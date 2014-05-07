@@ -25,6 +25,7 @@ module.exports = function(grunt) {
     'js/lib/handlebars.js',
     'js/lib/openseadragon.min.js',
     'js/lib/d3.v3.min.js',
+    'js/lib/jquery.layout-latest.min.js',
   ],
 
   // libraries/plugins for running tests
@@ -35,6 +36,7 @@ module.exports = function(grunt) {
   // source files
   sources = [
     'js/src/*.js',
+    'js/src/viewer/*.js',
     'js/src/manifests/*.js',
     'js/src/workspaces/*.js',
     'js/src/widgets/*.js',
@@ -71,8 +73,9 @@ module.exports = function(grunt) {
       css: {
         src: [
         'css/*.css',
+        '!css/mirador-combined.css'
         ],
-        dest: 'css/mirador-combined.css'
+        dest: 'build/mirador/css/mirador-combined.css'
       }
     },
 
@@ -154,6 +157,7 @@ module.exports = function(grunt) {
         files: [
           'Gruntfile.js',
           'js/src/*.js',
+          'js/src/*/*.js',
           'images/*',
           'css/*.css'
         ],
