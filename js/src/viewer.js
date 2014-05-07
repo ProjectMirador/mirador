@@ -32,6 +32,9 @@
             // add main menu
             this.mainMenu = new $.MainMenu({ appendTo: this.element });
 
+            // add workset select menu (hidden by default) 
+            this.manifestsPanel = new $.ManifestsPanel({ appendTo: this.element });
+
             // add viewer area
             this.canvas = jQuery('<div/>')
             .addClass('mirador-viewer')

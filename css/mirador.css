@@ -123,43 +123,13 @@
 }
 
 
-/* main menu load-window
+/* main menu select menu 
 ---------------------------------------------------------------------------- */
-
-.mirador-listing-collections {
-  /*background-color: #fff;*/
-  border: 1px solid #aaa;
-}
-
-.mirador-listing-collections select {
-  width: 240px;
-}
-
-.mirador-listing-collections legend {
-  padding: 0 5px;
-}
-
-.mirador-listing-collections ul {
-  display: none;
-  height: 300px;
-  overflow: auto;
-  padding: 0;
-}
-
-.mirador-listing-collections ul:first-of-type {
-  display: block;
-}
-
-.mirador-listing-collections li {
-  display: inline-block;
-  float: left;
-  padding: 4px 2px;
-  width: 60px;
-  word-wrap: break-word;
-}
-
-.mirador-listing-collections li a {
-  cursor: pointer;
+#manifest-select-menu {
+    position: absolute;
+    height:100%;
+    width:100%;
+    display:none;
 }
 
 

@@ -2732,7 +2732,11 @@ window.Mirador = window.Mirador || function(config) {
 
   // Render viewer using loaded manifests data
   Mirador.viewer = new Mirador.Viewer(config);
+  
+  // Fetch manifest, parse and render widgets from config
+  Mirador.manifests = new Mirador.ManifestsLoader(config);
 };
+
 
 (function($) {
 
@@ -2896,6 +2900,9 @@ window.Mirador = window.Mirador || function(config) {
             // add main menu
             this.mainMenu = new $.MainMenu({ appendTo: this.element });
 
+            // add workset select menu (hidden by default) 
+            this.manifestsPanel = new $.ManifestsPanel({ appendTo: this.element });
+
             // add viewer area
             this.canvas = jQuery('<div/>')
             .addClass('mirador-viewer')
@@ -3040,43 +3047,163 @@ window.Mirador = window.Mirador || function(config) {
 }(Mirador));
 
 (function($) {
+    
+    $.ManifestsPanel = function(options) {
+
+        jQuery.extend(true, this, {
+            element:                    null,
+            appendTo: null
+        }, $.DEFAULT_SETTINGS, options);
+
+        this.init();
+    };
+
+    $.ManifestsPanel.prototype = {
+
+        init: function() {
+            this.element = this.template({});
+            jQuery(this.element).appendTo(this.appendTo);
+        },
+
+        template: Handlebars.compile([
+          '<div id="manifest-select-menu">',
+              '<div id="load-controls"></div>',
+              '<div id="select-results">',
+                  '<ul class="items-listing">',
+                  '{{#worksets}}',
+                      '<li>',
+                      '<img src="http://placekitten.com/85/100" alt="repoImg">',
+                      '<div class="select-metadata">',
+                          '<h2 class="manifest-title">{{label}}</h2>',
+                          '<h3 class="repository-label">{{repository}}</h3>',
+                      '</div>',
+                      '</li>',
+                  '{{/worksets}}',
+                  '</ul>',
+              '</div>',
+          '</div>'
+        ].join(''))
+    };
 
 }(Mirador));
 
 
 (function($) {
 
-  $.ManifestsLoader = function(options) {
-
-     jQuery.extend(true, this, {
-
-     }, $.DEFAULT_SETTINGS, options);
-
+  $.ManifestsLoader = function(config) {
+    return this.getManifestsData(config);
   };
+
 
   $.ManifestsLoader.prototype = {
 
+    getManifestsData: function(config) {
+      var _this = this,
+      manifests = {},
+      loadingOrder = [],
+      arrDfds = [];
+
+      jQuery.each(config.data, function(index, collection) {
+        if (_this.hasWidgets(collection)) {
+          loadingOrder.unshift(index);
+        } else {
+          loadingOrder.push(index);
+        }
+      });
+
+      jQuery.each(loadingOrder, function(index, order) {
+        var collection = config.data[order],
+            dfd = jQuery.Deferred(),
+            manifest;
+
+        if (!jQuery.isEmptyObject(collection)) {
+
+          manifest = new $.Manifest(collection.manifestUri, dfd);
+          arrDfds.push(dfd);
+
+          dfd.done(function(loaded) {
+            if (loaded) {
+                console.log(manifest);
+                manifests[manifest.uri] = manifest.jsonLd;
+
+              // if (_this.hasWidgets(collection)) {
+              //   $.viewer.renderWidgetsForCollection(collection);
+              // }
+
+              // $.viewer.addStatusBarMessage('left', 'Loaded ' + collection.manifestUri, 600);
+            }
+          });
+        }
+
+      });
+
+      jQuery.when.apply(null, arrDfds).done(function() {
+      //   var message = 'Loaded ' + $.viewer.numManifestsLoaded + ' of ' + (arrDfds.length) + ' manifests to viewer';
+
+      //   $.viewer.updateLoadWindowContent();
+      //   $.viewer.addStatusBarMessage('left', message, 1000, true);
+
+      // }).done(function() {
+      //   if ($.viewer.workspaceAutoSave) {
+      //     $.viewer.saveController.save();
+      //   }
+      });
+
+      return manifests;
+    },
+
+
+    hasWidgets: function(collection) {
+      return (
+        typeof collection.widgets !== 'undefined' &&
+        collection.widgets &&
+        !jQuery.isEmptyObject(collection.widgets) &&
+        collection.widgets.length > 0
+      );
+    }
+
   };
 
 }(Mirador));
 
 
-(function($) {
+(function($){
 
-  $.Manifest = function(options) {
+    $.Manifest = function(manifestUri, dfd) {
 
-     jQuery.extend(true, this, {
+        jQuery.extend(true, this, {
+            jsonLd: null,
+            uri: manifestUri
+        });
 
-     }, $.DEFAULT_SETTINGS, options);
+        this.loadManifestDataFromURI(dfd);
+    };
 
-  };
+    $.Manifest.prototype = {
 
-  $.Manifest.prototype = {
+        loadManifestDataFromURI: function(dfd) {
+            var _this = this;
 
-  };
+            jQuery.ajax({
+                url: _this.uri,
+                dataType: 'json',
+                async: true,
+
+                success: function(jsonLd) {
+                    _this.jsonLd = jsonLd;
+                    dfd.resolve(true);
+                },
+
+                error: function() {
+                    console.log('Failed loading ' + _this.uri);
+                    dfd.resolve(false);
+                }
+            });
+
+        }
+    };
 
 }(Mirador));
-
 
 (function($) {
 
