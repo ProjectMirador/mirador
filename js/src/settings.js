@@ -9,28 +9,32 @@
 
     'showNoImageChoiceOption': true,
 
-    'initialLayout': 'stackAll3Columns',
+    'initialWorkspace': 'singleObject',
 
-    'availableViews': {
-      'imageView': {
-        'label': 'Image View'
-      },
+    'availableWorkspaces': {
+        'singleObject': {
+            'slots': [{
+                width: '100%'
+                // windowOptions: {...}
+            }],
+            'addNew': false,
+            'move': false
+        },
+        'compare': {
+            'slots': [
+                {},
+                {}
+            ]
+        },
+        'detailView': {
 
-      'scrollView': {
-        'label': 'Scroll View'
-      },
+        },
+        'bookReading': {
 
-      'thumbnailsView': {
-        'label': 'Thumbnails View'
-      },
-
-      'metadataView': {
-        'label': 'Metadata View'
-      },
-
-      'openLayersAnnotoriusView': {
-        'label': 'Annotate View'
-      }
+        }
+        // add new workspace types by appending a 
+        // profile with plugin initialisation code:
+        // $.DEFAULT_SETTINGS.availableWorkspaces['myNwqWorkspace'] = {...}
     },
 
     'maxWidgetsLimit': 10,
@@ -54,12 +58,6 @@
       'maxWidth': 230
     },
 
-    // widget
-    'widget': {
-      'height': 400,
-      'width': 400
-    },
-
     // widget toolbar
     'widgetToolbar': {
       'height': 25
@@ -70,7 +68,7 @@
       'height': 26
     },
 
-    // image view
+    // window options 
     'imageView': {
       'height': 400,
       'width': 350,
@@ -115,6 +113,7 @@
 
     // parameters of saving system
     'saveController': {
+        // TODO: make saving a function of significant user action, not timed intervals.
       'saveInterval': 8000 // number of milliseconds between automatic saves.
     },
 
