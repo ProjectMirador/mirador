@@ -15,7 +15,8 @@
             mainMenuLoadWindowCls:  '.mirador-main-menu .load-window',
             workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
             windowSize:             {},
-            resizeRatio:            {}
+            resizeRatio:            {},
+            manifestPanelVisible:   false
         }, $.DEFAULT_SETTINGS, options);
 
         this.element = this.element || jQuery('#' + this.id);
@@ -30,7 +31,7 @@
 
         init: function() {
             // add main menu
-            this.mainMenu = new $.MainMenu({ appendTo: this.element });
+            this.mainMenu = new $.MainMenu({ parent: this, appendTo: this.element });
 
             // add workset select menu (hidden by default) 
             this.manifestsPanel = new $.ManifestsPanel({ appendTo: this.element });
@@ -42,10 +43,24 @@
 
             // add workspace configuration
             this.workspace = new $.Workspace({initialWorkspace: this.initialWorkspace, parent: this });
-           },
+        },
+        get: function(prop) {
+            return this[prop];
+        },
+
+        set: function(prop, value, options) {
+            _this = this;
+            this[prop] = value;
+            jQuery.publish(prop + '.set', this.value );
+        },
 
         switchWorkspace: function(type) {
 
+        },
+
+        openLoadWindow: function() {
+            console.log('loadWindow opened');
+            this.set('manifestPanelVisible', true);
         }
 
     };

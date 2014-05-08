@@ -33,6 +33,7 @@
   color: #fff;
   padding: 4px;
   top: 0;
+  z-index: 1000;
 }
 
 .mirador-main-menu {

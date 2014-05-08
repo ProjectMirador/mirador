@@ -3,6 +3,7 @@
     $.MainMenu = function(options) {
 
         jQuery.extend(true, this, {
+            parent:                     null,
             element:                    null,
             mainMenuHeight:             $.DEFAULT_SETTINGS.mainMenu.height,
             mainMenuWidth:              $.DEFAULT_SETTINGS.mainMenu.width,
@@ -16,7 +17,7 @@
             clearLocalStorageCls:       'clear-local-storage',
             clearLocalStorageDialogCls: 'mirador-main-menu-clear-local-storage',
             collectionsListingCls:      'mirador-listing-collections'
-        }, options);
+        }, $.DEFAULT_SETTINGS,  options);
 
         this.element  = this.element || jQuery('<div/>');
 
@@ -33,9 +34,16 @@
             .width(this.mainMenuWidth)
             .appendTo(this.appendTo);
 
+
             this.element.append(this.template({
                 mainMenuCls: this.mainMenuCls
             }));
+
+            this.bindEvents();
+        },
+
+        bindEvents: function() {
+            this.element.find('.load-window').on('click', this.parent.openLoadWindow);
         },
 
         template: Handlebars.compile([
@@ -63,5 +71,4 @@
         '</ul>'
       ].join(''))
     };
-
 }(Mirador));
