@@ -44,7 +44,7 @@
             this.workspace = new $.Workspace({initialWorkspace: this.initialWorkspace, parent: this });
             
             //add workspaces select
-            this.workspacesSelect = new $.WorkspacesSelect({appendTo: this.element, workspaces: this.availableWorkspaces});
+            this.workspacesSelect = new $.WorkspacesSelect({appendTo: this.element, parent: this});
            },
 
         switchWorkspace: function(type) {

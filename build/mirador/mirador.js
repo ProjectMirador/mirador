@@ -2912,7 +2912,7 @@ window.Mirador = window.Mirador || function(config) {
             this.workspace = new $.Workspace({initialWorkspace: this.initialWorkspace, parent: this });
             
             //add workspaces select
-            this.workspacesSelect = new $.WorkspacesSelect({appendTo: this.element, workspaces: this.availableWorkspaces});
+            this.workspacesSelect = new $.WorkspacesSelect({appendTo: this.element, parent: this});
            },
 
         switchWorkspace: function(type) {
@@ -3098,7 +3098,7 @@ window.Mirador = window.Mirador || function(config) {
 		jQuery.extend(true, this, {
 			element: null,
 			appendTo: null,
-			workspaces: null
+			parent: null
 		}, $.DEFAULT_SETTINGS, options);
           
 		this.init();
@@ -3108,10 +3108,9 @@ window.Mirador = window.Mirador || function(config) {
 	$.WorkspacesSelect.prototype = {
 		init: function () {
 			var workspaceTemplate = [];
-			jQuery.each(this.workspaces, function(key, value) {
+			jQuery.each(this.parent.availableWorkspaces, function(key, value) {
 				workspaceTemplate.push({label : key});
 			});
-			console.log(workspaceTemplate);
 			this.element = this.template({ workspaces : workspaceTemplate});
 			jQuery(this.element).appendTo(this.appendTo);
 		},

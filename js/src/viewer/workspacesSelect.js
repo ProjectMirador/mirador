@@ -5,7 +5,7 @@
 		jQuery.extend(true, this, {
 			element: null,
 			appendTo: null,
-			workspaces: null
+			parent: null
 		}, $.DEFAULT_SETTINGS, options);
           
 		this.init();
@@ -15,7 +15,7 @@
 	$.WorkspacesSelect.prototype = {
 		init: function () {
 			var workspaceTemplate = [];
-			jQuery.each(this.workspaces, function(key, value) {
+			jQuery.each(this.parent.availableWorkspaces, function(key, value) {
 				workspaceTemplate.push({label : key});
 			});
 			this.element = this.template({ workspaces : workspaceTemplate});
