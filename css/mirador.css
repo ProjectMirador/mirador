@@ -1,4 +1,5 @@
 
+
 /*----------------------------------------------------------------------------
 /* Mirador styles
 ---------------------------------------------------------------------------- */
@@ -129,7 +130,17 @@
     position: absolute;
     height:100%;
     width:100%;
-    display:none;
+    background-color: rgba(200,200,200,0.8);
+    opacity:0;
+    -webkit-transform: scale(2);
+    transition: all 0.3s ease-out;
+    z-index:-1000;
+}
+#manifest-select-menu.active {
+     opacity:0.9;
+    -webkit-transform: scale(1);
+    transition: all 0.3s ease-out;
+    z-index:1000;
 }
 
 
