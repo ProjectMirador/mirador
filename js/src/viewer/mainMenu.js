@@ -43,7 +43,8 @@
         },
 
         bindEvents: function() {
-            this.element.find('.load-window').on('click', this.parent.openLoadWindow);
+            var _this = this;
+            this.element.find('.load-window').on('click', function() { _this.parent.toggleLoadWindow(); });
         },
 
         template: Handlebars.compile([

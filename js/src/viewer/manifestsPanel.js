@@ -4,7 +4,8 @@
 
         jQuery.extend(true, this, {
             element:                    null,
-            appendTo: null
+            appendTo:                   null,
+            parent:                     null
         }, $.DEFAULT_SETTINGS, options);
 
         this.init();
@@ -13,27 +14,35 @@
     $.ManifestsPanel.prototype = {
 
         init: function() {
+            this.element = jQuery(this.template(this.fetchTplData())).appendTo(this.appendTo);
+
+        },
+
+        fetchTplData: function() {
             var tplData = {
-                worksets: [
-
-                ]
+                manifests: []
             };
-            this.element = this.template({});
-            jQuery(this.element).appendTo(this.appendTo);
-
-            this.bindEvents();
-
-            // should probably retrieve some data in order to populate the template.
-            // template data built from the manifests object.
-            // 
+            return tplData;
         },
 
         bindEvents: function() {
-            jQuery.subscribe('manifestPanelVisible.set', this.show());
+            var _this = this;
+            jQuery.subscribe('manifestPanelVisible.set', function() {
+                console.log(_this.parent.get('manifestPanelVisible'));
+                if ( _this.parent.get('manifestPanelVisible')) { _this.show(); return; }
+                _this.hide();
+            });
+        },
+
+        hide: function() {
+            var _this = this;
+            jQuery(_this.element).removeClass('active');
         },
 
         show: function() {
-            console.log('showing loadMenu.');
+            var _this = this;
+            console.log(_this.element);
+            jQuery(_this.element).addClass('active');
         },
 
         template: Handlebars.compile([

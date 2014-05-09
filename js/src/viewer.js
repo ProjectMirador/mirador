@@ -34,7 +34,7 @@
             this.mainMenu = new $.MainMenu({ parent: this, appendTo: this.element });
 
             // add workset select menu (hidden by default) 
-            this.manifestsPanel = new $.ManifestsPanel({ appendTo: this.element });
+            this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element });
 
             // add viewer area
             this.canvas = jQuery('<div/>')
@@ -51,15 +51,16 @@
         set: function(prop, value, options) {
             _this = this;
             this[prop] = value;
-            jQuery.publish(prop + '.set', this.value );
+            console.log(value);
+            jQuery.publish(prop + '.set');
         },
 
         switchWorkspace: function(type) {
 
         },
 
-        openLoadWindow: function() {
-            console.log('loadWindow opened');
+        toggleLoadWindow: function() {
+            console.log(this);
             this.set('manifestPanelVisible', true);
         }
 
