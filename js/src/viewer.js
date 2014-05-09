@@ -43,6 +43,9 @@
 
             // add workspace configuration
             this.workspace = new $.Workspace({initialWorkspace: this.initialWorkspace, parent: this });
+
+            //add workspaces select
+            this.workspacesSelect = new $.WorkspacesSelect({appendTo: this.element, parent: this});
         },
         get: function(prop) {
             return this[prop];
