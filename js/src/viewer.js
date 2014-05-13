@@ -64,6 +64,11 @@
 
         toggleLoadWindow: function() {
             console.log(this);
+            if (this.get('manifestPanelVisible') === true) {
+                this.set('manifestPanelVisible', false);
+                return;
+
+            }
             this.set('manifestPanelVisible', true);
         }
 

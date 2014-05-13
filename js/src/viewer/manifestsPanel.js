@@ -8,20 +8,33 @@
             parent:                     null
         }, $.DEFAULT_SETTINGS, options);
 
-        this.init();
+        var _this = this;
+        setTimeout(function() { _this.init(); }, 6000 );
+        
     };
 
     $.ManifestsPanel.prototype = {
 
         init: function() {
             this.element = jQuery(this.template(this.fetchTplData())).appendTo(this.appendTo);
-
+            this.bindEvents();
+            console.log(this.fetchTplData());
         },
 
         fetchTplData: function() {
             var tplData = {
-                manifests: []
+                worksets: []
             };
+
+            jQuery.each($.manifests, function(manifestKey){
+                var manifest = $.manifests[manifestKey];
+                var prunedManifest = { 
+                    label: manifest.label
+                };
+                console.log(manifest);
+
+                tplData.worksets.push(prunedManifest);
+            });
             return tplData;
         },
 
@@ -36,17 +49,18 @@
 
         hide: function() {
             var _this = this;
-            jQuery(_this.element).removeClass('active');
+            _this.element.removeClass('active');
         },
 
         show: function() {
             var _this = this;
             console.log(_this.element);
-            jQuery(_this.element).addClass('active');
+            _this.element.addClass('active');
         },
 
         template: Handlebars.compile([
           '<div id="manifest-select-menu">',
+          '<div class="container">',
               '<div id="load-controls">',
               '<input type="text" name="url-load" placeholder="http://...">',
               '</div>',
@@ -54,14 +68,19 @@
                   '<ul class="items-listing">',
                   '{{#worksets}}',
                       '<li>',
-                      '<img src="http://placekitten.com/85/100" alt="repoImg">',
+                      '<img src="http://placehold.it/150x100" alt="repoImg">',
                       '<div class="select-metadata">',
                           '<h2 class="manifest-title">{{label}}</h2>',
                           '<h3 class="repository-label">{{repository}}</h3>',
                       '</div>',
+                      '<img src="http://placehold.it/150x100" alt="repoImg">',
+                      '<img src="http://placehold.it/150x100" alt="repoImg">',
+                      '<img src="http://placehold.it/150x100" alt="repoImg">',
+                      '<img src="http://placehold.it/150x100" alt="repoImg">',
                       '</li>',
                   '{{/worksets}}',
                   '</ul>',
+              '</div>',
               '</div>',
           '</div>'
         ].join(''))
