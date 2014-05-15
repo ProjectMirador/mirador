@@ -2891,7 +2891,6 @@ window.Mirador = window.Mirador || function(config) {
         }, $.DEFAULT_SETTINGS, options);
 
         // get initial manifests
-        this.manifests = new $.ManifestsLoader(options);
         this.element = this.element || jQuery('#' + this.id);
 
         if (this.data) {
@@ -2903,6 +2902,8 @@ window.Mirador = window.Mirador || function(config) {
     $.Viewer.prototype = {
 
         init: function() {
+            // retrieve manifests
+            this.manifests = this.getManifestsData();
 
             // add main menu
             this.mainMenu = new $.MainMenu({ parent: this, appendTo: this.element });
@@ -2947,20 +2948,59 @@ window.Mirador = window.Mirador || function(config) {
             }
             this.set('manifestPanelVisible', true);
         },
+        
+        getManifestsData: function() {
+            var _this = this,
+            manifests = {},
+            loadingOrder = [];
+
+            jQuery.each(_this.data, function(index, collection) {
+                if (_this.hasWidgets(collection)) {
+                    loadingOrder.unshift(index);
+                } else {
+                    loadingOrder.push(index);
+                }
+            });
+
+            jQuery.each(loadingOrder, function(index, order) {
+                var manifest = _this.data[order];
+                var url = manifest.manifestUri;
+
+                if (!jQuery.isEmptyObject(manifest)) {
+                    // populate blank object for immediate, synchronous return
+                    manifests[url] = null;
+                    console.log(manifest);
+                    _this.addManifestFromUrl(url);
+                }
+
+            });
+
+            console.log(manifests);
+            return manifests;
+        },
+        
+        hasWidgets: function(collection) {
+            return (
+                typeof collection.widgets !== 'undefined' &&
+                collection.widgets &&
+                !jQuery.isEmptyObject(collection.widgets) &&
+                collection.widgets.length > 0
+            );
+        },
 
         addManifestFromUrl: function(url) {
             var _this = this,
             dfd = jQuery.Deferred(),
-            oldManifests = _this.get('manifests');
+            manifests = _this.get('manifests');
 
             var manifest = new $.Manifest(url, dfd);
 
             dfd.done(function(loaded) {
                 if (loaded) {
-                    oldManifests[url] = manifest.jsonLd;
+                    manifests[url] = manifest.jsonLd;
                     _this.set('manifests', (function() {
-                        console.log(oldManifests);
-                        return oldManifests;
+                        console.log(manifests);
+                        return manifests;
                     })());
                 }
             });
@@ -3257,65 +3297,7 @@ window.Mirador = window.Mirador || function(config) {
 }(Mirador));
 
 
-(function($) {
-
-  $.ManifestsLoader = function(config) {
-    return this.getManifestsData(config);
-  };
-
-
-  $.ManifestsLoader.prototype = {
-
-    getManifestsData: function(config) {
-      var _this = this,
-      manifests = {},
-      loadingOrder = [],
-      arrDfds = [];
-
-      jQuery.each(config.data, function(index, collection) {
-        if (_this.hasWidgets(collection)) {
-          loadingOrder.unshift(index);
-        } else {
-          loadingOrder.push(index);
-        }
-      });
-
-      jQuery.each(loadingOrder, function(index, order) {
-        var collection = config.data[order],
-            dfd = jQuery.Deferred(),
-            manifest;
-
-        if (!jQuery.isEmptyObject(collection)) {
-
-          manifest = new $.Manifest(collection.manifestUri, dfd);
-          arrDfds.push(dfd);
-
-          dfd.done(function(loaded) {
-            if (loaded) {
-                console.log(manifest);
-                manifests[manifest.uri] = manifest.jsonLd;
-            }
-          });
-        }
-
-      });
-
-      return manifests;
-    },
-
-    hasWidgets: function(collection) {
-      return (
-        typeof collection.widgets !== 'undefined' &&
-        collection.widgets &&
-        !jQuery.isEmptyObject(collection.widgets) &&
-        collection.widgets.length > 0
-      );
-    }
-
-  };
-
-}(Mirador));
-
+(function(){})();
 
 (function($){
 
