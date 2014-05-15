@@ -27,9 +27,9 @@ describe('Mirador | mirador.js', function() {
   // Tests for object initialization
   describe('Initialization', function() {
 
-    it('should set "manifests" property', function() {
-      expect(Mirador.manifests).toBeTruthy();
-    });
+    // it('should set "manifests" property', function() {
+    //   expect(Mirador.manifests).toBeTruthy();
+    // });
 
 
     it('should set "viewer" property', function() {
