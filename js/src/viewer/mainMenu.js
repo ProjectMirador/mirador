@@ -45,6 +45,7 @@
         bindEvents: function() {
             var _this = this;
             this.element.find('.load-window').on('click', function() { _this.parent.toggleLoadWindow(); });
+            this.element.find('.switch-workspace').on('click', function() { _this.parent.toggleSwitchWorkspace(); });
         },
 
         template: Handlebars.compile([
@@ -65,7 +66,7 @@
             '</a>',
           '</li>',
           '<li>',
-            '<a href="javascript:;" class="window-options" title="Window Options">',
+            '<a href="javascript:;" class="switch-workspace" title="Switch Workspace">',
               '<span class="icon-window-options"></span>Switch Workspace',
             '</a>',
           '</li>',

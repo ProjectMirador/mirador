@@ -2887,6 +2887,7 @@ window.Mirador = window.Mirador || function(config) {
             windowSize:             {},
             resizeRatio:            {},
             manifestPanelVisible:   false,
+            workspacesPanelVisible: false,
             manifests: {} 
         }, $.DEFAULT_SETTINGS, options);
 
@@ -2915,8 +2916,8 @@ window.Mirador = window.Mirador || function(config) {
             // add workspace configuration
             this.workspace = new $.Workspace({initialWorkspace: this.initialWorkspace, parent: this });
 
-            //add workspaces select
-            this.workspacesSelect = new $.WorkspacesSelect({appendTo: this.element.find('.mirador-viewer'), parent: this});
+            //add workspaces panel
+            this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
 
             // add workset select menu (hidden by default) 
             this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
@@ -2946,6 +2947,15 @@ window.Mirador = window.Mirador || function(config) {
 
             }
             this.set('manifestPanelVisible', true);
+        },
+        
+        toggleSwitchWorkspace: function() {
+            if (this.get('workspacesPanelVisible') === true) {
+                this.set('workspacesPanelVisible', false);
+                return;
+
+            }
+            this.set('workspacesPanelVisible', true);
         },
 
         addManifestFromUrl: function(url) {
@@ -3075,6 +3085,7 @@ window.Mirador = window.Mirador || function(config) {
         bindEvents: function() {
             var _this = this;
             this.element.find('.load-window').on('click', function() { _this.parent.toggleLoadWindow(); });
+            this.element.find('.switch-workspace').on('click', function() { _this.parent.toggleSwitchWorkspace(); });
         },
 
         template: Handlebars.compile([
@@ -3095,7 +3106,7 @@ window.Mirador = window.Mirador || function(config) {
             '</a>',
           '</li>',
           '<li>',
-            '<a href="javascript:;" class="window-options" title="Window Options">',
+            '<a href="javascript:;" class="switch-workspace" title="Switch Workspace">',
               '<span class="icon-window-options"></span>Switch Workspace',
             '</a>',
           '</li>',
@@ -3218,7 +3229,7 @@ window.Mirador = window.Mirador || function(config) {
 
 (function($) {
 
-	$.WorkspacesSelect = function(options) {
+	$.WorkspacesPanel = function(options) {
 
 		jQuery.extend(true, this, {
 			element: null,
@@ -3230,18 +3241,39 @@ window.Mirador = window.Mirador || function(config) {
 
 	};
 
-	$.WorkspacesSelect.prototype = {
+	$.WorkspacesPanel.prototype = {
 		init: function () {
 			var workspaceTemplate = [];
 			jQuery.each(this.parent.availableWorkspaces, function(key, value) {
 				workspaceTemplate.push({label : key});
 			});
-			this.element = this.template({ workspaces : workspaceTemplate});
-			jQuery(this.element).appendTo(this.appendTo);
+			//this.element = this.template({ workspaces : workspaceTemplate});
+			this.element = jQuery(this.template({ workspaces : workspaceTemplate})).appendTo(this.appendTo);
+			this.bindEvents();
 		},
+		
+		bindEvents: function() {
+            var _this = this;
+            // handle subscribed events
+            jQuery.subscribe('workspacesPanelVisible.set', function() {
+                console.log(_this.parent.get('workspacesPanelVisible'));
+                if ( _this.parent.get('workspacesPanelVisible')) { _this.show(); return; }
+                _this.hide();
+            });
+        },
+
+        hide: function() {
+            var _this = this;
+            _this.element.removeClass('active');
+        },
+
+        show: function() {
+            var _this = this;
+            _this.element.addClass('active');
+        },
 
 		template: Handlebars.compile([
-			'<div class="workspace-select-menu">',
+			'<div id="workspace-select-menu">',
 				'<h3>Choose Workspace Type</h3>',
 				'<ul class="workspaces-listing">',
 					'{{#each workspaces}}',

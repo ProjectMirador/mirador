@@ -17,6 +17,7 @@
             windowSize:             {},
             resizeRatio:            {},
             manifestPanelVisible:   false,
+            workspacesPanelVisible: false,
             manifests: {} 
         }, $.DEFAULT_SETTINGS, options);
 
@@ -45,8 +46,8 @@
             // add workspace configuration
             this.workspace = new $.Workspace({initialWorkspace: this.initialWorkspace, parent: this });
 
-            //add workspaces select
-            this.workspacesSelect = new $.WorkspacesSelect({appendTo: this.element.find('.mirador-viewer'), parent: this});
+            //add workspaces panel
+            this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
 
             // add workset select menu (hidden by default) 
             this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
@@ -76,6 +77,15 @@
 
             }
             this.set('manifestPanelVisible', true);
+        },
+        
+        toggleSwitchWorkspace: function() {
+            if (this.get('workspacesPanelVisible') === true) {
+                this.set('workspacesPanelVisible', false);
+                return;
+
+            }
+            this.set('workspacesPanelVisible', true);
         },
 
         addManifestFromUrl: function(url) {
