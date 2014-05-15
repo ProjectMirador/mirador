@@ -10,11 +10,17 @@
 }
 
 .mirador-viewer {
-  box-sizing: border-box;
-  -moz-border-sizing: border-box;
-  height: 100%;
-  margin: auto;
-  width: 100%;
+    position:absolute;
+    top:35px;
+    bottom:0;
+    left:0;
+    right:0;
+    overflow:hidden;
+    box-sizing: border-box;
+    -moz-border-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
 }
 
 .mirador-viewer a,
@@ -126,7 +132,7 @@
 
 /* main menu select menu 
 ---------------------------------------------------------------------------- */
-#manifest-select-menu {
+#manifest-select-menu, #workspace-select-menu {
     position: absolute;
     height:100%;
     width:100%;
@@ -134,15 +140,12 @@
     opacity:0;
     -webkit-transform: scale(2);
     transition: all 0.3s ease-in;
-    z-index:-1000;
-    top:34px;
     overflow-y: scroll;
 }
-#manifest-select-menu.active {
+#manifest-select-menu.active, #workspace-select-menu.active {
      opacity:0.9;
     -webkit-transform: scale(1);
     transition: all 0.3s ease-out;
-    z-index:1000;
 }
 .container {
     position:relative;
