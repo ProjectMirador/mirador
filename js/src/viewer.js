@@ -16,8 +16,7 @@
             workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
             windowSize:             {},
             resizeRatio:            {},
-            manifestPanelVisible:   false,
-            workspacesPanelVisible: false,
+            mainMenuPanels:			{'manifestPanelVisible': false, 'workspacesPanelVisible': false},
             manifests: {} 
         }, $.DEFAULT_SETTINGS, options);
 
@@ -55,12 +54,13 @@
         },
         
         get: function(prop) {
-            return this[prop];
+			return this.mainMenuPanels[prop];
+            //return this[prop];
         },
 
         set: function(prop, value, options) {
             _this = this;
-            this[prop] = value;
+            this.mainMenuPanels[prop] = value;
             console.log(value);
             jQuery.publish(prop + '.set');
         },
@@ -71,20 +71,32 @@
 
         toggleLoadWindow: function() {
             console.log(this);
+            _this = this;
             if (this.get('manifestPanelVisible') === true) {
                 this.set('manifestPanelVisible', false);
                 return;
 
             }
+            jQuery.each(this.mainMenuPanels, function(key, value) {
+				if (key != 'manifestPanelVisible') {
+					_this.set(key, false);
+				}
+			});
             this.set('manifestPanelVisible', true);
         },
         
         toggleSwitchWorkspace: function() {
+            _this = this;
             if (this.get('workspacesPanelVisible') === true) {
                 this.set('workspacesPanelVisible', false);
                 return;
 
             }
+			jQuery.each(this.mainMenuPanels, function(key, value) {
+				if (key != 'workspacesPanelVisible') {
+					_this.set(key, false);
+				}
+			});
             this.set('workspacesPanelVisible', true);
         },
 
