@@ -35,33 +35,14 @@
             if (loaded) {
                 console.log(manifest);
                 manifests[manifest.uri] = manifest.jsonLd;
-
-              // if (_this.hasWidgets(collection)) {
-              //   $.viewer.renderWidgetsForCollection(collection);
-              // }
-
-              // $.viewer.addStatusBarMessage('left', 'Loaded ' + collection.manifestUri, 600);
             }
           });
         }
 
       });
 
-      jQuery.when.apply(null, arrDfds).done(function() {
-      //   var message = 'Loaded ' + $.viewer.numManifestsLoaded + ' of ' + (arrDfds.length) + ' manifests to viewer';
-
-      //   $.viewer.updateLoadWindowContent();
-      //   $.viewer.addStatusBarMessage('left', message, 1000, true);
-
-      // }).done(function() {
-      //   if ($.viewer.workspaceAutoSave) {
-      //     $.viewer.saveController.save();
-      //   }
-      });
-
       return manifests;
     },
-
 
     hasWidgets: function(collection) {
       return (

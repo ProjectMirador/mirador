@@ -170,6 +170,33 @@
     height:100%;
     width: 30%;
 }
+#load-controls input {
+    height:30px;
+    font-size:18px;
+    border:3px solid gray;
+    margin:0 auto;
+}
+#manifest-search input {
+    background:none;
+    border:none;
+    border-bottom:2px solid black;
+    margin-top: 30px;
+    transition: all 0.2s ease-out;
+}
+#manifest-search i {
+    position:absolute;
+    left:0;
+    color:black;
+}
+#manifest-search input:focus {
+    outline:none;
+    -webkit-transform: scale(1.1);
+    transition: all 0.2s ease-out;
+    border-color:deepskyblue;
+}
+#manifest-search i {
+}
+
 #select-results {
     float:left;
     height:100%;
