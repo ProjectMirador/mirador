@@ -16,7 +16,7 @@
             workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
             windowSize:             {},
             resizeRatio:            {},
-            manifestPanelVisible:   false,
+            mainMenuPanels:         {'manifestPanelVisible': false, 'workspacesPanelVisible': false},
             manifests: {} 
         }, $.DEFAULT_SETTINGS, options);
 
@@ -54,14 +54,20 @@
 
         },
         
-        get: function(prop) {
+        get: function(prop, parent) {
+            if (parent) {
+                return this[parent][prop];
+            }
             return this[prop];
         },
 
         set: function(prop, value, options) {
             _this = this;
-            this[prop] = value;
-            console.log(value);
+            if (options) {
+                this[options.parent][prop] = value;
+            } else {
+                this[prop] = value;
+            }
             jQuery.publish(prop + '.set');
         },
 
@@ -71,14 +77,32 @@
 
         toggleLoadWindow: function() {
             console.log(this);
-            if (this.get('manifestPanelVisible') === true) {
-                this.set('manifestPanelVisible', false);
+            _this = this;
+            if (this.get('manifestPanelVisible', 'mainMenuPanels') === true) {
+                this.set('manifestPanelVisible', false, {parent: 'mainMenuPanels'});
                 return;
-
             }
-            this.set('manifestPanelVisible', true);
+            jQuery.each(this.mainMenuPanels, function(key, value) {
+                if (key != 'manifestPanelVisible') {
+                    _this.set(key, false, {parent: 'mainMenuPanels'});
+                }
+            });
+            this.set('manifestPanelVisible', true, {parent: 'mainMenuPanels'});
         },
-        
+        toggleSwitchWorkspace: function() {
+            _this = this;
+            if (this.get('workspacesPanelVisible', 'mainMenuPanels') === true) {
+                this.set('workspacesPanelVisible', false, {parent: 'mainMenuPanels'});
+                return;
+            }
+            jQuery.each(this.mainMenuPanels, function(key, value) {
+                if (key != 'workspacesPanelVisible') {
+                    _this.set(key, false, {parent: 'mainMenuPanels'});
+                }
+            });
+            this.set('workspacesPanelVisible', true, {parent: 'mainMenuPanels'});
+        },
+
         getManifestsData: function() {
             var _this = this,
             manifests = {},
