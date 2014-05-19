@@ -51,8 +51,7 @@
 
             // handle subscribed events
             jQuery.subscribe('manifestPanelVisible.set', function() {
-                console.log(_this.parent.get('manifestPanelVisible'));
-                if ( _this.parent.get('manifestPanelVisible')) { _this.show(); return; }
+                if ( _this.parent.get('manifestPanelVisible', 'mainMenuPanels')) { _this.show(); return; }
                 _this.hide();
             });
             jQuery.subscribe('manifests.set', function() {
