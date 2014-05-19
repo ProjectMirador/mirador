@@ -2916,8 +2916,8 @@ window.Mirador = window.Mirador || function(config) {
             // add workspace configuration
             this.workspace = new $.Workspace({initialWorkspace: this.initialWorkspace, parent: this });
 
-            // add workspaces select
-            // this.workspacesSelect = new $.WorkspacesSelect({appendTo: this.element.find('.mirador-viewer'), parent: this});
+            //add workspaces panel
+			this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
 
             // add workset select menu (hidden by default) 
             this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
@@ -3222,8 +3222,9 @@ window.Mirador = window.Mirador || function(config) {
 
             // handle subscribed events
             jQuery.subscribe('manifestPanelVisible.set', function() {
-                console.log(_this.parent.get('manifestPanelVisible'));
-                if ( _this.parent.get('manifestPanelVisible')) { _this.show(); return; }
+                console.log("ManifestPanel");
+                console.log(_this.parent.get('manifestPanelVisible', 'mainMenuPanels'));
+                if ( _this.parent.get('manifestPanelVisible', 'mainMenuPanels')) { _this.show(); return; }
                 _this.hide();
             });
             jQuery.subscribe('manifests.set', function() {
@@ -3310,8 +3311,9 @@ window.Mirador = window.Mirador || function(config) {
             var _this = this;
             // handle subscribed events
             jQuery.subscribe('workspacesPanelVisible.set', function() {
-                console.log(_this.parent.get('workspacesPanelVisible'));
-                if ( _this.parent.get('workspacesPanelVisible')) { _this.show(); return; }
+                console.log("WorkspacesPanel");
+                console.log(_this.parent.get('workspacesPanelVisible', 'mainMenuPanels'));
+                if ( _this.parent.get('workspacesPanelVisible', 'mainMenuPanels')) { _this.show(); return; }
                 _this.hide();
             });
         },

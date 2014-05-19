@@ -18,7 +18,6 @@
 			jQuery.each(this.parent.availableWorkspaces, function(key, value) {
 				workspaceTemplate.push({label : key});
 			});
-			//this.element = this.template({ workspaces : workspaceTemplate});
 			this.element = jQuery(this.template({ workspaces : workspaceTemplate})).appendTo(this.appendTo);
 			this.bindEvents();
 		},
@@ -27,8 +26,7 @@
             var _this = this;
             // handle subscribed events
             jQuery.subscribe('workspacesPanelVisible.set', function() {
-                console.log(_this.parent.get('workspacesPanelVisible'));
-                if ( _this.parent.get('workspacesPanelVisible')) { _this.show(); return; }
+                if ( _this.parent.get('workspacesPanelVisible', 'mainMenuPanels')) { _this.show(); return; }
                 _this.hide();
             });
         },
