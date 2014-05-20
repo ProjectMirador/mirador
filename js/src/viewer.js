@@ -12,11 +12,12 @@
             activeWorkspace:        null,
             availableWorkspaces: $.DEFAULT_SETTINGS.availableWorkspaces,
             mainMenu:               null,
-            mainMenuLoadWindowCls:  '.mirador-main-menu .load-window',
+            //mainMenuLoadWindowCls:  '.mirador-main-menu .load-window',
             workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
             windowSize:             {},
             resizeRatio:            {},
-            mainMenuPanels:         {'manifestPanelVisible': false, 'workspacesPanelVisible': false},
+            uiState:				{'manifestPanelVisible': false, 'workspacesPanelVisible': false, 'currentWorkspaceVisible': false, 'optionsPanelVisible': false},
+            overlayState:			{},
             manifests: {} 
         }, $.DEFAULT_SETTINGS, options);
 
@@ -68,39 +69,31 @@
             } else {
                 this[prop] = value;
             }
-            jQuery.publish(prop + '.set');
+            jQuery.publish(prop + '.set', value);
         },
 
         switchWorkspace: function(type) {
 
         },
-
-        toggleLoadWindow: function() {
-            console.log(this);
-            _this = this;
-            if (this.get('manifestPanelVisible', 'mainMenuPanels') === true) {
-                this.set('manifestPanelVisible', false, {parent: 'mainMenuPanels'});
+        
+        // Sets the state of the viewer so that only one div can be visible/active and all others are hidden
+        toggleUI: function(state) {
+			_this = this;
+            if (this.get(state, 'uiState') === true) {
+                this.set(state, false, {parent: 'uiState'});
                 return;
             }
-            jQuery.each(this.mainMenuPanels, function(key, value) {
-                if (key != 'manifestPanelVisible') {
-                    _this.set(key, false, {parent: 'mainMenuPanels'});
+            jQuery.each(this.uiState, function(key, value) {
+                if (key != state) {
+                    _this.set(key, false, {parent: 'uiState'});
                 }
             });
-            this.set('manifestPanelVisible', true, {parent: 'mainMenuPanels'});
+            this.set(state, true, {parent: 'uiState'});
         },
-        toggleSwitchWorkspace: function() {
-            _this = this;
-            if (this.get('workspacesPanelVisible', 'mainMenuPanels') === true) {
-                this.set('workspacesPanelVisible', false, {parent: 'mainMenuPanels'});
-                return;
-            }
-            jQuery.each(this.mainMenuPanels, function(key, value) {
-                if (key != 'workspacesPanelVisible') {
-                    _this.set(key, false, {parent: 'mainMenuPanels'});
-                }
-            });
-            this.set('workspacesPanelVisible', true, {parent: 'mainMenuPanels'});
+        
+        // Sets state of overlays that layer over one of the UI states
+        toggleOverlay: function() {
+        
         },
 
         getManifestsData: function() {
