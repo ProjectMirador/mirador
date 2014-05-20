@@ -2886,9 +2886,8 @@ window.Mirador = window.Mirador || function(config) {
             workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
             windowSize:             {},
             resizeRatio:            {},
-            uiState:				{'manifestPanelVisible': false, 'workspacesPanelVisible': false, 'currentWorkspaceVisible': false, 'optionsPanelVisible': false},
+            uiState:				{'manifestsPanelVisible': false, 'workspacesPanelVisible': false, 'currentWorkspaceVisible': false, 'optionsPanelVisible': false},
             overlayState:			{},
-            //mainMenuPanels:         {'manifestPanelVisible': false, 'workspacesPanelVisible': false},
             manifests: {} 
         }, $.DEFAULT_SETTINGS, options);
 
@@ -2965,34 +2964,6 @@ window.Mirador = window.Mirador || function(config) {
         // Sets state of overlays that layer over one of the UI states
         toggleOverlay: function() {
         
-        },
-
-        toggleLoadWindow: function() {
-            console.log(this);
-            _this = this;
-            if (this.get('manifestPanelVisible', 'mainMenuPanels') === true) {
-                this.set('manifestPanelVisible', false, {parent: 'mainMenuPanels'});
-                return;
-            }
-            jQuery.each(this.mainMenuPanels, function(key, value) {
-                if (key != 'manifestPanelVisible') {
-                    _this.set(key, false, {parent: 'mainMenuPanels'});
-                }
-            });
-            this.set('manifestPanelVisible', true, {parent: 'mainMenuPanels'});
-        },
-        toggleSwitchWorkspace: function() {
-            _this = this;
-            if (this.get('workspacesPanelVisible', 'mainMenuPanels') === true) {
-                this.set('workspacesPanelVisible', false, {parent: 'mainMenuPanels'});
-                return;
-            }
-            jQuery.each(this.mainMenuPanels, function(key, value) {
-                if (key != 'workspacesPanelVisible') {
-                    _this.set(key, false, {parent: 'mainMenuPanels'});
-                }
-            });
-            this.set('workspacesPanelVisible', true, {parent: 'mainMenuPanels'});
         },
 
         getManifestsData: function() {
@@ -3160,7 +3131,7 @@ window.Mirador = window.Mirador || function(config) {
 
         bindEvents: function() {
             var _this = this;
-            this.element.find('.load-window').on('click', function() { _this.parent.toggleUI('mainfestsPanelVisible'); });
+            this.element.find('.load-window').on('click', function() { _this.parent.toggleUI('manifestsPanelVisible'); });
             this.element.find('.switch-workspace').on('click', function() { _this.parent.toggleUI('workspacesPanelVisible'); });
         },
 
@@ -3243,8 +3214,9 @@ window.Mirador = window.Mirador || function(config) {
             });
 
             // handle subscribed events
-            jQuery.subscribe('manifestPanelVisible.set', function() {
-                if ( _this.parent.get('manifestPanelVisible', 'uiState')) { _this.show(); return; }
+            jQuery.subscribe('manifestsPanelVisible.set', function(_, stateValue) {
+                if (stateValue) { _this.show(); return; }
+                //if ( _this.parent.get('manifestsPanelVisible', 'uiState')) { _this.show(); return; }
                 _this.hide();
             });
             jQuery.subscribe('manifests.set', function() {
@@ -3330,8 +3302,8 @@ window.Mirador = window.Mirador || function(config) {
             var _this = this;
             // handle subscribed events
             jQuery.subscribe('workspacesPanelVisible.set', function(_, stateValue) {
-				console.log("workspaces "+stateValue);
-                if ( _this.parent.get('workspacesPanelVisible', 'uiState')) { _this.show(); return; }
+                //if ( _this.parent.get('workspacesPanelVisible', 'uiState')) { _this.show(); return; }
+                if (stateValue) { _this.show(); return; }
                 _this.hide();
             });
         },
