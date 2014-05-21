@@ -3169,10 +3169,11 @@ window.Mirador = window.Mirador || function(config) {
         jQuery.extend(true, this, {
             element:                    null,
             parent:                     null,
-            manifestId:                 null
+            manifestId:                 null,
+            loadStatus:                 null
         }, $.DEFAULT_SETTINGS, options);
 
-        _this.init();
+        this.init();
         
     };
 
@@ -3186,19 +3187,16 @@ window.Mirador = window.Mirador || function(config) {
         },
 
         fetchTplData: function() {
-            var _this = this;
-            var tplData = {
-            };
+          var _this = this;
+          var manifest = $.viewer.manifests[_this.manifestId];
+          var tplData = { 
+            label: manifest.label,
+            repository: jQuery.grep($.viewer.data, function(item) {
+              return item.manifestUri === _this.manifestId;
+            }).location
+          };
 
-            jQuery.each(_this.parent.manifests, function(manifestKey){
-                var manifest = _this.parent.manifests[manifestKey];
-                var prunedManifest = { 
-                    label: manifest.label
-                };
-
-                tplData.worksets.push(prunedManifest);
-            });
-            return tplData;
+          return tplData;
         },
 
         fetchImages: function() {
@@ -3234,6 +3232,10 @@ window.Mirador = window.Mirador || function(config) {
 }(Mirador));
 
 
+(function ($) {
+  return 'blank';
+})(Mirador);
+
 (function($) {
 
     $.ManifestsPanel = function(options) {
@@ -3244,7 +3246,8 @@ window.Mirador = window.Mirador || function(config) {
             appendTo:                   null,
             parent:                     null,
             manifestListItems:          [],
-            manifestListElement:        null
+            manifestListElement:        null,
+            manifestLoadStatusIndicator: null
         }, $.DEFAULT_SETTINGS, options);
 
         var _this = this;
@@ -3255,12 +3258,10 @@ window.Mirador = window.Mirador || function(config) {
     $.ManifestsPanel.prototype = {
 
         init: function() {
-            this.element = jQuery(this.template(this.fetchTplData())).appendTo(this.appendTo);
+            this.element = jQuery(this.template()).appendTo(this.appendTo);
+            this.manifestListElement = this.element.find('ul');
+            // this.manifestLoadStatus = new $.ManifestLoadStatusIndicator({parent: this});
             this.bindEvents();
-        },
-
-        fetchTplData: function() {
-          return {};
         },
 
         bindEvents: function() {
@@ -3279,6 +3280,7 @@ window.Mirador = window.Mirador || function(config) {
                 _this.hide();
             });
             jQuery.subscribe('manifestAdded', function(event, newManifest) {
+              _this.manifestListItems.push(new $.ManifestsListItem({ parent: _this, manifestId: newManifest }));
             });
         },
 

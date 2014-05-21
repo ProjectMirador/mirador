@@ -8,7 +8,8 @@
             appendTo:                   null,
             parent:                     null,
             manifestListItems:          [],
-            manifestListElement:        null
+            manifestListElement:        null,
+            manifestLoadStatusIndicator: null
         }, $.DEFAULT_SETTINGS, options);
 
         var _this = this;
@@ -19,12 +20,10 @@
     $.ManifestsPanel.prototype = {
 
         init: function() {
-            this.element = jQuery(this.template(this.fetchTplData())).appendTo(this.appendTo);
+            this.element = jQuery(this.template()).appendTo(this.appendTo);
+            this.manifestListElement = this.element.find('ul');
+            // this.manifestLoadStatus = new $.ManifestLoadStatusIndicator({parent: this});
             this.bindEvents();
-        },
-
-        fetchTplData: function() {
-          return {};
         },
 
         bindEvents: function() {
@@ -43,6 +42,7 @@
                 _this.hide();
             });
             jQuery.subscribe('manifestAdded', function(event, newManifest) {
+              _this.manifestListItems.push(new $.ManifestsListItem({ parent: _this, manifestId: newManifest }));
             });
         },
 
