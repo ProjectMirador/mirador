@@ -25,8 +25,9 @@
 		bindEvents: function() {
             var _this = this;
             // handle subscribed events
-            jQuery.subscribe('workspacesPanelVisible.set', function() {
-                if ( _this.parent.get('workspacesPanelVisible', 'mainMenuPanels')) { _this.show(); return; }
+            jQuery.subscribe('workspacesPanelVisible.set', function(_, stateValue) {
+                //if ( _this.parent.get('workspacesPanelVisible', 'uiState')) { _this.show(); return; }
+                if (stateValue) { _this.show(); return; }
                 _this.hide();
             });
         },

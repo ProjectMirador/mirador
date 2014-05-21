@@ -4,7 +4,8 @@
 
         jQuery.extend(true, this, {
             jsonLd: null,
-            uri: manifestUri
+            uri: manifestUri,
+            location: null
         });
 
         this.loadManifestDataFromURI(dfd);
