@@ -4,8 +4,10 @@
 
         jQuery.extend(true, this, {
             element:                    null,
+            listItems:                  null,
             appendTo:                   null,
-            parent:                     null
+            parent:                     null,
+            manifestListElement:        null
         }, $.DEFAULT_SETTINGS, options);
 
         var _this = this;
@@ -29,12 +31,13 @@
                 worksets: []
             };
 
-            jQuery.each(_this.parent.manifests, function(manifestKey){
-                var manifest = _this.parent.manifests[manifestKey];
+            jQuery.each(_this.parent.manifests, function(manifestId){
+                var manifest = _this.parent.manifests[manifestId];
                 var prunedManifest = { 
                     label: manifest.label
                 };
 
+                console.log(manifest);
                 tplData.worksets.push(prunedManifest);
             });
             return tplData;
@@ -92,7 +95,7 @@
                       '<img src="http://placehold.it/120x90" alt="repoImg">',
                       '<div class="select-metadata">',
                           '<h2 class="manifest-title">{{label}}</h2>',
-                          '<h3 class="repository-label">{{repository}}</h3>',
+                          '<h3 class="repository-label">{{location}}</h3>',
                       '</div>',
                       '<img src="http://placehold.it/120x90" alt="repoImg">',
                       '<img src="http://placehold.it/120x90" alt="repoImg">',

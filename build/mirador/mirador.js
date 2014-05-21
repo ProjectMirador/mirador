@@ -3172,12 +3172,109 @@ window.Mirador = window.Mirador || function(config) {
 
 (function($) {
 
+    $.ManifestsListItem = function(options) {
+
+        jQuery.extend(true, this, {
+            element:                    null,
+            parent:                     null,
+            manifestId:                 null
+        }, $.DEFAULT_SETTINGS, options);
+
+        _this.init();
+        
+    };
+
+    $.ManifestsListItem.prototype = {
+
+        init: function() {
+          var _this = this;
+            this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn();
+            this.bindEvents();
+            this.fetchImages();
+        },
+
+        update: function() {
+        },
+
+        fetchTplData: function() {
+            var _this = this;
+            var tplData = {
+            };
+
+            jQuery.each(_this.parent.manifests, function(manifestKey){
+                var manifest = _this.parent.manifests[manifestKey];
+                var prunedManifest = { 
+                    label: manifest.label
+                };
+
+                tplData.worksets.push(prunedManifest);
+            });
+            return tplData;
+        },
+
+        fetchImages: function() {
+
+        },
+
+        bindEvents: function() {
+            var _this = this;
+            // handle interface events
+            this.element.find('#load-controls form').on('submit', function() {
+                event.preventDefault();
+                var url = jQuery(this).find('input').val();
+                _this.parent.addManifestFromUrl(url);
+            });
+
+            // handle subscribed events
+            jQuery.subscribe('manifestPanelVisible.set', function() {
+                if ( _this.parent.get('manifestPanelVisible', 'mainMenuPanels')) { _this.show(); return; }
+                _this.hide();
+            });
+            jQuery.subscribe('manifests.set', function() {
+                _this.update();
+                console.log('added new manifest');
+            });
+        },
+
+        hide: function() {
+            var _this = this;
+            _this.element.removeClass('active');
+        },
+
+        show: function() {
+            var _this = this;
+            console.log(_this.element);
+            _this.element.addClass('active');
+        },
+
+        template: Handlebars.compile([
+                      '<li>',
+                      '<img src="http://placehold.it/120x90" alt="repoImg">',
+                      '<div class="select-metadata">',
+                          '<h2 class="manifest-title">{{label}}</h2>',
+                          '<h3 class="repository-label">{{repository}}</h3>',
+                      '</div>',
+                      '<img src="http://placehold.it/120x90" alt="repoImg">',
+                      '<img src="http://placehold.it/120x90" alt="repoImg">',
+                      '<img src="http://placehold.it/120x90" alt="repoImg">',
+                      '<img src="http://placehold.it/120x90" alt="repoImg">',
+                      '</li>'
+        ].join(''))
+    };
+
+}(Mirador));
+
+
+(function($) {
+
     $.ManifestsPanel = function(options) {
 
         jQuery.extend(true, this, {
             element:                    null,
+            listItems:                  null,
             appendTo:                   null,
-            parent:                     null
+            parent:                     null,
+            manifestListElement:        null
         }, $.DEFAULT_SETTINGS, options);
 
         var _this = this;
@@ -3201,12 +3298,13 @@ window.Mirador = window.Mirador || function(config) {
                 worksets: []
             };
 
-            jQuery.each(_this.parent.manifests, function(manifestKey){
-                var manifest = _this.parent.manifests[manifestKey];
+            jQuery.each(_this.parent.manifests, function(manifestId){
+                var manifest = _this.parent.manifests[manifestId];
                 var prunedManifest = { 
                     label: manifest.label
                 };
 
+                console.log(manifest);
                 tplData.worksets.push(prunedManifest);
             });
             return tplData;
@@ -3225,7 +3323,7 @@ window.Mirador = window.Mirador || function(config) {
             jQuery.subscribe('manifestsPanelVisible.set', function(_, stateValue) {
                 if (stateValue) { _this.show(); return; }
                 //if ( _this.parent.get('manifestsPanelVisible', 'uiState')) { _this.show(); return; }
-                _this.hide();
+               _this.hide();
             });
             jQuery.subscribe('manifests.set', function() {
                 _this.update();
@@ -3264,7 +3362,7 @@ window.Mirador = window.Mirador || function(config) {
                       '<img src="http://placehold.it/120x90" alt="repoImg">',
                       '<div class="select-metadata">',
                           '<h2 class="manifest-title">{{label}}</h2>',
-                          '<h3 class="repository-label">{{repository}}</h3>',
+                          '<h3 class="repository-label">{{location}}</h3>',
                       '</div>',
                       '<img src="http://placehold.it/120x90" alt="repoImg">',
                       '<img src="http://placehold.it/120x90" alt="repoImg">',
@@ -3309,9 +3407,14 @@ window.Mirador = window.Mirador || function(config) {
 		bindEvents: function() {
             var _this = this;
             // handle subscribed events
+<<<<<<< HEAD
             jQuery.subscribe('workspacesPanelVisible.set', function(_, stateValue) {
                 //if ( _this.parent.get('workspacesPanelVisible', 'uiState')) { _this.show(); return; }
                 if (stateValue) { _this.show(); return; }
+=======
+            jQuery.subscribe('workspacesPanelVisible.set', function() {
+                if ( _this.parent.get('workspacesPanelVisible', 'mainMenuPanels')) { _this.show(); return; }
+>>>>>>> master
                 _this.hide();
             });
         },
@@ -3349,7 +3452,8 @@ window.Mirador = window.Mirador || function(config) {
 
         jQuery.extend(true, this, {
             jsonLd: null,
-            uri: manifestUri
+            uri: manifestUri,
+            location: null
         });
 
         this.loadManifestDataFromURI(dfd);
