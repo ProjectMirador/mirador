@@ -53,8 +53,9 @@
             });
 
             // handle subscribed events
-            jQuery.subscribe('manifestPanelVisible.set', function() {
-                if ( _this.parent.get('manifestPanelVisible', 'mainMenuPanels')) { _this.show(); return; }
+            jQuery.subscribe('manifestsPanelVisible.set', function(_, stateValue) {
+                if (stateValue) { _this.show(); return; }
+                //if ( _this.parent.get('manifestsPanelVisible', 'uiState')) { _this.show(); return; }
                 _this.hide();
             });
             jQuery.subscribe('manifests.set', function() {
