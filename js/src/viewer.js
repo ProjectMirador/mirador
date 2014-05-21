@@ -10,14 +10,14 @@
             canvas:                 null,
             initialWorkspace:       $.DEFAULT_SETTINGS.initialWorkspace,
             activeWorkspace:        null,
-            availableWorkspaces: $.DEFAULT_SETTINGS.availableWorkspaces,
+            availableWorkspaces:    $.DEFAULT_SETTINGS.availableWorkspaces,
             mainMenu:               null,
             //mainMenuLoadWindowCls:  '.mirador-main-menu .load-window',
             workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
             windowSize:             {},
             resizeRatio:            {},
-            uiState:				{'manifestsPanelVisible': false, 'workspacesPanelVisible': false, 'currentWorkspaceVisible': false, 'optionsPanelVisible': false},
-            overlayState:			{},
+            uiState:                {'manifestsPanelVisible': false, 'workspacesPanelVisible': false, 'currentWorkspaceVisible': false, 'optionsPanelVisible': false},
+            overlayState:           {},
             manifests: {} 
         }, $.DEFAULT_SETTINGS, options);
 
@@ -48,7 +48,7 @@
             this.workspace = new $.Workspace({initialWorkspace: this.initialWorkspace, parent: this });
 
             //add workspaces panel
-			this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
+            this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
 
             // add workset select menu (hidden by default) 
             this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
@@ -78,7 +78,7 @@
         
         // Sets the state of the viewer so that only one div can be visible/active and all others are hidden
         toggleUI: function(state) {
-			_this = this;
+            _this = this;
             if (this.get(state, 'uiState') === true) {
                 this.set(state, false, {parent: 'uiState'});
                 return;
@@ -94,6 +94,14 @@
         // Sets state of overlays that layer over one of the UI states
         toggleOverlay: function() {
         
+        },
+        
+        toggleLoadWindow: function() {
+            this.toggleUI('manifestsPanelVisible');
+        },
+        
+        toggleSwitchWorkspace: function() {
+            this.toggleUI('workspacesPanelVisible');
         },
 
         getManifestsData: function() {

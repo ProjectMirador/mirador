@@ -44,8 +44,8 @@
 
         bindEvents: function() {
             var _this = this;
-            this.element.find('.load-window').on('click', function() { _this.parent.toggleUI('manifestsPanelVisible'); });
-            this.element.find('.switch-workspace').on('click', function() { _this.parent.toggleUI('workspacesPanelVisible'); });
+            this.element.find('.load-window').on('click', function() { _this.parent.toggleLoadWindow(); });
+            this.element.find('.switch-workspace').on('click', function() { _this.parent.toggleSwitchWorkspace(); });
         },
 
         template: Handlebars.compile([
