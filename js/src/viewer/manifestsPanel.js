@@ -5,11 +5,12 @@
         jQuery.extend(true, this, {
             element:                    null,
             appendTo:                   null,
-            parent:                     null
+            parent:                     null,
+            manifestListItems:          []
         }, $.DEFAULT_SETTINGS, options);
 
         var _this = this;
-        setTimeout(function() { _this.init(); }, 3000 );
+        _this.init();
         
     };
 
@@ -20,24 +21,8 @@
             this.bindEvents();
         },
 
-        update: function() {
-        },
-
         fetchTplData: function() {
-            var _this = this;
-            var tplData = {
-                worksets: []
-            };
-
-            jQuery.each(_this.parent.manifests, function(manifestKey){
-                var manifest = _this.parent.manifests[manifestKey];
-                var prunedManifest = { 
-                    label: manifest.label
-                };
-
-                tplData.worksets.push(prunedManifest);
-            });
-            return tplData;
+          return {};
         },
 
         bindEvents: function() {
@@ -54,9 +39,7 @@
                 if ( _this.parent.get('manifestPanelVisible', 'mainMenuPanels')) { _this.show(); return; }
                 _this.hide();
             });
-            jQuery.subscribe('manifests.set', function() {
-                _this.update();
-                console.log('added new manifest');
+            jQuery.subscribe('manifestAdded', function(event, newManifest) {
             });
         },
 
@@ -67,7 +50,6 @@
 
         show: function() {
             var _this = this;
-            console.log(_this.element);
             _this.element.addClass('active');
         },
 
@@ -86,19 +68,6 @@
               '</div>',
               '<div id="select-results">',
                   '<ul class="items-listing">',
-                  '{{#worksets}}',
-                      '<li>',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<div class="select-metadata">',
-                          '<h2 class="manifest-title">{{label}}</h2>',
-                          '<h3 class="repository-label">{{repository}}</h3>',
-                      '</div>',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '</li>',
-                  '{{/worksets}}',
                   '</ul>',
               '</div>',
               '</div>',

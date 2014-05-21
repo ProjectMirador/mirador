@@ -68,7 +68,7 @@
             } else {
                 this[prop] = value;
             }
-            jQuery.publish(prop + '.set');
+            jQuery.publish(prop + '.set', [prop, value]);
         },
 
         switchWorkspace: function(type) {
@@ -76,7 +76,6 @@
         },
 
         toggleLoadWindow: function() {
-            console.log(this);
             _this = this;
             if (this.get('manifestPanelVisible', 'mainMenuPanels') === true) {
                 this.set('manifestPanelVisible', false, {parent: 'mainMenuPanels'});
@@ -123,13 +122,11 @@
                 if (!jQuery.isEmptyObject(manifest)) {
                     // populate blank object for immediate, synchronous return
                     manifests[url] = null;
-                    console.log(manifest);
                     _this.addManifestFromUrl(url);
                 }
 
             });
 
-            console.log(manifests);
             return manifests;
         },
         
@@ -144,22 +141,17 @@
 
         addManifestFromUrl: function(url) {
             var _this = this,
-            dfd = jQuery.Deferred(),
-            manifests = _this.get('manifests');
+            dfd = jQuery.Deferred();
 
             var manifest = new $.Manifest(url, dfd);
 
             dfd.done(function(loaded) {
                 if (loaded) {
-                    manifests[url] = manifest.jsonLd;
-                    _this.set('manifests', (function() {
-                        console.log(manifests);
-                        return manifests;
-                    })());
+                    _this.manifests[url] = manifest.jsonLd;
+                    jQuery.publish('manifestAdded', url);
                 }
             });
         }
-
     };
 
 }(Mirador));
