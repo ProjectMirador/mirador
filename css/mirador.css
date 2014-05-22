@@ -132,7 +132,7 @@
 
 /* main menu select menu 
 ---------------------------------------------------------------------------- */
-#manifest-select-menu, #workspace-select-menu {
+#manifest-select-menu, #workspace-select-menu, #workspaceContainer {
     position: absolute;
     height:100%;
     width:100%;
