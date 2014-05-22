@@ -3017,7 +3017,7 @@ window.Mirador = window.Mirador || function(config) {
             var manifest = new $.Manifest(url, dfd);
 
             dfd.done(function(loaded) {
-                if (loaded) {
+                if (loaded && !_this.manifests[url]) {
                     _this.manifests[url] = manifest.jsonLd;
                     jQuery.publish('manifestAdded', url);
                 }
@@ -3171,7 +3171,7 @@ window.Mirador = window.Mirador || function(config) {
             parent:                     null,
             manifestId:                 null,
             loadStatus:                 null
-        }, $.DEFAULT_SETTINGS, options);
+        }, options);
 
         this.init();
         
@@ -3181,19 +3181,20 @@ window.Mirador = window.Mirador || function(config) {
 
         init: function() {
           var _this = this;
-            this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn();
+            this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
             this.bindEvents();
             this.fetchImages();
         },
 
         fetchTplData: function() {
           var _this = this;
+          
           var manifest = $.viewer.manifests[_this.manifestId];
           var tplData = { 
             label: manifest.label,
             repository: jQuery.grep($.viewer.data, function(item) {
               return item.manifestUri === _this.manifestId;
-            }).location
+            })[0].location
           };
 
           return tplData;
@@ -3216,10 +3217,12 @@ window.Mirador = window.Mirador || function(config) {
 
         template: Handlebars.compile([
                       '<li>',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
+                      '<div class="repo-image">',
+                        '<img src="images/sul_logo.jpeg" alt="repoImg">',
+                      '</div>',
                       '<div class="select-metadata">',
-                          '<h2 class="manifest-title">{{label}}</h2>',
-                          '<h3 class="repository-label">{{repository}}</h3>',
+                          '<h3 class="manifest-title">{{label}}</h3>',
+                          '<h4 class="repository-label">{{repository}}</h4>',
                       '</div>',
                       '<img src="http://placehold.it/120x90" alt="repoImg">',
                       '<img src="http://placehold.it/120x90" alt="repoImg">',
@@ -3248,7 +3251,7 @@ window.Mirador = window.Mirador || function(config) {
             manifestListItems:          [],
             manifestListElement:        null,
             manifestLoadStatusIndicator: null
-        }, $.DEFAULT_SETTINGS, options);
+        }, options);
 
         var _this = this;
         _this.init();
@@ -3379,6 +3382,43 @@ window.Mirador = window.Mirador || function(config) {
 
 }(Mirador));
 
+
+(function($){
+
+    $.ImagePromise = function(imageUri, dfd) {
+
+        jQuery.extend(true, this, {
+            uri: imageUri,
+            dimensions: []
+        });
+
+        this.loadImageDataFromURI(dfd);
+    };
+
+    $.ImagePromise.prototype = {
+
+        loadImageDataFromURI: function(dfd) {
+            var _this = this;
+
+            jQuery.ajax({
+                url: _this.uri,
+                dataType: 'json',
+                async: true,
+
+                success: function(jsonLd) {
+                    dfd.resolve(true);
+                },
+
+                error: function() {
+                    console.log('Failed loading ' + _this.uri);
+                    dfd.resolve(false);
+                }
+            });
+
+        }
+    };
+
+}(Mirador));
 
 (function($){
 

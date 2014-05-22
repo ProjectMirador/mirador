@@ -147,7 +147,7 @@
             var manifest = new $.Manifest(url, dfd);
 
             dfd.done(function(loaded) {
-                if (loaded) {
+                if (loaded && !_this.manifests[url]) {
                     _this.manifests[url] = manifest.jsonLd;
                     jQuery.publish('manifestAdded', url);
                 }

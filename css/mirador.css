@@ -64,6 +64,11 @@
   text-decoration: none;
 }
 
+.mirador-main-menu a:focus {
+  border-bottom: 2px solid deepskyblue;
+  outline: none;
+}
+
 .mirador-main-menu .icon-bookmark-workspace,
 .mirador-main-menu .icon-load-window,
 .mirador-main-menu .icon-window-options,
@@ -155,7 +160,6 @@
     box-sizing: border-box;
     overflow: hidden;
 }
-
 .items-listing {
     overflow-y: scroll;
     height:100%;
@@ -167,6 +171,23 @@
     padding-top: 15px;
     padding-bottom: 15px;
     min-width:900px;
+}
+.select-metadata {
+  width:200px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow:hidden;
+}
+.repo-image {
+  position:relative;
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+}
+.repo-image img {
+  position:absolute;
+  width: 100%;
+  top: 0;
 }
 .items-listing li > * {
     float:left;

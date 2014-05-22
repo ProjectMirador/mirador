@@ -7,7 +7,7 @@
             parent:                     null,
             manifestId:                 null,
             loadStatus:                 null
-        }, $.DEFAULT_SETTINGS, options);
+        }, options);
 
         this.init();
         
@@ -17,7 +17,7 @@
 
         init: function() {
           var _this = this;
-            this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn();
+            this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
             this.bindEvents();
             this.fetchImages();
         },
@@ -30,7 +30,7 @@
             label: manifest.label,
             repository: jQuery.grep($.viewer.data, function(item) {
               return item.manifestUri === _this.manifestId;
-            }).location
+            })[0].location
           };
 
           return tplData;
@@ -53,10 +53,12 @@
 
         template: Handlebars.compile([
                       '<li>',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
+                      '<div class="repo-image">',
+                        '<img src="images/sul_logo.jpeg" alt="repoImg">',
+                      '</div>',
                       '<div class="select-metadata">',
-                          '<h2 class="manifest-title">{{label}}</h2>',
-                          '<h3 class="repository-label">{{repository}}</h3>',
+                          '<h3 class="manifest-title">{{label}}</h3>',
+                          '<h4 class="repository-label">{{repository}}</h4>',
                       '</div>',
                       '<img src="http://placehold.it/120x90" alt="repoImg">',
                       '<img src="http://placehold.it/120x90" alt="repoImg">',

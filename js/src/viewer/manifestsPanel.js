@@ -10,7 +10,7 @@
             manifestListItems:          [],
             manifestListElement:        null,
             manifestLoadStatusIndicator: null
-        }, $.DEFAULT_SETTINGS, options);
+        }, options);
 
         var _this = this;
         _this.init();
