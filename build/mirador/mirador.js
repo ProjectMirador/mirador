@@ -3227,6 +3227,7 @@ window.Mirador = window.Mirador || function(config) {
 
         fetchTplData: function() {
           var _this = this;
+          
           var manifest = $.viewer.manifests[_this.manifestId];
           var tplData = { 
             label: manifest.label,
@@ -3271,13 +3272,8 @@ window.Mirador = window.Mirador || function(config) {
 }(Mirador));
 
 
-(function ($) {
-  return 'blank';
-})(Mirador);
-
 (function($) {
 
->>>>>>> origin/master
     $.ManifestsPanel = function(options) {
 
         jQuery.extend(true, this, {
