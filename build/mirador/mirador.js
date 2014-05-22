@@ -2945,7 +2945,6 @@ window.Mirador = window.Mirador || function(config) {
         switchWorkspace: function(type) {
 
         },
-        
         // Sets the state of the viewer so that only one div can be visible/active and all others are hidden
         toggleUI: function(state) {
             _this = this;
@@ -2994,13 +2993,11 @@ window.Mirador = window.Mirador || function(config) {
                 if (!jQuery.isEmptyObject(manifest)) {
                     // populate blank object for immediate, synchronous return
                     manifests[url] = null;
-                    console.log(manifest);
                     _this.addManifestFromUrl(url);
                 }
 
             });
 
-            console.log(manifests);
             return manifests;
         },
         
@@ -3015,22 +3012,17 @@ window.Mirador = window.Mirador || function(config) {
 
         addManifestFromUrl: function(url) {
             var _this = this,
-            dfd = jQuery.Deferred(),
-            manifests = _this.get('manifests');
+            dfd = jQuery.Deferred();
 
             var manifest = new $.Manifest(url, dfd);
 
             dfd.done(function(loaded) {
                 if (loaded) {
-                    manifests[url] = manifest.jsonLd;
-                    _this.set('manifests', (function() {
-                        console.log(manifests);
-                        return manifests;
-                    })());
+                    _this.manifests[url] = manifest.jsonLd;
+                    jQuery.publish('manifestAdded', url);
                 }
             });
         }
-
     };
 
 }(Mirador));
@@ -3177,10 +3169,11 @@ window.Mirador = window.Mirador || function(config) {
         jQuery.extend(true, this, {
             element:                    null,
             parent:                     null,
-            manifestId:                 null
+            manifestId:                 null,
+            loadStatus:                 null
         }, $.DEFAULT_SETTINGS, options);
 
-        _this.init();
+        this.init();
         
     };
 
@@ -3193,23 +3186,17 @@ window.Mirador = window.Mirador || function(config) {
             this.fetchImages();
         },
 
-        update: function() {
-        },
-
         fetchTplData: function() {
-            var _this = this;
-            var tplData = {
-            };
+          var _this = this;
+          var manifest = $.viewer.manifests[_this.manifestId];
+          var tplData = { 
+            label: manifest.label,
+            repository: jQuery.grep($.viewer.data, function(item) {
+              return item.manifestUri === _this.manifestId;
+            }).location
+          };
 
-            jQuery.each(_this.parent.manifests, function(manifestKey){
-                var manifest = _this.parent.manifests[manifestKey];
-                var prunedManifest = { 
-                    label: manifest.label
-                };
-
-                tplData.worksets.push(prunedManifest);
-            });
-            return tplData;
+          return tplData;
         },
 
         fetchImages: function() {
@@ -3217,34 +3204,14 @@ window.Mirador = window.Mirador || function(config) {
         },
 
         bindEvents: function() {
-            var _this = this;
-            // handle interface events
-            this.element.find('#load-controls form').on('submit', function() {
-                event.preventDefault();
-                var url = jQuery(this).find('input').val();
-                _this.parent.addManifestFromUrl(url);
-            });
-
-            // handle subscribed events
-            jQuery.subscribe('manifestPanelVisible.set', function() {
-                if ( _this.parent.get('manifestPanelVisible', 'mainMenuPanels')) { _this.show(); return; }
-                _this.hide();
-            });
-            jQuery.subscribe('manifests.set', function() {
-                _this.update();
-                console.log('added new manifest');
-            });
         },
 
         hide: function() {
             var _this = this;
-            _this.element.removeClass('active');
         },
 
         show: function() {
             var _this = this;
-            console.log(_this.element);
-            _this.element.addClass('active');
         },
 
         template: Handlebars.compile([
@@ -3265,6 +3232,10 @@ window.Mirador = window.Mirador || function(config) {
 }(Mirador));
 
 
+(function ($) {
+  return 'blank';
+})(Mirador);
+
 (function($) {
 
     $.ManifestsPanel = function(options) {
@@ -3274,40 +3245,23 @@ window.Mirador = window.Mirador || function(config) {
             listItems:                  null,
             appendTo:                   null,
             parent:                     null,
-            manifestListElement:        null
+            manifestListItems:          [],
+            manifestListElement:        null,
+            manifestLoadStatusIndicator: null
         }, $.DEFAULT_SETTINGS, options);
 
         var _this = this;
-        setTimeout(function() { _this.init(); }, 3000 );
+        _this.init();
         
     };
 
     $.ManifestsPanel.prototype = {
 
         init: function() {
-            this.element = jQuery(this.template(this.fetchTplData())).appendTo(this.appendTo);
+            this.element = jQuery(this.template()).appendTo(this.appendTo);
+            this.manifestListElement = this.element.find('ul');
+            // this.manifestLoadStatus = new $.ManifestLoadStatusIndicator({parent: this});
             this.bindEvents();
-        },
-
-        update: function() {
-        },
-
-        fetchTplData: function() {
-            var _this = this;
-            var tplData = {
-                worksets: []
-            };
-
-            jQuery.each(_this.parent.manifests, function(manifestId){
-                var manifest = _this.parent.manifests[manifestId];
-                var prunedManifest = { 
-                    label: manifest.label
-                };
-
-                console.log(manifest);
-                tplData.worksets.push(prunedManifest);
-            });
-            return tplData;
         },
 
         bindEvents: function() {
@@ -3323,11 +3277,10 @@ window.Mirador = window.Mirador || function(config) {
             jQuery.subscribe('manifestsPanelVisible.set', function(_, stateValue) {
                 if (stateValue) { _this.show(); return; }
                 //if ( _this.parent.get('manifestsPanelVisible', 'uiState')) { _this.show(); return; }
-               _this.hide();
+                _this.hide();
             });
-            jQuery.subscribe('manifests.set', function() {
-                _this.update();
-                console.log('added new manifest');
+            jQuery.subscribe('manifestAdded', function(event, newManifest) {
+              _this.manifestListItems.push(new $.ManifestsListItem({ parent: _this, manifestId: newManifest }));
             });
         },
 
@@ -3338,7 +3291,6 @@ window.Mirador = window.Mirador || function(config) {
 
         show: function() {
             var _this = this;
-            console.log(_this.element);
             _this.element.addClass('active');
         },
 
@@ -3357,19 +3309,6 @@ window.Mirador = window.Mirador || function(config) {
               '</div>',
               '<div id="select-results">',
                   '<ul class="items-listing">',
-                  '{{#worksets}}',
-                      '<li>',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<div class="select-metadata">',
-                          '<h2 class="manifest-title">{{label}}</h2>',
-                          '<h3 class="repository-label">{{location}}</h3>',
-                      '</div>',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '</li>',
-                  '{{/worksets}}',
                   '</ul>',
               '</div>',
               '</div>',
@@ -3407,14 +3346,9 @@ window.Mirador = window.Mirador || function(config) {
 		bindEvents: function() {
             var _this = this;
             // handle subscribed events
-<<<<<<< HEAD
             jQuery.subscribe('workspacesPanelVisible.set', function(_, stateValue) {
                 //if ( _this.parent.get('workspacesPanelVisible', 'uiState')) { _this.show(); return; }
                 if (stateValue) { _this.show(); return; }
-=======
-            jQuery.subscribe('workspacesPanelVisible.set', function() {
-                if ( _this.parent.get('workspacesPanelVisible', 'mainMenuPanels')) { _this.show(); return; }
->>>>>>> master
                 _this.hide();
             });
         },

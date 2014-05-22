@@ -75,7 +75,6 @@
         switchWorkspace: function(type) {
 
         },
-        
         // Sets the state of the viewer so that only one div can be visible/active and all others are hidden
         toggleUI: function(state) {
             _this = this;
@@ -124,13 +123,11 @@
                 if (!jQuery.isEmptyObject(manifest)) {
                     // populate blank object for immediate, synchronous return
                     manifests[url] = null;
-                    console.log(manifest);
                     _this.addManifestFromUrl(url);
                 }
 
             });
 
-            console.log(manifests);
             return manifests;
         },
         
@@ -145,22 +142,17 @@
 
         addManifestFromUrl: function(url) {
             var _this = this,
-            dfd = jQuery.Deferred(),
-            manifests = _this.get('manifests');
+            dfd = jQuery.Deferred();
 
             var manifest = new $.Manifest(url, dfd);
 
             dfd.done(function(loaded) {
                 if (loaded) {
-                    manifests[url] = manifest.jsonLd;
-                    _this.set('manifests', (function() {
-                        console.log(manifests);
-                        return manifests;
-                    })());
+                    _this.manifests[url] = manifest.jsonLd;
+                    jQuery.publish('manifestAdded', url);
                 }
             });
         }
-
     };
 
 }(Mirador));

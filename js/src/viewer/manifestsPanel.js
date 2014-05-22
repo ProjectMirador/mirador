@@ -7,40 +7,23 @@
             listItems:                  null,
             appendTo:                   null,
             parent:                     null,
-            manifestListElement:        null
+            manifestListItems:          [],
+            manifestListElement:        null,
+            manifestLoadStatusIndicator: null
         }, $.DEFAULT_SETTINGS, options);
 
         var _this = this;
-        setTimeout(function() { _this.init(); }, 3000 );
+        _this.init();
         
     };
 
     $.ManifestsPanel.prototype = {
 
         init: function() {
-            this.element = jQuery(this.template(this.fetchTplData())).appendTo(this.appendTo);
+            this.element = jQuery(this.template()).appendTo(this.appendTo);
+            this.manifestListElement = this.element.find('ul');
+            // this.manifestLoadStatus = new $.ManifestLoadStatusIndicator({parent: this});
             this.bindEvents();
-        },
-
-        update: function() {
-        },
-
-        fetchTplData: function() {
-            var _this = this;
-            var tplData = {
-                worksets: []
-            };
-
-            jQuery.each(_this.parent.manifests, function(manifestId){
-                var manifest = _this.parent.manifests[manifestId];
-                var prunedManifest = { 
-                    label: manifest.label
-                };
-
-                console.log(manifest);
-                tplData.worksets.push(prunedManifest);
-            });
-            return tplData;
         },
 
         bindEvents: function() {
@@ -58,9 +41,8 @@
                 //if ( _this.parent.get('manifestsPanelVisible', 'uiState')) { _this.show(); return; }
                 _this.hide();
             });
-            jQuery.subscribe('manifests.set', function() {
-                _this.update();
-                console.log('added new manifest');
+            jQuery.subscribe('manifestAdded', function(event, newManifest) {
+              _this.manifestListItems.push(new $.ManifestsListItem({ parent: _this, manifestId: newManifest }));
             });
         },
 
@@ -71,7 +53,6 @@
 
         show: function() {
             var _this = this;
-            console.log(_this.element);
             _this.element.addClass('active');
         },
 
@@ -90,19 +71,6 @@
               '</div>',
               '<div id="select-results">',
                   '<ul class="items-listing">',
-                  '{{#worksets}}',
-                      '<li>',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<div class="select-metadata">',
-                          '<h2 class="manifest-title">{{label}}</h2>',
-                          '<h3 class="repository-label">{{location}}</h3>',
-                      '</div>',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '</li>',
-                  '{{/worksets}}',
                   '</ul>',
               '</div>',
               '</div>',
