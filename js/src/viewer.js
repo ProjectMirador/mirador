@@ -161,7 +161,7 @@
         addManifestToWorkspace: function(manifestURI) {
             var manifest = this.manifests[manifestURI];
             
-            jQuery.publish('manifestToWorkspace', manifest);
+            jQuery.publish('manifestToWindow', manifest);
             this.toggleCurrentWorkspace();
         }
     };

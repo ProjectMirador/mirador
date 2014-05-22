@@ -3031,7 +3031,7 @@ window.Mirador = window.Mirador || function(config) {
         addManifestToWorkspace: function(manifestURI) {
             var manifest = this.manifests[manifestURI];
             
-            jQuery.publish('manifestToWorkspace', manifest);
+            jQuery.publish('manifestToWindow', manifest);
             this.toggleCurrentWorkspace();
         }
     };
@@ -3063,7 +3063,7 @@ window.Mirador = window.Mirador || function(config) {
      jQuery.extend(true, this, {
          type:             null,
          workspaceSlotCls: 'slot',
-         objects:          []
+         windows:          []
          
      }, $.DEFAULT_SETTINGS, options);
      
@@ -3089,10 +3089,6 @@ window.Mirador = window.Mirador || function(config) {
       
       bindEvents: function() {
             var _this = this;
-            
-            jQuery.subscribe('manifestToWorkspace', function(_, manifest) {
-                _this.objects = [manifest];
-            });
             
             jQuery.subscribe('currentWorkspaceVisible.set', function(_, stateValue) {
                 if (stateValue) { _this.show(); return; }
@@ -3535,6 +3531,46 @@ window.Mirador = window.Mirador || function(config) {
 
   $.WorkspaceStatusBar.prototype = {
 
+  };
+
+}(Mirador));
+
+
+(function($) {
+
+  $.Window = function(options) {
+
+     jQuery.extend(true, this, {
+         element:           null,
+         appendTo:          null,
+         manifest:          null
+         
+     }, $.DEFAULT_SETTINGS, options);
+          
+     this.init();
+
+  };
+
+  $.Window.prototype = {
+      init: function () {
+            this.element = jQuery(this.template()).appendTo(this.appendTo);
+
+            this.bindEvents();
+      },
+      
+      bindEvents: function() {
+            var _this = this;
+            
+            jQuery.subscribe('manifestToWindow', function(_, manifest) {
+                _this.manifest = manifest;
+            });
+      },
+      
+      //template should be based on workspace type
+      template: Handlebars.compile([
+      '<div>',
+      '</div>'
+      ].join(''))
   };
 
 }(Mirador));

@@ -142,7 +142,7 @@
     transition: all 0.3s ease-in;
     overflow-y: scroll;
 }
-#manifest-select-menu.active, #workspace-select-menu.active {
+#manifest-select-menu.active, #workspace-select-menu.active, #workspaceContainer.active {
      opacity: 0.9;
     -webkit-transform: scale(1);
     transition: all 0.3s ease-out;
