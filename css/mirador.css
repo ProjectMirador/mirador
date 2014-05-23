@@ -194,6 +194,11 @@
     margin-right:15px;
     height: 80px;
 }
+.thumbnail-image {
+  background-color: lightgray;
+  box-shadow: 0px 0px 5px black;
+  background-image: url(../images/loading.gif));
+}
 #load-controls {
     float: left;
     height:100%;

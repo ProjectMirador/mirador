@@ -6,7 +6,9 @@
             element:                    null,
             parent:                     null,
             manifestId:                 null,
-            loadStatus:                 null
+            loadStatus:                 null,
+            numPreviewImages:           8,
+            thumbHeight:                80
         }, options);
 
         this.init();
@@ -30,8 +32,24 @@
             label: manifest.label,
             repository: jQuery.grep($.viewer.data, function(item) {
               return item.manifestUri === _this.manifestId;
-            })[0].location
+            })[0].location,
+            images: []
           };
+          if (_this.numPreviewImages > $.viewer.manifests[_this.manifestId].sequences[0].canvases.length) {
+            _this.numPreviewImages = $.viewer.manifests[_this.manifestId].sequences[0].canvases.length;
+          }
+          for ( var i=0; i < _this.numPreviewImages - 1 ; i++) {
+            var resource = $.viewer.manifests[_this.manifestId].sequences[0].canvases[i].images[0].resource,
+            url = $.Iiif.getUriWithHeight(resource.service['@id'], _this.thumbHeight),
+            aspectRatio = resource.height/resource.width;
+            width = (_this.thumbHeight/aspectRatio);
+            console.log(resource);
+   
+            tplData.images.push({
+              url: url,
+              width: width
+            });
+          }
 
           return tplData;
         },
@@ -60,10 +78,9 @@
                           '<h3 class="manifest-title">{{label}}</h3>',
                           '<h4 class="repository-label">{{repository}}</h4>',
                       '</div>',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
+                      '{{#each images}}',
+                        '<img src="{{url}}" width="{{width}}"class="thumbnail-image" >',
+                      '{{/each}}',
                       '</li>'
         ].join(''))
     };
