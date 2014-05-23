@@ -30,9 +30,9 @@
           var manifest = $.viewer.manifests[_this.manifestId];
           var tplData = { 
             label: manifest.label,
-            repository: jQuery.grep($.viewer.data, function(item) {
-              return item.manifestUri === _this.manifestId;
-            })[0].location,
+            // repository: jQuery.grep($.viewer.data, function(item) {
+            //   return item.manifestUri === _this.manifestId;
+            // })[0].location,
             images: []
           };
           if (_this.numPreviewImages > $.viewer.manifests[_this.manifestId].sequences[0].canvases.length) {
@@ -40,11 +40,11 @@
           }
           for ( var i=0; i < _this.numPreviewImages - 1 ; i++) {
             var resource = $.viewer.manifests[_this.manifestId].sequences[0].canvases[i].images[0].resource,
-            url = $.Iiif.getUriWithHeight(resource.service['@id'], _this.thumbHeight),
-            aspectRatio = resource.height/resource.width;
+            service = resource['default'] ? resource['default'].service : resource.service,
+            url = $.Iiif.getUriWithHeight(service['@id'], _this.thumbHeight),
+            aspectRatio = resource.height/resource.width,
             width = (_this.thumbHeight/aspectRatio);
-            console.log(resource);
-   
+
             tplData.images.push({
               url: url,
               width: width

@@ -195,9 +195,11 @@
     height: 80px;
 }
 .thumbnail-image {
-  background-color: lightgray;
-  box-shadow: 0px 0px 5px black;
-  background-image: url(../images/loading.gif));
+  background-color: gray;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
+  background-image: url(../images/loading.gif);
+  background-position: center;
+  background-repeat: no-repeat;
 }
 #load-controls {
     float: left;
