@@ -6,8 +6,10 @@
             element:                    null,
             parent:                     null,
             manifestId:                 null,
-            loadStatus:                 null
-        }, $.DEFAULT_SETTINGS, options);
+            loadStatus:                 null,
+            numPreviewImages:           8,
+            thumbHeight:                80
+        }, options);
 
         this.init();
         
@@ -17,7 +19,7 @@
 
         init: function() {
           var _this = this;
-            this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn();
+            this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
             this.bindEvents();
             this.fetchImages();
         },
@@ -28,10 +30,26 @@
           var manifest = $.viewer.manifests[_this.manifestId];
           var tplData = { 
             label: manifest.label,
-            repository: jQuery.grep($.viewer.data, function(item) {
-              return item.manifestUri === _this.manifestId;
-            }).location
+            // repository: jQuery.grep($.viewer.data, function(item) {
+            //   return item.manifestUri === _this.manifestId;
+            // })[0].location,
+            images: []
           };
+          if (_this.numPreviewImages > $.viewer.manifests[_this.manifestId].sequences[0].canvases.length) {
+            _this.numPreviewImages = $.viewer.manifests[_this.manifestId].sequences[0].canvases.length;
+          }
+          for ( var i=0; i < _this.numPreviewImages - 1 ; i++) {
+            var resource = $.viewer.manifests[_this.manifestId].sequences[0].canvases[i].images[0].resource,
+            service = resource['default'] ? resource['default'].service : resource.service,
+            url = $.Iiif.getUriWithHeight(service['@id'], _this.thumbHeight),
+            aspectRatio = resource.height/resource.width,
+            width = (_this.thumbHeight/aspectRatio);
+
+            tplData.images.push({
+              url: url,
+              width: width
+            });
+          }
 
           return tplData;
         },
@@ -53,15 +71,16 @@
 
         template: Handlebars.compile([
                       '<li>',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<div class="select-metadata">',
-                          '<h2 class="manifest-title">{{label}}</h2>',
-                          '<h3 class="repository-label">{{repository}}</h3>',
+                      '<div class="repo-image">',
+                        '<img src="images/sul_logo.jpeg" alt="repoImg">',
                       '</div>',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
+                      '<div class="select-metadata">',
+                          '<h3 class="manifest-title">{{label}}</h3>',
+                          '<h4 class="repository-label">{{repository}}</h4>',
+                      '</div>',
+                      '{{#each images}}',
+                        '<img src="{{url}}" width="{{width}}"class="thumbnail-image" >',
+                      '{{/each}}',
                       '</li>'
         ].join(''))
     };

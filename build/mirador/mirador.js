@@ -3021,7 +3021,7 @@ window.Mirador = window.Mirador || function(config) {
             var manifest = new $.Manifest(url, dfd);
 
             dfd.done(function(loaded) {
-                if (loaded) {
+                if (loaded && !_this.manifests[url]) {
                     _this.manifests[url] = manifest.jsonLd;
                     jQuery.publish('manifestAdded', url);
                 }
@@ -3206,8 +3206,10 @@ window.Mirador = window.Mirador || function(config) {
             element:                    null,
             parent:                     null,
             manifestId:                 null,
-            loadStatus:                 null
-        }, $.DEFAULT_SETTINGS, options);
+            loadStatus:                 null,
+            numPreviewImages:           8,
+            thumbHeight:                80
+        }, options);
 
         this.init();
         
@@ -3217,7 +3219,7 @@ window.Mirador = window.Mirador || function(config) {
 
         init: function() {
           var _this = this;
-            this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn();
+            this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
             this.bindEvents();
             this.fetchImages();
         },
@@ -3228,10 +3230,26 @@ window.Mirador = window.Mirador || function(config) {
           var manifest = $.viewer.manifests[_this.manifestId];
           var tplData = { 
             label: manifest.label,
-            repository: jQuery.grep($.viewer.data, function(item) {
-              return item.manifestUri === _this.manifestId;
-            }).location
+            // repository: jQuery.grep($.viewer.data, function(item) {
+            //   return item.manifestUri === _this.manifestId;
+            // })[0].location,
+            images: []
           };
+          if (_this.numPreviewImages > $.viewer.manifests[_this.manifestId].sequences[0].canvases.length) {
+            _this.numPreviewImages = $.viewer.manifests[_this.manifestId].sequences[0].canvases.length;
+          }
+          for ( var i=0; i < _this.numPreviewImages - 1 ; i++) {
+            var resource = $.viewer.manifests[_this.manifestId].sequences[0].canvases[i].images[0].resource,
+            service = resource['default'] ? resource['default'].service : resource.service,
+            url = $.Iiif.getUriWithHeight(service['@id'], _this.thumbHeight),
+            aspectRatio = resource.height/resource.width,
+            width = (_this.thumbHeight/aspectRatio);
+
+            tplData.images.push({
+              url: url,
+              width: width
+            });
+          }
 
           return tplData;
         },
@@ -3253,15 +3271,16 @@ window.Mirador = window.Mirador || function(config) {
 
         template: Handlebars.compile([
                       '<li>',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<div class="select-metadata">',
-                          '<h2 class="manifest-title">{{label}}</h2>',
-                          '<h3 class="repository-label">{{repository}}</h3>',
+                      '<div class="repo-image">',
+                        '<img src="images/sul_logo.jpeg" alt="repoImg">',
                       '</div>',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
-                      '<img src="http://placehold.it/120x90" alt="repoImg">',
+                      '<div class="select-metadata">',
+                          '<h3 class="manifest-title">{{label}}</h3>',
+                          '<h4 class="repository-label">{{repository}}</h4>',
+                      '</div>',
+                      '{{#each images}}',
+                        '<img src="{{url}}" width="{{width}}"class="thumbnail-image" >',
+                      '{{/each}}',
                       '</li>'
         ].join(''))
     };
@@ -3281,7 +3300,7 @@ window.Mirador = window.Mirador || function(config) {
             manifestListItems:          [],
             manifestListElement:        null,
             manifestLoadStatusIndicator: null
-        }, $.DEFAULT_SETTINGS, options);
+        }, options);
 
         var _this = this;
         _this.init();
@@ -3412,6 +3431,43 @@ window.Mirador = window.Mirador || function(config) {
 
 }(Mirador));
 
+
+(function($){
+
+    $.ImagePromise = function(imageUri, dfd) {
+
+        jQuery.extend(true, this, {
+            uri: imageUri,
+            dimensions: []
+        });
+
+        this.loadImageDataFromURI(dfd);
+    };
+
+    $.ImagePromise.prototype = {
+
+        loadImageDataFromURI: function(dfd) {
+            var _this = this;
+
+            jQuery.ajax({
+                url: _this.uri,
+                dataType: 'json',
+                async: true,
+
+                success: function(jsonLd) {
+                    dfd.resolve(true);
+                },
+
+                error: function() {
+                    console.log('Failed loading ' + _this.uri);
+                    dfd.resolve(false);
+                }
+            });
+
+        }
+    };
+
+}(Mirador));
 
 (function($){
 
@@ -3792,19 +3848,85 @@ window.Mirador = window.Mirador || function(config) {
 }(Mirador));
 
 
+
 (function($) {
 
-  $.Iiif = function(options) {
+  $.Iiif = {
 
-     jQuery.extend(true, this, {
+    // Temporary method to create Stanford IIIF URI from Stanford stacks non-IIIF URI
+    getUri: function(uri) {
+      var iiifUri = uri,
+      match = /http?:\/\/stacks.stanford.edu\/image\/(\w+\/\S+)/i.exec(uri);
 
-     }, $.DEFAULT_SETTINGS, options);
+      if (match && match.length === 2) {
+        iiifUri = 'https://stacks.stanford.edu/image/iiif/' + encodeURIComponent(match[1]);
+      }
+
+      return iiifUri;
+    },
+
+
+    getUriWithHeight: function(uri, height) {
+      uri = uri.replace(/\/$/, '');
+      return this.getUri(uri) + '/full/,' + height + '/0/native.jpg';
+    },
+
+
+    prepJsonForOsd: function(json) {
+      json.image_host    = this.getImageHostUrl(json);
+      json.scale_factors = this.packageScaleFactors(json);
+      json.profile       = json.profile.replace(/image-api\/1.\d/, 'image-api');
+
+      if (!json.tile_width) {
+        json.tile_width = 256;
+        json.tile_height = 256;
+      }
+
+      return json;
+    },
+
+
+    getImageHostUrl: function(json) {
+      var regex,
+          matches = [];
+
+      if (!json.hasOwnProperty('image_host')) {
+
+        json.image_host = json.tilesUrl || json['@id'] || '';
+
+       if (json.hasOwnProperty('identifier')) {
+          regex = new RegExp('/?' + json.identifier + '/?$', 'i');
+          json.image_host = json.image_host.replace(regex, '');
+
+        } else {
+          regex = new RegExp('(.*)\/(.*)$');
+          matches = regex.exec(json.image_host);
+
+          if (matches.length > 1) {
+            json.image_host = matches[1];
+            json.identifier = matches[2];
+          }
+        }
+      }
+
+      return json.image_host;
+    },
+
+
+    packageScaleFactors: function(json) {
+      var newScaleFactors = [];
+
+      if (json.hasOwnProperty('scale_factors') && jQuery.isArray(json.scale_factors)) {
+        for (var i = 0; i < json.scale_factors.length; i++) {
+          newScaleFactors.push(i);
+        }
+      }
+
+      return newScaleFactors;
+    }
 
   };
 
-  $.Iiif.prototype = {
-
-  };
 
 }(Mirador));
 
