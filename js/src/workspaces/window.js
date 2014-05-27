@@ -5,7 +5,9 @@
      jQuery.extend(true, this, {
          element:           null,
          appendTo:          null,
-         manifest:          null
+         manifest:          null,
+         uiState:           {'ThumbnailsView': true, 'ImageView': false},
+         overlayState:      {'metadata': false, 'toc': false, 'thumbnails' : false}
          
      }, $.DEFAULT_SETTINGS, options);
           
@@ -25,12 +27,19 @@
             
             jQuery.subscribe('manifestToWindow', function(_, manifest) {
                 _this.manifest = manifest;
+                
+                jQuery.each(_this.uiState, function(key, value){ 
+                    if (value) {
+                        var view = new $[key]( {manifest: manifest, appendTo: _this.element, parent: _this} );
+                        console.log(view);
+                    }
+                });
             });
       },
       
       //template should be based on workspace type
       template: Handlebars.compile([
-      '<div>',
+      '<div class="window">',
       '</div>'
       ].join(''))
   };

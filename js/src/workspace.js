@@ -17,14 +17,15 @@
 
   $.Workspace.prototype = {
       init: function () {
-            this.element
-            .addClass(this.workspaceSlotCls)
-            .appendTo(this.parent.canvas);
+            this.element.addClass(this.workspaceSlotCls).appendTo(this.parent.canvas);
 
             this.element.append(this.template({
                 workspaceSlotCls: this.workspaceSlotCls
             }));
+            
             jQuery(this.element).layout({ applyDefaultStyles: true });
+            
+            var window = new $.Window({appendTo: this.element});
             
             this.bindEvents();
       },
