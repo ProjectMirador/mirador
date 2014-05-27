@@ -31,7 +31,6 @@
                 jQuery.each(_this.uiState, function(key, value){ 
                     if (value) {
                         var view = new $[key]( {manifest: manifest, appendTo: _this.element, parent: _this} );
-                        console.log(view);
                     }
                 });
             });

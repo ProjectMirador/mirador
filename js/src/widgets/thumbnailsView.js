@@ -28,7 +28,6 @@
 
         this.thumbsListingCls = 'thumbs-listing';
         this.thumbsDefaultHeight = this.thumbsMinHeight + ((this.thumbsMaxHeight - this.thumbsMinHeight) * this.thumbsDefaultZoom);    
-        //jQuery(this.element.html(''));
         this.loadContent();
 
         },
@@ -46,8 +45,6 @@
       };
 
       tplData.thumbs = jQuery.map(this.imagesList, function(image, index) {
-        console.log($.getImageUrlForCanvas(image));
-        console.log($.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), _this.thumbsMaxHeight));
         return {
           thumbUrl: $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), _this.thumbsMaxHeight),
           title:    image.label,
@@ -55,10 +52,7 @@
         };
       });
       
-      console.log(tplData);
-      console.log(this.element);
-
-      this.element = _this.template(tplData);
+      this.element = jQuery(_this.template(tplData)).appendTo(this.appendTo);
     },
 
     attachEvents: function() {
