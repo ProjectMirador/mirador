@@ -52,10 +52,6 @@
       //template should be based on workspace type
       template: Handlebars.compile([
       '<div class="{{workspaceSlotCls}} ui-layout-center">',
-          '<span>',
-          '<h1>Add Item to Workspace</h1>',
-          '</span>',
-          '<span class="icon-workspace-slot"></span>',
       '</div>'
       ].join(''))
   };

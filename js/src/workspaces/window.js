@@ -36,6 +36,22 @@
             });
       },
       
+      get: function(prop, parent) {
+            if (parent) {
+                return this[parent][prop];
+            }
+            return this[prop];
+        },
+
+      set: function(prop, value, options) {
+            if (options) {
+                this[options.parent][prop] = value;
+            } else {
+                this[prop] = value;
+            }
+            jQuery.publish(prop + '.set', value);
+      },
+      
       //template should be based on workspace type
       template: Handlebars.compile([
       '<div class="window">',
