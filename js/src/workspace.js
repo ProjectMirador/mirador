@@ -23,7 +23,7 @@
                 workspaceSlotCls: this.workspaceSlotCls
             }));
             
-            jQuery(this.element).layout({ applyDefaultStyles: true });
+            //jQuery(this.element).layout({ applyDefaultStyles: true });
             
             var window = new $.Window({appendTo: this.element});
             

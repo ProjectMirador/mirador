@@ -53,6 +53,10 @@
       });
       
       this.element = jQuery(_this.template(tplData)).appendTo(this.appendTo);
+      jQuery.each(this.element.find("img"), function(key, value) {
+          var url = jQuery(value).attr("data");
+          _this.loadImage(value, url);
+      });
     },
 
     attachEvents: function() {
@@ -78,12 +82,21 @@
 
     },
     
+    loadImage: function(imageElement, url) {
+        var _this = this,
+        imagepromise = new $.ImagePromise(url);
+
+        imagepromise.done(function(image) {
+            jQuery(imageElement).attr('src', image);
+        });
+    },
+    
     template: Handlebars.compile([
         '<ul class="{{listingCssCls}} listing-thumbs">',
           '{{#thumbs}}',
             '<li>',
               '<a href="javascript:;">',
-                '<img title="{{title}}" data-image-id="{{id}}" src="{{thumbUrl}}" height="{{../defaultHeight}}">',
+                '<img class="thumbnail-image" title="{{title}}" data-image-id="{{id}}" src="" data="{{thumbUrl}}" height="{{../defaultHeight}}">',
                 '<div class="thumb-label">{{title}}</div>',
               '</a>',
             '</li>',
