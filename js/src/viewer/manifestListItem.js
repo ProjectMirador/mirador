@@ -71,10 +71,14 @@
         },
 
         bindEvents: function() {
+          var _this = this;
           this.element.find('img').on('load', function() {
-            console.log('this image has now loaded');
-            console.log(jQuery(this));
+            //console.log('this image has now loaded');
+            //console.log(jQuery(this));
             jQuery(this).hide().fadeIn(750);
+          });
+          this.element.find('.select-metadata').on('click', function() {
+            _this.parent.addManifestToWorkspace(_this.manifestId);
           });
         },
 

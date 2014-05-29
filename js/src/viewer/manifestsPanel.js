@@ -45,6 +45,10 @@
               _this.manifestListItems.push(new $.ManifestsListItem({ parent: _this, manifestId: newManifest }));
             });
         },
+        
+        addManifestToWorkspace: function(manifestURI) {
+            this.parent.addManifestToWorkspace(manifestURI);
+        },
 
         hide: function() {
             var _this = this;
