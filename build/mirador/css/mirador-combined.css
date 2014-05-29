@@ -2296,9 +2296,9 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
 .thumbnail-image {
   background-color: gray;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
-  background-image: url(../images/loading.gif);
-  background-position: center;
-  background-repeat: no-repeat;
+  /* background-image: url(../images/loading.gif); */
+  /* background-position: center; */
+  /* background-repeat: no-repeat; */
 }
 #load-controls {
     float: left;
@@ -3055,3 +3055,42 @@ a.mirador-icon-annotationDetail-toggle.hidden {
   font-family: 'Open Sans', 'Lucida Grande', Verdana, Arial,sans-serif;
   font-size: 1.2em;
 }
+
+// Animations for use elsewhere.
+.flash {
+  -webkit-animation: flash 5s infinite; /* Safari 4+ */
+  -moz-animation:    flash 5s infinite; /* Fx 5+ */
+  -o-animation:      flash 5s infinite; /* Opera 12+ */
+  animation:         flash 5s infinite;
+  -moz-animation-delay: 1s;
+  -webkit-animation-delay: 1s;
+  -ms-animation-delay: 1s;
+  -o-animation-delay: 1s;
+  animation-delay: 1s;
+}
+@-webkit-keyframes flash {
+  0%, 50%, 100% {
+    opacity: 1;
+
+}
+
+25%, 75% {
+  opacity: 0;
+
+}
+
+}
+
+@keyframes flash {
+  0%, 50%, 100% {
+    opacity: 1;
+
+}
+
+25%, 75% {
+  opacity: 0;
+
+}
+
+}
+
