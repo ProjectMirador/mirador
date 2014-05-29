@@ -2915,7 +2915,7 @@ window.Mirador = window.Mirador || function(config) {
             .appendTo(this.element);
 
             // add workspace configuration
-            this.workspace = new $.Workspace({initialWorkspace: this.initialWorkspace, parent: this });
+            this.activeWorkspace = new $.Workspace({type: this.initialWorkspace, parent: this });
 
             //add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
@@ -2972,6 +2972,10 @@ window.Mirador = window.Mirador || function(config) {
         toggleSwitchWorkspace: function() {
             this.toggleUI('workspacesPanelVisible');
         },
+        
+        toggleCurrentWorkspace: function() {
+            this.toggleUI('currentWorkspaceVisible');
+        },
 
         getManifestsData: function() {
             var _this = this,
@@ -3022,6 +3026,14 @@ window.Mirador = window.Mirador || function(config) {
                     jQuery.publish('manifestAdded', url);
                 }
             });
+        },
+        
+        addManifestToWorkspace: function(manifestURI) {
+            console.log("triggered addManifestToWorkspace " + manifestURI);
+            var manifest = this.manifests[manifestURI];
+            
+            jQuery.publish('manifestToWorkspace', manifest);
+            this.toggleCurrentWorkspace();
         }
     };
 
@@ -3050,12 +3062,13 @@ window.Mirador = window.Mirador || function(config) {
   $.Workspace = function(options) {
 
      jQuery.extend(true, this, {
-         type: null,
-         workspaceSlotCls: 'slot'
+         type:             null,
+         workspaceSlotCls: 'slot',
+         window:          null
          
      }, $.DEFAULT_SETTINGS, options);
      
-     this.element  = this.element || jQuery('<div class="workspaceContainer">');
+     this.element  = this.element || jQuery('<div id="workspaceContainer">');
      
      this.init();
 
@@ -3063,21 +3076,46 @@ window.Mirador = window.Mirador || function(config) {
 
   $.Workspace.prototype = {
       init: function () {
-            this.element
-            .addClass(this.workspaceSlotCls)
-            .appendTo(this.parent.canvas);
+            this.element.addClass(this.workspaceSlotCls).appendTo(this.parent.canvas);
 
             this.element.append(this.template({
                 workspaceSlotCls: this.workspaceSlotCls
             }));
-            jQuery(this.element).layout({ applyDefaultStyles: true });
+            
+            //jQuery(this.element).layout({ applyDefaultStyles: true });
+            
+            var window = new $.Window({appendTo: this.element});
+            
+            this.bindEvents();
       },
+      
+      bindEvents: function() {
+            var _this = this;
+            
+            jQuery.subscribe('manifestToWorkspace', function(_, manifest) {
+                //need to be able to set a specific window
+                jQuery.publish('manifestToWindow', manifest);
+            });
+            
+            jQuery.subscribe('currentWorkspaceVisible.set', function(_, stateValue) {
+                if (stateValue) { _this.show(); return; }
+                _this.hide();
+            });
+      },
+      
+      hide: function() {
+            var _this = this;
+            _this.element.removeClass('active');
+      },
+
+      show: function() {
+            var _this = this;
+            _this.element.addClass('active');
+      },
+      
+      //template should be based on workspace type
       template: Handlebars.compile([
       '<div class="{{workspaceSlotCls}} ui-layout-center">',
-          '<span>',
-          '<h1>Add Item to Workspace</h1>',
-          '</span>',
-          '<span class="icon-workspace-slot"></span>',
       '</div>'
       ].join(''))
   };
@@ -3233,10 +3271,14 @@ window.Mirador = window.Mirador || function(config) {
         },
 
         bindEvents: function() {
+          var _this = this;
           this.element.find('img').on('load', function() {
-            console.log('this image has now loaded');
-            console.log(jQuery(this));
+            //console.log('this image has now loaded');
+            //console.log(jQuery(this));
             jQuery(this).hide().fadeIn(750);
+          });
+          this.element.find('.select-metadata').on('click', function() {
+            _this.parent.addManifestToWorkspace(_this.manifestId);
           });
         },
 
@@ -3318,6 +3360,10 @@ window.Mirador = window.Mirador || function(config) {
             jQuery.subscribe('manifestAdded', function(event, newManifest) {
               _this.manifestListItems.push(new $.ManifestsListItem({ parent: _this, manifestId: newManifest }));
             });
+        },
+        
+        addManifestToWorkspace: function(manifestURI) {
+            this.parent.addManifestToWorkspace(manifestURI);
         },
 
         hide: function() {
@@ -3418,36 +3464,38 @@ window.Mirador = window.Mirador || function(config) {
 
 (function($){
 
-    $.ImagePromise = function(imageUri, dfd) {
+    $.ImagePromise = function(imageUri) {
 
         jQuery.extend(true, this, {
             uri: imageUri,
-            dimensions: []
+            dimensions: [],
+            dfd: null
         });
-
-        this.loadImageDataFromURI(dfd);
+        
+        dfd = jQuery.Deferred();
+        return this.loadImageDataFromURI(dfd);
     };
 
     $.ImagePromise.prototype = {
 
         loadImageDataFromURI: function(dfd) {
-            var _this = this;
-
-            jQuery.ajax({
-                url: _this.uri,
-                dataType: 'json',
-                async: true,
-
-                success: function(jsonLd) {
-                    dfd.resolve(true);
-                },
-
-                error: function() {
-                    console.log('Failed loading ' + _this.uri);
-                    dfd.resolve(false);
-                }
+            var img = new Image();
+            var self = this;
+        
+            img.onload = function() {
+                dfd.resolveWith(self, [img.src]);
+            };
+        
+            img.onerror = function() {
+                dfd.rejectWith(self, [img.src]);
+            };
+        
+            dfd.fail(function() {
+                console.log('image failed to load: ' + img.src);
             });
-
+        
+            img.src = self.uri;
+            return dfd.promise();
         }
     };
 
@@ -3579,6 +3627,70 @@ window.Mirador = window.Mirador || function(config) {
 
 (function($) {
 
+  $.Window = function(options) {
+
+     jQuery.extend(true, this, {
+         element:           null,
+         appendTo:          null,
+         manifest:          null,
+         uiState:           {'ThumbnailsView': true, 'ImageView': false},
+         overlayState:      {'metadata': false, 'toc': false, 'thumbnails' : false}
+         
+     }, $.DEFAULT_SETTINGS, options);
+          
+     this.init();
+
+  };
+
+  $.Window.prototype = {
+      init: function () {
+            this.element = jQuery(this.template()).appendTo(this.appendTo);
+
+            this.bindEvents();
+      },
+      
+      bindEvents: function() {
+            var _this = this;
+            
+            jQuery.subscribe('manifestToWindow', function(_, manifest) {                
+                jQuery.each(_this.uiState, function(key, value){ 
+                    if (value && _this.manifest != manifest) {
+                        _this.element.empty();
+                        _this.manifest = manifest;
+                        var view = new $[key]( {manifest: manifest, appendTo: _this.element, parent: _this} );
+                    }
+                });
+            });
+      },
+      
+      get: function(prop, parent) {
+            if (parent) {
+                return this[parent][prop];
+            }
+            return this[prop];
+        },
+
+      set: function(prop, value, options) {
+            if (options) {
+                this[options.parent][prop] = value;
+            } else {
+                this[prop] = value;
+            }
+            jQuery.publish(prop + '.set', value);
+      },
+      
+      //template should be based on workspace type
+      template: Handlebars.compile([
+      '<div class="window">',
+      '</div>'
+      ].join(''))
+  };
+
+}(Mirador));
+
+
+(function($) {
+
   $.WidgetImageView = function(options) {
 
      jQuery.extend(true, this, {
@@ -3644,6 +3756,122 @@ window.Mirador = window.Mirador || function(config) {
 
 }(Mirador));
 
+
+(function($) {
+
+  $.ThumbnailsView = function(options) {
+
+    jQuery.extend(this, {
+      currentImg:           null,
+      manifest:             null,
+      element:              null,
+      imagesList:           [],
+      appendTo:             null,
+      thumbsListingCls:     '',
+      thumbsMaxHeight:      $.DEFAULT_SETTINGS.thumbnailsView.thumbsMaxHeight,
+      thumbsMinHeight:      $.DEFAULT_SETTINGS.thumbnailsView.thumbsMinHeight,
+      thumbsDefaultZoom:    $.DEFAULT_SETTINGS.thumbnailsView.thumbsDefaultZoom,
+      thumbsDefaultHeight:  this.thumbsMinHeight,
+      parent:               null
+    }, options);
+    
+    this.init();
+  };
+
+
+  $.ThumbnailsView.prototype = {
+
+    init: function() {
+        this.imagesList = $.getImagesListByManifest(this.manifest);
+        this.currentImg = this.imagesList[0];
+
+        this.thumbsListingCls = 'thumbs-listing';
+        this.thumbsDefaultHeight = this.thumbsMinHeight + ((this.thumbsMaxHeight - this.thumbsMinHeight) * this.thumbsDefaultZoom);    
+        this.loadContent();
+        this.bindEvents();
+        },
+
+    loadContent: function() {
+      var _this = this,
+      tplData = {
+        defaultHeight:  this.thumbsDefaultHeight,
+        listingCssCls:  this.thumbsListingCls
+      };
+
+      tplData.thumbs = jQuery.map(this.imagesList, function(image, index) {
+        return {
+          thumbUrl: $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), _this.thumbsMaxHeight),
+          title:    image.label,
+          id:       image['@id']
+        };
+      });
+      
+      this.element = jQuery(_this.template(tplData)).appendTo(this.appendTo);
+      /*jQuery.each(this.element.find("img"), function(key, value) {
+          var url = jQuery(value).attr("data");
+          _this.loadImage(value, url);
+      });*/
+    },
+    
+    bindEvents: function() {
+        this.element.find('img').on('load', function() {
+           jQuery(this).hide().fadeIn(750);
+        });
+    },
+    
+    /*loadImage: function(imageElement, url) {
+        var _this = this,
+        imagepromise = new $.ImagePromise(url);
+
+        imagepromise.done(function(image) {
+            jQuery(imageElement).attr('src', image);
+        });
+    },*/
+    
+    template: Handlebars.compile([
+        '<ul class="{{listingCssCls}} listing-thumbs">',
+          '{{#thumbs}}',
+            '<li>',
+              '<a href="javascript:;">',
+                '<img class="thumbnail-image flash" title="{{title}}" data-image-id="{{id}}" src="{{thumbUrl}}" height="{{../defaultHeight}}">',
+                '<div class="thumb-label">{{title}}</div>',
+              '</a>',
+            '</li>',
+          '{{/thumbs}}',
+        '</ul>'
+      ].join('')),
+    
+    //Legacy methods - will need to be modified and integrated into new code
+    render: function() {
+      this.attachEvents();
+    },
+
+    attachEvents: function() {
+      this.attachNavEvents();
+    },
+
+    attachNavEvents: function() {
+      var selectorImagesListing = '.' + this.thumbsListingCls + ' li img',
+          selectorImageLinks    = '.' + this.thumbsListingCls + ' li a',
+          _this = this;
+
+      jQuery(selectorSlider).on('slide', function(event, ui) {
+        jQuery(selectorImagesListing).attr('height', ui.value);
+      });
+
+      jQuery(selectorImageLinks).on('click', function(event) {
+        var elemTarget  = jQuery(event.target),
+            imageId;
+
+        imageId = elemTarget.data('image-id');
+        $.viewer.loadView("imageView", _this.manifestId, imageId);
+      });
+
+    }
+
+  };
+
+}(Mirador));
 
 (function($) {
 
@@ -4034,6 +4262,20 @@ jQuery.fn.scrollStop = function(callback) {
     return $.manifests[manifestId].sequences[0].imagesList;
   };
 
+
+  $.getImagesListByManifest = function(manifest) {
+    return manifest.sequences[0].canvases;
+  };
+  
+  $.getImageUrlForCanvas = function(canvas) {
+    var resource = canvas.images[0].resource;
+    var service = resource['default'] ? resource['default'].service : resource.service;
+    return service['@id'];
+  };
+  
+  $.getImageTitleForCanvas = function(canvas) {
+    
+  };
 
   $.getCollectionTitle = function(metadata) {
     return metadata.details.label || '';

@@ -2236,7 +2236,7 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
 
 /* main menu select menu 
 ---------------------------------------------------------------------------- */
-#manifest-select-menu, #workspace-select-menu {
+#manifest-select-menu, #workspace-select-menu, #workspaceContainer {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -2246,7 +2246,7 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
     transition: all 0.3s ease-in;
     overflow-y: scroll;
 }
-#manifest-select-menu.active, #workspace-select-menu.active {
+#manifest-select-menu.active, #workspace-select-menu.active, #workspaceContainer.active {
      opacity: 0.9;
     -webkit-transform: scale(1);
     transition: all 0.3s ease-out;

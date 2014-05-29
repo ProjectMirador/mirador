@@ -186,6 +186,20 @@
   };
 
 
+  $.getImagesListByManifest = function(manifest) {
+    return manifest.sequences[0].canvases;
+  };
+  
+  $.getImageUrlForCanvas = function(canvas) {
+    var resource = canvas.images[0].resource;
+    var service = resource['default'] ? resource['default'].service : resource.service;
+    return service['@id'];
+  };
+  
+  $.getImageTitleForCanvas = function(canvas) {
+    
+  };
+
   $.getCollectionTitle = function(metadata) {
     return metadata.details.label || '';
   };

@@ -1,35 +1,37 @@
 (function($){
 
-    $.ImagePromise = function(imageUri, dfd) {
+    $.ImagePromise = function(imageUri) {
 
         jQuery.extend(true, this, {
             uri: imageUri,
-            dimensions: []
+            dimensions: [],
+            dfd: null
         });
-
-        this.loadImageDataFromURI(dfd);
+        
+        dfd = jQuery.Deferred();
+        return this.loadImageDataFromURI(dfd);
     };
 
     $.ImagePromise.prototype = {
 
         loadImageDataFromURI: function(dfd) {
-            var _this = this;
-
-            jQuery.ajax({
-                url: _this.uri,
-                dataType: 'json',
-                async: true,
-
-                success: function(jsonLd) {
-                    dfd.resolve(true);
-                },
-
-                error: function() {
-                    console.log('Failed loading ' + _this.uri);
-                    dfd.resolve(false);
-                }
+            var img = new Image();
+            var self = this;
+        
+            img.onload = function() {
+                dfd.resolveWith(self, [img.src]);
+            };
+        
+            img.onerror = function() {
+                dfd.rejectWith(self, [img.src]);
+            };
+        
+            dfd.fail(function() {
+                console.log('image failed to load: ' + img.src);
             });
-
+        
+            img.src = self.uri;
+            return dfd.promise();
         }
     };
 
