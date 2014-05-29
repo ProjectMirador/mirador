@@ -2288,6 +2288,9 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
   width: 100%;
   top: 0;
 }
+.items-listing h4, .items-listing h3 {
+  margin: 0;
+}
 .items-listing li > * {
     float:left;
     margin-right:15px;

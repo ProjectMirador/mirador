@@ -26,25 +26,23 @@
 
         fetchTplData: function() {
           var _this = this;
-          
+
           var manifest = $.viewer.manifests[_this.manifestId];
-          
+
           var tplData = { 
             label: manifest.label,
             repository: (function() { 
-              var location = jQuery.grep($.viewer.data, function(item) {
+              var locationData = jQuery.grep($.viewer.data, function(item) {
                 return item.manifestUri === _this.manifestId;
-              })[0].location;
+              })[0];
 
-              console.log(location);
-
-              if (location === 'undefined') {
+              if (locationData === undefined) {
                 return 'No Repository Information Available';
+              } else {
+                return locationData.location;
               }
-
-              return location;
-
             })(),
+            canvasCount: manifest.sequences[0].canvases.length,
             images: []
           };
           if (_this.numPreviewImages > $.viewer.manifests[_this.manifestId].sequences[0].canvases.length) {
@@ -94,6 +92,7 @@
                       '<div class="select-metadata">',
                           '<h3 class="manifest-title">{{label}}</h3>',
                           '<h4 class="repository-label">{{repository}}</h4>',
+                          '<h4 >{{canvasCount}} items</h4>',
                       '</div>',
                       '{{#each images}}',
                         '<img src="{{url}}" width="{{width}}"class="thumbnail-image flash" >',
