@@ -28,11 +28,23 @@
           var _this = this;
           
           var manifest = $.viewer.manifests[_this.manifestId];
+          
           var tplData = { 
             label: manifest.label,
-            // repository: jQuery.grep($.viewer.data, function(item) {
-            //   return item.manifestUri === _this.manifestId;
-            // })[0].location,
+            repository: (function() { 
+              var location = jQuery.grep($.viewer.data, function(item) {
+                return item.manifestUri === _this.manifestId;
+              })[0].location;
+
+              console.log(location);
+
+              if (location === 'undefined') {
+                return 'No Repository Information Available';
+              }
+
+              return location;
+
+            })(),
             images: []
           };
           if (_this.numPreviewImages > $.viewer.manifests[_this.manifestId].sequences[0].canvases.length) {
@@ -59,6 +71,11 @@
         },
 
         bindEvents: function() {
+          this.element.find('img').on('load', function() {
+            console.log('this image has now loaded');
+            console.log(jQuery(this));
+            jQuery(this).hide().fadeIn(750);
+          });
         },
 
         hide: function() {
@@ -79,7 +96,7 @@
                           '<h4 class="repository-label">{{repository}}</h4>',
                       '</div>',
                       '{{#each images}}',
-                        '<img src="{{url}}" width="{{width}}"class="thumbnail-image" >',
+                        '<img src="{{url}}" width="{{width}}"class="thumbnail-image flash" >',
                       '{{/each}}',
                       '</li>'
         ].join(''))
