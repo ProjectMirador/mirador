@@ -5,7 +5,7 @@
      jQuery.extend(true, this, {
          type:             null,
          workspaceSlotCls: 'slot',
-         windows:          []
+         window:          null
          
      }, $.DEFAULT_SETTINGS, options);
      
@@ -32,6 +32,11 @@
       
       bindEvents: function() {
             var _this = this;
+            
+            jQuery.subscribe('manifestToWorkspace', function(_, manifest) {
+                //need to be able to set a specific window
+                jQuery.publish('manifestToWindow', manifest);
+            });
             
             jQuery.subscribe('currentWorkspaceVisible.set', function(_, stateValue) {
                 if (stateValue) { _this.show(); return; }

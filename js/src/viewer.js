@@ -159,9 +159,10 @@
         },
         
         addManifestToWorkspace: function(manifestURI) {
+            console.log("triggered addManifestToWorkspace " + manifestURI);
             var manifest = this.manifests[manifestURI];
             
-            jQuery.publish('manifestToWindow', manifest);
+            jQuery.publish('manifestToWorkspace', manifest);
             this.toggleCurrentWorkspace();
         }
     };

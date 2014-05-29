@@ -29,13 +29,8 @@
         this.thumbsListingCls = 'thumbs-listing';
         this.thumbsDefaultHeight = this.thumbsMinHeight + ((this.thumbsMaxHeight - this.thumbsMinHeight) * this.thumbsDefaultZoom);    
         this.loadContent();
-
+        this.bindEvents();
         },
-
-    render: function() {
-      this.attachEvents();
-    },
-
 
     loadContent: function() {
       var _this = this,
@@ -53,10 +48,43 @@
       });
       
       this.element = jQuery(_this.template(tplData)).appendTo(this.appendTo);
-      jQuery.each(this.element.find("img"), function(key, value) {
+      /*jQuery.each(this.element.find("img"), function(key, value) {
           var url = jQuery(value).attr("data");
           _this.loadImage(value, url);
-      });
+      });*/
+    },
+    
+    bindEvents: function() {
+        this.element.find('img').on('load', function() {
+           jQuery(this).hide().fadeIn(750);
+        });
+    },
+    
+    /*loadImage: function(imageElement, url) {
+        var _this = this,
+        imagepromise = new $.ImagePromise(url);
+
+        imagepromise.done(function(image) {
+            jQuery(imageElement).attr('src', image);
+        });
+    },*/
+    
+    template: Handlebars.compile([
+        '<ul class="{{listingCssCls}} listing-thumbs">',
+          '{{#thumbs}}',
+            '<li>',
+              '<a href="javascript:;">',
+                '<img class="thumbnail-image flash" title="{{title}}" data-image-id="{{id}}" src="{{thumbUrl}}" height="{{../defaultHeight}}">',
+                '<div class="thumb-label">{{title}}</div>',
+              '</a>',
+            '</li>',
+          '{{/thumbs}}',
+        '</ul>'
+      ].join('')),
+    
+    //Legacy methods - will need to be modified and integrated into new code
+    render: function() {
+      this.attachEvents();
     },
 
     attachEvents: function() {
@@ -80,31 +108,8 @@
         $.viewer.loadView("imageView", _this.manifestId, imageId);
       });
 
-    },
-    
-    loadImage: function(imageElement, url) {
-        var _this = this,
-        imagepromise = new $.ImagePromise(url);
-
-        imagepromise.done(function(image) {
-            jQuery(imageElement).attr('src', image);
-        });
-    },
-    
-    template: Handlebars.compile([
-        '<ul class="{{listingCssCls}} listing-thumbs">',
-          '{{#thumbs}}',
-            '<li>',
-              '<a href="javascript:;">',
-                '<img class="thumbnail-image" title="{{title}}" data-image-id="{{id}}" src="" data="{{thumbUrl}}" height="{{../defaultHeight}}">',
-                '<div class="thumb-label">{{title}}</div>',
-              '</a>',
-            '</li>',
-          '{{/thumbs}}',
-        '</ul>'
-      ].join(''))
+    }
 
   };
-
 
 }(Mirador));

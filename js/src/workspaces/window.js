@@ -25,11 +25,11 @@
       bindEvents: function() {
             var _this = this;
             
-            jQuery.subscribe('manifestToWindow', function(_, manifest) {
-                _this.manifest = manifest;
-                
+            jQuery.subscribe('manifestToWindow', function(_, manifest) {                
                 jQuery.each(_this.uiState, function(key, value){ 
-                    if (value) {
+                    if (value && _this.manifest != manifest) {
+                        _this.element.empty();
+                        _this.manifest = manifest;
                         var view = new $[key]( {manifest: manifest, appendTo: _this.element, parent: _this} );
                     }
                 });
