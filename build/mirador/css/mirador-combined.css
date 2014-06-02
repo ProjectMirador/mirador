@@ -784,6 +784,7 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
 }
 .items-listing {
     overflow-y: scroll;
+    overflow-x: hidden;
     height:100%;
     margin:0;
     padding-left:0;

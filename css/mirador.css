@@ -163,6 +163,7 @@
 }
 .items-listing {
     overflow-y: scroll;
+    overflow-x: hidden;
     height:100%;
     margin:0;
     padding-left:0;

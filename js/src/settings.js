@@ -98,7 +98,7 @@
     'repoImages' : {
       'Yale University': 'yale_logo.jpeg',
       'Stanford University': 'sul_logo.jpeg',
-      'Harvard UNiversity': 'harvard_logo.png',
+      'Harvard University': 'harvard_logo.png',
       'other': 'iiif_logo.png'
     },
 
