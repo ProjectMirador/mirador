@@ -20,8 +20,10 @@
         init: function() {
           var _this = this;
             this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
+            var remainingOffset = this.element.find('.repo-image').outerWidth(true) + this.element.find('.select-metadata').outerWidth(true) + this.element.find('.preview-images').outerWidth(true);
+            console.log(remainingOffset);
+            this.element.find('.remaining-items').css('left', remainingOffset);
             this.bindEvents();
-            this.fetchImages();
         },
 
         fetchTplData: function() {
@@ -37,18 +39,31 @@
               })[0];
 
               if (locationData === undefined) {
-                return 'No Repository Information Available';
+                return '(Added from URL)';
               } else {
                 return locationData.location;
               }
             })(),
             canvasCount: manifest.sequences[0].canvases.length,
+            remaining: (function() {
+              var remaining = manifest.sequences[0].canvases.length - _this.numPreviewImages;
+              if (remaining > 0) {
+                return remaining;
+              }
+            })(),
             images: []
           };
+          tplData.repoImage = (function() {
+            var imageName = $.DEFAULT_SETTINGS.repoImages[tplData.repository || 'other'];
+
+            return 'images/' + imageName;
+          })();
+
           if (_this.numPreviewImages > $.viewer.manifests[_this.manifestId].sequences[0].canvases.length) {
             _this.numPreviewImages = $.viewer.manifests[_this.manifestId].sequences[0].canvases.length;
           }
-          for ( var i=0; i < _this.numPreviewImages - 1 ; i++) {
+
+          for ( var i=0; i < _this.numPreviewImages; i++) {
             var resource = $.viewer.manifests[_this.manifestId].sequences[0].canvases[i].images[0].resource,
             service = resource['default'] ? resource['default'].service : resource.service,
             url = $.Iiif.getUriWithHeight(service['@id'], _this.thumbHeight),
@@ -64,7 +79,7 @@
           return tplData;
         },
 
-        fetchImages: function() {
+        render: function() {
 
         },
 
@@ -91,16 +106,23 @@
         template: Handlebars.compile([
                       '<li>',
                       '<div class="repo-image">',
-                        '<img src="images/sul_logo.jpeg" alt="repoImg">',
+                        '<img src="{{repoImage}}" alt="repoImg">',
                       '</div>',
                       '<div class="select-metadata">',
                           '<h3 class="manifest-title">{{label}}</h3>',
-                          '<h4 class="repository-label">{{repository}}</h4>',
                           '<h4 >{{canvasCount}} items</h4>',
+                      '{{#if repository}}',
+                          '<h4 class="repository-label">{{repository}}</h4>',
+                      '{{/if}}',
                       '</div>',
+                      '<div class="preview-images">',
                       '{{#each images}}',
                         '<img src="{{url}}" width="{{width}}"class="thumbnail-image flash" >',
                       '{{/each}}',
+                      '</div>',
+                      '{{#if remaining}}',
+                        '<div class="remaining-items"><h3>{{remaining}} more</h3></div>',
+                      '{{/if}}',
                       '</li>'
         ].join(''))
     };
