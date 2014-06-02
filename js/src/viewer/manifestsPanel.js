@@ -65,7 +65,6 @@
           '<div class="container">',
               '<div id="load-controls">',
               '<form action="" id="manifest-search">',
-                  '<i class="fa fa-search"></i>',
                   '<input id="manifest-search" type="text" name="url-load" placeholder="Search...">',
               '</form>',
               '<form action="">',
