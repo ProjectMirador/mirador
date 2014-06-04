@@ -83,7 +83,7 @@
                 return;
             }
             jQuery.each(this.uiState, function(key, value) {
-                if (key != state) {
+                if (key != state && _this.get(key, 'uiState') === true) {
                     _this.set(key, false, {parent: 'uiState'});
                 }
             });
@@ -159,7 +159,6 @@
         },
         
         addManifestToWorkspace: function(manifestURI) {
-            console.log("triggered addManifestToWorkspace " + manifestURI);
             var manifest = this.manifests[manifestURI];
             
             jQuery.publish('manifestToWorkspace', manifest);

@@ -6,6 +6,7 @@
          element:           null,
          appendTo:          null,
          manifest:          null,
+         currentImg:        null,
          uiState:           {'ThumbnailsView': true, 'ImageView': false},
          overlayState:      {'metadata': false, 'toc': false, 'thumbnails' : false}
          
@@ -30,6 +31,7 @@
                     if (value && _this.manifest != manifest) {
                         _this.element.empty();
                         _this.manifest = manifest;
+                        _this.element.append('<h3 class="manifest-title">' + manifest.label + '</h3>');
                         var view = new $[key]( {manifest: manifest, appendTo: _this.element, parent: _this} );
                     }
                 });

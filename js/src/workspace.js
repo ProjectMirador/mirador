@@ -44,15 +44,23 @@
             });
       },
       
-      hide: function() {
+       hide: function() {
             var _this = this;
-            _this.element.removeClass('active');
-      },
+            
+            _this.element.removeClass('visuallyactive');  
+            _this.element.one('transitionend', function(e) {
+                _this.element.removeClass('active');
+            });
+        },
 
-      show: function() {
+        show: function() {
             var _this = this;
+
             _this.element.addClass('active');
-      },
+            setTimeout(function() {  
+                _this.element.addClass('visuallyactive active');  
+            }, 20);
+        },
       
       //template should be based on workspace type
       template: Handlebars.compile([

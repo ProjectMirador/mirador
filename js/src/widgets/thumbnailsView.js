@@ -40,10 +40,13 @@
       };
 
       tplData.thumbs = jQuery.map(this.imagesList, function(image, index) {
+        var aspectRatio = image.height/image.width,
+        width = (_this.thumbsDefaultHeight/aspectRatio);
         return {
           thumbUrl: $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), _this.thumbsMaxHeight),
           title:    image.label,
-          id:       image['@id']
+          id:       image['@id'],
+          width:    width
         };
       });
       
@@ -57,6 +60,12 @@
     bindEvents: function() {
         this.element.find('img').on('load', function() {
            jQuery(this).hide().fadeIn(750);
+        });
+        console.log(this.element.find('img'));
+        this.element.find('.window-thumb').on('click', function() {
+           console.log(this);
+           console.log("clicked thumbnail image in thumbnailview");
+           //_this.parent.toggleImageView();
         });
     },
     
@@ -73,10 +82,8 @@
         '<ul class="{{listingCssCls}} listing-thumbs">',
           '{{#thumbs}}',
             '<li>',
-              '<a href="javascript:;">',
-                '<img class="thumbnail-image flash" title="{{title}}" data-image-id="{{id}}" src="{{thumbUrl}}" height="{{../defaultHeight}}">',
+                '<img class="thumbnail-image flash window-thumb" title="{{title}}" data-image-id="{{id}}" src="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',
                 '<div class="thumb-label">{{title}}</div>',
-              '</a>',
             '</li>',
           '{{/thumbs}}',
         '</ul>'

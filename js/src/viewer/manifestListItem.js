@@ -21,7 +21,6 @@
           var _this = this;
             this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
             var remainingOffset = this.element.find('.repo-image').outerWidth(true) + this.element.find('.select-metadata').outerWidth(true) + this.element.find('.preview-images').outerWidth(true);
-            console.log(remainingOffset);
             this.element.find('.remaining-items').css('left', remainingOffset);
             this.bindEvents();
         },
@@ -93,6 +92,12 @@
           this.element.find('.select-metadata').on('click', function() {
             _this.parent.addManifestToWorkspace(_this.manifestId);
           });
+          
+          this.element.find('.thumbnail-image').on('click', function() {
+           console.log(this);
+           console.log("clicked thumbnail image in manifestlistitem");
+           //_this.parent.toggleImageView();
+        });
         },
 
         hide: function() {

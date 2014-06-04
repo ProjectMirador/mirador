@@ -765,13 +765,18 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
     background-color: rgba(255,255,255,0.9);
     opacity: 0;
     -webkit-transform: scale(2);
+    display: none;
     transition: all 0.3s ease-in;
     overflow-y: scroll;
 }
 #manifest-select-menu.active, #workspace-select-menu.active, #workspaceContainer.active {
-     opacity: 0.9;
+     /*opacity: 0.9;
+    transition: all 0.3s ease-out;*/
     -webkit-transform: scale(1);
-    transition: all 0.3s ease-out;
+    display: block;
+}
+#manifest-select-menu.visuallyactive, #workspace-select-menu.visuallyactive, #workspaceContainer.visuallyactive {
+	opacity: 0.9;
 }
 .container {
     position: relative;

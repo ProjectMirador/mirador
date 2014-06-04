@@ -37,8 +37,7 @@
 
             // handle subscribed events
             jQuery.subscribe('manifestsPanelVisible.set', function(_, stateValue) {
-                if (stateValue) { _this.show(); return; }
-                //if ( _this.parent.get('manifestsPanelVisible', 'uiState')) { _this.show(); return; }
+               if (stateValue) { _this.show(); return; }
                 _this.hide();
             });
             jQuery.subscribe('manifestAdded', function(event, newManifest) {
@@ -52,12 +51,20 @@
 
         hide: function() {
             var _this = this;
-            _this.element.removeClass('active');
+            
+            _this.element.removeClass('visuallyactive');  
+            _this.element.one('transitionend', function(e) {
+                _this.element.removeClass('active');
+            });
         },
 
         show: function() {
             var _this = this;
+
             _this.element.addClass('active');
+            setTimeout(function() {  
+                _this.element.addClass('visuallyactive');  
+            }, 20);
         },
 
         template: Handlebars.compile([
