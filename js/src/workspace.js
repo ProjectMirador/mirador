@@ -25,7 +25,7 @@
             
             //jQuery(this.element).layout({ applyDefaultStyles: true });
             
-            var window = new $.Window({appendTo: this.element});
+            this.window = new $.Window({appendTo: this.element});
             
             this.bindEvents();
       },

@@ -58,14 +58,18 @@
     },
     
     bindEvents: function() {
+        var _this = this;
         this.element.find('img').on('load', function() {
            jQuery(this).hide().fadeIn(750);
         });
-        console.log(this.element.find('img'));
-        this.element.find('.window-thumb').on('click', function() {
-           console.log(this);
-           console.log("clicked thumbnail image in thumbnailview");
-           //_this.parent.toggleImageView();
+
+        this.element.find('.thumbnail-image').on('click', function() {
+           _this.parent.toggleImageView(jQuery(this).attr('data-image-id'));
+        });
+        
+        jQuery.subscribe('ThumbnailsView.set', function(_, stateValue) {
+            if (stateValue) { _this.show(); return; }
+            _this.hide();
         });
     },
     
@@ -79,15 +83,36 @@
     },*/
     
     template: Handlebars.compile([
+      '<div class="thumbnail-view">',
         '<ul class="{{listingCssCls}} listing-thumbs">',
           '{{#thumbs}}',
             '<li>',
-                '<img class="thumbnail-image flash window-thumb" title="{{title}}" data-image-id="{{id}}" src="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',
+                '<img class="thumbnail-image flash" title="{{title}}" data-image-id="{{id}}" src="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',
                 '<div class="thumb-label">{{title}}</div>',
             '</li>',
           '{{/thumbs}}',
-        '</ul>'
-      ].join('')),
+        '</ul>',
+       '</div>'
+    ].join('')),
+      
+      hide: function() {
+            var _this = this;
+            
+            _this.element.removeClass('visuallyactive');  
+            _this.element.one('transitionend', function(e) {
+                _this.element.removeClass('active');
+            });
+        },
+
+        show: function() {
+            var _this = this;
+
+            _this.element.addClass('active');
+            setTimeout(function() {  
+                _this.element.addClass('visuallyactive active');  
+            }, 20);
+        },
+
     
     //Legacy methods - will need to be modified and integrated into new code
     render: function() {

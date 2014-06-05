@@ -8,6 +8,7 @@
          manifest:          null,
          currentImg:        null,
          uiState:           {'ThumbnailsView': true, 'ImageView': false},
+         uiViews:           {'ThumbnailsView': null, 'ImageView': null},
          overlayState:      {'metadata': false, 'toc': false, 'thumbnails' : false}
          
      }, $.DEFAULT_SETTINGS, options);
@@ -32,7 +33,7 @@
                         _this.element.empty();
                         _this.manifest = manifest;
                         _this.element.append('<h3 class="manifest-title">' + manifest.label + '</h3>');
-                        var view = new $[key]( {manifest: manifest, appendTo: _this.element, parent: _this} );
+                        _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element, parent: _this} );
                     }
                 });
             });
@@ -53,6 +54,31 @@
             }
             jQuery.publish(prop + '.set', value);
       },
+      
+      // One UI must always be on      
+      toggleUI: function(state) {
+            _this = this;
+
+            jQuery.each(this.uiState, function(key, value) {
+                if (key != state && _this.get(key, 'uiState') === true) {
+                    _this.set(key, false, {parent: 'uiState'});
+                }
+            });
+            this.set(state, true, {parent: 'uiState'});
+        },
+        
+        toggleThumbnails: function() {
+            this.toggleUI('ThumbnailsView');
+        },
+        
+        toggleImageView: function(imageID) {
+            if (this.uiViews.ImageView === null) {
+                this.uiViews.ImageView = new $.ImageView( {manifest: this.manifest, appendTo: this.element, parent: this, imageID: imageID} );
+            } else {
+            //update current image in image view
+            }
+            this.toggleUI('ImageView');
+        },
       
       //template should be based on workspace type
       template: Handlebars.compile([

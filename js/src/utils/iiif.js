@@ -14,6 +14,10 @@
 
       return iiifUri;
     },
+    
+    getImageUrl: function(image) {
+        return image.images[0].resource.service['@id'];
+    },
 
 
     getUriWithHeight: function(uri, height) {
