@@ -945,6 +945,28 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
   margin-left: 5px;
 }
 
+/* window views
+---------------------------------------------------------------------------- */
+
+.thumbnail-view, .image-view {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255,255,255,0.9);
+    opacity: 0;
+    -webkit-transform: scale(2);
+    display: none;
+    transition: all 0.3s ease-in;
+    overflow-y: scroll;
+}
+.thumbnail-view.active, .image-view.active {
+    -webkit-transform: scale(1);
+    display: block;
+}
+.thumbnail-view.visuallyactive, .image-view.visuallyactive {
+	opacity: 0.9;
+}
+
 /* widget
 ---------------------------------------------------------------------------- */
 

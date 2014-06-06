@@ -34,6 +34,7 @@
                         _this.manifest = manifest;
                         _this.element.append('<h3 class="manifest-title">' + manifest.label + '</h3>');
                         _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element, parent: _this} );
+                        _this.toggleUI(key);
                     }
                 });
             });

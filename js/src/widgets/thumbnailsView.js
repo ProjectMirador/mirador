@@ -95,51 +95,22 @@
        '</div>'
     ].join('')),
       
-      hide: function() {
-            var _this = this;
+    hide: function() {
+        var _this = this;
             
-            _this.element.removeClass('visuallyactive');  
-            _this.element.one('transitionend', function(e) {
-                _this.element.removeClass('active');
-            });
-        },
-
-        show: function() {
-            var _this = this;
-
-            _this.element.addClass('active');
-            setTimeout(function() {  
-                _this.element.addClass('visuallyactive active');  
-            }, 20);
-        },
-
-    
-    //Legacy methods - will need to be modified and integrated into new code
-    render: function() {
-      this.attachEvents();
+        _this.element.removeClass('visuallyactive');  
+        _this.element.one('transitionend', function(e) {
+            _this.element.removeClass('active');
+        });
     },
 
-    attachEvents: function() {
-      this.attachNavEvents();
-    },
+    show: function() {
+        var _this = this;
 
-    attachNavEvents: function() {
-      var selectorImagesListing = '.' + this.thumbsListingCls + ' li img',
-          selectorImageLinks    = '.' + this.thumbsListingCls + ' li a',
-          _this = this;
-
-      jQuery(selectorSlider).on('slide', function(event, ui) {
-        jQuery(selectorImagesListing).attr('height', ui.value);
-      });
-
-      jQuery(selectorImageLinks).on('click', function(event) {
-        var elemTarget  = jQuery(event.target),
-            imageId;
-
-        imageId = elemTarget.data('image-id');
-        $.viewer.loadView("imageView", _this.manifestId, imageId);
-      });
-
+        _this.element.addClass('active');
+        setTimeout(function() {  
+            _this.element.addClass('visuallyactive active');  
+        }, 20);
     }
 
   };
