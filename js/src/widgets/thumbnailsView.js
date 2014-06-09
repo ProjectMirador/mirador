@@ -3,7 +3,7 @@
   $.ThumbnailsView = function(options) {
 
     jQuery.extend(this, {
-      currentImg:           null,
+      currentImgIndex:      null,
       manifest:             null,
       element:              null,
       imagesList:           [],
@@ -24,7 +24,7 @@
 
     init: function() {
         this.imagesList = $.getImagesListByManifest(this.manifest);
-        this.currentImg = this.imagesList[0];
+        this.currentImgIndex = 0;
 
         this.thumbsListingCls = 'thumbs-listing';
         this.thumbsDefaultHeight = this.thumbsMinHeight + ((this.thumbsMaxHeight - this.thumbsMinHeight) * this.thumbsDefaultZoom);    
@@ -46,7 +46,8 @@
           thumbUrl: $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), _this.thumbsMaxHeight),
           title:    image.label,
           id:       image['@id'],
-          width:    width
+          width:    width,
+          highlight: _this.currentImgIndex === index ? 'highlight' : ''
         };
       });
       
@@ -55,6 +56,10 @@
           var url = jQuery(value).attr("data");
           _this.loadImage(value, url);
       });*/
+    },
+    
+    updateCurrentImg: function() {
+    
     },
     
     bindEvents: function() {
@@ -87,7 +92,7 @@
         '<ul class="{{listingCssCls}} listing-thumbs">',
           '{{#thumbs}}',
             '<li>',
-                '<img class="thumbnail-image flash" title="{{title}}" data-image-id="{{id}}" src="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',
+                '<img class="thumbnail-image flash {{highlight}}" title="{{title}}" data-image-id="{{id}}" src="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',
                 '<div class="thumb-label">{{title}}</div>',
             '</li>',
           '{{/thumbs}}',

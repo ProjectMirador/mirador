@@ -163,6 +163,11 @@
             
             jQuery.publish('manifestToWorkspace', manifest);
             this.toggleCurrentWorkspace();
+        },
+        
+        toggleImageViewInWorkspace: function(imageID, manifestURI) {
+           this.addManifestToWorkspace(manifestURI);
+           jQuery.publish('toggleToImage', imageID);
         }
     };
 

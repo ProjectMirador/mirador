@@ -38,6 +38,11 @@
                 jQuery.publish('manifestToWindow', manifest);
             });
             
+            jQuery.subscribe('toggleToImage', function(_, imageID) {
+                //need to be able to set a specific window
+                jQuery.publish('toggleImageView', imageID);
+            });
+            
             jQuery.subscribe('currentWorkspaceVisible.set', function(_, stateValue) {
                 if (stateValue) { _this.show(); return; }
                 _this.hide();

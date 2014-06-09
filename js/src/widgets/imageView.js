@@ -76,6 +76,8 @@
       infoJson,
       elemOsd,
       _this = this;
+      
+      this.element.find('.' + this.osdCls).remove();
 
       infoJson = $.getJsonFromUrl(infoJsonUrl, false);
 
@@ -97,6 +99,12 @@
           _this.osd.viewport.fitBounds(osdBounds, true);
         }
       });
+    },
+    
+    updateImage: function(imageID) {
+        this.currentImgIndex = this.getImageIndexById(imageID);
+        this.currentImg = this.imagesList[this.currentImgIndex];
+        this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
     },
 
     getImageIndexById: function(id) {

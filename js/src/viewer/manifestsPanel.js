@@ -48,6 +48,10 @@
         addManifestToWorkspace: function(manifestURI) {
             this.parent.addManifestToWorkspace(manifestURI);
         },
+        
+        toggleImageView: function(imageID, manifestURI) {
+            this.parent.toggleImageViewInWorkspace(imageID, manifestURI);
+        },
 
         hide: function() {
             var _this = this;

@@ -7,7 +7,8 @@
          appendTo:          null,
          manifest:          null,
          currentImg:        null,
-         uiState:           {'ThumbnailsView': true, 'ImageView': false},
+         defaultState:      'ThumbnailsView',
+         uiState:           {'ThumbnailsView': false, 'ImageView': false},
          uiViews:           {'ThumbnailsView': null, 'ImageView': null},
          overlayState:      {'metadata': false, 'toc': false, 'thumbnails' : false}
          
@@ -19,6 +20,8 @@
 
   $.Window.prototype = {
       init: function () {
+            this.updateState(this.defaultState);
+      
             this.element = jQuery(this.template()).appendTo(this.appendTo);
 
             this.bindEvents();
@@ -28,16 +31,38 @@
             var _this = this;
             
             jQuery.subscribe('manifestToWindow', function(_, manifest) {                
+                _this.updateState(_this.defaultState);
                 jQuery.each(_this.uiState, function(key, value){ 
                     if (value && _this.manifest != manifest) {
                         _this.element.empty();
                         _this.manifest = manifest;
                         _this.element.append('<h3 class="manifest-title">' + manifest.label + '</h3>');
+                        _this.clearViews();
                         _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element, parent: _this} );
                         _this.toggleUI(key);
                     }
                 });
             });
+            
+            jQuery.subscribe('toggleImageView', function(_, imageID) {
+                _this.toggleImageView(imageID);	
+            });
+      },
+      
+      updateState: function(state) {
+          var _this = this;
+          jQuery.each(this.uiState, function(key, value) {
+                if (key === state) {
+                    _this.uiState[key] = true;
+                }
+          });
+      },
+      
+      clearViews: function() {
+         var _this = this;
+         jQuery.each(_this.uiViews, function(key, value) {
+             _this.uiViews[key] = null;
+         });
       },
       
       get: function(prop, parent) {
@@ -76,7 +101,9 @@
             if (this.uiViews.ImageView === null) {
                 this.uiViews.ImageView = new $.ImageView( {manifest: this.manifest, appendTo: this.element, parent: this, imageID: imageID} );
             } else {
-            //update current image in image view
+                var view = this.uiViews.ImageView;
+                view.updateImage(imageID);
+                //update currentImage on thumbnails view
             }
             this.toggleUI('ImageView');
         },

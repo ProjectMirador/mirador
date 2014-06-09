@@ -63,7 +63,8 @@
           }
 
           for ( var i=0; i < _this.numPreviewImages; i++) {
-            var resource = $.viewer.manifests[_this.manifestId].sequences[0].canvases[i].images[0].resource,
+            var canvas = $.viewer.manifests[_this.manifestId].sequences[0].canvases[i],
+            resource = canvas.images[0].resource,
             service = resource['default'] ? resource['default'].service : resource.service,
             url = $.Iiif.getUriWithHeight(service['@id'], _this.thumbHeight),
             aspectRatio = resource.height/resource.width,
@@ -71,7 +72,8 @@
 
             tplData.images.push({
               url: url,
-              width: width
+              width: width,
+              id: canvas['@id']
             });
           }
 
@@ -94,9 +96,7 @@
           });
           
           this.element.find('.thumbnail-image').on('click', function() {
-           console.log(this);
-           console.log("clicked thumbnail image in manifestlistitem");
-           //_this.parent.toggleImageView();
+           _this.parent.toggleImageView(jQuery(this).attr('data-image-id'), _this.manifestId);
         });
         },
 
@@ -122,7 +122,7 @@
                       '</div>',
                       '<div class="preview-images">',
                       '{{#each images}}',
-                        '<img src="{{url}}" width="{{width}}"class="thumbnail-image flash" >',
+                        '<img src="{{url}}" width="{{width}}" class="thumbnail-image flash" data-image-id="{{id}}">',
                       '{{/each}}',
                       '</div>',
                       '{{#if remaining}}',
