@@ -25,7 +25,7 @@
             
             //jQuery(this.element).layout({ applyDefaultStyles: true });
             
-            var window = new $.Window({appendTo: this.element});
+            this.window = new $.Window({appendTo: this.element});
             
             this.bindEvents();
       },
@@ -38,21 +38,34 @@
                 jQuery.publish('manifestToWindow', manifest);
             });
             
+            jQuery.subscribe('toggleToImage', function(_, imageID) {
+                //need to be able to set a specific window
+                jQuery.publish('toggleImageView', imageID);
+            });
+            
             jQuery.subscribe('currentWorkspaceVisible.set', function(_, stateValue) {
                 if (stateValue) { _this.show(); return; }
                 _this.hide();
             });
       },
       
-      hide: function() {
+       hide: function() {
             var _this = this;
-            _this.element.removeClass('active');
-      },
+            
+            _this.element.removeClass('visuallyactive');  
+            _this.element.one('transitionend', function(e) {
+                _this.element.removeClass('active');
+            });
+        },
 
-      show: function() {
+        show: function() {
             var _this = this;
+
             _this.element.addClass('active');
-      },
+            setTimeout(function() {  
+                _this.element.addClass('visuallyactive active');  
+            }, 20);
+        },
       
       //template should be based on workspace type
       template: Handlebars.compile([

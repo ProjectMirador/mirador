@@ -21,7 +21,6 @@
           var _this = this;
             this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
             var remainingOffset = this.element.find('.repo-image').outerWidth(true) + this.element.find('.select-metadata').outerWidth(true) + this.element.find('.preview-images').outerWidth(true);
-            console.log(remainingOffset);
             this.element.find('.remaining-items').css('left', remainingOffset);
             this.bindEvents();
         },
@@ -64,7 +63,8 @@
           }
 
           for ( var i=0; i < _this.numPreviewImages; i++) {
-            var resource = $.viewer.manifests[_this.manifestId].sequences[0].canvases[i].images[0].resource,
+            var canvas = $.viewer.manifests[_this.manifestId].sequences[0].canvases[i],
+            resource = canvas.images[0].resource,
             service = resource['default'] ? resource['default'].service : resource.service,
             url = $.Iiif.getUriWithHeight(service['@id'], _this.thumbHeight),
             aspectRatio = resource.height/resource.width,
@@ -72,7 +72,8 @@
 
             tplData.images.push({
               url: url,
-              width: width
+              width: width,
+              id: canvas['@id']
             });
           }
 
@@ -93,6 +94,10 @@
           this.element.find('.select-metadata').on('click', function() {
             _this.parent.addManifestToWorkspace(_this.manifestId);
           });
+          
+          this.element.find('.thumbnail-image').on('click', function() {
+           _this.parent.toggleImageView(jQuery(this).attr('data-image-id'), _this.manifestId);
+        });
         },
 
         hide: function() {
@@ -117,7 +122,7 @@
                       '</div>',
                       '<div class="preview-images">',
                       '{{#each images}}',
-                        '<img src="{{url}}" width="{{width}}"class="thumbnail-image flash" >',
+                        '<img src="{{url}}" width="{{width}}" class="thumbnail-image flash" data-image-id="{{id}}">',
                       '{{/each}}',
                       '</div>',
                       '{{#if remaining}}',

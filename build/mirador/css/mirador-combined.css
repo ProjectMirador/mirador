@@ -765,13 +765,18 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
     background-color: rgba(255,255,255,0.9);
     opacity: 0;
     -webkit-transform: scale(2);
+    display: none;
     transition: all 0.3s ease-in;
     overflow-y: scroll;
 }
 #manifest-select-menu.active, #workspace-select-menu.active, #workspaceContainer.active {
-     opacity: 0.9;
+     /*opacity: 0.9;
+    transition: all 0.3s ease-out;*/
     -webkit-transform: scale(1);
-    transition: all 0.3s ease-out;
+    display: block;
+}
+#manifest-select-menu.visuallyactive, #workspace-select-menu.visuallyactive, #workspaceContainer.visuallyactive {
+	opacity: 0.9;
 }
 .container {
     position: relative;
@@ -938,6 +943,28 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
   border-radius: 4px;
   color: #fff;
   margin-left: 5px;
+}
+
+/* window views
+---------------------------------------------------------------------------- */
+
+.thumbnail-view, .image-view {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255,255,255,0.9);
+    opacity: 0;
+    -webkit-transform: scale(2);
+    display: none;
+    transition: all 0.3s ease-in;
+    overflow-y: scroll;
+}
+.thumbnail-view.active, .image-view.active {
+    -webkit-transform: scale(1);
+    display: block;
+}
+.thumbnail-view.visuallyactive, .image-view.visuallyactive {
+	opacity: 0.9;
 }
 
 /* widget
