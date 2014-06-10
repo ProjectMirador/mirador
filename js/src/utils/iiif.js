@@ -16,7 +16,9 @@
     },
     
     getImageUrl: function(image) {
-        return image.images[0].resource.service['@id'];
+        var id = image.images[0].resource.service['@id'];
+        id = id.replace(/\/$/, "");
+        return id;
     },
 
 

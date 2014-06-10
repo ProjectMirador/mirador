@@ -10,7 +10,8 @@
          defaultState:      'ThumbnailsView',
          uiState:           {'ThumbnailsView': false, 'ImageView': false},
          uiViews:           {'ThumbnailsView': null, 'ImageView': null},
-         overlayState:      {'metadata': false, 'toc': false, 'thumbnails' : false}
+         overlayState:      {'MetadataView': false, 'toc': false, 'thumbnails' : false},
+         overlayViews:      {'MetadataView': null}
          
      }, $.DEFAULT_SETTINGS, options);
           
