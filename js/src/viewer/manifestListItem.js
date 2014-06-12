@@ -21,7 +21,7 @@
           var _this = this;
             this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
             var remainingOffset = this.element.find('.repo-image').outerWidth(true) + this.element.find('.select-metadata').outerWidth(true) + this.element.find('.preview-images').outerWidth(true);
-            this.element.find('.remaining-items').css('left', remainingOffset);
+            // this.element.find('.remaining-items').css('left', remainingOffset);
             this.bindEvents();
         },
 
@@ -125,9 +125,9 @@
                         '<img src="{{url}}" width="{{width}}" class="thumbnail-image flash" data-image-id="{{id}}">',
                       '{{/each}}',
                       '</div>',
-                      '{{#if remaining}}',
-                        '<div class="remaining-items"><h3>{{remaining}} more</h3></div>',
-                      '{{/if}}',
+                      // '{{#if remaining}}',
+                      //   '<div class="remaining-items"><h3>{{remaining}} more</h3></div>',
+                      // '{{/if}}',
                       '</li>'
         ].join(''))
     };
