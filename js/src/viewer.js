@@ -63,7 +63,7 @@
         },
 
         set: function(prop, value, options) {
-            _this = this;
+            var _this = this;
             if (options) {
                 this[options.parent][prop] = value;
             } else {
@@ -77,7 +77,7 @@
         },
         // Sets the state of the viewer so that only one div can be visible/active and all others are hidden
         toggleUI: function(state) {
-            _this = this;
+            var _this = this;
             if (this.get(state, 'uiState') === true) {
                 this.set(state, false, {parent: 'uiState'});
                 return;
@@ -158,15 +158,15 @@
             });
         },
         
-        addManifestToWorkspace: function(manifestURI) {
+        addManifestToWorkspace: function(manifestURI, uiState) {
             var manifest = this.manifests[manifestURI];
             
-            jQuery.publish('manifestToWorkspace', manifest);
+            jQuery.publish('manifestToWorkspace', [manifest, uiState]);
             this.toggleCurrentWorkspace();
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {
-           this.addManifestToWorkspace(manifestURI);
+           this.addManifestToWorkspace(manifestURI, 'ImageView');
            jQuery.publish('toggleToImage', imageID);
         }
     };

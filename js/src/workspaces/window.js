@@ -8,10 +8,16 @@
          manifest:          null,
          currentImg:        null,
          defaultState:      'ThumbnailsView',
-         uiState:           {'ThumbnailsView': false, 'ImageView': false},
-         uiViews:           {'ThumbnailsView': null, 'ImageView': null},
-         overlayState:      {'MetadataView': false, 'toc': false, 'thumbnails' : false},
-         overlayViews:      {'MetadataView': null}
+         uiState:           {'ThumbnailsView': false, 'ImageView': false, 'ScrollView': false, 'BookView': false},
+         uiViews:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
+         overlayState:      {'MetadataView': false, 'TableOfContentsView': false, 'ThumbnailsView' : false},
+         overlayViews:      {'MetadataView': null, 'TableOfContentsView' : null, 'ThumbnailsView': null},
+         uiOverlaysAvailable: {
+                              'ThumbnailsView': ['MetadataView'], 
+                              'ImageView': ['MetadataView', 'TableOfContentsView', 'ThumbnailsView'],
+                              'ScrollView': ['MetadataView', 'TableOfContentsView'],
+                              'BookView': ['MetadataView', 'TableOfContentsView', 'ThumbnailsView']
+                            }
          
      }, $.DEFAULT_SETTINGS, options);
           
@@ -31,15 +37,23 @@
       bindEvents: function() {
             var _this = this;
             
-            jQuery.subscribe('manifestToWindow', function(_, manifest) {                
-                _this.updateState(_this.defaultState);
+            jQuery.subscribe('manifestToWindow', function(_, manifest, uiState) {
+                if (uiState) {
+                    _this.updateState(uiState);
+                } else {             
+                    _this.updateState(_this.defaultState);
+                }
                 jQuery.each(_this.uiState, function(key, value){ 
                     if (value && _this.manifest != manifest) {
                         _this.element.empty();
                         _this.manifest = manifest;
-                        _this.element.append('<h3 class="manifest-title">' + manifest.label + '</h3>');
+                        _this.element.append(_this.manifestInfoTemplate({title: manifest.label}));
+                        _this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
+                            _this.toggleThumbnails();
+                        });
                         _this.clearViews();
                         _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element, parent: _this} );
+                        _this.uiViews[key].init();
                         _this.toggleUI(key);
                     }
                 });
@@ -48,6 +62,7 @@
             jQuery.subscribe('toggleImageView', function(_, imageID) {
                 _this.toggleImageView(imageID);	
             });
+            
       },
       
       updateState: function(state) {
@@ -55,6 +70,8 @@
           jQuery.each(this.uiState, function(key, value) {
                 if (key === state) {
                     _this.uiState[key] = true;
+                } else {
+                   _this.uiState[key] = false;
                 }
           });
       },
@@ -79,22 +96,28 @@
             } else {
                 this[prop] = value;
             }
-            jQuery.publish(prop + '.set', value);
       },
       
       // One UI must always be on      
       toggleUI: function(state) {
-            _this = this;
+            var _this = this;
 
             jQuery.each(this.uiState, function(key, value) {
                 if (key != state && _this.get(key, 'uiState') === true) {
                     _this.set(key, false, {parent: 'uiState'});
+                    if (_this.uiViews[key]) {
+                        _this.uiViews[key].toggle(false);
+                    }
                 }
             });
             this.set(state, true, {parent: 'uiState'});
+            this.uiViews[state].toggle(true);
         },
         
         toggleThumbnails: function() {
+            if (this.uiViews.ThumbnailsView === null) {
+                this.uiViews.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element, parent: this} );
+            }
             this.toggleUI('ThumbnailsView');
         },
         
@@ -104,7 +127,6 @@
             } else {
                 var view = this.uiViews.ImageView;
                 view.updateImage(imageID);
-                //update currentImage on thumbnails view
             }
             this.toggleUI('ImageView');
         },
@@ -112,6 +134,15 @@
       //template should be based on workspace type
       template: Handlebars.compile([
       '<div class="window">',
+      '</div>'
+      ].join('')),
+      
+      manifestInfoTemplate: Handlebars.compile([
+      '<div class="manifest-info">',
+          '<div class="window-manifest-navigation">',
+              '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
+          '</div>',
+          '<h3 class="window-manifest-title">{{title}}</h3>',
       '</div>'
       ].join(''))
   };

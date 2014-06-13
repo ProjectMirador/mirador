@@ -755,6 +755,22 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
   padding: 3px 5px;
 }
 
+.window-manifest-title {
+ text-overflow: ellipsis;
+ max-width: 75%;
+ overflow: hidden;
+ white-space: nowrap;
+ padding-left: 10px;
+ margin: 10px 0px 10px 0px;
+}
+
+.window-manifest-navigation {
+  float: right;
+  width: 24%;
+  text-align: right;
+  padding-right: 10px;
+}
+
 
 /* main menu select menu 
 ---------------------------------------------------------------------------- */
@@ -864,7 +880,7 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
   float:left;
   margin-right:15px;
-  height: 80px;
+  /*height: 80px;*/
   /* background-image: url(../images/loading.gif); */
   /* background-position: center; */
   /* background-repeat: no-repeat; */
@@ -1377,13 +1393,13 @@ text {
   padding: 10px 10px 10px 10px;
   transition: all 0.05s ease-out;
 }
-.mirador-viewer ul.listing-thumbs li:hover {
+/*.mirador-viewer ul.listing-thumbs li:hover {
   -webkit-transform: scale(1.6);
   transition: all 0.2s ease-out;
   background-color: rgba(255,255,255,0.9);
   box-shadow: 0px 0px 5px white;
   border-radius: 4px;
-}
+}*/
 
 .mirador-viewer ul.listing-thumbs li img {
   background-color: #eee;
@@ -1398,12 +1414,12 @@ text {
   color: #999;
   font-size: 10px;
   margin: 0 auto;
-  max-width: 75px;
+  max-width: 125px;
   text-align: left;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
-  padding-left:13px;
+  text-align: center;
 }
 
 .mirador-viewer .thumbnails-view-slider {
@@ -1486,8 +1502,8 @@ text {
   display: inline-block;
   height: 20px;
   width: 20px;
-  margin-top: 4px;
-  margin-left: 3px;
+  /*margin-top: 4px;
+  margin-left: 3px;*/
 }
 
 .mirador-btn.disabled {

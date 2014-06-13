@@ -309,5 +309,12 @@
 
     return osdFrame;
   };
-
+  
+  $.isOnScreen = function(elem){
+    var viewportTop = jQuery(window).scrollTop();
+    var viewportBottom = viewportTop + jQuery(window).height();
+    var elemTop = jQuery(elem).offset().top;
+    var elemBottom = elemTop + jQuery(elem).height();
+    return ((elemTop < viewportBottom) && (elemTop >= viewportTop));
+  };
 }(Mirador));
