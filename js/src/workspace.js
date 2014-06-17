@@ -33,9 +33,9 @@
       bindEvents: function() {
             var _this = this;
             
-            jQuery.subscribe('manifestToWorkspace', function(_, manifest) {
+            jQuery.subscribe('manifestToWorkspace', function(_, manifest, uiState) {
                 //need to be able to set a specific window
-                jQuery.publish('manifestToWindow', manifest);
+                jQuery.publish('manifestToWindow', [manifest, uiState]);
             });
             
             jQuery.subscribe('toggleToImage', function(_, imageID) {
