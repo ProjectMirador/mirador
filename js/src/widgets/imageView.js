@@ -44,11 +44,15 @@
     
     bindEvents: function() {
        var _this = this;
-       
-       jQuery.subscribe('ImageView.set', function(_, stateValue) {
-            if (stateValue) { _this.show(); return; }
-            _this.hide();
-        });
+
+    },
+    
+    toggle: function(stateValue) {
+        if (stateValue) { 
+            this.show(); 
+        } else {
+            this.hide();
+        }
     },
     
     hide: function() {
