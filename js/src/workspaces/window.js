@@ -56,7 +56,6 @@
             });
             _this.clearViews();
             _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element, parent: _this} );
-            _this.uiViews[key].init();
             _this.toggleUI(key);
           }
         });
