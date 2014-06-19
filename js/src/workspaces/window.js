@@ -10,13 +10,28 @@
       defaultState:      'ThumbnailsView',
       uiState:           {'ThumbnailsView': false, 'ImageView': false, 'ScrollView': false, 'BookView': false},
       uiViews:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
-      overlayState:      {'MetadataView': false, 'TableOfContentsView': false, 'ThumbnailsView' : false},
+      //overlayState:      {'MetadataView': false, 'TableOfContentsView': false, 'ThumbnailsView' : false},
       overlayViews:      {'MetadataView': null, 'TableOfContentsView' : null, 'ThumbnailsView': null},
       uiOverlaysAvailable: {
-        'ThumbnailsView': ['MetadataView'], 
-        'ImageView': ['MetadataView', 'TableOfContentsView', 'ThumbnailsView'],
-        'ScrollView': ['MetadataView', 'TableOfContentsView'],
-        'BookView': ['MetadataView', 'TableOfContentsView', 'ThumbnailsView']
+        'ThumbnailsView': {
+            'overlay' : 'MetadataView',
+            'sidePanel' : 'TableOfContentsView',
+             'bottomPanel' : ''
+        },
+        'ImageView': {
+            'overlay' : 'MetadataView', 
+            'sidePanel' : 'TableOfContentsView', 
+            'bottomPanel' : 'ThumbnailsView'
+        },
+        'ScrollView': {
+            'overlay' : 'MetadataView', 
+            'sidePanel' : 'TableOfContentsView'
+        },
+        'BookView': {
+            'overlay' : 'MetadataView', 
+            'sidePanel' : 'TableOfContentsView', 
+            'bottomPanel' : 'ThumbnailsView'
+        }
       },
       sidePanel: null,
       bottomPanel: null,
@@ -55,6 +70,7 @@
               _this.toggleThumbnails();
             });
             _this.clearViews();
+            _this.clearPanelsAndOverlay();
             _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element, parent: _this} );
             _this.toggleUI(key);
           }
@@ -88,6 +104,12 @@
     clearWindow: function() {
        this.element.remove();
        this.element = jQuery(this.template()).appendTo(this.appendTo);
+    },
+    
+    clearPanelsAndOverlay: function() {
+       this.sidePanel = null;
+       this.bottomPanel = null;
+       this.overlay = null;
     },
 
     get: function(prop, parent) {
