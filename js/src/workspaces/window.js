@@ -48,7 +48,7 @@
         }
         jQuery.each(_this.uiState, function(key, value){ 
           if (value && _this.manifest != manifest) {
-            _this.element.empty();
+            _this.clearWindow();
             _this.manifest = manifest;
             _this.element.prepend(_this.manifestInfoTemplate({title: manifest.label}));
             _this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
@@ -83,6 +83,11 @@
       jQuery.each(_this.uiViews, function(key, value) {
         _this.uiViews[key] = null;
       });
+    },
+    
+    clearWindow: function() {
+       this.element.remove();
+       this.element = jQuery(this.template()).appendTo(this.appendTo);
     },
 
     get: function(prop, parent) {
