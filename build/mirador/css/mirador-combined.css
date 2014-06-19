@@ -960,6 +960,27 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
   color: #fff;
   margin-left: 5px;
 }
+/* Workspace scaffolding */
+.workspaceContainer {
+  position: absolute;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  overflow: hidden;
+}
+
+/* Slot Scaffolding */
+
+/* window scaffolding */
+.window {
+  position: absolute;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  overflow: hidden;
+}
 
 /* window views
 ---------------------------------------------------------------------------- */
