@@ -48,14 +48,13 @@
         }
         jQuery.each(_this.uiState, function(key, value){ 
           if (value && _this.manifest != manifest) {
-            _this.element.empty();
             _this.manifest = manifest;
-            _this.element.prepend(_this.manifestInfoTemplate({title: manifest.label}));
+            _this.element.prepend(_this.manifestInfoTemplate( { title: manifest.label } ));
             _this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
               _this.toggleThumbnails();
             });
             _this.clearViews();
-            _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element, parent: _this} );
+            _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this} );
             _this.uiViews[key].init();
             _this.toggleUI(key);
           }
@@ -118,9 +117,6 @@
     },
 
     toggleThumbnails: function() {
-      if (this.uiViews.ThumbnailsView === null) {
-        this.uiViews.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element, parent: this} );
-      }
       this.toggleUI('ThumbnailsView');
     },
 
@@ -138,9 +134,9 @@
     template: Handlebars.compile([
                                  '<div class="window">',
                                    '<div class="content-container">',
-                                     '<div id="sidePanel"></div>',
-                                     '<div id="view">',
-                                       '<div id="bottomPanel"></div>',
+                                     '<div class="sidePanel"></div>',
+                                     '<div class="view-container">',
+                                       '<div class="bottomPanel"></div>',
                                      '</div>',
                                    '</div>',
                                  '</div>'
