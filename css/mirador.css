@@ -381,7 +381,7 @@
   box-sizing: border-box;
 }
 
-.sidePanel {
+.side-panel {
   width:250px;
   height:100%;
   float: left;
@@ -395,7 +395,7 @@
   position:relative;
 }
 
-.bottomPanel {
+.bottom-panel {
   background-color: rgba(0,0,0,0.7);
   position: absolute;
   bottom:0;
@@ -785,6 +785,7 @@ text {
   overflow: auto;
   padding: 10px 0;
   min-width: 500px;
+  position:relative;
 }
 
 .mirador-viewer .scroll-view-frame .item {

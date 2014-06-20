@@ -3828,9 +3828,9 @@ window.Mirador = window.Mirador || function(config) {
     template: Handlebars.compile([
                                  '<div class="window">',
                                    '<div class="content-container">',
-                                     '<div class="sidePanel"></div>',
+                                     '<div class="side-panel"></div>',
                                      '<div class="view-container">',
-                                       '<div class="bottomPanel"></div>',
+                                       '<div class="bottom-panel"></div>',
                                      '</div>',
                                    '</div>',
                                  '</div>'
