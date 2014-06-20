@@ -10,28 +10,26 @@
       defaultState:      'ThumbnailsView',
       uiState:           {'ThumbnailsView': false, 'ImageView': false, 'ScrollView': false, 'BookView': false},
       uiViews:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
-      //overlayState:      {'MetadataView': false, 'TableOfContentsView': false, 'ThumbnailsView' : false},
-      //overlayViews:      {'MetadataView': null, 'TableOfContentsView' : null, 'ThumbnailsView': null},
       uiOverlaysAvailable: {
         'ThumbnailsView': {
-            'overlay' : 'MetadataView',
-            'sidePanel' : '',//'TableOfContentsView',
-             'bottomPanel' : ''
+            'overlay' : {'MetadataView' : false}, 
+            'sidePanel' : {'' : false},//'TableOfContentsView',
+             'bottomPanel' : {'' : false}
         },
         'ImageView': {
-            'overlay' : 'MetadataView', 
-            'sidePanel' : '',//'TableOfContentsView', 
-            'bottomPanel' : 'ThumbnailsView'
+            'overlay' : {'MetadataView' : false}, 
+            'sidePanel' : {'' : false},//'TableOfContentsView', 
+            'bottomPanel' : {'ThumbnailsView' : true}
         },
         'ScrollView': {
-            'overlay' : 'MetadataView', 
-            'sidePanel' : '',//'TableOfContentsView',
-            'bottomPanel' : ''
+            'overlay' : {'MetadataView' : false}, 
+            'sidePanel' : {'' : false},//'TableOfContentsView',
+            'bottomPanel' : {'' : false}
         },
         'BookView': {
-            'overlay' : 'MetadataView', 
-            'sidePanel' : '',//'TableOfContentsView', 
-            'bottomPanel' : 'ThumbnailsView'
+            'overlay' : {'MetadataView' : false},
+            'sidePanel' : {'' : false},//'TableOfContentsView', 
+            'bottomPanel' : {'ThumbnailsView' : true}
         }
       },
       sidePanel: null,
@@ -80,10 +78,15 @@
             _this.clearPanelsAndOverlay();
             
             //attach any panels or overlays for view
-            jQuery.each(_this.uiOverlaysAvailable[key], function(type, view) {
-                if (view !== '') {
-                   _this[type] = new $[view]({manifest: manifest, appendTo: _this.element.find('.'+type), parent: _this});
-                }
+            jQuery.each(_this.uiOverlaysAvailable[key], function(type, viewOptions) {
+                jQuery.each(viewOptions, function(view, displayed) {
+                    if (view !== '') {
+                        _this[type] = new $[view]({manifest: manifest, appendTo: _this.element.find('.'+type), parent: _this, panel: true});
+                        if (displayed) {
+                            _this.togglePanels(type, displayed);
+                        }
+                    }
+                });
             });
             //attach view
             _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this} );
@@ -130,7 +133,7 @@
     
     //only panels and overlay available to this view, make rest hidden while on this view
     updatePanelsAndOverlay: function() {
-    
+
     },
 
     get: function(prop, parent) {
@@ -146,6 +149,10 @@
       } else {
         this[prop] = value;
       }
+    },
+    
+    togglePanels: function(type, state) {
+        this[type].toggle(state);
     },
 
     // One UI must always be on      
