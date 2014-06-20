@@ -3704,13 +3704,29 @@ window.Mirador = window.Mirador || function(config) {
       defaultState:      'ThumbnailsView',
       uiState:           {'ThumbnailsView': false, 'ImageView': false, 'ScrollView': false, 'BookView': false},
       uiViews:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
-      overlayState:      {'MetadataView': false, 'TableOfContentsView': false, 'ThumbnailsView' : false},
-      overlayViews:      {'MetadataView': null, 'TableOfContentsView' : null, 'ThumbnailsView': null},
+      //overlayState:      {'MetadataView': false, 'TableOfContentsView': false, 'ThumbnailsView' : false},
+      //overlayViews:      {'MetadataView': null, 'TableOfContentsView' : null, 'ThumbnailsView': null},
       uiOverlaysAvailable: {
-        'ThumbnailsView': ['MetadataView'], 
-        'ImageView': ['MetadataView', 'TableOfContentsView', 'ThumbnailsView'],
-        'ScrollView': ['MetadataView', 'TableOfContentsView'],
-        'BookView': ['MetadataView', 'TableOfContentsView', 'ThumbnailsView']
+        'ThumbnailsView': {
+            'overlay' : 'MetadataView',
+            'sidePanel' : '',//'TableOfContentsView',
+             'bottomPanel' : ''
+        },
+        'ImageView': {
+            'overlay' : 'MetadataView', 
+            'sidePanel' : '',//'TableOfContentsView', 
+            'bottomPanel' : 'ThumbnailsView'
+        },
+        'ScrollView': {
+            'overlay' : 'MetadataView', 
+            'sidePanel' : '',//'TableOfContentsView',
+            'bottomPanel' : ''
+        },
+        'BookView': {
+            'overlay' : 'MetadataView', 
+            'sidePanel' : '',//'TableOfContentsView', 
+            'bottomPanel' : 'ThumbnailsView'
+        }
       },
       sidePanel: null,
       bottomPanel: null,
@@ -3742,15 +3758,31 @@ window.Mirador = window.Mirador || function(config) {
         }
         jQuery.each(_this.uiState, function(key, value){ 
           if (value && _this.manifest != manifest) {
+            
+            //reset the window div and update manifest
+            _this.clearWindow();
             _this.manifest = manifest;
-            _this.element.prepend(_this.manifestInfoTemplate( { title: manifest.label } ));
+            
+            //add manifest title and nav bar and bind nav bar events
+            _this.element.prepend(_this.manifestInfoTemplate({title: manifest.label}));
             _this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
               _this.toggleThumbnails();
             });
+            
+            //clear any existing objects
             _this.clearViews();
+            _this.clearPanelsAndOverlay();
+            
+            //attach any panels or overlays for view
+            jQuery.each(_this.uiOverlaysAvailable[key], function(type, view) {
+                if (view !== '') {
+                   _this[type] = new $[view]({manifest: manifest, appendTo: _this.element.find('.'+type), parent: _this});
+                }
+            });
+            //attach view
             _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this} );
-            _this.uiViews[key].init();
             _this.toggleUI(key);
+            //toggle display of panels
           }
         });
       });
@@ -3777,6 +3809,22 @@ window.Mirador = window.Mirador || function(config) {
       jQuery.each(_this.uiViews, function(key, value) {
         _this.uiViews[key] = null;
       });
+    },
+    
+    clearWindow: function() {
+       this.element.remove();
+       this.element = jQuery(this.template()).appendTo(this.appendTo);
+    },
+    
+    clearPanelsAndOverlay: function() {
+       this.sidePanel = null;
+       this.bottomPanel = null;
+       this.overlay = null;
+    },
+    
+    //only panels and overlay available to this view, make rest hidden while on this view
+    updatePanelsAndOverlay: function() {
+    
     },
 
     get: function(prop, parent) {
@@ -3808,29 +3856,40 @@ window.Mirador = window.Mirador || function(config) {
       });
       this.set(state, true, {parent: 'uiState'});
       this.uiViews[state].toggle(true);
+      this.updatePanelsAndOverlay();
     },
 
     toggleThumbnails: function() {
+      if (this.uiViews.ThumbnailsView === null) {
+        this.uiViews.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this} );
+      }
       this.toggleUI('ThumbnailsView');
     },
 
     toggleImageView: function(imageID) {
       if (this.uiViews.ImageView === null) {
-        this.uiViews.ImageView = new $.ImageView( {manifest: this.manifest, appendTo: this.element, parent: this, imageID: imageID} );
+        this.uiViews.ImageView = new $.ImageView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: imageID} );
       } else {
         var view = this.uiViews.ImageView;
         view.updateImage(imageID);
       }
       this.toggleUI('ImageView');
     },
+    
+    toggleBookView: function(imageID) {
+    },
+    
+    toggleScrollView: function(imageID) {
+    },
 
     //template should be based on workspace type
     template: Handlebars.compile([
                                  '<div class="window">',
                                    '<div class="content-container">',
-                                     '<div class="side-panel"></div>',
+                                     '<div class="sidePanel"></div>',
                                      '<div class="view-container">',
-                                       '<div class="bottom-panel"></div>',
+                                       '<div class="overlay"></div>',
+                                       '<div class="bottomPanel"></div>',
                                      '</div>',
                                    '</div>',
                                  '</div>'
@@ -3882,7 +3941,8 @@ window.Mirador = window.Mirador || function(config) {
 
         this.currentImg = this.imagesList[this.currentImgIndex];
         
-        this.element = jQuery(this.template()).appendTo(this.appendTo.find('.view-container'));
+        this.element = jQuery(this.template()).appendTo(this.appendTo);
+        console.log(this.appendTo);
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         
         this.bindEvents();
@@ -3996,6 +4056,115 @@ window.Mirador = window.Mirador || function(config) {
 }(Mirador));
 
 
+(function($) {
+
+  $.MetadataView = function(options) {
+
+    jQuery.extend(this, {
+      manifest:             null,
+      element:              null,
+      parent:               null,
+      metadataTypes:        null,
+      metadataListingCls:   'metadata-listing'
+    }, options);
+
+    this.init();
+  };
+
+
+  $.MetadataView.prototype = {
+
+    init: function() {
+      var _this = this,
+          tplData = {
+            metadataListingCls: this.metadataListingCls
+          };
+          
+      this.metadataTypes = {};
+
+      this.metadataTypes.about = $.getMetadataAbout(_this.manifest);
+      this.metadataTypes.details = $.getMetadataDetails(_this.manifest);
+      this.metadataTypes.rights = $.getMetadataRights(_this.manifest);
+      this.metadataTypes.links = $.getMetadataLinks(_this.manifest);
+      this.metadataTypes.metadata = $.getMetadataFields(_this.manifest);
+
+      jQuery.each(this.metadataTypes, function(metadata_key, metadata_value) {
+        tplData[metadata_key] = [];
+
+        // alert(type + ' ' + _this.metadata[type]);
+        jQuery.each(metadata_value, function(key, value) {
+          if (typeof value === 'object') {
+            value = $.stringifyObject(value);
+          }
+
+          if (typeof value === 'string' && value !== '') {
+            tplData[metadata_key].push({
+              label: $.extractLabelFromAttribute(key),
+              value: _this.addLinksToUris(value)
+            });
+          }
+        });
+      });
+
+      this.element = jQuery(this.template(tplData)).appendTo(this.appendTo);
+
+      this.bindEvents();
+    },
+
+    bindEvents: function() {
+    },
+
+
+    addLinksToUris: function(text) {
+      // http://stackoverflow.com/questions/8188645/javascript-regex-to-match-a-url-in-a-field-of-text
+      var regexUrl = /(http|ftp|https):\/\/[\w\-]+(\.[\w\-]+)+([\w.,@?\^=%&amp;:\/~+#\-]*[\w@?\^=%&amp;\/~+#\-])?/gi,
+          textWithLinks = text,
+          matches;
+
+      if (typeof text === 'string') {
+        matches = text.match(regexUrl);
+
+        if (matches) {
+          jQuery.each(matches, function(index, match) {
+            textWithLinks = textWithLinks.replace(match, '<a href="' + match + '" target="_blank">' + match + '</a>');
+          });
+        }
+      }
+
+      return textWithLinks;
+    },
+    
+    template: Handlebars.compile([
+    '<div class="sub-title">Details (Metadata about physical object/intellectual work):</div>',
+        '<dl class="{{metadataListingCls}}">',
+          '{{#each details}}',
+            '<dt>{{label}}:</dt><dd>{{value}}</dd>',
+          '{{/each}}',
+        '</dl>',
+        '<div class="sub-title">Rights Metadata:</div>',
+        '<dl class="{{metadataListingCls}}">',
+          '{{#each rights}}',
+            '<dt>{{label}}:</dt><dd>{{value}}</dd>',
+          '{{/each}}',
+        '</dl>',
+        '<div class="sub-title">Linking Metadata:</div>',
+        '<dl class="{{metadataListingCls}}">',
+          '{{#each links}}',
+            '<dt>{{label}}:</dt><dd>{{value}}</dd>',
+          '{{/each}}',
+        '</dl>',
+        '<div class="sub-title">About (Metadata about this manuscript\'s manifest file):</div>',
+        '<dl class="{{metadataListingCls}}">',
+          '{{#each about}}',
+            '<dt>{{label}}:</dt><dd>{{value}}</dd>',
+          '{{/each}}',
+        '</dl>'
+    ].join(''))
+
+  };
+
+
+}(Mirador));
 (function($) {
 
   $.WidgetScale = function(options) {
@@ -4552,12 +4721,49 @@ jQuery.fn.scrollStop = function(callback) {
 
     return id[0] || id;
   };
+  
+  $.getMetadataAbout = function(jsonLd) {
+      return {
+         '@context': jsonLd['@context'] || '',
+         '@id':      jsonLd['@id'] || ''
+        };
+    };
 
+  $.getMetadataDetails = function(jsonLd) {
+      return {
+          'label':        jsonLd.label || '',
+          'agent':        jsonLd.agent || '',
+          'location':     jsonLd.location || '',
+          'date':         jsonLd.date || '',
+          'description':  jsonLd.description || ''
+        };
+    };
 
-  $.getMetadataByManifestId = function(manifestId) {
-    return $.manifests[manifestId].metadata;
-  };
+  $.getMetadataFields = function(jsonLd) {
+      // parse and store metadata pairs (API 1.0)
+      var mdList = {};
+      if (typeof jsonLd.metadata !== 'undefined') {
+          jQuery.each(jsonLd.metadata, function(index, item) {
+              mdList[item.label] = item.value;
+            });
+        }
+        return mdList;
+   };
 
+   $.getMetadataRights =function(jsonLd) {
+       return {
+           'license':      jsonLd.license || '',
+           'attribution':  jsonLd.attribution || ''
+        };
+   };
+
+   $.getMetadataLinks = function(jsonLd) {
+      return {
+          'service':  jsonLd.service || '',
+          'seeAlso':  jsonLd.seeAlso || '',
+          'within':   jsonLd.within || ''
+        };
+   };
 
   $.getImagesListByManifestId = function(manifestId) {
     return $.manifests[manifestId].sequences[0].imagesList;

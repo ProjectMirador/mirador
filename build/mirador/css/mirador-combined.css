@@ -997,12 +997,11 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
   left:0;
   right:0;
   top:0;
-  height:100%;
   padding-top:38px;
   box-sizing: border-box;
 }
 
-.side-panel {
+.sidePanel {
   width:250px;
   height:100%;
   float: left;
@@ -1015,8 +1014,18 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
   height: 100%;
   position:relative;
 }
+.overlay {
+  display:none;
+  position: absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  top:0;
+  box-sizing: border-box;
 
-.bottom-panel {
+}
+
+.bottomPanel {
   background-color: rgba(0,0,0,0.7);
   position: absolute;
   bottom:0;
@@ -1049,6 +1058,10 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
 }
 .thumbnail-view.visuallyactive, .image-view.visuallyactive {
 	opacity: 0.9;
+}
+
+#overlay {
+   display: none;
 }
 
 /* widget
