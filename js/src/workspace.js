@@ -17,7 +17,7 @@
 
   $.Workspace.prototype = {
     init: function () {
-      this.element.addClass(this.workspaceSlotCls).appendTo(this.parent.canvas);
+      this.element.appendTo(this.parent.canvas);
 
       this.element.append(this.template({
         workspaceSlotCls: this.workspaceSlotCls
