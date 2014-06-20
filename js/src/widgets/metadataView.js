@@ -56,6 +56,21 @@
     bindEvents: function() {
     },
 
+    toggle: function(stateValue) {
+        if (stateValue) { 
+            this.show(); 
+        } else {
+            this.hide();
+        }
+    },
+    
+    show: function() {
+    
+    },
+    
+    hide: function() {
+    
+    },
 
     addLinksToUris: function(text) {
       // http://stackoverflow.com/questions/8188645/javascript-regex-to-match-a-url-in-a-field-of-text

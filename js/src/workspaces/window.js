@@ -77,21 +77,9 @@
             _this.clearViews();
             _this.clearPanelsAndOverlay();
             
-            //attach any panels or overlays for view
-            jQuery.each(_this.uiOverlaysAvailable[key], function(type, viewOptions) {
-                jQuery.each(viewOptions, function(view, displayed) {
-                    if (view !== '') {
-                        _this[type] = new $[view]({manifest: manifest, appendTo: _this.element.find('.'+type), parent: _this, panel: true});
-                        if (displayed) {
-                            _this.togglePanels(type, displayed);
-                        }
-                    }
-                });
-            });
-            //attach view
+            //attach view and toggle view, which triggers the attachment of panels or overlays
             _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this} );
             _this.toggleUI(key);
-            //toggle display of panels
           }
         });
       });
@@ -132,8 +120,27 @@
     },
     
     //only panels and overlay available to this view, make rest hidden while on this view
-    updatePanelsAndOverlay: function() {
+    updatePanelsAndOverlay: function(state) {
+        var _this = this;
 
+        jQuery.each(this.uiOverlaysAvailable[state], function(panelType, viewOptions) {
+            jQuery.each(viewOptions, function(view, displayed) {
+                //instantiate any panels that exist for this view but are still null
+                if (view !== '' && _this[panelType] === null) {
+                    _this[panelType] = new $[view]({manifest: _this.manifest, appendTo: _this.element.find('.'+panelType), parent: _this, panel: true});
+                }
+                //toggle any valid panels
+                if (view !== '') {   
+                    if (displayed) {
+                        _this.togglePanels(panelType, displayed);
+                    }
+                }
+                //hide any panels instantiated but not available to this view
+                if (view === '' && _this[panelType]) {
+                   _this.togglePanels(panelType, displayed);
+                }
+            });
+        });
     },
 
     get: function(prop, parent) {
@@ -169,7 +176,7 @@
       });
       this.set(state, true, {parent: 'uiState'});
       this.uiViews[state].toggle(true);
-      this.updatePanelsAndOverlay();
+      this.updatePanelsAndOverlay(state);
     },
 
     toggleThumbnails: function() {
