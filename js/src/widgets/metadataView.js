@@ -48,7 +48,7 @@
         });
       });
 
-      //this.element.append(this.template(tplData));
+      this.element = jQuery(this.template(tplData)).appendTo(this.appendTo);
 
       this.bindEvents();
     },

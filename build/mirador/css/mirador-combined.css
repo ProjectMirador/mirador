@@ -1004,6 +1004,10 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
 	opacity: 0.9;
 }
 
+#overlay {
+   display: none;
+}
+
 /* widget
 ---------------------------------------------------------------------------- */
 

@@ -11,25 +11,26 @@
       uiState:           {'ThumbnailsView': false, 'ImageView': false, 'ScrollView': false, 'BookView': false},
       uiViews:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
       //overlayState:      {'MetadataView': false, 'TableOfContentsView': false, 'ThumbnailsView' : false},
-      overlayViews:      {'MetadataView': null, 'TableOfContentsView' : null, 'ThumbnailsView': null},
+      //overlayViews:      {'MetadataView': null, 'TableOfContentsView' : null, 'ThumbnailsView': null},
       uiOverlaysAvailable: {
         'ThumbnailsView': {
             'overlay' : 'MetadataView',
-            'sidePanel' : 'TableOfContentsView',
+            'sidePanel' : '',//'TableOfContentsView',
              'bottomPanel' : ''
         },
         'ImageView': {
             'overlay' : 'MetadataView', 
-            'sidePanel' : 'TableOfContentsView', 
+            'sidePanel' : '',//'TableOfContentsView', 
             'bottomPanel' : 'ThumbnailsView'
         },
         'ScrollView': {
             'overlay' : 'MetadataView', 
-            'sidePanel' : 'TableOfContentsView'
+            'sidePanel' : '',//'TableOfContentsView',
+            'bottomPanel' : ''
         },
         'BookView': {
             'overlay' : 'MetadataView', 
-            'sidePanel' : 'TableOfContentsView', 
+            'sidePanel' : '',//'TableOfContentsView', 
             'bottomPanel' : 'ThumbnailsView'
         }
       },
@@ -63,16 +64,30 @@
         }
         jQuery.each(_this.uiState, function(key, value){ 
           if (value && _this.manifest != manifest) {
+            //reset the window div and update manifest
             _this.clearWindow();
             _this.manifest = manifest;
+            
+            //add manifest title and nav bar and bind nav bar events
             _this.element.prepend(_this.manifestInfoTemplate({title: manifest.label}));
             _this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
               _this.toggleThumbnails();
             });
+            
+            //clear any existing objects
             _this.clearViews();
             _this.clearPanelsAndOverlay();
-            _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element, parent: _this} );
+            
+            //attach any panels or overlays for view
+            jQuery.each(_this.uiOverlaysAvailable[key], function(type, view) {
+                if (view !== '') {
+                   _this[type] = new $[view]({manifest: manifest, appendTo: _this.element.find('#'+type), parent: _this});
+                }
+            });
+            //attach view
+            _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element.find('#view'), parent: _this} );
             _this.toggleUI(key);
+            //toggle display of panels
           }
         });
       });
@@ -111,6 +126,11 @@
        this.bottomPanel = null;
        this.overlay = null;
     },
+    
+    //only panels and overlay available to this view, make rest hidden while on this view
+    updatePanelsAndOverlay: function() {
+    
+    },
 
     get: function(prop, parent) {
       if (parent) {
@@ -141,29 +161,37 @@
       });
       this.set(state, true, {parent: 'uiState'});
       this.uiViews[state].toggle(true);
+      this.updatePanelsAndOverlay();
     },
 
     toggleThumbnails: function() {
       if (this.uiViews.ThumbnailsView === null) {
-        this.uiViews.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element, parent: this} );
+        this.uiViews.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('#view'), parent: this} );
       }
       this.toggleUI('ThumbnailsView');
     },
 
     toggleImageView: function(imageID) {
       if (this.uiViews.ImageView === null) {
-        this.uiViews.ImageView = new $.ImageView( {manifest: this.manifest, appendTo: this.element, parent: this, imageID: imageID} );
+        this.uiViews.ImageView = new $.ImageView( {manifest: this.manifest, appendTo: this.element.find('#view'), parent: this, imageID: imageID} );
       } else {
         var view = this.uiViews.ImageView;
         view.updateImage(imageID);
       }
       this.toggleUI('ImageView');
     },
+    
+    toggleBookView: function(imageID) {
+    },
+    
+    toggleScrollView: function(imageID) {
+    },
 
     //template should be based on workspace type
     template: Handlebars.compile([
                                  '<div class="window">',
                                    '<div class="content-container">',
+                                     '<div id="overlay"></div>',
                                      '<div id="sidePanel"></div>',
                                      '<div id="view">',
                                        '<div id="bottomPanel"></div>',
