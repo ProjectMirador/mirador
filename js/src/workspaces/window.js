@@ -160,6 +160,10 @@
     
     togglePanels: function(type, state) {
         this[type].toggle(state);
+        if (type === "sidePanel" && state) {
+            //side panel should adjust width of view-container
+            
+        }
     },
 
     // One UI must always be on      

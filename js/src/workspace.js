@@ -5,7 +5,8 @@
     jQuery.extend(true, this, {
       type:             null,
       workspaceSlotCls: 'slot',
-      window:          null
+      window:          null,
+      appendTo:         null
 
     }, $.DEFAULT_SETTINGS, options);
 
@@ -17,11 +18,12 @@
 
   $.Workspace.prototype = {
     init: function () {
-      this.element.addClass(this.workspaceSlotCls).appendTo(this.parent.canvas);
+      //this.element.addClass(this.workspaceSlotCls).appendTo(this.appendTo);
+      this.element.appendTo(this.appendTo);
 
-      this.element.append(this.template({
+      /*this.element.append(this.template({
         workspaceSlotCls: this.workspaceSlotCls
-      }));
+      }));*/
 
       //jQuery(this.element).layout({ applyDefaultStyles: true });
 
@@ -50,21 +52,11 @@
     },
 
     hide: function() {
-      var _this = this;
-
-      _this.element.removeClass('visuallyactive');  
-      _this.element.one('transitionend', function(e) {
-        _this.element.removeClass('active');
-      });
+        jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
     },
 
     show: function() {
-      var _this = this;
-
-      _this.element.addClass('active');
-      setTimeout(function() {  
-        _this.element.addClass('visuallyactive active');  
-      }, 20);
+        jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
     },
 
     // template should be based on workspace type
