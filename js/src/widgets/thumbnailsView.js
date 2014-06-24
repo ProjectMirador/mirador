@@ -114,7 +114,11 @@
     ].join('')),
       
     hide: function() {
-        jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
+        var element = jQuery(this.element);
+        if (this.panel) {
+            element = element.parent();
+        }
+        element.hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
     },
 
     show: function() {

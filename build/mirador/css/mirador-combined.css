@@ -1018,12 +1018,15 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
 .overlay {
   display:none;
   position: absolute;
-  bottom:0;
-  left:0;
   right:0;
   top:0;
   box-sizing: border-box;
-
+  opacity: 0.9;
+  background-color: white;
+  z-index:4;
+  width: 30%;
+  overflow-y: scroll;
+  height: 100%
 }
 
 .bottomPanel {

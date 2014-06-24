@@ -65,11 +65,19 @@
     },
     
     show: function() {
-    
+        var element = jQuery(this.element);
+        if (this.panel) {
+            element = element.parent();
+        }
+        element.show({effect: "slide", direction: "right", duration: 1000, easing: "swing"});    
     },
     
     hide: function() {
-    
+        var element = jQuery(this.element);
+        if (this.panel) {
+            element = element.parent();
+        }
+        element.hide({effect: "slide", direction: "right", duration: 1000, easing: "swing"});    
     },
 
     addLinksToUris: function(text) {

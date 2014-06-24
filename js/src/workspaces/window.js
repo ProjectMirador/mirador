@@ -60,6 +60,9 @@
         } else {             
           _this.updateState(_this.defaultState);
         }
+        
+        //update panels and overlay state to default?
+        
         jQuery.each(_this.uiState, function(key, value){ 
           if (value && _this.manifest != manifest) {
             
@@ -71,6 +74,9 @@
             _this.element.prepend(_this.manifestInfoTemplate({title: manifest.label}));
             _this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
               _this.toggleThumbnails();
+            });
+            _this.element.find('.mirador-icon-metadata-view').on('click', function() {
+              _this.toggleMetadataOverlay(key);
             });
             
             //clear any existing objects
@@ -132,12 +138,12 @@
                 //toggle any valid panels
                 if (view !== '') {   
                     if (displayed) {
-                        _this.togglePanels(panelType, displayed);
+                        _this.togglePanels(panelType, displayed, view, state);
                     }
                 }
                 //hide any panels instantiated but not available to this view
                 if (view === '' && _this[panelType]) {
-                   _this.togglePanels(panelType, displayed);
+                   _this.togglePanels(panelType, displayed, state);
                 }
             });
         });
@@ -158,12 +164,18 @@
       }
     },
     
-    togglePanels: function(type, state) {
-        this[type].toggle(state);
-        if (type === "sidePanel" && state) {
+    togglePanels: function(panelType, panelState, viewType, uiState) {
+        //update state in uiOverlaysAvailable
+        this.uiOverlaysAvailable[uiState][panelType][viewType] = panelState;
+        this[panelType].toggle(panelState);
+        if (panelType === "sidePanel") {
             //side panel should adjust width of view-container
             
         }
+    },
+    
+    toggleMetadataOverlay: function(uiState) {
+        this.togglePanels('overlay', !this.uiOverlaysAvailable[uiState].overlay.MetadataView, 'MetadataView', uiState);
     },
 
     // One UI must always be on      
@@ -223,6 +235,7 @@
                                              '<div class="manifest-info">',
                                              '<div class="window-manifest-navigation">',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
+                                             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
                                              '</div>',
                                              '<h3 class="window-manifest-title">{{title}}</h3>',
                                              '</div>'
