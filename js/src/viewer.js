@@ -45,7 +45,7 @@
             .appendTo(this.element);
 
             // add workspace configuration
-            this.activeWorkspace = new $.Workspace({type: this.initialWorkspace, parent: this });
+            this.activeWorkspace = new $.Workspace({type: this.initialWorkspace, parent: this, appendTo: this.element.find('.mirador-viewer') });
 
             //add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});

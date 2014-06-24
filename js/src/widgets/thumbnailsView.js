@@ -70,6 +70,8 @@
             });
         });
         
+        //add any other events that would trigger thumbnail display (resize, etc)
+                
         _this.element.find('.thumbnail-image').on('click', function() {
            _this.parent.toggleImageView(jQuery(this).attr('data-image-id'));
         });
@@ -106,27 +108,33 @@
     ].join('')),
       
     hide: function() {
-        var _this = this;
-            
-        _this.element.removeClass('visuallyactive');  
-        _this.element.one('transitionend', function(e) {
-            _this.element.removeClass('active');
-        });
+        var element = jQuery(this.element);
+        if (this.panel) {
+            element = element.parent();
+        }
+        element.hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
     },
 
     show: function() {
+        var element = jQuery(this.element);
+        if (this.panel) {
+            element = element.parent();
+        }
         var _this = this;
-
-        _this.element.addClass('active');
-        setTimeout(function() {  
-            _this.element.addClass('visuallyactive active'); 
+        element.show({
+        effect: "fade", 
+        duration: 1000, 
+        easing: "easeInCubic", 
+        complete: function() {
             jQuery.each(_this.element.find("img"), function(key, value) {
                    if ($.isOnScreen(value)) {
                       var url = jQuery(value).attr("data");
                       _this.loadImage(value, url);
                    }
                 });
-        }, 20);
+        }
+        
+        });
     }
 
   };

@@ -64,6 +64,9 @@
         } else {             
           _this.updateState(_this.defaultState);
         }
+        
+        //update panels and overlay state to default?
+        
         jQuery.each(_this.uiState, function(key, value){ 
           if (value && _this.manifest != manifest) {
 
@@ -76,21 +79,17 @@
             _this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
               _this.toggleThumbnails();
             });
-
+            _this.element.find('.mirador-icon-metadata-view').on('click', function() {
+              _this.toggleMetadataOverlay(key);
+            });
+            
             //clear any existing objects
             _this.clearViews();
             _this.clearPanelsAndOverlay();
-
-            //attach any panels or overlays for view
-            jQuery.each(_this.uiOverlaysAvailable[key], function(type, view) {
-              if (view !== '') {
-                _this[type] = new $[view]({manifest: manifest, appendTo: _this.element.find('.'+type), parent: _this});
-              }
-            });
-            //attach view
+            
+            //attach view and toggle view, which triggers the attachment of panels or overlays
             _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this} );
             _this.toggleUI(key);
-            //toggle display of panels
           }
         });
       });
@@ -131,8 +130,27 @@
     },
 
     //only panels and overlay available to this view, make rest hidden while on this view
-    updatePanelsAndOverlay: function() {
+    updatePanelsAndOverlay: function(state) {
+        var _this = this;
 
+        jQuery.each(this.uiOverlaysAvailable[state], function(panelType, viewOptions) {
+            jQuery.each(viewOptions, function(view, displayed) {
+                //instantiate any panels that exist for this view but are still null
+                if (view !== '' && _this[panelType] === null) {
+                    _this[panelType] = new $[view]({manifest: _this.manifest, appendTo: _this.element.find('.'+panelType), parent: _this, panel: true});
+                }
+                //toggle any valid panels
+                if (view !== '') {   
+                    if (displayed) {
+                        _this.togglePanels(panelType, displayed, view, state);
+                    }
+                }
+                //hide any panels instantiated but not available to this view
+                if (view === '' && _this[panelType]) {
+                   _this.togglePanels(panelType, displayed, state);
+                }
+            });
+        });
     },
 
     get: function(prop, parent) {
@@ -149,6 +167,20 @@
         this[prop] = value;
       }
     },
+   
+    togglePanels: function(panelType, panelState, viewType, uiState) {
+        //update state in uiOverlaysAvailable
+        this.uiOverlaysAvailable[uiState][panelType][viewType] = panelState;
+        this[panelType].toggle(panelState);
+        if (panelType === "sidePanel") {
+            //side panel should adjust width of view-container
+            
+        }
+    },
+    
+    toggleMetadataOverlay: function(uiState) {
+        this.togglePanels('overlay', !this.uiOverlaysAvailable[uiState].overlay.MetadataView, 'MetadataView', uiState);
+    },
 
     // One UI must always be on      
     toggleUI: function(state) {
@@ -164,7 +196,7 @@
       });
       this.set(state, true, {parent: 'uiState'});
       this.uiViews[state].toggle(true);
-      this.updatePanelsAndOverlay();
+      this.updatePanelsAndOverlay(state);
     },
 
     toggleThumbnails: function() {
@@ -207,6 +239,7 @@
                                              '<div class="manifest-info">',
                                              '<div class="window-manifest-navigation">',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
+                                             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
                                              '</div>',
                                              '<h3 class="window-manifest-title">{{title}}</h3>',
                                              '</div>'
