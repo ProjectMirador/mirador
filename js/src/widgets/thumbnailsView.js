@@ -10,8 +10,7 @@
       appendTo:             null,
       thumbsListingCls:     '',
       thumbsHeight:         150,
-      parent:               null,
-      panel:                false
+      parent:               null
     }, options);
     
     this.init();
@@ -23,12 +22,8 @@
     init: function() {
         this.imagesList = $.getImagesListByManifest(this.manifest);
         this.currentImgIndex = 0;
-        
-        if (this.panel) {
-            this.thumbsHeight = 80;
-        }
 
-        this.thumbsListingCls = 'listing-thumbs';
+        this.thumbsListingCls = 'thumbs-listing';
         this.loadContent();
         this.bindEvents();
         },
@@ -37,8 +32,7 @@
       var _this = this,
       tplData = {
         defaultHeight:  this.thumbsHeight,
-        listingCssCls:  this.panel ? 'panel-listing-thumbs' : 'listing-thumbs',
-        thumbnailCls:   this.panel ? 'panel-thumbnail-view' : 'thumbnail-view'
+        listingCssCls:  this.thumbsListingCls
       };
 
       tplData.thumbs = jQuery.map(this.imagesList, function(image, index) {
@@ -67,7 +61,6 @@
            jQuery(this).hide().fadeIn(750);
         });
                 
-        console.log(_this.element);
         jQuery(_this.element).scroll(function() {
           jQuery.each(_this.element.find("img"), function(key, value) {
                 if ($.isOnScreen(value) && !jQuery(value).attr("src")) {
@@ -102,8 +95,8 @@
     },
     
     template: Handlebars.compile([
-      '<div class="{{thumbnailCls}}">',
-        '<ul class="{{listingCssCls}}">',
+      '<div class="thumbnail-view">',
+        '<ul class="{{listingCssCls}} listing-thumbs">',
           '{{#thumbs}}',
             '<li>',
                 '<img class="thumbnail-image {{highlight}}" title="{{title}}" data-image-id="{{id}}" src="" data="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',
