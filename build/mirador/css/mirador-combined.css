@@ -792,11 +792,13 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
     height:100%;
     padding: 0 30px;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow-y: scroll;
     margin:0 auto;
     overflow-y: scroll;
 }
 .items-listing {
+    /*overflow-y: scroll;
+    overflow-x: hidden;*/
     height:100%;
     margin:0;
     padding-left:0;
@@ -1055,6 +1057,7 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
     width: 100%;
     background-color: rgba(255,255,255,0.9);
     opacity: 0.9;
+  overflow-x: scroll;
 }
 
 .panel-thumbnail-view ul.panel-listing-thumbs {
@@ -1063,7 +1066,6 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
   overflow: auto;
   padding: 0;
   white-space: nowrap;
-  overflow-x: scroll;
 }
 
 .panel-thumbnail-view ul.panel-listing-thumbs li {

@@ -67,6 +67,7 @@
            jQuery(this).hide().fadeIn(750);
         });
                 
+        console.log(_this.element);
         jQuery(_this.element).scroll(function() {
           jQuery.each(_this.element.find("img"), function(key, value) {
                 if ($.isOnScreen(value) && !jQuery(value).attr("src")) {
