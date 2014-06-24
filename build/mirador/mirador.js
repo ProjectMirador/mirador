@@ -3685,27 +3685,27 @@ window.Mirador = window.Mirador || function(config) {
       //overlayState:      {'MetadataView': false, 'TableOfContentsView': false, 'ThumbnailsView' : false},
       //overlayViews:      {'MetadataView': null, 'TableOfContentsView' : null, 'ThumbnailsView': null},
       uiOverlaysAvailable: {
-        'ThumbnailsView': {
-          'overlay' : 'MetadataView',
-          'sidePanel' : '', //'TableOfContentsView',
-          'bottomPanel' : ''
+          'ThumbnailsView': {
+              'overlay' : {'MetadataView' : false}, 
+              'sidePanel' : {'' : false},//'TableOfContentsView',
+               'bottomPanel' : {'' : false}
+          },
+          'ImageView': {
+              'overlay' : {'MetadataView' : false}, 
+              'sidePanel' : {'' : false},//'TableOfContentsView', 
+              'bottomPanel' : {'ThumbnailsView' : true}
+          },
+          'ScrollView': {
+              'overlay' : {'MetadataView' : false}, 
+              'sidePanel' : {'' : false},//'TableOfContentsView',
+              'bottomPanel' : {'' : false}
+          },
+          'BookView': {
+              'overlay' : {'MetadataView' : false},
+              'sidePanel' : {'' : false},//'TableOfContentsView', 
+              'bottomPanel' : {'ThumbnailsView' : true}
+          }
         },
-        'ImageView': {
-          'overlay' : 'MetadataView', 
-          'sidePanel' : '', //'TableOfContentsView', 
-          'bottomPanel' : 'ThumbnailsView'
-        },
-        'ScrollView': {
-          'overlay' : 'MetadataView', 
-          'sidePanel' : '', //'TableOfContentsView',
-          'bottomPanel' : ''
-        },
-        'BookView': {
-          'overlay' : 'MetadataView', 
-          'sidePanel' : '', //'TableOfContentsView', 
-          'bottomPanel' : 'ThumbnailsView'
-        }
-      },
       sidePanel: null,
       bottomPanel: null,
       overlay: null
@@ -3721,8 +3721,8 @@ window.Mirador = window.Mirador || function(config) {
       this.updateState(this.defaultState);
 
       this.element = jQuery(this.template()).appendTo(this.appendTo);
-      this.sidePanel = this.element.find('.sidePanel');
-      this.tableOfContents = new $.TableOfContents({appendTo: this.sidePanel, manifest: this.manifest});
+      //this.sidePanel = this.element.find('.sidePanel');
+      //this.tableOfContents = new $.TableOfContents({appendTo: this.sidePanel, manifest: this.manifest});
 
       this.bindEvents();
     },
@@ -4367,83 +4367,6 @@ window.Mirador = window.Mirador || function(config) {
   };
 
 }(Mirador));
-
-(function($) {
-
-  $.TableOfContents = function(options) {
-
-    jQuery.extend(true, this, {
-      element:           null,
-      appendTo:          null
-    }, $.DEFAULT_SETTINGS, options);
-
-    this.init();
-
-  };
-
-  $.TableOfContents.prototype = {
-    init: function () {
-      var _this = this;
-
-      this.ranges = this.manifest;
-      console.log(this.ranges);
-      this.render();
-      this.bindEvents();
-    },
-
-    getTplData: function() {  
-      return this.ranges;
-    },
-
-    render: function() {
-
-    },
-
-    bindEvents: function() {
-      var _this = this;
-
-      jQuery.subscribe('focusChanged', function(_, manifest, focusFrame) {
-      });
-
-    },
-
-    template: (function() {
-
-      var template = Handlebars.compile([
-        '{{#nestedRangeLevel ranges}}',
-          '{{{tocLevel label level}}}',
-          '{{#if children}}',
-            '{{{nestedRangeLevel children}}}',
-          '{{/if}}',
-        '{{/nestedRangeLevel}}'
-      ].join(''));
-
-      var previousTemplate;
-
-      Handlebars.registerHelper('nestedRangeLevel', function(children, options) {
-        var out = '';
-
-        if (options.fn !== undefined) {
-          previousTemplate = options.fn;
-        }
-
-        children.forEach(function(child){
-          out = out + previousTemplate(child);
-        });
-
-        return out;
-      });
-
-      Handlebars.registerHelper('tocLevel', function(label, level){
-        return '<h' + (level+1) + '>' + label + '</h' + (level+1) + '>';
-      });
-
-      return template;
-    })()
-  };
-
-}(Mirador));
-
 
 (function($) {
 

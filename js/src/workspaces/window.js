@@ -13,27 +13,27 @@
       //overlayState:      {'MetadataView': false, 'TableOfContentsView': false, 'ThumbnailsView' : false},
       //overlayViews:      {'MetadataView': null, 'TableOfContentsView' : null, 'ThumbnailsView': null},
       uiOverlaysAvailable: {
-        'ThumbnailsView': {
-          'overlay' : 'MetadataView',
-          'sidePanel' : '', //'TableOfContentsView',
-          'bottomPanel' : ''
+          'ThumbnailsView': {
+              'overlay' : {'MetadataView' : false}, 
+              'sidePanel' : {'' : false},//'TableOfContentsView',
+               'bottomPanel' : {'' : false}
+          },
+          'ImageView': {
+              'overlay' : {'MetadataView' : false}, 
+              'sidePanel' : {'' : false},//'TableOfContentsView', 
+              'bottomPanel' : {'ThumbnailsView' : true}
+          },
+          'ScrollView': {
+              'overlay' : {'MetadataView' : false}, 
+              'sidePanel' : {'' : false},//'TableOfContentsView',
+              'bottomPanel' : {'' : false}
+          },
+          'BookView': {
+              'overlay' : {'MetadataView' : false},
+              'sidePanel' : {'' : false},//'TableOfContentsView', 
+              'bottomPanel' : {'ThumbnailsView' : true}
+          }
         },
-        'ImageView': {
-          'overlay' : 'MetadataView', 
-          'sidePanel' : '', //'TableOfContentsView', 
-          'bottomPanel' : 'ThumbnailsView'
-        },
-        'ScrollView': {
-          'overlay' : 'MetadataView', 
-          'sidePanel' : '', //'TableOfContentsView',
-          'bottomPanel' : ''
-        },
-        'BookView': {
-          'overlay' : 'MetadataView', 
-          'sidePanel' : '', //'TableOfContentsView', 
-          'bottomPanel' : 'ThumbnailsView'
-        }
-      },
       sidePanel: null,
       bottomPanel: null,
       overlay: null
@@ -49,8 +49,8 @@
       this.updateState(this.defaultState);
 
       this.element = jQuery(this.template()).appendTo(this.appendTo);
-      this.sidePanel = this.element.find('.sidePanel');
-      this.tableOfContents = new $.TableOfContents({appendTo: this.sidePanel, manifest: this.manifest});
+      //this.sidePanel = this.element.find('.sidePanel');
+      //this.tableOfContents = new $.TableOfContents({appendTo: this.sidePanel, manifest: this.manifest});
 
       this.bindEvents();
     },
