@@ -3955,7 +3955,7 @@ window.Mirador = window.Mirador || function(config) {
         this.currentImg = this.imagesList[this.currentImgIndex];
         
         this.element = jQuery(this.template()).appendTo(this.appendTo);
-        console.log(this.appendTo);
+        
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         
         this.bindEvents();
@@ -4237,7 +4237,8 @@ window.Mirador = window.Mirador || function(config) {
       appendTo:             null,
       thumbsListingCls:     '',
       thumbsHeight:         150,
-      parent:               null
+      parent:               null,
+      panel:                false
     }, options);
     
     this.init();
@@ -4249,8 +4250,12 @@ window.Mirador = window.Mirador || function(config) {
     init: function() {
         this.imagesList = $.getImagesListByManifest(this.manifest);
         this.currentImgIndex = 0;
+        
+        if (this.panel) {
+            this.thumbsHeight = 80;
+        }
 
-        this.thumbsListingCls = 'thumbs-listing';
+        this.thumbsListingCls = 'listing-thumbs';
         this.loadContent();
         this.bindEvents();
         },
@@ -4259,7 +4264,8 @@ window.Mirador = window.Mirador || function(config) {
       var _this = this,
       tplData = {
         defaultHeight:  this.thumbsHeight,
-        listingCssCls:  this.thumbsListingCls
+        listingCssCls:  this.panel ? 'panel-listing-thumbs' : 'listing-thumbs',
+        thumbnailCls:   this.panel ? 'panel-thumbnail-view' : 'thumbnail-view'
       };
 
       tplData.thumbs = jQuery.map(this.imagesList, function(image, index) {
@@ -4322,8 +4328,8 @@ window.Mirador = window.Mirador || function(config) {
     },
     
     template: Handlebars.compile([
-      '<div class="thumbnail-view">',
-        '<ul class="{{listingCssCls}} listing-thumbs">',
+      '<div class="{{thumbnailCls}}">',
+        '<ul class="{{listingCssCls}}">',
           '{{#thumbs}}',
             '<li>',
                 '<img class="thumbnail-image {{highlight}}" title="{{title}}" data-image-id="{{id}}" src="" data="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',

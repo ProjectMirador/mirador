@@ -164,15 +164,7 @@
     /*transition: all 0.3s ease-in;*/
     overflow: hidden;
 }
-/*#manifest-select-menu.active, #workspace-select-menu.active, #workspaceContainer.active {
-     opacity: 0.9;
-    transition: all 0.3s ease-out;
-    -webkit-transform: scale(1);
-    display: block;
-}
-#manifest-select-menu.visuallyactive, #workspace-select-menu.visuallyactive, #workspaceContainer.visuallyactive {
-	opacity: 0.9;
-}*/
+
 .container {
     position: relative;
     width: 100%;
@@ -181,10 +173,9 @@
     box-sizing: border-box;
     overflow: hidden;
     margin:0 auto;
+    overflow-y: scroll;
 }
 .items-listing {
-    overflow-y: scroll;
-    overflow-x: hidden;
     height:100%;
     margin:0;
     padding-left:0;
@@ -427,25 +418,11 @@
     height: 100%;
     width: 100%;
     background-color: rgba(255,255,255,0.9);
-    /*opacity: 0;
-    -webkit-transform: scale(2);
-    transition: all 0.3s ease-in;*/
     display: none;
     overflow-y: scroll;
 }
 .image-view {
   overflow:hidden;
-}
-/*.thumbnail-view.active, .image-view.active {
-    -webkit-transform: scale(1);
-    display: block;
-}
-.thumbnail-view.visuallyactive, .image-view.visuallyactive {
-	opacity: 0.9;
-}*/
-
-#overlay {
-   display: none;
 }
 
 /* panels
@@ -457,18 +434,7 @@
     width: 100%;
     background-color: rgba(255,255,255,0.9);
     opacity: 0.9;
-    /*-webkit-transform: scale(2);
-    transition: all 0.3s ease-in;
-    display: none;*/
 }
-
-/*.panel-thumbnail-view.active {
-    -webkit-transform: scale(1);
-    display: block;
-}
-.panel-thumbnail-view.visuallyactive {
-	opacity: 0.9;
-}*/
 
 .panel-thumbnail-view ul.panel-listing-thumbs {
   clear: both;
@@ -1029,8 +995,8 @@ text {
   display: inline-block;
   height: 20px;
   width: 20px;
-  /*margin-top: 4px;
-  margin-left: 3px;*/
+  margin-top: 9px;
+  /*margin-left: 3px;*/
 }
 
 .mirador-btn.disabled {
