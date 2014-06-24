@@ -1028,7 +1028,7 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
   bottom:0;
   left:0;
   right:0;
-  height: 150px;
+  height: 140px;
   z-index: 4;
   display: none;
 }
@@ -1063,16 +1063,16 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
 .panel-thumbnail-view ul.panel-listing-thumbs {
   clear: both;
   list-style: none;
-  overflow: auto;
   padding: 0;
   white-space: nowrap;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .panel-thumbnail-view ul.panel-listing-thumbs li {
   box-sizing:border-box;
-  /*float: left;*/
   /*margin: 0 0 15px 0;*/
-  padding: 10px 10px 10px 10px;
+  padding: 10px 10px 0px 10px;
   transition: all 0.05s ease-out;
   display: inline-block;
 }
