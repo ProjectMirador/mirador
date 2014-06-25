@@ -564,12 +564,10 @@ table {
     height:100%;
     padding: 0 30px;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow-y: scroll;
     margin:0 auto;
 }
 .items-listing {
-    overflow-y: scroll;
-    overflow-x: hidden;
     height:100%;
     margin:0;
     padding-left:0;
@@ -836,7 +834,7 @@ table {
   bottom:0;
   left:0;
   right:0;
-  height: 150px;
+  height: 140px;
   z-index: 4;
   display: none;
 }
@@ -849,25 +847,11 @@ table {
     height: 100%;
     width: 100%;
     background-color: rgba(255,255,255,0.9);
-    /*opacity: 0;
-    -webkit-transform: scale(2);
-    transition: all 0.3s ease-in;*/
     display: none;
     overflow-y: scroll;
 }
 .image-view {
   overflow:hidden;
-}
-/*.thumbnail-view.active, .image-view.active {
-    -webkit-transform: scale(1);
-    display: block;
-}
-.thumbnail-view.visuallyactive, .image-view.visuallyactive {
-	opacity: 0.9;
-}*/
-
-#overlay {
-   display: none;
 }
 
 /* panels
@@ -879,33 +863,23 @@ table {
     width: 100%;
     background-color: rgba(255,255,255,0.9);
     opacity: 0.9;
-    /*-webkit-transform: scale(2);
-    transition: all 0.3s ease-in;
-    display: none;*/
+    overflow-x: scroll;
 }
-
-/*.panel-thumbnail-view.active {
-    -webkit-transform: scale(1);
-    display: block;
-}
-.panel-thumbnail-view.visuallyactive {
-	opacity: 0.9;
-}*/
 
 .panel-thumbnail-view ul.panel-listing-thumbs {
   clear: both;
   list-style: none;
-  overflow: auto;
   padding: 0;
   white-space: nowrap;
-  overflow-x: scroll;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .panel-thumbnail-view ul.panel-listing-thumbs li {
   box-sizing:border-box;
   /*float: left;*/
   /*margin: 0 0 15px 0;*/
-  padding: 10px 10px 10px 10px;
+  padding: 10px 10px 0px 10px;
   transition: all 0.05s ease-out;
   display: inline-block;
 }
@@ -1451,8 +1425,8 @@ text {
   display: inline-block;
   height: 20px;
   width: 20px;
-  /*margin-top: 4px;
-  margin-left: 3px;*/
+  margin-top: 9px;
+  /*margin-left: 3px;*/
 }
 
 .mirador-btn.disabled {

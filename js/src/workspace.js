@@ -22,10 +22,11 @@
     init: function () {
       this.element.appendTo(this.appendTo);
 
-      this.element.append(this.template({
+      /*this.element.append(this.template({
         workspaceSlotCls: this.workspaceSlotCls,
         slotId: 0
-      }));
+      }));*/
+        this.window = new $.Window({appendTo: this.element});
 
       // Not final. A unique identifier should be added here for multiple slots.
       if (this.focusedSlot === null) {
@@ -39,9 +40,8 @@
       var _this = this;
 
       jQuery.subscribe('manifestToWorkspace', function(_, manifest, uiState) {
-        this.window = new $.Window({appendTo: this.element});
-        // need to be able to set a specific window
-        // jQuery.publish('manifestToWindow', [manifest, uiState]);
+        //need to be able to set a specific window
+        jQuery.publish('manifestToWindow', [manifest, uiState]);
       });
 
       jQuery.subscribe('toggleToImage', function(_, imageID) {
@@ -54,13 +54,7 @@
         _this.hide();
       });
 
-      this.element.find('a').on('click', function() { _this.addItem(); } );
-      },
-
-    addItem: function() {
-      // this would get the id of the slot that was clicked
-      this.focusedSlot = 0; 
-      this.parent.toggleLoadWindow();
+      //this.element.find('a').on('click', function(){console.log('added');});
     },
 
     hide: function() {

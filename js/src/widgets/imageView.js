@@ -32,7 +32,7 @@
         this.currentImg = this.imagesList[this.currentImgIndex];
         
         this.element = jQuery(this.template()).appendTo(this.appendTo);
-        console.log(this.appendTo);
+
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         
         this.bindEvents();
