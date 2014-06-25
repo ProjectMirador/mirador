@@ -140,14 +140,12 @@
                     _this[panelType] = new $[view]({manifest: _this.manifest, appendTo: _this.element.find('.'+panelType), parent: _this, panel: true});
                 }
                 //toggle any valid panels
-                if (view !== '') {   
-                    if (displayed) {
-                        _this.togglePanels(panelType, displayed, view, state);
-                    }
+                if (view !== '' && displayed) {   
+                    _this.togglePanels(panelType, displayed, view, state);
                 }
                 //hide any panels instantiated but not available to this view
                 if (view === '' && _this[panelType]) {
-                   _this.togglePanels(panelType, displayed, state);
+                   _this.togglePanels(panelType, displayed, view, state);
                 }
             });
         });

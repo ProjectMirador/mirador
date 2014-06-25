@@ -21,10 +21,11 @@
     init: function () {
       this.element.appendTo(this.appendTo);
 
-      this.element.append(this.template({
+      /*this.element.append(this.template({
         workspaceSlotCls: this.workspaceSlotCls,
         slotId: 0
-      }));
+      }));*/
+        this.window = new $.Window({appendTo: this.element});
 
       // Not final. A unique identifier should be added here for multiple slots.
       if (this.focusedSlot === null) {
@@ -38,7 +39,6 @@
       var _this = this;
 
       jQuery.subscribe('manifestToWorkspace', function(_, manifest, uiState) {
-        this.window = new $.Window({appendTo: this.element});
         //need to be able to set a specific window
         jQuery.publish('manifestToWindow', [manifest, uiState]);
       });
@@ -53,7 +53,7 @@
         _this.hide();
       });
 
-      this.element.find('a').on('click', function(){console.log('added');});
+      //this.element.find('a').on('click', function(){console.log('added');});
     },
 
     hide: function() {
