@@ -60,7 +60,7 @@
 .mirador-main-menu a:active,
 .mirador-main-menu a:visited {
   color: #fff;
-  font-weight: 600;
+  font-weight: normal;
   text-decoration: none;
 }
 
@@ -158,21 +158,9 @@
     height: 100%;
     width: 100%;
     background-color: rgba(255,255,255,0.9);
-    /*opacity: 0;
-    -webkit-transform: scale(2);*/
     display: none;
-    /*transition: all 0.3s ease-in;*/
     overflow: hidden;
 }
-/*#manifest-select-menu.active, #workspace-select-menu.active, #workspaceContainer.active {
-     opacity: 0.9;
-    transition: all 0.3s ease-out;
-    -webkit-transform: scale(1);
-    display: block;
-}
-#manifest-select-menu.visuallyactive, #workspace-select-menu.visuallyactive, #workspaceContainer.visuallyactive {
-	opacity: 0.9;
-}*/
 .container {
     position: relative;
     width: 100%;
@@ -347,14 +335,51 @@
   top:0;
   bottom:0;
   overflow: hidden;
+  box-sizing: border-box;
+  padding: 10px;
 }
 
 /* Slot Scaffolding */
 
 .slot {
-  background-image: url(../images/add_collection.svg);
-  background-position: center center;
-  background-repeat: no-repeat;
+  position: relative;
+  width:100%;
+  height:100%;
+  border: 3px solid black;
+  box-shadow: inset 0 0 35px black;
+  box-sizing: border-box;
+}
+.slot h1 {
+  color: gray;
+  text-align: center;
+  font-weight: normal;
+}
+.slot:hover h1 {
+  color: lightgray;
+}
+.plus {
+  font-size: 170px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.slotIconContainer {
+  position:absolute;
+  top:50%;
+  margin-top:-260px;
+  width:100%;
+}
+.slot:hover {
+  box-shadow: inset 0 0 35px rgba(94, 219, 255, 1);
+  border: 2px solid rgb(190,190,190);
+}
+.addItemLink {
+  z-index:3;
+  position:absolute;
+  top:0;
+  bottom:0;
+  right:0;
+  left:0;
+  cursor: pointer;
 }
 
 /* window scaffolding */
@@ -800,7 +825,7 @@ text {
 
 .annotationDetailToggle {
   float:right;
-  margin: 35px;
+  margin: 34px;
   margin-top:0;
   cursor: pointer;
 }
