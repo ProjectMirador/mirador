@@ -15,22 +15,22 @@
       uiOverlaysAvailable: {
           'ThumbnailsView': {
               'overlay' : {'MetadataView' : false}, 
-              'sidePanel' : {'' : false},//'TableOfContentsView',
+              'sidePanel' : {'' : false}, //'TableOfContentsView',
                'bottomPanel' : {'' : false}
           },
           'ImageView': {
               'overlay' : {'MetadataView' : false}, 
-              'sidePanel' : {'' : false},//'TableOfContentsView', 
+              'sidePanel' : {'' : false}, //'TableOfContentsView', 
               'bottomPanel' : {'ThumbnailsView' : true}
           },
           'ScrollView': {
               'overlay' : {'MetadataView' : false}, 
-              'sidePanel' : {'' : false},//'TableOfContentsView',
+              'sidePanel' : {'' : false}, //'TableOfContentsView',
               'bottomPanel' : {'' : false}
           },
           'BookView': {
               'overlay' : {'MetadataView' : false},
-              'sidePanel' : {'' : false},//'TableOfContentsView', 
+              'sidePanel' : {'' : false}, //'TableOfContentsView', 
               'bottomPanel' : {'ThumbnailsView' : true}
           }
         },
@@ -224,25 +224,25 @@
 
     //template should be based on workspace type
     template: Handlebars.compile([
-                                 '<div class="window">',
-                                   '<div class="content-container">',
-                                     '<div class="sidePanel"></div>',
-                                     '<div class="view-container">',
-                                       '<div class="overlay"></div>',
-                                       '<div class="bottomPanel"></div>',
-                                     '</div>',
-                                   '</div>',
-                                 '</div>'
+     '<div class="window">',
+       '<div class="content-container">',
+         '<div class="sidePanel"></div>',
+         '<div class="view-container">',
+           '<div class="overlay"></div>',
+           '<div class="bottomPanel"></div>',
+         '</div>',
+       '</div>',
+     '</div>'
     ].join('')),
 
     manifestInfoTemplate: Handlebars.compile([
-                                             '<div class="manifest-info">',
-                                             '<div class="window-manifest-navigation">',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
-                                             '</div>',
-                                             '<h3 class="window-manifest-title">{{title}}</h3>',
-                                             '</div>'
+     '<div class="manifest-info">',
+       '<div class="window-manifest-navigation">',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
+       '</div>',
+       '<h3 class="window-manifest-title">{{title}}</h3>',
+     '</div>'
     ].join(''))
   };
 

@@ -7,7 +7,8 @@
       workspaceSlotCls: 'slot',
       focusedSlot:      null,
       window:           null,
-      appendTo:         null
+      appendTo:         null,
+      parent:           null
 
     }, $.DEFAULT_SETTINGS, options);
 
@@ -39,8 +40,8 @@
 
       jQuery.subscribe('manifestToWorkspace', function(_, manifest, uiState) {
         this.window = new $.Window({appendTo: this.element});
-        //need to be able to set a specific window
-        jQuery.publish('manifestToWindow', [manifest, uiState]);
+        // need to be able to set a specific window
+        // jQuery.publish('manifestToWindow', [manifest, uiState]);
       });
 
       jQuery.subscribe('toggleToImage', function(_, imageID) {
@@ -53,7 +54,13 @@
         _this.hide();
       });
 
-      this.element.find('a').on('click', function(){console.log('added');});
+      this.element.find('a').on('click', function() { _this.addItem(); } );
+      },
+
+    addItem: function() {
+      // this would get the id of the slot that was clicked
+      this.focusedSlot = 0; 
+      this.parent.toggleLoadWindow();
     },
 
     hide: function() {
