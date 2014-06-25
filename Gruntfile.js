@@ -74,7 +74,7 @@ module.exports = function(grunt) {
       css: {
         src: [
         'css/normalize.css',
-        'css/font-awesome.min.css',
+        'css/font-awesome.css',
         'css/jquery-ui.custom.min.css',
         'css/mirador.css',
         '!css/mirador-combined.css'
@@ -117,7 +117,7 @@ module.exports = function(grunt) {
           dest: 'build/mirador'
         }, {
           expand: true,
-          src: 'font/*',
+          src: 'fonts/*',
           dest: 'build/mirador'
         }, {
           src: 'js/lib/parse.min.js',
