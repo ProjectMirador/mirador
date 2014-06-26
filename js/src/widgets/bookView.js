@@ -12,11 +12,11 @@
       currentImgIndex:  0,
       stitchList:       [],
       element:          null,
-      imageId:          null,
+      imageID:          null,
       imagesList:       [],
       manifest:         null,
-      viewingDirection: '',
-      viewingHint:      '',
+      viewingDirection: 'left-to-right',
+      viewingHint:      'paged',
       zoomLevel:        null,
       osd:              null,
       osdBounds:        null,
@@ -32,21 +32,23 @@
   $.BookView.prototype = {
   
     init: function() {
-       this.imagesList = $.getImagesListByManifest(this.manifest);
-       
-       if (this.imageId !== null) {
-         this.currentImgIndex = this.getImageIndexById(this.imageId);
+       if (this.imageID !== null) {
+         this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
        }
               
        this.currentImg = this.imagesList[this.currentImgIndex];
        
        this.element = jQuery(this.template()).appendTo(this.appendTo);
        
-       this.viewingDirection = this.metadata.details.viewingDirection; //change to reflect manifest
-       this.viewingHint = this.metadata.details.viewingHint;  //change to reflect manifest
+       if (this.manifest.sequences[0].viewingDirection) {
+           this.viewingDirection = this.manifest.sequences[0].viewingDirection.toLowerCase();
+       }
+       if (this.manifest.sequences[0].viewingHint) {
+           this.viewingHint = this.manifest.sequences[0].viewingHint.toLowerCase();
+       }
        
        this.stitchList = getStitchList(this.viewingHint, this.viewingDirection, this.currentImg, this.currentImgIndex, this.imagesList);
-       this.createOpenSeadragonInstance(this.stitchList);
+       this.createOpenSeadragonInstance();
        
        this.bindEvents();
     },
@@ -55,8 +57,35 @@
       '<div class="book-view">',
        '</div>'
     ].join('')),
+    
+    bindEvents: function() {
+    
+    },
+    
+    toggle: function(stateValue) {
+        if (stateValue) { 
+            this.show(); 
+        } else {
+            this.hide();
+        }
+    },
+    
+    hide: function() {
+        jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
+    },
 
-    createOpenSeadragonInstance: function(stitchList, osdBounds) {
+    show: function() {
+        jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+    },
+    
+    update: function(imageID) {
+        this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
+        this.currentImg = this.imagesList[this.currentImgIndex];
+        this.stitchList = getStitchList(this.viewingHint, this.viewingDirection, this.currentImg, this.currentImgIndex, this.imagesList);
+        this.createOpenSeadragonInstance();
+    },
+
+    createOpenSeadragonInstance: function(osdBounds) {
       var osdId = 'mirador-osd-' + $.genUUID(),
       osdToolBarId = osdId + '-toolbar',
       elemOsd,
@@ -65,13 +94,12 @@
 
       this.element.find('.' + this.osdCls).remove();
 
-      for (var i=0; i < stitchList.length; i++) { 
-          var image = stitchList[i];
-          var imageUrl = $.Iiif.getImageUrl(this.currentImg);
+      jQuery.each(this.stitchList, function(index, image) {
+          var imageUrl = $.Iiif.getImageUrl(image);
           var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json';
           var infoJson = $.getJsonFromUrl(infoJsonUrl, false);
           tileSources.push($.Iiif.prepJsonForOsd(infoJson));
-      }
+      });
 
       elemOsd =
         jQuery('<div/>')
@@ -95,51 +123,15 @@
           _this.osd.viewport.fitBounds(osdBounds, true);
         }
       });
-      /*this.osd.addHandler('pre-full-screen', function(e) {
-          if (e.fullScreen) {
-              $.viewer.widgetsCopy = []; //empty out the copy when going into full screen
-              jQuery.each($.viewer.widgets, function(index, widget) {
-                  console.log(widget.getPosition());
-                  $.viewer.widgetsCopy.push(widget);
-              });
-          }
-      });*/
-      //need to figure out why it is not preserving positions
-      /*this.osd.addHandler('full-screen', function(e) {
-          //console.log("full-screen event triggered");
-          //console.log(e);
-          if (!e.fullScreen) {
-              //coming back from OSD's fullscreen drops the bottom status bar 
-              jQuery.each($.viewer.widgets, function(index, widget) {
-                  //console.log(widget.getPosition());
-                  //widget = $.viewer.widgetsCopy[index];
-                  widget.element[0].parentElement.style.display = "";
-              });
-          }
-      });*/
 
       //this.stitchOptions();
     },
-
 
     clearOpenSeadragonInstance: function() {
       this.element.find('.' + this.osdCls).remove();
       // this.element.find('.' + this.scaleCls).remove();
       this.osd = null;
 
-    },
-
-    getImageIndexById: function(id) {
-      var _this = this,
-          imgIndex = 0;
-
-      jQuery.each(this.imagesList, function(index, img) {
-        if ($.trimString(img.id) === $.trimString(id)) {
-          imgIndex = index;
-        }
-      });
-
-      return imgIndex;
     },
 
     // next two pages for paged objects
@@ -158,7 +150,7 @@
 
         this.stitchList = getStitchList(this.viewingHint, this.viewingDirection, this.currentImg, this.currentImgIndex, this.imagesList);
 
-        this.createOpenSeadragonInstance(this.stitchList);
+        this.createOpenSeadragonInstance();
       }
     },
 
@@ -178,7 +170,7 @@
         
         this.stitchList = getStitchList(this.viewingHint, this.viewingDirection, this.currentImg, this.currentImgIndex, this.imagesList);
 
-        this.createOpenSeadragonInstance(this.stitchList);
+        this.createOpenSeadragonInstance();
       }
     }
 

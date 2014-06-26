@@ -3,7 +3,8 @@
   $.ThumbnailsView = function(options) {
 
     jQuery.extend(this, {
-      currentImgIndex:      null,
+      currentImgIndex:      0,
+      imageID:              null,
       manifest:             null,
       element:              null,
       imagesList:           [],
@@ -21,8 +22,9 @@
   $.ThumbnailsView.prototype = {
 
     init: function() {
-        this.imagesList = $.getImagesListByManifest(this.manifest);
-        this.currentImgIndex = 0;
+        if (this.imageID !== null) {
+            this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
+        }
         
         if (this.panel) {
             this.thumbsHeight = 80;

@@ -22,11 +22,9 @@
 
   $.ImageView.prototype = {
   
-    init: function() {
-        this.imagesList = $.getImagesListByManifest(this.manifest);
-    
+    init: function() {    
         if (this.imageID !== null) {
-            this.currentImgIndex = this.getImageIndexById(this.imageID);
+            this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
         }
 
         this.currentImg = this.imagesList[this.currentImgIndex];
@@ -97,22 +95,9 @@
     },
     
     updateImage: function(imageID) {
-        this.currentImgIndex = this.getImageIndexById(imageID);
+        this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
         this.currentImg = this.imagesList[this.currentImgIndex];
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-    },
-
-    getImageIndexById: function(id) {
-      var _this = this,
-          imgIndex = 0;
-
-      jQuery.each(this.imagesList, function(index, img) {
-        if ($.trimString(img['@id']) === $.trimString(id)) {
-          imgIndex = index;
-        }
-      });
-
-      return imgIndex;
     }
 
   };

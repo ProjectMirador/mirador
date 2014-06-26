@@ -6,7 +6,8 @@
       element:           null,
       appendTo:          null,
       manifest:          null,
-      currentImg:        null,
+      currentImageID:    null,
+      imagesList:        null,
       defaultState:      'ThumbnailsView',
       uiState:           {'ThumbnailsView': false, 'ImageView': false, 'ScrollView': false, 'BookView': false},
       uiViews:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
@@ -49,8 +50,6 @@
       this.updateState(this.defaultState);
 
       this.element = jQuery(this.template()).appendTo(this.appendTo);
-      //this.sidePanel = this.element.find('.sidePanel');
-      //this.tableOfContents = new $.TableOfContents({appendTo: this.sidePanel, manifest: this.manifest});
 
       this.bindEvents();
     },
@@ -58,7 +57,7 @@
     bindEvents: function() {
       var _this = this;
 
-      jQuery.subscribe('manifestToWindow', function(_, manifest, uiState) {
+      jQuery.subscribe('manifestToWindow', function(_, manifest, uiState, imageID) {
         if (uiState) {
           _this.updateState(uiState);
         } else {             
@@ -73,6 +72,12 @@
             //reset the window div and update manifest
             _this.clearWindow();
             _this.manifest = manifest;
+            _this.imagesList = $.getImagesListByManifest(_this.manifest);
+            if (imageID) {
+                _this.currentImageID = imageID;
+            } else {
+                _this.currentImageID = _this.imagesList[0]['@id'];
+            }
 
             //add manifest title and nav bar and bind nav bar events
             _this.element.prepend(_this.manifestInfoTemplate({title: manifest.label}));
@@ -82,21 +87,24 @@
             _this.element.find('.mirador-icon-metadata-view').on('click', function() {
               _this.toggleMetadataOverlay(key);
             });
+            _this.element.find('.mirador-icon-image-view').on('click', function() {
+              _this.toggleBookView();
+            });
             
             //clear any existing objects
             _this.clearViews();
             _this.clearPanelsAndOverlay();
             
             //attach view and toggle view, which triggers the attachment of panels or overlays
-            _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this} );
+            _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this, imageID: imageID, imagesList: _this.imagesList} );
             _this.toggleUI(key);
           }
         });
       });
 
-      jQuery.subscribe('toggleImageView', function(_, imageID) {
+      /*jQuery.subscribe('toggleImageView', function(_, imageID) {
         _this.toggleImageView(imageID);	
-      });
+      });*/
 
     },
 
@@ -137,7 +145,7 @@
             jQuery.each(viewOptions, function(view, displayed) {
                 //instantiate any panels that exist for this view but are still null
                 if (view !== '' && _this[panelType] === null) {
-                    _this[panelType] = new $[view]({manifest: _this.manifest, appendTo: _this.element.find('.'+panelType), parent: _this, panel: true});
+                    _this[panelType] = new $[view]({manifest: _this.manifest, appendTo: _this.element.find('.'+panelType), parent: _this, panel: true, imageID: _this.currentImageID, imagesList: _this.imagesList});
                 }
                 //toggle any valid panels
                 if (view !== '' && displayed) {   
@@ -199,14 +207,15 @@
 
     toggleThumbnails: function() {
       if (this.uiViews.ThumbnailsView === null) {
-        this.uiViews.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this} );
+        this.uiViews.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: this.currentImageID, imagesList: this.imagesList} );
       }
       this.toggleUI('ThumbnailsView');
     },
 
     toggleImageView: function(imageID) {
+      this.currentImageID = imageID;
       if (this.uiViews.ImageView === null) {
-        this.uiViews.ImageView = new $.ImageView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: imageID} );
+        this.uiViews.ImageView = new $.ImageView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: imageID, imagesList: this.imagesList} );
       } else {
         var view = this.uiViews.ImageView;
         view.updateImage(imageID);
@@ -214,7 +223,14 @@
       this.toggleUI('ImageView');
     },
 
-    toggleBookView: function(imageID) {
+    toggleBookView: function() {
+        if (this.uiViews.BookView === null) {
+           this.uiViews.BookView = new $.BookView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: this.currentImageID, imagesList: this.imagesList} );
+        } else {
+           var view = this.uiViews.BookView;
+           view.update(this.currentImageID);
+        }
+        this.toggleUI('BookView');
     },
 
     toggleScrollView: function(imageID) {
@@ -234,13 +250,14 @@
     ].join('')),
 
     manifestInfoTemplate: Handlebars.compile([
-     '<div class="manifest-info">',
-       '<div class="window-manifest-navigation">',
-         '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
-         '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
-       '</div>',
-       '<h3 class="window-manifest-title">{{title}}</h3>',
-     '</div>'
+                                             '<div class="manifest-info">',
+                                             '<div class="window-manifest-navigation">',
+                                             '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa-photo"></i></a>',
+                                             '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
+                                             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
+                                             '</div>',
+                                             '<h3 class="window-manifest-title">{{title}}</h3>',
+                                             '</div>'
     ].join(''))
   };
 

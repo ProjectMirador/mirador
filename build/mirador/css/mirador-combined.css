@@ -2409,7 +2409,7 @@ table {
 /* window views
 ---------------------------------------------------------------------------- */
 
-.thumbnail-view, .image-view {
+.thumbnail-view, .image-view, .book-view {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -2417,7 +2417,7 @@ table {
     display: none;
     overflow-y: scroll;
 }
-.image-view {
+.image-view, .book-view {
   overflow:hidden;
 }
 
@@ -3014,6 +3014,19 @@ a.mirador-icon-annotations [class^="icon-"] {
   box-sizing: border-box;
 }
 .mirador-viewer a.mirador-icon-annotations:hover {
+  color: black
+}
+
+a.mirador-icon-image-view [class^="icon-"] {
+  display:block;
+  position:absolute;
+}
+.mirador-viewer a.mirador-icon-image-view {
+  background: none;
+  color: rgb( 146, 145, 145 );
+  box-sizing: border-box;
+}
+.mirador-viewer a.mirador-icon-image-view:hover {
   color: black
 }
 

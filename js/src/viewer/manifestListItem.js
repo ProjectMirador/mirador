@@ -87,12 +87,10 @@
         bindEvents: function() {
           var _this = this;
           this.element.find('img').on('load', function() {
-            //console.log('this image has now loaded');
-            //console.log(jQuery(this));
             jQuery(this).hide().fadeIn(750);
           });
           this.element.find('.select-metadata').on('click', function() {
-            _this.parent.addManifestToWorkspace(_this.manifestId);
+            _this.parent.toggleThumbnailsView(_this.manifestId);
           });
           
           this.element.find('.thumbnail-image').on('click', function() {

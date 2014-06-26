@@ -45,12 +45,12 @@
             });
         },
         
-        addManifestToWorkspace: function(manifestURI) {
-            this.parent.addManifestToWorkspace(manifestURI);
-        },
-        
         toggleImageView: function(imageID, manifestURI) {
             this.parent.toggleImageViewInWorkspace(imageID, manifestURI);
+        },
+        
+        toggleThumbnailsView: function(manifestURI) {
+            this.parent.toggleThumbnailsViewInWorkspace(manifestURI);
         },
 
         hide: function() {

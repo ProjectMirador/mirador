@@ -222,7 +222,18 @@
     return $.manifests[manifestId].sequences[0].imagesList;
   };
 
+  $.getImageIndexById = function(imagesList, id) {
+      var imgIndex = 0;
 
+      jQuery.each(imagesList, function(index, img) {
+        if ($.trimString(img['@id']) === $.trimString(id)) {
+          imgIndex = index;
+        }
+      });
+
+      return imgIndex;
+    };
+    
   $.getImagesListByManifest = function(manifest) {
     return manifest.sequences[0].canvases;
   };
