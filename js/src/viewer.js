@@ -158,16 +158,20 @@
             });
         },
         
-        addManifestToWorkspace: function(manifestURI, uiState) {
+        addManifestToWorkspace: function(manifestURI, uiState, imageID) {
             var manifest = this.manifests[manifestURI];
             
-            jQuery.publish('manifestToWorkspace', [manifest, uiState]);
+            jQuery.publish('manifestToWorkspace', [manifest, uiState, imageID]);
             this.toggleCurrentWorkspace();
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {
-           this.addManifestToWorkspace(manifestURI, 'ImageView');
-           jQuery.publish('toggleToImage', imageID);
+           this.addManifestToWorkspace(manifestURI, 'ImageView', imageID);
+           //jQuery.publish('toggleToImage', imageID);
+        },
+        
+        toggleThumbnailsViewInWorkspace: function(manifestURI) {
+           this.addManifestToWorkspace(manifestURI, 'ThumbnailsView', null);
         }
     };
 

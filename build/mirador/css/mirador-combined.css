@@ -2355,12 +2355,10 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
     height:100%;
     padding: 0 30px;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow-y: scroll;
     margin:0 auto;
 }
 .items-listing {
-    overflow-y: scroll;
-    overflow-x: hidden;
     height:100%;
     margin:0;
     padding-left:0;
@@ -2626,7 +2624,7 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
   bottom:0;
   left:0;
   right:0;
-  height: 150px;
+  height: 140px;
   z-index: 4;
   display: none;
 }
@@ -2634,30 +2632,16 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
 /* window views
 ---------------------------------------------------------------------------- */
 
-.thumbnail-view, .image-view {
+.thumbnail-view, .image-view, .book-view {
     position: absolute;
     height: 100%;
     width: 100%;
     background-color: rgba(255,255,255,0.9);
-    /*opacity: 0;
-    -webkit-transform: scale(2);
-    transition: all 0.3s ease-in;*/
     display: none;
     overflow-y: scroll;
 }
-.image-view {
+.image-view, .book-view {
   overflow:hidden;
-}
-/*.thumbnail-view.active, .image-view.active {
-    -webkit-transform: scale(1);
-    display: block;
-}
-.thumbnail-view.visuallyactive, .image-view.visuallyactive {
-	opacity: 0.9;
-}*/
-
-#overlay {
-   display: none;
 }
 
 /* panels
@@ -2669,33 +2653,23 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
     width: 100%;
     background-color: rgba(255,255,255,0.9);
     opacity: 0.9;
-    /*-webkit-transform: scale(2);
-    transition: all 0.3s ease-in;
-    display: none;*/
+    overflow-x: scroll;
 }
-
-/*.panel-thumbnail-view.active {
-    -webkit-transform: scale(1);
-    display: block;
-}
-.panel-thumbnail-view.visuallyactive {
-	opacity: 0.9;
-}*/
 
 .panel-thumbnail-view ul.panel-listing-thumbs {
   clear: both;
   list-style: none;
-  overflow: auto;
   padding: 0;
   white-space: nowrap;
-  overflow-x: scroll;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .panel-thumbnail-view ul.panel-listing-thumbs li {
   box-sizing:border-box;
   /*float: left;*/
   /*margin: 0 0 15px 0;*/
-  padding: 10px 10px 10px 10px;
+  padding: 10px 10px 0px 10px;
   transition: all 0.05s ease-out;
   display: inline-block;
 }
@@ -3241,8 +3215,8 @@ text {
   display: inline-block;
   height: 20px;
   width: 20px;
-  /*margin-top: 4px;
-  margin-left: 3px;*/
+  margin-top: 9px;
+  /*margin-left: 3px;*/
 }
 
 .mirador-btn.disabled {
@@ -3263,6 +3237,19 @@ a.mirador-icon-annotations [class^="icon-"] {
   box-sizing: border-box;
 }
 .mirador-viewer a.mirador-icon-annotations:hover {
+  color: black
+}
+
+a.mirador-icon-image-view [class^="icon-"] {
+  display:block;
+  position:absolute;
+}
+.mirador-viewer a.mirador-icon-image-view {
+  background: none;
+  color: rgb( 146, 145, 145 );
+  box-sizing: border-box;
+}
+.mirador-viewer a.mirador-icon-image-view:hover {
   color: black
 }
 

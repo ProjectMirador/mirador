@@ -8,7 +8,8 @@
       focusedSlot:      null,
       slots:            [],
       window:           null,
-      appendTo:         null
+      appendTo:         null,
+      parent:           null
 
     }, $.DEFAULT_SETTINGS, options);
 
@@ -21,10 +22,11 @@
     init: function () {
       this.element.appendTo(this.appendTo);
 
-      this.element.append(this.template({
+      /*this.element.append(this.template({
         workspaceSlotCls: this.workspaceSlotCls,
         slotId: 0
-      }));
+      }));*/
+        this.window = new $.Window({appendTo: this.element});
 
       // Not final. A unique identifier should be added here for multiple slots.
       if (this.focusedSlot === null) {
@@ -46,7 +48,7 @@
 
       jQuery.subscribe('toggleToImage', function(_, imageID) {
         //need to be able to set a specific window
-        jQuery.publish('toggleImageView', imageID);
+        jQuery.publish('manifestToWindow', [manifest, uiState, imageID]);
       });
 
       jQuery.subscribe('currentWorkspaceVisible.set', function(_, stateValue) {

@@ -48,6 +48,10 @@
         toggleImageView: function(imageID, manifestURI) {
             this.parent.toggleImageViewInWorkspace(imageID, manifestURI);
         },
+        
+        toggleThumbnailsView: function(manifestURI) {
+            this.parent.toggleThumbnailsViewInWorkspace(manifestURI);
+        },
 
         hide: function() {
             var _this = this;
