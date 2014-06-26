@@ -174,18 +174,66 @@
 
     return id[0] || id;
   };
+  
+  $.getMetadataAbout = function(jsonLd) {
+      return {
+         '@context': jsonLd['@context'] || '',
+         '@id':      jsonLd['@id'] || ''
+        };
+    };
 
+  $.getMetadataDetails = function(jsonLd) {
+      return {
+          'label':        jsonLd.label || '',
+          'agent':        jsonLd.agent || '',
+          'location':     jsonLd.location || '',
+          'date':         jsonLd.date || '',
+          'description':  jsonLd.description || ''
+        };
+    };
 
-  $.getMetadataByManifestId = function(manifestId) {
-    return $.manifests[manifestId].metadata;
-  };
+  $.getMetadataFields = function(jsonLd) {
+      // parse and store metadata pairs (API 1.0)
+      var mdList = {};
+      if (typeof jsonLd.metadata !== 'undefined') {
+          jQuery.each(jsonLd.metadata, function(index, item) {
+              mdList[item.label] = item.value;
+            });
+        }
+        return mdList;
+   };
 
+   $.getMetadataRights =function(jsonLd) {
+       return {
+           'license':      jsonLd.license || '',
+           'attribution':  jsonLd.attribution || ''
+        };
+   };
+
+   $.getMetadataLinks = function(jsonLd) {
+      return {
+          'service':  jsonLd.service || '',
+          'seeAlso':  jsonLd.seeAlso || '',
+          'within':   jsonLd.within || ''
+        };
+   };
 
   $.getImagesListByManifestId = function(manifestId) {
     return $.manifests[manifestId].sequences[0].imagesList;
   };
 
+  $.getImageIndexById = function(imagesList, id) {
+      var imgIndex = 0;
 
+      jQuery.each(imagesList, function(index, img) {
+        if ($.trimString(img['@id']) === $.trimString(id)) {
+          imgIndex = index;
+        }
+      });
+
+      return imgIndex;
+    };
+    
   $.getImagesListByManifest = function(manifest) {
     return manifest.sequences[0].canvases;
   };
@@ -310,11 +358,21 @@
     return osdFrame;
   };
   
-  $.isOnScreen = function(elem){
-    var viewportTop = jQuery(window).scrollTop();
-    var viewportBottom = viewportTop + jQuery(window).height();
-    var elemTop = jQuery(elem).offset().top;
-    var elemBottom = elemTop + jQuery(elem).height();
-    return ((elemTop < viewportBottom) && (elemTop >= viewportTop));
-  };
+//http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
+  $.isOnScreen = function(elem) {
+    var win = jQuery(window);
+   var viewport = {
+        top : win.scrollTop(),
+        left : win.scrollLeft()
+    };
+   viewport.bottom = viewport.top + win.height();
+    viewport.right = viewport.left + win.width();
+    
+    var el = jQuery(elem);
+    var bounds = el.offset();
+    bounds.bottom = bounds.top + el.height();
+    bounds.right = bounds.left + el.width();
+
+    return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
+};
 }(Mirador));

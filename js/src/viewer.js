@@ -45,7 +45,7 @@
             .appendTo(this.element);
 
             // add workspace configuration
-            this.activeWorkspace = new $.Workspace({type: this.initialWorkspace, parent: this });
+            this.activeWorkspace = new $.Workspace({type: this.initialWorkspace, parent: this, appendTo: this.element.find('.mirador-viewer') });
 
             //add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
@@ -158,16 +158,20 @@
             });
         },
         
-        addManifestToWorkspace: function(manifestURI, uiState) {
+        addManifestToWorkspace: function(manifestURI, uiState, imageID) {
             var manifest = this.manifests[manifestURI];
             
-            jQuery.publish('manifestToWorkspace', [manifest, uiState]);
+            jQuery.publish('manifestToWorkspace', [manifest, uiState, imageID]);
             this.toggleCurrentWorkspace();
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {
-           this.addManifestToWorkspace(manifestURI, 'ImageView');
-           jQuery.publish('toggleToImage', imageID);
+           this.addManifestToWorkspace(manifestURI, 'ImageView', imageID);
+           //jQuery.publish('toggleToImage', imageID);
+        },
+        
+        toggleThumbnailsViewInWorkspace: function(manifestURI) {
+           this.addManifestToWorkspace(manifestURI, 'ThumbnailsView', null);
         }
     };
 

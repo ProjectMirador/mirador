@@ -22,16 +22,15 @@
 
   $.ImageView.prototype = {
   
-    init: function() {
-        this.imagesList = $.getImagesListByManifest(this.manifest);
-    
+    init: function() {    
         if (this.imageID !== null) {
-            this.currentImgIndex = this.getImageIndexById(this.imageID);
+            this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
         }
 
         this.currentImg = this.imagesList[this.currentImgIndex];
         
         this.element = jQuery(this.template()).appendTo(this.appendTo);
+
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         
         this.bindEvents();
@@ -56,21 +55,11 @@
     },
     
     hide: function() {
-        var _this = this;
-            
-        _this.element.removeClass('visuallyactive');  
-        _this.element.one('transitionend', function(e) {
-            _this.element.removeClass('active');
-        });
+        jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
     },
 
     show: function() {
-        var _this = this;
-
-        _this.element.addClass('active');
-        setTimeout(function() {  
-            _this.element.addClass('visuallyactive active');  
-        }, 20);
+        jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
     },
 
     createOpenSeadragonInstance: function(imageUrl, osdBounds) {
@@ -106,22 +95,9 @@
     },
     
     updateImage: function(imageID) {
-        this.currentImgIndex = this.getImageIndexById(imageID);
+        this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
         this.currentImg = this.imagesList[this.currentImgIndex];
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-    },
-
-    getImageIndexById: function(id) {
-      var _this = this,
-          imgIndex = 0;
-
-      jQuery.each(this.imagesList, function(index, img) {
-        if ($.trimString(img['@id']) === $.trimString(id)) {
-          imgIndex = index;
-        }
-      });
-
-      return imgIndex;
     }
 
   };
