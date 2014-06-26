@@ -92,7 +92,7 @@
             jQuery(this).hide().fadeIn(750);
           });
           this.element.find('.select-metadata').on('click', function() {
-            _this.parent.addManifestToWorkspace(_this.manifestId);
+            _this.parent.parent.addManifestToWorkspace(_this.manifestId);
           });
           
           this.element.find('.thumbnail-image').on('click', function() {

@@ -6,13 +6,13 @@
       type:             null,
       workspaceSlotCls: 'slot',
       focusedSlot:      null,
+      slots:            [],
       window:           null,
       appendTo:         null
 
     }, $.DEFAULT_SETTINGS, options);
 
     this.element  = this.element || jQuery('<div class="workspace-container">');
-
     this.init();
 
   };
@@ -38,7 +38,8 @@
       var _this = this;
 
       jQuery.subscribe('manifestToWorkspace', function(_, manifest, uiState) {
-        this.window = new $.Window({appendTo: this.element});
+        _this.clearSlot(_this.focusedSlot);
+        _this.window = new $.Window({appendTo: this.element});
         //need to be able to set a specific window
         jQuery.publish('manifestToWindow', [manifest, uiState]);
       });
@@ -53,7 +54,18 @@
         _this.hide();
       });
 
-      this.element.find('a').on('click', function(){console.log('added');});
+      this.element.find('a').on('click', function(){ _this.addItem(); });
+    },
+
+    clearSlot: function(slotId) {
+      this.slots[slotId].windowElement.remove();
+      this.slots[slotId].window = new $.Window();
+    },
+
+    addItem: function() {
+      // set focused slot dynamically.
+      this.focusedSlot = 0;
+      this.parent.toggleLoadWindow();
     },
 
     hide: function() {
@@ -69,7 +81,7 @@
                                  '<div id="{{slotId}}" class="{{workspaceSlotCls}}">',
                                    '<div class="slotIconContainer">',
                                      '<h1 class="plus">+</h1>',
-                                     '<i class="fa fa-camera-retro fa-5x"></i><h1>Add Item to Workspace</h1>',
+                                     '<h1>Add Item to Workspace</h1>',
                                    '</div>',
                                    '<a class="addItemLink"></a>',
                                  '</div>'

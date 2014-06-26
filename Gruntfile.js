@@ -25,8 +25,9 @@ module.exports = function(grunt) {
     'js/lib/handlebars.js',
     'js/lib/openseadragon.min.js',
     'js/lib/d3.v3.min.js',
+    'js/lib/jquery.layout-latest.min.js',
     'js/lib/pubsub.min.js',
-    'js/lib/jquery-ui-1.9.2.min.js'
+    'js/lib/jquery.lazyload.min.js'
   ],
 
   // libraries/plugins for running tests
@@ -74,8 +75,9 @@ module.exports = function(grunt) {
       css: {
         src: [
         'css/normalize.css',
-        'css/font-awesome.min.css',
+        'css/font-awesome.css',
         'css/jquery-ui.custom.min.css',
+        'css/layout-default-latest.css',
         'css/mirador.css',
         '!css/mirador-combined.css'
         ],
@@ -117,7 +119,7 @@ module.exports = function(grunt) {
           dest: 'build/mirador'
         }, {
           expand: true,
-          src: 'font/*',
+          src: 'fonts/*',
           dest: 'build/mirador'
         }, {
           src: 'js/lib/parse.min.js',

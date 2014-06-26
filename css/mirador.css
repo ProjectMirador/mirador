@@ -373,7 +373,6 @@
   border: 2px solid rgb(190,190,190);
 }
 .addItemLink {
-  z-index:3;
   position:absolute;
   top:0;
   bottom:0;
