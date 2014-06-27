@@ -32,11 +32,11 @@
         },
 
          hide: function() {
-            jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
+            jQuery(this.element).hide({effect: "fade", duration: 160, easing: "easeOutCubic"});
         },
 
         show: function() {
-            jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+            jQuery(this.element).show({effect: "fade", duration: 160, easing: "easeInCubic"});
         },
 
 		template: Handlebars.compile([

@@ -16,7 +16,7 @@
             workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
             windowSize:             {},
             resizeRatio:            {},
-            uiState:                {'manifestsPanelVisible': false, 'workspacesPanelVisible': false, 'currentWorkspaceVisible': false, 'optionsPanelVisible': false},
+            uiState:                {'manifestsPanelVisible': false, 'currentWorkspaceVisible': false, 'optionsPanelVisible': false},
             overlayState:           {},
             manifests: {} 
         }, $.DEFAULT_SETTINGS, options);
@@ -103,10 +103,6 @@
             this.toggleUI('workspacesPanelVisible');
         },
         
-        toggleCurrentWorkspace: function() {
-            this.toggleUI('currentWorkspaceVisible');
-        },
-
         getManifestsData: function() {
             var _this = this,
             manifests = {},
@@ -162,7 +158,7 @@
             var manifest = this.manifests[manifestURI];
             
             jQuery.publish('manifestToWorkspace', [manifest, uiState, imageID]);
-            this.toggleCurrentWorkspace();
+            this.toggleLoadWindow();
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {
