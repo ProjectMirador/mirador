@@ -59,6 +59,7 @@
                                  '<div id="{{slotId}}" class="{{workspaceSlotCls}}">',
                                  '<div class="slotIconContainer">',
                                  '<h1 class="plus">+</h1>',
+                                 '<i class="fa fa-cubes"></i>',
                                  '<h1>Add Item to Workspace</h1>',
                                  '</div>',
                                  '<a class="addItemLink"></a>',
