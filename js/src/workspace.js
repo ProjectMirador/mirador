@@ -26,8 +26,8 @@
       }
       
       if (!this.slots) { 
-        var slots = [];
-        this.slots = slots.push(new $.Slot({
+        this.slots = [];
+        this.slots.push(new $.Slot({
           slotId: 0,
           focused: true,
           parent: this,
