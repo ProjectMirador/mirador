@@ -252,7 +252,7 @@
     manifestInfoTemplate: Handlebars.compile([
                                              '<div class="manifest-info">',
                                              '<div class="window-manifest-navigation">',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo"></i></a>',
+                                             '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-2x"></i></a>',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
                                              '</div>',
