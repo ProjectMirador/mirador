@@ -16,22 +16,22 @@
       uiOverlaysAvailable: {
           'ThumbnailsView': {
               'overlay' : {'MetadataView' : false}, 
-              'sidePanel' : {'' : false}, //'TableOfContentsView',
+              'sidePanel' : {'TableOfContents' : true}, //'TableOfContentsView',
                'bottomPanel' : {'' : false}
           },
           'ImageView': {
               'overlay' : {'MetadataView' : false}, 
-              'sidePanel' : {'' : false}, //'TableOfContentsView', 
+              'sidePanel' : {'TableOfContents' : true}, //'TableOfContentsView', 
               'bottomPanel' : {'ThumbnailsView' : true}
           },
           'ScrollView': {
               'overlay' : {'MetadataView' : false}, 
-              'sidePanel' : {'' : false}, //'TableOfContentsView',
+              'sidePanel' : {'TableOfContents' : true}, //'TableOfContentsView',
               'bottomPanel' : {'' : false}
           },
           'BookView': {
               'overlay' : {'MetadataView' : false},
-              'sidePanel' : {'' : false}, //'TableOfContentsView', 
+              'sidePanel' : {'TableOfContents' : true}, //'TableOfContentsView', 
               'bottomPanel' : {'ThumbnailsView' : true}
           }
         },
@@ -252,7 +252,7 @@
     manifestInfoTemplate: Handlebars.compile([
                                              '<div class="manifest-info">',
                                              '<div class="window-manifest-navigation">',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa-photo"></i></a>',
+                                             '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo"></i></a>',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
                                              '</div>',

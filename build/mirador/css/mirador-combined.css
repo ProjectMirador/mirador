@@ -2368,16 +2368,32 @@ table {
 }
 
 .sidePanel {
-  width:250px;
+  width:300px;
   height:100%;
   float: left;
-  background-color: white;
+  background-color: #efefef;
   border-right:2px solid gray;
   display: none;
+  box-sizing: border-box;
+  overflow-y: scroll;
+  padding: 0 5px 0 15px;
+}
+.sidePanel h1, .sidePanel h2, .sidePanel h3, .sidePanel h4 {
+  margin:0;
+  padding:10px 0;
+}
+
+.sidePanel h1:hover, .sidePanel h2:hover, .sidePanel h3:hover, .sidePanel h4:hover {
+  cursor: pointer;
+  border-left:5px solid deepSkyblue;
+  padding-left: 10px;
+  margin-left: -15px;
+  background-color: #dddddd;
+  display:block;
 }
 
 .view-container {
-  /*margin-left:250px;*/
+  margin-left: 300px;
   height: 100%;
   position:relative;
 }
@@ -2428,8 +2444,6 @@ table {
     position: absolute;
     height: 100%;
     width: 100%;
-    background-color: rgba(255,255,255,0.9);
-    opacity: 0.9;
     overflow-x: scroll;
 }
 
