@@ -12,8 +12,7 @@
       imageModes:        ['ImageView', 'BookView'], //ScrollView //for drop down menu
       defaultState:      'ThumbnailsView',
       currentFocus:      'ThumbnailsView',
-      focuses:           {'ThumbnailsView': false, 'ImageView': false, 'ScrollView': false, 'BookView': false},
-      focusesNew:           ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
+      focuses:           ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
       focusModules:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
       focusOverlaysAvailable: {
           'ThumbnailsView': {
@@ -49,8 +48,6 @@
 
   $.Window.prototype = {
     init: function () {
-      //this.updateState(this.defaultState);
-
       this.element = jQuery(this.template()).appendTo(this.appendTo);
 
       this.bindEvents();
@@ -60,15 +57,8 @@
       var _this = this;
 
       jQuery.subscribe('manifestToWindow', function(_, manifest, focusState, imageID) {
-        //use given focus, otherwise use default
-        /*if (focusState) {
-          _this.updateState(focusState);
-        } else {             
-          _this.updateState(_this.defaultState);
-        }*/
         //empty or invalid focus state, use default state
-        if (!focusState || jQuery.inArray(focusState, _this.focusesNew) === -1 ) {
-           //_this.currentFocus = focusState;
+        if (!focusState || jQuery.inArray(focusState, _this.focuses) === -1 ) {
            focusState = _this.defaultState;
         }
         
@@ -99,22 +89,6 @@
       });
 
     },
-
-    /*updateState: function(state) {
-      var _this = this;
-      jQuery.each(this.focuses, function(key, value) {
-        if (key === state) {
-          _this.focuses[key] = true;
-        } else {
-          _this.focuses[key] = false;
-        }
-      });
-      
-      if ( state !== _this.currentFocus && jQuery.inArray(state, _this.focusesNew) > -1 ) {
-          _this.currentFocus = state;
-          //trigger event!
-      }
-    },*/
 
     clearViews: function() {
       var _this = this;
