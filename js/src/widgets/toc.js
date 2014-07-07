@@ -17,8 +17,6 @@
       var _this = this;
 
       this.ranges = this.getTplData();
-      console.log('ranges bound');
-      console.log(this.ranges);
       this.render();
       this.bindEvents();
       this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
@@ -63,7 +61,6 @@
             // and all non-top-level children are now
             // bound the these base nodes set on the tree
             // object.
-            console.log('arrived at root');
             children.forEach(function(child) {
               child.level = 0;
             });
@@ -81,9 +78,7 @@
             children.forEach(function(child) { 
               child.level = parent.level+1;
             });
-            console.log('arrived at middle level');
             parent.children = children;
-            console.log(parent.children);
           }
           // The function cannot continue to the return 
           // statement until this line stops being called, 
@@ -135,11 +130,9 @@
       });
 
       Handlebars.registerHelper('tocLevel', function(label, level){
-        console.log('inside tocLevel');
         return '<h' + (level+1) + '>' + label + '</h' + (level+1) + '>';
       });
 
-      console.log(tplData);
 
       return template(tplData);
     },

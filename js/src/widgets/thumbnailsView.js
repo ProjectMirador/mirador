@@ -81,7 +81,7 @@
         //add any other events that would trigger thumbnail display (resize, etc)
                 
         _this.element.find('.thumbnail-image').on('click', function() {
-           _this.parent.toggleImageView(jQuery(this).attr('data-image-id'));
+           _this.parent.loadImageModeFromPanel(jQuery(this).attr('data-image-id'));
         });
     },
     
