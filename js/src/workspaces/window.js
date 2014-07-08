@@ -17,7 +17,7 @@
           'ThumbnailsView': {
               'overlay' : {'MetadataView' : false}, 
               'sidePanel' : {'TableOfContents' : true}, //'TableOfContentsView',
-               'bottomPanel' : {'' : false}
+              'bottomPanel' : {'' : false}
           },
           'ImageView': {
               'overlay' : {'MetadataView' : false}, 
@@ -64,7 +64,7 @@
           _this.updateState(_this.defaultState);
         }
         
-        //update panels and overlay state to default?
+        // update panels and overlay state to default?
         
         jQuery.each(_this.uiState, function(key, value){ 
           if (value && _this.manifest != manifest) {

@@ -17,11 +17,9 @@
       var _this = this;
 
       this.ranges = this.getTplData();
-      console.log('ranges bound');
-      console.log(this.ranges);
+      this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
       this.render();
       this.bindEvents();
-      this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
     },
 
     getTplData: function() {  
@@ -63,7 +61,6 @@
             // and all non-top-level children are now
             // bound the these base nodes set on the tree
             // object.
-            console.log('arrived at root');
             children.forEach(function(child) {
               child.level = 0;
             });
@@ -81,9 +78,7 @@
             children.forEach(function(child) { 
               child.level = parent.level+1;
             });
-            console.log('arrived at middle level');
             parent.children = children;
-            console.log(parent.children);
           }
           // The function cannot continue to the return 
           // statement until this line stops being called, 
@@ -105,17 +100,37 @@
       jQuery.subscribe('focusChanged', function(_, manifest, focusFrame) {
       });
 
+      // click on single item.
+      
+      // hover on single item.
+      
+      _this.element.find('li').has('ul').addClass('has-child');
+      jQuery('.has-child ul').hide();
+
+      jQuery('.has-child a').click(function() {
+        console.log(this);
+        console.log(jQuery(this).closest('li').find('ul:first'));
+        event.stopPropagation();
+        jQuery(this).closest('li').find('ul:first').slideFadeToggle();
+      });
+
     },
 
     template: function(tplData) {
 
       var template = Handlebars.compile([
-        '{{#nestedRangeLevel ranges}}',
-          '{{{tocLevel label level}}}',
-          '{{#if children}}',
-            '{{{nestedRangeLevel children}}}',
-          '{{/if}}',
-        '{{/nestedRangeLevel}}'
+                    '<ul class="toc">',
+                    '{{#nestedRangeLevel ranges}}',
+                    '<li>',
+                    '{{{tocLevel label level}}}',
+                    '{{#if children}}',
+                    '<ul>',
+                    '{{{nestedRangeLevel children}}}',
+                    '</ul>',
+                    '{{/if}}',
+                    '<li>',
+                    '{{/nestedRangeLevel}}',
+                    '</ul>'
       ].join(''));
 
       var previousTemplate;
@@ -127,22 +142,20 @@
           previousTemplate = options.fn;
         }
 
-        children.forEach(function(child){
+        children.forEach(function(child) {
           out = out + previousTemplate(child);
         });
-
+        
         return out;
       });
 
-      Handlebars.registerHelper('tocLevel', function(label, level){
-        console.log('inside tocLevel');
-        return '<h' + (level+1) + '>' + label + '</h' + (level+1) + '>';
+      Handlebars.registerHelper('tocLevel', function(label, level) {
+        return '<h' + (level+1) + '><a>' + label + '</a></h' + (level+1) + '>';
       });
-
-      console.log(tplData);
 
       return template(tplData);
     },
+
     toggle: function(stateValue) {
         if (stateValue) { 
             this.show(); 
