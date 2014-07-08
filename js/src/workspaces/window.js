@@ -85,6 +85,7 @@
             
             //attach view and toggle view, which triggers the attachment of panels or overlays
             _this.focusModules[focusState] = new $[focusState]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this, imageID: imageID, imagesList: _this.imagesList} );
+            _this.bindNavigation();
             _this.toggleFocus(focusState);
       });
 
@@ -129,6 +130,10 @@
                 //update current image for all valid panels
             });
         });
+        
+        //update panels with current image
+        if (this.sidePanel) { this.sidePanel.updateImage(this.currentImageID); }
+        if (this.bottomPanel) { this.bottomPanel.updateImage(this.currentImageID); }
     },
 
     get: function(prop, parent) {
@@ -230,21 +235,39 @@
         }
     },
     
-    //based on currentFocus
     updateManifestInfo: function() {
         var _this = this;
-        //add unbind calls for now because this gets called every time focus changes
-        this.element.find('.mirador-icon-thumbnails-view').unbind('click');
+        this.element.find('.window-manifest-navigation').children().show();
+        switch(_this.currentFocus) {
+            case 'ThumbnailsView':
+                //hide thumbnails button and highlight currentImageMode?
+                _this.element.find('.mirador-icon-thumbnails-view').hide();
+                break;
+            case 'ImageView':
+                //highlight Single Image View option
+                break;
+            case 'BookView':
+                //highlight Book View option
+                break;
+            case 'ScrollView':
+               //highlight Scroll View option
+               break;
+            default:
+               break;
+        }
+    },
+    
+    //based on currentFocus
+    bindNavigation: function() {
+        var _this = this;
         this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
             _this.toggleThumbnails(_this.currentImageID);
         });
         
-        this.element.find('.mirador-icon-metadata-view').unbind('click');
         this.element.find('.mirador-icon-metadata-view').on('click', function() {
             _this.toggleMetadataOverlay(_this.currentFocus);
         });
         
-        this.element.find('.mirador-icon-image-view').unbind('mouseenter mouseleave');
         this.element.find('.mirador-icon-image-view').mouseenter(
             function() {
               _this.element.find('.image-list').fadeIn();
@@ -253,18 +276,15 @@
               _this.element.find('.image-list').fadeOut();
             });
         
-        this.element.find('.single-image-option').unbind('click');
         this.element.find('.single-image-option').on('click', function() {
            _this.toggleImageView(_this.currentImageID);
         });
                 
-        this.element.find('.book-option').unbind('click');
         this.element.find('.book-option').on('click', function() {
            _this.toggleBookView(_this.currentImageID);
         });
         
-        /*this.element.find('.scroll-option').unbind('click');
-        this.element.find('.scroll-option').on('click', function() {
+        /*this.element.find('.scroll-option').on('click', function() {
            _this.toggleScrollView(_this.currentImageID);
         });*/
     },

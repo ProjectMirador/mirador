@@ -108,8 +108,6 @@
       jQuery('.has-child ul').hide();
 
       jQuery('.has-child a').click(function() {
-        console.log(this);
-        console.log(jQuery(this).closest('li').find('ul:first'));
         event.stopPropagation();
         jQuery(this).closest('li').find('ul:first').slideFadeToggle();
       });
@@ -170,6 +168,10 @@
 
     show: function() {
         jQuery(this.appendTo).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+    },
+    
+    updateImage: function(imageID) {
+    
     }
   };
 
