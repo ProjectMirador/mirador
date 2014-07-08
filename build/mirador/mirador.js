@@ -3556,8 +3556,13 @@ window.Mirador = window.Mirador || function(config) {
       focusOverlaysAvailable: {
           'ThumbnailsView': {
               'overlay' : {'MetadataView' : false}, 
+<<<<<<< HEAD
               'sidePanel' : {'TableOfContents' : true},
                'bottomPanel' : {'' : false}
+=======
+              'sidePanel' : {'TableOfContents' : true}, //'TableOfContentsView',
+              'bottomPanel' : {'' : false}
+>>>>>>> origin/master
           },
           'ImageView': {
               'overlay' : {'MetadataView' : false}, 
@@ -3601,7 +3606,7 @@ window.Mirador = window.Mirador || function(config) {
            focusState = _this.defaultState;
         }
         
-        //update panels and overlay state to default?
+        // update panels and overlay state to default?
         
           if (_this.manifest === manifest) { return; }
 
@@ -4585,9 +4590,12 @@ window.Mirador = window.Mirador || function(config) {
       var _this = this;
 
       this.ranges = this.getTplData();
+<<<<<<< HEAD
+=======
+      this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
+>>>>>>> origin/master
       this.render();
       this.bindEvents();
-      this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
     },
 
     getTplData: function() {  
@@ -4668,17 +4676,37 @@ window.Mirador = window.Mirador || function(config) {
       jQuery.subscribe('focusChanged', function(_, manifest, focusFrame) {
       });
 
+      // click on single item.
+      
+      // hover on single item.
+      
+      _this.element.find('li').has('ul').addClass('has-child');
+      jQuery('.has-child ul').hide();
+
+      jQuery('.has-child a').click(function() {
+        console.log(this);
+        console.log(jQuery(this).closest('li').find('ul:first'));
+        event.stopPropagation();
+        jQuery(this).closest('li').find('ul:first').slideFadeToggle();
+      });
+
     },
 
     template: function(tplData) {
 
       var template = Handlebars.compile([
-        '{{#nestedRangeLevel ranges}}',
-          '{{{tocLevel label level}}}',
-          '{{#if children}}',
-            '{{{nestedRangeLevel children}}}',
-          '{{/if}}',
-        '{{/nestedRangeLevel}}'
+                    '<ul class="toc">',
+                    '{{#nestedRangeLevel ranges}}',
+                    '<li>',
+                    '{{{tocLevel label level}}}',
+                    '{{#if children}}',
+                    '<ul>',
+                    '{{{nestedRangeLevel children}}}',
+                    '</ul>',
+                    '{{/if}}',
+                    '<li>',
+                    '{{/nestedRangeLevel}}',
+                    '</ul>'
       ].join(''));
 
       var previousTemplate;
@@ -4690,20 +4718,28 @@ window.Mirador = window.Mirador || function(config) {
           previousTemplate = options.fn;
         }
 
-        children.forEach(function(child){
+        children.forEach(function(child) {
           out = out + previousTemplate(child);
         });
-
+        
         return out;
       });
 
+<<<<<<< HEAD
       Handlebars.registerHelper('tocLevel', function(label, level){
         return '<h' + (level+1) + '>' + label + '</h' + (level+1) + '>';
       });
 
 
+=======
+      Handlebars.registerHelper('tocLevel', function(label, level) {
+        return '<h' + (level+1) + '><a>' + label + '</a></h' + (level+1) + '>';
+      });
+
+>>>>>>> origin/master
       return template(tplData);
     },
+
     toggle: function(stateValue) {
         if (stateValue) { 
             this.show(); 
@@ -5211,6 +5247,10 @@ jQuery.fn.scrollStop = function(callback) {
     });
 
     return "uuid-" + idNum;
+  };
+  
+  jQuery.fn.slideFadeToggle  = function(speed, easing, callback) {
+            return this.animate({opacity: 'toggle', height: 'toggle'}, speed, easing, callback);
   };
 
 

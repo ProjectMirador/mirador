@@ -62,7 +62,7 @@
            focusState = _this.defaultState;
         }
         
-        //update panels and overlay state to default?
+        // update panels and overlay state to default?
         
           if (_this.manifest === manifest) { return; }
 

@@ -275,6 +275,10 @@
 
     return "uuid-" + idNum;
   };
+  
+  jQuery.fn.slideFadeToggle  = function(speed, easing, callback) {
+            return this.animate({opacity: 'toggle', height: 'toggle'}, speed, easing, callback);
+  };
 
 
   $.throttle = function(func, wait, options) {

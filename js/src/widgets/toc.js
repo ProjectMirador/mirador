@@ -17,9 +17,9 @@
       var _this = this;
 
       this.ranges = this.getTplData();
+      this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
       this.render();
       this.bindEvents();
-      this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
     },
 
     getTplData: function() {  
@@ -100,17 +100,37 @@
       jQuery.subscribe('focusChanged', function(_, manifest, focusFrame) {
       });
 
+      // click on single item.
+      
+      // hover on single item.
+      
+      _this.element.find('li').has('ul').addClass('has-child');
+      jQuery('.has-child ul').hide();
+
+      jQuery('.has-child a').click(function() {
+        console.log(this);
+        console.log(jQuery(this).closest('li').find('ul:first'));
+        event.stopPropagation();
+        jQuery(this).closest('li').find('ul:first').slideFadeToggle();
+      });
+
     },
 
     template: function(tplData) {
 
       var template = Handlebars.compile([
-        '{{#nestedRangeLevel ranges}}',
-          '{{{tocLevel label level}}}',
-          '{{#if children}}',
-            '{{{nestedRangeLevel children}}}',
-          '{{/if}}',
-        '{{/nestedRangeLevel}}'
+                    '<ul class="toc">',
+                    '{{#nestedRangeLevel ranges}}',
+                    '<li>',
+                    '{{{tocLevel label level}}}',
+                    '{{#if children}}',
+                    '<ul>',
+                    '{{{nestedRangeLevel children}}}',
+                    '</ul>',
+                    '{{/if}}',
+                    '<li>',
+                    '{{/nestedRangeLevel}}',
+                    '</ul>'
       ].join(''));
 
       var previousTemplate;
@@ -122,20 +142,20 @@
           previousTemplate = options.fn;
         }
 
-        children.forEach(function(child){
+        children.forEach(function(child) {
           out = out + previousTemplate(child);
         });
-
+        
         return out;
       });
 
-      Handlebars.registerHelper('tocLevel', function(label, level){
-        return '<h' + (level+1) + '>' + label + '</h' + (level+1) + '>';
+      Handlebars.registerHelper('tocLevel', function(label, level) {
+        return '<h' + (level+1) + '><a>' + label + '</a></h' + (level+1) + '>';
       });
-
 
       return template(tplData);
     },
+
     toggle: function(stateValue) {
         if (stateValue) { 
             this.show(); 
