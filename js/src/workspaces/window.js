@@ -9,7 +9,7 @@
       currentImageID:    null,
       imagesList:        null,
       currentImageMode:  'ImageView',
-      imageModes:        ['ImageView', 'BookView'], //ScrollView //for drop down menu
+      //imageModes:        ['ImageView', 'BookView'], //ScrollView //for drop down menu
       defaultState:      'ThumbnailsView',
       currentFocus:      'ThumbnailsView',
       focuses:           ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
@@ -126,6 +126,7 @@
                 if (view === '' && _this[panelType]) {
                    _this.togglePanels(panelType, displayed, view, state);
                 }
+                //update current image for all valid panels
             });
         });
     },

@@ -62,6 +62,7 @@
         this.element.find('.highlight').removeClass('highlight');
         this.element.find("img[data-image-id='"+imageID+"']").addClass('highlight');
         this.element.find("img[data-image-id='"+imageID+"']").parent().addClass('highlight');
+        //scroll to current image
     },
     
     bindEvents: function() {
