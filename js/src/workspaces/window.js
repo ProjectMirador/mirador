@@ -177,9 +177,12 @@
       this.updatePanelsAndOverlay(focusState);
     },
 
-    toggleThumbnails: function() {
+    toggleThumbnails: function(imageID) {
       if (this.focusModules.ThumbnailsView === null) {
         this.focusModules.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: this.currentImageID, imagesList: this.imagesList} );
+      } else {
+         var view = this.focusModules.ThumbnailsView;
+         view.updateImage(imageID);
       }
       this.toggleFocus('ThumbnailsView', '');
     },
@@ -232,7 +235,7 @@
         //add unbind calls for now because this gets called every time focus changes
         this.element.find('.mirador-icon-thumbnails-view').unbind('click');
         this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
-            _this.toggleThumbnails();
+            _this.toggleThumbnails(_this.currentImageID);
         });
         
         this.element.find('.mirador-icon-metadata-view').unbind('click');
@@ -240,11 +243,7 @@
             _this.toggleMetadataOverlay(_this.currentFocus);
         });
         
-        /*_this.element.find('.mirador-icon-image-view').unbind('click');
-        _this.element.find('.mirador-icon-image-view').on('click', function() {
-            _this.toggleBookView(_this.currentImageID);
-        });*/
-        this.element.find('.mirador-icon-image-view').off('mouseenter mouseleave');
+        this.element.find('.mirador-icon-image-view').unbind('mouseenter mouseleave');
         this.element.find('.mirador-icon-image-view').mouseenter(
             function() {
               _this.element.find('.image-list').fadeIn();

@@ -9,7 +9,6 @@
       element:              null,
       imagesList:           [],
       appendTo:             null,
-      thumbsListingCls:     '',
       thumbsHeight:         150,
       parent:               null,
       panel:                false
@@ -30,7 +29,6 @@
             this.thumbsHeight = 80;
         }
 
-        this.thumbsListingCls = 'listing-thumbs';
         this.loadContent();
         this.bindEvents();
         },
@@ -59,8 +57,11 @@
       this.element = jQuery(_this.template(tplData)).appendTo(this.appendTo);
     },
     
-    updateCurrentImg: function() {
-    
+    updateImage: function(imageID) {
+        this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
+        this.element.find('.highlight').removeClass('highlight');
+        this.element.find("img[data-image-id='"+imageID+"']").addClass('highlight');
+        this.element.find("img[data-image-id='"+imageID+"']").parent().addClass('highlight');
     },
     
     bindEvents: function() {
@@ -106,7 +107,7 @@
       '<div class="{{thumbnailCls}}">',
         '<ul class="{{listingCssCls}}">',
           '{{#thumbs}}',
-            '<li>',
+            '<li class="{{highlight}}">',
                 '<img class="thumbnail-image {{highlight}}" title="{{title}}" data-image-id="{{id}}" src="" data="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',
                 '<div class="thumb-label">{{title}}</div>',
             '</li>',

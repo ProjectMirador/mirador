@@ -3716,9 +3716,12 @@ window.Mirador = window.Mirador || function(config) {
       this.updatePanelsAndOverlay(focusState);
     },
 
-    toggleThumbnails: function() {
+    toggleThumbnails: function(imageID) {
       if (this.focusModules.ThumbnailsView === null) {
         this.focusModules.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: this.currentImageID, imagesList: this.imagesList} );
+      } else {
+         var view = this.focusModules.ThumbnailsView;
+         view.updateImage(imageID);
       }
       this.toggleFocus('ThumbnailsView', '');
     },
@@ -3771,7 +3774,7 @@ window.Mirador = window.Mirador || function(config) {
         //add unbind calls for now because this gets called every time focus changes
         this.element.find('.mirador-icon-thumbnails-view').unbind('click');
         this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
-            _this.toggleThumbnails();
+            _this.toggleThumbnails(_this.currentImageID);
         });
         
         this.element.find('.mirador-icon-metadata-view').unbind('click');
@@ -3779,11 +3782,7 @@ window.Mirador = window.Mirador || function(config) {
             _this.toggleMetadataOverlay(_this.currentFocus);
         });
         
-        /*_this.element.find('.mirador-icon-image-view').unbind('click');
-        _this.element.find('.mirador-icon-image-view').on('click', function() {
-            _this.toggleBookView(_this.currentImageID);
-        });*/
-        this.element.find('.mirador-icon-image-view').off('mouseenter mouseleave');
+        this.element.find('.mirador-icon-image-view').unbind('mouseenter mouseleave');
         this.element.find('.mirador-icon-image-view').mouseenter(
             function() {
               _this.element.find('.image-list').fadeIn();
@@ -4426,7 +4425,6 @@ window.Mirador = window.Mirador || function(config) {
       element:              null,
       imagesList:           [],
       appendTo:             null,
-      thumbsListingCls:     '',
       thumbsHeight:         150,
       parent:               null,
       panel:                false
@@ -4447,7 +4445,6 @@ window.Mirador = window.Mirador || function(config) {
             this.thumbsHeight = 80;
         }
 
-        this.thumbsListingCls = 'listing-thumbs';
         this.loadContent();
         this.bindEvents();
         },
@@ -4476,8 +4473,11 @@ window.Mirador = window.Mirador || function(config) {
       this.element = jQuery(_this.template(tplData)).appendTo(this.appendTo);
     },
     
-    updateCurrentImg: function() {
-    
+    updateImage: function(imageID) {
+        this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
+        this.element.find('.highlight').removeClass('highlight');
+        this.element.find("img[data-image-id='"+imageID+"']").addClass('highlight');
+        this.element.find("img[data-image-id='"+imageID+"']").parent().addClass('highlight');
     },
     
     bindEvents: function() {
@@ -4523,7 +4523,7 @@ window.Mirador = window.Mirador || function(config) {
       '<div class="{{thumbnailCls}}">',
         '<ul class="{{listingCssCls}}">',
           '{{#thumbs}}',
-            '<li>',
+            '<li class="{{highlight}}">',
                 '<img class="thumbnail-image {{highlight}}" title="{{title}}" data-image-id="{{id}}" src="" data="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',
                 '<div class="thumb-label">{{title}}</div>',
             '</li>',

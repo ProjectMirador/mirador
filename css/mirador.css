@@ -250,6 +250,17 @@
   /* background-position: center; */
   /* background-repeat: no-repeat; */
 }
+
+img.thumbnail-image.highlight {
+  border: 2px solid deepskyblue;
+}
+
+li.highlight {
+  margin-bottom: 11px !important;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
 .remaining-items {
   background: url(../images/noise.png) repeat;
   opacity: 0.5;
@@ -488,8 +499,8 @@
   list-style: none;
   padding: 0;
   white-space: nowrap;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 4px;
+  margin-bottom: 4px;
 }
 
 .panel-thumbnail-view ul.panel-listing-thumbs li {
