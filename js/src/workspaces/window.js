@@ -7,6 +7,7 @@
       appendTo:          null,
       manifest:          null,
       currentImageID:    null,
+      focusImages:       [],
       imagesList:        null,
       currentImageMode:  'ImageView',
       //imageModes:        ['ImageView', 'BookView'], //ScrollView //for drop down menu
@@ -132,8 +133,8 @@
         });
         
         //update panels with current image
-        if (this.sidePanel) { this.sidePanel.updateImage(this.currentImageID); }
-        if (this.bottomPanel) { this.bottomPanel.updateImage(this.currentImageID); }
+        if (this.sidePanel) { this.sidePanel.updateFocusImages(this.focusImages); }
+        if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
 
     get: function(prop, parent) {
@@ -210,7 +211,7 @@
            this.focusModules.BookView = new $.BookView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: imageID, imagesList: this.imagesList} );
         } else {
            var view = this.focusModules.BookView;
-           view.update(imageID);
+           view.updateImage(imageID);
         }
         this.toggleFocus('BookView', 'BookView');
     },
@@ -233,6 +234,10 @@
             default:
                break;
         }
+    },
+    
+    updateFocusImages: function(imageList) {
+        this.focusImages = imageList;
     },
     
     updateManifestInfo: function() {

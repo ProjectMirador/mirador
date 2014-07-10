@@ -32,6 +32,7 @@
         this.element = jQuery(this.template()).appendTo(this.appendTo);
 
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+        this.parent.updateFocusImages([this.imageID]);
         
         this.bindEvents();
     },
@@ -95,9 +96,11 @@
     },
     
     updateImage: function(imageID) {
+        this.imageID = imageID;
         this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
         this.currentImg = this.imagesList[this.currentImgIndex];
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+        this.parent.updateFocusImages([imageID]);
     }
 
   };

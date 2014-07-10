@@ -5,6 +5,7 @@
     jQuery.extend(this, {
       currentImgIndex:      0,
       imageID:              null,
+      focusImages:          [],
       manifest:             null,
       element:              null,
       imagesList:           [],
@@ -62,6 +63,16 @@
         this.element.find('.highlight').removeClass('highlight');
         this.element.find("img[data-image-id='"+imageID+"']").addClass('highlight');
         this.element.find("img[data-image-id='"+imageID+"']").parent().addClass('highlight');
+        //scroll to current image
+    },
+    
+    updateFocusImages: function(focusList) {
+        var _this = this;
+        this.element.find('.highlight').removeClass('highlight');
+        jQuery.each(focusList, function(index, imageID) {
+           _this.element.find("img[data-image-id='"+imageID+"']").addClass('highlight');
+           _this.element.find("img[data-image-id='"+imageID+"']").parent().addClass('highlight');
+        });
         //scroll to current image
     },
     
@@ -137,7 +148,7 @@
         easing: "easeInCubic", 
         complete: function() {
             jQuery.each(_this.element.find("img"), function(key, value) {
-                   if ($.isOnScreen(value)) {
+                   if ($.isOnScreen(value) && !jQuery(value).attr("src")) {
                       var url = jQuery(value).attr("data");
                       _this.loadImage(value, url);
                    }

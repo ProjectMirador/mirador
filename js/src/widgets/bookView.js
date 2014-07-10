@@ -14,6 +14,7 @@
       element:          null,
       imageID:          null,
       imagesList:       [],
+      focusImages:      [],
       manifest:         null,
       viewingDirection: 'left-to-right',
       viewingHint:      'paged',
@@ -47,7 +48,7 @@
            this.viewingHint = this.manifest.sequences[0].viewingHint.toLowerCase();
        }
        
-       this.stitchList = getStitchList(this.viewingHint, this.viewingDirection, this.currentImg, this.currentImgIndex, this.imagesList);
+       this.stitchList = this.getStitchList();
        this.createOpenSeadragonInstance();
        
        this.bindEvents();
@@ -78,10 +79,10 @@
         jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
     },
     
-    update: function(imageID) {
+    updateImage: function(imageID) {
         this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
         this.currentImg = this.imagesList[this.currentImgIndex];
-        this.stitchList = getStitchList(this.viewingHint, this.viewingDirection, this.currentImg, this.currentImgIndex, this.imagesList);
+        this.stitchList = this.getStitchList();
         this.createOpenSeadragonInstance();
     },
 
@@ -148,7 +149,7 @@
         this.currentImgIndex = next;
         this.currentImg = this.imagesList[next];
 
-        this.stitchList = getStitchList(this.viewingHint, this.viewingDirection, this.currentImg, this.currentImgIndex, this.imagesList);
+        this.stitchList = this.getStitchList();
 
         this.createOpenSeadragonInstance();
       }
@@ -168,11 +169,90 @@
         this.currentImgIndex = prev;
         this.currentImg = this.imagesList[prev];
         
-        this.stitchList = getStitchList(this.viewingHint, this.viewingDirection, this.currentImg, this.currentImgIndex, this.imagesList);
+        this.stitchList = this.getStitchList();
 
         this.createOpenSeadragonInstance();
       }
+    },
+    
+    getStitchList: function() {
+    // Need to check metadata for object type and viewing direction
+    // Default to 'paged' and 'left-to-right'
+    // Set index(es) for any other images to stitch with selected image
+    var stitchList = [],
+    leftIndex = [],
+    rightIndex = [],
+    topIndex = [],
+    bottomIndex = [],
+    _this = this;
+    
+    this.focusImages = [];
+    
+    if (this.viewingHint === 'individuals') {
+       // don't do any stitching, display like an imageView
+    } else if (this.viewingHint === 'paged') {
+       // determine the other image for this pair based on index and viewingDirection
+       if (this.currentImgIndex === 0 || this.currentImgIndex === this.imagesList.length-1) {
+           //first page (front cover) or last page (back cover), display on its own
+          stitchList = [this.currentImg];
+       } else if (this.currentImgIndex % 2 === 0) {
+            // even, get previous page.  set order in array based on viewingDirection
+            switch (this.viewingDirection) {
+                case "left-to-right":
+                    leftIndex[0] = this.currentImgIndex-1;
+                    stitchList = [this.imagesList[this.currentImgIndex-1], this.currentImg];
+                    break;
+                case "right-to-left":
+                    rightIndex[0] = this.currentImgIndex-1;
+                    stitchList = [this.currentImg, this.imagesList[this.currentImgIndex-1]];
+                    break;
+                case "top-to-bottom":
+                    topIndex[0] = this.currentImgIndex-1;
+                    stitchList = [this.imagesList[this.currentImgIndex-1], this.currentImg];
+                    break;
+                case "bottom-to-top":
+                    bottomIndex[0] = this.currentImgIndex-1;
+                    stitchList = [this.currentImg, this.imagesList[this.currentImgIndex-1]];
+                    break;
+                default:
+                    break;
+            }
+       } else {
+            // odd, get next page
+            switch (this.viewingDirection) {
+                case "left-to-right":
+                    rightIndex[0] = this.currentImgIndex+1;
+                    stitchList = [this.currentImg, this.imagesList[this.currentImgIndex+1]];
+                    break;
+                case "right-to-left":
+                    leftIndex[0] = this.currentImgIndex+1;
+                    stitchList = [this.imagesList[this.currentImgIndex+1], this.currentImg];
+                    break;
+                case "top-to-bottom":
+                    bottomIndex[0] = this.currentImgIndex+1;
+                    stitchList = [this.currentImg, this.imagesList[this.currentImgIndex+1]];
+                    break;
+                case "bottom-to-top":
+                    topIndex[0] = this.currentImgIndex+1;
+                    stitchList = [this.imagesList[this.currentImgIndex+1], this.currentImg];
+                    break;
+                default:
+                    break;
+            }
+       }
+    } else if (this.viewingHint === 'continuous') {
+       // TODO: stitch all images together per the viewingDirection
+    } else {
+       // undefined viewingHint, don't do anything
     }
+    
+    //set the focusImages for highlighting in panels
+    jQuery.each(stitchList, function(index, image) {
+        _this.focusImages.push(image['@id']);
+    });
+    this.parent.updateFocusImages(this.focusImages);
+    return stitchList;
+  }
 
     // remove or add canvses to make pages line up
     /*stitchOptions: function() {  
@@ -210,74 +290,5 @@
       this.elemStitchOptions.hide();
       },*/
   };
-
-  function getStitchList(viewingHint, viewingDirection, currentImg, currentImgIndex, imagesList) {
-    // Need to check metadata for object type and viewing direction
-    // Default to 'paged' and 'left-to-right'
-    // Set index(es) for any other images to stitch with selected image
-    var stitchList = [],
-    leftIndex = [],
-    rightIndex = [],
-    topIndex = [],
-    bottomIndex = [];
-    if (viewingHint === 'individuals') {
-       // don't do any stitching, display like an imageView
-    } else if (viewingHint === 'paged') {
-       // determine the other image for this pair based on index and viewingDirection
-       if (currentImgIndex === 0 || currentImgIndex === imagesList.length-1) {
-           //first page (front cover) or last page (back cover), display on its own
-          stitchList = [currentImg];
-       } else if (currentImgIndex % 2 === 0) {
-            // even, get previous page.  set order in array based on viewingDirection
-            switch (viewingDirection) {
-                case "left-to-right":
-                    leftIndex[0] = currentImgIndex-1;
-                    stitchList = [imagesList[currentImgIndex-1], currentImg];
-                    break;
-                case "right-to-left":
-                    rightIndex[0] = currentImgIndex-1;
-                    stitchList = [currentImg, imagesList[currentImgIndex-1]];
-                    break;
-                case "top-to-bottom":
-                    topIndex[0] = currentImgIndex-1;
-                    stitchList = [imagesList[currentImgIndex-1], currentImg];
-                    break;
-                case "bottom-to-top":
-                    bottomIndex[0] = currentImgIndex-1;
-                    stitchList = [currentImg, imagesList[currentImgIndex-1]];
-                    break;
-                default:
-                    break;
-            }
-       } else {
-            // odd, get next page
-            switch (viewingDirection) {
-                case "left-to-right":
-                    rightIndex[0] = currentImgIndex+1;
-                    stitchList = [currentImg, imagesList[currentImgIndex+1]];
-                    break;
-                case "right-to-left":
-                    leftIndex[0] = currentImgIndex+1;
-                    stitchList = [imagesList[currentImgIndex+1], currentImg];
-                    break;
-                case "top-to-bottom":
-                    bottomIndex[0] = currentImgIndex+1;
-                    stitchList = [currentImg, imagesList[currentImgIndex+1]];
-                    break;
-                case "bottom-to-top":
-                    topIndex[0] = currentImgIndex+1;
-                    stitchList = [imagesList[currentImgIndex+1], currentImg];
-                    break;
-                default:
-                    break;
-            }
-       }
-    } else if (viewingHint === 'continuous') {
-       // TODO: stitch all images together per the viewingDirection
-    } else {
-       // undefined viewingHint, don't do anything
-    }
-    return stitchList;
-  }
 
 }(Mirador));
