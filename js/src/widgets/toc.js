@@ -172,6 +172,10 @@
     
     updateImage: function(imageID) {
     
+    },
+    
+    updateFocusImages: function(focusList) {
+    
     }
   };
 
