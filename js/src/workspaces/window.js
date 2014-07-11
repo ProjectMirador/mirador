@@ -19,7 +19,7 @@
           'ThumbnailsView': {
               'overlay' : {'MetadataView' : false}, 
               'sidePanel' : {'TableOfContents' : true},
-               'bottomPanel' : {'' : false}
+              'bottomPanel' : {'' : false}
           },
           'ImageView': {
               'overlay' : {'MetadataView' : false}, 
@@ -40,7 +40,6 @@
       sidePanel: null,
       bottomPanel: null,
       overlay: null
-
     }, $.DEFAULT_SETTINGS, options);
 
     this.init();
@@ -77,13 +76,12 @@
                 _this.currentImageID = _this.imagesList[0]['@id'];
             }
 
-            //add manifest title and complete nav bar and bind nav bar events for particular focus
             _this.element.prepend(_this.manifestInfoTemplate({title: manifest.label}));
             
             //clear any existing objects
             _this.clearViews();
             _this.clearPanelsAndOverlay();
-            
+
             //attach view and toggle view, which triggers the attachment of panels or overlays
             _this.focusModules[focusState] = new $[focusState]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this, imageID: imageID, imagesList: _this.imagesList} );
             _this.bindNavigation();
@@ -135,6 +133,7 @@
                 //hide any panels instantiated but not available to this view
                 if (view === '' && _this[panelType]) {
                    _this.togglePanels(panelType, displayed, view, state);
+                   console.log(panelType + ": " + displayed);
                 }
                 //update current image for all valid panels
             });
@@ -164,10 +163,6 @@
         //update state in focusOverlaysAvailable
         this.focusOverlaysAvailable[focusState][panelType][viewType] = panelState;
         this[panelType].toggle(panelState);
-        if (panelType === "sidePanel") {
-            //side panel should adjust width of view-container
-            
-        }
     },
     
     toggleMetadataOverlay: function(focusState) {
