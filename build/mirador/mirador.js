@@ -3558,7 +3558,7 @@ window.Mirador = window.Mirador || function(config) {
           'ThumbnailsView': {
               'overlay' : {'MetadataView' : false}, 
               'sidePanel' : {'TableOfContents' : true},
-               'bottomPanel' : {'' : false}
+              'bottomPanel' : {'' : false}
           },
           'ImageView': {
               'overlay' : {'MetadataView' : false}, 
@@ -3579,7 +3579,6 @@ window.Mirador = window.Mirador || function(config) {
       sidePanel: null,
       bottomPanel: null,
       overlay: null
-
     }, $.DEFAULT_SETTINGS, options);
 
     this.init();
@@ -3616,13 +3615,12 @@ window.Mirador = window.Mirador || function(config) {
                 _this.currentImageID = _this.imagesList[0]['@id'];
             }
 
-            //add manifest title and complete nav bar and bind nav bar events for particular focus
             _this.element.prepend(_this.manifestInfoTemplate({title: manifest.label}));
             
             //clear any existing objects
             _this.clearViews();
             _this.clearPanelsAndOverlay();
-            
+
             //attach view and toggle view, which triggers the attachment of panels or overlays
             _this.focusModules[focusState] = new $[focusState]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this, imageID: imageID, imagesList: _this.imagesList} );
             _this.bindNavigation();
@@ -3666,6 +3664,7 @@ window.Mirador = window.Mirador || function(config) {
                 //hide any panels instantiated but not available to this view
                 if (view === '' && _this[panelType]) {
                    _this.togglePanels(panelType, displayed, view, state);
+                   console.log(panelType + ": " + displayed);
                 }
                 //update current image for all valid panels
             });
@@ -3695,10 +3694,6 @@ window.Mirador = window.Mirador || function(config) {
         //update state in focusOverlaysAvailable
         this.focusOverlaysAvailable[focusState][panelType][viewType] = panelState;
         this[panelType].toggle(panelState);
-        if (panelType === "sidePanel") {
-            //side panel should adjust width of view-container
-            
-        }
     },
     
     toggleMetadataOverlay: function(focusState) {
@@ -4635,11 +4630,13 @@ window.Mirador = window.Mirador || function(config) {
   $.TableOfContents.prototype = {
     init: function () {
       var _this = this;
-
       this.ranges = this.getTplData();
       this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
       this.render();
       this.bindEvents();
+      if (!_this.manifest.structures) {
+        _this.hide();
+      }
     },
 
     getTplData: function() {  
@@ -4656,7 +4653,6 @@ window.Mirador = window.Mirador || function(config) {
           });
         }
       });
-      
 
       ranges = _this.extractRangeTrees(ranges);
       return ranges;
@@ -4775,19 +4771,24 @@ window.Mirador = window.Mirador || function(config) {
     },
 
     toggle: function(stateValue) {
-        if (stateValue) { 
-            this.show(); 
-        } else {
-            this.hide();
-        }
+      if (!this.manifest.structures) { stateValue = false; }
+      if (stateValue) { 
+        this.show(); 
+      } else {
+        this.hide();
+      }
     },
     
     hide: function() {
-        jQuery(this.appendTo).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
+      console.log('Hiding me!');
+      jQuery(this.appendTo).hide();
+      console.log(this.parent);
+      this.parent.element.find('.view-container').css('margin-left', 0);
     },
 
     show: function() {
-        jQuery(this.appendTo).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+      jQuery(this.appendTo).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+      this.parent.element.find('.view-container').css('margin-left', 280);
     },
     
     updateImage: function(imageID) {

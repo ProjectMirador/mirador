@@ -15,11 +15,13 @@
   $.TableOfContents.prototype = {
     init: function () {
       var _this = this;
-
       this.ranges = this.getTplData();
       this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
       this.render();
       this.bindEvents();
+      if (!_this.manifest.structures) {
+        _this.hide();
+      }
     },
 
     getTplData: function() {  
@@ -36,7 +38,6 @@
           });
         }
       });
-      
 
       ranges = _this.extractRangeTrees(ranges);
       return ranges;
@@ -155,19 +156,24 @@
     },
 
     toggle: function(stateValue) {
-        if (stateValue) { 
-            this.show(); 
-        } else {
-            this.hide();
-        }
+      if (!this.manifest.structures) { stateValue = false; }
+      if (stateValue) { 
+        this.show(); 
+      } else {
+        this.hide();
+      }
     },
     
     hide: function() {
-        jQuery(this.appendTo).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
+      console.log('Hiding me!');
+      jQuery(this.appendTo).hide();
+      console.log(this.parent);
+      this.parent.element.find('.view-container').css('margin-left', 0);
     },
 
     show: function() {
-        jQuery(this.appendTo).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+      jQuery(this.appendTo).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+      this.parent.element.find('.view-container').css('margin-left', 280);
     },
     
     updateImage: function(imageID) {
