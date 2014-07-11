@@ -10,7 +10,7 @@
       focusImages:       [],
       imagesList:        null,
       currentImageMode:  'ImageView',
-      //imageModes:        ['ImageView', 'BookView'], //ScrollView //for drop down menu
+      //imageModes:        ['ImageView', 'BookView'] //for drop down menu
       defaultState:      'ThumbnailsView',
       currentFocus:      'ThumbnailsView',
       focuses:           ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
@@ -118,7 +118,15 @@
             jQuery.each(viewOptions, function(view, displayed) {
                 //instantiate any panels that exist for this view but are still null
                 if (view !== '' && _this[panelType] === null) {
-                    _this[panelType] = new $[view]({manifest: _this.manifest, appendTo: _this.element.find('.'+panelType), parent: _this, panel: true, imageID: _this.currentImageID, imagesList: _this.imagesList});
+                    _this[panelType] = new $[view](
+                      {manifest: _this.manifest, 
+                      appendTo: _this.element.find('.'+panelType), 
+                      parent: _this, 
+                      panel: true, 
+                      imageID: _this.currentImageID, 
+                      imagesList: _this.imagesList,
+                      thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}}
+                    );
                 }
                 //toggle any valid panels
                 if (view !== '' && displayed) {   
@@ -217,6 +225,20 @@
     },
 
     toggleScrollView: function(imageID) {
+        this.currentImageID = imageID;
+        if (this.focusModules.ScrollView === null) {
+           this.focusModules.ScrollView = new $.ThumbnailsView( 
+             {manifest: this.manifest, 
+             appendTo: this.element.find('.view-container'), 
+             parent: this, imageID: this.currentImageID, 
+             imagesList: this.imagesList, 
+             thumbInfo: {thumbsHeight: 500, listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}}
+           );
+        } else {
+         var view = this.focusModules.ScrollView;
+         view.updateImage(imageID);
+      }
+      this.toggleFocus('ScrollView', '');    
     },
     
     loadImageModeFromPanel: function(imageID) {
@@ -242,20 +264,23 @@
     
     updateManifestInfo: function() {
         var _this = this;
-        this.element.find('.window-manifest-navigation').children().show();
+        this.element.find('.window-manifest-navigation').children().removeClass('selected');
         switch(_this.currentFocus) {
             case 'ThumbnailsView':
                 //hide thumbnails button and highlight currentImageMode?
-                _this.element.find('.mirador-icon-thumbnails-view').hide();
+                _this.element.find('.mirador-icon-thumbnails-view').addClass('selected');
                 break;
             case 'ImageView':
                 //highlight Single Image View option
+                _this.element.find('.mirador-icon-image-view').addClass('selected');
                 break;
             case 'BookView':
                 //highlight Book View option
+                _this.element.find('.mirador-icon-image-view').addClass('selected');
                 break;
             case 'ScrollView':
                //highlight Scroll View option
+               _this.element.find('.mirador-icon-scroll-view').addClass('selected');
                break;
             default:
                break;
@@ -289,9 +314,9 @@
            _this.toggleBookView(_this.currentImageID);
         });
         
-        /*this.element.find('.scroll-option').on('click', function() {
+        this.element.find('.mirador-icon-scroll-view').on('click', function() {
            _this.toggleScrollView(_this.currentImageID);
-        });*/
+        });
     },
 
     //template should be based on workspace type
@@ -314,10 +339,10 @@
                                              '<ul class="image-list">',
                                                    '<li class="single-image-option">Single Image View</li>',
                                                    '<li class="book-option">Book View</li>',
-                                                   '<li class="scroll-option">Scroll View</li>',
                                                  '</ul>',
                                              '</a>',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
+                                             '<a href="javascript:;" class="mirador-btn mirador-icon-scroll-view"></a>',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
                                              '</div>',
                                              '<h3 class="window-manifest-title">{{title}}</h3>',
