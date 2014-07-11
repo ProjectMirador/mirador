@@ -4655,6 +4655,11 @@ window.Mirador = window.Mirador || function(config) {
       });
 
       ranges = _this.extractRangeTrees(ranges);
+      if (ranges.length < 2) {
+        ranges = ranges[0].children;
+
+      }
+
       return ranges;
     },
     extractRangeTrees: function(rangeList) {
