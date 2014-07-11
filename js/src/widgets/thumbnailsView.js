@@ -10,7 +10,7 @@
       element:              null,
       imagesList:           [],
       appendTo:             null,
-      thumbsHeight:         150,
+      thumbInfo:            {thumbsHeight: 150, listingCssCls: 'listing-thumbs', thumbnailCls: 'thumbnail-view'},
       parent:               null,
       panel:                false
     }, options);
@@ -25,10 +25,6 @@
         if (this.imageID !== null) {
             this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
         }
-        
-        if (this.panel) {
-            this.thumbsHeight = 80;
-        }
 
         this.loadContent();
         this.bindEvents();
@@ -37,17 +33,17 @@
     loadContent: function() {
       var _this = this,
       tplData = {
-        defaultHeight:  this.thumbsHeight,
-        listingCssCls:  this.panel ? 'panel-listing-thumbs' : 'listing-thumbs',
-        thumbnailCls:   this.panel ? 'panel-thumbnail-view' : 'thumbnail-view'
+        defaultHeight:  this.thumbInfo.thumbsHeight,
+        listingCssCls:  this.thumbInfo.listingCssCls,
+        thumbnailCls:   this.thumbInfo.thumbnailCls
       };
 
       tplData.thumbs = jQuery.map(this.imagesList, function(image, index) {
         var aspectRatio = image.height/image.width,
-        width = (_this.thumbsHeight/aspectRatio);
+        width = (_this.thumbInfo.thumbsHeight/aspectRatio);
 
         return {
-          thumbUrl: $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), _this.thumbsHeight),
+          thumbUrl: $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), _this.thumbInfo.thumbsHeight),
           title:    image.label,
           id:       image['@id'],
           width:    width,
