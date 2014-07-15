@@ -77,7 +77,7 @@
           '<div class="container">',
               '<div id="load-controls">',
               '<form action="" id="manifest-search-form">',
-                  '<input id="manifest-search" type="text" name="url-load" placeholder="Search...">',
+                  '<input id="manifest-search" type="text" name="url-load" placeholder="Filter objects...">',
               '</form>',
               '<form action="">',
                   '<h2>Add new item from URL</h2>',
