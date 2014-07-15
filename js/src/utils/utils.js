@@ -384,11 +384,8 @@
   };
   
   $.getRangeIDByCanvasID = function(manifest, canvasID /*, [given parent range] (for multiple ranges, later) */) {
-    console.log(canvasID);
-    console.log(manifest);
     var ranges = jQuery.grep(manifest.structures, function(range) { return jQuery.inArray(canvasID, range.canvases) > -1; }),
     rangeIDs = jQuery.map(ranges,  function(range) { return range['@id']; });
-    console.log(rangeIDs);
 
     return rangeIDs;
 
