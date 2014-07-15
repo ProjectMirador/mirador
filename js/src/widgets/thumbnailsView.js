@@ -69,7 +69,13 @@
            _this.element.find("img[data-image-id='"+imageID+"']").addClass('highlight');
            _this.element.find("img[data-image-id='"+imageID+"']").parent().addClass('highlight');
         });
-        //scroll to current image
+    },
+
+    currentImageChanged: function() {
+      var _this = this,
+      scrollPosition = _this.element.scrollLeft() + _this.element.find('.highlight').offset().left - _this.element.width()/2;
+      console.log(scrollPosition);
+      _this.element.scrollTo(scrollPosition, 1000);
     },
     
     bindEvents: function() {
@@ -90,7 +96,13 @@
         //add any other events that would trigger thumbnail display (resize, etc)
                 
         _this.element.find('.thumbnail-image').on('click', function() {
-           _this.parent.loadImageModeFromPanel(jQuery(this).attr('data-image-id'));
+          var canvasID = jQuery(this).attr('data-image-id');
+          _this.parent.setCurrentImageID(canvasID);
+        });
+
+        jQuery.subscribe('CurrentImageIDUpdated', function(imageID) {
+          console.log('event received by bottom panel: ' + imageID);
+          _this.currentImageChanged();
         });
     },
     

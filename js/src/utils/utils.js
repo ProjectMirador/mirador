@@ -365,18 +365,33 @@
 //http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
   $.isOnScreen = function(elem) {
     var win = jQuery(window);
-   var viewport = {
-        top : win.scrollTop(),
-        left : win.scrollLeft()
+    var viewport = {
+      top : win.scrollTop(),
+      left : win.scrollLeft()
     };
-   viewport.bottom = viewport.top + win.height();
+    viewport.bottom = viewport.top + win.height();
     viewport.right = viewport.left + win.width();
-    
+
     var el = jQuery(elem);
     var bounds = el.offset();
     bounds.bottom = bounds.top + el.height();
     bounds.right = bounds.left + el.width();
 
     return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
-};
+  };
+
+  $.getCanvasIDFromRangeID = function(manifest, rangeID /*, [given parent range] (for multiple ranges, later) */) {
+  };
+  
+  $.getRangeIDByCanvasID = function(manifest, canvasID /*, [given parent range] (for multiple ranges, later) */) {
+    console.log(canvasID);
+    console.log(manifest);
+    var ranges = jQuery.grep(manifest.structures, function(range) { return jQuery.inArray(canvasID, range.canvases) > -1; }),
+    rangeIDs = jQuery.map(ranges,  function(range) { return range['@id']; });
+    console.log(rangeIDs);
+
+    return rangeIDs;
+
+  };
+
 }(Mirador));

@@ -2392,6 +2392,7 @@ li.highlight {
 .sidePanel h1, .sidePanel h2, .sidePanel h3, .sidePanel h4 {
   margin:0;
   padding:0;
+  font-weight: normal;
 }
 .sidePanel h1:hover, .sidePanel h2:hover, .sidePanel h3:hover, .sidePanel h4:hover {
 }
@@ -2418,11 +2419,9 @@ li.highlight {
 
 .toc a:hover {
   cursor: pointer;
-  border-left: 5px solid deepSkyblue;
   background-color: #dddddd;
   display:block;
   overflow:hidden;
-  padding-left:10px;
 }
 .toc ul {
   margin:0;
@@ -2437,19 +2436,42 @@ li.highlight {
   box-sizing: border-box;
   display:block;
   position:relative;
+  margin-left:8px;
+}
+.toc li.open {
+
+}
+.toc li.selected {
+  cursor: pointer;
+  display:block;
+  overflow:hidden;
+  border-left: 4px solid deepSkyblue;
+}
+.toc li.selected ul {
+  display: block;
+  height:auto;
+}
+.toc li.selected-parent {
+
+}
+.toc li.hover {
+  border-left: 4px solid deepSkyblue;
 }
 
 .toc li:hover {
+  border-left: 4px solid deepSkyblue;
 }
 
-.toc li:hover a:hover {
-}
+/* .toc li:hover > h2 a { */
+/*   font-weight: bold; */
+/* } */
 
 .view-container {
   margin-left: 280px;
   height: 100%;
   position:relative;
 }
+
 .overlay {
   display:none;
   position: absolute;

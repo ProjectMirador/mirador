@@ -5,7 +5,9 @@
     jQuery.extend(true, this, {
       element:           null,
       appendTo:          null,
-      parent:            null
+      parent:            null,
+      previousSelectedElements: null,
+      selectedElements: null
     }, $.DEFAULT_SETTINGS, options);
 
     this.init();
@@ -17,6 +19,7 @@
       var _this = this;
       this.ranges = this.getTplData();
       this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
+      this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
       this.render();
       this.bindEvents();
       if (!_this.manifest.structures) {
@@ -47,6 +50,7 @@
 
       return ranges;
     },
+
     extractRangeTrees: function(rangeList) {
       var tree, parent;
       // Recursively build tree/table of contents data structure
@@ -98,6 +102,21 @@
     },
 
     render: function() {
+      var _this = this;
+      
+      // take previous "currently selected element" and unselect it and its parents.
+      _this.element.find('.selected').removeClass('selected');
+      _this.element.scrollTo('.selected');
+      _this.element.find('selected-parent').removeClass('selected-parent');
+      
+      // bind the parent markers.
+      jQuery.each(_this.selectedElements, function(index, range) {
+        // select new one.
+        var attrString = '[data-rangeid="' + range +'"]';
+        _this.element.find(attrString).parent().parent().addClass('selected');
+        console.log(_this.element.find(attrString));
+      });
+
     },
 
     bindEvents: function() {
@@ -105,17 +124,32 @@
 
       jQuery.subscribe('focusChanged', function(_, manifest, focusFrame) {
       });
+        
+      jQuery.subscribe('CurrentImageIDUpdated', function(imageID) {
+          console.log('event received by TOC: ' + imageID);
+          _this.selectedElements = $.getRangeIDByCanvasID(_this.manifest, _this.parent.currentImageID);
+          _this.render();
+      });
 
-      // click on single item.
-      
-      // hover on single item.
-      
       _this.element.find('li').has('ul').addClass('has-child');
       jQuery('.has-child ul').hide();
 
       jQuery('.has-child a').click(function() {
         event.stopPropagation();
-        jQuery(this).closest('li').find('ul:first').slideFadeToggle();
+
+        // For now it's alright if this data gets lost in the fray.
+        jQuery(this).closest('li').find('ul:first').addClass('open').slideFadeToggle();
+
+        // The real purpose of the event is to update the data on the parent
+        // by calling its "set" function. 
+        //
+        // The parent (window) then emits an event notifying all panels of 
+        // the update, so they can respond in their own unique ways
+        // without window having to know anything about their DOMs or 
+        // internal structure. 
+        var rangeID = jQuery(this).data().rangeid;
+        var canvasID = jQuery.grep(_this.manifest.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0];
+        _this.parent.setCurrentImageID(canvasID);
       });
 
     },
@@ -126,7 +160,7 @@
                     '<ul class="toc">',
                     '{{#nestedRangeLevel ranges}}',
                     '<li>',
-                    '{{{tocLevel label level}}}',
+                    '{{{tocLevel id label level}}}',
                     '{{#if children}}',
                     '<ul>',
                     '{{{nestedRangeLevel children}}}',
@@ -153,8 +187,8 @@
         return out;
       });
 
-      Handlebars.registerHelper('tocLevel', function(label, level) {
-        return '<h' + (level+1) + '><a>' + label + '</a></h' + (level+1) + '>';
+      Handlebars.registerHelper('tocLevel', function(id, label, level) {
+        return '<h' + (level+1) + '><a data-rangeID="' + id + '">' + label + '</a></h' + (level+1) + '>';
       });
 
       return template(tplData);
@@ -179,15 +213,8 @@
     show: function() {
       jQuery(this.appendTo).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
       this.parent.element.find('.view-container').css('margin-left', 280);
-    },
-    
-    updateImage: function(imageID) {
-    
-    },
-    
-    updateFocusImages: function(focusList) {
-    
     }
+    
   };
 
 }(Mirador));

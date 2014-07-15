@@ -140,7 +140,6 @@
         });
         
         //update panels with current image
-        if (this.sidePanel) { this.sidePanel.updateFocusImages(this.focusImages); }
         if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
 
@@ -254,7 +253,13 @@
     },
     
     updateFocusImages: function(imageList) {
-        this.focusImages = imageList;
+      this.focusImages = imageList;
+    },
+
+    setCurrentImageID: function(imageID) {
+      this.currentImageID = imageID;
+      this.loadImageModeFromPanel(imageID);
+      jQuery.publish('CurrentImageIDUpdated', {newImageID : imageID});
     },
     
     updateManifestInfo: function() {
