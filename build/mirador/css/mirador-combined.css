@@ -2250,7 +2250,7 @@ li.highlight {
     border:3px solid gray;
     margin:0 auto;
 }
-#manifest-search input {
+#manifest-search-form input {
     background:none;
     border:none;
     border-bottom:2px solid black;
@@ -2261,7 +2261,7 @@ li.highlight {
     left:0;
     color:black;
 }
-#manifest-search input:focus {
+#manifest-search-form input:focus {
     outline:none;
     border-color:deepskyblue;
 }

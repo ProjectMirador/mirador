@@ -221,12 +221,13 @@
     toggleScrollView: function(imageID) {
         this.currentImageID = imageID;
         if (this.focusModules.ScrollView === null) {
+           var containerHeight = this.element.find('.view-container').height();
            this.focusModules.ScrollView = new $.ThumbnailsView( 
              {manifest: this.manifest, 
              appendTo: this.element.find('.view-container'), 
              parent: this, imageID: this.currentImageID, 
              imagesList: this.imagesList, 
-             thumbInfo: {thumbsHeight: 500, listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}}
+             thumbInfo: {thumbsHeight: Math.floor(containerHeight * 0.9), listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}}
            );
         } else {
          var view = this.focusModules.ScrollView;
