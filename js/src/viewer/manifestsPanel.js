@@ -43,6 +43,17 @@
             jQuery.subscribe('manifestAdded', function(event, newManifest) {
               _this.manifestListItems.push(new $.ManifestsListItem({ parent: _this, manifestId: newManifest }));
             });
+            
+            //Filter manifests based on user input
+            this.element.find('#manifest-search').on('keyup input', function() {
+               if (this.value.length > 0) {
+                  _this.element.find('.items-listing li').show().filter(function() {
+                     return jQuery(this).text().toLowerCase().indexOf(_this.element.find('#manifest-search').val().toLowerCase()) === -1;
+                  }).hide();
+               } else {
+                  _this.element.find('.items-listing li').show();
+               }
+            });
         },
         
         toggleImageView: function(imageID, manifestURI) {
@@ -65,7 +76,7 @@
           '<div id="manifest-select-menu">',
           '<div class="container">',
               '<div id="load-controls">',
-              '<form action="" id="manifest-search">',
+              '<form action="" id="manifest-search-form">',
                   '<input id="manifest-search" type="text" name="url-load" placeholder="Search...">',
               '</form>',
               '<form action="">',
