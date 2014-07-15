@@ -4,6 +4,7 @@
 
     jQuery.extend(true, this, {
       element:           null,
+      scrollImageRatio:  0.9,
       appendTo:          null,
       manifest:          null,
       currentImageID:    null,
@@ -87,7 +88,17 @@
             _this.bindNavigation();
             _this.toggleFocus(focusState);
       });
-
+      
+      jQuery(window).resize(_.debounce(function(){
+          if (_this.focusModules.ScrollView) {
+              var containerHeight = _this.element.find('.view-container').height();
+              var triggerShow = false;
+              if (_this.currentFocus === "ScrollView") {
+                 triggerShow = true;
+              }
+              _this.focusModules.ScrollView.reloadImages(Math.floor(containerHeight * _this.scrollImageRatio), triggerShow);
+          }
+      }, 300));
     },
 
     clearViews: function() {
@@ -227,7 +238,7 @@
              appendTo: this.element.find('.view-container'), 
              parent: this, imageID: this.currentImageID, 
              imagesList: this.imagesList, 
-             thumbInfo: {thumbsHeight: Math.floor(containerHeight * 0.9), listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}}
+             thumbInfo: {thumbsHeight: Math.floor(containerHeight * this.scrollImageRatio), listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}}
            );
         } else {
          var view = this.focusModules.ScrollView;

@@ -21,6 +21,7 @@ module.exports = function(grunt) {
 
   // libraries/plugins
   vendors = [
+    'js/lib/underscore-min.js',
     'js/lib/jquery.min.js',
     'js/lib/handlebars.js',
     'js/lib/openseadragon.min.js',
