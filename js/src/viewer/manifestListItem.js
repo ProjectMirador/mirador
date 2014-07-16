@@ -53,7 +53,11 @@
             images: []
           };
           tplData.repoImage = (function() {
-            var imageName = $.DEFAULT_SETTINGS.repoImages[tplData.repository || 'other'];
+            var repo = tplData.repository;
+            if (tplData.repository === '(Added from URL)') {
+               repo = '';
+            }            
+            var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'];
 
             return 'images/' + imageName;
           })();
