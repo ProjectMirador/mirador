@@ -116,7 +116,6 @@
         // select new one.
         var attrString = '[data-rangeid="' + range +'"]';
         _this.element.find(attrString).parent().parent().addClass('selected');
-        console.log(_this.element.find(attrString));
       });
       
       var head = _this.element.find('.selected').first();
