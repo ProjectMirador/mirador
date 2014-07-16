@@ -520,7 +520,7 @@ li.highlight {
   opacity: 0.9;
   background-color: white;
   z-index: 4;
-  width: 30%;
+  width: 45%;
   overflow-y: scroll;
   height: 75%
 }

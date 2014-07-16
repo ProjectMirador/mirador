@@ -4380,24 +4380,22 @@ window.Mirador = window.Mirador || function(config) {
       this.metadataTypes.links = $.getMetadataLinks(_this.manifest);
       this.metadataTypes.metadata = $.getMetadataFields(_this.manifest);
 
-      jQuery.each(this.metadataTypes, function(metadata_key, metadata_value) {
-        tplData[metadata_key] = [];
+      jQuery.each(this.metadataTypes, function(metadataKey, metadataValue) {
+        tplData[metadataKey] = [];
 
-        // alert(type + ' ' + _this.metadata[type]);
-        jQuery.each(metadata_value, function(key, value) {
+        jQuery.each(metadataValue, function(key, value) {
           if (typeof value === 'object') {
             value = $.stringifyObject(value);
           }
 
           if (typeof value === 'string' && value !== '') {
-            tplData[metadata_key].push({
+            tplData[metadataKey].push({
               label: $.extractLabelFromAttribute(key),
               value: _this.addLinksToUris(value)
             });
           }
         });
       });
-
       this.element = jQuery(this.template(tplData)).appendTo(this.appendTo);
 
       this.bindEvents();
@@ -4438,14 +4436,12 @@ window.Mirador = window.Mirador || function(config) {
 
       if (typeof text === 'string') {
         matches = text.match(regexUrl);
-
         if (matches) {
           jQuery.each(matches, function(index, match) {
             textWithLinks = textWithLinks.replace(match, '<a href="' + match + '" target="_blank">' + match + '</a>');
           });
         }
       }
-
       return textWithLinks;
     },
     
@@ -4474,7 +4470,7 @@ window.Mirador = window.Mirador || function(config) {
             '<dt>{{label}}:</dt><dd>{{value}}</dd>',
           '{{/each}}',
         '</dl>'
-    ].join(''))
+    ].join(''), { noEscape: true })
 
   };
 
@@ -4820,7 +4816,6 @@ window.Mirador = window.Mirador || function(config) {
         // select new one.
         var attrString = '[data-rangeid="' + range +'"]';
         _this.element.find(attrString).parent().parent().addClass('selected');
-        console.log(_this.element.find(attrString));
       });
 
     },
