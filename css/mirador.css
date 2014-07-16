@@ -459,6 +459,7 @@ li.highlight {
   display:block;
   overflow:hidden;
 }
+
 .toc ul {
   margin:0;
   padding:0;
@@ -483,9 +484,8 @@ li.highlight {
   overflow:hidden;
   border-left: 4px solid deepSkyblue;
 }
-.toc li.selected ul {
-  display: block;
-  height:auto;
+.toc li.selected>h2 a, .toc li.selected>h3 a, .toc li.selected>h4 a, .toc li.selected>h5 a  {
+  text-shadow: 0 0 18px black;
 }
 .toc li.selected-parent {
 
@@ -496,6 +496,9 @@ li.highlight {
 
 .toc li:hover {
   border-left: 4px solid deepSkyblue;
+}
+.toc li:hover>h2 a, .toc li:hover>h3 a, .toc li:hover>h4 a, .toc li:hover>h5 a, .toc li:hover>h6 a {
+  text-shadow: 0 0 18px black;
 }
 
 /* .toc li:hover > h2 a { */

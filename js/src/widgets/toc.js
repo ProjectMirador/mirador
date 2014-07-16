@@ -7,7 +7,9 @@
       appendTo:          null,
       parent:            null,
       previousSelectedElements: null,
-      selectedElements: null
+      selectedElements: null,
+      selectContext:    null,
+      tocData: []
     }, $.DEFAULT_SETTINGS, options);
 
     this.init();
