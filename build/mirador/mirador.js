@@ -3892,20 +3892,20 @@ window.Mirador = window.Mirador || function(config) {
     ].join('')),
 
     manifestInfoTemplate: Handlebars.compile([
-                                             '<div class="manifest-info">',
-                                             '<div class="window-manifest-navigation">',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-2x"></i>',
-                                             '<ul class="image-list">',
-                                                   '<li class="single-image-option">Single Image View</li>',
-                                                   '<li class="book-option">Book View</li>',
-                                                 '</ul>',
-                                             '</a>',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-scroll-view"></a>',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
-                                             '</div>',
-                                             '<h3 class="window-manifest-title">{{title}}</h3>',
-                                             '</div>'
+     '<div class="manifest-info">',
+       '<div class="window-manifest-navigation">',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-2x"></i>',
+         '<ul class="image-list">',
+           '<li class="single-image-option">Single Image View</li>',
+           '<li class="book-option">Book View</li>',
+         '</ul>',
+         '</a>',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-scroll-view"></a>',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
+       '</div>',
+       '<h3 class="window-manifest-title">{{title}}</h3>',
+     '</div>'
     ].join(''))
   };
 
@@ -4692,13 +4692,14 @@ window.Mirador = window.Mirador || function(config) {
   $.TableOfContents.prototype = {
     init: function () {
       var _this = this;
-      this.ranges = this.getTplData();
-      this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
-      this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
-      this.render();
-      this.bindEvents();
       if (!_this.manifest.structures) {
         _this.hide();
+        return;
+      } else {
+        this.ranges = this.getTplData();
+        this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
+        this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
+        this.render();
       }
     },
 
@@ -4880,9 +4881,7 @@ window.Mirador = window.Mirador || function(config) {
     },
     
     hide: function() {
-      console.log('Hiding me!');
       jQuery(this.appendTo).hide();
-      console.log(this.parent);
       this.parent.element.find('.view-container').css('margin-left', 0);
     },
 

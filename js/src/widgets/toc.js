@@ -19,13 +19,14 @@
   $.TableOfContents.prototype = {
     init: function () {
       var _this = this;
-      this.ranges = this.getTplData();
-      this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
-      this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
-      this.render();
-      this.bindEvents();
       if (!_this.manifest.structures) {
         _this.hide();
+        return;
+      } else {
+        this.ranges = this.getTplData();
+        this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
+        this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
+        this.render();
       }
     },
 
@@ -207,9 +208,7 @@
     },
     
     hide: function() {
-      console.log('Hiding me!');
       jQuery(this.appendTo).hide();
-      console.log(this.parent);
       this.parent.element.find('.view-container').css('margin-left', 0);
     },
 
