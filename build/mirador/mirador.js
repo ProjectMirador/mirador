@@ -4695,12 +4695,13 @@ window.Mirador = window.Mirador || function(config) {
       if (!_this.manifest.structures) {
         _this.hide();
         return;
+      } else {
+        this.ranges = this.getTplData();
+        this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
+        this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
+        this.render();
+        this.bindEvents();
       }
-      this.ranges = this.getTplData();
-      this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
-      this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
-      this.render();
-      this.bindEvents();
     },
 
     getTplData: function() {  
