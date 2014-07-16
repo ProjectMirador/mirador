@@ -4396,6 +4396,7 @@ window.Mirador = window.Mirador || function(config) {
           }
         });
       });
+
       this.element = jQuery(this.template(tplData)).appendTo(this.appendTo);
 
       this.bindEvents();
@@ -4436,12 +4437,14 @@ window.Mirador = window.Mirador || function(config) {
 
       if (typeof text === 'string') {
         matches = text.match(regexUrl);
+
         if (matches) {
           jQuery.each(matches, function(index, match) {
             textWithLinks = textWithLinks.replace(match, '<a href="' + match + '" target="_blank">' + match + '</a>');
           });
         }
       }
+
       return textWithLinks;
     },
     

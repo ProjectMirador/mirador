@@ -522,7 +522,8 @@ li.highlight {
   z-index: 4;
   width: 45%;
   overflow-y: scroll;
-  height: 75%
+  height: 75%;
+  word-wrap: break-word;
 }
 
 .bottomPanel {
