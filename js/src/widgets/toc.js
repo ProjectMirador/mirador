@@ -19,14 +19,15 @@
   $.TableOfContents.prototype = {
     init: function () {
       var _this = this;
+      if (!_this.manifest.structures) {
+        _this.hide();
+        return;
+      }
       this.ranges = this.getTplData();
       this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
       this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
       this.render();
       this.bindEvents();
-      if (!_this.manifest.structures) {
-        _this.hide();
-      }
     },
 
     getTplData: function() {  
@@ -115,7 +116,6 @@
         // select new one.
         var attrString = '[data-rangeid="' + range +'"]';
         _this.element.find(attrString).parent().parent().addClass('selected');
-        console.log(_this.element.find(attrString));
       });
       
       var head = _this.element.find('.selected').first();
@@ -207,9 +207,7 @@
     },
     
     hide: function() {
-      console.log('Hiding me!');
       jQuery(this.appendTo).hide();
-      console.log(this.parent);
       this.parent.element.find('.view-container').css('margin-left', 0);
     },
 
