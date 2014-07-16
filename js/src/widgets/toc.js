@@ -19,13 +19,14 @@
   $.TableOfContents.prototype = {
     init: function () {
       var _this = this;
-      this.ranges = this.getTplData();
-      this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
-      this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
-      this.render();
-      this.bindEvents();
       if (!_this.manifest.structures) {
         _this.hide();
+        return;
+      } else {
+        this.ranges = this.getTplData();
+        this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
+        this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
+        this.render();
       }
     },
 
@@ -108,7 +109,6 @@
       
       // take previous "currently selected element" and unselect it and its parents.
       _this.element.find('.selected').removeClass('selected');
-      _this.element.scrollTo('.selected');
       _this.element.find('selected-parent').removeClass('selected-parent');
       
       // bind the parent markers.
@@ -118,7 +118,9 @@
         _this.element.find(attrString).parent().parent().addClass('selected');
         console.log(_this.element.find(attrString));
       });
-
+      
+      var head = _this.element.find('.selected').first();
+      _this.element.scrollTo(head, 800);
     },
 
     bindEvents: function() {
@@ -206,9 +208,7 @@
     },
     
     hide: function() {
-      console.log('Hiding me!');
       jQuery(this.appendTo).hide();
-      console.log(this.parent);
       this.parent.element.find('.view-container').css('margin-left', 0);
     },
 

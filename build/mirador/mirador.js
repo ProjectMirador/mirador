@@ -3689,15 +3689,15 @@ window.Mirador = window.Mirador || function(config) {
             jQuery.each(viewOptions, function(view, displayed) {
                 //instantiate any panels that exist for this view but are still null
                 if (view !== '' && _this[panelType] === null) {
-                    _this[panelType] = new $[view](
-                      {manifest: _this.manifest, 
+                    _this[panelType] = new $[view]({
+                      manifest: _this.manifest, 
                       appendTo: _this.element.find('.'+panelType), 
                       parent: _this, 
                       panel: true, 
                       imageID: _this.currentImageID, 
                       imagesList: _this.imagesList,
-                      thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}}
-                    );
+                      thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
+                    });
                 }
                 //toggle any valid panels
                 if (view !== '' && displayed) {   
@@ -3907,20 +3907,20 @@ window.Mirador = window.Mirador || function(config) {
     ].join('')),
 
     manifestInfoTemplate: Handlebars.compile([
-                                             '<div class="manifest-info">',
-                                             '<div class="window-manifest-navigation">',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-2x"></i>',
-                                             '<ul class="image-list">',
-                                                   '<li class="single-image-option">Single Image View</li>',
-                                                   '<li class="book-option">Book View</li>',
-                                                 '</ul>',
-                                             '</a>',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-scroll-view"></a>',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
-                                             '</div>',
-                                             '<h3 class="window-manifest-title">{{title}}</h3>',
-                                             '</div>'
+     '<div class="manifest-info">',
+       '<div class="window-manifest-navigation">',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-2x"></i>',
+         '<ul class="image-list">',
+           '<li class="single-image-option">Single Image View</li>',
+           '<li class="book-option">Book View</li>',
+         '</ul>',
+         '</a>',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-scroll-view"></a>',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
+       '</div>',
+       '<h3 class="window-manifest-title">{{title}}</h3>',
+     '</div>'
     ].join(''))
   };
 
@@ -4723,13 +4723,14 @@ window.Mirador = window.Mirador || function(config) {
   $.TableOfContents.prototype = {
     init: function () {
       var _this = this;
-      this.ranges = this.getTplData();
-      this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
-      this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
-      this.render();
-      this.bindEvents();
       if (!_this.manifest.structures) {
         _this.hide();
+        return;
+      } else {
+        this.ranges = this.getTplData();
+        this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
+        this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
+        this.render();
       }
     },
 
@@ -4812,7 +4813,6 @@ window.Mirador = window.Mirador || function(config) {
       
       // take previous "currently selected element" and unselect it and its parents.
       _this.element.find('.selected').removeClass('selected');
-      _this.element.scrollTo('.selected');
       _this.element.find('selected-parent').removeClass('selected-parent');
       
       // bind the parent markers.
@@ -4822,7 +4822,9 @@ window.Mirador = window.Mirador || function(config) {
         _this.element.find(attrString).parent().parent().addClass('selected');
         console.log(_this.element.find(attrString));
       });
-
+      
+      var head = _this.element.find('.selected').first();
+      _this.element.scrollTo(head, 800);
     },
 
     bindEvents: function() {
@@ -4910,9 +4912,7 @@ window.Mirador = window.Mirador || function(config) {
     },
     
     hide: function() {
-      console.log('Hiding me!');
       jQuery(this.appendTo).hide();
-      console.log(this.parent);
       this.parent.element.find('.view-container').css('margin-left', 0);
     },
 
@@ -5519,9 +5519,6 @@ jQuery.fn.scrollStop = function(callback) {
     return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
   };
 
-  $.getCanvasIDFromRangeID = function(manifest, rangeID /*, [given parent range] (for multiple ranges, later) */) {
-  };
-  
   $.getRangeIDByCanvasID = function(manifest, canvasID /*, [given parent range] (for multiple ranges, later) */) {
     var ranges = jQuery.grep(manifest.structures, function(range) { return jQuery.inArray(canvasID, range.canvases) > -1; }),
     rangeIDs = jQuery.map(ranges,  function(range) { return range['@id']; });

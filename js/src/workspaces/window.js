@@ -127,15 +127,15 @@
             jQuery.each(viewOptions, function(view, displayed) {
                 //instantiate any panels that exist for this view but are still null
                 if (view !== '' && _this[panelType] === null) {
-                    _this[panelType] = new $[view](
-                      {manifest: _this.manifest, 
+                    _this[panelType] = new $[view]({
+                      manifest: _this.manifest, 
                       appendTo: _this.element.find('.'+panelType), 
                       parent: _this, 
                       panel: true, 
                       imageID: _this.currentImageID, 
                       imagesList: _this.imagesList,
-                      thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}}
-                    );
+                      thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
+                    });
                 }
                 //toggle any valid panels
                 if (view !== '' && displayed) {   
@@ -345,20 +345,20 @@
     ].join('')),
 
     manifestInfoTemplate: Handlebars.compile([
-                                             '<div class="manifest-info">',
-                                             '<div class="window-manifest-navigation">',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-2x"></i>',
-                                             '<ul class="image-list">',
-                                                   '<li class="single-image-option">Single Image View</li>',
-                                                   '<li class="book-option">Book View</li>',
-                                                 '</ul>',
-                                             '</a>',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-scroll-view"></a>',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
-                                             '</div>',
-                                             '<h3 class="window-manifest-title">{{title}}</h3>',
-                                             '</div>'
+     '<div class="manifest-info">',
+       '<div class="window-manifest-navigation">',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-2x"></i>',
+         '<ul class="image-list">',
+           '<li class="single-image-option">Single Image View</li>',
+           '<li class="book-option">Book View</li>',
+         '</ul>',
+         '</a>',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-scroll-view"></a>',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
+       '</div>',
+       '<h3 class="window-manifest-title">{{title}}</h3>',
+     '</div>'
     ].join(''))
   };
 
