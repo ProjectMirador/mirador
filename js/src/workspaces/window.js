@@ -89,7 +89,7 @@
             _this.toggleFocus(focusState);
       });
       
-      jQuery(window).resize(_.debounce(function(){
+      jQuery(window).resize($.debounce(function(){
           if (_this.focusModules.ScrollView) {
               var containerHeight = _this.element.find('.view-container').height();
               var triggerShow = false;
