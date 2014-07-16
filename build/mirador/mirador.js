@@ -4730,6 +4730,7 @@ window.Mirador = window.Mirador || function(config) {
         this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
         this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
         this.render();
+        this.bindEvents();
       }
     },
 
