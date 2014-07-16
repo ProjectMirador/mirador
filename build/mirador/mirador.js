@@ -3153,7 +3153,11 @@ window.Mirador = window.Mirador || function(config) {
             images: []
           };
           tplData.repoImage = (function() {
-            var imageName = $.DEFAULT_SETTINGS.repoImages[tplData.repository || 'other'];
+            var repo = tplData.repository;
+            if (tplData.repository === '(Added from URL)') {
+               repo = '';
+            }            
+            var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'];
 
             return 'images/' + imageName;
           })();
@@ -3268,7 +3272,7 @@ window.Mirador = window.Mirador || function(config) {
         bindEvents: function() {
             var _this = this;
             // handle interface events
-            this.element.find('#load-controls form').on('submit', function() {
+            this.element.find('form#url-load-form').on('submit', function() {
                 event.preventDefault();
                 var url = jQuery(this).find('input').val();
                 _this.parent.addManifestFromUrl(url);
@@ -3316,9 +3320,9 @@ window.Mirador = window.Mirador || function(config) {
           '<div class="container">',
               '<div id="load-controls">',
               '<form action="" id="manifest-search-form">',
-                  '<input id="manifest-search" type="text" name="url-load" placeholder="Filter objects...">',
+                  '<input id="manifest-search" type="text" name="manifest-filter" placeholder="Filter objects...">',
               '</form>',
-              '<form action="">',
+              '<form action="" id="url-load-form">',
                   '<h2>Add new item from URL</h2>',
                   '<input type="text" name="url-load" placeholder="http://...">',
               '</form>',
