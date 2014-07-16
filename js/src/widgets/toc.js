@@ -108,7 +108,6 @@
       
       // take previous "currently selected element" and unselect it and its parents.
       _this.element.find('.selected').removeClass('selected');
-      _this.element.scrollTo('.selected');
       _this.element.find('selected-parent').removeClass('selected-parent');
       
       // bind the parent markers.
@@ -118,7 +117,9 @@
         _this.element.find(attrString).parent().parent().addClass('selected');
         console.log(_this.element.find(attrString));
       });
-
+      
+      var head = _this.element.find('.selected').first();
+      _this.element.scrollTo(head, 800);
     },
 
     bindEvents: function() {

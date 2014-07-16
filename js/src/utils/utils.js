@@ -380,9 +380,6 @@
     return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
   };
 
-  $.getCanvasIDFromRangeID = function(manifest, rangeID /*, [given parent range] (for multiple ranges, later) */) {
-  };
-  
   $.getRangeIDByCanvasID = function(manifest, canvasID /*, [given parent range] (for multiple ranges, later) */) {
     var ranges = jQuery.grep(manifest.structures, function(range) { return jQuery.inArray(canvasID, range.canvases) > -1; }),
     rangeIDs = jQuery.map(ranges,  function(range) { return range['@id']; });

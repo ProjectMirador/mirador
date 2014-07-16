@@ -116,15 +116,15 @@
             jQuery.each(viewOptions, function(view, displayed) {
                 //instantiate any panels that exist for this view but are still null
                 if (view !== '' && _this[panelType] === null) {
-                    _this[panelType] = new $[view](
-                      {manifest: _this.manifest, 
+                    _this[panelType] = new $[view]({
+                      manifest: _this.manifest, 
                       appendTo: _this.element.find('.'+panelType), 
                       parent: _this, 
                       panel: true, 
                       imageID: _this.currentImageID, 
                       imagesList: _this.imagesList,
-                      thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}}
-                    );
+                      thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
+                    });
                 }
                 //toggle any valid panels
                 if (view !== '' && displayed) {   
