@@ -59,7 +59,6 @@
         this.element.find('.highlight').removeClass('highlight');
         this.element.find("img[data-image-id='"+imageID+"']").addClass('highlight');
         this.element.find("img[data-image-id='"+imageID+"']").parent().addClass('highlight');
-        //scroll to current image
     },
     
     updateFocusImages: function(focusList) {
@@ -121,6 +120,23 @@
         imagepromise.done(function(image) {
             jQuery(imageElement).attr('src', image);
         });
+    },
+    
+    reloadImages: function(newThumbHeight, triggerShow) {
+       var _this = this;
+       this.thumbInfo.thumbsHeight = newThumbHeight;
+       
+       jQuery.each(this.imagesList, function(index, image) {
+          var aspectRatio = image.height/image.width,
+          width = (_this.thumbInfo.thumbsHeight/aspectRatio),
+          newThumbURL = $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), _this.thumbInfo.thumbsHeight),
+          id = image['@id'];
+          var imageElement = _this.element.find('img[data-image-id="'+id+'"]');
+          imageElement.attr('data', newThumbURL).attr('height', _this.thumbInfo.thumbsHeight).attr('width', width).attr('src', '');
+       });
+       if (triggerShow) {
+          this.show();
+       }
     },
     
     template: Handlebars.compile([
