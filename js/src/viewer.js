@@ -16,8 +16,8 @@
             workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
             windowSize:             {},
             resizeRatio:            {},
-            uiState:                {'manifestsPanelVisible': false, 'workspacesPanelVisible': false, 'currentWorkspaceVisible': false, 'optionsPanelVisible': false},
-            overlayState:           {},
+            currentWorkspaceVisible: true,
+            overlayStates:           {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false},
             manifests: {} 
         }, $.DEFAULT_SETTINGS, options);
 
@@ -52,7 +52,9 @@
 
             // add workset select menu (hidden by default) 
             this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
-
+            
+            //set this to be displayed
+            this.set('currentWorkspaceVisible', true);
         },
         
         get: function(prop, parent) {
@@ -75,36 +77,26 @@
         switchWorkspace: function(type) {
 
         },
-        // Sets the state of the viewer so that only one div can be visible/active and all others are hidden
-        toggleUI: function(state) {
-            var _this = this;
-            if (this.get(state, 'uiState') === true) {
-                this.set(state, false, {parent: 'uiState'});
-                return;
-            }
-            jQuery.each(this.uiState, function(key, value) {
-                if (key != state && _this.get(key, 'uiState') === true) {
-                    _this.set(key, false, {parent: 'uiState'});
-                }
-            });
-            this.set(state, true, {parent: 'uiState'});
-        },
         
-        // Sets state of overlays that layer over one of the UI states
-        toggleOverlay: function() {
-        
+        // Sets state of overlays that layer over the UI state
+        toggleOverlay: function(state) {
+           var _this = this;
+           //first confirm all others are off
+           jQuery.each(this.overlayStates, function(oState, value) {
+              if (state !== oState) {
+                 _this.set(oState, false, {parent: 'overlayStates'});
+              }
+           });
+           var currentState = this.get(state, 'overlayStates');
+           this.set(state, !currentState, {parent: 'overlayStates'});
         },
         
         toggleLoadWindow: function() {
-            this.toggleUI('manifestsPanelVisible');
+            this.toggleOverlay('manifestsPanelVisible');
         },
         
         toggleSwitchWorkspace: function() {
-            this.toggleUI('workspacesPanelVisible');
-        },
-        
-        toggleCurrentWorkspace: function() {
-            this.toggleUI('currentWorkspaceVisible');
+            this.toggleOverlay('workspacesPanelVisible');
         },
 
         getManifestsData: function() {
@@ -159,15 +151,18 @@
         },
         
         addManifestToWorkspace: function(manifestURI, uiState, imageID) {
-            var manifest = this.manifests[manifestURI];
+            var manifest = this.manifests[manifestURI],
+            _this = this;
+            
+            jQuery.each(this.overlayStates, function(oState, value) {
+                _this.set(oState, false, {parent: 'overlayStates'});
+            });
             
             jQuery.publish('manifestToWorkspace', [manifest, uiState, imageID]);
-            this.toggleCurrentWorkspace();
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {
            this.addManifestToWorkspace(manifestURI, 'ImageView', imageID);
-           //jQuery.publish('toggleToImage', imageID);
         },
         
         toggleThumbnailsViewInWorkspace: function(manifestURI) {

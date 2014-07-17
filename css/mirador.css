@@ -157,15 +157,16 @@
     position: absolute;
     height: 100%;
     width: 100%;
-    background-color: rgba(255,255,255,0.9);
+    background-color: rgba(255,255,255,0.94);
     display: none;
     overflow: hidden;
+    z-index: 4;
 }
 .container {
     position: relative;
     width: 100%;
     height:100%;
-    padding: 0 30px;
+    padding-left: 30px;
     box-sizing: border-box;
     overflow: hidden;
     margin:0 auto;
@@ -187,6 +188,8 @@
     padding-bottom: 10px;
     min-width:900px;
     position: relative;
+    padding-left: 5px;
+    margin-right: 10px;
 }
 .repository-label {
   border-top: 1px solid rgba(0,0,0,0.7);
@@ -196,7 +199,7 @@
   width:100%;
 }
 .items-listing li:hover {
-  background: white;
+  background: #dddddd;
   cursor: pointer;
 }
 .select-metadata {
@@ -533,7 +536,7 @@ li.highlight {
   left:0;
   right:0;
   height: 140px;
-  z-index: 4;
+  z-index: 3;
   display: none;
 }
 
