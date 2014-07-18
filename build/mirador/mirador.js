@@ -3744,8 +3744,8 @@ window.Mirador = window.Mirador || function(config) {
           this.currentImageMode = imageMode;
       }
       //set other focusStates to false (toggle to display none)
-      jQuery.each(this.focusModules, function(index, module) {
-         if (module) {
+      jQuery.each(this.focusModules, function(focusKey, module) {
+         if (module && focusState !== focusKey) {
              module.toggle(false);
          }
       });
