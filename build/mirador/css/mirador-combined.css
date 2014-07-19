@@ -3109,13 +3109,23 @@ ul.image-list {
    list-style: none;
    position: absolute;
    right: 5px;
-   padding: 10px;
-   margin: 1px 5px 5px 5px;
+   padding:0;
+   margin: 2px 5px 5px 5px;
 }
 
-.image-list li:hover {
+.image-list li {
+   margin:0;
    cursor: pointer;
+   box-sizing: border-box;
    background-color: #dddddd;  
+   padding: 10px;
+   width:100%;
+}
+.image-list li:hover {
+   border-left: 3px solid deepskyblue;
+   background-color: #dddddd;  
+   padding-left: 7px;
+   font-weight: bold;
 }
 
 a.mirador-icon-annotationDetail-toggle [class^="icon-"] {

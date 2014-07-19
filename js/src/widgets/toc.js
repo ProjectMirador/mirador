@@ -49,7 +49,6 @@
       ranges = _this.extractRangeTrees(ranges);
       if (ranges.length < 2) {
         ranges = ranges[0].children;
-
       }
 
       return ranges;
@@ -131,11 +130,11 @@
         
       jQuery.subscribe('CurrentImageIDUpdated', function(imageID) {
           console.log('event received by TOC: ' + imageID);
+          if (!_this.manifest.structures) { return; }
           _this.selectedElements = $.getRangeIDByCanvasID(_this.manifest, _this.parent.currentImageID);
           _this.render();
       });
 
-      _this.element.find('li').has('ul').addClass('has-child');
       jQuery('.has-child ul').hide();
 
       jQuery('.has-child a').click(function() {
@@ -161,18 +160,18 @@
     template: function(tplData) {
 
       var template = Handlebars.compile([
-                    '<ul class="toc">',
-                    '{{#nestedRangeLevel ranges}}',
-                    '<li>',
-                    '{{{tocLevel id label level}}}',
-                    '{{#if children}}',
-                    '<ul>',
-                    '{{{nestedRangeLevel children}}}',
-                    '</ul>',
-                    '{{/if}}',
-                    '<li>',
-                    '{{/nestedRangeLevel}}',
-                    '</ul>'
+        '<ul class="toc">',
+          '{{#nestedRangeLevel ranges}}',
+            '<li class="{{#if children}}has-child{{else}}leaf-item{{/if}}"">',
+              '{{{tocLevel id label level}}}',
+              '{{#if children}}',
+                '<ul>',
+                '{{{nestedRangeLevel children}}}',
+                '</ul>',
+              '{{/if}}',
+            '<li>',
+          '{{/nestedRangeLevel}}',
+        '</ul>'
       ].join(''));
 
       var previousTemplate;
