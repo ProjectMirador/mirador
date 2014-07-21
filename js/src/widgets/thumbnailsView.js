@@ -73,7 +73,6 @@
     currentImageChanged: function() {
       var _this = this,
       scrollPosition = _this.element.scrollLeft() + _this.element.find('.highlight').offset().left - _this.element.width()/2;
-      console.log(scrollPosition);
       _this.element.scrollTo(scrollPosition, 1000);
     },
     
@@ -100,7 +99,6 @@
         });
 
         jQuery.subscribe('CurrentImageIDUpdated', function(imageID) {
-          console.log('event received by bottom panel: ' + imageID);
           _this.currentImageChanged();
         });
     },
