@@ -1792,46 +1792,6 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
 }
 
 
-/* status bar
----------------------------------------------------------------------------- */
-.mirador-status-bar {
-  background-color: #ccc;
-  border-top: 1px solid #000;
-  bottom: 0;
-  color: #000;
-  position: fixed;
-}
-
-.mirador-status-bar-msg-left, .mirador-status-bar-msg-right {
-  color: #666;
-  float: left;
-  overflow: hidden;
-  padding: 4px 10px;
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 40%;
-}
-
-.mirador-status-bar-msg-right {
-  float: right;
-  text-align: right;
-}
-
-/* main menu window options
----------------------------------------------------------------------------- */
-.mirador-window-options-menu {
-  list-style: none;
-  margin: 0;
-  padding: 10px 5px;
-}
-
-.mirador-window-options-menu li {
-  cursor: pointer;
-  padding: 3px 5px;
-}
-
-
 /* main menu load-window
 ---------------------------------------------------------------------------- */
 
@@ -1869,31 +1829,6 @@ iframe.ui-layout-mask {}	/* extra mask for objects/applets */
 
 .mirador-listing-collections li a {
   cursor: pointer;
-}
-
-
-/* main menu clear storage
----------------------------------------------------------------------------- */
-.mirador-main-menu-clear-local-storage {
-  line-height: 1.6;
-  width: 250px;
-  text-align: center;
-}
-
-.mirador-main-menu-clear-local-storage p:first-child {
-  padding-bottom: 10px;
-}
-
-.mirador-main-menu-clear-local-storage a.btn-cancel,
-.mirador-main-menu-clear-local-storage a.btn-clear {
-  padding: 5px 10px;
-}
-
-.mirador-main-menu-clear-local-storage a.btn-clear {
-  background-color: #0052A3;
-  border-radius: 4px;
-  color: #fff;
-  margin-left: 5px;
 }
 
 /* widget
