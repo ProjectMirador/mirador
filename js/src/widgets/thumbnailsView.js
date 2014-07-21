@@ -72,8 +72,9 @@
 
     currentImageChanged: function() {
       var _this = this,
-      scrollPosition = _this.element.scrollLeft() + _this.element.find('.highlight').offset().left - _this.element.width()/2;
-      _this.element.scrollTo(scrollPosition, 1000);
+      target = _this.element.find('.highlight'),
+      scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
+      _this.element.scrollTo(scrollPosition, 900);
     },
     
     bindEvents: function() {

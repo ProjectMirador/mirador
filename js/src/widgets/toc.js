@@ -9,7 +9,7 @@
       previousSelectedElements: null,
       selectedElements: null,
       selectContext:    null,
-      tocData: []
+      tocData: {}
     }, $.DEFAULT_SETTINGS, options);
 
     this.init();
@@ -25,6 +25,7 @@
       } else {
         this.ranges = this.getTplData();
         this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
+        this.initTocData();
         this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
         this.render();
         this.bindEvents();
@@ -52,6 +53,20 @@
       }
 
       return ranges;
+    },
+
+    initTocData: function() {
+      var _this = this;
+      jQuery.each(_this.ranges, function(index, item) {
+        var rangeID = item.id,
+        attrString = '[data-rangeid="' + rangeID +'"]';
+
+        _this.tocData[item.id] = {
+          element: _this.element.find(attrString),
+          open: false,
+          selected: false
+        };
+      });
     },
 
     extractRangeTrees: function(rangeList) {
