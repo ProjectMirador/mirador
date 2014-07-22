@@ -4582,8 +4582,9 @@ window.Mirador = window.Mirador || function(config) {
 
     currentImageChanged: function() {
       var _this = this,
-      scrollPosition = _this.element.scrollLeft() + _this.element.find('.highlight').offset().left - _this.element.width()/2;
-      _this.element.scrollTo(scrollPosition, 1000);
+      target = _this.element.find('.highlight'),
+      scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
+      _this.element.scrollTo(scrollPosition, 900);
     },
     
     bindEvents: function() {
@@ -4705,7 +4706,7 @@ window.Mirador = window.Mirador || function(config) {
       previousSelectedElements: null,
       selectedElements: null,
       selectContext:    null,
-      tocData: []
+      tocData: {}
     }, $.DEFAULT_SETTINGS, options);
 
     this.init();
@@ -4721,6 +4722,7 @@ window.Mirador = window.Mirador || function(config) {
       } else {
         this.ranges = this.getTplData();
         this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
+        this.initTocData();
         this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
         this.render();
         this.bindEvents();
@@ -4748,6 +4750,20 @@ window.Mirador = window.Mirador || function(config) {
       }
 
       return ranges;
+    },
+
+    initTocData: function() {
+      var _this = this;
+      jQuery.each(_this.ranges, function(index, item) {
+        var rangeID = item.id,
+        attrString = '[data-rangeid="' + rangeID +'"]';
+
+        _this.tocData[item.id] = {
+          element: _this.element.find(attrString),
+          open: false,
+          selected: false
+        };
+      });
     },
 
     extractRangeTrees: function(rangeList) {
