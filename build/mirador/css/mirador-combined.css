@@ -2208,6 +2208,15 @@ table {
   margin-right:0;
 }
 
+.preview-image {
+  background-color: #eee;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
+  float:left;
+  margin-right:15px;
+  min-height: 25px;
+  min-width: 25px;
+}
+
 .thumbnail-image {
   background-color: gray;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);

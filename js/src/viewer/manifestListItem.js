@@ -77,6 +77,7 @@
             tplData.images.push({
               url: url,
               width: width,
+              height: _this.thumbHeight,
               id: canvas['@id']
             });
           }
@@ -124,7 +125,7 @@
                       '</div>',
                       '<div class="preview-images">',
                       '{{#each images}}',
-                        '<img src="{{url}}" width="{{width}}" class="thumbnail-image flash" data-image-id="{{id}}">',
+                        '<img src="{{url}}" width="{{width}}" height="{{height}}" class="preview-image flash" data-image-id="{{id}}">',
                       '{{/each}}',
                       '</div>',
                       // '{{#if remaining}}',
