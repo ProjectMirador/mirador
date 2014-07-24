@@ -2412,15 +2412,13 @@ li.highlight {
   list-style-type:none;
 }
 
-.toc a {
+.toc a.toc-link {
   color: black;
   padding: 10px;
-  padding-left:15px;
-  padding-right:10px;
   display: block;
 }
 
-.toc a:hover {
+.toc a.toc-link:hover {
   cursor: pointer;
   background-color: #dddddd;
   display:block;
@@ -2441,24 +2439,28 @@ li.highlight {
   display:block;
   position:relative;
   margin-left:8px;
-}
-.toc li i {
-  display: block;
-  position: absolute;
-  left: 0;
-  top:15px;
+  margin-bottom: 5px;
 }
 .toc li.open {
 
 }
 .toc li.selected {
   cursor: pointer;
-  display:block;
   overflow:hidden;
   border-left: 4px solid deepSkyblue;
 }
-.toc li.selected>h2 a, .toc li.selected>h3 a, .toc li.selected>h4 a, .toc li.selected>h5 a  {
-  text-shadow: 0 0 18px black;
+.toc li i {
+  color: rgba(0,0,0,0.4);
+}
+
+.toc li.has-child>i.star {
+  display: none;
+}
+.toc li.leaf-item>i.caret {
+  display: none;
+}
+.toc li.selected>h2 a.toc-link , .toc li.selected>h3 a.toc-link, .toc li.selected>h4 a.toc-link, .toc li.selected>h5 a.toc-link  {
+  font-weight: bold;
 }
 .toc li.selected-parent {
 
@@ -2470,8 +2472,8 @@ li.highlight {
 .toc li:hover {
   border-left: 4px solid deepSkyblue;
 }
-.toc li:hover>h2 a, .toc li:hover>h3 a, .toc li:hover>h4 a, .toc li:hover>h5 a, .toc li:hover>h6 a {
-  text-shadow: 0 0 18px black;
+.toc li:hover>h2 a.toc-link, .toc li:hover>h3 a.toc-link, .toc li:hover>h4 a.toc-link, .toc li:hover>h5 a.toc-link, .toc li:hover>h6 a.toc-link {
+  font-weight: bold;
 }
 
 /* .toc li:hover > h2 a { */

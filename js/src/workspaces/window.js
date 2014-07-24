@@ -299,7 +299,7 @@
         }
     },
     
-    //based on currentFocus
+    // based on currentFocus
     bindNavigation: function() {
         var _this = this;
         this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
@@ -331,7 +331,7 @@
         });
     },
 
-    //template should be based on workspace type
+    // template should be based on workspace type
     template: Handlebars.compile([
      '<div class="window">',
        '<div class="content-container">',

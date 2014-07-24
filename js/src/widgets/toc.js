@@ -23,19 +23,18 @@
         _this.hide();
         return;
       } else {
-        this.ranges = this.getTplData();
-        this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
-        this.initTocData();
+        this.ranges = this.setRanges();
+        this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
+        this.tocData = this.initTocData();
         this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
-        this.render();
         this.bindEvents();
+        this.render();
       }
     },
 
-    getTplData: function() {  
+    setRanges: function() {
       var _this = this,
       ranges = [];
-      if (!_this.manifest.structures) { return []; }
       jQuery.each(_this.manifest.structures, function(index, range) {
         if (range['@type'] === 'sc:Range') {
           ranges.push({
@@ -47,7 +46,14 @@
         }
       });
 
-      ranges = _this.extractRangeTrees(ranges);
+      return ranges;
+
+    },
+
+    getTplData: function() {  
+      var _this = this,
+      ranges = _this.extractRangeTrees(_this.ranges);
+      
       if (ranges.length < 2) {
         ranges = ranges[0].children;
       }
@@ -56,17 +62,21 @@
     },
 
     initTocData: function() {
-      var _this = this;
+      var _this = this,
+      tocData = {};
+
       jQuery.each(_this.ranges, function(index, item) {
         var rangeID = item.id,
         attrString = '[data-rangeid="' + rangeID +'"]';
 
-        _this.tocData[item.id] = {
+        tocData[item.id] = {
           element: _this.element.find(attrString),
           open: false,
           selected: false
         };
       });
+
+      return tocData;
     },
 
     extractRangeTrees: function(rangeList) {
@@ -121,11 +131,7 @@
 
     render: function() {
       var _this = this;
-      
-      // take previous "currently selected element" and unselect it and its parents.
-      _this.element.find('.selected').removeClass('selected');
-      _this.element.find('selected-parent').removeClass('selected-parent');
-      
+
       // bind the parent markers.
       jQuery.each(_this.selectedElements, function(index, range) {
         // select new one.
@@ -150,9 +156,27 @@
           _this.render();
       });
 
-      jQuery('.has-child ul').hide();
+      jQuery('.has-child a').on('click', function() {
+        event.stopPropagation();
+        // The purpose of the immediate event is to update the data on the parent
+        // by calling its "set" function. 
+        // 
+        // The parent (window) then emits an event notifying all panels of 
+        // the update, so they can respond in their own unique ways
+        // without window having to know anything about their DOMs or 
+        // internal structure. 
+        var rangeID = jQuery(this).data().rangeid,
+        canvasID = jQuery.grep(_this.manifest.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0],
+        isLeaf = jQuery(this).closest('li').hasClass('leaf-item');
 
-      jQuery('.has-child a').click(function() {
+        if (isleaf) {
+          _this.parent.setCurrentImageID(canvasID);
+        } else {
+          _this.parent.setCursorFrameStart(canvasID);
+        }
+      });
+      
+      jQuery('.caret').on('click', function() {
         event.stopPropagation();
 
         // For now it's alright if this data gets lost in the fray.
@@ -160,16 +184,29 @@
 
         // The real purpose of the event is to update the data on the parent
         // by calling its "set" function. 
-        //
+        
         // The parent (window) then emits an event notifying all panels of 
         // the update, so they can respond in their own unique ways
         // without window having to know anything about their DOMs or 
         // internal structure. 
-        var rangeID = jQuery(this).data().rangeid;
-        var canvasID = jQuery.grep(_this.manifest.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0];
-        _this.parent.setCurrentImageID(canvasID);
       });
 
+    },
+
+    expandItem: function() {
+      console.log('expandItem');
+    },
+
+    noOpExandItem: function() {
+      console.log('noOpExpandItem');
+    },
+
+    focusCanvas: function() {
+      console.log('focusCanvas');
+    },
+
+    returnToPlace: function() {
+      console.log('returnToPlace');
     },
 
     template: function(tplData) {
@@ -178,10 +215,7 @@
         '<ul class="toc">',
           '{{#nestedRangeLevel ranges}}',
             '<li class="{{#if children}}has-child{{else}}leaf-item{{/if}}"">',
-              '{{#if children}}',
-              '<i class="fa fa-caret-right"></i>',
-              '{{/if}}',
-              '{{{tocLevel id label level}}}',
+              '{{{tocLevel id label level children}}}',
               '{{#if children}}',
                 '<ul>',
                 '{{{nestedRangeLevel children}}}',
@@ -208,8 +242,10 @@
         return out;
       });
 
-      Handlebars.registerHelper('tocLevel', function(id, label, level) {
-        return '<h' + (level+1) + '><a data-rangeID="' + id + '">' + label + '</a></h' + (level+1) + '>';
+      Handlebars.registerHelper('tocLevel', function(id, label, level, children) {
+        var caret = '<i class="fa fa-caret-right caret"></i>',
+        cert = '<i class="fa fa-certificate star"></i>';
+        return '<h' + (level+1) + '><a class="toc-link" data-rangeID="' + id + '">' + caret + cert + '<span class="label">' + label + '</span></a></h' + (level+1) + '>';
       });
 
       return template(tplData);
