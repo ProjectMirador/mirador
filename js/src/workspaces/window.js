@@ -137,15 +137,22 @@
                       thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
                     });
                 }
+                
                 //toggle any valid panels
                 if (view !== '' && displayed) {   
                     _this.togglePanels(panelType, displayed, view, state);
                 }
+                
                 //hide any panels instantiated but not available to this view
                 if (view === '' && _this[panelType]) {
                    _this.togglePanels(panelType, displayed, view, state);
-                   console.log(panelType + ": " + displayed);
                 }
+                
+                //lastly, adjust height for non-existent panels
+                if (view === '') {
+                   _this.adjustFocusSize(panelType, displayed);
+                }
+                
                 //update current image for all valid panels
             });
         });
@@ -173,6 +180,33 @@
         //update state in focusOverlaysAvailable
         this.focusOverlaysAvailable[focusState][panelType][viewType] = panelState;
         this[panelType].toggle(panelState);
+        this.adjustFocusSize(panelType, panelState);
+    },
+    
+    minMaxBottomPanel: function(element) {
+        if (element.hasClass('mirador-icon-minimize')) {
+            //hide all other siblings, change icon to maximize, change height of parent
+            element.removeClass('mirador-icon-minimize').addClass('mirador-icon-maximize');
+            element.siblings().hide();
+            element.parent().addClass('minimized');
+            //adjust height of focus element
+            this.focusModules[this.currentFocus].adjustHeight('focus-bottom-panel-minimized', false);
+        } else {
+            //show all other siblings, change icon to minimize, change height of parent
+            element.removeClass('mirador-icon-maximize').addClass('mirador-icon-minimize');
+            element.siblings().show();
+            element.parent().removeClass('minimized');
+            //adjust height of focus element
+            this.focusModules[this.currentFocus].adjustHeight('focus-bottom-panel-minimized', true);
+        }
+    },
+    
+    adjustFocusSize: function(panelType, panelState) {
+        if (panelType === 'bottomPanel') {
+            this.focusModules[this.currentFocus].adjustHeight('focus-max-height', panelState);
+        } else if (panelType === 'sidePanel') {
+            this.focusModules[this.currentFocus].adjustWidth('focus-max-height', panelState);
+        } else {}
     },
     
     toggleMetadataOverlay: function(focusState) {
@@ -329,6 +363,10 @@
         this.element.find('.mirador-icon-scroll-view').on('click', function() {
            _this.toggleScrollView(_this.currentImageID);
         });
+        
+        this.element.find('.mirador-thumb-panel').on('click', function() {
+           _this.minMaxBottomPanel(jQuery(this));
+        });
     },
 
     //template should be based on workspace type
@@ -338,7 +376,9 @@
          '<div class="sidePanel"></div>',
          '<div class="view-container">',
            '<div class="overlay"></div>',
-           '<div class="bottomPanel"></div>',
+           '<div class="bottomPanel">',
+           '<span class="mirador-btn mirador-thumb-panel mirador-icon-minimize"></span>',
+           '</div>',
          '</div>',
        '</div>',
      '</div>'

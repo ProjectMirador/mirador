@@ -79,6 +79,18 @@
         jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
     },
     
+    adjustWidth: function(className, hasClass) {
+       
+    },
+    
+    adjustHeight: function(className, hasClass) {
+        if (hasClass) {
+           this.element.removeClass(className);
+        } else {
+           this.element.addClass(className);
+        }
+    },
+    
     updateImage: function(imageID) {
         this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
         this.currentImg = this.imagesList[this.currentImgIndex];

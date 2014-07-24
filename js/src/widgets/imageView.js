@@ -33,8 +33,6 @@
 
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.parent.updateFocusImages([this.imageID]);
-        
-        this.bindEvents();
     },
     
     template: Handlebars.compile([
@@ -42,9 +40,16 @@
        '</div>'
     ].join('')),
     
-    bindEvents: function() {
+    bindOSDEvents: function() {
        var _this = this;
-
+       
+       this.element.find('.mirador-icon-next').on('click', function() {
+          _this.next();
+       });
+       
+       this.element.find('.mirador-icon-previous').on('click', function() {
+          _this.previous();
+       });
     },
     
     toggle: function(stateValue) {
@@ -61,6 +66,18 @@
 
     show: function() {
         jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+    },
+    
+    adjustWidth: function(className, hasClass) {
+       
+    },
+    
+    adjustHeight: function(className, hasClass) {
+        if (hasClass) {
+           this.element.removeClass(className);
+        } else {
+           this.element.addClass(className);
+        }
     },
 
     createOpenSeadragonInstance: function(imageUrl, osdBounds) {
@@ -82,10 +99,13 @@
       .appendTo(this.element);
 
       this.osd = $.OpenSeadragon({
-        'id':           elemOsd.attr('id'),
+        'id':           osdId,
         'tileSources':  $.Iiif.prepJsonForOsd(infoJson)
       });
-
+            
+      this.addOSDControls();
+      this.bindOSDEvents();
+            
       this.osd.addHandler('open', function(){
         _this.zoomLevel = _this.osd.viewport.getZoom();
 
@@ -101,6 +121,35 @@
         this.currentImg = this.imagesList[this.currentImgIndex];
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.parent.updateFocusImages([imageID]);
+    },
+    
+    addOSDControls: function() {
+        var div = document.createElement("div");
+        var previous = document.createElement("a");
+        previous.className = 'mirador-btn mirador-icon-previous';
+        var next = document.createElement("a");
+        next.className = 'mirador-btn mirador-icon-next';
+        
+        div.appendChild(previous);
+        div.appendChild(next);
+
+        this.osd.addControl(div, {anchor: OpenSeadragon.ControlAnchor.BOTTOM_RIGHT});
+    },
+    
+    next: function() {
+      var next = this.currentImgIndex + 1;
+
+      if (next < this.imagesList.length) {
+        this.parent.setCurrentImageID(this.imagesList[next]['@id']);
+      }
+    },
+
+    previous: function() {
+      var prev = this.currentImgIndex - 1;
+
+      if (prev >= 0) {
+        this.parent.setCurrentImageID(this.imagesList[prev]['@id']);
+      }
     }
 
   };

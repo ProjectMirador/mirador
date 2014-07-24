@@ -2505,9 +2505,13 @@ li.highlight {
   bottom:0;
   left:0;
   right:0;
-  height: 140px;
+  height: 20%;
   z-index: 3;
   display: none;
+}
+
+.bottomPanel.minimized {
+  height: 5%;
 }
 
 /* window views
@@ -2515,18 +2519,26 @@ li.highlight {
 
 .thumbnail-view, .image-view, .book-view, .scroll-view {
     position: absolute;
-    height: 100%;
+    height: 80%;
     width: 100%;
     background-color: rgba(255,255,255,0.9);
     display: none;
     overflow-y: scroll;
 }
 .image-view, .book-view {
-  overflow:hidden;
+  overflow: hidden;
 }
 .scroll-view {
   overflow-y: hidden;
   overflow-x: scroll;
+}
+
+.focus-max-height {
+   height: 100%;
+}
+
+.focus-bottom-panel-minimized {
+   height: 95%;
 }
 
 /* panels
@@ -2537,6 +2549,7 @@ li.highlight {
     height: 100%;
     width: 100%;
     overflow-x: scroll;
+    margin-top: 10px;
 }
 
 .panel-thumbnail-view ul.panel-listing-thumbs {
@@ -2552,7 +2565,7 @@ li.highlight {
   box-sizing:border-box;
   /*float: left;*/
   /*margin: 0 0 15px 0;*/
-  padding: 10px 10px 0px 10px;
+  padding: 0px 10px 0px 10px;
   transition: all 0.05s ease-out;
   display: inline-block;
 }
@@ -2633,6 +2646,9 @@ li.highlight {
   display: none;
 }
 
+.mirador-osd img {
+  padding: 2px !important;
+}
 
 /* image view
 ---------------------------------------------------------------------------- */
@@ -3215,7 +3231,19 @@ a.mirador-icon-image-view [class^="icon-"] {
 .mirador-icon-thumbnails-view.selected { background-position: -301px -60px; }
 .mirador-icon-thumbnails-view:hover { background-position: -301px -60px; }
 
+.mirador-icon-minimize {
+   background-position: -40px -2px;
+   float: right;
+   margin-right: 2px;
+   margin-top: 0px;
+}
 
+.mirador-icon-maximize {
+   background-position: -60px -2px;
+   float: right;
+   margin-right: 2px;
+   margin-top: 0px;
+}
 
 /* jquery-ui css overrides
 ---------------------------------------------------------------------------- */
