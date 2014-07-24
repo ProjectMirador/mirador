@@ -3213,6 +3213,7 @@ a.mirador-icon-image-view [class^="icon-"] {
 
 .mirador-icon-metadata-view { background-position: -120px -40px; }
 .mirador-icon-metadata-view:hover { background-position: -120px -60px; }
+.mirador-icon-metadata-view.selected { background-position: -120px -60px; }
 
 .mirador-icon-choices { background-position: -320px -40px; }
 .mirador-icon-choices:hover { background-position: -320px -60px; }

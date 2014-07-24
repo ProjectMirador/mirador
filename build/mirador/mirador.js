@@ -3767,7 +3767,21 @@ window.Mirador = window.Mirador || function(config) {
     },
     
     toggleMetadataOverlay: function(focusState) {
-        this.togglePanels('overlay', !this.focusOverlaysAvailable[focusState].overlay.MetadataView, 'MetadataView', focusState);
+        var _this = this;
+        var currentState = this.focusOverlaysAvailable[focusState].overlay.MetadataView;
+        if (currentState) {
+            this.element.find('.mirador-icon-metadata-view').removeClass('selected');
+        } else {
+            this.element.find('.mirador-icon-metadata-view').addClass('selected');
+        }
+        //set overlay for all focus types to same value
+        jQuery.each(this.focusOverlaysAvailable, function(focusType, options) {
+            if (focusState !== focusType) {
+                this.overlay.MetadataView = !currentState;
+            }
+        });
+        //and then do toggling for current focus
+        this.togglePanels('overlay', !currentState, 'MetadataView', focusState);
     },
 
     toggleFocus: function(focusState, imageMode) {
@@ -3887,6 +3901,10 @@ window.Mirador = window.Mirador || function(config) {
                break;
             default:
                break;
+        }
+        
+        if (this.focusOverlaysAvailable[this.currentFocus].overlay.MetadataView) {
+            this.element.find('.mirador-icon-metadata-view').addClass('selected');
         }
     },
     
