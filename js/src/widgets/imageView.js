@@ -103,7 +103,6 @@
         'tileSources':  $.Iiif.prepJsonForOsd(infoJson)
       });
             
-      this.addOSDControls();
       this.bindOSDEvents();
             
       this.osd.addHandler('open', function(){
@@ -121,19 +120,6 @@
         this.currentImg = this.imagesList[this.currentImgIndex];
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.parent.updateFocusImages([imageID]);
-    },
-    
-    addOSDControls: function() {
-        var div = document.createElement("div");
-        var previous = document.createElement("a");
-        previous.className = 'mirador-btn mirador-icon-previous';
-        var next = document.createElement("a");
-        next.className = 'mirador-btn mirador-icon-next';
-        
-        div.appendChild(previous);
-        div.appendChild(next);
-
-        this.osd.addControl(div, {anchor: OpenSeadragon.ControlAnchor.BOTTOM_RIGHT});
     },
     
     next: function() {

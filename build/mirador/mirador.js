@@ -4014,8 +4014,6 @@ window.Mirador = window.Mirador || function(config) {
        
        this.stitchList = this.getStitchList();
        this.createOpenSeadragonInstance();
-       
-       this.bindEvents();
     },
     
     template: Handlebars.compile([
@@ -4023,8 +4021,16 @@ window.Mirador = window.Mirador || function(config) {
        '</div>'
     ].join('')),
     
-    bindEvents: function() {
-    
+    bindOSDEvents: function() {
+       var _this = this;
+       
+       this.element.find('.mirador-icon-next').on('click', function() {
+          _this.next();
+       });
+       
+       this.element.find('.mirador-icon-previous').on('click', function() {
+          _this.previous();
+       });
     },
     
     toggle: function(stateValue) {
@@ -4092,6 +4098,8 @@ window.Mirador = window.Mirador || function(config) {
 	'collectionTileMargin': this.stitchTileMargin,
 	'collectionTileSize': 1600
       });
+      
+      this.bindOSDEvents();
 
       this.osd.addHandler('open', function(){
         _this.zoomLevel = _this.osd.viewport.getZoom();
@@ -4122,19 +4130,14 @@ window.Mirador = window.Mirador || function(config) {
         next = this.currentImgIndex + 2;
       }
       if (next < this.imagesList.length) {
-        this.currentImgIndex = next;
-        this.currentImg = this.imagesList[next];
-
-        this.stitchList = this.getStitchList();
-
-        this.createOpenSeadragonInstance();
+        this.parent.setCurrentImageID(this.imagesList[next]['@id']);
       }
     },
 
     // previous two pages for paged objects
     // need previous single page for lining things up
     // don't need for continuous or individuals
-    prev: function() {
+    previous: function() {
       var prev;
       if (this.currentImgIndex % 2 === 0) {
         prev = this.currentImgIndex - 2;
@@ -4142,12 +4145,7 @@ window.Mirador = window.Mirador || function(config) {
         prev = this.currentImgIndex - 1;
       }
       if (prev >= 0) {
-        this.currentImgIndex = prev;
-        this.currentImg = this.imagesList[prev];
-        
-        this.stitchList = this.getStitchList();
-
-        this.createOpenSeadragonInstance();
+        this.parent.setCurrentImageID(this.imagesList[prev]['@id']);
       }
     },
     
@@ -4374,7 +4372,7 @@ window.Mirador = window.Mirador || function(config) {
         'tileSources':  $.Iiif.prepJsonForOsd(infoJson)
       });
             
-      this.addOSDControls();
+      //this.addOSDControls();
       this.bindOSDEvents();
             
       this.osd.addHandler('open', function(){
@@ -5248,7 +5246,7 @@ jQuery.fn.scrollStop = function(callback) {
 
   $.OpenSeadragon = function(options) {
 
-    return OpenSeadragon(
+    var osd = OpenSeadragon(
 
       jQuery.extend({
         preserveViewport: true,
@@ -5298,6 +5296,19 @@ jQuery.fn.scrollStop = function(callback) {
       }, options)
 
     );
+    
+    var div = document.createElement("div");
+    var previous = document.createElement("a");
+    previous.className = 'mirador-btn mirador-icon-previous';
+    var next = document.createElement("a");
+    next.className = 'mirador-btn mirador-icon-next';
+        
+    div.appendChild(previous);
+    div.appendChild(next);
+
+    osd.addControl(div, {anchor: OpenSeadragon.ControlAnchor.BOTTOM_RIGHT});
+    
+    return osd;
 
   };
 

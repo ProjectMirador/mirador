@@ -3,7 +3,7 @@
 
   $.OpenSeadragon = function(options) {
 
-    return OpenSeadragon(
+    var osd = OpenSeadragon(
 
       jQuery.extend({
         preserveViewport: true,
@@ -53,6 +53,19 @@
       }, options)
 
     );
+    
+    var div = document.createElement("div");
+    var previous = document.createElement("a");
+    previous.className = 'mirador-btn mirador-icon-previous';
+    var next = document.createElement("a");
+    next.className = 'mirador-btn mirador-icon-next';
+        
+    div.appendChild(previous);
+    div.appendChild(next);
+
+    osd.addControl(div, {anchor: OpenSeadragon.ControlAnchor.BOTTOM_RIGHT});
+    
+    return osd;
 
   };
 
