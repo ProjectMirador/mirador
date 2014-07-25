@@ -27,6 +27,7 @@
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
         this.tocData = this.initTocData();
         this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
+        this.element.find('.has-child ul').hide();
         this.bindEvents();
         this.render();
       }
@@ -72,7 +73,8 @@
         tocData[item.id] = {
           element: _this.element.find(attrString),
           open: false,
-          selected: false
+          selected: false,
+          hovered: false
         };
       });
 
@@ -129,15 +131,38 @@
       return unflatten(rangeList);
     },
 
+    calculateRenderProperties: function() {
+      // Calculate and pre-cache matched sets 
+      // from data structure. Only bind those
+      // that need updating.
+      //
+      // to open
+      // to close
+      // to Select
+      // to hover
+      // (to activate)?
+      // To-do (later): cursorFrame height and position
+      //               pre-calculate height of lists to scroll properly
+      //               spread open TOC by level on shift+scroll
+      //               open higher-level item directly on shift+click
+    },
+
     render: function() {
       var _this = this;
 
+      _this.calculateRenderProperties();
+      
       // bind the parent markers.
       jQuery.each(_this.selectedElements, function(index, range) {
         // select new one.
         var attrString = '[data-rangeid="' + range +'"]';
         _this.element.find(attrString).parent().parent().addClass('selected');
       });
+
+      // _this.previousSelectedElements.removeClass('selected').close();
+      // _this.selectedElements.addClass('selected');
+      // _this.toOpen.addClass('open');
+      // _this.toOpen.addClass('open');
       
       var head = _this.element.find('.selected').first();
       _this.element.scrollTo(head, 800);
@@ -148,6 +173,9 @@
 
       jQuery.subscribe('focusChanged', function(_, manifest, focusFrame) {
       });
+      
+      jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
+      });
         
       jQuery.subscribe('CurrentImageIDUpdated', function(imageID) {
           console.log('event received by TOC: ' + imageID);
@@ -156,7 +184,7 @@
           _this.render();
       });
 
-      jQuery('.has-child a').on('click', function() {
+      jQuery('.toc-link').on('click', function() {
         event.stopPropagation();
         // The purpose of the immediate event is to update the data on the parent
         // by calling its "set" function. 
@@ -169,7 +197,7 @@
         canvasID = jQuery.grep(_this.manifest.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0],
         isLeaf = jQuery(this).closest('li').hasClass('leaf-item');
 
-        if (isleaf) {
+        if (isLeaf) {
           _this.parent.setCurrentImageID(canvasID);
         } else {
           _this.parent.setCursorFrameStart(canvasID);
@@ -178,9 +206,12 @@
       
       jQuery('.caret').on('click', function() {
         event.stopPropagation();
+        
+        var rangeID = jQuery(this).parent().data().rangeid;
+        _this.tocData[rangeID].open ^= true; 
 
         // For now it's alright if this data gets lost in the fray.
-        jQuery(this).closest('li').find('ul:first').addClass('open').slideFadeToggle();
+        jQuery(this).closest('li').toggleClass('open').find('ul:first').slideFadeToggle();
 
         // The real purpose of the event is to update the data on the parent
         // by calling its "set" function. 
@@ -190,15 +221,24 @@
         // without window having to know anything about their DOMs or 
         // internal structure. 
       });
+      
+      _this.element.on('mouseleave', function() {
+        var head = _this.element.find('.selected').first();
+        _this.element.scrollTo(head, 800);
+      });
 
     },
 
-    expandItem: function() {
-      console.log('expandItem');
-    },
-
-    noOpExandItem: function() {
+    exandItem: function() {
       console.log('noOpExpandItem');
+    },
+
+    focusCursorFrame: function() {
+      console.log('focusCursorFrame');
+    },
+
+    hoverItem: function() {
+      console.log('hoverItem');
     },
 
     focusCanvas: function() {

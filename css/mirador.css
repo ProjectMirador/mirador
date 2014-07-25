@@ -10,17 +10,17 @@
 }
 
 .mirador-viewer {
-    position:absolute;
-    top:35px;
-    bottom:0;
-    left:0;
-    right:0;
-    overflow:hidden;
-    box-sizing: border-box;
-    -moz-border-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    border: 0;
+  position:absolute;
+  top:35px;
+  bottom:0;
+  left:0;
+  right:0;
+  overflow:hidden;
+  box-sizing: border-box;
+  -moz-border-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 
 .mirador-viewer a,
@@ -135,12 +135,12 @@
 }
 
 .window-manifest-title {
- text-overflow: ellipsis;
- max-width: 75%;
- overflow: hidden;
- white-space: nowrap;
- padding-left: 10px;
- margin: 10px 0px 10px 0px;
+  text-overflow: ellipsis;
+  max-width: 75%;
+  overflow: hidden;
+  white-space: nowrap;
+  padding-left: 10px;
+  margin: 10px 0px 10px 0px;
 }
 
 .window-manifest-navigation {
@@ -154,42 +154,42 @@
 /* main menu select menu 
 ---------------------------------------------------------------------------- */
 #manifest-select-menu, #workspace-select-menu, #workspaceContainer {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(255,255,255,0.94);
-    display: none;
-    overflow: hidden;
-    z-index: 4;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255,255,255,0.94);
+  display: none;
+  overflow: hidden;
+  z-index: 4;
 }
 .container {
-    position: relative;
-    width: 100%;
-    height:100%;
-    padding-left: 30px;
-    box-sizing: border-box;
-    overflow: hidden;
-    margin:0 auto;
+  position: relative;
+  width: 100%;
+  height:100%;
+  padding-left: 30px;
+  box-sizing: border-box;
+  overflow: hidden;
+  margin:0 auto;
 }
 .items-listing {
-    height:100%;
-    margin: 0;
-    padding-left: 0;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    box-sizing: border-box;
-    overflow-y: scroll;
+  height:100%;
+  margin: 0;
+  padding-left: 0;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  box-sizing: border-box;
+  overflow-y: scroll;
 }
 .items-listing li {
-    list-style-type: none;
-    overflow: hidden;
-    border-bottom: 1px solid gray;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    min-width:900px;
-    position: relative;
-    padding-left: 5px;
-    margin-right: 10px;
+  list-style-type: none;
+  overflow: hidden;
+  border-bottom: 1px solid gray;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  min-width:900px;
+  position: relative;
+  padding-left: 5px;
+  margin-right: 10px;
 }
 .repository-label {
   border-top: 1px solid rgba(0,0,0,0.7);
@@ -231,14 +231,14 @@
 }
 
 .items-listing h3 {
- color:rgba(0,0,0,0.8);
- font-weight:bold;
- margin-top:2px;
+  color:rgba(0,0,0,0.8);
+  font-weight:bold;
+  margin-top:2px;
 }
 .repo-image, .select-metadata, .preview-images {
-    float:left;
-    margin-right:15px;
-    height: 80px;
+  float:left;
+  margin-right:15px;
+  height: 80px;
 }
 .preview-images {
   margin-right:0;
@@ -279,30 +279,30 @@ li.highlight {
   font-weight: bold;
 }
 #load-controls {
-    float: left;
-    height:100%;
-    width: 300px;
+  float: left;
+  height:100%;
+  width: 300px;
 }
 #load-controls input {
-    height:30px;
-    font-size:18px;
-    border:3px solid gray;
-    margin:0 auto;
+  height:30px;
+  font-size:18px;
+  border:3px solid gray;
+  margin:0 auto;
 }
 #manifest-search-form input {
-    background:none;
-    border:none;
-    border-bottom:2px solid black;
-    margin-top: 30px;
+  background:none;
+  border:none;
+  border-bottom:2px solid black;
+  margin-top: 30px;
 }
 #manifest-search i {
-    position:absolute;
-    left:0;
-    color:black;
+  position:absolute;
+  left:0;
+  color:black;
 }
 #manifest-search-form input:focus {
-    outline:none;
-    border-color:deepskyblue;
+  outline:none;
+  border-color:deepskyblue;
 }
 #manifest-search i {
   width:25px;
@@ -416,7 +416,6 @@ li.highlight {
   margin-top:38px;
   box-sizing: border-box;
 }
-
 .sidePanel {
   position: relative;
   width:280px;
@@ -447,20 +446,18 @@ li.highlight {
   bottom:0;
   list-style-type:none;
 }
-
 .toc a.toc-link {
   color: black;
   padding: 10px;
+  padding-left: 8px;
   display: block;
 }
-
 .toc a.toc-link:hover {
   cursor: pointer;
   background-color: #dddddd;
   display:block;
   overflow:hidden;
 }
-
 .toc ul {
   margin:0;
   padding:0;
@@ -468,7 +465,6 @@ li.highlight {
   list-style-type:none;
   width:100%;
 }
-
 .toc li {
   cursor: pointer;
   box-sizing: border-box;
@@ -478,35 +474,55 @@ li.highlight {
   margin-bottom: 5px;
 }
 .toc li.open {
-
 }
 .toc li.selected {
   cursor: pointer;
   overflow:hidden;
   border-left: 4px solid deepSkyblue;
 }
-.toc li i {
+.toc-link i {
   color: rgba(0,0,0,0.4);
+  margin-right:8px;
 }
-
-.toc li.has-child>i.star {
+.toc-link i:hover {
+  color: black;
+}
+.toc li.has-child i.star {
   display: none;
 }
-.toc li.leaf-item>i.caret {
+.toc li.leaf-item i.caret {
   display: none;
 }
-.toc li.selected>h2 a.toc-link , .toc li.selected>h3 a.toc-link, .toc li.selected>h4 a.toc-link, .toc li.selected>h5 a.toc-link  {
+.toc li.leaf-item i.star {
+  display: inline-block;
+}
+.toc li.selected>h2 .toc-link , .toc li.selected>h3 .toc-link, .toc li.selected>h4 .toc-link, .toc li.selected>h5 .toc-link  {
   font-weight: bold;
+}
+.toc li.selected>h2 .toc-link .star, .toc li.selected>h3 .toc-link .star, .toc li.selected>h4 .toc-link .star, .toc li.selected>h5 .toc-link .star .toc li.hovered>h2 .toc-link .star, .toc li.hovered>h3 .toc-link .star, .toc li.hovered>h4 .toc-link .star, .toc li.hovered>h5 .toc-link .star {
+  color:black;
+}
+.toc li.open>h2 .toc-link .caret, .toc li.open>h3 .toc-link .caret, .toc li.open>h4 .toc-link .caret, .toc li.open>h5 .toc-link .caret  {
+  transition: all 0.3s ease-out;
+  transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  /* Internet Explorer */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
 }
 .toc li.selected-parent {
 
 }
-.toc li.hover {
+.toc li.hovered {
   border-left: 4px solid deepSkyblue;
 }
-
 .toc li:hover {
   border-left: 4px solid deepSkyblue;
+}
+.toc-link:hover .star {
+  color:black;
 }
 .toc li:hover>h2 a.toc-link, .toc li:hover>h3 a.toc-link, .toc li:hover>h4 a.toc-link, .toc li:hover>h5 a.toc-link, .toc li:hover>h6 a.toc-link {
   font-weight: bold;
@@ -515,13 +531,11 @@ li.highlight {
 /* .toc li:hover > h2 a { */
 /*   font-weight: bold; */
 /* } */
-
 .view-container {
   margin-left: 280px;
   height: 100%;
   position:relative;
 }
-
 .overlay {
   display:none;
   position: absolute;
@@ -536,7 +550,6 @@ li.highlight {
   height: 75%;
   word-wrap: break-word;
 }
-
 .bottomPanel {
   background-color: rgba(0,0,0,0.7);
   position: absolute;
@@ -552,12 +565,12 @@ li.highlight {
 ---------------------------------------------------------------------------- */
 
 .thumbnail-view, .image-view, .book-view, .scroll-view {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(255,255,255,0.9);
-    display: none;
-    overflow-y: scroll;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255,255,255,0.9);
+  display: none;
+  overflow-y: scroll;
 }
 .image-view, .book-view {
   overflow:hidden;
@@ -571,10 +584,10 @@ li.highlight {
 ---------------------------------------------------------------------------- */
 
 .panel-thumbnail-view {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    overflow-x: scroll;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow-x: scroll;
 }
 
 .panel-thumbnail-view ul.panel-listing-thumbs {
@@ -1147,32 +1160,32 @@ a.mirador-icon-annotations [class^="icon-"] {
 }
 
 ul.image-list {
-   display: none;
-   width: 150px;
-   z-index: 4;
-   opacity: 0.9;
-   background-color: #efefef;
-   text-align: center;
-   list-style: none;
-   position: absolute;
-   right: 5px;
-   padding:0;
-   margin: 2px 5px 5px 5px;
+  display: none;
+  width: 150px;
+  z-index: 4;
+  opacity: 0.9;
+  background-color: #efefef;
+  text-align: center;
+  list-style: none;
+  position: absolute;
+  right: 5px;
+  padding:0;
+  margin: 2px 5px 5px 5px;
 }
 
 .image-list li {
-   margin:0;
-   cursor: pointer;
-   box-sizing: border-box;
-   background-color: #dddddd;  
-   padding: 10px;
-   width:100%;
+  margin:0;
+  cursor: pointer;
+  box-sizing: border-box;
+  background-color: #dddddd;  
+  padding: 10px;
+  width:100%;
 }
 .image-list li:hover {
-   border-left: 3px solid deepskyblue;
-   background-color: #dddddd;  
-   padding-left: 7px;
-   font-weight: bold;
+  border-left: 3px solid deepskyblue;
+  background-color: #dddddd;  
+  padding-left: 7px;
+  font-weight: bold;
 }
 
 a.mirador-icon-annotationDetail-toggle [class^="icon-"] {

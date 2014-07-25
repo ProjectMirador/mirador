@@ -27,7 +27,8 @@ module.exports = function(grunt) {
     'js/lib/d3.v3.min.js',
     'js/lib/pubsub.min.js',
     'js/lib/jquery-ui-1.9.2.min.js',
-    'js/lib/jquery.scrollTo.min.js'
+    'js/lib/jquery.scrollTo.min.js',
+    'js/lib/mousetrap.min.js'
   ],
 
   // libraries/plugins for running tests
