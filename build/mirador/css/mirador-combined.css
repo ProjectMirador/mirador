@@ -2254,7 +2254,7 @@ li.highlight {
 #load-controls {
     float: left;
     height:100%;
-    width: 300px;
+    width: 20%;
 }
 #load-controls input {
     height:30px;
@@ -2285,8 +2285,9 @@ li.highlight {
 }
 
 #select-results {
-  margin-left: 300px;
+  margin-left: 20%;
   height:100%;
+  width: 80%
 }
 
 /* main menu clear storage
