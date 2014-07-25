@@ -180,8 +180,22 @@
         }
         
         });
+    },
+    
+    adjustWidth: function(className, hasClass) {
+       
+    },
+    
+    adjustHeight: function(className, hasClass) {
+        if (hasClass) {
+           this.element.removeClass(className);
+        } else {
+           this.element.addClass(className);
+        }
     }
 
   };
+  
+  
 
 }(Mirador));

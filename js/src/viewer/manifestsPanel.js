@@ -9,7 +9,8 @@
             parent:                     null,
             manifestListItems:          [],
             manifestListElement:        null,
-            manifestLoadStatusIndicator: null
+            manifestLoadStatusIndicator: null,
+            resultsWidth:               0
         }, options);
 
         var _this = this;
@@ -22,6 +23,13 @@
         init: function() {
             this.element = jQuery(this.template()).appendTo(this.appendTo);
             this.manifestListElement = this.element.find('ul');
+            
+            //this code gives us the max width of the results area, used to determine how many preview images to show
+            //cloning the element and adjusting the display and visibility means it won't break the normal flow
+            var clone = this.element.clone().css("visibility","hidden").css("display", "block").appendTo(this.appendTo);
+            this.resultsWidth = clone.find('#select-results').outerWidth();
+            clone.remove();
+            
             // this.manifestLoadStatus = new $.ManifestLoadStatusIndicator({parent: this});
             this.bindEvents();
         },
@@ -41,7 +49,7 @@
                 _this.hide();
             });
             jQuery.subscribe('manifestAdded', function(event, newManifest) {
-              _this.manifestListItems.push(new $.ManifestsListItem({ parent: _this, manifestId: newManifest }));
+              _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifestId: newManifest, resultsWidth: _this.resultsWidth }));
             });
             
             //Filter manifests based on user input
