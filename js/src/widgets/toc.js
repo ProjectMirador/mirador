@@ -71,7 +71,7 @@
         attrString = '[data-rangeid="' + rangeID +'"]';
 
         tocData[item.id] = {
-          element: _this.element.find(attrString),
+          element: _this.element.find(attrString).closest('li'),
           open: false,
           selected: false,
           hovered: false
@@ -131,33 +131,43 @@
       return unflatten(rangeList);
     },
 
-    calculateRenderProperties: function() {
-      // Calculate and pre-cache matched sets 
-      // from data structure. Only bind those
-      // that need updating.
-      //
-      // to open
-      // to close
-      // to Select
-      // to hover
-      // (to activate)?
-      // To-do (later): cursorFrame height and position
-      //               pre-calculate height of lists to scroll properly
-      //               spread open TOC by level on shift+scroll
-      //               open higher-level item directly on shift+click
-    },
-
     render: function() {
       var _this = this;
 
-      _this.calculateRenderProperties();
+      if (_this.previousSelectedElements) {
+        jQuery.each(_this.previousSelectedElements, function(index, range) {
+          // deselect old items.
+        console.log(_this.tocData[range].element);
+          _this.tocData[range].element.removeClass('selected');
+        });
+      }
       
-      // bind the parent markers.
       jQuery.each(_this.selectedElements, function(index, range) {
         // select new one.
-        var attrString = '[data-rangeid="' + range +'"]';
-        _this.element.find(attrString).parent().parent().addClass('selected');
+        console.log(_this.tocData[range].element);
+        _this.tocData[range].element.addClass('selected');
       });
+
+      // bind the parent markers.
+      // jQuery.each(_this.selectedElements, function(index, range) {
+      //   // select new one.
+      //   _this.tocData[range].element.addClass('selected');
+      // });
+      // 
+      // jQuery.each(_this.openElements, function(index, range) {
+      //   // select new one.
+      //   _this.tocData[range].element.addClass('selected');
+      // });
+      // 
+      // jQuery.each(_this.hoveredElement, function(index, range) {
+      //   // select new one.
+      //   _this.tocData[range].element.addClass('selected');
+      // });
+      // 
+      // jQuery.each(_this.selectedElements, function(index, range) {
+      //   // select new one.
+      //   _this.tocData[range].element.addClass('selected');
+      // });
 
       // _this.previousSelectedElements.removeClass('selected').close();
       // _this.selectedElements.addClass('selected');
@@ -177,10 +187,13 @@
       jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
       });
         
-      jQuery.subscribe('CurrentImageIDUpdated', function(imageID) {
-          console.log('event received by TOC: ' + imageID);
+      jQuery.subscribe('CurrentImageIDUpdated', function(event, imageID) {
+          console.log('event received by TOC: ' + imageID.newImageID);
           if (!_this.manifest.structures) { return; }
-          _this.selectedElements = $.getRangeIDByCanvasID(_this.manifest, _this.parent.currentImageID);
+
+          console.log(data);
+
+          _this.setSelectedElements($.getRangeIDByCanvasID(_this.manifest, imageID.newImageID));
           _this.render();
       });
 
@@ -224,7 +237,7 @@
       
       _this.element.on('mouseleave', function() {
         var head = _this.element.find('.selected').first();
-        _this.element.scrollTo(head, 800);
+        _this.element.scrollTo(head, 1000);
       });
 
     },
@@ -241,8 +254,11 @@
       console.log('hoverItem');
     },
 
-    focusCanvas: function() {
-      console.log('focusCanvas');
+    setSelectedElements: function(rangeIDs) {
+      _this = this;
+
+      _this.previousSelectedElements = _this.selectedElements;
+      _this.selectedElements = rangeIDs;
     },
 
     returnToPlace: function() {

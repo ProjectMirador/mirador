@@ -274,6 +274,10 @@
       jQuery.publish('CurrentImageIDUpdated', {newImageID : imageID});
     },
     
+    setCursorFrameStart: function(canvasID) {
+      console.log('setting Cursor Frame');
+    },
+
     updateManifestInfo: function() {
         var _this = this;
         this.element.find('.window-manifest-navigation').children().removeClass('selected');

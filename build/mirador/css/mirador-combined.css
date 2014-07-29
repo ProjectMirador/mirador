@@ -2447,6 +2447,7 @@ li.highlight {
 .toc-link i {
   color: rgba(0,0,0,0.4);
   margin-right:8px;
+  transition: all 0.3s ease-out;
 }
 .toc-link i:hover {
   color: black;
@@ -2455,7 +2456,7 @@ li.highlight {
   display: none;
 }
 .toc li.leaf-item i.caret {
-  display: none;
+  display: none
 }
 .toc li.leaf-item i.star {
   display: inline-block;
