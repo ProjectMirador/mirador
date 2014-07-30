@@ -115,7 +115,7 @@
             _this.parent.toggleThumbnailsView(_this.manifestId);
           });
           
-          this.element.find('.thumbnail-image').on('click', function() {
+          this.element.find('.preview-image').on('click', function() {
            _this.parent.toggleImageView(jQuery(this).attr('data-image-id'), _this.manifestId);
         });
         },
