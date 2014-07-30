@@ -10,6 +10,7 @@
       currentImageID:    null,
       focusImages:       [],
       imagesList:        null,
+      currentImageMode:  'ImageView',
       //imageModes:        ['ImageView', 'BookView'] //for drop down menu
       currentFocus:      'ThumbnailsView',
       focuses:           ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
@@ -54,7 +55,7 @@
 
       _this.element = jQuery(this.template()).appendTo(this.appendTo);
 
-console.log(_this.manifest);
+      console.log(_this.manifest);
 
       //reset the window div and update manifest
       _this.clearWindow();
@@ -71,7 +72,7 @@ console.log(_this.manifest);
       _this.clearPanelsAndOverlay();
 
       //attach view and toggle view, which triggers the attachment of panels or overlays
-      _this.focusModules[focusState] = new $[focusState]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this, imageID: imageID, imagesList: _this.imagesList} );
+      _this.focusModules[focusState] = new $[focusState]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this, imageID: _this.currentImageID, imagesList: _this.imagesList} );
       _this.bindNavigation();
       _this.toggleFocus(focusState);
 
@@ -311,6 +312,7 @@ console.log(_this.manifest);
     },
 
     setCurrentImageID: function(imageID) {
+      console.log('current image updated');
       this.currentImageID = imageID;
       this.loadImageModeFromPanel(imageID);
       jQuery.publish('CurrentImageIDUpdated', {newImageID : imageID});

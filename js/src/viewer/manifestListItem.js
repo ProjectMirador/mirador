@@ -113,18 +113,9 @@
           });
           
           this.element.find('.select-metadata').on('click', function() {
-            if($.viewer.activeWorkspace.focusedSlot) {
-              // the slotID is appended to the event name,
-              // so the window is created in the correct slot.
               console.log('manifest selected');
-              jQuery.publish('manifestToSlot', [_this.manifestId, 'ThumbnailsView']);
-            } else {
-              // If the chooseManifest panel was not invoked from a 
-              // particular slot, but rather from the selectObject menu,
-              // then let the viewer decide where to put the resulting window
-              // according to the workspace type.
+              console.log(_this.manifestId);
               $.viewer.addManifestToWorkspace(_this.manifestId);
-            }
           });
 
           this.element.find('.preview-image').on('click', function() {

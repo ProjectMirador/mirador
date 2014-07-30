@@ -150,7 +150,7 @@
             });
         },
         
-        addManifestToWorkspace: function(_, manifestURI, focusState, imageID) {
+        addManifestToWorkspace: function(manifestURI, focusState, imageID) {
             var manifest = this.manifests[manifestURI],
             _this = this;
             
@@ -158,7 +158,19 @@
                 _this.set(oState, false, {parent: 'overlayStates'});
             });
             
-            jQuery.publish('manifestToWorkspace', [manifest, focusState, imageID]);
+            // If the chooseManifest panel was not invoked from a 
+            // particular slot, but rather from the selectObject menu,
+            // then let the viewer decide where to put the resulting window
+            // according to the workspace type.
+            if($.viewer.activeWorkspace.focusedSlot) {
+              // slotID is appended to event name so only 
+              // the invoking slot initialises a new window in 
+              // itself.
+              console.log(manifest);
+              jQuery.publish('manifestToSlot', [manifest, 'ThumbnailsView']);
+            } else {
+              jQuery.publish('manifestToWorkspace', [manifest, focusState, imageID]);
+            }
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {
