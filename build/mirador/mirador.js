@@ -2604,6 +2604,16 @@ return n?ua.touches(y,n)[0]:ua.mouse(y)}function f(){ua.event.keyCode==32&&(E||(
  */
 ;(function(a){if(typeof define==='function'&&define.amd){define(['jquery'],a)}else{a(jQuery)}}(function($){var j=$.scrollTo=function(a,b,c){return $(window).scrollTo(a,b,c)};j.defaults={axis:'xy',duration:parseFloat($.fn.jquery)>=1.3?0:1,limit:true};j.window=function(a){return $(window)._scrollable()};$.fn._scrollable=function(){return this.map(function(){var a=this,isWin=!a.nodeName||$.inArray(a.nodeName.toLowerCase(),['iframe','#document','html','body'])!=-1;if(!isWin)return a;var b=(a.contentWindow||a).document||a.ownerDocument||a;return/webkit/i.test(navigator.userAgent)||b.compatMode=='BackCompat'?b.body:b.documentElement})};$.fn.scrollTo=function(f,g,h){if(typeof g=='object'){h=g;g=0}if(typeof h=='function')h={onAfter:h};if(f=='max')f=9e9;h=$.extend({},j.defaults,h);g=g||h.duration;h.queue=h.queue&&h.axis.length>1;if(h.queue)g/=2;h.offset=both(h.offset);h.over=both(h.over);return this._scrollable().each(function(){if(f==null)return;var d=this,$elem=$(d),targ=f,toff,attr={},win=$elem.is('html,body');switch(typeof targ){case'number':case'string':if(/^([+-]=?)?\d+(\.\d+)?(px|%)?$/.test(targ)){targ=both(targ);break}targ=win?$(targ):$(targ,this);if(!targ.length)return;case'object':if(targ.is||targ.style)toff=(targ=$(targ)).offset()}var e=$.isFunction(h.offset)&&h.offset(d,targ)||h.offset;$.each(h.axis.split(''),function(i,a){var b=a=='x'?'Left':'Top',pos=b.toLowerCase(),key='scroll'+b,old=d[key],max=j.max(d,a);if(toff){attr[key]=toff[pos]+(win?0:old-$elem.offset()[pos]);if(h.margin){attr[key]-=parseInt(targ.css('margin'+b))||0;attr[key]-=parseInt(targ.css('border'+b+'Width'))||0}attr[key]+=e[pos]||0;if(h.over[pos])attr[key]+=targ[a=='x'?'width':'height']()*h.over[pos]}else{var c=targ[pos];attr[key]=c.slice&&c.slice(-1)=='%'?parseFloat(c)/100*max:c}if(h.limit&&/^\d+$/.test(attr[key]))attr[key]=attr[key]<=0?0:Math.min(attr[key],max);if(!i&&h.queue){if(old!=attr[key])animate(h.onAfterFirst);delete attr[key]}});animate(h.onAfter);function animate(a){$elem.animate(attr,g,h.easing,a&&function(){a.call(this,targ,h)})}}).end()};j.max=function(a,b){var c=b=='x'?'Width':'Height',scroll='scroll'+c;if(!$(a).is('html,body'))return a[scroll]-$(a)[c.toLowerCase()]();var d='client'+c,html=a.ownerDocument.documentElement,body=a.ownerDocument.body;return Math.max(html[scroll],body[scroll])-Math.min(html[d],body[d])};function both(a){return $.isFunction(a)||typeof a=='object'?a:{top:a,left:a}};return j}));
 
+/* mousetrap v1.4.6 craig.is/killing/mice */
+(function(J,r,f){function s(a,b,d){a.addEventListener?a.addEventListener(b,d,!1):a.attachEvent("on"+b,d)}function A(a){if("keypress"==a.type){var b=String.fromCharCode(a.which);a.shiftKey||(b=b.toLowerCase());return b}return h[a.which]?h[a.which]:B[a.which]?B[a.which]:String.fromCharCode(a.which).toLowerCase()}function t(a){a=a||{};var b=!1,d;for(d in n)a[d]?b=!0:n[d]=0;b||(u=!1)}function C(a,b,d,c,e,v){var g,k,f=[],h=d.type;if(!l[a])return[];"keyup"==h&&w(a)&&(b=[a]);for(g=0;g<l[a].length;++g)if(k=
+l[a][g],!(!c&&k.seq&&n[k.seq]!=k.level||h!=k.action||("keypress"!=h||d.metaKey||d.ctrlKey)&&b.sort().join(",")!==k.modifiers.sort().join(","))){var m=c&&k.seq==c&&k.level==v;(!c&&k.combo==e||m)&&l[a].splice(g,1);f.push(k)}return f}function K(a){var b=[];a.shiftKey&&b.push("shift");a.altKey&&b.push("alt");a.ctrlKey&&b.push("ctrl");a.metaKey&&b.push("meta");return b}function x(a,b,d,c){m.stopCallback(b,b.target||b.srcElement,d,c)||!1!==a(b,d)||(b.preventDefault?b.preventDefault():b.returnValue=!1,b.stopPropagation?
+b.stopPropagation():b.cancelBubble=!0)}function y(a){"number"!==typeof a.which&&(a.which=a.keyCode);var b=A(a);b&&("keyup"==a.type&&z===b?z=!1:m.handleKey(b,K(a),a))}function w(a){return"shift"==a||"ctrl"==a||"alt"==a||"meta"==a}function L(a,b,d,c){function e(b){return function(){u=b;++n[a];clearTimeout(D);D=setTimeout(t,1E3)}}function v(b){x(d,b,a);"keyup"!==c&&(z=A(b));setTimeout(t,10)}for(var g=n[a]=0;g<b.length;++g){var f=g+1===b.length?v:e(c||E(b[g+1]).action);F(b[g],f,c,a,g)}}function E(a,b){var d,
+c,e,f=[];d="+"===a?["+"]:a.split("+");for(e=0;e<d.length;++e)c=d[e],G[c]&&(c=G[c]),b&&"keypress"!=b&&H[c]&&(c=H[c],f.push("shift")),w(c)&&f.push(c);d=c;e=b;if(!e){if(!p){p={};for(var g in h)95<g&&112>g||h.hasOwnProperty(g)&&(p[h[g]]=g)}e=p[d]?"keydown":"keypress"}"keypress"==e&&f.length&&(e="keydown");return{key:c,modifiers:f,action:e}}function F(a,b,d,c,e){q[a+":"+d]=b;a=a.replace(/\s+/g," ");var f=a.split(" ");1<f.length?L(a,f,b,d):(d=E(a,d),l[d.key]=l[d.key]||[],C(d.key,d.modifiers,{type:d.action},
+c,a,e),l[d.key][c?"unshift":"push"]({callback:b,modifiers:d.modifiers,action:d.action,seq:c,level:e,combo:a}))}var h={8:"backspace",9:"tab",13:"enter",16:"shift",17:"ctrl",18:"alt",20:"capslock",27:"esc",32:"space",33:"pageup",34:"pagedown",35:"end",36:"home",37:"left",38:"up",39:"right",40:"down",45:"ins",46:"del",91:"meta",93:"meta",224:"meta"},B={106:"*",107:"+",109:"-",110:".",111:"/",186:";",187:"=",188:",",189:"-",190:".",191:"/",192:"`",219:"[",220:"\\",221:"]",222:"'"},H={"~":"`","!":"1",
+"@":"2","#":"3",$:"4","%":"5","^":"6","&":"7","*":"8","(":"9",")":"0",_:"-","+":"=",":":";",'"':"'","<":",",">":".","?":"/","|":"\\"},G={option:"alt",command:"meta","return":"enter",escape:"esc",mod:/Mac|iPod|iPhone|iPad/.test(navigator.platform)?"meta":"ctrl"},p,l={},q={},n={},D,z=!1,I=!1,u=!1;for(f=1;20>f;++f)h[111+f]="f"+f;for(f=0;9>=f;++f)h[f+96]=f;s(r,"keypress",y);s(r,"keydown",y);s(r,"keyup",y);var m={bind:function(a,b,d){a=a instanceof Array?a:[a];for(var c=0;c<a.length;++c)F(a[c],b,d);return this},
+unbind:function(a,b){return m.bind(a,function(){},b)},trigger:function(a,b){if(q[a+":"+b])q[a+":"+b]({},a);return this},reset:function(){l={};q={};return this},stopCallback:function(a,b){return-1<(" "+b.className+" ").indexOf(" mousetrap ")?!1:"INPUT"==b.tagName||"SELECT"==b.tagName||"TEXTAREA"==b.tagName||b.isContentEditable},handleKey:function(a,b,d){var c=C(a,b,d),e;b={};var f=0,g=!1;for(e=0;e<c.length;++e)c[e].seq&&(f=Math.max(f,c[e].level));for(e=0;e<c.length;++e)c[e].seq?c[e].level==f&&(g=!0,
+b[c[e].seq]=1,x(c[e].callback,d,c[e].combo,c[e].seq)):g||x(c[e].callback,d,c[e].combo);c="keypress"==d.type&&I;d.type!=u||w(a)||c||t(b);I=g&&"keydown"==d.type}};J.Mousetrap=m;"function"===typeof define&&define.amd&&define(m)})(window,document);
+
 window.Mirador = window.Mirador || function(config) {
 
   // initialise application 
@@ -3905,6 +3915,10 @@ window.Mirador = window.Mirador || function(config) {
       jQuery.publish('CurrentImageIDUpdated', {newImageID : imageID});
     },
     
+    setCursorFrameStart: function(canvasID) {
+      console.log('setting Cursor Frame');
+    },
+
     updateManifestInfo: function() {
         var _this = this;
         this.element.find('.window-manifest-navigation').children().removeClass('selected');
@@ -3934,7 +3948,7 @@ window.Mirador = window.Mirador || function(config) {
         }
     },
     
-    //based on currentFocus
+    // based on currentFocus
     bindNavigation: function() {
         var _this = this;
         this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
@@ -3970,7 +3984,7 @@ window.Mirador = window.Mirador || function(config) {
         });
     },
 
-    //template should be based on workspace type
+    // template should be based on workspace type
     template: Handlebars.compile([
      '<div class="window">',
        '<div class="content-container">',
@@ -4870,10 +4884,13 @@ window.Mirador = window.Mirador || function(config) {
       element:           null,
       appendTo:          null,
       parent:            null,
-      previousSelectedElements: null,
-      selectedElements: null,
+      previousSelectedElements: [],
+      selectedElements: [],
+      openElements:     [],
+      hoveredElement:   [],
       selectContext:    null,
-      tocData: {}
+      tocData: {},
+      active: null
     }, $.DEFAULT_SETTINGS, options);
 
     this.init();
@@ -4887,19 +4904,19 @@ window.Mirador = window.Mirador || function(config) {
         _this.hide();
         return;
       } else {
-        this.ranges = this.getTplData();
-        this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
-        this.initTocData();
+        this.ranges = this.setRanges();
+        this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
+        this.tocData = this.initTocData();
         this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
-        this.render();
+        this.element.find('.has-child ul').hide();
         this.bindEvents();
+        this.render();
       }
     },
 
-    getTplData: function() {  
+    setRanges: function() {
       var _this = this,
       ranges = [];
-      if (!_this.manifest.structures) { return []; }
       jQuery.each(_this.manifest.structures, function(index, range) {
         if (range['@type'] === 'sc:Range') {
           ranges.push({
@@ -4911,7 +4928,14 @@ window.Mirador = window.Mirador || function(config) {
         }
       });
 
-      ranges = _this.extractRangeTrees(ranges);
+      return ranges;
+
+    },
+
+    getTplData: function() {  
+      var _this = this,
+      ranges = _this.extractRangeTrees(_this.ranges);
+      
       if (ranges.length < 2) {
         ranges = ranges[0].children;
       }
@@ -4920,17 +4944,22 @@ window.Mirador = window.Mirador || function(config) {
     },
 
     initTocData: function() {
-      var _this = this;
+      var _this = this,
+      tocData = {};
+
       jQuery.each(_this.ranges, function(index, item) {
         var rangeID = item.id,
         attrString = '[data-rangeid="' + rangeID +'"]';
 
-        _this.tocData[item.id] = {
-          element: _this.element.find(attrString),
-          open: false,
-          selected: false
+        tocData[item.id] = {
+          element: _this.element.find(attrString).closest('li') //,
+          // open: false,
+          // selected: false,
+          // hovered: false
         };
       });
+
+      return tocData;
     },
 
     extractRangeTrees: function(rangeList) {
@@ -4984,21 +5013,53 @@ window.Mirador = window.Mirador || function(config) {
     },
 
     render: function() {
-      var _this = this;
-      
-      // take previous "currently selected element" and unselect it and its parents.
-      _this.element.find('.selected').removeClass('selected');
-      _this.element.find('selected-parent').removeClass('selected-parent');
-      
-      // bind the parent markers.
-      jQuery.each(_this.selectedElements, function(index, range) {
-        // select new one.
-        var attrString = '[data-rangeid="' + range +'"]';
-        _this.element.find(attrString).parent().parent().addClass('selected');
+      var _this = this,
+      toDeselect = jQuery.map(_this.previousSelectedElements, function(rangeID) {
+            return _this.tocData[rangeID].element.toArray();
+      }),
+      toSelect = jQuery.map(_this.selectedElements, function(rangeID) {
+            return _this.tocData[rangeID].element.toArray();
+      }),
+      toOpen = jQuery.map(_this.selectedElements, function(rangeID) {
+          if ((jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.previousSelectedElements) < 0)) {
+            return _this.tocData[rangeID].element.toArray();
+          }
+      }),
+      toClose = jQuery.map(_this.previousSelectedElements, function(rangeID) {
+          if ((jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.selectedElements) < 0)) {
+            return _this.tocData[rangeID].element.toArray();
+          }
       });
+
+      console.log(toDeselect);
+      console.log(toSelect);
+      console.log(toClose);
+      console.log(toOpen);
+
+      // Deselect elements
+      jQuery(toDeselect).removeClass('selected');
       
-      var head = _this.element.find('.selected').first();
-      _this.element.scrollTo(head, 800);
+      // Select new elements
+      jQuery(toSelect).addClass('selected');
+      
+      // Scroll to new elements
+      scroll();
+      
+      // Open new ones
+      jQuery(toOpen).toggleClass('open').find('ul:first').slideFadeToggle();
+      // Close old ones (find way to keep scroll position).
+      jQuery(toClose).toggleClass('open').find('ul:first').slideFadeToggle(400, 'swing', scroll);
+       
+      // Get the sum of the outer height of all elements to be removed.
+      // Subtract from current parent height to retreive the new height.
+      // Scroll with respect to this. 
+      scroll();
+
+      function scroll() {
+        var head = _this.element.find('.selected').first();
+        _this.element.scrollTo(head, 400);
+      } 
+
     },
 
     bindEvents: function() {
@@ -5006,35 +5067,98 @@ window.Mirador = window.Mirador || function(config) {
 
       jQuery.subscribe('focusChanged', function(_, manifest, focusFrame) {
       });
+      
+      jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
+      });
         
-      jQuery.subscribe('CurrentImageIDUpdated', function(imageID) {
-          console.log('event received by TOC: ' + imageID);
-          if (!_this.manifest.structures) { return; }
-          _this.selectedElements = $.getRangeIDByCanvasID(_this.manifest, _this.parent.currentImageID);
-          _this.render();
+      jQuery.subscribe('CurrentImageIDUpdated', function(event, imageID) {
+        if (!_this.manifest.structures) { return; }
+        _this.setSelectedElements($.getRangeIDByCanvasID(_this.manifest, imageID.newImageID));
+        _this.render();
       });
 
-      jQuery('.has-child ul').hide();
-
-      jQuery('.has-child a').click(function() {
+      jQuery('.toc-link').on('click', function() {
         event.stopPropagation();
-
-        // For now it's alright if this data gets lost in the fray.
-        jQuery(this).closest('li').find('ul:first').addClass('open').slideFadeToggle();
-
-        // The real purpose of the event is to update the data on the parent
+        // The purpose of the immediate event is to update the data on the parent
         // by calling its "set" function. 
-        //
+        // 
         // The parent (window) then emits an event notifying all panels of 
         // the update, so they can respond in their own unique ways
         // without window having to know anything about their DOMs or 
         // internal structure. 
-        var rangeID = jQuery(this).data().rangeid;
-        var canvasID = jQuery.grep(_this.manifest.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0];
-        _this.parent.setCurrentImageID(canvasID);
+        var rangeID = jQuery(this).data().rangeid,
+        canvasID = jQuery.grep(_this.manifest.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0],
+        isLeaf = jQuery(this).closest('li').hasClass('leaf-item');
+
+        // if ( _this.parent.currentFocus === 'ThumbnailsView' & !isLeaf) {
+        //   _this.parent.setCursorFrameStart(canvasID);
+        // } else {
+          _this.parent.setCurrentImageID(canvasID);
+        // }
+      });
+      
+      jQuery('.caret').on('click', function() {
+        event.stopPropagation();
+        
+        var rangeID = jQuery(this).parent().data().rangeid;
+        _this.setOpenItem(rangeID); 
+
+        // For now it's alright if this data gets lost in the fray.
+        jQuery(this).closest('li').toggleClass('open').find('ul:first').slideFadeToggle();
+
+        // The parent (window) then emits an event notifying all panels of 
+        // the update, so they can respond in their own unique ways
+        // without window having to know anything about their DOMs or 
+        // internal structure. 
+      });
+      
+      _this.element.on('mouseleave', function() {
+        console.log('leaving: ' + _this.element.attr('rangeid'));
+        var head = _this.element.find('.selected').first();
+        _this.element.stop().delay(1800).scrollTo(head, 1000);
+        _this.setActive(false);
+      });
+      
+      _this.element.on('mouseenter', function() {
+        console.log('entering: ' + _this.element.attr('rangeid'));
+        _this.element.stop();
+        _this.setActive(true);
       });
 
     },
+
+    setActive: function(active) {
+      _this.active = active;
+    },
+
+    setOpenItem: function(rangeID) {
+      _this = this;
+
+      if (jQuery.inArray(rangeID, _this.openElements)<0) {
+        _this.openElements.push(rangeID);
+      } else {
+        _this.openElements.splice(jQuery.inArray(rangeID, _this.openElements), 1);
+      }
+    },
+
+    // focusCursorFrame: function() {
+    //   console.log('focusCursorFrame');
+    // },
+
+    // hoverItem: function() {
+    //   console.log('hoverItem');
+    // },
+
+    setSelectedElements: function(rangeIDs) {
+      _this = this;
+
+      _this.previousSelectedElements = _this.selectedElements;
+      _this.selectedElements = rangeIDs;
+    },
+
+    // returnToPlace: function() {
+    //   console.log('returnToPlace');
+    // },
 
     template: function(tplData) {
 
@@ -5042,10 +5166,7 @@ window.Mirador = window.Mirador || function(config) {
         '<ul class="toc">',
           '{{#nestedRangeLevel ranges}}',
             '<li class="{{#if children}}has-child{{else}}leaf-item{{/if}}"">',
-              '{{#if children}}',
-              '<i class="fa fa-caret-right"></i>',
-              '{{/if}}',
-              '{{{tocLevel id label level}}}',
+              '{{{tocLevel id label level children}}}',
               '{{#if children}}',
                 '<ul>',
                 '{{{nestedRangeLevel children}}}',
@@ -5072,8 +5193,10 @@ window.Mirador = window.Mirador || function(config) {
         return out;
       });
 
-      Handlebars.registerHelper('tocLevel', function(id, label, level) {
-        return '<h' + (level+1) + '><a data-rangeID="' + id + '">' + label + '</a></h' + (level+1) + '>';
+      Handlebars.registerHelper('tocLevel', function(id, label, level, children) {
+        var caret = '<i class="fa fa-caret-right caret"></i>',
+        cert = '<i class="fa fa-certificate star"></i>';
+        return '<h' + (level+1) + '><a class="toc-link" data-rangeID="' + id + '">' + caret + cert + '<span class="label">' + label + '</span></a></h' + (level+1) + '>';
       });
 
       return template(tplData);
@@ -5703,7 +5826,7 @@ jQuery.fn.scrollStop = function(callback) {
     return osdFrame;
   };
   
-//http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
+  // http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
   $.isOnScreen = function(elem, outsideViewportFactor) {
     var factor = 1;
     if (outsideViewportFactor) {

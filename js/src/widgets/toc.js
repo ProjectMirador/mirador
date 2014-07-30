@@ -6,10 +6,13 @@
       element:           null,
       appendTo:          null,
       parent:            null,
-      previousSelectedElements: null,
-      selectedElements: null,
+      previousSelectedElements: [],
+      selectedElements: [],
+      openElements:     [],
+      hoveredElement:   [],
       selectContext:    null,
-      tocData: {}
+      tocData: {},
+      active: null
     }, $.DEFAULT_SETTINGS, options);
 
     this.init();
@@ -23,19 +26,19 @@
         _this.hide();
         return;
       } else {
-        this.ranges = this.getTplData();
-        this.element = jQuery(this.template({ ranges: _this.ranges })).appendTo(this.appendTo);
-        this.initTocData();
+        this.ranges = this.setRanges();
+        this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
+        this.tocData = this.initTocData();
         this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
-        this.render();
+        this.element.find('.has-child ul').hide();
         this.bindEvents();
+        this.render();
       }
     },
 
-    getTplData: function() {  
+    setRanges: function() {
       var _this = this,
       ranges = [];
-      if (!_this.manifest.structures) { return []; }
       jQuery.each(_this.manifest.structures, function(index, range) {
         if (range['@type'] === 'sc:Range') {
           ranges.push({
@@ -47,7 +50,14 @@
         }
       });
 
-      ranges = _this.extractRangeTrees(ranges);
+      return ranges;
+
+    },
+
+    getTplData: function() {  
+      var _this = this,
+      ranges = _this.extractRangeTrees(_this.ranges);
+      
       if (ranges.length < 2) {
         ranges = ranges[0].children;
       }
@@ -56,17 +66,22 @@
     },
 
     initTocData: function() {
-      var _this = this;
+      var _this = this,
+      tocData = {};
+
       jQuery.each(_this.ranges, function(index, item) {
         var rangeID = item.id,
         attrString = '[data-rangeid="' + rangeID +'"]';
 
-        _this.tocData[item.id] = {
-          element: _this.element.find(attrString),
-          open: false,
-          selected: false
+        tocData[item.id] = {
+          element: _this.element.find(attrString).closest('li') //,
+          // open: false,
+          // selected: false,
+          // hovered: false
         };
       });
+
+      return tocData;
     },
 
     extractRangeTrees: function(rangeList) {
@@ -120,21 +135,53 @@
     },
 
     render: function() {
-      var _this = this;
-      
-      // take previous "currently selected element" and unselect it and its parents.
-      _this.element.find('.selected').removeClass('selected');
-      _this.element.find('selected-parent').removeClass('selected-parent');
-      
-      // bind the parent markers.
-      jQuery.each(_this.selectedElements, function(index, range) {
-        // select new one.
-        var attrString = '[data-rangeid="' + range +'"]';
-        _this.element.find(attrString).parent().parent().addClass('selected');
+      var _this = this,
+      toDeselect = jQuery.map(_this.previousSelectedElements, function(rangeID) {
+            return _this.tocData[rangeID].element.toArray();
+      }),
+      toSelect = jQuery.map(_this.selectedElements, function(rangeID) {
+            return _this.tocData[rangeID].element.toArray();
+      }),
+      toOpen = jQuery.map(_this.selectedElements, function(rangeID) {
+          if ((jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.previousSelectedElements) < 0)) {
+            return _this.tocData[rangeID].element.toArray();
+          }
+      }),
+      toClose = jQuery.map(_this.previousSelectedElements, function(rangeID) {
+          if ((jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.selectedElements) < 0)) {
+            return _this.tocData[rangeID].element.toArray();
+          }
       });
+
+      console.log(toDeselect);
+      console.log(toSelect);
+      console.log(toClose);
+      console.log(toOpen);
+
+      // Deselect elements
+      jQuery(toDeselect).removeClass('selected');
       
-      var head = _this.element.find('.selected').first();
-      _this.element.scrollTo(head, 800);
+      // Select new elements
+      jQuery(toSelect).addClass('selected');
+      
+      // Scroll to new elements
+      scroll();
+      
+      // Open new ones
+      jQuery(toOpen).toggleClass('open').find('ul:first').slideFadeToggle();
+      // Close old ones (find way to keep scroll position).
+      jQuery(toClose).toggleClass('open').find('ul:first').slideFadeToggle(400, 'swing', scroll);
+       
+      // Get the sum of the outer height of all elements to be removed.
+      // Subtract from current parent height to retreive the new height.
+      // Scroll with respect to this. 
+      scroll();
+
+      function scroll() {
+        var head = _this.element.find('.selected').first();
+        _this.element.scrollTo(head, 400);
+      } 
+
     },
 
     bindEvents: function() {
@@ -142,35 +189,98 @@
 
       jQuery.subscribe('focusChanged', function(_, manifest, focusFrame) {
       });
+      
+      jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
+      });
         
-      jQuery.subscribe('CurrentImageIDUpdated', function(imageID) {
-          console.log('event received by TOC: ' + imageID);
-          if (!_this.manifest.structures) { return; }
-          _this.selectedElements = $.getRangeIDByCanvasID(_this.manifest, _this.parent.currentImageID);
-          _this.render();
+      jQuery.subscribe('CurrentImageIDUpdated', function(event, imageID) {
+        if (!_this.manifest.structures) { return; }
+        _this.setSelectedElements($.getRangeIDByCanvasID(_this.manifest, imageID.newImageID));
+        _this.render();
       });
 
-      jQuery('.has-child ul').hide();
-
-      jQuery('.has-child a').click(function() {
+      jQuery('.toc-link').on('click', function() {
         event.stopPropagation();
-
-        // For now it's alright if this data gets lost in the fray.
-        jQuery(this).closest('li').find('ul:first').addClass('open').slideFadeToggle();
-
-        // The real purpose of the event is to update the data on the parent
+        // The purpose of the immediate event is to update the data on the parent
         // by calling its "set" function. 
-        //
+        // 
         // The parent (window) then emits an event notifying all panels of 
         // the update, so they can respond in their own unique ways
         // without window having to know anything about their DOMs or 
         // internal structure. 
-        var rangeID = jQuery(this).data().rangeid;
-        var canvasID = jQuery.grep(_this.manifest.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0];
-        _this.parent.setCurrentImageID(canvasID);
+        var rangeID = jQuery(this).data().rangeid,
+        canvasID = jQuery.grep(_this.manifest.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0],
+        isLeaf = jQuery(this).closest('li').hasClass('leaf-item');
+
+        // if ( _this.parent.currentFocus === 'ThumbnailsView' & !isLeaf) {
+        //   _this.parent.setCursorFrameStart(canvasID);
+        // } else {
+          _this.parent.setCurrentImageID(canvasID);
+        // }
+      });
+      
+      jQuery('.caret').on('click', function() {
+        event.stopPropagation();
+        
+        var rangeID = jQuery(this).parent().data().rangeid;
+        _this.setOpenItem(rangeID); 
+
+        // For now it's alright if this data gets lost in the fray.
+        jQuery(this).closest('li').toggleClass('open').find('ul:first').slideFadeToggle();
+
+        // The parent (window) then emits an event notifying all panels of 
+        // the update, so they can respond in their own unique ways
+        // without window having to know anything about their DOMs or 
+        // internal structure. 
+      });
+      
+      _this.element.on('mouseleave', function() {
+        console.log('leaving: ' + _this.element.attr('rangeid'));
+        var head = _this.element.find('.selected').first();
+        _this.element.stop().delay(1800).scrollTo(head, 1000);
+        _this.setActive(false);
+      });
+      
+      _this.element.on('mouseenter', function() {
+        console.log('entering: ' + _this.element.attr('rangeid'));
+        _this.element.stop();
+        _this.setActive(true);
       });
 
     },
+
+    setActive: function(active) {
+      _this.active = active;
+    },
+
+    setOpenItem: function(rangeID) {
+      _this = this;
+
+      if (jQuery.inArray(rangeID, _this.openElements)<0) {
+        _this.openElements.push(rangeID);
+      } else {
+        _this.openElements.splice(jQuery.inArray(rangeID, _this.openElements), 1);
+      }
+    },
+
+    // focusCursorFrame: function() {
+    //   console.log('focusCursorFrame');
+    // },
+
+    // hoverItem: function() {
+    //   console.log('hoverItem');
+    // },
+
+    setSelectedElements: function(rangeIDs) {
+      _this = this;
+
+      _this.previousSelectedElements = _this.selectedElements;
+      _this.selectedElements = rangeIDs;
+    },
+
+    // returnToPlace: function() {
+    //   console.log('returnToPlace');
+    // },
 
     template: function(tplData) {
 
@@ -178,10 +288,7 @@
         '<ul class="toc">',
           '{{#nestedRangeLevel ranges}}',
             '<li class="{{#if children}}has-child{{else}}leaf-item{{/if}}"">',
-              '{{#if children}}',
-              '<i class="fa fa-caret-right"></i>',
-              '{{/if}}',
-              '{{{tocLevel id label level}}}',
+              '{{{tocLevel id label level children}}}',
               '{{#if children}}',
                 '<ul>',
                 '{{{nestedRangeLevel children}}}',
@@ -208,8 +315,10 @@
         return out;
       });
 
-      Handlebars.registerHelper('tocLevel', function(id, label, level) {
-        return '<h' + (level+1) + '><a data-rangeID="' + id + '">' + label + '</a></h' + (level+1) + '>';
+      Handlebars.registerHelper('tocLevel', function(id, label, level, children) {
+        var caret = '<i class="fa fa-caret-right caret"></i>',
+        cert = '<i class="fa fa-certificate star"></i>';
+        return '<h' + (level+1) + '><a class="toc-link" data-rangeID="' + id + '">' + caret + cert + '<span class="label">' + label + '</span></a></h' + (level+1) + '>';
       });
 
       return template(tplData);

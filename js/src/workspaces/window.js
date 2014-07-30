@@ -322,6 +322,10 @@
       jQuery.publish('CurrentImageIDUpdated', {newImageID : imageID});
     },
     
+    setCursorFrameStart: function(canvasID) {
+      console.log('setting Cursor Frame');
+    },
+
     updateManifestInfo: function() {
         var _this = this;
         this.element.find('.window-manifest-navigation').children().removeClass('selected');
@@ -351,7 +355,7 @@
         }
     },
     
-    //based on currentFocus
+    // based on currentFocus
     bindNavigation: function() {
         var _this = this;
         this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
@@ -387,7 +391,7 @@
         });
     },
 
-    //template should be based on workspace type
+    // template should be based on workspace type
     template: Handlebars.compile([
      '<div class="window">',
        '<div class="content-container">',
