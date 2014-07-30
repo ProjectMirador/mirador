@@ -483,7 +483,7 @@ li.highlight {
 .toc-link i {
   color: rgba(0,0,0,0.4);
   margin-right:8px;
-  transition: all 0.3s ease-out;
+  transition: all 0.2s linear;
 }
 .toc-link i:hover {
   color: black;
@@ -504,7 +504,7 @@ li.highlight {
   color:black;
 }
 .toc li.open>h2 .toc-link .caret, .toc li.open>h3 .toc-link .caret, .toc li.open>h4 .toc-link .caret, .toc li.open>h5 .toc-link .caret  {
-  transition: all 0.3s ease-out;
+  transition: all 0.2s linear;
   transform: rotate(90deg);
   -webkit-transform: rotate(90deg);
   -moz-transform: rotate(90deg);
