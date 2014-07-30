@@ -49,9 +49,9 @@
       this.slots[slotId].window = new $.Window();
     },
 
-    addItem: function() {
-      // set focused slot dynamically.
-      this.focusedSlot = 0;
+    addItem: function(slotID) {
+      console.log('registered the active slot as: ' + slotID);
+      this.focusedSlot = slotID;
       this.parent.toggleLoadWindow();
     },
 

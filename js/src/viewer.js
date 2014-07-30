@@ -91,7 +91,7 @@
            this.set(state, !currentState, {parent: 'overlayStates'});
         },
         
-        toggleLoadWindow: function() {
+        toggleLoadWindow: function(targetSlot) {
             this.toggleOverlay('manifestsPanelVisible');
         },
         
@@ -150,7 +150,7 @@
             });
         },
         
-        addManifestToWorkspace: function(manifestURI, uiState, imageID) {
+        addManifestToWorkspace: function(_, manifestURI, focusState, imageID) {
             var manifest = this.manifests[manifestURI],
             _this = this;
             
@@ -158,7 +158,7 @@
                 _this.set(oState, false, {parent: 'overlayStates'});
             });
             
-            jQuery.publish('manifestToWorkspace', [manifest, uiState, imageID]);
+            jQuery.publish('manifestToWorkspace', [manifest, focusState, imageID]);
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {

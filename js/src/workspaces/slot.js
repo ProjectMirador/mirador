@@ -4,14 +4,14 @@
 
     jQuery.extend(true, this, {
       workspaceSlotCls: 'slot',
-      slotId:           null,
+      slotID:           1,
       focused:          null,
       appendTo:         null,
       parent:           null,
       window:           null,
       windowElement:    null
 
-    }, $.DEFAULT_SETTINGS, options);
+    }, options);
 
     this.init();
 
@@ -21,7 +21,7 @@
     init: function () {
       this.element = jQuery(this.template({
         workspaceSlotCls: this.workspaceSlotCls,
-        slotId: 0
+        slotID: 1
       }));
       this.element.appendTo(this.appendTo);
 
@@ -31,11 +31,14 @@
     bindEvents: function() {
       var _this = this;
 
-      jQuery.subscribe('manifestToWorkspace', function(_, manifest, uiState) {
+      // Slot only subscribes under its own name,
+      // so it will be the only one whose function is
+      // called to create a window when the 
+      // load menu is invoked from it.
+      jQuery.subscribe('manifestToSlot', function(e, manifest, focusState) {
         _this.clearSlot();
-        console.log(uiState);
-        console.log(manifest);
-        _this.window = new $.Window({appendTo: _this.element, uiState: uiState, manifest: manifest});
+        console.log(arguments);
+        _this.window = new $.Window({appendTo: _this.element, currentFocus: focusState, manifest: manifest, id: _this.slotID});
       });
       
       this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
@@ -49,17 +52,17 @@
     },
 
     addItem: function() {
-      this.focused = true;
-      this.parent.focusedSlot = this.slotId;
-      this.parent.parent.toggleLoadWindow();
+      _this = this;
+      console.log(_this.slotID);
+      _this.focused = true;
+      _this.parent.addItem(_this.slotID);
     },
 
     // template should be based on workspace type
     template: Handlebars.compile([
-                                 '<div id="{{slotId}}" class="{{workspaceSlotCls}}">',
+                                 '<div id="{{slotID}}" class="{{workspaceSlotCls}}">',
                                  '<div class="slotIconContainer">',
                                  '<h1 class="plus">+</h1>',
-                                 '<i class="fa fa-cubes"></i>',
                                  '<h1>Add Item to Workspace</h1>',
                                  '</div>',
                                  '<a class="addItemLink"></a>',
