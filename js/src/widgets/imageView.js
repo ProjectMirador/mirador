@@ -102,12 +102,12 @@
 
       infoJson = $.getJsonFromUrl(infoJsonUrl, false);
 
-      jQuery(this.toolbarTemplate()).appendTo(this.element);
       elemOsd =
         jQuery('<div/>')
       .addClass(this.osdCls)
       .attr('id', osdID)
-      .prependTo(this.element);
+      .appendTo(this.element);
+      jQuery(this.toolbarTemplate()).appendTo(this.element);
 
       this.osd = $.OpenSeadragon({
         'id':           osdID,

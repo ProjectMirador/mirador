@@ -57,6 +57,17 @@
        '</div>'
     ].join('')),
     
+    toolbarTemplate: Handlebars.compile([
+      '<div id="osd-toolbar" class="toolbar">',
+      '<a class="mirador-btn mirador-icon-previous"></a>',
+      '<a id="zoom-in" class="mirador-btn mirador-icon-zoom-in"></a>', 
+      '<a id="zoom-out" class="mirador-btn mirador-icon-zoom-out"></a>',
+      '<a id="home" class="mirador-btn mirador-icon-home"></a>',
+      '<a id="full-page" class="mirador-btn mirador-icon-full-page"></a>',
+      '<a class="mirador-btn mirador-icon-next"></a>',
+      '</div>'
+    ].join('')),
+    
     bindOSDEvents: function() {
        var _this = this;
        
@@ -125,6 +136,7 @@
       .addClass(this.osdCls)
       .attr('id', osdId)
       .appendTo(this.element);
+      jQuery(this.toolbarTemplate()).appendTo(this.element);
 
       this.osd = $.OpenSeadragon({
         'id':           elemOsd.attr('id'),
