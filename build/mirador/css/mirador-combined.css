@@ -3238,6 +3238,18 @@ a.mirador-icon-image-view [class^="icon-"] {
 .mirador-icon-next { background-position: -100px -40px; }
 .mirador-icon-next:hover { background-position: -100px -60px; }
 
+.mirador-icon-zoom-in { background-position: 0px -40px; }
+.mirador-icon-zoom-in:hover { background-position: 0px -60px; }
+
+.mirador-icon-zoom-out { background-position: -20px -40px; }
+.mirador-icon-zoom-out:hover { background-position: -20px -60px; }
+
+.mirador-icon-home { background-position: -40px -40px; }
+.mirador-icon-home:hover { background-position: -40px -60px; }
+
+.mirador-icon-full-page { background-position: -60px -40px; }
+.mirador-icon-full-page:hover { background-position: -60px -60px; }
+
 .mirador-icon-metadata-view { background-position: -120px -40px; }
 .mirador-icon-metadata-view:hover { background-position: -120px -60px; }
 .mirador-icon-metadata-view.selected { background-position: -120px -60px; }
