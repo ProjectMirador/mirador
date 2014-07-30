@@ -3105,29 +3105,43 @@ window.Mirador = window.Mirador || function(config) {
 
 (function($) {
 
-    $.ManifestsListItem = function(options) {
+    $.ManifestListItem = function(options) {
 
         jQuery.extend(true, this, {
             element:                    null,
             parent:                     null,
             manifestId:                 null,
             loadStatus:                 null,
-            numPreviewImages:           8,
-            thumbHeight:                80
+            thumbHeight:                80,
+            resultsWidth:               0,  //based on screen width
+            maxPreviewImagesWidth:      0,
+            repoWidth:                  80,
+            metadataWidth:              200,
+            margin:                     15,
+            remainingItemsMinWidth:     80,  //set a minimum width for the "more" image
+            imagesTotalWidth:           0
+            
         }, options);
 
         this.init();
         
     };
 
-    $.ManifestsListItem.prototype = {
+    $.ManifestListItem.prototype = {
 
         init: function() {
-          var _this = this;
-            this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
-            var remainingOffset = this.element.find('.repo-image').outerWidth(true) + this.element.find('.select-metadata').outerWidth(true) + this.element.find('.preview-images').outerWidth(true);
-            // this.element.find('.remaining-items').css('left', remainingOffset);
-            this.bindEvents();
+           var _this = this;
+           //need a better way of calculating this because JS can't get width and margin of hidden elements, so must manually set that info
+           //ultimately use 95% of space available, since sometimes it still displays too many images
+           this.maxPreviewImagesWidth = this.resultsWidth - (this.repoWidth + this.margin + this.metadataWidth + this.margin + this.remainingItemsMinWidth);
+           this.maxPreviewImagesWidth = this.maxPreviewImagesWidth * 0.95;
+          
+           this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
+
+           var remainingOffset = this.repoWidth + this.margin + this.metadataWidth + this.margin + this.imagesTotalWidth;
+           this.element.find('.remaining-items').css('left', remainingOffset);
+
+           this.bindEvents();
         },
 
         fetchTplData: function() {
@@ -3149,12 +3163,6 @@ window.Mirador = window.Mirador || function(config) {
               }
             })(),
             canvasCount: manifest.sequences[0].canvases.length,
-            remaining: (function() {
-              var remaining = manifest.sequences[0].canvases.length - _this.numPreviewImages;
-              if (remaining > 0) {
-                return remaining;
-              }
-            })(),
             images: []
           };
           tplData.repoImage = (function() {
@@ -3167,24 +3175,34 @@ window.Mirador = window.Mirador || function(config) {
             return 'images/' + imageName;
           })();
 
-          if (_this.numPreviewImages > $.viewer.manifests[_this.manifestId].sequences[0].canvases.length) {
-            _this.numPreviewImages = $.viewer.manifests[_this.manifestId].sequences[0].canvases.length;
-          }
-
-          for ( var i=0; i < _this.numPreviewImages; i++) {
-            var canvas = $.viewer.manifests[_this.manifestId].sequences[0].canvases[i],
+          for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
+            var canvas = manifest.sequences[0].canvases[i],
             resource = canvas.images[0].resource,
             service = resource['default'] ? resource['default'].service : resource.service,
             url = $.Iiif.getUriWithHeight(service['@id'], _this.thumbHeight),
             aspectRatio = resource.height/resource.width,
             width = (_this.thumbHeight/aspectRatio);
-
+            
+            _this.imagesTotalWidth += (width + _this.margin);
+            if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
+               _this.imagesTotalWidth -= (width + _this.margin);
+               break;
+            }
+                        
             tplData.images.push({
               url: url,
               width: width,
+              height: _this.thumbHeight,
               id: canvas['@id']
             });
           }
+          
+          tplData.remaining = (function() {
+              var remaining = manifest.sequences[0].canvases.length - tplData.images.length;
+              if (remaining > 0) {
+                return remaining;
+              }
+            })();
 
           return tplData;
         },
@@ -3229,12 +3247,12 @@ window.Mirador = window.Mirador || function(config) {
                       '</div>',
                       '<div class="preview-images">',
                       '{{#each images}}',
-                        '<img src="{{url}}" width="{{width}}" class="thumbnail-image flash" data-image-id="{{id}}">',
+                        '<img src="{{url}}" width="{{width}}" height="{{height}}" class="preview-image flash" data-image-id="{{id}}">',
                       '{{/each}}',
                       '</div>',
-                      // '{{#if remaining}}',
-                      //   '<div class="remaining-items"><h3>{{remaining}} more</h3></div>',
-                      // '{{/if}}',
+                       '{{#if remaining}}',
+                         '<div class="remaining-items"><h3>{{remaining}} more</h3></div>',
+                       '{{/if}}',
                       '</li>'
         ].join(''))
     };
@@ -3257,7 +3275,8 @@ window.Mirador = window.Mirador || function(config) {
             parent:                     null,
             manifestListItems:          [],
             manifestListElement:        null,
-            manifestLoadStatusIndicator: null
+            manifestLoadStatusIndicator: null,
+            resultsWidth:               0
         }, options);
 
         var _this = this;
@@ -3270,6 +3289,13 @@ window.Mirador = window.Mirador || function(config) {
         init: function() {
             this.element = jQuery(this.template()).appendTo(this.appendTo);
             this.manifestListElement = this.element.find('ul');
+            
+            //this code gives us the max width of the results area, used to determine how many preview images to show
+            //cloning the element and adjusting the display and visibility means it won't break the normal flow
+            var clone = this.element.clone().css("visibility","hidden").css("display", "block").appendTo(this.appendTo);
+            this.resultsWidth = clone.find('#select-results').outerWidth();
+            clone.remove();
+            
             // this.manifestLoadStatus = new $.ManifestLoadStatusIndicator({parent: this});
             this.bindEvents();
         },
@@ -3289,7 +3315,7 @@ window.Mirador = window.Mirador || function(config) {
                 _this.hide();
             });
             jQuery.subscribe('manifestAdded', function(event, newManifest) {
-              _this.manifestListItems.push(new $.ManifestsListItem({ parent: _this, manifestId: newManifest }));
+              _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifestId: newManifest, resultsWidth: _this.resultsWidth }));
             });
             
             //Filter manifests based on user input
@@ -3704,15 +3730,22 @@ window.Mirador = window.Mirador || function(config) {
                       thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
                     });
                 }
+                
                 //toggle any valid panels
                 if (view !== '' && displayed) {   
                     _this.togglePanels(panelType, displayed, view, state);
                 }
+                
                 //hide any panels instantiated but not available to this view
                 if (view === '' && _this[panelType]) {
                    _this.togglePanels(panelType, displayed, view, state);
-                   console.log(panelType + ": " + displayed);
                 }
+                
+                //lastly, adjust height for non-existent panels
+                if (view === '') {
+                   _this.adjustFocusSize(panelType, displayed);
+                }
+                
                 //update current image for all valid panels
             });
         });
@@ -3740,10 +3773,51 @@ window.Mirador = window.Mirador || function(config) {
         //update state in focusOverlaysAvailable
         this.focusOverlaysAvailable[focusState][panelType][viewType] = panelState;
         this[panelType].toggle(panelState);
+        this.adjustFocusSize(panelType, panelState);
+    },
+    
+    minMaxBottomPanel: function(element) {
+        if (element.hasClass('mirador-icon-minimize')) {
+            //hide all other siblings, change icon to maximize, change height of parent
+            element.removeClass('mirador-icon-minimize').addClass('mirador-icon-maximize');
+            element.siblings().hide();
+            element.parent().addClass('minimized');
+            //adjust height of focus element
+            this.focusModules[this.currentFocus].adjustHeight('focus-bottom-panel-minimized', false);
+        } else {
+            //show all other siblings, change icon to minimize, change height of parent
+            element.removeClass('mirador-icon-maximize').addClass('mirador-icon-minimize');
+            element.siblings().show();
+            element.parent().removeClass('minimized');
+            //adjust height of focus element
+            this.focusModules[this.currentFocus].adjustHeight('focus-bottom-panel-minimized', true);
+        }
+    },
+    
+    adjustFocusSize: function(panelType, panelState) {
+        if (panelType === 'bottomPanel') {
+            this.focusModules[this.currentFocus].adjustHeight('focus-max-height', panelState);
+        } else if (panelType === 'sidePanel') {
+            this.focusModules[this.currentFocus].adjustWidth('focus-max-height', panelState);
+        } else {}
     },
     
     toggleMetadataOverlay: function(focusState) {
-        this.togglePanels('overlay', !this.focusOverlaysAvailable[focusState].overlay.MetadataView, 'MetadataView', focusState);
+        var _this = this;
+        var currentState = this.focusOverlaysAvailable[focusState].overlay.MetadataView;
+        if (currentState) {
+            this.element.find('.mirador-icon-metadata-view').removeClass('selected');
+        } else {
+            this.element.find('.mirador-icon-metadata-view').addClass('selected');
+        }
+        //set overlay for all focus types to same value
+        jQuery.each(this.focusOverlaysAvailable, function(focusType, options) {
+            if (focusState !== focusType) {
+                this.overlay.MetadataView = !currentState;
+            }
+        });
+        //and then do toggling for current focus
+        this.togglePanels('overlay', !currentState, 'MetadataView', focusState);
     },
 
     toggleFocus: function(focusState, imageMode) {
@@ -3868,6 +3942,10 @@ window.Mirador = window.Mirador || function(config) {
             default:
                break;
         }
+        
+        if (this.focusOverlaysAvailable[this.currentFocus].overlay.MetadataView) {
+            this.element.find('.mirador-icon-metadata-view').addClass('selected');
+        }
     },
     
     // based on currentFocus
@@ -3900,6 +3978,10 @@ window.Mirador = window.Mirador || function(config) {
         this.element.find('.mirador-icon-scroll-view').on('click', function() {
            _this.toggleScrollView(_this.currentImageID);
         });
+        
+        this.element.find('.mirador-thumb-panel').on('click', function() {
+           _this.minMaxBottomPanel(jQuery(this));
+        });
     },
 
     // template should be based on workspace type
@@ -3909,7 +3991,9 @@ window.Mirador = window.Mirador || function(config) {
          '<div class="sidePanel"></div>',
          '<div class="view-container">',
            '<div class="overlay"></div>',
-           '<div class="bottomPanel"></div>',
+           '<div class="bottomPanel">',
+           '<span class="mirador-btn mirador-thumb-panel mirador-icon-minimize"></span>',
+           '</div>',
          '</div>',
        '</div>',
      '</div>'
@@ -3988,8 +4072,6 @@ window.Mirador = window.Mirador || function(config) {
        
        this.stitchList = this.getStitchList();
        this.createOpenSeadragonInstance();
-       
-       this.bindEvents();
     },
     
     template: Handlebars.compile([
@@ -3997,8 +4079,16 @@ window.Mirador = window.Mirador || function(config) {
        '</div>'
     ].join('')),
     
-    bindEvents: function() {
-    
+    bindOSDEvents: function() {
+       var _this = this;
+       
+       this.element.find('.mirador-icon-next').on('click', function() {
+          _this.next();
+       });
+       
+       this.element.find('.mirador-icon-previous').on('click', function() {
+          _this.previous();
+       });
     },
     
     toggle: function(stateValue) {
@@ -4015,6 +4105,18 @@ window.Mirador = window.Mirador || function(config) {
 
     show: function() {
         jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+    },
+    
+    adjustWidth: function(className, hasClass) {
+       
+    },
+    
+    adjustHeight: function(className, hasClass) {
+        if (hasClass) {
+           this.element.removeClass(className);
+        } else {
+           this.element.addClass(className);
+        }
     },
     
     updateImage: function(imageID) {
@@ -4054,6 +4156,8 @@ window.Mirador = window.Mirador || function(config) {
 	'collectionTileMargin': this.stitchTileMargin,
 	'collectionTileSize': 1600
       });
+      
+      this.bindOSDEvents();
 
       this.osd.addHandler('open', function(){
         _this.zoomLevel = _this.osd.viewport.getZoom();
@@ -4084,19 +4188,14 @@ window.Mirador = window.Mirador || function(config) {
         next = this.currentImgIndex + 2;
       }
       if (next < this.imagesList.length) {
-        this.currentImgIndex = next;
-        this.currentImg = this.imagesList[next];
-
-        this.stitchList = this.getStitchList();
-
-        this.createOpenSeadragonInstance();
+        this.parent.setCurrentImageID(this.imagesList[next]['@id']);
       }
     },
 
     // previous two pages for paged objects
     // need previous single page for lining things up
     // don't need for continuous or individuals
-    prev: function() {
+    previous: function() {
       var prev;
       if (this.currentImgIndex % 2 === 0) {
         prev = this.currentImgIndex - 2;
@@ -4104,12 +4203,7 @@ window.Mirador = window.Mirador || function(config) {
         prev = this.currentImgIndex - 1;
       }
       if (prev >= 0) {
-        this.currentImgIndex = prev;
-        this.currentImg = this.imagesList[prev];
-        
-        this.stitchList = this.getStitchList();
-
-        this.createOpenSeadragonInstance();
+        this.parent.setCurrentImageID(this.imagesList[prev]['@id']);
       }
     },
     
@@ -4266,8 +4360,6 @@ window.Mirador = window.Mirador || function(config) {
 
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.parent.updateFocusImages([this.imageID]);
-        
-        this.bindEvents();
     },
     
     template: Handlebars.compile([
@@ -4275,9 +4367,16 @@ window.Mirador = window.Mirador || function(config) {
        '</div>'
     ].join('')),
     
-    bindEvents: function() {
+    bindOSDEvents: function() {
        var _this = this;
-
+       
+       this.element.find('.mirador-icon-next').on('click', function() {
+          _this.next();
+       });
+       
+       this.element.find('.mirador-icon-previous').on('click', function() {
+          _this.previous();
+       });
     },
     
     toggle: function(stateValue) {
@@ -4294,6 +4393,18 @@ window.Mirador = window.Mirador || function(config) {
 
     show: function() {
         jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+    },
+    
+    adjustWidth: function(className, hasClass) {
+       
+    },
+    
+    adjustHeight: function(className, hasClass) {
+        if (hasClass) {
+           this.element.removeClass(className);
+        } else {
+           this.element.addClass(className);
+        }
     },
 
     createOpenSeadragonInstance: function(imageUrl, osdBounds) {
@@ -4315,10 +4426,12 @@ window.Mirador = window.Mirador || function(config) {
       .appendTo(this.element);
 
       this.osd = $.OpenSeadragon({
-        'id':           elemOsd.attr('id'),
+        'id':           osdId,
         'tileSources':  $.Iiif.prepJsonForOsd(infoJson)
       });
-
+            
+      this.bindOSDEvents();
+            
       this.osd.addHandler('open', function(){
         _this.zoomLevel = _this.osd.viewport.getZoom();
 
@@ -4334,6 +4447,22 @@ window.Mirador = window.Mirador || function(config) {
         this.currentImg = this.imagesList[this.currentImgIndex];
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.parent.updateFocusImages([imageID]);
+    },
+    
+    next: function() {
+      var next = this.currentImgIndex + 1;
+
+      if (next < this.imagesList.length) {
+        this.parent.setCurrentImageID(this.imagesList[next]['@id']);
+      }
+    },
+
+    previous: function() {
+      var prev = this.currentImgIndex - 1;
+
+      if (prev >= 0) {
+        this.parent.setCurrentImageID(this.imagesList[prev]['@id']);
+      }
     }
 
   };
@@ -4536,7 +4665,8 @@ window.Mirador = window.Mirador || function(config) {
       appendTo:             null,
       thumbInfo:            {thumbsHeight: 150, listingCssCls: 'listing-thumbs', thumbnailCls: 'thumbnail-view'},
       parent:               null,
-      panel:                false
+      panel:                false,
+      lazyLoadingFactor:    1.5  //should be >= 1
     }, options);
     
     this.init();
@@ -4609,7 +4739,7 @@ window.Mirador = window.Mirador || function(config) {
                 
         jQuery(_this.element).scroll(function() {
           jQuery.each(_this.element.find("img"), function(key, value) {
-                if ($.isOnScreen(value) && !jQuery(value).attr("src")) {
+                if ($.isOnScreen(value, _this.lazyLoadingFactor) && !jQuery(value).attr("src")) {
                     var url = jQuery(value).attr("data");
                     _this.loadImage(value, url);
                 }
@@ -4695,7 +4825,7 @@ window.Mirador = window.Mirador || function(config) {
         easing: "easeInCubic", 
         complete: function() {
             jQuery.each(_this.element.find("img"), function(key, value) {
-                   if ($.isOnScreen(value) && !jQuery(value).attr("src")) {
+                   if ($.isOnScreen(value, _this.lazyLoadingFactor) && !jQuery(value).attr("src")) {
                       var url = jQuery(value).attr("data");
                       _this.loadImage(value, url);
                    }
@@ -4703,9 +4833,23 @@ window.Mirador = window.Mirador || function(config) {
         }
         
         });
+    },
+    
+    adjustWidth: function(className, hasClass) {
+       
+    },
+    
+    adjustHeight: function(className, hasClass) {
+        if (hasClass) {
+           this.element.removeClass(className);
+        } else {
+           this.element.addClass(className);
+        }
     }
 
   };
+  
+  
 
 }(Mirador));
 
@@ -5255,17 +5399,84 @@ jQuery.fn.scrollStop = function(callback) {
 
   $.OpenSeadragon = function(options) {
 
-    return OpenSeadragon(
+    var osd = OpenSeadragon(
 
       jQuery.extend({
         preserveViewport: true,
         visibilityRatio:  1,
         minZoomLevel:     0,
         defaultZoomLevel: 0,
-        prefixUrl:        'images/openseadragon/'
+        prefixUrl:        'images/openseadragon/',
+        autoHideControls: false,
+        navigationControlAnchor:    OpenSeadragon.ControlAnchor.BOTTOM_RIGHT,
+        navImages: {
+          zoomIn: {
+            REST:   'zoom-in.png',
+            GROUP:  'zoom-in.png',
+            HOVER:  'zoom-in-hover.png',
+            DOWN:   'zoom-in-hover.png'
+          },
+          zoomOut: {
+            REST:   'zoom-out.png',
+            GROUP:  'zoom-out.png',
+            HOVER:  'zoom-out-hover.png',
+            DOWN:   'zoom-out-hover.png'
+          },
+          home: {
+            REST:   'fit.png',
+            GROUP:  'fit.png',
+            HOVER:  'fit-hover.png',
+            DOWN:   'fit-hover.png'
+          },
+          fullpage: {
+            REST:   'full-screen.png',
+            GROUP:  'full-screen.png',
+            HOVER:  'full-screen-hover.png',
+            DOWN:   'full-screen-hover.png'
+          },
+          previous: {
+            REST:   'previous.png',
+            GROUP:  'previous.png',
+            HOVER:  'previous-hover.png',
+            DOWN:   'previous-hover.png'
+          },
+          next: {
+            REST:   'next.png',
+            GROUP:  'next.png',
+            HOVER:  'next-hover.png',
+            DOWN:   'next-hover.png'
+          }
+        }
       }, options)
 
     );
+    
+    var div = document.createElement("div");
+    var previous = document.createElement("a");
+    previous.className = 'mirador-btn mirador-icon-previous';
+    var next = document.createElement("a");
+    next.className = 'mirador-btn mirador-icon-next';
+        
+    div.appendChild(previous);
+    div.appendChild(next);
+
+    osd.addControl(div, {anchor: OpenSeadragon.ControlAnchor.BOTTOM_RIGHT});
+    
+    div = document.createElement("div");
+    var anno = document.createElement("a");
+    anno.className = 'mirador-btn mirador-icon-annotations';
+    var i = document.createElement("i");
+    i.className = "fa fa-comments fa-lg";
+    anno.appendChild(i);
+    
+    var choices = document.createElement("a");
+    choices.className = "mirador-btn mirador-icon-choices";
+
+	div.appendChild(anno);
+	div.appendChild(choices);
+	osd.addControl(div, {anchor: OpenSeadragon.ControlAnchor.BOTTOM_LEFT});
+
+    return osd;
 
   };
 
@@ -5634,15 +5845,19 @@ jQuery.fn.scrollStop = function(callback) {
     return osdFrame;
   };
   
-  //http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
-  $.isOnScreen = function(elem) {
+  // http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
+  $.isOnScreen = function(elem, outsideViewportFactor) {
+    var factor = 1;
+    if (outsideViewportFactor) {
+       factor = outsideViewportFactor;
+    }
     var win = jQuery(window);
     var viewport = {
-      top : win.scrollTop(),
-      left : win.scrollLeft()
+      top : (win.scrollTop() * factor),
+      left : (win.scrollLeft() * factor)
     };
-    viewport.bottom = viewport.top + win.height();
-    viewport.right = viewport.left + win.width();
+    viewport.bottom = (viewport.top + win.height()) * factor;
+    viewport.right = (viewport.left + win.width()) * factor;
 
     var el = jQuery(elem);
     var bounds = el.offset();

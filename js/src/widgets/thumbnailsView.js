@@ -12,7 +12,8 @@
       appendTo:             null,
       thumbInfo:            {thumbsHeight: 150, listingCssCls: 'listing-thumbs', thumbnailCls: 'thumbnail-view'},
       parent:               null,
-      panel:                false
+      panel:                false,
+      lazyLoadingFactor:    1.5  //should be >= 1
     }, options);
     
     this.init();
@@ -85,7 +86,7 @@
                 
         jQuery(_this.element).scroll(function() {
           jQuery.each(_this.element.find("img"), function(key, value) {
-                if ($.isOnScreen(value) && !jQuery(value).attr("src")) {
+                if ($.isOnScreen(value, _this.lazyLoadingFactor) && !jQuery(value).attr("src")) {
                     var url = jQuery(value).attr("data");
                     _this.loadImage(value, url);
                 }
@@ -171,7 +172,7 @@
         easing: "easeInCubic", 
         complete: function() {
             jQuery.each(_this.element.find("img"), function(key, value) {
-                   if ($.isOnScreen(value) && !jQuery(value).attr("src")) {
+                   if ($.isOnScreen(value, _this.lazyLoadingFactor) && !jQuery(value).attr("src")) {
                       var url = jQuery(value).attr("data");
                       _this.loadImage(value, url);
                    }
@@ -179,8 +180,22 @@
         }
         
         });
+    },
+    
+    adjustWidth: function(className, hasClass) {
+       
+    },
+    
+    adjustHeight: function(className, hasClass) {
+        if (hasClass) {
+           this.element.removeClass(className);
+        } else {
+           this.element.addClass(className);
+        }
     }
 
   };
+  
+  
 
 }(Mirador));

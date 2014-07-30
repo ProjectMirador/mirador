@@ -50,8 +50,6 @@
        
        this.stitchList = this.getStitchList();
        this.createOpenSeadragonInstance();
-       
-       this.bindEvents();
     },
     
     template: Handlebars.compile([
@@ -59,8 +57,16 @@
        '</div>'
     ].join('')),
     
-    bindEvents: function() {
-    
+    bindOSDEvents: function() {
+       var _this = this;
+       
+       this.element.find('.mirador-icon-next').on('click', function() {
+          _this.next();
+       });
+       
+       this.element.find('.mirador-icon-previous').on('click', function() {
+          _this.previous();
+       });
     },
     
     toggle: function(stateValue) {
@@ -77,6 +83,18 @@
 
     show: function() {
         jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+    },
+    
+    adjustWidth: function(className, hasClass) {
+       
+    },
+    
+    adjustHeight: function(className, hasClass) {
+        if (hasClass) {
+           this.element.removeClass(className);
+        } else {
+           this.element.addClass(className);
+        }
     },
     
     updateImage: function(imageID) {
@@ -116,6 +134,8 @@
 	'collectionTileMargin': this.stitchTileMargin,
 	'collectionTileSize': 1600
       });
+      
+      this.bindOSDEvents();
 
       this.osd.addHandler('open', function(){
         _this.zoomLevel = _this.osd.viewport.getZoom();
@@ -146,19 +166,14 @@
         next = this.currentImgIndex + 2;
       }
       if (next < this.imagesList.length) {
-        this.currentImgIndex = next;
-        this.currentImg = this.imagesList[next];
-
-        this.stitchList = this.getStitchList();
-
-        this.createOpenSeadragonInstance();
+        this.parent.setCurrentImageID(this.imagesList[next]['@id']);
       }
     },
 
     // previous two pages for paged objects
     // need previous single page for lining things up
     // don't need for continuous or individuals
-    prev: function() {
+    previous: function() {
       var prev;
       if (this.currentImgIndex % 2 === 0) {
         prev = this.currentImgIndex - 2;
@@ -166,12 +181,7 @@
         prev = this.currentImgIndex - 1;
       }
       if (prev >= 0) {
-        this.currentImgIndex = prev;
-        this.currentImg = this.imagesList[prev];
-        
-        this.stitchList = this.getStitchList();
-
-        this.createOpenSeadragonInstance();
+        this.parent.setCurrentImageID(this.imagesList[prev]['@id']);
       }
     },
     

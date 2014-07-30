@@ -362,15 +362,19 @@
     return osdFrame;
   };
   
-  //http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
-  $.isOnScreen = function(elem) {
+  // http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
+  $.isOnScreen = function(elem, outsideViewportFactor) {
+    var factor = 1;
+    if (outsideViewportFactor) {
+       factor = outsideViewportFactor;
+    }
     var win = jQuery(window);
     var viewport = {
-      top : win.scrollTop(),
-      left : win.scrollLeft()
+      top : (win.scrollTop() * factor),
+      left : (win.scrollLeft() * factor)
     };
-    viewport.bottom = viewport.top + win.height();
-    viewport.right = viewport.left + win.width();
+    viewport.bottom = (viewport.top + win.height()) * factor;
+    viewport.right = (viewport.left + win.width()) * factor;
 
     var el = jQuery(elem);
     var bounds = el.offset();
