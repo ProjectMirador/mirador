@@ -28,7 +28,7 @@ module.exports = function(grunt) {
     'js/lib/jquery.layout-latest.min.js',
     'js/lib/pubsub.min.js',
     'js/lib/jquery-ui-1.9.2.min.js',
-    'js/lib/split-pane.js'
+    'js/lib/split-pane.js',
     'js/lib/jquery.scrollTo.min.js',
     'js/lib/mousetrap.min.js'
   ],
