@@ -5,14 +5,15 @@
     jQuery.extend(this, {
       currentImgIndex:      0,
       imageID:              null,
+      focusImages:          [],
       manifest:             null,
       element:              null,
       imagesList:           [],
       appendTo:             null,
-      thumbsListingCls:     '',
-      thumbsHeight:         150,
+      thumbInfo:            {thumbsHeight: 150, listingCssCls: 'listing-thumbs', thumbnailCls: 'thumbnail-view'},
       parent:               null,
-      panel:                false
+      panel:                false,
+      lazyLoadingFactor:    1.5  //should be >= 1
     }, options);
     
     this.init();
@@ -25,12 +26,7 @@
         if (this.imageID !== null) {
             this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
         }
-        
-        if (this.panel) {
-            this.thumbsHeight = 80;
-        }
 
-        this.thumbsListingCls = 'listing-thumbs';
         this.loadContent();
         this.bindEvents();
         },
@@ -38,17 +34,17 @@
     loadContent: function() {
       var _this = this,
       tplData = {
-        defaultHeight:  this.thumbsHeight,
-        listingCssCls:  this.panel ? 'panel-listing-thumbs' : 'listing-thumbs',
-        thumbnailCls:   this.panel ? 'panel-thumbnail-view' : 'thumbnail-view'
+        defaultHeight:  this.thumbInfo.thumbsHeight,
+        listingCssCls:  this.thumbInfo.listingCssCls,
+        thumbnailCls:   this.thumbInfo.thumbnailCls
       };
 
       tplData.thumbs = jQuery.map(this.imagesList, function(image, index) {
         var aspectRatio = image.height/image.width,
-        width = (_this.thumbsHeight/aspectRatio);
+        width = (_this.thumbInfo.thumbsHeight/aspectRatio);
 
         return {
-          thumbUrl: $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), _this.thumbsHeight),
+          thumbUrl: $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), _this.thumbInfo.thumbsHeight),
           title:    image.label,
           id:       image['@id'],
           width:    width,
@@ -59,8 +55,27 @@
       this.element = jQuery(_this.template(tplData)).appendTo(this.appendTo);
     },
     
-    updateCurrentImg: function() {
+    updateImage: function(imageID) {
+        this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
+        this.element.find('.highlight').removeClass('highlight');
+        this.element.find("img[data-image-id='"+imageID+"']").addClass('highlight');
+        this.element.find("img[data-image-id='"+imageID+"']").parent().addClass('highlight');
+    },
     
+    updateFocusImages: function(focusList) {
+        var _this = this;
+        this.element.find('.highlight').removeClass('highlight');
+        jQuery.each(focusList, function(index, imageID) {
+           _this.element.find("img[data-image-id='"+imageID+"']").addClass('highlight');
+           _this.element.find("img[data-image-id='"+imageID+"']").parent().addClass('highlight');
+        });
+    },
+
+    currentImageChanged: function() {
+      var _this = this,
+      target = _this.element.find('.highlight'),
+      scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
+      _this.element.scrollTo(scrollPosition, 900);
     },
     
     bindEvents: function() {
@@ -71,7 +86,7 @@
                 
         jQuery(_this.element).scroll(function() {
           jQuery.each(_this.element.find("img"), function(key, value) {
-                if ($.isOnScreen(value) && !jQuery(value).attr("src")) {
+                if ($.isOnScreen(value, _this.lazyLoadingFactor) && !jQuery(value).attr("src")) {
                     var url = jQuery(value).attr("data");
                     _this.loadImage(value, url);
                 }
@@ -81,7 +96,12 @@
         //add any other events that would trigger thumbnail display (resize, etc)
                 
         _this.element.find('.thumbnail-image').on('click', function() {
-           _this.parent.toggleImageView(jQuery(this).attr('data-image-id'));
+          var canvasID = jQuery(this).attr('data-image-id');
+          _this.parent.setCurrentImageID(canvasID);
+        });
+
+        jQuery.subscribe('CurrentImageIDUpdated', function(imageID) {
+          _this.currentImageChanged();
         });
     },
     
@@ -102,11 +122,28 @@
         });
     },
     
+    reloadImages: function(newThumbHeight, triggerShow) {
+       var _this = this;
+       this.thumbInfo.thumbsHeight = newThumbHeight;
+       
+       jQuery.each(this.imagesList, function(index, image) {
+          var aspectRatio = image.height/image.width,
+          width = (_this.thumbInfo.thumbsHeight/aspectRatio),
+          newThumbURL = $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), _this.thumbInfo.thumbsHeight),
+          id = image['@id'];
+          var imageElement = _this.element.find('img[data-image-id="'+id+'"]');
+          imageElement.attr('data', newThumbURL).attr('height', _this.thumbInfo.thumbsHeight).attr('width', width).attr('src', '');
+       });
+       if (triggerShow) {
+          this.show();
+       }
+    },
+    
     template: Handlebars.compile([
       '<div class="{{thumbnailCls}}">',
         '<ul class="{{listingCssCls}}">',
           '{{#thumbs}}',
-            '<li>',
+            '<li class="{{highlight}}">',
                 '<img class="thumbnail-image {{highlight}}" title="{{title}}" data-image-id="{{id}}" src="" data="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',
                 '<div class="thumb-label">{{title}}</div>',
             '</li>',
@@ -135,7 +172,7 @@
         easing: "easeInCubic", 
         complete: function() {
             jQuery.each(_this.element.find("img"), function(key, value) {
-                   if ($.isOnScreen(value)) {
+                   if ($.isOnScreen(value, _this.lazyLoadingFactor) && !jQuery(value).attr("src")) {
                       var url = jQuery(value).attr("data");
                       _this.loadImage(value, url);
                    }
@@ -143,8 +180,22 @@
         }
         
         });
+    },
+    
+    adjustWidth: function(className, hasClass) {
+       
+    },
+    
+    adjustHeight: function(className, hasClass) {
+        if (hasClass) {
+           this.element.removeClass(className);
+        } else {
+           this.element.addClass(className);
+        }
     }
 
   };
+  
+  
 
 }(Mirador));

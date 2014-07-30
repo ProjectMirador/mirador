@@ -30,17 +30,16 @@
       this.metadataTypes.links = $.getMetadataLinks(_this.manifest);
       this.metadataTypes.metadata = $.getMetadataFields(_this.manifest);
 
-      jQuery.each(this.metadataTypes, function(metadata_key, metadata_value) {
-        tplData[metadata_key] = [];
+      jQuery.each(this.metadataTypes, function(metadataKey, metadataValue) {
+        tplData[metadataKey] = [];
 
-        // alert(type + ' ' + _this.metadata[type]);
-        jQuery.each(metadata_value, function(key, value) {
+        jQuery.each(metadataValue, function(key, value) {
           if (typeof value === 'object') {
             value = $.stringifyObject(value);
           }
 
           if (typeof value === 'string' && value !== '') {
-            tplData[metadata_key].push({
+            tplData[metadataKey].push({
               label: $.extractLabelFromAttribute(key),
               value: _this.addLinksToUris(value)
             });
@@ -124,7 +123,7 @@
             '<dt>{{label}}:</dt><dd>{{value}}</dd>',
           '{{/each}}',
         '</dl>'
-    ].join(''))
+    ].join(''), { noEscape: true })
 
   };
 

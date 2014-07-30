@@ -4,41 +4,43 @@
 
     jQuery.extend(true, this, {
       element:           null,
+      scrollImageRatio:  0.9,
       appendTo:          null,
       manifest:          null,
       currentImageID:    null,
+      focusImages:       [],
       imagesList:        null,
+      currentImageMode:  'ImageView',
+      //imageModes:        ['ImageView', 'BookView'] //for drop down menu
       defaultState:      'ThumbnailsView',
-      uiState:           {'ThumbnailsView': false, 'ImageView': false, 'ScrollView': false, 'BookView': false},
-      uiViews:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
-      //overlayState:      {'MetadataView': false, 'TableOfContentsView': false, 'ThumbnailsView' : false},
-      //overlayViews:      {'MetadataView': null, 'TableOfContentsView' : null, 'ThumbnailsView': null},
-      uiOverlaysAvailable: {
+      currentFocus:      'ThumbnailsView',
+      focuses:           ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
+      focusModules:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
+      focusOverlaysAvailable: {
           'ThumbnailsView': {
               'overlay' : {'MetadataView' : false}, 
-              'sidePanel' : {'' : false}, //'TableOfContentsView',
-               'bottomPanel' : {'' : false}
+              'sidePanel' : {'TableOfContents' : true},
+              'bottomPanel' : {'' : false}
           },
           'ImageView': {
               'overlay' : {'MetadataView' : false}, 
-              'sidePanel' : {'' : false}, //'TableOfContentsView', 
+              'sidePanel' : {'TableOfContents' : true},
               'bottomPanel' : {'ThumbnailsView' : true}
           },
           'ScrollView': {
               'overlay' : {'MetadataView' : false}, 
-              'sidePanel' : {'' : false}, //'TableOfContentsView',
+              'sidePanel' : {'TableOfContents' : true},
               'bottomPanel' : {'' : false}
           },
           'BookView': {
               'overlay' : {'MetadataView' : false},
-              'sidePanel' : {'' : false}, //'TableOfContentsView', 
+              'sidePanel' : {'TableOfContents' : true},
               'bottomPanel' : {'ThumbnailsView' : true}
           }
         },
       sidePanel: null,
       bottomPanel: null,
       overlay: null
-
     }, $.DEFAULT_SETTINGS, options);
 
     this.init();
@@ -47,8 +49,6 @@
 
   $.Window.prototype = {
     init: function () {
-      this.updateState(this.defaultState);
-
       this.element = jQuery(this.template()).appendTo(this.appendTo);
 
       this.bindEvents();
@@ -57,17 +57,15 @@
     bindEvents: function() {
       var _this = this;
 
-      jQuery.subscribe('manifestToWindow', function(_, manifest, uiState, imageID) {
-        if (uiState) {
-          _this.updateState(uiState);
-        } else {             
-          _this.updateState(_this.defaultState);
+      jQuery.subscribe('manifestToWindow', function(_, manifest, focusState, imageID) {
+        //empty or invalid focus state, use default state
+        if (!focusState || jQuery.inArray(focusState, _this.focuses) === -1 ) {
+           focusState = _this.defaultState;
         }
         
-        //update panels and overlay state to default?
+        // update panels and overlay state to default?
         
-        jQuery.each(_this.uiState, function(key, value){ 
-          if (value && _this.manifest != manifest) {
+          if (_this.manifest === manifest) { return; }
 
             //reset the window div and update manifest
             _this.clearWindow();
@@ -79,50 +77,34 @@
                 _this.currentImageID = _this.imagesList[0]['@id'];
             }
 
-            //add manifest title and nav bar and bind nav bar events
             _this.element.prepend(_this.manifestInfoTemplate({title: manifest.label}));
-            _this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
-              _this.toggleThumbnails();
-            });
-            _this.element.find('.mirador-icon-metadata-view').on('click', function() {
-              _this.toggleMetadataOverlay(key);
-            });
-            _this.element.find('.mirador-icon-image-view').on('click', function() {
-              _this.toggleBookView();
-            });
             
             //clear any existing objects
             _this.clearViews();
             _this.clearPanelsAndOverlay();
-            
+
             //attach view and toggle view, which triggers the attachment of panels or overlays
-            _this.uiViews[key] = new $[key]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this, imageID: imageID, imagesList: _this.imagesList} );
-            _this.toggleUI(key);
+            _this.focusModules[focusState] = new $[focusState]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this, imageID: imageID, imagesList: _this.imagesList} );
+            _this.bindNavigation();
+            _this.toggleFocus(focusState);
+      });
+      
+      jQuery(window).resize($.debounce(function(){
+          if (_this.focusModules.ScrollView) {
+              var containerHeight = _this.element.find('.view-container').height();
+              var triggerShow = false;
+              if (_this.currentFocus === "ScrollView") {
+                 triggerShow = true;
+              }
+              _this.focusModules.ScrollView.reloadImages(Math.floor(containerHeight * _this.scrollImageRatio), triggerShow);
           }
-        });
-      });
-
-      /*jQuery.subscribe('toggleImageView', function(_, imageID) {
-        _this.toggleImageView(imageID);	
-      });*/
-
-    },
-
-    updateState: function(state) {
-      var _this = this;
-      jQuery.each(this.uiState, function(key, value) {
-        if (key === state) {
-          _this.uiState[key] = true;
-        } else {
-          _this.uiState[key] = false;
-        }
-      });
+      }, 300));
     },
 
     clearViews: function() {
       var _this = this;
-      jQuery.each(_this.uiViews, function(key, value) {
-        _this.uiViews[key] = null;
+      jQuery.each(_this.focusModules, function(key, value) {
+        _this.focusModules[key] = null;
       });
     },
 
@@ -141,22 +123,42 @@
     updatePanelsAndOverlay: function(state) {
         var _this = this;
 
-        jQuery.each(this.uiOverlaysAvailable[state], function(panelType, viewOptions) {
+        jQuery.each(this.focusOverlaysAvailable[state], function(panelType, viewOptions) {
             jQuery.each(viewOptions, function(view, displayed) {
                 //instantiate any panels that exist for this view but are still null
                 if (view !== '' && _this[panelType] === null) {
-                    _this[panelType] = new $[view]({manifest: _this.manifest, appendTo: _this.element.find('.'+panelType), parent: _this, panel: true, imageID: _this.currentImageID, imagesList: _this.imagesList});
+                    _this[panelType] = new $[view]({
+                      manifest: _this.manifest, 
+                      appendTo: _this.element.find('.'+panelType), 
+                      parent: _this, 
+                      panel: true, 
+                      imageID: _this.currentImageID, 
+                      imagesList: _this.imagesList,
+                      thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
+                    });
                 }
+                
                 //toggle any valid panels
                 if (view !== '' && displayed) {   
                     _this.togglePanels(panelType, displayed, view, state);
                 }
+                
                 //hide any panels instantiated but not available to this view
                 if (view === '' && _this[panelType]) {
                    _this.togglePanels(panelType, displayed, view, state);
                 }
+                
+                //lastly, adjust height for non-existent panels
+                if (view === '') {
+                   _this.adjustFocusSize(panelType, displayed);
+                }
+                
+                //update current image for all valid panels
             });
         });
+        
+        //update panels with current image
+        if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
 
     get: function(prop, parent) {
@@ -174,90 +176,251 @@
       }
     },
    
-    togglePanels: function(panelType, panelState, viewType, uiState) {
-        //update state in uiOverlaysAvailable
-        this.uiOverlaysAvailable[uiState][panelType][viewType] = panelState;
+    togglePanels: function(panelType, panelState, viewType, focusState) {
+        //update state in focusOverlaysAvailable
+        this.focusOverlaysAvailable[focusState][panelType][viewType] = panelState;
         this[panelType].toggle(panelState);
-        if (panelType === "sidePanel") {
-            //side panel should adjust width of view-container
-            
+        this.adjustFocusSize(panelType, panelState);
+    },
+    
+    minMaxBottomPanel: function(element) {
+        if (element.hasClass('mirador-icon-minimize')) {
+            //hide all other siblings, change icon to maximize, change height of parent
+            element.removeClass('mirador-icon-minimize').addClass('mirador-icon-maximize');
+            element.siblings().hide();
+            element.parent().addClass('minimized');
+            //adjust height of focus element
+            this.focusModules[this.currentFocus].adjustHeight('focus-bottom-panel-minimized', false);
+        } else {
+            //show all other siblings, change icon to minimize, change height of parent
+            element.removeClass('mirador-icon-maximize').addClass('mirador-icon-minimize');
+            element.siblings().show();
+            element.parent().removeClass('minimized');
+            //adjust height of focus element
+            this.focusModules[this.currentFocus].adjustHeight('focus-bottom-panel-minimized', true);
         }
     },
     
-    toggleMetadataOverlay: function(uiState) {
-        this.togglePanels('overlay', !this.uiOverlaysAvailable[uiState].overlay.MetadataView, 'MetadataView', uiState);
+    adjustFocusSize: function(panelType, panelState) {
+        if (panelType === 'bottomPanel') {
+            this.focusModules[this.currentFocus].adjustHeight('focus-max-height', panelState);
+        } else if (panelType === 'sidePanel') {
+            this.focusModules[this.currentFocus].adjustWidth('focus-max-height', panelState);
+        } else {}
     },
-
-    // One UI must always be on      
-    toggleUI: function(state) {
-      var _this = this;
-
-      jQuery.each(this.uiState, function(key, value) {
-        if (key != state && _this.get(key, 'uiState') === true) {
-          _this.set(key, false, {parent: 'uiState'});
-          if (_this.uiViews[key]) {
-            _this.uiViews[key].toggle(false);
-          }
+    
+    toggleMetadataOverlay: function(focusState) {
+        var _this = this;
+        var currentState = this.focusOverlaysAvailable[focusState].overlay.MetadataView;
+        if (currentState) {
+            this.element.find('.mirador-icon-metadata-view').removeClass('selected');
+        } else {
+            this.element.find('.mirador-icon-metadata-view').addClass('selected');
         }
-      });
-      this.set(state, true, {parent: 'uiState'});
-      this.uiViews[state].toggle(true);
-      this.updatePanelsAndOverlay(state);
+        //set overlay for all focus types to same value
+        jQuery.each(this.focusOverlaysAvailable, function(focusType, options) {
+            if (focusState !== focusType) {
+                this.overlay.MetadataView = !currentState;
+            }
+        });
+        //and then do toggling for current focus
+        this.togglePanels('overlay', !currentState, 'MetadataView', focusState);
     },
 
-    toggleThumbnails: function() {
-      if (this.uiViews.ThumbnailsView === null) {
-        this.uiViews.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: this.currentImageID, imagesList: this.imagesList} );
+    toggleFocus: function(focusState, imageMode) {
+      var _this = this;
+      
+      this.currentFocus = focusState;
+      if (imageMode) {
+          this.currentImageMode = imageMode;
       }
-      this.toggleUI('ThumbnailsView');
+      //set other focusStates to false (toggle to display none)
+      jQuery.each(this.focusModules, function(focusKey, module) {
+         if (module && focusState !== focusKey) {
+             module.toggle(false);
+         }
+      });
+      this.focusModules[focusState].toggle(true);
+      this.updateManifestInfo();
+      this.updatePanelsAndOverlay(focusState);
+    },
+
+    toggleThumbnails: function(imageID) {
+      if (this.focusModules.ThumbnailsView === null) {
+        this.focusModules.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: this.currentImageID, imagesList: this.imagesList} );
+      } else {
+         var view = this.focusModules.ThumbnailsView;
+         view.updateImage(imageID);
+      }
+      this.toggleFocus('ThumbnailsView', '');
     },
 
     toggleImageView: function(imageID) {
       this.currentImageID = imageID;
-      if (this.uiViews.ImageView === null) {
-        this.uiViews.ImageView = new $.ImageView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: imageID, imagesList: this.imagesList} );
+      if (this.focusModules.ImageView === null) {
+        this.focusModules.ImageView = new $.ImageView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: imageID, imagesList: this.imagesList} );
       } else {
-        var view = this.uiViews.ImageView;
+        var view = this.focusModules.ImageView;
         view.updateImage(imageID);
       }
-      this.toggleUI('ImageView');
+      this.toggleFocus('ImageView', 'ImageView');
     },
 
-    toggleBookView: function() {
-        if (this.uiViews.BookView === null) {
-           this.uiViews.BookView = new $.BookView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: this.currentImageID, imagesList: this.imagesList} );
+    toggleBookView: function(imageID) {
+        this.currentImageID = imageID;
+        if (this.focusModules.BookView === null) {
+           this.focusModules.BookView = new $.BookView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: imageID, imagesList: this.imagesList} );
         } else {
-           var view = this.uiViews.BookView;
-           view.update(this.currentImageID);
+           var view = this.focusModules.BookView;
+           view.updateImage(imageID);
         }
-        this.toggleUI('BookView');
+        this.toggleFocus('BookView', 'BookView');
     },
 
     toggleScrollView: function(imageID) {
+        this.currentImageID = imageID;
+        if (this.focusModules.ScrollView === null) {
+           var containerHeight = this.element.find('.view-container').height();
+           this.focusModules.ScrollView = new $.ThumbnailsView( 
+             {manifest: this.manifest, 
+             appendTo: this.element.find('.view-container'), 
+             parent: this, imageID: this.currentImageID, 
+             imagesList: this.imagesList, 
+             thumbInfo: {thumbsHeight: Math.floor(containerHeight * this.scrollImageRatio), listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}}
+           );
+        } else {
+         var view = this.focusModules.ScrollView;
+         view.updateImage(imageID);
+      }
+      this.toggleFocus('ScrollView', '');    
+    },
+    
+    loadImageModeFromPanel: function(imageID) {
+        var _this = this;
+        switch(_this.currentImageMode) {
+            case 'ImageView':
+                _this.toggleImageView(imageID);
+                break;
+            case 'BookView':
+                _this.toggleBookView(imageID);
+                break;
+            case 'ScrollView':
+               _this.toggleScrollView(imageID);
+               break;
+            default:
+               break;
+        }
+    },
+    
+    updateFocusImages: function(imageList) {
+      this.focusImages = imageList;
     },
 
-    //template should be based on workspace type
+    setCurrentImageID: function(imageID) {
+      this.currentImageID = imageID;
+      this.loadImageModeFromPanel(imageID);
+      jQuery.publish('CurrentImageIDUpdated', {newImageID : imageID});
+    },
+    
+    setCursorFrameStart: function(canvasID) {
+      console.log('setting Cursor Frame');
+    },
+
+    updateManifestInfo: function() {
+        var _this = this;
+        this.element.find('.window-manifest-navigation').children().removeClass('selected');
+        switch(_this.currentFocus) {
+            case 'ThumbnailsView':
+                //hide thumbnails button and highlight currentImageMode?
+                _this.element.find('.mirador-icon-thumbnails-view').addClass('selected');
+                break;
+            case 'ImageView':
+                //highlight Single Image View option
+                _this.element.find('.mirador-icon-image-view').addClass('selected');
+                break;
+            case 'BookView':
+                //highlight Book View option
+                _this.element.find('.mirador-icon-image-view').addClass('selected');
+                break;
+            case 'ScrollView':
+               //highlight Scroll View option
+               _this.element.find('.mirador-icon-scroll-view').addClass('selected');
+               break;
+            default:
+               break;
+        }
+        
+        if (this.focusOverlaysAvailable[this.currentFocus].overlay.MetadataView) {
+            this.element.find('.mirador-icon-metadata-view').addClass('selected');
+        }
+    },
+    
+    // based on currentFocus
+    bindNavigation: function() {
+        var _this = this;
+        this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
+            _this.toggleThumbnails(_this.currentImageID);
+        });
+        
+        this.element.find('.mirador-icon-metadata-view').on('click', function() {
+            _this.toggleMetadataOverlay(_this.currentFocus);
+        });
+        
+        this.element.find('.mirador-icon-image-view').mouseenter(
+            function() {
+              _this.element.find('.image-list').fadeIn();
+            }).mouseleave(
+            function() {
+              _this.element.find('.image-list').fadeOut();
+            });
+        
+        this.element.find('.single-image-option').on('click', function() {
+           _this.toggleImageView(_this.currentImageID);
+        });
+                
+        this.element.find('.book-option').on('click', function() {
+           _this.toggleBookView(_this.currentImageID);
+        });
+        
+        this.element.find('.mirador-icon-scroll-view').on('click', function() {
+           _this.toggleScrollView(_this.currentImageID);
+        });
+        
+        this.element.find('.mirador-thumb-panel').on('click', function() {
+           _this.minMaxBottomPanel(jQuery(this));
+        });
+    },
+
+    // template should be based on workspace type
     template: Handlebars.compile([
      '<div class="window">',
        '<div class="content-container">',
          '<div class="sidePanel"></div>',
          '<div class="view-container">',
            '<div class="overlay"></div>',
-           '<div class="bottomPanel"></div>',
+           '<div class="bottomPanel">',
+           '<span class="mirador-btn mirador-thumb-panel mirador-icon-minimize"></span>',
+           '</div>',
          '</div>',
        '</div>',
      '</div>'
     ].join('')),
 
     manifestInfoTemplate: Handlebars.compile([
-                                             '<div class="manifest-info">',
-                                             '<div class="window-manifest-navigation">',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa-photo"></i></a>',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
-                                             '</div>',
-                                             '<h3 class="window-manifest-title">{{title}}</h3>',
-                                             '</div>'
+     '<div class="manifest-info">',
+       '<div class="window-manifest-navigation">',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-2x"></i>',
+         '<ul class="image-list">',
+           '<li class="single-image-option">Single Image View</li>',
+           '<li class="book-option">Book View</li>',
+         '</ul>',
+         '</a>',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-scroll-view"></a>',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
+       '</div>',
+       '<h3 class="window-manifest-title">{{title}}</h3>',
+     '</div>'
     ].join(''))
   };
 

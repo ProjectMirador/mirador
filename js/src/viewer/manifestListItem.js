@@ -1,28 +1,42 @@
 (function($) {
 
-    $.ManifestsListItem = function(options) {
+    $.ManifestListItem = function(options) {
 
         jQuery.extend(true, this, {
             element:                    null,
             parent:                     null,
             manifestId:                 null,
             loadStatus:                 null,
-            numPreviewImages:           8,
-            thumbHeight:                80
+            thumbHeight:                80,
+            resultsWidth:               0,  //based on screen width
+            maxPreviewImagesWidth:      0,
+            repoWidth:                  80,
+            metadataWidth:              200,
+            margin:                     15,
+            remainingItemsMinWidth:     80,  //set a minimum width for the "more" image
+            imagesTotalWidth:           0
+            
         }, options);
 
         this.init();
         
     };
 
-    $.ManifestsListItem.prototype = {
+    $.ManifestListItem.prototype = {
 
         init: function() {
-          var _this = this;
-            this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
-            var remainingOffset = this.element.find('.repo-image').outerWidth(true) + this.element.find('.select-metadata').outerWidth(true) + this.element.find('.preview-images').outerWidth(true);
-            // this.element.find('.remaining-items').css('left', remainingOffset);
-            this.bindEvents();
+           var _this = this;
+           //need a better way of calculating this because JS can't get width and margin of hidden elements, so must manually set that info
+           //ultimately use 95% of space available, since sometimes it still displays too many images
+           this.maxPreviewImagesWidth = this.resultsWidth - (this.repoWidth + this.margin + this.metadataWidth + this.margin + this.remainingItemsMinWidth);
+           this.maxPreviewImagesWidth = this.maxPreviewImagesWidth * 0.95;
+          
+           this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
+
+           var remainingOffset = this.repoWidth + this.margin + this.metadataWidth + this.margin + this.imagesTotalWidth;
+           this.element.find('.remaining-items').css('left', remainingOffset);
+
+           this.bindEvents();
         },
 
         fetchTplData: function() {
@@ -44,38 +58,46 @@
               }
             })(),
             canvasCount: manifest.sequences[0].canvases.length,
-            remaining: (function() {
-              var remaining = manifest.sequences[0].canvases.length - _this.numPreviewImages;
-              if (remaining > 0) {
-                return remaining;
-              }
-            })(),
             images: []
           };
           tplData.repoImage = (function() {
-            var imageName = $.DEFAULT_SETTINGS.repoImages[tplData.repository || 'other'];
+            var repo = tplData.repository;
+            if (tplData.repository === '(Added from URL)') {
+               repo = '';
+            }            
+            var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'];
 
             return 'images/' + imageName;
           })();
 
-          if (_this.numPreviewImages > $.viewer.manifests[_this.manifestId].sequences[0].canvases.length) {
-            _this.numPreviewImages = $.viewer.manifests[_this.manifestId].sequences[0].canvases.length;
-          }
-
-          for ( var i=0; i < _this.numPreviewImages; i++) {
-            var canvas = $.viewer.manifests[_this.manifestId].sequences[0].canvases[i],
+          for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
+            var canvas = manifest.sequences[0].canvases[i],
             resource = canvas.images[0].resource,
             service = resource['default'] ? resource['default'].service : resource.service,
             url = $.Iiif.getUriWithHeight(service['@id'], _this.thumbHeight),
             aspectRatio = resource.height/resource.width,
             width = (_this.thumbHeight/aspectRatio);
-
+            
+            _this.imagesTotalWidth += (width + _this.margin);
+            if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
+               _this.imagesTotalWidth -= (width + _this.margin);
+               break;
+            }
+                        
             tplData.images.push({
               url: url,
               width: width,
+              height: _this.thumbHeight,
               id: canvas['@id']
             });
           }
+          
+          tplData.remaining = (function() {
+              var remaining = manifest.sequences[0].canvases.length - tplData.images.length;
+              if (remaining > 0) {
+                return remaining;
+              }
+            })();
 
           return tplData;
         },
@@ -120,12 +142,12 @@
                       '</div>',
                       '<div class="preview-images">',
                       '{{#each images}}',
-                        '<img src="{{url}}" width="{{width}}" class="thumbnail-image flash" data-image-id="{{id}}">',
+                        '<img src="{{url}}" width="{{width}}" height="{{height}}" class="preview-image flash" data-image-id="{{id}}">',
                       '{{/each}}',
                       '</div>',
-                      // '{{#if remaining}}',
-                      //   '<div class="remaining-items"><h3>{{remaining}} more</h3></div>',
-                      // '{{/if}}',
+                       '{{#if remaining}}',
+                         '<div class="remaining-items"><h3>{{remaining}} more</h3></div>',
+                       '{{/if}}',
                       '</li>'
         ].join(''))
     };

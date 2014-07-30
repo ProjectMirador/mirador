@@ -275,6 +275,10 @@
 
     return "uuid-" + idNum;
   };
+  
+  jQuery.fn.slideFadeToggle  = function(speed, easing, callback) {
+            return this.animate({opacity: 'toggle', height: 'toggle'}, speed, easing, callback);
+  };
 
 
   $.throttle = function(func, wait, options) {
@@ -358,21 +362,34 @@
     return osdFrame;
   };
   
-//http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
-  $.isOnScreen = function(elem) {
+  // http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
+  $.isOnScreen = function(elem, outsideViewportFactor) {
+    var factor = 1;
+    if (outsideViewportFactor) {
+       factor = outsideViewportFactor;
+    }
     var win = jQuery(window);
-   var viewport = {
-        top : win.scrollTop(),
-        left : win.scrollLeft()
+    var viewport = {
+      top : (win.scrollTop() * factor),
+      left : (win.scrollLeft() * factor)
     };
-   viewport.bottom = viewport.top + win.height();
-    viewport.right = viewport.left + win.width();
-    
+    viewport.bottom = (viewport.top + win.height()) * factor;
+    viewport.right = (viewport.left + win.width()) * factor;
+
     var el = jQuery(elem);
     var bounds = el.offset();
     bounds.bottom = bounds.top + el.height();
     bounds.right = bounds.left + el.width();
 
     return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
-};
+  };
+
+  $.getRangeIDByCanvasID = function(manifest, canvasID /*, [given parent range] (for multiple ranges, later) */) {
+    var ranges = jQuery.grep(manifest.structures, function(range) { return jQuery.inArray(canvasID, range.canvases) > -1; }),
+    rangeIDs = jQuery.map(ranges,  function(range) { return range['@id']; });
+
+    return rangeIDs;
+
+  };
+
 }(Mirador));

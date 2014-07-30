@@ -32,8 +32,7 @@
         this.element = jQuery(this.template()).appendTo(this.appendTo);
 
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-        
-        this.bindEvents();
+        this.parent.updateFocusImages([this.imageID]);
     },
     
     template: Handlebars.compile([
@@ -41,9 +40,16 @@
        '</div>'
     ].join('')),
     
-    bindEvents: function() {
+    bindOSDEvents: function() {
        var _this = this;
-
+       
+       this.element.find('.mirador-icon-next').on('click', function() {
+          _this.next();
+       });
+       
+       this.element.find('.mirador-icon-previous').on('click', function() {
+          _this.previous();
+       });
     },
     
     toggle: function(stateValue) {
@@ -60,6 +66,18 @@
 
     show: function() {
         jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+    },
+    
+    adjustWidth: function(className, hasClass) {
+       
+    },
+    
+    adjustHeight: function(className, hasClass) {
+        if (hasClass) {
+           this.element.removeClass(className);
+        } else {
+           this.element.addClass(className);
+        }
     },
 
     createOpenSeadragonInstance: function(imageUrl, osdBounds) {
@@ -81,10 +99,12 @@
       .appendTo(this.element);
 
       this.osd = $.OpenSeadragon({
-        'id':           elemOsd.attr('id'),
+        'id':           osdId,
         'tileSources':  $.Iiif.prepJsonForOsd(infoJson)
       });
-
+            
+      this.bindOSDEvents();
+            
       this.osd.addHandler('open', function(){
         _this.zoomLevel = _this.osd.viewport.getZoom();
 
@@ -95,9 +115,27 @@
     },
     
     updateImage: function(imageID) {
+        this.imageID = imageID;
         this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
         this.currentImg = this.imagesList[this.currentImgIndex];
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+        this.parent.updateFocusImages([imageID]);
+    },
+    
+    next: function() {
+      var next = this.currentImgIndex + 1;
+
+      if (next < this.imagesList.length) {
+        this.parent.setCurrentImageID(this.imagesList[next]['@id']);
+      }
+    },
+
+    previous: function() {
+      var prev = this.currentImgIndex - 1;
+
+      if (prev >= 0) {
+        this.parent.setCurrentImageID(this.imagesList[prev]['@id']);
+      }
     }
 
   };
