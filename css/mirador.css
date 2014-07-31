@@ -488,6 +488,7 @@ li.highlight {
   cursor: pointer;
   overflow:hidden;
   border-left: 4px solid deepSkyblue;
+  transition: all 0.2s ease-out;
 }
 .toc-link i {
   color: rgba(0,0,0,0.4);
