@@ -18,19 +18,24 @@
                 // windowOptions: {...}
             }],
             'addNew': false,
-            'move': false
+            'move': false,
+            'iconClass': 'image'
         },
         'compare': {
             'slots': [
                 {},
                 {}
-            ]
-        },
-        'detailView': {
-
+            ],
+            'iconClass': 'columns'
         },
         'bookReading': {
-
+            'slots': [{
+            }],
+            defaultWindowOptions: {
+            },
+            'addNew': true,
+            'move': false,
+            'iconClass': 'book'
         }
         // add new workspace types by appending a 
         // profile with plugin initialisation code:
