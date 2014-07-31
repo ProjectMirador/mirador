@@ -60,6 +60,7 @@
             canvasCount: manifest.sequences[0].canvases.length,
             images: []
           };
+          $.viewer.manifests[_this.manifestId].miradorRepository = tplData.repository;
           tplData.repoImage = (function() {
             var repo = tplData.repository;
             if (tplData.repository === '(Added from URL)') {
