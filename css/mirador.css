@@ -11,7 +11,7 @@
 
 .mirador-viewer {
   position:absolute;
-  top:35px;
+  top:33px;
   bottom:0;
   left:0;
   right:0;
@@ -323,7 +323,7 @@ li.highlight {
 #select-results {
   margin-left: 300px;
   height:100%;
-  width: 80%
+  overflow-y: scroll;
 }
 
 /* main menu clear storage
@@ -358,7 +358,7 @@ li.highlight {
   bottom:0;
   overflow: hidden;
   box-sizing: border-box;
-  padding: 10px;
+  padding: 8px;
 }
 
 /* Slot Scaffolding */
@@ -395,7 +395,6 @@ li.highlight {
   border: 2px solid rgb(190,190,190);
 }
 .addItemLink {
-  z-index:3;
   position:absolute;
   top:0;
   bottom:0;
@@ -489,6 +488,7 @@ li.highlight {
   cursor: pointer;
   overflow:hidden;
   border-left: 4px solid deepSkyblue;
+  transition: all 0.2s ease-out;
 }
 .toc-link i {
   color: rgba(0,0,0,0.4);
@@ -948,7 +948,7 @@ text {
 
 .annotationDetailToggle {
   float:right;
-  margin: 34px;
+  margin: 32px;
   margin-top:0;
   cursor: pointer;
 }
