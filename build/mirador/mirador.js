@@ -2878,20 +2878,28 @@ window.Mirador = window.Mirador || function(config) {
                 width: '100%'
                 // windowOptions: {...}
             }],
+            'label': 'Single Object',
             'addNew': false,
-            'move': false
+            'move': false,
+            'iconClass': 'image'
         },
         'compare': {
             'slots': [
                 {},
                 {}
-            ]
-        },
-        'detailView': {
-
+            ],
+            'label': 'Compare',
+            'iconClass': 'columns'
         },
         'bookReading': {
-
+            'slots': [{
+            }],
+            defaultWindowOptions: {
+            },
+            'label': 'Book Reading',
+            'addNew': true,
+            'move': false,
+            'iconClass': 'book'
         }
         // add new workspace types by appending a 
         // profile with plugin initialisation code:
@@ -3619,58 +3627,65 @@ window.Mirador = window.Mirador || function(config) {
 
 (function($) {
 
-	$.WorkspacesPanel = function(options) {
+  $.WorkspacesPanel = function(options) {
 
-		jQuery.extend(true, this, {
-			element: null,
-			appendTo: null,
-			parent: null
-		}, $.DEFAULT_SETTINGS, options);
-          
-		this.init();
+    jQuery.extend(true, this, {
+      element: null,
+      appendTo: null,
+      parent: null
+    }, options);
 
-	};
+    this.init();
 
-	$.WorkspacesPanel.prototype = {
-		init: function () {
-			var workspaceTemplate = [];
-			jQuery.each(this.parent.availableWorkspaces, function(key, value) {
-				workspaceTemplate.push({label : key});
-			});
-			this.element = jQuery(this.template({ workspaces : workspaceTemplate})).appendTo(this.appendTo);
-			this.bindEvents();
-		},
-		
-		bindEvents: function() {
-            var _this = this;
-            // handle subscribed events
-            jQuery.subscribe('workspacesPanelVisible.set', function(_, stateValue) {
-                if (stateValue) { _this.show(); return; }
-                _this.hide();
-            });
-        },
+  };
 
-         hide: function() {
-            jQuery(this.element).hide({effect: "fade", duration: 160, easing: "easeOutCubic"});
-        },
+  $.WorkspacesPanel.prototype = {
+    init: function () {
+      var workspaceTemplate = [];
+      jQuery.each(this.parent.availableWorkspaces, function(key, value) {
+        workspaceTemplate.push({
+          label : value.label,
+          iconClass: value.iconClass
+        });
+      });
 
-        show: function() {
-            jQuery(this.element).show({effect: "fade", duration: 160, easing: "easeInCubic"});
-        },
+      this.element = jQuery(this.template({ workspaces : workspaceTemplate})).appendTo(this.appendTo);
+      this.bindEvents();
+    },
 
-		template: Handlebars.compile([
-			'<div id="workspace-select-menu">',
-				'<h3>Choose Workspace Type</h3>',
-				'<ul class="workspaces-listing">',
-					'{{#each workspaces}}',
-						'<li>',
-							'<div class="workspace-label">{{label}}</div>',
-						'</li>',
-					'{{/each}}',
-				'</ul>',
-			'</div>'
-		].join(''))
-	};
+    bindEvents: function() {
+      var _this = this;
+      // handle subscribed events
+      jQuery.subscribe('workspacesPanelVisible.set', function(_, stateValue) {
+        if (stateValue) { _this.show(); return; }
+        _this.hide();
+      });
+    },
+
+    hide: function() {
+      jQuery(this.element).hide({effect: "fade", duration: 160, easing: "easeOutCubic"});
+    },
+
+    show: function() {
+      jQuery(this.element).show({effect: "fade", duration: 160, easing: "easeInCubic"});
+    },
+
+    template: Handlebars.compile([
+       '<div id="workspace-select-menu">',
+         '<h1>Choose Workspace Type</h1>',
+         '<ul class="workspaces-listing">',
+           '{{#each workspaces}}',
+             '<li class="workspace-option {{label}}">',
+               '<a href="javascrippt:void(0);" name="{{label}}">',
+                 '<i class="fa fa-{{iconClass}} workspace-icon"></i>',
+                 '<h2 class="workspace-label">{{label}}</h2>',
+               '</a>',
+             '</li>',
+           '{{/each}}',
+         '</ul>',
+       '</div>'
+    ].join(''))
+  };
 
 }(Mirador));
 

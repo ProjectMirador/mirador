@@ -1,4 +1,7 @@
-
+a {
+  color: inherit; /* blue colors for links too */
+  text-decoration: inherit; /* no underline */
+    }
 
 /*----------------------------------------------------------------------------
 /* Mirador styles
@@ -21,13 +24,6 @@
   margin: 0;
   padding: 0;
   border: 0;
-}
-
-.mirador-viewer a,
-.mirador-viewer a:active,
-.mirador-viewer a:visited {
-  color: #0052A3;
-  text-decoration: none;
 }
 
 
@@ -326,29 +322,37 @@ li.highlight {
   overflow-y: scroll;
 }
 
-/* main menu clear storage
----------------------------------------------------------------------------- */
-.mirador-main-menu-clear-local-storage {
-  line-height: 1.6;
-  width: 250px;
-  text-align: center;
+/* main-menu workspaces-panel */
+#workspace-select-menu {
+  background: url(../images/debut_dark.png) repeat;
+  background-color: #333;
+  text-align:center;
+  padding:20%;
+  padding-top:0;
+  box-sizing:border-box;
+}
+#workspace-select-menu h1 {
+  color: lightgray;
+  font-size:4em;
+  padding-bottom:3%;
+}
+#workspace-select-menu ul {
+  margin:0 auto;
+}
+#workspace-select-menu li {
+  list-style:none;
+  color:gray;
+  display:inline-block;
+  cursor: pointer;
+  margin:3%;
+}
+#workspace-select-menu li:hover {
+  color: lightgray;
+}
+#workspace-select-menu .workspace-icon {
+  font-size:8em;
 }
 
-.mirador-main-menu-clear-local-storage p:first-child {
-  padding-bottom: 10px;
-}
-
-.mirador-main-menu-clear-local-storage a.btn-cancel,
-.mirador-main-menu-clear-local-storage a.btn-clear {
-  padding: 5px 10px;
-}
-
-.mirador-main-menu-clear-local-storage a.btn-clear {
-  background-color: #0052A3;
-  border-radius: 4px;
-  color: #fff;
-  margin-left: 5px;
-}
 /* Workspace scaffolding */
 .workspace-container {
   position: absolute;
