@@ -17,7 +17,7 @@
       var workspaceTemplate = [];
       jQuery.each(this.parent.availableWorkspaces, function(key, value) {
         workspaceTemplate.push({
-          label : key,
+          label : value.label,
           iconClass: value.iconClass
         });
       });
@@ -45,12 +45,14 @@
 
     template: Handlebars.compile([
        '<div id="workspace-select-menu">',
-         '<h3>Choose Workspace Type</h3>',
+         '<h1>Choose Workspace Type</h1>',
          '<ul class="workspaces-listing">',
            '{{#each workspaces}}',
              '<li class="workspace-option {{label}}">',
-               '<i class="fa fa-{{iconClass}} workspace-icon"></i>',
-               '<h2 class="workspace-label">{{label}}</h2>',
+               '<a href="javascrippt:void(0);" name="{{label}}">',
+                 '<i class="fa fa-{{iconClass}} workspace-icon"></i>',
+                 '<h2 class="workspace-label">{{label}}</h2>',
+               '</a>',
              '</li>',
            '{{/each}}',
          '</ul>',

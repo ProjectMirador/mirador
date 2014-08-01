@@ -17,6 +17,7 @@
                 width: '100%'
                 // windowOptions: {...}
             }],
+            'label': 'Single Object',
             'addNew': false,
             'move': false,
             'iconClass': 'image'
@@ -26,6 +27,7 @@
                 {},
                 {}
             ],
+            'label': 'Compare',
             'iconClass': 'columns'
         },
         'bookReading': {
@@ -33,6 +35,7 @@
             }],
             defaultWindowOptions: {
             },
+            'label': 'Book Reading',
             'addNew': true,
             'move': false,
             'iconClass': 'book'
