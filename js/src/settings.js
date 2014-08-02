@@ -14,8 +14,7 @@
     'availableWorkspaces': {
         'singleObject': {
             'slots': [{
-                width: '100%'
-                // windowOptions: {...}
+                'width': '100%'
             }],
             'label': 'Single Object',
             'addNew': false,
@@ -31,9 +30,10 @@
             'iconClass': 'columns'
         },
         'bookReading': {
-            'slots': [{
-            }],
-            defaultWindowOptions: {
+            'slots': [
+              {}
+            ],
+            'defaultWindowOptions': {
             },
             'label': 'Book Reading',
             'addNew': true,
