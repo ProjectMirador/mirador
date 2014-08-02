@@ -37,7 +37,6 @@
       // load menu is invoked from it.
       jQuery.subscribe('manifestToSlot', function(e, manifest, focusState) {
         _this.clearSlot();
-        console.log(arguments);
         _this.window = new $.Window({appendTo: _this.element, currentFocus: focusState, manifest: manifest, id: _this.slotID});
       });
       
@@ -45,15 +44,14 @@
     },
 
     clearSlot: function() {
-      if (this.windowElement) { 
-        this.windowElement.fadeOut();
-        this.windowElement.remove();
+      if (this.window) { 
+        this.window.element.toggle('scale').fadeOut();
+        this.window.element.remove();
       }
     },
 
     addItem: function() {
       _this = this;
-      console.log(_this.slotID);
       _this.focused = true;
       _this.parent.addItem(_this.slotID);
     },
