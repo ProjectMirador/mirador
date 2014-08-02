@@ -4287,10 +4287,10 @@ window.Mirador = window.Mirador || function(config) {
 
       this.element.find('.mirador-icon-image-view').mouseenter(
         function() {
-        _this.element.find('.image-list').fadeIn();
+        _this.element.find('.image-list').stop().slideFadeToggle(300);
       }).mouseleave(
       function() {
-        _this.element.find('.image-list').fadeOut();
+        _this.element.find('.image-list').stop().slideFadeToggle(300);
       });
 
       this.element.find('.single-image-option').on('click', function() {
