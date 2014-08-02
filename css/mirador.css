@@ -396,7 +396,7 @@ li.highlight {
 }
 .slot:hover {
   box-shadow: inset 0 0 35px rgba(94, 219, 255, 1);
-  border: 2px solid rgb(190,190,190);
+  /* border: 2px solid rgb(190,190,190); */
 }
 .addItemLink {
   position:absolute;
@@ -415,6 +415,7 @@ li.highlight {
   top:0;
   bottom:0;
   overflow: hidden;
+  background-color: #333;
 }
 .manifest-info {
   overflow: auto;

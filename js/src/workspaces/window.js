@@ -53,13 +53,11 @@
       manifest = _this.manifest,
       focusState = _this.currentFocus;
 
-      _this.element = jQuery(this.template()).appendTo(this.appendTo);
+      _this.element = jQuery(this.template()).appendTo(this.appendTo).hide().fadeIn().toggle('scale');
 
-      console.log(_this.manifest);
 
       //reset the window div and update manifest
       _this.clearWindow();
-      console.log('initialising');
       _this.imagesList = $.getImagesListByManifest(_this.manifest);
       if (!_this.currentImageID) {
         _this.currentImageID = _this.imagesList[0]['@id'];
@@ -77,7 +75,6 @@
       _this.toggleFocus(focusState);
 
       this.bindEvents();
-      console.log('window ' + this.id + ' initialised');
     },
 
     bindEvents: function() {
@@ -312,14 +309,12 @@
     },
 
     setCurrentImageID: function(imageID) {
-      console.log('current image updated');
       this.currentImageID = imageID;
       this.loadImageModeFromPanel(imageID);
       jQuery.publish('CurrentImageIDUpdated', {newImageID : imageID});
     },
 
     setCursorFrameStart: function(canvasID) {
-      console.log('setting Cursor Frame');
     },
 
     updateManifestInfo: function() {
