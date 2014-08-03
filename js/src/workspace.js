@@ -5,7 +5,7 @@
     jQuery.extend(true, this, {
       type:             null,
       workspaceSlotCls: 'slot',
-      focusedSlot:      null,
+      focusedSlot:      1,
       slots:            null,
       appendTo:         null,
       parent:           null

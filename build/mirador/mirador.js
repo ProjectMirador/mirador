@@ -3213,7 +3213,7 @@ window.Mirador = window.Mirador || function(config) {
     jQuery.extend(true, this, {
       type:             null,
       workspaceSlotCls: 'slot',
-      focusedSlot:      null,
+      focusedSlot:      1,
       slots:            null,
       appendTo:         null,
       parent:           null
@@ -3979,9 +3979,12 @@ window.Mirador = window.Mirador || function(config) {
     init: function () {
       _this = this,
       manifest = _this.manifest,
-      focusState = _this.currentFocus;
+      focusState = _this.currentFocus,
+      _this.id = $.genUUID();
 
-      _this.element = jQuery(this.template()).appendTo(this.appendTo).hide().fadeIn().toggle('scale');
+      console.log(_this.id);
+
+      _this.element = jQuery(this.template()).appendTo(this.appendTo).hide().fadeIn(300);
 
 
       //reset the window div and update manifest
@@ -4237,9 +4240,10 @@ window.Mirador = window.Mirador || function(config) {
     },
 
     setCurrentImageID: function(imageID) {
+      var _this = this;
       this.currentImageID = imageID;
       this.loadImageModeFromPanel(imageID);
-      jQuery.publish('CurrentImageIDUpdated', {newImageID : imageID});
+      jQuery.publish(('currentImageIDUpdated.' + _this.id), {newImageID : imageID});
     },
 
     setCursorFrameStart: function(canvasID) {
@@ -5102,7 +5106,7 @@ window.Mirador = window.Mirador || function(config) {
           _this.parent.setCurrentImageID(canvasID);
         });
 
-        jQuery.subscribe('CurrentImageIDUpdated', function(imageID) {
+        jQuery.subscribe(('currentImageIDUpdated.' + _this.parent.id), function(imageID) {
           _this.currentImageChanged();
         });
     },
@@ -5357,11 +5361,6 @@ window.Mirador = window.Mirador || function(config) {
           }
       });
 
-      console.log(toDeselect);
-      console.log(toSelect);
-      console.log(toClose);
-      console.log(toOpen);
-
       // Deselect elements
       jQuery(toDeselect).removeClass('selected');
       
@@ -5390,6 +5389,7 @@ window.Mirador = window.Mirador || function(config) {
 
     bindEvents: function() {
       var _this = this;
+      // var eventString = _this.parent.id
 
       jQuery.subscribe('focusChanged', function(_, manifest, focusFrame) {
       });
@@ -5397,7 +5397,9 @@ window.Mirador = window.Mirador || function(config) {
       jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
       });
         
-      jQuery.subscribe('CurrentImageIDUpdated', function(event, imageID) {
+      console.log('TOC UUID String: ' + _this.parent.id);
+
+      jQuery.subscribe(('currentImageIDUpdated.' + _this.parent.id), function(event, imageID) {
         if (!_this.manifest.structures) { return; }
         _this.setSelectedElements($.getRangeIDByCanvasID(_this.manifest, imageID.newImageID));
         _this.render();
@@ -5439,14 +5441,12 @@ window.Mirador = window.Mirador || function(config) {
       });
       
       _this.element.on('mouseleave', function() {
-        console.log('leaving: ' + _this.element.attr('rangeid'));
         var head = _this.element.find('.selected').first();
         _this.element.stop().delay(1800).scrollTo(head, 1000);
         _this.setActive(false);
       });
       
       _this.element.on('mouseenter', function() {
-        console.log('entering: ' + _this.element.attr('rangeid'));
         _this.element.stop();
         _this.setActive(true);
       });
