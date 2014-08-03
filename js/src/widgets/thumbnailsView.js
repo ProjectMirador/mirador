@@ -100,7 +100,7 @@
           _this.parent.setCurrentImageID(canvasID);
         });
 
-        jQuery.subscribe('CurrentImageIDUpdated', function(imageID) {
+        jQuery.subscribe(('currentImageIDUpdated.' + _this.parent.id), function(imageID) {
           _this.currentImageChanged();
         });
     },
