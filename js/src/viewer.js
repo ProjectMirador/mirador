@@ -19,7 +19,7 @@
             currentWorkspaceVisible: true,
             overlayStates:           {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false},
             manifests: {} 
-        }, $.DEFAULT_SETTINGS, options);
+        }, $.DEFAULT_SETTINGS.viewer, options);
 
         // get initial manifests
         this.element = this.element || jQuery('#' + this.id);
@@ -47,13 +47,13 @@
             // add workspace configuration
             this.activeWorkspace = new $.Workspace({type: this.initialWorkspace, parent: this, appendTo: this.element.find('.mirador-viewer') });
 
-            //add workspaces panel
+            // add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
 
             // add workset select menu (hidden by default) 
             this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
             
-            //set this to be displayed
+            // set this to be displayed
             this.set('currentWorkspaceVisible', true);
         },
         
