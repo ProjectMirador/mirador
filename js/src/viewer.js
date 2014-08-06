@@ -63,7 +63,7 @@
            var _this = this;
            jQuery.subscribe('manifestAdded', function(event, newManifest) {
                jQuery.each(_this.slots, function(index, slot) {
-                   if (slot.manifest === newManifest) {
+                   if (slot.manifestUri === newManifest) {
                        _this.addManifestToWorkspace(slot.manifestUri, slot.viewType, slot.canvasID);
                    }
                });

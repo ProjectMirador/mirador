@@ -10,7 +10,7 @@
       appendTo:         null,
       parent:           null
 
-    }, $.DEFAULT_SETTINGS, options);
+    }, options);
 
     this.element  = this.element || jQuery('<div class="workspace-container">');
     this.init();
