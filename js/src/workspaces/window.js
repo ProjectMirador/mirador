@@ -11,7 +11,7 @@
       focusImages:       [],
       imagesList:        null,
       currentImageMode:  'ImageView',
-      //imageModes:        ['ImageView', 'BookView'] //for drop down menu
+      imageModes:        ['ImageView', 'BookView'],
       currentFocus:      'ThumbnailsView',
       focuses:           ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
       focusModules:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
@@ -54,10 +54,7 @@
       focusState = _this.currentFocus,
       _this.id = $.genUUID();
 
-      console.log(_this.id);
-
       _this.element = jQuery(this.template()).appendTo(this.appendTo).hide().fadeIn(300);
-
 
       //reset the window div and update manifest
       _this.clearWindow();
@@ -75,7 +72,7 @@
       //attach view and toggle view, which triggers the attachment of panels or overlays
       _this.focusModules[focusState] = new $[focusState]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this, imageID: _this.currentImageID, imagesList: _this.imagesList} );
       _this.bindNavigation();
-      _this.toggleFocus(focusState);
+      _this.toggleFocus(focusState, focusState);
 
       this.bindEvents();
     },
@@ -226,7 +223,7 @@
       var _this = this;
 
       this.currentFocus = focusState;
-      if (imageMode) {
+      if (imageMode && jQuery.inArray(imageMode, this.imageModes) > -1) {
         this.currentImageMode = imageMode;
       }
       //set other focusStates to false (toggle to display none)

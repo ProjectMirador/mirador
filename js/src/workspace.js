@@ -50,7 +50,6 @@
     },
 
     addItem: function(slotID) {
-      console.log('registered the active slot as: ' + slotID);
       this.focusedSlot = slotID;
       this.parent.toggleLoadWindow();
     },

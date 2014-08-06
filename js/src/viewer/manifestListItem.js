@@ -114,9 +114,7 @@
           });
           
           this.element.find('.select-metadata').on('click', function() {
-              console.log('manifest selected');
-              console.log(_this.manifestId);
-              $.viewer.addManifestToWorkspace(_this.manifestId);
+              $.viewer.toggleThumbnailsViewInWorkspace(_this.manifestId);
           });
 
           this.element.find('.preview-image').on('click', function() {

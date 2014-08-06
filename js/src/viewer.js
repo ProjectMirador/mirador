@@ -18,7 +18,7 @@
             resizeRatio:            {},
             currentWorkspaceVisible: true,
             overlayStates:           {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false},
-            manifests: {} 
+            manifests:               {}
         }, $.DEFAULT_SETTINGS, options);
 
         // get initial manifests
@@ -55,6 +55,19 @@
             
             //set this to be displayed
             this.set('currentWorkspaceVisible', true);
+            
+            this.bindEvents();
+        },
+        
+        bindEvents: function() {
+           var _this = this;
+           jQuery.subscribe('manifestAdded', function(event, newManifest) {
+               jQuery.each(_this.slots, function(index, slot) {
+                   if (slot.manifest === newManifest) {
+                       _this.addManifestToWorkspace(slot.manifestUri, slot.viewType, slot.canvasID);
+                   }
+               });
+           });
         },
         
         get: function(prop, parent) {
@@ -162,15 +175,10 @@
             // particular slot, but rather from the selectObject menu,
             // then let the viewer decide where to put the resulting window
             // according to the workspace type.
-            if($.viewer.activeWorkspace.focusedSlot) {
               // slotID is appended to event name so only 
               // the invoking slot initialises a new window in 
               // itself.
-              console.log(manifest);
-              jQuery.publish('manifestToSlot', [manifest, 'ThumbnailsView']);
-            } else {
-              jQuery.publish('manifestToWorkspace', [manifest, focusState, imageID]);
-            }
+              jQuery.publish('manifestToSlot', [manifest, focusState, imageID]); 
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {
