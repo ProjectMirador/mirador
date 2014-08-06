@@ -153,11 +153,6 @@
           }
       });
 
-      console.log(toDeselect);
-      console.log(toSelect);
-      console.log(toClose);
-      console.log(toOpen);
-
       // Deselect elements
       jQuery(toDeselect).removeClass('selected');
       
@@ -186,6 +181,7 @@
 
     bindEvents: function() {
       var _this = this;
+      // var eventString = _this.parent.id
 
       jQuery.subscribe('focusChanged', function(_, manifest, focusFrame) {
       });
@@ -193,7 +189,9 @@
       jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
       });
         
-      jQuery.subscribe('CurrentImageIDUpdated', function(event, imageID) {
+      console.log('TOC UUID String: ' + _this.parent.id);
+
+      jQuery.subscribe(('currentImageIDUpdated.' + _this.parent.id), function(event, imageID) {
         if (!_this.manifest.structures) { return; }
         _this.setSelectedElements($.getRangeIDByCanvasID(_this.manifest, imageID.newImageID));
         _this.render();
@@ -235,14 +233,12 @@
       });
       
       _this.element.on('mouseleave', function() {
-        console.log('leaving: ' + _this.element.attr('rangeid'));
         var head = _this.element.find('.selected').first();
         _this.element.stop().delay(1800).scrollTo(head, 1000);
         _this.setActive(false);
       });
       
       _this.element.on('mouseenter', function() {
-        console.log('entering: ' + _this.element.attr('rangeid'));
         _this.element.stop();
         _this.setActive(true);
       });

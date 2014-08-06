@@ -15,7 +15,6 @@
             margin:                     15,
             remainingItemsMinWidth:     80,  //set a minimum width for the "more" image
             imagesTotalWidth:           0
-            
         }, options);
 
         this.init();
@@ -109,16 +108,20 @@
 
         bindEvents: function() {
           var _this = this;
+          
           this.element.find('img').on('load', function() {
             jQuery(this).hide().fadeIn(750);
           });
-          this.element.find('.select-metadata').on('click', function() {
-            _this.parent.toggleThumbnailsView(_this.manifestId);
-          });
           
+          this.element.find('.select-metadata').on('click', function() {
+              console.log('manifest selected');
+              console.log(_this.manifestId);
+              $.viewer.addManifestToWorkspace(_this.manifestId);
+          });
+
           this.element.find('.preview-image').on('click', function() {
-           _this.parent.toggleImageView(jQuery(this).attr('data-image-id'), _this.manifestId);
-        });
+            $.viewer.toggleImageViewInWorkspace(jQuery(this).attr('data-image-id'), _this.manifestId);
+          });
         },
 
         hide: function() {

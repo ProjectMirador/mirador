@@ -1,4 +1,7 @@
-
+a {
+  color: inherit; /* blue colors for links too */
+  text-decoration: inherit; /* no underline */
+    }
 
 /*----------------------------------------------------------------------------
 /* Mirador styles
@@ -11,7 +14,7 @@
 
 .mirador-viewer {
   position:absolute;
-  top:35px;
+  top:33px;
   bottom:0;
   left:0;
   right:0;
@@ -21,13 +24,6 @@
   margin: 0;
   padding: 0;
   border: 0;
-}
-
-.mirador-viewer a,
-.mirador-viewer a:active,
-.mirador-viewer a:visited {
-  color: #0052A3;
-  text-decoration: none;
 }
 
 
@@ -323,32 +319,40 @@ li.highlight {
 #select-results {
   margin-left: 300px;
   height:100%;
-  width: 80%
+  overflow-y: scroll;
 }
 
-/* main menu clear storage
----------------------------------------------------------------------------- */
-.mirador-main-menu-clear-local-storage {
-  line-height: 1.6;
-  width: 250px;
-  text-align: center;
+/* main-menu workspaces-panel */
+#workspace-select-menu {
+  background: url(../images/debut_dark.png) repeat;
+  background-color: #333;
+  text-align:center;
+  padding:20%;
+  padding-top:0;
+  box-sizing:border-box;
+}
+#workspace-select-menu h1 {
+  color: lightgray;
+  font-size:4em;
+  padding-bottom:3%;
+}
+#workspace-select-menu ul {
+  margin:0 auto;
+}
+#workspace-select-menu li {
+  list-style:none;
+  color:gray;
+  display:inline-block;
+  cursor: pointer;
+  margin:3%;
+}
+#workspace-select-menu li:hover {
+  color: lightgray;
+}
+#workspace-select-menu .workspace-icon {
+  font-size:8em;
 }
 
-.mirador-main-menu-clear-local-storage p:first-child {
-  padding-bottom: 10px;
-}
-
-.mirador-main-menu-clear-local-storage a.btn-cancel,
-.mirador-main-menu-clear-local-storage a.btn-clear {
-  padding: 5px 10px;
-}
-
-.mirador-main-menu-clear-local-storage a.btn-clear {
-  background-color: #0052A3;
-  border-radius: 4px;
-  color: #fff;
-  margin-left: 5px;
-}
 /* Workspace scaffolding */
 .workspace-container {
   position: absolute;
@@ -358,7 +362,7 @@ li.highlight {
   bottom:0;
   overflow: hidden;
   box-sizing: border-box;
-  padding: 10px;
+  padding: 8px;
 }
 
 /* Slot Scaffolding */
@@ -392,10 +396,8 @@ li.highlight {
 }
 .slot:hover {
   box-shadow: inset 0 0 35px rgba(94, 219, 255, 1);
-  border: 2px solid rgb(190,190,190);
 }
 .addItemLink {
-  z-index:3;
   position:absolute;
   top:0;
   bottom:0;
@@ -412,6 +414,7 @@ li.highlight {
   top:0;
   bottom:0;
   overflow: hidden;
+  background-color: #333;
 }
 .manifest-info {
   overflow: auto;
@@ -489,6 +492,7 @@ li.highlight {
   cursor: pointer;
   overflow:hidden;
   border-left: 4px solid deepSkyblue;
+  transition: all 0.2s ease-out;
 }
 .toc-link i {
   color: rgba(0,0,0,0.4);
@@ -548,17 +552,16 @@ li.highlight {
   position:relative;
 }
 .overlay {
-  display:none;
+  display: none;
   position: absolute;
-  right:0;
-  top:0;
+  right: 0;
+  top: 0;
   box-sizing: border-box;
-  opacity: 0.9;
-  background-color: white;
-  z-index: 4;
+  background-color: rgba(255,255,255,0.9);
+  z-index: 2;
   width: 45%;
   overflow-y: scroll;
-  height: 75%;
+  height: 80%;
   word-wrap: break-word;
 }
 .bottomPanel {
@@ -948,7 +951,7 @@ text {
 
 .annotationDetailToggle {
   float:right;
-  margin: 34px;
+  margin: 32px;
   margin-top:0;
   cursor: pointer;
 }

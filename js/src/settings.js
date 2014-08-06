@@ -14,23 +14,31 @@
     'availableWorkspaces': {
         'singleObject': {
             'slots': [{
-                width: '100%'
-                // windowOptions: {...}
+                'width': '100%'
             }],
+            'label': 'Single Object',
             'addNew': false,
-            'move': false
+            'move': false,
+            'iconClass': 'image'
         },
         'compare': {
             'slots': [
                 {},
                 {}
-            ]
-        },
-        'detailView': {
-
+            ],
+            'label': 'Compare',
+            'iconClass': 'columns'
         },
         'bookReading': {
-
+            'slots': [
+              {}
+            ],
+            'defaultWindowOptions': {
+            },
+            'label': 'Book Reading',
+            'addNew': true,
+            'move': false,
+            'iconClass': 'book'
         }
         // add new workspace types by appending a 
         // profile with plugin initialisation code:

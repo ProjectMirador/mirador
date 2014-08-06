@@ -5,15 +5,14 @@
     jQuery.extend(true, this, {
       type:             null,
       workspaceSlotCls: 'slot',
-      focusedSlot:      null,
-      window:           null,
+      focusedSlot:      1,
+      slots:            null,
       appendTo:         null,
       parent:           null
 
     }, $.DEFAULT_SETTINGS, options);
 
     this.element  = this.element || jQuery('<div class="workspace-container">');
-
     this.init();
 
   };
@@ -22,15 +21,18 @@
     init: function () {
       this.element.appendTo(this.appendTo);
 
-      /*this.element.append(this.template({
-        workspaceSlotCls: this.workspaceSlotCls,
-        slotId: 0
-      }));*/
-        this.window = new $.Window({appendTo: this.element});
-
-      // Not final. A unique identifier should be added here for multiple slots.
       if (this.focusedSlot === null) {
         this.focusedSlot = 0;
+      }
+      
+      if (!this.slots) { 
+        this.slots = [];
+        this.slots.push(new $.Slot({
+          slotId: 0,
+          focused: true,
+          parent: this,
+          appendTo: this.element
+        }));
       }
 
       this.bindEvents();
@@ -38,38 +40,28 @@
 
     bindEvents: function() {
       var _this = this;
+    },
 
-      jQuery.subscribe('manifestToWorkspace', function(_, manifest, uiState, imageID) {
-        //need to be able to set a specific window
-        jQuery.publish('manifestToWindow', [manifest, uiState, imageID]);
-      });
+    clearSlot: function(slotId) {
+      if (this.slots[slodId].windowElement) { 
+        this.slots[slotId].windowElement.remove();
+      }
+      this.slots[slotId].window = new $.Window();
+    },
 
-      jQuery.subscribe('currentWorkspaceVisible.set', function(_, stateValue) {
-        if (stateValue) { _this.show(); return; }
-        _this.hide();
-      });
-
-      //this.element.find('a').on('click', function(){console.log('added');});
+    addItem: function(slotID) {
+      console.log('registered the active slot as: ' + slotID);
+      this.focusedSlot = slotID;
+      this.parent.toggleLoadWindow();
     },
 
     hide: function() {
-        jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
+      jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
     },
 
     show: function() {
-        jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
-    },
-
-    // template should be based on workspace type
-    template: Handlebars.compile([
-                                 '<div id="{{slotId}}" class="{{workspaceSlotCls}}">',
-                                   '<div class="slotIconContainer">',
-                                     '<h1 class="plus">+</h1>',
-                                     '<i class="fa fa-camera-retro fa-5x"></i><h1>Add Item to Workspace</h1>',
-                                   '</div>',
-                                   '<a class="addItemLink"></a>',
-                                 '</div>'
-    ].join(''))
+      jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+    }
   };
 
 }(Mirador));
