@@ -2868,12 +2868,12 @@ window.Mirador = window.Mirador || function(config) {
 
     'workspaceAutoSave': true,
 
-    'showNoImageChoiceOption': true,
+    'currentWorkspace': 'singleObject',
 
-    'initialWorkspace': 'singleObject',
-
-    'availableWorkspaces': {
-        'singleObject': {
+    'availableWorkspaces': ['singleObject', 'compare', 'bookReading'],
+      
+    'workspaces' : {
+       'singleObject': {
             'slots': [{
                 'width': '100%'
             }],
@@ -2882,6 +2882,7 @@ window.Mirador = window.Mirador || function(config) {
             'move': false,
             'iconClass': 'image'
         },
+        
         'compare': {
             'slots': [
                 {},
@@ -2890,6 +2891,7 @@ window.Mirador = window.Mirador || function(config) {
             'label': 'Compare',
             'iconClass': 'columns'
         },
+        
         'bookReading': {
             'slots': [
               {}
@@ -2905,7 +2907,7 @@ window.Mirador = window.Mirador || function(config) {
         // profile with plugin initialisation code:
         // $.DEFAULT_SETTINGS.availableWorkspaces['myNwqWorkspace'] = {...}
     },
-
+    
     // main (top) menu
     'mainMenu': {
       'height': 25,
@@ -2919,14 +2921,31 @@ window.Mirador = window.Mirador || function(config) {
       'other': 'iiif_logo.png'
     },
 
-    // metadata view
-    'openLayersAnnotoriusView': {
+    // annotorius options
+    /*'openLayersAnnotoriusView': {
       'appId': 'lQ9BqPkPRVJR4Qbe652BapTP2JVDNzS0G2k6GCWW', // Parse.com app id
       'jsKey': 'VbYdon3U70Wi8aht9Y8Z2eRk3FmOsO2n1lQhx1vV', // Parse.com js_key
       'height': 400,
       'width': 600,
       'maxSize': 2500, // max longest side to load in open layers
       'maxZoomLevel': 4
+    },*/
+    
+    'annotationEndpoint': {
+      'url': '',
+      'storeId': 123,
+      'APIKey': '23983hf98j3f9283jf2983fj'
+    },
+    
+    // parameters of saving system
+    'saveController': {
+        // TODO: make saving a function of significant user action, not timed intervals.
+    },
+
+    'sharingEndpoint': {
+      'url': '',
+      'storeId': 123,
+      'APIKey': '23983hf98j3f9283jf2983fj'
     },
 
     // linked image views configuration
@@ -2948,12 +2967,12 @@ window.Mirador = window.Mirador || function(config) {
             data:                   null,
             element:                null,
             canvas:                 null,
-            initialWorkspace:       $.DEFAULT_SETTINGS.initialWorkspace,
+            currentWorkspace:       null,
             activeWorkspace:        null,
-            availableWorkspaces:    $.DEFAULT_SETTINGS.availableWorkspaces,
+            availableWorkspaces:    null,
             mainMenu:               null,
             //mainMenuLoadWindowCls:  '.mirador-main-menu .load-window',
-            workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
+            workspaceAutoSave:      null,
             windowSize:             {},
             resizeRatio:            {},
             currentWorkspaceVisible: true,
@@ -2985,7 +3004,7 @@ window.Mirador = window.Mirador || function(config) {
             .appendTo(this.element);
 
             // add workspace configuration
-            this.activeWorkspace = new $.Workspace({type: this.initialWorkspace, parent: this, appendTo: this.element.find('.mirador-viewer') });
+            this.activeWorkspace = new $.Workspace({type: this.currentWorkspace, parent: this, appendTo: this.element.find('.mirador-viewer') });
 
             //add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
@@ -3002,9 +3021,9 @@ window.Mirador = window.Mirador || function(config) {
         bindEvents: function() {
            var _this = this;
            jQuery.subscribe('manifestAdded', function(event, newManifest) {
-               jQuery.each(_this.slots, function(index, slot) {
-                   if (slot.manifestUri === newManifest) {
-                       _this.addManifestToWorkspace(slot.manifestUri, slot.viewType, slot.canvasID);
+               jQuery.each(_this.windowObjects, function(index, object) {
+                   if (object.loadedManifest === newManifest) {
+                       _this.addManifestToWorkspace(object.loadedManifest, object.viewType, object.canvasID);
                    }
                });
            });

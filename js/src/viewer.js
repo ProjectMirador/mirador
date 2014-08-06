@@ -8,12 +8,12 @@
             data:                   null,
             element:                null,
             canvas:                 null,
-            initialWorkspace:       $.DEFAULT_SETTINGS.initialWorkspace,
+            currentWorkspace:       null,
             activeWorkspace:        null,
-            availableWorkspaces:    $.DEFAULT_SETTINGS.availableWorkspaces,
+            availableWorkspaces:    null,
             mainMenu:               null,
             //mainMenuLoadWindowCls:  '.mirador-main-menu .load-window',
-            workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
+            workspaceAutoSave:      null,
             windowSize:             {},
             resizeRatio:            {},
             currentWorkspaceVisible: true,
@@ -45,7 +45,7 @@
             .appendTo(this.element);
 
             // add workspace configuration
-            this.activeWorkspace = new $.Workspace({type: this.initialWorkspace, parent: this, appendTo: this.element.find('.mirador-viewer') });
+            this.activeWorkspace = new $.Workspace({type: this.currentWorkspace, parent: this, appendTo: this.element.find('.mirador-viewer') });
 
             //add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
@@ -62,9 +62,9 @@
         bindEvents: function() {
            var _this = this;
            jQuery.subscribe('manifestAdded', function(event, newManifest) {
-               jQuery.each(_this.slots, function(index, slot) {
-                   if (slot.manifestUri === newManifest) {
-                       _this.addManifestToWorkspace(slot.manifestUri, slot.viewType, slot.canvasID);
+               jQuery.each(_this.windowObjects, function(index, object) {
+                   if (object.loadedManifest === newManifest) {
+                       _this.addManifestToWorkspace(object.loadedManifest, object.viewType, object.canvasID);
                    }
                });
            });
