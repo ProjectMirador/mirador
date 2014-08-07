@@ -13,7 +13,7 @@
       selectContext:    null,
       tocData: {},
       active: null
-    }, $.DEFAULT_SETTINGS, options);
+    }, options);
 
     this.init();
 

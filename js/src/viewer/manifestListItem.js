@@ -59,6 +59,7 @@
             canvasCount: manifest.sequences[0].canvases.length,
             images: []
           };
+          $.viewer.manifests[_this.manifestId].miradorRepository = tplData.repository;
           tplData.repoImage = (function() {
             var repo = tplData.repository;
             if (tplData.repository === '(Added from URL)') {
@@ -113,9 +114,7 @@
           });
           
           this.element.find('.select-metadata').on('click', function() {
-              console.log('manifest selected');
-              console.log(_this.manifestId);
-              $.viewer.addManifestToWorkspace(_this.manifestId);
+              $.viewer.toggleThumbnailsViewInWorkspace(_this.manifestId);
           });
 
           this.element.find('.preview-image').on('click', function() {

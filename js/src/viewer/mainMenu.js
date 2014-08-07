@@ -17,7 +17,7 @@
             clearLocalStorageCls:       'clear-local-storage',
             clearLocalStorageDialogCls: 'mirador-main-menu-clear-local-storage',
             collectionsListingCls:      'mirador-listing-collections'
-        }, $.DEFAULT_SETTINGS,  options);
+        }, options);
 
         this.element  = this.element || jQuery('<div/>');
 

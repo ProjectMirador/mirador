@@ -10,7 +10,7 @@
       appendTo:         null,
       parent:           null
 
-    }, $.DEFAULT_SETTINGS, options);
+    }, options);
 
     this.element  = this.element || jQuery('<div class="workspace-container">');
     this.init();
@@ -50,7 +50,6 @@
     },
 
     addItem: function(slotID) {
-      console.log('registered the active slot as: ' + slotID);
       this.focusedSlot = slotID;
       this.parent.toggleLoadWindow();
     },

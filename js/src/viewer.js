@@ -8,17 +8,17 @@
             data:                   null,
             element:                null,
             canvas:                 null,
-            initialWorkspace:       $.DEFAULT_SETTINGS.initialWorkspace,
+            currentWorkspace:       null,
             activeWorkspace:        null,
-            availableWorkspaces:    $.DEFAULT_SETTINGS.availableWorkspaces,
+            availableWorkspaces:    null,
             mainMenu:               null,
             //mainMenuLoadWindowCls:  '.mirador-main-menu .load-window',
-            workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
+            workspaceAutoSave:      null,
             windowSize:             {},
             resizeRatio:            {},
             currentWorkspaceVisible: true,
             overlayStates:           {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false},
-            manifests: {} 
+            manifests:               {}
         }, $.DEFAULT_SETTINGS, options);
 
         // get initial manifests
@@ -45,7 +45,7 @@
             .appendTo(this.element);
 
             // add workspace configuration
-            this.activeWorkspace = new $.Workspace({type: this.initialWorkspace, parent: this, appendTo: this.element.find('.mirador-viewer') });
+            this.activeWorkspace = new $.Workspace({type: this.currentWorkspace, parent: this, appendTo: this.element.find('.mirador-viewer') });
 
             //add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
@@ -55,6 +55,19 @@
             
             //set this to be displayed
             this.set('currentWorkspaceVisible', true);
+            
+            this.bindEvents();
+        },
+        
+        bindEvents: function() {
+           var _this = this;
+           jQuery.subscribe('manifestAdded', function(event, newManifest) {
+               jQuery.each(_this.windowObjects, function(index, object) {
+                   if (object.loadedManifest === newManifest) {
+                       _this.addManifestToWorkspace(object.loadedManifest, object.viewType, object.canvasID);
+                   }
+               });
+           });
         },
         
         get: function(prop, parent) {
@@ -162,15 +175,10 @@
             // particular slot, but rather from the selectObject menu,
             // then let the viewer decide where to put the resulting window
             // according to the workspace type.
-            if($.viewer.activeWorkspace.focusedSlot) {
               // slotID is appended to event name so only 
               // the invoking slot initialises a new window in 
               // itself.
-              console.log(manifest);
-              jQuery.publish('manifestToSlot', [manifest, 'ThumbnailsView']);
-            } else {
-              jQuery.publish('manifestToWorkspace', [manifest, focusState, imageID]);
-            }
+              jQuery.publish('manifestToSlot', [manifest, focusState, imageID]); 
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {
