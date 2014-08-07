@@ -70,9 +70,23 @@
       _this.clearPanelsAndOverlay();
 
       //attach view and toggle view, which triggers the attachment of panels or overlays
-      _this.focusModules[focusState] = new $[focusState]( {manifest: manifest, appendTo: _this.element.find('.view-container'), parent: _this, imageID: _this.currentImageID, imagesList: _this.imagesList} );
       _this.bindNavigation();
-      _this.toggleFocus(focusState, focusState);
+      switch(focusState) {
+        case 'ThumbnailsView':
+          _this.toggleThumbnails(_this.currentImageID);
+          break;
+        case 'ImageView':
+          _this.toggleImageView(_this.currentImageID);
+          break;
+        case 'BookView':
+          _this.toggleBookView(_this.currentImageID);
+          break;
+        case 'ScrollView':
+          _this.toggleScrollView(_this.currentImageID);
+          break;
+        default:
+          break;
+      }
 
       this.bindEvents();
     },
@@ -273,10 +287,11 @@
       this.currentImageID = imageID;
       if (this.focusModules.ScrollView === null) {
         var containerHeight = this.element.find('.view-container').height();
-        this.focusModules.ScrollView = new $.ThumbnailsView( 
+        this.focusModules.ScrollView = new $.ScrollView( 
                                                             {manifest: this.manifest, 
                                                               appendTo: this.element.find('.view-container'), 
-                                                              parent: this, imageID: this.currentImageID, 
+                                                              parent: this, 
+                                                              imageID: this.currentImageID, 
                                                               imagesList: this.imagesList, 
                                                               thumbInfo: {thumbsHeight: Math.floor(containerHeight * this.scrollImageRatio), listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}}
                                                            );
@@ -295,9 +310,6 @@
         break;
         case 'BookView':
           _this.toggleBookView(imageID);
-        break;
-        case 'ScrollView':
-          _this.toggleScrollView(imageID);
         break;
         default:
           break;
