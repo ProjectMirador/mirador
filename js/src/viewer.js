@@ -61,7 +61,7 @@
         
         bindEvents: function() {
            var _this = this;
-           jQuery.subscribe('manifestAdded', function(event, newManifest) {
+           jQuery.subscribe('manifestAdded', function(event, newManifest, repository) {
                if (_this.windowObjects) {
                    jQuery.each(_this.windowObjects, function(index, object) {
                        if (object.loadedManifest === newManifest) {
@@ -134,7 +134,7 @@
                 if (!jQuery.isEmptyObject(manifest)) {
                     // populate blank object for immediate, synchronous return
                     manifests[url] = null;
-                    _this.addManifestFromUrl(url);
+                    _this.addManifestFromUrl(url, manifest.location ? manifest.location : '');
                 }
 
             });
@@ -151,7 +151,7 @@
             );
         },
 
-        addManifestFromUrl: function(url) {
+        addManifestFromUrl: function(url, location) {
             var _this = this,
             dfd = jQuery.Deferred();
 
@@ -160,7 +160,8 @@
             dfd.done(function(loaded) {
                 if (loaded && !_this.manifests[url]) {
                     _this.manifests[url] = manifest.jsonLd;
-                    jQuery.publish('manifestAdded', url);
+                    _this.manifests[url].miradorRepository = location;
+                    jQuery.publish('manifestAdded', [url, location]);
                 }
             });
         },

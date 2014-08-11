@@ -3027,7 +3027,7 @@ window.Mirador = window.Mirador || function(config) {
         
         bindEvents: function() {
            var _this = this;
-           jQuery.subscribe('manifestAdded', function(event, newManifest) {
+           jQuery.subscribe('manifestAdded', function(event, newManifest, repository) {
                if (_this.windowObjects) {
                    jQuery.each(_this.windowObjects, function(index, object) {
                        if (object.loadedManifest === newManifest) {
@@ -3100,7 +3100,7 @@ window.Mirador = window.Mirador || function(config) {
                 if (!jQuery.isEmptyObject(manifest)) {
                     // populate blank object for immediate, synchronous return
                     manifests[url] = null;
-                    _this.addManifestFromUrl(url);
+                    _this.addManifestFromUrl(url, manifest.location ? manifest.location : '');
                 }
 
             });
@@ -3117,7 +3117,7 @@ window.Mirador = window.Mirador || function(config) {
             );
         },
 
-        addManifestFromUrl: function(url) {
+        addManifestFromUrl: function(url, location) {
             var _this = this,
             dfd = jQuery.Deferred();
 
@@ -3126,7 +3126,8 @@ window.Mirador = window.Mirador || function(config) {
             dfd.done(function(loaded) {
                 if (loaded && !_this.manifests[url]) {
                     _this.manifests[url] = manifest.jsonLd;
-                    jQuery.publish('manifestAdded', url);
+                    _this.manifests[url].miradorRepository = location;
+                    jQuery.publish('manifestAdded', [url, location]);
                 }
             });
         },
@@ -3370,21 +3371,11 @@ window.Mirador = window.Mirador || function(config) {
 
           var tplData = { 
             label: manifest.label,
-            repository: (function() { 
-              var locationData = jQuery.grep($.viewer.data, function(item) {
-                return item.manifestUri === _this.manifestId;
-              })[0];
-
-              if (locationData === undefined) {
-                return '(Added from URL)';
-              } else {
-                return locationData.location;
-              }
-            })(),
+            repository: manifest.miradorRepository,
             canvasCount: manifest.sequences[0].canvases.length,
             images: []
           };
-          $.viewer.manifests[_this.manifestId].miradorRepository = tplData.repository;
+          
           tplData.repoImage = (function() {
             var repo = tplData.repository;
             if (tplData.repository === '(Added from URL)') {
@@ -3528,7 +3519,7 @@ window.Mirador = window.Mirador || function(config) {
             this.element.find('form#url-load-form').on('submit', function() {
                 event.preventDefault();
                 var url = jQuery(this).find('input').val();
-                _this.parent.addManifestFromUrl(url);
+                _this.parent.addManifestFromUrl(url, "(Added from URL)");
             });
 
             // handle subscribed events
@@ -3536,7 +3527,7 @@ window.Mirador = window.Mirador || function(config) {
                if (stateValue) { _this.show(); return; }
                 _this.hide();
             });
-            jQuery.subscribe('manifestAdded', function(event, newManifest) {
+            jQuery.subscribe('manifestAdded', function(event, newManifest, repository) {
               _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifestId: newManifest, resultsWidth: _this.resultsWidth }));
             });
             
@@ -3705,8 +3696,7 @@ window.Mirador = window.Mirador || function(config) {
 
         jQuery.extend(true, this, {
             jsonLd: null,
-            uri: manifestUri,
-            location: null
+            uri: manifestUri
         });
 
         this.loadManifestDataFromURI(dfd);
@@ -5858,9 +5848,18 @@ jQuery.fn.scrollStop = function(callback) {
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
       
-      jQuery.subscribe('addManifestFromUrl', function(junk) {
-        // add to "data" in config
-
+      jQuery.subscribe('manifestAdded', function(event, url, repository) {
+        var data = _this.currentConfig.data;
+        var objectInConfig = false;
+        jQuery.each(data, function(index, manifestObject){
+            if (manifestObject.manifestUri === url) {
+                objectInConfig = true;
+            }
+        });
+        if (!objectInConfig) {
+            data.push({"manifestUri":url, "location":repository});
+            _this.set("data", data, {parent: "currentConfig"});
+        }
       });
       
       jQuery.subscribe('etc...', function(junk) {

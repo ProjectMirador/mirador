@@ -74,9 +74,18 @@
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
       
-      jQuery.subscribe('addManifestFromUrl', function(junk) {
-        // add to "data" in config
-
+      jQuery.subscribe('manifestAdded', function(event, url, repository) {
+        var data = _this.currentConfig.data;
+        var objectInConfig = false;
+        jQuery.each(data, function(index, manifestObject){
+            if (manifestObject.manifestUri === url) {
+                objectInConfig = true;
+            }
+        });
+        if (!objectInConfig) {
+            data.push({"manifestUri":url, "location":repository});
+            _this.set("data", data, {parent: "currentConfig"});
+        }
       });
       
       jQuery.subscribe('etc...', function(junk) {
