@@ -5791,10 +5791,10 @@ jQuery.fn.scrollStop = function(callback) {
   $.SaveController.prototype = {
 
     init: function(config) {
-      var sessionID = window.location.hash; // will return empty string if none exists, causing the or statement below to evaluate to false, generating a new sesssionID.
+      var sessionID = window.location.hash.substring(1); // will return empty string if none exists, causing the or statement below to evaluate to false, generating a new sesssionID.
       
       if ( sessionID ) {
-        this.currentConfig = JSON.parse(localStore.getItem(sessionID));
+        this.currentConfig = JSON.parse(localStorage.getItem(sessionID));
         this.sessionID =  sessionID;
       } else {
         this.currentConfig = config;
