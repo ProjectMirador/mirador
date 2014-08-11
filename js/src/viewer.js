@@ -62,11 +62,13 @@
         bindEvents: function() {
            var _this = this;
            jQuery.subscribe('manifestAdded', function(event, newManifest) {
-               jQuery.each(_this.windowObjects, function(index, object) {
-                   if (object.loadedManifest === newManifest) {
-                       _this.addManifestToWorkspace(object.loadedManifest, object.viewType, object.canvasID);
-                   }
-               });
+               if (_this.windowObjects) {
+                   jQuery.each(_this.windowObjects, function(index, object) {
+                       if (object.loadedManifest === newManifest) {
+                           _this.addManifestToWorkspace(object.loadedManifest, object.viewType, object.canvasID, object.id);
+                       }
+                   });
+               }
            });
         },
         
@@ -163,7 +165,7 @@
             });
         },
         
-        addManifestToWorkspace: function(manifestURI, focusState, imageID) {
+        addManifestToWorkspace: function(manifestURI, focusState, imageID, windowID) {
             var manifest = this.manifests[manifestURI],
             _this = this;
             
@@ -178,7 +180,7 @@
               // slotID is appended to event name so only 
               // the invoking slot initialises a new window in 
               // itself.
-              jQuery.publish('manifestToSlot', [manifest, focusState, imageID]); 
+              jQuery.publish('manifestToSlot', [manifest, focusState, imageID, windowID]); 
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {

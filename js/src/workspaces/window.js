@@ -51,8 +51,10 @@
     init: function () {
       _this = this,
       manifest = _this.manifest,
-      focusState = _this.currentFocus,
-      _this.id = $.genUUID();
+      focusState = _this.currentFocus;
+      if (!_this.id) {
+         _this.id = $.genUUID();
+      }
 
       _this.element = jQuery(this.template()).appendTo(this.appendTo).hide().fadeIn(300);
 
@@ -249,6 +251,12 @@
       this.focusModules[focusState].toggle(true);
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
+      jQuery.publish("focusUpdated", {
+                       id: _this.id, 
+                       viewType: _this.currentFocus, 
+                       canvasID: _this.currentImageID, 
+                       imageMode: _this.currentImageMode, 
+                       loadedManifest: _this.manifest['@id']});
     },
 
     toggleThumbnails: function(imageID) {

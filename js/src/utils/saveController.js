@@ -24,7 +24,14 @@
         this.sessionID =  sessionID;
       } else {
         this.currentConfig = config;
-
+        //add UUIDs to parts of config that need them
+        if (this.currentConfig.windowObjects) {
+           jQuery.each(this.currentConfig.windowObjects, function(index, window) {
+              if (!window.id) {
+                  window.id = $.genUUID();
+              }
+           });
+        }
         // generate a new sessionID and push an 
         // entry onto the history stack.
         // see: http://html5demos.com/history and http://diveintohtml5.info/history.html
@@ -39,23 +46,36 @@
     set: function(prop, value, options) {
       // when a property of the config is updated,
       // save it to localStore.
-      _this.save();
+      if (options) {
+          this[options.parent][prop] = value;
+      } else {
+          this[prop] = value;
+      }
+      this.save();
     },
 
     bindEvents: function() {
+      var _this = this;
       // listen to existing events and use the 
       // available data to update the appropriate 
       // field in the stored config.
-      jQuery.subscribe('currentImageIDUpdated', function(junk) {
-        // handle adding the property in the appropriate place 
-        // in this.currentConfig by passing to the _this.set(), 
-        // which "saves" to localstore as a side effect.
+      
+      jQuery.subscribe('focusUpdated', function(event, options) {
+        var windowObjects = _this.currentConfig.windowObjects;
+        if (windowObjects) {
+            jQuery.each(windowObjects, function(index, window){
+                if (window.id === options.id) {
+                    windowObjects[index] = options;
+                }
+            });
+        } else {
+           windowObjects = [options];
+        }
+        _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
       
       jQuery.subscribe('addManifestFromUrl', function(junk) {
-        // handle adding the property in the appropriate place 
-        // in this.currentConfig by passing to the _this.set(), 
-        // which "saves" to localstore as a side effect.
+        // add to "data" in config
 
       });
       
@@ -95,7 +115,7 @@
       // localStorage is a key:value store that
       // only accepts strings.
 
-      localStorage.setItem(JSON.stringify(_this.sessionID, _this.currentConfig));
+      localStorage.setItem(_this.sessionID, JSON.stringify(_this.currentConfig));
     }
 
   };
