@@ -8,9 +8,9 @@
             data:                   null,
             element:                null,
             canvas:                 null,
-            initialWorkspace:       $.DEFAULT_SETTINGS.initialWorkspace,
+            currentWorkspace:       null,
             activeWorkspace:        null,
-            availableWorkspaces:    $.DEFAULT_SETTINGS.availableWorkspaces,
+            availableWorkspaces:    null,
             mainMenu:               null,
             //mainMenuLoadWindowCls:  '.mirador-main-menu .load-window',
             workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
@@ -19,7 +19,7 @@
             currentWorkspaceVisible: true,
             overlayStates:           {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false},
             manifests: {} 
-        }, $.DEFAULT_SETTINGS.viewer, options);
+        }, $.DEFAULT_SETTINGS, options);
 
         // get initial manifests
         this.element = this.element || jQuery('#' + this.id);
@@ -45,7 +45,7 @@
             .appendTo(this.element);
 
             // add workspace configuration
-            this.activeWorkspace = new $.Workspace({type: this.initialWorkspace, parent: this, appendTo: this.element.find('.mirador-viewer') });
+            this.activeWorkspace = new $.Workspace({type: this.currentWorkspace, parent: this, appendTo: this.element.find('.mirador-viewer') });
 
             // add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});

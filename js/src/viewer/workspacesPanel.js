@@ -14,11 +14,13 @@
 
   $.WorkspacesPanel.prototype = {
     init: function () {
-      var workspaceTemplate = [];
-      jQuery.each(this.parent.availableWorkspaces, function(key, value) {
+      var _this = this,
+      workspaceTemplate = [];
+      
+      jQuery.each(this.parent.availableWorkspaces, function(index, value) {
         workspaceTemplate.push({
-          label : value.label,
-          iconClass: value.iconClass
+          label : _this.parent.workspaces[value].label,
+          iconClass: _this.parent.workspaces[value].iconClass
         });
       });
 

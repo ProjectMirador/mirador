@@ -7,16 +7,12 @@
 
     'workspaceAutoSave': true,
 
-    'showNoImageChoiceOption': true,
+    'currentWorkspace': 'singleObject',
 
-    'viewer': {
-      'initialWorkspace': null,
-      'zenMode': false,
-      'history': true
-    },
-
-    'availableWorkspaces': {
-        'singleObject': {
+    'availableWorkspaces': ['singleObject', 'compare', 'bookReading'],
+      
+    'workspaces' : {
+       'singleObject': {
             'slots': [{
                 'width': '100%'
             }],
@@ -25,6 +21,7 @@
             'move': false,
             'iconClass': 'image'
         },
+        
         'compare': {
             'slots': [
                 {},
@@ -33,6 +30,7 @@
             'label': 'Compare',
             'iconClass': 'columns'
         },
+        
         'bookReading': {
             'slots': [
               {}
@@ -46,11 +44,9 @@
         }
         // add new workspace types by appending a 
         // profile with plugin initialisation code:
-        // $.DEFAULT_SETTINGS.availableWorkspaces['myNwqWorkspace'] = {...}
+        // $.DEFAULT_SETTINGS.workspaces['myNwqWorkspace'] = {...}
     },
-
-    'maxWidgetsLimit': 10,
-
+    
     // main (top) menu
     'mainMenu': {
       'autoHide': true,
@@ -58,31 +54,7 @@
       'width': '100%'
     },
 
-    // At the moment, it doesn't seem like this
-    // will have good enough data to exist. 
-    // 'scale': {
-    //   'height': 60,
-    //   'maxWidth': 230
-    // },
-
-    // window options 
-    'imageView': {
-      'height': 400,
-      'width': 350,
-      'annotationsList': {
-        'display': true,
-        'width': 200
-      }
-    },
-
-    // thumbnails view
-    'thumbnailsView': {
-      'thumbsMaxHeight': 150,
-      'thumbsMinHeight': 50,
-      'thumbsDefaultZoom': 0.5
-    },
-
-    'repoImages' : {
+   'repoImages' : {
       'Yale University': 'yale_logo.jpeg',
       'Stanford University': 'sul_logo.jpeg',
       'Harvard University': 'harvard_logo.png',
@@ -116,7 +88,7 @@
       'storeId': 123,
       'APIKey': '23983hf98j3f9283jf2983fj'
     },
-
+    
     // parameters of saving system
     'saveController': {
         // TODO: make saving a function of significant user action, not timed intervals.
