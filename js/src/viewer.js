@@ -8,7 +8,7 @@
             data:                   null,
             element:                null,
             canvas:                 null,
-            currentWorkspace:       null,
+            currentWorkspaceType:       null,
             activeWorkspace:        null,
             availableWorkspaces:    null,
             mainMenu:               null,
@@ -45,7 +45,7 @@
             .appendTo(this.element);
 
             // add workspace configuration
-            this.activeWorkspace = new $.Workspace({type: this.currentWorkspace, parent: this, appendTo: this.element.find('.mirador-viewer') });
+            this.activeWorkspace = new $.Workspace({type: this.currentWorkspaceType, parent: this, appendTo: this.element.find('.mirador-viewer') });
 
             // add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
@@ -75,7 +75,15 @@
         },
 
         switchWorkspace: function(type) {
+          _this = this;
 
+          console.log(type);
+          _this.activeWorkspace.element.remove();
+          delete _this.activeWorkspace;
+
+          _this.activeWorkspace = new $.Workspace({type: type, parent: this, appendTo: this.element.find('.mirador-viewer') });
+          
+          _this.toggleSwitchWorkspace();
         },
         
         // Sets state of overlays that layer over the UI state

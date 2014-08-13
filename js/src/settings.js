@@ -9,24 +9,24 @@
 
     'currentWorkspace': 'singleObject',
 
-    'availableWorkspaces': ['singleObject', 'compare', 'bookReading'],
+    'availableWorkspaces': ['singleObject', 'compare', 'bookReading', 'quad'],
       
     'workspaces' : {
        'singleObject': {
             'slots': [{
-                'width': '100%'
             }],
             'label': 'Single Object',
             'addNew': false,
             'move': false,
             'iconClass': 'image'
         },
-        
         'compare': {
-            'slots': [
-                {},
-                {}
-            ],
+          'slots': [{
+            size: 50
+          },
+          {
+            size: 50
+          }],
             'label': 'Compare',
             'iconClass': 'columns'
         },
@@ -41,7 +41,34 @@
             'addNew': true,
             'move': false,
             'iconClass': 'book'
-        }
+        },
+        'quad': {
+          'slots': [
+            { type: 'column',
+              size: 50,
+              positions: {
+                type: 'row', 
+                size:50
+              },
+              { 
+                type: 'row',
+                size:50
+              }
+          },
+            { type: 'column',
+              size: 50,
+              { 
+                type: 'row',
+                size:50
+              },
+              { 
+                type: 'row',
+                size:50
+              }
+          }],
+            'label': 'Compare',
+            'iconClass': 'columns'
+        },
         // add new workspace types by appending a 
         // profile with plugin initialisation code:
         // $.DEFAULT_SETTINGS.workspaces['myNwqWorkspace'] = {...}

@@ -42,6 +42,18 @@
       var _this = this;
     },
 
+    addColumn: function() {
+
+    },
+    addRow: function() {
+
+    },
+    removeColumn: function() {
+
+    },
+    removeRow: function() {
+
+    },
     clearSlot: function(slotId) {
       if (this.slots[slodId].windowElement) { 
         this.slots[slotId].windowElement.remove();

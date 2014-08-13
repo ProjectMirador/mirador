@@ -19,6 +19,7 @@
       
       jQuery.each(this.parent.availableWorkspaces, function(index, value) {
         workspaceTemplate.push({
+          dataClass: value,
           label : _this.parent.workspaces[value].label,
           iconClass: _this.parent.workspaces[value].iconClass
         });
@@ -35,6 +36,11 @@
         if (stateValue) { _this.show(); return; }
         _this.hide();
       });
+
+      jQuery('#workspace-select-menu').find('.workspace-option').on('click', function() {
+        console.log(jQuery(this));
+        $.viewer.switchWorkspace(jQuery(this).data('workspaceType'));
+      });
     },
 
     hide: function() {
@@ -50,7 +56,7 @@
          '<h1>Choose Workspace Type</h1>',
          '<ul class="workspaces-listing">',
            '{{#each workspaces}}',
-             '<li class="workspace-option {{label}}">',
+             '<li class="workspace-option" data-workspace-type="{{dataClass}}">',
                '<a href="javascrippt:void(0);" name="{{label}}">',
                  '<i class="fa fa-{{iconClass}} workspace-icon"></i>',
                  '<h2 class="workspace-label">{{label}}</h2>',
