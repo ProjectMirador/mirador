@@ -46,29 +46,29 @@
           'slots': [
             { type: 'column',
               size: 50,
-              positions: {
+              positions: [{
                 type: 'row', 
                 size:50
               },
               { 
                 type: 'row',
                 size:50
-              }
+              }]
           },
             { type: 'column',
               size: 50,
-              { 
-                type: 'row',
+              positions: [{
+                type: 'row', 
                 size:50
               },
               { 
                 type: 'row',
                 size:50
-              }
+              }]
           }],
-            'label': 'Compare',
-            'iconClass': 'columns'
-        },
+            'label': 'quad',
+            'iconClass': 'th-large'
+        }
         // add new workspace types by appending a 
         // profile with plugin initialisation code:
         // $.DEFAULT_SETTINGS.workspaces['myNwqWorkspace'] = {...}
