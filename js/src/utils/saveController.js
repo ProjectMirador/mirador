@@ -18,7 +18,7 @@
 
     init: function(config) {
       var sessionID = window.location.hash.substring(1); // will return empty string if none exists, causing the or statement below to evaluate to false, generating a new sesssionID.
-      
+
       if ( sessionID ) {
         this.currentConfig = JSON.parse(localStorage.getItem(sessionID));
         this.sessionID =  sessionID;
@@ -37,6 +37,12 @@
         // see: http://html5demos.com/history and http://diveintohtml5.info/history.html
         this.sessionID = $.genUUID(); // might want a cleaner thing for the url.
         // put history stuff here, for a great cross-browser demo, see: http://browserstate.github.io/history.js/demo/
+        //http://stackoverflow.com/questions/17801614/popstate-passing-popped-state-to-event-handler
+        if (window.location.hash) {
+            history.replaceState(this.currentConfig, "Mirador Session", window.location.href);
+        } else {
+            history.replaceState(this.currentConfig, "Mirador Session", window.location.href+"#"+this.sessionID);
+        }
       }
 
       this.bindEvents();
