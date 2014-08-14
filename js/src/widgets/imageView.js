@@ -32,6 +32,7 @@
         this.element = jQuery(this.template()).appendTo(this.appendTo);
 
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+        this.addAnnotationsLayer();
         this.parent.updateFocusImages([this.imageID]);
     },
     
@@ -122,6 +123,14 @@
         if (typeof osdBounds != 'undefined') {
           _this.osd.viewport.fitBounds(osdBounds, true);
         }
+      });
+    },
+
+    addAnnotationsLayer: function() {
+      console.log(this.currentImg);
+      this.annotationsLayer = new $.AnnotationsLayer({
+        parent: this,
+        annotationUrls: this.currentImg.annotations
       });
     },
     
