@@ -17,7 +17,7 @@
             windowSize:             {},
             resizeRatio:            {},
             currentWorkspaceVisible: true,
-            overlayStates:           {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false},
+            overlayStates:           {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false, 'bookmarkPanelVisible': false},
             manifests:               {}
         }, $.DEFAULT_SETTINGS, options);
 
@@ -52,6 +52,8 @@
 
             // add workset select menu (hidden by default) 
             this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
+            
+            this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             //set this to be displayed
             this.set('currentWorkspaceVisible', true);
@@ -112,6 +114,10 @@
         
         toggleSwitchWorkspace: function() {
             this.toggleOverlay('workspacesPanelVisible');
+        },
+        
+        toggleBookmarkPanel: function() {
+            this.toggleOverlay('bookmarkPanelVisible');
         },
 
         getManifestsData: function() {

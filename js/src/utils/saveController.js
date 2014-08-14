@@ -17,13 +17,34 @@
   $.SaveController.prototype = {
 
     init: function(config) {
+      var _this = this;
       var sessionID = window.location.hash.substring(1); // will return empty string if none exists, causing the or statement below to evaluate to false, generating a new sesssionID.
 
       if ( sessionID ) {
         this.currentConfig = JSON.parse(localStorage.getItem(sessionID));
         this.sessionID =  sessionID;
       } else {
-        this.currentConfig = config;
+        var paramURL = window.location.search.substring(1);
+        if (paramURL) {
+          var params = paramURL.split('=');
+          var jsonblob = params[1];
+          var ajaxURL = "http://jsonblob.com/api/jsonBlob/"+jsonblob;
+          jQuery.ajax({
+           type: 'GET',
+           url: ajaxURL, 
+           headers: { 
+             'Accept': 'application/json',
+             'Content-Type': 'application/json' 
+            },
+            success: function(data, textStatus, request) {
+              _this.currentConfig = data;
+           },
+           async: false
+         });
+          //get json from jsonblob and set currentConfig to it
+        } else {
+           this.currentConfig = config;
+        }
         //add UUIDs to parts of config that need them
         if (this.currentConfig.windowObjects) {
            jQuery.each(this.currentConfig.windowObjects, function(index, window) {
@@ -38,12 +59,15 @@
         this.sessionID = $.genUUID(); // might want a cleaner thing for the url.
         // put history stuff here, for a great cross-browser demo, see: http://browserstate.github.io/history.js/demo/
         //http://stackoverflow.com/questions/17801614/popstate-passing-popped-state-to-event-handler
+        
+        //also remove ?json bit so it's a clean URL
+        var cleanURL = window.location.href.replace(window.location.search, "");
         if (window.location.hash) {
-            history.replaceState(this.currentConfig, "Mirador Session", window.location.href);
+            history.replaceState(this.currentConfig, "Mirador Session", cleanURL);
         } else {
-            history.replaceState(this.currentConfig, "Mirador Session", window.location.href+"#"+this.sessionID);
+            history.replaceState(this.currentConfig, "Mirador Session", cleanURL+"#"+this.sessionID);
         }
-      }
+    }
 
       this.bindEvents();
       

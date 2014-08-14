@@ -46,6 +46,7 @@
             var _this = this;
             this.element.find('.load-window').on('click', function() { _this.parent.toggleLoadWindow(); });
             this.element.find('.switch-workspace').on('click', function() { _this.parent.toggleSwitchWorkspace(); });
+            this.element.find('.bookmark-workspace').on('click', function() { _this.parent.toggleBookmarkPanel(); });
         },
 
         template: Handlebars.compile([
