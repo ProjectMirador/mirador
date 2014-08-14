@@ -6,7 +6,8 @@
       element: null,
       appendTo: null,
       parent: null,
-      jsonblob: null
+      jsonblob: null,
+      zeroclient: null
     }, options);
 
     this.init();
@@ -16,6 +17,7 @@
   $.BookmarkPanel.prototype = {
     init: function () {
       this.element = jQuery(this.template()).appendTo(this.appendTo);
+      this.zeroclient = new ZeroClipboard(this.element.find('.mirador-icon-copy'));
       this.bindEvents();
     },
 
@@ -59,6 +61,7 @@
               }
               var bookmarkURL = window.location.href.replace(window.location.hash, '') + "?json="+_this.jsonblob;
               _this.element.find('#share-url').val(bookmarkURL);
+              //TODO if flash isn't available to browser, auto highlight the URL
          }
       });
       jQuery(this.element).show({effect: "slide", direction: "up", duration: 1000, easing: "swing"});
@@ -67,7 +70,10 @@
     template: Handlebars.compile([
        '<div id="bookmark-panel">',
          '<h3>Bookmark or Share Your Workspace</h3>',
-         '<span>URL: <input id="share-url" type="text"></input></span>',
+         '<span>',
+         'URL: <input id="share-url" type="text"></input>',
+         '<a href="javascript:;" class="mirador-btn mirador-icon-copy" data-clipboard-target="share-url"><i class="fa fa-files-o fa-lg"></i></a>',
+         '</span>',
        '</div>'
     ].join(''))
   };
