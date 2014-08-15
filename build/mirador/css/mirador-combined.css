@@ -2346,6 +2346,28 @@ a {
   overflow: hidden;
   z-index: 4;
 }
+#bookmark-panel {
+  position: absolute;
+  height: 20%;
+  width: 30%;
+  background-color: rgba(255,255,255,0.94);
+  display: none;
+  overflow: hidden;
+  z-index: 4;
+  right: 0;
+  top: 0;
+  padding-left: 1%;
+}
+#bookmark-panel span {
+  width: 100%;
+}
+#bookmark-panel input {
+  width: 80%;
+  margin-right: 3px;
+}
+#bookmark-panel h3 {
+  text-align: center;
+}
 .container {
   position: relative;
   width: 100%;
@@ -3457,6 +3479,12 @@ a.mirador-icon-image-view [class^="icon-"] {
 
 .mirador-viewer a.mirador-icon-image-view.selected {
   color: black
+}
+
+.mirador-viewer a.mirador-icon-copy {
+  background: none;
+  /*color: rgb( 146, 145, 145 );*/
+  box-sizing: border-box;
 }
 
 .mirador-icon-previous { background-position: -80px -40px; }
