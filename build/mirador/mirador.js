@@ -3574,8 +3574,8 @@ window.Mirador = window.Mirador || function(config) {
 
           for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
             var canvas = manifest.sequences[0].canvases[i],
-            resource = canvas.images[0].resource,
-            service = resource['default'] ? resource['default'].service : resource.service,
+            resource = canvas.images[0].resource['default'] ? canvas.images[0].resource['default'] : canvas.images[0].resource,
+            service = resource.service,
             url = $.Iiif.getUriWithHeight(service['@id'], _this.thumbHeight),
             aspectRatio = resource.height/resource.width,
             width = (_this.thumbHeight/aspectRatio);
