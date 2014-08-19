@@ -5945,9 +5945,19 @@ window.Mirador = window.Mirador || function(config) {
     },
     
     getImageUrl: function(image) {
-        var id = image.images[0].resource.service['@id'];
+      console.log(image);
+
+      if (!image.images[0].resource.service) {
+        console.log(image.images[0]);
+        id = image.images[0].resource['default'].service['@id'];
         id = id.replace(/\/$/, "");
         return id;
+      }
+      
+      var id = image.images[0].resource.service['@id'];
+      id = id.replace(/\/$/, "");
+
+      return id;
     },
 
 
