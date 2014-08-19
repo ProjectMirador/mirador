@@ -37,6 +37,9 @@
       // load menu is invoked from it.
       jQuery.subscribe('manifestToSlot', function(e, manifest, focusState, imageID, windowID) {
         _this.clearSlot();
+        if (_this.window && !windowID) {
+           windowID = _this.window.id;
+        }
         _this.window = new $.Window({appendTo: _this.element, currentFocus: focusState, currentImageID: imageID, manifest: manifest, id: windowID});
       });
       
