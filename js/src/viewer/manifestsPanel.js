@@ -40,7 +40,7 @@
             this.element.find('form#url-load-form').on('submit', function() {
                 event.preventDefault();
                 var url = jQuery(this).find('input').val();
-                _this.parent.addManifestFromUrl(url);
+                _this.parent.addManifestFromUrl(url, "(Added from URL)");
             });
 
             // handle subscribed events
@@ -48,7 +48,7 @@
                if (stateValue) { _this.show(); return; }
                 _this.hide();
             });
-            jQuery.subscribe('manifestAdded', function(event, newManifest) {
+            jQuery.subscribe('manifestAdded', function(event, newManifest, repository) {
               _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifestId: newManifest, resultsWidth: _this.resultsWidth }));
             });
             

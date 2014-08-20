@@ -1,13 +1,13 @@
 {
   "name": "Mirador",
-  "version": "0.9.0", 
+  "version": "0.9.0",
   "description": "Multi-window image viewer, a web-based tool to support researcher goals",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/IIIF/mirador"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IIIF/mirador"
   },
   "devDependencies": {
-    "grunt": "~0.4.0",
+    "grunt": "^0.4.5",
     "grunt-contrib-compress": "~0.4.0",
     "grunt-contrib-concat": "~0.1.2",
     "grunt-contrib-copy": "~0.4.1",
@@ -19,9 +19,12 @@
     "grunt-contrib-clean": "~0.4.0",
     "grunt-git-describe": "~2.0.0",
     "grunt-contrib-jasmine": "~0.6.1",
-    "grunt-template-jasmine-istanbul": "~0.3.1"
+    "grunt-template-jasmine-istanbul": "~0.3.1",
+    "grunt-cli": "^0.1.13",
+    "grunt-coveralls": "^1.0.0"
   },
   "scripts": {
     "test": "grunt test coverage --verbose"
-  }
+  },
+  "dependencies": {}
 }

@@ -28,10 +28,10 @@
         }
 
         this.currentImg = this.imagesList[this.currentImgIndex];
-        
         this.element = jQuery(this.template()).appendTo(this.appendTo);
 
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+        this.addAnnotationsLayer();
         this.parent.updateFocusImages([this.imageID]);
     },
     
@@ -123,6 +123,27 @@
           _this.osd.viewport.fitBounds(osdBounds, true);
         }
       });
+    },
+
+    addAnnotationsLayer: function() {
+      var annotationListUrls;
+
+      if (this.currentImg.otherContent) {
+        annotationListUrls = jQuery.map(this.currentImg.otherContent, function( annotation ){
+
+          if (annotation['@id'].indexOf(".json") >= 0) {
+            return annotation['@id'];
+          }
+
+          return (annotation['@id'] + ".json");
+        });
+      }
+      
+      this.annotationsLayer = new $.AnnotationsLayer({
+        parent: this,
+        annotationListUrls: annotationListUrls
+      });
+      
     },
     
     updateImage: function(imageID) {

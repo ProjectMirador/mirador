@@ -45,21 +45,11 @@
 
           var tplData = { 
             label: manifest.label,
-            repository: (function() { 
-              var locationData = jQuery.grep($.viewer.data, function(item) {
-                return item.manifestUri === _this.manifestId;
-              })[0];
-
-              if (locationData === undefined) {
-                return '(Added from URL)';
-              } else {
-                return locationData.location;
-              }
-            })(),
+            repository: manifest.miradorRepository,
             canvasCount: manifest.sequences[0].canvases.length,
             images: []
           };
-          $.viewer.manifests[_this.manifestId].miradorRepository = tplData.repository;
+          
           tplData.repoImage = (function() {
             var repo = tplData.repository;
             if (tplData.repository === '(Added from URL)') {
@@ -72,8 +62,8 @@
 
           for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
             var canvas = manifest.sequences[0].canvases[i],
-            resource = canvas.images[0].resource,
-            service = resource['default'] ? resource['default'].service : resource.service,
+            resource = canvas.images[0].resource['default'] ? canvas.images[0].resource['default'] : canvas.images[0].resource,
+            service = resource.service,
             url = $.Iiif.getUriWithHeight(service['@id'], _this.thumbHeight),
             aspectRatio = resource.height/resource.width,
             width = (_this.thumbHeight/aspectRatio);

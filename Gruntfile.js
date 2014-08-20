@@ -28,8 +28,11 @@ module.exports = function(grunt) {
     'js/lib/jquery.layout-latest.min.js',
     'js/lib/pubsub.min.js',
     'js/lib/jquery-ui-1.9.2.min.js',
+    'js/lib/split-pane.js',
+    'js/lib/URI.min.js',
     'js/lib/jquery.scrollTo.min.js',
-    'js/lib/mousetrap.min.js'
+    'js/lib/mousetrap.min.js',
+    'js/lib/ZeroClipboard.min.js'
   ],
 
   // libraries/plugins for running tests
@@ -126,7 +129,10 @@ module.exports = function(grunt) {
         }, {
           src: 'js/lib/parse.min.js',
           dest: 'build/mirador/parse.min.js'
-        }]
+	}, {	    
+          src: 'js/lib/ZeroClipboard.swf',
+	  dest: 'build/mirador/ZeroClipboard.swf'
+	}]
       }
     },
 

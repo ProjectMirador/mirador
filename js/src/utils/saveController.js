@@ -17,20 +17,57 @@
   $.SaveController.prototype = {
 
     init: function(config) {
-      var sessionID = window.location.hash; // will return empty string if none exists, causing the or statement below to evaluate to false, generating a new sesssionID.
-      
+      var _this = this;
+      var sessionID = window.location.hash.substring(1); // will return empty string if none exists, causing the or statement below to evaluate to false, generating a new sesssionID.
+
       if ( sessionID ) {
-        this.currentConfig = JSON.parse(localStore.getItem(sessionID));
+        this.currentConfig = JSON.parse(localStorage.getItem(sessionID));
         this.sessionID =  sessionID;
       } else {
-        this.currentConfig = config;
-
+        var paramURL = window.location.search.substring(1);
+        if (paramURL) {
+          var params = paramURL.split('=');
+          var jsonblob = params[1];
+          var ajaxURL = "http://jsonblob.com/api/jsonBlob/"+jsonblob;
+          jQuery.ajax({
+           type: 'GET',
+           url: ajaxURL, 
+           headers: { 
+             'Accept': 'application/json',
+             'Content-Type': 'application/json' 
+            },
+            success: function(data, textStatus, request) {
+              _this.currentConfig = data;
+           },
+           async: false
+         });
+          //get json from jsonblob and set currentConfig to it
+        } else {
+           this.currentConfig = config;
+        }
+        //add UUIDs to parts of config that need them
+        if (this.currentConfig.windowObjects) {
+           jQuery.each(this.currentConfig.windowObjects, function(index, window) {
+              if (!window.id) {
+                  window.id = $.genUUID();
+              }
+           });
+        }
         // generate a new sessionID and push an 
         // entry onto the history stack.
         // see: http://html5demos.com/history and http://diveintohtml5.info/history.html
         this.sessionID = $.genUUID(); // might want a cleaner thing for the url.
         // put history stuff here, for a great cross-browser demo, see: http://browserstate.github.io/history.js/demo/
-      }
+        //http://stackoverflow.com/questions/17801614/popstate-passing-popped-state-to-event-handler
+        
+        //also remove ?json bit so it's a clean URL
+        var cleanURL = window.location.href.replace(window.location.search, "");
+        if (window.location.hash) {
+            history.replaceState(this.currentConfig, "Mirador Session", cleanURL);
+        } else {
+            history.replaceState(this.currentConfig, "Mirador Session", cleanURL+"#"+this.sessionID);
+        }
+    }
 
       this.bindEvents();
       
@@ -39,24 +76,46 @@
     set: function(prop, value, options) {
       // when a property of the config is updated,
       // save it to localStore.
-      _this.save();
+      if (options) {
+          this[options.parent][prop] = value;
+      } else {
+          this[prop] = value;
+      }
+      this.save();
     },
 
     bindEvents: function() {
+      var _this = this;
       // listen to existing events and use the 
       // available data to update the appropriate 
       // field in the stored config.
-      jQuery.subscribe('currentImageIDUpdated', function(junk) {
-        // handle adding the property in the appropriate place 
-        // in this.currentConfig by passing to the _this.set(), 
-        // which "saves" to localstore as a side effect.
+      
+      jQuery.subscribe('focusUpdated', function(event, options) {
+        var windowObjects = _this.currentConfig.windowObjects;
+        if (windowObjects) {
+            jQuery.each(windowObjects, function(index, window){
+                if (window.id === options.id) {
+                    windowObjects[index] = options;
+                }
+            });
+        } else {
+           windowObjects = [options];
+        }
+        _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
       
-      jQuery.subscribe('addManifestFromUrl', function(junk) {
-        // handle adding the property in the appropriate place 
-        // in this.currentConfig by passing to the _this.set(), 
-        // which "saves" to localstore as a side effect.
-
+      jQuery.subscribe('manifestAdded', function(event, url, repository) {
+        var data = _this.currentConfig.data;
+        var objectInConfig = false;
+        jQuery.each(data, function(index, manifestObject){
+            if (manifestObject.manifestUri === url) {
+                objectInConfig = true;
+            }
+        });
+        if (!objectInConfig) {
+            data.push({"manifestUri":url, "location":repository});
+            _this.set("data", data, {parent: "currentConfig"});
+        }
       });
       
       jQuery.subscribe('etc...', function(junk) {
@@ -95,7 +154,7 @@
       // localStorage is a key:value store that
       // only accepts strings.
 
-      localStorage.setItem(JSON.stringify(_this.sessionID, _this.currentConfig));
+      localStorage.setItem(_this.sessionID, JSON.stringify(_this.currentConfig));
     }
 
   };

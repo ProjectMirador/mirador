@@ -16,9 +16,17 @@
     },
     
     getImageUrl: function(image) {
-        var id = image.images[0].resource.service['@id'];
+
+      if (!image.images[0].resource.service) {
+        id = image.images[0].resource['default'].service['@id'];
         id = id.replace(/\/$/, "");
         return id;
+      }
+      
+      var id = image.images[0].resource.service['@id'];
+      id = id.replace(/\/$/, "");
+
+      return id;
     },
 
 
