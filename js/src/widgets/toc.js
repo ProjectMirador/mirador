@@ -189,8 +189,6 @@
       jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
       });
         
-      console.log('TOC UUID String: ' + _this.parent.id);
-
       jQuery.subscribe(('currentImageIDUpdated.' + _this.parent.id), function(event, imageID) {
         if (!_this.manifest.structures) { return; }
         _this.setSelectedElements($.getRangeIDByCanvasID(_this.manifest, imageID.newImageID));

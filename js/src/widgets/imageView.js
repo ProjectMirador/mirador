@@ -10,10 +10,14 @@
       element:          null,
       parent:           null,
       manifest:         null,
-      zoomLevel:        null,
       osd:              null,
-      osdBounds:        null,
-      osdCls: 'mirador-osd'
+      osdOptions: {
+        osdBounds:        null,
+        zoomLevel:        null
+      },
+      osdCls: 'mirador-osd',
+      zoomComplete: false,
+      panComplete: false
     }, options);
     
     this.init();
@@ -26,7 +30,12 @@
         if (this.imageID !== null) {
             this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
         }
-
+        if (!this.osdOptions) {
+          this.osdOptions = {
+            osdBounds:        null,
+            zoomLevel:        null
+          };
+        }
         this.currentImg = this.imagesList[this.currentImgIndex];
         this.element = jQuery(this.template()).appendTo(this.appendTo);
 
@@ -63,6 +72,25 @@
        });
     },
     
+    setZoom: function() {
+         var _this = this;
+         this.osdOptions.zoomLevel = this.osd.viewport.getZoom();
+         jQuery.publish("imageZoomUpdated", {
+                       id: _this.parent.id, 
+                       zoomLevel: _this.osdOptions.zoomLevel
+                       });
+    },
+    
+    setBounds: function() {
+         var _this = this;
+         this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
+         console.log(this.osdOptions.osdBounds);
+         jQuery.publish("imageBoundsUpdated", {
+                       id: _this.parent.id, 
+                       osdBounds: {x: _this.osdOptions.osdBounds.x, y: _this.osdOptions.osdBounds.y, width: _this.osdOptions.osdBounds.width, height: _this.osdOptions.osdBounds.height}
+                       });
+    },
+    
     toggle: function(stateValue) {
         if (stateValue) { 
             this.show(); 
@@ -91,7 +119,7 @@
         }
     },
 
-    createOpenSeadragonInstance: function(imageUrl, osdBounds) {
+    createOpenSeadragonInstance: function(imageUrl) {
       var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json',
       osdID = 'mirador-osd-' + $.genUUID(),
       infoJson,
@@ -115,13 +143,25 @@
       });
             
       this.bindOSDEvents();
-            
+      
       this.osd.addHandler('open', function(){
-        _this.zoomLevel = _this.osd.viewport.getZoom();
-
-        if (typeof osdBounds != 'undefined') {
-          _this.osd.viewport.fitBounds(osdBounds, true);
+        if (_this.osdOptions) {
+          if (_this.osdOptions.zoomLevel) {
+            _this.osd.viewport.zoomTo(_this.osdOptions.zoomLevel, null, true);
+          }
+          if (_this.osdOptions.osdBounds) {
+            var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
+            _this.osd.viewport.fitBounds(rect, true);
+          }
         }
+        
+        _this.osd.addHandler('zoom', function() {
+            _this.setZoom();
+          });
+       
+          _this.osd.addHandler('pan', function() {
+            _this.setBounds();
+          });
       });
     },
 
