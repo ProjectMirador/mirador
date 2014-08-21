@@ -22,9 +22,11 @@
         },
         'compare': {
           'slots': [{
+            type: "column"
             size: 50
           },
           {
+            type: "column"
             size: 50
           }],
             'label': 'Compare',
