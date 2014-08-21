@@ -7,7 +7,7 @@
 
     'workspaceAutoSave': true,
 
-    'currentWorkspace': 'singleObject',
+    'currentWorkspaceType': 'singleObject',
 
     'availableWorkspaces': ['singleObject', 'compare', 'bookReading', 'quad'],
       
@@ -22,11 +22,11 @@
         },
         'compare': {
           'slots': [{
-            type: "column"
+            type: "column",
             size: 50
           },
           {
-            type: "column"
+            type: "column",
             size: 50
           }],
             'label': 'Compare',

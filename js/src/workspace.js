@@ -44,8 +44,8 @@
     template: function(tplData) {
 
       var template = Handlebars.compile([
-        '{{#each slots}}'
-        '{{/each slots}}'
+        '{{#each slots}}',
+        '{{/each }}'
       ].join(''));
 
       var previousTemplate;
