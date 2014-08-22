@@ -15,9 +15,7 @@
         osdBounds:        null,
         zoomLevel:        null
       },
-      osdCls: 'mirador-osd',
-      zoomComplete: false,
-      panComplete: false
+      osdCls: 'mirador-osd'
     }, options);
     
     this.init();
