@@ -84,7 +84,6 @@
     setBounds: function() {
          var _this = this;
          this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
-         console.log(this.osdOptions.osdBounds);
          jQuery.publish("imageBoundsUpdated", {
                        id: _this.parent.id, 
                        osdBounds: {x: _this.osdOptions.osdBounds.x, y: _this.osdOptions.osdBounds.y, width: _this.osdOptions.osdBounds.width, height: _this.osdOptions.osdBounds.height}
@@ -190,6 +189,11 @@
         this.imageID = imageID;
         this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
         this.currentImg = this.imagesList[this.currentImgIndex];
+        this.osdOptions = {
+            osdBounds:        null,
+            zoomLevel:        null
+          };
+        this.osd.close();
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.parent.updateFocusImages([imageID]);
     },

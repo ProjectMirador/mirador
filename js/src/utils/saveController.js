@@ -109,8 +109,10 @@
         if (windowObjects) {
             jQuery.each(windowObjects, function(index, window){
                 if (window.id === options.id) {
+                    if (!windowObjects[index].windowOptions) {
+                      windowObjects[index].windowOptions = {};
+                    }
                     windowObjects[index].windowOptions.zoomLevel = options.zoomLevel;
-                    console.log("zoom " + options.zoomLevel);
                 }
             });
         }
@@ -122,8 +124,10 @@
         if (windowObjects) {
             jQuery.each(windowObjects, function(index, window){
                 if (window.id === options.id) {
+                    if (!windowObjects[index].windowOptions) {
+                      windowObjects[index].windowOptions = {};
+                    }
                     windowObjects[index].windowOptions.osdBounds = options.osdBounds;
-                    console.log(options.osdBounds);
                 }
             });
         }
