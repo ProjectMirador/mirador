@@ -58,6 +58,29 @@
       }
     },
 
+    resize: function() {
+      // There will only be a handle on 
+      // the bottom and top of the slot if it is
+      // in a column, and on the left and right if
+      // it is in a row. If the parent has more 
+      // than one child, then it becomes resizeable,
+      // and will likewise affect the layout of its
+      // siblings within their row or column.
+      
+      // On resize, the width must update with the 
+      // mouse position, and the other slots in
+      // the same parent must take up the same share
+      // of remaining space in the parent as they
+      // currently do in the resulting grown or 
+      // shrunken remaining space.
+      
+      // 1.) check the current layout in parent to 
+      // match the children of the common parent.
+
+      // 2.) 
+      // 
+    },
+
     addItem: function() {
       _this = this;
       _this.focused = true;
