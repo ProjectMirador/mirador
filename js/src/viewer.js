@@ -67,7 +67,7 @@
                if (_this.windowObjects) {
                    jQuery.each(_this.windowObjects, function(index, object) {
                        if (object.loadedManifest === newManifest) {
-                           _this.addManifestToWorkspace(object.loadedManifest, object.viewType, object.canvasID, object.id);
+                           _this.addManifestToWorkspace(object.loadedManifest, object.viewType, object.canvasID, object.id, object.windowOptions);
                        }
                    });
                }
@@ -180,7 +180,7 @@
             });
         },
         
-        addManifestToWorkspace: function(manifestURI, focusState, imageID, windowID) {
+        addManifestToWorkspace: function(manifestURI, focusState, imageID, windowID, windowOptions) {
             var manifest = this.manifests[manifestURI],
             _this = this;
             
@@ -192,16 +192,10 @@
             // particular slot, but rather from the selectObject menu,
             // then let the viewer decide where to put the resulting window
             // according to the workspace type.
-//             if($.viewer.activeWorkspace.focusedSlot) {
-//               // slotID is appended to event name so only 
-//               // the invoking slot initialises a new window in 
-//               // itself.
-//               console.log(manifest);
-//               jQuery.publish('manifestToSlot', [manifest, 'ThumbnailsView']);
-//             } else {
-//               jQuery.publish('manifestToWorkspace', [manifest, focusState, imageID]);
-//             }
-              jQuery.publish('manifestToSlot', [manifest, focusState, imageID, windowID]); 
+              // slotID is appended to event name so only 
+              // the invoking slot initialises a new window in 
+              // itself.
+              jQuery.publish('manifestToSlot', [manifest, focusState, imageID, windowID, windowOptions]); 
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {

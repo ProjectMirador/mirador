@@ -37,6 +37,7 @@
           'bottomPanel' : {'ThumbnailsView' : true}
         }
       },
+      focusOptions: null,
       id : null,
       sidePanel: null,
       bottomPanel: null,
@@ -272,7 +273,12 @@
     toggleImageView: function(imageID) {
       this.currentImageID = imageID;
       if (this.focusModules.ImageView === null) {
-        this.focusModules.ImageView = new $.ImageView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: imageID, imagesList: this.imagesList} );
+        this.focusModules.ImageView = new $.ImageView( {manifest: this.manifest, 
+                                                        appendTo: this.element.find('.view-container'), 
+                                                        parent: this, 
+                                                        imageID: imageID, 
+                                                        imagesList: this.imagesList,
+                                                        osdOptions: this.focusOptions} );
       } else {
         var view = this.focusModules.ImageView;
         view.updateImage(imageID);
@@ -283,7 +289,12 @@
     toggleBookView: function(imageID) {
       this.currentImageID = imageID;
       if (this.focusModules.BookView === null) {
-        this.focusModules.BookView = new $.BookView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: imageID, imagesList: this.imagesList} );
+        this.focusModules.BookView = new $.BookView( {manifest: this.manifest, 
+                                                      appendTo: this.element.find('.view-container'), 
+                                                      parent: this, 
+                                                      imageID: imageID, 
+                                                      imagesList: this.imagesList,
+                                                      osdOptions: this.focusOptions} );
       } else {
         var view = this.focusModules.BookView;
         view.updateImage(imageID);
