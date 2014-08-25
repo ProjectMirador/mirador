@@ -35,7 +35,7 @@
           appendTo: this.element
         }));
         this.element.append(this.template({ slots: $.DEFAULT_SETTINGS.workspaces[this.type].slots }));
-        } else {
+      } else {
         this.element.append(this.template(this.slots));
       }
 
