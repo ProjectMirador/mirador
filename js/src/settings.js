@@ -13,7 +13,7 @@
       
     'workspaces' : {
        'singleObject': {
-            'slots': [{
+            'layout': [{
                 'width': '100%'
             }],
             'label': 'Single Object',
@@ -23,7 +23,7 @@
         },
         
         'compare': {
-            'slots': [
+            'layout': [
                 {},
                 {}
             ],
@@ -32,7 +32,7 @@
         },
         
         'bookReading': {
-            'slots': [
+            'layout': [
               {}
             ],
             'defaultWindowOptions': {

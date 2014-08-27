@@ -17,9 +17,10 @@
       var workspaceTemplate = [];
       jQuery.each(this.parent.availableWorkspaces, function(key, value) {
         workspaceTemplate.push({
-          label : value.label,
-          iconClass: value.iconClass
+          label : $.DEFAULT_SETTINGS.workspaces[value].label,
+          iconClass: $.DEFAULT_SETTINGS.workspaces[value].iconClass
         });
+        console.log($.DEFAULT_SETTINGS.workspaces[value].iconClass);
       });
 
       this.element = jQuery(this.template({ workspaces : workspaceTemplate})).appendTo(this.appendTo);
