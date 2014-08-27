@@ -124,7 +124,11 @@
     },
     
     adjustWidth: function(className, hasClass) {
-       
+       if (hasClass) {
+           this.parent.element.find('.view-container').removeClass(className);
+       } else {
+           this.parent.element.find('.view-container').addClass(className);
+       }
     },
     
     adjustHeight: function(className, hasClass) {

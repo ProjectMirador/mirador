@@ -60,7 +60,6 @@
       _this.element = jQuery(this.template()).appendTo(this.appendTo).hide().fadeIn(300);
 
       //reset the window div and update manifest
-      _this.clearWindow();
       _this.imagesList = $.getImagesListByManifest(_this.manifest);
       if (!_this.currentImageID) {
         _this.currentImageID = _this.imagesList[0]['@id'];
@@ -71,7 +70,16 @@
       //clear any existing objects
       _this.clearViews();
       _this.clearPanelsAndOverlay();
-
+      if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
+         jQuery.each(this.focusOverlaysAvailable, function(key, value) {
+            _this.focusOverlaysAvailable[key].bottomPanel = {'' : false};
+         });
+      }
+      if (typeof this.sidePanelAvailable !== 'undefined' && !this.sidePanelAvailable) {
+         jQuery.each(this.focusOverlaysAvailable, function(key, value) {
+            _this.focusOverlaysAvailable[key].sidePanel = {'' : false};
+         });
+      }
       //attach view and toggle view, which triggers the attachment of panels or overlays
       _this.bindNavigation();
       switch(focusState) {
@@ -92,6 +100,11 @@
       }
 
       this.bindEvents();
+    },
+    
+    update: function(options) {
+      jQuery.extend(this, options);
+      this.init();
     },
 
     bindEvents: function() {
@@ -115,11 +128,6 @@
       jQuery.each(_this.focusModules, function(key, value) {
         _this.focusModules[key] = null;
       });
-    },
-
-    clearWindow: function() {
-      this.element.remove();
-      this.element = jQuery(this.template()).appendTo(this.appendTo);
     },
 
     clearPanelsAndOverlay: function() {
@@ -209,12 +217,30 @@
         this.focusModules[this.currentFocus].adjustHeight('focus-bottom-panel-minimized', true);
       }
     },
+    
+    minMaxSidePanel: function(element) {
+      if (element.hasClass('mirador-icon-minimize')) {
+        //hide all other siblings, change icon to maximize, change height of parent
+        element.removeClass('mirador-icon-minimize').addClass('mirador-icon-maximize');
+        element.siblings().hide();
+        element.parent().addClass('minimized');
+        //adjust height of focus element
+        this.focusModules[this.currentFocus].adjustWidth('focus-side-panel-minimized', false);
+      } else {
+        //show all other siblings, change icon to minimize, change height of parent
+        element.removeClass('mirador-icon-maximize').addClass('mirador-icon-minimize');
+        element.siblings().show();
+        element.parent().removeClass('minimized');
+        //adjust height of focus element
+        this.focusModules[this.currentFocus].adjustWidth('focus-side-panel-minimized', true);
+      }
+    },
 
     adjustFocusSize: function(panelType, panelState) {
       if (panelType === 'bottomPanel') {
         this.focusModules[this.currentFocus].adjustHeight('focus-max-height', panelState);
       } else if (panelType === 'sidePanel') {
-        this.focusModules[this.currentFocus].adjustWidth('focus-max-height', panelState);
+        this.focusModules[this.currentFocus].adjustWidth('focus-max-width', panelState);
       } else {}
     },
 
@@ -412,13 +438,19 @@
       this.element.find('.mirador-thumb-panel').on('click', function() {
         _this.minMaxBottomPanel(jQuery(this));
       });
+      
+      this.element.find('.mirador-side-panel').on('click', function() {
+        _this.minMaxSidePanel(jQuery(this));
+      });
     },
 
     // template should be based on workspace type
     template: Handlebars.compile([
                                  '<div class="window">',
                                  '<div class="content-container">',
-                                 '<div class="sidePanel"></div>',
+                                 '<div class="sidePanel">',
+                                 '<span class="mirador-btn mirador-side-panel mirador-icon-minimize"></span>',
+                                 '</div>',
                                  '<div class="view-container">',
                                  '<div class="overlay"></div>',
                                  '<div class="bottomPanel">',
