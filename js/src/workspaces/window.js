@@ -60,7 +60,6 @@
       _this.element = jQuery(this.template()).appendTo(this.appendTo).hide().fadeIn(300);
 
       //reset the window div and update manifest
-      _this.clearWindow();
       _this.imagesList = $.getImagesListByManifest(_this.manifest);
       if (!_this.currentImageID) {
         _this.currentImageID = _this.imagesList[0]['@id'];
@@ -71,7 +70,16 @@
       //clear any existing objects
       _this.clearViews();
       _this.clearPanelsAndOverlay();
-
+      if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
+         jQuery.each(this.focusOverlaysAvailable, function(key, value) {
+            _this.focusOverlaysAvailable[key].bottomPanel = {'' : false};
+         });
+      }
+      if (typeof this.sidePanelAvailable !== 'undefined' && !this.sidePanelAvailable) {
+         jQuery.each(this.focusOverlaysAvailable, function(key, value) {
+            _this.focusOverlaysAvailable[key].sidePanel = {'' : false};
+         });
+      }
       //attach view and toggle view, which triggers the attachment of panels or overlays
       _this.bindNavigation();
       switch(focusState) {
@@ -92,6 +100,11 @@
       }
 
       this.bindEvents();
+    },
+    
+    update: function(options) {
+      jQuery.extend(this, options);
+      this.init();
     },
 
     bindEvents: function() {
@@ -115,11 +128,6 @@
       jQuery.each(_this.focusModules, function(key, value) {
         _this.focusModules[key] = null;
       });
-    },
-
-    clearWindow: function() {
-      this.element.remove();
-      this.element = jQuery(this.template()).appendTo(this.appendTo);
     },
 
     clearPanelsAndOverlay: function() {

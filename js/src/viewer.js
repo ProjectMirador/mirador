@@ -67,7 +67,7 @@
                if (_this.windowObjects) {
                    jQuery.each(_this.windowObjects, function(index, object) {
                        if (object.loadedManifest === newManifest) {
-                           _this.addManifestToWorkspace(object.loadedManifest, object.viewType, object.canvasID, object.id, object.windowOptions);
+                           _this.loadManifestFromConfig(object);
                        }
                    });
                }
@@ -172,10 +172,22 @@
             });
         },
         
-        addManifestToWorkspace: function(manifestURI, focusState, imageID, windowID, windowOptions) {
+        loadManifestFromConfig: function(options) {
+           var windowConfig = {
+           currentFocus : options.viewType,
+           currentImageID : options.canvasID,
+           id : options.id,
+           focusOptions : options.windowOptions,
+           bottomPanelAvailable : options.bottomPanel,
+           sidePanelAvailable : options.sidePanel
+           };
+           this.addManifestToWorkspace(options.loadedManifest, windowConfig);
+        },
+        
+        addManifestToWorkspace: function(manifestURI, windowConfig) {
             var manifest = this.manifests[manifestURI],
             _this = this;
-            
+            windowConfig.manifest = manifest;
             jQuery.each(this.overlayStates, function(oState, value) {
                 _this.set(oState, false, {parent: 'overlayStates'});
             });
@@ -187,15 +199,19 @@
               // slotID is appended to event name so only 
               // the invoking slot initialises a new window in 
               // itself.
-              jQuery.publish('manifestToSlot', [manifest, focusState, imageID, windowID, windowOptions]); 
+              jQuery.publish('manifestToSlot', windowConfig); 
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {
-           this.addManifestToWorkspace(manifestURI, 'ImageView', imageID);
+           this.addManifestToWorkspace(manifestURI, 
+              {currentFocus: 'ImageView', 
+              currentImageID: imageID});
         },
         
         toggleThumbnailsViewInWorkspace: function(manifestURI) {
-           this.addManifestToWorkspace(manifestURI, 'ThumbnailsView', null);
+           this.addManifestToWorkspace(manifestURI,
+              {currentFocus: 'ThumbnailsView', 
+              currentImageID: null});
         }
     };
 
