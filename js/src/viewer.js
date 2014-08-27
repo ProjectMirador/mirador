@@ -8,12 +8,12 @@
             data:                   null,
             element:                null,
             canvas:                 null,
-            currentWorkspace:       null,
+            currentWorkspaceType:       null,
             activeWorkspace:        null,
             availableWorkspaces:    null,
             mainMenu:               null,
             //mainMenuLoadWindowCls:  '.mirador-main-menu .load-window',
-            workspaceAutoSave:      null,
+            workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
             windowSize:             {},
             resizeRatio:            {},
             currentWorkspaceVisible: true,
@@ -45,9 +45,9 @@
             .appendTo(this.element);
 
             // add workspace configuration
-            this.activeWorkspace = new $.Workspace({type: this.currentWorkspace, parent: this, appendTo: this.element.find('.mirador-viewer') });
+            this.activeWorkspace = new $.Workspace({type: this.currentWorkspaceType, parent: this, appendTo: this.element.find('.mirador-viewer') });
 
-            //add workspaces panel
+            // add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
 
             // add workset select menu (hidden by default) 
@@ -92,7 +92,15 @@
         },
 
         switchWorkspace: function(type) {
+          _this = this;
 
+          console.log(type);
+          _this.activeWorkspace.element.remove();
+          delete _this.activeWorkspace;
+
+          _this.activeWorkspace = new $.Workspace({type: type, parent: this, appendTo: this.element.find('.mirador-viewer') });
+          
+          _this.toggleSwitchWorkspace();
         },
         
         // Sets state of overlays that layer over the UI state
