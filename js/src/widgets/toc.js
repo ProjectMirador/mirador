@@ -329,12 +329,12 @@
     
     hide: function() {
       jQuery(this.appendTo).hide();
-      this.parent.element.find('.view-container').css('margin-left', 0);
+      this.parent.element.find('.view-container').addClass('focus-max-width');
     },
 
     show: function() {
       jQuery(this.appendTo).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
-      this.parent.element.find('.view-container').css('margin-left', 280);
+      this.parent.element.find('.view-container').removeClass('focus-max-width');
     }
     
   };

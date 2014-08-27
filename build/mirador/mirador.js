@@ -4298,12 +4298,30 @@ window.Mirador = window.Mirador || function(config) {
         this.focusModules[this.currentFocus].adjustHeight('focus-bottom-panel-minimized', true);
       }
     },
+    
+    minMaxSidePanel: function(element) {
+      if (element.hasClass('mirador-icon-minimize')) {
+        //hide all other siblings, change icon to maximize, change height of parent
+        element.removeClass('mirador-icon-minimize').addClass('mirador-icon-maximize');
+        element.siblings().hide();
+        element.parent().addClass('minimized');
+        //adjust height of focus element
+        this.focusModules[this.currentFocus].adjustWidth('focus-side-panel-minimized', false);
+      } else {
+        //show all other siblings, change icon to minimize, change height of parent
+        element.removeClass('mirador-icon-maximize').addClass('mirador-icon-minimize');
+        element.siblings().show();
+        element.parent().removeClass('minimized');
+        //adjust height of focus element
+        this.focusModules[this.currentFocus].adjustWidth('focus-side-panel-minimized', true);
+      }
+    },
 
     adjustFocusSize: function(panelType, panelState) {
       if (panelType === 'bottomPanel') {
         this.focusModules[this.currentFocus].adjustHeight('focus-max-height', panelState);
       } else if (panelType === 'sidePanel') {
-        this.focusModules[this.currentFocus].adjustWidth('focus-max-height', panelState);
+        this.focusModules[this.currentFocus].adjustWidth('focus-max-width', panelState);
       } else {}
     },
 
@@ -4501,13 +4519,19 @@ window.Mirador = window.Mirador || function(config) {
       this.element.find('.mirador-thumb-panel').on('click', function() {
         _this.minMaxBottomPanel(jQuery(this));
       });
+      
+      this.element.find('.mirador-side-panel').on('click', function() {
+        _this.minMaxSidePanel(jQuery(this));
+      });
     },
 
     // template should be based on workspace type
     template: Handlebars.compile([
                                  '<div class="window">',
                                  '<div class="content-container">',
-                                 '<div class="sidePanel"></div>',
+                                 '<div class="sidePanel">',
+                                 '<span class="mirador-btn mirador-side-panel mirador-icon-minimize"></span>',
+                                 '</div>',
                                  '<div class="view-container">',
                                  '<div class="overlay"></div>',
                                  '<div class="bottomPanel">',
@@ -4913,7 +4937,11 @@ window.Mirador = window.Mirador || function(config) {
     },
     
     adjustWidth: function(className, hasClass) {
-       
+       if (hasClass) {
+           this.parent.element.find('.view-container').removeClass(className);
+       } else {
+           this.parent.element.find('.view-container').addClass(className);
+       }
     },
     
     adjustHeight: function(className, hasClass) {
@@ -5248,7 +5276,11 @@ window.Mirador = window.Mirador || function(config) {
     },
     
     adjustWidth: function(className, hasClass) {
-       
+       if (hasClass) {
+           this.parent.element.find('.view-container').removeClass(className);
+       } else {
+           this.parent.element.find('.view-container').addClass(className);
+       }
     },
     
     adjustHeight: function(className, hasClass) {
@@ -5750,7 +5782,11 @@ window.Mirador = window.Mirador || function(config) {
     },
     
     adjustWidth: function(className, hasClass) {
-       
+       if (hasClass) {
+           this.parent.element.find('.view-container').removeClass(className);
+       } else {
+           this.parent.element.find('.view-container').addClass(className);
+       }
     },
     
     adjustHeight: function(className, hasClass) {
@@ -6098,12 +6134,12 @@ window.Mirador = window.Mirador || function(config) {
     
     hide: function() {
       jQuery(this.appendTo).hide();
-      this.parent.element.find('.view-container').css('margin-left', 0);
+      this.parent.element.find('.view-container').addClass('focus-max-width');
     },
 
     show: function() {
       jQuery(this.appendTo).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
-      this.parent.element.find('.view-container').css('margin-left', 280);
+      this.parent.element.find('.view-container').removeClass('focus-max-width');
     }
     
   };
