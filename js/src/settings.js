@@ -9,42 +9,79 @@
 
     'currentWorkspace': 'singleObject',
 
-    'availableWorkspaces': ['singleObject', 'compare', 'bookReading'],
+    'availableWorkspaces': ['singleObject', 'compare', 'bookReading', 'reference'],
       
     'workspaces' : {
-       'singleObject': {
-            'layout': [{
-                'width': '100%'
-            }],
-            'label': 'Single Object',
-            'addNew': false,
-            'move': false,
-            'iconClass': 'image'
+      'singleObject': {
+        'layout': [{
+        }],
+        'label': 'Single Object',
+        'addNew': false,
+        'move': false,
+        'iconClass': 'image'
+      },
+
+      'compare': {
+        'layout': [{ 
+          type: "column",
+          slot: true,
+          id: 1
+        },{ 
+          type: "column",
+          slot: true,
+          id: 2
+        }],
+        'label': 'Compare',
+        'iconClass': 'columns'
+      },
+
+      'bookReading': {
+        'layout': [
+          {}
+        ],
+        'defaultWindowOptions': {
         },
-        
-        'compare': {
-            'layout': [
-                {},
-                {}
-            ],
-            'label': 'Compare',
-            'iconClass': 'columns'
+        'label': 'Book Reading',
+        'addNew': true,
+        'move': false,
+        'iconClass': 'book'
+      },
+      'reference': {
+        'layout': [{ 
+          type: "column",
+          children: [{
+            type: 'row',
+            slot: true,
+            id: 1
+          }]
         },
-        
-        'bookReading': {
-            'layout': [
-              {}
-            ],
-            'defaultWindowOptions': {
+        { type: "column",
+          children: [{
+            type: "row",
+            children: [{
+              type: 'column',
+              slot: true,
+              id: 1
             },
-            'label': 'Book Reading',
-            'addNew': true,
-            'move': false,
-            'iconClass': 'book'
-        }
-        // add new workspace types by appending a 
-        // profile with plugin initialisation code:
-        // $.DEFAULT_SETTINGS.availableWorkspaces['myNwqWorkspace'] = {...}
+            {
+              type: 'column',
+              slot: true,
+              id: 1
+            }
+            ]
+          },
+          { type: 'slot',
+            id: 3
+          },
+          {type: 'slot'}
+          ]
+        }],
+        'label': 'Reference',
+        'iconClass': 'th-list'
+      }
+      // add new workspace types by appending a 
+      // profile with plugin initialisation code:
+      // $.DEFAULT_SETTINGS.availableWorkspaces['myNwqWorkspace'] = {...}
     },
     
     // main (top) menu

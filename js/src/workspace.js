@@ -21,6 +21,12 @@
     init: function () {
       this.element.appendTo(this.appendTo);
 
+      this.layout = new $.Layout({
+        layout: $.DEFAULT_SETTINGS.workspaces[this.parent.currentWorkspace].layout,
+        parent: this,
+        appendTo: this.element
+      });
+
       if (this.focusedSlot === null) {
         this.focusedSlot = 0;
       }

@@ -2191,6 +2191,19 @@ a {
   text-decoration: inherit; /* no underline */
     }
 
+/* jquery-ui-dialog theming/customisation (overrides to reset neutral defaults)
+---------------------------------------------------------------------------- */
+.ui-dialog-titlebar {
+  display:none;
+}
+.ui-dialog {
+  overflow:hidden;
+  padding:0;
+}
+.slot.ui-dialog-content {
+  margin:0;
+}
+
 /*----------------------------------------------------------------------------
 /* Mirador styles
 ---------------------------------------------------------------------------- */
@@ -2578,7 +2591,6 @@ li.highlight {
 /* Slot Scaffolding */
 
 .slot {
-  position: absolute;
   width:100%;
   height:100%;
   border: 3px solid black;
@@ -2866,19 +2878,6 @@ li.highlight {
   overflow:hidden;
   text-overflow:ellipsis;
   text-align: center;
-}
-
-/* jquery-ui-dialog theming/customisation 
----------------------------------------------------------------------------- */
-.ui-dialog-titlebar {
-  display:none;
-}
-.ui-dialog {
-  overflow:hidden;
-  padding:0;
-}
-.slot.ui-dialog-content {
-  margin:0;
 }
 
 /* openseadragon
