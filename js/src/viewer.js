@@ -183,6 +183,7 @@
         loadManifestFromConfig: function(options) {
            var windowConfig = {
            currentFocus : options.viewType,
+           focuses : options.availableViews,
            currentImageID : options.canvasID,
            id : options.id,
            focusOptions : options.windowOptions,

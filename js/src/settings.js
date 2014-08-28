@@ -76,6 +76,19 @@
         // $.DEFAULT_SETTINGS.workspaces['myNwqWorkspace'] = {...}
     },
     
+    'windowObjects' : [
+      /** within a single object, the following options:
+      *   "loadedManifest": [manifestURI] e.g. "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/manifest.json"
+      *   "availableViews" : defaults to ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'], any subset removes others
+      *   "viewType" : one of ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'] - if using availableViews, must be in subset
+      *   "canvasID": [canvas URI] e.g. "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/canvas/canvas-12"
+      *   "bottomPanel" : [true, false]
+      *   "sidePanel" : [true, false]
+      *   "windowOptions" : [data specific to the view type, such as OSD bounds and zoom level - automatically saved in SaveController]
+      *   "id" : [unique window ID - set by application and automatically saved in SaveController],
+      **/
+    ],
+    
     // main (top) menu
     'mainMenu': {
       'autoHide': true,
