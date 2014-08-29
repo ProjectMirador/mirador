@@ -65,7 +65,6 @@
          if (jQuery.inArray(value, this.focuses) === -1) return null;  
          return item;
       });
-      console.log(this.imageModes);
 
       _this.imagesList = $.getImagesListByManifest(_this.manifest);
       if (!_this.currentImageID) {

@@ -4044,7 +4044,6 @@ window.Mirador = window.Mirador || function(config) {
          if (jQuery.inArray(value, this.focuses) === -1) return null;  
          return item;
       });
-      console.log(this.imageModes);
 
       _this.imagesList = $.getImagesListByManifest(_this.manifest);
       if (!_this.currentImageID) {
@@ -6429,7 +6428,7 @@ jQuery.fn.scrollStop = function(callback) {
       
       jQuery.subscribe('focusUpdated', function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
-        if (windowObjects) {
+        if (windowObjects && windowObjects.length > 0) {
             jQuery.each(windowObjects, function(index, window){
                 if (window.id === options.id) {
                     jQuery.extend(windowObjects[index], options);
@@ -6443,7 +6442,7 @@ jQuery.fn.scrollStop = function(callback) {
       
       jQuery.subscribe("imageZoomUpdated", function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
-        if (windowObjects) {
+        if (windowObjects && windowObjects.length > 0) {
             jQuery.each(windowObjects, function(index, window){
                 if (window.id === options.id) {
                     if (!windowObjects[index].windowOptions) {
@@ -6458,7 +6457,7 @@ jQuery.fn.scrollStop = function(callback) {
       
       jQuery.subscribe("imageBoundsUpdated", function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
-        if (windowObjects) {
+        if (windowObjects && windowObjects.length > 0) {
             jQuery.each(windowObjects, function(index, window){
                 if (window.id === options.id) {
                     if (!windowObjects[index].windowOptions) {
