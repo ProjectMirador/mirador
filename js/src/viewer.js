@@ -188,7 +188,8 @@
            id : options.id,
            focusOptions : options.windowOptions,
            bottomPanelAvailable : options.bottomPanel,
-           sidePanelAvailable : options.sidePanel
+           sidePanelAvailable : options.sidePanel,
+           overlayAvailable : options.overlay
            };
            this.addManifestToWorkspace(options.loadedManifest, windowConfig);
         },

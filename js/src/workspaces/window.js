@@ -52,7 +52,8 @@
     init: function () {
       _this = this,
       manifest = _this.manifest,
-      focusState = _this.currentFocus;
+      focusState = _this.currentFocus,
+      templateData = {};
       if (!_this.id) {
          _this.id = $.genUUID();
       }
@@ -71,17 +72,7 @@
         _this.currentImageID = _this.imagesList[0]['@id'];
       }
 
-      //determine if any buttons should be hidden in template
-      var templateData = {};
-      jQuery.each(this.focuses, function(index, value) {
-         templateData[value] = true;
-      });
-      templateData.title = manifest.label;      
-      _this.element.prepend(_this.manifestInfoTemplate(templateData));
-
-      //clear any existing objects
-      _this.clearViews();
-      _this.clearPanelsAndOverlay();
+      //check config
       if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
          jQuery.each(this.focusOverlaysAvailable, function(key, value) {
             _this.focusOverlaysAvailable[key].bottomPanel = {'' : false};
@@ -92,6 +83,25 @@
             _this.focusOverlaysAvailable[key].sidePanel = {'' : false};
          });
       }
+      if (typeof this.overlayAvailable !== 'undefined' && !this.overlayAvailable) {
+         jQuery.each(this.focusOverlaysAvailable, function(key, value) {
+            _this.focusOverlaysAvailable[key].overlay = {'' : false};
+         });
+      } else {
+        templateData.MetadataView = true;
+      }
+
+      //determine if any buttons should be hidden in template
+      jQuery.each(this.focuses, function(index, value) {
+         templateData[value] = true;
+      });
+      templateData.title = manifest.label;      
+      _this.element.prepend(_this.manifestInfoTemplate(templateData));
+
+      //clear any existing objects
+      _this.clearViews();
+      _this.clearPanelsAndOverlay();
+
       //attach view and toggle view, which triggers the attachment of panels or overlays
       _this.bindNavigation();
       switch(focusState) {
@@ -502,7 +512,9 @@
                                              '{{#if ScrollView}}',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-scroll-view"></a>',
                                              '{{/if}}',
+                                             '{{#if MetadataView}}',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
+                                             '{{/if}}',
                                              '</div>',
                                              '<h3 class="window-manifest-title">{{title}}</h3>',
                                              '</div>'
