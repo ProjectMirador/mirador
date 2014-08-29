@@ -4039,12 +4039,20 @@ window.Mirador = window.Mirador || function(config) {
 
       _this.element = jQuery(this.template()).appendTo(this.appendTo).hide().fadeIn(300);
       
+      if (manifest.sequences[0].viewingHint) {
+           if (manifest.sequences[0].viewingHint.toLowerCase() !== 'paged') {
+              //disable bookview for this object because it's not a paged object
+              this.focuses = jQuery.grep(this.focuses, function(value) {
+                 return value !== 'BookView';
+              });
+           }
+       }
+      
       //remove any imageModes that are not available as a focus
       jQuery.map(this.imageModes, function(value, index) {
          if (jQuery.inArray(value, this.focuses) === -1) return null;  
          return item;
       });
-      console.log(this.imageModes);
 
       _this.imagesList = $.getImagesListByManifest(_this.manifest);
       if (!_this.currentImageID) {
@@ -6429,7 +6437,7 @@ jQuery.fn.scrollStop = function(callback) {
       
       jQuery.subscribe('focusUpdated', function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
-        if (windowObjects) {
+        if (windowObjects && windowObjects.length > 0) {
             jQuery.each(windowObjects, function(index, window){
                 if (window.id === options.id) {
                     jQuery.extend(windowObjects[index], options);
@@ -6443,7 +6451,7 @@ jQuery.fn.scrollStop = function(callback) {
       
       jQuery.subscribe("imageZoomUpdated", function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
-        if (windowObjects) {
+        if (windowObjects && windowObjects.length > 0) {
             jQuery.each(windowObjects, function(index, window){
                 if (window.id === options.id) {
                     if (!windowObjects[index].windowOptions) {
@@ -6458,7 +6466,7 @@ jQuery.fn.scrollStop = function(callback) {
       
       jQuery.subscribe("imageBoundsUpdated", function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
-        if (windowObjects) {
+        if (windowObjects && windowObjects.length > 0) {
             jQuery.each(windowObjects, function(index, window){
                 if (window.id === options.id) {
                     if (!windowObjects[index].windowOptions) {

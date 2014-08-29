@@ -94,7 +94,7 @@
       
       jQuery.subscribe('focusUpdated', function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
-        if (windowObjects) {
+        if (windowObjects && windowObjects.length > 0) {
             jQuery.each(windowObjects, function(index, window){
                 if (window.id === options.id) {
                     jQuery.extend(windowObjects[index], options);
@@ -108,7 +108,7 @@
       
       jQuery.subscribe("imageZoomUpdated", function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
-        if (windowObjects) {
+        if (windowObjects && windowObjects.length > 0) {
             jQuery.each(windowObjects, function(index, window){
                 if (window.id === options.id) {
                     if (!windowObjects[index].windowOptions) {
@@ -123,7 +123,7 @@
       
       jQuery.subscribe("imageBoundsUpdated", function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
-        if (windowObjects) {
+        if (windowObjects && windowObjects.length > 0) {
             jQuery.each(windowObjects, function(index, window){
                 if (window.id === options.id) {
                     if (!windowObjects[index].windowOptions) {
