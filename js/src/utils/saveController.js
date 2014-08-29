@@ -51,6 +51,12 @@
            this.currentConfig = config;
         }
     }        
+    //remove empty hashes from config
+    this.currentConfig.windowObjects = jQuery.map(this.currentConfig.windowObjects, function(value, index) {
+         if (Object.keys(value).length === 0) return null;  
+         return value;
+      });
+
     //add UUIDs to parts of config that need them
     if (this.currentConfig.windowObjects) {
         jQuery.each(this.currentConfig.windowObjects, function(index, window) {

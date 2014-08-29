@@ -70,9 +70,9 @@
        }
       
       //remove any imageModes that are not available as a focus
-      jQuery.map(this.imageModes, function(value, index) {
+      this.imageModes = jQuery.map(this.imageModes, function(value, index) {
          if (jQuery.inArray(value, this.focuses) === -1) return null;  
-         return item;
+         return value;
       });
 
       _this.imagesList = $.getImagesListByManifest(_this.manifest);

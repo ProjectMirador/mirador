@@ -4049,9 +4049,9 @@ window.Mirador = window.Mirador || function(config) {
        }
       
       //remove any imageModes that are not available as a focus
-      jQuery.map(this.imageModes, function(value, index) {
+      this.imageModes = jQuery.map(this.imageModes, function(value, index) {
          if (jQuery.inArray(value, this.focuses) === -1) return null;  
-         return item;
+         return value;
       });
 
       _this.imagesList = $.getImagesListByManifest(_this.manifest);
@@ -6394,6 +6394,12 @@ jQuery.fn.scrollStop = function(callback) {
            this.currentConfig = config;
         }
     }        
+    //remove empty hashes from config
+    this.currentConfig.windowObjects = jQuery.map(this.currentConfig.windowObjects, function(value, index) {
+         if (Object.keys(value).length === 0) return null;  
+         return value;
+      });
+
     //add UUIDs to parts of config that need them
     if (this.currentConfig.windowObjects) {
         jQuery.each(this.currentConfig.windowObjects, function(index, window) {
