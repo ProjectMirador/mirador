@@ -24,8 +24,10 @@
       var _this = this;
       if (!_this.manifest.structures) {
         _this.hide();
+        _this.parent.setTOCBoolean(false);
         return;
       } else {
+        _this.parent.setTOCBoolean(true);
         this.ranges = this.setRanges();
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
         this.tocData = this.initTocData();

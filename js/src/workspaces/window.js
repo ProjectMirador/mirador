@@ -2,7 +2,7 @@
 
   $.Window = function(options) {
 
-    jQuery.extend(true, this, {
+    jQuery.extend(this, {
       element:           null,
       scrollImageRatio:  0.9,
       appendTo:          null,
@@ -52,24 +52,27 @@
     init: function () {
       _this = this,
       manifest = _this.manifest,
-      focusState = _this.currentFocus;
+      focusState = _this.currentFocus,
+      templateData = {};
       if (!_this.id) {
          _this.id = $.genUUID();
       }
 
       _this.element = jQuery(this.template()).appendTo(this.appendTo).hide().fadeIn(300);
+      
+      //remove any imageModes that are not available as a focus
+      jQuery.map(this.imageModes, function(value, index) {
+         if (jQuery.inArray(value, this.focuses) === -1) return null;  
+         return item;
+      });
+      console.log(this.imageModes);
 
-      //reset the window div and update manifest
       _this.imagesList = $.getImagesListByManifest(_this.manifest);
       if (!_this.currentImageID) {
         _this.currentImageID = _this.imagesList[0]['@id'];
       }
 
-      _this.element.prepend(_this.manifestInfoTemplate({title: manifest.label}));
-
-      //clear any existing objects
-      _this.clearViews();
-      _this.clearPanelsAndOverlay();
+      //check config
       if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
          jQuery.each(this.focusOverlaysAvailable, function(key, value) {
             _this.focusOverlaysAvailable[key].bottomPanel = {'' : false};
@@ -80,6 +83,25 @@
             _this.focusOverlaysAvailable[key].sidePanel = {'' : false};
          });
       }
+      if (typeof this.overlayAvailable !== 'undefined' && !this.overlayAvailable) {
+         jQuery.each(this.focusOverlaysAvailable, function(key, value) {
+            _this.focusOverlaysAvailable[key].overlay = {'' : false};
+         });
+      } else {
+        templateData.MetadataView = true;
+      }
+
+      //determine if any buttons should be hidden in template
+      jQuery.each(this.focuses, function(index, value) {
+         templateData[value] = true;
+      });
+      templateData.title = manifest.label;      
+      _this.element.prepend(_this.manifestInfoTemplate(templateData));
+
+      //clear any existing objects
+      _this.clearViews();
+      _this.clearPanelsAndOverlay();
+
       //attach view and toggle view, which triggers the attachment of panels or overlays
       _this.bindNavigation();
       switch(focusState) {
@@ -154,6 +176,9 @@
               thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
             });
           }
+          
+          //refresh displayed in case TableOfContents module changed it
+          displayed = _this.focusOverlaysAvailable[state][panelType][view];
 
           //toggle any valid panels
           if (view !== '' && displayed) {   
@@ -191,6 +216,13 @@
       } else {
         this[prop] = value;
       }
+    },
+    
+    setTOCBoolean: function(boolValue) {
+      var _this = this;
+      jQuery.each(this.focusOverlaysAvailable, function(key, value) {
+         _this.focusOverlaysAvailable[key].sidePanel.TableOfContents = boolValue;
+      });
     },
 
     togglePanels: function(panelType, panelState, viewType, focusState) {
@@ -466,13 +498,23 @@
                                              '<div class="window-manifest-navigation">',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-2x"></i>',
                                              '<ul class="image-list">',
+                                             '{{#if ImageView}}',
                                              '<li class="single-image-option">Single Image View</li>',
+                                             '{{/if}}',
+                                             '{{#if BookView}}',
                                              '<li class="book-option">Book View</li>',
+                                             '{{/if}}',
                                              '</ul>',
                                              '</a>',
+                                             '{{#if ThumbnailsView}}',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
+                                             '{{/if}}',
+                                             '{{#if ScrollView}}',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-scroll-view"></a>',
+                                             '{{/if}}',
+                                             '{{#if MetadataView}}',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
+                                             '{{/if}}',
                                              '</div>',
                                              '<h3 class="window-manifest-title">{{title}}</h3>',
                                              '</div>'
