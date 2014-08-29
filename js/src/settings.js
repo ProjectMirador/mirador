@@ -61,19 +61,25 @@
             children: [{
               type: 'column',
               slot: true,
-              id: 1
+              id: 2
             },
             {
               type: 'column',
               slot: true,
-              id: 1
+              id: 3
             }
             ]
           },
-          { type: 'slot',
-            id: 3
+          {
+            type: 'column',
+            slot: true,
+            id: 4
           },
-          {type: 'slot'}
+          {
+            type: 'column',
+            slot: true,
+            id: 5
+          }
           ]
         }],
         'label': 'Reference',
