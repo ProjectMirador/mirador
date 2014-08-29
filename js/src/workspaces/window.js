@@ -60,6 +60,15 @@
 
       _this.element = jQuery(this.template()).appendTo(this.appendTo).hide().fadeIn(300);
       
+      if (manifest.sequences[0].viewingHint) {
+           if (manifest.sequences[0].viewingHint.toLowerCase() !== 'paged') {
+              //disable bookview for this object because it's not a paged object
+              this.focuses = jQuery.grep(this.focuses, function(value) {
+                 return value !== 'BookView';
+              });
+           }
+       }
+      
       //remove any imageModes that are not available as a focus
       jQuery.map(this.imageModes, function(value, index) {
          if (jQuery.inArray(value, this.focuses) === -1) return null;  
