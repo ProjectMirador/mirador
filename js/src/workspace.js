@@ -5,7 +5,7 @@
     jQuery.extend(true, this, {
       type:             null,
       workspaceSlotCls: 'slot',
-      focusedSlot:      1,
+      focusedSlot:      null,
       slots:            null,
       appendTo:         null,
       parent:           null
@@ -28,6 +28,7 @@
       });
 
       if (this.focusedSlot === null) {
+        // set the focused slot to the first in the list
         this.focusedSlot = 0;
       }
       
@@ -39,31 +40,68 @@
           parent: this,
           appendTo: this.element
         }));
+        this.element.append(this.template({ slots: $.DEFAULT_SETTINGS.workspaces[this.type].slots }));
+      } else {
+        this.element.append(this.template(this.slots));
       }
 
       this.bindEvents();
+    },
+    template: function(tplData) {
+
+      var template = Handlebars.compile([
+        '{{#each slots}}',
+        '{{/each }}'
+      ].join(''));
+
+      var previousTemplate;
+
+      Handlebars.registerHelper('insertParentSlot', function(children, options) {
+        var out = '';
+
+        if (options.fn !== undefined) {
+          previousTemplate = options.fn;
+        }
+
+        children.forEach(function(child) {
+          out = out + previousTemplate(child);
+        });
+        
+        return out;
+      });
+
+      Handlebars.registerHelper('tocLevel', function(id, label, level, children) {
+        var caret = '<i class="fa fa-caret-right caret"></i>',
+        cert = '<i class="fa fa-certificate star"></i>';
+        return '<h' + (level+1) + '><a class="toc-link" data-rangeID="' + id + '">' + caret + cert + '<span class="label">' + label + '</span></a></h' + (level+1) + '>';
+      });
+
+      return template(tplData);
     },
 
     bindEvents: function() {
       var _this = this;
     },
 
+    addSlot: function() {
+
+    },
+    removeSlot: function() {
+
+    },
     clearSlot: function(slotId) {
       if (this.slots[slodId].windowElement) { 
         this.slots[slotId].windowElement.remove();
       }
       this.slots[slotId].window = new $.Window();
     },
-
     addItem: function(slotID) {
       this.focusedSlot = slotID;
       this.parent.toggleLoadWindow();
     },
-
     hide: function() {
       jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
     },
-
     show: function() {
       jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
     }

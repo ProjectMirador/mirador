@@ -8,12 +8,12 @@
             data:                   null,
             element:                null,
             canvas:                 null,
-            currentWorkspace:       null,
+            currentWorkspaceType:       null,
             activeWorkspace:        null,
             availableWorkspaces:    null,
             mainMenu:               null,
             //mainMenuLoadWindowCls:  '.mirador-main-menu .load-window',
-            workspaceAutoSave:      null,
+            workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
             windowSize:             {},
             resizeRatio:            {},
             currentWorkspaceVisible: true,
@@ -45,9 +45,9 @@
             .appendTo(this.element);
 
             // add workspace configuration
-            this.activeWorkspace = new $.Workspace({type: this.currentWorkspace, parent: this, appendTo: this.element.find('.mirador-viewer') });
+            this.activeWorkspace = new $.Workspace({type: this.currentWorkspaceType, parent: this, appendTo: this.element.find('.mirador-viewer') });
 
-            //add workspaces panel
+            // add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
 
             // add workset select menu (hidden by default) 
@@ -67,7 +67,7 @@
                if (_this.windowObjects) {
                    jQuery.each(_this.windowObjects, function(index, object) {
                        if (object.loadedManifest === newManifest) {
-                           _this.addManifestToWorkspace(object.loadedManifest, object.viewType, object.canvasID, object.id);
+                           _this.loadManifestFromConfig(object);
                        }
                    });
                }
@@ -92,7 +92,15 @@
         },
 
         switchWorkspace: function(type) {
+          _this = this;
 
+          console.log(type);
+          _this.activeWorkspace.element.remove();
+          delete _this.activeWorkspace;
+
+          _this.activeWorkspace = new $.Workspace({type: type, parent: this, appendTo: this.element.find('.mirador-viewer') });
+          
+          _this.toggleSwitchWorkspace();
         },
         
         // Sets state of overlays that layer over the UI state
@@ -172,10 +180,24 @@
             });
         },
         
-        addManifestToWorkspace: function(manifestURI, focusState, imageID, windowID) {
+        loadManifestFromConfig: function(options) {
+           var windowConfig = {
+           currentFocus : options.viewType,
+           focuses : options.availableViews,
+           currentImageID : options.canvasID,
+           id : options.id,
+           focusOptions : options.windowOptions,
+           bottomPanelAvailable : options.bottomPanel,
+           sidePanelAvailable : options.sidePanel,
+           overlayAvailable : options.overlay
+           };
+           this.addManifestToWorkspace(options.loadedManifest, windowConfig);
+        },
+        
+        addManifestToWorkspace: function(manifestURI, windowConfig) {
             var manifest = this.manifests[manifestURI],
             _this = this;
-            
+            windowConfig.manifest = manifest;
             jQuery.each(this.overlayStates, function(oState, value) {
                 _this.set(oState, false, {parent: 'overlayStates'});
             });
@@ -187,15 +209,19 @@
               // slotID is appended to event name so only 
               // the invoking slot initialises a new window in 
               // itself.
-              jQuery.publish('manifestToSlot', [manifest, focusState, imageID, windowID]); 
+              jQuery.publish('manifestToSlot', windowConfig); 
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {
-           this.addManifestToWorkspace(manifestURI, 'ImageView', imageID);
+           this.addManifestToWorkspace(manifestURI, 
+              {currentFocus: 'ImageView', 
+              currentImageID: imageID});
         },
         
         toggleThumbnailsViewInWorkspace: function(manifestURI) {
-           this.addManifestToWorkspace(manifestURI, 'ThumbnailsView', null);
+           this.addManifestToWorkspace(manifestURI,
+              {currentFocus: 'ThumbnailsView', 
+              currentImageID: null});
         }
     };
 

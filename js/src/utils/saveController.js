@@ -19,10 +19,15 @@
     init: function(config) {
       var _this = this;
       var sessionID = window.location.hash.substring(1); // will return empty string if none exists, causing the or statement below to evaluate to false, generating a new sesssionID.
-
-      if ( sessionID ) {
-        this.currentConfig = JSON.parse(localStorage.getItem(sessionID));
+      
+      if (sessionID) {
         this.sessionID =  sessionID;
+      } else {
+        this.sessionID = $.genUUID(); // might want a cleaner thing for the url.
+      }
+      
+      if (localStorage.getItem(this.sessionID)) {
+        this.currentConfig = JSON.parse(localStorage.getItem(sessionID));
       } else {
         var paramURL = window.location.search.substring(1);
         if (paramURL) {
@@ -45,33 +50,36 @@
         } else {
            this.currentConfig = config;
         }
-        //add UUIDs to parts of config that need them
-        if (this.currentConfig.windowObjects) {
-           jQuery.each(this.currentConfig.windowObjects, function(index, window) {
-              if (!window.id) {
-                  window.id = $.genUUID();
-              }
-           });
-        }
-        // generate a new sessionID and push an 
-        // entry onto the history stack.
-        // see: http://html5demos.com/history and http://diveintohtml5.info/history.html
-        this.sessionID = $.genUUID(); // might want a cleaner thing for the url.
-        // put history stuff here, for a great cross-browser demo, see: http://browserstate.github.io/history.js/demo/
-        //http://stackoverflow.com/questions/17801614/popstate-passing-popped-state-to-event-handler
+    }        
+    //remove empty hashes from config
+    this.currentConfig.windowObjects = jQuery.map(this.currentConfig.windowObjects, function(value, index) {
+         if (Object.keys(value).length === 0) return null;  
+         return value;
+      });
+
+    //add UUIDs to parts of config that need them
+    if (this.currentConfig.windowObjects) {
+        jQuery.each(this.currentConfig.windowObjects, function(index, window) {
+            if (!window.id) {
+                window.id = $.genUUID();
+            }
+        });
+    }
+    // see: http://html5demos.com/history and http://diveintohtml5.info/history.html
+    // put history stuff here, for a great cross-browser demo, see: http://browserstate.github.io/history.js/demo/
+    //http://stackoverflow.com/questions/17801614/popstate-passing-popped-state-to-event-handler
         
-        //also remove ?json bit so it's a clean URL
-        var cleanURL = window.location.href.replace(window.location.search, "");
-        if (window.location.hash) {
-            history.replaceState(this.currentConfig, "Mirador Session", cleanURL);
-        } else {
-            history.replaceState(this.currentConfig, "Mirador Session", cleanURL+"#"+this.sessionID);
-        }
+    //also remove ?json bit so it's a clean URL
+    var cleanURL = window.location.href.replace(window.location.search, "");
+    if (window.location.hash) {
+        history.replaceState(this.currentConfig, "Mirador Session", cleanURL);
+    } else {
+        history.replaceState(this.currentConfig, "Mirador Session", cleanURL+"#"+this.sessionID);
     }
 
-      this.bindEvents();
+    this.bindEvents();
       
-    },
+  },
 
     set: function(prop, value, options) {
       // when a property of the config is updated,
@@ -92,14 +100,44 @@
       
       jQuery.subscribe('focusUpdated', function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
-        if (windowObjects) {
+        if (windowObjects && windowObjects.length > 0) {
             jQuery.each(windowObjects, function(index, window){
                 if (window.id === options.id) {
-                    windowObjects[index] = options;
+                    jQuery.extend(windowObjects[index], options);
                 }
             });
         } else {
            windowObjects = [options];
+        }
+        _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
+      });
+      
+      jQuery.subscribe("imageZoomUpdated", function(event, options) {
+        var windowObjects = _this.currentConfig.windowObjects;
+        if (windowObjects && windowObjects.length > 0) {
+            jQuery.each(windowObjects, function(index, window){
+                if (window.id === options.id) {
+                    if (!windowObjects[index].windowOptions) {
+                      windowObjects[index].windowOptions = {};
+                    }
+                    windowObjects[index].windowOptions.zoomLevel = options.zoomLevel;
+                }
+            });
+        }
+        _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
+      });
+      
+      jQuery.subscribe("imageBoundsUpdated", function(event, options) {
+        var windowObjects = _this.currentConfig.windowObjects;
+        if (windowObjects && windowObjects.length > 0) {
+            jQuery.each(windowObjects, function(index, window){
+                if (window.id === options.id) {
+                    if (!windowObjects[index].windowOptions) {
+                      windowObjects[index].windowOptions = {};
+                    }
+                    windowObjects[index].windowOptions.osdBounds = options.osdBounds;
+                }
+            });
         }
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });

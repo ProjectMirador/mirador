@@ -24,8 +24,10 @@
       var _this = this;
       if (!_this.manifest.structures) {
         _this.hide();
+        _this.parent.setTOCBoolean(false);
         return;
       } else {
+        _this.parent.setTOCBoolean(true);
         this.ranges = this.setRanges();
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
         this.tocData = this.initTocData();
@@ -189,8 +191,6 @@
       jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
       });
         
-      console.log('TOC UUID String: ' + _this.parent.id);
-
       jQuery.subscribe(('currentImageIDUpdated.' + _this.parent.id), function(event, imageID) {
         if (!_this.manifest.structures) { return; }
         _this.setSelectedElements($.getRangeIDByCanvasID(_this.manifest, imageID.newImageID));
@@ -331,12 +331,12 @@
     
     hide: function() {
       jQuery(this.appendTo).hide();
-      this.parent.element.find('.view-container').css('margin-left', 0);
+      this.parent.element.find('.view-container').addClass('focus-max-width');
     },
 
     show: function() {
       jQuery(this.appendTo).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
-      this.parent.element.find('.view-container').css('margin-left', 280);
+      this.parent.element.find('.view-container').removeClass('focus-max-width');
     }
     
   };

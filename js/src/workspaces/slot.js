@@ -36,12 +36,17 @@
       // so it will be the only one whose function is
       // called to create a window when the 
       // load menu is invoked from it.
-      jQuery.subscribe('manifestToSlot', function(e, manifest, focusState, imageID, windowID) {
+      jQuery.subscribe('manifestToSlot', function(e, windowConfig) { 
         _this.clearSlot();
-        if (_this.window && !windowID) {
-           windowID = _this.window.id;
+        if (_this.window && !windowConfig.id) {
+           windowConfig.id = _this.window.id;
         }
-        _this.window = new $.Window({appendTo: _this.element, currentFocus: focusState, currentImageID: imageID, manifest: manifest, id: windowID});
+        windowConfig.appendTo = _this.element;
+        if (_this.window) {
+          _this.window.update(windowConfig);
+        } else {
+          _this.window = new $.Window(windowConfig);
+        }
       });
       
       this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
