@@ -13,13 +13,13 @@
             availableWorkspaces:    null,
             mainMenu:               null,
             //mainMenuLoadWindowCls:  '.mirador-main-menu .load-window',
-            workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
+            workspaceAutoSave:      null,
             windowSize:             {},
             resizeRatio:            {},
             currentWorkspaceVisible: true,
             overlayStates:           {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false, 'bookmarkPanelVisible': false},
             manifests:               {}
-        }, $.DEFAULT_SETTINGS, options);
+        }, options);
 
         // get initial manifests
         this.element = this.element || jQuery('#' + this.id);
@@ -94,7 +94,6 @@
         switchWorkspace: function(type) {
           _this = this;
 
-          console.log(type);
           _this.activeWorkspace.element.remove();
           delete _this.activeWorkspace;
 

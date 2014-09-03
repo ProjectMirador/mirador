@@ -2588,6 +2588,17 @@ li.highlight {
   padding: 8px;
 }
 
+/* invisible layout slot styling */
+.layout-slot {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  border: 3px solid deeppink;
+  width:200px;
+  height:250px;
+  opacity: 0.3;
+}
+
 /* Slot Scaffolding */
 
 .slot {

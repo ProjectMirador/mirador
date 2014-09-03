@@ -6,9 +6,10 @@
   $.Layout = function(options) {
 
     jQuery.extend(true, this, {
+      layout:           null,
       parent:           null,
-      appendTo:         null,
-      element:          null
+      layoutContainer:  null,
+      elements:         null
     }, options);
 
     this.init();
@@ -17,11 +18,27 @@
 
   $.Layout.prototype = {
     init: function() {
-      console.log(this.tplData());
+      var _this = this;
+
+      this.calculateSlotGraph().forEach(function(slot) {
+        var layoutSlot = jQuery(_this.singleLayoutSlotTemplate({
+          slotID: slot.id
+        })).appendTo(_this.layoutContainer);
+        layoutSlot.resizable({handles: "all", containment: 'parent'});
+        layoutSlot.position({my:"left top", at: "center center", of: _this.layoutContainer, collision: "fit"});
+        // remove handles for top or bottom of column
+        // or left or right of row.
+      });
+
       this.bindEvents();
     },
 
     tplData: function() {
+      var tplData = {
+      };
+    },
+
+    calculateSlotGraph: function() {
       var _this = this,
       slots = [];
 
@@ -42,12 +59,24 @@
       return slots;
     },
 
+    // for a given area, get the required dimensions
+    //
+    // (width, height, x/y positions for a layout
+    // slot's DOM element)
+    getDimensionsFromLayoutGraph: function() {
+
+    },
+
     bindEvents: function() {
       var _this = this;
 
       // A layout element is resized. Detect whether
       // it is a row or a column and resize its siblings
       // accordingly, recalculating the layout.
+      
+      // throttle the resize event and broadcast the
+      // new widths and heights to all necessary children,
+      // having them resize themselves.
 
       // The workspace container is resized, 
 
@@ -59,18 +88,23 @@
 
     },
 
-    clearSlot: function() {
-      if (this.window) { 
-        this.window.element.toggle('scale').fadeOut();
-        this.window.element.remove();
-      }
+    addSlot: function() {
+      // insert at position in DOM with 0 width/height
+      // depending on if it is a column or a row and
+      // animate resizing it to its correct position.
     },
 
-    addItem: function() {
-      _this = this;
-      _this.focused = true;
-      _this.parent.addItem(_this.slotID);
-    }
+    resizeSlot: function() {
+      // for given slot, select the siblings that 
+      // need resizing, do some math for them, 
+      // resize them along with a given element.
+
+    },
+    
+    singleLayoutSlotTemplate: Handlebars.compile([
+                                 '<div data-layout-slot-id="{{slotID}}" class="layout-slot">',
+                                 '</div>'
+    ].join(''))
 
   };
 

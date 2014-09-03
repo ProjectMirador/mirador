@@ -13,7 +13,10 @@
       
     'workspaces' : {
       'singleObject': {
-        'layout': [{
+        'layout': [{ 
+          type: "column",
+          slot: true,
+          id: 1
         }],
         'label': 'Single Object',
         'addNew': false,

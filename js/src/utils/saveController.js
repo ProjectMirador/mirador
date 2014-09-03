@@ -8,9 +8,10 @@
       shareEndpoint: null, // the place where POST requests for new saved sessions will go 
       historySize: null, // wishful thinking for later.
       sessionID: null
-    }, $.DEFAULT_SETTINGS.saveController, config.saveController);
+    });
 
-    this.init(config);
+    this.init(jQuery.extend(false, $.DEFAULT_SETTINGS, config));
+    console.log(config);
 
   };
 
@@ -76,6 +77,7 @@
     } else {
         history.replaceState(this.currentConfig, "Mirador Session", cleanURL+"#"+this.sessionID);
     }
+    console.log(this.currentConfig);
 
     this.bindEvents();
       

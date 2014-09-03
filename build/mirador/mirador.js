@@ -2740,7 +2740,10 @@ window.Mirador = window.Mirador || function(config) {
       
     'workspaces' : {
       'singleObject': {
-        'layout': [{
+        'layout': [{ 
+          type: "column",
+          slot: true,
+          id: 1
         }],
         'label': 'Single Object',
         'addNew': false,
@@ -2908,13 +2911,13 @@ window.Mirador = window.Mirador || function(config) {
             availableWorkspaces:    null,
             mainMenu:               null,
             //mainMenuLoadWindowCls:  '.mirador-main-menu .load-window',
-            workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
+            workspaceAutoSave:      null,
             windowSize:             {},
             resizeRatio:            {},
             currentWorkspaceVisible: true,
             overlayStates:           {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false, 'bookmarkPanelVisible': false},
             manifests:               {}
-        }, $.DEFAULT_SETTINGS, options);
+        }, options);
 
         // get initial manifests
         this.element = this.element || jQuery('#' + this.id);
@@ -2989,7 +2992,6 @@ window.Mirador = window.Mirador || function(config) {
         switchWorkspace: function(type) {
           _this = this;
 
-          console.log(type);
           _this.activeWorkspace.element.remove();
           delete _this.activeWorkspace;
 
@@ -3162,63 +3164,51 @@ window.Mirador = window.Mirador || function(config) {
   $.Workspace.prototype = {
     init: function () {
       this.element.appendTo(this.appendTo);
+      
+      this.slots = this.extractSlots(this.parent.workspaces[this.parent.currentWorkspaceType].layout);
 
       this.layout = new $.Layout({
-        layout: $.DEFAULT_SETTINGS.workspaces[this.parent.currentWorkspace].layout,
+        layout: this.parent.workspaces[this.parent.currentWorkspaceType].layout,
         parent: this,
-        appendTo: this.element
+        layoutContainer: this.element
       });
+
 
       if (this.focusedSlot === null) {
         // set the focused slot to the first in the list
         this.focusedSlot = 0;
       }
       
-      if (!this.slots) { 
-        this.slots = [];
-        this.slots.push(new $.Slot({
+      this.bindEvents();
+    },
+    extractSlots: function(layout) {
+      var _this = this,
+      slots = [];
+
+      // extracts only the leaves of the tree.
+      function crawlLayout(tree, slots) {
+        tree.forEach(function(branch){
+          if ( !branch.hasOwnProperty('children') && branch.slot === true ) {
+            slots.push(branch);
+          }
+          else {
+            crawlLayout(branch.children, slots);
+          }
+        });
+      }
+
+      crawlLayout(layout, slots);
+
+      slotObjects = slots.map(function(slotData) {
+        return new $.Slot({
           slotId: 0,
           focused: true,
           parent: this,
           appendTo: this.element
-        }));
-        this.element.append(this.template({ slots: $.DEFAULT_SETTINGS.workspaces[this.type].slots }));
-      } else {
-        this.element.append(this.template(this.slots));
-      }
-
-      this.bindEvents();
-    },
-    template: function(tplData) {
-
-      var template = Handlebars.compile([
-        '{{#each slots}}',
-        '{{/each }}'
-      ].join(''));
-
-      var previousTemplate;
-
-      Handlebars.registerHelper('insertParentSlot', function(children, options) {
-        var out = '';
-
-        if (options.fn !== undefined) {
-          previousTemplate = options.fn;
-        }
-
-        children.forEach(function(child) {
-          out = out + previousTemplate(child);
         });
-        
-        return out;
       });
 
-      Handlebars.registerHelper('tocLevel', function(id, label, level, children) {
-        var caret = '<i class="fa fa-caret-right caret"></i>',
-        cert = '<i class="fa fa-certificate star"></i>';
-        return '<h' + (level+1) + '><a class="toc-link" data-rangeID="' + id + '">' + caret + cert + '<span class="label">' + label + '</span></a></h' + (level+1) + '>';
-      });
-
-      return template(tplData);
+      return slotObjects;
     },
 
     bindEvents: function() {
@@ -3228,22 +3218,27 @@ window.Mirador = window.Mirador || function(config) {
     addSlot: function() {
 
     },
+
     removeSlot: function() {
 
     },
+
     clearSlot: function(slotId) {
       if (this.slots[slodId].windowElement) { 
         this.slots[slotId].windowElement.remove();
       }
       this.slots[slotId].window = new $.Window();
     },
+
     addItem: function(slotID) {
       this.focusedSlot = slotID;
       this.parent.toggleLoadWindow();
     },
+
     hide: function() {
       jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
     },
+
     show: function() {
       jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
     }
@@ -3851,9 +3846,10 @@ window.Mirador = window.Mirador || function(config) {
   $.Layout = function(options) {
 
     jQuery.extend(true, this, {
+      layout:           null,
       parent:           null,
-      appendTo:         null,
-      element:          null
+      layoutContainer:  null,
+      elements:         null
     }, options);
 
     this.init();
@@ -3862,11 +3858,27 @@ window.Mirador = window.Mirador || function(config) {
 
   $.Layout.prototype = {
     init: function() {
-      console.log(this.tplData());
+      var _this = this;
+
+      this.calculateSlotGraph().forEach(function(slot) {
+        var layoutSlot = jQuery(_this.singleLayoutSlotTemplate({
+          slotID: slot.id
+        })).appendTo(_this.layoutContainer);
+        layoutSlot.resizable({handles: "all", containment: 'parent'});
+        layoutSlot.position({my:"left top", at: "center center", of: _this.layoutContainer, collision: "fit"});
+        // remove handles for top or bottom of column
+        // or left or right of row.
+      });
+
       this.bindEvents();
     },
 
     tplData: function() {
+      var tplData = {
+      };
+    },
+
+    calculateSlotGraph: function() {
       var _this = this,
       slots = [];
 
@@ -3887,12 +3899,24 @@ window.Mirador = window.Mirador || function(config) {
       return slots;
     },
 
+    // for a given area, get the required dimensions
+    //
+    // (width, height, x/y positions for a layout
+    // slot's DOM element)
+    getDimensionsFromLayoutGraph: function() {
+
+    },
+
     bindEvents: function() {
       var _this = this;
 
       // A layout element is resized. Detect whether
       // it is a row or a column and resize its siblings
       // accordingly, recalculating the layout.
+      
+      // throttle the resize event and broadcast the
+      // new widths and heights to all necessary children,
+      // having them resize themselves.
 
       // The workspace container is resized, 
 
@@ -3904,18 +3928,23 @@ window.Mirador = window.Mirador || function(config) {
 
     },
 
-    clearSlot: function() {
-      if (this.window) { 
-        this.window.element.toggle('scale').fadeOut();
-        this.window.element.remove();
-      }
+    addSlot: function() {
+      // insert at position in DOM with 0 width/height
+      // depending on if it is a column or a row and
+      // animate resizing it to its correct position.
     },
 
-    addItem: function() {
-      _this = this;
-      _this.focused = true;
-      _this.parent.addItem(_this.slotID);
-    }
+    resizeSlot: function() {
+      // for given slot, select the siblings that 
+      // need resizing, do some math for them, 
+      // resize them along with a given element.
+
+    },
+    
+    singleLayoutSlotTemplate: Handlebars.compile([
+                                 '<div data-layout-slot-id="{{slotID}}" class="layout-slot">',
+                                 '</div>'
+    ].join(''))
 
   };
 
@@ -6434,9 +6463,10 @@ jQuery.fn.scrollStop = function(callback) {
       shareEndpoint: null, // the place where POST requests for new saved sessions will go 
       historySize: null, // wishful thinking for later.
       sessionID: null
-    }, $.DEFAULT_SETTINGS.saveController, config.saveController);
+    });
 
-    this.init(config);
+    this.init(jQuery.extend(false, $.DEFAULT_SETTINGS, config));
+    console.log(config);
 
   };
 
@@ -6502,6 +6532,7 @@ jQuery.fn.scrollStop = function(callback) {
     } else {
         history.replaceState(this.currentConfig, "Mirador Session", cleanURL+"#"+this.sessionID);
     }
+    console.log(this.currentConfig);
 
     this.bindEvents();
       
