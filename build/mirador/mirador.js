@@ -3924,15 +3924,14 @@ window.Mirador = window.Mirador || function(config) {
           if ( !branch.hasOwnProperty('children') && branch.slot === true ) {
             var leaf = branch,
             siblings = tree;
-            console.log('leaf id: ' + leaf.id);
 
             leaf.siblingIDs = siblings.map(function(sibling){ return sibling.id; });
 
             leaf.layoutDimensions = {
               id: leaf.id,
-              x: containerWidth/tree.length*index,
+              x: leaf.x || containerWidth/tree.length*index,
               y: 0,
-              width: containerWidth/tree.length,
+              width: leaf.width || containerWidth/tree.length,
               height: containerHeight,
               handles: (function() { 
                 if (leaf.siblingIDs) {
@@ -4254,6 +4253,7 @@ window.Mirador = window.Mirador || function(config) {
       // load menu is invoked from it.
       jQuery.subscribe('manifestToSlot.'+_this.slotID, function(e, windowConfig) { 
         _this.clearSlot();
+        windowConfig.parent = _this;
         if (_this.window && !windowConfig.id) {
            windowConfig.id = _this.window.id;
         }
@@ -4767,6 +4767,11 @@ window.Mirador = window.Mirador || function(config) {
     // based on currentFocus
     bindNavigation: function() {
       var _this = this;
+      
+      this.element.find('.mirador-icon-empty-slot').on('click', function() {
+        _this.parent.clearSlot();
+      });
+      
       this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
         _this.toggleThumbnails(_this.currentImageID);
       });
@@ -4844,7 +4849,9 @@ window.Mirador = window.Mirador || function(config) {
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
                                              '{{/if}}',
                                              '</div>',
-                                             '<h3 class="window-manifest-title">{{title}}</h3>',
+                                             '<h3 class="window-manifest-title">',
+                                             '<a href="javascript:;" class="mirador-btn mirador-icon-empty-slot"><i class="fa fa-times "></i> </a>',
+                                             '{{title}}</h3>',
                                              '</div>'
     ].join(''))
   };

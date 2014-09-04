@@ -37,6 +37,7 @@
       // load menu is invoked from it.
       jQuery.subscribe('manifestToSlot.'+_this.slotID, function(e, windowConfig) { 
         _this.clearSlot();
+        windowConfig.parent = _this;
         if (_this.window && !windowConfig.id) {
            windowConfig.id = _this.window.id;
         }

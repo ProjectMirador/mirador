@@ -66,15 +66,14 @@
           if ( !branch.hasOwnProperty('children') && branch.slot === true ) {
             var leaf = branch,
             siblings = tree;
-            console.log('leaf id: ' + leaf.id);
 
             leaf.siblingIDs = siblings.map(function(sibling){ return sibling.id; });
 
             leaf.layoutDimensions = {
               id: leaf.id,
-              x: containerWidth/tree.length*index,
+              x: leaf.x || containerWidth/tree.length*index,
               y: 0,
-              width: containerWidth/tree.length,
+              width: leaf.width || containerWidth/tree.length,
               height: containerHeight,
               handles: (function() { 
                 if (leaf.siblingIDs) {
