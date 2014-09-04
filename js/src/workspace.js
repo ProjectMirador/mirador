@@ -20,7 +20,10 @@
   $.Workspace.prototype = {
     init: function () {
       this.element.appendTo(this.appendTo);
-      
+      if (this.type === "none") {
+        this.parent.toggleSwitchWorkspace();
+        return;
+      }
 
       this.layout = new $.Layout({
         layout: this.parent.workspaces[this.parent.currentWorkspaceType].layout,

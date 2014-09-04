@@ -44,9 +44,6 @@
             .addClass('mirador-viewer')
             .appendTo(this.element);
             
-            // add workspace configuration
-            this.activeWorkspace = new $.Workspace({type: this.currentWorkspaceType, parent: this, appendTo: this.element.find('.mirador-viewer') });
-
 
             // add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
@@ -55,6 +52,9 @@
             this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
+            
+            // add workspace configuration
+              this.activeWorkspace = new $.Workspace({type: this.currentWorkspaceType, parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             //set this to be displayed
             this.set('currentWorkspaceVisible', true);
@@ -98,9 +98,13 @@
           _this.activeWorkspace.element.remove();
           delete _this.activeWorkspace;
 
+          console.log(type);
+          console.log(_this);
+          _this.currentWorkspaceType = type;
+
           _this.activeWorkspace = new $.Workspace({type: type, parent: this, appendTo: this.element.find('.mirador-viewer') });
           
-          _this.toggleSwitchWorkspace();
+          $.viewer.toggleSwitchWorkspace();
         },
         
         // Sets state of overlays that layer over the UI state
