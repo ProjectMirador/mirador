@@ -156,13 +156,13 @@
           }
         }
         
-        _this.osd.addHandler('zoom', function() {
-            _this.setZoom();
-          });
-       
-          _this.osd.addHandler('pan', function() {
-            _this.setBounds();
-          });
+        _this.osd.addHandler('zoom', $.debounce(function(){
+           _this.setZoom();
+        }, 300));
+        
+        _this.osd.addHandler('pan', $.debounce(function(){
+           _this.setBounds();
+        }, 300));
       });
     },
 
