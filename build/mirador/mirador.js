@@ -3262,26 +3262,16 @@ window.Mirador = window.Mirador || function(config) {
         if (stateValue) { _this.show(); return; }
         _this.hide();
       });
-    },
-    
-    postSuccess: function() {
-       
-    },
-
-    hide: function() {
-      jQuery(this.element).hide({effect: "slide", direction: "up", duration: 1000, easing: "swing"});    
-    },
-
-    show: function() {
-      var _this = this,
-      ajaxType = 'POST',
-      ajaxURL = "http://jsonblob.com/api/jsonBlob";
       
-      if (this.jsonblob) {
+      jQuery.subscribe('saveControllerConfigUpdated', function() {
+        var ajaxType = 'POST',
+        ajaxURL = "http://jsonblob.com/api/jsonBlob";
+      
+        if (_this.jsonblob) {
           ajaxType = 'PUT';
-          ajaxURL = ajaxURL + "/" + this.jsonblob;
-      }
-      jQuery.ajax({
+          ajaxURL = ajaxURL + "/" + _this.jsonblob;
+        }
+        jQuery.ajax({
           type: ajaxType,
           url: ajaxURL, 
           data: JSON.stringify(Mirador.saveController.currentConfig), 
@@ -3297,7 +3287,15 @@ window.Mirador = window.Mirador || function(config) {
               _this.element.find('#share-url').val(bookmarkURL);
               //TODO if flash isn't available to browser, auto highlight the URL
          }
+        });
       });
+    },
+
+    hide: function() {
+      jQuery(this.element).hide({effect: "slide", direction: "up", duration: 1000, easing: "swing"});    
+    },
+
+    show: function() {      
       jQuery(this.element).show({effect: "slide", direction: "up", duration: 1000, easing: "swing"});
     },
 
@@ -6427,6 +6425,7 @@ jQuery.fn.scrollStop = function(callback) {
           this[prop] = value;
       }
       this.save();
+      jQuery.publish("saveControllerConfigUpdated");
     },
 
     bindEvents: function() {

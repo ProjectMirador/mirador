@@ -84,6 +84,7 @@
           this[prop] = value;
       }
       this.save();
+      jQuery.publish("saveControllerConfigUpdated");
     },
 
     bindEvents: function() {
