@@ -3002,6 +3002,7 @@ window.Mirador = window.Mirador || function(config) {
           _this.activeWorkspace = new $.Workspace({type: type, parent: this, appendTo: this.element.find('.mirador-viewer') });
           
           $.viewer.toggleSwitchWorkspace();
+          jQuery.publish("workspaceChanged", type);
         },
         
         // Sets state of overlays that layer over the UI state
@@ -3406,11 +3407,6 @@ window.Mirador = window.Mirador || function(config) {
           '<li>',
             '<a href="javascript:;" class="bookmark-workspace" title="Bookmark Workspace">',
               '<span class="icon-bookmark-workspace"></span>Bookmark',
-            '</a>',
-          '</li>',
-          '<li>',
-            '<a href="javascript:;" class="load-window" title="Load Window">',
-              '<span class="icon-load-window"></span>Select Object',
             '</a>',
           '</li>',
           '<li>',
@@ -6839,6 +6835,10 @@ jQuery.fn.scrollStop = function(callback) {
             data.push({"manifestUri":url, "location":repository});
             _this.set("data", data, {parent: "currentConfig"});
         }
+      });
+      
+      jQuery.subscribe("workspaceChanged", function(event, workspaceType) {
+         _this.set('currentWorkspaceType', workspaceType, {parent: "currentConfig"} );
       });
       
       jQuery.subscribe('etc...', function(junk) {
