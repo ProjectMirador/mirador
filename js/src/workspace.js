@@ -63,7 +63,7 @@
           slotID: slotData.id,
           focused: true,
           parent: _this,
-          appendTo: _this.layout.slots[slotData.id].element
+          appendTo: _this.layout.slots[slotData.id].layoutBox.element
         });
       });
 

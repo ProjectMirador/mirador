@@ -2997,8 +2997,6 @@ window.Mirador = window.Mirador || function(config) {
           _this.activeWorkspace.element.remove();
           delete _this.activeWorkspace;
 
-          console.log(type);
-          console.log(_this);
           _this.currentWorkspaceType = type;
 
           _this.activeWorkspace = new $.Workspace({type: type, parent: this, appendTo: this.element.find('.mirador-viewer') });
@@ -3095,7 +3093,6 @@ window.Mirador = window.Mirador || function(config) {
             overlayAvailable : options.overlay
           };
 
-           console.log(windowConfig.id);
            this.addManifestToWorkspace(options.loadedManifest, windowConfig);
         },
         
@@ -3122,7 +3119,6 @@ window.Mirador = window.Mirador || function(config) {
             // just assign the slotIDs in order of manifest listing.
             
             targetSlotID = _this.activeWorkspace.focusedSlot || _this.activeWorkspace.slots.filter(function(slot) { 
-              console.log(slot.hasOwnProperty('window'));
               return slot.hasOwnProperty('window') ? true : false;
             })[0].slotID;
             
@@ -3230,7 +3226,7 @@ window.Mirador = window.Mirador || function(config) {
           slotID: slotData.id,
           focused: true,
           parent: _this,
-          appendTo: _this.layout.slots[slotData.id].element
+          appendTo: _this.layout.slots[slotData.id].layoutBox.element
         });
       });
 
@@ -3888,12 +3884,9 @@ window.Mirador = window.Mirador || function(config) {
       this.graph = this.calculateSlotGraph();
       console.log(this.graph);
       jQuery.each(_this.graph, function(index, slot) {
-        // get this all dynamic-like.
-        var layoutDimensions = slot.layoutDimensions;
-        layoutDimensions.id = slot.id;
-        
-        _this.slots[slot.id] = new $.LayoutBox(layoutDimensions);
-
+        _this.slots[slot.id] = slot;
+        slot.layoutDimensions.parent = _this;
+        _this.slots[slot.id].layoutBox = new $.LayoutBox(slot.layoutDimensions);
       });
 
       this.bindEvents();
@@ -3931,28 +3924,33 @@ window.Mirador = window.Mirador || function(config) {
       function crawlLayout(tree, slots) {
         tree.forEach(function(branch, index) {
           if ( !branch.hasOwnProperty('children') && branch.slot === true ) {
-            var siblings = tree.filter(function(br) {
-              return br.id !== branch.id ? true : false;
-            });
-            branch.siblingIDs = siblings.map(function(sibling){ return sibling.id; });
+            var leaf = branch,
+            siblings = tree;
+            console.log('leaf id: ' + leaf.id);
 
-            // var x = branch.sibling
-            //
+            leaf.siblingIDs = siblings.map(function(sibling){ return sibling.id; });
 
-            branch.layoutDimensions = {
+            leaf.layoutDimensions = {
+              id: leaf.id,
               x: containerWidth/tree.length*index,
               y: 0,
               width: containerWidth/tree.length,
               height: containerHeight,
-              handles: "all",
+              handles: (function() { 
+                if (leaf.siblingIDs) {
+                  console.log(index);
+                  return index === 1 ? "": "e";
+                } else {
+                  return "";
+                }
+              })(),
               container: _this.layoutContainer
             };
 
-            slots[branch.id] = branch;
+            slots[branch.id] = leaf;
             // siblings
             // layout dimensions
             // parent (a slot is always a leaf, and thus has no children).
-            //
           }
           else {
             crawlLayout(branch.children, slots);
@@ -3985,6 +3983,7 @@ window.Mirador = window.Mirador || function(config) {
       // having them resize themselves.
 
       // The workspace container is resized, 
+      // jQuery('.viewer').on('resize', function() { _this.resizeContainer(); });
 
       // A new slot is added.
       
@@ -3994,17 +3993,80 @@ window.Mirador = window.Mirador || function(config) {
 
     },
 
+    resizeContainer: function() {
+      var _this = this;
+      console.log("is it there?");
+      
+      // For given slot, select the siblings that 
+      // need resizing, do some math for them, 
+      // resize them along with a given element.
+      
+      var oldContainerWidth = jQuery.map(this.slots, function(slot, index){ return slot.layoutDimensions.width;})
+      .reduce(function(a, b) {
+        return a + b;
+      }),
+      newContainerWidth = this.layoutContainer.outerWidth();
+      console.log(newContainerWidth);
+      console.log(oldContainerWidth);
+      
+      jQuery.each(this.slots, function(index, slot) {
+        slot = slot.layoutDimensions;
+
+        var oldWidth = slot.width,
+        oldHeight = slot.height,
+        percentageWidth = oldContainerWidth/oldWidth,
+        percentageX = oldContainerWidth/slot.x,
+        
+        x = percentageX*newContainerWidth,
+        y = 0,
+        width = newContainerWidth/percentageWidth,
+        height = _this.layoutContainer.height();
+
+        jQuery.each(_this.slots, function(index, slot) {
+          slot.layoutBox.setPositionAndSize(x, y, width, height);
+        });
+      });
+    },
+
     addSlot: function() {
       // insert at position in DOM with 0 width/height
       // depending on if it is a column or a row and
       // animate resizing it to its correct position.
     },
 
-    resizeSlot: function(slotID) {
+    resizeSlot: function(slotID, event, ui) {
+      var _this = this;
+      event.stopPropagation();
+      
       // For given slot, select the siblings that 
       // need resizing, do some math for them, 
       // resize them along with a given element.
-      //
+      console.log(ui);
+      console.log(this);
+      
+      var oldLeaderWidth = _this.slots[slotID].layoutDimensions.width,
+      newLeaderWidth = ui.size.width,
+      containerWidth = this.slots[slotID].layoutDimensions.container.outerWidth(),
+      oldRemainingWidth = containerWidth - oldLeaderWidth,
+      remainingWidth = containerWidth - newLeaderWidth,
+      delta = oldLeaderWidth - newLeaderWidth;
+      
+      this.slots[slotID].siblingIDs.filter(function(ID) {
+        return slotID !== ID ? true : false;
+      }).forEach(function(siblingID) {
+        console.log(siblingID);
+        var sibling = _this.slots[siblingID].layoutDimensions;
+        var oldWidth = sibling.width,
+        oldHeight = sibling.height,
+        percentageWidth = oldRemainingWidth/oldWidth,
+        x = sibling.x - delta,
+        y = sibling.y,
+        width = remainingWidth/percentageWidth,
+        height = sibling.height;
+
+        _this.slots[siblingID].layoutBox.setPositionAndSize(x, y, width, height);
+      });
+
       // Siblings must be resized. If the parent is a 
       // top-most column or row, then it will not be
       // resizeable in one direction. Therefore, the only
@@ -4021,6 +4083,7 @@ window.Mirador = window.Mirador || function(config) {
       //
       // The resize events can be delegated up or down, 
       // affecting only one layer of hierarchy.
+      event.stopPropagation();
     }
     
   };
@@ -4032,6 +4095,8 @@ window.Mirador = window.Mirador || function(config) {
 
   $.LayoutBox = function(options) {
     jQuery.extend(true, this, {
+      handles: null,
+      id: null,
       width: null,
       height: null,
       x: null,
@@ -4044,13 +4109,21 @@ window.Mirador = window.Mirador || function(config) {
 
   $.LayoutBox.prototype = {
     init: function() {
-      _this = this;
+      var _this = this;
 
       this.element = jQuery(_this.template({
         slotID: this.id
       })).appendTo(_this.container);
 
-      this.element.resizable({handles: this.handles, containment: 'parent'});
+      console.log('did this get done?');
+
+      this.element.resizable({
+        handles: this.handles, 
+        containment: 'parent',
+        start: _this.start,
+        resize: function(event, ui) { _this.resize(event, ui); },
+        stop: _this.stop
+      });
       this.element.appendTo(this.container);
       this.setPositionAndSize(this.x, this.y, this.width, this.height);
       // remove handles for top or bottom of column
@@ -4064,16 +4137,29 @@ window.Mirador = window.Mirador || function(config) {
 
     },
 
-    resize: function() {
-      // notify the layout manager with
-      // appropriate information.
+    start: function(event, ui) {
+     
     },
-    
+
+    resize: function(event, ui) {
+      event.stopImmediatePropagation();
+      this.parent.resizeSlot(this.id, event, ui);
+    },
+
+    stop: function(event, ui) {
+      // save new workspace layout.
+    },
+
     setPositionAndSize: function(x, y, w, h) {
-      this.setSize(w, h);
-      this.setPosition(x, y);
+      this.x = x;
+      this.y = y;
+      this.width = w;
+      this.heightx = h;
+      
+      this.setSize(this.width, this.height);
+      this.setPosition(this.x, this.y);
     },
-    
+
     setPosition: function(x, y) {
       var _this = this;
       x = Math.round(x);
@@ -4085,10 +4171,6 @@ window.Mirador = window.Mirador || function(config) {
     setSize: function(w, h) {
       this.element.width(Math.round(w));
       this.element.height(Math.round(h));
-    },
-
-    adjustToLayout: function() {
-
     },
 
     template: Handlebars.compile([
@@ -4172,7 +4254,6 @@ window.Mirador = window.Mirador || function(config) {
       // so it will be the only one whose function is
       // called to create a window when the 
       // load menu is invoked from it.
-      console.log(_this.slotID);
       jQuery.subscribe('manifestToSlot.'+_this.slotID, function(e, windowConfig) { 
         _this.clearSlot();
         if (_this.window && !windowConfig.id) {
@@ -6791,7 +6872,7 @@ jQuery.fn.scrollStop = function(callback) {
     },
 
     save: function() {
-      _this = this;
+      var _this = this;
 
       // the hash must be stringified because
       // localStorage is a key:value store that

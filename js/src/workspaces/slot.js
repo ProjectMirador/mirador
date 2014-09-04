@@ -35,7 +35,6 @@
       // so it will be the only one whose function is
       // called to create a window when the 
       // load menu is invoked from it.
-      console.log(_this.slotID);
       jQuery.subscribe('manifestToSlot.'+_this.slotID, function(e, windowConfig) { 
         _this.clearSlot();
         if (_this.window && !windowConfig.id) {

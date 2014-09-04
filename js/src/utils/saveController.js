@@ -186,7 +186,7 @@
     },
 
     save: function() {
-      _this = this;
+      var _this = this;
 
       // the hash must be stringified because
       // localStorage is a key:value store that

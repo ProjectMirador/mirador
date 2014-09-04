@@ -98,8 +98,6 @@
           _this.activeWorkspace.element.remove();
           delete _this.activeWorkspace;
 
-          console.log(type);
-          console.log(_this);
           _this.currentWorkspaceType = type;
 
           _this.activeWorkspace = new $.Workspace({type: type, parent: this, appendTo: this.element.find('.mirador-viewer') });
@@ -196,7 +194,6 @@
             overlayAvailable : options.overlay
           };
 
-           console.log(windowConfig.id);
            this.addManifestToWorkspace(options.loadedManifest, windowConfig);
         },
         
@@ -223,7 +220,6 @@
             // just assign the slotIDs in order of manifest listing.
             
             targetSlotID = _this.activeWorkspace.focusedSlot || _this.activeWorkspace.slots.filter(function(slot) { 
-              console.log(slot.hasOwnProperty('window'));
               return slot.hasOwnProperty('window') ? true : false;
             })[0].slotID;
             
