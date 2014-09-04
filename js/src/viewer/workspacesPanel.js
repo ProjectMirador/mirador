@@ -23,7 +23,6 @@
           label : _this.parent.workspaces[value].label,
           iconClass: _this.parent.workspaces[value].iconClass
         });
-        console.log($.DEFAULT_SETTINGS.workspaces[value].iconClass);
       });
 
       this.element = jQuery(this.template({ workspaces : workspaceTemplate})).appendTo(this.appendTo);
@@ -39,7 +38,6 @@
       });
 
       jQuery('#workspace-select-menu').find('.workspace-option').on('click', function() {
-        console.log(jQuery(this));
         $.viewer.switchWorkspace(jQuery(this).data('workspaceType'));
       });
     },

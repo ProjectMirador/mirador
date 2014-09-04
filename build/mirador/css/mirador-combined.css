@@ -2593,10 +2593,6 @@ li.highlight {
   position: absolute;
   margin: 0;
   padding: 0;
-  border: 3px solid deeppink;
-  width:200px;
-  height:250px;
-  opacity: 0.3;
 }
 
 /* Slot Scaffolding */
@@ -2605,9 +2601,8 @@ li.highlight {
   width:100%;
   height:100%;
   border: 3px solid black;
-  margin:0;
   box-shadow: inset 0 0 35px black;
-  box-sizing: border-box;
+  overflow: hidden;
 }
 .slot h1 {
   color: gray;
@@ -2642,11 +2637,9 @@ li.highlight {
 
 /* window scaffolding */
 .window {
-  position: absolute;
-  left:0;
-  right:0;
-  top:0;
-  bottom:0;
+  position:relative;
+  width:100%;
+  height:100%;
   overflow: hidden;
   background-color: #333;
 }

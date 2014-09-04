@@ -4,7 +4,7 @@
 
     jQuery.extend(true, this, {
       workspaceSlotCls: 'slot',
-      slotID:           1,
+      slotID:           null,
       focused:          null,
       appendTo:         null,
       parent:           null,
@@ -21,9 +21,8 @@
     init: function () {
       this.element = jQuery(this.template({
         workspaceSlotCls: this.workspaceSlotCls,
-        slotID: 1
+        slotID: this.slotId 
       }));
-      this.element.resizable();
       this.element.appendTo(this.appendTo);
 
       this.bindEvents();
@@ -36,7 +35,8 @@
       // so it will be the only one whose function is
       // called to create a window when the 
       // load menu is invoked from it.
-      jQuery.subscribe('manifestToSlot', function(e, windowConfig) { 
+      console.log(_this.slotID);
+      jQuery.subscribe('manifestToSlot.'+_this.slotID, function(e, windowConfig) { 
         _this.clearSlot();
         if (_this.window && !windowConfig.id) {
            windowConfig.id = _this.window.id;
@@ -63,10 +63,10 @@
       // notify the layout manager with
       // appropriate information.
     },
-
+    
     addItem: function() {
       _this = this;
-      _this.focused = true;
+      _this.parent.focused = true;
       _this.parent.addItem(_this.slotID);
     },
 

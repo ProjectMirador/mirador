@@ -21,14 +21,14 @@
     init: function () {
       this.element.appendTo(this.appendTo);
       
-      this.slots = this.extractSlots(this.parent.workspaces[this.parent.currentWorkspaceType].layout);
 
       this.layout = new $.Layout({
         layout: this.parent.workspaces[this.parent.currentWorkspaceType].layout,
         parent: this,
         layoutContainer: this.element
       });
-
+      
+      this.slots = this.extractSlots(this.parent.workspaces[this.parent.currentWorkspaceType].layout);
 
       if (this.focusedSlot === null) {
         // set the focused slot to the first in the list
@@ -57,10 +57,10 @@
 
       slotObjects = slots.map(function(slotData) {
         return new $.Slot({
-          slotId: 0,
+          slotID: slotData.id,
           focused: true,
-          parent: this,
-          appendTo: this.element
+          parent: _this,
+          appendTo: _this.layout.slots[slotData.id].element
         });
       });
 

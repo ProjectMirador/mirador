@@ -40,7 +40,11 @@
 
       'bookReading': {
         'layout': [
-          {}
+          {
+          type: "column",
+          slot: true,
+          id: 1
+        }
         ],
         'defaultWindowOptions': {
         },
@@ -52,11 +56,8 @@
       'reference': {
         'layout': [{ 
           type: "column",
-          children: [{
-            type: 'row',
-            slot: true,
-            id: 1
-          }]
+          slot: true,
+          id: 1
         },
         { type: "column",
           children: [{
