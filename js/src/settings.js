@@ -9,7 +9,7 @@
 
     'currentWorkspaceType': 'singleObject',
 
-    'availableWorkspaces': ['singleObject', 'compare', 'bookReading', 'reference'],
+    'availableWorkspaces': ['singleObject', 'compare', 'bookReading'],
       
     'workspaces' : {
       'singleObject': {
