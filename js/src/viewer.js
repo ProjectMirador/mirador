@@ -103,6 +103,7 @@
           _this.activeWorkspace = new $.Workspace({type: type, parent: this, appendTo: this.element.find('.mirador-viewer') });
           
           $.viewer.toggleSwitchWorkspace();
+          jQuery.publish("workspaceChanged", type);
         },
         
         // Sets state of overlays that layer over the UI state
