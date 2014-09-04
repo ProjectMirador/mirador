@@ -2191,6 +2191,19 @@ a {
   text-decoration: inherit; /* no underline */
     }
 
+/* jquery-ui-dialog theming/customisation (overrides to reset neutral defaults)
+---------------------------------------------------------------------------- */
+.ui-dialog-titlebar {
+  display:none;
+}
+.ui-dialog {
+  overflow:hidden;
+  padding:0;
+}
+.slot.ui-dialog-content {
+  margin:0;
+}
+
 /*----------------------------------------------------------------------------
 /* Mirador styles
 ---------------------------------------------------------------------------- */
@@ -2575,15 +2588,21 @@ li.highlight {
   padding: 8px;
 }
 
+/* invisible layout slot styling */
+.layout-slot {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+}
+
 /* Slot Scaffolding */
 
 .slot {
-  position: relative;
   width:100%;
   height:100%;
-  border: 3px solid black;
   box-shadow: inset 0 0 35px black;
-  box-sizing: border-box;
+  overflow: hidden;
+  box-sizing:border-box;
 }
 .slot h1 {
   color: gray;
@@ -2618,11 +2637,9 @@ li.highlight {
 
 /* window scaffolding */
 .window {
-  position: absolute;
-  left:0;
-  right:0;
-  top:0;
-  bottom:0;
+  position:relative;
+  width:100%;
+  height:100%;
   overflow: hidden;
   background-color: #333;
 }
@@ -2878,39 +2895,6 @@ li.highlight {
   text-overflow:ellipsis;
   text-align: center;
 }
-
-/* widget
----------------------------------------------------------------------------- */
-
-.mirador-widget {
-  height: auto;
-  min-height: 100%;
-  overflow: auto;
-  position: relative;
-  overflow: hidden;
-}
-
-.mirador-widget-toolbar {
-  /*border-bottom: 1px dotted #ccc;*/
-  display: none;
-  width: 100%;
-}
-
-.mirador-widget-statusbar {
-  /*border-top: 1px dotted #ccc;*/
-  bottom: 0;
-  display: none;
-  position: absolute;
-  width: 100%;
-}
-
-.mirador-widget-content {
-  overflow-y: auto;
-  width: 100%;
-  position:relative;
-  box-sizing: border-box;
-}
-
 
 /* openseadragon
 ---------------------------------------------------------------------------- */

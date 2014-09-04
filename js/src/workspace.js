@@ -20,57 +20,54 @@
   $.Workspace.prototype = {
     init: function () {
       this.element.appendTo(this.appendTo);
+      if (this.type === "none") {
+        this.parent.toggleSwitchWorkspace();
+        return;
+      }
+
+      this.layout = new $.Layout({
+        layout: this.parent.workspaces[this.parent.currentWorkspaceType].layout,
+        parent: this,
+        layoutContainer: this.element
+      });
+      
+      this.slots = this.extractSlots(this.parent.workspaces[this.parent.currentWorkspaceType].layout);
 
       if (this.focusedSlot === null) {
         // set the focused slot to the first in the list
         this.focusedSlot = 0;
       }
       
-      if (!this.slots) { 
-        this.slots = [];
-        this.slots.push(new $.Slot({
-          slotId: 0,
-          focused: true,
-          parent: this,
-          appendTo: this.element
-        }));
-        this.element.append(this.template({ slots: $.DEFAULT_SETTINGS.workspaces[this.type].slots }));
-      } else {
-        this.element.append(this.template(this.slots));
-      }
-
       this.bindEvents();
     },
-    template: function(tplData) {
+    extractSlots: function(layout) {
+      var _this = this,
+      slots = [];
 
-      var template = Handlebars.compile([
-        '{{#each slots}}',
-        '{{/each }}'
-      ].join(''));
-
-      var previousTemplate;
-
-      Handlebars.registerHelper('insertParentSlot', function(children, options) {
-        var out = '';
-
-        if (options.fn !== undefined) {
-          previousTemplate = options.fn;
-        }
-
-        children.forEach(function(child) {
-          out = out + previousTemplate(child);
+      // extracts only the leaves of the tree.
+      function crawlLayout(tree, slots) {
+        tree.forEach(function(branch){
+          if ( !branch.hasOwnProperty('children') && branch.slot === true ) {
+            slots.push(branch);
+          }
+          else {
+            crawlLayout(branch.children, slots);
+          }
         });
-        
-        return out;
+      }
+
+      crawlLayout(layout, slots);
+
+      slotObjects = slots.map(function(slotData) {
+        return new $.Slot({
+          slotID: slotData.id,
+          focused: true,
+          parent: _this,
+          appendTo: _this.layout.slots[slotData.id].layoutBox.element
+        });
       });
 
-      Handlebars.registerHelper('tocLevel', function(id, label, level, children) {
-        var caret = '<i class="fa fa-caret-right caret"></i>',
-        cert = '<i class="fa fa-certificate star"></i>';
-        return '<h' + (level+1) + '><a class="toc-link" data-rangeID="' + id + '">' + caret + cert + '<span class="label">' + label + '</span></a></h' + (level+1) + '>';
-      });
-
-      return template(tplData);
+      return slotObjects;
     },
 
     bindEvents: function() {
@@ -80,22 +77,27 @@
     addSlot: function() {
 
     },
+
     removeSlot: function() {
 
     },
+
     clearSlot: function(slotId) {
       if (this.slots[slodId].windowElement) { 
         this.slots[slotId].windowElement.remove();
       }
       this.slots[slotId].window = new $.Window();
     },
+
     addItem: function(slotID) {
       this.focusedSlot = slotID;
       this.parent.toggleLoadWindow();
     },
+
     hide: function() {
       jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
     },
+
     show: function() {
       jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
     }

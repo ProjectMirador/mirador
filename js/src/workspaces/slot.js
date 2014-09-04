@@ -4,7 +4,7 @@
 
     jQuery.extend(true, this, {
       workspaceSlotCls: 'slot',
-      slotID:           1,
+      slotID:           null,
       focused:          null,
       appendTo:         null,
       parent:           null,
@@ -21,7 +21,7 @@
     init: function () {
       this.element = jQuery(this.template({
         workspaceSlotCls: this.workspaceSlotCls,
-        slotID: 1
+        slotID: this.slotId 
       }));
       this.element.appendTo(this.appendTo);
 
@@ -35,7 +35,7 @@
       // so it will be the only one whose function is
       // called to create a window when the 
       // load menu is invoked from it.
-      jQuery.subscribe('manifestToSlot', function(e, windowConfig) { 
+      jQuery.subscribe('manifestToSlot.'+_this.slotID, function(e, windowConfig) { 
         _this.clearSlot();
         if (_this.window && !windowConfig.id) {
            windowConfig.id = _this.window.id;
@@ -59,31 +59,13 @@
     },
 
     resize: function() {
-      // There will only be a handle on 
-      // the bottom and top of the slot if it is
-      // in a column, and on the left and right if
-      // it is in a row. If the parent has more 
-      // than one child, then it becomes resizeable,
-      // and will likewise affect the layout of its
-      // siblings within their row or column.
-      
-      // On resize, the width must update with the 
-      // mouse position, and the other slots in
-      // the same parent must take up the same share
-      // of remaining space in the parent as they
-      // currently do in the resulting grown or 
-      // shrunken remaining space.
-      
-      // 1.) check the current layout in parent to 
-      // match the children of the common parent.
-
-      // 2.) 
-      // 
+      // notify the layout manager with
+      // appropriate information.
     },
-
+    
     addItem: function() {
       _this = this;
-      _this.focused = true;
+      _this.parent.focused = true;
       _this.parent.addItem(_this.slotID);
     },
 

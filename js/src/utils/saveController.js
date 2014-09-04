@@ -8,9 +8,9 @@
       shareEndpoint: null, // the place where POST requests for new saved sessions will go 
       historySize: null, // wishful thinking for later.
       sessionID: null
-    }, $.DEFAULT_SETTINGS.saveController, config.saveController);
+    });
 
-    this.init(config);
+    this.init(jQuery.extend(false, $.DEFAULT_SETTINGS, config));
 
   };
 
@@ -187,7 +187,7 @@
     },
 
     save: function() {
-      _this = this;
+      var _this = this;
 
       // the hash must be stringified because
       // localStorage is a key:value store that

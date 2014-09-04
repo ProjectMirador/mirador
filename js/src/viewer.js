@@ -13,13 +13,13 @@
             availableWorkspaces:    null,
             mainMenu:               null,
             //mainMenuLoadWindowCls:  '.mirador-main-menu .load-window',
-            workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
+            workspaceAutoSave:      null,
             windowSize:             {},
             resizeRatio:            {},
             currentWorkspaceVisible: true,
             overlayStates:           {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false, 'bookmarkPanelVisible': false},
             manifests:               {}
-        }, $.DEFAULT_SETTINGS, options);
+        }, options);
 
         // get initial manifests
         this.element = this.element || jQuery('#' + this.id);
@@ -43,9 +43,7 @@
             this.canvas = jQuery('<div/>')
             .addClass('mirador-viewer')
             .appendTo(this.element);
-
-            // add workspace configuration
-            this.activeWorkspace = new $.Workspace({type: this.currentWorkspaceType, parent: this, appendTo: this.element.find('.mirador-viewer') });
+            
 
             // add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
@@ -54,6 +52,9 @@
             this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
+            
+            // add workspace configuration
+              this.activeWorkspace = new $.Workspace({type: this.currentWorkspaceType, parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             //set this to be displayed
             this.set('currentWorkspaceVisible', true);
@@ -94,13 +95,14 @@
         switchWorkspace: function(type) {
           _this = this;
 
-          console.log(type);
           _this.activeWorkspace.element.remove();
           delete _this.activeWorkspace;
 
+          _this.currentWorkspaceType = type;
+
           _this.activeWorkspace = new $.Workspace({type: type, parent: this, appendTo: this.element.find('.mirador-viewer') });
           
-          _this.toggleSwitchWorkspace();
+          $.viewer.toggleSwitchWorkspace();
         },
         
         // Sets state of overlays that layer over the UI state
@@ -181,23 +183,25 @@
         },
         
         loadManifestFromConfig: function(options) {
-           var windowConfig = {
-           currentFocus : options.viewType,
-           focuses : options.availableViews,
-           currentImageID : options.canvasID,
-           id : options.id,
-           focusOptions : options.windowOptions,
-           bottomPanelAvailable : options.bottomPanel,
-           sidePanelAvailable : options.sidePanel,
-           overlayAvailable : options.overlay
-           };
+          var windowConfig = {
+            currentFocus : options.viewType,
+            focuses : options.availableViews,
+            currentImageID : options.canvasID,
+            id : options.id,
+            focusOptions : options.windowOptions,
+            bottomPanelAvailable : options.bottomPanel,
+            sidePanelAvailable : options.sidePanel,
+            overlayAvailable : options.overlay
+          };
+
            this.addManifestToWorkspace(options.loadedManifest, windowConfig);
         },
         
         addManifestToWorkspace: function(manifestURI, windowConfig) {
-            var manifest = this.manifests[manifestURI],
-            _this = this;
-            windowConfig.manifest = manifest;
+            var _this = this,
+            targetSlotID = null;
+            windowConfig.manifest = this.manifests[manifestURI];
+            
             jQuery.each(this.overlayStates, function(oState, value) {
                 _this.set(oState, false, {parent: 'overlayStates'});
             });
@@ -206,10 +210,23 @@
             // particular slot, but rather from the selectObject menu,
             // then let the viewer decide where to put the resulting window
             // according to the workspace type.
-              // slotID is appended to event name so only 
-              // the invoking slot initialises a new window in 
-              // itself.
-              jQuery.publish('manifestToSlot', windowConfig); 
+            // slotID is appended to event name so only 
+            // the invoking slot initialises a new window in 
+            // itself.
+
+            // There are fewer loadedManifests than slots.
+            // There are more loadedManifests than slots.
+            // The above two cases are effectively the same, so 
+            // just assign the slotIDs in order of manifest listing.
+            
+            targetSlotID = _this.activeWorkspace.focusedSlot || _this.activeWorkspace.slots.filter(function(slot) { 
+              return slot.hasOwnProperty('window') ? true : false;
+            })[0].slotID;
+            
+            // There is an exact mapping with given slotIDs.
+            // It is freeform view and all bets are off. 
+            
+            jQuery.publish('manifestToSlot.'+targetSlotID, windowConfig); 
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {

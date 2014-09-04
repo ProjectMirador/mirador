@@ -1,16 +1,28 @@
 {
+<<<<<<< HEAD
+  "name": "Mirador",
+  "version": "2.0.0",
+=======
   "name": "m2",
   "version": "0.0.0",
+>>>>>>> master
   "homepage": "https://github.com/IIIF/m2",
   "authors": [
     "aeschylus <scipioaffricanus@gmail.com>"
   ],
+<<<<<<< HEAD
+  "description": "An image viewer for IIIF resources.",
+  "main": "mirador.js",
+  "keywords": [
+    "IIIF"
+=======
   "description": "IIIF Viewer",
   "main": "mirador.js",
   "keywords": [
     "viewer",
     "zoom",
     "openseadragon"
+>>>>>>> master
   ],
   "license": "Apache 2",
   "private": true,
@@ -22,8 +34,16 @@
     "tests"
   ],
   "dependencies": {
+<<<<<<< HEAD
+    "annotator-full.1.2.9": "https://github.com/openannotation/annotator/releases/download/v1.2.9/annotator-full.1.2.9.zip",
+    "jquery-ui": "*",
+    "jquery.scrollTo": "~1.4.12",
+    "mousetrap": "~1.4.6",
+    "URIjs": "https://github.com/medialize/URI.js.git#~1.13.2"
+=======
     "jquery-ui": "*",
     "mousetrap": "~1.4.6",
     "jquery.scrollTo": "~1.4.12"
+>>>>>>> master
   }
 }

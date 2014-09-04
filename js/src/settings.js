@@ -9,71 +9,89 @@
 
     'currentWorkspaceType': 'singleObject',
 
-    'availableWorkspaces': ['singleObject', 'compare', 'bookReading', 'quad'],
+    'availableWorkspaces': ['singleObject', 'compare', 'bookReading'],
       
     'workspaces' : {
-       'singleObject': {
-            'slots': [{
-            }],
-            'label': 'Single Object',
-            'addNew': false,
-            'move': false,
-            'iconClass': 'image'
+      'singleObject': {
+        'layout': [{ 
+          type: "column",
+          slot: true,
+          id: 1
+        }],
+        'label': 'Single Object',
+        'addNew': false,
+        'move': false,
+        'iconClass': 'image'
+      },
+
+      'compare': {
+        'layout': [{ 
+          type: "column",
+          slot: true,
+          id: 1
+        },{ 
+          type: "column",
+          slot: true,
+          id: 2
+        }],
+        'label': 'Compare',
+        'iconClass': 'columns'
+      },
+
+      'bookReading': {
+        'layout': [
+          {
+          type: "column",
+          slot: true,
+          id: 1
+        }
+        ],
+        'defaultWindowOptions': {
         },
-        'compare': {
-          'slots': [{
-            type: "column",
-            size: 50
+        'label': 'Book Reading',
+        'addNew': true,
+        'move': false,
+        'iconClass': 'book'
+      },
+      'reference': {
+        'layout': [{ 
+          type: "column",
+          slot: true,
+          id: 1
+        },
+        { type: "column",
+          children: [{
+            type: "row",
+            children: [{
+              type: 'column',
+              slot: true,
+              id: 2
+            },
+            {
+              type: 'column',
+              slot: true,
+              id: 3
+            }
+            ]
           },
           {
-            type: "column",
-            size: 50
-          }],
-            'label': 'Compare',
-            'iconClass': 'columns'
-        },
-        
-        'bookReading': {
-            'slots': [
-              {}
-            ],
-            'defaultWindowOptions': {
-            },
-            'label': 'Book Reading',
-            'addNew': true,
-            'move': false,
-            'iconClass': 'book'
-        },
-        'quad': {
-          'slots': [
-            { type: 'column',
-              size: 50,
-              positions: [{
-                type: 'row', 
-                size:50
-              },
-              { 
-                type: 'row',
-                size:50
-              }]
+            type: 'column',
+            slot: true,
+            id: 4
           },
-            { type: 'column',
-              size: 50,
-              positions: [{
-                type: 'row', 
-                size:50
-              },
-              { 
-                type: 'row',
-                size:50
-              }]
-          }],
-            'label': 'quad',
-            'iconClass': 'th-large'
-        }
-        // add new workspace types by appending a 
-        // profile with plugin initialisation code:
-        // $.DEFAULT_SETTINGS.workspaces['myNwqWorkspace'] = {...}
+          {
+            type: 'column',
+            slot: true,
+            id: 5
+          }
+          ]
+        }],
+        'label': 'Reference',
+        'iconClass': 'th-list'
+      }
+      // add new workspace types by appending a 
+      // profile with plugin initialisation code:
+      // $.DEFAULT_SETTINGS.availableWorkspaces['myNwqWorkspace'] = {...}
     },
     
     'windowObjects' : [

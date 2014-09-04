@@ -38,7 +38,6 @@
       });
 
       jQuery('#workspace-select-menu').find('.workspace-option').on('click', function() {
-        console.log(jQuery(this));
         $.viewer.switchWorkspace(jQuery(this).data('workspaceType'));
       });
     },

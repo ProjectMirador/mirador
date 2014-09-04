@@ -2736,71 +2736,89 @@ window.Mirador = window.Mirador || function(config) {
 
     'currentWorkspaceType': 'singleObject',
 
-    'availableWorkspaces': ['singleObject', 'compare', 'bookReading', 'quad'],
+    'availableWorkspaces': ['singleObject', 'compare', 'bookReading'],
       
     'workspaces' : {
-       'singleObject': {
-            'slots': [{
-            }],
-            'label': 'Single Object',
-            'addNew': false,
-            'move': false,
-            'iconClass': 'image'
+      'singleObject': {
+        'layout': [{ 
+          type: "column",
+          slot: true,
+          id: 1
+        }],
+        'label': 'Single Object',
+        'addNew': false,
+        'move': false,
+        'iconClass': 'image'
+      },
+
+      'compare': {
+        'layout': [{ 
+          type: "column",
+          slot: true,
+          id: 1
+        },{ 
+          type: "column",
+          slot: true,
+          id: 2
+        }],
+        'label': 'Compare',
+        'iconClass': 'columns'
+      },
+
+      'bookReading': {
+        'layout': [
+          {
+          type: "column",
+          slot: true,
+          id: 1
+        }
+        ],
+        'defaultWindowOptions': {
         },
-        'compare': {
-          'slots': [{
-            type: "column",
-            size: 50
+        'label': 'Book Reading',
+        'addNew': true,
+        'move': false,
+        'iconClass': 'book'
+      },
+      'reference': {
+        'layout': [{ 
+          type: "column",
+          slot: true,
+          id: 1
+        },
+        { type: "column",
+          children: [{
+            type: "row",
+            children: [{
+              type: 'column',
+              slot: true,
+              id: 2
+            },
+            {
+              type: 'column',
+              slot: true,
+              id: 3
+            }
+            ]
           },
           {
-            type: "column",
-            size: 50
-          }],
-            'label': 'Compare',
-            'iconClass': 'columns'
-        },
-        
-        'bookReading': {
-            'slots': [
-              {}
-            ],
-            'defaultWindowOptions': {
-            },
-            'label': 'Book Reading',
-            'addNew': true,
-            'move': false,
-            'iconClass': 'book'
-        },
-        'quad': {
-          'slots': [
-            { type: 'column',
-              size: 50,
-              positions: [{
-                type: 'row', 
-                size:50
-              },
-              { 
-                type: 'row',
-                size:50
-              }]
+            type: 'column',
+            slot: true,
+            id: 4
           },
-            { type: 'column',
-              size: 50,
-              positions: [{
-                type: 'row', 
-                size:50
-              },
-              { 
-                type: 'row',
-                size:50
-              }]
-          }],
-            'label': 'quad',
-            'iconClass': 'th-large'
-        }
-        // add new workspace types by appending a 
-        // profile with plugin initialisation code:
-        // $.DEFAULT_SETTINGS.workspaces['myNwqWorkspace'] = {...}
+          {
+            type: 'column',
+            slot: true,
+            id: 5
+          }
+          ]
+        }],
+        'label': 'Reference',
+        'iconClass': 'th-list'
+      }
+      // add new workspace types by appending a 
+      // profile with plugin initialisation code:
+      // $.DEFAULT_SETTINGS.availableWorkspaces['myNwqWorkspace'] = {...}
     },
     
     'windowObjects' : [
@@ -2894,13 +2912,13 @@ window.Mirador = window.Mirador || function(config) {
             availableWorkspaces:    null,
             mainMenu:               null,
             //mainMenuLoadWindowCls:  '.mirador-main-menu .load-window',
-            workspaceAutoSave:      $.DEFAULT_SETTINGS.workspaceAutoSave,
+            workspaceAutoSave:      null,
             windowSize:             {},
             resizeRatio:            {},
             currentWorkspaceVisible: true,
             overlayStates:           {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false, 'bookmarkPanelVisible': false},
             manifests:               {}
-        }, $.DEFAULT_SETTINGS, options);
+        }, options);
 
         // get initial manifests
         this.element = this.element || jQuery('#' + this.id);
@@ -2924,9 +2942,7 @@ window.Mirador = window.Mirador || function(config) {
             this.canvas = jQuery('<div/>')
             .addClass('mirador-viewer')
             .appendTo(this.element);
-
-            // add workspace configuration
-            this.activeWorkspace = new $.Workspace({type: this.currentWorkspaceType, parent: this, appendTo: this.element.find('.mirador-viewer') });
+            
 
             // add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
@@ -2935,6 +2951,9 @@ window.Mirador = window.Mirador || function(config) {
             this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
+            
+            // add workspace configuration
+              this.activeWorkspace = new $.Workspace({type: this.currentWorkspaceType, parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             //set this to be displayed
             this.set('currentWorkspaceVisible', true);
@@ -2975,13 +2994,14 @@ window.Mirador = window.Mirador || function(config) {
         switchWorkspace: function(type) {
           _this = this;
 
-          console.log(type);
           _this.activeWorkspace.element.remove();
           delete _this.activeWorkspace;
 
+          _this.currentWorkspaceType = type;
+
           _this.activeWorkspace = new $.Workspace({type: type, parent: this, appendTo: this.element.find('.mirador-viewer') });
           
-          _this.toggleSwitchWorkspace();
+          $.viewer.toggleSwitchWorkspace();
         },
         
         // Sets state of overlays that layer over the UI state
@@ -3062,23 +3082,25 @@ window.Mirador = window.Mirador || function(config) {
         },
         
         loadManifestFromConfig: function(options) {
-           var windowConfig = {
-           currentFocus : options.viewType,
-           focuses : options.availableViews,
-           currentImageID : options.canvasID,
-           id : options.id,
-           focusOptions : options.windowOptions,
-           bottomPanelAvailable : options.bottomPanel,
-           sidePanelAvailable : options.sidePanel,
-           overlayAvailable : options.overlay
-           };
+          var windowConfig = {
+            currentFocus : options.viewType,
+            focuses : options.availableViews,
+            currentImageID : options.canvasID,
+            id : options.id,
+            focusOptions : options.windowOptions,
+            bottomPanelAvailable : options.bottomPanel,
+            sidePanelAvailable : options.sidePanel,
+            overlayAvailable : options.overlay
+          };
+
            this.addManifestToWorkspace(options.loadedManifest, windowConfig);
         },
         
         addManifestToWorkspace: function(manifestURI, windowConfig) {
-            var manifest = this.manifests[manifestURI],
-            _this = this;
-            windowConfig.manifest = manifest;
+            var _this = this,
+            targetSlotID = null;
+            windowConfig.manifest = this.manifests[manifestURI];
+            
             jQuery.each(this.overlayStates, function(oState, value) {
                 _this.set(oState, false, {parent: 'overlayStates'});
             });
@@ -3087,10 +3109,23 @@ window.Mirador = window.Mirador || function(config) {
             // particular slot, but rather from the selectObject menu,
             // then let the viewer decide where to put the resulting window
             // according to the workspace type.
-              // slotID is appended to event name so only 
-              // the invoking slot initialises a new window in 
-              // itself.
-              jQuery.publish('manifestToSlot', windowConfig); 
+            // slotID is appended to event name so only 
+            // the invoking slot initialises a new window in 
+            // itself.
+
+            // There are fewer loadedManifests than slots.
+            // There are more loadedManifests than slots.
+            // The above two cases are effectively the same, so 
+            // just assign the slotIDs in order of manifest listing.
+            
+            targetSlotID = _this.activeWorkspace.focusedSlot || _this.activeWorkspace.slots.filter(function(slot) { 
+              return slot.hasOwnProperty('window') ? true : false;
+            })[0].slotID;
+            
+            // There is an exact mapping with given slotIDs.
+            // It is freeform view and all bets are off. 
+            
+            jQuery.publish('manifestToSlot.'+targetSlotID, windowConfig); 
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {
@@ -3148,57 +3183,54 @@ window.Mirador = window.Mirador || function(config) {
   $.Workspace.prototype = {
     init: function () {
       this.element.appendTo(this.appendTo);
+      if (this.type === "none") {
+        this.parent.toggleSwitchWorkspace();
+        return;
+      }
+
+      this.layout = new $.Layout({
+        layout: this.parent.workspaces[this.parent.currentWorkspaceType].layout,
+        parent: this,
+        layoutContainer: this.element
+      });
+      
+      this.slots = this.extractSlots(this.parent.workspaces[this.parent.currentWorkspaceType].layout);
 
       if (this.focusedSlot === null) {
         // set the focused slot to the first in the list
         this.focusedSlot = 0;
       }
       
-      if (!this.slots) { 
-        this.slots = [];
-        this.slots.push(new $.Slot({
-          slotId: 0,
-          focused: true,
-          parent: this,
-          appendTo: this.element
-        }));
-        this.element.append(this.template({ slots: $.DEFAULT_SETTINGS.workspaces[this.type].slots }));
-      } else {
-        this.element.append(this.template(this.slots));
-      }
-
       this.bindEvents();
     },
-    template: function(tplData) {
+    extractSlots: function(layout) {
+      var _this = this,
+      slots = [];
 
-      var template = Handlebars.compile([
-        '{{#each slots}}',
-        '{{/each }}'
-      ].join(''));
-
-      var previousTemplate;
-
-      Handlebars.registerHelper('insertParentSlot', function(children, options) {
-        var out = '';
-
-        if (options.fn !== undefined) {
-          previousTemplate = options.fn;
-        }
-
-        children.forEach(function(child) {
-          out = out + previousTemplate(child);
+      // extracts only the leaves of the tree.
+      function crawlLayout(tree, slots) {
+        tree.forEach(function(branch){
+          if ( !branch.hasOwnProperty('children') && branch.slot === true ) {
+            slots.push(branch);
+          }
+          else {
+            crawlLayout(branch.children, slots);
+          }
         });
-        
-        return out;
+      }
+
+      crawlLayout(layout, slots);
+
+      slotObjects = slots.map(function(slotData) {
+        return new $.Slot({
+          slotID: slotData.id,
+          focused: true,
+          parent: _this,
+          appendTo: _this.layout.slots[slotData.id].layoutBox.element
+        });
       });
 
-      Handlebars.registerHelper('tocLevel', function(id, label, level, children) {
-        var caret = '<i class="fa fa-caret-right caret"></i>',
-        cert = '<i class="fa fa-certificate star"></i>';
-        return '<h' + (level+1) + '><a class="toc-link" data-rangeID="' + id + '">' + caret + cert + '<span class="label">' + label + '</span></a></h' + (level+1) + '>';
-      });
-
-      return template(tplData);
+      return slotObjects;
     },
 
     bindEvents: function() {
@@ -3208,22 +3240,27 @@ window.Mirador = window.Mirador || function(config) {
     addSlot: function() {
 
     },
+
     removeSlot: function() {
 
     },
+
     clearSlot: function(slotId) {
       if (this.slots[slodId].windowElement) { 
         this.slots[slotId].windowElement.remove();
       }
       this.slots[slotId].window = new $.Window();
     },
+
     addItem: function(slotID) {
       this.focusedSlot = slotID;
       this.parent.toggleLoadWindow();
     },
+
     hide: function() {
       jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
     },
+
     show: function() {
       jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
     }
@@ -3693,7 +3730,6 @@ window.Mirador = window.Mirador || function(config) {
       });
 
       jQuery('#workspace-select-menu').find('.workspace-option').on('click', function() {
-        console.log(jQuery(this));
         $.viewer.switchWorkspace(jQuery(this).data('workspaceType'));
       });
     },
@@ -3822,6 +3858,331 @@ window.Mirador = window.Mirador || function(config) {
 
 (function($) {
 
+  // Given a parent, and a configuration structure,
+  // produces an invisible grid into which you
+  // may place any element.
+  $.Layout = function(options) {
+
+    jQuery.extend(true, this, {
+      slots:            {},
+      layout:           null,
+      parent:           null,
+      layoutContainer:  null,
+      elements:         null
+    }, options);
+
+    this.init();
+
+  };
+
+  $.Layout.prototype = {
+    init: function() {
+      var _this = this;
+
+      this.graph = this.calculateSlotGraph();
+      console.log(this.graph);
+      jQuery.each(_this.graph, function(index, slot) {
+        _this.slots[slot.id] = slot;
+        slot.layoutDimensions.parent = _this;
+        _this.slots[slot.id].layoutBox = new $.LayoutBox(slot.layoutDimensions);
+      });
+
+      this.bindEvents();
+    },
+
+    calculateSlotGraph: function() {
+      var _this = this,
+      slots = {},
+      containerWidth = _this.layoutContainer.outerWidth(),
+      containerHeight = _this.layoutContainer.outerHeight();
+      // given:
+      // a slot's "position in the layout" and the container width,
+      // 
+      // It is required to find a slot's layoutDimensions.
+      // the position in the layout means "what are the parents?"
+      // "is it a row or a column?"
+      //
+      // With the simple case of the single column workspace:
+      // the width is "width", there is only one child, and it is 
+      // a leaf node. It will have 100% width and 100% height. 
+      //
+      // With the slightly more complicated case of the 2-column
+      // compare workspace:
+      // width is "width" (of the container), and the workspace
+      // will now be bifurcated. Any remaining space will now
+      // be partitioned out of half of the remaining space.
+      // Thankfully, the next level are leaves, so there is 
+      // no need to store or sort remaining space.
+      //
+      // With the "reference" workspace, or when there is a 
+      // free-form tiled view, the subtraction of remaining
+      // space must continue at each iteration.
+
+      // extracts only the leaves of the tree.
+      function crawlLayout(tree, slots) {
+        tree.forEach(function(branch, index) {
+          if ( !branch.hasOwnProperty('children') && branch.slot === true ) {
+            var leaf = branch,
+            siblings = tree;
+            console.log('leaf id: ' + leaf.id);
+
+            leaf.siblingIDs = siblings.map(function(sibling){ return sibling.id; });
+
+            leaf.layoutDimensions = {
+              id: leaf.id,
+              x: containerWidth/tree.length*index,
+              y: 0,
+              width: containerWidth/tree.length,
+              height: containerHeight,
+              handles: (function() { 
+                if (leaf.siblingIDs) {
+                  console.log(index);
+                  return index === 1 ? "": "e";
+                } else {
+                  return "";
+                }
+              })(),
+              container: _this.layoutContainer
+            };
+
+            slots[branch.id] = leaf;
+            // siblings
+            // layout dimensions
+            // parent (a slot is always a leaf, and thus has no children).
+          }
+          else {
+            crawlLayout(branch.children, slots);
+          }
+        });
+      }
+
+      crawlLayout(_this.layout, slots);
+
+      return slots;
+    },
+
+    // for a given area, get the required dimensions
+    //
+    // (width, height, x/y positions for a layout
+    // slot's DOM element)
+    getDimensionsFromLayoutGraph: function() {
+
+    },
+
+    bindEvents: function() {
+      var _this = this;
+
+      // A layout element is resized. Detect whether
+      // it is a row or a column and resize its siblings
+      // accordingly, recalculating the layout.
+      
+      // throttle the resize event and broadcast the
+      // new widths and heights to all necessary children,
+      // having them resize themselves.
+
+      // The workspace container is resized, 
+      // jQuery('.viewer').on('resize', function() { _this.resizeContainer(); });
+
+      // A new slot is added.
+      
+      // A new slot is removed.
+      
+      // A slot is moved from one place to another by dragging.
+
+    },
+
+    resizeContainer: function() {
+      var _this = this;
+      console.log("is it there?");
+      
+      // For given slot, select the siblings that 
+      // need resizing, do some math for them, 
+      // resize them along with a given element.
+      
+      var oldContainerWidth = jQuery.map(this.slots, function(slot, index){ return slot.layoutDimensions.width;})
+      .reduce(function(a, b) {
+        return a + b;
+      }),
+      newContainerWidth = this.layoutContainer.outerWidth();
+      console.log(newContainerWidth);
+      console.log(oldContainerWidth);
+      
+      jQuery.each(this.slots, function(index, slot) {
+        slot = slot.layoutDimensions;
+
+        var oldWidth = slot.width,
+        oldHeight = slot.height,
+        percentageWidth = oldContainerWidth/oldWidth,
+        percentageX = oldContainerWidth/slot.x,
+        
+        x = percentageX*newContainerWidth,
+        y = 0,
+        width = newContainerWidth/percentageWidth,
+        height = _this.layoutContainer.height();
+
+        jQuery.each(_this.slots, function(index, slot) {
+          slot.layoutBox.setPositionAndSize(x, y, width, height);
+        });
+      });
+    },
+
+    addSlot: function() {
+      // insert at position in DOM with 0 width/height
+      // depending on if it is a column or a row and
+      // animate resizing it to its correct position.
+    },
+
+    resizeSlot: function(slotID, event, ui) {
+      var _this = this;
+      event.stopPropagation();
+      
+      // For given slot, select the siblings that 
+      // need resizing, do some math for them, 
+      // resize them along with a given element.
+      console.log(ui);
+      console.log(this);
+      
+      var oldLeaderWidth = _this.slots[slotID].layoutDimensions.width,
+      newLeaderWidth = ui.size.width,
+      containerWidth = this.slots[slotID].layoutDimensions.container.outerWidth(),
+      oldRemainingWidth = containerWidth - oldLeaderWidth,
+      remainingWidth = containerWidth - newLeaderWidth,
+      delta = oldLeaderWidth - newLeaderWidth;
+      
+      this.slots[slotID].siblingIDs.filter(function(ID) {
+        return slotID !== ID ? true : false;
+      }).forEach(function(siblingID) {
+        console.log(siblingID);
+        var sibling = _this.slots[siblingID].layoutDimensions;
+        var oldWidth = sibling.width,
+        oldHeight = sibling.height,
+        percentageWidth = oldRemainingWidth/oldWidth,
+        x = sibling.x - delta,
+        y = sibling.y,
+        width = remainingWidth/percentageWidth,
+        height = sibling.height;
+
+        _this.slots[siblingID].layoutBox.setPositionAndSize(x, y, width, height);
+      });
+
+      // Siblings must be resized. If the parent is a 
+      // top-most column or row, then it will not be
+      // resizeable in one direction. Therefore, the only
+      // remaining dimension will steal or give space to 
+      // the siblings that they must fill according to 
+      // their previous occupation of the gnomon.  
+      //
+      // If the parent is a lower-level column or row, 
+      // and the event target slot is resized in a way
+      // that does not give room to its siblings, then
+      // the virtual parent will expand, stealing room 
+      // from its siblings. The result will be more room
+      // that all its children will fill together.
+      //
+      // The resize events can be delegated up or down, 
+      // affecting only one layer of hierarchy.
+      event.stopPropagation();
+    }
+    
+  };
+
+}(Mirador));
+
+
+(function($) {
+
+  $.LayoutBox = function(options) {
+    jQuery.extend(true, this, {
+      handles: null,
+      id: null,
+      width: null,
+      height: null,
+      x: null,
+      y: null,
+      container: null
+    }, options);
+
+    this.init();
+  };
+
+  $.LayoutBox.prototype = {
+    init: function() {
+      var _this = this;
+
+      this.element = jQuery(_this.template({
+        slotID: this.id
+      })).appendTo(_this.container);
+
+      console.log('did this get done?');
+
+      this.element.resizable({
+        handles: this.handles, 
+        containment: 'parent',
+        start: _this.start,
+        resize: function(event, ui) { _this.resize(event, ui); },
+        stop: _this.stop
+      });
+      this.element.appendTo(this.container);
+      this.setPositionAndSize(this.x, this.y, this.width, this.height);
+      // remove handles for top or bottom of column
+      // or left or right of row.
+
+      this.bindEvents();
+    },
+
+    bindEvents: function() {
+      var _this = this;
+
+    },
+
+    start: function(event, ui) {
+     
+    },
+
+    resize: function(event, ui) {
+      event.stopImmediatePropagation();
+      this.parent.resizeSlot(this.id, event, ui);
+    },
+
+    stop: function(event, ui) {
+      // save new workspace layout.
+    },
+
+    setPositionAndSize: function(x, y, w, h) {
+      this.x = x;
+      this.y = y;
+      this.width = w;
+      this.heightx = h;
+      
+      this.setSize(this.width, this.height);
+      this.setPosition(this.x, this.y);
+    },
+
+    setPosition: function(x, y) {
+      var _this = this;
+      x = Math.round(x);
+      y = Math.round(y);
+
+      this.element.position({my: "left top", at: "left+" + x + " top+" + y, of: _this.container, collision: 'none' });
+    },
+    
+    setSize: function(w, h) {
+      this.element.width(Math.round(w));
+      this.element.height(Math.round(h));
+    },
+
+    template: Handlebars.compile([
+                                 '<div data-layout-slot-id="{{slotID}}" class="layout-slot">',
+                                 '</div>'
+    ].join(''))
+
+  };
+
+})(Mirador);
+
+
+(function($) {
+
   $.WorkspaceLockController = function(options) {
 
      jQuery.extend(true, this, {
@@ -3860,7 +4221,7 @@ window.Mirador = window.Mirador || function(config) {
 
     jQuery.extend(true, this, {
       workspaceSlotCls: 'slot',
-      slotID:           1,
+      slotID:           null,
       focused:          null,
       appendTo:         null,
       parent:           null,
@@ -3877,7 +4238,7 @@ window.Mirador = window.Mirador || function(config) {
     init: function () {
       this.element = jQuery(this.template({
         workspaceSlotCls: this.workspaceSlotCls,
-        slotID: 1
+        slotID: this.slotId 
       }));
       this.element.appendTo(this.appendTo);
 
@@ -3891,7 +4252,7 @@ window.Mirador = window.Mirador || function(config) {
       // so it will be the only one whose function is
       // called to create a window when the 
       // load menu is invoked from it.
-      jQuery.subscribe('manifestToSlot', function(e, windowConfig) { 
+      jQuery.subscribe('manifestToSlot.'+_this.slotID, function(e, windowConfig) { 
         _this.clearSlot();
         if (_this.window && !windowConfig.id) {
            windowConfig.id = _this.window.id;
@@ -3915,31 +4276,13 @@ window.Mirador = window.Mirador || function(config) {
     },
 
     resize: function() {
-      // There will only be a handle on 
-      // the bottom and top of the slot if it is
-      // in a column, and on the left and right if
-      // it is in a row. If the parent has more 
-      // than one child, then it becomes resizeable,
-      // and will likewise affect the layout of its
-      // siblings within their row or column.
-      
-      // On resize, the width must update with the 
-      // mouse position, and the other slots in
-      // the same parent must take up the same share
-      // of remaining space in the parent as they
-      // currently do in the resulting grown or 
-      // shrunken remaining space.
-      
-      // 1.) check the current layout in parent to 
-      // match the children of the common parent.
-
-      // 2.) 
-      // 
+      // notify the layout manager with
+      // appropriate information.
     },
-
+    
     addItem: function() {
       _this = this;
-      _this.focused = true;
+      _this.parent.focused = true;
       _this.parent.addItem(_this.slotID);
     },
 
@@ -6349,9 +6692,9 @@ jQuery.fn.scrollStop = function(callback) {
       shareEndpoint: null, // the place where POST requests for new saved sessions will go 
       historySize: null, // wishful thinking for later.
       sessionID: null
-    }, $.DEFAULT_SETTINGS.saveController, config.saveController);
+    });
 
-    this.init(config);
+    this.init(jQuery.extend(false, $.DEFAULT_SETTINGS, config));
 
   };
 
@@ -6528,7 +6871,7 @@ jQuery.fn.scrollStop = function(callback) {
     },
 
     save: function() {
-      _this = this;
+      var _this = this;
 
       // the hash must be stringified because
       // localStorage is a key:value store that
@@ -6808,7 +7151,6 @@ jQuery.fn.scrollStop = function(callback) {
 
     return data;
   };
-
 
   $.genUUID = function() {
     var idNum = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
