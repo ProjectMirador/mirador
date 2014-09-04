@@ -157,6 +157,10 @@
         }
       });
       
+      jQuery.subscribe("workspaceChanged", function(event, workspaceType) {
+         _this.set('currentWorkspaceType', workspaceType, {parent: "currentConfig"} );
+      });
+      
       jQuery.subscribe('etc...', function(junk) {
         // handle adding the property in the appropriate place 
         // in this.currentConfig by passing to the _this.set(), 
