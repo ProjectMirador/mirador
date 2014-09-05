@@ -2965,11 +2965,6 @@ window.Mirador = window.Mirador || function(config) {
            var _this = this;
            jQuery.subscribe('manifestAdded', function(event, newManifest, repository) {
                if (_this.windowObjects) {
-                   /*jQuery.each(_this.windowObjects, function(index, object) {
-                       if (object.loadedManifest === newManifest) {
-                           _this.loadManifestFromConfig(object);
-                       }
-                   });*/
                    var check = jQuery.grep(_this.windowObjects, function(object, index) {
                       return object.loadedManifest === newManifest;
                    });
@@ -3248,7 +3243,6 @@ window.Mirador = window.Mirador || function(config) {
        var toReturn = null;
        jQuery.each(this.slots, function(index, value) {
           if (!value.window) {
-             console.log("null window, returning "+value.slotID);
              toReturn = value.slotID;
              return false;
           }
@@ -5177,12 +5171,12 @@ window.Mirador = window.Mirador || function(config) {
     ].join('')),
     
     toolbarTemplate: Handlebars.compile([
-      '<div id="osd-toolbar" class="toolbar">',
+      '<div id="{{toolbarID}}" class="toolbar">',
       '<a class="mirador-btn mirador-icon-previous"></a>',
-      '<a id="zoom-in" class="mirador-btn mirador-icon-zoom-in"></a>', 
-      '<a id="zoom-out" class="mirador-btn mirador-icon-zoom-out"></a>',
-      '<a id="home" class="mirador-btn mirador-icon-home"></a>',
-      '<a id="full-page" class="mirador-btn mirador-icon-full-page"></a>',
+      '<a id="zoom-in-{{uniqueID}}" class="mirador-btn mirador-icon-zoom-in"></a>', 
+      '<a id="zoom-out-{{uniqueID}}" class="mirador-btn mirador-icon-zoom-out"></a>',
+      '<a id="home-{{uniqueID}}" class="mirador-btn mirador-icon-home"></a>',
+      '<a id="full-page-{{uniqueID}}" class="mirador-btn mirador-icon-full-page"></a>',
       '<a class="mirador-btn mirador-icon-next"></a>',
       '</div>'
     ].join('')),
@@ -5262,11 +5256,13 @@ window.Mirador = window.Mirador || function(config) {
     },
 
     createOpenSeadragonInstance: function() {
-      var osdId = 'mirador-osd-' + $.genUUID(),
+      var uniqueID = $.genUUID(),
+      osdId = 'mirador-osd-' + uniqueID,
       osdToolBarId = osdId + '-toolbar',
       elemOsd,
       tileSources = [],
-      _this = this;
+      _this = this,
+      toolbarID = 'osd-toolbar-' + uniqueID;
 
       this.element.find('.' + this.osdCls).remove();
 
@@ -5282,7 +5278,7 @@ window.Mirador = window.Mirador || function(config) {
       .addClass(this.osdCls)
       .attr('id', osdId)
       .appendTo(this.element);
-      jQuery(this.toolbarTemplate()).appendTo(this.element);
+      jQuery(this.toolbarTemplate({"toolbarID":toolbarID, "uniqueID":uniqueID})).appendTo(this.element);
 
       this.osd = $.OpenSeadragon({
         'id':           elemOsd.attr('id'),
@@ -5290,7 +5286,9 @@ window.Mirador = window.Mirador || function(config) {
 	'collectionMode':     'true',
 	'collectionRows':     1, 
 	'collectionTileMargin': this.stitchTileMargin,
-	'collectionTileSize': 1600
+	'collectionTileSize': 1600,
+	'toolbarID' : toolbarID,
+        'uniqueID' : uniqueID
       });
       
       this.bindOSDEvents();
@@ -5516,12 +5514,12 @@ window.Mirador = window.Mirador || function(config) {
     ].join('')),
     
     toolbarTemplate: Handlebars.compile([
-      '<div id="osd-toolbar" class="toolbar">',
+      '<div id="{{toolbarID}}" class="toolbar">',
       '<a class="mirador-btn mirador-icon-previous"></a>',
-      '<a id="zoom-in" class="mirador-btn mirador-icon-zoom-in"></a>', 
-      '<a id="zoom-out" class="mirador-btn mirador-icon-zoom-out"></a>',
-      '<a id="home" class="mirador-btn mirador-icon-home"></a>',
-      '<a id="full-page" class="mirador-btn mirador-icon-full-page"></a>',
+      '<a id="zoom-in-{{uniqueID}}" class="mirador-btn mirador-icon-zoom-in"></a>', 
+      '<a id="zoom-out-{{uniqueID}}" class="mirador-btn mirador-icon-zoom-out"></a>',
+      '<a id="home-{{uniqueID}}" class="mirador-btn mirador-icon-home"></a>',
+      '<a id="full-page-{{uniqueID}}" class="mirador-btn mirador-icon-full-page"></a>',
       '<a class="mirador-btn mirador-icon-next"></a>',
       '</div>'
     ].join('')),
@@ -5590,10 +5588,12 @@ window.Mirador = window.Mirador || function(config) {
 
     createOpenSeadragonInstance: function(imageUrl) {
       var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json',
-      osdID = 'mirador-osd-' + $.genUUID(),
+      uniqueID = $.genUUID(),
+      osdID = 'mirador-osd-' + uniqueID,
       infoJson,
       elemOsd,
-      _this = this;
+      _this = this,
+      toolbarID = 'osd-toolbar-' + uniqueID;
       
       this.element.find('.' + this.osdCls).remove();
 
@@ -5604,11 +5604,13 @@ window.Mirador = window.Mirador || function(config) {
       .addClass(this.osdCls)
       .attr('id', osdID)
       .appendTo(this.element);
-      jQuery(this.toolbarTemplate()).appendTo(this.element);
+      jQuery(this.toolbarTemplate({"toolbarID":toolbarID, "uniqueID":uniqueID})).appendTo(this.element);
 
       this.osd = $.OpenSeadragon({
         'id':           osdID,
-        'tileSources':  $.Iiif.prepJsonForOsd(infoJson)
+        'tileSources':  $.Iiif.prepJsonForOsd(infoJson),
+        'toolbarID' : toolbarID,
+        'uniqueID' : uniqueID
       });
             
       this.bindOSDEvents();
@@ -6659,15 +6661,15 @@ jQuery.fn.scrollStop = function(callback) {
         defaultZoomLevel: 0,
         prefixUrl:        'images/openseadragon/',
         autoHideControls: false,
-        zoomInButton:   "zoom-in",
-        zoomOutButton:  "zoom-out",
-        homeButton:     "home",
-        fullPageButton: "full-page"
+        zoomInButton:   "zoom-in-"+options.uniqueID,
+        zoomOutButton:  "zoom-out-"+options.uniqueID,
+        homeButton:     "home-"+options.uniqueID,
+        fullPageButton: "full-page-"+options.uniqueID
       }, options)
 
     );
     
-    var div = document.getElementById("osd-toolbar");
+    var div = document.getElementById(options.toolbarID);
 
     osd.addControl(div, {anchor: OpenSeadragon.ControlAnchor.BOTTOM_RIGHT});
     
