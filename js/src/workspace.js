@@ -9,7 +9,6 @@
       slots:            null,
       appendTo:         null,
       parent:           null
-
     }, options);
 
     this.element  = this.element || jQuery('<div class="workspace-container">');
@@ -68,6 +67,17 @@
       });
 
       return slotObjects;
+    },
+    
+    availableSlot: function() {
+       var toReturn = null;
+       jQuery.each(this.slots, function(index, value) {
+          if (!value.window) {
+             toReturn = value.slotID;
+             return false;
+          }
+       });
+       return toReturn;
     },
 
     bindEvents: function() {

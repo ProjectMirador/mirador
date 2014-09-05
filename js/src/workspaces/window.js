@@ -54,9 +54,6 @@
       manifest = _this.manifest,
       focusState = _this.currentFocus,
       templateData = {};
-      if (!_this.id) {
-         _this.id = $.genUUID();
-      }
 
       _this.element = jQuery(this.template()).appendTo(this.appendTo).hide().fadeIn(300);
       
@@ -71,7 +68,7 @@
       
       //remove any imageModes that are not available as a focus
       this.imageModes = jQuery.map(this.imageModes, function(value, index) {
-         if (jQuery.inArray(value, this.focuses) === -1) return null;  
+         if (jQuery.inArray(value, _this.focuses) === -1) return null;  
          return value;
       });
 

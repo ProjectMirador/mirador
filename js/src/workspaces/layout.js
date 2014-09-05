@@ -22,7 +22,6 @@
       var _this = this;
 
       this.graph = this.calculateSlotGraph();
-      console.log(this.graph);
       jQuery.each(_this.graph, function(index, slot) {
         _this.slots[slot.id] = slot;
         slot.layoutDimensions.parent = _this;
@@ -66,7 +65,6 @@
           if ( !branch.hasOwnProperty('children') && branch.slot === true ) {
             var leaf = branch,
             siblings = tree;
-            console.log('leaf id: ' + leaf.id);
 
             leaf.siblingIDs = siblings.map(function(sibling){ return sibling.id; });
 
@@ -78,7 +76,6 @@
               height: containerHeight,
               handles: (function() { 
                 if (leaf.siblingIDs) {
-                  console.log(index);
                   return index === 1 ? "": "e";
                 } else {
                   return "";
@@ -135,7 +132,6 @@
 
     resizeContainer: function() {
       var _this = this;
-      console.log("is it there?");
       
       // For given slot, select the siblings that 
       // need resizing, do some math for them, 
@@ -146,8 +142,6 @@
         return a + b;
       }),
       newContainerWidth = this.layoutContainer.outerWidth();
-      console.log(newContainerWidth);
-      console.log(oldContainerWidth);
       
       jQuery.each(this.slots, function(index, slot) {
         slot = slot.layoutDimensions;
@@ -181,8 +175,6 @@
       // For given slot, select the siblings that 
       // need resizing, do some math for them, 
       // resize them along with a given element.
-      console.log(ui);
-      console.log(this);
       
       var oldLeaderWidth = _this.slots[slotID].layoutDimensions.width,
       newLeaderWidth = ui.size.width,
@@ -194,7 +186,6 @@
       this.slots[slotID].siblingIDs.filter(function(ID) {
         return slotID !== ID ? true : false;
       }).forEach(function(siblingID) {
-        console.log(siblingID);
         var sibling = _this.slots[siblingID].layoutDimensions;
         var oldWidth = sibling.width,
         oldHeight = sibling.height,

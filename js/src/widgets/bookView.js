@@ -67,12 +67,12 @@
     ].join('')),
     
     toolbarTemplate: Handlebars.compile([
-      '<div id="osd-toolbar" class="toolbar">',
+      '<div id="{{toolbarID}}" class="toolbar">',
       '<a class="mirador-btn mirador-icon-previous"></a>',
-      '<a id="zoom-in" class="mirador-btn mirador-icon-zoom-in"></a>', 
-      '<a id="zoom-out" class="mirador-btn mirador-icon-zoom-out"></a>',
-      '<a id="home" class="mirador-btn mirador-icon-home"></a>',
-      '<a id="full-page" class="mirador-btn mirador-icon-full-page"></a>',
+      '<a id="zoom-in-{{uniqueID}}" class="mirador-btn mirador-icon-zoom-in"></a>', 
+      '<a id="zoom-out-{{uniqueID}}" class="mirador-btn mirador-icon-zoom-out"></a>',
+      '<a id="home-{{uniqueID}}" class="mirador-btn mirador-icon-home"></a>',
+      '<a id="full-page-{{uniqueID}}" class="mirador-btn mirador-icon-full-page"></a>',
       '<a class="mirador-btn mirador-icon-next"></a>',
       '</div>'
     ].join('')),
@@ -152,11 +152,13 @@
     },
 
     createOpenSeadragonInstance: function() {
-      var osdId = 'mirador-osd-' + $.genUUID(),
+      var uniqueID = $.genUUID(),
+      osdId = 'mirador-osd-' + uniqueID,
       osdToolBarId = osdId + '-toolbar',
       elemOsd,
       tileSources = [],
-      _this = this;
+      _this = this,
+      toolbarID = 'osd-toolbar-' + uniqueID;
 
       this.element.find('.' + this.osdCls).remove();
 
@@ -172,7 +174,7 @@
       .addClass(this.osdCls)
       .attr('id', osdId)
       .appendTo(this.element);
-      jQuery(this.toolbarTemplate()).appendTo(this.element);
+      jQuery(this.toolbarTemplate({"toolbarID":toolbarID, "uniqueID":uniqueID})).appendTo(this.element);
 
       this.osd = $.OpenSeadragon({
         'id':           elemOsd.attr('id'),
@@ -180,7 +182,9 @@
 	'collectionMode':     'true',
 	'collectionRows':     1, 
 	'collectionTileMargin': this.stitchTileMargin,
-	'collectionTileSize': 1600
+	'collectionTileSize': 1600,
+	'toolbarID' : toolbarID,
+        'uniqueID' : uniqueID
       });
       
       this.bindOSDEvents();

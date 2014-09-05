@@ -22,8 +22,6 @@
         slotID: this.id
       })).appendTo(_this.container);
 
-      console.log('did this get done?');
-
       this.element.resizable({
         handles: this.handles, 
         containment: 'parent',

@@ -12,15 +12,15 @@
         defaultZoomLevel: 0,
         prefixUrl:        'images/openseadragon/',
         autoHideControls: false,
-        zoomInButton:   "zoom-in",
-        zoomOutButton:  "zoom-out",
-        homeButton:     "home",
-        fullPageButton: "full-page"
+        zoomInButton:   "zoom-in-"+options.uniqueID,
+        zoomOutButton:  "zoom-out-"+options.uniqueID,
+        homeButton:     "home-"+options.uniqueID,
+        fullPageButton: "full-page-"+options.uniqueID
       }, options)
 
     );
     
-    var div = document.getElementById("osd-toolbar");
+    var div = document.getElementById(options.toolbarID);
 
     osd.addControl(div, {anchor: OpenSeadragon.ControlAnchor.BOTTOM_RIGHT});
     
