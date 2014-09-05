@@ -54,9 +54,6 @@
       manifest = _this.manifest,
       focusState = _this.currentFocus,
       templateData = {};
-      if (!_this.id) {
-         _this.id = $.genUUID();
-      }
 
       _this.element = jQuery(this.template()).appendTo(this.appendTo).hide().fadeIn(300);
       

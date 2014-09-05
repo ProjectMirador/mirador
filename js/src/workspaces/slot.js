@@ -37,13 +37,17 @@
       // load menu is invoked from it.
       jQuery.subscribe('manifestToSlot.'+_this.slotID, function(e, windowConfig) { 
         _this.clearSlot();
+        if (!_this.window && !windowConfig.id) {
+           windowConfig.id = $.genUUID();
+        }
         if (_this.window && !windowConfig.id) {
            windowConfig.id = _this.window.id;
-        }
+        } 
         windowConfig.appendTo = _this.element;
         if (_this.window) {
           _this.window.update(windowConfig);
         } else {
+          jQuery.publish("windowAdded", windowConfig.id);
           _this.window = new $.Window(windowConfig);
         }
       });

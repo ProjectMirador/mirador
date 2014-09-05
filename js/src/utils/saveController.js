@@ -161,6 +161,24 @@
          _this.set('currentWorkspaceType', workspaceType, {parent: "currentConfig"} );
       });
       
+      jQuery.subscribe("windowAdded", function(event, windowID) {
+        var windowObjects = _this.currentConfig.windowObjects,
+        windowInConfig = false;
+        jQuery.each(windowObjects, function(index, window){
+           if (window.id === windowID) {
+              windowInConfig = true;
+           }
+        });
+        if (!windowInConfig) {
+           windowObjects.push({'id' : windowID});
+        }
+        _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
+      });
+      
+      jQuery.subscribe("windowRemoved", function(event) {
+      
+      });
+      
       jQuery.subscribe('etc...', function(junk) {
         // handle adding the property in the appropriate place 
         // in this.currentConfig by passing to the _this.set(), 
