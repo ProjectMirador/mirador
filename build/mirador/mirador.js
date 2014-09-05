@@ -2953,7 +2953,7 @@ window.Mirador = window.Mirador || function(config) {
             this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             // add workspace configuration
-              this.activeWorkspace = new $.Workspace({type: this.currentWorkspaceType, parent: this, appendTo: this.element.find('.mirador-viewer') });
+            this.activeWorkspace = new $.Workspace({type: this.currentWorkspaceType, parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             //set this to be displayed
             this.set('currentWorkspaceVisible', true);
@@ -2965,10 +2965,16 @@ window.Mirador = window.Mirador || function(config) {
            var _this = this;
            jQuery.subscribe('manifestAdded', function(event, newManifest, repository) {
                if (_this.windowObjects) {
-                   jQuery.each(_this.windowObjects, function(index, object) {
+                   /*jQuery.each(_this.windowObjects, function(index, object) {
                        if (object.loadedManifest === newManifest) {
                            _this.loadManifestFromConfig(object);
                        }
+                   });*/
+                   var check = jQuery.grep(_this.windowObjects, function(object, index) {
+                      return object.loadedManifest === newManifest;
+                   });
+                   jQuery.each(check, function(index, value) {
+                     _this.loadManifestFromConfig(value);
                    });
                }
            });
@@ -3083,18 +3089,23 @@ window.Mirador = window.Mirador || function(config) {
         },
         
         loadManifestFromConfig: function(options) {
-          var windowConfig = {
-            currentFocus : options.viewType,
-            focuses : options.availableViews,
-            currentImageID : options.canvasID,
-            id : options.id,
-            focusOptions : options.windowOptions,
-            bottomPanelAvailable : options.bottomPanel,
-            sidePanelAvailable : options.sidePanel,
-            overlayAvailable : options.overlay
-          };
+          //check if there are available slots, otherwise don't process this object from config
+          var slot = this.activeWorkspace.availableSlot();
+          if (slot) {
+            var windowConfig = {
+              currentFocus : options.viewType,
+              focuses : options.availableViews,
+              currentImageID : options.canvasID,
+              id : options.id,
+              focusOptions : options.windowOptions,
+              bottomPanelAvailable : options.bottomPanel,
+              sidePanelAvailable : options.sidePanel,
+              overlayAvailable : options.overlay,
+              slotID : slot ? slot : options.slot
+            };
 
-           this.addManifestToWorkspace(options.loadedManifest, windowConfig);
+             this.addManifestToWorkspace(options.loadedManifest, windowConfig);
+          }
         },
         
         addManifestToWorkspace: function(manifestURI, windowConfig) {
@@ -3106,10 +3117,6 @@ window.Mirador = window.Mirador || function(config) {
                 _this.set(oState, false, {parent: 'overlayStates'});
             });
             
-            // If the chooseManifest panel was not invoked from a 
-            // particular slot, but rather from the selectObject menu,
-            // then let the viewer decide where to put the resulting window
-            // according to the workspace type.
             // slotID is appended to event name so only 
             // the invoking slot initialises a new window in 
             // itself.
@@ -3119,9 +3126,13 @@ window.Mirador = window.Mirador || function(config) {
             // The above two cases are effectively the same, so 
             // just assign the slotIDs in order of manifest listing.
             
-            targetSlotID = _this.activeWorkspace.focusedSlot || _this.activeWorkspace.slots.filter(function(slot) { 
-              return slot.hasOwnProperty('window') ? true : false;
-            })[0].slotID;
+            if (windowConfig.slotID) {
+               targetSlotID = windowConfig.slotID;
+            } else {
+              targetSlotID = _this.activeWorkspace.focusedSlot || _this.activeWorkspace.slots.filter(function(slot) { 
+                return slot.hasOwnProperty('window') ? true : false;
+              })[0].slotID;
+            }
             
             // There is an exact mapping with given slotIDs.
             // It is freeform view and all bets are off. 
@@ -3173,7 +3184,6 @@ window.Mirador = window.Mirador || function(config) {
       slots:            null,
       appendTo:         null,
       parent:           null
-
     }, options);
 
     this.element  = this.element || jQuery('<div class="workspace-container">');
@@ -3232,6 +3242,18 @@ window.Mirador = window.Mirador || function(config) {
       });
 
       return slotObjects;
+    },
+    
+    availableSlot: function() {
+       var toReturn = null;
+       jQuery.each(this.slots, function(index, value) {
+          if (!value.window) {
+             console.log("null window, returning "+value.slotID);
+             toReturn = value.slotID;
+             return false;
+          }
+       });
+       return toReturn;
     },
 
     bindEvents: function() {
@@ -6770,7 +6792,6 @@ jQuery.fn.scrollStop = function(callback) {
       // field in the stored config.
       
       jQuery.subscribe('focusUpdated', function(event, options) {
-       console.log("focus updated");
         var windowObjects = _this.currentConfig.windowObjects;
         if (windowObjects && windowObjects.length > 0) {
             jQuery.each(windowObjects, function(index, window){
@@ -6833,7 +6854,6 @@ jQuery.fn.scrollStop = function(callback) {
       });
       
       jQuery.subscribe("windowAdded", function(event, windowID) {
-        console.log("window added");
         var windowObjects = _this.currentConfig.windowObjects,
         windowInConfig = false;
         jQuery.each(windowObjects, function(index, window){
