@@ -4393,7 +4393,7 @@ window.Mirador = window.Mirador || function(config) {
       
       //remove any imageModes that are not available as a focus
       this.imageModes = jQuery.map(this.imageModes, function(value, index) {
-         if (jQuery.inArray(value, this.focuses) === -1) return null;  
+         if (jQuery.inArray(value, _this.focuses) === -1) return null;  
          return value;
       });
 
