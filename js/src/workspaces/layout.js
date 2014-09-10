@@ -121,6 +121,10 @@
 
       // The workspace container is resized, 
       // jQuery('.viewer').on('resize', function() { _this.resizeContainer(); });
+      
+      jQuery(window).resize($.debounce(function(){
+        _this.resizeContainer();
+      }, 300));
 
       // A new slot is added.
       
@@ -154,12 +158,13 @@
         x = percentageX*newContainerWidth,
         y = 0,
         width = newContainerWidth/percentageWidth,
-        height = _this.layoutContainer.height();
+        height = _this.layoutContainer.outerHeight();
 
         jQuery.each(_this.slots, function(index, slot) {
           slot.layoutBox.setPositionAndSize(x, y, width, height);
         });
       });
+      jQuery.publish("scrollViewResize");
     },
 
     addSlot: function() {

@@ -59,7 +59,7 @@
       this.x = x;
       this.y = y;
       this.width = w;
-      this.heightx = h;
+      this.height = h;
       
       this.setSize(this.width, this.height);
       this.setPosition(this.x, this.y);
