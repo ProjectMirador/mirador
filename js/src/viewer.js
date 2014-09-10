@@ -95,6 +95,9 @@
 
         switchWorkspace: function(type) {
           _this = this;
+          
+          //remove all windows from config
+          jQuery.publish("windowsRemoved");
 
           _this.activeWorkspace.element.remove();
           delete _this.activeWorkspace;
@@ -233,7 +236,18 @@
             // There is an exact mapping with given slotIDs.
             // It is freeform view and all bets are off. 
             
-            jQuery.publish('manifestToSlot.'+targetSlotID, windowConfig); 
+            //The publish is sending too many events and it's creating a lot of cascading issues
+            //Need to call it once, to the exact slot
+            //jQuery.publish('manifestToSlot.'+targetSlotID, windowConfig); 
+            
+            var slot;
+            jQuery.each(this.activeWorkspace.slots, function(index, workspaceSlot) {
+               if (workspaceSlot.slotID === targetSlotID) {
+                  slot = workspaceSlot;
+                  return false;
+               }
+            });
+            slot.manifestToSlot(windowConfig);
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {

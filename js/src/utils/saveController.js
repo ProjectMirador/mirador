@@ -175,8 +175,8 @@
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
       
-      jQuery.subscribe("windowRemoved", function(event) {
-      
+      jQuery.subscribe("windowsRemoved", function(event) {
+        _this.set("windowObjects", [], {parent: "currentConfig"} );
       });
       
       jQuery.subscribe('etc...', function(junk) {
