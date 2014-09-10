@@ -484,17 +484,17 @@
     // template should be based on workspace type
     template: Handlebars.compile([
                                  '<div class="window">',
-                                 '<div class="content-container">',
-                                 '<div class="sidePanel">',
-                                 '<span class="mirador-btn mirador-side-panel mirador-icon-minimize"></span>',
-                                 '</div>',
-                                 '<div class="view-container">',
-                                 '<div class="overlay"></div>',
-                                 '<div class="bottomPanel">',
-                                 '<span class="mirador-btn mirador-thumb-panel mirador-icon-minimize"></span>',
-                                 '</div>',
-                                 '</div>',
-                                 '</div>',
+                                  '<div class="content-container">',
+                                   '<div class="sidePanel">',
+                                    '<span class="mirador-btn mirador-side-panel mirador-icon-minimize"></span>',
+                                   '</div>',
+                                   '<div class="view-container">',
+                                    '<div class="overlay"></div>',
+                                    '<div class="bottomPanel">',
+                                     '<span class="mirador-btn mirador-thumb-panel mirador-icon-minimize"></span>',
+                                    '</div>',
+                                   '</div>',
+                                  '</div>',
                                  '</div>'
     ].join('')),
 

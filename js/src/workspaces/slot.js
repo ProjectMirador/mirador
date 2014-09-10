@@ -54,6 +54,24 @@
       
       this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
     },
+    
+    manifestToSlot: function(windowConfig) { 
+        var _this = this;
+        _this.clearSlot();
+        if (!_this.window && !windowConfig.id) {
+           windowConfig.id = $.genUUID();
+        }
+        if (_this.window && !windowConfig.id) {
+           windowConfig.id = _this.window.id;
+        } 
+        windowConfig.appendTo = _this.element;
+        if (_this.window) {
+          _this.window.update(windowConfig);
+        } else {
+          jQuery.publish("windowAdded", windowConfig.id);
+          _this.window = new $.Window(windowConfig);
+        }
+      },
 
     clearSlot: function() {
       if (this.window) { 
