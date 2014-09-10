@@ -4005,6 +4005,10 @@ window.Mirador = window.Mirador || function(config) {
 
       // The workspace container is resized, 
       // jQuery('.viewer').on('resize', function() { _this.resizeContainer(); });
+      
+      jQuery(window).resize($.debounce(function(){
+        _this.resizeContainer();
+      }, 300));
 
       // A new slot is added.
       
@@ -4038,12 +4042,13 @@ window.Mirador = window.Mirador || function(config) {
         x = percentageX*newContainerWidth,
         y = 0,
         width = newContainerWidth/percentageWidth,
-        height = _this.layoutContainer.height();
+        height = _this.layoutContainer.outerHeight();
 
         jQuery.each(_this.slots, function(index, slot) {
           slot.layoutBox.setPositionAndSize(x, y, width, height);
         });
       });
+      jQuery.publish("scrollViewResize");
     },
 
     addSlot: function() {
@@ -4167,7 +4172,7 @@ window.Mirador = window.Mirador || function(config) {
       this.x = x;
       this.y = y;
       this.width = w;
-      this.heightx = h;
+      this.height = h;
       
       this.setSize(this.width, this.height);
       this.setPosition(this.x, this.y);
@@ -4494,7 +4499,8 @@ window.Mirador = window.Mirador || function(config) {
     bindEvents: function() {
       var _this = this;
 
-      jQuery(window).resize($.debounce(function(){
+      //this event should trigger from layout      
+      jQuery.subscribe('scrollViewResize', $.debounce(function(){
         if (_this.focusModules.ScrollView) {
           var containerHeight = _this.element.find('.view-container').height();
           var triggerShow = false;
