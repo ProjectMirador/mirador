@@ -500,6 +500,7 @@ li.highlight {
   top:10px;
   bottom:0;
   list-style-type:none;
+  font-size: 90%;
 }
 .toc a.toc-link {
   color: black;
@@ -576,7 +577,7 @@ li.highlight {
   border-left: 4px solid deepSkyblue;
 }
 .toc li:hover {
-  border-left: 4px solid deepSkyblue;
+  border-left: 4px solid #99e5ff;
 }
 .toc-link:hover .star {
   color:black;
