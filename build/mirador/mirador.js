@@ -3151,7 +3151,7 @@ window.Mirador = window.Mirador || function(config) {
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {
            this.addManifestToWorkspace(manifestURI, 
-              {currentFocus: 'ImageView', 
+              {currentFocus: this.activeWorkspace.type === "bookReading" ? 'BookView' : 'ImageView', 
               currentImageID: imageID});
         },
         

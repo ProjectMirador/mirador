@@ -252,7 +252,7 @@
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {
            this.addManifestToWorkspace(manifestURI, 
-              {currentFocus: 'ImageView', 
+              {currentFocus: this.activeWorkspace.type === "bookReading" ? 'BookView' : 'ImageView', 
               currentImageID: imageID});
         },
         
