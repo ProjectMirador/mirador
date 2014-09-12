@@ -445,6 +445,11 @@
     // based on currentFocus
     bindNavigation: function() {
       var _this = this;
+      
+      this.element.find('.mirador-icon-empty-slot').on('click', function() {
+        _this.parent.clearSlot();
+      });
+      
       this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
         _this.toggleThumbnails(_this.currentImageID);
       });
@@ -522,7 +527,9 @@
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
                                              '{{/if}}',
                                              '</div>',
-                                             '<h3 class="window-manifest-title">{{title}}</h3>',
+                                             '<h3 class="window-manifest-title">',
+                                             '<a href="javascript:;" class="mirador-btn mirador-icon-empty-slot"><i class="fa fa-times "></i> </a>',
+                                             '{{title}}</h3>',
                                              '</div>'
     ].join(''))
   };
