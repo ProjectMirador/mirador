@@ -4314,10 +4314,6 @@ window.Mirador = window.Mirador || function(config) {
 
     clearSlot: function() {
       if (this.window) { 
-        /*this.window.element.toggle({effect: 'scale', duration: 100}).fadeOut(100, function() {
-           jQuery(this).remove();        
-        });*/
-        
          this.window.element.toggle('fade', 300, function() {
            jQuery(this).remove();        
         });
@@ -4816,8 +4812,8 @@ window.Mirador = window.Mirador || function(config) {
       var _this = this;
       
       this.element.find('.mirador-icon-empty-slot').on('click', function() {
-        console.log(_this);
         _this.parent.clearSlot();
+        jQuery.publish("windowRemoved", _this.id);
       });
       
       this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
@@ -6924,6 +6920,13 @@ jQuery.fn.scrollStop = function(callback) {
       
       jQuery.subscribe("windowsRemoved", function(event) {
         _this.set("windowObjects", [], {parent: "currentConfig"} );
+      });
+      
+      jQuery.subscribe("windowRemoved", function(event, windowID) {
+        var windowObjects = jQuery.grep(_this.currentConfig.windowObjects, function(window, index) {
+           return window.id !== windowID;
+        });
+        _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
       
       jQuery.subscribe('etc...', function(junk) {

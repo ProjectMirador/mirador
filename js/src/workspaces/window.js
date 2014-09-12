@@ -448,6 +448,7 @@
       
       this.element.find('.mirador-icon-empty-slot').on('click', function() {
         _this.parent.clearSlot();
+        jQuery.publish("windowRemoved", _this.id);
       });
       
       this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
