@@ -179,6 +179,13 @@
         _this.set("windowObjects", [], {parent: "currentConfig"} );
       });
       
+      jQuery.subscribe("windowRemoved", function(event, windowID) {
+        var windowObjects = jQuery.grep(_this.currentConfig.windowObjects, function(window, index) {
+           return window.id !== windowID;
+        });
+        _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
+      });
+      
       jQuery.subscribe('etc...', function(junk) {
         // handle adding the property in the appropriate place 
         // in this.currentConfig by passing to the _this.set(), 
