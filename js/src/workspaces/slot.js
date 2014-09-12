@@ -37,6 +37,7 @@
       // load menu is invoked from it.
       jQuery.subscribe('manifestToSlot.'+_this.slotID, function(e, windowConfig) { 
         _this.clearSlot();
+        windowConfig.parent = _this;
         if (!_this.window && !windowConfig.id) {
            windowConfig.id = $.genUUID();
         }
@@ -58,6 +59,7 @@
     manifestToSlot: function(windowConfig) { 
         var _this = this;
         _this.clearSlot();
+        windowConfig.parent = _this;
         if (!_this.window && !windowConfig.id) {
            windowConfig.id = $.genUUID();
         }
@@ -75,8 +77,9 @@
 
     clearSlot: function() {
       if (this.window) { 
-        this.window.element.toggle('scale').fadeOut();
-        this.window.element.remove();
+         this.window.element.toggle('fade', 300, function() {
+           jQuery(this).remove();        
+        });
       }
     },
 
