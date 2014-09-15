@@ -34,9 +34,9 @@
     var choices = document.createElement("a");
     choices.className = "mirador-btn mirador-icon-choices";
 
-	div.appendChild(anno);
-	div.appendChild(choices);
-	osd.addControl(div, {anchor: OpenSeadragon.ControlAnchor.BOTTOM_LEFT});
+	// div.appendChild(anno);
+	// div.appendChild(choices);
+	// osd.addControl(div, {anchor: OpenSeadragon.ControlAnchor.BOTTOM_LEFT});
 
     return osd;
 

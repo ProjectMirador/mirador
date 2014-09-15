@@ -122,9 +122,9 @@
       // The workspace container is resized, 
       // jQuery('.viewer').on('resize', function() { _this.resizeContainer(); });
       
-      jQuery(window).resize($.debounce(function(){
-        _this.resizeContainer();
-      }, 300));
+      // jQuery(window).resize($.debounce(function(){
+      //   _this.resizeContainer();
+      // }, 300));
 
       // A new slot is added.
       
@@ -153,7 +153,7 @@
         var oldWidth = slot.width,
         oldHeight = slot.height,
         percentageWidth = oldContainerWidth/oldWidth,
-        percentageX = oldContainerWidth/slot.x,
+        percentageX = slot.x/oldContainerWidth,
         
         x = percentageX*newContainerWidth,
         y = 0,
