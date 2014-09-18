@@ -1,4 +1,3 @@
-
 (function($) {
 
   $.OpenSeadragon = function(options) {
@@ -11,7 +10,7 @@
         minZoomLevel:     0,
         defaultZoomLevel: 0,
         prefixUrl:        'images/openseadragon/',
-        autoHideControls: false,
+        autoHideControls: true,
         zoomInButton:   "zoom-in-"+options.uniqueID,
         zoomOutButton:  "zoom-out-"+options.uniqueID,
         homeButton:     "home-"+options.uniqueID,
