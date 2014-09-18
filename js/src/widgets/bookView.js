@@ -168,6 +168,8 @@
           var infoJson = $.getJsonFromUrl(infoJsonUrl, false);
           tileSources.push($.Iiif.prepJsonForOsd(infoJson));
       });
+      
+      var aspectRatio = tileSources[0].height / tileSources[0].width;
 
       elemOsd =
         jQuery('<div/>')
@@ -175,21 +177,24 @@
       .attr('id', osdId)
       .appendTo(this.element);
       jQuery(this.toolbarTemplate({"toolbarID":toolbarID, "uniqueID":uniqueID})).appendTo(this.element);
-
+      
       this.osd = $.OpenSeadragon({
         'id':           elemOsd.attr('id'),
-        'tileSources':  tileSources,
-	'collectionMode':     'true',
-	'collectionRows':     1, 
-	'collectionTileMargin': this.stitchTileMargin,
-	'collectionTileSize': 1600,
-	'toolbarID' : toolbarID,
+        'toolbarID' : toolbarID,
         'uniqueID' : uniqueID
       });
       
       this.bindOSDEvents();
 
       this.osd.addHandler('open', function(){
+        _this.addLayer(tileSources.slice(1), aspectRatio);
+        var addItemHandler = function( event ) {
+          _this.osd.world.removeHandler( "add-item", addItemHandler );
+          _this.osd.viewport.goHome(true);
+        };
+
+        _this.osd.world.addHandler( "add-item", addItemHandler );
+      
         if (_this.osdOptions) {
           if (_this.osdOptions.zoomLevel) {
             _this.osd.viewport.zoomTo(_this.osdOptions.zoomLevel, null, true);
@@ -208,8 +213,25 @@
            _this.setBounds();
         }, 300));
       });
+      
+      this.osd.open(tileSources[0], {opacity:1, x:0, y:0, width:1});
 
       //this.stitchOptions();
+    },
+    
+    addLayer: function(tileSources, aspectRatio) {
+      var _this = this;
+      jQuery.each(tileSources, function(index, value) {
+        var newAR = (value.height / value.width);
+        var options = {
+            tileSource: value,
+            opacity: 1,
+            x: 1.01,
+            y: 0,
+            width: aspectRatio / newAR
+		};
+		_this.osd.addTiledImage(options);
+      });
     },
 
     // next two pages for paged objects
@@ -257,6 +279,7 @@
     
     if (this.viewingHint === 'individuals') {
        // don't do any stitching, display like an imageView
+       stitchList = [this.currentImg];
     } else if (this.viewingHint === 'paged') {
        // determine the other image for this pair based on index and viewingDirection
        if (this.currentImgIndex === 0 || this.currentImgIndex === this.imagesList.length-1) {
