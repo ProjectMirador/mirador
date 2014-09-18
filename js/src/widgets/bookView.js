@@ -280,6 +280,7 @@
     
     if (this.viewingHint === 'individuals') {
        // don't do any stitching, display like an imageView
+       stitchList = [this.currentImg];
     } else if (this.viewingHint === 'paged') {
        // determine the other image for this pair based on index and viewingDirection
        if (this.currentImgIndex === 0 || this.currentImgIndex === this.imagesList.length-1) {
