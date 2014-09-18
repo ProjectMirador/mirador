@@ -170,7 +170,6 @@
       });
       
       var aspectRatio = tileSources[0].height / tileSources[0].width;
-      console.log(aspectRatio);
 
       elemOsd =
         jQuery('<div/>')
