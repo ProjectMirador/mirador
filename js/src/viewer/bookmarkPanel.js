@@ -6,7 +6,6 @@
       element: null,
       appendTo: null,
       parent: null,
-      jsonblob: null,
       zeroclient: null
     }, options);
 
@@ -33,10 +32,6 @@
         var ajaxType = 'POST',
         ajaxURL = "http://jsonblob.com/api/jsonBlob";
       
-        if (_this.jsonblob) {
-          ajaxType = 'PUT';
-          ajaxURL = ajaxURL + "/" + _this.jsonblob;
-        }
         jQuery.ajax({
           type: ajaxType,
           url: ajaxURL, 
@@ -46,10 +41,9 @@
             'Content-Type': 'application/json' 
           },
           success: function(data, textStatus, request) {
-              if (!_this.jsonblob) {
-                  _this.jsonblob = request.getResponseHeader('X-Jsonblob');
-              }
-              var bookmarkURL = window.location.href.replace(window.location.hash, '') + "?json="+_this.jsonblob;
+              var jsonblob = request.getResponseHeader('X-Jsonblob');
+              
+              var bookmarkURL = window.location.href.replace(window.location.hash, '') + "?json="+jsonblob;
               _this.element.find('#share-url').val(bookmarkURL);
               //TODO if flash isn't available to browser, auto highlight the URL
          }
