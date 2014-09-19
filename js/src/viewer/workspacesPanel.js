@@ -56,7 +56,7 @@
          '<ul class="workspaces-listing">',
            '{{#each workspaces}}',
              '<li class="workspace-option" data-workspace-type="{{dataClass}}">',
-               '<a href="javascrippt:void(0);" name="{{label}}">',
+               '<a href="javascript:void(0);" name="{{label}}">',
                  '<i class="fa fa-{{iconClass}} workspace-icon"></i>',
                  '<h2 class="workspace-label">{{label}}</h2>',
                '</a>',
