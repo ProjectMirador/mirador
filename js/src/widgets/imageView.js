@@ -40,22 +40,15 @@
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.addAnnotationsLayer();
         this.parent.updateFocusImages([this.imageID]);
+        this.hud = new $.Hud({
+          parent: this,
+          element: this.element
+        });
     },
     
     template: Handlebars.compile([
       '<div class="image-view">',
        '</div>'
-    ].join('')),
-    
-    toolbarTemplate: Handlebars.compile([
-      '<div id="{{toolbarID}}" class="toolbar">',
-      '<a class="mirador-btn mirador-icon-previous"></a>',
-      '<a id="zoom-in-{{uniqueID}}" class="mirador-btn mirador-icon-zoom-in"></a>', 
-      '<a id="zoom-out-{{uniqueID}}" class="mirador-btn mirador-icon-zoom-out"></a>',
-      '<a id="home-{{uniqueID}}" class="mirador-btn mirador-icon-home"></a>',
-      '<a id="full-page-{{uniqueID}}" class="mirador-btn mirador-icon-full-page"></a>',
-      '<a class="mirador-btn mirador-icon-next"></a>',
-      '</div>'
     ].join('')),
     
     bindOSDEvents: function() {
@@ -126,8 +119,7 @@
       osdID = 'mirador-osd-' + uniqueID,
       infoJson,
       elemOsd,
-      _this = this,
-      toolbarID = 'osd-toolbar-' + uniqueID;
+      _this = this;
       
       this.element.find('.' + this.osdCls).remove();
 
@@ -138,12 +130,10 @@
       .addClass(this.osdCls)
       .attr('id', osdID)
       .appendTo(this.element);
-      jQuery(this.toolbarTemplate({"toolbarID":toolbarID, "uniqueID":uniqueID})).appendTo(this.element);
 
       this.osd = $.OpenSeadragon({
         'id':           osdID,
         'tileSources':  $.Iiif.prepJsonForOsd(infoJson),
-        'toolbarID' : toolbarID,
         'uniqueID' : uniqueID
       });
             
