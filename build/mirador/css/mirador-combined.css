@@ -2824,8 +2824,7 @@ li.highlight {
 ---------------------------------------------------------------------------- */
 
 .thumbnail-view, .image-view, .book-view, .scroll-view {
-    position: absolute;
-    height: 80%;
+    height: 100%;
     width: 100%;
     background-color: #eee;
     display: none;
@@ -2924,6 +2923,7 @@ li.highlight {
   transition: opacity 0.2s ease-out;
   opacity: 0.6;
   font-size: 18px;
+  z-index:2;
 }
 .hud-control:hover {
   transition: opacity 0.2s ease-out;

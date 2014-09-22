@@ -36,30 +36,43 @@
         }
         this.currentImg = this.imagesList[this.currentImgIndex];
         this.element = jQuery(this.template()).appendTo(this.appendTo);
-
-        this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-        this.addAnnotationsLayer();
-        this.parent.updateFocusImages([this.imageID]);
         this.hud = new $.Hud({
           parent: this,
           element: this.element
         });
+
+        this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+        this.addAnnotationsLayer();
+        this.parent.updateFocusImages([this.imageID]);
     },
     
     template: Handlebars.compile([
       '<div class="image-view">',
-       '</div>'
+      '</div>'
     ].join('')),
     
     bindOSDEvents: function() {
        var _this = this;
        
-       this.element.find('.mirador-icon-next').on('click', function() {
+       this.element.find('.mirador-osd-next').on('click', function() {
+         console.log('next');
           _this.next();
        });
        
-       this.element.find('.mirador-icon-previous').on('click', function() {
-          _this.previous();
+       this.element.find('.mirador-osd-previous').on('click', function() {
+         console.log('previous');
+         _this.previous();
+       });
+       
+       this.element.find('.mirador-osd-fullscreen').on('click', function() {
+         console.log(jQuery(this).find('.fa'));
+         if (jQuery(this).find('.fa').hasClass('fa-expand')) {
+           console.log('expand');
+           _this.fullScreen();
+         } else {
+           console.log('compress');
+           _this.exitFullScreen();
+         }
        });
     },
     
@@ -208,7 +221,21 @@
       if (prev >= 0) {
         this.parent.setCurrentImageID(this.imagesList[prev]['@id']);
       }
+    },
+
+    fullScreen: function() {
+      OpenSeadragon.requestFullScreen(this.element[0]);
+      var replacementButton = jQuery('<i class="fa fa-compress"></i>');
+      this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
+
+    },
+
+    exitFullScreen: function() {
+      OpenSeadragon.exitFullScreen();
+      var replacementButton = jQuery('<i class="fa fa-expand"></i>');
+      this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
     }
+
 
   };
 
