@@ -2824,10 +2824,9 @@ li.highlight {
 ---------------------------------------------------------------------------- */
 
 .thumbnail-view, .image-view, .book-view, .scroll-view {
-    position: absolute;
-    height: 80%;
+    height: 100%;
     width: 100%;
-    background-color: rgba(255,255,255,0.9);
+    background-color: #eee;
     display: none;
     overflow-y: scroll;
 }
@@ -2906,21 +2905,54 @@ li.highlight {
   height: 100%;
 }
 
-.mirador-osd-toolbar {
-  margin-left: 5px;
+/* Canvas HUD
+----------------------- */
+.mirador-canvas-hud { 
+  position:absolute;
+  left: 0;
+  top:0;
+  bottom:0;
+  right:0;
+  background: rgba(255, 0, 128, 0.5);
+  pointer-events: none;
 }
-
-.mirador-osd-toolbar button img {
+.hud-control {
   cursor: pointer;
-  padding: 5px 4px !important;
+  color:white;
+  text-shadow: 0 0 5px black;
+  transition: opacity 0.2s ease-out;
+  opacity: 0.6;
+  font-size: 18px;
+  z-index:2;
 }
-
-.mirador-osd-toolbar button:last-child {
-  display: none;
+.hud-control:hover {
+  transition: opacity 0.2s ease-out;
+  opacity: 1;
 }
-
-.mirador-osd img {
-  padding: 2px !important;
+.mirador-osd-previous {
+  position:absolute;
+  left:1%;
+  top:50%;
+  margin-top:-17px;
+  width: 40px;
+}
+.mirador-osd-next {
+  position:absolute;
+  right:1%;
+  top:50%;
+  margin-top:-17px;
+}
+.mirador-osd-fullscreen {
+  position:absolute;
+  right:10px;
+  top:10px;
+}
+.mirador-pan-zoom-controls {
+  position: absolute;
+  width: 100px;
+  height: 80px;
+  bottom:0;
+  right:0;
 }
 
 /* image view

@@ -36,6 +36,10 @@
         }
         this.currentImg = this.imagesList[this.currentImgIndex];
         this.element = jQuery(this.template()).appendTo(this.appendTo);
+        this.hud = new $.Hud({
+          parent: this,
+          element: this.element
+        });
 
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.addAnnotationsLayer();
@@ -44,29 +48,31 @@
     
     template: Handlebars.compile([
       '<div class="image-view">',
-       '</div>'
-    ].join('')),
-    
-    toolbarTemplate: Handlebars.compile([
-      '<div id="{{toolbarID}}" class="toolbar">',
-      '<a class="mirador-btn mirador-icon-previous"></a>',
-      '<a id="zoom-in-{{uniqueID}}" class="mirador-btn mirador-icon-zoom-in"></a>', 
-      '<a id="zoom-out-{{uniqueID}}" class="mirador-btn mirador-icon-zoom-out"></a>',
-      '<a id="home-{{uniqueID}}" class="mirador-btn mirador-icon-home"></a>',
-      '<a id="full-page-{{uniqueID}}" class="mirador-btn mirador-icon-full-page"></a>',
-      '<a class="mirador-btn mirador-icon-next"></a>',
       '</div>'
     ].join('')),
     
     bindOSDEvents: function() {
        var _this = this;
        
-       this.element.find('.mirador-icon-next').on('click', function() {
+       this.element.find('.mirador-osd-next').on('click', function() {
+         console.log('next');
           _this.next();
        });
        
-       this.element.find('.mirador-icon-previous').on('click', function() {
-          _this.previous();
+       this.element.find('.mirador-osd-previous').on('click', function() {
+         console.log('previous');
+         _this.previous();
+       });
+       
+       this.element.find('.mirador-osd-fullscreen').on('click', function() {
+         console.log(jQuery(this).find('.fa'));
+         if (jQuery(this).find('.fa').hasClass('fa-expand')) {
+           console.log('expand');
+           _this.fullScreen();
+         } else {
+           console.log('compress');
+           _this.exitFullScreen();
+         }
        });
     },
     
@@ -126,8 +132,7 @@
       osdID = 'mirador-osd-' + uniqueID,
       infoJson,
       elemOsd,
-      _this = this,
-      toolbarID = 'osd-toolbar-' + uniqueID;
+      _this = this;
       
       this.element.find('.' + this.osdCls).remove();
 
@@ -138,12 +143,10 @@
       .addClass(this.osdCls)
       .attr('id', osdID)
       .appendTo(this.element);
-      jQuery(this.toolbarTemplate({"toolbarID":toolbarID, "uniqueID":uniqueID})).appendTo(this.element);
 
       this.osd = $.OpenSeadragon({
         'id':           osdID,
         'tileSources':  $.Iiif.prepJsonForOsd(infoJson),
-        'toolbarID' : toolbarID,
         'uniqueID' : uniqueID
       });
             
@@ -218,7 +221,21 @@
       if (prev >= 0) {
         this.parent.setCurrentImageID(this.imagesList[prev]['@id']);
       }
+    },
+
+    fullScreen: function() {
+      OpenSeadragon.requestFullScreen(this.element[0]);
+      var replacementButton = jQuery('<i class="fa fa-compress"></i>');
+      this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
+
+    },
+
+    exitFullScreen: function() {
+      OpenSeadragon.exitFullScreen();
+      var replacementButton = jQuery('<i class="fa fa-expand"></i>');
+      this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
     }
+
 
   };
 
