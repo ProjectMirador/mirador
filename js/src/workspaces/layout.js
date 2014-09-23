@@ -22,6 +22,8 @@
       var _this = this;
 
       this.graph = this.calculateSlotGraph();
+      // use jQuery.each() rather than native array forEach
+      // because it isn't an array (it's an object).
       jQuery.each(_this.graph, function(index, slot) {
         _this.slots[slot.id] = slot;
         slot.layoutDimensions.parent = _this;
@@ -122,9 +124,12 @@
       // The workspace container is resized, 
       // jQuery('.viewer').on('resize', function() { _this.resizeContainer(); });
       
-      // jQuery(window).resize($.debounce(function(){
-      //   _this.resizeContainer();
-      // }, 300));
+      jQuery(window).resize($.debounce(function(event) {
+        console.log(event);
+        if (!event.target.tagName) {
+          _this.resizeContainer();
+        }
+      }, 20));
 
       // A new slot is added.
       
@@ -160,9 +165,8 @@
         width = newContainerWidth/percentageWidth,
         height = _this.layoutContainer.outerHeight();
 
-        jQuery.each(_this.slots, function(index, slot) {
-          slot.layoutBox.setPositionAndSize(x, y, width, height);
-        });
+        console.log('Xposition: ' + x);
+        _this.slots[index].layoutBox.setPositionAndSize(x, y, width, height);
       });
       jQuery.publish("scrollViewResize");
     },
@@ -175,7 +179,6 @@
 
     resizeSlot: function(slotID, event, ui) {
       var _this = this;
-      event.stopPropagation();
       
       // For given slot, select the siblings that 
       // need resizing, do some math for them, 
@@ -201,6 +204,7 @@
         height = sibling.height;
 
         _this.slots[siblingID].layoutBox.setPositionAndSize(x, y, width, height);
+        event.stopPropagation();
       });
 
       // Siblings must be resized. If the parent is a 
@@ -219,7 +223,6 @@
       //
       // The resize events can be delegated up or down, 
       // affecting only one layer of hierarchy.
-      event.stopPropagation();
     }
     
   };

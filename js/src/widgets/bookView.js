@@ -84,14 +84,7 @@
        });
       
       this.element.find('.mirador-osd-fullscreen').on('click', function() {
-        console.log(jQuery(this).find('.fa'));
-        if (jQuery(this).find('.fa').hasClass('fa-expand')) {
-          console.log('expand');
           _this.fullScreen();
-        } else {
-          console.log('compress');
-          _this.exitFullScreen();
-        }
       });
     },
 
@@ -350,19 +343,17 @@
       return stitchList;
     },
     fullScreen: function() {
-      OpenSeadragon.requestFullScreen(this.element[0]);
-      var replacementButton = jQuery('<i class="fa fa-compress"></i>');
-      this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
-
-    },
-
-    exitFullScreen: function() {
-      OpenSeadragon.exitFullScreen();
-      var replacementButton = jQuery('<i class="fa fa-expand"></i>');
-      this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
+      var replacementButton;
+      if (OpenSeadragon.isFullScreen()) {
+        OpenSeadragon.exitFullScreen();
+        replacementButton = jQuery('<i class="fa fa-expand"></i>');
+        this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
+      } else {
+        OpenSeadragon.requestFullScreen(this.element[0]);
+        replacementButton = jQuery('<i class="fa fa-compress"></i>');
+        this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
+      }
     }
-
-
     // remove or add canvses to make pages line up
     /*stitchOptions: function() {  
           //clear options
