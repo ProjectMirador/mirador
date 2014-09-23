@@ -47,7 +47,6 @@
     },
 
     resize: function(event, ui) {
-      event.stopImmediatePropagation();
       this.parent.resizeSlot(this.id, event, ui);
     },
 
