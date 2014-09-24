@@ -40,6 +40,9 @@
       }
       this.currentImg = this.imagesList[this.currentImgIndex];
       this.element = jQuery(this.template()).appendTo(this.appendTo);
+      this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+      this.addAnnotationsLayer();
+      this.parent.updateFocusImages([this.imageID]); // DRY/Events refactor.
       // The hud controls are consistent 
       // throughout any updates to the osd canvas.
       this.hud = new $.Hud({
@@ -47,32 +50,12 @@
         element: this.element
       });
 
-      this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-      this.addAnnotationsLayer();
-      this.parent.updateFocusImages([this.imageID]); // DRY/Events refactor.
-      this.bindOSDEvents();
     },
 
     template: Handlebars.compile([
                                  '<div class="image-view">',
                                  '</div>'
     ].join('')),
-
-    bindOSDEvents: function() {
-      var _this = this;
-
-      this.element.find('.mirador-osd-next').on('click', function() {
-        _this.next();
-      });
-
-      this.element.find('.mirador-osd-previous').on('click', function() {
-        _this.previous();
-      });
-
-      this.element.find('.mirador-osd-fullscreen').on('click', function() {
-        _this.fullScreen();
-      });
-    },
 
     setZoom: function() {
       var _this = this;
@@ -217,19 +200,6 @@
 
       if (prev >= 0) {
         this.parent.setCurrentImageID(this.imagesList[prev]['@id']);
-      }
-    },
-
-    fullScreen: function() {
-      var replacementButton;
-      if (OpenSeadragon.isFullScreen()) {
-        OpenSeadragon.exitFullScreen();
-        replacementButton = jQuery('<i class="fa fa-expand"></i>');
-        this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
-      } else {
-        OpenSeadragon.requestFullScreen(this.element[0]);
-        replacementButton = jQuery('<i class="fa fa-compress"></i>');
-        this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
       }
     }
   };
