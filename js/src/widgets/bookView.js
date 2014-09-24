@@ -63,6 +63,8 @@
 
       this.stitchList = this.getStitchList();
       this.createOpenSeadragonInstance();
+      this.bindOSDEvents();
+
     },
 
     template: Handlebars.compile([
@@ -183,8 +185,6 @@
         'uniqueID' : uniqueID
       });
 
-      this.bindOSDEvents();
-
       this.osd.addHandler('open', function(){
         _this.addLayer(tileSources.slice(1), aspectRatio);
         var addItemHandler = function( event ) {
@@ -214,6 +214,7 @@
       });
 
       this.osd.open(tileSources[0], {opacity:1, x:0, y:0, width:1});
+
 
       //this.stitchOptions();
     },
