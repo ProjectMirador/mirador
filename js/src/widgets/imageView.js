@@ -18,104 +18,110 @@
       },
       osdCls: 'mirador-osd'
     }, options);
-    
+
     this.init();
   };
 
 
   $.ImageView.prototype = {
-  
-    init: function() {    
-        if (this.imageID !== null) {
-            this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
-        }
-        if (!this.osdOptions) {
-          this.osdOptions = {
-            osdBounds:        null,
-            zoomLevel:        null
-          };
-        }
-        this.currentImg = this.imagesList[this.currentImgIndex];
-        this.element = jQuery(this.template()).appendTo(this.appendTo);
-        this.hud = new $.Hud({
-          parent: this,
-          element: this.element
-        });
 
-        this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-        this.addAnnotationsLayer();
-        this.parent.updateFocusImages([this.imageID]);
+    init: function() {    
+      // check (for thumbnail view) if the imageID is set. 
+      // If not, make it page/item 1.
+      if (this.imageID !== null) {
+        this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
+      }
+      
+      if (!this.osdOptions) {
+        this.osdOptions = {
+          osdBounds:        null,
+          zoomLevel:        null
+        };
+      }
+      this.currentImg = this.imagesList[this.currentImgIndex];
+      this.element = jQuery(this.template()).appendTo(this.appendTo);
+      // The hud controls are consistent 
+      // throughout any updates to the osd canvas.
+      this.hud = new $.Hud({
+        parent: this,
+        element: this.element
+      });
+
+      this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+      this.addAnnotationsLayer();
+      this.parent.updateFocusImages([this.imageID]); // DRY/Events refactor.
+      this.bindOSDEvents();
     },
-    
+
     template: Handlebars.compile([
-      '<div class="image-view">',
-      '</div>'
+                                 '<div class="image-view">',
+                                 '</div>'
     ].join('')),
-    
+
     bindOSDEvents: function() {
-       var _this = this;
-       
-       this.element.find('.mirador-osd-next').on('click', function() {
-          _this.next();
-       });
-       
-       this.element.find('.mirador-osd-previous').on('click', function() {
-         _this.previous();
-       });
-       
-       this.element.find('.mirador-osd-fullscreen').on('click', function() {
-           _this.fullScreen();
-       });
+      var _this = this;
+
+      this.element.find('.mirador-osd-next').on('click', function() {
+        _this.next();
+      });
+
+      this.element.find('.mirador-osd-previous').on('click', function() {
+        _this.previous();
+      });
+
+      this.element.find('.mirador-osd-fullscreen').on('click', function() {
+        _this.fullScreen();
+      });
     },
-    
+
     setZoom: function() {
-         var _this = this;
-         this.osdOptions.zoomLevel = this.osd.viewport.getZoom();
-         jQuery.publish("imageZoomUpdated", {
-                       id: _this.parent.id, 
-                       zoomLevel: _this.osdOptions.zoomLevel
-                       });
+      var _this = this;
+      this.osdOptions.zoomLevel = this.osd.viewport.getZoom();
+      jQuery.publish("imageZoomUpdated", {
+        id: _this.parent.id, 
+        zoomLevel: _this.osdOptions.zoomLevel
+      });
     },
-    
+
     setBounds: function() {
-         var _this = this;
-         this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
-         jQuery.publish("imageBoundsUpdated", {
-                       id: _this.parent.id, 
-                       osdBounds: {x: _this.osdOptions.osdBounds.x, y: _this.osdOptions.osdBounds.y, width: _this.osdOptions.osdBounds.width, height: _this.osdOptions.osdBounds.height}
-                       });
+      var _this = this;
+      this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
+      jQuery.publish("imageBoundsUpdated", {
+        id: _this.parent.id, 
+        osdBounds: {x: _this.osdOptions.osdBounds.x, y: _this.osdOptions.osdBounds.y, width: _this.osdOptions.osdBounds.width, height: _this.osdOptions.osdBounds.height}
+      });
     },
-    
+
     toggle: function(stateValue) {
-        if (stateValue) { 
-            this.show(); 
-        } else {
-            this.hide();
-        }
+      if (stateValue) { 
+        this.show(); 
+      } else {
+        this.hide();
+      }
     },
-    
+
     hide: function() {
-        jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
+      jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
     },
 
     show: function() {
-        jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+      jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
     },
-    
+
     adjustWidth: function(className, hasClass) {
-       if (hasClass) {
-           this.parent.element.find('.view-container').removeClass(className);
-       } else {
-           this.parent.element.find('.view-container').addClass(className);
-       }
+      if (hasClass) {
+        this.parent.element.find('.view-container').removeClass(className);
+      } else {
+        this.parent.element.find('.view-container').addClass(className);
+      }
     },
-    
+
     adjustHeight: function(className, hasClass) {
-        if (hasClass) {
-           this.element.removeClass(className);
-        } else {
-           this.element.addClass(className);
-        }
+      if (hasClass) {
+        this.element.removeClass(className);
+      } else {
+        this.element.addClass(className);
+      }
     },
 
     createOpenSeadragonInstance: function(imageUrl) {
@@ -125,7 +131,7 @@
       infoJson,
       elemOsd,
       _this = this;
-      
+
       this.element.find('.' + this.osdCls).remove();
 
       infoJson = $.getJsonFromUrl(infoJsonUrl, false);
@@ -141,9 +147,8 @@
         'tileSources':  $.Iiif.prepJsonForOsd(infoJson),
         'uniqueID' : uniqueID
       });
-            
-      this.bindOSDEvents();
-      
+
+
       this.osd.addHandler('open', function(){
         if (_this.osdOptions) {
           if (_this.osdOptions.zoomLevel) {
@@ -154,13 +159,13 @@
             _this.osd.viewport.fitBounds(rect, true);
           }
         }
-        
+
         _this.osd.addHandler('zoom', $.debounce(function(){
-           _this.setZoom();
+          _this.setZoom();
         }, 300));
-        
+
         _this.osd.addHandler('pan', $.debounce(function(){
-           _this.setBounds();
+          _this.setBounds();
         }, 300));
       });
     },
@@ -178,27 +183,27 @@
           return (annotation['@id'] + ".json");
         });
       }
-      
+
       this.annotationsLayer = new $.AnnotationsLayer({
         parent: this,
         annotationListUrls: annotationListUrls
       });
-      
+
     },
-    
+
     updateImage: function(imageID) {
-        this.imageID = imageID;
-        this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
-        this.currentImg = this.imagesList[this.currentImgIndex];
-        this.osdOptions = {
-            osdBounds:        null,
-            zoomLevel:        null
-          };
-        this.osd.close();
-        this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-        this.parent.updateFocusImages([imageID]);
+      this.imageID = imageID;
+      this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
+      this.currentImg = this.imagesList[this.currentImgIndex];
+      this.osdOptions = {
+        osdBounds:        null,
+        zoomLevel:        null
+      };
+      this.osd.close();
+      this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+      this.parent.updateFocusImages([imageID]);
     },
-    
+
     next: function() {
       var next = this.currentImgIndex + 1;
 
