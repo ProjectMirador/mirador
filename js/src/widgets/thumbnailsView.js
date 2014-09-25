@@ -11,6 +11,7 @@
       imagesList:           [],
       appendTo:             null,
       thumbInfo:            {thumbsHeight: 150, listingCssCls: 'listing-thumbs', thumbnailCls: 'thumbnail-view'},
+      defaultThumbHeight:   150,
       parent:               null,
       panel:                false,
       lazyLoadingFactor:    1.5  //should be >= 1
@@ -40,11 +41,12 @@
       };
 
       tplData.thumbs = jQuery.map(this.imagesList, function(image, index) {
-        var aspectRatio = image.height/image.width,
+        var urlHeight = _this.defaultThumbHeight > _this.thumbInfo.thumbsHeight ? _this.defaultThumbHeight : _this.thumbInfo.thumbsHeight,
+        aspectRatio = image.height/image.width,
         width = (_this.thumbInfo.thumbsHeight/aspectRatio);
 
         return {
-          thumbUrl: $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), _this.thumbInfo.thumbsHeight),
+          thumbUrl: $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), urlHeight),
           title:    image.label,
           id:       image['@id'],
           width:    width,
