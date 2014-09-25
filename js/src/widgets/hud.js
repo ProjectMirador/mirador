@@ -17,8 +17,8 @@
     },
 
     bindEvents: function() {
-      var _this = this;
-      console.log(this.parent.element.find('.mirador-osd-next'));
+      var _this = this,
+      osd = _this.parent.osd;
 
       this.parent.element.find('.mirador-osd-next').on('click', function() {
         console.log('next');
@@ -35,8 +35,28 @@
         _this.parent.osd.viewport.goHome();
       });
       
+      this.parent.element.find('.mirador-osd-up').on('click', function() {
+        console.log('up');
+        osd.viewport.panBy(new OpenSeadragon.Point(0, -0.05));
+        osd.viewport.applyConstraints();
+      });
+      this.parent.element.find('.mirador-osd-right').on('click', function() {
+        console.log('right');
+        osd.viewport.panBy(new OpenSeadragon.Point(0.05, 0));
+        osd.viewport.applyConstraints();
+      });
+      this.parent.element.find('.mirador-osd-down').on('click', function() {
+        console.log('down');
+        osd.viewport.panBy(new OpenSeadragon.Point(0, 0.05));
+        osd.viewport.applyConstraints();
+      });
+      this.parent.element.find('.mirador-osd-left').on('click', function() {
+        console.log('left');
+        osd.viewport.panBy(new OpenSeadragon.Point(-0.05, 0));
+        osd.viewport.applyConstraints();
+      });
+      
       this.parent.element.find('.mirador-osd-zoom-in').on('click', function() {
-        var osd = _this.parent.osd;
         if ( osd.viewport ) {
           osd.viewport.zoomBy(
             osd.zoomPerClick / 1.0
@@ -48,7 +68,6 @@
       });
       
       this.parent.element.find('.mirador-osd-zoom-out').on('click', function() {
-        var osd = _this.parent.osd;
         if ( osd.viewport ) {
           osd.viewport.zoomBy(
             1.0 / osd.zoomPerClick
