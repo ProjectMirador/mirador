@@ -8,6 +8,7 @@
             manifestId:                 null,
             loadStatus:                 null,
             thumbHeight:                80,
+            urlHeight:                  150,
             resultsWidth:               0,  //based on screen width
             maxPreviewImagesWidth:      0,
             repoWidth:                  80,
@@ -64,7 +65,7 @@
             var canvas = manifest.sequences[0].canvases[i],
             resource = canvas.images[0].resource['default'] ? canvas.images[0].resource['default'] : canvas.images[0].resource,
             service = resource.service,
-            url = $.Iiif.getUriWithHeight(service['@id'], _this.thumbHeight),
+            url = $.Iiif.getUriWithHeight(service['@id'], _this.urlHeight),
             aspectRatio = resource.height/resource.width,
             width = (_this.thumbHeight/aspectRatio);
             

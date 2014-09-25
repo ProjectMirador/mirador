@@ -451,6 +451,11 @@
         jQuery.publish("windowRemoved", _this.id);
       });
       
+      this.element.find('.mirador-icon-new-object').on('click', function() {
+        _this.parent.addItem();
+        //jQuery.publish("windowRemoved", _this.id);
+      });
+      
       this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
         _this.toggleThumbnails(_this.currentImageID);
       });
@@ -519,17 +524,18 @@
                                              '</ul>',
                                              '</a>',
                                              '{{#if ThumbnailsView}}',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view"></a>',
+                                             '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view" title="Thumbnails View"></a>',
                                              '{{/if}}',
                                              '{{#if ScrollView}}',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-scroll-view"></a>',
+                                             '<a href="javascript:;" class="mirador-btn mirador-icon-scroll-view" title="Scroll View"></a>',
                                              '{{/if}}',
                                              '{{#if MetadataView}}',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view"></a>',
+                                             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="Object Metadata"></a>',
                                              '{{/if}}',
                                              '</div>',
                                              '<h3 class="window-manifest-title">',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-empty-slot"><i class="fa fa-times "></i> </a>',
+                                             '<a href="javascript:;" class="mirador-btn mirador-icon-empty-slot" title="Remove object"><i class="fa fa-times"></i> </a>',
+                                             '<a href="javascript:;" class="mirador-btn mirador-icon-new-object" title="Replace object"><i class="fa fa-exchange fa-rotate-90"></i> </a>',
                                              '{{title}}</h3>',
                                              '</div>'
     ].join(''))

@@ -211,6 +211,7 @@
             var _this = this,
             targetSlotID = null;
             windowConfig.manifest = this.manifests[manifestURI];
+            windowConfig.currentImageMode = this.activeWorkspace.type === "bookReading" ? 'BookView' : 'ImageView';
             
             jQuery.each(this.overlayStates, function(oState, value) {
                 _this.set(oState, false, {parent: 'overlayStates'});
