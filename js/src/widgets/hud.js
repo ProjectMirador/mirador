@@ -34,6 +34,28 @@
         console.log('previous');
         _this.parent.osd.viewport.goHome();
       });
+      
+      this.parent.element.find('.mirador-osd-zoom-in').on('click', function() {
+        var osd = _this.parent.osd;
+        if ( osd.viewport ) {
+          osd.viewport.zoomBy(
+            osd.zoomPerClick / 1.0
+
+          );
+          osd.viewport.applyConstraints();
+
+        }
+      });
+      
+      this.parent.element.find('.mirador-osd-zoom-out').on('click', function() {
+        var osd = _this.parent.osd;
+        if ( osd.viewport ) {
+          osd.viewport.zoomBy(
+            1.0 / osd.zoomPerClick
+          );
+          osd.viewport.applyConstraints();
+        }
+      });
 
       this.parent.element.find('.mirador-osd-fullscreen').on('click', function() {
         _this.fullScreen();
