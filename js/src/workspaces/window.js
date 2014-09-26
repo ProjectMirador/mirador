@@ -353,12 +353,14 @@
     toggleBookView: function(imageID) {
       this.currentImageID = imageID;
       if (this.focusModules.BookView === null) {
-        this.focusModules.BookView = new $.BookView( {manifest: this.manifest, 
-                                                      appendTo: this.element.find('.view-container'), 
-                                                      parent: this, 
-                                                      imageID: imageID, 
-                                                      imagesList: this.imagesList,
-                                                      osdOptions: this.focusOptions} );
+        this.focusModules.BookView = new $.BookView({
+          manifest: this.manifest, 
+          appendTo: this.element.find('.view-container'), 
+          parent: this, 
+          imageID: imageID, 
+          imagesList: this.imagesList,
+          osdOptions: this.focusOptions
+        });
       } else {
         var view = this.focusModules.BookView;
         view.updateImage(imageID);
