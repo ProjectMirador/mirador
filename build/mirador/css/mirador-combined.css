@@ -2953,6 +2953,45 @@ li.highlight {
   height: 80px;
   bottom:0;
   right:0;
+  margin:1%;
+}
+
+.mirador-osd-up {
+  position:absolute;
+  right:20px;
+  top:0;
+}
+.mirador-osd-right {
+  position:absolute;
+  right:0;
+  top:20px;
+}
+.mirador-osd-down {
+  position:absolute;
+  right:20px;
+  top:40px;
+}
+.mirador-osd-left {
+  position:absolute;
+  right:40px;
+  top:20px;
+}
+.mirador-osd-zoom-in {
+  font-size:130%;
+  position:absolute;
+  right:70px;
+  top:5px;
+}
+.mirador-osd-zoom-out {
+  font-size:130%;
+  position:absolute;
+  right:70px;
+  top:30px;
+}
+.mirador-osd-go-home {
+  position: absolute;
+  right:20px;
+  top:20px;
 }
 
 /* image view
