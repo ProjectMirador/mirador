@@ -41,6 +41,7 @@
       id : null,
       sidePanel: null,
       bottomPanel: null,
+      bottomPanelVisible: true,
       overlay: null
     }, options);
 
@@ -55,7 +56,7 @@
       focusState = _this.currentFocus,
       templateData = {};
 
-      _this.element = jQuery(this.template()).appendTo(this.appendTo).hide().fadeIn(300);
+      _this.element = jQuery(this.template()).appendTo(this.appendTo);
       
       if (manifest.sequences[0].viewingHint) {
            if (manifest.sequences[0].viewingHint.toLowerCase() !== 'paged') {
@@ -127,6 +128,7 @@
       }
 
       this.bindEvents();
+      this.setCurrentImageID(this.currentImageID);
     },
     
     update: function(options) {
@@ -148,6 +150,17 @@
           _this.focusModules.ScrollView.reloadImages(Math.floor(containerHeight * _this.scrollImageRatio), triggerShow);
         }
       }, 300));
+
+      jQuery.subscribe('bottomPanelSet.' + _this.id, function(event, visible) {
+        console.log(visible);
+        var panel = _this.element.find('.bottomPanel');
+        if (visible.visible === true) {
+          panel.css({transform: 'translateY(0)'});
+        } else {
+          panel.css({transform: 'translateY(100%)'});
+        }
+
+      });
 
     },
 
@@ -238,24 +251,6 @@
       this.adjustFocusSize(panelType, panelState);
     },
 
-    minMaxBottomPanel: function(element) {
-      if (element.hasClass('mirador-icon-minimize')) {
-        //hide all other siblings, change icon to maximize, change height of parent
-        element.removeClass('mirador-icon-minimize').addClass('mirador-icon-maximize');
-        element.siblings().hide();
-        element.parent().addClass('minimized');
-        //adjust height of focus element
-        this.focusModules[this.currentFocus].adjustHeight('focus-bottom-panel-minimized', false);
-      } else {
-        //show all other siblings, change icon to minimize, change height of parent
-        element.removeClass('mirador-icon-maximize').addClass('mirador-icon-minimize');
-        element.siblings().show();
-        element.parent().removeClass('minimized');
-        //adjust height of focus element
-        this.focusModules[this.currentFocus].adjustHeight('focus-bottom-panel-minimized', true);
-      }
-    },
-    
     minMaxSidePanel: function(element) {
       if (element.hasClass('mirador-icon-minimize')) {
         //hide all other siblings, change icon to maximize, change height of parent
@@ -412,6 +407,12 @@
       jQuery.publish(('currentImageIDUpdated.' + _this.id), {newImageID : imageID});
     },
 
+    bottomPanelVisibility: function(visible) {
+      var _this = this;
+      _this.bottomPanelVisible = visible;
+      jQuery.publish(('bottomPanelSet.' + _this.id), {visible: visible });
+    },
+
     setCursorFrameStart: function(canvasID) {
     },
 
@@ -486,10 +487,6 @@
         _this.toggleScrollView(_this.currentImageID);
       });
 
-      this.element.find('.mirador-thumb-panel').on('click', function() {
-        _this.minMaxBottomPanel(jQuery(this));
-      });
-      
       this.element.find('.mirador-side-panel').on('click', function() {
         _this.minMaxSidePanel(jQuery(this));
       });
@@ -505,7 +502,6 @@
                                    '<div class="view-container">',
                                     '<div class="overlay"></div>',
                                     '<div class="bottomPanel">',
-                                     '<span class="mirador-btn mirador-thumb-panel mirador-icon-minimize"></span>',
                                     '</div>',
                                    '</div>',
                                   '</div>',

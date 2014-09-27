@@ -622,14 +622,18 @@ li.highlight {
   bottom:0;
   left:0;
   right:0;
-  height: 20%;
+  height: 130px;
   z-index: 3;
   overflow:hidden;
   display: none;
+  transition:all 0.3s ease;
+}
+.bottomPanel {
+
 }
 
 .bottomPanel.minimized {
-  height: 5%;
+  transform:translateY(130px);
 }
 
 /* window views
@@ -667,6 +671,7 @@ li.highlight {
     width: 100%;
     overflow-x: scroll;
     margin-top: 10px;
+    overflow-y: hidden;
 }
 
 .panel-thumbnail-view ul.panel-listing-thumbs {
@@ -693,12 +698,18 @@ li.highlight {
   min-width: 25px;
   margin: 0 auto;
   display: block;
+  box-sizing:border-box;
+}
+.panel-thumbnail-view ul.panel-listing-thumbs li img:hover {
+  border:3px solid rgba(0,191,255,0.7);
+  transform: scale(1.1);
+  cursor: pointer;
 }
 
 .panel-thumbnail-view ul.panel-listing-thumbs li .thumb-label {
   clear: both;
   color: #999;
-  font-size: 10px;
+  font-size: 12px;
   margin: 0 auto;
   max-width: 75px;
   text-align: left;
@@ -732,13 +743,13 @@ li.highlight {
   cursor: pointer;
   color:white;
   text-shadow: 0 0 5px black;
-  transition: opacity 0.2s ease-out;
+  transition: all 0.3s ease;
   opacity: 0.6;
   font-size: 18px;
   z-index:2;
 }
 .hud-control:hover {
-  transition: opacity 0.2s ease-out;
+  transition: all 0.3s ease;
   opacity: 1;
 }
 .mirador-osd-previous {
@@ -754,6 +765,12 @@ li.highlight {
   top:50%;
   margin-top:-17px;
 }
+.mirador-osd-toggle-bottom-panel {
+  position: absolute;
+  bottom: 0;
+  right:50%;
+  margin-right: -30px;
+}
 .mirador-osd-fullscreen {
   position:absolute;
   right:10px;
@@ -762,12 +779,11 @@ li.highlight {
 .mirador-pan-zoom-controls {
   position: absolute;
   width: 100px;
-  height: 80px;
+  height: 65px;
   bottom:0;
   right:0;
   margin:1%;
 }
-
 .mirador-osd-up {
   position:absolute;
   right:20px;
@@ -1160,6 +1176,14 @@ ul.scroll-listing-thumbs li .thumb-label {
   min-width: 25px;
   margin: 0 auto;
   display: block;
+  box-sizing:border-box;
+  transition: all 0.2 ease-out;
+}
+.mirador-viewer ul.listing-thumbs li img:hover {
+  border:3px solid rgba(0,191,255,0.7);
+  transform: scale(1.1);
+  cursor: pointer;
+  transition: all 0.2 ease-out;
 }
 
 .mirador-viewer ul.listing-thumbs li .thumb-label {
