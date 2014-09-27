@@ -14,6 +14,7 @@
     init: function() {    
       this.element = jQuery(this.template()).appendTo(this.element);
       this.bindEvents();
+      this.parent.parent.bottomPanelVisibility(this.parent.parent.bottomPanelVisible);
     },
 
     bindEvents: function() {
@@ -83,32 +84,64 @@
       this.parent.element.find('.mirador-osd-fullscreen').on('click', function() {
         _this.fullScreen();
       });
+      
+      this.parent.element.find('.mirador-osd-toggle-bottom-panel').on('click', function() {
+        var visible = !_this.parent.parent.bottomPanelVisible;
+        _this.parent.parent.bottomPanelVisibility(visible);
+      });
+      
+      jQuery.subscribe('bottomPanelSet.' + _this.parent.parent.id, function(event, visible) {
+        var dodgers = _this.parent.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls');
+        var arrows = _this.parent.element.find('.mirador-osd-next, .mirador-osd-previous');
+        console.log(dodgers);
+        if (visible.visible === true) {
+          dodgers.css({transform: 'translateY(-130px)'});
+          arrows.css({transform: 'translateY(-65px)'});
+        } else {
+          dodgers.css({transform: 'translateY(0)'});
+          arrows.css({transform: 'translateY(0)'});
+        }
+
+      });
     },
 
     fullScreen: function() {
-      var replacementButton;
+      var replacementButton,
+      bottomPanelHeight = this.parent.parent.element.find('.bottomPanel').innerHeight();
+
       if (OpenSeadragon.isFullScreen()) {
+
         OpenSeadragon.exitFullScreen();
         replacementButton = jQuery('<i class="fa fa-expand"></i>');
         this.parent.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
-      } else {
+        this.parent.element.find('.mirador-osd-toggle-bottom-panel').show();
+        this.parent.parent.bottomPanelVisibility(true);
+
+        } else {
+
         OpenSeadragon.requestFullScreen(this.parent.element[0]);
         replacementButton = jQuery('<i class="fa fa-compress"></i>');
         this.parent.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
+        this.parent.element.find('.mirador-osd-toggle-bottom-panel').hide();
+        this.parent.parent.bottomPanelVisibility(false);
+
       }
     },
 
     template: Handlebars.compile([
-                                 '<a class="mirador-osd-previous hud-control">',
-                                 '<i class="fa fa-3x fa-chevron-left "></i>',
+                                 '<a class="mirador-osd-previous hud-control ">',
+                                   '<i class="fa fa-3x fa-chevron-left "></i>',
                                  '</a>',
                                  '<a class="mirador-osd-fullscreen hud-control">',
-                                 '<i class="fa fa-expand"></i>',
+                                   '<i class="fa fa-expand"></i>',
                                  '</a>',
-                                 '<a class="mirador-osd-next hud-control">',
-                                 '<i class="fa fa-3x fa-chevron-right"></i>',
+                                 '<a class="mirador-osd-next hud-control ">',
+                                   '<i class="fa fa-3x fa-chevron-right"></i>',
                                  '</a>',
-                                 '<div class="mirador-pan-zoom-controls hud-control">',
+                                 '<a class="mirador-osd-toggle-bottom-panel hud-control ">',
+                                   '<i class="fa fa-2x fa-ellipsis-h"></i>',
+                                 '</a>',
+                                 '<div class="mirador-pan-zoom-controls hud-control ">',
                                      '<a class="mirador-osd-up hud-control">',
                                        '<i class="fa fa-chevron-circle-up"></i>',
                                      '</a>',
