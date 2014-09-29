@@ -128,7 +128,6 @@
       }
 
       this.bindEvents();
-      this.setCurrentImageID(this.currentImageID);
     },
     
     update: function(options) {

@@ -2798,7 +2798,7 @@ li.highlight {
   top: 0;
   box-sizing: border-box;
   background-color: rgba(255,255,255,0.9);
-  z-index: 2;
+  z-index: 3;
   width: 45%;
   overflow-y: scroll;
   height: 80%;
