@@ -49,7 +49,6 @@
         parent: this,
         element: this.element
       });
-
     },
 
     template: Handlebars.compile([
@@ -150,6 +149,7 @@
         _this.osd.addHandler('pan', $.debounce(function(){
           _this.setBounds();
         }, 300));
+
       });
     },
 
