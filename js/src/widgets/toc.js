@@ -193,7 +193,7 @@
         
       jQuery.subscribe(('currentImageIDUpdated.' + _this.parent.id), function(event, imageID) {
         if (!_this.manifest.structures) { return; }
-        _this.setSelectedElements($.getRangeIDByCanvasID(_this.manifest, imageID.newImageID));
+        _this.setSelectedElements($.getRangeIDByCanvasID(_this.manifest, imageID));
         _this.render();
       });
 
