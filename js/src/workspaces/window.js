@@ -55,6 +55,9 @@
       manifest = _this.manifest,
       focusState = _this.currentFocus,
       templateData = {};
+      
+      //unsubscribe from stale events as they will be updated with new module calls
+      jQuery.unsubscribe(('currentImageIDUpdated.' + _this.id));
 
       _this.element = jQuery(this.template()).appendTo(this.appendTo);
       
@@ -403,7 +406,7 @@
       var _this = this;
       this.currentImageID = imageID;
       this.loadImageModeFromPanel(imageID);
-      jQuery.publish(('currentImageIDUpdated.' + _this.id), {newImageID : imageID});
+      jQuery.publish(('currentImageIDUpdated.' + _this.id), imageID);
     },
 
     bottomPanelVisibility: function(visible) {
