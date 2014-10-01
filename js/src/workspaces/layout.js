@@ -168,7 +168,7 @@
         console.log('Xposition: ' + x);
         _this.slots[index].layoutBox.setPositionAndSize(x, y, width, height);
       });
-      jQuery.publish("scrollViewResize");
+      jQuery.publish("windowResize");
     },
 
     addSlot: function() {
