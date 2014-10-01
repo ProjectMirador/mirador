@@ -82,6 +82,14 @@
       });
 
       this.parent.element.find('.mirador-osd-fullscreen').on('click', function() {
+        if (OpenSeadragon.isFullScreen()) {
+           OpenSeadragon.exitFullScreen();
+        } else {
+           OpenSeadragon.requestFullScreen(_this.parent.element[0]);
+        }
+      });
+      
+      jQuery(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function() {
         _this.fullScreen();
       });
       
@@ -93,7 +101,6 @@
       jQuery.subscribe('bottomPanelSet.' + _this.parent.parent.id, function(event, visible) {
         var dodgers = _this.parent.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls');
         var arrows = _this.parent.element.find('.mirador-osd-next, .mirador-osd-previous');
-        console.log(dodgers);
         if (visible.visible === true) {
           dodgers.css({transform: 'translateY(-130px)'});
           arrows.css({transform: 'translateY(-65px)'});
@@ -109,9 +116,8 @@
       var replacementButton,
       bottomPanelHeight = this.parent.parent.element.find('.bottomPanel').innerHeight();
 
-      if (OpenSeadragon.isFullScreen()) {
+      if (!OpenSeadragon.isFullScreen()) {
 
-        OpenSeadragon.exitFullScreen();
         replacementButton = jQuery('<i class="fa fa-expand"></i>');
         this.parent.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
         this.parent.element.find('.mirador-osd-toggle-bottom-panel').show();
@@ -119,7 +125,6 @@
 
         } else {
 
-        OpenSeadragon.requestFullScreen(this.parent.element[0]);
         replacementButton = jQuery('<i class="fa fa-compress"></i>');
         this.parent.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
         this.parent.element.find('.mirador-osd-toggle-bottom-panel').hide();

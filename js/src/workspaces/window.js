@@ -154,7 +154,6 @@
       }, 300));
 
       jQuery.subscribe('bottomPanelSet.' + _this.id, function(event, visible) {
-        console.log(visible);
         var panel = _this.element.find('.bottomPanel');
         if (visible.visible === true) {
           panel.css({transform: 'translateY(0)'});
