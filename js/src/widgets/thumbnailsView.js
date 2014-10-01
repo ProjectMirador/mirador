@@ -87,13 +87,12 @@
         });
                 
         jQuery(_this.element).scroll(function() {
-          jQuery.each(_this.element.find("img"), function(key, value) {
-                if ($.isOnScreen(value, _this.lazyLoadingFactor) && !jQuery(value).attr("src")) {
-                    var url = jQuery(value).attr("data");
-                    _this.loadImage(value, url);
-                }
-            });
+          _this.loadImages();
         });
+        
+        jQuery.subscribe('windowResize', $.debounce(function(){
+          _this.loadImages();
+        }, 100));
         
         //add any other events that would trigger thumbnail display (resize, etc)
                 
@@ -113,6 +112,16 @@
         } else {
             this.hide();
         }
+    },
+    
+    loadImages: function() {
+        var _this = this;
+        jQuery.each(_this.element.find("img"), function(key, value) {
+            if ($.isOnScreen(value, _this.lazyLoadingFactor) && !jQuery(value).attr("src")) {
+                var url = jQuery(value).attr("data");
+                _this.loadImage(value, url);
+            }
+        });
     },
     
     loadImage: function(imageElement, url) {
@@ -173,12 +182,7 @@
         duration: 1000, 
         easing: "easeInCubic", 
         complete: function() {
-            jQuery.each(_this.element.find("img"), function(key, value) {
-                   if ($.isOnScreen(value, _this.lazyLoadingFactor) && !jQuery(value).attr("src")) {
-                      var url = jQuery(value).attr("data");
-                      _this.loadImage(value, url);
-                   }
-                });
+            _this.loadImages();
         }
         
         });

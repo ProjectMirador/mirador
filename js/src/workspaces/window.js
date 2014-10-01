@@ -142,7 +142,7 @@
       var _this = this;
 
       //this event should trigger from layout      
-      jQuery.subscribe('scrollViewResize', $.debounce(function(){
+      jQuery.subscribe('windowResize', $.debounce(function(){
         if (_this.focusModules.ScrollView) {
           var containerHeight = _this.element.find('.view-container').height();
           var triggerShow = false;
