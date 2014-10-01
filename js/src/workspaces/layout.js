@@ -125,7 +125,6 @@
       // jQuery('.viewer').on('resize', function() { _this.resizeContainer(); });
       
       jQuery(window).resize($.debounce(function(event) {
-        console.log(event);
         if (!event.target.tagName) {
           _this.resizeContainer();
         }
@@ -165,7 +164,6 @@
         width = newContainerWidth/percentageWidth,
         height = _this.layoutContainer.outerHeight();
 
-        console.log('Xposition: ' + x);
         _this.slots[index].layoutBox.setPositionAndSize(x, y, width, height);
       });
       jQuery.publish("windowResize");
