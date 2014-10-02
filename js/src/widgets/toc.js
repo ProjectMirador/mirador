@@ -22,7 +22,7 @@
   $.TableOfContents.prototype = {
     init: function () {
       var _this = this;
-      if (!_this.manifest.structures) {
+      if (!_this.manifest.structures || _this.manifest.structures.length === 0) {
         _this.hide();
         _this.parent.setTOCBoolean(false);
         return;
