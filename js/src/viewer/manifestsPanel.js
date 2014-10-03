@@ -62,6 +62,13 @@
                   _this.element.find('.items-listing li').show();
                }
             });
+            
+            jQuery.subscribe('windowResize', $.debounce(function(){
+              var clone = _this.element.clone().css("visibility","hidden").css("display", "block").appendTo(_this.appendTo);
+              _this.resultsWidth = clone.find('#select-results').outerWidth();
+              clone.remove();
+              jQuery.publish("manifestPanelWidthChanged", _this.resultsWidth);
+            }, 100));
         },
         
         toggleImageView: function(imageID, manifestURI) {

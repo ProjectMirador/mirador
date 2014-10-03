@@ -15,7 +15,8 @@
             metadataWidth:              200,
             margin:                     15,
             remainingItemsMinWidth:     80,  //set a minimum width for the "more" image
-            imagesTotalWidth:           0
+            imagesTotalWidth:           0,
+            tplData:                    null
         }, options);
 
         this.init();
@@ -31,7 +32,8 @@
            this.maxPreviewImagesWidth = this.resultsWidth - (this.repoWidth + this.margin + this.metadataWidth + this.margin + this.remainingItemsMinWidth);
            this.maxPreviewImagesWidth = this.maxPreviewImagesWidth * 0.95;
           
-           this.element = jQuery(this.template(this.fetchTplData(this.manifestId))).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
+           this.fetchTplData(this.manifestId);
+           this.element = jQuery(this.template(this.tplData)).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
 
            var remainingOffset = this.repoWidth + this.margin + this.metadataWidth + this.margin + this.imagesTotalWidth;
            this.element.find('.remaining-items').css('left', remainingOffset);
@@ -44,16 +46,16 @@
 
           var manifest = $.viewer.manifests[_this.manifestId];
 
-          var tplData = { 
+          this.tplData = { 
             label: manifest.label,
             repository: manifest.miradorRepository,
             canvasCount: manifest.sequences[0].canvases.length,
             images: []
           };
           
-          tplData.repoImage = (function() {
-            var repo = tplData.repository;
-            if (tplData.repository === '(Added from URL)') {
+          this.tplData.repoImage = (function() {
+            var repo = _this.tplData.repository;
+            if (_this.tplData.repository === '(Added from URL)') {
                repo = '';
             }            
             var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'];
@@ -75,7 +77,7 @@
                break;
             }
                         
-            tplData.images.push({
+            this.tplData.images.push({
               url: url,
               width: width,
               height: _this.thumbHeight,
@@ -83,14 +85,13 @@
             });
           }
           
-          tplData.remaining = (function() {
-              var remaining = manifest.sequences[0].canvases.length - tplData.images.length;
+          this.tplData.remaining = (function() {
+              var remaining = manifest.sequences[0].canvases.length - _this.tplData.images.length;
               if (remaining > 0) {
                 return remaining;
               }
             })();
 
-          return tplData;
         },
 
         render: function() {
@@ -110,6 +111,37 @@
 
           this.element.find('.preview-image').on('click', function() {
             $.viewer.toggleImageViewInWorkspace(jQuery(this).attr('data-image-id'), _this.manifestId);
+          });
+          
+          jQuery.subscribe('manifestPanelWidthChanged', function(event, newWidth){
+             var newMaxPreviewWidth = newWidth - (_this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.remainingItemsMinWidth);
+             newMaxPreviewWidth = newMaxPreviewWidth * 0.95;
+             if (newMaxPreviewWidth < _this.maxPreviewImagesWidth ) {
+               while (_this.imagesTotalWidth >= newMaxPreviewWidth) {
+                 image = _this.tplData.images.pop();
+                 _this.imagesTotalWidth -= (image.width + _this.margin);
+                 
+                 //remove image from dom
+                 _this.element.find('img[data-image-id="'+image.id+'"]').remove();
+                 var remainingOffset = _this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.imagesTotalWidth;
+                 
+                 //increase remaining # by 1
+                 var remaining = _this.element.find('.remaining-amount');
+                 var newRemaining;
+                 if (remaining.length > 0) {
+                    newRemaining = parseInt(remaining[0].innerHTML, 10) + 1;
+                    remaining[0].innerHTML = newRemaining;
+                 } else {
+                   //add the remaining element
+                   newRemaining = 1;
+                   _this.element.find('.preview-images').after('<div class="remaining-items"><h3><span class="remaining-amount">'+newRemaining+'</span> more</h3></div>');
+                 }
+                 
+                 //update size of "More" icon
+                 _this.element.find('.remaining-items').css('left', remainingOffset);
+               }
+             }
+             _this.maxPreviewImagesWidth = newMaxPreviewWidth;
           });
         },
 
@@ -139,7 +171,7 @@
                       '{{/each}}',
                       '</div>',
                        '{{#if remaining}}',
-                         '<div class="remaining-items"><h3>{{remaining}} more</h3></div>',
+                         '<div class="remaining-items"><h3><span class="remaining-amount">{{remaining}}</span> more</h3></div>',
                        '{{/if}}',
                       '</li>'
         ].join(''))
