@@ -2405,7 +2405,6 @@ a {
   border-bottom: 1px solid gray;
   padding-top: 10px;
   padding-bottom: 10px;
-  min-width:900px;
   position: relative;
   padding-left: 5px;
   margin-right: 10px;
@@ -2509,19 +2508,21 @@ li.highlight {
 #load-controls {
   float: left;
   height:100%;
-  width: 300px;
+  width: 19%;
 }
 #load-controls input {
   height:30px;
   font-size:18px;
   border:3px solid gray;
   margin:0 auto;
+  width:100%;
 }
 #manifest-search-form input {
   background:none;
   border:none;
   border-bottom:2px solid black;
   margin-top: 30px;
+  width: 100%;
 }
 #manifest-search i {
   position:absolute;
@@ -2540,7 +2541,7 @@ li.highlight {
 }
 
 #select-results {
-  margin-left: 300px;
+  margin-left: 20%;
   height:100%;
   overflow-y: scroll;
 }
@@ -2692,7 +2693,7 @@ li.highlight {
 }
 .toc a.toc-link {
   color: black;
-  padding: 10px;
+  padding: 8px;
   padding-left: 8px;
   display: block;
 }
