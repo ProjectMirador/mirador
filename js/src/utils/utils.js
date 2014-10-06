@@ -4,6 +4,10 @@
     return (typeof $.DEFAULT_SETTINGS.availableViews.view === 'undefined');
   };
 
+  $.getViewLabel = function(type) {
+    var view = $.DEFAULT_SETTINGS.availableViews[type];
+    return (view && view.label) ? view.label : type;
+  };
 
   $.inArrayToBoolean = function(index) {
     return index === -1 ? false : true;
@@ -52,54 +56,8 @@
     if (str.length > length) {
       str = str.substr(0, length) + '...';
     }
-
     return str;
   };
-
-
-  // Base code from https://github.com/padolsey/prettyprint.js. Modified to fit Mirador needs
-  $.stringifyObject = function(obj, nestingMargin) {
-    var type = typeof obj,
-        str,
-        first = true,
-        increment = 15,
-        delimiter = '<br/>';
-
-    if (obj instanceof RegExp) {
-      return '/' + obj.source + '/';
-    }
-
-    if (typeof nestingMargin === 'undefined') {
-      nestingMargin = 0;
-    }
-
-    if (obj instanceof Array) {
-      str = '[ ';
-
-      jQuery.each(obj, function (i, item) {
-        str += (i === 0 ? '' : ', ') + $.stringifyObject(item, nestingMargin + increment);
-      });
-
-      return str + ' ]';
-    }
-
-    if (typeof obj === 'object') {
-      str = '<div style="margin-left:' +  nestingMargin + 'px">';
-
-      for (var i in obj) {
-        if (obj.hasOwnProperty(i)) {
-          str += (first ? '' : delimiter) + i + ': ' + $.stringifyObject(obj[i], nestingMargin + increment);
-          first = false;
-        }
-      }
-
-      return str + '</div>';
-    }
-
-
-    return obj.toString();
-  };
-
 
   $.getJsonFromUrl = function(url, async) {
     var json;
@@ -121,26 +79,6 @@
     return json;
   };
 
-
-  $.getViewLabel = function(type) {
-    var view = $.DEFAULT_SETTINGS.availableViews[type];
-
-    return (view && view.label) ? view.label : type;
-  };
-
-
-  $.extractLabelFromAttribute = function(attr) {
-    var label = attr;
-
-    label = label.replace(/^@/, '');
-    label = label.replace(/([A-Z])/g, ' $1');
-    label = label.replace(/\s{2,}/g, ' ');
-    label = label.replace(/\w\S*/g, function(txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-
-    return label;
-  };
 
 
   $.toString = function(obj, delimiter) {
@@ -174,49 +112,6 @@
 
     return id[0] || id;
   };
-  
-  $.getMetadataAbout = function(jsonLd) {
-      return {
-         '@context': jsonLd['@context'] || '',
-         '@id':      jsonLd['@id'] || ''
-        };
-    };
-
-  $.getMetadataDetails = function(jsonLd) {
-      return {
-          'label':        jsonLd.label || '',
-          'agent':        jsonLd.agent || '',
-          'location':     jsonLd.location || '',
-          'date':         jsonLd.date || '',
-          'description':  jsonLd.description || ''
-        };
-    };
-
-  $.getMetadataFields = function(jsonLd) {
-      // parse and store metadata pairs (API 1.0)
-      var mdList = {};
-      if (typeof jsonLd.metadata !== 'undefined') {
-          jQuery.each(jsonLd.metadata, function(index, item) {
-              mdList[item.label] = item.value;
-            });
-        }
-        return mdList;
-   };
-
-   $.getMetadataRights =function(jsonLd) {
-       return {
-           'license':      jsonLd.license || '',
-           'attribution':  jsonLd.attribution || ''
-        };
-   };
-
-   $.getMetadataLinks = function(jsonLd) {
-      return {
-          'service':  jsonLd.service || '',
-          'seeAlso':  jsonLd.seeAlso || '',
-          'within':   jsonLd.within || ''
-        };
-   };
 
   $.getImagesListByManifestId = function(manifestId) {
     return $.manifests[manifestId].sequences[0].imagesList;
