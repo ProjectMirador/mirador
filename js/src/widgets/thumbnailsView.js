@@ -30,7 +30,7 @@
 
         this.loadContent();
         this.bindEvents();
-        },
+    },
 
     loadContent: function() {
       var _this = this,
@@ -40,15 +40,15 @@
         thumbnailCls:   this.thumbInfo.thumbnailCls
       };
 
-      tplData.thumbs = jQuery.map(this.imagesList, function(image, index) {
-        var urlHeight = _this.defaultThumbHeight > _this.thumbInfo.thumbsHeight ? _this.defaultThumbHeight : _this.thumbInfo.thumbsHeight,
-        aspectRatio = image.height/image.width,
-        width = (_this.thumbInfo.thumbsHeight/aspectRatio);
+      tplData.thumbs = jQuery.map(this.imagesList, function(canvas, index) {
+        var aspectRatio = canvas.height/canvas.width,
+        width = (_this.thumbInfo.thumbsHeight/aspectRatio),
+        thumbnailUrl = $.getThumbnailForCanvas(canvas, width);
 
         return {
-          thumbUrl: $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), urlHeight),
-          title:    image.label,
-          id:       image['@id'],
+          thumbUrl: thumbnailUrl,
+          title:    canvas.label,
+          id:       canvas['@id'],
           width:    width,
           highlight: _this.currentImgIndex === index ? 'highlight' : ''
         };
@@ -140,7 +140,7 @@
        jQuery.each(this.imagesList, function(index, image) {
           var aspectRatio = image.height/image.width,
           width = (_this.thumbInfo.thumbsHeight/aspectRatio),
-          newThumbURL = $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), _this.thumbInfo.thumbsHeight),
+          newThumbURL = $.getThumbnailForCanvas(image, width),
           id = image['@id'];
           var imageElement = _this.element.find('img[data-image-id="'+id+'"]');
           imageElement.attr('data', newThumbURL).attr('height', _this.thumbInfo.thumbsHeight).attr('width', width).attr('src', '');

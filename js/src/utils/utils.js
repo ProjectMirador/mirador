@@ -233,15 +233,44 @@
 
       return imgIndex;
     };
-    
+
+  $.getThumbnailForCanvas = function(canvas, width) {
+      var version = "1.1",
+          service;
+
+      // Ensure width is an integer...
+      width = parseInt(width, 10);
+
+      // Respecting the Model...
+      if (canvas.thumbnail !== undefined) {
+        // use the thumbnail image, prefer via a service
+        if (typeof(canvas.thumbnail) == 'string') {
+          thumbnailUrl = canvas.thumbnail;
+        } else if (canvas.thumbnail.service !== undefined) {
+          // Get the IIIF Image API via the @context
+          service = canvas.thumbnail.service;
+          if (service['@context'] !== undefined) {
+            version = $.Iiif.getVersionFromContext(service['@context']);
+          }
+          thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+        } else {
+          thumbnailUrl = canvas.thumbnail['@id'];
+        }
+      } else {
+        // No thumbnail, use main image
+        var resource = canvas.images[0].resource;
+        service = resource['default'] ? resource['default'].service : resource.service;
+        // TODO: This should check that service is actually there...
+        if (service['@context'] !== undefined) {
+          version = $.Iiif.getVersionFromContext(service['@context']);
+        }          
+        thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+      }
+      return thumbnailUrl;
+    };
+
   $.getImagesListByManifest = function(manifest) {
     return manifest.sequences[0].canvases;
-  };
-  
-  $.getImageUrlForCanvas = function(canvas) {
-    var resource = canvas.images[0].resource;
-    var service = resource['default'] ? resource['default'].service : resource.service;
-    return service['@id'];
   };
   
   $.getImageTitleForCanvas = function(canvas) {
