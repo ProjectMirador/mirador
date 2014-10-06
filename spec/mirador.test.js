@@ -86,6 +86,7 @@ describe('Mirador | mirador.js', function() {
       expect($.trimString('  abc ')).toEqual('abc');
     });
 
+/*  Stringify moved to metadataView as only needed there
 
     it('should stringify a JavaScript object with padded HTML for printing', function() {
       expect($.stringifyObject('mirador')).toEqual('mirador');
@@ -93,6 +94,7 @@ describe('Mirador | mirador.js', function() {
       expect($.stringifyObject([1, 2])).toEqual('[ 1, 2 ]');
       expect($.stringifyObject({'Jan' : 1})).toEqual('<div style="margin-left:0px">Jan: 1</div>');
     });
+*/
 
 
     it('should return JSON data for a given URL via ajax call', function() {
@@ -112,7 +114,7 @@ describe('Mirador | mirador.js', function() {
       expect($.getJsonFromUrl('http://manifest/url/failed', false)).toEqual(error);
     });
 
-
+/* Moved to metadataView
     it('should return label for a given view name', function() {
       expect($.getViewLabel('xyzView')).toEqual('Xyz View');
       expect($.getViewLabel('unavailableView')).toEqual('unavailableView');
@@ -123,7 +125,7 @@ describe('Mirador | mirador.js', function() {
       expect($.extractLabelFromAttribute('@id')).toEqual('Id');
       expect($.extractLabelFromAttribute('seeAlso')).toEqual('See Also');
     });
-
+*/
 
     it('should convert an array to string with delimiter (if array), or return string (if string)', function() {
       expect($.toString('str')).toEqual('str');
@@ -179,11 +181,11 @@ describe('Mirador | mirador.js', function() {
       expect($.getManifestIdByUri('http://xyz.edu/data/abc.json')).toEqual([]);
     });
 
-
+/* Moved to MetadataView
     it('should return manifest metadata for a given manifest id', function() {
       expect($.getMetadataByManifestId('manifest-1234')).toEqual({ "details":{ 'label': 'Collection 123' } });
     });
-
+*/ 
 
     it('should return images list for given manifest id', function() {
       expect($.getImagesListByManifestId('manifest-1234')).toEqual(imagesList);
