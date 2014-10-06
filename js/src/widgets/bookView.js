@@ -147,7 +147,7 @@
         var imageUrl = $.Iiif.getImageUrl(image);
         var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json';
         var infoJson = $.getJsonFromUrl(infoJsonUrl, false);
-        tileSources.push($.Iiif.prepJsonForOsd(infoJson));
+        tileSources.push(infoJson);
       });
 
       var aspectRatio = tileSources[0].height / tileSources[0].width;
