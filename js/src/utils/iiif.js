@@ -29,12 +29,22 @@
       return id;
     },
 
-
-    getUriWithHeight: function(uri, height) {
-      uri = uri.replace(/\/$/, '');
-      return this.getUri(uri) + '/full/,' + height + '/0/native.jpg';
+    getVersionFromContext: function(context) {
+      if (context == "http://iiif.io/api/image/2/context.json") {
+        return "2.0";
+      } else {
+        return "1.1";
+      }
     },
 
+    makeUriWithWidth: function(uri, width, version) {
+      uri = uri.replace(/\/$/, '');
+      if (version[0] == '1') {
+        return this.getUri(uri) + '/full/' + width + ',/0/native.jpg';
+      } else {
+        return this.getUri(uri) + '/full/' + width + ',/0/default.jpg';
+      }
+    },
 
     prepJsonForOsd: function(json) {
       json.image_host    = this.getImageHostUrl(json);

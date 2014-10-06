@@ -65,12 +65,10 @@
 
           for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
             var canvas = manifest.sequences[0].canvases[i],
-            resource = canvas.images[0].resource['default'] ? canvas.images[0].resource['default'] : canvas.images[0].resource,
-            service = resource.service,
-            url = $.Iiif.getUriWithHeight(service['@id'], _this.urlHeight),
-            aspectRatio = resource.height/resource.width,
-            width = (_this.thumbHeight/aspectRatio);
-            
+            aspectRatio = canvas.height/canvas.width,
+            width = (_this.thumbHeight/aspectRatio),
+            url = $.getThumbnailForCanvas(canvas, width);
+
             _this.imagesTotalWidth += (width + _this.margin);
             if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
                _this.imagesTotalWidth -= (width + _this.margin);
