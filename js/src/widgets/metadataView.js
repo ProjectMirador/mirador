@@ -216,21 +216,29 @@
     '<div class="sub-title">Details:</div>',
         '<dl class="{{metadataListingCls}}">',
           '{{#each details}}',
-            '<dt>{{label}}:</dt><dd>{{value}}</dd>',
+            '<dt>{{label}}:</dt><dd>{{{value}}}</dd>',
           '{{/each}}',
         '</dl>',
         '<div class="sub-title">Rights:</div>',
+        '{{#if rights}}',
         '<dl class="{{metadataListingCls}}">',
           '{{#each rights}}',
-            '<dt>{{label}}:</dt><dd>{{value}}</dd>',
+            '<dt>{{label}}:</dt><dd>{{{value}}}</dd>',
           '{{/each}}',
         '</dl>',
+        '{{else}}',
+        '<dl class="{{metadataListingCls}}">',
+            '<dt>Rights Status:</dt><dd>Unspecified</dd>',
+        '</dl>',
+        '{{/if}}',
+        '{{#if links}}',
         '<div class="sub-title">Links:</div>',
         '<dl class="{{metadataListingCls}}">',
           '{{#each links}}',
-            '<dt>{{label}}:</dt><dd>{{value}}</dd>',
+            '<dt>{{label}}:</dt><dd>{{{value}}}</dd>',
           '{{/each}}',
-        '</dl>'
+        '</dl>',
+        '{{/if}}'
 
     ].join(''), { noEscape: true })
 
