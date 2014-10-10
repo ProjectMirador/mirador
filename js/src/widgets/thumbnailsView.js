@@ -16,7 +16,7 @@
       panel:                false,
       lazyLoadingFactor:    1.5  //should be >= 1
     }, options);
-    
+
     this.init();
   };
 
@@ -53,17 +53,17 @@
           highlight: _this.currentImgIndex === index ? 'highlight' : ''
         };
       });
-      
+
       this.element = jQuery(_this.template(tplData)).appendTo(this.appendTo);
     },
-    
+
     updateImage: function(imageID) {
         this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
         this.element.find('.highlight').removeClass('highlight');
         this.element.find("img[data-image-id='"+imageID+"']").addClass('highlight');
         this.element.find("img[data-image-id='"+imageID+"']").parent().addClass('highlight');
     },
-    
+
     updateFocusImages: function(focusList) {
         var _this = this;
         this.element.find('.highlight').removeClass('highlight');
@@ -77,25 +77,25 @@
       var _this = this,
       target = _this.element.find('.highlight'),
       scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
-      _this.element.scrollTo(scrollPosition, 900);
+      _this.element.stop().scrollTo(scrollPosition, 900, {easing: 'easeInOutCubic'});
     },
-    
+
     bindEvents: function() {
         var _this = this;
         _this.element.find('img').on('load', function() {
            jQuery(this).hide().fadeIn(750);
         });
-                
-        jQuery(_this.element).scroll(function() {
+
+        jQuery(_this.element).on('scroll', $.throttle(function() {
           _this.loadImages();
-        });
-        
+        }, 100));
+
         jQuery.subscribe('windowResize', $.debounce(function(){
           _this.loadImages();
         }, 100));
-        
+
         //add any other events that would trigger thumbnail display (resize, etc)
-                
+
         _this.element.find('.thumbnail-image').on('click', function() {
           var canvasID = jQuery(this).attr('data-image-id');
           _this.parent.setCurrentImageID(canvasID);
@@ -105,25 +105,35 @@
           _this.currentImageChanged();
         });
     },
-    
+
     toggle: function(stateValue) {
-        if (stateValue) { 
-            this.show(); 
+        if (stateValue) {
+            this.show();
         } else {
             this.hide();
         }
     },
-    
+
     loadImages: function() {
-        var _this = this;
-        jQuery.each(_this.element.find("img"), function(key, value) {
-            if ($.isOnScreen(value, _this.lazyLoadingFactor) && !jQuery(value).attr("src")) {
-                var url = jQuery(value).attr("data");
-                _this.loadImage(value, url);
-            }
-        });
+      var _this = this,
+        viewportStarted = false;
+      var viewport = $.viewport(_this.lazyLoadingFactor);
+      jQuery.each(_this.element.find("img"), function(key, value) {
+        var onScreen = $.isOnScreen(value, viewport);
+        if (onScreen) {
+          viewportStarted = true;
+          var el = jQuery(value);
+          if (!el.attr("src")) {
+            var url = el.attr("data");
+            _this.loadImage(value, url);
+          }
+        } else if (viewportStarted) {
+          // Break out of the each loop once we're done with the last visible image
+          return false;
+        }
+      });
     },
-    
+
     loadImage: function(imageElement, url) {
         var _this = this,
         imagepromise = new $.ImagePromise(url);
@@ -132,11 +142,11 @@
             jQuery(imageElement).attr('src', image);
         });
     },
-    
+
     reloadImages: function(newThumbHeight, triggerShow) {
        var _this = this;
        this.thumbInfo.thumbsHeight = newThumbHeight;
-       
+
        jQuery.each(this.imagesList, function(index, image) {
           var aspectRatio = image.height/image.width,
           width = (_this.thumbInfo.thumbsHeight/aspectRatio),
@@ -149,7 +159,7 @@
           this.show();
        }
     },
-    
+
     template: Handlebars.compile([
       '<div class="{{thumbnailCls}}">',
         '<ul class="{{listingCssCls}}">',
@@ -162,7 +172,7 @@
         '</ul>',
        '</div>'
     ].join('')),
-      
+
     hide: function() {
         var element = jQuery(this.element);
         if (this.panel) {
@@ -176,18 +186,12 @@
         if (this.panel) {
             element = element.parent();
         }
-        var _this = this;
-        element.show({
-        effect: "fade", 
-        duration: 1000, 
-        easing: "easeInCubic", 
-        complete: function() {
-            _this.loadImages();
-        }
-        
-        });
+        element.show();
+        this.loadImages();
+        // Scroll to the active image in the thumbnail list
+        this.currentImageChanged();
     },
-    
+
     adjustWidth: function(className, hasClass) {
        if (hasClass) {
            this.parent.element.find('.view-container').removeClass(className);
@@ -195,7 +199,7 @@
            this.parent.element.find('.view-container').addClass(className);
        }
     },
-    
+
     adjustHeight: function(className, hasClass) {
         if (hasClass) {
            this.element.removeClass(className);
@@ -205,7 +209,7 @@
     }
 
   };
-  
-  
+
+
 
 }(Mirador));

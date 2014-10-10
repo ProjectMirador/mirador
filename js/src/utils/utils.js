@@ -174,7 +174,7 @@
 
     return id[0] || id;
   };
-  
+
   $.getMetadataAbout = function(jsonLd) {
       return {
          '@context': jsonLd['@context'] || '',
@@ -233,19 +233,19 @@
 
       return imgIndex;
     };
-    
+
   $.getImagesListByManifest = function(manifest) {
     return manifest.sequences[0].canvases;
   };
-  
+
   $.getImageUrlForCanvas = function(canvas) {
     var resource = canvas.images[0].resource;
     var service = resource['default'] ? resource['default'].service : resource.service;
     return service['@id'];
   };
-  
+
   $.getImageTitleForCanvas = function(canvas) {
-    
+
   };
 
   $.getCollectionTitle = function(metadata) {
@@ -274,7 +274,7 @@
 
     return "uuid-" + idNum;
   };
-  
+
   jQuery.fn.slideFadeToggle  = function(speed, easing, callback) {
             return this.animate({opacity: 'toggle', height: 'toggle'}, speed, easing, callback);
   };
@@ -285,7 +285,7 @@
     var timeout = null;
     var previous = 0;
 
-    if (typeof options !== 'undefined') {
+    if (typeof options === 'undefined') {
       options = {};
     }
 
@@ -360,9 +360,22 @@
 
     return osdFrame;
   };
-  
+
   // http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
-  $.isOnScreen = function(elem, outsideViewportFactor) {
+  $.isOnScreen = function(elem, viewport) {
+    if (!viewport) {
+      viewport = $.viewport();
+    }
+
+    var el = jQuery(elem);
+    var bounds = el.offset();
+    bounds.bottom = bounds.top + el.height();
+    bounds.right = bounds.left + el.width();
+
+    return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
+  };
+
+  $.viewport = function(outsideViewportFactor) {
     var factor = 1;
     if (outsideViewportFactor) {
        factor = outsideViewportFactor;
@@ -374,13 +387,7 @@
     };
     viewport.bottom = (viewport.top + win.height()) * factor;
     viewport.right = (viewport.left + win.width()) * factor;
-
-    var el = jQuery(elem);
-    var bounds = el.offset();
-    bounds.bottom = bounds.top + el.height();
-    bounds.right = bounds.left + el.width();
-
-    return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
+    return viewport;
   };
 
   $.getRangeIDByCanvasID = function(manifest, canvasID /*, [given parent range] (for multiple ranges, later) */) {
