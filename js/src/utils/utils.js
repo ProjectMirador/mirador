@@ -137,14 +137,14 @@
       width = parseInt(width, 10);
 
       // Respecting the Model...
-      if (canvas.thumbnail !== undefined) {
+      if (canvas.hasOwnProperty('thumbnail')) {
         // use the thumbnail image, prefer via a service
         if (typeof(canvas.thumbnail) == 'string') {
           thumbnailUrl = canvas.thumbnail;
-        } else if (canvas.thumbnail.service !== undefined) {
+        } else if (canvas.thumbnail.hasOwnProperty('service')) {
           // Get the IIIF Image API via the @context
           service = canvas.thumbnail.service;
-          if (service['@context'] !== undefined) {
+          if (service.hasOwnProperty('@context')) {
             version = $.Iiif.getVersionFromContext(service['@context']);
           }
           thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
@@ -156,7 +156,7 @@
         var resource = canvas.images[0].resource;
         service = resource['default'] ? resource['default'].service : resource.service;
         // TODO: This should check that service is actually there...
-        if (service['@context'] !== undefined) {
+        if (service.hasOwnProperty('@context')) {
           version = $.Iiif.getVersionFromContext(service['@context']);
         }          
         thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
