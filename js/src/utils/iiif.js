@@ -70,19 +70,6 @@
       }
 
       return json.image_host;
-    },
-
-
-    packageScaleFactors: function(json) {
-      var newScaleFactors = [];
-
-      if (json.hasOwnProperty('scale_factors') && jQuery.isArray(json.scale_factors)) {
-        for (var i = 0; i < json.scale_factors.length; i++) {
-          newScaleFactors.push(Math.pow(2,i));
-        }
-      }
-
-      return newScaleFactors;
     }
 
   };
