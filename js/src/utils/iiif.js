@@ -78,7 +78,7 @@
 
       if (json.hasOwnProperty('scale_factors') && jQuery.isArray(json.scale_factors)) {
         for (var i = 0; i < json.scale_factors.length; i++) {
-          newScaleFactors.push(i);
+          newScaleFactors.push(Math.pow(2,i));
         }
       }
 
