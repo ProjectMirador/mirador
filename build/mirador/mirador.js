@@ -6793,9 +6793,7 @@ this.elemStitchOptions.hide();
 
 
     prepJsonForOsd: function(json) {
-      json.image_host    = this.getImageHostUrl(json);
       json.scale_factors = this.packageScaleFactors(json);
-      json.profile       = json.profile.replace(/image-api\/1.\d/, 'image-api');
 
       if (!json.tile_width) {
         json.tile_width = 256;
@@ -6838,7 +6836,7 @@ this.elemStitchOptions.hide();
 
       if (json.hasOwnProperty('scale_factors') && jQuery.isArray(json.scale_factors)) {
         for (var i = 0; i < json.scale_factors.length; i++) {
-          newScaleFactors.push(i);
+          newScaleFactors.push(Math.pow(2,i));
         }
       }
 
