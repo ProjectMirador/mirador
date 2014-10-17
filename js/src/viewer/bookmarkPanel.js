@@ -30,7 +30,7 @@
       
       jQuery.subscribe('saveControllerConfigUpdated', function() {
         var ajaxType = 'POST',
-        ajaxURL = "http://jsonblob.com/api/jsonBlob";
+        ajaxURL = "https://jsonblob.com/api/jsonBlob";
       
         jQuery.ajax({
           type: ajaxType,

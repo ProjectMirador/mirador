@@ -56,15 +56,6 @@
                                  '</div>'
     ].join('')),
 
-    setZoom: function() {
-      var _this = this;
-      this.osdOptions.zoomLevel = this.osd.viewport.getZoom();
-      jQuery.publish("imageZoomUpdated", {
-        id: _this.parent.id, 
-        zoomLevel: _this.osdOptions.zoomLevel
-      });
-    },
-
     setBounds: function() {
       var _this = this;
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
@@ -132,18 +123,13 @@
 
 
       this.osd.addHandler('open', function(){
-        if (_this.osdOptions) {
-          if (_this.osdOptions.zoomLevel) {
-            _this.osd.viewport.zoomTo(_this.osdOptions.zoomLevel, null, true);
-          }
-          if (_this.osdOptions.osdBounds) {
+        if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
-          }
         }
 
         _this.osd.addHandler('zoom', $.debounce(function(){
-          _this.setZoom();
+          _this.setBounds();
         }, 300));
 
         _this.osd.addHandler('pan', $.debounce(function(){
