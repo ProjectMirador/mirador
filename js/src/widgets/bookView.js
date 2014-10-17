@@ -158,8 +158,7 @@
 
       this.osd = $.OpenSeadragon({
         'id':           elemOsd.attr('id'),
-        'toolbarID' : toolbarID,
-        'uniqueID' : uniqueID
+        'toolbarID' : toolbarID
       });
 
       this.osd.addHandler('open', function(){

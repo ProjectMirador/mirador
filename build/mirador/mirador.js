@@ -5396,8 +5396,7 @@ window.Mirador = window.Mirador || function(config) {
 
       this.osd = $.OpenSeadragon({
         'id':           elemOsd.attr('id'),
-        'toolbarID' : toolbarID,
-        'uniqueID' : uniqueID
+        'toolbarID' : toolbarID
       });
 
       this.osd.addHandler('open', function(){
@@ -5606,7 +5605,7 @@ this.elemStitchOptions.hide();
   $.Hud.prototype = {
 
     init: function() {    
-      this.element = jQuery(this.template()).appendTo(this.element);
+      this.element = jQuery(this.template({showNextPrev : this.parent.imagesList.length !== 1})).appendTo(this.element);
       this.bindEvents();
       this.parent.parent.bottomPanelVisibility(this.parent.parent.bottomPanelVisible);
     },
@@ -5615,12 +5614,10 @@ this.elemStitchOptions.hide();
       var _this = this;
 
       this.parent.element.find('.mirador-osd-next').on('click', function() {
-        console.log('next');
         _this.parent.next();
       });
 
       this.parent.element.find('.mirador-osd-previous').on('click', function() {
-        console.log('previous');
         _this.parent.previous();
       });
       
@@ -5629,25 +5626,21 @@ this.elemStitchOptions.hide();
       });
       
       this.parent.element.find('.mirador-osd-up').on('click', function() {
-        console.log('up');
         var osd = _this.parent.osd;
         osd.viewport.panBy(new OpenSeadragon.Point(0, -0.05));
         osd.viewport.applyConstraints();
       });
       this.parent.element.find('.mirador-osd-right').on('click', function() {
-        console.log('right');
         var osd = _this.parent.osd;
         osd.viewport.panBy(new OpenSeadragon.Point(0.05, 0));
         osd.viewport.applyConstraints();
       });
       this.parent.element.find('.mirador-osd-down').on('click', function() {
-        console.log('down');
         var osd = _this.parent.osd;
         osd.viewport.panBy(new OpenSeadragon.Point(0, 0.05));
         osd.viewport.applyConstraints();
       });
       this.parent.element.find('.mirador-osd-left').on('click', function() {
-        console.log('left');
         var osd = _this.parent.osd;
         osd.viewport.panBy(new OpenSeadragon.Point(-0.05, 0));
         osd.viewport.applyConstraints();
@@ -5728,15 +5721,19 @@ this.elemStitchOptions.hide();
     },
 
     template: Handlebars.compile([
+                                 '{{#if showNextPrev}}',
                                  '<a class="mirador-osd-previous hud-control ">',
                                    '<i class="fa fa-3x fa-chevron-left "></i>',
                                  '</a>',
+                                 '{{/if}}',
                                  '<a class="mirador-osd-fullscreen hud-control">',
                                    '<i class="fa fa-expand"></i>',
                                  '</a>',
+                                 '{{#if showNextPrev}}',
                                  '<a class="mirador-osd-next hud-control ">',
                                    '<i class="fa fa-3x fa-chevron-right"></i>',
                                  '</a>',
+                                 '{{/if}}',
                                  '<a class="mirador-osd-toggle-bottom-panel hud-control ">',
                                    '<i class="fa fa-2x fa-ellipsis-h"></i>',
                                  '</a>',
@@ -5888,8 +5885,7 @@ this.elemStitchOptions.hide();
 
       this.osd = $.OpenSeadragon({
         'id':           osdID,
-        'tileSources':  $.Iiif.prepJsonForOsd(infoJson),
-        'uniqueID' : uniqueID
+        'tileSources':  $.Iiif.prepJsonForOsd(infoJson)
       });
 
 
@@ -7062,21 +7058,6 @@ jQuery.fn.scrollStop = function(callback) {
             });
         } else {
            windowObjects = [options];
-        }
-        _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
-      });
-      
-      jQuery.subscribe("imageZoomUpdated", function(event, options) {
-        var windowObjects = _this.currentConfig.windowObjects;
-        if (windowObjects && windowObjects.length > 0) {
-            jQuery.each(windowObjects, function(index, window){
-                if (window.id === options.id) {
-                    if (!windowObjects[index].windowOptions) {
-                      windowObjects[index].windowOptions = {};
-                    }
-                    windowObjects[index].windowOptions.zoomLevel = options.zoomLevel;
-                }
-            });
         }
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
