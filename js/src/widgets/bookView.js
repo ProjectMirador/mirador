@@ -112,15 +112,22 @@
     },
 
     updateImage: function(imageID) {
-      this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
+      this.imageID = imageID;
+      this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
       this.currentImg = this.imagesList[this.currentImgIndex];
-      this.stitchList = this.getStitchList();
-      this.osdOptions = {
-        osdBounds:        null,
-        zoomLevel:        null
-      };
-      this.osd.close();
-      this.createOpenSeadragonInstance();
+      var newList = this.getStitchList();
+      var is_same = this.stitchList.length == newList.length && this.stitchList.every(function(element, index) {
+          return element === newList[index]; 
+      });
+      if (!is_same) {
+        this.stitchList = newList;
+        this.osdOptions = {
+          osdBounds:        null,
+          zoomLevel:        null
+        };
+        this.osd.close();
+        this.createOpenSeadragonInstance();
+      }
     },
 
     createOpenSeadragonInstance: function() {
