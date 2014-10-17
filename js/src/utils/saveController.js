@@ -33,7 +33,7 @@
         if (paramURL) {
           var params = paramURL.split('=');
           var jsonblob = params[1];
-          var ajaxURL = "http://jsonblob.com/api/jsonBlob/"+jsonblob;
+          var ajaxURL = "https://jsonblob.com/api/jsonBlob/"+jsonblob;
           jQuery.ajax({
            type: 'GET',
            url: ajaxURL, 
