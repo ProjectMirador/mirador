@@ -64,9 +64,13 @@
           })();
 
           for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
-            var canvas = manifest.sequences[0].canvases[i],
-            aspectRatio = canvas.height/canvas.width,
-            width = (_this.thumbHeight/aspectRatio),
+            var canvas = manifest.sequences[0].canvases[i];
+            if (canvas.width === 0) {
+              continue;
+            }
+
+            var aspectRatio = canvas.height/canvas.width,
+            width = (_this.thumbHeight/aspectRatio);
             url = $.getThumbnailForCanvas(canvas, width);
 
             _this.imagesTotalWidth += (width + _this.margin);

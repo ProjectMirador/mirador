@@ -131,9 +131,11 @@
 
   $.getThumbnailForCanvas = function(canvas, width) {
       var version = "1.1",
-          service;
+          service,
+          thumbnailUrl;
 
       // Ensure width is an integer...
+      console.log("w: " + width);
       width = parseInt(width, 10);
 
       // Respecting the Model...
