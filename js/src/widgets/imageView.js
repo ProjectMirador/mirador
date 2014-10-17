@@ -117,8 +117,7 @@
 
       this.osd = $.OpenSeadragon({
         'id':           osdID,
-        'tileSources':  $.Iiif.prepJsonForOsd(infoJson),
-        'uniqueID' : uniqueID
+        'tileSources':  $.Iiif.prepJsonForOsd(infoJson)
       });
 
 
