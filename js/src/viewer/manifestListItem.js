@@ -55,6 +55,7 @@
           
           this.tplData.repoImage = (function() {
             var repo = _this.tplData.repository;
+            console.log("repo is: " + repo);
             if (_this.tplData.repository === '(Added from URL)') {
                repo = '';
             }            

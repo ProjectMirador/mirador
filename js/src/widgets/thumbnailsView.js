@@ -41,6 +41,10 @@
       };
 
       tplData.thumbs = jQuery.map(this.imagesList, function(canvas, index) {
+        if (canvas.width === 0) {
+          return {};
+        }
+
         var aspectRatio = canvas.height/canvas.width,
         width = (_this.thumbInfo.thumbsHeight/aspectRatio),
         thumbnailUrl = $.getThumbnailForCanvas(canvas, width);
