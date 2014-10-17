@@ -161,16 +161,18 @@
     },
 
     updateImage: function(imageID) {
-      this.imageID = imageID;
-      this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
-      this.currentImg = this.imagesList[this.currentImgIndex];
-      this.osdOptions = {
-        osdBounds:        null,
-        zoomLevel:        null
-      };
-      this.osd.close();
-      this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-      this.parent.updateFocusImages([imageID]);
+      if (this.imageID !== imageID) {
+        this.imageID = imageID;
+        this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
+        this.currentImg = this.imagesList[this.currentImgIndex];
+        this.osdOptions = {
+          osdBounds:        null,
+          zoomLevel:        null
+        };
+        this.osd.close();
+        this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+        this.parent.updateFocusImages([imageID]);
+      }
     },
 
     next: function() {
