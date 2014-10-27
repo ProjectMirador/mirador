@@ -60,7 +60,7 @@
             }            
             var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'];
 
-            return 'images/' + imageName;
+            return 'images/logos/' + imageName;
           })();
 
           for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
@@ -68,7 +68,7 @@
             resource = canvas.images[0].resource['default'] ? canvas.images[0].resource['default'] : canvas.images[0].resource,
             service = resource.service,
             url = $.Iiif.getUriWithHeight(service['@id'], _this.urlHeight),
-            aspectRatio = resource.height/resource.width,
+            aspectRatio = canvas.height/canvas.width,
             width = (_this.thumbHeight/aspectRatio);
             
             _this.imagesTotalWidth += (width + _this.margin);
@@ -102,6 +102,7 @@
           var _this = this;
           
           this.element.find('img').on('load', function() {
+            //if img width is not equal to the width in the html, change height
             jQuery(this).hide().fadeIn(750);
           });
           
