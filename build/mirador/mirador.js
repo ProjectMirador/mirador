@@ -4393,10 +4393,6 @@ window.Mirador = window.Mirador || function(config) {
           jQuery.publish("windowAdded", windowConfig.id);
           _this.window = new $.Window(windowConfig);
         }
-        //jQuery.publish("windowAdded", windowConfig.id);
-        //always create a new window so it's fresh and modified only by the config
-        //this handles the situation of switching between paged and non-paged objects, for example
-        //_this.window = new $.Window(windowConfig);
       },
 
     clearSlot: function() {
