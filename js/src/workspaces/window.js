@@ -13,6 +13,7 @@
       currentImageMode:  'ImageView',
       imageModes:        ['ImageView', 'BookView'],
       currentFocus:      'ThumbnailsView',
+      focusesOriginal:   ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
       focuses:           ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
       focusModules:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
       focusOverlaysAvailable: {
@@ -61,14 +62,7 @@
 
       _this.element = jQuery(this.template()).appendTo(this.appendTo);
       
-      if (manifest.sequences[0].viewingHint) {
-           if (manifest.sequences[0].viewingHint.toLowerCase() !== 'paged') {
-              //disable bookview for this object because it's not a paged object
-              this.focuses = jQuery.grep(this.focuses, function(value) {
-                 return value !== 'BookView';
-              });
-           }
-       }
+      _this.removeBookView();
       
       //remove any imageModes that are not available as a focus
       this.imageModes = jQuery.map(this.imageModes, function(value, index) {
@@ -136,6 +130,19 @@
     update: function(options) {
       jQuery.extend(this, options);
       this.init();
+    },
+    
+    // reset whether BookView is available every time as a user might switch between paged and non-paged objects within a single slot/window
+    removeBookView: function() {
+      this.focuses = this.focusesOriginal;
+      if (manifest.sequences[0].viewingHint) {
+           if (manifest.sequences[0].viewingHint.toLowerCase() !== 'paged') {
+              //disable bookview for this object because it's not a paged object
+              this.focuses = jQuery.grep(this.focuses, function(value) {
+                 return value !== 'BookView';
+              });
+           }
+      }
     },
 
     bindEvents: function() {

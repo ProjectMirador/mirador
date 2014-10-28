@@ -35,7 +35,7 @@
       // so it will be the only one whose function is
       // called to create a window when the 
       // load menu is invoked from it.
-      jQuery.subscribe('manifestToSlot.'+_this.slotID, function(e, windowConfig) { 
+      /*Query.subscribe('manifestToSlot.'+_this.slotID, function(e, windowConfig) { 
         _this.clearSlot();
         windowConfig.parent = _this;
         if (!_this.window && !windowConfig.id) {
@@ -51,7 +51,7 @@
           jQuery.publish("windowAdded", windowConfig.id);
           _this.window = new $.Window(windowConfig);
         }
-      });
+      })*/
       
       this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
     },
@@ -67,10 +67,16 @@
            windowConfig.id = _this.window.id;
         } 
         windowConfig.appendTo = _this.element;
-        jQuery.publish("windowAdded", windowConfig.id);
+        if (_this.window) {
+          _this.window.update(windowConfig);
+        } else {
+          jQuery.publish("windowAdded", windowConfig.id);
+          _this.window = new $.Window(windowConfig);
+        }
+        //jQuery.publish("windowAdded", windowConfig.id);
         //always create a new window so it's fresh and modified only by the config
         //this handles the situation of switching between paged and non-paged objects, for example
-        _this.window = new $.Window(windowConfig);
+        //_this.window = new $.Window(windowConfig);
       },
 
     clearSlot: function() {
