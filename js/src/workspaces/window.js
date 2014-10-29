@@ -162,7 +162,7 @@
 
       jQuery.subscribe('bottomPanelSet.' + _this.id, function(event, visible) {
         var panel = _this.element.find('.bottomPanel');
-        if (visible.visible === true) {
+        if (visible === true) {
           panel.css({transform: 'translateY(0)'});
         } else {
           panel.css({transform: 'translateY(100%)'});
@@ -345,7 +345,8 @@
                                                         parent: this, 
                                                         imageID: imageID, 
                                                         imagesList: this.imagesList,
-                                                        osdOptions: this.focusOptions} );
+                                                        osdOptions: this.focusOptions,
+                                                        bottomPanelAvailable: this.bottomPanelAvailable} );
       } else {
         var view = this.focusModules.ImageView;
         view.updateImage(imageID);
@@ -418,7 +419,7 @@
     bottomPanelVisibility: function(visible) {
       var _this = this;
       _this.bottomPanelVisible = visible;
-      jQuery.publish(('bottomPanelSet.' + _this.id), {visible: visible });
+      jQuery.publish(('bottomPanelSet.' + _this.id), visible);
     },
 
     setCursorFrameStart: function(canvasID) {

@@ -12,9 +12,16 @@
   $.Hud.prototype = {
 
     init: function() {    
-      this.element = jQuery(this.template({showNextPrev : this.parent.imagesList.length !== 1})).appendTo(this.element);
+      this.element = jQuery(this.template({
+         showNextPrev : this.parent.imagesList.length !== 1, 
+         showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable
+      })).appendTo(this.element);
       this.bindEvents();
-      this.parent.parent.bottomPanelVisibility(this.parent.parent.bottomPanelVisible);
+      if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
+         this.parent.parent.bottomPanelVisibility(false);
+      } else {
+         this.parent.parent.bottomPanelVisibility(this.parent.parent.bottomPanelVisible);
+      }
     },
 
     bindEvents: function() {
@@ -95,7 +102,7 @@
       jQuery.subscribe('bottomPanelSet.' + _this.parent.parent.id, function(event, visible) {
         var dodgers = _this.parent.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls');
         var arrows = _this.parent.element.find('.mirador-osd-next, .mirador-osd-previous');
-        if (visible.visible === true) {
+        if (visible === true) {
           dodgers.css({transform: 'translateY(-130px)'});
           arrows.css({transform: 'translateY(-65px)'});
         } else {
@@ -141,9 +148,11 @@
                                    '<i class="fa fa-3x fa-chevron-right"></i>',
                                  '</a>',
                                  '{{/if}}',
+                                 '{{#if showBottomPanel}}',
                                  '<a class="mirador-osd-toggle-bottom-panel hud-control ">',
                                    '<i class="fa fa-2x fa-ellipsis-h"></i>',
                                  '</a>',
+                                 '{{/if}}',
                                  '<div class="mirador-pan-zoom-controls hud-control ">',
                                      '<a class="mirador-osd-up hud-control">',
                                        '<i class="fa fa-chevron-circle-up"></i>',
