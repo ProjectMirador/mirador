@@ -3735,6 +3735,7 @@ window.Mirador = window.Mirador || function(config) {
             });
             jQuery.subscribe('manifestAdded', function(event, newManifest, repository) {
               _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifestId: newManifest, resultsWidth: _this.resultsWidth }));
+              _this.element.find('#manifest-search').keyup();
             });
             
             //Filter manifests based on user input
@@ -3746,6 +3747,10 @@ window.Mirador = window.Mirador || function(config) {
                } else {
                   _this.element.find('.items-listing li').show();
                }
+            });
+            
+            this.element.find('#manifest-search-form').on('submit', function(event) {
+              event.preventDefault();
             });
             
             jQuery.subscribe('windowResize', $.debounce(function(){
