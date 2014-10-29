@@ -47,7 +47,8 @@
       // throughout any updates to the osd canvas.
       this.hud = new $.Hud({
         parent: this,
-        element: this.element
+        element: this.element,
+        bottomPanelAvailable: this.bottomPanelAvailable
       });
     },
 
