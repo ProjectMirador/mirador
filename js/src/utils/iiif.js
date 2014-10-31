@@ -29,24 +29,22 @@
       return id;
     },
 
-
-    getUriWithHeight: function(uri, height) {
-      uri = uri.replace(/\/$/, '');
-      return this.getUri(uri) + '/full/,' + height + '/0/native.jpg';
-    },
-
-
-    prepJsonForOsd: function(json) {
-      json.scale_factors = this.packageScaleFactors(json);
-
-      if (!json.tile_width) {
-        json.tile_width = 256;
-        json.tile_height = 256;
+    getVersionFromContext: function(context) {
+      if (context == "http://iiif.io/api/image/2/context.json") {
+        return "2.0";
+      } else {
+        return "1.1";
       }
-
-      return json;
     },
 
+    makeUriWithWidth: function(uri, width, version) {
+      uri = uri.replace(/\/$/, '');
+      if (version[0] == '1') {
+        return this.getUri(uri) + '/full/' + width + ',/0/native.jpg';
+      } else {
+        return this.getUri(uri) + '/full/' + width + ',/0/default.jpg';
+      }
+    },
 
     getImageHostUrl: function(json) {
       var regex,
@@ -72,19 +70,6 @@
       }
 
       return json.image_host;
-    },
-
-
-    packageScaleFactors: function(json) {
-      var newScaleFactors = [];
-
-      if (json.hasOwnProperty('scale_factors') && jQuery.isArray(json.scale_factors)) {
-        for (var i = 0; i < json.scale_factors.length; i++) {
-          newScaleFactors.push(Math.pow(2,i));
-        }
-      }
-
-      return newScaleFactors;
     }
 
   };
