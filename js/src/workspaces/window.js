@@ -13,6 +13,7 @@
       currentImageMode:  'ImageView',
       imageModes:        ['ImageView', 'BookView'],
       currentFocus:      'ThumbnailsView',
+      focusesOriginal:   ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
       focuses:           ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
       focusModules:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
       focusOverlaysAvailable: {
@@ -61,14 +62,7 @@
 
       _this.element = jQuery(this.template()).appendTo(this.appendTo);
       
-      if (manifest.sequences[0].viewingHint) {
-           if (manifest.sequences[0].viewingHint.toLowerCase() !== 'paged') {
-              //disable bookview for this object because it's not a paged object
-              this.focuses = jQuery.grep(this.focuses, function(value) {
-                 return value !== 'BookView';
-              });
-           }
-       }
+      _this.removeBookView();
       
       //remove any imageModes that are not available as a focus
       this.imageModes = jQuery.map(this.imageModes, function(value, index) {
@@ -137,6 +131,19 @@
       jQuery.extend(this, options);
       this.init();
     },
+    
+    // reset whether BookView is available every time as a user might switch between paged and non-paged objects within a single slot/window
+    removeBookView: function() {
+      this.focuses = this.focusesOriginal;
+      if (manifest.sequences[0].viewingHint) {
+           if (manifest.sequences[0].viewingHint.toLowerCase() !== 'paged') {
+              //disable bookview for this object because it's not a paged object
+              this.focuses = jQuery.grep(this.focuses, function(value) {
+                 return value !== 'BookView';
+              });
+           }
+      }
+    },
 
     bindEvents: function() {
       var _this = this;
@@ -155,7 +162,7 @@
 
       jQuery.subscribe('bottomPanelSet.' + _this.id, function(event, visible) {
         var panel = _this.element.find('.bottomPanel');
-        if (visible.visible === true) {
+        if (visible === true) {
           panel.css({transform: 'translateY(0)'});
         } else {
           panel.css({transform: 'translateY(100%)'});
@@ -338,7 +345,8 @@
                                                         parent: this, 
                                                         imageID: imageID, 
                                                         imagesList: this.imagesList,
-                                                        osdOptions: this.focusOptions} );
+                                                        osdOptions: this.focusOptions,
+                                                        bottomPanelAvailable: this.bottomPanelAvailable} );
       } else {
         var view = this.focusModules.ImageView;
         view.updateImage(imageID);
@@ -411,7 +419,7 @@
     bottomPanelVisibility: function(visible) {
       var _this = this;
       _this.bottomPanelVisible = visible;
-      jQuery.publish(('bottomPanelSet.' + _this.id), {visible: visible });
+      jQuery.publish(('bottomPanelSet.' + _this.id), visible);
     },
 
     setCursorFrameStart: function(canvasID) {

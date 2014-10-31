@@ -61,7 +61,7 @@
             }            
             var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'];
 
-            return 'images/' + imageName;
+            return 'images/logos/' + imageName;
           })();
 
           for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
@@ -105,6 +105,7 @@
           var _this = this;
           
           this.element.find('img').on('load', function() {
+            //if img width is not equal to the width in the html, change height
             jQuery(this).hide().fadeIn(750);
           });
           
