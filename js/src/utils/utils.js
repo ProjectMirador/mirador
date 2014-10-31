@@ -113,10 +113,6 @@
     return id[0] || id;
   };
 
-  $.getImagesListByManifestId = function(manifestId) {
-    return $.manifests[manifestId].sequences[0].imagesList;
-  };
-
   $.getImageIndexById = function(imagesList, id) {
       var imgIndex = 0;
 
@@ -135,7 +131,6 @@
           thumbnailUrl;
 
       // Ensure width is an integer...
-      console.log("w: " + width);
       width = parseInt(width, 10);
 
       // Respecting the Model...
@@ -170,26 +165,8 @@
     return manifest.sequences[0].canvases;
   };
   
-  $.getImageTitleForCanvas = function(canvas) {
-    
-  };
-
   $.getCollectionTitle = function(metadata) {
     return metadata.details.label || '';
-  };
-
-
-  $.getImageTitlesAndIds = function(images) {
-    var data = [];
-
-    jQuery.each(images, function(index, image) {
-      data.push({
-        'title': image.title,
-        'id': image.id
-      });
-    });
-
-    return data;
   };
 
   $.genUUID = function() {
