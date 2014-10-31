@@ -8,7 +8,7 @@
             data:                   null,
             element:                null,
             canvas:                 null,
-            currentWorkspaceType:       null,
+            currentWorkspaceType:   null,
             activeWorkspace:        null,
             availableWorkspaces:    null,
             mainMenu:               null,
@@ -17,8 +17,8 @@
             windowSize:             {},
             resizeRatio:            {},
             currentWorkspaceVisible: true,
-            overlayStates:           {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false, 'bookmarkPanelVisible': false},
-            manifests:               {}
+            overlayStates:          {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false, 'bookmarkPanelVisible': false},
+            manifests:              {}
         }, options);
 
         // get initial manifests
@@ -37,14 +37,19 @@
             this.manifests = this.getManifestsData();
 
             // add main menu
-            this.mainMenu = new $.MainMenu({ parent: this, appendTo: this.element });
+            if (this.mainMenuSettings.show === true) {
+              this.mainMenu = new $.MainMenu({ parent: this, appendTo: this.element });
+            }
 
             // add viewer area
             this.canvas = jQuery('<div/>')
             .addClass('mirador-viewer')
             .appendTo(this.element);
+                        
+            if (this.mainMenuSettings.show === false) {
+               this.canvas.css("top", "0px");
+            }
             
-
             // add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
 
