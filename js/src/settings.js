@@ -119,8 +119,9 @@
       'Yale University': 'yale_logo.jpeg',
       'Stanford University': 'sul_logo.jpeg',
       'Harvard University': 'harvard_logo.png',
-      'other': 'iiif_logo.png',
-      'BnF': 'bnf_logo.jpeg'
+      'ecodices': 'ecodices_logo.png',
+      'BnF': 'bnf_logo.jpeg',
+      'other': 'iiif_logo.png'
     },
 
     // // metadata view

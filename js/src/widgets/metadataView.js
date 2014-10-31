@@ -24,23 +24,21 @@
           
       this.metadataTypes = {};
 
-      this.metadataTypes.about = $.getMetadataAbout(_this.manifest);
-      this.metadataTypes.details = $.getMetadataDetails(_this.manifest);
-      this.metadataTypes.rights = $.getMetadataRights(_this.manifest);
-      this.metadataTypes.links = $.getMetadataLinks(_this.manifest);
-      this.metadataTypes.metadata = $.getMetadataFields(_this.manifest);
+      this.metadataTypes.details = _this.getMetadataDetails(_this.manifest);
+      this.metadataTypes.rights = _this.getMetadataRights(_this.manifest);
+      this.metadataTypes.links = _this.getMetadataLinks(_this.manifest);
 
       jQuery.each(this.metadataTypes, function(metadataKey, metadataValue) {
         tplData[metadataKey] = [];
 
         jQuery.each(metadataValue, function(key, value) {
           if (typeof value === 'object') {
-            value = $.stringifyObject(value);
+            value = _this.stringifyObject(value);
           }
 
           if (typeof value === 'string' && value !== '') {
             tplData[metadataKey].push({
-              label: $.extractLabelFromAttribute(key),
+              label: _this.extractLabelFromAttribute(key),
               value: _this.addLinksToUris(value)
             });
           }
@@ -48,9 +46,125 @@
       });
 
       this.element = jQuery(this.template(tplData)).appendTo(this.appendTo);
-
       this.bindEvents();
     },
+
+  // Base code from https://github.com/padolsey/prettyprint.js. Modified to fit Mirador needs
+  stringifyObject: function(obj, nestingMargin) {
+    var type = typeof obj,
+        _this = this,
+        str,
+        first = true,
+        increment = 15,
+        delimiter = '<br/>';
+
+    if (obj instanceof RegExp) {
+      return '/' + obj.source + '/';
+    }
+
+    if (typeof nestingMargin === 'undefined') {
+      nestingMargin = 0;
+    }
+
+    if (obj instanceof Array) {
+      str = '[ ';
+      jQuery.each(obj, function (i, item) {
+        str += (i === 0 ? '' : ', ') + _this.stringifyObject(item, nestingMargin + increment);
+      });
+      return str + ' ]';
+    }
+
+    if (typeof obj === 'object') {
+      str = '<div style="margin-left:' +  nestingMargin + 'px">';
+      for (var i in obj) {
+        if (obj.hasOwnProperty(i)) {
+          str += (first ? '' : delimiter) + i + ': ' + _this.stringifyObject(obj[i], nestingMargin + increment);
+          first = false;
+        }
+      }
+
+      return str + '</div>';
+    }
+    return obj.toString();
+  },
+
+
+  getMetadataDetails: function(jsonLd) {
+      var mdList = {
+          'label':        '<b>' + jsonLd.label + '</b>' || '',
+          'description':  jsonLd.description || ''
+      };
+      if (typeof mdList.description == "object") {
+        var value = "";
+        jQuery.each(mdList.description, function(index, item) {
+          if (typeof item == "string") {
+            value += item;
+            value += "<br/>";
+          } else {
+            // {@value: ..., @language: ...}
+            if (item['@language'] == "en") {
+              value += item['@value'];
+              value += "<br/>";                  
+            }
+          }
+        });        
+        mdList.description = value;
+      }
+
+      if (jsonLd.metadata) {
+        jQuery.each(jsonLd.metadata, function(index, item) {
+          var value = "";
+          if (typeof item.value == "object") {
+            value = "";
+            jQuery.each(item.value, function(i2, what) {
+              if (typeof what == "string") {
+                value += what;
+                value += "<br/>";
+              } else {
+                // {@value: ..., @language: ...}
+                if (what['@language'] == "en") {
+                  value += what['@value'];
+                  value += "<br/>";                  
+                }
+              }
+            });
+          } else {
+            value = item.value;
+          }
+          mdList[item.label] = value;
+        });
+      }
+      return mdList;
+    },
+
+   getMetadataRights: function(jsonLd) {
+       return {
+           'license':      jsonLd.license || '',
+           'attribution':  jsonLd.attribution || '',
+           'logo': jsonLd.logo || ''
+        };
+   },
+
+   getMetadataLinks: function(jsonLd) {
+      return {
+          'related': jsonLd.related || '',
+          'seeAlso':  jsonLd.seeAlso || '',
+          'within':   jsonLd.within || ''
+        };
+   },
+
+   extractLabelFromAttribute: function(attr) {
+    var label = attr;
+
+    label = label.replace(/^@/, '');
+    label = label.replace(/([A-Z])/g, ' $1');
+    label = label.replace(/\s{2,}/g, ' ');
+    label = label.replace(/\w\S*/g, function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+
+    return label;
+  },
 
     bindEvents: function() {
     },
@@ -99,30 +213,33 @@
     },
     
     template: Handlebars.compile([
-    '<div class="sub-title">Details (Metadata about physical object/intellectual work):</div>',
+    '<div class="sub-title">Details:</div>',
         '<dl class="{{metadataListingCls}}">',
           '{{#each details}}',
-            '<dt>{{label}}:</dt><dd>{{value}}</dd>',
+            '<dt>{{label}}:</dt><dd>{{{value}}}</dd>',
           '{{/each}}',
         '</dl>',
-        '<div class="sub-title">Rights Metadata:</div>',
+        '<div class="sub-title">Rights:</div>',
+        '{{#if rights}}',
         '<dl class="{{metadataListingCls}}">',
           '{{#each rights}}',
-            '<dt>{{label}}:</dt><dd>{{value}}</dd>',
+            '<dt>{{label}}:</dt><dd>{{{value}}}</dd>',
           '{{/each}}',
         '</dl>',
-        '<div class="sub-title">Linking Metadata:</div>',
+        '{{else}}',
+        '<dl class="{{metadataListingCls}}">',
+            '<dt>Rights Status:</dt><dd>Unspecified</dd>',
+        '</dl>',
+        '{{/if}}',
+        '{{#if links}}',
+        '<div class="sub-title">Links:</div>',
         '<dl class="{{metadataListingCls}}">',
           '{{#each links}}',
-            '<dt>{{label}}:</dt><dd>{{value}}</dd>',
+            '<dt>{{label}}:</dt><dd>{{{value}}}</dd>',
           '{{/each}}',
         '</dl>',
-        '<div class="sub-title">About (Metadata about this manuscript\'s manifest file):</div>',
-        '<dl class="{{metadataListingCls}}">',
-          '{{#each about}}',
-            '<dt>{{label}}:</dt><dd>{{value}}</dd>',
-          '{{/each}}',
-        '</dl>'
+        '{{/if}}'
+
     ].join(''), { noEscape: true })
 
   };

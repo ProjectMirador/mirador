@@ -1,8 +1,3 @@
-// TODO: If paged object, then need opposite page (can do simple algorithm to use even/odd page number to start)
-// If continuous, then need to stitch all (use order)
-// If individual, no stitching (this view shouldn't do anything?)
-// next and previous not needed
-// no locking needed
 (function($) {
 
   $.BookView = function(options) {
@@ -145,7 +140,7 @@
         var imageUrl = $.Iiif.getImageUrl(image);
         var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json';
         var infoJson = $.getJsonFromUrl(infoJsonUrl, false);
-        tileSources.push($.Iiif.prepJsonForOsd(infoJson));
+        tileSources.push(infoJson);
       });
 
       var aspectRatio = tileSources[0].height / tileSources[0].width;
