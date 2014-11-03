@@ -154,15 +154,22 @@
             });
 
             jQuery.each(loadingOrder, function(index, order) {
-                var manifest = _this.data[order];
-                var url = manifest.manifestUri;
-
-                if (!jQuery.isEmptyObject(manifest)) {
-                    // populate blank object for immediate, synchronous return
-                    manifests[url] = null;
-                    _this.addManifestFromUrl(url, manifest.location ? manifest.location : '');
+                var what = _this.data[order];
+                if (what.hasOwnProperty('manifestUri')) {
+                  var url = what.manifestUri;
+                  // populate blank object for immediate, synchronous return
+                  manifests[url] = null;
+                  _this.addManifestFromUrl(url, what.location ? what.location : '');
+                } else if (what.hasOwnProperty('collectionUri')) {
+                  // TODO: fetch should be asynchronous
+                  var colljs = $.getJsonFromUrl(what.collectionUri);
+                  if (colljs.hasOwnProperty('manifests')) {
+                    jQuery.each(colljs.manifests, function(ci, mfst) {
+                      manifests[url] = null;
+                      _this.addManifestFromUrl(mfst['@id'], '');
+                    });
+                  }
                 }
-
             });
 
             return manifests;

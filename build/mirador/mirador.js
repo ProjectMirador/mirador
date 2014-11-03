@@ -2846,6 +2846,8 @@ window.Mirador = window.Mirador || function(config) {
       'Yale University': 'yale_logo.jpeg',
       'Stanford University': 'sul_logo.jpeg',
       'Harvard University': 'harvard_logo.png',
+      'ecodices': 'ecodices_logo.png',
+      'BnF': 'bnf_logo.jpeg',
       'other': 'iiif_logo.png'
     },
 
@@ -3053,15 +3055,22 @@ window.Mirador = window.Mirador || function(config) {
             });
 
             jQuery.each(loadingOrder, function(index, order) {
-                var manifest = _this.data[order];
-                var url = manifest.manifestUri;
-
-                if (!jQuery.isEmptyObject(manifest)) {
-                    // populate blank object for immediate, synchronous return
-                    manifests[url] = null;
-                    _this.addManifestFromUrl(url, manifest.location ? manifest.location : '');
+                var what = _this.data[order];
+                if (what.hasOwnProperty('manifestUri')) {
+                  var url = what.manifestUri;
+                  // populate blank object for immediate, synchronous return
+                  manifests[url] = null;
+                  _this.addManifestFromUrl(url, what.location ? what.location : '');
+                } else if (what.hasOwnProperty('collectionUri')) {
+                  // TODO: fetch should be asynchronous
+                  var colljs = $.getJsonFromUrl(what.collectionUri);
+                  if (colljs.hasOwnProperty('manifests')) {
+                    jQuery.each(colljs.manifests, function(ci, mfst) {
+                      manifests[url] = null;
+                      _this.addManifestFromUrl(mfst['@id'], '');
+                    });
+                  }
                 }
-
             });
 
             return manifests;
@@ -3560,6 +3569,7 @@ window.Mirador = window.Mirador || function(config) {
           
           this.tplData.repoImage = (function() {
             var repo = _this.tplData.repository;
+            console.log("repo is: " + repo);
             if (_this.tplData.repository === '(Added from URL)') {
                repo = '';
             }            
@@ -3569,13 +3579,15 @@ window.Mirador = window.Mirador || function(config) {
           })();
 
           for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
-            var canvas = manifest.sequences[0].canvases[i],
-            resource = canvas.images[0].resource['default'] ? canvas.images[0].resource['default'] : canvas.images[0].resource,
-            service = resource.service,
-            url = $.Iiif.getUriWithHeight(service['@id'], _this.urlHeight),
-            aspectRatio = canvas.height/canvas.width,
+            var canvas = manifest.sequences[0].canvases[i];
+            if (canvas.width === 0) {
+              continue;
+            }
+
+            var aspectRatio = canvas.height/canvas.width,
             width = (_this.thumbHeight/aspectRatio);
-            
+            url = $.getThumbnailForCanvas(canvas, width);
+
             _this.imagesTotalWidth += (width + _this.margin);
             if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
                _this.imagesTotalWidth -= (width + _this.margin);
@@ -5259,11 +5271,6 @@ window.Mirador = window.Mirador || function(config) {
 
 }(Mirador));
 
-// TODO: If paged object, then need opposite page (can do simple algorithm to use even/odd page number to start)
-// If continuous, then need to stitch all (use order)
-// If individual, no stitching (this view shouldn't do anything?)
-// next and previous not needed
-// no locking needed
 (function($) {
 
   $.BookView = function(options) {
@@ -5406,7 +5413,7 @@ window.Mirador = window.Mirador || function(config) {
         var imageUrl = $.Iiif.getImageUrl(image);
         var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json';
         var infoJson = $.getJsonFromUrl(infoJsonUrl, false);
-        tileSources.push($.Iiif.prepJsonForOsd(infoJson));
+        tileSources.push(infoJson);
       });
 
       var aspectRatio = tileSources[0].height / tileSources[0].width;
@@ -5918,7 +5925,8 @@ this.elemStitchOptions.hide();
 
       this.osd = $.OpenSeadragon({
         'id':           osdID,
-        'tileSources':  $.Iiif.prepJsonForOsd(infoJson)
+        'tileSources':  infoJson,
+        'uniqueID' : uniqueID
       });
 
 
@@ -6037,23 +6045,21 @@ this.elemStitchOptions.hide();
           
       this.metadataTypes = {};
 
-      this.metadataTypes.about = $.getMetadataAbout(_this.manifest);
-      this.metadataTypes.details = $.getMetadataDetails(_this.manifest);
-      this.metadataTypes.rights = $.getMetadataRights(_this.manifest);
-      this.metadataTypes.links = $.getMetadataLinks(_this.manifest);
-      this.metadataTypes.metadata = $.getMetadataFields(_this.manifest);
+      this.metadataTypes.details = _this.getMetadataDetails(_this.manifest);
+      this.metadataTypes.rights = _this.getMetadataRights(_this.manifest);
+      this.metadataTypes.links = _this.getMetadataLinks(_this.manifest);
 
       jQuery.each(this.metadataTypes, function(metadataKey, metadataValue) {
         tplData[metadataKey] = [];
 
         jQuery.each(metadataValue, function(key, value) {
           if (typeof value === 'object') {
-            value = $.stringifyObject(value);
+            value = _this.stringifyObject(value);
           }
 
           if (typeof value === 'string' && value !== '') {
             tplData[metadataKey].push({
-              label: $.extractLabelFromAttribute(key),
+              label: _this.extractLabelFromAttribute(key),
               value: _this.addLinksToUris(value)
             });
           }
@@ -6061,9 +6067,125 @@ this.elemStitchOptions.hide();
       });
 
       this.element = jQuery(this.template(tplData)).appendTo(this.appendTo);
-
       this.bindEvents();
     },
+
+  // Base code from https://github.com/padolsey/prettyprint.js. Modified to fit Mirador needs
+  stringifyObject: function(obj, nestingMargin) {
+    var type = typeof obj,
+        _this = this,
+        str,
+        first = true,
+        increment = 15,
+        delimiter = '<br/>';
+
+    if (obj instanceof RegExp) {
+      return '/' + obj.source + '/';
+    }
+
+    if (typeof nestingMargin === 'undefined') {
+      nestingMargin = 0;
+    }
+
+    if (obj instanceof Array) {
+      str = '[ ';
+      jQuery.each(obj, function (i, item) {
+        str += (i === 0 ? '' : ', ') + _this.stringifyObject(item, nestingMargin + increment);
+      });
+      return str + ' ]';
+    }
+
+    if (typeof obj === 'object') {
+      str = '<div style="margin-left:' +  nestingMargin + 'px">';
+      for (var i in obj) {
+        if (obj.hasOwnProperty(i)) {
+          str += (first ? '' : delimiter) + i + ': ' + _this.stringifyObject(obj[i], nestingMargin + increment);
+          first = false;
+        }
+      }
+
+      return str + '</div>';
+    }
+    return obj.toString();
+  },
+
+
+  getMetadataDetails: function(jsonLd) {
+      var mdList = {
+          'label':        '<b>' + jsonLd.label + '</b>' || '',
+          'description':  jsonLd.description || ''
+      };
+      if (typeof mdList.description == "object") {
+        var value = "";
+        jQuery.each(mdList.description, function(index, item) {
+          if (typeof item == "string") {
+            value += item;
+            value += "<br/>";
+          } else {
+            // {@value: ..., @language: ...}
+            if (item['@language'] == "en") {
+              value += item['@value'];
+              value += "<br/>";                  
+            }
+          }
+        });        
+        mdList.description = value;
+      }
+
+      if (jsonLd.metadata) {
+        jQuery.each(jsonLd.metadata, function(index, item) {
+          var value = "";
+          if (typeof item.value == "object") {
+            value = "";
+            jQuery.each(item.value, function(i2, what) {
+              if (typeof what == "string") {
+                value += what;
+                value += "<br/>";
+              } else {
+                // {@value: ..., @language: ...}
+                if (what['@language'] == "en") {
+                  value += what['@value'];
+                  value += "<br/>";                  
+                }
+              }
+            });
+          } else {
+            value = item.value;
+          }
+          mdList[item.label] = value;
+        });
+      }
+      return mdList;
+    },
+
+   getMetadataRights: function(jsonLd) {
+       return {
+           'license':      jsonLd.license || '',
+           'attribution':  jsonLd.attribution || '',
+           'logo': jsonLd.logo || ''
+        };
+   },
+
+   getMetadataLinks: function(jsonLd) {
+      return {
+          'related': jsonLd.related || '',
+          'seeAlso':  jsonLd.seeAlso || '',
+          'within':   jsonLd.within || ''
+        };
+   },
+
+   extractLabelFromAttribute: function(attr) {
+    var label = attr;
+
+    label = label.replace(/^@/, '');
+    label = label.replace(/([A-Z])/g, ' $1');
+    label = label.replace(/\s{2,}/g, ' ');
+    label = label.replace(/\w\S*/g, function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+
+    return label;
+  },
 
     bindEvents: function() {
     },
@@ -6112,30 +6234,33 @@ this.elemStitchOptions.hide();
     },
     
     template: Handlebars.compile([
-    '<div class="sub-title">Details (Metadata about physical object/intellectual work):</div>',
+    '<div class="sub-title">Details:</div>',
         '<dl class="{{metadataListingCls}}">',
           '{{#each details}}',
-            '<dt>{{label}}:</dt><dd>{{value}}</dd>',
+            '<dt>{{label}}:</dt><dd>{{{value}}}</dd>',
           '{{/each}}',
         '</dl>',
-        '<div class="sub-title">Rights Metadata:</div>',
+        '<div class="sub-title">Rights:</div>',
+        '{{#if rights}}',
         '<dl class="{{metadataListingCls}}">',
           '{{#each rights}}',
-            '<dt>{{label}}:</dt><dd>{{value}}</dd>',
+            '<dt>{{label}}:</dt><dd>{{{value}}}</dd>',
           '{{/each}}',
         '</dl>',
-        '<div class="sub-title">Linking Metadata:</div>',
+        '{{else}}',
+        '<dl class="{{metadataListingCls}}">',
+            '<dt>Rights Status:</dt><dd>Unspecified</dd>',
+        '</dl>',
+        '{{/if}}',
+        '{{#if links}}',
+        '<div class="sub-title">Links:</div>',
         '<dl class="{{metadataListingCls}}">',
           '{{#each links}}',
-            '<dt>{{label}}:</dt><dd>{{value}}</dd>',
+            '<dt>{{label}}:</dt><dd>{{{value}}}</dd>',
           '{{/each}}',
         '</dl>',
-        '<div class="sub-title">About (Metadata about this manuscript\'s manifest file):</div>',
-        '<dl class="{{metadataListingCls}}">',
-          '{{#each about}}',
-            '<dt>{{label}}:</dt><dd>{{value}}</dd>',
-          '{{/each}}',
-        '</dl>'
+        '{{/if}}'
+
     ].join(''), { noEscape: true })
 
   };
@@ -6232,7 +6357,7 @@ this.elemStitchOptions.hide();
 
         this.loadContent();
         this.bindEvents();
-        },
+    },
 
     loadContent: function() {
       var _this = this,
@@ -6242,15 +6367,19 @@ this.elemStitchOptions.hide();
         thumbnailCls:   this.thumbInfo.thumbnailCls
       };
 
-      tplData.thumbs = jQuery.map(this.imagesList, function(image, index) {
-        var urlHeight = _this.defaultThumbHeight > _this.thumbInfo.thumbsHeight ? _this.defaultThumbHeight : _this.thumbInfo.thumbsHeight,
-        aspectRatio = image.height/image.width,
-        width = (_this.thumbInfo.thumbsHeight/aspectRatio);
+      tplData.thumbs = jQuery.map(this.imagesList, function(canvas, index) {
+        if (canvas.width === 0) {
+          return {};
+        }
+
+        var aspectRatio = canvas.height/canvas.width,
+        width = (_this.thumbInfo.thumbsHeight/aspectRatio),
+        thumbnailUrl = $.getThumbnailForCanvas(canvas, width);
 
         return {
-          thumbUrl: $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), urlHeight),
-          title:    image.label,
-          id:       image['@id'],
+          thumbUrl: thumbnailUrl,
+          title:    canvas.label,
+          id:       canvas['@id'],
           width:    width,
           highlight: _this.currentImgIndex === index ? 'highlight' : ''
         };
@@ -6342,7 +6471,7 @@ this.elemStitchOptions.hide();
        jQuery.each(this.imagesList, function(index, image) {
           var aspectRatio = image.height/image.width,
           width = (_this.thumbInfo.thumbsHeight/aspectRatio),
-          newThumbURL = $.Iiif.getUriWithHeight($.getImageUrlForCanvas(image), _this.thumbInfo.thumbsHeight),
+          newThumbURL = $.getThumbnailForCanvas(image, width),
           id = image['@id'];
           var imageElement = _this.element.find('img[data-image-id="'+id+'"]');
           imageElement.attr('data', newThumbURL).attr('height', _this.thumbInfo.thumbsHeight).attr('width', width).attr('src', '');
@@ -6823,24 +6952,22 @@ this.elemStitchOptions.hide();
       return id;
     },
 
-
-    getUriWithHeight: function(uri, height) {
-      uri = uri.replace(/\/$/, '');
-      return this.getUri(uri) + '/full/,' + height + '/0/native.jpg';
-    },
-
-
-    prepJsonForOsd: function(json) {
-      json.scale_factors = this.packageScaleFactors(json);
-
-      if (!json.tile_width) {
-        json.tile_width = 256;
-        json.tile_height = 256;
+    getVersionFromContext: function(context) {
+      if (context == "http://iiif.io/api/image/2/context.json") {
+        return "2.0";
+      } else {
+        return "1.1";
       }
-
-      return json;
     },
 
+    makeUriWithWidth: function(uri, width, version) {
+      uri = uri.replace(/\/$/, '');
+      if (version[0] == '1') {
+        return this.getUri(uri) + '/full/' + width + ',/0/native.jpg';
+      } else {
+        return this.getUri(uri) + '/full/' + width + ',/0/default.jpg';
+      }
+    },
 
     getImageHostUrl: function(json) {
       var regex,
@@ -6866,19 +6993,6 @@ this.elemStitchOptions.hide();
       }
 
       return json.image_host;
-    },
-
-
-    packageScaleFactors: function(json) {
-      var newScaleFactors = [];
-
-      if (json.hasOwnProperty('scale_factors') && jQuery.isArray(json.scale_factors)) {
-        for (var i = 0; i < json.scale_factors.length; i++) {
-          newScaleFactors.push(Math.pow(2,i));
-        }
-      }
-
-      return newScaleFactors;
     }
 
   };
@@ -7202,6 +7316,10 @@ jQuery.fn.scrollStop = function(callback) {
     return (typeof $.DEFAULT_SETTINGS.availableViews.view === 'undefined');
   };
 
+  $.getViewLabel = function(type) {
+    var view = $.DEFAULT_SETTINGS.availableViews[type];
+    return (view && view.label) ? view.label : type;
+  };
 
   $.inArrayToBoolean = function(index) {
     return index === -1 ? false : true;
@@ -7250,54 +7368,8 @@ jQuery.fn.scrollStop = function(callback) {
     if (str.length > length) {
       str = str.substr(0, length) + '...';
     }
-
     return str;
   };
-
-
-  // Base code from https://github.com/padolsey/prettyprint.js. Modified to fit Mirador needs
-  $.stringifyObject = function(obj, nestingMargin) {
-    var type = typeof obj,
-        str,
-        first = true,
-        increment = 15,
-        delimiter = '<br/>';
-
-    if (obj instanceof RegExp) {
-      return '/' + obj.source + '/';
-    }
-
-    if (typeof nestingMargin === 'undefined') {
-      nestingMargin = 0;
-    }
-
-    if (obj instanceof Array) {
-      str = '[ ';
-
-      jQuery.each(obj, function (i, item) {
-        str += (i === 0 ? '' : ', ') + $.stringifyObject(item, nestingMargin + increment);
-      });
-
-      return str + ' ]';
-    }
-
-    if (typeof obj === 'object') {
-      str = '<div style="margin-left:' +  nestingMargin + 'px">';
-
-      for (var i in obj) {
-        if (obj.hasOwnProperty(i)) {
-          str += (first ? '' : delimiter) + i + ': ' + $.stringifyObject(obj[i], nestingMargin + increment);
-          first = false;
-        }
-      }
-
-      return str + '</div>';
-    }
-
-
-    return obj.toString();
-  };
-
 
   $.getJsonFromUrl = function(url, async) {
     var json;
@@ -7319,26 +7391,6 @@ jQuery.fn.scrollStop = function(callback) {
     return json;
   };
 
-
-  $.getViewLabel = function(type) {
-    var view = $.DEFAULT_SETTINGS.availableViews[type];
-
-    return (view && view.label) ? view.label : type;
-  };
-
-
-  $.extractLabelFromAttribute = function(attr) {
-    var label = attr;
-
-    label = label.replace(/^@/, '');
-    label = label.replace(/([A-Z])/g, ' $1');
-    label = label.replace(/\s{2,}/g, ' ');
-    label = label.replace(/\w\S*/g, function(txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-
-    return label;
-  };
 
 
   $.toString = function(obj, delimiter) {
@@ -7372,53 +7424,6 @@ jQuery.fn.scrollStop = function(callback) {
 
     return id[0] || id;
   };
-  
-  $.getMetadataAbout = function(jsonLd) {
-      return {
-         '@context': jsonLd['@context'] || '',
-         '@id':      jsonLd['@id'] || ''
-        };
-    };
-
-  $.getMetadataDetails = function(jsonLd) {
-      return {
-          'label':        jsonLd.label || '',
-          'agent':        jsonLd.agent || '',
-          'location':     jsonLd.location || '',
-          'date':         jsonLd.date || '',
-          'description':  jsonLd.description || ''
-        };
-    };
-
-  $.getMetadataFields = function(jsonLd) {
-      // parse and store metadata pairs (API 1.0)
-      var mdList = {};
-      if (typeof jsonLd.metadata !== 'undefined') {
-          jQuery.each(jsonLd.metadata, function(index, item) {
-              mdList[item.label] = item.value;
-            });
-        }
-        return mdList;
-   };
-
-   $.getMetadataRights =function(jsonLd) {
-       return {
-           'license':      jsonLd.license || '',
-           'attribution':  jsonLd.attribution || ''
-        };
-   };
-
-   $.getMetadataLinks = function(jsonLd) {
-      return {
-          'service':  jsonLd.service || '',
-          'seeAlso':  jsonLd.seeAlso || '',
-          'within':   jsonLd.within || ''
-        };
-   };
-
-  $.getImagesListByManifestId = function(manifestId) {
-    return $.manifests[manifestId].sequences[0].imagesList;
-  };
 
   $.getImageIndexById = function(imagesList, id) {
       var imgIndex = 0;
@@ -7431,37 +7436,49 @@ jQuery.fn.scrollStop = function(callback) {
 
       return imgIndex;
     };
-    
+
+  $.getThumbnailForCanvas = function(canvas, width) {
+      var version = "1.1",
+          service,
+          thumbnailUrl;
+
+      // Ensure width is an integer...
+      width = parseInt(width, 10);
+
+      // Respecting the Model...
+      if (canvas.hasOwnProperty('thumbnail')) {
+        // use the thumbnail image, prefer via a service
+        if (typeof(canvas.thumbnail) == 'string') {
+          thumbnailUrl = canvas.thumbnail;
+        } else if (canvas.thumbnail.hasOwnProperty('service')) {
+          // Get the IIIF Image API via the @context
+          service = canvas.thumbnail.service;
+          if (service.hasOwnProperty('@context')) {
+            version = $.Iiif.getVersionFromContext(service['@context']);
+          }
+          thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+        } else {
+          thumbnailUrl = canvas.thumbnail['@id'];
+        }
+      } else {
+        // No thumbnail, use main image
+        var resource = canvas.images[0].resource;
+        service = resource['default'] ? resource['default'].service : resource.service;
+        // TODO: This should check that service is actually there...
+        if (service.hasOwnProperty('@context')) {
+          version = $.Iiif.getVersionFromContext(service['@context']);
+        }          
+        thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+      }
+      return thumbnailUrl;
+    };
+
   $.getImagesListByManifest = function(manifest) {
     return manifest.sequences[0].canvases;
   };
   
-  $.getImageUrlForCanvas = function(canvas) {
-    var resource = canvas.images[0].resource;
-    var service = resource['default'] ? resource['default'].service : resource.service;
-    return service['@id'];
-  };
-  
-  $.getImageTitleForCanvas = function(canvas) {
-    
-  };
-
   $.getCollectionTitle = function(metadata) {
     return metadata.details.label || '';
-  };
-
-
-  $.getImageTitlesAndIds = function(images) {
-    var data = [];
-
-    jQuery.each(images, function(index, image) {
-      data.push({
-        'title': image.title,
-        'id': image.id
-      });
-    });
-
-    return data;
   };
 
   $.genUUID = function() {
