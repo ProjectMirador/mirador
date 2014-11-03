@@ -5,8 +5,8 @@
         jQuery.extend(true, this, {
             parent:                     null,
             element:                    null,
-            mainMenuHeight:             $.DEFAULT_SETTINGS.mainMenu.height,
-            mainMenuWidth:              $.DEFAULT_SETTINGS.mainMenu.width,
+            mainMenuHeight:             null,
+            mainMenuWidth:              null,
             windowOptionsMenu:          null,
             loadWindow:                 null,
             clearLocalStorage:          '',
@@ -28,6 +28,8 @@
     $.MainMenu.prototype = {
 
         init: function() {
+            this.mainMenuHeight = this.parent.mainMenuSettings.height;
+            this.mainMenuWidth = this.parent.mainMenuSettings.width;
             this.element
             .addClass(this.mainMenuBarCls)
             .height(this.mainMenuHeight)

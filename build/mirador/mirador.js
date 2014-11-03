@@ -2836,8 +2836,8 @@ window.Mirador = window.Mirador || function(config) {
     ],
     
     // main (top) menu
-    'mainMenu': {
-      'autoHide': true,
+    'mainMenuSettings': {
+      'show': true,
       'height': 25,
       'width': '100%'
     },
@@ -2909,7 +2909,7 @@ window.Mirador = window.Mirador || function(config) {
             data:                   null,
             element:                null,
             canvas:                 null,
-            currentWorkspaceType:       null,
+            currentWorkspaceType:   null,
             activeWorkspace:        null,
             availableWorkspaces:    null,
             mainMenu:               null,
@@ -2918,8 +2918,8 @@ window.Mirador = window.Mirador || function(config) {
             windowSize:             {},
             resizeRatio:            {},
             currentWorkspaceVisible: true,
-            overlayStates:           {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false, 'bookmarkPanelVisible': false},
-            manifests:               {}
+            overlayStates:          {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false, 'bookmarkPanelVisible': false},
+            manifests:              {}
         }, options);
 
         // get initial manifests
@@ -2938,14 +2938,19 @@ window.Mirador = window.Mirador || function(config) {
             this.manifests = this.getManifestsData();
 
             // add main menu
-            this.mainMenu = new $.MainMenu({ parent: this, appendTo: this.element });
+            if (this.mainMenuSettings.show === true) {
+              this.mainMenu = new $.MainMenu({ parent: this, appendTo: this.element });
+            }
 
             // add viewer area
             this.canvas = jQuery('<div/>')
             .addClass('mirador-viewer')
             .appendTo(this.element);
+                        
+            if (this.mainMenuSettings.show === false) {
+               this.canvas.css("top", "0px");
+            }
             
-
             // add workspaces panel
             this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
 
@@ -3439,8 +3444,8 @@ window.Mirador = window.Mirador || function(config) {
         jQuery.extend(true, this, {
             parent:                     null,
             element:                    null,
-            mainMenuHeight:             $.DEFAULT_SETTINGS.mainMenu.height,
-            mainMenuWidth:              $.DEFAULT_SETTINGS.mainMenu.width,
+            mainMenuHeight:             null,
+            mainMenuWidth:              null,
             windowOptionsMenu:          null,
             loadWindow:                 null,
             clearLocalStorage:          '',
@@ -3462,6 +3467,8 @@ window.Mirador = window.Mirador || function(config) {
     $.MainMenu.prototype = {
 
         init: function() {
+            this.mainMenuHeight = this.parent.mainMenuSettings.height;
+            this.mainMenuWidth = this.parent.mainMenuSettings.width;
             this.element
             .addClass(this.mainMenuBarCls)
             .height(this.mainMenuHeight)
