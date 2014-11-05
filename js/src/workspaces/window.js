@@ -10,6 +10,7 @@
       currentImageID:    null,
       focusImages:       [],
       imagesList:        null,
+      annotationsList:   null,
       currentImageMode:  'ImageView',
       imageModes:        ['ImageView', 'BookView'],
       currentFocus:      'ThumbnailsView',
@@ -74,6 +75,8 @@
       if (!_this.currentImageID) {
         _this.currentImageID = _this.imagesList[0]['@id'];
       }
+      
+      _this.annotationsList = _this.getAnnotations();
 
       //check config
       if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
@@ -452,6 +455,20 @@
       if (this.focusOverlaysAvailable[this.currentFocus].overlay.MetadataView) {
         this.element.find('.mirador-icon-metadata-view').addClass('selected');
       }
+    },
+    
+    /*
+     Merge all annotations for current image/canvas from various sources
+     Pass to any widgets that will use this list
+    */
+    getAnnotations: function() {
+      var _this = this;
+      jQuery.each($.viewer.annotationEndpoints, function(index, value) {
+         value.options.element = _this.element;
+         value.options.uri = _this.currentImageID;
+         var endpoint = new $[value.module](value.options);
+         var annotations = endpoint.search();
+      });
     },
 
     // based on currentFocus

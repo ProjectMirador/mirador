@@ -146,11 +146,18 @@
     //   'maxZoomLevel': 4
     // },
     
-    'annotationEndpoint': {
-      'url': '',
-      'storeId': 123,
-      'APIKey': '23983hf98j3f9283jf2983fj'
-    },
+    /*
+    List of backends that have instance-specific configuration data as a hash, e.g.:
+    {
+      name: 'backend name',
+      module: 'NameEndpoint',
+      options: 
+        {'url': '',
+        'storeId': 123,
+        'APIKey': '23983hf98j3f9283jf2983fj'
+        }
+    }*/
+    'annotationEndpoints': [],
     
     // parameters of saving system
     'saveController': {
