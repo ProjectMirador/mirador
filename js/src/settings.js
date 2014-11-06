@@ -109,8 +109,8 @@
     ],
     
     // main (top) menu
-    'mainMenu': {
-      'autoHide': true,
+    'mainMenuSettings': {
+      'show': true,
       'height': 25,
       'width': '100%'
     },
