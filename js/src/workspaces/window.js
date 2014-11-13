@@ -467,7 +467,6 @@
          value.options.element = _this.element;
          value.options.uri = _this.currentImageID;
          var endpoint = new $[value.module](value.options);
-         var annotations = endpoint.search();
       });
     },
 

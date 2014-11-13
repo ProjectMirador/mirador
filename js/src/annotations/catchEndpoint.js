@@ -95,8 +95,9 @@
                 loadFromSearch:{
                     limit:10,
                     offset:0,
+                    //media:"image"
                     //uri:this.uri,
-                    media:'image'
+                    parentid:58616
                     //userid:''
                 }
             },
@@ -120,19 +121,97 @@
           this.annotator.addPlugin('Auth', annotatorOptions.optionsAnnotator.auth);
           //this.annotator.addPlugin("Permissions", annotatorOptions.optionsAnnotator.permissions);
           this.annotator.addPlugin('Store', annotatorOptions.optionsAnnotator.store);
-          console.log(this.annotator.plugins.Store);
-          
+          console.log(this.annotator);
+          this.bindEvents();
         
         },
+        
+        bindEvents: function() {
+          var _this = this;
+          this.annotator.subscribe("annotationsLoaded", function (annotations){
+             _this.getAnnotationInOA();
+          });
+        },
+        
         search: function() {
-          if (!this.annotator.plugins.Store) {
-             
-          }
            
         },
         
-        getAnnotation: function() {
+        getAnnotationInOA: function(annotationID) {
+          //var annotation = this.getAnnotationInAnnotator(annotationID),
+          var annotation = this.annotator.plugins.Store.annotations[1],
+          id, 
+          motivation = [],
+          resource = [],
+          on,
+          annotatedBy,
+          bounds,
+          rect;
+          //convert annotation to OA format
+      
+         id = annotation.id;
+         
+         if (annotation.tags.length > 0) {
+           motivation.push("oa:tagging");
+           jQuery.each(annotation.tags, function(index, value) {
+             resource.push({      
+               "@type":"oa:Tag",
+               "chars":value
+               });
+           });
+         }
+         if (annotation.parent !== "0") {
+           motivation.push("oa:replying");
+           on = annotation.parent;
+         } else {
+           motivation.push("oa:commenting");
+           on = { "@type" : "oa:SpecificResource",
+                  "source" : annotation.uri,
+                  "selector" : {
+                    "@type" : "oa:FragmentSelector",
+                    "value" : "xywh=100,100,100,100"   // from rangePosition, do math};
+                  },
+                  "scope": {
+                    "@context" : "http://www.harvard.edu/catch/oa.json",
+                    "@type" : "catch:Viewport",
+                    "value" : "xywh=0,0,640,480" //do math from bounds
+                  }
+                };
+         }
+         resource.push( {
+            "@type":"dctypes:Text",
+            "format":"text/html",
+            "chars":annotation.text
+         });
+         
+         annotatedBy = { "@id" : annotation.user.id,
+                         "name" : annotation.user.name};
+         
+         var oaAnnotation = {
+            "@context":"http://iiif.io/api/presentation/2/context.json",
+            "@id":id,
+            "@type":"oa:Annotation",
+            "motivation":motivation,
+            "resource":resource,
+            "on": on,
+            "annotatedBy" : annotatedBy,
+            "annotatedAt" : annotation.created,
+            "serializedAt" : annotation.updated
+         };
+         console.log(oaAnnotation);
+        },
         
+        getAnnotationInAnnotator: function(annotationID) {
+           //return version from catch
+           var annotations = this.annotator.plugins.Store.annotations;
+           var annotation = null;
+           jQuery.each(annotations, function(index, value) {
+             if (value.id === annotationID) {
+                annotation = value;
+                return false;
+             }
+           });
+           return annotation;
         }
     };
 
