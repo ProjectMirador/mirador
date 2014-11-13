@@ -4390,7 +4390,7 @@ window.Mirador = window.Mirador || function(config) {
           rect;
           //convert annotation to OA format
       
-         id = annotation.id;
+         id = annotation.id;  //need to make URI
          
          if (annotation.tags.length > 0) {
            motivation.push("oa:tagging");
@@ -4403,7 +4403,7 @@ window.Mirador = window.Mirador || function(config) {
          }
          if (annotation.parent !== "0") {
            motivation.push("oa:replying");
-           on = annotation.parent;
+           on = annotation.parent;  //need to make URI
          } else {
            motivation.push("oa:commenting");
            on = { "@type" : "oa:SpecificResource",
@@ -4420,21 +4420,21 @@ window.Mirador = window.Mirador || function(config) {
                 };
          }
          resource.push( {
-            "@type":"dctypes:Text",
-            "format":"text/html",
-            "chars":annotation.text
+            "@type" : "dctypes:Text",
+            "format" : "text/html",
+            "chars" : annotation.text
          });
          
          annotatedBy = { "@id" : annotation.user.id,
                          "name" : annotation.user.name};
          
          var oaAnnotation = {
-            "@context":"http://iiif.io/api/presentation/2/context.json",
-            "@id":id,
-            "@type":"oa:Annotation",
-            "motivation":motivation,
-            "resource":resource,
-            "on": on,
+            "@context" : "http://iiif.io/api/presentation/2/context.json",
+            "@id" : id,
+            "@type" : "oa:Annotation",
+            "motivation" : motivation,
+            "resource" : resource,
+            "on" : on,
             "annotatedBy" : annotatedBy,
             "annotatedAt" : annotation.created,
             "serializedAt" : annotation.updated
