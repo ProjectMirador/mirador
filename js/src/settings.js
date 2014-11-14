@@ -10,6 +10,8 @@
     'currentWorkspaceType': 'singleObject',
 
     'availableWorkspaces': ['singleObject', 'compare', 'bookReading'],
+    
+    'saveSession' : true,
       
     'workspaces' : {
       'singleObject': {

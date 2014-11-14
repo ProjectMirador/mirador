@@ -18,6 +18,13 @@
 
     init: function(config) {
       var _this = this;
+      
+      // Don't want to save session, therefore don't set up save controller
+      if (config.saveSession === false) {
+        this.currentConfig = config;
+        return false;
+      }
+      
       var sessionID = window.location.hash.substring(1); // will return empty string if none exists, causing the or statement below to evaluate to false, generating a new sesssionID.
       
       if (sessionID) {
