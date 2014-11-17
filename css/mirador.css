@@ -259,7 +259,6 @@ a {
   white-space: nowrap;
   overflow:hidden;
 }
-
 .items-listing h3 {
   color:rgba(0,0,0,0.8);
   font-weight:bold;
@@ -765,6 +764,12 @@ li.highlight {
   right:1%;
   top:50%;
   margin-top:-17px;
+}
+.mirador-osd-annotations-layer {
+  position:absolute;
+  left:1%;
+  bottom:0;
+  margin: 0;
 }
 .mirador-osd-toggle-bottom-panel {
   position: absolute;

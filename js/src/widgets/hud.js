@@ -35,6 +35,10 @@
         _this.parent.previous();
       });
       
+      this.parent.element.find('.mirador-osd-annotations-layer').on('click', function() {
+        // initiate annotations layer.
+      });
+      
       this.parent.element.find('.mirador-osd-go-home').on('click', function() {
         _this.parent.osd.viewport.goHome();
       });
@@ -59,19 +63,15 @@
         osd.viewport.panBy(new OpenSeadragon.Point(-0.05, 0));
         osd.viewport.applyConstraints();
       });
-      
       this.parent.element.find('.mirador-osd-zoom-in').on('click', function() {
         var osd = _this.parent.osd;
         if ( osd.viewport ) {
           osd.viewport.zoomBy(
             osd.zoomPerClick / 1.0
-
           );
           osd.viewport.applyConstraints();
-
         }
       });
-      
       this.parent.element.find('.mirador-osd-zoom-out').on('click', function() {
         var osd = _this.parent.osd;
         if ( osd.viewport ) {
@@ -100,7 +100,8 @@
       });
       
       jQuery.subscribe('bottomPanelSet.' + _this.parent.parent.id, function(event, visible) {
-        var dodgers = _this.parent.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls');
+        var dodgers = _this.parent.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls, .mirador-osd-annotations-layer');
+        console.log(dodgers);
         var arrows = _this.parent.element.find('.mirador-osd-next, .mirador-osd-previous');
         if (visible === true) {
           dodgers.css({transform: 'translateY(-130px)'});
@@ -142,6 +143,9 @@
                                  '{{/if}}',
                                  '<a class="mirador-osd-fullscreen hud-control">',
                                    '<i class="fa fa-expand"></i>',
+                                 '</a>',
+                                 '<a class="mirador-osd-annotations-layer hud-control ">',
+                                   '<i class="fa fa-2x fa-comments"></i>',
                                  '</a>',
                                  '{{#if showNextPrev}}',
                                  '<a class="mirador-osd-next hud-control ">',
