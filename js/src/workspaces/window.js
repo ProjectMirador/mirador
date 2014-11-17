@@ -10,6 +10,7 @@
       currentImageID:    null,
       focusImages:       [],
       imagesList:        null,
+      annotationsList:   null,
       currentImageMode:  'ImageView',
       imageModes:        ['ImageView', 'BookView'],
       currentFocus:      'ThumbnailsView',
@@ -74,6 +75,8 @@
       if (!_this.currentImageID) {
         _this.currentImageID = _this.imagesList[0]['@id'];
       }
+      
+      _this.getAnnotations();
 
       //check config
       if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
@@ -413,6 +416,7 @@
       var _this = this;
       this.currentImageID = imageID;
       this.loadImageModeFromPanel(imageID);
+      this.getAnnotations();
       jQuery.publish(('currentImageIDUpdated.' + _this.id), imageID);
     },
 
@@ -452,6 +456,50 @@
       if (this.focusOverlaysAvailable[this.currentFocus].overlay.MetadataView) {
         this.element.find('.mirador-icon-metadata-view').addClass('selected');
       }
+    },
+    
+    /*
+     Merge all annotations for current image/canvas from various sources
+     Pass to any widgets that will use this list
+    */
+    getAnnotations: function() {
+      var _this = this,
+      url = $.Iiif.getAnnotationsListUrl(_this.manifest, _this.currentImageID),
+      dfd = jQuery.Deferred();
+
+      jQuery.get(url, function(list) {
+          _this.annotationsList = list;
+      });
+      
+      // jQuery.each($.viewer.annotationEndpoints, function(index, value) {
+      //   value.options.element = _this.element;
+      //   value.options.uri = _this.currentImageID;
+      //   var endpoint = new $[value.module](value.options);
+      //   
+      //   $.get('data/annotationList.json', function(data) {
+      //     annotationLists.push(data);
+      //     var annotations = annotationLists[0].resources.map(function(resource) {
+      //       return resource.resource.chars;
+      //     });
+      //     annotations.forEach(function(annotation) {
+      //       $('#controlPanel').append(listItem(annotation));
+      //     });
+
+      //     setTimeout(function() {
+      //       osdCanvasRenderer({
+      //         osd: OpenSeadragon,
+      //         viewer: viewer,
+      //         onUpdate: function(rect) { console.log(rect) },
+      //         onModeEnter: function() { console.log('entering annotation display mode!') },
+      //         onModeExit: function() { console.log('exiting annotation display mode!') },
+      //         list: annotationLists[0].resources // must be passed by reference.
+      //         // Annotator store object possible?
+      //         // tools: ... ?
+      //       });
+      //     }, 4000);
+
+      //   });
+      // });
     },
 
     // based on currentFocus

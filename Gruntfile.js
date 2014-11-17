@@ -22,6 +22,7 @@ module.exports = function(grunt) {
   // libraries/plugins
   vendors = [
     'js/lib/jquery.min.js',
+    'js/lib/annotator-full.min.js',
     'js/lib/handlebars.js',
     'js/lib/openseadragon.min.js',
     'js/lib/d3.v3.min.js',
@@ -44,6 +45,7 @@ module.exports = function(grunt) {
     'js/src/*.js',
     'js/src/viewer/*.js',
     'js/src/manifests/*.js',
+    'js/src/annotations/*.js',
     'js/src/workspaces/*.js',
     'js/src/widgets/*.js',
     'js/src/utils/*.js'

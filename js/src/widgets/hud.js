@@ -101,7 +101,6 @@
       
       jQuery.subscribe('bottomPanelSet.' + _this.parent.parent.id, function(event, visible) {
         var dodgers = _this.parent.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls, .mirador-osd-annotations-layer');
-        console.log(dodgers);
         var arrows = _this.parent.element.find('.mirador-osd-next, .mirador-osd-previous');
         if (visible === true) {
           dodgers.css({transform: 'translateY(-130px)'});
