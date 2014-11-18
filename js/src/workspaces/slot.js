@@ -89,7 +89,7 @@
     },
     
     addItem: function() {
-      _this = this;
+      var _this = this;
       _this.parent.focused = true;
       _this.parent.addItem(_this.slotID);
     },

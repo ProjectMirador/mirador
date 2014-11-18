@@ -4,7 +4,8 @@
 
     jQuery.extend(true, this, {
       parent:            null,
-      annotationsList:       null
+      annotationsList:   null,
+      viewer:               null
     }, options);
 
     this.init();
@@ -17,14 +18,15 @@
       var _this = this;
       _this.renderer = $.OsdCanvasRenderer({
               osd: $.OpenSeadragon,
-              viewer: _this.annotationsList,
+              viewer: _this.viewer,
               onUpdate: function(rect) { console.log(rect); },
               onModeEnter: function() { console.log('entering annotation display mode!'); },
               onModeExit: function() { console.log('exiting annotation display mode!'); },
-              list: this.resources // must be passed by reference.
+              list: _this.annotationsList.resources // must be passed by reference.
               // Annotator store object possible?
               // tools: ... ?
             });
+            console.log(_this.annotationsList);
       this.bindEvents();
     },
 

@@ -126,8 +126,9 @@
         if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
-            _this.addAnnotationsLayer();
         }
+        
+        _this.addAnnotationsLayer();
 
         _this.osd.addHandler('zoom', $.debounce(function(){
           _this.setBounds();
@@ -141,9 +142,11 @@
     },
 
     addAnnotationsLayer: function() {
+      var _this = this;
       _this.annotationsLayer = new $.AnnotationsLayer({
-        parent: this,
-        annotations: _this.parent.annotationsList
+        parent: _this,
+        annotationsList: _this.parent.annotationsList,
+        viewer: _this.osd
       });
 
     },

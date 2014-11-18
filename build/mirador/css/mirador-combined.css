@@ -2956,7 +2956,7 @@ li.highlight {
 .mirador-osd-annotations-layer {
   position:absolute;
   left:1%;
-  bottom:0;
+  bottom:1%;
   margin: 0;
 }
 .mirador-osd-toggle-bottom-panel {
