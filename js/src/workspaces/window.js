@@ -470,36 +470,6 @@
       jQuery.get(url, function(list) {
           _this.annotationsList = list;
       });
-      
-      // jQuery.each($.viewer.annotationEndpoints, function(index, value) {
-      //   value.options.element = _this.element;
-      //   value.options.uri = _this.currentImageID;
-      //   var endpoint = new $[value.module](value.options);
-      //   
-      //   $.get('data/annotationList.json', function(data) {
-      //     annotationLists.push(data);
-      //     var annotations = annotationLists[0].resources.map(function(resource) {
-      //       return resource.resource.chars;
-      //     });
-      //     annotations.forEach(function(annotation) {
-      //       $('#controlPanel').append(listItem(annotation));
-      //     });
-
-      //     setTimeout(function() {
-      //       osdCanvasRenderer({
-      //         osd: OpenSeadragon,
-      //         viewer: viewer,
-      //         onUpdate: function(rect) { console.log(rect) },
-      //         onModeEnter: function() { console.log('entering annotation display mode!') },
-      //         onModeExit: function() { console.log('exiting annotation display mode!') },
-      //         list: annotationLists[0].resources // must be passed by reference.
-      //         // Annotator store object possible?
-      //         // tools: ... ?
-      //       });
-      //     }, 4000);
-
-      //   });
-      // });
     },
 
     // based on currentFocus

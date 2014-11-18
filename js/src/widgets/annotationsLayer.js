@@ -3,21 +3,8 @@
   $.AnnotationsLayer = function(options) {
 
     jQuery.extend(true, this, {
-      sidePanel:  null,
-      bottomPanel:       null,
-      regionController:  null,
       parent:            null,
-      stateEvents:       {},
-      showList:          true,
-      annotationListUrls:    null,
-      annotations:       [],
-      commentAnnotations: 0,
-      textAnnotations: 0,
-      visible:        false,
-      selectedAnnotation: null,
-      hoveredAnnotation: null,
-      annotationListCls: 'mirador-annotation-list',
-      filter: null
+      annotationsList:       null
     }, options);
 
     this.init();
@@ -28,15 +15,16 @@
 
     init: function() {
       var _this = this;
-
-      // returns a promise object constructed using 
-      // jQuery.when.apply(this, [deferred array]);
-      _this.getAnnotations().done( function() {
-        // _this.bottomPanel = new $.AnnotationBottomPanel({parent: _this});
-        // _this.regionController = new $.AnnotationLayerRegionController({parent: _this});
-        // _this.sidePanel = new $.AnnotationLayerSidePanel({parent: _this});
-      });
-
+      _this.renderer = $.OsdCanvasRenderer({
+              osd: $.OpenSeadragon,
+              viewer: _this.annotationsList,
+              onUpdate: function(rect) { console.log(rect); },
+              onModeEnter: function() { console.log('entering annotation display mode!'); },
+              onModeExit: function() { console.log('exiting annotation display mode!'); },
+              list: this.resources // must be passed by reference.
+              // Annotator store object possible?
+              // tools: ... ?
+            });
       this.bindEvents();
     },
 
@@ -48,56 +36,6 @@
       _this = this;
       this[prop] = value;
       jQuery.publish(prop + ':set', value, options);
-    },
-
-    getAnnotations: function() {
-      var _this = this,
-      requests = [];
-
-      // not the best solution, but this resets the
-      // annotations whenever more are fetched, 
-      // effectively clearing them on next()/previous().
-      _this.set('annotations', []);
-
-      if (!_this.annotationListUrls) {
-        _this.annotations = [];
-        return jQuery.when(function() { return; });
-      }
-
-      jQuery.each(_this.annotationListUrls, function(index, url) {
-        var request =  jQuery.ajax(
-          {
-          url: url,
-          dataType: 'json',
-          async: true,
-          cache: false,
-          success: function(jsonLd) {
-            jQuery.each(jsonLd.resources, function(index, resource) {
-              var annotation = {
-                region: $.parseRegion(resource.on),
-                title: null,
-                content: resource.resource.full ? resource.resource.full.chars : resource.resource.chars,
-                type: (resource.motivation).split(':')[1],
-                id: $.genUUID()
-              };          
-
-              annotation.osdFrame = $.getOsdFrame(annotation.region, _this.parent.currentImg);
-
-              _this.annotations.push(annotation);
-            });
-
-          },
-
-          error: function() {
-            console.log('Failed loading ' + uri);
-          }
-        });
-
-        requests.push(request);
-
-      });
-
-      return jQuery.when.apply(this, requests);
     },
 
     bindEvents: function() {
@@ -129,17 +67,17 @@
       // });
     },
 
-    computeAnnotationStats: function() {
-      var comments = 0,
-      transcriptions = 0; 
+    // computeAnnotationStats: function() {
+    //   var comments = 0,
+    //   transcriptions = 0; 
 
-      jQuery.each(_this.annotations, function(index, annotation) {
-        if (annotation.type === 'commenting') { comments ++; } else { transcriptions ++; }
-      });
+    //   jQuery.each(_this.annotations, function(index, annotation) {
+    //     if (annotation.type === 'commenting') { comments ++; } else { transcriptions ++; }
+    //   });
 
-      _this.commentAnnotations = comments;
-      _this.textAnnotations = transcriptions;
-    },
+    //   _this.commentAnnotations = comments;
+    //   _this.textAnnotations = transcriptions;
+    // },
 
     setVisible: function() {
       var _this = this;

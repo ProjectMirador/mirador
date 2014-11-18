@@ -41,7 +41,6 @@
       this.currentImg = this.imagesList[this.currentImgIndex];
       this.element = jQuery(this.template()).appendTo(this.appendTo);
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-      this.addAnnotationsLayer();
       this.parent.updateFocusImages([this.imageID]); // DRY/Events refactor.
       // The hud controls are consistent 
       // throughout any updates to the osd canvas.
@@ -127,6 +126,7 @@
         if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
+            _this.addAnnotationsLayer();
         }
 
         _this.osd.addHandler('zoom', $.debounce(function(){
@@ -141,22 +141,9 @@
     },
 
     addAnnotationsLayer: function() {
-      var annotationListUrls;
-
-      if (this.currentImg.otherContent) {
-        annotationListUrls = jQuery.map(this.currentImg.otherContent, function( annotation ){
-
-          if (annotation['@id'].indexOf(".json") >= 0) {
-            return annotation['@id'];
-          }
-
-          return (annotation['@id'] + ".json");
-        });
-      }
-
-      this.annotationsLayer = new $.AnnotationsLayer({
+      _this.annotationsLayer = new $.AnnotationsLayer({
         parent: this,
-        annotationListUrls: annotationListUrls
+        annotations: _this.parent.annotationsList
       });
 
     },

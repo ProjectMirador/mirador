@@ -4458,6 +4458,192 @@ window.Mirador = window.Mirador || function(config) {
 
 (function($) {
 
+
+  // Takes a list of oa:annotations passed
+  // by reference and renders their regions,
+  // registering updates.
+  
+  $.OsdCanvasRenderer = function(options) {
+  
+    var osd = options.osd,
+    osdViewer = options.viewer,
+    list = options.list;
+    console.log(osdViewer.viewport);
+  
+    var parseRegion  = function(url) {
+      var regionString = url.split('#')[1];
+      regionArray = regionString.split('=')[1].split(',');
+      return regionArray;
+    },
+    getOsdFrame = function(region) {
+      rectX = region[0],
+      rectY = region[1],
+      rectW = region[2],
+      rectH = region[3];
+      
+      return osdViewer.viewport.imageToViewportRectangle(rectX,rectY,rectW,rectH);
+  
+    }, 
+    render = function() {
+      list.forEach(function(annotation) {
+        var region = parseRegion(annotation.on);
+        osdOverlay = document.createElement('div');
+        osdOverlay.className = 'osd-select-rectangle';
+        osdViewer.addOverlay({
+          element: osdOverlay,
+          location:  getOsdFrame(region)
+        });
+      });
+    },
+    update = function(toAdd) {
+      if (arguments.length) {
+        list.push(toAdd);
+      }
+      render();
+    };
+  
+    
+    var osdCanvasRenderer = {
+      enterDisplayMode: null,
+      exitDisplaMode: null,
+      update: update
+    };
+  
+    return osdCanvasRenderer;
+  
+  };
+}(Mirador));
+
+(function($) {
+  // Takes an openSeadragon canvas and calls
+  // provided callbacks at different stages
+  // of a rectangle creation event.
+
+  $.OsdRegionRectTool = function(options) {
+    var osdRectTool,
+    osd = options.osd,
+    osdViewer = options.viewer,
+    mouseStart = null,
+    rectangle,
+    osdOverlay,
+    dragging = false;
+
+    console.log(osdViewer.viewport);
+
+    function enterEditMode() {
+      setOsdFrozen(true);
+      osdViewer.addHandler("canvas-drag", startRectangle);
+      osdViewer.addHandler("canvas-release", finishRectangle);
+      if ( options.onModeEnter ) options.onModeEnter();
+    }
+
+    function startRectangle(event) {
+      if (!dragging) {
+        dragging = true; 
+        mouseStart = osdViewer.viewport.pointFromPixel(event.position);
+        createNewRect(mouseStart);
+        if ( options.onDrawStart ) options.onDrawStart();
+      } else { 
+        var mouseNow = osdViewer.viewport.pointFromPixel(event.position);
+        updateRectangle(mouseStart, mouseNow);
+        if ( options.onDraw ) options.onDraw();
+      }
+    }
+
+    function finishRectangle(event) {
+      dragging = false,
+      osdImageRect = osdViewer.viewport.viewportToImageRectangle(rectangle);
+      canvasRect = {
+        x: parseInt(osdImageRect.x, 10),
+        y: parseInt(osdImageRect.y, 10),
+        width: parseInt(osdImageRect.width, 10),
+        height: parseInt(osdImageRect.height, 10)
+      };
+
+      if ( options.onDrawFinish ) options.onDrawFinish(canvasRect);
+    }
+
+    function exitEditMode(event) {
+      setOsdFrozen(false),
+      osdViewer.removeHandler('canvas-drag', startRectangle);
+      osdViewer.removeHandler('canvas-release', finishRectangle);
+      if ( options.onModeExit ) options.onModeExit();
+    }
+
+    function setOsdFrozen(freeze) {
+      if (freeze) {
+        // Control the openSeadragon canvas behaviour
+        // so that it doesn't move around while we're
+        // trying to edit our rectangle.
+        osdViewer.panHorizontal = false;
+        osdViewer.panVertical = false;
+      } else {
+        osdViewer.panHorizontal = true;
+        osdViewer.panVertical = true;
+      }
+    }
+
+    function createNewRect(mouseStart) {
+      var x = mouseStart.x,
+      y = mouseStart.y,
+      width = 0,
+      height = 0;
+      rectangle = new OpenSeadragon.Rect(x, y, width, height);
+
+      osdOverlay = document.createElement('div');
+      osdOverlay.className = 'osd-select-rectangle';
+      osdViewer.addOverlay({
+        element: osdOverlay,
+        location:  rectangle
+      });
+    }
+
+    function updateRectangle(mouseStart, mouseNow) {
+      var topLeft = {
+        x:Math.min(mouseStart.x, mouseNow.x),
+        y:Math.min(mouseStart.y, mouseNow.y)
+      },
+      bottomRight = {
+        x:Math.max(mouseStart.x, mouseNow.x),
+        y:Math.max(mouseStart.y, mouseNow.y)
+      };
+
+      rectangle.x = topLeft.x;
+      rectangle.y = topLeft.y;
+      rectangle.width  = bottomRight.x - topLeft.x;
+      rectangle.height = bottomRight.y - topLeft.y;
+
+      osdViewer.updateOverlay(osdOverlay, rectangle);
+    }
+
+    // MIGHT BE NICE IF...:
+    // 
+    // If the user is mid-drag and hits the side of the 
+    // canvas, the canvas auto-pans and auto-zooms out 
+    // to accomodate the rectangle.
+    // 
+    // The size of the rectangle just before colliding with
+    // the canvas is auto-saved, so that the canvas can shrink 
+    // back down again if the user starts shrinking it in 
+    // mid-drag, allowing the auto-shrinking to stop when 
+    // the original size of the rectangle is reached again.
+    //
+    // The existing rectangles should also be moveable by
+    // shift-clicking and dragging them, showing the 
+    // cross-hair cursor type.
+
+    osdRegionRectTool = {
+      enterEditMode: enterEditMode,
+      exitEditMode: exitEditMode
+    };
+
+    return osdRegionRectTool;
+
+  };
+}(Mirador));
+
+(function($) {
+
   // Given a parent, and a configuration structure,
   // produces an invisible grid into which you
   // may place any element.
@@ -5409,36 +5595,6 @@ window.Mirador = window.Mirador || function(config) {
       jQuery.get(url, function(list) {
           _this.annotationsList = list;
       });
-      
-      // jQuery.each($.viewer.annotationEndpoints, function(index, value) {
-      //   value.options.element = _this.element;
-      //   value.options.uri = _this.currentImageID;
-      //   var endpoint = new $[value.module](value.options);
-      //   
-      //   $.get('data/annotationList.json', function(data) {
-      //     annotationLists.push(data);
-      //     var annotations = annotationLists[0].resources.map(function(resource) {
-      //       return resource.resource.chars;
-      //     });
-      //     annotations.forEach(function(annotation) {
-      //       $('#controlPanel').append(listItem(annotation));
-      //     });
-
-      //     setTimeout(function() {
-      //       osdCanvasRenderer({
-      //         osd: OpenSeadragon,
-      //         viewer: viewer,
-      //         onUpdate: function(rect) { console.log(rect) },
-      //         onModeEnter: function() { console.log('entering annotation display mode!') },
-      //         onModeExit: function() { console.log('exiting annotation display mode!') },
-      //         list: annotationLists[0].resources // must be passed by reference.
-      //         // Annotator store object possible?
-      //         // tools: ... ?
-      //       });
-      //     }, 4000);
-
-      //   });
-      // });
     },
 
     // based on currentFocus
@@ -5543,21 +5699,8 @@ window.Mirador = window.Mirador || function(config) {
   $.AnnotationsLayer = function(options) {
 
     jQuery.extend(true, this, {
-      sidePanel:  null,
-      bottomPanel:       null,
-      regionController:  null,
       parent:            null,
-      stateEvents:       {},
-      showList:          true,
-      annotationListUrls:    null,
-      annotations:       [],
-      commentAnnotations: 0,
-      textAnnotations: 0,
-      visible:        false,
-      selectedAnnotation: null,
-      hoveredAnnotation: null,
-      annotationListCls: 'mirador-annotation-list',
-      filter: null
+      annotationsList:       null
     }, options);
 
     this.init();
@@ -5568,15 +5711,16 @@ window.Mirador = window.Mirador || function(config) {
 
     init: function() {
       var _this = this;
-
-      // returns a promise object constructed using 
-      // jQuery.when.apply(this, [deferred array]);
-      _this.getAnnotations().done( function() {
-        // _this.bottomPanel = new $.AnnotationBottomPanel({parent: _this});
-        // _this.regionController = new $.AnnotationLayerRegionController({parent: _this});
-        // _this.sidePanel = new $.AnnotationLayerSidePanel({parent: _this});
-      });
-
+      _this.renderer = $.OsdCanvasRenderer({
+              osd: $.OpenSeadragon,
+              viewer: _this.annotationsList,
+              onUpdate: function(rect) { console.log(rect); },
+              onModeEnter: function() { console.log('entering annotation display mode!'); },
+              onModeExit: function() { console.log('exiting annotation display mode!'); },
+              list: this.resources // must be passed by reference.
+              // Annotator store object possible?
+              // tools: ... ?
+            });
       this.bindEvents();
     },
 
@@ -5588,56 +5732,6 @@ window.Mirador = window.Mirador || function(config) {
       _this = this;
       this[prop] = value;
       jQuery.publish(prop + ':set', value, options);
-    },
-
-    getAnnotations: function() {
-      var _this = this,
-      requests = [];
-
-      // not the best solution, but this resets the
-      // annotations whenever more are fetched, 
-      // effectively clearing them on next()/previous().
-      _this.set('annotations', []);
-
-      if (!_this.annotationListUrls) {
-        _this.annotations = [];
-        return jQuery.when(function() { return; });
-      }
-
-      jQuery.each(_this.annotationListUrls, function(index, url) {
-        var request =  jQuery.ajax(
-          {
-          url: url,
-          dataType: 'json',
-          async: true,
-          cache: false,
-          success: function(jsonLd) {
-            jQuery.each(jsonLd.resources, function(index, resource) {
-              var annotation = {
-                region: $.parseRegion(resource.on),
-                title: null,
-                content: resource.resource.full ? resource.resource.full.chars : resource.resource.chars,
-                type: (resource.motivation).split(':')[1],
-                id: $.genUUID()
-              };          
-
-              annotation.osdFrame = $.getOsdFrame(annotation.region, _this.parent.currentImg);
-
-              _this.annotations.push(annotation);
-            });
-
-          },
-
-          error: function() {
-            console.log('Failed loading ' + uri);
-          }
-        });
-
-        requests.push(request);
-
-      });
-
-      return jQuery.when.apply(this, requests);
     },
 
     bindEvents: function() {
@@ -5669,17 +5763,17 @@ window.Mirador = window.Mirador || function(config) {
       // });
     },
 
-    computeAnnotationStats: function() {
-      var comments = 0,
-      transcriptions = 0; 
+    // computeAnnotationStats: function() {
+    //   var comments = 0,
+    //   transcriptions = 0; 
 
-      jQuery.each(_this.annotations, function(index, annotation) {
-        if (annotation.type === 'commenting') { comments ++; } else { transcriptions ++; }
-      });
+    //   jQuery.each(_this.annotations, function(index, annotation) {
+    //     if (annotation.type === 'commenting') { comments ++; } else { transcriptions ++; }
+    //   });
 
-      _this.commentAnnotations = comments;
-      _this.textAnnotations = transcriptions;
-    },
+    //   _this.commentAnnotations = comments;
+    //   _this.textAnnotations = transcriptions;
+    // },
 
     setVisible: function() {
       var _this = this;
@@ -6366,7 +6460,6 @@ this.elemStitchOptions.hide();
       this.currentImg = this.imagesList[this.currentImgIndex];
       this.element = jQuery(this.template()).appendTo(this.appendTo);
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-      this.addAnnotationsLayer();
       this.parent.updateFocusImages([this.imageID]); // DRY/Events refactor.
       // The hud controls are consistent 
       // throughout any updates to the osd canvas.
@@ -6452,6 +6545,7 @@ this.elemStitchOptions.hide();
         if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
+            _this.addAnnotationsLayer();
         }
 
         _this.osd.addHandler('zoom', $.debounce(function(){
@@ -6466,22 +6560,9 @@ this.elemStitchOptions.hide();
     },
 
     addAnnotationsLayer: function() {
-      var annotationListUrls;
-
-      if (this.currentImg.otherContent) {
-        annotationListUrls = jQuery.map(this.currentImg.otherContent, function( annotation ){
-
-          if (annotation['@id'].indexOf(".json") >= 0) {
-            return annotation['@id'];
-          }
-
-          return (annotation['@id'] + ".json");
-        });
-      }
-
-      this.annotationsLayer = new $.AnnotationsLayer({
+      _this.annotationsLayer = new $.AnnotationsLayer({
         parent: this,
-        annotationListUrls: annotationListUrls
+        annotations: _this.parent.annotationsList
       });
 
     },
