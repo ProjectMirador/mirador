@@ -467,6 +467,8 @@
       url = $.Iiif.getAnnotationsListUrl(_this.manifest, _this.currentImageID),
       dfd = jQuery.Deferred();
 
+      if (url === false) return;
+
       jQuery.get(url, function(list) {
           _this.annotationsList = list;
       });

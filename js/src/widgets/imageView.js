@@ -143,9 +143,10 @@
 
     addAnnotationsLayer: function() {
       var _this = this;
+      console.log(_this.parent.annotationsList);
       _this.annotationsLayer = new $.AnnotationsLayer({
         parent: _this,
-        annotationsList: _this.parent.annotationsList,
+        annotationsList: _this.parent.annotationsList || [],
         viewer: _this.osd
       });
 

@@ -36,7 +36,8 @@
       });
       
       this.parent.element.find('.mirador-osd-annotations-layer').on('click', function() {
-        // initiate annotations layer.
+        console.log(_this.parent.annotationsLayer.renderer);
+        _this.parent.annotationsLayer.renderer.render();
       });
       
       this.parent.element.find('.mirador-osd-go-home').on('click', function() {

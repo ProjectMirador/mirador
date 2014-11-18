@@ -4488,7 +4488,7 @@ window.Mirador = window.Mirador || function(config) {
       list.forEach(function(annotation) {
         var region = parseRegion(annotation.on);
         osdOverlay = document.createElement('div');
-        osdOverlay.className = 'osd-select-rectangle';
+        osdOverlay.className = 'annotation';
         osdViewer.addOverlay({
           element: osdOverlay,
           location:  getOsdFrame(region)
@@ -4506,6 +4506,7 @@ window.Mirador = window.Mirador || function(config) {
     var osdCanvasRenderer = {
       enterDisplayMode: null,
       exitDisplaMode: null,
+      render: render,
       update: update
     };
   
@@ -5592,6 +5593,8 @@ window.Mirador = window.Mirador || function(config) {
       url = $.Iiif.getAnnotationsListUrl(_this.manifest, _this.currentImageID),
       dfd = jQuery.Deferred();
 
+      if (url === false) return;
+
       jQuery.get(url, function(list) {
           _this.annotationsList = list;
       });
@@ -5712,17 +5715,17 @@ window.Mirador = window.Mirador || function(config) {
 
     init: function() {
       var _this = this;
+      console.log(_this.annotationsList);
       _this.renderer = $.OsdCanvasRenderer({
-              osd: $.OpenSeadragon,
-              viewer: _this.viewer,
-              onUpdate: function(rect) { console.log(rect); },
-              onModeEnter: function() { console.log('entering annotation display mode!'); },
-              onModeExit: function() { console.log('exiting annotation display mode!'); },
-              list: _this.annotationsList.resources // must be passed by reference.
-              // Annotator store object possible?
-              // tools: ... ?
-            });
-            console.log(_this.annotationsList);
+        osd: $.OpenSeadragon,
+        viewer: _this.viewer,
+        onUpdate: function(rect) { console.log(rect); },
+        onModeEnter: function() { console.log('entering annotation display mode!'); },
+        onModeExit: function() { console.log('exiting annotation display mode!'); },
+        list: _this.annotationsList.resources // must be passed by reference.
+        // Annotator store object possible?
+        // tools: ... ?
+      });
       this.bindEvents();
     },
 
@@ -6270,7 +6273,8 @@ this.elemStitchOptions.hide();
       });
       
       this.parent.element.find('.mirador-osd-annotations-layer').on('click', function() {
-        // initiate annotations layer.
+        console.log(_this.parent.annotationsLayer.renderer);
+        _this.parent.annotationsLayer.renderer.render();
       });
       
       this.parent.element.find('.mirador-osd-go-home').on('click', function() {
@@ -6564,9 +6568,10 @@ this.elemStitchOptions.hide();
 
     addAnnotationsLayer: function() {
       var _this = this;
+      console.log(_this.parent.annotationsList);
       _this.annotationsLayer = new $.AnnotationsLayer({
         parent: _this,
-        annotationsList: _this.parent.annotationsList,
+        annotationsList: _this.parent.annotationsList || [],
         viewer: _this.osd
       });
 
@@ -7548,7 +7553,7 @@ this.elemStitchOptions.hide();
 
       if (canvas.otherContent) {
         return canvas.otherContent[0]['@id'];
-      } else { return []; }
+      } else { return false; }
     },
     getImageUrl: function(image) {
 

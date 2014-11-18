@@ -16,17 +16,17 @@
 
     init: function() {
       var _this = this;
+      console.log(_this.annotationsList);
       _this.renderer = $.OsdCanvasRenderer({
-              osd: $.OpenSeadragon,
-              viewer: _this.viewer,
-              onUpdate: function(rect) { console.log(rect); },
-              onModeEnter: function() { console.log('entering annotation display mode!'); },
-              onModeExit: function() { console.log('exiting annotation display mode!'); },
-              list: _this.annotationsList.resources // must be passed by reference.
-              // Annotator store object possible?
-              // tools: ... ?
-            });
-            console.log(_this.annotationsList);
+        osd: $.OpenSeadragon,
+        viewer: _this.viewer,
+        onUpdate: function(rect) { console.log(rect); },
+        onModeEnter: function() { console.log('entering annotation display mode!'); },
+        onModeExit: function() { console.log('exiting annotation display mode!'); },
+        list: _this.annotationsList.resources // must be passed by reference.
+        // Annotator store object possible?
+        // tools: ... ?
+      });
       this.bindEvents();
     },
 

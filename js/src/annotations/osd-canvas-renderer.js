@@ -30,7 +30,7 @@
       list.forEach(function(annotation) {
         var region = parseRegion(annotation.on);
         osdOverlay = document.createElement('div');
-        osdOverlay.className = 'osd-select-rectangle';
+        osdOverlay.className = 'annotation';
         osdViewer.addOverlay({
           element: osdOverlay,
           location:  getOsdFrame(region)
@@ -48,6 +48,7 @@
     var osdCanvasRenderer = {
       enterDisplayMode: null,
       exitDisplaMode: null,
+      render: render,
       update: update
     };
   

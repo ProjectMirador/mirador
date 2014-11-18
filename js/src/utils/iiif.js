@@ -21,7 +21,7 @@
 
       if (canvas.otherContent) {
         return canvas.otherContent[0]['@id'];
-      } else { return []; }
+      } else { return false; }
     },
     getImageUrl: function(image) {
 
