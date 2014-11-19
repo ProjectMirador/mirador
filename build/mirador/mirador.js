@@ -4249,7 +4249,8 @@ window.Mirador = window.Mirador || function(config) {
           element:   null,
           annotator: null,
           dfd:       null,
-          annotationsList: null
+          annotationsList: [], //OA list for Mirador use
+          annotationsListCatch: null  //internal list for module use
         }, options);
 
         this.init();
@@ -4362,7 +4363,6 @@ window.Mirador = window.Mirador || function(config) {
           this.annotator.addPlugin('Auth', annotatorOptions.optionsAnnotator.auth);
           //this.annotator.addPlugin("Permissions", annotatorOptions.optionsAnnotator.permissions);
           this.annotator.addPlugin('Store', annotatorOptions.optionsAnnotator.store);
-          console.log(this.annotator);
           this.bindEvents();
         
         },
@@ -4370,8 +4370,10 @@ window.Mirador = window.Mirador || function(config) {
         bindEvents: function() {
           var _this = this;
           this.annotator.subscribe("annotationsLoaded", function (annotations){
-             //_this.getAnnotationInOA();
-             _this.annotationsList = _this.annotator.plugins.Store.annotations;
+             _this.annotationsListCatch = _this.annotator.plugins.Store.annotations;
+             jQuery.each(_this.annotationsListCatch, function(index, value) {
+               _this.annotationsList.push(_this.getAnnotationInOA(value));
+             });
              _this.dfd.resolve(true);
           });
         },
@@ -4380,10 +4382,8 @@ window.Mirador = window.Mirador || function(config) {
            
         },
         
-        getAnnotationInOA: function(annotationID) {
-          //var annotation = this.getAnnotationInAnnotator(annotationID),
-          var annotation = this.annotator.plugins.Store.annotations[1],
-          id, 
+        getAnnotationInOA: function(annotation) {
+          var id, 
           motivation = [],
           resource = [],
           on,
@@ -4430,7 +4430,7 @@ window.Mirador = window.Mirador || function(config) {
          annotatedBy = { "@id" : annotation.user.id,
                          "name" : annotation.user.name};
          
-         var oaAnnotation = {
+          var oaAnnotation = {
             "@context" : "http://iiif.io/api/presentation/2/context.json",
             "@id" : id,
             "@type" : "oa:Annotation",
@@ -4440,8 +4440,8 @@ window.Mirador = window.Mirador || function(config) {
             "annotatedBy" : annotatedBy,
             "annotatedAt" : annotation.created,
             "serializedAt" : annotation.updated
-         };
-         console.log(oaAnnotation);
+          };
+          return oaAnnotation;
         },
         
         getAnnotationInAnnotator: function(annotationID) {
@@ -5606,7 +5606,6 @@ window.Mirador = window.Mirador || function(config) {
       
       //next check endpoints
       jQuery.each($.viewer.annotationEndpoints, function(index, value) {
-         console.log("getting endpoint annotations");
          var dfd = jQuery.Deferred();
          value.options.element = _this.element;
          value.options.uri = _this.currentImageID;
@@ -5622,6 +5621,7 @@ window.Mirador = window.Mirador || function(config) {
             }
          });
       });
+      console.log("went through endpoints");
       console.log(_this.annotationsList);
     },
 

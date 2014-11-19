@@ -476,7 +476,6 @@
       
       //next check endpoints
       jQuery.each($.viewer.annotationEndpoints, function(index, value) {
-         console.log("getting endpoint annotations");
          var dfd = jQuery.Deferred();
          value.options.element = _this.element;
          value.options.uri = _this.currentImageID;
@@ -492,6 +491,7 @@
             }
          });
       });
+      console.log("went through endpoints");
       console.log(_this.annotationsList);
     },
 
