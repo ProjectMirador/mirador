@@ -463,15 +463,36 @@
      Pass to any widgets that will use this list
     */
     getAnnotations: function() {
+      //first look for manifest annotations
       var _this = this,
       url = $.Iiif.getAnnotationsListUrl(_this.manifest, _this.currentImageID),
       dfd = jQuery.Deferred();
 
-      if (url === false) return;
-
-      jQuery.get(url, function(list) {
-          _this.annotationsList = list;
+      if (url === true) {
+        jQuery.get(url, function(list) {
+            _this.annotationsList = list;
+        });
+      }
+      
+      //next check endpoints
+      jQuery.each($.viewer.annotationEndpoints, function(index, value) {
+         console.log("getting endpoint annotations");
+         var dfd = jQuery.Deferred();
+         value.options.element = _this.element;
+         value.options.uri = _this.currentImageID;
+         value.options.dfd = dfd;
+         var endpoint = new $[value.module](value.options);
+         dfd.done(function(loaded) {
+            if (loaded) {
+              if (_this.annotationsList) {
+                _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
+              } else {
+                _this.annotationsList = endpoint.annotationsList;
+              }
+            }
+         });
       });
+      console.log(_this.annotationsList);
     },
 
     // based on currentFocus

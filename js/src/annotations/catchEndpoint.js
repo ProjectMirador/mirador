@@ -8,7 +8,9 @@
           urls:      null,
           uri:       null,
           element:   null,
-          annotator: null
+          annotator: null,
+          dfd:       null,
+          annotationsList: null
         }, options);
 
         this.init();
@@ -95,9 +97,9 @@
                 loadFromSearch:{
                     limit:10,
                     offset:0,
-                    //media:"image"
+                    media:"image"
                     //uri:this.uri,
-                    parentid:58616
+                    //parentid:58616
                     //userid:''
                 }
             },
@@ -129,7 +131,9 @@
         bindEvents: function() {
           var _this = this;
           this.annotator.subscribe("annotationsLoaded", function (annotations){
-             _this.getAnnotationInOA();
+             //_this.getAnnotationInOA();
+             _this.annotationsList = _this.annotator.plugins.Store.annotations;
+             _this.dfd.resolve(true);
           });
         },
         
