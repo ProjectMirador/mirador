@@ -8,8 +8,7 @@
   $.OsdCanvasRenderer = function(options) {
   
     var osd = options.osd,
-    osdViewer = options.viewer,
-    list = options.list;
+    osdViewer = options.viewer;
   
     var parseRegion  = function(url) {
       var regionString = url.split('#')[1];
@@ -26,7 +25,7 @@
   
     }, 
     render = function() {
-      list.forEach(function(annotation) {
+      options.list.forEach(function(annotation) {
         var region = parseRegion(annotation.on);
         osdOverlay = document.createElement('div');
         osdOverlay.className = 'annotation';
@@ -38,14 +37,16 @@
     },
     update = function() {
       render();
+    },
+    hideAll = function() {
+      osdViewer.clearOverlays();
     };
   
     
     var osdCanvasRenderer = {
-      enterDisplayMode: null,
-      exitDisplaMode: null,
       render: render,
-      update: update
+      update: update,
+      hideAll: hideAll
     };
   
     return osdCanvasRenderer;

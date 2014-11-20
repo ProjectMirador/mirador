@@ -472,15 +472,13 @@
       // while(_this.annotationsList.length > 0) {
       //   _this.annotationsList.pop();
       // }
-      console.log(_this.annotationList);
 
-      console.log("getting annotations");
-      console.log(url);
       if (url !== false) {
         jQuery.get(url, function(list) {
-            _this.annotationsList = _this.annotationsList.concat(list.resources);
+            // _this.annotationsList = _this.annotationsList.concat(list.resources);
+            _this.annotationsList = list.resources;
             console.log("finished manifest annotations");
-           // jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
+            jQuery.publish(('annotationListLoaded.' + _this.id));
         });
       }
       

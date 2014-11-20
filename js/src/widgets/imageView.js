@@ -11,7 +11,7 @@
       element:          null,
       parent:           null,
       manifest:         null,
-      mode:             null,
+      mode:             'default',
       osd:              null,
       fullscreen:       null,
       osdOptions: {

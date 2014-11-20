@@ -4481,8 +4481,7 @@ window.Mirador = window.Mirador || function(config) {
   $.OsdCanvasRenderer = function(options) {
   
     var osd = options.osd,
-    osdViewer = options.viewer,
-    list = options.list;
+    osdViewer = options.viewer;
   
     var parseRegion  = function(url) {
       var regionString = url.split('#')[1];
@@ -4499,7 +4498,7 @@ window.Mirador = window.Mirador || function(config) {
   
     }, 
     render = function() {
-      list.forEach(function(annotation) {
+      options.list.forEach(function(annotation) {
         var region = parseRegion(annotation.on);
         osdOverlay = document.createElement('div');
         osdOverlay.className = 'annotation';
@@ -4511,14 +4510,16 @@ window.Mirador = window.Mirador || function(config) {
     },
     update = function() {
       render();
+    },
+    hideAll = function() {
+      osdViewer.clearOverlays();
     };
   
     
     var osdCanvasRenderer = {
-      enterDisplayMode: null,
-      exitDisplaMode: null,
       render: render,
-      update: update
+      update: update,
+      hideAll: hideAll
     };
   
     return osdCanvasRenderer;
@@ -5609,15 +5610,13 @@ window.Mirador = window.Mirador || function(config) {
       // while(_this.annotationsList.length > 0) {
       //   _this.annotationsList.pop();
       // }
-      console.log(_this.annotationList);
 
-      console.log("getting annotations");
-      console.log(url);
       if (url !== false) {
         jQuery.get(url, function(list) {
-            _this.annotationsList = _this.annotationsList.concat(list.resources);
+            // _this.annotationsList = _this.annotationsList.concat(list.resources);
+            _this.annotationsList = list.resources;
             console.log("finished manifest annotations");
-           // jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
+            jQuery.publish(('annotationListLoaded.' + _this.id));
         });
       }
       
@@ -5740,7 +5739,7 @@ window.Mirador = window.Mirador || function(config) {
 
     jQuery.extend(true, this, {
       parent:            null,
-      annotations:       null,
+      annotationsList:       null,
       viewer:            null,
       renderer:          null,
       selected:          null,
@@ -5777,6 +5776,13 @@ window.Mirador = window.Mirador || function(config) {
         if (modeName === 'default') { _this.enterDefault(); }
       });
       
+      jQuery.subscribe('.currentImageIDUpdated' + _this.windowId, function(event) {
+        var modeName = _this.mode;
+        if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
+        if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
+        if (modeName === 'default') { _this.enterDefault(); }
+      });
+      
     },
 
     enterDisplayAnnotations: function() {
@@ -5792,7 +5798,7 @@ window.Mirador = window.Mirador || function(config) {
     
     enterDefault: function() {
       console.log('triggering default');
-      // this.renderer.update().hideAll();
+      this.renderer.hideAll();
     },
 
     setVisible: function() {
@@ -5806,21 +5812,6 @@ window.Mirador = window.Mirador || function(config) {
     },
 
     changePage: function() {
-      var _this = this;
-
-      if (_this.annotations === null) {
-        _this.set('visible', false);
-        return;
-      }
-
-      if ( _this.selectedAnnotation ) {
-        _this.set('selectedAnnotation', null);
-      }
-
-      _this.getAnnotations().done( function() {
-        _this.sidePanel.render();
-        _this.regionController.render();
-      });
     },
 
     accentHovered: function(id, source) {
@@ -5871,29 +5862,6 @@ window.Mirador = window.Mirador || function(config) {
 
       jQuery(filteredRegions).map(function() { return this.toArray(); }).fadeOut();
       jQuery(filteredListings).map(function() { return this.toArray(); }).slideUp();
-    },
-
-    append: function(item) {
-      this.element.append(item);
-    },
-
-    show: function() {
-      var _this = this;
-      this.parent.parent.element.find('.mirador-widget-content').css('padding-right', _this.width);
-      this.sidePanel.show();
-      this.regionController.show();
-      this.bottomPanel.show();
-    },
-
-    hide: function() {
-      this.parent.parent.element.find('.mirador-widget-content').css('padding-right', 0);
-      this.sidePanel.hide();
-      this.regionController.hide();
-      this.bottomPanel.hide();
-      // ensures the user won't accidentally be unable to view annotation details in 
-      // the annotation layer in the future. Resets the default visibility of the 
-      // bottom panel to true.
-      this.bottomPanel.hidden = false;
     }
 
   };
@@ -6568,7 +6536,7 @@ this.elemStitchOptions.hide();
       element:          null,
       parent:           null,
       manifest:         null,
-      mode:             null,
+      mode:             'default',
       osd:              null,
       fullscreen:       null,
       osdOptions: {
