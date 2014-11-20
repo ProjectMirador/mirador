@@ -50,7 +50,6 @@
      
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         _this.annotationsList = _this.parent.parent.annotationsList;
-        console.log(_this.annotationsList);
         _this.renderer = $.OsdCanvasRenderer({
           osd: $.OpenSeadragon,
           viewer: _this.viewer,

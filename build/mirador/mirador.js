@@ -4484,8 +4484,13 @@ window.Mirador = window.Mirador || function(config) {
     osdViewer = options.viewer;
   
     var parseRegion  = function(url) {
-      var regionString = url.split('#')[1];
-      regionArray = regionString.split('=')[1].split(',');
+      var regionString;
+      if (typeof url === 'object') {
+        regionString = url.selector.value;  
+      } else {
+        regionString = url.split('#')[1];
+      }
+      var regionArray = regionString.split('=')[1].split(',');
       return regionArray;
     },
     getOsdFrame = function(region) {
@@ -5785,7 +5790,6 @@ window.Mirador = window.Mirador || function(config) {
      
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         _this.annotationsList = _this.parent.parent.annotationsList;
-        console.log(_this.annotationsList);
         _this.renderer = $.OsdCanvasRenderer({
           osd: $.OpenSeadragon,
           viewer: _this.viewer,
