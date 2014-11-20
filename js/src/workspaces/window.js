@@ -493,8 +493,6 @@
             jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
           });
        });
-      // console.log("went through endpoints");
-      // console.log(_this.annotationsList);
     },
 
     // based on currentFocus

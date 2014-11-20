@@ -159,7 +159,8 @@
         parent: _this,
         annotationsList: _this.parent.annotationsList || [],
         viewer: _this.osd,
-        windowId: _this.windowId
+        windowId: _this.windowId,
+        mode: _this.mode
       });
 
     },

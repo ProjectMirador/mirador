@@ -39,13 +39,25 @@
           element: osdOverlay,
           location:  getOsdFrame(region)
         });
+        jQuery(osdOverlay).on('hover', function(annotation) {
+          options.onHover(annotation);
+        });
+        jQuery(osdOverlay).on('click', function(annotation) {
+          options.onSelect(annotation);
+        });
       });
+    },
+    select = function(annotationId) {
+      // jQuery(annotation element).trigger('click');
     },
     update = function() {
       render();
     },
     hideAll = function() {
       osdViewer.clearOverlays();
+    },
+    getElements = function() {
+
     };
   
     
