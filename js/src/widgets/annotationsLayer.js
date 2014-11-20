@@ -4,13 +4,16 @@
 
     jQuery.extend(true, this, {
       parent:            null,
-      annotationsList:   null,
-      viewer:               null
+      annotations:       null,
+      viewer:            null,
+      renderer:          null,
+      selected:          null,
+      hovered:           null,
+      windowId:          null
     }, options);
 
     this.init();
   };
-
 
   $.AnnotationsLayer.prototype = {
 
@@ -20,66 +23,32 @@
       _this.renderer = $.OsdCanvasRenderer({
         osd: $.OpenSeadragon,
         viewer: _this.viewer,
-        onUpdate: function(rect) { console.log(rect); },
-        onModeEnter: function() { console.log('entering annotation display mode!'); },
-        onModeExit: function() { console.log('exiting annotation display mode!'); },
-        list: _this.annotationsList.resources // must be passed by reference.
-        // Annotator store object possible?
-        // tools: ... ?
+        list: _this.annotationsList, // must be passed by reference.
+        onHover: null,
+        onSelect: null,
+        visible: false
       });
       this.bindEvents();
     },
 
-    get: function(prop) {
-      return this[prop];
-    },
-
-    set: function(prop, value, options) {
-      _this = this;
-      this[prop] = value;
-      jQuery.publish(prop + ':set', value, options);
-    },
-
     bindEvents: function() {
       var _this = this;
-
-      // model events
-      // _this.event('visible:set').subscribe( function(value) {
-      //     if (value === false) { _this.hide(); } else { _this.show(); }
-      // });
-      // _this.event('disabled:set').subscribe( function(value) {
-      //     if (value === true) { _this.hide(); } else { _this.show(); }
-      // });
-      // _this.event('selectedAnnotation:set').subscribe( function(value, options) {
-      //     if (value === null) {
-      //         _this.deselect(); 
-      //         return;
-      //     }
-      //     _this.focusSelected(value, options);
-      // });
-      // _this.event('hoveredAnnotation:set').subscribe( function(value, options) {
-      //     _this.accentHovered(value, options);
-      // });
-      // _this.event('annotationListUrls:set').subscribe( function(value, options) {
-      //     if (value) { console.log(value); }
-      //     _this.changePage();
-      // });
-      // _this.event('filter:set').subscribe( function(value, options) {
-      //     _this.filterAnnotations(value, options);
-      // });
+      
+      jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
+        console.log('entered ' + modeName + ' mode in annotationsLayer');
+      });
     },
 
-    // computeAnnotationStats: function() {
-    //   var comments = 0,
-    //   transcriptions = 0; 
+    enterDisplayMode: function() {
+      var _this = this;
 
-    //   jQuery.each(_this.annotations, function(index, annotation) {
-    //     if (annotation.type === 'commenting') { comments ++; } else { transcriptions ++; }
-    //   });
+      _this.mode = 'display';
+      // this.renderer.update().showAll();
+    },
 
-    //   _this.commentAnnotations = comments;
-    //   _this.textAnnotations = transcriptions;
-    // },
+    enterEditMode: function() {
+
+    },
 
     setVisible: function() {
       var _this = this;

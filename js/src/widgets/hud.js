@@ -3,7 +3,9 @@
   $.Hud = function(options) {
 
     jQuery.extend(this, {
-      parent: null
+      element: null,
+      parent: null,
+      windowId: null
     }, options);
 
     this.init();
@@ -13,14 +15,22 @@
 
     init: function() {    
       this.element = jQuery(this.template({
-         showNextPrev : this.parent.imagesList.length !== 1, 
-         showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable
+        showNextPrev : this.parent.imagesList.length !== 1, 
+        showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable
       })).appendTo(this.element);
+      this.contextControls = new $.ContextControls({
+        element: null,
+        container: this.parent.element,
+        mode: 'displayAnnotations',
+        parent: this
+      });
+
       this.bindEvents();
+
       if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
-         this.parent.parent.bottomPanelVisibility(false);
+        this.parent.parent.bottomPanelVisibility(false);
       } else {
-         this.parent.parent.bottomPanelVisibility(this.parent.parent.bottomPanelVisible);
+        this.parent.parent.bottomPanelVisibility(this.parent.parent.bottomPanelVisible);
       }
     },
 
@@ -34,16 +44,15 @@
       this.parent.element.find('.mirador-osd-previous').on('click', function() {
         _this.parent.previous();
       });
-      
+
       this.parent.element.find('.mirador-osd-annotations-layer').on('click', function() {
-        console.log(_this.parent.annotationsLayer.renderer);
-        _this.parent.annotationsLayer.renderer.render();
+        _this.parent.enterMode('displayAnnotations');
       });
-      
+
       this.parent.element.find('.mirador-osd-go-home').on('click', function() {
         _this.parent.osd.viewport.goHome();
       });
-      
+
       this.parent.element.find('.mirador-osd-up').on('click', function() {
         var osd = _this.parent.osd;
         osd.viewport.panBy(new OpenSeadragon.Point(0, -0.05));
@@ -85,22 +94,22 @@
 
       this.parent.element.find('.mirador-osd-fullscreen').on('click', function() {
         if (OpenSeadragon.isFullScreen()) {
-           OpenSeadragon.exitFullScreen();
+          OpenSeadragon.exitFullScreen();
         } else {
-           OpenSeadragon.requestFullScreen(_this.parent.element[0]);
+          OpenSeadragon.requestFullScreen(_this.parent.element[0]);
         }
       });
-      
+
       jQuery(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function() {
         _this.fullScreen();
       });
-      
+
       this.parent.element.find('.mirador-osd-toggle-bottom-panel').on('click', function() {
         var visible = !_this.parent.parent.bottomPanelVisible;
         _this.parent.parent.bottomPanelVisibility(visible);
       });
-      
-      jQuery.subscribe('bottomPanelSet.' + _this.parent.parent.id, function(event, visible) {
+
+      jQuery.subscribe('bottomPanelSet.' + _this.windowId, function(event, visible) {
         var dodgers = _this.parent.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls, .mirador-osd-annotations-layer');
         var arrows = _this.parent.element.find('.mirador-osd-next, .mirador-osd-previous');
         if (visible === true) {
@@ -110,7 +119,16 @@
           dodgers.css({transform: 'translateY(0)'});
           arrows.css({transform: 'translateY(0)'});
         }
-
+      });
+      
+      jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
+        console.log('entered ' + modeName + ' mode in hud');
+        // display context menu if not present.
+        if (modeName === 'displayAnnotations' || modeName === 'editingAnnotations') {
+          _this.contextControls.show();
+        } else {
+          _this.contextControls.hide();
+        }
       });
     },
 
@@ -125,7 +143,7 @@
         this.parent.element.find('.mirador-osd-toggle-bottom-panel').show();
         this.parent.parent.bottomPanelVisibility(true);
 
-        } else {
+      } else {
 
         replacementButton = jQuery('<i class="fa fa-compress"></i>');
         this.parent.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
@@ -138,47 +156,47 @@
     template: Handlebars.compile([
                                  '{{#if showNextPrev}}',
                                  '<a class="mirador-osd-previous hud-control ">',
-                                   '<i class="fa fa-3x fa-chevron-left "></i>',
+                                 '<i class="fa fa-3x fa-chevron-left "></i>',
                                  '</a>',
                                  '{{/if}}',
                                  '<a class="mirador-osd-fullscreen hud-control">',
-                                   '<i class="fa fa-expand"></i>',
+                                 '<i class="fa fa-expand"></i>',
                                  '</a>',
                                  '<a class="mirador-osd-annotations-layer hud-control ">',
-                                   '<i class="fa fa-2x fa-comments"></i>',
+                                 '<i class="fa fa-2x fa-comments"></i>',
                                  '</a>',
                                  '{{#if showNextPrev}}',
                                  '<a class="mirador-osd-next hud-control ">',
-                                   '<i class="fa fa-3x fa-chevron-right"></i>',
+                                 '<i class="fa fa-3x fa-chevron-right"></i>',
                                  '</a>',
                                  '{{/if}}',
                                  '{{#if showBottomPanel}}',
                                  '<a class="mirador-osd-toggle-bottom-panel hud-control ">',
-                                   '<i class="fa fa-2x fa-ellipsis-h"></i>',
+                                 '<i class="fa fa-2x fa-ellipsis-h"></i>',
                                  '</a>',
                                  '{{/if}}',
                                  '<div class="mirador-pan-zoom-controls hud-control ">',
-                                     '<a class="mirador-osd-up hud-control">',
-                                       '<i class="fa fa-chevron-circle-up"></i>',
-                                     '</a>',
-                                     '<a class="mirador-osd-right hud-control">',
-                                       '<i class="fa fa-chevron-circle-right"></i>',
-                                     '</a>',
-                                     '<a class="mirador-osd-down hud-control">',
-                                       '<i class="fa fa-chevron-circle-down"></i>',
-                                     '</a>',
-                                     '<a class="mirador-osd-left hud-control">',
-                                       '<i class="fa fa-chevron-circle-left"></i>',
-                                     '</a>',
-                                     '<a class="mirador-osd-zoom-in hud-control">',
-                                       '<i class="fa fa-plus-circle"></i>',
-                                     '</a>',
-                                     '<a class="mirador-osd-zoom-out hud-control">',
-                                       '<i class="fa fa-minus-circle"></i>',
-                                     '</a>',
-                                     '<a class="mirador-osd-go-home hud-control">',
-                                       '<i class="fa fa-home"></i>',
-                                     '</a>',
+                                 '<a class="mirador-osd-up hud-control">',
+                                 '<i class="fa fa-chevron-circle-up"></i>',
+                                 '</a>',
+                                 '<a class="mirador-osd-right hud-control">',
+                                 '<i class="fa fa-chevron-circle-right"></i>',
+                                 '</a>',
+                                 '<a class="mirador-osd-down hud-control">',
+                                 '<i class="fa fa-chevron-circle-down"></i>',
+                                 '</a>',
+                                 '<a class="mirador-osd-left hud-control">',
+                                 '<i class="fa fa-chevron-circle-left"></i>',
+                                 '</a>',
+                                 '<a class="mirador-osd-zoom-in hud-control">',
+                                 '<i class="fa fa-plus-circle"></i>',
+                                 '</a>',
+                                 '<a class="mirador-osd-zoom-out hud-control">',
+                                 '<i class="fa fa-minus-circle"></i>',
+                                 '</a>',
+                                 '<a class="mirador-osd-go-home hud-control">',
+                                 '<i class="fa fa-home"></i>',
+                                 '</a>',
                                  '</div>'
     ].join(''))
 

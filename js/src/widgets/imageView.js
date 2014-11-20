@@ -4,6 +4,7 @@
 
     jQuery.extend(this, {
       currentImg:       null,
+      windowId:         null,
       currentImgIndex:  0,
       imageID:          null,
       imagesList:       [],
@@ -47,7 +48,8 @@
       this.hud = new $.Hud({
         parent: this,
         element: this.element,
-        bottomPanelAvailable: this.bottomPanelAvailable
+        bottomPanelAvailable: this.bottomPanelAvailable,
+        windowId: this.windowId
       });
     },
 
@@ -61,7 +63,12 @@
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       jQuery.publish("imageBoundsUpdated", {
         id: _this.parent.id, 
-        osdBounds: {x: _this.osdOptions.osdBounds.x, y: _this.osdOptions.osdBounds.y, width: _this.osdOptions.osdBounds.width, height: _this.osdOptions.osdBounds.height}
+        osdBounds: {
+          x: _this.osdOptions.osdBounds.x, 
+          y: _this.osdOptions.osdBounds.y, 
+          width: _this.osdOptions.osdBounds.width, 
+          height: _this.osdOptions.osdBounds.height
+        }
       });
     },
 
@@ -143,11 +150,11 @@
 
     addAnnotationsLayer: function() {
       var _this = this;
-      console.log(_this.parent.annotationsList);
       _this.annotationsLayer = new $.AnnotationsLayer({
         parent: _this,
         annotationsList: _this.parent.annotationsList || [],
-        viewer: _this.osd
+        viewer: _this.osd,
+        windowId: _this.windowId
       });
 
     },
@@ -165,6 +172,11 @@
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.parent.updateFocusImages([imageID]);
       }
+    },
+
+    enterMode: function(modeName) {
+      var _this = this;
+      jQuery.publish('modeChange.' + _this.windowId, modeName);
     },
 
     next: function() {

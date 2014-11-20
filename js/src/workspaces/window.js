@@ -10,7 +10,7 @@
       currentImageID:    null,
       focusImages:       [],
       imagesList:        null,
-      annotationsList:   null,
+      annotationsList:   [],
       currentImageMode:  'ImageView',
       imageModes:        ['ImageView', 'BookView'],
       currentFocus:      'ThumbnailsView',
@@ -346,6 +346,7 @@
         this.focusModules.ImageView = new $.ImageView( {manifest: this.manifest, 
                                                         appendTo: this.element.find('.view-container'), 
                                                         parent: this, 
+                                                        windowId: this.id,
                                                         imageID: imageID, 
                                                         imagesList: this.imagesList,
                                                         osdOptions: this.focusOptions,
@@ -465,34 +466,38 @@
     getAnnotations: function() {
       //first look for manifest annotations
       var _this = this,
-      url = $.Iiif.getAnnotationsListUrl(_this.manifest, _this.currentImageID),
-      dfd = jQuery.Deferred();
+      url = $.Iiif.getAnnotationsListUrl(_this.manifest, _this.currentImageID);
+      
+      // empty the annotation list array efficiently.
+      while(_this.annotationsList.length > 0) {
+        _this.annotationsList.pop();
+      }
 
-      if (url === true) {
+      console.log("getting annotations");
+      console.log(url);
+      if (url !== false) {
         jQuery.get(url, function(list) {
-            _this.annotationsList = list;
+            _this.annotationsList = _this.annotationsList.concat(list);
+            console.log("finished manifest annotations");
+            console.log(list.resources);
+           // jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
         });
       }
       
-      //next check endpoints
-      jQuery.each($.viewer.annotationEndpoints, function(index, value) {
-         var dfd = jQuery.Deferred();
-         value.options.element = _this.element;
-         value.options.uri = _this.currentImageID;
-         value.options.dfd = dfd;
-         var endpoint = new $[value.module](value.options);
-         dfd.done(function(loaded) {
-            if (loaded) {
-              if (_this.annotationsList) {
-                _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
-              } else {
-                _this.annotationsList = endpoint.annotationsList;
-              }
-            }
-         });
-      });
-      console.log("went through endpoints");
-      console.log(_this.annotationsList);
+      // //next check endpoints
+      // jQuery.each($.viewer.annotationEndpoints, function(index, value) {
+      //    var dfd = jQuery.Deferred();
+      //    value.options.element = _this.element;
+      //    value.options.uri = _this.currentImageID;
+      //    value.options.dfd = dfd;
+      //    var endpoint = new $[value.module](value.options);
+      //    dfd.done(function(loaded) {
+      //      _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
+      //      jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
+      //    });
+      // });
+      // console.log("went through endpoints");
+      // console.log(_this.annotationsList);
     },
 
     // based on currentFocus

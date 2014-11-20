@@ -107,6 +107,14 @@
       *   "id" : [unique window ID - set by application and automatically saved in SaveController],
       **/
     ],
+
+    'availableAnnotationModes': [
+
+    ],
+
+    'availableAnnotationDrawingTools': [
+     
+    ],
     
     // main (top) menu
     'mainMenuSettings': {

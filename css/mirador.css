@@ -781,6 +781,7 @@ li.highlight {
   position:absolute;
   right:10px;
   top:10px;
+  z-index: 3;
 }
 .mirador-pan-zoom-controls {
   position: absolute;
@@ -826,6 +827,18 @@ li.highlight {
   position: absolute;
   right:20px;
   top:20px;
+}
+.mirador-osd-context-controls {
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  margin: 15px;
+}
+.mirador-osd-context-controls a {
+  float:left;
+  margin:0 15px 0 0;
+  font-weight: normal;
 }
 
 /* image view
