@@ -135,6 +135,10 @@
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
         }
+
+        // The worst hack imaginable. Pop the osd overlays layer after the canvas so 
+        // that annotations appear.
+        jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
         
         _this.addAnnotationsLayer();
 

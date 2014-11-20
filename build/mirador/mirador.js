@@ -4483,7 +4483,6 @@ window.Mirador = window.Mirador || function(config) {
     var osd = options.osd,
     osdViewer = options.viewer,
     list = options.list;
-    console.log(osdViewer.viewport);
   
     var parseRegion  = function(url) {
       var regionString = url.split('#')[1];
@@ -4510,10 +4509,7 @@ window.Mirador = window.Mirador || function(config) {
         });
       });
     },
-    update = function(toAdd) {
-      if (arguments.length) {
-        list.push(toAdd);
-      }
+    update = function() {
       render();
     };
   
@@ -5610,17 +5606,17 @@ window.Mirador = window.Mirador || function(config) {
       url = $.Iiif.getAnnotationsListUrl(_this.manifest, _this.currentImageID);
       
       // empty the annotation list array efficiently.
-      while(_this.annotationsList.length > 0) {
-        _this.annotationsList.pop();
-      }
+      // while(_this.annotationsList.length > 0) {
+      //   _this.annotationsList.pop();
+      // }
+      console.log(_this.annotationList);
 
       console.log("getting annotations");
       console.log(url);
       if (url !== false) {
         jQuery.get(url, function(list) {
-            _this.annotationsList = _this.annotationsList.concat(list);
+            _this.annotationsList = _this.annotationsList.concat(list.resources);
             console.log("finished manifest annotations");
-            console.log(list.resources);
            // jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
         });
       }
@@ -5776,18 +5772,27 @@ window.Mirador = window.Mirador || function(config) {
       
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
         console.log('entered ' + modeName + ' mode in annotationsLayer');
-        _this['enter' + modeName]();
+        if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
+        if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
+        if (modeName === 'default') { _this.enterDefault(); }
       });
       
     },
 
     enterDisplayAnnotations: function() {
       var _this = this;
-      // this.renderer.update().showAll();
+      console.log('triggering annotation loading and display');
+      this.renderer.render();
     },
 
     enterEditAnnotations: function() {
+      console.log('triggering annotation editing');
       // this.renderer.update().showAll();
+    },
+    
+    enterDefault: function() {
+      console.log('triggering default');
+      // this.renderer.update().hideAll();
     },
 
     setVisible: function() {
@@ -6687,6 +6692,10 @@ this.elemStitchOptions.hide();
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
         }
+
+        // The worst hack imaginable. Pop the osd overlays layer after the canvas so 
+        // that annotations appear.
+        jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
         
         _this.addAnnotationsLayer();
 

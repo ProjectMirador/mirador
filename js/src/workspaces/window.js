@@ -469,17 +469,17 @@
       url = $.Iiif.getAnnotationsListUrl(_this.manifest, _this.currentImageID);
       
       // empty the annotation list array efficiently.
-      while(_this.annotationsList.length > 0) {
-        _this.annotationsList.pop();
-      }
+      // while(_this.annotationsList.length > 0) {
+      //   _this.annotationsList.pop();
+      // }
+      console.log(_this.annotationList);
 
       console.log("getting annotations");
       console.log(url);
       if (url !== false) {
         jQuery.get(url, function(list) {
-            _this.annotationsList = _this.annotationsList.concat(list);
+            _this.annotationsList = _this.annotationsList.concat(list.resources);
             console.log("finished manifest annotations");
-            console.log(list.resources);
            // jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
         });
       }

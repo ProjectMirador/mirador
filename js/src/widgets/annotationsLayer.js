@@ -36,18 +36,27 @@
       
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
         console.log('entered ' + modeName + ' mode in annotationsLayer');
-        _this['enter' + modeName]();
+        if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
+        if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
+        if (modeName === 'default') { _this.enterDefault(); }
       });
       
     },
 
     enterDisplayAnnotations: function() {
       var _this = this;
-      // this.renderer.update().showAll();
+      console.log('triggering annotation loading and display');
+      this.renderer.render();
     },
 
     enterEditAnnotations: function() {
+      console.log('triggering annotation editing');
       // this.renderer.update().showAll();
+    },
+    
+    enterDefault: function() {
+      console.log('triggering default');
+      // this.renderer.update().hideAll();
     },
 
     setVisible: function() {

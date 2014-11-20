@@ -10,7 +10,6 @@
     var osd = options.osd,
     osdViewer = options.viewer,
     list = options.list;
-    console.log(osdViewer.viewport);
   
     var parseRegion  = function(url) {
       var regionString = url.split('#')[1];
@@ -37,10 +36,7 @@
         });
       });
     },
-    update = function(toAdd) {
-      if (arguments.length) {
-        list.push(toAdd);
-      }
+    update = function() {
       render();
     };
   
