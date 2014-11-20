@@ -5776,18 +5776,18 @@ window.Mirador = window.Mirador || function(config) {
       
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
         console.log('entered ' + modeName + ' mode in annotationsLayer');
+        _this['enter' + modeName]();
       });
+      
     },
 
-    enterDisplayMode: function() {
+    enterDisplayAnnotations: function() {
       var _this = this;
-
-      _this.mode = 'display';
       // this.renderer.update().showAll();
     },
 
-    enterEditMode: function() {
-
+    enterEditAnnotations: function() {
+      // this.renderer.update().showAll();
     },
 
     setVisible: function() {
@@ -6253,7 +6253,8 @@ this.elemStitchOptions.hide();
       parent: null,
       element: null,
       container: null,
-      mode: null
+      mode: null,
+      windowId: null
     }, options);
 
     this.init();
@@ -6263,10 +6264,8 @@ this.elemStitchOptions.hide();
 
     init: function() {    
       this.element = jQuery(this.template()).appendTo(this.container);
+      this.hide();
       this.bindEvents();
-    },
-
-    enterMode: function () {
     },
 
     show: function() {
@@ -6285,6 +6284,7 @@ this.elemStitchOptions.hide();
       this.container.find('.mirador-osd-close').on('click', function() {
         console.log('happening?');
         _this.hide();
+        _this.parent.parent.setMode('default');
       });
       
       this.container.find('.mirador-osd-back').on('click', function() {
@@ -6313,6 +6313,9 @@ this.elemStitchOptions.hide();
                                    '</a>',
                                    '<a class="mirador-osd-edit-mode hud-control">',
                                    '<i class="fa fa-2x fa-search"></i>',
+                                   '</a>',
+                                   '<a class="mirador-osd-rect-tool hud-control">',
+                                   '<i class="fa fa-2x fa-gear"></i>',
                                    '</a>',
                                  '</div>'
     ].join('')),
@@ -6360,7 +6363,8 @@ this.elemStitchOptions.hide();
         element: null,
         container: this.parent.element,
         mode: 'displayAnnotations',
-        parent: this
+        parent: this,
+        windowId: this.windowId
       });
 
       this.bindEvents();
@@ -6384,7 +6388,11 @@ this.elemStitchOptions.hide();
       });
 
       this.parent.element.find('.mirador-osd-annotations-layer').on('click', function() {
-        _this.parent.enterMode('displayAnnotations');
+        if (_this.parent.mode === 'displayAnnotations') {
+          _this.parent.setMode('default');
+        } else {
+          _this.parent.setMode('displayAnnotations');
+        }
       });
 
       this.parent.element.find('.mirador-osd-go-home').on('click', function() {
@@ -6555,6 +6563,7 @@ this.elemStitchOptions.hide();
       element:          null,
       parent:           null,
       manifest:         null,
+      mode:             null,
       osd:              null,
       fullscreen:       null,
       osdOptions: {
@@ -6718,8 +6727,9 @@ this.elemStitchOptions.hide();
       }
     },
 
-    enterMode: function(modeName) {
+    setMode: function(modeName) {
       var _this = this;
+      _this.mode = modeName;
       jQuery.publish('modeChange.' + _this.windowId, modeName);
     },
 

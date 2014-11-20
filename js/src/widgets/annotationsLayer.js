@@ -36,18 +36,18 @@
       
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
         console.log('entered ' + modeName + ' mode in annotationsLayer');
+        _this['enter' + modeName]();
       });
+      
     },
 
-    enterDisplayMode: function() {
+    enterDisplayAnnotations: function() {
       var _this = this;
-
-      _this.mode = 'display';
       // this.renderer.update().showAll();
     },
 
-    enterEditMode: function() {
-
+    enterEditAnnotations: function() {
+      // this.renderer.update().showAll();
     },
 
     setVisible: function() {

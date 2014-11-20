@@ -22,7 +22,8 @@
         element: null,
         container: this.parent.element,
         mode: 'displayAnnotations',
-        parent: this
+        parent: this,
+        windowId: this.windowId
       });
 
       this.bindEvents();
@@ -46,7 +47,11 @@
       });
 
       this.parent.element.find('.mirador-osd-annotations-layer').on('click', function() {
-        _this.parent.enterMode('displayAnnotations');
+        if (_this.parent.mode === 'displayAnnotations') {
+          _this.parent.setMode('default');
+        } else {
+          _this.parent.setMode('displayAnnotations');
+        }
       });
 
       this.parent.element.find('.mirador-osd-go-home').on('click', function() {

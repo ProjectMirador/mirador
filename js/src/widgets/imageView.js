@@ -11,6 +11,7 @@
       element:          null,
       parent:           null,
       manifest:         null,
+      mode:             null,
       osd:              null,
       fullscreen:       null,
       osdOptions: {
@@ -174,8 +175,9 @@
       }
     },
 
-    enterMode: function(modeName) {
+    setMode: function(modeName) {
       var _this = this;
+      _this.mode = modeName;
       jQuery.publish('modeChange.' + _this.windowId, modeName);
     },
 
