@@ -25,6 +25,7 @@
   
     }, 
     render = function() {
+      console.log(options);
       options.list.forEach(function(annotation) {
         var region = parseRegion(annotation.on);
         osdOverlay = document.createElement('div');

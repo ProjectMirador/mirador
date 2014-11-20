@@ -467,6 +467,7 @@
       //first look for manifest annotations
       var _this = this,
       url = $.Iiif.getAnnotationsListUrl(_this.manifest, _this.currentImageID);
+      _this.annotationsList = [];
       
       // empty the annotation list array efficiently.
       // while(_this.annotationsList.length > 0) {
@@ -475,25 +476,23 @@
 
       if (url !== false) {
         jQuery.get(url, function(list) {
-            // _this.annotationsList = _this.annotationsList.concat(list.resources);
-            _this.annotationsList = list.resources;
-            console.log("finished manifest annotations");
-            jQuery.publish(('annotationListLoaded.' + _this.id));
+            _this.annotationsList = _this.annotationsList.concat(list.resources);
+            jQuery.publish('annotationListLoaded.' + _this.id);
         });
       }
       
-      // //next check endpoints
-      // jQuery.each($.viewer.annotationEndpoints, function(index, value) {
-      //    var dfd = jQuery.Deferred();
-      //    value.options.element = _this.element;
-      //    value.options.uri = _this.currentImageID;
-      //    value.options.dfd = dfd;
-      //    var endpoint = new $[value.module](value.options);
-      //    dfd.done(function(loaded) {
-      //      _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
-      //      jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
-      //    });
-      // });
+       //next check endpoints
+       jQuery.each($.viewer.annotationEndpoints, function(index, value) {
+          var dfd = jQuery.Deferred();
+          value.options.element = _this.element;
+          value.options.uri = _this.currentImageID;
+          value.options.dfd = dfd;
+          var endpoint = new $[value.module](value.options);
+          dfd.done(function(loaded) {
+            _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
+            jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
+          });
+       });
       // console.log("went through endpoints");
       // console.log(_this.annotationsList);
     },

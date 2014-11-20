@@ -4498,6 +4498,7 @@ window.Mirador = window.Mirador || function(config) {
   
     }, 
     render = function() {
+      console.log(options);
       options.list.forEach(function(annotation) {
         var region = parseRegion(annotation.on);
         osdOverlay = document.createElement('div');
@@ -5605,6 +5606,7 @@ window.Mirador = window.Mirador || function(config) {
       //first look for manifest annotations
       var _this = this,
       url = $.Iiif.getAnnotationsListUrl(_this.manifest, _this.currentImageID);
+      _this.annotationsList = [];
       
       // empty the annotation list array efficiently.
       // while(_this.annotationsList.length > 0) {
@@ -5613,25 +5615,23 @@ window.Mirador = window.Mirador || function(config) {
 
       if (url !== false) {
         jQuery.get(url, function(list) {
-            // _this.annotationsList = _this.annotationsList.concat(list.resources);
-            _this.annotationsList = list.resources;
-            console.log("finished manifest annotations");
-            jQuery.publish(('annotationListLoaded.' + _this.id));
+            _this.annotationsList = _this.annotationsList.concat(list.resources);
+            jQuery.publish('annotationListLoaded.' + _this.id);
         });
       }
       
-      // //next check endpoints
-      // jQuery.each($.viewer.annotationEndpoints, function(index, value) {
-      //    var dfd = jQuery.Deferred();
-      //    value.options.element = _this.element;
-      //    value.options.uri = _this.currentImageID;
-      //    value.options.dfd = dfd;
-      //    var endpoint = new $[value.module](value.options);
-      //    dfd.done(function(loaded) {
-      //      _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
-      //      jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
-      //    });
-      // });
+       //next check endpoints
+       jQuery.each($.viewer.annotationEndpoints, function(index, value) {
+          var dfd = jQuery.Deferred();
+          value.options.element = _this.element;
+          value.options.uri = _this.currentImageID;
+          value.options.dfd = dfd;
+          var endpoint = new $[value.module](value.options);
+          dfd.done(function(loaded) {
+            _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
+            jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
+          });
+       });
       // console.log("went through endpoints");
       // console.log(_this.annotationsList);
     },
@@ -5754,7 +5754,7 @@ window.Mirador = window.Mirador || function(config) {
 
     init: function() {
       var _this = this;
-      console.log(_this.annotationsList);
+      /*console.log(_this.annotationsList);
       _this.renderer = $.OsdCanvasRenderer({
         osd: $.OpenSeadragon,
         viewer: _this.viewer,
@@ -5762,7 +5762,7 @@ window.Mirador = window.Mirador || function(config) {
         onHover: null,
         onSelect: null,
         visible: false
-      });
+      });*/
       this.bindEvents();
     },
 
@@ -5776,11 +5776,24 @@ window.Mirador = window.Mirador || function(config) {
         if (modeName === 'default') { _this.enterDefault(); }
       });
       
-      jQuery.subscribe('.currentImageIDUpdated' + _this.windowId, function(event) {
+      jQuery.subscribe('currentImageIDUpdated.' + _this.windowId, function(event) {
         var modeName = _this.mode;
         if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
         if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
         if (modeName === 'default') { _this.enterDefault(); }
+      });
+     
+      jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
+        _this.annotationsList = _this.parent.parent.annotationsList;
+        console.log(_this.annotationsList);
+        _this.renderer = $.OsdCanvasRenderer({
+          osd: $.OpenSeadragon,
+          viewer: _this.viewer,
+          list: _this.annotationsList, // must be passed by reference.
+          onHover: null,
+          onSelect: null,
+          visible: false
+        });
       });
       
     },
