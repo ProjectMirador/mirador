@@ -5776,7 +5776,7 @@ window.Mirador = window.Mirador || function(config) {
         if (modeName === 'default') { _this.enterDefault(); }
       });
       
-      jQuery.subscribe('.currentImageIDUpdated' + _this.windowId, function(event) {
+      jQuery.subscribe('currentImageIDUpdated.' + _this.windowId, function(event) {
         var modeName = _this.mode;
         if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
         if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
