@@ -10,6 +10,7 @@
           element:   null,
           annotator: null,
           dfd:       null,
+          windowID:  null,
           annotationsList: [], //OA list for Mirador use
           annotationsListCatch: null  //internal list for module use
         }, options);
@@ -137,6 +138,10 @@
              });
              _this.dfd.resolve(true);
           });
+          
+          jQuery.publish("destroyEndpoint."+_this.windowID, function(event) {
+            _this.annotator.destroy();
+          });
         },
         
         search: function() {
@@ -150,7 +155,8 @@
           on,
           annotatedBy,
           bounds,
-          rect;
+          selector,
+          scope;
           //convert annotation to OA format
       
          id = annotation.id;  //need to make URI
@@ -169,6 +175,9 @@
            on = annotation.parent;  //need to make URI
          } else {
            motivation.push("oa:commenting");
+           //selector = "xywh="+",".concat(annotation.rangePosition.x, annotation.rangePosition.y, annotation.rangePostion.width, annotation.rangePostion.height);
+           //scope = "xywh="+",".concat(annotation.bounds.x, annotation.bounds.y, annotation.bounds.width, annotation.bounds.height);
+           //console.log(selector + " " + scope);
            on = { "@type" : "oa:SpecificResource",
                   "source" : annotation.uri,
                   "selector" : {

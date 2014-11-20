@@ -4260,6 +4260,7 @@ window.Mirador = window.Mirador || function(config) {
           element:   null,
           annotator: null,
           dfd:       null,
+          windowID:  null,
           annotationsList: [], //OA list for Mirador use
           annotationsListCatch: null  //internal list for module use
         }, options);
@@ -4387,6 +4388,10 @@ window.Mirador = window.Mirador || function(config) {
              });
              _this.dfd.resolve(true);
           });
+          
+          jQuery.publish("destroyEndpoint."+_this.windowID, function(event) {
+            _this.annotator.destroy();
+          });
         },
         
         search: function() {
@@ -4400,7 +4405,8 @@ window.Mirador = window.Mirador || function(config) {
           on,
           annotatedBy,
           bounds,
-          rect;
+          selector,
+          scope;
           //convert annotation to OA format
       
          id = annotation.id;  //need to make URI
@@ -4419,6 +4425,9 @@ window.Mirador = window.Mirador || function(config) {
            on = annotation.parent;  //need to make URI
          } else {
            motivation.push("oa:commenting");
+           //selector = "xywh="+",".concat(annotation.rangePosition.x, annotation.rangePosition.y, annotation.rangePostion.width, annotation.rangePostion.height);
+           //scope = "xywh="+",".concat(annotation.bounds.x, annotation.bounds.y, annotation.bounds.width, annotation.bounds.height);
+           //console.log(selector + " " + scope);
            on = { "@type" : "oa:SpecificResource",
                   "source" : annotation.uri,
                   "selector" : {
@@ -5167,6 +5176,7 @@ window.Mirador = window.Mirador || function(config) {
       focusImages:       [],
       imagesList:        null,
       annotationsList:   [],
+      endpoints:         [],
       currentImageMode:  'ImageView',
       imageModes:        ['ImageView', 'BookView'],
       currentFocus:      'ThumbnailsView',
@@ -5640,10 +5650,16 @@ window.Mirador = window.Mirador || function(config) {
        //next check endpoints
        jQuery.each($.viewer.annotationEndpoints, function(index, value) {
           var dfd = jQuery.Deferred();
-          value.options.element = _this.element;
-          value.options.uri = _this.currentImageID;
-          value.options.dfd = dfd;
-          var endpoint = new $[value.module](value.options);
+          if (_this.endpoints[value.module] && _this.endpoints[value.module] !== null) {
+           //update with new search
+          } else {
+            value.options.element = _this.element;
+            value.options.uri = _this.currentImageID;
+            value.options.dfd = dfd;
+            value.options.windowID = _this.id;
+            var endpoint = new $[value.module](value.options);
+            _this.endpoints[value.module] = endpoint;
+          }
           dfd.done(function(loaded) {
             _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
             jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
