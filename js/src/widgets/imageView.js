@@ -106,17 +106,21 @@
     },
 
     createOpenSeadragonInstance: function(imageUrl) {
-      this.addAnnotationsLayer(this.element);
       var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json',
       uniqueID = $.genUUID(),
       osdID = 'mirador-osd-' + uniqueID,
       infoJson,
       elemOsd,
-      _this = this;
+      _this = this,
+      elemAnno;
 
       this.element.find('.' + this.osdCls).remove();
 
       infoJson = $.getJsonFromUrl(infoJsonUrl, false);
+      
+      elemAnno = jQuery('<div/>')
+      .addClass('annotation-canvas')
+      .appendTo(this.element);
 
       elemOsd =
         jQuery('<div/>')
@@ -137,7 +141,7 @@
             _this.osd.viewport.fitBounds(rect, true);
         }
         
-        jQuery.publish(('viewerCreated.'+_this.windowId), _this.osd);
+        _this.addAnnotationsLayer(elemAnno);
 
         // The worst hack imaginable. Pop the osd overlays layer after the canvas so 
         // that annotations appear.

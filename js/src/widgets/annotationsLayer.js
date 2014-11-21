@@ -23,10 +23,13 @@
     init: function() {
       var _this = this;
       console.log(this.element);
-      var el = this.parent.parent.element;
-      this.annotator = this.element.annotator().data('annotator');
+      if (this.element.data('annotator')) {
+        this.annotator = this.element.data('annotator');
+      } else {
+        this.annotator = this.element.annotator().data('annotator');
+      }
       //console.log(this.annotator);
-      //this.annotator.addPlugin('Tags');
+      this.annotator.addPlugin('Tags');
       this.bindEvents();
     },
 
@@ -42,16 +45,7 @@
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         _this.annotationsList = _this.parent.parent.annotationsList;
-        if (_this.annotationsList && _this.viewer) {
           _this.createRenderer();
-        }
-      });
-      
-      jQuery.subscribe('viewerCreated.'+_this.windowId, function(event, viewer) {
-        _this.viewer = viewer;
-        if (_this.annotationsList && _this.viewer) {
-           _this.createRenderer();
-        }
       });
 
     },

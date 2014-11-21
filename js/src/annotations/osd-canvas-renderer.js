@@ -6,7 +6,6 @@
   // registering updates.
   
   $.OsdCanvasRenderer = function(options) {
-  
     var osd = options.osd,
     osdViewer = options.viewer,
     elements,

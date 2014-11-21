@@ -4488,7 +4488,6 @@ window.Mirador = window.Mirador || function(config) {
   // registering updates.
   
   $.OsdCanvasRenderer = function(options) {
-  
     var osd = options.osd,
     osdViewer = options.viewer,
     elements,
@@ -5599,6 +5598,8 @@ window.Mirador = window.Mirador || function(config) {
     setCurrentImageID: function(imageID) {
       var _this = this;
       this.currentImageID = imageID;
+      this.annotationsList = [];
+      jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
       this.loadImageModeFromPanel(imageID);
       this.getAnnotations();
       jQuery.publish(('currentImageIDUpdated.' + _this.id), imageID);
@@ -5650,7 +5651,7 @@ window.Mirador = window.Mirador || function(config) {
       //first look for manifest annotations
       var _this = this,
       url = $.Iiif.getAnnotationsListUrl(_this.manifest, _this.currentImageID);
-      _this.annotationsList = [];
+      //_this.annotationsList = [];
       
       // empty the annotation list array efficiently.
       // while(_this.annotationsList.length > 0) {
@@ -5806,10 +5807,13 @@ window.Mirador = window.Mirador || function(config) {
     init: function() {
       var _this = this;
       console.log(this.element);
-      var el = this.parent.parent.element;
-      this.annotator = this.element.annotator().data('annotator');
+      if (this.element.data('annotator')) {
+        this.annotator = this.element.data('annotator');
+      } else {
+        this.annotator = this.element.annotator().data('annotator');
+      }
       //console.log(this.annotator);
-      //this.annotator.addPlugin('Tags');
+      this.annotator.addPlugin('Tags');
       this.bindEvents();
     },
 
@@ -5825,16 +5829,7 @@ window.Mirador = window.Mirador || function(config) {
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         _this.annotationsList = _this.parent.parent.annotationsList;
-        if (_this.annotationsList && _this.viewer) {
           _this.createRenderer();
-        }
-      });
-      
-      jQuery.subscribe('viewerCreated.'+_this.windowId, function(event, viewer) {
-        _this.viewer = viewer;
-        if (_this.annotationsList && _this.viewer) {
-           _this.createRenderer();
-        }
       });
 
     },
@@ -6739,17 +6734,21 @@ this.elemStitchOptions.hide();
     },
 
     createOpenSeadragonInstance: function(imageUrl) {
-      this.addAnnotationsLayer(this.element);
       var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json',
       uniqueID = $.genUUID(),
       osdID = 'mirador-osd-' + uniqueID,
       infoJson,
       elemOsd,
-      _this = this;
+      _this = this,
+      elemAnno;
 
       this.element.find('.' + this.osdCls).remove();
 
       infoJson = $.getJsonFromUrl(infoJsonUrl, false);
+      
+      elemAnno = jQuery('<div/>')
+      .addClass('annotation-canvas')
+      .appendTo(this.element);
 
       elemOsd =
         jQuery('<div/>')
@@ -6770,7 +6769,7 @@ this.elemStitchOptions.hide();
             _this.osd.viewport.fitBounds(rect, true);
         }
         
-        jQuery.publish(('viewerCreated.'+_this.windowId), _this.osd);
+        _this.addAnnotationsLayer(elemAnno);
 
         // The worst hack imaginable. Pop the osd overlays layer after the canvas so 
         // that annotations appear.
