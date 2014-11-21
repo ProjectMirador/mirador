@@ -106,6 +106,7 @@
     },
 
     createOpenSeadragonInstance: function(imageUrl) {
+      this.addAnnotationsLayer(this.element);
       var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json',
       uniqueID = $.genUUID(),
       osdID = 'mirador-osd-' + uniqueID,
@@ -135,13 +136,13 @@
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
         }
+        
+        jQuery.publish(('viewerCreated.'+_this.windowId), _this.osd);
 
         // The worst hack imaginable. Pop the osd overlays layer after the canvas so 
         // that annotations appear.
         jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
         
-        _this.addAnnotationsLayer();
-
         _this.osd.addHandler('zoom', $.debounce(function(){
           _this.setBounds();
         }, 300));
@@ -153,14 +154,15 @@
       });
     },
 
-    addAnnotationsLayer: function() {
+    addAnnotationsLayer: function(element) {
       var _this = this;
       _this.annotationsLayer = new $.AnnotationsLayer({
         parent: _this,
         annotationsList: _this.parent.annotationsList || [],
         viewer: _this.osd,
         windowId: _this.windowId,
-        mode: _this.mode
+        mode: _this.mode,
+        element: element
       });
 
     },

@@ -11,7 +11,8 @@
       hovered:           null,
       windowId:          null,
       mode:              null,
-      annotator:         null
+      annotator:         null,
+      element:           null
     }, options);
 
     this.init();
@@ -21,8 +22,11 @@
 
     init: function() {
       var _this = this;
-      this.annotator = this.parent.element.annotator().data('annotator');
-      this.annotator.addPlugin('Tags');
+      console.log(this.element);
+      var el = this.parent.parent.element;
+      this.annotator = this.element.annotator().data('annotator');
+      //console.log(this.annotator);
+      //this.annotator.addPlugin('Tags');
       this.bindEvents();
     },
 
@@ -39,29 +43,40 @@
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         var modeName = _this.mode;
         _this.annotationsList = _this.parent.parent.annotationsList;
-        _this.renderer = $.OsdCanvasRenderer({
+        if (_this.annotationsList && _this.viewer) {
+          _this.createRenderer();
+        }
+      });
+      
+      jQuery.subscribe('viewerCreated.'+_this.windowId, function(event, viewer) {
+        _this.viewer = viewer;
+        if (_this.annotationsList && _this.viewer) {
+           _this.createRenderer();
+        }
+      });
+
+    },
+    
+    createRenderer: function() {
+      this.renderer = $.OsdCanvasRenderer({
           osd: $.OpenSeadragon,
-          viewer: _this.viewer,
-          list: _this.annotationsList, // must be passed by reference.
+          viewer: this.viewer,
+          list: this.annotationsList, // must be passed by reference.
           onHover: function(annotations) {
             var annotation = annotations[0];
             console.log(annotation);
             var position = _this.parseRegion(annotation.on);
             
             // this.annotator.viewer.hide();
-            _this.annotator.showViewer(_this.prepareForAnnotator(annotation));
+            this.annotator.showViewer(_this.prepareForAnnotator(annotation));
           },
           onSelect: function(annotation) {
 
           },
           visible: false
         });
-        if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
-        if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
-        if (modeName === 'default') { _this.enterDefault(); }
-      });
-
     },
+    
     parseRegion: function(url) {
       var regionString;
       if (typeof url === 'object') {

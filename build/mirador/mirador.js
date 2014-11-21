@@ -5665,23 +5665,23 @@ window.Mirador = window.Mirador || function(config) {
       }
       
        //next check endpoints
-       // jQuery.each($.viewer.annotationEndpoints, function(index, value) {
-       //    var dfd = jQuery.Deferred();
-       //    if (_this.endpoints[value.module] && _this.endpoints[value.module] !== null) {
-       //     //update with new search
-       //    } else {
-       //      value.options.element = _this.element;
-       //      value.options.uri = _this.currentImageID;
-       //      value.options.dfd = dfd;
-       //      value.options.windowID = _this.id;
-       //      var endpoint = new $[value.module](value.options);
-       //      _this.endpoints[value.module] = endpoint;
-       //    }
-       //    dfd.done(function(loaded) {
-       //      _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
-       //      jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
-       //    });
-       // });
+//        jQuery.each($.viewer.annotationEndpoints, function(index, value) {
+//           var dfd = jQuery.Deferred();
+//    if (_this.endpoints[value.module] && _this.endpoints[value.module] !== null) {
+//     //update with new search
+//    } else {
+//      value.options.element = _this.element;
+//      value.options.uri = _this.currentImageID;
+//      value.options.dfd = dfd;
+//      value.options.windowID = _this.id;
+//      var endpoint = new $[value.module](value.options);
+//      _this.endpoints[value.module] = endpoint;
+//    }
+//    dfd.done(function(loaded) {
+//      _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
+//      jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
+//    });
+//});
     },
 
     // based on currentFocus
@@ -5794,7 +5794,8 @@ window.Mirador = window.Mirador || function(config) {
       hovered:           null,
       windowId:          null,
       mode:              null,
-      annotator:         null
+      annotator:         null,
+      element:           null
     }, options);
 
     this.init();
@@ -5804,8 +5805,11 @@ window.Mirador = window.Mirador || function(config) {
 
     init: function() {
       var _this = this;
-      this.annotator = this.parent.element.annotator().data('annotator');
-      this.annotator.addPlugin('Tags');
+      console.log(this.element);
+      var el = this.parent.parent.element;
+      this.annotator = this.element.annotator().data('annotator');
+      //console.log(this.annotator);
+      //this.annotator.addPlugin('Tags');
       this.bindEvents();
     },
 
@@ -5822,29 +5826,40 @@ window.Mirador = window.Mirador || function(config) {
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         var modeName = _this.mode;
         _this.annotationsList = _this.parent.parent.annotationsList;
-        _this.renderer = $.OsdCanvasRenderer({
+        if (_this.annotationsList && _this.viewer) {
+          _this.createRenderer();
+        }
+      });
+      
+      jQuery.subscribe('viewerCreated.'+_this.windowId, function(event, viewer) {
+        _this.viewer = viewer;
+        if (_this.annotationsList && _this.viewer) {
+           _this.createRenderer();
+        }
+      });
+
+    },
+    
+    createRenderer: function() {
+      this.renderer = $.OsdCanvasRenderer({
           osd: $.OpenSeadragon,
-          viewer: _this.viewer,
-          list: _this.annotationsList, // must be passed by reference.
+          viewer: this.viewer,
+          list: this.annotationsList, // must be passed by reference.
           onHover: function(annotations) {
             var annotation = annotations[0];
             console.log(annotation);
             var position = _this.parseRegion(annotation.on);
             
             // this.annotator.viewer.hide();
-            _this.annotator.showViewer(_this.prepareForAnnotator(annotation));
+            this.annotator.showViewer(_this.prepareForAnnotator(annotation));
           },
           onSelect: function(annotation) {
 
           },
           visible: false
         });
-        if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
-        if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
-        if (modeName === 'default') { _this.enterDefault(); }
-      });
-
     },
+    
     parseRegion: function(url) {
       var regionString;
       if (typeof url === 'object') {
@@ -6709,6 +6724,7 @@ this.elemStitchOptions.hide();
     },
 
     createOpenSeadragonInstance: function(imageUrl) {
+      this.addAnnotationsLayer(this.element);
       var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json',
       uniqueID = $.genUUID(),
       osdID = 'mirador-osd-' + uniqueID,
@@ -6738,13 +6754,13 @@ this.elemStitchOptions.hide();
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
         }
+        
+        jQuery.publish(('viewerCreated.'+_this.windowId), _this.osd);
 
         // The worst hack imaginable. Pop the osd overlays layer after the canvas so 
         // that annotations appear.
         jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
         
-        _this.addAnnotationsLayer();
-
         _this.osd.addHandler('zoom', $.debounce(function(){
           _this.setBounds();
         }, 300));
@@ -6756,14 +6772,15 @@ this.elemStitchOptions.hide();
       });
     },
 
-    addAnnotationsLayer: function() {
+    addAnnotationsLayer: function(element) {
       var _this = this;
       _this.annotationsLayer = new $.AnnotationsLayer({
         parent: _this,
         annotationsList: _this.parent.annotationsList || [],
         viewer: _this.osd,
         windowId: _this.windowId,
-        mode: _this.mode
+        mode: _this.mode,
+        element: element
       });
 
     },
