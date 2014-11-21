@@ -22,11 +22,8 @@
 
     init: function() {
       var _this = this;
-      console.log(this.element);
       var el = this.parent.parent.element;
       this.annotator = this.element.annotator().data('annotator');
-      //console.log(this.annotator);
-      //this.annotator.addPlugin('Tags');
       this.bindEvents();
     },
 
@@ -61,14 +58,14 @@
       var _this = this;
       this.renderer = $.OsdCanvasRenderer({
           osd: $.OpenSeadragon,
-          viewer: this.viewer,
-          list: this.annotationsList, // must be passed by reference.
+          viewer: _this.viewer,
+          list: _this.annotationsList, // must be passed by reference.
           onHover: function(annotations) {
             var annotation = annotations[0];
             console.log(annotation);
             var position = _this.parseRegionForAnnotator(annotation.on);
             
-            // this.annotator.viewer.hide();
+            _this.annotator.viewer.hide();
             _this.annotator.showViewer(_this.prepareForAnnotator(annotation), position);
           },
           onSelect: function(annotation) {
@@ -79,7 +76,8 @@
     },
     
     parseRegionForAnnotator: function(url) {
-      var regionString,
+      var _this = this,
+      regionString,
       regionArray,
       annotatorPosition;
 
@@ -93,10 +91,12 @@
       // This positions the annotator pop-up directly below the 
       // annotation, adjusting the canvas panning so that it
       // will always be visible.
+      console.log(_this.viewer);
       annotatorPosition = {
-        top: regionArray[3] + regionArray[1],
-        left: regionArray[0] + 20
+        top: (regionArray[1]),
+        left: (regionArray[0])
       };
+      console.log(annotatorPosition);
 
       return annotatorPosition;
     },
