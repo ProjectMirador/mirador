@@ -32,8 +32,6 @@
     bindEvents: function() {
       var _this = this;
 
-      console.log(this.parent.element);
-      
       this.container.find('.mirador-osd-close').on('click', function() {
         console.log('happening?');
         _this.hide();

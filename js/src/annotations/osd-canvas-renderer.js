@@ -8,7 +8,8 @@
   $.OsdCanvasRenderer = function(options) {
   
     var osd = options.osd,
-    osdViewer = options.viewer;
+    osdViewer = options.viewer,
+    elements;
   
     var parseRegion  = function(url) {
       var regionString;
@@ -30,7 +31,6 @@
   
     }, 
     render = function() {
-      console.log(options);
       options.list.forEach(function(annotation) {
         var region = parseRegion(annotation.on);
         osdOverlay = document.createElement('div');
@@ -39,16 +39,20 @@
           element: osdOverlay,
           location:  getOsdFrame(region)
         });
-        jQuery(osdOverlay).on('hover', function(annotation) {
-          options.onHover(annotation);
-        });
-        jQuery(osdOverlay).on('click', function(annotation) {
-          options.onSelect(annotation);
-        });
       });
+
+      bindEvents();
     },
     select = function(annotationId) {
       // jQuery(annotation element).trigger('click');
+    },
+    bindEvents = function() {
+      // be sure to properly delegate your event handlers
+      jQuery(osdViewer.canvas).parent().on('click', '.annotation', function() { options.onSelect(); });
+
+      jQuery(osdViewer.canvas).parent().on('mouseenter', '.annotation', function() { options.onHover(); });
+      
+      jQuery(osdViewer.canvas).parent().on('mouseleave', '.annotation', function() { options.onMouseLeave(); });
     },
     update = function() {
       render();
@@ -57,9 +61,13 @@
       osdViewer.clearOverlays();
     },
     getElements = function() {
-
+      var set = jQuery();
+      elements = osdViewer.currentOverlays.reduce(function(result, currentOverlay) {
+        currentOverlay = jQuery(currentOverlay);
+        return result.add(currentOverlay);
+      });
+      return elements;
     };
-  
     
     var osdCanvasRenderer = {
       render: render,
