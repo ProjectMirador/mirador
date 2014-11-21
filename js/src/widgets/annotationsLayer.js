@@ -41,7 +41,6 @@
       });
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
-        var modeName = _this.mode;
         _this.annotationsList = _this.parent.parent.annotationsList;
         if (_this.annotationsList && _this.viewer) {
           _this.createRenderer();
@@ -58,7 +57,8 @@
     },
     
     createRenderer: function() {
-      var _this = this;
+      var _this = this,
+      modeName = _this.mode;
       this.renderer = $.OsdCanvasRenderer({
           osd: $.OpenSeadragon,
           viewer: this.viewer,
@@ -76,6 +76,9 @@
           },
           visible: false
         });
+        if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
+        if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
+        if (modeName === 'default') { _this.enterDefault(); }
     },
     
     parseRegionForAnnotator: function(url) {
