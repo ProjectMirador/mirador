@@ -4,13 +4,14 @@
 
     jQuery.extend(true, this, {
       parent:            null,
-      annotationsList:       null,
+      annotationsList:   null,
       viewer:            null,
       renderer:          null,
       selected:          null,
       hovered:           null,
       windowId:          null,
-      mode:              null
+      mode:              null,
+      annotator:         null
     }, options);
 
     this.init();
@@ -20,19 +21,21 @@
 
     init: function() {
       var _this = this;
+      this.annotator = this.parent.element.annotator().data('annotator');
+      this.annotator.addPlugin('Tags');
       this.bindEvents();
     },
 
     bindEvents: function() {
       var _this = this;
-      
+
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
         console.log('entered ' + modeName + ' mode in annotationsLayer');
         if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
         if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
         if (modeName === 'default') { _this.enterDefault(); }
       });
-      
+
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         var modeName = _this.mode;
         _this.annotationsList = _this.parent.parent.annotationsList;
@@ -40,8 +43,13 @@
           osd: $.OpenSeadragon,
           viewer: _this.viewer,
           list: _this.annotationsList, // must be passed by reference.
-          onHover: function(annotation) {
-            // $.annnotator.viewer.show...
+          onHover: function(annotations) {
+            var annotation = annotations[0];
+            console.log(annotation);
+            var position = _this.parseRegion(annotation.on);
+            
+            // this.annotator.viewer.hide();
+            _this.annotator.showViewer(_this.prepareForAnnotator(annotation));
           },
           onSelect: function(annotation) {
 
@@ -52,7 +60,26 @@
         if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
         if (modeName === 'default') { _this.enterDefault(); }
       });
-      
+
+    },
+    parseRegion: function(url) {
+      var regionString;
+      if (typeof url === 'object') {
+        regionString = url.selector.value;  
+      } else {
+        regionString = url.split('#')[1];
+      }
+      var regionArray = regionString.split('=')[1].split(',');
+      return regionArray;
+    },
+
+    prepareForAnnotator: function(oaAnnotation) {
+      var annotatortion = {
+        text: oaAnnotation.resource.chars
+      };
+      console.log(annototortion);
+
+      return [annotatortion];
     },
 
     enterDisplayAnnotations: function() {
@@ -65,7 +92,7 @@
       console.log('triggering annotation editing');
       // this.renderer.update().showAll();
     },
-    
+
     enterDefault: function() {
       console.log('triggering default');
       this.renderer.hideAll();

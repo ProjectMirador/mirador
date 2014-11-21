@@ -9,7 +9,8 @@
   
     var osd = options.osd,
     osdViewer = options.viewer,
-    elements;
+    elements,
+    list = options.list;
   
     var parseRegion  = function(url) {
       var regionString;
@@ -35,6 +36,7 @@
         var region = parseRegion(annotation.on);
         osdOverlay = document.createElement('div');
         osdOverlay.className = 'annotation';
+        osdOverlay.id = annotation['@id'];
         osdViewer.addOverlay({
           element: osdOverlay,
           location:  getOsdFrame(region)
@@ -46,13 +48,20 @@
     select = function(annotationId) {
       // jQuery(annotation element).trigger('click');
     },
+    getAnnoFromRegion = function(regionId) {
+      return list.filter(function(annotation) {
+        return annotation['@id'] === regionId;
+      });
+    },
     bindEvents = function() {
       // be sure to properly delegate your event handlers
       jQuery(osdViewer.canvas).parent().on('click', '.annotation', function() { options.onSelect(); });
 
-      jQuery(osdViewer.canvas).parent().on('mouseenter', '.annotation', function() { options.onHover(); });
+      jQuery(osdViewer.canvas).parent().on('mouseenter', '.annotation', function() { 
+        options.onHover(getAnnoFromRegion(jQuery(this)[0].id)); 
+      });
       
-      jQuery(osdViewer.canvas).parent().on('mouseleave', '.annotation', function() { options.onMouseLeave(); });
+      jQuery(osdViewer.canvas).parent().on('mouseleave', '.annotation', function() {});
     },
     update = function() {
       render();

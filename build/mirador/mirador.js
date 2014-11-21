@@ -4491,7 +4491,8 @@ window.Mirador = window.Mirador || function(config) {
   
     var osd = options.osd,
     osdViewer = options.viewer,
-    elements;
+    elements,
+    list = options.list;
   
     var parseRegion  = function(url) {
       var regionString;
@@ -4517,6 +4518,7 @@ window.Mirador = window.Mirador || function(config) {
         var region = parseRegion(annotation.on);
         osdOverlay = document.createElement('div');
         osdOverlay.className = 'annotation';
+        osdOverlay.id = annotation['@id'];
         osdViewer.addOverlay({
           element: osdOverlay,
           location:  getOsdFrame(region)
@@ -4528,13 +4530,20 @@ window.Mirador = window.Mirador || function(config) {
     select = function(annotationId) {
       // jQuery(annotation element).trigger('click');
     },
+    getAnnoFromRegion = function(regionId) {
+      return list.filter(function(annotation) {
+        return annotation['@id'] === regionId;
+      });
+    },
     bindEvents = function() {
       // be sure to properly delegate your event handlers
       jQuery(osdViewer.canvas).parent().on('click', '.annotation', function() { options.onSelect(); });
 
-      jQuery(osdViewer.canvas).parent().on('mouseenter', '.annotation', function() { options.onHover(); });
+      jQuery(osdViewer.canvas).parent().on('mouseenter', '.annotation', function() { 
+        options.onHover(getAnnoFromRegion(jQuery(this)[0].id)); 
+      });
       
-      jQuery(osdViewer.canvas).parent().on('mouseleave', '.annotation', function() { options.onMouseLeave(); });
+      jQuery(osdViewer.canvas).parent().on('mouseleave', '.annotation', function() {});
     },
     update = function() {
       render();
@@ -5656,23 +5665,23 @@ window.Mirador = window.Mirador || function(config) {
       }
       
        //next check endpoints
-       jQuery.each($.viewer.annotationEndpoints, function(index, value) {
-          var dfd = jQuery.Deferred();
-          if (_this.endpoints[value.module] && _this.endpoints[value.module] !== null) {
-           //update with new search
-          } else {
-            value.options.element = _this.element;
-            value.options.uri = _this.currentImageID;
-            value.options.dfd = dfd;
-            value.options.windowID = _this.id;
-            var endpoint = new $[value.module](value.options);
-            _this.endpoints[value.module] = endpoint;
-          }
-          dfd.done(function(loaded) {
-            _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
-            jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
-          });
-       });
+       // jQuery.each($.viewer.annotationEndpoints, function(index, value) {
+       //    var dfd = jQuery.Deferred();
+       //    if (_this.endpoints[value.module] && _this.endpoints[value.module] !== null) {
+       //     //update with new search
+       //    } else {
+       //      value.options.element = _this.element;
+       //      value.options.uri = _this.currentImageID;
+       //      value.options.dfd = dfd;
+       //      value.options.windowID = _this.id;
+       //      var endpoint = new $[value.module](value.options);
+       //      _this.endpoints[value.module] = endpoint;
+       //    }
+       //    dfd.done(function(loaded) {
+       //      _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
+       //      jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
+       //    });
+       // });
     },
 
     // based on currentFocus
@@ -5778,13 +5787,14 @@ window.Mirador = window.Mirador || function(config) {
 
     jQuery.extend(true, this, {
       parent:            null,
-      annotationsList:       null,
+      annotationsList:   null,
       viewer:            null,
       renderer:          null,
       selected:          null,
       hovered:           null,
       windowId:          null,
-      mode:              null
+      mode:              null,
+      annotator:         null
     }, options);
 
     this.init();
@@ -5794,19 +5804,21 @@ window.Mirador = window.Mirador || function(config) {
 
     init: function() {
       var _this = this;
+      this.annotator = this.parent.element.annotator().data('annotator');
+      this.annotator.addPlugin('Tags');
       this.bindEvents();
     },
 
     bindEvents: function() {
       var _this = this;
-      
+
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
         console.log('entered ' + modeName + ' mode in annotationsLayer');
         if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
         if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
         if (modeName === 'default') { _this.enterDefault(); }
       });
-      
+
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         var modeName = _this.mode;
         _this.annotationsList = _this.parent.parent.annotationsList;
@@ -5814,8 +5826,13 @@ window.Mirador = window.Mirador || function(config) {
           osd: $.OpenSeadragon,
           viewer: _this.viewer,
           list: _this.annotationsList, // must be passed by reference.
-          onHover: function(annotation) {
-            // $.annnotator.viewer.show...
+          onHover: function(annotations) {
+            var annotation = annotations[0];
+            console.log(annotation);
+            var position = _this.parseRegion(annotation.on);
+            
+            // this.annotator.viewer.hide();
+            _this.annotator.showViewer(_this.prepareForAnnotator(annotation));
           },
           onSelect: function(annotation) {
 
@@ -5826,7 +5843,26 @@ window.Mirador = window.Mirador || function(config) {
         if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
         if (modeName === 'default') { _this.enterDefault(); }
       });
-      
+
+    },
+    parseRegion: function(url) {
+      var regionString;
+      if (typeof url === 'object') {
+        regionString = url.selector.value;  
+      } else {
+        regionString = url.split('#')[1];
+      }
+      var regionArray = regionString.split('=')[1].split(',');
+      return regionArray;
+    },
+
+    prepareForAnnotator: function(oaAnnotation) {
+      var annotatortion = {
+        text: oaAnnotation.resource.chars
+      };
+      console.log(annototortion);
+
+      return [annotatortion];
     },
 
     enterDisplayAnnotations: function() {
@@ -5839,7 +5875,7 @@ window.Mirador = window.Mirador || function(config) {
       console.log('triggering annotation editing');
       // this.renderer.update().showAll();
     },
-    
+
     enterDefault: function() {
       console.log('triggering default');
       this.renderer.hideAll();
