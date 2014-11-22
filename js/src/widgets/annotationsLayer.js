@@ -44,7 +44,7 @@
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         _this.annotationsList = _this.parent.parent.annotationsList;
-          _this.createRenderer();
+        _this.createRenderer();
       });
 
     },
@@ -58,7 +58,6 @@
           list: _this.annotationsList, // must be passed by reference.
           onHover: function(annotations) {
             var annotation = annotations[0];
-            console.log(annotation);
             var position = _this.parseRegionForAnnotator(annotation.on);
             
             _this.annotator.showViewer(_this.prepareForAnnotator(annotation), position);
@@ -92,16 +91,13 @@
       // This positions the annotator pop-up directly below the 
       // annotation, adjusting the canvas panning so that it
       // will always be visible.
-      console.log(_this.viewer);
       
       var topLeftImagePoint = new OpenSeadragon.Point(+regionArray[0], +regionArray[1]);
-      console.log(topLeftImagePoint);
 
       annotatorPosition = {
         top: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,
         left: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x
       };
-      console.log(annotatorPosition);
 
       return annotatorPosition;
     },

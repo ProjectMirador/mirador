@@ -5600,10 +5600,12 @@ window.Mirador = window.Mirador || function(config) {
     setCurrentImageID: function(imageID) {
       var _this = this;
       this.currentImageID = imageID;
-      this.annotationsList = [];
+      while(_this.annotationsList.length > 0) {
+       _this.annotationsList.pop();
+      }
       jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
-      this.loadImageModeFromPanel(imageID);
       this.getAnnotations();
+      this.loadImageModeFromPanel(imageID);
       jQuery.publish(('currentImageIDUpdated.' + _this.id), imageID);
     },
 
@@ -5830,7 +5832,7 @@ window.Mirador = window.Mirador || function(config) {
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         _this.annotationsList = _this.parent.parent.annotationsList;
-          _this.createRenderer();
+        _this.createRenderer();
       });
 
     },
@@ -5844,7 +5846,6 @@ window.Mirador = window.Mirador || function(config) {
           list: _this.annotationsList, // must be passed by reference.
           onHover: function(annotations) {
             var annotation = annotations[0];
-            console.log(annotation);
             var position = _this.parseRegionForAnnotator(annotation.on);
             
             _this.annotator.showViewer(_this.prepareForAnnotator(annotation), position);
@@ -5878,16 +5879,13 @@ window.Mirador = window.Mirador || function(config) {
       // This positions the annotator pop-up directly below the 
       // annotation, adjusting the canvas panning so that it
       // will always be visible.
-      console.log(_this.viewer);
       
       var topLeftImagePoint = new OpenSeadragon.Point(+regionArray[0], +regionArray[1]);
-      console.log(topLeftImagePoint);
 
       annotatorPosition = {
         top: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,
         left: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x
       };
-      console.log(annotatorPosition);
 
       return annotatorPosition;
     },
@@ -6656,7 +6654,9 @@ this.elemStitchOptions.hide();
         osdBounds:        null,
         zoomLevel:        null
       },
-      osdCls: 'mirador-osd'
+      osdCls: 'mirador-osd',
+      elemAnno:         null,
+      annoCls:          'annotation-canvas'
     }, options);
 
     this.init();
@@ -6680,6 +6680,9 @@ this.elemStitchOptions.hide();
       }
       this.currentImg = this.imagesList[this.currentImgIndex];
       this.element = jQuery(this.template()).appendTo(this.appendTo);
+      this.elemAnno = jQuery('<div/>')
+      .addClass(this.annoCls)
+      .appendTo(this.element);
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
       this.parent.updateFocusImages([this.imageID]); // DRY/Events refactor.
       // The hud controls are consistent 
@@ -6749,16 +6752,11 @@ this.elemStitchOptions.hide();
       osdID = 'mirador-osd-' + uniqueID,
       infoJson,
       elemOsd,
-      _this = this,
-      elemAnno;
+      _this = this;
 
       this.element.find('.' + this.osdCls).remove();
 
       infoJson = $.getJsonFromUrl(infoJsonUrl, false);
-      
-      elemAnno = jQuery('<div/>')
-      .addClass('annotation-canvas')
-      .appendTo(this.element);
 
       elemOsd =
         jQuery('<div/>')
@@ -6779,7 +6777,7 @@ this.elemStitchOptions.hide();
             _this.osd.viewport.fitBounds(rect, true);
         }
         
-        _this.addAnnotationsLayer(elemAnno);
+        _this.addAnnotationsLayer(_this.elemAnno);
 
         // The worst hack imaginable. Pop the osd overlays layer after the canvas so 
         // that annotations appear.

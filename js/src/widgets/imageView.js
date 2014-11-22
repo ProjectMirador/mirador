@@ -18,7 +18,9 @@
         osdBounds:        null,
         zoomLevel:        null
       },
-      osdCls: 'mirador-osd'
+      osdCls: 'mirador-osd',
+      elemAnno:         null,
+      annoCls:          'annotation-canvas'
     }, options);
 
     this.init();
@@ -42,6 +44,9 @@
       }
       this.currentImg = this.imagesList[this.currentImgIndex];
       this.element = jQuery(this.template()).appendTo(this.appendTo);
+      this.elemAnno = jQuery('<div/>')
+      .addClass(this.annoCls)
+      .appendTo(this.element);
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
       this.parent.updateFocusImages([this.imageID]); // DRY/Events refactor.
       // The hud controls are consistent 
@@ -111,16 +116,11 @@
       osdID = 'mirador-osd-' + uniqueID,
       infoJson,
       elemOsd,
-      _this = this,
-      elemAnno;
+      _this = this;
 
       this.element.find('.' + this.osdCls).remove();
 
       infoJson = $.getJsonFromUrl(infoJsonUrl, false);
-      
-      elemAnno = jQuery('<div/>')
-      .addClass('annotation-canvas')
-      .appendTo(this.element);
 
       elemOsd =
         jQuery('<div/>')
@@ -141,7 +141,7 @@
             _this.osd.viewport.fitBounds(rect, true);
         }
         
-        _this.addAnnotationsLayer(elemAnno);
+        _this.addAnnotationsLayer(_this.elemAnno);
 
         // The worst hack imaginable. Pop the osd overlays layer after the canvas so 
         // that annotations appear.
