@@ -417,6 +417,8 @@
     setCurrentImageID: function(imageID) {
       var _this = this;
       this.currentImageID = imageID;
+      this.annotationsList = [];
+      jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
       this.loadImageModeFromPanel(imageID);
       this.getAnnotations();
       jQuery.publish(('currentImageIDUpdated.' + _this.id), imageID);
@@ -468,7 +470,7 @@
       //first look for manifest annotations
       var _this = this,
       url = $.Iiif.getAnnotationsListUrl(_this.manifest, _this.currentImageID);
-      _this.annotationsList = [];
+      //_this.annotationsList = [];
       
       // empty the annotation list array efficiently.
       // while(_this.annotationsList.length > 0) {

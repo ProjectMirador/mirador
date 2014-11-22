@@ -6,7 +6,6 @@
   // registering updates.
   
   $.OsdCanvasRenderer = function(options) {
-  
     var osd = options.osd,
     osdViewer = options.viewer,
     elements,
@@ -32,7 +31,7 @@
   
     }, 
     render = function() {
-      options.list.forEach(function(annotation) {
+      list.forEach(function(annotation) {
         var region = parseRegion(annotation.on);
         osdOverlay = document.createElement('div');
         osdOverlay.className = 'annotation';
@@ -61,7 +60,9 @@
         options.onHover(getAnnoFromRegion(jQuery(this)[0].id)); 
       });
       
-      jQuery(osdViewer.canvas).parent().on('mouseleave', '.annotation', function() {});
+      jQuery(osdViewer.canvas).parent().on('mouseleave', '.annotation', function() {
+        options.onMouseLeave();
+      });
     },
     update = function() {
       render();

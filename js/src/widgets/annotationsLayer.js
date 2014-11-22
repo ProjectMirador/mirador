@@ -22,8 +22,13 @@
 
     init: function() {
       var _this = this;
-      var el = this.parent.parent.element;
-      this.annotator = this.element.annotator().data('annotator');
+      if (this.element.data('annotator')) {
+        this.annotator = this.element.data('annotator');
+      } else {
+        this.annotator = this.element.annotator().data('annotator');
+      }
+      this.createRenderer();
+      this.annotator.addPlugin('Tags');
       this.bindEvents();
     },
 
@@ -38,24 +43,15 @@
       });
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
-        var modeName = _this.mode;
         _this.annotationsList = _this.parent.parent.annotationsList;
-        if (_this.annotationsList && _this.viewer) {
           _this.createRenderer();
-        }
-      });
-      
-      jQuery.subscribe('viewerCreated.'+_this.windowId, function(event, viewer) {
-        _this.viewer = viewer;
-        if (_this.annotationsList && _this.viewer) {
-           _this.createRenderer();
-        }
       });
 
     },
     
     createRenderer: function() {
-      var _this = this;
+      var _this = this,
+      modeName = _this.mode;
       this.renderer = $.OsdCanvasRenderer({
           osd: $.OpenSeadragon,
           viewer: _this.viewer,
@@ -65,14 +61,19 @@
             console.log(annotation);
             var position = _this.parseRegionForAnnotator(annotation.on);
             
-            _this.annotator.viewer.hide();
             _this.annotator.showViewer(_this.prepareForAnnotator(annotation), position);
+          },
+          onMouseLeave: function() {
+            _this.annotator.viewer.hide();
           },
           onSelect: function(annotation) {
 
           },
           visible: false
         });
+        if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
+        if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
+        if (modeName === 'default') { _this.enterDefault(); }
     },
     
     parseRegionForAnnotator: function(url) {
@@ -92,9 +93,13 @@
       // annotation, adjusting the canvas panning so that it
       // will always be visible.
       console.log(_this.viewer);
+      
+      var topLeftImagePoint = new OpenSeadragon.Point(+regionArray[0], +regionArray[1]);
+      console.log(topLeftImagePoint);
+
       annotatorPosition = {
-        top: (regionArray[1]),
-        left: (regionArray[0])
+        top: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,
+        left: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x
       };
       console.log(annotatorPosition);
 
