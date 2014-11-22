@@ -7,8 +7,9 @@
     var osdRectTool,
     osd = options.osd,
     osdViewer = options.viewer,
-    mouseStart = null,
+    mouseStart,
     rectangle,
+    rectClass,
     osdOverlay,
     dragging = false;
 

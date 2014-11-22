@@ -7,7 +7,8 @@
       element: null,
       container: null,
       mode: null,
-      windowId: null
+      windowId: null,
+      rectTool: null
     }, options);
 
     this.init();
@@ -33,7 +34,6 @@
       var _this = this;
 
       this.container.find('.mirador-osd-close').on('click', function() {
-        console.log('happening?');
         _this.hide();
         _this.parent.parent.setMode('default');
       });
@@ -49,6 +49,11 @@
         _this.element = jQuery(_this.editorTemplate()).appendTo(_this.container);
         _this.bindEvents();
       });
+      
+      this.container.find('.mirador-osd-rect-tool').on('click', function() {
+        _this.parent.parent.rectTool.enterEditMode();
+        _this.bindEvents();
+      });
     },
 
     template: Handlebars.compile([
@@ -59,10 +64,10 @@
                                    '<a class="mirador-osd-edit-mode hud-control">',
                                    '<i class="fa fa-2x fa-edit"></i>',
                                    '</a>',
-                                   '<a class="mirador-osd-edit-mode hud-control">',
+                                   '<a class="mirador-osd-list hud-control">',
                                    '<i class="fa fa-2x fa-list"></i>',
                                    '</a>',
-                                   '<a class="mirador-osd-edit-mode hud-control">',
+                                   '<a class="mirador-osd-search hud-control">',
                                    '<i class="fa fa-2x fa-search"></i>',
                                    '</a>',
                                    '<a class="mirador-osd-rect-tool hud-control">',

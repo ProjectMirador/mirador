@@ -48,33 +48,33 @@
       });
 
     },
-    
+
     createRenderer: function() {
       var _this = this,
       modeName = _this.mode;
       this.renderer = $.OsdCanvasRenderer({
-          osd: $.OpenSeadragon,
-          viewer: _this.viewer,
-          list: _this.annotationsList, // must be passed by reference.
-          onHover: function(annotations) {
-            var annotation = annotations[0];
-            var position = _this.parseRegionForAnnotator(annotation.on);
-            
-            _this.annotator.showViewer(_this.prepareForAnnotator(annotation), position);
-          },
-          onMouseLeave: function() {
-            _this.annotator.viewer.hide();
-          },
-          onSelect: function(annotation) {
+        osd: $.OpenSeadragon,
+        viewer: _this.viewer,
+        list: _this.annotationsList, // must be passed by reference.
+        onHover: function(annotations) {
+          var annotation = annotations[0];
+          var position = _this.parseRegionForAnnotator(annotation.on);
 
-          },
-          visible: false
-        });
-        if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
-        if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
-        if (modeName === 'default') { _this.enterDefault(); }
+          _this.annotator.showViewer(_this.prepareForAnnotator(annotation), position);
+        },
+        onMouseLeave: function() {
+          _this.annotator.viewer.hide();
+        },
+        onSelect: function(annotation) {
+
+        },
+        visible: false
+      });
+      if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
+      if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
+      if (modeName === 'default') { _this.enterDefault(); }
     },
-    
+
     parseRegionForAnnotator: function(url) {
       var _this = this,
       regionString,
@@ -91,7 +91,7 @@
       // This positions the annotator pop-up directly below the 
       // annotation, adjusting the canvas panning so that it
       // will always be visible.
-      
+
       var topLeftImagePoint = new OpenSeadragon.Point(+regionArray[0], +regionArray[1]);
 
       annotatorPosition = {
@@ -116,8 +116,8 @@
       } else {
         annoText = oaAnnotation.resource.chars;
       }
-      
-      
+
+
       var annotatortion = {
         text: annoText,
         tags: tags
@@ -134,7 +134,35 @@
 
     enterEditAnnotations: function() {
       console.log('triggering annotation editing');
-      // this.renderer.update().showAll();
+      var _this = this;
+      this.parent.hud.contextControls.rectTool = new $.OsdRegionRectTool({
+        osd: OpenSeadragon,
+        viewer: _this.viewer,
+        rectType: 'oa', // does not do anything yet. Currently the rect is
+        // kept in openSeaDragon format until it is returned on "onDrawFinish".
+        // The intent here is to update the annotation continuously rather than
+        // only on the end of the draw event so rendering is always handled by
+        // renderer instead of only at the end of the process, since different 
+        // rendering methods may be used.
+        onDrawFinish: function(annotation) { 
+          // update region fragment of annotation to 
+          // invoke annotator editor with proper callbacks to 
+          // update the rest of the annotation, passing it along.
+          // Once text is added there, save annotation to save endpoint.
+        },
+        onDrawStart: function() { // use new $.oaAnnotation() to create new 
+          // annotation and pass it around for updating
+        },
+        onModeEnter: function() { // do reasonable things to the renderer to make
+          // things intelligible
+        },
+        onModeExit: function() {
+          // do reasonable things to renderer to return to "normal".
+        },
+        onDraw: function() { 
+          // update annotation 
+        }
+      });
     },
 
     enterDefault: function() {
