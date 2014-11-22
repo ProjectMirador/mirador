@@ -121,7 +121,11 @@
               }*/
             }
           };
-          this.annotator = this.element.annotator().data('annotator');
+          //create wrapper for annotator wrapper
+          var wrapper = jQuery('<div/>')
+            .addClass('catch-wrapper')
+            .appendTo(this.element);
+          this.annotator = wrapper.annotator().data('annotator');
           this.annotator.addPlugin('Auth', annotatorOptions.optionsAnnotator.auth);
           //this.annotator.addPlugin("Permissions", annotatorOptions.optionsAnnotator.permissions);
           this.annotator.addPlugin('Store', annotatorOptions.optionsAnnotator.store);
@@ -182,7 +186,7 @@
                   "source" : annotation.uri,
                   "selector" : {
                     "@type" : "oa:FragmentSelector",
-                    "value" : "xywh=100,100,100,100"   // from rangePosition, do math};
+                    "value" : "xywh="+String(this.getRandomInt())+","+String(this.getRandomInt())+","+String(this.getRandomInt())+","+String(this.getRandomInt()) //400,600,200,200"   // from rangePosition, do math};
                   },
                   "scope": {
                     "@context" : "http://www.harvard.edu/catch/oa.json",
@@ -202,7 +206,7 @@
          
           var oaAnnotation = {
             "@context" : "http://iiif.io/api/presentation/2/context.json",
-            "@id" : id,
+            "@id" : String(id),
             "@type" : "oa:Annotation",
             "motivation" : motivation,
             "resource" : resource,
@@ -212,6 +216,10 @@
             "serializedAt" : annotation.updated
           };
           return oaAnnotation;
+        },
+        
+        getRandomInt: function() {
+          return Math.floor(Math.random() * (1000 - 200)) + 200;
         },
         
         getAnnotationInAnnotator: function(annotationID) {

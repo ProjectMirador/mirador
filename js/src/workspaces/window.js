@@ -418,11 +418,11 @@
       var _this = this;
       this.currentImageID = imageID;
       while(_this.annotationsList.length > 0) {
-        _this.annotationsList.pop();
+       _this.annotationsList.pop();
       }
       jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
-      this.loadImageModeFromPanel(imageID);
       this.getAnnotations();
+      this.loadImageModeFromPanel(imageID);
       jQuery.publish(('currentImageIDUpdated.' + _this.id), imageID);
     },
 
@@ -487,23 +487,23 @@
       }
       
        //next check endpoints
-//        jQuery.each($.viewer.annotationEndpoints, function(index, value) {
-//           var dfd = jQuery.Deferred();
-//    if (_this.endpoints[value.module] && _this.endpoints[value.module] !== null) {
-//     //update with new search
-//    } else {
-//      value.options.element = _this.element;
-//      value.options.uri = _this.currentImageID;
-//      value.options.dfd = dfd;
-//      value.options.windowID = _this.id;
-//      var endpoint = new $[value.module](value.options);
-//      _this.endpoints[value.module] = endpoint;
-//    }
-//    dfd.done(function(loaded) {
-//      _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
-//      jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
-//    });
-//});
+       jQuery.each($.viewer.annotationEndpoints, function(index, value) {
+          var dfd = jQuery.Deferred();
+          if (_this.endpoints[value.module] && _this.endpoints[value.module] !== null) {
+            //update with new search
+          } else {
+            value.options.element = _this.element;
+            value.options.uri = _this.currentImageID;
+            value.options.dfd = dfd;
+            value.options.windowID = _this.id;
+            var endpoint = new $[value.module](value.options);
+            _this.endpoints[value.module] = endpoint;
+          }
+         dfd.done(function(loaded) {
+           _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
+           jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
+         });
+       });
     },
 
     // based on currentFocus

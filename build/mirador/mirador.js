@@ -4371,7 +4371,11 @@ window.Mirador = window.Mirador || function(config) {
               }*/
             }
           };
-          this.annotator = this.element.annotator().data('annotator');
+          //create wrapper for annotator wrapper
+          var wrapper = jQuery('<div/>')
+            .addClass('catch-wrapper')
+            .appendTo(this.element);
+          this.annotator = wrapper.annotator().data('annotator');
           this.annotator.addPlugin('Auth', annotatorOptions.optionsAnnotator.auth);
           //this.annotator.addPlugin("Permissions", annotatorOptions.optionsAnnotator.permissions);
           this.annotator.addPlugin('Store', annotatorOptions.optionsAnnotator.store);
@@ -4432,7 +4436,7 @@ window.Mirador = window.Mirador || function(config) {
                   "source" : annotation.uri,
                   "selector" : {
                     "@type" : "oa:FragmentSelector",
-                    "value" : "xywh=100,100,100,100"   // from rangePosition, do math};
+                    "value" : "xywh="+String(this.getRandomInt())+","+String(this.getRandomInt())+","+String(this.getRandomInt())+","+String(this.getRandomInt()) //400,600,200,200"   // from rangePosition, do math};
                   },
                   "scope": {
                     "@context" : "http://www.harvard.edu/catch/oa.json",
@@ -4452,7 +4456,7 @@ window.Mirador = window.Mirador || function(config) {
          
           var oaAnnotation = {
             "@context" : "http://iiif.io/api/presentation/2/context.json",
-            "@id" : id,
+            "@id" : String(id),
             "@type" : "oa:Annotation",
             "motivation" : motivation,
             "resource" : resource,
@@ -4462,6 +4466,10 @@ window.Mirador = window.Mirador || function(config) {
             "serializedAt" : annotation.updated
           };
           return oaAnnotation;
+        },
+        
+        getRandomInt: function() {
+          return Math.floor(Math.random() * (1000 - 200)) + 200;
         },
         
         getAnnotationInAnnotator: function(annotationID) {
@@ -5601,11 +5609,11 @@ window.Mirador = window.Mirador || function(config) {
       var _this = this;
       this.currentImageID = imageID;
       while(_this.annotationsList.length > 0) {
-        _this.annotationsList.pop();
+       _this.annotationsList.pop();
       }
       jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
-      this.loadImageModeFromPanel(imageID);
       this.getAnnotations();
+      this.loadImageModeFromPanel(imageID);
       jQuery.publish(('currentImageIDUpdated.' + _this.id), imageID);
     },
 
@@ -5670,23 +5678,23 @@ window.Mirador = window.Mirador || function(config) {
       }
       
        //next check endpoints
-//        jQuery.each($.viewer.annotationEndpoints, function(index, value) {
-//           var dfd = jQuery.Deferred();
-//    if (_this.endpoints[value.module] && _this.endpoints[value.module] !== null) {
-//     //update with new search
-//    } else {
-//      value.options.element = _this.element;
-//      value.options.uri = _this.currentImageID;
-//      value.options.dfd = dfd;
-//      value.options.windowID = _this.id;
-//      var endpoint = new $[value.module](value.options);
-//      _this.endpoints[value.module] = endpoint;
-//    }
-//    dfd.done(function(loaded) {
-//      _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
-//      jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
-//    });
-//});
+       jQuery.each($.viewer.annotationEndpoints, function(index, value) {
+          var dfd = jQuery.Deferred();
+          if (_this.endpoints[value.module] && _this.endpoints[value.module] !== null) {
+            //update with new search
+          } else {
+            value.options.element = _this.element;
+            value.options.uri = _this.currentImageID;
+            value.options.dfd = dfd;
+            value.options.windowID = _this.id;
+            var endpoint = new $[value.module](value.options);
+            _this.endpoints[value.module] = endpoint;
+          }
+         dfd.done(function(loaded) {
+           _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
+           jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
+         });
+       });
     },
 
     // based on currentFocus
@@ -5832,7 +5840,7 @@ window.Mirador = window.Mirador || function(config) {
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         _this.annotationsList = _this.parent.parent.annotationsList;
-          _this.createRenderer();
+        _this.createRenderer();
       });
 
     },
@@ -5846,7 +5854,6 @@ window.Mirador = window.Mirador || function(config) {
           list: _this.annotationsList, // must be passed by reference.
           onHover: function(annotations) {
             var annotation = annotations[0];
-            console.log(annotation);
             var position = _this.parseRegionForAnnotator(annotation.on);
             
             _this.annotator.showViewer(_this.prepareForAnnotator(annotation), position);
@@ -5892,8 +5899,24 @@ window.Mirador = window.Mirador || function(config) {
     },
 
     prepareForAnnotator: function(oaAnnotation) {
+      var annoText = "",
+      tags = [];
+      if (jQuery.isArray(oaAnnotation.resource)) {
+        jQuery.each(oaAnnotation.resource, function(index, value) {
+          if (value['@type'] === "dctypes:Text") {
+            annoText = value.chars;
+          } else if (value['@type'] == "oa:Tag") {
+            tags.push(value.chars);
+          }
+        });
+      } else {
+        annoText = oaAnnotation.resource.chars;
+      }
+      
+      
       var annotatortion = {
-        text: oaAnnotation.resource.chars
+        text: annoText,
+        tags: tags
       };
 
       return [annotatortion];
@@ -6655,7 +6678,9 @@ this.elemStitchOptions.hide();
         osdBounds:        null,
         zoomLevel:        null
       },
-      osdCls: 'mirador-osd'
+      osdCls: 'mirador-osd',
+      elemAnno:         null,
+      annoCls:          'annotation-canvas'
     }, options);
 
     this.init();
@@ -6679,6 +6704,9 @@ this.elemStitchOptions.hide();
       }
       this.currentImg = this.imagesList[this.currentImgIndex];
       this.element = jQuery(this.template()).appendTo(this.appendTo);
+      this.elemAnno = jQuery('<div/>')
+      .addClass(this.annoCls)
+      .appendTo(this.element);
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
       this.parent.updateFocusImages([this.imageID]); // DRY/Events refactor.
       // The hud controls are consistent 
@@ -6748,16 +6776,11 @@ this.elemStitchOptions.hide();
       osdID = 'mirador-osd-' + uniqueID,
       infoJson,
       elemOsd,
-      _this = this,
-      elemAnno;
+      _this = this;
 
       this.element.find('.' + this.osdCls).remove();
 
       infoJson = $.getJsonFromUrl(infoJsonUrl, false);
-      
-      elemAnno = jQuery('<div/>')
-      .addClass('annotation-canvas')
-      .appendTo(this.element);
 
       elemOsd =
         jQuery('<div/>')
@@ -6778,7 +6801,7 @@ this.elemStitchOptions.hide();
             _this.osd.viewport.fitBounds(rect, true);
         }
         
-        _this.addAnnotationsLayer(elemAnno);
+        _this.addAnnotationsLayer(_this.elemAnno);
 
         // The worst hack imaginable. Pop the osd overlays layer after the canvas so 
         // that annotations appear.

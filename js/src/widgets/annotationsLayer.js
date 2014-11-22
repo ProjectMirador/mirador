@@ -44,7 +44,7 @@
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         _this.annotationsList = _this.parent.parent.annotationsList;
-          _this.createRenderer();
+        _this.createRenderer();
       });
 
     },
@@ -58,7 +58,6 @@
           list: _this.annotationsList, // must be passed by reference.
           onHover: function(annotations) {
             var annotation = annotations[0];
-            console.log(annotation);
             var position = _this.parseRegionForAnnotator(annotation.on);
             
             _this.annotator.showViewer(_this.prepareForAnnotator(annotation), position);
@@ -104,8 +103,24 @@
     },
 
     prepareForAnnotator: function(oaAnnotation) {
+      var annoText = "",
+      tags = [];
+      if (jQuery.isArray(oaAnnotation.resource)) {
+        jQuery.each(oaAnnotation.resource, function(index, value) {
+          if (value['@type'] === "dctypes:Text") {
+            annoText = value.chars;
+          } else if (value['@type'] == "oa:Tag") {
+            tags.push(value.chars);
+          }
+        });
+      } else {
+        annoText = oaAnnotation.resource.chars;
+      }
+      
+      
       var annotatortion = {
-        text: oaAnnotation.resource.chars
+        text: annoText,
+        tags: tags
       };
 
       return [annotatortion];
