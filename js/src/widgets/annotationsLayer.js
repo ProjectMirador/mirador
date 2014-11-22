@@ -103,8 +103,24 @@
     },
 
     prepareForAnnotator: function(oaAnnotation) {
+      var annoText = "",
+      tags = [];
+      if (jQuery.isArray(oaAnnotation.resource)) {
+        jQuery.each(oaAnnotation.resource, function(index, value) {
+          if (value['@type'] === "dctypes:Text") {
+            annoText = value.chars;
+          } else if (value['@type'] == "oa:Tag") {
+            tags.push(value.chars);
+          }
+        });
+      } else {
+        annoText = oaAnnotation.resource.chars;
+      }
+      
+      
       var annotatortion = {
-        text: oaAnnotation.resource.chars
+        text: annoText,
+        tags: tags
       };
 
       return [annotatortion];

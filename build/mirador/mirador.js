@@ -4371,7 +4371,11 @@ window.Mirador = window.Mirador || function(config) {
               }*/
             }
           };
-          this.annotator = this.element.annotator().data('annotator');
+          //create wrapper for annotator wrapper
+          var wrapper = jQuery('<div/>')
+            .addClass('catch-wrapper')
+            .appendTo(this.element);
+          this.annotator = wrapper.annotator().data('annotator');
           this.annotator.addPlugin('Auth', annotatorOptions.optionsAnnotator.auth);
           //this.annotator.addPlugin("Permissions", annotatorOptions.optionsAnnotator.permissions);
           this.annotator.addPlugin('Store', annotatorOptions.optionsAnnotator.store);
@@ -4432,7 +4436,7 @@ window.Mirador = window.Mirador || function(config) {
                   "source" : annotation.uri,
                   "selector" : {
                     "@type" : "oa:FragmentSelector",
-                    "value" : "xywh=100,100,100,100"   // from rangePosition, do math};
+                    "value" : "xywh="+String(this.getRandomInt())+","+String(this.getRandomInt())+","+String(this.getRandomInt())+","+String(this.getRandomInt()) //400,600,200,200"   // from rangePosition, do math};
                   },
                   "scope": {
                     "@context" : "http://www.harvard.edu/catch/oa.json",
@@ -4452,7 +4456,7 @@ window.Mirador = window.Mirador || function(config) {
          
           var oaAnnotation = {
             "@context" : "http://iiif.io/api/presentation/2/context.json",
-            "@id" : id,
+            "@id" : String(id),
             "@type" : "oa:Annotation",
             "motivation" : motivation,
             "resource" : resource,
@@ -4462,6 +4466,10 @@ window.Mirador = window.Mirador || function(config) {
             "serializedAt" : annotation.updated
           };
           return oaAnnotation;
+        },
+        
+        getRandomInt: function() {
+          return Math.floor(Math.random() * (1000 - 200)) + 200;
         },
         
         getAnnotationInAnnotator: function(annotationID) {
@@ -5670,23 +5678,23 @@ window.Mirador = window.Mirador || function(config) {
       }
       
        //next check endpoints
-//        jQuery.each($.viewer.annotationEndpoints, function(index, value) {
-//           var dfd = jQuery.Deferred();
-//    if (_this.endpoints[value.module] && _this.endpoints[value.module] !== null) {
-//     //update with new search
-//    } else {
-//      value.options.element = _this.element;
-//      value.options.uri = _this.currentImageID;
-//      value.options.dfd = dfd;
-//      value.options.windowID = _this.id;
-//      var endpoint = new $[value.module](value.options);
-//      _this.endpoints[value.module] = endpoint;
-//    }
-//    dfd.done(function(loaded) {
-//      _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
-//      jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
-//    });
-//});
+       jQuery.each($.viewer.annotationEndpoints, function(index, value) {
+          var dfd = jQuery.Deferred();
+          if (_this.endpoints[value.module] && _this.endpoints[value.module] !== null) {
+            //update with new search
+          } else {
+            value.options.element = _this.element;
+            value.options.uri = _this.currentImageID;
+            value.options.dfd = dfd;
+            value.options.windowID = _this.id;
+            var endpoint = new $[value.module](value.options);
+            _this.endpoints[value.module] = endpoint;
+          }
+         dfd.done(function(loaded) {
+           _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
+           jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
+         });
+       });
     },
 
     // based on currentFocus
@@ -5891,8 +5899,24 @@ window.Mirador = window.Mirador || function(config) {
     },
 
     prepareForAnnotator: function(oaAnnotation) {
+      var annoText = "",
+      tags = [];
+      if (jQuery.isArray(oaAnnotation.resource)) {
+        jQuery.each(oaAnnotation.resource, function(index, value) {
+          if (value['@type'] === "dctypes:Text") {
+            annoText = value.chars;
+          } else if (value['@type'] == "oa:Tag") {
+            tags.push(value.chars);
+          }
+        });
+      } else {
+        annoText = oaAnnotation.resource.chars;
+      }
+      
+      
       var annotatortion = {
-        text: oaAnnotation.resource.chars
+        text: annoText,
+        tags: tags
       };
 
       return [annotatortion];
