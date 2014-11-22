@@ -417,7 +417,9 @@
     setCurrentImageID: function(imageID) {
       var _this = this;
       this.currentImageID = imageID;
-      this.annotationsList = [];
+      while(_this.annotationsList.length > 0) {
+        _this.annotationsList.pop();
+      }
       jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
       this.loadImageModeFromPanel(imageID);
       this.getAnnotations();

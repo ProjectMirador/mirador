@@ -5600,7 +5600,9 @@ window.Mirador = window.Mirador || function(config) {
     setCurrentImageID: function(imageID) {
       var _this = this;
       this.currentImageID = imageID;
-      this.annotationsList = [];
+      while(_this.annotationsList.length > 0) {
+        _this.annotationsList.pop();
+      }
       jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
       this.loadImageModeFromPanel(imageID);
       this.getAnnotations();
@@ -5878,16 +5880,13 @@ window.Mirador = window.Mirador || function(config) {
       // This positions the annotator pop-up directly below the 
       // annotation, adjusting the canvas panning so that it
       // will always be visible.
-      console.log(_this.viewer);
       
       var topLeftImagePoint = new OpenSeadragon.Point(+regionArray[0], +regionArray[1]);
-      console.log(topLeftImagePoint);
 
       annotatorPosition = {
         top: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,
         left: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x
       };
-      console.log(annotatorPosition);
 
       return annotatorPosition;
     },

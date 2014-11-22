@@ -92,16 +92,13 @@
       // This positions the annotator pop-up directly below the 
       // annotation, adjusting the canvas panning so that it
       // will always be visible.
-      console.log(_this.viewer);
       
       var topLeftImagePoint = new OpenSeadragon.Point(+regionArray[0], +regionArray[1]);
-      console.log(topLeftImagePoint);
 
       annotatorPosition = {
         top: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,
         left: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x
       };
-      console.log(annotatorPosition);
 
       return annotatorPosition;
     },
