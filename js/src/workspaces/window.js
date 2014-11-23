@@ -11,7 +11,7 @@
       focusImages:       [],
       imagesList:        null,
       annotationsList:   [],
-      endpoints:         [],
+      endpoints:         {},
       currentImageMode:  'ImageView',
       imageModes:        ['ImageView', 'BookView'],
       currentFocus:      'ThumbnailsView',
@@ -173,6 +173,16 @@
         }
 
       });
+      
+      jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno) {
+        jQuery.each(_this.endpoints, function(key, endpoint) {
+          var annoID = endpoint.save(oaAnno);
+          oaAnno['@id'] = String(annoID);  //just in case it returns a number
+          _this.annotationsList.push(oaAnno);
+          //need to update display? or something
+        });
+      });
+
 
     },
 
@@ -501,6 +511,12 @@
           }
          dfd.done(function(loaded) {
            _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
+           _this.annotationsList = jQuery.grep(_this.annotationsList, function (value, index) {
+             if (typeof value.on === "undefined") { 
+               return false;
+             }
+             return true; 
+           });
            jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
          });
        });

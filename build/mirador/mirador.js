@@ -4271,12 +4271,14 @@ window.Mirador = window.Mirador || function(config) {
     $.CatchEndpoint.prototype = {
 
         init: function() {
-          var annotatorOptions = {
+          var userid = "test@mirador.org";
+          var username = "mirador";
+          this.annotatorOptions = {
             optionsAnnotator: {
               permissions:{
                 user: {
-                    id:"", 
-                    name:""
+                    id: userid, 
+                    name: username
                 },
                 userString: function (user) {
                     if (user && user.name) 
@@ -4290,9 +4292,9 @@ window.Mirador = window.Mirador || function(config) {
                 },
                 permissions: {
                         'read':   [],
-                        'update': [],
-                        'delete': [],
-                        'admin':  []
+                        'update': [userid],
+                        'delete': [userid],
+                        'admin':  [userid]
                 },
                 showViewPermissionsCheckbox: false,
                 showEditPermissionsCheckbox: false,
@@ -4349,8 +4351,8 @@ window.Mirador = window.Mirador || function(config) {
                 loadFromSearch:{
                     limit:10,
                     offset:0,
-                    media:"image"
-                    //uri:this.uri,
+                    media:"image",
+                    uri:this.uri
                     //parentid:58616
                     //userid:''
                 }
@@ -4376,9 +4378,9 @@ window.Mirador = window.Mirador || function(config) {
             .addClass('catch-wrapper')
             .appendTo(this.element);
           this.annotator = wrapper.annotator().data('annotator');
-          this.annotator.addPlugin('Auth', annotatorOptions.optionsAnnotator.auth);
-          //this.annotator.addPlugin("Permissions", annotatorOptions.optionsAnnotator.permissions);
-          this.annotator.addPlugin('Store', annotatorOptions.optionsAnnotator.store);
+          this.annotator.addPlugin('Auth', this.annotatorOptions.optionsAnnotator.auth);
+          //this.annotator.addPlugin("Permissions", this.annotatorOptions.optionsAnnotator.permissions);
+          this.annotator.addPlugin('Store', this.annotatorOptions.optionsAnnotator.store);
           this.bindEvents();
         
         },
@@ -4429,19 +4431,16 @@ window.Mirador = window.Mirador || function(config) {
            on = annotation.parent;  //need to make URI
          } else {
            motivation.push("oa:commenting");
-           //selector = "xywh="+",".concat(annotation.rangePosition.x, annotation.rangePosition.y, annotation.rangePostion.width, annotation.rangePostion.height);
-           //scope = "xywh="+",".concat(annotation.bounds.x, annotation.bounds.y, annotation.bounds.width, annotation.bounds.height);
-           //console.log(selector + " " + scope);
            on = { "@type" : "oa:SpecificResource",
                   "source" : annotation.uri,
                   "selector" : {
                     "@type" : "oa:FragmentSelector",
-                    "value" : "xywh="+String(this.getRandomInt())+","+String(this.getRandomInt())+","+String(this.getRandomInt())+","+String(this.getRandomInt()) //400,600,200,200"   // from rangePosition, do math};
+                    "value" : "xywh="+annotation.rangePosition.x+","+annotation.rangePosition.y+","+annotation.rangePosition.width+","+annotation.rangePosition.height
                   },
                   "scope": {
                     "@context" : "http://www.harvard.edu/catch/oa.json",
                     "@type" : "catch:Viewport",
-                    "value" : "xywh=0,0,640,480" //do math from bounds
+                    "value" : "xywh="+annotation.bounds.x+","+annotation.bounds.y+","+annotation.bounds.width+","+annotation.bounds.height
                   }
                 };
          }
@@ -4468,6 +4467,48 @@ window.Mirador = window.Mirador || function(config) {
           return oaAnnotation;
         },
         
+        getAnnotationInEndpoint: function(oaAnnotation) {
+          var annotation = {},
+              tags = [],
+              text,
+              uri,
+              rangePostion,
+              bounds,
+              media;
+              
+            annotation.media = "image";
+            jQuery.each(oaAnnotation.resource, function(index, value) {
+              if (value['@type'] === 'oa:Tag') {
+                tags.push(value.chars); 
+              } else if (value['@type'] === 'dctypes:Text') {
+                text = value.chars;
+              }
+            });
+            annotation.tags = tags;
+            annotation.text = text;
+            
+            uri = oaAnnotation.on.source;
+            var region = oaAnnotation.on.selector.value;
+            var regionArray = region.split('=')[1].split(',');
+            rangePosition = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
+            annotation.rangePosition = rangePosition;
+            
+            region = oaAnnotation.on.scope.value;
+            regionArray = region.split('=')[1].split(',');
+            bounds = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
+            annotation.bounds = bounds;
+            
+            annotation.updated = new Date().toISOString(); // - updated
+            if (typeof annotation.created == 'undefined') { annotation.created = annotation.updated; }// - created
+            // this needs to come from LTI annotation.user.id, annotation.user.name
+            annotation.user = this.annotatorOptions.optionsAnnotator.permissions.user;
+            annotation.permissions = this.annotatorOptions.optionsAnnotator.permissions.permissions;
+            annotation.archived = false;
+            annotation.ranges = [];
+            annotation.parent = "0";
+            return annotation;
+        },
+        
         getRandomInt: function() {
           return Math.floor(Math.random() * (1000 - 200)) + 200;
         },
@@ -4483,6 +4524,15 @@ window.Mirador = window.Mirador || function(config) {
              }
            });
            return annotation;
+        },
+        
+        //takes OA Annotation and converts back to catch and saves
+        save: function(oaAnnotation) {
+          var annotation = this.getAnnotationInEndpoint(oaAnnotation);
+          var ret = this.annotator.publish('annotationCreated', [annotation]);
+          //var id = ret.plugins.Store.annotations[ret.plugins.Store.annotations-1].id;
+          //console.log(id);
+          return $.genUUID();
         }
     };
 
@@ -4595,7 +4645,7 @@ window.Mirador = window.Mirador || function(config) {
     osdOverlay,
     dragging = false;
 
-    console.log(osdViewer.viewport);
+    //console.log(osdViewer.viewport);
 
     function enterEditMode() {
       setOsdFrozen(true);
@@ -5203,7 +5253,7 @@ window.Mirador = window.Mirador || function(config) {
       focusImages:       [],
       imagesList:        null,
       annotationsList:   [],
-      endpoints:         [],
+      endpoints:         {},
       currentImageMode:  'ImageView',
       imageModes:        ['ImageView', 'BookView'],
       currentFocus:      'ThumbnailsView',
@@ -5365,6 +5415,16 @@ window.Mirador = window.Mirador || function(config) {
         }
 
       });
+      
+      jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno) {
+        jQuery.each(_this.endpoints, function(key, endpoint) {
+          var annoID = endpoint.save(oaAnno);
+          oaAnno['@id'] = String(annoID);  //just in case it returns a number
+          _this.annotationsList.push(oaAnno);
+          //need to update display? or something
+        });
+      });
+
 
     },
 
@@ -5693,6 +5753,12 @@ window.Mirador = window.Mirador || function(config) {
           }
          dfd.done(function(loaded) {
            _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
+           _this.annotationsList = jQuery.grep(_this.annotationsList, function (value, index) {
+             if (typeof value.on === "undefined") { 
+               return false;
+             }
+             return true; 
+           });
            jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
          });
        });
@@ -5823,9 +5889,9 @@ window.Mirador = window.Mirador || function(config) {
         this.annotator = this.element.data('annotator');
       } else {
         this.annotator = this.element.annotator().data('annotator');
+        this.annotator.addPlugin('Tags');
       }
       this.createRenderer();
-      this.annotator.addPlugin('Tags');
       this.bindEvents();
     },
 
@@ -5835,7 +5901,7 @@ window.Mirador = window.Mirador || function(config) {
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
         console.log('entered ' + modeName + ' mode in annotationsLayer');
         if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
-        if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
+        if (modeName === 'editingAnnotations') { _this.enterEditAnnotations(); }
         if (modeName === 'default') { _this.enterDefault(); }
       });
 
@@ -5843,7 +5909,6 @@ window.Mirador = window.Mirador || function(config) {
         _this.annotationsList = _this.parent.parent.annotationsList;
         _this.createRenderer();
       });
-
     },
 
     createRenderer: function() {
@@ -5868,7 +5933,7 @@ window.Mirador = window.Mirador || function(config) {
         visible: false
       });
       if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
-      if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
+      if (modeName === 'editingAnnotations') { _this.enterEditAnnotations(); }
       if (modeName === 'default') { _this.enterDefault(); }
     },
 
@@ -5922,6 +5987,54 @@ window.Mirador = window.Mirador || function(config) {
 
       return [annotatortion];
     },
+    
+    annotatorToOA: function(attrAnnotation, uri, selector, scope) {
+      var motivation = [],
+          resource = [],
+          on,
+          bounds;
+          //convert annotation to OA format
+               
+         if (attrAnnotation.tags.length > 0) {
+           motivation.push("oa:tagging");
+           jQuery.each(attrAnnotation.tags, function(index, value) {
+             resource.push({      
+               "@type":"oa:Tag",
+               "chars":value
+               });
+           });
+         }
+        motivation.push("oa:commenting");
+           //selector = "xywh="+",".concat(annotation.rangePosition.x, annotation.rangePosition.y, annotation.rangePostion.width, annotation.rangePostion.height);
+           //scope = "xywh="+",".concat(annotation.bounds.x, annotation.bounds.y, annotation.bounds.width, annotation.bounds.height);
+           //console.log(selector + " " + scope);
+        on = { "@type" : "oa:SpecificResource",
+                  "source" : uri, 
+                  "selector" : {
+                    "@type" : "oa:FragmentSelector",
+                    "value" : "xywh="+selector.x+","+selector.y+","+selector.width+","+selector.height
+                  },
+                  "scope": {
+                    "@context" : "http://www.harvard.edu/catch/oa.json",
+                    "@type" : "catch:Viewport",
+                    "value" : "xywh="+Math.round(scope.x)+","+Math.round(scope.y)+","+Math.round(scope.width)+","+Math.round(scope.height) //osd bounds
+                  }
+                };
+         resource.push( {
+            "@type" : "dctypes:Text",
+            "format" : "text/html",
+            "chars" : attrAnnotation.text
+         });
+         
+          var oaAnnotation = {
+            "@context" : "http://iiif.io/api/presentation/2/context.json",
+            "@type" : "oa:Annotation",
+            "motivation" : motivation,
+            "resource" : resource,
+            "on" : on
+          };
+          return oaAnnotation;
+    },
 
     enterDisplayAnnotations: function() {
       var _this = this;
@@ -5941,7 +6054,32 @@ window.Mirador = window.Mirador || function(config) {
         // only on the end of the draw event so rendering is always handled by
         // renderer instead of only at the end of the process, since different 
         // rendering methods may be used.
-        onDrawFinish: function(annotation) { 
+        
+        //in theory this is a good idea, but that will require a better understanding
+        //of how annotator creates the annotation in order to be able to intercept it 
+        //at various stages.  for now, just wait until user submits
+        onDrawFinish: function(canvasRect) {
+          //console.log(canvasRect);
+          _this.annotator.adder.show();
+          //console.log(_this.annotator.adder.position()); 
+          var topLeftImagePoint = new OpenSeadragon.Point(canvasRect.x, canvasRect.y);
+          var annotatorPosition = {
+            top: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,
+            left: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x
+          };
+          _this.annotator.adder.offset(annotatorPosition);
+          //console.log(_this.annotator.adder.position()); 
+          _this.annotator.onAdderClick();
+          _this.annotator.subscribe("annotationCreated", function (annotation){
+            var bounds = _this.viewer.viewport.getBounds(true);
+            var scope = _this.viewer.viewport.viewportToImageRectangle(bounds);
+            //bounds is giving negative values?
+            //console.log(annotation);
+            var oaAnno = _this.annotatorToOA(annotation, _this.parent.imageID, canvasRect, scope);
+            //save to endpoint
+            jQuery.publish('annotationCreated.'+_this.windowId, oaAnno);
+          });
+      
           // update region fragment of annotation to 
           // invoke annotator editor with proper callbacks to 
           // update the rest of the annotation, passing it along.
@@ -6437,8 +6575,9 @@ this.elemStitchOptions.hide();
       });
       
       this.container.find('.mirador-osd-rect-tool').on('click', function() {
-        _this.parent.parent.rectTool.enterEditMode();
-        _this.bindEvents();
+        _this.parent.parent.setMode('editingAnnotations');
+        _this.rectTool.enterEditMode();
+        //_this.bindEvents();
       });
     },
 
@@ -6456,9 +6595,9 @@ this.elemStitchOptions.hide();
                                    '<a class="mirador-osd-search hud-control">',
                                    '<i class="fa fa-2x fa-search"></i>',
                                    '</a>',
-                                   '<a class="mirador-osd-rect-tool hud-control">',
+                                   /*'<a class="mirador-osd-rect-tool hud-control">',
                                    '<i class="fa fa-2x fa-gear"></i>',
-                                   '</a>',
+                                   '</a>',*/
                                  '</div>'
     ].join('')),
 
@@ -6610,7 +6749,6 @@ this.elemStitchOptions.hide();
       });
       
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
-        console.log('entered ' + modeName + ' mode in hud');
         // display context menu if not present.
         if (modeName === 'displayAnnotations' || modeName === 'editingAnnotations') {
           _this.contextControls.show();
@@ -7996,7 +8134,7 @@ jQuery.fn.scrollStop = function(callback) {
     this.init();
   };
 
-  $.ContextControls.prototype = {
+  $.OaAnnotation.prototype = {
 
     init: function() {    
       this.oaAnnotation = {}; // stub text of valid oa annotation (as

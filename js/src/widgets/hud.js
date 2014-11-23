@@ -127,7 +127,6 @@
       });
       
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
-        console.log('entered ' + modeName + ' mode in hud');
         // display context menu if not present.
         if (modeName === 'displayAnnotations' || modeName === 'editingAnnotations') {
           _this.contextControls.show();

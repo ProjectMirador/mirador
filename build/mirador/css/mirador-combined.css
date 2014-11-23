@@ -3216,7 +3216,7 @@ text {
   display:block;
   cursor:ew-resize;
 }
-.annotation {
+.annotation, .osd-select-rectangle {
   border: 2px solid deepSkyBlue;
   box-shadow: 0px 0px 5px white; 
   box-sizing: border-box;

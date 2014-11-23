@@ -21,12 +21,14 @@
     $.CatchEndpoint.prototype = {
 
         init: function() {
-          var annotatorOptions = {
+          var userid = "test@mirador.org";
+          var username = "mirador";
+          this.annotatorOptions = {
             optionsAnnotator: {
               permissions:{
                 user: {
-                    id:"", 
-                    name:""
+                    id: userid, 
+                    name: username
                 },
                 userString: function (user) {
                     if (user && user.name) 
@@ -40,9 +42,9 @@
                 },
                 permissions: {
                         'read':   [],
-                        'update': [],
-                        'delete': [],
-                        'admin':  []
+                        'update': [userid],
+                        'delete': [userid],
+                        'admin':  [userid]
                 },
                 showViewPermissionsCheckbox: false,
                 showEditPermissionsCheckbox: false,
@@ -99,8 +101,8 @@
                 loadFromSearch:{
                     limit:10,
                     offset:0,
-                    media:"image"
-                    //uri:this.uri,
+                    media:"image",
+                    uri:this.uri
                     //parentid:58616
                     //userid:''
                 }
@@ -126,9 +128,9 @@
             .addClass('catch-wrapper')
             .appendTo(this.element);
           this.annotator = wrapper.annotator().data('annotator');
-          this.annotator.addPlugin('Auth', annotatorOptions.optionsAnnotator.auth);
-          //this.annotator.addPlugin("Permissions", annotatorOptions.optionsAnnotator.permissions);
-          this.annotator.addPlugin('Store', annotatorOptions.optionsAnnotator.store);
+          this.annotator.addPlugin('Auth', this.annotatorOptions.optionsAnnotator.auth);
+          //this.annotator.addPlugin("Permissions", this.annotatorOptions.optionsAnnotator.permissions);
+          this.annotator.addPlugin('Store', this.annotatorOptions.optionsAnnotator.store);
           this.bindEvents();
         
         },
@@ -179,19 +181,16 @@
            on = annotation.parent;  //need to make URI
          } else {
            motivation.push("oa:commenting");
-           //selector = "xywh="+",".concat(annotation.rangePosition.x, annotation.rangePosition.y, annotation.rangePostion.width, annotation.rangePostion.height);
-           //scope = "xywh="+",".concat(annotation.bounds.x, annotation.bounds.y, annotation.bounds.width, annotation.bounds.height);
-           //console.log(selector + " " + scope);
            on = { "@type" : "oa:SpecificResource",
                   "source" : annotation.uri,
                   "selector" : {
                     "@type" : "oa:FragmentSelector",
-                    "value" : "xywh="+String(this.getRandomInt())+","+String(this.getRandomInt())+","+String(this.getRandomInt())+","+String(this.getRandomInt()) //400,600,200,200"   // from rangePosition, do math};
+                    "value" : "xywh="+annotation.rangePosition.x+","+annotation.rangePosition.y+","+annotation.rangePosition.width+","+annotation.rangePosition.height
                   },
                   "scope": {
                     "@context" : "http://www.harvard.edu/catch/oa.json",
                     "@type" : "catch:Viewport",
-                    "value" : "xywh=0,0,640,480" //do math from bounds
+                    "value" : "xywh="+annotation.bounds.x+","+annotation.bounds.y+","+annotation.bounds.width+","+annotation.bounds.height
                   }
                 };
          }
@@ -218,6 +217,48 @@
           return oaAnnotation;
         },
         
+        getAnnotationInEndpoint: function(oaAnnotation) {
+          var annotation = {},
+              tags = [],
+              text,
+              uri,
+              rangePostion,
+              bounds,
+              media;
+              
+            annotation.media = "image";
+            jQuery.each(oaAnnotation.resource, function(index, value) {
+              if (value['@type'] === 'oa:Tag') {
+                tags.push(value.chars); 
+              } else if (value['@type'] === 'dctypes:Text') {
+                text = value.chars;
+              }
+            });
+            annotation.tags = tags;
+            annotation.text = text;
+            
+            uri = oaAnnotation.on.source;
+            var region = oaAnnotation.on.selector.value;
+            var regionArray = region.split('=')[1].split(',');
+            rangePosition = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
+            annotation.rangePosition = rangePosition;
+            
+            region = oaAnnotation.on.scope.value;
+            regionArray = region.split('=')[1].split(',');
+            bounds = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
+            annotation.bounds = bounds;
+            
+            annotation.updated = new Date().toISOString(); // - updated
+            if (typeof annotation.created == 'undefined') { annotation.created = annotation.updated; }// - created
+            // this needs to come from LTI annotation.user.id, annotation.user.name
+            annotation.user = this.annotatorOptions.optionsAnnotator.permissions.user;
+            annotation.permissions = this.annotatorOptions.optionsAnnotator.permissions.permissions;
+            annotation.archived = false;
+            annotation.ranges = [];
+            annotation.parent = "0";
+            return annotation;
+        },
+        
         getRandomInt: function() {
           return Math.floor(Math.random() * (1000 - 200)) + 200;
         },
@@ -233,6 +274,15 @@
              }
            });
            return annotation;
+        },
+        
+        //takes OA Annotation and converts back to catch and saves
+        save: function(oaAnnotation) {
+          var annotation = this.getAnnotationInEndpoint(oaAnnotation);
+          var ret = this.annotator.publish('annotationCreated', [annotation]);
+          //var id = ret.plugins.Store.annotations[ret.plugins.Store.annotations-1].id;
+          //console.log(id);
+          return $.genUUID();
         }
     };
 

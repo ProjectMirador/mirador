@@ -51,8 +51,9 @@
       });
       
       this.container.find('.mirador-osd-rect-tool').on('click', function() {
-        _this.parent.parent.rectTool.enterEditMode();
-        _this.bindEvents();
+        _this.parent.parent.setMode('editingAnnotations');
+        _this.rectTool.enterEditMode();
+        //_this.bindEvents();
       });
     },
 
@@ -70,9 +71,9 @@
                                    '<a class="mirador-osd-search hud-control">',
                                    '<i class="fa fa-2x fa-search"></i>',
                                    '</a>',
-                                   '<a class="mirador-osd-rect-tool hud-control">',
+                                   /*'<a class="mirador-osd-rect-tool hud-control">',
                                    '<i class="fa fa-2x fa-gear"></i>',
-                                   '</a>',
+                                   '</a>',*/
                                  '</div>'
     ].join('')),
 

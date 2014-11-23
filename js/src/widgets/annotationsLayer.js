@@ -26,9 +26,9 @@
         this.annotator = this.element.data('annotator');
       } else {
         this.annotator = this.element.annotator().data('annotator');
+        this.annotator.addPlugin('Tags');
       }
       this.createRenderer();
-      this.annotator.addPlugin('Tags');
       this.bindEvents();
     },
 
@@ -38,7 +38,7 @@
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
         console.log('entered ' + modeName + ' mode in annotationsLayer');
         if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
-        if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
+        if (modeName === 'editingAnnotations') { _this.enterEditAnnotations(); }
         if (modeName === 'default') { _this.enterDefault(); }
       });
 
@@ -46,7 +46,6 @@
         _this.annotationsList = _this.parent.parent.annotationsList;
         _this.createRenderer();
       });
-
     },
 
     createRenderer: function() {
@@ -71,7 +70,7 @@
         visible: false
       });
       if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
-      if (modeName === 'makeAnnotations') { _this.enterMakeAnnotations(); }
+      if (modeName === 'editingAnnotations') { _this.enterEditAnnotations(); }
       if (modeName === 'default') { _this.enterDefault(); }
     },
 
@@ -125,6 +124,54 @@
 
       return [annotatortion];
     },
+    
+    annotatorToOA: function(attrAnnotation, uri, selector, scope) {
+      var motivation = [],
+          resource = [],
+          on,
+          bounds;
+          //convert annotation to OA format
+               
+         if (attrAnnotation.tags.length > 0) {
+           motivation.push("oa:tagging");
+           jQuery.each(attrAnnotation.tags, function(index, value) {
+             resource.push({      
+               "@type":"oa:Tag",
+               "chars":value
+               });
+           });
+         }
+        motivation.push("oa:commenting");
+           //selector = "xywh="+",".concat(annotation.rangePosition.x, annotation.rangePosition.y, annotation.rangePostion.width, annotation.rangePostion.height);
+           //scope = "xywh="+",".concat(annotation.bounds.x, annotation.bounds.y, annotation.bounds.width, annotation.bounds.height);
+           //console.log(selector + " " + scope);
+        on = { "@type" : "oa:SpecificResource",
+                  "source" : uri, 
+                  "selector" : {
+                    "@type" : "oa:FragmentSelector",
+                    "value" : "xywh="+selector.x+","+selector.y+","+selector.width+","+selector.height
+                  },
+                  "scope": {
+                    "@context" : "http://www.harvard.edu/catch/oa.json",
+                    "@type" : "catch:Viewport",
+                    "value" : "xywh="+Math.round(scope.x)+","+Math.round(scope.y)+","+Math.round(scope.width)+","+Math.round(scope.height) //osd bounds
+                  }
+                };
+         resource.push( {
+            "@type" : "dctypes:Text",
+            "format" : "text/html",
+            "chars" : attrAnnotation.text
+         });
+         
+          var oaAnnotation = {
+            "@context" : "http://iiif.io/api/presentation/2/context.json",
+            "@type" : "oa:Annotation",
+            "motivation" : motivation,
+            "resource" : resource,
+            "on" : on
+          };
+          return oaAnnotation;
+    },
 
     enterDisplayAnnotations: function() {
       var _this = this;
@@ -144,7 +191,32 @@
         // only on the end of the draw event so rendering is always handled by
         // renderer instead of only at the end of the process, since different 
         // rendering methods may be used.
-        onDrawFinish: function(annotation) { 
+        
+        //in theory this is a good idea, but that will require a better understanding
+        //of how annotator creates the annotation in order to be able to intercept it 
+        //at various stages.  for now, just wait until user submits
+        onDrawFinish: function(canvasRect) {
+          //console.log(canvasRect);
+          _this.annotator.adder.show();
+          //console.log(_this.annotator.adder.position()); 
+          var topLeftImagePoint = new OpenSeadragon.Point(canvasRect.x, canvasRect.y);
+          var annotatorPosition = {
+            top: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,
+            left: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x
+          };
+          _this.annotator.adder.offset(annotatorPosition);
+          //console.log(_this.annotator.adder.position()); 
+          _this.annotator.onAdderClick();
+          _this.annotator.subscribe("annotationCreated", function (annotation){
+            var bounds = _this.viewer.viewport.getBounds(true);
+            var scope = _this.viewer.viewport.viewportToImageRectangle(bounds);
+            //bounds is giving negative values?
+            //console.log(annotation);
+            var oaAnno = _this.annotatorToOA(annotation, _this.parent.imageID, canvasRect, scope);
+            //save to endpoint
+            jQuery.publish('annotationCreated.'+_this.windowId, oaAnno);
+          });
+      
           // update region fragment of annotation to 
           // invoke annotator editor with proper callbacks to 
           // update the rest of the annotation, passing it along.

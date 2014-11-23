@@ -14,7 +14,7 @@
     this.init();
   };
 
-  $.ContextControls.prototype = {
+  $.OaAnnotation.prototype = {
 
     init: function() {    
       this.oaAnnotation = {}; // stub text of valid oa annotation (as

@@ -13,7 +13,7 @@
     osdOverlay,
     dragging = false;
 
-    console.log(osdViewer.viewport);
+    //console.log(osdViewer.viewport);
 
     function enterEditMode() {
       setOsdFrozen(true);
