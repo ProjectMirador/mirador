@@ -499,18 +499,23 @@
        //next check endpoints
        jQuery.each($.viewer.annotationEndpoints, function(index, value) {
           var dfd = jQuery.Deferred();
+          var endpoint;
           if (_this.endpoints[value.module] && _this.endpoints[value.module] !== null) {
+            endpoint = _this.endpoints[value.module];
+            endpoint.set('dfd', dfd);
+            endpoint.search(_this.currentImageID);
             //update with new search
           } else {
             value.options.element = _this.element;
             value.options.uri = _this.currentImageID;
             value.options.dfd = dfd;
             value.options.windowID = _this.id;
-            var endpoint = new $[value.module](value.options);
+            endpoint = new $[value.module](value.options);
             _this.endpoints[value.module] = endpoint;
           }
          dfd.done(function(loaded) {
            _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
+           //clear out some bad data
            _this.annotationsList = jQuery.grep(_this.annotationsList, function (value, index) {
              if (typeof value.on === "undefined") { 
                return false;

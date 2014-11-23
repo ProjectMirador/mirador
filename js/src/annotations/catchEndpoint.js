@@ -99,8 +99,8 @@
                 },
 
                 loadFromSearch:{
-                    limit:10,
-                    offset:0,
+                    //limit:10,
+                    //offset:0,
                     media:"image",
                     uri:this.uri
                     //parentid:58616
@@ -150,8 +150,24 @@
           });
         },
         
-        search: function() {
-           
+        search: function(uri) {
+          //why the hell doesn't annotator clear it's annotations with a new search???
+          this.annotator.plugins.Store.annotations = [];
+          this.annotationsList = [];
+          this.uri = uri;
+          var search = {
+                    media:"image",
+                    uri:this.uri
+                };
+           this.annotator.plugins.Store.loadAnnotationsFromSearch(search);
+        },
+        
+        set: function(prop, value, options) {
+          if (options) {
+            this[options.parent][prop] = value;
+          } else {
+            this[prop] = value;
+          }
         },
         
         getAnnotationInOA: function(annotation) {
@@ -176,7 +192,7 @@
                });
            });
          }
-         if (annotation.parent !== "0") {
+         if (annotation.parent && annotation.parent !== "0") {
            motivation.push("oa:replying");
            on = annotation.parent;  //need to make URI
          } else {
