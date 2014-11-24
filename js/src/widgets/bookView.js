@@ -46,7 +46,9 @@
       this.element = jQuery(this.template()).appendTo(this.appendTo);
       this.hud = new $.Hud({
         parent: this,
-        element: this.element
+        element: this.element,
+        bottomPanelAvailable: this.bottomPanelAvailable,
+        windowId: this.windowId
       });
 
       if (this.manifest.sequences[0].viewingDirection) {
