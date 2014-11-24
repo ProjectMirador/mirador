@@ -4,6 +4,7 @@
 
     jQuery.extend(this, {
       currentImg:       null,
+      windowId:         null,
       currentImgIndex:  0,
       stitchList:       [],
       imageID:          null,

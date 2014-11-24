@@ -377,6 +377,7 @@
           manifest: this.manifest, 
           appendTo: this.element.find('.view-container'), 
           parent: this, 
+          windowId: this.id,
           imageID: imageID, 
           imagesList: this.imagesList,
           osdOptions: this.focusOptions

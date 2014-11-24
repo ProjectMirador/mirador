@@ -5635,6 +5635,7 @@ window.Mirador = window.Mirador || function(config) {
           manifest: this.manifest, 
           appendTo: this.element.find('.view-container'), 
           parent: this, 
+          windowId: this.id,
           imageID: imageID, 
           imagesList: this.imagesList,
           osdOptions: this.focusOptions
@@ -6200,6 +6201,7 @@ window.Mirador = window.Mirador || function(config) {
 
     jQuery.extend(this, {
       currentImg:       null,
+      windowId:         null,
       currentImgIndex:  0,
       stitchList:       [],
       imageID:          null,
