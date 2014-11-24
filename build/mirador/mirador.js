@@ -5315,7 +5315,8 @@ window.Mirador = window.Mirador || function(config) {
       _this = this,
       manifest = _this.manifest,
       focusState = _this.currentFocus,
-      templateData = {};
+      templateData = {},
+      this.endpoints = {};
       
       //unsubscribe from stale events as they will be updated with new module calls
       jQuery.unsubscribe(('currentImageIDUpdated.' + _this.id));
