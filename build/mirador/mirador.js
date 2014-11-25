@@ -4596,6 +4596,7 @@ window.Mirador = window.Mirador || function(config) {
     
     render: function() {
       var _this = this;
+      _this.hideAll();
       this.list.forEach(function(annotation) {
         var region = _this.parseRegion(annotation.on);
         var osdOverlay = document.createElement('div');
@@ -5469,6 +5470,7 @@ window.Mirador = window.Mirador || function(config) {
           _this.annotationsList.push(oaAnno);
           //need to update display? or something
         });
+        jQuery.publish(('annotationListLoaded.' + _this.id));
       });
 
 
@@ -6044,8 +6046,8 @@ window.Mirador = window.Mirador || function(config) {
           on,
           bounds;
           //convert annotation to OA format
-               
-         if (attrAnnotation.tags.length > 0) {
+
+         if (attrAnnotation.tags && attrAnnotation.tags.length > 0) {
            motivation.push("oa:tagging");
            jQuery.each(attrAnnotation.tags, function(index, value) {
              resource.push({      
@@ -6150,6 +6152,7 @@ window.Mirador = window.Mirador || function(config) {
     },
 
     enterDefault: function() {
+      console.log('triggering default');
       this.renderer.hideAll();
     },
 

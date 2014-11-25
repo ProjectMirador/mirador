@@ -40,6 +40,7 @@
     
     render: function() {
       var _this = this;
+      _this.hideAll();
       this.list.forEach(function(annotation) {
         var region = _this.parseRegion(annotation.on);
         var osdOverlay = document.createElement('div');

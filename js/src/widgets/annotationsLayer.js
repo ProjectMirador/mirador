@@ -129,8 +129,8 @@
           on,
           bounds;
           //convert annotation to OA format
-               
-         if (attrAnnotation.tags.length > 0) {
+
+         if (attrAnnotation.tags && attrAnnotation.tags.length > 0) {
            motivation.push("oa:tagging");
            jQuery.each(attrAnnotation.tags, function(index, value) {
              resource.push({      
@@ -235,6 +235,7 @@
     },
 
     enterDefault: function() {
+      console.log('triggering default');
       this.renderer.hideAll();
     },
 

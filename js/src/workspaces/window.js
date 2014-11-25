@@ -182,6 +182,7 @@
           _this.annotationsList.push(oaAnno);
           //need to update display? or something
         });
+        jQuery.publish(('annotationListLoaded.' + _this.id));
       });
 
 
