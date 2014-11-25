@@ -44,31 +44,29 @@
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         _this.annotationsList = _this.parent.parent.annotationsList;
-        _this.createRenderer();
+        _this.updateRenderer();
       });
     },
 
     createRenderer: function() {
       var _this = this,
       modeName = _this.mode;
-      this.renderer = $.OsdCanvasRenderer({
+      this.renderer = new $.OsdCanvasRenderer({
         osd: $.OpenSeadragon,
-        viewer: _this.viewer,
+        osdViewer: _this.viewer,
         list: _this.annotationsList, // must be passed by reference.
-        onHover: function(annotations) {
-          var annotation = annotations[0];
-          var position = _this.parseRegionForAnnotator(annotation.on);
-
-          _this.annotator.showViewer(_this.prepareForAnnotator(annotation), position);
-        },
-        onMouseLeave: function() {
-          _this.annotator.viewer.hide();
-        },
-        onSelect: function(annotation) {
-
-        },
-        visible: false
+        visible: false,
+        parent: _this
       });
+      if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
+      if (modeName === 'editingAnnotations') { _this.enterEditAnnotations(); }
+      if (modeName === 'default') { _this.enterDefault(); }
+    },
+    
+    updateRenderer: function() {
+      this.renderer.list = this.annotationsList;
+      var _this = this,
+      modeName = this.mode;
       if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
       if (modeName === 'editingAnnotations') { _this.enterEditAnnotations(); }
       if (modeName === 'default') { _this.enterDefault(); }
@@ -180,7 +178,6 @@
     },
 
     enterEditAnnotations: function() {
-      console.log('triggering annotation editing');
       var _this = this;
       this.parent.hud.contextControls.rectTool = new $.OsdRegionRectTool({
         osd: OpenSeadragon,
@@ -238,7 +235,6 @@
     },
 
     enterDefault: function() {
-      console.log('triggering default');
       this.renderer.hideAll();
     },
 
