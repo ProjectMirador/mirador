@@ -15,8 +15,17 @@
 
   <script src="build/mirador/mirador.js"></script>
   <script type="text/javascript">
+    
     $(function() {
 
+    var anno_token;
+    jQuery.ajax({
+      url: "http://oculus-dev.harvardx.harvard.edu/cgi-bin/token.py", 
+      success: function(data) {
+      anno_token = data.replace(/[\n\r]/g, '');
+      },
+      async:false
+    });
       Mirador({
         "id": "viewer",
         "currentWorkspaceType": "singleObject",
@@ -95,7 +104,7 @@
             "name":"Harvard CATCH Dev",
             "module": "CatchEndpoint",
             "options": {
-token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE0MTY5NDMzMTcsImQiOnsiaXNzdWVkQXQiOiIyMDE0LTExLTI1VDEzOjIxOjU3LjY1MDgzMi02OjAwIiwiY29uc3VtZXJLZXkiOiIyYzYzYzA1OC1kYzJiLTRmOWQtYmY5ZC02ZDY0ZmRkOTM5ZDgiLCJ1aWQiOiJ0ZXN0QG1pcmFkb3Iub3JnIiwidHRsIjoxNzI4MDB9LCJ2IjowfQ.84VbY9uKvw3DRXOOa2ksYhBTT6ETFVZeqvk2BT2MhLQ",
+                token: anno_token,
                 // The endpoint of the store on your server.
                 prefix: "http://173.255.118.177:8080/catch/annotator",
             }
