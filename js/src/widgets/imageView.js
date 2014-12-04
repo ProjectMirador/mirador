@@ -9,6 +9,7 @@
       imageID:          null,
       imagesList:       [],
       element:          null,
+      elemOsd:          null,
       parent:           null,
       manifest:         null,
       mode:             'default',
@@ -115,14 +116,13 @@
       uniqueID = $.genUUID(),
       osdID = 'mirador-osd-' + uniqueID,
       infoJson,
-      elemOsd,
       _this = this;
 
       this.element.find('.' + this.osdCls).remove();
 
       infoJson = $.getJsonFromUrl(infoJsonUrl, false);
 
-      elemOsd =
+      this.elemOsd =
         jQuery('<div/>')
       .addClass(this.osdCls)
       .attr('id', osdID)

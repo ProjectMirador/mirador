@@ -138,6 +138,7 @@
         bindEvents: function() {
           var _this = this;
           this.annotator.subscribe("annotationsLoaded", function (annotations){
+          console.log(annotations);
              _this.annotationsListCatch = _this.annotator.plugins.Store.annotations;
              jQuery.each(_this.annotationsListCatch, function(index, value) {
                _this.annotationsList.push(_this.getAnnotationInOA(value));

@@ -37,9 +37,7 @@
 
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
         console.log('entered ' + modeName + ' mode in annotationsLayer');
-        if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
-        if (modeName === 'editingAnnotations') { _this.enterEditAnnotations(); }
-        if (modeName === 'default') { _this.enterDefault(); }
+        _this.modeSwitch(modeName);
       });
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
@@ -49,8 +47,7 @@
     },
 
     createRenderer: function() {
-      var _this = this,
-      modeName = _this.mode;
+      var _this = this;
       this.renderer = new $.OsdCanvasRenderer({
         osd: $.OpenSeadragon,
         osdViewer: _this.viewer,
@@ -58,18 +55,19 @@
         visible: false,
         parent: _this
       });
-      if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
-      if (modeName === 'editingAnnotations') { _this.enterEditAnnotations(); }
-      if (modeName === 'default') { _this.enterDefault(); }
+      this.modeSwitch(this.mode);
     },
     
     updateRenderer: function() {
       this.renderer.list = this.annotationsList;
-      var _this = this,
-      modeName = this.mode;
-      if (modeName === 'displayAnnotations') { _this.enterDisplayAnnotations(); }
-      if (modeName === 'editingAnnotations') { _this.enterEditAnnotations(); }
-      if (modeName === 'default') { _this.enterDefault(); }
+      this.modeSwitch(this.mode);
+    },
+    
+    modeSwitch: function(modeName) {
+      if (modeName === 'displayAnnotations') { this.enterDisplayAnnotations(); }
+      else if (modeName === 'editingAnnotations') { this.enterEditAnnotations(); }
+      else if (modeName === 'default') { this.enterDefault(); }
+      else {}
     },
 
     parseRegionForAnnotator: function(url) {
@@ -179,59 +177,16 @@
 
     enterEditAnnotations: function() {
       var _this = this;
-      this.parent.hud.contextControls.rectTool = new $.OsdRegionRectTool({
-        osd: OpenSeadragon,
-        viewer: _this.viewer,
-        rectType: 'oa', // does not do anything yet. Currently the rect is
-        // kept in openSeaDragon format until it is returned on "onDrawFinish".
-        // The intent here is to update the annotation continuously rather than
-        // only on the end of the draw event so rendering is always handled by
-        // renderer instead of only at the end of the process, since different 
-        // rendering methods may be used.
-        
-        //in theory this is a good idea, but that will require a better understanding
-        //of how annotator creates the annotation in order to be able to intercept it 
-        //at various stages.  for now, just wait until user submits
-        onDrawFinish: function(canvasRect) {
-          //console.log(canvasRect);
-          _this.annotator.adder.show();
-          //console.log(_this.annotator.adder.position()); 
-          var topLeftImagePoint = new OpenSeadragon.Point(canvasRect.x, canvasRect.y);
-          var annotatorPosition = {
-            top: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,
-            left: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x
-          };
-          _this.annotator.adder.offset(annotatorPosition);
-          //console.log(_this.annotator.adder.position()); 
-          _this.annotator.onAdderClick();
-          _this.annotator.subscribe("annotationCreated", function (annotation){
-            var bounds = _this.viewer.viewport.getBounds(true);
-            var scope = _this.viewer.viewport.viewportToImageRectangle(bounds);
-            //bounds is giving negative values?
-            //console.log(annotation);
-            var oaAnno = _this.annotatorToOA(annotation, _this.parent.imageID, canvasRect, scope);
-            //save to endpoint
-            jQuery.publish('annotationCreated.'+_this.windowId, oaAnno);
-          });
-      
-          // update region fragment of annotation to 
-          // invoke annotator editor with proper callbacks to 
-          // update the rest of the annotation, passing it along.
-          // Once text is added there, save annotation to save endpoint.
-        },
-        onDrawStart: function() { // use new $.oaAnnotation() to create new 
-          // annotation and pass it around for updating
-        },
-        onModeEnter: function() { // do reasonable things to the renderer to make
-          // things intelligible
-        },
-        onModeExit: function() {
-          // do reasonable things to renderer to return to "normal".
-        },
-        onDraw: function() { 
-          // update annotation 
-        }
-      });
+      if (!this.parent.hud.contextControls.rectTool) {
+        this.parent.hud.contextControls.rectTool = new $.OsdRegionRectTool({
+          osd: OpenSeadragon,
+          osdViewer: _this.viewer,
+          rectType: 'oa', // does not do anything yet. 
+          parent: _this
+        });
+      } else {
+        this.parent.hud.contextControls.rectTool.reset(_this.viewer);
+      }
     },
 
     enterDefault: function() {
