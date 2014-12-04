@@ -85,10 +85,6 @@
                 // The endpoint of the store on your server.
                 prefix: this.prefix,
 
-                annotationData: {
-                    uri: this.uri
-                },
-
                 urls: {
                     // These are the default URLs.
                     create:  '/create',
@@ -238,7 +234,6 @@
           var annotation = {},
               tags = [],
               text,
-              uri,
               rangePostion,
               bounds,
               media;
@@ -254,7 +249,7 @@
             annotation.tags = tags;
             annotation.text = text;
             
-            uri = oaAnnotation.on.source;
+            annotation.uri = oaAnnotation.on.source;
             var region = oaAnnotation.on.selector.value;
             var regionArray = region.split('=')[1].split(',');
             rangePosition = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
