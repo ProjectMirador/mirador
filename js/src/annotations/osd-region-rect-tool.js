@@ -148,7 +148,7 @@
       //console.log(annotator);
       annotator.adder.offset(annotatorPosition);
       //console.log(_this.annotator.adder.position()); 
-      annotator.onAdderClick(null, parent.parent.elemOsd);
+      annotator.onAdderClick();
       
       annotator.subscribe("annotationCreated", function (annotation){
         console.log("in annotator annotationCreated");
