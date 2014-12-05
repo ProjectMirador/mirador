@@ -35,7 +35,7 @@
     },
 
     startRectangle: function(event) {
-      var _this = this.userData.recttool;
+      var _this = this.userData.recttool; //osd userData
       if (!_this.dragging) {
         _this.dragging = true; 
         _this.mouseStart = _this.osdViewer.viewport.pointFromPixel(event.position);
@@ -49,7 +49,7 @@
     },
 
     finishRectangle: function(event) {
-      var _this = this.userData.recttool;
+      var _this = this.userData.recttool; //osd userData
       _this.dragging = false;
       var osdImageRect = _this.osdViewer.viewport.viewportToImageRectangle(_this.rectangle);
       var canvasRect = {
@@ -156,16 +156,17 @@
       });
       
       annotator.subscribe("annotationCreated", function (annotation){
-        console.log("in annotator annotationCreated");
+        //console.log("in annotator annotationCreated");
         var bounds = _this.osdViewer.viewport.getBounds(true);
         var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
         //bounds is giving negative values?
         //console.log(annotation);
         var oaAnno = parent.annotatorToOA(annotation, parent.parent.imageID, canvasRect, scope);
-        console.log(oaAnno);
+        //console.log(oaAnno);
+        //this seems to be necessary so annotator doesn't publish event multiple times
         annotator.unsubscribe("annotationCreated");
         //save to endpoint
-        jQuery.publish('annotationCreated.'+parent.windowId, oaAnno);
+        jQuery.publish('annotationCreated.'+parent.windowId, [oaAnno, _this.osdOverlay]);
       });
       
       // update region fragment of annotation to 

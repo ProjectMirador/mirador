@@ -4737,7 +4737,7 @@ Annotator.Widget.prototype.checkOrientation = function() {
     },
 
     startRectangle: function(event) {
-      var _this = this.userData.recttool;
+      var _this = this.userData.recttool; //osd userData
       if (!_this.dragging) {
         _this.dragging = true; 
         _this.mouseStart = _this.osdViewer.viewport.pointFromPixel(event.position);
@@ -4751,7 +4751,7 @@ Annotator.Widget.prototype.checkOrientation = function() {
     },
 
     finishRectangle: function(event) {
-      var _this = this.userData.recttool;
+      var _this = this.userData.recttool; //osd userData
       _this.dragging = false;
       var osdImageRect = _this.osdViewer.viewport.viewportToImageRectangle(_this.rectangle);
       var canvasRect = {
@@ -4858,16 +4858,17 @@ Annotator.Widget.prototype.checkOrientation = function() {
       });
       
       annotator.subscribe("annotationCreated", function (annotation){
-        console.log("in annotator annotationCreated");
+        //console.log("in annotator annotationCreated");
         var bounds = _this.osdViewer.viewport.getBounds(true);
         var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
         //bounds is giving negative values?
         //console.log(annotation);
         var oaAnno = parent.annotatorToOA(annotation, parent.parent.imageID, canvasRect, scope);
-        console.log(oaAnno);
+        //console.log(oaAnno);
+        //this seems to be necessary so annotator doesn't publish event multiple times
         annotator.unsubscribe("annotationCreated");
         //save to endpoint
-        jQuery.publish('annotationCreated.'+parent.windowId, oaAnno);
+        jQuery.publish('annotationCreated.'+parent.windowId, [oaAnno, _this.osdOverlay]);
       });
       
       // update region fragment of annotation to 
@@ -5576,12 +5577,13 @@ Annotator.Widget.prototype.checkOrientation = function() {
 
       });
       
-      jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno) {
+      jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
         jQuery.each(_this.endpoints, function(key, endpoint) {
-          var annoID = endpoint.save(oaAnno);
-          oaAnno['@id'] = String(annoID);  //just in case it returns a number
+          var annoID = String(endpoint.save(oaAnno)); //just in case it returns a number
+          oaAnno['@id'] = annoID;
           _this.annotationsList.push(oaAnno);
-          //need to update display? or something
+          //update overlay so it can be a part of the annotationList rendering
+          jQuery(osdOverlay).removeClass('osd-select-rectangle').addClass('annotation').attr('id', annoID);
         });
         jQuery.publish(('annotationListLoaded.' + _this.id));
       });
@@ -6052,6 +6054,8 @@ Annotator.Widget.prototype.checkOrientation = function() {
 
     init: function() {
       var _this = this;
+      jQuery.unsubscribe(('modeChange.' + _this.windowId));
+
       if (this.element.data('annotator')) {
         this.annotator = this.element.data('annotator');
       } else {
@@ -6066,7 +6070,7 @@ Annotator.Widget.prototype.checkOrientation = function() {
       var _this = this;
 
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
-        console.log('entered ' + modeName + ' mode in annotationsLayer');
+        //console.log('entered ' + modeName + ' mode in annotationsLayer');
         _this.mode = modeName;
         _this.modeSwitch();
       });
@@ -6126,7 +6130,7 @@ Annotator.Widget.prototype.checkOrientation = function() {
         top: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,
         left: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x
       };
-      console.log(_this.viewer.viewport.getBounds(true));
+      //console.log(_this.viewer.viewport.getBounds(true));
       //check OSD bounds
       //console.log(_this.viewer);
       return annotatorPosition;
@@ -6770,7 +6774,6 @@ this.elemStitchOptions.hide();
   $.Hud.prototype = {
 
     init: function() {   
-      //add more to these as AnnoState becomes more complex
       this.createStateMachine();
      
       this.element = jQuery(this.template({
@@ -6887,6 +6890,7 @@ this.elemStitchOptions.hide();
     },
     
     createStateMachine: function() {
+      //add more to these as AnnoState becomes more complex
       var _this = this;
       this.annoState = StateMachine.create({
         initial: 'annoOff',
@@ -7140,6 +7144,10 @@ this.elemStitchOptions.hide();
         }
         
         _this.addAnnotationsLayer(_this.elemAnno);
+        //re-add correct annotationsLayer mode based on annoState
+        if (_this.hud.annoState.current !== "annoOff") {
+          jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');          
+        }
 
         // The worst hack imaginable. Pop the osd overlays layer after the canvas so 
         // that annotations appear.
@@ -7180,6 +7188,10 @@ this.elemStitchOptions.hide();
         this.osd.close();
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.parent.updateFocusImages([imageID]);
+        //by default, don't allow a user to be in edit annotation mode when changing pages
+        if (this.hud.annoState.current === "annoOnEditOn") {
+          this.hud.annoState.editOff();
+        }
       }
     },
 

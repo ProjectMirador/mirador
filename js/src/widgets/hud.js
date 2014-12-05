@@ -15,7 +15,6 @@
   $.Hud.prototype = {
 
     init: function() {   
-      //add more to these as AnnoState becomes more complex
       this.createStateMachine();
      
       this.element = jQuery(this.template({
@@ -132,6 +131,7 @@
     },
     
     createStateMachine: function() {
+      //add more to these as AnnoState becomes more complex
       var _this = this;
       this.annoState = StateMachine.create({
         initial: 'annoOff',

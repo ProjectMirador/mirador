@@ -175,12 +175,13 @@
 
       });
       
-      jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno) {
+      jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
         jQuery.each(_this.endpoints, function(key, endpoint) {
-          var annoID = endpoint.save(oaAnno);
-          oaAnno['@id'] = String(annoID);  //just in case it returns a number
+          var annoID = String(endpoint.save(oaAnno)); //just in case it returns a number
+          oaAnno['@id'] = annoID;
           _this.annotationsList.push(oaAnno);
-          //need to update display? or something
+          //update overlay so it can be a part of the annotationList rendering
+          jQuery(osdOverlay).removeClass('osd-select-rectangle').addClass('annotation').attr('id', annoID);
         });
         jQuery.publish(('annotationListLoaded.' + _this.id));
       });

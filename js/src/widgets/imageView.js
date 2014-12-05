@@ -141,6 +141,10 @@
         }
         
         _this.addAnnotationsLayer(_this.elemAnno);
+        //re-add correct annotationsLayer mode based on annoState
+        if (_this.hud.annoState.current !== "annoOff") {
+          jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');          
+        }
 
         // The worst hack imaginable. Pop the osd overlays layer after the canvas so 
         // that annotations appear.
@@ -181,6 +185,10 @@
         this.osd.close();
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.parent.updateFocusImages([imageID]);
+        //by default, don't allow a user to be in edit annotation mode when changing pages
+        if (this.hud.annoState.current === "annoOnEditOn") {
+          this.hud.annoState.editOff();
+        }
       }
     },
 

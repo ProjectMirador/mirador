@@ -22,6 +22,8 @@
 
     init: function() {
       var _this = this;
+      jQuery.unsubscribe(('modeChange.' + _this.windowId));
+
       if (this.element.data('annotator')) {
         this.annotator = this.element.data('annotator');
       } else {
@@ -36,7 +38,7 @@
       var _this = this;
 
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
-        console.log('entered ' + modeName + ' mode in annotationsLayer');
+        //console.log('entered ' + modeName + ' mode in annotationsLayer');
         _this.mode = modeName;
         _this.modeSwitch();
       });
@@ -96,7 +98,7 @@
         top: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,
         left: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x
       };
-      console.log(_this.viewer.viewport.getBounds(true));
+      //console.log(_this.viewer.viewport.getBounds(true));
       //check OSD bounds
       //console.log(_this.viewer);
       return annotatorPosition;
