@@ -47,6 +47,7 @@
       });
 
       this.parent.element.find('.mirador-osd-annotations-layer').on('click', function() {
+        jQuery(this).toggleClass('selected');
         if (_this.parent.mode === 'displayAnnotations') {
           _this.parent.setMode('default');
         } else {

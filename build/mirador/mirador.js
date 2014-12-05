@@ -4253,17 +4253,18 @@ Annotator.Widget.prototype.checkOrientation = function() {
     this.resetOrientation();
     container = jQuery(this.element[0].parentNode.parentNode.nextSibling);  //this is extremely brittle. gross
     containerOffset = container.offset();
-    console.log(containerOffset);
     widget = this.element.children(":first");
     offset = widget.offset();
     viewport = {
       top: containerOffset.top,
       right: containerOffset.left + container.width()
     };
+    console.log(viewport);
     current = {
       top: offset.top,
       right: offset.left + widget.width()
     };
+    console.log(current);
     if ((current.top - viewport.top) < 0) {
       this.invertY();
     }
@@ -4763,9 +4764,10 @@ Annotator.Widget.prototype.checkOrientation = function() {
     },
 
     exitEditMode: function(event) {
-      this.setOsdFrozen(false),
-      this.osdViewer.removeHandler('canvas-drag', startRectangle);
-      this.osdViewer.removeHandler('canvas-release', finishRectangle);
+      var _this = this;
+      this.setOsdFrozen(false);
+      this.osdViewer.removeHandler('canvas-drag', _this.startRectangle);
+      this.osdViewer.removeHandler('canvas-release', _this.finishRectangle);
       this.onModeExit();
     },
 
@@ -4844,11 +4846,15 @@ Annotator.Widget.prototype.checkOrientation = function() {
         left: this.osdViewer.viewport.viewportToWindowCoordinates(topLeftImagePoint).x
       };
       //console.log(annotatorPosition);
-      //Widget.prototype.checkOrientation in annotator.  based on window, but we want it to be based on OSD element
       //console.log(annotator);
       annotator.adder.offset(annotatorPosition);
       //console.log(_this.annotator.adder.position()); 
       annotator.onAdderClick();
+      
+      // Remove rectangle if user cancels the creation of an annotation
+      annotator.subscribe("annotationEditorHidden", function() {
+        _this.osdViewer.removeOverlay(_this.osdOverlay);
+      });
       
       annotator.subscribe("annotationCreated", function (annotation){
         console.log("in annotator annotationCreated");
@@ -6060,10 +6066,12 @@ Annotator.Widget.prototype.checkOrientation = function() {
 
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
         console.log('entered ' + modeName + ' mode in annotationsLayer');
-        _this.modeSwitch(modeName);
+        _this.mode = modeName;
+        _this.modeSwitch();
       });
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
+        console.log(_this.mode);
         _this.annotationsList = _this.parent.parent.annotationsList;
         _this.updateRenderer();
       });
@@ -6078,18 +6086,19 @@ Annotator.Widget.prototype.checkOrientation = function() {
         visible: false,
         parent: _this
       });
-      this.modeSwitch(this.mode);
+      this.modeSwitch();
     },
     
     updateRenderer: function() {
       this.renderer.list = this.annotationsList;
-      this.modeSwitch(this.mode);
+      this.modeSwitch();
     },
     
-    modeSwitch: function(modeName) {
-      if (modeName === 'displayAnnotations') { this.enterDisplayAnnotations(); }
-      else if (modeName === 'editingAnnotations') { this.enterEditAnnotations(); }
-      else if (modeName === 'default') { this.enterDefault(); }
+    modeSwitch: function() {
+      console.log(this.mode);
+      if (this.mode === 'displayAnnotations') { this.enterDisplayAnnotations(); }
+      else if (this.mode === 'editingAnnotations') { this.enterEditAnnotations(); }
+      else if (this.mode === 'default') { this.enterDefault(); }
       else {}
     },
 
@@ -6116,7 +6125,9 @@ Annotator.Widget.prototype.checkOrientation = function() {
         top: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,
         left: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x
       };
-
+      console.log(_this.viewer.viewport.getBounds(true));
+      //check OSD bounds
+      //console.log(_this.viewer);
       return annotatorPosition;
     },
 
@@ -6673,6 +6684,11 @@ this.elemStitchOptions.hide();
       var _this = this;
 
       this.container.find('.mirador-osd-close').on('click', function() {
+        if (_this.rectTool) {
+          _this.rectTool.exitEditMode();
+        }
+        _this.container.find('.mirador-osd-edit-mode').removeClass("selected");
+        _this.container.find('.mirador-osd-annotations-layer').removeClass("selected");
         _this.hide();
         _this.parent.parent.setMode('default');
       });
@@ -6684,13 +6700,18 @@ this.elemStitchOptions.hide();
       });
       
       this.container.find('.mirador-osd-edit-mode').on('click', function() {
+        /* For now we won't have the secondary level of menu options
         _this.element.remove();
         _this.element = jQuery(_this.editorTemplate()).appendTo(_this.container);
-        _this.bindEvents();
+        _this.bindEvents();*/
+        console.log(this);
+        jQuery(this).toggleClass("selected");
+        _this.parent.parent.setMode('editingAnnotations'); 
+        _this.rectTool.enterEditMode();
       });
       
       this.container.find('.mirador-osd-rect-tool').on('click', function() {
-        _this.parent.parent.setMode('editingAnnotations');
+        _this.parent.parent.setMode('editingAnnotations'); 
         _this.rectTool.enterEditMode();
         //_this.bindEvents();
       });
@@ -6704,12 +6725,12 @@ this.elemStitchOptions.hide();
                                    '<a class="mirador-osd-edit-mode hud-control">',
                                    '<i class="fa fa-2x fa-edit"></i>',
                                    '</a>',
-                                   '<a class="mirador-osd-list hud-control">',
+                                   /*'<a class="mirador-osd-list hud-control">',
                                    '<i class="fa fa-2x fa-list"></i>',
-                                   '</a>',
-                                   '<a class="mirador-osd-search hud-control">',
+                                   '</a>',*/
+                                   /*'<a class="mirador-osd-search hud-control">',
                                    '<i class="fa fa-2x fa-search"></i>',
-                                   '</a>',
+                                   '</a>',*/
                                    /*'<a class="mirador-osd-rect-tool hud-control">',
                                    '<i class="fa fa-2x fa-gear"></i>',
                                    '</a>',*/
@@ -6784,6 +6805,7 @@ this.elemStitchOptions.hide();
       });
 
       this.parent.element.find('.mirador-osd-annotations-layer').on('click', function() {
+        jQuery(this).toggleClass('selected');
         if (_this.parent.mode === 'displayAnnotations') {
           _this.parent.setMode('default');
         } else {

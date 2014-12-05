@@ -63,9 +63,10 @@
     },
 
     exitEditMode: function(event) {
-      this.setOsdFrozen(false),
-      this.osdViewer.removeHandler('canvas-drag', startRectangle);
-      this.osdViewer.removeHandler('canvas-release', finishRectangle);
+      var _this = this;
+      this.setOsdFrozen(false);
+      this.osdViewer.removeHandler('canvas-drag', _this.startRectangle);
+      this.osdViewer.removeHandler('canvas-release', _this.finishRectangle);
       this.onModeExit();
     },
 
@@ -144,11 +145,15 @@
         left: this.osdViewer.viewport.viewportToWindowCoordinates(topLeftImagePoint).x
       };
       //console.log(annotatorPosition);
-      //Widget.prototype.checkOrientation in annotator.  based on window, but we want it to be based on OSD element
       //console.log(annotator);
       annotator.adder.offset(annotatorPosition);
       //console.log(_this.annotator.adder.position()); 
       annotator.onAdderClick();
+      
+      // Remove rectangle if user cancels the creation of an annotation
+      annotator.subscribe("annotationEditorHidden", function() {
+        _this.osdViewer.removeOverlay(_this.osdOverlay);
+      });
       
       annotator.subscribe("annotationCreated", function (annotation){
         console.log("in annotator annotationCreated");

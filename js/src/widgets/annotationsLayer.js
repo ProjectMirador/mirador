@@ -37,10 +37,12 @@
 
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
         console.log('entered ' + modeName + ' mode in annotationsLayer');
-        _this.modeSwitch(modeName);
+        _this.mode = modeName;
+        _this.modeSwitch();
       });
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
+        console.log(_this.mode);
         _this.annotationsList = _this.parent.parent.annotationsList;
         _this.updateRenderer();
       });
@@ -55,18 +57,19 @@
         visible: false,
         parent: _this
       });
-      this.modeSwitch(this.mode);
+      this.modeSwitch();
     },
     
     updateRenderer: function() {
       this.renderer.list = this.annotationsList;
-      this.modeSwitch(this.mode);
+      this.modeSwitch();
     },
     
-    modeSwitch: function(modeName) {
-      if (modeName === 'displayAnnotations') { this.enterDisplayAnnotations(); }
-      else if (modeName === 'editingAnnotations') { this.enterEditAnnotations(); }
-      else if (modeName === 'default') { this.enterDefault(); }
+    modeSwitch: function() {
+      console.log(this.mode);
+      if (this.mode === 'displayAnnotations') { this.enterDisplayAnnotations(); }
+      else if (this.mode === 'editingAnnotations') { this.enterEditAnnotations(); }
+      else if (this.mode === 'default') { this.enterDefault(); }
       else {}
     },
 
@@ -93,7 +96,9 @@
         top: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,
         left: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x
       };
-
+      console.log(_this.viewer.viewport.getBounds(true));
+      //check OSD bounds
+      //console.log(_this.viewer);
       return annotatorPosition;
     },
 
