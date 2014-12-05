@@ -10,7 +10,7 @@
       selected:          null,
       hovered:           null,
       windowId:          null,
-      mode:              null,
+      mode:              'default',
       annotator:         null,
       element:           null
     }, options);
@@ -42,7 +42,7 @@
       });
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
-        console.log(_this.mode);
+        //console.log(_this.mode);
         _this.annotationsList = _this.parent.parent.annotationsList;
         _this.updateRenderer();
       });
@@ -66,7 +66,7 @@
     },
     
     modeSwitch: function() {
-      console.log(this.mode);
+      //console.log(this.mode);
       if (this.mode === 'displayAnnotations') { this.enterDisplayAnnotations(); }
       else if (this.mode === 'editingAnnotations') { this.enterEditAnnotations(); }
       else if (this.mode === 'default') { this.enterDefault(); }
@@ -176,7 +176,7 @@
 
     enterDisplayAnnotations: function() {
       var _this = this;
-      console.log('triggering annotation loading and display');
+      //console.log('triggering annotation loading and display');
       this.renderer.render();
     },
 
@@ -195,7 +195,7 @@
     },
 
     enterDefault: function() {
-      console.log('triggering default');
+      //console.log('triggering default');
       this.renderer.hideAll();
     },
 

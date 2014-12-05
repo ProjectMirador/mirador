@@ -12,7 +12,6 @@
       elemOsd:          null,
       parent:           null,
       manifest:         null,
-      mode:             'default',
       osd:              null,
       fullscreen:       null,
       osdOptions: {
@@ -165,7 +164,6 @@
         annotationsList: _this.parent.annotationsList || [],
         viewer: _this.osd,
         windowId: _this.windowId,
-        mode: _this.mode,
         element: element
       });
 
@@ -184,12 +182,6 @@
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.parent.updateFocusImages([imageID]);
       }
-    },
-
-    setMode: function(modeName) {
-      var _this = this;
-      _this.mode = modeName;
-      jQuery.publish('modeChange.' + _this.windowId, modeName);
     },
 
     next: function() {

@@ -34,13 +34,7 @@
       var _this = this;
 
       this.container.find('.mirador-osd-close').on('click', function() {
-        if (_this.rectTool) {
-          _this.rectTool.exitEditMode();
-        }
-        _this.container.find('.mirador-osd-edit-mode').removeClass("selected");
-        _this.container.find('.mirador-osd-annotations-layer').removeClass("selected");
-        _this.hide();
-        _this.parent.parent.setMode('default');
+        _this.parent.annoState.displayOff();
       });
       
       this.container.find('.mirador-osd-back').on('click', function() {
@@ -54,21 +48,23 @@
         _this.element.remove();
         _this.element = jQuery(_this.editorTemplate()).appendTo(_this.container);
         _this.bindEvents();*/
-        console.log(this);
-        jQuery(this).toggleClass("selected");
-        _this.parent.parent.setMode('editingAnnotations'); 
-        _this.rectTool.enterEditMode();
+        //console.log(this);
+        if (_this.parent.annoState.current === 'annoOnEditOff') {
+          _this.parent.annoState.editOn();
+        } else if (_this.parent.annoState.current === 'annoOnEditOn') {
+          _this.parent.annoState.editOff();
+        }
       });
       
-      this.container.find('.mirador-osd-rect-tool').on('click', function() {
-        _this.parent.parent.setMode('editingAnnotations'); 
+      /*this.container.find('.mirador-osd-rect-tool').on('click', function() {
+        jQuery.publish('modeChange.' + _this.windowId, 'editingAnnotations');
         _this.rectTool.enterEditMode();
         //_this.bindEvents();
-      });
+      });*/
     },
 
     template: Handlebars.compile([
-                                 '<div class="mirador-osd-context-controls hud-control">',
+                                 '<div class="mirador-osd-context-controls hud-container">',
                                    '<a class="mirador-osd-close hud-control">',
                                    '<i class="fa fa-2x fa-times"></i>',
                                    '</a>',
@@ -88,7 +84,7 @@
     ].join('')),
 
     editorTemplate: Handlebars.compile([
-                                 '<div class="mirador-osd-context-controls hud-control">',
+                                 '<div class="mirador-osd-context-controls hud-container">',
                                    '<a class="mirador-osd-back hud-control">',
                                    '<i class="fa fa-2x fa-arrow-left"></i>',
                                    '</a>',
