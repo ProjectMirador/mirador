@@ -12,6 +12,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-coveralls');
   // grunt.loadNpmTasks('jasmine-jquery');
 
   // ----------
@@ -174,7 +175,8 @@ module.exports = function(grunt) {
           'js/src/*.js',
           'js/src/*/*.js',
           'images/*',
-          'css/*.css'
+          'css/*.css',
+          'index.html'
         ],
         tasks: 'dev_build'
       }
@@ -202,6 +204,22 @@ module.exports = function(grunt) {
         }
       }
     },
+    
+    coveralls: {
+      options: {
+        // LCOV coverage file relevant to every target
+        src: 'reports/coverage/lcov.info',
+
+        // When true, grunt-coveralls will only print a warning rather than
+        // an error, to prevent CI builds from failing unnecessarily (e.g. if
+        // coveralls.io is down). Optional, defaults to false.
+        force: false
+      },
+      cover_notify: {
+        // Target-specific LCOV coverage file
+        src: 'reports/coverage/lcov.info'
+      },
+    },
 
     jasmine: {
       test: {
@@ -221,7 +239,20 @@ module.exports = function(grunt) {
           template : require('grunt-template-jasmine-istanbul'),
           templateOptions: {
             coverage: 'reports/coverage.json',
-            report: 'reports/coverage'
+            report: [
+              {
+              type: 'html',
+              options: {
+                dir:'reports/coverage'
+              }
+            },
+            {
+              type: 'lcov',
+              options: {
+                dir:'reports/coverage'
+              }
+            }
+          ]
           }
         }
       }
