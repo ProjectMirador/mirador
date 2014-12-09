@@ -4827,28 +4827,25 @@ Annotator.Widget.prototype.checkOrientation = function() {
     //of how annotator creates the annotation in order to be able to intercept it 
     //at various stages.  for now, just wait until user submits
     onDrawFinish: function(canvasRect) {
-      //console.log(this.rectangle);
-      //console.log(this);
       var annotator = this.parent.annotator,
       parent = this.parent,
       _this = this;
+      
       annotator.adder.show();
-      //console.log(_this.annotator.adder.position()); 
-      //var topLeftImagePoint = new OpenSeadragon.Point(canvasRect.x, canvasRect.y);
-      var topLeftImagePoint = new OpenSeadragon.Point(this.rectangle.x, this.rectangle.y);
-      //console.log(topLeftImagePoint);
-      /*var annotatorPosition = {
-        top: this.osdViewer.viewport.imageToWindowCoordinates(topLeftImagePoint).y,
-        left: this.osdViewer.viewport.imageToWindowCoordinates(topLeftImagePoint).x
+      var topLeftImagePoint = new OpenSeadragon.Point(canvasRect.x, canvasRect.y);
+
+      /* I don't understand why this isn't correctly setting the annotatorPosition to the top left corner
+      Using windowCoordinates at least gets the Editor w/in the annotation box
+      var annotatorPosition = {
+        top: this.osdViewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,
+        left: this.osdViewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x
       };*/
       var annotatorPosition = {
-        top: this.osdViewer.viewport.viewportToWindowCoordinates(topLeftImagePoint).y,
-        left: this.osdViewer.viewport.viewportToWindowCoordinates(topLeftImagePoint).x
+        top: _this.parent.viewer.viewport.imageToWindowCoordinates(topLeftImagePoint).y,
+        left: _this.parent.viewer.viewport.imageToWindowCoordinates(topLeftImagePoint).x
       };
-      //console.log(annotatorPosition);
-      //console.log(annotator);
+
       annotator.adder.offset(annotatorPosition);
-      //console.log(_this.annotator.adder.position()); 
       annotator.onAdderClick();
       
       // Remove rectangle if user cancels the creation of an annotation
