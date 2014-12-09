@@ -94,13 +94,13 @@
 
       var topLeftImagePoint = new OpenSeadragon.Point(+regionArray[0], +regionArray[1]);
 
+      //use Math.max to make sure portion of annotation is not hidden due being zoomed in
+      //18 pixels account for the annotator CSS (left -18)
       annotatorPosition = {
-        top: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,
-        left: _this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x
+        top: Math.max(_this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,0),
+        left: Math.max(_this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x, 18)
       };
-      //console.log(_this.viewer.viewport.getBounds(true));
-      //check OSD bounds
-      //console.log(_this.viewer);
+
       return annotatorPosition;
     },
 
@@ -145,9 +145,6 @@
            });
          }
         motivation.push("oa:commenting");
-           //selector = "xywh="+",".concat(annotation.rangePosition.x, annotation.rangePosition.y, annotation.rangePostion.width, annotation.rangePostion.height);
-           //scope = "xywh="+",".concat(annotation.bounds.x, annotation.bounds.y, annotation.bounds.width, annotation.bounds.height);
-           //console.log(selector + " " + scope);
         on = { "@type" : "oa:SpecificResource",
                   "source" : uri, 
                   "selector" : {

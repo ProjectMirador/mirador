@@ -60,6 +60,10 @@
       templateData = {},
       this.endpoints = {};
       
+      //make sure annotations list is cleared out when changing objects within window
+      while(_this.annotationsList.length > 0) {
+       _this.annotationsList.pop();
+      }
       //unsubscribe from stale events as they will be updated with new module calls
       jQuery.unsubscribe(('currentImageIDUpdated.' + _this.id));
 
@@ -486,12 +490,6 @@
       //first look for manifest annotations
       var _this = this,
       url = $.Iiif.getAnnotationsListUrl(_this.manifest, _this.currentImageID);
-      //_this.annotationsList = [];
-      
-      // empty the annotation list array efficiently.
-      // while(_this.annotationsList.length > 0) {
-      //   _this.annotationsList.pop();
-      // }
 
       if (url !== false) {
         jQuery.get(url, function(list) {
