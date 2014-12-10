@@ -65,18 +65,48 @@
       });
     },
     
+    getAnnotationsFromPosition: function(event, imageViewElem) {
+      var _this = this,
+      annos = imageViewElem.find('.annotation').map(function() {
+        var self = jQuery(this),
+        offset = self.offset(),
+        l = offset.left,
+        t = offset.top,
+        h = self.height(),
+        w = self.width(),
+        x = new OpenSeadragon.getMousePosition(event).x,
+        y = new OpenSeadragon.getMousePosition(event).y,
+        maxx = l+w,
+        maxy = t+h;
+      
+        //console.log(y, maxy, t, x, maxx, l);
+        if ((y <= maxy && y >= t) && (x <= maxx && x >= l)) {
+        //console.log(_this.getAnnoFromRegion(this.id));
+        }
+      
+        return (y <= maxy && y >= t) && (x <= maxx && x >= l) ? _this.getAnnoFromRegion(this.id) : null;
+      });
+      //console.log(annos);
+      return annos;
+      //console.log(overlays);
+    },
+    
     bindEvents: function() {
       var _this = this;
       // be sure to properly delegate your event handlers
       jQuery(this.osdViewer.canvas).parent().on('click', '.annotation', function() { _this.onSelect(); });
 
-      jQuery(this.osdViewer.canvas).parent().on('mouseenter', '.annotation', function() { 
+      /*jQuery(this.osdViewer.canvas).parent().parent().on('mouseenter', '.annotation', function() { 
         _this.onHover(_this.getAnnoFromRegion(jQuery(this)[0].id)); 
+      });*/
+      
+      jQuery(this.osdViewer.canvas).parent().parent().on('mousemove', function(event) { 
+        _this.onHover(event, _this.getAnnotationsFromPosition(event, jQuery(this))); 
       });
       
-      jQuery(this.osdViewer.canvas).parent().on('mouseleave', '.annotation', function() {
+      /*jQuery(this.osdViewer.canvas).parent().on('mouseleave', '.annotation', function() {
         _this.onMouseLeave();
-      });
+      });*/
     },
     
     update: function() {
@@ -95,10 +125,23 @@
       return elements;
     },
     
-    onHover: function(annotations) {
-      var annotation = annotations[0];
-      var position = this.parent.parseRegionForAnnotator(annotation.on);
-      this.parent.annotator.showViewer(this.parent.prepareForAnnotator(annotation), position);
+    onHover: function(event, annotations) {
+      var renderAnnotations = [],
+      _this = this;
+      jQuery.each(annotations, function(index, annotation) {
+        renderAnnotations = renderAnnotations.concat(_this.parent.prepareForAnnotator(annotation));
+      });
+      //var annotation = annotations[0];
+      //var position = this.parent.parseRegionForAnnotator(annotation.on);
+      
+      //need to account for various menu bars that affect the mouse position
+      var topOffset = jQuery(window).height() - _this.osdViewer.container.offsetHeight;
+      var position = {
+                    top: new OpenSeadragon.getMousePosition(event).y-topOffset,
+                    left: new OpenSeadragon.getMousePosition(event).x
+                };
+      //this.parent.annotator.showViewer(this.parent.prepareForAnnotator(annotation), position);
+      if (renderAnnotations.length > 0) {this.parent.annotator.showViewer(renderAnnotations, position);}
     },
     
     onMouseLeave: function() {
