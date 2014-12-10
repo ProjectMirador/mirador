@@ -21,6 +21,7 @@ describe('Mirador | mirador.js', function() {
     });
 
     $ = Mirador;
+    console.log($);
   });
 
 
@@ -175,33 +176,15 @@ describe('Mirador | mirador.js', function() {
       };
     });
 
-
     it('should return matching manifest for a given URI', function() {
       expect($.getManifestIdByUri('http://xyz.edu/data/Manifest.json')).toEqual('manifest-1234');
       expect($.getManifestIdByUri('http://xyz.edu/data/abc.json')).toEqual([]);
     });
 
-/* Moved to MetadataView
-    it('should return manifest metadata for a given manifest id', function() {
-      expect($.getMetadataByManifestId('manifest-1234')).toEqual({ "details":{ 'label': 'Collection 123' } });
-    });
-*/ 
-
-    it('should return images list for given manifest id', function() {
-      expect($.getImagesListByManifestId('manifest-1234')).toEqual(imagesList);
-    });
-
-
     it('should return a collection title for a given metadata', function() {
       expect($.getCollectionTitle({ 'details': { 'label': 'abc' } })).toEqual('abc');
       expect($.getCollectionTitle({ 'details': { } })).toEqual('');
     });
-
-
-    it('should return array of image titles and ids for a given images list', function() {
-      expect($.getImageTitlesAndIds(imagesList)).toEqual(imageTitlesAndIds);
-    });
-
 
   });
 

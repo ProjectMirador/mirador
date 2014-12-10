@@ -12,6 +12,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-coveralls');
   // grunt.loadNpmTasks('jasmine-jquery');
 
   // ----------
@@ -174,7 +175,8 @@ module.exports = function(grunt) {
           'js/src/*.js',
           'js/src/*/*.js',
           'images/*',
-          'css/*.css'
+          'css/*.css',
+          'index.html'
         ],
         tasks: 'dev_build'
       }
@@ -202,6 +204,10 @@ module.exports = function(grunt) {
         }
       }
     },
+    
+    coveralls: {
+      src: 'reports/coverage/lcov.info',
+    },
 
     jasmine: {
       test: {
@@ -221,7 +227,20 @@ module.exports = function(grunt) {
           template : require('grunt-template-jasmine-istanbul'),
           templateOptions: {
             coverage: 'reports/coverage.json',
-            report: 'reports/coverage'
+            report: [
+              {
+              type: 'html',
+              options: {
+                dir:'reports/coverage'
+              }
+            },
+            {
+              type: 'lcov',
+              options: {
+                dir:'reports/coverage'
+              }
+            }
+          ]
           }
         }
       }
@@ -280,4 +299,5 @@ module.exports = function(grunt) {
   // Coverage task.
   // Runs instanbul coverage
   grunt.registerTask('coverage', 'jasmine:coverage');
+  
 };
