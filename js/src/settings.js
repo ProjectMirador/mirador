@@ -117,10 +117,11 @@
     ],
     
     // main (top) menu
+    //we don't actually take the height into account for the mirador-viewer div, so don't use for now
     'mainMenuSettings': {
-      'show': true,
-      'height': 25,
-      'width': '100%'
+      'show': true
+      //'height': 25,
+      //'width': '100%'
     },
 
    'repoImages' : {

@@ -2236,7 +2236,9 @@ a {
   background-color: #000;
   border-bottom: 1px solid #555;
   color: #fff;
-  padding: 4px;
+  height: 33px;
+  width: 100%;
+  /*padding: 4px;*/
   top: 0;
 }
 
@@ -2244,7 +2246,7 @@ a {
   float: right;
   list-style: none;
   margin: 0;
-  padding: 5px 12px 0 0;
+  padding: 8px 12px 0 0;
   text-align: right;
 }
 

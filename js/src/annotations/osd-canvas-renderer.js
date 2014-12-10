@@ -126,6 +126,9 @@
     },
     
     onHover: function(event, annotations) {
+      //first hide all annotations and then find new ones to display
+      this.parent.annotator.viewer.hide();
+    
       var renderAnnotations = [],
       _this = this;
       jQuery.each(annotations, function(index, annotation) {
@@ -134,11 +137,13 @@
       //var annotation = annotations[0];
       //var position = this.parent.parseRegionForAnnotator(annotation.on);
       
-      //need to account for various menu bars that affect the mouse position
-      var topOffset = jQuery(window).height() - _this.osdViewer.container.offsetHeight;
+      //need to account for various menu bars and side panel that affect the mouse position
+      var topOffset = jQuery(window).height() - _this.osdViewer.container.offsetHeight-2; //subtract a few pixels so mouse pointer is closer to annotation
+      var leftOffset = jQuery(window).width()-_this.osdViewer.container.offsetWidth;
+      console.log(topOffset);
       var position = {
                     top: new OpenSeadragon.getMousePosition(event).y-topOffset,
-                    left: new OpenSeadragon.getMousePosition(event).x
+                    left: new OpenSeadragon.getMousePosition(event).x-leftOffset
                 };
       //this.parent.annotator.showViewer(this.parent.prepareForAnnotator(annotation), position);
       if (renderAnnotations.length > 0) {this.parent.annotator.showViewer(renderAnnotations, position);}
