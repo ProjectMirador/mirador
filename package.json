@@ -26,8 +26,7 @@
     "jasmine-jquery": "^2.0.5"
   },
   "scripts": {
-    "test": "grunt test coverage --verbose",
-    "cover": "grunt coveralls --verbose"
+    "test": "grunt test coveralls --verbose"
   },
   "dependencies": {}
 }
