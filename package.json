@@ -23,10 +23,12 @@
     "grunt-cli": "*",
     "grunt-coveralls": "^1.0.0",
     "jasmine-core": "^2.1.3",
-    "jasmine-jquery": "^2.0.5"
+    "jasmine-jquery": "^2.0.5",
+    "coveralls": "^2.11.2"
   },
   "scripts": {
-    "test": "grunt test coveralls --verbose"
+    "test": "grunt test coveralls --verbose",
+    "coveralls": "cat reports/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "dependencies": {}
 }

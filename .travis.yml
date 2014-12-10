@@ -5,5 +5,5 @@ before_install:
   - npm install -g grunt-cli
 before-script:
   - grunt test coverage
-script:
-  - grunt coveralls
+after-ssuccess:
+  - node run coveralls 
