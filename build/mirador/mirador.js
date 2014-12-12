@@ -4277,6 +4277,18 @@ Annotator.Widget.prototype.checkOrientation = function() {
 };
 
     
+/*
+ * All Endpoints need to have at least the following:
+ * annotationsList - current list of OA Annotations
+ * dfd - Deferred Object
+ * init()
+ * search(uri)
+ * save(oaAnnotation)
+ *
+ * Optional, if endpoint is not OA compliant:
+ * getAnnotationInOA(endpointAnnotation)
+ * getAnnotationInEndpoint(oaAnnotation)
+ */
 (function($){
 
     $.CatchEndpoint = function(options) {
@@ -4286,11 +4298,8 @@ Annotator.Widget.prototype.checkOrientation = function() {
           prefix:    null,
           urls:      null,
           uri:       null,
-          element:   null,
-          annotator: null,
           dfd:       null,
-          windowID:  null,
-          annotationsList: [], //OA list for Mirador use
+          annotationsList: [],        //OA list for Mirador use
           annotationsListCatch: null  //internal list for module use
         }, options);
 
@@ -4298,7 +4307,7 @@ Annotator.Widget.prototype.checkOrientation = function() {
     };
 
     $.CatchEndpoint.prototype = {
-
+        //Any set up for this endpoint, and triggers a search of the URI passed to object
         init: function() {
           var userid = "test@mirador.org";
           var username = "mirador";
@@ -4398,43 +4407,63 @@ Annotator.Widget.prototype.checkOrientation = function() {
               }*/
             }
           };
-          //create wrapper for annotator wrapper
-          var wrapper = jQuery('<div/>')
-            .addClass('catch-wrapper')
-            .appendTo(this.element);
-          this.annotator = wrapper.annotator().data('annotator');
-          this.annotator.addPlugin('Auth', this.annotatorOptions.optionsAnnotator.auth);
-          //this.annotator.addPlugin("Permissions", this.annotatorOptions.optionsAnnotator.permissions);
-          this.annotator.addPlugin('Store', this.annotatorOptions.optionsAnnotator.store);
-          this.bindEvents();
-        
+          this.search(this.uri);        
         },
         
-        bindEvents: function() {
-          var _this = this;
-          this.annotator.subscribe("annotationsLoaded", function (annotations){
-             _this.annotationsListCatch = _this.annotator.plugins.Store.annotations;
-             jQuery.each(_this.annotationsListCatch, function(index, value) {
-               _this.annotationsList.push(_this.getAnnotationInOA(value));
-             });
-             _this.dfd.resolve(true);
-          });
-          
-          jQuery.publish("destroyEndpoint."+_this.windowID, function(event) {
-            _this.annotator.destroy();
-          });
-        },
-        
+        //Search endpoint for all annotations with a given URI
         search: function(uri) {
-          //why the hell doesn't annotator clear it's annotations with a new search???
-          this.annotator.plugins.Store.annotations = [];
-          this.annotationsList = [];
-          this.uri = uri;
-          var search = {
-                    media:"image",
-                    uri:this.uri
-                };
-           this.annotator.plugins.Store.loadAnnotationsFromSearch(search);
+           var _this = this;
+           this.annotationsList = []; //clear out current list
+           jQuery.ajax({
+             url: this.prefix+"/search",
+             type: 'GET',
+             dataType: 'json',
+             headers: {
+               "x-annotator-auth-token": this.token
+             },
+             data: {
+               uri: uri,
+               media: "image",
+               limit: 10000
+             },
+             contentType: "application/json; charset=utf-8",
+             success: function(data) {
+               _this.annotationsListCatch = data.rows;
+               jQuery.each(_this.annotationsListCatch, function(index, value) {
+                 _this.annotationsList.push(_this.getAnnotationInOA(value));
+               });
+               _this.dfd.resolve(true);
+             },
+             error: function() {
+               console.log("error searching");
+             }
+             
+           });
+        },
+        
+        //takes OA Annotation, gets Endpoint Annotation, and saves
+        save: function(oaAnnotation) {
+          var annotation = this.getAnnotationInEndpoint(oaAnnotation),
+          _this = this,
+          newId;
+          jQuery.ajax({
+             url: this.prefix+"/create",
+             type: 'POST',
+             dataType: 'json',
+             headers: {
+               "x-annotator-auth-token": this.token
+             },
+             data: JSON.stringify(annotation),
+             contentType: "application/json; charset=utf-8",
+             success: function(data) {
+               newId = data.id;
+             },
+             error: function() {
+               console.log("error saving");
+             }
+             
+           });
+          return newId;
         },
         
         set: function(prop, value, options) {
@@ -4445,6 +4474,7 @@ Annotator.Widget.prototype.checkOrientation = function() {
           }
         },
         
+        //Convert Endpoint annotation to OA
         getAnnotationInOA: function(annotation) {
           var id, 
           motivation = [],
@@ -4508,6 +4538,7 @@ Annotator.Widget.prototype.checkOrientation = function() {
           return oaAnnotation;
         },
         
+        //Converts OA Annotation to endpoint format
         getAnnotationInEndpoint: function(oaAnnotation) {
           var annotation = {},
               tags = [],
@@ -4547,32 +4578,6 @@ Annotator.Widget.prototype.checkOrientation = function() {
             annotation.ranges = [];
             annotation.parent = "0";
             return annotation;
-        },
-        
-        getRandomInt: function() {
-          return Math.floor(Math.random() * (1000 - 200)) + 200;
-        },
-        
-        getAnnotationInAnnotator: function(annotationID) {
-           //return version from catch
-           var annotations = this.annotator.plugins.Store.annotations;
-           var annotation = null;
-           jQuery.each(annotations, function(index, value) {
-             if (value.id === annotationID) {
-                annotation = value;
-                return false;
-             }
-           });
-           return annotation;
-        },
-        
-        //takes OA Annotation and converts back to catch and saves
-        save: function(oaAnnotation) {
-          var annotation = this.getAnnotationInEndpoint(oaAnnotation);
-          var ret = this.annotator.publish('annotationCreated', [annotation]);
-          //var id = ret.plugins.Store.annotations[ret.plugins.Store.annotations-1].id;
-          //console.log(id);
-          return $.genUUID();
         }
     };
 
@@ -4720,7 +4725,6 @@ Annotator.Widget.prototype.checkOrientation = function() {
       //need to account for various menu bars and side panel that affect the mouse position
       var topOffset = jQuery(window).height() - _this.osdViewer.container.offsetHeight-2; //subtract a few pixels so mouse pointer is closer to annotation
       var leftOffset = jQuery(window).width()-_this.osdViewer.container.offsetWidth;
-      console.log(topOffset);
       var position = {
                     top: new OpenSeadragon.getMousePosition(event).y-topOffset,
                     left: new OpenSeadragon.getMousePosition(event).x-leftOffset
