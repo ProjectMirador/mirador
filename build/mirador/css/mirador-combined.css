@@ -2683,7 +2683,7 @@ li.highlight {
 .toc {
   margin:0;
   overflow-y: scroll;
-  width: 290px;
+  width: 280px;
   padding:0;
   position:absolute;
   box-sizing: border-box;

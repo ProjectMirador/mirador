@@ -1,7 +1,7 @@
 Annotator.Widget.prototype.checkOrientation = function() {
     var current, offset, viewport, widget, containerOffset;
     this.resetOrientation();
-    container = jQuery(this.element[0].parentNode.parentNode.nextSibling);  //this is extremely brittle. gross
+    container = jQuery(jQuery(this.element[0]).parents('.image-view').find('.mirador-osd')[0]);  //this is slightly less brittle
     containerOffset = container.offset();
     widget = this.element.children(":first");
     offset = widget.offset();
@@ -9,12 +9,10 @@ Annotator.Widget.prototype.checkOrientation = function() {
       top: containerOffset.top,
       right: containerOffset.left + container.width()
     };
-    //console.log(viewport);
     current = {
       top: offset.top,
       right: offset.left + widget.width()
     };
-    //console.log(current);
     if ((current.top - viewport.top) < 0) {
       this.invertY();
     }
