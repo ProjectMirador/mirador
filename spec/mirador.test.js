@@ -21,6 +21,7 @@ describe('Mirador | mirador.js', function() {
     });
 
     $ = Mirador;
+    console.log($);
   });
 
 
@@ -174,7 +175,6 @@ describe('Mirador | mirador.js', function() {
         }
       };
     });
-
 
     it('should return matching manifest for a given URI', function() {
       expect($.getManifestIdByUri('http://xyz.edu/data/Manifest.json')).toEqual('manifest-1234');
