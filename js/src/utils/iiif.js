@@ -14,7 +14,15 @@
 
       return iiifUri;
     },
-    
+    getAnnotationsListUrl: function(manifest, canvasId) {
+      var canvas = jQuery.grep(manifest.sequences[0].canvases, function(canvas, index) {
+        return canvas['@id'] === canvasId;
+      })[0];
+
+      if (canvas.otherContent) {
+        return canvas.otherContent[0]['@id'];
+      } else { return false; }
+    },
     getImageUrl: function(image) {
 
       if (!image.images[0].resource.service) {

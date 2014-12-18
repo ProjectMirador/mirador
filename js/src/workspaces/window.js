@@ -10,6 +10,8 @@
       currentImageID:    null,
       focusImages:       [],
       imagesList:        null,
+      annotationsList:   [],
+      endpoints:         {},
       currentImageMode:  'ImageView',
       imageModes:        ['ImageView', 'BookView'],
       currentFocus:      'ThumbnailsView',
@@ -55,8 +57,13 @@
       _this = this,
       manifest = _this.manifest,
       focusState = _this.currentFocus,
-      templateData = {};
+      templateData = {},
+      this.endpoints = {};
       
+      //make sure annotations list is cleared out when changing objects within window
+      while(_this.annotationsList.length > 0) {
+       _this.annotationsList.pop();
+      }
       //unsubscribe from stale events as they will be updated with new module calls
       jQuery.unsubscribe(('currentImageIDUpdated.' + _this.id));
 
@@ -74,6 +81,8 @@
       if (!_this.currentImageID) {
         _this.currentImageID = _this.imagesList[0]['@id'];
       }
+      
+      _this.getAnnotations();
 
       //check config
       if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
@@ -169,6 +178,18 @@
         }
 
       });
+      
+      jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
+        jQuery.each(_this.endpoints, function(key, endpoint) {
+          var annoID = String(endpoint.save(oaAnno)); //just in case it returns a number
+          oaAnno['@id'] = annoID;
+          _this.annotationsList.push(oaAnno);
+          //update overlay so it can be a part of the annotationList rendering
+          jQuery(osdOverlay).removeClass('osd-select-rectangle').addClass('annotation').attr('id', annoID);
+        });
+        jQuery.publish(('annotationListLoaded.' + _this.id));
+      });
+
 
     },
 
@@ -343,6 +364,7 @@
         this.focusModules.ImageView = new $.ImageView( {manifest: this.manifest, 
                                                         appendTo: this.element.find('.view-container'), 
                                                         parent: this, 
+                                                        windowId: this.id,
                                                         imageID: imageID, 
                                                         imagesList: this.imagesList,
                                                         osdOptions: this.focusOptions,
@@ -361,6 +383,7 @@
           manifest: this.manifest, 
           appendTo: this.element.find('.view-container'), 
           parent: this, 
+          windowId: this.id,
           imageID: imageID, 
           imagesList: this.imagesList,
           osdOptions: this.focusOptions
@@ -412,6 +435,11 @@
     setCurrentImageID: function(imageID) {
       var _this = this;
       this.currentImageID = imageID;
+      jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
+      while(_this.annotationsList.length > 0) {
+       _this.annotationsList.pop();
+      }
+      this.getAnnotations();
       this.loadImageModeFromPanel(imageID);
       jQuery.publish(('currentImageIDUpdated.' + _this.id), imageID);
     },
@@ -452,6 +480,53 @@
       if (this.focusOverlaysAvailable[this.currentFocus].overlay.MetadataView) {
         this.element.find('.mirador-icon-metadata-view').addClass('selected');
       }
+    },
+    
+    /*
+     Merge all annotations for current image/canvas from various sources
+     Pass to any widgets that will use this list
+    */
+    getAnnotations: function() {
+      //first look for manifest annotations
+      var _this = this,
+      url = $.Iiif.getAnnotationsListUrl(_this.manifest, _this.currentImageID);
+
+      if (url !== false) {
+        jQuery.get(url, function(list) {
+            _this.annotationsList = _this.annotationsList.concat(list.resources);
+            jQuery.publish('annotationListLoaded.' + _this.id);
+        });
+      }
+      
+       //next check endpoints
+       jQuery.each($.viewer.annotationEndpoints, function(index, value) {
+          var dfd = jQuery.Deferred();
+          var endpoint;
+          if (_this.endpoints[value.module] && _this.endpoints[value.module] !== null) {
+            endpoint = _this.endpoints[value.module];
+            endpoint.set('dfd', dfd);
+            endpoint.search(_this.currentImageID);
+            //update with new search
+          } else {
+            value.options.element = _this.element;
+            value.options.uri = _this.currentImageID;
+            value.options.dfd = dfd;
+            value.options.windowID = _this.id;
+            endpoint = new $[value.module](value.options);
+            _this.endpoints[value.module] = endpoint;
+          }
+         dfd.done(function(loaded) {
+           _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
+           //clear out some bad data
+           _this.annotationsList = jQuery.grep(_this.annotationsList, function (value, index) {
+             if (typeof value.on === "undefined") { 
+               return false;
+             }
+             return true; 
+           });
+           jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
+         });
+       });
     },
 
     // based on currentFocus

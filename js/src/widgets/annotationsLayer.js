@@ -3,142 +3,199 @@
   $.AnnotationsLayer = function(options) {
 
     jQuery.extend(true, this, {
-      sidePanel:  null,
-      bottomPanel:       null,
-      regionController:  null,
       parent:            null,
-      stateEvents:       {},
-      showList:          true,
-      annotationListUrls:    null,
-      annotations:       [],
-      commentAnnotations: 0,
-      textAnnotations: 0,
-      visible:        false,
-      selectedAnnotation: null,
-      hoveredAnnotation: null,
-      annotationListCls: 'mirador-annotation-list',
-      filter: null
+      annotationsList:   null,
+      viewer:            null,
+      renderer:          null,
+      selected:          null,
+      hovered:           null,
+      windowId:          null,
+      mode:              'default',
+      annotator:         null,
+      element:           null
     }, options);
 
     this.init();
   };
 
-
   $.AnnotationsLayer.prototype = {
 
     init: function() {
       var _this = this;
+      jQuery.unsubscribe(('modeChange.' + _this.windowId));
 
-      // returns a promise object constructed using 
-      // jQuery.when.apply(this, [deferred array]);
-      _this.getAnnotations().done( function() {
-        // _this.bottomPanel = new $.AnnotationBottomPanel({parent: _this});
-        // _this.regionController = new $.AnnotationLayerRegionController({parent: _this});
-        // _this.sidePanel = new $.AnnotationLayerSidePanel({parent: _this});
-      });
-
-      this.bindEvents();
-    },
-
-    get: function(prop) {
-      return this[prop];
-    },
-
-    set: function(prop, value, options) {
-      _this = this;
-      this[prop] = value;
-      jQuery.publish(prop + ':set', value, options);
-    },
-
-    getAnnotations: function() {
-      var _this = this,
-      requests = [];
-
-      // not the best solution, but this resets the
-      // annotations whenever more are fetched, 
-      // effectively clearing them on next()/previous().
-      _this.set('annotations', []);
-
-      if (!_this.annotationListUrls) {
-        _this.annotations = [];
-        return jQuery.when(function() { return; });
+      if (this.element.data('annotator')) {
+        this.annotator = this.element.data('annotator');
+      } else {
+        this.annotator = this.element.annotator().data('annotator');
+        this.annotator.addPlugin('Tags');
       }
-
-      jQuery.each(_this.annotationListUrls, function(index, url) {
-        var request =  jQuery.ajax(
-          {
-          url: url,
-          dataType: 'json',
-          async: true,
-          cache: false,
-          success: function(jsonLd) {
-            jQuery.each(jsonLd.resources, function(index, resource) {
-              var annotation = {
-                region: $.parseRegion(resource.on),
-                title: null,
-                content: resource.resource.full ? resource.resource.full.chars : resource.resource.chars,
-                type: (resource.motivation).split(':')[1],
-                id: $.genUUID()
-              };          
-
-              annotation.osdFrame = $.getOsdFrame(annotation.region, _this.parent.currentImg);
-
-              _this.annotations.push(annotation);
-            });
-
-          },
-
-          error: function() {
-            console.log('Failed loading ' + uri);
-          }
-        });
-
-        requests.push(request);
-
-      });
-
-      return jQuery.when.apply(this, requests);
+      this.createRenderer();
+      this.bindEvents();
     },
 
     bindEvents: function() {
       var _this = this;
 
-      // model events
-      // _this.event('visible:set').subscribe( function(value) {
-      //     if (value === false) { _this.hide(); } else { _this.show(); }
-      // });
-      // _this.event('disabled:set').subscribe( function(value) {
-      //     if (value === true) { _this.hide(); } else { _this.show(); }
-      // });
-      // _this.event('selectedAnnotation:set').subscribe( function(value, options) {
-      //     if (value === null) {
-      //         _this.deselect(); 
-      //         return;
-      //     }
-      //     _this.focusSelected(value, options);
-      // });
-      // _this.event('hoveredAnnotation:set').subscribe( function(value, options) {
-      //     _this.accentHovered(value, options);
-      // });
-      // _this.event('annotationListUrls:set').subscribe( function(value, options) {
-      //     if (value) { console.log(value); }
-      //     _this.changePage();
-      // });
-      // _this.event('filter:set').subscribe( function(value, options) {
-      //     _this.filterAnnotations(value, options);
-      // });
-    },
-
-    computeAnnotationStats: function() {
-      var comments = 0,
-      transcriptions = 0; 
-
-      jQuery.each(_this.annotations, function(index, annotation) {
-        if (annotation.type === 'commenting') { comments ++; } else { transcriptions ++; }
+      jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
+        //console.log('entered ' + modeName + ' mode in annotationsLayer');
+        _this.mode = modeName;
+        _this.modeSwitch();
       });
 
-      _this.commentAnnotations = comments;
-      _this.textAnnotations = transcriptions;
+      jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
+        //console.log(_this.mode);
+        _this.annotationsList = _this.parent.parent.annotationsList;
+        _this.updateRenderer();
+      });
+    },
+
+    createRenderer: function() {
+      var _this = this;
+      this.renderer = new $.OsdCanvasRenderer({
+        osd: $.OpenSeadragon,
+        osdViewer: _this.viewer,
+        list: _this.annotationsList, // must be passed by reference.
+        visible: false,
+        parent: _this
+      });
+      this.modeSwitch();
+    },
+    
+    updateRenderer: function() {
+      this.renderer.list = this.annotationsList;
+      this.modeSwitch();
+    },
+    
+    modeSwitch: function() {
+      //console.log(this.mode);
+      if (this.mode === 'displayAnnotations') { this.enterDisplayAnnotations(); }
+      else if (this.mode === 'editingAnnotations') { this.enterEditAnnotations(); }
+      else if (this.mode === 'default') { this.enterDefault(); }
+      else {}
+    },
+
+    parseRegionForAnnotator: function(url) {
+      var _this = this,
+      regionString,
+      regionArray,
+      annotatorPosition;
+
+      if (typeof url === 'object') {
+        regionString = url.selector.value;  
+      } else {
+        regionString = url.split('#')[1];
+      }
+      regionArray = regionString.split('=')[1].split(',');
+
+      // This positions the annotator pop-up directly below the 
+      // annotation, adjusting the canvas panning so that it
+      // will always be visible.
+
+      var topLeftImagePoint = new OpenSeadragon.Point(+regionArray[0], +regionArray[1]);
+
+      //use Math.max to make sure portion of annotation is not hidden due being zoomed in
+      //18 pixels account for the annotator CSS (left -18)
+      annotatorPosition = {
+        top: Math.max(_this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,0),
+        left: Math.max(_this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x, 18)
+      };
+
+      return annotatorPosition;
+    },
+
+    prepareForAnnotator: function(oaAnnotation) {
+      var annoText = "",
+      tags = [];
+      if (jQuery.isArray(oaAnnotation.resource)) {
+        jQuery.each(oaAnnotation.resource, function(index, value) {
+          if (value['@type'] === "dctypes:Text") {
+            annoText = value.chars;
+          } else if (value['@type'] == "oa:Tag") {
+            tags.push(value.chars);
+          }
+        });
+      } else {
+        annoText = oaAnnotation.resource.chars;
+      }
+
+
+      var annotatortion = {
+        text: annoText,
+        tags: tags
+      };
+
+      return [annotatortion];
+    },
+    
+    annotatorToOA: function(attrAnnotation, uri, selector, scope) {
+      var motivation = [],
+          resource = [],
+          on,
+          bounds;
+          //convert annotation to OA format
+
+         if (attrAnnotation.tags && attrAnnotation.tags.length > 0) {
+           motivation.push("oa:tagging");
+           jQuery.each(attrAnnotation.tags, function(index, value) {
+             resource.push({      
+               "@type":"oa:Tag",
+               "chars":value
+               });
+           });
+         }
+        motivation.push("oa:commenting");
+        on = { "@type" : "oa:SpecificResource",
+                  "source" : uri, 
+                  "selector" : {
+                    "@type" : "oa:FragmentSelector",
+                    "value" : "xywh="+selector.x+","+selector.y+","+selector.width+","+selector.height
+                  },
+                  "scope": {
+                    "@context" : "http://www.harvard.edu/catch/oa.json",
+                    "@type" : "catch:Viewport",
+                    "value" : "xywh="+Math.round(scope.x)+","+Math.round(scope.y)+","+Math.round(scope.width)+","+Math.round(scope.height) //osd bounds
+                  }
+                };
+         resource.push( {
+            "@type" : "dctypes:Text",
+            "format" : "text/html",
+            "chars" : attrAnnotation.text
+         });
+         
+          var oaAnnotation = {
+            "@context" : "http://iiif.io/api/presentation/2/context.json",
+            "@type" : "oa:Annotation",
+            "motivation" : motivation,
+            "resource" : resource,
+            "on" : on
+          };
+          return oaAnnotation;
+    },
+
+    enterDisplayAnnotations: function() {
+      var _this = this;
+      //console.log('triggering annotation loading and display');
+      this.renderer.render();
+    },
+
+    enterEditAnnotations: function() {
+      var _this = this;
+      if (!this.parent.hud.contextControls.rectTool) {
+        this.parent.hud.contextControls.rectTool = new $.OsdRegionRectTool({
+          osd: OpenSeadragon,
+          osdViewer: _this.viewer,
+          rectType: 'oa', // does not do anything yet. 
+          parent: _this
+        });
+      } else {
+        this.parent.hud.contextControls.rectTool.reset(_this.viewer);
+      }
+    },
+
+    enterDefault: function() {
+      //console.log('triggering default');
+      this.renderer.hideAll();
     },
 
     setVisible: function() {
@@ -152,21 +209,6 @@
     },
 
     changePage: function() {
-      var _this = this;
-
-      if (_this.annotations === null) {
-        _this.set('visible', false);
-        return;
-      }
-
-      if ( _this.selectedAnnotation ) {
-        _this.set('selectedAnnotation', null);
-      }
-
-      _this.getAnnotations().done( function() {
-        _this.sidePanel.render();
-        _this.regionController.render();
-      });
     },
 
     accentHovered: function(id, source) {
@@ -217,29 +259,6 @@
 
       jQuery(filteredRegions).map(function() { return this.toArray(); }).fadeOut();
       jQuery(filteredListings).map(function() { return this.toArray(); }).slideUp();
-    },
-
-    append: function(item) {
-      this.element.append(item);
-    },
-
-    show: function() {
-      var _this = this;
-      this.parent.parent.element.find('.mirador-widget-content').css('padding-right', _this.width);
-      this.sidePanel.show();
-      this.regionController.show();
-      this.bottomPanel.show();
-    },
-
-    hide: function() {
-      this.parent.parent.element.find('.mirador-widget-content').css('padding-right', 0);
-      this.sidePanel.hide();
-      this.regionController.hide();
-      this.bottomPanel.hide();
-      // ensures the user won't accidentally be unable to view annotation details in 
-      // the annotation layer in the future. Resets the default visibility of the 
-      // bottom panel to true.
-      this.bottomPanel.hidden = false;
     }
 
   };

@@ -4,6 +4,7 @@
 
     jQuery.extend(this, {
       currentImg:       null,
+      windowId:         null,
       currentImgIndex:  0,
       stitchList:       [],
       imageID:          null,
@@ -47,7 +48,8 @@
       this.hud = new $.Hud({
         parent: this,
         element: this.element,
-        bottomPanelAvailable: this.bottomPanelAvailable
+        bottomPanelAvailable: this.bottomPanelAvailable,
+        windowId: this.windowId
       });
 
       if (this.manifest.sequences[0].viewingDirection) {

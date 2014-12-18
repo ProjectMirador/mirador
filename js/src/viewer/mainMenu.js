@@ -28,12 +28,12 @@
     $.MainMenu.prototype = {
 
         init: function() {
-            this.mainMenuHeight = this.parent.mainMenuSettings.height;
-            this.mainMenuWidth = this.parent.mainMenuSettings.width;
+            //this.mainMenuHeight = this.parent.mainMenuSettings.height;
+            //this.mainMenuWidth = this.parent.mainMenuSettings.width;
             this.element
             .addClass(this.mainMenuBarCls)
-            .height(this.mainMenuHeight)
-            .width(this.mainMenuWidth)
+            //.height(this.mainMenuHeight)
+            //.width(this.mainMenuWidth)
             .appendTo(this.appendTo);
 
 

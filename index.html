@@ -7,15 +7,24 @@
   <style type="text/css">
     body { padding: 0; margin: 0; overflow: hidden; font-size: 70%; }
     #viewer { background: #333 url(images/debut_dark.png) left top repeat; width: 100%; height: 100%; position: fixed; }
-  </style>
+ </style>
 </head>
 <body>
   <div id="viewer"></div>
 
   <script src="build/mirador/mirador.js"></script>
   <script type="text/javascript">
+    
     $(function() {
 
+    var anno_token;
+    jQuery.ajax({
+      url: "http://oculus-dev.harvardx.harvard.edu/cgi-bin/token.py", 
+      success: function(data) {
+      anno_token = data.replace(/[\n\r]/g, '');
+      },
+      async:false
+    });
       Mirador({
         "id": "viewer",
         "currentWorkspaceType": "singleObject",
@@ -87,6 +96,17 @@
         	//"sidePanel" : false,
         	//"availableViews" : ['ThumbnailsView', 'ImageView', 'BookView']
         	//"overlay" : false
+          }
+        ],
+        "annotationEndpoints": [
+          {
+            "name":"Harvard CATCH Dev",
+            "module": "CatchEndpoint",
+            "options": {
+                token: anno_token,
+                // The endpoint of the store on your server.
+                prefix: "http://54.148.223.225:8080/catch/annotator",
+            }
           }
         ]
       });

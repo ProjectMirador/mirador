@@ -107,12 +107,21 @@
       *   "id" : [unique window ID - set by application and automatically saved in SaveController],
       **/
     ],
+
+    'availableAnnotationModes': [
+
+    ],
+
+    'availableAnnotationDrawingTools': [
+     
+    ],
     
     // main (top) menu
+    //we don't actually take the height into account for the mirador-viewer div, so don't use for now
     'mainMenuSettings': {
-      'show': true,
-      'height': 25,
-      'width': '100%'
+      'show': true
+      //'height': 25,
+      //'width': '100%'
     },
 
    'repoImages' : {
@@ -146,11 +155,18 @@
     //   'maxZoomLevel': 4
     // },
     
-    'annotationEndpoint': {
-      'url': '',
-      'storeId': 123,
-      'APIKey': '23983hf98j3f9283jf2983fj'
-    },
+    /*
+    List of backends that have instance-specific configuration data as a hash, e.g.:
+    {
+      name: 'backend name',
+      module: 'NameEndpoint',
+      options: 
+        {'url': '',
+        'storeId': 123,
+        'APIKey': '23983hf98j3f9283jf2983fj'
+        }
+    }*/
+    'annotationEndpoints': [],
     
     // parameters of saving system
     'saveController': {

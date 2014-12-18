@@ -47,7 +47,9 @@ a {
   background-color: #000;
   border-bottom: 1px solid #555;
   color: #fff;
-  padding: 4px;
+  height: 33px;
+  width: 100%;
+  /*padding: 4px;*/
   top: 0;
 }
 
@@ -55,7 +57,7 @@ a {
   float: right;
   list-style: none;
   margin: 0;
-  padding: 5px 12px 0 0;
+  padding: 8px 12px 0 0;
   text-align: right;
 }
 
@@ -259,7 +261,6 @@ a {
   white-space: nowrap;
   overflow:hidden;
 }
-
 .items-listing h3 {
   color:rgba(0,0,0,0.8);
   font-weight:bold;
@@ -493,7 +494,7 @@ li.highlight {
 .toc {
   margin:0;
   overflow-y: scroll;
-  width: 290px;
+  width: 280px;
   padding:0;
   position:absolute;
   box-sizing: border-box;
@@ -749,9 +750,21 @@ li.highlight {
   font-size: 18px;
   z-index:2;
 }
+.hud-container {
+  cursor: pointer;
+  color:white;
+  text-shadow: 0 0 5px black;
+  transition: all 0.3s ease;
+  font-size: 18px;
+  z-index:2;
+}
 .hud-control:hover {
   transition: all 0.3s ease;
   opacity: 1;
+}
+.mirador-osd-edit-mode.selected, .mirador-osd-annotations-layer.selected {
+  opacity: 1;
+  transition: none;
 }
 .mirador-osd-previous {
   position:absolute;
@@ -766,6 +779,12 @@ li.highlight {
   top:50%;
   margin-top:-17px;
 }
+.mirador-osd-annotations-layer {
+  position:absolute;
+  bottom:0;
+  left:0;
+  margin: 1%;
+}
 .mirador-osd-toggle-bottom-panel {
   position: absolute;
   bottom: 0;
@@ -776,6 +795,7 @@ li.highlight {
   position:absolute;
   right:10px;
   top:10px;
+  z-index: 3;
 }
 .mirador-pan-zoom-controls {
   position: absolute;
@@ -821,6 +841,17 @@ li.highlight {
   position: absolute;
   right:20px;
   top:20px;
+}
+.mirador-osd-context-controls {
+  position: absolute;
+  top:0;
+  left:0;
+  margin: 15px;
+}
+.mirador-osd-context-controls a {
+  float:left;
+  margin:0 15px 0 0;
+  font-weight: normal;
 }
 
 /* image view
@@ -1011,9 +1042,9 @@ text {
   display:block;
   cursor:ew-resize;
 }
-.annotation {
-  border: 2px solid white;
-  box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+.annotation, .osd-select-rectangle {
+  border: 2px solid deepSkyBlue;
+  box-shadow: 0px 0px 5px white; 
   box-sizing: border-box;
 }
 .annotation.selected {

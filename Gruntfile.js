@@ -23,14 +23,16 @@ module.exports = function(grunt) {
   // libraries/plugins
   vendors = [
     'js/lib/jquery.min.js',
+    'js/lib/jquery.layout-latest.min.js',
+    'js/lib/jquery-ui-1.9.2.min.js',
+    'js/lib/jquery.scrollTo.min.js',
+    'js/lib/annotator-full.min.js',
+    'js/lib/state-machine.min.js',
     'js/lib/handlebars.js',
     'js/lib/openseadragon.min.js',
     'js/lib/d3.v3.min.js',
-    'js/lib/jquery.layout-latest.min.js',
     'js/lib/pubsub.min.js',
-    'js/lib/jquery-ui-1.9.2.min.js',
     'js/lib/URI.min.js',
-    'js/lib/jquery.scrollTo.min.js',
     'js/lib/mousetrap.min.js',
     'js/lib/ZeroClipboard.min.js'
   ],
@@ -45,6 +47,7 @@ module.exports = function(grunt) {
     'js/src/*.js',
     'js/src/viewer/*.js',
     'js/src/manifests/*.js',
+    'js/src/annotations/*.js',
     'js/src/workspaces/*.js',
     'js/src/widgets/*.js',
     'js/src/utils/*.js'
@@ -83,6 +86,7 @@ module.exports = function(grunt) {
         'css/font-awesome.css',
         'css/jquery-ui.custom.min.css',
         'css/layout-default-latest.css',
+        'css/annotator.min.css',
         'css/mirador.css',
         '!css/mirador-combined.css'
         ],
