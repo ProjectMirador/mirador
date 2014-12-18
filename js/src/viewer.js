@@ -12,14 +12,13 @@
             activeWorkspace:        null,
             availableWorkspaces:    null,
             mainMenu:               null,
-            //mainMenuLoadWindowCls:  '.mirador-main-menu .load-window',
             workspaceAutoSave:      null,
             windowSize:             {},
             resizeRatio:            {},
             currentWorkspaceVisible: true,
             overlayStates:          {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false, 'bookmarkPanelVisible': false},
             manifests:              {}
-        }, options);
+        }, $.DEFAULT_SETTINGS, options);
 
         // get initial manifests
         this.element = this.element || jQuery('#' + this.id);
@@ -35,9 +34,19 @@
         init: function() {
             // retrieve manifests
             this.manifests = this.getManifestsData();
+            
+            //check all buttons in mainMenu.  If they are all set to false, then don't show mainMenu
+            var showMainMenu = false;
+            jQuery.each(this.mainMenuSettings.buttons, function(key, value) {
+               if (value) { showMainMenu = true; }
+            });
+            //even if buttons are available, developer can override and set show to false
+            if (this.mainMenuSettings.show === false) {
+              showMainMenu = false;
+            }
 
             // add main menu
-            if (this.mainMenuSettings.show === true) {
+            if (showMainMenu) {
               this.mainMenu = new $.MainMenu({ parent: this, appendTo: this.element });
             }
 
@@ -46,7 +55,7 @@
             .addClass('mirador-viewer')
             .appendTo(this.element);
                         
-            if (this.mainMenuSettings.show === false) {
+            if (!showMainMenu) {
                this.canvas.css("top", "0px");
             }
             

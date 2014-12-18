@@ -119,7 +119,12 @@
     // main (top) menu
     //we don't actually take the height into account for the mirador-viewer div, so don't use for now
     'mainMenuSettings': {
-      'show': true
+      'show': true,
+      'buttons' : {
+        'bookmark' : true,
+        'layout' : true,
+        'options' : false
+      }
       //'height': 25,
       //'width': '100%'
     },
@@ -132,28 +137,6 @@
       'BnF': 'bnf_logo.jpeg',
       'other': 'iiif_logo.png'
     },
-
-    // // metadata view
-    // unclear what options should exist here.
-    // 'metadataView': {
-    //   'height': 400,
-    //   'width': 600
-    // },
-
-    // // metadata view
-    //
-    // What can we learn from this and the
-    // openi https://github.com/CtrHellenicStudies/OpenSeaDragonAnnotation
-    // annotator-based branches of the RC? 
-    //
-    // 'openLayersAnnotoriusView': {
-    //   'appId': 'lQ9BqPkPRVJR4Qbe652BapTP2JVDNzS0G2k6GCWW', // Parse.com app id
-    //   'jsKey': 'VbYdon3U70Wi8aht9Y8Z2eRk3FmOsO2n1lQhx1vV', // Parse.com js_key
-    //   'height': 400,
-    //   'width': 600,
-    //   'maxSize': 2500, // max longest side to load in open layers
-    //   'maxZoomLevel': 4
-    // },
     
     /*
     List of backends that have instance-specific configuration data as a hash, e.g.:
@@ -167,11 +150,6 @@
         }
     }*/
     'annotationEndpoints': [],
-    
-    // parameters of saving system
-    'saveController': {
-        // TODO: make saving a function of significant user action, not timed intervals.
-    },
 
     'sharingEndpoint': {
       'url': '',
