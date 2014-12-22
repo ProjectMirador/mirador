@@ -36,9 +36,11 @@
             //.width(this.mainMenuWidth)
             .appendTo(this.appendTo);
 
-
             this.element.append(this.template({
-                mainMenuCls: this.mainMenuCls
+                mainMenuCls: this.mainMenuCls,
+                showBookmark : this.parent.mainMenuSettings.buttons.bookmark,
+                showLayout : this.parent.mainMenuSettings.buttons.layout,
+                showOptions: this.parent.mainMenuSettings.buttons.options
             }));
 
             this.bindEvents();
@@ -46,28 +48,35 @@
 
         bindEvents: function() {
             var _this = this;
-            this.element.find('.load-window').on('click', function() { _this.parent.toggleLoadWindow(); });
-            this.element.find('.switch-workspace').on('click', function() { _this.parent.toggleSwitchWorkspace(); });
+            this.element.find('.change-layout').on('click', function() { _this.parent.toggleSwitchWorkspace(); });
             this.element.find('.bookmark-workspace').on('click', function() { _this.parent.toggleBookmarkPanel(); });
+            //when options are implemented, this will need to do something
+            this.element.find('.window-options').on('click', function() { });
         },
 
         template: Handlebars.compile([
         '<ul class="{{mainMenuCls}}">',
+        '{{#if showBookmark}}',
           '<li>',
             '<a href="javascript:;" class="bookmark-workspace" title="Bookmark Workspace">',
               '<span class="icon-bookmark-workspace"></span>Bookmark',
             '</a>',
           '</li>',
+        '{{/if}}',
+        /*'{{#if showOptions}}',
           '<li>',
             '<a href="javascript:;" class="window-options" title="Window Options">',
               '<span class="icon-window-options"></span>Options',
             '</a>',
           '</li>',
+        '{{/if}}',*/
+        '{{#if showLayout}}',
           '<li>',
-            '<a href="javascript:;" class="switch-workspace" title="Switch Workspace">',
+            '<a href="javascript:;" class="change-layout" title="Switch Workspace">',
               '<span class="icon-window-options"></span>Switch Workspace',
             '</a>',
           '</li>',
+        '{{/if}}',
         '</ul>'
       ].join(''))
     };
