@@ -323,18 +323,23 @@ li.highlight {
   height:100%;
   width: 19%;
 }
+#load-controls label {
+  font-weight: bold;
+}
 #load-controls input {
-  height:30px;
-  font-size:18px;
+  height:25px;
+  /*font-size:18px;*/
   border:3px solid gray;
   margin:0 auto;
   width:100%;
 }
+#manifest-search-form {
+  margin-top: 30px;
+}
 #manifest-search-form input {
   background:none;
-  border:none;
-  border-bottom:2px solid black;
-  margin-top: 30px;
+  /*border:none;
+  border-bottom:2px solid black;*/
   width: 100%;
 }
 #manifest-search i {
@@ -342,7 +347,7 @@ li.highlight {
   left:0;
   color:black;
 }
-#manifest-search-form input:focus {
+#manifest-search-form input:focus, #url-load-form input:focus {
   outline:none;
   border-color:deepskyblue;
 }
