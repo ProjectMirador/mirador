@@ -21,7 +21,9 @@
     $.ManifestsPanel.prototype = {
 
         init: function() {
-            this.element = jQuery(this.template()).appendTo(this.appendTo);
+            this.element = jQuery(this.template({
+                showURLBox : this.parent.showAddFromURLBox
+            })).appendTo(this.appendTo);
             this.manifestListElement = this.element.find('ul');
             
             //this code gives us the max width of the results area, used to determine how many preview images to show
@@ -100,12 +102,16 @@
           '<div class="container">',
               '<div id="load-controls">',
               '<form action="" id="manifest-search-form">',
+                  '<label for="manifest-search">Filter objects:</label>',
                   '<input id="manifest-search" type="text" name="manifest-filter" placeholder="Filter objects...">',
               '</form>',
+              '{{#if showURLBox}}',
+              '<br/>',
               '<form action="" id="url-load-form">',
-                  '<h2>Add new item from URL</h2>',
-                  '<input type="text" name="url-load" placeholder="http://...">',
+                  '<label for="url-loader">Add new object from URL:</label>',
+                  '<input type="text" id="url-loader" name="url-load" placeholder="http://...">',
               '</form>',
+              '{{/if}}',
               '</div>',
               '<div id="select-results">',
                   '<ul class="items-listing">',

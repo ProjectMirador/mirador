@@ -128,6 +128,9 @@
       //'height': 25,
       //'width': '100%'
     },
+    
+    //true or false.  controls display of "Add new object from URL" on manifest listing page
+    'showAddFromURLBox' : true,
 
    'repoImages' : {
       'Yale University': 'yale_logo.jpeg',
