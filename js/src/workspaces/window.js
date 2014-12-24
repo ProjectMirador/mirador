@@ -271,6 +271,10 @@
       jQuery.each(this.focusOverlaysAvailable, function(key, value) {
          _this.focusOverlaysAvailable[key].sidePanel.TableOfContents = boolValue;
       });
+      //remove thumbnail icon if not available for this object
+      if (!boolValue) {
+        this.element.find('.mirador-icon-toc').hide();
+      }
     },
 
     togglePanels: function(panelType, panelState, viewType, focusState) {
@@ -281,21 +285,17 @@
     },
 
     minMaxSidePanel: function(element) {
-      if (element.hasClass('mirador-icon-minimize')) {
-        //hide all other siblings, change icon to maximize, change height of parent
-        element.removeClass('mirador-icon-minimize').addClass('mirador-icon-maximize');
-        element.siblings().hide();
-        element.parent().addClass('minimized');
-        //adjust height of focus element
-        this.focusModules[this.currentFocus].adjustWidth('focus-side-panel-minimized', false);
-      } else {
-        //show all other siblings, change icon to minimize, change height of parent
-        element.removeClass('mirador-icon-maximize').addClass('mirador-icon-minimize');
-        element.siblings().show();
-        element.parent().removeClass('minimized');
-        //adjust height of focus element
-        this.focusModules[this.currentFocus].adjustWidth('focus-side-panel-minimized', true);
-      }
+      if (this.element.find('.sidePanel').hasClass('minimized')) {
+        element.find('.fa-list').switchClass('fa-list', 'fa-caret-down');
+        element.addClass('selected').css('background','#efefef');
+        this.element.find('.sidePanel').removeClass('minimized').width(280).css('border-right', '1px solid lightgray');
+        this.element.find('.view-container').css('margin-left', 280);
+    } else {
+        element.find('.fa-caret-down').switchClass('fa-caret-down', 'fa-list');
+        element.removeClass('selected').css('background', '#fafafa');
+        this.element.find('.view-container').css('margin-left', 0);
+        this.element.find('.sidePanel').addClass('minimized').css('border', 'none').width(0);
+    }
     },
 
     adjustFocusSize: function(panelType, panelState) {
@@ -459,7 +459,7 @@
       switch(_this.currentFocus) {
         case 'ThumbnailsView':
           //hide thumbnails button and highlight currentImageMode?
-          _this.element.find('.mirador-icon-thumbnails-view').addClass('selected');
+          _this.element.find('.mirador-icon-thumbs-view').addClass('selected');
         break;
         case 'ImageView':
           //highlight Single Image View option
@@ -471,7 +471,7 @@
         break;
         case 'ScrollView':
           //highlight Scroll View option
-          _this.element.find('.mirador-icon-scroll-view').addClass('selected');
+          _this.element.find('.mirador-icon-thumbs-view').addClass('selected');
         break;
         default:
           break;
@@ -542,14 +542,6 @@
         _this.parent.addItem();
         //jQuery.publish("windowRemoved", _this.id);
       });
-      
-      this.element.find('.mirador-icon-thumbnails-view').on('click', function() {
-        _this.toggleThumbnails(_this.currentImageID);
-      });
-
-      this.element.find('.mirador-icon-metadata-view').on('click', function() {
-        _this.toggleMetadataOverlay(_this.currentFocus);
-      });
 
       this.element.find('.mirador-icon-image-view').mouseenter(
         function() {
@@ -557,6 +549,14 @@
       }).mouseleave(
       function() {
         _this.element.find('.image-list').stop().slideFadeToggle(300);
+      });
+      
+      this.element.find('.mirador-icon-thumbs-view').mouseenter(
+        function() {
+        _this.element.find('.thumbs-list').stop().slideFadeToggle(300);
+      }).mouseleave(
+      function() {
+        _this.element.find('.thumbs-list').stop().slideFadeToggle(300);
       });
 
       this.element.find('.single-image-option').on('click', function() {
@@ -567,11 +567,19 @@
         _this.toggleBookView(_this.currentImageID);
       });
 
-      this.element.find('.mirador-icon-scroll-view').on('click', function() {
+      this.element.find('.scroll-option').on('click', function() {
         _this.toggleScrollView(_this.currentImageID);
       });
+      
+      this.element.find('.thumbnails-option').on('click', function() {
+        _this.toggleThumbnails(_this.currentImageID);
+      });
 
-      this.element.find('.mirador-side-panel').on('click', function() {
+      this.element.find('.mirador-icon-metadata-view').on('click', function() {
+        _this.toggleMetadataOverlay(_this.currentFocus);
+      });
+      
+      this.element.find('.mirador-icon-toc').on('click', function() {
         _this.minMaxSidePanel(jQuery(this));
       });
     },
@@ -581,7 +589,6 @@
                                  '<div class="window">',
                                   '<div class="content-container">',
                                    '<div class="sidePanel">',
-                                    '<span class="mirador-btn mirador-side-panel mirador-icon-minimize"></span>',
                                    '</div>',
                                    '<div class="view-container">',
                                     '<div class="overlay"></div>',
@@ -593,33 +600,37 @@
     ].join('')),
 
     manifestInfoTemplate: Handlebars.compile([
-                                             '<div class="manifest-info">',
-                                             '<div class="window-manifest-navigation">',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-2x"></i>',
-                                             '<ul class="image-list">',
-                                             '{{#if ImageView}}',
-                                             '<li class="single-image-option">Single Image View</li>',
-                                             '{{/if}}',
-                                             '{{#if BookView}}',
-                                             '<li class="book-option">Book View</li>',
-                                             '{{/if}}',
-                                             '</ul>',
-                                             '</a>',
-                                             '{{#if ThumbnailsView}}',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-thumbnails-view" title="Thumbnails View"></a>',
-                                             '{{/if}}',
-                                             '{{#if ScrollView}}',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-scroll-view" title="Scroll View"></a>',
-                                             '{{/if}}',
-                                             '{{#if MetadataView}}',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="Object Metadata"></a>',
-                                             '{{/if}}',
-                                             '</div>',
-                                             '<h3 class="window-manifest-title">',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-empty-slot" title="Remove object"><i class="fa fa-times"></i> </a>',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-new-object" title="Replace object"><i class="fa fa-exchange fa-rotate-90"></i> </a>',
-                                             '{{title}}</h3>',
-                                             '</div>'
+      '<div class="manifest-info">',
+        '<div class="window-manifest-navigation">',
+          '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-lg fa-fw"></i>',
+            '<ul class="image-list">',
+              '{{#if ImageView}}',
+                '<li class="single-image-option">Single Image View</li>',
+              '{{/if}}',
+              '{{#if BookView}}',
+                '<li class="book-option">Book View</li>',
+              '{{/if}}',
+            '</ul>',
+          '</a>',
+          '<a href="javascript:;" class="mirador-btn mirador-icon-thumbs-view"><i class="fa fa-th fa-lg fa-rotate-90 fa-fw"></i>',
+            '<ul class="thumbs-list">',
+              '{{#if ThumbnailsView}}',
+                '<li class="thumbnails-option">Thumbnails View</li>',
+              '{{/if}}',
+              '{{#if ScrollView}}',
+                '<li class="scroll-option">Scroll View</li>',
+              '{{/if}}',
+            '</ul>',
+          '</a>',
+          '{{#if MetadataView}}',
+            '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="Object Metadata"><i class="fa fa-info-circle fa-lg fa-fw"></i></a>',
+          '{{/if}}',
+        '</div>',
+          '<a href="javascript:;" class="mirador-btn mirador-icon-empty-slot" title="Remove object"><i class="fa fa-times fa-lg fa-fw"></i> </a>',
+          '<a href="javascript:;" class="mirador-btn mirador-icon-new-object" title="Replace object"><i class="fa fa-exchange fa-rotate-90 fa-lg fa-fw"></i> </a>',
+          '<a href="javascript:;" class="mirador-btn mirador-icon-toc selected" title="View/Hide Table of Contents"><i class="fa fa-caret-down fa-lg fa-fw"></i></a>',
+        '<h3 class="window-manifest-title">{{title}}</h3>',
+      '</div>'
     ].join(''))
   };
 

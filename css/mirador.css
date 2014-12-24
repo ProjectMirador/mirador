@@ -147,11 +147,11 @@ a {
 
 .window-manifest-title {
   text-overflow: ellipsis;
-  max-width: 75%;
+  max-width: 80%;
   overflow: hidden;
   white-space: nowrap;
   padding-left: 10px;
-  margin: 10px 0px 10px 0px;
+  margin: 8px 0px 8px 0px;
 }
 
 .window-manifest-navigation {
@@ -472,9 +472,10 @@ li.highlight {
   left:0;
   right:0;
   top:0;
-  margin-top:38px;
+  margin-top:34px;
   box-sizing: border-box;
 }
+
 .sidePanel {
   position: relative;
   width:280px;
@@ -482,12 +483,10 @@ li.highlight {
   float: left;
   background-color: #efefef;
   border-right: 1px solid lightgray;
-  display: none;
+  /*display: none;*/
   box-sizing: border-box;
   overflow: hidden;
-}
-.sidePanel.minimized {
-  width: 25px;
+  transition: all 0.3s ease;
 }
 .sidePanel h1, .sidePanel h2, .sidePanel h3, .sidePanel h4 {
   margin:0;
@@ -600,6 +599,7 @@ li.highlight {
   margin-left: 280px;
   height: 100%;
   position:relative;
+  transition:all 0.3s ease;
 }
 
 .view-container.focus-max-width {
@@ -607,7 +607,7 @@ li.highlight {
 }
 
 .view-container.focus-side-panel-minimized {
-   margin-left: 25px;
+   margin-left: 0px;
 }
 
 .overlay {
@@ -635,10 +635,6 @@ li.highlight {
   display: none;
   transition:all 0.3s ease;
 }
-.bottomPanel {
-
-}
-
 .bottomPanel.minimized {
   transform:translateY(130px);
 }
@@ -1341,7 +1337,7 @@ a.mirador-icon-annotations [class^="icon-"] {
   color: black
 }
 
-ul.image-list {
+ul.image-list, ul.thumbs-list {
   display: none;
   width: 150px;
   z-index: 4;
@@ -1355,7 +1351,7 @@ ul.image-list {
   margin: 2px 5px 5px 5px;
 }
 
-.image-list li {
+.image-list li, .thumbs-list li {
   margin:0;
   cursor: pointer;
   box-sizing: border-box;
@@ -1363,7 +1359,7 @@ ul.image-list {
   padding: 10px;
   width:100%;
 }
-.image-list li:hover {
+.image-list li:hover, .thumbs-list li:hover {
   border-left: 3px solid deepskyblue;
   background-color: #dddddd;  
   padding-left: 7px;
@@ -1411,30 +1407,37 @@ a.mirador-icon-empty-slot [class^="icon-"] {
   display:block;
   position:absolute;
 }
-.mirador-btn.mirador-icon-empty-slot, .mirador-btn.mirador-icon-new-object {
+div.manifest-info a.mirador-btn.mirador-icon-toc {
+ background-color: #efefef;
+ height: 100%;
+ margin-top: 0px;
+ padding-top: 9px;
+ height: 34px;
+ width: 24px;
+}
+.mirador-viewer a.mirador-icon-image-view, .mirador-viewer a.mirador-icon-thumbs-view, .mirador-viewer a.mirador-icon-metadata-view  {
+  background: none;
+  color: rgb( 146, 145, 145 );
+  box-sizing: border-box;
+  margin-right:5px;
+}
+
+.mirador-viewer a.mirador-icon-empty-slot, .mirador-viewer a.mirador-icon-new-object, .mirador-viewer a.mirador-icon-toc  {
   float:left;
-  margin-top:0;
-}
-
-.mirador-viewer a.mirador-icon-image-view, .mirador-viewer a.mirador-icon-empty-slot  {
   background: none;
   color: rgb( 146, 145, 145 );
   box-sizing: border-box;
-  margin-right:16px;
+  margin-left:5px;
 }
 
-.mirador-viewer a.mirador-icon-empty-slot, .mirador-viewer a.mirador-icon-new-object  {
-  background: none;
-  color: rgb( 146, 145, 145 );
-  box-sizing: border-box;
-  margin-right:0px;
-}
-
-.mirador-viewer a.mirador-icon-image-view:hover, .mirador-viewer a.mirador-icon-empty-slot:hover {
+.mirador-viewer a.mirador-icon-image-view:hover, .mirador-viewer a.mirador-icon-thumbs-view:hover, .mirador-viewer a.mirador-icon-empty-slot:hover, .mirador-viewer a.mirador-icon-new-object:hover, .mirador-viewer a.mirador-icon-toc:hover {
   color: black
 }
 
-.mirador-viewer a.mirador-icon-image-view.selected {
+.mirador-viewer a.mirador-icon-image-view.selected, 
+.mirador-viewer a.mirador-icon-thumbs-view.selected, 
+.mirador-viewer a.mirador-icon-toc.selected,
+.mirador-viewer a.mirador-icon-metadata-view.selected {
   color: black
 }
 
@@ -1462,10 +1465,10 @@ a.mirador-icon-empty-slot [class^="icon-"] {
 .mirador-icon-full-page { background-position: -60px -40px; }
 .mirador-icon-full-page:hover { background-position: -60px -60px; }
 
-.mirador-icon-metadata-view { background-position: -120px -40px; }
+/*.mirador-icon-metadata-view { background-position: -120px -40px; }
 .mirador-icon-metadata-view:hover { background-position: -120px -60px; }
 .mirador-icon-metadata-view.selected { background-position: -120px -60px; }
-
+*/
 .mirador-icon-choices { background-position: -320px -40px; }
 .mirador-icon-choices:hover { background-position: -320px -60px; }
 
@@ -1475,13 +1478,13 @@ a.mirador-icon-empty-slot [class^="icon-"] {
 .mirador-icon-lock { background-position: -181px -41px; }
 .mirador-icon-lock:hover { background-position: -181px -61px; }
 
-.mirador-icon-scroll-view { background-position: -281px -40px; }
+/*.mirador-icon-scroll-view { background-position: -281px -40px; }
 .mirador-icon-scroll-view.selected { background-position: -281px -60px; }
-.mirador-icon-scroll-view:hover { background-position: -281px -60px; }
+.mirador-icon-scroll-view:hover { background-position: -281px -60px; }*/
 
-.mirador-icon-thumbnails-view { background-position: -301px -40px; }
+/*.mirador-icon-thumbnails-view { background-position: -301px -40px; }
 .mirador-icon-thumbnails-view.selected { background-position: -301px -60px; }
-.mirador-icon-thumbnails-view:hover { background-position: -301px -60px; }
+.mirador-icon-thumbnails-view:hover { background-position: -301px -60px; }*/
 
 .mirador-icon-minimize {
    background-position: -40px -2px;
