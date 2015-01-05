@@ -36,6 +36,11 @@
       } else {
         this.parent.parent.bottomPanelVisibility(this.parent.parent.bottomPanelVisible);
       }
+      
+      //by default, minimized bottom panel if there is only one image for this object
+      if (this.parent.imagesList.length === 1) {
+        this.parent.parent.bottomPanelVisibility(false);      
+      }
     },
 
     bindEvents: function() {
