@@ -551,13 +551,13 @@
         _this.element.find('.image-list').stop().slideFadeToggle(300);
       });
       
-      this.element.find('.mirador-icon-thumbs-view').mouseenter(
+      /*this.element.find('.mirador-icon-thumbs-view').mouseenter(
         function() {
         _this.element.find('.thumbs-list').stop().slideFadeToggle(300);
       }).mouseleave(
       function() {
         _this.element.find('.thumbs-list').stop().slideFadeToggle(300);
-      });
+      });*/
 
       this.element.find('.single-image-option').on('click', function() {
         _this.toggleImageView(_this.currentImageID);
@@ -610,17 +610,12 @@
               '{{#if BookView}}',
                 '<li class="book-option">Book View</li>',
               '{{/if}}',
-            '</ul>',
-          '</a>',
-          '<a href="javascript:;" class="mirador-btn mirador-icon-thumbs-view"><i class="fa fa-th fa-lg fa-rotate-90 fa-fw"></i>',
-            '<ul class="thumbs-list">',
-              '{{#if ThumbnailsView}}',
-                '<li class="thumbnails-option">Thumbnails View</li>',
-              '{{/if}}',
               '{{#if ScrollView}}',
                 '<li class="scroll-option">Scroll View</li>',
               '{{/if}}',
             '</ul>',
+          '</a>',
+          '<a href="javascript:;" class="mirador-btn mirador-icon-thumbs-view thumbnails-option"><i class="fa fa-th fa-lg fa-rotate-90 fa-fw"></i>',
           '</a>',
           '{{#if MetadataView}}',
             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="Object Metadata"><i class="fa fa-info-circle fa-lg fa-fw"></i></a>',

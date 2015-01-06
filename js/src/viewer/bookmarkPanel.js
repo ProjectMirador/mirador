@@ -52,11 +52,11 @@
     },
 
     hide: function() {
-      jQuery(this.element).hide({effect: "slide", direction: "up", duration: 1000, easing: "swing"});    
+      jQuery(this.element).hide({effect: "slide", direction: "up", duration: 300, easing: "swing"});    
     },
 
     show: function() {      
-      jQuery(this.element).show({effect: "slide", direction: "up", duration: 1000, easing: "swing"});
+      jQuery(this.element).show({effect: "slide", direction: "up", duration: 300, easing: "swing"});
     },
 
     template: Handlebars.compile([
