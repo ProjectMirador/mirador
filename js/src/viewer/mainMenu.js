@@ -3,7 +3,7 @@
     $.MainMenu = function(options) {
 
         jQuery.extend(true, this, {
-            parent:                     null,
+            parent:                     null, //viewer
             element:                    null,
             mainMenuHeight:             null,
             mainMenuWidth:              null,

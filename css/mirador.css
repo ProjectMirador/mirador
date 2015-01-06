@@ -183,10 +183,10 @@ a {
   z-index: 4;
   right: 0;
   top: 0;
-  padding-left: 1%;
 }
 #bookmark-panel span {
   width: 100%;
+  padding-left: 2%;
 }
 #bookmark-panel input {
   width: 80%;
@@ -1348,7 +1348,7 @@ ul.image-list, ul.thumbs-list {
   position: absolute;
   right: 5px;
   padding:0;
-  margin: 2px 5px 5px 5px;
+  margin: 9px 5px 5px 5px;
 }
 
 .image-list li, .thumbs-list li {
