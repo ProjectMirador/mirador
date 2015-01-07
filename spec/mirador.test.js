@@ -28,9 +28,9 @@ describe('Mirador | mirador.js', function() {
   // Tests for object initialization
   describe('Initialization', function() {
 
-    // it('should set "manifests" property', function() {
-    //   expect(Mirador.manifests).toBeTruthy();
-    // });
+    it('should set "manifests" property', function() {
+      expect(Mirador.viewer.manifests).toBeTruthy();
+    });
 
 
     it('should set "viewer" property', function() {
@@ -47,42 +47,6 @@ describe('Mirador | mirador.js', function() {
       Mirador.DEFAULT_SETTINGS.availableViews = { 'xyzView': { 'label': 'Xyz View' } };
     });
 
-
-    it('should validate a view from available views', function() {
-      expect($.isValidView('newView')).toBeTruthy();
-    });
-
-
-    it('should convert inArray value to boolean', function() {
-      expect($.inArrayToBoolean(1)).toBeTruthy();
-      expect($.inArrayToBoolean(-1)).toBeFalsy();
-    });
-
-
-    it('should cast an object to array if string, or return the object', function() {
-      expect($.castToArray('str')).toEqual(['str']);
-      expect($.castToArray(['str'])).toEqual(['str']);
-      expect($.castToArray({})).toEqual({});
-    });
-
-
-    it('should return an unique array from a given array', function() {
-      expect($.getUniques(['a', 'b', 'b', 'a'])).toEqual(['a', 'b']);
-    });
-
-
-    it('should return a title prefix from a metadata object', function() {
-      expect($.getTitlePrefix({ label: 'Collection 123' })).toEqual('Collection 123');
-      expect($.getTitlePrefix({})).toEqual('');
-    });
-
-
-    it('should trim string by given length and add ellipsis', function() {
-      expect($.trimStringBy('The painting is framed by illuminated borders', 25)).toEqual('The painting is framed by...');
-      expect($.trimStringBy('The painting is framed', 25)).toEqual('The painting is framed');
-    });
-
-
     it('should trim trailing whitespaces from a string', function() {
       expect($.trimString('  abc ')).toEqual('abc');
     });
@@ -96,7 +60,6 @@ describe('Mirador | mirador.js', function() {
       expect($.stringifyObject({'Jan' : 1})).toEqual('<div style="margin-left:0px">Jan: 1</div>');
     });
 */
-
 
     it('should return JSON data for a given URL via ajax call', function() {
       var data = { 'a': 'b' },
@@ -121,21 +84,13 @@ describe('Mirador | mirador.js', function() {
       expect($.getViewLabel('unavailableView')).toEqual('unavailableView');
     });
 
-
     it('should extract label from a property attribute/key and titlecase it', function() {
       expect($.extractLabelFromAttribute('@id')).toEqual('Id');
       expect($.extractLabelFromAttribute('seeAlso')).toEqual('See Also');
     });
 */
 
-    it('should convert an array to string with delimiter (if array), or return string (if string)', function() {
-      expect($.toString('str')).toEqual('str');
-      expect($.toString(['a', 'b'])).toEqual('a b');
-      expect($.toString(['a', 'b'], ' / ')).toEqual('a / b');
-    });
-
   });
-
 
   // Tests for manifest data related methods
   describe('Manifest data related methods', function() {
@@ -174,11 +129,6 @@ describe('Mirador | mirador.js', function() {
           }]
         }
       };
-    });
-
-    it('should return matching manifest for a given URI', function() {
-      expect($.getManifestIdByUri('http://xyz.edu/data/Manifest.json')).toEqual('manifest-1234');
-      expect($.getManifestIdByUri('http://xyz.edu/data/abc.json')).toEqual([]);
     });
 
     it('should return a collection title for a given metadata', function() {

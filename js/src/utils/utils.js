@@ -1,62 +1,7 @@
 (function($) {
 
-  $.isValidView = function(view) {
-    return (typeof $.DEFAULT_SETTINGS.availableViews.view === 'undefined');
-  };
-
-  $.getViewLabel = function(type) {
-    var view = $.DEFAULT_SETTINGS.availableViews[type];
-    return (view && view.label) ? view.label : type;
-  };
-
-  $.inArrayToBoolean = function(index) {
-    return index === -1 ? false : true;
-  };
-
-
-  $.castToArray = function(obj) {
-    return (typeof obj === 'string') ? [obj] : obj;
-  };
-
-
-  // Removes duplicates from an array.
-  $.getUniques = function(arr) {
-    var temp = {},
-    unique = [];
-
-    for (var i = 0; i < arr.length; i++) {
-      temp[arr[i]] = true;
-    }
-
-    for (var k in temp) {
-      unique.push(k);
-    }
-
-    return unique;
-  };
-
-
-  $.getTitlePrefix = function(details) {
-    var prefixes = [];
-
-    if (details && details.label) {
-      prefixes.push(details.label);
-    }
-
-    return prefixes.join(' / ');
-  };
-
-
   $.trimString = function(str) {
     return str.replace(/^\s+|\s+$/g, '');
-  };
-
-
-  $.trimStringBy = function(str, length) {
-    if (str.length > length) {
-      str = str.substr(0, length) + '...';
-    }
-    return str;
   };
 
   $.getJsonFromUrl = function(url, async) {
@@ -80,38 +25,9 @@
   };
 
 
-
-  $.toString = function(obj, delimiter) {
-    var str = '',
-    joint = delimiter || ' ';
-
-    if (jQuery.type(obj) === 'string') {
-      str = obj;
-    }
-
-    if (jQuery.isArray(obj)) {
-      str = obj.join(joint);
-    }
-
-    return str;
-  };
-
-
   /* --------------------------------------------------------------------------
-     Methods related to manifest data
-     -------------------------------------------------------------------------- */
-
-  $.getManifestIdByUri = function(uri) {
-    var id;
-
-    id = jQuery.map($.manifests, function(manifest, manifestId) {
-      if (uri === manifest.uri) {
-        return manifestId;
-      }
-    });
-
-    return id[0] || id;
-  };
+   Methods related to manifest data
+   -------------------------------------------------------------------------- */
 
   $.getImageIndexById = function(imagesList, id) {
       var imgIndex = 0;
@@ -169,6 +85,10 @@
     return metadata.details.label || '';
   };
 
+  /* 
+    miscellaneous utilities
+    */
+
   $.genUUID = function() {
     var idNum = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       var r = Math.random() * 16|0, v = c == 'x' ? r : (r&0x3|0x8);
@@ -181,7 +101,6 @@
   jQuery.fn.slideFadeToggle  = function(speed, easing, callback) {
             return this.animate({opacity: 'toggle', height: 'toggle'}, speed, easing, callback);
   };
-
 
   $.throttle = function(func, wait, options) {
     var context, args, result;
@@ -214,7 +133,6 @@
       return result;
     };
   };
-
 
   $.debounce = function(func, wait, immediate) {
     var timeout, args, context, timestamp, result;
@@ -291,7 +209,6 @@
     rangeIDs = jQuery.map(ranges,  function(range) { return range['@id']; });
 
     return rangeIDs;
-
   };
 
 }(Mirador));
