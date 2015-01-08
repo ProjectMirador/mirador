@@ -70,7 +70,7 @@
       });
 
       // Data Join.
-      var divs = d3.select("#" +_this.element.attr('id')).selectAll("div")
+      var divs = d3.select("#" + _this.element.attr('id')).selectAll("div")
       .data(data, function(d) { return d.id; });
 
       // Enter
