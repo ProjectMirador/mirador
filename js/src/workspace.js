@@ -11,7 +11,7 @@
       parent:           null
     }, options);
 
-    this.element  = this.element || jQuery('<div class="workspace-container">');
+    this.element  = this.element || jQuery('<div class="workspace-container" id="workspace">');
     this.init();
 
   };
@@ -24,13 +24,9 @@
         return;
       }
 
-      this.layout = new $.Layout({
-        layout: this.parent.workspaces[this.parent.currentWorkspaceType].layout,
-        parent: this,
-        layoutContainer: this.element
-      });
-      
-      this.slots = this.extractSlots(this.parent.workspaces[this.parent.currentWorkspaceType].layout);
+      this.calculateLayout();
+
+      this.slots = this.slotList(this.layout);
 
       if (this.focusedSlot === null) {
         // set the focused slot to the first in the list
@@ -39,34 +35,59 @@
       
       this.bindEvents();
     },
-    extractSlots: function(layout) {
-      var _this = this,
-      slots = [];
-
-      // extracts only the leaves of the tree.
-      function crawlLayout(tree, slots) {
-        tree.forEach(function(branch){
-          if ( !branch.hasOwnProperty('children') && branch.slot === true ) {
-            slots.push(branch);
-          }
-          else {
-            crawlLayout(branch.children, slots);
-          }
-        });
-      }
-
-      crawlLayout(layout, slots);
-
-      slotObjects = slots.map(function(slotData) {
+    slotList: function(layout) {
+      var _this = this;
+      slotObjects = layout.map(function(slotData) {
         return new $.Slot({
           slotID: slotData.id,
           focused: true,
           parent: _this,
-          appendTo: _this.layout.slots[slotData.id].layoutBox.element
         });
       });
 
+      // appendTo: _this.layout.slots[slotData.id].layoutBox.element
       return slotObjects;
+    },
+
+    calculateLayout: function() {
+      var _this = this,
+      layout;
+
+      _this.layout = layout = new Isfahan({
+        containerId: _this.element.attr('id'),
+        layoutDescription: _this.parent.workspaces[_this.parent.currentWorkspaceType].layout,
+        configuration: null,
+        padding: 3 
+      });
+
+      // must have consistent keys for entering/assigning recursion.
+      layout.forEach(function(item){
+        item.id = Math.floor(Math.random()*20000);
+      });
+
+      var data = layout.filter( function(d) {
+        return !d.children;
+      });
+
+      // Data Join.
+      var divs = d3.select("#" +_this.element.attr('id')).selectAll("div")
+      .data(data, function(d) { return d.id; });
+
+      // Enter
+      divs.enter().append("div")
+      .attr("class", "layout-slot")
+      .call(cell);
+
+      divs.exit()
+      .remove("div");
+
+      function cell() {
+        this
+        .style("left", function(d) { return d.x + "px"; })
+        .style("top", function(d) { return d.y + "px"; })
+        .style("width", function(d) { return Math.max(0, d.dx ) + "px"; })
+        .style("height", function(d) { return Math.max(0, d.dy ) + "px"; });
+      }
     },
     
     availableSlot: function() {
@@ -82,14 +103,10 @@
 
     bindEvents: function() {
       var _this = this;
-    },
 
-    addSlot: function() {
-
-    },
-
-    removeSlot: function() {
-
+      d3.select(window).on('resize', function(event) {
+        _this.calculateLayout();
+      });
     },
 
     clearSlot: function(slotId) {

@@ -24,7 +24,7 @@
     "jquery-ui": "*",
     "jquery.scrollTo": "~1.4.12",
     "mousetrap": "~1.4.6",
-    "URIjs": "https://github.com/medialize/URI.js.git#~1.13.2"
+    "URIjs": "https://github.com/medialize/URI.js.git#~1.13.2",
     "jquery-ui": "*",
     "mousetrap": "~1.4.6",
     "jquery.scrollTo": "~1.4.12"
