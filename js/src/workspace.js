@@ -37,7 +37,7 @@
     },
     slotList: function(layout) {
       var _this = this;
-      slotObjects = layout.map(function(slotData) {
+      var slotObjects = layout.map(function(slotData) {
         return new $.Slot({
           slotID: slotData.id,
           focused: true,
