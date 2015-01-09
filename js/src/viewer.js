@@ -124,6 +124,24 @@
           jQuery.publish("workspaceChanged", type);
         },
         
+        updateWorkspace: function(type) {
+          _this = this;
+          
+          //remove all windows from config
+          //need to remove windows that are no longer in the layout
+          //jQuery.publish("windowsRemoved");
+
+          _this.activeWorkspace.element.remove();
+          delete _this.activeWorkspace;
+
+          _this.currentWorkspaceType = type;
+
+          _this.activeWorkspace = new $.Workspace({type: type, parent: this, appendTo: this.element.find('.mirador-viewer') });
+          
+          $.viewer.toggleSwitchWorkspace();
+          jQuery.publish("workspaceChanged", type);
+        },
+        
         // Sets state of overlays that layer over the UI state
         toggleOverlay: function(state) {
            var _this = this;
