@@ -99,7 +99,7 @@
                                  '<div id="{{slotID}}" class="{{workspaceSlotCls}}">',
                                  '<div class="slotIconContainer">',
                                  '<h1 class="plus">+</h1>',
-                                 '<h1>Add Item to Workspace</h1>',
+                                 '<h1>Add Item</h1>',
                                  '</div>',
                                  '<a class="addItemLink"></a>',
                                  '</div>'

@@ -26,11 +26,13 @@
 
       this.calculateLayout();
 
-      this.slots = this.slotList(this.layout);
+      this.slots = this.slotList(this.layout.filter( function(d) {
+        return !d.children;
+      }));
 
       if (this.focusedSlot === null) {
         // set the focused slot to the first in the list
-        this.focusedSlot = 0;
+        this.focusedSlot = this.slots[0].slotID;
       }
       
       this.bindEvents();
@@ -38,10 +40,12 @@
     slotList: function(layout) {
       var _this = this;
       slotObjects = layout.map(function(slotData) {
+        var appendTo = _this.element.children('div').filter('[data-layout-slot-id="'+slotData.id+'"]')[0];
         return new $.Slot({
           slotID: slotData.id,
           focused: true,
           parent: _this,
+          appendTo: appendTo
         });
       });
 
@@ -76,6 +80,7 @@
       // Enter
       divs.enter().append("div")
       .attr("class", "layout-slot")
+      .attr("data-layout-slot-id", function(d) { return d.id; })
       .call(cell);
 
       divs.exit()

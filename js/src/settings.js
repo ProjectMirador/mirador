@@ -42,7 +42,7 @@
             'type': 'column'
           },
           { 
-            'type': 'column',
+            'type': 'column'
           }]
         },
         'defaultWindowOptions': {
