@@ -27,7 +27,11 @@ var Isfahan = function(configObject) {
         group.push(child = remaining[n - 1]);
         remaining.pop();
       }
+
       position(group, node.type, rect);
+      children.forEach(function(child, index) {
+        child.id = node.id.concat("." + child.type + index);
+      })
       children.forEach(calculateLayout);
     }
   }
@@ -51,7 +55,7 @@ var Isfahan = function(configObject) {
       o.dx = row ? rect.dx : rect.dx/d,
       o.dy = row ? rect.dy/d : rect.dy,
       offset += row ? o.dy : o.dx;
-      console.log({x:o.x, y: o.y, width:o.dx, height: o.dy});
+      // console.log({x:o.x, y: o.y, width:o.dx, height: o.dy});
     }
   }
 
@@ -96,6 +100,7 @@ var Isfahan = function(configObject) {
     root.y = 0;
     root.dx = containerSize(containerId)[0];
     root.dy = containerSize(containerId)[1];
+    root.id = root.type + "1";
 
     calculateLayout(root);
     isfahan.padding(padding);

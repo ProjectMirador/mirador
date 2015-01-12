@@ -124,6 +124,18 @@
           jQuery.publish("workspaceChanged", type);
         },
         
+        updateLayout: function(type) {
+          _this = this;
+          
+          //remove all windows from config
+          //need to remove windows that are no longer in the layout
+          //jQuery.publish("windowsRemoved");
+          _this.currentWorkspaceType = type;
+          _this.activeWorkspace.calculateLayout();
+
+          jQuery.publish("layoutChanged", type);
+        },
+        
         // Sets state of overlays that layer over the UI state
         toggleOverlay: function(state) {
            var _this = this;

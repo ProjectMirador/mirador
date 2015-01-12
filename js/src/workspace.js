@@ -26,26 +26,29 @@
 
       this.calculateLayout();
 
-      this.slots = this.slotList(this.layout);
+      this.slots = this.slotList(this.layout.filter( function(d) {
+        return !d.children;
+      }));
 
       if (this.focusedSlot === null) {
         // set the focused slot to the first in the list
-        this.focusedSlot = 0;
+        this.focusedSlot = this.slots[0].slotID;
       }
       
       this.bindEvents();
     },
     slotList: function(layout) {
       var _this = this;
-      var slotObjects = layout.map(function(slotData) {
+      slotObjects = layout.map(function(slotData) {
+        var appendTo = _this.element.children('div').filter('[data-layout-slot-id="'+slotData.id+'"]')[0];
         return new $.Slot({
           slotID: slotData.id,
           focused: true,
           parent: _this,
+          appendTo: appendTo
         });
       });
 
-      // appendTo: _this.layout.slots[slotData.id].layoutBox.element
       return slotObjects;
     },
 
@@ -60,22 +63,23 @@
         padding: 3 
       });
 
-      // must have consistent keys for entering/assigning recursion.
-      layout.forEach(function(item){
-        item.id = Math.floor(Math.random()*20000);
-      });
-
       var data = layout.filter( function(d) {
         return !d.children;
       });
+      
+      console.log(layout);
+      console.log(data);
 
       // Data Join.
-      var divs = d3.select("#" + _this.element.attr('id')).selectAll("div")
-      .data(data, function(d) { return d.id; });
+      var divs = d3.select("#" + _this.element.attr('id')).selectAll(".layout-slot")
+      .data(data, function(d) { console.log(d); return d.id; });
+
+      divs.call(cell);
 
       // Enter
       divs.enter().append("div")
       .attr("class", "layout-slot")
+      .attr("data-layout-slot-id", function(d) { return d.id; })
       .call(cell);
 
       divs.exit()

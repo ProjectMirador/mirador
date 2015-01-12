@@ -48,6 +48,7 @@
 
         bindEvents: function() {
             var _this = this;
+            //change 'change-layout' to mouseover events rather than click?
             this.element.find('.change-layout').on('click', function() { _this.parent.toggleSwitchWorkspace(); });
             this.element.find('.bookmark-workspace').on('click', function() { _this.parent.toggleBookmarkPanel(); });
             //when options are implemented, this will need to do something
@@ -72,8 +73,8 @@
         '{{/if}}',*/
         '{{#if showLayout}}',
           '<li>',
-            '<a href="javascript:;" class="change-layout" title="Switch Workspace">',
-              '<span class="icon-window-options"></span>Switch Workspace',
+            '<a href="javascript:;" class="change-layout" title="Change Layout">',
+              '<span class="icon-window-options"></span>Change Layout',
             '</a>',
           '</li>',
         '{{/if}}',

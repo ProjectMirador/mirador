@@ -25,9 +25,11 @@
         },
         async:false
       });
+      
       Mirador({
         "id": "viewer",
-        "currentWorkspaceType": "reference",
+        "currentWorkspaceType": "1x2", // optional.
+        // "layout": "1x2"
         //"mainMenuSettings" : {"show": true, "buttons" : {"bookmark" : true, "layout" : true}},
         //'showAddFromURLBox' : false,
         "data": [
@@ -92,6 +94,7 @@
           {
           "loadedManifest": "http://oculus-dev.harvardx.harvard.edu/manifests/drs:5981093",
           "viewType" : "ImageView", 
+          // "slotId" : "row1.column2"
           // "canvasID": "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/canvas/canvas-12",
           //"bottomPanel" : false,
           //"sidePanel" : false,
