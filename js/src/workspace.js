@@ -67,7 +67,7 @@
       
       // Data Join.
       var divs = d3.select("#" + _this.element.attr('id')).selectAll(".layout-slot")
-      .data(data, function(d) { console.log(d); return d.id; });
+      .data(data, function(d) { return d.id; });
 
       // Implicitly updates the existing elements.
       // Must come before the enter function.
@@ -77,10 +77,20 @@
       divs.enter().append("div")
       .attr("class", "layout-slot")
       .attr("data-layout-slot-id", function(d) { return d.id; })
-      .call(cell);
+      .call(cell)
+      .each(function(d) { console.log(d); });
       
+      // Exit
       divs.exit()
-      .remove("div");
+      .remove("div")
+      .each(function(d) { 
+        var slot = jQuery.grep(_this.slots, function(slot) {
+           return slot.slotID === d.id;
+         })[0];
+         if (slot.window) {
+          jQuery.publish("windowRemoved", slot.window.id);
+        }
+      });
 
       function cell() {
         this
