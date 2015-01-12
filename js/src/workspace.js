@@ -6,7 +6,7 @@
       type:             null,
       workspaceSlotCls: 'slot',
       focusedSlot:      null,
-      slots:            null,
+      slots:            [],
       appendTo:         null,
       parent:           null
     }, options);
@@ -26,10 +26,6 @@
 
       this.calculateLayout();
 
-      this.slots = this.slotList(this.layout.filter( function(d) {
-        return !d.children;
-      }));
-
       if (this.focusedSlot === null) {
         // set the focused slot to the first in the list
         this.focusedSlot = this.slots[0].slotID;
@@ -37,19 +33,21 @@
       
       this.bindEvents();
     },
-    slotList: function(layout) {
+    slotList: function(layoutSlots) {
       var _this = this;
-      slotObjects = layout.map(function(slotData) {
-        var appendTo = _this.element.children('div').filter('[data-layout-slot-id="'+slotData.id+'"]')[0];
-        return new $.Slot({
-          slotID: slotData.id,
-          focused: true,
-          parent: _this,
-          appendTo: appendTo
-        });
-      });
 
-      return slotObjects;
+      layoutSlots.forEach(function(slotData) {
+        
+        if (!jQuery.grep(_this.slots, function(slot) { return slotData.id === slot.slotID; }).length) {
+          var appendTo = _this.element.children('div').filter('[data-layout-slot-id="'+slotData.id+'"]')[0];
+          _this.slots.push(new $.Slot({
+            slotID: slotData.id,
+            focused: true,
+            parent: _this,
+            appendTo: appendTo
+          }));
+        }
+      });
     },
 
     calculateLayout: function() {
@@ -67,13 +65,12 @@
         return !d.children;
       });
       
-      console.log(layout);
-      console.log(data);
-
       // Data Join.
       var divs = d3.select("#" + _this.element.attr('id')).selectAll(".layout-slot")
       .data(data, function(d) { console.log(d); return d.id; });
 
+      // Implicitly updates the existing elements.
+      // Must come before the enter function.
       divs.call(cell);
 
       // Enter
@@ -81,7 +78,7 @@
       .attr("class", "layout-slot")
       .attr("data-layout-slot-id", function(d) { return d.id; })
       .call(cell);
-
+      
       divs.exit()
       .remove("div");
 
@@ -92,6 +89,9 @@
         .style("width", function(d) { return Math.max(0, d.dx ) + "px"; })
         .style("height", function(d) { return Math.max(0, d.dy ) + "px"; });
       }
+
+      _this.slotList(data);
+      
     },
     
     availableSlot: function() {

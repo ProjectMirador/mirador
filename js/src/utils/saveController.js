@@ -142,7 +142,7 @@
         }
       });
       
-      jQuery.subscribe("workspaceChanged", function(event, workspaceType) {
+      jQuery.subscribe("layoutChanged", function(event, workspaceType) {
          _this.set('currentWorkspaceType', workspaceType, {parent: "currentConfig"} );
       });
       

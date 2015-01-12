@@ -53,6 +53,7 @@
         }
       })*/
       
+     console.log('added an event');
       this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
     },
     
