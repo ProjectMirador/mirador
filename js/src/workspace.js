@@ -87,9 +87,11 @@
         var slot = jQuery.grep(_this.slots, function(slot) {
            return slot.slotID === d.id;
          })[0];
+
          if (slot.window) {
           jQuery.publish("windowRemoved", slot.window.id);
         }
+        _this.slots.splice(_this.slots.indexOf(slot), 1);
       });
 
       function cell() {

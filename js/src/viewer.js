@@ -132,6 +132,7 @@
           //jQuery.publish("windowsRemoved");
           _this.currentWorkspaceType = type;
           _this.activeWorkspace.calculateLayout();
+          $.viewer.toggleSwitchWorkspace();
 
           jQuery.publish("layoutChanged", type);
         },

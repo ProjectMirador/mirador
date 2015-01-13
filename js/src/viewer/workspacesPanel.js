@@ -38,7 +38,7 @@
       });
 
       jQuery('#workspace-select-menu').find('.workspace-option').on('click', function() {
-        $.viewer.switchWorkspace(jQuery(this).data('workspaceType'));
+        $.viewer.updateLayout(jQuery(this).data('workspaceType'));
       });
     },
 
@@ -52,7 +52,7 @@
 
     template: Handlebars.compile([
        '<div id="workspace-select-menu">',
-         '<h1>Choose Workspace Type</h1>',
+         '<h1>Choose New Layout</h1>',
          '<ul class="workspaces-listing">',
            '{{#each workspaces}}',
              '<li class="workspace-option" data-workspace-type="{{dataClass}}">',
