@@ -88,7 +88,7 @@
           return slot.slotID === d.id;
         })[0];
 
-        // if (slot.window) {
+        // if (slot.window !== null) {
         //   jQuery.publish("windowRemoved", slot.window.id);
         // }
         _this.slots.splice(_this.slots.indexOf(slot), 1);
@@ -142,7 +142,8 @@
       // Recalculate the layout (just UI code????).
       node.parent = newParent;
       _this.layout.push(newParent, newSibling);
-      _this.parent.workspaces[_this.parent.currentWorkspaceType].layout = _this.treeifyLayout(_this.layout);
+      var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
+      _this.parent.workspaces[_this.parent.currentWorkspaceType].layout = root;
       _this.calculateLayout();
     },
 
@@ -161,26 +162,20 @@
     },
 
     treeifyLayout: function(flatLayout) {
-      var dataMap = {};
-      flatLayout.reduce(function(map, node) {
-        map[node.id] = node;
-        console.log(node);
-        return map;
-      }, {});
-
-      // create the tree array
-      var treeData = [];
+      
       flatLayout.forEach(function(node) {
-        // add to parent
-        var parent = dataMap[node.parent];
-        if (parent) {
-          // create child array if it doesn't exist
-          (parent.children || (parent.children = []))
-          // add node to child array
-          .push(node);
-        } else {
-          // parent is null or missing
-          treeData.push(node);
+        if (node.parent) {
+          // add to parent
+          var parent = dataMap[node.parent];
+          if (parent) {
+            // create child array if it doesn't exist
+            (parent.children || (parent.children = []))
+            // add node to child array
+            .push(node);
+          } else {
+            // parent is null or missing
+            treeData.push(node);
+          }
         }
       });
 
