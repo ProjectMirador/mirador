@@ -135,15 +135,25 @@
 
       // Create a new node (which will be childless)
       // that is also a sibling of this node.
-      newSibling = _this.newNode(node.type, oldAddress.concat(node.type + '1'), newParent);
+      newSibling = _this.newNode(node.type, oldAddress.concat("." + node.type + '1'), newParent);
+      
       // maintain array ordering.
+      newParent.children = [];
       newParent.children.push(node, newSibling);
+      newParent.parent = node.parent;
+
+      // replace the old node in ites parent's child
+      // array with the new parent.
+      var nodeIndex = newParent.parent.children.indexOf(node);
+      newParent.parent.children[nodeIndex] = newParent;
 
       // Recalculate the layout (just UI code????).
       node.parent = newParent;
       _this.layout.push(newParent, newSibling);
       var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
       _this.parent.workspaces[_this.parent.currentWorkspaceType].layout = root;
+      console.log(newParent);
+      console.log(root);
       _this.calculateLayout();
     },
 
@@ -157,33 +167,9 @@
         address: address,
         id: $.genUUID(),
         parent: parent,
-        children: []
       };
     },
-
-    treeifyLayout: function(flatLayout) {
-      
-      flatLayout.forEach(function(node) {
-        if (node.parent) {
-          // add to parent
-          var parent = dataMap[node.parent];
-          if (parent) {
-            // create child array if it doesn't exist
-            (parent.children || (parent.children = []))
-            // add node to child array
-            .push(node);
-          } else {
-            // parent is null or missing
-            treeData.push(node);
-          }
-        }
-      });
-
-      console.log(dataMap);
-
-      return dataMap;
-    },
-
+    
     availableSlot: function() {
       var toReturn = null;
       jQuery.each(this.slots, function(index, value) {
