@@ -30,7 +30,8 @@ var Isfahan = function(configObject) {
 
       position(group, node.type, rect);
       children.forEach(function(child, index) {
-        child.id = node.id.concat("." + child.type + index);
+        child.address = node.address.concat("." + child.type + (index + 1));
+        child.id = genUuid();
       })
       children.forEach(calculateLayout);
     }
@@ -100,7 +101,10 @@ var Isfahan = function(configObject) {
     root.y = 0;
     root.dx = containerSize(containerId)[0];
     root.dy = containerSize(containerId)[1];
-    root.id = root.type + "1";
+    root.address = root.type + "1";
+    root.id = genUuid();
+
+    console.log(genUuid());
 
     calculateLayout(root);
     isfahan.padding(padding);
@@ -145,6 +149,13 @@ var Isfahan = function(configObject) {
     : padConstant;
     return isfahan;
   };
+
+  function genUuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+      return v.toString(16);
+    });
+  }
 
   function d3_layout_cellPadNull(node) {
     return {x: node.x, y: node.y, dx: node.dx, dy: node.dy};
