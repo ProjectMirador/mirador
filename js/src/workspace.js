@@ -84,13 +84,14 @@
       divs.exit()
       .remove("div")
       .each(function(d) { 
-        var slot = jQuery.grep(_this.slots, function(slot) {
-          return slot.slotID === d.id;
-        })[0];
-
-        // if (slot.window !== null) {
-        //   jQuery.publish("windowRemoved", slot.window.id);
-        // }
+        var slotMap = _this.slots.reduce(function(map, temp_slot) {
+            map[d.id] = temp_slot;
+            return map;
+        }, {}),
+        slot = slotMap[d.id];
+        if (slot && slot.window) {
+          jQuery.publish("windowRemoved", slot.window.id);
+        }
         _this.slots.splice(_this.slots.indexOf(slot), 1);
       });
 
@@ -103,7 +104,6 @@
       }
 
       _this.slotList(data);
-
     },
 
     splitLeft: function() {
@@ -129,8 +129,6 @@
       // the same id.
       node.type = node.type === 'row' ? 'column' : 'row';
 
-      console.log(node);
-
       node.address = node.address.concat(node.type + '1');
 
       // Create a new node (which will be childless)
@@ -152,8 +150,6 @@
       _this.layout.push(newParent, newSibling);
       var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
       _this.parent.workspaces[_this.parent.currentWorkspaceType].layout = root;
-      console.log(newParent);
-      console.log(root);
       _this.calculateLayout();
     },
 

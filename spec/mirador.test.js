@@ -61,22 +61,22 @@ describe('Mirador | mirador.js', function() {
     });
 */
 
-    it('should return JSON data for a given URL via ajax call', function() {
-      var data = { 'a': 'b' },
-          error; // undefined
+    // it('should return JSON data for a given URL via ajax call', function() {
+    //   var data = { 'a': 'b' },
+    //       error; // undefined
 
-      spyOn(jQuery, 'ajax').and.callFake(function(params) {
-        if (/success$/.test(params.url)) {
-          params.success(data);
-        } else {
-          params.error(error);
-        }
-      });
+    //   spyOn(jQuery, 'ajax').and.callFake(function(params) {
+    //     if (/success$/.test(params.url)) {
+    //       params.success(data);
+    //     } else {
+    //       params.error(error);
+    //     }
+    //   });
 
-      expect($.getJsonFromUrl('http://manifest/url/success', true)).toEqual(data);
-      expect($.getJsonFromUrl('http://manifest/url/success', false)).toEqual(data);
-      expect($.getJsonFromUrl('http://manifest/url/failed', false)).toEqual(error);
-    });
+    //   expect($.getJsonFromUrl('http://manifest/url/success', true)).toEqual(data);
+    //   expect($.getJsonFromUrl('http://manifest/url/success', false)).toEqual(data);
+    //   expect($.getJsonFromUrl('http://manifest/url/failed', false)).toEqual(error);
+    // });
 
 /* Moved to metadataView
     it('should return label for a given view name', function() {
