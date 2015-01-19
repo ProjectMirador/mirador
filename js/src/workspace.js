@@ -28,22 +28,6 @@
 
       this.bindEvents();
     },
-    slotList: function(layoutSlots) {
-      var _this = this;
-
-      layoutSlots.forEach(function(slotData) {
-
-        if (!jQuery.grep(_this.slots, function(slot) { return slotData.id === slot.slotID; }).length) {
-          var appendTo = _this.element.children('div').filter('[data-layout-slot-id="'+slotData.id+'"]')[0];
-          _this.slots.push(new $.Slot({
-            slotID: slotData.id,
-            focused: true,
-            parent: _this,
-            appendTo: appendTo
-          }));
-        }
-      });
-    },
 
     calculateLayout: function() {
       var _this = this,
@@ -55,6 +39,8 @@
         configuration: null,
         padding: 3 
       });
+
+      console.log(layout);
 
       var data = layout.filter( function(d) {
         return !d.children;
@@ -116,13 +102,18 @@
       console.log(node);
       nodeIndex = node.parent ? node.parent.children.indexOf(node) : node;
 
-      function addSibling(node, beforeOrAfter) {
-        newSibling = _this.newNode(node.type, node.address.concat("." + node.type + '1'), node);
-        node.parent.children.splice(nodeIndex + 1, 0, newSibling);
+      function addSibling(node, indexDifference) {
+        var siblingIndex = nodeIndex + indexDifference,
+        newSibling = _this.newNode(node.type, node.address.concat("." + node.type + (siblingIndex + 1)), node),
+        ndexDifference;
+
+        node.parent.children.splice(siblingIndex, 0, newSibling);
         _this.layout.push(newSibling);
+
+        return newSibling;
       }
 
-      function mutateAndAdd(node, beforeOrAfter) {
+      function mutateAndAdd(node, indexDifference) {
         newParent = _this.newNode(node.type, node.address, node.parent),
         oldAddress = node.address;
 
@@ -130,7 +121,7 @@
         // and flip its type while keeping
         // the same id.
         node.type = node.type === 'row' ? 'column' : 'row';
-        node.address = node.address.concat(node.type + '1');
+        node.address = node.address.concat('.' + node.type + '1');
 
         // Create a new node (which will be childless)
         // that is also a sibling of this node.
@@ -138,10 +129,10 @@
 
         // maintain array ordering.
         newParent.children = [];
-        newParent.children.push(node, newSibling); // order matters.
+        newParent.children.splice(siblingIndex, 0, newSibling); // order matters.
         newParent.parent = node.parent;
 
-        // replace the old node in ites parent's child
+        // replace the old node in its parent's child
         // array with the new parent.
         newParent.parent.children[nodeIndex] = newParent;
 
@@ -156,14 +147,16 @@
         // add a sibling.
         // Left means before, right means after.
         if (direction === 'r' || direction === 'l') {
-          addSibling(node, direction);
+          indexDifference = direction === 'r' ? 1 : 0;
+          addSibling(node, indexDifference);
         } 
         // If adding above or below, the
         // operation must be changed to mutating
         // the structure. 
         // Up means before, Down means after.
         else {
-          mutateAndAdd(node, direction);
+          indexDifference = direction === 'd' ? 1 : 0;
+          mutateAndAdd(node, indexDifference);
         }
       } else {
         // Since it is a row:
@@ -172,14 +165,16 @@
         // structure.
         // Left means before, right means after.
         if (direction === 'r' || direction === 'l') {
-          mutateAndAdd(node, direction);
+          indexDifference = direction === 'r' ? 1 : 0;
+          mutateAndAdd(node, indexDifference);
         } 
         // If adding above or below, the
         // operations must be switched to adding
         // a sibling. 
         // Up means before, Down means after.
         else {
-          addSibling(node, direction);
+          indexDifference = direction === 'd' ? 1 : 0;
+          addSibling(node, indexDifference);
         }
       }
       
@@ -234,7 +229,7 @@
         newParent.parent.children[nodeIndex] = newParent;
 
         node.parent = newParent;
-        _this.layout.push(newParent);
+        _this.layout.push(newParent, newSibling);
       } else {
         // if it is a row, simply create a 
         // new sibling and insert it into the 

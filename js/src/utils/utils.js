@@ -95,7 +95,7 @@
       return v.toString(16);
     });
 
-    return "uuid-" + idNum;
+    return idNum;
   };
   
   jQuery.fn.slideFadeToggle  = function(speed, easing, callback) {

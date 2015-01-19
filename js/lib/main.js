@@ -31,7 +31,6 @@ var Isfahan = function(configObject) {
       position(group, node.type, rect);
       children.forEach(function(child, index) {
         child.address = node.address.concat("." + child.type + (index + 1));
-        child.id = genUuid();
       })
       children.forEach(calculateLayout);
     }
@@ -51,6 +50,7 @@ var Isfahan = function(configObject) {
     while (++i < n) {
       o = group[n-(i+1)],
       d = divisor(o, row, rect, group, n),
+      o.id = typeof o.id !== 'undefined' ? o.id : genUuid(),
       o.x = row ?  x : x + offset,
       o.y = row ? y + offset : y,
       o.dx = row ? rect.dx : rect.dx/d,
@@ -74,6 +74,7 @@ var Isfahan = function(configObject) {
     });
 
     if (old) {
+      console.log('preserved');
       var sum = group.reduce(
         function(previousValue, currentValue, index, array) {
         return previousValue[dimension] + currentValue[dimension];
@@ -103,8 +104,6 @@ var Isfahan = function(configObject) {
     root.dy = containerSize(containerId)[1];
     root.address = root.type + "1";
     root.id = genUuid();
-
-    console.log(genUuid());
 
     calculateLayout(root);
     isfahan.padding(padding);
