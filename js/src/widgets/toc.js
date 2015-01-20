@@ -197,7 +197,7 @@
         _this.render();
       });
 
-      jQuery('.toc-link').on('click', function() {
+      jQuery('.toc-link').on('click', function(event) {
         event.stopPropagation();
         // The purpose of the immediate event is to update the data on the parent
         // by calling its "set" function. 
@@ -217,7 +217,7 @@
         // }
       });
       
-      jQuery('.caret').on('click', function() {
+      jQuery('.caret').on('click', function(event) {
         event.stopPropagation();
         
         var rangeID = jQuery(this).parent().data().rangeid;
