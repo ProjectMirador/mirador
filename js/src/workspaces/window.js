@@ -538,7 +538,7 @@
         jQuery.publish("windowRemoved", _this.id);
       });
       
-      this.element.find('.mirador-icon-new-object').on('click', function() {
+      this.element.find('.mirador-icon-window-menu').on('click', function() {
         _this.parent.addItem();
         //jQuery.publish("windowRemoved", _this.id);
       });
@@ -551,14 +551,6 @@
         _this.element.find('.image-list').stop().slideFadeToggle(300);
       });
       
-      /*this.element.find('.mirador-icon-thumbs-view').mouseenter(
-        function() {
-        _this.element.find('.thumbs-list').stop().slideFadeToggle(300);
-      }).mouseleave(
-      function() {
-        _this.element.find('.thumbs-list').stop().slideFadeToggle(300);
-      });*/
-
       this.element.find('.single-image-option').on('click', function() {
         _this.toggleImageView(_this.currentImageID);
       });
@@ -622,7 +614,22 @@
           '{{/if}}',
         '</div>',
           //'<a href="javascript:;" class="mirador-btn mirador-icon-empty-slot" title="Close slot"><i class="fa fa-times fa-lg fa-fw"></i> </a>',
-          '<a href="javascript:;" class="mirador-btn mirador-icon-new-object" title="Replace object"><i class="fa fa-exchange fa-lg fa-fw"></i> </a>',
+          '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="Replace object"><i class="fa fa-table fa-lg fa-fw"></i>',
+            '<ul class="image-list">',
+              // '{{#if ImageView}}',
+                '<li class="single-image-option">New Object</li>',
+              // '{{/if}}',
+              // '{{#if BookView}}',
+                '<li class="book-option">Remove Object</li>',
+              // '{{/if}}',
+              // '{{#if ScrollView}}',
+                '<li class="book-option">Add Slot Right</li>',
+                '<li class="book-option">Add Slot Left</li>',
+                '<li class="scroll-option">Add Slot Below</li>',
+                '<li class="book-option">Add Slot Above</li>',
+              // '{{/if}}',
+            '</ul>',
+          '</a>',
           '<a href="javascript:;" class="mirador-btn mirador-icon-toc selected" title="View/Hide Table of Contents"><i class="fa fa-caret-down fa-lg fa-fw"></i></a>',
         '<h3 class="window-manifest-title">{{title}}</h3>',
       '</div>'

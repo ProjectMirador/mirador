@@ -114,7 +114,7 @@
       }
 
       function mutateAndAdd(node, indexDifference) {
-        newParent = _this.newNode(node.type, node.address, node.parent),
+        var newParent = _this.newNode(node.type, node.address, node.parent),
         oldAddress = node.address;
 
         // Recalculate the address of this node
@@ -129,7 +129,8 @@
 
         // maintain array ordering.
         newParent.children = [];
-        newParent.children.splice(siblingIndex, 0, newSibling); // order matters.
+        newParent.children.push(node); // order matters.
+        newParent.children.splice(indexDifference, 0, newSibling); // order matters.
         newParent.parent = node.parent;
 
         // replace the old node in its parent's child
