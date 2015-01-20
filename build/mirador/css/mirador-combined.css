@@ -3527,21 +3527,20 @@ a.mirador-icon-annotations [class^="icon-"] {
   color: black
 }
 
-ul.image-list {
+ul.dropdown {
   display: none;
   width: 150px;
-  z-index: 4;
+  z-index: 3;
   opacity: 0.9;
   background-color: #efefef;
   text-align: center;
   list-style: none;
   position: absolute;
-  right: 5px;
   padding:0;
   margin: 9px 5px 5px 5px;
 }
 
-.image-list li {
+.dropdown li {
   margin:0;
   cursor: pointer;
   box-sizing: border-box;
@@ -3549,11 +3548,19 @@ ul.image-list {
   padding: 10px;
   width:100%;
 }
-.image-list li:hover {
+.dropdown li:hover {
   border-left: 3px solid deepskyblue;
   background-color: #dddddd;  
   padding-left: 7px;
   font-weight: bold;
+}
+
+.image-list {
+  right: 0;
+}
+
+.slot-controls {
+  left: 0;
 }
 
 a.mirador-icon-annotationDetail-toggle [class^="icon-"] {

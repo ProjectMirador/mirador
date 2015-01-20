@@ -54,7 +54,7 @@
       })*/
       
      console.log('added an event');
-      this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
+     this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
     },
     
     manifestToSlot: function(windowConfig) { 

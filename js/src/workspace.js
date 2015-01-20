@@ -196,60 +196,9 @@
       _this.split(targetSlot, 'r');
     },
 
-    splitDown: function(targetSlot) {
-      var _this = this,
-      node = jQuery.grep(_this.layout, function(node) { return node.id === targetSlot.slotID; })[0];
-      console.log(node);
-      nodeIndex = node.parent ? node.parent.children.indexOf(node) : node;
-
-      if (node.type === 'column') {
-        // if it's a column, 
-        // create a new node that is the parent
-        // of this node.
-        newParent = _this.newNode(node.type, node.address, node.parent),
-        oldAddress = node.address;
-
-        // Recalculate the address of this node
-        // and flip its type while keeping
-        // the same id.
-        node.type = node.type === 'row' ? 'column' : 'row';
-
-        node.address = node.address.concat(node.type + '1');
-
-        // Create a new node (which will be childless)
-        // that is also a sibling of this node.
-        newSibling = _this.newNode(node.type, oldAddress.concat("." + node.type + '1'), newParent);
-
-        // maintain array ordering.
-        newParent.children = [];
-        newParent.children.push(node, newSibling);
-        newParent.parent = node.parent;
-
-        // replace the old node in ites parent's child
-        // array with the new parent.
-        newParent.parent.children[nodeIndex] = newParent;
-
-        node.parent = newParent;
-        _this.layout.push(newParent, newSibling);
-      } else {
-        // if it is a row, simply create a 
-        // new sibling and insert it into the 
-        // correct location (taking into account
-        // the other siblings).
-        newSibling = _this.newNode(node.type, node.address.concat("." + node.type + '1'), node);
-        node.parent.children.splice(nodeIndex + 1, 0, newSibling);
-        _this.layout.push(newSibling);
-      }
-      
-      // Recalculate the layout.
-      // The original hierarchical structure is
-      // accessible from the root node. Passing 
-      // it back through the layout code will 
-      // recalculate everything else needed for 
-      // the redraw.
-      var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
-      _this.parent.workspaces[_this.parent.currentWorkspaceType].layout = root;
-      _this.calculateLayout();
+    splitLeft: function(targetSlot) {
+      var _this = this;
+      _this.split(targetSlot, 'l');
     },
 
     splitUp: function(targetSlot) {
@@ -257,7 +206,7 @@
       _this.split(targetSlot, 'u');
     },
 
-    splitDwn: function(targetSlot) {
+    splitDown: function(targetSlot) {
       var _this = this;
       _this.split(targetSlot, 'd');
     },
