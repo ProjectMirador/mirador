@@ -100,7 +100,7 @@
       var _this = this,
       node = jQuery.grep(_this.layout, function(node) { return node.id === targetSlot.slotID; })[0];
       console.log(node);
-      nodeIndex = node.parent ? node.parent.children.indexOf(node) : node;
+      nodeIndex = node.parent ? node.parent.children.indexOf(node) : 0;
 
       function addSibling(node, indexDifference) {
         var siblingIndex = nodeIndex + indexDifference,
@@ -209,6 +209,14 @@
     splitDown: function(targetSlot) {
       var _this = this;
       _this.split(targetSlot, 'd');
+    },
+
+    removeNode: function(targetSlot) {
+      var _this = this;
+      var node = jQuery.grep(_this.layout, function(node) { return node.id === targetSlot.slotID; })[0];
+      nodeIndex = node.parent ? node.parent.children.indexOf(node) : 0;
+      node.parent.children.splice(nodeIndex, 1);
+      _this.calculateLayout();
     },
 
     newNode: function(type, address, parent) {

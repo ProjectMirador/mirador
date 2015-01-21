@@ -539,6 +539,11 @@
         jQuery.publish("windowRemoved", _this.id);
       });
       
+      this.element.find('.mirador-icon-window-menu').on('click', function() {
+        _this.parent.addItem();
+        //jQuery.publish("windowRemoved", _this.id);
+      });
+
       this.element.find('.mirador-icon-image-view').mouseenter(
         function() {
         _this.element.find('.image-list').stop().slideFadeToggle(300);
