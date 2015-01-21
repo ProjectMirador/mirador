@@ -224,7 +224,7 @@
         type: type,
         address: address,
         id: $.genUUID(),
-        parent: parent,
+        parent: parent
       };
     },
     
