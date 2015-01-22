@@ -2963,14 +2963,14 @@ li.highlight {
   position:absolute;
   left:1%;
   top:50%;
-  margin-top:-17px;
+  margin-top:-35px;
   width: 40px;
 }
 .mirador-osd-next {
   position:absolute;
   right:1%;
   top:50%;
-  margin-top:-17px;
+  margin-top:-35px;
 }
 .mirador-osd-annotations-layer {
   position:absolute;
@@ -3529,7 +3529,7 @@ a.mirador-icon-annotations [class^="icon-"] {
 
 ul.dropdown {
   display: none;
-  width: 150px;
+  width: 160px;
   z-index: 3;
   opacity: 0.9;
   background-color: #efefef;
@@ -3537,7 +3537,7 @@ ul.dropdown {
   list-style: none;
   position: absolute;
   padding:0;
-  margin: 9px 5px 5px 5px;
+  margin-top:9px;
 }
 
 .dropdown li {
@@ -3547,6 +3547,7 @@ ul.dropdown {
   background-color: #dddddd;  
   padding: 10px;
   width:100%;
+  text-align:left;
 }
 .dropdown li:hover {
   border-left: 3px solid deepskyblue;
@@ -3561,38 +3562,6 @@ ul.dropdown {
 
 .slot-controls {
   left: 0;
-}
-
-a.mirador-icon-annotationDetail-toggle [class^="icon-"] {
-  display: block;
-  position: absolute;
-  color: white;
-  transition: all 0.8 ease-out;
-  opacity: 0.6;
-}
-
-.displayBottomPanelButton a.mirador-icon-annotationDetail-toggle [class^="icon-"] {
-  cursor:pointer;
-  text-shadow:0 0 10px black;
-  font-size: 1.4em;
-  opacity: 1;
-}
-.displayBottomPanelButton a.mirador-icon-annotationDetail-toggle:hover [class^="icon-"] {
-  text-shadow: 1px 1px 07px black;
-}
-
-a.mirador-icon-annotationDetail-toggle [class^="icon-"]:hover {
-  transition: all 0.8 ease-out;
-  opacity: 1.0;
-}
-.mirador-viewer a.mirador-icon-annotationDetail-toggle {
-  font-size: 1.4em;
-  width:20px;
-  height:20px;
-}
-a.mirador-icon-annotationDetail-toggle.hidden {
-  bottom:0;
-  left: -25px;
 }
 
 a.mirador-icon-image-view [class^="icon-"] {
@@ -3617,14 +3586,16 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   color: rgb( 146, 145, 145 );
   box-sizing: border-box;
   margin-right:5px;
+  padding-bottom:30px;
 }
 
-.mirador-viewer a.mirador-icon-empty-slot, .mirador-viewer a.mirador-icon-window-menu, .mirador-viewer a.mirador-icon-toc  {
+.mirador-viewer a.mirador-icon-window-menu, .mirador-viewer a.mirador-icon-toc  {
   float:left;
   background: none;
   color: rgb( 146, 145, 145 );
   box-sizing: border-box;
   margin-left:5px;
+  padding-bottom:30px;
 }
 
 .mirador-viewer a.mirador-icon-image-view:hover, .mirador-viewer a.mirador-icon-thumbs-view:hover, .mirador-viewer a.mirador-icon-empty-slot:hover, .mirador-viewer a.mirador-icon-window-menu:hover, .mirador-viewer a.mirador-icon-toc:hover {
