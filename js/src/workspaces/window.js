@@ -534,11 +534,6 @@
     bindNavigation: function() {
       var _this = this;
       
-      this.element.find('.mirador-icon-empty-slot').on('click', function() {
-        _this.parent.clearSlot();
-        jQuery.publish("windowRemoved", _this.id);
-      });
-      
       this.element.find('.mirador-icon-image-view').mouseenter(
         function() {
         _this.element.find('.image-list').stop().slideFadeToggle(300);
@@ -584,8 +579,7 @@
       });
 
       this.element.find('.remove-object-option').on('click', function() {
-        _this.parent.clearSlot();
-        jQuery.publish("windowRemoved", _this.id);
+        $.viewer.activeWorkspace.removeNode(_this.parent);
       });
 
       this.element.find('.add-slot-right').on('click', function() {
@@ -642,11 +636,10 @@
             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="Object Metadata"><i class="fa fa-info-circle fa-lg fa-fw"></i></a>',
           '{{/if}}',
         '</div>',
-          //'<a href="javascript:;" class="mirador-btn mirador-icon-empty-slot" title="Close slot"><i class="fa fa-times fa-lg fa-fw"></i> </a>',
           '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="Replace object"><i class="fa fa-table fa-lg fa-fw"></i>',
             '<ul class="dropdown slot-controls">',
-                '<li class="new-object-option">New Object</li>',
-                '<li class="remove-object-option">Remove Object</li>',
+                '<li class="new-object-option">Replace Object</li>',
+                '<li class="remove-object-option">Remove Slot</li>',
                 '<li class="add-slot-right">Add Slot Right</li>',
                 '<li class="add-slot-left">Add Slot Left</li>',
                 '<li class="add-slot-below">Add Slot Below</li>',

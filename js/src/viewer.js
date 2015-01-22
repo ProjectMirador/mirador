@@ -10,7 +10,6 @@
             canvas:                 null,
             currentWorkspaceType:   null,
             activeWorkspace:        null,
-            availableWorkspaces:    null,
             mainMenu:               null,
             workspaceAutoSave:      null,
             windowSize:             {},
@@ -68,7 +67,7 @@
             this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             // add workspace configuration
-            this.activeWorkspace = new $.Workspace({type: this.currentWorkspaceType, parent: this, appendTo: this.element.find('.mirador-viewer') });
+            this.activeWorkspace = new $.Workspace({layoutDescrip: this.workspaces[this.currentWorkspaceType].layout, parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             //set this to be displayed
             this.set('currentWorkspaceVisible', true);
@@ -118,7 +117,7 @@
 
           _this.currentWorkspaceType = type;
 
-          _this.activeWorkspace = new $.Workspace({type: type, parent: this, appendTo: this.element.find('.mirador-viewer') });
+          _this.activeWorkspace = new $.Workspace({layoutDescrip: _this.workspaces[_this.currentWorkspaceType].layout, parent: this, appendTo: this.element.find('.mirador-viewer') });
           
           $.viewer.toggleSwitchWorkspace();
           jQuery.publish("workspaceChanged", type);
@@ -131,6 +130,7 @@
           //need to remove windows that are no longer in the layout
           //jQuery.publish("windowsRemoved");
           _this.currentWorkspaceType = type;
+          _this.activeWorkspace.set('layoutDescrip', _this.workspaces[_this.currentWorkspaceType].layout);
           _this.activeWorkspace.calculateLayout();
           $.viewer.toggleSwitchWorkspace();
 

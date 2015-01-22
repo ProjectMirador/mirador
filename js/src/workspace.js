@@ -3,12 +3,12 @@
   $.Workspace = function(options) {
 
     jQuery.extend(true, this, {
-      type:             null,
       workspaceSlotCls: 'slot',
       focusedSlot:      null,
       slots:            [],
       appendTo:         null,
-      parent:           null
+      parent:           null,
+      layoutDescrip:    null
     }, options);
 
     this.element  = this.element || jQuery('<div class="workspace-container" id="workspace">');
@@ -28,6 +28,23 @@
 
       this.bindEvents();
     },
+    
+    get: function(prop, parent) {
+        if (parent) {
+            return this[parent][prop];
+        }
+        return this[prop];
+    },
+
+    set: function(prop, value, options) {
+        var _this = this;
+        if (options) {
+            this[options.parent][prop] = value;
+        } else {
+            this[prop] = value;
+        }
+        jQuery.publish(prop + '.set', value);
+    },
 
     calculateLayout: function() {
       var _this = this,
@@ -35,7 +52,7 @@
 
       _this.layout = layout = new Isfahan({
         containerId: _this.element.attr('id'),
-        layoutDescription: _this.parent.workspaces[_this.parent.currentWorkspaceType].layout,
+        layoutDescription: _this.layoutDescrip,
         configuration: null,
         padding: 3 
       });
@@ -75,7 +92,9 @@
       .each(function(d) { 
         console.log(_this.slots);
         var slotMap = _this.slots.reduce(function(map, temp_slot) {
-            map[d.id] = temp_slot;
+            if (d.id === temp_slot.slotID) {
+              map[d.id] = temp_slot;
+            }
             return map;
         }, {}),
         slot = slotMap[d.id];
@@ -216,6 +235,8 @@
       var node = jQuery.grep(_this.layout, function(node) { return node.id === targetSlot.slotID; })[0];
       nodeIndex = node.parent ? node.parent.children.indexOf(node) : 0;
       node.parent.children.splice(nodeIndex, 1);
+      var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
+      _this.layoutDescrip = root;
       _this.calculateLayout();
     },
 
