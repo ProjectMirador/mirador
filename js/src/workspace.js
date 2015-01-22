@@ -205,7 +205,7 @@
       // recalculate everything else needed for 
       // the redraw.
       var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
-      _this.parent.workspaces[_this.parent.currentWorkspaceType].layout = root;
+      _this.layoutDescrip = root;
       _this.calculateLayout();
 
     },
