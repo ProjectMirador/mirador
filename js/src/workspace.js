@@ -109,7 +109,7 @@
         .style("height", function(d) { return Math.max(0, d.dy ) + "px"; });
       }
 
-      jQuery.publish("layoutUpdated", _this.slots);
+      jQuery.publish("layoutUpdated", _this.layoutDescrip);
     },
 
     split: function(targetSlot, direction) {
@@ -119,8 +119,7 @@
 
       function addSibling(node, indexDifference) {
         var siblingIndex = nodeIndex + indexDifference,
-        newSibling = _this.newNode(node.type, node.address.concat("." + node.type + (siblingIndex + 1)), node),
-        ndexDifference;
+        newSibling = _this.newNode(node.type, node.address.concat("." + node.type + (siblingIndex + 1)), node);
 
         node.parent.children.splice(siblingIndex, 0, newSibling);
         _this.layout.push(newSibling);
@@ -268,7 +267,7 @@
       if (this.slots[slodId].windowElement) { 
         this.slots[slotId].windowElement.remove();
       }
-      this.slots[slotId].window = new $.Window();
+      this.slots[slotId].window = null;
     },
 
     addItem: function(slotID) {

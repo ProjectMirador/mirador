@@ -243,7 +243,9 @@
         
         addManifestToWorkspace: function(manifestURI, windowConfig) {
             var _this = this,
-            targetSlotID = null;
+            targetSlotID,
+            slot;
+
             windowConfig.manifest = this.manifests[manifestURI];
             windowConfig.currentImageMode = this.activeWorkspace.type === "bookReading" ? 'BookView' : 'ImageView';
             
@@ -255,10 +257,7 @@
             // the invoking slot initialises a new window in 
             // itself.
 
-            // There are fewer loadedManifests than slots.
-            // There are more loadedManifests than slots.
-            // The above two cases are effectively the same, so 
-            // just assign the slotIDs in order of manifest listing.
+            // Just assign the slotIDs in order of manifest listing.
             
             if (windowConfig.slotID) {
                targetSlotID = windowConfig.slotID;
@@ -275,13 +274,13 @@
             //Need to call it once, to the exact slot
             //jQuery.publish('manifestToSlot.'+targetSlotID, windowConfig); 
             
-            var slot;
             jQuery.each(this.activeWorkspace.slots, function(index, workspaceSlot) {
                if (workspaceSlot.slotID === targetSlotID) {
                   slot = workspaceSlot;
                   return false;
                }
             });
+
             slot.manifestToSlot(windowConfig);
         },
         
