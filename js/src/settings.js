@@ -13,67 +13,25 @@
 
     'workspaces' : {
       'singleObject': {
-        'layout': { 
-          'type': 'row'
-        },
+        'layout': '1x1',
         'label': 'Single Object',
         'addNew': false,
         'move': false,
         'iconClass': 'image'
       },
       'compare': {
-        'layout': { 
-          'type': 'row',
-          'children': [
-            { 
-            'type': 'column'
-          },
-          { 
-            'type': 'column'
-          }]
-        },
+        'layout': '1x2',
         'label': 'Compare',
         'iconClass': 'columns'
       },
       'bookReading': {
-        'layout': { 
-          'type': 'row',
-          'children': [{ 
-            'type': 'column'
-          },
-          { 
-            'type': 'column'
-          }]
-        },
+        'layout': '1x2',
         'defaultWindowOptions': {
         },
         'label': 'Book Reading',
         'addNew': true,
         'move': false,
         'iconClass': 'book'
-      },
-      'reference': {
-        'layout': { 
-          'type': 'row',
-          'children': [{ 
-            'type': 'column'
-          },
-          { 
-            'type': 'column',
-            'children':[
-              {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            }]
-          }]
-        },
-        'label': 'Reference',
-        'iconClass': 'th-list'
       },
       '1x1': {
         'layout': { 
