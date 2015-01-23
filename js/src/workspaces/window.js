@@ -134,6 +134,10 @@
           break;
       }
 
+      if ($.viewer.activeWorkspace.slots.length <= 1) {
+        _this.element.find('.remove-object-option').hide();
+      }
+
       this.bindEvents();
     },
     
@@ -177,7 +181,6 @@
         } else {
           panel.css({transform: 'translateY(100%)'});
         }
-
       });
       
       jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
@@ -190,8 +193,14 @@
         });
         jQuery.publish(('annotationListLoaded.' + _this.id));
       });
-
-
+      
+      jQuery.subscribe('layoutUpdated', function(event, slots) {
+        if (slots.length <= 1) {
+          _this.element.find('.remove-object-option').hide();
+        } else {
+          _this.element.find('.remove-object-option').show();
+        }
+      });
     },
 
     clearViews: function() {
@@ -499,7 +508,7 @@
         });
       }
       
-       //next check endpoints
+       // next check endpoints
        jQuery.each($.viewer.annotationEndpoints, function(index, value) {
           var dfd = jQuery.Deferred();
           var endpoint;
@@ -507,7 +516,7 @@
             endpoint = _this.endpoints[value.module];
             endpoint.set('dfd', dfd);
             endpoint.search(_this.currentImageID);
-            //update with new search
+            // update with new search
           } else {
             value.options.element = _this.element;
             value.options.uri = _this.currentImageID;
@@ -518,7 +527,7 @@
           }
          dfd.done(function(loaded) {
            _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
-           //clear out some bad data
+           // clear out some bad data
            _this.annotationsList = jQuery.grep(_this.annotationsList, function (value, index) {
              if (typeof value.on === "undefined") { 
                return false;

@@ -57,8 +57,6 @@
         padding: 3 
       });
 
-      console.log(layout);
-
       var data = layout.filter( function(d) {
         return !d.children;
       });
@@ -90,7 +88,6 @@
       divs.exit()
       .remove("div")
       .each(function(d) { 
-        console.log(_this.slots);
         var slotMap = _this.slots.reduce(function(map, temp_slot) {
             if (d.id === temp_slot.slotID) {
               map[d.id] = temp_slot;
@@ -102,7 +99,6 @@
           jQuery.publish("windowRemoved", slot.window.id);
         }
         _this.slots.splice(_this.slots.indexOf(slot), 1);
-        console.log(_this.slots);
       });
 
       function cell() {
@@ -113,12 +109,12 @@
         .style("height", function(d) { return Math.max(0, d.dy ) + "px"; });
       }
 
+      jQuery.publish("layoutUpdated", _this.slots);
     },
 
     split: function(targetSlot, direction) {
       var _this = this,
       node = jQuery.grep(_this.layout, function(node) { return node.id === targetSlot.slotID; })[0];
-      console.log(node);
       nodeIndex = node.parent ? node.parent.children.indexOf(node) : 0;
 
       function addSibling(node, indexDifference) {
