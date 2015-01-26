@@ -44,18 +44,23 @@
                 var url = jQuery(this).find('input').val();
                 _this.parent.addManifestFromUrl(url, "(Added from URL)");
             });
+            
+            this.element.find('.remove-object-option').on('click', function() {
+              _this.parent.toggleLoadWindow();
+            });
 
             // handle subscribed events
             jQuery.subscribe('manifestsPanelVisible.set', function(_, stateValue) {
                if (stateValue) { _this.show(); return; }
                 _this.hide();
             });
+            
             jQuery.subscribe('manifestAdded', function(event, newManifest, repository) {
               _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifestId: newManifest, resultsWidth: _this.resultsWidth }));
               _this.element.find('#manifest-search').keyup();
             });
             
-            //Filter manifests based on user input
+            // Filter manifests based on user input
             this.element.find('#manifest-search').on('keyup input', function() {
                if (this.value.length > 0) {
                   _this.element.find('.items-listing li').show().filter(function() {
@@ -100,6 +105,7 @@
         template: Handlebars.compile([
           '<div id="manifest-select-menu">',
           '<div class="container">',
+          '<a class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i> Close</a>',
               '<div id="load-controls">',
               '<form action="" id="manifest-search-form">',
                   '<label for="manifest-search">Filter objects:</label>',

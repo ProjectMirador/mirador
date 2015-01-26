@@ -150,7 +150,7 @@
            this.set(state, !currentState, {parent: 'overlayStates'});
         },
         
-        toggleLoadWindow: function(targetSlot) {
+        toggleLoadWindow: function() {
             this.toggleOverlay('manifestsPanelVisible');
         },
         
