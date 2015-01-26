@@ -46,7 +46,16 @@
       sidePanel: null,
       bottomPanel: null,
       bottomPanelVisible: true,
-      overlay: null
+      overlay: null,
+      displayLayout: true,
+      layoutOptions : {
+            "newObject" : true,
+            "close" : true,
+            "slotRight" : true,
+            "slotLeft" : true,
+            "slotAbove" : true,
+            "slotBelow" : true
+          }
     }, options);
 
     this.init();
@@ -108,7 +117,15 @@
       jQuery.each(this.focuses, function(index, value) {
          templateData[value] = true;
       });
-      templateData.title = manifest.label;      
+      templateData.title = manifest.label; 
+      templateData.displayLayout = this.displayLayout; 
+      templateData.layoutOptions = this.layoutOptions; 
+      // if displayLayout is true,  but all individual options are set to false, set displayLayout to false
+      if (this.displayLayout) { 
+        templateData.displayLayout = !Object.keys(this.layoutOptions).every(function(element, index, array) {
+          return _this.layoutOptions[element] === false;
+        });
+      }
       _this.element.prepend(_this.manifestInfoTemplate(templateData));
 
       //clear any existing objects
@@ -639,22 +656,38 @@
               '{{/if}}',
             '</ul>',
           '</a>',
+          '{{#if ThumbnailsView}}',
           '<a href="javascript:;" class="mirador-btn mirador-icon-thumbs-view thumbnails-option"><i class="fa fa-th fa-lg fa-rotate-90 fa-fw"></i>',
           '</a>',
+          '{{/if}}',
           '{{#if MetadataView}}',
             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="Object Metadata"><i class="fa fa-info-circle fa-lg fa-fw"></i></a>',
           '{{/if}}',
         '</div>',
-          '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="Replace object"><i class="fa fa-table fa-lg fa-fw"></i>',
+        '{{#if displayLayout}}',
+          '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="Change Layout"><i class="fa fa-table fa-lg fa-fw"></i>',
             '<ul class="dropdown slot-controls">',
+                '{{#if layoutOptions.newObject}}',
                 '<li class="new-object-option"><i class="fa fa-plus-square fa-lg fa-fw"></i> New Object</li>',
+                '{{/if}}',
+                '{{#if layoutOptions.close}}',
                 '<li class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i> Close</li>',
+                '{{/if}}',
+                '{{#if layoutOptions.slotRight}}',
                 '<li class="add-slot-right"><i class="fa fa-caret-square-o-right fa-lg fa-fw"></i> Add Slot Right</li>',
+                '{{/if}}',
+                '{{#if layoutOptions.slotLeft}}',
                 '<li class="add-slot-left"><i class="fa fa-caret-square-o-left fa-lg fa-fw"></i> Add Slot Left</li>',
+                '{{/if}}',
+                '{{#if layoutOptions.slotAbove}}',
                 '<li class="add-slot-above"><i class="fa fa-caret-square-o-up fa-lg fa-fw"></i> Add Slot Above</li>',
+                '{{/if}}',
+                '{{#if layoutOptions.slotBelow}}',
                 '<li class="add-slot-below"><i class="fa fa-caret-square-o-down fa-lg fa-fw"></i> Add Slot Below</li>',
+                '{{/if}}',
             '</ul>',
           '</a>',
+          '{{/if}}',
           '<a href="javascript:;" class="mirador-btn mirador-icon-toc selected" title="View/Hide Table of Contents"><i class="fa fa-caret-down fa-lg fa-fw"></i></a>',
         '<h3 class="window-manifest-title">{{title}}</h3>',
       '</div>'

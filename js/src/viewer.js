@@ -234,7 +234,9 @@
               bottomPanelAvailable : options.bottomPanel,
               sidePanelAvailable : options.sidePanel,
               overlayAvailable : options.overlay,
-              slotID : slot ? slot : options.slot
+              slotID : slot ? slot : options.slot,
+              displayLayout : options.displayLayout,
+              layoutOptions: options.layoutOptions
             };
 
              this.addManifestToWorkspace(options.loadedManifest, windowConfig);

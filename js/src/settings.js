@@ -273,7 +273,17 @@
        *   "sidePanel" : [true, false]
        *   "overlay" : [true, false]
        *   "windowOptions" : [data specific to the view type, such as OSD bounds and zoom level - automatically saved in SaveController]
-       *   "id" : [unique window ID - set by application and automatically saved in SaveController],
+       *   "id" : [unique window ID - set by application and automatically saved in SaveController]
+       *   "displayLayout" : [true, false], whether or not to display all layout options, removing individual menu options is separate
+       *   "layoutOptions" : control individual menu items in layout menu. if "displayLayout" is false, these options won't be applied
+       *     {
+       *     "newObject" : [true, false]
+       *     "close" : [true, false]
+       *     "slotRight" : [true, false]
+       *     "slotLeft" : [true, false]
+       *     "slotAbove" : [true, false]
+       *     "slotBelow" : [true, false]
+       *     }
        **/
     ],
 
