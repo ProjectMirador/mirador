@@ -189,7 +189,7 @@
       // jQuery.subscribe('set', function(junk) {
       //  // 1.) send the junk to a parser function
       //  // 2.) use this.set(parsedJunk) to update
-      //  // this.currentConfig, with the sideEffect of
+      //  // this.currentConfig, with the side effect of
       //  // saving to localStorage. 
       //
       // });

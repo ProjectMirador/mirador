@@ -9,7 +9,7 @@
             element:                null,
             canvas:                 null,
             currentWorkspaceType:   null,
-            activeWorkspace:        null,
+            workspace:        null,
             mainMenu:               null,
             workspaceAutoSave:      null,
             windowSize:             {},
@@ -67,7 +67,7 @@
             this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             // add workspace configuration
-            this.activeWorkspace = new $.Workspace({layoutDescrip: this.workspaces[this.currentWorkspaceType].layout, parent: this, appendTo: this.element.find('.mirador-viewer') });
+            this.workspace = new $.Workspace({layoutDescrip: this.workspaces[this.currentWorkspaceType].layout, parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             //set this to be displayed
             this.set('currentWorkspaceVisible', true);
@@ -112,12 +112,12 @@
           //remove all windows from config
           jQuery.publish("windowsRemoved");
 
-          _this.activeWorkspace.element.remove();
-          delete _this.activeWorkspace;
+          _this.workspace.element.remove();
+          delete _this.workspace;
 
           _this.currentWorkspaceType = type;
 
-          _this.activeWorkspace = new $.Workspace({layoutDescrip: _this.workspaces[_this.currentWorkspaceType].layout, parent: this, appendTo: this.element.find('.mirador-viewer') });
+          _this.workspace = new $.Workspace({layoutDescrip: _this.workspaces[_this.currentWorkspaceType].layout, parent: this, appendTo: this.element.find('.mirador-viewer') });
           
           $.viewer.toggleSwitchWorkspace();
           jQuery.publish("workspaceChanged", type);
@@ -130,8 +130,8 @@
           //need to remove windows that are no longer in the layout
           //jQuery.publish("windowsRemoved");
           _this.currentWorkspaceType = type;
-          _this.activeWorkspace.set('layoutDescrip', _this.workspaces[_this.currentWorkspaceType].layout);
-          _this.activeWorkspace.calculateLayout();
+          _this.workspace.set('layoutDescrip', _this.workspaces[_this.currentWorkspaceType].layout);
+          _this.workspace.calculateLayout();
           $.viewer.toggleSwitchWorkspace();
 
           jQuery.publish("layoutChanged", type);
@@ -223,7 +223,7 @@
         
         loadManifestFromConfig: function(options) {
           //check if there are available slots, otherwise don't process this object from config
-          var slot = this.activeWorkspace.availableSlot();
+          var slot = this.workspace.availableSlot();
           if (slot) {
             var windowConfig = {
               currentFocus : options.viewType,
@@ -247,7 +247,7 @@
             slot;
 
             windowConfig.manifest = this.manifests[manifestURI];
-            windowConfig.currentImageMode = this.activeWorkspace.type === "bookReading" ? 'BookView' : 'ImageView';
+            windowConfig.currentImageMode = this.workspace.type === "bookReading" ? 'BookView' : 'ImageView';
             
             jQuery.each(this.overlayStates, function(oState, value) {
                 _this.set(oState, false, {parent: 'overlayStates'});
@@ -262,7 +262,7 @@
             if (windowConfig.slotID) {
                targetSlotID = windowConfig.slotID;
             } else {
-              targetSlotID = _this.activeWorkspace.focusedSlot || _this.activeWorkspace.slots.filter(function(slot) { 
+              targetSlotID = _this.workspace.focusedSlot || _this.workspace.slots.filter(function(slot) { 
                 return slot.hasOwnProperty('window') ? true : false;
               })[0].slotID;
             }
@@ -274,7 +274,7 @@
             //Need to call it once, to the exact slot
             //jQuery.publish('manifestToSlot.'+targetSlotID, windowConfig); 
             
-            jQuery.each(this.activeWorkspace.slots, function(index, workspaceSlot) {
+            jQuery.each(this.workspace.slots, function(index, workspaceSlot) {
                if (workspaceSlot.slotID === targetSlotID) {
                   slot = workspaceSlot;
                   return false;
@@ -286,7 +286,7 @@
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {
            this.addManifestToWorkspace(manifestURI, 
-              {currentFocus: this.activeWorkspace.type === "bookReading" ? 'BookView' : 'ImageView', 
+              {currentFocus: this.workspace.type === "bookReading" ? 'BookView' : 'ImageView', 
               currentImageID: imageID});
         },
         

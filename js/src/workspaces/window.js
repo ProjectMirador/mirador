@@ -134,7 +134,7 @@
           break;
       }
 
-      if ($.viewer.activeWorkspace.slots.length <= 1) {
+      if ($.viewer.workspace.slots.length <= 1) {
         _this.element.find('.remove-object-option').hide();
       }
 
@@ -588,23 +588,23 @@
       });
 
       this.element.find('.remove-object-option').on('click', function() {
-        $.viewer.activeWorkspace.removeNode(_this.parent);
+        $.viewer.workspace.removeNode(_this.parent);
       });
 
       this.element.find('.add-slot-right').on('click', function() {
-        $.viewer.activeWorkspace.splitRight(_this.parent);
+        $.viewer.workspace.splitRight(_this.parent);
       });
       
       this.element.find('.add-slot-left').on('click', function() {
-        $.viewer.activeWorkspace.splitLeft(_this.parent);
+        $.viewer.workspace.splitLeft(_this.parent);
       });
 
       this.element.find('.add-slot-below').on('click', function() {
-        $.viewer.activeWorkspace.splitDown(_this.parent);
+        $.viewer.workspace.splitDown(_this.parent);
       });
       
       this.element.find('.add-slot-above').on('click', function() {
-        $.viewer.activeWorkspace.splitUp(_this.parent);
+        $.viewer.workspace.splitUp(_this.parent);
       });
     },
 
