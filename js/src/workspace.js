@@ -226,11 +226,29 @@
     },
 
     removeNode: function(targetSlot) {
-      var _this = this;
-      var node = jQuery.grep(_this.layout, function(node) { return node.id === targetSlot.slotID; })[0];
-      nodeIndex = node.parent ? node.parent.children.indexOf(node) : 0;
-      node.parent.children.splice(nodeIndex, 1);
-      var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
+      var _this = this,
+      node = jQuery.grep(_this.layout, function(node) { return node.id === targetSlot.slotID; })[0],
+      nodeIndex = node.parent ? node.parent.children.indexOf(node) : 0,
+      parentIndex,
+      root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
+
+      if (node.parent !== root && node.parent.children.length === 2) {
+        parentIndex = node.parent.parent.children.indexOf(node.parent);
+        
+        // If the operation is going to destroy the root
+        // or lead to a situation where there will be a 
+        // superfluous parent node, de-mutate the tree,
+        // placing the node in the parent's place with
+        // the parent's address.
+        node.type = node.parent.type;
+        node.address = node.parent.address;
+        node.parent.parent.children.splice(parentIndex, 1, node);
+        node.parent = node.parent.parent; 
+      } else { 
+        // Regardless, remove the node from the parent
+        node.parent.children.splice(nodeIndex, 1);
+      }
+
       _this.layoutDescrip = root;
       _this.calculateLayout();
     },
