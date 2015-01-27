@@ -39,7 +39,7 @@
         bindEvents: function() {
             var _this = this;
             // handle interface events
-            this.element.find('form#url-load-form').on('submit', function() {
+            this.element.find('form#url-load-form').on('submit', function(event) {
                 event.preventDefault();
                 var url = jQuery(this).find('input').val();
                 _this.parent.addManifestFromUrl(url, "(Added from URL)");
