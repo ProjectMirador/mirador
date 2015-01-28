@@ -1,6 +1,6 @@
 (function($) {
 
-  $.WorkspacesPanel = function(options) {
+  $.WorkspacePanel = function(options) {
 
     jQuery.extend(true, this, {
       element: null,
@@ -12,19 +12,11 @@
 
   };
 
-  $.WorkspacesPanel.prototype = {
+  $.WorkspacePanel.prototype = {
     init: function () {
       var _this = this,
       workspaceTemplate = [];
       
-      jQuery.each(this.parent.availableWorkspaces, function(index, value) {
-        workspaceTemplate.push({
-          dataClass: value,
-          label : _this.parent.workspaces[value].label,
-          iconClass: _this.parent.workspaces[value].iconClass
-        });
-      });
-
       this.element = jQuery(this.template({ workspaces : workspaceTemplate})).appendTo(this.appendTo);
       this.bindEvents();
     },

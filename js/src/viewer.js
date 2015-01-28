@@ -8,8 +8,9 @@
             data:                   null,
             element:                null,
             canvas:                 null,
-            currentWorkspaceType:   null,
-            workspace:        null,
+            workspaceType:          null,
+            layout:                 null,
+            workspace:              null,
             mainMenu:               null,
             workspaceAutoSave:      null,
             windowSize:             {},
@@ -25,7 +26,6 @@
         if (this.data) {
             this.init();
         }
-
     };
 
     $.Viewer.prototype = {
@@ -59,7 +59,7 @@
             }
             
             // add workspaces panel
-            this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
+            this.workspacePanel = new $.WorkspacePanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
 
             // add workset select menu (hidden by default) 
             this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
@@ -67,9 +67,13 @@
             this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             // add workspace configuration
-            this.workspace = new $.Workspace({layoutDescrip: this.workspaces[this.currentWorkspaceType].layout, parent: this, appendTo: this.element.find('.mirador-viewer') });
+            this.workspace = new $.Workspace({
+              layoutDescription: typeof this.layout === 'string' ? $.layoutDescriptionFromGridString(this.layout) : this.layout, 
+              parent: this, 
+              appendTo: this.element.find('.mirador-viewer')
+            });
             
-            //set this to be displayed
+            // set this to be displayed
             this.set('currentWorkspaceVisible', true);
             
             this.bindEvents();
@@ -106,35 +110,17 @@
             jQuery.publish(prop + '.set', value);
         },
 
-        switchWorkspace: function(type) {
-          _this = this;
-          
-          //remove all windows from config
-          jQuery.publish("windowsRemoved");
-
-          _this.workspace.element.remove();
-          delete _this.workspace;
-
-          _this.currentWorkspaceType = type;
-
-          _this.workspace = new $.Workspace({layoutDescrip: _this.workspaces[_this.currentWorkspaceType].layout, parent: this, appendTo: this.element.find('.mirador-viewer') });
-          
-          $.viewer.toggleSwitchWorkspace();
-          jQuery.publish("workspaceChanged", type);
-        },
-        
         updateLayout: function(type) {
           _this = this;
           
           //remove all windows from config
           //need to remove windows that are no longer in the layout
           //jQuery.publish("windowsRemoved");
-          _this.currentWorkspaceType = type;
-          _this.workspace.set('layoutDescrip', _this.workspaces[_this.currentWorkspaceType].layout);
+          _this.workspaceType = type;
+          _this.workspace.set('layoutDescription', _this.workspaces[_this.workspaceType].layout);
           _this.workspace.calculateLayout();
           $.viewer.toggleSwitchWorkspace();
 
-          jQuery.publish("layoutChanged", type);
         },
         
         // Sets state of overlays that layer over the UI state
@@ -300,4 +286,3 @@
     };
 
 }(Mirador));
-

@@ -142,8 +142,9 @@
         }
       });
       
-      jQuery.subscribe("layoutChanged", function(event, workspaceType) {
-         _this.set('currentWorkspaceType', workspaceType, {parent: "currentConfig"} );
+      jQuery.subscribe("layoutChanged", function(event, layoutDescription) {
+        // string parents to prevent invalid circular representation.
+        _this.set('layout', layoutDescription, {parent: "currentConfig"} );
       });
       
       jQuery.subscribe("windowAdded", function(event, windowID) {

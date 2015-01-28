@@ -7,25 +7,20 @@
 
     'workspaceAutoSave': true,
 
-    'currentWorkspaceType': 'singleObject',
-
-    'availableWorkspaces': ['1x1','1x2', '1x3', '2x1', '2x2', '2x3', '3x1', '3x2', '3x3'],
+    'workspaceType': 'singleObject',
 
     'workspaces' : {
       'singleObject': {
-        'layout': '1x1',
         'label': 'Single Object',
         'addNew': false,
         'move': false,
         'iconClass': 'image'
       },
       'compare': {
-        'layout': '1x2',
         'label': 'Compare',
         'iconClass': 'columns'
       },
       'bookReading': {
-        'layout': '1x2',
         'defaultWindowOptions': {
         },
         'label': 'Book Reading',
@@ -33,235 +28,9 @@
         'move': false,
         'iconClass': 'book'
       },
-      '1x1': {
-        'layout': { 
-          'type': 'row'
-        },
-        'label': '1x1',
-        'addNew': false,
-        'move': false,
-        'iconClass': 'image'
-      },
-      '1x2': {
-        'layout': { 
-          'type': 'row',
-          'children': [
-            { 
-            'type': 'column'
-          },
-          { 
-            'type': 'column'
-          }]
-        },
-        'label': '1x2',
-        'iconClass': 'columns'
-      },
-      '1x3': {
-        'layout': { 
-          'type': 'row',
-          'children': [
-            { 
-            'type': 'column'
-          },
-          { 
-            'type': 'column'
-          },
-          { 
-            'type': 'column'
-          }]
-        },
-        'label': '1x3',
-        'iconClass': 'columns'
-      },
-      '2x1': {
-        'layout': { 
-          'type': 'row',
-          'children': [
-            { 
-            'type': 'column',
-            'children': [
-              { 
-              'type': 'row'
-            },{ 
-              'type': 'row'
-            }]
-        }]
-      },
-        'label': '2x1',
-        'iconClass': 'columns'
-      },
-      '2x2': {
-        'layout': { 
-          'type': 'row',
-          'children': [{ 
-            'type': 'column',
-            'children':[
-              {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            }]
-          },
-          { 
-            'type': 'column',
-            'children':[
-              {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            }]
-          }]
-        },
-        'label': '2x2',
-        'iconClass': 'columns'
-      },
-      '2x3': {
-        'layout': { 
-          'type': 'row',
-          'children': [
-          { 
-            'type': 'column',
-            'children':[
-              {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            }]
-          },
-          { 
-            'type': 'column',
-            'children':[
-              {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            }]
-          },
-          { 
-            'type': 'column',
-            'children':[
-              {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            }]
-          }
-          ]
-        },
-        'label': '2x3',
-        'iconClass': 'columns'
-      },
-      '3x1': {
-        'layout': { 
-          'type': 'row',
-          'children': [
-            {
-            'type': 'column',
-            'children': [
-              { 
-              'type': 'row'
-            },
-            { 
-              'type': 'row'
-            },
-            { 
-              'type': 'row'
-            }]
-          }]
-        },
-        'label': '3x1',
-        'iconClass': 'columns'
-      },
-      '3x2': {
-        'layout': { 
-          'type': 'row',
-          'children': [{ 
-            'type': 'column',
-            'children':[
-              {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            }]
-          },
-          { 
-            'type': 'column',
-            'children':[
-              {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            }]
-          }]
-        },
-        'label': '3x2',
-        'iconClass': 'columns'
-      },
-      '3x3': {
-        'layout': { 
-          'type': 'row',
-          'children': [
-          { 
-            'type': 'column',
-            'children':[
-              {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            }]
-          },
-          { 
-            'type': 'column',
-            'children':[
-              {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            }]
-          },
-          { 
-            'type': 'column',
-            'children':[
-              {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            },
-            {
-              'type':'row'
-            }]
-          }
-          ]
-        },
-        'label': '3x3',
-        'iconClass': 'columns'
-      }
-      // add new workspace types by appending a 
-      // profile with plugin initialisation code:
-      // $.DEFAULT_SETTINGS.availableWorkspaces['myNwqWorkspace'] = {...}
     },
+
+    'layout': '1x2',
 
     'windowObjects' : [
       /** within a single object, the following options:

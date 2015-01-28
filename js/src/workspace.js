@@ -6,9 +6,10 @@
       workspaceSlotCls: 'slot',
       focusedSlot:      null,
       slots:            [],
+      windows:          [],
       appendTo:         null,
       parent:           null,
-      layoutDescrip:    null
+      layoutDescription:    null
     }, options);
 
     this.element  = this.element || jQuery('<div class="workspace-container" id="workspace">');
@@ -52,10 +53,12 @@
 
       _this.layout = layout = new Isfahan({
         containerId: _this.element.attr('id'),
-        layoutDescription: _this.layoutDescrip,
+        layoutDescription: _this.layoutDescription,
         configuration: null,
         padding: 3 
       });
+      
+      var layoutCopy = layout.slice(0); // remove all parent references for JSONification
 
       var data = layout.filter( function(d) {
         return !d.children;
@@ -109,7 +112,11 @@
         .style("height", function(d) { return Math.max(0, d.dy ) + "px"; });
       }
 
-      jQuery.publish("layoutUpdated", _this.layoutDescrip);
+      var orphanRoot = layoutCopy.map(function(child) {
+        delete child.parent;
+        if (child.depth === 0) return child;
+      })[0];
+      jQuery.publish("layoutChanged", orphanRoot);
     },
 
     split: function(targetSlot, direction) {
@@ -200,7 +207,7 @@
       // recalculate everything else needed for 
       // the redraw.
       var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
-      _this.layoutDescrip = root;
+      _this.layoutDescription = root;
       _this.calculateLayout();
 
     },
@@ -249,7 +256,7 @@
         node.parent.children.splice(nodeIndex, 1);
       }
 
-      _this.layoutDescrip = root;
+      _this.layoutDescription = root;
       _this.calculateLayout();
     },
 
@@ -303,4 +310,3 @@
   };
 
 }(Mirador));
-
