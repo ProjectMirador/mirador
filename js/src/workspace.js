@@ -58,8 +58,6 @@
         padding: 3 
       });
       
-      var layoutCopy = layout.slice(0); // remove all parent references for JSONification
-
       var data = layout.filter( function(d) {
         return !d.children;
       });
@@ -112,11 +110,8 @@
         .style("height", function(d) { return Math.max(0, d.dy ) + "px"; });
       }
 
-      var orphanRoot = layoutCopy.map(function(child) {
-        delete child.parent;
-        if (child.depth === 0) return child;
-      })[0];
-      jQuery.publish("layoutChanged", orphanRoot);
+      var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
+      jQuery.publish("layoutChanged", root);
     },
 
     split: function(targetSlot, direction) {

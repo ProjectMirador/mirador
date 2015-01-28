@@ -68,7 +68,7 @@
             
             // add workspace configuration
             this.workspace = new $.Workspace({
-              layoutDescription: typeof this.layout === 'string' ? $.layoutDescriptionFromGridString(this.layout) : this.layout, 
+              layoutDescription: this.layout.charAt(0) === '{' ? JSON.parse(this.layout) : $.layoutDescriptionFromGridString(this.layout), 
               parent: this, 
               appendTo: this.element.find('.mirador-viewer')
             });
