@@ -212,8 +212,8 @@
   };
 
   $.layoutDescriptionFromGridString = function (gridString) {
-    var columns = parseInt(gridString.substring(0, gridString.indexOf("x"))),
-    rowsPerColumn = parseInt(gridString.substring(gridString.indexOf("x") + 1, gridString.length)),
+    var columns = parseInt(gridString.substring(gridString.indexOf("x") + 1, gridString.length),10),
+    rowsPerColumn = parseInt(gridString.substring(0, gridString.indexOf("x")),10),
     layoutDescription = {
       type:'row'
     };

@@ -27,7 +27,7 @@
         'addNew': true,
         'move': false,
         'iconClass': 'book'
-      },
+      }
     },
 
     'layout': '1x2',
