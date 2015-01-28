@@ -156,6 +156,10 @@
       }
 
       this.bindEvents();
+      
+      if (this.imagesList.length === 1) {
+        this.bottomPanelVisibility(false);      
+      }
     },
 
     update: function(options) {
