@@ -170,14 +170,17 @@
                   manifests[url] = null;
                   _this.addManifestFromUrl(url, what.location ? what.location : '');
                 } else if (what.hasOwnProperty('collectionUri')) {
-                  // TODO: fetch should be asynchronous
-                  var colljs = $.getJsonFromUrl(what.collectionUri);
-                  if (colljs.hasOwnProperty('manifests')) {
-                    jQuery.each(colljs.manifests, function(ci, mfst) {
+                  jQuery.getJSON(what.collectionUri).done(function (data, status, jqXHR) {
+                    if (data.hasOwnProperty('manifests')){
+                      jQuery.each(data.manifests, function (ci, mfst) {
+                        console.log(mfst['@id']);
                       manifests[url] = null;
                       _this.addManifestFromUrl(mfst['@id'], '');
                     });
                   }
+                  }).fail(function(jqXHR, status, error) {
+                    console.log(jqXHR, status, error);
+                  });
                 }
             });
 
@@ -286,4 +289,3 @@
     };
 
 }(Mirador));
-
