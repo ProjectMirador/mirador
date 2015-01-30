@@ -5,6 +5,11 @@
  * init()
  * search(uri)
  * save(oaAnnotation)
+ * TODO:
+ * create()
+ * read()
+ * update()
+ * delete()
  *
  * Optional, if endpoint is not OA compliant:
  * getAnnotationInOA(endpointAnnotation)

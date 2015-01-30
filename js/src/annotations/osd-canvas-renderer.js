@@ -50,6 +50,40 @@
           element: osdOverlay,
           location: _this.getOsdFrame(region)
         });
+        var annoText,
+        tags = [];
+        if (jQuery.isArray(annotation.resource)) {
+          jQuery.each(annotation.resource, function(index, value) {
+            if (value['@type'] === "dctypes:Text") {
+              annoText = value.chars;
+            } else if (value['@type'] == "oa:Tag") {
+              tags.push(value.chars);
+            }
+          });
+        } else {
+          annoText = annotation.resource.chars;
+        }
+        jQuery(osdOverlay).qtip({
+           overwrite : false,
+           content: {
+            title : annoText,
+            text : tags
+            },
+            position : {
+              target : 'mouse',
+              //container : jQuery(_this.osdViewer.element).find('.openseadragon-canvas'),
+              adjust : {
+                mouse: false
+              }
+            },
+            style : {
+              classes : 'qtip-bootstrap'
+            },
+            hide: {
+                fixed: true,
+                delay: 300
+            }
+         });
       });
 
       this.bindEvents();
@@ -145,7 +179,7 @@
                     left: new OpenSeadragon.getMousePosition(event).x-leftOffset
                 };
       //this.parent.annotator.showViewer(this.parent.prepareForAnnotator(annotation), position);
-      if (renderAnnotations.length > 0) {this.parent.annotator.showViewer(renderAnnotations, position);}
+      //if (renderAnnotations.length > 0) {this.parent.annotator.showViewer(renderAnnotations, position);}
     },
     
     onMouseLeave: function() {
