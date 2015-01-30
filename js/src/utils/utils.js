@@ -220,8 +220,6 @@
 
     if (gridString === "1x1") return layoutDescription;
 
-    console.log(columns, rowsPerColumn);
-
     layoutDescription.children = [];
 
     // Javascript does not have range expansions quite yet,

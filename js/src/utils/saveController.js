@@ -146,7 +146,6 @@
         // string parents to prevent invalid circular representation.
         var serialisedLayout = JSON.stringify(layoutDescription, function(key, value) {
           if (key === 'parent') return undefined;
-          console.log('made it here');
           return value;
         });
         _this.set('layout', serialisedLayout, {parent: "currentConfig"} );

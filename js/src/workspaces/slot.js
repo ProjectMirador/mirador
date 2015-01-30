@@ -31,29 +31,6 @@
     bindEvents: function() {
       var _this = this;
 
-      // Slot only subscribes under its own name,
-      // so it will be the only one whose function is
-      // called to create a window when the 
-      // load menu is invoked from it.
-      /*Query.subscribe('manifestToSlot.'+_this.slotID, function(e, windowConfig) { 
-        _this.clearSlot();
-        windowConfig.parent = _this;
-        if (!_this.window && !windowConfig.id) {
-           windowConfig.id = $.genUUID();
-        }
-        if (_this.window && !windowConfig.id) {
-           windowConfig.id = _this.window.id;
-        } 
-        windowConfig.appendTo = _this.element;
-        if (_this.window) {
-          _this.window.update(windowConfig);
-        } else {
-          jQuery.publish("windowAdded", windowConfig.id);
-          _this.window = new $.Window(windowConfig);
-        }
-      })*/
-      
-     console.log('added an event');
      this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
     },
     
