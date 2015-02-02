@@ -8,9 +8,9 @@
             data:                   null,
             element:                null,
             canvas:                 null,
-            currentWorkspaceType:   null,
-            activeWorkspace:        null,
-            availableWorkspaces:    null,
+            workspaceType:          null,
+            layout:                 null,
+            workspace:              null,
             mainMenu:               null,
             workspaceAutoSave:      null,
             windowSize:             {},
@@ -26,7 +26,6 @@
         if (this.data) {
             this.init();
         }
-
     };
 
     $.Viewer.prototype = {
@@ -60,7 +59,7 @@
             }
             
             // add workspaces panel
-            this.workspacesPanel = new $.WorkspacesPanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
+            this.workspacePanel = new $.WorkspacePanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
 
             // add workset select menu (hidden by default) 
             this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
@@ -68,10 +67,19 @@
             this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             // add workspace configuration
-            this.activeWorkspace = new $.Workspace({type: this.currentWorkspaceType, parent: this, appendTo: this.element.find('.mirador-viewer') });
+            this.layout = typeof this.layout !== 'string' ? JSON.stringify(this.layout) : this.layout;
+            this.workspace = new $.Workspace({
+              layoutDescription: this.layout.charAt(0) === '{' ? JSON.parse(this.layout) : $.layoutDescriptionFromGridString(this.layout), 
+              parent: this, 
+              appendTo: this.element.find('.mirador-viewer')
+            });
             
-            //set this to be displayed
+            // set this to be displayed
             this.set('currentWorkspaceVisible', true);
+
+            // this.windowObjects.forEach(windowObjects, function(windowConfig) {
+            //   this.workspace.addWindow(windowConfig);
+            // });
             
             this.bindEvents();
         },
@@ -107,21 +115,17 @@
             jQuery.publish(prop + '.set', value);
         },
 
-        switchWorkspace: function(type) {
+        updateLayout: function(type) {
           _this = this;
           
           //remove all windows from config
-          jQuery.publish("windowsRemoved");
-
-          _this.activeWorkspace.element.remove();
-          delete _this.activeWorkspace;
-
-          _this.currentWorkspaceType = type;
-
-          _this.activeWorkspace = new $.Workspace({type: type, parent: this, appendTo: this.element.find('.mirador-viewer') });
-          
+          //need to remove windows that are no longer in the layout
+          //jQuery.publish("windowsRemoved");
+          _this.workspaceType = type;
+          _this.workspace.set('layoutDescription', _this.workspaces[_this.workspaceType].layout);
+          _this.workspace.calculateLayout();
           $.viewer.toggleSwitchWorkspace();
-          jQuery.publish("workspaceChanged", type);
+
         },
         
         // Sets state of overlays that layer over the UI state
@@ -137,7 +141,7 @@
            this.set(state, !currentState, {parent: 'overlayStates'});
         },
         
-        toggleLoadWindow: function(targetSlot) {
+        toggleLoadWindow: function() {
             this.toggleOverlay('manifestsPanelVisible');
         },
         
@@ -210,7 +214,7 @@
         
         loadManifestFromConfig: function(options) {
           //check if there are available slots, otherwise don't process this object from config
-          var slot = this.activeWorkspace.availableSlot();
+          var slot = this.workspace.availableSlot();
           if (slot) {
             var windowConfig = {
               currentFocus : options.viewType,
@@ -221,7 +225,9 @@
               bottomPanelAvailable : options.bottomPanel,
               sidePanelAvailable : options.sidePanel,
               overlayAvailable : options.overlay,
-              slotID : slot ? slot : options.slot
+              slotID : slot ? slot : options.slot,
+              displayLayout : options.displayLayout,
+              layoutOptions: options.layoutOptions
             };
 
              this.addManifestToWorkspace(options.loadedManifest, windowConfig);
@@ -230,9 +236,11 @@
         
         addManifestToWorkspace: function(manifestURI, windowConfig) {
             var _this = this,
-            targetSlotID = null;
+            targetSlotID,
+            slot;
+
             windowConfig.manifest = this.manifests[manifestURI];
-            windowConfig.currentImageMode = this.activeWorkspace.type === "bookReading" ? 'BookView' : 'ImageView';
+            windowConfig.currentImageMode = this.workspace.type === "bookReading" ? 'BookView' : 'ImageView';
             
             jQuery.each(this.overlayStates, function(oState, value) {
                 _this.set(oState, false, {parent: 'overlayStates'});
@@ -242,39 +250,33 @@
             // the invoking slot initialises a new window in 
             // itself.
 
-            // There are fewer loadedManifests than slots.
-            // There are more loadedManifests than slots.
-            // The above two cases are effectively the same, so 
-            // just assign the slotIDs in order of manifest listing.
+            // Just assign the slotIDs in order of manifest listing.
             
             if (windowConfig.slotID) {
                targetSlotID = windowConfig.slotID;
             } else {
-              targetSlotID = _this.activeWorkspace.focusedSlot || _this.activeWorkspace.slots.filter(function(slot) { 
+              targetSlotID = _this.workspace.focusedSlot || _this.workspace.slots.filter(function(slot) { 
                 return slot.hasOwnProperty('window') ? true : false;
               })[0].slotID;
             }
-            
-            // There is an exact mapping with given slotIDs.
-            // It is freeform view and all bets are off. 
             
             //The publish is sending too many events and it's creating a lot of cascading issues
             //Need to call it once, to the exact slot
             //jQuery.publish('manifestToSlot.'+targetSlotID, windowConfig); 
             
-            var slot;
-            jQuery.each(this.activeWorkspace.slots, function(index, workspaceSlot) {
+            jQuery.each(this.workspace.slots, function(index, workspaceSlot) {
                if (workspaceSlot.slotID === targetSlotID) {
                   slot = workspaceSlot;
                   return false;
                }
             });
+
             slot.manifestToSlot(windowConfig);
         },
         
         toggleImageViewInWorkspace: function(imageID, manifestURI) {
            this.addManifestToWorkspace(manifestURI, 
-              {currentFocus: this.activeWorkspace.type === "bookReading" ? 'BookView' : 'ImageView', 
+              {currentFocus: this.workspace.type === "bookReading" ? 'BookView' : 'ImageView', 
               currentImageID: imageID});
         },
         
@@ -286,4 +288,3 @@
     };
 
 }(Mirador));
-

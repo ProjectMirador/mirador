@@ -19,7 +19,7 @@
     "grunt-contrib-clean": "*",
     "grunt-git-describe": "*",
     "grunt-contrib-jasmine": "*",
-    "grunt-template-jasmine-istanbul": "gyandeeps/grunt-template-jasmine-istanbul",
+    "grunt-template-jasmine-istanbul": "^0.3.3",
     "grunt-cli": "*",
     "grunt-coveralls": "^1.0.0",
     "jasmine-core": "^2.1.3",

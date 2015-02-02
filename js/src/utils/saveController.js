@@ -19,13 +19,13 @@
     init: function(config) {
       var _this = this;
       var sessionID = window.location.hash.substring(1); // will return empty string if none exists, causing the or statement below to evaluate to false, generating a new sesssionID.
-      
+
       if (sessionID) {
         this.sessionID =  sessionID;
       } else {
         this.sessionID = $.genUUID(); // might want a cleaner thing for the url.
       }
-      
+
       if (localStorage.getItem(this.sessionID)) {
         this.currentConfig = JSON.parse(localStorage.getItem(sessionID));
       } else {
@@ -35,59 +35,59 @@
           var jsonblob = params[1];
           var ajaxURL = "https://jsonblob.com/api/jsonBlob/"+jsonblob;
           jQuery.ajax({
-           type: 'GET',
-           url: ajaxURL, 
-           headers: { 
-             'Accept': 'application/json',
-             'Content-Type': 'application/json' 
+            type: 'GET',
+            url: ajaxURL, 
+            headers: { 
+              'Accept': 'application/json',
+              'Content-Type': 'application/json' 
             },
             success: function(data, textStatus, request) {
               _this.currentConfig = data;
-           },
-           async: false
-         });
+            },
+            async: false
+          });
           //get json from jsonblob and set currentConfig to it
         } else {
-           this.currentConfig = config;
+          this.currentConfig = config;
         }
-    }        
-    //remove empty hashes from config
-    this.currentConfig.windowObjects = jQuery.map(this.currentConfig.windowObjects, function(value, index) {
-         if (Object.keys(value).length === 0) return null;  
-         return value;
+      }        
+      //remove empty hashes from config
+      this.currentConfig.windowObjects = jQuery.map(this.currentConfig.windowObjects, function(value, index) {
+        if (Object.keys(value).length === 0) return null;  
+        return value;
       });
 
-    //add UUIDs to parts of config that need them
-    if (this.currentConfig.windowObjects) {
+      //add UUIDs to parts of config that need them
+      if (this.currentConfig.windowObjects) {
         jQuery.each(this.currentConfig.windowObjects, function(index, window) {
-            if (!window.id) {
-                window.id = $.genUUID();
-            }
+          if (!window.id) {
+            window.id = $.genUUID();
+          }
         });
-    }
-    // see: http://html5demos.com/history and http://diveintohtml5.info/history.html
-    // put history stuff here, for a great cross-browser demo, see: http://browserstate.github.io/history.js/demo/
-    //http://stackoverflow.com/questions/17801614/popstate-passing-popped-state-to-event-handler
-        
-    //also remove ?json bit so it's a clean URL
-    var cleanURL = window.location.href.replace(window.location.search, "");
-    if (window.location.hash) {
-        history.replaceState(this.currentConfig, "Mirador Session", cleanURL);
-    } else {
-        history.replaceState(this.currentConfig, "Mirador Session", cleanURL+"#"+this.sessionID);
-    }
+      }
+      // see: http://html5demos.com/history and http://diveintohtml5.info/history.html
+      // put history stuff here, for a great cross-browser demo, see: http://browserstate.github.io/history.js/demo/
+      //http://stackoverflow.com/questions/17801614/popstate-passing-popped-state-to-event-handler
 
-    this.bindEvents();
-      
-  },
+      //also remove ?json bit so it's a clean URL
+      var cleanURL = window.location.href.replace(window.location.search, "");
+      if (window.location.hash) {
+        history.replaceState(this.currentConfig, "Mirador Session", cleanURL);
+      } else {
+        history.replaceState(this.currentConfig, "Mirador Session", cleanURL+"#"+this.sessionID);
+      }
+
+      this.bindEvents();
+
+    },
 
     set: function(prop, value, options) {
       // when a property of the config is updated,
       // save it to localStore.
       if (options) {
-          this[options.parent][prop] = value;
+        this[options.parent][prop] = value;
       } else {
-          this[prop] = value;
+        this[prop] = value;
       }
       this.save();
       jQuery.publish("saveControllerConfigUpdated");
@@ -98,79 +98,84 @@
       // listen to existing events and use the 
       // available data to update the appropriate 
       // field in the stored config.
-      
+
       jQuery.subscribe('focusUpdated', function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
         if (windowObjects && windowObjects.length > 0) {
-            jQuery.each(windowObjects, function(index, window){
-                if (window.id === options.id) {
-                    jQuery.extend(windowObjects[index], options);
-                }
-            });
+          jQuery.each(windowObjects, function(index, window){
+            if (window.id === options.id) {
+              jQuery.extend(windowObjects[index], options);
+            }
+          });
         } else {
-           windowObjects = [options];
+          windowObjects = [options];
         }
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
-      
+
       jQuery.subscribe("imageBoundsUpdated", function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
         if (windowObjects && windowObjects.length > 0) {
-            jQuery.each(windowObjects, function(index, window){
-                if (window.id === options.id) {
-                    if (!windowObjects[index].windowOptions) {
-                      windowObjects[index].windowOptions = {};
-                    }
-                    windowObjects[index].windowOptions.osdBounds = options.osdBounds;
-                }
-            });
+          jQuery.each(windowObjects, function(index, window){
+            if (window.id === options.id) {
+              if (!windowObjects[index].windowOptions) {
+                windowObjects[index].windowOptions = {};
+              }
+              windowObjects[index].windowOptions.osdBounds = options.osdBounds;
+            }
+          });
         }
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
-      
+
       jQuery.subscribe('manifestAdded', function(event, url, repository) {
         var data = _this.currentConfig.data;
         var objectInConfig = false;
         jQuery.each(data, function(index, manifestObject){
-            if (manifestObject.manifestUri === url) {
-                objectInConfig = true;
-            }
+          if (manifestObject.manifestUri === url) {
+            objectInConfig = true;
+          }
         });
         if (!objectInConfig) {
-            data.push({"manifestUri":url, "location":repository});
-            _this.set("data", data, {parent: "currentConfig"});
+          data.push({"manifestUri":url, "location":repository});
+          _this.set("data", data, {parent: "currentConfig"});
         }
       });
-      
-      jQuery.subscribe("workspaceChanged", function(event, workspaceType) {
-         _this.set('currentWorkspaceType', workspaceType, {parent: "currentConfig"} );
+
+      jQuery.subscribe("layoutChanged", function(event, layoutDescription) {
+        // string parents to prevent invalid circular representation.
+        var serialisedLayout = JSON.stringify(layoutDescription, function(key, value) {
+          if (key === 'parent') return undefined;
+          return value;
+        });
+        _this.set('layout', serialisedLayout, {parent: "currentConfig"} );
       });
-      
+
       jQuery.subscribe("windowAdded", function(event, windowID) {
         var windowObjects = _this.currentConfig.windowObjects,
         windowInConfig = false;
         jQuery.each(windowObjects, function(index, window){
-           if (window.id === windowID) {
-              windowInConfig = true;
-           }
+          if (window.id === windowID) {
+            windowInConfig = true;
+          }
         });
         if (!windowInConfig) {
-           windowObjects.push({'id' : windowID});
+          windowObjects.push({'id' : windowID});
         }
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
-      
+
       jQuery.subscribe("windowsRemoved", function(event) {
         _this.set("windowObjects", [], {parent: "currentConfig"} );
       });
-      
+
       jQuery.subscribe("windowRemoved", function(event, windowID) {
         var windowObjects = jQuery.grep(_this.currentConfig.windowObjects, function(window, index) {
-           return window.id !== windowID;
+          return window.id !== windowID;
         });
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
-      
+
       jQuery.subscribe('etc...', function(junk) {
         // handle adding the property in the appropriate place 
         // in this.currentConfig by passing to the _this.set(), 
@@ -189,7 +194,7 @@
       // jQuery.subscribe('set', function(junk) {
       //  // 1.) send the junk to a parser function
       //  // 2.) use this.set(parsedJunk) to update
-      //  // this.currentConfig, with the sideEffect of
+      //  // this.currentConfig, with the side effect of
       //  // saving to localStorage. 
       //
       // });

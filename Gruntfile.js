@@ -34,7 +34,8 @@ module.exports = function(grunt) {
     'js/lib/pubsub.min.js',
     'js/lib/URI.min.js',
     'js/lib/mousetrap.min.js',
-    'js/lib/ZeroClipboard.min.js'
+    'js/lib/ZeroClipboard.min.js',
+    'js/lib/main.js'
   ],
 
   // libraries/plugins for running tests
