@@ -4,10 +4,6 @@ describe('Mirador | mirador.js', function() {
   beforeEach(function() {
     localStorage.clear();
 
-    // suppress console messages in Jasmine output
-    console.error = function() { return true; }
-    console.log = function() { return true; }
-
     loadFixtures('mirador.html');
 
     Mirador({
@@ -21,7 +17,6 @@ describe('Mirador | mirador.js', function() {
     });
 
     $ = Mirador;
-    console.log($);
   });
 
 
@@ -61,23 +56,42 @@ describe('Mirador | mirador.js', function() {
     });
 */
 
-    it('should return JSON data for a given URL via ajax call', function() {
-      var data = { 'a': 'b' },
-          error; // undefined
-
-      spyOn(jQuery, 'ajax').and.callFake(function(params) {
-        if (/success$/.test(params.url)) {
-          params.success(data);
-        } else {
-          params.error(error);
-        }
+    describe('getting manifests', function() {
+      beforeEach(function() {
+        this.server = sinon.fakeServer.create();
       });
 
-      expect($.getJsonFromUrl('http://manifest/url/success', true)).toEqual(data);
-      expect($.getJsonFromUrl('http://manifest/url/success', false)).toEqual(data);
-      expect($.getJsonFromUrl('http://manifest/url/failed', false)).toEqual(error);
-    });
+      afterEach(function() {
+        this.server.restore();
+      });
 
+      // it('should return JSON data for a given URL via ajax call', function() {
+      //   var data = { 'a': 'b' },
+      //   error; // undefined
+      //   
+      //   this.server.respondWith("GET", "http://manifest/url/success",
+      //                           [200, { "Content-Type": "application/json" },
+      //                             JSON.stringify(data)]);
+      //   this.server.respondWith("GET", "http://manifest/url/failed",
+      //                           [500, {}, '']);
+
+      //   var callback = sinon.spy();
+      //   myLib.getCommentsFor("/manifest/url", callback);
+      //   this.server.respond();
+
+      //   // spyOn(jQuery, 'ajax').and.callFake(function(params) {
+      //   //   if (/success$/.test(params.url)) {
+      //   //     params.success(data);
+      //   //   } else {
+      //   //     params.error(error);
+      //   //   }
+      //   // });
+
+      //   expect($.getJsonFromUrl('http://manifest/url/success', true)).toEqual(data);
+      //   expect($.getJsonFromUrl('http://manifest/url/success', false)).toEqual(data);
+      //   expect($.getJsonFromUrl('http://manifest/url/failed', false)).toEqual(error);
+      // });
+    });
 /* Moved to metadataView
     it('should return label for a given view name', function() {
       expect($.getViewLabel('xyzView')).toEqual('Xyz View');

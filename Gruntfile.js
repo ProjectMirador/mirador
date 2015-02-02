@@ -39,7 +39,8 @@ module.exports = function(grunt) {
 
   // libraries/plugins for running tests
   specJs = [
-    'spec/lib/jasmine-jquery.js'
+    'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
+    'bower_components/sinon-server/index.js'
   ],
 
   // source files
@@ -227,7 +228,7 @@ module.exports = function(grunt) {
         options: {
           keepRunner: true,
           specs: specs,
-          vendor: vendors,
+          vendor: vendors.concat(specJs),
           template : require('grunt-template-jasmine-istanbul'),
           templateOptions: {
             coverage: 'reports/coverage.json',

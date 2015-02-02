@@ -4,13 +4,14 @@
     return str.replace(/^\s+|\s+$/g, '');
   };
 
+  // make asynchronous
   $.getJsonFromUrl = function(url, async) {
     var json;
 
     jQuery.ajax({
       url: url,
       dataType: 'json',
-      async: async || false,
+      async: false,
 
       success: function(data) {
         json = data;
