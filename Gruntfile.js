@@ -35,7 +35,7 @@ module.exports = function(grunt) {
     'js/lib/URI.min.js',
     'js/lib/mousetrap.min.js',
     'js/lib/ZeroClipboard.min.js',
-    'js/lib/main.js'
+    'js/lib/isfahan.js'
   ],
 
   // libraries/plugins for running tests
@@ -55,8 +55,11 @@ module.exports = function(grunt) {
     'js/src/utils/*.js'
   ],
 
-  specs = 'spec/**/*js';
+  specs = ['spec/**/*js'];
 
+  if (!grunt.option('full')) {
+    specs.push('!spec/mirador.test.js');
+  }
 
   // ----------
   // Project configuration.
@@ -221,12 +224,14 @@ module.exports = function(grunt) {
         options: {
           keepRunner: true,
           specs: specs,
-          vendor: vendors.concat(specJs)
+          vendor: vendors.concat(specJs),
+          summary: true
         }
       },
       coverage: {
         src: sources,
         options: {
+          summary: true,
           keepRunner: true,
           specs: specs,
           vendor: vendors.concat(specJs),

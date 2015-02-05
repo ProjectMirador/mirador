@@ -244,4 +244,25 @@
     return layoutDescription;
   };
 
+  // Configurable Promises
+  $.createImagePromise = function(imageUrl) {
+    var img = new Image(),
+    dfd = jQuery.Deferred();
+
+    img.onload = function() {
+      dfd.resolve(img.src);
+    };
+
+    img.onerror = function() {
+      dfd.reject(img.src);
+    };
+
+    dfd.fail(function() {
+      console.log('image failed to load: ' + img.src);
+    });
+
+    img.src = imageUrl;
+    return dfd.promise();
+  };
+
 }(Mirador));
