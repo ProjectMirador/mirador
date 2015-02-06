@@ -215,7 +215,7 @@
         jQuery.publish(('annotationListLoaded.' + _this.id));
       });
 
-      jQuery.subscribe('layoutUpdated', function(event, slots) {
+      jQuery.subscribe('layoutChanged', function(event, slots) {
         if (slots.length <= 1) {
           _this.element.find('.remove-object-option').hide();
         } else {

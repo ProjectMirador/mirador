@@ -132,8 +132,7 @@
         'uniqueID' : uniqueID
       });
 
-
-      this.osd.addHandler('open', function(){
+      this.osd.addHandler('open', function() {
         if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
@@ -145,17 +144,17 @@
           jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');          
         }
 
-        // The worst hack imaginable. Pop the osd overlays layer after the canvas so 
+        // A hack. Pop the osd overlays layer after the canvas so 
         // that annotations appear.
         jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
         
-        _this.osd.addHandler('zoom', $.debounce(function(){
+        _this.osd.addHandler('zoom', $.debounce(function() {
           _this.setBounds();
-        }, 300));
+        }, 500));
 
         _this.osd.addHandler('pan', $.debounce(function(){
           _this.setBounds();
-        }, 300));
+        }, 500));
 
       });
     },
