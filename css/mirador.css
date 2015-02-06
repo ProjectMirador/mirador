@@ -164,7 +164,7 @@ a {
 
 /* main menu select menu 
 ---------------------------------------------------------------------------- */
-  #manifest-select-menu, #workspace-select-menu, #workspaceContainer {
+#manifest-select-menu, #workspace-select-menu, #workspaceContainer {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -1096,6 +1096,10 @@ text {
   margin: 32px;
   margin-top:0;
   cursor: pointer;
+}
+
+.osd-annotation-overlay {
+  display: none;
 }
 
 .displayBottomPanelButton {
