@@ -136,54 +136,12 @@
     // renderer instead of only at the end of the process, since different 
     // rendering methods may be used.
         
-    //in theory this is a good idea, but that will require a better understanding
-    //of how annotator creates the annotation in order to be able to intercept it 
-    //at various stages.  for now, just wait until user submits
     onDrawFinishOld: function(canvasRect) {
-      var annotator = this.parent.annotator,
-      parent = this.parent,
+      var parent = this.parent,
       _this = this;
       
-      annotator.adder.show();
       var topLeftImagePoint = new OpenSeadragon.Point(canvasRect.x, canvasRect.y);
 
-      /* I don't understand why this isn't correctly setting the annotatorPosition to the top left corner
-      Using windowCoordinates at least gets the Editor w/in the annotation box
-      var annotatorPosition = {
-        top: this.osdViewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,
-        left: this.osdViewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x
-      };*/
-      var annotatorPosition = {
-        top: _this.parent.viewer.viewport.imageToWindowCoordinates(topLeftImagePoint).y,
-        left: _this.parent.viewer.viewport.imageToWindowCoordinates(topLeftImagePoint).x
-      };
-
-      annotator.adder.offset(annotatorPosition);
-      annotator.onAdderClick();
-      
-      // Remove rectangle if user cancels the creation of an annotation
-      annotator.subscribe("annotationEditorHidden", function() {
-        _this.osdViewer.removeOverlay(_this.osdOverlay);
-      });
-      
-      annotator.subscribe("annotationCreated", function (annotation){
-        //console.log("in annotator annotationCreated");
-        var bounds = _this.osdViewer.viewport.getBounds(true);
-        var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
-        //bounds is giving negative values?
-        //console.log(annotation);
-        var oaAnno = parent.annotatorToOA(annotation, parent.parent.imageID, canvasRect, scope);
-        //console.log(oaAnno);
-        //this seems to be necessary so annotator doesn't publish event multiple times
-        annotator.unsubscribe("annotationCreated");
-        //save to endpoint
-        jQuery.publish('annotationCreated.'+parent.windowId, [oaAnno, _this.osdOverlay]);
-      });
-      
-      // update region fragment of annotation to 
-      // invoke annotator editor with proper callbacks to 
-      // update the rest of the annotation, passing it along.
-      // Once text is added there, save annotation to save endpoint.
     },
     
     onDrawFinish: function(canvasRect) {

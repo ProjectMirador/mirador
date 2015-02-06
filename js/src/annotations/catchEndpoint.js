@@ -264,7 +264,7 @@
           return oaAnnotation;
         },
         
-        //Converts OA Annotation to endpoint format
+        // Converts OA Annotation to endpoint format
         getAnnotationInEndpoint: function(oaAnnotation) {
           var annotation = {},
               tags = [],
