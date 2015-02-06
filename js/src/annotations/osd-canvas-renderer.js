@@ -170,6 +170,7 @@
     },
     
     getOverlaysFromPosition: function(event, imageViewElem) {
+      console.log(imageViewElem);
       var _this = this,
       annos = imageViewElem.find('.annotation').map(function() {
         var self = jQuery(this),
@@ -208,7 +209,14 @@
       });*/
       
       jQuery(this.osdViewer.canvas).parent().parent().on('mousemove', function(event) { 
-        _this.onHover(event, _this.getOverlaysFromPosition(event, jQuery(this)));
+        var mouseElem = this;
+        if(typeof movewait != 'undefined'){
+          clearTimeout(movewait);
+        }
+        movewait = setTimeout(function(){
+          console.log("inside settimeout");
+          _this.onHover(event, _this.getOverlaysFromPosition(event, jQuery(mouseElem)));
+        },20);
         //_this.onHover(event, _this.getAnnotationsFromPosition(event, jQuery(this))); 
       });
       
@@ -234,6 +242,7 @@
     },
     
     onHover: function(event, overlays) {
+      console.log("inside onhover");
       //first hide all annotations and then find new ones to display
       //this.parent.annotator.viewer.hide();
       /*jQuery.each(this.annoTooltips, function(key, value) {
@@ -245,7 +254,7 @@
       annoTooltip = new $.AnnotationTooltip(); //pass permissions
       var offset = 0,
       annotations = [];
-      //console.log(overlays);
+      console.log(overlays);
       jQuery.each(overlays, function(index, overlay) {
         //var annotation = _this.getAnnoFromRegion(id)[0];
         //console.log(annotation);
@@ -277,6 +286,7 @@
           annoText = annotation.resource.chars;
         }*/
         if (annotations.length > 0) {
+          console.log(annotations);
           //console.log(overlays.first());
           if (this.tooltips) {
             var api = this.tooltips.qtip('api');
@@ -288,7 +298,8 @@
            this.tooltips = jQuery(_this.osdViewer.element).qtip({
             overwrite : false,
             content: {
-             text : annoTooltip.getViewer(annotations)
+             text : annoTooltip.getViewer(annotations),
+             button: 'Close'
              },
              position : {
               target : 'mouse',
@@ -303,11 +314,11 @@
              show: {
               target: overlays.first(),
               ready: true,
-              delay: 90
+              delay: 300
              },
              hide: {
                 fixed: true,
-                delay: 0
+                delay: 10
              },
              events: {
                hide: function(event, api) {
