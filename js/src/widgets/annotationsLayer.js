@@ -11,7 +11,6 @@
       hovered:           null,
       windowId:          null,
       mode:              'default',
-      annotator:         null,
       element:           null
     }, options);
 
@@ -24,12 +23,6 @@
       var _this = this;
       jQuery.unsubscribe(('modeChange.' + _this.windowId));
 
-      if (this.element.data('annotator')) {
-        this.annotator = this.element.data('annotator');
-      } else {
-        this.annotator = this.element.annotator().data('annotator');
-        this.annotator.addPlugin('Tags');
-      }
       this.createRenderer();
       this.bindEvents();
     },
@@ -75,103 +68,6 @@
       else {}
     },
 
-    parseRegionForAnnotator: function(url) {
-      var _this = this,
-      regionString,
-      regionArray,
-      annotatorPosition;
-
-      if (typeof url === 'object') {
-        regionString = url.selector.value;  
-      } else {
-        regionString = url.split('#')[1];
-      }
-      regionArray = regionString.split('=')[1].split(',');
-
-      // This positions the annotator pop-up directly below the 
-      // annotation, adjusting the canvas panning so that it
-      // will always be visible.
-
-      var topLeftImagePoint = new OpenSeadragon.Point(+regionArray[0], +regionArray[1]);
-
-      //use Math.max to make sure portion of annotation is not hidden due being zoomed in
-      //18 pixels account for the annotator CSS (left -18)
-      annotatorPosition = {
-        top: Math.max(_this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).y,0),
-        left: Math.max(_this.viewer.viewport.imageToViewerElementCoordinates(topLeftImagePoint).x, 18)
-      };
-
-      return annotatorPosition;
-    },
-
-    prepareForAnnotator: function(oaAnnotation) {
-      var annoText = "",
-      tags = [];
-      if (jQuery.isArray(oaAnnotation.resource)) {
-        jQuery.each(oaAnnotation.resource, function(index, value) {
-          if (value['@type'] === "dctypes:Text") {
-            annoText = value.chars;
-          } else if (value['@type'] == "oa:Tag") {
-            tags.push(value.chars);
-          }
-        });
-      } else {
-        annoText = oaAnnotation.resource.chars;
-      }
-
-
-      var annotatortion = {
-        text: annoText,
-        tags: tags
-      };
-
-      return [annotatortion];
-    },
-    
-    annotatorToOA: function(attrAnnotation, uri, selector, scope) {
-      var motivation = [],
-          resource = [],
-          on,
-          bounds;
-          //convert annotation to OA format
-
-         if (attrAnnotation.tags && attrAnnotation.tags.length > 0) {
-           motivation.push("oa:tagging");
-           jQuery.each(attrAnnotation.tags, function(index, value) {
-             resource.push({      
-               "@type":"oa:Tag",
-               "chars":value
-               });
-           });
-         }
-        motivation.push("oa:commenting");
-        on = { "@type" : "oa:SpecificResource",
-                  "source" : uri, 
-                  "selector" : {
-                    "@type" : "oa:FragmentSelector",
-                    "value" : "xywh="+selector.x+","+selector.y+","+selector.width+","+selector.height
-                  },
-                  "scope": {
-                    "@context" : "http://www.harvard.edu/catch/oa.json",
-                    "@type" : "catch:Viewport",
-                    "value" : "xywh="+Math.round(scope.x)+","+Math.round(scope.y)+","+Math.round(scope.width)+","+Math.round(scope.height) //osd bounds
-                  }
-                };
-         resource.push( {
-            "@type" : "dctypes:Text",
-            "format" : "text/html",
-            "chars" : attrAnnotation.text
-         });
-         
-          var oaAnnotation = {
-            "@context" : "http://iiif.io/api/presentation/2/context.json",
-            "@type" : "oa:Annotation",
-            "motivation" : motivation,
-            "resource" : resource,
-            "on" : on
-          };
-          return oaAnnotation;
-    },
 
     enterDisplayAnnotations: function() {
       var _this = this;
