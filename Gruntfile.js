@@ -236,6 +236,9 @@ module.exports = function(grunt) {
             coverage: 'reports/coverage.json',
             report: [
               {
+                type: 'text-summary'
+              },
+              {
               type: 'html',
               options: {
                 dir:'reports/coverage'
