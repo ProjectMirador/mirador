@@ -73,6 +73,9 @@
       if (service.hasOwnProperty('@context')) {
         version = $.Iiif.getVersionFromContext(service['@context']);
       }          
+      console.log(canvas['@id']);
+      console.log(service);
+      console.log(version);
       thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
     }
     return thumbnailUrl;

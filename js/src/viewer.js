@@ -210,7 +210,6 @@
                     jQuery.publish('manifestAdded', [url, location]);
                 }
             });
-
         },
         
         loadManifestFromConfig: function(options) {
