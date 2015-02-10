@@ -170,7 +170,6 @@
     },
     
     getOverlaysFromPosition: function(event, imageViewElem) {
-      console.log(imageViewElem);
       var _this = this,
       annos = imageViewElem.find('.annotation').map(function() {
         var self = jQuery(this),
@@ -216,7 +215,7 @@
         movewait = setTimeout(function(){
           console.log("inside settimeout");
           _this.onHover(event, _this.getOverlaysFromPosition(event, jQuery(mouseElem)));
-        },20);
+        },200);
         //_this.onHover(event, _this.getAnnotationsFromPosition(event, jQuery(this))); 
       });
       
@@ -242,7 +241,6 @@
     },
     
     onHover: function(event, overlays) {
-      console.log("inside onhover");
       //first hide all annotations and then find new ones to display
       //this.parent.annotator.viewer.hide();
       /*jQuery.each(this.annoTooltips, function(key, value) {
@@ -254,7 +252,7 @@
       annoTooltip = new $.AnnotationTooltip(); //pass permissions
       var offset = 0,
       annotations = [];
-      console.log(overlays);
+      //console.log(overlays);
       jQuery.each(overlays, function(index, overlay) {
         //var annotation = _this.getAnnoFromRegion(id)[0];
         //console.log(annotation);
@@ -286,20 +284,19 @@
           annoText = annotation.resource.chars;
         }*/
         if (annotations.length > 0) {
-          console.log(annotations);
           //console.log(overlays.first());
           if (this.tooltips) {
-            var api = this.tooltips.qtip('api');
-            api.set({'content.text' : annoTooltip.getViewer(annotations),
+            var tooltipApi = this.tooltips.qtip('api');
+            tooltipApi.set({'content.text' : annoTooltip.getViewer(annotations),
             'show.target' : overlays.first(),
-            'position.target' : 'mouse'});
-            api.reposition();
+            'position.target' : 'mouse',
+            'events.move' : function(event, api) {_this.annotationEvents(event, api);}});
+            tooltipApi.reposition();
           } else {
            this.tooltips = jQuery(_this.osdViewer.element).qtip({
             overwrite : false,
             content: {
-             text : annoTooltip.getViewer(annotations),
-             button: 'Close'
+             text : annoTooltip.getViewer(annotations)
              },
              position : {
               target : 'mouse',
@@ -324,9 +321,7 @@
                hide: function(event, api) {
                  //api.destroy();
                },
-               show: function(event, api) {
-                 //api.reposition();
-               }
+               show: function(event, api) {_this.annotationEvents(event, api);}
              } 
             });
            }
@@ -346,6 +341,28 @@
       //          };
       //this.parent.annotator.showViewer(this.parent.prepareForAnnotator(annotation), position);
       //if (renderAnnotations.length > 0) {this.parent.annotator.showViewer(renderAnnotations, position);}
+    },
+    
+    annotationEvents: function(event, api) {
+      var _this = this;
+      jQuery('.annotation-display a.delete').on("click", function(event) {
+                  event.preventDefault();
+                  console.log("clicked delete");
+                  var id = jQuery(this).parents('.annotation-display').attr('data-anno-id');
+                  var oaAnno = _this.getAnnoFromRegion(id)[0];
+                  jQuery.publish('annotationDeleted.'+_this.parent.windowId, [oaAnno]);
+                  
+                  //remove this annotation's overlay from osd
+                  //should there be some sort of check that it was successfully deleted?
+                  _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+id)[0]);
+                  
+                });
+                
+                jQuery('.annotation-display a.edit').on("click", function(event) {
+                  event.preventDefault();
+                  console.log("clicked edit");
+                  
+                });
     },
     
     onMouseLeave: function() {

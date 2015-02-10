@@ -9,7 +9,7 @@
  * create()
  * read()
  * update()
- * delete()
+ * deleteAnnotation() (delete is a reserved word)
  *
  * Optional, if endpoint is not OA compliant:
  * getAnnotationInOA(endpointAnnotation)
@@ -162,6 +162,25 @@
              },
              error: function() {
                console.log("error searching");
+             }
+             
+           });
+        },
+        
+        deleteAnnotation: function(annotationID) {          
+          jQuery.ajax({
+             url: this.prefix+"/destroy/"+annotationID,
+             type: 'DELETE',
+             dataType: 'json',
+             headers: {
+               "x-annotator-auth-token": this.token
+             },
+             contentType: "application/json; charset=utf-8",
+             success: function(data) {
+               console.log("successfully deleted");
+             },
+             error: function() {
+               console.log("error deleting");
              }
              
            });

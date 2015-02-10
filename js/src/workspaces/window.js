@@ -214,6 +214,18 @@
         });
         jQuery.publish(('annotationListLoaded.' + _this.id));
       });
+      
+      jQuery.subscribe('annotationDeleted.'+_this.id, function(event, oaAnno) {
+        //remove from annotationsList
+        _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== oaAnno['@id']; });
+        
+        jQuery.each(_this.endpoints, function(key, endpoint) {
+          //remove form endpoint
+          endpoint.deleteAnnotation(oaAnno['@id']);
+          
+        });
+        jQuery.publish(('annotationListLoaded.' + _this.id));
+      });
 
       jQuery.subscribe('layoutUpdated', function(event, slots) {
         if (slots.length <= 1) {

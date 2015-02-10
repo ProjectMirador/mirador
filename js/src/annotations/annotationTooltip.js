@@ -25,10 +25,11 @@
       var annoText,
         tags = [],
         _this = this,
-        htmlAnnotations = [];
+        htmlAnnotations = [],
+        id;
 
         jQuery.each(annotations, function(index, annotation) {
-        if (jQuery.isArray(annotation.resource)) {
+         if (jQuery.isArray(annotation.resource)) {
           jQuery.each(annotation.resource, function(index, value) {
             if (value['@type'] === "dctypes:Text") {
               annoText = value.chars;
@@ -36,13 +37,14 @@
               tags.push(value.chars);
             }
           });
-        } else {
+         } else {
           annoText = annotation.resource.chars;
-        }
-        htmlAnnotations.push({
-           annoText: annoText,
-           tags: tags
-           });
+         }
+         htmlAnnotations.push({
+           annoText : annoText,
+           tags : tags,
+           id : annotation['@id']
+         });
         });
 
         return this.viewerTemplate({annotations : htmlAnnotations});
@@ -71,7 +73,7 @@
     viewerTemplate: Handlebars.compile([
       '<div class="all-annotations">',
       '{{#each annotations}}',
-      '<div class="annotation-display">',
+      '<div class="annotation-display" data-anno-id="{{id}}">',
        '<a href="#edit" class="edit">Edit</a>',
        '<a href="#delete" class="delete">Delete</a>',
        '<div class="text-viewer">{{annoText}}</div>',
