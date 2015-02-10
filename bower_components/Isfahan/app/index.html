@@ -1,0 +1,327 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Isfahan</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!-- build:css styles/vendor.css -->
+  <!-- bower:css -->
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css(.tmp) styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild -->
+</head>
+<body>
+  <!--[if lt IE 10]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+  <div id="container">
+  </div>
+  <input type="range" min="1" max="400" value="100">
+
+  <!-- build:js scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/d3/d3.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
+
+  <!-- build:js({app,.tmp}) scripts/main.js -->
+  <script src="scripts/main.js"></script>
+  <script>
+    var singleNested = {
+      "type": "column",
+      "children":[
+        {
+        "type":"row",
+        "children":[
+          {
+          "type":"column",
+          "children":[
+            {
+            "type":"row",
+            "children":[
+              {
+              "type":"column",
+              "children":[
+                {
+                "type":"column",
+              },
+              {
+                "type":"column",
+              },
+              {
+                "type":"column",
+              }]
+            },
+            {
+              "type":"column",
+            },
+            {
+              "type":"column",
+            }]
+          },
+          {
+            "type":"column",
+          },
+          {
+            "type":"column",
+          }]
+        },
+        {
+          "type":"column",
+        },
+        {
+          "type":"column",
+        }]
+      },
+      {
+        "type":"row",
+        "children":[
+          {
+          "type":"column",
+        },
+        {
+          "type":"column",
+        },
+        {
+          "type":"column",
+        }]
+      }
+      ]
+    };
+
+    var oneBytwo = {
+      'type': 'row',
+      'children': [
+        {
+        'type': 'column'
+      },
+      {
+        'type': 'column'
+      }]
+    };    
+
+    var oneByThree = {
+      'type': 'row',
+      'children': [
+        {
+        'type': 'column'
+      },
+      {
+        'type': 'column'
+      },
+      {
+        'type': 'column'
+      }]
+    };
+
+    var threeBythree = {
+      "type": "row",
+      "children":[
+        {
+        "type":"column",
+        "children":[
+          {
+          "type":"row",
+        },
+        {
+          "type":"row",
+        },
+        {
+          "type":"row",
+        }]
+      }
+      ,{
+        "type":"column",
+        "children":[
+          {
+          "type":"row",
+        },
+        {
+          "type":"row",
+        },
+        {
+          "type":"row",
+        }]
+      },
+      {
+        "type":"column",
+        "children":[
+          {
+          "type":"row",
+        },
+        {
+          "type":"row",
+        },
+        {
+          "type":"row",
+        }]
+      }]
+    }
+
+    var layoutInput = {
+      "type": "row",
+      "children":[
+        {
+        "type":"column",
+      },
+      {
+        "type":"column",
+        "children":[
+          {
+          "type":"row",
+          "children":[
+            {
+            "type":"column",
+          },
+          {
+            "type":"column",
+          },
+          {
+            "type":"column",
+          }]
+        },
+        {
+          "type":"row",
+          "children":[
+            {
+            "type":"column",
+            "children":[
+              {
+              "type":"column",
+            },
+            {
+              "type":"column",
+            },
+            {
+              "type":"column",
+            }]
+          },
+          {
+            "type":"column",
+          },
+          {
+            "type":"column",
+          }]
+        },
+        {
+          "type":"row",
+        }]
+      }],
+      "label":"Reference",
+      "iconClass":"th-list"
+    };
+
+    function update(data, animate) {
+      var windowingSystem = Isfahan({
+        containerId: 'container',
+        layoutDescription: data,
+        configuration: null,
+        padding: 3 
+      });
+
+      console.log('data before filter: ');
+      console.log(data);
+      data = windowingSystem.filter( function(d) {
+        return !d.children;
+      });
+
+      console.log('data after filter: ');
+      console.log(data);
+
+      // Data Join.
+      var divs = d3.select("#container").selectAll("div.tileWindow")
+      .data(data, function(d) {console.log(d); return d.address; });
+
+      // Update
+      if (animate) {
+        divs.transition()
+        .duration(300).call(cell);
+      } else {
+        divs.call(cell);
+      }
+      
+      // Enter
+      if (animate) {
+        divs.enter().append("div")
+        .attr("class", "tileWindow")
+        .transition().duration(300)
+        .call(cell);
+      } else {
+        divs.enter().append("div")
+        .attr("class", "tileWindow")
+        .call(cell);
+      }
+
+      // Exit
+      divs.exit()
+      .remove("div");
+
+      function cell() {
+        this
+        .style("left", function(d) { return d.x + "px"; })
+        .style("top", function(d) { return d.y + "px"; })
+        .style("width", function(d) { return Math.max(0, d.dx ) + "px"; })
+        .style("height", function(d) { return Math.max(0, d.dy ) + "px"; });
+      }
+    }
+
+    d3.select(window).on('resize', function(event) {
+      update(option, false);
+    })
+
+    function changeIt(animate) {
+      var options = [threeBythree, layoutInput, singleNested];
+      option = options[Math.floor(Math.random() * 3)]; 
+      update(option, true);
+    }
+
+    update(oneBytwo, false);
+
+    function setOption(layoutName) {
+      option = layoutName;
+      update(option, true);
+    }
+
+    var input = document.getElementsByTagName("input")[0];
+
+    input.onchange = function() {
+      var val = input.value;
+      var tile = selected;
+      windowingSystem.resize(tile, val);
+      console.log('resizing slot');
+    }
+    // Mock API
+
+    // load from serialised version
+
+    // Fill/address/empty the slot
+    // Just get the dom reference for
+    // an address of the grid system
+
+    // close area by address or id
+
+    // insert new area by address
+    // left/right split, top/bottom split 
+
+    // serialise contents/layout
+
+    // resize a sub-slot
+
+    // fix rounding errors
+
+    // UI layer has ugly code
+
+    // re-evaluate styling hooks
+
+  </script>
+  <!-- endbuild -->
+</body>
+</html>

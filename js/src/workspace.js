@@ -117,37 +117,42 @@
     split: function(targetSlot, direction) {
       var _this = this,
       node = jQuery.grep(_this.layout, function(node) { return node.id === targetSlot.slotID; })[0];
-      nodeIndex = node.parent ? node.parent.children.indexOf(node) : 0;
+      nodeIndex = node.parent ? node.parent.children.indexOf(node) : 0,
+      nodeIsNotRoot = node.parent;
 
       function addSibling(node, indexDifference) {
-        var siblingIndex = nodeIndex + indexDifference,
-        newSibling = _this.newNode(node.type, node.address.concat("." + node.type + (siblingIndex + 1)), node);
+        if (nodeIsNotRoot) {
+          var siblingIndex = nodeIndex + indexDifference,
+          newSibling = _this.newNode(node.type, node);
 
-        node.parent.children.splice(siblingIndex, 0, newSibling);
-        _this.layout.push(newSibling);
+          node.parent.children.splice(siblingIndex, 0, newSibling);
+          _this.layout.push(newSibling);
+          // console.log("addSibling");
+          return newSibling;
+        }
+          // console.log("add sibling to root");
+      }
 
-        return newSibling;
+      function mutateRoot(root) {
+
       }
 
       function mutateAndAdd(node, indexDifference) {
-        var newParent = _this.newNode(node.type, node.address, node.parent),
-        oldAddress = node.address,
-        nodeIsNotRoot = node.parent;
+        // console.log("mutate and add");
+        var newParent = _this.newNode(node.type, node.parent);
 
-        // Recalculate the address of this node
-        // and flip its type while keeping
+        // Flip its type while keeping
         // the same id.
         node.type = node.type === 'row' ? 'column' : 'row';
-        node.address = node.address.concat('.' + node.type + '1');
 
         // Create a new node (which will be childless)
         // that is also a sibling of this node.
-        newSibling = _this.newNode(node.type, oldAddress.concat("." + node.type + '1'), newParent);
+        newSibling = _this.newNode(node.type, newParent);
 
         // maintain array ordering.
         newParent.children = [];
-        newParent.children.push(node); // order matters.
-        newParent.children.splice(indexDifference, 0, newSibling); // order matters.
+        newParent.children.push(node); // order matters, place node first.
+        newParent.children.splice(indexDifference, 0, newSibling); // order matters, so put new sibling on one side or the other.
         if (nodeIsNotRoot) {
           newParent.parent = node.parent;
           // replace the old node in its parent's child
@@ -205,6 +210,7 @@
       // the redraw.
       var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
       _this.layoutDescription = root;
+      // console.log(_this.layoutDescription);
       _this.calculateLayout();
 
     },
@@ -255,13 +261,19 @@
       _this.calculateLayout();
     },
 
-    newNode: function(type, address, parent) {
-      return {
-        type: type,
-        address: address,
-        id: $.genUUID(),
-        parent: parent
-      };
+    newNode: function(type, parent) {
+      if (typeof parent === 'undefined') {
+        return {
+          type: type,
+          id: $.genUUID(),
+        };
+      } else {
+        return {
+          type: type,
+          id: $.genUUID(),
+          parent: parent
+        };
+      }
     },
     
     availableSlot: function() {

@@ -1,0 +1,15 @@
+{
+  "name": "annotator-full.1.2.9",
+  "_cacheHeaders": {
+    "ETag": "\"47e13d32da2db8bab466836395427814\"",
+    "Last-Modified": "Mon, 02 Dec 2013 18:22:32 GMT",
+    "Content-Length": "34365",
+    "Content-Type": "application/octet-stream",
+    "Content-Disposition": "attachment; filename=annotator-full.1.2.9.zip"
+  },
+  "_release": "e-tag:47e13d32d",
+  "_source": "https://github.com/openannotation/annotator/releases/download/v1.2.9/annotator-full.1.2.9.zip",
+  "_target": "*",
+  "_originalSource": "https://github.com/openannotation/annotator/releases/download/v1.2.9/annotator-full.1.2.9.zip",
+  "_direct": true
+}

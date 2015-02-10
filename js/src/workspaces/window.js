@@ -217,8 +217,10 @@
 
       jQuery.subscribe('layoutChanged', function(event, slots) {
         if (slots.length <= 1) {
+          // console.log('too few slots');
           _this.element.find('.remove-object-option').hide();
         } else {
+          // console.log('got enough slots');
           _this.element.find('.remove-object-option').show();
         }
       });

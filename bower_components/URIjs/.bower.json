@@ -1,0 +1,40 @@
+{
+  "name": "URIjs",
+  "version": "1.13.2",
+  "main": [
+    "src/URI.js",
+    "src/IPv6.js",
+    "src/SecondLevelDomains.js",
+    "src/punycode.js",
+    "src/URITemplate.js",
+    "src/jquery.URI.js",
+    "src/URI.min.js",
+    "src/jquery.URI.min.js",
+    "src/URI.fragmentQuery.js",
+    "src/URI.fragmentURI.js"
+  ],
+  "ignore": [
+    ".*",
+    "*.css",
+    "/*.js",
+    "/*.html",
+    "/*.json",
+    "utils",
+    "test",
+    "prettify"
+  ],
+  "dependencies": {
+    "jquery": ">=1.7.0"
+  },
+  "homepage": "https://github.com/medialize/URI.js",
+  "_release": "1.13.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.13.2",
+    "commit": "85cc312f394ee848933da218a4ff407e8e8e81e7"
+  },
+  "_source": "https://github.com/medialize/URI.js.git",
+  "_target": "~1.13.2",
+  "_originalSource": "https://github.com/medialize/URI.js.git",
+  "_direct": true
+}

@@ -56,6 +56,25 @@ describe('Workspace', function() {
       expect(this.workspace.slots.length).toEqual(2);
       expect(this.workspace.layoutDescription.children[0].id).toBe(originalId);
     });
+    
+    xit('should have new children and structure splitting down or up (even if root)', function() {
+      this.workspace = new Mirador.Workspace({
+        parent:                     this.viewer, //viewer
+        appendTo: this.viewerDiv,
+        layoutDescription: Mirador.layoutDescriptionFromGridString('1x1')
+      });
+      var originalId = this.workspace.layoutDescription.id;
+
+      expect(this.workspace.layoutDescription.children).toBe(undefined);
+      expect(this.workspace.slots.length).toBe(1);
+
+      this.workspace.splitDown(this.workspace.slots[0]);
+
+      expect(this.workspace.layoutDescription.children.length).toEqual(2);
+      expect(this.workspace.layoutDescription.children[0].type).toBe('row');
+      expect(this.workspace.slots.length).toEqual(2);
+      expect(this.workspace.layoutDescription.children[0].id).toBe(originalId);
+    });
 
   });
 
@@ -93,7 +112,7 @@ describe('Workspace', function() {
         return slot.slotID;
       })).toEqual(newSlotIDs);
     });
-
+    
     it('should remove sibling and create new parent with same id as target', function() {
       this.workspace = new Mirador.Workspace({
         parent:                     this.viewer, //viewer
@@ -113,6 +132,31 @@ describe('Workspace', function() {
       expect(this.workspace.layoutDescription.children.length).toBe(2);
       expect(this.workspace.slots.length).toEqual(2);
       expect(this.workspace.layoutDescription.children[0].id).toBe(newSlotID);
+      expect(this.workspace.slots[1].slotID).toBe(newSlotID);
+    });
+    
+    xit('should remove sibling and create new parent with same id as target (even if siblings have children)', function() {
+      this.workspace = new Mirador.Workspace({
+        parent:                     this.viewer, //viewer
+        appendTo: this.viewerDiv,
+        layoutDescription: Mirador.layoutDescriptionFromGridString('1x2')
+      });
+      var originalId = this.workspace.slots[1].slotID;
+
+      expect(this.workspace.layoutDescription.children.length).toBe(2);
+      expect(this.workspace.slots.length).toBe(2);
+
+      // split the right slot (column)
+      this.workspace.splitDown(this.workspace.slots[1]);
+      var newSlotID = this.workspace.slots[2].slotID;
+      
+      // remove the left slot...
+      this.workspace.removeNode(this.workspace.slots[0]);
+
+      // there should still be 2 slots, since the other column had children
+      expect(this.workspace.layoutDescription.children.length).toBe(2);
+      expect(this.workspace.slots.length).toEqual(2);
+      expect(this.workspace.layoutDescription.children[1].id).toBe(newSlotID);
       expect(this.workspace.slots[1].slotID).toBe(newSlotID);
     });
     
