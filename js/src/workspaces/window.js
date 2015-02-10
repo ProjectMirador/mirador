@@ -281,6 +281,7 @@
       });
 
       //update panels with current image
+      console.log(JSON.stringify(this.bottomPanel));
       if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
 
@@ -634,15 +635,15 @@
   // template should be based on workspace type
   template: Handlebars.compile([
                                '<div class="window">',
-                               '<div class="content-container">',
-                               '<div class="sidePanel">',
-                               '</div>',
-                               '<div class="view-container">',
-                               '<div class="overlay"></div>',
-                               '<div class="bottomPanel">',
-                               '</div>',
-                               '</div>',
-                               '</div>',
+                                 '<div class="content-container">',
+                                   '<div class="sidePanel">',
+                                   '</div>',
+                                   '<div class="view-container">',
+                                     '<div class="overlay"></div>',
+                                     '<div class="bottomPanel">',
+                                     '</div>',
+                                   '</div>',
+                                 '</div>',
                                '</div>'
   ].join('')),
 
