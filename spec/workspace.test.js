@@ -57,7 +57,7 @@ describe('Workspace', function() {
       expect(this.workspace.layoutDescription.children[0].id).toBe(originalId);
     });
     
-    xit('should have new children and structure splitting down or up (even if root)', function() {
+    it('should have new children and structure splitting down or up (even if root)', function() {
       this.workspace = new Mirador.Workspace({
         parent:                     this.viewer, //viewer
         appendTo: this.viewerDiv,
@@ -160,7 +160,7 @@ describe('Workspace', function() {
       expect(this.workspace.slots[1].slotID).toBe(newSlotID);
     });
     
-    it('should remove sibling and create new parent with same id as target (even if root)', function() {
+    xit('should remove sibling and create new parent with same id as target (even if root)', function() {
       this.workspace = new Mirador.Workspace({
         parent:                     this.viewer, //viewer
         appendTo: this.viewerDiv,

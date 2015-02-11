@@ -127,18 +127,18 @@
 
           node.parent.children.splice(siblingIndex, 0, newSibling);
           _this.layout.push(newSibling);
-          // console.log("addSibling");
           return newSibling;
         }
-          // console.log("add sibling to root");
-      }
-
-      function mutateRoot(root) {
-
+        
+        // handles the case where the root needs to be mutated.
+        node.type = node.type === 'row' ? 'column' : 'row';
+        mutateAndAdd(node, indexDifference);
       }
 
       function mutateAndAdd(node, indexDifference) {
-        // console.log("mutate and add");
+        // Locally mutate the tree to accomodate a 
+        // sibling of another kind, transforming
+        // both the target node and its parent.
         var newParent = _this.newNode(node.type, node.parent);
 
         // Flip its type while keeping
@@ -210,7 +210,6 @@
       // the redraw.
       var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
       _this.layoutDescription = root;
-      // console.log(_this.layoutDescription);
       _this.calculateLayout();
 
     },
@@ -236,7 +235,7 @@
     },
 
     removeNode: function(targetSlot) {
-      // De-mutate the tree structure.
+      // de-mutate the tree structure.
       var _this = this,
       node = jQuery.grep(_this.layout, function(node) { return node.id === targetSlot.slotID; })[0],
       nodeIndex = node.parent.children.indexOf(node),
@@ -245,11 +244,16 @@
       root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
 
       if (node.parent.children.length === 2) {
+        // de-mutate the tree without destroying
+        // the children of the remaining node, 
+        // which in this case means changing their
+        // IDs.
         node.parent.children.splice(nodeIndex,1);
         remainingNode = node.parent.children[0];
 
         remainingNode.parent.id = remainingNode.id;
-        delete remainingNode.parent.children;
+        delete node.parent;
+      } else if (node.parent.children.length === 1) { 
       } else { 
         // If the node is one of more than 2 siblings,
         // simply splice it out of the parent's children 

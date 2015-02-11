@@ -69,7 +69,6 @@
       // No thumbnail, use main image
       var resource = canvas.images[0].resource;
       service = resource['default'] ? resource['default'].service : resource.service;
-      // TODO: This should check that service is actually there...
       if (service.hasOwnProperty('@context')) {
         version = $.Iiif.getVersionFromContext(service['@context']);
       }          

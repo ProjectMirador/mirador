@@ -215,13 +215,14 @@
         jQuery.publish(('annotationListLoaded.' + _this.id));
       });
 
-      jQuery.subscribe('layoutChanged', function(event, slots) {
-        if (slots.length <= 1) {
-          // console.log('too few slots');
+      jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
+        if ($.viewer.workspace.slots.length <= 1) {
           _this.element.find('.remove-object-option').hide();
+          console.log('hiding close button');
         } else {
-          // console.log('got enough slots');
           _this.element.find('.remove-object-option').show();
+          console.log('hiding close button');
+          console.log(_this.element.find('.remove-object-option'));
         }
       });
     },
@@ -281,7 +282,6 @@
       });
 
       //update panels with current image
-      console.log(JSON.stringify(this.bottomPanel));
       if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
 
@@ -567,18 +567,18 @@
   bindNavigation: function() {
     var _this = this;
 
-    this.element.find('.mirador-icon-image-view').mouseenter(
+    this.element.find('.mirador-icon-image-view').on('mouseenter',
       function() {
       _this.element.find('.image-list').stop().slideFadeToggle(300);
-    }).mouseleave(
+    }).on('mouseleave',
     function() {
       _this.element.find('.image-list').stop().slideFadeToggle(300);
     });
 
-    this.element.find('.mirador-icon-window-menu').mouseenter(
+    this.element.find('.mirador-icon-window-menu').on('mouseenter',
       function() {
       _this.element.find('.slot-controls').stop().slideFadeToggle(300);
-    }).mouseleave(
+    }).on('mouseleave',
     function() {
       _this.element.find('.slot-controls').stop().slideFadeToggle(300);
     });
