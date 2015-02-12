@@ -223,7 +223,6 @@
                  "resource" : resource,
                  "on" : on
                 };
-                console.log(oaAnno);
                   //save to endpoint
                 jQuery.publish('annotationCreated.'+parent.windowId, [oaAnno, _this.osdOverlay]);
                 
