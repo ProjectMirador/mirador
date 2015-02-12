@@ -9,7 +9,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-git-describe');
-  grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-coveralls');
@@ -57,9 +56,10 @@ module.exports = function(grunt) {
   ],
 
   specs = ['spec/**/*js'];
+  exclude = [];
 
   if (!grunt.option('full')) {
-    specs.push('!spec/mirador.test.js');
+    exclude.push('spec/mirador.test.js');
   }
 
   // ----------
@@ -219,49 +219,15 @@ module.exports = function(grunt) {
       src: 'reports/coverage/lcov.info',
     },
 
-    jasmine: {
-      test: {
-        src: sources,
-        options: {
-          keepRunner: true,
-          specs: specs,
-          vendor: vendors.concat(specJs),
-          summary: true
-        }
-      },
-      coverage: {
-        src: sources,
-        options: {
-          summary: true,
-          keepRunner: true,
-          specs: specs,
-          vendor: vendors.concat(specJs),
-          template : require('grunt-template-jasmine-istanbul'),
-          templateOptions: {
-            coverage: 'reports/coverage.json',
-            report: [
-              {
-              type: 'html',
-              options: {
-                dir:'reports/coverage'
-              }
-            },
-            {
-              type: 'lcov',
-              options: {
-                dir:'reports/coverage'
-              }
-            }
-            ]
-          }
-        }
-      }
-    },
     karma : {
       options: {
         basePath: '',
         frameworks: ['jasmine'],
-        files: [].concat(vendors, sources, specs, ['bower_components/sinon-server/index.js'], {pattern: '/spec/data/manifest.json', included: false} ),
+        files: [].concat(vendors, sources, specs, ['bower_components/sinon-server/index.js', 'bower_components/jasmine-jquery/lib/jasmine-jquery.js'], {pattern: 'spec/data/manifest.json', included: false} ),
+        exclude: exclude,
+        proxies: {
+          '/spec': 'http://localhost:9876/base/spec'
+        },
         coverageReporter: {
           reporters: [
             {type: 'lcov'},
@@ -288,7 +254,7 @@ module.exports = function(grunt) {
         }
       },
       test: {
-        reporters: ['progress'],
+        reporters: ['spec'],
         browsers: ['PhantomJS'],
         singleRun: true
       },
@@ -304,6 +270,11 @@ module.exports = function(grunt) {
         reporters: ['progress'],
         browsers: ['Firefox'],
         background: true
+      },
+      chrome: {
+        reporters: ['progress'],
+        browsers: ['Chrome'],
+        singleRun: true
       },
       firefox: {
         reporters: ['progress'],
@@ -364,11 +335,11 @@ module.exports = function(grunt) {
   // ----------
   // Test task.
   // Runs Jasmine tests
-  grunt.registerTask('test', 'jasmine:test');
+  grunt.registerTask('test', 'karma:test');
 
   // ----------
   // Coverage task.
   // Runs instanbul coverage
-  grunt.registerTask('coverage', 'jasmine:coverage');
+  grunt.registerTask('cover', 'karma:cover');
 
 };

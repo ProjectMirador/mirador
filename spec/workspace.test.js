@@ -6,7 +6,7 @@ describe('Workspace', function() {
     // spyOn(Mirador.Workspace.prototype, 'calculateLayout').and.returnValue();
   });
 
-  describe('splits', function() {
+  xdescribe('splits', function() {
     it('should have three siblings instead of two', function() {
       this.workspace = new Mirador.Workspace({
         parent:                     this.viewer, //viewer

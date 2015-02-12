@@ -53,7 +53,7 @@ describe('Mirador | mirador.js', function() {
 
       setTimeout(function() {
         done();
-      }, 1000);
+      }, 2000);
     });
 
     it('should click manifest', function(done) {
@@ -64,21 +64,21 @@ describe('Mirador | mirador.js', function() {
       
       setTimeout(function() {
         done();
-      }, 1000);
+      }, 2000);
     });
 
     it('should click first page in thumbnail view', function(done) {
       expect(testContext.viewerDiv.find('.window').first()).toExist();
       setTimeout(function() {
         done();
-      }, 1000);
+      }, 2000);
     });
     
     it('should click the next button', function(done) {
       setTimeout(function() {
         testContext.viewerDiv.remove();
         done();
-      }, 1000);
+      }, 2000);
     })
   });
 });
