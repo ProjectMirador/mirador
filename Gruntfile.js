@@ -281,7 +281,7 @@ module.exports = function(grunt) {
         browsers: ['Firefox'],
         singleRun: true
       },
-      chromeWin7: {
+      browsers: {
         reporters: ['spec', 'saucelabs'],
         browsers: ['sl_win7_chrome'],
         singleRun: true
@@ -341,5 +341,13 @@ module.exports = function(grunt) {
   // Coverage task.
   // Runs instanbul coverage
   grunt.registerTask('cover', 'karma:cover');
-
+  
+  // ----------
+  // Runs this on travis.
+  grunt.registerTask('ci', [
+                     'test',
+                     'cover',
+                     'jshint',
+                     'karma:browsers'
+  ]);
 };

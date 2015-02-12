@@ -35,7 +35,8 @@
     "karma-spec-reporter": "^0.0.16"
   },
   "scripts": {
-    "test": "grunt coverage jshint coveralls --verbose --full"
+    "test": "grunt cover jshint coveralls --verbose --full",
+    "travis": "grunt ci --verbose --full"
   },
   "dependencies": {}
 }
