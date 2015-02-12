@@ -174,7 +174,29 @@
              }
              
            });
+    },
+    
+    update: function(annotationID, oaAnnotation) {
+      var annotation = this.getAnnotationInEndpoint(oaAnnotation),
+      _this = this;
+      jQuery.ajax({
+        url: this.prefix+"/update/"+annotationID,
+        type: 'PUT',
+        dataType: 'json',
+        headers: {
+          "x-annotator-auth-token": this.token
         },
+        data: JSON.stringify(annotation),
+        contentType: "application/json; charset=utf-8",
+        success: function(data) {
+          console.log("successfully updated");
+        },
+        error: function() {
+          console.log("error updating");
+        }
+
+      });
+    },
 
     //takes OA Annotation, gets Endpoint Annotation, and saves
     save: function(oaAnnotation) {

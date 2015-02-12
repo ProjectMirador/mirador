@@ -112,13 +112,14 @@
 
     getOverlaysFromPosition: function(event) {
       var _this = this;
+      console.log(event);
       var annos = jQuery(_this.osdViewer.canvas).find('.annotation').map(function() {
         var self = jQuery(this),
         offset = self.offset(),
         l = offset.left,
         t = offset.top,
-        h = self.height(),
-        w = self.width(),
+        h = self.outerHeight(),
+        w = self.outerWidth(),
         x = new OpenSeadragon.getMousePosition(event).x,
         y = new OpenSeadragon.getMousePosition(event).y,
         maxx = l+w,
@@ -135,7 +136,7 @@
       // be sure to properly delegate your event handlers
       jQuery(this.osdViewer.canvas).parent().on('click', '.annotation', function() { _this.onSelect(); });
 
-      jQuery(this.osdViewer.canvas).parent().parent().on('mouseenter', '.annotation', function(event) { 
+      jQuery(this.osdViewer.canvas).on('mouseenter', '.annotation', function(event) { 
         console.log('entering');
         var mouseElem = this;
         _this.onHover(event, _this.getOverlaysFromPosition(event));
@@ -171,6 +172,7 @@
       jQuery.each(overlays, function(index, overlay) {
         annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
       });
+      console.log(overlays);
       console.log(annotations);
       if (annotations.length > 0) {
         _this.tooltip = jQuery(_this.osdViewer.element).qtip({
@@ -188,11 +190,11 @@
             classes : 'qtip-bootstrap'
           },
           show: {
-            ready: true,
+            ready: true
             // delay: 300
           },
           hide: {
-            fixed: true,
+            fixed: true
             // delay: 10
           },
           events: {
