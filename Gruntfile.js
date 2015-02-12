@@ -13,12 +13,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-coveralls');
+  grunt.loadNpmTasks('grunt-karma');
   // grunt.loadNpmTasks('jasmine-jquery');
 
   // ----------
   var distribution = 'build/mirador/mirador.js',
-      minified = 'build/mirador/mirador.min.js',
-      releaseRoot = '../site-build/built-mirador/',
+  minified = 'build/mirador/mirador.min.js',
+  releaseRoot = '../site-build/built-mirador/',
 
   // libraries/plugins
   vendors = [
@@ -87,13 +88,13 @@ module.exports = function(grunt) {
       },
       css: {
         src: [
-        'css/normalize.css',
-        'css/font-awesome.css',
-        'css/jquery-ui.custom.min.css',
-        'css/layout-default-latest.css',
-        'css/annotator.min.css',
-        'css/mirador.css',
-        '!css/mirador-combined.css'
+          'css/normalize.css',
+          'css/font-awesome.css',
+          'css/jquery-ui.custom.min.css',
+          'css/layout-default-latest.css',
+          'css/annotator.min.css',
+          'css/mirador.css',
+          '!css/mirador-combined.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'
       }
@@ -138,10 +139,10 @@ module.exports = function(grunt) {
         }, {
           src: 'js/lib/parse.min.js',
           dest: 'build/mirador/parse.min.js'
-	}, {	    
+        }, {	    
           src: 'js/lib/ZeroClipboard.swf',
-	  dest: 'build/mirador/ZeroClipboard.swf'
-	}]
+          dest: 'build/mirador/ZeroClipboard.swf'
+        }]
       }
     },
 
@@ -213,7 +214,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    
+
     coveralls: {
       src: 'reports/coverage/lcov.info',
     },
@@ -251,9 +252,68 @@ module.exports = function(grunt) {
                 dir:'reports/coverage'
               }
             }
-          ]
+            ]
           }
         }
+      }
+    },
+    karma : {
+      options: {
+        basePath: '',
+        frameworks: ['jasmine'],
+        files: [].concat(vendors, sources, specs, ['bower_components/sinon-server/index.js'], {pattern: '/spec/data/manifest.json', included: false} ),
+        coverageReporter: {
+          reporters: [
+            {type: 'lcov'},
+            {type: 'html'},
+            {type: 'text-summary'}
+          ],
+          dir: 'reports/coverage'
+        },
+        port: 9876, // Note: web server port
+        colors: true, // Note: enable / disable colors in the output (reporters and logs)
+        logLevel: 'INFO',
+        autoWatch: false,
+        captureTimeout: 60000, // Note: If browser does not capture in given timeout [ms], kill it
+        singleRun: false,
+        sauceLabs: {
+        },
+        customLaunchers: {
+          'sl_win7_chrome': {
+            base: 'SauceLabs',
+            browserName: 'chrome',
+            platform: 'Windows 7',
+            version: '39'
+          }
+        }
+      },
+      test: {
+        reporters: ['progress'],
+        browsers: ['PhantomJS'],
+        singleRun: true
+      },
+      cover: {
+        preprocessors: {
+          'js/src/**/*.js': ['coverage']
+        },
+        reporters: ['progress', 'coverage'],
+        browsers: ['PhantomJS'],
+        singleRun: true
+      },
+      server: {
+        reporters: ['progress'],
+        browsers: ['Firefox'],
+        background: true
+      },
+      firefox: {
+        reporters: ['progress'],
+        browsers: ['Firefox'],
+        singleRun: true
+      },
+      chromeWin7: {
+        reporters: ['spec', 'saucelabs'],
+        browsers: ['sl_win7_chrome'],
+        singleRun: true
       }
     }
   });
@@ -264,8 +324,8 @@ module.exports = function(grunt) {
   grunt.registerTask('copy:release', function() {
     grunt.file.recurse('build', function(abspath, rootdir, subdir, filename) {
       var dest = releaseRoot +
-      (subdir ? subdir + '/' : '/') +
-      filename;
+        (subdir ? subdir + '/' : '/') +
+        filename;
 
       grunt.file.copy(abspath, dest);
     });
@@ -310,5 +370,5 @@ module.exports = function(grunt) {
   // Coverage task.
   // Runs instanbul coverage
   grunt.registerTask('coverage', 'jasmine:coverage');
-  
+
 };

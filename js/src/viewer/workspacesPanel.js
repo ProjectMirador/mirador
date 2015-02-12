@@ -5,7 +5,7 @@
     jQuery.extend(true, this, {
       element: null,
       appendTo: null,
-      parent: null
+      workspace: null
     }, options);
 
     this.init();
@@ -28,10 +28,14 @@
         if (stateValue) { _this.show(); return; }
         _this.hide();
       });
-
+      
       jQuery('#workspace-select-menu').find('.workspace-option').on('click', function() {
         $.viewer.updateLayout(jQuery(this).data('workspaceType'));
       });
+    },
+
+    onSelect: function(layoutString) {
+      this.workspace.setLayout(layoutString);
     },
 
     hide: function() {
@@ -44,17 +48,11 @@
 
     template: Handlebars.compile([
        '<div id="workspace-select-menu">',
-         '<h1>Choose New Layout</h1>',
-         '<ul class="workspaces-listing">',
-           '{{#each workspaces}}',
-             '<li class="workspace-option" data-workspace-type="{{dataClass}}">',
-               '<a href="javascript:void(0);" name="{{label}}">',
-                 '<i class="fa fa-{{iconClass}} workspace-icon"></i>',
-                 '<h2 class="workspace-label">{{label}}</h2>',
-               '</a>',
-             '</li>',
-           '{{/each}}',
-         '</ul>',
+         '<h1>Change Layout</h1>',
+         '<div class="select-grid">',
+       '</div>',
+         '<div class="preview-container">',
+       '</div>',
        '</div>'
     ].join(''))
   };
