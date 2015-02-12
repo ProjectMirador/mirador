@@ -23,7 +23,6 @@ module.exports = function(grunt) {
   // libraries/plugins
   vendors = [
     'js/lib/jquery.min.js',
-    'js/lib/jquery.layout-latest.min.js',
     'js/lib/jquery-ui-1.9.2.min.js',
     'js/lib/jquery.scrollTo.min.js',
     'js/lib/annotator-full.min.js',
@@ -348,6 +347,7 @@ module.exports = function(grunt) {
                      'test',
                      'cover',
                      'jshint',
-                     'karma:browsers'
+                     'karma:browsers',
+                     'coveralls'
   ]);
 };
