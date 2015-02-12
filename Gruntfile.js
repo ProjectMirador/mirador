@@ -13,6 +13,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-coveralls');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-githooks');
   // grunt.loadNpmTasks('jasmine-jquery');
 
   // ----------
@@ -214,8 +215,15 @@ module.exports = function(grunt) {
       }
     },
 
+    githooks: {
+      all: {
+        'pre-commit': 'jshint cover'
+        // 'post-checkout': 
+      }
+    },
+
     coveralls: {
-      src: 'reports/coverage/lcov.info',
+      src: 'reports/coverage/PhantomJS\ 1.9.8\ \(Mac\ OS\ X\)',
     },
 
     karma : {

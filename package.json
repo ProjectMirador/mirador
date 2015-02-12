@@ -32,11 +32,13 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-jasmine": "^0.3.5",
     "karma-sauce-launcher": "^0.2.10",
-    "karma-spec-reporter": "^0.0.16"
+    "karma-spec-reporter": "^0.0.16",
+    "grunt-githooks": "^0.3.1"
   },
   "scripts": {
     "test": "grunt cover jshint coveralls --verbose --full",
-    "travis": "grunt ci --verbose"
+    "travis": "grunt ci --verbose",
+    "postinstall": "grunt githooks"
   },
   "dependencies": {}
 }

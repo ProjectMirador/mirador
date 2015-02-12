@@ -20,7 +20,6 @@
     "tests"
   ],
   "dependencies": {
-    "annotator-full.1.2.9": "https://github.com/openannotation/annotator/releases/download/v1.2.9/annotator-full.1.2.9.zip",
     "jquery-ui": "*",
     "jquery.scrollTo": "~1.4.12",
     "mousetrap": "~1.4.6",
