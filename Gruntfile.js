@@ -223,7 +223,7 @@ module.exports = function(grunt) {
     },
 
     coveralls: {
-      src: 'reports/coverage/PhantomJS\ 1.9.8\ \(Mac\ OS\ X\)',
+      src: 'reports/coverage/PhantomJS 1.9.8 (Mac OS X)',
     },
 
     karma : {
