@@ -257,6 +257,18 @@ module.exports = function(grunt) {
             browserName: 'chrome',
             platform: 'Windows 7',
             version: '39'
+          },
+          'sl_win7_firefox': {
+            base: 'SauceLabs',
+            browserName: 'firefox',
+            platform: 'Windows 7',
+            version: '35.0'
+          },
+          'sl_win7_ie11': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows 7',
+            version: '11'
           }
         }
       },
@@ -289,8 +301,8 @@ module.exports = function(grunt) {
         singleRun: true
       },
       browsers: {
-        reporters: ['spec', 'saucelabs'],
-        browsers: ['sl_win7_chrome'],
+        reporters: ['spec', 'saucelabs', 'coveralls'],
+        browsers: ['sl_win7_chrome', 'sl_win7_firefox', 'sl_win7_ie'],
         singleRun: true
       }
     }
