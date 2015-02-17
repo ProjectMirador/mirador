@@ -52,6 +52,34 @@
           location: _this.getOsdFrame(region)
         });
       });
+      
+      this.tooltips = jQuery(_this.osdViewer.element).qtip({
+            overwrite : false,
+            content: {
+             text : ''
+             },
+             position : {
+              target : 'mouse',
+              adjust : {
+                mouse: false
+              }
+             },
+             style : {
+              classes : 'qtip-bootstrap'
+             },
+             show: {
+              ready: false,
+              event : false,
+              delay: 0
+             },
+             hide: {
+                fixed: true,
+                delay: 10
+             },
+             events: {
+               show: function(event, api) {_this.annotationEvents(event, api);}
+             } 
+            });
 
       this.bindEvents();
     },
@@ -112,7 +140,6 @@
 
     getOverlaysFromPosition: function(event) {
       var _this = this;
-      console.log(event);
       var annos = jQuery(_this.osdViewer.canvas).find('.annotation').map(function() {
         var self = jQuery(this),
         offset = self.offset(),
@@ -137,8 +164,7 @@
       jQuery(this.osdViewer.canvas).parent().on('click', '.annotation', function() { _this.onSelect(); });
 
       jQuery(this.osdViewer.canvas).on('mouseenter', '.annotation', function(event) { 
-        console.log('entering');
-        var mouseElem = this;
+        console.log('entering '+this.id);
         _this.onHover(event, _this.getOverlaysFromPosition(event));
       });
 
@@ -164,6 +190,7 @@
     },
 
     onHover: function(event, overlays) {
+      console.log("in onhover");
       var renderAnnotations = [],
       _this = this,
       annoTooltip = new $.AnnotationTooltip(); // pass permissions
@@ -172,53 +199,77 @@
       jQuery.each(overlays, function(index, overlay) {
         annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
       });
-      console.log(overlays);
-      console.log(annotations);
       if (annotations.length > 0) {
-        _this.tooltip = jQuery(_this.osdViewer.element).qtip({
-          overwrite : false,
-          content: {
-            text : annoTooltip.getViewer(annotations)
-          },
-          position : {
-            target : 'mouse',
-            adjust : {
-              mouse: true
-            }
-          },
-          style : {
-            classes : 'qtip-bootstrap'
-          },
-          show: {
-            ready: true
-            // delay: 300
-          },
-          hide: {
-            fixed: true
-            // delay: 10
-          },
-          events: {
-            hide: function(event, api) {
-              api.destroy();
-            },
-            show: function(event, api) {_this.annotationEvents(event, api);}
-          } 
-        });
-      }
+          //console.log(overlays.first());
+            var tooltipApi = this.tooltips.qtip('api');
+            //console.log("calling hide!");
+            //tooltipApi.hide();
+            console.log(event.pageX, event.pageY);
+            console.log(tooltipApi.mouse);
+            tooltipApi.mouse = event;
+            tooltipApi.set({'content.text' : annoTooltip.getViewer(annotations),
+            'show.target' : overlays,
+            'hide.target' : overlays
+            //'position.target' : 'mouse',
+            });
+            tooltipApi.reposition(event, false);
+            console.log(tooltipApi.mouse);
+            tooltipApi.show(); 
+        }
     },
 
     annotationEvents: function(event, api) {
       var _this = this;
       jQuery('.annotation-display a.delete').on("click", function(event) {
         event.preventDefault();
+        
+        if (!window.confirm("Do you want to delete this annotation?")) { 
+          return false;
+        }
+
+    /*jQuery('<div />').qtip({
+        content: {
+            text: message.add(ok).add(cancel),
+            title: 'Please confirm'
+        },
+        position: {
+            my: 'center', at: 'center',
+            target: jQuery(window)
+        },
+        show: {
+            ready: true,
+            modal: {
+                on: true,
+                blur: false
+            }
+        },
+        hide: false,
+        style: 'dialogue',
+        events: {
+            render: function(event, api) {
+                jQuery('button', api.elements.content).click(function(e) {
+                    api.hide(e);
+                });
+            },
+            hide: function(event, api) { api.destroy(); }
+        }
+    });*/
+        
         console.log("clicked delete");
-        var id = jQuery(this).parents('.annotation-display').attr('data-anno-id');
-        var oaAnno = _this.getAnnoFromRegion(id)[0];
-        jQuery.publish('annotationDeleted.'+_this.parent.windowId, [oaAnno]);
+        var display = jQuery(this).parents('.annotation-display'),
+        id = display.attr('data-anno-id'),
+        oaAnno = _this.getAnnoFromRegion(id)[0];
+        //jQuery.publish('annotationDeleted.'+_this.parent.windowId, [oaAnno]);
 
         //remove this annotation's overlay from osd
         //should there be some sort of check that it was successfully deleted?
-        _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+id)[0]);
+        //_this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+id)[0]);
+        
+        //if there will be no more displayed annotations after removing current one from dom, then hide the qtip
+        if(jQuery(this).parents('.all-annotations').find('.annotation-display').length-1 === 0) {
+          api.hide();
+        }
+        display.remove(); //remove this annotation display from dom
       });
 
       jQuery('.annotation-display a.edit').on("click", function(event) {
@@ -228,6 +279,8 @@
     },
 
     onMouseLeave: function() {
+      var tooltipApi = this.tooltips.qtip('api');
+      tooltipApi.hide();
     },
 
     onSelect: function(annotation) {
