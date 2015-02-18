@@ -94,50 +94,6 @@
       });
     },
 
-    getAnnotationsFromPosition: function(event, imageViewElem) {
-      var _this = this,
-      annos = imageViewElem.find('.annotation').map(function() {
-        var self = jQuery(this),
-        offset = self.offset(),
-        l = offset.left,
-        t = offset.top,
-        h = self.height(),
-        w = self.width(),
-        x = new OpenSeadragon.getMousePosition(event).x,
-        y = new OpenSeadragon.getMousePosition(event).y,
-        maxx = l+w,
-        maxy = t+h;
-
-        // console.log(y, maxy, t, x, maxx, l);
-        if ((y <= maxy && y >= t) && (x <= maxx && x >= l)) {
-          // console.log(_this.getAnnoFromRegion(this.id));
-        }
-
-        return (y <= maxy && y >= t) && (x <= maxx && x >= l) ? _this.getAnnoFromRegion(this.id) : null;
-      });
-      return annos;
-    },
-
-    getAnnoIdsFromPosition: function(event, imageViewElem) {
-      var _this = this,
-      annos = imageViewElem.find('.annotation').map(function() {
-        var self = jQuery(this),
-        offset = self.offset(),
-        l = offset.left,
-        t = offset.top,
-        h = self.height(),
-        w = self.width(),
-        x = new OpenSeadragon.getMousePosition(event).x,
-        y = new OpenSeadragon.getMousePosition(event).y,
-        maxx = l+w,
-        maxy = t+h;
-
-        return (y <= maxy && y >= t) && (x <= maxx && x >= l) ? this.id : null;
-      });
-
-      return annos;
-    },
-
     getOverlaysFromPosition: function(event) {
       var _this = this;
       var annos = jQuery(_this.osdViewer.canvas).find('.annotation').map(function() {
@@ -190,7 +146,6 @@
     },
 
     onHover: function(event, overlays) {
-      console.log("in onhover");
       var renderAnnotations = [],
       _this = this,
       annoTooltip = new $.AnnotationTooltip(); // pass permissions
@@ -200,12 +155,9 @@
         annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
       });
       if (annotations.length > 0) {
-          //console.log(overlays.first());
             var tooltipApi = this.tooltips.qtip('api');
             //console.log("calling hide!");
             //tooltipApi.hide();
-            console.log(event.pageX, event.pageY);
-            console.log(tooltipApi.mouse);
             tooltipApi.mouse = event;
             tooltipApi.set({'content.text' : annoTooltip.getViewer(annotations),
             'show.target' : overlays,
@@ -213,7 +165,6 @@
             //'position.target' : 'mouse',
             });
             tooltipApi.reposition(event, false);
-            console.log(tooltipApi.mouse);
             tooltipApi.show(); 
         }
     },
@@ -227,43 +178,15 @@
           return false;
         }
 
-    /*jQuery('<div />').qtip({
-        content: {
-            text: message.add(ok).add(cancel),
-            title: 'Please confirm'
-        },
-        position: {
-            my: 'center', at: 'center',
-            target: jQuery(window)
-        },
-        show: {
-            ready: true,
-            modal: {
-                on: true,
-                blur: false
-            }
-        },
-        hide: false,
-        style: 'dialogue',
-        events: {
-            render: function(event, api) {
-                jQuery('button', api.elements.content).click(function(e) {
-                    api.hide(e);
-                });
-            },
-            hide: function(event, api) { api.destroy(); }
-        }
-    });*/
-        
         console.log("clicked delete");
         var display = jQuery(this).parents('.annotation-display'),
         id = display.attr('data-anno-id'),
         oaAnno = _this.getAnnoFromRegion(id)[0];
-        //jQuery.publish('annotationDeleted.'+_this.parent.windowId, [oaAnno]);
+        jQuery.publish('annotationDeleted.'+_this.parent.windowId, [oaAnno]);
 
         //remove this annotation's overlay from osd
         //should there be some sort of check that it was successfully deleted?
-        //_this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+id)[0]);
+        _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+id)[0]);
         
         //if there will be no more displayed annotations after removing current one from dom, then hide the qtip
         if(jQuery(this).parents('.all-annotations').find('.annotation-display').length-1 === 0) {
