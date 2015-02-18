@@ -215,6 +215,11 @@
         jQuery.publish(('annotationListLoaded.' + _this.id));
       });
       
+      jQuery.subscribe('annotationUpdated.'+_this.id, function(event, oaAnno) {
+        console.log("updated annotation");
+        console.log(oaAnno);
+      });
+      
       jQuery.subscribe('annotationDeleted.'+_this.id, function(event, oaAnno) {
         //remove from annotationsList
         _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== oaAnno['@id']; });

@@ -20,6 +20,28 @@
     bindEvents: function() {
       var _this = this;
     },
+    
+    getEditor: function(annotation) {
+      var annoText,
+      tags = [],
+      _this = this;
+
+        if (jQuery.isArray(annotation.resource)) {
+          jQuery.each(annotation.resource, function(index, value) {
+            if (value['@type'] === "dctypes:Text") {
+              annoText = value.chars;
+            } else if (value['@type'] == "oa:Tag") {
+              tags.push(value.chars);
+            }
+          });
+        } else {
+          annoText = annotation.resource.chars;
+        }
+
+      return this.editorTemplate({content : annoText,
+      tags : tags.join(" "),
+      id : annotation['@id']});
+    },
 
     getViewer: function(annotations) {
       var annoText,
@@ -53,13 +75,13 @@
 
     //when this is being used to edit an existing annotation, insert them into the inputs
     editorTemplate: Handlebars.compile([
-                                       '<form class="new-annotation-form">',
+                                       '<form class="new-annotation-form annotation-tooltip" {{#if id}}data-anno-id="{{id}}"{{/if}}>',
                                        '<ul>',
                                        '<li>',
-                                       '<textarea class="text-editor" placeholder="Comments…"></textarea>',
+                                       '<textarea class="text-editor" placeholder="Comments…">{{#if content}}{{content}}{{/if}}</textarea>',
                                        '</li>',
                                        '<li>',
-                                       '<input class="tags-editor" placeholder="Add some tags here…">',
+                                       '<input class="tags-editor" placeholder="Add some tags here…" {{#if tags}}value="{{tags}}"{{/if}}>',
                                        '</li>',
                                        '</ul>',
                                        '<div>',
@@ -73,9 +95,10 @@
     viewerTemplate: Handlebars.compile([
                                        '<div class="all-annotations">',
                                        '{{#each annotations}}',
-                                       '<div class="annotation-display" data-anno-id="{{id}}">',
+                                       '<div class="annotation-display annotation-tooltip" data-anno-id="{{id}}">',
                                        '<a href="#edit" class="edit">Edit</a>',
                                        '<a href="#delete" class="delete">Delete</a>',
+                                       '<a href="#save" style="display:none;" class="save">Save</a>',
                                        '<div class="text-viewer">{{annoText}}</div>',
                                        '<div class="tags-viewer">',
                                        '{{#each tags}}',

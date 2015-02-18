@@ -164,13 +164,13 @@
             },
             events: {
               show: function(event, api) {
-                jQuery('.new-annotation-form a.cancel').on("click", function(event) {
+                jQuery('.annotation-tooltip a.cancel').on("click", function(event) {
                   event.preventDefault();
                   api.destroy();
                   _this.osdViewer.removeOverlay(_this.osdOverlay);
                 });
                 
-                jQuery('.new-annotation-form a.save').on("click", function(event) {
+                jQuery('.annotation-tooltip a.save').on("click", function(event) {
                   event.preventDefault();
                   
                   var tagText = jQuery(this).parents('.new-annotation-form').find('.tags-editor').val();

@@ -77,8 +77,9 @@
                 delay: 10
              },
              events: {
-               show: function(event, api) {_this.annotationEvents(event, api);}
-             } 
+               show: function(event, api) {_this.annotationEvents(event, api);},
+               move: function(event, api) {_this.annotationSaveEvent(event, api);}
+             }
             });
 
       this.bindEvents();
@@ -170,8 +171,9 @@
     },
 
     annotationEvents: function(event, api) {
-      var _this = this;
-      jQuery('.annotation-display a.delete').on("click", function(event) {
+      var _this = this,
+      annoTooltip = new $.AnnotationTooltip();
+      jQuery('.annotation-tooltip a.delete').on("click", function(event) {
         event.preventDefault();
         
         if (!window.confirm("Do you want to delete this annotation?")) { 
@@ -195,10 +197,75 @@
         display.remove(); //remove this annotation display from dom
       });
 
-      jQuery('.annotation-display a.edit').on("click", function(event) {
+      jQuery('.annotation-tooltip a.edit').on("click", function(event) {
         event.preventDefault();
         console.log("clicked edit");
+        
+        var display = jQuery(this).parents('.annotation-display'),
+        id = display.attr('data-anno-id'),
+        oaAnno = _this.getAnnoFromRegion(id)[0];
+        var tooltipApi = _this.tooltips.qtip('api');
+        //need to bind save action with editor
+        tooltipApi.set({'content.text' : annoTooltip.getEditor(oaAnno)});
       });
+    },
+    
+    annotationSaveEvent: function(event, api) {
+    var _this = this;
+    jQuery('.annotation-tooltip a.save').on("click", function(event) {
+                  event.preventDefault();
+                  console.log("clicked save");
+                  
+                  var display = jQuery(this).parents('.annotation-tooltip'),
+                  id = display.attr('data-anno-id'),
+                  oaAnno = _this.getAnnoFromRegion(id)[0];
+                  
+                  //check if new resourceText is empty??
+                  var tagText = jQuery(this).parents('.new-annotation-form').find('.tags-editor').val(),
+                  resourceText = jQuery(this).parents('.new-annotation-form').find('.text-editor').val(),
+                  tags = [];
+                  tagText = $.trimString(tagText);
+                  if (tagText) {
+                    tags = tagText.split(/\s+/);
+                  }
+
+                  var bounds = _this.osdViewer.viewport.getBounds(true);
+                  var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
+                  //bounds is giving negative values?
+                  //update scope?
+                  
+                  var motivation = [],
+                  resource = [],
+                  on;
+                  
+                  //remove all tag-related content in annotation
+                  oaAnno.motivation = jQuery.grep(oaAnno.motivation, function(value) {
+                    return value !== "oa:tagging";
+                  });
+                  oaAnno.resource = jQuery.grep(oaAnno.resource, function(value) {
+                    return value["@type"] !== "oa:Tag";
+                  });
+                  //re-add tagging if we have them
+                  if (tags.length > 0) {
+                   oaAnno.motivation.push("oa:tagging");
+                   jQuery.each(tags, function(index, value) {
+                    oaAnno.resource.push({      
+                     "@type":"oa:Tag",
+                     "chars":value
+                    });
+                   });
+                  }
+                jQuery.each(oaAnno.resource, function(index, value) {
+                  if (value["@type"] === "dctypes:Text") {
+                    value.chars = resourceText;
+                  }
+                });
+                  //save to endpoint
+                jQuery.publish('annotationUpdated.'+_this.parent.windowId, [oaAnno]);
+                
+                //update content of this qtip to make it a viewer, not editor
+                //api.set({'content.text' : annoTooltip.getViewer([oaAnno])});
+                });
     },
 
     onMouseLeave: function() {
