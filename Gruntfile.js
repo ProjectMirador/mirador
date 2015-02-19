@@ -226,7 +226,7 @@ module.exports = function(grunt) {
       // src: 'reports/coverage/PhantomJS/lcov.info',
       options: {
         debug: true,
-        coverageDir: 'reports/coverage/PhantomJS/',
+        coverageDir: 'reports/coverage/PhantomJS 1.9.8 (Mac OS X)',
         dryRun: true,
         force: true,
         recursive: true
