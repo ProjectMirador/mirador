@@ -11,8 +11,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-git-describe');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('karma-coveralls');
-  grunt.loadNpmTasks('karma-coverage');
+  grunt.loadNpmTasks('grunt-karma-coveralls');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-githooks');
   // grunt.loadNpmTasks('jasmine-jquery');
@@ -269,19 +268,19 @@ module.exports = function(grunt) {
             browserName: 'chrome',
             platform: 'Windows 7',
             version: '39'
-          }//,
-          // 'sl_win7_firefox': {
-          //   base: 'SauceLabs',
-          //   browserName: 'firefox',
-          //   platform: 'Windows 7',
-          //   version: '35.0'
-          // },
-          // 'sl_win7_ie11': {
-          //   base: 'SauceLabs',
-          //   browserName: 'internet explorer',
-          //   platform: 'Windows 7',
-          //   version: '11'
-          // }
+          },
+          'sl_win7_firefox': {
+            base: 'SauceLabs',
+            browserName: 'firefox',
+            platform: 'Windows 7',
+            version: '35.0'
+          },
+          'sl_win7_ie11': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows 7',
+            version: '11'
+          }
         }
       },
       test: {
@@ -293,7 +292,7 @@ module.exports = function(grunt) {
         preprocessors: {
           'js/src/**/*.js': ['coverage']
         },
-        reporters: ['progress', 'coverage'],
+        reporters: ['progress', 'coverage', 'coveralls'],
         browsers: ['PhantomJS'],
         singleRun: true
       },
