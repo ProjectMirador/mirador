@@ -10,5 +10,6 @@
   },
   "_source": "git://github.com/ccampbell/mousetrap.git",
   "_target": "~1.4.6",
-  "_originalSource": "mousetrap"
+  "_originalSource": "mousetrap",
+  "_direct": true
 }

@@ -117,41 +117,48 @@
     split: function(targetSlot, direction) {
       var _this = this,
       node = jQuery.grep(_this.layout, function(node) { return node.id === targetSlot.slotID; })[0];
-      nodeIndex = node.parent ? node.parent.children.indexOf(node) : 0;
+      nodeIndex = node.parent ? node.parent.children.indexOf(node) : 0,
+      nodeIsNotRoot = node.parent;
 
       function addSibling(node, indexDifference) {
-        var siblingIndex = nodeIndex + indexDifference,
-        newSibling = _this.newNode(node.type, node.address.concat("." + node.type + (siblingIndex + 1)), node);
+        if (nodeIsNotRoot) {
+          var siblingIndex = nodeIndex + indexDifference,
+          newSibling = _this.newNode(node.type, node);
 
-        node.parent.children.splice(siblingIndex, 0, newSibling);
-        _this.layout.push(newSibling);
-
-        return newSibling;
+          node.parent.children.splice(siblingIndex, 0, newSibling);
+          _this.layout.push(newSibling);
+          return newSibling;
+        }
+        
+        // handles the case where the root needs to be mutated.
+        node.type = node.type === 'row' ? 'column' : 'row';
+        mutateAndAdd(node, indexDifference);
       }
 
       function mutateAndAdd(node, indexDifference) {
-        var newParent = _this.newNode(node.type, node.address, node.parent),
-        oldAddress = node.address;
+        // Locally mutate the tree to accomodate a 
+        // sibling of another kind, transforming
+        // both the target node and its parent.
+        var newParent = _this.newNode(node.type, node.parent);
 
-        // Recalculate the address of this node
-        // and flip its type while keeping
+        // Flip its type while keeping
         // the same id.
         node.type = node.type === 'row' ? 'column' : 'row';
-        node.address = node.address.concat('.' + node.type + '1');
 
         // Create a new node (which will be childless)
         // that is also a sibling of this node.
-        newSibling = _this.newNode(node.type, oldAddress.concat("." + node.type + '1'), newParent);
+        newSibling = _this.newNode(node.type, newParent);
 
         // maintain array ordering.
         newParent.children = [];
-        newParent.children.push(node); // order matters.
-        newParent.children.splice(indexDifference, 0, newSibling); // order matters.
-        newParent.parent = node.parent;
-
-        // replace the old node in its parent's child
-        // array with the new parent.
-        newParent.parent.children[nodeIndex] = newParent;
+        newParent.children.push(node); // order matters, place node first.
+        newParent.children.splice(indexDifference, 0, newSibling); // order matters, so put new sibling on one side or the other.
+        if (nodeIsNotRoot) {
+          newParent.parent = node.parent;
+          // replace the old node in its parent's child
+          // array with the new parent.
+          newParent.parent.children[nodeIndex] = newParent;
+        }
 
         node.parent = newParent;
         _this.layout.push(newParent, newSibling);
@@ -228,26 +235,29 @@
     },
 
     removeNode: function(targetSlot) {
+      // de-mutate the tree structure.
       var _this = this,
       node = jQuery.grep(_this.layout, function(node) { return node.id === targetSlot.slotID; })[0],
-      nodeIndex = node.parent ? node.parent.children.indexOf(node) : 0,
+      nodeIndex = node.parent.children.indexOf(node),
       parentIndex,
+      remainingNode,
       root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
 
-      if (node.parent !== root && node.parent.children.length === 2) {
-        parentIndex = node.parent.parent.children.indexOf(node.parent);
-        
-        // If the operation is going to destroy the root
-        // or lead to a situation where there will be a 
-        // superfluous parent node, de-mutate the tree,
-        // placing the node in the parent's place with
-        // the parent's address.
-        node.type = node.parent.type;
-        node.address = node.parent.address;
-        node.parent.parent.children.splice(parentIndex, 1, node);
-        node.parent = node.parent.parent; 
+      if (node.parent.children.length === 2) {
+        // de-mutate the tree without destroying
+        // the children of the remaining node, 
+        // which in this case means changing their
+        // IDs.
+        node.parent.children.splice(nodeIndex,1);
+        remainingNode = node.parent.children[0];
+
+        remainingNode.parent.id = remainingNode.id;
+        delete node.parent;
+      } else if (node.parent.children.length === 1) { 
       } else { 
-        // Regardless, remove the node from the parent
+        // If the node is one of more than 2 siblings,
+        // simply splice it out of the parent's children 
+        // array.
         node.parent.children.splice(nodeIndex, 1);
       }
 
@@ -255,13 +265,19 @@
       _this.calculateLayout();
     },
 
-    newNode: function(type, address, parent) {
-      return {
-        type: type,
-        address: address,
-        id: $.genUUID(),
-        parent: parent
-      };
+    newNode: function(type, parent) {
+      if (typeof parent === 'undefined') {
+        return {
+          type: type,
+          id: $.genUUID(),
+        };
+      } else {
+        return {
+          type: type,
+          id: $.genUUID(),
+          parent: parent
+        };
+      }
     },
     
     availableSlot: function() {

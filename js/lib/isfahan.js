@@ -103,7 +103,7 @@ var Isfahan = function(configObject) {
     root.dx = containerSize(containerId)[0];
     root.dy = containerSize(containerId)[1];
     root.address = root.type + "1";
-    root.id = genUuid();
+    root.id = root.id || genUuid();
 
     calculateLayout(root);
     isfahan.padding(padding);

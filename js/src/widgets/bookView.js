@@ -141,7 +141,7 @@
 
       jQuery.each(this.stitchList, function(index, image) {
         var imageUrl = $.Iiif.getImageUrl(image);
-        var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json';
+        var infoJsonUrl = imageUrl + '/info.json';
         var infoJson = $.getJsonFromUrl(infoJsonUrl, false);
         tileSources.push(infoJson);
       });
@@ -185,7 +185,7 @@
       this.osd.open(tileSources[0], {opacity:1, x:0, y:0, width:1});
 
 
-      //this.stitchOptions();
+      // this.stitchOptions();
     },
 
     addLayer: function(tileSources, aspectRatio) {
@@ -312,41 +312,6 @@
       this.parent.updateFocusImages(this.focusImages);
       return stitchList;
     }
-    // remove or add canvses to make pages line up
-    /*stitchOptions: function() {  
-          //clear options
-          var options = [];
-
-          this.clearStitchOptions();
-
-          // if there is only one image, don't show options to remove images
-          if (this.stitchList.length == 2) {
-          options.push({
-label: "Remove image from page view",
-imgIndex: this.currentImgIndex
-});
-options.push({
-label: "Insert empty canvas between images"
-imgIndex: this.currentImgIndex
-});
-
-this.elemStitchOptions.tooltipster({
-arrow: true,
-content: $.Templates.stitchView.stitchOptions({options: options}),
-interactive: true,
-position: 'bottom',
-theme: '.tooltipster-mirador'
-});
-}
-},
-
-clearStitchOptions: function() {
-if (this.elemStitchOptions.data('plugin_tooltipster') !== '') {
-this.elemStitchOptions.tooltipster('destroy');
-}
-
-this.elemStitchOptions.hide();
-},*/
 };
 
 }(Mirador));

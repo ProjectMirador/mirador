@@ -67,6 +67,7 @@
             this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
             
             // add workspace configuration
+            this.layout = typeof this.layout !== 'string' ? JSON.stringify(this.layout) : this.layout;
             this.workspace = new $.Workspace({
               layoutDescription: this.layout.charAt(0) === '{' ? JSON.parse(this.layout) : $.layoutDescriptionFromGridString(this.layout), 
               parent: this, 
@@ -75,6 +76,10 @@
             
             // set this to be displayed
             this.set('currentWorkspaceVisible', true);
+
+            // this.windowObjects.forEach(windowObjects, function(windowConfig) {
+            //   this.workspace.addWindow(windowConfig);
+            // });
             
             this.bindEvents();
         },
@@ -254,9 +259,6 @@
                 return slot.hasOwnProperty('window') ? true : false;
               })[0].slotID;
             }
-            
-            // There is an exact mapping with given slotIDs.
-            // It is freeform view and all bets are off. 
             
             //The publish is sending too many events and it's creating a lot of cascading issues
             //Need to call it once, to the exact slot

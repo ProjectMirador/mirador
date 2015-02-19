@@ -23,10 +23,22 @@
     "grunt-cli": "*",
     "grunt-coveralls": "^1.0.0",
     "jasmine-core": "^2.1.3",
-    "jasmine-jquery": "^2.0.5"
+    "jasmine-jquery": "^2.0.5",
+    "grunt-karma": "^0.10.1",
+    "karma": "^0.12.16",
+    "karma-coverage": "^0.2.4",
+    "karma-firefox-launcher": "^0.1.3",
+    "karma-chrome-launcher": "^0.1.7",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-jasmine": "^0.3.5",
+    "karma-sauce-launcher": "^0.2.10",
+    "karma-spec-reporter": "^0.0.16",
+    "grunt-githooks": "^0.3.1"
   },
   "scripts": {
-    "test": "grunt test coverage coveralls --verbose"
+    "test": "grunt cover jshint coveralls --verbose --full",
+    "travis": "grunt ci --verbose",
+    "postinstall": "grunt githooks"
   },
   "dependencies": {}
 }

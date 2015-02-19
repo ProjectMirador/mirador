@@ -232,11 +232,14 @@
         jQuery.publish(('annotationListLoaded.' + _this.id));
       });
 
-      jQuery.subscribe('layoutUpdated', function(event, slots) {
-        if (slots.length <= 1) {
+      jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
+        if ($.viewer.workspace.slots.length <= 1) {
           _this.element.find('.remove-object-option').hide();
+          console.log('hiding close button');
         } else {
           _this.element.find('.remove-object-option').show();
+          console.log('hiding close button');
+          console.log(_this.element.find('.remove-object-option'));
         }
       });
     },
@@ -581,18 +584,18 @@
   bindNavigation: function() {
     var _this = this;
 
-    this.element.find('.mirador-icon-image-view').mouseenter(
+    this.element.find('.mirador-icon-image-view').on('mouseenter',
       function() {
       _this.element.find('.image-list').stop().slideFadeToggle(300);
-    }).mouseleave(
+    }).on('mouseleave',
     function() {
       _this.element.find('.image-list').stop().slideFadeToggle(300);
     });
 
-    this.element.find('.mirador-icon-window-menu').mouseenter(
+    this.element.find('.mirador-icon-window-menu').on('mouseenter',
       function() {
       _this.element.find('.slot-controls').stop().slideFadeToggle(300);
-    }).mouseleave(
+    }).on('mouseleave',
     function() {
       _this.element.find('.slot-controls').stop().slideFadeToggle(300);
     });
@@ -649,15 +652,15 @@
   // template should be based on workspace type
   template: Handlebars.compile([
                                '<div class="window">',
-                               '<div class="content-container">',
-                               '<div class="sidePanel">',
-                               '</div>',
-                               '<div class="view-container">',
-                               '<div class="overlay"></div>',
-                               '<div class="bottomPanel">',
-                               '</div>',
-                               '</div>',
-                               '</div>',
+                                 '<div class="content-container">',
+                                   '<div class="sidePanel">',
+                                   '</div>',
+                                   '<div class="view-container">',
+                                     '<div class="overlay"></div>',
+                                     '<div class="bottomPanel">',
+                                     '</div>',
+                                   '</div>',
+                                 '</div>',
                                '</div>'
   ].join('')),
 

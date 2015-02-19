@@ -2296,6 +2296,9 @@ a {
   display: none;
   /*z-index: 10000;*/
 }
+.change-layout {
+  display: none;
+}
 
 
 /* status bar

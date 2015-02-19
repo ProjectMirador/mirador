@@ -4,13 +4,14 @@
     return str.replace(/^\s+|\s+$/g, '');
   };
 
+  // make asynchronous
   $.getJsonFromUrl = function(url, async) {
     var json;
 
     jQuery.ajax({
       url: url,
       dataType: 'json',
-      async: async || false,
+      async: false,
 
       success: function(data) {
         json = data;
@@ -68,7 +69,6 @@
       // No thumbnail, use main image
       var resource = canvas.images[0].resource;
       service = resource['default'] ? resource['default'].service : resource.service;
-      // TODO: This should check that service is actually there...
       if (service.hasOwnProperty('@context')) {
         version = $.Iiif.getVersionFromContext(service['@context']);
       }          
@@ -220,8 +220,6 @@
 
     if (gridString === "1x1") return layoutDescription;
 
-    console.log(columns, rowsPerColumn);
-
     layoutDescription.children = [];
 
     // Javascript does not have range expansions quite yet,
@@ -243,6 +241,27 @@
     }
 
     return layoutDescription;
+  };
+
+  // Configurable Promises
+  $.createImagePromise = function(imageUrl) {
+    var img = new Image(),
+    dfd = jQuery.Deferred();
+
+    img.onload = function() {
+      dfd.resolve(img.src);
+    };
+
+    img.onerror = function() {
+      dfd.reject(img.src);
+    };
+
+    dfd.fail(function() {
+      console.log('image failed to load: ' + img.src);
+    });
+
+    img.src = imageUrl;
+    return dfd.promise();
   };
 
 }(Mirador));
