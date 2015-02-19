@@ -258,6 +258,7 @@ module.exports = function(grunt) {
         singleRun: false,
         sauceLabs: {
         },
+        // plugins:['karma-coverage'],
         customLaunchers: {
           'sl_win7_chrome': {
             base: 'SauceLabs',
