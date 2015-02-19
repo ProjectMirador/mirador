@@ -292,7 +292,7 @@ module.exports = function(grunt) {
         preprocessors: {
           'js/src/**/*.js': ['coverage']
         },
-        reporters: ['progress', 'coverage', 'coveralls'],
+        reporters: ['progress', 'coverage'],
         browsers: ['PhantomJS'],
         singleRun: true
       },
