@@ -223,7 +223,7 @@ module.exports = function(grunt) {
     },
 
     coveralls: {
-      src: 'reports/coverage/PhantomJS 1.9.8 (Mac OS X)/lcov.info',
+      src: '/reports/coverage/PhantomJS\ 1.9.8\ (Mac\ OS\ X)/lcov.info',
     },
 
     karma : {
@@ -301,8 +301,8 @@ module.exports = function(grunt) {
         singleRun: true
       },
       browsers: {
-        reporters: ['spec', 'saucelabs', 'coveralls'],
-        browsers: ['sl_win7_chrome', 'sl_win7_firefox', 'sl_win7_ie'],
+        reporters: ['spec', 'saucelabs'],
+        browsers: ['sl_win7_chrome', 'sl_win7_firefox', 'sl_win7_ie11'],
         singleRun: true
       }
     }
