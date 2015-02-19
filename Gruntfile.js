@@ -11,7 +11,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-git-describe');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-karma-coveralls');
+  grunt.loadNpmTasks('karma-coveralls');
+  grunt.loadNpmTasks('karma-coverage');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-githooks');
   // grunt.loadNpmTasks('jasmine-jquery');
