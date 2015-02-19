@@ -244,9 +244,6 @@ module.exports = function(grunt) {
           '/spec': 'http://localhost:9876/base/spec'
         },
         reporters: [
-          {type: 'lcov'},
-          {type: 'html'},
-          {type: 'text-summary'},
           'coverage',
           'coveralls'
         ],
