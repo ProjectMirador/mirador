@@ -34,7 +34,8 @@
     "karma-spec-reporter": "^0.0.16",
     "grunt-githooks": "^0.3.1",
     "grunt-karma-coveralls": "^2.5.3",
-    "karma-safari-launcher": "^0.1.1"
+    "karma-safari-launcher": "^0.1.1",
+    "grunt-coveralls": "^1.0.0"
   },
   "scripts": {
     "test": "grunt cover jshint coveralls --verbose --full",

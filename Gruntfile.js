@@ -11,6 +11,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-git-describe');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-coveralls');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-githooks');
   // grunt.loadNpmTasks('jasmine-jquery');
@@ -222,32 +223,24 @@ module.exports = function(grunt) {
     },
 
     coveralls: {
-      options: {
-        debug: true,
-        coverageDir: '/reports/coverage/PhantomJS 1.9.8 (Mac OS X)/',
-        dryRun: true,
-        force: true,
-        recursive: true
-      }
+      src: 'reports/coverage/PhantomJS 1.9.8 (Mac OS X)/lcov.info',
     },
 
     karma : {
       options: {
         basePath: '',
-        frameworks: [
-          'jasmine'
-        ],
+        frameworks: ['jasmine'],
         files: [].concat(vendors, sources, specs, ['bower_components/sinon-server/index.js', 'bower_components/jasmine-jquery/lib/jasmine-jquery.js'], {pattern: 'spec/data/manifest.json', included: false} ),
         exclude: exclude,
         proxies: {
           '/spec': 'http://localhost:9876/base/spec'
         },
-        reporters: [
-          'coverage',
-          'coveralls'
-        ],
         coverageReporter: {
-          type:'lcov',
+          reporters: [
+            {type: 'lcov'},
+            {type: 'html'},
+            {type: 'text-summary'}
+          ],
           dir: 'reports/coverage'
         },
         port: 9876, // Note: web server port
