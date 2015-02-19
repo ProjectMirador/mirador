@@ -264,11 +264,11 @@ module.exports = function(grunt) {
             platform: 'Windows 7',
             version: '35.0'
           },
-          'sl_win7_ie11': {
+          'sl_win7_ie10': {
             base: 'SauceLabs',
             browserName: 'internet explorer',
             platform: 'Windows 7',
-            version: '11'
+            version: '10'
           }
         }
       },
@@ -302,7 +302,7 @@ module.exports = function(grunt) {
       },
       browsers: {
         reporters: ['spec', 'saucelabs'],
-        browsers: ['sl_win7_chrome', 'sl_win7_firefox', 'sl_win7_ie11'],
+        browsers: ['sl_win7_chrome', 'sl_win7_firefox', 'sl_win7_ie10'],
         singleRun: true
       }
     }
