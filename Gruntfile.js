@@ -223,7 +223,6 @@ module.exports = function(grunt) {
     },
 
     coveralls: {
-      // src: 'reports/coverage/PhantomJS/lcov.info',
       options: {
         debug: true,
         coverageDir: '/reports/coverage/PhantomJS 1.9.8 (Mac OS X)/',
@@ -244,13 +243,15 @@ module.exports = function(grunt) {
         proxies: {
           '/spec': 'http://localhost:9876/base/spec'
         },
+        reporters: [
+          {type: 'lcov'},
+          {type: 'html'},
+          {type: 'text-summary'},
+          'coverage',
+          'coveralls'
+        ],
         coverageReporter: {
-          reporters: [
-            {type: 'lcov'},
-            {type: 'html'},
-            {type: 'text-summary'},
-            'coveralls'
-          ],
+          type:'lcov',
           dir: 'reports/coverage'
         },
         port: 9876, // Note: web server port
