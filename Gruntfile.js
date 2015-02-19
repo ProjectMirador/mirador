@@ -236,7 +236,9 @@ module.exports = function(grunt) {
     karma : {
       options: {
         basePath: '',
-        frameworks: ['jasmine'],
+        frameworks: [
+          'jasmine'
+        ],
         files: [].concat(vendors, sources, specs, ['bower_components/sinon-server/index.js', 'bower_components/jasmine-jquery/lib/jasmine-jquery.js'], {pattern: 'spec/data/manifest.json', included: false} ),
         exclude: exclude,
         proxies: {
@@ -246,7 +248,8 @@ module.exports = function(grunt) {
           reporters: [
             {type: 'lcov'},
             {type: 'html'},
-            {type: 'text-summary'}
+            {type: 'text-summary'},
+            'coveralls'
           ],
           dir: 'reports/coverage'
         },
@@ -258,26 +261,25 @@ module.exports = function(grunt) {
         singleRun: false,
         sauceLabs: {
         },
-        // plugins:['karma-coverage'],
         customLaunchers: {
           'sl_win7_chrome': {
             base: 'SauceLabs',
             browserName: 'chrome',
             platform: 'Windows 7',
             version: '39'
-          },
-          'sl_win7_firefox': {
-            base: 'SauceLabs',
-            browserName: 'firefox',
-            platform: 'Windows 7',
-            version: '35.0'
-          },
-          'sl_win7_ie11': {
-            base: 'SauceLabs',
-            browserName: 'internet explorer',
-            platform: 'Windows 7',
-            version: '11'
-          }
+          }//,
+          // 'sl_win7_firefox': {
+          //   base: 'SauceLabs',
+          //   browserName: 'firefox',
+          //   platform: 'Windows 7',
+          //   version: '35.0'
+          // },
+          // 'sl_win7_ie11': {
+          //   base: 'SauceLabs',
+          //   browserName: 'internet explorer',
+          //   platform: 'Windows 7',
+          //   version: '11'
+          // }
         }
       },
       test: {
