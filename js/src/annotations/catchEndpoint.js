@@ -157,7 +157,7 @@
       });
     },
     
-    deleteAnnotation: function(annotationID) {          
+    deleteAnnotation: function(annotationID, returnSuccess, returnError) {          
           jQuery.ajax({
              url: this.prefix+"/destroy/"+annotationID,
              type: 'DELETE',
@@ -168,20 +168,24 @@
              contentType: "application/json; charset=utf-8",
              success: function(data) {
                console.log("successfully deleted");
+               returnSuccess();
              },
              error: function() {
                console.log("error deleting");
+               returnError();
              }
              
            });
     },
     
-    update: function(annotationID, oaAnnotation) {
+    update: function(oaAnnotation) {
       var annotation = this.getAnnotationInEndpoint(oaAnnotation),
-      _this = this;
+      _this = this,
+      annotationID = oaAnnotation["@id"];
+      console.log(annotation);
       jQuery.ajax({
         url: this.prefix+"/update/"+annotationID,
-        type: 'PUT',
+        type: 'POST',
         dataType: 'json',
         headers: {
           "x-annotator-auth-token": this.token
@@ -191,15 +195,17 @@
         success: function(data) {
           console.log("successfully updated");
         },
-        error: function() {
+        error: function(xhr, status, error) {
           console.log("error updating");
+          console.log(status);
+          console.log(error);          
         }
 
       });
     },
 
     //takes OA Annotation, gets Endpoint Annotation, and saves
-    save: function(oaAnnotation) {
+    save: function(oaAnnotation, returnSuccess, returnError) {
       var annotation = this.getAnnotationInEndpoint(oaAnnotation),
       _this = this,
       newId;
@@ -213,14 +219,14 @@
         data: JSON.stringify(annotation),
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-          newId = data.id;
+          console.log(data);
+          returnSuccess(data);
         },
-        error: function() {
-          console.log("error saving");
+        error: function(xhr, status, error) {
+          returnError();
         }
 
       });
-      return newId;
     },
 
     set: function(prop, value, options) {

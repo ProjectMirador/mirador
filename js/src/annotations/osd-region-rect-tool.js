@@ -163,7 +163,7 @@
               delay: 300
             },
             events: {
-              show: function(event, api) {
+              render: function(event, api) {
                 jQuery('.annotation-tooltip a.cancel').on("click", function(event) {
                   event.preventDefault();
                   api.destroy();

@@ -212,6 +212,7 @@
     
     annotationSaveEvent: function(event, api) {
     var _this = this;
+    console.log("annotationSaveEvent called");
     jQuery('.annotation-tooltip a.save').on("click", function(event) {
                   event.preventDefault();
                   console.log("clicked save");
