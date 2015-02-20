@@ -27,7 +27,6 @@ module.exports = function(grunt) {
     'js/lib/jquery-ui-1.9.2.min.js',
     'js/lib/jquery.scrollTo.min.js',
     'js/lib/jquery.qtip.min.js',
-    'js/lib/annotator-full.min.js',
     'js/lib/state-machine.min.js',
     'js/lib/handlebars.js',
     'js/lib/openseadragon.min.js',
@@ -93,7 +92,6 @@ module.exports = function(grunt) {
         'css/font-awesome.css',
         'css/jquery-ui.custom.min.css',
         'css/layout-default-latest.css',
-        'css/annotator.min.css',
         'css/jquery.qtip.min.css',
         'css/mirador.css',
         '!css/mirador-combined.css'

@@ -207,7 +207,7 @@
       jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
         var annoID;
         //first function is success callback, second is error callback
-        endpoint.save(oaAnno, function(data) {
+        endpoint.create(oaAnno, function(data) {
           annoID = String(data.id); //just in case it returns a number
           oaAnno['@id'] = annoID;
           _this.annotationsList.push(oaAnno);
@@ -224,10 +224,13 @@
       });
       
       jQuery.subscribe('annotationUpdated.'+_this.id, function(event, oaAnno) {
-        console.log("updated annotation");
-        console.log(oaAnno);
-        console.log(_this.annotationsList);
-        endpoint.update(oaAnno);
+        //first function is success callback, second is error callback
+        endpoint.update(oaAnno, function() {
+          //successfully updated anno
+        },
+        function() {
+          console.log("There was an error updating this annotation");        
+        });
       });
       
       jQuery.subscribe('annotationDeleted.'+_this.id, function(event, oaAnno) {        

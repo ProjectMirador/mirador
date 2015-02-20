@@ -4,12 +4,11 @@
  * dfd - Deferred Object
  * init()
  * search(uri)
- * save(oaAnnotation)
+ * create(oaAnnotation, returnSuccess, returnError)
+ * update(oaAnnotation, returnSuccess, returnError)
+ * deleteAnnotation(annotationID, returnSuccess, returnError) (delete is a reserved word)
  * TODO:
- * create()
- * read()
- * update()
- * deleteAnnotation() (delete is a reserved word)
+ * read() //not currently used
  *
  * Optional, if endpoint is not OA compliant:
  * getAnnotationInOA(endpointAnnotation)
@@ -167,22 +166,21 @@
              },
              contentType: "application/json; charset=utf-8",
              success: function(data) {
-               console.log("successfully deleted");
                returnSuccess();
              },
              error: function() {
-               console.log("error deleting");
                returnError();
              }
              
            });
     },
     
-    update: function(oaAnnotation) {
+    update: function(oaAnnotation, returnSuccess, returnError) {
       var annotation = this.getAnnotationInEndpoint(oaAnnotation),
       _this = this,
-      annotationID = oaAnnotation["@id"];
+      annotationID = annotation.id;
       console.log(annotation);
+      
       jQuery.ajax({
         url: this.prefix+"/update/"+annotationID,
         type: 'POST',
@@ -193,22 +191,19 @@
         data: JSON.stringify(annotation),
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-          console.log("successfully updated");
+          returnSuccess();
         },
-        error: function(xhr, status, error) {
-          console.log("error updating");
-          console.log(status);
-          console.log(error);          
+        error: function() {
+          returnError();
         }
-
       });
     },
 
     //takes OA Annotation, gets Endpoint Annotation, and saves
-    save: function(oaAnnotation, returnSuccess, returnError) {
+    create: function(oaAnnotation, returnSuccess, returnError) {
       var annotation = this.getAnnotationInEndpoint(oaAnnotation),
-      _this = this,
-      newId;
+      _this = this;
+      
       jQuery.ajax({
         url: this.prefix+"/create",
         type: 'POST',
@@ -219,13 +214,11 @@
         data: JSON.stringify(annotation),
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-          console.log(data);
           returnSuccess(data);
         },
-        error: function(xhr, status, error) {
+        error: function() {
           returnError();
         }
-
       });
     },
 
@@ -243,10 +236,7 @@
       motivation = [],
       resource = [],
       on,
-      annotatedBy,
-      bounds,
-      selector,
-      scope;
+      annotatedBy;
       //convert annotation to OA format
 
       id = annotation.id;  //need to make URI
@@ -305,10 +295,11 @@
     getAnnotationInEndpoint: function(oaAnnotation) {
       var annotation = {},
       tags = [],
-      text,
-      rangePostion,
-      bounds,
-      media;
+      text;
+      
+      if (oaAnnotation["@id"]) {
+        annotation.id = oaAnnotation["@id"];
+      }
 
       annotation.media = "image";
       jQuery.each(oaAnnotation.resource, function(index, value) {
@@ -324,16 +315,18 @@
       annotation.uri = oaAnnotation.on.source;
       var region = oaAnnotation.on.selector.value;
       var regionArray = region.split('=')[1].split(',');
-      rangePosition = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
-      annotation.rangePosition = rangePosition;
+      annotation.rangePosition = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
 
       region = oaAnnotation.on.scope.value;
       regionArray = region.split('=')[1].split(',');
-      bounds = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
-      annotation.bounds = bounds;
+      annotation.bounds = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
 
-      annotation.updated = new Date().toISOString(); // - updated
-      if (typeof annotation.created == 'undefined') { annotation.created = annotation.updated; }// - created
+      annotation.updated = new Date().toISOString();
+      if (oaAnnotation.annotatedAt) { 
+        annotation.created = oaAnnotation.annotatedAt; 
+      } else {
+        annotation.created = annotation.updated;
+      }
       // this needs to come from LTI annotation.user.id, annotation.user.name
       annotation.user = this.annotatorOptions.optionsAnnotator.permissions.user;
       annotation.permissions = this.annotatorOptions.optionsAnnotator.permissions.permissions;

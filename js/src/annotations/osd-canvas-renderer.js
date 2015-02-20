@@ -187,7 +187,7 @@
         jQuery.publish('annotationDeleted.'+_this.parent.windowId, [oaAnno]);
 
         //remove this annotation's overlay from osd
-        //should there be some sort of check that it was successfully deleted?
+        //should there be some sort of check that it was successfully deleted? or pass when publishing?
         _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+id)[0]);
         
         //if there will be no more displayed annotations after removing current one from dom, then hide the qtip
