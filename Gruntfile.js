@@ -302,7 +302,11 @@ module.exports = function(grunt) {
       },
       browsers: {
         reporters: ['spec', 'saucelabs'],
-        browsers: ['sl_win7_chrome', 'sl_win7_firefox', 'sl_win7_ie10'],
+        browsers: [
+          'sl_win7_chrome', 
+          'sl_win7_firefox'//,
+          // 'sl_win7_ie10'
+        ],
         singleRun: true
       }
     }
