@@ -135,31 +135,36 @@
       elemOsd,
       tileSources = [],
       _this = this,
-      toolbarID = 'osd-toolbar-' + uniqueID;
+      toolbarID = 'osd-toolbar-' + uniqueID,
+      dfd = jQuery.Deferred();
 
       this.element.find('.' + this.osdCls).remove();
 
       jQuery.each(this.stitchList, function(index, image) {
         var imageUrl = $.Iiif.getImageUrl(image);
-        var infoJsonUrl = imageUrl + '/info.json';
-        var infoJson = $.getJsonFromUrl(infoJsonUrl, false);
-        tileSources.push(infoJson);
+        var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json';
+
+        jQuery.getJSON(infoJsonUrl).done(function (data, status, jqXHR) {
+          tileSources.push(data);
+          if (tileSources.length === _this.stitchList.length ) { dfd.resolve(); }
+        });
       });
 
+      dfd.done(function () {
       var aspectRatio = tileSources[0].height / tileSources[0].width;
 
       elemOsd =
         jQuery('<div/>')
-      .addClass(this.osdCls)
+          .addClass(_this.osdCls)
       .attr('id', osdId)
-      .appendTo(this.element);
+          .appendTo(_this.element);
 
-      this.osd = $.OpenSeadragon({
+        _this.osd = $.OpenSeadragon({
         'id':           elemOsd.attr('id'),
         'toolbarID' : toolbarID
       });
 
-      this.osd.addHandler('open', function(){
+        _this.osd.addHandler('open', function(){
         _this.addLayer(tileSources.slice(1), aspectRatio);
         var addItemHandler = function( event ) {
           _this.osd.world.removeHandler( "add-item", addItemHandler );
@@ -182,8 +187,8 @@
         }, 300));
       });
 
-      this.osd.open(tileSources[0], {opacity:1, x:0, y:0, width:1});
-
+        _this.osd.open(tileSources[0], {opacity:1, x:0, y:0, width:1});
+      });
 
       // this.stitchOptions();
     },

@@ -118,21 +118,20 @@
 
       this.element.find('.' + this.osdCls).remove();
 
-      infoJson = $.getJsonFromUrl(infoJsonUrl, false);
-
-      this.elemOsd =
+      jQuery.getJSON(infoJsonUrl).done(function (infoJson, status, jqXHR) {
+        _this.elemOsd =
         jQuery('<div/>')
-      .addClass(this.osdCls)
+          .addClass(_this.osdCls)
       .attr('id', osdID)
-      .appendTo(this.element);
+          .appendTo(_this.element);
 
-      this.osd = $.OpenSeadragon({
+        _this.osd = $.OpenSeadragon({
         'id':           osdID,
         'tileSources':  infoJson,
         'uniqueID' : uniqueID
       });
 
-      this.osd.addHandler('open', function() {
+        _this.osd.addHandler('open', function(){
         if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
@@ -156,6 +155,7 @@
           _this.setBounds();
         }, 500));
 
+      });
       });
     },
 
