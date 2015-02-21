@@ -223,9 +223,7 @@ module.exports = function(grunt) {
     },
 
     coveralls: {
-      options: {
-        src: '/reports/coverage/PhantomJS\ 1.9.8\ (Mac\ OS\ X)/lcov.info',
-      },
+      src: '/reports/coverage/PhantomJS\ 1.9.8\ (Mac\ OS\ X)/lcov.info',
       ci: {
         src: '/reports/coverage/PhantomJS\ 1.9.8\ (Mac\ OS\ X)/lcov.info',
       }
