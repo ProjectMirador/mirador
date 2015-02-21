@@ -76,18 +76,14 @@
     //when this is being used to edit an existing annotation, insert them into the inputs
     editorTemplate: Handlebars.compile([
                                        '<form class="new-annotation-form annotation-tooltip" {{#if id}}data-anno-id="{{id}}"{{/if}}>',
-                                       '<ul>',
-                                       '<li>',
                                        '<textarea class="text-editor" placeholder="Comments…">{{#if content}}{{content}}{{/if}}</textarea>',
-                                       '</li>',
-                                       '<li>',
-                                       '<input class="tags-editor" placeholder="Add some tags here…" {{#if tags}}value="{{tags}}"{{/if}}>',
-                                       '</li>',
-                                       '</ul>',
+                                       '<input class="tags-editor" placeholder="Add tags here…" {{#if tags}}value="{{tags}}"{{/if}}>',
                                        '<div>',
-                                       //need to add a delete, if permissions allow
-                                       '<a href="#cancel" class="cancel">Cancel</a>',
-                                       '<a href="#save" class="save">Save</a>',
+                                       // need to add a delete, if permissions allow
+                                       '<div class="button-container">',
+                                       '<a href="#cancel" class="cancel"><i class="fa fa-times-circle-o fa-fw"></i>Cancel</a>',
+                                       '<a href="#save" class="save"><i class="fa fa-database fa-fw"></i>Save</a>',
+                                       '</div>',
                                        '</div>',
                                        '</form>'
     ].join('')),
@@ -96,10 +92,13 @@
                                        '<div class="all-annotations">',
                                        '{{#each annotations}}',
                                        '<div class="annotation-display annotation-tooltip" data-anno-id="{{id}}">',
-                                       '<a href="#edit" class="edit">Edit</a>',
-                                       '<a href="#delete" class="delete">Delete</a>',
-                                       '<a href="#save" style="display:none;" class="save">Save</a>',
-                                       '<div class="text-viewer">{{annoText}}</div>',
+                                       '<div class="button-container">',
+                                         '<a href="#edit" class="edit">Edit</a>',
+                                         '<a href="#delete" class="delete">Delete</a>',
+                                       '</div>',
+                                       '<div class="text-viewer">',
+                                       '<p>{{annoText}}</p>',
+                                       '</div>',
                                        '<div class="tags-viewer">',
                                        '{{#each tags}}',
                                        '<span class="tag">{{this}}</span>',
@@ -109,7 +108,6 @@
                                        '{{/each}}',
                                        '</div>'                      
     ].join(''))
-
   };
 
 }(Mirador));

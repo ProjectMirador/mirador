@@ -74,7 +74,7 @@
              },
              hide: {
                 fixed: true,
-                delay: 10
+                delay:0 
              },
              events: {
                show: function(event, api) {_this.annotationEvents(event, api);},
@@ -213,6 +213,11 @@
     annotationSaveEvent: function(event, api) {
     var _this = this;
     console.log("annotationSaveEvent called");
+    // jQuery('.annotation-tooltip, .annotation-tooltip input').on("submit", function() {
+    //   event.preventDefault();
+    //   jQuery('.annotation-tooltip a.save').click();
+    //   return false;
+    // });
     jQuery('.annotation-tooltip a.save').on("click", function(event) {
                   event.preventDefault();
                   console.log("clicked save");
@@ -261,11 +266,11 @@
                     value.chars = resourceText;
                   }
                 });
-                  //save to endpoint
+                //save to endpoint
                 jQuery.publish('annotationUpdated.'+_this.parent.windowId, [oaAnno]);
                 
                 //update content of this qtip to make it a viewer, not editor
-                //api.set({'content.text' : annoTooltip.getViewer([oaAnno])});
+                // api.set({'content.text' : annoTooltip.getViewer([oaAnno])});
                 });
     },
 
