@@ -4,28 +4,6 @@
     return str.replace(/^\s+|\s+$/g, '');
   };
 
-  // make asynchronous
-  $.getJsonFromUrl = function(url, async) {
-    var json;
-
-    jQuery.ajax({
-      url: url,
-      dataType: 'json',
-      async: false,
-
-      success: function(data) {
-        json = data;
-      },
-
-      error: function(xhr, status, error) {
-        console.error(xhr, status, error);
-      }
-    });
-
-    return json;
-  };
-
-
   /* --------------------------------------------------------------------------
      Methods related to manifest data
      -------------------------------------------------------------------------- */
