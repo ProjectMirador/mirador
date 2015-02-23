@@ -11,7 +11,7 @@
       focusImages:       [],
       imagesList:        null,
       annotationsList:   [],
-      endpoints:         {},
+      endpoint:          null,
       slot:              null,
       currentImageMode:  'ImageView',
       imageModes:        ['ImageView', 'BookView'],
@@ -68,7 +68,7 @@
       manifest = _this.manifest,
       focusState = _this.currentFocus,
       templateData = {},
-      this.endpoints = {};
+      endpoint = null;
 
       //make sure annotations list is cleared out when changing objects within window
       while(_this.annotationsList.length > 0) {
@@ -205,14 +205,44 @@
       });
 
       jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
-        jQuery.each(_this.endpoints, function(key, endpoint) {
-          var annoID = String(endpoint.save(oaAnno)); //just in case it returns a number
+        var annoID;
+        //first function is success callback, second is error callback
+        endpoint.create(oaAnno, function(data) {
+          annoID = String(data.id); //just in case it returns a number
           oaAnno['@id'] = annoID;
           _this.annotationsList.push(oaAnno);
           //update overlay so it can be a part of the annotationList rendering
           jQuery(osdOverlay).removeClass('osd-select-rectangle').addClass('annotation').attr('id', annoID);
+          jQuery.publish(('annotationListLoaded.' + _this.id));
+        },
+        function() {
+          //provide useful feedback to user
+          console.log("There was an error saving this new annotation");
+          //remove this overlay because we couldn't save annotation
+          jQuery(osdOverlay).remove();
+        }); 
+      });
+      
+      jQuery.subscribe('annotationUpdated.'+_this.id, function(event, oaAnno) {
+        //first function is success callback, second is error callback
+        endpoint.update(oaAnno, function() {
+          //successfully updated anno
+        },
+        function() {
+          console.log("There was an error updating this annotation");        
         });
-        jQuery.publish(('annotationListLoaded.' + _this.id));
+      });
+      
+      jQuery.subscribe('annotationDeleted.'+_this.id, function(event, oaAnno) {        
+        //remove from endpoint
+        //first function is success callback, second is error callback
+        endpoint.deleteAnnotation(oaAnno['@id'], function() {
+          _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== oaAnno['@id']; });
+          jQuery.publish(('annotationListLoaded.' + _this.id));
+        }, 
+        function() {
+          console.log("There was an error deleting this annotation");
+        });
       });
 
       jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
@@ -532,22 +562,21 @@
         });
     }
 
-    // next check endpoints
-    jQuery.each($.viewer.annotationEndpoints, function(index, value) {
-      var dfd = jQuery.Deferred();
-      var endpoint;
-      if (_this.endpoints[value.module] && _this.endpoints[value.module] !== null) {
-        endpoint = _this.endpoints[value.module];
+    // next check endpoint
+    if (!jQuery.isEmptyObject($.viewer.annotationEndpoint)) {
+      var dfd = jQuery.Deferred(),
+      module = $.viewer.annotationEndpoint.module,
+      options = $.viewer.annotationEndpoint.options;
+      if (_this.endpoint && _this.endpoint !== null) {
         endpoint.set('dfd', dfd);
         endpoint.search(_this.currentImageID);
         // update with new search
       } else {
-        value.options.element = _this.element;
-        value.options.uri = _this.currentImageID;
-        value.options.dfd = dfd;
-        value.options.windowID = _this.id;
-        endpoint = new $[value.module](value.options);
-        _this.endpoints[value.module] = endpoint;
+        options.element = _this.element;
+        options.uri = _this.currentImageID;
+        options.dfd = dfd;
+        options.windowID = _this.id;
+        endpoint = new $[module](options);
       }
       dfd.done(function(loaded) {
         _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
@@ -558,9 +587,9 @@
           }
           return true; 
         });
-        jQuery.publish(('annotationListLoaded.' + _this.id), value.module);
+        jQuery.publish('annotationListLoaded.' + _this.id);
       });
-    });
+    }
   },
 
   // based on currentFocus

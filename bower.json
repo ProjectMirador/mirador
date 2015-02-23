@@ -23,7 +23,8 @@
     "jquery-ui": "*",
     "jquery.scrollTo": "~1.4.12",
     "mousetrap": "~1.4.6",
-    "URIjs": "https://github.com/medialize/URI.js.git#~1.13.2"
+    "URIjs": "https://github.com/medialize/URI.js.git#~1.13.2",
+    "qTip2": "~2.2.1"
   },
   "devDependencies": {
     "sinon-server": "http://sinonjs.org/releases/sinon-server-1.12.2.js",

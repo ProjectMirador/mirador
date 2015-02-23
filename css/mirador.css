@@ -1,10 +1,10 @@
 a {
   color: inherit; /* blue colors for links too */
   text-decoration: inherit; /* no underline */
-  }
+}
 
-  /* jquery-ui-dialog theming/customisation (overrides to reset neutral defaults)
-  ---------------------------------------------------------------------------- */
+/* jquery-ui-dialog theming/customisation (overrides to reset neutral defaults)
+---------------------------------------------------------------------------- */
   .ui-dialog-titlebar {
     display:none;
 }
@@ -1101,6 +1101,10 @@ text {
   cursor: pointer;
 }
 
+.osd-annotation-overlay {
+  display: none;
+}
+
 .displayBottomPanelButton {
   box-sizing: border-box;
   position: absolute;
@@ -1429,3 +1433,80 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   /*color: rgb( 146, 145, 145 );*/
   box-sizing: border-box;
 }
+
+// qtip overrides.
+.qtip {
+}
+.qtip-bootstrap {
+  border-radius: 2px;
+  padding:0;
+  background-color:#fafafa;
+}
+.qtip-bootstrap .qtip-content {
+  padding: 0;
+  clear: both;
+}
+.annotation-display {
+  position:relative;
+  border-left:0;
+  border-right:0;
+  padding: 12px;
+  padding-bottom: 0;
+}
+.annotation-tooltip {
+  padding: 12px; 
+}
+.annotation-tooltip .button-container {
+  text-align: right;
+}
+.annotation-tooltip .save, .annotation-tooltip .cancel {
+  margin-left: 12px;
+  /* padding: 5px 7px; */
+  /* border-radius: 2px; */
+  /* text-decoration: underline; */
+  /* color: white; */
+  /* background-color: black; */
+}
+.annotation-tooltip .save:hover, .annotation-tooltip .cancel:hover {
+  margin-left: 12px;
+  /* padding: 5px 7px; */
+  /* border-radius: 2px; */
+  /* text-decoration: underline; */
+  font-weight:bold;
+  /* color: white; */
+  /* background-color: black; */
+}
+.text-editor, .tags-editor {
+  padding: 5px;
+  display: block;
+  margin-bottom: 12px;
+  border: 0;
+  background: #efefef;
+  box-shadow: inset 0 0 7px gray;
+  resize: vertical;
+  border: 1px solid gray;
+}
+.annotation-display .button-container {
+  text-align: right;
+}
+.annotation-display .edit, .annotation-display .delete {
+  font-size: 12px;
+  margin-left: 5px;
+  text-decoration: underline;
+}
+.text-viewer {
+}
+.tags-viewer {
+  margin-bottom: 10px;
+}
+.qtip-bootstrap .tags-viewer span.tag {
+  background: gray;
+  color:white;
+  border-radius: 3px;
+  padding: 3px 7px;
+  margin-right:5px; 
+  margin-bottom: 5px;
+  text-align: center;
+  font-size: 12;
+}
+

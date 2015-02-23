@@ -89,18 +89,19 @@
       'other': 'iiif_logo.png'
     },
 
-    /*
-       List of backends that have instance-specific configuration data as a hash, e.g.:
-       {
-name: 'backend name',
-module: 'NameEndpoint',
-options: 
-{'url': '',
-'storeId': 123,
-'APIKey': '23983hf98j3f9283jf2983fj'
-}
-}*/
-    'annotationEndpoints': [],
+    /**
+     *  Annotation backend that have instance-specific configuration data as a hash, e.g.:
+     *  {
+     *  name: 'backend name',
+     *  module: 'NameEndpoint',
+     *  options: 
+     *  { 'url': '',
+     *    'storeId': 123,
+     *    'APIKey': '23983hf98j3f9283jf2983fj'
+     *  }
+     *  }
+     **/
+    'annotationEndpoint': {},
 
     'sharingEndpoint': {
       'url': '',

@@ -269,7 +269,7 @@
       if (typeof parent === 'undefined') {
         return {
           type: type,
-          id: $.genUUID(),
+          id: $.genUUID()
         };
       } else {
         return {
