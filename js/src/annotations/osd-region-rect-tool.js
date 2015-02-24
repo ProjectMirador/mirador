@@ -149,6 +149,10 @@
            content: {
             text : annoTooltip.editorTemplate()
             },
+            position : {
+              at: 'center',
+              viewport: jQuery(window)
+            },
             style : {
               classes : 'qtip-bootstrap'
             },
@@ -157,10 +161,16 @@
             },
             hide: {
               fixed: true,
-              delay: 300
+              delay: 300,
+              event: false
             },
             events: {
               render: function(event, api) {
+                jQuery('.annotation-tooltip').on("submit", function(event) {
+                  event.preventDefault();
+                  jQuery('.annotation-tooltip a.save').click();
+                });
+              
                 jQuery('.annotation-tooltip a.cancel').on("click", function(event) {
                   event.preventDefault();
                   api.destroy();
@@ -170,12 +180,12 @@
                 jQuery('.annotation-tooltip a.save').on("click", function(event) {
                   event.preventDefault();
                   var tagText = jQuery(this).parents('.new-annotation-form').find('.tags-editor').val();
-                  var resourceText = jQuery(this).parents('.new-annotation-form').find('.text-editor').val();
+                  var resourceText = $.trimString(jQuery(this).parents('.new-annotation-form').find('.text-editor').val());
                   var tags = [];
                   tagText = $.trimString(tagText);
                   if (tagText) {
                     tags = tagText.split(/\s+/);
-                  }
+                  } 
 
                   var bounds = _this.osdViewer.viewport.getBounds(true);
                   var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
@@ -228,6 +238,8 @@
               }
             }
          });
+      tinyMCE.execCommand("mceAddEditor", false, 'form.annotation-tooltip textarea');
+
     },
     
     onDrawStart: function() { // use new $.oaAnnotation() to create new 

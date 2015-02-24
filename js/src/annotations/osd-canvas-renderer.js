@@ -92,6 +92,12 @@
                  _this.annotationEvents(event, api);
                  _this.annotationSaveEvent(event, api);
                },
+               hidden: function(event, api) {
+                 jQuery('.annotation-tooltip a.delete').off("click");
+                 jQuery('.annotation-tooltip a.edit').off("click");
+                 jQuery('.annotation-tooltip a.save').off("click");
+                 jQuery('.annotation-tooltip a.cancel').off("click");
+               },
                hide: function(event, api) { }
              }
       });
@@ -195,6 +201,11 @@
     annotationSaveEvent: function(event, api) {
       var _this = this,
       annoTooltip = new $.AnnotationTooltip();
+      
+      jQuery('.annotation-tooltip').on("submit", function(event) {
+        event.preventDefault();
+        jQuery('.annotation-tooltip a.save').click();
+      });
 
       jQuery('.annotation-tooltip a.save').on("click", function(event) {
         event.preventDefault();

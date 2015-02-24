@@ -70,7 +70,8 @@
         });
       });
 
-      return this.viewerTemplate({annotations : htmlAnnotations});
+      var template = this.viewerTemplate({annotations : htmlAnnotations});      
+      return template;
       //return combination of all of them
     },
 
