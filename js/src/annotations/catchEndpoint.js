@@ -179,7 +179,6 @@
       var annotation = this.getAnnotationInEndpoint(oaAnnotation),
       _this = this,
       annotationID = annotation.id;
-      console.log(annotation);
       
       jQuery.ajax({
         url: this.prefix+"/update/"+annotationID,

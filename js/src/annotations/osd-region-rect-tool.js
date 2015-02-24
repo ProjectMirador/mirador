@@ -26,10 +26,15 @@
     },
     
     bindEvents: function() {
-      jQuery('.new-annotation-form a.cancel').on("click", function(event) {
+      var _this = this;
+      /*jQuery('.new-annotation-form a.cancel').on("click", function(event) {
         event.preventDefault();
         console.log("click cancel");
-      });
+      });*/
+      
+      /*jQuery.subscribe('removeTooltips.' + _this.parent.windowId, function() {
+        jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
+      });*/
     },
     
     reset: function(osdViewer) {

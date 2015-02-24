@@ -3657,6 +3657,9 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   /* text-decoration: underline; */
   /* color: white; */
   /* background-color: black; */
+  font-size: 12px;
+  margin-left: 5px;
+  text-decoration: underline;
 }
 .annotation-tooltip .save:hover, .annotation-tooltip .cancel:hover {
   margin-left: 12px;
@@ -3680,7 +3683,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 .annotation-display .button-container {
   text-align: right;
 }
-.annotation-display .edit, .annotation-display .delete {
+.annotation-display .edit, .annotation-display .delete  {
   font-size: 12px;
   margin-left: 5px;
   text-decoration: underline;

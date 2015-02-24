@@ -41,19 +41,21 @@
 
     render: function() {
       var _this = this;
-      _this.hideAll();
+      _this.hideAll(),
+      overlays = [];
       this.list.forEach(function(annotation) {
-        var region = _this.parseRegion(annotation.on);
-        var osdOverlay = document.createElement('div');
+        var region = _this.parseRegion(annotation.on),
+        osdOverlay = document.createElement('div');
         osdOverlay.className = 'annotation';
         osdOverlay.id = annotation['@id'];
         _this.osdViewer.addOverlay({
           element: osdOverlay,
           location: _this.getOsdFrame(region)
         });
+        overlays.push(jQuery(osdOverlay));
       });
       
-      this.tooltips = jQuery(_this.osdViewer.element).qtip({
+      this.tooltips = jQuery(overlays).qtip({
             overwrite : false,
             content: {
              text : ''
@@ -68,19 +70,31 @@
               classes : 'qtip-bootstrap'
              },
              show: {
-              ready: false,
-              event : false,
-              delay: 0
+              delay: 20
              },
              hide: {
                 fixed: true,
-                delay:0 
+                delay: 50
              },
              events: {
-               show: function(event, api) {_this.annotationEvents(event, api);},
-               move: function(event, api) {_this.annotationSaveEvent(event, api);}
+               show: function(event, api) {
+                 var overlays = _this.getOverlaysFromPosition(event.originalEvent),
+                 annoTooltip = new $.AnnotationTooltip(), //pass permissions
+                 annotations = [];
+                 
+                 jQuery.each(overlays, function(index, overlay) {
+                   annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
+                 });
+                 api.set({'content.text' : annoTooltip.getViewer(annotations)});
+                 
+                 },
+               move: function(event, api) {
+                 _this.annotationEvents(event, api);
+                 _this.annotationSaveEvent(event, api);
+               },
+               hide: function(event, api) { }
              }
-            });
+      });
 
       this.bindEvents();
     },
@@ -97,7 +111,7 @@
 
     getOverlaysFromPosition: function(event) {
       var _this = this;
-      var annos = jQuery(_this.osdViewer.canvas).find('.annotation').map(function() {
+      var overlays = jQuery(_this.osdViewer.canvas).find('.annotation').map(function() {
         var self = jQuery(this),
         offset = self.offset(),
         l = offset.left,
@@ -111,23 +125,19 @@
 
         return (y <= maxy && y >= t) && (x <= maxx && x >= l) ? this : null;
       });
-
-      return annos;
+      
+      return overlays;
     },
 
     bindEvents: function() {
       var _this = this;
       // be sure to properly delegate your event handlers
-      jQuery(this.osdViewer.canvas).parent().on('click', '.annotation', function() { _this.onSelect(); });
-
-      jQuery(this.osdViewer.canvas).on('mouseenter', '.annotation', function(event) { 
-        console.log('entering '+this.id);
-        _this.onHover(event, _this.getOverlaysFromPosition(event));
+      //jQuery(this.osdViewer.canvas).parent().on('click', '.annotation', function() { _this.onSelect(); });
+      
+      jQuery.subscribe('removeTooltips.' + _this.parent.windowId, function() {
+        jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
       });
 
-      jQuery(this.osdViewer.canvas).parent().on('mouseleave', '.annotation', function() {
-        _this.onMouseLeave();
-      });
     },
 
     update: function() {
@@ -144,30 +154,6 @@
         return result.add(currentOverlay);
       });
       return elements;
-    },
-
-    onHover: function(event, overlays) {
-      var renderAnnotations = [],
-      _this = this,
-      annoTooltip = new $.AnnotationTooltip(); // pass permissions
-      var offset = 0,
-      annotations = [];
-      jQuery.each(overlays, function(index, overlay) {
-        annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
-      });
-      if (annotations.length > 0) {
-            var tooltipApi = this.tooltips.qtip('api');
-            //console.log("calling hide!");
-            //tooltipApi.hide();
-            tooltipApi.mouse = event;
-            tooltipApi.set({'content.text' : annoTooltip.getViewer(annotations),
-            'show.target' : overlays,
-            'hide.target' : overlays
-            //'position.target' : 'mouse',
-            });
-            tooltipApi.reposition(event, false);
-            tooltipApi.show(); 
-        }
     },
 
     annotationEvents: function(event, api) {
@@ -199,28 +185,25 @@
 
       jQuery('.annotation-tooltip a.edit').on("click", function(event) {
         event.preventDefault();
-        console.log("clicked edit");
         
         var display = jQuery(this).parents('.annotation-display'),
         id = display.attr('data-anno-id'),
         oaAnno = _this.getAnnoFromRegion(id)[0];
-        var tooltipApi = _this.tooltips.qtip('api');
         //need to bind save action with editor
-        tooltipApi.set({'content.text' : annoTooltip.getEditor(oaAnno)});
+        api.set({'content.text' : annoTooltip.getEditor(oaAnno)});
       });
     },
     
     annotationSaveEvent: function(event, api) {
-    var _this = this;
-    console.log("annotationSaveEvent called");
+      var _this = this,
+      annoTooltip = new $.AnnotationTooltip();
     // jQuery('.annotation-tooltip, .annotation-tooltip input').on("submit", function() {
     //   event.preventDefault();
     //   jQuery('.annotation-tooltip a.save').click();
     //   return false;
     // });
-    jQuery('.annotation-tooltip a.save').on("click", function(event) {
+      jQuery('.annotation-tooltip a.save').on("click", function(event) {
                   event.preventDefault();
-                  console.log("clicked save");
                   
                   var display = jQuery(this).parents('.annotation-tooltip'),
                   id = display.attr('data-anno-id'),
@@ -270,13 +253,19 @@
                 jQuery.publish('annotationUpdated.'+_this.parent.windowId, [oaAnno]);
                 
                 //update content of this qtip to make it a viewer, not editor
-                // api.set({'content.text' : annoTooltip.getViewer([oaAnno])});
-                });
-    },
+                api.set({'content.text' : annoTooltip.getViewer([oaAnno])});
+        });
+        
+        jQuery('.annotation-tooltip a.cancel').on("click", function(event) {
+          event.preventDefault();
+          var display = jQuery(this).parents('.annotation-tooltip'),
+          id = display.attr('data-anno-id'),
+          oaAnno = _this.getAnnoFromRegion(id)[0];
 
-    onMouseLeave: function() {
-      var tooltipApi = this.tooltips.qtip('api');
-      tooltipApi.hide();
+          //go back to viewer
+          api.set({'content.text' : annoTooltip.getViewer([oaAnno])});
+        });
+
     },
 
     onSelect: function(annotation) {
