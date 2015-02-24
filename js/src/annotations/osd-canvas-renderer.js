@@ -74,7 +74,8 @@
              },
              hide: {
                 fixed: true,
-                delay: 50
+                delay: 50,
+                event: 'mouseleave'
              },
              events: {
                show: function(event, api) {
@@ -105,10 +106,6 @@
       this.bindEvents();
     },
 
-    select: function(annotationId) {
-      // jQuery(annotation element).trigger('click');
-    },
-
     getAnnoFromRegion: function(regionId) {
       return this.list.filter(function(annotation) {
         return annotation['@id'] === regionId;
@@ -137,11 +134,19 @@
 
     bindEvents: function() {
       var _this = this;
+            
+     this.osdViewer.addHandler('zoom', $.debounce(function(){
+          _this.checkMousePosition();
+        }, 200, true));
       
       jQuery.subscribe('removeTooltips.' + _this.parent.windowId, function() {
         jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
       });
 
+    },
+    
+    checkMousePosition: function() {
+      jQuery('.qtip').qtip('hide');
     },
 
     update: function() {
