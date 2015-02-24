@@ -51,6 +51,7 @@
       id;
 
       jQuery.each(annotations, function(index, annotation) {
+        tags = [];
         if (jQuery.isArray(annotation.resource)) {
           jQuery.each(annotation.resource, function(index, value) {
             if (value['@type'] === "dctypes:Text") {
