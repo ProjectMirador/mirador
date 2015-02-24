@@ -6,7 +6,7 @@
     // Temporary method to create Stanford IIIF URI from Stanford stacks non-IIIF URI
     getUri: function(uri) {
       var iiifUri = uri,
-      match = /http?:\/\/stacks.stanford.edu\/image\/(\w+\/\S+)/i.exec(uri);
+      match = /http?:\/\/stacks.stanford.edu\/image\/(iiif\/)?(\w+\/\S+)/i.exec(uri);
 
       if (match && match.length === 2) {
         iiifUri = 'https://stacks.stanford.edu/image/iiif/' + encodeURIComponent(match[1]);
@@ -47,7 +47,7 @@
 
     makeUriWithWidth: function(uri, width, version) {
       uri = uri.replace(/\/$/, '');
-      if (version[0] == '1') {
+      if (version !== '2.0') {
         return this.getUri(uri) + '/full/' + width + ',/0/native.jpg';
       } else {
         return this.getUri(uri) + '/full/' + width + ',/0/default.jpg';
