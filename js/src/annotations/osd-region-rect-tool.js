@@ -27,14 +27,6 @@
     
     bindEvents: function() {
       var _this = this;
-      /*jQuery('.new-annotation-form a.cancel').on("click", function(event) {
-        event.preventDefault();
-        console.log("click cancel");
-      });*/
-      
-      /*jQuery.subscribe('removeTooltips.' + _this.parent.windowId, function() {
-        jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
-      });*/
     },
     
     reset: function(osdViewer) {
@@ -177,7 +169,6 @@
                 
                 jQuery('.annotation-tooltip a.save').on("click", function(event) {
                   event.preventDefault();
-                  
                   var tagText = jQuery(this).parents('.new-annotation-form').find('.tags-editor').val();
                   var resourceText = jQuery(this).parents('.new-annotation-form').find('.text-editor').val();
                   var tags = [];

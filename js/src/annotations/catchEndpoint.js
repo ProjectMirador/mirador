@@ -36,8 +36,7 @@
     init: function() {
       var userid = "test@mirador.org";
       var username = "mirador";
-      this.annotatorOptions = {
-        optionsAnnotator: {
+      this.catchOptions = {
           permissions:{
             user: {
               id: userid, 
@@ -90,36 +89,7 @@
               }
               return true;
             }
-          },
-          auth: {
-            token: this.token
-          },
-          store: {
-            // The endpoint of the store on your server.
-            prefix: this.prefix,
-
-            urls: {
-              // These are the default URLs.
-              create:  '/create',
-              read:    '/read/:id',
-              update:  '/update/:id',
-              destroy: '/delete/:id',
-              search:  '/search'
-            },
-
-            loadFromSearch:{
-              //limit:10,
-              //offset:0,
-              media:"image",
-              uri:this.uri
-              //parentid:58616
-              //userid:''
-            }
-          },
-          highlightTags:{
-            tag: ""
           }
-        }
       };
       this.search(this.uri);        
     },
@@ -327,8 +297,8 @@
         annotation.created = annotation.updated;
       }
       // this needs to come from LTI annotation.user.id, annotation.user.name
-      annotation.user = this.annotatorOptions.optionsAnnotator.permissions.user;
-      annotation.permissions = this.annotatorOptions.optionsAnnotator.permissions.permissions;
+      annotation.user = this.catchOptions.permissions.user;
+      annotation.permissions = this.catchOptions.permissions.permissions;
       annotation.archived = false;
       annotation.ranges = [];
       annotation.parent = "0";

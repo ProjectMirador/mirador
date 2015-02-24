@@ -131,8 +131,6 @@
 
     bindEvents: function() {
       var _this = this;
-      // be sure to properly delegate your event handlers
-      //jQuery(this.osdViewer.canvas).parent().on('click', '.annotation', function() { _this.onSelect(); });
       
       jQuery.subscribe('removeTooltips.' + _this.parent.windowId, function() {
         jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
@@ -197,63 +195,59 @@
     annotationSaveEvent: function(event, api) {
       var _this = this,
       annoTooltip = new $.AnnotationTooltip();
-    // jQuery('.annotation-tooltip, .annotation-tooltip input').on("submit", function() {
-    //   event.preventDefault();
-    //   jQuery('.annotation-tooltip a.save').click();
-    //   return false;
-    // });
-      jQuery('.annotation-tooltip a.save').on("click", function(event) {
-                  event.preventDefault();
-                  
-                  var display = jQuery(this).parents('.annotation-tooltip'),
-                  id = display.attr('data-anno-id'),
-                  oaAnno = _this.getAnnoFromRegion(id)[0];
-                  
-                  //check if new resourceText is empty??
-                  var tagText = jQuery(this).parents('.new-annotation-form').find('.tags-editor').val(),
-                  resourceText = jQuery(this).parents('.new-annotation-form').find('.text-editor').val(),
-                  tags = [];
-                  tagText = $.trimString(tagText);
-                  if (tagText) {
-                    tags = tagText.split(/\s+/);
-                  }
 
-                  var bounds = _this.osdViewer.viewport.getBounds(true);
-                  var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
-                  //bounds is giving negative values?
-                  //update scope?
+      jQuery('.annotation-tooltip a.save').on("click", function(event) {
+        event.preventDefault();
                   
-                  var motivation = [],
-                  resource = [],
-                  on;
+        var display = jQuery(this).parents('.annotation-tooltip'),
+        id = display.attr('data-anno-id'),
+        oaAnno = _this.getAnnoFromRegion(id)[0];
                   
-                  //remove all tag-related content in annotation
-                  oaAnno.motivation = jQuery.grep(oaAnno.motivation, function(value) {
-                    return value !== "oa:tagging";
-                  });
-                  oaAnno.resource = jQuery.grep(oaAnno.resource, function(value) {
-                    return value["@type"] !== "oa:Tag";
-                  });
-                  //re-add tagging if we have them
-                  if (tags.length > 0) {
-                   oaAnno.motivation.push("oa:tagging");
-                   jQuery.each(tags, function(index, value) {
-                    oaAnno.resource.push({      
-                     "@type":"oa:Tag",
+        //check if new resourceText is empty??
+        var tagText = jQuery(this).parents('.new-annotation-form').find('.tags-editor').val(),
+        resourceText = jQuery(this).parents('.new-annotation-form').find('.text-editor').val(),
+        tags = [];
+        tagText = $.trimString(tagText);
+        if (tagText) {
+            tags = tagText.split(/\s+/);
+        }
+
+        var bounds = _this.osdViewer.viewport.getBounds(true);
+        var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
+        //bounds is giving negative values?
+        //update scope?
+                  
+        var motivation = [],
+        resource = [],
+        on;
+                  
+        //remove all tag-related content in annotation
+        oaAnno.motivation = jQuery.grep(oaAnno.motivation, function(value) {
+            return value !== "oa:tagging";
+        });
+        oaAnno.resource = jQuery.grep(oaAnno.resource, function(value) {
+            return value["@type"] !== "oa:Tag";
+        });
+        //re-add tagging if we have them
+        if (tags.length > 0) {
+            oaAnno.motivation.push("oa:tagging");
+            jQuery.each(tags, function(index, value) {
+                oaAnno.resource.push({      
+                    "@type":"oa:Tag",
                      "chars":value
-                    });
-                   });
-                  }
-                jQuery.each(oaAnno.resource, function(index, value) {
-                  if (value["@type"] === "dctypes:Text") {
-                    value.chars = resourceText;
-                  }
                 });
-                //save to endpoint
-                jQuery.publish('annotationUpdated.'+_this.parent.windowId, [oaAnno]);
+            });
+        }
+        jQuery.each(oaAnno.resource, function(index, value) {
+            if (value["@type"] === "dctypes:Text") {
+                value.chars = resourceText;
+            }
+        });
+        //save to endpoint
+        jQuery.publish('annotationUpdated.'+_this.parent.windowId, [oaAnno]);
                 
-                //update content of this qtip to make it a viewer, not editor
-                api.set({'content.text' : annoTooltip.getViewer([oaAnno])});
+        //update content of this qtip to make it a viewer, not editor
+        api.set({'content.text' : annoTooltip.getViewer([oaAnno])});
         });
         
         jQuery('.annotation-tooltip a.cancel').on("click", function(event) {
@@ -265,10 +259,6 @@
           //go back to viewer
           api.set({'content.text' : annoTooltip.getViewer([oaAnno])});
         });
-
-    },
-
-    onSelect: function(annotation) {
 
     }
   };
