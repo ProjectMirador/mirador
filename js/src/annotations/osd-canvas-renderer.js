@@ -13,7 +13,8 @@
       list:      null,
       parent:    null,
       annoTooltips: {},
-      tooltips:  null
+      tooltips:  null,
+      overlays:  []
     }, options);
   };
 
@@ -42,7 +43,7 @@
     render: function() {
       var _this = this;
       _this.hideAll(),
-      overlays = [];
+      this.overlays = [];
       this.list.forEach(function(annotation) {
         var region = _this.parseRegion(annotation.on),
         osdOverlay = document.createElement('div');
@@ -52,10 +53,10 @@
           element: osdOverlay,
           location: _this.getOsdFrame(region)
         });
-        overlays.push(jQuery(osdOverlay));
+        _this.overlays.push(jQuery(osdOverlay));
       });
       
-      this.tooltips = jQuery(overlays).qtip({
+      this.tooltips = jQuery(this.overlays).qtip({
             overwrite : false,
             content: {
              text : ''
@@ -164,6 +165,33 @@
       });
       return elements;
     },
+    
+    //change content of this tooltip, and disable hiding it, until user clicks save or cancel
+    //disable all other qtips until editing this is done
+    freezeQtip: function(api, oaAnno, annoTooltip) {
+      jQuery.each(this.overlays, function(index, value) {
+          var overlayApi = value.qtip('api');
+          if (api.id !== overlayApi.id) {
+            overlayApi.disable(true);
+          }
+        });
+        api.set({'content.text' : annoTooltip.getEditor(oaAnno),
+        'hide.event' : false});
+    },
+    
+    //reenable all other qtips
+    //update content of this qtip to make it a viewer, not editor
+    //and reset hide event       
+    unFreezeQtip: function(api, oaAnno, annoTooltip) {
+      jQuery.each(this.overlays, function(index, value) {
+           var overlayApi = value.qtip('api');
+           if (api.id !== overlayApi.id) {
+            overlayApi.disable(false);
+           }
+          });
+      api.set({'content.text' : annoTooltip.getViewer([oaAnno]),
+          'hide.event' : 'mouseleave'}).hide();
+    },
 
     annotationEvents: function(event, api) {
       var _this = this,
@@ -198,8 +226,8 @@
         var display = jQuery(this).parents('.annotation-display'),
         id = display.attr('data-anno-id'),
         oaAnno = _this.getAnnoFromRegion(id)[0];
-        //need to bind save action with editor
-        api.set({'content.text' : annoTooltip.getEditor(oaAnno)});
+       
+        _this.freezeQtip(api, oaAnno, annoTooltip);
       });
     },
     
@@ -261,9 +289,8 @@
         });
         //save to endpoint
         jQuery.publish('annotationUpdated.'+_this.parent.windowId, [oaAnno]);
-                
-        //update content of this qtip to make it a viewer, not editor
-        api.set({'content.text' : annoTooltip.getViewer([oaAnno])});
+
+        _this.unFreezeQtip(api, oaAnno, annoTooltip);
         });
         
         jQuery('.annotation-tooltip a.cancel').on("click", function(event) {
@@ -271,9 +298,8 @@
           var display = jQuery(this).parents('.annotation-tooltip'),
           id = display.attr('data-anno-id'),
           oaAnno = _this.getAnnoFromRegion(id)[0];
-
-          //go back to viewer
-          api.set({'content.text' : annoTooltip.getViewer([oaAnno])});
+   
+        _this.unFreezeQtip(api, oaAnno, annoTooltip);
         });
 
     }
