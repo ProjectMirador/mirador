@@ -99,7 +99,7 @@
                                          '<a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw"></i>Delete</a>',
                                        '</div>',
                                        '<div class="text-viewer">',
-                                       '<p>{{annoText}}</p>',
+                                       '<p>{{{annoText}}}</p>',
                                        '</div>',
                                        '<div class="tags-viewer">',
                                        '{{#each tags}}',

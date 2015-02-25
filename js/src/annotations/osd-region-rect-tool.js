@@ -166,6 +166,16 @@
             },
             events: {
               render: function(event, api) {
+                
+                tinymce.init({
+                  selector : 'form.annotation-tooltip textarea',
+                  plugins: "image link media",
+                  menubar: false,
+                  statusbar: false,
+                  toolbar_items_size: 'small',
+                  toolbar: "bold italic | bullist numlist | link image media"
+                });
+                      
                 jQuery('.annotation-tooltip').on("submit", function(event) {
                   event.preventDefault();
                   jQuery('.annotation-tooltip a.save').click();
@@ -180,7 +190,7 @@
                 jQuery('.annotation-tooltip a.save').on("click", function(event) {
                   event.preventDefault();
                   var tagText = jQuery(this).parents('.new-annotation-form').find('.tags-editor').val();
-                  var resourceText = $.trimString(jQuery(this).parents('.new-annotation-form').find('.text-editor').val());
+                  var resourceText = tinymce.activeEditor.getContent();
                   var tags = [];
                   tagText = $.trimString(tagText);
                   if (tagText) {
@@ -231,15 +241,13 @@
                 };
                   //save to endpoint
                 jQuery.publish('annotationCreated.'+parent.windowId, [oaAnno, _this.osdOverlay]);
-                
+
                 //update content of this qtip to make it a viewer, not editor
                 api.destroy();
                 });
               }
             }
          });
-      tinyMCE.execCommand("mceAddEditor", false, 'form.annotation-tooltip textarea');
-
     },
     
     onDrawStart: function() { // use new $.oaAnnotation() to create new 
