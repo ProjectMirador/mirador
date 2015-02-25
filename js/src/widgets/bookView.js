@@ -141,7 +141,7 @@
 
       jQuery.each(this.stitchList, function(index, image) {
         var imageUrl = $.Iiif.getImageUrl(image);
-        var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json';
+        var infoJsonUrl = imageUrl + '/info.json';
         var infoJson = $.getJsonFromUrl(infoJsonUrl, false);
         tileSources.push(infoJson);
       });
