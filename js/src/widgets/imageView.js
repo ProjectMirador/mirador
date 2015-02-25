@@ -111,7 +111,7 @@
     },
 
     createOpenSeadragonInstance: function(imageUrl) {
-      var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json',
+      var infoJsonUrl = imageUrl + '/info.json',
       uniqueID = $.genUUID(),
       osdID = 'mirador-osd-' + uniqueID,
       infoJson,
