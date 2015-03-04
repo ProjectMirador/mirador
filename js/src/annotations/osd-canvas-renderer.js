@@ -13,7 +13,8 @@
       list:      null,
       parent:    null,
       annoTooltips: {},
-      tooltips:  null
+      tooltips:  null,
+      overlays:  []
     }, options);
   };
 
@@ -42,7 +43,7 @@
     render: function() {
       var _this = this;
       _this.hideAll(),
-      overlays = [];
+      this.overlays = [];
       this.list.forEach(function(annotation) {
         var region = _this.parseRegion(annotation.on),
         osdOverlay = document.createElement('div');
@@ -52,10 +53,10 @@
           element: osdOverlay,
           location: _this.getOsdFrame(region)
         });
-        overlays.push(jQuery(osdOverlay));
+        _this.overlays.push(jQuery(osdOverlay));
       });
       
-      this.tooltips = jQuery(overlays).qtip({
+      this.tooltips = jQuery(this.overlays).qtip({
             overwrite : false,
             content: {
              text : ''
@@ -74,7 +75,8 @@
              },
              hide: {
                 fixed: true,
-                delay: 50
+                delay: 50,
+                event: 'mouseleave'
              },
              events: {
                show: function(event, api) {
@@ -92,15 +94,17 @@
                  _this.annotationEvents(event, api);
                  _this.annotationSaveEvent(event, api);
                },
+               hidden: function(event, api) {
+                 jQuery('.annotation-tooltip a.delete').off("click");
+                 jQuery('.annotation-tooltip a.edit').off("click");
+                 jQuery('.annotation-tooltip a.save').off("click");
+                 jQuery('.annotation-tooltip a.cancel').off("click");
+               },
                hide: function(event, api) { }
              }
       });
 
       this.bindEvents();
-    },
-
-    select: function(annotationId) {
-      // jQuery(annotation element).trigger('click');
     },
 
     getAnnoFromRegion: function(regionId) {
@@ -131,13 +135,19 @@
 
     bindEvents: function() {
       var _this = this;
-      // be sure to properly delegate your event handlers
-      //jQuery(this.osdViewer.canvas).parent().on('click', '.annotation', function() { _this.onSelect(); });
+            
+     this.osdViewer.addHandler('zoom', $.debounce(function(){
+          _this.checkMousePosition();
+        }, 200, true));
       
       jQuery.subscribe('removeTooltips.' + _this.parent.windowId, function() {
         jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
       });
 
+    },
+    
+    checkMousePosition: function() {
+      jQuery('.qtip').qtip('hide');
     },
 
     update: function() {
@@ -154,6 +164,33 @@
         return result.add(currentOverlay);
       });
       return elements;
+    },
+    
+    //change content of this tooltip, and disable hiding it, until user clicks save or cancel
+    //disable all other qtips until editing this is done
+    freezeQtip: function(api, oaAnno, annoTooltip) {
+      jQuery.each(this.overlays, function(index, value) {
+          var overlayApi = value.qtip('api');
+          if (api.id !== overlayApi.id) {
+            overlayApi.disable(true);
+          }
+        });
+        api.set({'content.text' : annoTooltip.getEditor(oaAnno),
+        'hide.event' : false});
+    },
+    
+    //reenable all other qtips
+    //update content of this qtip to make it a viewer, not editor
+    //and reset hide event       
+    unFreezeQtip: function(api, oaAnno, annoTooltip) {
+      jQuery.each(this.overlays, function(index, value) {
+           var overlayApi = value.qtip('api');
+           if (api.id !== overlayApi.id) {
+            overlayApi.disable(false);
+           }
+          });
+      api.set({'content.text' : annoTooltip.getViewer([oaAnno]),
+          'hide.event' : 'mouseleave'}).hide();
     },
 
     annotationEvents: function(event, api) {
@@ -189,71 +226,71 @@
         var display = jQuery(this).parents('.annotation-display'),
         id = display.attr('data-anno-id'),
         oaAnno = _this.getAnnoFromRegion(id)[0];
-        //need to bind save action with editor
-        api.set({'content.text' : annoTooltip.getEditor(oaAnno)});
+       
+        _this.freezeQtip(api, oaAnno, annoTooltip);
       });
     },
     
     annotationSaveEvent: function(event, api) {
       var _this = this,
       annoTooltip = new $.AnnotationTooltip();
-    // jQuery('.annotation-tooltip, .annotation-tooltip input').on("submit", function() {
-    //   event.preventDefault();
-    //   jQuery('.annotation-tooltip a.save').click();
-    //   return false;
-    // });
-      jQuery('.annotation-tooltip a.save').on("click", function(event) {
-                  event.preventDefault();
-                  
-                  var display = jQuery(this).parents('.annotation-tooltip'),
-                  id = display.attr('data-anno-id'),
-                  oaAnno = _this.getAnnoFromRegion(id)[0];
-                  
-                  //check if new resourceText is empty??
-                  var tagText = jQuery(this).parents('.new-annotation-form').find('.tags-editor').val(),
-                  resourceText = jQuery(this).parents('.new-annotation-form').find('.text-editor').val(),
-                  tags = [];
-                  tagText = $.trimString(tagText);
-                  if (tagText) {
-                    tags = tagText.split(/\s+/);
-                  }
+      
+      jQuery('.annotation-tooltip').on("submit", function(event) {
+        event.preventDefault();
+        jQuery('.annotation-tooltip a.save').click();
+      });
 
-                  var bounds = _this.osdViewer.viewport.getBounds(true);
-                  var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
-                  //bounds is giving negative values?
-                  //update scope?
+      jQuery('.annotation-tooltip a.save').on("click", function(event) {
+        event.preventDefault();
                   
-                  var motivation = [],
-                  resource = [],
-                  on;
+        var display = jQuery(this).parents('.annotation-tooltip'),
+        id = display.attr('data-anno-id'),
+        oaAnno = _this.getAnnoFromRegion(id)[0];
                   
-                  //remove all tag-related content in annotation
-                  oaAnno.motivation = jQuery.grep(oaAnno.motivation, function(value) {
-                    return value !== "oa:tagging";
-                  });
-                  oaAnno.resource = jQuery.grep(oaAnno.resource, function(value) {
-                    return value["@type"] !== "oa:Tag";
-                  });
-                  //re-add tagging if we have them
-                  if (tags.length > 0) {
-                   oaAnno.motivation.push("oa:tagging");
-                   jQuery.each(tags, function(index, value) {
-                    oaAnno.resource.push({      
-                     "@type":"oa:Tag",
+        //check if new resourceText is empty??
+        var tagText = jQuery(this).parents('.new-annotation-form').find('.tags-editor').val(),
+        resourceText = jQuery(this).parents('.new-annotation-form').find('.text-editor').val(),
+        tags = [];
+        tagText = $.trimString(tagText);
+        if (tagText) {
+            tags = tagText.split(/\s+/);
+        }
+
+        var bounds = _this.osdViewer.viewport.getBounds(true);
+        var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
+        //bounds is giving negative values?
+        //update scope?
+                  
+        var motivation = [],
+        resource = [],
+        on;
+                  
+        //remove all tag-related content in annotation
+        oaAnno.motivation = jQuery.grep(oaAnno.motivation, function(value) {
+            return value !== "oa:tagging";
+        });
+        oaAnno.resource = jQuery.grep(oaAnno.resource, function(value) {
+            return value["@type"] !== "oa:Tag";
+        });
+        //re-add tagging if we have them
+        if (tags.length > 0) {
+            oaAnno.motivation.push("oa:tagging");
+            jQuery.each(tags, function(index, value) {
+                oaAnno.resource.push({      
+                    "@type":"oa:Tag",
                      "chars":value
-                    });
-                   });
-                  }
-                jQuery.each(oaAnno.resource, function(index, value) {
-                  if (value["@type"] === "dctypes:Text") {
-                    value.chars = resourceText;
-                  }
                 });
-                //save to endpoint
-                jQuery.publish('annotationUpdated.'+_this.parent.windowId, [oaAnno]);
-                
-                //update content of this qtip to make it a viewer, not editor
-                api.set({'content.text' : annoTooltip.getViewer([oaAnno])});
+            });
+        }
+        jQuery.each(oaAnno.resource, function(index, value) {
+            if (value["@type"] === "dctypes:Text") {
+                value.chars = resourceText;
+            }
+        });
+        //save to endpoint
+        jQuery.publish('annotationUpdated.'+_this.parent.windowId, [oaAnno]);
+
+        _this.unFreezeQtip(api, oaAnno, annoTooltip);
         });
         
         jQuery('.annotation-tooltip a.cancel').on("click", function(event) {
@@ -261,14 +298,9 @@
           var display = jQuery(this).parents('.annotation-tooltip'),
           id = display.attr('data-anno-id'),
           oaAnno = _this.getAnnoFromRegion(id)[0];
-
-          //go back to viewer
-          api.set({'content.text' : annoTooltip.getViewer([oaAnno])});
+   
+        _this.unFreezeQtip(api, oaAnno, annoTooltip);
         });
-
-    },
-
-    onSelect: function(annotation) {
 
     }
   };

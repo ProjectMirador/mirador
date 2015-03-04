@@ -28,6 +28,7 @@ module.exports = function(grunt) {
     'js/lib/jquery.scrollTo.min.js',
     'js/lib/jquery.qtip.min.js',
     'js/lib/state-machine.min.js',
+    'js/lib/tinymce.min.js',
     'js/lib/handlebars.js',
     'js/lib/openseadragon.min.js',
     'js/lib/d3.v3.min.js',
@@ -125,8 +126,19 @@ module.exports = function(grunt) {
           dest: 'build/mirador/'
         }, {
           expand: true,
-          src: 'css/theme-dark/**',
-          dest: 'build/mirador/'
+          cwd: 'css/',
+          src: 'themes/**',
+          dest: 'build/mirador'
+        }, {
+          expand: true,
+          cwd: 'css/',
+          src: 'skins/**',
+          dest: 'build/mirador'
+        }, {
+          expand: true,
+          cwd: 'css/',
+          src: 'plugins/**',
+          dest: 'build/mirador'
         }, {
           expand: true,
           src: 'images/**',

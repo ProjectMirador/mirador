@@ -27,14 +27,6 @@
     
     bindEvents: function() {
       var _this = this;
-      /*jQuery('.new-annotation-form a.cancel').on("click", function(event) {
-        event.preventDefault();
-        console.log("click cancel");
-      });*/
-      
-      /*jQuery.subscribe('removeTooltips.' + _this.parent.windowId, function() {
-        jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
-      });*/
     },
     
     reset: function(osdViewer) {
@@ -157,6 +149,10 @@
            content: {
             text : annoTooltip.editorTemplate()
             },
+            position : {
+              at: 'center',
+              viewport: jQuery(window)
+            },
             style : {
               classes : 'qtip-bootstrap'
             },
@@ -165,10 +161,26 @@
             },
             hide: {
               fixed: true,
-              delay: 300
+              delay: 300,
+              event: false
             },
             events: {
               render: function(event, api) {
+                
+                /*tinymce.init({
+                  selector : 'form.annotation-tooltip textarea',
+                  plugins: "image link media",
+                  menubar: false,
+                  statusbar: false,
+                  toolbar_items_size: 'small',
+                  toolbar: "bold italic | bullist numlist | link image media"
+                });*/
+                      
+                jQuery('.annotation-tooltip').on("submit", function(event) {
+                  event.preventDefault();
+                  jQuery('.annotation-tooltip a.save').click();
+                });
+              
                 jQuery('.annotation-tooltip a.cancel').on("click", function(event) {
                   event.preventDefault();
                   api.destroy();
@@ -177,14 +189,14 @@
                 
                 jQuery('.annotation-tooltip a.save').on("click", function(event) {
                   event.preventDefault();
-                  
                   var tagText = jQuery(this).parents('.new-annotation-form').find('.tags-editor').val();
-                  var resourceText = jQuery(this).parents('.new-annotation-form').find('.text-editor').val();
+                  //var resourceText = tinymce.activeEditor.getContent();
+                  var resourceText = $.trimString(jQuery(this).parents('.new-annotation-form').find('.text-editor').val());
                   var tags = [];
                   tagText = $.trimString(tagText);
                   if (tagText) {
                     tags = tagText.split(/\s+/);
-                  }
+                  } 
 
                   var bounds = _this.osdViewer.viewport.getBounds(true);
                   var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
@@ -230,7 +242,7 @@
                 };
                   //save to endpoint
                 jQuery.publish('annotationCreated.'+parent.windowId, [oaAnno, _this.osdOverlay]);
-                
+
                 //update content of this qtip to make it a viewer, not editor
                 api.destroy();
                 });

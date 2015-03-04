@@ -51,6 +51,7 @@
       id;
 
       jQuery.each(annotations, function(index, annotation) {
+        tags = [];
         if (jQuery.isArray(annotation.resource)) {
           jQuery.each(annotation.resource, function(index, value) {
             if (value['@type'] === "dctypes:Text") {
@@ -69,7 +70,8 @@
         });
       });
 
-      return this.viewerTemplate({annotations : htmlAnnotations});
+      var template = this.viewerTemplate({annotations : htmlAnnotations});      
+      return template;
       //return combination of all of them
     },
 
@@ -97,7 +99,7 @@
                                          '<a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw"></i>Delete</a>',
                                        '</div>',
                                        '<div class="text-viewer">',
-                                       '<p>{{annoText}}</p>',
+                                       '<p>{{{annoText}}}</p>',
                                        '</div>',
                                        '<div class="tags-viewer">',
                                        '{{#each tags}}',
