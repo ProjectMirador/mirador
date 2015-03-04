@@ -32,6 +32,14 @@
       var _this = this;
 
      this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
+     this.element.find('.remove-object-option').on('click', function(){ _this.parent.removeNode(_this); });
+      jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
+        if (_this.parent.slots.length <= 1) {
+          _this.element.find('.remove-object-option').hide();
+        } else {
+          _this.element.find('.remove-object-option').show();
+        }
+      });
     },
     
     manifestToSlot: function(windowConfig) { 
@@ -90,6 +98,7 @@
                                  '<h1>Add Item</h1>',
                                  '</div>',
                                  '<a class="addItemLink"></a>',
+                                 '<a class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i> Close</a>',
                                  '</div>'
     ].join(''))
   };

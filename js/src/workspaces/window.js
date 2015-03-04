@@ -241,18 +241,15 @@
           jQuery.publish(('annotationListLoaded.' + _this.id));
         }, 
         function() {
-          console.log("There was an error deleting this annotation");
+          // console.log("There was an error deleting this annotation");
         });
       });
 
       jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
         if ($.viewer.workspace.slots.length <= 1) {
           _this.element.find('.remove-object-option').hide();
-          console.log('hiding close button');
         } else {
           _this.element.find('.remove-object-option').show();
-          console.log('hiding close button');
-          console.log(_this.element.find('.remove-object-option'));
         }
       });
     },

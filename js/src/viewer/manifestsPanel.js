@@ -29,10 +29,13 @@
             //this code gives us the max width of the results area, used to determine how many preview images to show
             //cloning the element and adjusting the display and visibility means it won't break the normal flow
             var clone = this.element.clone().css("visibility","hidden").css("display", "block").appendTo(this.appendTo);
-            this.resultsWidth = clone.find('#select-results').outerWidth();
+            this.resultsWidth = clone.find('.select-results').outerWidth();
             clone.remove();
             
-            // this.manifestLoadStatus = new $.ManifestLoadStatusIndicator({parent: this});
+            this.manifestLoadStatusIndicator = new $.ManifestLoadStatusIndicator({
+              manifests: this.parent.manifests,
+              appendTo: this.element.find('.select-results')
+            });
             this.bindEvents();
         },
 
@@ -55,8 +58,8 @@
                 _this.hide();
             });
             
-            jQuery.subscribe('manifestAdded', function(event, newManifest, repository) {
-              _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifestId: newManifest, resultsWidth: _this.resultsWidth }));
+            jQuery.subscribe('manifestReceived', function(event, newManifest, repository) {
+              _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifest: newManifest, resultsWidth: _this.resultsWidth }));
               _this.element.find('#manifest-search').keyup();
             });
             
@@ -77,7 +80,7 @@
             
             jQuery.subscribe('windowResize', $.debounce(function(){
               var clone = _this.element.clone().css("visibility","hidden").css("display", "block").appendTo(_this.appendTo);
-              _this.resultsWidth = clone.find('#select-results').outerWidth();
+              _this.resultsWidth = clone.find('.select-results').outerWidth();
               clone.remove();
               jQuery.publish("manifestPanelWidthChanged", _this.resultsWidth);
             }, 100));
@@ -105,8 +108,8 @@
         template: Handlebars.compile([
           '<div id="manifest-select-menu">',
           '<div class="container">',
-          '<a class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i> Close</a>',
               '<div id="load-controls">',
+              '<a class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i> Close</a>',
               '<form action="" id="manifest-search-form">',
                   '<label for="manifest-search">Filter objects:</label>',
                   '<input id="manifest-search" type="text" name="manifest-filter" placeholder="Filter objects...">',
@@ -119,7 +122,7 @@
               '</form>',
               '{{/if}}',
               '</div>',
-              '<div id="select-results">',
+              '<div class="select-results">',
                   '<ul class="items-listing">',
                   '</ul>',
               '</div>',

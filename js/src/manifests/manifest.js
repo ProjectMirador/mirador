@@ -1,36 +1,28 @@
 (function($){
 
-    $.Manifest = function(manifestUri, dfd) {
+    $.Manifest = function(manifestUri) {
 
         jQuery.extend(true, this, {
             jsonLd: null,
-            uri: manifestUri
+            uri: manifestUri,
+            request: null 
         });
 
-        this.loadManifestDataFromURI(dfd);
+        this.init(manifestUri);
     };
 
     $.Manifest.prototype = {
-
-        loadManifestDataFromURI: function(dfd) {
+        init: function(manifestUri) {
             var _this = this;
-
-            jQuery.ajax({
-                url: _this.uri,
+            this.request = jQuery.ajax({
+                url: manifestUri,
                 dataType: 'json',
-                async: true,
-
-                success: function(jsonLd) {
-                    _this.jsonLd = jsonLd;
-                    dfd.resolve(true);
-                },
-
-                error: function() {
-                    console.log('Failed loading ' + _this.uri);
-                    dfd.resolve(false);
-                }
+                async: true
             });
 
+            this.request.done(function(jsonLd) {
+              _this.jsonLd = jsonLd;
+            });
         }
     };
 

@@ -128,9 +128,11 @@
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
 
-      jQuery.subscribe('manifestAdded', function(event, url, repository) {
-        var data = _this.currentConfig.data;
-        var objectInConfig = false;
+      jQuery.subscribe('manifestQueued', function(event, manifestObject, repository) {
+        var data = _this.currentConfig.data,
+        objectInConfig = false,
+        url = manifestObject.uri;
+
         jQuery.each(data, function(index, manifestObject){
           if (manifestObject.manifestUri === url) {
             objectInConfig = true;
