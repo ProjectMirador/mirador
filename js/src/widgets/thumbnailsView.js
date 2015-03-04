@@ -130,9 +130,9 @@
     
     loadImage: function(imageElement, url) {
         var _this = this,
-        imagepromise = new $.ImagePromise(url);
+        imagePromise = $.createImagePromise(url);
 
-        imagepromise.done(function(image) {
+        imagePromise.done(function(image) {
             jQuery(imageElement).attr('src', image);
         });
     },

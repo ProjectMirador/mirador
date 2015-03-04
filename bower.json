@@ -20,13 +20,14 @@
     "tests"
   ],
   "dependencies": {
-    "annotator-full.1.2.9": "https://github.com/openannotation/annotator/releases/download/v1.2.9/annotator-full.1.2.9.zip",
     "jquery-ui": "*",
     "jquery.scrollTo": "~1.4.12",
     "mousetrap": "~1.4.6",
     "URIjs": "https://github.com/medialize/URI.js.git#~1.13.2",
-    "jquery-ui": "*",
-    "mousetrap": "~1.4.6",
-    "jquery.scrollTo": "~1.4.12"
+    "qTip2": "~2.2.1"
+  },
+  "devDependencies": {
+    "sinon-server": "http://sinonjs.org/releases/sinon-server-1.12.2.js",
+    "jasmine-jquery": "~2.0.6"
   }
 }

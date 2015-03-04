@@ -5,16 +5,16 @@
         jQuery.extend(true, this, {
             element:                    null,
             parent:                     null,
-            manifestId:                 null,
+            manifest:                   null,
             loadStatus:                 null,
             thumbHeight:                80,
             urlHeight:                  150,
-            resultsWidth:               0,  //based on screen width
+            resultsWidth:               0,  // based on screen width
             maxPreviewImagesWidth:      0,
             repoWidth:                  80,
             metadataWidth:              200,
             margin:                     15,
-            remainingItemsMinWidth:     80,  //set a minimum width for the "more" image
+            remainingItemsMinWidth:     80, // set a minimum width for the "more" image
             imagesTotalWidth:           0,
             tplData:                    null
         }, options);
@@ -47,52 +47,52 @@
           var manifest = $.viewer.manifests[_this.manifestId];
 
           this.tplData = { 
-            label: manifest.label,
-            repository: manifest.miradorRepository,
-            canvasCount: manifest.sequences[0].canvases.length,
+            label: 'label', //manifest.jsonLd.label,
+            repository: 'repository',//manifest.jsonLd.miradorRepository,
+            canvasCount: '300',//manifest.jsonLd.sequences[0].canvases.length,
             images: []
           };
           
-          this.tplData.repoImage = (function() {
-            var repo = _this.tplData.repository;
-            if (_this.tplData.repository === '(Added from URL)') {
-               repo = '';
-            }            
-            var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'];
+          // this.tplData.repoImage = (function() {
+          //   var repo = _this.tplData.repository;
+          //   if (_this.tplData.repository === '(Added from URL)') {
+          //      repo = '';
+          //   }            
+          //   var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'];
 
-            return 'images/logos/' + imageName;
-          })();
+          //   return 'images/logos/' + imageName;
+          // })();
 
-          for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
-            var canvas = manifest.sequences[0].canvases[i];
-            if (canvas.width === 0) {
-              continue;
-            }
+          // for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
+          //   var canvas = manifest.sequences[0].canvases[i];
+          //   if (canvas.width === 0) {
+          //     continue;
+          //   }
 
-            var aspectRatio = canvas.height/canvas.width,
-            width = (_this.thumbHeight/aspectRatio);
-            url = $.getThumbnailForCanvas(canvas, width);
+          //   var aspectRatio = canvas.height/canvas.width,
+          //   width = (_this.thumbHeight/aspectRatio);
+          //   url = $.getThumbnailForCanvas(canvas, width);
 
-            _this.imagesTotalWidth += (width + _this.margin);
-            if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
-               _this.imagesTotalWidth -= (width + _this.margin);
-               break;
-            }
-                        
-            this.tplData.images.push({
-              url: url,
-              width: width,
-              height: _this.thumbHeight,
-              id: canvas['@id']
-            });
-          }
+          //   _this.imagesTotalWidth += (width + _this.margin);
+          //   if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
+          //      _this.imagesTotalWidth -= (width + _this.margin);
+          //      break;
+          //   }
+          //               
+          //   this.tplData.images.push({
+          //     url: url,
+          //     width: width,
+          //     height: _this.thumbHeight,
+          //     id: canvas['@id']
+          //   });
+          // }
           
-          this.tplData.remaining = (function() {
-              var remaining = manifest.sequences[0].canvases.length - _this.tplData.images.length;
-              if (remaining > 0) {
-                return remaining;
-              }
-            })();
+          // this.tplData.remaining = (function() {
+          //     var remaining = manifest.sequences[0].canvases.length - _this.tplData.images.length;
+          //     if (remaining > 0) {
+          //       return remaining;
+          //     }
+          //   })();
 
         },
 

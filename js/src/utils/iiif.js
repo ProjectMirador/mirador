@@ -4,16 +4,6 @@
   $.Iiif = {
 
     // Temporary method to create Stanford IIIF URI from Stanford stacks non-IIIF URI
-    getUri: function(uri) {
-      var iiifUri = uri,
-      match = /http?:\/\/stacks.stanford.edu\/image\/(\w+\/\S+)/i.exec(uri);
-
-      if (match && match.length === 2) {
-        iiifUri = 'https://stacks.stanford.edu/image/iiif/' + encodeURIComponent(match[1]);
-      }
-
-      return iiifUri;
-    },
     getAnnotationsListUrl: function(manifest, canvasId) {
       var canvas = jQuery.grep(manifest.sequences[0].canvases, function(canvas, index) {
         return canvas['@id'] === canvasId;
@@ -48,9 +38,9 @@
     makeUriWithWidth: function(uri, width, version) {
       uri = uri.replace(/\/$/, '');
       if (version[0] == '1') {
-        return this.getUri(uri) + '/full/' + width + ',/0/native.jpg';
+        return uri + '/full/' + width + ',/0/native.jpg';
       } else {
-        return this.getUri(uri) + '/full/' + width + ',/0/default.jpg';
+        return uri + '/full/' + width + ',/0/default.jpg';
       }
     },
 
@@ -81,7 +71,6 @@
     }
 
   };
-
 
 }(Mirador));
 

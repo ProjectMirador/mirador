@@ -9,37 +9,39 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-git-describe');
-  grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-coveralls');
+  grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-githooks');
   // grunt.loadNpmTasks('jasmine-jquery');
 
   // ----------
   var distribution = 'build/mirador/mirador.js',
-      minified = 'build/mirador/mirador.min.js',
-      releaseRoot = '../site-build/built-mirador/',
+  minified = 'build/mirador/mirador.min.js',
+  releaseRoot = '../site-build/built-mirador/',
 
   // libraries/plugins
   vendors = [
     'js/lib/jquery.min.js',
-    'js/lib/jquery.layout-latest.min.js',
     'js/lib/jquery-ui-1.9.2.min.js',
     'js/lib/jquery.scrollTo.min.js',
-    'js/lib/annotator-full.min.js',
+    'js/lib/jquery.qtip.min.js',
     'js/lib/state-machine.min.js',
+    'js/lib/tinymce.min.js',
     'js/lib/handlebars.js',
     'js/lib/openseadragon.min.js',
     'js/lib/d3.v3.min.js',
     'js/lib/pubsub.min.js',
     'js/lib/URI.min.js',
     'js/lib/mousetrap.min.js',
-    'js/lib/ZeroClipboard.min.js'
+    'js/lib/isfahan.js'
   ],
 
   // libraries/plugins for running tests
   specJs = [
-    'spec/lib/jasmine-jquery.js'
+    'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
+    'bower_components/sinon-server/index.js'
   ],
 
   // source files
@@ -53,8 +55,12 @@ module.exports = function(grunt) {
     'js/src/utils/*.js'
   ],
 
-  specs = 'spec/**/*js';
+  specs = ['spec/**/*js'];
+  exclude = [];
 
+  if (!grunt.option('full')) {
+    exclude.push('spec/mirador.test.js');
+  }
 
   // ----------
   // Project configuration.
@@ -86,7 +92,7 @@ module.exports = function(grunt) {
         'css/font-awesome.css',
         'css/jquery-ui.custom.min.css',
         'css/layout-default-latest.css',
-        'css/annotator.min.css',
+        'css/jquery.qtip.min.css',
         'css/mirador.css',
         '!css/mirador-combined.css'
         ],
@@ -120,8 +126,19 @@ module.exports = function(grunt) {
           dest: 'build/mirador/'
         }, {
           expand: true,
-          src: 'css/theme-dark/**',
-          dest: 'build/mirador/'
+          cwd: 'css/',
+          src: 'themes/**',
+          dest: 'build/mirador'
+        }, {
+          expand: true,
+          cwd: 'css/',
+          src: 'skins/**',
+          dest: 'build/mirador'
+        }, {
+          expand: true,
+          cwd: 'css/',
+          src: 'plugins/**',
+          dest: 'build/mirador'
         }, {
           expand: true,
           src: 'images/**',
@@ -133,10 +150,10 @@ module.exports = function(grunt) {
         }, {
           src: 'js/lib/parse.min.js',
           dest: 'build/mirador/parse.min.js'
-	}, {	    
+        }, {	    
           src: 'js/lib/ZeroClipboard.swf',
-	  dest: 'build/mirador/ZeroClipboard.swf'
-	}]
+          dest: 'build/mirador/ZeroClipboard.swf'
+        }]
       }
     },
 
@@ -208,48 +225,103 @@ module.exports = function(grunt) {
         }
       }
     },
-    
-    coveralls: {
-      src: 'reports/coverage/lcov.info',
+
+    githooks: {
+      all: {
+        'pre-commit': 'jshint cover'
+        // 'post-checkout': 
+      }
     },
 
-    jasmine: {
-      test: {
-        src: sources,
-        options: {
-          keepRunner: true,
-          specs: specs,
-          vendor: vendors.concat(specJs)
-        }
-      },
-      coverage: {
-        src: sources,
-        options: {
-          keepRunner: true,
-          specs: specs,
-          vendor: vendors,
-          template : require('grunt-template-jasmine-istanbul'),
-          templateOptions: {
-            coverage: 'reports/coverage.json',
-            report: [
-              {
-                type: 'text-summary'
-              },
-              {
-              type: 'html',
-              options: {
-                dir:'reports/coverage'
-              }
-            },
-            {
-              type: 'lcov',
-              options: {
-                dir:'reports/coverage'
-              }
-            }
-          ]
+    coveralls: {
+      src: '/reports/coverage/PhantomJS\ 1.9.8\ (Mac\ OS\ X)/lcov.info',
+      ci: {
+        src: '/reports/coverage/PhantomJS\ 1.9.8\ (Mac\ OS\ X)/lcov.info',
+      }
+    },
+
+    karma : {
+      options: {
+        basePath: '',
+        frameworks: ['jasmine'],
+        files: [].concat(vendors, sources, specs, ['bower_components/sinon-server/index.js', 'bower_components/jasmine-jquery/lib/jasmine-jquery.js'], {pattern: 'spec/data/manifest.json', included: false} ),
+        exclude: exclude,
+        proxies: {
+          '/spec': 'http://localhost:9876/base/spec'
+        },
+        coverageReporter: {
+          reporters: [
+            {type: 'lcov'},
+            {type: 'html'},
+            {type: 'text-summary'}
+          ],
+          dir: 'reports/coverage'
+        },
+        port: 9876, // Note: web server port
+        colors: true, // Note: enable / disable colors in the output (reporters and logs)
+        logLevel: 'INFO',
+        autoWatch: false,
+        captureTimeout: 60000, // Note: If browser does not capture in given timeout [ms], kill it
+        singleRun: false,
+        sauceLabs: {
+        },
+        customLaunchers: {
+          'sl_win7_chrome': {
+            base: 'SauceLabs',
+            browserName: 'chrome',
+            platform: 'Windows 7',
+            version: '39'
+          },
+          'sl_win7_firefox': {
+            base: 'SauceLabs',
+            browserName: 'firefox',
+            platform: 'Windows 7',
+            version: '35.0'
+          },
+          'sl_win7_ie10': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows 7',
+            version: '10'
           }
         }
+      },
+      test: {
+        reporters: ['spec'],
+        browsers: ['PhantomJS'],
+        singleRun: true
+      },
+      cover: {
+        preprocessors: {
+          'js/src/**/*.js': ['coverage']
+        },
+        reporters: ['progress', 'coverage'],
+        browsers: ['PhantomJS'],
+        singleRun: true
+      },
+      server: {
+        reporters: ['progress'],
+        browsers: ['Firefox'],
+        background: true
+      },
+      chrome: {
+        reporters: ['progress'],
+        browsers: ['Chrome'],
+        singleRun: true
+      },
+      firefox: {
+        reporters: ['progress'],
+        browsers: ['Firefox'],
+        singleRun: true
+      },
+      browsers: {
+        reporters: ['spec', 'saucelabs'],
+        browsers: [
+          'sl_win7_chrome', 
+          'sl_win7_firefox'//,
+          // 'sl_win7_ie10'
+        ],
+        singleRun: true
       }
     }
   });
@@ -260,8 +332,8 @@ module.exports = function(grunt) {
   grunt.registerTask('copy:release', function() {
     grunt.file.recurse('build', function(abspath, rootdir, subdir, filename) {
       var dest = releaseRoot +
-      (subdir ? subdir + '/' : '/') +
-      filename;
+        (subdir ? subdir + '/' : '/') +
+        filename;
 
       grunt.file.copy(abspath, dest);
     });
@@ -300,11 +372,20 @@ module.exports = function(grunt) {
   // ----------
   // Test task.
   // Runs Jasmine tests
-  grunt.registerTask('test', 'jasmine:test');
+  grunt.registerTask('test', 'karma:test');
 
   // ----------
   // Coverage task.
   // Runs instanbul coverage
-  grunt.registerTask('coverage', 'jasmine:coverage');
+  grunt.registerTask('cover', 'karma:cover');
   
+  // ----------
+  // Runs this on travis.
+  grunt.registerTask('ci', [
+                     'test',
+                     'cover',
+                     'jshint',
+                     'karma:browsers',
+                     'coveralls'
+  ]);
 };

@@ -4,90 +4,68 @@
     return str.replace(/^\s+|\s+$/g, '');
   };
 
-  $.getJsonFromUrl = function(url, async) {
-    var json;
+  /* --------------------------------------------------------------------------
+     Methods related to manifest data
+     -------------------------------------------------------------------------- */
 
-    jQuery.ajax({
-      url: url,
-      dataType: 'json',
-      async: async || false,
+  $.getImageIndexById = function(imagesList, id) {
+    var imgIndex = 0;
 
-      success: function(data) {
-        json = data;
-      },
-
-      error: function(xhr, status, error) {
-        console.error(xhr, status, error);
+    jQuery.each(imagesList, function(index, img) {
+      if ($.trimString(img['@id']) === $.trimString(id)) {
+        imgIndex = index;
       }
     });
 
-    return json;
+    return imgIndex;
   };
 
-
-  /* --------------------------------------------------------------------------
-   Methods related to manifest data
-   -------------------------------------------------------------------------- */
-
-  $.getImageIndexById = function(imagesList, id) {
-      var imgIndex = 0;
-
-      jQuery.each(imagesList, function(index, img) {
-        if ($.trimString(img['@id']) === $.trimString(id)) {
-          imgIndex = index;
-        }
-      });
-
-      return imgIndex;
-    };
-
   $.getThumbnailForCanvas = function(canvas, width) {
-      var version = "1.1",
-          service,
-          thumbnailUrl;
+    var version = "1.1",
+    service,
+    thumbnailUrl;
 
-      // Ensure width is an integer...
-      width = parseInt(width, 10);
+    // Ensure width is an integer...
+    width = parseInt(width, 10);
 
-      // Respecting the Model...
-      if (canvas.hasOwnProperty('thumbnail')) {
-        // use the thumbnail image, prefer via a service
-        if (typeof(canvas.thumbnail) == 'string') {
-          thumbnailUrl = canvas.thumbnail;
-        } else if (canvas.thumbnail.hasOwnProperty('service')) {
-          // Get the IIIF Image API via the @context
-          service = canvas.thumbnail.service;
-          if (service.hasOwnProperty('@context')) {
-            version = $.Iiif.getVersionFromContext(service['@context']);
-          }
-          thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
-        } else {
-          thumbnailUrl = canvas.thumbnail['@id'];
-        }
-      } else {
-        // No thumbnail, use main image
-        var resource = canvas.images[0].resource;
-        service = resource['default'] ? resource['default'].service : resource.service;
-        // TODO: This should check that service is actually there...
+    // Respecting the Model...
+    if (canvas.hasOwnProperty('thumbnail')) {
+      // use the thumbnail image, prefer via a service
+      if (typeof(canvas.thumbnail) == 'string') {
+        thumbnailUrl = canvas.thumbnail;
+      } else if (canvas.thumbnail.hasOwnProperty('service')) {
+        // Get the IIIF Image API via the @context
+        service = canvas.thumbnail.service;
         if (service.hasOwnProperty('@context')) {
           version = $.Iiif.getVersionFromContext(service['@context']);
-        }          
+        }
         thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+      } else {
+        thumbnailUrl = canvas.thumbnail['@id'];
       }
-      return thumbnailUrl;
-    };
+    } else {
+      // No thumbnail, use main image
+      var resource = canvas.images[0].resource;
+      service = resource['default'] ? resource['default'].service : resource.service;
+      if (service.hasOwnProperty('@context')) {
+        version = $.Iiif.getVersionFromContext(service['@context']);
+      }          
+      thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+    }
+    return thumbnailUrl;
+  };
 
   $.getImagesListByManifest = function(manifest) {
     return manifest.sequences[0].canvases;
   };
-  
+
   $.getCollectionTitle = function(metadata) {
     return metadata.details.label || '';
   };
 
   /* 
-    miscellaneous utilities
-    */
+     miscellaneous utilities
+     */
 
   $.genUUID = function() {
     var idNum = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -95,11 +73,11 @@
       return v.toString(16);
     });
 
-    return "uuid-" + idNum;
+    return idNum;
   };
-  
+
   jQuery.fn.slideFadeToggle  = function(speed, easing, callback) {
-            return this.animate({opacity: 'toggle', height: 'toggle'}, speed, easing, callback);
+    return this.animate({opacity: 'toggle', height: 'toggle'}, speed, easing, callback);
   };
 
   $.throttle = function(func, wait, options) {
@@ -181,12 +159,12 @@
 
     return osdFrame;
   };
-  
+
   // http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
   $.isOnScreen = function(elem, outsideViewportFactor) {
     var factor = 1;
     if (outsideViewportFactor) {
-       factor = outsideViewportFactor;
+      factor = outsideViewportFactor;
     }
     var win = jQuery(window);
     var viewport = {
@@ -209,6 +187,59 @@
     rangeIDs = jQuery.map(ranges,  function(range) { return range['@id']; });
 
     return rangeIDs;
+  };
+
+  $.layoutDescriptionFromGridString = function (gridString) {
+    var columns = parseInt(gridString.substring(gridString.indexOf("x") + 1, gridString.length),10),
+    rowsPerColumn = parseInt(gridString.substring(0, gridString.indexOf("x")),10),
+    layoutDescription = {
+      type:'row'
+    };
+
+    if (gridString === "1x1") return layoutDescription;
+
+    layoutDescription.children = [];
+
+    // Javascript does not have range expansions quite yet,
+    // long live the humble for loop.
+    // Use a closure to contain the column and row variables.
+    for (var i = 0, c = columns; i < c; i++) { 
+      var column = { type: 'column'};
+
+      if (rowsPerColumn > 1) {
+        column.children = [];
+        for (var j = 0, r = rowsPerColumn; j < r; j++) { 
+          column.children.push({
+            type: 'row'
+          });
+        }
+      } 
+
+      layoutDescription.children.push(column);
+    }
+
+    return layoutDescription;
+  };
+
+  // Configurable Promises
+  $.createImagePromise = function(imageUrl) {
+    var img = new Image(),
+    dfd = jQuery.Deferred();
+
+    img.onload = function() {
+      dfd.resolve(img.src);
+    };
+
+    img.onerror = function() {
+      dfd.reject(img.src);
+    };
+
+    dfd.fail(function() {
+      console.log('image failed to load: ' + img.src);
+    });
+
+    img.src = imageUrl;
+    return dfd.promise();
   };
 
 }(Mirador));

@@ -1,0 +1,15 @@
+{
+  "name": "qTip2",
+  "homepage": "https://github.com/qTip2/qTip2",
+  "version": "2.2.1",
+  "_release": "2.2.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.2.1",
+    "commit": "bc8ab26a2229cb9958e49fdc0d54f46a07467f4c"
+  },
+  "_source": "git://github.com/qTip2/qTip2.git",
+  "_target": "~2.2.1",
+  "_originalSource": "qTip2",
+  "_direct": true
+}
