@@ -88,19 +88,16 @@
                    annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
                  });
                  api.set({'content.text' : annoTooltip.getViewer(annotations)});
-                 
                  },
+               visible: function(event, api) {
+                 _this.removeAnnotationEvents(event, api);
+                 _this.annotationEvents(event, api);
+               },
                move: function(event, api) {
+                 _this.removeAnnotationEvents(event, api);
                  _this.annotationEvents(event, api);
                  _this.annotationSaveEvent(event, api);
-               },
-               hidden: function(event, api) {
-                 jQuery('.annotation-tooltip a.delete').off("click");
-                 jQuery('.annotation-tooltip a.edit').off("click");
-                 jQuery('.annotation-tooltip a.save').off("click");
-                 jQuery('.annotation-tooltip a.cancel').off("click");
-               },
-               hide: function(event, api) { }
+               }
              }
       });
 
@@ -192,8 +189,15 @@
       api.set({'content.text' : annoTooltip.getViewer([oaAnno]),
           'hide.event' : 'mouseleave'}).hide();
     },
+    
+    removeAnnotationEvents: function(tooltipevent, api) {
+      jQuery('.annotation-tooltip a.delete').off("click");
+      jQuery('.annotation-tooltip a.edit').off("click");
+      jQuery('.annotation-tooltip a.save').off("click");
+      jQuery('.annotation-tooltip a.cancel').off("click");
+    },
 
-    annotationEvents: function(event, api) {
+    annotationEvents: function(tooltipevent, api) {
       var _this = this,
       annoTooltip = new $.AnnotationTooltip();
       jQuery('.annotation-tooltip a.delete').on("click", function(event) {
@@ -203,7 +207,6 @@
           return false;
         }
 
-        console.log("clicked delete");
         var display = jQuery(this).parents('.annotation-display'),
         id = display.attr('data-anno-id'),
         oaAnno = _this.getAnnoFromRegion(id)[0];
@@ -213,10 +216,8 @@
         //should there be some sort of check that it was successfully deleted? or pass when publishing?
         _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+id)[0]);
         
-        //if there will be no more displayed annotations after removing current one from dom, then hide the qtip
-        if(jQuery(this).parents('.all-annotations').find('.annotation-display').length-1 === 0) {
-          api.hide();
-        }
+        //hide tooltip so event handlers don't get messed up
+        api.hide();
         display.remove(); //remove this annotation display from dom
       });
 
