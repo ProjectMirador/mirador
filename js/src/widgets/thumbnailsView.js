@@ -4,7 +4,7 @@
 
     jQuery.extend(this, {
       currentImgIndex:      0,
-      imageID:              null,
+      canvasID:              null,
       focusImages:          [],
       manifest:             null,
       element:              null,
@@ -24,8 +24,8 @@
   $.ThumbnailsView.prototype = {
 
     init: function() {
-        if (this.imageID !== null) {
-            this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
+        if (this.canvasID !== null) {
+            this.currentImgIndex = $.getImageIndexById(this.imagesList, this.canvasID);
         }
 
         this.loadContent();
@@ -105,7 +105,7 @@
           _this.parent.setCurrentImageID(canvasID);
         });
 
-        jQuery.subscribe(('currentImageIDUpdated.' + _this.parent.id), function(imageID) {
+        jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(imageID) {
           _this.currentImageChanged();
         });
     },

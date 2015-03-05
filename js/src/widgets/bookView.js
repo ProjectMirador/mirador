@@ -7,7 +7,7 @@
       windowId:         null,
       currentImgIndex:  0,
       stitchList:       [],
-      imageID:          null,
+      canvasID:          null,
       imagesList:       [],
       element:          null,
       focusImages:      [],
@@ -52,11 +52,11 @@
         windowId: this.windowId
       });
 
-      if (this.manifest.sequences[0].viewingDirection) {
-        this.viewingDirection = this.manifest.sequences[0].viewingDirection.toLowerCase();
+      if (this.manifest.jsonLd.sequences[0].viewingDirection) {
+        this.viewingDirection = this.manifest.jsonLd.sequences[0].viewingDirection.toLowerCase();
       }
-      if (this.manifest.sequences[0].viewingHint) {
-        this.viewingHint = this.manifest.sequences[0].viewingHint.toLowerCase();
+      if (this.manifest.jsonLd.sequences[0].viewingHint) {
+        this.viewingHint = this.manifest.jsonLd.sequences[0].viewingHint.toLowerCase();
       }
 
       this.stitchList = this.getStitchList();
@@ -142,7 +142,7 @@
 
       jQuery.each(this.stitchList, function(index, image) {
         var imageUrl = $.Iiif.getImageUrl(image);
-        var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json';
+        var infoJsonUrl = imageUrl + '/info.json';
 
         jQuery.getJSON(infoJsonUrl).done(function (data, status, jqXHR) {
           tileSources.push(data);

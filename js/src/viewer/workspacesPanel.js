@@ -24,7 +24,7 @@
     bindEvents: function() {
       var _this = this;
       // handle subscribed events
-      jQuery.subscribe('workspacesPanelVisible.set', function(_, stateValue) {
+      jQuery.subscribe('layoutPanelVisible.set', function(_, stateValue) {
         if (stateValue) { _this.show(); return; }
         _this.hide();
       });

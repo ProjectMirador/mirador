@@ -16,7 +16,12 @@
       windowSize:             {},
       resizeRatio:            {},
       currentWorkspaceVisible: true,
-      overlayStates:          {'workspacesPanelVisible': false, 'manifestsPanelVisible': false, 'optionsPanelVisible': false, 'bookmarkPanelVisible': false},
+      overlayStates:          {
+        'layoutPanelVisible': false,
+        'manifestsPanelVisible': false,
+        'optionsPanelVisible': false,
+        'bookmarkPanelVisible': false
+      },
       manifests:             [] 
     }, $.DEFAULT_SETTINGS, options);
 
@@ -124,8 +129,7 @@
       _this.workspaceType = type;
       _this.workspace.set('layoutDescription', _this.workspaces[_this.workspaceType].layout);
       _this.workspace.calculateLayout();
-      $.viewer.toggleSwitchWorkspace();
-
+      _this.toggleLayoutControl();
     },
 
     // Sets state of overlays that layer over the UI state
@@ -145,8 +149,8 @@
       this.toggleOverlay('manifestsPanelVisible');
     },
 
-    toggleSwitchWorkspace: function() {
-      this.toggleOverlay('workspacesPanelVisible');
+    toggleLayoutControl: function() {
+      this.toggleOverlay('layoutPanelVisible');
     },
 
     toggleBookmarkPanel: function() {
@@ -192,7 +196,7 @@
         _this.manifests[url] = manifest;
         _this.manifests.push(manifest);
         jQuery.publish('manifestQueued', manifest);
-        manifest.request.done(function(loaded) {
+        manifest.request.done(function() {
           jQuery.publish('manifestReceived', manifest);
         });
       }
@@ -205,7 +209,7 @@
         var windowConfig = {
           currentFocus : options.viewType,
           focuses : options.availableViews,
-          currentImageID : options.canvasID,
+          currentCanvasID : options.canvasID,
           id : options.id,
           focusOptions : options.windowOptions,
           bottomPanelAvailable : options.bottomPanel,
@@ -216,60 +220,8 @@
           layoutOptions: options.layoutOptions
         };
 
-        this.addManifestToWorkspace(options.loadedManifest, windowConfig);
+        this.workspace.addWindow(options.loadedManifest, windowConfig);
       }
-    },
-
-    addManifestToWorkspace: function(manifestURI, windowConfig) {
-      var _this = this,
-      targetSlotID,
-      slot;
-
-      windowConfig.manifest = this.manifests[manifestURI];
-      windowConfig.currentImageMode = this.workspace.type === "bookReading" ? 'BookView' : 'ImageView';
-
-      jQuery.each(this.overlayStates, function(oState, value) {
-        _this.set(oState, false, {parent: 'overlayStates'});
-      });
-
-      // slotID is appended to event name so only 
-      // the invoking slot initialises a new window in 
-      // itself.
-
-      // Just assign the slotIDs in order of manifest listing.
-
-      if (windowConfig.slotID) {
-        targetSlotID = windowConfig.slotID;
-      } else {
-        targetSlotID = _this.workspace.focusedSlot || _this.workspace.slots.filter(function(slot) { 
-          return slot.hasOwnProperty('window') ? true : false;
-        })[0].slotID;
-      }
-
-      //The publish is sending too many events and it's creating a lot of cascading issues
-      //Need to call it once, to the exact slot
-      //jQuery.publish('manifestToSlot.'+targetSlotID, windowConfig); 
-
-      jQuery.each(this.workspace.slots, function(index, workspaceSlot) {
-        if (workspaceSlot.slotID === targetSlotID) {
-          slot = workspaceSlot;
-          return false;
-        }
-      });
-
-      slot.manifestToSlot(windowConfig);
-    },
-
-    toggleImageViewInWorkspace: function(imageID, manifestURI) {
-      this.addManifestToWorkspace(manifestURI, 
-                                  {currentFocus: this.workspace.type === "bookReading" ? 'BookView' : 'ImageView', 
-                                    currentImageID: imageID});
-    },
-
-    toggleThumbnailsViewInWorkspace: function(manifestURI) {
-      this.addManifestToWorkspace(manifestURI,
-                                  {currentFocus: 'ThumbnailsView', 
-                                    currentImageID: null});
     }
   };
 

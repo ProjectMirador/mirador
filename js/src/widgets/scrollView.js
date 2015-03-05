@@ -4,7 +4,7 @@
 
     jQuery.extend(this, {
       currentImgIndex:      0,
-      imageID:              null,
+      canvasID:              null,
       focusImages:          [],
       manifest:             null,
       element:              null,

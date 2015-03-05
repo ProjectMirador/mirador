@@ -6,7 +6,7 @@
       currentImg:       null,
       windowId:         null,
       currentImgIndex:  0,
-      imageID:          null,
+      canvasID:          null,
       imagesList:       [],
       element:          null,
       elemOsd:          null,

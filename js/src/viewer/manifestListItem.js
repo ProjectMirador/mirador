@@ -44,55 +44,55 @@
         fetchTplData: function() {
           var _this = this;
 
-          var manifest = $.viewer.manifests[_this.manifestId];
+          var manifest = _this.manifest.jsonLd;
 
           this.tplData = { 
-            label: 'label', //manifest.jsonLd.label,
-            repository: 'repository',//manifest.jsonLd.miradorRepository,
-            canvasCount: '300',//manifest.jsonLd.sequences[0].canvases.length,
+            label: manifest.label,
+            repository: manifest.miradorRepository,
+            canvasCount: manifest.sequences[0].canvases.length,
             images: []
           };
           
-          // this.tplData.repoImage = (function() {
-          //   var repo = _this.tplData.repository;
-          //   if (_this.tplData.repository === '(Added from URL)') {
-          //      repo = '';
-          //   }            
-          //   var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'];
+          this.tplData.repoImage = (function() {
+            var repo = _this.tplData.repository;
+            if (_this.tplData.repository === '(Added from URL)') {
+               repo = '';
+            }            
+            var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'];
 
-          //   return 'images/logos/' + imageName;
-          // })();
+            return 'images/logos/' + imageName;
+          })();
 
-          // for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
-          //   var canvas = manifest.sequences[0].canvases[i];
-          //   if (canvas.width === 0) {
-          //     continue;
-          //   }
+          for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
+            var canvas = manifest.sequences[0].canvases[i];
+            if (canvas.width === 0) {
+              continue;
+            }
 
-          //   var aspectRatio = canvas.height/canvas.width,
-          //   width = (_this.thumbHeight/aspectRatio);
-          //   url = $.getThumbnailForCanvas(canvas, width);
+            var aspectRatio = canvas.height/canvas.width,
+            width = (_this.thumbHeight/aspectRatio);
+            url = _this.manifest.getThumbnailForCanvas(canvas, width);
 
-          //   _this.imagesTotalWidth += (width + _this.margin);
-          //   if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
-          //      _this.imagesTotalWidth -= (width + _this.margin);
-          //      break;
-          //   }
-          //               
-          //   this.tplData.images.push({
-          //     url: url,
-          //     width: width,
-          //     height: _this.thumbHeight,
-          //     id: canvas['@id']
-          //   });
-          // }
+            _this.imagesTotalWidth += (width + _this.margin);
+            if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
+               _this.imagesTotalWidth -= (width + _this.margin);
+               break;
+            }
+                        
+            this.tplData.images.push({
+              url: url,
+              width: width,
+              height: _this.thumbHeight,
+              id: canvas['@id']
+            });
+          }
           
-          // this.tplData.remaining = (function() {
-          //     var remaining = manifest.sequences[0].canvases.length - _this.tplData.images.length;
-          //     if (remaining > 0) {
-          //       return remaining;
-          //     }
-          //   })();
+          this.tplData.remaining = (function() {
+              var remaining = manifest.sequences[0].canvases.length - _this.tplData.images.length;
+              if (remaining > 0) {
+                return remaining;
+              }
+            })();
 
         },
 
@@ -109,11 +109,12 @@
           });
           
           this.element.find('.select-metadata').on('click', function() {
-              $.viewer.toggleThumbnailsViewInWorkspace(_this.manifestId);
+              $.viewer.workspace.addWindow(_this.manifest); // must adjust config properly
           });
 
           this.element.find('.preview-image').on('click', function() {
-            $.viewer.toggleImageViewInWorkspace(jQuery(this).attr('data-image-id'), _this.manifestId);
+            // $.viewer.toggleImageViewInWorkspace(jQuery(this).attr('data-image-id'), _this.manifestId);
+            $.viewer.workspace.addWindow(_this.manifest, jQuery(this).attr('data-image-id')); // must adjust config properly
           });
           
           jQuery.subscribe('manifestPanelWidthChanged', function(event, newWidth){
@@ -163,7 +164,7 @@
                       '</div>',
                       '<div class="select-metadata">',
                           '<h3 class="manifest-title">{{label}}</h3>',
-                          '<h4 >{{canvasCount}} items</h4>',
+                          '<h4>{{canvasCount}} items</h4>',
                       '{{#if repository}}',
                           '<h4 class="repository-label">{{repository}}</h4>',
                       '{{/if}}',

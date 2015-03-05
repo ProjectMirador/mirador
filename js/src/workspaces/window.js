@@ -7,12 +7,17 @@
       scrollImageRatio:  0.9,
       appendTo:          null,
       manifest:          null,
-      currentImageID:    null,
+      currentCanvasID:    null,
       focusImages:       [],
       imagesList:        null,
       annotationsList:   [],
       endpoint:          null,
       slot:              null,
+      width:             null,
+      height:            null,
+      x:                 null,
+      y:                 null,
+      layoutAddress:     null,
       currentImageMode:  'ImageView',
       imageModes:        ['ImageView', 'BookView'],
       currentFocus:      'ThumbnailsView',
@@ -65,7 +70,7 @@
   $.Window.prototype = {
     init: function () {
       _this = this,
-      manifest = _this.manifest,
+      manifest = _this.manifest.jsonLd,
       focusState = _this.currentFocus,
       templateData = {},
       endpoint = null;
@@ -75,7 +80,7 @@
         _this.annotationsList.pop();
       }
       //unsubscribe from stale events as they will be updated with new module calls
-      jQuery.unsubscribe(('currentImageIDUpdated.' + _this.id));
+      jQuery.unsubscribe(('currentCanvasIDUpdated.' + _this.id));
 
       _this.element = jQuery(this.template()).appendTo(this.appendTo);
 
@@ -87,9 +92,9 @@
         return value;
       });
 
-      _this.imagesList = $.getImagesListByManifest(_this.manifest);
-      if (!_this.currentImageID) {
-        _this.currentImageID = _this.imagesList[0]['@id'];
+      _this.imagesList = _this.manifest.getCanvases();
+      if (!_this.currentCanvasID) {
+        _this.currentCanvasID = _this.imagesList[0]['@id'];
       }
 
       _this.getAnnotations();
@@ -136,16 +141,16 @@
       _this.bindNavigation();
       switch(focusState) {
         case 'ThumbnailsView':
-          _this.toggleThumbnails(_this.currentImageID);
+          _this.toggleThumbnails(_this.currentCanvasID);
         break;
         case 'ImageView':
-          _this.toggleImageView(_this.currentImageID);
+          _this.toggleImageView(_this.currentCanvasID);
         break;
         case 'BookView':
-          _this.toggleBookView(_this.currentImageID);
+          _this.toggleBookView(_this.currentCanvasID);
         break;
         case 'ScrollView':
-          _this.toggleScrollView(_this.currentImageID);
+          _this.toggleScrollView(_this.currentCanvasID);
         break;
         default:
           break;
@@ -280,7 +285,7 @@
               appendTo: _this.element.find('.'+panelType), 
               parent: _this, 
               panel: true, 
-              imageID: _this.currentImageID, 
+              canvasID: _this.currentCanvasID, 
               imagesList: _this.imagesList,
               thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
             });
@@ -404,14 +409,14 @@
       jQuery.publish("focusUpdated", {
         id: _this.id, 
         viewType: _this.currentFocus, 
-        canvasID: _this.currentImageID, 
+        canvasID: _this.currentCanvasID, 
         imageMode: _this.currentImageMode, 
         loadedManifest: _this.manifest['@id']});
     },
 
     toggleThumbnails: function(imageID) {
       if (this.focusModules.ThumbnailsView === null) {
-        this.focusModules.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: this.currentImageID, imagesList: this.imagesList} );
+        this.focusModules.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: this.currentCanvasID, imagesList: this.imagesList} );
       } else {
         var view = this.focusModules.ThumbnailsView;
         view.updateImage(imageID);
@@ -420,7 +425,7 @@
     },
 
     toggleImageView: function(imageID) {
-      this.currentImageID = imageID;
+      this.currentCanvasID = imageID;
       if (this.focusModules.ImageView === null) {
         this.focusModules.ImageView = new $.ImageView( {manifest: this.manifest, 
                                                       appendTo: this.element.find('.view-container'), 
@@ -438,7 +443,7 @@
     },
 
     toggleBookView: function(imageID) {
-      this.currentImageID = imageID;
+      this.currentCanvasID = imageID;
       if (this.focusModules.BookView === null) {
         this.focusModules.BookView = new $.BookView({
           manifest: this.manifest, 
@@ -457,14 +462,14 @@
     },
 
     toggleScrollView: function(imageID) {
-      this.currentImageID = imageID;
+      this.currentCanvasID = imageID;
       if (this.focusModules.ScrollView === null) {
         var containerHeight = this.element.find('.view-container').height();
         this.focusModules.ScrollView = new $.ScrollView( 
                                                         {manifest: this.manifest, 
                                                           appendTo: this.element.find('.view-container'), 
                                                           parent: this, 
-                                                          imageID: this.currentImageID, 
+                                                          imageID: this.currentCanvasID, 
                                                           imagesList: this.imagesList, 
                                                           thumbInfo: {thumbsHeight: Math.floor(containerHeight * this.scrollImageRatio), listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}}
                                                        );
@@ -495,7 +500,7 @@
 
     setCurrentImageID: function(imageID) {
       var _this = this;
-      this.currentImageID = imageID;
+      this.currentCanvasID = imageID;
       jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
       jQuery.publish('removeTooltips.' + _this.id);
       while(_this.annotationsList.length > 0) {
@@ -503,7 +508,7 @@
       }
       this.getAnnotations();
       this.loadImageModeFromPanel(imageID);
-      jQuery.publish(('currentImageIDUpdated.' + _this.id), imageID);
+      jQuery.publish(('currentCanvasIDUpdated.' + _this.id), imageID);
     },
 
     bottomPanelVisibility: function(visible) {
@@ -551,7 +556,7 @@
     getAnnotations: function() {
                       //first look for manifest annotations
                       var _this = this,
-                      url = $.Iiif.getAnnotationsListUrl(_this.manifest, _this.currentImageID);
+                      url = _this.manifest.getAnnotationsListUrl(_this.currentCanvasID);
 
       if (url !== false) {
         jQuery.get(url, function(list) {
@@ -567,11 +572,11 @@
       options = $.viewer.annotationEndpoint.options;
       if (_this.endpoint && _this.endpoint !== null) {
         endpoint.set('dfd', dfd);
-        endpoint.search(_this.currentImageID);
+        endpoint.search(_this.currentCanvasID);
         // update with new search
       } else {
         options.element = _this.element;
-        options.uri = _this.currentImageID;
+        options.uri = _this.currentCanvasID;
         options.dfd = dfd;
         options.windowID = _this.id;
         endpoint = new $[module](options);
@@ -611,19 +616,19 @@
     });
 
     this.element.find('.single-image-option').on('click', function() {
-      _this.toggleImageView(_this.currentImageID);
+      _this.toggleImageView(_this.currentCanvasID);
     });
 
     this.element.find('.book-option').on('click', function() {
-      _this.toggleBookView(_this.currentImageID);
+      _this.toggleBookView(_this.currentCanvasID);
     });
 
     this.element.find('.scroll-option').on('click', function() {
-      _this.toggleScrollView(_this.currentImageID);
+      _this.toggleScrollView(_this.currentCanvasID);
     });
 
     this.element.find('.thumbnails-option').on('click', function() {
-      _this.toggleThumbnails(_this.currentImageID);
+      _this.toggleThumbnails(_this.currentCanvasID);
     });
 
     this.element.find('.mirador-icon-metadata-view').on('click', function() {

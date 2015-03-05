@@ -459,13 +459,13 @@ li.highlight {
   overflow: hidden;
   box-sizing:border-box;
 }
-.slot .remove-object-option {
+.slot .remove-slot-option {
   position: absolute;
   margin:10px;
   color:gray;
   cursor: pointer;
 }
-.slot .remove-object-option:hover {
+.slot .remove-slot-option:hover {
   float:left;
   margin:10px;
   color:lightGray;
