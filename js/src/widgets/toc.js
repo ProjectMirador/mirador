@@ -31,7 +31,7 @@
         this.ranges = this.setRanges();
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
         this.tocData = this.initTocData();
-        this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
+        this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentCanvasID);
         this.element.find('.has-child ul').hide();
         this.bindEvents();
         this.render();
@@ -191,7 +191,7 @@
       jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
       });
         
-      jQuery.subscribe(('currentImageIDUpdated.' + _this.parent.id), function(event, imageID) {
+      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(event, imageID) {
         if (!_this.manifest.structures) { return; }
         _this.setSelectedElements($.getRangeIDByCanvasID(_this.manifest, imageID));
         _this.render();

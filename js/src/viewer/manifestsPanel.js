@@ -59,6 +59,7 @@
             });
             
             jQuery.subscribe('manifestReceived', function(event, newManifest, repository) {
+              console.log(newManifest);
               _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifest: newManifest, resultsWidth: _this.resultsWidth }));
               _this.element.find('#manifest-search').keyup();
             });
@@ -78,7 +79,7 @@
               event.preventDefault();
             });
             
-            jQuery.subscribe('windowResize', $.debounce(function(){
+            jQuery.subscribe('resize', $.debounce(function(){
               var clone = _this.element.clone().css("visibility","hidden").css("display", "block").appendTo(_this.appendTo);
               _this.resultsWidth = clone.find('.select-results').outerWidth();
               clone.remove();
@@ -86,14 +87,6 @@
             }, 100));
         },
         
-        toggleImageView: function(imageID, manifestURI) {
-            this.parent.toggleImageViewInWorkspace(imageID, manifestURI);
-        },
-        
-        toggleThumbnailsView: function(manifestURI) {
-            this.parent.toggleThumbnailsViewInWorkspace(manifestURI);
-        },
-
         hide: function() {
             var _this = this;
             jQuery(this.element).hide({effect: "fade", duration: 160, easing: "easeOutCubic"});

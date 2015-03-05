@@ -29,22 +29,22 @@
 
       this.bindEvents();
     },
-    
+
     get: function(prop, parent) {
-        if (parent) {
-            return this[parent][prop];
-        }
-        return this[prop];
+      if (parent) {
+        return this[parent][prop];
+      }
+      return this[prop];
     },
 
     set: function(prop, value, options) {
-        var _this = this;
-        if (options) {
-            this[options.parent][prop] = value;
-        } else {
-            this[prop] = value;
-        }
-        jQuery.publish(prop + '.set', value);
+      var _this = this;
+      if (options) {
+        this[options.parent][prop] = value;
+      } else {
+        this[prop] = value;
+      }
+      jQuery.publish(prop + '.set', value);
     },
 
     calculateLayout: function() {
@@ -57,7 +57,7 @@
         configuration: null,
         padding: 3 
       });
-      
+
       var data = layout.filter( function(d) {
         return !d.children;
       });
@@ -90,10 +90,10 @@
       .remove("div")
       .each(function(d) { 
         var slotMap = _this.slots.reduce(function(map, temp_slot) {
-            if (d.id === temp_slot.slotID) {
-              map[d.id] = temp_slot;
-            }
-            return map;
+          if (d.id === temp_slot.slotID) {
+            map[d.id] = temp_slot;
+          }
+          return map;
         }, {}),
         slot = slotMap[d.id];
         if (slot && slot.window) {
@@ -129,7 +129,7 @@
           _this.layout.push(newSibling);
           return newSibling;
         }
-        
+
         // handles the case where the root needs to be mutated.
         node.type = node.type === 'row' ? 'column' : 'row';
         mutateAndAdd(node, indexDifference);
@@ -201,7 +201,7 @@
           addSibling(node, indexDifference);
         }
       }
-      
+
       // Recalculate the layout.
       // The original hierarchical structure is
       // accessible from the root node. Passing 
@@ -279,7 +279,7 @@
         };
       }
     },
-    
+
     availableSlot: function() {
       var toReturn = null;
       jQuery.each(this.slots, function(index, value) {
@@ -311,12 +311,55 @@
       this.parent.toggleLoadWindow();
     },
 
-    hide: function() {
-      jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
-    },
+    addWindow: function(manifest, canvasId) {
+      var _this = this,
+      windowConfig,
+      targetSlotID,
+      slot;
 
-    show: function() {
-      jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+      if (typeof imageId !== 'undefined') {
+        windowConfig =  
+          {
+          currentFocus: 'ImageView', 
+          currentCanvasID: canvasId 
+        };
+      } else {
+        windowConfig =  {
+          currentFocus: 'ThumbnailsView', 
+          currentCanvasID: null
+        };
+      }
+
+      windowConfig.manifest = manifest;
+
+      console.log(windowConfig);
+
+      jQuery.each(_this.parent.overlayStates, function(oState, value) {
+        _this.parent.set(oState, false, {parent: 'overlayStates'});
+      });
+
+      // slotID is appended to event name so only 
+      // the invoking slot initialises a new window in 
+      // itself.
+
+      // Just assign the slotIDs in order of manifest listing.
+
+      if (windowConfig.slotID) {
+        targetSlotID = windowConfig.slotID;
+      } else {
+        targetSlotID = _this.focusedSlot || _this.slots.filter(function(slot) { 
+          return slot.hasOwnProperty('window') ? true : false;
+        })[0].slotID;
+      }
+
+      jQuery.each(_this.slots, function(index, workspaceSlot) {
+        if (workspaceSlot.slotID === targetSlotID) {
+          slot = workspaceSlot;
+          return false;
+        }
+      });
+
+      slot.manifestToSlot(windowConfig);
     }
   };
 
