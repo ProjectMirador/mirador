@@ -234,7 +234,9 @@ module.exports = function(grunt) {
     },
 
     coveralls: {
-      src: '/reports/coverage/PhantomJS\ 1.9.8\ (Mac\ OS\ X)/lcov.info',
+      options: {
+        src: '/reports/coverage/PhantomJS\ 1.9.8\ (Mac\ OS\ X)/lcov.info',
+      },
       ci: {
         src: '/reports/coverage/PhantomJS\ 1.9.8\ (Mac\ OS\ X)/lcov.info',
       }
@@ -278,11 +280,23 @@ module.exports = function(grunt) {
             platform: 'Windows 7',
             version: '35.0'
           },
+          'sl_win7_ie09': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows 7',
+            version: '9'
+          },
           'sl_win7_ie10': {
             base: 'SauceLabs',
             browserName: 'internet explorer',
             platform: 'Windows 7',
             version: '10'
+          },
+          'sl_win7_ie11': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows 7',
+            version: '11'
           }
         }
       },
@@ -318,8 +332,10 @@ module.exports = function(grunt) {
         reporters: ['spec', 'saucelabs'],
         browsers: [
           'sl_win7_chrome', 
-          'sl_win7_firefox'//,
-          // 'sl_win7_ie10'
+          'sl_win7_firefox',
+          'sl_win7_ie9',
+          'sl_win7_ie10',
+          'sl_win7_ie11'
         ],
         singleRun: true
       }
