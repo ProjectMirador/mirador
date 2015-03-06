@@ -333,8 +333,8 @@ module.exports = function(grunt) {
         browsers: [
           'sl_win7_chrome', 
           'sl_win7_firefox',
-          'sl_win7_ie9',
-          'sl_win7_ie10',
+          // 'sl_win7_ie9',
+          // 'sl_win7_ie10',
           'sl_win7_ie11'
         ],
         singleRun: true
