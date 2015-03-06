@@ -5,7 +5,7 @@
     jQuery.extend(true, this, {
       element: null,
       appendTo: null,
-      parent: null,
+      parent: null
     }, options);
 
     this.init();

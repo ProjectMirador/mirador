@@ -71,7 +71,7 @@
       if (canvas.otherContent) {
         return canvas.otherContent[0]['@id'];
       } else { return false; }
-    },
+    }
   };
 
 }(Mirador));
