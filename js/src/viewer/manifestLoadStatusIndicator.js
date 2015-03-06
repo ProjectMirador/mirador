@@ -17,7 +17,7 @@
     render: function() {
       var _this = this;
 
-      console.log(_this.manifests.length);
+      //console.log(_this.manifests.length);
       var pending = _this.manifests.filter(function(d,i) {
         return d.request.state() === 'pending';
       }),
@@ -33,7 +33,7 @@
       .selectAll('div.pending')
       .data(pending);
 
-      console.log(pending);
+      //console.log(pending);
 
       // add new requests to the queue.
       requests.enter()
@@ -62,11 +62,11 @@
     bindEvents: function() {
       var _this = this;
       jQuery.subscribe('manifestQueued', function(manifest) {
-        console.log('queued');
+        //console.log('queued');
         _this.render();
       });
       jQuery.subscribe('manifestReceived', function(manifest) {
-        console.log('received');
+        //console.log('received');
         _this.render();
       });
     },

@@ -91,10 +91,10 @@
 
     bindEvents: function() {
       var _this = this;
-      jQuery.subscribe('manifestReceived', function(event, newManifest, repository) {
+      jQuery.subscribe('manifestReceived', function(event, newManifest) {
         if (_this.windowObjects) {
           var check = jQuery.grep(_this.windowObjects, function(object, index) {
-            return object.loadedManifest === newManifest;
+            return object.loadedManifest === newManifest.uri;
           });
           jQuery.each(check, function(index, value) {
             _this.loadManifestFromConfig(value);
@@ -220,7 +220,7 @@
           layoutOptions: options.layoutOptions
         };
 
-        this.workspace.addWindow(options.loadedManifest, windowConfig);
+        this.workspace.addWindow(this.manifests[options.loadedManifest], windowConfig);
       }
     }
   };
