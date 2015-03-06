@@ -80,7 +80,7 @@
              },
              events: {
                show: function(event, api) {
-                 var overlays = _this.getOverlaysFromPosition(event.originalEvent),
+                 var overlays = _this.getOverlaysFromElement(jQuery(event.originalEvent.currentTarget)),
                  annoTooltip = new $.AnnotationTooltip(), //pass permissions
                  annotations = [];
                  
@@ -109,22 +109,37 @@
         return annotation['@id'] === regionId;
       });
     },
-
-    getOverlaysFromPosition: function(event) {
-      var _this = this;
+    
+    getOverlaysFromElement: function(element) {
+      var _this = this,
+      eo = element.offset(),
+      el = eo.left,
+      et = eo.top,
+      er = el + element.outerWidth(),
+      eb = et + element.outerHeight();
+              
       var overlays = jQuery(_this.osdViewer.canvas).find('.annotation').map(function() {
         var self = jQuery(this),
         offset = self.offset(),
         l = offset.left,
         t = offset.top,
-        h = self.outerHeight(),
-        w = self.outerWidth(),
-        x = new OpenSeadragon.getMousePosition(event).x,
-        y = new OpenSeadragon.getMousePosition(event).y,
-        maxx = l+w,
-        maxy = t+h;
-
-        return (y <= maxy && y >= t) && (x <= maxx && x >= l) ? this : null;
+        r = l + self.outerWidth(),
+        b = t + self.outerHeight();
+        
+        //check if the current overlay has a corner contained within the element that triggered the mouseenter
+        //OR check if element has a corner contained within the overlay
+        //so that any overlapping annotations are stacked and displayed
+        //this will also find when the overlay and element are the same thing and return it, which is good, we don't have to add it separately
+        return (((l >= el && t >= et && l <= er && t <= eb) || 
+                (l >= el && b <= eb && l <= er && b >= et) || 
+                (r <= er && t >= et && r >= el && t <= eb) || 
+                (r <= er && b <= eb && r >= el && b >= et)) ||
+                
+                ((el >= l && et >= t && el <= r && et <= b) || 
+                (el >= l && eb <= b && el <= r && eb >= t) || 
+                (er <= r && et >= t && er >= l && et <= b) || 
+                (er <= r && eb <= b && er >= l && eb >= t)
+                )) ? this : null;
       });
       
       return overlays;
