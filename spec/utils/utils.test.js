@@ -91,6 +91,7 @@ describe('Utils', function() {
 
       imagePromise.done(function(image) {
         expect(image).toBe(dataUri);
+        console.log(image);
         done();
       });
 
