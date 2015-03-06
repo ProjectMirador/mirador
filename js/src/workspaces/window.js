@@ -174,7 +174,9 @@
 
     // reset whether BookView is available every time as a user might switch between paged and non-paged objects within a single slot/window
     removeBookView: function() {
+      var _this = this;
       this.focuses = this.focusesOriginal;
+      var manifest = this.manifest.jsonLd;
       if (manifest.sequences[0].viewingHint) {
         if (manifest.sequences[0].viewingHint.toLowerCase() !== 'paged') {
           //disable bookview for this object because it's not a paged object
@@ -411,7 +413,7 @@
         viewType: _this.currentFocus, 
         canvasID: _this.currentCanvasID, 
         imageMode: _this.currentImageMode, 
-        loadedManifest: _this.manifest['@id']});
+        loadedManifest: _this.manifest.jsonLd['@id']});
     },
 
     toggleThumbnails: function(imageID) {

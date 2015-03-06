@@ -22,13 +22,20 @@ describe('Window', function() {
     });
     this.window = new Mirador.Window({
       manifest: {
-        jsonLD: {
+        jsonLd: {
           sequences: [
             { viewingHint: 'paged',
               canvases: [{
                 '@id': ''
               }]
           }]
+        },
+        getCanvases: function() { return [{
+                '@id': ''
+              }];
+        },
+        getAnnotationsListUrl: function() {
+          return undefined;
         }
       },
       appendTo: this.appendTo
@@ -40,7 +47,7 @@ describe('Window', function() {
   });
 
   describe('Initialisation', function() {
-    xit('should place itself in DOM', function() {
+    it('should place itself in DOM', function() {
       expect(this.appendTo.find('.window')).toExist();
       expect(this.appendTo.find('.remove-object-option').css('display')).toBe('none');
       expect(this.appendTo.find('.book-option')).toExist();
@@ -51,7 +58,7 @@ describe('Window', function() {
     });
   });
   describe('Menu Events', function() {
-    xit('should change to book view when button is clicked', function() {
+    it('should change to book view when button is clicked', function() {
       expect(this.appendTo.find('.book-option')).toExist();
       expect(this.window.focusModules.BookView).toBe(null);
       this.appendTo.find('.book-option').trigger('click');

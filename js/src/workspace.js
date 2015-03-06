@@ -317,7 +317,7 @@
       targetSlotID,
       slot;
 
-      if (typeof imageId !== 'undefined') {
+      if (typeof canvasId !== 'undefined') {
         windowConfig =  
           {
           currentFocus: 'ImageView', 
