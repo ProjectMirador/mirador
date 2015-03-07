@@ -311,24 +311,10 @@
       this.parent.toggleLoadWindow();
     },
 
-    addWindow: function(manifest, canvasId) {
+    addWindow: function(manifest, windowConfig) {
       var _this = this,
-      windowConfig,
       targetSlotID,
       slot;
-
-      if (typeof canvasId !== 'undefined') {
-        windowConfig =  
-          {
-          currentFocus: 'ImageView', 
-          currentCanvasID: canvasId 
-        };
-      } else {
-        windowConfig =  {
-          currentFocus: 'ThumbnailsView', 
-          currentCanvasID: null
-        };
-      }
 
       windowConfig.manifest = manifest;
 

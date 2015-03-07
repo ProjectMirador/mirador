@@ -398,10 +398,10 @@ module.exports = function(grunt) {
   // ----------
   // Runs this on travis.
   grunt.registerTask('ci', [
+                     'jshint',
                      'test',
                      'cover',
-                     'jshint',
-                     'karma:browsers',
-                     'coveralls'
+                     'coveralls',
+                     'karma:browsers'
   ]);
 };
