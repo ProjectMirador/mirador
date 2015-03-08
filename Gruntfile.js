@@ -234,11 +234,15 @@ module.exports = function(grunt) {
     },
 
     coveralls: {
+      files: {
+        src: 'reports/coverage/PhantomJS 1.9.8 (Mac OS X)/lcov.info'
+      },
       options: {
-        src: '/reports/coverage/PhantomJS 1.9.8 (Mac OS X)/lcov.info',
+        src: 'reports/coverage/PhantomJS 1.9.8 (Mac OS X)/lcov.info',
+        force: 'true'
       },
       ci: {
-        src: '/reports/coverage/PhantomJS 1.9.8 (Mac OS X)/lcov.info',
+        src: 'reports/coverage/PhantomJS 1.9.8 (Mac OS X)/lcov.info'
       }
     },
 
@@ -309,7 +313,7 @@ module.exports = function(grunt) {
         preprocessors: {
           'js/src/**/*.js': ['coverage']
         },
-        reporters: ['progress', 'coverage'],
+        reporters: ['progress', 'coverage', 'coveralls'],
         browsers: ['PhantomJS'],
         singleRun: true
       },
