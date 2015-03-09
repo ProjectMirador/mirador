@@ -37,6 +37,9 @@ describe('Window', function() {
           },
           getAnnotationsListUrl: function() {
             return undefined;
+          },
+          getStructures: function() {
+            return [];
           }
         },
         appendTo: this.appendTo

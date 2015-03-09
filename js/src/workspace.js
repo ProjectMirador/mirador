@@ -311,14 +311,10 @@
       this.parent.toggleLoadWindow();
     },
 
-    addWindow: function(manifest, windowConfig) {
+    addWindow: function(windowConfig) {
       var _this = this,
       targetSlotID,
       slot;
-
-      windowConfig.manifest = manifest;
-
-      console.log(windowConfig);
 
       jQuery.each(_this.parent.overlayStates, function(oState, value) {
         _this.parent.set(oState, false, {parent: 'overlayStates'});

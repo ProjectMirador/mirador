@@ -64,13 +64,17 @@
     },
     getAnnotationsListUrl: function(canvasId) {
       var _this = this;
-      var canvas = jQuery.grep(_this.jsonLd.sequences[0].canvases, function(canvas, index) {
+      var canvas = jQuery.grep(_this.getCanvases(), function(canvas, index) {
         return canvas['@id'] === canvasId;
       })[0];
 
-      if (canvas.otherContent) {
+      if (canvas && canvas.otherContent) {
         return canvas.otherContent[0]['@id'];
       } else { return false; }
+    },
+    getStructures: function() {
+      var _this = this;
+      return _this.jsonLd.structures;
     }
   };
 

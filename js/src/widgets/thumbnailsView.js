@@ -102,7 +102,7 @@
                 
         _this.element.find('.thumbnail-image').on('click', function() {
           var canvasID = jQuery(this).attr('data-image-id');
-          _this.parent.setCurrentImageID(canvasID);
+          _this.parent.setCurrentCanvasID(canvasID);
         });
 
         jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(imageID) {
