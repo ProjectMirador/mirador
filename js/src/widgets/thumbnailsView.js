@@ -80,7 +80,14 @@
     currentImageChanged: function() {
       var _this = this,
       target = _this.element.find('.highlight'),
-      scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
+      scrollPosition;
+
+      if (this.parent.currentFocus === 'BookView') {
+        scrollPosition = _this.element.scrollLeft() + (target.position().left + (target.next().width() + target.outerWidth())/2) - _this.element.width()/2;
+      } else {
+
+        scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
+      }
       _this.element.scrollTo(scrollPosition, 900);
     },
     

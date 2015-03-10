@@ -31,8 +31,8 @@
   $.BookView.prototype = {
 
     init: function() {
-      if (this.imageID !== null) {
-        this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
+      if (this.canvasID !== null) {
+        this.currentImgIndex = $.getImageIndexById(this.imagesList, this.canvasID);
       }
 
       if (!this.osdOptions) {
@@ -141,11 +141,11 @@
       this.element.find('.' + this.osdCls).remove();
 
       jQuery.each(this.stitchList, function(index, image) {
-        var imageUrl = $.Iiif.getImageUrl(image);
-        var infoJsonUrl = imageUrl + '/info.json';
+        var imageUrl = $.Iiif.getImageUrl(image),
+        infoJsonUrl = imageUrl + '/info.json';
 
         jQuery.getJSON(infoJsonUrl).done(function (data, status, jqXHR) {
-          tileSources.push(data);
+          tileSources[index] = data;
           if (tileSources.length === _this.stitchList.length ) { dfd.resolve(); }
         });
       });

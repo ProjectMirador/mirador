@@ -1,9 +1,10 @@
 (function($){
 
-  $.Manifest = function(manifestUri) {
+  $.Manifest = function(manifestUri, location) {
 
     jQuery.extend(true, this, {
       jsonLd: null,
+      location: location,
       uri: manifestUri,
       request: null 
     });

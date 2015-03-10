@@ -42,13 +42,13 @@
     },
 
     fetchTplData: function() {
-      var _this = this;
-
-      var manifest = _this.manifest.jsonLd;
+      var _this = this,
+      location = _this.manifest.location,
+      manifest = _this.manifest.jsonLd;
 
       this.tplData = { 
         label: manifest.label,
-        repository: manifest.miradorRepository,
+        repository: location,
         canvasCount: manifest.sequences[0].canvases.length,
         images: []
       };

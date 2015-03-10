@@ -69,7 +69,7 @@
 
   $.Window.prototype = {
     init: function () {
-      _this = this,
+      var _this = this,
       manifest = _this.manifest.jsonLd,
       focusState = _this.currentFocus,
       templateData = {},
@@ -274,7 +274,7 @@
       this.overlay = null;
     },
 
-    //only panels and overlay available to this view, make rest hidden while on this view
+    // only panels and overlay available to this view, make rest hidden while on this view
     updatePanelsAndOverlay: function(state) {
       var _this = this;
 
