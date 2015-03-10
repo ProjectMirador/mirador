@@ -31,8 +31,8 @@
     bindEvents: function() {
       var _this = this;
 
-     this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
-     this.element.find('.remove-slot-option').on('click', function(){ _this.parent.removeNode(_this); });
+      this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
+      this.element.find('.remove-slot-option').on('click', function(){ _this.parent.removeNode(_this); });
       jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
         if (_this.parent.slots.length <= 1) {
           _this.element.find('.remove-slot-option').hide();
@@ -41,30 +41,33 @@
         }
       });
     },
-    
+
     manifestToSlot: function(windowConfig) { 
-        var _this = this;
-        _this.clearSlot();
-        windowConfig.parent = _this;
-        if (!_this.window && !windowConfig.id) {
-           windowConfig.id = $.genUUID();
-        }
-        if (_this.window && !windowConfig.id) {
-           windowConfig.id = _this.window.id;
-        } 
-        windowConfig.appendTo = _this.element;
-        if (_this.window) {
-          _this.window.update(windowConfig);
-        } else {
-          jQuery.publish("windowAdded", windowConfig.id);
-          _this.window = new $.Window(windowConfig);
-        }
-      },
+      var _this = this;
+      _this.clearSlot();
+
+      windowConfig.parent = _this;
+      windowConfig.appendTo = _this.element;
+
+      if (!_this.window && !windowConfig.id) {
+        windowConfig.id = $.genUUID();
+      }
+      if (_this.window && !windowConfig.id) {
+        windowConfig.id = _this.window.id;
+      } 
+
+      if (_this.window) {
+        _this.window.update(windowConfig);
+      } else {
+        jQuery.publish("windowAdded", windowConfig.id);
+        _this.window = new $.Window(windowConfig);
+      }
+    },
 
     clearSlot: function() {
       if (this.window) { 
-         this.window.element.toggle('fade', 300, function() {
-           jQuery(this).remove();        
+        this.window.element.toggle('fade', 300, function() {
+          jQuery(this).remove();        
         });
       }
     },
@@ -73,7 +76,7 @@
       // notify the layout manager with
       // appropriate information.
     },
-    
+
     addItem: function() {
       var _this = this;
       _this.parent.focused = true;

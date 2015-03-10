@@ -145,12 +145,14 @@
         infoJsonUrl = imageUrl + '/info.json';
 
         jQuery.getJSON(infoJsonUrl).done(function (data, status, jqXHR) {
-          tileSources[index] = data;
+          tileSources.splice(index, 0, data);
+          console.log(tileSources);
           if (tileSources.length === _this.stitchList.length ) { dfd.resolve(); }
         });
       });
 
       dfd.done(function () {
+        console.log(tileSources);
         var aspectRatio = tileSources[0].height / tileSources[0].width;
 
         elemOsd =
@@ -190,7 +192,6 @@
         _this.osd.open(tileSources[0], {opacity:1, x:0, y:0, width:1});
       });
 
-      // this.stitchOptions();
     },
 
     addLayer: function(tileSources, aspectRatio) {
