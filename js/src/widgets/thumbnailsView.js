@@ -80,7 +80,14 @@
     currentImageChanged: function() {
       var _this = this,
       target = _this.element.find('.highlight'),
-      scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
+      scrollPosition;
+
+      if (this.parent.currentFocus === 'BookView') {
+        scrollPosition = _this.element.scrollLeft() + (target.position().left + (target.next().width() + target.outerWidth())/2) - _this.element.width()/2;
+      } else {
+
+        scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
+      }
       _this.element.scrollTo(scrollPosition, 900);
     },
     
@@ -102,7 +109,7 @@
                 
         _this.element.find('.thumbnail-image').on('click', function() {
           var canvasID = jQuery(this).attr('data-image-id');
-          _this.parent.setCurrentImageID(canvasID);
+          _this.parent.setCurrentCanvasID(canvasID);
         });
 
         jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(imageID) {

@@ -44,11 +44,6 @@
       });
       
       this.container.find('.mirador-osd-edit-mode').on('click', function() {
-        /* For now we won't have the secondary level of menu options
-        _this.element.remove();
-        _this.element = jQuery(_this.editorTemplate()).appendTo(_this.container);
-        _this.bindEvents();*/
-        //console.log(this);
         if (_this.parent.annoState.current === 'annoOnEditOff') {
           _this.parent.annoState.editOn();
         } else if (_this.parent.annoState.current === 'annoOnEditOn') {
@@ -56,11 +51,6 @@
         }
       });
       
-      /*this.container.find('.mirador-osd-rect-tool').on('click', function() {
-        jQuery.publish('modeChange.' + _this.windowId, 'editingAnnotations');
-        _this.rectTool.enterEditMode();
-        //_this.bindEvents();
-      });*/
     },
 
     template: Handlebars.compile([

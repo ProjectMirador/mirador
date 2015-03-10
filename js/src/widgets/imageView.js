@@ -194,7 +194,7 @@
       var next = this.currentImgIndex + 1;
 
       if (next < this.imagesList.length) {
-        this.parent.setCurrentImageID(this.imagesList[next]['@id']);
+        this.parent.setCurrentCanvasID(this.imagesList[next]['@id']);
       }
     },
 
@@ -202,7 +202,7 @@
       var prev = this.currentImgIndex - 1;
 
       if (prev >= 0) {
-        this.parent.setCurrentImageID(this.imagesList[prev]['@id']);
+        this.parent.setCurrentCanvasID(this.imagesList[prev]['@id']);
       }
     }
   };

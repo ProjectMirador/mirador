@@ -56,11 +56,19 @@
        **/
     ],
 
+    'defaultWindowSettings': {
+
+    },
+
     'availableAnnotationModes': [
 
     ],
 
     'availableAnnotationDrawingTools': [
+
+    ],
+    
+    'availableCanvasTools': [
 
     ],
 

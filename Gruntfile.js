@@ -236,9 +236,10 @@ module.exports = function(grunt) {
     coveralls: {
       options: {
         src: 'reports/coverage/PhantomJS 1.9.8 (Mac OS X)/lcov.info',
+        force: 'true'
       },
       ci: {
-        src: 'reports/coverage/PhantomJS 1.9.8 (Mac OS X)/lcov.info',
+        src: 'reports/coverage/PhantomJS 1.9.8 (Mac OS X)/lcov.info'
       }
     },
 
@@ -398,10 +399,10 @@ module.exports = function(grunt) {
   // ----------
   // Runs this on travis.
   grunt.registerTask('ci', [
+                     'jshint',
                      'test',
                      'cover',
-                     'jshint',
-                     'karma:browsers',
-                     'coveralls'
+                     'coveralls',
+                     'karma:browsers'
   ]);
 };

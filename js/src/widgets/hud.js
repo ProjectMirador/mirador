@@ -175,19 +175,16 @@
       bottomPanelHeight = this.parent.parent.element.find('.bottomPanel').innerHeight();
 
       if (!OpenSeadragon.isFullScreen()) {
-
         replacementButton = jQuery('<i class="fa fa-expand"></i>');
         this.parent.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
         this.parent.element.find('.mirador-osd-toggle-bottom-panel').show();
         this.parent.parent.bottomPanelVisibility(true);
-
       } else {
 
         replacementButton = jQuery('<i class="fa fa-compress"></i>');
         this.parent.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
         this.parent.element.find('.mirador-osd-toggle-bottom-panel').hide();
         this.parent.parent.bottomPanelVisibility(false);
-
       }
     },
 
@@ -210,7 +207,9 @@
                                  '{{/if}}',
                                  '{{#if showBottomPanel}}',
                                  '<a class="mirador-osd-toggle-bottom-panel hud-control ">',
-                                 '<i class="fa fa-2x fa-ellipsis-h"></i>',
+                                 '<i class="fa fa-photo"></i> ',
+                                 '<i class="fa fa-photo"></i> ',
+                                 '<i class="fa fa-photo"></i>',
                                  '</a>',
                                  '{{/if}}',
                                  '<div class="mirador-pan-zoom-controls hud-control ">',

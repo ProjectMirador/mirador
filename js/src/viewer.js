@@ -82,10 +82,6 @@
       // set this to be displayed
       this.set('currentWorkspaceVisible', true);
 
-      // this.windowObjects.forEach(windowObjects, function(windowConfig) {
-      //   this.workspace.addWindow(windowConfig);
-      // });
-
       this.bindEvents();
     },
 
@@ -96,8 +92,8 @@
           var check = jQuery.grep(_this.windowObjects, function(object, index) {
             return object.loadedManifest === newManifest.uri;
           });
-          jQuery.each(check, function(index, value) {
-            _this.loadManifestFromConfig(value);
+          jQuery.each(check, function(index, config) {
+            _this.loadManifestFromConfig(config);
           });
         }
       });
@@ -203,10 +199,11 @@
     },
 
     loadManifestFromConfig: function(options) {
-      //check if there are available slots, otherwise don't process this object from config
+      // check if there are available slots, otherwise don't process this object from config
       var slot = this.workspace.availableSlot();
       if (slot) {
         var windowConfig = {
+          manifest: this.manifests[options.loadedManifest],
           currentFocus : options.viewType,
           focuses : options.availableViews,
           currentCanvasID : options.canvasID,
@@ -220,7 +217,7 @@
           layoutOptions: options.layoutOptions
         };
 
-        this.workspace.addWindow(this.manifests[options.loadedManifest], windowConfig);
+        this.workspace.addWindow(windowConfig);
       }
     }
   };

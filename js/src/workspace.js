@@ -311,28 +311,10 @@
       this.parent.toggleLoadWindow();
     },
 
-    addWindow: function(manifest, canvasId) {
+    addWindow: function(windowConfig) {
       var _this = this,
-      windowConfig,
       targetSlotID,
       slot;
-
-      if (typeof canvasId !== 'undefined') {
-        windowConfig =  
-          {
-          currentFocus: 'ImageView', 
-          currentCanvasID: canvasId 
-        };
-      } else {
-        windowConfig =  {
-          currentFocus: 'ThumbnailsView', 
-          currentCanvasID: null
-        };
-      }
-
-      windowConfig.manifest = manifest;
-
-      console.log(windowConfig);
 
       jQuery.each(_this.parent.overlayStates, function(oState, value) {
         _this.parent.set(oState, false, {parent: 'overlayStates'});

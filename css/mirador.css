@@ -305,12 +305,18 @@ a {
 }
 
 .preview-image {
-  background-color: #eee;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
+  background-color: lightgray;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.7);
   float:left;
   margin-right:15px;
   min-height: 25px;
   min-width: 25px;
+}
+
+.preview-image:hover {
+  box-shadow: 0px 0px 5px rgba(0, 191, 255, 1);
+  transform: scale(1.1);
+  transition: all 0.6 ease-out;
 }
 
 .thumbnail-image {
@@ -694,7 +700,7 @@ li.highlight {
   .thumbnail-view, .image-view, .book-view, .scroll-view {
     height: 100%;
     width: 100%;
-    background-color: #eee;
+    background-color: black;
     display: none;
     overflow-y: scroll;
 }
@@ -837,9 +843,14 @@ li.highlight {
 }
 .mirador-osd-toggle-bottom-panel {
   position: absolute;
-  bottom: 0;
+  margin-bottom: 1%;
+  bottom:0;
   right:50%;
-  margin-right: -30px;
+  margin-right: -54px;
+  border: 1px solid white;
+  border-bottom: 0;
+  padding:3px 5px;
+  border-radius: 6px;
 }
 .mirador-osd-fullscreen {
   position:absolute;

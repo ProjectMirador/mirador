@@ -22,6 +22,7 @@
             metadataListingCls: this.metadataListingCls
           };
           
+      _this.manifest = _this.manifest.jsonLd;
       this.metadataTypes = {};
 
       this.metadataTypes.details = _this.getMetadataDetails(_this.manifest);
