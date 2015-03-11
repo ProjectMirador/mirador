@@ -456,7 +456,8 @@
           windowId: this.id,
           imageID: imageID, 
           imagesList: this.imagesList,
-          osdOptions: this.focusOptions
+          osdOptions: this.focusOptions,
+          bottomPanelAvailable: this.bottomPanelAvailable
         });
       } else {
         var view = this.focusModules.BookView;
@@ -728,7 +729,7 @@
                                  '<div class="sidePanel">',
                                  '</div>',
                                  '{{/if}}',
-                                 '<div class="view-container" {{#unless sidePanel}}class="focus-max-width"{{/unless}}>',
+                                 '<div class="view-container {{#unless sidePanel}}focus-max-width{{/unless}}">',
                                  '<div class="overlay"></div>',
                                  '<div class="bottomPanel">',
                                  '</div>',
