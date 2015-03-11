@@ -110,7 +110,9 @@
 
       this.element.find('.select-metadata').on('click', function() {
         var windowConfig = {
-          manifest: _this.manifest
+          manifest: _this.manifest,
+          currentCanvasID: null,
+          currentFocus: 'ThumbnailsView'
         };
         $.viewer.workspace.addWindow(windowConfig);
       });
@@ -118,7 +120,8 @@
       this.element.find('.preview-image').on('click', function() {
         var windowConfig = {
           manifest: _this.manifest,
-          currentCanvasID: jQuery(this).attr('data-image-id')
+          currentCanvasID: jQuery(this).attr('data-image-id'),
+          currentFocus: 'ImageView'
         };
         $.viewer.workspace.addWindow(windowConfig);
       });

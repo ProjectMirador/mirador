@@ -82,8 +82,6 @@
       //unsubscribe from stale events as they will be updated with new module calls
       jQuery.unsubscribe(('currentCanvasIDUpdated.' + _this.id));
 
-      _this.element = jQuery(this.template()).appendTo(this.appendTo);
-
       _this.removeBookView();
 
       //remove any imageModes that are not available as a focus
@@ -109,6 +107,9 @@
         jQuery.each(this.focusOverlaysAvailable, function(key, value) {
           _this.focusOverlaysAvailable[key].sidePanel = {'' : false};
         });
+        templateData.sidePanel = false;
+      } else {
+        templateData.sidePanel = true;
       }
       if (typeof this.overlayAvailable !== 'undefined' && !this.overlayAvailable) {
         jQuery.each(this.focusOverlaysAvailable, function(key, value) {
@@ -131,7 +132,8 @@
           return _this.layoutOptions[element] === false;
         });
       }
-      _this.element.prepend(_this.manifestInfoTemplate(templateData));
+      _this.element = jQuery(this.template(templateData)).appendTo(this.appendTo);
+      //_this.element.prepend(_this.manifestInfoTemplate(templateData));
 
       //clear any existing objects
       _this.clearViews();
@@ -278,15 +280,10 @@
     updatePanelsAndOverlay: function(state) {
       var _this = this;
 
-      console.log("state: " + state);
       jQuery.each(this.focusOverlaysAvailable[state], function(panelType, viewOptions) {
-        console.log(viewOptions);
         jQuery.each(viewOptions, function(view, displayed) {
           //instantiate any panels that exist for this view but are still null
-          console.log(view);
-          console.log(_this[panelType]);
           if (view !== '' && _this[panelType] === null) {
-            console.log(panelType);
             _this[panelType] = new $[view]({
               manifest: _this.manifest, 
               appendTo: _this.element.find('.'+panelType), 
@@ -606,87 +603,74 @@
     bindNavigation: function() {
       var _this = this;
 
-      this.element.find('.mirador-icon-image-view').on('mouseenter',
-                                                       function() {
-                                                         _this.element.find('.image-list').stop().slideFadeToggle(300);
-                                                       }).on('mouseleave',
-                                                       function() {
-                                                         _this.element.find('.image-list').stop().slideFadeToggle(300);
-                                                       });
+    this.element.find('.mirador-icon-image-view').on('mouseenter',
+      function() {
+      _this.element.find('.image-list').stop().slideFadeToggle(300);
+    }).on('mouseleave',
+    function() {
+      _this.element.find('.image-list').stop().slideFadeToggle(300);
+    });
 
-                                                       this.element.find('.mirador-icon-window-menu').on('mouseenter',
-                                                                                                         function() {
-                                                                                                           _this.element.find('.slot-controls').stop().slideFadeToggle(300);
-                                                                                                         }).on('mouseleave',
-                                                                                                         function() {
-                                                                                                           _this.element.find('.slot-controls').stop().slideFadeToggle(300);
-                                                                                                         });
+    this.element.find('.mirador-icon-window-menu').on('mouseenter',
+      function() {
+      _this.element.find('.slot-controls').stop().slideFadeToggle(300);
+    }).on('mouseleave',
+    function() {
+      _this.element.find('.slot-controls').stop().slideFadeToggle(300);
+    });
 
-                                                                                                         this.element.find('.single-image-option').on('click', function() {
-                                                                                                           _this.toggleImageView(_this.currentCanvasID);
-                                                                                                         });
+    this.element.find('.single-image-option').on('click', function() {
+      _this.toggleImageView(_this.currentImageID);
+    });
 
-                                                                                                         this.element.find('.book-option').on('click', function() {
-                                                                                                           _this.toggleBookView(_this.currentCanvasID);
-                                                                                                         });
+    this.element.find('.book-option').on('click', function() {
+      _this.toggleBookView(_this.currentImageID);
+    });
 
-                                                                                                         this.element.find('.scroll-option').on('click', function() {
-                                                                                                           _this.toggleScrollView(_this.currentCanvasID);
-                                                                                                         });
+    this.element.find('.scroll-option').on('click', function() {
+      _this.toggleScrollView(_this.currentImageID);
+    });
 
-                                                                                                         this.element.find('.thumbnails-option').on('click', function() {
-                                                                                                           _this.toggleThumbnails(_this.currentCanvasID);
-                                                                                                         });
+    this.element.find('.thumbnails-option').on('click', function() {
+      _this.toggleThumbnails(_this.currentImageID);
+    });
 
-                                                                                                         this.element.find('.mirador-icon-metadata-view').on('click', function() {
-                                                                                                           _this.toggleMetadataOverlay(_this.currentFocus);
-                                                                                                         });
+    this.element.find('.mirador-icon-metadata-view').on('click', function() {
+      _this.toggleMetadataOverlay(_this.currentFocus);
+    });
 
-                                                                                                         this.element.find('.mirador-icon-toc').on('click', function() {
-                                                                                                           _this.minMaxSidePanel(jQuery(this));
-                                                                                                         });
+    this.element.find('.mirador-icon-toc').on('click', function() {
+      _this.minMaxSidePanel(jQuery(this));
+    });
 
-                                                                                                         this.element.find('.new-object-option').on('click', function() {
-                                                                                                           _this.parent.addItem();
-                                                                                                         });
+    this.element.find('.new-object-option').on('click', function() {
+      _this.parent.addItem();
+    });
 
-                                                                                                         this.element.find('.remove-object-option').on('click', function() {
-                                                                                                           $.viewer.workspace.removeNode(_this.parent);
-                                                                                                         });
+    this.element.find('.remove-object-option').on('click', function() {
+      $.viewer.workspace.removeNode(_this.parent);
+    });
 
-                                                                                                         this.element.find('.add-slot-right').on('click', function() {
-                                                                                                           $.viewer.workspace.splitRight(_this.parent);
-                                                                                                         });
+    this.element.find('.add-slot-right').on('click', function() {
+      $.viewer.workspace.splitRight(_this.parent);
+    });
 
-                                                                                                         this.element.find('.add-slot-left').on('click', function() {
-                                                                                                           $.viewer.workspace.splitLeft(_this.parent);
-                                                                                                         });
+    this.element.find('.add-slot-left').on('click', function() {
+      $.viewer.workspace.splitLeft(_this.parent);
+    });
 
-                                                                                                         this.element.find('.add-slot-below').on('click', function() {
-                                                                                                           $.viewer.workspace.splitDown(_this.parent);
-                                                                                                         });
+    this.element.find('.add-slot-below').on('click', function() {
+      $.viewer.workspace.splitDown(_this.parent);
+    });
 
-                                                                                                         this.element.find('.add-slot-above').on('click', function() {
-                                                                                                           $.viewer.workspace.splitUp(_this.parent);
-                                                                                                         });
+    this.element.find('.add-slot-above').on('click', function() {
+      $.viewer.workspace.splitUp(_this.parent);
+    });
     },
 
     // template should be based on workspace type
     template: Handlebars.compile([
-                                 '<div class="window">',
-                                 '<div class="content-container">',
-                                 '<div class="sidePanel">',
-                                 '</div>',
-                                 '<div class="view-container">',
-                                 '<div class="overlay"></div>',
-                                 '<div class="bottomPanel">',
-                                 '</div>',
-                                 '</div>',
-                                 '</div>',
-                                 '</div>'
-    ].join('')),
-
-    manifestInfoTemplate: Handlebars.compile([
+                                             '<div class="window">',
                                              '<div class="manifest-info">',
                                              '<div class="window-manifest-navigation">',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-lg fa-fw"></i>',
@@ -734,9 +718,23 @@
                                              '</ul>',
                                              '</a>',
                                              '{{/if}}',
+                                 '{{#if sidePanel}}',
                                              '<a href="javascript:;" class="mirador-btn mirador-icon-toc selected" title="View/Hide Table of Contents"><i class="fa fa-caret-down fa-lg fa-fw"></i></a>',
+                                 '{{/if}}',
                                              '<h3 class="window-manifest-title">{{title}}</h3>',
-                                             '</div>'
+                                             '</div>',
+                                             '<div class="content-container">',
+                                 '{{#if sidePanel}}',
+                                 '<div class="sidePanel">',
+                                 '</div>',
+                                 '{{/if}}',
+                                 '<div class="view-container" {{#unless sidePanel}}class="focus-max-width"{{/unless}}>',
+                                 '<div class="overlay"></div>',
+                                 '<div class="bottomPanel">',
+                                 '</div>',
+                                 '</div>',
+                                 '</div>',
+                                 '</div>'
     ].join(''))
   };
 
