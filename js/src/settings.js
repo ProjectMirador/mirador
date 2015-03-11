@@ -38,9 +38,10 @@
        *   "availableViews" : defaults to ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'], any subset removes others
        *   "viewType" : one of ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'] - if using availableViews, must be in subset
        *   "canvasID": [canvas URI] e.g. "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/canvas/canvas-12"
-       *   "bottomPanel" : [true, false]
-       *   "sidePanel" : [true, false]
-       *   "overlay" : [true, false]
+       *   "bottomPanel" : [true, false] whether or not to make the bottom panel available/visible in this window
+       *   "sidePanel" : [true, false] whether or not to make the side panel available/visible in this window
+       *   "overlay" : [true, false] whether or not to make the overlay available/visible in this window
+       *   "annotationLayer" : [true, false] whether or not to make annotation layer available in this window
        *   "windowOptions" : [data specific to the view type, such as OSD bounds and zoom level - automatically saved in SaveController]
        *   "id" : [unique window ID - set by application and automatically saved in SaveController]
        *   "displayLayout" : [true, false], whether or not to display all layout options, removing individual menu options is separate

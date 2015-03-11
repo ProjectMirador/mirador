@@ -54,7 +54,8 @@
         parent: this,
         element: this.element,
         bottomPanelAvailable: this.bottomPanelAvailable,
-        windowId: this.windowId
+        windowId: this.windowId,
+        annotationLayerAvailable: this.annotationLayerAvailable
       });
     },
 

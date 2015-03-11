@@ -52,6 +52,7 @@
       bottomPanel: null,
       bottomPanelVisible: true,
       overlay: null,
+      annotationLayerAvailable: true,
       displayLayout: true,
       layoutOptions : {
         "newObject" : true,
@@ -438,7 +439,8 @@
                                                       imageID: imageID, 
                                                       imagesList: this.imagesList,
                                                       osdOptions: this.focusOptions,
-                                                      bottomPanelAvailable: this.bottomPanelAvailable} );
+                                                      bottomPanelAvailable: this.bottomPanelAvailable,
+                                                      annotationLayerAvailable: this.annotationLayerAvailable} );
       } else {
         var view = this.focusModules.ImageView;
         view.updateImage(imageID);
