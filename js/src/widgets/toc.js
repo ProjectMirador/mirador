@@ -338,7 +338,7 @@
     },
 
     show: function() {
-      jQuery(this.appendTo).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+      jQuery(this.appendTo).show({effect: "fade", duration: 300, easing: "easeInCubic"});
       this.parent.element.find('.view-container').removeClass('focus-max-width');
     }
     
