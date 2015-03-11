@@ -212,6 +212,7 @@
           bottomPanelAvailable : options.bottomPanel,
           sidePanelAvailable : options.sidePanel,
           overlayAvailable : options.overlay,
+          annotationLayerAvailable : options.annotationLayer,
           slotID : slot ? slot : options.slot,
           displayLayout : options.displayLayout,
           layoutOptions: options.layoutOptions
