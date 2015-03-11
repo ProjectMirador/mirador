@@ -4,10 +4,12 @@
 
     jQuery.extend(this, {
       currentImg:       null,
+      windowId:         null,
       currentImgIndex:  0,
-      imageID:          null,
+      canvasID:          null,
       imagesList:       [],
       element:          null,
+      elemOsd:          null,
       parent:           null,
       manifest:         null,
       osd:              null,
@@ -16,12 +18,13 @@
         osdBounds:        null,
         zoomLevel:        null
       },
-      osdCls: 'mirador-osd'
+      osdCls: 'mirador-osd',
+      elemAnno:         null,
+      annoCls:          'annotation-canvas'
     }, options);
 
     this.init();
   };
-
 
   $.ImageView.prototype = {
 
@@ -40,15 +43,19 @@
       }
       this.currentImg = this.imagesList[this.currentImgIndex];
       this.element = jQuery(this.template()).appendTo(this.appendTo);
+      this.elemAnno = jQuery('<div/>')
+      .addClass(this.annoCls)
+      .appendTo(this.element);
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-      this.addAnnotationsLayer();
       this.parent.updateFocusImages([this.imageID]); // DRY/Events refactor.
       // The hud controls are consistent 
       // throughout any updates to the osd canvas.
       this.hud = new $.Hud({
         parent: this,
         element: this.element,
-        bottomPanelAvailable: this.bottomPanelAvailable
+        bottomPanelAvailable: this.bottomPanelAvailable,
+        windowId: this.windowId,
+        annotationLayerAvailable: this.annotationLayerAvailable
       });
     },
 
@@ -62,7 +69,12 @@
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       jQuery.publish("imageBoundsUpdated", {
         id: _this.parent.id, 
-        osdBounds: {x: _this.osdOptions.osdBounds.x, y: _this.osdOptions.osdBounds.y, width: _this.osdOptions.osdBounds.width, height: _this.osdOptions.osdBounds.height}
+        osdBounds: {
+          x: _this.osdOptions.osdBounds.x, 
+          y: _this.osdOptions.osdBounds.y, 
+          width: _this.osdOptions.osdBounds.width, 
+          height: _this.osdOptions.osdBounds.height
+        }
       });
     },
 
@@ -99,64 +111,63 @@
     },
 
     createOpenSeadragonInstance: function(imageUrl) {
-      var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json',
+      var infoJsonUrl = imageUrl + '/info.json',
       uniqueID = $.genUUID(),
       osdID = 'mirador-osd-' + uniqueID,
       infoJson,
-      elemOsd,
       _this = this;
 
       this.element.find('.' + this.osdCls).remove();
 
-      infoJson = $.getJsonFromUrl(infoJsonUrl, false);
-
-      elemOsd =
+      jQuery.getJSON(infoJsonUrl).done(function (infoJson, status, jqXHR) {
+        _this.elemOsd =
         jQuery('<div/>')
-      .addClass(this.osdCls)
+          .addClass(_this.osdCls)
       .attr('id', osdID)
-      .appendTo(this.element);
+          .appendTo(_this.element);
 
-      this.osd = $.OpenSeadragon({
+        _this.osd = $.OpenSeadragon({
         'id':           osdID,
         'tileSources':  infoJson,
         'uniqueID' : uniqueID
       });
 
-
-      this.osd.addHandler('open', function(){
+        _this.osd.addHandler('open', function(){
         if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
         }
+        
+        _this.addAnnotationsLayer(_this.elemAnno);
+        //re-add correct annotationsLayer mode based on annoState
+        if (_this.hud.annoState.current !== "annoOff") {
+          jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');          
+        }
 
-        _this.osd.addHandler('zoom', $.debounce(function(){
+        // A hack. Pop the osd overlays layer after the canvas so 
+        // that annotations appear.
+        jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
+        
+        _this.osd.addHandler('zoom', $.debounce(function() {
           _this.setBounds();
-        }, 300));
+        }, 500));
 
         _this.osd.addHandler('pan', $.debounce(function(){
           _this.setBounds();
-        }, 300));
+        }, 500));
 
+      });
       });
     },
 
-    addAnnotationsLayer: function() {
-      var annotationListUrls;
-
-      if (this.currentImg.otherContent) {
-        annotationListUrls = jQuery.map(this.currentImg.otherContent, function( annotation ){
-
-          if (annotation['@id'].indexOf(".json") >= 0) {
-            return annotation['@id'];
-          }
-
-          return (annotation['@id'] + ".json");
-        });
-      }
-
-      this.annotationsLayer = new $.AnnotationsLayer({
-        parent: this,
-        annotationListUrls: annotationListUrls
+    addAnnotationsLayer: function(element) {
+      var _this = this;
+      _this.annotationsLayer = new $.AnnotationsLayer({
+        parent: _this,
+        annotationsList: _this.parent.annotationsList || [],
+        viewer: _this.osd,
+        windowId: _this.windowId,
+        element: element
       });
 
     },
@@ -173,6 +184,10 @@
         this.osd.close();
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.parent.updateFocusImages([imageID]);
+        //by default, don't allow a user to be in edit annotation mode when changing pages
+        if (this.hud.annoState.current === "annoOnEditOn") {
+          this.hud.annoState.editOff();
+        }
       }
     },
 
@@ -180,7 +195,7 @@
       var next = this.currentImgIndex + 1;
 
       if (next < this.imagesList.length) {
-        this.parent.setCurrentImageID(this.imagesList[next]['@id']);
+        this.parent.setCurrentCanvasID(this.imagesList[next]['@id']);
       }
     },
 
@@ -188,7 +203,7 @@
       var prev = this.currentImgIndex - 1;
 
       if (prev >= 0) {
-        this.parent.setCurrentImageID(this.imagesList[prev]['@id']);
+        this.parent.setCurrentCanvasID(this.imagesList[prev]['@id']);
       }
     }
   };

@@ -1,12 +1,13 @@
 a {
   color: inherit; /* blue colors for links too */
   text-decoration: inherit; /* no underline */
-    }
+}
 
 /* jquery-ui-dialog theming/customisation (overrides to reset neutral defaults)
----------------------------------------------------------------------------- */
-.ui-dialog-titlebar {
-  display:none;
+---------------------------------------------------------------------------- 
+ */
+  .ui-dialog-titlebar {
+    display:none;
 }
 .ui-dialog {
   overflow:hidden;
@@ -18,11 +19,12 @@ a {
 
 /*----------------------------------------------------------------------------
 /* Mirador styles
----------------------------------------------------------------------------- */
+---------------------------------------------------------------------------- 
+ */
 
-.mirador-viewer, .mirador-main-menu-bar, .mirador-status-bar {
-  font-family: 'Open Sans', 'Lucida Grande', Verdana, Arial,sans-serif;
-  font-size: 1.2em;
+  .mirador-viewer, .mirador-main-menu-bar, .mirador-status-bar {
+    font-family: 'Open Sans', 'Lucida Grande', Verdana, Arial,sans-serif;
+    font-size: 1.2em;
 }
 
 .mirador-viewer {
@@ -43,19 +45,21 @@ a {
 /* main menu
 ---------------------------------------------------------------------------- */
 
-.mirador-main-menu-bar {
-  background-color: #000;
-  border-bottom: 1px solid #555;
-  color: #fff;
-  padding: 4px;
-  top: 0;
+  .mirador-main-menu-bar {
+    background-color: #000;
+    border-bottom: 1px solid #555;
+    color: #fff;
+    height: 33px;
+    width: 100%;
+    /*padding: 4px;*/
+    top: 0;
 }
 
 .mirador-main-menu {
   float: right;
   list-style: none;
   margin: 0;
-  padding: 5px 12px 0 0;
+  padding: 8px 12px 0 0;
   text-align: right;
 }
 
@@ -102,16 +106,19 @@ a {
   display: none;
   /*z-index: 10000;*/
 }
+.change-layout {
+  display: none;
+}
 
 
 /* status bar
 ---------------------------------------------------------------------------- */
-.mirador-status-bar {
-  background-color: #ccc;
-  border-top: 1px solid #000;
-  bottom: 0;
-  color: #000;
-  position: fixed;
+  .mirador-status-bar {
+    background-color: #ccc;
+    border-top: 1px solid #000;
+    bottom: 0;
+    color: #000;
+    position: fixed;
 }
 
 .mirador-status-bar-msg-left, .mirador-status-bar-msg-right {
@@ -132,10 +139,10 @@ a {
 
 /* main menu window options
 ---------------------------------------------------------------------------- */
-.mirador-window-options-menu {
-  list-style: none;
-  margin: 0;
-  padding: 10px 5px;
+  .mirador-window-options-menu {
+    list-style: none;
+    margin: 0;
+    padding: 10px 5px;
 }
 
 .mirador-window-options-menu li {
@@ -145,11 +152,11 @@ a {
 
 .window-manifest-title {
   text-overflow: ellipsis;
-  max-width: 75%;
+  max-width: 80%;
   overflow: hidden;
   white-space: nowrap;
   padding-left: 10px;
-  margin: 10px 0px 10px 0px;
+  margin: 8px 0px 8px 0px;
 }
 
 .window-manifest-navigation {
@@ -162,14 +169,14 @@ a {
 
 /* main menu select menu 
 ---------------------------------------------------------------------------- */
-#manifest-select-menu, #workspace-select-menu, #workspaceContainer {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(255,255,255,0.94);
-  display: none;
-  overflow: hidden;
-  z-index: 4;
+  #manifest-select-menu, #workspace-select-menu, #workspaceContainer {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255,255,255,0.94);
+    display: none;
+    overflow: hidden;
+    z-index: 5;
 }
 #bookmark-panel {
   position: absolute;
@@ -178,13 +185,13 @@ a {
   background-color: rgba(255,255,255,0.94);
   display: none;
   overflow: hidden;
-  z-index: 4;
+  z-index: 5;
   right: 0;
   top: 0;
-  padding-left: 1%;
 }
 #bookmark-panel span {
   width: 100%;
+  padding-left: 2%;
 }
 #bookmark-panel input {
   width: 80%;
@@ -203,13 +210,10 @@ a {
   margin:0 auto;
 }
 .items-listing {
-  height:100%;
   margin: 0;
   padding-left: 0;
-  padding-top: 30px;
   padding-bottom: 30px;
   box-sizing: border-box;
-  overflow-y: scroll;
 }
 .items-listing li {
   list-style-type: none;
@@ -220,6 +224,33 @@ a {
   position: relative;
   padding-left: 5px;
   margin-right: 10px;
+}
+.manifest-load-status-indicator {
+  width:100%;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: rgba(255,255,255,0.94);
+  position: absolute;
+}
+.request-status-bar {
+  background: deepSkyblue;
+  width:10px;
+  height:50px;
+  display: inline-block;
+  margin-left: 5px;
+  vertical-align:bottom;
+  transition: all 0.1s ease-out;
+}
+.request-status-bar.pending {
+  background: gray;
+  transition: all 0.1s ease-out;
+}
+.loading-status {
+  display:block;
+}
+.request-status-bar:nth-child(2) {
+  margin-left: 0;
 }
 .repository-label {
   border-top: 1px solid rgba(0,0,0,0.7);
@@ -259,7 +290,6 @@ a {
   white-space: nowrap;
   overflow:hidden;
 }
-
 .items-listing h3 {
   color:rgba(0,0,0,0.8);
   font-weight:bold;
@@ -275,12 +305,18 @@ a {
 }
 
 .preview-image {
-  background-color: #eee;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
+  background-color: lightgray;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.7);
   float:left;
   margin-right:15px;
   min-height: 25px;
   min-width: 25px;
+}
+
+.preview-image:hover {
+  box-shadow: 0px 0px 5px rgba(0, 191, 255, 1);
+  transform: scale(1.1);
+  transition: all 0.6 ease-out;
 }
 
 .thumbnail-image {
@@ -322,18 +358,28 @@ li.highlight {
   height:100%;
   width: 19%;
 }
+#load-controls label {
+  font-weight: bold;
+}
 #load-controls input {
-  height:30px;
-  font-size:18px;
+  height:25px;
+  /*font-size:18px;*/
   border:3px solid gray;
   margin:0 auto;
   width:100%;
 }
+#manifest-select-menu .remove-object-option {
+  cursor: pointer;
+  margin-top:20px;
+  display: block;
+}
+#manifest-search-form {
+  margin-top: 30px;
+}
 #manifest-search-form input {
   background:none;
-  border:none;
-  border-bottom:2px solid black;
-  margin-top: 30px;
+  /*border:none;
+  border-bottom:2px solid black;*/
   width: 100%;
 }
 #manifest-search i {
@@ -341,7 +387,7 @@ li.highlight {
   left:0;
   color:black;
 }
-#manifest-search-form input:focus {
+#manifest-search-form input:focus, #url-load-form input:focus {
   outline:none;
   border-color:deepskyblue;
 }
@@ -352,10 +398,11 @@ li.highlight {
   border: 1 px solid red;
 }
 
-#select-results {
+.select-results {
   margin-left: 20%;
   height:100%;
   overflow-y: scroll;
+  padding-top: 30px;
 }
 
 /* main-menu workspaces-panel */
@@ -398,7 +445,7 @@ li.highlight {
   bottom:0;
   overflow: hidden;
   box-sizing: border-box;
-  padding: 8px;
+  margin: 3px;
 }
 
 /* invisible layout slot styling */
@@ -406,6 +453,7 @@ li.highlight {
   position: absolute;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 /* Slot Scaffolding */
@@ -416,6 +464,17 @@ li.highlight {
   box-shadow: inset 0 0 35px black;
   overflow: hidden;
   box-sizing:border-box;
+}
+.slot .remove-slot-option {
+  position: absolute;
+  margin:10px;
+  color:gray;
+  cursor: pointer;
+}
+.slot .remove-slot-option:hover {
+  float:left;
+  margin:10px;
+  color:lightGray;
 }
 .slot h1 {
   color: gray;
@@ -435,6 +494,8 @@ li.highlight {
   top:50%;
   margin-top:-260px;
   width:100%;
+  overflow:hidden;
+  pointer-events: none;
 }
 .slot:hover {
   box-shadow: inset 0 0 35px rgba(94, 219, 255, 1);
@@ -466,9 +527,10 @@ li.highlight {
   left:0;
   right:0;
   top:0;
-  margin-top:38px;
+  margin-top:34px;
   box-sizing: border-box;
 }
+
 .sidePanel {
   position: relative;
   width:280px;
@@ -476,12 +538,10 @@ li.highlight {
   float: left;
   background-color: #efefef;
   border-right: 1px solid lightgray;
-  display: none;
+  /*display: none;*/
   box-sizing: border-box;
   overflow: hidden;
-}
-.sidePanel.minimized {
-  width: 25px;
+  transition: all 0.3s ease;
 }
 .sidePanel h1, .sidePanel h2, .sidePanel h3, .sidePanel h4 {
   margin:0;
@@ -493,7 +553,7 @@ li.highlight {
 .toc {
   margin:0;
   overflow-y: scroll;
-  width: 290px;
+  width: 280px;
   padding:0;
   position:absolute;
   box-sizing: border-box;
@@ -501,7 +561,7 @@ li.highlight {
   top:10px;
   bottom:0;
   list-style-type:none;
-  font-size: 90%;
+  font-size: 75%;
 }
 .toc a.toc-link {
   color: black;
@@ -594,14 +654,18 @@ li.highlight {
   margin-left: 280px;
   height: 100%;
   position:relative;
+  transition:all 0.3s ease;
+}
+
+.view-container.tranisition {
 }
 
 .view-container.focus-max-width {
-   margin-left: 0px;
+  margin-left: 0px;
 }
 
 .view-container.focus-side-panel-minimized {
-   margin-left: 25px;
+  margin-left: 0px;
 }
 
 .overlay {
@@ -611,7 +675,7 @@ li.highlight {
   top: 0;
   box-sizing: border-box;
   background-color: rgba(255,255,255,0.9);
-  z-index: 3;
+  z-index: 4;
   width: 45%;
   overflow-y: scroll;
   height: 80%;
@@ -624,15 +688,11 @@ li.highlight {
   left:0;
   right:0;
   height: 130px;
-  z-index: 3;
+  z-index: 4;
   overflow:hidden;
   display: none;
   transition:all 0.3s ease;
 }
-.bottomPanel {
-
-}
-
 .bottomPanel.minimized {
   transform:translateY(130px);
 }
@@ -640,10 +700,10 @@ li.highlight {
 /* window views
 ---------------------------------------------------------------------------- */
 
-.thumbnail-view, .image-view, .book-view, .scroll-view {
+  .thumbnail-view, .image-view, .book-view, .scroll-view {
     height: 100%;
     width: 100%;
-    background-color: #eee;
+    background-color: black;
     display: none;
     overflow-y: scroll;
 }
@@ -656,17 +716,17 @@ li.highlight {
 }
 
 .focus-max-height {
-   height: 100%;
+  height: 100%;
 }
 
 .focus-bottom-panel-minimized {
-   height: 95%;
+  height: 95%;
 }
 
 /* panels
 ---------------------------------------------------------------------------- */
 
-.panel-thumbnail-view {
+  .panel-thumbnail-view {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -723,22 +783,22 @@ li.highlight {
 /* openseadragon
 ---------------------------------------------------------------------------- */
 
-.mirador-osd {
-  background-color: #000;
-  width: 100%;
-  height: 100%;
+  .mirador-osd {
+    background-color: #000;
+    width: 100%;
+    height: 100%;
 }
 
 /* Canvas HUD
 ----------------------- */
-.mirador-canvas-hud { 
-  position:absolute;
-  left: 0;
-  top:0;
-  bottom:0;
-  right:0;
-  background: rgba(255, 0, 128, 0.5);
-  pointer-events: none;
+  .mirador-canvas-hud { 
+    position:absolute;
+    left: 0;
+    top:0;
+    bottom:0;
+    right:0;
+    background: rgba(255, 0, 128, 0.5);
+    pointer-events: none;
 }
 .hud-control {
   cursor: pointer;
@@ -749,33 +809,57 @@ li.highlight {
   font-size: 18px;
   z-index:2;
 }
+.hud-container {
+  cursor: pointer;
+  color:white;
+  text-shadow: 0 0 5px black;
+  transition: all 0.3s ease;
+  font-size: 18px;
+  z-index:2;
+}
 .hud-control:hover {
   transition: all 0.3s ease;
   opacity: 1;
+}
+.mirador-osd-edit-mode.selected, .mirador-osd-annotations-layer.selected {
+  opacity: 1;
+  transition: none;
 }
 .mirador-osd-previous {
   position:absolute;
   left:1%;
   top:50%;
-  margin-top:-17px;
+  margin-top:-35px;
   width: 40px;
 }
 .mirador-osd-next {
   position:absolute;
   right:1%;
   top:50%;
-  margin-top:-17px;
+  margin-top:-35px;
+}
+.mirador-osd-annotations-layer {
+  position:absolute;
+  bottom:0;
+  left:0;
+  margin: 1%;
 }
 .mirador-osd-toggle-bottom-panel {
   position: absolute;
-  bottom: 0;
+  margin-bottom: 1%;
+  bottom:0;
   right:50%;
-  margin-right: -30px;
+  margin-right: -54px;
+  border: 1px solid white;
+  border-bottom: 0;
+  padding:3px 5px;
+  border-radius: 6px;
 }
 .mirador-osd-fullscreen {
   position:absolute;
   right:10px;
   top:10px;
+  z-index: 2;
 }
 .mirador-pan-zoom-controls {
   position: absolute;
@@ -822,14 +906,25 @@ li.highlight {
   right:20px;
   top:20px;
 }
+.mirador-osd-context-controls {
+  position: absolute;
+  top:0;
+  left:0;
+  margin: 15px;
+}
+.mirador-osd-context-controls a {
+  float:left;
+  margin:0 15px 0 0;
+  font-weight: normal;
+}
 
 /* image view
 ---------------------------------------------------------------------------- */
 
-.mirador-image-view-nav-toolbar {
-  position:relative;
-  float: right;
-  margin-right: 5px;
+  .mirador-image-view-nav-toolbar {
+    position:relative;
+    float: right;
+    margin-right: 5px;
 }
 
 .mirador-image-view-bg {
@@ -925,24 +1020,24 @@ text {
 
 /* scale
 ----------------*/
-.mirador-image-scale.hidden {
-  display:none;
+  .mirador-image-scale.hidden {
+    display:none;
 }
 
 /* annotation list
 -----------------*/
-.annotationListPanel {
-  background-color: #f0f0f0;
-  width:200px;
-  height:100%;
-  position:absolute;
-  right:0;
-  top:0;
-  margin:0;
-  padding: 0;
-  z-index:2;
-  box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
-  border-left:1px solid gray;
+  .annotationListPanel {
+    background-color: #f0f0f0;
+    width:200px;
+    height:100%;
+    position:absolute;
+    right:0;
+    top:0;
+    margin:0;
+    padding: 0;
+    z-index:2;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+    border-left:1px solid gray;
 }
 .annotationPanelHeader {
   padding: 0 10px;
@@ -1011,9 +1106,9 @@ text {
   display:block;
   cursor:ew-resize;
 }
-.annotation {
-  border: 2px solid white;
-  box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+.annotation, .osd-select-rectangle {
+  border: 2px solid deepSkyBlue;
+  box-shadow: 0px 0px 5px white; 
   box-sizing: border-box;
 }
 .annotation.selected {
@@ -1063,6 +1158,10 @@ text {
   cursor: pointer;
 }
 
+.osd-annotation-overlay {
+  display: none;
+}
+
 .displayBottomPanelButton {
   box-sizing: border-box;
   position: absolute;
@@ -1086,11 +1185,11 @@ text {
 /* image choice controls
 ------------------------*/
 
-.mirador-image-view-choices {
-  list-style: none;
-  max-height: 350px;
-  overflow: auto;
-  padding: 0;
+  .mirador-image-view-choices {
+    list-style: none;
+    max-height: 350px;
+    overflow: auto;
+    padding: 0;
 }
 
 .mirador-image-view-choices li {
@@ -1116,11 +1215,11 @@ text {
 /* scroll view
 ---------------------------------------------------------------------------- */
 
-ul.scroll-listing-thumbs {
-  clear: both;
-  list-style: none;
-  padding: 0;
-  white-space: nowrap;
+  ul.scroll-listing-thumbs {
+    clear: both;
+    list-style: none;
+    padding: 0;
+    white-space: nowrap;
 }
 
 ul.scroll-listing-thumbs li {
@@ -1156,11 +1255,11 @@ ul.scroll-listing-thumbs li .thumb-label {
 /* thumbnails view
 ---------------------------------------------------------------------------- */
 
-.mirador-viewer ul.listing-thumbs {
-  clear: both;
-  list-style: none;
-  overflow: auto;
-  padding: 0;
+  .mirador-viewer ul.listing-thumbs {
+    clear: both;
+    list-style: none;
+    overflow: auto;
+    padding: 0;
 }
 
 .mirador-viewer ul.listing-thumbs li {
@@ -1219,16 +1318,15 @@ ul.scroll-listing-thumbs li .thumb-label {
   top: -0.5em;
 }
 
-
 /* metadata view
 ---------------------------------------------------------------------------- */
 
-.mirador-viewer .sub-title {
-  border-bottom: 1px dotted #ccc;
-  color: #666;
-  font-weight: bold;
-  margin: 10px 20px 0 20px;
-  padding: 0 5px 5px 0;
+  .mirador-viewer .sub-title {
+    border-bottom: 1px dotted #ccc;
+    color: #666;
+    font-weight: bold;
+    margin: 10px 20px 0 20px;
+    padding: 0 5px 5px 0;
 }
 
 .mirador-viewer dl.metadata-listing {
@@ -1264,24 +1362,22 @@ ul.scroll-listing-thumbs li .thumb-label {
 
 /* initial loader
 ---------------------------------------------------------------------------- */
-.mirador-loading {
-  background-color: #fff;
-  border: 1px solid #999;
-  padding: 20px;
+  .mirador-loading {
+    background-color: #fff;
+    border: 1px solid #999;
+    padding: 20px;
 }
 
 
 /* buttons and icons
 ---------------------------------------------------------------------------- */
-.mirador-btn {
-  background-image: url('../images/mirador-icons.png');
-  background-repeat: none;
-  cursor: pointer;
-  display: inline-block;
-  height: 20px;
-  width: 20px;
-  margin-top: 9px;
-  /*margin-left: 3px;*/
+  .mirador-btn {
+    cursor: pointer;
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    margin-top: 9px;
+    /*margin-left: 3px;*/
 }
 
 .mirador-btn.disabled {
@@ -1305,65 +1401,41 @@ a.mirador-icon-annotations [class^="icon-"] {
   color: black
 }
 
-ul.image-list {
+ul.dropdown {
   display: none;
-  width: 150px;
-  z-index: 4;
+  width: 160px;
+  z-index: 3;
   opacity: 0.9;
   background-color: #efefef;
   text-align: center;
   list-style: none;
   position: absolute;
-  right: 5px;
   padding:0;
-  margin: 2px 5px 5px 5px;
+  margin-top:9px;
 }
 
-.image-list li {
+.dropdown li {
   margin:0;
   cursor: pointer;
   box-sizing: border-box;
   background-color: #dddddd;  
   padding: 10px;
   width:100%;
+  text-align:left;
 }
-.image-list li:hover {
+.dropdown li:hover {
   border-left: 3px solid deepskyblue;
   background-color: #dddddd;  
   padding-left: 7px;
   font-weight: bold;
 }
 
-a.mirador-icon-annotationDetail-toggle [class^="icon-"] {
-  display: block;
-  position: absolute;
-  color: white;
-  transition: all 0.8 ease-out;
-  opacity: 0.6;
+.image-list {
+  right: 0;
 }
 
-.displayBottomPanelButton a.mirador-icon-annotationDetail-toggle [class^="icon-"] {
-  cursor:pointer;
-  text-shadow:0 0 10px black;
-  font-size: 1.4em;
-  opacity: 1;
-}
-.displayBottomPanelButton a.mirador-icon-annotationDetail-toggle:hover [class^="icon-"] {
-  text-shadow: 1px 1px 07px black;
-}
-
-a.mirador-icon-annotationDetail-toggle [class^="icon-"]:hover {
-  transition: all 0.8 ease-out;
-  opacity: 1.0;
-}
-.mirador-viewer a.mirador-icon-annotationDetail-toggle {
-  font-size: 1.4em;
-  width:20px;
-  height:20px;
-}
-a.mirador-icon-annotationDetail-toggle.hidden {
-  bottom:0;
-  left: -25px;
+.slot-controls {
+  left: 0;
 }
 
 a.mirador-icon-image-view [class^="icon-"] {
@@ -1375,31 +1447,41 @@ a.mirador-icon-empty-slot [class^="icon-"] {
   display:block;
   position:absolute;
 }
-.mirador-btn.mirador-icon-empty-slot, .mirador-btn.mirador-icon-new-object {
+div.manifest-info a.mirador-btn.mirador-icon-toc {
+  background-color: #efefef;
+  height: 100%;
+  margin-top: 0px;
+  padding-top: 9px;
+  height: 34px;
+  width: 24px;
+  z-index:4;
+}
+.mirador-viewer a.mirador-icon-image-view, .mirador-viewer a.mirador-icon-thumbs-view, .mirador-viewer a.mirador-icon-metadata-view  {
+  background: none;
+  color: rgb( 146, 145, 145 );
+  box-sizing: border-box;
+  margin-right:5px;
+  padding-bottom:30px;
+}
+
+.mirador-viewer a.mirador-icon-window-menu, .mirador-viewer a.mirador-icon-toc  {
   float:left;
-  margin-top:0;
-}
-
-.mirador-viewer a.mirador-icon-image-view, .mirador-viewer a.mirador-icon-empty-slot  {
   background: none;
   color: rgb( 146, 145, 145 );
   box-sizing: border-box;
-  margin-right:16px;
+  margin-left:5px;
+  padding-bottom:30px;
 }
 
-.mirador-viewer a.mirador-icon-empty-slot, .mirador-viewer a.mirador-icon-new-object  {
-  background: none;
-  color: rgb( 146, 145, 145 );
-  box-sizing: border-box;
-  margin-right:0px;
+.mirador-viewer a.mirador-icon-image-view:hover, .mirador-viewer a.mirador-icon-thumbs-view:hover, .mirador-viewer a.mirador-icon-empty-slot:hover, .mirador-viewer a.mirador-icon-window-menu:hover, .mirador-viewer a.mirador-icon-toc:hover {
+  color: black;
 }
 
-.mirador-viewer a.mirador-icon-image-view:hover, .mirador-viewer a.mirador-icon-empty-slot:hover {
-  color: black
-}
-
-.mirador-viewer a.mirador-icon-image-view.selected {
-  color: black
+.mirador-viewer a.mirador-icon-image-view.selected, 
+.mirador-viewer a.mirador-icon-thumbs-view.selected, 
+.mirador-viewer a.mirador-icon-toc.selected,
+.mirador-viewer a.mirador-icon-metadata-view.selected {
+  color: black;
 }
 
 .mirador-viewer a.mirador-icon-copy {
@@ -1408,186 +1490,84 @@ a.mirador-icon-empty-slot [class^="icon-"] {
   box-sizing: border-box;
 }
 
-.mirador-icon-previous { background-position: -80px -40px; }
-.mirador-icon-previous:hover { background-position: -80px -60px; }
-
-.mirador-icon-next { background-position: -100px -40px; }
-.mirador-icon-next:hover { background-position: -100px -60px; }
-
-.mirador-icon-zoom-in { background-position: 0px -40px; }
-.mirador-icon-zoom-in:hover { background-position: 0px -60px; }
-
-.mirador-icon-zoom-out { background-position: -20px -40px; }
-.mirador-icon-zoom-out:hover { background-position: -20px -60px; }
-
-.mirador-icon-home { background-position: -40px -40px; }
-.mirador-icon-home:hover { background-position: -40px -60px; }
-
-.mirador-icon-full-page { background-position: -60px -40px; }
-.mirador-icon-full-page:hover { background-position: -60px -60px; }
-
-.mirador-icon-metadata-view { background-position: -120px -40px; }
-.mirador-icon-metadata-view:hover { background-position: -120px -60px; }
-.mirador-icon-metadata-view.selected { background-position: -120px -60px; }
-
-.mirador-icon-choices { background-position: -320px -40px; }
-.mirador-icon-choices:hover { background-position: -320px -60px; }
-
-.mirador-icon-save { background-position: -340px -40px; }
-.mirador-icon-save:hover { background-position: -340px -60px; }
-
-.mirador-icon-lock { background-position: -181px -41px; }
-.mirador-icon-lock:hover { background-position: -181px -61px; }
-
-.mirador-icon-scroll-view { background-position: -281px -40px; }
-.mirador-icon-scroll-view.selected { background-position: -281px -60px; }
-.mirador-icon-scroll-view:hover { background-position: -281px -60px; }
-
-.mirador-icon-thumbnails-view { background-position: -301px -40px; }
-.mirador-icon-thumbnails-view.selected { background-position: -301px -60px; }
-.mirador-icon-thumbnails-view:hover { background-position: -301px -60px; }
-
-.mirador-icon-minimize {
-   background-position: -40px -2px;
-   float: right;
-   margin-right: 2px;
-   margin-top: 0px;
+// qtip overrides.
+.qtip {
 }
-
-.mirador-icon-maximize {
-   background-position: -60px -2px;
-   float: right;
-   margin-right: 2px;
-   margin-top: 0px;
-}
-
-/* jquery-ui css overrides
----------------------------------------------------------------------------- */
-
-.mirador-viewer .ui-widget {
-  font-family: 'Open Sans', 'Lucida Grande', Verdana, Arial,sans-serif;
-}
-
-.mirador-viewer .ui-dialog {
+.qtip-bootstrap {
   border-radius: 2px;
-  box-shadow:         0px 0px 1px rgba(50, 50, 50, 0.5);
-  -webkit-box-shadow: 0px 0px 1px rgba(50, 50, 50, 0.5);
-  -moz-box-shadow:    0px 0px 1px rgba(50, 50, 50, 0.5);
-}
-
-.mirador-viewer .ui-dialog .ui-dialog-content {
-  padding: 0;
-  overflow:hidden;
-  /*z-index: inherit;*/
-}
-
-.mirador-viewer .ui-dialog .ui-dialog-titlebar {
-  background-color: #f0f0f0;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-  border-bottom: 1px dotted #ccc;
-  padding: .6em .6em;
-  /*z-index: inherit;*/
-}
-
-.ui-dialog .ui-dialog-title {
-  color: #444;
-  font-size: 12px;
-  font-weight: 500;
-  width: 70%;
-}
-
-.mirador-viewer .ui-widget-header {
-  background-image: none;
-  /*background-color: #E5E3DB;*/
-  background-color: #fff;
-  background: #fff none 50% 50%;
-  color: #333;
-}
-
-.mirador-viewer .ui-dialog {
   padding:0;
+  background-color:#fafafa;
 }
-
-.mirador-viewer .ui-dialog.locked {
-  border: 2px solid deepskyblue;
-  box-shadow:         0px 0px 4px rgba(120, 255, 255, .7);
-  -webkit-box-shadow: 0px 0px 4px rgba(120, 255, 255, .7);
-  -moz-box-shadow:    0px 0px 4px rgba(120, 255, 255, .7);
+.qtip-bootstrap .qtip-content {
+  padding: 0;
+  clear: both;
 }
-
-.mirador-viewer .ui-dialog.locked .mirador-widget-statusbar .mirador-icon-lock {
-  background-position: -161px -41px;
+.annotation-tooltip {
+  padding: 12px; 
 }
-
-.mirador-viewer .ui-dialog.locked .mirador-widget-statusbar .mirador-icon-lock:hover {
-  background-position: -161px -61px;
+.annotation-display {
+  position:relative;
+  border-left:0;
+  border-right:0;
+  padding: 12px;
+  padding-bottom:0;
+  border-bottom: 1px solid gray;
 }
-
-.mirador-viewer .ui-dialog-titlebar-buttonpane button {
+.annotation-tooltip .button-container {
+  text-align: right;
+}
+.annotation-tooltip .save, .annotation-tooltip .cancel {
+  margin-left: 12px;
+  /* padding: 5px 7px; */
+  /* border-radius: 2px; */
+  /* text-decoration: underline; */
+  /* color: white; */
+  /* background-color: black; */
+  font-size: 12px;
+  text-decoration: underline;
+}
+.annotation-tooltip .save:hover, .annotation-tooltip .cancel:hover {
+  /* padding: 5px 7px; */
+  /* border-radius: 2px; */
+  /* text-decoration: underline; */
+  font-weight:bold;
+  /* color: white; */
+  /* background-color: black; */
+}
+.text-editor, .tags-editor {
+  padding: 5px;
+  display: block;
+  margin-bottom: 12px;
   border: 0;
-  background: none;
+  background: #efefef;
+  box-shadow: inset 0 0 7px gray;
+  resize: vertical;
+  border: 1px solid gray;
 }
-
-.mirador-viewer .ui-resizable-se {
-  background-position: -64px -224px;
-  bottom: 1px;
-  right: 1px;
+.annotation-display.annotation-tooltip .button-container {
+  text-align: right;
 }
-
-.mirador-viewer .ui-dialog-titlebar-maximize,
-.mirador-viewer .ui-dialog-titlebar-minimize,
-.mirador-viewer .ui-dialog-titlebar-collapse,
-.mirador-viewer .ui-dialog-titlebar-restore {
-  border:none;
-  background:none;
+.annotation-display .edit, .annotation-display .delete  {
+  font-size: 12px;
+  margin-left: 5px;
+  text-decoration: underline;
 }
-
-.mirador-viewer-dialog-no-title-bar .ui-dialog-titlebar {
-  display: none;
+.text-viewer p {
+  margin-top: 0;
 }
-
-
-.tooltipster-content {
-  font-family: 'Open Sans', 'Lucida Grande', Verdana, Arial,sans-serif;
-  font-size: 1.2em;
+.tags-viewer {
+  margin-bottom: 12px;
 }
-
-// Animations for use elsewhere.
-.flash {
-  -webkit-animation: flash 5s infinite; /* Safari 4+ */
-  -moz-animation:    flash 5s infinite; /* Fx 5+ */
-  -o-animation:      flash 5s infinite; /* Opera 12+ */
-  animation:         flash 5s infinite;
-  -moz-animation-delay: 1s;
-  -webkit-animation-delay: 1s;
-  -ms-animation-delay: 1s;
-  -o-animation-delay: 1s;
-  animation-delay: 1s;
-}
-@-webkit-keyframes flash {
-  0%, 50%, 100% {
-    opacity: 1;
-
-}
-
-25%, 75% {
-  opacity: 0;
-
-}
-
-}
-
-@keyframes flash {
-  0%, 50%, 100% {
-    opacity: 1;
-
-}
-
-25%, 75% {
-  opacity: 0;
-
-}
-
+.qtip-bootstrap .tags-viewer span.tag {
+  background: lightgray;
+  color: #222;
+  border-radius: 6px;
+  padding: 0 5px;
+  margin-right:5px; 
+  margin-bottom: 5px;
+  text-align: center;
+  font-size: 12;
+  font-weight: bold;
+  border: 1px solid #aaa;
 }
 

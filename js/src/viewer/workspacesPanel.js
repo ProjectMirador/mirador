@@ -1,30 +1,22 @@
 (function($) {
 
-  $.WorkspacesPanel = function(options) {
+  $.WorkspacePanel = function(options) {
 
     jQuery.extend(true, this, {
       element: null,
       appendTo: null,
-      parent: null
+      workspace: null
     }, options);
 
     this.init();
 
   };
 
-  $.WorkspacesPanel.prototype = {
+  $.WorkspacePanel.prototype = {
     init: function () {
       var _this = this,
       workspaceTemplate = [];
       
-      jQuery.each(this.parent.availableWorkspaces, function(index, value) {
-        workspaceTemplate.push({
-          dataClass: value,
-          label : _this.parent.workspaces[value].label,
-          iconClass: _this.parent.workspaces[value].iconClass
-        });
-      });
-
       this.element = jQuery(this.template({ workspaces : workspaceTemplate})).appendTo(this.appendTo);
       this.bindEvents();
     },
@@ -32,14 +24,18 @@
     bindEvents: function() {
       var _this = this;
       // handle subscribed events
-      jQuery.subscribe('workspacesPanelVisible.set', function(_, stateValue) {
+      jQuery.subscribe('layoutPanelVisible.set', function(_, stateValue) {
         if (stateValue) { _this.show(); return; }
         _this.hide();
       });
-
+      
       jQuery('#workspace-select-menu').find('.workspace-option').on('click', function() {
-        $.viewer.switchWorkspace(jQuery(this).data('workspaceType'));
+        $.viewer.updateLayout(jQuery(this).data('workspaceType'));
       });
+    },
+
+    onSelect: function(layoutString) {
+      this.workspace.setLayout(layoutString);
     },
 
     hide: function() {
@@ -52,17 +48,11 @@
 
     template: Handlebars.compile([
        '<div id="workspace-select-menu">',
-         '<h1>Choose Workspace Type</h1>',
-         '<ul class="workspaces-listing">',
-           '{{#each workspaces}}',
-             '<li class="workspace-option" data-workspace-type="{{dataClass}}">',
-               '<a href="javascript:void(0);" name="{{label}}">',
-                 '<i class="fa fa-{{iconClass}} workspace-icon"></i>',
-                 '<h2 class="workspace-label">{{label}}</h2>',
-               '</a>',
-             '</li>',
-           '{{/each}}',
-         '</ul>',
+         '<h1>Change Layout</h1>',
+         '<div class="select-grid">',
+       '</div>',
+         '<div class="preview-container">',
+       '</div>',
        '</div>'
     ].join(''))
   };

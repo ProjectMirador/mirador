@@ -5,8 +5,7 @@
     jQuery.extend(true, this, {
       element: null,
       appendTo: null,
-      parent: null,
-      zeroclient: null
+      parent: null
     }, options);
 
     this.init();
@@ -16,7 +15,6 @@
   $.BookmarkPanel.prototype = {
     init: function () {
       this.element = jQuery(this.template()).appendTo(this.appendTo);
-      this.zeroclient = new ZeroClipboard(this.element.find('.mirador-icon-copy'));
       this.bindEvents();
     },
 
@@ -44,19 +42,18 @@
               var jsonblob = request.getResponseHeader('X-Jsonblob');
               
               var bookmarkURL = window.location.href.replace(window.location.hash, '') + "?json="+jsonblob;
-              _this.element.find('#share-url').val(bookmarkURL);
-              //TODO if flash isn't available to browser, auto highlight the URL
+              _this.element.find('#share-url').val(bookmarkURL).focus().select();
          }
         });
       });
     },
 
     hide: function() {
-      jQuery(this.element).hide({effect: "slide", direction: "up", duration: 1000, easing: "swing"});    
+      jQuery(this.element).hide({effect: "slide", direction: "up", duration: 300, easing: "swing"});    
     },
 
     show: function() {      
-      jQuery(this.element).show({effect: "slide", direction: "up", duration: 1000, easing: "swing"});
+      jQuery(this.element).show({effect: "slide", direction: "up", duration: 300, easing: "swing"});
     },
 
     template: Handlebars.compile([

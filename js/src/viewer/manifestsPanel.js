@@ -21,26 +21,35 @@
     $.ManifestsPanel.prototype = {
 
         init: function() {
-            this.element = jQuery(this.template()).appendTo(this.appendTo);
+            this.element = jQuery(this.template({
+                showURLBox : this.parent.showAddFromURLBox
+            })).appendTo(this.appendTo);
             this.manifestListElement = this.element.find('ul');
             
             //this code gives us the max width of the results area, used to determine how many preview images to show
             //cloning the element and adjusting the display and visibility means it won't break the normal flow
             var clone = this.element.clone().css("visibility","hidden").css("display", "block").appendTo(this.appendTo);
-            this.resultsWidth = clone.find('#select-results').outerWidth();
+            this.resultsWidth = clone.find('.select-results').outerWidth();
             clone.remove();
             
-            // this.manifestLoadStatus = new $.ManifestLoadStatusIndicator({parent: this});
+            this.manifestLoadStatusIndicator = new $.ManifestLoadStatusIndicator({
+              manifests: this.parent.manifests,
+              appendTo: this.element.find('.select-results')
+            });
             this.bindEvents();
         },
 
         bindEvents: function() {
             var _this = this;
             // handle interface events
-            this.element.find('form#url-load-form').on('submit', function() {
+            this.element.find('form#url-load-form').on('submit', function(event) {
                 event.preventDefault();
                 var url = jQuery(this).find('input').val();
                 _this.parent.addManifestFromUrl(url, "(Added from URL)");
+            });
+            
+            this.element.find('.remove-object-option').on('click', function() {
+              _this.parent.toggleLoadWindow();
             });
 
             // handle subscribed events
@@ -48,12 +57,14 @@
                if (stateValue) { _this.show(); return; }
                 _this.hide();
             });
-            jQuery.subscribe('manifestAdded', function(event, newManifest, repository) {
-              _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifestId: newManifest, resultsWidth: _this.resultsWidth }));
+            
+            jQuery.subscribe('manifestReceived', function(event, newManifest, repository) {
+              //console.log(newManifest);
+              _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifest: newManifest, resultsWidth: _this.resultsWidth }));
               _this.element.find('#manifest-search').keyup();
             });
             
-            //Filter manifests based on user input
+            // Filter manifests based on user input
             this.element.find('#manifest-search').on('keyup input', function() {
                if (this.value.length > 0) {
                   _this.element.find('.items-listing li').show().filter(function() {
@@ -68,22 +79,14 @@
               event.preventDefault();
             });
             
-            jQuery.subscribe('windowResize', $.debounce(function(){
+            jQuery.subscribe('resize', $.debounce(function(){
               var clone = _this.element.clone().css("visibility","hidden").css("display", "block").appendTo(_this.appendTo);
-              _this.resultsWidth = clone.find('#select-results').outerWidth();
+              _this.resultsWidth = clone.find('.select-results').outerWidth();
               clone.remove();
               jQuery.publish("manifestPanelWidthChanged", _this.resultsWidth);
             }, 100));
         },
         
-        toggleImageView: function(imageID, manifestURI) {
-            this.parent.toggleImageViewInWorkspace(imageID, manifestURI);
-        },
-        
-        toggleThumbnailsView: function(manifestURI) {
-            this.parent.toggleThumbnailsViewInWorkspace(manifestURI);
-        },
-
         hide: function() {
             var _this = this;
             jQuery(this.element).hide({effect: "fade", duration: 160, easing: "easeOutCubic"});
@@ -99,15 +102,20 @@
           '<div id="manifest-select-menu">',
           '<div class="container">',
               '<div id="load-controls">',
+              '<a class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i> Close</a>',
               '<form action="" id="manifest-search-form">',
+                  '<label for="manifest-search">Filter objects:</label>',
                   '<input id="manifest-search" type="text" name="manifest-filter" placeholder="Filter objects...">',
               '</form>',
+              '{{#if showURLBox}}',
+              '<br/>',
               '<form action="" id="url-load-form">',
-                  '<h2>Add new item from URL</h2>',
-                  '<input type="text" name="url-load" placeholder="http://...">',
+                  '<label for="url-loader">Add new object from URL:</label>',
+                  '<input type="text" id="url-loader" name="url-load" placeholder="http://...">',
               '</form>',
+              '{{/if}}',
               '</div>',
-              '<div id="select-results">',
+              '<div class="select-results">',
                   '<ul class="items-listing">',
                   '</ul>',
               '</div>',

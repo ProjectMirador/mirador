@@ -1,0 +1,27 @@
+{
+  "name": "jasmine-jquery",
+  "version": "2.0.6",
+  "main": "lib/jasmine-jquery.js",
+  "ignore": [
+    "test",
+    "vendor",
+    ".*",
+    "HISTORY.md",
+    "SpecRunner.html"
+  ],
+  "dependencies": {
+    "jasmine": ">=2",
+    "jquery": ">=2"
+  },
+  "homepage": "https://github.com/velesin/jasmine-jquery",
+  "_release": "2.0.6",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.0.6",
+    "commit": "eafa07b698fd65e8f69f3cfa5d69979667a3ceed"
+  },
+  "_source": "git://github.com/velesin/jasmine-jquery.git",
+  "_target": "~2.0.6",
+  "_originalSource": "jasmine-jquery",
+  "_direct": true
+}

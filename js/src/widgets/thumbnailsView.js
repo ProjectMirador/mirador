@@ -4,7 +4,7 @@
 
     jQuery.extend(this, {
       currentImgIndex:      0,
-      imageID:              null,
+      canvasID:              null,
       focusImages:          [],
       manifest:             null,
       element:              null,
@@ -24,8 +24,8 @@
   $.ThumbnailsView.prototype = {
 
     init: function() {
-        if (this.imageID !== null) {
-            this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
+        if (this.canvasID !== null) {
+            this.currentImgIndex = $.getImageIndexById(this.imagesList, this.canvasID);
         }
 
         this.loadContent();
@@ -80,7 +80,14 @@
     currentImageChanged: function() {
       var _this = this,
       target = _this.element.find('.highlight'),
-      scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
+      scrollPosition;
+
+      if (this.parent.currentFocus === 'BookView') {
+        scrollPosition = _this.element.scrollLeft() + (target.position().left + (target.next().width() + target.outerWidth())/2) - _this.element.width()/2;
+      } else {
+
+        scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
+      }
       _this.element.scrollTo(scrollPosition, 900);
     },
     
@@ -102,10 +109,10 @@
                 
         _this.element.find('.thumbnail-image').on('click', function() {
           var canvasID = jQuery(this).attr('data-image-id');
-          _this.parent.setCurrentImageID(canvasID);
+          _this.parent.setCurrentCanvasID(canvasID);
         });
 
-        jQuery.subscribe(('currentImageIDUpdated.' + _this.parent.id), function(imageID) {
+        jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(imageID) {
           _this.currentImageChanged();
         });
     },
@@ -130,9 +137,9 @@
     
     loadImage: function(imageElement, url) {
         var _this = this,
-        imagepromise = new $.ImagePromise(url);
+        imagePromise = $.createImagePromise(url);
 
-        imagepromise.done(function(image) {
+        imagePromise.done(function(image) {
             jQuery(imageElement).attr('src', image);
         });
     },

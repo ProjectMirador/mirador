@@ -26,6 +26,9 @@
       // window is opened/closed:
       // different top-level menus are opened (load manifest/choose workspace, etc.):
       // item is selected from manifest menu.
+      // item is hovered over with the mouse.
+      // deliberately moving "up" "down" "left" and "right" through
+      // the command contexts.
     },
 
     switchActiveContext: function() {

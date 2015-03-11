@@ -22,6 +22,7 @@
             metadataListingCls: this.metadataListingCls
           };
           
+      _this.manifest = _this.manifest.jsonLd;
       this.metadataTypes = {};
 
       this.metadataTypes.details = _this.getMetadataDetails(_this.manifest);
@@ -182,7 +183,7 @@
         if (this.panel) {
             element = element.parent();
         }
-        element.show({effect: "slide", direction: "right", duration: 1000, easing: "swing"});    
+        element.show({effect: "slide", direction: "right", duration: 300, easing: "swing"});    
     },
     
     hide: function() {
@@ -190,7 +191,7 @@
         if (this.panel) {
             element = element.parent();
         }
-        element.hide({effect: "slide", direction: "right", duration: 1000, easing: "swing"});    
+        element.hide({effect: "slide", direction: "right", duration: 300, easing: "swing"});    
     },
 
     addLinksToUris: function(text) {

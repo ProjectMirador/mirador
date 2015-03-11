@@ -4,9 +4,10 @@
 
     jQuery.extend(this, {
       currentImg:       null,
+      windowId:         null,
       currentImgIndex:  0,
       stitchList:       [],
-      imageID:          null,
+      canvasID:          null,
       imagesList:       [],
       element:          null,
       focusImages:      [],
@@ -30,8 +31,8 @@
   $.BookView.prototype = {
 
     init: function() {
-      if (this.imageID !== null) {
-        this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
+      if (this.canvasID !== null) {
+        this.currentImgIndex = $.getImageIndexById(this.imagesList, this.canvasID);
       }
 
       if (!this.osdOptions) {
@@ -46,14 +47,17 @@
       this.element = jQuery(this.template()).appendTo(this.appendTo);
       this.hud = new $.Hud({
         parent: this,
-        element: this.element
+        element: this.element,
+        bottomPanelAvailable: this.bottomPanelAvailable,
+        windowId: this.windowId,
+        annotationLayerAvailable: false
       });
 
-      if (this.manifest.sequences[0].viewingDirection) {
-        this.viewingDirection = this.manifest.sequences[0].viewingDirection.toLowerCase();
+      if (this.manifest.jsonLd.sequences[0].viewingDirection) {
+        this.viewingDirection = this.manifest.jsonLd.sequences[0].viewingDirection.toLowerCase();
       }
-      if (this.manifest.sequences[0].viewingHint) {
-        this.viewingHint = this.manifest.sequences[0].viewingHint.toLowerCase();
+      if (this.manifest.jsonLd.sequences[0].viewingHint) {
+        this.viewingHint = this.manifest.jsonLd.sequences[0].viewingHint.toLowerCase();
       }
 
       this.stitchList = this.getStitchList();
@@ -106,13 +110,13 @@
       }
     },
 
-    updateImage: function(imageID) {
-      this.imageID = imageID;
-      this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
+    updateImage: function(canvasID) {
+      this.canvasID = canvasID;
+      this.currentImgIndex = $.getImageIndexById(this.imagesList, this.canvasID);
       this.currentImg = this.imagesList[this.currentImgIndex];
       var newList = this.getStitchList();
       var is_same = this.stitchList.length == newList.length && this.stitchList.every(function(element, index) {
-          return element === newList[index]; 
+        return element === newList[index]; 
       });
       if (!is_same) {
         this.stitchList = newList;
@@ -132,57 +136,62 @@
       elemOsd,
       tileSources = [],
       _this = this,
-      toolbarID = 'osd-toolbar-' + uniqueID;
+      toolbarID = 'osd-toolbar-' + uniqueID,
+      dfd = jQuery.Deferred();
 
       this.element.find('.' + this.osdCls).remove();
 
       jQuery.each(this.stitchList, function(index, image) {
-        var imageUrl = $.Iiif.getImageUrl(image);
-        var infoJsonUrl = $.Iiif.getUri(imageUrl) + '/info.json';
-        var infoJson = $.getJsonFromUrl(infoJsonUrl, false);
-        tileSources.push(infoJson);
+        var imageUrl = $.Iiif.getImageUrl(image),
+        infoJsonUrl = imageUrl + '/info.json';
+
+        jQuery.getJSON(infoJsonUrl).done(function (data, status, jqXHR) {
+          tileSources[index] = data;
+          if (tileSources.length === _this.stitchList.length ) { dfd.resolve(); }
+        });
       });
 
-      var aspectRatio = tileSources[0].height / tileSources[0].width;
+      dfd.done(function () {
+        var aspectRatio = tileSources[0].height / tileSources[0].width;
 
-      elemOsd =
-        jQuery('<div/>')
-      .addClass(this.osdCls)
-      .attr('id', osdId)
-      .appendTo(this.element);
+        elemOsd =
+          jQuery('<div/>')
+        .addClass(_this.osdCls)
+        .attr('id', osdId)
+        .appendTo(_this.element);
 
-      this.osd = $.OpenSeadragon({
-        'id':           elemOsd.attr('id'),
-        'toolbarID' : toolbarID
+        _this.osd = $.OpenSeadragon({
+          'id':           elemOsd.attr('id'),
+          'toolbarID' : toolbarID
+        });
+
+        _this.osd.addHandler('open', function(){
+          _this.addLayer(tileSources.slice(1), aspectRatio);
+          var addItemHandler = function( event ) {
+            _this.osd.world.removeHandler( "add-item", addItemHandler );
+            if (_this.osdOptions.osdBounds) {
+              var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
+              _this.osd.viewport.fitBounds(rect, true);
+            } else {
+              _this.osd.viewport.goHome(true);
+            }
+          };
+
+          _this.osd.world.addHandler( "add-item", addItemHandler );
+
+          _this.osd.addHandler('zoom', $.debounce(function(){
+            _this.setBounds();
+          }, 300));
+
+          _this.osd.addHandler('pan', $.debounce(function(){
+            _this.setBounds();
+          }, 300));
+        });
+
+        _this.osd.open(tileSources[0], {opacity:1, x:0, y:0, width:1});
       });
 
-      this.osd.addHandler('open', function(){
-        _this.addLayer(tileSources.slice(1), aspectRatio);
-        var addItemHandler = function( event ) {
-          _this.osd.world.removeHandler( "add-item", addItemHandler );
-          if (_this.osdOptions.osdBounds) {
-             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
-             _this.osd.viewport.fitBounds(rect, true);
-          } else {
-             _this.osd.viewport.goHome(true);
-          }
-        };
-
-        _this.osd.world.addHandler( "add-item", addItemHandler );
-
-        _this.osd.addHandler('zoom', $.debounce(function(){
-          _this.setBounds();
-        }, 300));
-
-        _this.osd.addHandler('pan', $.debounce(function(){
-          _this.setBounds();
-        }, 300));
-      });
-
-      this.osd.open(tileSources[0], {opacity:1, x:0, y:0, width:1});
-
-
-      //this.stitchOptions();
+      // this.stitchOptions();
     },
 
     addLayer: function(tileSources, aspectRatio) {
@@ -211,7 +220,7 @@
         next = this.currentImgIndex + 2;
       }
       if (next < this.imagesList.length) {
-        this.parent.setCurrentImageID(this.imagesList[next]['@id']);
+        this.parent.setCurrentCanvasID(this.imagesList[next]['@id']);
       }
     },
 
@@ -226,7 +235,7 @@
         prev = this.currentImgIndex - 1;
       }
       if (prev >= 0) {
-        this.parent.setCurrentImageID(this.imagesList[prev]['@id']);
+        this.parent.setCurrentCanvasID(this.imagesList[prev]['@id']);
       }
     },
 
@@ -309,41 +318,6 @@
       this.parent.updateFocusImages(this.focusImages);
       return stitchList;
     }
-    // remove or add canvses to make pages line up
-    /*stitchOptions: function() {  
-          //clear options
-          var options = [];
-
-          this.clearStitchOptions();
-
-          // if there is only one image, don't show options to remove images
-          if (this.stitchList.length == 2) {
-          options.push({
-label: "Remove image from page view",
-imgIndex: this.currentImgIndex
-});
-options.push({
-label: "Insert empty canvas between images"
-imgIndex: this.currentImgIndex
-});
-
-this.elemStitchOptions.tooltipster({
-arrow: true,
-content: $.Templates.stitchView.stitchOptions({options: options}),
-interactive: true,
-position: 'bottom',
-theme: '.tooltipster-mirador'
-});
-}
-},
-
-clearStitchOptions: function() {
-if (this.elemStitchOptions.data('plugin_tooltipster') !== '') {
-this.elemStitchOptions.tooltipster('destroy');
-}
-
-this.elemStitchOptions.hide();
-},*/
-};
+  };
 
 }(Mirador));

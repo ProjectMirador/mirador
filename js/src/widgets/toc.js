@@ -6,6 +6,8 @@
       element:           null,
       appendTo:          null,
       parent:            null,
+      manifest:          null,
+      structures:        null,
       previousSelectedElements: [],
       selectedElements: [],
       openElements:     [],
@@ -22,7 +24,8 @@
   $.TableOfContents.prototype = {
     init: function () {
       var _this = this;
-      if (!_this.manifest.structures || _this.manifest.structures.length === 0) {
+      _this.structures = _this.manifest.getStructures();
+      if (!_this.structures || _this.structures.length === 0) {
         _this.hide();
         _this.parent.setTOCBoolean(false);
         return;
@@ -31,7 +34,7 @@
         this.ranges = this.setRanges();
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
         this.tocData = this.initTocData();
-        this.selectedElements = $.getRangeIDByCanvasID(this.manifest, this.parent.currentImageID);
+        this.selectedElements = $.getRangeIDByCanvasID(_this.structures, _this.parent.currentCanvasID);
         this.element.find('.has-child ul').hide();
         this.bindEvents();
         this.render();
@@ -41,7 +44,7 @@
     setRanges: function() {
       var _this = this,
       ranges = [];
-      jQuery.each(_this.manifest.structures, function(index, range) {
+      jQuery.each(_this.structures, function(index, range) {
         if (range['@type'] === 'sc:Range') {
           ranges.push({
             id: range['@id'],
@@ -191,13 +194,13 @@
       jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
       });
         
-      jQuery.subscribe(('currentImageIDUpdated.' + _this.parent.id), function(event, imageID) {
-        if (!_this.manifest.structures) { return; }
-        _this.setSelectedElements($.getRangeIDByCanvasID(_this.manifest, imageID));
+      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(event, imageID) {
+        if (!_this.structures) { return; }
+        _this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, imageID));
         _this.render();
       });
 
-      jQuery('.toc-link').on('click', function() {
+      jQuery('.toc-link').on('click', function(event) {
         event.stopPropagation();
         // The purpose of the immediate event is to update the data on the parent
         // by calling its "set" function. 
@@ -207,17 +210,17 @@
         // without window having to know anything about their DOMs or 
         // internal structure. 
         var rangeID = jQuery(this).data().rangeid,
-        canvasID = jQuery.grep(_this.manifest.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0],
+        canvasID = jQuery.grep(_this.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0],
         isLeaf = jQuery(this).closest('li').hasClass('leaf-item');
 
         // if ( _this.parent.currentFocus === 'ThumbnailsView' & !isLeaf) {
         //   _this.parent.setCursorFrameStart(canvasID);
         // } else {
-          _this.parent.setCurrentImageID(canvasID);
+          _this.parent.setCurrentCanvasID(canvasID);
         // }
       });
       
-      jQuery('.caret').on('click', function() {
+      jQuery('.caret').on('click', function(event) {
         event.stopPropagation();
         
         var rangeID = jQuery(this).parent().data().rangeid;
@@ -321,7 +324,7 @@
     },
 
     toggle: function(stateValue) {
-      if (!this.manifest.structures) { stateValue = false; }
+      if (!this.structures) { stateValue = false; }
       if (stateValue) { 
         this.show(); 
       } else {
@@ -335,7 +338,7 @@
     },
 
     show: function() {
-      jQuery(this.appendTo).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+      jQuery(this.appendTo).show({effect: "fade", duration: 300, easing: "easeInCubic"});
       this.parent.element.find('.view-container').removeClass('focus-max-width');
     }
     
