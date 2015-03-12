@@ -7,7 +7,8 @@
       parent:    null,
       windowId:  null,
       annoState: null,
-      showAnnotations: true
+      showAnnotations: true,
+      annoEndpointAvailable: false
     }, options);
 
     this.init();
@@ -23,7 +24,7 @@
         showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable,
         showAnno : this.annotationLayerAvailable
       })).appendTo(this.element);
-      if (this.annotationLayerAvailable) {
+      if (this.annotationLayerAvailable && this.annoEndpointAvailable) {
       this.contextControls = new $.ContextControls({
         element: null,
         container: this.parent.element,
@@ -148,26 +149,34 @@
         callbacks: {
           ondisplayOn: function(event, from, to) { 
             _this.parent.element.find('.mirador-osd-annotations-layer').addClass("selected");
-            _this.contextControls.show();
+            if (_this.annoEndpointAvailable) {
+              _this.contextControls.show();
+            }
             jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');
           },
           oneditOn: function(event, from, to) { 
             _this.parent.element.find('.mirador-osd-edit-mode').addClass("selected");
             jQuery.publish('modeChange.' + _this.windowId, 'editingAnnotations');
-            _this.contextControls.rectTool.enterEditMode();
+            if (_this.annoEndpointAvailable) {
+              _this.contextControls.rectTool.enterEditMode();
+            }
           },
           oneditOff: function(event, from, to) { 
             _this.parent.element.find('.mirador-osd-edit-mode').removeClass("selected");
             jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');
-            _this.contextControls.rectTool.exitEditMode();
+            if (_this.annoEndpointAvailable) {
+              _this.contextControls.rectTool.exitEditMode();
+            }
           },
           ondisplayOff: function(event, from, to) { 
-            if (_this.contextControls.rectTool) {
+            if (_this.annoEndpointAvailable && _this.contextControls.rectTool) {
               _this.contextControls.rectTool.exitEditMode();
             }
             _this.parent.element.find('.mirador-osd-edit-mode').removeClass("selected");
             _this.parent.element.find('.mirador-osd-annotations-layer').removeClass("selected");
-            _this.contextControls.hide();
+            if (_this.annoEndpointAvailable) {
+              _this.contextControls.hide();
+            }
             jQuery.publish('modeChange.' + _this.windowId, 'default');            
           }
         }

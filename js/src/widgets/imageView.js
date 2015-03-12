@@ -55,7 +55,8 @@
         element: this.element,
         bottomPanelAvailable: this.bottomPanelAvailable,
         windowId: this.windowId,
-        annotationLayerAvailable: this.annotationLayerAvailable
+        annotationLayerAvailable: this.annotationLayerAvailable,
+        annoEndpointAvailable: this.annoEndpointAvailable
       });
     },
 

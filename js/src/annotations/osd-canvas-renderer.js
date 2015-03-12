@@ -97,6 +97,11 @@
                  _this.removeAnnotationEvents(event, api);
                  _this.annotationEvents(event, api);
                  _this.annotationSaveEvent(event, api);
+               },
+               hidden: function(event, api) {
+                 if (jQuery('.qtip:visible').length === 0) {
+                  jQuery(_this.osdViewer.canvas).find('.annotation').removeClass('hovered');
+                 }
                }
              }
       });
@@ -141,7 +146,8 @@
                 (er <= r && eb <= b && er >= l && eb >= t)
                 )) ? this : null;
       });
-      
+      jQuery(_this.osdViewer.canvas).find('.annotation.hovered').removeClass('hovered');
+      overlays.addClass('hovered');
       return overlays;
     },
 
