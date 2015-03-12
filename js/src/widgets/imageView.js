@@ -48,7 +48,7 @@
       .addClass(this.annoCls)
       .appendTo(this.element);
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-      this.parent.updateFocusImages([this.canvasID]); // DRY/Events refactor.
+      jQuery.publish('focusImagesUpdated'+this.windowId, [[this.canvasID]]);
       // The hud controls are consistent 
       // throughout any updates to the osd canvas.
       this.hud = new $.Hud({
@@ -184,11 +184,13 @@
         };
         this.osd.close();
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-        this.parent.updateFocusImages([canvasID]);
+        jQuery.publish('focusImagesUpdated'+this.windowId, [[canvasID]]);
         //by default, don't allow a user to be in edit annotation mode when changing pages
         if (this.hud.annoState.current === "annoOnEditOn") {
           this.hud.annoState.editOff();
         }
+      } else {
+        jQuery.publish('focusImagesUpdated'+this.windowId, [[canvasID]]);      
       }
     },
 

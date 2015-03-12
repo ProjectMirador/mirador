@@ -5,9 +5,9 @@
    */
   $.DEFAULT_SETTINGS = {
 
-    'workspaceAutoSave': true,
-
     'workspaceType': 'singleObject',
+
+    'saveSession' : true,  //whether or not to store session to local storage
 
     'workspaces' : {
       'singleObject': {

@@ -265,6 +265,11 @@
           _this.element.find('.remove-object-option').show();
         }
       });
+      
+      jQuery.subscribe('focusImagesUpdated'+_this.id, function(event, focusImages) {
+        _this.focusImages = focusImages;
+        if (_this.bottomPanel) { _this.bottomPanel.updateFocusImages(_this.focusImages); }      
+      });
     },
 
     clearViews: function() {
@@ -320,9 +325,6 @@
           //update current image for all valid panels
         });
       });
-
-      //update panels with current image
-      if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
 
     get: function(prop, parent) {
@@ -423,6 +425,7 @@
     },
 
     toggleThumbnails: function(canvasID) {
+      // this.currentCanvasID = canvasID;
       if (this.focusModules.ThumbnailsView === null) {
         this.focusModules.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, canvasID: this.currentCanvasID, imagesList: this.imagesList} );
       } else {
@@ -626,19 +629,19 @@
     });
 
     this.element.find('.single-image-option').on('click', function() {
-      _this.toggleImageView(_this.currentImageID);
+      _this.toggleImageView(_this.currentCanvasID);
     });
 
     this.element.find('.book-option').on('click', function() {
-      _this.toggleBookView(_this.currentImageID);
+      _this.toggleBookView(_this.currentCanvasID);
     });
 
     this.element.find('.scroll-option').on('click', function() {
-      _this.toggleScrollView(_this.currentImageID);
+      _this.toggleScrollView(_this.currentCanvasID);
     });
 
     this.element.find('.thumbnails-option').on('click', function() {
-      _this.toggleThumbnails(_this.currentImageID);
+      _this.toggleThumbnails(_this.currentCanvasID);
     });
 
     this.element.find('.mirador-icon-metadata-view').on('click', function() {
