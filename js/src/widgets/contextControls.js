@@ -8,7 +8,8 @@
       container: null,
       mode: null,
       windowId: null,
-      rectTool: null
+      rectTool: null,
+      annoEndpointAvailable: false
     }, options);
 
     this.init();

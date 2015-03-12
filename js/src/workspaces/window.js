@@ -53,6 +53,7 @@
       bottomPanelVisible: true,
       overlay: null,
       annotationLayerAvailable: true,
+      annoEndpointAvailable : false,
       displayLayout: true,
       layoutOptions : {
         "newObject" : true,
@@ -95,6 +96,8 @@
       if (!_this.currentCanvasID) {
         _this.currentCanvasID = _this.imagesList[0]['@id'];
       }
+      
+      this.annoEndpointAvailable = !jQuery.isEmptyObject($.viewer.annotationEndpoint);
 
       _this.getAnnotations();
 
@@ -447,7 +450,8 @@
                                                       imagesList: this.imagesList,
                                                       osdOptions: this.focusOptions,
                                                       bottomPanelAvailable: this.bottomPanelAvailable,
-                                                      annotationLayerAvailable: this.annotationLayerAvailable} );
+                                                      annotationLayerAvailable: this.annotationLayerAvailable,
+                                                      annoEndpointAvailable: this.annoEndpointAvailable} );
       } else {
         var view = this.focusModules.ImageView;
         view.updateImage(canvasID);
@@ -580,7 +584,7 @@
       }
 
       // next check endpoint
-      if (!jQuery.isEmptyObject($.viewer.annotationEndpoint)) {
+      if (this.annoEndpointAvailable) {
         var dfd = jQuery.Deferred(),
         module = $.viewer.annotationEndpoint.module,
         options = $.viewer.annotationEndpoint.options;
