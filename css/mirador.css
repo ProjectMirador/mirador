@@ -63,6 +63,10 @@ a {
   text-align: right;
 }
 
+.mirador-main-menu.user-buttons {
+  padding-right: 0;
+}
+
 .mirador-main-menu li {
   cursor: pointer;
   float: left;
