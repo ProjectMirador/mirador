@@ -171,6 +171,9 @@
       if (this.imagesList.length === 1) {
         this.bottomPanelVisibility(false);      
       }
+
+      _this.setCurrentCanvasID(_this.currentCanvasID);
+
     },
 
     update: function(options) {
@@ -425,13 +428,9 @@
     },
 
     toggleThumbnails: function(canvasID) {
-      this.currentCanvasID = canvasID;
+      // this.currentCanvasID = canvasID;
       if (this.focusModules.ThumbnailsView === null) {
-        this.focusModules.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, 
-                                                                appendTo: this.element.find('.view-container'), 
-                                                                parent: this, 
-                                                                canvasID: this.currentCanvasID, 
-                                                                imagesList: this.imagesList} );
+        this.focusModules.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, canvasID: this.currentCanvasID, imagesList: this.imagesList} );
       } else {
         var view = this.focusModules.ThumbnailsView;
         view.updateImage(canvasID);

@@ -20,7 +20,8 @@
       },
       osdCls: 'mirador-osd',
       elemAnno:         null,
-      annoCls:          'annotation-canvas'
+      annoCls:          'annotation-canvas',
+      annotationLayerAvailable: null 
     }, options);
 
     this.init();

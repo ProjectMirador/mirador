@@ -846,14 +846,9 @@ li.highlight {
 }
 .mirador-osd-toggle-bottom-panel {
   position: absolute;
-  margin-bottom: 1%;
   bottom:0;
   right:50%;
-  margin-right: -54px;
-  border: 1px solid white;
-  border-bottom: 0;
-  padding:3px 5px;
-  border-radius: 6px;
+  margin-right: -25px;
 }
 .mirador-osd-fullscreen {
   position:absolute;

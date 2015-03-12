@@ -146,7 +146,7 @@
         infoJsonUrl = imageUrl + '/info.json';
 
         jQuery.getJSON(infoJsonUrl).done(function (data, status, jqXHR) {
-          tileSources[index] = data;
+          tileSources.splice(index, 0, data);
           if (tileSources.length === _this.stitchList.length ) { dfd.resolve(); }
         });
       });
@@ -173,7 +173,6 @@
               var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
               _this.osd.viewport.fitBounds(rect, true);
             } else {
-              _this.osd.viewport.goHome(true);
             }
           };
 
@@ -191,7 +190,6 @@
         _this.osd.open(tileSources[0], {opacity:1, x:0, y:0, width:1});
       });
 
-      // this.stitchOptions();
     },
 
     addLayer: function(tileSources, aspectRatio) {

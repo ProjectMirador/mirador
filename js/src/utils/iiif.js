@@ -3,9 +3,9 @@
 
   $.Iiif = {
 
-    // Temporary method to create Stanford IIIF URI from Stanford stacks non-IIIF URI
     getImageUrl: function(image) {
 
+      console.log(image);
       if (!image.images[0].resource.service) {
         id = image.images[0].resource['default'].service['@id'];
         id = id.replace(/\/$/, "");
