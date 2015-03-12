@@ -657,6 +657,9 @@ li.highlight {
   transition:all 0.3s ease;
 }
 
+.view-container.tranisition {
+}
+
 .view-container.focus-max-width {
   margin-left: 0px;
 }

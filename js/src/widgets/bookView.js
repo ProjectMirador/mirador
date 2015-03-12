@@ -49,7 +49,8 @@
         parent: this,
         element: this.element,
         bottomPanelAvailable: this.bottomPanelAvailable,
-        windowId: this.windowId
+        windowId: this.windowId,
+        annotationLayerAvailable: false
       });
 
       if (this.manifest.jsonLd.sequences[0].viewingDirection) {

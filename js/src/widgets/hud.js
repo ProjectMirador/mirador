@@ -6,7 +6,8 @@
       element:   null,
       parent:    null,
       windowId:  null,
-      annoState: null
+      annoState: null,
+      showAnnotations: true
     }, options);
 
     this.init();
@@ -19,8 +20,10 @@
      
       this.element = jQuery(this.template({
         showNextPrev : this.parent.imagesList.length !== 1, 
-        showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable
+        showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable,
+        showAnno : this.annotationLayerAvailable
       })).appendTo(this.element);
+      if (this.annotationLayerAvailable) {
       this.contextControls = new $.ContextControls({
         element: null,
         container: this.parent.element,
@@ -28,6 +31,7 @@
         parent: this,
         windowId: this.windowId
       });
+      }
 
       this.bindEvents();
 
@@ -197,9 +201,11 @@
                                  '<a class="mirador-osd-fullscreen hud-control">',
                                  '<i class="fa fa-expand"></i>',
                                  '</a>',
+                                 '{{#if showAnno}}',
                                  '<a class="mirador-osd-annotations-layer hud-control ">',
                                  '<i class="fa fa-2x fa-comments"></i>',
                                  '</a>',
+                                 '{{/if}}',
                                  '{{#if showNextPrev}}',
                                  '<a class="mirador-osd-next hud-control ">',
                                  '<i class="fa fa-3x fa-chevron-right"></i>',
