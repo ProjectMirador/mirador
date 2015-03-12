@@ -262,6 +262,11 @@
           _this.element.find('.remove-object-option').show();
         }
       });
+      
+      jQuery.subscribe('focusImagesUpdated'+_this.id, function(event, focusImages) {
+        _this.focusImages = focusImages;
+        if (_this.bottomPanel) { _this.bottomPanel.updateFocusImages(_this.focusImages); }      
+      });
     },
 
     clearViews: function() {
@@ -317,9 +322,6 @@
           //update current image for all valid panels
         });
       });
-
-      //update panels with current image
-      if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
 
     get: function(prop, parent) {
@@ -419,82 +421,87 @@
         loadedManifest: _this.manifest.jsonLd['@id']});
     },
 
-    toggleThumbnails: function(imageID) {
+    toggleThumbnails: function(canvasID) {
+      this.currentCanvasID = canvasID;
       if (this.focusModules.ThumbnailsView === null) {
-        this.focusModules.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, imageID: this.currentCanvasID, imagesList: this.imagesList} );
+        this.focusModules.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, 
+                                                                appendTo: this.element.find('.view-container'), 
+                                                                parent: this, 
+                                                                canvasID: this.currentCanvasID, 
+                                                                imagesList: this.imagesList} );
       } else {
         var view = this.focusModules.ThumbnailsView;
-        view.updateImage(imageID);
+        view.updateImage(canvasID);
       }
       this.toggleFocus('ThumbnailsView', '');
     },
 
-    toggleImageView: function(imageID) {
-      this.currentCanvasID = imageID;
+    toggleImageView: function(canvasID) {
+      this.currentCanvasID = canvasID;
       if (this.focusModules.ImageView === null) {
         this.focusModules.ImageView = new $.ImageView( {manifest: this.manifest, 
                                                       appendTo: this.element.find('.view-container'), 
                                                       parent: this, 
                                                       windowId: this.id,
-                                                      imageID: imageID, 
+                                                      canvasID: canvasID, 
                                                       imagesList: this.imagesList,
                                                       osdOptions: this.focusOptions,
                                                       bottomPanelAvailable: this.bottomPanelAvailable,
                                                       annotationLayerAvailable: this.annotationLayerAvailable} );
       } else {
         var view = this.focusModules.ImageView;
-        view.updateImage(imageID);
+        view.updateImage(canvasID);
       }
       this.toggleFocus('ImageView', 'ImageView');
     },
 
-    toggleBookView: function(imageID) {
-      this.currentCanvasID = imageID;
+    toggleBookView: function(canvasID) {
+      this.currentCanvasID = canvasID;
       if (this.focusModules.BookView === null) {
         this.focusModules.BookView = new $.BookView({
           manifest: this.manifest, 
           appendTo: this.element.find('.view-container'), 
           parent: this, 
           windowId: this.id,
-          imageID: imageID, 
+          canvasID: canvasID, 
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
           bottomPanelAvailable: this.bottomPanelAvailable
         });
       } else {
         var view = this.focusModules.BookView;
-        view.updateImage(imageID);
+        view.updateImage(canvasID);
       }
       this.toggleFocus('BookView', 'BookView');
     },
 
-    toggleScrollView: function(imageID) {
-      this.currentCanvasID = imageID;
+    toggleScrollView: function(canvasID) {
+      this.currentCanvasID = canvasID;
       if (this.focusModules.ScrollView === null) {
         var containerHeight = this.element.find('.view-container').height();
         this.focusModules.ScrollView = new $.ScrollView( 
                                                         {manifest: this.manifest, 
                                                           appendTo: this.element.find('.view-container'), 
                                                           parent: this, 
-                                                          imageID: this.currentCanvasID, 
+                                                          canvasID: this.currentCanvasID, 
                                                           imagesList: this.imagesList, 
                                                           thumbInfo: {thumbsHeight: Math.floor(containerHeight * this.scrollImageRatio), listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}}
                                                        );
       } else {
         var view = this.focusModules.ScrollView;
-        view.updateImage(imageID);
+        view.updateImage(canvasID);
       }
       this.toggleFocus('ScrollView', '');    
     },
 
-    loadImageModeFromPanel: function(imageID) {
+    loadImageModeFromPanel: function(canvasID) {
       var _this = this;
       switch(_this.currentImageMode) {
         case 'ImageView':
-          _this.toggleImageView(imageID);
+          _this.toggleImageView(canvasID);
         break;
         case 'BookView':
-          _this.toggleBookView(imageID);
+          _this.toggleBookView(canvasID);
         break;
         default:
           break;
@@ -505,17 +512,17 @@
       this.focusImages = imageList;
     },
 
-    setCurrentCanvasID: function(imageID) {
+    setCurrentCanvasID: function(canvasID) {
       var _this = this;
-      this.currentCanvasID = imageID;
+      this.currentCanvasID = canvasID;
       jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
       jQuery.publish('removeTooltips.' + _this.id);
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
       this.getAnnotations();
-      this.loadImageModeFromPanel(imageID);
-      jQuery.publish(('currentCanvasIDUpdated.' + _this.id), imageID);
+      this.loadImageModeFromPanel(canvasID);
+      jQuery.publish(('currentCanvasIDUpdated.' + _this.id), canvasID);
     },
 
     bottomPanelVisibility: function(visible) {
@@ -623,19 +630,19 @@
     });
 
     this.element.find('.single-image-option').on('click', function() {
-      _this.toggleImageView(_this.currentImageID);
+      _this.toggleImageView(_this.currentCanvasID);
     });
 
     this.element.find('.book-option').on('click', function() {
-      _this.toggleBookView(_this.currentImageID);
+      _this.toggleBookView(_this.currentCanvasID);
     });
 
     this.element.find('.scroll-option').on('click', function() {
-      _this.toggleScrollView(_this.currentImageID);
+      _this.toggleScrollView(_this.currentCanvasID);
     });
 
     this.element.find('.thumbnails-option').on('click', function() {
-      _this.toggleThumbnails(_this.currentImageID);
+      _this.toggleThumbnails(_this.currentCanvasID);
     });
 
     this.element.find('.mirador-icon-metadata-view').on('click', function() {

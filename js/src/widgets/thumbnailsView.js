@@ -61,19 +61,19 @@
       this.element = jQuery(_this.template(tplData)).appendTo(this.appendTo);
     },
     
-    updateImage: function(imageID) {
-        this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
+    updateImage: function(canvasID) {
+        this.currentImgIndex = $.getImageIndexById(this.imagesList, canvasID);
         this.element.find('.highlight').removeClass('highlight');
-        this.element.find("img[data-image-id='"+imageID+"']").addClass('highlight');
-        this.element.find("img[data-image-id='"+imageID+"']").parent().addClass('highlight');
+        this.element.find("img[data-image-id='"+canvasID+"']").addClass('highlight');
+        this.element.find("img[data-image-id='"+canvasID+"']").parent().addClass('highlight');
     },
     
     updateFocusImages: function(focusList) {
         var _this = this;
         this.element.find('.highlight').removeClass('highlight');
-        jQuery.each(focusList, function(index, imageID) {
-           _this.element.find("img[data-image-id='"+imageID+"']").addClass('highlight');
-           _this.element.find("img[data-image-id='"+imageID+"']").parent().addClass('highlight');
+        jQuery.each(focusList, function(index, canvasID) {
+           _this.element.find("img[data-image-id='"+canvasID+"']").addClass('highlight');
+           _this.element.find("img[data-image-id='"+canvasID+"']").parent().addClass('highlight');
         });
     },
 
@@ -112,7 +112,7 @@
           _this.parent.setCurrentCanvasID(canvasID);
         });
 
-        jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(imageID) {
+        jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(canvasID) {
           _this.currentImageChanged();
         });
     },
