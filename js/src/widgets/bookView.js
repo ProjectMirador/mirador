@@ -315,7 +315,7 @@
       jQuery.each(stitchList, function(index, image) {
         _this.focusImages.push(image['@id']);
       });
-      this.parent.updateFocusImages(this.focusImages);
+      jQuery.publish('focusImagesUpdated'+this.windowId, [this.focusImages]);
       return stitchList;
     }
   };

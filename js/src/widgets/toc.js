@@ -194,9 +194,9 @@
       jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
       });
         
-      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(event, imageID) {
+      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(event, canvasID) {
         if (!_this.structures) { return; }
-        _this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, imageID));
+        _this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, canvasID));
         _this.render();
       });
 
@@ -249,11 +249,12 @@
     },
 
     setActive: function(active) {
+      var _this = this;
       _this.active = active;
     },
 
     setOpenItem: function(rangeID) {
-      _this = this;
+      var _this = this;
 
       if (jQuery.inArray(rangeID, _this.openElements)<0) {
         _this.openElements.push(rangeID);
@@ -271,7 +272,7 @@
     // },
 
     setSelectedElements: function(rangeIDs) {
-      _this = this;
+      var _this = this;
 
       _this.previousSelectedElements = _this.selectedElements;
       _this.selectedElements = rangeIDs;

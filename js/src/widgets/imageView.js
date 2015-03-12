@@ -29,10 +29,10 @@
   $.ImageView.prototype = {
 
     init: function() {    
-      // check (for thumbnail view) if the imageID is set. 
+      // check (for thumbnail view) if the canvasID is set. 
       // If not, make it page/item 1.
-      if (this.imageID !== null) {
-        this.currentImgIndex = $.getImageIndexById(this.imagesList, this.imageID);
+      if (this.canvasID !== null) {
+        this.currentImgIndex = $.getImageIndexById(this.imagesList, this.canvasID);
       }
       
       if (!this.osdOptions) {
@@ -47,7 +47,7 @@
       .addClass(this.annoCls)
       .appendTo(this.element);
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-      this.parent.updateFocusImages([this.imageID]); // DRY/Events refactor.
+      jQuery.publish('focusImagesUpdated'+this.windowId, [[this.canvasID]]);
       // The hud controls are consistent 
       // throughout any updates to the osd canvas.
       this.hud = new $.Hud({
@@ -172,10 +172,10 @@
 
     },
 
-    updateImage: function(imageID) {
-      if (this.imageID !== imageID) {
-        this.imageID = imageID;
-        this.currentImgIndex = $.getImageIndexById(this.imagesList, imageID);
+    updateImage: function(canvasID) {
+      if (this.canvasID !== canvasID) {
+        this.canvasID = canvasID;
+        this.currentImgIndex = $.getImageIndexById(this.imagesList, canvasID);
         this.currentImg = this.imagesList[this.currentImgIndex];
         this.osdOptions = {
           osdBounds:        null,
@@ -183,11 +183,13 @@
         };
         this.osd.close();
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-        this.parent.updateFocusImages([imageID]);
+        jQuery.publish('focusImagesUpdated'+this.windowId, [[canvasID]]);
         //by default, don't allow a user to be in edit annotation mode when changing pages
         if (this.hud.annoState.current === "annoOnEditOn") {
           this.hud.annoState.editOff();
         }
+      } else {
+        jQuery.publish('focusImagesUpdated'+this.windowId, [[canvasID]]);      
       }
     },
 
