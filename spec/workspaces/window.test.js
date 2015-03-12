@@ -57,7 +57,7 @@ describe('Window', function() {
         expect(this.appendTo.find('.book-option')).toExist();
         expect(this.appendTo.find('.scroll-option')).toExist();
         var calls = Mirador.ThumbnailsView.calls;
-        expect(calls.count()).toBe(1);
+        expect(calls.count()).toBe(2);
         expect(calls.first().args[0].appendTo.is(this.appendTo.find('.view-container'))).toBe(true);
       });
     });
@@ -69,7 +69,7 @@ describe('Window', function() {
         var calls = Mirador.BookView.calls;
         var bottomPanelCalls = this.window.bottomPanel.updateFocusImages.calls;
         expect(calls.count()).toBe(1);
-        expect(bottomPanelCalls.count()).toBe(1);
+        expect(bottomPanelCalls.count()).toBe(2);
       });
     });
   });

@@ -146,13 +146,11 @@
 
         jQuery.getJSON(infoJsonUrl).done(function (data, status, jqXHR) {
           tileSources.splice(index, 0, data);
-          console.log(tileSources);
           if (tileSources.length === _this.stitchList.length ) { dfd.resolve(); }
         });
       });
 
       dfd.done(function () {
-        console.log(tileSources);
         var aspectRatio = tileSources[0].height / tileSources[0].width;
 
         elemOsd =
@@ -174,7 +172,6 @@
               var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
               _this.osd.viewport.fitBounds(rect, true);
             } else {
-              _this.osd.viewport.goHome(true);
             }
           };
 

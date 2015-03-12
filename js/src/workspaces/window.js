@@ -165,6 +165,9 @@
       if (this.imagesList.length === 1) {
         this.bottomPanelVisibility(false);      
       }
+
+      _this.setCurrentCanvasID(_this.currentCanvasID);
+
     },
 
     update: function(options) {
@@ -278,15 +281,10 @@
     updatePanelsAndOverlay: function(state) {
       var _this = this;
 
-      console.log("state: " + state);
       jQuery.each(this.focusOverlaysAvailable[state], function(panelType, viewOptions) {
-        console.log(viewOptions);
         jQuery.each(viewOptions, function(view, displayed) {
           //instantiate any panels that exist for this view but are still null
-          console.log(view);
-          console.log(_this[panelType]);
           if (view !== '' && _this[panelType] === null) {
-            console.log(panelType);
             _this[panelType] = new $[view]({
               manifest: _this.manifest, 
               appendTo: _this.element.find('.'+panelType), 
