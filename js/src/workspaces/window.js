@@ -379,7 +379,7 @@
       if (panelType === 'bottomPanel') {
         this.focusModules[this.currentFocus].adjustHeight('focus-max-height', panelState);
       } else if (panelType === 'sidePanel') {
-        this.focusModules[this.currentFocus].adjustWidth('focus-max-width', panelState);
+        this.focusModules[this.currentFocus].adjustWidth('focus-side-panel-open', panelState);
       } else {}
     },
 

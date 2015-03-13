@@ -58,7 +58,7 @@
     ],
 
     'defaultWindowSettings': {
-
+      // same as individual window setting overrides
     },
 
     'availableAnnotationModes': [
@@ -84,6 +84,12 @@
       }
       //'height': 25,
       //'width': '100%'
+    },
+
+    workspacePanelSettings: {
+      maxX: 5,
+      maxY: 5,
+      preserveWindows: true 
     },
 
     //true or false.  controls display of "Add new object from URL" on manifest listing page
