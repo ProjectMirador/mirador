@@ -35,7 +35,7 @@
       if (this.canvasID !== null) {
         this.currentImgIndex = $.getImageIndexById(this.imagesList, this.canvasID);
       }
-      
+
       if (!this.osdOptions) {
         this.osdOptions = {
           osdBounds:        null,
@@ -123,42 +123,42 @@
 
       jQuery.getJSON(infoJsonUrl).done(function (infoJson, status, jqXHR) {
         _this.elemOsd =
-        jQuery('<div/>')
-          .addClass(_this.osdCls)
-      .attr('id', osdID)
-          .appendTo(_this.element);
+          jQuery('<div/>')
+        .addClass(_this.osdCls)
+        .attr('id', osdID)
+        .appendTo(_this.element);
 
         _this.osd = $.OpenSeadragon({
-        'id':           osdID,
-        'tileSources':  infoJson,
-        'uniqueID' : uniqueID
-      });
+          'id':           osdID,
+          'tileSources':  infoJson,
+          'uniqueID' : uniqueID
+        });
 
         _this.osd.addHandler('open', function(){
-        if (_this.osdOptions.osdBounds) {
+          if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
-        }
-        
-        _this.addAnnotationsLayer(_this.elemAnno);
-        //re-add correct annotationsLayer mode based on annoState
-        if (_this.hud.annoState.current !== "annoOff") {
-          jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');          
-        }
+          }
 
-        // A hack. Pop the osd overlays layer after the canvas so 
-        // that annotations appear.
-        jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
-        
-        _this.osd.addHandler('zoom', $.debounce(function() {
-          _this.setBounds();
-        }, 500));
+          _this.addAnnotationsLayer(_this.elemAnno);
+          //re-add correct annotationsLayer mode based on annoState
+          if (_this.hud.annoState.current !== "annoOff") {
+            jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');          
+          }
 
-        _this.osd.addHandler('pan', $.debounce(function(){
-          _this.setBounds();
-        }, 500));
+          // A hack. Pop the osd overlays layer after the canvas so 
+          // that annotations appear.
+          jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
 
-      });
+          _this.osd.addHandler('zoom', $.debounce(function() {
+            _this.setBounds();
+          }, 500));
+
+          _this.osd.addHandler('pan', $.debounce(function(){
+            _this.setBounds();
+          }, 500));
+
+        });
       });
     },
 
