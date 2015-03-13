@@ -268,11 +268,6 @@
           _this.element.find('.remove-object-option').show();
         }
       });
-      
-      jQuery.subscribe('focusImagesUpdated'+_this.id, function(event, focusImages) {
-        _this.focusImages = focusImages;
-        if (_this.bottomPanel) { _this.bottomPanel.updateFocusImages(_this.focusImages); }      
-      });
     },
 
     clearViews: function() {
@@ -328,6 +323,9 @@
           //update current image for all valid panels
         });
       });
+      
+      //update panels with current image
+      if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
 
     get: function(prop, parent) {
