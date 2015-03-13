@@ -313,7 +313,7 @@
       jQuery.each(stitchList, function(index, image) {
         _this.focusImages.push(image['@id']);
       });
-      jQuery.publish('focusImagesUpdated'+this.windowId, [this.focusImages]);
+      this.parent.updateFocusImages(this.focusImages);
       return stitchList;
     }
   };
