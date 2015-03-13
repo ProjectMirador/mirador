@@ -66,6 +66,7 @@
     }, options);
 
     this.init();
+    this.bindAnnotationEvents();
 
   };
 
@@ -98,8 +99,6 @@
       }
       
       this.annoEndpointAvailable = !jQuery.isEmptyObject($.viewer.annotationEndpoint);
-
-      _this.getAnnotations();
 
       //check config
       if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
@@ -220,6 +219,17 @@
         }
       });
 
+      jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
+        if ($.viewer.workspace.slots.length <= 1) {
+          _this.element.find('.remove-object-option').hide();
+        } else {
+          _this.element.find('.remove-object-option').show();
+        }
+      });
+    },
+    
+    bindAnnotationEvents: function() {
+      var _this = this;
       jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
         var annoID;
         //first function is success callback, second is error callback
@@ -259,14 +269,6 @@
         function() {
           // console.log("There was an error deleting this annotation");
         });
-      });
-
-      jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
-        if ($.viewer.workspace.slots.length <= 1) {
-          _this.element.find('.remove-object-option').hide();
-        } else {
-          _this.element.find('.remove-object-option').show();
-        }
       });
     },
 
