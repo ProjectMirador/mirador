@@ -651,13 +651,21 @@ li.highlight {
 /*   font-weight: bold; */
 /* } */
 .view-container {
+  margin-left: 280px;
   height: 100%;
   position:relative;
   transition:all 0.3s ease;
 }
 
-.view-container.focus-side-panel-open {
-  margin-left: 280px;
+.view-container.tranisition {
+}
+
+.view-container.focus-max-width {
+  margin-left: 0px;
+}
+
+.view-container.focus-side-panel-minimized {
+  margin-left: 0px;
 }
 
 .overlay {
