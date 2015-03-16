@@ -28,10 +28,10 @@
 
         if (jQuery.isArray(annotation.resource)) {
           jQuery.each(annotation.resource, function(index, value) {
-            if (value['@type'] === "dctypes:Text") {
-              annoText = value.chars;
-            } else if (value['@type'] == "oa:Tag") {
+            if (value['@type'] === "oa:Tag") {
               tags.push(value.chars);
+            } else {
+              annoText = value.chars;
             }
           });
         } else {
@@ -54,10 +54,10 @@
         tags = [];
         if (jQuery.isArray(annotation.resource)) {
           jQuery.each(annotation.resource, function(index, value) {
-            if (value['@type'] === "dctypes:Text") {
-              annoText = value.chars;
-            } else if (value['@type'] == "oa:Tag") {
+            if (value['@type'] === "oa:Tag") {
               tags.push(value.chars);
+            } else {
+              annoText = value.chars;
             }
           });
         } else {
@@ -66,7 +66,11 @@
         htmlAnnotations.push({
           annoText : annoText,
           tags : tags,
-          id : annotation['@id']
+          id : annotation['@id'],
+          //this needs to be fleshed out more based on permissions from the endpoint,
+          //for now, just disable edit/delete for manifest annotations
+          showEdit : annotation.endpoint === 'manifest' ? false : true,
+          showDelete : annotation.endpoint === 'manifest' ? false : true
         });
       });
 
@@ -95,8 +99,8 @@
                                        '{{#each annotations}}',
                                        '<div class="annotation-display annotation-tooltip" data-anno-id="{{id}}">',
                                        '<div class="button-container">',
-                                         '<a href="#edit" class="edit"><i class="fa fa-pencil-square-o fa-fw"></i>Edit</a>',
-                                         '<a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw"></i>Delete</a>',
+                                         '{{#if showEdit}}<a href="#edit" class="edit"><i class="fa fa-pencil-square-o fa-fw"></i>Edit</a>{{/if}}',
+                                         '{{#if showDelete}}<a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw"></i>Delete</a>{{/if}}',
                                        '</div>',
                                        '<div class="text-viewer">',
                                        '<p>{{{annoText}}}</p>',

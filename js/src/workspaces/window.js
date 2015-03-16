@@ -578,6 +578,14 @@
       if (url !== false) {
         jQuery.get(url, function(list) {
           _this.annotationsList = _this.annotationsList.concat(list.resources);
+          jQuery.each(_this.annotationsList, function(index, value) {
+            //if there is no ID for this annotation, set a random one
+            if (typeof value['@id'] === 'undefined') {
+              value['@id'] = $.genUUID();
+            }
+            //indicate this is a manifest annotation - which affects the UI
+            value.endpoint = "manifest";
+          });
           jQuery.publish('annotationListLoaded.' + _this.id);
         });
       }
