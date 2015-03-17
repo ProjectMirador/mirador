@@ -77,7 +77,6 @@
       .call(cell)
       .each(function(d) {
         var appendTo = _this.element.children('div').filter('[data-layout-slot-id="'+ d.id+'"]')[0];
-        console.log(d);
         _this.slots.push(new $.Slot({
           slotID: d.id,
           layoutAddress: d.address,
@@ -283,7 +282,6 @@
     },
 
     getSlotFromAddress: function(address) {
-      console.log(address);
       var _this = this;
       return _this.slots.filter(function(slot) {
         return slot.layoutAddress === address;
@@ -291,7 +289,6 @@
     },
 
     resetLayout: function(layoutDescription) {
-      console.log(this);
       this.layoutDescription = layoutDescription;
       this.calculateLayout();
       this.placeWindows();
@@ -352,15 +349,12 @@
       });
 
       if (windowConfig.slotAddress) {
-        console.log('looking by address');
         targetSlot = _this.getSlotFromAddress(windowConfig.slotAddress);
       } else {
         targetSlot = _this.focusedSlot || _this.slots.filter(function(slot) {
           return slot.hasOwnProperty('window') ? true : false;
         })[0];
       }
-
-      console.log(targetSlot);
 
       newWindow = new $.Window(windowConfig);
       _this.windows.push(newWindow);
