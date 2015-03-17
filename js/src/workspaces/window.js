@@ -5,19 +5,13 @@
     jQuery.extend(this, {
       element:           null,
       scrollImageRatio:  0.9,
-      appendTo:          null,
       manifest:          null,
       currentCanvasID:    null,
       focusImages:       [],
       imagesList:        null,
       annotationsList:   [],
       endpoint:          null,
-      slot:              null,
-      width:             null,
-      height:            null,
-      x:                 null,
-      y:                 null,
-      layoutAddress:     null,
+      slotAddress:     null,
       currentImageMode:  'ImageView',
       imageModes:        ['ImageView', 'BookView'],
       currentFocus:      'ThumbnailsView',
@@ -135,7 +129,7 @@
           return _this.layoutOptions[element] === false;
         });
       }
-      _this.element = jQuery(this.template(templateData)).appendTo(this.appendTo);
+      _this.element = jQuery(this.template(templateData));
       //_this.element.prepend(_this.manifestInfoTemplate(templateData));
 
       //clear any existing objects
@@ -178,6 +172,10 @@
     update: function(options) {
       jQuery.extend(this, options);
       this.init();
+    },
+
+    spawnInWorkspace: function() {
+
     },
 
     // reset whether BookView is available every time as a user might switch between paged and non-paged objects within a single slot/window
@@ -381,7 +379,7 @@
       if (panelType === 'bottomPanel') {
         this.focusModules[this.currentFocus].adjustHeight('focus-max-height', panelState);
       } else if (panelType === 'sidePanel') {
-        this.focusModules[this.currentFocus].adjustWidth('focus-side-panel-open', panelState);
+        this.focusModules[this.currentFocus].adjustWidth('focus-max-width', panelState);
       } else {}
     },
 

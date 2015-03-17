@@ -5,12 +5,12 @@
     jQuery.extend(true, this, {
       workspaceSlotCls: 'slot',
       slotID:           null,
+      layoutAddress:    null,
       focused:          null,
       appendTo:         null,
       parent:           null,
       window:           null,
       windowElement:    null
-
     }, options);
 
     this.init();
@@ -42,33 +42,17 @@
       });
     },
 
-    manifestToSlot: function(windowConfig) { 
+    placeWindow: function(window) { 
       var _this = this;
       _this.clearSlot();
-
-      windowConfig.parent = _this;
-      windowConfig.appendTo = _this.element;
-
-      if (!_this.window && !windowConfig.id) {
-        windowConfig.id = $.genUUID();
-      }
-      if (_this.window && !windowConfig.id) {
-        windowConfig.id = _this.window.id;
-      } 
-
-      if (_this.window) {
-        _this.window.update(windowConfig);
-      } else {
-        jQuery.publish("windowAdded", windowConfig.id);
-        _this.window = new $.Window(windowConfig);
-      }
+      _this.window = window;
+      _this.element.append(window.element);
     },
 
     clearSlot: function() {
       if (this.window) { 
-        this.window.element.toggle('fade', 300, function() {
-          jQuery(this).remove();        
-        });
+        this.window.element.remove();
+        delete this.window;
       }
     },
 
@@ -79,8 +63,9 @@
 
     addItem: function() {
       var _this = this;
-      _this.parent.focused = true;
-      _this.parent.addItem(_this.slotID);
+      _this.focused = true;
+      
+      _this.parent.addItem(_this.slot);
     },
 
     // template should be based on workspace type

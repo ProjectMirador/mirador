@@ -3,10 +3,9 @@ describe('Workspace', function() {
     this.viewer = {};
     this.viewerDiv = jQuery('<div/>');
     jasmine.getFixtures().set(this.viewerDiv);
-    // spyOn(Mirador.Workspace.prototype, 'calculateLayout').and.returnValue();
   });
 
-  xdescribe('splits', function() {
+  describe('splits', function() {
     it('should have three siblings instead of two', function() {
       this.workspace = new Mirador.Workspace({
         parent:                     this.viewer, //viewer
@@ -75,7 +74,6 @@ describe('Workspace', function() {
       expect(this.workspace.slots.length).toEqual(2);
       expect(this.workspace.layoutDescription.children[0].id).toBe(originalId);
     });
-
   });
 
   describe('removeNode', function() {
@@ -181,4 +179,33 @@ describe('Workspace', function() {
     
   });
 
+  xdescribe('Adding Windows', function() {
+    var mockManifest = {
+
+    };
+    var windowConfig = {
+
+    };
+    expect(this.workspace.windows.length).toBe(0);
+    this.workspace.addWindow(windowConfig);
+    expect(this.workspace.windows.length).toBe(1);
+  });
+
+  xdescribe('Resetting Layout', function() {
+    var mockManifest = {
+
+    };
+    var windowConfig = {
+
+    };
+    expect(this.workspace.windows.length).toBe(0);
+    this.workspace.addWindow(windowConfig);
+    this.workspace.addWindow(windowConfig);
+    this.workspace.addWindow(windowConfig);
+    expect(this.workspace.windows.length).toBe(3);
+    this.resetLayout('1x2');
+    expect(this.workspace.windows.length).toBe(2);
+    expect(this.workspace.slots.length).toBe(2);
+    expect(this.workspace.slots[0].window).not().toBe(null);
+  });
 });
