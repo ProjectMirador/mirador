@@ -147,6 +147,10 @@
 
             $a.text(btn.label);
 
+            if (btn.iconClass) {
+                $a.prepend('<span class="' + btn.iconClass + '"></span> ');
+            }
+
             if (btn.attributes){
                 $a.attr(btn.attributes);
             }
