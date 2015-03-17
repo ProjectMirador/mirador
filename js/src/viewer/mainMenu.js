@@ -41,7 +41,8 @@
                 showBookmark : this.parent.mainMenuSettings.buttons.bookmark,
                 showLayout : this.parent.mainMenuSettings.buttons.layout,
                 showOptions: this.parent.mainMenuSettings.buttons.options,
-                userButtons: this.parent.mainMenuSettings.userButtons
+                userButtons: this.parent.mainMenuSettings.userButtons,
+                userLogo:    this.parent.mainMenuSettings.userLogo
             }));
 
             this.bindEvents();
@@ -60,6 +61,11 @@
         },
 
         template: Handlebars.compile([
+        '{{#if userLogo}}',
+          '<ul class="user-logo {{mainMenuCls}}">',
+            '{{userlogo userLogo}}',
+          '</ul>',
+        '{{/if}}',
         '<ul class="{{mainMenuCls}}">',
         '{{#if showBookmark}}',
           '<li>',
@@ -185,7 +191,13 @@
 
     Handlebars.registerHelper('userbtns', function (userButtons) {
         return new Handlebars.SafeString(
-            jQuery('<ul class="user-buttons mirador-main-menu"></ul>').append(processUserButtons(userButtons)).get(0).outerHTML
+            jQuery('<ul class="user-buttons ' + this.mainMenuCls +'"></ul>').append(processUserButtons(userButtons)).get(0).outerHTML
+        );
+    });
+
+    Handlebars.registerHelper('userlogo', function (userLogo) {
+        return new Handlebars.SafeString(
+            processUserBtn(userLogo).get(0).outerHTML
         );
     });
 
