@@ -362,7 +362,7 @@
       newWindow.parent = targetSlot;
       targetSlot.placeWindow(newWindow);
 
-      jQuery.publish("windowAdded", windowConfig);
+      jQuery.publish("windowAdded", windowConfig.id);
     }
   };
 
