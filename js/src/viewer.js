@@ -87,6 +87,7 @@
 
     bindEvents: function() {
       var _this = this;
+      // check that windows are loading first to set state of slot?
       jQuery.subscribe('manifestReceived', function(event, newManifest) {
         if (_this.windowObjects) {
           var check = jQuery.grep(_this.windowObjects, function(object, index) {
@@ -114,18 +115,6 @@
         this[prop] = value;
       }
       jQuery.publish(prop + '.set', value);
-    },
-
-    updateLayout: function(type) {
-      _this = this;
-
-      //remove all windows from config
-      //need to remove windows that are no longer in the layout
-      //jQuery.publish("windowsRemoved");
-      _this.workspaceType = type;
-      _this.workspace.set('layoutDescription', _this.workspaces[_this.workspaceType].layout);
-      _this.workspace.calculateLayout();
-      _this.toggleLayoutControl();
     },
 
     // Sets state of overlays that layer over the UI state
@@ -200,8 +189,8 @@
 
     loadManifestFromConfig: function(options) {
       // check if there are available slots, otherwise don't process this object from config
-      var slot = this.workspace.availableSlot();
-      if (slot) {
+      var slotAddress = options.slotAddress ? options.slotAddress : this.workspace.getAvailableSlotPosition();
+      if (slotAddress) {
         var windowConfig = {
           manifest: this.manifests[options.loadedManifest],
           currentFocus : options.viewType,
@@ -213,7 +202,7 @@
           sidePanelAvailable : options.sidePanel,
           overlayAvailable : options.overlay,
           annotationLayerAvailable : options.annotationLayer,
-          slotID : slot ? slot : options.slot,
+          slotAddress: slotAddress,
           displayLayout : options.displayLayout,
           layoutOptions: options.layoutOptions
         };

@@ -77,8 +77,10 @@
       .call(cell)
       .each(function(d) {
         var appendTo = _this.element.children('div').filter('[data-layout-slot-id="'+ d.id+'"]')[0];
+        console.log(d);
         _this.slots.push(new $.Slot({
           slotID: d.id,
+          layoutAddress: d.address,
           focused: true,
           parent: _this,
           appendTo: appendTo
@@ -280,11 +282,33 @@
       }
     },
 
-    availableSlot: function() {
+    getSlotFromAddress: function(address) {
+      console.log(address);
+      var _this = this;
+      return _this.slots.filter(function(slot) {
+        return slot.layoutAddress === address;
+      })[0];
+    },
+
+    resetLayout: function(layoutDescription) {
+      console.log(this);
+      this.layoutDescription = layoutDescription;
+      this.calculateLayout();
+      this.placeWindows();
+    },
+
+    placeWindows: function() {
+      // take the windows array and place
+      // as many windows into places as can 
+      // fit.
+      console.log('placing windows');
+    },
+
+    getAvailableSlotPosition: function() {
       var toReturn = null;
       jQuery.each(this.slots, function(index, value) {
         if (!value.window) {
-          toReturn = value.slotID;
+          toReturn = value.layoutAddress;
           return false;
         }
       });
@@ -306,42 +330,45 @@
       this.slots[slotId].window = null;
     },
 
-    addItem: function(slotID) {
-      this.focusedSlot = slotID;
+    addItem: function(slot) {
+      this.focusedSlot = slot;
       this.parent.toggleLoadWindow();
     },
 
     addWindow: function(windowConfig) {
+      // Windows can be added from a config,
+      // from a saved state, (in both those cases they are in the form of "windowObjects")
+      // from the workspace windows list after a grid layout change,
+      // from the manifests panel in image mode,
+      // or from the manifests panel in thumbnail mode.
       var _this = this,
-      targetSlotID,
-      slot;
+      newWindow;
 
       jQuery.each(_this.parent.overlayStates, function(oState, value) {
+        // toggles the other top-level panels closed and focuses the
+        // workspace. For instance, after selecting an object from the
+        // manifestPanel.
         _this.parent.set(oState, false, {parent: 'overlayStates'});
       });
 
-      // slotID is appended to event name so only 
-      // the invoking slot initialises a new window in 
-      // itself.
-
-      // Just assign the slotIDs in order of manifest listing.
-
-      if (windowConfig.slotID) {
-        targetSlotID = windowConfig.slotID;
+      if (windowConfig.slotAddress) {
+        console.log('looking by address');
+        targetSlot = _this.getSlotFromAddress(windowConfig.slotAddress);
       } else {
-        targetSlotID = _this.focusedSlot || _this.slots.filter(function(slot) { 
+        targetSlot = _this.focusedSlot || _this.slots.filter(function(slot) {
           return slot.hasOwnProperty('window') ? true : false;
-        })[0].slotID;
+        })[0];
       }
 
-      jQuery.each(_this.slots, function(index, workspaceSlot) {
-        if (workspaceSlot.slotID === targetSlotID) {
-          slot = workspaceSlot;
-          return false;
-        }
-      });
+      console.log(targetSlot);
 
-      slot.manifestToSlot(windowConfig);
+      newWindow = new $.Window(windowConfig);
+      _this.windows.push(newWindow);
+      
+      newWindow.parent = targetSlot;
+      targetSlot.placeWindow(newWindow);
+
+      jQuery.publish("windowAdded", windowConfig);
     }
   };
 
