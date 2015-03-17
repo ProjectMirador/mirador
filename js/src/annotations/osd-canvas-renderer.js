@@ -65,7 +65,8 @@
               target : 'mouse',
               adjust : {
                 mouse: false
-              }
+              },
+              container: jQuery(_this.osdViewer.element)
              },
              style : {
               classes : 'qtip-bootstrap'

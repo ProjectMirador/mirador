@@ -64,7 +64,7 @@
       }
 
       // add workspaces panel
-      this.workspacePanel = new $.WorkspacePanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
+      //this.workspacePanel = new $.WorkspacePanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
 
       // add workset select menu (hidden by default) 
       this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });

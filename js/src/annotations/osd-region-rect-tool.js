@@ -151,7 +151,8 @@
             },
             position : {
               at: 'center',
-              viewport: jQuery(window)
+              viewport: jQuery(window),
+              container: jQuery(_this.osdViewer.element)
             },
             style : {
               classes : 'qtip-bootstrap'
