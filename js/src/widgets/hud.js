@@ -109,7 +109,7 @@
         if (OpenSeadragon.isFullScreen()) {
           OpenSeadragon.exitFullScreen();
         } else {
-          OpenSeadragon.requestFullScreen(_this.parent.element[0]);
+          OpenSeadragon.requestFullScreen(_this.parent.parent.element[0]);
         }
       });
 
