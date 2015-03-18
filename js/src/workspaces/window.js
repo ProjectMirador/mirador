@@ -90,7 +90,7 @@
       if (!_this.currentCanvasID) {
         _this.currentCanvasID = _this.imagesList[0]['@id'];
       }
-      
+
       this.annoEndpointAvailable = !jQuery.isEmptyObject($.viewer.annotationEndpoint);
 
       _this.getAnnotations();
@@ -321,7 +321,7 @@
           //update current image for all valid panels
         });
       });
-      
+
       //update panels with current image
       if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
@@ -437,16 +437,17 @@
     toggleImageView: function(canvasID) {
       this.currentCanvasID = canvasID;
       if (this.focusModules.ImageView === null) {
-        this.focusModules.ImageView = new $.ImageView( {manifest: this.manifest, 
-                                                      appendTo: this.element.find('.view-container'), 
-                                                      parent: this, 
-                                                      windowId: this.id,
-                                                      canvasID: canvasID, 
-                                                      imagesList: this.imagesList,
-                                                      osdOptions: this.focusOptions,
-                                                      bottomPanelAvailable: this.bottomPanelAvailable,
-                                                      annotationLayerAvailable: this.annotationLayerAvailable,
-                                                      annoEndpointAvailable: this.annoEndpointAvailable} );
+        this.focusModules.ImageView = new $.ImageView({
+          manifest: this.manifest, 
+          appendTo: this.element.find('.view-container'), 
+          parent: this, 
+          windowId: this.id,
+          canvasID: canvasID, 
+          imagesList: this.imagesList,
+          osdOptions: this.focusOptions,
+          bottomPanelAvailable: this.bottomPanelAvailable,
+          annotationLayerAvailable: this.annotationLayerAvailable,
+          annoEndpointAvailable: this.annoEndpointAvailable} );
       } else {
         var view = this.focusModules.ImageView;
         view.updateImage(canvasID);
@@ -612,127 +613,127 @@
     bindNavigation: function() {
       var _this = this;
 
-    this.element.find('.mirador-icon-image-view').on('mouseenter',
-      function() {
-      _this.element.find('.image-list').stop().slideFadeToggle(300);
-    }).on('mouseleave',
-    function() {
-      _this.element.find('.image-list').stop().slideFadeToggle(300);
-    });
+      this.element.find('.mirador-icon-image-view').on('mouseenter',
+                                                       function() {
+                                                         _this.element.find('.image-list').stop().slideFadeToggle(300);
+                                                       }).on('mouseleave',
+                                                       function() {
+                                                         _this.element.find('.image-list').stop().slideFadeToggle(300);
+                                                       });
 
-    this.element.find('.mirador-icon-window-menu').on('mouseenter',
-      function() {
-      _this.element.find('.slot-controls').stop().slideFadeToggle(300);
-    }).on('mouseleave',
-    function() {
-      _this.element.find('.slot-controls').stop().slideFadeToggle(300);
-    });
+                                                       this.element.find('.mirador-icon-window-menu').on('mouseenter',
+                                                                                                         function() {
+                                                                                                           _this.element.find('.slot-controls').stop().slideFadeToggle(300);
+                                                                                                         }).on('mouseleave',
+                                                                                                         function() {
+                                                                                                           _this.element.find('.slot-controls').stop().slideFadeToggle(300);
+                                                                                                         });
 
-    this.element.find('.single-image-option').on('click', function() {
-      _this.toggleImageView(_this.currentCanvasID);
-    });
+                                                                                                         this.element.find('.single-image-option').on('click', function() {
+                                                                                                           _this.toggleImageView(_this.currentCanvasID);
+                                                                                                         });
 
-    this.element.find('.book-option').on('click', function() {
-      _this.toggleBookView(_this.currentCanvasID);
-    });
+                                                                                                         this.element.find('.book-option').on('click', function() {
+                                                                                                           _this.toggleBookView(_this.currentCanvasID);
+                                                                                                         });
 
-    this.element.find('.scroll-option').on('click', function() {
-      _this.toggleScrollView(_this.currentCanvasID);
-    });
+                                                                                                         this.element.find('.scroll-option').on('click', function() {
+                                                                                                           _this.toggleScrollView(_this.currentCanvasID);
+                                                                                                         });
 
-    this.element.find('.thumbnails-option').on('click', function() {
-      _this.toggleThumbnails(_this.currentCanvasID);
-    });
+                                                                                                         this.element.find('.thumbnails-option').on('click', function() {
+                                                                                                           _this.toggleThumbnails(_this.currentCanvasID);
+                                                                                                         });
 
-    this.element.find('.mirador-icon-metadata-view').on('click', function() {
-      _this.toggleMetadataOverlay(_this.currentFocus);
-    });
+                                                                                                         this.element.find('.mirador-icon-metadata-view').on('click', function() {
+                                                                                                           _this.toggleMetadataOverlay(_this.currentFocus);
+                                                                                                         });
 
-    this.element.find('.mirador-icon-toc').on('click', function() {
-      _this.minMaxSidePanel(jQuery(this));
-    });
+                                                                                                         this.element.find('.mirador-icon-toc').on('click', function() {
+                                                                                                           _this.minMaxSidePanel(jQuery(this));
+                                                                                                         });
 
-    this.element.find('.new-object-option').on('click', function() {
-      _this.parent.addItem();
-    });
+                                                                                                         this.element.find('.new-object-option').on('click', function() {
+                                                                                                           _this.parent.addItem();
+                                                                                                         });
 
-    this.element.find('.remove-object-option').on('click', function() {
-      $.viewer.workspace.removeNode(_this.parent);
-    });
+                                                                                                         this.element.find('.remove-object-option').on('click', function() {
+                                                                                                           $.viewer.workspace.removeNode(_this.parent);
+                                                                                                         });
 
-    this.element.find('.add-slot-right').on('click', function() {
-      $.viewer.workspace.splitRight(_this.parent);
-    });
+                                                                                                         this.element.find('.add-slot-right').on('click', function() {
+                                                                                                           $.viewer.workspace.splitRight(_this.parent);
+                                                                                                         });
 
-    this.element.find('.add-slot-left').on('click', function() {
-      $.viewer.workspace.splitLeft(_this.parent);
-    });
+                                                                                                         this.element.find('.add-slot-left').on('click', function() {
+                                                                                                           $.viewer.workspace.splitLeft(_this.parent);
+                                                                                                         });
 
-    this.element.find('.add-slot-below').on('click', function() {
-      $.viewer.workspace.splitDown(_this.parent);
-    });
+                                                                                                         this.element.find('.add-slot-below').on('click', function() {
+                                                                                                           $.viewer.workspace.splitDown(_this.parent);
+                                                                                                         });
 
-    this.element.find('.add-slot-above').on('click', function() {
-      $.viewer.workspace.splitUp(_this.parent);
-    });
+                                                                                                         this.element.find('.add-slot-above').on('click', function() {
+                                                                                                           $.viewer.workspace.splitUp(_this.parent);
+                                                                                                         });
     },
 
     // template should be based on workspace type
     template: Handlebars.compile([
-                                             '<div class="window">',
-                                             '<div class="manifest-info">',
-                                             '<div class="window-manifest-navigation">',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-lg fa-fw"></i>',
-                                             '<ul class="dropdown image-list">',
-                                             '{{#if ImageView}}',
-                                             '<li class="single-image-option"><i class="fa fa-photo fa-lg fa-fw"></i> Image View</li>',
-                                             '{{/if}}',
-                                             '{{#if BookView}}',
-                                             '<li class="book-option"><i class="fa fa-columns fa-lg fa-fw"></i> Book View</li>',
-                                             '{{/if}}',
-                                             '{{#if ScrollView}}',
-                                             '<li class="scroll-option"><i class="fa fa-ellipsis-h fa-lg fa-fw"></i> Scroll View</li>',
-                                             '{{/if}}',
-                                             '</ul>',
-                                             '</a>',
-                                             '{{#if ThumbnailsView}}',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-thumbs-view thumbnails-option"><i class="fa fa-th fa-lg fa-rotate-90 fa-fw"></i>',
-                                             '</a>',
-                                             '{{/if}}',
-                                             '{{#if MetadataView}}',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="Object Metadata"><i class="fa fa-info-circle fa-lg fa-fw"></i></a>',
-                                             '{{/if}}',
-                                             '</div>',
-                                             '{{#if displayLayout}}',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="Change Layout"><i class="fa fa-table fa-lg fa-fw"></i>',
-                                             '<ul class="dropdown slot-controls">',
-                                             '{{#if layoutOptions.newObject}}',
-                                             '<li class="new-object-option"><i class="fa fa-plus-square fa-lg fa-fw"></i> New Object</li>',
-                                             '{{/if}}',
-                                             '{{#if layoutOptions.close}}',
-                                             '<li class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i> Close</li>',
-                                             '{{/if}}',
-                                             '{{#if layoutOptions.slotRight}}',
-                                             '<li class="add-slot-right"><i class="fa fa-caret-square-o-right fa-lg fa-fw"></i> Add Slot Right</li>',
-                                             '{{/if}}',
-                                             '{{#if layoutOptions.slotLeft}}',
-                                             '<li class="add-slot-left"><i class="fa fa-caret-square-o-left fa-lg fa-fw"></i> Add Slot Left</li>',
-                                             '{{/if}}',
-                                             '{{#if layoutOptions.slotAbove}}',
-                                             '<li class="add-slot-above"><i class="fa fa-caret-square-o-up fa-lg fa-fw"></i> Add Slot Above</li>',
-                                             '{{/if}}',
-                                             '{{#if layoutOptions.slotBelow}}',
-                                             '<li class="add-slot-below"><i class="fa fa-caret-square-o-down fa-lg fa-fw"></i> Add Slot Below</li>',
-                                             '{{/if}}',
-                                             '</ul>',
-                                             '</a>',
-                                             '{{/if}}',
-                                 '{{#if sidePanel}}',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-toc selected" title="View/Hide Table of Contents"><i class="fa fa-caret-down fa-lg fa-fw"></i></a>',
+                                 '<div class="window">',
+                                 '<div class="manifest-info">',
+                                 '<div class="window-manifest-navigation">',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-lg fa-fw"></i>',
+                                 '<ul class="dropdown image-list">',
+                                 '{{#if ImageView}}',
+                                 '<li class="single-image-option"><i class="fa fa-photo fa-lg fa-fw"></i> Image View</li>',
                                  '{{/if}}',
-                                             '<h3 class="window-manifest-title">{{title}}</h3>',
-                                             '</div>',
-                                             '<div class="content-container">',
+                                 '{{#if BookView}}',
+                                 '<li class="book-option"><i class="fa fa-columns fa-lg fa-fw"></i> Book View</li>',
+                                 '{{/if}}',
+                                 '{{#if ScrollView}}',
+                                 '<li class="scroll-option"><i class="fa fa-ellipsis-h fa-lg fa-fw"></i> Scroll View</li>',
+                                 '{{/if}}',
+                                 '</ul>',
+                                 '</a>',
+                                 '{{#if ThumbnailsView}}',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-thumbs-view thumbnails-option"><i class="fa fa-th fa-lg fa-rotate-90 fa-fw"></i>',
+                                 '</a>',
+                                 '{{/if}}',
+                                 '{{#if MetadataView}}',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="Object Metadata"><i class="fa fa-info-circle fa-lg fa-fw"></i></a>',
+                                 '{{/if}}',
+                                 '</div>',
+                                 '{{#if displayLayout}}',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="Change Layout"><i class="fa fa-table fa-lg fa-fw"></i>',
+                                 '<ul class="dropdown slot-controls">',
+                                 '{{#if layoutOptions.newObject}}',
+                                 '<li class="new-object-option"><i class="fa fa-plus-square fa-lg fa-fw"></i> New Object</li>',
+                                 '{{/if}}',
+                                 '{{#if layoutOptions.close}}',
+                                 '<li class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i> Close</li>',
+                                 '{{/if}}',
+                                 '{{#if layoutOptions.slotRight}}',
+                                 '<li class="add-slot-right"><i class="fa fa-caret-square-o-right fa-lg fa-fw"></i> Add Slot Right</li>',
+                                 '{{/if}}',
+                                 '{{#if layoutOptions.slotLeft}}',
+                                 '<li class="add-slot-left"><i class="fa fa-caret-square-o-left fa-lg fa-fw"></i> Add Slot Left</li>',
+                                 '{{/if}}',
+                                 '{{#if layoutOptions.slotAbove}}',
+                                 '<li class="add-slot-above"><i class="fa fa-caret-square-o-up fa-lg fa-fw"></i> Add Slot Above</li>',
+                                 '{{/if}}',
+                                 '{{#if layoutOptions.slotBelow}}',
+                                 '<li class="add-slot-below"><i class="fa fa-caret-square-o-down fa-lg fa-fw"></i> Add Slot Below</li>',
+                                 '{{/if}}',
+                                 '</ul>',
+                                 '</a>',
+                                 '{{/if}}',
+                                 '{{#if sidePanel}}',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-toc selected" title="View/Hide Table of Contents"><i class="fa fa-caret-down fa-lg fa-fw"></i></a>',
+                                 '{{/if}}',
+                                 '<h3 class="window-manifest-title">{{title}}</h3>',
+                                 '</div>',
+                                 '<div class="content-container">',
                                  '{{#if sidePanel}}',
                                  '<div class="sidePanel">',
                                  '</div>',
