@@ -439,6 +439,12 @@ li.highlight {
   float: left;
   margin: 4px;
 }
+.grid-item.hovered {
+  background:deepSkyBlue;
+  box-shadow: 0 0 10px black;
+  transform: scale(1.1);
+  transition: all 0.2s ease-out;
+}
 
 /* Workspace scaffolding */
 .workspace-container {

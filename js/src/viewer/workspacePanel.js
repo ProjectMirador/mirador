@@ -5,6 +5,7 @@
     jQuery.extend(true, this, {
       element: null,
       appendTo: null,
+      parent: null,
       workspace: null,
       maxRows: null,
       maxColumns: null
@@ -45,24 +46,28 @@
         _this.onSelect(gridString);
       });
 
-      _this.element.find('.grid-item').on('hover', _this.onHover);
+      _this.element.find('.grid-item').on('hover', function() {
+        var gridString = jQuery(this).data('gridstring');
+        _this.onHover(gridString);
+      });
     },
 
     onSelect: function(gridString) {
       var _this = this;
       var layoutDescription = $.layoutDescriptionFromGridString(gridString);
       _this.workspace.resetLayout(layoutDescription);
+      _this.parent.toggleWorkspacePanel();
     },
-    onHover: function(arg1, arg2, arg3) {
-      console.log(arg1);
-      console.log(arg2);
-      console.log(arg3);
+    onHover: function(gridString) {
+      console.log('hovering');
       var _this = this,
-      highestRow = jQuery(this),
-      highestColumns = jQuery(this);
-
-      console.log(jQuery(this));
-      _this.element.find('.grid-item').filter();
+      highestRow = gridString.charAt(0),
+      highestColumn = gridString.charAt(2),
+      gridItems = _this.element.find('.grid-item');
+      gridItems.removeClass('hovered');
+      gridItems.filter(function() {
+        return gridString.charAt(0)<highestRow && gridString.charAt(2)<highestColumn;
+      }).addClass('hovered');
     },
 
     hide: function() {
