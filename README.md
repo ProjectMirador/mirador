@@ -13,3 +13,5 @@ At the end of each sprint, we record a video of our progress. Below are links to
 3.  Demo 4: [ Switching between image viewing modes ](https://www.youtube.com/watch?v=vYMCOoVkRMk&list=PLYPP1-8uH9c5OwwsBoZdcwKyUS95sAbl)
 3.  Demo 5: [ Add basic table of contents and book viewing mode ](https://www.youtube.com/watch?v=hWscKGm_biE&index=3&list=PLYPP1-8uH9c5OwwsBoZdcwKyUS95sAblM)
 3.  Demo 6: [ Synchronise table of contents and more flexibly track user state ](https://www.youtube.com/watch?v=cxewYwtr5c0&index=4&list=PLYPP1-8uH9c5OwwsBoZdcwKyUS95sAblM)
+
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/IIIF/m2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
