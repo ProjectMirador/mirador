@@ -173,6 +173,7 @@
               var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
               _this.osd.viewport.fitBounds(rect, true);
             } else {
+              _this.osd.viewport.goHome(true);
             }
           };
 
