@@ -169,7 +169,10 @@
           }
         });
         if (!windowInConfig) {
-          windowObjects.push({'id' : windowID});
+          windowObjects.push({
+            'id' : windowID,
+            'slotAddress': 'row1'
+          });
         }
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
