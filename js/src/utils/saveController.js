@@ -160,16 +160,19 @@
         _this.set('layout', serialisedLayout, {parent: "currentConfig"} );
       });
 
-      jQuery.subscribe("windowAdded", function(event, windowID) {
+      jQuery.subscribe("windowAdded", function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects,
         windowInConfig = false;
         jQuery.each(windowObjects, function(index, window){
-          if (window.id === windowID) {
+          if (window.id === options.id) {
             windowInConfig = true;
           }
         });
         if (!windowInConfig) {
-          windowObjects.push({'id' : windowID});
+          windowObjects.push({
+            'id' : options.id,
+            'slotAddress': options.slotAddress 
+          });
         }
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });

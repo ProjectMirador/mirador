@@ -661,14 +661,22 @@ li.highlight {
 /*   font-weight: bold; */
 /* } */
 .view-container {
+  margin-left: 280px;
   height: 100%;
   position:relative;
   transition:all 0.3s ease;
   margin-left:0;
 }
 
-.view-container.focus-side-panel-open {
-  margin-left: 280px;
+.view-container.tranisition {
+}
+
+.view-container.focus-max-width {
+  margin-left: 0px;
+}
+
+.view-container.focus-side-panel-minimized {
+  margin-left: 0px;
 }
 
 .overlay {
@@ -1499,6 +1507,10 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 .qtip-bootstrap .qtip-content {
   padding: 0;
   clear: both;
+}
+.qtip-content {
+  max-height: 150px;
+  overflow: auto;
 }
 .annotation-tooltip {
   padding: 12px; 

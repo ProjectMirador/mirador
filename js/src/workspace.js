@@ -359,14 +359,15 @@
       }
 
       windowConfig.parent = targetSlot;
+      windowConfig.slotAddress = targetSlot.layoutAddress;
       windowConfig.id = windowConfig.id || $.genUUID();
-      
+
       newWindow = new $.Window(windowConfig);
       _this.windows.push(newWindow);
-      
+
       targetSlot.placeWindow(newWindow);
 
-      jQuery.publish("windowAdded", windowConfig.id);
+      jQuery.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
     }
   };
 

@@ -58,7 +58,7 @@
     ],
 
     'defaultWindowSettings': {
-      // same as individual window setting overrides
+
     },
 
     'availableAnnotationModes': [
