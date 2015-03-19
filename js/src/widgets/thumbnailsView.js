@@ -88,7 +88,7 @@
 
         scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
       }
-      _this.element.stop(true).scrollTo(scrollPosition, 900);
+      _this.element.scrollTo(scrollPosition, 900);
     },
 
     bindEvents: function() {
@@ -179,7 +179,7 @@
       if (this.panel) {
         element = element.parent();
       }
-      element.hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
+      element.hide({effect: "fade", duration: 300, easing: "easeOutCubic"});
     },
 
     show: function() {
@@ -190,7 +190,7 @@
       var _this = this;
       element.show({
         effect: "fade", 
-        duration: 1000, 
+        duration: 300, 
         easing: "easeInCubic", 
         complete: function() {
           _this.loadImages();

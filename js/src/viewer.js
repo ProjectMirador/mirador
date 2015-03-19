@@ -77,7 +77,7 @@
         maxRows: this.workspacePanelSettings.maxRows,
         maxColumns: this.workspacePanelSettings.maxColumns,
         preserveWindows: this.workspacePanelSettings.preserveWindows,
-        workspace: this.workspace,
+        workspace: this.workspace
       });
       
       this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });

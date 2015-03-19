@@ -93,6 +93,7 @@
       }
 
       this.annoEndpointAvailable = !jQuery.isEmptyObject($.viewer.annotationEndpoint);
+      _this.getAnnotations();
 
       //check config
       if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
@@ -165,8 +166,9 @@
         this.bottomPanelVisibility(false);      
       }
 
-      _this.setCurrentCanvasID(_this.currentCanvasID);
-
+      //this should work scroll the filmstrip if the current canvas in the filmstrip is far enough over
+      //but it isn't working because the position of the highlighted thumbnail is returning (0,0)
+      jQuery.publish(('currentCanvasIDUpdated.' + _this.id), _this.currentCanvasID);
     },
 
     update: function(options) {
@@ -426,7 +428,7 @@
     },
 
     toggleThumbnails: function(canvasID) {
-      // this.currentCanvasID = canvasID;
+      this.currentCanvasID = canvasID;
       if (this.focusModules.ThumbnailsView === null) {
         this.focusModules.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, canvasID: this.currentCanvasID, imagesList: this.imagesList} );
       } else {
@@ -496,20 +498,6 @@
       this.toggleFocus('ScrollView', '');    
     },
 
-    loadImageModeFromPanel: function(canvasID) {
-      var _this = this;
-      switch(_this.currentImageMode) {
-        case 'ImageView':
-          _this.toggleImageView(canvasID);
-        break;
-        case 'BookView':
-          _this.toggleBookView(canvasID);
-        break;
-        default:
-          break;
-      }
-    },
-
     updateFocusImages: function(imageList) {
       this.focusImages = imageList;
     },
@@ -523,7 +511,16 @@
         _this.annotationsList.pop();
       }
       this.getAnnotations();
-      this.loadImageModeFromPanel(canvasID);
+      switch(this.currentImageMode) {
+        case 'ImageView':
+          this.toggleImageView(this.currentCanvasID);
+        break;
+        case 'BookView':
+          this.toggleBookView(this.currentCanvasID);
+        break;
+        default:
+          break;
+      }
       jQuery.publish(('currentCanvasIDUpdated.' + _this.id), canvasID);
     },
 
@@ -623,69 +620,69 @@
     bindNavigation: function() {
       var _this = this;
 
-      this.element.find('.mirador-icon-image-view').on('mouseenter',
-                                                       function() {
-                                                         _this.element.find('.image-list').stop().slideFadeToggle(300);
-                                                       }).on('mouseleave',
-                                                       function() {
-                                                         _this.element.find('.image-list').stop().slideFadeToggle(300);
-                                                       });
+    this.element.find('.mirador-icon-image-view').on('mouseenter',
+      function() {
+      _this.element.find('.image-list').stop().slideFadeToggle(300);
+    }).on('mouseleave',
+    function() {
+      _this.element.find('.image-list').stop().slideFadeToggle(300);
+    });
 
-                                                       this.element.find('.mirador-icon-window-menu').on('mouseenter',
-                                                                                                         function() {
-                                                                                                           _this.element.find('.slot-controls').stop().slideFadeToggle(300);
-                                                                                                         }).on('mouseleave',
-                                                                                                         function() {
-                                                                                                           _this.element.find('.slot-controls').stop().slideFadeToggle(300);
-                                                                                                         });
+    this.element.find('.mirador-icon-window-menu').on('mouseenter',
+      function() {
+      _this.element.find('.slot-controls').stop().slideFadeToggle(300);
+    }).on('mouseleave',
+    function() {
+      _this.element.find('.slot-controls').stop().slideFadeToggle(300);
+    });
 
-                                                                                                         this.element.find('.single-image-option').on('click', function() {
-                                                                                                           _this.toggleImageView(_this.currentCanvasID);
-                                                                                                         });
+    this.element.find('.single-image-option').on('click', function() {
+      _this.toggleImageView(_this.currentCanvasID);
+    });
 
-                                                                                                         this.element.find('.book-option').on('click', function() {
-                                                                                                           _this.toggleBookView(_this.currentCanvasID);
-                                                                                                         });
+    this.element.find('.book-option').on('click', function() {
+      _this.toggleBookView(_this.currentCanvasID);
+    });
 
-                                                                                                         this.element.find('.scroll-option').on('click', function() {
-                                                                                                           _this.toggleScrollView(_this.currentCanvasID);
-                                                                                                         });
+    this.element.find('.scroll-option').on('click', function() {
+      _this.toggleScrollView(_this.currentCanvasID);
+    });
 
-                                                                                                         this.element.find('.thumbnails-option').on('click', function() {
-                                                                                                           _this.toggleThumbnails(_this.currentCanvasID);
-                                                                                                         });
+    this.element.find('.thumbnails-option').on('click', function() {
+      _this.toggleThumbnails(_this.currentCanvasID);
+    });
 
-                                                                                                         this.element.find('.mirador-icon-metadata-view').on('click', function() {
-                                                                                                           _this.toggleMetadataOverlay(_this.currentFocus);
-                                                                                                         });
+    this.element.find('.mirador-icon-metadata-view').on('click', function() {
+      _this.toggleMetadataOverlay(_this.currentFocus);
+    });
 
-                                                                                                         this.element.find('.mirador-icon-toc').on('click', function() {
-                                                                                                           _this.minMaxSidePanel(jQuery(this));
-                                                                                                         });
+    this.element.find('.mirador-icon-toc').on('click', function() {
+      _this.minMaxSidePanel(jQuery(this));
+    });
 
-                                                                                                         this.element.find('.new-object-option').on('click', function() {
-                                                                                                           _this.parent.addItem();
-                                                                                                         });
+    this.element.find('.new-object-option').on('click', function() {
+      _this.parent.addItem();
+    });
 
-                                                                                                         this.element.find('.remove-object-option').on('click', function() {
-                                                                                                           $.viewer.workspace.removeNode(_this.parent);
-                                                                                                         });
+    this.element.find('.remove-object-option').on('click', function() {
+      $.viewer.workspace.removeNode(_this.parent);
+    });
 
-                                                                                                         this.element.find('.add-slot-right').on('click', function() {
-                                                                                                           $.viewer.workspace.splitRight(_this.parent);
-                                                                                                         });
+    this.element.find('.add-slot-right').on('click', function() {
+      $.viewer.workspace.splitRight(_this.parent);
+    });
 
-                                                                                                         this.element.find('.add-slot-left').on('click', function() {
-                                                                                                           $.viewer.workspace.splitLeft(_this.parent);
-                                                                                                         });
+    this.element.find('.add-slot-left').on('click', function() {
+      $.viewer.workspace.splitLeft(_this.parent);
+    });
 
-                                                                                                         this.element.find('.add-slot-below').on('click', function() {
-                                                                                                           $.viewer.workspace.splitDown(_this.parent);
-                                                                                                         });
+    this.element.find('.add-slot-below').on('click', function() {
+      $.viewer.workspace.splitDown(_this.parent);
+    });
 
-                                                                                                         this.element.find('.add-slot-above').on('click', function() {
-                                                                                                           $.viewer.workspace.splitUp(_this.parent);
-                                                                                                         });
+    this.element.find('.add-slot-above').on('click', function() {
+      $.viewer.workspace.splitUp(_this.parent);
+    });
     },
 
     // template should be based on workspace type

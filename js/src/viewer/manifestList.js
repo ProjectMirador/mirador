@@ -78,7 +78,7 @@
     show: function() {
       var _this = this;
       jQuery(this.element).show({effect: "fade", duration: 160, easing: "easeInCubic"});
-    },
+    }
   };
 
 })(Mirador);
