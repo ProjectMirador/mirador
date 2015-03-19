@@ -415,7 +415,9 @@ li.highlight {
   padding-bottom: 3%;
   font-weight: normal;
 }
-
+#workspace-select-menu h3, #workspace-select-menu h2 {
+  color:lightGray;
+}
 .select-grid {
   width:60%;
   min-width:300px;
@@ -429,21 +431,29 @@ li.highlight {
   margin: 0 auto;
 }
 .grid-item {
-  border-radius: 7px;
-  background: lightgray;
   height: 50px;
   width: 50px;
-  transition: all 0.2s ease-out;
-  margin-left: 5%;
-  display: block;
   float: left;
-  margin: 4px;
+  padding: 4px;
+  display: block;
 }
-.grid-item.hovered {
+.grid-item .grid-icon {
+  background:gray;
+  height: 50px;
+  width: 50px;
+  border-radius: 7px;
+  display: block;
+  transition: all 0.2s ease-out;
+  margin:auto;
+}
+.grid-item.hovered .grid-icon {
   background:deepSkyBlue;
   box-shadow: 0 0 10px black;
   transform: scale(1.1) translateY(-10px) translateX(-5px);
   transition: all 0.2s ease-out;
+}
+.grid-text {
+  display:none;
 }
 
 /* Workspace scaffolding */
