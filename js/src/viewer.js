@@ -115,6 +115,7 @@
     },
 
     set: function(prop, value, options) {
+      console.log(prop, value, options);
       var _this = this;
       if (options) {
         this[options.parent][prop] = value;
@@ -126,8 +127,9 @@
 
     // Sets state of overlays that layer over the UI state
     toggleOverlay: function(state) {
+      console.log(state);
       var _this = this;
-      //first confirm all others are off
+      // first confirm all others are off
       jQuery.each(this.overlayStates, function(oState, value) {
         if (state !== oState) {
           _this.set(oState, false, {parent: 'overlayStates'});

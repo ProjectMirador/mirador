@@ -93,6 +93,7 @@
       }
 
       this.annoEndpointAvailable = !jQuery.isEmptyObject($.viewer.annotationEndpoint);
+      this.getAnnotations(); // adHoc
 
       //check config
       if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
@@ -165,8 +166,14 @@
         this.bottomPanelVisibility(false);      
       }
 
-      _this.setCurrentCanvasID(_this.currentCanvasID);
-
+      //_this.setCurrentCanvasID(_this.currentCanvasID);
+      //
+      // Table of contents still messes up the view.
+      //
+      // If you load a window with the thumbnail view, 
+      // switching doesn't work. 
+      //
+      // If you enter image view first, everything works.
     },
 
     update: function(options) {
@@ -174,9 +181,9 @@
       this.init();
     },
 
-    spawnInWorkspace: function() {
+    // spawnInWorkspace: function() {
 
-    },
+    // },
 
     // reset whether BookView is available every time as a user might switch between paged and non-paged objects within a single slot/window
     removeBookView: function() {

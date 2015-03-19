@@ -27,7 +27,6 @@
           return column;
         })
       };
-      console.log(templateData);
 
       this.element = jQuery(this.template(templateData)).appendTo(this.appendTo);
       this.bindEvents();
@@ -35,9 +34,12 @@
 
     bindEvents: function() {
       var _this = this;
-      // handle subscribed events
       jQuery.subscribe('workspacePanelVisible.set', function(_, stateValue) {
-        if (stateValue) { _this.show(); return; }
+        console.log('is anything happening????');
+        // console.log(_);
+        // console.log(stateValue);
+        console.log('workspacePanelVisible');
+        if (stateValue) { console.log('supposed to be hiding'); _this.show(); return; }
         _this.hide();
       });
 
@@ -46,9 +48,13 @@
         _this.onSelect(gridString);
       });
 
-      _this.element.find('.grid-item').on('hover', function() {
+      _this.element.find('.grid-item').on('mouseover', function() {
         var gridString = jQuery(this).data('gridstring');
         _this.onHover(gridString);
+      });
+      
+      _this.element.find('.select-grid').on('mouseout', function() {
+        _this.element.find('.grid-item').removeClass('hovered');
       });
     },
 
@@ -58,6 +64,7 @@
       _this.workspace.resetLayout(layoutDescription);
       _this.parent.toggleWorkspacePanel();
     },
+
     onHover: function(gridString) {
       console.log('hovering');
       var _this = this,
@@ -65,8 +72,12 @@
       highestColumn = gridString.charAt(2),
       gridItems = _this.element.find('.grid-item');
       gridItems.removeClass('hovered');
-      gridItems.filter(function() {
-        return gridString.charAt(0)<highestRow && gridString.charAt(2)<highestColumn;
+      gridItems.filter(function(index) {
+        var element = jQuery(this);
+        var change = element.data('gridstring').charAt(0) <= highestRow && element.data('gridstring').charAt(2)<=highestColumn;
+        console.log(jQuery(this));
+        console.log(change);
+        return change;
       }).addClass('hovered');
     },
 

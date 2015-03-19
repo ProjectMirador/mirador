@@ -442,8 +442,8 @@ li.highlight {
 .grid-item.hovered {
   background:deepSkyBlue;
   box-shadow: 0 0 10px black;
-  transform: scale(1.1);
-  transition: all 0.2s ease-out;
+  transform: scale(1.1) translateY(-10px) translateX(-5px);
+  transition: all 0.1s ease-out;
 }
 
 /* Workspace scaffolding */
