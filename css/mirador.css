@@ -415,6 +415,9 @@ li.highlight {
   padding-bottom: 3%;
   font-weight: normal;
 }
+#workspace-select-menu h3, #workspace-select-menu h2 {
+  color:lightGray;
+}
 .select-grid {
   width:60%;
   min-width:300px;
@@ -448,6 +451,9 @@ li.highlight {
   box-shadow: 0 0 10px black;
   transform: scale(1.1) translateY(-10px) translateX(-5px);
   transition: all 0.2s ease-out;
+}
+.grid-text {
+  display:none;
 }
 
 /* Workspace scaffolding */

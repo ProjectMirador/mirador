@@ -51,6 +51,8 @@
       
       _this.element.find('.select-grid').on('mouseout', function() {
         _this.element.find('.grid-item').removeClass('hovered');
+        _this.element.find('.grid-instructions').show();
+        _this.element.find('.grid-text').hide();
       });
     },
 
@@ -62,7 +64,6 @@
     },
 
     onHover: function(gridString) {
-      console.log('hovering');
       var _this = this,
       highestRow = gridString.charAt(0),
       highestColumn = gridString.charAt(2),
@@ -71,10 +72,10 @@
       gridItems.filter(function(index) {
         var element = jQuery(this);
         var change = element.data('gridstring').charAt(0) <= highestRow && element.data('gridstring').charAt(2)<=highestColumn;
-        console.log(jQuery(this));
-        console.log(change);
         return change;
       }).addClass('hovered');
+      _this.element.find('.grid-instructions').hide();
+      _this.element.find('.grid-text').text(gridString).show();
     },
 
     hide: function() {
@@ -88,6 +89,8 @@
     template: Handlebars.compile([
                                  '<div id="workspace-select-menu">',
                                  '<h1>Change Layout</h1>',
+                                 '<h3 class="grid-text"></h3>',
+                                 '<h3 class="grid-instructions">Select a grid below</h3>',
                                  '<div class="select-grid">',
                                  '{{#each rows}}',
                                  '<div class="grid-row">',
