@@ -165,10 +165,6 @@
       if (this.imagesList.length === 1) {
         this.bottomPanelVisibility(false);      
       }
-
-      //this should work scroll the filmstrip if the current canvas in the filmstrip is far enough over
-      //but it isn't working because the position of the highlighted thumbnail is returning (0,0)
-      jQuery.publish(('currentCanvasIDUpdated.' + _this.id), _this.currentCanvasID);
     },
 
     update: function(options) {
