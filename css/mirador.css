@@ -106,11 +106,6 @@ a {
   display: none;
   /*z-index: 10000;*/
 }
-.change-layout {
-  display: none;
-}
-
-
 /* status bar
 ---------------------------------------------------------------------------- */
   .mirador-status-bar {
@@ -416,24 +411,39 @@ li.highlight {
 }
 #workspace-select-menu h1 {
   color: lightgray;
-  font-size:4em;
-  padding-bottom:3%;
+  font-size: 4em;
+  padding-bottom: 3%;
+  font-weight: normal;
 }
-#workspace-select-menu ul {
-  margin:0 auto;
+
+.select-grid {
+  width:60%;
+  min-width:300px;
+  position:relative;
+  margin:auto;
 }
-#workspace-select-menu li {
-  list-style:none;
-  color:gray;
-  display:inline-block;
-  cursor: pointer;
-  margin:3%;
+.grid-row {
+  content: "";
+  display: table;
+  clear: both;
+  margin: 0 auto;
 }
-#workspace-select-menu li:hover {
-  color: lightgray;
+.grid-item {
+  border-radius: 7px;
+  background: lightgray;
+  height: 50px;
+  width: 50px;
+  transition: all 0.2s ease-out;
+  margin-left: 5%;
+  display: block;
+  float: left;
+  margin: 4px;
 }
-#workspace-select-menu .workspace-icon {
-  font-size:8em;
+.grid-item.hovered {
+  background:deepSkyBlue;
+  box-shadow: 0 0 10px black;
+  transform: scale(1.1) translateY(-10px) translateX(-5px);
+  transition: all 0.2s ease-out;
 }
 
 /* Workspace scaffolding */
@@ -655,6 +665,7 @@ li.highlight {
   height: 100%;
   position:relative;
   transition:all 0.3s ease;
+  margin-left:0;
 }
 
 .view-container.tranisition {

@@ -86,6 +86,12 @@
       //'width': '100%'
     },
 
+    'workspacePanelSettings': {
+      'maxRows': 5,
+      'maxColumns': 5,
+      'preserveWindows': true 
+    },
+
     //true or false.  controls display of "Add new object from URL" on manifest listing page
     'showAddFromURLBox' : true,
 

@@ -17,7 +17,7 @@
       resizeRatio:            {},
       currentWorkspaceVisible: true,
       overlayStates:          {
-        'layoutPanelVisible': false,
+        'workspacePanelVisible': false,
         'manifestsPanelVisible': false,
         'optionsPanelVisible': false,
         'bookmarkPanelVisible': false
@@ -63,14 +63,6 @@
         this.canvas.css("top", "0px");
       }
 
-      // add workspaces panel
-      //this.workspacePanel = new $.WorkspacePanel({appendTo: this.element.find('.mirador-viewer'), parent: this});
-
-      // add workset select menu (hidden by default) 
-      this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
-
-      this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
-
       // add workspace configuration
       this.layout = typeof this.layout !== 'string' ? JSON.stringify(this.layout) : this.layout;
       this.workspace = new $.Workspace({
@@ -78,6 +70,21 @@
         parent: this, 
         appendTo: this.element.find('.mirador-viewer')
       });
+      
+      this.workspacePanel = new $.WorkspacePanel({
+        appendTo: this.element.find('.mirador-viewer'),
+        parent: this,
+        maxRows: this.workspacePanelSettings.maxRows,
+        maxColumns: this.workspacePanelSettings.maxColumns,
+        preserveWindows: this.workspacePanelSettings.preserveWindows,
+        workspace: this.workspace
+      });
+      
+      this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
+
+      this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
+
+
 
       // set this to be displayed
       this.set('currentWorkspaceVisible', true);
@@ -108,6 +115,7 @@
     },
 
     set: function(prop, value, options) {
+      console.log(prop, value, options);
       var _this = this;
       if (options) {
         this[options.parent][prop] = value;
@@ -119,8 +127,9 @@
 
     // Sets state of overlays that layer over the UI state
     toggleOverlay: function(state) {
+      console.log(state);
       var _this = this;
-      //first confirm all others are off
+      // first confirm all others are off
       jQuery.each(this.overlayStates, function(oState, value) {
         if (state !== oState) {
           _this.set(oState, false, {parent: 'overlayStates'});
@@ -134,8 +143,8 @@
       this.toggleOverlay('manifestsPanelVisible');
     },
 
-    toggleLayoutControl: function() {
-      this.toggleOverlay('layoutPanelVisible');
+    toggleWorkspacePanel: function() {
+      this.toggleOverlay('workspacePanelVisible');
     },
 
     toggleBookmarkPanel: function() {

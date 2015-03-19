@@ -65,7 +65,7 @@
       var _this = this;
       _this.focused = true;
       
-      _this.parent.addItem(_this.slot);
+      _this.parent.addItem(_this);
     },
 
     // template should be based on workspace type

@@ -5,9 +5,10 @@
     jQuery.extend(true, this, {
       element: null,
       appendTo: null,
+      parent: null,
       workspace: null,
-      maxX: null,
-      maxY: null
+      maxRows: null,
+      maxColumns: null
     }, options);
 
     this.init();
@@ -17,28 +18,67 @@
   $.WorkspacePanel.prototype = {
     init: function () {
       var _this = this,
-      workspaceTemplate = [];
-      
-      this.element = jQuery(this.template({ workspaces : workspaceTemplate})).appendTo(this.appendTo);
+      templateData = {
+        rows: $.layoutDescriptionFromGridString(_this.maxColumns + 'x' + _this.maxRows).children.map(function(column, rowIndex) {
+          column.columns = column.children.map(function(row, columnIndex) {
+            row.gridString = (rowIndex+1) + 'x' + (columnIndex+1);
+            return row;
+          });
+          return column;
+        })
+      };
+
+      this.element = jQuery(this.template(templateData)).appendTo(this.appendTo);
       this.bindEvents();
     },
 
     bindEvents: function() {
       var _this = this;
-      // handle subscribed events
-      jQuery.subscribe('layoutPanelVisible.set', function(_, stateValue) {
-        if (stateValue) { _this.show(); return; }
+      jQuery.subscribe('workspacePanelVisible.set', function(_, stateValue) {
+        console.log('is anything happening????');
+        // console.log(_);
+        // console.log(stateValue);
+        console.log('workspacePanelVisible');
+        if (stateValue) { console.log('supposed to be hiding'); _this.show(); return; }
         _this.hide();
       });
+
+      _this.element.find('.grid-item').on('click', function() {
+        var gridString = jQuery(this).data('gridstring');
+        _this.onSelect(gridString);
+      });
+
+      _this.element.find('.grid-item').on('mouseover', function() {
+        var gridString = jQuery(this).data('gridstring');
+        _this.onHover(gridString);
+      });
       
-      jQuery('#workspace-select-menu').find('.workspace-option').on('click', function() {
-        $.viewer.updateLayout(jQuery(this).data('workspaceType'));
+      _this.element.find('.select-grid').on('mouseout', function() {
+        _this.element.find('.grid-item').removeClass('hovered');
       });
     },
 
     onSelect: function(gridString) {
+      var _this = this;
       var layoutDescription = $.layoutDescriptionFromGridString(gridString);
-      this.workspace.resetLayout(layoutDescription);
+      _this.workspace.resetLayout(layoutDescription);
+      _this.parent.toggleWorkspacePanel();
+    },
+
+    onHover: function(gridString) {
+      console.log('hovering');
+      var _this = this,
+      highestRow = gridString.charAt(0),
+      highestColumn = gridString.charAt(2),
+      gridItems = _this.element.find('.grid-item');
+      gridItems.removeClass('hovered');
+      gridItems.filter(function(index) {
+        var element = jQuery(this);
+        var change = element.data('gridstring').charAt(0) <= highestRow && element.data('gridstring').charAt(2)<=highestColumn;
+        console.log(jQuery(this));
+        console.log(change);
+        return change;
+      }).addClass('hovered');
     },
 
     hide: function() {
@@ -50,13 +90,21 @@
     },
 
     template: Handlebars.compile([
-       '<div id="workspace-select-menu">',
-         '<h1>Change Layout</h1>',
-         '<div class="select-grid">',
-       '</div>',
-         '<div class="preview-container">',
-       '</div>',
-       '</div>'
+                                 '<div id="workspace-select-menu">',
+                                 '<h1>Change Layout</h1>',
+                                 '<div class="select-grid">',
+                                 '{{#each rows}}',
+                                 '<div class="grid-row">',
+                                   '{{#each columns}}',
+                                   '<a class="grid-item" data-gridString="{{gridString}}">',
+                                   '</a>',
+                                   '{{/each}}',
+                                 '</div>',
+                                 '{{/each}}',
+                                 '</div>',
+                                 // '<div class="preview-container">',
+                                 // '</div>',
+                                 '</div>'
     ].join(''))
   };
 

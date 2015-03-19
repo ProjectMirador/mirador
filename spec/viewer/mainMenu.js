@@ -3,7 +3,7 @@ describe('MainMenu Class', function () {
     beforeEach(function() {
       this.viewer = {
         toggleBookmarkPanel: jasmine.createSpy(),
-        toggleSwitchWorkspace: jasmine.createSpy()
+        toggleWorkspacePanel: jasmine.createSpy()
       };
       this.viewer.mainMenuSettings = {
         'buttons' : {
@@ -36,7 +36,7 @@ describe('MainMenu Class', function () {
 
     it('can detect change-layout menu invocation', function () {
       this.viewerDiv.find('.change-layout').trigger('click');
-      expect(this.viewer.toggleSwitchWorkspace).toHaveBeenCalledWith();
+      expect(this.viewer.toggleWorkspacePanel).toHaveBeenCalledWith();
     });
 
   });

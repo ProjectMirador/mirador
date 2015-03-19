@@ -91,8 +91,9 @@
       if (!_this.currentCanvasID) {
         _this.currentCanvasID = _this.imagesList[0]['@id'];
       }
-      
+
       this.annoEndpointAvailable = !jQuery.isEmptyObject($.viewer.annotationEndpoint);
+      _this.getAnnotations();
 
       //check config
       if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
@@ -165,8 +166,9 @@
         this.bottomPanelVisibility(false);      
       }
 
-      _this.setCurrentCanvasID(_this.currentCanvasID);
-
+      //this should work scroll the filmstrip if the current canvas in the filmstrip is far enough over
+      //but it isn't working because the position of the highlighted thumbnail is returning (0,0)
+      jQuery.publish(('currentCanvasIDUpdated.' + _this.id), _this.currentCanvasID);
     },
 
     update: function(options) {
@@ -174,9 +176,9 @@
       this.init();
     },
 
-    spawnInWorkspace: function() {
+    // spawnInWorkspace: function() {
 
-    },
+    // },
 
     // reset whether BookView is available every time as a user might switch between paged and non-paged objects within a single slot/window
     removeBookView: function() {
@@ -323,7 +325,7 @@
           //update current image for all valid panels
         });
       });
-      
+
       //update panels with current image
       if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
@@ -426,7 +428,7 @@
     },
 
     toggleThumbnails: function(canvasID) {
-      // this.currentCanvasID = canvasID;
+      this.currentCanvasID = canvasID;
       if (this.focusModules.ThumbnailsView === null) {
         this.focusModules.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, canvasID: this.currentCanvasID, imagesList: this.imagesList} );
       } else {
@@ -439,16 +441,17 @@
     toggleImageView: function(canvasID) {
       this.currentCanvasID = canvasID;
       if (this.focusModules.ImageView === null) {
-        this.focusModules.ImageView = new $.ImageView( {manifest: this.manifest, 
-                                                      appendTo: this.element.find('.view-container'), 
-                                                      parent: this, 
-                                                      windowId: this.id,
-                                                      canvasID: canvasID, 
-                                                      imagesList: this.imagesList,
-                                                      osdOptions: this.focusOptions,
-                                                      bottomPanelAvailable: this.bottomPanelAvailable,
-                                                      annotationLayerAvailable: this.annotationLayerAvailable,
-                                                      annoEndpointAvailable: this.annoEndpointAvailable} );
+        this.focusModules.ImageView = new $.ImageView({
+          manifest: this.manifest, 
+          appendTo: this.element.find('.view-container'), 
+          parent: this, 
+          windowId: this.id,
+          canvasID: canvasID, 
+          imagesList: this.imagesList,
+          osdOptions: this.focusOptions,
+          bottomPanelAvailable: this.bottomPanelAvailable,
+          annotationLayerAvailable: this.annotationLayerAvailable,
+          annoEndpointAvailable: this.annoEndpointAvailable} );
       } else {
         var view = this.focusModules.ImageView;
         view.updateImage(canvasID);
@@ -480,33 +483,19 @@
       this.currentCanvasID = canvasID;
       if (this.focusModules.ScrollView === null) {
         var containerHeight = this.element.find('.view-container').height();
-        this.focusModules.ScrollView = new $.ScrollView( 
-                                                        {manifest: this.manifest, 
-                                                          appendTo: this.element.find('.view-container'), 
-                                                          parent: this, 
-                                                          canvasID: this.currentCanvasID, 
-                                                          imagesList: this.imagesList, 
-                                                          thumbInfo: {thumbsHeight: Math.floor(containerHeight * this.scrollImageRatio), listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}}
-                                                       );
+        this.focusModules.ScrollView = new $.ScrollView({
+          manifest: this.manifest, 
+          appendTo: this.element.find('.view-container'), 
+          parent: this, 
+          canvasID: this.currentCanvasID, 
+          imagesList: this.imagesList, 
+          thumbInfo: {thumbsHeight: Math.floor(containerHeight * this.scrollImageRatio), listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}
+        });
       } else {
         var view = this.focusModules.ScrollView;
         view.updateImage(canvasID);
       }
       this.toggleFocus('ScrollView', '');    
-    },
-
-    loadImageModeFromPanel: function(canvasID) {
-      var _this = this;
-      switch(_this.currentImageMode) {
-        case 'ImageView':
-          _this.toggleImageView(canvasID);
-        break;
-        case 'BookView':
-          _this.toggleBookView(canvasID);
-        break;
-        default:
-          break;
-      }
     },
 
     updateFocusImages: function(imageList) {
@@ -522,7 +511,16 @@
         _this.annotationsList.pop();
       }
       this.getAnnotations();
-      this.loadImageModeFromPanel(canvasID);
+      switch(this.currentImageMode) {
+        case 'ImageView':
+          this.toggleImageView(this.currentCanvasID);
+        break;
+        case 'BookView':
+          this.toggleBookView(this.currentCanvasID);
+        break;
+        default:
+          break;
+      }
       jQuery.publish(('currentCanvasIDUpdated.' + _this.id), canvasID);
     },
 
@@ -689,60 +687,60 @@
 
     // template should be based on workspace type
     template: Handlebars.compile([
-                                             '<div class="window">',
-                                             '<div class="manifest-info">',
-                                             '<div class="window-manifest-navigation">',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-lg fa-fw"></i>',
-                                             '<ul class="dropdown image-list">',
-                                             '{{#if ImageView}}',
-                                             '<li class="single-image-option"><i class="fa fa-photo fa-lg fa-fw"></i> Image View</li>',
-                                             '{{/if}}',
-                                             '{{#if BookView}}',
-                                             '<li class="book-option"><i class="fa fa-columns fa-lg fa-fw"></i> Book View</li>',
-                                             '{{/if}}',
-                                             '{{#if ScrollView}}',
-                                             '<li class="scroll-option"><i class="fa fa-ellipsis-h fa-lg fa-fw"></i> Scroll View</li>',
-                                             '{{/if}}',
-                                             '</ul>',
-                                             '</a>',
-                                             '{{#if ThumbnailsView}}',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-thumbs-view thumbnails-option"><i class="fa fa-th fa-lg fa-rotate-90 fa-fw"></i>',
-                                             '</a>',
-                                             '{{/if}}',
-                                             '{{#if MetadataView}}',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="Object Metadata"><i class="fa fa-info-circle fa-lg fa-fw"></i></a>',
-                                             '{{/if}}',
-                                             '</div>',
-                                             '{{#if displayLayout}}',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="Change Layout"><i class="fa fa-table fa-lg fa-fw"></i>',
-                                             '<ul class="dropdown slot-controls">',
-                                             '{{#if layoutOptions.newObject}}',
-                                             '<li class="new-object-option"><i class="fa fa-plus-square fa-lg fa-fw"></i> New Object</li>',
-                                             '{{/if}}',
-                                             '{{#if layoutOptions.close}}',
-                                             '<li class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i> Close</li>',
-                                             '{{/if}}',
-                                             '{{#if layoutOptions.slotRight}}',
-                                             '<li class="add-slot-right"><i class="fa fa-caret-square-o-right fa-lg fa-fw"></i> Add Slot Right</li>',
-                                             '{{/if}}',
-                                             '{{#if layoutOptions.slotLeft}}',
-                                             '<li class="add-slot-left"><i class="fa fa-caret-square-o-left fa-lg fa-fw"></i> Add Slot Left</li>',
-                                             '{{/if}}',
-                                             '{{#if layoutOptions.slotAbove}}',
-                                             '<li class="add-slot-above"><i class="fa fa-caret-square-o-up fa-lg fa-fw"></i> Add Slot Above</li>',
-                                             '{{/if}}',
-                                             '{{#if layoutOptions.slotBelow}}',
-                                             '<li class="add-slot-below"><i class="fa fa-caret-square-o-down fa-lg fa-fw"></i> Add Slot Below</li>',
-                                             '{{/if}}',
-                                             '</ul>',
-                                             '</a>',
-                                             '{{/if}}',
-                                 '{{#if sidePanel}}',
-                                             '<a href="javascript:;" class="mirador-btn mirador-icon-toc selected" title="View/Hide Table of Contents"><i class="fa fa-caret-down fa-lg fa-fw"></i></a>',
+                                 '<div class="window">',
+                                 '<div class="manifest-info">',
+                                 '<div class="window-manifest-navigation">',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-lg fa-fw"></i>',
+                                 '<ul class="dropdown image-list">',
+                                 '{{#if ImageView}}',
+                                 '<li class="single-image-option"><i class="fa fa-photo fa-lg fa-fw"></i> Image View</li>',
                                  '{{/if}}',
-                                             '<h3 class="window-manifest-title">{{title}}</h3>',
-                                             '</div>',
-                                             '<div class="content-container">',
+                                 '{{#if BookView}}',
+                                 '<li class="book-option"><i class="fa fa-columns fa-lg fa-fw"></i> Book View</li>',
+                                 '{{/if}}',
+                                 '{{#if ScrollView}}',
+                                 '<li class="scroll-option"><i class="fa fa-ellipsis-h fa-lg fa-fw"></i> Scroll View</li>',
+                                 '{{/if}}',
+                                 '</ul>',
+                                 '</a>',
+                                 '{{#if ThumbnailsView}}',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-thumbs-view thumbnails-option"><i class="fa fa-th fa-lg fa-rotate-90 fa-fw"></i>',
+                                 '</a>',
+                                 '{{/if}}',
+                                 '{{#if MetadataView}}',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="Object Metadata"><i class="fa fa-info-circle fa-lg fa-fw"></i></a>',
+                                 '{{/if}}',
+                                 '</div>',
+                                 '{{#if displayLayout}}',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="Change Layout"><i class="fa fa-table fa-lg fa-fw"></i>',
+                                 '<ul class="dropdown slot-controls">',
+                                 '{{#if layoutOptions.newObject}}',
+                                 '<li class="new-object-option"><i class="fa fa-plus-square fa-lg fa-fw"></i> New Object</li>',
+                                 '{{/if}}',
+                                 '{{#if layoutOptions.close}}',
+                                 '<li class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i> Close</li>',
+                                 '{{/if}}',
+                                 '{{#if layoutOptions.slotRight}}',
+                                 '<li class="add-slot-right"><i class="fa fa-caret-square-o-right fa-lg fa-fw"></i> Add Slot Right</li>',
+                                 '{{/if}}',
+                                 '{{#if layoutOptions.slotLeft}}',
+                                 '<li class="add-slot-left"><i class="fa fa-caret-square-o-left fa-lg fa-fw"></i> Add Slot Left</li>',
+                                 '{{/if}}',
+                                 '{{#if layoutOptions.slotAbove}}',
+                                 '<li class="add-slot-above"><i class="fa fa-caret-square-o-up fa-lg fa-fw"></i> Add Slot Above</li>',
+                                 '{{/if}}',
+                                 '{{#if layoutOptions.slotBelow}}',
+                                 '<li class="add-slot-below"><i class="fa fa-caret-square-o-down fa-lg fa-fw"></i> Add Slot Below</li>',
+                                 '{{/if}}',
+                                 '</ul>',
+                                 '</a>',
+                                 '{{/if}}',
+                                 '{{#if sidePanel}}',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-toc selected" title="View/Hide Table of Contents"><i class="fa fa-caret-down fa-lg fa-fw"></i></a>',
+                                 '{{/if}}',
+                                 '<h3 class="window-manifest-title">{{title}}</h3>',
+                                 '</div>',
+                                 '<div class="content-container">',
                                  '{{#if sidePanel}}',
                                  '<div class="sidePanel">',
                                  '</div>',

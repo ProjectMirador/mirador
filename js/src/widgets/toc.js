@@ -36,8 +36,8 @@
         this.tocData = this.initTocData();
         this.selectedElements = $.getRangeIDByCanvasID(_this.structures, _this.parent.currentCanvasID);
         this.element.find('.has-child ul').hide();
-        this.bindEvents();
         this.render();
+        this.bindEvents();
       }
     },
 
@@ -200,7 +200,7 @@
         _this.render();
       });
 
-      jQuery('.toc-link').on('click', function(event) {
+      _this.element.find('.toc-link').on('click', function(event) {
         event.stopPropagation();
         // The purpose of the immediate event is to update the data on the parent
         // by calling its "set" function. 
@@ -220,7 +220,7 @@
         // }
       });
       
-      jQuery('.caret').on('click', function(event) {
+      _this.element.find('.caret').on('click', function(event) {
         event.stopPropagation();
         
         var rangeID = jQuery(this).parent().data().rangeid;

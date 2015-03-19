@@ -32,10 +32,10 @@
             this.resultsWidth = clone.find('.select-results').outerWidth();
             clone.remove();
             
-            this.manifestLoadStatusIndicator = new $.ManifestLoadStatusIndicator({
-              manifests: this.parent.manifests,
-              appendTo: this.element.find('.select-results')
-            });
+            // this.manifestLoadStatusIndicator = new $.ManifestLoadStatusIndicator({
+            //   manifests: this.parent.manifests,
+            //   appendTo: this.element.find('.select-results')
+            // });
             this.bindEvents();
         },
 

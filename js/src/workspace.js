@@ -349,20 +349,25 @@
       });
 
       if (windowConfig.slotAddress) {
+        console.log('getting slot from address');
         targetSlot = _this.getSlotFromAddress(windowConfig.slotAddress);
       } else {
+        console.log('getting slot from Focused Slot');
         targetSlot = _this.focusedSlot || _this.slots.filter(function(slot) {
           return slot.hasOwnProperty('window') ? true : false;
         })[0];
       }
 
+      windowConfig.parent = targetSlot;
+      windowConfig.slotAddress = targetSlot.layoutAddress;
+      windowConfig.id = windowConfig.id || $.genUUID();
+
       newWindow = new $.Window(windowConfig);
       _this.windows.push(newWindow);
-      
-      newWindow.parent = targetSlot;
+
       targetSlot.placeWindow(newWindow);
 
-      jQuery.publish("windowAdded", windowConfig.id);
+      jQuery.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
     }
   };
 
