@@ -443,7 +443,7 @@ li.highlight {
   background:deepSkyBlue;
   box-shadow: 0 0 10px black;
   transform: scale(1.1) translateY(-10px) translateX(-5px);
-  transition: all 0.1s ease-out;
+  transition: all 0.2s ease-out;
 }
 
 /* Workspace scaffolding */
