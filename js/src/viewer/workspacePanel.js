@@ -35,11 +35,7 @@
     bindEvents: function() {
       var _this = this;
       jQuery.subscribe('workspacePanelVisible.set', function(_, stateValue) {
-        console.log('is anything happening????');
-        // console.log(_);
-        // console.log(stateValue);
-        console.log('workspacePanelVisible');
-        if (stateValue) { console.log('supposed to be hiding'); _this.show(); return; }
+        if (stateValue) { _this.show(); return; }
         _this.hide();
       });
 
@@ -97,6 +93,7 @@
                                  '<div class="grid-row">',
                                    '{{#each columns}}',
                                    '<a class="grid-item" data-gridString="{{gridString}}">',
+                                   '<div class="grid-icon"></div>',
                                    '</a>',
                                    '{{/each}}',
                                  '</div>',
