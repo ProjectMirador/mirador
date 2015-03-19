@@ -368,6 +368,8 @@
       targetSlot.placeWindow(newWindow);
 
       jQuery.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
+      //this needs to be called after the window is visible so that the thumbnail position is not 0,0 and therefore can be scrolled
+      jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
     }
   };
 
