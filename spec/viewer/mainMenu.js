@@ -71,7 +71,7 @@ describe('MainMenu Class', function () {
 
   });
 
-  describe('user buttons', function () {
+  describe('user buttons/logo', function () {
     beforeEach(function () {
 
       spyOn(console, 'log');
@@ -107,6 +107,10 @@ describe('MainMenu Class', function () {
               "attributes": {"id": "sl-two"}}]
           }
         ],
+        "userLogo": {
+          "label": "Logo",
+          "attributes": {"id": "logo"}
+        }
       }
 
       this.viewerDiv = jQuery('<div>');
@@ -135,6 +139,10 @@ describe('MainMenu Class', function () {
       expect(this.viewerDiv.find('ul.user-buttons > li > #sublist')).toExist();
       expect(this.viewerDiv.find('ul.user-buttons > li > #sublist + ul > li > #sl-one')).toExist();
       expect(this.viewerDiv.find('ul.user-buttons > li > #sublist + ul > li > #sl-two')).toExist();
+    });
+
+    it('creates userLogo', function () {
+      expect(this.viewerDiv.find('ul.user-logo > li > a#logo').text()).toBe('Logo');
     });
   });
 
