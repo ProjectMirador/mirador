@@ -167,10 +167,10 @@
       jQuery.subscribe("windowAdded", function(event, options) {
         console.log('added');
         var windowObjects = _this.currentConfig.windowObjects,
-        inArray = windowObjects.map(function(windowObj) {
+        inArray = jQuery.grep(windowObjects, function(windowObj) {
           return windowObj.id === options.id;
-        })[0];
-        if (!inArray) {
+        });
+        if (inArray.length === 0) {
           windowObjects.push({
             'id' : options.id,
             'slotAddress': options.slotAddress

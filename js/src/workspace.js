@@ -401,6 +401,8 @@
         targetSlot = _this.focusedSlot || _this.getAvailableSlotPosition();
         console.log(targetSlot);
       }
+      
+      windowConfig.appendTo = targetSlot.element;
 
       if (!targetSlot.window) {
         windowConfig.parent = targetSlot;
@@ -412,7 +414,7 @@
         newWindow = new $.Window(windowConfig);
         _this.windows.push(newWindow);
 
-        targetSlot.placeWindow(newWindow);
+        targetSlot.window = newWindow;
 
         // This needs to be called after the window is visible so that the thumbnail position is not 0,0 and therefore can be scrolled
         //
@@ -423,6 +425,9 @@
         console.log('existing window');
         console.log('targetSlot:');
         console.log(targetSlot);
+        targetSlot.window.element.toggle('fade', 300, function() {
+           jQuery(this).remove();        
+        });
         console.log('should be updating now');
         targetSlot.window.update(windowConfig);
         jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);

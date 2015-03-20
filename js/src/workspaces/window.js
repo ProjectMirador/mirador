@@ -130,7 +130,7 @@
           return _this.layoutOptions[element] === false;
         });
       }
-      _this.element = jQuery(this.template(templateData));
+      _this.element = jQuery(this.template(templateData)).appendTo(_this.appendTo);
 
       //clear any existing objects
       _this.clearViews();

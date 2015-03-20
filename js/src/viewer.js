@@ -97,8 +97,10 @@
       jQuery.subscribe('manifestReceived', function(event, newManifest) {
         if (_this.windowObjects) {
           var check = jQuery.grep(_this.windowObjects, function(object, index) {
+            console.log(object.loadedManifest, newManifest.uri);
             return object.loadedManifest === newManifest.uri;
           });
+          console.log(check.length);
           jQuery.each(check, function(index, config) {
             _this.loadManifestFromConfig(config);
           });
