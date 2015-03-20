@@ -108,7 +108,7 @@
         jQuery(this).hide().fadeIn(600);
       });
 
-      this.element.find('.select-metadata').on('click', function() {
+      this.element.on('click', function() {
         var windowConfig = {
           manifest: _this.manifest,
           currentCanvasID: null,
@@ -117,7 +117,8 @@
         $.viewer.workspace.addWindow(windowConfig);
       });
 
-      this.element.find('.preview-image').on('click', function() {
+      this.element.find('.preview-image').on('click', function(e) {
+        e.stopPropagation();
         var windowConfig = {
           manifest: _this.manifest,
           currentCanvasID: jQuery(this).attr('data-image-id'),
