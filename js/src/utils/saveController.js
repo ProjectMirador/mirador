@@ -98,6 +98,7 @@
       }
       this.save();
       jQuery.publish("saveControllerConfigUpdated");
+      console.log(this.currentConfig.windowObjects);
     },
 
     bindEvents: function() {
@@ -161,18 +162,19 @@
       });
 
       jQuery.subscribe("windowAdded", function(event, options) {
-        var windowObjects = _this.currentConfig.windowObjects,
-        windowInConfig = false;
-        jQuery.each(windowObjects, function(index, window){
-          if (window.id === options.id) {
-            windowInConfig = true;
-          }
-        });
-        if (!windowInConfig) {
-          windowObjects.push({
-            'id' : options.id,
-            'slotAddress': options.slotAddress 
+        var windowObjects = _this.currentConfig.windowObjects;
+        console.log(options);
+        if (windowObjects && windowObjects.length > 0) {
+          jQuery.each(windowObjects, function(index, window){
+            console.log('windowObj.id: ' + window.id + '\n' + 'options.id: ' +options.id);
+            if (window.id === options.id) {
+              console.log('detected new window');
+              jQuery.extend(windowObjects[index], options);
+            }
           });
+        } else {
+          console.log('okay...');
+          windowObjects = [options];
         }
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });

@@ -131,7 +131,6 @@
         });
       }
       _this.element = jQuery(this.template(templateData));
-      //_this.element.prepend(_this.manifestInfoTemplate(templateData));
 
       //clear any existing objects
       _this.clearViews();
@@ -169,6 +168,7 @@
 
     update: function(options) {
       jQuery.extend(this, options);
+      console.log(options);
       this.init();
     },
 

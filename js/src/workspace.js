@@ -68,7 +68,13 @@
 
       // Implicitly updates the existing elements.
       // Must come before the enter function.
-      divs.call(cell);
+      divs.call(cell).each(function(d) {
+        _this.slots.forEach(function(slot) {
+          if (slot.slotID === d.id) {
+            slot.layoutAddress = d.address;
+          }
+        });
+      });
 
       // Enter
       divs.enter().append("div")
@@ -298,7 +304,12 @@
       // take the windows array and place
       // as many windows into places as can 
       // fit.
+      var _this = this,
+      remainingWindows = _this.windows.
       console.log('placing windows');
+      
+      _this.windows.each(function(window) {
+        window.setSlotAddress(_this.getAvailableSlotPosition());});
     },
 
     getAvailableSlotPosition: function() {
@@ -317,6 +328,41 @@
 
       d3.select(window).on('resize', function(event) {
         _this.calculateLayout();
+      });
+      
+      jQuery.subscribe('manifestQueued', function(event, manifestPromise) {
+        // Trawl windowObjects preemptively for slotAddresses and
+        // notify those slots to display a "loading" state.
+        // Similar to the operation of the manifestLoadStatusIndicator
+        // and its associated manifestList controller.
+        var _this = this,
+        targetSlot;
+
+
+        if (_this.parent.windowObjects) {
+          var check = _this.parent.windowObjects.each(function(windowConfig, index) {
+            // windowConfig.slotAddress will give the slot;
+            // change the state on that slot to be "loading"
+            if (windowConfig.slotAddress) {
+              targetSlot = _this.getSlotFromAddress(windowConfig.slotAddress);
+            } else {
+              targetSlot = _this.focusedSlot || _this.slots.filter(function(slot) {
+                return slot.hasOwnProperty('window') ? true : false;
+              })[0];
+            }
+          });
+        }
+      });
+
+      jQuery.subscribe('windowRemoved', function(windowId) {
+        var remove = _this.windows.map(function(window) {
+          return window.id !== windowId;
+        })[0],
+        spliceIndex = _this.windows.indexOf(remove);
+
+        console.log(_this.windows);
+        _this.windows.splice(spliceIndex, 0);
+        console.log(_this.windows);
       });
     },
 
@@ -349,27 +395,41 @@
       });
 
       if (windowConfig.slotAddress) {
-        console.log('getting slot from address');
         targetSlot = _this.getSlotFromAddress(windowConfig.slotAddress);
+        console.log(targetSlot);
       } else {
-        console.log('getting slot from Focused Slot');
-        targetSlot = _this.focusedSlot || _this.slots.filter(function(slot) {
-          return slot.hasOwnProperty('window') ? true : false;
-        })[0];
+        targetSlot = _this.focusedSlot || _this.getAvailableSlotPosition();
+        console.log(targetSlot);
       }
 
-      windowConfig.parent = targetSlot;
-      windowConfig.slotAddress = targetSlot.layoutAddress;
-      windowConfig.id = windowConfig.id || $.genUUID();
+      if (!targetSlot.window) {
+        windowConfig.parent = targetSlot;
+        windowConfig.slotAddress = targetSlot.layoutAddress;
+        console.log(windowConfig.id);
+        windowConfig.id = windowConfig.id || $.genUUID();
+        newWindow = new $.Window(windowConfig);
+        _this.windows.push(newWindow);
 
-      newWindow = new $.Window(windowConfig);
-      _this.windows.push(newWindow);
+        targetSlot.placeWindow(newWindow);
 
-      targetSlot.placeWindow(newWindow);
+        jQuery.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
+        // This needs to be called after the window is visible so that the thumbnail position is not 0,0 and therefore can be scrolled
+        //
+        // Yeah, I think the source of the problem was that the element was being appended later than the canvas update call, which was never received by anything.
+        jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
+        console.log('added Window');
+      } else {
+        console.log('existing window');
+        console.log('targetSlot:');
+        console.log(targetSlot);
+        console.log('should be updating now');
+        targetSlot.window.update(windowConfig);
+        jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
+        // The target slot already has a window in it, so just update that window instead, 
+        // using the appropriate saving functions, etc. This obviates the need changing the 
+        // parent, slotAddress, setting a new ID, and so on.
+      }
 
-      jQuery.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
-      //this needs to be called after the window is visible so that the thumbnail position is not 0,0 and therefore can be scrolled
-      jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
     }
   };
 

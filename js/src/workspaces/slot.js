@@ -39,6 +39,12 @@
         } else {
           _this.element.find('.remove-slot-option').show();
         }
+
+        // Must reset the slotAddress of the window.
+        if (_this.window) {
+          _this.window.slotAddress = _this.layoutAddress;
+          console.log(_this.layoutAddress);
+        }
       });
     },
 
