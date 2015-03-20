@@ -405,14 +405,15 @@
       if (!targetSlot.window) {
         windowConfig.parent = targetSlot;
         windowConfig.slotAddress = targetSlot.layoutAddress;
-        console.log(windowConfig.id);
         windowConfig.id = windowConfig.id || $.genUUID();
+        
+        jQuery.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
+
         newWindow = new $.Window(windowConfig);
         _this.windows.push(newWindow);
 
         targetSlot.placeWindow(newWindow);
 
-        jQuery.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
         // This needs to be called after the window is visible so that the thumbnail position is not 0,0 and therefore can be scrolled
         //
         // Yeah, I think the source of the problem was that the element was being appended later than the canvas update call, which was never received by anything.

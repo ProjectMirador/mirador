@@ -415,12 +415,14 @@
       this.focusModules[focusState].toggle(true);
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
-      jQuery.publish("focusUpdated", {
+      jQuery.publish("windowUpdated", {
         id: _this.id, 
         viewType: _this.currentFocus, 
         canvasID: _this.currentCanvasID, 
         imageMode: _this.currentImageMode, 
-        loadedManifest: _this.manifest.jsonLd['@id']});
+        loadedManifest: _this.manifest.jsonLd['@id'],
+        slotAddress: _this.slotAddress
+      });
     },
 
     toggleThumbnails: function(canvasID) {

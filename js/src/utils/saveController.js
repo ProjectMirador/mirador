@@ -57,6 +57,8 @@
         } else {
           this.currentConfig = config;
         }
+        console.log('current Config');
+        console.log(this.currentConfig);
       }        
       //remove empty hashes from config
       this.currentConfig.windowObjects = jQuery.map(this.currentConfig.windowObjects, function(value, index) {
@@ -107,7 +109,8 @@
       // available data to update the appropriate 
       // field in the stored config.
 
-      jQuery.subscribe('focusUpdated', function(event, options) {
+      jQuery.subscribe('windowUpdated', function(event, options) {
+        console.log('updated');
         var windowObjects = _this.currentConfig.windowObjects;
         if (windowObjects && windowObjects.length > 0) {
           jQuery.each(windowObjects, function(index, window){
@@ -120,7 +123,7 @@
         }
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
-
+      
       jQuery.subscribe("imageBoundsUpdated", function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
         if (windowObjects && windowObjects.length > 0) {
@@ -162,26 +165,23 @@
       });
 
       jQuery.subscribe("windowAdded", function(event, options) {
-        var windowObjects = _this.currentConfig.windowObjects;
-        console.log(options);
-        if (windowObjects && windowObjects.length > 0) {
-          jQuery.each(windowObjects, function(index, window){
-            console.log('windowObj.id: ' + window.id + '\n' + 'options.id: ' +options.id);
-            if (window.id === options.id) {
-              console.log('detected new window');
-              jQuery.extend(windowObjects[index], options);
-            }
+        console.log('added');
+        var windowObjects = _this.currentConfig.windowObjects,
+        inArray = windowObjects.map(function(windowObj) {
+          return windowObj.id === options.id;
+        })[0];
+        if (!inArray) {
+          windowObjects.push({
+            'id' : options.id,
+            'slotAddress': options.slotAddress
           });
-        } else {
-          console.log('okay...');
-          windowObjects = [options];
+          _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
         }
-        _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
 
-      jQuery.subscribe("windowsRemoved", function(event) {
-        _this.set("windowObjects", [], {parent: "currentConfig"} );
-      });
+        jQuery.subscribe("windowsRemoved", function(event) {
+          _this.set("windowObjects", [], {parent: "currentConfig"} );
+        });
 
       jQuery.subscribe("windowRemoved", function(event, windowID) {
         var windowObjects = jQuery.grep(_this.currentConfig.windowObjects, function(window, index) {

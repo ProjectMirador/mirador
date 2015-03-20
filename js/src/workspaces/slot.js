@@ -32,7 +32,14 @@
       var _this = this;
 
       this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
-      this.element.find('.remove-slot-option').on('click', function(){ _this.parent.removeNode(_this); });
+      this.element.find('.remove-slot-option').on('click', function(){ 
+        _this.parent.removeNode(_this); 
+      });
+      jQuery.subscribe('windowRemoved', function(event, id) {
+        if (_this.window && _this.window.id === id) {
+          _this.clearSlot();
+        }
+      });
       jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
         if (_this.parent.slots.length <= 1) {
           _this.element.find('.remove-slot-option').hide();
@@ -43,7 +50,10 @@
         // Must reset the slotAddress of the window.
         if (_this.window) {
           _this.window.slotAddress = _this.layoutAddress;
-          console.log(_this.layoutAddress);
+          jQuery.publish('windowUpdated', {
+            id: _this.window.id,
+            slotAddress: _this.window.slotAddress
+          });
         }
       });
     },

@@ -85,7 +85,6 @@
       this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
 
 
-
       // set this to be displayed
       this.set('currentWorkspaceVisible', true);
 
