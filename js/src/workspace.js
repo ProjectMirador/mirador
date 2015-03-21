@@ -47,7 +47,7 @@
       jQuery.publish(prop + '.set', value);
     },
 
-    calculateLayout: function() {
+    calculateLayout: function(resetting) {
       var _this = this,
       layout;
 
@@ -103,9 +103,11 @@
           return map;
         }, {}),
         slot = slotMap[d.id];
-        if (slot && slot.window) {
+
+        if (slot && slot.window && !resetting) {
           jQuery.publish("windowRemoved", slot.window.id);
         }
+
         _this.slots.splice(_this.slots.indexOf(slot), 1);
       });
 
@@ -296,8 +298,9 @@
 
     resetLayout: function(layoutDescription) {
       this.layoutDescription = layoutDescription;
+      // this.calculateLayout(true);
       this.calculateLayout();
-      this.placeWindows();
+      // this.placeWindows();
     },
 
     placeWindows: function() {
@@ -305,11 +308,21 @@
       // as many windows into places as can 
       // fit.
       var _this = this,
-      remainingWindows = _this.windows.
+      remainingWindows = _this.windows;
+      console.log(remainingWindows);
       console.log('placing windows');
-      
-      _this.windows.each(function(window) {
-        window.setSlotAddress(_this.getAvailableSlotPosition());});
+
+      _this.windows.forEach(function(window) {
+        var slot = _this.getAvailableSlotPosition();
+        window.update({
+          id: window.id, 
+          slotAddress: slot.layoutAddress, 
+          appendTo: slot.element,
+          currentCanvasID: window.currentCanvasID,
+          currentFOcus: window.currentFocus
+        });
+      });
+      jQuery.publish(('currentCanvasIDUpdated.' + window.id), window.currentCanvasID);
     },
 
     getAvailableSlotPosition: function() {
@@ -359,10 +372,7 @@
           return window.id !== windowId;
         })[0],
         spliceIndex = _this.windows.indexOf(remove);
-
-        console.log(_this.windows);
         _this.windows.splice(spliceIndex, 0);
-        console.log(_this.windows);
       });
     },
 
@@ -425,9 +435,7 @@
         console.log('existing window');
         console.log('targetSlot:');
         console.log(targetSlot);
-        targetSlot.window.element.toggle('fade', 300, function() {
-           jQuery(this).remove();        
-        });
+        targetSlot.window.element.remove();        
         console.log('should be updating now');
         targetSlot.window.update(windowConfig);
         jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
@@ -435,8 +443,6 @@
         // using the appropriate saving functions, etc. This obviates the need changing the 
         // parent, slotAddress, setting a new ID, and so on.
       }
-
     }
   };
-
 }(Mirador));

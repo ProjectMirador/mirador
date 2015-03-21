@@ -37,6 +37,9 @@
       });
       jQuery.subscribe('windowRemoved', function(event, id) {
         if (_this.window && _this.window.id === id) {
+          // This prevents the save controller
+          // from attempting to re-save the window
+          // after having already removed it.
           _this.clearSlot();
         }
       });
@@ -58,23 +61,11 @@
       });
     },
 
-    placeWindow: function(window) { 
-      var _this = this;
-      _this.clearSlot();
-      _this.window = window;
-      _this.element.append(window.element);
-    },
-
     clearSlot: function() {
       if (this.window) { 
         this.window.element.remove();
         delete this.window;
       }
-    },
-
-    resize: function() {
-      // notify the layout manager with
-      // appropriate information.
     },
 
     addItem: function() {

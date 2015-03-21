@@ -101,6 +101,7 @@
       this.save();
       jQuery.publish("saveControllerConfigUpdated");
       console.log(this.currentConfig.windowObjects);
+      console.log(value);
     },
 
     bindEvents: function() {

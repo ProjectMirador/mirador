@@ -168,7 +168,6 @@
 
     update: function(options) {
       jQuery.extend(this, options);
-      console.log(options);
       this.init();
     },
 
@@ -520,6 +519,12 @@
           break;
       }
       jQuery.publish(('currentCanvasIDUpdated.' + _this.id), canvasID);
+    },
+    
+    replaceWindow: function(newSlotAddress, newElement) {
+      this.slotAddress = newSlotAddress;
+      this.appendTo = newElement;
+      this.update();
     },
 
     bottomPanelVisibility: function(visible) {
