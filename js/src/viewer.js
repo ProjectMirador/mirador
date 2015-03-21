@@ -97,10 +97,8 @@
       jQuery.subscribe('manifestReceived', function(event, newManifest) {
         if (_this.windowObjects) {
           var check = jQuery.grep(_this.windowObjects, function(object, index) {
-            console.log(object.loadedManifest, newManifest.uri);
             return object.loadedManifest === newManifest.uri;
           });
-          console.log(check.length);
           jQuery.each(check, function(index, config) {
             _this.loadManifestFromConfig(config);
           });
@@ -198,7 +196,7 @@
 
     loadManifestFromConfig: function(options) {
       // check if there are available slots, otherwise don't process this object from config
-      var slotAddress = options.slotAddress ? options.slotAddress : this.workspace.getAvailableSlotPosition();
+      var slotAddress = options.slotAddress ? options.slotAddress : this.workspace.getAvailableSlot().layoutAddress;
       var windowConfig = {
         manifest: this.manifests[options.loadedManifest],
         currentFocus : options.viewType,
@@ -214,9 +212,6 @@
         displayLayout : options.displayLayout,
         layoutOptions: options.layoutOptions
       };
-
-      console.log('loadingTheManifest: ');
-      console.log(windowConfig);
 
       this.workspace.addWindow(windowConfig);
     }
