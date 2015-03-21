@@ -298,22 +298,23 @@
 
     resetLayout: function(layoutDescription) {
       this.layoutDescription = layoutDescription;
-      // this.calculateLayout(true);
-      this.calculateLayout();
-      // this.placeWindows();
+      this.calculateLayout(true);
+      this.placeWindows();
     },
 
     placeWindows: function() {
       // take the windows array and place
       // as many windows into places as can 
       // fit.
-      var _this = this,
-      remainingWindows = _this.windows;
-      console.log(remainingWindows);
-      console.log('placing windows');
-
+      var _this = this;
+      if (_this.windows.length > _this.slots.length) {
+        _this.windows.splice(0, _this.windows.length -_this.slots.length);
+      }
+      
       _this.windows.forEach(function(window) {
-        var slot = _this.getAvailableSlotPosition();
+        var slot = _this.getAvailableSlot();
+        slot.window = window;
+
         window.update({
           id: window.id, 
           slotAddress: slot.layoutAddress, 
@@ -322,18 +323,15 @@
           currentFOcus: window.currentFocus
         });
       });
-      jQuery.publish(('currentCanvasIDUpdated.' + window.id), window.currentCanvasID);
     },
 
-    getAvailableSlotPosition: function() {
-      var toReturn = null;
-      jQuery.each(this.slots, function(index, value) {
-        if (!value.window) {
-          toReturn = value.layoutAddress;
-          return false;
-        }
-      });
-      return toReturn;
+    getAvailableSlot: function() {
+      console.log(this.slots.filter(function(slot) {
+        return !slot.window;
+      })[0]);
+      return this.slots.filter(function(slot) {
+        return !slot.window;
+      })[0];
     },
 
     bindEvents: function() {
@@ -406,10 +404,8 @@
 
       if (windowConfig.slotAddress) {
         targetSlot = _this.getSlotFromAddress(windowConfig.slotAddress);
-        console.log(targetSlot);
       } else {
-        targetSlot = _this.focusedSlot || _this.getAvailableSlotPosition();
-        console.log(targetSlot);
+        targetSlot = _this.focusedSlot || _this.getAvailableSlot();
       }
       
       windowConfig.appendTo = targetSlot.element;
@@ -430,13 +426,8 @@
         //
         // Yeah, I think the source of the problem was that the element was being appended later than the canvas update call, which was never received by anything.
         jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
-        console.log('added Window');
       } else {
-        console.log('existing window');
-        console.log('targetSlot:');
-        console.log(targetSlot);
         targetSlot.window.element.remove();        
-        console.log('should be updating now');
         targetSlot.window.update(windowConfig);
         jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
         // The target slot already has a window in it, so just update that window instead, 
