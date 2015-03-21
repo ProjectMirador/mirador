@@ -85,7 +85,6 @@
       this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
 
 
-
       // set this to be displayed
       this.set('currentWorkspaceVisible', true);
 
@@ -98,13 +97,16 @@
       jQuery.subscribe('manifestReceived', function(event, newManifest) {
         if (_this.windowObjects) {
           var check = jQuery.grep(_this.windowObjects, function(object, index) {
+            console.log(object.loadedManifest, newManifest.uri);
             return object.loadedManifest === newManifest.uri;
           });
+          console.log(check.length);
           jQuery.each(check, function(index, config) {
             _this.loadManifestFromConfig(config);
           });
         }
       });
+
     },
 
     get: function(prop, parent) {
@@ -115,7 +117,6 @@
     },
 
     set: function(prop, value, options) {
-      console.log(prop, value, options);
       var _this = this;
       if (options) {
         this[options.parent][prop] = value;
@@ -127,7 +128,6 @@
 
     // Sets state of overlays that layer over the UI state
     toggleOverlay: function(state) {
-      console.log(state);
       var _this = this;
       // first confirm all others are off
       jQuery.each(this.overlayStates, function(oState, value) {
@@ -199,25 +199,26 @@
     loadManifestFromConfig: function(options) {
       // check if there are available slots, otherwise don't process this object from config
       var slotAddress = options.slotAddress ? options.slotAddress : this.workspace.getAvailableSlotPosition();
-      if (slotAddress) {
-        var windowConfig = {
-          manifest: this.manifests[options.loadedManifest],
-          currentFocus : options.viewType,
-          focuses : options.availableViews,
-          currentCanvasID : options.canvasID,
-          id : options.id,
-          focusOptions : options.windowOptions,
-          bottomPanelAvailable : options.bottomPanel,
-          sidePanelAvailable : options.sidePanel,
-          overlayAvailable : options.overlay,
-          annotationLayerAvailable : options.annotationLayer,
-          slotAddress: slotAddress,
-          displayLayout : options.displayLayout,
-          layoutOptions: options.layoutOptions
-        };
+      var windowConfig = {
+        manifest: this.manifests[options.loadedManifest],
+        currentFocus : options.viewType,
+        focuses : options.availableViews,
+        currentCanvasID : options.canvasID,
+        id : options.id,
+        focusOptions : options.windowOptions,
+        bottomPanelAvailable : options.bottomPanel,
+        sidePanelAvailable : options.sidePanel,
+        overlayAvailable : options.overlay,
+        annotationLayerAvailable : options.annotationLayer,
+        slotAddress: slotAddress,
+        displayLayout : options.displayLayout,
+        layoutOptions: options.layoutOptions
+      };
 
-        this.workspace.addWindow(windowConfig);
-      }
+      console.log('loadingTheManifest: ');
+      console.log(windowConfig);
+
+      this.workspace.addWindow(windowConfig);
     }
   };
 

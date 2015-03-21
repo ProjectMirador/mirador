@@ -130,8 +130,7 @@
           return _this.layoutOptions[element] === false;
         });
       }
-      _this.element = jQuery(this.template(templateData));
-      //_this.element.prepend(_this.manifestInfoTemplate(templateData));
+      _this.element = jQuery(this.template(templateData)).appendTo(_this.appendTo);
 
       //clear any existing objects
       _this.clearViews();
@@ -415,12 +414,14 @@
       this.focusModules[focusState].toggle(true);
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
-      jQuery.publish("focusUpdated", {
+      jQuery.publish("windowUpdated", {
         id: _this.id, 
         viewType: _this.currentFocus, 
         canvasID: _this.currentCanvasID, 
         imageMode: _this.currentImageMode, 
-        loadedManifest: _this.manifest.jsonLd['@id']});
+        loadedManifest: _this.manifest.jsonLd['@id'],
+        slotAddress: _this.slotAddress
+      });
     },
 
     toggleThumbnails: function(canvasID) {
@@ -518,6 +519,12 @@
           break;
       }
       jQuery.publish(('currentCanvasIDUpdated.' + _this.id), canvasID);
+    },
+    
+    replaceWindow: function(newSlotAddress, newElement) {
+      this.slotAddress = newSlotAddress;
+      this.appendTo = newElement;
+      this.update();
     },
 
     bottomPanelVisibility: function(visible) {
