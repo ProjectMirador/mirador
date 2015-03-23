@@ -30,7 +30,7 @@
       }
     },
 
-    'layout': '1x2',
+    'layout': '1x1',
 
     'windowObjects' : [
       /** within a single object, the following options:
