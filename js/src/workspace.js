@@ -340,9 +340,6 @@
     },
 
     getAvailableSlot: function() {
-      console.log(this.slots.filter(function(slot) {
-        return !slot.window;
-      })[0]);
       return this.slots.filter(function(slot) {
         return !slot.window;
       })[0];
