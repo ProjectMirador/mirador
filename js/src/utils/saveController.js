@@ -57,8 +57,6 @@
         } else {
           this.currentConfig = config;
         }
-        console.log('current Config');
-        console.log(this.currentConfig);
       }        
       //remove empty hashes from config
       this.currentConfig.windowObjects = jQuery.map(this.currentConfig.windowObjects, function(value, index) {
@@ -100,8 +98,6 @@
       }
       this.save();
       jQuery.publish("saveControllerConfigUpdated");
-      console.log(this.currentConfig.windowObjects);
-      console.log(value);
     },
 
     bindEvents: function() {
@@ -111,7 +107,6 @@
       // field in the stored config.
 
       jQuery.subscribe('windowUpdated', function(event, options) {
-        console.log('updated');
         var windowObjects = _this.currentConfig.windowObjects;
         if (windowObjects && windowObjects.length > 0) {
           jQuery.each(windowObjects, function(index, window){
@@ -166,7 +161,6 @@
       });
 
       jQuery.subscribe("windowAdded", function(event, options) {
-        console.log('added');
         var windowObjects = _this.currentConfig.windowObjects,
         inArray = jQuery.grep(windowObjects, function(windowObj) {
           return windowObj.id === options.id;

@@ -306,9 +306,23 @@
       // take the windows array and place
       // as many windows into places as can 
       // fit.
-      var _this = this;
+      var _this = this,
+      deletedWindows;
+
       if (_this.windows.length > _this.slots.length) {
-        _this.windows.splice(0, _this.windows.length -_this.slots.length);
+        // splice modifies the original array and 
+        // returns the deleted items, 
+        // so we can just perform a forEach on the 
+        // return value, and have the saveController
+        // remove these windows in response to the event
+        // (which otherwise it would not do).
+        //
+        // The event was not called in the calculateLayout
+        // function because we need the other windows to remain,
+        // so we filter them here.
+        _this.windows.splice(0, _this.windows.length -_this.slots.length).forEach(function(removedWindow){
+          jQuery.publish('windowRemoved', removedWindow.id);
+        });
       }
       
       _this.windows.forEach(function(window) {
@@ -326,9 +340,6 @@
     },
 
     getAvailableSlot: function() {
-      console.log(this.slots.filter(function(slot) {
-        return !slot.window;
-      })[0]);
       return this.slots.filter(function(slot) {
         return !slot.window;
       })[0];
