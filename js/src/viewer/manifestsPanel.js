@@ -46,6 +46,7 @@
                 event.preventDefault();
                 var url = jQuery(this).find('input').val();
                 _this.parent.addManifestFromUrl(url, "(Added from URL)");
+                console.log('trying to add from URL');
             });
             
             this.element.find('.remove-object-option').on('click', function() {
