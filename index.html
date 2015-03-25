@@ -16,16 +16,6 @@
   <script type="text/javascript">
 
     $(function() {
-
-      var anno_token;
-      jQuery.ajax({
-        url: "http://oculus-dev.harvardx.harvard.edu/cgi-bin/token.py", 
-        success: function(data) {
-          anno_token = data.replace(/[\n\r]/g, '');
-        },
-        async:false
-      });
-
       Mirador({
         "id": "viewer",
         // "workspaceType": "1x2", // optional, allows you to limit functionality in 
@@ -75,12 +65,10 @@
           { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BeineckeMS360", "location": "Yale University"},
           { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BeineckeMS525", "location": "Yale University"},
           { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BeineckeMS748", "location": "Yale University"},
-          {"manifestUri": "http://scta.info/iiif/pg-lon/manifest"},
           // { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BeineckeMS758_5"},
           { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMSBodley113", "location": "Yale University"},
-          // { "manifestUri": "http://www.shared-canvas.org/impl/demo1d/res/manifest.json" },
-          { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMSBodley850"},
-          { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMSDouce18"},
+          { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMSBodley850", "location": "Yale University"},
+          { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMSDouce18", "location": "Yale University"},
           // { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMSGoughLiturg_3"},
           // { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMSLaudMisc_204"},
           // { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMS_Auct_D_inf_2_11"},
@@ -88,11 +76,10 @@
           // { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMS_Bodley861"},
           // { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMS_Bodley920"},
           // { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMS_Douce231"},
-          { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMS_GoughLiturg_19"},
-          { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMS_Lat_Liturg_f_21"},
-          { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMS_Lat_liturg_f_2"},
+          { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMS_GoughLiturg_19", "location": "Yale University"},
+          { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMS_Lat_Liturg_f_21", "location": "Yale University"},
+          { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMS_Lat_liturg_f_2", "location": "Yale University"},
          // {"manifestUri": "http://dms-data.stanford.edu/data/manifests/BnF/jr903ng8662/manifest.json"},
-          //{"manifestUri": "http://www.shared-canvas.org/impl/demo1d/res/manifest.json"},
           // { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMS_LaudLat_4"},
           // { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMS_LaudMisc_188"},
           // { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMSliturg_e_17"},
