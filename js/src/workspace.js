@@ -357,12 +357,10 @@
         // notify those slots to display a "loading" state.
         // Similar to the operation of the manifestLoadStatusIndicator
         // and its associated manifestList controller.
-        var _this = this,
-        targetSlot;
-
+        var targetSlot;
 
         if (_this.parent.windowObjects) {
-          var check = _this.parent.windowObjects.each(function(windowConfig, index) {
+          var check = _this.parent.windowObjects.forEach(function(windowConfig, index) {
             // windowConfig.slotAddress will give the slot;
             // change the state on that slot to be "loading"
             if (windowConfig.slotAddress) {

@@ -28,7 +28,9 @@
       this.metadataTypes.details = _this.getMetadataDetails(_this.manifest);
       this.metadataTypes.rights = _this.getMetadataRights(_this.manifest);
       this.metadataTypes.links = _this.getMetadataLinks(_this.manifest);
+      this.metadataTypes.relatedLinks = _this.getMetadataRelatedLinks(_this.manifest);
 
+      //vvvvv This is *not* how this should be done.
       jQuery.each(this.metadataTypes, function(metadataKey, metadataValue) {
         tplData[metadataKey] = [];
 
@@ -147,10 +149,17 @@
    },
 
    getMetadataLinks: function(jsonLd) {
+     // #414
       return {
           'related': jsonLd.related || '',
-          'seeAlso':  jsonLd.seeAlso || '',
-          'within':   jsonLd.within || ''
+          'seeAlso': jsonLd.seeAlso || '',
+          'within':  jsonLd.within || ''
+        };
+   },
+   
+   getMetadataRelatedLinks: function(jsonLd) {
+      return {
+          'related': jsonLd.related || '',
         };
    },
 
@@ -238,12 +247,14 @@
           '{{#each links}}',
             '<dt>{{label}}:</dt><dd>{{{value}}}</dd>',
           '{{/each}}',
+          // '{{#if relatedLinks}}',
+          //   '<dt>{{label}}:</dt><dd>{{{value}}}</dd>',
+          // '{{/if}}',
         '</dl>',
         '{{/if}}'
 
     ].join(''), { noEscape: true })
 
   };
-
 
 }(Mirador));

@@ -36,6 +36,7 @@
   $.Viewer.prototype = {
 
     init: function() {
+      var _this = this;
       // retrieve manifests
       this.getManifestsData();
 
@@ -184,6 +185,7 @@
       manifest;
 
       if (!_this.manifests[url]) {
+      console.log('new');
         manifest = new $.Manifest(url, location);
         _this.manifests[url] = manifest;
         _this.manifests.push(manifest);
