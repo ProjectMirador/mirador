@@ -16,29 +16,14 @@
   <script type="text/javascript">
 
     $(function() {
-
-      var anno_token;
-      jQuery.ajax({
-        url: "http://oculus-dev.harvardx.harvard.edu/cgi-bin/token.py", 
-        success: function(data) {
-          anno_token = data.replace(/[\n\r]/g, '');
-        },
-        async:false
-      });
-
       Mirador({
         "id": "viewer",
-        // "workspaceType": "1x2", // optional, allows you to limit functionality in 
-        // a variety of collections of settings.
         "layout": "1x1",
-        //"mainMenuSettings" : {"show": true, "buttons" : {"bookmark" : true, "layout" : true}},
-        //'showAddFromURLBox' : false,
-        //"saveSession":false,
         "data": [
           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/drs:48309543", "location": "Harvard University"}, // Harvard Scroll 
-         { "manifestUri": "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/manifest.json", "location": "Stanford University"},
-         { "manifestUri": "http://dms-data.stanford.edu/data/manifests/Stanford/ege1/manifest.json", "location": "Stanford University"},
-         { "manifestUri": "http://dms-data.stanford.edu/data/manifests/BnF/jr903ng8662/manifest.json ", "location": "Stanford University"},
+          { "manifestUri": "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/manifest.json", "location": "Stanford University"},
+          { "manifestUri": "http://dms-data.stanford.edu/data/manifests/Stanford/ege1/manifest.json", "location": "Stanford University"},
+          { "manifestUri": "http://dms-data.stanford.edu/data/manifests/BnF/jr903ng8662/manifest.json ", "location": "Stanford University"},
           { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/Admont23", "location": "Yale University"},
           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/drs:5981093", "location": "Harvard University"},
           { "manifestUri": "http://dams.llgc.org.uk/iiif/4574752/manifest.json"},
