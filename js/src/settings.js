@@ -101,6 +101,7 @@
       'Harvard University': 'harvard_logo.png',
       'e-codices': 'e-codices_logo.png',
       'BnF': 'bnf_logo.jpeg',
+      'National Library of Wales': 'llgc_logo.jpeg',
       'other': 'iiif_logo.png'
     },
 
