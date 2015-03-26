@@ -73,7 +73,6 @@ You may also wish to obtain the source code from the [latest release](https://gi
           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/huam:320567", "location": "Harvard University"},
           { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/Admont43", "location": "Yale University"},
           { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BeineckeMS10", "location": "Yale University"},
-          {"manifestUri": "http://scta.info/iiif/pg-lon/manifest"},
           { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMSBodley113", "location": "Yale University"},
           { "manifestUri": "http://iiif.biblissima.fr/manifests/ark:/12148/btv1b84539771/manifest.json", "location":'BnF' },
           { "manifestUri": "http://iiif.biblissima.fr/manifests/ark:/12148/btv1b10500687r/manifest.json", "location": 'BnF'},
