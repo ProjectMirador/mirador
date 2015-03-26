@@ -8,6 +8,7 @@ Mirador
 =======
 Mirador is a multi-repository, configurable, extensible, and easy-to-integrate viewer amd annotation creation and comparison environment for IIIF resources, ranging from deep-zooming artwork, to complex manuscript objects. It provides a tiling windowed environment for comparing multiple image-based resources, synchronised structural and visual navigation of content using openSeadragon, Open Annotation compliant annotation creation and viewing on deep-zoomable canvases, metadata display, bookreading, and bookmarking.
 
+### Getting Started
 To begin working with Mirador, run:
 
 `git clone https://github.com/IIIF/m2.git`
@@ -20,8 +21,8 @@ Either visit the root folder of the project at localhost, or, if you are using `
 
 To integrate the component into your project, include the `mirador.min.js` and `mirador-combined.css` from the build folder into your webpage or application asset pipeline, and call the Mirador constructor function with any appropriate configuration.
 
-### For Example
-```
+#### For Example
+```html
 <!DOCTYPE html>
 <head>
   <meta charset="utf-8">
@@ -91,6 +92,8 @@ To integrate the component into your project, include the `mirador.min.js` and `
 A Mirador instance will fill its container (not stretch it to a certain size). Therefore, the parent must have a definite height and width, and either `relative`, `fixed` or `absolute` position to work correctly (as seen above).
 
 There can be as many instances of Mirador running on one page as desired. Simply name them differently and point them to different elements on the page.
+
+For more information, see the [wiki](https://github.com/IIIF/mirador/wiki), submit an [issue](https://github.com/mirador/mirador/issues), or ask on [gitter](https://gitter.im/IIIF/mirador).
 
 
 
