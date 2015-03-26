@@ -11,7 +11,7 @@ Mirador is a multi-repository, configurable, extensible, and easy-to-integrate v
 ### Getting Started
 To begin working with Mirador, run:
 
-`git clone https://github.com/IIIF/m2.git`
+`git clone https://github.com/IIIF/mirador.git`
 
 Install all dependencies with `npm install` and `bower install`. Run `grunt`.
 
