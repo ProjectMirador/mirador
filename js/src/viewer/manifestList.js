@@ -16,7 +16,6 @@
     render: function() {
       var _this = this;
 
-      console.log(_this.manifests.length);
       var pending = _this.manifests.filter(function(d,i) {
         return d.request.state() === 'pending';
       }),
@@ -31,8 +30,6 @@
       var requests = d3.select(_this.element[0])
       .selectAll('div.pending')
       .data(pending);
-
-      console.log(pending);
 
       // add new requests to the queue.
       requests.enter()
@@ -61,11 +58,9 @@
     bindEvents: function() {
       var _this = this;
       jQuery.subscribe('manifestQueued', function(manifest) {
-        console.log('queued');
         _this.render();
       });
       jQuery.subscribe('manifestReceived', function(manifest) {
-        console.log('received');
         _this.render();
       });
     },

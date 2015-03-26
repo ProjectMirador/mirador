@@ -142,15 +142,12 @@
         // console.log(lastCanvasId);
         // If it is the first canvas, hide the "go to previous" button, otherwise show it.
         if (canvasId === firstCanvasId) {
-          console.log("it's the first");
           _this.parent.element.find('.mirador-osd-previous').hide();
           _this.parent.element.find('.mirador-osd-next').show();
         } else if (canvasId === lastCanvasId) {
-          console.log("it's the last");
           _this.parent.element.find('.mirador-osd-next').hide();
           _this.parent.element.find('.mirador-osd-previous').show();
         } else {
-          console.log("we're in the middle somewhere");
           _this.parent.element.find('.mirador-osd-next').show();
           _this.parent.element.find('.mirador-osd-previous').show();
         }

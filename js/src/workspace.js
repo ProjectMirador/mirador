@@ -437,7 +437,7 @@
         // Yeah, I think the source of the problem was that the element was being appended later than the canvas update call, which was never received by anything.
         jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
       } else {
-        // targetSlot.window.element.remove();        
+        targetSlot.window.element.remove();        
         targetSlot.window.update(windowConfig);
         jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
         // The target slot already has a window in it, so just update that window instead, 
