@@ -21,6 +21,8 @@ Either visit the root folder of the project at localhost, or, if you are using `
 
 To integrate the component into your project, include the `mirador.min.js` and `mirador-combined.css` from the build folder into your webpage or application asset pipeline, and call the Mirador constructor function with any appropriate configuration.
 
+You may also wish to obtain the source code from the [latest release](https://github.com/IIIF/mirador/releases/latest) as a downloadable artefact. The necessary files will be **in the build folder**.
+
 #### For Example
 ```html
 <!DOCTYPE html>
