@@ -159,7 +159,7 @@
    
    getMetadataRelatedLinks: function(jsonLd) {
       return {
-          'related': jsonLd.related || '',
+          'related': jsonLd.related || ''
         };
    },
 
