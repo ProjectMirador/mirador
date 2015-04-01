@@ -1518,7 +1518,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   clear: both;
 }
 .qtip-content {
-  max-height: 150px;
+  max-height: 185px;
   overflow: auto;
 }
 .annotation-tooltip {
@@ -1556,7 +1556,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 .text-editor, .tags-editor {
   padding: 5px;
   display: block;
-  margin-bottom: 12px;
+  margin: 6px 0px 6px 0px;
   border: 0;
   background: #efefef;
   box-shadow: inset 0 0 7px gray;
@@ -1589,4 +1589,9 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   font-weight: bold;
   border: 1px solid #aaa;
 }
+
+.mce-edit-area iframe {
+    height: 75px !important;
+}
+
 

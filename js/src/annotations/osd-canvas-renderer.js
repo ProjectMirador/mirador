@@ -199,7 +199,6 @@
         //add rich text editor
         tinymce.init({
                   selector : 'form.annotation-tooltip textarea',
-                  height: 75,
                   plugins: "image link media",
                   menubar: false,
                   statusbar: false,
