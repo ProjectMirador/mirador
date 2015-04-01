@@ -167,15 +167,18 @@
             },
             events: {
               render: function(event, api) {
+              
+                //disable all tooltips for overlays
+                jQuery.publish('disableTooltips.'+parent.windowId);
                 
-                /*tinymce.init({
+                tinymce.init({
                   selector : 'form.annotation-tooltip textarea',
                   plugins: "image link media",
                   menubar: false,
                   statusbar: false,
                   toolbar_items_size: 'small',
                   toolbar: "bold italic | bullist numlist | link image media"
-                });*/
+                });
                       
                 jQuery('.annotation-tooltip').on("submit", function(event) {
                   event.preventDefault();
@@ -186,14 +189,15 @@
                   event.preventDefault();
                   api.destroy();
                   _this.osdViewer.removeOverlay(_this.osdOverlay);
+                //reenable viewer tooltips
+                jQuery.publish('enableTooltips.'+parent.windowId);
                 });
                 
                 jQuery('.annotation-tooltip a.save').on("click", function(event) {
                   event.preventDefault();
-                  var tagText = jQuery(this).parents('.new-annotation-form').find('.tags-editor').val();
-                  //var resourceText = tinymce.activeEditor.getContent();
-                  var resourceText = $.trimString(jQuery(this).parents('.new-annotation-form').find('.text-editor').val());
-                  var tags = [];
+                  var tagText = jQuery(this).parents('.annotation-editor').find('.tags-editor').val(),
+                  resourceText = tinymce.activeEditor.getContent(),
+                  tags = [];
                   tagText = $.trimString(tagText);
                   if (tagText) {
                     tags = tagText.split(/\s+/);
@@ -246,6 +250,8 @@
 
                 //update content of this qtip to make it a viewer, not editor
                 api.destroy();
+                //reenable viewer tooltips
+                jQuery.publish('enableTooltips.'+parent.windowId);
                 });
               }
             }
