@@ -1130,7 +1130,7 @@ text {
   border: 3px solid orangered;
   box-shadow: 0px 0px 8px rgba(0,0,0,0.7);
 }
-.annotation:hover {
+/*.annotation:hover {
   border: 3px solid orangered;
   opacity: 0.5;
   box-shadow: 0px 0px 15px rgba(0,0,0,1);
@@ -1139,7 +1139,7 @@ text {
   border: 3px solid orangered;
   opacity: 1;
   box-shadow: 0px 0px 8px rgba(0,0,0,0.7);
-}
+}*/
 .annotation.hovered {
   border: 3px solid orangered;
   opacity: 0.5;

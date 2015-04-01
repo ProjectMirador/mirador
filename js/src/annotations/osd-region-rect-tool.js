@@ -167,6 +167,9 @@
             },
             events: {
               render: function(event, api) {
+              
+                //disable all tooltips for overlays
+                jQuery.publish('disableTooltips.'+parent.windowId);
                 
                 tinymce.init({
                   selector : 'form.annotation-tooltip textarea',
@@ -186,11 +189,13 @@
                   event.preventDefault();
                   api.destroy();
                   _this.osdViewer.removeOverlay(_this.osdOverlay);
+                //reenable viewer tooltips
+                jQuery.publish('enableTooltips.'+parent.windowId);
                 });
                 
                 jQuery('.annotation-tooltip a.save').on("click", function(event) {
                   event.preventDefault();
-                  var tagText = jQuery(this).parents('.new-annotation-form').find('.tags-editor').val(),
+                  var tagText = jQuery(this).parents('.annotation-editor').find('.tags-editor').val(),
                   resourceText = tinymce.activeEditor.getContent(),
                   tags = [];
                   tagText = $.trimString(tagText);
@@ -245,6 +250,8 @@
 
                 //update content of this qtip to make it a viewer, not editor
                 api.destroy();
+                //reenable viewer tooltips
+                jQuery.publish('enableTooltips.'+parent.windowId);
                 });
               }
             }

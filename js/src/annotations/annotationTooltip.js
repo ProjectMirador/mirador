@@ -81,7 +81,7 @@
 
     //when this is being used to edit an existing annotation, insert them into the inputs
     editorTemplate: Handlebars.compile([
-                                       '<form class="new-annotation-form annotation-tooltip" {{#if id}}data-anno-id="{{id}}"{{/if}}>',
+                                       '<form class="annotation-editor annotation-tooltip" {{#if id}}data-anno-id="{{id}}"{{/if}}>',
                                        '<textarea class="text-editor" placeholder="Comments…">{{#if content}}{{content}}{{/if}}</textarea>',
                                        '<input class="tags-editor" placeholder="Add tags here…" {{#if tags}}value="{{tags}}"{{/if}}>',
                                        '<div>',

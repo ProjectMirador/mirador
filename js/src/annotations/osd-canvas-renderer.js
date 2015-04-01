@@ -162,6 +162,22 @@
       jQuery.subscribe('removeTooltips.' + _this.parent.windowId, function() {
         jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
       });
+      
+      jQuery.subscribe('disableTooltips.' + _this.parent.windowId, function() {
+        jQuery.each(_this.tooltips, function(index, value) {
+          console.log(value.qtip('api'));
+          value.qtip('disable', true);
+          console.log(value.qtip('api'));
+        }); 
+      });
+      
+      jQuery.subscribe('enableTooltips.' + _this.parent.windowId, function() {
+        jQuery.each(_this.tooltips, function(index, value) {
+          console.log(value.qtip('api'));
+          value.qtip('disable', false);
+          console.log(value.qtip('api'));
+        }); 
+      });
 
     },
     
@@ -280,7 +296,7 @@
         oaAnno = _this.getAnnoFromRegion(id)[0];
                   
         //check if new resourceText is empty??
-        var tagText = jQuery(this).parents('.new-annotation-form').find('.tags-editor').val(),
+        var tagText = jQuery(this).parents('.annotation-editor').find('.tags-editor').val(),
         resourceText = tinymce.activeEditor.getContent(),
         tags = [];
         tagText = $.trimString(tagText);
