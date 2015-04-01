@@ -196,6 +196,16 @@
         });
         api.set({'content.text' : annoTooltip.getEditor(oaAnno),
         'hide.event' : false});
+        //add rich text editor
+        tinymce.init({
+                  selector : 'form.annotation-tooltip textarea',
+                  height: 75,
+                  plugins: "image link media",
+                  menubar: false,
+                  statusbar: false,
+                  toolbar_items_size: 'small',
+                  toolbar: "bold italic | bullist numlist | link image media"
+                });
     },
     
     //reenable all other qtips
@@ -272,7 +282,7 @@
                   
         //check if new resourceText is empty??
         var tagText = jQuery(this).parents('.new-annotation-form').find('.tags-editor').val(),
-        resourceText = jQuery(this).parents('.new-annotation-form').find('.text-editor').val(),
+        resourceText = tinymce.activeEditor.getContent(),
         tags = [];
         tagText = $.trimString(tagText);
         if (tagText) {
