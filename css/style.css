@@ -1041,6 +1041,10 @@
 		text-transform: uppercase;
 	}
 
+	#topPanel ul {
+		margin: 0;
+	}
+
 		#topPanel nav,
 		#sidePanel nav {
 			padding: 0.25em 0.5em 1em 0.5em;
@@ -1049,13 +1053,19 @@
 		#topPanel .link,
 		#sidePanel .link {
 			border: 0;
-			border-top: solid 1px rgba(255, 255, 255, 0.05);
 			color: inherit;
 			display: block;
 			height: 3em;
 			line-height: 3em;
 			opacity: 0.75;
+			text-align: center;
 			text-decoration: none;
+		}
+
+		#topPanel .link a,
+		#sidePanel .link a {
+			border: 0;
+			color: #fff;
 		}
 
 			#topPanel .link.depth-0,
