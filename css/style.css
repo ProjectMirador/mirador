@@ -498,12 +498,12 @@
 		-ms-transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 		transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 		background: none;
-		border: solid 1px;
+		border: solid 1px #aaa;
 		color: inherit;
 		cursor: pointer;
 		display: inline-block;
 		font-size: 0.8em;
-		font-weight: 900;
+		font-weight: 300;
 		letter-spacing: 2px;
 		min-width: 18em;
 		padding: 0 0.75em;
@@ -553,6 +553,25 @@
 			min-width: 14em;
 			padding: 0.5em 0;
 		}
+
+  input[type="button"].button-primary,
+	input[type="submit"].button-primary,
+	input[type="reset"].button-primary,
+	.button.button-primary {
+		font-size: 0.8em;
+		min-width: 14em;
+		padding: 0.2em;
+    background: rgba(188, 202, 206, 0.15);
+     margin: 0 1em;
+	}
+
+  input[type="button"].button-primary:hover,
+	input[type="submit"].button-primary:hover,
+	input[type="reset"].button-primary:hover,
+	.button.button-primary:hover {
+     background: #35323E;
+	}
+
 
 /* Wrapper */
 
@@ -797,20 +816,8 @@
 	}
 
 		#banner .inner {
-			-moz-animation: reveal-banner 1s 0.25s ease-in-out;
-			-webkit-animation: reveal-banner 1s 0.25s ease-in-out;
-			-o-animation: reveal-banner 1s 0.25s ease-in-out;
-			-ms-animation: reveal-banner 1s 0.25s ease-in-out;
-			animation: reveal-banner 1s 0.25s ease-in-out;
-			-moz-animation-fill-mode: forwards;
-			-webkit-animation-fill-mode: forwards;
-			-o-animation-fill-mode: forwards;
-			-ms-animation-fill-mode: forwards;
-			animation-fill-mode: forwards;
-			/*background: rgba(52, 27, 43, 0.5);*/
 			color: white;
 			display: inline-block;
-			opacity: 0;
 			padding: 3em;
 			text-align: center;
 		}
