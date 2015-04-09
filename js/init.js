@@ -87,19 +87,6 @@
 
 			}
 
-		// Scrolly links.
-			$('.scrolly').scrolly({
-				speed: 1000,
-				offset: -10
-			});
-
-		// Dropdowns.
-			$('#nav > ul').dropotron({
-				mode: 'fade',
-				noOpenerFade: true,
-				expandMode: (skel.vars.isTouch ? 'click' : 'hover')
-			});
-
 		// Header.
 		// If the header is using "alt" styling and #banner is present, use scrollwatch
 		// to revert it back to normal styling once the user scrolls past the banner.
@@ -112,7 +99,7 @@
 
 					$banner.scrollwatch({
 						delay:		0,
-						range:		1,
+						range:		0.5,
 						anchor:		'top',
 						on:			function() { $header.addClass('alt reveal'); },
 						off:		function() { $header.removeClass('alt'); }
