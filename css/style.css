@@ -785,7 +785,7 @@
 
 	#banner {
 		background-attachment: scroll, scroll, scroll, fixed;
-		background-color: #73354a;
+		background-color: #777;
 		background-image: url(""), url(""), url("images/overlay.png"), url("../img/banner.jpg");
 		background-position: bottom left, bottom right, top left, top center;
 		background-repeat: no-repeat, no-repeat, repeat, no-repeat;
@@ -797,11 +797,11 @@
 	}
 
 		#banner .inner {
-			-moz-animation: reveal-banner 0.4s 0.25s ease-in-out;
-			-webkit-animation: reveal-banner 0.4s 0.25s ease-in-out;
-			-o-animation: reveal-banner 0.4s 0.25s ease-in-out;
-			-ms-animation: reveal-banner 0.4s 0.25s ease-in-out;
-			animation: reveal-banner 0.4s 0.25s ease-in-out;
+			-moz-animation: reveal-banner 1s 0.25s ease-in-out;
+			-webkit-animation: reveal-banner 1s 0.25s ease-in-out;
+			-o-animation: reveal-banner 1s 0.25s ease-in-out;
+			-ms-animation: reveal-banner 1s 0.25s ease-in-out;
+			animation: reveal-banner 1s 0.25s ease-in-out;
 			-moz-animation-fill-mode: forwards;
 			-webkit-animation-fill-mode: forwards;
 			-o-animation-fill-mode: forwards;
