@@ -58,7 +58,7 @@
         if (_this.tplData.repository === '(Added from URL)') {
           repo = '';
         }            
-        var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'];
+        var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'] || $.DEFAULT_SETTINGS.repoImages.other;
 
         return 'images/logos/' + imageName;
       })();
