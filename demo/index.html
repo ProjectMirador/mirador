@@ -18,7 +18,7 @@
     $(function() {
       Mirador({
         "id": "viewer",
-        "layout": "1x1",
+        "layout": "1x2",
         "data": [
           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/drs:48309543", "location": "Harvard University"}, // Harvard Scroll 
           { "manifestUri": "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/manifest.json", "location": "Stanford University"},
@@ -51,10 +51,9 @@
         ],
         "windowObjects": [{
           canvasID: "http://oculus-dev.harvardx.harvard.edu/manifests/huam:299843/canvas/canvas-47174896.json",
-          id: "f5762679-9d5e-4399-9c8e-eda19707182c",
           imageMode: "ImageView",
           loadedManifest: "http://oculus-dev.harvardx.harvard.edu/manifests/huam:299843",
-          slotAddress: "row1",
+          slotAddress: "row1.column1",
           viewType: "ImageView",
           windowOptions: {
             osdBounds: {
@@ -62,6 +61,20 @@
               width: 0.43429019471185254,
               x: 0.3720708474242217,
               y: 0.396141728689274 
+            }
+          }
+        },{
+          loadedManifest: "http://oculus-dev.harvardx.harvard.edu/manifests/huam:198021",
+          canvasID: "http://oculus-dev.harvardx.harvard.edu/manifests/huam:198021/canvas/canvas-25214252.json",
+          imageMode: "ImageView",
+          slotAddress: "row1.column2",
+          viewType: "ImageView",
+          windowOptions: {
+            osdBounds: {
+              height: 1.3857580194329826,
+              width: 0.8414215360042591,
+              x: 0.07238148839422948,
+              y: -0.00265183160756044 
             }
           }
         }]

@@ -553,6 +553,24 @@
 			min-width: 14em;
 			padding: 0.5em 0;
 		}
+		
+    input[type="button"].button-primary,
+		input[type="submit"].button-primary,
+		input[type="reset"].button-primary,
+		.button.button-primary {
+			font-size: 0.7em;
+			min-width: 14em;
+			padding: 0.4em 0;
+      background-color: #3fb1a3;
+      margin: 0 1em;
+		}
+    
+    input[type="button"].button-primary:hover,
+		input[type="submit"].button-primary:hover,
+		input[type="reset"].button-primary:hover,
+		.button.button-primary:hover {
+      background-color: rgb(32, 157, 124);
+		}
 
 /* Wrapper */
 
