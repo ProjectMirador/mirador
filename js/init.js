@@ -22,8 +22,8 @@
 					hidden: true,
 					animation: 'pushY',
 					width: '100%',
-					height: 275,
-					html: '<nav data-action="navList" data-args="nav"></nav>',
+					height: 160,
+					html: '<nav data-action="navList" data-args="nav"><ul><li class="link"><a href="https://github.com/IIIF/mirador">Code</a></li><li class="link"><a href="demo/index.html">Demo</a></li><li class="link"><a href="https://groups.google.com/forum/#!forum/iiif-discuss">News</a></li></ul></nav>',
 					clickToHide: true,
 					swipeToHide: false,
 					orientation: 'vertical'
@@ -41,9 +41,9 @@
 					side: 'left',
 					hidden: true,
 					animation: 'revealX',
-					width: 250,
+					width: 100,
 					height: '100%',
-					html: '<nav data-action="navList" data-args="nav"></nav>',
+					html: '<nav data-action="navList" data-args="nav"><ul><li class="link"><a href="https://github.com/IIIF/mirador">Code</a></li><li class="link"><a href="demo/index.html">Demo</a></li><li class="link"><a href="https://groups.google.com/forum/#!forum/iiif-discuss">News</a></li></ul></nav>',
 					clickToHide: true,
 					orientation: 'vertical'
 				},
@@ -87,19 +87,6 @@
 
 			}
 
-		// Scrolly links.
-			$('.scrolly').scrolly({
-				speed: 1000,
-				offset: -10
-			});
-
-		// Dropdowns.
-			$('#nav > ul').dropotron({
-				mode: 'fade',
-				noOpenerFade: true,
-				expandMode: (skel.vars.isTouch ? 'click' : 'hover')
-			});
-
 		// Header.
 		// If the header is using "alt" styling and #banner is present, use scrollwatch
 		// to revert it back to normal styling once the user scrolls past the banner.
@@ -112,7 +99,7 @@
 
 					$banner.scrollwatch({
 						delay:		0,
-						range:		1,
+						range:		0.5,
 						anchor:		'top',
 						on:			function() { $header.addClass('alt reveal'); },
 						off:		function() { $header.removeClass('alt'); }

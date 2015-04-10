@@ -1,16 +1,9 @@
   <!DOCTYPE html>
   <head>
   <meta charset="utf-8">
-  <title>Home &mdash; </title>
+  <title>Mirador &mdash; Home</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="js/jquery.min.js"></script>
-  <script src="js/jquery.dropotron.min.js"></script>
-  <script src="js/jquery.scrolly.min.js"></script>
-  <script src="js/jquery.scrollgress.min.js"></script>
-  <script src="js/skel.min.js"></script>
-  <script src="js/skel-layers.min.js"></script>
-  <script src="js/init.js"></script>
   <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:300,200' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Lato:300,900' rel='stylesheet' type='text/css'>
@@ -26,110 +19,95 @@
 
   <body>
     <header id="header" class="alt">
-  <nav>
-    <ul>
-
-
-
-
-      <li class="current">
-        <a href="/index.html">Home</a>
-      </li>
-
-
-
-
-      <li class="">
-        <a href="https://github.com/IIIF/mirador">Code</a>
-      </li>
-
-
-
-
-      <li class="">
-        <a href="demo/">Demo</a>
-      </li>
-
-
-
-
-      <li class="">
-        <a href="https://groups.google.com/forum/#!forum/iiif-discuss">News</a>
-      </li>
-
-    </ul>
-  </nav>
-</header>
+      <nav>
+        <ul>
+          <!--
+          <li class="current">
+            <a href="/index.html">Home</a>
+          </li>
+          -->
+          <li class="">
+            <a href="https://github.com/IIIF/mirador">Code</a>
+          </li>
+          <li class="">
+            <a href="demo/index.html">Demo</a>
+          </li>
+          <li class="">
+            <a href="https://groups.google.com/forum/#!forum/iiif-discuss">News</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
 
     <section id="banner">
-  <div class="inner">
-    <header>
-      <img src="img/mirador-logo.png" alt="Mirador">
-      <h2>mirador</h2>
-    </header>
-    <p>
-      <span style="font-weight: 400;">Open-source</span>,
-      web based, multi-window image viewing platform <br>
-      with the ability to zoom, display, compare and annotate <br>
-      images from around the world.
-    </p>
-  </div>
-  <div>
-    <a class="button button-primary" href="/demo">Try a Live Demo</a>
-    <a class="button button-primary" href="https://www.youtube.com/watch?v=9b1ReCZh9-E">See A Screencast</a>
-  </div>
-</section>
-
-<article id="main">
-
-  <header class="special container">
-    <h2>Fully Featured IIIF Viewer</h2>
-    <p>
-    Mirador is a configurable, extensible, and easy-to-integrate image viewer, which enables image annotation and comparison of images from repositories dispersed around the world. Mirador has been optimized to display resources from repositories that support the <a href="http://iiif.io/">International Image Interoperability Framework</a> (IIIF) API's.  It provides a tiling windowed environment for comparing multiple image-based resources, synchronized structural and visual navigation of content using <a href="https://openseadragon.github.io/">OpenSeadragon</a>, <a href="http://www.openannotation.org/">Open Annotation</a> compliant annotation creation and viewing on deep-zoomable canvases, metadata display, book reading, bookmarking and more.
-    </p>
-  </header>
-
-  <section class="wrapper container special-alt">
-    <iframe id="iframe-demo" width="800" height="600" marginwidth="0" marginheight="0" frameborder="10" scrolling="no" id="frame" allowfullscreen="">You need an iFrame capable browser to view this.</iframe>
-  </section>
-
-  <section class="wrapper style1 container special">
-    <div class="row">
-      <div class="4u 12u(narrower)">
-        <section>
-          <span class="icon featured fa-github"></span>
-          <header>
-            <h3>Open source</h3>
-          </header>
-          <p>Participate in development on Github. Submit issues, changes, or suggestions, and be a part of the process. You can also join the discussion on the mirador-tech mailing list and gitter channels.</p>
-        </section>
-
+      <div class="inner">
+        <header>
+          <img src="img/mirador-logo.png" alt="Mirador">
+          <h2>mirador</h2>
+        </header>
+        <p>
+          <span style="font-weight: 400;">Open-source</span>,
+          web based, multi-window image viewing platform <br>
+          with the ability to zoom, display, compare and annotate <br>
+          images from around the world.
+        </p>
       </div>
-      <div class="4u 12u(narrower)">
-
-        <section>
-          <span class="icon featured fa-list"></span>
-          <header>
-            <h3>Full Featured</h3>
-          </header>
-          <p>Mirador implements the full client functionality of the IIIF Image and Presentation APIs. It provides tools for bringing in metadata, images, structures, and can create, edit, delete, and view annotations in Open Annotation Format.</p>
-        </section>
-
+      <div>
+        <a class="button button-primary" href="/demo">Try a Live Demo</a>
+        <a class="button button-primary" href="https://www.youtube.com/watch?v=9b1ReCZh9-E">See A Screencast</a>
       </div>
-      <div class="4u 12u(narrower)">
-        <section>
-          <span class="icon featured fa-cogs"></span>
-          <header>
-            <h3>Configurable</h3>
-          </header>
-          <p>Mirador can be easily configured to provide the simple functionality of an embedded viewer or bookreader, or opened up into a fully-featured scholarly workspace.</p>
-        </section>
-      </div>
-    </div>
-  </section>
-</article>
+    </section>
 
+    <article id="main">
+      <header class="special container">
+        <h2>Fully Featured IIIF Viewer</h2>
+        <p>
+        Mirador is a configurable, extensible, and easy-to-integrate image viewer, which enables image annotation and comparison of images from repositories dispersed around the world. Mirador has been optimized to display resources from repositories that support the <a href="http://iiif.io/">International Image Interoperability Framework</a> (IIIF) API's.  It provides a tiling windowed environment for comparing multiple image-based resources, synchronized structural and visual navigation of content using <a href="https://openseadragon.github.io/">OpenSeadragon</a>, <a href="http://www.openannotation.org/">Open Annotation</a> compliant annotation creation and viewing on deep-zoomable canvases, metadata display, book reading, bookmarking and more.
+        </p>
+      </header>
 
+      <section class="wrapper container special-alt">
+        <iframe id="iframe-demo" width="800" height="600" marginwidth="0" marginheight="0" frameborder="10" scrolling="no" id="frame" allowfullscreen="">You need an iFrame capable browser to view this.</iframe>
+      </section>
+
+      <section class="wrapper style1 container special">
+        <div class="row">
+          <div class="4u 12u(narrower)">
+            <section>
+              <span class="icon featured fa-github"></span>
+              <header>
+                <h3>Open source</h3>
+              </header>
+              <p>Participate in development on Github. Submit issues, changes, or suggestions, and be a part of the process. You can also join the discussion on the mirador-tech mailing list and gitter channels.</p>
+            </section>
+          </div>
+          <div class="4u 12u(narrower)">
+            <section>
+              <span class="icon featured fa-list"></span>
+              <header>
+                <h3>Full Featured</h3>
+              </header>
+              <p>Mirador implements the full client functionality of the IIIF Image and Presentation APIs. It provides tools for bringing in metadata, images, structures, and can create, edit, delete, and view annotations in Open Annotation Format.</p>
+            </section>
+          </div>
+          <div class="4u 12u(narrower)">
+            <section>
+              <span class="icon featured fa-cogs"></span>
+              <header>
+                <h3>Configurable</h3>
+              </header>
+              <p>Mirador can be easily configured to provide the simple functionality of an embedded viewer or bookreader, or opened up into a fully-featured scholarly workspace.</p>
+            </section>
+          </div>
+        </div>
+      </section>
+    </article>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.scrollgress.min.js"></script>
+    <script src="js/skel.min.js"></script>
+    <script src="js/skel-layers.min.js"></script>
+    <script src="js/init.js"></script>
 
   </body>
 </html>
