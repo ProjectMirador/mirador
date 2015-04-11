@@ -562,7 +562,7 @@
 		min-width: 14em;
 		padding: 0.2em;
     background: rgba(188, 202, 206, 0.15);
-     margin: 0 1em;
+     margin: 1em;
 	}
 
   input[type="button"].button-primary:hover,
@@ -585,13 +585,15 @@
 		}
 
 		.wrapper.style2 {
-			background-color: #c3aab2;
-			background-image: url(""), url("");
-			background-position: bottom left, bottom right;
-			background-repeat: no-repeat, no-repeat;
-			background-size: 25em, 25em;
-			color: white;
+			background-color: white;
+			color: black;
+      box-shadow: 0 10px 30px black;
+      border: 1px solid gray;
 		}
+    .wrapper.style2 p {
+      text-align:left;
+      margin-top: 0;
+}
 
 			.wrapper.style2 .button:hover {
 				background: rgba(255, 255, 255, 0.15) !important;
