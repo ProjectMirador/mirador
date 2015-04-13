@@ -107,9 +107,10 @@
 
 				});
 			}
-
-		$('#iframe-demo').attr('src', 'demo/index.html');
-
 	});
 
 })(jQuery);
+
+$(window).load(function() {
+	$('#iframe-demo').attr('src', 'demo/index.html');
+});
