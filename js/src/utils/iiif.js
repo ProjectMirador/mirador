@@ -25,12 +25,23 @@
       }
     },
 
-    makeUriWithWidth: function(uri, width, version) {
+    makeUriWithWidth: function(uri, width, version, mimetype) {
+      var format = '';
+      if (!mimetype || mimetype.match(/jp(e?g|2)$/)) {
+        format = 'jpg';
+      }
+      else if (mimetype.match(/png$/)) {
+        format = 'png';
+      }
+      else if (mimetype.match(/gif$/)) {
+        format = 'gif';
+      }
+
       uri = uri.replace(/\/$/, '');
       if (version[0] == '1') {
-        return uri + '/full/' + width + ',/0/native.jpg';
+        return uri + '/full/' + width + ',/0/native.' + format;
       } else {
-        return uri + '/full/' + width + ',/0/default.jpg';
+        return uri + '/full/' + width + ',/0/default.' + format;
       }
     },
 
