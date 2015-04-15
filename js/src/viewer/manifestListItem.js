@@ -55,9 +55,15 @@
 
       this.tplData.repoImage = (function() {
         var repo = _this.tplData.repository;
+        if (manifest.thumbnail) {
+          if (typeof manifest.thumbnail === "string")
+            return manifest.thumbnail;
+          if (typeof manifest.thumbnail['@id'] !== 'undefined')
+            return manifest.thumbnail['@id'];
+        }
         if (_this.tplData.repository === '(Added from URL)') {
           repo = '';
-        }            
+        }
         var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'] || $.DEFAULT_SETTINGS.repoImages.other;
 
         return 'images/logos/' + imageName;
