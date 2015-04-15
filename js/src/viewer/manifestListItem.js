@@ -107,7 +107,8 @@
     },
 
     bindEvents: function() {
-      var _this = this;
+      var _this = this,
+      manifest = _this.manifest.jsonLd;
 
       this.element.find('img').on('load', function() {
         //if img width is not equal to the width in the html, change height
@@ -121,6 +122,20 @@
           currentFocus: 'ThumbnailsView'
         };
         $.viewer.workspace.addWindow(windowConfig);
+      });
+
+      this.element.find('h3').qtip({
+        content: {
+          text: manifest.description ? manifest.description : "No description available."
+        },
+        style : {
+          classes : 'qtip-bootstrap'
+        },
+        hide: {
+          fixed: true,
+          delay: 500,
+          event: 'mouseleave'
+        }
       });
 
       this.element.find('.preview-image').on('click', function(e) {
