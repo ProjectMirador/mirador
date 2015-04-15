@@ -231,19 +231,8 @@
 
         // The parent (window) then emits an event notifying all panels of 
         // the update, so they can respond in their own unique ways
-        // without window having to know anything about their DOMs or 
-        // internal structure. 
-      });
-      
-      _this.element.on('mouseleave', function() {
-        var head = _this.element.find('.selected').first();
-        _this.element.stop().delay(1800).scrollTo(head, 1000);
-        _this.setActive(false);
-      });
-      
-      _this.element.on('mouseenter', function() {
-        _this.element.stop();
-        _this.setActive(true);
+        // without window having to know anything about their DOMs or
+        // internal structure.
       });
 
     },
