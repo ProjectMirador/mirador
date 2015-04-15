@@ -39,7 +39,7 @@
         if (service.hasOwnProperty('@context')) {
           version = $.Iiif.getVersionFromContext(service['@context']);
         }
-        thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+        thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version, canvas.thumbnail.format);
       } else {
         thumbnailUrl = canvas.thumbnail['@id'];
       }
@@ -49,8 +49,8 @@
       service = resource['default'] ? resource['default'].service : resource.service;
       if (service.hasOwnProperty('@context')) {
         version = $.Iiif.getVersionFromContext(service['@context']);
-      }          
-      thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+      }
+      thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version, resource.format);
     }
     return thumbnailUrl;
   };
