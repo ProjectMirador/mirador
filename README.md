@@ -2,7 +2,7 @@
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/IIIF.svg)](https://saucelabs.com/u/IIIF)  
 
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/IIIF/mirador?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Waffle.io Board](https://waffle.io/iiif/mirador)] 
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/IIIF/mirador?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Stories in Ready](https://badge.waffle.io/iiif/mirador.svg?label=ready&title=Ready)](http://waffle.io/iiif/mirador) 
 
 Mirador
 =======
