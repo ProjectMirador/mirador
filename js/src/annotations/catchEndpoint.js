@@ -24,6 +24,8 @@
       urls:      null,
       uri:       null,
       dfd:       null,
+      userid:    "test@mirador.org",
+      username:  "mirador",
       annotationsList: [],        //OA list for Mirador use
       annotationsListCatch: null  //internal list for module use
     }, options);
@@ -34,62 +36,17 @@
   $.CatchEndpoint.prototype = {
     //Any set up for this endpoint, and triggers a search of the URI passed to object
     init: function() {
-      var userid = "test@mirador.org";
-      var username = "mirador";
       this.catchOptions = {
-          permissions:{
-            user: {
-              id: userid, 
-              name: username
-            },
-            userString: function (user) {
-              if (user && user.name) 
-                return user.name;
-              return user;
-            },
-            userId: function (user) {
-              if (user && user.id) 
-                return user.id;
-              return user;
-            },
-            permissions: {
-              'read':   [],
-              'update': [userid],
-              'delete': [userid],
-              'admin':  [userid]
-            },
-            showViewPermissionsCheckbox: false,
-            showEditPermissionsCheckbox: false,
-            userAuthorize: function(action, annotation, user) {
-              var token, tokens, _i, _len;
-              if (annotation.permissions) {
-                tokens = annotation.permissions[action] || [];
-                if (is_staff){
-                  return true;
-                }
-                if (tokens.length === 0) {
-                  return true;
-                }
-                for (_i = 0, _len = tokens.length; _i < _len; _i++) {
-                  token = tokens[_i];
-
-                  if (this.userId(user) === token) {
-
-                    return true;
-                  }
-                }
-
-                return false;
-              } else if (annotation.user) {
-                if (user) {
-                  return this.userId(user) === this.userId(annotation.user);
-                } else {
-                  return false;
-                }
-              }
-              return true;
-            }
-          }
+        user: {
+          id: this.userid, 
+          name: this.username
+        },
+        permissions: {
+          'read':   [],
+          'update': [this.userid],
+          'delete': [this.userid],
+          'admin':  [this.userid]
+        }
       };
       this.search(this.uri);        
     },
@@ -199,6 +156,32 @@
       }
     },
 
+    userAuthorize: function(action, annotation) {
+      var token, tokens, _i, _len;
+      //if this is an instructor, they have access to student annotations      
+      if (this.roles && this.roles.indexOf('Instructor') !== -1){
+          return true;
+      }
+      //otherwise check annotation permissions
+      if (annotation.permissions) {
+        var permissionUserIds = annotation.permissions[action] || [];
+        //if no userids set for a permission, it is open to everyone
+        if (permissionUserIds.length === 0) {
+          return true;
+        }
+        //otherwise compare userid of annotation to current userid
+        if (permissionUserIds.indexOf(this.userid) !== -1) {
+          return true;
+        }
+        return false;
+      } else if (annotation.user) {
+        //if no permissions, just check userids
+        return this.userid === annotation.user.userid;
+      }
+      //otherwise, just return true
+      return true;
+    },
+
     //Convert Endpoint annotation to OA
     getAnnotationInOA: function(annotation) {
       var id, 
@@ -255,7 +238,9 @@
           "on" : on,
           "annotatedBy" : annotatedBy,
           "annotatedAt" : annotation.created,
-          "serializedAt" : annotation.updated
+          "serializedAt" : annotation.updated,
+          "permissions" : annotation.permissions,
+          "endpoint" : this
         };
         return oaAnnotation;
     },
@@ -297,8 +282,8 @@
         annotation.created = annotation.updated;
       }
       // this needs to come from LTI annotation.user.id, annotation.user.name
-      annotation.user = this.catchOptions.permissions.user;
-      annotation.permissions = this.catchOptions.permissions.permissions;
+      annotation.user = this.catchOptions.user;
+      annotation.permissions = this.catchOptions.permissions;
       annotation.archived = false;
       annotation.ranges = [];
       annotation.parent = "0";
