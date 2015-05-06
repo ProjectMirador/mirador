@@ -63,6 +63,15 @@ a {
   text-align: right;
 }
 
+.mirador-main-menu.user-buttons {
+  padding-right: 0;
+}
+.mirador-main-menu.user-logo {
+  padding-right: 0;
+  padding-left: 0;
+  float: left;
+}
+
 .mirador-main-menu li {
   cursor: pointer;
   float: left;
@@ -1344,29 +1353,37 @@ ul.scroll-listing-thumbs li .thumb-label {
     padding: 0 5px 5px 0;
 }
 
-.mirador-viewer dl.metadata-listing {
+.mirador-viewer .metadata-listing {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
   margin: 0;
   padding: 0px 20px 10px 20px;
+  box-sizing: border-box;
 }
 
-.mirador-viewer dl.metadata-listing a:hover {
-  border-bottom: 1px dotted #005EBD;
+.mirador-viewer .metadata-item {
+  display: table-row;
 }
 
-.mirador-viewer .metadata-listing dt {
-  clear: both;
-  color: #555;
-  float: left;
+.mirador-viewer .metadata-label, .mirador-viewer .metadata-value {
+  display: table-cell;
   line-height: 1.5;
   padding: 3px 0;
-  text-transform: capitalize;
+}
+
+.mirador-viewer .metadata-label {
   width: 8em;
+  text-transform: capitalize;
+  color: #555;
 }
 
-.mirador-viewer .metadata-listing dd {
-  margin-left: 8em;
-  line-height: 1.5;
-  padding: 3px 0;
+.mirador-viewer .metadata-value {
+  vertical-align: bottom;
+}
+
+.mirador-viewer .metadata-listing a:hover {
+  border-bottom: 1px dotted #005EBD;
 }
 
 .mirador-metadata-view-nav-toolbar {
