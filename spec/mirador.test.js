@@ -56,6 +56,15 @@ describe('Mirador | mirador.js', function() {
       }, 2000);
     });
 
+    it('should show thumbnail specified in manifest', function(done){
+      expect(testContext.viewerDiv.find(".repo-image>img")[0].getAttribute("src"))
+        .toEqual("https://stacks-test.stanford.edu/image/iiif/ck546xs5106%2Folemiss1/full/400,/0/default.jpg");
+
+      setTimeout(function() {
+        done();
+      }, 2000);
+    });
+
     it('should click manifest', function(done) {
       expect(testContext.viewerDiv.find('.select-metadata').first()).toExist();
       expect(testContext.viewerDiv.find('.window').first()).not.toExist();
