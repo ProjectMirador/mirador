@@ -102,6 +102,7 @@
       'e-codices': 'e-codices_logo.png',
       'BnF': 'bnf_logo.jpeg',
       'National Library of Wales': 'llgc_logo.jpeg',
+      'University College Dublin': 'ucd_logo.png',
       'other': 'iiif_logo.png'
     },
 
