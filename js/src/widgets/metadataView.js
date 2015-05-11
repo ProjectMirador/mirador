@@ -28,7 +28,6 @@
       this.metadataTypes.details = _this.getMetadataDetails(_this.manifest);
       this.metadataTypes.rights = _this.getMetadataRights(_this.manifest);
       this.metadataTypes.links = _this.getMetadataLinks(_this.manifest);
-      this.metadataTypes.relatedLinks = _this.getMetadataRelatedLinks(_this.manifest);
 
       //vvvvv This is *not* how this should be done.
       jQuery.each(this.metadataTypes, function(metadataKey, metadataValue) {
@@ -42,7 +41,7 @@
           if (typeof value === 'string' && value !== '') {
             tplData[metadataKey].push({
               label: _this.extractLabelFromAttribute(key),
-              value: _this.addLinksToUris(value)
+              value: (metadataKey === 'links') ? value : _this.addLinksToUris(value)
             });
           }
         });
@@ -91,6 +90,29 @@
     return obj.toString();
   },
 
+  stringifyRelated: function(obj) {
+    var _this = this,
+        str,
+        next,
+        label, 
+        format;
+    if (obj instanceof Array) {
+      str = '';
+      jQuery.each(obj, function (i, item) {
+        next = _this.stringifyRelated(item);
+        if (next !== '') str += (i === 0 ? '' : '<br/>') + next;
+      });
+      return str;
+    }
+
+    if (typeof obj === 'object' && '@id' in obj) {
+      label = ('label' in obj)? obj.label : obj['@id'];
+      format = ('format' in obj && obj.format !== 'text/html')? '(' + obj.format + ')' : '';
+      return '<a href="' + obj['@id'] + '"  target="_blank">' + label + '</a> ' + format;
+    }
+
+    return _this.addLinksToUris(obj.toString());
+  },
 
   getMetadataDetails: function(jsonLd) {
       var mdList = {
@@ -151,15 +173,9 @@
    getMetadataLinks: function(jsonLd) {
      // #414
       return {
-          'related': jsonLd.related || '',
-          'seeAlso': jsonLd.seeAlso || '',
-          'within':  jsonLd.within || ''
-        };
-   },
-   
-   getMetadataRelatedLinks: function(jsonLd) {
-      return {
-          'related': jsonLd.related || ''
+          'related': this.stringifyRelated(jsonLd.related || ''),
+          'seeAlso': this.stringifyRelated(jsonLd.seeAlso || ''),
+          'within':  this.stringifyObject(jsonLd.within || '')
         };
    },
 
