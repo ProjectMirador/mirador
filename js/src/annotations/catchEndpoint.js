@@ -48,7 +48,7 @@
           'admin':  [this.userid]
         }
       };
-      this.search(this.buildURI(this.uri));        
+      this.search(this.uri);        
     },
 
     // this is temporary because CATCH doesn't have indexes on new fields
@@ -67,7 +67,9 @@
     //Search endpoint for all annotations with a given URI
     search: function(uri) {
       var _this = this;
-      this.annotationsList = []; //clear out current list
+      this.annotationsList = [], //clear out current list
+      updatedUri = this.buildURI(uri);
+      
       jQuery.ajax({
         url: this.prefix+"/search",
         type: 'GET',
@@ -76,7 +78,7 @@
           "x-annotator-auth-token": this.token
         },
         data: {
-          uri: uri,
+          uri: updatedUri,
           media: "image",
           limit: 10000
           //pass in context, collection, group, if exists
