@@ -228,9 +228,9 @@
         var annoID;
         //first function is success callback, second is error callback
         _this.endpoint.create(oaAnno, function(data) {
-          annoID = String(data.id); //just in case it returns a number
-          oaAnno['@id'] = annoID;
-          _this.annotationsList.push(oaAnno);
+          //the success callback expects the OA annotation be returned
+          annoID = String(data['@id']); //just in case it returns a number
+          _this.annotationsList.push(data);
           //update overlay so it can be a part of the annotationList rendering
           jQuery(osdOverlay).removeClass('osd-select-rectangle').addClass('annotation').attr('id', annoID);
           jQuery.publish(('annotationListLoaded.' + _this.id));

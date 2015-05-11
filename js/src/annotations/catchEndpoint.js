@@ -25,7 +25,7 @@
       uri:       null,
       dfd:       null,
       userid:    "test@mirador.org",
-      username:  "mirador",
+      username:  "mirador-test",
       annotationsList: [],        //OA list for Mirador use
       annotationsListCatch: null  //internal list for module use
     }, options);
@@ -48,7 +48,20 @@
           'admin':  [this.userid]
         }
       };
-      this.search(this.uri);        
+      this.search(this.buildURI(this.uri));        
+    },
+
+    // this is temporary because CATCH doesn't have indexes on new fields
+    // for now, concatenate bits that we need into a single URI
+    buildURI: function(uri) {
+      var catchURI = uri;
+      if (this.context_id && this.context_id !== "") {
+        catchURI = catchURI + ":" + this.context_id;
+        if (this.collection_id && this.collection_id !== "") {
+          catchURI = catchURI + ":" + this.collection_id;
+        }
+      }
+      return catchURI;
     },
 
     //Search endpoint for all annotations with a given URI
@@ -66,6 +79,7 @@
           uri: uri,
           media: "image",
           limit: 10000
+          //pass in context, collection, group, if exists
         },
 
         contentType: "application/json; charset=utf-8",
@@ -126,6 +140,7 @@
     },
 
     //takes OA Annotation, gets Endpoint Annotation, and saves
+    //if successful, MUST return the OA rendering of the annotation
     create: function(oaAnnotation, returnSuccess, returnError) {
       var annotation = this.getAnnotationInEndpoint(oaAnnotation),
       _this = this;
@@ -140,7 +155,7 @@
         data: JSON.stringify(annotation),
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-          returnSuccess(data);
+          returnSuccess(_this.getAnnotationInOA(data));
         },
         error: function() {
           returnError();
@@ -266,7 +281,9 @@
       annotation.tags = tags;
       annotation.text = text;
 
-      annotation.uri = oaAnnotation.on.source;
+      //annotation.uri = oaAnnotation.on.source;
+      annotation.uri = this.buildURI(oaAnnotation.on.source);
+      //TODO: add context, collection, etc
       var region = oaAnnotation.on.selector.value;
       var regionArray = region.split('=')[1].split(',');
       annotation.rangePosition = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};

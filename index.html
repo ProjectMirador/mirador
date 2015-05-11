@@ -15,6 +15,15 @@
   <script src="build/mirador/mirador.js"></script>
   <script type="text/javascript">
 
+  var anno_token;
+      jQuery.ajax({
+        url: "http://oculus-dev.harvardx.harvard.edu/cgi-bin/new_token.py", 
+        success: function(data) {
+          anno_token = data.replace(/[\n\r]/g, '');
+        },
+        async:false
+      });
+
     $(function() {
       Mirador({
         "id": "viewer",
@@ -50,7 +59,17 @@
           { "manifestUri": "http://www.e-codices.unifr.ch/metadata/iiif/sl-0002/manifest.json", "location": 'e-codices'},
           { "manifestUri": "http://www.e-codices.unifr.ch/metadata/iiif/bge-cl0015/manifest.json", "location": 'e-codices'}
         ],
-        "windowObjects": []
+        "windowObjects": [],
+        "annotationEndpoint": 
+          {
+          "name":"Harvard CATCH Dev",
+          "module": "CatchEndpoint",
+          "options": {
+            token: anno_token,
+            // The endpoint of the store on your server.
+            prefix: "http://catch-dev.harvardx.harvard.edu:8080/catch/annotator",
+          }
+        }
       });
     });
   </script>
