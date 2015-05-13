@@ -69,7 +69,7 @@
       var _this = this;
       this.annotationsList = [], //clear out current list
       updatedUri = this.buildURI(uri);
-      
+
       jQuery.ajax({
         url: this.prefix+"/search",
         type: 'GET',
@@ -176,7 +176,7 @@
     userAuthorize: function(action, annotation) {
       var token, tokens, _i, _len;
       //if this is an instructor, they have access to student annotations      
-      if (this.roles && this.roles.indexOf('Instructor') !== -1){
+      if (this.roles && (this.roles.indexOf('Instructor') !== -1 || this.roles.indexOf('Administrator') !== -1)){
           return true;
       }
       //otherwise check annotation permissions
