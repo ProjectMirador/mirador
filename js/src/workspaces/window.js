@@ -264,6 +264,13 @@
           // console.log("There was an error deleting this annotation");
         });
       });
+
+      jQuery.subscribe('updateAnnotationList.'+_this.id, function(event) {
+        while(_this.annotationsList.length > 0) {
+          _this.annotationsList.pop();
+        }
+        _this.getAnnotations();
+      });
     },
 
     clearViews: function() {
