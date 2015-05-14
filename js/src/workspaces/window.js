@@ -597,7 +597,7 @@
 
         // One annotation endpoint per window, the endpoint
         // is a property of the instance.
-        if ( _this.endpoint && _this.endpoint != null ) {
+        if ( _this.endpoint && _this.endpoint !== null ) {
           _this.endpoint.set('dfd', dfd);
           _this.endpoint.search(_this.currentCanvasID);
         } else {
