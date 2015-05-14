@@ -99,7 +99,7 @@
                                        '{{#each annotations}}',
                                        '<div class="annotation-display annotation-tooltip" data-anno-id="{{id}}">',
                                        '<div class="button-container">',
-                                            '<a href="#pin" class="pin"><i class="fa fa fa-circle-o fa-fw"></i>Pin</a>',
+                                         '<a href="#pin" class="pin"><i class="fa fa fa-circle-o fa-fw"></i>Pin</a>',
                                          '{{#if showEdit}}<a href="#edit" class="edit"><i class="fa fa-pencil-square-o fa-fw"></i>Edit</a>{{/if}}',
                                          '{{#if showDelete}}<a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw"></i>Delete</a>{{/if}}',
                                        '</div>',
