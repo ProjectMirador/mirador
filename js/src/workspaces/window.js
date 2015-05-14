@@ -594,6 +594,7 @@
         var dfd = jQuery.Deferred(),
         module = $.viewer.annotationEndpoint.module,
         options = $.viewer.annotationEndpoint.options;
+
         // One annotation endpoint per window, the endpoint
         // is a property of the instance.
         if ( _this.endpoint && _this.endpoint != null ) {
