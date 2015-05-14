@@ -329,6 +329,7 @@
     removeAnnotationEvents: function(tooltipevent, api) {
       jQuery('.annotation-tooltip a.delete').off("click");
       jQuery('.annotation-tooltip a.edit').off("click");
+        jQuery('.annotation-tooltip a.pin').off("click");
       jQuery('.annotation-tooltip a.save').off("click");
       jQuery('.annotation-tooltip a.cancel').off("click");
     },
@@ -356,6 +357,17 @@
         api.hide();
         display.remove(); //remove this annotation display from dom
       });
+
+        jQuery('.annotation-tooltip a.pin').on("click", function(event) {
+                event.preventDefault();
+                if ( api.get('hide.event') ) {
+                        jQuery('.annotation-tooltip a.pin').html('<i class="fa fa fa-dot-circle-o fa-fw"></i>Unpin');
+                        api.set({'hide.event': false});
+                    } else {
+                        jQuery('.annotation-tooltip a.pin').html('<i class="fa fa fa-circle-o fa-fw"></i>Pin');
+                        api.set({'hide.event': 'mouseleave' });
+                    }
+            });
 
       jQuery('.annotation-tooltip a.edit').on("click", function(event) {
         event.preventDefault();
