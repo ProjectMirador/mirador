@@ -1583,7 +1583,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 .annotation-display.annotation-tooltip .button-container {
   text-align: right;
 }
-.annotation-display .edit, .annotation-display .delete  {
+.annotation-display .edit, .annotation-display .delete, .annotation-display .pin  {
   font-size: 12px;
   margin-left: 5px;
   text-decoration: underline;
