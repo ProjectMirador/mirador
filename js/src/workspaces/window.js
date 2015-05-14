@@ -594,17 +594,30 @@
         var dfd = jQuery.Deferred(),
         module = $.viewer.annotationEndpoint.module,
         options = $.viewer.annotationEndpoint.options;
-        if (_this.endpoint && _this.endpoint !== null) {
-          endpoint.set('dfd', dfd);
-          endpoint.search(_this.currentCanvasID);
-          // update with new search
-        } else {
+
+	// At this point 'endpoint' can be either null
+	// or already created. If we try and check for
+        // undefined - as in 'if (endpoint)' we will
+	// crash and burn, since it's a null - not an
+	// undefined.
+	try {
+	  // If we can assign endpoint is defined,
+	  // use the search function of the endpoint
+	  // to search.
+	  endpoint = endpoint;
+	  endpoint.set('dfd', dfd);
+	  endpoint.search(_this.currentCanvasID);
+	} catch(error) {
+	  // We failed, endpoint is not assigned
+	  // yet - so we need to get the endpoint
+	  // module instance.
           options.element = _this.element;
           options.uri = _this.currentCanvasID;
           options.dfd = dfd;
           options.windowID = _this.id;
           endpoint = new $[module](options);
-        }
+	}
+
         dfd.done(function(loaded) {
           _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
           // clear out some bad data
