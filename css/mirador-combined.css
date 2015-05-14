@@ -2079,7 +2079,6 @@ text {
   border: 2px solid white;
   box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
   box-sizing: border-box;
-  z-index: 2
 }
 .annotation.selected {
   border: 3px solid orangered;
