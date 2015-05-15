@@ -284,7 +284,12 @@
     },
 
     hideAll: function() {
-      this.osdViewer.clearOverlays();
+        // Make sure we disable the tooltips
+        // before hiding the annotation overlay.
+        jQuery.each(this.tooltips, function(index, value) {
+            value.qtip('disable', true);
+        });
+        this.osdViewer.clearOverlays();
     },
 
     getElements: function() {
