@@ -1538,6 +1538,11 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   max-height: 185px;
   overflow: auto;
 }
+
+.qtip-header {
+   background: #cecede;
+}
+
 .annotation-tooltip {
   padding: 12px; 
 }

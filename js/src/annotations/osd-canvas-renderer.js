@@ -342,7 +342,7 @@
     removeAnnotationEvents: function(tooltipevent, api) {
       jQuery('.annotation-tooltip a.delete').off("click");
       jQuery('.annotation-tooltip a.edit').off("click");
-      jQuery('.annotation-tooltip a.pin').off("click");
+        jQuery('.qtip-header a.pin').off("click");
       jQuery('.annotation-tooltip a.save').off("click");
       jQuery('.annotation-tooltip a.cancel').off("click");
     },
@@ -371,15 +371,15 @@
         display.remove(); //remove this annotation display from dom
       });
 
-      jQuery('.annotation-tooltip a.pin').on("click", function(event) {
+        jQuery('.qtip-header a.pin').on("click", function(event) {
               event.preventDefault();
               // Get this pin annotation API instance
               var qtipApi = jQuery(this).parents('.qtip').qtip();
               if ( qtipApi.get('hide.event') ) {
-                      event.target.innerHTML = '<i class="fa fa fa-dot-circle-o fa-fw"></i>Unpin';
+                      jQuery(event.target).attr('class', 'fa fa fa-dot-circle-o fa-fw');
                       qtipApi.set({'hide.event': false});
                   } else {
-                      event.target.innerHTML = '<i class="fa fa fa-circle-o fa-fw"></i>Pin';
+                      jQuery(event.target).attr('class', 'fa fa fa-circle-o fa-fw');
                       qtipApi.set({'hide.event': 'mouseleave' });
                   }
       });
