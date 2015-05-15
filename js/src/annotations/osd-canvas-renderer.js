@@ -269,14 +269,19 @@
       });
 
     },
-    
+      hideWindowAnnotations: function() {
+          // Hide and fix only the annotations in this window.
+          var windowAnnotations = this.parent.element.parent().children('.mirador-osd').children('.qtip');
+
+          // Reset the annotations to unpinned and hide
+          jQuery.each(windowAnnotations, function(index, value) {
+              var qtipApi = jQuery(value).qtip();
+              qtipApi.set({'hide.event': 'mouseleave'});
+              qtipApi.hide();
+          });
+      },
     checkMousePosition: function() {
-      jQuery('.qtip').qtip('hide');
-        // Reset the annotations to unpinned
-        jQuery.each(this.tooltips, function(index, value) {
-            var qtipApi = value.qtip();
-            qtipApi.set({'hide.event': 'mouseleave'});
-        });
+        this.hideWindowAnnotations;
     },
 
     update: function() {
@@ -286,7 +291,7 @@
     hideAll: function() {
         // Make sure we hide the tooltips
         // before hiding the annotation overlay.
-        jQuery('.qtip').qtip('hide');
+        this.hideWindowAnnotations;
         this.osdViewer.clearOverlays();
     },
 
