@@ -360,12 +360,14 @@
 
       jQuery('.annotation-tooltip a.pin').on("click", function(event) {
               event.preventDefault();
-              if ( api.get('hide.event') ) {
+              // Get this pin annotation API instance
+              var qtipApi = jQuery(this).parents('.qtip').qtip();
+              if ( qtipApi.get('hide.event') ) {
                       jQuery('.annotation-tooltip a.pin').html('<i class="fa fa fa-dot-circle-o fa-fw"></i>Unpin');
-                      api.set({'hide.event': false});
+                      qtipApi.set({'hide.event': false});
                   } else {
                       jQuery('.annotation-tooltip a.pin').html('<i class="fa fa fa-circle-o fa-fw"></i>Pin');
-                      api.set({'hide.event': 'mouseleave' });
+                      qtipApi.set({'hide.event': 'mouseleave' });
                   }
       });
 
