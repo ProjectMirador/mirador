@@ -272,6 +272,11 @@
     
     checkMousePosition: function() {
       jQuery('.qtip').qtip('hide');
+        // Reset the annotations to unpinned
+        jQuery.each(this.tooltips, function(index, value) {
+            var qtipApi = value.qtip();
+            qtipApi.set({'hide.event': 'mouseleave'});
+        });
     },
 
     update: function() {
