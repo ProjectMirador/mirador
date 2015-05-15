@@ -281,7 +281,7 @@
           });
       },
     checkMousePosition: function() {
-        this.hideWindowAnnotations;
+        this.hideWindowAnnotations();
     },
 
     update: function() {
@@ -291,7 +291,7 @@
     hideAll: function() {
         // Make sure we hide the tooltips
         // before hiding the annotation overlay.
-        this.hideWindowAnnotations;
+        this.hideWindowAnnotations();
         this.osdViewer.clearOverlays();
     },
 
