@@ -152,7 +152,7 @@
             position : {
               at: 'center',
               viewport: true,
-              container: jQuery(_this.osdViewer.element)
+              container: jQuery(_this.osdViewer.element),
               adjust : {
                 method: 'shift'
               }
