@@ -363,10 +363,10 @@
               // Get this pin annotation API instance
               var qtipApi = jQuery(this).parents('.qtip').qtip();
               if ( qtipApi.get('hide.event') ) {
-                      jQuery('.annotation-tooltip a.pin').html('<i class="fa fa fa-dot-circle-o fa-fw"></i>Unpin');
+                      event.target.html('<i class="fa fa fa-dot-circle-o fa-fw"></i>Unpin');
                       qtipApi.set({'hide.event': false});
                   } else {
-                      jQuery('.annotation-tooltip a.pin').html('<i class="fa fa fa-circle-o fa-fw"></i>Pin');
+                      event.target.html('<i class="fa fa fa-circle-o fa-fw"></i>Pin');
                       qtipApi.set({'hide.event': 'mouseleave' });
                   }
       });
