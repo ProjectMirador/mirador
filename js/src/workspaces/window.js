@@ -69,8 +69,7 @@
       var _this = this,
       manifest = _this.manifest.jsonLd,
       focusState = _this.currentFocus,
-      templateData = {},
-      endpoint = null;
+      templateData = {};
 
       //make sure annotations list is cleared out when changing objects within window
       while(_this.annotationsList.length > 0) {
@@ -228,7 +227,7 @@
       jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
         var annoID;
         //first function is success callback, second is error callback
-        endpoint.create(oaAnno, function(data) {
+        _this.endpoint.create(oaAnno, function(data) {
           annoID = String(data.id); //just in case it returns a number
           oaAnno['@id'] = annoID;
           _this.annotationsList.push(oaAnno);
@@ -246,7 +245,7 @@
 
       jQuery.subscribe('annotationUpdated.'+_this.id, function(event, oaAnno) {
         //first function is success callback, second is error callback
-        endpoint.update(oaAnno, function() {
+        _this.endpoint.update(oaAnno, function() {
           //successfully updated anno
         },
         function() {
@@ -257,7 +256,7 @@
       jQuery.subscribe('annotationDeleted.'+_this.id, function(event, oaAnno) {        
         //remove from endpoint
         //first function is success callback, second is error callback
-        endpoint.deleteAnnotation(oaAnno['@id'], function() {
+          _this.endpoint.deleteAnnotation(oaAnno['@id'], function() {
           _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== oaAnno['@id']; });
           jQuery.publish(('annotationListLoaded.' + _this.id));
         }, 
@@ -594,19 +593,22 @@
         var dfd = jQuery.Deferred(),
         module = $.viewer.annotationEndpoint.module,
         options = $.viewer.annotationEndpoint.options;
-        if (_this.endpoint && _this.endpoint !== null) {
-          endpoint.set('dfd', dfd);
-          endpoint.search(_this.currentCanvasID);
-          // update with new search
+
+        // One annotation endpoint per window, the endpoint
+        // is a property of the instance.
+        if ( _this.endpoint && _this.endpoint !== null ) {
+          _this.endpoint.set('dfd', dfd);
+          _this.endpoint.search(_this.currentCanvasID);
         } else {
           options.element = _this.element;
           options.uri = _this.currentCanvasID;
           options.dfd = dfd;
           options.windowID = _this.id;
-          endpoint = new $[module](options);
+          _this.endpoint = new $[module](options);
         }
+
         dfd.done(function(loaded) {
-          _this.annotationsList = _this.annotationsList.concat(endpoint.annotationsList);
+          _this.annotationsList = _this.annotationsList.concat(_this.endpoint.annotationsList);
           // clear out some bad data
           _this.annotationsList = jQuery.grep(_this.annotationsList, function (value, index) {
             if (typeof value.on === "undefined") { 
