@@ -23,5 +23,13 @@
   	"addSlotBelow": "Add Slot Below",
   	"imageView": "Image View",
   	"bookView": "Book View",
-  	"scrollView": "Scroll View"
+  	"scrollView": "Scroll View",
+    "comments": "Comments",
+    "addTagsHere": "Add tags here",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "url": "URL",
+    "newObject": "New Object"
 }
