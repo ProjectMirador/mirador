@@ -63,6 +63,15 @@ a {
   text-align: right;
 }
 
+.mirador-main-menu.user-buttons {
+  padding-right: 0;
+}
+.mirador-main-menu.user-logo {
+  padding-right: 0;
+  padding-left: 0;
+  float: left;
+}
+
 .mirador-main-menu li {
   cursor: pointer;
   float: left;
@@ -1530,7 +1539,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   overflow: auto;
 }
 .annotation-tooltip {
-  padding: 12px; 
+  padding: 7px; 
 }
 .annotation-display {
   position:relative;

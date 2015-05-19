@@ -42,7 +42,7 @@ describe('MainMenu Class', function () {
   });
 
   describe('toggling behaviour', function() {
-    
+
     beforeEach(function() {
       this.viewer = {
         toggleBookmarkPanel: jasmine.createSpy(),
@@ -62,13 +62,88 @@ describe('MainMenu Class', function () {
         mainMenuBarCls:             'menu-bar',
       });
     });
-    
+
     it("doesn't render useless elements", function () {
       expect(this.viewerDiv.find('.change-layout')).not.toExist();
     });
 
     // test other options?
 
+  });
+
+  describe('user buttons/logo', function () {
+    beforeEach(function () {
+
+      spyOn(console, 'log');
+
+      this.viewer = {};
+
+      this.viewer.mainMenuSettings = {
+        /* Setup will fail without 'buttons' */
+        'buttons' : {
+          'bookmark' : true,
+          'layout' : false,
+          'options' : false
+        },
+        "userButtons": [
+          /* Ordinary link */
+          { "label": "Link",
+            "attributes": {
+              "href": "http://example.com",
+              "id":   "test-button"
+            }
+          },
+          /* Callback link - omitted if it doesn't have an id */
+          {"label": "Callback",
+           "attributes": {"href": "#noop"},
+           "callback": true},
+          /* Sublists */
+          {"label": "Sublist",
+           "attributes": {"id": "sublist"},
+           "sublist": [
+             {"label": "One",
+              "attributes": {"id": "sl-one"}},
+             {"label": "Two",
+              "attributes": {"id": "sl-two"}}]
+          }
+        ],
+        "userLogo": {
+          "label": "Logo",
+          "attributes": {"id": "logo"}
+        }
+      }
+
+      this.viewerDiv = jQuery('<div>');
+
+      this.mainMenu = new Mirador.MainMenu({
+        parent:         this.viewer,
+        appendTo:       this.viewerDiv,
+        mainMenuBarCls: 'menu-bar'
+      });
+    });
+
+    it('creates regular buttons', function () {
+      var button = this.viewerDiv.find('ul.user-buttons > li > a#test-button');
+      expect(button).toExist;
+      expect(button.text()).toBe("Link");
+      expect(button.attr('href')).toBe("http://example.com");
+      expect(button.attr('id')).toBe('test-button');
+    });
+
+    it('omits links marked "callback" if they don\'t have IDs', function () {
+      expect(this.viewerDiv.find('a[href=#noop]')).not.toExist()
+      expect(console.log).toHaveBeenCalled();
+    });
+
+    it('creates sublists', function () {
+      expect(this.viewerDiv.find('ul.user-buttons > li > #sublist')).toExist();
+      expect(this.viewerDiv.find('ul.user-buttons > li > #sublist + ul > li > #sl-one')).toExist();
+      expect(this.viewerDiv.find('ul.user-buttons > li > #sublist + ul > li > #sl-two')).toExist();
+    });
+
+    it('creates userLogo', function () {
+      expect(this.viewerDiv.find('ul.user-logo > li > a#logo').text()).toBe('Logo');
+    });
   });
 
 });

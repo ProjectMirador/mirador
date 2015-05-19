@@ -600,10 +600,11 @@
         var dfd = jQuery.Deferred(),
         module = $.viewer.annotationEndpoint.module,
         options = $.viewer.annotationEndpoint.options;
-        if (_this.endpoint && _this.endpoint !== null) {
+        // One annotation endpoint per window, the endpoint
+        // is a property of the instance.
+        if ( _this.endpoint && _this.endpoint !== null ) {
           _this.endpoint.set('dfd', dfd);
           _this.endpoint.search(_this.currentCanvasID);
-          // update with new search
         } else {
           options.element = _this.element;
           options.uri = _this.currentCanvasID;
@@ -611,6 +612,7 @@
           options.windowID = _this.id;
           _this.endpoint = new $[module](options);
         }
+
         dfd.done(function(loaded) {
           _this.annotationsList = _this.annotationsList.concat(_this.endpoint.annotationsList);
           // clear out some bad data
