@@ -239,7 +239,7 @@
     },
     
     template: Handlebars.compile([
-    '<div class="sub-title">Details:</div>',
+    '<div class="sub-title">{{t "details"}}:</div>',
         '<div class="{{metadataListingCls}}">',
           '{{#each details}}',
             '<div class="metadata-item"><div class="metadata-label">{{t label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
