@@ -41,7 +41,7 @@
       this.getManifestsData();
 
       //initialize i18next  
-      i18n.init({debug: true, getAsync: false}); 
+      i18n.init({debug: false, getAsync: false}); 
 
       //register Handlebars helper
       Handlebars.registerHelper('t', function(i18n_key) {
