@@ -31,5 +31,21 @@
     "edit": "Edit",
     "delete": "Delete",
     "url": "URL",
-    "newObject": "New Object"
+    "newObject": "New Object",
+    "License": "License",
+    "Date": "Date",
+    "Location": "Location",
+    "Within": "Within",
+    "See Also": "See Also",
+    "Repository": "Repository",
+    "Shelfmark": "Shelfmark",
+    "Title": "Title",
+    "Language": "Language",
+    "Format": "Format",
+    "Provider": "Provider",
+    "Disseminator": "Disseminator",
+    "Source Images": "Source Images",
+    "Source Metadata": "Source Metadata",
+    "Logo": "Logo",
+    "Related": "Related"
 }
