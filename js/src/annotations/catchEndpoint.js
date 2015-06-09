@@ -80,8 +80,8 @@
         },
         data: {
           uri: uri,
-          context_id: _this.context_id,
-          collection_id: _this.collection_id,
+          contextId: _this.context_id,
+          collectionId: _this.collection_id,
           media: "image",
           limit: 10000
           //pass in context, collection, group, if exists
@@ -288,8 +288,8 @@
 
       annotation.uri = oaAnnotation.on.source;
       //annotation.uri = this.buildURI(oaAnnotation.on.source);
-      annotation.context_id = this.context_id;
-      annotation.collection_id = this.collection_id;
+      annotation.contextId = this.context_id;
+      annotation.collectionId = this.collection_id;
       //TODO: add context, collection, etc
       var region = oaAnnotation.on.selector.value;
       var regionArray = region.split('=')[1].split(',');
