@@ -69,6 +69,7 @@
       var _this = this;
       this.annotationsList = [], //clear out current list
       updatedUri = this.buildURI(uri);
+      //console.log(uri, this.context_id, this.collection_id);
 
       jQuery.ajax({
         url: this.prefix+"/search",
@@ -78,7 +79,9 @@
           "x-annotator-auth-token": this.token
         },
         data: {
-          uri: updatedUri,
+          uri: uri,
+          context_id: _this.context_id,
+          collection_id: _this.collection_id,
           media: "image",
           limit: 10000
           //pass in context, collection, group, if exists
@@ -283,8 +286,10 @@
       annotation.tags = tags;
       annotation.text = text;
 
-      //annotation.uri = oaAnnotation.on.source;
-      annotation.uri = this.buildURI(oaAnnotation.on.source);
+      annotation.uri = oaAnnotation.on.source;
+      //annotation.uri = this.buildURI(oaAnnotation.on.source);
+      annotation.context_id = this.context_id;
+      annotation.collection_id = this.collection_id;
       //TODO: add context, collection, etc
       var region = oaAnnotation.on.selector.value;
       var regionArray = region.split('=')[1].split(',');
