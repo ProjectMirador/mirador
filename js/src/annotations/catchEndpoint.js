@@ -71,7 +71,6 @@
       var _this = this;
       this.annotationsList = [], //clear out current list
       updatedUri = this.buildURI(uri);
-      console.log(uri, this.context_id, this.collection_id);
 
       jQuery.ajax({
         url: this.prefix+"/search",
