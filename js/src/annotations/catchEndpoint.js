@@ -24,6 +24,8 @@
       urls:      null,
       uri:       null,
       dfd:       null,
+      context_id: "None",
+      collection_id: "None",
       userid:    "test@mirador.org",
       username:  "mirador-test",
       annotationsList: [],        //OA list for Mirador use
@@ -69,7 +71,7 @@
       var _this = this;
       this.annotationsList = [], //clear out current list
       updatedUri = this.buildURI(uri);
-      //console.log(uri, this.context_id, this.collection_id);
+      console.log(uri, this.context_id, this.collection_id);
 
       jQuery.ajax({
         url: this.prefix+"/search",
@@ -84,7 +86,6 @@
           collectionId: _this.collection_id,
           media: "image",
           limit: 10000
-          //pass in context, collection, group, if exists
         },
 
         contentType: "application/json; charset=utf-8",
