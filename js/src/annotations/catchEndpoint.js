@@ -53,24 +53,10 @@
       this.search(this.uri);        
     },
 
-    // this is temporary because CATCH doesn't have indexes on new fields
-    // for now, concatenate bits that we need into a single URI
-    buildURI: function(uri) {
-      var catchURI = uri;
-      if (this.context_id && this.context_id !== "") {
-        catchURI = catchURI + ":" + this.context_id;
-        if (this.collection_id && this.collection_id !== "") {
-          catchURI = catchURI + ":" + this.collection_id;
-        }
-      }
-      return catchURI;
-    },
-
     //Search endpoint for all annotations with a given URI
     search: function(uri) {
       var _this = this;
-      this.annotationsList = [], //clear out current list
-      updatedUri = this.buildURI(uri);
+      this.annotationsList = []; //clear out current list
 
       jQuery.ajax({
         url: this.prefix+"/search",
@@ -287,10 +273,9 @@
       annotation.text = text;
 
       annotation.uri = oaAnnotation.on.source;
-      //annotation.uri = this.buildURI(oaAnnotation.on.source);
       annotation.contextId = this.context_id;
       annotation.collectionId = this.collection_id;
-      //TODO: add context, collection, etc
+
       var region = oaAnnotation.on.selector.value;
       var regionArray = region.split('=')[1].split(',');
       annotation.rangePosition = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
