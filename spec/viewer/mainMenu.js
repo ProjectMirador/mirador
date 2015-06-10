@@ -1,6 +1,13 @@
 describe('MainMenu Class', function () {
   describe('default configuration', function() {
     beforeEach(function() {
+
+      //register Handlebars helper
+      Handlebars.registerHelper('t', function(i18n_key) {
+        var result = i18n.t(i18n_key);
+        return new Handlebars.SafeString(result);
+      });
+      
       this.viewer = {
         toggleBookmarkPanel: jasmine.createSpy(),
         toggleWorkspacePanel: jasmine.createSpy()
