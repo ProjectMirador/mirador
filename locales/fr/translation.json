@@ -31,5 +31,21 @@
     "edit": "Editer",
     "delete": "Supprimer",
     "url": "URL",
-    "newObject": "Nouvel objet"
+    "newObject": "Nouvel objet",
+    "License": "Licence",
+    "Date": "Date",
+    "Location": "Localisation",
+    "Within": "Contenu dans",
+    "See Also": "Autre(s)",
+    "Repository": "Etablissement de conservation",
+    "Shelfmark": "Cote",
+    "Title": "Titre",
+    "Language": "Langue",
+    "Format": "Format",
+    "Provider": "Fournisseur",
+    "Disseminator": "Diffuseur",
+    "Source Images": "Source Images",
+    "Source Metadata": "Source Métadonnées",
+    "Logo": "Logo",
+    "Related": "Voir aussi"
 }
