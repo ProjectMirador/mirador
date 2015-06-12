@@ -1539,7 +1539,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   overflow: auto;
 }
 .annotation-tooltip {
-  padding: 12px; 
+  padding: 7px; 
 }
 .annotation-display {
   position:relative;
@@ -1590,6 +1590,11 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 }
 .text-viewer p {
   margin-top: 0;
+}
+.text-viewer p.user {
+  color: gray;
+  font-style: italic;
+  font-size: 11px;
 }
 .tags-viewer {
   margin-bottom: 12px;
