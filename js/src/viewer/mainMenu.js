@@ -92,7 +92,7 @@
         '{{#if userButtons}}',
           '{{userbtns userButtons}}',
         '{{/if}}'
-        ].join('')),
+        ].join(''))
     };
 
     /* Helper methods for processing userButtons provided in configuration */
