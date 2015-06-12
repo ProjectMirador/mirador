@@ -150,9 +150,9 @@
             text : annoTooltip.editorTemplate()
             },
             position : {
-              at: 'center',
+              my: 'center left',
+              at: 'center right',
               viewport: true,
-              container: jQuery(_this.osdViewer.element),
               adjust : {
                 method: 'shift'
               }
