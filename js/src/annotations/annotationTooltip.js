@@ -63,27 +63,14 @@
         } else {
           annoText = annotation.resource.chars;
         }
-        var username = "";
-        if (annotation.annotatedBy && annotation.annotatedBy.name) {
-          username = annotation.annotatedBy.name;
-        }
-        //if it is a manifest annotation, don't allow editing or deletion
-        //otherwise, check annotation in endpoint
-        var showUpdate = false;
-        if (annotation.endpoint !== 'manifest') {
-          showUpdate = annotation.endpoint.userAuthorize('update', annotation);
-        }
-        var showDelete = false;
-        if (annotation.endpoint !== 'manifest') {
-          showDelete = annotation.endpoint.userAuthorize('delete', annotation);
-        }
         htmlAnnotations.push({
           annoText : annoText,
           tags : tags,
           id : annotation['@id'],
-          username : username,
-          showUpdate : showUpdate,
-          showDelete : showDelete
+          //this needs to be fleshed out more based on permissions from the endpoint,
+          //for now, just disable edit/delete for manifest annotations
+          showEdit : annotation.endpoint === 'manifest' ? false : true,
+          showDelete : annotation.endpoint === 'manifest' ? false : true
         });
       });
 
@@ -116,7 +103,6 @@
                                          '{{#if showDelete}}<a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw"></i>{{t "delete"}}</a>{{/if}}',
                                        '</div>',
                                        '<div class="text-viewer">',
-                                       '{{#if username}}<p class="user">{{username}}:</p>{{/if}}',
                                        '<p>{{{annoText}}}</p>',
                                        '</div>',
                                        '<div class="tags-viewer">',

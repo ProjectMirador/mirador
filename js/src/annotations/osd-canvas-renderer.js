@@ -256,13 +256,17 @@
       
       jQuery.subscribe('disableTooltips.' + _this.parent.windowId, function() {
         jQuery.each(_this.tooltips, function(index, value) {
+          console.log(value.qtip('api'));
           value.qtip('disable', true);
+          console.log(value.qtip('api'));
         }); 
       });
       
       jQuery.subscribe('enableTooltips.' + _this.parent.windowId, function() {
         jQuery.each(_this.tooltips, function(index, value) {
+          console.log(value.qtip('api'));
           value.qtip('disable', false);
+          console.log(value.qtip('api'));
         }); 
       });
 
