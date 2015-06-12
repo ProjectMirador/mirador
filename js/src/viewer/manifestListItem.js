@@ -60,7 +60,7 @@
         }            
         var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'] || $.DEFAULT_SETTINGS.repoImages.other;
 
-        return 'images/logos/' + imageName;
+        return $.DEFAULT_SETTINGS.logosLocation + imageName;
       })();
 
       for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {

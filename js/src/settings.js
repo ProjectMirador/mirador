@@ -95,6 +95,8 @@
     //true or false.  controls display of "Add new object from URL" on manifest listing page
     'showAddFromURLBox' : true,
 
+    'logosLocation' : 'build/mirador/images/logos/',
+
     'repoImages' : {
       'Yale University': 'yale_logo.jpeg',
       'Stanford University': 'sul_logo.jpeg',
