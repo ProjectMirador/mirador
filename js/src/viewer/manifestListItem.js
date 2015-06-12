@@ -174,7 +174,7 @@
                                  '</div>',
                                  '<div class="select-metadata">',
                                  '<h3 class="manifest-title">{{label}}</h3>',
-                                 '<h4>{{canvasCount}} {{t "items"}}</h4>',
+                                 '<h4>{{canvasCount}} items</h4>',
                                  '{{#if repository}}',
                                  '<h4 class="repository-label">{{repository}}</h4>',
                                  '{{/if}}',
@@ -185,7 +185,7 @@
                                  '{{/each}}',
                                  '</div>',
                                  '{{#if remaining}}',
-                                 '<div class="remaining-items"><h3><span class="remaining-amount">{{remaining}}</span> {{t "more"}}</h3></div>',
+                                 '<div class="remaining-items"><h3><span class="remaining-amount">{{remaining}}</span> more</h3></div>',
                                  '{{/if}}',
                                  '</li>'
     ].join(''))
