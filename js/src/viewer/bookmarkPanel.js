@@ -58,9 +58,9 @@
 
     template: Handlebars.compile([
        '<div id="bookmark-panel">',
-         '<h3>{{t "bookmarkTitle"}}</h3>',
+         '<h3>Bookmark or Share Your Workspace</h3>',
          '<span>',
-         '{{t "url"}}: <input id="share-url" type="text"></input>',
+         'URL: <input id="share-url" type="text"></input>',
          '<a href="javascript:;" class="mirador-btn mirador-icon-copy" data-clipboard-target="share-url"><i class="fa fa-files-o fa-lg"></i></a>',
          '</span>',
        '</div>'
