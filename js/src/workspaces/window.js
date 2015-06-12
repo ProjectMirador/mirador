@@ -228,9 +228,9 @@
         var annoID;
         //first function is success callback, second is error callback
         _this.endpoint.create(oaAnno, function(data) {
-          //the success callback expects the OA annotation be returned
-          annoID = String(data['@id']); //just in case it returns a number
-          _this.annotationsList.push(data);
+          annoID = String(data.id); //just in case it returns a number
+          oaAnno['@id'] = annoID;
+          _this.annotationsList.push(oaAnno);
           //update overlay so it can be a part of the annotationList rendering
           jQuery(osdOverlay).removeClass('osd-select-rectangle').addClass('annotation').attr('id', annoID);
           jQuery.publish(('annotationListLoaded.' + _this.id));
@@ -256,20 +256,13 @@
       jQuery.subscribe('annotationDeleted.'+_this.id, function(event, oaAnno) {        
         //remove from endpoint
         //first function is success callback, second is error callback
-        _this.endpoint.deleteAnnotation(oaAnno['@id'], function() {
+          _this.endpoint.deleteAnnotation(oaAnno['@id'], function() {
           _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== oaAnno['@id']; });
           jQuery.publish(('annotationListLoaded.' + _this.id));
         }, 
         function() {
           // console.log("There was an error deleting this annotation");
         });
-      });
-
-      jQuery.subscribe('updateAnnotationList.'+_this.id, function(event) {
-        while(_this.annotationsList.length > 0) {
-          _this.annotationsList.pop();
-        }
-        _this.getAnnotations();
       });
     },
 
@@ -600,6 +593,7 @@
         var dfd = jQuery.Deferred(),
         module = $.viewer.annotationEndpoint.module,
         options = $.viewer.annotationEndpoint.options;
+
         // One annotation endpoint per window, the endpoint
         // is a property of the instance.
         if ( _this.endpoint && _this.endpoint !== null ) {
