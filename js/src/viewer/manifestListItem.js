@@ -58,9 +58,9 @@
         if (_this.tplData.repository === '(Added from URL)') {
           repo = '';
         }            
-        var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'] || $.DEFAULT_SETTINGS.repoImages.other;
+        var imageName = $.viewer.repoImages[repo || 'other'] || $.viewer.repoImages.other;
 
-        return 'images/logos/' + imageName;
+        return $.viewer.logosLocation + imageName;
       })();
 
       for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
