@@ -150,9 +150,12 @@
             text : annoTooltip.editorTemplate()
             },
             position : {
-              at: 'center',
-              viewport: jQuery(window),
-              container: jQuery(_this.osdViewer.element)
+              my: 'center left',
+              at: 'center right',
+              viewport: true,
+              adjust : {
+                method: 'shift'
+              }
             },
             style : {
               classes : 'qtip-bootstrap'

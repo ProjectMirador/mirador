@@ -19,30 +19,6 @@
       Mirador({
         "id": "viewer",
         "layout": "1x1",
-        "mainMenuSettings" :
-          {"show": true,
-           "buttons" : {"bookmark" : true, "layout" : true},
-           "userButtons": [
-             /* Ordinary link */
-             {"label": "Link",
-             "attributes": {"href": "http://example.com"}},
-             /* If callback key is true, failing to include an ID attribute will *
-              *   throw an exception.                                            */
-             {"label": "Callback",
-              "attributes": {"id": "example-callback", href: "#noop"},
-              "callback": true},
-             /* Sublists are supported, but their display is not (yet) */
-             /*{"label": "Sublist",
-              "sublist": [
-                {"label": "One"},
-                {"label": "Two"}]
-             }*/
-           ],
-           "userLogo": {"label": "Harvard",
-                        "attributes": {"href": "http://harvard.edu"}}
-         },
-        //'showAddFromURLBox' : false,
-        //"saveSession":false,
         "data": [
           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/drs:48309543", "location": "Harvard University"}, // Harvard Scroll 
           { "manifestUri": "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/manifest.json", "location": "Stanford University"},
@@ -75,12 +51,6 @@
           { "manifestUri": "http://www.e-codices.unifr.ch/metadata/iiif/bge-cl0015/manifest.json", "location": 'e-codices'}
         ],
         "windowObjects": []
-      });
-
-      /* Callback for mainMenu configuration */
-      $(document).on('click', '#example-callback', function (e) {
-        alert("Example Callback");
-        e.preventDefault();
       });
     });
   </script>
