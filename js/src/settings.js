@@ -121,6 +121,14 @@
      **/
     'annotationEndpoint': {},
 
+    'jsonStorageEndpoint': {
+	'name': 'JSONBlob API Endpoint',
+	'module': 'JSONBlobAPI',
+	'options': {
+		'ssl': true
+	}
+    },
+
     'sharingEndpoint': {
       'url': '',
       'storeId': 123,

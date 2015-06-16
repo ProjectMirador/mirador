@@ -15,6 +15,9 @@
   $.BookmarkPanel.prototype = {
     init: function () {
       this.element = jQuery(this.template()).appendTo(this.appendTo);
+      saveModule = this.jsonStorageEndpoint.module,
+      saveOptions = this.jsonStorageEndpoint.options;
+      this.storageModule = new $[saveModule](saveOptions);
       this.bindEvents();
     },
 
@@ -27,24 +30,11 @@
       });
       
       jQuery.subscribe('saveControllerConfigUpdated', function() {
-        var ajaxType = 'POST',
-        ajaxURL = "https://jsonblob.com/api/jsonBlob";
-      
-        jQuery.ajax({
-          type: ajaxType,
-          url: ajaxURL, 
-          data: JSON.stringify(Mirador.saveController.currentConfig), 
-          headers: { 
-            'Accept': 'application/json',
-            'Content-Type': 'application/json' 
-          },
-          success: function(data, textStatus, request) {
-              var jsonblob = request.getResponseHeader('X-Jsonblob');
-              
-              var bookmarkURL = window.location.href.replace(window.location.hash, '') + "?json="+jsonblob;
-              _this.element.find('#share-url').val(bookmarkURL).focus().select();
-         }
-        });
+        _this.storageModule.save(Mirador.saveController.currentConfig)
+          .then(function(blobId) {
+            var bookmarkURL = window.location.href.replace(window.location.hash, '') + "?json="+jsonblob;
+            _this.element.find('#share-url').val(bookmarkURL).focus().select();
+	  });
       });
     },
 

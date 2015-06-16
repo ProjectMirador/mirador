@@ -80,11 +80,9 @@
         preserveWindows: this.workspacePanelSettings.preserveWindows,
         workspace: this.workspace
       });
-      
+     
       this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
-
-      this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
-
+      this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer'), jsonStorageEndpoint: this.jsonStorageEndpoint });
 
       // set this to be displayed
       this.set('currentWorkspaceVisible', true);

@@ -25,6 +25,10 @@
         return false;
       }
       
+      saveModule = config.jsonStorageEndpoint.module,
+      saveOptions = config.jsonStorageEndpoint.options;
+      _this.storageModule = new $[saveModule](saveOptions);
+
       var sessionID = window.location.hash.substring(1); // will return empty string if none exists, causing the or statement below to evaluate to false, generating a new sesssionID.
 
       if (sessionID) {
@@ -38,22 +42,10 @@
       } else {
         var paramURL = window.location.search.substring(1);
         if (paramURL) {
+          //get json from JSON storage and set currentConfig to it
           var params = paramURL.split('=');
           var jsonblob = params[1];
-          var ajaxURL = "https://jsonblob.com/api/jsonBlob/"+jsonblob;
-          jQuery.ajax({
-            type: 'GET',
-            url: ajaxURL, 
-            headers: { 
-              'Accept': 'application/json',
-              'Content-Type': 'application/json' 
-            },
-            success: function(data, textStatus, request) {
-              _this.currentConfig = data;
-            },
-            async: false
-          });
-          //get json from jsonblob and set currentConfig to it
+	  this.currentConfig = this.storageModule.readSync(jsonblob);
         } else {
           this.currentConfig = config;
         }
