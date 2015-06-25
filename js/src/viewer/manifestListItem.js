@@ -55,6 +55,12 @@
 
       this.tplData.repoImage = (function() {
         var repo = _this.tplData.repository;
+        if (manifest.logo) {
+          if (typeof manifest.logo === "string")
+            return manifest.logo;
+          if (typeof manifest.logo['@id'] !== 'undefined')
+            return manifest.logo['@id'];
+        }
         if (_this.tplData.repository === '(Added from URL)') {
           repo = '';
         }            
