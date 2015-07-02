@@ -49,7 +49,6 @@
 
       this.element = jQuery(this.template(tplData)).appendTo(this.appendTo);
       this.bindEvents();
-      console.log(this.metadataTypes);
     },
 
   // Base code from https://github.com/padolsey/prettyprint.js. Modified to fit Mirador needs
@@ -119,9 +118,7 @@
       var mdList = {
           'label':        '<b>' + jsonLd.label + '</b>' || '',
           'description':  jsonLd.description || ''
-      },
-      userLanguage = navigator.language || navigator.userLanguage;
-      console.log(userLanguage); 
+      };
       if (typeof mdList.description == "object") {
         var value = "";
         jQuery.each(mdList.description, function(index, item) {
@@ -130,17 +127,10 @@
             value += "<br/>";
           } else {
             // {@value: ..., @language: ...}
-            // Select user language based on browser preference, otherwise
-            // default to english 
-            if (item['@language'] == userLanguage) {
+            if (item['@language'] == "en") {
               value += item['@value'];
               value += "<br/>";                  
             }
-            else if (item['@language'] == "en") {
-              value += item['@value'];
-              value += "<br/>";                
-            }
-          
           }
         });        
         mdList.description = value;
@@ -157,7 +147,7 @@
                 value += "<br/>";
               } else {
                 // {@value: ..., @language: ...}
-                if (what['@language'] == userLanguage) {
+                if (what['@language'] == "en") {
                   value += what['@value'];
                   value += "<br/>";                  
                 }
@@ -252,14 +242,14 @@
     '<div class="sub-title">{{t "details"}}:</div>',
         '<div class="{{metadataListingCls}}">',
           '{{#each details}}',
-            '<div class="metadata-item"><div class="metadata-label">{{t label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
+            '<div class="metadata-item"><div class="metadata-label">{{label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
           '{{/each}}',
         '</div>',
         '<div class="sub-title">{{t "rights"}}:</div>',
         '{{#if rights}}',
         '<div class="{{metadataListingCls}}">',
           '{{#each rights}}',
-            '<div class="metadata-item"><div class="metadata-label">{{t label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
+            '<div class="metadata-item"><div class="metadata-label">{{label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
           '{{/each}}',
         '</div>',
         '{{else}}',
@@ -271,7 +261,7 @@
         '<div class="sub-title">{{t "links"}}:</div>',
         '<div class="{{metadataListingCls}}">',
           '{{#each links}}',
-            '<div class="metadata-item"><div class="metadata-label">{{t label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
+            '<div class="metadata-item"><div class="metadata-label">{{label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
           '{{/each}}',
         // '{{#if relatedLinks}}',
         //   '<dt>{{label}}:</dt><dd>{{{value}}}</dd>',
