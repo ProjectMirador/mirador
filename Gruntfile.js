@@ -154,6 +154,10 @@ module.exports = function(grunt) {
         }, {	    
           src: 'js/lib/ZeroClipboard.swf',
           dest: 'build/mirador/ZeroClipboard.swf'
+        }, {
+	  expand: true,	    
+          src: 'locales/**',
+          dest: 'build/mirador'
         }]
       }
     },
