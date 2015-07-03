@@ -56,12 +56,18 @@
 
       this.tplData.repoImage = (function() {
         var repo = _this.tplData.repository;
+        if (manifest.logo) {
+          if (typeof manifest.logo === "string")
+            return manifest.logo;
+          if (typeof manifest.logo['@id'] !== 'undefined')
+            return manifest.logo['@id'];
+        }
         if (_this.tplData.repository === '(Added from URL)') {
           repo = '';
         }            
-        var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'] || $.DEFAULT_SETTINGS.repoImages.other;
+        var imageName = $.viewer.repoImages[repo || 'other'] || $.viewer.repoImages.other;
 
-        return 'images/logos/' + imageName;
+        return $.viewer.logosLocation + imageName;
       })();
 
       for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {

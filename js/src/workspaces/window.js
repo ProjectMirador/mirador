@@ -228,9 +228,9 @@
         var annoID;
         //first function is success callback, second is error callback
         _this.endpoint.create(oaAnno, function(data) {
-          annoID = String(data.id); //just in case it returns a number
-          oaAnno['@id'] = annoID;
-          _this.annotationsList.push(oaAnno);
+          //the success callback expects the OA annotation be returned
+          annoID = String(data['@id']); //just in case it returns a number
+          _this.annotationsList.push(data);
           //update overlay so it can be a part of the annotationList rendering
           jQuery(osdOverlay).removeClass('osd-select-rectangle').addClass('annotation').attr('id', annoID);
           jQuery.publish(('annotationListLoaded.' + _this.id));
@@ -256,13 +256,20 @@
       jQuery.subscribe('annotationDeleted.'+_this.id, function(event, oaAnno) {        
         //remove from endpoint
         //first function is success callback, second is error callback
-          _this.endpoint.deleteAnnotation(oaAnno['@id'], function() {
+        _this.endpoint.deleteAnnotation(oaAnno['@id'], function() {
           _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== oaAnno['@id']; });
           jQuery.publish(('annotationListLoaded.' + _this.id));
         }, 
         function() {
           // console.log("There was an error deleting this annotation");
         });
+      });
+
+      jQuery.subscribe('updateAnnotationList.'+_this.id, function(event) {
+        while(_this.annotationsList.length > 0) {
+          _this.annotationsList.pop();
+        }
+        _this.getAnnotations();
       });
     },
 
@@ -593,7 +600,6 @@
         var dfd = jQuery.Deferred(),
         module = $.viewer.annotationEndpoint.module,
         options = $.viewer.annotationEndpoint.options;
-
         // One annotation endpoint per window, the endpoint
         // is a property of the instance.
         if ( _this.endpoint && _this.endpoint !== null ) {
@@ -698,13 +704,13 @@
                                  '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-lg fa-fw"></i>',
                                  '<ul class="dropdown image-list">',
                                  '{{#if ImageView}}',
-                                 '<li class="single-image-option"><i class="fa fa-photo fa-lg fa-fw"></i> {{t "imageView"}}</li>',
+                                 '<li class="single-image-option"><i class="fa fa-photo fa-lg fa-fw"></i> Image View</li>',
                                  '{{/if}}',
                                  '{{#if BookView}}',
-                                 '<li class="book-option"><i class="fa fa-columns fa-lg fa-fw"></i> {{t "bookView"}}</li>',
+                                 '<li class="book-option"><i class="fa fa-columns fa-lg fa-fw"></i> Book View</li>',
                                  '{{/if}}',
                                  '{{#if ScrollView}}',
-                                 '<li class="scroll-option"><i class="fa fa-ellipsis-h fa-lg fa-fw"></i> {{t "scrollView"}}</li>',
+                                 '<li class="scroll-option"><i class="fa fa-ellipsis-h fa-lg fa-fw"></i> Scroll View</li>',
                                  '{{/if}}',
                                  '</ul>',
                                  '</a>',
@@ -720,22 +726,22 @@
                                  '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="Change Layout"><i class="fa fa-table fa-lg fa-fw"></i>',
                                  '<ul class="dropdown slot-controls">',
                                  '{{#if layoutOptions.newObject}}',
-                                 '<li class="new-object-option"><i class="fa fa-plus-square fa-lg fa-fw"></i> {{t "newObject"}}</li>',
+                                 '<li class="new-object-option"><i class="fa fa-plus-square fa-lg fa-fw"></i> New Object</li>',
                                  '{{/if}}',
                                  '{{#if layoutOptions.close}}',
-                                 '<li class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i> {{t "close"}}</li>',
+                                 '<li class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i> Close</li>',
                                  '{{/if}}',
                                  '{{#if layoutOptions.slotRight}}',
-                                 '<li class="add-slot-right"><i class="fa fa-caret-square-o-right fa-lg fa-fw"></i> {{t "addSlotRight"}}</li>',
+                                 '<li class="add-slot-right"><i class="fa fa-caret-square-o-right fa-lg fa-fw"></i> Add Slot Right</li>',
                                  '{{/if}}',
                                  '{{#if layoutOptions.slotLeft}}',
-                                 '<li class="add-slot-left"><i class="fa fa-caret-square-o-left fa-lg fa-fw"></i> {{t "addSlotLeft"}}</li>',
+                                 '<li class="add-slot-left"><i class="fa fa-caret-square-o-left fa-lg fa-fw"></i> Add Slot Left</li>',
                                  '{{/if}}',
                                  '{{#if layoutOptions.slotAbove}}',
-                                 '<li class="add-slot-above"><i class="fa fa-caret-square-o-up fa-lg fa-fw"></i> {{t "addSlotAbove"}}</li>',
+                                 '<li class="add-slot-above"><i class="fa fa-caret-square-o-up fa-lg fa-fw"></i> Add Slot Above</li>',
                                  '{{/if}}',
                                  '{{#if layoutOptions.slotBelow}}',
-                                 '<li class="add-slot-below"><i class="fa fa-caret-square-o-down fa-lg fa-fw"></i> {{t "addSlotBelow"}}</li>',
+                                 '<li class="add-slot-below"><i class="fa fa-caret-square-o-down fa-lg fa-fw"></i> Add Slot Below</li>',
                                  '{{/if}}',
                                  '</ul>',
                                  '</a>',
