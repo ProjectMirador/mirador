@@ -28,5 +28,6 @@
     "edit": "Editer",
     "delete": "Supprimer",
     "url": "URL",
-    "newObject": "Nouvel objet"
+    "newObject": "Nouvel objet",
+    "objectMetadata": "Métadonnées"
 }
