@@ -177,7 +177,7 @@
       var r, g, b;
       var i;
       var f, p, q, t;
-	
+  
       // Make sure our arguments stay in-range
       h = Math.max(0, Math.min(360, h));
       s = Math.max(0, Math.min(100, s));
@@ -189,7 +189,7 @@
       // That conversion here.
       s /= 100;
       v /= 100;
-	
+  
       if(s === 0) {
         // Achromatic (grey)
         r = g = b = v;
@@ -205,39 +205,39 @@
 
       switch(i) {
        case 0:
-			r = v;
-			g = t;
-			b = p;
-			break;
-			
-		case 1:
-			r = q;
-			g = v;
-			b = p;
-			break;
-			
-		case 2:
-			r = p;
-			g = v;
-			b = t;
-			break;
-			
-		case 3:
-			r = p;
-			g = q;
-			b = v;
-			break;
-			
-		case 4:
-			r = t;
-			g = p;
-			b = v;
-			break;
-			
-		default: // case 5:
-			r = v;
-			g = p;
-			b = q;
+      r = v;
+      g = t;
+      b = p;
+      break;
+      
+    case 1:
+      r = q;
+      g = v;
+      b = p;
+      break;
+      
+    case 2:
+      r = p;
+      g = v;
+      b = t;
+      break;
+      
+    case 3:
+      r = p;
+      g = q;
+      b = v;
+      break;
+      
+    case 4:
+      r = t;
+      g = p;
+      b = v;
+      break;
+      
+    default: // case 5:
+      r = v;
+      g = p;
+      b = q;
      }
 
      return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
@@ -256,17 +256,13 @@
       
       jQuery.subscribe('disableTooltips.' + _this.parent.windowId, function() {
         jQuery.each(_this.tooltips, function(index, value) {
-          console.log(value.qtip('api'));
           value.qtip('disable', true);
-          console.log(value.qtip('api'));
         }); 
       });
       
       jQuery.subscribe('enableTooltips.' + _this.parent.windowId, function() {
         jQuery.each(_this.tooltips, function(index, value) {
-          console.log(value.qtip('api'));
           value.qtip('disable', false);
-          console.log(value.qtip('api'));
         }); 
       });
 
