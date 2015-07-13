@@ -50,12 +50,35 @@
         }
       } else {
         // No thumbnail, use main image
-        var resource = canvas.images[0].resource;
+         //BH edit for no image found
+        var resource = "";
+        if(canvas.images[0] === undefined || canvas.images[0] === ""){
+          //place a holder image.  
+          resource = {
+                            "@id":"http://localhost:8080/brokenBooks/images/imgNotFound.png",
+                            "format":"image/jpg",
+                            "@type":"dctypes:Image",
+                            "service":
+                                {                                       
+                                    "@context": "http://iiif.io/api/image/2/context.json",
+                                    "profile":"http://iiif.io/api/image/2/profiles/level2.json",
+                                    "@id" : "http://localhost:8080/brokenBooks/images/imgNotFound.png"
+                                },
+                            "width": 667,
+                            "height":1000
+                        };
+        }
+        else{
+          resource = canvas.images[0].resource;
+        }
+        //End BH edit
         service = resource['default'] ? resource['default'].service : resource.service;
         if (service.hasOwnProperty('@context')) {
           version = $.Iiif.getVersionFromContext(service['@context']);
-        }          
-        thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+        }       
+        thumbnailUrl = resource["@id"];   
+        //BH edit
+        //thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
       }
       return thumbnailUrl;
     },

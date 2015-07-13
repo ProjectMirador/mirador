@@ -887,11 +887,106 @@ li.highlight {
 }
 .mirador-pan-zoom-controls {
   position: absolute;
-  width: 100px;
+  width: 500px;
   height: 65px;
   bottom:0;
   right:0;
   margin:1%;
+}
+
+.mirador-osd-contrast{
+  font-size:130%;
+  position:absolute;
+  left: 163px;
+  color:white;
+}
+.mirador-osd-brightness{
+  font-size:130%;
+  position:absolute;
+  color:white;
+}
+.brightnessSlider{
+  display: block;
+  height:200px;
+}
+.contrastSlider{
+  display: block;
+  height:200px;
+}
+.invertEffect{
+  -webkit-filter: invert(100%);
+  -moz-filter: invert(100%);
+  filter: invert(100%);
+}
+.grayscaleEffect{
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  filter: grayscale(100%);
+;
+}
+.invertEffect.grayscaleEffect{
+  -webkit-filter: invert(100%) grayscale(100%);
+  -moz-filter: invert(100%) grayscale(100%);
+  filter: invert(100%) grayscale(100%);
+}
+.mirador-osd-positive-rotate {
+  font-size:130%;
+  position:absolute;
+  right:110px;
+  top:205px;
+}
+.mirador-osd-negative-rotate {
+  font-size:130%;
+  position:absolute;
+  right:110px;
+  top:230px;
+}
+.mirador-osd-flip {
+  font-size:130%;
+  position:absolute;
+  right:140px;
+  top:215px;
+}
+.mirador-osd-toggle-grayscale {
+  font-size:130%;
+  position:absolute;
+  right:170px;
+  top:199px;
+  display: block;
+  cursor: pointer;
+}
+.mirador-osd-toggle-invert {
+  font-size:130%;
+  position:absolute;
+  right:170px;
+  top:230px;
+  display:block;
+  cursor: pointer;
+}
+.mirador-osd-filters-off {
+  font-size:130%;
+  position:absolute;
+  right:170px;
+  top:170px;
+  display:block;
+  cursor: pointer;
+}
+
+.mirador-pan-zoom-toggle {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  bottom: 160px;
+  right: 118px;
+  color: green;
+  opacity: 1;
+}
+.mirador-img-manipulation{
+  right:-350px;
+  height: 300px;
+  width: 245px;
+  position: absolute;
+  bottom: 96px;
 }
 .mirador-osd-up {
   position:absolute;

@@ -113,6 +113,7 @@
     },
 
     createOpenSeadragonInstance: function(imageUrl) {
+      console.log("On OSD creation with url: "+imageUrl);
       var infoJsonUrl = imageUrl + '/info.json',
       uniqueID = $.genUUID(),
       osdID = 'mirador-osd-' + uniqueID,
@@ -121,7 +122,10 @@
 
       this.element.find('.' + this.osdCls).remove();
 
+      //needs tweaking so that it can handle a no .json file present.  it still needs to work.  
       jQuery.getJSON(infoJsonUrl).done(function (infoJson, status, jqXHR) {
+        console.log("Got JSON info");
+        console.log(infoJson);
         _this.elemOsd =
           jQuery('<div/>')
         .addClass(_this.osdCls)
@@ -159,6 +163,46 @@
           }, 500));
 
         });
+      })
+      .fail(function(){
+        console.log("No info.json file.  Please handle accordingly.  I am going to make the OSD container.");
+        _this.elemOsd =
+          jQuery('<div/>')
+        .addClass(_this.osdCls)
+        .attr('id', osdID)
+        .appendTo(_this.element);
+
+        _this.osd = $.OpenSeadragon({
+          'id':           osdID,
+          'tileSources':  [], //This is the consequence of not getting the JSON.  It needs a height and width in the [0]th element for the image.
+          'uniqueID' : uniqueID
+        });
+
+        _this.osd.addHandler('open', function(){
+          if (_this.osdOptions.osdBounds) {
+            var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
+            _this.osd.viewport.fitBounds(rect, true);
+          }
+
+          _this.addAnnotationsLayer(_this.elemAnno);
+          //re-add correct annotationsLayer mode based on annoState
+          if (_this.hud.annoState.current !== "annoOff") {
+            jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');          
+          }
+
+          // A hack. Pop the osd overlays layer after the canvas so 
+          // that annotations appear.
+          jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
+
+          _this.osd.addHandler('zoom', $.debounce(function() {
+            _this.setBounds();
+          }, 500));
+
+          _this.osd.addHandler('pan', $.debounce(function(){
+            _this.setBounds();
+          }, 500));
+        });
+
       });
     },
 
@@ -175,6 +219,7 @@
     },
 
     updateImage: function(canvasID) {
+      console.log("Load new full image");
       if (this.canvasID !== canvasID) {
         this.canvasID = canvasID;
         this.currentImgIndex = $.getImageIndexById(this.imagesList, canvasID);
