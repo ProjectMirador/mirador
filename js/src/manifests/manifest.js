@@ -80,6 +80,13 @@
         //BH edit
         //thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
       }
+      // var can = "";
+      // can = $(".openseadragon-canvas");
+      // if(can === undefined){
+      //   can ="no";
+      // }
+      // console.log("can i set image here4?");
+      // console.log(can);
       return thumbnailUrl;
     },
     getCanvases : function() {

@@ -59,6 +59,13 @@
         annotationLayerAvailable: this.annotationLayerAvailable,
         annoEndpointAvailable: this.annoEndpointAvailable
       });
+      //   var can = "";
+      // can = $(".openseadragon-canvas");
+      // if(can === undefined){
+      //   can == "no";
+      // }
+      // console.log("Can i make image here6?");
+      // console.log(can);
     },
 
     template: Handlebars.compile([
@@ -161,6 +168,8 @@
           _this.osd.addHandler('pan', $.debounce(function(){
             _this.setBounds();
           }, 500));
+          
+          
 
         });
       })
@@ -202,8 +211,12 @@
             _this.setBounds();
           }, 500));
         });
-
-      });
+        
+        //wrapping the image element in a canavas causes the image not to load.  Without the canvas, none of the tools work.  
+        var fakeCanvas = jQuery("<img class='fix' src='"+imageUrl+"'/>");
+        jQuery(_this.osd.canvas).append(fakeCanvas);       
+        });
+      
     },
 
     addAnnotationsLayer: function(element) {
@@ -238,6 +251,13 @@
       } else {
         this.parent.updateFocusImages([canvasID]);
       }
+        // var can2 = "";
+        // can2 = $(".openseadragon-canvas");
+        // if(can2 === undefined){
+        //   can2 == "no";
+        // }
+        // console.log("Can i make image here3?");
+        // console.log(can2);
     },
 
     next: function() {

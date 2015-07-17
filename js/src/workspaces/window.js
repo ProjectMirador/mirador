@@ -460,6 +460,13 @@
         view.updateImage(canvasID);
       }
       this.toggleFocus('ImageView', 'ImageView');
+      // var can = "";
+      // can = $(".openseadragon-canvas");
+      // if(can === undefined){
+      //   can == "no";
+      // }
+      // console.log("Can i make image here1?");
+      // console.log(can);
     },
 
     toggleBookView: function(canvasID) {

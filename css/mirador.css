@@ -1711,3 +1711,9 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
     height: 75px !important;
 }
 
+.fix{
+    position: relative;
+    height: 100%;
+    margin: 0 auto;
+    display: block;
+}
