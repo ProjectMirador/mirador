@@ -112,7 +112,7 @@
                                        '{{#each annotations}}',
                                        '<div class="annotation-display annotation-tooltip" data-anno-id="{{id}}">',
                                        '<div class="button-container">',
-                                         '{{#if showEdit}}<a href="#edit" class="edit"><i class="fa fa-pencil-square-o fa-fw"></i>{{t "edit"}}</a>{{/if}}',
+                                         '{{#if showUpdate}}<a href="#edit" class="edit"><i class="fa fa-pencil-square-o fa-fw"></i>{{t "edit"}}</a>{{/if}}',
                                          '{{#if showDelete}}<a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw"></i>{{t "delete"}}</a>{{/if}}',
                                        '</div>',
                                        '<div class="text-viewer">',
