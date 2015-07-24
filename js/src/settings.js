@@ -95,6 +95,8 @@
     //true or false.  controls display of "Add new object from URL" on manifest listing page
     'showAddFromURLBox' : true,
 
+    'i18nPath' : 'build/mirador/locales/',
+
     'logosLocation' : 'build/mirador/images/logos/',
 
     'repoImages' : {
