@@ -267,9 +267,19 @@
       });
 
     },
-    
+      hideWindowAnnotations: function() {
+          // Hide and fix only the annotations in this window.
+          var windowAnnotations = this.parent.element.parent().children('.mirador-osd').children('.qtip');
+
+          // Reset the annotations to unpinned and hide
+          jQuery.each(windowAnnotations, function(index, value) {
+              var qtipApi = jQuery(value).qtip();
+              qtipApi.set({'hide.event': 'mouseleave'});
+              qtipApi.hide();
+          });
+      },
     checkMousePosition: function() {
-      jQuery('.qtip').qtip('hide');
+        this.hideWindowAnnotations();
     },
 
     update: function() {
@@ -277,7 +287,10 @@
     },
 
     hideAll: function() {
-      this.osdViewer.clearOverlays();
+        // Make sure we hide the tooltips
+        // before hiding the annotation overlay.
+        this.hideWindowAnnotations();
+        this.osdViewer.clearOverlays();
     },
 
     getElements: function() {
@@ -327,6 +340,7 @@
     removeAnnotationEvents: function(tooltipevent, api) {
       jQuery('.annotation-tooltip a.delete').off("click");
       jQuery('.annotation-tooltip a.edit').off("click");
+        jQuery('.qtip-header a.pin').off("click");
       jQuery('.annotation-tooltip a.save').off("click");
       jQuery('.annotation-tooltip a.cancel').off("click");
     },
@@ -353,6 +367,19 @@
         //hide tooltip so event handlers don't get messed up
         api.hide();
         display.remove(); //remove this annotation display from dom
+      });
+
+        jQuery('.qtip-header a.pin').on("click", function(event) {
+              event.preventDefault();
+              // Get this pin annotation API instance
+              var qtipApi = jQuery(this).parents('.qtip').qtip();
+              if ( qtipApi.get('hide.event') ) {
+                      jQuery(event.target).attr('class', 'fa fa fa-dot-circle-o fa-fw');
+                      qtipApi.set({'hide.event': false});
+                  } else {
+                      jQuery(event.target).attr('class', 'fa fa fa-circle-o fa-fw');
+                      qtipApi.set({'hide.event': 'mouseleave' });
+                  }
       });
 
       jQuery('.annotation-tooltip a.edit').on("click", function(event) {

@@ -109,6 +109,7 @@
 
     viewerTemplate: Handlebars.compile([
                                        '<div class="all-annotations">',
+                                        '<div class="qtip-header"><a href="#pin" class="pin"><i class="fa fa fa-circle-o fa-fw"></i></a></div>',
                                        '{{#each annotations}}',
                                        '<div class="annotation-display annotation-tooltip" data-anno-id="{{id}}">',
                                        '<div class="button-container">',
