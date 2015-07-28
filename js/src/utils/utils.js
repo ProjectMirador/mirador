@@ -178,11 +178,7 @@
     var bounds = el.offset();
     bounds.bottom = bounds.top + el.height();
     bounds.right = bounds.left + el.width();
-    var bounding = elem.getBoundingClientRect();
-    var position = el.position();
-    var parentOffset = el.parent().offset();
 
-    var oldTest = (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
     return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
   };
 
