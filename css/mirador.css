@@ -851,7 +851,7 @@ li.highlight {
 }
 .mirador-osd-edit-mode.selected, .mirador-osd-annotations-layer.selected {
   opacity: 1;
-  transition: none;
+  /*transition: none;*/
 }
 .mirador-osd-previous {
   position:absolute;
