@@ -720,7 +720,7 @@ li.highlight {
   z-index: 4;
   overflow:hidden;
   display: none;
-  /*transition:all 0.1s ease; causes the filmstrip to be very jumpy - don't use*/
+  transition:transform 0.3s ease;
 }
 .bottomPanel.minimized {
   transform:translateY(130px);
