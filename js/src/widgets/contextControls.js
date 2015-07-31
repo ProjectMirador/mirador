@@ -9,7 +9,8 @@
       mode: null,
       windowId: null,
       rectTool: null,
-      annoEndpointAvailable: false
+      annoEndpointAvailable: false,
+      annotationCreationAvailable: true
     }, options);
 
     this.init();
@@ -18,7 +19,9 @@
   $.ContextControls.prototype = {
 
     init: function() {    
-      this.element = jQuery(this.template()).appendTo(this.container);
+      this.element = jQuery(this.template({
+        showEdit : this.annotationCreationAvailable
+      })).appendTo(this.container);
       this.hide();
       this.bindEvents();
     },
@@ -63,9 +66,11 @@
                                    '<a class="mirador-osd-close hud-control">',
                                    '<i class="fa fa-lg fa-times"></i>',
                                    '</a>',
+                                   '{{#if showEdit}}',
                                    '<a class="mirador-osd-edit-mode hud-control">',
                                    '<i class="fa fa-lg fa-edit"></i>',
                                    '</a>',
+                                   '{{/if}}',
                                    '<a class="mirador-osd-refresh-mode hud-control">',
                                    '<i class="fa fa-lg fa-refresh"></i>',
                                    '</a>',
