@@ -47,6 +47,7 @@
       bottomPanelVisible: true,
       overlay: null,
       annotationLayerAvailable: true,
+      annotationCreationAvailable: true,
       annoEndpointAvailable : false,
       displayLayout: true,
       layoutOptions : {
@@ -454,6 +455,7 @@
           osdOptions: this.focusOptions,
           bottomPanelAvailable: this.bottomPanelAvailable,
           annotationLayerAvailable: this.annotationLayerAvailable,
+          annotationCreationAvailable: this.annotationCreationAvailable,
           annoEndpointAvailable: this.annoEndpointAvailable} );
       } else {
         var view = this.focusModules.ImageView;

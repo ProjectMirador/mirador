@@ -218,6 +218,7 @@
         sidePanelAvailable : options.sidePanel,
         overlayAvailable : options.overlay,
         annotationLayerAvailable : options.annotationLayer,
+        annotationCreationAvailable : options.annotationCreation,
         slotAddress: slotAddress,
         displayLayout : options.displayLayout,
         layoutOptions: options.layoutOptions
