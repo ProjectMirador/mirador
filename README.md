@@ -9,15 +9,22 @@ Mirador
 Mirador is a multi-repository, configurable, extensible, and easy-to-integrate viewer amd annotation creation and comparison environment for IIIF resources, ranging from deep-zooming artwork, to complex manuscript objects. It provides a tiling windowed environment for comparing multiple image-based resources, synchronised structural and visual navigation of content using openSeadragon, Open Annotation compliant annotation creation and viewing on deep-zoomable canvases, metadata display, bookreading, and bookmarking.
 
 ### Getting Started
-To begin working with Mirador, run:
+To begin local development with Mirador, run:
 
 `git clone https://github.com/IIIF/mirador.git`
+
+Mirador uses [node.js](http://nodejs.org/) and a build system to assemble, test, and manage the development resources. If you have never used these tools before, you may need to install them.
+
+Install Node, if you haven't already (available at the link above)
+Install the Grunt command line runner (if you haven't already); on the command line, run `npm install -g grunt-cli`
+Clone the mirador repository (if you haven't already done so above)
+On the command line, go in to the mirador folder
 
 Install all dependencies with `npm install` and `bower install`. Run `grunt`.
 
 A good practice is to clone the project into a directory that is being served by a running http server such as apache or nginx. However, if you would like to test and develop without using an external server, you may run `grunt server`.
 
-Either visit the root folder of the project at localhost, or, if you are using `grunt server`, see the example working at localhost:8000.
+Either visit the root folder of the project on your local server, or, if you are using `grunt server`, see the example working at [localhost:8000](localhost:8000).
 
 To integrate the component into your project, include the `mirador.min.js` and `mirador-combined.css` from the build folder into your webpage or application asset pipeline, and call the Mirador constructor function with any appropriate configuration. For the moment, Mirador also uses local images to supply repository logos. These must be present in the same directory as the ultimate index.html (under `images/`). It also depends on the icon font [FontAwesome](http://fortawesome.github.io/Font-Awesome/), and expects it in a fonts directory at the same level as `index.html`.
 
