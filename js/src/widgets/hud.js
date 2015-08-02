@@ -31,7 +31,8 @@
           container: this.parent.element,
           mode: 'displayAnnotations',
           parent: this,
-          windowId: this.windowId
+          windowId: this.windowId,
+          annotationCreationAvailable: this.annotationCreationAvailable
         });
       }
 

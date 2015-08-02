@@ -95,13 +95,13 @@
     //when this is being used to edit an existing annotation, insert them into the inputs
     editorTemplate: Handlebars.compile([
                                        '<form class="annotation-editor annotation-tooltip" {{#if id}}data-anno-id="{{id}}"{{/if}}>',
-                                       '<textarea class="text-editor" placeholder="Comments…">{{#if content}}{{content}}{{/if}}</textarea>',
-                                       '<input class="tags-editor" placeholder="Add tags here…" {{#if tags}}value="{{tags}}"{{/if}}>',
+                                       '<textarea class="text-editor" placeholder="{{t "comments"}}…">{{#if content}}{{content}}{{/if}}</textarea>',
+                                       '<input class="tags-editor" placeholder="{{t "addTagsHere"}}…" {{#if tags}}value="{{tags}}"{{/if}}>',
                                        '<div>',
                                        // need to add a delete, if permissions allow
                                        '<div class="button-container">',
-                                       '<a href="#cancel" class="cancel"><i class="fa fa-times-circle-o fa-fw"></i>Cancel</a>',
-                                       '<a href="#save" class="save"><i class="fa fa-database fa-fw"></i>Save</a>',
+                                       '<a href="#cancel" class="cancel"><i class="fa fa-times-circle-o fa-fw"></i>{{t "cancel"}}</a>',
+                                       '<a href="#save" class="save"><i class="fa fa-database fa-fw"></i>{{t "save"}}</a>',
                                        '</div>',
                                        '</div>',
                                        '</form>'
@@ -112,8 +112,8 @@
                                        '{{#each annotations}}',
                                        '<div class="annotation-display annotation-tooltip" data-anno-id="{{id}}">',
                                        '<div class="button-container">',
-                                         '{{#if showUpdate}}<a href="#edit" class="edit"><i class="fa fa-pencil-square-o fa-fw"></i>Edit</a>{{/if}}',
-                                         '{{#if showDelete}}<a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw"></i>Delete</a>{{/if}}',
+                                         '{{#if showUpdate}}<a href="#edit" class="edit"><i class="fa fa-pencil-square-o fa-fw"></i>{{t "edit"}}</a>{{/if}}',
+                                         '{{#if showDelete}}<a href="#delete" class="delete"><i class="fa fa-trash-o fa-fw"></i>{{t "delete"}}</a>{{/if}}',
                                        '</div>',
                                        '<div class="text-viewer">',
                                        '{{#if username}}<p class="user">{{username}}:</p>{{/if}}',

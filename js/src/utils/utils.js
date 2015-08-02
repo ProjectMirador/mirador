@@ -171,8 +171,8 @@
       top : (win.scrollTop() * factor),
       left : (win.scrollLeft() * factor)
     };
-    viewport.bottom = (viewport.top + win.height()) * factor;
-    viewport.right = (viewport.left + win.width()) * factor;
+    viewport.bottom = (viewport.top + win.outerHeight()) * factor;
+    viewport.right = (viewport.left + win.outerWidth()) * factor;
 
     var el = jQuery(elem);
     var bounds = el.offset();

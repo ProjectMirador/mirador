@@ -40,6 +40,15 @@
       // retrieve manifests
       this.getManifestsData();
 
+      //initialize i18next  
+      i18n.init({debug: false, getAsync: false, resGetPath: _this.i18nPath+'__lng__/__ns__.json'}); 
+
+      //register Handlebars helper
+      Handlebars.registerHelper('t', function(i18n_key) {
+        var result = i18n.t(i18n_key);
+        return new Handlebars.SafeString(result);
+      });
+
       //check all buttons in mainMenu.  If they are all set to false, then don't show mainMenu
       var showMainMenu = false;
       jQuery.each(this.mainMenuSettings.buttons, function(key, value) {
@@ -209,6 +218,7 @@
         sidePanelAvailable : options.sidePanel,
         overlayAvailable : options.overlay,
         annotationLayerAvailable : options.annotationLayer,
+        annotationCreationAvailable : options.annotationCreation,
         slotAddress: slotAddress,
         displayLayout : options.displayLayout,
         layoutOptions: options.layoutOptions
