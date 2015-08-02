@@ -15,8 +15,9 @@ To begin local development with Mirador, run:
 
 Mirador uses [node.js](http://nodejs.org/) and a build system to assemble, test, and manage the development resources. If you have never used these tools before, you may need to install them.
 
-Install Node, if you haven't already (available at the link above)
-Install the Grunt command line runner (if you haven't already); on the command line, run `npm install -g grunt-cli`
+Install Node, if you haven't already (available at the link above).  
+Install the Grunt command line runner (if you haven't already); on the command line, run `npm install -g grunt-cli`  
+
 Clone the mirador repository (if you haven't already done so above)
 On the command line, go in to the mirador folder
 
@@ -103,8 +104,3 @@ A Mirador instance will fill its container (not stretch it to a certain size). T
 There can be as many instances of Mirador running on one page as desired. Simply name them differently and point them to different elements on the page.
 
 For more information, see the [wiki](https://github.com/IIIF/mirador/wiki), submit an [issue](https://github.com/mirador/mirador/issues), or ask on [gitter](https://gitter.im/IIIF/mirador).
-
-
-
- 
-
