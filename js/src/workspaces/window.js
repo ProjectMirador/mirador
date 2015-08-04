@@ -20,23 +20,23 @@
       focusModules:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
       focusOverlaysAvailable: {
         'ThumbnailsView': {
-          'overlay' : {'MetadataView' : false}, 
-          'sidePanel' : {'TableOfContents' : true},
+          'overlay' : {'MetadataView' : false},
+          'sidePanel' : {'SidePanel' : true},
           'bottomPanel' : {'' : false}
         },
         'ImageView': {
-          'overlay' : {'MetadataView' : false}, 
-          'sidePanel' : {'TableOfContents' : true},
+          'overlay' : {'MetadataView' : false},
+          'sidePanel' : {'SidePanel' : true},
           'bottomPanel' : {'ThumbnailsView' : true}
         },
         'ScrollView': {
-          'overlay' : {'MetadataView' : false}, 
-          'sidePanel' : {'TableOfContents' : true},
+          'overlay' : {'MetadataView' : false},
+          'sidePanel' : {'SidePanel' : true},
           'bottomPanel' : {'' : false}
         },
         'BookView': {
           'overlay' : {'MetadataView' : false},
-          'sidePanel' : {'TableOfContents' : true},
+          'sidePanel' : {'SidePanel' : true},
           'bottomPanel' : {'ThumbnailsView' : true}
         }
       },
@@ -296,21 +296,21 @@
           //instantiate any panels that exist for this view but are still null
           if (view !== '' && _this[panelType] === null) {
             _this[panelType] = new $[view]({
-              manifest: _this.manifest, 
-              appendTo: _this.element.find('.'+panelType), 
-              parent: _this, 
-              panel: true, 
-              canvasID: _this.currentCanvasID, 
+              manifest: _this.manifest,
+              appendTo: _this.element.find('.'+panelType),
+              parent: _this,
+              panel: true,
+              canvasID: _this.currentCanvasID,
               imagesList: _this.imagesList,
               thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
             });
           }
 
-          //refresh displayed in case TableOfContents module changed it
+          //refresh displayed in case SidePanel module changed it
           displayed = _this.focusOverlaysAvailable[state][panelType][view];
 
           //toggle any valid panels
-          if (view !== '' && displayed) {   
+          if (view !== '' && displayed) {
             _this.togglePanels(panelType, displayed, view, state);
           }
 
@@ -350,7 +350,7 @@
     setTOCBoolean: function(boolValue) {
       var _this = this;
       jQuery.each(this.focusOverlaysAvailable, function(key, value) {
-        _this.focusOverlaysAvailable[key].sidePanel.TableOfContents = boolValue;
+        _this.focusOverlaysAvailable[key].sidePanel.SidePanel = boolValue;
       });
       //remove thumbnail icon if not available for this object
       if (!boolValue) {

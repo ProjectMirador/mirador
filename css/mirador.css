@@ -567,18 +567,53 @@ li.highlight {
   float: left;
   background-color: #efefef;
   border-right: 1px solid lightgray;
-  /*display: none;*/
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  padding: 10px;
+}
+
+.tabContentArea {
+  position: relative;
+  width:280px;
+  height:100%;
+  float: left;
+  background-color: #efefef;
+  border-right: 1px solid lightgray;
   box-sizing: border-box;
   overflow: hidden;
   transition: all 0.3s ease;
 }
-.sidePanel h1, .sidePanel h2, .sidePanel h3, .sidePanel h4 {
+
+.sidePanel .tabGroup {
+    list-style-type:none;
+    margin:0;
+    padding:0;
+}
+
+.sidePanel .tab {
+    padding: 5px;
+    border-left:0;
+    border-bottom: 2px solid black;
+    display: inline-block;
+    margin-left:-2px;
+}
+
+.sidePanel .tab.selected {
+    border: 2px solid black;
+    border-bottom:0;
+    border-radius: 3px 3px 0 0;
+}
+
+.tableOfContents h1, .tableOfContents h2, .tableOfContents h3, .tableOfContents h4 {
   margin:0;
   padding:0;
   font-weight: normal;
 }
-.sidePanel h1:hover, .sidePanel h2:hover, .sidePanel h3:hover, .sidePanel h4:hover {
+.tableOfContents h1:hover, .tableOfContents h2:hover, .tableOfContents h3:hover, .tableOfContents h4:hover {
 }
+
+
 .toc {
   margin:0;
   overflow-y: scroll;
@@ -602,7 +637,6 @@ li.highlight {
   cursor: pointer;
   background-color: #dddddd;
   display:block;
-  overflow:hidden;
 }
 .toc ul {
   margin:0;
@@ -623,9 +657,7 @@ li.highlight {
 }
 .toc li.selected {
   cursor: pointer;
-  overflow:hidden;
   border-left: 4px solid deepSkyblue;
-  transition: all 0.2s ease-out;
 }
 .toc-link i {
   color: rgba(0,0,0,0.4);
@@ -660,8 +692,10 @@ li.highlight {
   /* Internet Explorer */
   filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
 }
+.toc h2, .toc h3 {
+    margin:0;
+}
 .toc li.selected-parent {
-
 }
 .toc li.hovered {
   border-left: 4px solid deepSkyblue;

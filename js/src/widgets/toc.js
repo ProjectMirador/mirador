@@ -32,7 +32,7 @@
       } else {
         _this.parent.setTOCBoolean(true);
         this.ranges = this.setRanges();
-        this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
+          this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
         this.tocData = this.initTocData();
         this.selectedElements = $.getRangeIDByCanvasID(_this.structures, _this.parent.currentCanvasID);
         this.element.find('.has-child ul').hide();
@@ -62,7 +62,7 @@
     getTplData: function() {  
       var _this = this,
       ranges = _this.extractRangeTrees(_this.ranges);
-      
+
       if (ranges.length < 2) {
         ranges = ranges[0].children;
       }
@@ -112,26 +112,26 @@
             children.forEach(function(child) {
               child.level = 0;
             });
-            tree = children;   
+            tree = children;
           } else {
             // If the parent does not have a top-level id,
             // bind the children to the parent node in this
             // recursion level before handing it over for
-            // another spin. 
+            // another spin.
             //
-            // Because "child" is passed as 
-            // the second parameter in the next call, 
+            // Because "child" is passed as
+            // the second parameter in the next call,
             // in the next iteration "parent" will be the
             // first child bound here.
-            children.forEach(function(child) { 
+            children.forEach(function(child) {
               child.level = parent.level+1;
             });
             parent.children = children;
           }
-          // The function cannot continue to the return 
-          // statement until this line stops being called, 
+          // The function cannot continue to the return
+          // statement until this line stops being called,
           // which only happens when "children" is empty.
-          jQuery.each( children, function( index, child ){ unflatten( flatRanges, child ); } );                    
+          jQuery.each( children, function( index, child ){ unflatten( flatRanges, child ); } );
         }
         return tree;
       }
@@ -160,18 +160,18 @@
 
       // Deselect elements
       jQuery(toDeselect).removeClass('selected');
-      
+
       // Select new elements
       jQuery(toSelect).addClass('selected');
-      
+
       // Scroll to new elements
       scroll();
-      
+
       // Open new ones
       jQuery(toOpen).toggleClass('open').find('ul:first').slideFadeToggle();
       // Close old ones (find way to keep scroll position).
       jQuery(toClose).toggleClass('open').find('ul:first').slideFadeToggle(400, 'swing', scroll);
-       
+
       // Get the sum of the outer height of all elements to be removed.
       // Subtract from current parent height to retreive the new height.
       // Scroll with respect to this. 
@@ -190,10 +190,8 @@
 
       jQuery.subscribe('focusChanged', function(_, manifest, focusFrame) {
       });
-      
       jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
       });
-        
       jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(event, canvasID) {
         if (!_this.structures) { return; }
         _this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, canvasID));
@@ -219,10 +217,8 @@
           _this.parent.setCurrentCanvasID(canvasID);
         // }
       });
-      
       _this.element.find('.caret').on('click', function(event) {
         event.stopPropagation();
-        
         var rangeID = jQuery(this).parent().data().rangeid;
         _this.setOpenItem(rangeID); 
 
@@ -300,7 +296,7 @@
         children.forEach(function(child) {
           out = out + previousTemplate(child);
         });
-        
+
         return out;
       });
 
@@ -321,17 +317,7 @@
         this.hide();
       }
     },
-    
-    hide: function() {
-      jQuery(this.appendTo).hide();
-      this.parent.element.find('.view-container').addClass('focus-max-width');
-    },
 
-    show: function() {
-      jQuery(this.appendTo).show({effect: "fade", duration: 300, easing: "easeInCubic"});
-      this.parent.element.find('.view-container').removeClass('focus-max-width');
-    }
-    
   };
 
 }(Mirador));

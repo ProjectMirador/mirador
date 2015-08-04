@@ -28,7 +28,7 @@
       token:     null,
      // prefix:    'annotation', /**/
       uri:       null,
-		url:		  options.url,	
+		    url:		  options.url,
       dfd:       null,
       annotationsList: [],        //OA list for Mirador use
         idMapper: {} // internal list for module use to map id to URI
@@ -52,13 +52,13 @@
 					 'admin':  [this.userid]
 				 }
 		};
-      this.search(this.uri);        
+      this.search(this.uri);
     },
 
     //Search endpoint for all annotations with a given URI
     search: function(uri) {
       var _this = this;
-		
+
       this.annotationsList = []; //clear out current list
       jQuery.ajax({
         url: _this.url + "/search", // this.prefix+
