@@ -178,6 +178,7 @@
       scroll();
 
       function scroll() {
+          console.log(_this);
         var head = _this.element.find('.selected').first();
         _this.element.scrollTo(head, 400);
       }
