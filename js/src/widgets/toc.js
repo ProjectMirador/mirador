@@ -180,7 +180,7 @@
       function scroll() {
         var head = _this.element.find('.selected').first();
         _this.element.scrollTo(head, 400);
-      } 
+      }
 
     },
 

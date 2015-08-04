@@ -528,7 +528,7 @@
       }
       jQuery.publish(('currentCanvasIDUpdated.' + _this.id), canvasID);
     },
-    
+
     replaceWindow: function(newSlotAddress, newElement) {
       this.slotAddress = newSlotAddress;
       this.appendTo = newElement;
