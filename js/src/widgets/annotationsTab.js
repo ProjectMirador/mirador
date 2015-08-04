@@ -15,7 +15,6 @@
         init: function() {
             var _this = this;
             this.windowId = this.parent.id;
-
             this.listenForActions();
             //this.render();
             this.bindEvents();
@@ -52,7 +51,9 @@
             }
         },
         template: Handlebars.compile([
-            '{{#each annotations}}<div>{{fullId}}</div>{{/each}}'
+            '<div class="annotationsPanel">',
+            '{{#each annotations}}<div>{{fullId}}</div>{{/each}}',
+            '</div>',
         ].join(''))
     };
 

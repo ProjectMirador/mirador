@@ -597,6 +597,7 @@ li.highlight {
     border-bottom: 2px solid black;
     display: inline-block;
     cursor: pointer;
+    border-radius: 3px;
 }
 
 .sidePanel .tab:not(.selected):hover {
