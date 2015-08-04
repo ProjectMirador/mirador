@@ -17,12 +17,12 @@
             this.windowId = this.parent.id;
 
             this.state({
-                tocTab: true,
-                annotationsTab: false
-            });
+                tocTab: false,
+                annotationsTab: true
+            }, true);
 
             this.listenForActions();
-            this.render();
+            this.render(this.state());
             this.bindEvents();
 
             this.loadTabComponents();
@@ -45,11 +45,13 @@
                 appendTo: _this.element.find('.tabContentArea')
             });
         },
-        state: function(state) {
+        state: function(state, initial) {
             if (!arguments.length) return this.tabState;
             this.tabState = state;
 
-            jQuery.publish('sidePanelStateUpdated', this.tabState);
+            if (!initial) {
+                jQuery.publish('sidePanelStateUpdated' + this.windowId, this.tabState);
+            }
 
             return this.tabState;
         },
@@ -57,7 +59,7 @@
             var state = this.state();
 
             for (var tab in state) {
-                tab = false;
+                state[tab] = false;
             }
 
             state[tabId] = true; 
@@ -97,26 +99,28 @@
             var _this = this;
 
             if (!this.element) {
+                console.log(renderingData);
                 this.element = this.appendTo;
                 jQuery(_this.template(renderingData)).appendTo(_this.appendTo);
                 return;
             }
 
             this.element.find('.tab').removeClass('selected');
-            renderingData.forEach(function(tab) {
-                if (tab === true) {
-                    this.element.find(tab).addClass('selected');
+
+            for (var tab in renderingData) {
+                if (renderingData[tab] === true) {
+                    var tabClass = '.tab.' + tab;
+                    this.element.find(tabClass).addClass('selected');
                 }
-                return;
-            });
+            }
         },
         template: Handlebars.compile([
             '<ul class="tabGroup">',
-                '<li class="tab {{#if tocTab}}selected{{/if}}" data-tabId="tocTab">',
+            '<li class="tab tocTab {{#if tocTab}}selected{{/if}}" data-tabId="tocTab">',
                     // '<i class="fa fa-indent fa-lg fa-fw"></i>',
             'Indices',
             '</li>',
-            '<li class="tab {{#if annotationsTab}}selected{{/if}}" data-tabId="annotationsTab">',
+            '<li class="tab annotationsTab {{#if annotationsTab}}selected{{/if}}" data-tabId="annotationsTab">',
                     // '<i class="fa fa-keyboard-o fa-lg fa-fw"></i>',
             'Annotations',
             '</li>',

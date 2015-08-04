@@ -151,11 +151,13 @@
           if ((jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.previousSelectedElements) < 0)) {
             return _this.tocData[rangeID].element.toArray();
           }
+          return false;
       }),
       toClose = jQuery.map(_this.previousSelectedElements, function(rangeID) {
           if ((jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.selectedElements) < 0)) {
             return _this.tocData[rangeID].element.toArray();
           }
+          return false;
       });
 
       // Deselect elements
@@ -165,7 +167,7 @@
       jQuery(toSelect).addClass('selected');
 
       // Scroll to new elements
-      scroll();
+      // scroll();
 
       // Open new ones
       jQuery(toOpen).toggleClass('open').find('ul:first').slideFadeToggle();
@@ -175,10 +177,9 @@
       // Get the sum of the outer height of all elements to be removed.
       // Subtract from current parent height to retreive the new height.
       // Scroll with respect to this. 
-      scroll();
+      // scroll();
 
       function scroll() {
-          console.log(_this);
         var head = _this.element.find('.selected').first();
         _this.element.scrollTo(head, 400);
       }

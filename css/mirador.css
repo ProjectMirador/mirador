@@ -592,39 +592,24 @@ li.highlight {
 }
 
 .sidePanel .tab {
-    padding: 6px;
+    padding: 8px;
     border-left:0;
     border-bottom: 2px solid black;
     display: inline-block;
-    margin-left:-2px;
-    padding-left:8px;
     cursor: pointer;
-}
-
-.sidePanel .tab:hover {
 }
 
 .sidePanel .tab:not(.selected):hover {
     border: 2px solid rgba(0,0,0,0.3);
     border-bottom: 2px solid black;
-    padding-left:6px;
-}
-
-.sidePanel .tab {
-    padding: 6px;
-    border-left:0;
-    border-bottom: 2px solid black;
-    display: inline-block;
-    margin-left:-2px;
-    padding-left:8px;
-    cursor: pointer;
+    padding:8px 6px;
 }
 
 .sidePanel .tab.selected {
     border: 2px solid black;
     border-bottom:0;
     border-radius: 3px 3px 0 0;
-    padding-left:6px;
+    margin: 0 -2px;
 }
 
 .tableOfContents h1, .tableOfContents h2, .tableOfContents h3, .tableOfContents h4 {
