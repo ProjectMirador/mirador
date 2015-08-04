@@ -42,6 +42,7 @@
 
             new $.AnnotationsTab({
                 manifest: _this.manifest,
+                parent: this.parent,
                 appendTo: _this.element.find('.tabContentArea')
             });
         },
@@ -62,7 +63,7 @@
                 state[tab] = false;
             }
 
-            state[tabId] = true; 
+            state[tabId] = true;
             this.state(state);
         },
         getTemplateData: function() {
