@@ -571,6 +571,16 @@ li.highlight {
   overflow: hidden;
   transition: all 0.3s ease;
   padding: 10px;
+  opacity:1;
+  transition: all 0.5s ease-out;
+}
+
+.sidePanel.minimized {
+    width:0;
+    transition: all 0.2s ease-out;
+    opacity:0;
+    padding: 0;
+    border:none;
 }
 
 .tabContentArea {
@@ -728,15 +738,9 @@ li.highlight {
   transition:all 0.3s ease;
 }
 
-.view-container.tranisition {
-}
-
-.view-container.focus-max-width {
+.view-container.maximised {
   margin-left: 0px;
-}
-
-.view-container.focus-side-panel-minimized {
-  margin-left: 0px;
+  transition: all 0.2s ease-out;
 }
 
 .overlay {

@@ -15,21 +15,29 @@
         init: function() {
             var _this = this;
             this.windowId = this.parent.id;
+
             this.listenForActions();
             //this.render();
             this.bindEvents();
 
             this.loadTabComponents();
-
         },
         loadTabComponents: function() {
             var _this = this;
+        },
+        tabStateUpdated: function(visible) {
+            if (visible) {
+                this.element.show();
+            } else {
+                this.element.hide();
+            }
         },
         toggle: function() {},
         listenForActions: function() {
             var _this = this;
 
-            jQuery.subscribe('tabSelected', function() {
+            jQuery.subscribe('tabStateUpdated' + _this.windowId, function(_, data) {
+                _this.tabStateUpdated(data.annotationsTab);
             });
 
             jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
@@ -40,9 +48,6 @@
         },
         bindEvents: function() {
             var _this = this;
-            jQuery.subscribe('sidePanelStateUpdated', function() {
-                //_this.render();
-            });
         },
         render: function(list) {
             var _this = this;

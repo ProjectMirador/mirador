@@ -17,18 +17,27 @@
             this.windowId = this.parent.id;
 
             this.state({
-                tocTab: false,
-                annotationsTab: true
+                tocTabAvailable: true,
+                annotationsTabAvailable: true,
+                layersTabAvailable: false,
+                toolsTabAvailable: false,
+                width: 280,
+                open: true
             }, true);
 
             this.listenForActions();
             this.render(this.state());
             this.bindEvents();
 
-            this.loadTabComponents();
+            this.loadSidePanelComponents();
         },
-        loadTabComponents: function() {
+        loadSidePanelComponents: function() {
             var _this = this;
+
+            new $.Tabs({
+                windowId: this.parent.id,
+                appendTo: this.appendTo
+            });
 
             new $.TableOfContents({
                 manifest: this.manifest,
@@ -47,23 +56,20 @@
             });
         },
         state: function(state, initial) {
-            if (!arguments.length) return this.tabState;
-            this.tabState = state;
+            if (!arguments.length) return this.panelState;
+            this.panelState = state;
 
             if (!initial) {
-                jQuery.publish('sidePanelStateUpdated' + this.windowId, this.tabState);
+                jQuery.publish('sidePanelStateUpdated' + this.windowId, this.panelState);
             }
 
-            return this.tabState;
+            return this.panelState;
         },
-        tabSelected: function(tabId) {
-            var state = this.state();
+        panelToggled: function() {
+            var state = this.state(),
+                open = !state.open;
 
-            for (var tab in state) {
-                state[tab] = false;
-            }
-
-            state[tabId] = true;
+            state.open = open;
             this.state(state);
         },
         getTemplateData: function() {
@@ -75,12 +81,10 @@
         listenForActions: function() {
             var _this = this;
 
-            jQuery.subscribe('tabSelected' + this.windowId, function(_, data) {
-                _this.tabSelected(data);
-            });
-            jQuery.subscribe('tabFocused', function() {
-            });
             jQuery.subscribe('sidePanelResized', function() {
+            });
+            jQuery.subscribe('sidePanelToggled' + this.windowId, function() {
+                _this.panelToggled();
             });
         },
         bindEvents: function() {
@@ -90,10 +94,6 @@
                 _this.render(data);
             });
 
-            this.element.find('.tab').on('click', function(event) {
-                window.ell = jQuery(this);
-                jQuery.publish('tabSelected' + _this.windowId, jQuery(this).data('tabid'));
-            });
         },
         render: function(renderingData) {
             var _this = this;
@@ -103,27 +103,8 @@
                 jQuery(_this.template(renderingData)).appendTo(_this.appendTo);
                 return;
             }
-
-            this.element.find('.tab').removeClass('selected');
-
-            for (var tab in renderingData) {
-                if (renderingData[tab] === true) {
-                    var tabClass = '.tab.' + tab;
-                    this.element.find(tabClass).addClass('selected');
-                }
-            }
         },
         template: Handlebars.compile([
-            '<ul class="tabGroup">',
-            '<li class="tab tocTab {{#if tocTab}}selected{{/if}}" data-tabId="tocTab">',
-                    // '<i class="fa fa-indent fa-lg fa-fw"></i>',
-            'Indices',
-            '</li>',
-            '<li class="tab annotationsTab {{#if annotationsTab}}selected{{/if}}" data-tabId="annotationsTab">',
-                    // '<i class="fa fa-keyboard-o fa-lg fa-fw"></i>',
-            'Annotations',
-            '</li>',
-            '</ul>',
             '<div class="tabContentArea">',
             '</div>'
         ].join('')),
