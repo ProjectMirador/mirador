@@ -4,6 +4,7 @@
         jQuery.extend(true, this, {
             element:           null,
             appendTo:          null,
+            parent:            null,
             manifest:          null
         }, options);
 
@@ -13,9 +14,10 @@
     $.AnnotationsTab.prototype = {
         init: function() {
             var _this = this;
+            this.windowId = this.parent.id;
 
             this.listenForActions();
-            this.render();
+            //this.render();
             this.bindEvents();
 
             this.loadTabComponents();
@@ -26,23 +28,31 @@
         },
         toggle: function() {},
         listenForActions: function() {
+            var _this = this;
+
             jQuery.subscribe('tabSelected', function() {
+            });
+
+            jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
+              console.log(_this.parent.annotationsList);
+              var list = { annotations: _this.parent.annotationsList };
+              _this.render(list);
             });
         },
         bindEvents: function() {
             var _this = this;
             jQuery.subscribe('sidePanelStateUpdated', function() {
-                _this.render();
+                //_this.render();
             });
         },
-        render: function() {
+        render: function(list) {
             var _this = this;
             if (!this.element) {
-                this.element = jQuery(_this.template()).appendTo(_this.appendTo);
+                this.element = jQuery(_this.template(list)).appendTo(_this.appendTo);
             }
         },
         template: Handlebars.compile([
-            '<div>hello Annotations!</div>'
+            '{{#each annotations}}<div>{{fullId}}</div>{{/each}}'
         ].join(''))
     };
 
