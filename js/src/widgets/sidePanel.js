@@ -67,7 +67,6 @@
             this.state(state);
         },
         getTemplateData: function() {
-            console.log(this);
             return {
                 annotationsTab: this.state().annotationsTab,
                 tocTab: this.state().tocTab
@@ -100,7 +99,6 @@
             var _this = this;
 
             if (!this.element) {
-                console.log(renderingData);
                 this.element = this.appendTo;
                 jQuery(_this.template(renderingData)).appendTo(_this.appendTo);
                 return;

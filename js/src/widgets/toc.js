@@ -167,7 +167,7 @@
       jQuery(toSelect).addClass('selected');
 
       // Scroll to new elements
-      // scroll();
+      scroll();
 
       // Open new ones
       jQuery(toOpen).toggleClass('open').find('ul:first').slideFadeToggle();
@@ -177,7 +177,7 @@
       // Get the sum of the outer height of all elements to be removed.
       // Subtract from current parent height to retreive the new height.
       // Scroll with respect to this. 
-      // scroll();
+      scroll();
 
       function scroll() {
         var head = _this.element.find('.selected').first();
