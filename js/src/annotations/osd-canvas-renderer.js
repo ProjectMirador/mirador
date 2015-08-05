@@ -71,7 +71,7 @@
                  viewport: true
              },
              style : {
-              classes : 'qtip-bootstrap'
+              classes : 'qtip-bootstrap qtip-viewer'
              },
              show: {
               delay: 20
@@ -269,7 +269,7 @@
     },
     
     checkMousePosition: function() {
-      jQuery('.qtip').qtip('hide');
+      jQuery('.qtip-viewer').qtip('hide');
     },
 
     update: function() {
