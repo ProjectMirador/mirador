@@ -41,9 +41,18 @@
             });
 
             jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
-              console.log(_this.parent.annotationsList);
               var list = { annotations: _this.parent.annotationsList };
               _this.render(list);
+            });
+
+            jQuery.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event) {
+              console.log('currentCanvasIDUpdated');
+              jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
+                console.log('annotationListLoaded');
+                var list = { annotations: _this.parent.annotationsList };
+                console.log(list);
+                _this.render(list);
+              });
             });
         },
         bindEvents: function() {
@@ -52,6 +61,9 @@
         render: function(list) {
             var _this = this;
             if (!this.element) {
+                this.element = jQuery(_this.template(list)).appendTo(_this.appendTo);
+            } else {
+                _this.appendTo.find(".annotationsPanel").empty();
                 this.element = jQuery(_this.template(list)).appendTo(_this.appendTo);
             }
         },
