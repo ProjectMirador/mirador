@@ -32,16 +32,9 @@
                 this.element.hide();
             }
         },
-        toggle: function() {},
-        listenForActions: function() {
-            var _this = this;
-
-            jQuery.subscribe('tabStateUpdated' + _this.windowId, function(_, data) {
-                _this.tabStateUpdated(data.annotationsTab);
-            });
-
-            jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
-              var motivations = []; 
+        annotationListLoaded: function() {
+            var motivations = [], 
+            _this = this; 
               
               for(i = 0; i < _this.parent.annotationsList.length; i++)
               {
@@ -58,6 +51,17 @@
 
               var list = { motivations: motivations };
               _this.render(list);
+        },
+        toggle: function() {},
+        listenForActions: function() {
+            var _this = this;
+
+            jQuery.subscribe('tabStateUpdated' + _this.windowId, function(_, data) {
+                _this.tabStateUpdated(data.annotationsTab);
+            });
+
+            jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(_, data) {
+                _this.annotationListLoaded(); 
             });
         },
         bindEvents: function() {
