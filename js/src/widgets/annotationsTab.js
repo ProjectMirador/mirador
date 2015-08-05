@@ -11,7 +11,7 @@
 
         this.init();
     };
-
+ 
     $.AnnotationsTab.prototype = {
         init: function() {
             var _this = this;
@@ -77,8 +77,15 @@
                 _this.tabStateUpdated(data.annotationsTab);
             });
 
+
             jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(_, data) {
                 _this.annotationListLoaded();
+            });
+
+            jQuery.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event) {
+              jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
+                  _this.annotationListLoaded();
+              });
             });
         },
         bindEvents: function() {
@@ -90,8 +97,10 @@
                 state = this.state();
 
             if (!this.element) {
-                this.element = jQuery(_this.template(list));
-                this.element.appendTo(_this.appendTo);
+                this.element = jQuery(_this.template(list)).appendTo(_this.appendTo);
+            } else {
+                _this.appendTo.find(".annotationsPanel").empty();
+                this.element = jQuery(_this.template(list)).appendTo(_this.appendTo);
             }
 
             if (state.visible) {
