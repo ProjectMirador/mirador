@@ -11,7 +11,7 @@
 
         this.init();
     };
- 
+
     $.AnnotationsTab.prototype = {
         init: function() {
             var _this = this;
@@ -19,12 +19,11 @@
 
             var state = this.state({
                 visible: this.visible,
-                annotationLists: []
+                annotationLists: null
             }, true);
 
             this.listenForActions();
             this.bindEvents();
-            // this.tabStateUpdated(state.visible);
             this.loadTabComponents();
         },
         state: function(state, initial) {
@@ -47,11 +46,12 @@
             this.state(state);
         },
         annotationListLoaded: function() {
-            var motivations = [],
-            _this = this;
+            var _this = this,
+                motivations = [],
+                state = this.state();
 
             for(i = 0; i < _this.parent.annotationsList.length; i++)
-              {
+            {
                 for(x = 0; x < _this.parent.annotationsList[i].motivation.length; x++)
                 {
                     motivation = _this.parent.annotationsList[i].motivation[x];
@@ -59,12 +59,12 @@
                     motivation = motivation.charAt(0).toUpperCase() + motivation.substr(1);
                     motivations.push(motivation);
                 }
-              }
+            }
 
-              jQuery.unique(motivations);
+            jQuery.unique(motivations);
 
-              var list = { motivations: motivations };
-              _this.render(list);
+            state.annotationsList = motivations;
+            this.state(state);
         },
         toggle: function() {},
         listenForActions: function() {
@@ -91,16 +91,17 @@
         bindEvents: function() {
             var _this = this;
         },
-        render: function(list) {
-            console.log(list);
+        render: function(state) {
             var _this = this,
-                state = this.state();
+                templateData = {
+                    motivations: state.annotationsList
+                };
 
             if (!this.element) {
-                this.element = jQuery(_this.template(list)).appendTo(_this.appendTo);
+                this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
             } else {
-                _this.appendTo.find(".annotationsPanel").empty();
-                this.element = jQuery(_this.template(list)).appendTo(_this.appendTo);
+                _this.appendTo.find(".annotationsPanel").remove();
+                this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
             }
 
             if (state.visible) {
