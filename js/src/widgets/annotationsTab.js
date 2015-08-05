@@ -46,6 +46,26 @@
 
             this.state(state);
         },
+        annotationListLoaded: function() {
+            var motivations = [], 
+            _this = this; 
+              
+              for(i = 0; i < _this.parent.annotationsList.length; i++)
+              {
+                for(x = 0; x < _this.parent.annotationsList[i].motivation.length; x++)
+                {
+                    motivation = _this.parent.annotationsList[i].motivation[x];
+                    motivation = motivation.split(":")[1];
+                    motivation = motivation.charAt(0).toUpperCase() + motivation.substr(1);
+                    motivations.push(motivation);
+                }
+              }
+
+              jQuery.unique(motivations);
+
+              var list = { motivations: motivations };
+              _this.render(list);
+        },
         toggle: function() {},
         listenForActions: function() {
             var _this = this;
@@ -57,10 +77,8 @@
                 _this.tabStateUpdated(data.annotationsTab);
             });
 
-            jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
-              console.log(_this.parent.annotationsList);
-              var list = { annotations: _this.parent.annotationsList };
-              _this.render(list);
+            jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(_, data) {
+                _this.annotationListLoaded(); 
             });
         },
         bindEvents: function() {
@@ -84,7 +102,9 @@
         },
         template: Handlebars.compile([
             '<div class="annotationsPanel">',
-            '{{#each annotations}}<div>{{fullId}}</div>{{/each}}',
+            '<ul class="motivations">', 
+            '{{#each motivations}}<li><a href="#" class="motivation">{{this}}</li>{{/each}}',
+            '</ul>',
             '</div>',
         ].join(''))
     };
