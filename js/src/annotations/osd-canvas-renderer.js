@@ -308,6 +308,8 @@
                   toolbar_items_size: 'small',
                   toolbar: "bold italic | bullist numlist | link image media"
                 });
+        jQuery(api.elements.tooltip).removeClass("qtip-viewer"); //so it is not affected by zoom event raised in OSD
+        this.osdViewer.zoomPerClick = 1;
     },
     
     //reenable all other qtips
@@ -322,6 +324,8 @@
           });
       api.set({'content.text' : annoTooltip.getViewer([oaAnno]),
           'hide.event' : 'mouseleave'}).hide();
+      jQuery(api.elements.tooltip).addClass("qtip-viewer"); //re-add class so it is affected by zoom event raised in OSD
+      this.osdViewer.zoomPerClick = 2;
     },
     
     removeAnnotationEvents: function(tooltipevent, api) {
