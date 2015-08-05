@@ -4,6 +4,13 @@
     return str.replace(/^\s+|\s+$/g, '');
   };
 
+$.objectArrayIndexOf = function(myArray, searchTerm, property) {
+    for(var i = 0, len = myArray.length; i < len; i++) {
+        if (myArray[i][property] === searchTerm) return i;
+    }
+    return -1;
+};
+
   /* --------------------------------------------------------------------------
      Methods related to manifest data
      -------------------------------------------------------------------------- */

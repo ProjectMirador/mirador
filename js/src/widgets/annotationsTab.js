@@ -19,10 +19,12 @@
 
             var state = this.state({
                 visible: this.visible,
-                annotationLists: null
+                annotationLists: [],
+                focusedList: null
             }, true);
 
             this.listenForActions();
+            this.render(state);
             this.bindEvents();
             this.loadTabComponents();
         },
@@ -33,6 +35,8 @@
             if (!initial) {
                 jQuery.publish('annotationsTabStateUpdated' + this.windowId, this.tabState);
             }
+
+            console.log(this.tabState);
 
             return this.tabState;
         },
@@ -50,11 +54,11 @@
                 motivations = [],
                 state = this.state();
 
-            for(i = 0; i < _this.parent.annotationsList.length; i++)
+            for(var i = 0; i < _this.parent.annotationsList.length; i++)
             {
-                for(x = 0; x < _this.parent.annotationsList[i].motivation.length; x++)
+                for(var x = 0; x < _this.parent.annotationsList[i].motivation.length; x++)
                 {
-                    motivation = _this.parent.annotationsList[i].motivation[x];
+                    var motivation = _this.parent.annotationsList[i].motivation[x];
                     motivation = motivation.split(":")[1];
                     motivation = motivation.charAt(0).toUpperCase() + motivation.substr(1);
                     motivations.push(motivation);
@@ -63,7 +67,31 @@
 
             jQuery.unique(motivations);
 
-            state.annotationsList = motivations;
+            state.annotationLists = motivations.map(function(motivation) {
+                return {
+                    motivation: motivation,
+                    layer: null,
+                    selected: false,
+                    focused: false
+                };
+            });
+            this.state(state);
+        },
+        selectList: function(listId) {
+            var state = this.state();
+            state.selectedList = listId;
+
+            console.log(state);
+            console.log(listId);
+            state.selectedList = listId;
+            state.annotationLists.forEach(function(list){ list.selected = list.motivation === listId ? true : false; console.log(list.selected);});
+
+            this.state(state);
+        },
+        focusList: function(listId) {
+            var state = this.state();
+            state.focusedList = listId;
+            state.annotationLists.forEach(function(list){ list.focused = list.motivation === listId ? true : false;});
             this.state(state);
         },
         toggle: function() {},
@@ -90,12 +118,30 @@
         },
         bindEvents: function() {
             var _this = this;
+
+            this.element.on('click', '.annotationListItem', function(event) {
+                event.preventDefault();
+                var listId = jQuery(this).data('id');
+                _this.selectList(listId);
+            });
+            console.log(this.element);
+
+            this.element.on('mouseover', '.annotationListItem', function(event) {
+                event.preventDefault();
+                var listId = jQuery(this).data('id');
+                _this.focusList(listId);
+            });
+
+            this.element.on('focus', '.annotationListItem', function() {
+            });
+
         },
         render: function(state) {
             var _this = this,
                 templateData = {
-                    motivations: state.annotationsList
+                    motivations: state.annotationLists
                 };
+            console.log(templateData);
 
             if (!this.element) {
                 this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
@@ -109,11 +155,16 @@
             } else {
                 this.element.hide();
             }
+            this.bindEvents();
         },
         template: Handlebars.compile([
             '<div class="annotationsPanel">',
             '<ul class="motivations">',
-            '{{#each motivations}}<li><a href="#" class="motivation">{{this}}</li>{{/each}}',
+            '{{#each motivations}}',
+            '<li class="annotationListItem {{#if this.selected}}selected{{/if}} {{#if this.focused }}focused{{/if}}" data-id="{{this.motivation}}">',
+                    '<span>{{this.motivation}}</span>',
+                '</li>',
+            '{{/each}}',
             '</ul>',
             '</div>',
         ].join(''))

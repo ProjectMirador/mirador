@@ -622,6 +622,27 @@ li.highlight {
     border-radius: 3px 3px 0 0;
     margin: 0 -2px;
 }
+.annotationsPanel ul {
+    padding:0;
+    margin:0;
+ }
+.sidePanel .annotationListItem {
+    list-style-type: none;
+    border: 1px solid gray;
+    border-left:0;
+    border-right:0;
+    padding:10px;
+}
+
+.sidePanel .annotationListItem.focused {
+    background-color: #ddd;
+    border-left: 3px solid lightBlue;
+}
+
+.sidePanel .annotationListItem.selected {
+    background-color: #ddd;
+    border-left: 3px solid deepskyblue;
+}
 
 .tableOfContents h1, .tableOfContents h2, .tableOfContents h3, .tableOfContents h4 {
   margin:0;
