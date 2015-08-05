@@ -47,10 +47,10 @@
             this.state(state);
         },
         annotationListLoaded: function() {
-            var motivations = [], 
-            _this = this; 
-              
-              for(i = 0; i < _this.parent.annotationsList.length; i++)
+            var motivations = [],
+            _this = this;
+
+            for(i = 0; i < _this.parent.annotationsList.length; i++)
               {
                 for(x = 0; x < _this.parent.annotationsList[i].motivation.length; x++)
                 {
@@ -78,7 +78,7 @@
             });
 
             jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(_, data) {
-                _this.annotationListLoaded(); 
+                _this.annotationListLoaded();
             });
         },
         bindEvents: function() {
@@ -102,7 +102,7 @@
         },
         template: Handlebars.compile([
             '<div class="annotationsPanel">',
-            '<ul class="motivations">', 
+            '<ul class="motivations">',
             '{{#each motivations}}<li><a href="#" class="motivation">{{this}}</li>{{/each}}',
             '</ul>',
             '</div>',
