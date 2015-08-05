@@ -59,6 +59,14 @@
 
         },
 
+        tabStateUpdated: function(visible) {
+            if (visible) {
+                this.element.show();
+            } else {
+                this.element.hide();
+            }
+        },
+
         getTplData: function() {  
             var _this = this,
                 ranges = _this.extractRangeTrees(_this.ranges);
@@ -194,6 +202,9 @@
             jQuery.subscribe('focusChanged', function(_, manifest, focusFrame) {
             });
             jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
+            });
+            jQuery.subscribe('tabStateUpdated' + _this.parent.id, function(_, data) {
+                _this.tabStateUpdated(data.tocTab);
             });
             jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(event, canvasID) {
                 if (!_this.structures) { return; }
