@@ -80,7 +80,6 @@
 
             this.element.find('.tab').removeClass('selected');
 
-            console.log(renderingData);
             for (var tab in renderingData) {
                 if (renderingData[tab] === true) {
                     var tabClass = '.' + tab;

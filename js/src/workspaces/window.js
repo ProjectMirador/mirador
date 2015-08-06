@@ -599,6 +599,7 @@
         var dfd = jQuery.Deferred(),
         module = $.viewer.annotationEndpoint.module,
         options = $.viewer.annotationEndpoint.options;
+        name = $.viewer.annotationEndpoint.name;
         console.log("endpoint: " + _this.endpoint);
         // One annotation endpoint per window, the endpoint
         // is a property of the instance.
@@ -611,7 +612,7 @@
           options.dfd = dfd;
           options.windowID = _this.id;
           _this.endpoint = new $[module](options);
-
+          _this.endpoint.name = name;
         }
 
         dfd.done(function(loaded) {
