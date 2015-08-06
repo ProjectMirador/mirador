@@ -25,8 +25,8 @@
 
             this.listenForActions();
             this.render(state);
-            this.bindEvents();
             this.loadTabComponents();
+            this.bindEvents();
         },
         state: function(state, initial) {
             if (!arguments.length) return this.tabState;
@@ -35,8 +35,6 @@
             if (!initial) {
                 jQuery.publish('annotationsTabStateUpdated' + this.windowId, this.tabState);
             }
-
-            console.log(this.tabState);
 
             return this.tabState;
         },
@@ -60,7 +58,7 @@
                 {
                     var motivation = _this.parent.annotationsList[i].motivation[x];
                     motivation = motivation.split(":")[1];
-                    motivation = motivation.charAt(0).toUpperCase() + motivation.substr(1);
+                    // motivation = motivation.charAt(0).toUpperCase() + motivation.substr(1);
                     motivations.push(motivation);
                 }
             }
@@ -81,10 +79,8 @@
             var state = this.state();
             state.selectedList = listId;
 
-            console.log(state);
-            console.log(listId);
             state.selectedList = listId;
-            state.annotationLists.forEach(function(list){ list.selected = list.motivation === listId ? true : false; console.log(list.selected);});
+            state.annotationLists.forEach(function(list){ list.selected = list.motivation === listId ? true : false; });
 
             this.state(state);
         },
@@ -117,21 +113,20 @@
             });
         },
         bindEvents: function() {
-            var _this = this;
+            var _this = this,
+                listItems = this.element.find('.annotationListItem');
 
-            this.element.on('click', '.annotationListItem', function(event) {
-                event.preventDefault();
+            listItems.on('click', function(event) {
+                console.log('click');
                 var listId = jQuery(this).data('id');
                 _this.selectList(listId);
             });
-
         },
         render: function(state) {
             var _this = this,
                 templateData = {
                     motivations: state.annotationLists
                 };
-            console.log(templateData);
 
             if (!this.element) {
                 this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
@@ -139,19 +134,19 @@
                 _this.appendTo.find(".annotationsPanel").remove();
                 this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
             }
+            _this.bindEvents();
 
             if (state.visible) {
                 this.element.show();
             } else {
                 this.element.hide();
             }
-            this.bindEvents();
         },
         template: Handlebars.compile([
             '<div class="annotationsPanel">',
             '<ul class="motivations">',
             '{{#each motivations}}',
-            '<li class="annotationListItem {{#if this.selected}}selected{{/if}} {{#if this.focused }}focused{{/if}}" data-id="{{this.motivation}}">',
+            '<li class="annotationListItem {{#if this.selected}}selected{{/if}}{{#if this.focused }}focused{{/if}}" data-id="{{this.motivation}}">',
                     '<span>{{this.motivation}}</span>',
                 '</li>',
             '{{/each}}',

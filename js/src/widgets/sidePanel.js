@@ -81,19 +81,21 @@
         listenForActions: function() {
             var _this = this;
 
+            jQuery.subscribe('sidePanelStateUpdated' + this.windowId, function(_, data) {
+                console.log('sidePanelToggled now');
+                console.log(data);
+                _this.render(data);
+            });
+
             jQuery.subscribe('sidePanelResized', function() {
             });
+
             jQuery.subscribe('sidePanelToggled' + this.windowId, function() {
                 _this.panelToggled();
             });
         },
         bindEvents: function() {
             var _this = this;
-
-            jQuery.subscribe('sidePanelStateUpdated' + this.windowId, function(_, data) {
-                _this.render(data);
-            });
-
         },
         render: function(renderingData) {
             var _this = this;
@@ -102,6 +104,12 @@
                 this.element = this.appendTo;
                 jQuery(_this.template(renderingData)).appendTo(_this.appendTo);
                 return;
+            }
+
+            if (renderingData.open) {
+                this.appendTo.removeClass('minimized');
+            } else {
+                this.appendTo.addClass('minimized');
             }
         },
         template: Handlebars.compile([
