@@ -26,8 +26,8 @@
             var _this = this;
             _this.structures = _this.manifest.getStructures();
             if (!_this.structures || _this.structures.length === 0) {
-                _this.hide();
-                _this.parent.setTOCBoolean(false);
+                //_this.hide();
+                //_this.parent.setTOCBoolean(false);
                 return;
             } else {
                 _this.parent.setTOCBoolean(true);
