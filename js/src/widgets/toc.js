@@ -67,7 +67,7 @@
             }
         },
 
-        getTplData: function() {  
+        getTplData: function() {
             var _this = this,
                 ranges = _this.extractRangeTrees(_this.ranges);
 
@@ -110,9 +110,9 @@
                 var children = jQuery.grep(flatRanges, function(child) { if (!child.within) { child.within = 'root'; } return child.within == parent.id; });
                 if ( children.length ) {
                     if ( parent.id === 'root') {
-                        // If there are children and their parent's 
+                        // If there are children and their parent's
                         // id is a root, bind them to the tree object.
-                        // 
+                        //
                         // This begins the construction of the object,
                         // and all non-top-level children are now
                         // bound the these base nodes set on the tree
@@ -184,12 +184,11 @@
 
             // Get the sum of the outer height of all elements to be removed.
             // Subtract from current parent height to retreive the new height.
-            // Scroll with respect to this. 
+            // Scroll with respect to this.
             // scroll();
 
             function scroll() {
                 var head = _this.element.find('.selected').first();
-                console.log(head);
                 _this.element.scrollTo(head, 400);
             }
 
@@ -215,12 +214,12 @@
             _this.element.find('.toc-link').on('click', function(event) {
                 event.stopPropagation();
                 // The purpose of the immediate event is to update the data on the parent
-                // by calling its "set" function. 
-                // 
-                // The parent (window) then emits an event notifying all panels of 
+                // by calling its "set" function.
+                //
+                // The parent (window) then emits an event notifying all panels of
                 // the update, so they can respond in their own unique ways
-                // without window having to know anything about their DOMs or 
-                // internal structure. 
+                // without window having to know anything about their DOMs or
+                // internal structure.
                 var rangeID = jQuery(this).data().rangeid,
                     canvasID = jQuery.grep(_this.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0],
                     isLeaf = jQuery(this).closest('li').hasClass('leaf-item');
@@ -234,12 +233,12 @@
             _this.element.find('.caret').on('click', function(event) {
                 event.stopPropagation();
                 var rangeID = jQuery(this).parent().data().rangeid;
-                _this.setOpenItem(rangeID); 
+                _this.setOpenItem(rangeID);
 
                 // For now it's alright if this data gets lost in the fray.
                 jQuery(this).closest('li').toggleClass('open').find('ul:first').slideFadeToggle();
 
-                // The parent (window) then emits an event notifying all panels of 
+                // The parent (window) then emits an event notifying all panels of
                 // the update, so they can respond in their own unique ways
                 // without window having to know anything about their DOMs or
                 // internal structure.
@@ -325,8 +324,8 @@
 
         toggle: function(stateValue) {
             if (!this.structures) { stateValue = false; }
-            if (stateValue) { 
-                this.show(); 
+            if (stateValue) {
+                this.show();
             } else {
                 this.hide();
             }
@@ -343,4 +342,3 @@
     };
 
 }(Mirador));
-

@@ -49,30 +49,38 @@
         },
         annotationListLoaded: function() {
             var _this = this,
-                motivations = [],
+                annotationSources = [],
                 state = this.state();
 
             for(var i = 0; i < _this.parent.annotationsList.length; i++)
             {
-                for(var x = 0; x < _this.parent.annotationsList[i].motivation.length; x++)
-                {
-                    var motivation = _this.parent.annotationsList[i].motivation[x];
-                    motivation = motivation.split(":")[1];
-                    // motivation = motivation.charAt(0).toUpperCase() + motivation.substr(1);
-                    motivations.push(motivation);
+
+                if(typeof _this.parent.annotationsList[i].endpoint === 'string'){
+
+                  annotationSources.push('manifest');
+
+                }else{
+
+                  annotationSources.push(_this.parent.annotationsList[i].endpoint.name);
+
                 }
+
             }
 
-            jQuery.unique(motivations);
+            // make unique
+            annotationSources = annotationSources.filter(function(itm,i,annotationSources){
+                return i==annotationSources.indexOf(itm);
+            });
 
-            state.annotationLists = motivations.map(function(motivation) {
+            state.annotationLists = annotationSources.map(function(annotationSource) {
                 return {
-                    motivation: motivation,
+                    annotationSource: annotationSource,
                     layer: null,
                     selected: false,
                     focused: false
                 };
             });
+
             this.state(state);
         },
         selectList: function(listId) {
@@ -121,11 +129,12 @@
                 var listId = jQuery(this).data('id');
                 _this.selectList(listId);
             });
+
         },
         render: function(state) {
             var _this = this,
                 templateData = {
-                    motivations: state.annotationLists
+                    annotationSources: state.annotationLists
                 };
 
             if (!this.element) {
@@ -136,19 +145,22 @@
             }
             _this.bindEvents();
 
+
             if (state.visible) {
+                console.log(this.element);
                 this.element.show();
             } else {
+                console.log(this.element);
                 this.element.hide();
             }
         },
         template: Handlebars.compile([
             '<div class="annotationsPanel">',
             '<ul class="motivations">',
-            '{{#each motivations}}',
-            '<li class="annotationListItem {{#if this.selected}}selected{{/if}}{{#if this.focused }}focused{{/if}}" data-id="{{this.motivation}}">',
-                    '<span>{{this.motivation}}</span>',
-                '</li>',
+            '{{#each annotationSources}}',
+            '<li class="annotationListItem {{#if this.selected}}selected{{/if}} {{#if this.focused }}focused{{/if}}" data-id="{{this.annotationSource}}">',
+                    '<span>{{this.annotationSource}}</span>',
+            '</li>',
             '{{/each}}',
             '</ul>',
             '</div>',

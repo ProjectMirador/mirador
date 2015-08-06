@@ -36,6 +36,7 @@
       });
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
+        console.log('subscribed!');
         _this.annotationsList = _this.parent.parent.annotationsList;
         _this.updateRenderer();
       });
@@ -52,12 +53,12 @@
       });
       this.modeSwitch();
     },
-    
+
     updateRenderer: function() {
       this.renderer.list = this.annotationsList;
       this.modeSwitch();
     },
-    
+
     modeSwitch: function() {
       //console.log(this.mode);
       if (this.mode === 'displayAnnotations') { this.enterDisplayAnnotations(); }
@@ -79,7 +80,7 @@
         this.parent.hud.contextControls.rectTool = new $.OsdRegionRectTool({
           osd: OpenSeadragon,
           osdViewer: _this.viewer,
-          rectType: 'oa', // does not do anything yet. 
+          rectType: 'oa', // does not do anything yet.
           parent: _this
         });
       } else {
