@@ -6,7 +6,7 @@
       jsonLd: null,
       location: location,
       uri: manifestUri,
-      request: null 
+      request: null
     });
 
     this.init(manifestUri);
@@ -54,7 +54,7 @@
         service = resource['default'] ? resource['default'].service : resource.service;
         if (service.hasOwnProperty('@context')) {
           version = $.Iiif.getVersionFromContext(service['@context']);
-        }          
+        }
         thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
       }
       return thumbnailUrl;
@@ -69,8 +69,14 @@
         return canvas['@id'] === canvasId;
       })[0];
 
-      if (canvas && canvas.otherContent) {
+
+
+      if(canvas && canvas.otherContent){
         return canvas.otherContent[0]['@id'];
+      } else if (canvas) {
+        // console.log(canvas);
+        // return canvas.otherContent[0]['@id'];
+        return false;
       } else { return false; }
     },
     getStructures: function() {

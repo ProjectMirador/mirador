@@ -16,11 +16,11 @@
 
   $.Hud.prototype = {
 
-    init: function() {   
+    init: function() {
       this.createStateMachine();
 
       this.element = jQuery(this.template({
-        showNextPrev : this.parent.imagesList.length !== 1, 
+        showNextPrev : this.parent.imagesList.length !== 1,
         showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable,
         showAnno : this.annotationLayerAvailable
       })).appendTo(this.element);
@@ -35,6 +35,8 @@
           annotationCreationAvailable: this.annotationCreationAvailable
         });
       }
+
+      this.loadHudComponents();
 
       this.bindEvents();
 
@@ -62,7 +64,7 @@
         if (_this.annoState.current === 'annoOff') {
           _this.annoState.displayOn(this);
         } else {
-          _this.annoState.displayOff(this);          
+          _this.annoState.displayOff(this);
         }
       });
 
@@ -155,7 +157,12 @@
         // If it is the last canvas, hide the "go to previous" button, otherwise show it.
       });
     },
-
+    loadHudComponents: function () {
+        new $.EditorPanel({
+          windowId: this.windowId,
+          appendTo: this.element.parent().parent() // appending to .view-container
+        });
+    },
     createStateMachine: function() {
       //add more to these as AnnoState becomes more complex
       var _this = this;
@@ -168,28 +175,28 @@
           { name: 'displayOff', from: ['annoOnEditOn','annoOnEditOff'], to: 'annoOff' }
         ],
         callbacks: {
-          ondisplayOn: function(event, from, to) { 
+          ondisplayOn: function(event, from, to) {
             _this.parent.element.find('.mirador-osd-annotations-layer').addClass("selected");
             if (_this.annoEndpointAvailable) {
               _this.contextControls.show();
             }
             jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');
           },
-          oneditOn: function(event, from, to) { 
+          oneditOn: function(event, from, to) {
             _this.parent.element.find('.mirador-osd-edit-mode').addClass("selected");
             jQuery.publish('modeChange.' + _this.windowId, 'editingAnnotations');
             if (_this.annoEndpointAvailable) {
               _this.contextControls.rectTool.enterEditMode();
             }
           },
-          oneditOff: function(event, from, to) { 
+          oneditOff: function(event, from, to) {
             _this.parent.element.find('.mirador-osd-edit-mode').removeClass("selected");
             jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');
             if (_this.annoEndpointAvailable) {
               _this.contextControls.rectTool.exitEditMode();
             }
           },
-          ondisplayOff: function(event, from, to) { 
+          ondisplayOff: function(event, from, to) {
             if (_this.annoEndpointAvailable && _this.contextControls.rectTool) {
               _this.contextControls.rectTool.exitEditMode();
             }
@@ -198,7 +205,7 @@
             if (_this.annoEndpointAvailable) {
               _this.contextControls.hide();
             }
-            jQuery.publish('modeChange.' + _this.windowId, 'default');            
+            jQuery.publish('modeChange.' + _this.windowId, 'default');
           }
         }
       });
