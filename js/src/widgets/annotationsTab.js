@@ -124,16 +124,6 @@
                 var listId = jQuery(this).data('id');
                 _this.selectList(listId);
             });
-            console.log(this.element);
-
-            this.element.on('mouseover', '.annotationListItem', function(event) {
-                event.preventDefault();
-                var listId = jQuery(this).data('id');
-                _this.focusList(listId);
-            });
-
-            this.element.on('focus', '.annotationListItem', function() {
-            });
 
         },
         render: function(state) {
