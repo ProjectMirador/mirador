@@ -26,8 +26,6 @@
             var _this = this;
             _this.structures = _this.manifest.getStructures();
             if (!_this.structures || _this.structures.length === 0) {
-                //_this.hide();
-                //_this.parent.setTOCBoolean(false);
                 return;
             } else {
                 _this.parent.setTOCBoolean(true);
@@ -329,15 +327,6 @@
             } else {
                 this.hide();
             }
-        },
-        hide: function() {
-            jQuery(this.appendTo).hide();
-            this.parent.element.find('.view-container').addClass('focus-max-width');
-        },
-
-        show: function() {
-            jQuery(this.appendTo).show({effect: "fade", duration: 300, easing: "easeInCubic"});
-            this.parent.element.find('.view-container').removeClass('focus-max-width');
         }
     };
 
