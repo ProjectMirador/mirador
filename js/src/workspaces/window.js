@@ -83,7 +83,7 @@
 
       //remove any imageModes that are not available as a focus
       this.imageModes = jQuery.map(this.imageModes, function(value, index) {
-        if (jQuery.inArray(value, _this.focuses) === -1) return null;  
+        if (jQuery.inArray(value, _this.focuses) === -1) return null;
         return value;
       });
 
@@ -121,11 +121,11 @@
       jQuery.each(this.focuses, function(index, value) {
         templateData[value] = true;
       });
-      templateData.title = manifest.label; 
-      templateData.displayLayout = this.displayLayout; 
-      templateData.layoutOptions = this.layoutOptions; 
+      templateData.title = manifest.label;
+      templateData.displayLayout = this.displayLayout;
+      templateData.layoutOptions = this.layoutOptions;
       // if displayLayout is true,  but all individual options are set to false, set displayLayout to false
-      if (this.displayLayout) { 
+      if (this.displayLayout) {
         templateData.displayLayout = !Object.keys(this.layoutOptions).every(function(element, index, array) {
           return _this.layoutOptions[element] === false;
         });
@@ -193,7 +193,7 @@
     bindEvents: function() {
       var _this = this;
 
-      //this event should trigger from layout      
+      //this event should trigger from layout
       jQuery.subscribe('windowResize', $.debounce(function(){
         if (_this.focusModules.ScrollView) {
           var containerHeight = _this.element.find('.view-container').height();
@@ -251,7 +251,7 @@
           console.log("There was an error saving this new annotation");
           //remove this overlay because we couldn't save annotation
           jQuery(osdOverlay).remove();
-        }); 
+        });
       });
 
       jQuery.subscribe('annotationUpdated.'+_this.id, function(event, oaAnno) {
@@ -260,17 +260,17 @@
           //successfully updated anno
         },
         function() {
-          console.log("There was an error updating this annotation");        
+          console.log("There was an error updating this annotation");
         });
       });
 
-      jQuery.subscribe('annotationDeleted.'+_this.id, function(event, oaAnno) {        
+      jQuery.subscribe('annotationDeleted.'+_this.id, function(event, oaAnno) {
         //remove from endpoint
         //first function is success callback, second is error callback
         _this.endpoint.deleteAnnotation(oaAnno['@id'], function() {
           _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== oaAnno['@id']; });
           jQuery.publish(('annotationListLoaded.' + _this.id));
-        }, 
+        },
         function() {
           // console.log("There was an error deleting this annotation");
         });
@@ -418,10 +418,10 @@
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
       jQuery.publish("windowUpdated", {
-        id: _this.id, 
-        viewType: _this.currentFocus, 
-        canvasID: _this.currentCanvasID, 
-        imageMode: _this.currentImageMode, 
+        id: _this.id,
+        viewType: _this.currentFocus,
+        canvasID: _this.currentCanvasID,
+        imageMode: _this.currentImageMode,
         loadedManifest: _this.manifest.jsonLd['@id'],
         slotAddress: _this.slotAddress
       });
@@ -442,11 +442,11 @@
       this.currentCanvasID = canvasID;
       if (this.focusModules.ImageView === null) {
         this.focusModules.ImageView = new $.ImageView({
-          manifest: this.manifest, 
-          appendTo: this.element.find('.view-container'), 
-          parent: this, 
+          manifest: this.manifest,
+          appendTo: this.element.find('.view-container'),
+          parent: this,
           windowId: this.id,
-          canvasID: canvasID, 
+          canvasID: canvasID,
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
           bottomPanelAvailable: this.bottomPanelAvailable,
@@ -464,11 +464,11 @@
       this.currentCanvasID = canvasID;
       if (this.focusModules.BookView === null) {
         this.focusModules.BookView = new $.BookView({
-          manifest: this.manifest, 
-          appendTo: this.element.find('.view-container'), 
-          parent: this, 
+          manifest: this.manifest,
+          appendTo: this.element.find('.view-container'),
+          parent: this,
           windowId: this.id,
-          canvasID: canvasID, 
+          canvasID: canvasID,
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
           bottomPanelAvailable: this.bottomPanelAvailable
@@ -485,18 +485,18 @@
       if (this.focusModules.ScrollView === null) {
         var containerHeight = this.element.find('.view-container').height();
         this.focusModules.ScrollView = new $.ScrollView({
-          manifest: this.manifest, 
-          appendTo: this.element.find('.view-container'), 
-          parent: this, 
-          canvasID: this.currentCanvasID, 
-          imagesList: this.imagesList, 
+          manifest: this.manifest,
+          appendTo: this.element.find('.view-container'),
+          parent: this,
+          canvasID: this.currentCanvasID,
+          imagesList: this.imagesList,
           thumbInfo: {thumbsHeight: Math.floor(containerHeight * this.scrollImageRatio), listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}
         });
       } else {
         var view = this.focusModules.ScrollView;
         view.updateImage(canvasID);
       }
-      this.toggleFocus('ScrollView', '');    
+      this.toggleFocus('ScrollView', '');
     },
 
     updateFocusImages: function(imageList) {
@@ -512,6 +512,7 @@
         _this.annotationsList.pop();
       }
       this.getAnnotations();
+      console.log(this.annotationsList);
       switch(this.currentImageMode) {
         case 'ImageView':
           this.toggleImageView(this.currentCanvasID);
@@ -598,6 +599,7 @@
         var dfd = jQuery.Deferred(),
         module = $.viewer.annotationEndpoint.module,
         options = $.viewer.annotationEndpoint.options;
+        console.log("endpoint: " + _this.endpoint);
         // One annotation endpoint per window, the endpoint
         // is a property of the instance.
         if ( _this.endpoint && _this.endpoint !== null ) {
@@ -609,19 +611,21 @@
           options.dfd = dfd;
           options.windowID = _this.id;
           _this.endpoint = new $[module](options);
+
         }
 
         dfd.done(function(loaded) {
           _this.annotationsList = _this.annotationsList.concat(_this.endpoint.annotationsList);
           // clear out some bad data
           _this.annotationsList = jQuery.grep(_this.annotationsList, function (value, index) {
-            if (typeof value.on === "undefined") { 
+            if (typeof value.on === "undefined") {
               return false;
             }
-            return true; 
+            return true;
           });
           jQuery.publish('annotationListLoaded.' + _this.id);
         });
+        console.log(_this.annotationsList);
       }
     },
 
@@ -765,4 +769,3 @@
   };
 
 }(Mirador));
-

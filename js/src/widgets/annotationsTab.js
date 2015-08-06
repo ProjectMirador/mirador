@@ -36,8 +36,6 @@
                 jQuery.publish('annotationsTabStateUpdated' + this.windowId, this.tabState);
             }
 
-            console.log(this.tabState);
-
             return this.tabState;
         },
         loadTabComponents: function() {
@@ -58,10 +56,14 @@
             {
                 for(var x = 0; x < _this.parent.annotationsList[i].motivation.length; x++)
                 {
+                  //if( _this.parent.annotationsList[i].motivation[x] !== 'undefined'){
                     var motivation = _this.parent.annotationsList[i].motivation[x];
+                    console.log(_this.parent.annotationsList[i]);
                     motivation = motivation.split(":")[1];
+                    console.log(motivation);
                     motivation = motivation.charAt(0).toUpperCase() + motivation.substr(1);
                     motivations.push(motivation);
+                  //}
                 }
             }
 
@@ -124,7 +126,6 @@
                 var listId = jQuery(this).data('id');
                 _this.selectList(listId);
             });
-            console.log(this.element);
 
             this.element.on('mouseover', '.annotationListItem', function(event) {
                 event.preventDefault();
@@ -141,7 +142,6 @@
                 templateData = {
                     motivations: state.annotationLists
                 };
-            console.log(templateData);
 
             if (!this.element) {
                 this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
