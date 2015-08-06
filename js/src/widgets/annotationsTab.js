@@ -87,15 +87,14 @@
             var state = this.state();
             state.selectedList = listId;
 
-            state.selectedList = listId;
-            state.annotationLists.forEach(function(list){ list.selected = list.motivation === listId ? true : false; });
+            state.annotationLists.forEach(function(list){ list.selected = list.annotationSource === listId ? true : false; });
 
             this.state(state);
         },
         focusList: function(listId) {
             var state = this.state();
             state.focusedList = listId;
-            state.annotationLists.forEach(function(list){ list.focused = list.motivation === listId ? true : false;});
+            state.annotationLists.forEach(function(list){ list.focused = list.annotationSource === listId ? true : false;});
             this.state(state);
         },
         toggle: function() {},
@@ -119,15 +118,19 @@
                   _this.annotationListLoaded();
               });
             });
+
+            jQuery.subscribe('openAnnotationList.' + _this.windowId, function(event, data) {
+                _this.selectList(data);
+            });
+
         },
         bindEvents: function() {
             var _this = this,
                 listItems = this.element.find('.annotationListItem');
 
             listItems.on('click', function(event) {
-                console.log('click');
                 var listId = jQuery(this).data('id');
-                _this.selectList(listId);
+                jQuery.publish('openAnnotationList.' + _this.windowId, listId);
             });
 
         },
@@ -147,16 +150,14 @@
 
 
             if (state.visible) {
-                console.log(this.element);
                 this.element.show();
             } else {
-                console.log(this.element);
                 this.element.hide();
             }
         },
         template: Handlebars.compile([
             '<div class="annotationsPanel">',
-            '<ul class="motivations">',
+            '<ul class="annotationSources">',
             '{{#each annotationSources}}',
             '<li class="annotationListItem {{#if this.selected}}selected{{/if}} {{#if this.focused }}focused{{/if}}" data-id="{{this.annotationSource}}">',
                     '<span>{{this.annotationSource}}</span>',

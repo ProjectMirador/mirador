@@ -18,7 +18,7 @@
 
     init: function() {
       this.createStateMachine();
-      
+
       this.element = jQuery(this.template({
         showNextPrev : this.parent.imagesList.length !== 1,
         showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable,
@@ -35,6 +35,8 @@
           annotationCreationAvailable: this.annotationCreationAvailable
         });
       }
+
+      this.loadHudComponents();
 
       this.bindEvents();
 
@@ -155,7 +157,12 @@
         // If it is the last canvas, hide the "go to previous" button, otherwise show it.
       });
     },
-
+    loadHudComponents: function () {
+        new $.EditorPanel({
+          windowId: this.windowId,
+          appendTo: this.element.parent().parent() // appending to .view-container
+        });
+    },
     createStateMachine: function() {
       //add more to these as AnnoState becomes more complex
       var _this = this;
