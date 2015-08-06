@@ -224,10 +224,12 @@
 
       jQuery.subscribe('sidePanelStateUpdated' + this.id, function(event, state) {
           if (state.open) {
-              _this.element.find('.sidePanel').removeClass('minimized');
+              _this.element.find('.fa-list').switchClass('fa-list', 'fa-caret-down');
+              _this.element.find('.mirador-icon-toc').addClass('selected');
               _this.element.find('.view-container').removeClass('maximised');
           } else {
-              _this.element.find('.sidePanel').addClass('minimized');
+              _this.element.find('.mirador-icon-toc').removeClass('selected');
+              _this.element.find('.fa-caret-down').switchClass('fa-caret-down', 'fa-list');
               _this.element.find('.view-container').addClass('maximised');
           }
       });
@@ -583,13 +585,14 @@
         jQuery.get(url, function(list) {
           _this.annotationsList = _this.annotationsList.concat(list.resources);
           jQuery.each(_this.annotationsList, function(index, value) {
-            //if there is no ID for this annotation, set a random one
+            // if there is no ID for this annotation, set a random one
             if (typeof value['@id'] === 'undefined') {
               value['@id'] = $.genUUID();
             }
-            //indicate this is a manifest annotation - which affects the UI
+            // indicate this is a manifest annotation - which affects the UI
             value.endpoint = "manifest";
           });
+            console.log(list);
           jQuery.publish('annotationListLoaded.' + _this.id);
         });
       }
@@ -602,7 +605,7 @@
         name = $.viewer.annotationEndpoint.name;
         console.log("endpoint: " + _this.endpoint);
         // One annotation endpoint per window, the endpoint
-        // is a property of the instance.
+        // is a property of the whole app instance.
         if ( _this.endpoint && _this.endpoint !== null ) {
           _this.endpoint.set('dfd', dfd);
           _this.endpoint.search(_this.currentCanvasID);

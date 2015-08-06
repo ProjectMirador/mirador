@@ -25,8 +25,8 @@
 
             this.listenForActions();
             this.render(state);
-            this.bindEvents();
             this.loadTabComponents();
+            this.bindEvents();
         },
         state: function(state, initial) {
             if (!arguments.length) return this.tabState;
@@ -62,6 +62,7 @@
                 }else{
 
                   annotationSources.push(_this.parent.annotationsList[i].endpoint.name);
+
                 }
 
             }
@@ -86,10 +87,8 @@
             var state = this.state();
             state.selectedList = listId;
 
-            console.log(state);
-            console.log(listId);
             state.selectedList = listId;
-            state.annotationLists.forEach(function(list){ list.selected = list.motivation === listId ? true : false; console.log(list.selected);});
+            state.annotationLists.forEach(function(list){ list.selected = list.motivation === listId ? true : false; });
 
             this.state(state);
         },
@@ -122,21 +121,13 @@
             });
         },
         bindEvents: function() {
-            var _this = this;
+            var _this = this,
+                listItems = this.element.find('.annotationListItem');
 
-            this.element.on('click', '.annotationListItem', function(event) {
-                event.preventDefault();
+            listItems.on('click', function(event) {
+                console.log('click');
                 var listId = jQuery(this).data('id');
                 _this.selectList(listId);
-            });
-
-            this.element.on('mouseover', '.annotationListItem', function(event) {
-                event.preventDefault();
-                var listId = jQuery(this).data('id');
-                _this.focusList(listId);
-            });
-
-            this.element.on('focus', '.annotationListItem', function() {
             });
 
         },
@@ -152,6 +143,7 @@
                 _this.appendTo.find(".annotationsPanel").remove();
                 this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
             }
+            _this.bindEvents();
 
 
             if (state.visible) {
@@ -161,7 +153,6 @@
                 console.log(this.element);
                 this.element.hide();
             }
-            this.bindEvents();
         },
         template: Handlebars.compile([
             '<div class="annotationsPanel">',
@@ -169,7 +160,7 @@
             '{{#each annotationSources}}',
             '<li class="annotationListItem {{#if this.selected}}selected{{/if}} {{#if this.focused }}focused{{/if}}" data-id="{{this.annotationSource}}">',
                     '<span>{{this.annotationSource}}</span>',
-                '</li>',
+            '</li>',
             '{{/each}}',
             '</ul>',
             '</div>',
