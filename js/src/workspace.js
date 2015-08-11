@@ -375,7 +375,7 @@
         }
       });
 
-      jQuery.subscribe('windowRemoved', function(windowId) {
+      jQuery.subscribe('windowRemoved', function(event, windowId) {
         var remove = _this.windows.map(function(window) {
           return window.id !== windowId;
         })[0],

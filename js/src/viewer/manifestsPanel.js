@@ -59,8 +59,7 @@
                 _this.hide();
             });
             
-            jQuery.subscribe('manifestReceived', function(event, newManifest, repository) {
-              //console.log(newManifest);
+            jQuery.subscribe('manifestReceived', function(event, newManifest) {
               _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifest: newManifest, resultsWidth: _this.resultsWidth }));
               _this.element.find('#manifest-search').keyup();
             });

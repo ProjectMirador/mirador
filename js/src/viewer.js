@@ -37,8 +37,6 @@
 
     init: function() {
       var _this = this;
-      // retrieve manifests
-      this.getManifestsData();
 
       //initialize i18next  
       i18n.init({debug: false, getAsync: false, resGetPath: _this.i18nPath+'__lng__/__ns__.json'}); 
@@ -99,6 +97,8 @@
       this.set('currentWorkspaceVisible', true);
 
       this.bindEvents();
+      // retrieve manifests
+      this.getManifestsData();
     },
 
     bindEvents: function() {
@@ -197,7 +197,7 @@
         manifest = new $.Manifest(url, location);
         _this.manifests[url] = manifest;
         _this.manifests.push(manifest);
-        jQuery.publish('manifestQueued', manifest);
+        jQuery.publish('manifestQueued', manifest, location);
         manifest.request.done(function() {
           jQuery.publish('manifestReceived', manifest);
         });
