@@ -41,7 +41,7 @@
       var _this = this;
       this.setOsdFrozen(true);
       this.osdViewer.addHandler("canvas-drag", _this.startRectangle, {recttool: _this});
-      this.osdViewer.addHandler("canvas-release", _this.finishRectangle, {recttool: _this});
+      this.osdViewer.addHandler("canvas-drag-end", _this.finishRectangle, {recttool: _this});
       this.onModeEnter();
     },
 
@@ -77,7 +77,7 @@
       var _this = this;
       this.setOsdFrozen(false);
       this.osdViewer.removeHandler('canvas-drag', _this.startRectangle);
-      this.osdViewer.removeHandler('canvas-release', _this.finishRectangle);
+      this.osdViewer.removeHandler('canvas-drag-end', _this.finishRectangle);
       this.onModeExit();
     },
 
@@ -173,7 +173,8 @@
               
                 //disable all tooltips for overlays
                 jQuery.publish('disableTooltips.'+parent.windowId);
-                
+                _this.osdViewer.zoomPerClick = 1;
+
                 tinymce.init({
                   selector : 'form.annotation-tooltip textarea',
                   plugins: "image link media",
@@ -192,8 +193,9 @@
                   event.preventDefault();
                   api.destroy();
                   _this.osdViewer.removeOverlay(_this.osdOverlay);
-                //reenable viewer tooltips
-                jQuery.publish('enableTooltips.'+parent.windowId);
+                  //reenable viewer tooltips
+                  jQuery.publish('enableTooltips.'+parent.windowId);
+                  _this.osdViewer.zoomPerClick = 2;
                 });
                 
                 jQuery('.annotation-tooltip a.save').on("click", function(event) {
@@ -255,6 +257,7 @@
                 api.destroy();
                 //reenable viewer tooltips
                 jQuery.publish('enableTooltips.'+parent.windowId);
+                _this.osdViewer.zoomPerClick = 2;
                 });
               }
             }

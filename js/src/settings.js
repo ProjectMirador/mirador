@@ -42,6 +42,9 @@
        *   "sidePanel" : [true, false] whether or not to make the side panel available/visible in this window
        *   "overlay" : [true, false] whether or not to make the overlay available/visible in this window
        *   "annotationLayer" : [true, false] whether or not to make annotation layer available in this window
+       *   "annotationCreation" : [true, false] whether or not to make annotation creation available in this window, 
+       *                          only valid if annotationLayer is set to True and an annotationEndpoint is defined.
+       *                          This setting does NOT affect whether or not a user can edit an individual annotation that has already been created.
        *   "windowOptions" : [data specific to the view type, such as OSD bounds and zoom level - automatically saved in SaveController]
        *   "id" : [unique window ID - set by application and automatically saved in SaveController]
        *   "displayLayout" : [true, false], whether or not to display all layout options, removing individual menu options is separate
@@ -94,6 +97,8 @@
 
     //true or false.  controls display of "Add new object from URL" on manifest listing page
     'showAddFromURLBox' : true,
+
+    'i18nPath' : 'build/mirador/locales/',
 
     'logosLocation' : 'build/mirador/images/logos/',
 

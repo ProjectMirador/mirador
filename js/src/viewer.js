@@ -37,8 +37,15 @@
 
     init: function() {
       var _this = this;
-      // retrieve manifests
-      this.getManifestsData();
+
+      //initialize i18next  
+      i18n.init({debug: false, getAsync: false, resGetPath: _this.i18nPath+'__lng__/__ns__.json'}); 
+
+      //register Handlebars helper
+      Handlebars.registerHelper('t', function(i18n_key) {
+        var result = i18n.t(i18n_key);
+        return new Handlebars.SafeString(result);
+      });
 
       //check all buttons in mainMenu.  If they are all set to false, then don't show mainMenu
       var showMainMenu = false;
@@ -90,6 +97,8 @@
       this.set('currentWorkspaceVisible', true);
 
       this.bindEvents();
+      // retrieve manifests
+      this.getManifestsData();
     },
 
     bindEvents: function() {
@@ -188,7 +197,7 @@
         manifest = new $.Manifest(url, location);
         _this.manifests[url] = manifest;
         _this.manifests.push(manifest);
-        jQuery.publish('manifestQueued', manifest);
+        jQuery.publish('manifestQueued', manifest, location);
         manifest.request.done(function() {
           jQuery.publish('manifestReceived', manifest);
         });
@@ -209,6 +218,7 @@
         sidePanelAvailable : options.sidePanel,
         overlayAvailable : options.overlay,
         annotationLayerAvailable : options.annotationLayer,
+        annotationCreationAvailable : options.annotationCreation,
         slotAddress: slotAddress,
         displayLayout : options.displayLayout,
         layoutOptions: options.layoutOptions

@@ -57,6 +57,7 @@
         bottomPanelAvailable: this.bottomPanelAvailable,
         windowId: this.windowId,
         annotationLayerAvailable: this.annotationLayerAvailable,
+        annotationCreationAvailable: this.annotationCreationAvailable,
         annoEndpointAvailable: this.annoEndpointAvailable
       });
     },
@@ -89,11 +90,11 @@
     },
 
     hide: function() {
-      jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
+      jQuery(this.element).hide({effect: "fade", duration: 300, easing: "easeOutCubic"});
     },
 
     show: function() {
-      jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+      jQuery(this.element).show({effect: "fade", duration: 300, easing: "easeInCubic"});
     },
 
     adjustWidth: function(className, hasClass) {
