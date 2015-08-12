@@ -20,6 +20,7 @@
             var state = this.state({
                 visible: this.visible,
                 annotationLists: [],
+                selectedList: null,
                 focusedList: null
             }, true);
 
@@ -83,11 +84,18 @@
 
             this.state(state);
         },
-        selectList: function(listId) {
+        selectList: function(selected) {
+            var _this = this;
             var state = this.state();
-            state.selectedList = listId;
+            listId = selected.listId;
 
-            state.annotationLists.forEach(function(list){ list.selected = list.annotationSource === listId ? true : false; });
+              if(state.selectedList !== listId){
+                state.selectedList = listId;
+                state.annotationLists.forEach(function(list){ list.selected = list.annotationSource === listId ? true : false; });
+              }else{ // "deselect" the list
+                state.selectedList = null;
+                state.annotationLists.forEach(function(list){ list.selected = false; });
+              }
 
             this.state(state);
         },
@@ -128,9 +136,16 @@
             var _this = this,
                 listItems = this.element.find('.annotationListItem');
 
+            listItems.off('click', function(event) {
+
+            });
+
             listItems.on('click', function(event) {
-                var listId = jQuery(this).data('id');
-                jQuery.publish('openAnnotationList.' + _this.windowId, listId);
+                event.stopImmediatePropagation();
+                var selected = { listId : jQuery(this).data('id'),
+                                 prev : _this.state().selectedList
+                               };
+                jQuery.publish('openAnnotationList.' + _this.windowId, selected);
             });
 
         },
