@@ -44,10 +44,15 @@
 
             return this.panelState;
         },
-        openAnnotationList: function(listId) {
+        openAnnotationList: function(selected) {
             var _this = this,
                 state = this.state(),
                 open = !state.open;
+
+            var listId = selected.listId;
+            var prev = selected.prev;
+            if (listId !== prev && prev !== null){ open = true; }
+
             var window = $.viewer.workspace.windows.map(function(window){
                   if(window.id == _this.windowId){ return window; }
                 });
@@ -92,6 +97,7 @@
             jQuery.subscribe('openAnnotationList.' + this.windowId, function(event, data) {
                 _this.openAnnotationList(data);
             });
+
         },
         bindEvents: function() {
             var _this = this;
