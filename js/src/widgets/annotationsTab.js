@@ -96,7 +96,9 @@
               }else{ // "deselect" the list
                 state.selectedList = null;
                 state.annotationLists.forEach(function(list){ list.selected = false; });
-                jQuery.publish('modeChange.' + _this.windowId, 'default'); 
+                var annos = { data: _this.parent.annotationsList };
+                jQuery.publish('annotationsListFiltered' + this.windowId, annos);
+                jQuery.publish('modeChange.' + _this.windowId, 'default');
               }
 
             this.state(state);
