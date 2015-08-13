@@ -68,6 +68,8 @@
 
               return false;
             });
+            var annos = { data: state.annotations };
+            jQuery.publish('annotationsListFiltered' + this.windowId, annos);
 
             state.open = open;
             this.state(state);
