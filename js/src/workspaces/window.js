@@ -628,12 +628,11 @@
           });
 
           jQuery.each( _this.annotationsList, function( key, value ) {
-            //console.log( jQuery.isArray(value.resource) );
+
             if(jQuery.isArray(value.resource)){
                _this.annotationsList[key].resource = value.resource[0];
             }
           });
-          console.log(  _this.annotationsList );
 
           jQuery.publish('annotationListLoaded.' + _this.id);
         });

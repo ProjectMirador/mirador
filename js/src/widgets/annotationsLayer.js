@@ -41,9 +41,7 @@
       });
 
       jQuery.subscribe('annotationsListFiltered' + this.windowId, function(_, annotations) {
-        var annos = annotations.data; // can't pass arrays via jQuery pubsub, so unwrap from object
-        console.log(jQuery.isArray(annos[0].resource));
-        // _this.annotationsList = annotations;
+        _this.annotationsList = annotations.data; // can't pass arrays via jQuery pubsub, so unwrap from object
         _this.updateRenderer();
       });
 
@@ -59,7 +57,6 @@
         visible: false,
         parent: _this
       });
-      console.log(_this.annotationsList);
       this.modeSwitch();
     },
 
