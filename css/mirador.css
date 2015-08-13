@@ -811,10 +811,9 @@ li.highlight {
   width:100%;
   height: 130px;
   z-index: 4;
+  overflow:hidden;
   display: none;
   transition:transform 0.3s ease;
-  color: white;
-  overflow-y: auto;
 }
 .editorPanel.minimized {
   transform:translateY(130px);
