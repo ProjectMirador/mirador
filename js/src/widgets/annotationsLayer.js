@@ -36,10 +36,17 @@
       });
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
-        console.log('subscribed!');
         _this.annotationsList = _this.parent.parent.annotationsList;
         _this.updateRenderer();
       });
+
+      jQuery.subscribe('annotationsListFiltered' + this.windowId, function(_, annotations) {
+        var annos = annotations.data; // can't pass arrays via jQuery pubsub, so unwrap from object
+        console.log(jQuery.isArray(annos[0].resource));
+        // _this.annotationsList = annotations;
+        _this.updateRenderer();
+      });
+
     },
 
     createRenderer: function() {
@@ -48,9 +55,11 @@
         osd: $.OpenSeadragon,
         osdViewer: _this.viewer,
         list: _this.annotationsList, // must be passed by reference.
+        //list: _this.parent.parent.editorPanel.state.annotations,
         visible: false,
         parent: _this
       });
+      console.log(_this.annotationsList);
       this.modeSwitch();
     },
 
