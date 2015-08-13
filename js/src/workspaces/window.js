@@ -514,7 +514,6 @@
         _this.annotationsList.pop();
       }
       this.getAnnotations();
-      console.log(this.annotationsList);
       switch(this.currentImageMode) {
         case 'ImageView':
           this.toggleImageView(this.currentCanvasID);
@@ -592,7 +591,7 @@
             // indicate this is a manifest annotation - which affects the UI
             value.endpoint = "manifest";
           });
-            console.log(list);
+
           jQuery.publish('annotationListLoaded.' + _this.id);
         });
       }
@@ -603,7 +602,7 @@
         module = $.viewer.annotationEndpoint.module,
         options = $.viewer.annotationEndpoint.options;
         name = $.viewer.annotationEndpoint.name;
-        console.log("endpoint: " + _this.endpoint);
+
         // One annotation endpoint per window, the endpoint
         // is a property of the whole app instance.
         if ( _this.endpoint && _this.endpoint !== null ) {
@@ -627,9 +626,17 @@
             }
             return true;
           });
+
+          jQuery.each( _this.annotationsList, function( key, value ) {
+
+            if(jQuery.isArray(value.resource)){
+               _this.annotationsList[key].resource = value.resource[0];
+            }
+          });
+
           jQuery.publish('annotationListLoaded.' + _this.id);
         });
-        console.log(_this.annotationsList);
+
       }
     },
 
