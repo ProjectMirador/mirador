@@ -66,7 +66,6 @@
     },
 
     modeSwitch: function() {
-      //console.log(this.mode);
       if (this.mode === 'displayAnnotations') { this.enterDisplayAnnotations(); }
       else if (this.mode === 'editingAnnotations') { this.enterEditAnnotations(); }
       else if (this.mode === 'default') { this.enterDefault(); }

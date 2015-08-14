@@ -578,7 +578,7 @@
     getAnnotations: function() {
       //first look for manifest annotations
       var _this = this,
-      url = _this.manifest.getAnnotationsListUrl(_this.currentCanvasID);
+          url = _this.manifest.getAnnotationsListUrl(_this.currentCanvasID);
 
       if (url !== false) {
         jQuery.get(url, function(list) {
@@ -591,7 +591,6 @@
             // indicate this is a manifest annotation - which affects the UI
             value.endpoint = "manifest";
           });
-
           jQuery.publish('annotationListLoaded.' + _this.id);
         });
       }
@@ -633,7 +632,6 @@
                _this.annotationsList[key].resource = value.resource[0];
             }
           });
-
           jQuery.publish('annotationListLoaded.' + _this.id);
         });
 

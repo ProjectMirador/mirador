@@ -39,6 +39,7 @@
       this.loadHudComponents();
 
       this.bindEvents();
+      this.listenForActions();
 
       if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
         this.parent.parent.bottomPanelVisibility(false);
@@ -46,7 +47,20 @@
         this.parent.parent.bottomPanelVisibility(this.parent.parent.bottomPanelVisible);
       }
     },
+    listenForActions: function() {
+        var _this = this;
 
+        jQuery.subscribe('editorPanelStateUpdated' + _this.windowId, function(_, editorPanelState) {
+          if(editorPanelState.open){
+            console.log("on");
+            //_this.annoState.displayOn(this);
+          }else{
+            console.log("off");
+            //_this.annoState.displayOff(this);
+          }
+        });
+
+    },
     bindEvents: function() {
       var _this = this,
       firstCanvasId = _this.parent.imagesList[0]['@id'],

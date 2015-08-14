@@ -15,9 +15,10 @@
     $.AnnotationsTab.prototype = {
         init: function() {
             var _this = this;
+            jQuery.unsubscribe(('modeChange.' + _this.windowId));
             this.windowId = this.parent.id;
 
-            var state = this.state({
+            this.state({
                 visible: this.visible,
                 annotationLists: [],
                 selectedList: null,
@@ -25,19 +26,20 @@
             }, true);
 
             this.listenForActions();
-            this.render(state);
+            this.render(this.state());
             this.loadTabComponents();
             this.bindEvents();
         },
         state: function(state, initial) {
-            if (!arguments.length) return this.tabState;
-            this.tabState = state;
-
+            if (!arguments.length) return this.annoTabState;
+            this.annoTabState = state;
+            console.log(arguments.length);
+            console.log('initial: ' + initial);
             if (!initial) {
-                jQuery.publish('annotationsTabStateUpdated' + this.windowId, this.tabState);
+                jQuery.publish('annotationsTabStateUpdated.' + this.windowId, this.annoTabState);
             }
 
-            return this.tabState;
+            return this.annoTabState;
         },
         loadTabComponents: function() {
             var _this = this;
@@ -84,21 +86,18 @@
 
             this.state(state);
         },
-        selectList: function(selected) {
+        deselectList: function(listId) {
             var _this = this;
             var state = this.state();
-            listId = selected.listId;
-
-              if(state.selectedList !== listId){
-                state.selectedList = listId;
-                state.annotationLists.forEach(function(list){ list.selected = list.annotationSource === listId ? true : false; });
-                jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');
-              }else{ // "deselect" the list
-                state.selectedList = null;
-                state.annotationLists.forEach(function(list){ list.selected = false; });
-                jQuery.publish('modeChange.' + _this.windowId, 'default'); 
-              }
-
+            state.selectedList = null;
+            state.annotationLists.forEach(function(list){ list.selected = false; });
+            this.state(state);
+        },
+        selectList: function(listId) {
+            var _this = this;
+            var state = this.state();
+            state.selectedList = listId;
+            state.annotationLists.forEach(function(list){ list.selected = list.annotationSource === listId ? true : false; });
             this.state(state);
         },
         focusList: function(listId) {
@@ -110,7 +109,8 @@
         toggle: function() {},
         listenForActions: function() {
             var _this = this;
-            jQuery.subscribe('annotationsTabStateUpdated' + _this.windowId, function(_, data) {
+
+            jQuery.subscribe('annotationsTabStateUpdated.' + _this.windowId, function(_, data) {
                 _this.render(data);
             });
 
@@ -124,13 +124,19 @@
             });
 
             jQuery.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event) {
+
               jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
                   _this.annotationListLoaded();
               });
+
             });
 
-            jQuery.subscribe('openAnnotationList.' + _this.windowId, function(event, data) {
-                _this.selectList(data);
+            jQuery.subscribe('listSelected.' + _this.windowId, function(event, listId) {
+                _this.selectList(listId);
+            });
+
+            jQuery.subscribe('listDeselected.' + _this.windowId, function(event, listId) {
+                _this.deselectList(listId);
             });
 
         },
@@ -138,16 +144,15 @@
             var _this = this,
                 listItems = this.element.find('.annotationListItem');
 
-            listItems.off('click', function(event) {
-
-            });
-
             listItems.on('click', function(event) {
-                event.stopImmediatePropagation();
-                var selected = { listId : jQuery(this).data('id'),
-                                 prev : _this.state().selectedList
-                               };
-                jQuery.publish('openAnnotationList.' + _this.windowId, selected);
+                //event.stopImmediatePropagation();
+                var listClicked = jQuery(this).data('id');
+                if(_this.state().selectedList === listClicked){
+                    jQuery.publish('listDeselected.' + _this.windowId, listClicked);
+                }else{
+                    jQuery.publish('listSelected.' + _this.windowId, listClicked);
+                }
+
             });
 
         },

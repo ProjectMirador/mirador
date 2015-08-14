@@ -44,19 +44,17 @@
 
             return this.panelState;
         },
-        openAnnotationList: function(selected) {
-            var _this = this,
-                state = this.state(),
-                open = !state.open;
+        refreshAnnotationList: function(listId){
+          var _this = this,
+              state = this.state();
 
-            var listId = selected.listId;
-            var prev = selected.prev;
-            if (listId !== prev && prev !== null){ open = true; }
+          var window = $.viewer.workspace.windows.map(function(window){
+                if(window.id == _this.windowId){ return window; }
+              });
 
-            var window = $.viewer.workspace.windows.map(function(window){
-                  if(window.id == _this.windowId){ return window; }
-                });
-
+          if(listId === null){
+            state.annotations = window[0].annotationsList;
+          }else{
             state.annotations = window[0].annotationsList.filter(function(annotation){
               if(annotation.endpoint === listId){
                 return true;
@@ -68,8 +66,24 @@
 
               return false;
             });
-            var annos = { data: state.annotations };
-            jQuery.publish('annotationsListFiltered' + this.windowId, annos);
+          }
+
+          var annos = { data: state.annotations };
+          jQuery.publish('annotationsListFiltered' + this.windowId, annos);
+          this.state(state);
+        },
+        openAnnotationList: function() {
+            var _this = this,
+                state = this.state(),
+                open = true;
+
+            state.open = open;
+            this.state(state);
+        },
+        closeAnnotationList: function() {
+            var _this = this,
+                state = this.state(),
+                open = false;
 
             state.open = open;
             this.state(state);
@@ -89,15 +103,21 @@
                 _this.render(data);
             });
 
+            jQuery.subscribe('annotationsTabStateUpdated.' + _this.windowId, function(event, annotationsTabState) {
+              _this.refreshAnnotationList(annotationsTabState.selectedList);
+              if(annotationsTabState.selectedList === null){
+                _this.closeAnnotationList();
+              }else{
+                _this.openAnnotationList();
+              }
+
+            });
+
             jQuery.subscribe('editorPanelResized', function() {
             });
 
             jQuery.subscribe('editorPanelToggled' + this.windowId, function() {
                 _this.panelToggled();
-            });
-
-            jQuery.subscribe('openAnnotationList.' + this.windowId, function(event, data) {
-                _this.openAnnotationList(data);
             });
 
         },
