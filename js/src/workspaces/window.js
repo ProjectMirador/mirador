@@ -49,6 +49,7 @@
       annotationLayerAvailable: true,
       annotationCreationAvailable: true,
       annoEndpointAvailable : false,
+      fullScreenAvailable : true,
       displayLayout: true,
       layoutOptions : {
         "newObject" : true,
@@ -456,7 +457,9 @@
           bottomPanelAvailable: this.bottomPanelAvailable,
           annotationLayerAvailable: this.annotationLayerAvailable,
           annotationCreationAvailable: this.annotationCreationAvailable,
-          annoEndpointAvailable: this.annoEndpointAvailable} );
+          annoEndpointAvailable: this.annoEndpointAvailable,
+          fullScreenAvailable: this.fullScreenAvailable
+        });
       } else {
         var view = this.focusModules.ImageView;
         view.updateImage(canvasID);
@@ -475,7 +478,8 @@
           canvasID: canvasID, 
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
-          bottomPanelAvailable: this.bottomPanelAvailable
+          bottomPanelAvailable: this.bottomPanelAvailable,
+          fullScreenAvailable: this.fullScreenAvailable
         });
       } else {
         var view = this.focusModules.BookView;
