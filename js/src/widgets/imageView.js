@@ -58,7 +58,8 @@
         windowId: this.windowId,
         annotationLayerAvailable: this.annotationLayerAvailable,
         annotationCreationAvailable: this.annotationCreationAvailable,
-        annoEndpointAvailable: this.annoEndpointAvailable
+        annoEndpointAvailable: this.annoEndpointAvailable,
+        fullScreenAvailable : this.fullScreenAvailable
       });
     },
 
