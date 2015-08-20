@@ -907,11 +907,11 @@ li.highlight {
 }
 .brightnessSlider{
   display: block;
-  height:200px;
+  /*height:200px;*/
 }
 .contrastSlider{
   display: block;
-  height:200px;
+  /*height:200px;*/
 }
 .invertEffect{
   -webkit-filter: invert(100%);

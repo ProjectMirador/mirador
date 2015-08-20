@@ -75,6 +75,8 @@
 
     setBounds: function() {
       var _this = this;
+      console.log("Set bounds called.");
+      console.log(this.osd.viewport.getBounds(true));
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       jQuery.publish("imageBoundsUpdated", {
         id: _this.parent.id, 
@@ -145,7 +147,13 @@
           'uniqueID' : uniqueID
         });
 
+        console.log("_this osd");
+        console.log(_this.osd); //Does not have viewport yet. 
+
         _this.osd.addHandler('open', function(){
+          console.log("Looking for options and bounds");
+          console.log(_this.osdOptions);
+          console.log(_this.osdOptions.osdBounds);
           if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
@@ -168,9 +176,6 @@
           _this.osd.addHandler('pan', $.debounce(function(){
             _this.setBounds();
           }, 500));
-          
-          
-
         });
       })
       .fail(function(){
@@ -181,16 +186,25 @@
         .attr('id', osdID)
         .appendTo(_this.element);
 
+        //The only way to attach osd functions is to fake tileSources here so that this builds and OSD instance with a viewport.  
+
         _this.osd = $.OpenSeadragon({
           'id':           osdID,
-          'tileSources':  [], //This is the consequence of not getting the JSON.  It needs a height and width in the [0]th element for the image.
+          'tileSources':  [], //This is the consequence of not getting the JSON.  It creates the viewport on which the OSD functions are called.  Without it, OSD does not work.
           'uniqueID' : uniqueID
         });
 
+        console.log("_this osd");
+        console.log(_this.osd);
+
         _this.osd.addHandler('open', function(){
+          console.log("Looking for options and bounds");
+          console.log(_this.osdOptions);
+          console.log(_this.osdOptions.osdBounds);
           if (_this.osdOptions.osdBounds) {
-            var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
-            _this.osd.viewport.fitBounds(rect, true);
+            var rect = new OpenSeadragon.Rect(0, 0, 1, 1);
+            //_this.osd.viewport.fitBounds(rect, true);
+            _this.osd.container.fitBounds(rect, true);
           }
 
           _this.addAnnotationsLayer(_this.elemAnno);

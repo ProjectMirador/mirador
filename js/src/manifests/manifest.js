@@ -99,7 +99,7 @@
         return canvas['@id'] === canvasId;
       })[0];
 
-      if (canvas && canvas.otherContent) {
+      if (canvas && canvas.otherContent && canvas.otherContent.length >= 1) {
         return canvas.otherContent[0]['@id'];
       } else { return false; }
     },

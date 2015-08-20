@@ -28,8 +28,11 @@
       if (!_this.structures || _this.structures.length === 0) {
         _this.hide();
         _this.parent.setTOCBoolean(false);
+        console.log("No Structures");
         return;
       } else {
+        console.log("got structures");
+        console.log(_this.structures);
         _this.parent.setTOCBoolean(true);
         this.ranges = this.setRanges();
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
@@ -54,17 +57,26 @@
           });
         }
       });
-
+      console.log("we set the ranges, here they are");
+      console.log(ranges);
       return ranges;
 
     },
 
     getTplData: function() {  
+      console.log("getting template data from these ranges");
+      
       var _this = this,
       ranges = _this.extractRangeTrees(_this.ranges);
+
+      console.log(_this.ranges);
       
+      console.log("here are the local ranges to return");
+      console.log(ranges);
       if (ranges.length < 2) {
-        ranges = ranges[0].children;
+        console.log("there are less than 2 ranges so here is what we will return");
+        //ranges = ranges[0].children; //Why do this?  It doesn't make sense here.  
+        console.log(ranges);
       }
 
       return ranges;
@@ -85,7 +97,8 @@
           // hovered: false
         };
       });
-
+      console.log("TOC DATA");
+      console.log(tocData);
       return tocData;
     },
 
@@ -101,6 +114,8 @@
         parent = typeof parent !== 'undefined' ? parent : {id: "root", label: "Table of Contents" };
         var children = jQuery.grep(flatRanges, function(child) { if (!child.within) { child.within = 'root'; } return child.within == parent.id; });
         if ( children.length ) {
+          console.log("We have children");
+          console.log(children);
           if ( parent.id === 'root') {
             // If there are children and their parent's 
             // id is a root, bind them to the tree object.
@@ -294,13 +309,28 @@
         var out = '';
 
         if (options.fn !== undefined) {
+          console.log("we had options");
+          console.log(options);
           previousTemplate = options.fn;
         }
-
-        children.forEach(function(child) {
-          out = out + previousTemplate(child);
-        });
+        else{
+          console.log("Options were undefined.  What should I DO?");
+        }
         
+        if(children !== undefined && children.length > 0){
+          console.log("We had children");
+          console.log(children);
+          children.forEach(function(child) {
+            //console.log(previousTemplate(child));
+            out = out + previousTemplate(child);
+            console.log(out);
+          });
+        }
+        else{
+          console.log("We didn't seem to have children.  What should I do?");
+          console.log(out);
+          out = "<span class='hello212'>I had no children</span>";
+        }
         return out;
       });
 
