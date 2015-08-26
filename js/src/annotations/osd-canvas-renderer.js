@@ -266,6 +266,11 @@
         }); 
       });
 
+      jQuery.subscribe('removeOverlay.' + _this.parent.windowId, function(event, annoId) {
+        //remove this annotation's overlay from osd
+        _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+annoId)[0]);
+      });
+
     },
     
     checkMousePosition: function() {
@@ -346,13 +351,9 @@
         }
 
         var display = jQuery(this).parents('.annotation-display'),
-        id = display.attr('data-anno-id'),
-        oaAnno = _this.getAnnoFromRegion(id)[0];
-        jQuery.publish('annotationDeleted.'+_this.parent.windowId, [oaAnno]);
-
-        //remove this annotation's overlay from osd
-        //should there be some sort of check that it was successfully deleted? or pass when publishing?
-        _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+id)[0]);
+        id = display.attr('data-anno-id');
+        //oaAnno = _this.getAnnoFromRegion(id)[0];
+        jQuery.publish('annotationDeleted.'+_this.parent.windowId, [id]);
         
         //hide tooltip so event handlers don't get messed up
         api.hide();

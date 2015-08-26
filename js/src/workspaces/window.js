@@ -255,12 +255,13 @@
         });
       });
 
-      jQuery.subscribe('annotationDeleted.'+_this.id, function(event, oaAnno) {        
+      jQuery.subscribe('annotationDeleted.'+_this.id, function(event, annoId) {        
         //remove from endpoint
         //first function is success callback, second is error callback
-        _this.endpoint.deleteAnnotation(oaAnno['@id'], function() {
-          _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== oaAnno['@id']; });
+        _this.endpoint.deleteAnnotation(annoId, function() {
+          _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== annoId; });
           jQuery.publish(('annotationListLoaded.' + _this.id));
+          jQuery.publish(('removeOverlay.' + _this.id), annoId);
         }, 
         function() {
           // console.log("There was an error deleting this annotation");
