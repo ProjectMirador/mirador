@@ -50,14 +50,14 @@
         if(canvas.images[0] === undefined || canvas.images[0] === ""){
           //place a holder image.  
           resource = {
-                            "@id":"http://localhost:8080/brokenBooks/images/imgNotFound.png",
+                            "@id":"http://165.134.241.141/brokenBooks/images/imgNotFound.png",
                             "format":"image/jpg",
                             "@type":"dctypes:Image",
                             "service":
                                 {                                       
                                     "@context": "http://iiif.io/api/image/2/context.json",
                                     "profile":"http://iiif.io/api/image/2/profiles/level2.json",
-                                    "@id" : "http://localhost:8080/brokenBooks/images/imgNotFound.png"
+                                    "@id" : "http://165.134.241.141/brokenBooks/images/imgNotFound.png"
                                 },
                             "width": 667,
                             "height":1000

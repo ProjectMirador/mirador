@@ -6,7 +6,7 @@
     getImageUrl: function(image) {
 
       if(!image.images[0]){
-        id = "http://localhost:8080/brokenBooks/images/imgNotFound.png";
+        id = "http://165.134.241.141/brokenBooks/images/imgNotFound.png";
         return id;
       }
       else if (!image.images[0].resource.service) {

@@ -587,11 +587,26 @@
       var _this = this,
       url = _this.manifest.getAnnotationsListUrl(_this.currentCanvasID);
 
+      console.log("Getting annos for canvas " + _this.currentCanvasID);
+      console.log("from this anno list "+url);
       if (url !== false) {
         jQuery.get(url, function(list) {
+          console.log("Got anno list");
+          console.log(list);
+          if(typeof list == "object"){
+
+          }
+          else{
+            list = JSON.parse(list);
+          }
+          //need to check if list is a string or an object, and cast if so.
           _this.annotationsList = _this.annotationsList.concat(list.resources);
+          console.log("Got the resources");
+          console.log(_this.annotationsList);
           jQuery.each(_this.annotationsList, function(index, value) {
             //if there is no ID for this annotation, set a random one
+            console.log("i,v");
+            console.log(index, value);
             if (typeof value['@id'] === 'undefined') {
               value['@id'] = $.genUUID();
             }
@@ -601,9 +616,13 @@
           jQuery.publish('annotationListLoaded.' + _this.id);
         });
       }
+      else{
+        console.log("url was false");
+      }
 
       // next check endpoint
       if (this.annoEndpointAvailable) {
+        console.log("Endpoint available");
         var dfd = jQuery.Deferred(),
         module = $.viewer.annotationEndpoint.module,
         options = $.viewer.annotationEndpoint.options;
@@ -631,6 +650,9 @@
           });
           jQuery.publish('annotationListLoaded.' + _this.id);
         });
+      }
+      else{
+        console.log("Anno endpoint not available");
       }
     },
 
