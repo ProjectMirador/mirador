@@ -33,8 +33,8 @@
         state: function(state, initial) {
             if (!arguments.length) return this.annoTabState;
             this.annoTabState = state;
-            console.log(arguments.length);
-            console.log('initial: ' + initial);
+            //console.log(arguments.length);
+            //console.log('initial: ' + initial);
             if (!initial) {
                 jQuery.publish('annotationsTabStateUpdated.' + this.windowId, this.annoTabState);
             }
@@ -54,7 +54,6 @@
             var _this = this,
                 annotationSources = [],
                 state = this.state();
-
             for(var i = 0; i < _this.parent.annotationsList.length; i++)
             {
 
@@ -76,14 +75,14 @@
             });
 
             state.annotationLists = annotationSources.map(function(annotationSource) {
+                //var s = (annotationSource === state.selectedList ? true : false);
                 return {
                     annotationSource: annotationSource,
                     layer: null,
-                    selected: false,
+                    selected: (annotationSource === state.selectedList ? true : false),
                     focused: false
                 };
             });
-
             this.state(state);
         },
         deselectList: function(listId) {
@@ -129,6 +128,8 @@
                   _this.annotationListLoaded();
               });
 
+              _this.selectList(_this.state().selectedList);
+
             });
 
             jQuery.subscribe('listSelected.' + _this.windowId, function(event, listId) {
@@ -161,7 +162,6 @@
                 templateData = {
                     annotationSources: state.annotationLists
                 };
-
             if (!this.element) {
                 this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
             } else {

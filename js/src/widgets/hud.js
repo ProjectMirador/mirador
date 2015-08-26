@@ -51,13 +51,20 @@
         var _this = this;
 
         jQuery.subscribe('editorPanelStateUpdated' + _this.windowId, function(_, editorPanelState) {
+          //console.log(editorPanelState);
+          if (_this.annoState.current === 'annoOff') {
+            _this.annoState.displayOn(this);
+          } else {
+            _this.annoState.displayOff(this);
+          }
+          /*
           if(editorPanelState.open){
             console.log("on");
             //_this.annoState.displayOn(this);
           }else{
             console.log("off");
             //_this.annoState.displayOff(this);
-          }
+          }*/
         });
 
     },

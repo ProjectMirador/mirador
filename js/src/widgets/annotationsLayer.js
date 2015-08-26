@@ -42,7 +42,7 @@
 
       jQuery.subscribe('annotationsListFiltered' + this.windowId, function(_, annotations) {
         _this.annotationsList = annotations.data; // can't pass arrays via jQuery pubsub, so unwrap from object
-        _this.updateRenderer();
+        _this.updateRenderer(annotations.data);
       });
 
     },
@@ -60,8 +60,10 @@
       this.modeSwitch();
     },
 
-    updateRenderer: function() {
-      this.renderer.list = this.annotationsList;
+    updateRenderer: function(annolist) {
+      var list = typeof annolist !== 'undefined' ? annolist : this.annotationsList;
+      console.log(list);
+      this.renderer.list = list;
       this.modeSwitch();
     },
 

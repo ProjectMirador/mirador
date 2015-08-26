@@ -514,6 +514,7 @@
         _this.annotationsList.pop();
       }
       this.getAnnotations();
+
       switch(this.currentImageMode) {
         case 'ImageView':
           this.toggleImageView(this.currentCanvasID);

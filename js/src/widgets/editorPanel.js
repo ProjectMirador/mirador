@@ -69,6 +69,7 @@
           }
 
           var annos = { data: state.annotations };
+        
           jQuery.publish('annotationsListFiltered' + this.windowId, annos);
           this.state(state);
         },
