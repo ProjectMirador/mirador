@@ -83,6 +83,7 @@
                     focused: false
                 };
             });
+
             this.state(state);
         },
         deselectList: function(listId) {
@@ -149,8 +150,10 @@
                 //event.stopImmediatePropagation();
                 var listClicked = jQuery(this).data('id');
                 if(_this.state().selectedList === listClicked){
+                    //_this.deselectList(listClicked);
                     jQuery.publish('listDeselected.' + _this.windowId, listClicked);
                 }else{
+                    //_this.selectList(listClicked);
                     jQuery.publish('listSelected.' + _this.windowId, listClicked);
                 }
 

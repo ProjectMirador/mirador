@@ -525,6 +525,7 @@
         default:
           break;
       }
+      console.log('currentCanvasIDUpdated fired!');
       jQuery.publish(('currentCanvasIDUpdated.' + _this.id), canvasID);
     },
 
@@ -578,6 +579,7 @@
        */
     getAnnotations: function() {
       //first look for manifest annotations
+      console.log('getAnnotations fired!');
       var _this = this,
           url = _this.manifest.getAnnotationsListUrl(_this.currentCanvasID);
 

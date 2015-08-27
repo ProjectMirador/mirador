@@ -69,8 +69,8 @@
           }
 
           var annos = { data: state.annotations };
-        
-          jQuery.publish('annotationsListFiltered' + this.windowId, annos);
+
+          //jQuery.publish('annotationsListFiltered' + this.windowId, annos);
           this.state(state);
         },
         openAnnotationList: function() {

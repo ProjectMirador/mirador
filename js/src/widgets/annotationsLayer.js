@@ -5,6 +5,7 @@
     jQuery.extend(true, this, {
       parent:            null,
       annotationsList:   null,
+      currentAnnosList:  null,
       viewer:            null,
       renderer:          null,
       selected:          null,
@@ -35,18 +36,43 @@
         _this.modeSwitch();
       });
 
-      jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
-        _this.annotationsList = _this.parent.parent.annotationsList;
-        _this.updateRenderer();
-      });
 
-      jQuery.subscribe('annotationsListFiltered' + this.windowId, function(_, annotations) {
-        _this.annotationsList = annotations.data; // can't pass arrays via jQuery pubsub, so unwrap from object
-        _this.updateRenderer(annotations.data);
+      jQuery.subscribe('annotationsTabStateUpdated.' + _this.windowId, function(_, data) {
+
+          _this.filterList(data.selectedList);
+
       });
 
     },
+    filterList: function(listId){
+      var _this = this;
 
+      var window = $.viewer.workspace.windows.map(function(window){
+            if(window.id == _this.windowId){ return window; }
+          });
+
+      var annos = null;
+
+      if(listId === null){
+        annos = window[0].annotationsList;
+      }else{
+        annos = window[0].annotationsList.filter(function(annotation){
+          if(annotation.endpoint === listId){
+            return true;
+          }
+
+          if(annotation.endpoint.name === listId){
+            return true;
+          }
+
+          return false;
+        });
+      }
+
+      _this.currentAnnosList = annos;
+      _this.updateRenderer();
+
+    },
     createRenderer: function() {
       var _this = this;
       this.renderer = new $.OsdCanvasRenderer({
@@ -60,10 +86,12 @@
       this.modeSwitch();
     },
 
-    updateRenderer: function(annolist) {
-      var list = typeof annolist !== 'undefined' ? annolist : this.annotationsList;
-      console.log(list);
-      this.renderer.list = list;
+    updateRenderer: function() {
+      var _this = this;
+
+      if(_this.currentAnnosList.length < 1){ _this.currentAnnosList = _this.annotationsList; }
+
+      this.renderer.list = _this.currentAnnosList;
       this.modeSwitch();
     },
 
