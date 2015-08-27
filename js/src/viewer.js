@@ -210,7 +210,7 @@
       var windowConfig = {
         manifest: this.manifests[options.loadedManifest],
         currentFocus : options.viewType,
-        focuses : options.availableViews,
+        focusesOriginal : options.availableViews,
         currentCanvasID : options.canvasID,
         id : options.id,
         focusOptions : options.windowOptions,
