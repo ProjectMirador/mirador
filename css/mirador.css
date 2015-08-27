@@ -820,6 +820,10 @@ li.highlight {
   transform:translateY(130px);
 }
 
+.annotations li.selected {
+  color: red;
+}
+
 /* window views
 ---------------------------------------------------------------------------- */
 

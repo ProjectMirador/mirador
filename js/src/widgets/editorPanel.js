@@ -18,6 +18,7 @@
                 position: 'bottom',
                 title: 'untitled',
                 annotations: [],
+                selectedAnno: null,
                 showThumbnails: true,
                 allowEditing: true,
                 locked: true,
@@ -68,10 +69,19 @@
             });
           }
 
-          var annos = { data: state.annotations };
-
-          //jQuery.publish('annotationsListFiltered' + this.windowId, annos);
           this.state(state);
+        },
+        deselectAnno: function(annoId) {
+            var _this = this;
+            var state = this.state();
+            state.selectedAnno = null;
+            this.state(state);
+        },
+        selectAnno: function(annoId) {
+            var _this = this;
+            var state = this.state();
+            state.selectedAnno = annoId;
+            this.state(state);
         },
         openAnnotationList: function() {
             var _this = this,
@@ -92,6 +102,7 @@
         getTemplateData: function(state) {
             return {
                 annotations: state.annotations,
+                selected: state.selectedAnno,
                 postion: state.position,
                 open: state.open,
                 size:  state.size
@@ -121,13 +132,47 @@
                 _this.panelToggled();
             });
 
+            jQuery.subscribe('annoSelected.' + _this.windowId, function(event, annoId) {
+                _this.selectAnno(annoId);
+            });
+
+            jQuery.subscribe('annoDeselected.' + _this.windowId, function(event, annoId) {
+                _this.deselectAnno(annoId);
+            });
+
         },
         bindEvents: function() {
-            var _this = this;
+            var _this = this,
+                annoItems = _this.element.find('.annotationItem');
+            state = this.state();
+
+            annoItems.on('click', function(event) {
+              var annoClicked = jQuery(this).data('id');
+              if(_this.state().selectedAnno === annoClicked){
+                  jQuery.publish('annoDeselected.' + _this.windowId, annoClicked);
+              }else{
+                  jQuery.publish('annoSelected.' + _this.windowId, annoClicked);
+              }
+            });
+
         },
         render: function(state) {
             var _this = this;
             var templateData = _this.getTemplateData(state);
+
+            // Handlebars does not like the @ symbol in template variables so massaging here...
+            var arrayLength = templateData.annotations.length;
+            for (var i = 0; i < arrayLength; i++) {
+              for (var property in templateData.annotations[i]) {
+                  if (templateData.annotations[i].hasOwnProperty(property)) {
+                      var messaged = property.replace('@', '');
+                      if (typeof templateData.annotations[i][property] !== "undefined") {
+                        templateData.annotations[i][messaged] = templateData.annotations[i][property];
+                        templateData.annotations[i].selected = templateData.annotations[i].id === templateData.selected ? true : false;
+                      }
+                  }
+              }
+            }
 
             if (!this.element) {
                 this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
@@ -139,13 +184,14 @@
                 this.element.html(contents);
             }
             var openValue = templateData.open === true ? 'block' : 'none';
+            _this.bindEvents();
             this.element.css({'display':openValue});
         },
         template: Handlebars.compile([
             '<div class="editorPanel {{position}}">',
             '<ul class="annotations">',
             '{{#each annotations}}',
-            '<li class="annotationItem">',
+            '<li class="annotationItem {{#if this.selected}}selected{{/if}}" data-id="{{this.id}}">',
                 '<span>{{this.resource.chars}}{{#each this.resource}}{{chars}}{{/each}}</span>',
             '</li>',
             '{{/each}}',
