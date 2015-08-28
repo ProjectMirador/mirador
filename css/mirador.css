@@ -809,19 +809,60 @@ li.highlight {
   position: absolute;
   bottom:0;
   width:100%;
-  height: 130px;
+  height: 230px;
   z-index: 4;
   display: none;
   transition:transform 0.3s ease;
   color: white;
   overflow-y: auto;
+  border-top: 1px lightgray solid;
 }
 .editorPanel.minimized {
-  transform:translateY(130px);
+  transform:translateY(230px);
 }
 
-.annotations li.selected {
-  color: orangered;
+.editorTools {
+  width:100%;
+  min-height:40px;
+  height: 40px;
+  padding: 10px;
+  z-index:5;
+  position: absolute;
+  bottom:0;
+  opacity: 0.6;
+  background-color: black;
+  color: white;
+
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.editorPanel ul.annotations {
+  list-style-type: none;
+}
+
+.editorPanel li.annotationItem {
+  background-color: rgba(0,0,0,1);
+  margin-bottom: 10px;
+  margin-right: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid deepSkyBlue;
+}
+
+.editorPanel li.annotationItem p {
+  margin:0px;
+}
+
+.editorPanel .annotations li.selected {
+  border: 1px solid orangered;
 }
 
 /* window views

@@ -196,6 +196,9 @@
             '</li>',
             '{{/each}}',
             '</ul>',
+            '<div class="editorTools">',
+            '<span><i class="fa fa-icon-pencil"></i> full page</span>',
+            '</div>',
             '</div>'
         ].join('')),
         toggle: function () {}
