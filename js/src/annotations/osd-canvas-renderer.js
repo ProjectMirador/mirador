@@ -48,7 +48,7 @@
         var region = _this.parseRegion(annotation.on),
         osdOverlay = document.createElement('div');
         osdOverlay.className = 'annotation';
-        if(annotation.selected){ osdOverlay.className = osdOverlay.className + ' hovered'; }
+        if(annotation.selected){ osdOverlay.className = osdOverlay.className + ' selected'; }
         osdOverlay.id = annotation['@id'];
         _this.osdViewer.addOverlay({
           element: osdOverlay,
