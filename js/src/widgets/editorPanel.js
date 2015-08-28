@@ -192,7 +192,7 @@
             '<ul class="annotations">',
             '{{#each annotations}}',
             '<li class="annotationItem {{#if this.selected}}selected{{/if}}" data-id="{{this.id}}">',
-                '<span>{{this.resource.chars}}{{#each this.resource}}{{chars}}{{/each}}</span>',
+                '<span>{{{this.resource.chars}}}</span>',
             '</li>',
             '{{/each}}',
             '</ul>',

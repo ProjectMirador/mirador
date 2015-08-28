@@ -821,7 +821,7 @@ li.highlight {
 }
 
 .annotations li.selected {
-  color: red;
+  color: orangered;
 }
 
 /* window views

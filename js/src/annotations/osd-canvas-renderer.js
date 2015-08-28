@@ -22,7 +22,7 @@
     parseRegion: function(url) {
       var regionString;
       if (typeof url === 'object') {
-        regionString = url.selector.value;  
+        regionString = url.selector.value;
       } else {
         regionString = url.split('#')[1];
       }
@@ -38,7 +38,7 @@
 
       return this.osdViewer.viewport.imageToViewportRectangle(rectX,rectY,rectW,rectH);
 
-    }, 
+    },
 
     render: function() {
       var _this = this;
@@ -48,6 +48,7 @@
         var region = _this.parseRegion(annotation.on),
         osdOverlay = document.createElement('div');
         osdOverlay.className = 'annotation';
+        if(annotation.selected){ osdOverlay.className = osdOverlay.className + ' selected'; }
         osdOverlay.id = annotation['@id'];
         _this.osdViewer.addOverlay({
           element: osdOverlay,
@@ -55,7 +56,7 @@
         });
         _this.overlays.push(jQuery(osdOverlay));
       });
-      
+
       this.tooltips = jQuery(this.overlays).qtip({
             overwrite : false,
             content: {
@@ -86,7 +87,7 @@
                  var overlays = _this.getOverlaysFromElement(jQuery(event.originalEvent.currentTarget)),
                  annoTooltip = new $.AnnotationTooltip(), //pass permissions
                  annotations = [];
-                 
+
                  jQuery.each(overlays, function(index, overlay) {
                    annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
                  });
@@ -117,7 +118,7 @@
         return annotation['@id'] === regionId;
       });
     },
-    
+
     getOverlaysFromElement: function(element) {
       var _this = this,
       eo = element.offset(),
@@ -125,7 +126,7 @@
       et = eo.top,
       er = el + element.outerWidth(),
       eb = et + element.outerHeight();
-              
+
       var overlays = jQuery(_this.osdViewer.canvas).find('.annotation').map(function() {
         var self = jQuery(this),
         offset = self.offset(),
@@ -133,19 +134,19 @@
         t = offset.top,
         r = l + self.outerWidth(),
         b = t + self.outerHeight();
-        
+
         //check if the current overlay has a corner contained within the element that triggered the mouseenter
         //OR check if element has a corner contained within the overlay
         //so that any overlapping annotations are stacked and displayed
         //this will also find when the overlay and element are the same thing and return it, which is good, we don't have to add it separately
-        return (((l >= el && t >= et && l <= er && t <= eb) || 
-                (l >= el && b <= eb && l <= er && b >= et) || 
-                (r <= er && t >= et && r >= el && t <= eb) || 
+        return (((l >= el && t >= et && l <= er && t <= eb) ||
+                (l >= el && b <= eb && l <= er && b >= et) ||
+                (r <= er && t >= et && r >= el && t <= eb) ||
                 (r <= er && b <= eb && r >= el && b >= et)) ||
-                
-                ((el >= l && et >= t && el <= r && et <= b) || 
-                (el >= l && eb <= b && el <= r && eb >= t) || 
-                (er <= r && et >= t && er >= l && et <= b) || 
+
+                ((el >= l && et >= t && el <= r && et <= b) ||
+                (el >= l && eb <= b && el <= r && eb >= t) ||
+                (er <= r && et >= t && er >= l && et <= b) ||
                 (er <= r && eb <= b && er >= l && eb >= t)
                 )) ? this : null;
       });
@@ -156,20 +157,20 @@
       });*/
       return overlays;
     },
-    
+
     getRandomColor: function() {
        var colors = this.hsvToRgb(Math.random() * 360, 50, 100);
        //return "#" + Math.floor(Math.random() * 0xFFFFFF).toString(16);
        return 'rgb('+colors[0]+','+colors[1]+','+colors[2]+')';
     },
-    
+
     /**
     * From: http://snipplr.com/view.php?codeview&id=14590
     * HSV to RGB color conversion
     *
     * H runs from 0 to 360 degrees
     * S and V run from 0 to 100
-    * 
+    *
     * Ported from the excellent java algorithm by Eugene Vishnevsky at:
     * http://www.cs.rit.edu/~ncs/color/t_convert.html
     */
@@ -177,7 +178,7 @@
       var r, g, b;
       var i;
       var f, p, q, t;
-  
+
       // Make sure our arguments stay in-range
       h = Math.max(0, Math.min(360, h));
       s = Math.max(0, Math.min(100, s));
@@ -189,13 +190,13 @@
       // That conversion here.
       s /= 100;
       v /= 100;
-  
+
       if(s === 0) {
         // Achromatic (grey)
         r = g = b = v;
         return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
       }
-  
+
       h /= 60; // sector 0 to 5
       i = Math.floor(h);
       f = h - i; // factorial part of h
@@ -209,31 +210,31 @@
       g = t;
       b = p;
       break;
-      
+
     case 1:
       r = q;
       g = v;
       b = p;
       break;
-      
+
     case 2:
       r = p;
       g = v;
       b = t;
       break;
-      
+
     case 3:
       r = p;
       g = q;
       b = v;
       break;
-      
+
     case 4:
       r = t;
       g = p;
       b = v;
       break;
-      
+
     default: // case 5:
       r = v;
       g = p;
@@ -245,29 +246,29 @@
 
     bindEvents: function() {
       var _this = this;
-            
+
      this.osdViewer.addHandler('zoom', $.debounce(function(){
           _this.checkMousePosition();
         }, 200, true));
-      
+
       jQuery.subscribe('removeTooltips.' + _this.parent.windowId, function() {
         jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
       });
-      
+
       jQuery.subscribe('disableTooltips.' + _this.parent.windowId, function() {
         jQuery.each(_this.tooltips, function(index, value) {
           value.qtip('disable', true);
-        }); 
+        });
       });
-      
+
       jQuery.subscribe('enableTooltips.' + _this.parent.windowId, function() {
         jQuery.each(_this.tooltips, function(index, value) {
           value.qtip('disable', false);
-        }); 
+        });
       });
 
     },
-    
+
     checkMousePosition: function() {
       jQuery('.qtip').qtip('hide');
     },
@@ -287,7 +288,7 @@
       });
       return elements;
     },
-    
+
     //change content of this tooltip, and disable hiding it, until user clicks save or cancel
     //disable all other qtips until editing this is done
     freezeQtip: function(api, oaAnno, annoTooltip) {
@@ -309,10 +310,10 @@
                   toolbar: "bold italic | bullist numlist | link image media"
                 });
     },
-    
+
     //reenable all other qtips
     //update content of this qtip to make it a viewer, not editor
-    //and reset hide event       
+    //and reset hide event
     unFreezeQtip: function(api, oaAnno, annoTooltip) {
       jQuery.each(this.overlays, function(index, value) {
            var overlayApi = value.qtip('api');
@@ -323,7 +324,7 @@
       api.set({'content.text' : annoTooltip.getViewer([oaAnno]),
           'hide.event' : 'mouseleave'}).hide();
     },
-    
+
     removeAnnotationEvents: function(tooltipevent, api) {
       jQuery('.annotation-tooltip a.delete').off("click");
       jQuery('.annotation-tooltip a.edit').off("click");
@@ -336,8 +337,8 @@
       annoTooltip = new $.AnnotationTooltip();
       jQuery('.annotation-tooltip a.delete').on("click", function(event) {
         event.preventDefault();
-        
-        if (!window.confirm("Do you want to delete this annotation?")) { 
+
+        if (!window.confirm("Do you want to delete this annotation?")) {
           return false;
         }
 
@@ -349,7 +350,7 @@
         //remove this annotation's overlay from osd
         //should there be some sort of check that it was successfully deleted? or pass when publishing?
         _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+id)[0]);
-        
+
         //hide tooltip so event handlers don't get messed up
         api.hide();
         display.remove(); //remove this annotation display from dom
@@ -357,19 +358,19 @@
 
       jQuery('.annotation-tooltip a.edit').on("click", function(event) {
         event.preventDefault();
-        
+
         var display = jQuery(this).parents('.annotation-display'),
         id = display.attr('data-anno-id'),
         oaAnno = _this.getAnnoFromRegion(id)[0];
-       
+
         _this.freezeQtip(api, oaAnno, annoTooltip);
       });
     },
-    
+
     annotationSaveEvent: function(event, api) {
       var _this = this,
       annoTooltip = new $.AnnotationTooltip();
-      
+
       jQuery('.annotation-tooltip').on("submit", function(event) {
         event.preventDefault();
         jQuery('.annotation-tooltip a.save').click();
@@ -377,11 +378,11 @@
 
       jQuery('.annotation-tooltip a.save').on("click", function(event) {
         event.preventDefault();
-                  
+
         var display = jQuery(this).parents('.annotation-tooltip'),
         id = display.attr('data-anno-id'),
         oaAnno = _this.getAnnoFromRegion(id)[0];
-                  
+
         //check if new resourceText is empty??
         var tagText = jQuery(this).parents('.annotation-editor').find('.tags-editor').val(),
         resourceText = tinymce.activeEditor.getContent(),
@@ -395,11 +396,11 @@
         var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
         //bounds is giving negative values?
         //update scope?
-                  
+
         var motivation = [],
         resource = [],
         on;
-                  
+
         //remove all tag-related content in annotation
         oaAnno.motivation = jQuery.grep(oaAnno.motivation, function(value) {
             return value !== "oa:tagging";
@@ -411,7 +412,7 @@
         if (tags.length > 0) {
             oaAnno.motivation.push("oa:tagging");
             jQuery.each(tags, function(index, value) {
-                oaAnno.resource.push({      
+                oaAnno.resource.push({
                     "@type":"oa:Tag",
                      "chars":value
                 });
@@ -427,13 +428,13 @@
 
         _this.unFreezeQtip(api, oaAnno, annoTooltip);
         });
-        
+
         jQuery('.annotation-tooltip a.cancel').on("click", function(event) {
           event.preventDefault();
           var display = jQuery(this).parents('.annotation-tooltip'),
           id = display.attr('data-anno-id'),
           oaAnno = _this.getAnnoFromRegion(id)[0];
-   
+
         _this.unFreezeQtip(api, oaAnno, annoTooltip);
         });
 
