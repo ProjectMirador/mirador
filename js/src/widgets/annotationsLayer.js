@@ -43,6 +43,10 @@
 
       });
 
+      jQuery.subscribe('editorPanelStateUpdated' + this.windowId, function(_, data) {
+          _this.updateRenderer();
+      });
+
     },
     filterList: function(listId){
       var _this = this;
@@ -88,7 +92,7 @@
 
     updateRenderer: function() {
       var _this = this;
-
+      if(_this.currentAnnosList === null){ _this.currentAnnosList = _this.annotationsList; }
       if(_this.currentAnnosList.length < 1){ _this.currentAnnosList = _this.annotationsList; }
       console.log(this.renderer);
       this.renderer.list = _this.currentAnnosList;
