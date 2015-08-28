@@ -59,13 +59,6 @@
         annotationLayerAvailable: this.annotationLayerAvailable,
         annoEndpointAvailable: this.annoEndpointAvailable
       });
-      //   var can = "";
-      // can = $(".openseadragon-canvas");
-      // if(can === undefined){
-      //   can == "no";
-      // }
-      // console.log("Can i make image here6?");
-      // console.log(can);
     },
 
     template: Handlebars.compile([
@@ -75,8 +68,6 @@
 
     setBounds: function() {
       var _this = this;
-      console.log("Set bounds called.");
-      console.log(this.osd.viewport.getBounds(true));
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       jQuery.publish("imageBoundsUpdated", {
         id: _this.parent.id, 
@@ -151,9 +142,9 @@
         console.log(_this.osd); //Does not have viewport yet. 
 
         _this.osd.addHandler('open', function(){
-          console.log("Looking for options and bounds");
-          console.log(_this.osdOptions);
-          console.log(_this.osdOptions.osdBounds);
+          // console.log("Looking for options and bounds");
+          // console.log(_this.osdOptions);
+          // console.log(_this.osdOptions.osdBounds);
           if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
@@ -179,6 +170,8 @@
         });
       })
       .fail(function(){
+        //BH edit:  On fail, then it is not an image with a IIIF service.  We can only build certain parts of OSD
+        //but we can still get the image out
         console.log("No info.json file.  Please handle accordingly.  I am going to make the OSD container.");
         _this.elemOsd =
           jQuery('<div/>')
@@ -198,9 +191,9 @@
         console.log(_this.osd);
 
         _this.osd.addHandler('open', function(){
-          console.log("Looking for options and bounds");
-          console.log(_this.osdOptions);
-          console.log(_this.osdOptions.osdBounds);
+          // console.log("Looking for options and bounds");
+          // console.log(_this.osdOptions);
+          // console.log(_this.osdOptions.osdBounds);
           if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(0, 0, 1, 1);
             //_this.osd.viewport.fitBounds(rect, true);
@@ -226,9 +219,10 @@
           }, 500));
         });
         
-        //wrapping the image element in a canavas causes the image not to load.  Without the canvas, none of the tools work.  
+        //wrapping the image element in a canvas causes the image not to load.  OSD will not build a viewport
+        //  
         var fakeCanvas = jQuery("<img class='fix' src='"+imageUrl+"'/>");
-        jQuery(_this.osd.canvas).append(fakeCanvas);       
+          jQuery(_this.osd.canvas).append(fakeCanvas);       
         });
       
     },
@@ -247,6 +241,8 @@
 
     updateImage: function(canvasID) {
       console.log("Load new full image");
+      jQuery(".bbAnnosContainer").hide();
+      //bh edit: hide the anno containers.  We can make it specific to the canvas. 
       if (this.canvasID !== canvasID) {
         this.canvasID = canvasID;
         this.currentImgIndex = $.getImageIndexById(this.imagesList, canvasID);
@@ -265,13 +261,6 @@
       } else {
         this.parent.updateFocusImages([canvasID]);
       }
-        // var can2 = "";
-        // can2 = $(".openseadragon-canvas");
-        // if(can2 === undefined){
-        //   can2 == "no";
-        // }
-        // console.log("Can i make image here3?");
-        // console.log(can2);
     },
 
     next: function() {

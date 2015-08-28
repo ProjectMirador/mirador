@@ -48,12 +48,18 @@
         } else {
           thumbnailUrl = canvas.thumbnail['@id'];
         }
-      } else {
-        // No thumbnail, use main image
-         //BH edit for no image found
+      } 
+      else {
+         //BH edit for no thumbnail image defined
         var resource = "";
         if(canvas.images[0] === undefined || canvas.images[0] === ""){
-          //place a holder image.  
+          /*
+             If an image is not found, then there is no resource for it.  This is a place where you can set
+             a default image resource within mirador or specific to a project.  Here, I have specified one for
+             broken books default imgNotFound.png.  My service is invalid and will break.  
+
+             @see: createOpenSeadragonInstance in imageView.js for what to do with invalid image service.
+         */
           resource = {
                             "@id":"http://165.134.241.141/brokenBooks/images/imgNotFound.png",
                             "format":"image/jpg",
@@ -77,16 +83,7 @@
           version = $.Iiif.getVersionFromContext(service['@context']);
         }       
         thumbnailUrl = resource["@id"];   
-        //BH edit
-        //thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
       }
-      // var can = "";
-      // can = $(".openseadragon-canvas");
-      // if(can === undefined){
-      //   can ="no";
-      // }
-      // console.log("can i set image here4?");
-      // console.log(can);
       return thumbnailUrl;
     },
     getCanvases : function() {
@@ -94,17 +91,16 @@
       return _this.jsonLd.sequences[0].canvases;
     },
     getAnnotationsListUrl: function(canvasId) {
-      console.log("Get the list url for this canvasID " + canvasId);
       var _this = this;
       var canvas = jQuery.grep(_this.getCanvases(), function(canvas, index) {
-        console.log("Here is the canvas in getannolisturl");
-        console.log(canvas);
         return canvas['@id'] === canvasId;
       })[0];
-
+       
+      //bh edit:  Need to make sure that other content is defined and not empty before attempting to access.
       if (canvas && canvas.otherContent && canvas.otherContent.length >= 1) {
         return canvas.otherContent[0]['@id'];
-      } else { return false; }
+      } 
+      else { return false; }
     },
     getStructures: function() {
       var _this = this;

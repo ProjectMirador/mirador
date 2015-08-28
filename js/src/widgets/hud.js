@@ -43,6 +43,16 @@
         this.parent.parent.bottomPanelVisibility(this.parent.parent.bottomPanelVisible);
       }
     },
+     
+    //BH edit to allow commenting annotations when images are non-IIIF
+    bbShowAnnos: function(){
+      this.parent.element.find(".bbAnnosContainer").show(); //imageview
+    },
+
+    //BH edit to allow commenting annotations when images are non-IIIF
+    bbHideAnnos: function(){
+      this.parent.element.find(".bbAnnosContainer").hide();//imageview
+    },
 
     bindEvents: function() {
       var _this = this,
@@ -60,9 +70,25 @@
 
       this.parent.element.find('.mirador-osd-annotations-layer').on('click', function() {
         if (_this.annoState.current === 'annoOff') {
-          _this.annoState.displayOn(this);
-        } else {
-          _this.annoState.displayOff(this);          
+          if(_this.parent.osd.viewport){
+            _this.annoState.displayOn(this);
+          }
+          else{ //it is one of ours
+            //BH edit for toggling annotations on non-IIIF image
+            _this.bbShowAnnos();
+            _this.annoState.displayOn(this);
+          }
+          
+        } 
+        else {
+          if(_this.parent.osd.viewport){
+            _this.annoState.displayOff(this);
+          }
+          else{ //it is one of ours
+            //BH edit for toggling annotations on non-IIIF image
+            _this.bbHideAnnos();
+            _this.annoState.displayOff(this);
+          }
         }
       });
 
@@ -80,7 +106,6 @@
       });
       this.parent.element.find('.mirador-osd-right').on('click', function() {
         var osd = _this.parent.osd;
-        console.log(osd.viewport);
         osd.viewport.panBy(new OpenSeadragon.Point(0.05, 0));
         osd.viewport.applyConstraints();
       });
@@ -258,7 +283,7 @@
           slide: function( event, ui ) {
             var osd = _this.parent.osd;
             var newFilter = "";
-            
+            var moz = false;
               //Need to be able to tell which vendor preifxes I need.  Order is always brightness then contrast, so I can put brightness in right away here.
               if( navigator.userAgent.indexOf("Chrome") != -1 ) {
                 newFilter = "-webkit-filter: brightness("+ui.value+"%)";
@@ -272,6 +297,7 @@
               else if( navigator.userAgent.indexOf("Firefox") != -1 ) {
                 //The latst version of firefox does not use the -moz- prefix
                 newFilter = "filter: brightness("+ui.value+"%)";
+                moz = true;
               } 
               else {
                 //Not a browser we accounted for so filter will not work
@@ -318,7 +344,7 @@
               }
               else if(currentStyle.indexOf("-moz-filter") >= 0){
                 //The current version of firefox uses filter without the -moz- prefix 
-                alteredStyle = currentStyle;
+                
               }
                else if(currentStyle.indexOf("-o-filter") >= 0){
                 //get current contrast to preserve its value as it will not change. 
@@ -348,12 +374,24 @@
               else if(currentStyle.indexOf("filter") >= 0){
                 //get current contrast to preserve its value as it will not change. 
                 if ( osd.viewport ) {
-                  filterString = osd.viewport.viewer.canvas.parentNode.style.webkitFilter;
+                  if(moz){
+                    filterString = osd.viewport.viewer.canvas.parentNode.style.filter;
+                  }
+                  else{
+                    filterString = osd.viewport.viewer.canvas.parentNode.style.webkitFilter;
+                  }
+                  
                 }
                 else{
-                  filterString = osd.canvas.parentNode.style.webkitFilter;
+                  if(moz){
+                    filterString = osd.canvas.parentNode.style.filter;
+                  }
+                  else{
+                    filterString = osd.canvas.parentNode.style.webkitFilter;
+                  }
+                  
                 }
-                console.log(filterString);
+               
 
                 //Break the contrast piece off so that we can play with the brightness piece
                 contrastPiece = filterString.substring(filterString.lastIndexOf(" "), filterString.lastIndexOf(")") + 1);
@@ -395,6 +433,7 @@
           slide: function( event, ui ) {
             var osd = _this.parent.osd;
             var newFilter = "-webkit-filter: ";
+            var moz = false;
             //First find any existing filter for brightness and remove it.
               
               //Need to be able to tell which vendor preifxes I need if any.  
@@ -410,9 +449,10 @@
               else if( navigator.userAgent.indexOf("Firefox") != -1 ) {
                 //newFilter = "-moz-filter: "  as of the latest version of firefox, it works without the prefix. 
                 newFilter = "filter: ";
+                moz = true;
               } 
               else {
-                console.log("unknown");
+                //unsupported
               }
               var currentBrightness = "100%";
               var currentStyle = "";
@@ -484,10 +524,22 @@
               else if(currentStyle.indexOf("filter") >= 0){
                 //get current brightness to preserve its value as it will not change. 
                 if ( osd.viewport ) {
-                  filterString = osd.viewport.viewer.canvas.parentNode.style.webkitFilter;
+                  if(moz){
+                    filterString = osd.viewport.viewer.canvas.parentNode.style.filter;
+                  }
+                  else{
+                    filterString = osd.viewport.viewer.canvas.parentNode.style.webkitFilter;
+                  }
+                  
                 }
                 else{
-                  filterString = osd.canvas.parentNode.style.webkitFilter;
+                  if(moz){
+                    filterString = osd.canvas.parentNode.style.filter;
+                  }
+                  else{
+                    filterString = osd.canvas.parentNode.style.webkitFilter;
+                  }
+                  
                 }
 
                 //break contrast piece from the string so we can play with brightness and contrast separately
@@ -539,8 +591,6 @@
       });
 
       jQuery.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasId) {
-        // console.log(canvasId);
-        // console.log(lastCanvasId);
         // If it is the first canvas, hide the "go to previous" button, otherwise show it.
         if (canvasId === firstCanvasId) {
           _this.parent.element.find('.mirador-osd-previous').hide();
@@ -552,7 +602,12 @@
           _this.parent.element.find('.mirador-osd-next').show();
           _this.parent.element.find('.mirador-osd-previous').show();
         }
-        // If it is the last canvas, hide the "go to previous" button, otherwise show it.
+        
+        if(_this.parent.parent.element.find(".bbAnnosContainer").length === 0){
+          //BH edit.  Create container for this image view's annotations.
+          var windowSlotAnnos = jQuery("<div class='bbAnnosContainer'></div>");
+          _this.parent.element.append(windowSlotAnnos);
+        }
       });
     },
 

@@ -1717,3 +1717,19 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
     margin: 0 auto;
     display: block;
 }
+
+/* BH edit: Custom BB CSS */
+.bbAnnosContainer{
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: green;
+  z-index: 100;
+  color: black;
+  border: 2px solid blue;
+}
+
+.bbAnnos{
+  
+}

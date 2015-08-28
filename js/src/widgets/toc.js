@@ -57,26 +57,21 @@
           });
         }
       });
-      console.log("we set the ranges, here they are");
-      console.log(ranges);
       return ranges;
 
     },
 
-    getTplData: function() {  
-      console.log("getting template data from these ranges");
-      
+    getTplData: function() {        
       var _this = this,
       ranges = _this.extractRangeTrees(_this.ranges);
-
-      console.log(_this.ranges);
-      
-      console.log("here are the local ranges to return");
-      console.log(ranges);
       if (ranges.length < 2) {
-        console.log("there are less than 2 ranges so here is what we will return");
         //ranges = ranges[0].children; //Why do this?  It doesn't make sense here.  
-        console.log(ranges);
+        /*
+            BH edit
+            A range can exist outside of a parent.  Therefore, even if the length is just one, we still 
+            want to return the array of one range.  The template function checks the one item, realizes it doesn't have
+            children and deems it a leaf, which is what we want. 
+        */
       }
 
       return ranges;
@@ -97,8 +92,6 @@
           // hovered: false
         };
       });
-      console.log("TOC DATA");
-      console.log(tocData);
       return tocData;
     },
 
@@ -114,8 +107,6 @@
         parent = typeof parent !== 'undefined' ? parent : {id: "root", label: "Table of Contents" };
         var children = jQuery.grep(flatRanges, function(child) { if (!child.within) { child.within = 'root'; } return child.within == parent.id; });
         if ( children.length ) {
-          console.log("We have children");
-          console.log(children);
           if ( parent.id === 'root') {
             // If there are children and their parent's 
             // id is a root, bind them to the tree object.
@@ -309,26 +300,18 @@
         var out = '';
 
         if (options.fn !== undefined) {
-          console.log("we had options");
-          console.log(options);
           previousTemplate = options.fn;
         }
         else{
-          console.log("Options were undefined.  What should I DO?");
         }
         
         if(children !== undefined && children.length > 0){
-          console.log("We had children");
-          console.log(children);
           children.forEach(function(child) {
             //console.log(previousTemplate(child));
             out = out + previousTemplate(child);
-            console.log(out);
           });
         }
         else{
-          console.log("We didn't seem to have children.  What should I do?");
-          console.log(out);
           out = "<span class='hello212'>I had no children</span>";
         }
         return out;

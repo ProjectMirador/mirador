@@ -460,13 +460,6 @@
         view.updateImage(canvasID);
       }
       this.toggleFocus('ImageView', 'ImageView');
-      // var can = "";
-      // can = $(".openseadragon-canvas");
-      // if(can === undefined){
-      //   can == "no";
-      // }
-      // console.log("Can i make image here1?");
-      // console.log(can);
     },
 
     toggleBookView: function(canvasID) {
@@ -586,33 +579,49 @@
       //first look for manifest annotations
       var _this = this,
       url = _this.manifest.getAnnotationsListUrl(_this.currentCanvasID);
-
-      console.log("Getting annos for canvas " + _this.currentCanvasID);
-      console.log("from this anno list "+url);
       if (url !== false) {
         jQuery.get(url, function(list) {
           console.log("Got anno list");
-          console.log(list);
-          if(typeof list == "object"){
-
-          }
-          else{
+          if(typeof list !== "object"){
+            //bh edit: test for case where it is a string, not an object and cast if necessary.
             list = JSON.parse(list);
           }
-          //need to check if list is a string or an object, and cast if so.
-          _this.annotationsList = _this.annotationsList.concat(list.resources);
+          console.log(list);
           console.log("Got the resources");
+          var annoListID = list["@id"];
+          _this.annotationsList = _this.annotationsList.concat(list.resources);
+          if(_this.annotationsList.length > 0 && typeof _this.annotationsList[0] !== "object"){
+            _this.annotationsList = JSON.parse(_this.annotationsList);
+          }
           console.log(_this.annotationsList);
+          var oneofours = false;
+          var goAhead = true;
+          if(url.indexOf("/annotationstore/annotation")){ // one of ours, which will not render out annotation w/o a viewport
+            //bh edit: make this check for if it is an item from SLU anno store.  If it is not, do not run special code.
+            oneofours = true;
+            var showAnnos = _this.element.find('.bbAnnosContainer');
+            showAnnos.attr("listID", annoListID);
+            if(showAnnos.length === 0){
+              goAhead = false;
+            }
+          }
           jQuery.each(_this.annotationsList, function(index, value) {
             //if there is no ID for this annotation, set a random one
-            console.log("i,v");
-            console.log(index, value);
             if (typeof value['@id'] === 'undefined') {
               value['@id'] = $.genUUID();
             }
             //indicate this is a manifest annotation - which affects the UI
             value.endpoint = "manifest";
+            if(oneofours && goAhead){
+              //Has to be a slu item, container must exist.
+              var anno = value;
+              var annoLabel = anno.label;
+              var annoText = anno.resource["cnt:chars"];
+              var annoHtml = jQuery("<div annoID='"+anno['@id']+"' class='bbAnno'>"+annoLabel+": "+annoText+"</div>");
+              jQuery("div[listID='"+annoListID+"']").append(annoHtml);
+            }
           });
+          console.log("Publish anno list loaded with id: " + _this.id);
           jQuery.publish('annotationListLoaded.' + _this.id);
         });
       }
