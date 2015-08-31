@@ -15,20 +15,20 @@
       dragging:    false,
       parent:      null
       }, options);
-      
+
       this.init();
   };
 
   $.OsdRegionRectTool.prototype = {
-  
+
     init: function() {
       this.bindEvents();
     },
-    
+
     bindEvents: function() {
       var _this = this;
     },
-    
+
     reset: function(osdViewer) {
       this.dragging = false;
       this.osdOverlay = null;
@@ -36,7 +36,7 @@
       this.mouseStart = null;
       this.osdViewer = osdViewer;
     },
-    
+
     enterEditMode: function() {
       var _this = this;
       this.setOsdFrozen(true);
@@ -48,11 +48,11 @@
     startRectangle: function(event) {
       var _this = this.userData.recttool; //osd userData
       if (!_this.dragging) {
-        _this.dragging = true; 
+        _this.dragging = true;
         _this.mouseStart = _this.osdViewer.viewport.pointFromPixel(event.position);
         _this.createNewRect(_this.mouseStart);
         _this.onDrawStart();
-      } else { 
+      } else {
         var mouseNow = _this.osdViewer.viewport.pointFromPixel(event.position);
         _this.updateRectangle(_this.mouseStart, mouseNow);
         _this.onDraw();
@@ -125,22 +125,22 @@
 
       this.osdViewer.updateOverlay(this.osdOverlay, this.rectangle);
     },
-    
+
     //Currently the rect is
     // kept in openSeaDragon format until it is returned on "onDrawFinish".
     // The intent here is to update the annotation continuously rather than
     // only on the end of the draw event so rendering is always handled by
-    // renderer instead of only at the end of the process, since different 
+    // renderer instead of only at the end of the process, since different
     // rendering methods may be used.
-        
+
     onDrawFinishOld: function(canvasRect) {
       var parent = this.parent,
       _this = this;
-      
+
       var topLeftImagePoint = new OpenSeadragon.Point(canvasRect.x, canvasRect.y);
 
     },
-    
+
     onDrawFinish: function(canvasRect) {
       var _this = this,
       parent = this.parent,
@@ -170,10 +170,10 @@
             },
             events: {
               render: function(event, api) {
-              
+
                 //disable all tooltips for overlays
                 jQuery.publish('disableTooltips.'+parent.windowId);
-                
+
                 tinymce.init({
                   selector : 'form.annotation-tooltip textarea',
                   plugins: "image link media",
@@ -182,12 +182,12 @@
                   toolbar_items_size: 'small',
                   toolbar: "bold italic | bullist numlist | link image media"
                 });
-                      
+
                 jQuery('.annotation-tooltip').on("submit", function(event) {
                   event.preventDefault();
                   jQuery('.annotation-tooltip a.save').click();
                 });
-              
+
                 jQuery('.annotation-tooltip a.cancel').on("click", function(event) {
                   event.preventDefault();
                   api.destroy();
@@ -195,7 +195,7 @@
                 //reenable viewer tooltips
                 jQuery.publish('enableTooltips.'+parent.windowId);
                 });
-                
+
                 jQuery('.annotation-tooltip a.save').on("click", function(event) {
                   event.preventDefault();
                   var tagText = jQuery(this).parents('.annotation-editor').find('.tags-editor').val(),
@@ -204,12 +204,14 @@
                   tagText = $.trimString(tagText);
                   if (tagText) {
                     tags = tagText.split(/\s+/);
-                  } 
+                  }
 
                   var bounds = _this.osdViewer.viewport.getBounds(true);
                   var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
+                  console.log(bounds);
+                  console.log(scope);
                   //bounds is giving negative values?
-                  
+
                   var motivation = [],
                   resource = [],
                   on;
@@ -217,7 +219,7 @@
                   if (tags && tags.length > 0) {
                    motivation.push("oa:tagging");
                    jQuery.each(tags, function(index, value) {
-                    resource.push({      
+                    resource.push({
                      "@type":"oa:Tag",
                      "chars":value
                     });
@@ -225,7 +227,7 @@
                   }
                   motivation.push("oa:commenting");
                   on = { "@type" : "oa:SpecificResource",
-                  "source" : parent.parent.canvasID, 
+                  "source" : parent.parent.canvasID,
                   "selector" : {
                     "@type" : "oa:FragmentSelector",
                     "value" : "xywh="+canvasRect.x+","+canvasRect.y+","+canvasRect.width+","+canvasRect.height
@@ -260,44 +262,44 @@
             }
          });
     },
-    
-    onDrawStart: function() { // use new $.oaAnnotation() to create new 
+
+    onDrawStart: function() { // use new $.oaAnnotation() to create new
         // annotation and pass it around for updating
     },
-    
+
     onModeEnter: function() { // do reasonable things to the renderer to make
         // things intelligible
     },
-    
+
     onModeExit: function() {
         // do reasonable things to renderer to return to "normal".
     },
-    
-    onDraw: function() { 
-        // update annotation 
+
+    onDraw: function() {
+        // update annotation
     }
 
     // MIGHT BE NICE IF...:
-    // 
-    // If the user is mid-drag and hits the side of the 
-    // canvas, the canvas auto-pans and auto-zooms out 
+    //
+    // If the user is mid-drag and hits the side of the
+    // canvas, the canvas auto-pans and auto-zooms out
     // to accomodate the rectangle.
-    // 
+    //
     // The size of the rectangle just before colliding with
-    // the canvas is auto-saved, so that the canvas can shrink 
-    // back down again if the user starts shrinking it in 
-    // mid-drag, allowing the auto-shrinking to stop when 
+    // the canvas is auto-saved, so that the canvas can shrink
+    // back down again if the user starts shrinking it in
+    // mid-drag, allowing the auto-shrinking to stop when
     // the original size of the rectangle is reached again.
     //
     // The existing rectangles should also be moveable by
-    // shift-clicking and dragging them, showing the 
+    // shift-clicking and dragging them, showing the
     // cross-hair cursor type.
 
 //     osdRegionRectTool = {
 //       enterEditMode: enterEditMode,
 //       exitEditMode: exitEditMode
 //     };
-// 
+//
 //     return osdRegionRectTool;
 
   };

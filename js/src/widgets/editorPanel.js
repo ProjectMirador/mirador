@@ -83,6 +83,21 @@
             state.selectedAnno = annoId;
             this.state(state);
         },
+        editAnno: function(annoId) {
+            var _this = this;
+            var state = this.state();
+            state.selectedAnno = annoId;
+
+            tinymce.init({
+                      selector : annoId,
+                      inline: true,
+                      toolbar: "undo redo",
+                      menubar: false
+                    });
+            tinymce.execCommand("mceAddControl", false, annoId);
+            console.log(tinymce.init.toString());
+            this.state(state);
+        },
         openAnnotationList: function() {
             var _this = this,
                 state = this.state(),
@@ -140,6 +155,10 @@
                 _this.deselectAnno(annoId);
             });
 
+            jQuery.subscribe('annoEdit.' + _this.windowId, function(event, annoId) {
+                _this.editAnno(annoId);
+            });
+
         },
         bindEvents: function() {
             var _this = this,
@@ -149,7 +168,8 @@
             annoItems.on('click', function(event) {
               var annoClicked = jQuery(this).data('id');
               if(_this.state().selectedAnno === annoClicked){
-                  jQuery.publish('annoDeselected.' + _this.windowId, annoClicked);
+                  //jQuery.publish('annoDeselected.' + _this.windowId, annoClicked);
+                  jQuery.publish('annoEdit.' + _this.windowId, annoClicked);
               }else{
                   jQuery.publish('annoSelected.' + _this.windowId, annoClicked);
               }
@@ -191,8 +211,8 @@
             '<div class="editorPanel {{position}}">',
             '<ul class="annotations">',
             '{{#each annotations}}',
-            '<li class="annotationItem {{#if this.selected}}selected{{/if}}" data-id="{{this.id}}">',
-                '<span>{{{this.resource.chars}}}</span>',
+            '<li class="annotationItem {{#if this.selected}}selected{{/if}}" id="{{this.id}}" data-id="{{this.id}}">',
+                '<div class="editable">{{{this.resource.chars}}}</div>',
             '</li>',
             '{{/each}}',
             '</ul>',
