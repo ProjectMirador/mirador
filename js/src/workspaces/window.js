@@ -165,6 +165,8 @@
       if (this.imagesList.length === 1) {
         this.bottomPanelVisibility(false);      
       }
+
+      jQuery.publish('windowInitialized', this.id);
     },
 
     update: function(options) {
@@ -611,7 +613,7 @@
         // is a property of the instance.
         if ( _this.endpoint && _this.endpoint !== null ) {
           _this.endpoint.set('dfd', dfd);
-          _this.endpoint.search(_this.currentCanvasID);
+          _this.endpoint.search({ "uri" : _this.currentCanvasID});
         } else {
           options.element = _this.element;
           options.uri = _this.currentCanvasID;

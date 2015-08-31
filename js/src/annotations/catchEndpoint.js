@@ -50,13 +50,14 @@
           'admin':  [this.userid]
         }
       };
-      this.search(this.uri);        
+      this.search({"uri" : this.uri});        
     },
 
     //Search endpoint for all annotations with a given URI
-    search: function(uri) {
+    search: function(options) {
       var _this = this;
-      this.annotationsList = []; //clear out current list
+      this.annotationsList = [], //clear out current list
+      uri = options.uri; 
 
       jQuery.ajax({
         url: this.prefix+"/search",
@@ -70,15 +71,19 @@
           contextId: _this.context_id,
           collectionId: _this.collection_id,
           media: "image",
-          limit: 10000
+          limit: -1 //get all from catch, and limit (if in options) in success
         },
 
         contentType: "application/json; charset=utf-8",
         success: function(data) {
           _this.annotationsListCatch = data.rows;
+          if (options.limit && options.limit !== -1) {
+
+          }
           jQuery.each(_this.annotationsListCatch, function(index, value) {
             _this.annotationsList.push(_this.getAnnotationInOA(value));
           });
+          jQuery.publish('');
           _this.dfd.resolve(true);
         },
         error: function() {
