@@ -23,10 +23,18 @@
 
     init: function() {
       this.bindEvents();
+      this.listenForActions();
     },
 
     bindEvents: function() {
       var _this = this;
+    },
+    listenForActions: function() {
+        var _this = this;
+
+        jQuery.subscribe('fullPageSelected.' + this.parent.windowId, function(_, data) {
+           _this.fullPageRect();
+        });
     },
 
     reset: function(osdViewer) {
@@ -43,6 +51,35 @@
       this.osdViewer.addHandler("canvas-drag", _this.startRectangle, {recttool: _this});
       this.osdViewer.addHandler("canvas-release", _this.finishRectangle, {recttool: _this});
       this.onModeEnter();
+    },
+
+    fullPageRect: function() {
+      var _this = this;
+      var bounds = _this.osdViewer.viewport.getBounds(true);
+      var x = 0,
+          y = 0,
+          width = parseInt(_this.parent.parent.currentImg.width,10),
+          height = parseInt(_this.parent.parent.currentImg.height,10);
+
+          var canvasRect = {
+            x: x,
+            y: y,
+            width: width,
+            height: height
+          };
+
+          this.rectangle = _this.osdViewer.viewport.imageToViewportRectangle(canvasRect);
+          this.setOsdFrozen(false);
+
+          this.osdOverlay = document.createElement('div');
+          this.osdOverlay.className = 'osd-select-rectangle';
+          this.osdViewer.addOverlay({
+            element: this.osdOverlay,
+            location: this.rectangle
+          });
+
+      _this.onDrawFinish(this.rectangle);
+
     },
 
     startRectangle: function(event) {
@@ -145,6 +182,7 @@
       var _this = this,
       parent = this.parent,
       annoTooltip = new $.AnnotationTooltip(); //pass permissions
+
       var tooltip = jQuery(this.osdOverlay).qtip({
            content: {
             text : annoTooltip.editorTemplate()
@@ -208,8 +246,6 @@
 
                   var bounds = _this.osdViewer.viewport.getBounds(true);
                   var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
-                  console.log(bounds);
-                  console.log(scope);
                   //bounds is giving negative values?
 
                   var motivation = [],
