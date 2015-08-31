@@ -93,7 +93,8 @@
       });
     },
     
-    deleteAnnotation: function(annotationID, returnSuccess, returnError) {          
+    deleteAnnotation: function(annotationID, returnSuccess, returnError) {
+          var _this = this;        
           jQuery.ajax({
              url: this.prefix+"/destroy/"+annotationID,
              type: 'DELETE',
