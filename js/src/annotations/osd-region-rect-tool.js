@@ -54,21 +54,15 @@
     },
 
     fullPageRect: function() {
-      var _this = this;
-      var bounds = _this.osdViewer.viewport.getBounds(true);
-      var x = 0,
-          y = 0,
-          width = parseInt(_this.parent.parent.currentImg.width,10),
-          height = parseInt(_this.parent.parent.currentImg.height,10);
-
-          var canvasRect = {
-            x: x,
-            y: y,
-            width: width,
-            height: height
+      var _this = this,
+          rect = {
+            x: 0,
+            y: 0,
+            width: parseInt(_this.parent.parent.currentImg.width,10),
+            height: parseInt(_this.parent.parent.currentImg.height,10)
           };
 
-          this.rectangle = _this.osdViewer.viewport.imageToViewportRectangle(canvasRect);
+          this.rectangle = _this.osdViewer.viewport.imageToViewportRectangle(rect);
           this.setOsdFrozen(false);
 
           this.osdOverlay = document.createElement('div');
@@ -78,7 +72,15 @@
             location: this.rectangle
           });
 
-      _this.onDrawFinish(this.rectangle);
+      var osdImageRect = _this.osdViewer.viewport.viewportToImageRectangle(_this.rectangle);
+      var canvasRect = {
+            x: parseInt(osdImageRect.x, 10),
+            y: parseInt(osdImageRect.y, 10),
+            width: parseInt(osdImageRect.width, 10),
+            height: parseInt(osdImageRect.height, 10)
+          };
+
+      _this.onDrawFinish(canvasRect);
 
     },
 
