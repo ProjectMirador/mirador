@@ -104,6 +104,7 @@
              contentType: "application/json; charset=utf-8",
              success: function(data) {
                returnSuccess();
+               jQuery.publish('catchAnnotationDeleted.'+_this.windowID, annotationID);
              },
              error: function() {
                returnError();
