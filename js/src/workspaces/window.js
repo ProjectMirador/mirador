@@ -165,8 +165,6 @@
       if (this.imagesList.length === 1) {
         this.bottomPanelVisibility(false);      
       }
-
-      jQuery.publish('windowInitialized', this.id);
     },
 
     update: function(options) {
