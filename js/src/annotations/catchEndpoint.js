@@ -85,6 +85,7 @@
             _this.annotationsList.push(_this.getAnnotationInOA(value));
           });
           _this.dfd.resolve(true);
+          jQuery.publish('catchAnnotationsLoaded.'+_this.windowID, _this.annotationsListCatch);
         },
         error: function() {
           console.log("error searching");
