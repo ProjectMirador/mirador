@@ -131,6 +131,7 @@
         contentType: "application/json; charset=utf-8",
         success: function(data) {
           returnSuccess();
+          jQuery.publish('catchAnnotationUpdated.'+_this.windowID, annotation);
         },
         error: function() {
           returnError();
