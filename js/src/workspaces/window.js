@@ -248,7 +248,13 @@
       jQuery.subscribe('annotationUpdated.'+_this.id, function(event, oaAnno) {
         //first function is success callback, second is error callback
         _this.endpoint.update(oaAnno, function() {
-          //successfully updated anno
+          jQuery.each(_this.annotationsList, function(index, value) {
+            if (value['@id'] === oaAnno['@id']) {
+              _this.annotationsList[index] = oaAnno;
+              break;
+            }
+          });
+          jQuery.publish(('annotationListLoaded.' + _this.id));          
         },
         function() {
           console.log("There was an error updating this annotation");        
