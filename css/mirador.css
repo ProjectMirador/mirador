@@ -19,8 +19,7 @@ a {
 
 /*----------------------------------------------------------------------------
 /* Mirador styles
----------------------------------------------------------------------------- 
- */
+---------------------------------------------------------------------------- */
 
   .mirador-viewer, .mirador-main-menu-bar, .mirador-status-bar {
     font-family: 'Open Sans', 'Lucida Grande', Verdana, Arial,sans-serif;
@@ -41,6 +40,20 @@ a {
   border: 0;
 }
 
+/* media-queries
+---------------------------------------------------------------------------- */
+
+@media screen and (max-width: 768px) {
+  
+  #load-controls form {
+    float: none;
+  }
+  
+  #url-load-form {
+    margin-bottom: 5px; 
+  }
+  
+}
 
 /* main menu
 ---------------------------------------------------------------------------- */
@@ -173,7 +186,7 @@ a {
 
 /* main menu select menu 
 ---------------------------------------------------------------------------- */
-  #manifest-select-menu, #workspace-select-menu, #workspaceContainer {
+#workspace-select-menu, #workspaceContainer {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -181,6 +194,20 @@ a {
     display: none;
     overflow: hidden;
     z-index: 5;
+}
+#manifest-select-menu {
+  position: absolute;
+  margin: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  display: none;
+  overflow: hidden;
+  z-index: 101;
+  background-color: #fff;
+  box-shadow: 0 0 6px #333;
 }
 #bookmark-panel {
   position: absolute;
@@ -208,26 +235,31 @@ a {
   position: relative;
   width: 100%;
   height:100%;
-  padding-left: 30px;
+  padding: 10px;
   box-sizing: border-box;
   overflow: hidden;
   margin:0 auto;
+  /*border: 2px inset rgba(0,0,0,.5);*/
 }
 .items-listing {
   margin: 0;
   padding-left: 0;
-  padding-bottom: 30px;
+  /*padding-bottom: 65px;*/
   box-sizing: border-box;
 }
 .items-listing li {
   list-style-type: none;
   overflow: hidden;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid #d3d3d3;
   padding-top: 10px;
   padding-bottom: 10px;
   position: relative;
   padding-left: 5px;
-  margin-right: 10px;
+  transition: background-color 0.3s ease-out;
+}
+.items-listing li:hover {
+  background-color: #ddd;
+  cursor: pointer;
 }
 .manifest-load-status-indicator {
   width:100%;
@@ -263,16 +295,15 @@ a {
   bottom:0;
   width:100%;
 }
-.items-listing li:hover {
-  background: #dddddd;
-  cursor: pointer;
-}
 .select-metadata {
-  width:200px;
-  text-overflow: ellipsis;
+  width: 45%;
+  max-width: 450px;
+  min-width: 300px;
+  position: relative;
+  /*text-overflow: ellipsis;
   white-space: nowrap;
   overflow:hidden;
-  position: relative;
+  position: relative;*/
 }
 .repo-image {
   position:relative;
@@ -290,24 +321,58 @@ a {
   margin: 0;
   font-weight: normal;
   color:rgba(0,0,0,0.7);
-  text-overflow: ellipsis;
+  /*text-overflow: ellipsis;
   white-space: nowrap;
-  overflow:hidden;
+  overflow:hidden;*/
 }
 .items-listing h3 {
   color:rgba(0,0,0,0.8);
-  font-weight:bold;
   margin-top:2px;
+  font-size: 1.1em;
 }
 .repo-image, .select-metadata, .preview-images {
   float:left;
   margin-right:15px;
   height: 80px;
 }
+.manifest-title h3 {
+  line-height: 1.2em;
+  height: 3.6em;
+  position: relative;
+  overflow: hidden;
+}
+.manifest-title h3:after {
+  content: "";
+  text-align: right;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20%;
+  height: 1.2em;
+  /*background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);*/
+}
+.item-info {
+  position: absolute;
+  bottom: 0;
+  display: table;
+  width: 100%;
+}
+.item-info-row {
+  display: table-row;
+}
+.repo-label, .canvas-count {
+  display: table-cell;
+  white-space: nowrap;
+  font-size: .9em;
+  vertical-align: bottom;
+  color: gray;
+}
+.canvas-count {
+  text-align: right;
+}
 .preview-images {
   margin-right:0;
 }
-
 .preview-image {
   background-color: gray;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.7);
@@ -315,12 +380,11 @@ a {
   margin-right:15px;
   min-height: 25px;
   min-width: 25px;
+  transition: all 0.1s ease-out;
 }
-
 .preview-image:hover {
   box-shadow: 0px 0px 5px rgba(0, 191, 255, 1);
   transform: scale(1.1);
-  transition: all 0.6 ease-out;
 }
 
 .thumbnail-image {
@@ -343,55 +407,73 @@ li.highlight {
   padding-left: 8px !important;
   padding-right: 8px !important;
 }
-
+/*
 .remaining-items {
-  background: url(../images/noise.png) repeat;
+  float: left;
+  height:80px;
   opacity: 0.5;
   text-align: center;
-  position: absolute;
-  right: 0;
+}*/
+.ellipsis {
+  float: left;
   height:80px;
-  margin-right: 10px;
-}
-.remaining-items h3 {
-  margin-top: 30px;
+  opacity: 0.5;
+  text-align: center;
   font-weight: bold;
+  font-size: 1.3em;
+  box-sizing: border-box;
+  padding-top: 26px;
 }
 #load-controls {
-  float: left;
-  height:100%;
-  width: 19%;
+  margin-top: 20px;
 }
-#load-controls label {
-  font-weight: bold;
+#load-controls:after {
+content: "";
+display: table;
+clear: both;
 }
 #load-controls input {
   height:25px;
-  /*font-size:18px;*/
-  border:3px solid gray;
-  margin:0 auto;
-  width:100%;
+  border:1px solid #d3d3d3;
+  color: gray;
+  background:none;
+  border-radius: 2px;
+  transition: border-color 0.3s ease-out;
+}
+#load-controls input[type="text"] {
+  margin: 0 5px;
+}
+#load-controls input[type="submit"] {
+  height: 29px;
 }
 #manifest-select-menu .remove-object-option {
   cursor: pointer;
-  margin-top:20px;
-  display: block;
+  display: inline-block;
+  transition: color 0.2s ease-out;
+}
+#manifest-select-menu .remove-object-option:hover {
+  color: rgb( 146, 145, 145 );
 }
 #manifest-search-form {
-  margin-top: 30px;
+  float:left;
 }
-#manifest-search-form input {
-  background:none;
-  /*border:none;
-  border-bottom:2px solid black;*/
-  width: 100%;
+#manifest-search-form label {
+  margin-right: 6px;
+}
+#url-load-form {
+  float: right; 
+}
+#url-load-form input[type="text"] {
+  width: 250px;
 }
 #manifest-search i {
   position:absolute;
   left:0;
   color:black;
 }
-#manifest-search-form input:focus, #url-load-form input:focus {
+#manifest-search-form input:focus, 
+#url-load-form input:focus,
+#url-load-form input[type="submit"]:hover {
   outline:none;
   border-color:deepskyblue;
 }
@@ -403,10 +485,10 @@ li.highlight {
 }
 
 .select-results {
-  margin-left: 20%;
   height:100%;
   overflow-y: scroll;
-  padding-top: 30px;
+  margin-top: 10px;
+  border-top: 1px solid gray;
 }
 
 /* main-menu workspaces-panel */
@@ -503,7 +585,7 @@ li.highlight {
 .slot .remove-slot-option:hover {
   float:left;
   margin:10px;
-  color:lightGray;
+  color:#fff;
 }
 .slot h1 {
   color: gray;
@@ -511,7 +593,7 @@ li.highlight {
   font-weight: normal;
 }
 .slot:hover h1 {
-  color: lightgray;
+  color: #fff;
 }
 .plus {
   font-size: 170px;
@@ -729,14 +811,31 @@ li.highlight {
 /* window views
 ---------------------------------------------------------------------------- */
 
-  .thumbnail-view, .image-view, .book-view, .scroll-view {
-    height: 100%;
-    width: 100%;
-    background-color: black;
-    display: none;
-    overflow-y: scroll;
+.thumbnail-view, .image-view, .book-view, .scroll-view {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  display: none;
+  overflow-y: scroll;
 }
-.image-view, .book-view {
+.object-view {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+}
+.scroll-cover {
+  display: none;
+  overflow: scroll;
+  z-index: 100;
+}
+.viewer-position {
+  position: absolute;
+  left: 0;
+  top: 0px;
+  right: 0;
+  bottom: 0;
+}
+.image-view, .book-view, .object-view {
   overflow: hidden;
 }
 .scroll-view {
@@ -1435,7 +1534,7 @@ a.mirador-icon-annotations [class^="icon-"] {
 ul.dropdown {
   display: none;
   width: 160px;
-  z-index: 3;
+  z-index: 100;
   opacity: 0.9;
   background-color: #efefef;
   text-align: center;
@@ -1614,4 +1713,3 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 .mce-edit-area iframe {
     height: 75px !important;
 }
-
