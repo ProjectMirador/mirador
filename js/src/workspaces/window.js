@@ -251,7 +251,7 @@
           jQuery.each(_this.annotationsList, function(index, value) {
             if (value['@id'] === oaAnno['@id']) {
               _this.annotationsList[index] = oaAnno;
-              break;
+              return false;
             }
           });
           jQuery.publish(('annotationListLoaded.' + _this.id));          
