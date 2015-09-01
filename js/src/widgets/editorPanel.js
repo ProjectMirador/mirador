@@ -19,6 +19,7 @@
                 title: 'untitled',
                 annotations: [],
                 selectedAnno: null,
+                editAnno: null,
                 showThumbnails: true,
                 allowEditing: true,
                 locked: true,
@@ -75,27 +76,33 @@
             var _this = this;
             var state = this.state();
             state.selectedAnno = null;
+            state.editAnno = null;
             this.state(state);
         },
         selectAnno: function(annoId) {
             var _this = this;
             var state = this.state();
             state.selectedAnno = annoId;
+            state.editAnno = null;
             this.state(state);
         },
         editAnno: function(annoId) {
             var _this = this;
             var state = this.state();
             state.selectedAnno = annoId;
-
+            state.editAnno = annoId;
+/*
+            var selector = "." + annoId + " textarea";
             tinymce.init({
-                      selector : annoId,
+                      selector : selector,
                       inline: true,
                       toolbar: "undo redo",
                       menubar: false
                     });
-            tinymce.execCommand("mceAddControl", false, annoId);
-            console.log(tinymce.init.toString());
+*/
+            //tinymce.execCommand("mceAddEditor", true, selector);
+
+            //console.log(selector);
             this.state(state);
         },
         openAnnotationList: function() {
@@ -124,10 +131,19 @@
             };
         },
         listenForActions: function() {
-            var _this = this;
+            var _this = this,
+                state = _this.state();
 
             jQuery.subscribe('editorPanelStateUpdated' + this.windowId, function(_, data) {
-                _this.render(data);
+                if(state.editAnno === null){
+                    _this.render(data);
+                } else {
+                  tinymce.init({
+                            selector : "." + state.editAnno,
+                            inline: true,
+                            menubar: false
+                          });
+                }
             });
 
             jQuery.subscribe('annotationsTabStateUpdated.' + _this.windowId, function(event, annotationsTabState) {
@@ -162,6 +178,7 @@
         },
         bindEvents: function() {
             var _this = this,
+                fullpage = _this.element.find('.fullpage'),
                 annoItems = _this.element.find('.annotationItem');
             state = this.state();
 
@@ -173,6 +190,10 @@
               }else{
                   jQuery.publish('annoSelected.' + _this.windowId, annoClicked);
               }
+            });
+
+            fullpage.on('click', function(event) {
+              jQuery.publish('fullPageSelected.' + _this.windowId);
             });
 
         },
@@ -206,19 +227,23 @@
             var openValue = templateData.open === true ? 'block' : 'none';
             _this.bindEvents();
             this.element.css({'display':openValue});
+
+
         },
         template: Handlebars.compile([
             '<div class="editorPanel {{position}}">',
+            '<form>',
             '<ul class="annotations">',
             '{{#each annotations}}',
-            '<li class="annotationItem {{#if this.selected}}selected{{/if}}" id="{{this.id}}" data-id="{{this.id}}">',
-                '<div class="editable">{{{this.resource.chars}}}</div>',
+            '<li class="annotationItem {{#if this.selected}}selected{{/if}}" data-id="{{this.id}}">',
+                '<div class="editable {{this.id}}">{{{this.resource.chars}}}</div>',
             '</li>',
             '{{/each}}',
             '</ul>',
             '<div class="editorTools">',
-            '<span><i class="fa fa-icon-pencil"></i> full page</span>',
+            '<span class="fullpage"><i class="fa fa-edit fa-fw"></i> full page</span>',
             '</div>',
+            '</form>',
             '</div>'
         ].join('')),
         toggle: function () {}
