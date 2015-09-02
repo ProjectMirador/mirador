@@ -55,7 +55,7 @@
     },
 
     //Search endpoint for all annotations with a given URI
-    search: function(options) {
+    search: function(options, returnSuccess, returnError) {
       var _this = this;
       this.annotationsList = [], //clear out current list
       uri = options.uri; 
@@ -77,18 +77,31 @@
 
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-          _this.annotationsListCatch = data.rows;
-          if (options.limit && options.limit !== -1) {
-
+          //check if a function has been passed in, otherwise, treat it as a normal search
+          if (typeof returnSuccess === "function") {
+            returnSuccess(data);
+          } else {
+            _this.annotationsListCatch = data.rows;
+            var limit = -1;
+            if (options.limit && options.limit !== -1) {
+              limit = options.limit;
+            }
+            jQuery.each(_this.annotationsListCatch, function(index, value) {
+              if (index >= limit) {
+                return false;
+              } 
+              _this.annotationsList.push(_this.getAnnotationInOA(value));
+            });
+            _this.dfd.resolve(true);
+            jQuery.publish('catchAnnotationsLoaded.'+_this.windowID, _this.annotationsListCatch);
           }
-          jQuery.each(_this.annotationsListCatch, function(index, value) {
-            _this.annotationsList.push(_this.getAnnotationInOA(value));
-          });
-          _this.dfd.resolve(true);
-          jQuery.publish('catchAnnotationsLoaded.'+_this.windowID, _this.annotationsListCatch);
         },
         error: function() {
-          console.log("error searching");
+          if (typeof returnError === "function") {
+            returnError();
+          } else {
+            console.log("There was an error searching this endpoint");
+          }
         }
 
       });
