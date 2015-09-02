@@ -35,6 +35,7 @@
         jQuery.subscribe('fullPageSelected.' + this.parent.windowId, function(_, data) {
            _this.fullPageRect();
         });
+
     },
 
     reset: function(osdViewer) {

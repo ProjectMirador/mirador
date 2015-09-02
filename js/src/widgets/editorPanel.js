@@ -20,6 +20,7 @@
                 annotations: [],
                 selectedAnno: null,
                 editAnno: null,
+                autoSaveInterval: null,
                 showThumbnails: true,
                 allowEditing: true,
                 locked: true,
@@ -91,18 +92,7 @@
             var state = this.state();
             state.selectedAnno = annoId;
             state.editAnno = annoId;
-/*
-            var selector = "." + annoId + " textarea";
-            tinymce.init({
-                      selector : selector,
-                      inline: true,
-                      toolbar: "undo redo",
-                      menubar: false
-                    });
-*/
-            //tinymce.execCommand("mceAddEditor", true, selector);
 
-            //console.log(selector);
             this.state(state);
         },
         openAnnotationList: function() {
@@ -130,20 +120,44 @@
                 size:  state.size
             };
         },
+        getEditorContent: function(){
+          var _this = this,
+              state = _this.state();
+          state.autoSaveInterval = setInterval(function(){ _this.autoSaveAnno(tinymce.activeEditor.getContent()); },2000);
+          console.log(tinymce.activeEditor.getContent());
+          this.state(state);
+        },
+        autoSaveAnno: function(resourceText){
+              var _this = this;
+              // jQuery.publish('autoSaveAnno.' + _this.windowId, resourceText);
+              console.log(resourceText);
+
+        },
         listenForActions: function() {
             var _this = this,
                 state = _this.state();
 
             jQuery.subscribe('editorPanelStateUpdated' + this.windowId, function(_, data) {
                 if(state.editAnno === null){
+                    clearInterval(state.autoSaveInterval);
                     _this.render(data);
                 } else {
+                  var selector = "." + state.editAnno;
                   tinymce.init({
-                            selector : "." + state.editAnno,
+                            selector : selector,
                             inline: true,
-                            menubar: false
+                            menubar: false,
+                            setup: function (ed) {
+                                        ed.on('init', function(args) {
+                                            _this.getEditorContent();
+                                        });
+                                    }
                           });
                 }
+            });
+
+            jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
+              console.log('annotationCreated');
             });
 
             jQuery.subscribe('annotationsTabStateUpdated.' + _this.windowId, function(event, annotationsTabState) {
@@ -196,6 +210,8 @@
               jQuery.publish('fullPageSelected.' + _this.windowId);
             });
 
+
+
         },
         render: function(state) {
             var _this = this;
@@ -240,10 +256,10 @@
             '</li>',
             '{{/each}}',
             '</ul>',
-            '<div class="editorTools">',
-            '<span class="fullpage"><i class="fa fa-edit fa-fw"></i> full page</span>',
-            '</div>',
             '</form>',
+            '<div class="editorTools">',
+            '<span class="fullpage"><i class="fa fa-edit fa-fw"></i> start transcription</span>',
+            '</div>',
             '</div>'
         ].join('')),
         toggle: function () {}
