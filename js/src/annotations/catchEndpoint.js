@@ -57,8 +57,7 @@
     //Search endpoint for all annotations with a given URI
     search: function(options, returnSuccess, returnError) {
       var _this = this;
-      this.annotationsList = [], //clear out current list
-      uri = options.uri; 
+      this.annotationsList = []; //clear out current list
 
       jQuery.ajax({
         url: this.prefix+"/search",
@@ -68,11 +67,11 @@
           "x-annotator-auth-token": this.token
         },
         data: {
-          uri: uri,
+          uri: options.uri,
           contextId: _this.context_id,
           collectionId: _this.collection_id,
-          media: "image",
-          limit: -1 //get all from catch, and limit (if in options) in success
+          media: options.media ? options.media : "image",
+          limit: options.limit ? options.limit : -1 
         },
 
         contentType: "application/json; charset=utf-8",
@@ -82,14 +81,7 @@
             returnSuccess(data);
           } else {
             _this.annotationsListCatch = data.rows;
-            var limit = -1;
-            if (options.limit && options.limit !== -1) {
-              limit = options.limit;
-            }
             jQuery.each(_this.annotationsListCatch, function(index, value) {
-              if (index >= limit) {
-                return false;
-              } 
               _this.annotationsList.push(_this.getAnnotationInOA(value));
             });
             _this.dfd.resolve(true);
