@@ -19,6 +19,8 @@
                 title: 'untitled',
                 annotations: [],
                 selectedAnno: null,
+                editAnno: null,
+                autoSaveInterval: null,
                 showThumbnails: true,
                 allowEditing: true,
                 locked: true,
@@ -75,12 +77,22 @@
             var _this = this;
             var state = this.state();
             state.selectedAnno = null;
+            state.editAnno = null;
             this.state(state);
         },
         selectAnno: function(annoId) {
             var _this = this;
             var state = this.state();
             state.selectedAnno = annoId;
+            state.editAnno = null;
+            this.state(state);
+        },
+        editAnno: function(annoId) {
+            var _this = this;
+            var state = this.state();
+            state.selectedAnno = annoId;
+            state.editAnno = annoId;
+
             this.state(state);
         },
         openAnnotationList: function() {
@@ -108,11 +120,44 @@
                 size:  state.size
             };
         },
+        getEditorContent: function(){
+          var _this = this,
+              state = _this.state();
+          state.autoSaveInterval = setInterval(function(){ _this.autoSaveAnno(tinymce.activeEditor.getContent()); },2000);
+          console.log(tinymce.activeEditor.getContent());
+          this.state(state);
+        },
+        autoSaveAnno: function(resourceText){
+              var _this = this;
+              // jQuery.publish('autoSaveAnno.' + _this.windowId, resourceText);
+              console.log(resourceText);
+
+        },
         listenForActions: function() {
-            var _this = this;
+            var _this = this,
+                state = _this.state();
 
             jQuery.subscribe('editorPanelStateUpdated' + this.windowId, function(_, data) {
-                _this.render(data);
+                if(state.editAnno === null){
+                    clearInterval(state.autoSaveInterval);
+                    _this.render(data);
+                } else {
+                  var selector = "." + state.editAnno;
+                  tinymce.init({
+                            selector : selector,
+                            inline: true,
+                            menubar: false,
+                            setup: function (ed) {
+                                        ed.on('init', function(args) {
+                                            _this.getEditorContent();
+                                        });
+                                    }
+                          });
+                }
+            });
+
+            jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
+              console.log('annotationCreated');
             });
 
             jQuery.subscribe('annotationsTabStateUpdated.' + _this.windowId, function(event, annotationsTabState) {
@@ -140,20 +185,32 @@
                 _this.deselectAnno(annoId);
             });
 
+            jQuery.subscribe('annoEdit.' + _this.windowId, function(event, annoId) {
+                _this.editAnno(annoId);
+            });
+
         },
         bindEvents: function() {
             var _this = this,
+                fullpage = _this.element.find('.fullpage'),
                 annoItems = _this.element.find('.annotationItem');
             state = this.state();
 
             annoItems.on('click', function(event) {
               var annoClicked = jQuery(this).data('id');
               if(_this.state().selectedAnno === annoClicked){
-                  jQuery.publish('annoDeselected.' + _this.windowId, annoClicked);
+                  //jQuery.publish('annoDeselected.' + _this.windowId, annoClicked);
+                  jQuery.publish('annoEdit.' + _this.windowId, annoClicked);
               }else{
                   jQuery.publish('annoSelected.' + _this.windowId, annoClicked);
               }
             });
+
+            fullpage.on('click', function(event) {
+              jQuery.publish('fullPageSelected.' + _this.windowId);
+            });
+
+
 
         },
         render: function(state) {
@@ -186,18 +243,22 @@
             var openValue = templateData.open === true ? 'block' : 'none';
             _this.bindEvents();
             this.element.css({'display':openValue});
+
+
         },
         template: Handlebars.compile([
             '<div class="editorPanel {{position}}">',
+            '<form>',
             '<ul class="annotations">',
             '{{#each annotations}}',
             '<li class="annotationItem {{#if this.selected}}selected{{/if}}" data-id="{{this.id}}">',
-                '<span>{{{this.resource.chars}}}</span>',
+                '<div class="editable {{this.id}}">{{{this.resource.chars}}}</div>',
             '</li>',
             '{{/each}}',
             '</ul>',
+            '</form>',
             '<div class="editorTools">',
-            '<span><i class="fa fa-icon-pencil"></i> full page</span>',
+            '<span class="fullpage"><i class="fa fa-edit fa-fw"></i> start transcription</span>',
             '</div>',
             '</div>'
         ].join('')),
