@@ -183,6 +183,7 @@
                   toolbar_items_size: 'small',
                   toolbar: "bold italic | bullist numlist | link image media"
                 });
+                tinymce.execCommand('mceFocus', false, 'tinymce'); //make sure tinymce focuses on the editor after initialization
                       
                 jQuery('.annotation-tooltip').on("submit", function(event) {
                   event.preventDefault();
