@@ -115,11 +115,15 @@
              },
              contentType: "application/json; charset=utf-8",
              success: function(data) {
-               returnSuccess();
+              if (typeof returnSuccess === "function") {
+                returnSuccess();
+              }
                jQuery.publish('catchAnnotationDeleted.'+_this.windowID, annotationID);
              },
              error: function() {
-               returnError();
+              if (typeof returnSuccess === "function") {
+                returnError();
+              }
              }
              
            });
@@ -140,11 +144,15 @@
         data: JSON.stringify(annotation),
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-          returnSuccess();
+          if (typeof returnSuccess === "function") {
+            returnSuccess();
+          }
           jQuery.publish('catchAnnotationUpdated.'+_this.windowID, annotation);
         },
         error: function() {
-          returnError();
+          if (typeof returnError === "function") {
+            returnError();
+          }
         }
       });
     },
@@ -152,8 +160,12 @@
     //takes OA Annotation, gets Endpoint Annotation, and saves
     //if successful, MUST return the OA rendering of the annotation
     create: function(oaAnnotation, returnSuccess, returnError) {
-      var annotation = this.getAnnotationInEndpoint(oaAnnotation),
-      _this = this;
+      var annotation = this.getAnnotationInEndpoint(oaAnnotation);
+      this.createCatchAnnotation(annotation, returnSuccess, returnError);
+    },
+
+    createCatchAnnotation: function(catchAnnotation, returnSuccess, returnError) {
+      var _this = this;
       
       jQuery.ajax({
         url: this.prefix+"/create",
@@ -162,14 +174,18 @@
         headers: {
           "x-annotator-auth-token": this.token
         },
-        data: JSON.stringify(annotation),
+        data: JSON.stringify(catchAnnotation),
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-          returnSuccess(_this.getAnnotationInOA(data));
+          if (typeof returnSuccess === "function") {
+            returnSuccess(_this.getAnnotationInOA(data));
+          }
           jQuery.publish('catchAnnotationCreated.'+_this.windowID, data);
         },
         error: function() {
-          returnError();
+          if (typeof returnError === "function") {
+            returnError();
+          }
         }
       });
     },
