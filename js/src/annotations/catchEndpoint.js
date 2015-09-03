@@ -72,6 +72,7 @@
           username : options.username ? options.username : undefined,
           text : options.text ? options.text : undefined,
           tags : options.tag ? options.tag : undefined,
+          parentid : options.parentid ? options.parentid : undefined,
           contextId: _this.context_id,
           collectionId: _this.collection_id,
           media: options.media ? options.media : "image",

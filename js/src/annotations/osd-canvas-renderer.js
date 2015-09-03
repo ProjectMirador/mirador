@@ -311,7 +311,12 @@
                   menubar: false,
                   statusbar: false,
                   toolbar_items_size: 'small',
-                  toolbar: "bold italic | bullist numlist | link image media"
+                  toolbar: "bold italic | bullist numlist | link image media",
+                  setup : function(editor) {
+                    editor.on('init', function(args) {
+                      tinymce.execCommand('mceFocus', false, args.target.id); //make sure tinymce focuses on the editor after initialization                    
+                    });
+                  }
                 });
         jQuery(api.elements.tooltip).removeClass("qtip-viewer"); //so it is not affected by zoom event raised in OSD
         this.osdViewer.zoomPerClick = 1;
