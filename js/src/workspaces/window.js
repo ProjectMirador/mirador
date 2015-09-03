@@ -623,6 +623,7 @@
           options.uri = _this.currentCanvasID;
           options.dfd = dfd;
           options.windowID = _this.id;
+          options.parent = _this;
           _this.endpoint = new $[module](options);
         }
 

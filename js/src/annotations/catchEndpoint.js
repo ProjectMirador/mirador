@@ -300,6 +300,10 @@
       var regionArray = region.split('=')[1].split(',');
       annotation.rangePosition = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
 
+      var imageUrl = $.Iiif.getImageUrl(this.parent.imagesList[$.getImageIndexById(this.parent.imagesList, oaAnnotation.on.source)]);
+      imageUrl = imageUrl + "/" + regionArray.join(',') + "/full/0/native.jpg";
+      annotation.thumb = imageUrl;
+
       region = oaAnnotation.on.scope.value;
       regionArray = region.split('=')[1].split(',');
       annotation.bounds = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
