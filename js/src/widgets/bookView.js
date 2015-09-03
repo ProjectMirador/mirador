@@ -50,7 +50,8 @@
         element: this.element,
         bottomPanelAvailable: this.bottomPanelAvailable,
         windowId: this.windowId,
-        annotationLayerAvailable: false
+        annotationLayerAvailable: false,
+        fullScreenAvailable : this.fullScreenAvailable
       });
 
       if (this.manifest.jsonLd.sequences[0].viewingDirection) {

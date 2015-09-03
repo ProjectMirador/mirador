@@ -8,7 +8,8 @@
       windowId:  null,
       annoState: null,
       showAnnotations: true,
-      annoEndpointAvailable: false
+      annoEndpointAvailable: false,
+      fullScreenAvailable: true
     }, options);
 
     this.init();
@@ -22,7 +23,8 @@
       this.element = jQuery(this.template({
         showNextPrev : this.parent.imagesList.length !== 1, 
         showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable,
-        showAnno : this.annotationLayerAvailable
+        showAnno : this.annotationLayerAvailable,
+        showFullScreen : this.fullScreenAvailable
       })).appendTo(this.element);
 
       if (this.annotationLayerAvailable && this.annoEndpointAvailable) {
@@ -228,9 +230,11 @@
                                  '<i class="fa fa-3x fa-chevron-left "></i>',
                                  '</a>',
                                  '{{/if}}',
+                                 '{{#if showFullScreen}}',
                                  '<a class="mirador-osd-fullscreen hud-control">',
                                  '<i class="fa fa-expand"></i>',
                                  '</a>',
+                                 '{{/if}}',
                                  '{{#if showAnno}}',
                                  '<a class="mirador-osd-annotations-layer hud-control ">',
                                  '<i class="fa fa-2x fa-comments"></i>',
