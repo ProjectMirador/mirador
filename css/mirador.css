@@ -579,6 +579,18 @@ li.highlight {
 }
 .sidePanel h1:hover, .sidePanel h2:hover, .sidePanel h3:hover, .sidePanel h4:hover {
 }
+.sidePanel h2 {
+  font-size: 2.5em;
+}
+.sidePanel h3 {
+  font-size: 1.75em;
+}
+.sidePanel h4 {
+  font-size: 1.5em;
+}
+.sidePanel h5 {
+  font-size: 1.25em;
+}
 .toc {
   margin:0;
   overflow-y: scroll;
