@@ -638,7 +638,7 @@ li.highlight {
 .toc li.has-child i.star {
   display: none;
 }
-.toc li.leaf-item i.caret {
+.toc li.leaf-item i.toc-caret {
   display: none
 }
 .toc li.leaf-item i.star {
@@ -650,7 +650,7 @@ li.highlight {
 .toc li.selected>h2 .toc-link .star, .toc li.selected>h3 .toc-link .star, .toc li.selected>h4 .toc-link .star, .toc li.selected>h5 .toc-link .star .toc li.hovered>h2 .toc-link .star, .toc li.hovered>h3 .toc-link .star, .toc li.hovered>h4 .toc-link .star, .toc li.hovered>h5 .toc-link .star {
   color:black;
 }
-.toc li.open>h2 .toc-link .caret, .toc li.open>h3 .toc-link .caret, .toc li.open>h4 .toc-link .caret, .toc li.open>h5 .toc-link .caret  {
+.toc li.open>h2 .toc-link .toc-caret, .toc li.open>h3 .toc-link .toc-caret, .toc li.open>h4 .toc-link .toc-caret, .toc li.open>h5 .toc-link .toc-caret  {
   transition: all 0.2s linear;
   transform: rotate(90deg);
   -webkit-transform: rotate(90deg);
