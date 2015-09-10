@@ -100,10 +100,6 @@ describe('MainMenu Class', function () {
               "id":   "test-button"
             }
           },
-          /* Callback link - omitted if it doesn't have an id */
-          {"label": "Callback",
-           "attributes": {"href": "#noop"},
-           "callback": true},
           /* Sublists */
           {"label": "Sublist",
            "attributes": {"id": "sublist"},
@@ -135,11 +131,6 @@ describe('MainMenu Class', function () {
       expect(button.text()).toBe("Link");
       expect(button.attr('href')).toBe("http://example.com");
       expect(button.attr('id')).toBe('test-button');
-    });
-
-    it('omits links marked "callback" if they don\'t have IDs', function () {
-      expect(this.viewerDiv.find('a[href=#noop]')).not.toExist()
-      expect(console.log).toHaveBeenCalled();
     });
 
     it('creates sublists', function () {
