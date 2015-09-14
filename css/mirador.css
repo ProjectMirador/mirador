@@ -1728,6 +1728,8 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   z-index: 100;
   color: black;
   border: 2px solid blue;
+  max-height: 90%;
+  overflow: auto;
 }
 
 .bbAnnos{
