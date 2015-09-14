@@ -219,7 +219,7 @@
           }, 500));
         });
         
-        //wrapping the image element in a canvas causes the image not to load.  OSD will not build a viewport
+        //BH edit: wrapping the image element in a canvas causes the image not to load.  OSD will not build a viewport
         //  
         var fakeCanvas = jQuery("<img class='fix' src='"+imageUrl+"'/>");
           jQuery(_this.osd.canvas).append(fakeCanvas);       
@@ -237,7 +237,7 @@
         element: element
       });
 
-    },
+    }, 
 
     updateImage: function(canvasID) {
       console.log("Load new full image");
@@ -258,7 +258,8 @@
         if (this.hud.annoState.current === "annoOnEditOn") {
           this.hud.annoState.editOff();
         }
-      } else {
+      } 
+      else {
         this.parent.updateFocusImages([canvasID]);
       }
     },

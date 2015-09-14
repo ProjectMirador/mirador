@@ -192,7 +192,7 @@
           osd.viewport.applyConstraints();
         }
         else{
-          if(osd.viewport.viewer.canvas.className.indexOf('grayscaleEffect') >= 0){
+          if(osd.canvas.className.indexOf('grayscaleEffect') >= 0){
             osd.canvas.className = osd.canvas.className.replace('grayscaleEffect', '');
           }
           else{
