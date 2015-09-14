@@ -71,7 +71,7 @@
           userid : options.userid ? options.userid : undefined,
           username : options.username ? options.username : undefined,
           text : options.text ? options.text : undefined,
-          tags : options.tag ? options.tag : undefined,
+          tag : options.tag ? options.tag : undefined,
           parentid : options.parentid ? options.parentid : undefined,
           contextId: _this.context_id,
           collectionId: _this.collection_id,
