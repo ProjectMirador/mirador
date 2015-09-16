@@ -72,6 +72,7 @@
       templateData = {};
 
       //make sure annotations list is cleared out when changing objects within window
+      jQuery(".bbAnnosContainer").empty().hide();
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
@@ -513,6 +514,7 @@
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
+      jQuery(".bbAnnosContainer").empty().hide();
       this.getAnnotations();
       switch(this.currentImageMode) {
         case 'ImageView':
@@ -589,11 +591,14 @@
           console.log(list);
           console.log("Got the resources");
           var annoListID = list["@id"];
+          if(jQuery("div[listID='"+annoListID+"']").length > 0){
+            return false;
+          }
           _this.annotationsList = _this.annotationsList.concat(list.resources);
           if(_this.annotationsList.length > 0 && typeof _this.annotationsList[0] !== "object"){
             _this.annotationsList = JSON.parse(_this.annotationsList);
           }
-          console.log(_this.annotationsList);
+          //console.log(_this.annotationsList);
           var oneofours = false;
           var goAhead = true;
           if(url.indexOf("/annotationstore/annotation")){ // one of ours, which will not render out annotation w/o a viewport
@@ -605,22 +610,26 @@
               goAhead = false;
             }
           }
-          jQuery.each(_this.annotationsList, function(index, value) {
-            //if there is no ID for this annotation, set a random one
-            if (typeof value['@id'] === 'undefined') {
-              value['@id'] = $.genUUID();
-            }
-            //indicate this is a manifest annotation - which affects the UI
-            value.endpoint = "manifest";
-            if(oneofours && goAhead){
-              //Has to be a slu item, container must exist.
-              var anno = value;
-              var annoLabel = anno.label;
-              var annoText = anno.resource["cnt:chars"];
-              var annoHtml = jQuery("<div annoID='"+anno['@id']+"' class='bbAnno'>"+annoLabel+": "+annoText+"</div>");
-              jQuery("div[listID='"+annoListID+"']").append(annoHtml);
-            }
-          });
+          if(oneofours && goAhead){
+            jQuery("div[listID='"+annoListID+"']").empty();
+            jQuery.each(_this.annotationsList, function(index, value) {
+              //if there is no ID for this annotation, set a random one
+              if (typeof value['@id'] === 'undefined') {
+                value['@id'] = $.genUUID();
+              }
+              //indicate this is a manifest annotation - which affects the UI
+              value.endpoint = "manifest";
+              
+                //Has to be a slu item, container must exist.
+                var anno = value;
+                var annoLabel = anno.label;
+                annoLabel = annoLabel.trim();
+                var annoText = anno.resource["cnt:chars"];
+                var annoHtml = jQuery("<div annoID='"+anno['@id']+"' class='bbAnno'><span class='bbAnnoLabel'>"+annoLabel+":</span> <span class='bbAnnoText'>"+annoText+"</span></div>");
+                jQuery("div[listID='"+annoListID+"']").append(annoHtml);
+              
+            });
+          }
           console.log("Publish anno list loaded with id: " + _this.id);
           jQuery.publish('annotationListLoaded.' + _this.id);
         });

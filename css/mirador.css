@@ -1732,6 +1732,16 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   overflow: auto;
 }
 
-.bbAnnos{
-  
+.bbAnnoLabel{
+  font-size: 18px;
+}
+
+.bbAnnoText{
+  font-size: 17px;
+}
+
+.bbAnno{
+  margin: 5px 2px;
+  text-align: left;
+  max-width: 400px;
 }
