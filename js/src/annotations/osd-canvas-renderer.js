@@ -14,7 +14,8 @@
       parent:    null,
       annoTooltips: {},
       tooltips:  null,
-      overlays:  []
+      overlays:  [],
+      inEditMode:   false
     }, options);
   };
 
@@ -261,7 +262,9 @@
       var _this = this;
 
       jQuery(this.osdViewer.canvas).parent().on('mousemove', $.throttle(function(event) { 
-        _this.showTooltipsFromMousePosition(event);
+        if (!_this.inEditMode) {
+          _this.showTooltipsFromMousePosition(event);
+        }
        }, 200, true));
             
      this.osdViewer.addHandler('zoom', $.debounce(function(){
@@ -314,12 +317,7 @@
     //change content of this tooltip, and disable hiding it, until user clicks save or cancel
     //disable all other qtips until editing this is done
     freezeQtip: function(api, oaAnno, annoTooltip) {
-      jQuery.each(this.overlays, function(index, value) {
-          var overlayApi = value.qtip('api');
-          if (api.id !== overlayApi.id) {
-            overlayApi.disable(true);
-          }
-        });
+      this.inEditMode = true;
         api.set({'content.text' : annoTooltip.getEditor(oaAnno),
         'hide.event' : false});
         //add rich text editor
@@ -344,12 +342,7 @@
     //update content of this qtip to make it a viewer, not editor
     //and reset hide event       
     unFreezeQtip: function(api, oaAnno, annoTooltip) {
-      jQuery.each(this.overlays, function(index, value) {
-           var overlayApi = value.qtip('api');
-           if (api.id !== overlayApi.id) {
-            overlayApi.disable(false);
-           }
-          });
+      this.inEditMode = false;
       api.set({'content.text' : annoTooltip.getViewer([oaAnno]),
           'hide.event' : 'mouseleave'}).hide();
       jQuery(api.elements.tooltip).addClass("qtip-viewer"); //re-add class so it is affected by zoom event raised in OSD
