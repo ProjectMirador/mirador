@@ -17,21 +17,9 @@
 
     $(function() {
 
-      var anno_token;
-      jQuery.ajax({
-        url: "http://oculus-dev.harvardx.harvard.edu/cgi-bin/token.py", 
-        success: function(data) {
-          anno_token = data.replace(/[\n\r]/g, '');
-        },
-        async:false
-      });
-
       Mirador({
         "id": "viewer",
-        // "workspaceType": "1x2", // optional, allows you to limit functionality in 
-        // a variety of collections of settings.
         "layout": "1x1",
-        
         "mainMenuSettings" : {
           
           "show": true, 
@@ -49,35 +37,9 @@
             "attributes": { "id": "scta-logo", "href": "http://scta.info"}
           }
         },
-        //'showAddFromURLBox' : false,
-        //"saveSession":false,
         
         "data" : selectdataset("remote"),
 
-       /*
-        "windowObjects": [
-          {
-          "loadedManifest": "http://manifests.ydc2.yale.edu/manifest/BodleianMS_GoughLiturg_19",
-          "viewType" : "ImageView",
-          "annotationLayer" : false
-          //"bottomPanel" : false,
-          //"sidePanel" : false,
-          //"availableViews" : ['ThumbnailsView', 'ImageView', 'BookView']
-          //"overlay" : false
-        }],
-        */
-        /*
-        "annotationEndpoint": 
-          {
-          "name":"Harvard CATCH Dev",
-          "module": "CatchEndpoint",
-          "options": {
-            token: anno_token,
-            // The endpoint of the store on your server.
-            prefix: "http://54.148.223.225:8080/catch/annotator",
-          }
-        }
-        */
       });
     });
 
