@@ -375,12 +375,10 @@
         }
       });
 
-      jQuery.subscribe('windowRemoved', function(windowId) {
-        var remove = _this.windows.map(function(window) {
+      jQuery.subscribe('windowRemoved', function(event, windowId) {
+        _this.windows = jQuery.grep(_this.windows, function(window) {
           return window.id !== windowId;
-        })[0],
-        spliceIndex = _this.windows.indexOf(remove);
-        _this.windows.splice(spliceIndex, 0);
+        });
       });
     },
 

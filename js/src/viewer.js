@@ -37,11 +37,9 @@
 
     init: function() {
       var _this = this;
-      // retrieve manifests
-      this.getManifestsData();
 
       //initialize i18next  
-      i18n.init({debug: false, getAsync: false, resGetPath: 'build/mirador/locales/__lng__/__ns__.json'}); 
+      i18n.init({debug: false, getAsync: false, resGetPath: _this.i18nPath+'__lng__/__ns__.json'}); 
 
       //register Handlebars helper
       Handlebars.registerHelper('t', function(i18n_key) {
@@ -99,6 +97,8 @@
       this.set('currentWorkspaceVisible', true);
 
       this.bindEvents();
+      // retrieve manifests
+      this.getManifestsData();
     },
 
     bindEvents: function() {
@@ -197,7 +197,7 @@
         manifest = new $.Manifest(url, location);
         _this.manifests[url] = manifest;
         _this.manifests.push(manifest);
-        jQuery.publish('manifestQueued', manifest);
+        jQuery.publish('manifestQueued', manifest, location);
         manifest.request.done(function() {
           jQuery.publish('manifestReceived', manifest);
         });
@@ -210,7 +210,7 @@
       var windowConfig = {
         manifest: this.manifests[options.loadedManifest],
         currentFocus : options.viewType,
-        focuses : options.availableViews,
+        focusesOriginal : options.availableViews,
         currentCanvasID : options.canvasID,
         id : options.id,
         focusOptions : options.windowOptions,
@@ -218,6 +218,8 @@
         sidePanelAvailable : options.sidePanel,
         overlayAvailable : options.overlay,
         annotationLayerAvailable : options.annotationLayer,
+        annotationCreationAvailable : options.annotationCreation,
+        fullScreenAvailable : options.fullScreen,
         slotAddress: slotAddress,
         displayLayout : options.displayLayout,
         layoutOptions: options.layoutOptions

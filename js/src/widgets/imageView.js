@@ -57,7 +57,9 @@
         bottomPanelAvailable: this.bottomPanelAvailable,
         windowId: this.windowId,
         annotationLayerAvailable: this.annotationLayerAvailable,
-        annoEndpointAvailable: this.annoEndpointAvailable
+        annotationCreationAvailable: this.annotationCreationAvailable,
+        annoEndpointAvailable: this.annoEndpointAvailable,
+        fullScreenAvailable : this.fullScreenAvailable
       });
     },
 
@@ -89,11 +91,11 @@
     },
 
     hide: function() {
-      jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
+      jQuery(this.element).hide({effect: "fade", duration: 300, easing: "easeOutCubic"});
     },
 
     show: function() {
-      jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+      jQuery(this.element).show({effect: "fade", duration: 300, easing: "easeInCubic"});
     },
 
     adjustWidth: function(className, hasClass) {

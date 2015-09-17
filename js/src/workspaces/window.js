@@ -47,7 +47,9 @@
       bottomPanelVisible: true,
       overlay: null,
       annotationLayerAvailable: true,
+      annotationCreationAvailable: true,
       annoEndpointAvailable : false,
+      fullScreenAvailable : true,
       displayLayout: true,
       layoutOptions : {
         "newObject" : true,
@@ -455,7 +457,10 @@
           osdOptions: this.focusOptions,
           bottomPanelAvailable: this.bottomPanelAvailable,
           annotationLayerAvailable: this.annotationLayerAvailable,
-          annoEndpointAvailable: this.annoEndpointAvailable} );
+          annotationCreationAvailable: this.annotationCreationAvailable,
+          annoEndpointAvailable: this.annoEndpointAvailable,
+          fullScreenAvailable: this.fullScreenAvailable
+        });
       } else {
         var view = this.focusModules.ImageView;
         view.updateImage(canvasID);
@@ -474,7 +479,8 @@
           canvasID: canvasID, 
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
-          bottomPanelAvailable: this.bottomPanelAvailable
+          bottomPanelAvailable: this.bottomPanelAvailable,
+          fullScreenAvailable: this.fullScreenAvailable
         });
       } else {
         var view = this.focusModules.BookView;
@@ -766,11 +772,11 @@
                                  '</a>',
                                  '{{/if}}',
                                  '{{#if MetadataView}}',
-                                 '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="Object Metadata"><i class="fa fa-info-circle fa-lg fa-fw"></i></a>',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="{{t "objectMetadata"}}"><i class="fa fa-info-circle fa-lg fa-fw"></i></a>',
                                  '{{/if}}',
                                  '</div>',
                                  '{{#if displayLayout}}',
-                                 '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="Change Layout"><i class="fa fa-table fa-lg fa-fw"></i>',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="{{t "changeLayout"}}"><i class="fa fa-table fa-lg fa-fw"></i>',
                                  '<ul class="dropdown slot-controls">',
                                  '{{#if layoutOptions.newObject}}',
                                  '<li class="new-object-option"><i class="fa fa-plus-square fa-lg fa-fw"></i> {{t "newObject"}}</li>',

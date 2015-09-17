@@ -112,7 +112,7 @@
         _this.parent.setCurrentCanvasID(canvasID);
       });
 
-      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(canvasId) {
+      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(event) {
         _this.currentImageChanged();
       });
     },

@@ -720,7 +720,7 @@ li.highlight {
   z-index: 4;
   overflow:hidden;
   display: none;
-  transition:all 0.3s ease;
+  transition:transform 0.3s ease;
 }
 .bottomPanel.minimized {
   transform:translateY(130px);
@@ -760,7 +760,6 @@ li.highlight {
     height: 100%;
     width: 100%;
     overflow-x: scroll;
-    margin-top: 10px;
     overflow-y: hidden;
 }
 
@@ -769,7 +768,7 @@ li.highlight {
   list-style: none;
   padding: 0;
   white-space: nowrap;
-  margin-top: 4px;
+  margin-top: 10px;
   margin-bottom: 4px;
 }
 
@@ -778,7 +777,7 @@ li.highlight {
   /*float: left;*/
   /*margin: 0 0 15px 0;*/
   padding: 0px 10px 0px 10px;
-  transition: all 0.05s ease-out;
+  /*transition: all 0.03s ease-out;*/
   display: inline-block;
 }
 
@@ -852,7 +851,7 @@ li.highlight {
 }
 .mirador-osd-edit-mode.selected, .mirador-osd-annotations-layer.selected {
   opacity: 1;
-  transition: none;
+  /*transition: none;*/
 }
 .mirador-osd-previous {
   position:absolute;
@@ -1345,7 +1344,7 @@ ul.scroll-listing-thumbs li {
   box-sizing:border-box;
   margin: 0 0 15px 0;
   padding: 10px 10px 10px 10px;
-  transition: all 0.05s ease-out;
+  /*transition: all 0.05s ease-out;*/
   display: inline-block;
 }
 
@@ -1386,7 +1385,7 @@ ul.scroll-listing-thumbs li .thumb-label {
   float: left;
   margin: 0 0 15px 0;
   padding: 10px 10px 10px 10px;
-  transition: all 0.05s ease-out;
+  /*transition: all 0.05s ease-out;*/
 }
 
 .mirador-viewer ul.listing-thumbs li img {
@@ -1396,7 +1395,7 @@ ul.scroll-listing-thumbs li .thumb-label {
   margin: 0 auto;
   display: block;
   box-sizing:border-box;
-  transition: all 0.2 ease-out;
+  /*transition: all 0.2 ease-out;*/
 }
 .mirador-viewer ul.listing-thumbs li img:hover {
   border:3px solid rgba(0,191,255,0.7);
