@@ -112,14 +112,16 @@
      *          exist and MUST contain an "id" value    *
      *   li_attributes: HTML attributes to add to the   *
      *          list item containing the button.        *
+     *   iconClass: class or space-separated list of    *
+     *          classes. If present, an empty span with *
+     *          these classes will be prepended to the  *
+     *          content of the link element
      *   sublist: Sublist of buttons, to be implemented *
      *          as a dropdown via CSS/JS                *
      *   ul_attributes: HTML attributes to add to the   *
      *          sublist UL contained in the button.     *
      *          Ignored if button isn't representing    *
      *          a sublist.                              *
-     *   callback: If set to true, and attributes['id'] *
-     *          is not set, an error will be thrown     *
      *                                                  *
      * NOTE: sublist dropdown functionality is not yet  *
      *       implemented                                *
@@ -173,12 +175,6 @@
                 $sub_ul.append(processUserButtons(btn.sublist));
 
                 $li.append($sub_ul);
-            }
-
-            if (btn.callback) {
-                if (!(btn.attributes && btn.attributes.id)) {
-                    throw "userButton with callback does not have attributes.id";
-                }
             }
 
             return $li;
