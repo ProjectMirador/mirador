@@ -220,7 +220,7 @@
         // }
       });
       
-      _this.element.find('.caret').on('click', function(event) {
+      _this.element.find('.toc-caret').on('click', function(event) {
         event.stopPropagation();
         
         var rangeID = jQuery(this).parent().data().rangeid;
@@ -305,9 +305,9 @@
       });
 
       Handlebars.registerHelper('tocLevel', function(id, label, level, children) {
-        var caret = '<i class="fa fa-caret-right caret"></i>',
+        var caret = '<i class="fa fa-caret-right toc-caret"></i>',
         cert = '<i class="fa fa-certificate star"></i>';
-        return '<h' + (level+1) + '><a class="toc-link" data-rangeID="' + id + '">' + caret + cert + '<span class="label">' + label + '</span></a></h' + (level+1) + '>';
+        return '<h' + (level+1) + '><a class="toc-link" data-rangeID="' + id + '">' + caret + cert + '<span>' + label + '</span></a></h' + (level+1) + '>';
       });
 
       return template(tplData);

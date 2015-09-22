@@ -14,7 +14,8 @@
       parent:    null,
       annoTooltips: {},
       tooltips:  null,
-      overlays:  []
+      overlays:  [],
+      inEditMode:   false
     }, options);
   };
 
@@ -56,7 +57,7 @@
         _this.overlays.push(jQuery(osdOverlay));
       });
       
-      this.tooltips = jQuery(this.overlays).qtip({
+      this.tooltips = jQuery(this.osdViewer.element).qtip({
             overwrite : false,
             content: {
              text : ''
@@ -74,23 +75,17 @@
               classes : 'qtip-bootstrap qtip-viewer'
              },
              show: {
-              delay: 20
+              delay: 20,
+              event: false
              },
              hide: {
                 fixed: true,
                 delay: 50,
-                event: 'mouseleave'
+                event: false
              },
              events: {
                show: function(event, api) {
-                 var overlays = _this.getOverlaysFromElement(jQuery(event.originalEvent.currentTarget)),
-                 annoTooltip = new $.AnnotationTooltip(), //pass permissions
-                 annotations = [];
-                 
-                 jQuery.each(overlays, function(index, overlay) {
-                   annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
-                 });
-                 api.set({'content.text' : annoTooltip.getViewer(annotations)});
+                 _this.setTooltipContent(event, api);
                  },
                visible: function(event, api) {
                  _this.removeAnnotationEvents(event, api);
@@ -112,43 +107,63 @@
       this.bindEvents();
     },
 
+    setTooltipContent: function(event, api) {
+      var overlays = this.getOverlaysFromElement(jQuery(event.originalEvent.currentTarget), event.originalEvent),
+      annoTooltip = new $.AnnotationTooltip(), //pass permissions
+      annotations = [],
+      _this = this;
+                     
+      jQuery.each(overlays, function(index, overlay) {
+       annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
+     });
+      api.set({'content.text' : annoTooltip.getViewer(annotations)});
+    },
+
     getAnnoFromRegion: function(regionId) {
       return this.list.filter(function(annotation) {
         return annotation['@id'] === regionId;
       });
     },
-    
-    getOverlaysFromElement: function(element) {
+
+    showTooltipsFromMousePosition: function(event) {
+      var overlays = this.getOverlaysFromMousePosition(event);
+      var api = jQuery(this.osdViewer.element).qtip('api');
+      if (api) {
+        if (overlays.length === 0) {
+          api.hide(event);          
+        } else if (api.elements.tooltip && api.elements.tooltip.is(':visible')) {
+          this.setTooltipContent(event, api);
+          api.cache.origin = event;
+          api.reposition(event, true);
+        } else {
+          api.show(event);
+        }
+      }
+    },
+
+    getOverlaysFromMousePosition: function(event) {
+      var position = new OpenSeadragon.getMousePosition(event);
       var _this = this,
-      eo = element.offset(),
-      el = eo.left,
-      et = eo.top,
-      er = el + element.outerWidth(),
-      eb = et + element.outerHeight();
-              
-      var overlays = jQuery(_this.osdViewer.canvas).find('.annotation').map(function() {
+      overlays = jQuery(_this.osdViewer.canvas).find('.annotation').map(function() {
         var self = jQuery(this),
         offset = self.offset(),
         l = offset.left,
         t = offset.top,
-        r = l + self.outerWidth(),
-        b = t + self.outerHeight();
-        
-        //check if the current overlay has a corner contained within the element that triggered the mouseenter
-        //OR check if element has a corner contained within the overlay
-        //so that any overlapping annotations are stacked and displayed
-        //this will also find when the overlay and element are the same thing and return it, which is good, we don't have to add it separately
-        return (((l >= el && t >= et && l <= er && t <= eb) || 
-                (l >= el && b <= eb && l <= er && b >= et) || 
-                (r <= er && t >= et && r >= el && t <= eb) || 
-                (r <= er && b <= eb && r >= el && b >= et)) ||
-                
-                ((el >= l && et >= t && el <= r && et <= b) || 
-                (el >= l && eb <= b && el <= r && eb >= t) || 
-                (er <= r && et >= t && er >= l && et <= b) || 
-                (er <= r && eb <= b && er >= l && eb >= t)
-                )) ? this : null;
+        h = self.height(),
+        w = self.width(),
+        x = position.x,
+        y = position.y,
+        maxx = l+w,
+        maxy = t+h;
+      
+        return (y <= maxy && y >= t) && (x <= maxx && x >= l) ? this : null;
       });
+      return overlays;
+    },
+    
+    getOverlaysFromElement: function(element, event) {
+      var _this = this,
+      overlays = this.getOverlaysFromMousePosition(event);
       jQuery(_this.osdViewer.canvas).find('.annotation.hovered').removeClass('hovered');//.css('border-color', 'deepSkyBlue');
       overlays.addClass('hovered');
       /*jQuery.each(overlays, function(index, value) {
@@ -245,9 +260,15 @@
 
     bindEvents: function() {
       var _this = this;
+
+      jQuery(this.osdViewer.canvas).parent().on('mousemove', $.throttle(function(event) { 
+        if (!_this.inEditMode) {
+          _this.showTooltipsFromMousePosition(event);
+        }
+       }, 200, true));
             
      this.osdViewer.addHandler('zoom', $.debounce(function(){
-          _this.checkMousePosition();
+          _this.hideVisibleTooltips();
         }, 200, true));
       
       jQuery.subscribe('removeTooltips.' + _this.parent.windowId, function() {
@@ -266,9 +287,14 @@
         }); 
       });
 
+      jQuery.subscribe('removeOverlay.' + _this.parent.windowId, function(event, annoId) {
+        //remove this annotation's overlay from osd
+        _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+annoId)[0]);
+      });
+
     },
     
-    checkMousePosition: function() {
+    hideVisibleTooltips: function() {
       jQuery('.qtip-viewer').qtip('hide');
     },
 
@@ -291,12 +317,7 @@
     //change content of this tooltip, and disable hiding it, until user clicks save or cancel
     //disable all other qtips until editing this is done
     freezeQtip: function(api, oaAnno, annoTooltip) {
-      jQuery.each(this.overlays, function(index, value) {
-          var overlayApi = value.qtip('api');
-          if (api.id !== overlayApi.id) {
-            overlayApi.disable(true);
-          }
-        });
+      this.inEditMode = true;
         api.set({'content.text' : annoTooltip.getEditor(oaAnno),
         'hide.event' : false});
         //add rich text editor
@@ -306,7 +327,12 @@
                   menubar: false,
                   statusbar: false,
                   toolbar_items_size: 'small',
-                  toolbar: "bold italic | bullist numlist | link image media"
+                  toolbar: "bold italic | bullist numlist | link image media",
+                  setup : function(editor) {
+                    editor.on('init', function(args) {
+                      tinymce.execCommand('mceFocus', false, args.target.id); //make sure tinymce focuses on the editor after initialization                    
+                    });
+                  }
                 });
         jQuery(api.elements.tooltip).removeClass("qtip-viewer"); //so it is not affected by zoom event raised in OSD
         this.osdViewer.zoomPerClick = 1;
@@ -316,12 +342,7 @@
     //update content of this qtip to make it a viewer, not editor
     //and reset hide event       
     unFreezeQtip: function(api, oaAnno, annoTooltip) {
-      jQuery.each(this.overlays, function(index, value) {
-           var overlayApi = value.qtip('api');
-           if (api.id !== overlayApi.id) {
-            overlayApi.disable(false);
-           }
-          });
+      this.inEditMode = false;
       api.set({'content.text' : annoTooltip.getViewer([oaAnno]),
           'hide.event' : 'mouseleave'}).hide();
       jQuery(api.elements.tooltip).addClass("qtip-viewer"); //re-add class so it is affected by zoom event raised in OSD
@@ -346,13 +367,9 @@
         }
 
         var display = jQuery(this).parents('.annotation-display'),
-        id = display.attr('data-anno-id'),
-        oaAnno = _this.getAnnoFromRegion(id)[0];
-        jQuery.publish('annotationDeleted.'+_this.parent.windowId, [oaAnno]);
-
-        //remove this annotation's overlay from osd
-        //should there be some sort of check that it was successfully deleted? or pass when publishing?
-        _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+id)[0]);
+        id = display.attr('data-anno-id');
+        //oaAnno = _this.getAnnoFromRegion(id)[0];
+        jQuery.publish('annotationDeleted.'+_this.parent.windowId, [id]);
         
         //hide tooltip so event handlers don't get messed up
         api.hide();
