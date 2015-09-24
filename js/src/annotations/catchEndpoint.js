@@ -331,7 +331,11 @@
         annotation.created = annotation.updated;
       }
       // this needs to come from LTI annotation.user.id, annotation.user.name
-      annotation.user = this.catchOptions.user;
+      if (oaAnnotation.annotatedBy) {
+        annotation.user = oaAnnotation.annotatedBy;
+      } else {
+        annotation.user = this.catchOptions.user;
+      }
       annotation.permissions = this.catchOptions.permissions;
       annotation.archived = false;
       annotation.ranges = [];

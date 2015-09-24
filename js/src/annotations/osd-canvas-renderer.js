@@ -17,6 +17,8 @@
       overlays:  [],
       inEditMode:   false
     }, options);
+
+    this.bindEvents();
   };
 
   $.OsdCanvasRenderer.prototype = {
@@ -103,8 +105,6 @@
                }
              }
       });
-
-      this.bindEvents();
     },
 
     setTooltipContent: function(event, api) {
