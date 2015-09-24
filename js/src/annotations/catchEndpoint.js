@@ -332,7 +332,8 @@
       }
       // this needs to come from LTI annotation.user.id, annotation.user.name
       if (oaAnnotation.annotatedBy) {
-        annotation.user = oaAnnotation.annotatedBy;
+        annotation.user.name = oaAnnotation.annotatedBy.name;
+        annotation.user.id = oaAnnotation.annotatedBy['@id'];
       } else {
         annotation.user = this.catchOptions.user;
       }
