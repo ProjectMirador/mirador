@@ -61,12 +61,22 @@
         annoEndpointAvailable: this.annoEndpointAvailable,
         fullScreenAvailable : this.fullScreenAvailable
       });
+
+      this.bindEvents();
     },
 
     template: Handlebars.compile([
                                  '<div class="image-view">',
                                  '</div>'
     ].join('')),
+
+    bindEvents: function() {
+      var _this = this;
+      jQuery.subscribe('fitBounds.' + _this.parent.id, function(event, bounds) {
+        var rect = _this.osd.viewport.imageToViewportRectangle(Number(bounds.x), Number(bounds.y), Number(bounds.width), Number(bounds.height));
+        _this.osd.viewport.fitBounds(rect, false);
+      });
+    },
 
     setBounds: function() {
       var _this = this;

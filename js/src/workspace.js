@@ -423,12 +423,12 @@
         windowConfig.slotAddress = targetSlot.layoutAddress;
         windowConfig.id = windowConfig.id || $.genUUID();
         
-        jQuery.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
-
         newWindow = new $.Window(windowConfig);
         _this.windows.push(newWindow);
 
         targetSlot.window = newWindow;
+
+        jQuery.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
 
         // This needs to be called after the window is visible so that the thumbnail position is not 0,0 and therefore can be scrolled
         //

@@ -53,7 +53,7 @@
         // Must reset the slotAddress of the window.
         if (_this.window) {
           _this.window.slotAddress = _this.layoutAddress;
-          jQuery.publish('windowUpdated', {
+          jQuery.publish('windowSlotAddressUpdated', {
             id: _this.window.id,
             slotAddress: _this.window.slotAddress
           });
