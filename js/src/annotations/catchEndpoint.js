@@ -331,6 +331,7 @@
         annotation.created = annotation.updated;
       }
       // this needs to come from LTI annotation.user.id, annotation.user.name
+      annotation.user = {};
       if (oaAnnotation.annotatedBy) {
         annotation.user.name = oaAnnotation.annotatedBy.name;
         annotation.user.id = oaAnnotation.annotatedBy['@id'];
