@@ -23,7 +23,7 @@
     parseRegion: function(url) {
       var regionString;
       if (typeof url === 'object') {
-        regionString = url.selector.value;  
+        regionString = url.selector.value;
       } else {
         regionString = url.split('#')[1];
       }
@@ -39,7 +39,7 @@
 
       return this.osdViewer.viewport.imageToViewportRectangle(rectX,rectY,rectW,rectH);
 
-    }, 
+    },
 
     render: function() {
       var _this = this;
@@ -56,7 +56,7 @@
         });
         _this.overlays.push(jQuery(osdOverlay));
       });
-      
+
       this.tooltips = jQuery(this.osdViewer.element).qtip({
             overwrite : false,
             content: {
@@ -112,7 +112,7 @@
       annoTooltip = new $.AnnotationTooltip(), //pass permissions
       annotations = [],
       _this = this;
-                     
+
       jQuery.each(overlays, function(index, overlay) {
        annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
      });
@@ -130,7 +130,7 @@
       var api = jQuery(this.osdViewer.element).qtip('api');
       if (api) {
         if (overlays.length === 0) {
-          api.hide(event);          
+          api.hide(event);
         } else if (api.elements.tooltip && api.elements.tooltip.is(':visible')) {
           this.setTooltipContent(event, api);
           api.cache.origin = event;
@@ -155,12 +155,10 @@
         y = position.y,
         maxx = l+w,
         maxy = t+h;
-      
         return (y <= maxy && y >= t) && (x <= maxx && x >= l) ? this : null;
       });
       return overlays;
     },
-    
     getOverlaysFromElement: function(element, event) {
       var _this = this,
       overlays = this.getOverlaysFromMousePosition(event);
@@ -171,13 +169,13 @@
       });*/
       return overlays;
     },
-    
+
     getRandomColor: function() {
        var colors = this.hsvToRgb(Math.random() * 360, 50, 100);
        //return "#" + Math.floor(Math.random() * 0xFFFFFF).toString(16);
        return 'rgb('+colors[0]+','+colors[1]+','+colors[2]+')';
     },
-    
+
     /**
     * From: http://snipplr.com/view.php?codeview&id=14590
     * HSV to RGB color conversion
@@ -192,7 +190,7 @@
       var r, g, b;
       var i;
       var f, p, q, t;
-  
+
       // Make sure our arguments stay in-range
       h = Math.max(0, Math.min(360, h));
       s = Math.max(0, Math.min(100, s));
@@ -204,13 +202,13 @@
       // That conversion here.
       s /= 100;
       v /= 100;
-  
+
       if(s === 0) {
         // Achromatic (grey)
         r = g = b = v;
         return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
       }
-  
+
       h /= 60; // sector 0 to 5
       i = Math.floor(h);
       f = h - i; // factorial part of h
@@ -224,19 +222,19 @@
       g = t;
       b = p;
       break;
-      
+
     case 1:
       r = q;
       g = v;
       b = p;
       break;
-      
+
     case 2:
       r = p;
       g = v;
       b = t;
       break;
-      
+
     case 3:
       r = p;
       g = q;
@@ -266,21 +264,21 @@
           _this.showTooltipsFromMousePosition(event);
         }
        }, 200, true));
-            
+
      this.osdViewer.addHandler('zoom', $.debounce(function(){
           _this.hideVisibleTooltips();
         }, 200, true));
-      
+
       jQuery.subscribe('removeTooltips.' + _this.parent.windowId, function() {
         jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
       });
-      
+
       jQuery.subscribe('disableTooltips.' + _this.parent.windowId, function() {
         jQuery.each(_this.tooltips, function(index, value) {
           value.qtip('disable', true);
         }); 
       });
-      
+
       jQuery.subscribe('enableTooltips.' + _this.parent.windowId, function() {
         jQuery.each(_this.tooltips, function(index, value) {
           value.qtip('disable', false);
@@ -293,7 +291,7 @@
       });
 
     },
-    
+
     hideVisibleTooltips: function() {
       jQuery('.qtip-viewer').qtip('hide');
     },
@@ -313,7 +311,7 @@
       });
       return elements;
     },
-    
+
     //change content of this tooltip, and disable hiding it, until user clicks save or cancel
     //disable all other qtips until editing this is done
     freezeQtip: function(api, oaAnno, annoTooltip) {
