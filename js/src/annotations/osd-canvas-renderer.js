@@ -142,7 +142,7 @@
     },
 
     getOverlaysFromMousePosition: function(event) {
-      var position = new OpenSeadragon.getMousePosition(event);
+      var position = OpenSeadragon.getMousePosition(event);
       var _this = this,
       overlays = jQuery(_this.osdViewer.canvas).find('.annotation').map(function() {
         var self = jQuery(this),
@@ -278,13 +278,15 @@
           if (value.qtip) {
             value.qtip('disable', true);
           }
-        }); 
+        });
       });
 
       jQuery.subscribe('enableTooltips.' + _this.parent.windowId, function() {
         jQuery.each(_this.tooltips, function(index, value) {
-          value.qtip('disable', false);
-        }); 
+          if (value.qtip) {
+            value.qtip('disable', false);
+          }
+        });
       });
 
       jQuery.subscribe('removeOverlay.' + _this.parent.windowId, function(event, annoId) {

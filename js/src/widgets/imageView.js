@@ -76,6 +76,7 @@
         var rect = _this.osd.viewport.imageToViewportRectangle(Number(bounds.x), Number(bounds.y), Number(bounds.width), Number(bounds.height));
         _this.osd.viewport.fitBounds(rect, false);
       });
+
     },
 
     setBounds: function() {
@@ -170,6 +171,18 @@
             _this.setBounds();
           }, 500));
 
+          jQuery(_this.osd.canvas).on('mousemove', $.throttle(function(event) {
+            console.log('we are moving around');
+            if (_this.hud.annoState.current === 'annoOnEditOn') {
+              console.log('edit is on and we are moving around');
+              var insideCanvas = (function() {
+                var elementCoordinates = OpenSeadragon.getMousePosition(event);
+
+                console.log(_this.osd.viewport.viewerElementToViewportCoordinates(elementCoordinates));
+
+              })();
+            }
+          }, 100, true));
         });
       });
     },

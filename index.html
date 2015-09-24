@@ -17,18 +17,11 @@
 
      $(function() {
          var anno_token;
-         jQuery.ajax({
-             url: "http://oculus-dev.harvardx.harvard.edu/cgi-bin/new_token.py", 
-             success: function(data) {
-                 anno_token = data.replace(/[\n\r]/g, '');
-             },
-             async:false
-         });
          Mirador({
              "id": "viewer",
              "layout": "1x1",
              "data": [
-                 { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/drs:48309543", "location": "Harvard University"}, // Harvard Scroll 
+                 { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/drs:48309543", "location": "Harvard University"}, // Harvard Scroll
                  { "manifestUri": "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/manifest.json", "location": "Stanford University"},
                  { "manifestUri": "http://dms-data.stanford.edu/data/manifests/Stanford/ege1/manifest.json", "location": "Stanford University"},
                  { "manifestUri": "http://dms-data.stanford.edu/data/manifests/BnF/jr903ng8662/manifest.json ", "location": "Stanford University"},
@@ -58,17 +51,7 @@
                  { "manifestUri": "http://www.e-codices.unifr.ch/metadata/iiif/sl-0002/manifest.json", "location": 'e-codices'},
                  { "manifestUri": "http://www.e-codices.unifr.ch/metadata/iiif/bge-cl0015/manifest.json", "location": 'e-codices'}
              ],
-             "windowObjects": [],
-             "annotationEndpoint":
-             {
-                 "name":"Harvard CATCH Dev",
-                 "module": "CatchEndpoint",
-                 "options": {
-                     token: anno_token,
-                     // The endpoint of the store on your server.
-                     prefix: "http://catch-dev.harvardx.harvard.edu:8080/catch/annotator"
-                 }
-             }
+             "windowObjects": []
          });
      });
     </script>
