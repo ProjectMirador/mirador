@@ -417,11 +417,11 @@
         var bounds = _this.osdViewer.viewport.getBounds(true);
         var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
         //bounds is giving negative values?
-        //update scope?
+        //update scope
+        oaAnno.on.scope.value = "xywh="+Math.round(scope.x)+","+Math.round(scope.y)+","+Math.round(scope.width)+","+Math.round(scope.height); //osd bounds
                   
         var motivation = [],
-        resource = [],
-        on;
+        resource = [];
                   
         //remove all tag-related content in annotation
         oaAnno.motivation = jQuery.grep(oaAnno.motivation, function(value) {
