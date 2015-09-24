@@ -277,7 +277,9 @@
       
       jQuery.subscribe('disableTooltips.' + _this.parent.windowId, function() {
         jQuery.each(_this.tooltips, function(index, value) {
-          value.qtip('disable', true);
+          if (value.qtip) {
+            value.qtip('disable', true);
+          }
         }); 
       });
       
