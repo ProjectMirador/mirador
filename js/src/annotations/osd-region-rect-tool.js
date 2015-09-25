@@ -45,34 +45,6 @@
       this.onModeEnter();
     },
 
-    startRectangle: function(event) {
-      var _this = this.userData.recttool; //osd userData
-      if (!_this.dragging) {
-        _this.dragging = true; 
-        _this.mouseStart = _this.osdViewer.viewport.pointFromPixel(event.position);
-        _this.createNewRect(_this.mouseStart);
-        _this.onDrawStart();
-      } else { 
-        var mouseNow = _this.osdViewer.viewport.pointFromPixel(event.position);
-        _this.updateRectangle(_this.mouseStart, mouseNow);
-        _this.onDraw();
-      }
-    },
-
-    finishRectangle: function(event) {
-      var _this = this.userData.recttool; //osd userData
-      _this.dragging = false;
-      var osdImageRect = _this.osdViewer.viewport.viewportToImageRectangle(_this.rectangle);
-      var canvasRect = {
-        x: parseInt(osdImageRect.x, 10),
-        y: parseInt(osdImageRect.y, 10),
-        width: parseInt(osdImageRect.width, 10),
-        height: parseInt(osdImageRect.height, 10)
-      };
-
-      _this.onDrawFinish(canvasRect);
-    },
-
     exitEditMode: function(event) {
       var _this = this;
       this.setOsdFrozen(false);
@@ -94,7 +66,32 @@
       }
     },
 
-    createNewRect: function(mouseStart) {
+    startRectangle: function(event) {
+      var _this = this.userData.recttool; //osd userData
+      if (!_this.dragging) {
+        _this.dragging = true; 
+        var currentMouse = _this.osdViewer.viewport.pointFromPixel(event.position);
+        if (_this.isMouseInImage(currentMouse)) {
+          _this.mouseStart = currentMouse;
+          _this.createRectangle(_this.mouseStart);
+          _this.onDrawStart();
+        }
+      } else { 
+        var mouseNow = _this.osdViewer.viewport.pointFromPixel(event.position);
+        if (_this.isMouseInImage(mouseNow)) {
+          if (_this.mouseStart) {
+            _this.updateRectangle(_this.mouseStart, mouseNow);
+            _this.onDraw();
+          } else {
+            _this.mouseStart = mouseNow;
+            _this.createRectangle(_this.mouseStart);
+            _this.onDrawStart();
+          }
+        }
+      }
+    },
+
+    createRectangle: function(mouseStart) {
       var x = mouseStart.x,
       y = mouseStart.y,
       width = 0,
@@ -124,6 +121,34 @@
       this.rectangle.height = bottomRight.y - topLeft.y;
 
       this.osdViewer.updateOverlay(this.osdOverlay, this.rectangle);
+    },
+
+    finishRectangle: function(event) {
+      var _this = this.userData.recttool; //osd userData
+      if (_this.rectangle) {
+        _this.dragging = false;
+        var osdImageRect = _this.osdViewer.viewport.viewportToImageRectangle(_this.rectangle);
+        var canvasRect = {
+          x: parseInt(osdImageRect.x, 10),
+          y: parseInt(osdImageRect.y, 10),
+          width: parseInt(osdImageRect.width, 10),
+          height: parseInt(osdImageRect.height, 10)
+        };
+
+        _this.onDrawFinish(canvasRect);
+        _this.rectangle = null;
+        _this.mouseStart = null;
+      }
+    },
+
+    isMouseInImage: function(mousePosition) {
+      if (mousePosition.x < 0) {
+        return false;
+      }
+      if (mousePosition.y < 0) {
+        return false;
+      }
+      return true;
     },
     
     //Currently the rect is

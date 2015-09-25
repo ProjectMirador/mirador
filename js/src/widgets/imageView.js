@@ -172,13 +172,19 @@
           }, 500));
 
           jQuery(_this.osd.canvas).on('mousemove', $.throttle(function(event) {
-            console.log('we are moving around');
             if (_this.hud.annoState.current === 'annoOnEditOn') {
-              console.log('edit is on and we are moving around');
               var insideCanvas = (function() {
                 var elementCoordinates = OpenSeadragon.getMousePosition(event);
-
-                console.log(_this.osd.viewport.viewerElementToViewportCoordinates(elementCoordinates));
+                //console.log(elementCoordinates);
+                //var tiledImage = _this.osd.world.getItemAt(0);
+                //var imageCoordinates = tiledImage.viewerElementToImageCoordinates(elementCoordinates);
+                //var viewportCoordinates = tiledImage.imageToViewportCoordinates(imageCoordinates);
+                //console.log(imageCoordinates);
+                //console.log(viewportCoordinates);
+                //console.log(_this.osd.viewport.pointFromPixel(event.position));
+                /*if (viewportCoordinates.x >= 0 && viewportCoordinates.y >= 0) {
+                  jQuery(_this.osd.canvas).css('cursor', 'crosshair');
+                }*/
 
               })();
             }
