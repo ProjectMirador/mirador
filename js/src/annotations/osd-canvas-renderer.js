@@ -338,6 +338,7 @@
                 });
         jQuery(api.elements.tooltip).removeClass("qtip-viewer"); //so it is not affected by zoom event raised in OSD
         this.osdViewer.zoomPerClick = 1;
+        this.osdViewer.zoomPerScroll = 1;
     },
     
     //reenable all other qtips
@@ -349,6 +350,7 @@
           'hide.event' : 'mouseleave'}).hide();
       jQuery(api.elements.tooltip).addClass("qtip-viewer"); //re-add class so it is affected by zoom event raised in OSD
       this.osdViewer.zoomPerClick = 2;
+      this.osdViewer.zoomPerScroll = 1.2;
     },
     
     removeAnnotationEvents: function(tooltipevent, api) {
