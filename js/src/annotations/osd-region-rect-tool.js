@@ -66,7 +66,7 @@
       }
     },
 
-    startRectangle: function(event) {
+    startRectangleOther: function(event) {
       var _this = this.userData.recttool; //osd userData
       if (!_this.dragging) {
         _this.dragging = true; 
@@ -88,6 +88,20 @@
             _this.onDrawStart();
           }
         }
+      }
+    },
+
+    startRectangle: function(event) {
+      var _this = this.userData.recttool; //osd userData
+      if (!_this.dragging) {
+        _this.dragging = true; 
+        _this.mouseStart = _this.getMousePositionInImage(_this.osdViewer.viewport.pointFromPixel(event.position));
+        _this.createRectangle(_this.mouseStart);
+        _this.onDrawStart();
+      } else { 
+        var mouseNow = _this.getMousePositionInImage(_this.osdViewer.viewport.pointFromPixel(event.position));
+        _this.updateRectangle(_this.mouseStart, mouseNow);
+        _this.onDraw();
       }
     },
 
@@ -131,8 +145,8 @@
         var canvasRect = {
           x: parseInt(osdImageRect.x, 10),
           y: parseInt(osdImageRect.y, 10),
-          width: parseInt(osdImageRect.width, 10),
-          height: parseInt(osdImageRect.height, 10)
+          width: Math.max(parseInt(osdImageRect.width, 10), 1),  //don't allow 0 pixel width or height
+          height: Math.max(parseInt(osdImageRect.height, 10), 1) //don't allow 0 pixel width or height
         };
 
         _this.onDrawFinish(canvasRect);
@@ -141,11 +155,33 @@
       }
     },
 
+    getMousePositionInImage: function(mousePosition) {
+      if (mousePosition.x < 0) {
+        mousePosition.x = 0;
+      }
+      if (mousePosition.x > 1) {
+        mousePosition.x = 1;
+      }
+      if (mousePosition.y < 0) {
+        mousePosition.y = 0;
+      }
+      if (mousePosition.y > (1/this.osdViewer.source.aspectRatio)) {
+        mousePosition.y = (1/this.osdViewer.source.aspectRatio);
+      }
+      return mousePosition;
+    },
+
     isMouseInImage: function(mousePosition) {
       if (mousePosition.x < 0) {
         return false;
       }
+      if (mousePosition.x > 1) {
+        return false;
+      }
       if (mousePosition.y < 0) {
+        return false;
+      }
+      if (mousePosition.y > (1/this.osdViewer.source.aspectRatio)) {
         return false;
       }
       return true;
