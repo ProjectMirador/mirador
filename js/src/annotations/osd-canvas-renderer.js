@@ -312,6 +312,7 @@
     //disable all other qtips until editing this is done
     freezeQtip: function(api, oaAnno, annoTooltip) {
       this.inEditOrCreateMode = true;
+      jQuery.publish('disableRectTool.'+this.parent.windowId);
         api.set({'content.text' : annoTooltip.getEditor(oaAnno),
         'hide.event' : false});
         //add rich text editor
@@ -338,6 +339,7 @@
     //and reset hide event       
     unFreezeQtip: function(api, oaAnno, annoTooltip) {
       this.inEditOrCreateMode = false;
+      jQuery.publish('enableRectTool.'+this.parent.windowId);
       api.set({'content.text' : annoTooltip.getViewer([oaAnno]),
           'hide.event' : 'mouseleave'}).hide();
       jQuery(api.elements.tooltip).addClass("qtip-viewer"); //re-add class so it is affected by zoom event raised in OSD

@@ -14,6 +14,7 @@
       osdOverlay:  null,
       dragging:    false,
       rectangleDrawn: false,
+      disableRectTool: false,
       parent:      null
       }, options);
       
@@ -28,6 +29,14 @@
     
     bindEvents: function() {
       var _this = this;
+
+      jQuery.subscribe('disableRectTool.' + _this.parent.windowId, function() {
+        _this.disableRectTool = true;
+      });
+
+      jQuery.subscribe('enableRectTool.' + _this.parent.windowId, function() {
+        _this.disableRectTool = false;
+      });
     },
     
     reset: function(osdViewer) {
@@ -97,7 +106,7 @@
 
     startRectangle: function(event) {
       var _this = this.userData.recttool; //osd userData
-      if (!_this.rectangleDrawn) {
+      if (!_this.rectangleDrawn && !_this.disableRectTool) {
         if (!_this.dragging) {
           _this.dragging = true; 
           _this.mouseStart = _this.getMousePositionInImage(_this.osdViewer.viewport.pointFromPixel(event.position));
