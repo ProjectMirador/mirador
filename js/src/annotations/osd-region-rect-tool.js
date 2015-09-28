@@ -66,7 +66,10 @@
       }
     },
 
-    startRectangleOther: function(event) {
+    /*
+     * Here is a different way of checking if the mouse is inside the image.  The response to the user feels slower
+     * so it doesn't feel as great.
+    startRectangle: function(event) {
       var _this = this.userData.recttool; //osd userData
       if (!_this.dragging) {
         _this.dragging = true; 
@@ -89,7 +92,7 @@
           }
         }
       }
-    },
+    },*/
 
     startRectangle: function(event) {
       var _this = this.userData.recttool; //osd userData
