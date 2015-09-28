@@ -274,19 +274,11 @@
       });
 
       jQuery.subscribe('disableTooltips.' + _this.parent.windowId, function() {
-        jQuery.each(_this.tooltips, function(index, value) {
-          if (value.qtip) {
-            value.qtip('disable', true);
-          }
-        });
+        _this.inEditMode = true;
       });
 
       jQuery.subscribe('enableTooltips.' + _this.parent.windowId, function() {
-        jQuery.each(_this.tooltips, function(index, value) {
-          if (value.qtip) {
-            value.qtip('disable', false);
-          }
-        });
+        _this.inEditMode = false;
       });
 
       jQuery.subscribe('removeOverlay.' + _this.parent.windowId, function(event, annoId) {
