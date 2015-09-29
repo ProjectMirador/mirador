@@ -68,10 +68,10 @@
               target : 'mouse',
               adjust : {
                 mouse: false,
-                  method: 'shift'
+                method: 'shift'
               },
               container: jQuery(_this.osdViewer.element),
-                 viewport: true
+              viewport: true
              },
              style : {
               classes : 'qtip-bootstrap qtip-viewer'
@@ -322,7 +322,7 @@
                   menubar: false,
                   statusbar: false,
                   toolbar_items_size: 'small',
-                  toolbar: "bold italic | bullist numlist | link image media",
+                  toolbar: "bold italic | bullist numlist | link image media | removeformat",
                   setup : function(editor) {
                     editor.on('init', function(args) {
                       tinymce.execCommand('mceFocus', false, args.target.id); //make sure tinymce focuses on the editor after initialization                    

@@ -226,12 +226,13 @@
             text : annoTooltip.editorTemplate()
             },
             position : {
-              my: 'center left',
-              at: 'center right',
-              viewport: true,
+              my: 'bottom left',
+              at: 'top right',
+              viewport: jQuery(window),
               adjust : {
-                method: 'shift'
-              }
+                method: 'flipinvert'
+              },
+              container: jQuery(_this.osdViewer.element)
             },
             style : {
               classes : 'qtip-bootstrap'
@@ -259,14 +260,14 @@
                   menubar: false,
                   statusbar: false,
                   toolbar_items_size: 'small',
-                  toolbar: "bold italic | bullist numlist | link image media",
+                  toolbar: "bold italic | bullist numlist | link image media | removeformat",
                   setup : function(editor) {
                     editor.on('init', function(args) {
                       tinymce.execCommand('mceFocus', false, args.target.id); //make sure tinymce focuses on the editor after initialization                    
                     });
                   }
                 });
-                      
+
                 jQuery('.annotation-tooltip').on("submit", function(event) {
                   event.preventDefault();
                   jQuery('.annotation-tooltip a.save').click();
