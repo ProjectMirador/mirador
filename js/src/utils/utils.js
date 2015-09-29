@@ -67,6 +67,22 @@
      miscellaneous utilities
      */
 
+  $.getQueryParams = function(url) {
+    var assoc  = {};
+    var decode = function (s) { return decodeURIComponent(s.replace(/\+/g, " ")); };
+    var queryString = url.split('?')[1];
+    var keyValues = queryString.split('&');
+
+    for(var i in keyValues) {
+      var key = keyValues[i].split('=');
+      if (key.length > 1) {
+        assoc[decode(key[0])] = decode(key[1]);
+      }
+    }
+
+    return assoc;
+  };
+
   $.genUUID = function() {
     var idNum = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       var r = Math.random() * 16|0, v = c == 'x' ? r : (r&0x3|0x8);

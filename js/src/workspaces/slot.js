@@ -43,6 +43,29 @@
           _this.clearSlot();
         }
       });
+      this.element.on('dragover', function(e) {e.preventDefault();return false;});
+      this.element.on('drop', function(e) {
+        e.preventDefault();
+        e.originalEvent.dataTransfer.items[0].getAsString(function(url){
+          var manifestUrl = $.getQueryParams(url).manifest;
+
+          $.viewer.addManifestFromUrl(manifestUrl, "(Added from URL)");
+
+          jQuery.subscribe('manifestReceived', function(event, manifest) {
+            console.log('event sent');
+            var windowConfig;
+            if (manifest.jsonLd['@id'] === manifestUrl) {
+              console.log('should be adding');
+              windowConfig = {
+                manifest: manifest,
+                slotAddress: _this.layoutAddress
+              };
+              console.log(windowConfig);
+              $.viewer.workspace.addWindow(windowConfig);
+            }
+          });
+        });
+      });
       jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
         if (_this.parent.slots.length <= 1) {
           _this.element.find('.remove-slot-option').hide();
@@ -71,7 +94,7 @@
     addItem: function() {
       var _this = this;
       _this.focused = true;
-      
+
       _this.parent.addItem(_this);
     },
 

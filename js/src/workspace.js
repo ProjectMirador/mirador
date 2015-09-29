@@ -352,7 +352,7 @@
       d3.select(window).on('resize', function(event) {
         _this.calculateLayout();
       });
-      
+
       jQuery.subscribe('manifestQueued', function(event, manifestPromise) {
         // Trawl windowObjects preemptively for slotAddresses and
         // notify those slots to display a "loading" state.
@@ -401,7 +401,8 @@
       // from the manifests panel in image mode,
       // or from the manifests panel in thumbnail mode.
       var _this = this,
-      newWindow;
+          newWindow,
+          targetSlot;
 
       jQuery.each(_this.parent.overlayStates, function(oState, value) {
         // toggles the other top-level panels closed and focuses the
@@ -411,18 +412,19 @@
       });
 
       if (windowConfig.slotAddress) {
+        console.log(windowConfig.slotAddress);
         targetSlot = _this.getSlotFromAddress(windowConfig.slotAddress);
       } else {
         targetSlot = _this.focusedSlot || _this.getAvailableSlot();
       }
-      
+
       windowConfig.appendTo = targetSlot.element;
       windowConfig.parent = targetSlot;
 
       if (!targetSlot.window) {
         windowConfig.slotAddress = targetSlot.layoutAddress;
         windowConfig.id = windowConfig.id || $.genUUID();
-        
+
         newWindow = new $.Window(windowConfig);
         _this.windows.push(newWindow);
 
