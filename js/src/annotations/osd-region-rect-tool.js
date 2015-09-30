@@ -164,7 +164,9 @@
           height: Math.max(parseInt(osdImageRect.height, 10), 1) //don't allow 0 pixel width or height
         };
         _this.rectangleDrawn = true;
-        _this.onDrawFinish(canvasRect);
+        var tooltip = _this.onDrawFinish(canvasRect);
+        //show after creation so we don't have to wait for user to make sure mouse is inside overlay
+        tooltip.qtip('show');
         _this.rectangle = null;
         _this.mouseStart = null;
       }
@@ -228,7 +230,7 @@
             position : {
               my: 'bottom left',
               at: 'top right',
-              viewport: jQuery(window),
+              viewport: true,
               adjust : {
                 method: 'flipinvert'
               },
@@ -238,7 +240,7 @@
               classes : 'qtip-bootstrap'
             },
             show: {
-              ready: true
+              event: false
             },
             hide: {
               fixed: true,
@@ -357,6 +359,7 @@
               }
             }
          });
+      return tooltip;
     },
     
     onDrawStart: function() { // use new $.oaAnnotation() to create new 
