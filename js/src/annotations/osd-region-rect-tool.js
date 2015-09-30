@@ -228,7 +228,7 @@
             position : {
               my: 'bottom left',
               at: 'top right',
-              viewport: jQuery(window),
+              viewport: true,
               adjust : {
                 method: 'flipinvert'
               },
