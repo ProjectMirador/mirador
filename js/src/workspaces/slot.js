@@ -29,11 +29,12 @@
     },
 
     bindEvents: function() {
-      var _this = this;
+      var _this = this,
+          dropTarget = this.element.find('.dropMask');
 
       this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
-      this.element.find('.remove-slot-option').on('click', function(){ 
-        _this.parent.removeNode(_this); 
+      this.element.find('.remove-slot-option').on('click', function(){
+        _this.parent.removeNode(_this);
       });
       jQuery.subscribe('windowRemoved', function(event, id) {
         if (_this.window && _this.window.id === id) {
@@ -43,29 +44,21 @@
           _this.clearSlot();
         }
       });
-      this.element.on('dragover', function(e) {e.preventDefault();return false;});
-      this.element.on('drop', function(e) {
+      this.element.on('dragover', function(e) {
         e.preventDefault();
-        e.originalEvent.dataTransfer.items[0].getAsString(function(url){
-          var manifestUrl = $.getQueryParams(url).manifest;
-
-          $.viewer.addManifestFromUrl(manifestUrl, "(Added from URL)");
-
-          jQuery.subscribe('manifestReceived', function(event, manifest) {
-            console.log('event sent');
-            var windowConfig;
-            if (manifest.jsonLd['@id'] === manifestUrl) {
-              console.log('should be adding');
-              windowConfig = {
-                manifest: manifest,
-                slotAddress: _this.layoutAddress
-              };
-              console.log(windowConfig);
-              $.viewer.workspace.addWindow(windowConfig);
-            }
-          });
-        });
+        dropTarget.show();
       });
+      dropTarget.on('dragenter', function(e) {
+        e.preventDefault();
+        _this.element.addClass('draggedOver');
+      });
+      dropTarget.on('dragleave', function(e) {
+        e.preventDefault();
+        _this.element.removeClass('draggedOver');
+        dropTarget.hide();
+      });
+      this.element.on('drop', _this.dropItem);
+
       jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
         if (_this.parent.slots.length <= 1) {
           _this.element.find('.remove-slot-option').hide();
@@ -81,6 +74,30 @@
             slotAddress: _this.window.slotAddress
           });
         }
+      });
+    },
+
+    dropItem: function(e) {
+      var _this = this;
+
+      e.preventDefault();
+      e.originalEvent.dataTransfer.items[0].getAsString(function(url){
+        var manifestUrl = $.getQueryParams(url).manifest;
+
+        $.viewer.addManifestFromUrl(manifestUrl, "(Added from URL)");
+
+        jQuery.subscribe('manifestReceived', function(event, manifest) {
+          console.log('event sent');
+          var windowConfig;
+          if (manifest.jsonLd['@id'] === manifestUrl) {
+            windowConfig = {
+              manifest: manifest,
+              slotAddress: _this.layoutAddress
+            };
+            console.log(windowConfig);
+            $.viewer.workspace.addWindow(windowConfig);
+          }
+        });
       });
     },
 
@@ -112,11 +129,18 @@
                                  // '<li class="add-slot-below"><i class="fa fa-caret-square-o-down fa-lg fa-fw"></i> {{t "addSlotBelow"}}</li>',
                                  // '</ul>',
                                  // '</a>',
-                                 '<h1 class="plus">+</h1>',
-                                 '<h1>{{t "addItem"}}</h1>',
+                                '<h1 class="plus">',
+                                    '<span>+</span>',
+                                '<div class="dropIcon">',
+                                    '<i class="fa fa-level-down"></i>',
+                                '</div>',
+                                '</h1>',
+                                 '<h1 class="addItemText">{{t "addItem"}}</h1>',
+                                 '<h1 class="dropMeMessage">Drop to Load Manifest</h1>',
                                  '</div>',
                                  '<a class="addItemLink"></a>',
                                  '<a class="remove-slot-option"><i class="fa fa-times fa-lg fa-fw"></i> {{t "close"}}</a>',
+      '<a class="dropMask"></a>',
                                  '</div>'
     ].join(''))
   };
