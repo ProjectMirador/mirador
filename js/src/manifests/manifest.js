@@ -1,15 +1,42 @@
 (function($){
 
   $.Manifest = function(manifestUri, location) {
+    if (manifestUri.indexOf('info.json') !== -1) {
+      // The following is an ugly hack. We need to finish the
+      // Manifesto utility library.
+      // See: https://github.com/IIIF/manifesto
+      //
+      // If manifestUri is not a string, then
+      // it's an object, namely a light-weight
+      // dummy manifest wrapped around the
+      // contents of an an info.json response.
+      //
+      // The wrapper is still going to need these
+      // accessor methods. We can just set the
+      // jsonLd directly, and the request needs to
+      // be a jQuery deferred object that is completed
+      // imediately upon creation. This allows
+      // components listening for this request to finish
+      // to react immediately without having to be
+      // re-written.
+      jQuery.extend(true, this, {
+        jsonLd: null,
+        location: location,
+        uri: manifestUri,
+        request: null
+      });
 
-    jQuery.extend(true, this, {
-      jsonLd: null,
-      location: location,
-      uri: manifestUri,
-      request: null 
-    });
+      this.initFromInfoJson(manifestUri);
+    } else {
+      jQuery.extend(true, this, {
+        jsonLd: null,
+        location: location,
+        uri: manifestUri,
+        request: null
+      });
 
-    this.init(manifestUri);
+      this.init(manifestUri);
+    }
   };
 
   $.Manifest.prototype = {
@@ -23,6 +50,19 @@
 
       this.request.done(function(jsonLd) {
         _this.jsonLd = jsonLd;
+      });
+    },
+    initFromInfoJson: function(infoJsonUrl) {
+      var _this = this;
+      this.request = jQuery.ajax({
+        url: infoJsonUrl,
+        dataType: 'json',
+        async: true
+      });
+
+      this.request.done(function(jsonLd) {
+        _this.jsonLd = _this.generateInfoWrapper(jsonLd);
+        console.log('the request has completed');
       });
     },
     getThumbnailForCanvas : function(canvas, width) {
@@ -54,7 +94,7 @@
         service = resource['default'] ? resource['default'].service : resource.service;
         if (service.hasOwnProperty('@context')) {
           version = $.Iiif.getVersionFromContext(service['@context']);
-        }          
+        }
         thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
       }
       return thumbnailUrl;
@@ -76,6 +116,56 @@
     getStructures: function() {
       var _this = this;
       return _this.jsonLd.structures;
+    },
+    generateInfoWrapper: function(infoJson) {
+      // Takes in info.json and creates the
+      // dummy manifest wrapper around it
+      // that will allow it to behave like a
+      // manifest with one canvas in it, with
+      // one image on it. Some of the metadata
+      // of the image will be used as the
+      // label, and so on, of the manifest.
+      var dummyManifest = {
+        '@context': "http://www.shared-canvas.org/ns/context.json",
+        '@id': infoJson['@id'],
+        '@type': 'sc:Manifest',
+        label: "Individual Images",
+        sequences: [
+          {
+            '@id': infoJson['@id'] + '/sequence/1',
+            '@type': 'sc:Sequence',
+            canvases: [
+              {
+                '@id': infoJson['@id'] + '/sequence/1/canvas/1',
+                '@type': 'sc:Canvas',
+                width: infoJson.width,
+                height: infoJson.height,
+                images: [
+                  {
+                    '@id': infoJson['@id'] + '/sequence/1/canvas/1/image/1',
+                    '@type': 'sc:image',
+                    'motivation': 'sc:painting',
+                    resource: {
+                      '@id': infoJson,
+                      '@type': "dctypes:Image",
+                      format: "image/jpeg",
+                      height: infoJson.width,
+                      width: infoJson.height,
+                      service: {
+                        '@id': infoJson['@id'],
+                        '@context': "http://iiif.io/api/image/2/context.json",
+                        'profile': infoJson.profile
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      };
+
+      return dummyManifest;
     }
   };
 

@@ -412,7 +412,6 @@
       });
 
       if (windowConfig.slotAddress) {
-        console.log(windowConfig.slotAddress);
         targetSlot = _this.getSlotFromAddress(windowConfig.slotAddress);
       } else {
         targetSlot = _this.focusedSlot || _this.getAvailableSlot();
@@ -432,16 +431,13 @@
 
         jQuery.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
 
-        // This needs to be called after the window is visible so that the thumbnail position is not 0,0 and therefore can be scrolled
-        //
-        // Yeah, I think the source of the problem was that the element was being appended later than the canvas update call, which was never received by anything.
         jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
       } else {
-        targetSlot.window.element.remove();        
+        targetSlot.window.element.remove();
         targetSlot.window.update(windowConfig);
         jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
-        // The target slot already has a window in it, so just update that window instead, 
-        // using the appropriate saving functions, etc. This obviates the need changing the 
+        // The target slot already has a window in it, so just update that window instead,
+        // using the appropriate saving functions, etc. This obviates the need changing the
         // parent, slotAddress, setting a new ID, and so on.
       }
     }

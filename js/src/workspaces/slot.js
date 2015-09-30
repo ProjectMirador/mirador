@@ -82,19 +82,31 @@
 
       e.preventDefault();
       e.originalEvent.dataTransfer.items[0].getAsString(function(url){
-        var manifestUrl = $.getQueryParams(url).manifest;
+        var manifestUrl = $.getQueryParams(url).manifest,
+            canvasId = $.getQueryParams(url).canvas,
+            imageInfoUrl = $.getQueryParams(url).image;
 
-        $.viewer.addManifestFromUrl(manifestUrl, "(Added from URL)");
+        if (typeof imageInfoUrl !== 'undefined') {
+          $.viewer.addManifestFromUrl(imageInfoUrl, "(Added from URL)");
+        } else {
+          $.viewer.addManifestFromUrl(manifestUrl, "(Added from URL)");
+        }
 
         jQuery.subscribe('manifestReceived', function(event, manifest) {
-          console.log('event sent');
+          console.log(manifest);
           var windowConfig;
-          if (manifest.jsonLd['@id'] === manifestUrl) {
+          if (manifest.jsonLd['@id'] === manifestUrl || manifest.jsonLd['@id']+'/info.json' === imageInfoUrl) {
+            console.log('made it in');
+
             windowConfig = {
               manifest: manifest,
               slotAddress: _this.layoutAddress
             };
-            console.log(windowConfig);
+
+            if (canvasId) {
+              windowConfig.currentCanvasID = canvasId;
+              windowConfig.currentFocus = 'ImageView';
+            }
             $.viewer.workspace.addWindow(windowConfig);
           }
         });
@@ -102,7 +114,7 @@
     },
 
     clearSlot: function() {
-      if (this.window) { 
+      if (this.window) {
         this.window.element.remove();
         delete this.window;
       }
