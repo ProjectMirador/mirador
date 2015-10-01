@@ -93,20 +93,34 @@
         }
 
         jQuery.subscribe('manifestReceived', function(event, manifest) {
-          console.log(manifest);
           var windowConfig;
           if (manifest.jsonLd['@id'] === manifestUrl || manifest.jsonLd['@id']+'/info.json' === imageInfoUrl) {
-            console.log('made it in');
+            // There are many manifests that may be received
+            // while we are waiting for this one, so we
+            // need to make sure the event actually refers to the
+            // manifest we've just dropped.
 
             windowConfig = {
               manifest: manifest,
               slotAddress: _this.layoutAddress
             };
 
+            if (manifest.jsonLd['@id']+'/info.json' === imageInfoUrl) {
+              // If this was added from a naked info.json, pick the
+              // first (and only) page from the synthetic manifest.
+              canvasId = manifest.jsonLd.sequences[0].canvases[0]['@id'];
+            }
+
             if (canvasId) {
+              // If the canvasID is defined, we need to both add
+              // it to the windowConfig and tell it to open in
+              // image view. If we don't specify the focus, the
+              // window will open in thumbnail view with the
+              // chosen page highlighted.
               windowConfig.currentCanvasID = canvasId;
               windowConfig.currentFocus = 'ImageView';
             }
+
             $.viewer.workspace.addWindow(windowConfig);
           }
         });

@@ -38,6 +38,7 @@
         service = canvas.thumbnail.service;
         if (service.hasOwnProperty('@context')) {
           version = $.Iiif.getVersionFromContext(service['@context']);
+          console.log('version');
         }
         thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
       } else {
@@ -49,7 +50,7 @@
       service = resource['default'] ? resource['default'].service : resource.service;
       if (service.hasOwnProperty('@context')) {
         version = $.Iiif.getVersionFromContext(service['@context']);
-      }          
+      }
       thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
     }
     return thumbnailUrl;

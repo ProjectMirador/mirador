@@ -62,7 +62,6 @@
 
       this.request.done(function(jsonLd) {
         _this.jsonLd = _this.generateInfoWrapper(jsonLd);
-        console.log('the request has completed');
       });
     },
     getThumbnailForCanvas : function(canvas, width) {
@@ -129,7 +128,7 @@
         '@context': "http://www.shared-canvas.org/ns/context.json",
         '@id': infoJson['@id'],
         '@type': 'sc:Manifest',
-        label: "Individual Images",
+        label: infoJson['@id'].split('/')[infoJson['@id'].split('/').length -1],
         sequences: [
           {
             '@id': infoJson['@id'] + '/sequence/1',
@@ -153,7 +152,7 @@
                       width: infoJson.height,
                       service: {
                         '@id': infoJson['@id'],
-                        '@context': "http://iiif.io/api/image/2/context.json",
+                        '@context': infoJson['@context'],
                         'profile': infoJson.profile
                       }
                     }

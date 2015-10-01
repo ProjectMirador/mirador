@@ -49,6 +49,8 @@
         width = (_this.thumbInfo.thumbsHeight/aspectRatio),
         thumbnailUrl = $.getThumbnailForCanvas(canvas, width);
 
+        console.log(thumbnailUrl);
+
         return {
           thumbUrl: thumbnailUrl,
           title:    canvas.label,
