@@ -57,7 +57,9 @@
         _this.element.removeClass('draggedOver');
         dropTarget.hide();
       });
-      this.element.on('drop', _this.dropItem);
+      this.element.on('drop', function(e) {
+        _this.dropItem(e);
+      });
 
       jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
         if (_this.parent.slots.length <= 1) {
@@ -84,12 +86,35 @@
       e.originalEvent.dataTransfer.items[0].getAsString(function(url){
         var manifestUrl = $.getQueryParams(url).manifest,
             canvasId = $.getQueryParams(url).canvas,
-            imageInfoUrl = $.getQueryParams(url).image;
+            imageInfoUrl = $.getQueryParams(url).image,
+            windowConfig;
 
-        if (typeof imageInfoUrl !== 'undefined') {
-          $.viewer.addManifestFromUrl(imageInfoUrl, "(Added from URL)");
+        if (typeof $.viewer.manifests[manifestUrl] !== 'undefined') {
+          windowConfig = {
+            manifest: $.viewer.manifests[manifestUrl],
+            slotAddress: _this.getAddress()
+          };
+
+          if (canvasId) {
+            // If the canvasID is defined, we need to both add
+            // it to the windowConfig and tell it to open in
+            // image view. If we don't specify the focus, the
+            // window will open in thumbnail view with the
+            // chosen page highlighted.
+            windowConfig.currentCanvasID = canvasId;
+            windowConfig.currentFocus = 'ImageView';
+          }
+
+          $.viewer.workspace.addWindow(windowConfig);
+
+        } else if (typeof imageInfoUrl !== 'undefined') {
+          if (!$.viewer.manifests[imageInfoUrl]) {
+            $.viewer.addManifestFromUrl(imageInfoUrl, "(Added from URL)");
+          }
         } else {
-          $.viewer.addManifestFromUrl(manifestUrl, "(Added from URL)");
+          if (!$.viewer.manifests[imageInfoUrl]) {
+            $.viewer.addManifestFromUrl(manifestUrl, "(Added from URL)");
+          }
         }
 
         jQuery.subscribe('manifestReceived', function(event, manifest) {
@@ -102,7 +127,7 @@
 
             windowConfig = {
               manifest: manifest,
-              slotAddress: _this.layoutAddress
+              slotAddress: _this.getAddress()
             };
 
             if (manifest.jsonLd['@id']+'/info.json' === imageInfoUrl) {
@@ -132,6 +157,10 @@
         this.window.element.remove();
         delete this.window;
       }
+    },
+
+    getAddress: function() {
+      return this.layoutAddress;
     },
 
     addItem: function() {
