@@ -74,6 +74,8 @@
       templateData = {};
 
       //make sure annotations list is cleared out when changing objects within window
+      console.log("Need to empty and hide, here is this object.  can i find a bbAnnosContainer here?");
+      console.log(this);
       jQuery(".bbAnnosContainer").empty().hide();
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
@@ -91,7 +93,14 @@
 
       _this.imagesList = _this.manifest.getCanvases();
       if (!_this.currentCanvasID) {
-        _this.currentCanvasID = _this.imagesList[0]['@id'];
+        //TODO:  If we have just a range that is going to organize, its possible there are no canvases.  What should I do?
+        if(_this.imagesList[0] === undefined){
+          _this.currentCanvasID = "nocanvas";
+        }
+        else{
+          _this.currentCanvasID = _this.imagesList[0]['@id'];
+        }
+        
       }
 
       this.annoEndpointAvailable = !jQuery.isEmptyObject($.viewer.annotationEndpoint);
@@ -520,6 +529,8 @@
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
+      console.log("need to empty and hide.  Can i find bbAnnosContainer in this?");
+      console.log(this);
       jQuery(".bbAnnosContainer").empty().hide();
       this.getAnnotations();
       switch(this.currentImageMode) {
@@ -632,7 +643,13 @@
                 annoLabel = annoLabel.trim();
                 var annoText = anno.resource["cnt:chars"];
                 var annoHtml = jQuery("<div annoID='"+anno['@id']+"' class='bbAnno'><span class='bbAnnoLabel'>"+annoLabel+":</span> <span class='bbAnnoText'>"+annoText+"</span></div>");
-                jQuery("div[listID='"+annoListID+"']").append(annoHtml);
+                if(annoText === undefined || annoText === ""){
+
+                }
+                else{
+                  jQuery("div[listID='"+annoListID+"']").append(annoHtml);
+                }
+                
               
             });
           }

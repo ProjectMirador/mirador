@@ -242,7 +242,8 @@
     }, 
 
     updateImage: function(canvasID) {
-      console.log("Load new full image");
+      console.log("Load new full image.  Need to empty and hide bbAnnos.  Can i find it in this?");
+      console.log(this);
       jQuery(".bbAnnosContainer").empty();
       jQuery(".bbAnnosContainer").hide();
       //bh edit: hide the anno containers.  We can make it specific to the canvas. 
