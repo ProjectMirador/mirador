@@ -13,6 +13,8 @@
       rectClass:   null,
       osdOverlay:  null,
       dragging:    false,
+      rectangleDrawn: false,
+      disableRectTool: false,
       parent:      null
       }, options);
       
@@ -27,6 +29,14 @@
     
     bindEvents: function() {
       var _this = this;
+
+      jQuery.subscribe('disableRectTool.' + _this.parent.windowId, function() {
+        _this.disableRectTool = true;
+      });
+
+      jQuery.subscribe('enableRectTool.' + _this.parent.windowId, function() {
+        _this.disableRectTool = false;
+      });
     },
     
     reset: function(osdViewer) {
@@ -43,34 +53,6 @@
       this.osdViewer.addHandler("canvas-drag", _this.startRectangle, {recttool: _this});
       this.osdViewer.addHandler("canvas-drag-end", _this.finishRectangle, {recttool: _this});
       this.onModeEnter();
-    },
-
-    startRectangle: function(event) {
-      var _this = this.userData.recttool; //osd userData
-      if (!_this.dragging) {
-        _this.dragging = true; 
-        _this.mouseStart = _this.osdViewer.viewport.pointFromPixel(event.position);
-        _this.createNewRect(_this.mouseStart);
-        _this.onDrawStart();
-      } else { 
-        var mouseNow = _this.osdViewer.viewport.pointFromPixel(event.position);
-        _this.updateRectangle(_this.mouseStart, mouseNow);
-        _this.onDraw();
-      }
-    },
-
-    finishRectangle: function(event) {
-      var _this = this.userData.recttool; //osd userData
-      _this.dragging = false;
-      var osdImageRect = _this.osdViewer.viewport.viewportToImageRectangle(_this.rectangle);
-      var canvasRect = {
-        x: parseInt(osdImageRect.x, 10),
-        y: parseInt(osdImageRect.y, 10),
-        width: parseInt(osdImageRect.width, 10),
-        height: parseInt(osdImageRect.height, 10)
-      };
-
-      _this.onDrawFinish(canvasRect);
     },
 
     exitEditMode: function(event) {
@@ -94,7 +76,51 @@
       }
     },
 
-    createNewRect: function(mouseStart) {
+    /*
+     * Here is a different way of checking if the mouse is inside the image.  The response to the user feels slower
+     * so it doesn't feel as great.
+    startRectangle: function(event) {
+      var _this = this.userData.recttool; //osd userData
+      if (!_this.dragging) {
+        _this.dragging = true; 
+        var currentMouse = _this.osdViewer.viewport.pointFromPixel(event.position);
+        if (_this.isMouseInImage(currentMouse)) {
+          _this.mouseStart = currentMouse;
+          _this.createRectangle(_this.mouseStart);
+          _this.onDrawStart();
+        }
+      } else { 
+        var mouseNow = _this.osdViewer.viewport.pointFromPixel(event.position);
+        if (_this.isMouseInImage(mouseNow)) {
+          if (_this.mouseStart) {
+            _this.updateRectangle(_this.mouseStart, mouseNow);
+            _this.onDraw();
+          } else {
+            _this.mouseStart = mouseNow;
+            _this.createRectangle(_this.mouseStart);
+            _this.onDrawStart();
+          }
+        }
+      }
+    },*/
+
+    startRectangle: function(event) {
+      var _this = this.userData.recttool; //osd userData
+      if (!_this.rectangleDrawn && !_this.disableRectTool) {
+        if (!_this.dragging) {
+          _this.dragging = true; 
+          _this.mouseStart = _this.getMousePositionInImage(_this.osdViewer.viewport.pointFromPixel(event.position));
+          _this.createRectangle(_this.mouseStart);
+          _this.onDrawStart();
+        } else { 
+          var mouseNow = _this.getMousePositionInImage(_this.osdViewer.viewport.pointFromPixel(event.position));
+          _this.updateRectangle(_this.mouseStart, mouseNow);
+          _this.onDraw();
+        }
+      }
+    },
+
+    createRectangle: function(mouseStart) {
       var x = mouseStart.x,
       y = mouseStart.y,
       width = 0,
@@ -125,6 +151,58 @@
 
       this.osdViewer.updateOverlay(this.osdOverlay, this.rectangle);
     },
+
+    finishRectangle: function(event) {
+      var _this = this.userData.recttool; //osd userData
+      if (_this.rectangle) {
+        _this.dragging = false;
+        var osdImageRect = _this.osdViewer.viewport.viewportToImageRectangle(_this.rectangle);
+        var canvasRect = {
+          x: parseInt(osdImageRect.x, 10),
+          y: parseInt(osdImageRect.y, 10),
+          width: Math.max(parseInt(osdImageRect.width, 10), 1),  //don't allow 0 pixel width or height
+          height: Math.max(parseInt(osdImageRect.height, 10), 1) //don't allow 0 pixel width or height
+        };
+        _this.rectangleDrawn = true;
+        var tooltip = _this.onDrawFinish(canvasRect);
+        //show after creation so we don't have to wait for user to make sure mouse is inside overlay
+        tooltip.qtip('show');
+        _this.rectangle = null;
+        _this.mouseStart = null;
+      }
+    },
+
+    getMousePositionInImage: function(mousePosition) {
+      if (mousePosition.x < 0) {
+        mousePosition.x = 0;
+      }
+      if (mousePosition.x > 1) {
+        mousePosition.x = 1;
+      }
+      if (mousePosition.y < 0) {
+        mousePosition.y = 0;
+      }
+      if (mousePosition.y > (1/this.osdViewer.source.aspectRatio)) {
+        mousePosition.y = (1/this.osdViewer.source.aspectRatio);
+      }
+      return mousePosition;
+    },
+
+    isMouseInImage: function(mousePosition) {
+      if (mousePosition.x < 0) {
+        return false;
+      }
+      if (mousePosition.x > 1) {
+        return false;
+      }
+      if (mousePosition.y < 0) {
+        return false;
+      }
+      if (mousePosition.y > (1/this.osdViewer.source.aspectRatio)) {
+        return false;
+      }
+      return true;
+    },
     
     //Currently the rect is
     // kept in openSeaDragon format until it is returned on "onDrawFinish".
@@ -150,18 +228,19 @@
             text : annoTooltip.editorTemplate()
             },
             position : {
-              my: 'center left',
-              at: 'center right',
+              my: 'bottom left',
+              at: 'top right',
               viewport: true,
               adjust : {
-                method: 'shift'
-              }
+                method: 'flipinvert'
+              },
+              container: jQuery(_this.osdViewer.element)
             },
             style : {
               classes : 'qtip-bootstrap'
             },
             show: {
-              ready: true
+              event: false
             },
             hide: {
               fixed: true,
@@ -173,7 +252,9 @@
               
                 //disable all tooltips for overlays
                 jQuery.publish('disableTooltips.'+parent.windowId);
+                //disable zooming
                 _this.osdViewer.zoomPerClick = 1;
+                _this.osdViewer.zoomPerScroll = 1;
 
                 tinymce.init({
                   selector : 'form.annotation-tooltip textarea',
@@ -181,9 +262,14 @@
                   menubar: false,
                   statusbar: false,
                   toolbar_items_size: 'small',
-                  toolbar: "bold italic | bullist numlist | link image media"
+                  toolbar: "bold italic | bullist numlist | link image media | removeformat",
+                  setup : function(editor) {
+                    editor.on('init', function(args) {
+                      tinymce.execCommand('mceFocus', false, args.target.id); //make sure tinymce focuses on the editor after initialization                    
+                    });
+                  }
                 });
-                      
+
                 jQuery('.annotation-tooltip').on("submit", function(event) {
                   event.preventDefault();
                   jQuery('.annotation-tooltip a.save').click();
@@ -191,11 +277,20 @@
               
                 jQuery('.annotation-tooltip a.cancel').on("click", function(event) {
                   event.preventDefault();
+                  //add check so that dialog box only pops up if there is stuff in the editor
+                  var content = tinymce.activeEditor.getContent();
+                  if (content) {
+                    if (!window.confirm("Do you want to cancel this annotation?")) { 
+                      return false;
+                    }
+                  }
                   api.destroy();
+                  _this.rectangleDrawn = false;
                   _this.osdViewer.removeOverlay(_this.osdOverlay);
                   //reenable viewer tooltips
                   jQuery.publish('enableTooltips.'+parent.windowId);
                   _this.osdViewer.zoomPerClick = 2;
+                  _this.osdViewer.zoomPerScroll = 1.2;                  
                 });
                 
                 jQuery('.annotation-tooltip a.save').on("click", function(event) {
@@ -255,13 +350,16 @@
 
                 //update content of this qtip to make it a viewer, not editor
                 api.destroy();
+                _this.rectangleDrawn = false;
                 //reenable viewer tooltips
                 jQuery.publish('enableTooltips.'+parent.windowId);
                 _this.osdViewer.zoomPerClick = 2;
+                _this.osdViewer.zoomPerScroll = 1.2;                  
                 });
               }
             }
          });
+      return tooltip;
     },
     
     onDrawStart: function() { // use new $.oaAnnotation() to create new 

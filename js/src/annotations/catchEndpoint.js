@@ -29,7 +29,8 @@
       userid:    "test@mirador.org",
       username:  "mirador-test",
       annotationsList: [],        //OA list for Mirador use
-      annotationsListCatch: null  //internal list for module use
+      annotationsListCatch: null,  //internal list for module use
+      windowID: null
     }, options);
 
     this.init();
@@ -50,11 +51,11 @@
           'admin':  [this.userid]
         }
       };
-      this.search(this.uri);        
+      this.search({"uri" : this.uri});        
     },
 
     //Search endpoint for all annotations with a given URI
-    search: function(uri) {
+    search: function(options, returnSuccess, returnError) {
       var _this = this;
       this.annotationsList = []; //clear out current list
 
@@ -66,29 +67,45 @@
           "x-annotator-auth-token": this.token
         },
         data: {
-          uri: uri,
+          uri: options.uri,
+          userid : options.userid ? options.userid : undefined,
+          username : options.username ? options.username : undefined,
+          text : options.text ? options.text : undefined,
+          tag : options.tag ? options.tag : undefined,
+          parentid : options.parentid ? options.parentid : undefined,
           contextId: _this.context_id,
           collectionId: _this.collection_id,
-          media: "image",
-          limit: 10000
+          media: options.media ? options.media : "image",
+          limit: options.limit ? options.limit : -1 
         },
 
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-          _this.annotationsListCatch = data.rows;
-          jQuery.each(_this.annotationsListCatch, function(index, value) {
-            _this.annotationsList.push(_this.getAnnotationInOA(value));
-          });
-          _this.dfd.resolve(true);
+          //check if a function has been passed in, otherwise, treat it as a normal search
+          if (typeof returnSuccess === "function") {
+            returnSuccess(data);
+          } else {
+            _this.annotationsListCatch = data.rows;
+            jQuery.each(_this.annotationsListCatch, function(index, value) {
+              _this.annotationsList.push(_this.getAnnotationInOA(value));
+            });
+            _this.dfd.resolve(true);
+            jQuery.publish('catchAnnotationsLoaded.'+_this.windowID, _this.annotationsListCatch);
+          }
         },
         error: function() {
-          console.log("error searching");
+          if (typeof returnError === "function") {
+            returnError();
+          } else {
+            console.log("There was an error searching this endpoint");
+          }
         }
 
       });
     },
     
-    deleteAnnotation: function(annotationID, returnSuccess, returnError) {          
+    deleteAnnotation: function(annotationID, returnSuccess, returnError) {
+          var _this = this;        
           jQuery.ajax({
              url: this.prefix+"/destroy/"+annotationID,
              type: 'DELETE',
@@ -98,10 +115,15 @@
              },
              contentType: "application/json; charset=utf-8",
              success: function(data) {
-               returnSuccess();
+              if (typeof returnSuccess === "function") {
+                returnSuccess();
+              }
+               jQuery.publish('catchAnnotationDeleted.'+_this.windowID, annotationID);
              },
              error: function() {
-               returnError();
+              if (typeof returnSuccess === "function") {
+                returnError();
+              }
              }
              
            });
@@ -122,10 +144,15 @@
         data: JSON.stringify(annotation),
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-          returnSuccess();
+          if (typeof returnSuccess === "function") {
+            returnSuccess();
+          }
+          jQuery.publish('catchAnnotationUpdated.'+_this.windowID, annotation);
         },
         error: function() {
-          returnError();
+          if (typeof returnError === "function") {
+            returnError();
+          }
         }
       });
     },
@@ -133,8 +160,12 @@
     //takes OA Annotation, gets Endpoint Annotation, and saves
     //if successful, MUST return the OA rendering of the annotation
     create: function(oaAnnotation, returnSuccess, returnError) {
-      var annotation = this.getAnnotationInEndpoint(oaAnnotation),
-      _this = this;
+      var annotation = this.getAnnotationInEndpoint(oaAnnotation);
+      this.createCatchAnnotation(annotation, returnSuccess, returnError);
+    },
+
+    createCatchAnnotation: function(catchAnnotation, returnSuccess, returnError) {
+      var _this = this;
       
       jQuery.ajax({
         url: this.prefix+"/create",
@@ -143,13 +174,18 @@
         headers: {
           "x-annotator-auth-token": this.token
         },
-        data: JSON.stringify(annotation),
+        data: JSON.stringify(catchAnnotation),
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-          returnSuccess(_this.getAnnotationInOA(data));
+          if (typeof returnSuccess === "function") {
+            returnSuccess(_this.getAnnotationInOA(data));
+          }
+          jQuery.publish('catchAnnotationCreated.'+_this.windowID, data);
         },
         error: function() {
-          returnError();
+          if (typeof returnError === "function") {
+            returnError();
+          }
         }
       });
     },
@@ -280,6 +316,10 @@
       var regionArray = region.split('=')[1].split(',');
       annotation.rangePosition = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
 
+      var imageUrl = $.Iiif.getImageUrl(this.parent.imagesList[$.getImageIndexById(this.parent.imagesList, oaAnnotation.on.source)]);
+      imageUrl = imageUrl + "/" + regionArray.join(',') + "/full/0/native.jpg";
+      annotation.thumb = imageUrl;
+
       region = oaAnnotation.on.scope.value;
       regionArray = region.split('=')[1].split(',');
       annotation.bounds = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
@@ -291,7 +331,13 @@
         annotation.created = annotation.updated;
       }
       // this needs to come from LTI annotation.user.id, annotation.user.name
-      annotation.user = this.catchOptions.user;
+      annotation.user = {};
+      if (oaAnnotation.annotatedBy) {
+        annotation.user.name = oaAnnotation.annotatedBy.name;
+        annotation.user.id = oaAnnotation.annotatedBy['@id'];
+      } else {
+        annotation.user = this.catchOptions.user;
+      }
       annotation.permissions = this.catchOptions.permissions;
       annotation.archived = false;
       annotation.ranges = [];

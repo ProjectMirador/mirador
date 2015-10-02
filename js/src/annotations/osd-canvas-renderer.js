@@ -14,15 +14,18 @@
       parent:    null,
       annoTooltips: {},
       tooltips:  null,
-      overlays:  []
+      overlays:  [],
+      inEditOrCreateMode:   false
     }, options);
+
+    this.bindEvents();
   };
 
   $.OsdCanvasRenderer.prototype = {
     parseRegion: function(url) {
       var regionString;
       if (typeof url === 'object') {
-        regionString = url.selector.value;  
+        regionString = url.selector.value;
       } else {
         regionString = url.split('#')[1];
       }
@@ -38,7 +41,7 @@
 
       return this.osdViewer.viewport.imageToViewportRectangle(rectX,rectY,rectW,rectH);
 
-    }, 
+    },
 
     render: function() {
       var _this = this;
@@ -55,8 +58,8 @@
         });
         _this.overlays.push(jQuery(osdOverlay));
       });
-      
-      this.tooltips = jQuery(this.overlays).qtip({
+
+      this.tooltips = jQuery(this.osdViewer.element).qtip({
             overwrite : false,
             content: {
              text : ''
@@ -65,32 +68,26 @@
               target : 'mouse',
               adjust : {
                 mouse: false,
-                  method: 'shift'
+                method: 'shift'
               },
               container: jQuery(_this.osdViewer.element),
-                 viewport: true
+              viewport: true
              },
              style : {
               classes : 'qtip-bootstrap qtip-viewer'
              },
              show: {
-              delay: 20
+              delay: 20,
+              event: false
              },
              hide: {
                 fixed: true,
                 delay: 50,
-                event: 'mouseleave'
+                event: false
              },
              events: {
                show: function(event, api) {
-                 var overlays = _this.getOverlaysFromElement(jQuery(event.originalEvent.currentTarget)),
-                 annoTooltip = new $.AnnotationTooltip(), //pass permissions
-                 annotations = [];
-                 
-                 jQuery.each(overlays, function(index, overlay) {
-                   annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
-                 });
-                 api.set({'content.text' : annoTooltip.getViewer(annotations)});
+                 _this.setTooltipContent(event, api);
                  },
                visible: function(event, api) {
                  _this.removeAnnotationEvents(event, api);
@@ -108,8 +105,18 @@
                }
              }
       });
+    },
 
-      this.bindEvents();
+    setTooltipContent: function(event, api) {
+      var overlays = this.getOverlaysFromElement(jQuery(event.originalEvent.currentTarget), event.originalEvent),
+      annoTooltip = new $.AnnotationTooltip(), //pass permissions
+      annotations = [],
+      _this = this;
+
+      jQuery.each(overlays, function(index, overlay) {
+       annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
+     });
+      api.set({'content.text' : annoTooltip.getViewer(annotations)});
     },
 
     getAnnoFromRegion: function(regionId) {
@@ -117,38 +124,44 @@
         return annotation['@id'] === regionId;
       });
     },
-    
-    getOverlaysFromElement: function(element) {
+
+    showTooltipsFromMousePosition: function(event) {
+      var overlays = this.getOverlaysFromMousePosition(event);
+      var api = jQuery(this.osdViewer.element).qtip('api');
+      if (api) {
+        if (overlays.length === 0) {
+          api.hide(event);
+        } else if (api.elements.tooltip && api.elements.tooltip.is(':visible')) {
+          this.setTooltipContent(event, api);
+          api.cache.origin = event;
+          api.reposition(event, true);
+        } else {
+          api.show(event);
+        }
+      }
+    },
+
+    getOverlaysFromMousePosition: function(event) {
+      var position = OpenSeadragon.getMousePosition(event);
       var _this = this,
-      eo = element.offset(),
-      el = eo.left,
-      et = eo.top,
-      er = el + element.outerWidth(),
-      eb = et + element.outerHeight();
-              
-      var overlays = jQuery(_this.osdViewer.canvas).find('.annotation').map(function() {
+      overlays = jQuery(_this.osdViewer.canvas).find('.annotation').map(function() {
         var self = jQuery(this),
         offset = self.offset(),
         l = offset.left,
         t = offset.top,
-        r = l + self.outerWidth(),
-        b = t + self.outerHeight();
-        
-        //check if the current overlay has a corner contained within the element that triggered the mouseenter
-        //OR check if element has a corner contained within the overlay
-        //so that any overlapping annotations are stacked and displayed
-        //this will also find when the overlay and element are the same thing and return it, which is good, we don't have to add it separately
-        return (((l >= el && t >= et && l <= er && t <= eb) || 
-                (l >= el && b <= eb && l <= er && b >= et) || 
-                (r <= er && t >= et && r >= el && t <= eb) || 
-                (r <= er && b <= eb && r >= el && b >= et)) ||
-                
-                ((el >= l && et >= t && el <= r && et <= b) || 
-                (el >= l && eb <= b && el <= r && eb >= t) || 
-                (er <= r && et >= t && er >= l && et <= b) || 
-                (er <= r && eb <= b && er >= l && eb >= t)
-                )) ? this : null;
+        h = self.height(),
+        w = self.width(),
+        x = position.x,
+        y = position.y,
+        maxx = l+w,
+        maxy = t+h;
+        return (y <= maxy && y >= t) && (x <= maxx && x >= l) ? this : null;
       });
+      return overlays;
+    },
+    getOverlaysFromElement: function(element, event) {
+      var _this = this,
+      overlays = this.getOverlaysFromMousePosition(event);
       jQuery(_this.osdViewer.canvas).find('.annotation.hovered').removeClass('hovered');//.css('border-color', 'deepSkyBlue');
       overlays.addClass('hovered');
       /*jQuery.each(overlays, function(index, value) {
@@ -156,13 +169,13 @@
       });*/
       return overlays;
     },
-    
+
     getRandomColor: function() {
        var colors = this.hsvToRgb(Math.random() * 360, 50, 100);
        //return "#" + Math.floor(Math.random() * 0xFFFFFF).toString(16);
        return 'rgb('+colors[0]+','+colors[1]+','+colors[2]+')';
     },
-    
+
     /**
     * From: http://snipplr.com/view.php?codeview&id=14590
     * HSV to RGB color conversion
@@ -177,7 +190,7 @@
       var r, g, b;
       var i;
       var f, p, q, t;
-  
+
       // Make sure our arguments stay in-range
       h = Math.max(0, Math.min(360, h));
       s = Math.max(0, Math.min(100, s));
@@ -189,13 +202,13 @@
       // That conversion here.
       s /= 100;
       v /= 100;
-  
+
       if(s === 0) {
         // Achromatic (grey)
         r = g = b = v;
         return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
       }
-  
+
       h /= 60; // sector 0 to 5
       i = Math.floor(h);
       f = h - i; // factorial part of h
@@ -209,19 +222,19 @@
       g = t;
       b = p;
       break;
-      
+
     case 1:
       r = q;
       g = v;
       b = p;
       break;
-      
+
     case 2:
       r = p;
       g = v;
       b = t;
       break;
-      
+
     case 3:
       r = p;
       g = q;
@@ -245,30 +258,37 @@
 
     bindEvents: function() {
       var _this = this;
-            
+
+      jQuery(this.osdViewer.canvas).parent().on('mousemove', $.throttle(function(event) { 
+        if (!_this.inEditOrCreateMode) {
+          _this.showTooltipsFromMousePosition(event);
+        }
+       }, 200, true));
+
      this.osdViewer.addHandler('zoom', $.debounce(function(){
-          _this.checkMousePosition();
+          _this.hideVisibleTooltips();
         }, 200, true));
-      
+
       jQuery.subscribe('removeTooltips.' + _this.parent.windowId, function() {
         jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
       });
-      
+
       jQuery.subscribe('disableTooltips.' + _this.parent.windowId, function() {
-        jQuery.each(_this.tooltips, function(index, value) {
-          value.qtip('disable', true);
-        }); 
+        _this.inEditOrCreateMode = true;
       });
-      
+
       jQuery.subscribe('enableTooltips.' + _this.parent.windowId, function() {
-        jQuery.each(_this.tooltips, function(index, value) {
-          value.qtip('disable', false);
-        }); 
+        _this.inEditOrCreateMode = false;
+      });
+
+      jQuery.subscribe('removeOverlay.' + _this.parent.windowId, function(event, annoId) {
+        //remove this annotation's overlay from osd
+        _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+annoId)[0]);
       });
 
     },
-    
-    checkMousePosition: function() {
+
+    hideVisibleTooltips: function() {
       jQuery('.qtip-viewer').qtip('hide');
     },
 
@@ -287,16 +307,12 @@
       });
       return elements;
     },
-    
+
     //change content of this tooltip, and disable hiding it, until user clicks save or cancel
     //disable all other qtips until editing this is done
     freezeQtip: function(api, oaAnno, annoTooltip) {
-      jQuery.each(this.overlays, function(index, value) {
-          var overlayApi = value.qtip('api');
-          if (api.id !== overlayApi.id) {
-            overlayApi.disable(true);
-          }
-        });
+      this.inEditOrCreateMode = true;
+      jQuery.publish('disableRectTool.'+this.parent.windowId);
         api.set({'content.text' : annoTooltip.getEditor(oaAnno),
         'hide.event' : false});
         //add rich text editor
@@ -306,26 +322,29 @@
                   menubar: false,
                   statusbar: false,
                   toolbar_items_size: 'small',
-                  toolbar: "bold italic | bullist numlist | link image media"
+                  toolbar: "bold italic | bullist numlist | link image media | removeformat",
+                  setup : function(editor) {
+                    editor.on('init', function(args) {
+                      tinymce.execCommand('mceFocus', false, args.target.id); //make sure tinymce focuses on the editor after initialization                    
+                    });
+                  }
                 });
         jQuery(api.elements.tooltip).removeClass("qtip-viewer"); //so it is not affected by zoom event raised in OSD
         this.osdViewer.zoomPerClick = 1;
+        this.osdViewer.zoomPerScroll = 1;
     },
     
     //reenable all other qtips
     //update content of this qtip to make it a viewer, not editor
     //and reset hide event       
     unFreezeQtip: function(api, oaAnno, annoTooltip) {
-      jQuery.each(this.overlays, function(index, value) {
-           var overlayApi = value.qtip('api');
-           if (api.id !== overlayApi.id) {
-            overlayApi.disable(false);
-           }
-          });
+      this.inEditOrCreateMode = false;
+      jQuery.publish('enableRectTool.'+this.parent.windowId);
       api.set({'content.text' : annoTooltip.getViewer([oaAnno]),
           'hide.event' : 'mouseleave'}).hide();
       jQuery(api.elements.tooltip).addClass("qtip-viewer"); //re-add class so it is affected by zoom event raised in OSD
       this.osdViewer.zoomPerClick = 2;
+      this.osdViewer.zoomPerScroll = 1.2;
     },
     
     removeAnnotationEvents: function(tooltipevent, api) {
@@ -346,13 +365,9 @@
         }
 
         var display = jQuery(this).parents('.annotation-display'),
-        id = display.attr('data-anno-id'),
-        oaAnno = _this.getAnnoFromRegion(id)[0];
-        jQuery.publish('annotationDeleted.'+_this.parent.windowId, [oaAnno]);
-
-        //remove this annotation's overlay from osd
-        //should there be some sort of check that it was successfully deleted? or pass when publishing?
-        _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+id)[0]);
+        id = display.attr('data-anno-id');
+        //oaAnno = _this.getAnnoFromRegion(id)[0];
+        jQuery.publish('annotationDeleted.'+_this.parent.windowId, [id]);
         
         //hide tooltip so event handlers don't get messed up
         api.hide();
@@ -398,11 +413,11 @@
         var bounds = _this.osdViewer.viewport.getBounds(true);
         var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
         //bounds is giving negative values?
-        //update scope?
+        //update scope
+        oaAnno.on.scope.value = "xywh="+Math.round(scope.x)+","+Math.round(scope.y)+","+Math.round(scope.width)+","+Math.round(scope.height); //osd bounds
                   
         var motivation = [],
-        resource = [],
-        on;
+        resource = [];
                   
         //remove all tag-related content in annotation
         oaAnno.motivation = jQuery.grep(oaAnno.motivation, function(value) {

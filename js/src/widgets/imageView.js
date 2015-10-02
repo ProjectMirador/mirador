@@ -61,12 +61,23 @@
         annoEndpointAvailable: this.annoEndpointAvailable,
         fullScreenAvailable : this.fullScreenAvailable
       });
+
+      this.bindEvents();
     },
 
     template: Handlebars.compile([
                                  '<div class="image-view">',
                                  '</div>'
     ].join('')),
+
+    bindEvents: function() {
+      var _this = this;
+      jQuery.subscribe('fitBounds.' + _this.parent.id, function(event, bounds) {
+        var rect = _this.osd.viewport.imageToViewportRectangle(Number(bounds.x), Number(bounds.y), Number(bounds.width), Number(bounds.height));
+        _this.osd.viewport.fitBounds(rect, false);
+      });
+
+    },
 
     setBounds: function() {
       var _this = this;
@@ -140,9 +151,6 @@
           'uniqueID' : uniqueID
         });
 
-        console.log("_this osd");
-        console.log(_this.osd); //Does not have viewport yet. 
-
         _this.osd.addHandler('open', function(){
           // console.log("Looking for options and bounds");
           // console.log(_this.osdOptions);
@@ -161,6 +169,25 @@
           // A hack. Pop the osd overlays layer after the canvas so 
           // that annotations appear.
           jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
+
+          jQuery(_this.osd.canvas).on('mousemove', $.throttle(function(event) {
+            if (_this.hud.annoState.current === 'annoOnEditOn') {
+              var insideCanvas = (function() {
+                var elementCoordinates = OpenSeadragon.getMousePosition(event);
+                //console.log(elementCoordinates);
+                //var tiledImage = _this.osd.world.getItemAt(0);
+                //var imageCoordinates = tiledImage.viewerElementToImageCoordinates(elementCoordinates);
+                //var viewportCoordinates = tiledImage.imageToViewportCoordinates(imageCoordinates);
+                //console.log(imageCoordinates);
+                //console.log(viewportCoordinates);
+                //console.log(_this.osd.viewport.pointFromPixel(event.position));
+                /*if (viewportCoordinates.x >= 0 && viewportCoordinates.y >= 0) {
+                  jQuery(_this.osd.canvas).css('cursor', 'crosshair');
+                }*/
+
+              })();
+            }
+          }, 100, true));
 
           _this.osd.addHandler('zoom', $.debounce(function() {
             _this.setBounds();
@@ -187,10 +214,10 @@
           'id':           osdID,
           'tileSources':  [], //This is the consequence of not getting the JSON.  It creates the viewport on which the OSD functions are called.  Without it, OSD does not work.
           'uniqueID' : uniqueID
+         
         });
 
-        console.log("_this osd");
-        console.log(_this.osd);
+         
 
         _this.osd.addHandler('open', function(){
           // console.log("Looking for options and bounds");
@@ -220,6 +247,25 @@
             _this.setBounds();
           }, 500));
         });
+
+        jQuery(_this.osd.canvas).on('mousemove', $.throttle(function(event) {
+            if (_this.hud.annoState.current === 'annoOnEditOn') {
+              var insideCanvas = (function() {
+                var elementCoordinates = OpenSeadragon.getMousePosition(event);
+                //console.log(elementCoordinates);
+                //var tiledImage = _this.osd.world.getItemAt(0);
+                //var imageCoordinates = tiledImage.viewerElementToImageCoordinates(elementCoordinates);
+                //var viewportCoordinates = tiledImage.imageToViewportCoordinates(imageCoordinates);
+                //console.log(imageCoordinates);
+                //console.log(viewportCoordinates);
+                //console.log(_this.osd.viewport.pointFromPixel(event.position));
+                /*if (viewportCoordinates.x >= 0 && viewportCoordinates.y >= 0) {
+                  jQuery(_this.osd.canvas).css('cursor', 'crosshair');
+                }*/
+
+              })();
+            }
+          }, 100, true));
         
         //BH edit: wrapping the image element in a canvas causes the image not to load.  OSD will not build a viewport
         //  

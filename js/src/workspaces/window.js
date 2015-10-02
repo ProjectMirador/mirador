@@ -258,19 +258,26 @@
       jQuery.subscribe('annotationUpdated.'+_this.id, function(event, oaAnno) {
         //first function is success callback, second is error callback
         _this.endpoint.update(oaAnno, function() {
-          //successfully updated anno
+          jQuery.each(_this.annotationsList, function(index, value) {
+            if (value['@id'] === oaAnno['@id']) {
+              _this.annotationsList[index] = oaAnno;
+              return false;
+            }
+          });
+          jQuery.publish(('annotationListLoaded.' + _this.id));          
         },
         function() {
           console.log("There was an error updating this annotation");        
         });
       });
 
-      jQuery.subscribe('annotationDeleted.'+_this.id, function(event, oaAnno) {        
+      jQuery.subscribe('annotationDeleted.'+_this.id, function(event, annoId) {        
         //remove from endpoint
         //first function is success callback, second is error callback
-        _this.endpoint.deleteAnnotation(oaAnno['@id'], function() {
-          _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== oaAnno['@id']; });
+        _this.endpoint.deleteAnnotation(annoId, function() {
+          _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== annoId; });
           jQuery.publish(('annotationListLoaded.' + _this.id));
+          jQuery.publish(('removeOverlay.' + _this.id), annoId);
         }, 
         function() {
           // console.log("There was an error deleting this annotation");
@@ -671,12 +678,13 @@
         // is a property of the instance.
         if ( _this.endpoint && _this.endpoint !== null ) {
           _this.endpoint.set('dfd', dfd);
-          _this.endpoint.search(_this.currentCanvasID);
+          _this.endpoint.search({ "uri" : _this.currentCanvasID});
         } else {
           options.element = _this.element;
           options.uri = _this.currentCanvasID;
           options.dfd = dfd;
           options.windowID = _this.id;
+          options.parent = _this;
           _this.endpoint = new $[module](options);
         }
 

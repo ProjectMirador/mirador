@@ -19,6 +19,7 @@
         id = id.replace(/\/$/, "");
         return id;
       }
+
     },
 
     getVersionFromContext: function(context) {
