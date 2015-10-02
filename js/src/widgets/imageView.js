@@ -288,10 +288,9 @@
     }, 
 
     updateImage: function(canvasID) {
-      console.log("Load new full image.  Need to empty and hide bbAnnos.  Can i find it in this?");
+      console.log("Load new full image.  Need to empty and hide bbAnnos.  Can i find it in this 3 ?");
       console.log(this);
-      jQuery(".bbAnnosContainer").empty();
-      jQuery(".bbAnnosContainer").hide();
+      this.element.find(jQuery(".bbAnnosContainer")).empty().hide();
       //bh edit: hide the anno containers.  We can make it specific to the canvas. 
       if (this.canvasID !== canvasID) {
         this.canvasID = canvasID;

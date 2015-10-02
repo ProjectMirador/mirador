@@ -74,9 +74,9 @@
       templateData = {};
 
       //make sure annotations list is cleared out when changing objects within window
-      console.log("Need to empty and hide, here is this object.  can i find a bbAnnosContainer here?");
-      console.log(this);
-      jQuery(".bbAnnosContainer").empty().hide();
+      console.log("need to empty and hide maybe?  Can i find bbAnnosContainer in this 1?");
+      console.log(_this);
+      //_this.element.find(jQuery(".bbAnnosContainer")).empty().hide();
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
@@ -536,9 +536,9 @@
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
-      console.log("need to empty and hide.  Can i find bbAnnosContainer in this?");
-      console.log(this);
-      jQuery(".bbAnnosContainer").empty().hide();
+      console.log("need to empty and hide.  Can i find bbAnnosContainer in this2 ?");
+      console.log(_this);
+      _this.element.find(jQuery(".bbAnnosContainer")).empty().hide();
       this.getAnnotations();
       switch(this.currentImageMode) {
         case 'ImageView':
