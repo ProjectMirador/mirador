@@ -57,10 +57,10 @@
         } else {
           this.currentConfig = config;
         }
-      }        
+      }
       //remove empty hashes from config
       this.currentConfig.windowObjects = jQuery.map(this.currentConfig.windowObjects, function(value, index) {
-        if (Object.keys(value).length === 0) return null;  
+        if (Object.keys(value).length === 0) return null;
         return value;
       });
 
@@ -79,9 +79,9 @@
       //also remove ?json bit so it's a clean URL
       var cleanURL = window.location.href.replace(window.location.search, "");
       if (window.location.hash) {
-        history.replaceState(this.currentConfig, "Mirador Session", cleanURL);
+       history.replaceState(this.currentConfig, "Mirador Session", cleanURL);
       } else {
-        history.replaceState(this.currentConfig, "Mirador Session", cleanURL+"#"+this.sessionID);
+       history.replaceState(this.currentConfig, "Mirador Session", cleanURL+"#"+this.sessionID);
       }
 
       this.bindEvents();

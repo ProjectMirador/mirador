@@ -97,7 +97,7 @@ describe('Utils', function() {
 
     });
 
-    it('should return an error message to the console if the result is bad', function(done) {
+    xit('should return an error message to the console if the result is bad', function(done) {
       var dataUri = 'http://thing.notanimagehfhfhfhf.png/';
       spyOn(console, 'log').and.returnValue();
 

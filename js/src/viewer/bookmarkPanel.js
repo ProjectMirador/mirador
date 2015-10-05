@@ -25,22 +25,22 @@
         if (stateValue) { _this.show(); return; }
         _this.hide();
       });
-      
+
       jQuery.subscribe('saveControllerConfigUpdated', function() {
         var ajaxType = 'POST',
         ajaxURL = "https://jsonblob.com/api/jsonBlob";
-      
+
         jQuery.ajax({
           type: ajaxType,
-          url: ajaxURL, 
-          data: JSON.stringify(Mirador.saveController.currentConfig), 
-          headers: { 
+          url: ajaxURL,
+          data: JSON.stringify(Mirador.saveController.currentConfig),
+          headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json' 
+            'Content-Type': 'application/json'
           },
           success: function(data, textStatus, request) {
               var jsonblob = request.getResponseHeader('X-Jsonblob');
-              
+
               var bookmarkURL = window.location.href.replace(window.location.hash, '') + "?json="+jsonblob;
               _this.element.find('#share-url').val(bookmarkURL).focus().select();
          }
@@ -49,10 +49,10 @@
     },
 
     hide: function() {
-      jQuery(this.element).hide({effect: "slide", direction: "up", duration: 300, easing: "swing"});    
+      jQuery(this.element).hide({effect: "slide", direction: "up", duration: 300, easing: "swing"});
     },
 
-    show: function() {      
+    show: function() {
       jQuery(this.element).show({effect: "slide", direction: "up", duration: 300, easing: "swing"});
     },
 

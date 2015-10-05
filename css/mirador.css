@@ -531,16 +531,34 @@ li.highlight {
   overflow:hidden;
   pointer-events: none;
 }
-.slot:hover {
+.slot:hover, .slot.focused, .slot.draggedOver {
   box-shadow: inset 0 0 35px rgba(94, 219, 255, 1);
 }
+.slot.draggedOver .dropMeMessage, .slot.draggedOver .dropIcon {
+    display:block;
+}
+.dropMeMessage, .dropIcon {
+    display:none;
+}
+.slot.draggedOver .addItemText, .slot.draggedOver .plus span {
+    display:none;
+}
 .addItemLink {
+    display:block;
+    position:absolute;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    cursor: pointer;
+}
+.dropMask {
   position:absolute;
   top:0;
   bottom:0;
   right:0;
   left:0;
-  cursor: pointer;
+  display:none;
 }
 
 /* window scaffolding */

@@ -48,7 +48,7 @@
                 _this.parent.addManifestFromUrl(url, "(Added from URL)");
                 //console.log('trying to add from URL');
             });
-            
+
             this.element.find('.remove-object-option').on('click', function() {
               _this.parent.toggleLoadWindow();
             });
@@ -58,12 +58,12 @@
                if (stateValue) { _this.show(); return; }
                 _this.hide();
             });
-            
+
             jQuery.subscribe('manifestReceived', function(event, newManifest) {
               _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifest: newManifest, resultsWidth: _this.resultsWidth }));
               _this.element.find('#manifest-search').keyup();
             });
-            
+
             // Filter manifests based on user input
             this.element.find('#manifest-search').on('keyup input', function() {
                if (this.value.length > 0) {
@@ -74,11 +74,11 @@
                   _this.element.find('.items-listing li').show();
                }
             });
-            
+
             this.element.find('#manifest-search-form').on('submit', function(event) {
               event.preventDefault();
             });
-            
+
             jQuery.subscribe('resize', $.debounce(function(){
               var clone = _this.element.clone().css("visibility","hidden").css("display", "block").appendTo(_this.appendTo);
               _this.resultsWidth = clone.find('.select-results').outerWidth();
