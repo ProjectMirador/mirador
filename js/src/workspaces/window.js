@@ -74,8 +74,8 @@
       templateData = {};
 
       //make sure annotations list is cleared out when changing objects within window
-      console.log("need to empty and hide maybe?  Can i find bbAnnosContainer in this 1?");
-      console.log(_this);
+      //console.log("need to empty and hide maybe?  Can i find bbAnnosContainer in this 1?");
+     // console.log(_this);
       //_this.element.find(jQuery(".bbAnnosContainer")).empty().hide();
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
@@ -536,8 +536,8 @@
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
-      console.log("need to empty and hide.  Can i find bbAnnosContainer in this2 ?");
-      console.log(_this);
+      //console.log("need to empty and hide.  Can i find bbAnnosContainer in this2 ?");
+      //console.log(_this);
       _this.element.find(jQuery(".bbAnnosContainer")).empty().hide();
       this.getAnnotations();
       switch(this.currentImageMode) {
@@ -607,13 +607,13 @@
       url = _this.manifest.getAnnotationsListUrl(_this.currentCanvasID);
       if (url !== false) {
         jQuery.get(url, function(list) {
-          console.log("Got anno list");
+          //console.log("Got anno list");
           if(typeof list !== "object"){
             //bh edit: test for case where it is a string, not an object and cast if necessary.
             list = JSON.parse(list);
           }
-          console.log(list);
-          console.log("Got the resources");
+          //console.log(list);
+          //console.log("Got the resources");
           var annoListID = list["@id"];
           if(jQuery("div[listID='"+annoListID+"']").length > 0){
             return false;
@@ -660,7 +660,6 @@
               
             });
           }
-          console.log("Publish anno list loaded with id: " + _this.id);
           jQuery.publish('annotationListLoaded.' + _this.id);
         });
       }

@@ -126,12 +126,15 @@
     },
 
     createOpenSeadragonInstance: function(imageUrl) {
-      console.log("On OSD creation with url: "+imageUrl);
+     // console.log("On OSD creation with url: "+imageUrl);
       var infoJsonUrl = imageUrl + '/info.json',
       uniqueID = $.genUUID(),
       osdID = 'mirador-osd-' + uniqueID,
       infoJson,
       _this = this;
+
+     // console.log("create osd.  what is _this?");
+      //console.log(_this);
 
       this.element.find('.' + this.osdCls).remove();
 
@@ -208,25 +211,35 @@
         .attr('id', osdID)
         .appendTo(_this.element);
 
-        //The only way to attach osd functions is to fake tileSources here so that this builds and OSD instance with a viewport.  
-
+        //I may not know the height or width of this image or canvas.  Our application does not allow for drawing annotations, so we are not concerned with height/width
+        //when we make the canvases.  They are just filled with arbitrary values.  
+        
         _this.osd = $.OpenSeadragon({
           'id':           osdID,
-          'tileSources':  [], //This is the consequence of not getting the JSON.  It creates the viewport on which the OSD functions are called.  Without it, OSD does not work.
+          'tileSources':  [
+              {
+              'type': 'legacy-image-pyramid',
+              'levels':[{ 
+                'url': imageUrl,
+                'height': 1500,
+                'width': 1000
+              }
+              ]
+            }], //This is the consequence of not getting the JSON.  It creates the viewport on which the OSD functions are called.  Without it, OSD does not work.
           'uniqueID' : uniqueID
-         
         });
 
          
 
         _this.osd.addHandler('open', function(){
-          // console.log("Looking for options and bounds");
-          // console.log(_this.osdOptions);
+           console.log("Looking for options and bounds");
+           console.log(_this.osdOptions);
           // console.log(_this.osdOptions.osdBounds);
           if (_this.osdOptions.osdBounds) {
-            var rect = new OpenSeadragon.Rect(0, 0, 1, 1);
-            //_this.osd.viewport.fitBounds(rect, true);
-            _this.osd.container.fitBounds(rect, true);
+            //var rect = new OpenSeadragon.Rect(0, 0, 1000, 1500);
+            var rect = new OpenSeadragon.Rect(0, 0, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
+            _this.osd.viewport.fitBounds(rect, true);
+            //_this.osd.container.fitBounds(rect, true);
           }
 
           _this.addAnnotationsLayer(_this.elemAnno);
@@ -269,9 +282,9 @@
         
         //BH edit: wrapping the image element in a canvas causes the image not to load.  OSD will not build a viewport
         //  
-        var fakeCanvas = jQuery("<img class='fix' src='"+imageUrl+"'/>");
-          jQuery(_this.osd.canvas).append(fakeCanvas);       
-        });
+        // var fakeCanvas = jQuery("<img class='fix' src='"+imageUrl+"'/>");
+        //   jQuery(_this.osd.canvas).append(fakeCanvas);       
+         });
       
     },
 
@@ -288,8 +301,8 @@
     }, 
 
     updateImage: function(canvasID) {
-      console.log("Load new full image.  Need to empty and hide bbAnnos.  Can i find it in this 3 ?");
-      console.log(this);
+      //console.log("Load new full image.  Need to empty and hide bbAnnos.  Can i find it in this 3 ?");
+      //console.log(this);
       this.element.find(jQuery(".bbAnnosContainer")).empty().hide();
       //bh edit: hide the anno containers.  We can make it specific to the canvas. 
       if (this.canvasID !== canvasID) {
