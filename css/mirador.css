@@ -1554,7 +1554,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   clear: both;
 }
 .qtip-content {
-  min-width: 200px;
+  min-width: 275px;
   max-height: 200px;
   overflow: auto;
 }
