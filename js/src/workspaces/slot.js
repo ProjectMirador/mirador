@@ -29,11 +29,12 @@
     },
 
     bindEvents: function() {
-      var _this = this;
+      var _this = this,
+          dropTarget = this.element.find('.dropMask');
 
       this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
-      this.element.find('.remove-slot-option').on('click', function(){ 
-        _this.parent.removeNode(_this); 
+      this.element.find('.remove-slot-option').on('click', function(){
+        _this.parent.removeNode(_this);
       });
       jQuery.subscribe('windowRemoved', function(event, id) {
         if (_this.window && _this.window.id === id) {
@@ -43,6 +44,23 @@
           _this.clearSlot();
         }
       });
+      this.element.on('dragover', function(e) {
+        e.preventDefault();
+        dropTarget.show();
+      });
+      dropTarget.on('dragenter', function(e) {
+        e.preventDefault();
+        _this.element.addClass('draggedOver');
+      });
+      dropTarget.on('dragleave', function(e) {
+        e.preventDefault();
+        _this.element.removeClass('draggedOver');
+        dropTarget.hide();
+      });
+      this.element.on('drop', function(e) {
+        _this.dropItem(e);
+      });
+
       jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
         if (_this.parent.slots.length <= 1) {
           _this.element.find('.remove-slot-option').hide();
@@ -61,17 +79,94 @@
       });
     },
 
+    dropItem: function(e) {
+      var _this = this;
+
+      e.preventDefault();
+      e.originalEvent.dataTransfer.items[0].getAsString(function(url){
+        var manifestUrl = $.getQueryParams(url).manifest,
+            canvasId = $.getQueryParams(url).canvas,
+            imageInfoUrl = $.getQueryParams(url).image,
+            windowConfig;
+
+        if (typeof $.viewer.manifests[manifestUrl] !== 'undefined') {
+          windowConfig = {
+            manifest: $.viewer.manifests[manifestUrl],
+            slotAddress: _this.getAddress()
+          };
+
+          if (canvasId) {
+            // If the canvasID is defined, we need to both add
+            // it to the windowConfig and tell it to open in
+            // image view. If we don't specify the focus, the
+            // window will open in thumbnail view with the
+            // chosen page highlighted.
+            windowConfig.currentCanvasID = canvasId;
+            windowConfig.currentFocus = 'ImageView';
+          }
+
+          $.viewer.workspace.addWindow(windowConfig);
+
+        } else if (typeof imageInfoUrl !== 'undefined') {
+          if (!$.viewer.manifests[imageInfoUrl]) {
+            $.viewer.addManifestFromUrl(imageInfoUrl, "(Added from URL)");
+          }
+        } else {
+          if (!$.viewer.manifests[imageInfoUrl]) {
+            $.viewer.addManifestFromUrl(manifestUrl, "(Added from URL)");
+          }
+        }
+
+        jQuery.subscribe('manifestReceived', function(event, manifest) {
+          var windowConfig;
+          if (manifest.jsonLd['@id'] === manifestUrl || manifest.jsonLd['@id']+'/info.json' === imageInfoUrl) {
+            // There are many manifests that may be received
+            // while we are waiting for this one, so we
+            // need to make sure the event actually refers to the
+            // manifest we've just dropped.
+
+            windowConfig = {
+              manifest: manifest,
+              slotAddress: _this.getAddress()
+            };
+
+            if (manifest.jsonLd['@id']+'/info.json' === imageInfoUrl) {
+              // If this was added from a naked info.json, pick the
+              // first (and only) page from the synthetic manifest.
+              canvasId = manifest.jsonLd.sequences[0].canvases[0]['@id'];
+            }
+
+            if (canvasId) {
+              // If the canvasID is defined, we need to both add
+              // it to the windowConfig and tell it to open in
+              // image view. If we don't specify the focus, the
+              // window will open in thumbnail view with the
+              // chosen page highlighted.
+              windowConfig.currentCanvasID = canvasId;
+              windowConfig.currentFocus = 'ImageView';
+            }
+
+            $.viewer.workspace.addWindow(windowConfig);
+          }
+        });
+      });
+    },
+
     clearSlot: function() {
-      if (this.window) { 
+      if (this.window) {
         this.window.element.remove();
         delete this.window;
       }
     },
 
+    getAddress: function() {
+      return this.layoutAddress;
+    },
+
     addItem: function() {
       var _this = this;
       _this.focused = true;
-      
+
       _this.parent.addItem(_this);
     },
 
@@ -89,11 +184,18 @@
                                  // '<li class="add-slot-below"><i class="fa fa-caret-square-o-down fa-lg fa-fw"></i> {{t "addSlotBelow"}}</li>',
                                  // '</ul>',
                                  // '</a>',
-                                 '<h1 class="plus">+</h1>',
-                                 '<h1>{{t "addItem"}}</h1>',
+                                '<h1 class="plus">',
+                                    '<span>+</span>',
+                                '<div class="dropIcon">',
+                                    '<i class="fa fa-level-down"></i>',
+                                '</div>',
+                                '</h1>',
+                                 '<h1 class="addItemText">{{t "addItem"}}</h1>',
+                                 '<h1 class="dropMeMessage">Drop to Load Manifest</h1>',
                                  '</div>',
                                  '<a class="addItemLink"></a>',
                                  '<a class="remove-slot-option"><i class="fa fa-times fa-lg fa-fw"></i> {{t "close"}}</a>',
+      '<a class="dropMask"></a>',
                                  '</div>'
     ].join(''))
   };

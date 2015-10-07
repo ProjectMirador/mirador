@@ -191,9 +191,9 @@
       }
       var _this = this;
       element.show({
-        effect: "fade", 
-        duration: 300, 
-        easing: "easeInCubic", 
+        effect: "fade",
+        duration: 300,
+        easing: "easeInCubic",
         complete: function() {
           _this.loadImages();
         }
