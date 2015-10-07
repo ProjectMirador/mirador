@@ -74,6 +74,9 @@
       templateData = {};
 
       //make sure annotations list is cleared out when changing objects within window
+      //console.log("need to empty and hide maybe?  Can i find bbAnnosContainer in this 1?");
+     // console.log(_this);
+      //_this.element.find(jQuery(".bbAnnosContainer")).empty().hide();
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
@@ -90,7 +93,14 @@
 
       _this.imagesList = _this.manifest.getCanvases();
       if (!_this.currentCanvasID) {
-        _this.currentCanvasID = _this.imagesList[0]['@id'];
+        //TODO:  If we have just a range that is going to organize, its possible there are no canvases.  What should I do?
+        if(_this.imagesList[0] === undefined){
+          _this.currentCanvasID = "nocanvas";
+        }
+        else{
+          _this.currentCanvasID = _this.imagesList[0]['@id'];
+        }
+        
       }
 
       this.annoEndpointAvailable = !jQuery.isEmptyObject($.viewer.annotationEndpoint);
@@ -526,6 +536,9 @@
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
+      //console.log("need to empty and hide.  Can i find bbAnnosContainer in this2 ?");
+      //console.log(_this);
+      _this.element.find(jQuery(".bbAnnosContainer")).empty().hide();
       this.getAnnotations();
       switch(this.currentImageMode) {
         case 'ImageView':
@@ -592,24 +605,71 @@
       //first look for manifest annotations
       var _this = this,
       url = _this.manifest.getAnnotationsListUrl(_this.currentCanvasID);
-
       if (url !== false) {
         jQuery.get(url, function(list) {
+          //console.log("Got anno list");
+          if(typeof list !== "object"){
+            //bh edit: test for case where it is a string, not an object and cast if necessary.
+            list = JSON.parse(list);
+          }
+          //console.log(list);
+          //console.log("Got the resources");
+          var annoListID = list["@id"];
+          if(jQuery("div[listID='"+annoListID+"']").length > 0){
+            return false;
+          }
           _this.annotationsList = _this.annotationsList.concat(list.resources);
-          jQuery.each(_this.annotationsList, function(index, value) {
-            //if there is no ID for this annotation, set a random one
-            if (typeof value['@id'] === 'undefined') {
-              value['@id'] = $.genUUID();
+          if(_this.annotationsList.length > 0 && typeof _this.annotationsList[0] !== "object"){
+            _this.annotationsList = JSON.parse(_this.annotationsList);
+          }
+          //console.log(_this.annotationsList);
+          var oneofours = false;
+          var goAhead = true;
+          if(url.indexOf("/annotationstore/annotation")){ // one of ours, which will not render out annotation w/o a viewport
+            //bh edit: make this check for if it is an item from SLU anno store.  If it is not, do not run special code.
+            oneofours = true;
+            var showAnnos = _this.element.find('.bbAnnosContainer');
+            showAnnos.attr("listID", annoListID);
+            if(showAnnos.length === 0){
+              goAhead = false;
             }
-            //indicate this is a manifest annotation - which affects the UI
-            value.endpoint = "manifest";
-          });
+          }
+          if(oneofours && goAhead){
+            jQuery("div[listID='"+annoListID+"']").empty();
+            jQuery.each(_this.annotationsList, function(index, value) {
+              //if there is no ID for this annotation, set a random one
+              if (typeof value['@id'] === 'undefined') {
+                value['@id'] = $.genUUID();
+              }
+              //indicate this is a manifest annotation - which affects the UI
+              value.endpoint = "manifest";
+              
+                //Has to be a slu item, container must exist.
+                var anno = value;
+                var annoLabel = anno.label;
+                annoLabel = annoLabel.trim();
+                var annoText = anno.resource["cnt:chars"];
+                var annoHtml = jQuery("<div annoID='"+anno['@id']+"' class='bbAnno'><span class='bbAnnoLabel'>"+annoLabel+":</span> <span class='bbAnnoText'>"+annoText+"</span></div>");
+                if(annoText === undefined || annoText === ""){
+
+                }
+                else{
+                  jQuery("div[listID='"+annoListID+"']").append(annoHtml);
+                }
+                
+              
+            });
+          }
           jQuery.publish('annotationListLoaded.' + _this.id);
         });
+      }
+      else{
+        console.log("url was false");
       }
 
       // next check endpoint
       if (this.annoEndpointAvailable) {
+        console.log("Endpoint available");
         var dfd = jQuery.Deferred(),
         module = $.viewer.annotationEndpoint.module,
         options = $.viewer.annotationEndpoint.options;
@@ -638,6 +698,9 @@
           });
           jQuery.publish('annotationListLoaded.' + _this.id);
         });
+      }
+      else{
+        console.log("Anno endpoint not available");
       }
     },
 

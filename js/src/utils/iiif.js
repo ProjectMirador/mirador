@@ -4,16 +4,22 @@
   $.Iiif = {
 
     getImageUrl: function(image) {
-
-      if (!image.images[0].resource.service) {
+      //bh edit:  if there is no image or a missing resource, then set the image id to be the default image
+      if(!image.images[0] || !image.images[0].resource){
+        id = "http://165.134.241.141/brokenBooks/images/imgNotFound.png";
+        return id;
+      }
+      else if (!image.images[0].resource.service) {
         id = image.images[0].resource['default'].service['@id'];
         id = id.replace(/\/$/, "");
         return id;
       }
-      var id = image.images[0].resource.service['@id'];
-      id = id.replace(/\/$/, "");
+      else{
+        var id = image.images[0].resource.service['@id'];
+        id = id.replace(/\/$/, "");
+        return id;
+      }
 
-      return id;
     },
 
     getVersionFromContext: function(context) {

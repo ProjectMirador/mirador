@@ -126,15 +126,22 @@
     },
 
     createOpenSeadragonInstance: function(imageUrl) {
+     // console.log("On OSD creation with url: "+imageUrl);
       var infoJsonUrl = imageUrl + '/info.json',
       uniqueID = $.genUUID(),
       osdID = 'mirador-osd-' + uniqueID,
       infoJson,
       _this = this;
 
+     // console.log("create osd.  what is _this?");
+      //console.log(_this);
+
       this.element.find('.' + this.osdCls).remove();
 
+      //needs tweaking so that it can handle a no .json file present.  it still needs to work.  
       jQuery.getJSON(infoJsonUrl).done(function (infoJson, status, jqXHR) {
+        console.log("Got JSON info");
+        console.log(infoJson);
         _this.elemOsd =
           jQuery('<div/>')
         .addClass(_this.osdCls)
@@ -148,6 +155,9 @@
         });
 
         _this.osd.addHandler('open', function(){
+          // console.log("Looking for options and bounds");
+          // console.log(_this.osdOptions);
+          // console.log(_this.osdOptions.osdBounds);
           if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
@@ -162,14 +172,6 @@
           // A hack. Pop the osd overlays layer after the canvas so 
           // that annotations appear.
           jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
-
-          _this.osd.addHandler('zoom', $.debounce(function() {
-            _this.setBounds();
-          }, 500));
-
-          _this.osd.addHandler('pan', $.debounce(function(){
-            _this.setBounds();
-          }, 500));
 
           jQuery(_this.osd.canvas).on('mousemove', $.throttle(function(event) {
             if (_this.hud.annoState.current === 'annoOnEditOn') {
@@ -189,8 +191,105 @@
               })();
             }
           }, 100, true));
+
+          _this.osd.addHandler('zoom', $.debounce(function() {
+            _this.setBounds();
+          }, 500));
+
+          _this.osd.addHandler('pan', $.debounce(function(){
+            _this.setBounds();
+          }, 500));
         });
-      });
+      })
+      .fail(function(){
+        //BH edit:  On fail, then it is not an image with a IIIF service.  We can only build certain parts of OSD
+        //but we can still get the image out
+        console.log("No info.json file.  Please handle accordingly.  I am going to make the OSD container.");
+        _this.elemOsd =
+          jQuery('<div/>')
+        .addClass(_this.osdCls)
+        .attr('id', osdID)
+        .appendTo(_this.element);
+
+        //I may not know the height or width of this image or canvas.  Our application does not allow for drawing annotations, so we are not concerned with height/width
+        //when we make the canvases.  They are just filled with arbitrary values.  
+
+        var currentCanvasIndex = _this.currentImgIndex;
+        var currentCanvasHeight = _this.imagesList[currentCanvasIndex].height;
+        var currentCanvasWidth = _this.imagesList[currentCanvasIndex].width;
+        
+        _this.osd = $.OpenSeadragon({
+          'id':           osdID,
+          'tileSources':  [
+              { 
+              'type': 'legacy-image-pyramid',
+              'levels':[{ 
+                'url': imageUrl,
+                'height': currentCanvasHeight,
+                'width': currentCanvasWidth
+              }
+              ]
+            }], //This is the consequence of not getting the JSON.  It creates the viewport on which the OSD functions are called.  Without it, OSD does not work.
+          'uniqueID' : uniqueID
+        });
+
+         
+
+        _this.osd.addHandler('open', function(){
+           console.log("Looking for options and bounds");
+           console.log(_this.osdOptions);
+          // console.log(_this.osdOptions.osdBounds);
+          if (_this.osdOptions.osdBounds) {
+            //var rect = new OpenSeadragon.Rect(0, 0, 1000, 1500);
+            var rect = new OpenSeadragon.Rect(0, 0, parseInt(currentCanvasWidth), parseInt(currentCanvasHeight));
+            _this.osd.viewport.fitBounds(rect, true);
+            //_this.osd.container.fitBounds(rect, true);
+          }
+
+          _this.addAnnotationsLayer(_this.elemAnno);
+          //re-add correct annotationsLayer mode based on annoState
+          if (_this.hud.annoState.current !== "annoOff") {
+            jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');          
+          }
+
+          // A hack. Pop the osd overlays layer after the canvas so 
+          // that annotations appear.
+          jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
+
+          _this.osd.addHandler('zoom', $.debounce(function() {
+            _this.setBounds();
+          }, 500));
+
+          _this.osd.addHandler('pan', $.debounce(function(){
+            _this.setBounds();
+          }, 500));
+        });
+
+        jQuery(_this.osd.canvas).on('mousemove', $.throttle(function(event) {
+            if (_this.hud.annoState.current === 'annoOnEditOn') {
+              var insideCanvas = (function() {
+                var elementCoordinates = OpenSeadragon.getMousePosition(event);
+                //console.log(elementCoordinates);
+                //var tiledImage = _this.osd.world.getItemAt(0);
+                //var imageCoordinates = tiledImage.viewerElementToImageCoordinates(elementCoordinates);
+                //var viewportCoordinates = tiledImage.imageToViewportCoordinates(imageCoordinates);
+                //console.log(imageCoordinates);
+                //console.log(viewportCoordinates);
+                //console.log(_this.osd.viewport.pointFromPixel(event.position));
+                /*if (viewportCoordinates.x >= 0 && viewportCoordinates.y >= 0) {
+                  jQuery(_this.osd.canvas).css('cursor', 'crosshair');
+                }*/
+
+              })();
+            }
+          }, 100, true));
+        
+        //BH edit: wrapping the image element in a canvas causes the image not to load.  OSD will not build a viewport
+        //  
+        // var fakeCanvas = jQuery("<img class='fix' src='"+imageUrl+"'/>");
+        //   jQuery(_this.osd.canvas).append(fakeCanvas);       
+         });
+      
     },
 
     addAnnotationsLayer: function(element) {
@@ -203,9 +302,13 @@
         element: element
       });
 
-    },
+    }, 
 
     updateImage: function(canvasID) {
+      //console.log("Load new full image.  Need to empty and hide bbAnnos.  Can i find it in this 3 ?");
+      //console.log(this);
+      this.element.find(jQuery(".bbAnnosContainer")).empty().hide();
+      //bh edit: hide the anno containers.  We can make it specific to the canvas. 
       if (this.canvasID !== canvasID) {
         this.canvasID = canvasID;
         this.currentImgIndex = $.getImageIndexById(this.imagesList, canvasID);
@@ -221,7 +324,8 @@
         if (this.hud.annoState.current === "annoOnEditOn") {
           this.hud.annoState.editOff();
         }
-      } else {
+      } 
+      else {
         this.parent.updateFocusImages([canvasID]);
       }
     },

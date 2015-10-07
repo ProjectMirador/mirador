@@ -23,11 +23,28 @@
 
   $.OsdCanvasRenderer.prototype = {
     parseRegion: function(url) {
-      var regionString;
+      var regionString = "xywh=0,0,0,0";
+      var onlyCommenting = false;
       if (typeof url === 'object') {
-        regionString = url.selector.value;
-      } else {
-        regionString = url.split('#')[1];
+        if(url.selection.value!==undefined && url.selection.value!==""){
+          //A region may not have been provided, this causes the code to crash.  Handle with a 0 height and width anno. 
+          regionString = url.selector.value;
+        }
+        else{
+          regionString = "xywh=0,0,0,0";
+        }
+      } 
+      else {
+        //BH edit: These could be commenting annotations that were not given a region.  If so, make a fake xywh=0,0,0,0 to represent the commenting annotation on the canvas. 
+        if(regionString.indexOf("#") > -1){
+          regionString = url.split('#')[1];
+        }
+        else{
+          //Then it does not have a region, it is only commenting.
+          onlyCommenting = true;
+          regionString = "xywh=0,0,0,0"; //It could be a purely commenting annotation that does not need to be drawn.
+        }
+        
       }
       var regionArray = regionString.split('=')[1].split(',');
       return regionArray;

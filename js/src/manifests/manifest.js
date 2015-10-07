@@ -87,14 +87,41 @@
         } else {
           thumbnailUrl = canvas.thumbnail['@id'];
         }
-      } else {
-        // No thumbnail, use main image
-        var resource = canvas.images[0].resource;
+      } 
+      else {
+         //BH edit for no thumbnail image defined
+        var resource = "";
+        if(canvas.images[0] === undefined || canvas.images[0] === ""){
+          /*
+             If an image is not found, then there is no resource for it.  This is a place where you can set
+             a default image resource within mirador or specific to a project.  Here, I have specified one for
+             broken books default imgNotFound.png.  My service is invalid and will break.  
+
+             @see: createOpenSeadragonInstance in imageView.js for what to do with invalid image service.
+         */
+          resource = {
+                            "@id":"http://165.134.241.141/brokenBooks/images/imgNotFound.png",
+                            "format":"image/jpg",
+                            "@type":"dctypes:Image",
+                            "service":
+                                {                                       
+                                    "@context": "http://iiif.io/api/image/2/context.json",
+                                    "profile":"http://iiif.io/api/image/2/profiles/level2.json",
+                                    "@id" : "http://165.134.241.141/brokenBooks/images/imgNotFound.png"
+                                },
+                            "width": 667,
+                            "height":1000
+                        };
+        }
+        else{
+          resource = canvas.images[0].resource;
+        }
+        //End BH edit
         service = resource['default'] ? resource['default'].service : resource.service;
         if (service.hasOwnProperty('@context')) {
           version = $.Iiif.getVersionFromContext(service['@context']);
-        }
-        thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+        }       
+        thumbnailUrl = resource["@id"];   
       }
       return thumbnailUrl;
     },
@@ -107,10 +134,12 @@
       var canvas = jQuery.grep(_this.getCanvases(), function(canvas, index) {
         return canvas['@id'] === canvasId;
       })[0];
-
-      if (canvas && canvas.otherContent) {
+       
+      //bh edit:  Need to make sure that other content is defined and not empty before attempting to access.
+      if (canvas && canvas.otherContent && canvas.otherContent.length >= 1) {
         return canvas.otherContent[0]['@id'];
-      } else { return false; }
+      } 
+      else { return false; }
     },
     getStructures: function() {
       var _this = this;

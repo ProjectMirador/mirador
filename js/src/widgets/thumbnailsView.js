@@ -126,6 +126,7 @@
     },
 
     loadImages: function() {
+      //TODO: this is breaking
       var _this = this;
       jQuery.each(_this.element.find("img"), function(key, value) {
         if ($.isOnScreen(value, _this.lazyLoadingFactor) && !jQuery(value).attr("src")) {
@@ -136,6 +137,7 @@
     },
 
     loadImage: function(imageElement, url) {
+   
       var _this = this,
       imagePromise = $.createImagePromise(url);
 

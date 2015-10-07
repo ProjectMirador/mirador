@@ -28,8 +28,11 @@
       if (!_this.structures || _this.structures.length === 0) {
         _this.hide();
         _this.parent.setTOCBoolean(false);
+        console.log("No Structures");
         return;
       } else {
+        console.log("got structures");
+        console.log(_this.structures);
         _this.parent.setTOCBoolean(true);
         this.ranges = this.setRanges();
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
@@ -54,17 +57,21 @@
           });
         }
       });
-
       return ranges;
 
     },
 
-    getTplData: function() {  
+    getTplData: function() {        
       var _this = this,
       ranges = _this.extractRangeTrees(_this.ranges);
-      
       if (ranges.length < 2) {
-        ranges = ranges[0].children;
+        //ranges = ranges[0].children; //Why do this?  It doesn't make sense here.  
+        /*
+            BH edit
+            A range can exist outside of a parent.  Therefore, even if the length is just one, we still 
+            want to return the array of one range.  The template function checks the one item, realizes it doesn't have
+            children and deems it a leaf, which is what we want. 
+        */
       }
 
       return ranges;
@@ -85,7 +92,6 @@
           // hovered: false
         };
       });
-
       return tocData;
     },
 
@@ -296,11 +302,18 @@
         if (options.fn !== undefined) {
           previousTemplate = options.fn;
         }
-
-        children.forEach(function(child) {
-          out = out + previousTemplate(child);
-        });
+        else{
+        }
         
+        if(children !== undefined && children.length > 0){
+          children.forEach(function(child) {
+            //console.log(previousTemplate(child));
+            out = out + previousTemplate(child);
+          });
+        }
+        else{
+          out = "<span class='hello212'>I had no children</span>";
+        }
         return out;
       });
 
