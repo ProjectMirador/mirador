@@ -74,6 +74,8 @@
       this.parent.element.find('.mirador-osd-annotations-layer').on('click', function() {
         if (_this.annoState.current === 'annoOff') {
           if(_this.parent.osd.viewport){
+            //BH edit for toggling annotations from BB on non-IIIF images
+            _this.bbShowAnnos();
             _this.annoState.displayOn(this);
           }
           else{ //it is one of ours
@@ -85,6 +87,7 @@
         } 
         else {
           if(_this.parent.osd.viewport){
+            _this.bbHideAnnos();
             _this.annoState.displayOff(this);
           }
           else{ //it is one of ours
