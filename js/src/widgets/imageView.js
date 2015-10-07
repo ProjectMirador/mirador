@@ -213,16 +213,20 @@
 
         //I may not know the height or width of this image or canvas.  Our application does not allow for drawing annotations, so we are not concerned with height/width
         //when we make the canvases.  They are just filled with arbitrary values.  
+
+        var currentCanvasIndex = _this.currentImgIndex;
+        var currentCanvasHeight = _this.imagesList[currentCanvasIndex].height;
+        var currentCanvasWidth = _this.imagesList[currentCanvasIndex].width;
         
         _this.osd = $.OpenSeadragon({
           'id':           osdID,
           'tileSources':  [
-              {
+              { 
               'type': 'legacy-image-pyramid',
               'levels':[{ 
                 'url': imageUrl,
-                'height': 1500,
-                'width': 1000
+                'height': currentCanvasHeight,
+                'width': currentCanvasWidth
               }
               ]
             }], //This is the consequence of not getting the JSON.  It creates the viewport on which the OSD functions are called.  Without it, OSD does not work.
