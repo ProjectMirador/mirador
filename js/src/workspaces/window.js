@@ -95,6 +95,11 @@
       }
 
       this.annoEndpointAvailable = !jQuery.isEmptyObject($.viewer.annotationEndpoint);
+      if (!this.annotationLayerAvailable) {
+        this.annotationCreationAvailable = false;
+        this.annoEndpointAvailable = false;
+        this.annotationOn = false;
+      }
       _this.getAnnotations();
 
       //check config
