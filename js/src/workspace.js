@@ -420,9 +420,7 @@
       windowConfig.appendTo = targetSlot.element;
       windowConfig.parent = targetSlot;
 
-      console.log(targetSlot.window);
       if (!targetSlot.window) {
-        console.log('window is blank, adding some more things');
         windowConfig.slotAddress = targetSlot.layoutAddress;
         windowConfig.id = windowConfig.id || $.genUUID();
 
