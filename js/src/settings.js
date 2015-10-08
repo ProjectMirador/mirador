@@ -45,6 +45,7 @@
        *   "annotationCreation" : [true, false] whether or not to make annotation creation available in this window, 
        *                          only valid if annotationLayer is set to True and an annotationEndpoint is defined.
        *                          This setting does NOT affect whether or not a user can edit an individual annotation that has already been created.
+       *   "annotationOn" : [true, false] whether or not to turn on the annotation layer on window load
        *   "fullScreen" : [true, false] whether or not to make the fullScreen HUD button visible to user
        *   "windowOptions" : [data specific to the view type, such as OSD bounds and zoom level - automatically saved in SaveController]
        *   "id" : [unique window ID - set by application and automatically saved in SaveController]

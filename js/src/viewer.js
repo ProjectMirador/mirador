@@ -219,6 +219,7 @@
         overlayAvailable : options.overlay,
         annotationLayerAvailable : options.annotationLayer,
         annotationCreationAvailable : options.annotationCreation,
+        annotationOn : options.annotationOn,
         fullScreenAvailable : options.fullScreen,
         slotAddress: slotAddress,
         displayLayout : options.displayLayout,

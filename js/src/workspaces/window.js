@@ -49,6 +49,7 @@
       annotationLayerAvailable: true,
       annotationCreationAvailable: true,
       annoEndpointAvailable : false,
+      annotationOn : false,
       fullScreenAvailable : true,
       displayLayout: true,
       layoutOptions : {
@@ -442,7 +443,13 @@
     toggleThumbnails: function(canvasID) {
       this.currentCanvasID = canvasID;
       if (this.focusModules.ThumbnailsView === null) {
-        this.focusModules.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, canvasID: this.currentCanvasID, imagesList: this.imagesList} );
+        this.focusModules.ThumbnailsView = new $.ThumbnailsView({
+          manifest: this.manifest, 
+          appendTo: this.element.find('.view-container'), 
+          parent: this, 
+          canvasID: this.currentCanvasID, 
+          imagesList: this.imagesList
+        });
       } else {
         var view = this.focusModules.ThumbnailsView;
         view.updateImage(canvasID);
@@ -465,6 +472,7 @@
           annotationLayerAvailable: this.annotationLayerAvailable,
           annotationCreationAvailable: this.annotationCreationAvailable,
           annoEndpointAvailable: this.annoEndpointAvailable,
+          annotationOn : this.annotationOn,
           fullScreenAvailable: this.fullScreenAvailable
         });
       } else {
