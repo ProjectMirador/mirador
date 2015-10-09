@@ -58,6 +58,7 @@
         });
         _this.overlays.push(jQuery(osdOverlay));
       });
+      jQuery.publish('overlaysRendered.' + _this.parent.windowId);
 
       this.tooltips = jQuery(this.osdViewer.element).qtip({
             overwrite : false,
