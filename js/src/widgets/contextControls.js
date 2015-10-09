@@ -27,11 +27,11 @@
     },
 
     show: function() {
-      this.element.show().fadeIn();
+      this.element.fadeIn("200");
     },
 
-    hide: function() {
-      this.element.hide().fadeOut();
+    hide: function(complete) {
+      this.element.fadeOut("200", complete);
     },
 
     bindEvents: function() {
