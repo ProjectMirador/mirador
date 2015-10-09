@@ -58,7 +58,6 @@
         });
         _this.overlays.push(jQuery(osdOverlay));
       });
-      jQuery.publish('overlaysRendered.' + _this.parent.windowId);
 
       this.tooltips = jQuery(this.osdViewer.element).qtip({
             overwrite : false,
@@ -125,6 +124,7 @@
        annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
      });
       api.set({'content.text' : annoTooltip.getViewer(annotations)});
+      jQuery.publish('tooltipContentSet.'+_this.parent.windowId);
     },
 
     getAnnoFromRegion: function(regionId) {

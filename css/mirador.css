@@ -1587,6 +1587,9 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   padding-bottom:0;
   border-bottom: 1px solid gray;
 }
+.annotation-display:last-child {
+    border: none;
+}
 .annotation-tooltip .button-container {
   text-align: right;
 }
