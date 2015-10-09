@@ -352,7 +352,7 @@
       d3.select(window).on('resize', function(event) {
         _this.calculateLayout();
       });
-      
+
       jQuery.subscribe('manifestQueued', function(event, manifestPromise) {
         // Trawl windowObjects preemptively for slotAddresses and
         // notify those slots to display a "loading" state.
@@ -401,7 +401,8 @@
       // from the manifests panel in image mode,
       // or from the manifests panel in thumbnail mode.
       var _this = this,
-      newWindow;
+          newWindow,
+          targetSlot;
 
       jQuery.each(_this.parent.overlayStates, function(oState, value) {
         // toggles the other top-level panels closed and focuses the
@@ -415,14 +416,14 @@
       } else {
         targetSlot = _this.focusedSlot || _this.getAvailableSlot();
       }
-      
+
       windowConfig.appendTo = targetSlot.element;
       windowConfig.parent = targetSlot;
 
       if (!targetSlot.window) {
         windowConfig.slotAddress = targetSlot.layoutAddress;
         windowConfig.id = windowConfig.id || $.genUUID();
-        
+
         newWindow = new $.Window(windowConfig);
         _this.windows.push(newWindow);
 
@@ -430,16 +431,13 @@
 
         jQuery.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
 
-        // This needs to be called after the window is visible so that the thumbnail position is not 0,0 and therefore can be scrolled
-        //
-        // Yeah, I think the source of the problem was that the element was being appended later than the canvas update call, which was never received by anything.
         jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
       } else {
-        targetSlot.window.element.remove();        
+        targetSlot.window.element.remove();
         targetSlot.window.update(windowConfig);
         jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
-        // The target slot already has a window in it, so just update that window instead, 
-        // using the appropriate saving functions, etc. This obviates the need changing the 
+        // The target slot already has a window in it, so just update that window instead,
+        // using the appropriate saving functions, etc. This obviates the need changing the
         // parent, slotAddress, setting a new ID, and so on.
       }
     }

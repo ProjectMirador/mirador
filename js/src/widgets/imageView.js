@@ -62,6 +62,10 @@
         fullScreenAvailable : this.fullScreenAvailable
       });
 
+      if (this.annotationOn && this.hud.annoState.current === 'annoOff') {
+        this.hud.annoState.displayOn(null);
+      }
+
       this.bindEvents();
     },
 
@@ -76,6 +80,7 @@
         var rect = _this.osd.viewport.imageToViewportRectangle(Number(bounds.x), Number(bounds.y), Number(bounds.width), Number(bounds.height));
         _this.osd.viewport.fitBounds(rect, false);
       });
+
     },
 
     setBounds: function() {
@@ -169,7 +174,6 @@
           _this.osd.addHandler('pan', $.debounce(function(){
             _this.setBounds();
           }, 500));
-
         });
       });
     },

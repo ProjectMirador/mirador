@@ -73,23 +73,27 @@
       });
 
       this.parent.element.find('.mirador-osd-up').on('click', function() {
+        var panBy = _this.getPanByValue();
         var osd = _this.parent.osd;
-        osd.viewport.panBy(new OpenSeadragon.Point(0, -0.05));
+        osd.viewport.panBy(new OpenSeadragon.Point(0, -panBy.y));
         osd.viewport.applyConstraints();
       });
       this.parent.element.find('.mirador-osd-right').on('click', function() {
+        var panBy = _this.getPanByValue();
         var osd = _this.parent.osd;
-        osd.viewport.panBy(new OpenSeadragon.Point(0.05, 0));
+        osd.viewport.panBy(new OpenSeadragon.Point(panBy.x, 0));
         osd.viewport.applyConstraints();
       });
       this.parent.element.find('.mirador-osd-down').on('click', function() {
+        var panBy = _this.getPanByValue();
         var osd = _this.parent.osd;
-        osd.viewport.panBy(new OpenSeadragon.Point(0, 0.05));
+        osd.viewport.panBy(new OpenSeadragon.Point(0, panBy.y));
         osd.viewport.applyConstraints();
       });
       this.parent.element.find('.mirador-osd-left').on('click', function() {
+        var panBy = _this.getPanByValue();
         var osd = _this.parent.osd;
-        osd.viewport.panBy(new OpenSeadragon.Point(-0.05, 0));
+        osd.viewport.panBy(new OpenSeadragon.Point(-panBy.x, 0));
         osd.viewport.applyConstraints();
       });
       this.parent.element.find('.mirador-osd-zoom-in').on('click', function() {
@@ -141,8 +145,6 @@
       });
 
       jQuery.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasId) {
-        // console.log(canvasId);
-        // console.log(lastCanvasId);
         // If it is the first canvas, hide the "go to previous" button, otherwise show it.
         if (canvasId === firstCanvasId) {
           _this.parent.element.find('.mirador-osd-previous').hide();
@@ -204,6 +206,16 @@
           }
         }
       });
+    },
+
+    getPanByValue: function() {
+      var bounds = this.parent.osd.viewport.getBounds(true);
+      //for now, let's keep 50% of the image on the screen
+      var panBy = {
+        "x" : bounds.width * 0.5,
+        "y" : bounds.height * 0.5
+      };
+      return panBy;
     },
 
     fullScreen: function() {
