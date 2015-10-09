@@ -124,7 +124,7 @@
        annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
      });
       api.set({'content.text' : annoTooltip.getViewer(annotations)});
-      jQuery.publish('tooltipContentSet.'+_this.parent.windowId);
+      jQuery.publish('tooltipViewerSet.'+_this.parent.windowId);
     },
 
     getAnnoFromRegion: function(regionId) {
