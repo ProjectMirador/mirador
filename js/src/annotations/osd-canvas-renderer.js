@@ -47,6 +47,9 @@
       var _this = this;
       _this.hideAll(),
       this.overlays = [];
+      this.osdViewer.addHandler("add-overlay", function() {
+        jQuery.publish('overlayRendered.' + _this.parent.windowId);
+      });
       this.list.forEach(function(annotation) {
         var region = _this.parseRegion(annotation.on),
         osdOverlay = document.createElement('div');
