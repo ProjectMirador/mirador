@@ -64,18 +64,8 @@
         _this.overlays.push(jQuery(osdOverlay));
         return deferred;
       });
-      /*this.list.forEach(function(annotation) {
-        var region = _this.parseRegion(annotation.on),
-        osdOverlay = document.createElement('div');
-        osdOverlay.className = 'annotation';
-        osdOverlay.id = annotation['@id'];
-        _this.osdViewer.addOverlay({
-          element: osdOverlay,
-          location: _this.getOsdFrame(region)
-        });
-        _this.overlays.push(jQuery(osdOverlay));
-      });*/
-
+      //this still doesn't take into account the actual appending of the overlays to the DOM
+      //so not quite there yet
       jQuery.when.apply(jQuery, deferreds).done(function() {
         jQuery.publish('overlaysRendered.' + _this.parent.windowId);        
       });

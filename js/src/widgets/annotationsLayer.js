@@ -28,10 +28,6 @@
       this.bindEvents();
     },
 
-    /*update: function() {
-      this.createRenderer();      
-    },*/
-
     bindEvents: function() {
       var _this = this;
 

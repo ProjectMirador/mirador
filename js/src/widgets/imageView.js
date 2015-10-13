@@ -181,18 +181,13 @@
 
     addAnnotationsLayer: function(element) {
       var _this = this;
-      //if (_this.annotationsLayer === null) {
-        _this.annotationsLayer = new $.AnnotationsLayer({
-          parent: _this,
-          annotationsList: _this.parent.annotationsList || [],
-          viewer: _this.osd,
-          windowId: _this.windowId,
-          element: element
-        });
-      /*} else {
-        _this.annotationsLayer.update();
-      }*/
-
+      _this.annotationsLayer = new $.AnnotationsLayer({
+        parent: _this,
+        annotationsList: _this.parent.annotationsList || [],
+        viewer: _this.osd,
+        windowId: _this.windowId,
+        element: element
+      });
     },
 
     updateImage: function(canvasID) {
