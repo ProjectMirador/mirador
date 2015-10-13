@@ -534,7 +534,7 @@
     setCurrentCanvasID: function(canvasID) {
       var _this = this;
       this.currentCanvasID = canvasID;
-      jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
+      //jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
       jQuery.publish('removeTooltips.' + _this.id);
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();

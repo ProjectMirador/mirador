@@ -21,7 +21,8 @@
       osdCls: 'mirador-osd',
       elemAnno:         null,
       annoCls:          'annotation-canvas',
-      annotationLayerAvailable: null 
+      annotationLayerAvailable: null,
+      annotationsLayer: null 
     }, options);
 
     this.init();
@@ -180,13 +181,17 @@
 
     addAnnotationsLayer: function(element) {
       var _this = this;
-      _this.annotationsLayer = new $.AnnotationsLayer({
-        parent: _this,
-        annotationsList: _this.parent.annotationsList || [],
-        viewer: _this.osd,
-        windowId: _this.windowId,
-        element: element
-      });
+      //if (_this.annotationsLayer === null) {
+        _this.annotationsLayer = new $.AnnotationsLayer({
+          parent: _this,
+          annotationsList: _this.parent.annotationsList || [],
+          viewer: _this.osd,
+          windowId: _this.windowId,
+          element: element
+        });
+      /*} else {
+        _this.annotationsLayer.update();
+      }*/
 
     },
 
