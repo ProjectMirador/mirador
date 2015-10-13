@@ -47,10 +47,24 @@
       var _this = this;
       _this.hideAll(),
       this.overlays = [];
-      this.osdViewer.addHandler("add-overlay", function() {
-        jQuery.publish('overlayRendered.' + _this.parent.windowId);
+
+      var deferreds = jQuery.map(this.list, function(annotation) {
+        var deferred = jQuery.Deferred(),
+        region = _this.parseRegion(annotation.on),
+        osdOverlay = document.createElement('div');
+        osdOverlay.className = 'annotation';
+        osdOverlay.id = annotation['@id'];
+        _this.osdViewer.addHandler("add-overlay", function() {
+          deferred.resolve();
+        });
+        _this.osdViewer.addOverlay({
+          element: osdOverlay,
+          location: _this.getOsdFrame(region)
+        });
+        _this.overlays.push(jQuery(osdOverlay));
+        return deferred;
       });
-      this.list.forEach(function(annotation) {
+      /*this.list.forEach(function(annotation) {
         var region = _this.parseRegion(annotation.on),
         osdOverlay = document.createElement('div');
         osdOverlay.className = 'annotation';
@@ -60,6 +74,10 @@
           location: _this.getOsdFrame(region)
         });
         _this.overlays.push(jQuery(osdOverlay));
+      });*/
+
+      jQuery.when.apply(jQuery, deferreds).done(function() {
+        jQuery.publish('overlaysRendered.' + _this.parent.windowId);        
       });
 
       this.tooltips = jQuery(this.osdViewer.element).qtip({
