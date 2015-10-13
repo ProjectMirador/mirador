@@ -21,7 +21,8 @@
       osdCls: 'mirador-osd',
       elemAnno:         null,
       annoCls:          'annotation-canvas',
-      annotationLayerAvailable: null 
+      annotationLayerAvailable: null,
+      annotationsLayer: null 
     }, options);
 
     this.init();
@@ -187,7 +188,6 @@
         windowId: _this.windowId,
         element: element
       });
-
     },
 
     updateImage: function(canvasID) {

@@ -47,18 +47,28 @@
       var _this = this;
       _this.hideAll(),
       this.overlays = [];
-      this.list.forEach(function(annotation) {
-        var region = _this.parseRegion(annotation.on),
+
+      var deferreds = jQuery.map(this.list, function(annotation) {
+        var deferred = jQuery.Deferred(),
+        region = _this.parseRegion(annotation.on),
         osdOverlay = document.createElement('div');
         osdOverlay.className = 'annotation';
         osdOverlay.id = annotation['@id'];
+        _this.osdViewer.addHandler("add-overlay", function() {
+          deferred.resolve();
+        });
         _this.osdViewer.addOverlay({
           element: osdOverlay,
           location: _this.getOsdFrame(region)
         });
         _this.overlays.push(jQuery(osdOverlay));
+        return deferred;
       });
-      jQuery.publish('overlaysRendered.' + _this.parent.windowId);
+      //this still doesn't take into account the actual appending of the overlays to the DOM
+      //so not quite there yet
+      jQuery.when.apply(jQuery, deferreds).done(function() {
+        jQuery.publish('overlaysRendered.' + _this.parent.windowId);        
+      });
 
       this.tooltips = jQuery(this.osdViewer.element).qtip({
             overwrite : false,
@@ -125,6 +135,7 @@
        annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
      });
       api.set({'content.text' : annoTooltip.getViewer(annotations)});
+      jQuery.publish('tooltipViewerSet.'+_this.parent.windowId);
     },
 
     getAnnoFromRegion: function(regionId) {
