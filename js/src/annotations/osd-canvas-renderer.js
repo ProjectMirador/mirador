@@ -334,7 +334,7 @@
       jQuery.publish('disableRectTool.'+this.parent.windowId);
         api.set({'content.text' : annoTooltip.getEditor(oaAnno),
         'hide.event' : false});
-        jQuery.publish('annotationEditorAvailable.'+parent.windowId);
+        jQuery.publish('annotationEditorAvailable.'+this.parent.windowId);
         //add rich text editor
         tinymce.init({
                   selector : 'form.annotation-tooltip textarea',
