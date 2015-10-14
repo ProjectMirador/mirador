@@ -222,10 +222,10 @@
     onDrawFinish: function(canvasRect) {
       var _this = this,
       parent = this.parent,
-      annoTooltip = new $.AnnotationTooltip(); //pass permissions
+      annoTooltip = new $.AnnotationTooltip({"windowId" : _this.parent.windowId}); //pass permissions
       var tooltip = jQuery(this.osdOverlay).qtip({
            content: {
-            text : annoTooltip.editorTemplate()
+            text : annoTooltip.getEditor({})
             },
             position : {
               my: 'bottom left',
@@ -261,8 +261,10 @@
                 _this.osdViewer.zoomPerClick = 1;
                 _this.osdViewer.zoomPerScroll = 1;
 
+                var selector = '#annotation-editor-'+parent.windowId;
+
                 tinymce.init({
-                  selector : 'form.annotation-tooltip textarea',
+                  selector : selector+' textarea',
                   plugins: "image link media",
                   menubar: false,
                   statusbar: false,
@@ -275,12 +277,12 @@
                   }
                 });
 
-                jQuery('.annotation-tooltip').on("submit", function(event) {
+                jQuery(selector).on("submit", function(event) {
                   event.preventDefault();
-                  jQuery('.annotation-tooltip a.save').click();
+                  jQuery(selector+' a.save').click();
                 });
               
-                jQuery('.annotation-tooltip a.cancel').on("click", function(event) {
+                jQuery(selector+' a.cancel').on("click", function(event) {
                   event.preventDefault();
                   //add check so that dialog box only pops up if there is stuff in the editor
                   var content = tinymce.activeEditor.getContent();
@@ -298,7 +300,7 @@
                   _this.osdViewer.zoomPerScroll = 1.2;                  
                 });
                 
-                jQuery('.annotation-tooltip a.save').on("click", function(event) {
+                jQuery(selector+' a.save').on("click", function(event) {
                   event.preventDefault();
                   var tagText = jQuery(this).parents('.annotation-editor').find('.tags-editor').val(),
                   resourceText = tinymce.activeEditor.getContent(),

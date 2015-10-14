@@ -127,9 +127,9 @@
 
     setTooltipContent: function(event, api) {
       var overlays = this.getOverlaysFromElement(jQuery(event.originalEvent.currentTarget), event.originalEvent),
-      annoTooltip = new $.AnnotationTooltip(), //pass permissions
-      annotations = [],
-      _this = this;
+      _this = this,
+      annoTooltip = new $.AnnotationTooltip({"windowId" : _this.parent.windowId}), //pass permissions
+      annotations = [];
 
       jQuery.each(overlays, function(index, overlay) {
        annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
@@ -367,16 +367,20 @@
     },
     
     removeAnnotationEvents: function(tooltipevent, api) {
-      jQuery('.annotation-tooltip a.delete').off("click");
-      jQuery('.annotation-tooltip a.edit').off("click");
-      jQuery('.annotation-tooltip a.save').off("click");
-      jQuery('.annotation-tooltip a.cancel').off("click");
+      var _this = this,
+      editorSelector = '#annotation-editor-'+_this.parent.windowId,
+      viewerSelector = '#annotation-viewer-'+_this.parent.windowId;
+      jQuery(viewerSelector+' a.delete').off("click");
+      jQuery(viewerSelector+' a.edit').off("click");
+      jQuery(editorSelector+' a.save').off("click");
+      jQuery(editorSelector+' a.cancel').off("click");
     },
 
     annotationEvents: function(tooltipevent, api) {
       var _this = this,
-      annoTooltip = new $.AnnotationTooltip();
-      jQuery('.annotation-tooltip a.delete').on("click", function(event) {
+      annoTooltip = new $.AnnotationTooltip({"windowId" : _this.parent.windowId}),
+      selector = '#annotation-viewer-'+_this.parent.windowId;
+      jQuery(selector+' a.delete').on("click", function(event) {
         event.preventDefault();
         
         if (!window.confirm("Do you want to delete this annotation?")) { 
@@ -393,7 +397,7 @@
         display.remove(); //remove this annotation display from dom
       });
 
-      jQuery('.annotation-tooltip a.edit').on("click", function(event) {
+      jQuery(selector+' a.edit').on("click", function(event) {
         event.preventDefault();
         
         var display = jQuery(this).parents('.annotation-display'),
@@ -406,14 +410,15 @@
     
     annotationSaveEvent: function(event, api) {
       var _this = this,
-      annoTooltip = new $.AnnotationTooltip();
+      annoTooltip = new $.AnnotationTooltip({"windowId" : _this.parent.windowId}),
+      selector = '#annotation-editor-'+_this.parent.windowId;
       
-      jQuery('.annotation-tooltip').on("submit", function(event) {
+      jQuery(selector).on("submit", function(event) {
         event.preventDefault();
-        jQuery('.annotation-tooltip a.save').click();
+        jQuery(selector+' a.save').click();
       });
 
-      jQuery('.annotation-tooltip a.save').on("click", function(event) {
+      jQuery(selector+' a.save').on("click", function(event) {
         event.preventDefault();
                   
         var display = jQuery(this).parents('.annotation-tooltip'),
@@ -466,7 +471,7 @@
         _this.unFreezeQtip(api, oaAnno, annoTooltip);
         });
         
-        jQuery('.annotation-tooltip a.cancel').on("click", function(event) {
+        jQuery(selector+' a.cancel').on("click", function(event) {
           event.preventDefault();
           var display = jQuery(this).parents('.annotation-tooltip'),
           id = display.attr('data-anno-id'),
