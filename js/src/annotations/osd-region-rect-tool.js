@@ -256,7 +256,6 @@
               render: function(event, api) {
               
                 jQuery.publish('annotationEditorAvailable.'+parent.windowId);
-                //jQuery('form.annotation-tooltip input.tags-editor').tokenInput(_this.tags);
 
                 //disable all tooltips for overlays
                 jQuery.publish('disableTooltips.'+parent.windowId);
