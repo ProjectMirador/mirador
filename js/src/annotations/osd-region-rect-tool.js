@@ -255,6 +255,8 @@
             events: {
               render: function(event, api) {
               
+                jQuery.publish('annotationEditorAvailable.'+parent.windowId);
+
                 //disable all tooltips for overlays
                 jQuery.publish('disableTooltips.'+parent.windowId);
                 //disable zooming

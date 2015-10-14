@@ -116,8 +116,7 @@
      *  options: 
      *  { 'url': '',
      *    'storeId': 123,
-     *    'APIKey': '23983hf98j3f9283jf2983fj',
-     *    'tagColors' : {'tag1' : '#000000', 'tag2' : '#FF0000', etc}  // for when OSD overlays should be colored differently based on tags
+     *    'APIKey': '23983hf98j3f9283jf2983fj'
      *  }
      *  }
      **/

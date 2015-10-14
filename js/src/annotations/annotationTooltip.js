@@ -102,7 +102,7 @@
     editorTemplate: Handlebars.compile([
                                        '<form id="annotation-editor-{{windowId}}" class="annotation-editor annotation-tooltip" {{#if id}}data-anno-id="{{id}}"{{/if}}>',
                                        '<textarea class="text-editor" placeholder="{{t "comments"}}…">{{#if content}}{{content}}{{/if}}</textarea>',
-                                       '<input class="tags-editor" placeholder="{{t "addTagsHere"}}…" {{#if tags}}value="{{tags}}"{{/if}}>',
+                                       '<input id="tags-editor-{{windowId}}" class="tags-editor" placeholder="{{t "addTagsHere"}}…" {{#if tags}}value="{{tags}}"{{/if}}>',
                                        '<div>',
                                        // need to add a delete, if permissions allow
                                        '<div class="button-container">',
@@ -125,7 +125,7 @@
                                        '{{#if username}}<p class="user">{{username}}:</p>{{/if}}',
                                        '<p>{{{annoText}}}</p>',
                                        '</div>',
-                                       '<div class="tags-viewer">',
+                                       '<div id="tags-viewer-{{windowId}}" class="tags-viewer">',
                                        '{{#each tags}}',
                                        '<span class="tag">{{this}}</span>',
                                        '{{/each}}',
