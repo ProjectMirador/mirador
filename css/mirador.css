@@ -1651,6 +1651,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   font-size: 12;
   font-weight: bold;
   border: 1px solid #aaa;
+  display: inline-block;
 }
 
 .mce-edit-area iframe {
