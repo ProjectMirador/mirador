@@ -308,9 +308,14 @@
       var _this = this;
 
       jQuery.each(this.focusOverlaysAvailable[state], function(panelType, viewOptions) {
+        console.log("panelType", panelType);
+        console.log("panelType", viewOptions);
         jQuery.each(viewOptions, function(view, displayed) {
+          console.log("view", view);
+          console.log("displayed", displayed);
           //instantiate any panels that exist for this view but are still null
           if (view !== '' && _this[panelType] === null) {
+            console.log("conditional is true");
             _this[panelType] = new $[view]({
               manifest: _this.manifest, 
               appendTo: _this.element.find('.'+panelType), 
@@ -321,7 +326,7 @@
               thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
             });
           }
-
+          console.log(_this[panelType]);
           //refresh displayed in case TableOfContents module changed it
           displayed = _this.focusOverlaysAvailable[state][panelType][view];
 
@@ -437,7 +442,9 @@
       });
       //and then do toggling for current focus
       this.togglePanels('overlay', !currentState, 'SearchWithin', focusState);
-      //this.updatePanelsAndOverlay(currentState)
+      console.log(focusState);
+      this.toggleFocus(focusState, "SearchWithin");
+      console.log('test2');
     },
     toggleFocus: function(focusState, imageMode) {
       var _this = this;
@@ -455,6 +462,7 @@
       this.focusModules[focusState].toggle(true);
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
+      console.log(focusState);
       jQuery.publish("windowUpdated", {
         id: _this.id, 
         viewType: _this.currentFocus, 

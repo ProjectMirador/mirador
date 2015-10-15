@@ -17,7 +17,7 @@
   $.SearchWithin.prototype = {
 
     init: function() {
-      console.log("test");
+      console.log("test SEARCH");
       var _this = this,
           tplData = {
             metadataListingCls: this.metadataListingCls
