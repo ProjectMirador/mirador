@@ -25,7 +25,9 @@
           'bottomPanel' : {'' : false}
         },
         'ImageView': {
-          'overlay' : {'MetadataView' : false}, 
+          'overlay' : {'MetadataView' : false,
+                       'SearchWithin': false 
+                      }, 
           'sidePanel' : {'TableOfContents' : true},
           'bottomPanel' : {'ThumbnailsView' : true}
         },
@@ -403,6 +405,7 @@
 
     toggleMetadataOverlay: function(focusState) {
       var _this = this;
+      //returns boolean, true or false
       var currentState = this.focusOverlaysAvailable[focusState].overlay.MetadataView;
       if (currentState) {
         this.element.find('.mirador-icon-metadata-view').removeClass('selected');
@@ -418,7 +421,23 @@
       //and then do toggling for current focus
       this.togglePanels('overlay', !currentState, 'MetadataView', focusState);
     },
-
+    toggleSearchWithinOverlay: function(focusState){
+      var _this = this;
+      var currentState = this.focusOverlaysAvailable[focusState].overlay.SearchWithin;
+      if (currentState) {
+        this.element.find('.mirador-icon-search-within').removeClass('selected');
+      } else {
+        this.element.find('.mirador-icon-search-within').addClass('selected');
+      }
+      //set overlay for all focus types to same value
+      jQuery.each(this.focusOverlaysAvailable, function(focusType, options) {
+        if (focusState !== focusType) {
+          this.overlay.SearchWithin = !currentState;
+        }
+      });
+      //and then do toggling for current focus
+      this.togglePanels('overlay', !currentState, 'SearchWithin', focusState);
+    },
     toggleFocus: function(focusState, imageMode) {
       var _this = this;
 
@@ -690,6 +709,11 @@
       _this.toggleThumbnails(_this.currentCanvasID);
     });
 
+    this.element.find('.mirador-icon-search-within').on('click', function() {
+      _this.toggleSearchWithinOverlay(_this.currentFocus);
+    });
+
+
     this.element.find('.mirador-icon-metadata-view').on('click', function() {
       _this.toggleMetadataOverlay(_this.currentFocus);
     });
@@ -728,6 +752,7 @@
                                  '<div class="window">',
                                  '<div class="manifest-info">',
                                  '<div class="window-manifest-navigation">',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-search-within"><i class="fa fa-search fa-lg fa-fw"></i></a>', 
                                  '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-lg fa-fw"></i>',
                                  '<ul class="dropdown image-list">',
                                  '{{#if ImageView}}',
