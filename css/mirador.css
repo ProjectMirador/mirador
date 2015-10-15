@@ -1758,7 +1758,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 
 /* BH edit: Custom BB CSS */
 .bbAnnosContainer{
-  display: none;
+  /*display: none;
   position: absolute;
   right: 0;
   top: 0;
@@ -1767,15 +1767,36 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   color: black;
   border: 2px solid blue;
   max-height: 90%;
-  overflow: auto;
+  overflow: auto;*/
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  box-sizing: border-box;
+  background-color: rgba(255,255,255,0.9);
+  z-index: 3;
+  width: 45%;
+  overflow-y: scroll;
+  max-height: 90%;
+  word-wrap: break-word;
 }
 
 .bbAnnoLabel{
-  font-size: 18px;
+  /*font-size: 18px;*/
+  width: 8em;
+  text-transform: capitalize;
+  color: #555;
+  display: table-cell;
+  line-height: 1.5;
+  padding: 3px 0;
 }
 
 .bbAnnoText{
-  font-size: 17px;
+    /*font-size: 17px;*/
+    vertical-align: bottom;
+    display: table-cell;
+    line-height: 1.5;
+    padding: 3px 0;
 }
 
 .bbAnno{
