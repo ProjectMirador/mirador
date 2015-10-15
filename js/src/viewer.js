@@ -215,6 +215,7 @@
         id : options.id,
         focusOptions : options.windowOptions,
         bottomPanelAvailable : options.bottomPanel,
+        bottomPanelVisible : options.bottomPanelVisible,
         sidePanelAvailable : options.sidePanel,
         overlayAvailable : options.overlay,
         annotationLayerAvailable : options.annotationLayer,

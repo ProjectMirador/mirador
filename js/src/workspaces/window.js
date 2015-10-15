@@ -42,8 +42,10 @@
       },
       focusOptions: null,
       id : null,
-      sidePanel: null,
-      bottomPanel: null,
+      sidePanel: null, //the actual module for the side panel
+      sidePanelVisible: true,
+      bottomPanel: null, //the actual module for the bottom panel
+      bottomPanelAvailable: true,
       bottomPanelVisible: true,
       overlay: null,
       annotationLayerAvailable: true,
@@ -170,6 +172,8 @@
 
       if (this.imagesList.length === 1) {
         this.bottomPanelVisibility(false);      
+      } else {
+        this.bottomPanelVisibility(this.bottomPanelVisible);
       }
     },
 
@@ -393,6 +397,16 @@
       }
     },
 
+    bottomPanelVisibility: function(visible) {
+      var _this = this;
+      _this.bottomPanelVisible = visible;
+      jQuery.publish(('bottomPanelSet.' + _this.id), visible);
+      jQuery.publish(('windowUpdated'), {
+        id: _this.id,
+        bottomPanelVisible: visible
+      });
+    },
+
     adjustFocusSize: function(panelType, panelState) {
       if (panelType === 'bottomPanel') {
         this.focusModules[this.currentFocus].adjustHeight('focus-max-height', panelState);
@@ -556,12 +570,6 @@
       this.slotAddress = newSlotAddress;
       this.appendTo = newElement;
       this.update();
-    },
-
-    bottomPanelVisibility: function(visible) {
-      var _this = this;
-      _this.bottomPanelVisible = visible;
-      jQuery.publish(('bottomPanelSet.' + _this.id), visible);
     },
 
     setCursorFrameStart: function(canvasID) {
