@@ -437,6 +437,7 @@
       });
       //and then do toggling for current focus
       this.togglePanels('overlay', !currentState, 'SearchWithin', focusState);
+      //this.updatePanelsAndOverlay(currentState)
     },
     toggleFocus: function(focusState, imageMode) {
       var _this = this;
