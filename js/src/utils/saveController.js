@@ -159,7 +159,7 @@
         _this.set('layout', serialisedLayout, {parent: "currentConfig"} );
       });
 
-      jQuery.subscribe("windowAdded", function(event, options) {
+      jQuery.subscribe("windowSlotAdded", function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects,
         inArray = jQuery.grep(windowObjects, function(windowObj) {
           return windowObj.id === options.id;
