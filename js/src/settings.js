@@ -41,9 +41,11 @@
        *   "viewType" : one of [_'ThumbnailsView'_, 'ImageView', 'ScrollView', 'BookView'] - if using availableViews, must be in subset
        *
        *   "bottomPanel" : [_true_, false] whether or not to make the bottom panel available in this window
-       *   "bottomPanelVisible" : [_true_, false] whether or not to make the bottom panel visible in this window. This setting is dependent
+       *   "bottomPanelVisible" : [_true_, false] whether or not to make the bottom panel visible in this window on load. This setting is dependent
        *                           on bottomPanel being true
-       *   "sidePanel" : [_true_, false] whether or not to make the side panel available/visible in this window
+       *   "sidePanel" : [_true_, false] whether or not to make the side panel available in this window
+       *   "sidePanelVisible" : [_true_, false] whether or not to make the side panel visible in this window on load. This setting is dependent
+       *                           on sidePanel being true
        *   "overlay" : [_true_, false] whether or not to make the overlay available/visible in this window
        *
        *   "annotationLayer" : [_true_, false] whether or not to make annotation layer available in this window

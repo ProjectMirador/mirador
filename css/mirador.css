@@ -593,7 +593,7 @@ li.highlight {
   /*display: none;*/
   box-sizing: border-box;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0s ease;
 }
 .sidePanel a:hover {
   text-decoration: none;
@@ -625,7 +625,7 @@ li.highlight {
   position:absolute;
   box-sizing: border-box;
   left:0;
-  top:10px;
+  top:0px;
   bottom:0;
   list-style-type:none;
   font-size: 75%;
@@ -721,7 +721,7 @@ li.highlight {
   margin-left: 280px;
   height: 100%;
   position:relative;
-  transition:all 0.3s ease;
+  transition:all 0s ease;
 }
 
 .view-container.tranisition {

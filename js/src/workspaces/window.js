@@ -43,6 +43,7 @@
       focusOptions: null,
       id : null,
       sidePanel: null, //the actual module for the side panel
+      sidePanelAvailable: true,
       sidePanelVisible: true,
       bottomPanel: null, //the actual module for the bottom panel
       bottomPanelAvailable: true,
@@ -175,6 +176,7 @@
       } else {
         this.bottomPanelVisibility(this.bottomPanelVisible);
       }
+      this.sidePanelVisibility(this.sidePanelVisible, '0s');
     },
 
     update: function(options) {
@@ -383,18 +385,30 @@
       this.adjustFocusSize(panelType, panelState);
     },
 
-    minMaxSidePanel: function(element) {
-      if (this.element.find('.sidePanel').hasClass('minimized')) {
-        element.find('.fa-list').switchClass('fa-list', 'fa-caret-down');
-        element.addClass('selected').css('background','#efefef');
-        this.element.find('.sidePanel').removeClass('minimized').width(280).css('border-right', '1px solid lightgray');
-        this.element.find('.view-container').css('margin-left', 280);
-      } else {
-        element.find('.fa-caret-down').switchClass('fa-caret-down', 'fa-list');
-        element.removeClass('selected').css('background', '#fafafa');
-        this.element.find('.view-container').css('margin-left', 0);
-        this.element.find('.sidePanel').addClass('minimized').css('border', 'none').width(0);
+    sidePanelVisibility: function(visible, transitionDuration) {
+      var _this = this;
+      _this.sidePanelVisible = visible,
+      tocIconElement = this.element.find('.mirador-icon-toc'),
+      sidePanelElement = this.element.find('.sidePanel'),
+      viewContainerElement = this.element.find('.view-container');
+      
+      sidePanelElement.css('transition-duration', transitionDuration);
+      viewContainerElement.css('transition', transitionDuration);
+      if (visible && sidePanelElement.hasClass('minimized')) {
+        tocIconElement.find('.fa-list').switchClass('fa-list', 'fa-caret-down');
+        tocIconElement.addClass('selected').css('background','#efefef');
+        sidePanelElement.removeClass('minimized').width(280).css('border-right', '1px solid lightgray');
+        viewContainerElement.css('margin-left', 280);
+      } else if (!visible && !sidePanelElement.hasClass('minimized')) {
+        tocIconElement.find('.fa-caret-down').switchClass('fa-caret-down', 'fa-list');
+        tocIconElement.removeClass('selected').css('background', '#fafafa');
+        viewContainerElement.css('margin-left', 0);
+        sidePanelElement.addClass('minimized').css('border', 'none').width(0);
       }
+      jQuery.publish(('windowUpdated'), {
+        id: _this.id,
+        sidePanelVisible: visible
+      });
     },
 
     bottomPanelVisibility: function(visible) {
@@ -702,7 +716,7 @@
     });
 
     this.element.find('.mirador-icon-toc').on('click', function() {
-      _this.minMaxSidePanel(jQuery(this));
+      _this.sidePanelVisibility(!_this.sidePanelVisible, '0.3s');
     });
 
     this.element.find('.new-object-option').on('click', function() {
