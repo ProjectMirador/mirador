@@ -205,8 +205,8 @@
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.parent.updateFocusImages([canvasID]);
         //by default, don't allow a user to be in edit annotation mode when changing pages
-        if (this.hud.annoState.current === "annoOnEditOn") {
-          this.hud.annoState.editOff();
+        if (this.hud.annoState.current === "annoOnCreateOn") {
+          this.hud.annoState.createOff();
         }
       } else {
         this.parent.updateFocusImages([canvasID]);

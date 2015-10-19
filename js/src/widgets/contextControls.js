@@ -48,10 +48,10 @@
       });
       
       this.container.find('.mirador-osd-edit-mode').on('click', function() {
-        if (_this.parent.annoState.current === 'annoOnEditOff') {
-          _this.parent.annoState.editOn();
-        } else if (_this.parent.annoState.current === 'annoOnEditOn') {
-          _this.parent.annoState.editOff();
+        if (_this.parent.annoState.current === 'annoOnCreateOff') {
+          _this.parent.annoState.createOn();
+        } else if (_this.parent.annoState.current === 'annoOnCreateOn') {
+          _this.parent.annoState.createOff();
         }
       });
       this.container.find('.mirador-osd-refresh-mode').on('click', function() {

@@ -166,10 +166,10 @@
       this.annoState = StateMachine.create({
         initial: 'annoOff',
         events: [
-          { name: 'displayOn',  from: 'annoOff',  to: 'annoOnEditOff' },
-          { name: 'editOn', from: 'annoOnEditOff', to: 'annoOnEditOn' },
-          { name: 'editOff',  from: 'annoOnEditOn',    to: 'annoOnEditOff' },
-          { name: 'displayOff', from: ['annoOnEditOn','annoOnEditOff'], to: 'annoOff' }
+          { name: 'displayOn',  from: 'annoOff',  to: 'annoOnCreateOff' },
+          { name: 'createOn', from: 'annoOnCreateOff', to: 'annoOnCreateOn' },
+          { name: 'createOff',  from: 'annoOnCreateOn',    to: 'annoOnCreateOff' },
+          { name: 'displayOff', from: ['annoOnCreateOn','annoOnCreateOff'], to: 'annoOff' }
         ],
         callbacks: {
           ondisplayOn: function(event, from, to) { 
@@ -182,14 +182,14 @@
             }
             jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');
           },
-          oneditOn: function(event, from, to) { 
+          oncreateOn: function(event, from, to) { 
             _this.parent.element.find('.mirador-osd-edit-mode').addClass("selected");
             jQuery.publish('modeChange.' + _this.windowId, 'editingAnnotations');
             if (_this.annoEndpointAvailable) {
               _this.contextControls.rectTool.enterEditMode();
             }
           },
-          oneditOff: function(event, from, to) { 
+          oncreateOff: function(event, from, to) { 
             _this.parent.element.find('.mirador-osd-edit-mode').removeClass("selected");
             jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');
             if (_this.annoEndpointAvailable) {
