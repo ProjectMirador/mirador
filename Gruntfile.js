@@ -89,12 +89,12 @@ module.exports = function(grunt) {
       },
       css: {
         src: [
-        'css/mirador.css',
         'css/normalize.css',
         'css/font-awesome.css',
         'css/jquery-ui.custom.min.css',
         'css/layout-default-latest.css',
         'css/jquery.qtip.min.css',
+        'css/mirador.css',
         '!css/mirador-combined.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'

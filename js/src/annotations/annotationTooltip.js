@@ -5,7 +5,8 @@
     jQuery.extend(this, {
       element:   null,
       parent:    null,
-      annotations: []
+      annotations: [],
+      windowId:  ""
     }, options);
 
     this.init();
@@ -22,10 +23,11 @@
     },
     
     getEditor: function(annotation) {
-      var annoText,
+      var annoText = "",
       tags = [],
       _this = this;
 
+      if (!jQuery.isEmptyObject(annotation)) {
         if (jQuery.isArray(annotation.resource)) {
           jQuery.each(annotation.resource, function(index, value) {
             if (value['@type'] === "oa:Tag") {
@@ -37,10 +39,13 @@
         } else {
           annoText = annotation.resource.chars;
         }
+      }
 
       return this.editorTemplate({content : annoText,
-      tags : tags.join(" "),
-      id : annotation['@id']});
+        tags : tags.join(" "),
+        id : jQuery.isEmptyObject(annotation) ? "" : annotation['@id'],
+        windowId : _this.windowId
+      });
     },
 
     getViewer: function(annotations) {
@@ -87,16 +92,17 @@
         });
       });
 
-      var template = this.viewerTemplate({annotations : htmlAnnotations});      
+      var template = this.viewerTemplate({annotations : htmlAnnotations,
+        windowId : _this.windowId});
       return template;
       //return combination of all of them
     },
 
     //when this is being used to edit an existing annotation, insert them into the inputs
     editorTemplate: Handlebars.compile([
-                                       '<form class="annotation-editor annotation-tooltip" {{#if id}}data-anno-id="{{id}}"{{/if}}>',
+                                       '<form id="annotation-editor-{{windowId}}" class="annotation-editor annotation-tooltip" {{#if id}}data-anno-id="{{id}}"{{/if}}>',
                                        '<textarea class="text-editor" placeholder="{{t "comments"}}…">{{#if content}}{{content}}{{/if}}</textarea>',
-                                       '<input class="tags-editor" placeholder="{{t "addTagsHere"}}…" {{#if tags}}value="{{tags}}"{{/if}}>',
+                                       '<input id="tags-editor-{{windowId}}" class="tags-editor" placeholder="{{t "addTagsHere"}}…" {{#if tags}}value="{{tags}}"{{/if}}>',
                                        '<div>',
                                        // need to add a delete, if permissions allow
                                        '<div class="button-container">',
@@ -108,7 +114,7 @@
     ].join('')),
 
     viewerTemplate: Handlebars.compile([
-                                       '<div class="all-annotations">',
+                                       '<div class="all-annotations" id="annotation-viewer-{{windowId}}">',
                                        '{{#each annotations}}',
                                        '<div class="annotation-display annotation-tooltip" data-anno-id="{{id}}">',
                                        '<div class="button-container">',
@@ -119,7 +125,7 @@
                                        '{{#if username}}<p class="user">{{username}}:</p>{{/if}}',
                                        '<p>{{{annoText}}}</p>',
                                        '</div>',
-                                       '<div class="tags-viewer">',
+                                       '<div id="tags-viewer-{{windowId}}" class="tags-viewer">',
                                        '{{#each tags}}',
                                        '<span class="tag">{{this}}</span>',
                                        '{{/each}}',

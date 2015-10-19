@@ -21,7 +21,8 @@
       osdCls: 'mirador-osd',
       elemAnno:         null,
       annoCls:          'annotation-canvas',
-      annotationLayerAvailable: null 
+      annotationLayerAvailable: null,
+      annotationsLayer: null 
     }, options);
 
     this.init();
@@ -61,6 +62,10 @@
         annoEndpointAvailable: this.annoEndpointAvailable,
         fullScreenAvailable : this.fullScreenAvailable
       });
+
+      if (this.annotationOn && this.hud.annoState.current === 'annoOff') {
+        this.hud.annoState.displayOn(null);
+      }
 
       this.bindEvents();
     },
@@ -283,13 +288,11 @@
               })();
             }
           }, 100, true));
-        
         //BH edit: wrapping the image element in a canvas causes the image not to load.  OSD will not build a viewport
         //  
         // var fakeCanvas = jQuery("<img class='fix' src='"+imageUrl+"'/>");
         //   jQuery(_this.osd.canvas).append(fakeCanvas);       
-         });
-      
+       });
     },
 
     addAnnotationsLayer: function(element) {
@@ -303,6 +306,7 @@
       });
 
     }, 
+
 
     updateImage: function(canvasID) {
       //console.log("Load new full image.  Need to empty and hide bbAnnos.  Can i find it in this 3 ?");

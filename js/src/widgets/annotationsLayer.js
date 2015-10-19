@@ -22,6 +22,7 @@
     init: function() {
       var _this = this;
       jQuery.unsubscribe(('modeChange.' + _this.windowId));
+      jQuery.unsubscribe(('annotationListLoaded.' + _this.windowId));
 
       this.createRenderer();
       this.bindEvents();

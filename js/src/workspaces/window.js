@@ -49,6 +49,7 @@
       annotationLayerAvailable: true,
       annotationCreationAvailable: true,
       annoEndpointAvailable : false,
+      annotationOn : false,
       fullScreenAvailable : true,
       displayLayout: true,
       layoutOptions : {
@@ -104,6 +105,11 @@
       }
 
       this.annoEndpointAvailable = !jQuery.isEmptyObject($.viewer.annotationEndpoint);
+      if (!this.annotationLayerAvailable) {
+        this.annotationCreationAvailable = false;
+        this.annoEndpointAvailable = false;
+        this.annotationOn = false;
+      }
       _this.getAnnotations();
 
       //check config
@@ -452,7 +458,13 @@
     toggleThumbnails: function(canvasID) {
       this.currentCanvasID = canvasID;
       if (this.focusModules.ThumbnailsView === null) {
-        this.focusModules.ThumbnailsView = new $.ThumbnailsView( {manifest: this.manifest, appendTo: this.element.find('.view-container'), parent: this, canvasID: this.currentCanvasID, imagesList: this.imagesList} );
+        this.focusModules.ThumbnailsView = new $.ThumbnailsView({
+          manifest: this.manifest, 
+          appendTo: this.element.find('.view-container'), 
+          parent: this, 
+          canvasID: this.currentCanvasID, 
+          imagesList: this.imagesList
+        });
       } else {
         var view = this.focusModules.ThumbnailsView;
         view.updateImage(canvasID);
@@ -475,6 +487,7 @@
           annotationLayerAvailable: this.annotationLayerAvailable,
           annotationCreationAvailable: this.annotationCreationAvailable,
           annoEndpointAvailable: this.annoEndpointAvailable,
+          annotationOn : this.annotationOn,
           fullScreenAvailable: this.fullScreenAvailable
         });
       } else {
@@ -531,7 +544,6 @@
     setCurrentCanvasID: function(canvasID) {
       var _this = this;
       this.currentCanvasID = canvasID;
-      jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
       jQuery.publish('removeTooltips.' + _this.id);
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
