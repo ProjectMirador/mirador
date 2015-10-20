@@ -30,5 +30,6 @@
 	"cancel":			"取消",
 	"edit":				"編輯",
 	"delete":			"刪除",
-	"newObject":		"建立新物件"
+	"newObject":		"建立新物件",
+  "fullScreen": "全屏"
 }

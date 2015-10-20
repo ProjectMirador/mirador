@@ -17,6 +17,40 @@ a {
   margin:0;
 }
 
+/* Full screen
+---------------------------------------------------------------------------- */
+:-webkit-full-screen {
+  height: 100%;
+  left: 0;
+  margin: 0;
+  top: 0;
+  width: 100%;
+}
+
+:-moz-full-screen {
+  height: 100%;
+  left: 0;
+  margin: 0;
+  top: 0;
+  width: 100%;
+}
+
+:-ms-fullscreen {
+  height: 100%;
+  left: 0;
+  margin: 0;
+  top: 0;
+  width: 100%;
+}
+
+:fullscreen {
+  height: 100%;
+  left: 0;
+  margin: 0;
+  top: 0;
+  width: 100%;
+}
+
 /*----------------------------------------------------------------------------
 /* Mirador styles
 ---------------------------------------------------------------------------- 
