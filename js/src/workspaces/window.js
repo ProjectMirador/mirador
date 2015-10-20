@@ -181,6 +181,8 @@
 
     update: function(options) {
       jQuery.extend(this, options);
+      this.focusOptions.osdBounds = null;
+      this.focusOptions.zoomLevel = null;
       this.init();
     },
 
