@@ -52,7 +52,7 @@
        *   "annotationCreation" : [_true_, false] whether or not to make annotation creation available in this window, 
        *                          only valid if annotationLayer is set to True and an annotationEndpoint is defined.
        *                          This setting does NOT affect whether or not a user can edit an individual annotation that has already been created.
-       *   "annotationOn" : [_true_, false] whether or not to turn on the annotation layer on window load
+       *   "annotationState" : [_'annoOff'_, 'annoOnCreateOff', 'annoOnCreateOn'] whether or not to turn on the annotation layer on window load
        *
        *   "fullScreen" : [_true_, false] whether or not to make the fullScreen HUD button visible to user
        *

@@ -52,7 +52,7 @@
       annotationLayerAvailable: true,
       annotationCreationAvailable: true,
       annoEndpointAvailable : false,
-      annotationOn : false,
+      annotationState : 'annoOff',
       fullScreenAvailable : true,
       displayLayout: true,
       layoutOptions : {
@@ -101,7 +101,7 @@
       if (!this.annotationLayerAvailable) {
         this.annotationCreationAvailable = false;
         this.annoEndpointAvailable = false;
-        this.annotationOn = false;
+        this.annotationState = 'annoOff';
       }
       _this.getAnnotations();
 
@@ -505,7 +505,7 @@
           annotationLayerAvailable: this.annotationLayerAvailable,
           annotationCreationAvailable: this.annotationCreationAvailable,
           annoEndpointAvailable: this.annoEndpointAvailable,
-          annotationOn : this.annotationOn,
+          annotationState : this.annotationState,
           fullScreenAvailable: this.fullScreenAvailable
         });
       } else {

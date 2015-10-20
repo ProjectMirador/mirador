@@ -8,7 +8,6 @@
       container: null,
       mode: null,
       windowId: null,
-      rectTool: null,
       annoEndpointAvailable: false,
       annotationCreationAvailable: true
     }, options);
