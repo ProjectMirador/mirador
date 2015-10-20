@@ -35,30 +35,39 @@
     'windowObjects' : [
       /** within a single object, the following options:
        *   "loadedManifest": [manifestURI] e.g. "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/manifest.json"
-       *   "availableViews" : defaults to ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'], any subset removes others
-       *   "viewType" : one of ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'] - if using availableViews, must be in subset
        *   "canvasID": [canvas URI] e.g. "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/canvas/canvas-12"
-       *   "bottomPanel" : [true, false] whether or not to make the bottom panel available/visible in this window
-       *   "sidePanel" : [true, false] whether or not to make the side panel available/visible in this window
-       *   "overlay" : [true, false] whether or not to make the overlay available/visible in this window
-       *   "annotationLayer" : [true, false] whether or not to make annotation layer available in this window
-       *   "annotationCreation" : [true, false] whether or not to make annotation creation available in this window, 
+       *
+       *   "availableViews" : defaults to ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'], any subset removes others
+       *   "viewType" : one of [_'ThumbnailsView'_, 'ImageView', 'ScrollView', 'BookView'] - if using availableViews, must be in subset
+       *
+       *   "bottomPanel" : [_true_, false] whether or not to make the bottom panel available in this window
+       *   "bottomPanelVisible" : [_true_, false] whether or not to make the bottom panel visible in this window on load. This setting is dependent
+       *                           on bottomPanel being true
+       *   "sidePanel" : [_true_, false] whether or not to make the side panel available in this window
+       *   "sidePanelVisible" : [_true_, false] whether or not to make the side panel visible in this window on load. This setting is dependent
+       *                           on sidePanel being true
+       *   "overlay" : [_true_, false] whether or not to make the overlay available/visible in this window
+       *
+       *   "annotationLayer" : [_true_, false] whether or not to make annotation layer available in this window
+       *   "annotationCreation" : [_true_, false] whether or not to make annotation creation available in this window, 
        *                          only valid if annotationLayer is set to True and an annotationEndpoint is defined.
        *                          This setting does NOT affect whether or not a user can edit an individual annotation that has already been created.
-       *   "annotationOn" : [true, false] whether or not to turn on the annotation layer on window load
-       *   "fullScreen" : [true, false] whether or not to make the fullScreen HUD button visible to user
-       *   "windowOptions" : [data specific to the view type, such as OSD bounds and zoom level - automatically saved in SaveController]
-       *   "id" : [unique window ID - set by application and automatically saved in SaveController]
-       *   "displayLayout" : [true, false], whether or not to display all layout options, removing individual menu options is separate
+       *   "annotationState" : [_'annoOff'_, 'annoOnCreateOff', 'annoOnCreateOn'] whether or not to turn on the annotation layer on window load
+       *
+       *   "fullScreen" : [_true_, false] whether or not to make the fullScreen HUD button visible to user
+       *
+       *   "displayLayout" : [_true_, false], whether or not to display all layout options, removing individual menu options is separate
        *   "layoutOptions" : control individual menu items in layout menu. if "displayLayout" is false, these options won't be applied
        *     {
-       *     "newObject" : [true, false]
-       *     "close" : [true, false]
-       *     "slotRight" : [true, false]
-       *     "slotLeft" : [true, false]
-       *     "slotAbove" : [true, false]
-       *     "slotBelow" : [true, false]
+       *     "newObject" : [_true_, false]
+       *     "close" : [_true_, false]
+       *     "slotRight" : [_true_, false]
+       *     "slotLeft" : [_true_, false]
+       *     "slotAbove" : [_true_, false]
+       *     "slotBelow" : [_true_, false]
        *     }
+       *   "windowOptions" : [data specific to the view type, such as OSD bounds and zoom level - automatically saved in SaveController]
+       *   "id" : [unique window ID - set by application and automatically saved in SaveController]
        **/
     ],
 

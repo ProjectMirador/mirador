@@ -42,14 +42,17 @@
       },
       focusOptions: null,
       id : null,
-      sidePanel: null,
-      bottomPanel: null,
+      sidePanel: null, //the actual module for the side panel
+      sidePanelAvailable: true,
+      sidePanelVisible: true,
+      bottomPanel: null, //the actual module for the bottom panel
+      bottomPanelAvailable: true,
       bottomPanelVisible: true,
       overlay: null,
       annotationLayerAvailable: true,
       annotationCreationAvailable: true,
       annoEndpointAvailable : false,
-      annotationOn : false,
+      annotationState : 'annoOff',
       fullScreenAvailable : true,
       displayLayout: true,
       layoutOptions : {
@@ -98,7 +101,7 @@
       if (!this.annotationLayerAvailable) {
         this.annotationCreationAvailable = false;
         this.annoEndpointAvailable = false;
-        this.annotationOn = false;
+        this.annotationState = 'annoOff';
       }
       _this.getAnnotations();
 
@@ -170,11 +173,16 @@
 
       if (this.imagesList.length === 1) {
         this.bottomPanelVisibility(false);      
+      } else {
+        this.bottomPanelVisibility(this.bottomPanelVisible);
       }
+      this.sidePanelVisibility(this.sidePanelVisible, '0s');
     },
 
     update: function(options) {
       jQuery.extend(this, options);
+      this.focusOptions.osdBounds = null;
+      this.focusOptions.zoomLevel = null;
       this.init();
     },
 
@@ -379,18 +387,40 @@
       this.adjustFocusSize(panelType, panelState);
     },
 
-    minMaxSidePanel: function(element) {
-      if (this.element.find('.sidePanel').hasClass('minimized')) {
-        element.find('.fa-list').switchClass('fa-list', 'fa-caret-down');
-        element.addClass('selected').css('background','#efefef');
-        this.element.find('.sidePanel').removeClass('minimized').width(280).css('border-right', '1px solid lightgray');
-        this.element.find('.view-container').css('margin-left', 280);
-      } else {
-        element.find('.fa-caret-down').switchClass('fa-caret-down', 'fa-list');
-        element.removeClass('selected').css('background', '#fafafa');
-        this.element.find('.view-container').css('margin-left', 0);
-        this.element.find('.sidePanel').addClass('minimized').css('border', 'none').width(0);
+    sidePanelVisibility: function(visible, transitionDuration) {
+      var _this = this;
+      _this.sidePanelVisible = visible,
+      tocIconElement = this.element.find('.mirador-icon-toc'),
+      sidePanelElement = this.element.find('.sidePanel'),
+      viewContainerElement = this.element.find('.view-container');
+      
+      sidePanelElement.css('transition-duration', transitionDuration);
+      viewContainerElement.css('transition', transitionDuration);
+      if (visible && sidePanelElement.hasClass('minimized')) {
+        tocIconElement.find('.fa-list').switchClass('fa-list', 'fa-caret-down');
+        tocIconElement.addClass('selected').css('background','#efefef');
+        sidePanelElement.removeClass('minimized').width(280).css('border-right', '1px solid lightgray');
+        viewContainerElement.css('margin-left', 280);
+      } else if (!visible && !sidePanelElement.hasClass('minimized')) {
+        tocIconElement.find('.fa-caret-down').switchClass('fa-caret-down', 'fa-list');
+        tocIconElement.removeClass('selected').css('background', '#fafafa');
+        viewContainerElement.css('margin-left', 0);
+        sidePanelElement.addClass('minimized').css('border', 'none').width(0);
       }
+      jQuery.publish(('windowUpdated'), {
+        id: _this.id,
+        sidePanelVisible: visible
+      });
+    },
+
+    bottomPanelVisibility: function(visible) {
+      var _this = this;
+      _this.bottomPanelVisible = visible;
+      jQuery.publish(('bottomPanelSet.' + _this.id), visible);
+      jQuery.publish(('windowUpdated'), {
+        id: _this.id,
+        bottomPanelVisible: visible
+      });
     },
 
     adjustFocusSize: function(panelType, panelState) {
@@ -477,7 +507,7 @@
           annotationLayerAvailable: this.annotationLayerAvailable,
           annotationCreationAvailable: this.annotationCreationAvailable,
           annoEndpointAvailable: this.annoEndpointAvailable,
-          annotationOn : this.annotationOn,
+          annotationState : this.annotationState,
           fullScreenAvailable: this.fullScreenAvailable
         });
       } else {
@@ -556,12 +586,6 @@
       this.slotAddress = newSlotAddress;
       this.appendTo = newElement;
       this.update();
-    },
-
-    bottomPanelVisibility: function(visible) {
-      var _this = this;
-      _this.bottomPanelVisible = visible;
-      jQuery.publish(('bottomPanelSet.' + _this.id), visible);
     },
 
     setCursorFrameStart: function(canvasID) {
@@ -694,7 +718,7 @@
     });
 
     this.element.find('.mirador-icon-toc').on('click', function() {
-      _this.minMaxSidePanel(jQuery(this));
+      _this.sidePanelVisibility(!_this.sidePanelVisible, '0.3s');
     });
 
     this.element.find('.new-object-option').on('click', function() {

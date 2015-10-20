@@ -61,7 +61,7 @@
       });
 
       this.parent.element.find('.mirador-osd-annotations-layer').on('click', function() {
-        if (_this.annoState.current === 'annoOff') {
+        if (_this.annoState.current === 'annoOff' || _this.annoState.current === 'none') {
           _this.annoState.displayOn(this);
         } else {
           _this.annoState.displayOff(this);
@@ -162,54 +162,97 @@
 
     createStateMachine: function() {
       //add more to these as AnnoState becomes more complex
-      var _this = this;
+      var _this = this,
+      duration = "200";
+      //initial state is 'none'
       this.annoState = StateMachine.create({
-        initial: 'annoOff',
         events: [
-          { name: 'displayOn',  from: 'annoOff',  to: 'annoOnEditOff' },
-          { name: 'editOn', from: 'annoOnEditOff', to: 'annoOnEditOn' },
-          { name: 'editOff',  from: 'annoOnEditOn',    to: 'annoOnEditOff' },
-          { name: 'displayOff', from: ['annoOnEditOn','annoOnEditOff'], to: 'annoOff' }
+          { name: 'startup',  from: 'none',  to: 'annoOff' },
+          { name: 'displayOn',  from: ['none','annoOff'],  to: 'annoOnCreateOff' },
+          { name: 'refreshCreateOff',  from: 'annoOnCreateOff',  to: 'annoOnCreateOff' },          
+          { name: 'createOn', from: ['none','annoOff','annoOnCreateOff'], to: 'annoOnCreateOn' },
+          { name: 'refreshCreateOn',  from: 'annoOnCreateOn',  to: 'annoOnCreateOn' },          
+          { name: 'createOff',  from: 'annoOnCreateOn',    to: 'annoOnCreateOff' },
+          { name: 'displayOff', from: ['annoOnCreateOn','annoOnCreateOff'], to: 'annoOff' }
         ],
         callbacks: {
+          onstartup: function(event, from, to) {
+            jQuery.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
+          },
           ondisplayOn: function(event, from, to) { 
             if (_this.annoEndpointAvailable) {
-              _this.parent.element.find('.mirador-osd-annotations-layer').fadeOut("200", function() {      
+              _this.parent.element.find('.mirador-osd-annotations-layer').fadeOut(duration, function() {      
                 _this.contextControls.show();
               });              
             } else {
               _this.parent.element.find('.mirador-osd-annotations-layer').addClass("selected");
             }
             jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');
+            jQuery.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
           },
-          oneditOn: function(event, from, to) { 
-            _this.parent.element.find('.mirador-osd-edit-mode').addClass("selected");
-            jQuery.publish('modeChange.' + _this.windowId, 'editingAnnotations');
-            if (_this.annoEndpointAvailable) {
-              _this.contextControls.rectTool.enterEditMode();
+          onrefreshCreateOff: function(event, from, to) {
+            jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');
+            jQuery.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
+          },
+          oncreateOn: function(event, from, to) {
+            function enableEditingAnnotations() {
+              _this.parent.element.find('.mirador-osd-edit-mode').addClass("selected");
+              jQuery.publish('modeChange.' + _this.windowId, 'editingAnnotations');
             }
+            if (_this.annoEndpointAvailable) {
+              if (from === "annoOff") {
+                _this.parent.element.find('.mirador-osd-annotations-layer').fadeOut(duration, function() {      
+                  _this.contextControls.show();
+                  enableEditingAnnotations();
+                });
+              } else {
+                enableEditingAnnotations();
+              }
+            }
+            jQuery.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
           },
-          oneditOff: function(event, from, to) { 
+          onrefreshCreateOn: function(event, from, to) {
+            jQuery.publish('modeChange.' + _this.windowId, 'editingAnnotations');
+            jQuery.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
+          },
+          oncreateOff: function(event, from, to) { 
             _this.parent.element.find('.mirador-osd-edit-mode').removeClass("selected");
             jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');
-            if (_this.annoEndpointAvailable) {
-              _this.contextControls.rectTool.exitEditMode();
-            }
+            jQuery.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
           },
           ondisplayOff: function(event, from, to) { 
-            if (_this.annoEndpointAvailable && _this.contextControls.rectTool) {
-              _this.contextControls.rectTool.exitEditMode();
-            }
             if (_this.annoEndpointAvailable) {
               _this.parent.element.find('.mirador-osd-edit-mode').removeClass("selected");
               _this.contextControls.hide(function() {
-                _this.parent.element.find('.mirador-osd-annotations-layer').fadeIn("200");
+                _this.parent.element.find('.mirador-osd-annotations-layer').fadeIn(duration);
               }
               );
             } else {
               _this.parent.element.find('.mirador-osd-annotations-layer').removeClass("selected");
             }
-            jQuery.publish('modeChange.' + _this.windowId, 'default');            
+            jQuery.publish('modeChange.' + _this.windowId, 'default');
+            jQuery.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
           }
         }
       });

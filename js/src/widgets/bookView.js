@@ -73,9 +73,16 @@
     setBounds: function() {
       var _this = this;
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
-      jQuery.publish("imageBoundsUpdated", {
+      jQuery.publish("windowUpdated", {
         id: _this.parent.id, 
-        osdBounds: {x: _this.osdOptions.osdBounds.x, y: _this.osdOptions.osdBounds.y, width: _this.osdOptions.osdBounds.width, height: _this.osdOptions.osdBounds.height}
+        windowOptions: { 
+          osdBounds: {
+            x: _this.osdOptions.osdBounds.x, 
+            y: _this.osdOptions.osdBounds.y, 
+            width: _this.osdOptions.osdBounds.width, 
+            height: _this.osdOptions.osdBounds.height
+          }
+        }
       });
     },
 

@@ -424,6 +424,8 @@
         windowConfig.slotAddress = targetSlot.layoutAddress;
         windowConfig.id = windowConfig.id || $.genUUID();
 
+        jQuery.publish("windowSlotAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
+
         newWindow = new $.Window(windowConfig);
         _this.windows.push(newWindow);
 
