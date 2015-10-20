@@ -161,9 +161,8 @@
           // if current annoState is 'none' that means it has been initialized but not used
           // use annotationState to choose event
           if (_this.hud.annoState.current === 'none') {
-            if (_this.annotationState === 'annoOff') {
               _this.hud.annoState.startup(null);
-            } else if (_this.annotationState === 'annoOnCreateOff') {
+            if (_this.annotationState === 'annoOnCreateOff') {
               _this.hud.annoState.displayOn(null);
             } else if (_this.annotationState === 'annoOnCreateOn') {
               _this.hud.annoState.createOn(null);
