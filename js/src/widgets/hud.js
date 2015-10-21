@@ -61,7 +61,10 @@
       });
 
       this.parent.element.find('.mirador-osd-annotations-layer').on('click', function() {
-        if (_this.annoState.current === 'annoOff' || _this.annoState.current === 'none') {
+        if (_this.annoState.current === 'none') {
+          _this.annoState.startup(this);
+        }
+        if (_this.annoState.current === 'annoOff') {
           _this.annoState.displayOn(this);
         } else {
           _this.annoState.displayOff(this);
@@ -168,9 +171,9 @@
       this.annoState = StateMachine.create({
         events: [
           { name: 'startup',  from: 'none',  to: 'annoOff' },
-          { name: 'displayOn',  from: ['none','annoOff'],  to: 'annoOnCreateOff' },
+          { name: 'displayOn',  from: 'annoOff',  to: 'annoOnCreateOff' },
           { name: 'refreshCreateOff',  from: 'annoOnCreateOff',  to: 'annoOnCreateOff' },          
-          { name: 'createOn', from: ['none','annoOff','annoOnCreateOff'], to: 'annoOnCreateOn' },
+          { name: 'createOn', from: ['annoOff','annoOnCreateOff'], to: 'annoOnCreateOn' },
           { name: 'refreshCreateOn',  from: 'annoOnCreateOn',  to: 'annoOnCreateOn' },          
           { name: 'createOff',  from: 'annoOnCreateOn',    to: 'annoOnCreateOff' },
           { name: 'displayOff', from: ['annoOnCreateOn','annoOnCreateOff'], to: 'annoOff' }
