@@ -5,7 +5,7 @@
 
     getImageUrl: function(image) {
       //bh edit:  if there is no image or a missing resource, then set the image id to be the default image
-      if(!image.images[0] || !image.images[0].resource){
+      if(!image.images[0] || !image.images[0].resource || images.images[0].resource["@id"] === ""){
         id = "http://165.134.241.141/brokenBooks/images/imgNotFound.png";
         return id;
       }
