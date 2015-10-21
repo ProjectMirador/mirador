@@ -29,5 +29,6 @@
     "delete": "Supprimer",
     "url": "URL",
     "newObject": "Nouvel objet",
-    "objectMetadata": "Métadonnées"
+    "objectMetadata": "Métadonnées",
+    "fullScreen": "Plein écran"
 }
