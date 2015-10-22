@@ -94,7 +94,8 @@
       'buttons' : {
         'bookmark' : true,
         'layout' : true,
-        'options' : false
+        'options' : false,
+        'fullScreenViewer': true 
       }
       //'height': 25,
       //'width': '100%'
