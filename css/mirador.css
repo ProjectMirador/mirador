@@ -1,3 +1,9 @@
+body { 
+  padding: 0; 
+  margin: 0; 
+  overflow: hidden; 
+  font-size: 70%; 
+}
 a {
   color: inherit; /* blue colors for links too */
   text-decoration: inherit; /* no underline */
