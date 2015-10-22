@@ -50,6 +50,7 @@ module.exports = function(grunt) {
     'js/src/*.js',
     'js/src/viewer/*.js',
     'js/src/manifests/*.js',
+    'js/src/annotations/endpoint.js',
     'js/src/annotations/*.js',
     'js/src/workspaces/*.js',
     'js/src/widgets/*.js',

@@ -3,10 +3,10 @@
  * annotationsList - current list of OA Annotations
  * dfd - Deferred Object
  * init()
- * search(uri)
- * create(oaAnnotation, returnSuccess, returnError)
- * update(oaAnnotation, returnSuccess, returnError)
- * deleteAnnotation(annotationID, returnSuccess, returnError) (delete is a reserved word)
+ * search(options, successCallback, errorCallback)
+ * create(oaAnnotation, successCallback, errorCallback)
+ * update(oaAnnotation, successCallback, errorCallback)
+ * deleteAnnotation(annotationID, successCallback, errorCallback) (delete is a reserved word)
  * TODO:
  * read() //not currently used
  *
@@ -21,8 +21,6 @@
     jQuery.extend(this, {
       token:     null,
       prefix:    null,
-      urls:      null,
-      uri:       null,
       dfd:       null,
       context_id: "None",
       collection_id: "None",
@@ -33,11 +31,12 @@
       windowID: null
     }, options);
 
+    //jQuery.extend($.CatchEndpoint.prototype, $.Endpoint.prototype);
     this.init();
   };
 
-  $.CatchEndpoint.prototype = {
-    //Any set up for this endpoint, and triggers a search of the URI passed to object
+  jQuery.extend($.CatchEndpoint.prototype, $.Endpoint.prototype, {
+    //Set up some options for catch
     init: function() {
       this.catchOptions = {
         user: {
@@ -51,11 +50,10 @@
           'admin':  [this.userid]
         }
       };
-      this.search({"uri" : this.uri});        
     },
 
     //Search endpoint for all annotations with a given URI
-    search: function(options, returnSuccess, returnError) {
+    search: function(options, successCallback, errorCallback) {
       var _this = this;
       this.annotationsList = []; //clear out current list
 
@@ -82,8 +80,8 @@
         contentType: "application/json; charset=utf-8",
         success: function(data) {
           //check if a function has been passed in, otherwise, treat it as a normal search
-          if (typeof returnSuccess === "function") {
-            returnSuccess(data);
+          if (typeof successCallback === "function") {
+            successCallback(data);
           } else {
             _this.annotationsListCatch = data.rows;
             jQuery.each(_this.annotationsListCatch, function(index, value) {
@@ -94,8 +92,8 @@
           }
         },
         error: function() {
-          if (typeof returnError === "function") {
-            returnError();
+          if (typeof errorCallback === "function") {
+            errorCallback();
           } else {
             console.log("There was an error searching this endpoint");
           }
@@ -104,32 +102,32 @@
       });
     },
     
-    deleteAnnotation: function(annotationID, returnSuccess, returnError) {
-          var _this = this;        
-          jQuery.ajax({
-             url: this.prefix+"/destroy/"+annotationID,
-             type: 'DELETE',
-             dataType: 'json',
-             headers: {
-               "x-annotator-auth-token": this.token
-             },
-             contentType: "application/json; charset=utf-8",
-             success: function(data) {
-              if (typeof returnSuccess === "function") {
-                returnSuccess();
-              }
-               jQuery.publish('catchAnnotationDeleted.'+_this.windowID, annotationID);
-             },
-             error: function() {
-              if (typeof returnSuccess === "function") {
-                returnError();
-              }
-             }
-             
-           });
+    deleteAnnotation: function(annotationID, successCallback, errorCallback) {
+      var _this = this;        
+      jQuery.ajax({
+       url: this.prefix+"/destroy/"+annotationID,
+       type: 'DELETE',
+       dataType: 'json',
+       headers: {
+         "x-annotator-auth-token": this.token
+       },
+       contentType: "application/json; charset=utf-8",
+       success: function(data) {
+        if (typeof successCallback === "function") {
+          successCallback();
+        }
+        jQuery.publish('catchAnnotationDeleted.'+_this.windowID, annotationID);
+      },
+      error: function() {
+        if (typeof errorCallback === "function") {
+          errorCallback();
+        }
+      }
+
+    });
     },
     
-    update: function(oaAnnotation, returnSuccess, returnError) {
+    update: function(oaAnnotation, successCallback, errorCallback) {
       var annotation = this.getAnnotationInEndpoint(oaAnnotation),
       _this = this,
       annotationID = annotation.id;
@@ -144,14 +142,14 @@
         data: JSON.stringify(annotation),
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-          if (typeof returnSuccess === "function") {
-            returnSuccess();
+          if (typeof successCallback === "function") {
+            successCallback();
           }
           jQuery.publish('catchAnnotationUpdated.'+_this.windowID, annotation);
         },
         error: function() {
-          if (typeof returnError === "function") {
-            returnError();
+          if (typeof errorCallback === "function") {
+            errorCallback();
           }
         }
       });
@@ -159,12 +157,12 @@
 
     //takes OA Annotation, gets Endpoint Annotation, and saves
     //if successful, MUST return the OA rendering of the annotation
-    create: function(oaAnnotation, returnSuccess, returnError) {
+    create: function(oaAnnotation, successCallback, errorCallback) {
       var annotation = this.getAnnotationInEndpoint(oaAnnotation);
-      this.createCatchAnnotation(annotation, returnSuccess, returnError);
+      this.createCatchAnnotation(annotation, successCallback, errorCallback);
     },
 
-    createCatchAnnotation: function(catchAnnotation, returnSuccess, returnError) {
+    createCatchAnnotation: function(catchAnnotation, successCallback, errorCallback) {
       var _this = this;
       
       jQuery.ajax({
@@ -177,25 +175,17 @@
         data: JSON.stringify(catchAnnotation),
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-          if (typeof returnSuccess === "function") {
-            returnSuccess(_this.getAnnotationInOA(data));
+          if (typeof successCallback === "function") {
+            successCallback(_this.getAnnotationInOA(data));
           }
           jQuery.publish('catchAnnotationCreated.'+_this.windowID, data);
         },
         error: function() {
-          if (typeof returnError === "function") {
-            returnError();
+          if (typeof errorCallback === "function") {
+            errorCallback();
           }
         }
       });
-    },
-
-    set: function(prop, value, options) {
-      if (options) {
-        this[options.parent][prop] = value;
-      } else {
-        this[prop] = value;
-      }
     },
 
     userAuthorize: function(action, annotation) {
@@ -344,6 +334,6 @@
       annotation.parent = "0";
       return annotation;
     }
-  };
+  });
 
 }(Mirador));
