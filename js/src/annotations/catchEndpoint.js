@@ -31,11 +31,10 @@
       windowID: null
     }, options);
 
-    //jQuery.extend($.CatchEndpoint.prototype, $.Endpoint.prototype);
     this.init();
   };
 
-  jQuery.extend($.CatchEndpoint.prototype, $.Endpoint.prototype, {
+  $.CatchEndpoint.prototype = {
     //Set up some options for catch
     init: function() {
       this.catchOptions = {
@@ -334,6 +333,6 @@
       annotation.parent = "0";
       return annotation;
     }
-  });
+  };
 
 }(Mirador));
