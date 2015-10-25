@@ -430,6 +430,7 @@
 
 
 /// functions added by me    
+
     toggleSearchWithinOverlay: function(focusState){
       var _this = this;
       var currentState = this.focusOverlaysAvailable[focusState].overlay.SearchWithin;
@@ -450,6 +451,7 @@
       this.toggleFocus(focusState, "SearchWithin");
       console.log('test2');
     },
+
     showSearchForm: function(){
       var $body = jQuery(".content-container");
       var queryForm = ["<div id='searchResults'>",
@@ -785,6 +787,7 @@
       _this.toggleThumbnails(_this.currentCanvasID);
     });
 
+
 //events added by me
 
     this.element.find('.mirador-icon-search-within').on('click', function() {
@@ -813,6 +816,7 @@
     });
 
 // end of events added by me
+
 
 
     this.element.find('.mirador-icon-metadata-view').on('click', function() {
