@@ -426,6 +426,10 @@
       //and then do toggling for current focus
       this.togglePanels('overlay', !currentState, 'MetadataView', focusState);
     },
+
+
+
+/// functions added by me    
     toggleSearchWithinOverlay: function(focusState){
       var _this = this;
       var currentState = this.focusOverlaysAvailable[focusState].overlay.SearchWithin;
@@ -446,6 +450,69 @@
       this.toggleFocus(focusState, "SearchWithin");
       console.log('test2');
     },
+    showSearchForm: function(){
+      var $body = jQuery(".content-container");
+      var queryForm = ["<div id='searchResults'>",
+          "<p><a href='#' id='js-close-search-within'>Close</a></p>",
+          "<form id='js-perform-query'>",
+            "<input id='js-query' type='text' placeholder='search'/>",
+            "<input type='submit'>",
+          "</form>",
+          "<div id='search-results-list'>",
+          "</div>",
+        "</div>"].join("");
+        console.log(queryForm);
+
+      $body.prepend(queryForm);
+    },
+    displaySearchWithin: function(query){
+      var _this = this;
+      if (query !== ""){
+        console.log(_this.manifest.uri);
+        searchService = (_this.manifest.getSearchWithinService());
+        console.log(searchService);
+
+        var searchRequest = jQuery.ajax({
+          url: searchService['@id'] + "?q=" + query,
+          dataType: 'json',
+          async: true
+        });
+
+        var searchResults = searchRequest.done(function(searchResults) {
+          console.log(searchResults);
+          jQuery("#search-results-list").html("");
+          jQuery("#search-results-list").append("<h1>Search results for: " + query + "</h1>");
+          searchResults.resources.forEach(function(result){
+            var canvasid = result.on.split("#")[0];
+            //not sure how to get canvas label so I'm just hacking it for the moment
+            var canvaslabel = canvasid.split("/").pop();
+            
+            var resultdisplay = [
+            "<div class='result-wrapper'>",
+            "<a href='#' class='js-show-canvas' data-canvasid='",
+            canvasid,
+            "'>View Canvas ", 
+            canvaslabel,
+            "</a>",
+            "<div class='result-paragraph'>", 
+            result.resource.chars,
+            "</div>",
+            "<div>"
+            ].join("");
+
+            jQuery("#search-results-list").append(resultdisplay);
+            //console.log(result.resource.chars);
+          });
+        //return searchResults;
+        });
+      }
+    },
+
+
+
+
+// end of functions added by me 
+
     toggleFocus: function(focusState, imageMode) {
       var _this = this;
 
@@ -718,9 +785,34 @@
       _this.toggleThumbnails(_this.currentCanvasID);
     });
 
+//events added by me
+
     this.element.find('.mirador-icon-search-within').on('click', function() {
-      _this.toggleSearchWithinOverlay(_this.currentFocus);
+      //_this.toggleSearchWithinOverlay(_this.currentFocus);
+      _this.showSearchForm();
+      
     });
+    
+    jQuery(document).on("click", ".js-show-canvas", function(){
+      var canvasid = jQuery(this).attr('data-canvasid');
+      jQuery(".result-wrapper").css("background-color", "inherit");
+      jQuery(this).parent().css("background-color", "lightyellow");
+      _this.toggleImageView(canvasid);
+
+    });
+    jQuery(document).on("submit", "#js-perform-query", function(event){
+        event.preventDefault();
+        var query = jQuery("#js-query").val();
+        console.log(query);
+      _this.displaySearchWithin(query);
+
+    });
+    jQuery(document).on("click", "#js-close-search-within", function(event){
+      event.preventDefault();
+      jQuery("#searchResults").remove();
+    });
+
+// end of events added by me
 
 
     this.element.find('.mirador-icon-metadata-view').on('click', function() {

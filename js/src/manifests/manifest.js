@@ -165,7 +165,13 @@
       };
 
       return dummyManifest;
+    },
+    // my added function 
+    getSearchWithinService: function(){
+      var _this = this;
+      return _this.jsonLd.service;
     }
+
   };
 
 }(Mirador));

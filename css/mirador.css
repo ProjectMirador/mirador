@@ -1654,3 +1654,20 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
     height: 75px !important;
 }
 
+/* styles added by me */ 
+#searchResults  {
+  overflow: scroll;
+  background-color: white;
+  color: black;
+  opacity: 1;
+  position: absolute;
+  left: 75%;
+  top: 0%;
+  width: 25%;
+  height: 100%;
+  z-index: 1;
+  padding: 10px;
+}
+.results-wrapper {
+  border-bottom: 1px solid gray;
+}
