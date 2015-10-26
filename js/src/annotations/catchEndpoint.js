@@ -51,6 +51,14 @@
       };
     },
 
+    set: function(prop, value, options) {
+      if (options) {
+        this[options.parent][prop] = value;
+      } else {
+        this[prop] = value;
+      }
+    },
+
     //Search endpoint for all annotations with a given URI
     search: function(options, successCallback, errorCallback) {
       var _this = this;
