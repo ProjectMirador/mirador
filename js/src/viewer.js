@@ -238,7 +238,11 @@
 
     loadManifestFromConfig: function(options) {
       // check if there are available slots, otherwise don't process this object from config
-      var slotAddress = options.slotAddress ? options.slotAddress : this.workspace.getAvailableSlot().layoutAddress;
+      //if we have more windowObjects that slots in the layout, return
+      var slotAddress = options.slotAddress ? options.slotAddress : this.workspace.getAvailableSlot() ? this.workspace.getAvailableSlot().layoutAddress : null;
+      if (!slotAddress) {
+        return;
+      }
       var windowConfig = {
         manifest: this.manifests[options.loadedManifest],
         currentFocus : options.viewType,
