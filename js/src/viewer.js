@@ -38,10 +38,9 @@
     init: function() {
       var _this = this;
 
+      //add background and positioning information on the root element that is provided in config
       this.element.css('background-color', '#333').css('background-image','url("images/debut_dark.png")').css('background-position','left top')
-      .css('background-repeat','repeat');
-      //  background: #333 url(images/debut_dark.png) left top repeat;
-
+      .css('background-repeat','repeat').css('position','fixed');
 
       //initialize i18next  
       i18n.init({debug: false, getAsync: false, resGetPath: _this.i18nPath+'__lng__/__ns__.json'}); 
