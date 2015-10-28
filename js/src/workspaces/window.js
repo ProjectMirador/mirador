@@ -473,7 +473,7 @@
         console.log(_this.manifest.uri);
         searchService = (_this.manifest.getSearchWithinService());
         console.log(searchService);
-
+/*
         var searchRequest = jQuery.ajax({
           url: searchService['@id'] + "?q=" + query,
           dataType: 'json',
@@ -503,11 +503,25 @@
             ].join("");
 
             jQuery("#search-results-list").append(resultdisplay);
-            //console.log(result.resource.chars);
+            
           });
-        //return searchResults;
+        
         });
+*/
+   test = new $.SearchWithin({
+              manifest: _this.manifest, 
+              appendTo: jQuery("#search-results-list"), 
+              parent: _this, 
+              panel: true, 
+              canvasID: _this.currentCanvasID, 
+              imagesList: _this.imagesList,
+              thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'},
+              query: query
+            });
+
+
       }
+  
     },
 
 
@@ -795,7 +809,7 @@
       _this.showSearchForm();
       
     });
-    
+/*    
     jQuery(document).on("click", ".js-show-canvas", function(){
       var canvasid = jQuery(this).attr('data-canvasid');
       jQuery(".result-wrapper").css("background-color", "inherit");
@@ -803,6 +817,8 @@
       _this.toggleImageView(canvasid);
 
     });
+*/
+
     jQuery(document).on("submit", "#js-perform-query", function(event){
         event.preventDefault();
         var query = jQuery("#js-query").val();

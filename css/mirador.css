@@ -1668,6 +1668,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   z-index: 1;
   padding: 10px;
 }
-.results-wrapper {
+.result-wrapper {
   border-bottom: 1px solid gray;
+  margin-bottom: 5px;
 }
