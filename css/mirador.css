@@ -1659,14 +1659,14 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   overflow: scroll;
   background-color: white;
   color: black;
-  opacity: 1;
+  opacity: .9;
   position: absolute;
-  left: 75%;
+  left: 80%;
   top: 0%;
-  width: 25%;
+  width: 20%;
   height: 100%;
   z-index: 1;
-  padding: 10px;
+  padding: 15px;
 }
 .result-wrapper {
   border-bottom: 1px solid gray;

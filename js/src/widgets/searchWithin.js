@@ -21,14 +21,9 @@
     init: function() {
       
       var _this = this;
-          console.log("this",this);
-          console.log("this_", _this);
-          console.log("test", _this.query);
-      
+          
       _this.searchService = this.manifest.getSearchWithinService();
-      console.log(this.searchService);
-
-
+      
       jQuery(this.appendTo).html("");
       jQuery("<h1>Search results for: " + this.query + "</h1>").appendTo(this.appendTo);
       
@@ -47,7 +42,6 @@
           _this.tplData = _this.getSearchAnnotations(searchResults);
         }
 
-        console.log("tplData", _this.tplData);
         //add array to template 
         _this.element = jQuery(_this.template(_this.tplData)).appendTo(_this.appendTo);
         //bind events
@@ -57,23 +51,38 @@
 
   // Base code from https://github.com/padolsey/prettyprint.js. Modified to fit Mirador needs
   searchRequest: function(query){
-    _this = this;
+    var _this = this;
+    var searchUrl = "";
+    console.log("current _this", _this);
+    console.log(_this.searchService.constructor === Array);
+    
+    if (_this.searchService.constructor === Array){
+      searchUrl = _this.searchService[0]['@id'];
+    }
+    else{
+      searchUrl = _this.searchService['@id'];
+    }
+    
+    console.log("searchUrl", searchUrl);
+
     var searchRequest = jQuery.ajax({
-          url: _this.searchService['@id'] + "?q=" + query,
-          //url: "http://wellcomelibrary.org/annoservices/search/b18035978" + "?q=" + query,
+          url:  searchUrl + "?q=" + query,
           dataType: 'json',
           async: true
         });
      return searchRequest;
   },
-  getSearchAnnotations: function(results){
+  getSearchAnnotations: function(searchResults){
+    var _this = this;
     tplData = [];
     searchResults.resources.forEach(function(result){
       var canvasid = result.on.split("#")[0];
+      var coordinates = result.on.split("#")[1];
       //not sure how to get canvas label so I'm just hacking it for the moment
       var canvaslabel = canvasid.split("/").pop();
       
       resultobject = {canvasid: canvasid,
+                      coordinates: coordinates,
                       canvaslabel: canvaslabel,
                       resulttext: result.resource.chars}; 
 
@@ -82,20 +91,41 @@
     return tplData;
   },
   getHits: function(searchResults){
+      var _this = this;
       tplData = [];
       searchResults.hits.forEach(function(hit){
-        //var canvasid = result.on.split("#")[0];
-        //not sure how to get canvas label so I'm just hacking it for the moment
-        //var canvaslabel = canvasid.split("/").pop();
         
-        resultobject = {canvasid: "test",
-                        canvaslabel: "test",
+        //this seems like a really slow way to retrieve on property from hits
+        var annotation = hit.annotations[0];
+        var canvases = _this.getHitCanvases(searchResults, annotation);
+        
+        var canvasid = canvases[0].split("#")[0];
+        var coordinates = canvases[0].split("#")[1];
+        //not sure how to get canvas label so I'm just hacking it for the moment
+        var canvaslabel = canvasid.split("/").pop();
+        
+        resultobject = {canvasid: canvasid,
+                        coordinates: coordinates,
+                        canvaslabel: canvaslabel,
                         resulttext: hit.before + "<span style='background-color: yellow'>" + hit.match + "</span>" + hit.after}; 
 
         tplData.push(resultobject);              
       });
       return tplData;
   },
+
+  getHitCanvases: function(searchResults, annotationid){
+    var results = [];
+    searchResults.resources.forEach(function(resource){
+      if (resource["@id"] === annotationid){
+        results.push(resource.on);
+      }
+    //should return an array of canvasids
+    });
+    console.log(results);
+    return results;
+  },
+  
 
   
 
@@ -104,9 +134,25 @@
     this.element.find('.js-show-canvas').on("click", function() {
       console.log("event triggered");
       var canvasid = jQuery(this).attr('data-canvasid');
+      var coordinates = jQuery(this).attr('data-coordinates');
       jQuery(".result-wrapper").css("background-color", "inherit");
       jQuery(this).parent().css("background-color", "lightyellow");
 
+      miniAnnotationList  = [
+                              {
+                              "@id": "test",
+                              "@type": "oa:Annotation",
+                              "motivation": "sc:painting",
+                              "resource": {
+                                "@type": "cnt:ContentAsText",
+                                "chars": _this.query
+                              },
+                              "on": canvasid + "#" + coordinates
+                              }
+                            ]; 
+      
+      _this.parent.annotationsList = miniAnnotationList;
+      console.log("parent test", _this.parent);
       _this.parent.toggleImageView(canvasid);
       
     });
@@ -126,10 +172,10 @@
   template: Handlebars.compile([
             '{{#each this}}',
             "<div class='result-wrapper'>",
-            "<a style='cursor: pointer;' class='js-show-canvas' data-canvasid='{{canvasid}}'>Canvas ", 
+            "<a style='cursor: pointer;' class='js-show-canvas' data-canvasid='{{canvasid}}' data-coordinates='{{coordinates}}'>Canvas ", 
             "{{canvaslabel}}",
             "</a>",
-            "<div style='cursor: pointer;' class='result-paragraph js-show-canvas' data-canvasid='{{canvasid}}'>", 
+            "<div style='cursor: pointer;' class='result-paragraph js-show-canvas' data-canvasid='{{canvasid}}' data-coordinates='{{coordinates}}'>", 
             "{{resulttext}}",
             "</div>",
             "</div>",
