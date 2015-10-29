@@ -66,7 +66,7 @@
         }            
         var imageName = $.viewer.repoImages[repo || 'other'] || $.viewer.repoImages.other;
 
-        return $.viewer.logosLocation + imageName;
+        return $.viewer.buildPath + $.viewer.logosPath + imageName;
       })();
 
       for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
