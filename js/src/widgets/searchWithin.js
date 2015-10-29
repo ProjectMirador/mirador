@@ -9,6 +9,7 @@
       metadataTypes:        null,
       metadataListingCls:   'metadata-listing',
       query:                null,
+      searchService:        null,
     }, options);
 
     this.init();
@@ -24,7 +25,7 @@
           console.log("this_", _this);
           console.log("test", _this.query);
       
-      this.searchService = this.manifest.getSearchWithinService();
+      _this.searchService = this.manifest.getSearchWithinService();
       console.log(this.searchService);
 
 
@@ -36,20 +37,16 @@
       searchRequest.done(function(searchResults) {
 
         //create tplData array
-        _this.tplData = []; 
+        //_this.tplData = []; 
 
         //loop through restuls and fill array
-        searchResults.resources.forEach(function(result){
-          var canvasid = result.on.split("#")[0];
-          //not sure how to get canvas label so I'm just hacking it for the moment
-          var canvaslabel = canvasid.split("/").pop();
-          
-          resultobject = {canvasid: canvasid,
-                          canvaslabel: canvaslabel,
-                          resulttext: result.resource.chars}; 
+        if (searchResults.hits){
+          _this.tplData = _this.getHits(searchResults);
+        }
+        else{
+          _this.tplData = _this.getSearchAnnotations(searchResults);
+        }
 
-          _this.tplData.push(resultobject);              
-        });
         console.log("tplData", _this.tplData);
         //add array to template 
         _this.element = jQuery(_this.template(_this.tplData)).appendTo(_this.appendTo);
@@ -60,13 +57,46 @@
 
   // Base code from https://github.com/padolsey/prettyprint.js. Modified to fit Mirador needs
   searchRequest: function(query){
-     var searchRequest = jQuery.ajax({
-          url: searchService['@id'] + "?q=" + query,
+    _this = this;
+    var searchRequest = jQuery.ajax({
+          url: _this.searchService['@id'] + "?q=" + query,
+          //url: "http://wellcomelibrary.org/annoservices/search/b18035978" + "?q=" + query,
           dataType: 'json',
           async: true
         });
      return searchRequest;
   },
+  getSearchAnnotations: function(results){
+    tplData = [];
+    searchResults.resources.forEach(function(result){
+      var canvasid = result.on.split("#")[0];
+      //not sure how to get canvas label so I'm just hacking it for the moment
+      var canvaslabel = canvasid.split("/").pop();
+      
+      resultobject = {canvasid: canvasid,
+                      canvaslabel: canvaslabel,
+                      resulttext: result.resource.chars}; 
+
+      tplData.push(resultobject);              
+    });
+    return tplData;
+  },
+  getHits: function(searchResults){
+      tplData = [];
+      searchResults.hits.forEach(function(hit){
+        //var canvasid = result.on.split("#")[0];
+        //not sure how to get canvas label so I'm just hacking it for the moment
+        //var canvaslabel = canvasid.split("/").pop();
+        
+        resultobject = {canvasid: "test",
+                        canvaslabel: "test",
+                        resulttext: hit.before + "<span style='background-color: yellow'>" + hit.match + "</span>" + hit.after}; 
+
+        tplData.push(resultobject);              
+      });
+      return tplData;
+  },
+
   
 
   bindEvents: function() {
