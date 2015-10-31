@@ -169,7 +169,31 @@
     // my added function 
     getSearchWithinService: function(){
       var _this = this;
-      return _this.jsonLd.service;
+      var serviceProperty = _this.jsonLd.service;
+      console.log("serviceProperty", serviceProperty);
+      var service = {};
+      console.log("true or false", serviceProperty.constructor === Array);
+      if (serviceProperty.constructor === Array){
+        alert("test1");
+        console.log("count", serviceProperty.length);
+        for (var i = 0; i < serviceProperty.length; i++){
+          console.log("I am in side the loop");
+          console.log("test", serviceProperty[i]);
+          if (serviceProperty[i]["@context"] === "http://iiif.io/api/search/0/context.json"){
+            //returns the first service object with the correct contest
+            service = serviceProperty[i];
+            break;
+          }
+        }
+      }
+      else if (_this.jsonLd.service["@context"] === "http://iiif.io/api/search/0/context.json"){
+        service = _this.jsonLd.service;
+      }
+      else {
+        //no service object with the right context is found 
+        service = null;
+      }
+      return service;
     }
 
   };

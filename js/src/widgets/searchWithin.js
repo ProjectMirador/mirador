@@ -52,16 +52,15 @@
   // Base code from https://github.com/padolsey/prettyprint.js. Modified to fit Mirador needs
   searchRequest: function(query){
     var _this = this;
-    var searchUrl = "";
-    console.log("current _this", _this);
-    console.log(_this.searchService.constructor === Array);
-    
-    if (_this.searchService.constructor === Array){
-      searchUrl = _this.searchService[0]['@id'];
-    }
-    else{
-      searchUrl = _this.searchService['@id'];
-    }
+    //var searchUrl = "";
+    //if (_this.searchService.constructor === Array){
+    //  searchUrl = _this.searchService[0]['@id'];
+    //}
+    //else{
+    //  searchUrl = _this.searchService['@id'];
+    //}
+
+    var searchUrl = _this.searchService['@id'];
     
     console.log("searchUrl", searchUrl);
 
