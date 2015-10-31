@@ -62,7 +62,7 @@
 
     var searchUrl = _this.searchService['@id'];
     
-    console.log("searchUrl", searchUrl);
+    
 
     var searchRequest = jQuery.ajax({
           url:  searchUrl + "?q=" + query,
