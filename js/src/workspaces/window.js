@@ -25,9 +25,7 @@
           'bottomPanel' : {'' : false}
         },
         'ImageView': {
-          'overlay' : {'MetadataView' : false,
-                       'SearchWithin': false 
-                      }, 
+          'overlay' : {'MetadataView' : false}, 
           'sidePanel' : {'TableOfContents' : true},
           'bottomPanel' : {'ThumbnailsView' : true}
         },
@@ -308,14 +306,9 @@
       var _this = this;
 
       jQuery.each(this.focusOverlaysAvailable[state], function(panelType, viewOptions) {
-        console.log("panelType", panelType);
-        console.log("panelType", viewOptions);
         jQuery.each(viewOptions, function(view, displayed) {
-          console.log("view", view);
-          console.log("displayed", displayed);
           //instantiate any panels that exist for this view but are still null
           if (view !== '' && _this[panelType] === null) {
-            console.log("conditional is true");
             _this[panelType] = new $[view]({
               manifest: _this.manifest, 
               appendTo: _this.element.find('.'+panelType), 
@@ -326,7 +319,6 @@
               thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
             });
           }
-          console.log(_this[panelType]);
           //refresh displayed in case TableOfContents module changed it
           displayed = _this.focusOverlaysAvailable[state][panelType][view];
 
@@ -430,7 +422,7 @@
 
 
 /// functions added by me    
-
+  /*
     toggleSearchWithinOverlay: function(focusState){
       var _this = this;
       var currentState = this.focusOverlaysAvailable[focusState].overlay.SearchWithin;
@@ -451,6 +443,7 @@
       this.toggleFocus(focusState, "SearchWithin");
       console.log('test2');
     },
+  */  
 
     showSearchForm: function(){
       var $body = jQuery(".content-container");
@@ -463,52 +456,14 @@
           "<div id='search-results-list'>",
           "</div>",
         "</div>"].join("");
-        console.log(queryForm);
-
       $body.prepend(queryForm);
     },
     displaySearchWithin: function(query){
       var _this = this;
       if (query !== ""){
-        console.log(_this.manifest.uri);
         searchService = (_this.manifest.getSearchWithinService());
-        console.log(searchService);
-/*
-        var searchRequest = jQuery.ajax({
-          url: searchService['@id'] + "?q=" + query,
-          dataType: 'json',
-          async: true
-        });
-
-        var searchResults = searchRequest.done(function(searchResults) {
-          console.log(searchResults);
-          jQuery("#search-results-list").html("");
-          jQuery("#search-results-list").append("<h1>Search results for: " + query + "</h1>");
-          searchResults.resources.forEach(function(result){
-            var canvasid = result.on.split("#")[0];
-            //not sure how to get canvas label so I'm just hacking it for the moment
-            var canvaslabel = canvasid.split("/").pop();
-            
-            var resultdisplay = [
-            "<div class='result-wrapper'>",
-            "<a href='#' class='js-show-canvas' data-canvasid='",
-            canvasid,
-            "'>View Canvas ", 
-            canvaslabel,
-            "</a>",
-            "<div class='result-paragraph'>", 
-            result.resource.chars,
-            "</div>",
-            "<div>"
-            ].join("");
-
-            jQuery("#search-results-list").append(resultdisplay);
-            
-          });
         
-        });
-*/
-   test = new $.SearchWithin({
+        searchObject = new $.SearchWithin({
               manifest: _this.manifest, 
               appendTo: jQuery("#search-results-list"), 
               parent: _this, 
@@ -518,14 +473,8 @@
               thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'},
               query: query
             });
-
-
       }
-  
     },
-
-
-
 
 // end of functions added by me 
 
@@ -545,7 +494,6 @@
       this.focusModules[focusState].toggle(true);
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
-      console.log(focusState);
       jQuery.publish("windowUpdated", {
         id: _this.id, 
         viewType: _this.currentFocus, 
@@ -822,8 +770,7 @@
     jQuery(document).on("submit", "#js-perform-query", function(event){
         event.preventDefault();
         var query = jQuery("#js-query").val();
-        console.log(query);
-      _this.displaySearchWithin(query);
+        _this.displaySearchWithin(query);
 
     });
     jQuery(document).on("click", "#js-close-search-within", function(event){

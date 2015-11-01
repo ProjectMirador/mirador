@@ -32,9 +32,6 @@
       searchRequest.done(function(searchResults) {
 
         //create tplData array
-        //_this.tplData = []; 
-
-        //loop through restuls and fill array
         if (searchResults.hits){
           _this.tplData = _this.getHits(searchResults);
         }
@@ -52,18 +49,7 @@
   // Base code from https://github.com/padolsey/prettyprint.js. Modified to fit Mirador needs
   searchRequest: function(query){
     var _this = this;
-    //var searchUrl = "";
-    //if (_this.searchService.constructor === Array){
-    //  searchUrl = _this.searchService[0]['@id'];
-    //}
-    //else{
-    //  searchUrl = _this.searchService['@id'];
-    //}
-
     var searchUrl = _this.searchService['@id'];
-    
-    
-
     var searchRequest = jQuery.ajax({
           url:  searchUrl + "?q=" + query,
           dataType: 'json',
@@ -93,9 +79,12 @@
       var _this = this;
       tplData = [];
       searchResults.hits.forEach(function(hit){
-        
         //this seems like a really slow way to retrieve on property from hits
+        //note that at present it is only retrieving the first annotation 
+        //but a hit annotation property takes an array and could have more than one
+        //annotation -- its not a very common case but a possibility.
         var annotation = hit.annotations[0];
+        //canvases could come back as an array
         var canvases = _this.getHitCanvases(searchResults, annotation);
         
         var canvasid = canvases[0].split("#")[0];
@@ -110,7 +99,7 @@
 
         tplData.push(resultobject);              
       });
-      return tplData;
+    return tplData;
   },
 
   getHitCanvases: function(searchResults, annotationid){
@@ -119,24 +108,22 @@
       if (resource["@id"] === annotationid){
         results.push(resource.on);
       }
-    //should return an array of canvasids
+    //should return an array of canvasids; 
+    //in most cases there will only be one result in that array
     });
-    console.log(results);
     return results;
   },
-  
-
-  
 
   bindEvents: function() {
     _this = this;
     this.element.find('.js-show-canvas').on("click", function() {
-      console.log("event triggered");
       var canvasid = jQuery(this).attr('data-canvasid');
       var coordinates = jQuery(this).attr('data-coordinates');
       jQuery(".result-wrapper").css("background-color", "inherit");
       jQuery(this).parent().css("background-color", "lightyellow");
-
+      //if there was more than one annotation 
+      //(for example if a word crossed a line and needed two coordinates sets)
+      //the miniAnnotationList should have multiple objects
       miniAnnotationList  = [
                               {
                               "@id": "test",
@@ -151,20 +138,10 @@
                             ]; 
       
       _this.parent.annotationsList = miniAnnotationList;
-      console.log("parent test", _this.parent);
       _this.parent.toggleImageView(canvasid);
       
     });
-/*
-    jQuery(document).on("click", ".js-show-canvas", function(){
-      var canvasid = jQuery(this).attr('data-canvasid');
-      jQuery(".result-wrapper").css("background-color", "inherit");
-      jQuery(this).parent().css("background-color", "lightyellow");
-      _this.toggleImageView(canvasid);
-
-    });
-*/
-    },
+  },
 
     //notes about template, I can't the js-show-canvas to fire when applied to the wrapping div.
     //so for now its applied on both the canvas number and the paragraph
