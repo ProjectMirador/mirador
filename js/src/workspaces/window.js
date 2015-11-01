@@ -445,27 +445,14 @@
     },
   */  
 
-    showSearchForm: function(){
-      var $body = jQuery(".content-container");
-      var queryForm = ["<div id='searchResults'>",
-          "<p><a href='#' id='js-close-search-within'>Close</a></p>",
-          "<form id='js-perform-query'>",
-            "<input id='js-query' type='text' placeholder='search'/>",
-            "<input type='submit'>",
-          "</form>",
-          "<div id='search-results-list'>",
-          "</div>",
-        "</div>"].join("");
-      $body.prepend(queryForm);
-    },
+    
     displaySearchWithin: function(query){
       var _this = this;
       if (query !== ""){
         searchService = (_this.manifest.getSearchWithinService());
-        
         searchObject = new $.SearchWithin({
               manifest: _this.manifest, 
-              appendTo: jQuery("#search-results-list"), 
+              appendTo: _this.element.find(".search-results-list"), 
               parent: _this, 
               panel: true, 
               canvasID: _this.currentCanvasID, 
@@ -753,30 +740,18 @@
 //events added by me
 
     this.element.find('.mirador-icon-search-within').on('click', function() {
-      //_this.toggleSearchWithinOverlay(_this.currentFocus);
-      _this.showSearchForm();
-      
+      _this.element.find('.searchResults').stop().slideFadeToggle(300);
+    
     });
-/*    
-    jQuery(document).on("click", ".js-show-canvas", function(){
-      var canvasid = jQuery(this).attr('data-canvasid');
-      jQuery(".result-wrapper").css("background-color", "inherit");
-      jQuery(this).parent().css("background-color", "lightyellow");
-      _this.toggleImageView(canvasid);
-
-    });
-*/
-
-    jQuery(document).on("submit", "#js-perform-query", function(event){
+    
+    this.element.find(".js-perform-query").on('click', function(event){
         event.preventDefault();
-        var query = jQuery("#js-query").val();
+        var query = _this.element.find(".js-query").val();
+        console.log("query", query);
         _this.displaySearchWithin(query);
+    });
 
-    });
-    jQuery(document).on("click", "#js-close-search-within", function(event){
-      event.preventDefault();
-      jQuery("#searchResults").remove();
-    });
+    
 
 // end of events added by me
 
@@ -872,6 +847,15 @@
                                  '<h3 class="window-manifest-title">{{title}}</h3>',
                                  '</div>',
                                  '<div class="content-container">',
+                                 '<div class="searchResults" style="display: none;">',
+                                 '<p><a href="javascript:;" class="js-close-search-within">Close</a></p>',
+                                 '<form class="js-perform-query">',
+                                 '<input class="js-query" type="text" placeholder="search"/>',
+                                 '<input type="submit"/>',
+                                 '</form>',
+                                 '<div class="search-results-list">',
+                                 '</div>',
+                                 '</div>',
                                  '{{#if sidePanel}}',
                                  '<div class="sidePanel">',
                                  '</div>',

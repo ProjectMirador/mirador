@@ -1655,7 +1655,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 }
 
 /* styles added by me */ 
-#searchResults  {
+.searchResults  {
   overflow: scroll;
   background-color: white;
   color: black;

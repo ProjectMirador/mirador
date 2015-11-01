@@ -25,7 +25,7 @@
       _this.searchService = this.manifest.getSearchWithinService();
       
       jQuery(this.appendTo).html("");
-      jQuery("<h1>Search results for: " + this.query + "</h1>").appendTo(this.appendTo);
+      jQuery("<h1>Search results for: " + _this.query + "</h1>").appendTo(_this.appendTo);
       
       var searchRequest = this.searchRequest(this.query);
 
@@ -115,7 +115,8 @@
   },
 
   bindEvents: function() {
-    _this = this;
+    var _this = this;
+
     this.element.find('.js-show-canvas').on("click", function() {
       var canvasid = jQuery(this).attr('data-canvasid');
       var coordinates = jQuery(this).attr('data-coordinates');
