@@ -51,8 +51,8 @@ a {
     color: #fff;
     height: 33px;
     width: 100%;
-    /*padding: 4px;*/
-    top: 0;
+    top: -10px;
+    position: relative;
 }
 
 .mirador-main-menu {
@@ -160,9 +160,11 @@ a {
   overflow: hidden;
   white-space: nowrap;
   padding-left: 10px;
-  margin: 8px 0px 8px 0px;
+  margin: 1px 0px;
   font-weight: bold;
-  font-size: 1.3em;
+  text-align: left;
+  font-size: 86%;
+  padding-top: 4px;
 }
 
 .window-manifest-navigation {
@@ -588,12 +590,14 @@ li.highlight {
   width:280px;
   height:100%;
   float: left;
-  background-color: #efefef;
+  /*background-color: #efefef;*/
+  background-color: lightgray;
   border-right: 1px solid lightgray;
   /*display: none;*/
   box-sizing: border-box;
   overflow: hidden;
   transition: all 0.3s ease;
+  font-size: 75%;
 }
 .sidePanel a:hover {
   text-decoration: none;
@@ -635,6 +639,7 @@ li.highlight {
   padding: 8px;
   padding-left: 8px;
   display: block;
+  border-top: 1px solid white;
 }
 .toc a.toc-link:hover {
   cursor: pointer;
@@ -667,7 +672,7 @@ li.highlight {
 }
 .toc-link i {
   color: rgba(0,0,0,0.4);
-  margin-right:8px;
+  margin-left:8px;
   transition: all 0.2s linear;
 }
 .toc-link i:hover {
@@ -736,17 +741,18 @@ li.highlight {
 }
 
 .overlay {
-  display: none;
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 0px;
+  top: 0px;
   box-sizing: border-box;
-  background-color: rgba(255,255,255,0.9);
+  background-color: rgba(255, 255, 255, 0.9);
   z-index: 4;
   width: 45%;
   overflow-y: scroll;
   height: 80%;
   word-wrap: break-word;
+  font-size: 70%;
+  display: none;
 }
 .bottomPanel {
   background-color: rgba(0,0,0,0.7);
@@ -906,9 +912,10 @@ li.highlight {
 }
 .mirador-osd-annotations-layer {
   position:absolute;
-  top: 10px;
-  left: 10px;
-  transition: none;
+  bottom: 170px;
+  left: 0px;
+  margin: 1%;
+  font-size: 1.5em;
 }
 .mirador-osd-toggle-bottom-panel {
   position: absolute;
@@ -924,7 +931,7 @@ li.highlight {
 }
 .mirador-pan-zoom-controls {
   position: absolute;
-  width: 500px;
+  width: auto;
   height: 65px;
   bottom:0;
   right:0;
@@ -932,23 +939,40 @@ li.highlight {
 }
 
 .mirador-osd-contrast{
-  font-size:130%;
-  position:absolute;
-  left: 163px;
-  color:white;
+  font-size: 103%;
+  color: #FFF;
+  width: 135px;
+  display: block;
+  position: relative;
+  margin: 15px 0px;
 }
 .mirador-osd-brightness{
-  font-size:130%;
-  position:absolute;
+  font-size:103%;
+  position: relative;
   color:white;
+  width: 135px;
+  display: block;
 }
+
 .brightnessSlider{
   display: block;
+  margin-top:8px;
+  height: 0.4em !important;
   /*height:200px;*/
 }
 .contrastSlider{
   display: block;
+  margin-top:8px;
+  height: 0.4em !important;
   /*height:200px;*/
+}
+.brightnessSlider .ui-slider-handle{
+  width: .4em !important;
+  top: -0.4em !important; 
+}
+.contrastSlider .ui-slider-handle{
+  width: .4em !important;
+  top: -0.4em !important;
 }
 .invertEffect{
   -webkit-filter: invert(100%);
@@ -968,62 +992,74 @@ li.highlight {
 }
 .mirador-osd-positive-rotate {
   font-size:130%;
-  position:absolute;
-  right:110px;
-  top:205px;
+  position:relative;
+  margin-right:10px;
+
 }
 .mirador-osd-negative-rotate {
   font-size:130%;
-  position:absolute;
-  right:110px;
-  top:230px;
+  position:relative;
 }
 .mirador-osd-flip {
   font-size:130%;
-  position:absolute;
-  right:140px;
-  top:215px;
+  position:relative;
+  margin-right: 10px;
 }
 .mirador-osd-toggle-grayscale {
-  font-size:130%;
-  position:absolute;
-  right:170px;
-  top:199px;
-  display: block;
+  font-size:100%;
+  position:relative;
+  /*right:170px;
+  top:104px;*/
   cursor: pointer;
+  text-align: left;
+  display: block;
+  margin: 10px 0px;
 }
 .mirador-osd-toggle-invert {
-  font-size:130%;
-  position:absolute;
-  right:170px;
-  top:230px;
+  font-size:100%;
+  position:relative;
+  /*right:170px;
+  top:135px;*/
   display:block;
   cursor: pointer;
+  text-align: left;
+  margin-bottom: 10px;
 }
 .mirador-osd-filters-off {
-  font-size:130%;
-  position:absolute;
-  right:170px;
-  top:170px;
+  font-size:100%;
+  position:relative;
+  /*right:170px;
+  top:75px;*/
   display:block;
   cursor: pointer;
+  text-align: left;
+  margin-top: 13px;
+}
+.mirador-osd-filters-off span{
+  border: 1px solid white;
+  padding: 3px ;
 }
 
 .mirador-pan-zoom-toggle {
   width: 40px;
   height: 40px;
   position: absolute;
-  bottom: 160px;
+  bottom: 0px;
   right: 118px;
   color: green;
   opacity: 1;
+  padding: 25px 0px;
 }
 .mirador-img-manipulation{
   right:-350px;
-  height: 300px;
-  width: 245px;
+  height: 244px;
+  width: auto;
   position: absolute;
-  bottom: 96px;
+  background-color: black;
+  padding: 16px;
+  opacity:1 !important;
+  text-align: left;
+  bottom: 0px;
 }
 .mirador-osd-up {
   position:absolute;
@@ -1478,40 +1514,44 @@ ul.scroll-listing-thumbs li .thumb-label {
 ---------------------------------------------------------------------------- */
 
   .mirador-viewer .sub-title {
-    border-bottom: 1px dotted #ccc;
+    border-bottom: 1px dotted #CCC;
     color: #666;
     font-weight: bold;
-    margin: 10px 20px 0 20px;
-    padding: 0 5px 5px 0;
+    margin: 10px 20px 0px;
+    padding: 0px 5px 5px 0px;
 }
 
 .mirador-viewer .metadata-listing {
-  display: table;
-  table-layout: fixed;
-  width: 100%;
-  margin: 0;
-  padding: 0px 20px 10px 20px;
-  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px 20px 10px;
 }
 
 .mirador-viewer .metadata-item {
-  display: table-row;
+  display: block;
+  text-align: left;
 }
 
 .mirador-viewer .metadata-label, .mirador-viewer .metadata-value {
-  display: table-cell;
+  display: inline-block;
   line-height: 1.5;
   padding: 3px 0;
 }
 
 .mirador-viewer .metadata-label {
-  width: 8em;
-  text-transform: capitalize;
   color: #555;
+  line-height: 1.5;
+  padding: 3px 0px;
+  text-transform: capitalize;
+  width: 8em;
+  text-align: left;
+  margin-right: 30px;
+  left: 0px;
 }
 
 .mirador-viewer .metadata-value {
-  vertical-align: bottom;
+  line-height: 1.5;
+  padding: 3px 0px;
+  text-align: left;
 }
 
 .mirador-viewer .metadata-listing a:hover {
@@ -1615,7 +1655,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   background-color: #efefef;
   height: 100%;
   margin-top: 0px;
-  padding-top: 9px;
+  padding-top: 5px;
   height: 34px;
   width: 24px;
   z-index:4;
@@ -1624,7 +1664,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   background: none;
   color: rgb( 146, 145, 145 );
   box-sizing: border-box;
-  margin-right:5px;
+  margin:4px;
   padding-bottom:30px;
 }
 
@@ -1633,7 +1673,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   background: none;
   color: rgb( 146, 145, 145 );
   box-sizing: border-box;
-  margin-left:5px;
+  margin:5px 7px;
   padding-bottom:30px;
 }
 

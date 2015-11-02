@@ -273,12 +273,14 @@
           event.target.className = "fa fa-2x fa-mail-reply";
           event.target.parentNode.style.right = "118px";
           event.target.parentNode.nextSibling.style.right = "-350px";
+          event.target.parentNode.previousSibling.style.right = "0px";
           event.target.parentNode.setAttribute("title", "View Image Manipulation Tools");
         }
         else if (event.target.className == "fa fa-2x fa-mail-reply"){
           event.target.className = "fa fa-2x fa-mail-forward";
-          event.target.parentNode.nextSibling.style.right = "117px";
-          event.target.parentNode.style.right = "371px";
+          event.target.parentNode.nextSibling.style.right = "0px";
+          event.target.parentNode.previousSibling.style.right = "173px";
+          event.target.parentNode.style.right = "310px";
           event.target.parentNode.setAttribute("title", "Hide Image Manipulation Tools");
         }
         else{
@@ -287,7 +289,7 @@
       });
 
       this.parent.element.find(".brightnessSlider").slider({
-        orientation: "vertical",
+          orientation: "horizontal",
           range: "min",
           min: 0,
           max: 200,
@@ -437,7 +439,7 @@
       });
 
       this.parent.element.find(".contrastSlider").slider({
-         orientation: "vertical",
+         orientation: "horizontal",
           range: "min",
           min: 0,
           max: 200,
@@ -591,7 +593,7 @@
       });
 
       jQuery.subscribe('bottomPanelSet.' + _this.windowId, function(event, visible) {
-        var dodgers = _this.parent.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls');
+        var dodgers = _this.parent.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls, .mirador-pan-zoom-toggle, .mirador-img-manipulation');
         var arrows = _this.parent.element.find('.mirador-osd-next, .mirador-osd-previous');
         if (visible === true) {
           dodgers.css({transform: 'translateY(-130px)'});
@@ -759,24 +761,6 @@
                                  '<i class="fa fa-2x fa-mail-reply"></i>',
                                  '</div>',
                                  '<div class="mirador-img-manipulation hud-control">',
-                                 '<a title="Rotate +90 degrees" class="mirador-osd-positive-rotate hud-control">',
-                                 '<i class="fa fa-rotate-right"></i>',
-                                 '</a>',
-                                 '<a title="Rotate -90 degrees" class="mirador-osd-negative-rotate hud-control">',
-                                 '<i class="fa fa-rotate-left"></i>',
-                                 '</a>',
-                                 '<a title="Rotate +180 degrees" class="mirador-osd-flip hud-control">',
-                                 '<i class="fa fa-refresh"></i>',
-                                 '</a>',
-                                 '<a title="Toggle Grayscale" class="mirador-osd-toggle-grayscale hud-control">',
-                                 '<span>gray</span>',
-                                 '</a>',
-                                 '<a title="Invert Colors" class="mirador-osd-toggle-invert hud-control">',
-                                 '<span>invert<span>',
-                                 '</a>',
-                                 '<a title="Reset Viewport" class="mirador-osd-filters-off hud-control">',
-                                 '<span>RESET</span>',
-                                 '</a>',
                                  '<div title="Change Image Brightness" class="mirador-osd-brightness">',
                                  '<span>Brightness</span>',
                                  '<span class="brightnessSlider"></span>',
@@ -785,6 +769,24 @@
                                  '<span>Contrast</span>',
                                  '<span class="contrastSlider"></span>',
                                  '</div>',
+                                 '<a title="Toggle Grayscale" class="mirador-osd-toggle-grayscale hud-control">',
+                                 '<span>gray</span>',
+                                 '</a>',
+                                 '<a title="Invert Colors" class="mirador-osd-toggle-invert hud-control">',
+                                 '<span>invert<span>',
+                                 '</a>',
+                                 '<a title="Rotate +180 degrees" class="mirador-osd-flip hud-control">',
+                                 '<i class="fa fa-refresh"></i>',
+                                 '</a>',
+                                 '<a title="Rotate +90 degrees" class="mirador-osd-positive-rotate hud-control">',
+                                 '<i class="fa fa-rotate-right"></i>',
+                                 '</a>',
+                                 '<a title="Rotate -90 degrees" class="mirador-osd-negative-rotate hud-control">',
+                                 '<i class="fa fa-rotate-left"></i>',
+                                 '</a>',
+                                 '<a title="Remove Tool Effects" class="mirador-osd-filters-off hud-control">',
+                                 '<span>RESET</span>',
+                                 '</a>',
                                  '</div>'
     ].join(''))
 

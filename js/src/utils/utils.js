@@ -280,6 +280,7 @@
   // Configurable Promises
   $.createImagePromise = function(imageUrl) {
     var img = new Image(),
+    defaultImage = "http://165.134.241.141/brokenBooks/images/imgNotFound.png",
     dfd = jQuery.Deferred();
 
     img.onload = function() {
@@ -287,11 +288,15 @@
     };
 
     img.onerror = function() {
-      dfd.reject(img.src);
+      dfd.resolve(defaultImage);
+      imageUrl = defaultImage;
+      //dfd.reject(img.src);
     };
 
     dfd.fail(function() {
       console.log('image failed to load: ' + img.src);
+      dfd.resolve(defaultImage);
+      imageUrl = defaultImage;
     });
 
     img.src = imageUrl;
