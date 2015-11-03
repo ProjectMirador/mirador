@@ -1,5 +1,6 @@
 describe('WorkspacePanel', function() {
   beforeEach(function() {
+    this.viewer = {};
     var viewer = jQuery('<div>');
     var windowElem = jQuery('<div class="window">').add('<div class="window">');
     this.workspace = {
@@ -10,7 +11,8 @@ describe('WorkspacePanel', function() {
       appendTo: viewer, 
       maxX : 3,
       maxY : 5,
-      workspace: this.workspace
+      workspace: this.workspace,
+      parent: this.viewer
     });
   });
 
