@@ -38,8 +38,13 @@
     init: function() {
       var _this = this;
 
+      //add background and positioning information on the root element that is provided in config
+      var backgroundImage = _this.buildPath + _this.imagesPath + 'debut_dark.png';
+      this.element.css('background-color', '#333').css('background-image','url('+backgroundImage+')').css('background-position','left top')
+      .css('background-repeat','repeat').css('position','fixed');
+
       //initialize i18next  
-      i18n.init({debug: false, getAsync: false, resGetPath: _this.i18nPath+'__lng__/__ns__.json'}); 
+      i18n.init({debug: false, getAsync: false, resGetPath: _this.buildPath + _this.i18nPath+'__lng__/__ns__.json'}); 
 
       //register Handlebars helper
       Handlebars.registerHelper('t', function(i18n_key) {

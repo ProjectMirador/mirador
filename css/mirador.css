@@ -1,3 +1,9 @@
+body { 
+  padding: 0; 
+  margin: 0; 
+  overflow: hidden; 
+  font-size: 70%; 
+}
 a {
   color: inherit; /* blue colors for links too */
   text-decoration: inherit; /* no underline */
@@ -384,7 +390,6 @@ li.highlight {
 }
 
 .remaining-items {
-  background: url(../images/noise.png) repeat;
   opacity: 0.5;
   text-align: center;
   position: absolute;
@@ -450,7 +455,6 @@ li.highlight {
 
 /* main-menu workspaces-panel */
 #workspace-select-menu {
-  background: url(../images/debut_dark.png) repeat;
   background-color: #333;
   text-align:center;
   padding:20%;
