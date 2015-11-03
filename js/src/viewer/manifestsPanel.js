@@ -79,7 +79,7 @@
               event.preventDefault();
             });
 
-            jQuery.subscribe('resize', $.debounce(function(){
+            jQuery(window).resize($.debounce(function(){
               var clone = _this.element.clone().css("visibility","hidden").css("display", "block").appendTo(_this.appendTo);
               _this.resultsWidth = clone.find('.select-results').outerWidth();
               clone.remove();
