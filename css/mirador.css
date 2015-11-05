@@ -2,7 +2,6 @@ body {
   padding: 0; 
   margin: 0; 
   overflow: hidden; 
-  font-size: 70%; 
 }
 a {
   color: inherit; /* blue colors for links too */
@@ -64,7 +63,6 @@ a {
 
   .mirador-viewer, .mirador-main-menu-bar, .mirador-status-bar {
     font-family: 'Open Sans', 'Lucida Grande', Verdana, Arial,sans-serif;
-    font-size: 1.2em;
 }
 
 .mirador-viewer {
@@ -202,7 +200,6 @@ a {
   padding-left: 10px;
   margin: 8px 0px 8px 0px;
   font-weight: bold;
-  font-size: 1.3em;
 }
 
 .window-manifest-navigation {
@@ -335,14 +332,12 @@ a {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow:hidden;
-  font-size: 1.15em;
 }
 .items-listing h3 {
   color:rgba(0,0,0,0.8);
   font-weight:bold;
   margin-top:2px;
   font-weight: bold;
-  font-size: 1.3em;
 }
 .repo-image, .select-metadata, .preview-images {
   float:left;
@@ -463,7 +458,6 @@ li.highlight {
 }
 #workspace-select-menu h1 {
   color: lightgray;
-  font-size: 4em;
   padding-bottom: 3%;
   font-weight: normal;
 }
@@ -643,7 +637,6 @@ li.highlight {
 }
 .sidePanel h1:hover, .sidePanel h2:hover, .sidePanel h3:hover, .sidePanel h4:hover {
 }
-.sidePanel h2 {
   font-size: 1.5em;
 }
 .sidePanel h3 {
@@ -654,7 +647,6 @@ li.highlight {
 }
 .sidePanel h5 {
   font-size: .75em;
-}
 .toc {
   margin:0;
   overflow-y: scroll;
@@ -1340,7 +1332,6 @@ ul.scroll-listing-thumbs li img {
 ul.scroll-listing-thumbs li .thumb-label {
   clear: both;
   color: #999;
-  font-size: 10px;
   margin: 0 auto;
   max-width: 200px;
   text-align: left;
@@ -1388,7 +1379,6 @@ ul.scroll-listing-thumbs li .thumb-label {
 .mirador-viewer ul.listing-thumbs li .thumb-label {
   clear: both;
   color: #999;
-  font-size: 10px;
   margin: 0 auto;
   max-width: 125px;
   text-align: left;
