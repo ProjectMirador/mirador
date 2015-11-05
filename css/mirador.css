@@ -90,6 +90,7 @@ a {
     height: 33px;
     width: 100%;
     /*padding: 4px;*/
+    font-size: 14px;
     top: 0;
 }
 
@@ -200,6 +201,7 @@ a {
   padding-left: 10px;
   margin: 8px 0px 8px 0px;
   font-weight: bold;
+  font-size: 1em;
 }
 
 .window-manifest-navigation {
@@ -605,6 +607,9 @@ li.highlight {
   overflow: auto;
   background: #fafafa;
 }
+.manifest-info .mirador-btn {
+  font-size: .8em;
+}
 .content-container {
   position: absolute;
   bottom:0;
@@ -637,6 +642,7 @@ li.highlight {
 }
 .sidePanel h1:hover, .sidePanel h2:hover, .sidePanel h3:hover, .sidePanel h4:hover {
 }
+/*.sidePanel h2 {
   font-size: 1.5em;
 }
 .sidePanel h3 {
@@ -647,6 +653,7 @@ li.highlight {
 }
 .sidePanel h5 {
   font-size: .75em;
+}*/
 .toc {
   margin:0;
   overflow-y: scroll;
@@ -1332,6 +1339,7 @@ ul.scroll-listing-thumbs li img {
 ul.scroll-listing-thumbs li .thumb-label {
   clear: both;
   color: #999;
+  font-size: 12px;
   margin: 0 auto;
   max-width: 200px;
   text-align: left;
@@ -1379,6 +1387,7 @@ ul.scroll-listing-thumbs li .thumb-label {
 .mirador-viewer ul.listing-thumbs li .thumb-label {
   clear: both;
   color: #999;
+  font-size: 12px;
   margin: 0 auto;
   max-width: 125px;
   text-align: left;
