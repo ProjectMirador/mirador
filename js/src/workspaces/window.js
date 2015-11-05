@@ -467,6 +467,7 @@
       this.focusModules[focusState].toggle(true);
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
+      jQuery.publish("focusUpdated");
       jQuery.publish("windowUpdated", {
         id: _this.id, 
         viewType: _this.currentFocus, 
