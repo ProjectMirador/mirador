@@ -467,6 +467,7 @@
       this.focusModules[focusState].toggle(true);
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
+      jQuery.publish("focusUpdated");
       jQuery.publish("windowUpdated", {
         id: _this.id, 
         viewType: _this.currentFocus, 
@@ -650,20 +651,18 @@
       if (this.annoEndpointAvailable) {
         var dfd = jQuery.Deferred(),
         module = $.viewer.annotationEndpoint.module,
-        options = $.viewer.annotationEndpoint.options;
+        options = $.viewer.annotationEndpoint.options; //grab anything from the config that should be passed directly to the endpoint
         // One annotation endpoint per window, the endpoint
         // is a property of the instance.
         if ( _this.endpoint && _this.endpoint !== null ) {
           _this.endpoint.set('dfd', dfd);
-          _this.endpoint.search({ "uri" : _this.currentCanvasID});
         } else {
-          options.element = _this.element;
-          options.uri = _this.currentCanvasID;
           options.dfd = dfd;
           options.windowID = _this.id;
           options.parent = _this;
           _this.endpoint = new $[module](options);
         }
+        _this.endpoint.search({ "uri" : _this.currentCanvasID});
 
         dfd.done(function(loaded) {
           _this.annotationsList = _this.annotationsList.concat(_this.endpoint.annotationsList);
