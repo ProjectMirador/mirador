@@ -139,7 +139,9 @@
                             ]; 
       
       _this.parent.annotationsList = miniAnnotationList;
-      _this.parent.toggleImageView(canvasid);
+      //_this.parent.toggleImageView(canvasid);
+
+      _this.parent.setCurrentCanvasID(canvasid);
       
     });
   },
