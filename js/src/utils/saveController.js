@@ -120,6 +120,21 @@
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
 
+      jQuery.subscribe("imageBoundsUpdated", function(event, options) {   
+        var windowObjects = _this.currentConfig.windowObjects;   
+        if (windowObjects && windowObjects.length > 0) {   
+          jQuery.each(windowObjects, function(index, window){    
+            if (window.id === options.id) {    
+              if (!windowObjects[index].windowOptions) {   
+                windowObjects[index].windowOptions = {};   
+              }    
+              windowObjects[index].windowOptions.osdBounds = options.osdBounds;    
+            }    
+          });    
+        }    
+        _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );   
+      });
+
       jQuery.subscribe('windowSlotAddressUpdated', function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
         if (windowObjects && windowObjects.length > 0) {
