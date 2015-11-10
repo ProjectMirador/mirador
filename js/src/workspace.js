@@ -353,6 +353,10 @@
         _this.calculateLayout();
       });
 
+      jQuery.subscribe('resizeMirador', function(event) {
+        _this.calculateLayout();
+      });
+
       jQuery.subscribe('manifestQueued', function(event, manifestPromise) {
         // Trawl windowObjects preemptively for slotAddresses and
         // notify those slots to display a "loading" state.
