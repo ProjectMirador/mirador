@@ -1580,7 +1580,12 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   padding-bottom:30px;
 }
 
-.mirador-viewer a.mirador-icon-image-view:hover, .mirador-viewer a.mirador-icon-thumbs-view:hover, .mirador-viewer a.mirador-icon-empty-slot:hover, .mirador-viewer a.mirador-icon-window-menu:hover, .mirador-viewer a.mirador-icon-toc:hover {
+.mirador-viewer a.mirador-icon-image-view:hover, 
+.mirador-viewer a.mirador-icon-thumbs-view:hover, 
+.mirador-viewer a.mirador-icon-metadata-view:hover, 
+.mirador-viewer a.mirador-icon-empty-slot:hover, 
+.mirador-viewer a.mirador-icon-window-menu:hover, 
+.mirador-viewer a.mirador-icon-toc:hover {
   color: black;
 }
 
