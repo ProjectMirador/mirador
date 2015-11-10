@@ -46,7 +46,22 @@
           }
         });
       });
-
+      tplData.logos = [];
+      if (_this.manifest.logo) {
+        var logo = '';
+        if (typeof _this.manifest.logo === "string") {
+          logo = _this.manifest.logo;
+        } else if (typeof _this.manifest.logo['@id'] !== 'undefined') {
+          logo = _this.manifest.logo['@id'];
+        }
+      tplData.logos.push(
+        {
+          'label' : 'Logo',
+          'value' : logo
+        }
+        );
+    }
+      console.log(tplData);
       this.element = jQuery(this.template(tplData)).appendTo(this.appendTo);
       this.bindEvents();
     },
@@ -119,8 +134,9 @@
           'label':        '<b>' + jsonLd.label + '</b>' || '',
           'description':  jsonLd.description || ''
       };
+      var value = "";
+      var label = "";
       if (typeof mdList.description == "object") {
-        var value = "";
         jQuery.each(mdList.description, function(index, item) {
           if (typeof item == "string") {
             value += item;
@@ -137,36 +153,42 @@
       }
 
       if (jsonLd.metadata) {
+        value = "";
+        label = "";
         jQuery.each(jsonLd.metadata, function(index, item) {
-          var value = "";
-          if (typeof item.value == "object") {
-            value = "";
-            jQuery.each(item.value, function(i2, what) {
-              if (typeof what == "string") {
-                value += what;
-                value += "<br/>";
-              } else {
+          console.log(item);
+          if (typeof item.label === "string") {
+            label = item.label;
+          } else {
+            jQuery.each(item.label, function(i2, what) {
                 // {@value: ..., @language: ...}
-                if (what['@language'] == "en") {
-                  value += what['@value'];
-                  value += "<br/>";                  
+                if (what['@language'] === "en") {
+                  label = what['@value'];
                 }
+              });
+          }
+          if (typeof item.value === "string") {
+              value = item.value;
+          } else {
+            jQuery.each(item.value, function(i3, what) {
+              // {@value: ..., @language: ...}
+              if (what['@language'] === "en") {
+                value = what['@value'];
               }
             });
-          } else {
-            value = item.value;
-          }
-          mdList[item.label] = value;
+          } 
+        console.log(label, value);
+        mdList[label] = value;
         });
       }
+ 
       return mdList;
     },
 
    getMetadataRights: function(jsonLd) {
        return {
            'license':      jsonLd.license || '',
-           'attribution':  jsonLd.attribution || '',
-           'logo': jsonLd.logo || ''
+           'attribution':  jsonLd.attribution || ''
         };
    },
 
@@ -250,6 +272,9 @@
         '<div class="{{metadataListingCls}}">',
           '{{#each rights}}',
             '<div class="metadata-item"><div class="metadata-label">{{label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
+          '{{/each}}',
+          '{{#each logos}}',
+            '<div class="metadata-item"><div class="metadata-label">{{label}}:</div><img class="metadata-logo" src="{{value}}"/></div>',
           '{{/each}}',
         '</div>',
         '{{else}}',

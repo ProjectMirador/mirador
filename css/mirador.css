@@ -1438,19 +1438,19 @@ ul.scroll-listing-thumbs li .thumb-label {
 }
 
 .mirador-viewer .metadata-item {
-  display: table-row;
+  padding-bottom: 5px;
 }
 
 .mirador-viewer .metadata-label, .mirador-viewer .metadata-value {
-  display: table-cell;
   line-height: 1.5;
-  padding: 3px 0;
+  margin-left: 3%;
 }
 
 .mirador-viewer .metadata-label {
-  width: 8em;
   text-transform: capitalize;
   color: #555;
+  margin-left: 3%;
+  font-style: italic;
 }
 
 .mirador-viewer .metadata-value {
@@ -1464,6 +1464,11 @@ ul.scroll-listing-thumbs li .thumb-label {
 .mirador-metadata-view-nav-toolbar {
   float: right;
   margin-right: 5px;
+}
+
+.metadata-logo {
+  width: 80px;
+  margin-left: 3%;
 }
 
 
