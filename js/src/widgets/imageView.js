@@ -75,7 +75,7 @@
       var _this = this;
       jQuery.subscribe('fitBounds.' + _this.parent.id, function(event, bounds) {
         var rect = _this.osd.viewport.imageToViewportRectangle(Number(bounds.x), Number(bounds.y), Number(bounds.width), Number(bounds.height));
-        _this.osd.viewport.fitBounds(rect, false);
+        _this.osd.viewport.fitBoundsWithConstraints(rect, false);
       });
 
     },
