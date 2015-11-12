@@ -26,5 +26,6 @@
   	"bookView": "Vista del Libro",
   	"scrollView": "Vista del rollo de papel",
     "objectMetadata": "Metadatos",
-    "fullScreen": "Pantalla completa"
+    "fullScreen": "Pantalla completa",
+    "logo": "Logo"
 }

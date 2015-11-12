@@ -31,5 +31,6 @@
 	"edit":				"编辑",
 	"delete":			"删除",
 	"newObject":		"建立新的物件",
-  "fullScreen": "全屏"
+  "fullScreen": "全屏",
+  "logo": "徽标"
 }
