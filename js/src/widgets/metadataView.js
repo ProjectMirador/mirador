@@ -46,7 +46,7 @@
           }
         });
       });
-      tplData.logos = [];
+
       if (_this.manifest.logo) {
         var logo = '';
         if (typeof _this.manifest.logo === "string") {
@@ -54,14 +54,9 @@
         } else if (typeof _this.manifest.logo['@id'] !== 'undefined') {
           logo = _this.manifest.logo['@id'];
         }
-      tplData.logos.push(
-        {
-          'label' : 'Logo',
-          'value' : logo
-        }
-        );
-    }
-      console.log(tplData);
+        tplData.logo = logo;
+      }
+
       this.element = jQuery(this.template(tplData)).appendTo(this.appendTo);
       this.bindEvents();
     },
@@ -130,6 +125,7 @@
   },
 
   getMetadataDetails: function(jsonLd) {
+      // TODO: This should not default to English
       var mdList = {
           'label':        '<b>' + jsonLd.label + '</b>' || '',
           'description':  jsonLd.description || ''
@@ -156,19 +152,18 @@
         value = "";
         label = "";
         jQuery.each(jsonLd.metadata, function(index, item) {
-          console.log(item);
           if (typeof item.label === "string") {
             label = item.label;
           } else {
             jQuery.each(item.label, function(i2, what) {
-                // {@value: ..., @language: ...}
-                if (what['@language'] === "en") {
-                  label = what['@value'];
-                }
-              });
+              // {@value: ..., @language: ...}
+              if (what['@language'] === "en") {
+                label = what['@value'];
+              }
+            });
           }
           if (typeof item.value === "string") {
-              value = item.value;
+            value = item.value;
           } else {
             jQuery.each(item.value, function(i3, what) {
               // {@value: ..., @language: ...}
@@ -177,7 +172,6 @@
               }
             });
           } 
-        console.log(label, value);
         mdList[label] = value;
         });
       }
@@ -273,9 +267,9 @@
           '{{#each rights}}',
             '<div class="metadata-item"><div class="metadata-label">{{label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
           '{{/each}}',
-          '{{#each logos}}',
-            '<div class="metadata-item"><div class="metadata-label">{{label}}:</div><img class="metadata-logo" src="{{value}}"/></div>',
-          '{{/each}}',
+          '{{#if logo}}',
+            '<div class="metadata-item"><div class="metadata-label">{{t "logo"}}:</div><img class="metadata-logo" src="{{logo}}"/></div>',
+          '{{/if}}',
         '</div>',
         '{{else}}',
         '<div class="{{metadataListingCls}}">',
