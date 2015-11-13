@@ -47,6 +47,16 @@
         });
       });
 
+      if (_this.manifest.logo) {
+        var logo = '';
+        if (typeof _this.manifest.logo === "string") {
+          logo = _this.manifest.logo;
+        } else if (typeof _this.manifest.logo['@id'] !== 'undefined') {
+          logo = _this.manifest.logo['@id'];
+        }
+        tplData.logo = logo;
+      }
+
       this.element = jQuery(this.template(tplData)).appendTo(this.appendTo);
       this.bindEvents();
     },
@@ -115,12 +125,14 @@
   },
 
   getMetadataDetails: function(jsonLd) {
+      // TODO: This should not default to English
       var mdList = {
           'label':        '<b>' + jsonLd.label + '</b>' || '',
           'description':  jsonLd.description || ''
       };
+      var value = "";
+      var label = "";
       if (typeof mdList.description == "object") {
-        var value = "";
         jQuery.each(mdList.description, function(index, item) {
           if (typeof item == "string") {
             value += item;
@@ -137,36 +149,40 @@
       }
 
       if (jsonLd.metadata) {
+        value = "";
+        label = "";
         jQuery.each(jsonLd.metadata, function(index, item) {
-          var value = "";
-          if (typeof item.value == "object") {
-            value = "";
-            jQuery.each(item.value, function(i2, what) {
-              if (typeof what == "string") {
-                value += what;
-                value += "<br/>";
-              } else {
-                // {@value: ..., @language: ...}
-                if (what['@language'] == "en") {
-                  value += what['@value'];
-                  value += "<br/>";                  
-                }
+          if (typeof item.label === "string") {
+            label = item.label;
+          } else {
+            jQuery.each(item.label, function(i2, what) {
+              // {@value: ..., @language: ...}
+              if (what['@language'] === "en") {
+                label = what['@value'];
               }
             });
-          } else {
-            value = item.value;
           }
-          mdList[item.label] = value;
+          if (typeof item.value === "string") {
+            value = item.value;
+          } else {
+            jQuery.each(item.value, function(i3, what) {
+              // {@value: ..., @language: ...}
+              if (what['@language'] === "en") {
+                value = what['@value'];
+              }
+            });
+          } 
+        mdList[label] = value;
         });
       }
+ 
       return mdList;
     },
 
    getMetadataRights: function(jsonLd) {
        return {
            'license':      jsonLd.license || '',
-           'attribution':  jsonLd.attribution || '',
-           'logo': jsonLd.logo || ''
+           'attribution':  jsonLd.attribution || ''
         };
    },
 
@@ -251,6 +267,9 @@
           '{{#each rights}}',
             '<div class="metadata-item"><div class="metadata-label">{{label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
           '{{/each}}',
+          '{{#if logo}}',
+            '<div class="metadata-item"><div class="metadata-label">{{t "logo"}}:</div><img class="metadata-logo" src="{{logo}}"/></div>',
+          '{{/if}}',
         '</div>',
         '{{else}}',
         '<div class="{{metadataListingCls}}">',
