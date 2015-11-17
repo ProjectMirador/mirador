@@ -174,7 +174,7 @@
           //width of browser window has been made larger
         } else if (newMaxPreviewWidth > _this.maxPreviewImagesWidth) {
           var currentLastImage = _this.tplData.images[_this.tplData.images.length-1],
-          index = currentLastImage.index+1,
+          index = currentLastImage ? currentLastImage.index+1 : 0,
           image = _this.allImages[index];
           if (image) {
             while (_this.imagesTotalWidth + image.width + _this.margin < newMaxPreviewWidth) {
