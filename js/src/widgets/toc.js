@@ -25,8 +25,10 @@
     init: function () {
       var _this = this;
       _this.structures = _this.manifest.getStructures();
-      /*if (!_this.structures || _this.structures.length === 0) {
-        _this.hide();
+      if (!_this.structures || _this.structures.length === 0) {
+        return;
+      }
+      /*  _this.hide();
         _this.parent.setTOCBoolean(false);
         return;
       } else {*/
@@ -60,7 +62,7 @@
     },
 
     tabStateUpdated: function(data) {
-        if (data.tabs[data.selectedTabIndex].id == 'tocTab') {
+        if (data.tabs[data.selectedTabIndex].options.id == 'tocTab') {
             this.element.show();
         } else {
             this.element.hide();
@@ -204,7 +206,7 @@
       jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
       });
 
-      jQuery.subscribe('tabStateUpdated' + _this.parent.id, function(_, data) {
+      jQuery.subscribe('tabStateUpdated.' + _this.parent.id, function(_, data) {
         _this.tabStateUpdated(data);
       });
 

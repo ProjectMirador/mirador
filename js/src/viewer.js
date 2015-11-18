@@ -258,6 +258,7 @@
         bottomPanelAvailable : options.bottomPanel,
         bottomPanelVisible : options.bottomPanelVisible,
         sidePanelAvailable : options.sidePanel,
+        sidePanelOptions : options.sidePanelOptions,
         sidePanelVisible : options.sidePanelVisible,
         overlayAvailable : options.overlay,
         annotationLayerAvailable : options.annotationLayer,

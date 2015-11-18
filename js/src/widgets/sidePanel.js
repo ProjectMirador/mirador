@@ -6,8 +6,11 @@
             appendTo:          null,
             parent:            null,
             manifest:          null,
+            panelState:        {},
             tocTabAvailable:   false,
-            panelState:        {} 
+            annotationsTabAvailable: false,
+            layersTabAvailable: false,
+            toolsTabAvailable: false
         }, options);
 
         this.init();
@@ -19,17 +22,45 @@
             this.windowId = this.parent.id;
 
             this.state({
-                tabs : {
-                    tocTabAvailable: _this.tocTabAvailable,
-                    annotationsTabAvailable: _this.annotationsTabAvailable,
-                    layersTabAvailable: false,
-                    toolsTabAvailable: false
+                tabs : [
+                {
+                    name : 'toc',
+                    options : {
+                        available: _this.tocTabAvailable,
+                        id:'tocTab', 
+                        label:'Index'
+                    }
                 },
+                /*{
+                    name : 'annotations',
+                    options : {
+                        available: _this.annotationsTabAvailable,
+                        id:'annotationsTab', 
+                        label:'Annotations'
+                    }
+                },*/
+                /*{
+                    name : 'layers',
+                    options : {
+                        available: _this.layersTabAvailable,
+                        id:'layersTab', 
+                        label:'Layers'
+                    }
+                },
+                {
+                    name : 'tools',
+                    options : {
+                        available: _this.toolsTabAvailable,
+                        id:'toolsTab', 
+                        label:'Tools'
+                    }
+                }*/
+                ],
                 width: 280,
                 open: true
             }, true);
 
-            this.bindEvents();
+            this.listenForActions();
             this.render(this.state());
 
             this.loadSidePanelComponents();
@@ -40,10 +71,11 @@
 
             new $.Tabs({
                 windowId: this.parent.id,
-                appendTo: this.appendTo
+                appendTo: this.appendTo,
+                tabs : this.panelState.tabs
             });
 
-            if (_this.panelState.tabs.tocTabAvailable) {
+            if (this.tocTabAvailable) {
                 new $.TableOfContents({
                     manifest: this.manifest,
                     appendTo: this.element.find('.tabContentArea'),
@@ -52,13 +84,25 @@
                     canvasID: this.parent.currentCanvasID
                 });
             }
+            if (_this.annotationsTabAvailable) {
+                new $.AnnotationsTab({
+                    manifest: _this.manifest,
+                    parent: this.parent,
+                    appendTo: _this.element.find('.tabContentArea'),
+                    tabs: _this.state.tabs
+                });
+            }
 
-            new $.AnnotationsTab({
-                manifest: _this.manifest,
-                parent: this.parent,
-                appendTo: _this.element.find('.tabContentArea')
+        },
+
+        update: function(name, availability) {
+            var state = this.panelState;
+            jQuery.each(state.tabs, function(index, value) {
+                if (value.name === name) {
+                    value.options.available = availability;
+                }
             });
-
+            this.state(state);
         },
 
         state: function(state, initial) {
@@ -66,17 +110,17 @@
             jQuery.extend(true, this.panelState, state);
 
             if (!initial) {
-                jQuery.publish('sidePanelStateUpdated' + this.windowId, this.panelState);
+                jQuery.publish('sidePanelStateUpdated.' + this.windowId, this.panelState);
             }
 
-            var enableSidePanel = false;
-            jQuery.each(this.panelState.tabs, function(key, value) {
-                if (value) {
+            /*var enableSidePanel = false;
+            jQuery.each(this.panelState.tabs, function(index, value) {
+                if (value.options.available) {
                     enableSidePanel = true;
                 }
             });
 
-            this.toggle(enableSidePanel);
+            this.toggle(enableSidePanel);*/
 
             return this.panelState;
         },
@@ -89,16 +133,17 @@
             this.state(state);
         },
 
-        getTemplateData: function() {
-            return {
-                annotationsTab: this.state().annotationsTab,
-                tocTab: this.state().tocTab
-            };
-        },
+        // doesn't do anything right now
+        // getTemplateData: function() {
+        //     return {
+        //         annotationsTab: this.state().annotationsTab,
+        //         tocTab: this.state().tocTab
+        //     };
+        // },
 
-        bindEvents: function() {
+        listenForActions: function() {
             var _this = this;
-            jQuery.subscribe('sidePanelStateUpdated' + this.windowId, function(_, data) {
+            jQuery.subscribe('sidePanelStateUpdated.' + this.windowId, function(_, data) {
                 console.log('sidePanelToggled now');
                 console.log(data);
                 _this.render(data);
@@ -107,14 +152,14 @@
             jQuery.subscribe('sidePanelResized', function() {
             });
 
-            jQuery.subscribe('sidePanelToggled' + this.windowId, function() {
+            jQuery.subscribe('sidePanelToggled.' + this.windowId, function() {
                 _this.panelToggled();
             });
 
             jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
                 if (_this.parent.annotationsAvailable[_this.parent.currentFocus]) {
                     if (_this.parent.annotationsList.length > 0) {
-                        _this.state({tabs: {annotationsTabAvailable: true}});
+                        _this.update('annotations', true);
                     }
                 }
             });

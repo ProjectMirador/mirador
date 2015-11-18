@@ -119,7 +119,7 @@
                 _this.render(data);
             });
 
-            jQuery.subscribe('tabStateUpdated' + _this.windowId, function(_, data) {
+            jQuery.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
                 _this.tabStateUpdated(data.annotationsTab);
             });
 

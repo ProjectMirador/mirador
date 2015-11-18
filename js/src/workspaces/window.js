@@ -40,6 +40,10 @@
       id : null,
       sidePanel: null, //the actual module for the side panel
       sidePanelAvailable: true,
+      sidePanelOptions: {
+        "toc" : true,
+        "annotations" : false
+      },
       sidePanelVisible: true,
       annotationsAvailable: {
         'ThumbnailsView' : false,
@@ -113,13 +117,12 @@
           _this.focusOverlaysAvailable[key].bottomPanel = {'' : false};
         });
       }
-      if (typeof this.sidePanelAvailable !== 'undefined' && !this.sidePanelAvailable) {
-        jQuery.each(this.focusOverlaysAvailable, function(key, value) {
-          _this.focusOverlaysAvailable[key].sidePanel = {'' : false};
+
+      templateData.sidePanel = this.sidePanelAvailable;
+      if (this.sidePanelAvailable) {
+        templateData.sidePanel = !Object.keys(this.sidePanelOptions).every(function(element, index, array) {
+          return _this.sidePanelOptions[element] === false;
         });
-        templateData.sidePanel = false;
-      } else {
-        templateData.sidePanel = true;
       }
       if (typeof this.overlayAvailable !== 'undefined' && !this.overlayAvailable) {
         jQuery.each(this.focusOverlaysAvailable, function(key, value) {
@@ -241,7 +244,7 @@
         }
       });
 
-      jQuery.subscribe('sidePanelStateUpdated' + this.id, function(event, state) {
+      jQuery.subscribe('sidePanelStateUpdated.' + this.id, function(event, state) {
         if (state.open) {
             _this.element.find('.fa-list').switchClass('fa-list', 'fa-caret-down');
             _this.element.find('.mirador-icon-toc').addClass('selected');
@@ -372,25 +375,12 @@
     },
 
     updateSidePanel: function() {
-      console.log("sidepanel updated",this.currentFocus);
       if (!this.sidePanelAvailable) {
         return;
       }
       var _this = this,
-      tocAvailable = true,
-      structures = _this.manifest.getStructures();
-      if (!structures || structures.length === 0) {
-        tocAvailable = false;
-      }
-
-      var annotationsTabAvailable = this.annotationsAvailable[this.currentFocus];
-      console.log(annotationsTabAvailable);
-      if (annotationsTabAvailable) {
-        console.log(this.annotationsList);
-        if (this.annotationsList.length === 0) {
-          annotationsTabAvailable = false;
-        }
-      }
+      tocAvailable = _this.sidePanelOptions.toc,
+      annotationsTabAvailable = _this.sidePanelOptions.annotations;
 
       if (this.sidePanel === null) {
         this.sidePanel = new $.SidePanel({
@@ -402,7 +392,7 @@
               annotationsTabAvailable: annotationsTabAvailable
         });
       } else {
-        this.sidePanel.state({tabs: {annotationsTabAvailable: annotationsTabAvailable}});
+        this.sidePanel.update('annotations', annotationsTabAvailable);
       }
     },
  
@@ -421,7 +411,7 @@
       }
     },
 
-    setTOCBoolean: function(boolValue) {
+    /*setTOCBoolean: function(boolValue) {
       var _this = this;
       jQuery.each(this.focusOverlaysAvailable, function(key, value) {
         _this.focusOverlaysAvailable[key].sidePanel.TableOfContents = boolValue;
@@ -430,7 +420,7 @@
       if (!boolValue) {
         this.element.find('.mirador-icon-toc').hide();
       }
-    },
+    },*/
 
     togglePanels: function(panelType, panelState, viewType, focusState) {
       //update state in focusOverlaysAvailable

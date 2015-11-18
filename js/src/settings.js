@@ -44,6 +44,11 @@
        *   "bottomPanelVisible" : [_true_, false] whether or not to make the bottom panel visible in this window on load. This setting is dependent
        *                           on bottomPanel being true
        *   "sidePanel" : [_true_, false] whether or not to make the side panel available in this window
+       *   "sidePanelOptions" : control individual menu items in layout menu. if "displayLayout" is false, these options won't be applied
+       *     {
+       *     "toc" : [_true_, false]
+       *     "annotations" : [true, _false_]
+       *     }
        *   "sidePanelVisible" : [_true_, false] whether or not to make the side panel visible in this window on load. This setting is dependent
        *                           on sidePanel being true
        *   "overlay" : [_true_, false] whether or not to make the overlay available/visible in this window

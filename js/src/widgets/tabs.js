@@ -4,7 +4,9 @@
         jQuery.extend(true, this, {
             element:           null,
             appendTo:          null,
-            windowId:          null
+            windowId:          null,
+            tabState:          {},
+            tabs:              []
         }, options);
 
         this.init();
@@ -15,21 +17,21 @@
             var _this = this;
 
             this.state({
-                tabs: [{id:'tocTab', label:'Indices'}, {id:'annotationsTab', label:'Annotations'}],
+                tabs : this.tabs,
+                //tabs: [{id:'tocTab', label:'Indices'}, {id:'annotationsTab', label:'Annotations'}],
                 //tabs: [{id:'tocTab', label:'Indices'}],
                 selectedTabIndex: 0
             }, true);
-
             this.listenForActions();
             this.render(this.state());
             this.bindEvents();
         },
         state: function(state, initial) {
             if (!arguments.length) return this.tabState;
-            this.tabState = state;
+            jQuery.extend(true, this.tabState, state);
 
            if (!initial) {
-                jQuery.publish('tabStateUpdated' + this.windowId, this.tabState);
+                jQuery.publish('tabStateUpdated.' + this.windowId, this.tabState);
            }
 
             return this.tabState;
@@ -48,43 +50,49 @@
         listenForActions: function() {
             var _this = this;
 
-            jQuery.subscribe('tabStateUpdated' + this.windowId, function(_, data) {
+            jQuery.subscribe('tabStateUpdated.' + this.windowId, function(_, data) {
                 _this.render(data);
             });
 
-            jQuery.subscribe('tabSelected' + this.windowId, function(_, data) {
+            jQuery.subscribe('tabSelected.' + this.windowId, function(_, data) {
                 _this.tabSelected(data);
             });
 
-            jQuery.subscribe('tabFocused', function() {
+            jQuery.subscribe('tabFocused.', function() {
             });
         },
         bindEvents: function() {
             var _this = this;
 
             this.element.find('.tab').on('click', function(event) {
-                jQuery.publish('tabSelected' + _this.windowId, jQuery( ".tabGroup li" ).index( this ));
+                jQuery.publish('tabSelected.' + _this.windowId, jQuery( ".tabGroup li" ).index( this ));
             });
         },
         render: function(renderingData) {
             var _this = this;
 
             if (!this.element) {
-                if(renderingData.tabs.length == 1){ renderingData.tabs = []; } // don't show label if only one tab
+                var displayLabels = false;
+                var tabs = jQuery.grep(renderingData.tabs, function(value, index) {
+                    return value.options.available;
+                });
+                renderingData.tabs = tabs;
+                if(renderingData.tabs.length === 1){ renderingData.tabs = []; } // don't show button if only one tab
+                //TODO: add text if there is one label or no content within this tab
                 this.element = jQuery(_this.template(renderingData)).prependTo(_this.appendTo);
                 return;
             }
 
             this.element.find('.tab').removeClass('selected');
-            var tabClass = '.' + renderingData.tabs[renderingData.selectedTabIndex].id;
+            var tabClass = '.' + renderingData.tabs[renderingData.selectedTabIndex].options.id;
             this.element.find(tabClass).addClass('selected');
 
         },
         template: Handlebars.compile([
           '<ul class="tabGroup">',
             '{{#each tabs}}',
-            '<li class="tab {{this.id}} {{#unless @index}}selected{{/unless}}" data-tabId="{{this.id}}">',
-                '{{this.label}}',
+            '<li class="tab {{this.options.id}} {{#unless @index}}selected{{/unless}}" data-tabId="{{this.options.id}}">',
+                '{{this.options.label}}',
             '</li>',
             '{{/each}}',
           '</ul>',
