@@ -518,6 +518,7 @@
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
       this.updateSidePanel();
+      jQuery.publish("focusUpdated");
       jQuery.publish("windowUpdated", {
         id: _this.id,
         viewType: _this.currentFocus,
@@ -859,8 +860,8 @@
                                  '<div class="sidePanel">',
                                  '</div>',
                                  '{{/if}}',
-                                 '<div class="view-container {{#unless sidePanel}}focus-max-width{{/unless}}">',
                                  '<div class="overlay"></div>',
+                                 '<div class="view-container {{#unless sidePanel}}focus-max-width{{/unless}}">',
                                  '<div class="bottomPanel">',
                                  '</div>',
                                  '</div>',

@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/IIIF/mirador.svg)](https://travis-ci.org/IIIF/mirador) [![Coverage Status](https://img.shields.io/coveralls/IIIF/m2.svg)](https://coveralls.io/r/IIIF/m2)  
-
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/IIIF.svg)](https://saucelabs.com/u/IIIF)  
 
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/IIIF/mirador?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Stories in Ready](https://badge.waffle.io/iiif/mirador.svg?label=ready&title=Ready)](http://waffle.io/iiif/mirador) 
 
@@ -87,3 +84,9 @@ A Mirador instance will fill its container (not stretch it to a certain size). T
 There can be as many instances of Mirador running on one page as desired. Simply name them differently and point them to different elements on the page.
 
 For more information, see the [wiki](https://github.com/IIIF/mirador/wiki), submit an [issue](https://github.com/mirador/mirador/issues), or ask on [gitter](https://gitter.im/IIIF/mirador).
+
+### Project Diagnostics
+[![Build Status](https://travis-ci.org/IIIF/mirador.svg)](https://travis-ci.org/IIIF/mirador) [![Coverage Status](https://img.shields.io/coveralls/IIIF/m2.svg)](https://coveralls.io/r/IIIF/m2)  
+
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/IIIF.svg)](https://saucelabs.com/u/IIIF)  
+

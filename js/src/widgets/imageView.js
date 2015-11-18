@@ -75,7 +75,7 @@
       var _this = this;
       jQuery.subscribe('fitBounds.' + _this.parent.id, function(event, bounds) {
         var rect = _this.osd.viewport.imageToViewportRectangle(Number(bounds.x), Number(bounds.y), Number(bounds.width), Number(bounds.height));
-        _this.osd.viewport.fitBounds(rect, false);
+        _this.osd.viewport.fitBoundsWithConstraints(rect, false);
       });
 
     },
@@ -83,16 +83,14 @@
     setBounds: function() {
       var _this = this;
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
-      jQuery.publish("windowUpdated", {
+      jQuery.publish("imageBoundsUpdated", {
         id: _this.parent.id, 
-        windowOptions: { 
           osdBounds: {
             x: _this.osdOptions.osdBounds.x, 
             y: _this.osdOptions.osdBounds.y, 
             width: _this.osdOptions.osdBounds.width, 
             height: _this.osdOptions.osdBounds.height
           }
-        }
       });
     },
 
@@ -151,6 +149,7 @@
         });
 
         _this.osd.addHandler('open', function(){
+          jQuery.publish('osdOpen.'+_this.windowId);
           if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);

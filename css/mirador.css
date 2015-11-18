@@ -1,8 +1,7 @@
-body {
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-  font-size: 70%;
+body { 
+  padding: 0; 
+  margin: 0; 
+  overflow: hidden; 
 }
 a {
   color: inherit; /* blue colors for links too */
@@ -64,7 +63,6 @@ a {
 
   .mirador-viewer, .mirador-main-menu-bar, .mirador-status-bar {
     font-family: 'Open Sans', 'Lucida Grande', Verdana, Arial,sans-serif;
-    font-size: 1.2em;
 }
 
 .mirador-viewer {
@@ -92,6 +90,7 @@ a {
     height: 33px;
     width: 100%;
     /*padding: 4px;*/
+    font-size: 14px;
     top: 0;
 }
 
@@ -183,7 +182,7 @@ a {
 
 /* main menu window options
 ---------------------------------------------------------------------------- */
-  .mirador-window-options-menu {
+.mirador-window-options-menu {
     list-style: none;
     margin: 0;
     padding: 10px 5px;
@@ -202,7 +201,7 @@ a {
   padding-left: 10px;
   margin: 8px 0px 8px 0px;
   font-weight: bold;
-  font-size: 1.3em;
+  font-size: 16px;
 }
 
 .window-manifest-navigation {
@@ -210,6 +209,7 @@ a {
   width: 24%;
   text-align: right;
   padding-right: 10px;
+  font-size: 16px;
 }
 
 
@@ -335,14 +335,12 @@ a {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow:hidden;
-  font-size: 1.15em;
 }
 .items-listing h3 {
   color:rgba(0,0,0,0.8);
   font-weight:bold;
   margin-top:2px;
   font-weight: bold;
-  font-size: 1.3em;
 }
 .repo-image, .select-metadata, .preview-images {
   float:left;
@@ -463,7 +461,6 @@ li.highlight {
 }
 #workspace-select-menu h1 {
   color: lightgray;
-  font-size: 4em;
   padding-bottom: 3%;
   font-weight: normal;
 }
@@ -611,6 +608,9 @@ li.highlight {
   overflow: auto;
   background: #fafafa;
 }
+.manifest-info .mirador-btn {
+  font-size: .8em;
+}
 .content-container {
   position: absolute;
   bottom:0;
@@ -728,7 +728,7 @@ li.highlight {
 }
 .sidePanel h1:hover, .sidePanel h2:hover, .sidePanel h3:hover, .sidePanel h4:hover {
 }
-.sidePanel h2 {
+/*.sidePanel h2 {
   font-size: 1.5em;
 }
 .sidePanel h3 {
@@ -739,7 +739,7 @@ li.highlight {
 }
 .sidePanel h5 {
   font-size: .75em;
-}
+}*/
 .toc {
   margin:0;
   overflow-y: scroll;
@@ -1425,7 +1425,7 @@ ul.scroll-listing-thumbs li img {
 ul.scroll-listing-thumbs li .thumb-label {
   clear: both;
   color: #999;
-  font-size: 10px;
+  font-size: 12px;
   margin: 0 auto;
   max-width: 200px;
   text-align: left;
@@ -1473,7 +1473,7 @@ ul.scroll-listing-thumbs li .thumb-label {
 .mirador-viewer ul.listing-thumbs li .thumb-label {
   clear: both;
   color: #999;
-  font-size: 10px;
+  font-size: 12px;
   margin: 0 auto;
   max-width: 125px;
   text-align: left;
@@ -1523,19 +1523,19 @@ ul.scroll-listing-thumbs li .thumb-label {
 }
 
 .mirador-viewer .metadata-item {
-  display: table-row;
+  padding-bottom: 5px;
 }
 
 .mirador-viewer .metadata-label, .mirador-viewer .metadata-value {
-  display: table-cell;
   line-height: 1.5;
-  padding: 3px 0;
+  margin-left: 3%;
 }
 
 .mirador-viewer .metadata-label {
-  width: 8em;
   text-transform: capitalize;
   color: #555;
+  margin-left: 3%;
+  font-style: italic;
 }
 
 .mirador-viewer .metadata-value {
@@ -1549,6 +1549,11 @@ ul.scroll-listing-thumbs li .thumb-label {
 .mirador-metadata-view-nav-toolbar {
   float: right;
   margin-right: 5px;
+}
+
+.metadata-logo {
+  width: 80px;
+  margin-left: 3%;
 }
 
 
@@ -1665,7 +1670,12 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   padding-bottom:30px;
 }
 
-.mirador-viewer a.mirador-icon-image-view:hover, .mirador-viewer a.mirador-icon-thumbs-view:hover, .mirador-viewer a.mirador-icon-empty-slot:hover, .mirador-viewer a.mirador-icon-window-menu:hover, .mirador-viewer a.mirador-icon-toc:hover {
+.mirador-viewer a.mirador-icon-image-view:hover, 
+.mirador-viewer a.mirador-icon-thumbs-view:hover, 
+.mirador-viewer a.mirador-icon-metadata-view:hover, 
+.mirador-viewer a.mirador-icon-empty-slot:hover, 
+.mirador-viewer a.mirador-icon-window-menu:hover, 
+.mirador-viewer a.mirador-icon-toc:hover {
   color: black;
 }
 
