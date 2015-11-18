@@ -15,8 +15,8 @@
             var _this = this;
 
             this.state({
-                //tabs: [{id:'tocTab', label:'Indices'}, {id:'annotationsTab', label:'Annotations'}],
-                tabs: [{id:'tocTab', label:'Indices'}],
+                tabs: [{id:'tocTab', label:'Indices'}, {id:'annotationsTab', label:'Annotations'}],
+                //tabs: [{id:'tocTab', label:'Indices'}],
                 selectedTabIndex: 0
             }, true);
 

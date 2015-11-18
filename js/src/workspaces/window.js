@@ -21,22 +21,18 @@
       focusOverlaysAvailable: {
         'ThumbnailsView': {
           'overlay' : {'MetadataView' : false},
-          'sidePanel' : {'SidePanel' : true},
           'bottomPanel' : {'' : false}
         },
         'ImageView': {
           'overlay' : {'MetadataView' : false},
-          'sidePanel' : {'SidePanel' : true},
           'bottomPanel' : {'ThumbnailsView' : true}
         },
         'ScrollView': {
           'overlay' : {'MetadataView' : false},
-          'sidePanel' : {'SidePanel' : true},
           'bottomPanel' : {'' : false}
         },
         'BookView': {
           'overlay' : {'MetadataView' : false},
-          'sidePanel' : {'SidePanel' : true},
           'bottomPanel' : {'ThumbnailsView' : true}
         }
       },
@@ -45,6 +41,12 @@
       sidePanel: null, //the actual module for the side panel
       sidePanelAvailable: true,
       sidePanelVisible: true,
+      annotationsAvailable: {
+        'ThumbnailsView' : false,
+        'ImageView' : true,
+        'ScrollView' : false,
+        'BookView' : false
+      },
       bottomPanel: null, //the actual module for the bottom panel
       bottomPanelAvailable: true,
       bottomPanelVisible: true,
@@ -369,6 +371,41 @@
       if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
 
+    updateSidePanel: function() {
+      console.log("sidepanel updated",this.currentFocus);
+      if (!this.sidePanelAvailable) {
+        return;
+      }
+      var _this = this,
+      tocAvailable = true,
+      structures = _this.manifest.getStructures();
+      if (!structures || structures.length === 0) {
+        tocAvailable = false;
+      }
+
+      var annotationsTabAvailable = this.annotationsAvailable[this.currentFocus];
+      console.log(annotationsTabAvailable);
+      if (annotationsTabAvailable) {
+        console.log(this.annotationsList);
+        if (this.annotationsList.length === 0) {
+          annotationsTabAvailable = false;
+        }
+      }
+
+      if (this.sidePanel === null) {
+        this.sidePanel = new $.SidePanel({
+              parent: _this,
+              appendTo: _this.element.find('.sidePanel'),
+              manifest: _this.manifest,
+              canvasID: _this.currentCanvasID,
+              tocTabAvailable: tocAvailable,
+              annotationsTabAvailable: annotationsTabAvailable
+        });
+      } else {
+        this.sidePanel.state({tabs: {annotationsTabAvailable: annotationsTabAvailable}});
+      }
+    },
+ 
     get: function(prop, parent) {
       if (parent) {
         return this[parent][prop];
@@ -480,6 +517,7 @@
       this.focusModules[focusState].toggle(true);
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
+      this.updateSidePanel();
       jQuery.publish("windowUpdated", {
         id: _this.id,
         viewType: _this.currentFocus,
@@ -580,6 +618,7 @@
       var _this = this;
       this.currentCanvasID = canvasID;
       jQuery.publish('removeTooltips.' + _this.id);
+      jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
@@ -664,6 +703,7 @@
         var dfd = jQuery.Deferred(),
         module = $.viewer.annotationEndpoint.module,
         options = $.viewer.annotationEndpoint.options; //grab anything from the config that should be passed directly to the endpoint
+        options.name = $.viewer.annotationEndpoint.name;
         // One annotation endpoint per window, the endpoint
         // is a property of the instance.
         if ( _this.endpoint && _this.endpoint !== null ) {

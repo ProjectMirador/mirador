@@ -15,7 +15,6 @@
     $.AnnotationsTab.prototype = {
         init: function() {
             var _this = this;
-            jQuery.unsubscribe(('modeChange.' + _this.windowId));
             this.windowId = this.parent.id;
 
             this.state({

@@ -25,12 +25,12 @@
     init: function () {
       var _this = this;
       _this.structures = _this.manifest.getStructures();
-      if (!_this.structures || _this.structures.length === 0) {
+      /*if (!_this.structures || _this.structures.length === 0) {
         _this.hide();
         _this.parent.setTOCBoolean(false);
         return;
-      } else {
-        _this.parent.setTOCBoolean(true);
+      } else {*/
+        //_this.parent.setTOCBoolean(true);
         this.ranges = this.setRanges();
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
         this.tocData = this.initTocData();
@@ -38,7 +38,7 @@
         this.element.find('.has-child ul').hide();
         this.render();
         this.bindEvents();
-      }
+      //}
     },
 
     setRanges: function() {

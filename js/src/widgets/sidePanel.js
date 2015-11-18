@@ -5,7 +5,9 @@
             element:           null,
             appendTo:          null,
             parent:            null,
-            manifest:          null
+            manifest:          null,
+            tocTabAvailable:   false,
+            panelState:        {} 
         }, options);
 
         this.init();
@@ -17,20 +19,22 @@
             this.windowId = this.parent.id;
 
             this.state({
-                tocTabAvailable: true,
-                annotationsTabAvailable: false,
-                layersTabAvailable: false,
-                toolsTabAvailable: false,
+                tabs : {
+                    tocTabAvailable: _this.tocTabAvailable,
+                    annotationsTabAvailable: _this.annotationsTabAvailable,
+                    layersTabAvailable: false,
+                    toolsTabAvailable: false
+                },
                 width: 280,
                 open: true
             }, true);
 
-            this.listenForActions();
-            this.render(this.state());
             this.bindEvents();
+            this.render(this.state());
 
             this.loadSidePanelComponents();
-        },
+        },  
+
         loadSidePanelComponents: function() {
             var _this = this;
 
@@ -39,15 +43,15 @@
                 appendTo: this.appendTo
             });
 
-            new $.TableOfContents({
-                manifest: this.manifest,
-                appendTo: this.element.find('.tabContentArea'),
-                parent: this.parent,
-                panel: true,
-                canvasID: this.parent.currentCanvasID,
-                imagesList: this.parent.imagesList,
-                thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
-            });
+            if (_this.panelState.tabs.tocTabAvailable) {
+                new $.TableOfContents({
+                    manifest: this.manifest,
+                    appendTo: this.element.find('.tabContentArea'),
+                    parent: this.parent,
+                    panel: true,
+                    canvasID: this.parent.currentCanvasID
+                });
+            }
 
             new $.AnnotationsTab({
                 manifest: _this.manifest,
@@ -56,16 +60,27 @@
             });
 
         },
+
         state: function(state, initial) {
             if (!arguments.length) return this.panelState;
-            this.panelState = state;
+            jQuery.extend(true, this.panelState, state);
 
             if (!initial) {
                 jQuery.publish('sidePanelStateUpdated' + this.windowId, this.panelState);
             }
 
+            var enableSidePanel = false;
+            jQuery.each(this.panelState.tabs, function(key, value) {
+                if (value) {
+                    enableSidePanel = true;
+                }
+            });
+
+            this.toggle(enableSidePanel);
+
             return this.panelState;
         },
+
         panelToggled: function() {
             var state = this.state(),
                 open = !state.open;
@@ -73,15 +88,16 @@
             state.open = open;
             this.state(state);
         },
+
         getTemplateData: function() {
             return {
                 annotationsTab: this.state().annotationsTab,
                 tocTab: this.state().tocTab
             };
         },
-        listenForActions: function() {
-            var _this = this;
 
+        bindEvents: function() {
+            var _this = this;
             jQuery.subscribe('sidePanelStateUpdated' + this.windowId, function(_, data) {
                 console.log('sidePanelToggled now');
                 console.log(data);
@@ -94,10 +110,17 @@
             jQuery.subscribe('sidePanelToggled' + this.windowId, function() {
                 _this.panelToggled();
             });
+
+            jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
+                if (_this.parent.annotationsAvailable[_this.parent.currentFocus]) {
+                    if (_this.parent.annotationsList.length > 0) {
+                        _this.state({tabs: {annotationsTabAvailable: true}});
+                    }
+                }
+            });
+
         },
-        bindEvents: function() {
-            var _this = this;
-        },
+
         render: function(renderingData) {
             var _this = this;
 
@@ -113,13 +136,25 @@
                 this.appendTo.addClass('minimized');
             }
         },
+
         template: Handlebars.compile([
             '<div class="tabContentArea">',
             '<ul class="tabGroup">',
             '</ul>',
             '</div>'
         ].join('')),
-        toggle: function () {}
+
+        toggle: function (enableSidePanel) {
+            if (!enableSidePanel) {
+                jQuery(this.appendTo).hide();
+                this.parent.element.find('.view-container').addClass('focus-max-width');
+                this.parent.element.find('.mirador-icon-toc').hide();
+            } else {
+                jQuery(this.appendTo).show({effect: "fade", duration: 300, easing: "easeInCubic"});
+                this.parent.element.find('.view-container').removeClass('focus-max-width');
+                this.parent.element.find('.mirador-icon-toc').show();                
+            }
+        }
     };
 
 }(Mirador));
