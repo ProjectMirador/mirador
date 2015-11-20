@@ -12,6 +12,7 @@
       selectedElements: [],
       openElements:     [],
       hoveredElement:   [],
+      ranges:           [],
       selectContext:    null,
       tocData: {},
       active: null
@@ -26,21 +27,16 @@
       var _this = this;
       _this.structures = _this.manifest.getStructures();
       if (!_this.structures || _this.structures.length === 0) {
-        return;
-      }
-      /*  _this.hide();
-        _this.parent.setTOCBoolean(false);
-        return;
-      } else {*/
-        //_this.parent.setTOCBoolean(true);
+        this.element = jQuery(this.emptyTemplate()).appendTo(this.appendTo);
+      } else {
         this.ranges = this.setRanges();
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
         this.tocData = this.initTocData();
         this.selectedElements = $.getRangeIDByCanvasID(_this.structures, _this.parent.currentCanvasID);
         this.element.find('.has-child ul').hide();
         this.render();
-        this.bindEvents();
-      //}
+      }
+      this.bindEvents();
     },
 
     setRanges: function() {
@@ -62,7 +58,7 @@
     },
 
     tabStateUpdated: function(data) {
-        if (data.tabs[data.selectedTabIndex].options.id == 'tocTab') {
+        if (data.tabs[data.selectedTabIndex].options.id === 'tocTab') {
             this.element.show();
         } else {
             this.element.hide();
@@ -286,6 +282,13 @@
     // returnToPlace: function() {
     //   console.log('returnToPlace');
     // },
+
+    emptyTemplate: Handlebars.compile([
+            '<ul class="toc">',
+            '<li class="leaf-item open">',
+            '<h2><span>No index available</span></h2>',
+            '</ul>',
+        ].join('')),
 
     template: function(tplData) {
 

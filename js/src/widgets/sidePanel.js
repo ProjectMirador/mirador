@@ -10,7 +10,8 @@
             tocTabAvailable:   false,
             annotationsTabAvailable: false,
             layersTabAvailable: false,
-            toolsTabAvailable: false
+            toolsTabAvailable: false,
+            hasStructures:     false
         }, options);
 
         this.init();
@@ -72,7 +73,8 @@
             new $.Tabs({
                 windowId: this.parent.id,
                 appendTo: this.appendTo,
-                tabs : this.panelState.tabs
+                tabs : this.panelState.tabs,
+                parent : this
             });
 
             if (this.tocTabAvailable) {
@@ -144,8 +146,6 @@
         listenForActions: function() {
             var _this = this;
             jQuery.subscribe('sidePanelStateUpdated.' + this.windowId, function(_, data) {
-                console.log('sidePanelToggled now');
-                console.log(data);
                 _this.render(data);
             });
 

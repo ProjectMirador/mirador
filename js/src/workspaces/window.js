@@ -256,6 +256,11 @@
         }
     });
 
+      // TODO: temporary logic to minimize side panel if only tab is toc and toc is empty
+      jQuery.subscribe('sidePanelVisibilityByTab.' + this.id, function(event, visible) {
+        _this.sidePanelVisibility(visible, '0s');
+      });
+
     },
 
     bindAnnotationEvents: function() {
@@ -380,7 +385,13 @@
       }
       var _this = this,
       tocAvailable = _this.sidePanelOptions.toc,
-      annotationsTabAvailable = _this.sidePanelOptions.annotations;
+      annotationsTabAvailable = _this.sidePanelOptions.annotations,
+      hasStructures = true;
+
+      var structures = _this.manifest.getStructures();
+      if (!structures || structures.length === 0) {
+        hasStructures = false;
+      }
 
       if (this.sidePanel === null) {
         this.sidePanel = new $.SidePanel({
@@ -389,7 +400,8 @@
               manifest: _this.manifest,
               canvasID: _this.currentCanvasID,
               tocTabAvailable: tocAvailable,
-              annotationsTabAvailable: annotationsTabAvailable
+              annotationsTabAvailable: annotationsTabAvailable,
+              hasStructures: hasStructures
         });
       } else {
         this.sidePanel.update('annotations', annotationsTabAvailable);
