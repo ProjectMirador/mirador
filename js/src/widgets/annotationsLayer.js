@@ -7,6 +7,7 @@
       annotationsList:   null,
       viewer:            null,
       renderer:          null,
+      rectTool:          null,
       selected:          null,
       hovered:           null,
       windowId:          null,
@@ -22,6 +23,7 @@
     init: function() {
       var _this = this;
       jQuery.unsubscribe(('modeChange.' + _this.windowId));
+      jQuery.unsubscribe(('annotationListLoaded.' + _this.windowId));
 
       this.createRenderer();
       this.bindEvents();
@@ -70,25 +72,32 @@
     enterDisplayAnnotations: function() {
       var _this = this;
       //console.log('triggering annotation loading and display');
+      if (this.rectTool) {
+        this.rectTool.exitEditMode();
+      }
       this.renderer.render();
     },
 
     enterEditAnnotations: function() {
       var _this = this;
-      if (!this.parent.hud.contextControls.rectTool) {
-        this.parent.hud.contextControls.rectTool = new $.OsdRegionRectTool({
+      if (!this.rectTool) {
+        this.rectTool = new $.OsdRegionRectTool({
           osd: OpenSeadragon,
           osdViewer: _this.viewer,
           rectType: 'oa', // does not do anything yet. 
           parent: _this
         });
       } else {
-        this.parent.hud.contextControls.rectTool.reset(_this.viewer);
+        this.rectTool.reset(_this.viewer);
       }
       this.renderer.render();
+      this.rectTool.enterEditMode();
     },
 
     enterDefault: function() {
+      if (this.rectTool) {
+        this.rectTool.exitEditMode();
+      }
       this.renderer.hideAll();
     }
 

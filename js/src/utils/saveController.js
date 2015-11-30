@@ -57,10 +57,10 @@
         } else {
           this.currentConfig = config;
         }
-      }        
+      }
       //remove empty hashes from config
       this.currentConfig.windowObjects = jQuery.map(this.currentConfig.windowObjects, function(value, index) {
-        if (Object.keys(value).length === 0) return null;  
+        if (Object.keys(value).length === 0) return null;
         return value;
       });
 
@@ -79,9 +79,9 @@
       //also remove ?json bit so it's a clean URL
       var cleanURL = window.location.href.replace(window.location.search, "");
       if (window.location.hash) {
-        history.replaceState(this.currentConfig, "Mirador Session", cleanURL);
+       history.replaceState(this.currentConfig, "Mirador Session", cleanURL);
       } else {
-        history.replaceState(this.currentConfig, "Mirador Session", cleanURL+"#"+this.sessionID);
+       history.replaceState(this.currentConfig, "Mirador Session", cleanURL+"#"+this.sessionID);
       }
 
       this.bindEvents();
@@ -119,18 +119,32 @@
         }
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
-      
-      jQuery.subscribe("imageBoundsUpdated", function(event, options) {
+
+      jQuery.subscribe("imageBoundsUpdated", function(event, options) {   
+        var windowObjects = _this.currentConfig.windowObjects;   
+        if (windowObjects && windowObjects.length > 0) {   
+          jQuery.each(windowObjects, function(index, window){    
+            if (window.id === options.id) {    
+              if (!windowObjects[index].windowOptions) {   
+                windowObjects[index].windowOptions = {};   
+              }    
+              windowObjects[index].windowOptions.osdBounds = options.osdBounds;    
+            }    
+          });    
+        }    
+        _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );   
+      });
+
+      jQuery.subscribe('windowSlotAddressUpdated', function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
         if (windowObjects && windowObjects.length > 0) {
           jQuery.each(windowObjects, function(index, window){
             if (window.id === options.id) {
-              if (!windowObjects[index].windowOptions) {
-                windowObjects[index].windowOptions = {};
-              }
-              windowObjects[index].windowOptions.osdBounds = options.osdBounds;
+              jQuery.extend(windowObjects[index], options);
             }
           });
+        } else {
+          windowObjects = [options];
         }
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
@@ -160,7 +174,7 @@
         _this.set('layout', serialisedLayout, {parent: "currentConfig"} );
       });
 
-      jQuery.subscribe("windowAdded", function(event, options) {
+      jQuery.subscribe("windowSlotAdded", function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects,
         inArray = jQuery.grep(windowObjects, function(windowObj) {
           return windowObj.id === options.id;

@@ -16,7 +16,8 @@
       margin:                     15,
       remainingItemsMinWidth:     80, // set a minimum width for the "more" image
       imagesTotalWidth:           0,
-      tplData:                    null
+      tplData:                    null,
+      allImages:                  []
     }, options);
 
     this.init();
@@ -36,7 +37,8 @@
       this.element = jQuery(this.template(this.tplData)).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
 
       var remainingOffset = this.repoWidth + this.margin + this.metadataWidth + this.margin + this.imagesTotalWidth;
-      this.element.find('.remaining-items').css('left', remainingOffset);
+      _this.noiseImage = $.viewer.buildPath + $.viewer.imagesPath + 'noise.png';
+      this.element.find('.remaining-items').css('left', remainingOffset).css('background-image','url('+_this.noiseImage+')').css('background-repeat','repeat');
 
       this.bindEvents();
     },
@@ -55,12 +57,18 @@
 
       this.tplData.repoImage = (function() {
         var repo = _this.tplData.repository;
+        if (manifest.logo) {
+          if (typeof manifest.logo === "string")
+            return manifest.logo;
+          if (typeof manifest.logo['@id'] !== 'undefined')
+            return manifest.logo['@id'];
+        }
         if (_this.tplData.repository === '(Added from URL)') {
           repo = '';
         }            
-        var imageName = $.DEFAULT_SETTINGS.repoImages[repo || 'other'] || $.DEFAULT_SETTINGS.repoImages.other;
+        var imageName = $.viewer.repoImages[repo || 'other'] || $.viewer.repoImages.other;
 
-        return 'images/logos/' + imageName;
+        return $.viewer.buildPath + $.viewer.logosPath + imageName;
       })();
 
       for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
@@ -73,19 +81,25 @@
         width = (_this.thumbHeight/aspectRatio);
         url = _this.manifest.getThumbnailForCanvas(canvas, width);
 
-        _this.imagesTotalWidth += (width + _this.margin);
-        if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
-          _this.imagesTotalWidth -= (width + _this.margin);
-          break;
-        }
-
-        this.tplData.images.push({
+        _this.allImages.push({
           url: url,
           width: width,
           height: _this.thumbHeight,
-          id: canvas['@id']
+          id: canvas['@id'],
+          index: i
         });
       }
+
+      jQuery.each(_this.allImages, function(index, value) {
+        var width = value.width;
+        
+        _this.imagesTotalWidth += (width + _this.margin);
+        if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
+          _this.imagesTotalWidth -= (width + _this.margin);
+          return false;
+        }
+        _this.tplData.images.push(value);
+      });
 
       this.tplData.remaining = (function() {
         var remaining = manifest.sequences[0].canvases.length - _this.tplData.images.length;
@@ -128,8 +142,12 @@
       });
 
       jQuery.subscribe('manifestPanelWidthChanged', function(event, newWidth){
-        var newMaxPreviewWidth = newWidth - (_this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.remainingItemsMinWidth);
+        var newMaxPreviewWidth = newWidth - (_this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.remainingItemsMinWidth),
+        remainingOffset = 0,
+        remaining,
+        newRemaining;
         newMaxPreviewWidth = newMaxPreviewWidth * 0.95;
+        //width of browser window has been made smaller
         if (newMaxPreviewWidth < _this.maxPreviewImagesWidth ) {
           while (_this.imagesTotalWidth >= newMaxPreviewWidth) {
             image = _this.tplData.images.pop();
@@ -137,11 +155,10 @@
 
             //remove image from dom
             _this.element.find('img[data-image-id="'+image.id+'"]').remove();
-            var remainingOffset = _this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.imagesTotalWidth;
+            remainingOffset = _this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.imagesTotalWidth;
 
             //increase remaining # by 1
-            var remaining = _this.element.find('.remaining-amount');
-            var newRemaining;
+            remaining = _this.element.find('.remaining-amount');
             if (remaining.length > 0) {
               newRemaining = parseInt(remaining[0].innerHTML, 10) + 1;
               remaining[0].innerHTML = newRemaining;
@@ -152,7 +169,42 @@
             }
 
             //update size of "More" icon
-            _this.element.find('.remaining-items').css('left', remainingOffset);
+            _this.element.find('.remaining-items').css('left', remainingOffset).css('background-image','url('+_this.noiseImage+')').css('background-repeat','repeat');
+          }
+          //width of browser window has been made larger
+        } else if (newMaxPreviewWidth > _this.maxPreviewImagesWidth) {
+          var currentLastImage = _this.tplData.images[_this.tplData.images.length-1],
+          index = currentLastImage ? currentLastImage.index+1 : 0,
+          image = _this.allImages[index];
+          if (image) {
+            while (_this.imagesTotalWidth + image.width + _this.margin < newMaxPreviewWidth) {
+              _this.tplData.images.push(image);
+              _this.imagesTotalWidth += (image.width + _this.margin);
+              
+              //add image to dom
+              _this.element.find('.preview-images').append('<img src="'+image.url+'" width="'+image.width+'" height="'+image.height+'" class="preview-image flash" data-image-id="'+image.id+'">');
+              remainingOffset = _this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.imagesTotalWidth;
+              
+              //decrease remaining # by 1
+              remaining = _this.element.find('.remaining-amount');
+              if (remaining.length > 0) {
+                newRemaining = parseInt(remaining[0].innerHTML, 10) - 1;
+                if (newRemaining > 0) {
+                  remaining[0].innerHTML = newRemaining;
+                } else {
+                  _this.element.find('.remaining-items').remove();
+                }
+              }
+          
+              _this.element.find('.remaining-items').css('left', remainingOffset);
+
+              //get next image
+              index++;
+              image = _this.allImages[index];
+              if (!image) {
+                break;
+              }
+            }
           }
         }
         _this.maxPreviewImagesWidth = newMaxPreviewWidth;
@@ -174,7 +226,7 @@
                                  '</div>',
                                  '<div class="select-metadata">',
                                  '<h3 class="manifest-title">{{label}}</h3>',
-                                 '<h4>{{canvasCount}} items</h4>',
+                                 '<h4>{{canvasCount}} {{t "items"}}</h4>',
                                  '{{#if repository}}',
                                  '<h4 class="repository-label">{{repository}}</h4>',
                                  '{{/if}}',
@@ -185,7 +237,7 @@
                                  '{{/each}}',
                                  '</div>',
                                  '{{#if remaining}}',
-                                 '<div class="remaining-items"><h3><span class="remaining-amount">{{remaining}}</span> more</h3></div>',
+                                 '<div class="remaining-items"><h3><span class="remaining-amount">{{remaining}}</span> {{t "more"}}</h3></div>',
                                  '{{/if}}',
                                  '</li>'
     ].join(''))

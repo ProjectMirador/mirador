@@ -8,7 +8,8 @@
       windowId:  null,
       annoState: null,
       showAnnotations: true,
-      annoEndpointAvailable: false
+      annoEndpointAvailable: false,
+      fullScreenAvailable: true
     }, options);
 
     this.init();
@@ -22,7 +23,8 @@
       this.element = jQuery(this.template({
         showNextPrev : this.parent.imagesList.length !== 1, 
         showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable,
-        showAnno : this.annotationLayerAvailable
+        showAnno : this.annotationLayerAvailable,
+        showFullScreen : this.fullScreenAvailable
       })).appendTo(this.element);
 
       if (this.annotationLayerAvailable && this.annoEndpointAvailable) {
@@ -31,7 +33,8 @@
           container: this.parent.element,
           mode: 'displayAnnotations',
           parent: this,
-          windowId: this.windowId
+          windowId: this.windowId,
+          annotationCreationAvailable: this.annotationCreationAvailable
         });
       }
 
@@ -58,10 +61,13 @@
       });
 
       this.parent.element.find('.mirador-osd-annotations-layer').on('click', function() {
+        if (_this.annoState.current === 'none') {
+          _this.annoState.startup(this);
+        }
         if (_this.annoState.current === 'annoOff') {
           _this.annoState.displayOn(this);
         } else {
-          _this.annoState.displayOff(this);          
+          _this.annoState.displayOff(this);
         }
       });
 
@@ -70,23 +76,27 @@
       });
 
       this.parent.element.find('.mirador-osd-up').on('click', function() {
+        var panBy = _this.getPanByValue();
         var osd = _this.parent.osd;
-        osd.viewport.panBy(new OpenSeadragon.Point(0, -0.05));
+        osd.viewport.panBy(new OpenSeadragon.Point(0, -panBy.y));
         osd.viewport.applyConstraints();
       });
       this.parent.element.find('.mirador-osd-right').on('click', function() {
+        var panBy = _this.getPanByValue();
         var osd = _this.parent.osd;
-        osd.viewport.panBy(new OpenSeadragon.Point(0.05, 0));
+        osd.viewport.panBy(new OpenSeadragon.Point(panBy.x, 0));
         osd.viewport.applyConstraints();
       });
       this.parent.element.find('.mirador-osd-down').on('click', function() {
+        var panBy = _this.getPanByValue();
         var osd = _this.parent.osd;
-        osd.viewport.panBy(new OpenSeadragon.Point(0, 0.05));
+        osd.viewport.panBy(new OpenSeadragon.Point(0, panBy.y));
         osd.viewport.applyConstraints();
       });
       this.parent.element.find('.mirador-osd-left').on('click', function() {
+        var panBy = _this.getPanByValue();
         var osd = _this.parent.osd;
-        osd.viewport.panBy(new OpenSeadragon.Point(-0.05, 0));
+        osd.viewport.panBy(new OpenSeadragon.Point(-panBy.x, 0));
         osd.viewport.applyConstraints();
       });
       this.parent.element.find('.mirador-osd-zoom-in').on('click', function() {
@@ -126,7 +136,7 @@
       });
 
       jQuery.subscribe('bottomPanelSet.' + _this.windowId, function(event, visible) {
-        var dodgers = _this.parent.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls, .mirador-osd-annotations-layer');
+        var dodgers = _this.parent.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls');
         var arrows = _this.parent.element.find('.mirador-osd-next, .mirador-osd-previous');
         if (visible === true) {
           dodgers.css({transform: 'translateY(-130px)'});
@@ -138,8 +148,6 @@
       });
 
       jQuery.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasId) {
-        // console.log(canvasId);
-        // console.log(lastCanvasId);
         // If it is the first canvas, hide the "go to previous" button, otherwise show it.
         if (canvasId === firstCanvasId) {
           _this.parent.element.find('.mirador-osd-previous').hide();
@@ -157,50 +165,110 @@
 
     createStateMachine: function() {
       //add more to these as AnnoState becomes more complex
-      var _this = this;
+      var _this = this,
+      duration = "200";
+      //initial state is 'none'
       this.annoState = StateMachine.create({
-        initial: 'annoOff',
         events: [
-          { name: 'displayOn',  from: 'annoOff',  to: 'annoOnEditOff' },
-          { name: 'editOn', from: 'annoOnEditOff', to: 'annoOnEditOn' },
-          { name: 'editOff',  from: 'annoOnEditOn',    to: 'annoOnEditOff' },
-          { name: 'displayOff', from: ['annoOnEditOn','annoOnEditOff'], to: 'annoOff' }
+          { name: 'startup',  from: 'none',  to: 'annoOff' },
+          { name: 'displayOn',  from: 'annoOff',  to: 'annoOnCreateOff' },
+          { name: 'refreshCreateOff',  from: 'annoOnCreateOff',  to: 'annoOnCreateOff' },          
+          { name: 'createOn', from: ['annoOff','annoOnCreateOff'], to: 'annoOnCreateOn' },
+          { name: 'refreshCreateOn',  from: 'annoOnCreateOn',  to: 'annoOnCreateOn' },          
+          { name: 'createOff',  from: 'annoOnCreateOn',    to: 'annoOnCreateOff' },
+          { name: 'displayOff', from: ['annoOnCreateOn','annoOnCreateOff'], to: 'annoOff' }
         ],
         callbacks: {
+          onstartup: function(event, from, to) {
+            jQuery.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
+          },
           ondisplayOn: function(event, from, to) { 
-            _this.parent.element.find('.mirador-osd-annotations-layer').addClass("selected");
             if (_this.annoEndpointAvailable) {
-              _this.contextControls.show();
+              _this.parent.element.find('.mirador-osd-annotations-layer').fadeOut(duration, function() {      
+                _this.contextControls.show();
+              });              
+            } else {
+              _this.parent.element.find('.mirador-osd-annotations-layer').addClass("selected");
             }
             jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');
+            jQuery.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
           },
-          oneditOn: function(event, from, to) { 
-            _this.parent.element.find('.mirador-osd-edit-mode').addClass("selected");
-            jQuery.publish('modeChange.' + _this.windowId, 'editingAnnotations');
-            if (_this.annoEndpointAvailable) {
-              _this.contextControls.rectTool.enterEditMode();
+          onrefreshCreateOff: function(event, from, to) {
+            jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');
+            jQuery.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
+          },
+          oncreateOn: function(event, from, to) {
+            function enableEditingAnnotations() {
+              _this.parent.element.find('.mirador-osd-edit-mode').addClass("selected");
+              jQuery.publish('modeChange.' + _this.windowId, 'editingAnnotations');
             }
+            if (_this.annoEndpointAvailable) {
+              if (from === "annoOff") {
+                _this.parent.element.find('.mirador-osd-annotations-layer').fadeOut(duration, function() {      
+                  _this.contextControls.show();
+                  enableEditingAnnotations();
+                });
+              } else {
+                enableEditingAnnotations();
+              }
+            }
+            jQuery.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
           },
-          oneditOff: function(event, from, to) { 
+          onrefreshCreateOn: function(event, from, to) {
+            jQuery.publish('modeChange.' + _this.windowId, 'editingAnnotations');
+            jQuery.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
+          },
+          oncreateOff: function(event, from, to) { 
             _this.parent.element.find('.mirador-osd-edit-mode').removeClass("selected");
             jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');
-            if (_this.annoEndpointAvailable) {
-              _this.contextControls.rectTool.exitEditMode();
-            }
+            jQuery.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
           },
           ondisplayOff: function(event, from, to) { 
-            if (_this.annoEndpointAvailable && _this.contextControls.rectTool) {
-              _this.contextControls.rectTool.exitEditMode();
-            }
-            _this.parent.element.find('.mirador-osd-edit-mode').removeClass("selected");
-            _this.parent.element.find('.mirador-osd-annotations-layer').removeClass("selected");
             if (_this.annoEndpointAvailable) {
-              _this.contextControls.hide();
+              _this.parent.element.find('.mirador-osd-edit-mode').removeClass("selected");
+              _this.contextControls.hide(function() {
+                _this.parent.element.find('.mirador-osd-annotations-layer').fadeIn(duration);
+              }
+              );
+            } else {
+              _this.parent.element.find('.mirador-osd-annotations-layer').removeClass("selected");
             }
-            jQuery.publish('modeChange.' + _this.windowId, 'default');            
+            jQuery.publish('modeChange.' + _this.windowId, 'default');
+            jQuery.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
           }
         }
       });
+    },
+
+    getPanByValue: function() {
+      var bounds = this.parent.osd.viewport.getBounds(true);
+      //for now, let's keep 50% of the image on the screen
+      var panBy = {
+        "x" : bounds.width * 0.5,
+        "y" : bounds.height * 0.5
+      };
+      return panBy;
     },
 
     fullScreen: function() {
@@ -227,12 +295,14 @@
                                  '<i class="fa fa-3x fa-chevron-left "></i>',
                                  '</a>',
                                  '{{/if}}',
+                                 '{{#if showFullScreen}}',
                                  '<a class="mirador-osd-fullscreen hud-control">',
                                  '<i class="fa fa-expand"></i>',
                                  '</a>',
+                                 '{{/if}}',
                                  '{{#if showAnno}}',
                                  '<a class="mirador-osd-annotations-layer hud-control ">',
-                                 '<i class="fa fa-2x fa-comments"></i>',
+                                 '<i class="fa fa-lg fa-comments"></i>',
                                  '</a>',
                                  '{{/if}}',
                                  '{{#if showNextPrev}}',

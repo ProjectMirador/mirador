@@ -1,3 +1,8 @@
+body { 
+  padding: 0; 
+  margin: 0; 
+  overflow: hidden; 
+}
 a {
   color: inherit; /* blue colors for links too */
   text-decoration: inherit; /* no underline */
@@ -17,6 +22,40 @@ a {
   margin:0;
 }
 
+/* Full screen
+---------------------------------------------------------------------------- */
+:-webkit-full-screen {
+  height: 100%;
+  left: 0;
+  margin: 0;
+  top: 0;
+  width: 100%;
+}
+
+:-moz-full-screen {
+  height: 100%;
+  left: 0;
+  margin: 0;
+  top: 0;
+  width: 100%;
+}
+
+:-ms-fullscreen {
+  height: 100%;
+  left: 0;
+  margin: 0;
+  top: 0;
+  width: 100%;
+}
+
+:fullscreen {
+  height: 100%;
+  left: 0;
+  margin: 0;
+  top: 0;
+  width: 100%;
+}
+
 /*----------------------------------------------------------------------------
 /* Mirador styles
 ---------------------------------------------------------------------------- 
@@ -24,7 +63,6 @@ a {
 
   .mirador-viewer, .mirador-main-menu-bar, .mirador-status-bar {
     font-family: 'Open Sans', 'Lucida Grande', Verdana, Arial,sans-serif;
-    font-size: 1.2em;
 }
 
 .mirador-viewer {
@@ -52,6 +90,7 @@ a {
     height: 33px;
     width: 100%;
     /*padding: 4px;*/
+    font-size: 14px;
     top: 0;
 }
 
@@ -143,7 +182,7 @@ a {
 
 /* main menu window options
 ---------------------------------------------------------------------------- */
-  .mirador-window-options-menu {
+.mirador-window-options-menu {
     list-style: none;
     margin: 0;
     padding: 10px 5px;
@@ -161,6 +200,8 @@ a {
   white-space: nowrap;
   padding-left: 10px;
   margin: 8px 0px 8px 0px;
+  font-weight: bold;
+  font-size: 16px;
 }
 
 .window-manifest-navigation {
@@ -168,6 +209,7 @@ a {
   width: 24%;
   text-align: right;
   padding-right: 10px;
+  font-size: 16px;
 }
 
 
@@ -298,6 +340,7 @@ a {
   color:rgba(0,0,0,0.8);
   font-weight:bold;
   margin-top:2px;
+  font-weight: bold;
 }
 .repo-image, .select-metadata, .preview-images {
   float:left;
@@ -345,7 +388,6 @@ li.highlight {
 }
 
 .remaining-items {
-  background: url(../images/noise.png) repeat;
   opacity: 0.5;
   text-align: center;
   position: absolute;
@@ -411,7 +453,6 @@ li.highlight {
 
 /* main-menu workspaces-panel */
 #workspace-select-menu {
-  background: url(../images/debut_dark.png) repeat;
   background-color: #333;
   text-align:center;
   padding:20%;
@@ -420,7 +461,6 @@ li.highlight {
 }
 #workspace-select-menu h1 {
   color: lightgray;
-  font-size: 4em;
   padding-bottom: 3%;
   font-weight: normal;
 }
@@ -526,16 +566,34 @@ li.highlight {
   overflow:hidden;
   pointer-events: none;
 }
-.slot:hover {
+.slot:hover, .slot.focused, .slot.draggedOver {
   box-shadow: inset 0 0 35px rgba(94, 219, 255, 1);
 }
+.slot.draggedOver .dropMeMessage, .slot.draggedOver .dropIcon {
+    display:block;
+}
+.dropMeMessage, .dropIcon {
+    display:none;
+}
+.slot.draggedOver .addItemText, .slot.draggedOver .plus span {
+    display:none;
+}
 .addItemLink {
+    display:block;
+    position:absolute;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    cursor: pointer;
+}
+.dropMask {
   position:absolute;
   top:0;
   bottom:0;
   right:0;
   left:0;
-  cursor: pointer;
+  display:none;
 }
 
 /* window scaffolding */
@@ -549,6 +607,9 @@ li.highlight {
 .manifest-info {
   overflow: auto;
   background: #fafafa;
+}
+.manifest-info .mirador-btn {
+  font-size: .8em;
 }
 .content-container {
   position: absolute;
@@ -570,7 +631,10 @@ li.highlight {
   /*display: none;*/
   box-sizing: border-box;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0s ease;
+}
+.sidePanel a:hover {
+  text-decoration: none;
 }
 .sidePanel h1, .sidePanel h2, .sidePanel h3, .sidePanel h4 {
   margin:0;
@@ -579,6 +643,18 @@ li.highlight {
 }
 .sidePanel h1:hover, .sidePanel h2:hover, .sidePanel h3:hover, .sidePanel h4:hover {
 }
+/*.sidePanel h2 {
+  font-size: 1.5em;
+}
+.sidePanel h3 {
+  font-size: 1.25em;
+}
+.sidePanel h4 {
+  font-size: 1.0em;
+}
+.sidePanel h5 {
+  font-size: .75em;
+}*/
 .toc {
   margin:0;
   overflow-y: scroll;
@@ -587,7 +663,7 @@ li.highlight {
   position:absolute;
   box-sizing: border-box;
   left:0;
-  top:10px;
+  top:0px;
   bottom:0;
   list-style-type:none;
   font-size: 75%;
@@ -638,7 +714,7 @@ li.highlight {
 .toc li.has-child i.star {
   display: none;
 }
-.toc li.leaf-item i.caret {
+.toc li.leaf-item i.toc-caret {
   display: none
 }
 .toc li.leaf-item i.star {
@@ -650,7 +726,7 @@ li.highlight {
 .toc li.selected>h2 .toc-link .star, .toc li.selected>h3 .toc-link .star, .toc li.selected>h4 .toc-link .star, .toc li.selected>h5 .toc-link .star .toc li.hovered>h2 .toc-link .star, .toc li.hovered>h3 .toc-link .star, .toc li.hovered>h4 .toc-link .star, .toc li.hovered>h5 .toc-link .star {
   color:black;
 }
-.toc li.open>h2 .toc-link .caret, .toc li.open>h3 .toc-link .caret, .toc li.open>h4 .toc-link .caret, .toc li.open>h5 .toc-link .caret  {
+.toc li.open>h2 .toc-link .toc-caret, .toc li.open>h3 .toc-link .toc-caret, .toc li.open>h4 .toc-link .toc-caret, .toc li.open>h5 .toc-link .toc-caret  {
   transition: all 0.2s linear;
   transform: rotate(90deg);
   -webkit-transform: rotate(90deg);
@@ -683,7 +759,7 @@ li.highlight {
   margin-left: 280px;
   height: 100%;
   position:relative;
-  transition:all 0.3s ease;
+  transition:all 0s ease;
 }
 
 .view-container.tranisition {
@@ -720,7 +796,7 @@ li.highlight {
   z-index: 4;
   overflow:hidden;
   display: none;
-  transition:all 0.3s ease;
+  transition:transform 0.3s ease;
 }
 .bottomPanel.minimized {
   transform:translateY(130px);
@@ -760,7 +836,6 @@ li.highlight {
     height: 100%;
     width: 100%;
     overflow-x: scroll;
-    margin-top: 10px;
     overflow-y: hidden;
 }
 
@@ -769,7 +844,7 @@ li.highlight {
   list-style: none;
   padding: 0;
   white-space: nowrap;
-  margin-top: 4px;
+  margin-top: 10px;
   margin-bottom: 4px;
 }
 
@@ -778,7 +853,7 @@ li.highlight {
   /*float: left;*/
   /*margin: 0 0 15px 0;*/
   padding: 0px 10px 0px 10px;
-  transition: all 0.05s ease-out;
+  /*transition: all 0.03s ease-out;*/
   display: inline-block;
 }
 
@@ -852,7 +927,7 @@ li.highlight {
 }
 .mirador-osd-edit-mode.selected, .mirador-osd-annotations-layer.selected {
   opacity: 1;
-  transition: none;
+  /*transition: none;*/
 }
 .mirador-osd-previous {
   position:absolute;
@@ -869,9 +944,9 @@ li.highlight {
 }
 .mirador-osd-annotations-layer {
   position:absolute;
-  bottom:0;
-  left:0;
-  margin: 1%;
+  top: 10px;
+  left: 10px;
+  transition: none;
 }
 .mirador-osd-toggle-bottom-panel {
   position: absolute;
@@ -932,9 +1007,9 @@ li.highlight {
 }
 .mirador-osd-context-controls {
   position: absolute;
-  top:0;
-  left:0;
-  margin: 15px;
+  top: 10px;
+  left: 10px;
+  transition: none;
 }
 .mirador-osd-context-controls a {
   float:left;
@@ -1250,7 +1325,7 @@ ul.scroll-listing-thumbs li {
   box-sizing:border-box;
   margin: 0 0 15px 0;
   padding: 10px 10px 10px 10px;
-  transition: all 0.05s ease-out;
+  /*transition: all 0.05s ease-out;*/
   display: inline-block;
 }
 
@@ -1265,7 +1340,7 @@ ul.scroll-listing-thumbs li img {
 ul.scroll-listing-thumbs li .thumb-label {
   clear: both;
   color: #999;
-  font-size: 10px;
+  font-size: 12px;
   margin: 0 auto;
   max-width: 200px;
   text-align: left;
@@ -1291,7 +1366,7 @@ ul.scroll-listing-thumbs li .thumb-label {
   float: left;
   margin: 0 0 15px 0;
   padding: 10px 10px 10px 10px;
-  transition: all 0.05s ease-out;
+  /*transition: all 0.05s ease-out;*/
 }
 
 .mirador-viewer ul.listing-thumbs li img {
@@ -1301,7 +1376,7 @@ ul.scroll-listing-thumbs li .thumb-label {
   margin: 0 auto;
   display: block;
   box-sizing:border-box;
-  transition: all 0.2 ease-out;
+  /*transition: all 0.2 ease-out;*/
 }
 .mirador-viewer ul.listing-thumbs li img:hover {
   border:3px solid rgba(0,191,255,0.7);
@@ -1313,7 +1388,7 @@ ul.scroll-listing-thumbs li .thumb-label {
 .mirador-viewer ul.listing-thumbs li .thumb-label {
   clear: both;
   color: #999;
-  font-size: 10px;
+  font-size: 12px;
   margin: 0 auto;
   max-width: 125px;
   text-align: left;
@@ -1363,19 +1438,19 @@ ul.scroll-listing-thumbs li .thumb-label {
 }
 
 .mirador-viewer .metadata-item {
-  display: table-row;
+  padding-bottom: 5px;
 }
 
 .mirador-viewer .metadata-label, .mirador-viewer .metadata-value {
-  display: table-cell;
   line-height: 1.5;
-  padding: 3px 0;
+  margin-left: 3%;
 }
 
 .mirador-viewer .metadata-label {
-  width: 8em;
   text-transform: capitalize;
   color: #555;
+  margin-left: 3%;
+  font-style: italic;
 }
 
 .mirador-viewer .metadata-value {
@@ -1389,6 +1464,11 @@ ul.scroll-listing-thumbs li .thumb-label {
 .mirador-metadata-view-nav-toolbar {
   float: right;
   margin-right: 5px;
+}
+
+.metadata-logo {
+  width: 80px;
+  margin-left: 3%;
 }
 
 
@@ -1505,7 +1585,12 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   padding-bottom:30px;
 }
 
-.mirador-viewer a.mirador-icon-image-view:hover, .mirador-viewer a.mirador-icon-thumbs-view:hover, .mirador-viewer a.mirador-icon-empty-slot:hover, .mirador-viewer a.mirador-icon-window-menu:hover, .mirador-viewer a.mirador-icon-toc:hover {
+.mirador-viewer a.mirador-icon-image-view:hover, 
+.mirador-viewer a.mirador-icon-thumbs-view:hover, 
+.mirador-viewer a.mirador-icon-metadata-view:hover, 
+.mirador-viewer a.mirador-icon-empty-slot:hover, 
+.mirador-viewer a.mirador-icon-window-menu:hover, 
+.mirador-viewer a.mirador-icon-toc:hover {
   color: black;
 }
 
@@ -1535,11 +1620,12 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   clear: both;
 }
 .qtip-content {
-  max-height: 185px;
+  min-width: 275px;
+  max-height: 200px;
   overflow: auto;
 }
 .annotation-tooltip {
-  padding: 12px; 
+  padding: 7px; 
 }
 .annotation-display {
   position:relative;
@@ -1548,6 +1634,9 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   padding: 12px;
   padding-bottom:0;
   border-bottom: 1px solid gray;
+}
+.annotation-display:last-child {
+    border: none;
 }
 .annotation-tooltip .button-container {
   text-align: right;
@@ -1591,6 +1680,11 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 .text-viewer p {
   margin-top: 0;
 }
+.text-viewer p.user {
+  color: gray;
+  font-style: italic;
+  font-size: 11px;
+}
 .tags-viewer {
   margin-bottom: 12px;
 }
@@ -1605,10 +1699,10 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   font-size: 12;
   font-weight: bold;
   border: 1px solid #aaa;
+  display: inline-block;
 }
 
 .mce-edit-area iframe {
     height: 75px !important;
 }
-
 

@@ -48,7 +48,7 @@
                 _this.parent.addManifestFromUrl(url, "(Added from URL)");
                 //console.log('trying to add from URL');
             });
-            
+
             this.element.find('.remove-object-option').on('click', function() {
               _this.parent.toggleLoadWindow();
             });
@@ -58,13 +58,12 @@
                if (stateValue) { _this.show(); return; }
                 _this.hide();
             });
-            
-            jQuery.subscribe('manifestReceived', function(event, newManifest, repository) {
-              //console.log(newManifest);
+
+            jQuery.subscribe('manifestReceived', function(event, newManifest) {
               _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifest: newManifest, resultsWidth: _this.resultsWidth }));
               _this.element.find('#manifest-search').keyup();
             });
-            
+
             // Filter manifests based on user input
             this.element.find('#manifest-search').on('keyup input', function() {
                if (this.value.length > 0) {
@@ -75,12 +74,12 @@
                   _this.element.find('.items-listing li').show();
                }
             });
-            
+
             this.element.find('#manifest-search-form').on('submit', function(event) {
               event.preventDefault();
             });
-            
-            jQuery.subscribe('resize', $.debounce(function(){
+
+            jQuery(window).resize($.debounce(function(){
               var clone = _this.element.clone().css("visibility","hidden").css("display", "block").appendTo(_this.appendTo);
               _this.resultsWidth = clone.find('.select-results').outerWidth();
               clone.remove();
@@ -103,15 +102,15 @@
           '<div id="manifest-select-menu">',
           '<div class="container">',
               '<div id="load-controls">',
-              '<a class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i> Close</a>',
+              '<a class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i> {{t "close"}}</a>',
               '<form action="" id="manifest-search-form">',
-                  '<label for="manifest-search">Filter objects:</label>',
-                  '<input id="manifest-search" type="text" name="manifest-filter" placeholder="Filter objects...">',
+                  '<label for="manifest-search">{{t "filterObjects"}}:</label>',
+                  '<input id="manifest-search" type="text" name="manifest-filter" placeholder="{{t "filterObjects"}}...">',
               '</form>',
               '{{#if showURLBox}}',
               '<br/>',
               '<form action="" id="url-load-form">',
-                  '<label for="url-loader">Add new object from URL:</label>',
+                  '<label for="url-loader">{{t "addNewObject"}}:</label>',
                   '<input type="text" id="url-loader" name="url-load" placeholder="http://...">',
               '</form>',
               '{{/if}}',

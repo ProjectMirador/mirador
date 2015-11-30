@@ -37,8 +37,20 @@
 
     init: function() {
       var _this = this;
-      // retrieve manifests
-      this.getManifestsData();
+
+      //add background and positioning information on the root element that is provided in config
+      var backgroundImage = _this.buildPath + _this.imagesPath + 'debut_dark.png';
+      this.element.css('background-color', '#333').css('background-image','url('+backgroundImage+')').css('background-position','left top')
+      .css('background-repeat','repeat').css('position','fixed');
+
+      //initialize i18next  
+      i18n.init({debug: false, getAsync: false, resGetPath: _this.buildPath + _this.i18nPath+'__lng__/__ns__.json'}); 
+
+      //register Handlebars helper
+      Handlebars.registerHelper('t', function(i18n_key) {
+        var result = i18n.t(i18n_key);
+        return new Handlebars.SafeString(result);
+      });
 
       //check all buttons in mainMenu.  If they are all set to false, then don't show mainMenu
       var showMainMenu = false;
@@ -90,6 +102,8 @@
       this.set('currentWorkspaceVisible', true);
 
       this.bindEvents();
+      // retrieve manifests
+      this.getManifestsData();
     },
 
     bindEvents: function() {
@@ -149,6 +163,38 @@
     toggleBookmarkPanel: function() {
       this.toggleOverlay('bookmarkPanelVisible');
     },
+    
+    enterFullscreen: function() {
+      var el = this.element[0];
+      if (el.requestFullscreen) {
+        el.requestFullscreen();
+      } else if (el.mozRequestFullScreen) {
+        el.mozRequestFullScreen();
+      } else if (el.webkitRequestFullscreen) {
+        el.webkitRequestFullscreen();
+      } else if (el.msRequestFullscreen) {
+        el.msRequestFullscreen();
+      }
+    },
+
+    exitFullscreen: function() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+    },
+
+    isFullscreen: function() {
+      var $fullscreen = $(fullscreenElement());
+      return ($fullscreen.length > 0);
+    },
+
+    fullscreenElement: function() {
+      return (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement);
+    },
 
     getManifestsData: function() {
       var _this = this;
@@ -188,7 +234,7 @@
         manifest = new $.Manifest(url, location);
         _this.manifests[url] = manifest;
         _this.manifests.push(manifest);
-        jQuery.publish('manifestQueued', manifest);
+        jQuery.publish('manifestQueued', manifest, location);
         manifest.request.done(function() {
           jQuery.publish('manifestReceived', manifest);
         });
@@ -197,18 +243,27 @@
 
     loadManifestFromConfig: function(options) {
       // check if there are available slots, otherwise don't process this object from config
-      var slotAddress = options.slotAddress ? options.slotAddress : this.workspace.getAvailableSlot().layoutAddress;
+      //if we have more windowObjects that slots in the layout, return
+      var slotAddress = options.slotAddress ? options.slotAddress : this.workspace.getAvailableSlot() ? this.workspace.getAvailableSlot().layoutAddress : null;
+      if (!slotAddress) {
+        return;
+      }
       var windowConfig = {
         manifest: this.manifests[options.loadedManifest],
         currentFocus : options.viewType,
-        focuses : options.availableViews,
+        focusesOriginal : options.availableViews,
         currentCanvasID : options.canvasID,
         id : options.id,
         focusOptions : options.windowOptions,
         bottomPanelAvailable : options.bottomPanel,
+        bottomPanelVisible : options.bottomPanelVisible,
         sidePanelAvailable : options.sidePanel,
+        sidePanelVisible : options.sidePanelVisible,
         overlayAvailable : options.overlay,
         annotationLayerAvailable : options.annotationLayer,
+        annotationCreationAvailable : options.annotationCreation,
+        annotationState : options.annotationState,
+        fullScreenAvailable : options.fullScreen,
         slotAddress: slotAddress,
         displayLayout : options.displayLayout,
         layoutOptions: options.layoutOptions

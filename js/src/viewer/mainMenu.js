@@ -41,6 +41,7 @@
                 showBookmark : this.parent.mainMenuSettings.buttons.bookmark,
                 showLayout : this.parent.mainMenuSettings.buttons.layout,
                 showOptions: this.parent.mainMenuSettings.buttons.options,
+                showFullScreenViewer : this.parent.mainMenuSettings.buttons.fullScreenViewer,
                 userButtons: this.parent.mainMenuSettings.userButtons,
                 userLogo:    this.parent.mainMenuSettings.userLogo
             }));
@@ -58,6 +59,9 @@
             });
             // when options are implemented, this will need to do something
             this.element.find('.window-options').on('click', function() { });
+            this.element.find('.fullscreen-viewer').on('click', function() {
+              _this.parent.fullscreenElement() ? _this.parent.exitFullscreen() : _this.parent.enterFullscreen();
+            });
         },
 
         template: Handlebars.compile([
@@ -69,8 +73,8 @@
         '<ul class="{{mainMenuCls}}">',
         '{{#if showBookmark}}',
           '<li>',
-            '<a href="javascript:;" class="bookmark-workspace" title="Bookmark Workspace">',
-              '<span class="icon-bookmark-workspace"></span>Bookmark',
+            '<a href="javascript:;" class="bookmark-workspace" title="{{t "bookmark"}}">',
+              '<span class="icon-bookmark-workspace"></span>{{t "bookmark"}}',
             '</a>',
           '</li>',
         '{{/if}}',
@@ -83,8 +87,15 @@
         '{{/if}}',*/
         '{{#if showLayout}}',
           '<li>',
-            '<a href="javascript:;" class="change-layout" title="Change Layout">',
-              '<span class="icon-window-options"></span>Change Layout',
+            '<a href="javascript:;" class="change-layout" title="{{t "changeLayout"}}">',
+              '<span class="icon-window-options"></span>{{t "changeLayout"}}',
+            '</a>',
+          '</li>',
+        '{{/if}}',
+        '{{#if showFullScreenViewer}}',
+          '<li>',
+            '<a href="javascript:;" class="fullscreen-viewer" title="{{t "fullScreen"}}">',
+              '<span class="fa fa-expand"></span> {{t "fullScreen"}}',
             '</a>',
           '</li>',
         '{{/if}}',
@@ -92,7 +103,7 @@
         '{{#if userButtons}}',
           '{{userbtns userButtons}}',
         '{{/if}}'
-        ].join('')),
+        ].join(''))
     };
 
     /* Helper methods for processing userButtons provided in configuration */
@@ -112,14 +123,16 @@
      *          exist and MUST contain an "id" value    *
      *   li_attributes: HTML attributes to add to the   *
      *          list item containing the button.        *
+     *   iconClass: class or space-separated list of    *
+     *          classes. If present, an empty span with *
+     *          these classes will be prepended to the  *
+     *          content of the link element
      *   sublist: Sublist of buttons, to be implemented *
      *          as a dropdown via CSS/JS                *
      *   ul_attributes: HTML attributes to add to the   *
      *          sublist UL contained in the button.     *
      *          Ignored if button isn't representing    *
      *          a sublist.                              *
-     *   callback: If set to true, and attributes['id'] *
-     *          is not set, an error will be thrown     *
      *                                                  *
      * NOTE: sublist dropdown functionality is not yet  *
      *       implemented                                *
@@ -173,12 +186,6 @@
                 $sub_ul.append(processUserButtons(btn.sublist));
 
                 $li.append($sub_ul);
-            }
-
-            if (btn.callback) {
-                if (!(btn.attributes && btn.attributes.id)) {
-                    throw "userButton with callback does not have attributes.id";
-                }
             }
 
             return $li;

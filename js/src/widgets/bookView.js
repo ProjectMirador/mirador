@@ -50,7 +50,8 @@
         element: this.element,
         bottomPanelAvailable: this.bottomPanelAvailable,
         windowId: this.windowId,
-        annotationLayerAvailable: false
+        annotationLayerAvailable: false,
+        fullScreenAvailable : this.fullScreenAvailable
       });
 
       if (this.manifest.jsonLd.sequences[0].viewingDirection) {
@@ -74,7 +75,12 @@
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       jQuery.publish("imageBoundsUpdated", {
         id: _this.parent.id, 
-        osdBounds: {x: _this.osdOptions.osdBounds.x, y: _this.osdOptions.osdBounds.y, width: _this.osdOptions.osdBounds.width, height: _this.osdOptions.osdBounds.height}
+          osdBounds: {
+            x: _this.osdOptions.osdBounds.x, 
+            y: _this.osdOptions.osdBounds.y, 
+            width: _this.osdOptions.osdBounds.width, 
+            height: _this.osdOptions.osdBounds.height
+          }
       });
     },
 
@@ -87,11 +93,11 @@
     },
 
     hide: function() {
-      jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
+      jQuery(this.element).hide({effect: "fade", duration: 300, easing: "easeOutCubic"});
     },
 
     show: function() {
-      jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+      jQuery(this.element).show({effect: "fade", duration: 300, easing: "easeInCubic"});
     },
 
     adjustWidth: function(className, hasClass) {

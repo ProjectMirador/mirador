@@ -29,6 +29,8 @@
       };
 
       this.element = jQuery(this.template(templateData)).appendTo(this.appendTo);
+      var backgroundImage = _this.parent.buildPath + _this.parent.imagesPath + 'debut_dark.png';
+      this.element.css('background-image','url('+backgroundImage+')').css('background-repeat','repeat');
       this.bindEvents();
     },
 
@@ -88,9 +90,9 @@
 
     template: Handlebars.compile([
                                  '<div id="workspace-select-menu">',
-                                 '<h1>Change Layout</h1>',
+                                 '<h1>{{t "changeLayout"}}</h1>',
                                  '<h3 class="grid-text"></h3>',
-                                 '<h3 class="grid-instructions">Select a grid below</h3>',
+                                 '<h3 class="grid-instructions">{{t "selectGrid"}}</h3>',
                                  '<div class="select-grid">',
                                  '{{#each rows}}',
                                  '<div class="grid-row">',

@@ -21,7 +21,8 @@
       osdCls: 'mirador-osd',
       elemAnno:         null,
       annoCls:          'annotation-canvas',
-      annotationLayerAvailable: null 
+      annotationLayerAvailable: null,
+      annotationsLayer: null 
     }, options);
 
     this.init();
@@ -57,8 +58,12 @@
         bottomPanelAvailable: this.bottomPanelAvailable,
         windowId: this.windowId,
         annotationLayerAvailable: this.annotationLayerAvailable,
-        annoEndpointAvailable: this.annoEndpointAvailable
+        annotationCreationAvailable: this.annotationCreationAvailable,
+        annoEndpointAvailable: this.annoEndpointAvailable,
+        fullScreenAvailable : this.fullScreenAvailable
       });
+
+      this.bindEvents();
     },
 
     template: Handlebars.compile([
@@ -66,17 +71,26 @@
                                  '</div>'
     ].join('')),
 
+    bindEvents: function() {
+      var _this = this;
+      jQuery.subscribe('fitBounds.' + _this.parent.id, function(event, bounds) {
+        var rect = _this.osd.viewport.imageToViewportRectangle(Number(bounds.x), Number(bounds.y), Number(bounds.width), Number(bounds.height));
+        _this.osd.viewport.fitBoundsWithConstraints(rect, false);
+      });
+
+    },
+
     setBounds: function() {
       var _this = this;
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       jQuery.publish("imageBoundsUpdated", {
         id: _this.parent.id, 
-        osdBounds: {
-          x: _this.osdOptions.osdBounds.x, 
-          y: _this.osdOptions.osdBounds.y, 
-          width: _this.osdOptions.osdBounds.width, 
-          height: _this.osdOptions.osdBounds.height
-        }
+          osdBounds: {
+            x: _this.osdOptions.osdBounds.x, 
+            y: _this.osdOptions.osdBounds.y, 
+            width: _this.osdOptions.osdBounds.width, 
+            height: _this.osdOptions.osdBounds.height
+          }
       });
     },
 
@@ -89,11 +103,11 @@
     },
 
     hide: function() {
-      jQuery(this.element).hide({effect: "fade", duration: 1000, easing: "easeOutCubic"});
+      jQuery(this.element).hide({effect: "fade", duration: 300, easing: "easeOutCubic"});
     },
 
     show: function() {
-      jQuery(this.element).show({effect: "fade", duration: 1000, easing: "easeInCubic"});
+      jQuery(this.element).show({effect: "fade", duration: 300, easing: "easeInCubic"});
     },
 
     adjustWidth: function(className, hasClass) {
@@ -135,15 +149,34 @@
         });
 
         _this.osd.addHandler('open', function(){
+          jQuery.publish('osdOpen.'+_this.windowId);
           if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
+          } else {
+            //else reset bounds for this image
+            _this.setBounds();
           }
 
           _this.addAnnotationsLayer(_this.elemAnno);
-          //re-add correct annotationsLayer mode based on annoState
-          if (_this.hud.annoState.current !== "annoOff") {
-            jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');          
+            
+          // if current annoState is 'none' that means it has been initialized but not used
+          // use annotationState to choose event
+          if (_this.hud.annoState.current === 'none') {
+              _this.hud.annoState.startup(null);
+            if (_this.annotationState === 'annoOnCreateOff') {
+              _this.hud.annoState.displayOn(null);
+            } else if (_this.annotationState === 'annoOnCreateOn') {
+              _this.hud.annoState.createOn(null);
+            }
+          } else {
+            // if the current state is not 'none' then we need to update the annotations layer,
+            // with the current state, for the new canvas
+            if (_this.hud.annoState.current === 'annoOnCreateOff') {
+              _this.hud.annoState.refreshCreateOff(null);
+            } else if (_this.hud.annoState.current === 'annoOnCreateOn') {
+              _this.hud.annoState.refreshCreateOn(null);
+            }
           }
 
           // A hack. Pop the osd overlays layer after the canvas so 
@@ -157,7 +190,6 @@
           _this.osd.addHandler('pan', $.debounce(function(){
             _this.setBounds();
           }, 500));
-
         });
       });
     },
@@ -171,7 +203,6 @@
         windowId: _this.windowId,
         element: element
       });
-
     },
 
     updateImage: function(canvasID) {
@@ -186,10 +217,6 @@
         this.osd.close();
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.parent.updateFocusImages([canvasID]);
-        //by default, don't allow a user to be in edit annotation mode when changing pages
-        if (this.hud.annoState.current === "annoOnEditOn") {
-          this.hud.annoState.editOff();
-        }
       } else {
         this.parent.updateFocusImages([canvasID]);
       }
