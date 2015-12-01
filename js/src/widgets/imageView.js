@@ -92,7 +92,7 @@
             height: _this.osdOptions.osdBounds.height
           }
       });
-      var rectangle = _this.osdViewer.viewport.viewportToImageRectangle(this.osdOptions.osdBounds);
+      var rectangle = this.osd.viewport.viewportToImageRectangle(this.osdOptions.osdBounds);
       jQuery.publish("imageRectangleUpdated", {
         id: _this.parent.id,
         osdBounds: {
