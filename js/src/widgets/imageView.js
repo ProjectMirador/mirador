@@ -92,6 +92,16 @@
             height: _this.osdOptions.osdBounds.height
           }
       });
+      var rectangle = _this.osdViewer.viewport.viewportToImageRectangle(this.osdOptions.osdBounds);
+      jQuery.publish("imageRectangleUpdated", {
+        id: _this.parent.id,
+        osdBounds: {
+          x: Math.round(rectangle.x),
+          y: Math.round(rectangle.y),
+          width: Math.round(rectangle.width),
+          height: Math.round(rectangle.height)
+        }
+      });
     },
 
     toggle: function(stateValue) {
