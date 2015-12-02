@@ -24,7 +24,7 @@
 		accepts: 'application/json',
 		dataType: 'json',
 		processData: false,
-		data: requestBody
+		data: JSON.stringify(requestBody)
 	};
 
 	return ajaxSettings;
