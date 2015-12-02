@@ -21,7 +21,7 @@
 		type: method,
 		url: getAPIUri(relURI, ssl),
 		contentType: 'application/json; charset=UTF-8',
-		accepts: 'application/json',
+		accept: 'application/json',
 		dataType: 'json',
 		processData: false,
 		data: JSON.stringify(requestBody)
