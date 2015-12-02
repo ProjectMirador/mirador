@@ -27,6 +27,7 @@
     jQuery.extend(this, {
       token:     null,
       // prefix:    'annotation', /**/
+      uri:      null,
       url:		  options.url,
       dfd:       null,
       annotationsList: [],        //OA list for Mirador use
@@ -51,7 +52,7 @@
           'admin':  [this.userid]
         }
       };
-      this.search(this.url);
+      this.search({ uri: this.uri });
     },
 
     //Search endpoint for all annotations with a given URI
