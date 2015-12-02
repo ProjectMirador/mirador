@@ -104,6 +104,10 @@
       this.bindEvents();
       // retrieve manifests
       this.getManifestsData();
+
+      if (this.windowObjects.length === 0 && this.openManifestsPage) {
+        this.workspace.slots[0].addItem();
+      }
     },
 
     bindEvents: function() {
