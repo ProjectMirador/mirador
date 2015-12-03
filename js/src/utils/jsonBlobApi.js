@@ -17,6 +17,7 @@
   }
 
   function initSettings(method, relURI, ssl, requestBody) {
+
 	var ajaxSettings = {
 		type: method,
 		url: getAPIUri(relURI, ssl),
@@ -57,12 +58,12 @@
 		return syncRequest('GET', blobId, this.options.ssl);
 	},
 	save: function(blob) {
-		var promise = jQuery.Deferred().promise();
+		var deferred = jQuery.Deferred();
 		asyncRequest('POST', '', this.options.ssl, blob, function(data, textStatus, request) {
 			var blobid = request.getResponseHeader('X-Jsonblob');
-			promise.resolve(blobid);
+			deferred.resolve(blobid);
 		});
-		return promise;
+		return deferred.promise();
 	}
   };
 
