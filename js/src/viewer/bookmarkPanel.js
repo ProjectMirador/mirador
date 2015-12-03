@@ -32,7 +32,7 @@
       jQuery.subscribe('saveControllerConfigUpdated', function() {
         _this.storageModule.save(Mirador.saveController.currentConfig)
           .then(function(blobId) {
-            var bookmarkURL = window.location.href.replace(window.location.hash, '') + "?json="+jsonblob;
+            var bookmarkURL = window.location.href.replace(window.location.hash, '') + "?json="+blobId;
             _this.element.find('#share-url').val(bookmarkURL).focus().select();
 	         });
       });
