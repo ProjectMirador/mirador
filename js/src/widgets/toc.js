@@ -321,7 +321,7 @@
 
       Handlebars.registerHelper('tocLevel', function(id, label, level, children) {
         var caret = '<i class="fa fa-caret-right toc-caret"></i>',
-        cert = '<i class="fa fa-certificate star"></i>';
+        cert = '<i class="fa star"></i>';
         return '<h' + (level+1) + '><a class="toc-link" data-rangeID="' + id + '"><span>' + label + '</span>' + caret + cert + '</a></h' + (level+1) + '>';
       });
 

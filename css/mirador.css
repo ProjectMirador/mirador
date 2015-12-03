@@ -591,8 +591,8 @@ li.highlight {
   height:100%;
   float: left;
   /*background-color: #efefef;*/
-  background-color: lightgray;
-  border-right: 1px solid lightgray;
+  background-color: #B6B9BA;
+  border-right: 1px solid #B6B9BA;
   /*display: none;*/
   box-sizing: border-box;
   overflow: hidden;
@@ -941,7 +941,7 @@ li.highlight {
 .mirador-osd-contrast{
   font-size: 103%;
   color: #FFF;
-  width: 135px;
+  width: 175px;
   display: block;
   position: relative;
   margin: 15px 0px;
@@ -950,20 +950,22 @@ li.highlight {
   font-size:103%;
   position: relative;
   color:white;
-  width: 135px;
+  width: 175px;
   display: block;
 }
 
 .brightnessSlider{
-  display: block;
+  display: inline-block;
   margin-top:8px;
   height: 0.4em !important;
+  width: 135px;
   /*height:200px;*/
 }
 .contrastSlider{
-  display: block;
+  display: inline-block;
   margin-top:8px;
   height: 0.4em !important;
+  width: 135px;
   /*height:200px;*/
 }
 .brightnessSlider .ui-slider-handle{
@@ -994,16 +996,18 @@ li.highlight {
   font-size:130%;
   position:relative;
   margin-right:10px;
-
+  top: 20px;
 }
 .mirador-osd-negative-rotate {
   font-size:130%;
   position:relative;
+  top: 20px;
 }
 .mirador-osd-flip {
   font-size:130%;
   position:relative;
   margin-right: 10px;
+  top: 20px;
 }
 .mirador-osd-toggle-grayscale {
   font-size:100%;
@@ -1026,14 +1030,11 @@ li.highlight {
   margin-bottom: 10px;
 }
 .mirador-osd-filters-off {
-  font-size:100%;
-  position:relative;
-  /*right:170px;
-  top:75px;*/
-  display:block;
+  font-size: 100%;
+  position: absolute;
+  display: block;
+  right: 25px;
   cursor: pointer;
-  text-align: left;
-  margin-top: 13px;
 }
 .mirador-osd-filters-off span{
   border: 1px solid white;
@@ -1041,18 +1042,24 @@ li.highlight {
 }
 
 .mirador-pan-zoom-toggle {
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  bottom: 0px;
-  right: 118px;
-  color: green;
-  opacity: 1;
-  padding: 25px 0px;
+    width: 60px;
+    height: 70px;
+    position: absolute;
+    bottom: 70px;
+    right: 0px;
+    color: #008000;
+    opacity: 1;
+    padding: 25px 0px;
 }
+
+.viewImgManip{
+  height: 70px;
+  width: 60px;
+}
+
 .mirador-img-manipulation{
   right:-350px;
-  height: 244px;
+  height: 289px;
   width: auto;
   position: absolute;
   background-color: black;
@@ -1060,6 +1067,7 @@ li.highlight {
   opacity:1 !important;
   text-align: left;
   bottom: 0px;
+  font-size: 88%;
 }
 .mirador-osd-up {
   position:absolute;
@@ -1818,7 +1826,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   top: 0;
   box-sizing: border-box;
   background-color: rgba(255,255,255,0.9);
-  z-index: 3;
+  z-index: 4;
   width: 45%;
   overflow-y: scroll;
   max-height: 90%;
@@ -1847,4 +1855,13 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   margin: 5px 2px;
   text-align: left;
   max-width: 400px;
+}
+
+.imgManipIcon{
+  display: inline-block;
+  position: relative;
+  height: 30px;
+  width: 30px;
+  margin-left: 10px;
+  top: 8px;
 }

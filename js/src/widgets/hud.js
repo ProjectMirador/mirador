@@ -248,9 +248,9 @@
           osd.viewport.viewer.canvas.parentNode.style.mozFilter = "";
           osd.viewport.viewer.canvas.parentNode.style.filter = "";
           osd.viewport.setRotation(0);
-          osd.viewport.zoomTo(0);
-          parentElement.find(".brightnessSlider").slider("option","value",100); //reset sliders.
-          parentElement.find(".contrastSlider").slider("option","value",100); //reset sliders.
+          //osd.viewport.zoomTo(1);
+          jQuery(".brightnessSlider").slider("option","value",100); //reset sliders.
+          jQuery(".contrastSlider").slider("option","value",100); //reset sliders.
           osd.viewport.applyConstraints();
         }
         else{
@@ -259,28 +259,28 @@
           osd.canvas.parentNode.style.webkitFilter = "";
           osd.canvas.parentNode.style.mozFilter = "";
           osd.canvas.parentNode.style.filter = "";
-          // osd.viewport.setRotation(0);
+          //osd.viewport.setRotation(0);
           // osd.viewport.zoomTo(0);
-          parentElement.find(".brightnessSlider").slider("option","value",100); //reset sliders.
-          parentElement.find(".contrastSlider").slider("option","value",100); //reset sliders.
+          jQuery(".brightnessSlider").slider("option","value",100); //reset sliders.
+          jQuery(".contrastSlider").slider("option","value",100); //reset sliders.
           osd.applyConstraints();
         }
       });
 
       this.parent.element.find('.mirador-pan-zoom-toggle').on('click', function(event){
         event = event || window.event;
-        if(event.target.className == "fa fa-2x fa-mail-forward"){
-          event.target.className = "fa fa-2x fa-mail-reply";
-          event.target.parentNode.style.right = "118px";
+        if(event.target.className.indexOf("opened") > -1 ){
+          event.target.className = "viewImgManip closed";
+          event.target.parentNode.style.right = "0px";
           event.target.parentNode.nextSibling.style.right = "-350px";
           event.target.parentNode.previousSibling.style.right = "0px";
           event.target.parentNode.setAttribute("title", "View Image Manipulation Tools");
         }
-        else if (event.target.className == "fa fa-2x fa-mail-reply"){
-          event.target.className = "fa fa-2x fa-mail-forward";
+        else if (event.target.className.indexOf("closed") > -1){
+          event.target.className = "viewImgManip opened";
           event.target.parentNode.nextSibling.style.right = "0px";
-          event.target.parentNode.previousSibling.style.right = "173px";
-          event.target.parentNode.style.right = "310px";
+          event.target.parentNode.previousSibling.style.right = "194px";
+          event.target.parentNode.style.right = "206px";
           event.target.parentNode.setAttribute("title", "Hide Image Manipulation Tools");
         }
         else{
@@ -758,22 +758,24 @@
                                  '</a>',
                                  '</div>',
                                  '<div title="View Image Manipulation Tools" class="mirador-pan-zoom-toggle hud-control">',
-                                 '<i class="fa fa-2x fa-mail-reply"></i>',
+                                 '<img class="viewImgManip closed" src="../brokenBooks/images/imageadjust.png">',
                                  '</div>',
                                  '<div class="mirador-img-manipulation hud-control">',
-                                 '<div title="Change Image Brightness" class="mirador-osd-brightness">',
+                                 '<div title="Change Image Brightness" class="mirador-osd-brightness hud-control">',
                                  '<span>Brightness</span>',
                                  '<span class="brightnessSlider"></span>',
+                                 '<img class="imgManipIcon" src="../brokenBooks/images/brightness.png">',
                                  '</div>',
-                                 '<div title="Change Image Contrast" class="mirador-osd-contrast">',
+                                 '<div title="Change Image Contrast" class="mirador-osd-contrast hud-control">',
                                  '<span>Contrast</span>',
                                  '<span class="contrastSlider"></span>',
+                                 '<img class="imgManipIcon" src="../brokenBooks/images/contrast.png">',
                                  '</div>',
                                  '<a title="Toggle Grayscale" class="mirador-osd-toggle-grayscale hud-control">',
-                                 '<span>gray</span>',
+                                 '<span>Grayscale</span><img class="imgManipIcon" src="../brokenBooks/images/grayscale.png">',
                                  '</a>',
                                  '<a title="Invert Colors" class="mirador-osd-toggle-invert hud-control">',
-                                 '<span>invert<span>',
+                                 '<span>Invert<span><img class="imgManipIcon" src="../brokenBooks/images/invert.png">',
                                  '</a>',
                                  '<a title="Rotate +180 degrees" class="mirador-osd-flip hud-control">',
                                  '<i class="fa fa-refresh"></i>',
