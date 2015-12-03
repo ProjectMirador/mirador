@@ -32,6 +32,10 @@
 
     'layout': '1x1',
 
+    'openManifestsPage' : false, //defaults to false, whether or not Mirador should display the manifests page, 
+                                //only valid if no windowObjects have been initialized
+                                //if there are multiple slots, it will be bound to the first slot and the selected manifest will open in that slot
+
     'windowObjects' : [
       /** within a single object, the following options:
        *   "loadedManifest": [manifestURI] e.g. "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/manifest.json"
