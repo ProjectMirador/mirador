@@ -22,6 +22,7 @@
         this.element  = this.element || jQuery('<div/>');
 
         this.init();
+
     };
 
 
