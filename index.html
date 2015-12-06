@@ -50,6 +50,16 @@
                  { "manifestUri": "http://www.e-codices.unifr.ch/metadata/iiif/sl-0002/manifest.json", "location": 'e-codices'},
                  { "manifestUri": "http://www.e-codices.unifr.ch/metadata/iiif/bge-cl0015/manifest.json", "location": 'e-codices'}
              ],
+
+	    'jsonStorageEndpoint': {
+		'name': 'JSONBlob API Endpoint',
+		'module': 'JSONBlobAPI',
+		'options': {
+			'ssl': false,
+			'host': 'localhost',
+			'port': '8080'
+		}
+	    },
             "windowObjects": []
          });
      });
