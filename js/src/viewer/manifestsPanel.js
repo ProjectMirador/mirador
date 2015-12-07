@@ -30,6 +30,9 @@
             //cloning the element and adjusting the display and visibility means it won't break the normal flow
             var clone = this.element.clone().css("visibility","hidden").css("display", "block").appendTo(this.appendTo);
             this.resultsWidth = clone.find('.select-results').outerWidth();
+            this.controlsHeight = clone.find('.manifest-panel-controls').outerHeight();
+            this.paddingListElement = this.controlsHeight;
+            this.manifestListElement.css("padding-bottom", this.paddingListElement);
             clone.remove();
             
             // this.manifestLoadStatusIndicator = new $.ManifestLoadStatusIndicator({
@@ -101,25 +104,27 @@
         template: Handlebars.compile([
           '<div id="manifest-select-menu">',
           '<div class="container">',
+            '<div class="manifest-panel-controls">',
+              '<a class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i>{{t "close"}}</a>',
               '<div id="load-controls">',
-              '<a class="remove-object-option"><i class="fa fa-times fa-lg fa-fw"></i> {{t "close"}}</a>',
-              '<form action="" id="manifest-search-form">',
+                '{{#if showURLBox}}',
+                  '<form action="" id="url-load-form">',
+                    '<label for="url-loader">{{t "addNewObject"}}:</label>',
+                    '<input type="text" id="url-loader" name="url-load" placeholder="http://...">',
+                    '<input type="submit" value="Load">',
+                  '</form>',
+                '{{/if}}',
+                '<form action="" id="manifest-search-form">',
                   '<label for="manifest-search">{{t "filterObjects"}}:</label>',
-                  '<input id="manifest-search" type="text" name="manifest-filter" placeholder="{{t "filterObjects"}}...">',
-              '</form>',
-              '{{#if showURLBox}}',
-              '<br/>',
-              '<form action="" id="url-load-form">',
-                  '<label for="url-loader">{{t "addNewObject"}}:</label>',
-                  '<input type="text" id="url-loader" name="url-load" placeholder="http://...">',
-              '</form>',
-              '{{/if}}',
+                  '<input id="manifest-search" type="text" name="manifest-filter">',
+                '</form>',
               '</div>',
+            '</div>',
               '<div class="select-results">',
-                  '<ul class="items-listing">',
-                  '</ul>',
+                '<ul class="items-listing">',
+                '</ul>',
               '</div>',
-              '</div>',
+          '</div>',
           '</div>'
         ].join(''))
     };

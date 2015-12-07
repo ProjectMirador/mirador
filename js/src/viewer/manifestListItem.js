@@ -12,9 +12,8 @@
       resultsWidth:               0,  // based on screen width
       maxPreviewImagesWidth:      0,
       repoWidth:                  80,
-      metadataWidth:              200,
+      metadataWidth:              450,
       margin:                     15,
-      remainingItemsMinWidth:     80, // set a minimum width for the "more" image
       imagesTotalWidth:           0,
       tplData:                    null,
       allImages:                  []
@@ -30,15 +29,16 @@
       var _this = this;
       //need a better way of calculating this because JS can't get width and margin of hidden elements, so must manually set that info
       //ultimately use 95% of space available, since sometimes it still displays too many images
-      this.maxPreviewImagesWidth = this.resultsWidth - (this.repoWidth + this.margin + this.metadataWidth + this.margin + this.remainingItemsMinWidth);
+      //this.maxPreviewImagesWidth = this.resultsWidth - (this.repoWidth + this.margin + this.metadataWidth + this.margin + this.remainingItemsMinWidth);
+      this.maxPreviewImagesWidth = this.resultsWidth - (this.repoWidth + this.margin + this.metadataWidth + this.margin);
       this.maxPreviewImagesWidth = this.maxPreviewImagesWidth * 0.95;
 
       this.fetchTplData(this.manifestId);
       this.element = jQuery(this.template(this.tplData)).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
 
-      var remainingOffset = this.repoWidth + this.margin + this.metadataWidth + this.margin + this.imagesTotalWidth;
-      _this.noiseImage = $.viewer.buildPath + $.viewer.imagesPath + 'noise.png';
-      this.element.find('.remaining-items').css('left', remainingOffset).css('background-image','url('+_this.noiseImage+')').css('background-repeat','repeat');
+      //var remainingOffset = this.repoWidth + this.margin + this.metadataWidth + this.margin + this.imagesTotalWidth;
+      //_this.noiseImage = $.viewer.buildPath + $.viewer.imagesPath + 'noise.png';
+      //this.element.find('.remaining-items').css('left', remainingOffset).css('background-image','url('+_this.noiseImage+')').css('background-repeat','repeat');
 
       this.bindEvents();
     },
@@ -142,7 +142,8 @@
       });
 
       jQuery.subscribe('manifestPanelWidthChanged', function(event, newWidth){
-        var newMaxPreviewWidth = newWidth - (_this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.remainingItemsMinWidth),
+        //var newMaxPreviewWidth = newWidth - (_this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.remainingItemsMinWidth),
+        var newMaxPreviewWidth = newWidth - (_this.repoWidth + _this.margin + _this.metadataWidth + _this.margin),
         remainingOffset = 0,
         remaining,
         newRemaining;
@@ -165,7 +166,7 @@
             } else {
               //add the remaining element
               newRemaining = 1;
-              _this.element.find('.preview-images').after('<div class="remaining-items"><h3><span class="remaining-amount">'+newRemaining+'</span> more</h3></div>');
+              //_this.element.find('.preview-images').after('<div class="remaining-items"><h3><span class="remaining-amount">'+newRemaining+'</span> more</h3></div>');
             }
 
             //update size of "More" icon
@@ -207,7 +208,7 @@
             }
           }
         }
-        _this.maxPreviewImagesWidth = newMaxPreviewWidth;
+        //_this.maxPreviewImagesWidth = newMaxPreviewWidth;
       });
     },
 
@@ -220,26 +221,32 @@
     },
 
     template: Handlebars.compile([
-                                 '<li>',
-                                 '<div class="repo-image">',
-                                 '<img src="{{repoImage}}" alt="repoImg">',
-                                 '</div>',
-                                 '<div class="select-metadata">',
-                                 '<h3 class="manifest-title">{{label}}</h3>',
-                                 '<h4>{{canvasCount}} {{t "items"}}</h4>',
-                                 '{{#if repository}}',
-                                 '<h4 class="repository-label">{{repository}}</h4>',
-                                 '{{/if}}',
-                                 '</div>',
-                                 '<div class="preview-images">',
-                                 '{{#each images}}',
-                                 '<img src="{{url}}" width="{{width}}" height="{{height}}" class="preview-image flash" data-image-id="{{id}}">',
-                                 '{{/each}}',
-                                 '</div>',
-                                 '{{#if remaining}}',
-                                 '<div class="remaining-items"><h3><span class="remaining-amount">{{remaining}}</span> {{t "more"}}</h3></div>',
-                                 '{{/if}}',
-                                 '</li>'
+      '<li>',
+      '<div class="repo-image">',
+        '<img src="{{repoImage}}" alt="repoImg">',
+      '</div>',
+      '<div class="select-metadata">',
+        '<div class="manifest-title">',
+          '<h3>{{label}}</h3>',
+        '</div>',
+        '<div class="item-info">',
+          '<div class="item-info-row">',
+            '{{#if repository}}',
+              '<div class="repo-label">{{repository}}</div>',
+            '{{/if}}',
+            '<div class="canvas-count">{{canvasCount}} {{t "items"}}</div>',
+          '</div>',
+        '</div>',
+      '</div>',
+      '<div class="preview-images">',
+      '{{#each images}}',
+        '<img src="{{url}}" width="{{width}}" height="{{height}}" class="preview-image flash" data-image-id="{{id}}">',
+      '{{/each}}',
+      '</div>',
+      '{{#if remaining}}',
+        '<div class="ellipsis">&hellip;</div>',
+      '{{/if}}',
+      '</li>'
     ].join(''))
   };
 
