@@ -144,7 +144,9 @@
 	'name': 'JSONBlob API Endpoint',
 	'module': 'JSONBlobAPI',
 	'options': {
-		'ssl': true
+		'ssl': true,
+		'port': '443',
+		'host': 'jsonblob.com'
 	}
     },
 

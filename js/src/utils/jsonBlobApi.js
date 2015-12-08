@@ -1,39 +1,52 @@
 (function($){
 
-  var JSONBLOB_API_BASE = 'jsonblob.com/api/jsonBlob';
+  var JSONBLOB_API_ENDPOINT = '/api/jsonBlob';
 
-  function getAPIUri(relURI, ssl) {
+  function getAPIUri(host, port, ssl, body) {
 
 	var proto = 'http';
+	port = port ? port : '80';
+
 	if ( ssl ) {
 		proto = 'https';
+		port = port ? port : '443';
 	}
 
-	if ( typeof relURI !== 'undefined'  && relURI.length > 0) {
-		return proto + '://' + JSONBLOB_API_BASE + '/' + relURI;
+	host = host ? host : 'jsonblob.com';
+
+	var path = JSONBLOB_API_ENDPOINT;
+
+        // If the body is a string, this is a blob GET operation, 
+	// otherwise it's a POST	
+        if ( typeof body === 'string' || body instanceof String ){
+		path += '/' + body;
 	}
 
-	return proto + '://' + JSONBLOB_API_BASE;
+	return proto + '://' + host + ':' + port + path;
   }
 
-  function initSettings(method, relURI, ssl, requestBody) {
+  function initSettings(method, host, port, ssl, requestBody) {
 
 	var ajaxSettings = {
 		type: method,
-		url: getAPIUri(relURI, ssl),
+		url: getAPIUri(host, port, ssl, requestBody),
 		contentType: 'application/json; charset=UTF-8',
 		accept: 'application/json',
 		dataType: 'json',
-		processData: false,
-		data: JSON.stringify(requestBody)
+		processData: false
 	};
+
+	// POST The data
+        if ( typeof requestBody  !== 'string' && !(requestBody instanceof String) ) {
+		ajaxSettings.data = JSON.stringify(requestBody);
+	}
 
 	return ajaxSettings;
   }
 
-  function syncRequest(method, relURI, ssl, requestBody) {
+  function syncRequest(method, host, port, ssl, requestBody) {
 	var result;
-	var settings = initSettings(method, relURI, ssl, requestBody);
+	var settings = initSettings(method, host, port, ssl, requestBody);
 	settings.async = false;
 	settings.success = function(data, textStatus, request) {
           result = data;
@@ -42,8 +55,8 @@
 	return result;
   }
 
-  function asyncRequest(method, relURI, ssl, requestBody, cb) {
-	var settings = initSettings(method, relURI, ssl, requestBody);
+  function asyncRequest(method, host, port, ssl, requestBody, cb) {
+	var settings = initSettings(method, host, port, ssl, requestBody);
 	settings.success = cb;
 	jQuery.ajax(settings);
   }
@@ -55,11 +68,11 @@
 
   $.JSONBlobAPI.prototype = {
 	readSync: function(blobId) {
-		return syncRequest('GET', blobId, this.options.ssl);
+		return syncRequest('GET', this.options.host, this.options.port, this.options.ssl, blobId);
 	},
 	save: function(blob) {
 		var deferred = jQuery.Deferred();
-		asyncRequest('POST', '', this.options.ssl, blob, function(data, textStatus, request) {
+		asyncRequest('POST', this.options.host, this.options.port, this.options.ssl, blob, function(data, textStatus, request) {
 			var blobid = request.getResponseHeader('X-Jsonblob');
 			deferred.resolve(blobid);
 		});
