@@ -82,12 +82,12 @@
               event.preventDefault();
             });
 
-            jQuery(window).resize($.debounce(function(){
+            jQuery(window).resize($.throttle(function(){
               var clone = _this.element.clone().css("visibility","hidden").css("display", "block").appendTo(_this.appendTo);
               _this.resultsWidth = clone.find('.select-results').outerWidth();
               clone.remove();
               jQuery.publish("manifestPanelWidthChanged", _this.resultsWidth);
-            }, 100));
+            }, 50, true));
         },
         
         hide: function() {
