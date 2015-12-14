@@ -184,7 +184,10 @@
                                  // '<li class="add-slot-below"><i class="fa fa-caret-square-o-down fa-lg fa-fw"></i> {{t "addSlotBelow"}}</li>',
                                  // '</ul>',
                                  // '</a>',
-                                '<h1 class="plus">',
+                                 // accessbility-wise it's really bad practice to have h1 tags be used like this
+                                 // most screen reader users get a sense of where they are based on header tags
+                                 // if these are merely h1 tags for aesthetic purposes, it might be better to make them specific classes
+                                '<h1 class="plus" role="presentation" aria-label="Add item using Link">',
                                     '<span>+</span>',
                                 '<div class="dropIcon">',
                                     '<i class="fa fa-level-down"></i>',
@@ -193,7 +196,7 @@
                                  '<h1 class="addItemText">{{t "addItem"}}</h1>',
                                  '<h1 class="dropMeMessage">Drop to Load Manifest</h1>',
                                  '</div>',
-                                 '<a class="addItemLink"></a>',
+                                 '<a class="addItemLink" role="button" aria-label="Add item"></a>',
                                  '<a class="remove-slot-option"><i class="fa fa-times fa-lg fa-fw"></i> {{t "close"}}</a>',
       '<a class="dropMask"></a>',
                                  '</div>'
