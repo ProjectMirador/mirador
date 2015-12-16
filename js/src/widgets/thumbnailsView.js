@@ -163,9 +163,9 @@
 
     template: Handlebars.compile([
                                  '<div class="{{thumbnailCls}}">',
-                                 '<ul class="{{listingCssCls}}">',
+                                 '<ul class="{{listingCssCls}}" role="list" aria-label="Thumbnails">',
                                  '{{#thumbs}}',
-                                 '<li class="{{highlight}}">',
+                                 '<li class="{{highlight}}" role="listitem" aria-label="Thumbnail">',
                                  '<img class="thumbnail-image {{highlight}}" title="{{title}}" data-image-id="{{id}}" src="" data="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',
                                  '<div class="thumb-label">{{title}}</div>',
                                  '</li>',
