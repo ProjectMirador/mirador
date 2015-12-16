@@ -34,6 +34,14 @@
       this.maxPreviewImagesWidth = this.resultsWidth - (this.repoWidth + this.margin + this.metadataWidth + this.margin + this.remainingWidth);
       this.maxPreviewImagesWidth = this.maxPreviewImagesWidth * 0.95;
 
+      Handlebars.registerHelper('pluralize', function(count, singular, plural) {
+        if (count === 1) {
+          return singular;
+        } else {
+          return plural;
+        }
+      });
+
       this.fetchTplData(this.manifestId);
       this.element = jQuery(this.template(this.tplData)).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
 
@@ -210,7 +218,7 @@
             '{{#if repository}}',
               '<div class="repo-label">{{repository}}</div>',
             '{{/if}}',
-            '<div class="canvas-count">{{canvasCount}} {{t "items"}}</div>',
+            '<div class="canvas-count">{{canvasCount}} {{pluralize canvasCount (t "item") (t "items")}}</div>',
           '</div>',
         '</div>',
       '</div>',
