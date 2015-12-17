@@ -9,7 +9,7 @@ a {
 }
 
 /* jquery-ui-dialog theming/customisation (overrides to reset neutral defaults)
----------------------------------------------------------------------------- 
+----------------------------------------------------------------------------
  */
   .ui-dialog-titlebar {
     display:none;
@@ -58,7 +58,7 @@ a {
 
 /*----------------------------------------------------------------------------
 /* Mirador styles
----------------------------------------------------------------------------- 
+----------------------------------------------------------------------------
  */
 
   .mirador-viewer, .mirador-main-menu-bar, .mirador-status-bar {
@@ -213,7 +213,7 @@ a {
 }
 
 
-/* main menu select menu 
+/* main menu select menu
 ---------------------------------------------------------------------------- */
   #manifest-select-menu, #workspace-select-menu, #workspaceContainer {
     position: absolute;
@@ -621,18 +621,103 @@ li.highlight {
   box-sizing: border-box;
 }
 
+
 .sidePanel {
+    position:absolute;
+  width:280px;
+  left: 0;
+  bottom: 0;
+  top:0;
+  background-color: #efefef;
+  border-right: 1px solid lightgray;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  padding: 10px;
+  opacity:1;
+  transition: all 0.2s ease-out;
+  transform: translateX(0);
+}
+
+.sidePanel.minimized {
+    transition: all 0.2s ease-out;
+    transform: translateX(-280px);
+    opacity:0;
+    border:none;
+}
+
+.tabContentArea {
   position: relative;
   width:280px;
   height:100%;
   float: left;
   background-color: #efefef;
   border-right: 1px solid lightgray;
-  /*display: none;*/
   box-sizing: border-box;
   overflow: hidden;
-  transition: all 0s ease;
+  transition: all 0.3s ease;
 }
+
+.sidePanel .tabGroup {
+    list-style-type:none;
+    margin:0;
+    padding:0;
+}
+
+.sidePanel .tab {
+    padding: 4px 6px;
+    border-left:0;
+    border-bottom: 2px solid black;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 3px 3px 0 0;
+}
+
+.sidePanel .tab:not(.selected):hover {
+    border: 2px solid rgba(0,0,0,0.3);
+    border-bottom: 2px solid black;
+    padding:4px 4px;
+}
+
+.sidePanel .tab.selected {
+    border: 2px solid black;
+    border-bottom:0;
+    border-radius: 3px 3px 0 0;
+    margin: 0 -2px;
+}
+.annotationsPanel ul {
+    padding:0;
+    margin:0;
+ }
+.sidePanel .annotationListItem {
+    list-style-type: none;
+    border-left:0;
+    border-right:0;
+    padding:10px 10px 0 10px;
+}
+.sidePanel .annotationListItem:after {
+                 content: "";
+                 height: 1px;
+                 background: linear-gradient(to right,  rgba(0,0,0,0) 0%,rgba(147,147,147,1) 50%,rgba(0,0,0,0) 100%);
+
+                 display: block;
+                 margin-top: 10px;
+             }
+.sidePanel .annotationListItem.focused {
+    background-color: #ddd;
+    border-left: 3px solid lightBlue;
+}
+
+.sidePanel .annotationListItem:hover {
+    background-color: #ddd;
+    border-left: 3px solid lightBlue;
+}
+
+.sidePanel .annotationListItem.selected {
+    background-color: #ccc;
+    border-left: 3px solid deepskyblue;
+}
+
 .sidePanel a:hover {
   text-decoration: none;
 }
@@ -895,7 +980,7 @@ li.highlight {
 
 /* Canvas HUD
 ----------------------- */
-  .mirador-canvas-hud { 
+  .mirador-canvas-hud {
     position:absolute;
     left: 0;
     top:0;
@@ -1207,7 +1292,7 @@ text {
 }
 .annotation, .osd-select-rectangle {
   border: 2px solid deepSkyBlue;
-  box-shadow: 0px 0px 5px white; 
+  box-shadow: 0px 0px 5px white;
   box-sizing: border-box;
 }
 .annotation.selected {
@@ -1530,14 +1615,14 @@ ul.dropdown {
   margin:0;
   cursor: pointer;
   box-sizing: border-box;
-  background-color: #dddddd;  
+  background-color: #dddddd;
   padding: 10px;
   width:100%;
   text-align:left;
 }
 .dropdown li:hover {
   border-left: 3px solid deepskyblue;
-  background-color: #dddddd;  
+  background-color: #dddddd;
   padding-left: 7px;
   font-weight: bold;
 }
@@ -1594,8 +1679,8 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   color: black;
 }
 
-.mirador-viewer a.mirador-icon-image-view.selected, 
-.mirador-viewer a.mirador-icon-thumbs-view.selected, 
+.mirador-viewer a.mirador-icon-image-view.selected,
+.mirador-viewer a.mirador-icon-thumbs-view.selected,
 .mirador-viewer a.mirador-icon-toc.selected,
 .mirador-viewer a.mirador-icon-metadata-view.selected {
   color: black;
@@ -1625,7 +1710,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   overflow: auto;
 }
 .annotation-tooltip {
-  padding: 7px; 
+  padding: 7px;
 }
 .annotation-display {
   position:relative;
@@ -1693,7 +1778,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   color: #222;
   border-radius: 6px;
   padding: 0 5px;
-  margin-right:5px; 
+  margin-right:5px;
   margin-bottom: 5px;
   text-align: center;
   font-size: 12;
@@ -1705,4 +1790,3 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 .mce-edit-area iframe {
     height: 75px !important;
 }
-
