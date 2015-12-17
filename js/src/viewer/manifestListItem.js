@@ -211,7 +211,7 @@
       '</div>',
       '<div class="select-metadata">',
         '<div class="manifest-title">',
-          '<h3>{{label}}</h3>',
+          '<h3 title="{{label}}">{{label}}</h3>',
         '</div>',
         '<div class="item-info">',
           '<div class="item-info-row">',
