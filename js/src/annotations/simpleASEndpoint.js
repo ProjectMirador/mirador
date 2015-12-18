@@ -52,7 +52,6 @@
           'admin':  [this.userid]
         }
       };
-      this.search({ uri: this.uri });
     },
 
     //Search endpoint for all annotations with a given URI
