@@ -89,7 +89,9 @@
     ],
 
     'availableAnnotationDrawingTools': [
-
+      /** possible drawing tools:
+       * 'Rectangle', 'Ellipse', 'Freehand', 'Polygon', 'Pin'
+       **/
     ],
     
     'availableCanvasTools': [
