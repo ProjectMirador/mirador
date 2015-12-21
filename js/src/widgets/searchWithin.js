@@ -60,14 +60,22 @@
     var _this = this;
     tplData = [];
     searchResults.resources.forEach(function(result){
-      var canvasid = result.on.split("#")[0];
-      var coordinates = result.on.split("#")[1];
-      //not sure how to get canvas label so I'm just hacking it for the moment
-      var canvaslabel = canvasid.split("/").pop();
+      // Set to resouce.on, which is usually a simple String ID
+      var canvasid = result.on;
+      var canvaslabel = result.label;
+
+      // If resource.on is an Object, containing extra information about the
+      // parent object, set ID appropriately
+      if (typeof canvasid === 'object') {
+        canvasid = result.on['@id'];
+      }
+
+      // Split ID from Coordinates if necessary
+      var id_parts = _this.splitBaseUrlAndCoordinates(canvasid);
 
       resultobject = {
-        canvasid: canvasid,
-        coordinates: coordinates,
+        canvasid: id_parts.base,
+        coordinates: id_parts.coords,
         canvaslabel: canvaslabel,
         resulttext: result.resource.chars
       };
@@ -99,20 +107,11 @@
         }
 
         // Extract coordinates if necessary
-        var coordinates;
-        if (typeof canvasid === 'string') {
-          // Separate base ID from fragment selector
-          var parts = canvasid.split('#');
-
-          canvasid = parts[0];
-          if (parts.length === 2) {
-            coordinates = parts[1];
-          }
-        }
+        var id_parts = _this.splitBaseUrlAndCoordinates(canvasid);
 
         resultobject = {
-          canvasid: canvasid,
-          coordinates: coordinates,
+          canvasid: id_parts.base,
+          coordinates: id_parts.coords,
           canvaslabel: canvaslabel,
           resulttext: (hit.before ? hit.before : '') +
                       "<span style='background-color: yellow'>" +
@@ -131,6 +130,33 @@
     return searchResults.resources.filter(function(resource){
       return resource['@id'] === annotationid;
     });
+  },
+
+  /**
+   * @param  url - a resource ID
+   * @return {
+   *   base: base URL, or the original url param if no coords are present,
+   *   coords: coordinates from ID if present
+   * }
+   */
+  splitBaseUrlAndCoordinates: function(url) {
+    var coordinates;
+    var base = url;
+
+    if (typeof url === 'string') {
+      // Separate base ID from fragment selector
+      var parts = url.split('#');
+
+      base = parts[0];
+      if (parts.length === 2) {
+        coordinates = parts[1];
+      }
+    }
+
+    return {
+      base: base,
+      coords: coordinates
+    };
   },
 
   bindEvents: function() {
