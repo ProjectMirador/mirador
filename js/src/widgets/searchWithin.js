@@ -15,18 +15,17 @@
     this.init();
   };
 
-
   $.SearchWithin.prototype = {
 
     init: function() {
-      
+
       var _this = this;
-          
+
       _this.searchService = this.manifest.getSearchWithinService();
-      
+
       jQuery(this.appendTo).html("");
       jQuery("<h1>Search results for: " + _this.query + "</h1>").appendTo(_this.appendTo);
-      
+
       var searchRequest = this.searchRequest(this.query);
 
       searchRequest.done(function(searchResults) {
@@ -39,7 +38,7 @@
           _this.tplData = _this.getSearchAnnotations(searchResults);
         }
 
-        //add array to template 
+        //add array to template
         _this.element = jQuery(_this.template(_this.tplData)).appendTo(_this.appendTo);
         //bind events
         _this.bindEvents();
@@ -65,13 +64,15 @@
       var coordinates = result.on.split("#")[1];
       //not sure how to get canvas label so I'm just hacking it for the moment
       var canvaslabel = canvasid.split("/").pop();
-      
-      resultobject = {canvasid: canvasid,
-                      coordinates: coordinates,
-                      canvaslabel: canvaslabel,
-                      resulttext: result.resource.chars}; 
 
-      tplData.push(resultobject);              
+      resultobject = {
+        canvasid: canvasid,
+        coordinates: coordinates,
+        canvaslabel: canvaslabel,
+        resulttext: result.resource.chars
+      };
+
+      tplData.push(resultobject);
     });
     return tplData;
   },
@@ -80,38 +81,56 @@
       tplData = [];
       searchResults.hits.forEach(function(hit){
         //this seems like a really slow way to retrieve on property from hits
-        //note that at present it is only retrieving the first annotation 
+        //note that at present it is only retrieving the first annotation
         //but a hit annotation property takes an array and could have more than one
         //annotation -- its not a very common case but a possibility.
         var annotation = hit.annotations[0];
         //canvases could come back as an array
-        var canvases = _this.getHitCanvases(searchResults, annotation);
-        
-        var canvasid = canvases[0].split("#")[0];
-        var coordinates = canvases[0].split("#")[1];
-        //not sure how to get canvas label so I'm just hacking it for the moment
-        var canvaslabel = canvasid.split("/").pop();
-        
-        resultobject = {canvasid: canvasid,
-                        coordinates: coordinates,
-                        canvaslabel: canvaslabel,
-                        resulttext: hit.before + "<span style='background-color: yellow'>" + hit.match + "</span>" + hit.after}; 
+        var canvases = _this.getHitResources(searchResults, annotation);
 
-        tplData.push(resultobject);              
+        var resource = canvases[0];
+        var canvasid = resource;
+        var canvaslabel = resource;
+
+        // If you have the full annotation, set ID and label appropriately
+        if (typeof canvasid === 'object') {
+          canvasid = resource.on['@id'];
+          canvaslabel = resource.label;
+        }
+
+        // Extract coordinates if necessary
+        var coordinates;
+        if (typeof canvasid === 'string') {
+          // Separate base ID from fragment selector
+          var parts = canvasid.split('#');
+
+          canvasid = parts[0];
+          if (parts.length === 2) {
+            coordinates = parts[1];
+          }
+        }
+
+        resultobject = {
+          canvasid: canvasid,
+          coordinates: coordinates,
+          canvaslabel: canvaslabel,
+          resulttext: (hit.before ? hit.before : '') +
+                      "<span style='background-color: yellow'>" +
+                      hit.match +
+                      "</span>" +
+                       (hit.after ? hit.after : '')
+        };
+
+        tplData.push(resultobject);
       });
     return tplData;
   },
 
-  getHitCanvases: function(searchResults, annotationid){
-    var results = [];
-    searchResults.resources.forEach(function(resource){
-      if (resource["@id"] === annotationid){
-        results.push(resource.on);
-      }
-    //should return an array of canvasids; 
-    //in most cases there will only be one result in that array
+  getHitResources: function(searchResults, annotationid){
+    // Get array of results
+    return searchResults.resources.filter(function(resource){
+      return resource['@id'] === annotationid;
     });
-    return results;
   },
 
   bindEvents: function() {
@@ -122,7 +141,7 @@
       var coordinates = jQuery(this).attr('data-coordinates');
       jQuery(".result-wrapper").css("background-color", "inherit");
       jQuery(this).parent().css("background-color", "lightyellow");
-      //if there was more than one annotation 
+      //if there was more than one annotation
       //(for example if a word crossed a line and needed two coordinates sets)
       //the miniAnnotationList should have multiple objects
       miniAnnotationList  = [
@@ -134,13 +153,15 @@
                                 "@type": "cnt:ContentAsText",
                                 "chars": _this.query
                               },
-                              "on": canvasid + "#" + coordinates
+                              "on": canvasid + (coordinates ? "#" + coordinates : '')
                               }
-                            ]; 
-      
+                            ];
+
       _this.parent.annotationsList = miniAnnotationList;
-      _this.parent.toggleImageView(canvasid);
-      
+      // _this.parent.toggleImageView(canvasid);
+console.log("Clicked canvas ID: " + canvasid);
+
+      _this.parent.setCurrentCanvasID(canvasid);
     });
   },
 
@@ -149,15 +170,15 @@
   template: Handlebars.compile([
             '{{#each this}}',
             "<div class='result-wrapper'>",
-            "<a style='cursor: pointer;' class='js-show-canvas' data-canvasid='{{canvasid}}' data-coordinates='{{coordinates}}'>Canvas ", 
+            "<a class='search-result search-title js-show-canvas' data-canvasid='{{canvasid}}' data-coordinates='{{coordinates}}'>",
             "{{canvaslabel}}",
             "</a>",
-            "<div style='cursor: pointer;' class='result-paragraph js-show-canvas' data-canvasid='{{canvasid}}' data-coordinates='{{coordinates}}'>", 
+            "<div class='search-result result-paragraph js-show-canvas' data-canvasid='{{canvasid}}' data-coordinates='{{coordinates}}'>",
             "{{resulttext}}",
             "</div>",
             "</div>",
             '{{/each}}'
-            ].join(""), { noEscape: true })    
+            ].join(""), { noEscape: true })
 
   };
 

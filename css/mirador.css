@@ -4,7 +4,7 @@ a {
 }
 
 /* jquery-ui-dialog theming/customisation (overrides to reset neutral defaults)
----------------------------------------------------------------------------- 
+----------------------------------------------------------------------------
  */
   .ui-dialog-titlebar {
     display:none;
@@ -19,7 +19,7 @@ a {
 
 /*----------------------------------------------------------------------------
 /* Mirador styles
----------------------------------------------------------------------------- 
+----------------------------------------------------------------------------
  */
 
   .mirador-viewer, .mirador-main-menu-bar, .mirador-status-bar {
@@ -173,7 +173,7 @@ a {
 }
 
 
-/* main menu select menu 
+/* main menu select menu
 ---------------------------------------------------------------------------- */
   #manifest-select-menu, #workspace-select-menu, #workspaceContainer {
     position: absolute;
@@ -857,7 +857,7 @@ li.highlight {
 
 /* Canvas HUD
 ----------------------- */
-  .mirador-canvas-hud { 
+  .mirador-canvas-hud {
     position:absolute;
     left: 0;
     top:0;
@@ -1169,7 +1169,7 @@ text {
 }
 .annotation, .osd-select-rectangle {
   border: 2px solid deepSkyBlue;
-  box-shadow: 0px 0px 5px white; 
+  box-shadow: 0px 0px 5px white;
   box-sizing: border-box;
 }
 .annotation.selected {
@@ -1487,14 +1487,14 @@ ul.dropdown {
   margin:0;
   cursor: pointer;
   box-sizing: border-box;
-  background-color: #dddddd;  
+  background-color: #dddddd;
   padding: 10px;
   width:100%;
   text-align:left;
 }
 .dropdown li:hover {
   border-left: 3px solid deepskyblue;
-  background-color: #dddddd;  
+  background-color: #dddddd;
   padding-left: 7px;
   font-weight: bold;
 }
@@ -1546,8 +1546,8 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   color: black;
 }
 
-.mirador-viewer a.mirador-icon-image-view.selected, 
-.mirador-viewer a.mirador-icon-thumbs-view.selected, 
+.mirador-viewer a.mirador-icon-image-view.selected,
+.mirador-viewer a.mirador-icon-thumbs-view.selected,
 .mirador-viewer a.mirador-icon-toc.selected,
 .mirador-viewer a.mirador-icon-metadata-view.selected {
   color: black;
@@ -1577,7 +1577,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   overflow: auto;
 }
 .annotation-tooltip {
-  padding: 7px; 
+  padding: 7px;
 }
 .annotation-display {
   position:relative;
@@ -1642,7 +1642,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   color: #222;
   border-radius: 6px;
   padding: 0 5px;
-  margin-right:5px; 
+  margin-right:5px;
   margin-bottom: 5px;
   text-align: center;
   font-size: 12;
@@ -1654,7 +1654,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
     height: 75px !important;
 }
 
-/* styles added by me */ 
+/* Search Within */
 .searchResults  {
   overflow: scroll;
   background-color: white;
@@ -1670,5 +1670,14 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 }
 .result-wrapper {
   border-bottom: 1px solid gray;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+.search-result {
+  cursor: pointer;
+}
+.search-title {
+  font-weight: bold;
   margin-bottom: 5px;
+  display: block;
 }
