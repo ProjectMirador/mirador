@@ -15,7 +15,7 @@
 
         var _this = this;
         _this.init();
-        
+
     };
 
     $.ManifestsPanel.prototype = {
@@ -25,7 +25,7 @@
                 showURLBox : this.parent.showAddFromURLBox
             })).appendTo(this.appendTo);
             this.manifestListElement = this.element.find('ul');
-            
+
             //this code gives us the max width of the results area, used to determine how many preview images to show
             //cloning the element and adjusting the display and visibility means it won't break the normal flow
             var clone = this.element.clone().css("visibility","hidden").css("display", "block").appendTo(this.appendTo);
@@ -34,7 +34,7 @@
             this.paddingListElement = this.controlsHeight;
             this.manifestListElement.css("padding-bottom", this.paddingListElement);
             clone.remove();
-            
+
             // this.manifestLoadStatusIndicator = new $.ManifestLoadStatusIndicator({
             //   manifests: this.parent.manifests,
             //   appendTo: this.element.find('.select-results')
@@ -63,7 +63,14 @@
             });
 
             jQuery.subscribe('manifestReceived', function(event, newManifest) {
-              _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifest: newManifest, resultsWidth: _this.resultsWidth }));
+              _this.manifestListItems.push(new $.ManifestListItem({
+                parent: _this,
+                manifest: newManifest,
+                resultsWidth: _this.resultsWidth,
+                repoImages: this.repoImages,
+                logosPath: this.logosPath,
+                buildPath: this.buildPath
+              }));
               _this.element.find('#manifest-search').keyup();
             });
 
@@ -89,7 +96,7 @@
               jQuery.publish("manifestPanelWidthChanged", _this.resultsWidth);
             }, 50, true));
         },
-        
+
         hide: function() {
             var _this = this;
             jQuery(this.element).hide({effect: "fade", duration: 160, easing: "easeOutCubic"});

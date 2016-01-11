@@ -79,11 +79,11 @@
       // add workspace configuration
       this.layout = typeof this.layout !== 'string' ? JSON.stringify(this.layout) : this.layout;
       this.workspace = new $.Workspace({
-        layoutDescription: this.layout.charAt(0) === '{' ? JSON.parse(this.layout) : $.layoutDescriptionFromGridString(this.layout), 
-        parent: this, 
+        layoutDescription: this.layout.charAt(0) === '{' ? JSON.parse(this.layout) : $.layoutDescriptionFromGridString(this.layout),
+        parent: this,
         appendTo: this.element.find('.mirador-viewer')
       });
-      
+
       this.workspacePanel = new $.WorkspacePanel({
         appendTo: this.element.find('.mirador-viewer'),
         parent: this,
@@ -92,8 +92,14 @@
         preserveWindows: this.workspacePanelSettings.preserveWindows,
         workspace: this.workspace
       });
-     
-      this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
+
+      this.manifestsPanel = new $.ManifestsPanel({
+        parent: this,
+        appendTo: this.element.find('.mirador-viewer'),
+        repoImages: this.repoImages,
+        buildPath: this.buildPath,
+        logosPath: this.logosPath
+      });
       this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer'), jsonStorageEndpoint: this.jsonStorageEndpoint });
 
       // set this to be displayed
