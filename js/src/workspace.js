@@ -28,6 +28,7 @@
       this.calculateLayout();
 
       this.bindEvents();
+      this.listenForActions();
     },
 
     get: function(prop, parent) {
@@ -344,6 +345,16 @@
       return this.slots.filter(function(slot) {
         return !slot.window;
       })[0];
+    },
+
+    listenForActions: function() {
+      var _this = this;
+
+      jQuery.subscribe('ADD_WINDOW', function(event, windowConfig) {
+        console.log(event);
+        console.log(windowConfig);
+        _this.addWindow(windowConfig);
+      });
     },
 
     bindEvents: function() {

@@ -79,14 +79,6 @@ module.exports = function(grunt) {
     },
 
     concat: {
-      js: {
-        options: {
-          banner: '//! <%= pkg.name %> <%= pkg.version %>\n' + '//! Built on <%= grunt.template.today("yyyy-mm-dd") %>\n',
-          process: true
-        },
-        src:  [ "<banner>" ].concat(vendors, sources),
-        dest: distribution
-      },
       css: {
         src: [
         'css/normalize.css',
@@ -231,12 +223,12 @@ module.exports = function(grunt) {
       }
     },
 
-    githooks: {
-      all: {
-        'pre-commit': 'jshint cover'
-        // 'post-checkout': 
-      }
-    },
+    // githooks: {
+    //   all: {
+    //     'pre-commit': 'jshint cover'
+    //     // 'post-checkout': 
+    //   }
+    // },
 
     coveralls: {
       options: {
@@ -245,105 +237,6 @@ module.exports = function(grunt) {
       },
       ci: {
         src: 'reports/coverage/PhantomJS 1.9.8 (Mac OS X)/lcov.info'
-      }
-    },
-
-    karma : {
-      options: {
-        basePath: '',
-        frameworks: ['jasmine'],
-        files: [].concat(vendors, sources, specs, ['bower_components/sinon-server/index.js', 'bower_components/jasmine-jquery/lib/jasmine-jquery.js'], {pattern: 'spec/data/manifest.json', included: false} ),
-        exclude: exclude,
-        proxies: {
-          '/spec': 'http://localhost:9876/base/spec'
-        },
-        coverageReporter: {
-          reporters: [
-            {type: 'lcov'},
-            {type: 'html'},
-            {type: 'text-summary'}
-          ],
-          dir: 'reports/coverage'
-        },
-        port: 9876, // Note: web server port
-        colors: true, // Note: enable / disable colors in the output (reporters and logs)
-        logLevel: 'INFO',
-        autoWatch: false,
-        captureTimeout: 60000, // Note: If browser does not capture in given timeout [ms], kill it
-        singleRun: false,
-        sauceLabs: {
-        },
-        customLaunchers: {
-          'sl_win7_chrome': {
-            base: 'SauceLabs',
-            browserName: 'chrome',
-            platform: 'Windows 7',
-            version: '39'
-          },
-          'sl_win7_firefox': {
-            base: 'SauceLabs',
-            browserName: 'firefox',
-            platform: 'Windows 7',
-            version: '35.0'
-          },
-          'sl_win7_ie09': {
-            base: 'SauceLabs',
-            browserName: 'internet explorer',
-            platform: 'Windows 7',
-            version: '9'
-          },
-          'sl_win7_ie10': {
-            base: 'SauceLabs',
-            browserName: 'internet explorer',
-            platform: 'Windows 7',
-            version: '10'
-          },
-          'sl_win7_ie11': {
-            base: 'SauceLabs',
-            browserName: 'internet explorer',
-            platform: 'Windows 7',
-            version: '11'
-          }
-        }
-      },
-      test: {
-        reporters: ['spec'],
-        browsers: ['PhantomJS'],
-        singleRun: true
-      },
-      cover: {
-        preprocessors: {
-          'js/src/**/*.js': ['coverage']
-        },
-        reporters: ['progress', 'coverage'],
-        browsers: ['PhantomJS'],
-        singleRun: true
-      },
-      server: {
-        reporters: ['progress'],
-        browsers: ['Firefox'],
-        background: true
-      },
-      chrome: {
-        reporters: ['progress'],
-        browsers: ['Chrome'],
-        singleRun: true
-      },
-      firefox: {
-        reporters: ['progress'],
-        browsers: ['Firefox'],
-        singleRun: true
-      },
-      browsers: {
-        reporters: ['spec', 'saucelabs'],
-        browsers: [
-          'sl_win7_chrome', 
-          'sl_win7_firefox',
-          // 'sl_win7_ie9',
-          // 'sl_win7_ie10',
-          'sl_win7_ie11'
-        ],
-        singleRun: true
       }
     }
   });
@@ -394,20 +287,19 @@ module.exports = function(grunt) {
   // ----------
   // Test task.
   // Runs Jasmine tests
-  grunt.registerTask('test', 'karma:test');
+  // grunt.registerTask('test', 'karma:test');
 
   // ----------
   // Coverage task.
   // Runs instanbul coverage
-  grunt.registerTask('cover', 'karma:cover');
-  
+  // grunt.registerTask('cover', 'karma:cover');
+
   // ----------
   // Runs this on travis.
   grunt.registerTask('ci', [
                      'jshint',
-                     'test',
-                     'cover',
+                     // 'test',
+                     // 'cover',
                      'coveralls',
-                     'karma:browsers'
   ]);
 };
