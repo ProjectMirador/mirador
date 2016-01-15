@@ -61,7 +61,11 @@
             });
 
             jQuery.subscribe('manifestReceived', function(event, newManifest) {
-              _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifest: newManifest, resultsWidth: _this.resultsWidth, state: _this.state }));
+              _this.manifestListItems.push(new $.ManifestListItem({ 
+                manifest: newManifest, 
+                resultsWidth: _this.resultsWidth, 
+                state: _this.state,
+                appendTo: _this.manifestListElement }));
               _this.element.find('#manifest-search').keyup();
             });
 

@@ -4,7 +4,7 @@
 
     jQuery.extend(true, this, {
       element:                    null,
-      parent:                     null,
+      appendTo:                   null,
       manifest:                   null,
       loadStatus:                 null,
       thumbHeight:                80,
@@ -43,7 +43,7 @@
       });
 
       this.fetchTplData(this.manifestId);
-      this.element = jQuery(this.template(this.tplData)).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
+      this.element = jQuery(this.template(this.tplData)).appendTo(this.appendTo).hide().fadeIn('slow');
 
       this.bindEvents();
     },

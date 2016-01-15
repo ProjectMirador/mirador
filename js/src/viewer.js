@@ -142,7 +142,16 @@
       });
 
       jQuery.subscribe('ADD_MANIFEST_FROM_URL', function(event, url, location) {
-          _this.addManifestFromUrl(url, location);
+        _this.addManifestFromUrl(url, location);
+      });
+
+      jQuery.subscribe('TOGGLE_OVERLAYS_FALSE', function(event) {
+        jQuery.each(_this.overlayStates, function(oState, value) {
+          // toggles the other top-level panels closed and focuses the
+          // workspace. For instance, after selecting an object from the
+          // manifestPanel.
+          _this.set(oState, false, {parent: 'overlayStates'});
+        });
       });
 
     },

@@ -8,7 +8,6 @@
       slots:            [],
       windows:          [],
       appendTo:         null,
-      parent:           null,
       layoutDescription:    null
     }, options);
 
@@ -20,10 +19,11 @@
   $.Workspace.prototype = {
     init: function () {
       this.element.appendTo(this.appendTo);
-      if (this.type === "none") {
-        this.parent.toggleSwitchWorkspace();
-        return;
-      }
+      // this if statement does not appear to be doing anything because toggleSwitchWorkspace is not a function anywhere
+      // if (this.type === "none") {
+      //   this.parent.toggleSwitchWorkspace();
+      //   return;
+      // }
 
       this.calculateLayout();
 
@@ -365,8 +365,8 @@
         // and its associated manifestList controller.
         var targetSlot;
 
-        if (_this.parent.windowObjects) {
-          var check = _this.parent.windowObjects.forEach(function(windowConfig, index) {
+        if (_this.state.getStateProperty('windowObjects')) {
+          var check = _this.state.getStateProperty('windowObjects').forEach(function(windowConfig, index) {
             // windowConfig.slotAddress will give the slot;
             // change the state on that slot to be "loading"
             if (windowConfig.slotAddress) {
@@ -396,7 +396,7 @@
 
     addItem: function(slot) {
       this.focusedSlot = slot;
-      this.parent.toggleLoadWindow();
+      jQuery.publish('TOGGLE_LOAD_WINDOW');
     },
 
     addWindow: function(windowConfig) {
@@ -409,12 +409,10 @@
           newWindow,
           targetSlot;
 
-      jQuery.each(_this.parent.overlayStates, function(oState, value) {
-        // toggles the other top-level panels closed and focuses the
-        // workspace. For instance, after selecting an object from the
-        // manifestPanel.
-        _this.parent.set(oState, false, {parent: 'overlayStates'});
-      });
+      // toggles the other top-level panels closed and focuses the
+      // workspace. For instance, after selecting an object from the
+      // manifestPanel.
+      jQuery.publish('TOGGLE_OVERLAYS_FALSE');
 
       if (windowConfig.slotAddress) {
         targetSlot = _this.getSlotFromAddress(windowConfig.slotAddress);
