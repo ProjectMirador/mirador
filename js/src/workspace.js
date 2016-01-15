@@ -28,6 +28,59 @@
       this.calculateLayout();
 
       this.bindEvents();
+      this.listenForActions();
+    },
+
+    listenForActions: function() {
+      var _this = this;
+
+      jQuery.subscribe('resizeMirador', function(event) {
+        _this.calculateLayout();
+      });
+
+      jQuery.subscribe('manifestQueued', function(event, manifestPromise) {
+        // Trawl windowObjects preemptively for slotAddresses and
+        // notify those slots to display a "loading" state.
+        // Similar to the operation of the manifestLoadStatusIndicator
+        // and its associated manifestList controller.
+        var targetSlot;
+
+        if (_this.state.getStateProperty('windowObjects')) {
+          var check = _this.state.getStateProperty('windowObjects').forEach(function(windowConfig, index) {
+            // windowConfig.slotAddress will give the slot;
+            // change the state on that slot to be "loading"
+            if (windowConfig.slotAddress) {
+              targetSlot = _this.getSlotFromAddress(windowConfig.slotAddress);
+            } else {
+              targetSlot = _this.focusedSlot || _this.slots.filter(function(slot) {
+                return slot.hasOwnProperty('window') ? true : false;
+              })[0];
+            }
+          });
+        }
+      });
+
+      jQuery.subscribe('windowRemoved', function(event, windowId) {
+        _this.windows = jQuery.grep(_this.windows, function(window) {
+          return window.id !== windowId;
+        });
+      });
+
+      jQuery.subscribe('REMOVE_NODE', function(event, node){
+        _this.removeNode(node);
+      });
+
+      jQuery.subscribe('ADD_SLOT_ITEM', function(event, slot){
+        _this.addItem(slot);
+      });
+    },
+
+    bindEvents: function() {
+      var _this = this;
+
+      d3.select(window).on('resize', function(event) {
+        _this.calculateLayout();
+      });
     },
 
     get: function(prop, parent) {
@@ -87,7 +140,6 @@
           slotID: d.id,
           layoutAddress: d.address,
           focused: true,
-          parent: _this,
           appendTo: appendTo,
           state: _this.state
         }));
@@ -121,6 +173,11 @@
       }
 
       var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
+      if (_this.slots.length <= 1) {
+          jQuery.publish('HIDE_REMOVE_SLOT');
+        } else {
+          jQuery.publish('SHOW_REMOVE_SLOT');
+        }
       jQuery.publish("layoutChanged", root);
     },
 
@@ -345,46 +402,6 @@
       return this.slots.filter(function(slot) {
         return !slot.window;
       })[0];
-    },
-
-    bindEvents: function() {
-      var _this = this;
-
-      d3.select(window).on('resize', function(event) {
-        _this.calculateLayout();
-      });
-
-      jQuery.subscribe('resizeMirador', function(event) {
-        _this.calculateLayout();
-      });
-
-      jQuery.subscribe('manifestQueued', function(event, manifestPromise) {
-        // Trawl windowObjects preemptively for slotAddresses and
-        // notify those slots to display a "loading" state.
-        // Similar to the operation of the manifestLoadStatusIndicator
-        // and its associated manifestList controller.
-        var targetSlot;
-
-        if (_this.state.getStateProperty('windowObjects')) {
-          var check = _this.state.getStateProperty('windowObjects').forEach(function(windowConfig, index) {
-            // windowConfig.slotAddress will give the slot;
-            // change the state on that slot to be "loading"
-            if (windowConfig.slotAddress) {
-              targetSlot = _this.getSlotFromAddress(windowConfig.slotAddress);
-            } else {
-              targetSlot = _this.focusedSlot || _this.slots.filter(function(slot) {
-                return slot.hasOwnProperty('window') ? true : false;
-              })[0];
-            }
-          });
-        }
-      });
-
-      jQuery.subscribe('windowRemoved', function(event, windowId) {
-        _this.windows = jQuery.grep(_this.windows, function(window) {
-          return window.id !== windowId;
-        });
-      });
     },
 
     clearSlot: function(slotId) {

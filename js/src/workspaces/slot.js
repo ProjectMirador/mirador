@@ -8,7 +8,6 @@
       layoutAddress:    null,
       focused:          null,
       appendTo:         null,
-      parent:           null,
       window:           null,
       windowElement:    null
     }, options);
@@ -26,6 +25,39 @@
       this.element.appendTo(this.appendTo);
 
       this.bindEvents();
+      this.listenForActions();
+    },
+
+    listenForActions: function() {
+      var _this = this;
+      
+      jQuery.subscribe('windowRemoved', function(event, id) {
+        if (_this.window && _this.window.id === id) {
+          // This prevents the save controller
+          // from attempting to re-save the window
+          // after having already removed it.
+          _this.clearSlot();
+        }
+      });
+
+      jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
+        // Must reset the slotAddress of the window.
+        if (_this.window) {
+          _this.window.slotAddress = _this.layoutAddress;
+          jQuery.publish('windowSlotAddressUpdated', {
+            id: _this.window.id,
+            slotAddress: _this.window.slotAddress
+          });
+        }
+      });
+
+      jQuery.subscribe('HIDE_REMOVE_SLOT', function(event) {
+          _this.element.find('.remove-slot-option').hide();
+      });
+      
+      jQuery.subscribe('SHOW_REMOVE_SLOT', function(event) {
+          _this.element.find('.remove-slot-option').show();
+      });
     },
 
     bindEvents: function() {
@@ -34,15 +66,7 @@
 
       this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
       this.element.find('.remove-slot-option').on('click', function(){
-        _this.parent.removeNode(_this);
-      });
-      jQuery.subscribe('windowRemoved', function(event, id) {
-        if (_this.window && _this.window.id === id) {
-          // This prevents the save controller
-          // from attempting to re-save the window
-          // after having already removed it.
-          _this.clearSlot();
-        }
+        jQuery.publish('REMOVE_NODE', _this);
       });
       this.element.on('dragover', function(e) {
         e.preventDefault();
@@ -59,23 +83,6 @@
       });
       this.element.on('drop', function(e) {
         _this.dropItem(e);
-      });
-
-      jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
-        if (_this.parent.slots.length <= 1) {
-          _this.element.find('.remove-slot-option').hide();
-        } else {
-          _this.element.find('.remove-slot-option').show();
-        }
-
-        // Must reset the slotAddress of the window.
-        if (_this.window) {
-          _this.window.slotAddress = _this.layoutAddress;
-          jQuery.publish('windowSlotAddressUpdated', {
-            id: _this.window.id,
-            slotAddress: _this.window.slotAddress
-          });
-        }
       });
     },
 
@@ -167,7 +174,7 @@
       var _this = this;
       _this.focused = true;
 
-      _this.parent.addItem(_this);
+      jQuery.publish('ADD_SLOT_ITEM', _this);
     },
 
     // template should be based on workspace type
