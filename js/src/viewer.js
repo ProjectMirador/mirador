@@ -81,7 +81,6 @@
       this.layout = typeof this.state.getStateProperty('layout') !== 'string' ? JSON.stringify(this.state.getStateProperty('layout')) : this.state.getStateProperty('layout');
       this.workspace = new $.Workspace({
         layoutDescription: this.layout.charAt(0) === '{' ? JSON.parse(this.layout) : $.layoutDescriptionFromGridString(this.layout), 
-        parent: this, 
         appendTo: this.element.find('.mirador-viewer'),
         state: this.state
       });
@@ -103,6 +102,7 @@
       this.set('currentWorkspaceVisible', true);
 
       this.bindEvents();
+      this.listenForActions();
       // retrieve manifests
       this.getManifestsData();
 
@@ -111,8 +111,9 @@
       }
     },
 
-    bindEvents: function() {
+    listenForActions: function() {
       var _this = this;
+
       // check that windows are loading first to set state of slot?
       jQuery.subscribe('manifestReceived', function(event, newManifest) {
         if (_this.state.getStateProperty('windowObjects')) {
@@ -125,6 +126,21 @@
         }
       });
 
+      jQuery.subscribe('TOGGLE_WORKSPACE_PANEL', function(event) {
+        _this.toggleWorkspacePanel(); 
+      });
+
+      jQuery.subscribe('TOGGLE_BOOKMARK_PANEL', function(event) {
+        _this.toggleBookmarkPanel(); 
+      });
+
+      jQuery.subscribe('TOGGLE_FULLSCREEN', function(event) {
+        _this.fullscreenElement() ? _this.exitFullscreen() : _this.enterFullscreen();
+      });
+    },
+
+    bindEvents: function() {
+      var _this = this;
     },
 
     get: function(prop, parent) {
@@ -193,8 +209,8 @@
     },
 
     isFullscreen: function() {
-      var $fullscreen = $(fullscreenElement());
-      return ($fullscreen.length > 0);
+      var fullscreen = this.fullscreenElement();
+      return (fullscreen.length > 0);
     },
 
     fullscreenElement: function() {

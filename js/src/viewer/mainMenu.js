@@ -3,7 +3,6 @@
     $.MainMenu = function(options) {
 
         jQuery.extend(true, this, {
-            parent:                     null, //viewer
             element:                    null,
             mainMenuHeight:             null,
             mainMenuWidth:              null,
@@ -54,14 +53,17 @@
             var _this = this;
             //change 'change-layout' to mouseover events rather than click?
             this.element.find('.change-layout').on('click', function() { 
-              _this.parent.toggleWorkspacePanel(); 
+              jQuery.publish('TOGGLE_WORKSPACE_PANEL');
             });
-            this.element.find('.bookmark-workspace').on('click', function() { _this.parent.toggleBookmarkPanel(); 
+
+            this.element.find('.bookmark-workspace').on('click', function() { 
+              jQuery.publish('TOGGLE_BOOKMARK_PANEL');
             });
+
             // when options are implemented, this will need to do something
             this.element.find('.window-options').on('click', function() { });
             this.element.find('.fullscreen-viewer').on('click', function() {
-              _this.parent.fullscreenElement() ? _this.parent.exitFullscreen() : _this.parent.enterFullscreen();
+              jQuery.publish('TOGGLE_FULLSCREEN');
             });
         },
 
