@@ -6,7 +6,6 @@
             element:                    null,
             listItems:                  null,
             appendTo:                   null,
-            parent:                     null,
             manifestListItems:          [],
             manifestListElement:        null,
             manifestLoadStatusIndicator: null,
@@ -48,12 +47,11 @@
             this.element.find('form#url-load-form').on('submit', function(event) {
                 event.preventDefault();
                 var url = jQuery(this).find('input').val();
-                _this.parent.addManifestFromUrl(url, "(Added from URL)");
-                //console.log('trying to add from URL');
+                jQuery.publish('ADD_MANIFEST_FROM_URL', url, "(Added from URL)");
             });
 
             this.element.find('.remove-object-option').on('click', function() {
-              _this.parent.toggleLoadWindow();
+              jQuery.publish('TOGGLE_LOAD_WINDOW');
             });
 
             // handle subscribed events

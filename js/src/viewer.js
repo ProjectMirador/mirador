@@ -94,7 +94,7 @@
         state: this.state
       });
      
-      this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer'), state: this.state });
+      this.manifestsPanel = new $.ManifestsPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state });
       this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer'), jsonStorageEndpoint: this.state.getStateProperty('jsonStorageEndpoint'), state: this.state });
 
       // set this to be displayed
@@ -136,6 +136,15 @@
       jQuery.subscribe('TOGGLE_FULLSCREEN', function(event) {
         _this.fullscreenElement() ? _this.exitFullscreen() : _this.enterFullscreen();
       });
+
+      jQuery.subscribe('TOGGLE_LOAD_WINDOW', function(event) {
+        _this.toggleLoadWindow();
+      });
+
+      jQuery.subscribe('ADD_MANIFEST_FROM_URL', function(event, url, location) {
+          _this.addManifestFromUrl(url, location);
+      });
+
     },
 
     bindEvents: function() {
