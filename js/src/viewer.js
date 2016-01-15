@@ -95,7 +95,7 @@
       });
      
       this.manifestsPanel = new $.ManifestsPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state });
-      this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer'), jsonStorageEndpoint: this.state.getStateProperty('jsonStorageEndpoint'), state: this.state });
+      this.bookmarkPanel = new $.BookmarkPanel({ appendTo: this.element.find('.mirador-viewer'), jsonStorageEndpoint: this.state.getStateProperty('jsonStorageEndpoint'), state: this.state });
 
       // set this to be displayed
       this.set('currentWorkspaceVisible', true);
