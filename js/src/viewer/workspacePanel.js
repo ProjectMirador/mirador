@@ -5,7 +5,6 @@
     jQuery.extend(true, this, {
       element: null,
       appendTo: null,
-      parent: null,
       workspace: null,
       maxRows: null,
       maxColumns: null
@@ -62,7 +61,7 @@
       var _this = this;
       var layoutDescription = $.layoutDescriptionFromGridString(gridString);
       _this.workspace.resetLayout(layoutDescription);
-      _this.parent.toggleWorkspacePanel();
+      jQuery.publish('TOGGLE_WORKSPACE_PANEL');
     },
 
     onHover: function(gridString) {

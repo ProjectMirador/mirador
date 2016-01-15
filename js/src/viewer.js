@@ -87,7 +87,6 @@
       
       this.workspacePanel = new $.WorkspacePanel({
         appendTo: this.element.find('.mirador-viewer'),
-        parent: this,
         maxRows: this.state.getStateProperty('workspacePanelSettings').maxRows,
         maxColumns: this.state.getStateProperty('workspacePanelSettings').maxColumns,
         preserveWindows: this.state.getStateProperty('workspacePanelSettings').preserveWindows,
