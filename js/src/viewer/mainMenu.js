@@ -39,12 +39,12 @@
 
             this.element.append(this.template({
                 mainMenuCls: this.mainMenuCls,
-                showBookmark : this.parent.mainMenuSettings.buttons.bookmark,
-                showLayout : this.parent.mainMenuSettings.buttons.layout,
-                showOptions: this.parent.mainMenuSettings.buttons.options,
-                showFullScreenViewer : this.parent.mainMenuSettings.buttons.fullScreenViewer,
-                userButtons: this.parent.mainMenuSettings.userButtons,
-                userLogo:    this.parent.mainMenuSettings.userLogo
+                showBookmark : this.state.getStateProperty('mainMenuSettings').buttons.bookmark,
+                showLayout : this.state.getStateProperty('mainMenuSettings').buttons.layout,
+                showOptions: this.state.getStateProperty('mainMenuSettings').buttons.options,
+                showFullScreenViewer : this.state.getStateProperty('mainMenuSettings').buttons.fullScreenViewer,
+                userButtons: this.state.getStateProperty('mainMenuSettings').userButtons,
+                userLogo:    this.state.getStateProperty('mainMenuSettings').userLogo
             }));
 
             this.bindEvents();

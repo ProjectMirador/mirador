@@ -88,7 +88,8 @@
           layoutAddress: d.address,
           focused: true,
           parent: _this,
-          appendTo: appendTo
+          appendTo: appendTo,
+          state: _this.state
         }));
       });
 

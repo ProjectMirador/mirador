@@ -71,9 +71,9 @@
         if (_this.tplData.repository === '(Added from URL)') {
           repo = '';
         }            
-        var imageName = $.viewer.repoImages[repo || 'other'] || $.viewer.repoImages.other;
+        var imageName = _this.state.getStateProperty('repoImages')[repo || 'other'] || _this.state.getStateProperty('repoImages').other;
 
-        return $.viewer.buildPath + $.viewer.logosPath + imageName;
+        return _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('logosPath') + imageName;
       })();
 
       for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {

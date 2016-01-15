@@ -89,9 +89,9 @@
             imageInfoUrl = $.getQueryParams(url).image,
             windowConfig;
 
-        if (typeof $.viewer.manifests[manifestUrl] !== 'undefined') {
+        if (typeof _this.state.getStateProperty('manifests')[manifestUrl] !== 'undefined') {
           windowConfig = {
-            manifest: $.viewer.manifests[manifestUrl],
+            manifest: _this.state.getStateProperty('manifests')[manifestUrl],
             slotAddress: _this.getAddress()
           };
 
@@ -108,11 +108,11 @@
           $.viewer.workspace.addWindow(windowConfig);
 
         } else if (typeof imageInfoUrl !== 'undefined') {
-          if (!$.viewer.manifests[imageInfoUrl]) {
+          if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
             $.viewer.addManifestFromUrl(imageInfoUrl, "(Added from URL)");
           }
         } else {
-          if (!$.viewer.manifests[imageInfoUrl]) {
+          if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
             $.viewer.addManifestFromUrl(manifestUrl, "(Added from URL)");
           }
         }

@@ -22,7 +22,7 @@
 
         init: function() {
             this.element = jQuery(this.template({
-                showURLBox : this.parent.showAddFromURLBox
+                showURLBox : this.state.getStateProperty('showAddFromURLBox')
             })).appendTo(this.appendTo);
             this.manifestListElement = this.element.find('ul');
             
@@ -63,7 +63,7 @@
             });
 
             jQuery.subscribe('manifestReceived', function(event, newManifest) {
-              _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifest: newManifest, resultsWidth: _this.resultsWidth }));
+              _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifest: newManifest, resultsWidth: _this.resultsWidth, state: _this.state }));
               _this.element.find('#manifest-search').keyup();
             });
 

@@ -29,7 +29,7 @@
       };
 
       this.element = jQuery(this.template(templateData)).appendTo(this.appendTo);
-      var backgroundImage = _this.parent.buildPath + _this.parent.imagesPath + 'debut_dark.png';
+      var backgroundImage = _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('imagesPath') + 'debut_dark.png';
       this.element.css('background-image','url('+backgroundImage+')').css('background-repeat','repeat');
       this.bindEvents();
     },

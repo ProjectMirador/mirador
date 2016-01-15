@@ -45,7 +45,7 @@
           //get json from JSON storage and set currentConfig to it
           var params = paramURL.split('=');
           var jsonblob = params[1];
-	  this.currentConfig = this.storageModule.readSync(jsonblob);
+          this.currentConfig = this.storageModule.readSync(jsonblob);
         } else {
           this.currentConfig = config;
         }
@@ -78,6 +78,17 @@
 
       this.bindEvents();
 
+    },
+
+    getStateProperty: function(prop) {
+      return this.get(prop, 'currentConfig');
+    },
+
+    get: function(prop, parent) {
+      if (parent) {
+        return this[parent][prop];
+      }
+      return this[prop];
     },
 
     set: function(prop, value, options) {
@@ -155,6 +166,9 @@
           data.push({"manifestUri":url, "location":repository});
           _this.set("data", data, {parent: "currentConfig"});
         }
+        var manifests = _this.currentConfig.manifests;
+        manifests[url] = manifestObject;
+        _this.set('manifests', manifests, {parent: 'currentConfig'});
       });
 
       jQuery.subscribe("layoutChanged", function(event, layoutDescription) {
