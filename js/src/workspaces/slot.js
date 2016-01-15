@@ -30,7 +30,7 @@
 
     listenForActions: function() {
       var _this = this;
-      
+
       jQuery.subscribe('windowRemoved', function(event, id) {
         if (_this.window && _this.window.id === id) {
           // This prevents the save controller
@@ -112,15 +112,15 @@
             windowConfig.currentFocus = 'ImageView';
           }
 
-          $.viewer.workspace.addWindow(windowConfig);
+          jQuery.publish('ADD_WINDOW', windowConfig);
 
         } else if (typeof imageInfoUrl !== 'undefined') {
           if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
-            $.viewer.addManifestFromUrl(imageInfoUrl, "(Added from URL)");
+            jQuery.publish('ADD_MANIFEST_FROM_URL', imageInfoUrl, "(Added from URL)");
           }
         } else {
           if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
-            $.viewer.addManifestFromUrl(manifestUrl, "(Added from URL)");
+            jQuery.publish('ADD_MANIFEST_FROM_URL', manifestUrl, "(Added from URL)");
           }
         }
 
@@ -153,7 +153,7 @@
               windowConfig.currentFocus = 'ImageView';
             }
 
-            $.viewer.workspace.addWindow(windowConfig);
+            jQuery.publish('ADD_WINDOW', windowConfig);
           }
         });
       });

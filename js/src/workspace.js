@@ -73,6 +73,10 @@
       jQuery.subscribe('ADD_SLOT_ITEM', function(event, slot){
         _this.addItem(slot);
       });
+
+      jQuery.subscribe('ADD_WINDOW', function(event, windowConfig) {
+      _this.addWindow(windowConfig);
+    });
     },
 
     bindEvents: function() {
