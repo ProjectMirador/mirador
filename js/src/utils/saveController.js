@@ -91,6 +91,14 @@
       return returnObject;
     },
 
+    getWindowAnnotationsList: function(windowId) {
+      if (this.windowsAnnotationsLists) {
+        return this.windowsAnnotationsLists[windowId];
+      } else {
+        return null;
+      }
+    },
+
     getStateProperty: function(prop) {
       return this.get(prop, 'currentConfig');
     },
@@ -147,6 +155,13 @@
           });    
         }    
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );   
+      });
+
+      jQuery.subscribe('ANNOTATIONS_LIST_UPDATED', function(event, options) {
+        if (!_this.windowsAnnotationsLists) {
+          _this.windowsAnnotationsLists = {};
+        }
+        _this.windowsAnnotationsLists[options.windowId] = options.annotationsList;
       });
 
       jQuery.subscribe('windowSlotAddressUpdated', function(event, options) {

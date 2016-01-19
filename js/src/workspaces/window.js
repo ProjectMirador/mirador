@@ -260,6 +260,10 @@
       jQuery.subscribe('ADD_CLASS.' + this.id, function(event, className) {
         _this.element.find('.view-container').addClass(className);
       });
+
+      jQuery.subscribe('UPDATE_FOCUS_IMAGES.' + this.id, function(event, images) {
+        _this.updateFocusImages(images.array); 
+      });
     },
 
     bindEvents: function() {
@@ -575,6 +579,7 @@
           appendTo: this.element.find('.view-container'),
           parent: this,
           windowId: this.id,
+          state:  this.state,
           canvasID: canvasID,
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,

@@ -10,7 +10,6 @@
       imagesList:       [],
       element:          null,
       elemOsd:          null,
-      parent:           null,
       manifest:         null,
       osd:              null,
       fullscreen:       null,
@@ -49,7 +48,7 @@
       .addClass(this.annoCls)
       .appendTo(this.element);
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-      this.parent.updateFocusImages([this.canvasID]); 
+      jQuery.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
       // The hud controls are consistent 
       // throughout any updates to the osd canvas.
       this.hud = new $.Hud({
@@ -73,7 +72,7 @@
 
     bindEvents: function() {
       var _this = this;
-      jQuery.subscribe('fitBounds.' + _this.parent.id, function(event, bounds) {
+      jQuery.subscribe('fitBounds.' + _this.windowId, function(event, bounds) {
         var rect = _this.osd.viewport.imageToViewportRectangle(Number(bounds.x), Number(bounds.y), Number(bounds.width), Number(bounds.height));
         _this.osd.viewport.fitBoundsWithConstraints(rect, false);
       });
@@ -84,7 +83,7 @@
       var _this = this;
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       jQuery.publish("imageBoundsUpdated", {
-        id: _this.parent.id, 
+        id: _this.windowId, 
           osdBounds: {
             x: _this.osdOptions.osdBounds.x, 
             y: _this.osdOptions.osdBounds.y, 
@@ -94,7 +93,7 @@
       });
       var rectangle = this.osd.viewport.viewportToImageRectangle(this.osdOptions.osdBounds);
       jQuery.publish("imageRectangleUpdated", {
-        id: _this.parent.id,
+        id: _this.windowId,
         osdBounds: {
           x: Math.round(rectangle.x),
           y: Math.round(rectangle.y),
@@ -122,9 +121,9 @@
 
     adjustWidth: function(className, hasClass) {
       if (hasClass) {
-        this.parent.element.find('.view-container').removeClass(className);
+        jQuery.publish('REMOVE_CLASS.'+this.windowId, className);
       } else {
-        this.parent.element.find('.view-container').addClass(className);
+        jQuery.publish('ADD_CLASS.'+this.windowId, className);
       }
     },
 
@@ -208,7 +207,7 @@
       var _this = this;
       _this.annotationsLayer = new $.AnnotationsLayer({
         parent: _this,
-        annotationsList: _this.parent.annotationsList || [],
+        annotationsList: _this.state.getWindowAnnotationsList(_this.windowId) || [],
         viewer: _this.osd,
         windowId: _this.windowId,
         element: element
@@ -226,9 +225,9 @@
         };
         this.osd.close();
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-        this.parent.updateFocusImages([canvasID]);
+        jQuery.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
       } else {
-        this.parent.updateFocusImages([canvasID]);
+        jQuery.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
       }
     },
 
@@ -236,7 +235,7 @@
       var next = this.currentImgIndex + 1;
 
       if (next < this.imagesList.length) {
-        this.parent.setCurrentCanvasID(this.imagesList[next]['@id']);
+        jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, this.imagesList[next]['@id']);
       }
     },
 
@@ -244,7 +243,7 @@
       var prev = this.currentImgIndex - 1;
 
       if (prev >= 0) {
-        this.parent.setCurrentCanvasID(this.imagesList[prev]['@id']);
+        jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, this.imagesList[prev]['@id']);
       }
     }
   };
