@@ -248,6 +248,18 @@
       jQuery.subscribe('sidePanelVisibilityByTab.' + this.id, function(event, visible) {
         _this.sidePanelVisibility(visible, '0s');
       });
+
+      jQuery.subscribe('SET_CURRENT_CANVAS_ID.' + this.id, function(event, canvasID) {
+        _this.setCurrentCanvasID(canvasID);
+      });
+
+      jQuery.subscribe('REMOVE_CLASS.' + this.id, function(event, className) {
+        _this.element.find('.view-container').removeClass(className);
+      });
+
+      jQuery.subscribe('ADD_CLASS.' + this.id, function(event, className) {
+        _this.element.find('.view-container').addClass(className);
+      });
     },
 
     bindEvents: function() {
@@ -350,6 +362,8 @@
               manifest: _this.manifest,
               appendTo: _this.element.find('.'+panelType),
               parent: _this,
+              state:  _this.state,
+              windowId: _this.id,
               panel: true,
               canvasID: _this.currentCanvasID,
               imagesList: _this.imagesList,
@@ -541,7 +555,8 @@
         this.focusModules.ThumbnailsView = new $.ThumbnailsView({
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
-          parent: this,
+          state:  this.state,
+          windowId: this.id,
           canvasID: this.currentCanvasID,
           imagesList: this.imagesList
         });

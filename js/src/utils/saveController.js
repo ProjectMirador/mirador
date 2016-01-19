@@ -80,6 +80,17 @@
 
     },
 
+    getWindowObjectById: function(windowId) {
+      var returnObject = null;
+      jQuery.each(this.currentConfig.windowObjects, function(index, window) {
+        if (window.id === windowId) {
+          returnObject = window;
+          return false;
+        }
+      });
+      return returnObject;
+    },
+
     getStateProperty: function(prop) {
       return this.get(prop, 'currentConfig');
     },

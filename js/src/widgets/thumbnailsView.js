@@ -12,7 +12,7 @@
       appendTo:             null,
       thumbInfo:            {thumbsHeight: 150, listingCssCls: 'listing-thumbs', thumbnailCls: 'thumbnail-view'},
       defaultThumbHeight:   150,
-      parent:               null,
+      windowId:             null,
       panel:                false,
       lazyLoadingFactor:    1.5  //should be >= 1
     }, options);
@@ -80,9 +80,10 @@
     currentImageChanged: function() {
       var _this = this,
       target = _this.element.find('.highlight'),
-      scrollPosition;
+      scrollPosition,
+      windowObject = this.state.getWindowObjectById(this.windowId);
 
-      if (this.parent.currentFocus === 'BookView') {
+      if (windowObject && windowObject.viewType === 'BookView') {
         scrollPosition = _this.element.scrollLeft() + (target.position().left + (target.next().width() + target.outerWidth())/2) - _this.element.width()/2;
       } else {
 
@@ -109,10 +110,10 @@
 
       _this.element.find('.thumbnail-image').on('click', function() {
         var canvasID = jQuery(this).attr('data-image-id');
-        _this.parent.setCurrentCanvasID(canvasID);
+        jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasID);
       });
 
-      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(event) {
+      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event) {
         _this.currentImageChanged();
       });
     },
@@ -200,9 +201,9 @@
 
     adjustWidth: function(className, hasClass) {
       if (hasClass) {
-        this.parent.element.find('.view-container').removeClass(className);
+        jQuery.publish('REMOVE_CLASS.'+this.windowId, className);
       } else {
-        this.parent.element.find('.view-container').addClass(className);
+        jQuery.publish('ADD_CLASS.'+this.windowId, className);
       }
     },
 
