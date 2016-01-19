@@ -74,7 +74,7 @@
       var _this = this;
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       jQuery.publish("imageBoundsUpdated", {
-        id: _this.parent.id, 
+        id: _this.windowId, 
           osdBounds: {
             x: _this.osdOptions.osdBounds.x, 
             y: _this.osdOptions.osdBounds.y, 
@@ -102,9 +102,9 @@
 
     adjustWidth: function(className, hasClass) {
       if (hasClass) {
-        this.parent.element.find('.view-container').removeClass(className);
+        jQuery.publish('REMOVE_CLASS.'+this.windowId, className);
       } else {
-        this.parent.element.find('.view-container').addClass(className);
+        jQuery.publish('ADD_CLASS.'+this.windowId, className);
       }
     },
 
@@ -225,7 +225,7 @@
         next = this.currentImgIndex + 2;
       }
       if (next < this.imagesList.length) {
-        this.parent.setCurrentCanvasID(this.imagesList[next]['@id']);
+        jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, this.imagesList[next]['@id']);
       }
     },
 
@@ -240,7 +240,7 @@
         prev = this.currentImgIndex - 1;
       }
       if (prev >= 0) {
-        this.parent.setCurrentCanvasID(this.imagesList[prev]['@id']);
+        jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, this.imagesList[prev]['@id']);
       }
     },
 
@@ -320,7 +320,7 @@
       jQuery.each(stitchList, function(index, image) {
         _this.focusImages.push(image['@id']);
       });
-      this.parent.updateFocusImages(this.focusImages);
+      jQuery.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: this.focusImages});
       return stitchList;
     }
   };

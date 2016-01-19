@@ -577,7 +577,6 @@
         this.focusModules.ImageView = new $.ImageView({
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
-          parent: this,
           windowId: this.id,
           state:  this.state,
           canvasID: canvasID,
@@ -603,8 +602,8 @@
         this.focusModules.BookView = new $.BookView({
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
-          parent: this,
           windowId: this.id,
+          state:  this.state,
           canvasID: canvasID,
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
@@ -625,7 +624,8 @@
         this.focusModules.ScrollView = new $.ScrollView({
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
-          parent: this,
+          state:  this.state,
+          windowId: this.id,
           canvasID: this.currentCanvasID,
           imagesList: this.imagesList,
           thumbInfo: {thumbsHeight: Math.floor(containerHeight * this.scrollImageRatio), listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}
