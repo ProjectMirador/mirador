@@ -62,7 +62,7 @@
     searchResults.resources.forEach(function(result){
       // Set to resouce.on, which is usually a simple String ID
       var canvasid = result.on;
-      var canvaslabel = result.label;
+      var canvaslabel = _this.getLabel(result);
 
       // If resource.on is an Object, containing extra information about the
       // parent object, set ID appropriately
@@ -98,12 +98,11 @@
 
         var resource = canvases[0];
         var canvasid = resource;
-        var canvaslabel = resource;
+        var canvaslabel = _this.getLabel(resource);
 
         // If you have the full annotation, set ID and label appropriately
         if (typeof canvasid === 'object') {
           canvasid = resource.on['@id'];
-          canvaslabel = resource.label;
         }
 
         // Extract coordinates if necessary
@@ -123,6 +122,29 @@
         tplData.push(resultobject);
       });
     return tplData;
+  },
+
+  /**
+   * Get a label describing a search match. This label is set to the
+   * associated annotation label, if available, or to the label of the
+   * parent canvas.
+   *
+   * @param  {[type]} resource annotation associated with the search match
+   * @return {[type]}          string label
+   */
+  getLabel: function(resource) {
+    if (resource && typeof resource === 'object') {
+      if (resource.label) {
+        return resource.label;
+      } else if (resource.on && typeof resource.on === 'string') {
+        return 'Canvas ' + this.manifest.getCanvasLabel(resource.on);
+      } else if (resource.on && typeof resource.on === 'object') {
+        return resource.on.label ?
+            resource.on.label : 'Canvas ' + this.manifest.getCanvasLabel(resource.on['@id']);
+      }
+    } else {
+      return resource;
+    }
   },
 
   getHitResources: function(searchResults, annotationid){
