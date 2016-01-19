@@ -52,11 +52,53 @@
       });
 
       jQuery.subscribe('HIDE_REMOVE_SLOT', function(event) {
-          _this.element.find('.remove-slot-option').hide();
+        _this.element.find('.remove-slot-option').hide();
+        if (_this.window) {
+          jQuery.publish('HIDE_REMOVE_OBJECT.' + _this.window.id);
+        }
       });
       
       jQuery.subscribe('SHOW_REMOVE_SLOT', function(event) {
-          _this.element.find('.remove-slot-option').show();
+        _this.element.find('.remove-slot-option').show();
+        if (_this.window) {
+          jQuery.publish('SHOW_REMOVE_OBJECT.' + _this.window.id);
+        }
+      });
+
+      jQuery.subscribe('ADD_ITEM_FROM_WINDOW', function(event, id) {
+        if (_this.window && _this.window.id === id) {
+          _this.addItem();
+        }
+      });
+
+      jQuery.subscribe('REMOVE_SLOT_FROM_WINDOW', function(event, id) {
+        if (_this.window && _this.window.id === id) {
+          jQuery.publish('REMOVE_NODE', _this);
+        }
+      });
+
+      jQuery.subscribe('SPLIT_RIGHT_FROM_WINDOW', function(event, id) {
+        if (_this.window && _this.window.id === id) {
+          jQuery.publish('SPLIT_RIGHT', _this);
+        }
+      });
+
+      jQuery.subscribe('SPLIT_LEFT_FROM_WINDOW', function(event, id) {
+        if (_this.window && _this.window.id === id) {
+          jQuery.publish('SPLIT_LEFT', _this);
+        }
+      });
+
+      jQuery.subscribe('SPLIT_DOWN_FROM_WINDOW', function(event, id) {
+        if (_this.window && _this.window.id === id) {
+          jQuery.publish('SPLIT_DOWN', _this);
+        }
+      });
+
+      jQuery.subscribe('SPLIT_UP_FROM_WINDOW', function(event, id) {
+        if (_this.window && _this.window.id === id) {
+          jQuery.publish('SPLIT_UP', _this);
+        }
       });
     },
 

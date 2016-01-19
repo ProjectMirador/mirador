@@ -43,7 +43,7 @@
       });
 
       this.fetchTplData(this.manifestId);
-      this.element = jQuery(this.template(this.tplData)).appendTo(this.appendTo).hide().fadeIn('slow');
+      this.element = jQuery(this.template(this.tplData)).prependTo(this.appendTo).hide().fadeIn('slow');
 
       this.bindEvents();
     },

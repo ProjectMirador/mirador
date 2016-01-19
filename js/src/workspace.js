@@ -75,8 +75,24 @@
       });
 
       jQuery.subscribe('ADD_WINDOW', function(event, windowConfig) {
-      _this.addWindow(windowConfig);
-    });
+        _this.addWindow(windowConfig);
+      });
+
+      jQuery.subscribe('SPLIT_RIGHT', function(event, slot) {
+        _this.splitRight(slot);
+      });
+
+      jQuery.subscribe('SPLIT_LEFT', function(event, slot) {
+        _this.splitLeft(slot);
+      });
+
+      jQuery.subscribe('SPLIT_DOWN', function(event, slot) {
+        _this.splitDown(slot);
+      });
+
+      jQuery.subscribe('SPLIT_UP', function(event, slot) {
+        _this.splitUp(slot);
+      });
     },
 
     bindEvents: function() {
@@ -145,7 +161,8 @@
           layoutAddress: d.address,
           focused: true,
           appendTo: appendTo,
-          state: _this.state
+          state: _this.state,
+          parent: _this
         }));
       });
 
@@ -177,12 +194,14 @@
       }
 
       var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
+
+      jQuery.publish("layoutChanged", root);
+
       if (_this.slots.length <= 1) {
           jQuery.publish('HIDE_REMOVE_SLOT');
         } else {
           jQuery.publish('SHOW_REMOVE_SLOT');
         }
-      jQuery.publish("layoutChanged", root);
     },
 
     split: function(targetSlot, direction) {
@@ -313,6 +332,8 @@
       parentIndex,
       remainingNode,
       root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
+      console.log(_this.layout);
+      console.log(_this.slots);
 
       if (node.parent.children.length === 2) {
         // de-mutate the tree without destroying
@@ -332,6 +353,7 @@
         node.parent.children.splice(nodeIndex, 1);
       }
 
+      //delete targetSlot;
       _this.layoutDescription = root;
       _this.calculateLayout();
     },
@@ -394,7 +416,7 @@
         window.update({
           id: window.id, 
           slotAddress: slot.layoutAddress, 
-          parent: slot,
+          state: _this.state,
           appendTo: slot.element,
           currentCanvasID: window.currentCanvasID,
           currentFOcus: window.currentFocus
@@ -409,7 +431,7 @@
     },
 
     clearSlot: function(slotId) {
-      if (this.slots[slodId].windowElement) { 
+      if (this.slots[slotId].windowElement) { 
         this.slots[slotId].windowElement.remove();
       }
       this.slots[slotId].window = null;
@@ -442,14 +464,13 @@
       }
 
       windowConfig.appendTo = targetSlot.element;
-      windowConfig.parent = targetSlot;
+      windowConfig.state = _this.state;
 
       if (!targetSlot.window) {
         windowConfig.slotAddress = targetSlot.layoutAddress;
         windowConfig.id = windowConfig.id || $.genUUID();
 
         jQuery.publish("windowSlotAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
-
         newWindow = new $.Window(windowConfig);
         _this.windows.push(newWindow);
 

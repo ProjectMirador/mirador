@@ -103,7 +103,7 @@
         _this.currentCanvasID = _this.imagesList[0]['@id'];
       }
 
-      this.annoEndpointAvailable = !jQuery.isEmptyObject($.viewer.annotationEndpoint);
+      this.annoEndpointAvailable = !jQuery.isEmptyObject(_this.state.getStateProperty('annotationEndpoint'));
       if (!this.annotationLayerAvailable) {
         this.annotationCreationAvailable = false;
         this.annoEndpointAvailable = false;
@@ -175,6 +175,7 @@
       }
 
       this.bindEvents();
+      this.listenForActions();
 
       if (this.imagesList.length === 1) {
         this.bottomPanelVisibility(false);
@@ -212,6 +213,43 @@
       }
     },
 
+    listenForActions: function() {
+      var _this = this;
+      jQuery.subscribe('bottomPanelSet.' + _this.id, function(event, visible) {
+        var panel = _this.element.find('.bottomPanel');
+        if (visible === true) {
+          panel.css({transform: 'translateY(0)'});
+        } else {
+          panel.css({transform: 'translateY(100%)'});
+        }
+      });
+
+      jQuery.subscribe('HIDE_REMOVE_OBJECT.' + _this.id, function(event) {
+        _this.element.find('.remove-object-option').hide();
+      });
+
+      jQuery.subscribe('SHOW_REMOVE_OBJECT.' + _this.id, function(event) {
+        _this.element.find('.remove-object-option').show();
+      });
+
+      jQuery.subscribe('sidePanelStateUpdated.' + this.id, function(event, state) {
+        if (state.open) {
+            _this.element.find('.fa-list').switchClass('fa-list', 'fa-caret-down');
+            _this.element.find('.mirador-icon-toc').addClass('selected');
+            _this.element.find('.view-container').removeClass('maximised');
+        } else {
+            _this.element.find('.mirador-icon-toc').removeClass('selected');
+            _this.element.find('.fa-caret-down').switchClass('fa-caret-down', 'fa-list');
+            _this.element.find('.view-container').addClass('maximised');
+        }
+      });
+
+      // TODO: temporary logic to minimize side panel if only tab is toc and toc is empty
+      jQuery.subscribe('sidePanelVisibilityByTab.' + this.id, function(event, visible) {
+        _this.sidePanelVisibility(visible, '0s');
+      });
+    },
+
     bindEvents: function() {
       var _this = this;
 
@@ -226,40 +264,6 @@
           _this.focusModules.ScrollView.reloadImages(Math.floor(containerHeight * _this.scrollImageRatio), triggerShow);
         }
       }, 300));
-
-      jQuery.subscribe('bottomPanelSet.' + _this.id, function(event, visible) {
-        var panel = _this.element.find('.bottomPanel');
-        if (visible === true) {
-          panel.css({transform: 'translateY(0)'});
-        } else {
-          panel.css({transform: 'translateY(100%)'});
-        }
-      });
-
-      jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
-        if ($.viewer.workspace.slots.length <= 1) {
-          _this.element.find('.remove-object-option').hide();
-        } else {
-          _this.element.find('.remove-object-option').show();
-        }
-      });
-
-      jQuery.subscribe('sidePanelStateUpdated.' + this.id, function(event, state) {
-        if (state.open) {
-            _this.element.find('.fa-list').switchClass('fa-list', 'fa-caret-down');
-            _this.element.find('.mirador-icon-toc').addClass('selected');
-            _this.element.find('.view-container').removeClass('maximised');
-        } else {
-            _this.element.find('.mirador-icon-toc').removeClass('selected');
-            _this.element.find('.fa-caret-down').switchClass('fa-caret-down', 'fa-list');
-            _this.element.find('.view-container').addClass('maximised');
-        }
-    });
-
-      // TODO: temporary logic to minimize side panel if only tab is toc and toc is empty
-      jQuery.subscribe('sidePanelVisibilityByTab.' + this.id, function(event, visible) {
-        _this.sidePanelVisibility(visible, '0s');
-      });
 
     },
 
@@ -704,9 +708,9 @@
       // next check endpoint
       if (this.annoEndpointAvailable) {
         var dfd = jQuery.Deferred(),
-        module = $.viewer.annotationEndpoint.module,
-        options = $.viewer.annotationEndpoint.options; //grab anything from the config that should be passed directly to the endpoint
-        options.name = $.viewer.annotationEndpoint.name;
+        module = _this.state.getStateProperty('annotationEndpoint').module,
+        options = _this.state.getStateProperty('annotationEndpoint').options; //grab anything from the config that should be passed directly to the endpoint
+        options.name = _this.state.getStateProperty('annotationEndpoint').name;
         // One annotation endpoint per window, the endpoint
         // is a property of the instance.
         if ( _this.endpoint && _this.endpoint !== null ) {
@@ -737,69 +741,69 @@
     bindNavigation: function() {
       var _this = this;
 
-    this.element.find('.mirador-icon-image-view').on('mouseenter',
+      this.element.find('.mirador-icon-image-view').on('mouseenter',
+        function() {
+        _this.element.find('.image-list').stop().slideFadeToggle(300);
+      }).on('mouseleave',
       function() {
-      _this.element.find('.image-list').stop().slideFadeToggle(300);
-    }).on('mouseleave',
-    function() {
-      _this.element.find('.image-list').stop().slideFadeToggle(300);
-    });
+        _this.element.find('.image-list').stop().slideFadeToggle(300);
+      });
 
-    this.element.find('.mirador-icon-window-menu').on('mouseenter',
+      this.element.find('.mirador-icon-window-menu').on('mouseenter',
+        function() {
+        _this.element.find('.slot-controls').stop().slideFadeToggle(300);
+      }).on('mouseleave',
       function() {
-      _this.element.find('.slot-controls').stop().slideFadeToggle(300);
-    }).on('mouseleave',
-    function() {
-      _this.element.find('.slot-controls').stop().slideFadeToggle(300);
-    });
+        _this.element.find('.slot-controls').stop().slideFadeToggle(300);
+      });
 
-    this.element.find('.single-image-option').on('click', function() {
-      _this.toggleImageView(_this.currentCanvasID);
-    });
+      this.element.find('.single-image-option').on('click', function() {
+        _this.toggleImageView(_this.currentCanvasID);
+      });
 
-    this.element.find('.book-option').on('click', function() {
-      _this.toggleBookView(_this.currentCanvasID);
-    });
+      this.element.find('.book-option').on('click', function() {
+        _this.toggleBookView(_this.currentCanvasID);
+      });
 
-    this.element.find('.scroll-option').on('click', function() {
-      _this.toggleScrollView(_this.currentCanvasID);
-    });
+      this.element.find('.scroll-option').on('click', function() {
+        _this.toggleScrollView(_this.currentCanvasID);
+      });
 
-    this.element.find('.thumbnails-option').on('click', function() {
-      _this.toggleThumbnails(_this.currentCanvasID);
-    });
+      this.element.find('.thumbnails-option').on('click', function() {
+        _this.toggleThumbnails(_this.currentCanvasID);
+      });
 
-    this.element.find('.mirador-icon-metadata-view').on('click', function() {
-      _this.toggleMetadataOverlay(_this.currentFocus);
-    });
+      this.element.find('.mirador-icon-metadata-view').on('click', function() {
+        _this.toggleMetadataOverlay(_this.currentFocus);
+      });
 
-    this.element.find('.mirador-icon-toc').on('click', function() {
-      _this.sidePanelVisibility(!_this.sidePanelVisible, '0.3s');
-    });
+      this.element.find('.mirador-icon-toc').on('click', function() {
+        _this.sidePanelVisibility(!_this.sidePanelVisible, '0.3s');
+      });
 
-    this.element.find('.new-object-option').on('click', function() {
-      _this.parent.addItem();
-    });
+      this.element.find('.new-object-option').on('click', function() {
+        jQuery.publish('ADD_ITEM_FROM_WINDOW', _this.id);
+      });
 
-    this.element.find('.remove-object-option').on('click', function() {
-      $.viewer.workspace.removeNode(_this.parent);
-    });
+      this.element.find('.remove-object-option').on('click', function() {
+        jQuery.publish('REMOVE_SLOT_FROM_WINDOW', _this.id);
+      });
 
-    this.element.find('.add-slot-right').on('click', function() {
-      $.viewer.workspace.splitRight(_this.parent);
-    });
+      this.element.find('.add-slot-right').on('click', function() {
+        jQuery.publish('SPLIT_RIGHT_FROM_WINDOW', _this.id);
+      });
 
-    this.element.find('.add-slot-left').on('click', function() {
-      $.viewer.workspace.splitLeft(_this.parent);
-    });
+      this.element.find('.add-slot-left').on('click', function() {
+        jQuery.publish('SPLIT_LEFT_FROM_WINDOW', _this.id);
+      });
 
-    this.element.find('.add-slot-below').on('click', function() {
-      $.viewer.workspace.splitDown(_this.parent);
-    });
+      this.element.find('.add-slot-below').on('click', function() {
+        jQuery.publish('SPLIT_DOWN_FROM_WINDOW', _this.id);
+      });
 
-    this.element.find('.add-slot-above').on('click', function() {
-      $.viewer.workspace.splitUp(_this.parent);
-    });
+      this.element.find('.add-slot-above').on('click', function() {
+        jQuery.publish('SPLIT_UP_FROM_WINDOW', _this.id);
+      });
     },
 
     // template should be based on workspace type
