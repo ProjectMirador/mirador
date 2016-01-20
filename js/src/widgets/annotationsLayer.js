@@ -37,7 +37,7 @@
       });
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
-        _this.annotationsList = _this.parent.parent.annotationsList;
+        _this.annotationsList = _this.state.getWindowAnnotationsList(_this.windowId);
         _this.updateRenderer();
       });
     },

@@ -319,7 +319,7 @@
           _this.annotationsList.push(data);
           //update overlay so it can be a part of the annotationList rendering
           jQuery(osdOverlay).removeClass('osd-select-rectangle').addClass('annotation').attr('id', annoID);
-          jQuery.publish(('annotationListLoaded.' + _this.id));
+          jQuery.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         },
         function() {
           //provide useful feedback to user
@@ -338,7 +338,7 @@
               return false;
             }
           });
-          jQuery.publish(('annotationListLoaded.' + _this.id));
+          jQuery.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         },
         function() {
           console.log("There was an error updating this annotation");
@@ -350,8 +350,8 @@
         //first function is success callback, second is error callback
         _this.endpoint.deleteAnnotation(annoId, function() {
           _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== annoId; });
-          jQuery.publish(('annotationListLoaded.' + _this.id));
           jQuery.publish(('removeOverlay.' + _this.id), annoId);
+          jQuery.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         },
         function() {
           // console.log("There was an error deleting this annotation");
@@ -751,7 +751,7 @@
             //indicate this is a manifest annotation - which affects the UI
             value.endpoint = "manifest";
           });
-          jQuery.publish('annotationListLoaded.' + _this.id);
+          jQuery.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         });
       }
 
@@ -783,7 +783,8 @@
             }
             return true;
           });
-          jQuery.publish('annotationListLoaded.' + _this.id);
+          console.log(_this.annotationsList);
+          jQuery.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         });
       }
     },

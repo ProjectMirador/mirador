@@ -162,6 +162,7 @@
           _this.windowsAnnotationsLists = {};
         }
         _this.windowsAnnotationsLists[options.windowId] = options.annotationsList;
+        jQuery.publish('annotationListLoaded.' + options.windowId);
       });
 
       jQuery.subscribe('windowSlotAddressUpdated', function(event, options) {

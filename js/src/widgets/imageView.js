@@ -347,6 +347,7 @@
       var _this = this;
       _this.annotationsLayer = new $.AnnotationsLayer({
         parent: _this,
+        state: _this.state,
         annotationsList: _this.state.getWindowAnnotationsList(_this.windowId) || [],
         viewer: _this.osd,
         windowId: _this.windowId,

@@ -15,7 +15,7 @@
     $.AnnotationsTab.prototype = {
         init: function() {
             var _this = this;
-            this.windowId = this.parent.id;
+            this.windowId = this.windowId;
 
             this.state({
                 id: 'annotationsTab',
@@ -55,20 +55,13 @@
             var _this = this,
                 annotationSources = [],
                 state = this.state();
-            for(var i = 0; i < _this.parent.annotationsList.length; i++)
-            {
-
-                if(typeof _this.parent.annotationsList[i].endpoint === 'string'){
-
-                  annotationSources.push('manifest');
-
-                }else{
-
-                  annotationSources.push(_this.parent.annotationsList[i].endpoint.name);
-
+            jQuery.each(_this.state.getWindowAnnotationsList(_this.windowId), function(index, value) {
+                if(typeof value.endpoint === 'string') {
+                    annotationSources.push('manifest');
+                } else {
+                    annotationSources.push(value.endpoint.name);
                 }
-
-            }
+            });
 
             // make unique
             annotationSources = annotationSources.filter(function(itm,i,annotationSources){

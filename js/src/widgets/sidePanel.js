@@ -89,6 +89,7 @@
                 new $.AnnotationsTab({
                     manifest: _this.manifest,
                     parent: this.parent,
+                    windowId: this.windowId,
                     appendTo: _this.element.find('.tabContentArea'),
                     tabs: _this.sidePanelState.tabs
                 });
@@ -158,7 +159,7 @@
             jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
                 var windowObject = _this.state.getWindowObjectById(_this.windowId);
                 if (_this.parent.annotationsAvailable[windowObject.viewType]) {
-                    if (_this.parent.annotationsList.length > 0) {
+                    if (_this.state.getWindowAnnotationsList(_this.windowId).length > 0) {
                         _this.update('annotations', true);
                     }
                 }
