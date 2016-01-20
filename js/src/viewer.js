@@ -284,7 +284,7 @@
       if (!slotAddress) {
         return;
       }
-      console.log(options);
+
       var windowConfig = {
         manifest: this.state.getStateProperty('manifests')[options.loadedManifest],
         currentFocus : options.viewType,

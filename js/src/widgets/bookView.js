@@ -225,7 +225,7 @@
         next = this.currentImgIndex + 2;
       }
       if (next < this.imagesList.length) {
-        jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, this.imagesList[next]['@id']);
+        jQuery.publish('SET_CURRENT_CANVAS_ID.' + this.windowId, this.imagesList[next]['@id']);
       }
     },
 
@@ -240,7 +240,7 @@
         prev = this.currentImgIndex - 1;
       }
       if (prev >= 0) {
-        jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, this.imagesList[prev]['@id']);
+        jQuery.publish('SET_CURRENT_CANVAS_ID.' + this.windowId, this.imagesList[prev]['@id']);
       }
     },
 

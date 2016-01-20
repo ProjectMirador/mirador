@@ -264,6 +264,31 @@
       jQuery.subscribe('UPDATE_FOCUS_IMAGES.' + this.id, function(event, images) {
         _this.updateFocusImages(images.array); 
       });
+
+      jQuery.subscribe('HIDE_ICON_TOC.' + this.id, function(event) {
+        _this.element.find('.mirador-icon-toc').hide();
+      });
+
+      jQuery.subscribe('SHOW_ICON_TOC.' + this.id, function(event) {
+        _this.element.find('.mirador-icon-toc').show();
+      });
+
+      jQuery.subscribe('SET_BOTTOM_PANEL_VISIBILITY.' + this.id, function(event, visibility) {
+        if (visibility !== null) {
+          _this.bottomPanelVisibility(visibility);
+        } else {
+          _this.bottomPanelVisibility(_this.bottomPanelVisible);
+        }
+      });
+
+      jQuery.subscribe('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + this.id, function(event) {
+        var visible = !_this.bottomPanelVisible;
+        _this.bottomPanelVisibility(visible);
+      });
+
+      jQuery.subscribe('REQUEST_OSD_FULL_SCREEN.' + this.id, function(event) {
+        OpenSeadragon.requestFullScreen(_this.element[0]);
+      });
     },
 
     bindEvents: function() {
@@ -365,7 +390,6 @@
             _this[panelType] = new $[view]({
               manifest: _this.manifest,
               appendTo: _this.element.find('.'+panelType),
-              parent: _this,
               state:  _this.state,
               windowId: _this.id,
               panel: true,
@@ -398,7 +422,8 @@
       });
 
       //update panels with current image
-      if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
+      //console.log(this.focusImages);
+      //if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
 
     updateSidePanel: function() {
@@ -418,6 +443,8 @@
       if (this.sidePanel === null) {
         this.sidePanel = new $.SidePanel({
               parent: _this,
+              windowId: _this.id,
+              state: _this.state,
               appendTo: _this.element.find('.sidePanel'),
               manifest: _this.manifest,
               canvasID: _this.currentCanvasID,
@@ -577,6 +604,7 @@
         this.focusModules.ImageView = new $.ImageView({
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
+          parent: this,
           windowId: this.id,
           state:  this.state,
           canvasID: canvasID,
@@ -602,6 +630,7 @@
         this.focusModules.BookView = new $.BookView({
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
+          parent: this,
           windowId: this.id,
           state:  this.state,
           canvasID: canvasID,
@@ -639,6 +668,7 @@
 
     updateFocusImages: function(imageList) {
       this.focusImages = imageList;
+      if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
 
     setCurrentCanvasID: function(canvasID) {
@@ -738,7 +768,8 @@
         } else {
           options.dfd = dfd;
           options.windowID = _this.id;
-          options.parent = _this;
+          options.imagesList = _this.imagesList;
+          //options.parent = _this;
           _this.endpoint = new $[module](options);
         }
         _this.endpoint.search({ "uri" : _this.currentCanvasID});

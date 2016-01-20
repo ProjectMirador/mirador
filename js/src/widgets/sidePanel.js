@@ -20,9 +20,8 @@
     $.SidePanel.prototype = {
         init: function() {
             var _this = this;
-            this.windowId = this.parent.id;
 
-            this.state({
+            this.updateState({
                 tabs : [
                 {
                     name : 'toc',
@@ -62,7 +61,7 @@
             }, true);
 
             this.listenForActions();
-            this.render(this.state());
+            this.render(this.updateState());
 
             this.loadSidePanelComponents();
         },  
@@ -71,7 +70,7 @@
             var _this = this;
 
             new $.Tabs({
-                windowId: this.parent.id,
+                windowId: this.windowId,
                 appendTo: this.appendTo,
                 tabs : this.panelState.tabs,
                 parent : this
@@ -91,25 +90,25 @@
                     manifest: _this.manifest,
                     parent: this.parent,
                     appendTo: _this.element.find('.tabContentArea'),
-                    tabs: _this.state.tabs
+                    tabs: _this.sidePanelState.tabs
                 });
             }
 
         },
 
         update: function(name, availability) {
-            var state = this.panelState;
-            jQuery.each(state.tabs, function(index, value) {
+            var updatedState = this.panelState;
+            jQuery.each(updatedState.tabs, function(index, value) {
                 if (value.name === name) {
                     value.options.available = availability;
                 }
             });
-            this.state(state);
+            this.updateState(updatedState);
         },
 
-        state: function(state, initial) {
+        updateState: function(newState, initial) {
             if (!arguments.length) return this.panelState;
-            jQuery.extend(true, this.panelState, state);
+            jQuery.extend(true, this.panelState, newState);
 
             if (!initial) {
                 jQuery.publish('sidePanelStateUpdated.' + this.windowId, this.panelState);
@@ -128,11 +127,11 @@
         },
 
         panelToggled: function() {
-            var state = this.state(),
-                open = !state.open;
+            var currentState = this.updateState(),
+                open = !currentState.open;
 
-            state.open = open;
-            this.state(state);
+            currentState.open = open;
+            this.updateState(currentState);
         },
 
         // doesn't do anything right now
@@ -157,7 +156,8 @@
             });
 
             jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
-                if (_this.parent.annotationsAvailable[_this.parent.currentFocus]) {
+                var windowObject = _this.state.getWindowObjectById(_this.windowId);
+                if (_this.parent.annotationsAvailable[windowObject.viewType]) {
                     if (_this.parent.annotationsList.length > 0) {
                         _this.update('annotations', true);
                     }
@@ -192,12 +192,12 @@
         toggle: function (enableSidePanel) {
             if (!enableSidePanel) {
                 jQuery(this.appendTo).hide();
-                this.parent.element.find('.view-container').addClass('focus-max-width');
-                this.parent.element.find('.mirador-icon-toc').hide();
+                jQuery.publish('ADD_CLASS.'+this.windowId, 'focus-max-width');
+                jQuery.publish('HIDE_ICON_TOC.'+this.windowId);                
             } else {
                 jQuery(this.appendTo).show({effect: "fade", duration: 300, easing: "easeInCubic"});
-                this.parent.element.find('.view-container').removeClass('focus-max-width');
-                this.parent.element.find('.mirador-icon-toc').show();                
+                jQuery.publish('REMOVE_CLASS.'+this.windowId, 'focus-max-width');
+                jQuery.publish('SHOW_ICON_TOC.'+this.windowId);                
             }
         }
     };

@@ -5,7 +5,6 @@
     jQuery.extend(this, {
       manifest:             null,
       element:              null,
-      parent:               null,
       metadataTypes:        null,
       metadataListingCls:   'metadata-listing'
     }, options);
