@@ -49,7 +49,8 @@
         osdViewer: _this.viewer,
         list: _this.annotationsList, // must be passed by reference.
         visible: false,
-        parent: _this
+        windowId: _this.windowId,
+        state: _this.state
       });
       this.modeSwitch();
     },
@@ -84,7 +85,8 @@
           osd: OpenSeadragon,
           osdViewer: _this.viewer,
           rectType: 'oa', // does not do anything yet. 
-          parent: _this
+          windowId: _this.windowId,
+          state: _this.state
         });
       } else {
         this.rectTool.reset(_this.viewer);

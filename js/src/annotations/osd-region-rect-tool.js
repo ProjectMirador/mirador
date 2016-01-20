@@ -14,8 +14,7 @@
       osdOverlay:  null,
       dragging:    false,
       rectangleDrawn: false,
-      disableRectTool: false,
-      parent:      null
+      disableRectTool: false
       }, options);
       
       this.init();
@@ -30,11 +29,11 @@
     bindEvents: function() {
       var _this = this;
 
-      jQuery.subscribe('disableRectTool.' + _this.parent.windowId, function() {
+      jQuery.subscribe('disableRectTool.' + _this.windowId, function() {
         _this.disableRectTool = true;
       });
 
-      jQuery.subscribe('enableRectTool.' + _this.parent.windowId, function() {
+      jQuery.subscribe('enableRectTool.' + _this.windowId, function() {
         _this.disableRectTool = false;
       });
     },
@@ -212,8 +211,7 @@
     // rendering methods may be used.
         
     onDrawFinishOld: function(canvasRect) {
-      var parent = this.parent,
-      _this = this;
+      var _this = this;
       
       var topLeftImagePoint = new OpenSeadragon.Point(canvasRect.x, canvasRect.y);
 
@@ -221,8 +219,8 @@
     
     onDrawFinish: function(canvasRect) {
       var _this = this,
-      parent = this.parent,
-      annoTooltip = new $.AnnotationTooltip({"windowId" : _this.parent.windowId}); //pass permissions
+      annoTooltip = new $.AnnotationTooltip({"windowId" : _this.windowId}),
+      windowElement = _this.state.getWindowElement(_this.windowId); //pass permissions
       var tooltip = jQuery(this.osdOverlay).qtip({
            content: {
             text : annoTooltip.getEditor({})
@@ -236,10 +234,9 @@
               //when the side panel is active and visible, it messes up the offset for the qtip
               //which means that qtips will disappear for annotations that are on the far right side of the canvas
               //so we need the container and viewport to be the element that encompasses everything,
-              //which can be the window or slot.  we need a better way of getting this element
-              //because this is brittle
-              container: _this.parent.parent.parent.element, //window's element
-              viewport: _this.parent.parent.parent.element //window's element
+              //which can be the window or slot. 
+              container: windowElement, //window's element
+              viewport: windowElement //window's element
             },
             style : {
               classes : 'qtip-bootstrap'
@@ -255,15 +252,15 @@
             events: {
               render: function(event, api) {
               
-                jQuery.publish('annotationEditorAvailable.'+parent.windowId);
+                jQuery.publish('annotationEditorAvailable.'+_this.windowId);
 
                 //disable all tooltips for overlays
-                jQuery.publish('disableTooltips.'+parent.windowId);
+                jQuery.publish('disableTooltips.'+_this.windowId);
                 //disable zooming
                 _this.osdViewer.zoomPerClick = 1;
                 _this.osdViewer.zoomPerScroll = 1;
 
-                var selector = '#annotation-editor-'+parent.windowId;
+                var selector = '#annotation-editor-'+_this.windowId;
 
                 tinymce.init({
                   selector : selector+' textarea',
@@ -297,7 +294,7 @@
                   _this.rectangleDrawn = false;
                   _this.osdViewer.removeOverlay(_this.osdOverlay);
                   //reenable viewer tooltips
-                  jQuery.publish('enableTooltips.'+parent.windowId);
+                  jQuery.publish('enableTooltips.'+_this.windowId);
                   _this.osdViewer.zoomPerClick = 2;
                   _this.osdViewer.zoomPerScroll = 1.2;                  
                 });
@@ -331,7 +328,7 @@
                   }
                   motivation.push("oa:commenting");
                   on = { "@type" : "oa:SpecificResource",
-                  "source" : parent.parent.canvasID, 
+                  "source" : _this.state.getWindowObjectById(_this.windowId).canvasID, 
                   "selector" : {
                     "@type" : "oa:FragmentSelector",
                     "value" : "xywh="+canvasRect.x+","+canvasRect.y+","+canvasRect.width+","+canvasRect.height
@@ -355,13 +352,13 @@
                  "on" : on
                 };
                   //save to endpoint
-                jQuery.publish('annotationCreated.'+parent.windowId, [oaAnno, _this.osdOverlay]);
+                jQuery.publish('annotationCreated.'+_this.windowId, [oaAnno, _this.osdOverlay]);
 
                 //update content of this qtip to make it a viewer, not editor
                 api.destroy();
                 _this.rectangleDrawn = false;
                 //reenable viewer tooltips
-                jQuery.publish('enableTooltips.'+parent.windowId);
+                jQuery.publish('enableTooltips.'+_this.windowId);
                 _this.osdViewer.zoomPerClick = 2;
                 _this.osdViewer.zoomPerScroll = 1.2;                  
                 });

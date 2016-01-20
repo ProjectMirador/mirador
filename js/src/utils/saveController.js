@@ -99,6 +99,14 @@
       }
     },
 
+    getWindowElement: function(windowId) {
+      if (this.windowsElements) {
+        return this.windowsElements[windowId];
+      } else {
+        return null;
+      }
+    },
+
     getStateProperty: function(prop) {
       return this.get(prop, 'currentConfig');
     },
@@ -163,6 +171,13 @@
         }
         _this.windowsAnnotationsLists[options.windowId] = options.annotationsList;
         jQuery.publish('annotationListLoaded.' + options.windowId);
+      });
+
+      jQuery.subscribe('WINDOW_ELEMENT_UPDATED', function(event, options) {
+        if (!_this.windowsElements) {
+          _this.windowsElements = {};
+        }
+        _this.windowsElements[options.windowId] = options.element;
       });
 
       jQuery.subscribe('windowSlotAddressUpdated', function(event, options) {

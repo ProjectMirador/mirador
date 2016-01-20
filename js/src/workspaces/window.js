@@ -146,6 +146,7 @@
         });
       }
       _this.element = jQuery(this.template(templateData)).appendTo(_this.appendTo);
+      jQuery.publish('WINDOW_ELEMENT_UPDATED', {windowId: _this.id, element: _this.element});
 
       //clear any existing objects
       _this.clearViews();
@@ -783,7 +784,6 @@
             }
             return true;
           });
-          console.log(_this.annotationsList);
           jQuery.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         });
       }
