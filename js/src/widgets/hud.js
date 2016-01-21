@@ -39,12 +39,6 @@
       }
 
       this.bindEvents();
-
-      if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
-        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, false);
-      } else {
-        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, null);
-      }
     },
 
     bindEvents: function() {

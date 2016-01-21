@@ -47,6 +47,7 @@
       this.elemAnno = jQuery('<div/>')
       .addClass(this.annoCls)
       .appendTo(this.element);
+
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
       jQuery.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
       // The hud controls are consistent 
@@ -65,6 +66,12 @@
 
       this.bindEvents();
       this.listenForActions();
+
+      if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
+        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, false);
+      } else {
+        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, null);
+      }
     },
 
     template: Handlebars.compile([

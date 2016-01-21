@@ -275,7 +275,7 @@
       });
 
       jQuery.subscribe('SET_BOTTOM_PANEL_VISIBILITY.' + this.id, function(event, visibility) {
-        if (visibility !== null) {
+        if (typeof visibility !== 'undefined' && visibility !== null) {
           _this.bottomPanelVisibility(visibility);
         } else {
           _this.bottomPanelVisibility(_this.bottomPanelVisible);
