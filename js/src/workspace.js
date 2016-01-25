@@ -93,6 +93,10 @@
       jQuery.subscribe('SPLIT_UP', function(event, slot) {
         _this.splitUp(slot);
       });
+
+      jQuery.subscribe('RESET_WORKSPACE_LAYOUT', function(event, options) {
+        _this.resetLayout(options.layoutDescription);
+      });
     },
 
     bindEvents: function() {

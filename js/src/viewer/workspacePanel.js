@@ -5,9 +5,7 @@
     jQuery.extend(true, this, {
       element: null,
       appendTo: null,
-      workspace: null,
-      maxRows: null,
-      maxColumns: null
+      workspace: null
     }, options);
 
     this.init();
@@ -18,7 +16,7 @@
     init: function () {
       var _this = this,
       templateData = {
-        rows: $.layoutDescriptionFromGridString(_this.maxColumns + 'x' + _this.maxRows).children.map(function(column, rowIndex) {
+        rows: $.layoutDescriptionFromGridString(_this.state.getStateProperty('workspacePanelSettings').maxColumns + 'x' + _this.state.getStateProperty('workspacePanelSettings').maxRows).children.map(function(column, rowIndex) {
           column.columns = column.children.map(function(row, columnIndex) {
             row.gridString = (rowIndex+1) + 'x' + (columnIndex+1);
             return row;
@@ -60,7 +58,7 @@
     onSelect: function(gridString) {
       var _this = this;
       var layoutDescription = $.layoutDescriptionFromGridString(gridString);
-      _this.workspace.resetLayout(layoutDescription);
+      jQuery.publish('RESET_WORKSPACE_LAYOUT', {layoutDescription: layoutDescription});
       jQuery.publish('TOGGLE_WORKSPACE_PANEL');
     },
 

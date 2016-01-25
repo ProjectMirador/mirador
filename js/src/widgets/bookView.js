@@ -139,17 +139,17 @@ bindEvents: function() {
         _this.osd.viewport.panBy(new OpenSeadragon.Point(0, -panBy.y));
         _this.osd.viewport.applyConstraints();
       });
-      this.parent.element.find('.mirador-osd-right').on('click', function() {
+      this.element.find('.mirador-osd-right').on('click', function() {
         var panBy = _this.getPanByValue();
         _this.osd.viewport.panBy(new OpenSeadragon.Point(panBy.x, 0));
         _this.osd.viewport.applyConstraints();
       });
-      this.parent.element.find('.mirador-osd-down').on('click', function() {
+      this.element.find('.mirador-osd-down').on('click', function() {
         var panBy = _this.getPanByValue();
         _this.osd.viewport.panBy(new OpenSeadragon.Point(0, panBy.y));
         _this.osd.viewport.applyConstraints();
       });
-      this.parent.element.find('.mirador-osd-left').on('click', function() {
+      this.element.find('.mirador-osd-left').on('click', function() {
         var panBy = _this.getPanByValue();
         _this.osd.viewport.panBy(new OpenSeadragon.Point(-panBy.x, 0));
         _this.osd.viewport.applyConstraints();

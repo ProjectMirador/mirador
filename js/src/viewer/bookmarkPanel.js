@@ -14,8 +14,9 @@
   $.BookmarkPanel.prototype = {
     init: function () {
       this.element = jQuery(this.template()).appendTo(this.appendTo);
-      saveModule = this.jsonStorageEndpoint.module,
-      saveOptions = this.jsonStorageEndpoint.options;
+      var jsonStorageEndpoint = this.state.getStateProperty('jsonStorageEndpoint'),
+      saveModule = jsonStorageEndpoint.module,
+      saveOptions = jsonStorageEndpoint.options;
       this.storageModule = new $[saveModule](saveOptions);
       this.bindEvents();
     },
