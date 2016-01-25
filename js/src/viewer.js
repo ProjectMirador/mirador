@@ -303,7 +303,7 @@
         layoutOptions: options.layoutOptions
       };
 
-      this.workspace.addWindow(windowConfig);
+      jQuery.publish('ADD_WINDOW', windowConfig);
     }
   };
 
