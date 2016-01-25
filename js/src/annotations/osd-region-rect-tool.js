@@ -24,9 +24,10 @@
   
     init: function() {
       this.bindEvents();
+      this.listenForActions();
     },
     
-    bindEvents: function() {
+    listenForActions: function() {
       var _this = this;
 
       jQuery.subscribe('disableRectTool.' + _this.windowId, function() {
@@ -36,6 +37,10 @@
       jQuery.subscribe('enableRectTool.' + _this.windowId, function() {
         _this.disableRectTool = false;
       });
+    },
+
+    bindEvents: function() {
+      var _this = this;
     },
     
     reset: function(osdViewer) {

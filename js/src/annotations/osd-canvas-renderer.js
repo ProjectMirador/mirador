@@ -17,10 +17,50 @@
       inEditOrCreateMode:   false
     }, options);
 
-    this.bindEvents();
+    this.init();
   };
 
   $.OsdCanvasRenderer.prototype = {
+    init: function() {
+      this.bindEvents();
+      this.listenForActions();
+    },
+
+    listenForActions: function() {
+      var _this = this;
+
+      jQuery.subscribe('removeTooltips.' + _this.windowId, function() {
+        jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
+      });
+
+      jQuery.subscribe('disableTooltips.' + _this.windowId, function() {
+        _this.inEditOrCreateMode = true;
+      });
+
+      jQuery.subscribe('enableTooltips.' + _this.windowId, function() {
+        _this.inEditOrCreateMode = false;
+      });
+
+      jQuery.subscribe('removeOverlay.' + _this.windowId, function(event, annoId) {
+        //remove this annotation's overlay from osd
+        _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+annoId)[0]);
+      });
+    }, 
+
+    bindEvents: function() {
+      var _this = this;
+
+      jQuery(this.osdViewer.canvas).parent().on('mousemove', $.throttle(function(event) { 
+        if (!_this.inEditOrCreateMode) {
+          _this.showTooltipsFromMousePosition(event);
+        }
+       }, 200, true));
+
+     this.osdViewer.addHandler('zoom', $.debounce(function(){
+          _this.hideVisibleTooltips();
+        }, 200, true));
+    },
+
     parseRegion: function(url) {
       var regionString;
       if (typeof url === 'object') {
@@ -273,38 +313,6 @@
      }
 
      return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-    },
-
-    bindEvents: function() {
-      var _this = this;
-
-      jQuery(this.osdViewer.canvas).parent().on('mousemove', $.throttle(function(event) { 
-        if (!_this.inEditOrCreateMode) {
-          _this.showTooltipsFromMousePosition(event);
-        }
-       }, 200, true));
-
-     this.osdViewer.addHandler('zoom', $.debounce(function(){
-          _this.hideVisibleTooltips();
-        }, 200, true));
-
-      jQuery.subscribe('removeTooltips.' + _this.windowId, function() {
-        jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
-      });
-
-      jQuery.subscribe('disableTooltips.' + _this.windowId, function() {
-        _this.inEditOrCreateMode = true;
-      });
-
-      jQuery.subscribe('enableTooltips.' + _this.windowId, function() {
-        _this.inEditOrCreateMode = false;
-      });
-
-      jQuery.subscribe('removeOverlay.' + _this.windowId, function(event, annoId) {
-        //remove this annotation's overlay from osd
-        _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+annoId)[0]);
-      });
-
     },
 
     hideVisibleTooltips: function() {

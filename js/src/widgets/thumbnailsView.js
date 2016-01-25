@@ -30,6 +30,7 @@
 
       this.loadContent();
       this.bindEvents();
+      this.listenForActions();
     },
 
     loadContent: function() {
@@ -92,6 +93,17 @@
       _this.element.scrollTo(scrollPosition, 900);
     },
 
+    listenForActions: function() {
+      var _this = this;
+      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event) {
+        _this.currentImageChanged();
+      });
+
+      jQuery.subscribe('windowResize', $.debounce(function(){
+        _this.loadImages();
+      }, 100));
+    },
+
     bindEvents: function() {
       var _this = this;
       _this.element.find('img').on('load', function() {
@@ -102,19 +114,11 @@
         _this.loadImages();
       });
 
-      jQuery.subscribe('windowResize', $.debounce(function(){
-        _this.loadImages();
-      }, 100));
-
       //add any other events that would trigger thumbnail display (resize, etc)
 
       _this.element.find('.thumbnail-image').on('click', function() {
         var canvasID = jQuery(this).attr('data-image-id');
         jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasID);
-      });
-
-      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event) {
-        _this.currentImageChanged();
       });
     },
 

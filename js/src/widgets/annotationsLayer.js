@@ -26,9 +26,10 @@
 
       this.createRenderer();
       this.bindEvents();
+      this.listenForActions();
     },
 
-    bindEvents: function() {
+    listenForActions: function() {
       var _this = this;
 
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
@@ -40,6 +41,10 @@
         _this.annotationsList = _this.state.getWindowAnnotationsList(_this.windowId);
         _this.updateRenderer();
       });
+    },
+
+    bindEvents: function() {
+      var _this = this;
     },
 
     createRenderer: function() {
