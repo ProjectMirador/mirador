@@ -181,7 +181,9 @@
         if (slot && slot.window && !resetting) {
           jQuery.publish("windowRemoved", slot.window.id);
         }
-
+        
+        // nullify the window parameter of old slots
+        slot.window = null;
         _this.slots.splice(_this.slots.indexOf(slot), 1);
       });
 
