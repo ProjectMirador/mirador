@@ -171,7 +171,7 @@
           break;
       }
 
-      if ($.viewer.workspace.slots.length <= 1) {
+      if (_this.state.getSlots().length <= 1) {
         _this.element.find('.remove-object-option').hide();
       }
 

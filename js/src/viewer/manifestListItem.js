@@ -133,7 +133,7 @@
           currentCanvasID: null,
           currentFocus: 'ThumbnailsView'
         };
-        $.viewer.workspace.addWindow(windowConfig);
+        jQuery.publish('ADD_WINDOW', windowConfig);
       });
 
       this.element.find('.preview-image').on('click', function(e) {
@@ -143,7 +143,7 @@
           currentCanvasID: jQuery(this).attr('data-image-id'),
           currentFocus: 'ImageView'
         };
-        $.viewer.workspace.addWindow(windowConfig);
+        jQuery.publish('ADD_WINDOW', windowConfig);
       });
 
       jQuery.subscribe('manifestPanelWidthChanged', function(event, newWidth){

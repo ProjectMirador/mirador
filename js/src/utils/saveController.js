@@ -99,6 +99,10 @@
       }
     },
 
+    getSlots: function() {
+      return this.slots;
+    },
+
     getWindowElement: function(windowId) {
       if (this.windowsElements) {
         return this.windowsElements[windowId];
@@ -211,6 +215,10 @@
         var manifests = _this.currentConfig.manifests;
         manifests[url] = manifestObject;
         _this.set('manifests', manifests, {parent: 'currentConfig'});
+      });
+
+      jQuery.subscribe("slotsUpdated", function(event, options) {
+        _this.slots = options.slots;
       });
 
       jQuery.subscribe("layoutChanged", function(event, layoutDescription) {

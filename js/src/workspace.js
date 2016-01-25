@@ -198,6 +198,7 @@
       var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
 
       jQuery.publish("layoutChanged", root);
+      jQuery.publish('slotsUpdated', {slots: _this.slots});
 
       if (_this.slots.length <= 1) {
           jQuery.publish('HIDE_REMOVE_SLOT');
@@ -334,8 +335,6 @@
       parentIndex,
       remainingNode,
       root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
-      console.log(_this.layout);
-      console.log(_this.slots);
 
       if (node.parent.children.length === 2) {
         // de-mutate the tree without destroying
