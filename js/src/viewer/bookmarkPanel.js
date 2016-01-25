@@ -18,10 +18,12 @@
       saveModule = jsonStorageEndpoint.module,
       saveOptions = jsonStorageEndpoint.options;
       this.storageModule = new $[saveModule](saveOptions);
+      
       this.bindEvents();
+      this.listenForActions();
     },
 
-    bindEvents: function() {
+    listenForActions: function() {
       var _this = this;
       // handle subscribed events
       jQuery.subscribe('bookmarkPanelVisible.set', function(_, stateValue) {
@@ -36,6 +38,10 @@
             _this.element.find('#share-url').val(bookmarkURL).focus().select();
 	         });
       });
+    },
+
+    bindEvents: function() {
+      var _this = this;
     },
 
     hide: function() {

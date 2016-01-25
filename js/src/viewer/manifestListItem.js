@@ -46,6 +46,7 @@
       this.element = jQuery(this.template(this.tplData)).prependTo(this.appendTo).hide().fadeIn('slow');
 
       this.bindEvents();
+      this.listenForActions();
     },
 
     fetchTplData: function() {
@@ -119,6 +120,14 @@
 
     },
 
+    listenForActions: function() {
+      var _this = this;
+
+      jQuery.subscribe('manifestPanelWidthChanged', function(event, newWidth){
+        _this.updateDisplay(newWidth);
+      });
+    },
+
     bindEvents: function() {
       var _this = this;
 
@@ -145,9 +154,11 @@
         };
         jQuery.publish('ADD_WINDOW', windowConfig);
       });
+    },
 
-      jQuery.subscribe('manifestPanelWidthChanged', function(event, newWidth){
-        var newMaxPreviewWidth = newWidth - (_this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.remainingWidth);
+    updateDisplay: function(newWidth) {
+        var _this = this,
+        newMaxPreviewWidth = newWidth - (_this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.remainingWidth);
         newMaxPreviewWidth = newMaxPreviewWidth * 0.95;
         
         //width of browser window has been made smaller
@@ -193,7 +204,6 @@
           }
         }
         _this.maxPreviewImagesWidth = newMaxPreviewWidth;
-      });
     },
 
     hide: function() {
