@@ -207,9 +207,9 @@
      * @return {[type]}          string
      */
     getCanvasLabel: function(canvasId) {
-      canvasId = canvasId.split('#')[0];  // Remove region fragment if necessary
-      console.log("[Manifest] getting canvas label for: " + canvasId);
-      return this.canvasMap[canvasId].label;
+      console.assert(canvasId && canvasId !== '', "No canvasId was specified.");
+      var canvas = this.canvasMap[canvasId.split('#')[0]];
+      return canvas ? canvas.label : undefined;
     }
 
   };
