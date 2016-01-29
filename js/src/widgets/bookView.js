@@ -20,7 +20,6 @@
         osdBounds:        null,
         zoomLevel:        null
       },
-      parent:           null,
       stitchTileMargin: 10
     }, options);
 

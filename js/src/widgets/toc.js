@@ -5,7 +5,7 @@
     jQuery.extend(true, this, {
       element:           null,
       appendTo:          null,
-      parent:            null,
+      windowId:          null,
       manifest:          null,
       structures:        null,
       previousSelectedElements: [],
@@ -32,7 +32,7 @@
         this.ranges = this.setRanges();
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
         this.tocData = this.initTocData();
-        this.selectedElements = $.getRangeIDByCanvasID(_this.structures, _this.parent.currentCanvasID);
+        this.selectedElements = $.getRangeIDByCanvasID(_this.structures, _this.canvasID);
         this.element.find('.has-child ul').hide();
         this.render();
       }
@@ -194,7 +194,6 @@
 
     bindEvents: function() {
       var _this = this;
-      // var eventString = _this.parent.id
 
       jQuery.subscribe('focusChanged', function(_, manifest, focusFrame) {
       });
@@ -202,11 +201,11 @@
       jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
       });
 
-      jQuery.subscribe('tabStateUpdated.' + _this.parent.id, function(_, data) {
+      jQuery.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
         _this.tabStateUpdated(data);
       });
 
-      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(event, canvasID) {
+      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event, canvasID) {
         if (!_this.structures) { return; }
         _this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, canvasID));
         _this.render();
@@ -228,7 +227,7 @@
         // if ( _this.parent.currentFocus === 'ThumbnailsView' & !isLeaf) {
         //   _this.parent.setCursorFrameStart(canvasID);
         // } else {
-          _this.parent.setCurrentCanvasID(canvasID);
+          jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasID);
         // }
       });
 
@@ -343,12 +342,12 @@
 
     hide: function() {
       jQuery(this.appendTo).hide();
-      this.parent.element.find('.view-container').addClass('focus-max-width');
+      jQuery.publish('ADD_CLASS.'+this.windowId, 'focus-max-width');
     },
 
     show: function() {
       jQuery(this.appendTo).show({effect: "fade", duration: 300, easing: "easeInCubic"});
-      this.parent.element.find('.view-container').removeClass('focus-max-width');
+      jQuery.publish('REMOVE_CLASS.'+this.windowId, 'focus-max-width');
     }
 
   };

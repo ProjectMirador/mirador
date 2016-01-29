@@ -80,9 +80,9 @@
                 new $.TableOfContents({
                     manifest: this.manifest,
                     appendTo: this.element.find('.tabContentArea'),
-                    parent: this.parent,
+                    windowId: this.windowId,
                     panel: true,
-                    canvasID: this.parent.currentCanvasID
+                    canvasID: this.canvasID
                 });
             }
             if (_this.annotationsTabAvailable) {
@@ -163,6 +163,10 @@
                         _this.update('annotations', true);
                     }
                 }
+            });
+
+            jQuery.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, newCanvasId) {
+                _this.canvasID = newCanvasId;
             });
 
         },
