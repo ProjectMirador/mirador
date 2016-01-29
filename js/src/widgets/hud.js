@@ -4,7 +4,6 @@
 
     jQuery.extend(this, {
       element:   null,
-      parent:    null,
       windowId:  null,
       annoState: null,
       showAnnotations: true,
@@ -32,7 +31,6 @@
           element: null,
           container: this.appendTo,
           mode: 'displayAnnotations',
-          parent: this,
           windowId: this.windowId,
           annotationCreationAvailable: this.annotationCreationAvailable
         });
@@ -69,11 +67,11 @@
           },
           ondisplayOn: function(event, from, to) { 
             if (_this.annoEndpointAvailable) {
-              _this.parent.element.find('.mirador-osd-annotations-layer').fadeOut(duration, function() {      
-                _this.contextControls.show();
-              });              
+                jQuery.publish('HUD_FADE_OUT.' + _this.windowId, ['.mirador-osd-annotations-layer', duration, function() {      
+                  _this.contextControls.show();
+                }]);
             } else {
-              _this.parent.element.find('.mirador-osd-annotations-layer').addClass("selected");
+              jQuery.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-annotations-layer', 'selected']);
             }
             jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');
             jQuery.publish(('windowUpdated'), {
@@ -90,15 +88,15 @@
           },
           oncreateOn: function(event, from, to) {
             function enableEditingAnnotations() {
-              _this.parent.element.find('.mirador-osd-edit-mode').addClass("selected");
+              jQuery.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
               jQuery.publish('modeChange.' + _this.windowId, 'editingAnnotations');
             }
             if (_this.annoEndpointAvailable) {
               if (from === "annoOff") {
-                _this.parent.element.find('.mirador-osd-annotations-layer').fadeOut(duration, function() {      
+                jQuery.publish('HUD_FADE_OUT.' + _this.windowId, ['.mirador-osd-annotations-layer', duration, function() {      
                   _this.contextControls.show();
                   enableEditingAnnotations();
-                });
+                }]);
               } else {
                 enableEditingAnnotations();
               }
@@ -116,7 +114,7 @@
             });
           },
           oncreateOff: function(event, from, to) { 
-            _this.parent.element.find('.mirador-osd-edit-mode').removeClass("selected");
+            jQuery.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
             jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');
             jQuery.publish(('windowUpdated'), {
               id: _this.windowId,
@@ -125,13 +123,12 @@
           },
           ondisplayOff: function(event, from, to) { 
             if (_this.annoEndpointAvailable) {
-              _this.parent.element.find('.mirador-osd-edit-mode').removeClass("selected");
+              jQuery.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
               _this.contextControls.hide(function() {
-                _this.parent.element.find('.mirador-osd-annotations-layer').fadeIn(duration);
-              }
-              );
+                jQuery.publish('HUD_FADE_IN.' + _this.windowId, ['.mirador-osd-annotations-layer', duration]);
+              });
             } else {
-              _this.parent.element.find('.mirador-osd-annotations-layer').removeClass("selected");
+              jQuery.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-annotations-layer', 'selected']);
             }
             jQuery.publish('modeChange.' + _this.windowId, 'default');
             jQuery.publish(('windowUpdated'), {

@@ -3,7 +3,6 @@
   $.ContextControls = function(options) {
 
     jQuery.extend(this, {
-      parent: null,  //hud
       element: null,
       container: null,
       mode: null,
@@ -35,29 +34,12 @@
 
     bindEvents: function() {
       var _this = this;
-
-      this.container.find('.mirador-osd-close').on('click', function() {
-        _this.parent.annoState.displayOff();
-      });
       
       this.container.find('.mirador-osd-back').on('click', function() {
         _this.element.remove();
         _this.element = jQuery(_this.template()).appendTo(_this.container);
         _this.bindEvents();
       });
-      
-      this.container.find('.mirador-osd-edit-mode').on('click', function() {
-        if (_this.parent.annoState.current === 'annoOnCreateOff') {
-          _this.parent.annoState.createOn();
-        } else if (_this.parent.annoState.current === 'annoOnCreateOn') {
-          _this.parent.annoState.createOff();
-        }
-      });
-      this.container.find('.mirador-osd-refresh-mode').on('click', function() {
-        //update annotation list from endpoint
-        jQuery.publish('updateAnnotationList.'+_this.windowId);
-      });
-      
     },
 
     template: Handlebars.compile([

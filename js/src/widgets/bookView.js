@@ -46,7 +46,6 @@
       this.element = jQuery(this.template()).appendTo(this.appendTo);
 
       this.hud = new $.Hud({
-        parent: this,
         appendTo: this.element,
         bottomPanelAvailable: this.bottomPanelAvailable,
         windowId: this.windowId,

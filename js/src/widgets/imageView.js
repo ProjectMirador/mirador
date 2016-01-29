@@ -53,7 +53,6 @@
       // The hud controls are consistent 
       // throughout any updates to the osd canvas.
       this.hud = new $.Hud({
-        parent: this,
         appendTo: this.element,
         bottomPanelAvailable: this.bottomPanelAvailable,
         windowId: this.windowId,
@@ -115,6 +114,24 @@
         }
         // If it is the last canvas, hide the "go to previous" button, otherwise show it.
       });
+
+      //Related to Annotations HUD
+      jQuery.subscribe('HUD_REMOVE_CLASS.' + _this.windowId, function(event, elementSelector, className) {
+        _this.element.find(elementSelector).removeClass(className);
+      });
+
+      jQuery.subscribe('HUD_ADD_CLASS.' + _this.windowId, function(event, elementSelector, className) {
+        _this.element.find(elementSelector).addClass(className);
+      });
+
+      jQuery.subscribe('HUD_FADE_IN.' + _this.windowId, function(event, elementSelector, duration) {
+        _this.element.find(elementSelector).fadeIn(duration);
+      });
+
+      jQuery.subscribe('HUD_FADE_OUT.' + _this.windowId, function(event, elementSelector, duration, complete) {
+        _this.element.find(elementSelector).fadeOut(duration, complete);
+      });
+      //Related to Annotations HUD
     },
 
     bindEvents: function() {
@@ -198,6 +215,25 @@
       this.element.find('.mirador-osd-toggle-bottom-panel').on('click', function() {
         jQuery.publish('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + _this.windowId);
       });
+
+      //related the ContextControls
+      this.element.find('.mirador-osd-close').on('click', function() {
+        _this.hud.annoState.displayOff();
+      });
+
+      this.element.find('.mirador-osd-edit-mode').on('click', function() {
+        if (_this.hud.annoState.current === 'annoOnCreateOff') {
+          _this.hud.annoState.createOn();
+        } else if (_this.hud.annoState.current === 'annoOnCreateOn') {
+          _this.hud.annoState.createOff();
+        }
+      });
+
+      this.element.find('.mirador-osd-refresh-mode').on('click', function() {
+        //update annotation list from endpoint
+        jQuery.publish('updateAnnotationList.'+_this.windowId);
+      });
+      //related the ContextControls
     },
 
     getPanByValue: function() {
