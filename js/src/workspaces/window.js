@@ -111,6 +111,12 @@
       }
       _this.getAnnotations();
 
+      //for use by SidePanel, which needs to know if the current view can have the annotations tab
+      jQuery.publish(('windowUpdated'), {
+        id: _this.id,
+        annotationsAvailable: this.annotationsAvailable
+      });
+
       //check config
       if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
         jQuery.each(this.focusOverlaysAvailable, function(key, value) {
@@ -152,6 +158,9 @@
       _this.clearViews();
       _this.clearPanelsAndOverlay();
 
+      //window needs to listen for any events before it finishes building out the widgets, in case they publish anything
+      this.listenForActions();
+
       //attach view and toggle view, which triggers the attachment of panels or overlays
       _this.bindNavigation();
       switch(focusState) {
@@ -176,7 +185,6 @@
       }
 
       this.bindEvents();
-      this.listenForActions();
 
       if (this.imagesList.length === 1) {
         this.bottomPanelVisibility(false);
@@ -443,7 +451,6 @@
 
       if (this.sidePanel === null) {
         this.sidePanel = new $.SidePanel({
-              parent: _this,
               windowId: _this.id,
               state: _this.state,
               appendTo: _this.element.find('.sidePanel'),

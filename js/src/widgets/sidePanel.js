@@ -4,7 +4,6 @@
         jQuery.extend(true, this, {
             element:           null,
             appendTo:          null,
-            parent:            null,
             manifest:          null,
             panelState:        {},
             tocTabAvailable:   false,
@@ -73,7 +72,7 @@
                 windowId: this.windowId,
                 appendTo: this.appendTo,
                 tabs : this.panelState.tabs,
-                parent : this
+                hasStructures : this.hasStructures
             });
 
             if (this.tocTabAvailable) {
@@ -157,7 +156,7 @@
 
             jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
                 var windowObject = _this.state.getWindowObjectById(_this.windowId);
-                if (_this.parent.annotationsAvailable[windowObject.viewType]) {
+                if (windowObject.annotationsAvailable[windowObject.viewType]) {
                     if (_this.state.getWindowAnnotationsList(_this.windowId).length > 0) {
                         _this.update('annotations', true);
                     }
