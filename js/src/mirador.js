@@ -4,7 +4,6 @@ window.Mirador = window.Mirador || function(config) {
   // returning the config that will, in fact, populate the
   // application.
   Mirador.saveController = new Mirador.SaveController(config);
-  console.log(Mirador.saveController.currentConfig);
 
   //config = Mirador.saveController.currentConfig;
 
