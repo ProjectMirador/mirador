@@ -65,7 +65,7 @@
 
       // add main menu
       if (showMainMenu) {
-        this.mainMenu = new $.MainMenu({ parent: this, appendTo: this.element, state: this.state });
+        this.mainMenu = new $.MainMenu({ appendTo: this.element, state: this.state });
       }
 
       // add viewer area

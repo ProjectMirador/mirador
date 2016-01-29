@@ -88,7 +88,6 @@
             if (_this.annotationsTabAvailable) {
                 new $.AnnotationsTab({
                     manifest: _this.manifest,
-                    parent: this.parent,
                     windowId: this.windowId,
                     appendTo: _this.element.find('.tabContentArea'),
                     tabs: _this.sidePanelState.tabs

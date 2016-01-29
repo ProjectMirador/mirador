@@ -4,7 +4,6 @@
         jQuery.extend(true, this, {
             element:           null,
             appendTo:          null,
-            parent:            null,
             manifest:          null,
             visible:           null
         }, options);

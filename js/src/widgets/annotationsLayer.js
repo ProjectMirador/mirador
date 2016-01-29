@@ -3,7 +3,6 @@
   $.AnnotationsLayer = function(options) {
 
     jQuery.extend(true, this, {
-      parent:            null,
       annotationsList:   null,
       viewer:            null,
       renderer:          null,

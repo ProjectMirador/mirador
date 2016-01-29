@@ -165,8 +165,7 @@
           layoutAddress: d.address,
           focused: true,
           appendTo: appendTo,
-          state: _this.state,
-          parent: _this
+          state: _this.state
         }));
       });
 

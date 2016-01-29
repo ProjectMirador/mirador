@@ -605,7 +605,6 @@
         this.focusModules.ImageView = new $.ImageView({
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
-          parent: this,
           windowId: this.id,
           state:  this.state,
           canvasID: canvasID,
@@ -631,7 +630,6 @@
         this.focusModules.BookView = new $.BookView({
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
-          parent: this,
           windowId: this.id,
           state:  this.state,
           canvasID: canvasID,
@@ -770,7 +768,6 @@
           options.dfd = dfd;
           options.windowID = _this.id;
           options.imagesList = _this.imagesList;
-          //options.parent = _this;
           _this.endpoint = new $[module](options);
         }
         _this.endpoint.search({ "uri" : _this.currentCanvasID});
