@@ -12,3 +12,14 @@ data/ecodices
 data/BnF
 data/Harvard
 build/
+.idea/.name
+.idea/encodings.xml
+.idea/jsLibraryMappings.xml
+.idea/libraries/miradorITT_node_modules.xml
+.idea/miradorITT.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/libraries/mirador_node_modules.xml
+.idea/mirador.iml

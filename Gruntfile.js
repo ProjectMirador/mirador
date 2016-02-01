@@ -36,6 +36,8 @@ module.exports = function(grunt) {
     'js/lib/URI.min.js',
     'js/lib/mousetrap.min.js',
     'js/lib/isfahan.js',
+    'js/lib/paper-full.min.js',
+    'js/lib/spectrum.js',
     'js/lib/i18next.min.js'
   ],
 
@@ -94,6 +96,7 @@ module.exports = function(grunt) {
         'css/jquery-ui.custom.min.css',
         'css/layout-default-latest.css',
         'css/jquery.qtip.min.css',
+        'css/spectrum.css',
         'css/mirador.css',
         '!css/mirador-combined.css'
         ],

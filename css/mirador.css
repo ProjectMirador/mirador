@@ -1176,6 +1176,38 @@ li.highlight {
   font-weight: normal;
 }
 
+/* color picker custom style
+---------------------------------------------------------------------------- */
+
+.mirador-osd-edit-mode .sp-container {
+  width: 300px !important;
+}
+
+.mirador-osd-edit-mode .sp-preview {
+  height: 10px !important;
+}
+.mirador-osd-edit-mode .sp-dd {
+  height: 6px !important;
+  line-height: 6px !important;
+}
+.mirador-osd-edit-mode .sp-replacer {
+  border-radius: 5px !important;
+}
+
+.borderColorPicker + div {
+  background-image: url('../images/border-color-picker.png');
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  padding-left: 1.5em;
+}
+
+.fillColorPicker + div {
+  background-image: url('../images/fill-color-picker.png');
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  padding-left: 1.5em;
+}
+
 /* image view
 ---------------------------------------------------------------------------- */
 
