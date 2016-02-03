@@ -4,7 +4,6 @@
 
     jQuery.extend(this, {
       element:   null,
-      parent:    null,
       annotations: [],
       windowId:  ""
     }, options);

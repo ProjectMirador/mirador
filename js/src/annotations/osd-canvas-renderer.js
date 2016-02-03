@@ -11,17 +11,56 @@
       osdViewer: null,
       elements:  null,
       list:      null,
-      parent:    null, //annotationsLayer
       annoTooltips: {},
       tooltips:  null,
       overlays:  [],
       inEditOrCreateMode:   false
     }, options);
 
-    this.bindEvents();
+    this.init();
   };
 
   $.OsdCanvasRenderer.prototype = {
+    init: function() {
+      this.bindEvents();
+      this.listenForActions();
+    },
+
+    listenForActions: function() {
+      var _this = this;
+
+      jQuery.subscribe('removeTooltips.' + _this.windowId, function() {
+        jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
+      });
+
+      jQuery.subscribe('disableTooltips.' + _this.windowId, function() {
+        _this.inEditOrCreateMode = true;
+      });
+
+      jQuery.subscribe('enableTooltips.' + _this.windowId, function() {
+        _this.inEditOrCreateMode = false;
+      });
+
+      jQuery.subscribe('removeOverlay.' + _this.windowId, function(event, annoId) {
+        //remove this annotation's overlay from osd
+        _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+annoId)[0]);
+      });
+    }, 
+
+    bindEvents: function() {
+      var _this = this;
+
+      jQuery(this.osdViewer.canvas).parent().on('mousemove', $.throttle(function(event) { 
+        if (!_this.inEditOrCreateMode) {
+          _this.showTooltipsFromMousePosition(event);
+        }
+       }, 200, true));
+
+     this.osdViewer.addHandler('zoom', $.debounce(function(){
+          _this.hideVisibleTooltips();
+        }, 200, true));
+    },
+
     parseRegion: function(url) {
       var regionString;
       if (typeof url === 'object') {
@@ -67,8 +106,10 @@
       //this still doesn't take into account the actual appending of the overlays to the DOM
       //so not quite there yet
       jQuery.when.apply(jQuery, deferreds).done(function() {
-        jQuery.publish('overlaysRendered.' + _this.parent.windowId);        
+        jQuery.publish('overlaysRendered.' + _this.windowId);        
       });
+
+      var windowElement = _this.state.getWindowElement(_this.windowId);
 
       this.tooltips = jQuery(this.osdViewer.element).qtip({
             overwrite : false,
@@ -86,10 +127,9 @@
               //when the side panel is active and visible, it messes up the offset for the qtip
               //which means that qtips will disappear for annotations that are on the far right side of the canvas
               //so we need the container and viewport to be the element that encompasses everything,
-              //which can be the window or slot.  we need a better way of getting this element
-              //because this is brittle
-              container: _this.parent.parent.parent.element, //window's element
-              viewport: _this.parent.parent.parent.element //window's element
+              //which can be the window or slot.  
+              container: windowElement, //window's element
+              viewport: windowElement //window's element
              },
              style : {
               classes : 'qtip-bootstrap qtip-viewer'
@@ -128,14 +168,14 @@
     setTooltipContent: function(event, api) {
       var overlays = this.getOverlaysFromElement(jQuery(event.originalEvent.currentTarget), event.originalEvent),
       _this = this,
-      annoTooltip = new $.AnnotationTooltip({"windowId" : _this.parent.windowId}), //pass permissions
+      annoTooltip = new $.AnnotationTooltip({"windowId" : _this.windowId}), //pass permissions
       annotations = [];
 
       jQuery.each(overlays, function(index, overlay) {
        annotations.push(_this.getAnnoFromRegion(overlay.id)[0]);
      });
       api.set({'content.text' : annoTooltip.getViewer(annotations)});
-      jQuery.publish('tooltipViewerSet.'+_this.parent.windowId);
+      jQuery.publish('tooltipViewerSet.'+_this.windowId);
     },
 
     getAnnoFromRegion: function(regionId) {
@@ -275,38 +315,6 @@
      return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
     },
 
-    bindEvents: function() {
-      var _this = this;
-
-      jQuery(this.osdViewer.canvas).parent().on('mousemove', $.throttle(function(event) { 
-        if (!_this.inEditOrCreateMode) {
-          _this.showTooltipsFromMousePosition(event);
-        }
-       }, 200, true));
-
-     this.osdViewer.addHandler('zoom', $.debounce(function(){
-          _this.hideVisibleTooltips();
-        }, 200, true));
-
-      jQuery.subscribe('removeTooltips.' + _this.parent.windowId, function() {
-        jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
-      });
-
-      jQuery.subscribe('disableTooltips.' + _this.parent.windowId, function() {
-        _this.inEditOrCreateMode = true;
-      });
-
-      jQuery.subscribe('enableTooltips.' + _this.parent.windowId, function() {
-        _this.inEditOrCreateMode = false;
-      });
-
-      jQuery.subscribe('removeOverlay.' + _this.parent.windowId, function(event, annoId) {
-        //remove this annotation's overlay from osd
-        _this.osdViewer.removeOverlay(jQuery(_this.osdViewer.element).find(".annotation#"+annoId)[0]);
-      });
-
-    },
-
     hideVisibleTooltips: function() {
       jQuery('.qtip-viewer').qtip('hide');
     },
@@ -331,10 +339,10 @@
     //disable all other qtips until editing this is done
     freezeQtip: function(api, oaAnno, annoTooltip) {
       this.inEditOrCreateMode = true;
-      jQuery.publish('disableRectTool.'+this.parent.windowId);
+      jQuery.publish('disableRectTool.'+this.windowId);
         api.set({'content.text' : annoTooltip.getEditor(oaAnno),
         'hide.event' : false});
-        jQuery.publish('annotationEditorAvailable.'+this.parent.windowId);
+        jQuery.publish('annotationEditorAvailable.'+this.windowId);
         //add rich text editor
         tinymce.init({
                   selector : 'form.annotation-tooltip textarea',
@@ -359,7 +367,7 @@
     //and reset hide event       
     unFreezeQtip: function(api, oaAnno, annoTooltip) {
       this.inEditOrCreateMode = false;
-      jQuery.publish('enableRectTool.'+this.parent.windowId);
+      jQuery.publish('enableRectTool.'+this.windowId);
       api.set({'content.text' : annoTooltip.getViewer([oaAnno]),
           'hide.event' : 'mouseleave'}).hide();
       jQuery(api.elements.tooltip).addClass("qtip-viewer"); //re-add class so it is affected by zoom event raised in OSD
@@ -369,8 +377,8 @@
     
     removeAnnotationEvents: function(tooltipevent, api) {
       var _this = this,
-      editorSelector = '#annotation-editor-'+_this.parent.windowId,
-      viewerSelector = '#annotation-viewer-'+_this.parent.windowId;
+      editorSelector = '#annotation-editor-'+_this.windowId,
+      viewerSelector = '#annotation-viewer-'+_this.windowId;
       jQuery(viewerSelector+' a.delete').off("click");
       jQuery(viewerSelector+' a.edit').off("click");
       jQuery(editorSelector+' a.save').off("click");
@@ -379,8 +387,8 @@
 
     annotationEvents: function(tooltipevent, api) {
       var _this = this,
-      annoTooltip = new $.AnnotationTooltip({"windowId" : _this.parent.windowId}),
-      selector = '#annotation-viewer-'+_this.parent.windowId;
+      annoTooltip = new $.AnnotationTooltip({"windowId" : _this.windowId}),
+      selector = '#annotation-viewer-'+_this.windowId;
       jQuery(selector+' a.delete').on("click", function(event) {
         event.preventDefault();
         
@@ -391,7 +399,7 @@
         var display = jQuery(this).parents('.annotation-display'),
         id = display.attr('data-anno-id');
         //oaAnno = _this.getAnnoFromRegion(id)[0];
-        jQuery.publish('annotationDeleted.'+_this.parent.windowId, [id]);
+        jQuery.publish('annotationDeleted.'+_this.windowId, [id]);
         
         //hide tooltip so event handlers don't get messed up
         api.hide();
@@ -411,8 +419,8 @@
     
     annotationSaveEvent: function(event, api) {
       var _this = this,
-      annoTooltip = new $.AnnotationTooltip({"windowId" : _this.parent.windowId}),
-      selector = '#annotation-editor-'+_this.parent.windowId;
+      annoTooltip = new $.AnnotationTooltip({"windowId" : _this.windowId}),
+      selector = '#annotation-editor-'+_this.windowId;
       
       jQuery(selector).on("submit", function(event) {
         event.preventDefault();
@@ -467,7 +475,7 @@
             }
         });
         //save to endpoint
-        jQuery.publish('annotationUpdated.'+_this.parent.windowId, [oaAnno]);
+        jQuery.publish('annotationUpdated.'+_this.windowId, [oaAnno]);
 
         _this.unFreezeQtip(api, oaAnno, annoTooltip);
         });

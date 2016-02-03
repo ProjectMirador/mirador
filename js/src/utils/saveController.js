@@ -45,7 +45,7 @@
           //get json from JSON storage and set currentConfig to it
           var params = paramURL.split('=');
           var jsonblob = params[1];
-	  this.currentConfig = this.storageModule.readSync(jsonblob);
+          this.currentConfig = this.storageModule.readSync(jsonblob);
         } else {
           this.currentConfig = config;
         }
@@ -78,6 +78,48 @@
 
       this.bindEvents();
 
+    },
+
+    getWindowObjectById: function(windowId) {
+      var returnObject = null;
+      jQuery.each(this.currentConfig.windowObjects, function(index, window) {
+        if (window.id === windowId) {
+          returnObject = window;
+          return false;
+        }
+      });
+      return returnObject;
+    },
+
+    getWindowAnnotationsList: function(windowId) {
+      if (this.windowsAnnotationsLists) {
+        return this.windowsAnnotationsLists[windowId];
+      } else {
+        return null;
+      }
+    },
+
+    getSlots: function() {
+      return this.slots;
+    },
+
+    getWindowElement: function(windowId) {
+      if (this.windowsElements) {
+        return this.windowsElements[windowId];
+      } else {
+        return null;
+      }
+    },
+
+    getStateProperty: function(prop) {
+      return this.get(prop, 'currentConfig');
+    },
+
+    get: function(prop, parent) {
+      if (parent) {
+        return this[parent][prop];
+      }
+      return this[prop];
     },
 
     set: function(prop, value, options) {
@@ -127,6 +169,21 @@
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );   
       });
 
+      jQuery.subscribe('ANNOTATIONS_LIST_UPDATED', function(event, options) {
+        if (!_this.windowsAnnotationsLists) {
+          _this.windowsAnnotationsLists = {};
+        }
+        _this.windowsAnnotationsLists[options.windowId] = options.annotationsList;
+        jQuery.publish('annotationListLoaded.' + options.windowId);
+      });
+
+      jQuery.subscribe('WINDOW_ELEMENT_UPDATED', function(event, options) {
+        if (!_this.windowsElements) {
+          _this.windowsElements = {};
+        }
+        _this.windowsElements[options.windowId] = options.element;
+      });
+
       jQuery.subscribe('windowSlotAddressUpdated', function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
         if (windowObjects && windowObjects.length > 0) {
@@ -155,6 +212,13 @@
           data.push({"manifestUri":url, "location":repository});
           _this.set("data", data, {parent: "currentConfig"});
         }
+        var manifests = _this.currentConfig.manifests;
+        manifests[url] = manifestObject;
+        _this.set('manifests', manifests, {parent: 'currentConfig'});
+      });
+
+      jQuery.subscribe("slotsUpdated", function(event, options) {
+        _this.slots = options.slots;
       });
 
       jQuery.subscribe("layoutChanged", function(event, layoutDescription) {

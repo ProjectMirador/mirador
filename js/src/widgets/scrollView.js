@@ -11,7 +11,7 @@
       imagesList:           [],
       appendTo:             null,
       thumbInfo:            {thumbsHeight: 150, listingCssCls: 'listing-thumbs', thumbnailCls: 'thumbnail-view'},
-      parent:               null,
+      windowId:             null,
       panel:                false,
       lazyLoadingFactor:    1.5  //should be >= 1
     }, options);

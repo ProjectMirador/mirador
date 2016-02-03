@@ -3,7 +3,6 @@
   $.AnnotationsLayer = function(options) {
 
     jQuery.extend(true, this, {
-      parent:            null,
       annotationsList:   null,
       viewer:            null,
       renderer:          null,
@@ -26,9 +25,10 @@
 
       this.createRenderer();
       this.bindEvents();
+      this.listenForActions();
     },
 
-    bindEvents: function() {
+    listenForActions: function() {
       var _this = this;
 
       jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
@@ -37,9 +37,13 @@
       });
 
       jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
-        _this.annotationsList = _this.parent.parent.annotationsList;
+        _this.annotationsList = _this.state.getWindowAnnotationsList(_this.windowId);
         _this.updateRenderer();
       });
+    },
+
+    bindEvents: function() {
+      var _this = this;
     },
 
     createRenderer: function() {
@@ -49,7 +53,8 @@
         osdViewer: _this.viewer,
         list: _this.annotationsList, // must be passed by reference.
         visible: false,
-        parent: _this
+        windowId: _this.windowId,
+        state: _this.state
       });
       this.modeSwitch();
     },
@@ -84,7 +89,8 @@
           osd: OpenSeadragon,
           osdViewer: _this.viewer,
           rectType: 'oa', // does not do anything yet. 
-          parent: _this
+          windowId: _this.windowId,
+          state: _this.state
         });
       } else {
         this.rectTool.reset(_this.viewer);
