@@ -2,7 +2,7 @@
   $.Pin = function(options) {
     jQuery.extend(this, {
       name: 'Pin',
-      logoClass: 'pin',
+      logoClass: 'room',
       idPrefix: 'pin_'
     }, options);
 

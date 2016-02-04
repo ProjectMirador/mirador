@@ -40,17 +40,37 @@
         appendTo: 'parent',
         containerClassName: 'borderColorPickerPop'+_this.windowId,
         preferredFormat: "rgb",
+        show: function(color) {
+          jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, color);
+        },
         change: function(color) {
-          jQuery.publish('changeBorderColor.'+_this.windowId, color.toHexString());
+          jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, color);
+        },
+        move: function(color) {
+          jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, color);
+        },
+        hide: function(color) {
+          color = jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId);
+          if (color) {
+            jQuery.publish('changeBorderColor.' + _this.windowId, color.toHexString());
+          }
         },
         palette: [
           ["black", "red", "green", "blue"],
           ["white", "cyan", "magenta", "yellow"]
         ]
       });
-      jQuery('.borderColorPickerPop'+_this.windowId).find('.sp-choose').on('click',function(){
-        var color = _this.container.find(".borderColorPicker").spectrum("get");
-        jQuery.publish('changeBorderColor.'+_this.windowId, color.toHexString());
+      _this.container.find(".borderColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>border_color</i>");
+      var borderPicker = jQuery('.borderColorPickerPop'+_this.windowId);
+      borderPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>Cancel');
+      borderPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>Choose</a>');
+      borderPicker.find('button.sp-choose').hide();
+      borderPicker.find('a.sp-cancel').on('click', function() {
+        jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, null);
+      });
+      jQuery._data(borderPicker.find(".sp-cancel")[0], "events").click.reverse();
+      borderPicker.find('a.sp-choose').on('click',function(){
+        borderPicker.find('button.sp-choose').click();
       });
       _this.container.find(".fillColorPicker").spectrum({
         showInput: true,
@@ -61,17 +81,37 @@
         appendTo: 'parent',
         containerClassName: 'fillColorPickerPop'+_this.windowId,
         preferredFormat: "rgb",
+        show: function(color) {
+          jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, color);
+        },
         change: function(color) {
-          jQuery.publish('changeFillColor.'+_this.windowId, [color.toHexString(), color.getAlpha()]);
+          jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, color);
+        },
+        move: function(color) {
+          jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, color);
+        },
+        hide: function(color) {
+          color = jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId);
+          if (color) {
+            jQuery.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
+          }
         },
         palette: [
           ["black", "red", "green", "blue"],
           ["white", "cyan", "magenta", "yellow"]
         ]
       });
-      jQuery('.fillColorPickerPop'+_this.windowId).find('.sp-choose').on('click',function(){
-        var color = _this.container.find(".fillColorPicker").spectrum("get");
-        jQuery.publish('changeFillColor.'+_this.windowId, [color.toHexString(), color.getAlpha()]);
+      _this.container.find(".fillColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>format_color_fill</i>");
+      var fillPicker = jQuery('.fillColorPickerPop'+_this.windowId);
+      fillPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>Cancel');
+      fillPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>Choose</a>');
+      fillPicker.find('button.sp-choose').hide();
+      fillPicker.find('a.sp-cancel').on('click', function() {
+        jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, null);
+      });
+      jQuery._data(fillPicker.find(".sp-cancel")[0], "events").click.reverse();
+      fillPicker.find('a.sp-choose').on('click',function(){
+        fillPicker.find('button.sp-choose').click();
       });
       this.hide();
       this.bindEvents();
@@ -89,6 +129,7 @@
       var _this = this;
 
       this.container.find('.fa-refresh').on('click', function() {
+        jQuery.publish('updateAnnotationList.'+_this.windowId);
         jQuery.publish('refreshOverlay.'+_this.windowId, '');
       });
       this.container.find('.fa-trash-o').on('click', function() {
@@ -98,10 +139,10 @@
         jQuery.publish('updateEditedShape.'+_this.windowId, '');
       });
       this.container.find('.fa-times').on('click', function() {
-        jQuery.publish('toggleDrawingTool.'+_this.windowId, 'default');
+        jQuery.publish('toggleDefaultDrawingTool.'+_this.windowId);
       });
       this.container.find('.fa-edit').on('click', function() {
-        jQuery.publish('toggleDrawingTool.'+_this.windowId, '');
+        jQuery.publish('toggleDefaultDrawingTool.'+_this.windowId);
       });
 
       function make_handler(shapeMode) {
@@ -110,7 +151,7 @@
         };
       }
       for (var value in _this.availableTools) {
-        this.container.find('.' + _this.availableTools[value]).on('click', make_handler(_this.availableTools[value]));
+        this.container.find('.material-icons:contains(\'' + _this.availableTools[value] + '\')').on('click', make_handler(_this.availableTools[value]));
       }
 
       jQuery.subscribe('initBorderColor.' + _this.windowId, function(event, color) {
@@ -142,9 +183,9 @@
         _this.container.find('.draw-tool').hide();
       });
 
-      this.container.find('.mirador-osd-close').on('click', function() {
+      this.container.find('.mirador-osd-close').on('click', $.debounce(function() {
         _this.parent.annoState.displayOff();
-      });
+      },300));
       
       this.container.find('.mirador-osd-back').on('click', function() {
         _this.element.remove();
@@ -180,16 +221,16 @@
                                    '</a>',
                                    '{{#each tools}}',
                                    '<a class="mirador-osd-{{this}}-mode hud-control draw-tool">',
-                                   '<i class="fa fa-lg {{this}}"></i>',
+                                   '<i class="material-icons">{{this}}</i>',
                                    '</a>',
                                    '{{/each}}',
                                    '<a class="hud-control draw-tool" style="color:#abcdef;">',
                                    '|',
                                    '</a>',
-                                   '<a class="mirador-osd-edit-mode hud-control draw-tool">',
+                                   '<a class="hud-control draw-tool">',
                                    '<input type="text" class="borderColorPicker"/>',
                                    '</a>',
-                                   '<a class="mirador-osd-edit-mode hud-control draw-tool">',
+                                   '<a class="hud-control draw-tool">',
                                    '<input type="text" class="fillColorPicker"/>',
                                    '</a>',
                                    '<a class="hud-control draw-tool" style="color:#abcdef;">',

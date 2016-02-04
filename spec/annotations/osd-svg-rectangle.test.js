@@ -294,6 +294,28 @@ describe('Rectangle', function() {
       }
     });
 
+    it('should create rectangular shape', function() {
+      var event = getEvent({}, {
+        'x': this.initialPoint.x + 1000,
+        'y': this.initialPoint.y + 1000
+      });
+      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+      spyOn(overlay, 'onDrawFinish');
+      this.rect.onMouseDown(event, overlay);
+
+      expect(overlay.path).not.toBeNull();
+      expect(overlay.onDrawFinish.calls.count()).toEqual(0);
+
+      this.rect.onMouseUp(event, overlay);
+
+      expect(overlay.onDrawFinish.calls.count()).toEqual(1);
+
+      overlay.mode = '';
+      this.rect.onMouseUp(event, overlay);
+
+      expect(overlay.onDrawFinish.calls.count()).toEqual(1);
+    });
+
     it('should select rectangular shape', function() {
       var event = getEvent({}, {
         'x': this.initialPoint.x - 1,

@@ -8,12 +8,12 @@
   };
 
   OpenSeadragon.Viewer.prototype.svgOverlay = function(windowObj) {
-    return new $.Overlay(this, windowObj);
+    return new $.Overlay(this, windowObj, $.viewer.drawingToolsSettings, $.viewer.availableAnnotationDrawingTools);
   };
 
-  $.Overlay = function(viewer, windowObj) {
+  $.Overlay = function(viewer, windowObj, drawingToolsSettings, availableAnnotationDrawingTools) {
     jQuery.extend(this, {
-      disabled: false,
+      disabled: true,
       window: windowObj,
       windowId: windowObj.windowId,
       commentPanel: null,
@@ -24,7 +24,8 @@
       path: null,
       segment: null,
       latestMouseDownTime: -1,
-      doubleClickReactionTime: 300,
+      doubleClickReactionTime: drawingToolsSettings.doubleClickReactionTime,
+      availableAnnotationDrawingTools: availableAnnotationDrawingTools,
       hitOptions: {
         fill: true,
         stroke: true,
@@ -37,17 +38,16 @@
     this.tools = $.getTools();
     this.currentTool = null;
     // Default colors.
-    this.strokeColor = 'red';
-    this.fillColor = 'green';
-    this.fillColorAlpha = 0.5;
+    this.strokeColor = drawingToolsSettings.fillColor;
+    this.fillColor = drawingToolsSettings.fillColor;
+    this.fillColorAlpha = drawingToolsSettings.fillColorAlpha;
     this.viewer = viewer;
     this.canvas = document.createElement('canvas');
     this.canvas.id = 'draw_canvas_' + this.windowId;
     // Drawing of overlay border during development.
     // this.canvas.style.border = '1px solid yellow';
     this.viewer.canvas.appendChild(this.canvas);
-    this.initialZoom = this.viewer.viewport.getZoom(true);
-    this.currentPinSize = this.viewer.viewport.getZoom(true);
+    this.initialZoom = this.viewer.viewport.containerSize.x * this.viewer.viewport.getZoom(true);
 
     var _this = this;
     this.viewer.addHandler('animation', function() {
@@ -66,7 +66,27 @@
       for (var i = 0; i < _this.tools.length; i++) {
         if (_this.tools[i].logoClass == tool) {
           _this.currentTool = _this.tools[i];
-          jQuery('#' + _this.window.viewer.id).parent().find('.hud-container').find('.' + tool).parent('.draw-tool').css('opacity', '1');
+          jQuery('#' + _this.window.viewer.id).parent().find('.hud-container').find('.material-icons:contains(\'' + tool + '\')').parent('.draw-tool').css('opacity', '1');
+        }
+      }
+    });
+    jQuery.subscribe('toggleDefaultDrawingTool.' + _this.windowId, function(event) {
+      jQuery('#' + _this.window.viewer.id).parent().find('.hud-container').find('.draw-tool').css('opacity', '');
+      if (_this.disabled) {
+        jQuery('.qtip' + _this.windowId).qtip('hide');
+        return;
+      }
+      _this.currentTool = null;
+      for (var i = 0; i < _this.availableAnnotationDrawingTools.length; i++) {
+        for (var j = 0; j < _this.tools.length; j++) {
+          if (_this.availableAnnotationDrawingTools[i] == _this.tools[j].name) {
+            _this.currentTool = _this.tools[j];
+            jQuery('#' + _this.window.viewer.id).parent().find('.hud-container').find('.material-icons:contains(\'' + _this.tools[j].logoClass + '\')').parent('.draw-tool').css('opacity', '1');
+            break;
+          }
+        }
+        if (_this.currentTool) {
+          break;
         }
       }
     });
@@ -100,29 +120,71 @@
       var _this = this;
       this.paperScope = new paper.PaperScope();
       this.paperScope.setup('draw_canvas_' + _this.windowId);
-      var mouseTool = new this.paperScope.Tool();
+      this.paperScope.activate();
+      this.currentPinSize = this.paperScope.view.zoom;
+      this.paperScope.view.onFrame = function(event) {
+        if (_this.paperScope.snapPoint) {
+          _this.paperScope.snapPoint.remove();
+        }
+        if (_this.path && !_this.path.closed && _this.cursorLocation && _this.currentTool && _this.currentTool.idPrefix.indexOf('rough_path_') != -1) {
+          var distanceToFirst = _this.path.segments[0].point.getDistance(_this.cursorLocation);
+          if (_this.path.segments.length > 1 && distanceToFirst < _this.hitOptions.tolerance) {
+            _this.paperScope.snapPoint = new _this.paperScope.Path.Circle({
+              name: 'snapPoint',
+              center: _this.path.segments[0].point,
+              radius: _this.hitOptions.tolerance / _this.currentPinSize,
+              fillColor: _this.path.strokeColor,
+              strokeColor: _this.path.strokeColor
+            });
+          }
+        }
+      };
+      var mouseTool = jQuery.data(document.body, 'draw_canvas_' + _this.windowId);
+      if (mouseTool) {
+        mouseTool.remove();
+      }
+      mouseTool = new this.paperScope.Tool();
       mouseTool.overlay = this;
       mouseTool.onMouseUp = _this.onMouseUp;
       mouseTool.onMouseDrag = _this.onMouseDrag;
       mouseTool.onMouseMove = _this.onMouseMove;
       mouseTool.onMouseDown = _this.onMouseDown;
       mouseTool.onDoubleClick = _this.onDoubleClick;
+      jQuery.data(document.body, 'draw_canvas_' + _this.windowId, mouseTool);
     },
 
     onMouseUp: function(event) {
+      event.stopPropagation();
       if (this.overlay.currentTool) {
+        document.body.style.cursor = "default";
+        if (this.overlay.mode === 'deform' || this.overlay.mode === 'edit') {
+          this.overlay.segment = null;
+          this.overlay.path = null;
+        }
+        if (this.overlay.mode != 'create') {
+          this.overlay.mode = '';
+        }
         this.overlay.currentTool.onMouseUp(event, this.overlay);
       }
     },
 
     onMouseDrag: function(event) {
+      event.stopPropagation();
       if (this.overlay.currentTool) {
         this.overlay.currentTool.onMouseDrag(event, this.overlay);
+      } else {
+        var absolutePoint = {
+          'x': event.event.clientX,
+          'y': event.event.clientY
+        };
+        jQuery.publish('updateTooltips.' + this.overlay.windowId, [event.point, absolutePoint]);
       }
       this.overlay.paperScope.view.draw();
     },
 
     onMouseMove: function(event) {
+      event.stopPropagation();
+      this.overlay.cursorLocation = event.point;
       if (this.overlay.currentTool) {
         this.overlay.currentTool.onMouseMove(event, this.overlay);
       } else {
@@ -136,6 +198,7 @@
     },
 
     onMouseDown: function(event) {
+      event.stopPropagation();
       var date = new Date();
       var time = date.getTime();
       if (time - this.overlay.latestMouseDownTime < this.overlay.doubleClickReactionTime) {
@@ -143,7 +206,22 @@
         this.onDoubleClick(event);
       } else {
         this.overlay.latestMouseDownTime = time;
-        this.overlay.hover(event);
+        var hitResult = this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions);
+        if (hitResult && (!this.overlay.currentTool || (hitResult.item._name.toString().indexOf(this.overlay.currentTool.idPrefix) == -1 && this.overlay.mode === ''))) {
+          var prefix = hitResult.item._name.toString();
+          prefix = prefix.substring(0, prefix.lastIndexOf('_') + 1);
+          for (var j = 0; j < this.overlay.tools.length; j++) {
+            if (this.overlay.tools[j].idPrefix == prefix) {
+              jQuery.publish('toggleDrawingTool.' + this.overlay.windowId, this.overlay.tools[j].logoClass);
+              this.overlay.paperScope.project.activeLayer.selected = false;
+              this.overlay.hoveredPath = null;
+              this.overlay.segment = null;
+              this.overlay.path = null;
+              this.overlay.mode = '';
+              break;
+            }
+          }
+        }
         if (this.overlay.currentTool) {
           this.overlay.currentTool.onMouseDown(event, this.overlay);
           if (this.overlay.mode == 'translate' || this.overlay.mode == 'deform' || this.overlay.mode == 'edit') {
@@ -162,10 +240,12 @@
           }
         }
       }
+      this.overlay.hover();
       this.overlay.paperScope.view.draw();
     },
 
     onDoubleClick: function(event) {
+      event.stopPropagation();
       if (this.overlay.currentTool) {
         this.overlay.currentTool.onDoubleClick(event, this.overlay);
       }
@@ -184,7 +264,7 @@
       this.canvas.style.marginTop = pointZero.y + "px";
       if (this.paperScope && this.paperScope.view) {
         this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
-        this.paperScope.view.zoom = this.viewer.viewport.getZoom(true) / this.initialZoom;
+        this.paperScope.view.zoom = scale / this.initialZoom;
         this.paperScope.view.center = new this.paperScope.Size(this.paperScope.view.bounds.width / 2, this.paperScope.view.bounds.height / 2);
         this.paperScope.view.update(true);
         // Fit pins to the current zoom level.
@@ -198,11 +278,27 @@
       }
     },
 
-    hover: function(event) {
-      if (this.currentTool && event.item && event.item._name.toString().indexOf(this.currentTool.idPrefix) != -1) {
-        this.removeFocus();
-        event.item.selected = true;
-        this.hoveredPath = event.item;
+    hover: function() {
+      if (!this.currentTool) {
+        if (this.hoveredPath) {
+          this.hoveredPath.selected = false;
+          this.hoveredPath = null;
+        }
+      } else if (this.hoveredPath) {
+        if (this.hoveredPath._name.toString().indexOf(this.currentTool.idPrefix) == -1) {
+          this.hoveredPath.selected = false;
+          this.hoveredPath = null;
+        }
+        if (this.path && this.path._name.toString().indexOf(this.currentTool.idPrefix) != -1) {
+          if (this.hoveredPath) {
+            this.hoveredPath.selected = false;
+          }
+          this.hoveredPath = this.path;
+          this.hoveredPath.selected = true;
+        }
+      } else if (this.path && this.path._name.toString().indexOf(this.currentTool.idPrefix) != -1) {
+        this.hoveredPath = this.path;
+        this.hoveredPath.selected = true;
       }
     },
 
@@ -211,10 +307,19 @@
         this.hoveredPath.selected = false;
         this.hoveredPath = null;
       }
+      if (this.path) {
+        this.path.selected = false;
+        this.path = null;
+      }
     },
 
     restoreEditedShapes: function() {
       this.editedPaths = [];
+      this.removeFocus();
+    },
+
+    restoreDraftShapes: function() {
+      this.draftPaths = [];
       this.removeFocus();
     },
 
@@ -239,6 +344,43 @@
       }
       shape.remove();
       return cloned;
+    },
+
+    // creating shapes used for backward compatibility.
+    createRectangle: function(shape, annotation) {
+      var scale = this.viewer.viewport.containerSize.y;
+      var paperItems = [];
+      var rect = new $.Rectangle();
+      var initialPoint = {
+        'x': shape.x * scale + 1,
+        'y': shape.y * scale + 1
+      };
+      var currentMode = this.mode;
+      var currentPath = this.path;
+      var strokeColor = this.strokeColor;
+      var fillColor = this.fillColor;
+      var fillColorAlpha = this.fillColorAlpha;
+      this.strokeColor = $.viewer.drawingToolsSettings.fillColor;
+      this.fillColor = $.viewer.drawingToolsSettings.fillColor;
+      this.fillColorAlpha = $.viewer.drawingToolsSettings.fillColorAlpha;
+      this.mode = 'create';
+      this.path = rect.createShape(initialPoint, this);
+      var eventData = {
+        'delta': {
+          'x': shape.width * scale,
+          'y': shape.height * scale
+        }
+      };
+      rect.onMouseDrag(eventData, this);
+      paperItems.push(this.path);
+      paperItems[0].data.annotation = annotation;
+      paperItems[0].selected = false;
+      this.strokeColor = strokeColor;
+      this.fillColor = fillColor;
+      this.fillColorAlpha = fillColorAlpha;
+      this.path = currentPath;
+      this.mode = currentMode;
+      return paperItems;
     },
 
     parseSVG: function(svg, annotation) {
@@ -301,7 +443,6 @@
 
     hide: function() {
       this.canvas.style.display = 'none';
-      jQuery.publish('toggleDrawingTool.' + this.windowId, '');
       this.deselectAll();
     },
 
@@ -315,16 +456,19 @@
       jQuery.publish('disableBorderColorPicker.' + this.windowId, this.disabled);
       jQuery.publish('disableFillColorPicker.' + this.windowId, this.disabled);
       jQuery.publish('enableTooltips.' + this.windowId);
-      jQuery.publish('toggleDrawingTool.' + this.windowId, '');
       this.deselectAll();
     },
 
     enable: function() {
+      var setDefaultTool = this.disabled;
       this.disabled = false;
       jQuery.publish('showDrawTools.' + this.windowId);
       jQuery.publish('disableBorderColorPicker.' + this.windowId, this.disabled);
       jQuery.publish('disableFillColorPicker.' + this.windowId, this.disabled);
       jQuery.publish('disableTooltips.' + this.windowId);
+      if (setDefaultTool) {
+        jQuery.publish('toggleDefaultDrawingTool.' + this.windowId);
+      }
     },
 
     refresh: function() {
@@ -332,6 +476,7 @@
     },
 
     destroyCommentPanel: function() {
+      jQuery.publish('removeTooltips.' + this.windowId);
       jQuery(this.canvas).parents('.mirador-osd').qtip('destroy', true);
       this.commentPanel = null;
     },
@@ -451,8 +596,12 @@
                   _this.draftPaths[idx].remove();
                 }
                 _this.draftPaths = [];
+                if (_this.path) {
+                  _this.path.remove();
+                }
                 _this.paperScope.view.update(true);
                 _this.paperScope.project.activeLayer.selected = false;
+                _this.hoveredPath = null;
                 _this.segment = null;
                 _this.path = null;
                 _this.mode = '';
@@ -528,8 +677,12 @@
                   _this.draftPaths[idx].remove();
                 }
                 _this.draftPaths = [];
+                if (_this.path) {
+                  _this.path.remove();
+                }
                 _this.paperScope.view.update(true);
                 _this.paperScope.project.activeLayer.selected = false;
+                _this.hoveredPath = null;
                 _this.segment = null;
                 _this.path = null;
                 _this.mode = '';

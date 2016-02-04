@@ -210,6 +210,17 @@ describe('Freehand', function() {
       }
     });
 
+    it('should finish freehand shape', function() {
+      var event = getEvent();
+      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'create', this.shape, null);
+
+      this.freehand.onMouseUp(event, overlay);
+
+      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'create', null, null);
+
+      this.freehand.onMouseUp(event, overlay);
+    });
+
     it('should select freehand shape', function() {
       var event = getEvent({}, {
         'x': this.initialPoint.x - 100,

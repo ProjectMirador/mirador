@@ -2,7 +2,7 @@
   $.Polygon = function(options) {
     jQuery.extend(this, {
       name: 'Polygon',
-      logoClass: 'polygon',
+      logoClass: 'timeline',
       idPrefix: 'rough_path_'
     }, options);
 
@@ -70,7 +70,9 @@
               hitResult.segment.remove();
             }
           } else if (overlay.path) {
-            overlay.onDrawFinish();
+            overlay.segment = null;
+            overlay.path = null;
+            overlay.mode = '';
           } else {
             overlay.path = hitResult.item;
             if (hitResult.type == 'segment') {

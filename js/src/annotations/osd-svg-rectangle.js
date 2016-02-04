@@ -2,7 +2,7 @@
   $.Rectangle = function(options) {
     jQuery.extend(this, {
       name: 'Rectangle',
-      logoClass: 'square',
+      logoClass: 'check_box_outline_blank',
       idPrefix: 'rectangle_'
     }, options);
 
@@ -46,7 +46,9 @@
     },
 
     onMouseUp: function(event, overlay) {
-      // Empty block.
+      if (overlay.mode == 'create' && overlay.path) {
+        overlay.onDrawFinish();
+      }
     },
 
     onMouseDrag: function(event, overlay) {
@@ -151,8 +153,6 @@
           overlay.path = hitResult.item;
           overlay.segment = hitResult.segment;
         }
-      } else if (overlay.path) {
-        overlay.onDrawFinish();
       } else {
         overlay.path = this.createShape(event.point, overlay);
       }

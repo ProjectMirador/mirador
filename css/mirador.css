@@ -1176,39 +1176,6 @@ li.highlight {
   font-weight: normal;
 }
 
-/* annotation tools
----------------------------------------------------------------------------- */
-
-.draw-tool .square {
-  background-position: 0px;
-}
-
-.draw-tool .circle {
-  background-position: -21px;
-}
-
-.draw-tool .freehand {
-  background-position: -42px;
-}
-
-.draw-tool .polygon {
-  background-position: -63px;
-}
-
-.draw-tool .pin {
-  background-position: -84px;
-}
-
-.draw-tool i {
-  background-image: url('../images/tools.png');
-  background-repeat: none;
-  cursor: pointer;
-  display: inline-block;
-  height: 21px;
-  width: 21px;
-  margin: 3px 0 0 0;
-}
-
 /* color picker custom style
 ---------------------------------------------------------------------------- */
 
@@ -1220,33 +1187,25 @@ li.highlight {
   text-decoration-line: underline !important;
 }
 
-.mirador-osd-edit-mode .sp-container {
+.borderColorPicker + div + .sp-container, .fillColorPicker + div + .sp-container {
   width: 300px !important;
 }
 
-.mirador-osd-edit-mode .sp-preview {
+.borderColorPicker + div .sp-preview, .fillColorPicker + div .sp-preview {
   height: 10px !important;
 }
-.mirador-osd-edit-mode .sp-dd {
+.borderColorPicker + div .sp-dd, .fillColorPicker + div .sp-dd {
   height: 6px !important;
   line-height: 6px !important;
 }
-.mirador-osd-edit-mode .sp-replacer {
+.borderColorPicker + div.sp-replacer, .fillColorPicker + div.sp-replacer {
   border-radius: 5px !important;
 }
 
-.borderColorPicker + div {
-  background-image: url('../images/border-color-picker.png');
-  background-repeat: no-repeat;
-  background-size: auto 100%;
-  padding-left: 1.5em;
-}
-
-.fillColorPicker + div {
-  background-image: url('../images/fill-color-picker.png');
-  background-repeat: no-repeat;
-  background-size: auto 100%;
-  padding-left: 1.5em;
+.borderColorPicker + div .material-icons, .fillColorPicker + div .material-icons {
+  float: left;
+  font-size: 12px !important;
+  margin: 0 5px 0 0;
 }
 
 /* image view

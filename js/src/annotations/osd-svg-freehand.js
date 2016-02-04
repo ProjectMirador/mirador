@@ -2,7 +2,7 @@
   $.Freehand = function(options) {
     jQuery.extend(this, {
       name: 'Freehand',
-      logoClass: 'freehand',
+      logoClass: 'gesture',
       idPrefix: 'smooth_path_'
     }, options);
 
@@ -26,7 +26,10 @@
     },
 
     onMouseUp: function(event, overlay) {
-      // Empty block.
+      if (overlay.path) {
+        overlay.path.simplify();
+        overlay.onDrawFinish();
+      }
     },
 
     onMouseDrag: function(event, overlay) {
@@ -64,8 +67,6 @@
       }
       if (overlay.mode === '') {
         overlay.path = this.createShape(event.point, overlay);
-      } else if (overlay.mode === 'create') {
-        overlay.onDrawFinish();
       } else if (overlay.mode === 'edit') {
         if (hitResult) {
           if (event.modifiers.shift) {
@@ -74,7 +75,9 @@
               hitResult.item.smooth();
             }
           } else if (overlay.path) {
-            overlay.onDrawFinish();
+            overlay.segment = null;
+            overlay.path = null;
+            overlay.mode = '';
           } else {
             overlay.path = hitResult.item;
             if (hitResult.type == 'segment') {

@@ -2,8 +2,8 @@
   $.Ellipse = function(options) {
     jQuery.extend(this, {
       name: 'Ellipse',
-      logoClass: 'circle',
-      idPrefix: 'circle_'
+      logoClass: 'radio_button_unchecked',
+      idPrefix: 'ellipse_'
     }, options);
 
     this.init();
@@ -35,7 +35,6 @@
       var _this = this;
       var shape = new overlay.paperScope.Path({
         segments: segments,
-        fullySelected: true,
         name: overlay.getName(_this)
       });
       shape.strokeColor = overlay.strokeColor;
@@ -49,7 +48,9 @@
     },
 
     onMouseUp: function(event, overlay) {
-      // Empty block.
+      if (overlay.mode == 'create' && overlay.path) {
+        overlay.onDrawFinish();
+      }
     },
 
     onMouseDrag: function(event, overlay) {
@@ -58,7 +59,23 @@
           overlay.path.segments[i].point.x += event.delta.x;
           overlay.path.segments[i].point.y += event.delta.y;
         }
-      } else if (overlay.mode == 'create' || overlay.mode == 'deform') {
+      } else if (overlay.mode == 'create') {
+        overlay.path.segments[0].point.x += event.delta.x * (1 - Math.sqrt(1 / 2)) / 2;
+        overlay.path.segments[1].point.x += event.delta.x / 2;
+        overlay.path.segments[2].point.x += event.delta.x * (1 + Math.sqrt(1 / 2)) / 2;
+        overlay.path.segments[3].point.x += event.delta.x;
+        overlay.path.segments[4].point.x += event.delta.x * (1 + Math.sqrt(1 / 2)) / 2;
+        overlay.path.segments[5].point.x += event.delta.x / 2;
+        overlay.path.segments[6].point.x += event.delta.x * (1 - Math.sqrt(1 / 2)) / 2;
+        overlay.path.segments[0].point.y += event.delta.y * (1 - Math.sqrt(1 / 2)) / 2;
+        overlay.path.segments[2].point.y += event.delta.y * (1 - Math.sqrt(1 / 2)) / 2;
+        overlay.path.segments[3].point.y += event.delta.y / 2;
+        overlay.path.segments[4].point.y += event.delta.y * (1 + Math.sqrt(1 / 2)) / 2;
+        overlay.path.segments[5].point.y += event.delta.y;
+        overlay.path.segments[6].point.y += event.delta.y * (1 + Math.sqrt(1 / 2)) / 2;
+        overlay.path.segments[7].point.y += event.delta.y / 2;
+        overlay.path.smooth();
+      } else if (overlay.mode == 'deform') {
         var idx = -1;
         for (var l = 0; l < overlay.path.segments.length; l++) {
           if (overlay.path.segments[l] == overlay.segment) {
@@ -66,7 +83,7 @@
             break;
           }
         }
-        if (overlay.mode == 'deform' && idx % 2 == 1) {
+        if (idx % 2 == 1) {
           var oldPoint = new overlay.paperScope.Point(overlay.segment.point.x - overlay.path.position.x, overlay.segment.point.y - overlay.path.position.y);
           var newPoint = new overlay.paperScope.Point(overlay.segment.point.x - overlay.path.position.x + event.delta.x, overlay.segment.point.y - overlay.path.position.y + event.delta.y);
           var scale = Math.sqrt(newPoint.x * newPoint.x + newPoint.y * newPoint.y) / Math.sqrt(oldPoint.x * oldPoint.x + oldPoint.y * oldPoint.y);
@@ -143,8 +160,6 @@
           overlay.path = hitResult.item;
           overlay.segment = hitResult.segment;
         }
-      } else if (overlay.path) {
-        overlay.onDrawFinish();
       } else {
         overlay.path = this.createShape(event.point, overlay);
       }

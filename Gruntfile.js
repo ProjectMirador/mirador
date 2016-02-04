@@ -38,6 +38,7 @@ module.exports = function(grunt) {
     'js/lib/isfahan.js',
     'js/lib/paper-full.min.js',
     'js/lib/spectrum.js',
+    'js/lib/jquery.awesome-cursor.js',
     'js/lib/i18next.min.js'
   ],
 

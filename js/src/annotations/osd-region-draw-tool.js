@@ -59,6 +59,14 @@
                     return false;
                   }
                   shapeArray.splice(idx, 1);
+                  // backward compatibility
+                  if (typeof oaAnno.on !== 'object') {
+                    oaAnno.on = {
+                      'selector': {
+                        'value': ''
+                      }
+                    };
+                  }
                   oaAnno.on.selector.value = _this.svgOverlay.getSVGString(shapeArray);
                   jQuery.publish('annotationUpdated.' + _this.parent.windowId, [oaAnno]);
                   this.svgOverlay.removeFocus();
@@ -82,6 +90,14 @@
             for (var idx = 0; idx < shapeArray.length; idx++) {
               if (shapeArray[idx].name == _this.svgOverlay.editedPaths[i].name) {
                 oaAnnos.push(shapeArray[idx].data.annotation);
+                // backward compatibility
+                if (typeof oaAnnos[oaAnnos.length - 1].on !== 'object') {
+                  oaAnnos[oaAnnos.length - 1].on = {
+                    'selector': {
+                      'value': ''
+                    }
+                  };
+                }
                 oaAnnos[oaAnnos.length - 1].on.selector.value = _this.svgOverlay.getSVGString(shapeArray);
                 annotationShapesAreEdited = true;
                 break;
@@ -100,16 +116,29 @@
     },
 
     render: function() {
+      this.svgOverlay.restoreEditedShapes();
+      this.svgOverlay.paperScope.activate();
       this.svgOverlay.paperScope.project.clear();
       var _this = this;
       _this.annotationsToShapesMap = {};
       var deferreds = jQuery.map(this.list, function(annotation) {
         var deferred = jQuery.Deferred();
+        var shapeArray;
         if (typeof annotation.on === 'object') {
-          var shapeArray = _this.svgOverlay.parseSVG(annotation.on.selector.value, annotation);
-          _this.svgOverlay.restoreLastView(shapeArray);
-          _this.annotationsToShapesMap[$.genUUID()] = shapeArray;
+          if (annotation.on.selector.value.indexOf('<svg') != -1) {
+            shapeArray = _this.svgOverlay.parseSVG(annotation.on.selector.value, annotation);
+          } else {
+            var shape = annotation.on.selector.value.split('=')[1].split(',');
+            shape = _this.svgOverlay.viewer.viewport.imageToViewportRectangle(shape[0], shape[1], shape[2], shape[3]);
+            shapeArray = _this.svgOverlay.createRectangle(shape, annotation);
+          }
+        } else {
+          var shapeObj = annotation.on.split('#')[1].split('=')[1].split(',');
+          shapeObj = _this.svgOverlay.viewer.viewport.imageToViewportRectangle(shapeObj[0], shapeObj[1], shapeObj[2], shapeObj[3]);
+          shapeArray = _this.svgOverlay.createRectangle(shapeObj, annotation);
         }
+        _this.svgOverlay.restoreLastView(shapeArray);
+        _this.annotationsToShapesMap[$.genUUID()] = shapeArray;
         return deferred;
       });
       jQuery.when.apply(jQuery, deferreds).done(function() {
@@ -159,6 +188,7 @@
       var api = jQuery(this.osdViewer.element).qtip('api');
       api.cache.annotations = [];
       api.cache.hidden = true;
+      this.svgOverlay.paperScope.view.draw();
     },
 
     setTooltipContent: function(api, annotations) {
@@ -170,12 +200,17 @@
 
     showTooltipsFromMousePosition: function(event, location, absoluteLocation) {
       var _this = this;
+      var hitOptions = {
+        fill: true,
+        stroke: true,
+        segments: true
+      };
       var annotations = [];
       for (var key in _this.annotationsToShapesMap) {
         if (_this.annotationsToShapesMap.hasOwnProperty(key)) {
           var shapeArray = _this.annotationsToShapesMap[key];
           for (var idx = 0; idx < shapeArray.length; idx++) {
-            if (shapeArray[idx].contains(location)) {
+            if (shapeArray[idx].hitTest(location, hitOptions)) {
               annotations.push(shapeArray[idx].data.annotation);
               break;
             }
@@ -255,12 +290,8 @@
         }
       });
 
-      this.osdViewer.addHandler('zoom', $.debounce(function() {
-        jQuery('.qtip-viewer').qtip('hide');
-      }, 200, true));
-
       jQuery.subscribe('removeTooltips.' + _this.parent.windowId, function() {
-        jQuery(_this.osdViewer.canvas).find('.annotation').qtip('destroy', true);
+        jQuery(_this.osdViewer.element).qtip('destroy', true);
       });
 
       jQuery.subscribe('disableTooltips.' + _this.parent.windowId, function() {
@@ -269,6 +300,7 @@
 
       jQuery.subscribe('enableTooltips.' + _this.parent.windowId, function() {
         _this.inEditOrCreateMode = false;
+        _this.svgOverlay.restoreDraftShapes();
       });
     },
 
