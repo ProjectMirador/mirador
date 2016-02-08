@@ -9,7 +9,7 @@
       metadataTypes:        null,
       metadataListingCls:   'metadata-listing',
       query:                null,
-      searchService:        null,
+      searchService:        null
     }, options);
 
     this.init();
@@ -64,6 +64,11 @@
       var canvasid = result.on;
       var canvaslabel = _this.getLabel(result);
 
+      if (!canvaslabel) {
+        // If no label or no canvas found, do not add this result to display
+        return;
+      }
+
       // If resource.on is an Object, containing extra information about the
       // parent object, set ID appropriately
       if (typeof canvasid === 'object') {
@@ -100,6 +105,11 @@
         var canvasid = resource;
         var canvaslabel = _this.getLabel(resource);
 
+        if (!canvaslabel) {
+          // If no label or no canvas found, do not add this result to display
+          return;
+        }
+
         // If you have the full annotation, set ID and label appropriately
         if (typeof canvasid === 'object') {
           canvasid = resource.on['@id'];
@@ -130,20 +140,29 @@
    * parent canvas.
    *
    * @param  {[type]} resource annotation associated with the search match
-   * @return {[type]}          string label
+   * @return {[type]}          string label OR undefined if no label was found
    */
   getLabel: function(resource) {
     if (resource && typeof resource === 'object') {
+      var label;
+
       if (resource.label) {
         return resource.label;
+      } else if (resource.resource.label) {
+        return resource.resource.label;
       } else if (resource.on && typeof resource.on === 'string') {
-        return 'Canvas ' + this.manifest.getCanvasLabel(resource.on);
+        label = this.manifest.getCanvasLabel(resource.on);
+        return label ? label : undefined;
       } else if (resource.on && typeof resource.on === 'object') {
-        return resource.on.label ?
-            resource.on.label : 'Canvas ' + this.manifest.getCanvasLabel(resource.on['@id']);
+        if (resource.on.label) {
+          return resource.on.label;
+        } else {
+          label = this.manifest.getCanvasLabel(resource.on['@id']);
+          return label ? label : undefined;
+        }
       }
     } else {
-      return resource;
+      return undefined;
     }
   },
 
@@ -206,8 +225,10 @@
                             ];
 
       _this.parent.annotationsList = miniAnnotationList;
-      _this.parent.toggleImageView(canvasid);
-      
+      // _this.parent.toggleImageView(canvasid);
+console.log("Clicked canvas ID: " + canvasid);
+
+      _this.parent.setCurrentCanvasID(canvasid);
     });
   },
 
