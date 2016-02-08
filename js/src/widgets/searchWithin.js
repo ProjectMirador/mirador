@@ -148,19 +148,21 @@
 
       if (resource.label) {
         return resource.label;
+      } else if (resource.resource.label) {
+        return resource.resource.label;
       } else if (resource.on && typeof resource.on === 'string') {
         label = this.manifest.getCanvasLabel(resource.on);
-        return label ? 'Canvas ' + label : undefined;
+        return label ? label : undefined;
       } else if (resource.on && typeof resource.on === 'object') {
         if (resource.on.label) {
           return resource.on.label;
         } else {
           label = this.manifest.getCanvasLabel(resource.on['@id']);
-          return label ? 'Canvas ' + label : undefined;
+          return label ? label : undefined;
         }
       }
     } else {
-      return resource;
+      return undefined;
     }
   },
 
