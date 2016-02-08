@@ -848,7 +848,6 @@
                                  '</div>',
                                  '<div class="content-container">',
                                  '<div class="searchResults" style="display: none;">',
-                                 '<p><a href="javascript:;" class="js-close-search-within">Close</a></p>',
                                  '<form class="js-perform-query">',
                                  '<input class="js-query" type="text" placeholder="search"/>',
                                  '<input type="submit"/>',
