@@ -8,7 +8,6 @@
       container: null,
       mode: null,
       windowId: null,
-      rectTool: null,
       annoEndpointAvailable: false,
       annotationCreationAvailable: true
     }, options);
@@ -48,10 +47,10 @@
       });
       
       this.container.find('.mirador-osd-edit-mode').on('click', function() {
-        if (_this.parent.annoState.current === 'annoOnEditOff') {
-          _this.parent.annoState.editOn();
-        } else if (_this.parent.annoState.current === 'annoOnEditOn') {
-          _this.parent.annoState.editOff();
+        if (_this.parent.annoState.current === 'annoOnCreateOff') {
+          _this.parent.annoState.createOn();
+        } else if (_this.parent.annoState.current === 'annoOnCreateOn') {
+          _this.parent.annoState.createOff();
         }
       });
       this.container.find('.mirador-osd-refresh-mode').on('click', function() {
@@ -63,41 +62,42 @@
 
     template: Handlebars.compile([
                                  '<div class="mirador-osd-context-controls hud-container">',
-                                   '<a class="mirador-osd-close hud-control">',
+                                   '<a class="mirador-osd-close hud-control" role="button" aria-label="Turn off annotations">',
                                    '<i class="fa fa-lg fa-times"></i>',
                                    '</a>',
                                    '{{#if showEdit}}',
-                                   '<a class="mirador-osd-edit-mode hud-control">',
+                                   '<a class="mirador-osd-edit-mode hud-control" role="button" aria-label="Make a new annotation using mouse">',
                                    '<i class="fa fa-lg fa-edit"></i>',
                                    '</a>',
                                    '{{/if}}',
-                                   '<a class="mirador-osd-refresh-mode hud-control">',
+                                   '<a class="mirador-osd-refresh-mode hud-control" role="button" aria-label="Refresh annotations">',
                                    '<i class="fa fa-lg fa-refresh"></i>',
                                    '</a>',
-                                   /*'<a class="mirador-osd-list hud-control">',
+                                   /*'<a class="mirador-osd-list hud-control" role="button">',
                                    '<i class="fa fa-lg fa-list"></i>',
                                    '</a>',*/
-                                   /*'<a class="mirador-osd-search hud-control">',
+                                   /*'<a class="mirador-osd-search hud-control" role="button">',
                                    '<i class="fa fa-lg fa-search"></i>',
                                    '</a>',*/
-                                   /*'<a class="mirador-osd-rect-tool hud-control">',
+                                   /*'<a class="mirador-osd-rect-tool hud-control" role="button">',
                                    '<i class="fa fa-lg fa-gear"></i>',
                                    '</a>',*/
                                  '</div>'
     ].join('')),
 
+    // for accessibility, make sure to add aria-labels just like above
     editorTemplate: Handlebars.compile([
                                  '<div class="mirador-osd-context-controls hud-container">',
-                                   '<a class="mirador-osd-back hud-control">',
+                                   '<a class="mirador-osd-back hud-control" role="button">',
                                    '<i class="fa fa-lg fa-arrow-left"></i>',
                                    '</a>',
-                                   '<a class="mirador-osd-rect-tool hud-control">',
+                                   '<a class="mirador-osd-rect-tool hud-control" role ="buton">',
                                    '<i class="fa fa-lg fa-pencil-square"></i>',
                                    '</a>',
-                                   '<a class="mirador-osd-rect-tool hud-control">',
+                                   '<a class="mirador-osd-rect-tool hud-control" role="button">',
                                    '<i class="fa fa-lg fa-ellipsis-h"></i>',
                                    '</a>',
-                                   '<a class="mirador-osd-rect-tool hud-control">',
+                                   '<a class="mirador-osd-rect-tool hud-control" role="button">',
                                    '<i class="fa fa-lg fa-gear"></i>',
                                    '</a>',
                                  '</div>'

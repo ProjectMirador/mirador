@@ -22,6 +22,7 @@
         this.element  = this.element || jQuery('<div/>');
 
         this.init();
+
     };
 
 
@@ -41,6 +42,7 @@
                 showBookmark : this.parent.mainMenuSettings.buttons.bookmark,
                 showLayout : this.parent.mainMenuSettings.buttons.layout,
                 showOptions: this.parent.mainMenuSettings.buttons.options,
+                showFullScreenViewer : this.parent.mainMenuSettings.buttons.fullScreenViewer,
                 userButtons: this.parent.mainMenuSettings.userButtons,
                 userLogo:    this.parent.mainMenuSettings.userLogo
             }));
@@ -58,6 +60,9 @@
             });
             // when options are implemented, this will need to do something
             this.element.find('.window-options').on('click', function() { });
+            this.element.find('.fullscreen-viewer').on('click', function() {
+              _this.parent.fullscreenElement() ? _this.parent.exitFullscreen() : _this.parent.enterFullscreen();
+            });
         },
 
         template: Handlebars.compile([
@@ -85,6 +90,13 @@
           '<li>',
             '<a href="javascript:;" class="change-layout" title="{{t "changeLayout"}}">',
               '<span class="icon-window-options"></span>{{t "changeLayout"}}',
+            '</a>',
+          '</li>',
+        '{{/if}}',
+        '{{#if showFullScreenViewer}}',
+          '<li>',
+            '<a href="javascript:;" class="fullscreen-viewer" title="{{t "fullScreen"}}">',
+              '<span class="fa fa-expand"></span> {{t "fullScreen"}}',
             '</a>',
           '</li>',
         '{{/if}}',

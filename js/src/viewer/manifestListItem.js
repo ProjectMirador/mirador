@@ -12,11 +12,13 @@
       resultsWidth:               0,  // based on screen width
       maxPreviewImagesWidth:      0,
       repoWidth:                  80,
-      metadataWidth:              200,
+      metadataWidth:              450,
       margin:                     15,
-      remainingItemsMinWidth:     80, // set a minimum width for the "more" image
+      remainingWidth:             20,
       imagesTotalWidth:           0,
-      tplData:                    null
+      tplData:                    null,
+      allImages:                  [],
+      remaining:                  0
     }, options);
 
     this.init();
@@ -29,14 +31,19 @@
       var _this = this;
       //need a better way of calculating this because JS can't get width and margin of hidden elements, so must manually set that info
       //ultimately use 95% of space available, since sometimes it still displays too many images
-      this.maxPreviewImagesWidth = this.resultsWidth - (this.repoWidth + this.margin + this.metadataWidth + this.margin + this.remainingItemsMinWidth);
+      this.maxPreviewImagesWidth = this.resultsWidth - (this.repoWidth + this.margin + this.metadataWidth + this.margin + this.remainingWidth);
       this.maxPreviewImagesWidth = this.maxPreviewImagesWidth * 0.95;
+
+      Handlebars.registerHelper('pluralize', function(count, singular, plural) {
+        if (count === 1) {
+          return singular;
+        } else {
+          return plural;
+        }
+      });
 
       this.fetchTplData(this.manifestId);
       this.element = jQuery(this.template(this.tplData)).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
-
-      var remainingOffset = this.repoWidth + this.margin + this.metadataWidth + this.margin + this.imagesTotalWidth;
-      this.element.find('.remaining-items').css('left', remainingOffset);
 
       this.bindEvents();
     },
@@ -66,7 +73,7 @@
         }            
         var imageName = $.viewer.repoImages[repo || 'other'] || $.viewer.repoImages.other;
 
-        return $.viewer.logosLocation + imageName;
+        return $.viewer.buildPath + $.viewer.logosPath + imageName;
       })();
 
       for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
@@ -79,22 +86,28 @@
         width = (_this.thumbHeight/aspectRatio);
         url = _this.manifest.getThumbnailForCanvas(canvas, width);
 
-        _this.imagesTotalWidth += (width + _this.margin);
-        if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
-          _this.imagesTotalWidth -= (width + _this.margin);
-          break;
-        }
-
-        this.tplData.images.push({
+        _this.allImages.push({
           url: url,
           width: width,
           height: _this.thumbHeight,
-          id: canvas['@id']
+          id: canvas['@id'],
+          index: i
         });
       }
 
-      this.tplData.remaining = (function() {
-        var remaining = manifest.sequences[0].canvases.length - _this.tplData.images.length;
+      jQuery.each(_this.allImages, function(index, value) {
+        var width = value.width;
+        
+        _this.imagesTotalWidth += (width + _this.margin);
+        if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
+          _this.imagesTotalWidth -= (width + _this.margin);
+          return false;
+        }
+        _this.tplData.images.push(value);
+      });
+
+      _this.remaining = this.tplData.remaining = (function() {
+        var remaining = _this.allImages.length - _this.tplData.images.length;
         if (remaining > 0) {
           return remaining;
         }
@@ -134,8 +147,10 @@
       });
 
       jQuery.subscribe('manifestPanelWidthChanged', function(event, newWidth){
-        var newMaxPreviewWidth = newWidth - (_this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.remainingItemsMinWidth);
+        var newMaxPreviewWidth = newWidth - (_this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.remainingWidth);
         newMaxPreviewWidth = newMaxPreviewWidth * 0.95;
+        
+        //width of browser window has been made smaller
         if (newMaxPreviewWidth < _this.maxPreviewImagesWidth ) {
           while (_this.imagesTotalWidth >= newMaxPreviewWidth) {
             image = _this.tplData.images.pop();
@@ -143,22 +158,38 @@
 
             //remove image from dom
             _this.element.find('img[data-image-id="'+image.id+'"]').remove();
-            var remainingOffset = _this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.imagesTotalWidth;
+          }
+          //check if need to add ellipsis
+          if (_this.remaining === 0 && _this.allImages.length - _this.tplData.images.length > 0) {
+              _this.element.find('.preview-images').after('<i class="fa fa fa-ellipsis-h remaining"></i>');
+          }
+          _this.remaining = _this.allImages.length - _this.tplData.images.length;
 
-            //increase remaining # by 1
-            var remaining = _this.element.find('.remaining-amount');
-            var newRemaining;
-            if (remaining.length > 0) {
-              newRemaining = parseInt(remaining[0].innerHTML, 10) + 1;
-              remaining[0].innerHTML = newRemaining;
-            } else {
-              //add the remaining element
-              newRemaining = 1;
-              _this.element.find('.preview-images').after('<div class="remaining-items"><h3><span class="remaining-amount">'+newRemaining+'</span> more</h3></div>');
+        } else if (newMaxPreviewWidth > _this.maxPreviewImagesWidth) {
+          //width of browser window has been made larger
+          var currentLastImage = _this.tplData.images[_this.tplData.images.length-1],
+          index = currentLastImage ? currentLastImage.index+1 : 0,
+          image = _this.allImages[index];
+          if (image) {
+            while (_this.imagesTotalWidth + image.width + _this.margin < newMaxPreviewWidth) {
+              _this.tplData.images.push(image);
+              _this.imagesTotalWidth += (image.width + _this.margin);
+              
+              //add image to dom
+              _this.element.find('.preview-images').append('<img src="'+image.url+'" width="'+image.width+'" height="'+image.height+'" class="preview-image flash" data-image-id="'+image.id+'">');
+
+              //get next image
+              index++;
+              image = _this.allImages[index];
+              if (!image) {
+                break;
+              }
             }
-
-            //update size of "More" icon
-            _this.element.find('.remaining-items').css('left', remainingOffset);
+            //check if need to remove ellipsis
+          if (_this.remaining > 0 && _this.allImages.length - _this.tplData.images.length === 0) {
+            _this.element.find('.remaining').remove();
+          }
+          _this.remaining = _this.allImages.length - _this.tplData.images.length;
           }
         }
         _this.maxPreviewImagesWidth = newMaxPreviewWidth;
@@ -174,26 +205,32 @@
     },
 
     template: Handlebars.compile([
-                                 '<li>',
-                                 '<div class="repo-image">',
-                                 '<img src="{{repoImage}}" alt="repoImg">',
-                                 '</div>',
-                                 '<div class="select-metadata">',
-                                 '<h3 class="manifest-title">{{label}}</h3>',
-                                 '<h4>{{canvasCount}} {{t "items"}}</h4>',
-                                 '{{#if repository}}',
-                                 '<h4 class="repository-label">{{repository}}</h4>',
-                                 '{{/if}}',
-                                 '</div>',
-                                 '<div class="preview-images">',
-                                 '{{#each images}}',
-                                 '<img src="{{url}}" width="{{width}}" height="{{height}}" class="preview-image flash" data-image-id="{{id}}">',
-                                 '{{/each}}',
-                                 '</div>',
-                                 '{{#if remaining}}',
-                                 '<div class="remaining-items"><h3><span class="remaining-amount">{{remaining}}</span> {{t "more"}}</h3></div>',
-                                 '{{/if}}',
-                                 '</li>'
+      '<li>',
+      '<div class="repo-image">',
+        '<img src="{{repoImage}}" alt="repoImg">',
+      '</div>',
+      '<div class="select-metadata">',
+        '<div class="manifest-title">',
+          '<h3 title="{{label}}">{{label}}</h3>',
+        '</div>',
+        '<div class="item-info">',
+          '<div class="item-info-row">',
+            '{{#if repository}}',
+              '<div class="repo-label">{{repository}}</div>',
+            '{{/if}}',
+            '<div class="canvas-count">{{canvasCount}} {{pluralize canvasCount (t "item") (t "items")}}</div>',
+          '</div>',
+        '</div>',
+      '</div>',
+      '<div class="preview-images">',
+      '{{#each images}}',
+        '<img src="{{url}}" width="{{width}}" height="{{height}}" class="preview-image flash" data-image-id="{{id}}">',
+      '{{/each}}',
+      '</div>',
+      '{{#if remaining}}',
+        '<i class="fa fa fa-ellipsis-h remaining"></i>',
+      '{{/if}}',
+      '</li>'
     ].join(''))
   };
 

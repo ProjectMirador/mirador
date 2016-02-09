@@ -79,7 +79,7 @@
       var _this = this;
       jQuery.subscribe('fitBounds.' + _this.parent.id, function(event, bounds) {
         var rect = _this.osd.viewport.imageToViewportRectangle(Number(bounds.x), Number(bounds.y), Number(bounds.width), Number(bounds.height));
-        _this.osd.viewport.fitBounds(rect, false);
+        _this.osd.viewport.fitBoundsWithConstraints(rect, false);
       });
 
     },
@@ -89,11 +89,21 @@
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       jQuery.publish("imageBoundsUpdated", {
         id: _this.parent.id, 
+          osdBounds: {
+            x: _this.osdOptions.osdBounds.x, 
+            y: _this.osdOptions.osdBounds.y, 
+            width: _this.osdOptions.osdBounds.width, 
+            height: _this.osdOptions.osdBounds.height
+          }
+      });
+      var rectangle = this.osd.viewport.viewportToImageRectangle(this.osdOptions.osdBounds);
+      jQuery.publish("imageRectangleUpdated", {
+        id: _this.parent.id,
         osdBounds: {
-          x: _this.osdOptions.osdBounds.x, 
-          y: _this.osdOptions.osdBounds.y, 
-          width: _this.osdOptions.osdBounds.width, 
-          height: _this.osdOptions.osdBounds.height
+          x: Math.round(rectangle.x),
+          y: Math.round(rectangle.y),
+          width: Math.round(rectangle.width),
+          height: Math.round(rectangle.height)
         }
       });
     },
@@ -163,15 +173,36 @@
           // console.log("Looking for options and bounds");
           // console.log(_this.osdOptions);
           // console.log(_this.osdOptions.osdBounds);
+
+          jQuery.publish('osdOpen.'+_this.windowId);
+
           if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
+          } else {
+            //else reset bounds for this image
+            _this.setBounds();
           }
 
           _this.addAnnotationsLayer(_this.elemAnno);
-          //re-add correct annotationsLayer mode based on annoState
-          if (_this.hud.annoState.current !== "annoOff") {
-            jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');          
+            
+          // if current annoState is 'none' that means it has been initialized but not used
+          // use annotationState to choose event
+          if (_this.hud.annoState.current === 'none') {
+              _this.hud.annoState.startup(null);
+            if (_this.annotationState === 'annoOnCreateOff') {
+              _this.hud.annoState.displayOn(null);
+            } else if (_this.annotationState === 'annoOnCreateOn') {
+              _this.hud.annoState.createOn(null);
+            }
+          } else {
+            // if the current state is not 'none' then we need to update the annotations layer,
+            // with the current state, for the new canvas
+            if (_this.hud.annoState.current === 'annoOnCreateOff') {
+              _this.hud.annoState.refreshCreateOff(null);
+            } else if (_this.hud.annoState.current === 'annoOnCreateOn') {
+              _this.hud.annoState.refreshCreateOn(null);
+            }
           }
 
           // A hack. Pop the osd overlays layer after the canvas so 
@@ -308,6 +339,7 @@
     }, 
 
 
+
     updateImage: function(canvasID) {
       //console.log("Load new full image.  Need to empty and hide bbAnnos.  Can i find it in this 3 ?");
       //console.log(this);
@@ -324,6 +356,7 @@
         this.osd.close();
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         this.parent.updateFocusImages([canvasID]);
+
         //by default, don't allow a user to be in edit annotation mode when changing pages
         if (this.hud.annoState.current === "annoOnEditOn") {
           this.hud.annoState.editOff();

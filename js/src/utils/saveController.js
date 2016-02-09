@@ -25,6 +25,10 @@
         return false;
       }
       
+      saveModule = config.jsonStorageEndpoint.module,
+      saveOptions = config.jsonStorageEndpoint.options;
+      _this.storageModule = new $[saveModule](saveOptions);
+
       var sessionID = window.location.hash.substring(1); // will return empty string if none exists, causing the or statement below to evaluate to false, generating a new sesssionID.
 
       if (sessionID) {
@@ -38,22 +42,10 @@
       } else {
         var paramURL = window.location.search.substring(1);
         if (paramURL) {
+          //get json from JSON storage and set currentConfig to it
           var params = paramURL.split('=');
           var jsonblob = params[1];
-          var ajaxURL = "https://jsonblob.com/api/jsonBlob/"+jsonblob;
-          jQuery.ajax({
-            type: 'GET',
-            url: ajaxURL, 
-            headers: { 
-              'Accept': 'application/json',
-              'Content-Type': 'application/json' 
-            },
-            success: function(data, textStatus, request) {
-              _this.currentConfig = data;
-            },
-            async: false
-          });
-          //get json from jsonblob and set currentConfig to it
+	  this.currentConfig = this.storageModule.readSync(jsonblob);
         } else {
           this.currentConfig = config;
         }
@@ -120,6 +112,21 @@
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
 
+      jQuery.subscribe("imageBoundsUpdated", function(event, options) {   
+        var windowObjects = _this.currentConfig.windowObjects;   
+        if (windowObjects && windowObjects.length > 0) {   
+          jQuery.each(windowObjects, function(index, window){    
+            if (window.id === options.id) {    
+              if (!windowObjects[index].windowOptions) {   
+                windowObjects[index].windowOptions = {};   
+              }    
+              windowObjects[index].windowOptions.osdBounds = options.osdBounds;    
+            }    
+          });    
+        }    
+        _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );   
+      });
+
       jQuery.subscribe('windowSlotAddressUpdated', function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
         if (windowObjects && windowObjects.length > 0) {
@@ -130,21 +137,6 @@
           });
         } else {
           windowObjects = [options];
-        }
-        _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
-      });
-      
-      jQuery.subscribe("imageBoundsUpdated", function(event, options) {
-        var windowObjects = _this.currentConfig.windowObjects;
-        if (windowObjects && windowObjects.length > 0) {
-          jQuery.each(windowObjects, function(index, window){
-            if (window.id === options.id) {
-              if (!windowObjects[index].windowOptions) {
-                windowObjects[index].windowOptions = {};
-              }
-              windowObjects[index].windowOptions.osdBounds = options.osdBounds;
-            }
-          });
         }
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
@@ -174,7 +166,7 @@
         _this.set('layout', serialisedLayout, {parent: "currentConfig"} );
       });
 
-      jQuery.subscribe("windowAdded", function(event, options) {
+      jQuery.subscribe("windowSlotAdded", function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects,
         inArray = jQuery.grep(windowObjects, function(windowObj) {
           return windowObj.id === options.id;

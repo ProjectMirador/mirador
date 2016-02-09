@@ -20,36 +20,46 @@
       focusModules:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
       focusOverlaysAvailable: {
         'ThumbnailsView': {
-          'overlay' : {'MetadataView' : false}, 
-          'sidePanel' : {'TableOfContents' : true},
+          'overlay' : {'MetadataView' : false},
           'bottomPanel' : {'' : false}
         },
         'ImageView': {
-          'overlay' : {'MetadataView' : false}, 
-          'sidePanel' : {'TableOfContents' : true},
+          'overlay' : {'MetadataView' : false},
           'bottomPanel' : {'ThumbnailsView' : true}
         },
         'ScrollView': {
-          'overlay' : {'MetadataView' : false}, 
-          'sidePanel' : {'TableOfContents' : true},
+          'overlay' : {'MetadataView' : false},
           'bottomPanel' : {'' : false}
         },
         'BookView': {
           'overlay' : {'MetadataView' : false},
-          'sidePanel' : {'TableOfContents' : true},
           'bottomPanel' : {'ThumbnailsView' : true}
         }
       },
       focusOptions: null,
       id : null,
-      sidePanel: null,
-      bottomPanel: null,
+      sidePanel: null, //the actual module for the side panel
+      sidePanelAvailable: true,
+      sidePanelOptions: {
+        "toc" : true,
+        "annotations" : false
+      },
+      sidePanelVisible: true,
+      annotationsAvailable: {
+        'ThumbnailsView' : false,
+        'ImageView' : true,
+        'ScrollView' : false,
+        'BookView' : false
+      },
+      bottomPanel: null, //the actual module for the bottom panel
+      bottomPanelAvailable: true,
       bottomPanelVisible: true,
       overlay: null,
       annotationLayerAvailable: true,
       annotationCreationAvailable: true,
       annoEndpointAvailable : false,
       annotationOn : false,
+      annotationState : 'annoOff',
       fullScreenAvailable : true,
       displayLayout: true,
       layoutOptions : {
@@ -88,7 +98,7 @@
 
       //remove any imageModes that are not available as a focus
       this.imageModes = jQuery.map(this.imageModes, function(value, index) {
-        if (jQuery.inArray(value, _this.focuses) === -1) return null;  
+        if (jQuery.inArray(value, _this.focuses) === -1) return null;
         return value;
       });
 
@@ -109,6 +119,7 @@
         this.annotationCreationAvailable = false;
         this.annoEndpointAvailable = false;
         this.annotationOn = false;
+        this.annotationState = 'annoOff';
       }
       _this.getAnnotations();
 
@@ -118,13 +129,12 @@
           _this.focusOverlaysAvailable[key].bottomPanel = {'' : false};
         });
       }
-      if (typeof this.sidePanelAvailable !== 'undefined' && !this.sidePanelAvailable) {
-        jQuery.each(this.focusOverlaysAvailable, function(key, value) {
-          _this.focusOverlaysAvailable[key].sidePanel = {'' : false};
+
+      templateData.sidePanel = this.sidePanelAvailable;
+      if (this.sidePanelAvailable) {
+        templateData.sidePanel = !Object.keys(this.sidePanelOptions).every(function(element, index, array) {
+          return _this.sidePanelOptions[element] === false;
         });
-        templateData.sidePanel = false;
-      } else {
-        templateData.sidePanel = true;
       }
       if (typeof this.overlayAvailable !== 'undefined' && !this.overlayAvailable) {
         jQuery.each(this.focusOverlaysAvailable, function(key, value) {
@@ -138,11 +148,11 @@
       jQuery.each(this.focuses, function(index, value) {
         templateData[value] = true;
       });
-      templateData.title = manifest.label; 
-      templateData.displayLayout = this.displayLayout; 
-      templateData.layoutOptions = this.layoutOptions; 
+      templateData.title = manifest.label;
+      templateData.displayLayout = this.displayLayout;
+      templateData.layoutOptions = this.layoutOptions;
       // if displayLayout is true,  but all individual options are set to false, set displayLayout to false
-      if (this.displayLayout) { 
+      if (this.displayLayout) {
         templateData.displayLayout = !Object.keys(this.layoutOptions).every(function(element, index, array) {
           return _this.layoutOptions[element] === false;
         });
@@ -179,12 +189,19 @@
       this.bindEvents();
 
       if (this.imagesList.length === 1) {
-        this.bottomPanelVisibility(false);      
+        this.bottomPanelVisibility(false);
+      } else {
+        this.bottomPanelVisibility(this.bottomPanelVisible);
       }
+      this.sidePanelVisibility(this.sidePanelVisible, '0s');
     },
 
     update: function(options) {
       jQuery.extend(this, options);
+      if (this.focusOptions) {
+        this.focusOptions.osdBounds = null;
+        this.focusOptions.zoomLevel = null;
+      }
       this.init();
     },
 
@@ -210,8 +227,8 @@
     bindEvents: function() {
       var _this = this;
 
-      //this event should trigger from layout      
-      jQuery.subscribe('windowResize', $.debounce(function(){
+      //this event should trigger from layout
+      jQuery(window).resize($.debounce(function(){
         if (_this.focusModules.ScrollView) {
           var containerHeight = _this.element.find('.view-container').height();
           var triggerShow = false;
@@ -238,8 +255,26 @@
           _this.element.find('.remove-object-option').show();
         }
       });
+
+      jQuery.subscribe('sidePanelStateUpdated.' + this.id, function(event, state) {
+        if (state.open) {
+            _this.element.find('.fa-list').switchClass('fa-list', 'fa-caret-down');
+            _this.element.find('.mirador-icon-toc').addClass('selected');
+            _this.element.find('.view-container').removeClass('maximised');
+        } else {
+            _this.element.find('.mirador-icon-toc').removeClass('selected');
+            _this.element.find('.fa-caret-down').switchClass('fa-caret-down', 'fa-list');
+            _this.element.find('.view-container').addClass('maximised');
+        }
+    });
+
+      // TODO: temporary logic to minimize side panel if only tab is toc and toc is empty
+      jQuery.subscribe('sidePanelVisibilityByTab.' + this.id, function(event, visible) {
+        _this.sidePanelVisibility(visible, '0s');
+      });
+
     },
-    
+
     bindAnnotationEvents: function() {
       var _this = this;
       jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
@@ -258,7 +293,7 @@
           console.log("There was an error saving this new annotation");
           //remove this overlay because we couldn't save annotation
           jQuery(osdOverlay).remove();
-        }); 
+        });
       });
 
       jQuery.subscribe('annotationUpdated.'+_this.id, function(event, oaAnno) {
@@ -270,21 +305,21 @@
               return false;
             }
           });
-          jQuery.publish(('annotationListLoaded.' + _this.id));          
+          jQuery.publish(('annotationListLoaded.' + _this.id));
         },
         function() {
-          console.log("There was an error updating this annotation");        
+          console.log("There was an error updating this annotation");
         });
       });
 
-      jQuery.subscribe('annotationDeleted.'+_this.id, function(event, annoId) {        
+      jQuery.subscribe('annotationDeleted.'+_this.id, function(event, annoId) {
         //remove from endpoint
         //first function is success callback, second is error callback
         _this.endpoint.deleteAnnotation(annoId, function() {
           _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== annoId; });
           jQuery.publish(('annotationListLoaded.' + _this.id));
           jQuery.publish(('removeOverlay.' + _this.id), annoId);
-        }, 
+        },
         function() {
           // console.log("There was an error deleting this annotation");
         });
@@ -320,11 +355,11 @@
           //instantiate any panels that exist for this view but are still null
           if (view !== '' && _this[panelType] === null) {
             _this[panelType] = new $[view]({
-              manifest: _this.manifest, 
-              appendTo: _this.element.find('.'+panelType), 
-              parent: _this, 
-              panel: true, 
-              canvasID: _this.currentCanvasID, 
+              manifest: _this.manifest,
+              appendTo: _this.element.find('.'+panelType),
+              parent: _this,
+              panel: true,
+              canvasID: _this.currentCanvasID,
               imagesList: _this.imagesList,
               thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
             });
@@ -334,7 +369,7 @@
           displayed = _this.focusOverlaysAvailable[state][panelType][view];
 
           //toggle any valid panels
-          if (view !== '' && displayed) {   
+          if (view !== '' && displayed) {
             _this.togglePanels(panelType, displayed, view, state);
           }
 
@@ -356,6 +391,35 @@
       if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
 
+    updateSidePanel: function() {
+      if (!this.sidePanelAvailable) {
+        return;
+      }
+      var _this = this,
+      tocAvailable = _this.sidePanelOptions.toc,
+      annotationsTabAvailable = _this.sidePanelOptions.annotations,
+      hasStructures = true;
+
+      var structures = _this.manifest.getStructures();
+      if (!structures || structures.length === 0) {
+        hasStructures = false;
+      }
+
+      if (this.sidePanel === null) {
+        this.sidePanel = new $.SidePanel({
+              parent: _this,
+              appendTo: _this.element.find('.sidePanel'),
+              manifest: _this.manifest,
+              canvasID: _this.currentCanvasID,
+              tocTabAvailable: tocAvailable,
+              annotationsTabAvailable: annotationsTabAvailable,
+              hasStructures: hasStructures
+        });
+      } else {
+        this.sidePanel.update('annotations', annotationsTabAvailable);
+      }
+    },
+ 
     get: function(prop, parent) {
       if (parent) {
         return this[parent][prop];
@@ -371,7 +435,7 @@
       }
     },
 
-    setTOCBoolean: function(boolValue) {
+    /*setTOCBoolean: function(boolValue) {
       var _this = this;
       jQuery.each(this.focusOverlaysAvailable, function(key, value) {
         _this.focusOverlaysAvailable[key].sidePanel.TableOfContents = boolValue;
@@ -380,7 +444,7 @@
       if (!boolValue) {
         this.element.find('.mirador-icon-toc').hide();
       }
-    },
+    },*/
 
     togglePanels: function(panelType, panelState, viewType, focusState) {
       //update state in focusOverlaysAvailable
@@ -389,18 +453,40 @@
       this.adjustFocusSize(panelType, panelState);
     },
 
-    minMaxSidePanel: function(element) {
-      if (this.element.find('.sidePanel').hasClass('minimized')) {
-        element.find('.fa-list').switchClass('fa-list', 'fa-caret-down');
-        element.addClass('selected').css('background','#efefef');
-        this.element.find('.sidePanel').removeClass('minimized').width(280).css('border-right', '1px solid lightgray');
-        this.element.find('.view-container').css('margin-left', 280);
-      } else {
-        element.find('.fa-caret-down').switchClass('fa-caret-down', 'fa-list');
-        element.removeClass('selected').css('background', '#fafafa');
-        this.element.find('.view-container').css('margin-left', 0);
-        this.element.find('.sidePanel').addClass('minimized').css('border', 'none').width(0);
+    sidePanelVisibility: function(visible, transitionDuration) {
+      var _this = this;
+      _this.sidePanelVisible = visible,
+      tocIconElement = this.element.find('.mirador-icon-toc'),
+      sidePanelElement = this.element.find('.sidePanel'),
+      viewContainerElement = this.element.find('.view-container');
+
+      sidePanelElement.css('transition-duration', transitionDuration);
+      viewContainerElement.css('transition', transitionDuration);
+      if (visible && sidePanelElement.hasClass('minimized')) {
+        tocIconElement.find('.fa-list').switchClass('fa-list', 'fa-caret-down');
+        tocIconElement.addClass('selected').css('background','#efefef');
+        sidePanelElement.removeClass('minimized').width(280).css('border-right', '1px solid lightgray');
+        viewContainerElement.css('margin-left', 280);
+      } else if (!visible && !sidePanelElement.hasClass('minimized')) {
+        tocIconElement.find('.fa-caret-down').switchClass('fa-caret-down', 'fa-list');
+        tocIconElement.removeClass('selected').css('background', '#fafafa');
+        viewContainerElement.css('margin-left', 0);
+        sidePanelElement.addClass('minimized').css('border', 'none').width(0);
       }
+      jQuery.publish(('windowUpdated'), {
+        id: _this.id,
+        sidePanelVisible: visible
+      });
+    },
+
+    bottomPanelVisibility: function(visible) {
+      var _this = this;
+      _this.bottomPanelVisible = visible;
+      jQuery.publish(('bottomPanelSet.' + _this.id), visible);
+      jQuery.publish(('windowUpdated'), {
+        id: _this.id,
+        bottomPanelVisible: visible
+      });
     },
 
     adjustFocusSize: function(panelType, panelState) {
@@ -445,11 +531,13 @@
       this.focusModules[focusState].toggle(true);
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
+      this.updateSidePanel();
+      jQuery.publish("focusUpdated");
       jQuery.publish("windowUpdated", {
-        id: _this.id, 
-        viewType: _this.currentFocus, 
-        canvasID: _this.currentCanvasID, 
-        imageMode: _this.currentImageMode, 
+        id: _this.id,
+        viewType: _this.currentFocus,
+        canvasID: _this.currentCanvasID,
+        imageMode: _this.currentImageMode,
         loadedManifest: _this.manifest.jsonLd['@id'],
         slotAddress: _this.slotAddress
       });
@@ -476,11 +564,11 @@
       this.currentCanvasID = canvasID;
       if (this.focusModules.ImageView === null) {
         this.focusModules.ImageView = new $.ImageView({
-          manifest: this.manifest, 
-          appendTo: this.element.find('.view-container'), 
-          parent: this, 
+          manifest: this.manifest,
+          appendTo: this.element.find('.view-container'),
+          parent: this,
           windowId: this.id,
-          canvasID: canvasID, 
+          canvasID: canvasID,
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
           bottomPanelAvailable: this.bottomPanelAvailable,
@@ -488,6 +576,7 @@
           annotationCreationAvailable: this.annotationCreationAvailable,
           annoEndpointAvailable: this.annoEndpointAvailable,
           annotationOn : this.annotationOn,
+          annotationState : this.annotationState,
           fullScreenAvailable: this.fullScreenAvailable
         });
       } else {
@@ -501,11 +590,11 @@
       this.currentCanvasID = canvasID;
       if (this.focusModules.BookView === null) {
         this.focusModules.BookView = new $.BookView({
-          manifest: this.manifest, 
-          appendTo: this.element.find('.view-container'), 
-          parent: this, 
+          manifest: this.manifest,
+          appendTo: this.element.find('.view-container'),
+          parent: this,
           windowId: this.id,
-          canvasID: canvasID, 
+          canvasID: canvasID,
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
           bottomPanelAvailable: this.bottomPanelAvailable,
@@ -523,18 +612,18 @@
       if (this.focusModules.ScrollView === null) {
         var containerHeight = this.element.find('.view-container').height();
         this.focusModules.ScrollView = new $.ScrollView({
-          manifest: this.manifest, 
-          appendTo: this.element.find('.view-container'), 
-          parent: this, 
-          canvasID: this.currentCanvasID, 
-          imagesList: this.imagesList, 
+          manifest: this.manifest,
+          appendTo: this.element.find('.view-container'),
+          parent: this,
+          canvasID: this.currentCanvasID,
+          imagesList: this.imagesList,
           thumbInfo: {thumbsHeight: Math.floor(containerHeight * this.scrollImageRatio), listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}
         });
       } else {
         var view = this.focusModules.ScrollView;
         view.updateImage(canvasID);
       }
-      this.toggleFocus('ScrollView', '');    
+      this.toggleFocus('ScrollView', '');
     },
 
     updateFocusImages: function(imageList) {
@@ -545,6 +634,7 @@
       var _this = this;
       this.currentCanvasID = canvasID;
       jQuery.publish('removeTooltips.' + _this.id);
+      jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
@@ -564,17 +654,11 @@
       }
       jQuery.publish(('currentCanvasIDUpdated.' + _this.id), canvasID);
     },
-    
+
     replaceWindow: function(newSlotAddress, newElement) {
       this.slotAddress = newSlotAddress;
       this.appendTo = newElement;
       this.update();
-    },
-
-    bottomPanelVisibility: function(visible) {
-      var _this = this;
-      _this.bottomPanelVisible = visible;
-      jQuery.publish(('bottomPanelSet.' + _this.id), visible);
     },
 
     setCursorFrameStart: function(canvasID) {
@@ -684,29 +768,28 @@
         console.log("Endpoint available");
         var dfd = jQuery.Deferred(),
         module = $.viewer.annotationEndpoint.module,
-        options = $.viewer.annotationEndpoint.options;
+        options = $.viewer.annotationEndpoint.options; //grab anything from the config that should be passed directly to the endpoint
+        options.name = $.viewer.annotationEndpoint.name;
         // One annotation endpoint per window, the endpoint
         // is a property of the instance.
         if ( _this.endpoint && _this.endpoint !== null ) {
           _this.endpoint.set('dfd', dfd);
-          _this.endpoint.search({ "uri" : _this.currentCanvasID});
         } else {
-          options.element = _this.element;
-          options.uri = _this.currentCanvasID;
           options.dfd = dfd;
           options.windowID = _this.id;
           options.parent = _this;
           _this.endpoint = new $[module](options);
         }
+        _this.endpoint.search({ "uri" : _this.currentCanvasID});
 
         dfd.done(function(loaded) {
           _this.annotationsList = _this.annotationsList.concat(_this.endpoint.annotationsList);
           // clear out some bad data
           _this.annotationsList = jQuery.grep(_this.annotationsList, function (value, index) {
-            if (typeof value.on === "undefined") { 
+            if (typeof value.on === "undefined") {
               return false;
             }
-            return true; 
+            return true;
           });
           jQuery.publish('annotationListLoaded.' + _this.id);
         });
@@ -757,7 +840,7 @@
     });
 
     this.element.find('.mirador-icon-toc').on('click', function() {
-      _this.minMaxSidePanel(jQuery(this));
+      _this.sidePanelVisibility(!_this.sidePanelVisible, '0.3s');
     });
 
     this.element.find('.new-object-option').on('click', function() {
@@ -790,7 +873,7 @@
                                  '<div class="window">',
                                  '<div class="manifest-info">',
                                  '<div class="window-manifest-navigation">',
-                                 '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-lg fa-fw"></i>',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-image-view" role="button" aria-label="Change Image Mode"><i class="fa fa-photo fa-lg fa-fw"></i>',
                                  '<ul class="dropdown image-list">',
                                  '{{#if ImageView}}',
                                  '<li class="single-image-option"><i class="fa fa-photo fa-lg fa-fw"></i> {{t "imageView"}}</li>',
@@ -804,11 +887,11 @@
                                  '</ul>',
                                  '</a>',
                                  '{{#if ThumbnailsView}}',
-                                 '<a href="javascript:;" class="mirador-btn mirador-icon-thumbs-view thumbnails-option"><i class="fa fa-th fa-lg fa-rotate-90 fa-fw"></i>',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-thumbs-view thumbnails-option" role="button" aria-label="Change to Thumbnails Mode"><i class="fa fa-th fa-lg fa-rotate-90 fa-fw"></i>',
                                  '</a>',
                                  '{{/if}}',
                                  '{{#if MetadataView}}',
-                                 '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="{{t "objectMetadata"}}"><i class="fa fa-info-circle fa-lg fa-fw"></i></a>',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="{{t "objectMetadata"}}" role="button" aria-label="View Information/Metadata about Object"><i class="fa fa-info-circle fa-lg fa-fw"></i></a>',
                                  '{{/if}}',
                                  '</div>',
                                  '{{#if displayLayout}}',
@@ -845,8 +928,8 @@
                                  '<div class="sidePanel">',
                                  '</div>',
                                  '{{/if}}',
-                                 '<div class="view-container {{#unless sidePanel}}focus-max-width{{/unless}}">',
                                  '<div class="overlay"></div>',
+                                 '<div class="view-container {{#unless sidePanel}}focus-max-width{{/unless}}">',
                                  '<div class="bottomPanel">',
                                  '</div>',
                                  '</div>',
@@ -856,4 +939,3 @@
   };
 
 }(Mirador));
-

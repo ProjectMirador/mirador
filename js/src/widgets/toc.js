@@ -12,6 +12,7 @@
       selectedElements: [],
       openElements:     [],
       hoveredElement:   [],
+      ranges:           [],
       selectContext:    null,
       tocData: {},
       active: null
@@ -26,22 +27,21 @@
       var _this = this;
       _this.structures = _this.manifest.getStructures();
       if (!_this.structures || _this.structures.length === 0) {
+
         _this.hide();
         _this.parent.setTOCBoolean(false);
         console.log("No Structures");
         return;
-      } else {
-        console.log("got structures");
-        console.log(_this.structures);
-        _this.parent.setTOCBoolean(true);
+      } 
+      else {
         this.ranges = this.setRanges();
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
         this.tocData = this.initTocData();
         this.selectedElements = $.getRangeIDByCanvasID(_this.structures, _this.parent.currentCanvasID);
         this.element.find('.has-child ul').hide();
         this.render();
-        this.bindEvents();
       }
+      this.bindEvents();
     },
 
     setRanges: function() {
@@ -61,7 +61,16 @@
 
     },
 
-    getTplData: function() {        
+
+    tabStateUpdated: function(data) {
+        if (data.tabs[data.selectedTabIndex].options.id === 'tocTab') {
+            this.element.show();
+        } else {
+            this.element.hide();
+        }
+    },
+
+    getTplData: function() {
       var _this = this,
       ranges = _this.extractRangeTrees(_this.ranges);
       if (ranges.length < 2) {
@@ -108,9 +117,9 @@
         var children = jQuery.grep(flatRanges, function(child) { if (!child.within) { child.within = 'root'; } return child.within == parent.id; });
         if ( children.length ) {
           if ( parent.id === 'root') {
-            // If there are children and their parent's 
+            // If there are children and their parent's
             // id is a root, bind them to the tree object.
-            // 
+            //
             // This begins the construction of the object,
             // and all non-top-level children are now
             // bound the these base nodes set on the tree
@@ -118,26 +127,26 @@
             children.forEach(function(child) {
               child.level = 0;
             });
-            tree = children;   
+            tree = children;
           } else {
             // If the parent does not have a top-level id,
             // bind the children to the parent node in this
             // recursion level before handing it over for
-            // another spin. 
+            // another spin.
             //
-            // Because "child" is passed as 
-            // the second parameter in the next call, 
+            // Because "child" is passed as
+            // the second parameter in the next call,
             // in the next iteration "parent" will be the
             // first child bound here.
-            children.forEach(function(child) { 
+            children.forEach(function(child) {
               child.level = parent.level+1;
             });
             parent.children = children;
           }
-          // The function cannot continue to the return 
-          // statement until this line stops being called, 
+          // The function cannot continue to the return
+          // statement until this line stops being called,
           // which only happens when "children" is empty.
-          jQuery.each( children, function( index, child ){ unflatten( flatRanges, child ); } );                    
+          jQuery.each( children, function( index, child ){ unflatten( flatRanges, child ); } );
         }
         return tree;
       }
@@ -166,21 +175,21 @@
 
       // Deselect elements
       jQuery(toDeselect).removeClass('selected');
-      
+
       // Select new elements
       jQuery(toSelect).addClass('selected');
-      
+
       // Scroll to new elements
       scroll();
-      
+
       // Open new ones
       jQuery(toOpen).toggleClass('open').find('ul:first').slideFadeToggle();
       // Close old ones (find way to keep scroll position).
       jQuery(toClose).toggleClass('open').find('ul:first').slideFadeToggle(400, 'swing', scroll);
-       
+
       // Get the sum of the outer height of all elements to be removed.
       // Subtract from current parent height to retreive the new height.
-      // Scroll with respect to this. 
+      // Scroll with respect to this.
       scroll();
 
       function scroll() {
@@ -198,10 +207,14 @@
 
       jQuery.subscribe('focusChanged', function(_, manifest, focusFrame) {
       });
-      
+
       jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
       });
-        
+
+      jQuery.subscribe('tabStateUpdated.' + _this.parent.id, function(_, data) {
+        _this.tabStateUpdated(data);
+      });
+
       jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(event, canvasID) {
         if (!_this.structures) { return; }
         _this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, canvasID));
@@ -211,12 +224,12 @@
       _this.element.find('.toc-link').on('click', function(event) {
         event.stopPropagation();
         // The purpose of the immediate event is to update the data on the parent
-        // by calling its "set" function. 
-        // 
-        // The parent (window) then emits an event notifying all panels of 
+        // by calling its "set" function.
+        //
+        // The parent (window) then emits an event notifying all panels of
         // the update, so they can respond in their own unique ways
-        // without window having to know anything about their DOMs or 
-        // internal structure. 
+        // without window having to know anything about their DOMs or
+        // internal structure.
         var rangeID = jQuery(this).data().rangeid,
         canvasID = jQuery.grep(_this.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0],
         isLeaf = jQuery(this).closest('li').hasClass('leaf-item');
@@ -227,17 +240,17 @@
           _this.parent.setCurrentCanvasID(canvasID);
         // }
       });
-      
+
       _this.element.find('.toc-caret').on('click', function(event) {
         event.stopPropagation();
-        
+
         var rangeID = jQuery(this).parent().data().rangeid;
-        _this.setOpenItem(rangeID); 
+        _this.setOpenItem(rangeID);
 
         // For now it's alright if this data gets lost in the fray.
         jQuery(this).closest('li').toggleClass('open').find('ul:first').slideFadeToggle();
 
-        // The parent (window) then emits an event notifying all panels of 
+        // The parent (window) then emits an event notifying all panels of
         // the update, so they can respond in their own unique ways
         // without window having to know anything about their DOMs or
         // internal structure.
@@ -279,6 +292,13 @@
     //   console.log('returnToPlace');
     // },
 
+    emptyTemplate: Handlebars.compile([
+            '<ul class="toc">',
+            '<li class="leaf-item open">',
+            '<h2><span>No index available</span></h2>',
+            '</ul>',
+        ].join('')),
+
     template: function(tplData) {
 
       var template = Handlebars.compile([
@@ -304,18 +324,9 @@
         if (options.fn !== undefined) {
           previousTemplate = options.fn;
         }
-        else{
-        }
-        
-        if(children !== undefined && children.length > 0){
-          children.forEach(function(child) {
-            //console.log(previousTemplate(child));
-            out = out + previousTemplate(child);
-          });
-        }
-        else{
-          out = "<span class='hello212'>I had no children</span>";
-        }
+        children.forEach(function(child) {
+          out = out + previousTemplate(child);
+        });
         return out;
       });
 
@@ -330,13 +341,13 @@
 
     toggle: function(stateValue) {
       if (!this.structures) { stateValue = false; }
-      if (stateValue) { 
-        this.show(); 
+      if (stateValue) {
+        this.show();
       } else {
         this.hide();
       }
     },
-    
+
     hide: function() {
       jQuery(this.appendTo).hide();
       this.parent.element.find('.view-container').addClass('focus-max-width');
@@ -346,8 +357,7 @@
       jQuery(this.appendTo).show({effect: "fade", duration: 300, easing: "easeInCubic"});
       this.parent.element.find('.view-container').removeClass('focus-max-width');
     }
-    
+
   };
 
 }(Mirador));
-
