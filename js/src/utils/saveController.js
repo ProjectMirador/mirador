@@ -22,6 +22,7 @@
       // Don't want to save session, therefore don't set up save controller
       if (config.saveSession === false) {
         this.currentConfig = config;
+        this.bindEvents();
         return false;
       }
       
@@ -130,7 +131,9 @@
       } else {
         this[prop] = value;
       }
-      this.save();
+      if (this.currentConfig.saveSession) {
+        this.save();
+      }
       jQuery.publish("saveControllerConfigUpdated");
     },
 
