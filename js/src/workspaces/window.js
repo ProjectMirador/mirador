@@ -151,6 +151,8 @@
       _this.clearViews();
       _this.clearPanelsAndOverlay();
 
+      this.bindEvents();
+
       //attach view and toggle view, which triggers the attachment of panels or overlays
       _this.bindNavigation();
       switch(focusState) {
@@ -173,8 +175,6 @@
       if ($.viewer.workspace.slots.length <= 1) {
         _this.element.find('.remove-object-option').hide();
       }
-
-      this.bindEvents();
 
       if (this.imagesList.length === 1) {
         this.bottomPanelVisibility(false);
