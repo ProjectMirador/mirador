@@ -54,7 +54,7 @@
       location = _this.manifest.location,
       manifest = _this.manifest.jsonLd;
 
-      this.tplData = { 
+      this.tplData = {
         label: manifest.label,
         repository: location,
         canvasCount: manifest.sequences[0].canvases.length,
@@ -71,7 +71,7 @@
         }
         if (_this.tplData.repository === '(Added from URL)') {
           repo = '';
-        }            
+        }
         var imageName = _this.state.getStateProperty('repoImages')[repo || 'other'] || _this.state.getStateProperty('repoImages').other;
 
         return _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('logosPath') + imageName;
@@ -98,7 +98,7 @@
 
       jQuery.each(_this.allImages, function(index, value) {
         var width = value.width;
-        
+
         _this.imagesTotalWidth += (width + _this.margin);
         if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
           _this.imagesTotalWidth -= (width + _this.margin);
@@ -160,7 +160,8 @@
         var _this = this,
         newMaxPreviewWidth = newWidth - (_this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.remainingWidth);
         newMaxPreviewWidth = newMaxPreviewWidth * 0.95;
-        
+        var image = null;
+
         //width of browser window has been made smaller
         if (newMaxPreviewWidth < _this.maxPreviewImagesWidth ) {
           while (_this.imagesTotalWidth >= newMaxPreviewWidth) {
@@ -179,13 +180,15 @@
         } else if (newMaxPreviewWidth > _this.maxPreviewImagesWidth) {
           //width of browser window has been made larger
           var currentLastImage = _this.tplData.images[_this.tplData.images.length-1],
-          index = currentLastImage ? currentLastImage.index+1 : 0,
+            index = currentLastImage ? currentLastImage.index+1 : 0;
+
           image = _this.allImages[index];
+
           if (image) {
             while (_this.imagesTotalWidth + image.width + _this.margin < newMaxPreviewWidth) {
               _this.tplData.images.push(image);
               _this.imagesTotalWidth += (image.width + _this.margin);
-              
+
               //add image to dom
               _this.element.find('.preview-images').append('<img src="'+image.url+'" width="'+image.width+'" height="'+image.height+'" class="preview-image flash" data-image-id="'+image.id+'">');
 
@@ -245,4 +248,3 @@
   };
 
 }(Mirador));
-
