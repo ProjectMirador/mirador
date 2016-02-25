@@ -60,7 +60,7 @@
         _this.parent.previous();
       });
 
-      this.parent.element.find('.mirador-osd-annotations-layer').on('click', function() {
+      this.parent.element.find('.mirador-osd-annotations-layer').on('click', $.debounce(function() {
         if (_this.annoState.current === 'none') {
           _this.annoState.startup(this);
         }
@@ -69,7 +69,7 @@
         } else {
           _this.annoState.displayOff(this);
         }
-      });
+      },300));
 
       this.parent.element.find('.mirador-osd-go-home').on('click', function() {
         _this.parent.osd.viewport.goHome();

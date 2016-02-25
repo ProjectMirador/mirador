@@ -1,6 +1,12 @@
 (function($) {
 
   $.Viewer = function(options) {
+    // error check - removes invalid tools
+    if (options.availableAnnotationDrawingTools) {
+      options.availableAnnotationDrawingTools = jQuery.grep(options.availableAnnotationDrawingTools, function(element, index) {
+        return jQuery.inArray(element, $.DEFAULT_SETTINGS.availableAnnotationDrawingTools) >= 0;
+      });
+    }
 
     jQuery.extend(true, this, {
       id:                     options.id,
@@ -27,6 +33,9 @@
 
     // get initial manifests
     this.element = this.element || jQuery('#' + this.id);
+    if (options.availableAnnotationDrawingTools && options.availableAnnotationDrawingTools.length > 0) {
+      this.availableAnnotationDrawingTools = options.availableAnnotationDrawingTools;
+    }
 
     if (this.data) {
       this.init();

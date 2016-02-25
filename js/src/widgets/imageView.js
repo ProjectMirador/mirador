@@ -158,6 +158,22 @@
           'uniqueID' : uniqueID
         });
 
+        _this.osd.addHandler('zoom', $.debounce(function(){
+          var point = {
+            'x': -10000000,
+            'y': -10000000
+          };
+          jQuery.publish('updateTooltips.' + _this.windowId, [point, point]);
+        }, 30));
+
+        _this.osd.addHandler('pan', $.debounce(function(){
+          var point = {
+            'x': -10000000,
+            'y': -10000000
+          };
+          jQuery.publish('updateTooltips.' + _this.windowId, [point, point]);
+        }, 30));
+
         _this.osd.addHandler('open', function(){
           jQuery.publish('osdOpen.'+_this.windowId);
           if (_this.osdOptions.osdBounds) {

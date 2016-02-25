@@ -89,9 +89,16 @@
     ],
 
     'availableAnnotationDrawingTools': [
-
+       'Rectangle', 'Ellipse', 'Freehand', 'Polygon', 'Pin'
     ],
-    
+
+    'drawingToolsSettings': {
+      'doubleClickReactionTime': 300,
+      'strokeColor': 'deepSkyBlue',
+      'fillColor': 'deepSkyBlue',
+      'fillColorAlpha': 0.0
+    },
+
     'availableCanvasTools': [
 
     ],

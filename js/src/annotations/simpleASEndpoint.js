@@ -52,7 +52,6 @@
           'admin':  [this.userid]
         }
       };
-      this.search({ uri: this.uri });
     },
 
     //Search endpoint for all annotations with a given URI
@@ -62,6 +61,7 @@
       this.annotationsList = []; //clear out current list
       jQuery.ajax({
         url: _this.url + "/search", // this.prefix+
+        cache: false,
         type: 'GET',
         dataType: 'json',
         headers: {
@@ -69,6 +69,7 @@
         },
         data: {
           uri: options.uri,
+          APIKey: _this.APIKey,
           media: "image",
           limit: 10000
         },
@@ -102,7 +103,7 @@
     deleteAnnotation: function(annotationID, returnSuccess, returnError) {
       var _this = this;
       jQuery.ajax({
-        url: _this.url + "/destroy?uri=" + _this.idMapper[annotationID], // this.prefix+
+        url: _this.url + "/destroy?uri=" + encodeURIComponent(_this.idMapper[annotationID]) + "&APIKey=" + _this.APIKey, // this.prefix+
         type: 'DELETE',
         dataType: 'json',
         headers: {
@@ -133,7 +134,7 @@
       delete annotation.fullId;
       delete annotation.endpoint;
       jQuery.ajax({
-        url: _this.url + "/update/"+annotationID, //this.prefix+
+        url: _this.url + "/update/"+encodeURIComponent(annotationID) + "?APIKey=" + _this.APIKey, //this.prefix+
         type: 'POST',
         dataType: 'json',
         headers: {
@@ -160,7 +161,7 @@
           _this = this;
 
       jQuery.ajax({
-        url: _this.url + "/create", //this.prefix+
+        url: _this.url + "/create?APIKey=" + _this.APIKey, //this.prefix+
         type: 'POST',
         dataType: 'json',
         headers: {
