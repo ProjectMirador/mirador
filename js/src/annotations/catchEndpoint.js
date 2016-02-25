@@ -245,12 +245,18 @@
         motivation.push("oa:replying");
         on = annotation.parent;  //need to make URI
       } else {
+        var value;
+        if (typeof annotation.rangePosition === 'object') {
+          value = "xywh="+annotation.rangePosition.x+","+annotation.rangePosition.y+","+annotation.rangePosition.width+","+annotation.rangePosition.height;
+        } else {
+          value = annotation.rangePosition;
+        }
         motivation.push("oa:commenting");
         on = { "@type" : "oa:SpecificResource",
           "source" : annotation.uri,
           "selector" : {
             "@type" : "oa:FragmentSelector",
-            "value" : "xywh="+annotation.rangePosition.x+","+annotation.rangePosition.y+","+annotation.rangePosition.width+","+annotation.rangePosition.height
+            "value" : value
           },
           "scope": {
             "@context" : "http://www.harvard.edu/catch/oa.json",
@@ -310,12 +316,18 @@
       annotation.collectionId = this.collection_id;
 
       var region = oaAnnotation.on.selector.value;
-      var regionArray = region.split('=')[1].split(',');
-      annotation.rangePosition = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
+      var regionArray;
+      if (region.indexOf('<svg') !== -1) {
+        //this is an svg string, so don't do anything special
+        annotation.rangePosition = region;
+      } else {
+        regionArray = region.split('=')[1].split(',');
+        annotation.rangePosition = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
+      }
 
-      var imageUrl = $.Iiif.getImageUrl(this.parent.imagesList[$.getImageIndexById(this.parent.imagesList, oaAnnotation.on.source)]);
-      imageUrl = imageUrl + "/" + regionArray.join(',') + "/full/0/native.jpg";
-      annotation.thumb = imageUrl;
+      // var imageUrl = $.Iiif.getImageUrl(this.parent.imagesList[$.getImageIndexById(this.parent.imagesList, oaAnnotation.on.source)]);
+      // imageUrl = imageUrl + "/" + regionArray.join(',') + "/full/0/native.jpg";
+      // annotation.thumb = imageUrl;
 
       region = oaAnnotation.on.scope.value;
       regionArray = region.split('=')[1].split(',');
