@@ -251,12 +251,13 @@
           "selector" : {
             "@type" : "oa:FragmentSelector",
             "value" : "xywh="+annotation.rangePosition.x+","+annotation.rangePosition.y+","+annotation.rangePosition.width+","+annotation.rangePosition.height
-          },
-          "scope": {
-            "@context" : "http://www.harvard.edu/catch/oa.json",
-            "@type" : "catch:Viewport",
-            "value" : "xywh="+annotation.bounds.x+","+annotation.bounds.y+","+annotation.bounds.width+","+annotation.bounds.height
           }
+          // ,
+          // "scope": {
+          //   "@context" : "http://www.harvard.edu/catch/oa.json",
+          //   "@type" : "catch:Viewport",
+          //   "value" : "xywh="+annotation.bounds.x+","+annotation.bounds.y+","+annotation.bounds.width+","+annotation.bounds.height
+          // }
         };
       }
       resource.push( {
@@ -317,9 +318,9 @@
       imageUrl = imageUrl + "/" + regionArray.join(',') + "/full/0/native.jpg";
       annotation.thumb = imageUrl;
 
-      region = oaAnnotation.on.scope.value;
-      regionArray = region.split('=')[1].split(',');
-      annotation.bounds = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
+      // region = oaAnnotation.on.scope.value;
+      // regionArray = region.split('=')[1].split(',');
+      // annotation.bounds = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
 
       annotation.updated = new Date().toISOString();
       if (oaAnnotation.annotatedAt) { 
