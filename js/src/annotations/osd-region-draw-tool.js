@@ -404,15 +404,15 @@
         }
 
         var bounds = _this.svgOverlay.viewer.viewport.getBounds(true);
-        var scope = _this.svgOverlay.viewer.viewport.viewportToImageRectangle(bounds);
+        // var scope = _this.svgOverlay.viewer.viewport.viewportToImageRectangle(bounds);
 
-        if (!oaAnno.on.scope) {
-          oaAnno.on.scope = {
-            "@context": "http://www.harvard.edu/catch/oa.json",
-            "@type": "catch:Viewport"
-          };
-        }
-        oaAnno.on.scope.value = "xywh=" + Math.round(scope.x) + "," + Math.round(scope.y) + "," + Math.round(scope.width) + "," + Math.round(scope.height); //osd bounds
+        // if (!oaAnno.on.scope) {
+        //   oaAnno.on.scope = {
+        //     "@context": "http://www.harvard.edu/catch/oa.json",
+        //     "@type": "catch:Viewport"
+        //   };
+        // }
+        // oaAnno.on.scope.value = "xywh=" + Math.round(scope.x) + "," + Math.round(scope.y) + "," + Math.round(scope.width) + "," + Math.round(scope.height); //osd bounds
         // oaAnno.on.selector.value remains the same
 
         var motivation = [],

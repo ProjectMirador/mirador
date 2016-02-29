@@ -622,7 +622,7 @@
                 }
 
                 var bounds = _this.viewer.viewport.getBounds(true);
-                var scope = _this.viewer.viewport.viewportToImageRectangle(bounds);
+                // var scope = _this.viewer.viewport.viewportToImageRectangle(bounds);
 
                 var motivation = [],
                   resource = [],
@@ -646,12 +646,13 @@
                   "selector": {
                     "@type": "oa:SvgSelector",
                     "value": svg
-                  },
-                  "scope": {
-                    "@context": "http://www.harvard.edu/catch/oa.json",
-                    "@type": "catch:Viewport",
-                    "value": "xywh=" + Math.round(scope.x) + "," + Math.round(scope.y) + "," + Math.round(scope.width) + "," + Math.round(scope.height) //osd bounds
                   }
+                  // ,
+                  // "scope": {
+                  //   "@context": "http://www.harvard.edu/catch/oa.json",
+                  //   "@type": "catch:Viewport",
+                  //   "value": "xywh=" + Math.round(scope.x) + "," + Math.round(scope.y) + "," + Math.round(scope.width) + "," + Math.round(scope.height) //osd bounds
+                  // }
                 };
                 resource.push({
                   "@type": "dctypes:Text",
