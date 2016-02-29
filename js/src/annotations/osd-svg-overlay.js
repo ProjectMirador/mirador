@@ -642,7 +642,7 @@
                 motivation.push("oa:commenting");
                 on = {
                   "@type": "oa:SpecificResource",
-                  "source": _this.window.parent.canvasID,
+                  "full": _this.window.parent.canvasID,
                   "selector": {
                     "@type": "oa:SvgSelector",
                     "value": svg
