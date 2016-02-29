@@ -247,7 +247,7 @@
       } else {
         motivation.push("oa:commenting");
         on = { "@type" : "oa:SpecificResource",
-          "source" : annotation.uri,
+          "full" : annotation.uri,
           "selector" : {
             "@type" : "oa:FragmentSelector",
             "value" : "xywh="+annotation.rangePosition.x+","+annotation.rangePosition.y+","+annotation.rangePosition.width+","+annotation.rangePosition.height
@@ -305,7 +305,7 @@
       annotation.tags = tags;
       annotation.text = text;
 
-      annotation.uri = oaAnnotation.on.source;
+      annotation.uri = oaAnnotation.on.full;
       annotation.contextId = this.context_id;
       annotation.collectionId = this.collection_id;
 
@@ -313,7 +313,7 @@
       var regionArray = region.split('=')[1].split(',');
       annotation.rangePosition = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
 
-      var imageUrl = $.Iiif.getImageUrl(this.parent.imagesList[$.getImageIndexById(this.parent.imagesList, oaAnnotation.on.source)]);
+      var imageUrl = $.Iiif.getImageUrl(this.parent.imagesList[$.getImageIndexById(this.parent.imagesList, oaAnnotation.on.full)]);
       imageUrl = imageUrl + "/" + regionArray.join(',') + "/full/0/native.jpg";
       annotation.thumb = imageUrl;
 

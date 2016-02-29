@@ -331,7 +331,7 @@
                   }
                   motivation.push("oa:commenting");
                   on = { "@type" : "oa:SpecificResource",
-                  "source" : parent.parent.canvasID, 
+                  "full" : parent.parent.canvasID,
                   "selector" : {
                     "@type" : "oa:FragmentSelector",
                     "value" : "xywh="+canvasRect.x+","+canvasRect.y+","+canvasRect.width+","+canvasRect.height
