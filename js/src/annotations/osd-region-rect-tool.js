@@ -313,7 +313,7 @@
                   } 
 
                   var bounds = _this.osdViewer.viewport.getBounds(true);
-                  var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
+                  //var scope = _this.osdViewer.viewport.viewportToImageRectangle(bounds);
                   //bounds is giving negative values?
                   
                   var motivation = [],
@@ -335,12 +335,13 @@
                   "selector" : {
                     "@type" : "oa:FragmentSelector",
                     "value" : "xywh="+canvasRect.x+","+canvasRect.y+","+canvasRect.width+","+canvasRect.height
-                  },
-                  "scope": {
-                    "@context" : "http://www.harvard.edu/catch/oa.json",
-                    "@type" : "catch:Viewport",
-                    "value" : "xywh="+Math.round(scope.x)+","+Math.round(scope.y)+","+Math.round(scope.width)+","+Math.round(scope.height) //osd bounds
                   }
+                  // ,
+                  // "scope": {
+                  //   "@context" : "http://www.harvard.edu/catch/oa.json",
+                  //   "@type" : "catch:Viewport",
+                  //   "value" : "xywh="+Math.round(scope.x)+","+Math.round(scope.y)+","+Math.round(scope.width)+","+Math.round(scope.height) //osd bounds
+                  // }
                 };
                 resource.push( {
                   "@type" : "dctypes:Text",
