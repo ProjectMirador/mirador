@@ -55,6 +55,7 @@
             jQuery.publish('changeBorderColor.' + _this.windowId, color.toHexString());
           }
         },
+        maxSelectionSize: 4,
         palette: [
           ["black", "red", "green", "blue"],
           ["white", "cyan", "magenta", "yellow"]
@@ -96,6 +97,7 @@
             jQuery.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
           }
         },
+        maxSelectionSize: 4,
         palette: [
           ["black", "red", "green", "blue"],
           ["white", "cyan", "magenta", "yellow"]

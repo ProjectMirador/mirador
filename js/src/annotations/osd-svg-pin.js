@@ -17,7 +17,7 @@
       overlay.mode = 'create';
       var _this = this;
       var pathData = '';
-      var size = 5 / overlay.currentPinSize;
+      var size = overlay.pinSize;
       pathData += 'M' + initialPoint.x + ',' + initialPoint.y;
       pathData += ' Q' + initialPoint.x + ',' + (initialPoint.y - size);
       pathData += ' ' + (initialPoint.x + size) + ',' + (initialPoint.y - 2 * size);
@@ -32,6 +32,7 @@
       shape.fillColor.alpha = overlay.fillColorAlpha;
       shape.fullySelected = true;
       shape.closed = true;
+      overlay.fitPinSize(shape);
       return shape;
     },
 
