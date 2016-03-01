@@ -26,6 +26,7 @@
       latestMouseDownTime: -1,
       doubleClickReactionTime: drawingToolsSettings.doubleClickReactionTime,
       availableAnnotationDrawingTools: availableAnnotationDrawingTools,
+      pinSize: 10,
       hitOptions: {
         fill: true,
         stroke: true,
@@ -121,7 +122,7 @@
       this.paperScope = new paper.PaperScope();
       this.paperScope.setup('draw_canvas_' + _this.windowId);
       this.paperScope.activate();
-      this.currentPinSize = this.paperScope.view.zoom;
+      this.viewZoom = this.paperScope.view.zoom;
       this.paperScope.view.onFrame = function(event) {
         if (_this.paperScope.snapPoint) {
           _this.paperScope.snapPoint.remove();
@@ -132,7 +133,7 @@
             _this.paperScope.snapPoint = new _this.paperScope.Path.Circle({
               name: 'snapPoint',
               center: _this.path.segments[0].point,
-              radius: _this.hitOptions.tolerance / _this.currentPinSize,
+              radius: _this.hitOptions.tolerance / _this.viewZoom,
               fillColor: _this.path.strokeColor,
               strokeColor: _this.path.strokeColor
             });
@@ -251,6 +252,12 @@
       }
     },
 
+    fitPinSize: function(shape) {
+      var scale = 1 / shape.bounds.width;
+      scale *= this.pinSize / this.viewZoom;
+      shape.scale(scale, shape.segments[0].point);
+    },
+
     resize: function() {
       var pointZero = this.viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
       var scale = this.viewer.viewport.containerSize.x * this.viewer.viewport.getZoom(true);
@@ -267,14 +274,14 @@
         this.paperScope.view.zoom = scale / this.initialZoom;
         this.paperScope.view.center = new this.paperScope.Size(this.paperScope.view.bounds.width / 2, this.paperScope.view.bounds.height / 2);
         this.paperScope.view.update(true);
+        this.viewZoom = this.paperScope.view.zoom;
         // Fit pins to the current zoom level.
         var items = this.paperScope.project.getItems({
           name: /^pin_/
         });
         for (var i = 0; i < items.length; i++) {
-          items[i].scale(this.currentPinSize / this.paperScope.view.zoom);
+          this.fitPinSize(items[i]);
         }
-        this.currentPinSize = this.paperScope.view.zoom;
       }
     },
 
@@ -339,8 +346,9 @@
       cloned.closed = shape.closed;
       cloned.data.rotation = shape.data.rotation;
       cloned.data.annotation = annotation;
+      cloned.scale(this.canvas.width / (this.viewZoom * this.viewer.viewport.contentSize.x), new this.paperScope.Point(0, 0));
       if (cloned.name.toString().indexOf('pin_') != -1) { // pin shapes with fixed size.
-        cloned.scale(1 / this.paperScope.view.zoom);
+        this.fitPinSize(cloned);
       }
       shape.remove();
       return cloned;
@@ -426,7 +434,7 @@
             shapeArray[idx].data.rotation = this.editedPaths[i].data.rotation;
             shapeArray[idx].data.annotation = this.editedPaths[i].data.annotation;
             if (shapeArray[idx].name.toString().indexOf('pin_') != -1) { // pin shapes with fixed size.
-              shapeArray[idx].scale(1 / this.paperScope.view.zoom);
+              this.fitPinSize(shapeArray[idx]);
             }
           }
         }
@@ -490,8 +498,9 @@
       if (shapes.length > 1) {
         svg += "<g>";
         for (var i = 0; i < shapes.length; i++) {
+          shapes[i].scale(this.viewZoom * this.viewer.viewport.contentSize.x / this.canvas.width, new this.paperScope.Point(0, 0));
           if (shapes[i].name.toString().indexOf('pin_') != -1) {
-            shapes[i].scale(this.currentPinSize);
+            this.fitPinSize(shapes[i]);
           }
           var anno = shapes[i].data.annotation;
           shapes[i].data.annotation = null;
@@ -502,8 +511,9 @@
         }
         svg += "</g>";
       } else {
+        shapes[0].scale(this.viewZoom * this.viewer.viewport.contentSize.x / this.canvas.width, new this.paperScope.Point(0, 0));
         if (shapes[0].name.toString().indexOf('pin_') != -1) {
-          shapes[0].scale(this.currentPinSize);
+          this.fitPinSize(shapes[0]);
         }
         var annoSingle = shapes[0].data.annotation;
         shapes[0].data.annotation = null;
