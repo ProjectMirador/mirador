@@ -705,7 +705,7 @@
       if (this.annoEndpointAvailable) {
         var dfd = jQuery.Deferred(),
         module = $.viewer.annotationEndpoint.module,
-        options = $.viewer.annotationEndpoint.options; //grab anything from the config that should be passed directly to the endpoint
+        options = $.viewer.annotationEndpoint.options || {}; //grab anything from the config that should be passed directly to the endpoint
         options.name = $.viewer.annotationEndpoint.name;
         // One annotation endpoint per window, the endpoint
         // is a property of the instance.
