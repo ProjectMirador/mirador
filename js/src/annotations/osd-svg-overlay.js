@@ -63,6 +63,7 @@
         jQuery('.qtip' + _this.windowId).qtip('hide');
         return;
       }
+      jQuery('#' + _this.window.viewer.id).parents(".window").find(".qtip-viewer").hide();
       _this.currentTool = null;
       for (var i = 0; i < _this.tools.length; i++) {
         if (_this.tools[i].logoClass == tool) {
@@ -77,6 +78,7 @@
         jQuery('.qtip' + _this.windowId).qtip('hide');
         return;
       }
+      jQuery('#' + _this.window.viewer.id).parents(".window").find(".qtip-viewer").hide();
       _this.currentTool = null;
       for (var i = 0; i < _this.availableAnnotationDrawingTools.length; i++) {
         for (var j = 0; j < _this.tools.length; j++) {
@@ -155,8 +157,8 @@
     },
 
     onMouseUp: function(event) {
-      event.stopPropagation();
-      if (this.overlay.currentTool) {
+      if (!this.overlay.disabled) {
+        event.stopPropagation();
         document.body.style.cursor = "default";
         if (this.overlay.mode === 'deform' || this.overlay.mode === 'edit') {
           this.overlay.segment = null;
@@ -170,8 +172,8 @@
     },
 
     onMouseDrag: function(event) {
-      event.stopPropagation();
-      if (this.overlay.currentTool) {
+      if (!this.overlay.disabled) {
+        event.stopPropagation();
         this.overlay.currentTool.onMouseDrag(event, this.overlay);
       } else {
         var absolutePoint = {
@@ -184,9 +186,9 @@
     },
 
     onMouseMove: function(event) {
-      event.stopPropagation();
       this.overlay.cursorLocation = event.point;
-      if (this.overlay.currentTool) {
+      if (!this.overlay.disabled) {
+        event.stopPropagation();
         this.overlay.currentTool.onMouseMove(event, this.overlay);
       } else {
         var absolutePoint = {
@@ -199,6 +201,9 @@
     },
 
     onMouseDown: function(event) {
+      if (this.overlay.disabled) {
+        return;
+      }
       event.stopPropagation();
       var date = new Date();
       var time = date.getTime();

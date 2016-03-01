@@ -240,11 +240,13 @@ describe('Overlay', function() {
       'y': 100
     });
     this.overlay.overlay = this.overlay;
+    this.overlay.disabled = true;
     this.overlay.onMouseUp(event);
 
     expect(this.rectangle.onMouseUp.calls.count()).toEqual(0);
 
     this.overlay.currentTool = this.rectangle;
+    this.overlay.disabled = false;
     this.overlay.onMouseUp(event);
 
     expect(this.rectangle.onMouseUp.calls.count()).toEqual(1);
@@ -261,11 +263,13 @@ describe('Overlay', function() {
       'clientX': 100
     });
     this.overlay.overlay = this.overlay;
+    this.overlay.disabled = true;
     this.overlay.onMouseDrag(event);
 
     expect(this.rectangle.onMouseDrag.calls.count()).toEqual(0);
 
     this.overlay.currentTool = this.rectangle;
+    this.overlay.disabled = false;
     this.overlay.onMouseDrag(event);
 
     expect(this.rectangle.onMouseDrag.calls.count()).toEqual(1);
@@ -282,11 +286,13 @@ describe('Overlay', function() {
       'clientX': 100
     });
     this.overlay.overlay = this.overlay;
+    this.overlay.disabled = true;
     this.overlay.onMouseMove(event);
 
     expect(this.rectangle.onMouseMove.calls.count()).toEqual(0);
 
     this.overlay.currentTool = this.rectangle;
+    this.overlay.disabled = false;
     this.overlay.onMouseMove(event);
 
     expect(this.rectangle.onMouseMove.calls.count()).toEqual(1);
@@ -324,12 +330,14 @@ describe('Overlay', function() {
     var date = new Date();
     this.overlay.latestMouseDownTime = date.getTime();
     this.overlay.overlay = this.overlay;
+    this.overlay.disabled = true;
     this.overlay.onMouseDown(event);
 
     expect(this.rectangle.onMouseDown.calls.count()).toEqual(0);
     expect(this.rectangle.onDoubleClick.calls.count()).toEqual(0);
 
     this.overlay.currentTool = this.rectangle;
+    this.overlay.disabled = false;
     this.overlay.onMouseDown(event);
 
     expect(this.rectangle.onMouseDown.calls.count()).toEqual(0);
@@ -396,10 +404,10 @@ describe('Overlay', function() {
 
     this.overlay.onMouseDown(event);
 
-    expect(this.overlay.hoveredPath).toBeNull();
-    expect(this.overlay.segment).toBeNull();
-    expect(this.overlay.path).toBeNull();
-    expect(this.overlay.mode).toEqual('');
+    expect(this.overlay.hoveredPath).toBe(newShape);
+    expect(this.overlay.segment).toBe(newShape.segments[0]);
+    expect(this.overlay.path).toBe(newShape);
+    expect(this.overlay.mode).toEqual('deform');
   });
 
   it('parseSVG', function() {
