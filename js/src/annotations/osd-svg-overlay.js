@@ -266,8 +266,37 @@
     resize: function() {
       var pointZero = this.viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
       var scale = this.viewer.viewport.containerSize.x * this.viewer.viewport.getZoom(true);
-      this.canvas.width = scale;
-      this.canvas.height = scale * (this.viewer.viewport.contentSize.y / this.viewer.viewport.contentSize.x);
+
+      // maximum canvas size which should be less that limitations from each browser.
+      // http://stackoverflow.com/questions/6081483/maximum-size-of-a-canvas-element
+      var maxSize = 2048;
+      var realSize = {
+        width: scale,
+        height: scale * (this.viewer.viewport.contentSize.y / this.viewer.viewport.contentSize.x),
+        offsetX: 0,
+        offsetY: 0,
+        scale: 1
+      };
+      if (realSize.width > maxSize) {
+        realSize.scale = realSize.width / maxSize;
+        realSize.width /= realSize.scale;
+        realSize.height /= realSize.scale;
+        realSize.offsetX -= pointZero.x;
+        realSize.offsetY -= pointZero.y;
+        pointZero.x = 0;
+        pointZero.y = 0;
+      } else if (realSize.height > maxSize) {
+        realSize.scale = realSize.height / maxSize;
+        realSize.width /= realSize.scale;
+        realSize.height /= realSize.scale;
+        realSize.offsetX -= pointZero.x;
+        realSize.offsetY -= pointZero.y;
+        pointZero.x = 0;
+        pointZero.y = 0;
+      }
+
+      this.canvas.width = realSize.width;
+      this.canvas.height = realSize.height;
       var transform = 'translate(0px,0px)';
       this.canvas.style.WebkitTransform = transform;
       this.canvas.style.msTransform = transform;
@@ -277,7 +306,7 @@
       if (this.paperScope && this.paperScope.view) {
         this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
         this.paperScope.view.zoom = scale / this.initialZoom;
-        this.paperScope.view.center = new this.paperScope.Size(this.paperScope.view.bounds.width / 2, this.paperScope.view.bounds.height / 2);
+        this.paperScope.view.center = new this.paperScope.Size(realSize.offsetX / this.paperScope.view.zoom + this.paperScope.view.bounds.width / 2, realSize.offsetY / this.paperScope.view.zoom + this.paperScope.view.bounds.height / 2);
         this.paperScope.view.update(true);
         this.viewZoom = this.paperScope.view.zoom;
         // Fit pins to the current zoom level.
