@@ -24,19 +24,21 @@
       //     \   /    
       //   6   ─   4  
       //       5      
-      segments.push(new overlay.paperScope.Point(initialPoint.x - 2, initialPoint.y - 2));
-      segments.push(new overlay.paperScope.Point(initialPoint.x - 1, initialPoint.y - Math.sqrt(2) - 1));
-      segments.push(new overlay.paperScope.Point(initialPoint.x, initialPoint.y - 2));
-      segments.push(new overlay.paperScope.Point(initialPoint.x + Math.sqrt(2) - 1, initialPoint.y - 1));
+      var pixel = 1 / overlay.paperScope.view.zoom;
+      segments.push(new overlay.paperScope.Point(initialPoint.x - 2 * pixel, initialPoint.y - 2 * pixel));
+      segments.push(new overlay.paperScope.Point(initialPoint.x - 1 * pixel, initialPoint.y - (Math.sqrt(2) + 1) * pixel));
+      segments.push(new overlay.paperScope.Point(initialPoint.x, initialPoint.y - 2 * pixel));
+      segments.push(new overlay.paperScope.Point(initialPoint.x + (Math.sqrt(2) - 1) * pixel, initialPoint.y - 1 * pixel));
       segments.push(new overlay.paperScope.Point(initialPoint.x, initialPoint.y));
-      segments.push(new overlay.paperScope.Point(initialPoint.x - 1, initialPoint.y + Math.sqrt(2) - 1));
-      segments.push(new overlay.paperScope.Point(initialPoint.x - 2, initialPoint.y));
-      segments.push(new overlay.paperScope.Point(initialPoint.x - Math.sqrt(2) - 1, initialPoint.y - 1));
+      segments.push(new overlay.paperScope.Point(initialPoint.x - 1 * pixel, initialPoint.y + (Math.sqrt(2) - 1) * pixel));
+      segments.push(new overlay.paperScope.Point(initialPoint.x - 2 * pixel, initialPoint.y));
+      segments.push(new overlay.paperScope.Point(initialPoint.x - (Math.sqrt(2) + 1) * pixel, initialPoint.y - 1 * pixel));
       var _this = this;
       var shape = new overlay.paperScope.Path({
         segments: segments,
         name: overlay.getName(_this)
       });
+      shape.strokeWidth = 1 / overlay.paperScope.view.zoom;
       shape.strokeColor = overlay.strokeColor;
       shape.fillColor = overlay.fillColor;
       shape.fillColor.alpha = overlay.fillColorAlpha;
@@ -93,12 +95,25 @@
           overlay.path.rotate(rotation, overlay.path.position);
           overlay.path.data.rotation += rotation;
         } else {
-          var oldRotPoint = new overlay.paperScope.Point(overlay.segment.point.x - overlay.path.position.x, overlay.segment.point.y - overlay.path.position.y);
-          var newRotPoint = new overlay.paperScope.Point(overlay.segment.point.x - overlay.path.position.x + event.delta.x, overlay.segment.point.y - overlay.path.position.y + event.delta.y);
+          // code switches one of the 4 segments with indexes 0,2,4,6 to prevent scaling with negative value almost equal to 0.
+          // this scenario is chrome bug which paints the whole image with the color of the border and the internal area of the ellipse is transparent.
           var rot = overlay.path.data.rotation;
-          oldRotPoint = oldRotPoint.rotate(-rot);
-          newRotPoint = newRotPoint.rotate(-rot);
-          var rotScale = new overlay.paperScope.Point(newRotPoint.x / oldRotPoint.x, newRotPoint.y / oldRotPoint.y);
+          var rotScale;
+          var updatedSegment;
+          var updatedPosition = {
+            x: event.delta.x + overlay.segment.point.x,
+            y: event.delta.y + overlay.segment.point.y
+          };
+          do {
+            updatedSegment = overlay.path.segments[idx];
+            var oldRotPoint = new overlay.paperScope.Point(updatedSegment.point.x - overlay.path.position.x, updatedSegment.point.y - overlay.path.position.y);
+            var newRotPoint = new overlay.paperScope.Point(updatedPosition.x - overlay.path.position.x, updatedPosition.y - overlay.path.position.y);
+            oldRotPoint = oldRotPoint.rotate(-rot);
+            newRotPoint = newRotPoint.rotate(-rot);
+            rotScale = new overlay.paperScope.Point(newRotPoint.x / oldRotPoint.x, newRotPoint.y / oldRotPoint.y);
+            idx = (idx + 2) % 8;
+          } while (rotScale.x < 0 || rotScale.y < 0);
+          overlay.segment = updatedSegment;
           overlay.path.rotate(-rot, overlay.path.position);
           overlay.path.scale(rotScale);
           overlay.path.rotate(rot, overlay.path.position);
