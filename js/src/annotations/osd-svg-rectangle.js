@@ -22,20 +22,22 @@
       // 7 │       │ 3
       //   └ ─ ─ ─ ┘  
       // 6     5     4
-      segments.push(new overlay.paperScope.Point(initialPoint.x - 2, initialPoint.y - 2));
-      segments.push(new overlay.paperScope.Point(initialPoint.x - 1, initialPoint.y - 2));
-      segments.push(new overlay.paperScope.Point(initialPoint.x, initialPoint.y - 2));
-      segments.push(new overlay.paperScope.Point(initialPoint.x, initialPoint.y - 1));
+      var pixel = 1 / overlay.paperScope.view.zoom;
+      segments.push(new overlay.paperScope.Point(initialPoint.x - 2 * pixel, initialPoint.y - 2 * pixel));
+      segments.push(new overlay.paperScope.Point(initialPoint.x - 1 * pixel, initialPoint.y - 2 * pixel));
+      segments.push(new overlay.paperScope.Point(initialPoint.x, initialPoint.y - 2 * pixel));
+      segments.push(new overlay.paperScope.Point(initialPoint.x, initialPoint.y - 1 * pixel));
       segments.push(new overlay.paperScope.Point(initialPoint.x, initialPoint.y));
-      segments.push(new overlay.paperScope.Point(initialPoint.x - 1, initialPoint.y));
-      segments.push(new overlay.paperScope.Point(initialPoint.x - 2, initialPoint.y));
-      segments.push(new overlay.paperScope.Point(initialPoint.x - 2, initialPoint.y - 1));
+      segments.push(new overlay.paperScope.Point(initialPoint.x - 1 * pixel, initialPoint.y));
+      segments.push(new overlay.paperScope.Point(initialPoint.x - 2 * pixel, initialPoint.y));
+      segments.push(new overlay.paperScope.Point(initialPoint.x - 2 * pixel, initialPoint.y - 1 * pixel));
       var _this = this;
       var shape = new overlay.paperScope.Path({
         segments: segments,
         fullySelected: true,
         name: overlay.getName(_this)
       });
+      shape.strokeWidth = 1 / overlay.paperScope.view.zoom;
       shape.strokeColor = overlay.strokeColor;
       shape.fillColor = overlay.fillColor;
       shape.fillColor.alpha = overlay.fillColorAlpha;

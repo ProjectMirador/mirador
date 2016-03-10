@@ -19,6 +19,7 @@ describe('Ellipse', function() {
       'mode': mode,
       'path': path,
       'segment': segment,
+      'viewZoom': 1,
       'hitOptions': {
         'fill': true,
         'stroke': true,

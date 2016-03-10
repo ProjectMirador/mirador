@@ -275,6 +275,7 @@
       jQuery.subscribe('refreshOverlay.' + _this.parent.windowId, function(event) {
         _this.svgOverlay.restoreEditedShapes();
         _this.svgOverlay.deselectAll();
+        _this.svgOverlay.mode = '';
         _this.render();
       });
       jQuery.subscribe('deleteShape.' + _this.parent.windowId, function(event) {

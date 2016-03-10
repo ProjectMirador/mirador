@@ -27,6 +27,7 @@
       pathData += ' ' + initialPoint.x + ',' + initialPoint.y;
       var shape = new overlay.paperScope.Path(pathData);
       shape.name = overlay.getName(_this);
+      shape.strokeWidth = 1 / overlay.paperScope.view.zoom;
       shape.strokeColor = overlay.strokeColor;
       shape.fillColor = overlay.fillColor;
       shape.fillColor.alpha = overlay.fillColorAlpha;

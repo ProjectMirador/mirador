@@ -48,7 +48,6 @@
     // Drawing of overlay border during development.
     // this.canvas.style.border = '1px solid yellow';
     this.viewer.canvas.appendChild(this.canvas);
-    this.initialZoom = this.viewer.viewport.containerSize.x * this.viewer.viewport.getZoom(true);
 
     var _this = this;
     this.viewer.addHandler('animation', function() {
@@ -124,10 +123,11 @@
       this.paperScope = new paper.PaperScope();
       this.paperScope.setup('draw_canvas_' + _this.windowId);
       this.paperScope.activate();
-      this.viewZoom = this.paperScope.view.zoom;
+      jQuery(_this.canvas).attr('keepalive', 'true');
       this.paperScope.view.onFrame = function(event) {
         if (_this.paperScope.snapPoint) {
           _this.paperScope.snapPoint.remove();
+          _this.paperScope.snapPoint = null;
         }
         if (_this.path && !_this.path.closed && _this.cursorLocation && _this.currentTool && _this.currentTool.idPrefix.indexOf('rough_path_') != -1) {
           var distanceToFirst = _this.path.segments[0].point.getDistance(_this.cursorLocation);
@@ -135,7 +135,7 @@
             _this.paperScope.snapPoint = new _this.paperScope.Path.Circle({
               name: 'snapPoint',
               center: _this.path.segments[0].point,
-              radius: _this.hitOptions.tolerance / _this.viewZoom,
+              radius: _this.hitOptions.tolerance / _this.paperScope.view.zoom,
               fillColor: _this.path.strokeColor,
               strokeColor: _this.path.strokeColor
             });
@@ -259,15 +259,44 @@
 
     fitPinSize: function(shape) {
       var scale = 1 / shape.bounds.width;
-      scale *= this.pinSize / this.viewZoom;
+      scale *= this.pinSize / this.paperScope.view.zoom;
       shape.scale(scale, shape.segments[0].point);
     },
 
     resize: function() {
       var pointZero = this.viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
       var scale = this.viewer.viewport.containerSize.x * this.viewer.viewport.getZoom(true);
-      this.canvas.width = scale;
-      this.canvas.height = scale * (this.viewer.viewport.contentSize.y / this.viewer.viewport.contentSize.x);
+
+      // maximum canvas size which should be less that limitations from each browser.
+      // http://stackoverflow.com/questions/6081483/maximum-size-of-a-canvas-element
+      var maxSize = 2048;
+      var realSize = {
+        width: scale,
+        height: scale * (this.viewer.viewport.contentSize.y / this.viewer.viewport.contentSize.x),
+        offsetX: 0,
+        offsetY: 0,
+        scale: 1
+      };
+      if (realSize.width > maxSize) {
+        realSize.scale = realSize.width / maxSize;
+        realSize.width /= realSize.scale;
+        realSize.height /= realSize.scale;
+        realSize.offsetX -= pointZero.x;
+        realSize.offsetY -= pointZero.y;
+        pointZero.x = 0;
+        pointZero.y = 0;
+      } else if (realSize.height > maxSize) {
+        realSize.scale = realSize.height / maxSize;
+        realSize.width /= realSize.scale;
+        realSize.height /= realSize.scale;
+        realSize.offsetX -= pointZero.x;
+        realSize.offsetY -= pointZero.y;
+        pointZero.x = 0;
+        pointZero.y = 0;
+      }
+
+      this.canvas.width = realSize.width;
+      this.canvas.height = realSize.height;
       var transform = 'translate(0px,0px)';
       this.canvas.style.WebkitTransform = transform;
       this.canvas.style.msTransform = transform;
@@ -276,16 +305,21 @@
       this.canvas.style.marginTop = pointZero.y + "px";
       if (this.paperScope && this.paperScope.view) {
         this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
-        this.paperScope.view.zoom = scale / this.initialZoom;
-        this.paperScope.view.center = new this.paperScope.Size(this.paperScope.view.bounds.width / 2, this.paperScope.view.bounds.height / 2);
+        this.paperScope.view.zoom = this.viewer.viewport.getZoom(true);
+        this.paperScope.view.center = new this.paperScope.Size(realSize.offsetX / this.paperScope.view.zoom + this.paperScope.view.bounds.width / 2, realSize.offsetY / this.paperScope.view.zoom + this.paperScope.view.bounds.height / 2);
         this.paperScope.view.update(true);
-        this.viewZoom = this.paperScope.view.zoom;
         // Fit pins to the current zoom level.
         var items = this.paperScope.project.getItems({
           name: /^pin_/
         });
         for (var i = 0; i < items.length; i++) {
           this.fitPinSize(items[i]);
+        }
+        var allItems = this.paperScope.project.getItems({
+          name: /_/
+        });
+        for (var j = 0; j < allItems.length; j++) {
+          allItems[j].strokeWidth = 1 / this.paperScope.view.zoom;
         }
       }
     },
@@ -336,11 +370,13 @@
     },
 
     // replaces paper.js objects with the required properties only.
+    // shape coordinates are viewport coordinates.
     replaceShape: function(shape, annotation) {
       var cloned = new this.paperScope.Path({
         segments: shape.segments,
         name: shape.name
       });
+      cloned.strokeWidth = 1 / this.paperScope.view.zoom;
       cloned.strokeColor = shape.strokeColor;
       if (shape.fillColor) {
         cloned.fillColor = shape.fillColor;
@@ -351,7 +387,7 @@
       cloned.closed = shape.closed;
       cloned.data.rotation = shape.data.rotation;
       cloned.data.annotation = annotation;
-      cloned.scale(this.canvas.width / (this.viewZoom * this.viewer.viewport.contentSize.x), new this.paperScope.Point(0, 0));
+      cloned.scale(this.viewer.viewport.containerSize.x / this.viewer.viewport.contentSize.x, new this.paperScope.Point(0, 0));
       if (cloned.name.toString().indexOf('pin_') != -1) { // pin shapes with fixed size.
         this.fitPinSize(cloned);
       }
@@ -360,13 +396,14 @@
     },
 
     // creating shapes used for backward compatibility.
+    // shape coordinates are viewport coordinates.
     createRectangle: function(shape, annotation) {
-      var scale = this.viewer.viewport.containerSize.y;
+      var scale = this.viewer.viewport.containerSize.x;
       var paperItems = [];
       var rect = new $.Rectangle();
       var initialPoint = {
-        'x': shape.x * scale + 1,
-        'y': shape.y * scale + 1
+        'x': shape.x * scale,
+        'y': shape.y * scale
       };
       var currentMode = this.mode;
       var currentPath = this.path;
@@ -428,6 +465,7 @@
           if (shapeArray[idx].name == this.editedPaths[i].name) {
             shapeArray[idx].segments = this.editedPaths[i].segments;
             shapeArray[idx].name = this.editedPaths[i].name;
+            shapeArray[idx].strokeWidth = 1 / this.paperScope.view.zoom;
             shapeArray[idx].strokeColor = this.editedPaths[i].strokeColor;
             if (this.editedPaths[i].fillColor) {
               shapeArray[idx].fillColor = this.editedPaths[i].fillColor;
@@ -499,32 +537,35 @@
     },
 
     getSVGString: function(shapes) {
+      var scale = this.viewer.viewport.contentSize.x / this.viewer.viewport.containerSize.x;
       var svg = "<svg xmlns='http://www.w3.org/2000/svg'>";
       if (shapes.length > 1) {
         svg += "<g>";
         for (var i = 0; i < shapes.length; i++) {
-          shapes[i].scale(this.viewZoom * this.viewer.viewport.contentSize.x / this.canvas.width, new this.paperScope.Point(0, 0));
           if (shapes[i].name.toString().indexOf('pin_') != -1) {
             this.fitPinSize(shapes[i]);
           }
           var anno = shapes[i].data.annotation;
           shapes[i].data.annotation = null;
+          shapes[i].scale(scale, new this.paperScope.Point(0, 0));
           svg += shapes[i].exportSVG({
             "asString": true
           });
+          shapes[i].scale(1 / scale, new this.paperScope.Point(0, 0));
           shapes[i].data.annotation = anno;
         }
         svg += "</g>";
       } else {
-        shapes[0].scale(this.viewZoom * this.viewer.viewport.contentSize.x / this.canvas.width, new this.paperScope.Point(0, 0));
         if (shapes[0].name.toString().indexOf('pin_') != -1) {
           this.fitPinSize(shapes[0]);
         }
         var annoSingle = shapes[0].data.annotation;
         shapes[0].data.annotation = null;
+        shapes[0].scale(scale, new this.paperScope.Point(0, 0));
         svg += shapes[0].exportSVG({
           "asString": true
         });
+        shapes[0].scale(1 / scale, new this.paperScope.Point(0, 0));
         shapes[0].data.annotation = annoSingle;
       }
       svg += "</svg>";
