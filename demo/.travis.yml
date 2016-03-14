@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+- '0.10'
+before_install:
+- npm install -g grunt-cli
+# before-script:
+# - grunt test cover
+script: npm run travis
+env:
+  global:
+    secure: JVaMZ3Hb3z6h0+K7dpjZnWxeNX4gAT65CG1xKd4T1wv+T3y9U5o519ldSJtA29gleiLXD/EuFs+8d9pe2B8/3HqRD2KEbY2ABiqMVzyfSVGEO4jxMHqhoGB6kRkffTPEYElnzf7s1yIJWuP7/7BX2HbaqCRX11EYdVsTb5s2NFw=
