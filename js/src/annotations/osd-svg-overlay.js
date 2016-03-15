@@ -56,6 +56,12 @@
     this.viewer.addHandler('open', function() {
       _this.resize();
     });
+    this.viewer.addHandler('animation-finish', function() {
+      _this.resize();
+    });
+    this.viewer.addHandler('update-viewport', function() {
+      _this.resize();
+    });
     jQuery.subscribe('toggleDrawingTool.' + _this.windowId, function(event, tool) {
       jQuery('#' + _this.window.viewer.id).parent().find('.hud-container').find('.draw-tool').css('opacity', '');
       if (_this.disabled) {
@@ -264,15 +270,15 @@
     },
 
     resize: function() {
+      var viewportBounds = this.viewer.viewport.getBounds(true); /* in viewport coordinates */
       var pointZero = this.viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
-      var scale = this.viewer.viewport.containerSize.x * this.viewer.viewport.getZoom(true);
 
       // maximum canvas size which should be less that limitations from each browser.
       // http://stackoverflow.com/questions/6081483/maximum-size-of-a-canvas-element
       var maxSize = 2048;
       var realSize = {
-        width: scale,
-        height: scale * (this.viewer.viewport.contentSize.y / this.viewer.viewport.contentSize.x),
+        width: this.viewer.viewport.containerSize.x / viewportBounds.width,
+        height: this.viewer.viewport.containerSize.y / viewportBounds.height,
         offsetX: 0,
         offsetY: 0,
         scale: 1
@@ -305,8 +311,10 @@
       this.canvas.style.marginTop = pointZero.y + "px";
       if (this.paperScope && this.paperScope.view) {
         this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
-        this.paperScope.view.zoom = this.viewer.viewport.getZoom(true);
-        this.paperScope.view.center = new this.paperScope.Size(realSize.offsetX / this.paperScope.view.zoom + this.paperScope.view.bounds.width / 2, realSize.offsetY / this.paperScope.view.zoom + this.paperScope.view.bounds.height / 2);
+        this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
+        this.paperScope.view.center = new this.paperScope.Size(
+            realSize.offsetX / this.paperScope.view.zoom + this.paperScope.view.bounds.width / 2,
+            realSize.offsetY / this.paperScope.view.zoom + this.paperScope.view.bounds.height / 2);
         this.paperScope.view.update(true);
         // Fit pins to the current zoom level.
         var items = this.paperScope.project.getItems({
@@ -370,7 +378,7 @@
     },
 
     // replaces paper.js objects with the required properties only.
-    // shape coordinates are viewport coordinates.
+    // 'shapes' coordinates are image coordiantes
     replaceShape: function(shape, annotation) {
       var cloned = new this.paperScope.Path({
         segments: shape.segments,
@@ -387,7 +395,6 @@
       cloned.closed = shape.closed;
       cloned.data.rotation = shape.data.rotation;
       cloned.data.annotation = annotation;
-      cloned.scale(this.viewer.viewport.containerSize.x / this.viewer.viewport.contentSize.x, new this.paperScope.Point(0, 0));
       if (cloned.name.toString().indexOf('pin_') != -1) { // pin shapes with fixed size.
         this.fitPinSize(cloned);
       }
@@ -535,9 +542,8 @@
     getName: function(tool) {
       return tool.idPrefix + $.genUUID();
     },
-
+    
     getSVGString: function(shapes) {
-      var scale = this.viewer.viewport.contentSize.x / this.viewer.viewport.containerSize.x;
       var svg = "<svg xmlns='http://www.w3.org/2000/svg'>";
       if (shapes.length > 1) {
         svg += "<g>";
@@ -547,11 +553,9 @@
           }
           var anno = shapes[i].data.annotation;
           shapes[i].data.annotation = null;
-          shapes[i].scale(scale, new this.paperScope.Point(0, 0));
           svg += shapes[i].exportSVG({
             "asString": true
           });
-          shapes[i].scale(1 / scale, new this.paperScope.Point(0, 0));
           shapes[i].data.annotation = anno;
         }
         svg += "</g>";
@@ -561,11 +565,9 @@
         }
         var annoSingle = shapes[0].data.annotation;
         shapes[0].data.annotation = null;
-        shapes[0].scale(scale, new this.paperScope.Point(0, 0));
         svg += shapes[0].exportSVG({
           "asString": true
         });
-        shapes[0].scale(1 / scale, new this.paperScope.Point(0, 0));
         shapes[0].data.annotation = annoSingle;
       }
       svg += "</svg>";
