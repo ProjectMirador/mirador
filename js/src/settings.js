@@ -174,6 +174,22 @@
     'lockController' : {
       'lockProfile' : 'lazyZoom',
       'notifyMaxMin' : true
+    },
+
+    // physical ruler
+    'scalebar': {
+      'type': OpenSeadragon.ScalebarType.RULER,
+      'minWidth': '300px',
+      'location': OpenSeadragon.ScalebarLocation.BOTTOM_LEFT,
+      'xOffset': 10,
+      'yOffset': 10,
+      'orientation': OpenSeadragon.ScalebarOrientation.VERTICAL,
+      'stayInsideImage': true,
+      'color': 'black',
+      'fontColor': 'rgb(100, 100, 100)',
+      'backgroundColor': 'rgba(255, 255, 255, 0.3)',
+      'fontSize': 'small',
+      'barThickness': 1
     }
   };
 

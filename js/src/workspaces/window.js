@@ -672,6 +672,100 @@
       this.toggleFocus('ScrollView', '');
     },
 
+    /** If physical dimensions are available, then set the ruler visibility to 'v'.
+     * @param {string} v - ['invisible', 'visible']
+     */
+    setRulerVisibility: function(v) {
+      var osdInstance = this.focusModules.ImageView.osd;
+      if (!osdInstance.hasPhysicalDimensionData) {
+        return;
+      }
+
+      var type;
+      if (v === 'invisible') {
+        type = OpenSeadragon.ScalebarType.NONE;
+      }
+      else if (v === 'visible') {
+        type = OpenSeadragon.ScalebarType.RULER;
+      }
+      osdInstance.scalebar({'type': type});
+    },
+
+    /** If physical dimensions are available, then set the ruler orientation to 'o'.
+     * @param {string} o - ['horizontal', 'vertical']
+     */
+    setRulerOrientation: function(o) {
+      var osdInstance = this.focusModules.ImageView.osd;
+      if (!osdInstance.hasPhysicalDimensionData) {
+        return;
+      }
+
+      var orientation;
+      switch (o) {
+        case 'horizontal':
+	  orientation = OpenSeadragon.ScalebarOrientation.HORIZONTAL;
+	  break;
+	case 'vertical':
+	  orientation = OpenSeadragon.ScalebarOrientation.VERTICAL;
+	  break;
+      }
+      this.setRulerVisibility('visible');
+      osdInstance.scalebar({'orientation': orientation});
+    },
+
+    /** If physical dimensions are available, then set the ruler color to 'c'.
+     * @param {string} c - Any valid CSS color string.
+     */
+    setRulerColor: function(c) {
+      var osdInstance = this.focusModules.ImageView.osd;
+      if (!osdInstance.hasPhysicalDimensionData) {
+        return;
+      }
+
+      this.setRulerVisibility('visible');
+      osdInstance.scalebar({'color': c});
+    },
+
+    /** If physical dimensions are available, then set the ruler position to 'p'.
+     * @param {string} p - ['tl', 'tm', 'tr', 'ml', 'mr', 'bl', 'bm', 'br']
+     */
+    setRulerPosition: function(p) {
+      var osdInstance = this.focusModules.ImageView.osd;
+      if (!osdInstance.hasPhysicalDimensionData) {
+        return;
+      }
+
+      var position;
+      switch (p) {
+        case 'tl':
+	  position = OpenSeadragon.ScalebarLocation.TOP_LEFT;
+	  break;
+        case 'tm':
+	  position = OpenSeadragon.ScalebarLocation.TOP_MIDDLE;
+	  break;
+        case 'tr':
+	  position = OpenSeadragon.ScalebarLocation.TOP_RIGHT;
+	  break;
+        case 'ml':
+	  position = OpenSeadragon.ScalebarLocation.MIDDLE_LEFT;
+	  break;
+        case 'mr':
+	  position = OpenSeadragon.ScalebarLocation.MIDDLE_RIGHT;
+	  break;
+        case 'bl':
+	  position = OpenSeadragon.ScalebarLocation.BOTTOM_LEFT;
+	  break;
+        case 'bm':
+	  position = OpenSeadragon.ScalebarLocation.BOTTOM_MIDDLE;
+	  break;
+        case 'br':
+	  position = OpenSeadragon.ScalebarLocation.BOTTOM_RIGHT;
+	  break;
+      }
+      this.setRulerVisibility('visible');
+      osdInstance.scalebar({'location': position});
+    },
+
     updateFocusImages: function(imageList) {
       this.focusImages = imageList;
       if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
@@ -860,6 +954,67 @@
       this.element.find('.add-slot-above').on('click', function() {
         jQuery.publish('SPLIT_UP_FROM_WINDOW', _this.id);
       });
+      
+      // TODO: disable these ruler methods if no physical dimension data is available
+      this.element.find('.mirador-icon-ruler').on('mouseenter',
+        function() {
+        _this.element.find('.ruler-options-list').stop().slideFadeToggle(300);
+      }).on('mouseleave',
+      function() {
+        _this.element.find('.ruler-options-list').stop().slideFadeToggle(300);
+      });
+      
+      this.element.find('.ruler-hide').on('click', function() {
+        _this.setRulerVisibility('invisible');
+      });
+      
+      this.element.find('.ruler-horizontal').on('click', function() {
+        _this.setRulerOrientation('horizontal');
+      });
+      
+      this.element.find('.ruler-vertical').on('click', function() {
+        _this.setRulerOrientation('vertical');
+      });
+
+      this.element.find('.ruler-black').on('click', function() {
+        _this.setRulerColor('black');
+      });
+
+      this.element.find('.ruler-white').on('click', function() {
+        _this.setRulerColor('white');
+      });
+
+      this.element.find('.ruler-top-left').on('click', function() {
+        _this.setRulerPosition('tl');
+      });
+
+      this.element.find('.ruler-top-middle').on('click', function() {
+        _this.setRulerPosition('tm');
+      });
+
+      this.element.find('.ruler-top-right').on('click', function() {
+        _this.setRulerPosition('tr');
+      });
+
+      this.element.find('.ruler-middle-left').on('click', function() {
+        _this.setRulerPosition('ml');
+      });
+
+      this.element.find('.ruler-middle-right').on('click', function() {
+        _this.setRulerPosition('mr');
+      });
+
+      this.element.find('.ruler-bottom-left').on('click', function() {
+        _this.setRulerPosition('bl');
+      });
+
+      this.element.find('.ruler-bottom-middle').on('click', function() {
+        _this.setRulerPosition('bm');
+      });
+
+      this.element.find('.ruler-bottom-right').on('click', function() {
+        _this.setRulerPosition('br');
+      });
     },
 
     // template should be based on workspace type
@@ -915,6 +1070,27 @@
                                  '{{#if sidePanel}}',
                                  '<a href="javascript:;" class="mirador-btn mirador-icon-toc selected" title="View/Hide Table of Contents"><i class="fa fa-caret-down fa-lg fa-fw"></i></a>',
                                  '{{/if}}',
+
+                                 // TODO: hide this ruler UI html if no physical dimensions are available
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-ruler" title="ruler"><i class="fa fa-text-width fa-lg fa-fw"></i>',
+                                 '<ul class="dropdown ruler-options-list">',
+                                 '<li class="ruler-hide"><i class="fa fa-ban fa-lg fa-fw"></i></li>',
+                                 '<li class="ruler-horizontal"><i class="fa fa-text-width fa-lg fa-fw"></i> Horizontal Ruler</li>',
+                                 '<li class="ruler-vertical"><i class="fa fa-text-height fa-lg fa-fw"></i> Vertical Ruler</li>',
+                                 '<li class="ruler-black"><i class="fa fa-square fa-lg fa-fw"></i> Black Lines</li>',
+                                 '<li class="ruler-white"><i class="fa fa-square-o fa-lg fa-fw"></i> White Lines</li>',
+                                 '<li class="ruler-top-left"><i class="fa fa- fa-lg fa-fw"></i> Top Left</li>',
+                                 '<li class="ruler-top-middle"><i class="fa fa- fa-lg fa-fw"></i> Top Middle</li>',
+                                 '<li class="ruler-top-right"><i class="fa fa- fa-lg fa-fw"></i> Top Right</li>',
+                                 '<li class="ruler-middle-left"><i class="fa fa- fa-lg fa-fw"></i> Middle Left</li>',
+                                 '<li class="ruler-middle-right"><i class="fa fa- fa-lg fa-fw"></i> Middle Right</li>',
+                                 '<li class="ruler-bottom-left"><i class="fa fa- fa-lg fa-fw"></i> Bottom Left</li>',
+                                 '<li class="ruler-bottom-middle"><i class="fa fa- fa-lg fa-fw"></i> Bottom Middle</li>',
+                                 '<li class="ruler-bottom-right"><i class="fa fa- fa-lg fa-fw"></i> Bottom Right</li>',
+                                 '</ul>',
+                                 '</a>',
+                                 // end of ruler UI html
+
                                  '<h3 class="window-manifest-title">{{title}}</h3>',
                                  '</div>',
                                  '<div class="content-container">',
