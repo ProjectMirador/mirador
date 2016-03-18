@@ -7,17 +7,17 @@
     return this.svgOverlayTools;
   };
 
-  OpenSeadragon.Viewer.prototype.svgOverlay = function(windowObj, state) {
-    return new $.Overlay(this, windowObj, state);
+  OpenSeadragon.Viewer.prototype.svgOverlay = function(osdViewerId, windowId, state) {
+    return new $.Overlay(this, osdViewerId, windowId, state);
   };
 
-  $.Overlay = function(viewer, windowObj, state) {
+  $.Overlay = function(viewer, osdViewerId, windowId, state) {
     var drawingToolsSettings = state.getStateProperty('drawingToolsSettings'), 
     availableAnnotationDrawingTools = state.getStateProperty('availableAnnotationDrawingTools');
     jQuery.extend(this, {
       disabled: true,
-      window: windowObj,
-      windowId: windowObj.windowId,
+      osdViewerId: osdViewerId,
+      windowId: windowId,
       commentPanel: null,
       mode: '', // Possible modes: 'create', 'translate', 'deform', 'edit' and '' as default.
       draftPaths: [],
@@ -66,33 +66,33 @@
       _this.resize();
     });
     jQuery.subscribe('toggleDrawingTool.' + _this.windowId, function(event, tool) {
-      jQuery('#' + _this.window.viewer.id).parent().find('.hud-container').find('.draw-tool').css('opacity', '');
+      jQuery('#' + osdViewerId).parent().find('.hud-container').find('.draw-tool').css('opacity', '');
       if (_this.disabled) {
         jQuery('.qtip' + _this.windowId).qtip('hide');
         return;
       }
-      jQuery('#' + _this.window.viewer.id).parents(".window").find(".qtip-viewer").hide();
+      jQuery('#' + osdViewerId).parents(".window").find(".qtip-viewer").hide();
       _this.currentTool = null;
       for (var i = 0; i < _this.tools.length; i++) {
         if (_this.tools[i].logoClass == tool) {
           _this.currentTool = _this.tools[i];
-          jQuery('#' + _this.window.viewer.id).parent().find('.hud-container').find('.material-icons:contains(\'' + tool + '\')').parent('.draw-tool').css('opacity', '1');
+          jQuery('#' + osdViewerId).parent().find('.hud-container').find('.material-icons:contains(\'' + tool + '\')').parent('.draw-tool').css('opacity', '1');
         }
       }
     });
     jQuery.subscribe('toggleDefaultDrawingTool.' + _this.windowId, function(event) {
-      jQuery('#' + _this.window.viewer.id).parent().find('.hud-container').find('.draw-tool').css('opacity', '');
+      jQuery('#' + osdViewerId).parent().find('.hud-container').find('.draw-tool').css('opacity', '');
       if (_this.disabled) {
         jQuery('.qtip' + _this.windowId).qtip('hide');
         return;
       }
-      jQuery('#' + _this.window.viewer.id).parents(".window").find(".qtip-viewer").hide();
+      jQuery('#' + osdViewerId).parents(".window").find(".qtip-viewer").hide();
       _this.currentTool = null;
       for (var i = 0; i < _this.availableAnnotationDrawingTools.length; i++) {
         for (var j = 0; j < _this.tools.length; j++) {
           if (_this.availableAnnotationDrawingTools[i] == _this.tools[j].name) {
             _this.currentTool = _this.tools[j];
-            jQuery('#' + _this.window.viewer.id).parent().find('.hud-container').find('.material-icons:contains(\'' + _this.tools[j].logoClass + '\')').parent('.draw-tool').css('opacity', '1');
+            jQuery('#' + osdViewerId).parent().find('.hud-container').find('.material-icons:contains(\'' + _this.tools[j].logoClass + '\')').parent('.draw-tool').css('opacity', '1');
             break;
           }
         }
@@ -703,7 +703,7 @@
                 motivation.push("oa:commenting");
                 on = {
                   "@type": "oa:SpecificResource",
-                  "full": _this.window.parent.canvasID,
+                  "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
                   "selector": {
                     "@type": "oa:SvgSelector",
                     "value": svg
