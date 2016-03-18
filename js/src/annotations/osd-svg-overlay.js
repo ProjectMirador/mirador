@@ -7,11 +7,13 @@
     return this.svgOverlayTools;
   };
 
-  OpenSeadragon.Viewer.prototype.svgOverlay = function(windowObj) {
-    return new $.Overlay(this, windowObj, $.viewer.drawingToolsSettings, $.viewer.availableAnnotationDrawingTools);
+  OpenSeadragon.Viewer.prototype.svgOverlay = function(windowObj, state) {
+    return new $.Overlay(this, windowObj, state);
   };
 
-  $.Overlay = function(viewer, windowObj, drawingToolsSettings, availableAnnotationDrawingTools) {
+  $.Overlay = function(viewer, windowObj, state) {
+    var drawingToolsSettings = state.getStateProperty('drawingToolsSettings'), 
+    availableAnnotationDrawingTools = state.getStateProperty('availableAnnotationDrawingTools');
     jQuery.extend(this, {
       disabled: true,
       window: windowObj,
@@ -50,6 +52,7 @@
     this.viewer.canvas.appendChild(this.canvas);
 
     var _this = this;
+    this.state = state;
     this.viewer.addHandler('animation', function() {
       _this.resize();
     });
@@ -417,9 +420,9 @@
       var strokeColor = this.strokeColor;
       var fillColor = this.fillColor;
       var fillColorAlpha = this.fillColorAlpha;
-      this.strokeColor = $.viewer.drawingToolsSettings.fillColor;
-      this.fillColor = $.viewer.drawingToolsSettings.fillColor;
-      this.fillColorAlpha = $.viewer.drawingToolsSettings.fillColorAlpha;
+      this.strokeColor = this.state.getStateProperty('drawingToolsSettings').strokeColor;
+      this.fillColor = this.state.getStateProperty('drawingToolsSettings').fillColor;
+      this.fillColorAlpha = this.state.getStateProperty('drawingToolsSettings').fillColorAlpha;
       this.mode = 'create';
       this.path = rect.createShape(initialPoint, this);
       var eventData = {

@@ -60,7 +60,8 @@
         annotationCreationAvailable: this.annotationCreationAvailable,
         annoEndpointAvailable: this.annoEndpointAvailable,
         fullScreenAvailable : this.fullScreenAvailable,
-        showNextPrev : this.imagesList.length !== 1
+        showNextPrev : this.imagesList.length !== 1,
+        state: this.state
       });
 
       this.bindEvents();

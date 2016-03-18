@@ -51,7 +51,8 @@
         windowId: this.windowId,
         annotationLayerAvailable: false,
         fullScreenAvailable : this.fullScreenAvailable,
-        showNextPrev : this.imagesList.length !== 1
+        showNextPrev : this.imagesList.length !== 1,
+        state: this.state
       });
 
       if (this.manifest.jsonLd.sequences[0].viewingDirection) {

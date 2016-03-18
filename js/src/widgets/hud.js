@@ -32,7 +32,8 @@
           container: this.appendTo,
           mode: 'displayAnnotations',
           windowId: this.windowId,
-          annotationCreationAvailable: this.annotationCreationAvailable
+          annotationCreationAvailable: this.annotationCreationAvailable,
+          state: this.state
         });
       }
 
@@ -152,7 +153,7 @@
                                  '</a>',
                                  '{{/if}}',
                                  '{{#if showAnno}}',
-                                 '<a class="mirador-osd-annotations-layer hud-control " role="button" aria-label="Toggle annotations">',
+                                 '<a class="mirador-osd-annotations-layer hud-control" role="button" aria-label="Toggle annotations">',
                                  '<i class="fa fa-lg fa-comments"></i>',
                                  '</a>',
                                  '{{/if}}',
@@ -162,11 +163,11 @@
                                  '</a>',
                                  '{{/if}}',
                                  '{{#if showBottomPanel}}',
-                                 '<a class="mirador-osd-toggle-bottom-panel hud-control " role="button" aria-label="Toggle Bottom Panel">',
+                                 '<a class="mirador-osd-toggle-bottom-panel hud-control" role="button" aria-label="Toggle Bottom Panel">',
                                  '<i class="fa fa-2x fa-ellipsis-h"></i>',
                                  '</a>',
                                  '{{/if}}',
-                                 '<div class="mirador-pan-zoom-controls hud-control ">',
+                                 '<div class="mirador-pan-zoom-controls hud-control">',
                                  '<a class="mirador-osd-up hud-control" role="button" aria-label="Move image up">',
                                  '<i class="fa fa-chevron-circle-up"></i>',
                                  '</a>',

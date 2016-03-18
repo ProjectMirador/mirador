@@ -16,7 +16,7 @@
   $.OsdRegionDrawTool.prototype = {
 
     init: function() {
-      this.svgOverlay = this.osdViewer.svgOverlay(this.parent);
+      this.svgOverlay = this.osdViewer.svgOverlay(this.parent, this.state);
       this.svgOverlay.show();
       this.svgOverlay.disable();
     },
@@ -145,6 +145,8 @@
         jQuery.publish('overlaysRendered.' + _this.parent.windowId);
       });
 
+      var windowElement = _this.state.getWindowElement(_this.windowId);
+
       this.tooltips = jQuery(this.osdViewer.element).qtip({
         overwrite: false,
         content: {
@@ -158,8 +160,8 @@
             mouse: false,
             method: 'shift'
           },
-          container: _this.parent.parent.parent.element,
-          viewport: _this.parent.parent.parent.element
+          container: windowElement,
+          viewport: windowElement
         },
         style: {
           classes: 'qtip-bootstrap qtip-viewer',

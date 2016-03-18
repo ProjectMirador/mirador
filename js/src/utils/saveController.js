@@ -10,6 +10,13 @@
       sessionID: null
     });
 
+    // error check - removes invalid annotation tools
+    if (config.availableAnnotationDrawingTools) {
+      config.availableAnnotationDrawingTools = jQuery.grep(config.availableAnnotationDrawingTools, function(element, index) {
+        return jQuery.inArray(element, $.DEFAULT_SETTINGS.availableAnnotationDrawingTools) >= 0;
+      });
+    }
+
     this.init(jQuery.extend(false, $.DEFAULT_SETTINGS, config));
 
   };
