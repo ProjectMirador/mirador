@@ -1715,6 +1715,7 @@ ul.dropdown {
   position: absolute;
   padding:0;
   margin-top:9px;
+  height: auto;
 }
 
 .dropdown li {

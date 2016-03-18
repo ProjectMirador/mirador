@@ -4,7 +4,7 @@
 
     jQuery.extend(true, this, {
       element:                    null,
-      parent:                     null,
+      appendTo:                   null,
       manifest:                   null,
       loadStatus:                 null,
       thumbHeight:                80,
@@ -43,9 +43,10 @@
       });
 
       this.fetchTplData(this.manifestId);
-      this.element = jQuery(this.template(this.tplData)).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
+      this.element = jQuery(this.template(this.tplData)).prependTo(this.appendTo).hide().fadeIn('slow');
 
       this.bindEvents();
+      this.listenForActions();
     },
 
     fetchTplData: function() {
@@ -53,7 +54,7 @@
       location = _this.manifest.location,
       manifest = _this.manifest.jsonLd;
 
-      this.tplData = { 
+      this.tplData = {
         label: manifest.label,
         repository: location,
         canvasCount: manifest.sequences[0].canvases.length,
@@ -70,10 +71,10 @@
         }
         if (_this.tplData.repository === '(Added from URL)') {
           repo = '';
-        }            
-        var imageName = $.viewer.repoImages[repo || 'other'] || $.viewer.repoImages.other;
+        }
+        var imageName = _this.state.getStateProperty('repoImages')[repo || 'other'] || _this.state.getStateProperty('repoImages').other;
 
-        return $.viewer.buildPath + $.viewer.logosPath + imageName;
+        return _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('logosPath') + imageName;
       })();
 
       for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
@@ -97,7 +98,7 @@
 
       jQuery.each(_this.allImages, function(index, value) {
         var width = value.width;
-        
+
         _this.imagesTotalWidth += (width + _this.margin);
         if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
           _this.imagesTotalWidth -= (width + _this.margin);
@@ -119,6 +120,14 @@
 
     },
 
+    listenForActions: function() {
+      var _this = this;
+
+      jQuery.subscribe('manifestPanelWidthChanged', function(event, newWidth){
+        _this.updateDisplay(newWidth);
+      });
+    },
+
     bindEvents: function() {
       var _this = this;
 
@@ -133,7 +142,7 @@
           currentCanvasID: null,
           currentFocus: 'ThumbnailsView'
         };
-        $.viewer.workspace.addWindow(windowConfig);
+        jQuery.publish('ADD_WINDOW', windowConfig);
       });
 
       this.element.find('.preview-image').on('click', function(e) {
@@ -143,13 +152,16 @@
           currentCanvasID: jQuery(this).attr('data-image-id'),
           currentFocus: 'ImageView'
         };
-        $.viewer.workspace.addWindow(windowConfig);
+        jQuery.publish('ADD_WINDOW', windowConfig);
       });
+    },
 
-      jQuery.subscribe('manifestPanelWidthChanged', function(event, newWidth){
-        var newMaxPreviewWidth = newWidth - (_this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.remainingWidth);
+    updateDisplay: function(newWidth) {
+        var _this = this,
+        newMaxPreviewWidth = newWidth - (_this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.remainingWidth);
         newMaxPreviewWidth = newMaxPreviewWidth * 0.95;
-        
+        var image = null;
+
         //width of browser window has been made smaller
         if (newMaxPreviewWidth < _this.maxPreviewImagesWidth ) {
           while (_this.imagesTotalWidth >= newMaxPreviewWidth) {
@@ -168,13 +180,15 @@
         } else if (newMaxPreviewWidth > _this.maxPreviewImagesWidth) {
           //width of browser window has been made larger
           var currentLastImage = _this.tplData.images[_this.tplData.images.length-1],
-          index = currentLastImage ? currentLastImage.index+1 : 0,
+            index = currentLastImage ? currentLastImage.index+1 : 0;
+
           image = _this.allImages[index];
+
           if (image) {
             while (_this.imagesTotalWidth + image.width + _this.margin < newMaxPreviewWidth) {
               _this.tplData.images.push(image);
               _this.imagesTotalWidth += (image.width + _this.margin);
-              
+
               //add image to dom
               _this.element.find('.preview-images').append('<img src="'+image.url+'" width="'+image.width+'" height="'+image.height+'" class="preview-image flash" data-image-id="'+image.id+'">');
 
@@ -193,7 +207,6 @@
           }
         }
         _this.maxPreviewImagesWidth = newMaxPreviewWidth;
-      });
     },
 
     hide: function() {
@@ -235,4 +248,3 @@
   };
 
 }(Mirador));
-

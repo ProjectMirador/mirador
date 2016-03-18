@@ -3,7 +3,6 @@
   $.ContextControls = function(options) {
 
     jQuery.extend(this, {
-      parent: null,  //hud
       element: null,
       container: null,
       mode: null,
@@ -128,85 +127,12 @@
     },
 
     bindEvents: function() {
-      var _this = this;
-
-      this.container.find('.fa-refresh').on('click', function() {
-        jQuery.publish('updateAnnotationList.'+_this.windowId);
-        jQuery.publish('refreshOverlay.'+_this.windowId, '');
-      });
-      this.container.find('.fa-trash-o').on('click', function() {
-        jQuery.publish('deleteShape.'+_this.windowId, '');
-      });
-      this.container.find('.fa-save').on('click', function() {
-        jQuery.publish('updateEditedShape.'+_this.windowId, '');
-      });
-      this.container.find('.fa-times').on('click', function() {
-        jQuery.publish('toggleDefaultDrawingTool.'+_this.windowId);
-      });
-      this.container.find('.fa-edit').on('click', function() {
-        jQuery.publish('toggleDefaultDrawingTool.'+_this.windowId);
-      });
-
-      function make_handler(shapeMode) {
-        return function () {
-          jQuery.publish('toggleDrawingTool.'+_this.windowId, shapeMode);
-        };
-      }
-      for (var value in _this.availableTools) {
-        this.container.find('.material-icons:contains(\'' + _this.availableTools[value] + '\')').on('click', make_handler(_this.availableTools[value]));
-      }
-
-      jQuery.subscribe('initBorderColor.' + _this.windowId, function(event, color) {
-        _this.container.find('.borderColorPicker').spectrum('set', color);
-      });
-      jQuery.subscribe('initFillColor.' + _this.windowId, function(event, color, alpha) {
-        var colorObj = tinycolor(color);
-        colorObj.setAlpha(alpha);
-        _this.container.find('.fillColorPicker').spectrum('set', colorObj);
-      });
-      jQuery.subscribe('disableBorderColorPicker.'+_this.windowId, function(event, disablePicker) {
-        if(disablePicker) {
-          _this.container.find('.borderColorPicker').spectrum("disable");
-        }else{
-          _this.container.find('.borderColorPicker').spectrum("enable");
-        }
-      });
-      jQuery.subscribe('disableFillColorPicker.'+_this.windowId, function(event, disablePicker) {
-        if(disablePicker) {
-          _this.container.find('.fillColorPicker').spectrum("disable");
-        }else{
-          _this.container.find('.fillColorPicker').spectrum("enable");
-        }
-      });
-      jQuery.subscribe('showDrawTools.'+_this.windowId, function(event) {
-        _this.container.find('.draw-tool').show();
-      });
-      jQuery.subscribe('hideDrawTools.'+_this.windowId, function(event) {
-        _this.container.find('.draw-tool').hide();
-      });
-
-      this.container.find('.mirador-osd-close').on('click', $.debounce(function() {
-        _this.parent.annoState.displayOff();
-      },300));
-      
+      var _this = this;      
       this.container.find('.mirador-osd-back').on('click', function() {
         _this.element.remove();
         _this.element = jQuery(_this.template()).appendTo(_this.container);
         _this.bindEvents();
       });
-      
-      this.container.find('.mirador-osd-edit-mode').on('click', function() {
-        if (_this.parent.annoState.current === 'annoOnCreateOff') {
-          _this.parent.annoState.createOn();
-        } else if (_this.parent.annoState.current === 'annoOnCreateOn') {
-          _this.parent.annoState.createOff();
-        }
-      });
-      this.container.find('.mirador-osd-refresh-mode').on('click', function() {
-        //update annotation list from endpoint
-        jQuery.publish('updateAnnotationList.'+_this.windowId);
-      });
-      
     },
 
     template: Handlebars.compile([
@@ -238,13 +164,13 @@
                                    '<a class="hud-control draw-tool" style="color:#abcdef;">',
                                    '|',
                                    '</a>',
-                                   '<a class="hud-control draw-tool">',
+                                   '<a class="hud-control draw-tool mirador-osd-delete-mode">',
                                    '<i class="fa fa-lg fa-trash-o"></i>',
                                    '</a>',
-                                   '<a class="hud-control draw-tool">',
+                                   '<a class="hud-control draw-tool mirador-osd-save-mode">',
                                    '<i class="fa fa-lg fa-save"></i>',
                                    '</a>',
-                                   '<a class="hud-control draw-tool">',
+                                   '<a class="hud-control draw-tool mirador-osd-refresh-mode">',
                                    '<i class="fa fa-lg fa-refresh"></i>',
                                    '</a>',
                                    '{{/if}}',

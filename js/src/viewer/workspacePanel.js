@@ -5,10 +5,7 @@
     jQuery.extend(true, this, {
       element: null,
       appendTo: null,
-      parent: null,
-      workspace: null,
-      maxRows: null,
-      maxColumns: null
+      workspace: null
     }, options);
 
     this.init();
@@ -19,7 +16,7 @@
     init: function () {
       var _this = this,
       templateData = {
-        rows: $.layoutDescriptionFromGridString(_this.maxColumns + 'x' + _this.maxRows).children.map(function(column, rowIndex) {
+        rows: $.layoutDescriptionFromGridString(_this.state.getStateProperty('workspacePanelSettings').maxColumns + 'x' + _this.state.getStateProperty('workspacePanelSettings').maxRows).children.map(function(column, rowIndex) {
           column.columns = column.children.map(function(row, columnIndex) {
             row.gridString = (rowIndex+1) + 'x' + (columnIndex+1);
             return row;
@@ -29,17 +26,23 @@
       };
 
       this.element = jQuery(this.template(templateData)).appendTo(this.appendTo);
-      var backgroundImage = _this.parent.buildPath + _this.parent.imagesPath + 'debut_dark.png';
+      var backgroundImage = _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('imagesPath') + 'debut_dark.png';
       this.element.css('background-image','url('+backgroundImage+')').css('background-repeat','repeat');
+      
       this.bindEvents();
+      this.listenForActions();
     },
 
-    bindEvents: function() {
+    listenForActions: function() {
       var _this = this;
       jQuery.subscribe('workspacePanelVisible.set', function(_, stateValue) {
         if (stateValue) { _this.show(); return; }
         _this.hide();
       });
+    },
+
+    bindEvents: function() {
+      var _this = this;
 
       _this.element.find('.grid-item').on('click', function() {
         var gridString = jQuery(this).data('gridstring');
@@ -61,8 +64,8 @@
     onSelect: function(gridString) {
       var _this = this;
       var layoutDescription = $.layoutDescriptionFromGridString(gridString);
-      _this.workspace.resetLayout(layoutDescription);
-      _this.parent.toggleWorkspacePanel();
+      jQuery.publish('RESET_WORKSPACE_LAYOUT', {layoutDescription: layoutDescription});
+      jQuery.publish('TOGGLE_WORKSPACE_PANEL');
     },
 
     onHover: function(gridString) {

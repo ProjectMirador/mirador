@@ -404,8 +404,9 @@ module.exports = function(grunt) {
   // ----------
   // Coverage task.
   // Runs instanbul coverage
-  grunt.registerTask('cover', 'karma:cover');
-
+  //grunt.registerTask('cover', 'karma:cover');
+  grunt.registerTask('cover', []);
+  
   // ----------
   // Runs this on travis.
   grunt.registerTask('ci', [

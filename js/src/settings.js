@@ -30,6 +30,8 @@
       }
     },
 
+    'manifests' : [],
+
     'layout': '1x1',
 
     'openManifestsPage' : false, //defaults to false, whether or not Mirador should display the manifests page, 
