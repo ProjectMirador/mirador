@@ -33,7 +33,7 @@
           mode: 'displayAnnotations',
           windowId: this.windowId,
           annotationCreationAvailable: this.annotationCreationAvailable,
-          state: this.state
+          availableTools: this.availableTools
         });
       }
 

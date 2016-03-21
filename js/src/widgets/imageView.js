@@ -50,6 +50,16 @@
 
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
       jQuery.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
+
+      var allTools = $.getTools();
+      this.availableTools = [];
+      for ( var i = 0; i < this.state.getStateProperty('availableAnnotationDrawingTools').length; i++) {
+        for ( var j = 0; j < allTools.length; j++) {
+          if (this.state.getStateProperty('availableAnnotationDrawingTools')[i] == allTools[j].name) {
+            this.availableTools.push(allTools[j].logoClass);
+          }
+        }
+      }
       // The hud controls are consistent 
       // throughout any updates to the osd canvas.
       this.hud = new $.Hud({
@@ -61,7 +71,7 @@
         annoEndpointAvailable: this.annoEndpointAvailable,
         fullScreenAvailable : this.fullScreenAvailable,
         showNextPrev : this.imagesList.length !== 1,
-        state: this.state
+        availableTools: this.availableTools
       });
 
       this.bindEvents();
@@ -283,7 +293,7 @@
         };
       }
       for (var value in _this.availableTools) {
-        this.container.find('.material-icons:contains(\'' + _this.availableTools[value] + '\')').on('click', make_handler(_this.availableTools[value]));
+        this.element.find('.material-icons:contains(\'' + _this.availableTools[value] + '\')').on('click', make_handler(_this.availableTools[value]));
       }
       //related the ContextControls
     },

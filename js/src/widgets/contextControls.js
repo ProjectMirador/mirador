@@ -17,15 +17,6 @@
   $.ContextControls.prototype = {
 
     init: function() {    
-      var allTools = $.getTools();
-      this.availableTools = [];
-      for ( var i = 0; i < this.state.getStateProperty('availableAnnotationDrawingTools').length; i++) {
-        for ( var j = 0; j < allTools.length; j++) {
-          if (this.state.getStateProperty('availableAnnotationDrawingTools')[i] == allTools[j].name) {
-            this.availableTools.push(allTools[j].logoClass);
-          }
-        }
-      }
       var _this = this;
       this.element = jQuery(this.template({
         tools : _this.availableTools,
