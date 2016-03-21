@@ -245,18 +245,25 @@
         motivation.push("oa:replying");
         on = annotation.parent;  //need to make URI
       } else {
+        var value;
+        if (typeof annotation.rangePosition === 'object') {
+          value = "xywh="+annotation.rangePosition.x+","+annotation.rangePosition.y+","+annotation.rangePosition.width+","+annotation.rangePosition.height;
+        } else {
+          value = annotation.rangePosition;
+        }
         motivation.push("oa:commenting");
         on = { "@type" : "oa:SpecificResource",
-          "source" : annotation.uri,
+          "full" : annotation.uri,
           "selector" : {
             "@type" : "oa:FragmentSelector",
-            "value" : "xywh="+annotation.rangePosition.x+","+annotation.rangePosition.y+","+annotation.rangePosition.width+","+annotation.rangePosition.height
-          },
-          "scope": {
-            "@context" : "http://www.harvard.edu/catch/oa.json",
-            "@type" : "catch:Viewport",
-            "value" : "xywh="+annotation.bounds.x+","+annotation.bounds.y+","+annotation.bounds.width+","+annotation.bounds.height
+            "value" : value
           }
+          // ,
+          // "scope": {
+          //   "@context" : "http://www.harvard.edu/catch/oa.json",
+          //   "@type" : "catch:Viewport",
+          //   "value" : "xywh="+annotation.bounds.x+","+annotation.bounds.y+","+annotation.bounds.width+","+annotation.bounds.height
+          // }
         };
       }
       resource.push( {
@@ -305,21 +312,27 @@
       annotation.tags = tags;
       annotation.text = text;
 
-      annotation.uri = oaAnnotation.on.source;
+      annotation.uri = oaAnnotation.on.full;
       annotation.contextId = this.context_id;
       annotation.collectionId = this.collection_id;
 
       var region = oaAnnotation.on.selector.value;
-      var regionArray = region.split('=')[1].split(',');
-      annotation.rangePosition = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
+      var regionArray;
+      if (region.indexOf('<svg') !== -1) {
+        //this is an svg string, so don't do anything special
+        annotation.rangePosition = region;
+      } else {
+        regionArray = region.split('=')[1].split(',');
+        annotation.rangePosition = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
+      }
 
-      var imageUrl = $.Iiif.getImageUrl(this.imagesList[$.getImageIndexById(this.imagesList, oaAnnotation.on.source)]);
-      imageUrl = imageUrl + "/" + regionArray.join(',') + "/full/0/native.jpg";
-      annotation.thumb = imageUrl;
+      // var imageUrl = $.Iiif.getImageUrl(this.parent.imagesList[$.getImageIndexById(this.parent.imagesList, oaAnnotation.on.full)]);
+      // imageUrl = imageUrl + "/" + regionArray.join(',') + "/full/0/native.jpg";
+      // annotation.thumb = imageUrl;
 
-      region = oaAnnotation.on.scope.value;
-      regionArray = region.split('=')[1].split(',');
-      annotation.bounds = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
+      // region = oaAnnotation.on.scope.value;
+      // regionArray = region.split('=')[1].split(',');
+      // annotation.bounds = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
 
       annotation.updated = new Date().toISOString();
       if (oaAnnotation.annotatedAt) { 

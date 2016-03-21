@@ -50,6 +50,16 @@
 
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
       jQuery.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
+
+      var allTools = $.getTools();
+      this.availableTools = [];
+      for ( var i = 0; i < this.state.getStateProperty('availableAnnotationDrawingTools').length; i++) {
+        for ( var j = 0; j < allTools.length; j++) {
+          if (this.state.getStateProperty('availableAnnotationDrawingTools')[i] == allTools[j].name) {
+            this.availableTools.push(allTools[j].logoClass);
+          }
+        }
+      }
       // The hud controls are consistent 
       // throughout any updates to the osd canvas.
       this.hud = new $.Hud({
@@ -60,7 +70,8 @@
         annotationCreationAvailable: this.annotationCreationAvailable,
         annoEndpointAvailable: this.annoEndpointAvailable,
         fullScreenAvailable : this.fullScreenAvailable,
-        showNextPrev : this.imagesList.length !== 1
+        showNextPrev : this.imagesList.length !== 1,
+        availableTools: this.availableTools
       });
 
       this.bindEvents();
@@ -131,6 +142,35 @@
       jQuery.subscribe('HUD_FADE_OUT.' + _this.windowId, function(event, elementSelector, duration, complete) {
         _this.element.find(elementSelector).fadeOut(duration, complete);
       });
+
+      jQuery.subscribe('initBorderColor.' + _this.windowId, function(event, color) {
+        _this.element.find('.borderColorPicker').spectrum('set', color);
+      });
+      jQuery.subscribe('initFillColor.' + _this.windowId, function(event, color, alpha) {
+        var colorObj = tinycolor(color);
+        colorObj.setAlpha(alpha);
+        _this.element.find('.fillColorPicker').spectrum('set', colorObj);
+      });
+      jQuery.subscribe('disableBorderColorPicker.'+_this.windowId, function(event, disablePicker) {
+        if(disablePicker) {
+          _this.element.find('.borderColorPicker').spectrum("disable");
+        }else{
+          _this.element.find('.borderColorPicker').spectrum("enable");
+        }
+      });
+      jQuery.subscribe('disableFillColorPicker.'+_this.windowId, function(event, disablePicker) {
+        if(disablePicker) {
+          _this.element.find('.fillColorPicker').spectrum("disable");
+        }else{
+          _this.element.find('.fillColorPicker').spectrum("enable");
+        }
+      });
+      jQuery.subscribe('showDrawTools.'+_this.windowId, function(event) {
+        _this.element.find('.draw-tool').show();
+      });
+      jQuery.subscribe('hideDrawTools.'+_this.windowId, function(event) {
+        _this.element.find('.draw-tool').hide();
+      });
       //Related to Annotations HUD
     },
 
@@ -145,7 +185,7 @@
         _this.previous();
       });
 
-      this.element.find('.mirador-osd-annotations-layer').on('click', function() {
+      this.element.find('.mirador-osd-annotations-layer').on('click', $.debounce(function() {
         if (_this.hud.annoState.current === 'none') {
           _this.hud.annoState.startup(this);
         }
@@ -154,7 +194,7 @@
         } else {
           _this.hud.annoState.displayOff(this);
         }
-      });
+      },300));
 
       this.element.find('.mirador-osd-go-home').on('click', function() {
         _this.osd.viewport.goHome();
@@ -217,9 +257,9 @@
       });
 
       //related the ContextControls
-      this.element.find('.mirador-osd-close').on('click', function() {
+      this.element.find('.mirador-osd-close').on('click', $.debounce(function() {
         _this.hud.annoState.displayOff();
-      });
+      },300));
 
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
         if (_this.hud.annoState.current === 'annoOnCreateOff') {
@@ -232,7 +272,29 @@
       this.element.find('.mirador-osd-refresh-mode').on('click', function() {
         //update annotation list from endpoint
         jQuery.publish('updateAnnotationList.'+_this.windowId);
+        jQuery.publish('refreshOverlay.'+_this.windowId, '');
       });
+      this.element.find('.mirador-osd-delete-mode').on('click', function() {
+        jQuery.publish('deleteShape.'+_this.windowId, '');
+      });
+      this.element.find('.mirador-osd-save-mode').on('click', function() {
+        jQuery.publish('updateEditedShape.'+_this.windowId, '');
+      });
+      this.element.find('.mirador-osd-close').on('click', function() {
+        jQuery.publish('toggleDefaultDrawingTool.'+_this.windowId);
+      });
+      this.element.find('.mirador-osd-edit-mode').on('click', function() {
+        jQuery.publish('toggleDefaultDrawingTool.'+_this.windowId);
+      });
+
+      function make_handler(shapeMode) {
+        return function () {
+          jQuery.publish('toggleDrawingTool.'+_this.windowId, shapeMode);
+        };
+      }
+      for (var value in _this.availableTools) {
+        this.element.find('.material-icons:contains(\'' + _this.availableTools[value] + '\')').on('click', make_handler(_this.availableTools[value]));
+      }
       //related the ContextControls
     },
 
@@ -339,6 +401,22 @@
           'tileSources':  infoJson,
           'uniqueID' : uniqueID
         });
+
+        _this.osd.addHandler('zoom', $.debounce(function(){
+          var point = {
+            'x': -10000000,
+            'y': -10000000
+          };
+          jQuery.publish('updateTooltips.' + _this.windowId, [point, point]);
+        }, 30));
+
+        _this.osd.addHandler('pan', $.debounce(function(){
+          var point = {
+            'x': -10000000,
+            'y': -10000000
+          };
+          jQuery.publish('updateTooltips.' + _this.windowId, [point, point]);
+        }, 30));
 
         _this.osd.addHandler('open', function(){
           jQuery.publish('osdOpen.'+_this.windowId);

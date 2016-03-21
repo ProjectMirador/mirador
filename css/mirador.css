@@ -1172,8 +1172,40 @@ li.highlight {
 }
 .mirador-osd-context-controls a {
   float:left;
-  margin:0 15px 0 0;
+  margin:0 10px 0 0;
   font-weight: normal;
+}
+
+/* color picker custom style
+---------------------------------------------------------------------------- */
+
+.sp-button-container a {
+  color: #555555 !important;
+  text-shadow: none !important;
+  margin: 0 0 0 15px !important;
+  text-decoration: none !important;
+  text-decoration-line: underline !important;
+}
+
+.borderColorPicker + div + .sp-container, .fillColorPicker + div + .sp-container {
+  width: 300px !important;
+}
+
+.borderColorPicker + div .sp-preview, .fillColorPicker + div .sp-preview {
+  height: 10px !important;
+}
+.borderColorPicker + div .sp-dd, .fillColorPicker + div .sp-dd {
+  height: 6px !important;
+  line-height: 6px !important;
+}
+.borderColorPicker + div.sp-replacer, .fillColorPicker + div.sp-replacer {
+  border-radius: 5px !important;
+}
+
+.borderColorPicker + div .material-icons, .fillColorPicker + div .material-icons {
+  float: left;
+  font-size: 12px !important;
+  margin: 0 5px 0 0;
 }
 
 /* image view

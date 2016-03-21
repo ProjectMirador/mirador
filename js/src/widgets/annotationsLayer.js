@@ -5,8 +5,7 @@
     jQuery.extend(true, this, {
       annotationsList:   null,
       viewer:            null,
-      renderer:          null,
-      rectTool:          null,
+      drawTool:          null,
       selected:          null,
       hovered:           null,
       windowId:          null,
@@ -48,9 +47,9 @@
 
     createRenderer: function() {
       var _this = this;
-      this.renderer = new $.OsdCanvasRenderer({
-        osd: $.OpenSeadragon,
+      this.drawTool = new $.OsdRegionDrawTool({
         osdViewer: _this.viewer,
+        parent: _this,
         list: _this.annotationsList, // must be passed by reference.
         visible: false,
         windowId: _this.windowId,
@@ -58,54 +57,32 @@
       });
       this.modeSwitch();
     },
-    
+
     updateRenderer: function() {
-      this.renderer.list = this.annotationsList;
+      this.drawTool.list = this.annotationsList;
       this.modeSwitch();
     },
-    
+
     modeSwitch: function() {
-      //console.log(this.mode);
       if (this.mode === 'displayAnnotations') { this.enterDisplayAnnotations(); }
       else if (this.mode === 'editingAnnotations') { this.enterEditAnnotations(); }
       else if (this.mode === 'default') { this.enterDefault(); }
       else {}
     },
 
-
     enterDisplayAnnotations: function() {
-      var _this = this;
-      //console.log('triggering annotation loading and display');
-      if (this.rectTool) {
-        this.rectTool.exitEditMode();
-      }
-      this.renderer.render();
+      this.drawTool.exitEditMode(true);
+      this.drawTool.render();
     },
 
     enterEditAnnotations: function() {
-      var _this = this;
-      if (!this.rectTool) {
-        this.rectTool = new $.OsdRegionRectTool({
-          osd: OpenSeadragon,
-          osdViewer: _this.viewer,
-          rectType: 'oa', // does not do anything yet. 
-          windowId: _this.windowId,
-          state: _this.state
-        });
-      } else {
-        this.rectTool.reset(_this.viewer);
-      }
-      this.renderer.render();
-      this.rectTool.enterEditMode();
+      this.drawTool.enterEditMode();
+      this.drawTool.render();
     },
 
     enterDefault: function() {
-      if (this.rectTool) {
-        this.rectTool.exitEditMode();
-      }
-      this.renderer.hideAll();
+      this.drawTool.exitEditMode(false);
     }
-
   };
 
 }(Mirador));

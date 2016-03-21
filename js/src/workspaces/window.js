@@ -765,7 +765,7 @@
       if (this.annoEndpointAvailable) {
         var dfd = jQuery.Deferred(),
         module = _this.state.getStateProperty('annotationEndpoint').module,
-        options = _this.state.getStateProperty('annotationEndpoint').options; //grab anything from the config that should be passed directly to the endpoint
+        options = _this.state.getStateProperty('annotationEndpoint').options || {}; //grab anything from the config that should be passed directly to the endpoint
         options.name = _this.state.getStateProperty('annotationEndpoint').name;
         // One annotation endpoint per window, the endpoint
         // is a property of the instance.
