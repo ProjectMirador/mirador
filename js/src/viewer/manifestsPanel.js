@@ -6,7 +6,6 @@
             element:                    null,
             listItems:                  null,
             appendTo:                   null,
-            parent:                     null,
             manifestListItems:          [],
             manifestListElement:        null,
             manifestLoadStatusIndicator: null,
@@ -22,7 +21,7 @@
 
         init: function() {
             this.element = jQuery(this.template({
-                showURLBox : this.parent.showAddFromURLBox
+                showURLBox : this.state.getStateProperty('showAddFromURLBox')
             })).appendTo(this.appendTo);
             this.manifestListElement = this.element.find('ul');
             
@@ -40,6 +39,26 @@
             //   appendTo: this.element.find('.select-results')
             // });
             this.bindEvents();
+            this.listenForActions();
+        },
+
+        listenForActions: function() {
+          var _this = this;
+
+          // handle subscribed events
+          jQuery.subscribe('manifestsPanelVisible.set', function(_, stateValue) {
+             if (stateValue) { _this.show(); return; }
+              _this.hide();
+          });
+
+          jQuery.subscribe('manifestReceived', function(event, newManifest) {
+            _this.manifestListItems.push(new $.ManifestListItem({ 
+              manifest: newManifest, 
+              resultsWidth: _this.resultsWidth, 
+              state: _this.state,
+              appendTo: _this.manifestListElement }));
+            _this.element.find('#manifest-search').keyup();
+          });
         },
 
         bindEvents: function() {
@@ -48,23 +67,11 @@
             this.element.find('form#url-load-form').on('submit', function(event) {
                 event.preventDefault();
                 var url = jQuery(this).find('input').val();
-                _this.parent.addManifestFromUrl(url, "(Added from URL)");
-                //console.log('trying to add from URL');
+                jQuery.publish('ADD_MANIFEST_FROM_URL', url, "(Added from URL)");
             });
 
             this.element.find('.remove-object-option').on('click', function() {
-              _this.parent.toggleLoadWindow();
-            });
-
-            // handle subscribed events
-            jQuery.subscribe('manifestsPanelVisible.set', function(_, stateValue) {
-               if (stateValue) { _this.show(); return; }
-                _this.hide();
-            });
-
-            jQuery.subscribe('manifestReceived', function(event, newManifest) {
-              _this.manifestListItems.push(new $.ManifestListItem({ parent: _this, manifest: newManifest, resultsWidth: _this.resultsWidth }));
-              _this.element.find('#manifest-search').keyup();
+              jQuery.publish('TOGGLE_LOAD_WINDOW');
             });
 
             // Filter manifests based on user input

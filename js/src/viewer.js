@@ -1,10 +1,8 @@
 (function($) {
 
   $.Viewer = function(options) {
-
     jQuery.extend(true, this, {
-      id:                     options.id,
-      hash:                   options.id,
+      id:                     null,
       data:                   null,
       element:                null,
       canvas:                 null,
@@ -16,17 +14,23 @@
       windowSize:             {},
       resizeRatio:            {},
       currentWorkspaceVisible: true,
+      state:                  null,
       overlayStates:          {
         'workspacePanelVisible': false,
         'manifestsPanelVisible': false,
         'optionsPanelVisible': false,
         'bookmarkPanelVisible': false
       },
-      manifests:             [] 
-    }, $.DEFAULT_SETTINGS, options);
+      manifests:             []
+    }, options);
 
+    this.id = this.state.getStateProperty('id');
+    this.data = this.state.getStateProperty('data');
     // get initial manifests
     this.element = this.element || jQuery('#' + this.id);
+    if (options.availableAnnotationDrawingTools && options.availableAnnotationDrawingTools.length > 0) {
+      this.availableAnnotationDrawingTools = options.availableAnnotationDrawingTools;
+    }
 
     if (this.data) {
       this.init();
@@ -37,14 +41,13 @@
 
     init: function() {
       var _this = this;
-
       //add background and positioning information on the root element that is provided in config
-      var backgroundImage = _this.buildPath + _this.imagesPath + 'debut_dark.png';
+      var backgroundImage = _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('imagesPath') + 'debut_dark.png';
       this.element.css('background-color', '#333').css('background-image','url('+backgroundImage+')').css('background-position','left top')
       .css('background-repeat','repeat').css('position','fixed');
 
-      //initialize i18next  
-      i18n.init({debug: false, getAsync: false, resGetPath: _this.buildPath + _this.i18nPath+'__lng__/__ns__.json'}); 
+      //initialize i18next
+      i18n.init({debug: false, getAsync: false, resGetPath: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('i18nPath')+'__lng__/__ns__.json'});
 
       //register Handlebars helper
       Handlebars.registerHelper('t', function(i18n_key) {
@@ -54,17 +57,17 @@
 
       //check all buttons in mainMenu.  If they are all set to false, then don't show mainMenu
       var showMainMenu = false;
-      jQuery.each(this.mainMenuSettings.buttons, function(key, value) {
+      jQuery.each(this.state.getStateProperty('mainMenuSettings').buttons, function(key, value) {
         if (value) { showMainMenu = true; }
       });
       //even if buttons are available, developer can override and set show to false
-      if (this.mainMenuSettings.show === false) {
+      if (this.state.getStateProperty('mainMenuSettings').show === false) {
         showMainMenu = false;
       }
 
       // add main menu
       if (showMainMenu) {
-        this.mainMenu = new $.MainMenu({ parent: this, appendTo: this.element });
+        this.mainMenu = new $.MainMenu({ appendTo: this.element, state: this.state });
       }
 
       // add viewer area
@@ -77,43 +80,41 @@
       }
 
       // add workspace configuration
-      this.layout = typeof this.layout !== 'string' ? JSON.stringify(this.layout) : this.layout;
+      this.layout = typeof this.state.getStateProperty('layout') !== 'string' ? JSON.stringify(this.state.getStateProperty('layout')) : this.state.getStateProperty('layout');
       this.workspace = new $.Workspace({
-        layoutDescription: this.layout.charAt(0) === '{' ? JSON.parse(this.layout) : $.layoutDescriptionFromGridString(this.layout), 
-        parent: this, 
-        appendTo: this.element.find('.mirador-viewer')
+        layoutDescription: this.layout.charAt(0) === '{' ? JSON.parse(this.layout) : $.layoutDescriptionFromGridString(this.layout),
+        appendTo: this.element.find('.mirador-viewer'),
+        state: this.state
       });
-      
+
       this.workspacePanel = new $.WorkspacePanel({
         appendTo: this.element.find('.mirador-viewer'),
-        parent: this,
-        maxRows: this.workspacePanelSettings.maxRows,
-        maxColumns: this.workspacePanelSettings.maxColumns,
-        preserveWindows: this.workspacePanelSettings.preserveWindows,
-        workspace: this.workspace
+        state: this.state
       });
-     
-      this.manifestsPanel = new $.ManifestsPanel({ parent: this, appendTo: this.element.find('.mirador-viewer') });
-      this.bookmarkPanel = new $.BookmarkPanel({ parent: this, appendTo: this.element.find('.mirador-viewer'), jsonStorageEndpoint: this.jsonStorageEndpoint });
+
+      this.manifestsPanel = new $.ManifestsPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state });
+      this.bookmarkPanel = new $.BookmarkPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state });
 
       // set this to be displayed
       this.set('currentWorkspaceVisible', true);
 
       this.bindEvents();
+      this.listenForActions();
       // retrieve manifests
       this.getManifestsData();
 
-      if (this.windowObjects.length === 0 && this.openManifestsPage) {
+      if (this.state.getStateProperty('windowObjects').length === 0 && this.state.getStateProperty('openManifestsPage')) {
         this.workspace.slots[0].addItem();
       }
     },
 
-    bindEvents: function() {
+    listenForActions: function() {
       var _this = this;
+
       // check that windows are loading first to set state of slot?
       jQuery.subscribe('manifestReceived', function(event, newManifest) {
-        if (_this.windowObjects) {
-          var check = jQuery.grep(_this.windowObjects, function(object, index) {
+        if (_this.state.getStateProperty('windowObjects')) {
+          var check = jQuery.grep(_this.state.getStateProperty('windowObjects'), function(object, index) {
             return object.loadedManifest === newManifest.uri;
           });
           jQuery.each(check, function(index, config) {
@@ -122,6 +123,39 @@
         }
       });
 
+      jQuery.subscribe('TOGGLE_WORKSPACE_PANEL', function(event) {
+        _this.toggleWorkspacePanel();
+      });
+
+      jQuery.subscribe('TOGGLE_BOOKMARK_PANEL', function(event) {
+        _this.toggleBookmarkPanel();
+      });
+
+      jQuery.subscribe('TOGGLE_FULLSCREEN', function(event) {
+        _this.fullscreenElement() ? _this.exitFullscreen() : _this.enterFullscreen();
+      });
+
+      jQuery.subscribe('TOGGLE_LOAD_WINDOW', function(event) {
+        _this.toggleLoadWindow();
+      });
+
+      jQuery.subscribe('ADD_MANIFEST_FROM_URL', function(event, url, location) {
+        _this.addManifestFromUrl(url, location);
+      });
+
+      jQuery.subscribe('TOGGLE_OVERLAYS_FALSE', function(event) {
+        jQuery.each(_this.overlayStates, function(oState, value) {
+          // toggles the other top-level panels closed and focuses the
+          // workspace. For instance, after selecting an object from the
+          // manifestPanel.
+          _this.set(oState, false, {parent: 'overlayStates'});
+        });
+      });
+
+    },
+
+    bindEvents: function() {
+      var _this = this;
     },
 
     get: function(prop, parent) {
@@ -165,7 +199,7 @@
     toggleBookmarkPanel: function() {
       this.toggleOverlay('bookmarkPanelVisible');
     },
-    
+
     enterFullscreen: function() {
       var el = this.element[0];
       if (el.requestFullscreen) {
@@ -190,8 +224,8 @@
     },
 
     isFullscreen: function() {
-      var $fullscreen = $(fullscreenElement());
-      return ($fullscreen.length > 0);
+      var fullscreen = this.fullscreenElement();
+      return (fullscreen.length > 0);
     },
 
     fullscreenElement: function() {
@@ -202,14 +236,17 @@
       var _this = this;
 
       _this.data.forEach(function(manifest) {
-        if (manifest.hasOwnProperty('manifestUri')) {
+        if (manifest.hasOwnProperty('manifestContent')) {
+          var content = manifest.manifestContent;
+          _this.addManifestFromUrl(content['@id'], manifest.location ? manifest.location : '', content);
+        } else if (manifest.hasOwnProperty('manifestUri')) {
           var url = manifest.manifestUri;
-          _this.addManifestFromUrl(url, manifest.location ? manifest.location : '');
+          _this.addManifestFromUrl(url, manifest.location ? manifest.location : '', null);
         } else if (manifest.hasOwnProperty('collectionUri')) {
           jQuery.getJSON(manifest.collectionUri).done(function (data, status, jqXHR) {
             if (data.hasOwnProperty('manifests')){
               jQuery.each(data.manifests, function (ci, mfst) {
-                _this.addManifestFromUrl(mfst['@id'], '');
+                _this.addManifestFromUrl(mfst['@id'], '', null);
               });
             }
           }).fail(function(jqXHR, status, error) {
@@ -228,14 +265,12 @@
       );
     },
 
-    addManifestFromUrl: function(url, location) {
+    addManifestFromUrl: function(url, location, content) {
       var _this = this,
-      manifest;
+        manifest;
 
-      if (!_this.manifests[url]) {
-        manifest = new $.Manifest(url, location);
-        _this.manifests[url] = manifest;
-        _this.manifests.push(manifest);
+      if (!_this.state.getStateProperty('manifests')[url]) {
+        manifest = new $.Manifest(url, location, content);
         jQuery.publish('manifestQueued', manifest, location);
         manifest.request.done(function() {
           jQuery.publish('manifestReceived', manifest);
@@ -250,8 +285,9 @@
       if (!slotAddress) {
         return;
       }
+
       var windowConfig = {
-        manifest: this.manifests[options.loadedManifest],
+        manifest: this.state.getStateProperty('manifests')[options.loadedManifest],
         currentFocus : options.viewType,
         focusesOriginal : options.availableViews,
         currentCanvasID : options.canvasID,
@@ -272,7 +308,7 @@
         layoutOptions: options.layoutOptions
       };
 
-      this.workspace.addWindow(windowConfig);
+      jQuery.publish('ADD_WINDOW', windowConfig);
     }
   };
 

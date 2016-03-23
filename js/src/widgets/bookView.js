@@ -20,7 +20,6 @@
         osdBounds:        null,
         zoomLevel:        null
       },
-      parent:           null,
       stitchTileMargin: 10
     }, options);
 
@@ -45,13 +44,15 @@
       this.currentImg = this.imagesList[this.currentImgIndex];
 
       this.element = jQuery(this.template()).appendTo(this.appendTo);
+
       this.hud = new $.Hud({
-        parent: this,
-        element: this.element,
+        appendTo: this.element,
         bottomPanelAvailable: this.bottomPanelAvailable,
         windowId: this.windowId,
         annotationLayerAvailable: false,
-        fullScreenAvailable : this.fullScreenAvailable
+        fullScreenAvailable : this.fullScreenAvailable,
+        showNextPrev : this.imagesList.length !== 1,
+        state: this.state
       });
 
       if (this.manifest.jsonLd.sequences[0].viewingDirection) {
@@ -63,6 +64,15 @@
 
       this.stitchList = this.getStitchList();
       this.createOpenSeadragonInstance();
+
+      this.bindEvents();
+      this.listenForActions();
+
+      if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
+        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, false);
+      } else {
+        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, null);
+      }
     },
 
     template: Handlebars.compile([
@@ -70,11 +80,147 @@
                                  '</div>'
     ].join('')),
 
+    listenForActions: function() {
+      var _this = this,
+      firstCanvasId = _this.imagesList[0]['@id'],
+      lastCanvasId = _this.imagesList[_this.imagesList.length-1]['@id'];
+
+      jQuery.subscribe('bottomPanelSet.' + _this.windowId, function(event, visible) {
+        var dodgers = _this.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls');
+        var arrows = _this.element.find('.mirador-osd-next, .mirador-osd-previous');
+        if (visible === true) {
+          dodgers.css({transform: 'translateY(-130px)'});
+          arrows.css({transform: 'translateY(-65px)'});
+        } else {
+          dodgers.css({transform: 'translateY(0)'});
+          arrows.css({transform: 'translateY(0)'});
+        }
+      });
+
+      jQuery.subscribe('fitBounds.' + _this.windowId, function(event, bounds) {
+        var rect = _this.osd.viewport.imageToViewportRectangle(Number(bounds.x), Number(bounds.y), Number(bounds.width), Number(bounds.height));
+        _this.osd.viewport.fitBoundsWithConstraints(rect, false);
+      });
+
+      jQuery.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasId) {
+        // If it is the first canvas, hide the "go to previous" button, otherwise show it.
+        if (canvasId === firstCanvasId) {
+          _this.element.find('.mirador-osd-previous').hide();
+          _this.element.find('.mirador-osd-next').show();
+        } else if (canvasId === lastCanvasId) {
+          _this.element.find('.mirador-osd-next').hide();
+          _this.element.find('.mirador-osd-previous').show();
+        } else {
+          _this.element.find('.mirador-osd-next').show();
+          _this.element.find('.mirador-osd-previous').show();
+        }
+        // If it is the last canvas, hide the "go to previous" button, otherwise show it.
+      });
+    },
+
+bindEvents: function() {
+      var _this = this;
+
+      this.element.find('.mirador-osd-next').on('click', function() {
+        _this.next();
+      });
+
+      this.element.find('.mirador-osd-previous').on('click', function() {
+        _this.previous();
+      });
+
+      this.element.find('.mirador-osd-go-home').on('click', function() {
+        _this.osd.viewport.goHome();
+      });
+
+      this.element.find('.mirador-osd-up').on('click', function() {
+        var panBy = _this.getPanByValue();
+        _this.osd.viewport.panBy(new OpenSeadragon.Point(0, -panBy.y));
+        _this.osd.viewport.applyConstraints();
+      });
+      this.element.find('.mirador-osd-right').on('click', function() {
+        var panBy = _this.getPanByValue();
+        _this.osd.viewport.panBy(new OpenSeadragon.Point(panBy.x, 0));
+        _this.osd.viewport.applyConstraints();
+      });
+      this.element.find('.mirador-osd-down').on('click', function() {
+        var panBy = _this.getPanByValue();
+        _this.osd.viewport.panBy(new OpenSeadragon.Point(0, panBy.y));
+        _this.osd.viewport.applyConstraints();
+      });
+      this.element.find('.mirador-osd-left').on('click', function() {
+        var panBy = _this.getPanByValue();
+        _this.osd.viewport.panBy(new OpenSeadragon.Point(-panBy.x, 0));
+        _this.osd.viewport.applyConstraints();
+      });
+
+      this.element.find('.mirador-osd-zoom-in').on('click', function() {
+        var osd = _this.osd;
+        if ( osd.viewport ) {
+          osd.viewport.zoomBy(
+            osd.zoomPerClick / 1.0
+          );
+          osd.viewport.applyConstraints();
+        }
+      });
+      this.element.find('.mirador-osd-zoom-out').on('click', function() {
+        var osd = _this.osd;
+        if ( osd.viewport ) {
+          osd.viewport.zoomBy(
+            1.0 / osd.zoomPerClick
+          );
+          osd.viewport.applyConstraints();
+        }
+      });
+
+      this.element.find('.mirador-osd-fullscreen').on('click', function() {
+        if (OpenSeadragon.isFullScreen()) {
+          OpenSeadragon.exitFullScreen();
+        } else {
+          jQuery.publish('REQUEST_OSD_FULL_SCREEN.' + _this.windowId);
+        }
+      });
+
+      jQuery(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function() {
+        _this.fullScreen();
+      });
+
+      this.element.find('.mirador-osd-toggle-bottom-panel').on('click', function() {
+        jQuery.publish('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + _this.windowId);
+      });
+    },
+
+    getPanByValue: function() {
+      var bounds = this.osd.viewport.getBounds(true);
+      //for now, let's keep 50% of the image on the screen
+      var panBy = {
+        "x" : bounds.width * 0.5,
+        "y" : bounds.height * 0.5
+      };
+      return panBy;
+    },
+
+    fullScreen: function() {
+      var replacementButton;
+
+      if (!OpenSeadragon.isFullScreen()) {
+        replacementButton = jQuery('<i class="fa fa-expand"></i>');
+        this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
+        this.element.find('.mirador-osd-toggle-bottom-panel').show();
+        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, true);
+      } else {
+        replacementButton = jQuery('<i class="fa fa-compress"></i>');
+        this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
+        this.element.find('.mirador-osd-toggle-bottom-panel').hide();
+        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, false);
+      }
+    },
+
     setBounds: function() {
       var _this = this;
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       jQuery.publish("imageBoundsUpdated", {
-        id: _this.parent.id, 
+        id: _this.windowId, 
           osdBounds: {
             x: _this.osdOptions.osdBounds.x, 
             y: _this.osdOptions.osdBounds.y, 
@@ -102,9 +248,9 @@
 
     adjustWidth: function(className, hasClass) {
       if (hasClass) {
-        this.parent.element.find('.view-container').removeClass(className);
+        jQuery.publish('REMOVE_CLASS.'+this.windowId, className);
       } else {
-        this.parent.element.find('.view-container').addClass(className);
+        jQuery.publish('ADD_CLASS.'+this.windowId, className);
       }
     },
 
@@ -225,7 +371,7 @@
         next = this.currentImgIndex + 2;
       }
       if (next < this.imagesList.length) {
-        this.parent.setCurrentCanvasID(this.imagesList[next]['@id']);
+        jQuery.publish('SET_CURRENT_CANVAS_ID.' + this.windowId, this.imagesList[next]['@id']);
       }
     },
 
@@ -240,7 +386,7 @@
         prev = this.currentImgIndex - 1;
       }
       if (prev >= 0) {
-        this.parent.setCurrentCanvasID(this.imagesList[prev]['@id']);
+        jQuery.publish('SET_CURRENT_CANVAS_ID.' + this.windowId, this.imagesList[prev]['@id']);
       }
     },
 
@@ -320,7 +466,7 @@
       jQuery.each(stitchList, function(index, image) {
         _this.focusImages.push(image['@id']);
       });
-      this.parent.updateFocusImages(this.focusImages);
+      jQuery.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: this.focusImages});
       return stitchList;
     }
   };

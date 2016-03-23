@@ -24,6 +24,9 @@
     "jquery.scrollTo": "~1.4.12",
     "mousetrap": "~1.4.6",
     "URIjs": "https://github.com/medialize/URI.js.git#~1.13.2",
+    "paper": "git://github.com/paperjs/paper.js.git#*",
+    "spectrum": "git://github.com/bgrins/spectrum.git#*",
+    "jquery-awesome-cursor": "git://github.com/jwarby/jquery-awesome-cursor.git#*",
     "qTip2": "~2.2.1"
   },
   "devDependencies": {

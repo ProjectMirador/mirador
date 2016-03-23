@@ -30,6 +30,8 @@
       }
     },
 
+    'manifests' : [],
+
     'layout': '1x1',
 
     'openManifestsPage' : false, //defaults to false, whether or not Mirador should display the manifests page, 
@@ -89,9 +91,16 @@
     ],
 
     'availableAnnotationDrawingTools': [
-
+       'Rectangle', 'Ellipse', 'Freehand', 'Polygon', 'Pin'
     ],
-    
+
+    'drawingToolsSettings': {
+      'doubleClickReactionTime': 300,
+      'strokeColor': 'deepSkyBlue',
+      'fillColor': 'deepSkyBlue',
+      'fillColorAlpha': 0.0
+    },
+
     'availableCanvasTools': [
 
     ],

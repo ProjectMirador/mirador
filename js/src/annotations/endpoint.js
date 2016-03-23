@@ -21,8 +21,7 @@
     jQuery.extend(this, {
       dfd:             null,
       annotationsList: [],        //OA list for Mirador use
-      windowID:        null,
-      parent:          null
+      windowID:        null
     }, options);
 
     this.init();

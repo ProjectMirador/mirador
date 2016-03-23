@@ -8,7 +8,6 @@
       layoutAddress:    null,
       focused:          null,
       appendTo:         null,
-      parent:           null,
       window:           null,
       windowElement:    null
     }, options);
@@ -26,6 +25,81 @@
       this.element.appendTo(this.appendTo);
 
       this.bindEvents();
+      this.listenForActions();
+    },
+
+    listenForActions: function() {
+      var _this = this;
+
+      jQuery.subscribe('windowRemoved', function(event, id) {
+        if (_this.window && _this.window.id === id) {
+          // This prevents the save controller
+          // from attempting to re-save the window
+          // after having already removed it.
+          _this.clearSlot();
+        }
+      });
+
+      jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
+        // Must reset the slotAddress of the window.
+        if (_this.window) {
+          _this.window.slotAddress = _this.layoutAddress;
+          jQuery.publish('windowSlotAddressUpdated', {
+            id: _this.window.id,
+            slotAddress: _this.window.slotAddress
+          });
+        }
+      });
+
+      jQuery.subscribe('HIDE_REMOVE_SLOT', function(event) {
+        _this.element.find('.remove-slot-option').hide();
+        if (_this.window) {
+          jQuery.publish('HIDE_REMOVE_OBJECT.' + _this.window.id);
+        }
+      });
+      
+      jQuery.subscribe('SHOW_REMOVE_SLOT', function(event) {
+        _this.element.find('.remove-slot-option').show();
+        if (_this.window) {
+          jQuery.publish('SHOW_REMOVE_OBJECT.' + _this.window.id);
+        }
+      });
+
+      jQuery.subscribe('ADD_ITEM_FROM_WINDOW', function(event, id) {
+        if (_this.window && _this.window.id === id) {
+          _this.addItem();
+        }
+      });
+
+      jQuery.subscribe('REMOVE_SLOT_FROM_WINDOW', function(event, id) {
+        if (_this.window && _this.window.id === id) {
+          jQuery.publish('REMOVE_NODE', _this);
+        }
+      });
+
+      jQuery.subscribe('SPLIT_RIGHT_FROM_WINDOW', function(event, id) {
+        if (_this.window && _this.window.id === id) {
+          jQuery.publish('SPLIT_RIGHT', _this);
+        }
+      });
+
+      jQuery.subscribe('SPLIT_LEFT_FROM_WINDOW', function(event, id) {
+        if (_this.window && _this.window.id === id) {
+          jQuery.publish('SPLIT_LEFT', _this);
+        }
+      });
+
+      jQuery.subscribe('SPLIT_DOWN_FROM_WINDOW', function(event, id) {
+        if (_this.window && _this.window.id === id) {
+          jQuery.publish('SPLIT_DOWN', _this);
+        }
+      });
+
+      jQuery.subscribe('SPLIT_UP_FROM_WINDOW', function(event, id) {
+        if (_this.window && _this.window.id === id) {
+          jQuery.publish('SPLIT_UP', _this);
+        }
+      });
     },
 
     bindEvents: function() {
@@ -34,15 +108,7 @@
 
       this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
       this.element.find('.remove-slot-option').on('click', function(){
-        _this.parent.removeNode(_this);
-      });
-      jQuery.subscribe('windowRemoved', function(event, id) {
-        if (_this.window && _this.window.id === id) {
-          // This prevents the save controller
-          // from attempting to re-save the window
-          // after having already removed it.
-          _this.clearSlot();
-        }
+        jQuery.publish('REMOVE_NODE', _this);
       });
       this.element.on('dragover', function(e) {
         e.preventDefault();
@@ -60,23 +126,6 @@
       this.element.on('drop', function(e) {
         _this.dropItem(e);
       });
-
-      jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
-        if (_this.parent.slots.length <= 1) {
-          _this.element.find('.remove-slot-option').hide();
-        } else {
-          _this.element.find('.remove-slot-option').show();
-        }
-
-        // Must reset the slotAddress of the window.
-        if (_this.window) {
-          _this.window.slotAddress = _this.layoutAddress;
-          jQuery.publish('windowSlotAddressUpdated', {
-            id: _this.window.id,
-            slotAddress: _this.window.slotAddress
-          });
-        }
-      });
     },
 
     dropItem: function(e) {
@@ -89,9 +138,9 @@
             imageInfoUrl = $.getQueryParams(url).image,
             windowConfig;
 
-        if (typeof $.viewer.manifests[manifestUrl] !== 'undefined') {
+        if (typeof _this.state.getStateProperty('manifests')[manifestUrl] !== 'undefined') {
           windowConfig = {
-            manifest: $.viewer.manifests[manifestUrl],
+            manifest: _this.state.getStateProperty('manifests')[manifestUrl],
             slotAddress: _this.getAddress()
           };
 
@@ -105,15 +154,15 @@
             windowConfig.currentFocus = 'ImageView';
           }
 
-          $.viewer.workspace.addWindow(windowConfig);
+          jQuery.publish('ADD_WINDOW', windowConfig);
 
         } else if (typeof imageInfoUrl !== 'undefined') {
-          if (!$.viewer.manifests[imageInfoUrl]) {
-            $.viewer.addManifestFromUrl(imageInfoUrl, "(Added from URL)");
+          if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
+            jQuery.publish('ADD_MANIFEST_FROM_URL', imageInfoUrl, "(Added from URL)");
           }
         } else {
-          if (!$.viewer.manifests[imageInfoUrl]) {
-            $.viewer.addManifestFromUrl(manifestUrl, "(Added from URL)");
+          if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
+            jQuery.publish('ADD_MANIFEST_FROM_URL', manifestUrl, "(Added from URL)");
           }
         }
 
@@ -146,7 +195,7 @@
               windowConfig.currentFocus = 'ImageView';
             }
 
-            $.viewer.workspace.addWindow(windowConfig);
+            jQuery.publish('ADD_WINDOW', windowConfig);
           }
         });
       });
@@ -167,7 +216,7 @@
       var _this = this;
       _this.focused = true;
 
-      _this.parent.addItem(_this);
+      jQuery.publish('ADD_SLOT_ITEM', _this);
     },
 
     // template should be based on workspace type

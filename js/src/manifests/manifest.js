@@ -1,7 +1,15 @@
 (function($){
 
-  $.Manifest = function(manifestUri, location) {
-    if (manifestUri.indexOf('info.json') !== -1) {
+  $.Manifest = function(manifestUri, location, manifestContent) {
+    if (manifestContent) {
+      jQuery.extend(true, this, {
+          jsonLd: null,
+          location: location,
+          uri: manifestUri,
+          request: null
+      });
+      this.initFromManifestContent(manifestContent);
+    } else if (manifestUri.indexOf('info.json') !== -1) {
       // The following is an ugly hack. We need to finish the
       // Manifesto utility library.
       // See: https://github.com/IIIF/manifesto
@@ -63,6 +71,14 @@
       this.request.done(function(jsonLd) {
         _this.jsonLd = _this.generateInfoWrapper(jsonLd);
       });
+    },
+    initFromManifestContent: function (manifestContent) {
+      var _this = this;
+      this.request = jQuery.Deferred();
+      this.request.done(function(jsonLd) {
+        _this.jsonLd = jsonLd;
+      });
+      setTimeout(function () { _this.request.resolve(manifestContent); }, 0);
     },
     getThumbnailForCanvas : function(canvas, width) {
       var version = "1.1",

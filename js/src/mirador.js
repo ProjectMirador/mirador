@@ -5,8 +5,8 @@ window.Mirador = window.Mirador || function(config) {
   // application.
   Mirador.saveController = new Mirador.SaveController(config);
 
-  config = Mirador.saveController.currentConfig;
+  //config = Mirador.saveController.currentConfig;
 
   // initialise application 
-  Mirador.viewer = new Mirador.Viewer(config);
+  Mirador.viewer = new Mirador.Viewer({'state' : Mirador.saveController});
 };
