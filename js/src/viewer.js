@@ -14,14 +14,14 @@
       windowSize:             {},
       resizeRatio:            {},
       currentWorkspaceVisible: true,
-      state:                  null, 
+      state:                  null,
       overlayStates:          {
         'workspacePanelVisible': false,
         'manifestsPanelVisible': false,
         'optionsPanelVisible': false,
         'bookmarkPanelVisible': false
       },
-      manifests:             [] 
+      manifests:             []
     }, options);
 
     this.id = this.state.getStateProperty('id');
@@ -46,8 +46,8 @@
       this.element.css('background-color', '#333').css('background-image','url('+backgroundImage+')').css('background-position','left top')
       .css('background-repeat','repeat').css('position','fixed');
 
-      //initialize i18next  
-      i18n.init({debug: false, getAsync: false, resGetPath: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('i18nPath')+'__lng__/__ns__.json'}); 
+      //initialize i18next
+      i18n.init({debug: false, getAsync: false, resGetPath: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('i18nPath')+'__lng__/__ns__.json'});
 
       //register Handlebars helper
       Handlebars.registerHelper('t', function(i18n_key) {
@@ -82,16 +82,16 @@
       // add workspace configuration
       this.layout = typeof this.state.getStateProperty('layout') !== 'string' ? JSON.stringify(this.state.getStateProperty('layout')) : this.state.getStateProperty('layout');
       this.workspace = new $.Workspace({
-        layoutDescription: this.layout.charAt(0) === '{' ? JSON.parse(this.layout) : $.layoutDescriptionFromGridString(this.layout), 
+        layoutDescription: this.layout.charAt(0) === '{' ? JSON.parse(this.layout) : $.layoutDescriptionFromGridString(this.layout),
         appendTo: this.element.find('.mirador-viewer'),
         state: this.state
       });
-      
+
       this.workspacePanel = new $.WorkspacePanel({
         appendTo: this.element.find('.mirador-viewer'),
         state: this.state
       });
-     
+
       this.manifestsPanel = new $.ManifestsPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state });
       this.bookmarkPanel = new $.BookmarkPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state });
 
@@ -124,11 +124,11 @@
       });
 
       jQuery.subscribe('TOGGLE_WORKSPACE_PANEL', function(event) {
-        _this.toggleWorkspacePanel(); 
+        _this.toggleWorkspacePanel();
       });
 
       jQuery.subscribe('TOGGLE_BOOKMARK_PANEL', function(event) {
-        _this.toggleBookmarkPanel(); 
+        _this.toggleBookmarkPanel();
       });
 
       jQuery.subscribe('TOGGLE_FULLSCREEN', function(event) {
@@ -199,7 +199,7 @@
     toggleBookmarkPanel: function() {
       this.toggleOverlay('bookmarkPanelVisible');
     },
-    
+
     enterFullscreen: function() {
       var el = this.element[0];
       if (el.requestFullscreen) {
@@ -236,14 +236,17 @@
       var _this = this;
 
       _this.data.forEach(function(manifest) {
-        if (manifest.hasOwnProperty('manifestUri')) {
+        if (manifest.hasOwnProperty('manifestContent')) {
+          var content = manifest.manifestContent;
+          _this.addManifestFromUrl(content['@id'], manifest.location ? manifest.location : '', content);
+        } else if (manifest.hasOwnProperty('manifestUri')) {
           var url = manifest.manifestUri;
-          _this.addManifestFromUrl(url, manifest.location ? manifest.location : '');
+          _this.addManifestFromUrl(url, manifest.location ? manifest.location : '', null);
         } else if (manifest.hasOwnProperty('collectionUri')) {
           jQuery.getJSON(manifest.collectionUri).done(function (data, status, jqXHR) {
             if (data.hasOwnProperty('manifests')){
               jQuery.each(data.manifests, function (ci, mfst) {
-                _this.addManifestFromUrl(mfst['@id'], '');
+                _this.addManifestFromUrl(mfst['@id'], '', null);
               });
             }
           }).fail(function(jqXHR, status, error) {
@@ -262,12 +265,12 @@
       );
     },
 
-    addManifestFromUrl: function(url, location) {
+    addManifestFromUrl: function(url, location, content) {
       var _this = this,
-      manifest;
+        manifest;
 
       if (!_this.state.getStateProperty('manifests')[url]) {
-        manifest = new $.Manifest(url, location);
+        manifest = new $.Manifest(url, location, content);
         jQuery.publish('manifestQueued', manifest, location);
         manifest.request.done(function() {
           jQuery.publish('manifestReceived', manifest);

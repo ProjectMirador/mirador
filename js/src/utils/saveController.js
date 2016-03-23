@@ -53,7 +53,7 @@
           //get json from JSON storage and set currentConfig to it
           var params = paramURL.split('=');
           var jsonblob = params[1];
-          this.currentConfig = this.storageModule.readSync(jsonblob);
+          this.currentConfig = this.storageModule.readSync(jsonblob) || config;
         } else {
           this.currentConfig = config;
         }
