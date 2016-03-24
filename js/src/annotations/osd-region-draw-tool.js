@@ -219,6 +219,10 @@
           }
         }
       }
+      if (_this.svgOverlay.availableExternalCommentsPanel) {
+        jQuery.publish('annotationMousePosition.' + _this.parent.windowId, [annotations]);
+        return;
+      }
       var api = jQuery(this.osdViewer.element).qtip('api');
       if (api) {
         //track whether the cursor is within the tooltip (with the specified tolerance) and disables show/hide/update functionality.
