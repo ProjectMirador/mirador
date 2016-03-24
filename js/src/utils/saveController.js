@@ -15,6 +15,9 @@
       config.availableAnnotationDrawingTools = jQuery.grep(config.availableAnnotationDrawingTools, function(element, index) {
         return jQuery.inArray(element, $.DEFAULT_SETTINGS.availableAnnotationDrawingTools) >= 0;
       });
+      if (config.availableAnnotationDrawingTools.length === 0) {
+        config.availableAnnotationDrawingTools = $.DEFAULT_SETTINGS.availableAnnotationDrawingTools;
+      }
     }
 
     this.init(jQuery.extend(false, $.DEFAULT_SETTINGS, config));
