@@ -51,7 +51,7 @@
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
       jQuery.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
 
-      var allTools = $.getTools();
+      var allTools = $.getTools(this.state.getStateProperty('drawingToolsSettings'));
       this.availableTools = [];
       for ( var i = 0; i < this.state.getStateProperty('availableAnnotationDrawingTools').length; i++) {
         for ( var j = 0; j < allTools.length; j++) {
@@ -143,6 +143,9 @@
         _this.element.find(elementSelector).fadeOut(duration, complete);
       });
 
+      jQuery.subscribe('initBorderType.' + _this.windowId, function(event, type) {
+        _this.element.find('.mirador-line-type').find('ul li:contains(\'' + type + '\')').click();
+      });
       jQuery.subscribe('initBorderColor.' + _this.windowId, function(event, color) {
         _this.element.find('.borderColorPicker').spectrum('set', color);
       });
@@ -295,6 +298,18 @@
       for (var value in _this.availableTools) {
         this.element.find('.material-icons:contains(\'' + _this.availableTools[value] + '\')').on('click', make_handler(_this.availableTools[value]));
       }
+      _this.element.find('.mirador-line-type').on('mouseenter', function() {
+        _this.element.find('.type-list').stop().slideFadeToggle(300);
+      });
+      _this.element.find('.mirador-line-type').on('mouseleave', function() {
+        _this.element.find('.type-list').stop().slideFadeToggle(300);
+      });
+      _this.element.find('.mirador-line-type').find('ul li').on('click', function() {
+        var className = jQuery(this).find('i').attr('class').replace(/fa/, '').replace(/ /, '');
+        _this.element.find('.mirador-line-type>i').removeClass("solid dashed dotdashed");
+        _this.element.find('.mirador-line-type>i').addClass(className);
+        jQuery.publish('toggleBorderType.' + _this.windowId, className);
+      });
       //related the ContextControls
     },
 

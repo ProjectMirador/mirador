@@ -1179,6 +1179,52 @@ li.highlight {
 /* color picker custom style
 ---------------------------------------------------------------------------- */
 
+.mirador-line-type {
+  border-radius: 5px !important;
+  padding: 0px !important;
+  height: 20px !important;
+  width: 55px !important;
+  opacity: 0.6;
+  border: 1px solid #91765d;
+  background: white none repeat scroll 0 0;
+  margin: 3px 5px 0px 0px !important;
+}
+
+.mirador-line-type ul {
+  color: #333333;
+  margin-top: 0px !important;
+}
+
+.mirador-line-type li {
+  text-shadow: none !important;
+  font-size: 10px !important;
+}
+
+.mirador-line-type>i {
+  padding-left: 35px;
+  margin: 4px 0px 0px 4px !important;
+}
+
+.mirador-line-type i {
+  color: #333333;
+  width: 55px;
+  height: 10px;
+  font-size: 15px !important;
+  background-repeat: no-repeat;
+}
+
+.mirador-line-type .solid {
+  background-image: url('../images/border_type_1.png');
+}
+
+.mirador-line-type .dashed {
+  background-image: url('../images/border_type_2.png');
+}
+
+.mirador-line-type .dotdashed {
+  background-image: url('../images/border_type_3.png');
+}
+
 .sp-button-container a {
   color: #555555 !important;
   text-shadow: none !important;
