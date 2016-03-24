@@ -132,7 +132,6 @@
         _this.paperScope.view.draw();
       }
     });
-    jQuery.publish('initBorderType.' + _this.windowId, 'solid');
     jQuery.publish('initBorderColor.' + _this.windowId, _this.strokeColor);
     jQuery.publish('initFillColor.' + _this.windowId, [_this.fillColor, _this.fillColorAlpha]);
 
