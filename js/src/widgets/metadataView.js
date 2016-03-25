@@ -126,8 +126,8 @@
   getMetadataDetails: function(jsonLd) {
       // TODO: This should not default to English
       var mdList = {
-          'label':        '<b>' + jsonLd.label + '</b>' || '',
-          'description':  jsonLd.description || ''
+        'label': '<b>' + ($.JsonLd.getTextValue(jsonLd.label) || '') + '</b>',
+        'description':  jsonLd.description || ''
       };
       var value = "";
       var label = "";
@@ -140,7 +140,7 @@
             // {@value: ..., @language: ...}
             if (item['@language'] == "en") {
               value += item['@value'];
-              value += "<br/>";                  
+              value += "<br/>";
             }
           }
         });        
@@ -151,27 +151,9 @@
         value = "";
         label = "";
         jQuery.each(jsonLd.metadata, function(index, item) {
-          if (typeof item.label === "string") {
-            label = item.label;
-          } else {
-            jQuery.each(item.label, function(i2, what) {
-              // {@value: ..., @language: ...}
-              if (what['@language'] === "en") {
-                label = what['@value'];
-              }
-            });
-          }
-          if (typeof item.value === "string") {
-            value = item.value;
-          } else {
-            jQuery.each(item.value, function(i3, what) {
-              // {@value: ..., @language: ...}
-              if (what['@language'] === "en") {
-                value = what['@value'];
-              }
-            });
-          } 
-        mdList[label] = value;
+          label = $.JsonLd.getTextValue(item.label);
+          value = $.JsonLd.getTextValue(item.value);
+          mdList[label] = value;
         });
       }
  
