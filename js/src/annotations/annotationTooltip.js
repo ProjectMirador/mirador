@@ -5,7 +5,6 @@
     jQuery.extend(this, {
       targetElement: null,
       annotations: [],
-      parent: null,
       windowId: "",
     }, options);
 
@@ -15,8 +14,8 @@
   $.AnnotationTooltip.prototype = {
 
     init: function() {
-      this.editor = $[$.saveController.currentConfig.annotationBodyEditor.module];
-      this.editorOptions = $.saveController.currentConfig.annotationBodyEditor.options;
+      this.editor = $[this.state.currentConfig.annotationBodyEditor.module];
+      this.editorOptions = this.state.currentConfig.annotationBodyEditor.options;
 
       this.activeEditor = null;
       this.activeEditorTip = null;

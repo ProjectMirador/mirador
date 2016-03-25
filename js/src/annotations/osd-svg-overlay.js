@@ -591,12 +591,12 @@
       this.path = null;
       this.mode = '';
       this.draftPaths.push(shape);
-      var _this = this;
       var annoTooltip = new $.AnnotationTooltip({
-        targetElement: jQuery(_this.canvas).parents('.mirador-osd'),
-        parent: _this,
-        windowId: _this.windowId
+        targetElement: jQuery(this.canvas).parents('.mirador-osd'),
+        state: this.state,
+        windowId: this.windowId
       });
+      var _this = this;
       annoTooltip.showEditor({
         annotation: {},
         onAnnotationCreated: function (oaAnno) {
