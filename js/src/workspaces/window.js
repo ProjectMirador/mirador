@@ -136,7 +136,7 @@
       jQuery.each(this.focuses, function(index, value) {
         templateData[value] = true;
       });
-      templateData.title = manifest.label;
+      templateData.title = $.JsonLd.getTextValue(manifest.label);
       templateData.displayLayout = this.displayLayout;
       templateData.layoutOptions = this.layoutOptions;
       // if displayLayout is true,  but all individual options are set to false, set displayLayout to false
