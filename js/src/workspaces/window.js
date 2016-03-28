@@ -20,24 +20,28 @@
       focusModules:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
       focusOverlaysAvailable: {
         'ThumbnailsView': {
-          'overlay' : {'MetadataView' : false}, 
+          'overlay' : {'MetadataView' : false},
           'sidePanel' : {'TableOfContents' : true},
-          'bottomPanel' : {'' : false}
+          'bottomPanel' : {'' : false},
+          'searchWidget' : {'SearchWidget' : false}
         },
         'ImageView': {
-          'overlay' : {'MetadataView' : false}, 
+          'overlay' : {'MetadataView' : false},
           'sidePanel' : {'TableOfContents' : true},
-          'bottomPanel' : {'ThumbnailsView' : true}
+          'bottomPanel' : {'ThumbnailsView' : true},
+          'searchWidget' : {'SearchWidget' : false}
         },
         'ScrollView': {
-          'overlay' : {'MetadataView' : false}, 
+          'overlay' : {'MetadataView' : false},
           'sidePanel' : {'TableOfContents' : true},
-          'bottomPanel' : {'' : false}
+          'bottomPanel' : {'' : false},
+          'searchWidget' : {'SearchWidget' : false}
         },
         'BookView': {
           'overlay' : {'MetadataView' : false},
           'sidePanel' : {'TableOfContents' : true},
-          'bottomPanel' : {'ThumbnailsView' : true}
+          'bottomPanel' : {'ThumbnailsView' : true},
+          'searchWidget' : {'SearchWidget' : false}
         }
       },
       focusOptions: null,
@@ -59,7 +63,9 @@
         "slotLeft" : true,
         "slotAbove" : true,
         "slotBelow" : true
-      }
+      },
+      searchWidget: null,
+      searchWidgetVisible: false
     }, options);
 
     this.init();
@@ -85,7 +91,7 @@
 
       //remove any imageModes that are not available as a focus
       this.imageModes = jQuery.map(this.imageModes, function(value, index) {
-        if (jQuery.inArray(value, _this.focuses) === -1) return null;  
+        if (jQuery.inArray(value, _this.focuses) === -1) return null;
         return value;
       });
 
@@ -124,19 +130,30 @@
         templateData.MetadataView = true;
       }
 
+      if (typeof this.searchWidgetAvailable !== 'undefined' && !this.searchWidgetAvailable) {
+        // Set the 'searchWidget' overlay not available in all views
+        jQuery.each(this.focusOverlaysAvailable, function(key, value) {
+          _this.focusOverlaysAvailable[key].overlay = {'': false};
+        });
+        templateData.searchPanel = false;
+      } else {
+        templateData.searchPanel = true;
+      }
+
       //determine if any buttons should be hidden in template
       jQuery.each(this.focuses, function(index, value) {
         templateData[value] = true;
       });
-      templateData.title = manifest.label; 
-      templateData.displayLayout = this.displayLayout; 
-      templateData.layoutOptions = this.layoutOptions; 
+      templateData.title = manifest.label;
+      templateData.displayLayout = this.displayLayout;
+      templateData.layoutOptions = this.layoutOptions;
       // if displayLayout is true,  but all individual options are set to false, set displayLayout to false
-      if (this.displayLayout) { 
+      if (this.displayLayout) {
         templateData.displayLayout = !Object.keys(this.layoutOptions).every(function(element, index, array) {
           return _this.layoutOptions[element] === false;
         });
       }
+
       _this.element = jQuery(this.template(templateData)).appendTo(_this.appendTo);
 
       //clear any existing objects
@@ -169,7 +186,7 @@
       this.bindEvents();
 
       if (this.imagesList.length === 1) {
-        this.bottomPanelVisibility(false);      
+        this.bottomPanelVisibility(false);
       }
     },
 
@@ -200,7 +217,7 @@
     bindEvents: function() {
       var _this = this;
 
-      //this event should trigger from layout      
+      //this event should trigger from layout
       jQuery.subscribe('windowResize', $.debounce(function(){
         if (_this.focusModules.ScrollView) {
           var containerHeight = _this.element.find('.view-container').height();
@@ -229,7 +246,7 @@
         }
       });
     },
-    
+
     bindAnnotationEvents: function() {
       var _this = this;
       jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
@@ -248,7 +265,7 @@
           console.log("There was an error saving this new annotation");
           //remove this overlay because we couldn't save annotation
           jQuery(osdOverlay).remove();
-        }); 
+        });
       });
 
       jQuery.subscribe('annotationUpdated.'+_this.id, function(event, oaAnno) {
@@ -260,21 +277,21 @@
               return false;
             }
           });
-          jQuery.publish(('annotationListLoaded.' + _this.id));          
+          jQuery.publish(('annotationListLoaded.' + _this.id));
         },
         function() {
-          console.log("There was an error updating this annotation");        
+          console.log("There was an error updating this annotation");
         });
       });
 
-      jQuery.subscribe('annotationDeleted.'+_this.id, function(event, annoId) {        
+      jQuery.subscribe('annotationDeleted.'+_this.id, function(event, annoId) {
         //remove from endpoint
         //first function is success callback, second is error callback
         _this.endpoint.deleteAnnotation(annoId, function() {
           _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== annoId; });
           jQuery.publish(('annotationListLoaded.' + _this.id));
           jQuery.publish(('removeOverlay.' + _this.id), annoId);
-        }, 
+        },
         function() {
           // console.log("There was an error deleting this annotation");
         });
@@ -299,6 +316,7 @@
       this.sidePanel = null;
       this.bottomPanel = null;
       this.overlay = null;
+      this.searchWidget = null;
     },
 
     // only panels and overlay available to this view, make rest hidden while on this view
@@ -310,11 +328,11 @@
           //instantiate any panels that exist for this view but are still null
           if (view !== '' && _this[panelType] === null) {
             _this[panelType] = new $[view]({
-              manifest: _this.manifest, 
-              appendTo: _this.element.find('.'+panelType), 
-              parent: _this, 
-              panel: true, 
-              canvasID: _this.currentCanvasID, 
+              manifest: _this.manifest,
+              appendTo: _this.element.find('.'+panelType),
+              parent: _this,
+              panel: true,
+              canvasID: _this.currentCanvasID,
               imagesList: _this.imagesList,
               thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
             });
@@ -323,7 +341,7 @@
           displayed = _this.focusOverlaysAvailable[state][panelType][view];
 
           //toggle any valid panels
-          if (view !== '' && displayed) {   
+          if (view !== '' && displayed) {
             _this.togglePanels(panelType, displayed, view, state);
           }
 
@@ -397,7 +415,9 @@
         this.focusModules[this.currentFocus].adjustHeight('focus-max-height', panelState);
       } else if (panelType === 'sidePanel') {
         this.focusModules[this.currentFocus].adjustWidth('focus-max-width', panelState);
-      } else {}
+      } else if (panelType === 'searchWidget') {
+
+      }
     },
 
     toggleMetadataOverlay: function(focusState) {
@@ -419,52 +439,6 @@
       this.togglePanels('overlay', !currentState, 'MetadataView', focusState);
     },
 
-
-
-/// functions added by me    
-  /*
-    toggleSearchWithinOverlay: function(focusState){
-      var _this = this;
-      var currentState = this.focusOverlaysAvailable[focusState].overlay.SearchWithin;
-      if (currentState) {
-        this.element.find('.mirador-icon-search-within').removeClass('selected');
-      } else {
-        this.element.find('.mirador-icon-search-within').addClass('selected');
-      }
-      //set overlay for all focus types to same value
-      jQuery.each(this.focusOverlaysAvailable, function(focusType, options) {
-        if (focusState !== focusType) {
-          this.overlay.SearchWithin = !currentState;
-        }
-      });
-      //and then do toggling for current focus
-      this.togglePanels('overlay', !currentState, 'SearchWithin', focusState);
-      console.log(focusState);
-      this.toggleFocus(focusState, "SearchWithin");
-      console.log('test2');
-    },
-  */  
-
-    
-    displaySearchWithin: function(query){
-      var _this = this;
-      if (query !== ""){
-        searchService = (_this.manifest.getSearchWithinService());
-        searchObject = new $.SearchWithin({
-              manifest: _this.manifest, 
-              appendTo: _this.element.find(".search-results-list"), 
-              parent: _this, 
-              panel: true, 
-              canvasID: _this.currentCanvasID, 
-              imagesList: _this.imagesList,
-              thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'},
-              query: query
-            });
-      }
-    },
-
-// end of functions added by me 
-
     toggleFocus: function(focusState, imageMode) {
       var _this = this;
 
@@ -482,10 +456,10 @@
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
       jQuery.publish("windowUpdated", {
-        id: _this.id, 
-        viewType: _this.currentFocus, 
-        canvasID: _this.currentCanvasID, 
-        imageMode: _this.currentImageMode, 
+        id: _this.id,
+        viewType: _this.currentFocus,
+        canvasID: _this.currentCanvasID,
+        imageMode: _this.currentImageMode,
         loadedManifest: _this.manifest.jsonLd['@id'],
         slotAddress: _this.slotAddress
       });
@@ -495,10 +469,10 @@
       this.currentCanvasID = canvasID;
       if (this.focusModules.ThumbnailsView === null) {
         this.focusModules.ThumbnailsView = new $.ThumbnailsView({
-          manifest: this.manifest, 
-          appendTo: this.element.find('.view-container'), 
-          parent: this, 
-          canvasID: this.currentCanvasID, 
+          manifest: this.manifest,
+          appendTo: this.element.find('.view-container'),
+          parent: this,
+          canvasID: this.currentCanvasID,
           imagesList: this.imagesList
         });
       } else {
@@ -512,11 +486,11 @@
       this.currentCanvasID = canvasID;
       if (this.focusModules.ImageView === null) {
         this.focusModules.ImageView = new $.ImageView({
-          manifest: this.manifest, 
-          appendTo: this.element.find('.view-container'), 
-          parent: this, 
+          manifest: this.manifest,
+          appendTo: this.element.find('.view-container'),
+          parent: this,
           windowId: this.id,
-          canvasID: canvasID, 
+          canvasID: canvasID,
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
           bottomPanelAvailable: this.bottomPanelAvailable,
@@ -537,11 +511,11 @@
       this.currentCanvasID = canvasID;
       if (this.focusModules.BookView === null) {
         this.focusModules.BookView = new $.BookView({
-          manifest: this.manifest, 
-          appendTo: this.element.find('.view-container'), 
-          parent: this, 
+          manifest: this.manifest,
+          appendTo: this.element.find('.view-container'),
+          parent: this,
           windowId: this.id,
-          canvasID: canvasID, 
+          canvasID: canvasID,
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
           bottomPanelAvailable: this.bottomPanelAvailable,
@@ -559,18 +533,18 @@
       if (this.focusModules.ScrollView === null) {
         var containerHeight = this.element.find('.view-container').height();
         this.focusModules.ScrollView = new $.ScrollView({
-          manifest: this.manifest, 
-          appendTo: this.element.find('.view-container'), 
-          parent: this, 
-          canvasID: this.currentCanvasID, 
-          imagesList: this.imagesList, 
+          manifest: this.manifest,
+          appendTo: this.element.find('.view-container'),
+          parent: this,
+          canvasID: this.currentCanvasID,
+          imagesList: this.imagesList,
           thumbInfo: {thumbsHeight: Math.floor(containerHeight * this.scrollImageRatio), listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}
         });
       } else {
         var view = this.focusModules.ScrollView;
         view.updateImage(canvasID);
       }
-      this.toggleFocus('ScrollView', '');    
+      this.toggleFocus('ScrollView', '');
     },
 
     updateFocusImages: function(imageList) {
@@ -598,7 +572,7 @@
       }
       jQuery.publish(('currentCanvasIDUpdated.' + _this.id), canvasID);
     },
-    
+
     replaceWindow: function(newSlotAddress, newElement) {
       this.slotAddress = newSlotAddress;
       this.appendTo = newElement;
@@ -616,7 +590,16 @@
 
     updateManifestInfo: function() {
       var _this = this;
+
+      // Determine whether or not the search panel was open. If so, its
+      // icon must remain selected after this update.
+      var searchIcon = this.element.find('.mirador-icon-search-within');
+      var searchSelected = searchIcon.hasClass('selected');
+
       this.element.find('.window-manifest-navigation').children().removeClass('selected');
+      if (searchSelected) {
+        searchIcon.addClass('selected');
+      }
       switch(_this.currentFocus) {
         case 'ThumbnailsView':
           //hide thumbnails button and highlight currentImageMode?
@@ -690,10 +673,10 @@
           _this.annotationsList = _this.annotationsList.concat(_this.endpoint.annotationsList);
           // clear out some bad data
           _this.annotationsList = jQuery.grep(_this.annotationsList, function (value, index) {
-            if (typeof value.on === "undefined") { 
+            if (typeof value.on === "undefined") {
               return false;
             }
-            return true; 
+            return true;
           });
           jQuery.publish('annotationListLoaded.' + _this.id);
         });
@@ -736,27 +719,6 @@
       _this.toggleThumbnails(_this.currentCanvasID);
     });
 
-
-//events added by me
-
-    this.element.find('.mirador-icon-search-within').on('click', function() {
-      _this.element.find('.searchResults').stop().slideFadeToggle(300);
-    
-    });
-    
-    this.element.find(".js-perform-query").on('click', function(event){
-        event.preventDefault();
-        var query = _this.element.find(".js-query").val();
-        console.log("query", query);
-        _this.displaySearchWithin(query);
-    });
-
-    
-
-// end of events added by me
-
-
-
     this.element.find('.mirador-icon-metadata-view').on('click', function() {
       _this.toggleMetadataOverlay(_this.currentFocus);
     });
@@ -795,7 +757,8 @@
                                  '<div class="window">',
                                  '<div class="manifest-info">',
                                  '<div class="window-manifest-navigation">',
-                                 '<a href="javascript:;" class="mirador-btn mirador-icon-search-within"><i class="fa fa-search fa-lg fa-fw"></i></a>', 
+                                //  '{{> searchWithinButton}}',      // Need a better way to insert this button here!
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-search-within" title="Search within this object."><i class="fa fa-search fa-lg fa-fw"></i></a>',
                                  '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-lg fa-fw"></i>',
                                  '<ul class="dropdown image-list">',
                                  '{{#if ImageView}}',
@@ -847,14 +810,12 @@
                                  '<h3 class="window-manifest-title">{{title}}</h3>',
                                  '</div>',
                                  '<div class="content-container">',
-                                 '<div class="searchResults" style="display: none;">',
-                                 '<form class="js-perform-query">',
-                                 '<input class="js-query" type="text" placeholder="search"/>',
-                                 '<input type="submit"/>',
-                                 '</form>',
-                                 '<div class="search-results-list">',
-                                 '</div>',
-                                 '</div>',
+                                 // ----- Search within widget -----
+                                 '{{#if searchPanel}}',
+                                 '<div class="searchWidget"></div>',
+                                 '{{/if}}',
+                                //  '{{> searchWithinWidget }}',
+                                 // ----- End search within -----
                                  '{{#if sidePanel}}',
                                  '<div class="sidePanel">',
                                  '</div>',
@@ -870,4 +831,3 @@
   };
 
 }(Mirador));
-

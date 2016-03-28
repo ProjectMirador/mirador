@@ -1661,9 +1661,9 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   color: black;
   opacity: .9;
   position: absolute;
-  left: 80%;
+  right: 0;
   top: 0%;
-  width: 20%;
+  width: 300px;
   height: 100%;
   z-index: 1;
   padding: 15px;
@@ -1680,4 +1680,33 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   font-weight: bold;
   margin-bottom: 5px;
   display: block;
+}
+.js-close-search-within {
+  margin-bottom: 10px;
+  margin-top: 0;
+  background: none;
+  color: rgb( 146, 145, 145 );
+  box-sizing: border-box;
+}
+.search-disclose {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.search-disclose-btn-more,
+.search-disclose-btn-less {
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid rgb( 146, 145, 145 );
+  padding-bottom: 10px;
+  width: 100%;
+}
+.advanced-search-all,
+.advanced-search-symbols,
+.advanced-search-marks,
+.advanced-search-marginalia,
+.advanced-search-underlines {
+  margin: 5px;
+}
+.search-results-list .result-wrapper .result-paragraph .highlight {
+  background-color: rgb(255, 255, 0);
 }
