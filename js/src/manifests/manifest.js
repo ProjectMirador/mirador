@@ -94,6 +94,10 @@
         if (service.hasOwnProperty('@context')) {
           version = $.Iiif.getVersionFromContext(service['@context']);
         }
+        // Show up thumbnail in an acceptable quality
+        if (width > 90) {
+          width = 4000;
+        }
         thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
       }
       return thumbnailUrl;
