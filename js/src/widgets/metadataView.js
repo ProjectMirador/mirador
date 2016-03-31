@@ -10,6 +10,8 @@
     }, options);
 
     this.init();
+    this.bindEvents();
+
   };
 
 
@@ -68,7 +70,6 @@
       // with a clean metadata panel.
       this.appendTo.empty();
       this.element = jQuery(this.template(tplData)).appendTo(this.appendTo);
-      this.bindEvents();
     },
 
   // Base code from https://github.com/padolsey/prettyprint.js. Modified to fit Mirador needs
