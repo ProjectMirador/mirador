@@ -20,11 +20,18 @@
           tplData = {
             metadataListingCls: this.metadataListingCls
           };
-          
-      _this.manifest = _this.manifest.jsonLd;
+
+      if ( typeof _this.manifest.jsonLd !== 'undefined' ) {
+        _this.manifest = _this.manifest.jsonLd;
+      }
+
       this.metadataTypes = {};
 
       this.metadataTypes.details = _this.getMetadataDetails(_this.manifest);
+      // Populate canvas specific metadata
+      if ( _this.imageMetadata ) {
+        this.metadataTypes.imageMetadata = _this.imageMetadata;
+      }
       this.metadataTypes.rights = _this.getMetadataRights(_this.manifest);
       this.metadataTypes.links = _this.getMetadataLinks(_this.manifest);
 
@@ -56,6 +63,10 @@
         tplData.logo = logo;
       }
 
+      // Clean up before appending, to make sure
+      // that after loading the canvas metadata we start
+      // with a clean metadata panel.
+      this.appendTo.empty();
       this.element = jQuery(this.template(tplData)).appendTo(this.appendTo);
       this.bindEvents();
     },
@@ -103,7 +114,7 @@
     var _this = this,
         str,
         next,
-        label, 
+        label,
         format;
     if (obj instanceof Array) {
       str = '';
@@ -140,10 +151,10 @@
             // {@value: ..., @language: ...}
             if (item['@language'] == "en") {
               value += item['@value'];
-              value += "<br/>";                  
+              value += "<br/>";
             }
           }
-        });        
+        });
         mdList.description = value;
       }
 
@@ -170,11 +181,11 @@
                 value = what['@value'];
               }
             });
-          } 
+          }
         mdList[label] = value;
         });
       }
- 
+
       return mdList;
     },
 
@@ -208,30 +219,77 @@
   },
 
     bindEvents: function() {
+      var _this = this;
+      jQuery.subscribe('ANNOTATIONS_LIST_UPDATED', function(event, options) {
+        _this.updateMetadata(options);
+      });
     },
 
     toggle: function(stateValue) {
-        if (stateValue) { 
-            this.show(); 
+        if (stateValue) {
+            this.show();
         } else {
             this.hide();
         }
     },
-    
+
+    isMetadataAnnotation: function(annotation) {
+      if (typeof annotation.motivation !== 'undefined' &&
+          typeof annotation.motivation.indexOf === 'function' &&
+          annotation.motivation.indexOf('oa:describing') >= 0 ) {
+            // We are reserving 'oa:describing' annotation type
+            // to provide image specific metadata.
+            return true;
+      }
+      return false;
+    },
+
+    findImageAnnotation: function() {
+      var imageAnnotation;
+      var annotations = this.state.windowsAnnotationsLists[this.windowId];
+      if (typeof annotations !== 'undefined') {
+        for (var i=0, len=annotations.length; i<len && !imageAnnotation; i++) {
+          var annotation = annotations[i];
+          if (this.isMetadataAnnotation(annotation)) {
+            imageAnnotation = annotation;
+          }
+        }
+      }
+      return imageAnnotation;
+    },
+
+    updateMetadata: function(options) {
+      // This was a refresh due to an updated list of
+      // annotations being loaded, we only change our
+      // metadata if the the annotations have been updated
+      // for our window.
+      if (typeof options !== 'undefined') {
+        if (options.windowId !== this.windowId) {
+          return;
+        }
+      }
+      var currentImageAnnotation = this.findImageAnnotation();
+      if (typeof currentImageAnnotation !== 'undefined') {
+        this.imageMetadata = currentImageAnnotation.resource;
+        this.init();
+      }
+    },
+
     show: function() {
+        this.updateMetadata();
         var element = jQuery(this.element);
         if (this.panel) {
             element = element.parent();
         }
-        element.show({effect: "slide", direction: "right", duration: 300, easing: "swing"});    
+        element.show({effect: "slide", direction: "right", duration: 300, easing: "swing"});
     },
-    
+
     hide: function() {
         var element = jQuery(this.element);
         if (this.panel) {
             element = element.parent();
         }
-        element.hide({effect: "slide", direction: "right", duration: 300, easing: "swing"});    
+        element.hide({effect: "slide", direction: "right", duration: 300, easing: "swing"});
     },
 
     addLinksToUris: function(text) {
@@ -252,9 +310,17 @@
 
       return textWithLinks;
     },
-    
+
     template: Handlebars.compile([
-    '<div class="sub-title">{{t "details"}}:</div>',
+    '{{#if imageMetadata}}',
+      '<div class="sub-title">{{t "mediadetails"}}:</div>',
+        '<div class="{{metadataListingCls}}">',
+          '{{#each imageMetadata}}',
+            '<div class="metadata-item"><div class="metadata-label">{{label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
+          '{{/each}}',
+        '</div>',
+   '{{/if}}',
+    '<div class="sub-title">{{t "collectiondetails"}}:</div>',
         '<div class="{{metadataListingCls}}">',
           '{{#each details}}',
             '<div class="metadata-item"><div class="metadata-label">{{label}}:</div><div class="metadata-value">{{{value}}}</div></div>',

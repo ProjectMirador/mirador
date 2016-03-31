@@ -1,5 +1,5 @@
 {
-    "addItem": "Ajouter un objet", 
+    "addItem": "Ajouter un objet",
     "changeLayout": "Changer la disposition",
     "selectGrid": "Sélectionner une grille",
     "bookmark": "Ajouter aux favoris",
@@ -10,7 +10,8 @@
     "more": "restants",
     "item": "objet",
     "items": "objets",
-    "details": "Détails",
+    "mediadetails": "Détails de l'image",
+    "collectiondetails": "Détails de la collection",
     "rights": "Droits",
     "rightsStatus": "Statut des droits",
     "unspecified": "Non spécifié",

@@ -1,5 +1,5 @@
 {
-    "addItem": "Objekt hinzufügen", 
+    "addItem": "Objekt hinzufügen",
     "changeLayout": "Layout ändern",
     "selectGrid": "Anordnung auswählen",
     "bookmark": "Lesezeichen",
@@ -10,8 +10,9 @@
     "more": "mehr",
     "item": "Objekt",
     "items": "Objekte",
-    "details": "Details",
-    "rights": "Rechte", 
+    "mediadetails": "Bild-Details",
+    "collectiondetails": "Sammlung-Details",
+    "rights": "Rechte",
     "rightsStatus": "Rechtsstatus",
     "unspecified": "nicht spezifiziert",
     "links": "Links",
