@@ -1,7 +1,7 @@
-body { 
-  padding: 0; 
-  margin: 0; 
-  overflow: hidden; 
+body {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
 }
 a {
   color: inherit; /* blue colors for links too */
@@ -86,9 +86,9 @@ a {
   #load-controls form {
     float: none;
   }
-  
+
   #url-load-form {
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
   }
 }
 
@@ -490,7 +490,7 @@ li.highlight {
   margin-right: 6px;
 }
 #url-load-form {
-  float: right; 
+  float: right;
 }
 #url-load-form input[type="text"] {
   width: 250px;
@@ -505,7 +505,7 @@ li.highlight {
   color:black;
 }
 #manifest-search-form input:focus, #url-load-form input:focus,
-#manifest-search-form input:focus, 
+#manifest-search-form input:focus,
 #url-load-form input:focus,
 #url-load-form input[type="submit"]:hover{
   outline:none;
@@ -1707,7 +1707,7 @@ a.mirador-icon-annotations [class^="icon-"] {
 ul.dropdown {
   display: none;
   width: 160px;
-  z-index: 3;
+  z-index: 7;
   opacity: 0.9;
   background-color: #efefef;
   text-align: center;
@@ -1777,11 +1777,11 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   padding-bottom:30px;
 }
 
-.mirador-viewer a.mirador-icon-image-view:hover, 
-.mirador-viewer a.mirador-icon-thumbs-view:hover, 
-.mirador-viewer a.mirador-icon-metadata-view:hover, 
-.mirador-viewer a.mirador-icon-empty-slot:hover, 
-.mirador-viewer a.mirador-icon-window-menu:hover, 
+.mirador-viewer a.mirador-icon-image-view:hover,
+.mirador-viewer a.mirador-icon-thumbs-view:hover,
+.mirador-viewer a.mirador-icon-metadata-view:hover,
+.mirador-viewer a.mirador-icon-empty-slot:hover,
+.mirador-viewer a.mirador-icon-window-menu:hover,
 .mirador-viewer a.mirador-icon-toc:hover {
   color: black;
 }

@@ -271,7 +271,7 @@
       });
 
       jQuery.subscribe('UPDATE_FOCUS_IMAGES.' + this.id, function(event, images) {
-        _this.updateFocusImages(images.array); 
+        _this.updateFocusImages(images.array);
       });
 
       jQuery.subscribe('HIDE_ICON_TOC.' + this.id, function(event) {
@@ -464,7 +464,7 @@
         this.sidePanel.update('annotations', annotationsTabAvailable);
       }
     },
- 
+
     get: function(prop, parent) {
       if (parent) {
         return this[parent][prop];
@@ -755,7 +755,10 @@
               value['@id'] = $.genUUID();
             }
             //indicate this is a manifest annotation - which affects the UI
-            value.endpoint = "manifest";
+            if (typeof value.endpoint ===  'undefined') {
+              //indicate this is a manifest annotation - which affects the UI
+              value.endpoint = "manifest";
+            }
           });
           jQuery.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         });

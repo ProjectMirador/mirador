@@ -1,5 +1,5 @@
 {
-    "addItem": "أضف عنصراً", 
+    "addItem": "أضف عنصراً",
     "changeLayout": "غيّر الإطار",
     "selectGrid": "اختر تقسيم الشاشة في الأسفل",
     "bookmark": "أضف للمفضلة",
@@ -10,8 +10,9 @@
     "more": "أكثر",
     "item": "عنصر",
     "items": "عناصر",
-    "details": "تفاصيل",
-    "rights": "الحقوق", 
+    "mediadetails": "تفاصيل الصورة",
+    "collectiondetails": "تفاصيل المجموعات",
+    "rights": "الحقوق",
     "rightsStatus": "حالة الحقوق",
     "unspecified": "غير محدد",
     "links": "روابط",
@@ -34,6 +35,3 @@
     "fullScreen": "ملء الشاشة",
     "logo": "الشعار"
 }
-
-
-

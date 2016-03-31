@@ -115,6 +115,18 @@
       this.svgOverlay.restoreEditedShapes();
     },
 
+    isImageAnnotation: function(annotation) {
+      if (typeof annotation.motivation !== 'undefined' &&
+              typeof annotation.motivation.indexOf === 'function' &&
+              annotation.motivation.indexOf('oa:describing') >= 0 ) {
+          // We are reserving 'oa:describing' annotation type
+          // to provide image specific metadata.
+          return false;
+      }
+      // Everything else we assume is an image annotation.
+      return true;
+    },
+
     render: function() {
       this.svgOverlay.restoreEditedShapes();
       this.svgOverlay.paperScope.activate();
@@ -122,25 +134,31 @@
       var _this = this;
       _this.annotationsToShapesMap = {};
       var deferreds = jQuery.map(this.list, function(annotation) {
-        var deferred = jQuery.Deferred();
-        var shapeArray;
-        if (typeof annotation.on === 'object') {
-          if (annotation.on.selector.value.indexOf('<svg') != -1) {
-            shapeArray = _this.svgOverlay.parseSVG(annotation.on.selector.value, annotation);
+
+        var deferred;
+
+        if ( _this.isImageAnnotation(annotation) ) {
+          deferred = jQuery.Deferred();
+          var shapeArray;
+          if (typeof annotation.on === 'object') {
+            if (annotation.on.selector.value.indexOf('<svg') != -1) {
+              shapeArray = _this.svgOverlay.parseSVG(annotation.on.selector.value, annotation);
+            } else {
+              var shape = annotation.on.selector.value.split('=')[1].split(',');
+              shape = _this.svgOverlay.viewer.viewport.imageToViewportRectangle(shape[0], shape[1], shape[2], shape[3]);
+              shapeArray = _this.svgOverlay.createRectangle(shape, annotation);
+            }
           } else {
-            var shape = annotation.on.selector.value.split('=')[1].split(',');
-            shape = _this.svgOverlay.viewer.viewport.imageToViewportRectangle(shape[0], shape[1], shape[2], shape[3]);
-            shapeArray = _this.svgOverlay.createRectangle(shape, annotation);
+            var shapeObj = annotation.on.split('#')[1].split('=')[1].split(',');
+            shapeObj = _this.svgOverlay.viewer.viewport.imageToViewportRectangle(shapeObj[0], shapeObj[1], shapeObj[2], shapeObj[3]);
+            shapeArray = _this.svgOverlay.createRectangle(shapeObj, annotation);
           }
-        } else {
-          var shapeObj = annotation.on.split('#')[1].split('=')[1].split(',');
-          shapeObj = _this.svgOverlay.viewer.viewport.imageToViewportRectangle(shapeObj[0], shapeObj[1], shapeObj[2], shapeObj[3]);
-          shapeArray = _this.svgOverlay.createRectangle(shapeObj, annotation);
+          _this.svgOverlay.restoreLastView(shapeArray);
+          _this.annotationsToShapesMap[$.genUUID()] = shapeArray;
         }
-        _this.svgOverlay.restoreLastView(shapeArray);
-        _this.annotationsToShapesMap[$.genUUID()] = shapeArray;
         return deferred;
       });
+      
       jQuery.when.apply(jQuery, deferreds).done(function() {
         jQuery.publish('overlaysRendered.' + _this.windowId);
       });
