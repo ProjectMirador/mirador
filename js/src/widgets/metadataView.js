@@ -128,25 +128,8 @@
       // TODO: This should not default to English
       var mdList = {
         'label': '<b>' + ($.JsonLd.getTextValue(jsonLd.label) || '') + '</b>',
-        'description':  jsonLd.description || ''
+        'description':  $.JsonLd.getTextValue(jsonLd.description) || ''
       };
-      var value = "";
-      var label = "";
-      if (typeof mdList.description == "object") {
-        jQuery.each(mdList.description, function(index, item) {
-          if (typeof item == "string") {
-            value += item;
-            value += "<br/>";
-          } else {
-            // {@value: ..., @language: ...}
-            if (item['@language'] == "en") {
-              value += item['@value'];
-              value += "<br/>";
-            }
-          }
-        });        
-        mdList.description = value;
-      }
 
       if (jsonLd.metadata) {
         value = "";

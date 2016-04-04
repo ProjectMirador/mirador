@@ -5,11 +5,14 @@
       if (typeof language === 'undefined') { language = "en"; }
       if (typeof propertyValue === 'string') { return propertyValue; }
       else if (Array.isArray(propertyValue)) {
-        var text;
-        jQuery.each(propertyValue, function(i3, what) {
-          // {@value: ..., @language: ...}
-          if (!text || what['@language'] === language) {
-            text = what['@value'];
+        var text = '';
+        jQuery.each(propertyValue, function(index, item) {
+          if (typeof item === "string") {
+            text += item;
+            text += "<br/>";
+          } else if (!text || item['@language'] === language) {
+            // {@value: ..., @language: ...}
+              text = item['@value'];
           }
         });
         return text;
