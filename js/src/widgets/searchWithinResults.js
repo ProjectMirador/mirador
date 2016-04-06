@@ -31,6 +31,7 @@
       _this.searchService = this.manifest.getSearchWithinService();
 
       jQuery(this.appendTo).empty();
+      
       jQuery("<h1>Search results for: " + _this.query + "</h1>").appendTo(_this.appendTo);
 
       this.searchRequest(this.query).done(function(searchResults) {

@@ -140,9 +140,9 @@ $.SearchWidget.prototype = {
      * Example usage: {{> searchWithinWidget }}
      */
     Handlebars.registerPartial('searchWithinWidget',[
-      '<div class="searchResults" style="display: none;">',
+      '<div class="searchResults">',
         '<a href="javascript:;" class="mirador-btn js-close-search-within" title="close">',
-         '<i class="fa fa-times fa-lg"></i>',
+         '<i class="fa fa-times fa-lg">Close</i>',
         '</a>',  // Close button
         '<form id="search-form" class="js-perform-query">',
           '<input class="js-query" type="text" placeholder="search"/>',
