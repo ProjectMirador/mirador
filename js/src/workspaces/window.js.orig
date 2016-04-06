@@ -21,6 +21,7 @@
       focusOverlaysAvailable: {
         'ThumbnailsView': {
           'overlay' : {'MetadataView' : false},
+<<<<<<< HEAD
           'bottomPanel' : {'' : false}
         },
         'ImageView': {
@@ -34,6 +35,29 @@
         'BookView': {
           'overlay' : {'MetadataView' : false},
           'bottomPanel' : {'ThumbnailsView' : true}
+=======
+          'sidePanel' : {'TableOfContents' : true},
+          'bottomPanel' : {'' : false},
+          'searchWidget' : {'SearchWidget' : false}
+        },
+        'ImageView': {
+          'overlay' : {'MetadataView' : false},
+          'sidePanel' : {'TableOfContents' : true},
+          'bottomPanel' : {'ThumbnailsView' : true},
+          'searchWidget' : {'SearchWidget' : false}
+        },
+        'ScrollView': {
+          'overlay' : {'MetadataView' : false},
+          'sidePanel' : {'TableOfContents' : true},
+          'bottomPanel' : {'' : false},
+          'searchWidget' : {'SearchWidget' : false}
+        },
+        'BookView': {
+          'overlay' : {'MetadataView' : false},
+          'sidePanel' : {'TableOfContents' : true},
+          'bottomPanel' : {'ThumbnailsView' : true},
+          'searchWidget' : {'SearchWidget' : false}
+>>>>>>> feature/search-within
         }
       },
       focusOptions: null,
@@ -68,7 +92,9 @@
         "slotLeft" : true,
         "slotAbove" : true,
         "slotBelow" : true
-      }
+      },
+      searchWidget: null,
+      searchWidgetVisible: false
     }, options);
 
     this.init();
@@ -138,6 +164,16 @@
         templateData.MetadataView = true;
       }
 
+      if (typeof this.searchWidgetAvailable !== 'undefined' && !this.searchWidgetAvailable) {
+        // Set the 'searchWidget' overlay not available in all views
+        jQuery.each(this.focusOverlaysAvailable, function(key, value) {
+          _this.focusOverlaysAvailable[key].overlay = {'': false};
+        });
+        templateData.searchPanel = false;
+      } else {
+        templateData.searchPanel = true;
+      }
+
       //determine if any buttons should be hidden in template
       jQuery.each(this.focuses, function(index, value) {
         templateData[value] = true;
@@ -151,6 +187,7 @@
           return _this.layoutOptions[element] === false;
         });
       }
+
       _this.element = jQuery(this.template(templateData)).appendTo(_this.appendTo);
       jQuery.publish('WINDOW_ELEMENT_UPDATED', {windowId: _this.id, element: _this.element});
 
@@ -188,8 +225,11 @@
 
       if (this.imagesList.length === 1) {
         this.bottomPanelVisibility(false);
+<<<<<<< HEAD
       } else {
         this.bottomPanelVisibility(this.bottomPanelVisible);
+=======
+>>>>>>> feature/search-within
       }
       this.sidePanelVisibility(this.sidePanelVisible, '0s');
     },
@@ -224,6 +264,22 @@
 
     listenForActions: function() {
       var _this = this;
+<<<<<<< HEAD
+=======
+
+      //this event should trigger from layout
+      jQuery.subscribe('windowResize', $.debounce(function(){
+        if (_this.focusModules.ScrollView) {
+          var containerHeight = _this.element.find('.view-container').height();
+          var triggerShow = false;
+          if (_this.currentFocus === "ScrollView") {
+            triggerShow = true;
+          }
+          _this.focusModules.ScrollView.reloadImages(Math.floor(containerHeight * _this.scrollImageRatio), triggerShow);
+        }
+      }, 300));
+
+>>>>>>> feature/search-within
       jQuery.subscribe('bottomPanelSet.' + _this.id, function(event, visible) {
         var panel = _this.element.find('.bottomPanel');
         if (visible === true) {
@@ -300,6 +356,7 @@
       });
     },
 
+<<<<<<< HEAD
     bindEvents: function() {
       var _this = this;
 
@@ -317,6 +374,8 @@
 
     },
 
+=======
+>>>>>>> feature/search-within
     bindAnnotationEvents: function() {
       var _this = this;
       jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
@@ -347,7 +406,11 @@
               return false;
             }
           });
+<<<<<<< HEAD
           jQuery.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
+=======
+          jQuery.publish(('annotationListLoaded.' + _this.id));
+>>>>>>> feature/search-within
         },
         function() {
           console.log("There was an error updating this annotation");
@@ -360,7 +423,10 @@
         _this.endpoint.deleteAnnotation(annoId, function() {
           _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== annoId; });
           jQuery.publish(('removeOverlay.' + _this.id), annoId);
+<<<<<<< HEAD
           jQuery.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
+=======
+>>>>>>> feature/search-within
         },
         function() {
           // console.log("There was an error deleting this annotation");
@@ -386,6 +452,7 @@
       this.sidePanel = null;
       this.bottomPanel = null;
       this.overlay = null;
+      this.searchWidget = null;
     },
 
     // only panels and overlay available to this view, make rest hidden while on this view
@@ -399,8 +466,12 @@
             _this[panelType] = new $[view]({
               manifest: _this.manifest,
               appendTo: _this.element.find('.'+panelType),
+<<<<<<< HEAD
               state:  _this.state,
               windowId: _this.id,
+=======
+              parent: _this,
+>>>>>>> feature/search-within
               panel: true,
               canvasID: _this.currentCanvasID,
               imagesList: _this.imagesList,
@@ -538,10 +609,14 @@
         this.focusModules[this.currentFocus].adjustHeight('focus-max-height', panelState);
       } else if (panelType === 'sidePanel') {
         this.focusModules[this.currentFocus].adjustWidth('focus-max-width', panelState);
+      } else if (panelType === 'searchWidget') {
+
+      }
     },
 
     toggleMetadataOverlay: function(focusState) {
       var _this = this;
+      //returns boolean, true or false
       var currentState = this.focusOverlaysAvailable[focusState].overlay.MetadataView;
       if (currentState) {
         this.element.find('.mirador-icon-metadata-view').removeClass('selected');
@@ -592,8 +667,12 @@
         this.focusModules.ThumbnailsView = new $.ThumbnailsView({
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
+<<<<<<< HEAD
           state:  this.state,
           windowId: this.id,
+=======
+          parent: this,
+>>>>>>> feature/search-within
           canvasID: this.currentCanvasID,
           imagesList: this.imagesList
         });
@@ -610,8 +689,13 @@
         this.focusModules.ImageView = new $.ImageView({
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
+<<<<<<< HEAD
           windowId: this.id,
           state:  this.state,
+=======
+          parent: this,
+          windowId: this.id,
+>>>>>>> feature/search-within
           canvasID: canvasID,
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
@@ -635,8 +719,13 @@
         this.focusModules.BookView = new $.BookView({
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
+<<<<<<< HEAD
           windowId: this.id,
           state:  this.state,
+=======
+          parent: this,
+          windowId: this.id,
+>>>>>>> feature/search-within
           canvasID: canvasID,
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
@@ -657,8 +746,12 @@
         this.focusModules.ScrollView = new $.ScrollView({
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
+<<<<<<< HEAD
           state:  this.state,
           windowId: this.id,
+=======
+          parent: this,
+>>>>>>> feature/search-within
           canvasID: this.currentCanvasID,
           imagesList: this.imagesList,
           thumbInfo: {thumbsHeight: Math.floor(containerHeight * this.scrollImageRatio), listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}
@@ -708,7 +801,16 @@
 
     updateManifestInfo: function() {
       var _this = this;
+
+      // Determine whether or not the search panel was open. If so, its
+      // icon must remain selected after this update.
+      var searchIcon = this.element.find('.mirador-icon-search-within');
+      var searchSelected = searchIcon.hasClass('selected');
+
       this.element.find('.window-manifest-navigation').children().removeClass('selected');
+      if (searchSelected) {
+        searchIcon.addClass('selected');
+      }
       switch(_this.currentFocus) {
         case 'ThumbnailsView':
           //hide thumbnails button and highlight currentImageMode?
@@ -865,7 +967,13 @@
                                  '<div class="window">',
                                  '<div class="manifest-info">',
                                  '<div class="window-manifest-navigation">',
+<<<<<<< HEAD
                                  '<a href="javascript:;" class="mirador-btn mirador-icon-image-view" role="button" aria-label="Change Image Mode"><i class="fa fa-photo fa-lg fa-fw"></i>',
+=======
+                                //  '{{> searchWithinButton}}',      // Need a better way to insert this button here!
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-search-within" title="Search within this object."><i class="fa fa-search fa-lg fa-fw"></i></a>',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-image-view"><i class="fa fa-photo fa-lg fa-fw"></i>',
+>>>>>>> feature/search-within
                                  '<ul class="dropdown image-list">',
                                  '{{#if ImageView}}',
                                  '<li class="single-image-option"><i class="fa fa-photo fa-lg fa-fw"></i> {{t "imageView"}}</li>',
@@ -916,6 +1024,12 @@
                                  '<h3 class="window-manifest-title">{{title}}</h3>',
                                  '</div>',
                                  '<div class="content-container">',
+                                 // ----- Search within widget -----
+                                 '{{#if searchPanel}}',
+                                 '<div class="searchWidget"></div>',
+                                 '{{/if}}',
+                                //  '{{> searchWithinWidget }}',
+                                 // ----- End search within -----
                                  '{{#if sidePanel}}',
                                  '<div class="sidePanel">',
                                  '</div>',

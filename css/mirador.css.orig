@@ -1897,6 +1897,9 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 .mce-edit-area iframe {
     height: 75px !important;
 }
+<<<<<<< HEAD
+=======
+
 /* Search Within */
 .searchResults  {
   overflow: scroll;
@@ -1953,3 +1956,4 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 .search-results-list .result-wrapper .result-paragraph .highlight {
   background-color: rgb(255, 255, 0);
 }
+>>>>>>> feature/search-within
