@@ -7,9 +7,10 @@
             manifest:          null,
             panelState:        {},
             tocTabAvailable:   false,
-            annotationsTabAvailable: false,
+            annotationsTabAvailable: true,
             layersTabAvailable: false,
-            toolsTabAvailable: false,
+            toolsTabAvailable: true,
+            searchTabAvailable: true,
             hasStructures:     false
         }, options);
 
@@ -30,15 +31,15 @@
                         label:'Index'
                     }
                 },
-                /*{
+                {
                     name : 'annotations',
                     options : {
                         available: _this.annotationsTabAvailable,
                         id:'annotationsTab', 
                         label:'Annotations'
                     }
-                },*/
-                /*{
+                },
+                {
                     name : 'layers',
                     options : {
                         available: _this.layersTabAvailable,
@@ -53,7 +54,15 @@
                         id:'toolsTab', 
                         label:'Tools'
                     }
-                }*/
+                },
+                {
+                    name : 'search',
+                    options : {
+                        available: _this.searchTabAvailable,
+                        id:'searchTab', 
+                        label:'Search'
+                    }
+                }
                 ],
                 width: 280,
                 open: true
@@ -86,6 +95,14 @@
             }
             if (_this.annotationsTabAvailable) {
                 new $.AnnotationsTab({
+                    manifest: _this.manifest,
+                    windowId: this.windowId,
+                    appendTo: _this.element.find('.tabContentArea'),
+                    tabs: _this.sidePanelState.tabs
+                });
+            } 
+            if (_this.searchTabAvailable) {
+                new $.SearchWidget({
                     manifest: _this.manifest,
                     windowId: this.windowId,
                     appendTo: _this.element.find('.tabContentArea'),

@@ -11,7 +11,7 @@
  * @return {[type]}         Search Within widget
  */
 $.SearchWidget = function(options) {
-
+  
   jQuery.extend(this, {
     parent: null,   // Window object. To get window ID: this.parent.id
     appendTo: null,

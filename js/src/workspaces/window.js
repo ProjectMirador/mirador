@@ -536,8 +536,10 @@
     adjustFocusSize: function(panelType, panelState) {
       if (panelType === 'bottomPanel') {
         this.focusModules[this.currentFocus].adjustHeight('focus-max-height', panelState);
-      } else if (panelType === 'sidePanel') {
+      } 
+      else if (panelType === 'sidePanel') {
         this.focusModules[this.currentFocus].adjustWidth('focus-max-width', panelState);
+      }
     },
 
     toggleMetadataOverlay: function(focusState) {
