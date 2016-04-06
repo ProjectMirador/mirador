@@ -11,7 +11,6 @@
  * @return {[type]}         Search Within widget
  */
 $.SearchWidget = function(options) {
-  
   jQuery.extend(this, {
     parent: null,   // Window object. To get window ID: this.parent.id
     appendTo: null,
@@ -31,7 +30,7 @@ $.SearchWidget.prototype = {
   init: function() {
     var _this = this;
     this.registerWidget();
-
+    console.log(this.appendTo);
     var templateData = {};
     templateData.search = this.search;
 
@@ -75,6 +74,8 @@ $.SearchWidget.prototype = {
   bindEvents: function() {
     var _this = this;
 
+    /*
+
     jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
       if (_this.parent.element.find('.mirador-icon-search-within').hasClass('selected')) {
         var newWidth = _this.parent.element.width() - _this.element.width();
@@ -92,7 +93,7 @@ $.SearchWidget.prototype = {
     this.parent.element.find('.mirador-btn.js-close-search-within').on('click', function() {
       _this.toggle();
     });
-
+    */
     this.element.find('.search-disclose-btn-more').on('click', function() {
       _this.element.find('#search-form').hide('fast');
       _this.element.find('.search-disclose').show('fast');

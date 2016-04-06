@@ -104,9 +104,10 @@
             if (_this.searchTabAvailable) {
                 new $.SearchWidget({
                     manifest: _this.manifest,
+                    parent: _this.parent,
                     windowId: this.windowId,
+                    widgetId: "searchTab",
                     appendTo: _this.element.find('.tabContentArea'),
-                    tabs: _this.sidePanelState.tabs
                 });
             }
 
