@@ -13,11 +13,12 @@
     jQuery.extend(this, {
       manifest:             null,
       element:              null,
-      parent:               null,
       metadataTypes:        null,
       metadataListingCls:   'metadata-listing',
       query:                null,
       searchService:        null,
+      windowId:       null,
+
     }, options);
 
     this.init();
@@ -241,7 +242,16 @@
   bindEvents: function() {
     var _this = this;
 
+    jQuery.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event, canvasID) {
+        //if (!_this.structures) { return; }
+        //_this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, canvasID));
+        //_this.render();
+        
+      });
+
     this.element.find('.js-show-canvas').on("click", function() {
+      event.stopPropagation();
+
       var canvasid = jQuery(this).attr('data-canvasid');
       var coordinates = jQuery(this).attr('data-coordinates');
       jQuery(".result-wrapper").css("background-color", "inherit");
@@ -260,9 +270,15 @@
         "on": canvasid + (coordinates ? "#" + coordinates : '')
         }];
 
-      _this.parent.annotationsList = miniAnnotationList;
-      _this.parent.parent.setCurrentCanvasID(canvasid);
+      //_this.parent.annotationsList = miniAnnotationList;
+      console.log(_this.parent);
+      //_this.parent.setCurrentCanvasID(canvasid);
+      jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasid);
+
+      
     });
+
+
   },
 
   /**

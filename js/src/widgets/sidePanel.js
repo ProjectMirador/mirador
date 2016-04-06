@@ -102,12 +102,14 @@
                 });
             } 
             if (_this.searchTabAvailable) {
-                new $.SearchWidget({
+                new $.SearchTab({
                     manifest: _this.manifest,
                     parent: _this.parent,
                     windowId: this.windowId,
                     widgetId: "searchTab",
+                    canvasID: this.canvasID,
                     appendTo: _this.element.find('.tabContentArea'),
+                    //tabs: _this.sidePanelState.tabs
                 });
             }
 

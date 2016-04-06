@@ -44,7 +44,8 @@
         getTemplateData: function() {
             return {
                 annotationsTab: this.state().annotationsTab,
-                tocTab: this.state().tocTab
+                tocTab: this.state().tocTab,
+                searchTab: this.state().searchTab
             };
         },
         listenForActions: function() {
