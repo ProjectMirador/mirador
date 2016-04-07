@@ -43,11 +43,13 @@
             var _this = this;
 
         },
-        tabStateUpdated: function(visible) {
-            var state = this.state();
-            state.visible = state.visible ? false : true;
-
-            this.state(state);
+        tabStateUpdated: function(data) {
+            if (data.tabs[data.selectedTabIndex].options.id === 'searchTab') {
+                this.element.show();
+            } 
+            else {
+                this.element.hide();
+            }
         },
         
         
@@ -55,12 +57,12 @@
         listenForActions: function() {
             var _this = this;
 
-            jQuery.subscribe('searchTabStateUpdated.' + _this.windowId, function(_, data) {
-                _this.render(data);
-            });
+            //jQuery.subscribe('searchTabStateUpdated.' + _this.windowId, function(_, data) {
+            //    _this.render(data);
+            //});
 
             jQuery.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
-                _this.tabStateUpdated(data.annotationsTab);
+                _this.tabStateUpdated(data);
             });
 
             jQuery.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event) {

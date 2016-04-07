@@ -107,33 +107,36 @@
   getSearchAnnotations: function(searchResults) {
     var _this = this;
     tplData = [];
-    searchResults.resources.forEach(function(result){
-      // Set to resouce.on, which is usually a simple String ID
-      var canvasid = result.on;
-      var canvaslabel = _this.getLabel(result);
+    //add condition here to make sure searchResults.resources is not null
+    if (searchResults.resources !== null) {
+      searchResults.resources.forEach(function(result){
+        // Set to resouce.on, which is usually a simple String ID
+        var canvasid = result.on;
+        var canvaslabel = _this.getLabel(result);
 
-      if (!canvaslabel) {   // Do not add this result if no label is found
-        return;
-      }
+        if (!canvaslabel) {   // Do not add this result if no label is found
+          return;
+        }
 
-      // If resource.on is an Object, containing extra information about the
-      // parent object, set ID appropriately
-      if (typeof canvasid === 'object') {
-        canvasid = result.on['@id'];
-      }
+        // If resource.on is an Object, containing extra information about the
+        // parent object, set ID appropriately
+        if (typeof canvasid === 'object') {
+          canvasid = result.on['@id'];
+        }
 
-      // Split ID from Coordinates if necessary
-      var id_parts = _this.splitBaseUrlAndCoordinates(canvasid);
+        // Split ID from Coordinates if necessary
+        var id_parts = _this.splitBaseUrlAndCoordinates(canvasid);
 
-      resultobject = {
-        canvasid: id_parts.base,
-        coordinates: id_parts.coords,
-        canvaslabel: canvaslabel,
-        resulttext: result.resource.chars
-      };
+        resultobject = {
+          canvasid: id_parts.base,
+          coordinates: id_parts.coords,
+          canvaslabel: canvaslabel,
+          resulttext: result.resource.chars
+        };
 
-      tplData.push(resultobject);
-    });
+        tplData.push(resultobject);
+      });
+    }
     return tplData;
   },
 
