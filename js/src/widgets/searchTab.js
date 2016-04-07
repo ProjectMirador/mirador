@@ -95,21 +95,42 @@
 
             this.element.find(".js-perform-query").on('submit', function(event){
         		event.preventDefault();
-        		console.log("test");
         		var query = _this.element.find(".js-query").val();
         		_this.displaySearchWithin(query);
     			});
 
-            //jQuery.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
-              //  _this.tabStateUpdated(data);
-            //});
+          this.element.find(".js-search-expand").on('click', function(event){
+            event.preventDefault();
+            
+            _this.element.find(".js-search-expanded").slideToggle("slow", function(){
+            });
+
+            console.log(jQuery(this).text());
+              if (jQuery(this).text() === "more"){
+                jQuery(this).html("less");
+              }
+              else if (jQuery(this).text() === "less"){
+                jQuery(this).html("more");
+              }
+            
+            
+            //this is weird; if I don't add exit here, the toggle occurs twice 
+            //and the menu shows and the hides itself
+            // exit is not even a viable javscript keyword here
+            // it just serves to break the function and stops it from occuring twice.
+            exit;
+          });
+
 
             
 
         },
         render: function(state) {
-            var _this = this,
+            var _this = this;
+            
+
                 templateData = {
+                  searchService: this.manifest.getSearchWithinService()["@id"]
                     
                 };
             if (!this.element) {
@@ -129,10 +150,24 @@
         },
         template: Handlebars.compile([
             '<div class="searchResults">',
+                '<select style="width: 100%">',
+                  '<option>Select Search Services</option>',
+                  '<option>{{ searchService }}</option>',
+                '</select>',
                 '<form id="search-form" class="js-perform-query">',
                   '<input class="js-query" type="text" placeholder="search"/>',
-                  '<input type="submit"/>',
+
+                  '<input style="margin: 10px 0" type="submit"/>',
+                  
+                  '<a class="js-search-expand" style="display: block; margin: 0 0 5px 0">more</a>',   
+                  '<div class="js-search-expanded" style="display: none;">',
+                    '<input class="js-motivation" type="text" placeholder="painting"/>',
+                    '<input class="js-date" type="text" placeholder="date"/>',
+                    '<input class="js-user" type="text" placeholder="user"/>',
+                    '<input class="js-box" type="text" placeholder="box"/>',
+                  '</div>',
                 '</form>',
+                
             '<div class="search-results-list"></div>',
             '</div>',
         ].join(''))
