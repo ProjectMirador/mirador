@@ -93,7 +93,10 @@
       });
 
       this.manifestsPanel = new $.ManifestsPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state });
-      this.bookmarkPanel = new $.BookmarkPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state });
+      //only instatiate bookmarkPanel if we need it
+      if (showMainMenu && this.state.getStateProperty('mainMenuSettings').buttons.bookmark) {
+        this.bookmarkPanel = new $.BookmarkPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state });
+      }
 
       // set this to be displayed
       this.set('currentWorkspaceVisible', true);
