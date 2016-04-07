@@ -60,7 +60,16 @@
       jQuery.each(this.state.getStateProperty('mainMenuSettings').buttons, function(key, value) {
         if (value) { showMainMenu = true; }
       });
-      //even if buttons are available, developer can override and set show to false
+      // but, mainMenu should be displayed if we have userButtons and/or userLogo defined
+      if (this.state.getStateProperty('mainMenuSettings').userButtons && this.state.getStateProperty('mainMenuSettings').userButtons.length > 0) {
+        showMainMenu = true;
+      }
+      if (this.state.getStateProperty('mainMenuSettings').userLogo && !jQuery.isEmptyObject(this.state.getStateProperty('mainMenuSettings').userLogo)) {
+        showMainMenu = true;
+      }
+
+      //even if all these buttons are available, developer can override and set show to false,
+      //in which case, don't show mainMenu at all
       if (this.state.getStateProperty('mainMenuSettings').show === false) {
         showMainMenu = false;
       }
