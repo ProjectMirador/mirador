@@ -12,7 +12,7 @@
   };
 
   $.Overlay = function(viewer, osdViewerId, windowId, state) {
-    var drawingToolsSettings = state.getStateProperty('drawingToolsSettings'), 
+    var drawingToolsSettings = state.getStateProperty('drawingToolsSettings'),
     availableAnnotationDrawingTools = state.getStateProperty('availableAnnotationDrawingTools');
     jQuery.extend(this, {
       disabled: true,
@@ -545,7 +545,7 @@
     getName: function(tool) {
       return tool.idPrefix + $.genUUID();
     },
-    
+
     getSVGString: function(shapes) {
       var svg = "<svg xmlns='http://www.w3.org/2000/svg'>";
       if (shapes.length > 1) {
@@ -591,169 +591,52 @@
       this.path = null;
       this.mode = '';
       this.draftPaths.push(shape);
-      var _this = this;
       var annoTooltip = new $.AnnotationTooltip({
-        "windowId": _this.windowId
+        targetElement: jQuery(this.canvas).parents('.mirador-osd'),
+        state: this.state,
+        windowId: this.windowId
       });
-      if (!_this.commentPanel) {
-        _this.commentPanel = jQuery(_this.canvas).parents('.mirador-osd').qtip({
-          content: {
-            text: annoTooltip.getEditor({})
-          },
-          position: {
-            my: 'center',
-            at: 'center'
-          },
-          style: {
-            classes: 'qtip-bootstrap qtip' + _this.windowId
-          },
-          show: {
-            event: false
-          },
-          hide: {
-            fixed: true,
-            delay: 300,
-            event: false
-          },
-          events: {
-            render: function(event, api) {
-              jQuery.publish('annotationEditorAvailable.' + _this.windowId);
-              jQuery.publish('disableTooltips.' + _this.windowId);
-
-              var selector = '#annotation-editor-' + _this.windowId;
-              jQuery(selector).parent().parent().draggable();
-
-              tinymce.init({
-                selector: selector + ' textarea',
-                plugins: "image link media",
-                menubar: false,
-                statusbar: false,
-                toolbar_items_size: 'small',
-                toolbar: "bold italic | bullist numlist | link image media | removeformat",
-                setup: function(editor) {
-                  editor.on('init', function(args) {
-                    tinymce.execCommand('mceFocus', false, args.target.id);
-                  });
-                }
-              });
-
-              jQuery(selector).on("submit", function(event) {
-                event.preventDefault();
-                jQuery(selector + ' a.save').click();
-              });
-
-              jQuery(selector + ' a.cancel').on("click", function(event) {
-                event.preventDefault();
-                var content = tinymce.activeEditor.getContent();
-                if (content) {
-                  if (!window.confirm("Do you want to cancel this annotation?")) {
-                    return false;
-                  }
-                }
-                api.destroy();
-
-                // clear draft data.
-                for (var idx = 0; idx < _this.draftPaths.length; idx++) {
-                  _this.draftPaths[idx].remove();
-                }
-                _this.draftPaths = [];
-                if (_this.path) {
-                  _this.path.remove();
-                }
-                _this.paperScope.view.update(true);
-                _this.paperScope.project.activeLayer.selected = false;
-                _this.hoveredPath = null;
-                _this.segment = null;
-                _this.path = null;
-                _this.mode = '';
-
-                //reenable viewer tooltips
-                jQuery.publish('enableTooltips.' + _this.windowId);
-                _this.commentPanel = null;
-              });
-
-              jQuery(selector + ' a.save').on("click", function(event) {
-                event.preventDefault();
-                var tagText = jQuery(this).parents('.annotation-editor').find('.tags-editor').val(),
-                  resourceText = tinymce.activeEditor.getContent(),
-                  tags = [];
-                tagText = $.trimString(tagText);
-                if (tagText) {
-                  tags = tagText.split(/\s+/);
-                }
-
-                var bounds = _this.viewer.viewport.getBounds(true);
-                // var scope = _this.viewer.viewport.viewportToImageRectangle(bounds);
-
-                var motivation = [],
-                  resource = [],
-                  on;
-
-                var svg = _this.getSVGString(_this.draftPaths);
-
-                if (tags && tags.length > 0) {
-                  motivation.push("oa:tagging");
-                  jQuery.each(tags, function(index, value) {
-                    resource.push({
-                      "@type": "oa:Tag",
-                      "chars": value
-                    });
-                  });
-                }
-                motivation.push("oa:commenting");
-                on = {
-                  "@type": "oa:SpecificResource",
-                  "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
-                  "selector": {
-                    "@type": "oa:SvgSelector",
-                    "value": svg
-                  }
-                  // ,
-                  // "scope": {
-                  //   "@context": "http://www.harvard.edu/catch/oa.json",
-                  //   "@type": "catch:Viewport",
-                  //   "value": "xywh=" + Math.round(scope.x) + "," + Math.round(scope.y) + "," + Math.round(scope.width) + "," + Math.round(scope.height) //osd bounds
-                  // }
-                };
-                resource.push({
-                  "@type": "dctypes:Text",
-                  "format": "text/html",
-                  "chars": resourceText
-                });
-                var oaAnno = {
-                  "@context": "http://iiif.io/api/presentation/2/context.json",
-                  "@type": "oa:Annotation",
-                  "motivation": motivation,
-                  "resource": resource,
-                  "on": on
-                };
-                //save to endpoint
-                jQuery.publish('annotationCreated.' + _this.windowId, [oaAnno, shape]);
-
-                api.destroy();
-                //reenable viewer tooltips
-                jQuery.publish('enableTooltips.' + _this.windowId);
-                _this.commentPanel = null;
-                // clear draft data.
-                for (var idx = 0; idx < _this.draftPaths.length; idx++) {
-                  _this.draftPaths[idx].remove();
-                }
-                _this.draftPaths = [];
-                if (_this.path) {
-                  _this.path.remove();
-                }
-                _this.paperScope.view.update(true);
-                _this.paperScope.project.activeLayer.selected = false;
-                _this.hoveredPath = null;
-                _this.segment = null;
-                _this.path = null;
-                _this.mode = '';
-              });
+      var _this = this;
+      annoTooltip.showEditor({
+        annotation: {},
+        onAnnotationCreated: function (oaAnno) {
+          var svg = _this.getSVGString(_this.draftPaths);
+          oaAnno.on = {
+            "@type": "oa:SpecificResource",
+            "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
+            "selector": {
+              "@type": "oa:SvgSelector",
+              "value": svg
             }
-          }
-        });
-        _this.commentPanel.qtip('show');
+          };
+
+          //save to endpoint
+          jQuery.publish('annotationCreated.' + _this.windowId, [oaAnno, shape]);
+        },
+        onCancel: function() {
+          _this.clearDraftData();
+        },
+        onCompleted: function() {
+          _this.clearDraftData();
+        }
+      });
+    },
+
+    clearDraftData: function() {
+      var _this = this;
+      for (var idx = 0; idx < _this.draftPaths.length; idx++) {
+        _this.draftPaths[idx].remove();
       }
+      _this.draftPaths = [];
+      if (_this.path) {
+        _this.path.remove();
+      }
+      _this.paperScope.view.update(true);
+      _this.paperScope.project.activeLayer.selected = false;
+      _this.hoveredPath = null;
+      _this.segment = null;
+      _this.path = null;
+      _this.mode = '';
     }
   };
 }(Mirador));

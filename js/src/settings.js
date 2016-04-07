@@ -34,7 +34,7 @@
 
     'layout': '1x1',
 
-    'openManifestsPage' : false, //defaults to false, whether or not Mirador should display the manifests page, 
+    'openManifestsPage' : false, //defaults to false, whether or not Mirador should display the manifests page,
                                 //only valid if no windowObjects have been initialized
                                 //if there are multiple slots, it will be bound to the first slot and the selected manifest will open in that slot
 
@@ -60,7 +60,7 @@
        *   "overlay" : [_true_, false] whether or not to make the overlay available/visible in this window
        *
        *   "annotationLayer" : [_true_, false] whether or not to make annotation layer available in this window
-       *   "annotationCreation" : [_true_, false] whether or not to make annotation creation available in this window, 
+       *   "annotationCreation" : [_true_, false] whether or not to make annotation creation available in this window,
        *                          only valid if annotationLayer is set to True and an annotationEndpoint is defined.
        *                          This setting does NOT affect whether or not a user can edit an individual annotation that has already been created.
        *   "annotationState" : [_'annoOff'_, 'annoOnCreateOff', 'annoOnCreateOn'] whether or not to turn on the annotation layer on window load
@@ -113,7 +113,7 @@
         'bookmark' : true,
         'layout' : true,
         'options' : false,
-        'fullScreenViewer': true 
+        'fullScreenViewer': true
       }
       //'height': 25,
       //'width': '100%'
@@ -122,7 +122,7 @@
     'workspacePanelSettings': {
       'maxRows': 5,
       'maxColumns': 5,
-      'preserveWindows': true 
+      'preserveWindows': true
     },
 
     //true or false.  controls display of "Add new object from URL" on manifest listing page
@@ -145,7 +145,7 @@
      *  {
      *  name: 'backend name',
      *  module: 'NameEndpoint',
-     *  options: 
+     *  options:
      *  { 'url': '',
      *    'storeId': 123,
      *    'APIKey': '23983hf98j3f9283jf2983fj'
@@ -153,6 +153,10 @@
      *  }
      **/
     'annotationEndpoint': {},
+    'annotationBodyEditor': {
+      'module': 'TinyMCEAnnotationBodyEditor',
+      'options': {}
+    },
 
     'jsonStorageEndpoint': {
 	'name': 'JSONBlob API Endpoint',
