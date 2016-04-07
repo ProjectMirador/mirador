@@ -1900,15 +1900,8 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 /* Search Within */
 .searchResults  {
   overflow: scroll;
-  background-color: white;
-  color: black;
-  opacity: .9;
-  position: absolute;
-  right: 0;
-  top: 0%;
-  width: 300px;
   height: 100%;
-  z-index: 1;
+  
   padding: 15px;
 }
 .result-wrapper {

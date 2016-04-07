@@ -98,6 +98,10 @@
         		_this.displaySearchWithin(query);
     			});
 
+            //jQuery.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
+              //  _this.tabStateUpdated(data);
+            //});
+
             
 
         },
@@ -109,7 +113,7 @@
             if (!this.element) {
                 this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
             } else {
-                _this.appendTo.find(".annotationsPanel").remove();
+                _this.appendTo.find(".searchResults").remove();
                 this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
             }
             _this.bindEvents();
@@ -123,15 +127,12 @@
         },
         template: Handlebars.compile([
             '<div class="searchResults">',
-        '<a href="javascript:;" class="mirador-btn js-close-search-within" title="close">',
-         '<i class="fa fa-times fa-lg">Close</i>',
-        '</a>',  // Close button
-        '<form id="search-form" class="js-perform-query">',
-          '<input class="js-query" type="text" placeholder="search"/>',
-          '<input type="submit"/>',
-        '</form>',
-        '<div class="search-results-list"></div>',
-      '</div>',
+                '<form id="search-form" class="js-perform-query">',
+                  '<input class="js-query" type="text" placeholder="search"/>',
+                  '<input type="submit"/>',
+                '</form>',
+            '<div class="search-results-list"></div>',
+            '</div>',
         ].join(''))
     };
 

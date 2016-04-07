@@ -33,7 +33,7 @@
 
       jQuery(this.appendTo).empty();
       
-      jQuery("<h1>Search results for: " + _this.query + "</h1>").appendTo(_this.appendTo);
+      jQuery("<hr/><h3>Search results for: " + _this.query + "</h3><hr/>").appendTo(_this.appendTo);
 
       this.searchRequest(this.query).done(function(searchResults) {
 

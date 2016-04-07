@@ -7,9 +7,9 @@
             manifest:          null,
             panelState:        {},
             tocTabAvailable:   false,
-            annotationsTabAvailable: true,
+            annotationsTabAvailable: false,
             layersTabAvailable: false,
-            toolsTabAvailable: true,
+            toolsTabAvailable: false,
             searchTabAvailable: true,
             hasStructures:     false
         }, options);
