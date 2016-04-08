@@ -22,6 +22,7 @@
     "imageView": "Simple page",
     "bookView": "Double page",
     "scrollView": "Défilement horizontal",
+    "thumbnailsView": "Mosaïque",
     "comments": "Commentaires",
     "addTagsHere": "Ajouter des mots-clés",
     "save": "Enregistrer",
