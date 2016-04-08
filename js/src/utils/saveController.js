@@ -18,7 +18,7 @@
     }
 
     // error check on mainMenuSettings
-    if (!config.mainMenuSettings.buttons) {
+    if (config.mainMenuSettings && !config.mainMenuSettings.buttons) {
       config.mainMenuSettings.buttons = {};
     }
 
