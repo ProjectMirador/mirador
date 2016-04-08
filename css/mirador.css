@@ -1786,8 +1786,8 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   color: black;
 }
 
-.mirador-viewer a.mirador-icon-image-view.selected,
-.mirador-viewer a.mirador-icon-thumbs-view.selected,
+.mirador-viewer a.mirador-icon-view-type.selected,
+/*.mirador-viewer a.mirador-icon-thumbs-view.selected,*/
 .mirador-viewer a.mirador-icon-toc.selected,
 .mirador-viewer a.mirador-icon-metadata-view.selected {
   color: black;

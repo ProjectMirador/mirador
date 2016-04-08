@@ -68,6 +68,12 @@
         "slotLeft" : true,
         "slotAbove" : true,
         "slotBelow" : true
+      },
+      iconClasses: {
+        "ImageView" : "fa fa-photo fa-lg fa-fw",
+        "BookView" : "fa fa-columns fa-lg fa-fw",
+        "ScrollView" : "fa fa-ellipsis-h fa-lg fa-fw",
+        "ThumbnailsView" : "fa fa-th fa-lg fa-rotate-90 fa-fw"
       }
     }, options);
 
@@ -151,6 +157,7 @@
           return _this.layoutOptions[element] === false;
         });
       }
+      templateData.currentFocusClass = _this.iconClasses[_this.currentFocus];
       _this.element = jQuery(this.template(templateData)).appendTo(_this.appendTo);
       jQuery.publish('WINDOW_ELEMENT_UPDATED', {windowId: _this.id, element: _this.element});
 
@@ -710,27 +717,28 @@
 
     updateManifestInfo: function() {
       var _this = this;
-      this.element.find('.window-manifest-navigation').children().removeClass('selected');
-      switch(_this.currentFocus) {
-        case 'ThumbnailsView':
-          //hide thumbnails button and highlight currentImageMode?
-          _this.element.find('.mirador-icon-thumbs-view').addClass('selected');
-        break;
-        case 'ImageView':
-          //highlight Single Image View option
-          _this.element.find('.mirador-icon-image-view').addClass('selected');
-        break;
-        case 'BookView':
-          //highlight Book View option
-          _this.element.find('.mirador-icon-image-view').addClass('selected');
-        break;
-        case 'ScrollView':
-          //highlight Scroll View option
-          _this.element.find('.mirador-icon-thumbs-view').addClass('selected');
-        break;
-        default:
-          break;
-      }
+      //this.element.find('.window-manifest-navigation').children().removeClass('selected');
+      _this.element.find('.mirador-icon-view-type > i').removeClass().addClass(_this.iconClasses[_this.currentFocus]);
+      // switch(_this.currentFocus) {
+      //   case 'ThumbnailsView':
+      //     //hide thumbnails button and highlight currentImageMode?
+      //     _this.element.find('.mirador-icon-thumbs-view').addClass('selected');
+      //   break;
+      //   case 'ImageView':
+      //     //highlight Single Image View option
+      //     _this.element.find('.mirador-icon-image-view').addClass('selected');
+      //   break;
+      //   case 'BookView':
+      //     //highlight Book View option
+      //     _this.element.find('.mirador-icon-image-view').addClass('selected');
+      //   break;
+      //   case 'ScrollView':
+      //     //highlight Scroll View option
+      //     _this.element.find('.mirador-icon-thumbs-view').addClass('selected');
+      //   break;
+      //   default:
+      //     break;
+      // }
 
       if (this.focusOverlaysAvailable[this.currentFocus].overlay.MetadataView) {
         this.element.find('.mirador-icon-metadata-view').addClass('selected');
@@ -797,7 +805,7 @@
     bindNavigation: function() {
       var _this = this;
 
-      this.element.find('.mirador-icon-image-view').on('mouseenter',
+      this.element.find('.mirador-icon-view-type').on('mouseenter',
         function() {
         _this.element.find('.image-list').stop().slideFadeToggle(300);
       }).on('mouseleave',
@@ -867,7 +875,7 @@
                                  '<div class="window">',
                                  '<div class="manifest-info">',
                                  '<div class="window-manifest-navigation">',
-                                 '<a href="javascript:;" class="mirador-btn mirador-icon-image-view" role="button" aria-label="Change Image Mode"><i class="fa fa-photo fa-lg fa-fw"></i>',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-view-type" role="button" aria-label="Change View Type"><i class="{{currentFocusClass}}"></i>',
                                  '<ul class="dropdown image-list">',
                                  '{{#if ImageView}}',
                                  '<li class="single-image-option"><i class="fa fa-photo fa-lg fa-fw"></i> {{t "imageView"}}</li>',
@@ -878,12 +886,13 @@
                                  '{{#if ScrollView}}',
                                  '<li class="scroll-option"><i class="fa fa-ellipsis-h fa-lg fa-fw"></i> {{t "scrollView"}}</li>',
                                  '{{/if}}',
+                                 '{{#if ThumbnailsView}}',
+                                 '<li class="thumbnails-option"><i class="fa fa-th fa-lg fa-rotate-90 fa-fw"></i> {{t "thumbnailsView"}}</li>',
+                                 // '<a href="javascript:;" class="mirador-btn mirador-icon-thumbs-view thumbnails-option" role="button" aria-label="Change to Thumbnails Mode"><i class="fa fa-th fa-lg fa-rotate-90 fa-fw"></i>',
+                                 // '</a>',
+                                 '{{/if}}',
                                  '</ul>',
                                  '</a>',
-                                 '{{#if ThumbnailsView}}',
-                                 '<a href="javascript:;" class="mirador-btn mirador-icon-thumbs-view thumbnails-option" role="button" aria-label="Change to Thumbnails Mode"><i class="fa fa-th fa-lg fa-rotate-90 fa-fw"></i>',
-                                 '</a>',
-                                 '{{/if}}',
                                  '{{#if MetadataView}}',
                                  '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="{{t "objectMetadata"}}" role="button" aria-label="View Information/Metadata about Object"><i class="fa fa-info-circle fa-lg fa-fw"></i></a>',
                                  '{{/if}}',
