@@ -15,10 +15,10 @@
       element:              null,
       metadataTypes:        null,
       metadataListingCls:   'metadata-listing',
-      query:                null,
       searchService:        null,
-      windowId:       null,
-
+      windowId:             null,
+      query_params:         null,
+      
     }, options);
 
     this.init();
@@ -33,9 +33,9 @@
 
       jQuery(this.appendTo).empty();
       
-      jQuery("<hr/><h3>Search results for: " + _this.query + "</h3><hr/>").appendTo(_this.appendTo);
+      jQuery("<hr/><h3>Search results for: " + _this.query_params.q + "</h3><hr/>").appendTo(_this.appendTo);
 
-      this.searchRequest(this.query).done(function(searchResults) {
+      this.searchRequest(this.query_params).done(function(searchResults) {
 
         //create tplData array
         if (searchResults.hits) {
@@ -51,11 +51,22 @@
     },
 
   // Base code from https://github.com/padolsey/prettyprint.js. Modified to fit Mirador needs
-  searchRequest: function(query ){
+  searchRequest: function(query_params){
     var _this = this;
 
+    query_string = "";
+    console.log(query_params.box);
+    for (var param in query_params){
+      if (param === "q"){
+        query_string += param + "=" + query_params[param];
+      }
+      else if (query_params[param].length > 0){
+       query_string += "&" + param + "=" + query_params[param];
+      }
+    }
+    console.log (query_string);
     return jQuery.ajax({
-        url:   _this.searchService['@id'] + "?q=" + query,
+        url:   _this.searchService['@id'] + "?" + query_string,
         dataType: 'json',
         async: true
       });

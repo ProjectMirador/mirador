@@ -70,35 +70,36 @@
       });
     },
 
-    displaySearchWithin: function(query){
-        var _this = this;
-        if (query !== "") {
-          searchService = (_this.manifest.getSearchWithinService());
-          this.searchObject = new $.SearchWithinResults({
-            manifest: _this.manifest,
-            appendTo: _this.element.find(".search-results-list"),
-            panel: true,
-            canvasID: _this.canvasID,
-            windowId: _this.windowId,
-            imagesList: _this.imagesList,
-            thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'},
-            query: query
-          });
-        }
-        },
+    displaySearchWithin: function(query_params){
+      var _this = this;
+      if (query_params !== "") {
+        searchService = (_this.manifest.getSearchWithinService());
+        this.searchObject = new $.SearchWithinResults({
+          manifest: _this.manifest,
+          appendTo: _this.element.find(".search-results-list"),
+          panel: true,
+          canvasID: _this.canvasID,
+          windowId: _this.windowId,
+          imagesList: _this.imagesList,
+          thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'},
+          query_params: query_params
+        });
+      }
+    },
 
     bindEvents: function() {
       var _this = this;
 
       this.element.find(".js-perform-query").on('submit', function(event){
-            event.preventDefault();
-            var query = _this.element.find(".js-query").val();
-            var motivation = _this.element.find(".js-motivation").val();
-            var date = _this.element.find(".js-date").val();
-            var user = _this.element.find(".js-user").val();
-            var box = _this.element.find(".js-box").val();
-            _this.displaySearchWithin(query);
-            });
+        event.preventDefault();
+        var query = _this.element.find(".js-query").val();
+        var motivation = _this.element.find(".js-motivation").val();
+        var date = _this.element.find(".js-date").val();
+        var user = _this.element.find(".js-user").val();
+        var box = _this.element.find(".js-box").val();
+        var query_params = {q: query, motivation: motivation, date: date, user: user, box: box};
+        _this.displaySearchWithin(query_params);
+        });
 
       this.element.find(".js-search-expand").on('click', function(event){
         event.preventDefault();
