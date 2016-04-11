@@ -145,8 +145,10 @@
       }
 
       //determine if any buttons should be hidden in template
+      templateData.iconClasses = {};
       jQuery.each(this.focuses, function(index, value) {
         templateData[value] = true;
+        templateData.iconClasses[value] = _this.iconClasses[value];
       });
       templateData.title = $.JsonLd.getTextValue(manifest.label);
       templateData.displayLayout = this.displayLayout;
@@ -717,29 +719,8 @@
 
     updateManifestInfo: function() {
       var _this = this;
-      //this.element.find('.window-manifest-navigation').children().removeClass('selected');
       _this.element.find('.mirador-icon-view-type > i').removeClass().addClass(_this.iconClasses[_this.currentFocus]);
-      // switch(_this.currentFocus) {
-      //   case 'ThumbnailsView':
-      //     //hide thumbnails button and highlight currentImageMode?
-      //     _this.element.find('.mirador-icon-thumbs-view').addClass('selected');
-      //   break;
-      //   case 'ImageView':
-      //     //highlight Single Image View option
-      //     _this.element.find('.mirador-icon-image-view').addClass('selected');
-      //   break;
-      //   case 'BookView':
-      //     //highlight Book View option
-      //     _this.element.find('.mirador-icon-image-view').addClass('selected');
-      //   break;
-      //   case 'ScrollView':
-      //     //highlight Scroll View option
-      //     _this.element.find('.mirador-icon-thumbs-view').addClass('selected');
-      //   break;
-      //   default:
-      //     break;
-      // }
-
+      
       if (this.focusOverlaysAvailable[this.currentFocus].overlay.MetadataView) {
         this.element.find('.mirador-icon-metadata-view').addClass('selected');
       }
@@ -878,18 +859,16 @@
                                  '<a href="javascript:;" class="mirador-btn mirador-icon-view-type" role="button" aria-label="Change View Type"><i class="{{currentFocusClass}}"></i>',
                                  '<ul class="dropdown image-list">',
                                  '{{#if ImageView}}',
-                                 '<li class="single-image-option"><i class="fa fa-photo fa-lg fa-fw"></i> {{t "imageView"}}</li>',
+                                 '<li class="single-image-option"><i class="{{iconClasses.ImageView}}"></i> {{t "imageView"}}</li>',
                                  '{{/if}}',
                                  '{{#if BookView}}',
-                                 '<li class="book-option"><i class="fa fa-columns fa-lg fa-fw"></i> {{t "bookView"}}</li>',
+                                 '<li class="book-option"><i class="{{iconClasses.BookView}}"></i> {{t "bookView"}}</li>',
                                  '{{/if}}',
                                  '{{#if ScrollView}}',
-                                 '<li class="scroll-option"><i class="fa fa-ellipsis-h fa-lg fa-fw"></i> {{t "scrollView"}}</li>',
+                                 '<li class="scroll-option"><i class="{{iconClasses.ScrollView}}"></i> {{t "scrollView"}}</li>',
                                  '{{/if}}',
                                  '{{#if ThumbnailsView}}',
-                                 '<li class="thumbnails-option"><i class="fa fa-th fa-lg fa-rotate-90 fa-fw"></i> {{t "thumbnailsView"}}</li>',
-                                 // '<a href="javascript:;" class="mirador-btn mirador-icon-thumbs-view thumbnails-option" role="button" aria-label="Change to Thumbnails Mode"><i class="fa fa-th fa-lg fa-rotate-90 fa-fw"></i>',
-                                 // '</a>',
+                                 '<li class="thumbnails-option"><i class="{{iconClasses.ThumbnailsView}}"></i> {{t "thumbnailsView"}}</li>',
                                  '{{/if}}',
                                  '</ul>',
                                  '</a>',
