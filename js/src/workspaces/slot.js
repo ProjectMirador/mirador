@@ -243,7 +243,7 @@
                                 '</div>',
                                 '</h1>',
                                  '<h1 class="addItemText">{{t "addItem"}}</h1>',
-                                 '<h1 class="dropMeMessage">Drop to Load Manifest</h1>',
+                                 '<h1 class="dropMeMessage">{{t "dropToLoad"}}</h1>',
                                  '</div>',
                                  '<a class="addItemLink" role="button" aria-label="Add item"></a>',
                                  '<a class="remove-slot-option"><i class="fa fa-times fa-lg fa-fw"></i> {{t "close"}}</a>',

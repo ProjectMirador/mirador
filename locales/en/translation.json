@@ -32,5 +32,7 @@
     "newObject": "New Object",
     "objectMetadata": "Object Metadata",
     "fullScreen": "Full Screen",
-    "logo": "Logo"
+    "logo": "Logo",
+    "load": "Load",
+    "dropToLoad": "Drop to Load Manifest"
 }
