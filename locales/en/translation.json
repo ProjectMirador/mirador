@@ -22,6 +22,7 @@
     "imageView": "Image View",
     "bookView": "Book View",
     "scrollView": "Scroll View",
+    "thumbnailsView": "Gallery View",
     "comments": "Comments",
     "addTagsHere": "Add tags here",
     "save": "Save",

@@ -24,7 +24,7 @@ module.exports = function(grunt) {
   // libraries/plugins
   vendors = [
     'js/lib/jquery.min.js',
-    'js/lib/jquery-ui-1.9.2.min.js',
+    'js/lib/jquery-ui.min.js',
     'js/lib/jquery.scrollTo.min.js',
     'js/lib/jquery.qtip.min.js',
     'js/lib/state-machine.min.js',
@@ -94,7 +94,7 @@ module.exports = function(grunt) {
         src: [
         'css/normalize.css',
         'css/font-awesome.css',
-        'css/jquery-ui.custom.min.css',
+        'css/jquery-ui.min.css',
         'css/layout-default-latest.css',
         'css/jquery.qtip.min.css',
         'css/spectrum.css',
@@ -205,6 +205,7 @@ module.exports = function(grunt) {
           'Gruntfile.js',
           'js/src/*.js',
           'js/src/*/*.js',
+          'locales/*/*.json',
           'images/*',
           'css/*.css',
           'index.html'

@@ -22,6 +22,7 @@
     "imageView": "Ansicht Einzelbild",
     "bookView": "Ansicht Doppelseite",
     "scrollView": "Ansicht horizontal scrollen",
+    "thumbnailsView": "Ansicht galerie",
     "comments": "Kommentare",
     "addTagsHere": "Tags hier hinzufügen",
     "save": "Speichern",
@@ -32,5 +33,7 @@
     "newObject": "Neues Objekt",
     "objectMetadata": "Objekt Metadaten",
     "fullScreen": "Vollbild",
-    "logo": "Logo"
+    "logo": "Logo",
+    "load": "Laden",
+    "dropToLoad": "Fallen hier zu laden manifestieren"
 }
