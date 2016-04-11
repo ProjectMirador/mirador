@@ -29,5 +29,7 @@
     "thumbnailsView": "Miniaturas",
     "objectMetadata": "Metadatos",
     "fullScreen": "Pantalla completa",
-    "logo": "Logo"
+    "logo": "Logo",
+    "load": "Cargar",
+    "dropToLoad": "Soltar aquí para añadir el objeto"
 }

@@ -33,5 +33,7 @@
     "newObject": "Nouvel objet",
     "objectMetadata": "Métadonnées",
     "fullScreen": "Plein écran",
-    "logo": "Logo"
+    "logo": "Logo",
+    "load": "Charger",
+    "dropToLoad": "Déposer ici pour ajouter l'objet"
 }
