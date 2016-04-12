@@ -252,12 +252,10 @@
 
       jQuery.subscribe('sidePanelStateUpdated.' + this.id, function(event, state) {
         if (state.open) {
-            _this.element.find('.fa-list').switchClass('fa-list', 'fa-caret-down');
             _this.element.find('.mirador-icon-toc').addClass('selected');
             _this.element.find('.view-container').removeClass('maximised');
         } else {
             _this.element.find('.mirador-icon-toc').removeClass('selected');
-            _this.element.find('.fa-caret-down').switchClass('fa-caret-down', 'fa-list');
             _this.element.find('.view-container').addClass('maximised');
         }
       });
@@ -517,13 +515,11 @@
       sidePanelElement.css('transition-duration', transitionDuration);
       viewContainerElement.css('transition', transitionDuration);
       if (visible && sidePanelElement.hasClass('minimized')) {
-        tocIconElement.find('.fa-list').switchClass('fa-list', 'fa-caret-down');
-        tocIconElement.addClass('selected').css('background','#efefef');
+        tocIconElement.addClass('selected');
         sidePanelElement.removeClass('minimized').width(280).css('border-right', '1px solid lightgray');
         viewContainerElement.css('margin-left', 280);
       } else if (!visible && !sidePanelElement.hasClass('minimized')) {
-        tocIconElement.find('.fa-caret-down').switchClass('fa-caret-down', 'fa-list');
-        tocIconElement.removeClass('selected').css('background', '#fafafa');
+        tocIconElement.removeClass('selected');
         viewContainerElement.css('margin-left', 0);
         sidePanelElement.addClass('minimized').css('border', 'none').width(0);
       }
@@ -719,7 +715,7 @@
 
     updateManifestInfo: function() {
       var _this = this;
-      _this.element.find('.mirador-icon-view-type > i').removeClass().addClass(_this.iconClasses[_this.currentFocus]);
+      _this.element.find('.mirador-icon-view-type > i:first').removeClass().addClass(_this.iconClasses[_this.currentFocus]);
       
       if (this.focusOverlaysAvailable[this.currentFocus].overlay.MetadataView) {
         this.element.find('.mirador-icon-metadata-view').addClass('selected');
@@ -856,7 +852,9 @@
                                  '<div class="window">',
                                  '<div class="manifest-info">',
                                  '<div class="window-manifest-navigation">',
-                                 '<a href="javascript:;" class="mirador-btn mirador-icon-view-type" role="button" aria-label="Change View Type"><i class="{{currentFocusClass}}"></i>',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-view-type" role="button" aria-label="Change View Type">',
+                                 '<i class="{{currentFocusClass}}"></i>',
+                                 '<i class="fa fa-caret-down"></i>',
                                  '<ul class="dropdown image-list">',
                                  '{{#if ImageView}}',
                                  '<li class="single-image-option"><i class="{{iconClasses.ImageView}}"></i> {{t "imageView"}}</li>',
@@ -877,7 +875,7 @@
                                  '{{/if}}',
                                  '</div>',
                                  '{{#if displayLayout}}',
-                                 '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="{{t "changeLayout"}}"><i class="fa fa-th-large fa-lg fa-fw"></i>',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="{{t "changeLayout"}}"><i class="fa fa-th-large fa-lg fa-fw"></i><i class="fa fa-caret-down"></i>',
                                  '<ul class="dropdown slot-controls">',
                                  '{{#if layoutOptions.newObject}}',
                                  '<li class="new-object-option"><i class="fa fa-plus-square fa-lg fa-fw"></i> {{t "newObject"}}</li>',
@@ -901,7 +899,7 @@
                                  '</a>',
                                  '{{/if}}',
                                  '{{#if sidePanel}}',
-                                 '<a href="javascript:;" class="mirador-btn mirador-icon-toc selected" title="View/Hide Table of Contents"><i class="fa fa-caret-down fa-lg fa-fw"></i></a>',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-toc selected" title="View/Hide Table of Contents"><i class="fa fa-bars fa-lg fa-fw"></i></a>',
                                  '{{/if}}',
                                  '<h3 class="window-manifest-title">{{title}}</h3>',
                                  '</div>',
