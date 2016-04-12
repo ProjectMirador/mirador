@@ -515,11 +515,11 @@
       sidePanelElement.css('transition-duration', transitionDuration);
       viewContainerElement.css('transition', transitionDuration);
       if (visible && sidePanelElement.hasClass('minimized')) {
-        tocIconElement.addClass('selected').css('background','#efefef');
+        tocIconElement.addClass('selected');
         sidePanelElement.removeClass('minimized').width(280).css('border-right', '1px solid lightgray');
         viewContainerElement.css('margin-left', 280);
       } else if (!visible && !sidePanelElement.hasClass('minimized')) {
-        tocIconElement.removeClass('selected').css('background', '#fafafa');
+        tocIconElement.removeClass('selected');
         viewContainerElement.css('margin-left', 0);
         sidePanelElement.addClass('minimized').css('border', 'none').width(0);
       }

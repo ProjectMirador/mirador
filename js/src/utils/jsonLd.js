@@ -3,7 +3,7 @@
   $.JsonLd = {
     getTextValue: function(propertyValue, language) {
       if (typeof language === 'undefined') { language = "en"; }
-      if (typeof propertyValue === 'undefined') {return ''; }
+      if (typeof propertyValue === 'undefined' || propertyValue === null) {return ''; }
       else if (typeof propertyValue === 'string') { return propertyValue; }
       else if (Array.isArray(propertyValue)) {
         var text = '';
