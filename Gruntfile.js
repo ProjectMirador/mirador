@@ -99,8 +99,7 @@ module.exports = function(grunt) {
         'css/jquery.qtip.min.css',
         'css/spectrum.css',
         'css/mirador.css',
-        'css/material-icons.css',
-        '!css/mirador-combined.css'
+        'css/material-icons.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'
       }
@@ -108,7 +107,7 @@ module.exports = function(grunt) {
 
     cssmin: {
       minify: {
-        src: 'css/mirador-combined.css',
+        src: 'build/mirador/css/mirador-combined.css',
         dest: 'build/mirador/css/mirador-combined.min.css'
       }
     },

@@ -877,7 +877,7 @@
                                  '{{/if}}',
                                  '</div>',
                                  '{{#if displayLayout}}',
-                                 '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="{{t "changeLayout"}}"><i class="fa fa-table fa-lg fa-fw"></i>',
+                                 '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="{{t "changeLayout"}}"><i class="fa fa-th-large fa-lg fa-fw"></i>',
                                  '<ul class="dropdown slot-controls">',
                                  '{{#if layoutOptions.newObject}}',
                                  '<li class="new-object-option"><i class="fa fa-plus-square fa-lg fa-fw"></i> {{t "newObject"}}</li>',
