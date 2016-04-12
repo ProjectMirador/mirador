@@ -143,24 +143,6 @@ a {
   outline: none;
 }
 
-.mirador-main-menu .icon-bookmark-workspace,
-.mirador-main-menu .icon-load-window,
-.mirador-main-menu .icon-window-options,
-.mirador-main-menu .icon-clear-local-storage {
-  background-image: url('../images/mirador-icons.png');
-  background-repeat: none;
-  cursor: pointer;
-  display: inline-block;
-  height: 20px;
-  margin: 0 2px -7px 0;
-  width: 20px;
-}
-
-.mirador-main-menu .icon-bookmark-workspace { background-position: -221px -41px; }
-.mirador-main-menu .icon-load-window { background-position: -241px -41px; }
-.mirador-main-menu .icon-window-options { background-position: -261px -41px; }
-.mirador-main-menu .icon-clear-local-storage { background-position: -60px -80px; }
-
 .mirador-main-menu-bar .window-options-menu {
   position: relative;
   border-radius: 0;
