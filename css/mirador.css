@@ -1851,6 +1851,9 @@ a.mirador-icon-window-menu, a.mirador-icon-view-type {
   margin-left: 5px;
   text-decoration: underline;
 }
+.annotation-display a:hover {
+  border-bottom: 1px dotted #005EBD;
+}
 .text-viewer p {
   margin-top: 0;
 }
