@@ -160,6 +160,7 @@
         });
       }
       templateData.currentFocusClass = _this.iconClasses[_this.currentFocus];
+      templateData.showFullScreen = _this.fullScreenAvailable;
       _this.element = jQuery(this.template(templateData)).appendTo(_this.appendTo);
       jQuery.publish('WINDOW_ELEMENT_UPDATED', {windowId: _this.id, element: _this.element});
 
@@ -321,6 +322,19 @@
           _this.focusModules.ScrollView.reloadImages(Math.floor(containerHeight * _this.scrollImageRatio), triggerShow);
         }
       }, 300));
+
+      this.element.find('.mirador-osd-fullscreen').on('click', function() {
+        if (OpenSeadragon.isFullScreen()) {
+          OpenSeadragon.exitFullScreen();
+        } else {
+          //jQuery.publish('REQUEST_OSD_FULL_SCREEN.' + _this.id);
+          OpenSeadragon.requestFullScreen(_this.element[0]);
+        }
+      });
+
+      jQuery(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function() {
+        _this.fullScreen();
+      });
 
     },
 
@@ -626,8 +640,7 @@
           annotationLayerAvailable: this.annotationLayerAvailable,
           annotationCreationAvailable: this.annotationCreationAvailable,
           annoEndpointAvailable: this.annoEndpointAvailable,
-          annotationState : this.annotationState,
-          fullScreenAvailable: this.fullScreenAvailable
+          annotationState : this.annotationState
         });
       } else {
         var view = this.focusModules.ImageView;
@@ -647,8 +660,7 @@
           canvasID: canvasID,
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
-          bottomPanelAvailable: this.bottomPanelAvailable,
-          fullScreenAvailable: this.fullScreenAvailable
+          bottomPanelAvailable: this.bottomPanelAvailable
         });
       } else {
         var view = this.focusModules.BookView;
@@ -778,6 +790,18 @@
       }
     },
 
+    fullScreen: function() {
+      if (!OpenSeadragon.isFullScreen()) {
+        this.element.find('.mirador-osd-fullscreen i').removeClass('fa-compress').addClass('fa-expand');
+        this.element.find('.mirador-osd-toggle-bottom-panel').show();
+        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.id, true);
+      } else {
+        this.element.find('.mirador-osd-fullscreen i').removeClass('fa-expand').addClass('fa-compress');
+        this.element.find('.mirador-osd-toggle-bottom-panel').hide();
+        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.id, false);
+      }
+    },
+
     // based on currentFocus
     bindNavigation: function() {
       var _this = this;
@@ -872,6 +896,11 @@
                                  '</a>',
                                  '{{#if MetadataView}}',
                                  '<a href="javascript:;" class="mirador-btn mirador-icon-metadata-view" title="{{t "objectMetadata"}}" role="button" aria-label="View Information/Metadata about Object"><i class="fa fa-info-circle fa-lg fa-fw"></i></a>',
+                                 '{{/if}}',
+                                 '{{#if showFullScreen}}',
+                                 '<a class="mirador-btn mirador-osd-fullscreen" role="button" aria-label="Toggle fullscreen">',
+                                 '<i class="fa fa-lg fa-fw fa-expand"></i>',
+                                 '</a>',
                                  '{{/if}}',
                                  '</div>',
                                  '{{#if layoutOptions.close}}',

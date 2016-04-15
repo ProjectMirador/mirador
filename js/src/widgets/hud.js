@@ -7,8 +7,7 @@
       windowId:  null,
       annoState: null,
       showAnnotations: true,
-      annoEndpointAvailable: false,
-      fullScreenAvailable: true
+      annoEndpointAvailable: false
     }, options);
 
     this.init();
@@ -22,8 +21,7 @@
       this.element = jQuery(this.template({
         showNextPrev : this.showNextPrev, 
         showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable,
-        showAnno : this.annotationLayerAvailable,
-        showFullScreen : this.fullScreenAvailable
+        showAnno : this.annotationLayerAvailable
       })).appendTo(this.appendTo);
 
       if (this.annotationLayerAvailable && this.annoEndpointAvailable) {
@@ -145,11 +143,6 @@
                                  '{{#if showNextPrev}}',
                                  '<a class="mirador-osd-previous hud-control ">',
                                  '<i class="fa fa-3x fa-chevron-left "></i>',
-                                 '</a>',
-                                 '{{/if}}',
-                                 '{{#if showFullScreen}}',
-                                 '<a class="mirador-osd-fullscreen hud-control" role="button" aria-label="Toggle fullscreen">',
-                                 '<i class="fa fa-expand"></i>',
                                  '</a>',
                                  '{{/if}}',
                                  '{{#if showAnno}}',

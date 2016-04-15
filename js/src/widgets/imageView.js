@@ -12,7 +12,6 @@
       elemOsd:          null,
       manifest:         null,
       osd:              null,
-      fullscreen:       null,
       osdOptions: {
         osdBounds:        null,
         zoomLevel:        null
@@ -69,7 +68,6 @@
         annotationLayerAvailable: this.annotationLayerAvailable,
         annotationCreationAvailable: this.annotationCreationAvailable,
         annoEndpointAvailable: this.annoEndpointAvailable,
-        fullScreenAvailable : this.fullScreenAvailable,
         showNextPrev : this.imagesList.length !== 1,
         availableTools: this.availableTools
       });
@@ -240,18 +238,6 @@
         }
       });
 
-      this.element.find('.mirador-osd-fullscreen').on('click', function() {
-        if (OpenSeadragon.isFullScreen()) {
-          OpenSeadragon.exitFullScreen();
-        } else {
-          jQuery.publish('REQUEST_OSD_FULL_SCREEN.' + _this.windowId);
-        }
-      });
-
-      jQuery(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function() {
-        _this.fullScreen();
-      });
-
       this.element.find('.mirador-osd-toggle-bottom-panel').on('click', function() {
         jQuery.publish('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + _this.windowId);
       });
@@ -306,22 +292,6 @@
         "y" : bounds.height * 0.5
       };
       return panBy;
-    },
-
-    fullScreen: function() {
-      var replacementButton;
-
-      if (!OpenSeadragon.isFullScreen()) {
-        replacementButton = jQuery('<i class="fa fa-expand"></i>');
-        this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
-        this.element.find('.mirador-osd-toggle-bottom-panel').show();
-        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, true);
-      } else {
-        replacementButton = jQuery('<i class="fa fa-compress"></i>');
-        this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
-        this.element.find('.mirador-osd-toggle-bottom-panel').hide();
-        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, false);
-      }
     },
 
     setBounds: function() {
