@@ -1099,12 +1099,6 @@ li.highlight {
   right:50%;
   margin-right: -25px;
 }
-.mirador-osd-fullscreen {
-  position:absolute;
-  right:10px;
-  top:10px;
-  z-index: 2;
-}
 .mirador-pan-zoom-controls {
   position: absolute;
   width: 100px;
@@ -1746,7 +1740,7 @@ a.mirador-icon-empty-slot [class^="icon-"] {
   position:absolute;
 }
 
-.mirador-viewer a.mirador-icon-view-type, .mirador-viewer a.mirador-icon-metadata-view  {
+.mirador-viewer a.mirador-icon-view-type, .mirador-viewer a.mirador-icon-metadata-view, .mirador-viewer a.mirador-osd-fullscreen  {
   background: none;
   color: rgb( 146, 145, 145 );
   box-sizing: border-box;

@@ -144,7 +144,19 @@
       });
 
       jQuery.subscribe('TOGGLE_FULLSCREEN', function(event) {
-        _this.fullscreenElement() ? _this.exitFullscreen() : _this.enterFullscreen();
+        if ($.fullscreenElement()) {
+          $.exitFullscreen();
+          //enable any window-specific fullscreen buttons
+          jQuery.publish('ENABLE_WINDOW_FULLSCREEN');
+        } else {
+          $.enterFullscreen(_this.element[0]);
+          //disable any window-specific fullscreen buttons
+          jQuery.publish('DISABLE_WINDOW_FULLSCREEN');
+        }
+      });
+      
+      jQuery(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function() {
+        jQuery.publish('MAINMENU_FULLSCREEN_BUTTON');
       });
 
       jQuery.subscribe('TOGGLE_LOAD_WINDOW', function(event) {
@@ -210,38 +222,6 @@
 
     toggleBookmarkPanel: function() {
       this.toggleOverlay('bookmarkPanelVisible');
-    },
-
-    enterFullscreen: function() {
-      var el = this.element[0];
-      if (el.requestFullscreen) {
-        el.requestFullscreen();
-      } else if (el.mozRequestFullScreen) {
-        el.mozRequestFullScreen();
-      } else if (el.webkitRequestFullscreen) {
-        el.webkitRequestFullscreen();
-      } else if (el.msRequestFullscreen) {
-        el.msRequestFullscreen();
-      }
-    },
-
-    exitFullscreen: function() {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      }
-    },
-
-    isFullscreen: function() {
-      var fullscreen = this.fullscreenElement();
-      return (fullscreen.length > 0);
-    },
-
-    fullscreenElement: function() {
-      return (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement);
     },
 
     getManifestsData: function() {
