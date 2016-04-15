@@ -1,9 +1,9 @@
 (function($) {
-  $.getTools = function() {
+  $.getTools = function(options) {
     if (this.svgOverlayTools) {
       return this.svgOverlayTools;
     }
-    this.svgOverlayTools = [new $.Rectangle(), new $.Freehand(), new $.Polygon(), new $.Ellipse(), new $.Pin()];
+    this.svgOverlayTools = [new $.Rectangle(options), new $.Freehand(options), new $.Polygon(options), new $.Ellipse(options), new $.Pin(options)];
     return this.svgOverlayTools;
   };
 
@@ -12,8 +12,9 @@
   };
 
   $.Overlay = function(viewer, osdViewerId, windowId, state) {
-    var drawingToolsSettings = state.getStateProperty('drawingToolsSettings'),
-    availableAnnotationDrawingTools = state.getStateProperty('availableAnnotationDrawingTools');
+    var drawingToolsSettings = state.getStateProperty('drawingToolsSettings');
+    var availableAnnotationDrawingTools = state.getStateProperty('availableAnnotationDrawingTools');
+    var availableExternalCommentsPanel = state.getStateProperty('availableExternalCommentsPanel');
     jQuery.extend(this, {
       disabled: true,
       osdViewerId: osdViewerId,
@@ -28,9 +29,9 @@
       latestMouseDownTime: -1,
       doubleClickReactionTime: drawingToolsSettings.doubleClickReactionTime,
       availableAnnotationDrawingTools: availableAnnotationDrawingTools,
-      pinSize: 10,
+      availableExternalCommentsPanel: availableExternalCommentsPanel,
+      fixedShapeSize: 10,
       hitOptions: {
-        fill: true,
         stroke: true,
         segments: true,
         tolerance: 5
@@ -38,7 +39,7 @@
     });
 
     // Initialization of overlay object.
-    this.tools = $.getTools();
+    this.tools = $.getTools(drawingToolsSettings);
     this.currentTool = null;
     // Default colors.
     this.strokeColor = drawingToolsSettings.fillColor;
@@ -114,6 +115,19 @@
       if (_this.hoveredPath && _this.hoveredPath.closed) {
         _this.hoveredPath.fillColor = color;
         _this.hoveredPath.fillColor.alpha = alpha;
+        _this.paperScope.view.draw();
+      }
+    });
+    jQuery.subscribe('toggleBorderType.' + _this.windowId, function(event, type) {
+      if (type == 'solid') {
+        _this.dashArray = [];
+      } else if (type == 'dashed') {
+        _this.dashArray = [5, 5];
+      } else if (type == 'dotdashed') {
+        _this.dashArray = [2, 5, 7, 5];
+      }
+      if (_this.hoveredPath) {
+        _this.hoveredPath.dashArray = _this.dashArray;
         _this.paperScope.view.draw();
       }
     });
@@ -266,71 +280,44 @@
       }
     },
 
-    fitPinSize: function(shape) {
-      var scale = 1 / shape.bounds.width;
-      scale *= this.pinSize / this.paperScope.view.zoom;
-      shape.scale(scale, shape.segments[0].point);
+    fitFixedSizeShapes: function(shape) {
+      shape.data.fixedSize = true;
+      if (shape.name.toString().indexOf('pin_') != -1) {
+        var scale = 1 / shape.bounds.width;
+        scale *= this.fixedShapeSize / this.paperScope.view.zoom;
+        shape.scale(scale, shape.segments[0].point);
+      }
     },
 
     resize: function() {
-      var viewportBounds = this.viewer.viewport.getBounds(true); /* in viewport coordinates */
-      var pointZero = this.viewer.viewport.pixelFromPoint(new OpenSeadragon.Point(0, 0), true);
-
-      // maximum canvas size which should be less that limitations from each browser.
-      // http://stackoverflow.com/questions/6081483/maximum-size-of-a-canvas-element
-      var maxSize = 2048;
-      var realSize = {
-        width: this.viewer.viewport.containerSize.x / viewportBounds.width,
-        height: this.viewer.viewport.containerSize.y / viewportBounds.height,
-        offsetX: 0,
-        offsetY: 0,
-        scale: 1
-      };
-      if (realSize.width > maxSize) {
-        realSize.scale = realSize.width / maxSize;
-        realSize.width /= realSize.scale;
-        realSize.height /= realSize.scale;
-        realSize.offsetX -= pointZero.x;
-        realSize.offsetY -= pointZero.y;
-        pointZero.x = 0;
-        pointZero.y = 0;
-      } else if (realSize.height > maxSize) {
-        realSize.scale = realSize.height / maxSize;
-        realSize.width /= realSize.scale;
-        realSize.height /= realSize.scale;
-        realSize.offsetX -= pointZero.x;
-        realSize.offsetY -= pointZero.y;
-        pointZero.x = 0;
-        pointZero.y = 0;
-      }
-
-      this.canvas.width = realSize.width;
-      this.canvas.height = realSize.height;
+      var viewportBounds = this.viewer.viewport.getBounds(true);
+      /* in viewport coordinates */
+      this.canvas.width = this.viewer.viewport.containerSize.x;
+      this.canvas.height = this.viewer.viewport.containerSize.y;
       var transform = 'translate(0px,0px)';
       this.canvas.style.WebkitTransform = transform;
       this.canvas.style.msTransform = transform;
       this.canvas.style.transform = transform;
-      this.canvas.style.marginLeft = pointZero.x + "px";
-      this.canvas.style.marginTop = pointZero.y + "px";
+      this.canvas.style.marginLeft = "0px";
+      this.canvas.style.marginTop = "0px";
       if (this.paperScope && this.paperScope.view) {
         this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
         this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
         this.paperScope.view.center = new this.paperScope.Size(
-            realSize.offsetX / this.paperScope.view.zoom + this.paperScope.view.bounds.width / 2,
-            realSize.offsetY / this.paperScope.view.zoom + this.paperScope.view.bounds.height / 2);
+          this.viewer.viewport.contentSize.x * viewportBounds.x + this.paperScope.view.bounds.width / 2,
+          this.viewer.viewport.contentSize.x * viewportBounds.y + this.paperScope.view.bounds.height / 2);
         this.paperScope.view.update(true);
-        // Fit pins to the current zoom level.
-        var items = this.paperScope.project.getItems({
-          name: /^pin_/
-        });
-        for (var i = 0; i < items.length; i++) {
-          this.fitPinSize(items[i]);
-        }
         var allItems = this.paperScope.project.getItems({
           name: /_/
         });
         for (var j = 0; j < allItems.length; j++) {
+          if (allItems[j].data.fixedSize) {
+            this.fitFixedSizeShapes(allItems[j]);
+          }
           allItems[j].strokeWidth = 1 / this.paperScope.view.zoom;
+          if (allItems[j].style) {
+            allItems[j].style.strokeWidth = 1 / this.paperScope.view.zoom;
+          }
         }
       }
     },
@@ -389,6 +376,7 @@
       });
       cloned.strokeWidth = 1 / this.paperScope.view.zoom;
       cloned.strokeColor = shape.strokeColor;
+      cloned.dashArray = shape.dashArray;
       if (shape.fillColor) {
         cloned.fillColor = shape.fillColor;
         if (shape.fillColor.alpha) {
@@ -397,9 +385,10 @@
       }
       cloned.closed = shape.closed;
       cloned.data.rotation = shape.data.rotation;
+      cloned.data.fixedSize = shape.data.fixedSize;
       cloned.data.annotation = annotation;
-      if (cloned.name.toString().indexOf('pin_') != -1) { // pin shapes with fixed size.
-        this.fitPinSize(cloned);
+      if (cloned.data.fixedSize) {
+        this.fitFixedSizeShapes(cloned);
       }
       shape.remove();
       return cloned;
@@ -408,7 +397,7 @@
     // creating shapes used for backward compatibility.
     // shape coordinates are viewport coordinates.
     createRectangle: function(shape, annotation) {
-      var scale = this.viewer.viewport.containerSize.x;
+      var scale = this.viewer.viewport.contentSize.x;
       var paperItems = [];
       var rect = new $.Rectangle();
       var initialPoint = {
@@ -477,17 +466,23 @@
             shapeArray[idx].name = this.editedPaths[i].name;
             shapeArray[idx].strokeWidth = 1 / this.paperScope.view.zoom;
             shapeArray[idx].strokeColor = this.editedPaths[i].strokeColor;
+            shapeArray[idx].dashArray = this.editedPaths[i].dashArray;
             if (this.editedPaths[i].fillColor) {
               shapeArray[idx].fillColor = this.editedPaths[i].fillColor;
               if (this.editedPaths[i].fillColor.alpha) {
                 shapeArray[idx].fillColor.alpha = this.editedPaths[i].fillColor.alpha;
               }
             }
+            if (this.editedPaths[i].style) {
+              shapeArray[idx].style = this.editedPaths[i].style;
+              shapeArray[idx].style.strokeWidth = 1 / this.paperScope.view.zoom;
+            }
             shapeArray[idx].closed = this.editedPaths[i].closed;
             shapeArray[idx].data.rotation = this.editedPaths[i].data.rotation;
+            shapeArray[idx].data.fixedSize = this.editedPaths[i].data.fixedSize;
             shapeArray[idx].data.annotation = this.editedPaths[i].data.annotation;
-            if (shapeArray[idx].name.toString().indexOf('pin_') != -1) { // pin shapes with fixed size.
-              this.fitPinSize(shapeArray[idx]);
+            if (shapeArray[idx].data.fixedSize) {
+              this.fitFixedSizeShapes(shapeArray[idx]);
             }
           }
         }
@@ -551,8 +546,8 @@
       if (shapes.length > 1) {
         svg += "<g>";
         for (var i = 0; i < shapes.length; i++) {
-          if (shapes[i].name.toString().indexOf('pin_') != -1) {
-            this.fitPinSize(shapes[i]);
+          if (shapes[i].data.fixedSize) {
+            this.fitFixedSizeShapes(shapes[i]);
           }
           var anno = shapes[i].data.annotation;
           shapes[i].data.annotation = null;
@@ -563,8 +558,8 @@
         }
         svg += "</g>";
       } else {
-        if (shapes[0].name.toString().indexOf('pin_') != -1) {
-          this.fitPinSize(shapes[0]);
+        if (shapes[0].data.fixedSize) {
+          this.fitFixedSizeShapes(shapes[0]);
         }
         var annoSingle = shapes[0].data.annotation;
         shapes[0].data.annotation = null;
@@ -597,9 +592,13 @@
         windowId: this.windowId
       });
       var _this = this;
+      if (_this.availableExternalCommentsPanel) {
+        jQuery.publish('annotationShapeCreated.' + _this.windowId, [_this, shape]);
+        return;
+      }
       annoTooltip.showEditor({
         annotation: {},
-        onAnnotationCreated: function (oaAnno) {
+        onAnnotationCreated: function(oaAnno) {
           var svg = _this.getSVGString(_this.draftPaths);
           oaAnno.on = {
             "@type": "oa:SpecificResource",
