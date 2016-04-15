@@ -1696,14 +1696,16 @@ ul.dropdown {
   display: none;
   width: 160px;
   z-index: 3;
-  opacity: 0.9;
+  opacity: 0.98;
   background-color: #efefef;
   text-align: center;
   list-style: none;
   position: absolute;
   padding:0;
-  margin-top:9px;
+  margin-top:10px;
   height: auto;
+  box-shadow: 0px 2px 4px #B1B1B1;
+  border: 1px solid #B1B1B1;
 }
 
 .dropdown li {
@@ -1779,6 +1781,12 @@ a.mirador-icon-window-menu, a.mirador-icon-view-type {
   background: none;
   /*color: rgb( 146, 145, 145 );*/
   box-sizing: border-box;
+}
+
+.menu-divider {
+  color: #B1B1B1;
+  margin: 0px;
+  height: 0px;
 }
 
 // qtip overrides.
