@@ -302,9 +302,13 @@
         var visible = !_this.bottomPanelVisible;
         _this.bottomPanelVisibility(visible);
       });
+      
+      jQuery.subscribe('DISABLE_WINDOW_FULLSCREEN', function(event) {
+        _this.element.find('.mirador-osd-fullscreen').hide();
+      });
 
-      jQuery.subscribe('REQUEST_OSD_FULL_SCREEN.' + this.id, function(event) {
-        OpenSeadragon.requestFullScreen(_this.element[0]);
+      jQuery.subscribe('ENABLE_WINDOW_FULLSCREEN', function(event) {
+        _this.element.find('.mirador-osd-fullscreen').show();        
       });
     },
 
@@ -324,11 +328,10 @@
       }, 300));
 
       this.element.find('.mirador-osd-fullscreen').on('click', function() {
-        if (OpenSeadragon.isFullScreen()) {
-          OpenSeadragon.exitFullScreen();
+        if ($.fullscreenElement()) {
+          $.exitFullscreen();
         } else {
-          //jQuery.publish('REQUEST_OSD_FULL_SCREEN.' + _this.id);
-          OpenSeadragon.requestFullScreen(_this.element[0]);
+          $.enterFullscreen(_this.element[0]);
         }
       });
 

@@ -276,4 +276,35 @@
     return dfd.promise();
   };
 
+  $.enterFullscreen = function(el) {
+    if (el.requestFullscreen) {
+      el.requestFullscreen();
+    } else if (el.mozRequestFullScreen) {
+      el.mozRequestFullScreen();
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen();
+    } else if (el.msRequestFullscreen) {
+      el.msRequestFullscreen();
+    }
+  };
+
+  $.exitFullscreen = function() {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  };
+
+  $.isFullscreen = function() {
+    var fullscreen = $.fullscreenElement();
+    return (fullscreen.length > 0);
+  };
+
+  $.fullscreenElement = function() {
+    return (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement);
+  };
+
 }(Mirador));

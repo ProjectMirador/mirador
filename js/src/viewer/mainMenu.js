@@ -46,7 +46,21 @@
                 userLogo:    this.state.getStateProperty('mainMenuSettings').userLogo
             }));
 
+            this.listenForActions();
             this.bindEvents();
+        },
+
+        listenForActions: function() {
+          var _this = this;
+
+          jQuery.subscribe('MAINMENU_FULLSCREEN_BUTTON', function(event) {
+            var fullScreenButton = _this.element.find('.fullscreen-viewer span');
+            if (fullScreenButton.hasClass('fa-expand')) {
+              fullScreenButton.removeClass('fa-expand').addClass('fa-compress');
+            } else {
+              fullScreenButton.removeClass('fa-compress').addClass('fa-expand');
+            }
+          });
         },
 
         bindEvents: function() {
