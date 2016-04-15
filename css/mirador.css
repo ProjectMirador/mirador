@@ -1636,8 +1636,12 @@ ul.scroll-listing-thumbs li .thumb-label {
   vertical-align: bottom;
 }
 
-.mirador-viewer .metadata-listing a:hover {
+.mirador-viewer .metadata-listing a {
   border-bottom: 1px dotted #005EBD;
+}
+
+.mirador-viewer .metadata-listing a:hover {
+  border-bottom: 1px dotted #dddddd;
 }
 
 .mirador-metadata-view-nav-toolbar {
@@ -1851,8 +1855,11 @@ a.mirador-icon-window-menu, a.mirador-icon-view-type {
   margin-left: 5px;
   text-decoration: underline;
 }
-.annotation-display a:hover {
+.annotation-display  .text-viewer a {
   border-bottom: 1px dotted #005EBD;
+}
+.annotation-display .text-viewer a:hover {
+  border-bottom: 1px dotted #dddddd;
 }
 .text-viewer p {
   margin-top: 0;
