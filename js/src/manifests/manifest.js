@@ -40,7 +40,8 @@
         jsonLd: null,
         location: location,
         uri: manifestUri,
-        request: null
+        request: null,
+        canvasMap: null
       });
 
       this.init(manifestUri);
@@ -58,6 +59,15 @@
 
       this.request.done(function(jsonLd) {
         _this.jsonLd = jsonLd;
+        _this.buildCanvasMap();
+      });
+    },
+    buildCanvasMap: function() {
+      var _this = this;
+      this.canvasMap = {};
+
+      this.getCanvases().forEach(function(canvas) {
+        _this.canvasMap[canvas['@id']] = canvas;
       });
     },
     initFromInfoJson: function(infoJsonUrl) {
@@ -181,7 +191,43 @@
       };
 
       return dummyManifest;
+    },
+    // my added function
+    getSearchWithinService: function(){
+      var _this = this;
+      var serviceProperty = _this.jsonLd.service;
+
+      var service = {};
+      if (serviceProperty.constructor === Array){
+        for (var i = 0; i < serviceProperty.length; i++){
+          if (serviceProperty[i]["@context"] === "http://iiif.io/api/search/0/context.json"){
+            //returns the first service object with the correct contest
+            service = serviceProperty[i];
+            break;
+          }
+        }
+      }
+      else if (_this.jsonLd.service["@context"] === "http://iiif.io/api/search/0/context.json"){
+        service = _this.jsonLd.service;
+      }
+      else {
+        //no service object with the right context is found
+        service = null;
+      }
+      return service;
+    },
+
+    /**
+     * Get the label of the a canvas by ID
+     * @param  {[type]} canvasId ID of desired canvas
+     * @return {[type]}          string
+     */
+    getCanvasLabel: function(canvasId) {
+      console.assert(canvasId && canvasId !== '', "No canvasId was specified.");
+      var canvas = this.canvasMap[canvasId.split('#')[0]];
+      return canvas ? canvas.label : undefined;
     }
+
   };
 
 }(Mirador));

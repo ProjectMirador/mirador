@@ -10,6 +10,7 @@
             annotationsTabAvailable: false,
             layersTabAvailable: false,
             toolsTabAvailable: false,
+            searchTabAvailable: true,
             hasStructures:     false
         }, options);
 
@@ -30,15 +31,15 @@
                         label:'Index'
                     }
                 },
-                /*{
+                {
                     name : 'annotations',
                     options : {
                         available: _this.annotationsTabAvailable,
                         id:'annotationsTab', 
                         label:'Annotations'
                     }
-                },*/
-                /*{
+                },
+                {
                     name : 'layers',
                     options : {
                         available: _this.layersTabAvailable,
@@ -53,7 +54,15 @@
                         id:'toolsTab', 
                         label:'Tools'
                     }
-                }*/
+                },
+                {
+                    name : 'search',
+                    options : {
+                        available: _this.searchTabAvailable,
+                        id:'searchTab', 
+                        label:'Search'
+                    }
+                }
                 ],
                 width: 280,
                 open: true
@@ -90,6 +99,16 @@
                     windowId: this.windowId,
                     appendTo: _this.element.find('.tabContentArea'),
                     tabs: _this.sidePanelState.tabs
+                });
+            } 
+            if (_this.searchTabAvailable) {
+                new $.SearchTab({
+                    manifest: _this.manifest,
+                    windowId: this.windowId,
+                    widgetId: "searchTab",
+                    canvasID: this.canvasID,
+                    appendTo: _this.element.find('.tabContentArea'),
+                    //tabs: _this.sidePanelState.tabs
                 });
             }
 

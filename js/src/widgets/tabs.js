@@ -18,7 +18,7 @@
 
             this.state({
                 tabs : this.tabs,
-                //tabs: [{id:'tocTab', label:'Indices'}, {id:'annotationsTab', label:'Annotations'}],
+                //tabs: [{id:'tocTab', label:'Indices'}, {id:'searchTab', label:'Search'}],
                 //tabs: [{id:'tocTab', label:'Indices'}],
                 selectedTabIndex: 0
             }, true);
@@ -44,7 +44,8 @@
         getTemplateData: function() {
             return {
                 annotationsTab: this.state().annotationsTab,
-                tocTab: this.state().tocTab
+                tocTab: this.state().tocTab,
+                searchTab: this.state().searchTab
             };
         },
         listenForActions: function() {
@@ -65,7 +66,7 @@
             var _this = this;
 
             this.element.find('.tab').on('click', function(event) {
-                jQuery.publish('tabSelected.' + _this.windowId, jQuery( ".tabGroup li" ).index( this ));
+                jQuery.publish('tabSelected.' + _this.windowId, jQuery( this ).index());
             });
         },
         render: function(renderingData) {

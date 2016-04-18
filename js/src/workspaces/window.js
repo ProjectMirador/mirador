@@ -431,7 +431,6 @@
               thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
             });
           }
-
           //refresh displayed in case TableOfContents module changed it
           displayed = _this.focusOverlaysAvailable[state][panelType][view];
 
@@ -559,9 +558,10 @@
     adjustFocusSize: function(panelType, panelState) {
       if (panelType === 'bottomPanel') {
         this.focusModules[this.currentFocus].adjustHeight('focus-max-height', panelState);
-      } else if (panelType === 'sidePanel') {
+      } 
+      else if (panelType === 'sidePanel') {
         this.focusModules[this.currentFocus].adjustWidth('focus-max-width', panelState);
-      } else {}
+      }
     },
 
     toggleMetadataOverlay: function(focusState) {
