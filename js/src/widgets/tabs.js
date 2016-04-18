@@ -65,7 +65,7 @@
             var _this = this;
 
             this.element.find('.tab').on('click', function(event) {
-                jQuery.publish('tabSelected.' + _this.windowId, jQuery( ".tabGroup li" ).index( this ));
+                jQuery.publish('tabSelected.' + _this.windowId, jQuery( this ).index());
             });
         },
         render: function(renderingData) {
