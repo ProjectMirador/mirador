@@ -20,7 +20,7 @@
                 tabs : this.tabs,
                 //tabs: [{id:'tocTab', label:'Indices'}, {id:'searchTab', label:'Search'}],
                 //tabs: [{id:'tocTab', label:'Indices'}],
-                selectedTabIndex: 1
+                selectedTabIndex: 0
             }, true);
             this.listenForActions();
             this.render(this.state());
