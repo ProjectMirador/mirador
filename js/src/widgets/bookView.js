@@ -288,6 +288,24 @@ bindEvents: function() {
           'toolbarID' : toolbarID
         });
 
+        if (_this.state.getStateProperty('autoHideControls')) {
+          var timeoutID = null,
+          fadeDuration = _this.state.getStateProperty('fadeDuration'),
+          timeoutDuration = _this.state.getStateProperty('timeoutDuration');
+          var hideHUD = function() {
+            _this.element.find(".hud-control").fadeOut(fadeDuration);
+          };
+          hideHUD();
+          jQuery(_this.element).on('mousemove', function() {
+            clearTimeout(timeoutID);
+            _this.element.find('.hud-control').fadeIn(fadeDuration);
+            timeoutID = setTimeout(hideHUD, timeoutDuration);
+          }).on('mouseleave', function() {
+            clearTimeout(timeoutID);
+            _this.element.find('.hud-control').fadeOut(fadeDuration);
+          });
+        }
+
         _this.osd.addHandler('open', function(){
           _this.addLayer(tileSources.slice(1), aspectRatio);
           var addItemHandler = function( event ) {

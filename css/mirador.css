@@ -1040,7 +1040,7 @@ li.highlight {
 
 /* Canvas HUD
 ----------------------- */
-.mirador-canvas-hud {
+/*.mirador-canvas-hud {
   position:absolute;
   left: 0;
   top:0;
@@ -1048,24 +1048,24 @@ li.highlight {
   right:0;
   background: rgba(255, 0, 128, 0.5);
   pointer-events: none;
-}
+}*/
 .hud-control {
   cursor: pointer;
   color:white;
   text-shadow: 0 0 5px black;
-  transition: all 0.3s ease;
+  /*transition: all 0.3s ease;*/
   opacity: 0.6;
   font-size: 18px;
   z-index:2;
 }
-.hud-container {
+/*.hud-container {
   cursor: pointer;
   color:white;
   text-shadow: 0 0 5px black;
   transition: all 0.3s ease;
   font-size: 18px;
   z-index:2;
-}
+}*/
 .hud-control:hover {
   transition: all 0.3s ease;
   opacity: 1;
