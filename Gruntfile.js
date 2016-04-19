@@ -39,7 +39,8 @@ module.exports = function(grunt) {
     'js/lib/paper-full.min.js',
     'js/lib/spectrum.js',
     'js/lib/jquery.awesome-cursor.js',
-    'js/lib/i18next.min.js'
+    'js/lib/i18next.min.js',
+    'bower_components/simplePagination.js/jquery.simplePagination.js'
   ],
 
   // libraries/plugins for running tests
@@ -100,7 +101,8 @@ module.exports = function(grunt) {
         'css/spectrum.css',
         'css/mirador.css',
         'css/material-icons.css',
-        '!css/mirador-combined.css'
+        '!css/mirador-combined.css',
+        'bower_components/simplePagination.js/simplePagination.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'
       }
@@ -406,7 +408,7 @@ module.exports = function(grunt) {
   // Runs instanbul coverage
   //grunt.registerTask('cover', 'karma:cover');
   grunt.registerTask('cover', []);
-  
+
   // ----------
   // Runs this on travis.
   grunt.registerTask('ci', [
