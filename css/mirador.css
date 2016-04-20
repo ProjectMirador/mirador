@@ -1068,7 +1068,7 @@ li.highlight {
 }
 .hud-control:hover {
   /*transition: all 0.3s ease;*/
-  opacity: 1;
+  color: deepSkyblue;
 }
 .mirador-osd-edit-mode.selected, .mirador-osd-annotations-layer.selected {
   opacity: 1;
