@@ -1058,16 +1058,16 @@ li.highlight {
   font-size: 18px;
   z-index:2;
 }
-/*.hud-container {
+.hud-container {
   cursor: pointer;
   color:white;
   text-shadow: 0 0 5px black;
   transition: all 0.3s ease;
   font-size: 18px;
   z-index:2;
-}*/
+}
 .hud-control:hover {
-  transition: all 0.3s ease;
+  /*transition: all 0.3s ease;*/
   opacity: 1;
 }
 .mirador-osd-edit-mode.selected, .mirador-osd-annotations-layer.selected {
