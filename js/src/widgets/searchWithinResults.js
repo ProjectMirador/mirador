@@ -65,10 +65,26 @@ $.SearchWithinResults.prototype = {
       async: true
     })
     .done(function(searchResults) {
+      // display result totals
+      _this.displayResultCounts(searchResults);
+      // show results list
       _this.processResults(searchResults);
     })
     .fail()
     .always();
+  },
+
+  
+  displayResultCounts: function(searchResults){
+
+    var total = searchResults.within.total,
+      startResultNumber = searchResults.startIndex + 1,
+      endResultNumber = searchResults.startIndex + searchResults.resources.length;
+  
+    jQuery('.search-results-count').html("<hr/><h3>" +  total + " total; showing " + startResultNumber + "-" + endResultNumber + "</h3><hr/>");
+      
+
+
   },
 
   processResults: function(searchResults) {
@@ -385,6 +401,7 @@ $.SearchWithinResults.prototype = {
   template: Handlebars.compile([
     '<div>',
       '<div class="search-results-messages"></div>',
+      '<div class="search-results-count"></div>',
       '<div class="search-results-pager"></div>',
       '<div class="search-results-container">',
         '{{> resultsList }}',

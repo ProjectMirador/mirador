@@ -42,7 +42,7 @@
       sidePanelAvailable: true,
       sidePanelOptions: {
         "toc" : true,
-        "annotations" : false
+        "annotations" : true
       },
       sidePanelVisible: true,
       annotationsAvailable: {
