@@ -92,20 +92,24 @@
 
       this.element.find(".js-perform-query").on('submit', function(event){
         event.preventDefault();
+
         var query = _this.element.find(".js-query").val();
         var motivation = _this.element.find(".js-motivation").val();
         var date = _this.element.find(".js-date").val();
         var user = _this.element.find(".js-user").val();
-        var box = _this.element.find(".js-box").val();
-        var query_params = {q: query, motivation: motivation, date: date, user: user, box: box};
-        _this.displaySearchWithin(query_params);
+
+        _this.displaySearchWithin({
+          "q": query,
+          "motivation": motivation,
+          "date": date,
+          "user": user
         });
+      });
 
       this.element.find(".js-search-expand").on('click', function(event){
         event.preventDefault();
 
-        _this.element.find(".js-search-expanded").slideToggle("slow", function(){
-        });
+        _this.element.find(".js-search-expanded").slideToggle("fast");
 
         if (jQuery(this).text() === "more"){
           jQuery(this).html("less");
@@ -152,10 +156,10 @@
 
           '<a class="js-search-expand" style="display: block; margin: 0 0 5px 0">more</a>',
           '<div class="js-search-expanded" style="display: none;">',
-            '<input class="js-motivation" type="text" placeholder="painting"/>',
+            '<input class="js-motivation" type="text" placeholder="motivation"/>',
             '<input class="js-date" type="text" placeholder="date"/>',
             '<input class="js-user" type="text" placeholder="user"/>',
-            '<input class="js-box" type="text" placeholder="box"/>',
+            // '<input class="js-box" type="text" placeholder="box: x, y, w, h"/>',
           '</div>',
         '</form>',
         '<div class="search-results-list"></div>',

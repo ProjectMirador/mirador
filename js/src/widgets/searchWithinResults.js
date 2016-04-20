@@ -1,61 +1,46 @@
 (function($) {
 
-  /**
-   * UI + logic to get search results for a given search query. On initialization,
-   * the provided search query is given tothe provided IIIF Search service.
-   * The response is displayed as a list.
-   *
-   * Currently follows IIIF Search API v0.9.1-draft
-   * (http://iiif.io/api/search/0.9/)
-   */
-  $.SearchWithinResults = function(options) {
+/**
+ * UI + logic to get search results for a given search query. On initialization,
+ * the provided search query is given tothe provided IIIF Search service.
+ * The response is displayed as a list.
+ *
+ * Parameter 'query_params': {q: query, motivation: motivation, date: date, user: user, box: box}
+ *
+ * Currently follows IIIF Search API v0.9.1-draft
+ * (http://iiif.io/api/search/0.9/)
+ */
+$.SearchWithinResults = function(options) {
 
-    jQuery.extend(this, {
-      manifest:             null,
-      element:              null,
-      metadataTypes:        null,
-      metadataListingCls:   'metadata-listing',
-      searchService:        null,
-      windowId:             null,
-      query_params:         null,
-      
-    }, options);
+  jQuery.extend(this, {
+    manifest:             null,
+    element:              null,
+    metadataTypes:        null,
+    metadataListingCls:   'metadata-listing',
+    searchService:        null,
+    windowId:             null,
+    query_params:         null,
+    currentPage:          1,
+  }, options);
 
-    this.init();
-  };
+  this.init();
+};
 
-  $.SearchWithinResults.prototype = {
+$.SearchWithinResults.prototype = {
 
-    init: function() {
-      var _this = this;
+  init: function() {
+    this.registerHandlebars();
+    this.searchService = this.manifest.getSearchWithinService();
 
-      _this.searchService = this.manifest.getSearchWithinService();
+    jQuery(this.appendTo).empty();
+    this.element = jQuery(this.template()).appendTo(this.appendTo);
+    jQuery("<hr/><h3>Search results for: " + this.query_params.q + "</h3><hr/>")
+        .appendTo(this.appendTo.find('.search-results-messages'));
+    this.doSearchFromQuery(this.query_params);
+  },
 
-      jQuery(this.appendTo).empty();
-      
-      jQuery("<hr/><h3>Search results for: " + _this.query_params.q + "</h3><hr/>").appendTo(_this.appendTo);
-
-      this.searchRequest(this.query_params).done(function(searchResults) {
-
-        //create tplData array
-        if (searchResults.hits) {
-          _this.tplData = _this.getHits(searchResults);
-        }
-        else {
-          _this.tplData = _this.getSearchAnnotations(searchResults);
-        }
-
-        _this.element = jQuery(_this.template(_this.tplData)).appendTo(_this.appendTo);
-        _this.bindEvents();
-      });
-    },
-
-  // Base code from https://github.com/padolsey/prettyprint.js. Modified to fit Mirador needs
-  searchRequest: function(query_params){
-    var _this = this;
-
+  doSearchFromQuery: function(query_params) {
     query_string = "";
-    console.log(query_params.box);
     for (var param in query_params){
       if (param === "q"){
         query_string += param + "=" + query_params[param];
@@ -64,12 +49,40 @@
        query_string += "&" + param + "=" + query_params[param];
       }
     }
-    console.log (query_string);
-    return jQuery.ajax({
-        url:   _this.searchService['@id'] + "?" + query_string,
-        dataType: 'json',
-        async: true
-      });
+
+    var url = this.searchService['@id'] + '?q=' + query_string;
+    this.doSearchFromUrl(url);
+  },
+
+  doSearchFromUrl: function(url) {
+    var _this = this;
+
+    this.element.find('.search-results-container').empty();
+
+    jQuery.ajax({
+      url: url,
+      dataType: 'json',
+      async: true
+    })
+    .done(function(searchResults) {
+      _this.processResults(searchResults);
+    })
+    .fail()
+    .always();
+  },
+
+  processResults: function(searchResults) {
+    //create tplData array
+    if (searchResults.hits) {
+      this.tplData = this.getHits(searchResults);
+    } else {
+      this.tplData = this.getSearchAnnotations(searchResults);
+    }
+
+    jQuery(Handlebars.compile('{{> resultsList }}')(this.tplData)).appendTo(jQuery(this.element.find('.search-results-container')));
+    this.bindEvents();
+
+    this.setPager(searchResults);
   },
 
   /**
@@ -79,7 +92,10 @@
    * @return TRUE if paging is needed
    */
   needsPager: function(results) {
-    return results && results.next;
+    // Check for total number of results vs number of returned results
+    return results &&
+        results.within && results.within.total &&
+        results.resources && results.resources.length < results.within.total;
   },
 
   /**
@@ -87,22 +103,62 @@
    * been determined whether or not the pager needs to be created.
    * If a pager is created, it will be inserted into the DOM.
    *
+   * If it is determined that this set of results does not need paging,
+   * then this function will exit early and no paging will be set.
+   * {@link SearchWithinResults#needsPager}
+   *
    * @param  results - IIIF Search results
    */
   setPager: function(results) {
-    var onPageCount = results.hits ? results.hits.length : results.resources.length;
-    var urlPrefix = 'blah';
+    if (!this.needsPager(results)) {
+      return;
+    }
+    var _this = this;
 
-    var startIndex = results.startIndex ? results.startIndex : results.
+    if (!this.onPageCount) { // This will be set with initial page and not be changed.
+      this.onPageCount = results.resources.length;
+    }
 
-    $('.search-results-pager').pagination({
+    this.element.find('.search-results-pager').pagination({
         items: results.within.total,
-        itemsOnPage: onPageCount,
-        currentPage: this.float2int(results.within.total / onPageCount),
+        itemsOnPage: _this.onPageCount,
+        currentPage: _this.currentPage,
+        displayedPages: 1,
+        edges: 1,
+        ellipsePageSet: false,
         cssStyle: 'compact-theme',
-        ellipsePageSet: true,
-        hrefTextPrefix: urlPrefix    // Take from the search results
+        hrefTextPrefix: '',
+        prevText: '<i class="fa fa-lg fa-angle-left"></i>',
+        nextText: '<i class="fa fa-lg fa-angle-right"></i>',
+        onPageClick: function(pageNumber, event) {
+          event.preventDefault();
+
+          // See if target is next/prev. Next/Prev buttons have correct page number.
+          if (pageNumber == _this.currentPage - 1) {
+            goPrev();
+          } else if (pageNumber == _this.currentPage + 1) {
+            goNext();
+          } else if (pageNumber == 1) {
+            _this.doSearchFromUrl(results.within.first);
+            _this.currentPage = 1;
+          } else {
+            // Assume this is the last page........
+            _this.doSearchFromUrl(results.within.last);
+            _this.currentPage = parseInt(
+              _this.element.find('.search-results-pager li:nth-last-child(2)').text()
+            );
+          }
+        }
     });
+
+    function goNext() {
+      _this.doSearchFromUrl(results.next);
+      _this.currentPage++;
+    }
+    function goPrev() {
+      _this.doSearchFromUrl(results.prev);
+      _this.currentPage--;
+    }
   },
 
   /**
@@ -260,7 +316,7 @@
         //if (!_this.structures) { return; }
         //_this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, canvasID));
         //_this.render();
-        
+
       });
 
     this.element.find('.js-show-canvas').on("click", function() {
@@ -285,31 +341,12 @@
         }];
 
       //_this.parent.annotationsList = miniAnnotationList;
-      console.log(_this.parent);
-      //_this.parent.setCurrentCanvasID(canvasid);
       jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasid);
-
-      
     });
-
-
   },
 
-  /**
-   * Handlebars template. Accepts data and formats appropriately. To use,
-   * just pass in the template data and this will return a String with
-   * the formatted HTML which can then be inserted into the DOM.
-   *
-   * This template expects a IIIF AnnotationList formatted to represent
-   * IIIF Search results.
-   *
-   * EX: assume context:
-   * 	var templateData = { template data goes here }
-   * 	var htmlString = template(templateData);
-   */
-  template: Handlebars.compile([
-    '<div class="search-results-pager"></div>',
-    '<div class="search-results-container">',
+  registerHandlebars: function() {
+    Handlebars.registerPartial('resultsList', [
       '{{#each this}}',
         '<div class="result-wrapper">',
           '<a class="search-result search-title js-show-canvas" data-canvasid="{{canvasid}}" data-coordinates="{{coordinates}}">',
@@ -330,6 +367,28 @@
           '</div>',
         '</div>',
       '{{/each}}',
+    ].join(''));
+  },
+
+  /**
+   * Handlebars template. Accepts data and formats appropriately. To use,
+   * just pass in the template data and this will return a String with
+   * the formatted HTML which can then be inserted into the DOM.
+   *
+   * This template expects a IIIF AnnotationList formatted to represent
+   * IIIF Search results.
+   *
+   * EX: assume context:
+   * 	var templateData = { template data goes here }
+   * 	var htmlString = template(templateData);
+   */
+  template: Handlebars.compile([
+    '<div>',
+      '<div class="search-results-messages"></div>',
+      '<div class="search-results-pager"></div>',
+      '<div class="search-results-container">',
+        '{{> resultsList }}',
+      '</div>',
     '</div>'
   ].join(""))};
 
