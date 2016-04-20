@@ -81,7 +81,7 @@
               localState.empty = false;
             }
 
-            this.state(state);
+            this.localState(localState);
         },
         deselectList: function(listId) {
             var _this = this;
