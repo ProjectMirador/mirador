@@ -89,7 +89,8 @@
                     manifest: _this.manifest,
                     windowId: this.windowId,
                     appendTo: _this.element.find('.tabContentArea'),
-                    tabs: _this.sidePanelState.tabs
+                    tabs: _this.sidePanelState.tabs,
+                    state: _this.state
                 });
             }
 
