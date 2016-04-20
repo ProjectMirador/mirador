@@ -1183,9 +1183,14 @@ li.highlight {
   text-shadow: none !important;
 }
 
+.draw-tool>i {
+  text-shadow: 0 0 5px black !important;
+}
+
 .draw-tool .sp-replacer {
   vertical-align: top;
   margin-top: 2px;
+  height: 14px !important;
 }
 
 .mirador-line-type:hover {
@@ -1198,7 +1203,7 @@ li.highlight {
 .mirador-line-type {
   border-radius: 5px !important;
   padding: 0px !important;
-  height: 20px !important;
+  height: 22px !important;
   width: 67px !important;
   opacity: 0.6;
   border: 1px solid #91765d;
@@ -1216,14 +1221,21 @@ li.highlight {
   font-size: 10px !important;
 }
 
+.mirador-line-type>span {
+  color: black;
+  float: right;
+  margin-right: 5px;
+}
+
 .mirador-line-type>i {
-  padding-left: 45px;
+  vertical-align: top;
+  width: 30px !important;
   margin: 4px 0px 0px 4px !important;
 }
 
 .mirador-line-type i {
   color: #333333;
-  width: 55px;
+  width: 45px;
   height: 10px;
   font-size: 15px !important;
   background-repeat: no-repeat;
@@ -1251,6 +1263,8 @@ li.highlight {
 
 .borderColorPicker + div + .sp-container, .fillColorPicker + div + .sp-container {
   width: 300px !important;
+  border-width: 0px !important;
+  opacity: 0.9;
 }
 
 .borderColorPicker + div .sp-preview, .fillColorPicker + div .sp-preview {
