@@ -16,7 +16,7 @@
             var _this = this;
             this.windowId = this.windowId;
 
-            this.state({
+            this.localState({
                 id: 'annotationsTab',
                 visible: this.visible,
                 annotationLists: [],
@@ -26,11 +26,11 @@
             }, true);
 
             this.listenForActions();
-            this.render(this.state());
+            this.render(this.localState());
             this.loadTabComponents();
             this.bindEvents();
         },
-        state: function(state, initial) {
+        localState: function(state, initial) {
             if (!arguments.length) return this.annoTabState;
             this.annoTabState = state;
 
@@ -45,15 +45,15 @@
 
         },
         tabStateUpdated: function(visible) {
-            var state = this.state();
-            state.visible = state.visible ? false : true;
+            var localState = this.localState();
+            localState.visible = localState.visible ? false : true;
 
-            this.state(state);
+            this.localState(localState);
         },
         annotationListLoaded: function() {
             var _this = this,
                 annotationSources = [],
-                state = this.state();
+                localState = this.localState();
             jQuery.each(_this.state.getWindowAnnotationsList(_this.windowId), function(index, value) {
                 if(typeof value.endpoint === 'string') {
                     annotationSources.push('manifest');
@@ -67,41 +67,41 @@
                 return i==annotationSources.indexOf(itm);
             });
 
-            state.annotationLists = annotationSources.map(function(annotationSource) {
-                //var s = (annotationSource === state.selectedList ? true : false);
+            localState.annotationLists = annotationSources.map(function(annotationSource) {
+                //var s = (annotationSource === localState.selectedList ? true : false);
                 return {
                     annotationSource: annotationSource,
                     layer: null,
-                    selected: (annotationSource === state.selectedList ? true : false),
+                    selected: (annotationSource === localState.selectedList ? true : false),
                     focused: false
                 };
             });
 
-            if(state.annotationLists.length){
-              state.empty = false;
+            if(localState.annotationLists.length){
+              localState.empty = false;
             }
 
             this.state(state);
         },
         deselectList: function(listId) {
             var _this = this;
-            var state = this.state();
-            state.selectedList = null;
-            state.annotationLists.forEach(function(list){ list.selected = false; });
-            this.state(state);
+            var localState = this.localState();
+            localState.selectedList = null;
+            localState.annotationLists.forEach(function(list){ list.selected = false; });
+            this.localState(localState);
         },
         selectList: function(listId) {
             var _this = this;
-            var state = this.state();
-            state.selectedList = listId;
-            state.annotationLists.forEach(function(list){ list.selected = list.annotationSource === listId ? true : false; });
-            this.state(state);
+            var localState = this.localState();
+            localState.selectedList = listId;
+            localState.annotationLists.forEach(function(list){ list.selected = list.annotationSource === listId ? true : false; });
+            this.localState(localState);
         },
         focusList: function(listId) {
-            var state = this.state();
-            state.focusedList = listId;
-            state.annotationLists.forEach(function(list){ list.focused = list.annotationSource === listId ? true : false;});
-            this.state(state);
+            var localState = this.localState();
+            localState.focusedList = listId;
+            localState.annotationLists.forEach(function(list){ list.focused = list.annotationSource === listId ? true : false;});
+            this.localState(localState);
         },
         toggle: function() {},
         listenForActions: function() {
@@ -126,7 +126,7 @@
                   _this.annotationListLoaded();
               });
 
-              _this.selectList(_this.state().selectedList);
+              _this.selectList(_this.localState().selectedList);
 
             });
 
@@ -146,7 +146,7 @@
             listItems.on('click', function(event) {
                 //event.stopImmediatePropagation();
                 var listClicked = jQuery(this).data('id');
-                if(_this.state().selectedList === listClicked){
+                if(_this.localState().selectedList === listClicked){
                     //_this.deselectList(listClicked);
                     jQuery.publish('listDeselected.' + _this.windowId, listClicked);
                 }else{
