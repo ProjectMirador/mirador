@@ -7,7 +7,7 @@
             manifest:          null,
             panelState:        {},
             tocTabAvailable:   false,
-            annotationsTabAvailable: true,
+            annotationsTabAvailable: false,
             layersTabAvailable: false,
             toolsTabAvailable: false,
             searchTabAvailable: true,
@@ -98,7 +98,7 @@
                     manifest: _this.manifest,
                     windowId: this.windowId,
                     appendTo: _this.element.find('.tabContentArea'),
-                    //tabs: _this.sidePanelState.tabs
+                    tabs: _this.sidePanelState.tabs
                 });
             } 
             if (_this.searchTabAvailable) {

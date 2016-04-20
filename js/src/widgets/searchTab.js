@@ -124,6 +124,8 @@
     render: function(state) {
       var _this = this;
 
+      // TODO: if there was more than one searchservice on a manifest, 
+      // only the first one search service on the manifest level will be included.
       templateData = {
         searchService: this.manifest.getSearchWithinService()["@id"]
       };

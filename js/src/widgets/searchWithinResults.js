@@ -50,7 +50,7 @@ $.SearchWithinResults.prototype = {
       }
     }
 
-    var url = this.searchService['@id'] + '?q=' + query_string;
+    var url = this.searchService['@id'] + '?' + query_string;
     this.doSearchFromUrl(url);
   },
 
@@ -79,9 +79,26 @@ $.SearchWithinResults.prototype = {
 
     var total = searchResults.within.total,
       startResultNumber = searchResults.startIndex + 1,
-      endResultNumber = searchResults.startIndex + searchResults.resources.length;
+      endResultNumber = "";
+
+
+      //if there is only only resource, it will not be array and therefore we can't 
+      //take the length of it; this conditions check first to see if the resources 
+      //property contains an array or single object
+
+      // TODO: not that this single object vs. array seems to be problem throughout. 
+      // Pages with only one result do not display properly. See for example: 
+      // http://exist.scta.info/exist/apps/scta/iiif/pl-zbsSII72/search?q=fides&page=3
+
+      if (searchResults.resources.constructor === Array) {
+        endResultNumber = searchResults.startIndex + searchResults.resources.length;  
+      }
+      else {
+        endResultNumber = searchResults.startIndex + 1;  
+      }
+      
   
-    jQuery('.search-results-count').html("<hr/><h3>" +  total + " total; showing " + startResultNumber + "-" + endResultNumber + "</h3><hr/>");
+    jQuery('.search-results-count').html("<hr/><p>Showing " + startResultNumber + " - " + endResultNumber + " out of " + total + "</p><hr/>");
       
 
 
@@ -197,9 +214,16 @@ $.SearchWithinResults.prototype = {
         var canvasid = result.on;
         var canvaslabel = _this.getLabel(result);
 
-        if (!canvaslabel) {   // Do not add this result if no label is found
-          return;
-        }
+        
+        // TODO: i turned this off so that we could results that don't yet have a 
+        // canvas identifier. It might be nice to allow these to display but provide 
+        // a graceful error message for these, indicating to the user that no canvas
+        // identifier is currently available. Click events for these kinds of results
+        // should be disabled.
+
+        //if (!canvaslabel) {   // Do not add this result if no label is found
+          //return;
+        //}
 
         // If resource.on is an Object, containing extra information about the
         // parent object, set ID appropriately
@@ -222,6 +246,15 @@ $.SearchWithinResults.prototype = {
     }
     return tplData;
   },
+
+  //TODO: getHits is mostly working, but the when you click on a 
+  //hit it doesn't take you to the correct canvas
+
+  //use the this manifest as test data: 
+  //http://wellcomelibrary.org/iiif/b18035978/manifest
+  // here are examples search results for this manifest
+  ///http://wellcomelibrary.org/annoservices/search/b18035978?q=morality
+
 
   getHits: function(searchResults) {
     var _this = this;
@@ -335,6 +368,14 @@ $.SearchWithinResults.prototype = {
 
       });
 
+    //TODO 
+    //This function works to move the user to the specified canvas
+    //but if there are associated coordinates, it does not yet know how to highlight
+    //those coordinates.
+
+    //thie miniAnnotatList attempted to do this, but is no longer working
+    //it needs to be replaced by a new strategy.
+    
     this.element.find('.js-show-canvas').on("click", function() {
       event.stopPropagation();
 
