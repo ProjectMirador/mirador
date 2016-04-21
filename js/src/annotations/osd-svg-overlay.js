@@ -211,6 +211,11 @@
     onMouseMove: function(event) {
       this.overlay.cursorLocation = event.point;
       if (!this.overlay.disabled) {
+        if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
+          document.body.style.cursor = "pointer";
+        } else {
+          document.body.style.cursor = "default";
+        }
         event.stopPropagation();
         this.overlay.currentTool.onMouseMove(event, this.overlay);
       } else {
