@@ -1241,18 +1241,6 @@ li.highlight {
   background-repeat: no-repeat;
 }
 
-.mirador-line-type .solid {
-  background-image: url('../images/border_type_1.png');
-}
-
-.mirador-line-type .dashed {
-  background-image: url('../images/border_type_2.png');
-}
-
-.mirador-line-type .dotdashed {
-  background-image: url('../images/border_type_3.png');
-}
-
 .sp-button-container a {
   color: #555555 !important;
   text-shadow: none !important;

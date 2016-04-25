@@ -295,6 +295,11 @@
       for (var value in _this.availableTools) {
         this.element.find('.material-icons:contains(\'' + _this.availableTools[value] + '\')').on('click', make_handler(_this.availableTools[value]));
       }
+      var backgroundPath = _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('imagesPath');
+      _this.element.find('.mirador-line-type>i').css('background-image', 'url(' + backgroundPath + 'border_type_1.png)');
+      _this.element.find('.mirador-line-type .solid').css('background-image', 'url(' + backgroundPath + 'border_type_1.png)');
+      _this.element.find('.mirador-line-type .dashed').css('background-image', 'url(' + backgroundPath + 'border_type_2.png)');
+      _this.element.find('.mirador-line-type .dotdashed').css('background-image', 'url(' + backgroundPath + 'border_type_3.png)');
       _this.element.find('.mirador-line-type').on('mouseenter', function() {
         _this.element.find('.type-list').stop().slideFadeToggle(300);
       });
@@ -305,6 +310,14 @@
         var className = jQuery(this).find('i').attr('class').replace(/fa/, '').replace(/ /, '');
         _this.element.find('.mirador-line-type>i').removeClass("solid dashed dotdashed");
         _this.element.find('.mirador-line-type>i').addClass(className);
+        var url = _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('imagesPath');
+        if (className === 'solid') {
+          _this.element.find('.mirador-line-type>i').css('background-image', 'url(' + backgroundPath + 'border_type_1.png)');
+        } else if (className === 'dashed') {
+          _this.element.find('.mirador-line-type>i').css('background-image', 'url(' + backgroundPath + 'border_type_2.png)');
+        } else if (className === 'dotdashed') {
+          _this.element.find('.mirador-line-type>i').css('background-image', 'url(' + backgroundPath + 'border_type_3.png)');
+        }
         jQuery.publish('toggleBorderType.' + _this.windowId, className);
       });
       //related the ContextControls
