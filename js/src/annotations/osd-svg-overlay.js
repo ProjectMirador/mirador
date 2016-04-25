@@ -66,7 +66,8 @@
       _this.resize();
     });
     jQuery.subscribe('toggleDrawingTool.' + _this.windowId, function(event, tool) {
-      jQuery('#' + osdViewerId).parent().find('.hud-container').find('.draw-tool').css('opacity', '');
+      //jQuery('#' + osdViewerId).parent().find('.hud-container').find('.draw-tool').css('opacity', '');
+      jQuery('#' + osdViewerId).parent().find('.hud-container').find('.draw-tool').removeClass('selected');
       if (_this.disabled) {
         jQuery('.qtip' + _this.windowId).qtip('hide');
         return;
@@ -76,12 +77,14 @@
       for (var i = 0; i < _this.tools.length; i++) {
         if (_this.tools[i].logoClass == tool) {
           _this.currentTool = _this.tools[i];
-          jQuery('#' + osdViewerId).parent().find('.hud-container').find('.material-icons:contains(\'' + tool + '\')').parent('.draw-tool').css('opacity', '1');
+          //jQuery('#' + osdViewerId).parent().find('.hud-container').find('.material-icons:contains(\'' + tool + '\')').parent('.draw-tool').css('opacity', '1');
+          jQuery('#' + osdViewerId).parent().find('.hud-container').find('.material-icons:contains(\'' + tool + '\')').parent('.draw-tool').addClass('selected');
         }
       }
     });
     jQuery.subscribe('toggleDefaultDrawingTool.' + _this.windowId, function(event) {
-      jQuery('#' + osdViewerId).parent().find('.hud-container').find('.draw-tool').css('opacity', '');
+      //jQuery('#' + osdViewerId).parent().find('.hud-container').find('.draw-tool').css('opacity', '');
+      jQuery('#' + osdViewerId).parent().find('.hud-container').find('.draw-tool').removeClass('selected');
       if (_this.disabled) {
         jQuery('.qtip' + _this.windowId).qtip('hide');
         return;
@@ -92,7 +95,8 @@
         for (var j = 0; j < _this.tools.length; j++) {
           if (_this.availableAnnotationDrawingTools[i] == _this.tools[j].name) {
             _this.currentTool = _this.tools[j];
-            jQuery('#' + osdViewerId).parent().find('.hud-container').find('.material-icons:contains(\'' + _this.tools[j].logoClass + '\')').parent('.draw-tool').css('opacity', '1');
+            //jQuery('#' + osdViewerId).parent().find('.hud-container').find('.material-icons:contains(\'' + _this.tools[j].logoClass + '\')').parent('.draw-tool').css('opacity', '1');
+            jQuery('#' + osdViewerId).parent().find('.hud-container').find('.material-icons:contains(\'' + _this.tools[j].logoClass + '\')').parent('.draw-tool').addClass('selected');
             break;
           }
         }

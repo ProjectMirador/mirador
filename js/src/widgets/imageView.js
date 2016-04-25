@@ -393,12 +393,14 @@
           fadeDuration = _this.state.getStateProperty('fadeDuration'),
           timeoutDuration = _this.state.getStateProperty('timeoutDuration');
           var hideHUD = function() {
-            _this.element.find(".hud-control").stop(true, true).animate({opacity: 0}, fadeDuration);
+            //_this.element.find(".hud-control").stop(true, true).animate({opacity: 0}, fadeDuration);
+            _this.element.find(".hud-control").stop(true, true).addClass('hidden', fadeDuration);
           };
           hideHUD();
           jQuery(_this.element).on('mousemove', function() {
             window.clearTimeout(timeoutID);
-            _this.element.find(".hud-control").stop(true, true).animate({opacity: 0.6}, fadeDuration);
+            //_this.element.find(".hud-control").stop(true, true).animate({opacity: 0.6}, fadeDuration);
+            _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
             timeoutID = window.setTimeout(hideHUD, timeoutDuration);
           }).on('mouseleave', function() {
             window.clearTimeout(timeoutID);

@@ -1068,11 +1068,14 @@ li.highlight {
 }
 .hud-control:hover {
   /*transition: all 0.3s ease;*/
-  color: deepSkyblue;
+  opacity: 1;
 }
-.mirador-osd-edit-mode.selected, .mirador-osd-annotations-layer.selected {
+.hud-control.selected {
   opacity: 1;
   /*transition: none;*/
+}
+.hud-control.hidden {
+  opacity: 0;
 }
 .mirador-osd-previous {
   position:absolute;
