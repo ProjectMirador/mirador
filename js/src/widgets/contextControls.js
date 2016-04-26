@@ -40,9 +40,8 @@
           jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, color);
         },
         hide: function(color) {
-          color = jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId);
           if (color) {
-            jQuery.publish('changeBorderColor.' + _this.windowId, color.toHexString());
+            jQuery.publish('updateBorderColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
           }
         },
         maxSelectionSize: 4,
@@ -62,9 +61,18 @@
       jQuery._data(borderPicker.find(".sp-cancel")[0], "events").click.reverse();
       borderPicker.find('a.sp-choose').on('click',function(){
         borderPicker.find('button.sp-choose').click();
+        color = jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId);
+        if (color) {
+          jQuery.publish('changeBorderColor.' + _this.windowId, color.toHexString());
+        }
       });
       jQuery('.draw-tool:has(input.borderColorPicker)').mouseover(function() {
         if(borderPicker.hasClass("sp-hidden")) {
+          jQuery(this).find(".sp-preview").click();
+        }
+      });
+      jQuery('.draw-tool:has(input.borderColorPicker)').mouseleave(function() {
+        if(!borderPicker.hasClass("sp-hidden")) {
           jQuery(this).find(".sp-preview").click();
         }
       });
@@ -87,9 +95,8 @@
           jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, color);
         },
         hide: function(color) {
-          color = jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId);
           if (color) {
-            jQuery.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
+            jQuery.publish('updateFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
           }
         },
         maxSelectionSize: 4,
@@ -109,15 +116,20 @@
       jQuery._data(fillPicker.find(".sp-cancel")[0], "events").click.reverse();
       fillPicker.find('a.sp-choose').on('click',function(){
         fillPicker.find('button.sp-choose').click();
+        color = jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId);
+        if (color) {
+          jQuery.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
+        }
       });
       jQuery('.draw-tool:has(input.fillColorPicker)').mouseover(function() {
         if(fillPicker.hasClass("sp-hidden")) {
           jQuery(this).find(".sp-preview").click();
         }
       });
-      jQuery('i').mouseover(function(){
-        _this.container.find(".borderColorPicker").spectrum('hide');
-        _this.container.find(".fillColorPicker").spectrum('hide');
+      jQuery('.draw-tool:has(input.fillColorPicker)').mouseleave(function() {
+        if(!fillPicker.hasClass("sp-hidden")) {
+          jQuery(this).find(".sp-preview").click();
+        }
       });
       this.hide();
       this.bindEvents();

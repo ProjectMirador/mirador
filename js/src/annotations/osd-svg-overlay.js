@@ -109,6 +109,9 @@
         _this.paperScope.view.draw();
       }
     });
+    jQuery.subscribe('updateBorderColor.' + _this.windowId, function(event, color) {
+      _this.strokeColor = color;
+    });
     jQuery.subscribe('changeFillColor.' + _this.windowId, function(event, color, alpha) {
       _this.fillColor = color;
       _this.fillColorAlpha = alpha;
@@ -117,6 +120,10 @@
         _this.hoveredPath.fillColor.alpha = alpha;
         _this.paperScope.view.draw();
       }
+    });
+    jQuery.subscribe('updateFillColor.' + _this.windowId, function(event, color, alpha) {
+      _this.fillColor = color;
+      _this.fillColorAlpha = alpha;
     });
     jQuery.subscribe('toggleBorderType.' + _this.windowId, function(event, type) {
       if (type == 'solid') {
