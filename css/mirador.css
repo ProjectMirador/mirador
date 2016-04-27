@@ -1594,16 +1594,14 @@ ul.scroll-listing-thumbs li .thumb-label {
 ---------------------------------------------------------------------------- */
 
 .mirador-viewer .sub-title {
-  border-bottom: 1px dotted #ccc;
+  border-bottom: 2px solid #ccc;
   color: #666;
   font-weight: bold;
-  margin: 10px 20px 0 20px;
+  margin: 10px 20px 5px 20px;
   padding: 0 5px 5px 0;
 }
 
 .mirador-viewer .metadata-listing {
-  display: table;
-  table-layout: fixed;
   width: 100%;
   margin: 0;
   padding: 0px 20px 10px 20px;
@@ -1611,18 +1609,16 @@ ul.scroll-listing-thumbs li .thumb-label {
 }
 
 .mirador-viewer .metadata-item {
-  padding-bottom: 5px;
+  padding: 5px 0;
 }
 
 .mirador-viewer .metadata-label, .mirador-viewer .metadata-value {
   line-height: 1.5;
-  margin-left: 3%;
 }
 
 .mirador-viewer .metadata-label {
   text-transform: capitalize;
   color: #555;
-  margin-left: 3%;
   font-style: italic;
 }
 
@@ -1644,8 +1640,8 @@ ul.scroll-listing-thumbs li .thumb-label {
 }
 
 .metadata-logo {
-  width: 80px;
-  margin-left: 3%;
+  max-height: 120px;
+  max-width: 100%;
 }
 
 
