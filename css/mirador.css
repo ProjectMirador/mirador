@@ -1686,7 +1686,7 @@ a.mirador-icon-annotations [class^="icon-"] {
   color: black
 }
 
-ul.dropdown {
+.mirador-viewer ul.dropdown {
   display: none;
   width: 160px;
   z-index: 3;
@@ -1702,7 +1702,7 @@ ul.dropdown {
   border: 1px solid #B1B1B1;
 }
 
-.dropdown li {
+.mirador-viewer .dropdown li {
   margin:0;
   cursor: pointer;
   box-sizing: border-box;
@@ -1711,7 +1711,8 @@ ul.dropdown {
   width:100%;
   text-align:left;
 }
-.dropdown li:hover {
+
+.mirador-viewer .dropdown li:hover {
   border-left: 3px solid deepskyblue;
   background-color: #dddddd;
   padding-left: 7px;
