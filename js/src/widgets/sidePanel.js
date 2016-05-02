@@ -38,7 +38,7 @@
                         label:'Annotations'
                     }
                 },*/
-                /*{
+                {
                     name : 'layers',
                     options : {
                         available: _this.layersTabAvailable,
@@ -46,7 +46,7 @@
                         label:'Layers'
                     }
                 },
-                {
+                /*{
                     name : 'tools',
                     options : {
                         available: _this.toolsTabAvailable,
@@ -89,7 +89,15 @@
                     manifest: _this.manifest,
                     windowId: this.windowId,
                     appendTo: _this.element.find('.tabContentArea'),
-                    tabs: _this.sidePanelState.tabs,
+                    state: _this.state
+                });
+            }
+            if (_this.layersTabAvailable) {
+                new $.LayersTab({
+                    manifest: _this.manifest,
+                    windowId: this.windowId,
+                    appendTo: _this.element.find('.tabContentArea'),
+                    canvasID: this.canvasID,
                     state: _this.state
                 });
             }
