@@ -38,9 +38,9 @@
     "grunt-coveralls": "^1.0.0"
   },
   "scripts": {
-    "test": "grunt cover jshint coveralls --verbose --full",
+    "test": "./node_modules/grunt-cli/bin/grunt cover jshint coveralls --verbose --full",
     "travis": "./node_modules/grunt-cli/bin/grunt ci --verbose",
-    "postinstall": "grunt githooks"
+    "postinstall": "./node_modules/grunt-cli/bin/grunt githooks"
   },
   "dependencies": {}
 }
