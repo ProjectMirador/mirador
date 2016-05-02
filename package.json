@@ -7,7 +7,7 @@
     "url": "https://github.com/IIIF/mirador"
   },
   "devDependencies": {
-    "grunt": "*",
+    "grunt": ">=0.4.5 <1.0.0",
     "grunt-contrib-compress": "*",
     "grunt-contrib-concat": "*",
     "grunt-contrib-copy": "*",
