@@ -39,7 +39,7 @@
   },
   "scripts": {
     "test": "grunt cover jshint coveralls --verbose --full",
-    "travis": "grunt ci --verbose",
+    "travis": "./node_modules/grunt-cli/bin/grunt ci --verbose",
     "postinstall": "grunt githooks"
   },
   "dependencies": {}
