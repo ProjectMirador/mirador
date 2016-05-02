@@ -26,28 +26,39 @@ describe('WorkspacePanel', function() {
   it('can detect when a layout is selected', function() {
     var gridItem = this.viewerDiv.find('.grid-item').first();
     var gridString = gridItem.data('gridstring');
+    spyOn(this.panel, 'onSelect');
+    gridItem.trigger('click');
+    expect(this.panel.onSelect).toHaveBeenCalledWith(gridString);
+  });
+  
+  it('can detect when a layout is hovered', function() {
+    var gridItem = this.viewerDiv.find('.grid-item').first();
+    var gridString = gridItem.data('gridstring');
+    spyOn(this.panel, 'onHover');
+    gridItem.trigger('mouseenter');
+    expect(this.panel.onHover).toHaveBeenCalledWith(gridString);
+  });
+  
+  it('publishes events when a layout is selected', function() {
+    var gridString = '2x2';
     var layoutDescription = Mirador.layoutDescriptionFromGridString(gridString);
     spyOn(jQuery, 'publish');
-    gridItem.trigger('click');
+    this.panel.onSelect(gridString);
     expect(jQuery.publish).toHaveBeenCalledWith('RESET_WORKSPACE_LAYOUT', {layoutDescription: layoutDescription});
     expect(jQuery.publish).toHaveBeenCalledWith('TOGGLE_WORKSPACE_PANEL');
   });
   
-  xit('should create grid data', function() {
-    this.panel.find('.layout-cell').first().hover();
+  it('should render the grid', function() {
+    var maxRows = workspacePanelSettings.maxRows;
+    var maxColumns = workspacePanelSettings.maxColumns;
+    var maxGridString = maxRows + 'x' + maxColumns;
+    expect(this.viewerDiv.find('#workspace-select-menu')).toExist();
+    expect(this.viewerDiv.find('.select-grid .grid-row')).toExist();
+    expect(this.viewerDiv.find('.select-grid .grid-row > .grid-item')).toExist();
+    
+    var gridItems = this.viewerDiv.find('.grid-item');
+    expect(gridItems.length).toBe(maxRows * maxColumns);
+    expect(jQuery(gridItems[gridItems.length - 1]).data('gridstring')).toBe(maxGridString);
   });
-  
-  xit('should render the grid', function() {
-    expect(this.panel.element.find('.grid-container')).toExist();
-    expect(this.panel.element.find('.select-grid .preview-container')).toExist();
-    expect(this.panel.element.find('.select-grid .preview-container .layout-strip')).toExist();
-    var cellElements = this.panel.element.find('.layout-cell');
-    expect(cellElements.length).toBe(15);
-    expect(cellElements[cellElements.length -1 ].data('selection')).toBe('3x5');
-  });
-  
-  xit('should trigger new layout on workspace, according to selection', function() {
-    this.panel.onSelect('2x2');
-    expect(this.workspace.setLayout).toHaveBeenCalledWith('2x2');
-  });
+
 });
