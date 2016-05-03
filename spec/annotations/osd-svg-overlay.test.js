@@ -65,6 +65,12 @@ describe('Overlay', function() {
         'pixelFromPoint': function(point, current) {
           return point;
         },
+        'getBounds': function(current) {
+          return {
+            'x': 800,
+            'y': 600
+          };
+        },
         'containerSize': {
           'x': 800,
           'y': 600
@@ -77,13 +83,32 @@ describe('Overlay', function() {
       'addHandler': function(eventName, functionBody) {
       }
     };
-    var drawingToolsSettings = {
-      'doubleClickReactionTime': 300,
-      'strokeColor': 'deepSkyBlue',
-      'fillColor': 'deepSkyBlue',
-      'fillColorAlpha': 0.0
+    var state = {
+      'currentConfig': {
+        'annotationBodyEditor': {
+          'module': 'TinyMCEAnnotationBodyEditor',
+          'options': {}
+        }
+      },
+      getStateProperty: function(key) {
+        if (key === 'drawingToolsSettings') {
+          return {
+            'doubleClickReactionTime': 300,
+            'strokeColor': 'deepSkyBlue',
+            'fillColor': 'deepSkyBlue',
+            'fillColorAlpha': 0.0
+          };
+        }
+        if (key === 'availableAnnotationDrawingTools') {
+          return [];
+        }
+        if (key === 'availableExternalCommentsPanel') {
+          return false;
+        }
+        return null;
+      }
     };
-    this.overlay = new Mirador.Overlay(this.viewerMock, this.windowObjMock, drawingToolsSettings, []);
+    this.overlay = new Mirador.Overlay(this.viewerMock, this.windowObjMock.windowId, this.windowObjMock.windowId, state);
   });
 
   afterEach(function() {

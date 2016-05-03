@@ -17,7 +17,7 @@
       overlay.mode = 'create';
       var _this = this;
       var pathData = '';
-      var size = overlay.pinSize;
+      var size = overlay.fixedShapeSize;
       pathData += 'M' + initialPoint.x + ',' + initialPoint.y;
       pathData += ' Q' + initialPoint.x + ',' + (initialPoint.y - size);
       pathData += ' ' + (initialPoint.x + size) + ',' + (initialPoint.y - 2 * size);
@@ -27,13 +27,14 @@
       pathData += ' ' + initialPoint.x + ',' + initialPoint.y;
       var shape = new overlay.paperScope.Path(pathData);
       shape.name = overlay.getName(_this);
+      shape.dashArray = overlay.dashArray;
       shape.strokeWidth = 1 / overlay.paperScope.view.zoom;
       shape.strokeColor = overlay.strokeColor;
       shape.fillColor = overlay.fillColor;
       shape.fillColor.alpha = overlay.fillColorAlpha;
       shape.fullySelected = true;
       shape.closed = true;
-      overlay.fitPinSize(shape);
+      overlay.fitFixedSizeShapes(shape);
       return shape;
     },
 

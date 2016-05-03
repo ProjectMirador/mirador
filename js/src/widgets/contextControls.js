@@ -27,6 +27,7 @@
         showInitial: true,
         showPalette: true,
         showSelectionPalette: true,
+        clickoutFiresChange: false,
         appendTo: 'parent',
         containerClassName: 'borderColorPickerPop'+_this.windowId,
         preferredFormat: "rgb",
@@ -40,9 +41,8 @@
           jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, color);
         },
         hide: function(color) {
-          color = jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId);
           if (color) {
-            jQuery.publish('changeBorderColor.' + _this.windowId, color.toHexString());
+            jQuery.publish('updateBorderColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
           }
         },
         maxSelectionSize: 4,
@@ -53,8 +53,8 @@
       });
       _this.container.find(".borderColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>border_color</i>");
       var borderPicker = jQuery('.borderColorPickerPop'+_this.windowId);
-      borderPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>Cancel');
-      borderPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>Choose</a>');
+      borderPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>' + i18n.t('cancel'));
+      borderPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>' + i18n.t('choose') + '</a>');
       borderPicker.find('button.sp-choose').hide();
       borderPicker.find('a.sp-cancel').on('click', function() {
         jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, null);
@@ -62,6 +62,20 @@
       jQuery._data(borderPicker.find(".sp-cancel")[0], "events").click.reverse();
       borderPicker.find('a.sp-choose').on('click',function(){
         borderPicker.find('button.sp-choose').click();
+        color = jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId);
+        if (color) {
+          jQuery.publish('changeBorderColor.' + _this.windowId, color.toHexString());
+        }
+      });
+      jQuery('.draw-tool:has(input.borderColorPicker)').mouseover(function() {
+        if(borderPicker.hasClass("sp-hidden")) {
+          jQuery(this).find(".sp-preview").click();
+        }
+      });
+      jQuery('.draw-tool:has(input.borderColorPicker)').mouseleave(function() {
+        if(!borderPicker.hasClass("sp-hidden")) {
+          jQuery(this).find(".sp-preview").click();
+        }
       });
       _this.container.find(".fillColorPicker").spectrum({
         showInput: true,
@@ -69,6 +83,7 @@
         showAlpha: true,
         showPalette: true,
         showSelectionPalette: true,
+        clickoutFiresChange: false,
         appendTo: 'parent',
         containerClassName: 'fillColorPickerPop'+_this.windowId,
         preferredFormat: "rgb",
@@ -82,9 +97,8 @@
           jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, color);
         },
         hide: function(color) {
-          color = jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId);
           if (color) {
-            jQuery.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
+            jQuery.publish('updateFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
           }
         },
         maxSelectionSize: 4,
@@ -95,8 +109,8 @@
       });
       _this.container.find(".fillColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>format_color_fill</i>");
       var fillPicker = jQuery('.fillColorPickerPop'+_this.windowId);
-      fillPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>Cancel');
-      fillPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>Choose</a>');
+      fillPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>' + i18n.t('cancel'));
+      fillPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>' + i18n.t('choose') + '</a>');
       fillPicker.find('button.sp-choose').hide();
       fillPicker.find('a.sp-cancel').on('click', function() {
         jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, null);
@@ -104,6 +118,20 @@
       jQuery._data(fillPicker.find(".sp-cancel")[0], "events").click.reverse();
       fillPicker.find('a.sp-choose').on('click',function(){
         fillPicker.find('button.sp-choose').click();
+        color = jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId);
+        if (color) {
+          jQuery.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
+        }
+      });
+      jQuery('.draw-tool:has(input.fillColorPicker)').mouseover(function() {
+        if(fillPicker.hasClass("sp-hidden")) {
+          jQuery(this).find(".sp-preview").click();
+        }
+      });
+      jQuery('.draw-tool:has(input.fillColorPicker)').mouseleave(function() {
+        if(!fillPicker.hasClass("sp-hidden")) {
+          jQuery(this).find(".sp-preview").click();
+        }
       });
       this.hide();
       this.bindEvents();
@@ -145,6 +173,13 @@
                                    '{{/each}}',
                                    '<a class="hud-control draw-tool" style="color:#abcdef;">',
                                    '|',
+                                   '</a>',
+                                   '<a href="javascript:;" class="mirador-btn draw-tool mirador-line-type" role="button" aria-label="Change Line Type"><i class="material-icons solid"></i><span class="sp-dd">▼</span>',
+                                   '<ul class="dropdown type-list">',
+                                   '<li><i class="fa solid"></i> {{t "solid"}}</li>',
+                                   '<li><i class="fa dashed"></i> {{t "dashes"}}</li>',
+                                   '<li><i class="fa dotdashed"></i> {{t "dotsAndDashes"}}</li>',
+                                   '</ul>',
                                    '</a>',
                                    '<a class="hud-control draw-tool">',
                                    '<input type="text" class="borderColorPicker"/>',
