@@ -42,5 +42,6 @@
     "travis": "./node_modules/grunt-cli/bin/grunt ci --verbose",
     "postinstall": "./node_modules/grunt-cli/bin/grunt githooks"
   },
+  "after_script": "cat ./reports/coverage/PhantomJS*/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
   "dependencies": {}
 }

@@ -1,6 +1,6 @@
 paper.install(window);
 
-describe('Overlay', function() {
+xdescribe('Overlay', function() {
 
   function getEvent(delta, point, event) {
     return {
