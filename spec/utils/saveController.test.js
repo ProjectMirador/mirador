@@ -10,9 +10,9 @@ describe("saveController", function() {
         "title": "MS 5",
         "widgets": []
       }],
-    }; 
+    };
   });
-  
+
   describe('saveSession == false', function() {
 
     beforeEach(function() {
@@ -76,8 +76,6 @@ describe("saveController", function() {
   describe('default settings set to undefined', function() {
 
     beforeEach(function() {
-      // clear $.DEFAULT_SETTINGS
-      window.Mirador.DEFAULT_SETTINGS = {};
       this.config.jsonStorageEndpoint = {
         'name': 'JSONBlob API Endpoint',
         'module': 'JSONBlobAPI',
