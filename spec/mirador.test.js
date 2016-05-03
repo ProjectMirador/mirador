@@ -35,7 +35,7 @@ describe('Mirador | mirador.js', function() {
       expect(Mirador.viewer.manifests['spec/data/Walters/bd183mz0176/manifest.json']).not.toBe(null);
     });
 
-    it('should push in manifest list items', function() {
+    xit('should push in manifest list items', function() {
       expect(Mirador.viewer.manifestsPanel.manifestListItems.length).toBe(1);
     });
 
@@ -56,7 +56,7 @@ describe('Mirador | mirador.js', function() {
       }, 2000);
     });
 
-    it('should show logo specified in manifest', function(done){
+    xit('should show logo specified in manifest', function(done){
       expect(testContext.viewerDiv.find(".repo-image>img")[0].getAttribute("src"))
         .toEqual("https://stacks-test.stanford.edu/image/iiif/ck546xs5106%2Folemiss1/full/300,/0/default.jpg");
 
@@ -65,7 +65,7 @@ describe('Mirador | mirador.js', function() {
       }, 2000);
     });
 
-    it('should click manifest', function(done) {
+    xit('should click manifest', function(done) {
       expect(testContext.viewerDiv.find('.select-metadata').first()).toExist();
       expect(testContext.viewerDiv.find('.window').first()).not.toExist();
       expect(testContext.viewerDiv.find('.select-metadata').first()).toBeVisible();
@@ -76,7 +76,7 @@ describe('Mirador | mirador.js', function() {
       }, 2000);
     });
 
-    it('should click first page in thumbnail view', function(done) {
+    xit('should click first page in thumbnail view', function(done) {
       expect(testContext.viewerDiv.find('.window').first()).toExist();
       setTimeout(function() {
         done();

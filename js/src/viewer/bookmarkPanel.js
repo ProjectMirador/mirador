@@ -23,25 +23,33 @@
       this.listenForActions();
     },
 
+    bindEvents: function() {
+      var _this = this;
+    },
+
     listenForActions: function() {
       var _this = this;
-      // handle subscribed events
       jQuery.subscribe('bookmarkPanelVisible.set', function(_, stateValue) {
-        if (stateValue) { _this.show(); return; }
-        _this.hide();
+        _this.onPanelVisible(_, stateValue);
       });
-
       jQuery.subscribe('saveControllerConfigUpdated', function() {
-        _this.storageModule.save(Mirador.saveController.currentConfig)
-          .then(function(blobId) {
-            var bookmarkURL = window.location.href.replace(window.location.hash, '') + "?json="+blobId;
-            _this.element.find('#share-url').val(bookmarkURL).focus().select();
-	         });
+        _this.onConfigUpdated();
       });
     },
 
-    bindEvents: function() {
+    onPanelVisible: function(_, stateValue) {
       var _this = this;
+      if (stateValue) { _this.show(); return; }
+      _this.hide();
+    },
+
+    onConfigUpdated: function() {
+      var _this = this;
+      _this.storageModule.save(_this.state.currentConfig)
+      .then(function(blobId) {
+        var bookmarkURL = window.location.href.replace(window.location.hash, '') + "?json="+blobId;
+        _this.element.find('#share-url').val(bookmarkURL).focus().select();
+      });
     },
 
     hide: function() {
