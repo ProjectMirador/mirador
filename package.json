@@ -39,7 +39,7 @@
   },
   "scripts": {
     "test": "./node_modules/grunt-cli/bin/grunt cover jshint coveralls --verbose --full",
-    "travis": "./node_modules/grunt-cli/bin/grunt ci --verbose",
+    "travis": "./node_modules/grunt-cli/bin/grunt ci --verbose --force",
     "postinstall": "./node_modules/grunt-cli/bin/grunt githooks"
   },
   "after_script": "cat ./reports/coverage/PhantomJS*/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
