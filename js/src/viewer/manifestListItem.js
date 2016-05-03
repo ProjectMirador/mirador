@@ -82,24 +82,9 @@
           continue;
         }
 
-        /*var aspectRatio = canvas.height/canvas.width,
+        var aspectRatio = canvas.height/canvas.width,
         width = (_this.thumbHeight/aspectRatio);
-        url = _this.manifest.getThumbnailForCanvas(canvas, width);*/
-        
-        // Show up thumbnail for wider images than the screen
-        var aspectRatio = canvas.height/canvas.width;
-	if (aspectRatio < 0.6) {
-		canvas.width = (canvas.width * aspectRatio) / 0.2;
-		aspectRatio = canvas.height/canvas.width;
-		width = (_this.thumbHeight/aspectRatio);
-	} else if (aspectRatio > 1.5) {
-		canvas.height = (canvas.height * 1.5) / aspectRatio;
-		aspectRatio = canvas.height/canvas.width;
-		width = (_this.thumbHeight/aspectRatio);
-	} else {
-		width = (_this.thumbHeight/aspectRatio);
-	}
-	url = _this.manifest.getThumbnailForCanvas(canvas, width);
+        url = _this.manifest.getThumbnailForCanvas(canvas, width);
 
         _this.allImages.push({
           url: url,
@@ -115,6 +100,10 @@
 
         _this.imagesTotalWidth += (width + _this.margin);
         if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
+          // outsized image will inherited
+          if (value.width > _this.maxPreviewImagesWidth) {
+            _this.tplData.images.push(value);
+          }
           _this.imagesTotalWidth -= (width + _this.margin);
           return false;
         }
@@ -240,14 +229,16 @@
           '</div>',
         '</div>',
       '</div>',
-      '<div class="preview-images">',
-      '{{#each images}}',
-        '<img src="{{url}}" width="{{width}}" height="{{height}}" class="preview-image flash" data-image-id="{{id}}">',
-      '{{/each}}',
+      '<div class="preview-thumb">',
+      	'<div class="preview-images">',
+      	'{{#each images}}',
+           '<img src="{{url}}" width="{{width}}" height="{{height}}" class="preview-image flash" data-image-id="{{id}}">',
+      	'{{/each}}',
+      	'</div>',
+      	'{{#if remaining}}',
+           '<i class="fa fa fa-ellipsis-h remaining"></i>',
+      	'{{/if}}',
       '</div>',
-      '{{#if remaining}}',
-        '<i class="fa fa fa-ellipsis-h remaining"></i>',
-      '{{/if}}',
       '</li>'
     ].join(''))
   };
