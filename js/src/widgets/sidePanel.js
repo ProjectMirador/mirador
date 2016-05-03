@@ -77,7 +77,7 @@
 
             if (this.tocTabAvailable) {
                 new $.TableOfContents({
-                    manifest: this.manifest,
+                    structures: this.manifest.getStructures(),
                     appendTo: this.element.find('.tabContentArea'),
                     windowId: this.windowId,
                     panel: true,

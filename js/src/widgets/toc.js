@@ -6,7 +6,6 @@
       element:           null,
       appendTo:          null,
       windowId:          null,
-      manifest:          null,
       structures:        null,
       previousSelectedElements: [],
       selectedElements: [],
@@ -25,7 +24,6 @@
   $.TableOfContents.prototype = {
     init: function () {
       var _this = this;
-      _this.structures = _this.manifest.getStructures();
       if (!_this.structures || _this.structures.length === 0) {
         this.element = jQuery(this.emptyTemplate()).appendTo(this.appendTo);
       } else {
