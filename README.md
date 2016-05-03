@@ -1,5 +1,5 @@
 
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/IIIF/mirador?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Stories in Ready](https://badge.waffle.io/iiif/mirador.svg?label=ready&title=Ready)](http://waffle.io/iiif/mirador) 
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/IIIF/mirador?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Stories in Ready](https://badge.waffle.io/iiif/mirador.svg?label=ready&title=Ready)](http://waffle.io/iiif/mirador)
 
 Mirador
 =======
@@ -48,7 +48,7 @@ You may also wish to obtain the source code from the [latest release](https://gi
       Mirador({
         "id": "viewer", // The CSS ID selector for the containing element.
         "layout": "1x1", // The number and arrangement of windows ("row"x"column")?
-        "data": [ 
+        "data": [
         // This array holds the manifest URIs for the IIIF resources you want Mirador to make available to the user.
         // Each manifest object must have a manifest URI pointing to a valid IIIF manifest, and may also
         // provide a location to be displayed in the listing of available manifests.
@@ -68,9 +68,9 @@ You may also wish to obtain the source code from the [latest release](https://gi
           { "manifestUri": "http://www.e-codices.unifr.ch/metadata/iiif/sl-0002/manifest.json", "location": 'e-codices'},
           { "manifestUri": "http://www.e-codices.unifr.ch/metadata/iiif/bge-cl0015/manifest.json", "location": 'e-codices'}
         ],
-        // This array allows the user to specify which of the included manifests should appear 
-        // in the workspace, and what the configuration of the window (zoom level, open panels, etc.) 
-        // ought to be. To begin with, we will leave it blank. 
+        // This array allows the user to specify which of the included manifests should appear
+        // in the workspace, and what the configuration of the window (zoom level, open panels, etc.)
+        // ought to be. To begin with, we will leave it blank.
         "windowObjects": []
       });
     });
@@ -86,7 +86,4 @@ There can be as many instances of Mirador running on one page as desired. Simply
 For more information, see the [wiki](https://github.com/IIIF/mirador/wiki), submit an [issue](https://github.com/mirador/mirador/issues), or ask on [gitter](https://gitter.im/IIIF/mirador).
 
 ### Project Diagnostics
-[![Build Status](https://travis-ci.org/IIIF/mirador.svg)](https://travis-ci.org/IIIF/mirador) [![Coverage Status](https://img.shields.io/coveralls/IIIF/m2.svg)](https://coveralls.io/r/IIIF/m2)  
-
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/IIIF.svg)](https://saucelabs.com/u/IIIF)  
-
+[![Build Status](https://travis-ci.org/IIIF/mirador.svg?branch=release2.1)](https://travis-ci.org/IIIF/mirador?branch=release2.1) [![Coverage Status](https://coveralls.io/repos/github/IIIF/mirador/badge.svg?branch=release2.1?upToDate=true)](https://coveralls.io/github/IIIF/mirador?branch=release2.1?upToDate=true)
