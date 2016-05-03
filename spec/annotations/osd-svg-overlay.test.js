@@ -83,7 +83,8 @@ describe('Overlay', function() {
       'fillColor': 'deepSkyBlue',
       'fillColorAlpha': 0.0
     };
-    this.overlay = new Mirador.Overlay(this.viewerMock, this.windowObjMock, drawingToolsSettings, []);
+    var state = new Mirador.SaveController({});
+    this.overlay = new Mirador.Overlay(this.viewerMock, this.windowObjMock.viewer.id, this.windowObjMock.windowId, state);
   });
 
   afterEach(function() {
