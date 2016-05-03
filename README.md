@@ -86,6 +86,4 @@ There can be as many instances of Mirador running on one page as desired. Simply
 For more information, see the [wiki](https://github.com/IIIF/mirador/wiki), submit an [issue](https://github.com/mirador/mirador/issues), or ask on [gitter](https://gitter.im/IIIF/mirador).
 
 ### Project Diagnostics
-[![Build Status](https://travis-ci.org/IIIF/mirador.svg)](https://travis-ci.org/IIIF/mirador) [![Coverage Status](https://img.shields.io/coveralls/IIIF/mirador.svg)](https://coveralls.io/r/IIIF/mirador)  
-
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/IIIF.svg)](https://saucelabs.com/u/IIIF)  
+[![Build Status](https://travis-ci.org/IIIF/mirador.svg?branch=release2.1)](https://travis-ci.org/IIIF/mirador?branch=release2.1) [![Coverage Status](https://img.shields.io/coveralls/IIIF/mirador.svg)](https://coveralls.io/r/IIIF/mirador?branch=release2.1)  
