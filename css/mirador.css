@@ -409,6 +409,10 @@ a {
   margin-right:15px;
   height: 80px;
 }
+.preview-thumb {
+  display: inline-flex;
+  position: absolute;
+}
 .preview-images {
   margin-right:0;
 }
