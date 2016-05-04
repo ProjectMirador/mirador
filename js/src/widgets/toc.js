@@ -25,7 +25,7 @@
     init: function () {
       var _this = this;
       if (!_this.structures || _this.structures.length === 0) {
-        this.element = jQuery(this.emptyTemplate).appendTo(this.appendTo);
+        this.element = jQuery(this.emptyTemplate()).appendTo(this.appendTo);
       } else {
         this.ranges = this.setRanges();
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);

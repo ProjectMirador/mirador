@@ -45,7 +45,7 @@ module.exports = function(config) {
       // spec
       'spec/**/*.js',
       {pattern: 'spec/data/*', watched: true, served: true, included: false},
-      {pattern: 'spec/fixtures/v1StructuresManifest.json', watched: true, served: true, included: false},
+      {pattern: 'spec/fixtures/*json', watched: true, served: true, included: false},
     ],
 
 

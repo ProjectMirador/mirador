@@ -2,17 +2,17 @@ describe('Table of Contents', function() {
   beforeEach(function(){
     jasmine.getJSONFixtures().fixturesPath = 'spec/fixtures';
 
-    var v1SimpleStructures = getJSONFixture('simpleFixture'),
-        v2SimpleStructures = getJSONFixture('simpleFixture'),
-        v21SimpleStructures = getJSONFixture('simpleFixture'),
+    var v1SimpleStructures = getJSONFixture('simpleStructuresFixtureV1.json'),
+        // v2SimpleStructures = getJSONFixture('simpleStructuresFixtureV2.json'),
+        // v21SimpleStructures = getJSONFixture('simpleStructuresFixtureV21.json'),
         realisticV2 = {},
         realisticV21 = {},
-        realisticV1 = getJSONFixture('v1StructuresManifest.json');
+        realisticV1 = getJSONFixture('Richardson7manifest.json');
   });
 
   describe('Initialisation', function(){
 
-    xit('should render a table of contents element', function() {
+    it('should render a table of contents element', function() {
 
     });
 
