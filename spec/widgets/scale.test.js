@@ -1,4 +1,4 @@
-describe('', function() {
+describe('WidgetScale', function() {
 
   beforeEach(function() {
 
