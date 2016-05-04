@@ -67,7 +67,6 @@
         dataType: 'json',
         async: true
       });
-
       this.request.done(function(jsonLd) {
         _this.jsonLd = _this.generateInfoWrapper(jsonLd);
       });
@@ -164,8 +163,8 @@
                       '@id': infoJson,
                       '@type': "dctypes:Image",
                       format: "image/jpeg",
-                      height: infoJson.width,
-                      width: infoJson.height,
+                      height: infoJson.height,
+                      width: infoJson.width,
                       service: {
                         '@id': infoJson['@id'],
                         '@context': infoJson['@context'],
