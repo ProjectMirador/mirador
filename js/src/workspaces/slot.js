@@ -20,7 +20,7 @@
     init: function () {
       this.element = jQuery(this.template({
         workspaceSlotCls: this.workspaceSlotCls,
-        slotID: this.slotId 
+        slotID: this.slotId
       }));
       this.element.appendTo(this.appendTo);
 
@@ -57,7 +57,7 @@
           jQuery.publish('HIDE_REMOVE_OBJECT.' + _this.window.id);
         }
       });
-      
+
       jQuery.subscribe('SHOW_REMOVE_SLOT', function(event) {
         _this.element.find('.remove-slot-option').show();
         if (_this.window) {
@@ -132,7 +132,8 @@
       var _this = this;
 
       e.preventDefault();
-      e.originalEvent.dataTransfer.items[0].getAsString(function(url){
+      var url = e.originalEvent.dataTransfer.getData("text/plain");
+      if (url) {
         var manifestUrl = $.getQueryParams(url).manifest,
             canvasId = $.getQueryParams(url).canvas,
             imageInfoUrl = $.getQueryParams(url).image,
@@ -197,8 +198,11 @@
 
             jQuery.publish('ADD_WINDOW', windowConfig);
           }
-        });
       });
+    } else {
+      _this.element.removeClass('draggedOver');
+      dropTarget.hide();
+    }
     },
 
     clearSlot: function() {
@@ -253,4 +257,3 @@
   };
 
 }(Mirador));
-
