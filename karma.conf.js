@@ -9,7 +9,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'fixture'],
 
 
     // list of files / patterns to load in the browser
@@ -44,7 +44,8 @@ module.exports = function(config) {
       'js/src/utils/*.js',
       // spec
       'spec/**/*.js',
-      {pattern: 'spec/data/manifest.json', watched: true, served: true, included: false},
+      {pattern: 'spec/data/*', watched: true, served: true, included: false},
+      {pattern: 'spec/fixtures/v1StructuresManifest.json', watched: true, served: true, included: false},
     ],
 
 
@@ -58,7 +59,6 @@ module.exports = function(config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
     },
-
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
@@ -91,5 +91,5 @@ module.exports = function(config) {
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: true
-  })
-}
+  });
+};

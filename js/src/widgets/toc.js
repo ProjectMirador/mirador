@@ -25,7 +25,7 @@
     init: function () {
       var _this = this;
       if (!_this.structures || _this.structures.length === 0) {
-        this.element = jQuery(this.emptyTemplate()).appendTo(this.appendTo);
+        this.element = jQuery(this.emptyTemplate).appendTo(this.appendTo);
       } else {
         this.ranges = this.setRanges();
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
@@ -83,10 +83,7 @@
         attrString = '[data-rangeid="' + rangeID +'"]';
 
         tocData[item.id] = {
-          element: _this.element.find(attrString).closest('li') //,
-          // open: false,
-          // selected: false,
-          // hovered: false
+          element: _this.element.find(attrString).closest('li')
         };
       });
 
@@ -193,11 +190,11 @@
     bindEvents: function() {
       var _this = this;
 
-      jQuery.subscribe('focusChanged', function(_, manifest, focusFrame) {
-      });
+      // jQuery.subscribe('focusChanged', function(_, focusFrame) {
+      // });
 
-      jQuery.subscribe('cursorFrameUpdated', function(_, manifest, cursorBounds) {
-      });
+      // jQuery.subscribe('cursorFrameUpdated', function(_, cursorBounds) {
+      // });
 
       jQuery.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
         _this.tabStateUpdated(data);
@@ -211,22 +208,12 @@
 
       _this.element.find('.toc-link').on('click', function(event) {
         event.stopPropagation();
-        // The purpose of the immediate event is to update the data on the parent
-        // by calling its "set" function.
-        //
-        // The parent (window) then emits an event notifying all panels of
-        // the update, so they can respond in their own unique ways
-        // without window having to know anything about their DOMs or
-        // internal structure.
-        var rangeID = jQuery(this).data().rangeid,
-        canvasID = jQuery.grep(_this.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0],
-        isLeaf = jQuery(this).closest('li').hasClass('leaf-item');
 
-        // if ( _this.parent.currentFocus === 'ThumbnailsView' & !isLeaf) {
-        //   _this.parent.setCursorFrameStart(canvasID);
-        // } else {
-          jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasID);
-        // }
+        var rangeID = jQuery(this).data().rangeid,
+            canvasID = jQuery.grep(_this.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0],
+            isLeaf = jQuery(this).closest('li').hasClass('leaf-item');
+
+        jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasID);
       });
 
       _this.element.find('.toc-caret').on('click', function(event) {
@@ -235,15 +222,8 @@
         var rangeID = jQuery(this).parent().data().rangeid;
         _this.setOpenItem(rangeID);
 
-        // For now it's alright if this data gets lost in the fray.
         jQuery(this).closest('li').toggleClass('open').find('ul:first').slideFadeToggle();
-
-        // The parent (window) then emits an event notifying all panels of
-        // the update, so they can respond in their own unique ways
-        // without window having to know anything about their DOMs or
-        // internal structure.
       });
-
     },
 
     setActive: function(active) {
@@ -275,10 +255,6 @@
       _this.previousSelectedElements = _this.selectedElements;
       _this.selectedElements = rangeIDs;
     },
-
-    // returnToPlace: function() {
-    //   console.log('returnToPlace');
-    // },
 
     emptyTemplate: Handlebars.compile([
             '<ul class="toc">',
@@ -327,15 +303,6 @@
       });
 
       return template(tplData);
-    },
-
-    toggle: function(stateValue) {
-      if (!this.structures) { stateValue = false; }
-      if (stateValue) {
-        this.show();
-      } else {
-        this.hide();
-      }
     },
 
     hide: function() {
