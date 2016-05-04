@@ -1,23 +1,47 @@
+
 describe('Table of Contents', function() {
   beforeEach(function(){
     jasmine.getJSONFixtures().fixturesPath = 'spec/fixtures';
 
-    var v1SimpleStructures = getJSONFixture('simpleStructuresFixtureV1.json'),
-        // v2SimpleStructures = getJSONFixture('simpleStructuresFixtureV2.json'),
-        // v21SimpleStructures = getJSONFixture('simpleStructuresFixtureV21.json'),
-        realisticV2 = {},
-        realisticV21 = {},
-        realisticV1 = getJSONFixture('Richardson7manifest.json');
+    this.v1SimpleStructures = getJSONFixture('simpleStructuresFixtureV1.json'),
+    this.v1SimpleStructuresTemplateData = '[{"@id":"http://www.example.org/iiif/book1/range/r1.json","@type":"sc:Range","label":"Introduction","canvases":["http://www.example.org/iiif/book1/canvas/p1.json"],"within":"root","level":0,"children":[{"@id":"http://www.example.org/iiif/book1/range/r2.json","@type":"sc:Range","label":"Part 1","within":"http://www.example.org/iiif/book1/range/r1.json","canvases":["http://www.example.org/iiif/book1/canvas/p2.json","http://www.example.org/iiif/book1/canvas/p3.json#xywh=0,0,750,300"],"level":1}]}]',
+    // v2SimpleStructures = getJSONFixture('simpleStructuresFixtureV2.json'),
+    // v21SimpleStructures = getJSONFixture('simpleStructuresFixtureV21.json'),
+    this.realisticV2 = {},
+    this.realisticV21 = {},
+    this.realisticV1 = getJSONFixture('Richardson7manifest.json');
+
+    this.sandbox = sandbox();
+
+  });
+
+  afterEach(function() {
   });
 
   describe('Initialisation', function(){
 
     it('should render a table of contents element', function() {
+      var testToc = new Mirador.TableOfContents({
+        structures: this.v1SimpleStructures.structures,
+        appendTo: this.sandbox,
+        windowId: 'dummyID',
+        canvasID: 1234
+      });
 
+      expect(this.sandbox.find('.toc')).toExist();
+      expect(testToc.structures.length).toEqual(2);
     });
 
     xit('should render an empty table if there are no strcutures', function(){
+      var testToc = new Mirador.TableOfContents({
+        structures: [],
+        appendTo: this.sandbox,
+        windowId: 'dummyID',
+        canvasID: 1234
+      });
 
+      expect(this.sandbox.find('.toc')).toExist();
+      expect('h2>span').toContainText('No index available');
     });
 
     xit('should bind events on the element(s)', function(){
@@ -38,12 +62,31 @@ describe('Table of Contents', function() {
 
     });
 
-    xit('should return a tree of ranges from the structures (v1.0)', function() {
+    it('should return a tree of ranges from the structures (v1.0)', function() {
+      var testToc = new Mirador.TableOfContents({
+        structures: this.v1SimpleStructures.structures,
+        appendTo: this.sandbox,
+        windowId: 'dummyID',
+        canvasID: 1234
+      });
 
+      expect(testToc.structures.length).toEqual(2);
+      expect(JSON.stringify(testToc.extractRangeTrees(testToc.structures)))
+        .toEqual(this.v1SimpleStructuresTemplateData);
     });
 
     xit('should return a tree of ranges from the structures (v2.0)', function() {
 
+      var testToc = new Mirador.TableOfContents({
+        structures: this.vSimpleStructures.structures,
+        appendTo: this.sandbox,
+        windowId: 'dummyID',
+        canvasID: 1234
+      });
+
+      expect(testToc.ranges.length).toEqual(2);
+      expect(JSON.stringify(testToc.extractRangeTrees(this.v2SimpleStructures)))
+        .toEqual(this.v1SimpleStructuresTemplateData);
     });
 
     xit('should return a tree of ranges from the structures (v2.1)', function() {

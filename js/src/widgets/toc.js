@@ -6,12 +6,11 @@
       element:           null,
       appendTo:          null,
       windowId:          null,
-      structures:        null,
+      structures:        [],
       previousSelectedElements: [],
       selectedElements: [],
       openElements:     [],
       hoveredElement:   [],
-      ranges:           [],
       selectContext:    null,
       tocData: {},
       active: null
@@ -27,7 +26,6 @@
       if (!_this.structures || _this.structures.length === 0) {
         this.element = jQuery(this.emptyTemplate()).appendTo(this.appendTo);
       } else {
-        this.ranges = this.setRanges();
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
         this.tocData = this.initTocData();
         this.selectedElements = $.getRangeIDByCanvasID(_this.structures, _this.canvasID);
@@ -35,24 +33,6 @@
         this.render();
       }
       this.bindEvents();
-    },
-
-    setRanges: function() {
-      var _this = this,
-      ranges = [];
-      jQuery.each(_this.structures, function(index, range) {
-        if (range['@type'] === 'sc:Range') {
-          ranges.push({
-            id: range['@id'],
-            canvases: range.canvases,
-            within: range.within,
-            label: range.label
-          });
-        }
-      });
-
-      return ranges;
-
     },
 
     tabStateUpdated: function(data) {
@@ -65,7 +45,7 @@
 
     getTplData: function() {
       var _this = this,
-      ranges = _this.extractRangeTrees(_this.ranges);
+      ranges = _this.extractRangeTrees(_this.structures);
 
       if (ranges.length < 2) {
         ranges = ranges[0].children;
@@ -78,11 +58,11 @@
       var _this = this,
       tocData = {};
 
-      jQuery.each(_this.ranges, function(index, item) {
-        var rangeID = item.id,
+      jQuery.each(_this.structures, function(index, item) {
+        var rangeID = item['@id'],
         attrString = '[data-rangeid="' + rangeID +'"]';
 
-        tocData[item.id] = {
+        tocData[item['@id']] = {
           element: _this.element.find(attrString).closest('li')
         };
       });
@@ -99,10 +79,10 @@
         // but use the tree that is being recursively built
         // by the call below.
         tree = typeof tree !== 'undefined' ? tree : [];
-        parent = typeof parent !== 'undefined' ? parent : {id: "root", label: "Table of Contents" };
-        var children = jQuery.grep(flatRanges, function(child) { if (!child.within) { child.within = 'root'; } return child.within == parent.id; });
+        parent = typeof parent !== 'undefined' ? parent : {'@id': "root", label: "Table of Contents" };
+        var children = jQuery.grep(flatRanges, function(child) { if (!child.within) { child.within = 'root'; } return child.within == parent['@id']; });
         if ( children.length ) {
-          if ( parent.id === 'root') {
+          if ( parent['@id'] === 'root') {
             // If there are children and their parent's
             // id is a root, bind them to the tree object.
             //
