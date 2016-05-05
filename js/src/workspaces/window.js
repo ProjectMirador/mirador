@@ -42,7 +42,8 @@
       sidePanelAvailable: true,
       sidePanelOptions: {
         "toc" : true,
-        "annotations" : false
+        "annotations" : false,
+        "layers" : false
       },
       sidePanelVisible: true,
       annotationsAvailable: {
@@ -466,6 +467,7 @@
       var _this = this,
       tocAvailable = _this.sidePanelOptions.toc,
       annotationsTabAvailable = _this.sidePanelOptions.annotations,
+      layersTabAvailable = _this.sidePanelOptions.layers,
       hasStructures = true;
 
       var structures = _this.manifest.getStructures();
@@ -480,6 +482,7 @@
               appendTo: _this.element.find('.sidePanel'),
               manifest: _this.manifest,
               canvasID: _this.currentCanvasID,
+              layersTabAvailable: layersTabAvailable,
               tocTabAvailable: tocAvailable,
               annotationsTabAvailable: annotationsTabAvailable,
               hasStructures: hasStructures

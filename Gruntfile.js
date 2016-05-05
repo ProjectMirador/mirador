@@ -245,20 +245,17 @@ module.exports = function(grunt) {
 
     coveralls: {
       options: {
-        src: 'reports/coverage/PhantomJS 1.9.8 (Mac OS X)/lcov.info',
+        src: 'reports/coverage/PhantomJS*/lcov.info',
         force: 'true'
       },
       ci: {
-        src: 'reports/coverage/PhantomJS 1.9.8 (Mac OS X)/lcov.info'
+        src: 'reports/coverage/PhantomJS*/lcov.info'
       }
     },
 
     karma : {
       options: {
-        basePath: '',
-        frameworks: ['jasmine'],
-        files: [].concat(vendors, sources, specs, ['bower_components/sinon-server/index.js', 'bower_components/jasmine-jquery/lib/jasmine-jquery.js'], {pattern: 'spec/data/manifest.json', included: false} ),
-        exclude: exclude,
+        configFile: 'karma.conf.js',
         proxies: {
           '/spec': 'http://localhost:9876/base/spec'
         },
@@ -270,12 +267,6 @@ module.exports = function(grunt) {
           ],
           dir: 'reports/coverage'
         },
-        port: 9876, // Note: web server port
-        colors: true, // Note: enable / disable colors in the output (reporters and logs)
-        logLevel: 'INFO',
-        autoWatch: false,
-        captureTimeout: 60000, // Note: If browser does not capture in given timeout [ms], kill it
-        singleRun: false,
         sauceLabs: {
         },
         customLaunchers: {
@@ -404,9 +395,8 @@ module.exports = function(grunt) {
   // ----------
   // Coverage task.
   // Runs instanbul coverage
-  //grunt.registerTask('cover', 'karma:cover');
-  grunt.registerTask('cover', []);
-  
+  grunt.registerTask('cover', 'karma:cover');
+
   // ----------
   // Runs this on travis.
   grunt.registerTask('ci', [
