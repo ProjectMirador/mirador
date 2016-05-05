@@ -51,7 +51,9 @@
         },
         position: {
           my: 'center',
-          at: 'center'
+          at: 'center',
+          container: _this.targetElement,
+          viewport: _this.targetElement
         },
         style: {
           classes: 'qtip-bootstrap qtip' + _this.windowId
