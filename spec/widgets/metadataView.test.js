@@ -1,7 +1,11 @@
 describe('MetadataView', function() {
   beforeEach(function() {
-    this.utils = Mirador;
-    Mirador.DEFAULT_SETTINGS.availableViews = { 'xyzView': { 'label': 'Xyz View' } };
+    jasmine.getJSONFixtures().fixturesPath = 'spec/fixtures';
+
+    this.fixture = getJSONFixture('metadataFixture.json');
+    this.mockManifest = {
+      metadata : this.fixture
+    };
   });
 
   afterEach(function() {
@@ -9,8 +13,13 @@ describe('MetadataView', function() {
   });
 
   xdescribe('Initialization', function() {
-    it('should initialize', function() {
-
+    xit('should initialize', function() {
+      var testMDView = new Mirador.MetadataView({
+        manifest: this.mockManifest,
+        appendTo: this.sandbox,
+        windowId: 'dummyID',
+        canvasID: 1234
+      });
     });
   });
 
@@ -57,4 +66,4 @@ describe('MetadataView', function() {
   xdescribe('addLinksToUris', function() {
 
   });
-}); 
+});
