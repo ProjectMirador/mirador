@@ -1,16 +1,26 @@
 describe('Manifest', function() {
   beforeEach(function() {
     this.server = sinon.fakeServer.create();
-    this.manifestUri = 'path/to/manifest.json';
   });
 
   afterEach(function() {
     this.server.restore();
   });
   
-  describe('init', function() {
-    xit('should have expected data constructed from manifest content', function(done) {
-      done();
+  describe('init', function () {
+    it('should have expected data constructed from manifest content', function(done) {
+      var content = { "@context": "http://www.shared-canvas.org/ns/context.json",
+        "@type": "sc:Manifest",
+        "@id": "http://manifests.example.com/iiif/EX/manifest",
+        "label": "Book 1",
+        "sequences": [{}]
+      };
+      var manifestInstance = new Mirador.Manifest(null, null, content);
+
+      setTimeout(function () { 
+        expect(manifestInstance.jsonLd.label).toEqual('Book 1');
+        done(); 
+      }, 0);
     });
 
     it('should have expected data constructed from info.json', function(done) {
@@ -52,6 +62,7 @@ describe('Manifest', function() {
     });
     
     it('should have expected data constructed from manifest URI', function(done) {
+      var manifestUri = 'path/to/manifest.json';
       var data = {manifest : "here"};
 
       this.server.respondWith("GET", "path/to/manifest.json",
@@ -60,13 +71,206 @@ describe('Manifest', function() {
           JSON.stringify(data)
         ]
       );
-      var manifestInstance = new Mirador.Manifest(this.manifestUri);
+      var manifestInstance = new Mirador.Manifest(manifestUri);
       this.server.respond();
 
       expect(manifestInstance.jsonLd).toEqual(data);
       done();
     });
     
+    describe('getThumbnailForCanvas', function () {
+      
+      it('when canvas.thumbnail is a string', function () {
+        var thumbnailUrl = 'http://www.example.org/iiif/book1/thumbnail/p1.jpg';
+        var canvas = {
+          thumbnail: thumbnailUrl
+        };
+        var manifestInstance = new Mirador.Manifest(null, null, {});
+        var thumbnail = manifestInstance.getThumbnailForCanvas(canvas);
+        expect(thumbnail).toEqual(thumbnailUrl);
+      });
+      
+      it('when canvas.thumbnail is an object without service', function () {
+        var thumbnailUrl = 'http://www.example.org/iiif/book1/thumbnail/p1.jpg';
+        var canvas = {
+          thumbnail: {
+            '@id': thumbnailUrl
+          }
+        };
+        var manifestInstance = new Mirador.Manifest(null, null, {});
+        var thumbnail = manifestInstance.getThumbnailForCanvas(canvas);
+        expect(thumbnail).toEqual(thumbnailUrl);
+      });
+
+      it('when canvas.thumbnail has a service', function () {
+        var canvas = {
+          thumbnail: {
+            '@id': 'http://example.org/images/book1-page1/full/80,100/0/default.jpg',
+            service: {
+              '@id': 'http://example.org/images/book1-page1',
+              profile: 'http://iiif.io/api/image/2/level1.json'
+            }
+          }
+        };
+        
+        // Version 1
+        canvas.thumbnail.service['@context'] = 'http://iiif.io/api/image/1/context.json';
+        var manifestInstance = new Mirador.Manifest(null, null, {});
+        var thumbnail = manifestInstance.getThumbnailForCanvas(canvas, 128);
+        expect(thumbnail).toEqual('http://example.org/images/book1-page1/full/128,/0/native.jpg');
+        
+        // Version 2
+        canvas.thumbnail.service['@context'] = 'http://iiif.io/api/image/2/context.json';
+        var manifestInstance = new Mirador.Manifest(null, null, {});
+        var thumbnail = manifestInstance.getThumbnailForCanvas(canvas, 126);
+        expect(thumbnail).toEqual('http://example.org/images/book1-page1/full/126,/0/default.jpg');
+        
+        // No @context
+        delete canvas.thumbnail.service['@context'];
+        var manifestInstance = new Mirador.Manifest(null, null, {});
+        var thumbnail = manifestInstance.getThumbnailForCanvas(canvas, 128);
+        expect(thumbnail).toEqual('http://example.org/images/book1-page1/full/128,/0/native.jpg');
+      });
+
+    });
+    
+    it('when canvas has no thumbnail', function () {
+      var canvas = {
+        images: [
+          {
+            resource: {
+              service: {
+                '@context': 'http://iiif.io/api/image/2/context.json',
+                '@id': 'http://example.org/images/book1-page1'
+              }
+            }
+          }
+        ]
+      };
+      var manifestInstance = new Mirador.Manifest(null, null, {});
+      var thumbnail = manifestInstance.getThumbnailForCanvas(canvas, 124);
+      expect(thumbnail).toEqual('http://example.org/images/book1-page1/full/124,/0/default.jpg');
+
+      // No @context
+      delete canvas.images[0].resource.service['@context'];
+      var manifestInstance = new Mirador.Manifest(null, null, {});
+      var thumbnail = manifestInstance.getThumbnailForCanvas(canvas, 124);
+      expect(thumbnail).toEqual('http://example.org/images/book1-page1/full/124,/0/native.jpg');
+    });
+    
+    it('when canvas has no thumbnail and the image resource has a default', function () {
+      var canvas = {
+        images: [
+          {
+            resource: {
+              default: {
+                service: {
+                  '@context': 'http://iiif.io/api/image/2/context.json',
+                  '@id': 'http://example.org/images/book1-page1'
+                }
+              }
+            }
+          }
+        ]
+      };
+      var manifestInstance = new Mirador.Manifest(null, null, {});
+      var thumbnail = manifestInstance.getThumbnailForCanvas(canvas, 122);
+      expect(thumbnail).toEqual('http://example.org/images/book1-page1/full/122,/0/default.jpg');
+    });
+    
+  });
+  
+  describe('getCanvases', function () {
+    it('should return correct canvases', function (done) {
+      var content = {
+        sequences: [
+          {
+            canvases: [
+              {
+                '@id': 'http://example.org/iiif/book1/canvas/p1'
+              }
+            ]
+          }
+        ]
+      };
+      var manifestInstance = new Mirador.Manifest(null, null, content);
+
+      setTimeout(function () { 
+        expect(manifestInstance.getCanvases()[0]['@id']).toEqual('http://example.org/iiif/book1/canvas/p1');
+        done(); 
+      }, 0);
+    });
+  });
+  
+  describe('getAnnotationsListUrl', function () {
+    it('assuming otherContent has a single annotation list', function (done) {
+      var canvasId = 'http://example.org/iiif/book1/canvas/p1';
+      var listId = 'http://example.org/iiif/book1/canvas/p1';
+      var content = {
+        sequences: [
+          {
+            canvases: [
+              {
+                '@id': canvasId,
+                otherContent: [
+                  {
+                    "@id": listId,
+                    "@type": "sc:AnnotationList"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      };
+      var manifestInstance = new Mirador.Manifest(null, null, content);
+      setTimeout(function () { 
+        var annotationListUrl = manifestInstance.getAnnotationsListUrl(canvasId);
+        expect(annotationListUrl).toEqual(listId);
+        done();
+      }, 0);
+    });
+    
+    it('when canvas does not have otherContent', function (done) {
+      var canvasId = 'http://example.org/iiif/book1/canvas/p1';
+      var listId = 'http://example.org/iiif/book1/canvas/p1';
+      var content = {
+        sequences: [
+          {
+            canvases: [
+              {
+                '@id': canvasId,
+              }
+            ]
+          }
+        ]
+      };
+      var manifestInstance = new Mirador.Manifest(null, null, content);
+      setTimeout(function () { 
+        var annotationListUrl = manifestInstance.getAnnotationsListUrl(canvasId);
+        expect(annotationListUrl).toEqual(false); // XXX: why return false?
+        done();
+      }, 0);
+    });
+  });
+  
+  describe('getStructures', function () {
+    it('should retrieve correct structures', function (done) {
+      var rangeId = 'http://example.org/iiif/book1/range/r1';
+      var content = {
+        structures: [
+          {
+            '@id': rangeId
+          }
+        ]
+      };
+      var manifestInstance = new Mirador.Manifest(null, null, content);
+      setTimeout(function () { 
+        var structures = manifestInstance.getStructures();
+        expect(structures.length).toEqual(1);
+        done();
+      }, 0);
+    });
   });
   
 });
