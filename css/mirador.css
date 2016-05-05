@@ -130,18 +130,27 @@ a {
   padding: 0 15px;
 }
 
-.mirador-main-menu a,
-.mirador-main-menu a:active,
-.mirador-main-menu a:visited {
+.mirador-main-menu a {
   color: #fff;
   font-weight: normal;
   text-decoration: none;
+  opacity: 0.6;
 }
 
-.mirador-main-menu a:focus {
+.mirador-main-menu a:hover {
+  opacity: 1;
+}
+
+.mirador-main-menu a.active {
+  opacity: 1;
+  border-bottom: 2px solid deepskyblue;
+}
+
+
+/*.mirador-main-menu a:focus {
   border-bottom: 2px solid deepskyblue;
   outline: none;
-}
+}*/
 
 .mirador-main-menu-bar .window-options-menu {
   position: relative;

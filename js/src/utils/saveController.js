@@ -22,8 +22,7 @@
       config.mainMenuSettings.buttons = {};
     }
 
-    this.init(jQuery.extend(false, $.DEFAULT_SETTINGS, config));
-
+    this.init(jQuery.extend(true, {}, $.DEFAULT_SETTINGS, config));
   };
 
   $.SaveController.prototype = {

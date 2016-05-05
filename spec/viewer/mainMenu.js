@@ -110,7 +110,7 @@ describe('MainMenu Class', function () {
           "label": "Logo",
           "attributes": {"id": "logo"}
         }
-      }
+      };
 
       this.viewerDiv = jQuery('<div>');
 

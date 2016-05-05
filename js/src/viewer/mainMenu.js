@@ -68,10 +68,24 @@
             //change 'change-layout' to mouseover events rather than click?
             this.element.find('.change-layout').on('click', function() { 
               jQuery.publish('TOGGLE_WORKSPACE_PANEL');
+              //remove active class from other buttons
+              _this.element.find('.bookmark-workspace').removeClass('active');
+              if (jQuery(this).hasClass('active')) {
+                jQuery(this).removeClass('active');
+              } else {
+                jQuery(this).addClass('active');
+              }
             });
 
             this.element.find('.bookmark-workspace').on('click', function() { 
               jQuery.publish('TOGGLE_BOOKMARK_PANEL');
+              //remove active class from other buttons
+              _this.element.find('.change-layout').removeClass('active');
+              if (jQuery(this).hasClass('active')) {
+                jQuery(this).removeClass('active');
+              } else {
+                jQuery(this).addClass('active');
+              }
             });
 
             // when options are implemented, this will need to do something
