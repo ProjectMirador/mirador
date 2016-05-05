@@ -5,11 +5,11 @@ describe('Table of Contents', function() {
 
     this.v1SimpleStructures = getJSONFixture('simpleStructuresFixtureV1.json'),
     this.v1SimpleStructuresTemplateData = '[{"@id":"http://www.example.org/iiif/book1/range/r1.json","@type":"sc:Range","label":"Introduction","canvases":["http://www.example.org/iiif/book1/canvas/p1.json"],"within":"root","level":0,"children":[{"@id":"http://www.example.org/iiif/book1/range/r2.json","@type":"sc:Range","label":"Part 1","within":"http://www.example.org/iiif/book1/range/r1.json","canvases":["http://www.example.org/iiif/book1/canvas/p2.json","http://www.example.org/iiif/book1/canvas/p3.json#xywh=0,0,750,300"],"level":1}]}]',
-    // v2SimpleStructures = getJSONFixture('simpleStructuresFixtureV2.json'),
+    this.v2SimpleStructures = getJSONFixture('simpleStructuresFixtureV2.json'),
     // v21SimpleStructures = getJSONFixture('simpleStructuresFixtureV21.json'),
-    this.realisticV2 = {},
-    this.realisticV21 = {},
-    this.realisticV1 = getJSONFixture('Richardson7manifest.json');
+    this.realisticV1 = getJSONFixture('Richardson7manifest.json'),
+    this.realisticV2 = getJSONFixture('BNF-condorcet-florus-dispersus-manifest.json');
+    // this.realisticV21 = {},
 
     this.sandbox = sandbox();
 
@@ -54,11 +54,10 @@ describe('Table of Contents', function() {
   });
 
   describe('Template data', function() {
-    xit('should set ranges property with children if there is only one "structure"', function() {
-
+    xit('should set structures property with children if there is only one "structure"', function() {
     });
 
-    xit('should set ranges property with top-level ranges if there is more than one "structure"', function() {
+    xit('should set structures property with top-level ranges if there is more than one "structure"', function() {
 
     });
 

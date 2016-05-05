@@ -1,0 +1,22 @@
+{"structures": [
+    {
+      "@id": "http://www.example.org/iiif/book1/range/r1",
+        "@type":"sc:Range",
+        "label":"Introduction",
+        "ranges": [
+          "http://www.example.org/iiif/book1/range/r2"
+        ],
+        "canvases": [
+        	"http://www.example.org/iiif/book1/canvas/p1"
+        ]
+    },
+    {
+      "@id": "http://www.example.org/iiif/book1/range/r2",
+        "@type":"sc:Range",
+        "label":"Part 1",
+        "canvases": [
+          "http://www.example.org/iiif/book1/canvas/p2",
+          "http://www.example.org/iiif/book1/canvas/p3#xywh=0,0,750,300"
+        ]
+    }
+]}
