@@ -36,8 +36,7 @@
     listenForActions: function() {
       var _this = this;
       jQuery.subscribe('workspacePanelVisible.set', function(_, stateValue) {
-        if (stateValue) { _this.show(); return; }
-        _this.hide();
+        _this.onPanelVisible(_, stateValue);
       });
     },
 
@@ -46,41 +45,46 @@
 
       _this.element.find('.grid-item').on('click', function() {
         var gridString = jQuery(this).data('gridstring');
-        _this.onSelect(gridString);
+        _this.select(gridString);
       });
 
       _this.element.find('.grid-item').on('mouseover', function() {
         var gridString = jQuery(this).data('gridstring');
-        _this.onHover(gridString);
+        _this.hover(gridString);
       });
       
       _this.element.find('.select-grid').on('mouseout', function() {
-        _this.element.find('.grid-item').removeClass('hovered');
-        _this.element.find('.grid-instructions').show();
-        _this.element.find('.grid-text').hide();
+        _this.reset();
       });
     },
 
-    onSelect: function(gridString) {
+    select: function(gridString) {
       var _this = this;
       var layoutDescription = $.layoutDescriptionFromGridString(gridString);
       jQuery.publish('RESET_WORKSPACE_LAYOUT', {layoutDescription: layoutDescription});
       jQuery.publish('TOGGLE_WORKSPACE_PANEL');
     },
 
-    onHover: function(gridString) {
+    hover: function(gridString) {
       var _this = this,
       highestRow = gridString.charAt(0),
       highestColumn = gridString.charAt(2),
       gridItems = _this.element.find('.grid-item');
       gridItems.removeClass('hovered');
       gridItems.filter(function(index) {
-        var element = jQuery(this);
-        var change = element.data('gridstring').charAt(0) <= highestRow && element.data('gridstring').charAt(2)<=highestColumn;
+        var gridString = jQuery(this).data('gridstring');
+        var change = gridString.charAt(0) <= highestRow && gridString.charAt(2) <= highestColumn;
         return change;
       }).addClass('hovered');
       _this.element.find('.grid-instructions').hide();
       _this.element.find('.grid-text').text(gridString).show();
+    },
+    
+    reset: function() {
+      var _this = this;
+      _this.element.find('.grid-item').removeClass('hovered');
+      _this.element.find('.grid-instructions').show();
+      _this.element.find('.grid-text').hide();
     },
 
     hide: function() {
@@ -89,6 +93,12 @@
 
     show: function() {
       jQuery(this.element).show({effect: "fade", duration: 160, easing: "easeInCubic"});
+    },
+
+    onPanelVisible: function(_, stateValue) {
+      var _this = this;
+      if (stateValue) { _this.show(); return; }
+      _this.hide();
     },
 
     template: Handlebars.compile([
