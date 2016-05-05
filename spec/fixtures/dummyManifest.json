@@ -1,0 +1,42 @@
+{
+   "@context":"http://iiif.io/api/presentation/2/context.json",
+   "@id":"http://www.example.org/iiif/book1/manifest",
+   "@type":"sc:Manifest",
+   "label":"Dummy Manifest",
+   "description": "A dummy manifest with a single, empty canvas.",
+   "sequences":[
+      {
+         "@id":"http://www.example.org/iiif/book1/sequence/normal",
+         "@type":"sc:Sequence",
+         "label":"Default Sequence",
+         "canvases":[
+            {
+               "@id":"http://www.example.org/iiif/book1/canvas/p1",
+               "@type":"sc:Canvas",
+               "label":"Default Canvas",
+               "width":1234,
+               "height":4321,
+               "images": [
+                  {
+                     "@id": "http://www.example.org/iiif/image/1",
+                     "@type": "oa:Annotation",
+                     "motivation": "sc:painting",
+                     "on": "http://www.example.org/iiif/book1/canvas/p1",
+                     "resource": {
+                        "@id": "http://www.example.org/iiif/resource/1",
+                        "@type": "dctypes:Image",
+                        "format": "image/jpeg",
+                        "height": 1234,
+                        "width": 4321,
+                        "service": {
+                           "@id": "http://www.example.org/iiif/image/1",
+                           "profile": "http://iiif.io/api/image/2/profiles/level2.json"
+                        }
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
