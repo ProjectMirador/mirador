@@ -293,16 +293,16 @@ bindEvents: function() {
           fadeDuration = _this.state.getStateProperty('fadeDuration'),
           timeoutDuration = _this.state.getStateProperty('timeoutDuration');
           var hideHUD = function() {
-            _this.element.find(".hud-control").fadeOut(fadeDuration);
+            _this.element.find(".hud-control").stop(true, true).addClass('hidden', fadeDuration);
           };
           hideHUD();
           jQuery(_this.element).on('mousemove', function() {
-            clearTimeout(timeoutID);
-            _this.element.find('.hud-control').fadeIn(fadeDuration);
-            timeoutID = setTimeout(hideHUD, timeoutDuration);
+            window.clearTimeout(timeoutID);
+            _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
+            timeoutID = window.setTimeout(hideHUD, timeoutDuration);
           }).on('mouseleave', function() {
-            clearTimeout(timeoutID);
-            _this.element.find('.hud-control').fadeOut(fadeDuration);
+            window.clearTimeout(timeoutID);
+            hideHUD();
           });
         }
 
