@@ -7,7 +7,7 @@
     "url": "https://github.com/IIIF/mirador"
   },
   "devDependencies": {
-    "grunt": "*",
+    "grunt": ">=0.4.5 <1.0.0",
     "grunt-contrib-compress": "*",
     "grunt-contrib-concat": "*",
     "grunt-contrib-copy": "*",
@@ -38,9 +38,9 @@
     "grunt-coveralls": "^1.0.0"
   },
   "scripts": {
-    "test": "grunt cover jshint coveralls --verbose --full",
-    "travis": "grunt ci --verbose",
-    "postinstall": "grunt githooks"
+    "test": "./node_modules/grunt-cli/bin/grunt cover jshint coveralls --verbose --full",
+    "travis": "./node_modules/grunt-cli/bin/grunt ci --verbose --force",
+    "postinstall": "./node_modules/grunt-cli/bin/grunt githooks"
   },
   "dependencies": {}
 }

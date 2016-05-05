@@ -159,13 +159,13 @@
     },
 
     'jsonStorageEndpoint': {
-	'name': 'JSONBlob API Endpoint',
-	'module': 'JSONBlobAPI',
-	'options': {
-		'ssl': true,
-		'port': '443',
-		'host': 'jsonblob.com'
-	}
+      'name': 'JSONBlob API Endpoint',
+      'module': 'JSONBlobAPI',
+      'options': {
+        'ssl': true,
+        'port': '443',
+        'host': 'jsonblob.com'
+      }
     },
 
     'sharingEndpoint': {
