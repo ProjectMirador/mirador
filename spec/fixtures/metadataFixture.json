@@ -1,0 +1,28 @@
+{
+  "@context":"http://iiif.io/api/presentation/2/context.json",
+  "@type":"sc:Manifest",
+  "@id":"http://www.example.org/iiif/book1/manifest",
+
+  "metadata": [
+    {"label":"Single", "value":"default"},
+    {"label":"Multiple with default", "value": [
+      {"@value": "English", "@language":"en"},
+      {"@value": "French", "@language":"fr"},
+      {"@value": "default"}
+    ]
+    },
+    {"label":"Multiple without default", "value": [
+      {"@value": "English", "@language":"en"},
+      {"@value": "French", "@language":"fr"}
+    ]
+    },
+    {
+      "label":"Single HTML with invalid elements",
+      "value":"<span style='height:500px'>test <script language='Javascript'>alert('bad!');</script><blink>bad</blink></span>"
+    },
+    {
+      "label":"Single HTML with valid elements",
+      "value":"<span><b>bold</b><i>italic</i><br/><a href='http://iiif.io/'><img src='http://iiif.io/img/logo-iiif-34x30.png'></a></span>"
+	  }
+  ]
+}
