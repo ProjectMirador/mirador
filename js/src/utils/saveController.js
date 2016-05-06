@@ -7,7 +7,8 @@
       originalConfig: null, // Don't know if we really need this.
       shareEndpoint: null, // the place where POST requests for new saved sessions will go 
       historySize: null, // wishful thinking for later.
-      sessionID: null
+      sessionID: null,
+      slots: []
     });
 
     // error check - removes invalid annotation tools
