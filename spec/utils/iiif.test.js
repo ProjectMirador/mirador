@@ -1,4 +1,4 @@
-describe('iiif', function () {
+describe('Iiif', function () {
   xit('getImageUrl', function () {
   });
   
