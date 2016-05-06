@@ -20,7 +20,8 @@
       elemAnno:         null,
       annoCls:          'annotation-canvas',
       annotationLayerAvailable: null,
-      annotationsLayer: null 
+      annotationsLayer: null,
+      forceShowControls: false
     }, options);
 
     this.init();
@@ -250,8 +251,13 @@
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
         if (_this.hud.annoState.current === 'annoOnCreateOff') {
           _this.hud.annoState.createOn();
+          //when a user is in Create mode, don't let the controls auto fade as it could be distracting to the user
+          _this.forceShowControls = true;
+          _this.element.find(".hud-control").stop(true, true).removeClass('hidden', _this.state.getStateProperty('fadeDuration'));
         } else if (_this.hud.annoState.current === 'annoOnCreateOn') {
           _this.hud.annoState.createOff();
+          //go back to allowing the controls to auto fade
+          _this.forceShowControls = false;
         }
       });
 
@@ -387,6 +393,29 @@
           };
           jQuery.publish('updateTooltips.' + _this.windowId, [point, point]);
         }, 30));
+
+        if (_this.state.getStateProperty('autoHideControls')) {
+          var timeoutID = null,
+          fadeDuration = _this.state.getStateProperty('fadeDuration'),
+          timeoutDuration = _this.state.getStateProperty('timeoutDuration');
+          var hideHUD = function() {
+            _this.element.find(".hud-control").stop(true, true).addClass('hidden', fadeDuration);
+          };
+          hideHUD();
+          jQuery(_this.element).on('mousemove', function() {
+            window.clearTimeout(timeoutID);
+            // When a user is in annotation create mode, force show the controls so they don't disappear when in a qtip, so check for that
+            if (!_this.forceShowControls) {
+              _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
+              timeoutID = window.setTimeout(hideHUD, timeoutDuration);
+            }
+          }).on('mouseleave', function() {
+            if (!_this.forceShowControls) {
+              window.clearTimeout(timeoutID);
+              hideHUD();
+            }
+          });
+        }
 
         _this.osd.addHandler('open', function(){
           jQuery.publish('osdOpen.'+_this.windowId);

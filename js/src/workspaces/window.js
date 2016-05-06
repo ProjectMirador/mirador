@@ -214,10 +214,6 @@
       this.init();
     },
 
-    // spawnInWorkspace: function() {
-
-    // },
-
     // reset whether BookView is available every time as a user might switch between paged and non-paged objects within a single slot/window
     removeBookView: function() {
       var _this = this;

@@ -77,7 +77,7 @@
       this.request.done(function(jsonLd) {
         _this.jsonLd = jsonLd;
       });
-      setTimeout(function () { _this.request.resolve(manifestContent); }, 0);
+      _this.request.resolve(manifestContent); // resolve immediately
     },
     getThumbnailForCanvas : function(canvas, width) {
       var version = "1.1",
