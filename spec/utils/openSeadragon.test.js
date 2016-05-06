@@ -1,4 +1,4 @@
-describe('utils/openSeadragon', function () {
+describe('OpenSeadragon', function () {
   xit('Construction', function () {
   });
 });

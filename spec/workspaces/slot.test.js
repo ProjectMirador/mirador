@@ -1,4 +1,4 @@
-describe('workspaces/slot', function () {
+describe('Slot', function () {
   xit('listenForActions', function () {
   });
   xit('bindEvents', function () {

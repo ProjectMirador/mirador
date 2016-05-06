@@ -1,4 +1,4 @@
-describe('MainMenu Class', function () {
+describe('MainMenu', function () {
 
   describe('default configuration', function() {
     beforeEach(function() {

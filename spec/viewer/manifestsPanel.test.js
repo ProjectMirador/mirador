@@ -1,4 +1,4 @@
-describe('viewer/manifestsPanel', function() {
+describe('ManifestsPanel', function() {
   beforeEach(function() {
     jasmine.getJSONFixtures().fixturesPath = 'spec/fixtures';
     this.dummyManifestContent = getJSONFixture('dummyManifest.json');

@@ -1,26 +1,26 @@
 describe('Utils', function() {
   beforeEach(function() {
     this.utils = Mirador;
-    var imagesList = [{
-      'id':     1,
+    this.imagesList = [{
+      '@id':     '1',
       'title':  '1r',
       'height': 10,
       'width':  20
     }, {
-      'id':     2,
+      '@id':     '2',
       'title':  '1v',
       'height': 15,
       'width':  25
-    }],
+    }];
 
-    imageTitlesAndIds = [{
-      'id':     1,
+    this.imageTitlesAndIds = [{
+      '@id':     '1',
       'title': '1r'
     }, {
-      'id':     2,
+      '@id':     '2',
       'title': '1v'
     }];
-    manifests = {
+    this.manifests = {
       "manifest-1234": {
         "uri":"http://xyz.edu/data/Manifest.json",
         "metadata": {
@@ -29,7 +29,7 @@ describe('Utils', function() {
           }
         },
         "sequences": [{
-          "imagesList": imagesList
+          "imagesList": this.imagesList
         }]
       }
     };
@@ -38,12 +38,6 @@ describe('Utils', function() {
   it('should trim trailing whitespaces from a string', function() {
     expect(this.utils.trimString('  abc ')).toEqual('abc');
   });
-
-  it('should return a collection title for a given metadata', function() {
-    expect(this.utils.getCollectionTitle({ 'details': { 'label': 'abc' } })).toEqual('abc');
-    expect(this.utils.getCollectionTitle({ 'details': { } })).toEqual('');
-  });
-
 
   describe('XHR utils', function() {
     beforeEach(function() {
@@ -109,6 +103,21 @@ describe('Utils', function() {
         expect(console.log).toHaveBeenCalledWith('image failed to load: http://thing.notanimagehfhfhfhf.png/');
         done();
       });
+    });
+  });
+
+  describe('getImageIndexById', function() {
+    it('should return index of the image with the given id', function() {
+      expect(this.utils.getImageIndexById(this.imagesList, '1')).toBe(0);
+      expect(this.utils.getImageIndexById(this.imagesList, '2')).toBe(1);
+      // TODO: should expect -1 or throw exception instead
+      expect(this.utils.getImageIndexById(this.imagesList, '0')).toBe(0);
+    });
+  });
+
+  describe('getThumbnailForCanvas', function() {
+    xit('should get the proper thumbnail for a canvas', function () {
+      
     });
   });
 });
