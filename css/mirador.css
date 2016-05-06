@@ -1809,7 +1809,7 @@ a.mirador-icon-window-menu, a.mirador-icon-view-type {
   padding: 0;
   clear: both;
 }
-.qtip-content {
+.qtip-viewer .qtip-content {
   min-width: 275px;
   max-height: 200px;
   overflow: auto;
