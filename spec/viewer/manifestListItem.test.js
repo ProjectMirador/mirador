@@ -1,4 +1,4 @@
-describe('viewer/manifestListItem', function () {
+describe('ManifestListItem', function () {
   xit('fetchTplData', function () {
   });
   xit('render', function () {

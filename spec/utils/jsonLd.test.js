@@ -1,4 +1,4 @@
-describe('utils/jsonLd', function () {
+describe('JsonLd', function () {
   xit('getTextValue', function () {
   });
 });

@@ -1,4 +1,4 @@
-describe('workspaces/slot', function () {
+describe('Slot', function () {
   beforeEach(function () {
     var windowElement = jQuery('<div id="MOCK_WINDOW_1"/>');
     this.appendTo = jQuery('<div/>').append(windowElement);

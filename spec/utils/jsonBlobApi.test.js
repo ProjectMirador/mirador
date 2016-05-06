@@ -1,4 +1,4 @@
-describe('util/jsonBlobApi', function () {
+describe('JsonBlobApi', function () {
   xit('readSync', function () {
   });
   xit('save', function () {
