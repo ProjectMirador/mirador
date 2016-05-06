@@ -9,7 +9,7 @@ describe('Window', function() {
         workspace: {
           slots: []
         }
-      }
+      };
       spyOn(Mirador, 'ThumbnailsView').and.callFake(function() {
         this.updateImages = jasmine.createSpy();
         this.toggle = jasmine.createSpy();
@@ -43,6 +43,9 @@ describe('Window', function() {
           },
           getStructures: function() {
             return [];
+          },
+          getVersion: function() {
+            return '1';
           }
         },
         appendTo: this.appendTo
