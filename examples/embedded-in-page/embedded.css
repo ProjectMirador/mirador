@@ -1,0 +1,27 @@
+.mirador_container {
+  position: relative; /* Necessary when mirador viewer div's position is absolute */
+  border: 5px solid green;
+  margin: 10px;
+  width: 90%;
+  height: 600px;
+}
+
+.mirador_viewer {
+  /*display: block !important;*/
+
+  /* Position is "fixed" in mirador.css.
+   * We cannot confine it within a div with a fixed postion.
+   */
+  position: absolute !important;
+  
+  /* width=100%, top=0, bottom=0: necessary to stretch Mirador to
+   * the containing div
+   */
+  width: 100%;
+  top: 0;
+  bottom: 0;
+}
+
+h1, p {
+  margin-left: 10px;
+}
