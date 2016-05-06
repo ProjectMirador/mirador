@@ -1,4 +1,4 @@
-describe('AnnotatinsLayer', function() {
+describe('AnnotationsLayer', function() {
 
   beforeEach(function() {
 
