@@ -113,6 +113,15 @@
       }
       return thumbnailUrl;
     },
+    getVersion: function() {
+      var versionMap = {
+        'http://www.shared-canvas.org/ns/context.json': '1', // is this valid?
+        'http://iiif.io/api/presentation/1/context.json': '1',
+        'http://iiif.io/api/presentation/2/context.json': '2',
+        'http://iiif.io/api/presentation/2.1/context.json': '2.1'
+      };
+      return versionMap[this.jsonLd['@context']];
+    },
     getCanvases : function() {
       var _this = this;
       return _this.jsonLd.sequences[0].canvases;
