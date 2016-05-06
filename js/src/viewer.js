@@ -157,6 +157,10 @@
       
       jQuery(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function() {
         jQuery.publish('MAINMENU_FULLSCREEN_BUTTON');
+        // in case the user clicked ESC instead of clicking on the toggle fullscreen button, reenable the window fullscreen button
+        if (!$.fullscreenElement()) {
+          jQuery.publish('ENABLE_WINDOW_FULLSCREEN');
+        }
       });
 
       jQuery.subscribe('TOGGLE_LOAD_WINDOW', function(event) {
