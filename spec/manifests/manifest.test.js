@@ -6,15 +6,15 @@ describe('Manifest', function() {
   afterEach(function() {
     this.server.restore();
   });
-  
+
   describe('init', function () {
     it('should have expected data constructed from manifest content', function(done) {
       var content = { "@context": "http://www.shared-canvas.org/ns/context.json",
-        "@type": "sc:Manifest",
-        "@id": "http://manifests.example.com/iiif/EX/manifest",
-        "label": "Book 1",
-        "sequences": [{}]
-      };
+                      "@type": "sc:Manifest",
+                      "@id": "http://manifests.example.com/iiif/EX/manifest",
+                      "label": "Book 1",
+                      "sequences": [{}]
+                    };
       var manifestInstance = new Mirador.Manifest(null, null, content);
 
       setTimeout(function () { 
@@ -34,11 +34,11 @@ describe('Manifest', function() {
         profile: 'http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level2'
       };
       this.server.respondWith('GET', uri,
-        [ 200,
-          { 'Content-Type': 'application/json' },
-          JSON.stringify(data)
-        ]
-      );
+                              [ 200,
+                                { 'Content-Type': 'application/json' },
+                                JSON.stringify(data)
+                              ]
+                             );
       var manifestInstance = new Mirador.Manifest(uri);
       this.server.respond();
       
@@ -66,18 +66,56 @@ describe('Manifest', function() {
       var data = {manifest : "here"};
 
       this.server.respondWith("GET", "path/to/manifest.json",
-        [ 200,
-          { "Content-Type": "application/json" },
-          JSON.stringify(data)
-        ]
-      );
+                              [ 200,
+                                { "Content-Type": "application/json" },
+                                JSON.stringify(data)
+                              ]
+                             );
       var manifestInstance = new Mirador.Manifest(manifestUri);
       this.server.respond();
 
       expect(manifestInstance.jsonLd).toEqual(data);
       done();
     });
-    
+
+    describe('getVersion for manifest', function() {
+      it('should return the correct values for different versions of the manifest', function() {
+        var content = { "@context": "http://www.shared-canvas.org/ns/context.json",
+                        "@type": "sc:Manifest",
+                        "@id": "http://manifests.example.com/iiif/EX/manifest",
+                        "label": "Book 1",
+                        "sequences": [{}]
+                      };
+        var manifestInstance = new Mirador.Manifest(null, null, content);
+        expect(manifestInstance.getVersion()).toEqual('1');
+
+        content = { "@context": "http://iiif.io/api/presentation/1/context.json",
+                    "@type": "sc:Manifest",
+                    "@id": "http://manifests.example.com/iiif/EX/manifest",
+                    "label": "Book 1",
+                    "sequences": [{}]
+                  };
+        manifestInstance = new Mirador.Manifest(null, null, content);
+        expect(manifestInstance.getVersion()).toEqual('1');
+        content = { "@context": "http://iiif.io/api/presentation/2/context.json",
+                    "@type": "sc:Manifest",
+                    "@id": "http://manifests.example.com/iiif/EX/manifest",
+                    "label": "Book 1",
+                    "sequences": [{}]
+                  };
+        manifestInstance = new Mirador.Manifest(null, null, content);
+        expect(manifestInstance.getVersion()).toEqual('2');
+
+        content = { "@context": "http://iiif.io/api/presentation/2.1/context.json",
+                    "@type": "sc:Manifest",
+                    "@id": "http://manifests.example.com/iiif/EX/manifest",
+                    "label": "Book 1",
+                    "sequences": [{}]
+                  };
+        manifestInstance = new Mirador.Manifest(null, null, content);
+        expect(manifestInstance.getVersion()).toEqual('2.1');
+      });
+    });
     describe('getThumbnailForCanvas', function () {
       
       it('when canvas.thumbnail is a string', function () {
