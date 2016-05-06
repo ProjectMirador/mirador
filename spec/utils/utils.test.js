@@ -115,9 +115,17 @@ describe('Utils', function() {
     });
   });
 
-  describe('getThumbnailForCanvas', function() {
-    xit('should get the proper thumbnail for a canvas', function () {
+  xdescribe('getThumbnailForCanvas', function() {
+    it('should get the proper thumbnail for a canvas', function () {
       
+    });
+  });
+
+  describe('getQueryParams', function() {
+    it('should properly parse a url with query parameters', function() {
+      var queryParams = this.utils.getQueryParams('http://zimeon.github.io/iiif-dragndrop/e-codices-help.html?manifest=http://www.e-codices.unifr.ch/metadata/iiif/kba-0003/manifest.json&canvas=http://www.e-codices.unifr.ch/metadata/iiif/kba-0003/canvas/kba-0003_002r.json');
+      expect(queryParams.manifest).toBe("http://www.e-codices.unifr.ch/metadata/iiif/kba-0003/manifest.json");
+      expect(queryParams.canvas).toBe("http://www.e-codices.unifr.ch/metadata/iiif/kba-0003/canvas/kba-0003_002r.json");
     });
   });
 });
