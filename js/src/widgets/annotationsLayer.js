@@ -10,7 +10,8 @@
       hovered:           null,
       windowId:          null,
       mode:              'default',
-      element:           null
+      element:           null,
+      eventEmitter:      null
     }, options);
 
     this.init();
@@ -20,7 +21,7 @@
 
     init: function() {
       var _this = this;
-      jQuery.unsubscribe(('modeChange.' + _this.windowId));
+      _this.eventEmitter.unsubscribe(('modeChange.' + _this.windowId));
 
       this.createRenderer();
       this.bindEvents();
@@ -30,12 +31,12 @@
     listenForActions: function() {
       var _this = this;
 
-      jQuery.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
+      _this.eventEmitter.subscribe('modeChange.' + _this.windowId, function(event, modeName) {
         _this.mode = modeName;
         _this.modeSwitch();
       });
 
-      jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
+      _this.eventEmitter.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         _this.annotationsList = _this.state.getWindowAnnotationsList(_this.windowId);
         _this.updateRenderer();
       });

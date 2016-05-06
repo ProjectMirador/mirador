@@ -9,7 +9,9 @@
             manifestListItems:          [],
             manifestListElement:        null,
             manifestLoadStatusIndicator: null,
-            resultsWidth:               0
+            resultsWidth:               0,
+            state:                      null,
+            eventEmitter:               null
         }, options);
 
         var _this = this;
@@ -46,11 +48,11 @@
           var _this = this;
 
           // handle subscribed events
-          jQuery.subscribe('manifestsPanelVisible.set', function(_, stateValue) {
+          _this.eventEmitter.subscribe('manifestsPanelVisible.set', function(_, stateValue) {
             _this.onPanelVisible(_, stateValue);
           });
 
-          jQuery.subscribe('manifestReceived', function(event, newManifest) {
+          _this.eventEmitter.subscribe('manifestReceived', function(event, newManifest) {
             _this.onManifestReceived(event, newManifest);
           });
         },
@@ -93,11 +95,13 @@
         },
         
         addManifestUrl: function(url) {
-          jQuery.publish('ADD_MANIFEST_FROM_URL', url, "(Added from URL)");
+          var _this = this;
+          _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', url, "(Added from URL)");
         },
         
         togglePanel: function(event) {
-          jQuery.publish('TOGGLE_LOAD_WINDOW');
+          var _this = this;
+          _this.eventEmitter.publish('TOGGLE_LOAD_WINDOW');
         },
         
         filterManifests: function(value) {
@@ -116,7 +120,7 @@
           var clone = _this.element.clone().css("visibility","hidden").css("display", "block").appendTo(_this.appendTo);
           _this.resultsWidth = clone.find('.select-results').outerWidth();
           clone.remove();
-          jQuery.publish("manifestPanelWidthChanged", _this.resultsWidth);
+          _this.eventEmitter.publish("manifestPanelWidthChanged", _this.resultsWidth);
         },
         
         onPanelVisible: function(_, stateValue) {
@@ -131,6 +135,7 @@
             manifest: newManifest, 
             resultsWidth: _this.resultsWidth, 
             state: _this.state,
+            eventEmitter: _this.eventEmitter,
             appendTo: _this.manifestListElement }));
           _this.element.find('#manifest-search').keyup();
         },

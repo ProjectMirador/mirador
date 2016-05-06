@@ -18,7 +18,9 @@
       imagesTotalWidth:           0,
       tplData:                    null,
       allImages:                  [],
-      remaining:                  0
+      remaining:                  0,
+      state:                      null,
+      eventEmitter:               null
     }, options);
 
     this.init();
@@ -123,7 +125,7 @@
     listenForActions: function() {
       var _this = this;
 
-      jQuery.subscribe('manifestPanelWidthChanged', function(event, newWidth){
+      _this.eventEmitter.subscribe('manifestPanelWidthChanged', function(event, newWidth){
         _this.updateDisplay(newWidth);
       });
     },
@@ -142,7 +144,7 @@
           currentCanvasID: null,
           currentFocus: 'ThumbnailsView'
         };
-        jQuery.publish('ADD_WINDOW', windowConfig);
+        _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
       });
 
       this.element.find('.preview-image').on('click', function(e) {
@@ -152,7 +154,7 @@
           currentCanvasID: jQuery(this).attr('data-image-id'),
           currentFocus: 'ImageView'
         };
-        jQuery.publish('ADD_WINDOW', windowConfig);
+        _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
       });
     },
 

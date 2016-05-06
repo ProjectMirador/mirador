@@ -75,7 +75,9 @@
         "BookView" : "fa fa-columns fa-lg fa-fw",
         "ScrollView" : "fa fa-ellipsis-h fa-lg fa-fw",
         "ThumbnailsView" : "fa fa-th fa-lg fa-rotate-90 fa-fw"
-      }
+      },
+      state: null,
+      eventEmitter: null
     }, options);
 
     this.init();
@@ -95,7 +97,7 @@
         _this.annotationsList.pop();
       }
       //unsubscribe from stale events as they will be updated with new module calls
-      jQuery.unsubscribe(('currentCanvasIDUpdated.' + _this.id));
+      _this.eventEmitter.unsubscribe(('currentCanvasIDUpdated.' + _this.id));
 
       _this.removeBookView();
 
@@ -119,7 +121,7 @@
       _this.getAnnotations();
 
       //for use by SidePanel, which needs to know if the current view can have the annotations tab
-      jQuery.publish(('windowUpdated'), {
+      _this.eventEmitter.publish(('windowUpdated'), {
         id: _this.id,
         annotationsAvailable: this.annotationsAvailable
       });
@@ -163,7 +165,7 @@
       templateData.currentFocusClass = _this.iconClasses[_this.currentFocus];
       templateData.showFullScreen = _this.fullScreenAvailable;
       _this.element = jQuery(this.template(templateData)).appendTo(_this.appendTo);
-      jQuery.publish('WINDOW_ELEMENT_UPDATED', {windowId: _this.id, element: _this.element});
+      _this.eventEmitter.publish('WINDOW_ELEMENT_UPDATED', {windowId: _this.id, element: _this.element});
 
       //clear any existing objects
       _this.clearViews();
@@ -231,7 +233,7 @@
 
     listenForActions: function() {
       var _this = this;
-      jQuery.subscribe('bottomPanelSet.' + _this.id, function(event, visible) {
+      _this.eventEmitter.subscribe('bottomPanelSet.' + _this.id, function(event, visible) {
         var panel = _this.element.find('.bottomPanel');
         if (visible === true) {
           panel.css({transform: 'translateY(0)'});
@@ -240,15 +242,15 @@
         }
       });
 
-      jQuery.subscribe('HIDE_REMOVE_OBJECT.' + _this.id, function(event) {
+      _this.eventEmitter.subscribe('HIDE_REMOVE_OBJECT.' + _this.id, function(event) {
         _this.element.find('.remove-object-option').hide();
       });
 
-      jQuery.subscribe('SHOW_REMOVE_OBJECT.' + _this.id, function(event) {
+      _this.eventEmitter.subscribe('SHOW_REMOVE_OBJECT.' + _this.id, function(event) {
         _this.element.find('.remove-object-option').show();
       });
 
-      jQuery.subscribe('sidePanelStateUpdated.' + this.id, function(event, state) {
+      _this.eventEmitter.subscribe('sidePanelStateUpdated.' + this.id, function(event, state) {
         if (state.open) {
             _this.element.find('.mirador-icon-toc').addClass('selected');
             _this.element.find('.view-container').removeClass('maximised');
@@ -259,35 +261,35 @@
       });
 
       // TODO: temporary logic to minimize side panel if only tab is toc and toc is empty
-      jQuery.subscribe('sidePanelVisibilityByTab.' + this.id, function(event, visible) {
+      _this.eventEmitter.subscribe('sidePanelVisibilityByTab.' + this.id, function(event, visible) {
         _this.sidePanelVisibility(visible, '0s');
       });
 
-      jQuery.subscribe('SET_CURRENT_CANVAS_ID.' + this.id, function(event, canvasID) {
+      _this.eventEmitter.subscribe('SET_CURRENT_CANVAS_ID.' + this.id, function(event, canvasID) {
         _this.setCurrentCanvasID(canvasID);
       });
 
-      jQuery.subscribe('REMOVE_CLASS.' + this.id, function(event, className) {
+      _this.eventEmitter.subscribe('REMOVE_CLASS.' + this.id, function(event, className) {
         _this.element.find('.view-container').removeClass(className);
       });
 
-      jQuery.subscribe('ADD_CLASS.' + this.id, function(event, className) {
+      _this.eventEmitter.subscribe('ADD_CLASS.' + this.id, function(event, className) {
         _this.element.find('.view-container').addClass(className);
       });
 
-      jQuery.subscribe('UPDATE_FOCUS_IMAGES.' + this.id, function(event, images) {
+      _this.eventEmitter.subscribe('UPDATE_FOCUS_IMAGES.' + this.id, function(event, images) {
         _this.updateFocusImages(images.array); 
       });
 
-      jQuery.subscribe('HIDE_ICON_TOC.' + this.id, function(event) {
+      _this.eventEmitter.subscribe('HIDE_ICON_TOC.' + this.id, function(event) {
         _this.element.find('.mirador-icon-toc').hide();
       });
 
-      jQuery.subscribe('SHOW_ICON_TOC.' + this.id, function(event) {
+      _this.eventEmitter.subscribe('SHOW_ICON_TOC.' + this.id, function(event) {
         _this.element.find('.mirador-icon-toc').show();
       });
 
-      jQuery.subscribe('SET_BOTTOM_PANEL_VISIBILITY.' + this.id, function(event, visibility) {
+      _this.eventEmitter.subscribe('SET_BOTTOM_PANEL_VISIBILITY.' + this.id, function(event, visibility) {
         if (typeof visibility !== 'undefined' && visibility !== null) {
           _this.bottomPanelVisibility(visibility);
         } else {
@@ -295,16 +297,16 @@
         }
       });
 
-      jQuery.subscribe('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + this.id, function(event) {
+      _this.eventEmitter.subscribe('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + this.id, function(event) {
         var visible = !_this.bottomPanelVisible;
         _this.bottomPanelVisibility(visible);
       });
       
-      jQuery.subscribe('DISABLE_WINDOW_FULLSCREEN', function(event) {
+      _this.eventEmitter.subscribe('DISABLE_WINDOW_FULLSCREEN', function(event) {
         _this.element.find('.mirador-osd-fullscreen').hide();
       });
 
-      jQuery.subscribe('ENABLE_WINDOW_FULLSCREEN', function(event) {
+      _this.eventEmitter.subscribe('ENABLE_WINDOW_FULLSCREEN', function(event) {
         _this.element.find('.mirador-osd-fullscreen').show();        
       });
     },
@@ -340,7 +342,7 @@
 
     bindAnnotationEvents: function() {
       var _this = this;
-      jQuery.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
+      _this.eventEmitter.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
         var annoID;
         //first function is success callback, second is error callback
         _this.endpoint.create(oaAnno, function(data) {
@@ -349,7 +351,7 @@
           _this.annotationsList.push(data);
           //update overlay so it can be a part of the annotationList rendering
           jQuery(osdOverlay).removeClass('osd-select-rectangle').addClass('annotation').attr('id', annoID);
-          jQuery.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
+          _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         },
         function() {
           //provide useful feedback to user
@@ -359,7 +361,7 @@
         });
       });
 
-      jQuery.subscribe('annotationUpdated.'+_this.id, function(event, oaAnno) {
+      _this.eventEmitter.subscribe('annotationUpdated.'+_this.id, function(event, oaAnno) {
         //first function is success callback, second is error callback
         _this.endpoint.update(oaAnno, function() {
           jQuery.each(_this.annotationsList, function(index, value) {
@@ -368,27 +370,27 @@
               return false;
             }
           });
-          jQuery.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
+          _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         },
         function() {
           console.log("There was an error updating this annotation");
         });
       });
 
-      jQuery.subscribe('annotationDeleted.'+_this.id, function(event, annoId) {
+      _this.eventEmitter.subscribe('annotationDeleted.'+_this.id, function(event, annoId) {
         //remove from endpoint
         //first function is success callback, second is error callback
         _this.endpoint.deleteAnnotation(annoId, function() {
           _this.annotationsList = jQuery.grep(_this.annotationsList, function(e){ return e['@id'] !== annoId; });
-          jQuery.publish(('removeOverlay.' + _this.id), annoId);
-          jQuery.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
+          _this.eventEmitter.publish(('removeOverlay.' + _this.id), annoId);
+          _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         },
         function() {
           // console.log("There was an error deleting this annotation");
         });
       });
 
-      jQuery.subscribe('updateAnnotationList.'+_this.id, function(event) {
+      _this.eventEmitter.subscribe('updateAnnotationList.'+_this.id, function(event) {
         while(_this.annotationsList.length > 0) {
           _this.annotationsList.pop();
         }
@@ -475,6 +477,7 @@
         this.sidePanel = new $.SidePanel({
               windowId: _this.id,
               state: _this.state,
+              eventEmitter: _this.eventEmitter,
               appendTo: _this.element.find('.sidePanel'),
               manifest: _this.manifest,
               canvasID: _this.currentCanvasID,
@@ -539,7 +542,7 @@
         viewContainerElement.css('margin-left', 0);
         sidePanelElement.addClass('minimized').css('border', 'none').width(0);
       }
-      jQuery.publish(('windowUpdated'), {
+      _this.eventEmitter.publish(('windowUpdated'), {
         id: _this.id,
         sidePanelVisible: visible
       });
@@ -548,8 +551,8 @@
     bottomPanelVisibility: function(visible) {
       var _this = this;
       _this.bottomPanelVisible = visible;
-      jQuery.publish(('bottomPanelSet.' + _this.id), visible);
-      jQuery.publish(('windowUpdated'), {
+      _this.eventEmitter.publish(('bottomPanelSet.' + _this.id), visible);
+      _this.eventEmitter.publish(('windowUpdated'), {
         id: _this.id,
         bottomPanelVisible: visible
       });
@@ -598,8 +601,8 @@
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
       this.updateSidePanel();
-      jQuery.publish("focusUpdated");
-      jQuery.publish("windowUpdated", {
+      _this.eventEmitter.publish("focusUpdated");
+      _this.eventEmitter.publish("windowUpdated", {
         id: _this.id,
         viewType: _this.currentFocus,
         canvasID: _this.currentCanvasID,
@@ -618,7 +621,8 @@
           state:  this.state,
           windowId: this.id,
           canvasID: this.currentCanvasID,
-          imagesList: this.imagesList
+          imagesList: this.imagesList,
+          eventEmitter: this.eventEmitter
         });
       } else {
         var view = this.focusModules.ThumbnailsView;
@@ -635,6 +639,7 @@
           appendTo: this.element.find('.view-container'),
           windowId: this.id,
           state:  this.state,
+          eventEmitter: this.eventEmitter,
           canvasID: canvasID,
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
@@ -659,6 +664,7 @@
           appendTo: this.element.find('.view-container'),
           windowId: this.id,
           state:  this.state,
+          eventEmitter: this.eventEmitter,
           canvasID: canvasID,
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
@@ -679,6 +685,7 @@
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
           state:  this.state,
+          eventEmitter: this.eventEmitter,
           windowId: this.id,
           canvasID: this.currentCanvasID,
           imagesList: this.imagesList,
@@ -699,8 +706,8 @@
     setCurrentCanvasID: function(canvasID) {
       var _this = this;
       this.currentCanvasID = canvasID;
-      jQuery.publish('removeTooltips.' + _this.id);
-      jQuery.unsubscribe(('annotationListLoaded.' + _this.id));
+      _this.eventEmitter.publish('removeTooltips.' + _this.id);
+      _this.eventEmitter.unsubscribe(('annotationListLoaded.' + _this.id));
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
@@ -715,7 +722,7 @@
         default:
           break;
       }
-      jQuery.publish(('currentCanvasIDUpdated.' + _this.id), canvasID);
+      _this.eventEmitter.publish(('currentCanvasIDUpdated.' + _this.id), canvasID);
     },
 
     replaceWindow: function(newSlotAddress, newElement) {
@@ -756,7 +763,7 @@
             //indicate this is a manifest annotation - which affects the UI
             value.endpoint = "manifest";
           });
-          jQuery.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
+          _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         });
       }
 
@@ -774,6 +781,7 @@
           options.dfd = dfd;
           options.windowID = _this.id;
           options.imagesList = _this.imagesList;
+          options.eventEmitter = _this.eventEmitter;
           _this.endpoint = new $[module](options);
         }
         _this.endpoint.search({ "uri" : _this.currentCanvasID});
@@ -787,20 +795,21 @@
             }
             return true;
           });
-          jQuery.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
+          _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         });
       }
     },
 
     fullScreen: function() {
+      var _this = this;
       if (!OpenSeadragon.isFullScreen()) {
         this.element.find('.mirador-osd-fullscreen i').removeClass('fa-compress').addClass('fa-expand');
         this.element.find('.mirador-osd-toggle-bottom-panel').show();
-        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.id, true);
+        _this.eventEmitter.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.id, true);
       } else {
         this.element.find('.mirador-osd-fullscreen i').removeClass('fa-expand').addClass('fa-compress');
         this.element.find('.mirador-osd-toggle-bottom-panel').hide();
-        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.id, false);
+        _this.eventEmitter.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.id, false);
       }
     },
 
@@ -849,27 +858,27 @@
       });
 
       this.element.find('.new-object-option').on('click', function() {
-        jQuery.publish('ADD_ITEM_FROM_WINDOW', _this.id);
+        _this.eventEmitter.publish('ADD_ITEM_FROM_WINDOW', _this.id);
       });
 
       this.element.find('.remove-object-option').on('click', function() {
-        jQuery.publish('REMOVE_SLOT_FROM_WINDOW', _this.id);
+        _this.eventEmitter.publish('REMOVE_SLOT_FROM_WINDOW', _this.id);
       });
 
       this.element.find('.add-slot-right').on('click', function() {
-        jQuery.publish('SPLIT_RIGHT_FROM_WINDOW', _this.id);
+        _this.eventEmitter.publish('SPLIT_RIGHT_FROM_WINDOW', _this.id);
       });
 
       this.element.find('.add-slot-left').on('click', function() {
-        jQuery.publish('SPLIT_LEFT_FROM_WINDOW', _this.id);
+        _this.eventEmitter.publish('SPLIT_LEFT_FROM_WINDOW', _this.id);
       });
 
       this.element.find('.add-slot-below').on('click', function() {
-        jQuery.publish('SPLIT_DOWN_FROM_WINDOW', _this.id);
+        _this.eventEmitter.publish('SPLIT_DOWN_FROM_WINDOW', _this.id);
       });
 
       this.element.find('.add-slot-above').on('click', function() {
-        jQuery.publish('SPLIT_UP_FROM_WINDOW', _this.id);
+        _this.eventEmitter.publish('SPLIT_UP_FROM_WINDOW', _this.id);
       });
     },
 

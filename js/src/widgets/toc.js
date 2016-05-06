@@ -14,7 +14,8 @@
       hoveredElement:   [],
       selectContext:    null,
       tocData: {},
-      active: null
+      active: null,
+      eventEmitter: null
     }, options);
 
     this.init();
@@ -236,17 +237,17 @@
     bindEvents: function() {
       var _this = this;
 
-      // jQuery.subscribe('focusChanged', function(_, focusFrame) {
+      // _this.eventEmitter.subscribe('focusChanged', function(_, focusFrame) {
       // });
 
-      // jQuery.subscribe('cursorFrameUpdated', function(_, cursorBounds) {
+      // _this.eventEmitter.subscribe('cursorFrameUpdated', function(_, cursorBounds) {
       // });
 
-      jQuery.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
+      _this.eventEmitter.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
         _this.tabStateUpdated(data);
       });
 
-      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event, canvasID) {
+      _this.eventEmitter.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event, canvasID) {
         if (!_this.structures) { return; }
         _this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, canvasID));
         _this.render();
@@ -259,7 +260,7 @@
             canvasID = jQuery.grep(_this.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0],
             isLeaf = jQuery(this).closest('li').hasClass('leaf-item');
 
-        jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasID);
+        _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasID);
       });
 
       _this.element.find('.toc-caret').on('click', function(event) {
@@ -352,13 +353,15 @@
     },
 
     hide: function() {
+      var _this = this;
       jQuery(this.appendTo).hide();
-      jQuery.publish('ADD_CLASS.'+this.windowId, 'focus-max-width');
+      _this.eventEmitter.publish('ADD_CLASS.'+this.windowId, 'focus-max-width');
     },
 
     show: function() {
+      var _this = this;
       jQuery(this.appendTo).show({effect: "fade", duration: 300, easing: "easeInCubic"});
-      jQuery.publish('REMOVE_CLASS.'+this.windowId, 'focus-max-width');
+      _this.eventEmitter.publish('REMOVE_CLASS.'+this.windowId, 'focus-max-width');
     }
 
   };

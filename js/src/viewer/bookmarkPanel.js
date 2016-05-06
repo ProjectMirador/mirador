@@ -5,6 +5,8 @@
     jQuery.extend(true, this, {
       element: null,
       appendTo: null,
+			state: null,
+			eventEmitter: null
     }, options);
 
     this.init();
@@ -29,10 +31,10 @@
 
     listenForActions: function() {
       var _this = this;
-      jQuery.subscribe('bookmarkPanelVisible.set', function(_, stateValue) {
+      _this.eventEmitter.subscribe('bookmarkPanelVisible.set', function(_, stateValue) {
         _this.onPanelVisible(_, stateValue);
       });
-      jQuery.subscribe('saveControllerConfigUpdated', function() {
+      _this.eventEmitter.subscribe('saveControllerConfigUpdated', function() {
         _this.onConfigUpdated();
       });
     },

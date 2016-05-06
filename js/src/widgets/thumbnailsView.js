@@ -14,7 +14,8 @@
       defaultThumbHeight:   150,
       windowId:             null,
       panel:                false,
-      lazyLoadingFactor:    1.5  //should be >= 1
+      lazyLoadingFactor:    1.5,  //should be >= 1
+      eventEmitter:         null
     }, options);
 
     this.init();
@@ -95,11 +96,11 @@
 
     listenForActions: function() {
       var _this = this;
-      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event) {
+      _this.eventEmitter.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event) {
         _this.currentImageChanged();
       });
 
-      jQuery.subscribe('windowResize', $.debounce(function(){
+      _this.eventEmitter.subscribe('windowResize', $.debounce(function(){
         _this.loadImages();
       }, 100));
     },
@@ -118,7 +119,7 @@
 
       _this.element.find('.thumbnail-image').on('click', function() {
         var canvasID = jQuery(this).attr('data-image-id');
-        jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasID);
+        _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasID);
       });
     },
 
@@ -204,10 +205,11 @@
     },
 
     adjustWidth: function(className, hasClass) {
+      var _this = this;
       if (hasClass) {
-        jQuery.publish('REMOVE_CLASS.'+this.windowId, className);
+        _this.eventEmitter.publish('REMOVE_CLASS.'+this.windowId, className);
       } else {
-        jQuery.publish('ADD_CLASS.'+this.windowId, className);
+        _this.eventEmitter.publish('ADD_CLASS.'+this.windowId, className);
       }
     },
 

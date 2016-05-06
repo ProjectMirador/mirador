@@ -10,7 +10,9 @@
       annotationsTabAvailable: false,
       layersTabAvailable: false,
       toolsTabAvailable: false,
-      hasStructures:     false
+      hasStructures:     false,
+      state:             null,
+      eventEmitter:      null
     }, options);
 
     this.init();
@@ -72,7 +74,8 @@
         windowId: this.windowId,
         appendTo: this.appendTo,
         tabs : this.panelState.tabs,
-        hasStructures : this.hasStructures
+        hasStructures : this.hasStructures,
+        eventEmitter: this.eventEmitter
       });
 
       if (this.tocTabAvailable) {
@@ -81,7 +84,8 @@
           appendTo: this.element.find('.tabContentArea'),
           windowId: this.windowId,
           canvasID: this.canvasID,
-          manifestVersion: this.manifest.getVersion()
+          manifestVersion: this.manifest.getVersion(),
+          eventEmitter: this.eventEmitter
         });
       }
       if (_this.annotationsTabAvailable) {
@@ -89,7 +93,8 @@
           manifest: _this.manifest,
           windowId: this.windowId,
           appendTo: _this.element.find('.tabContentArea'),
-          state: _this.state
+          state: _this.state,
+          eventEmitter: _this.eventEmitter
         });
       }
       if (_this.layersTabAvailable) {
@@ -98,7 +103,8 @@
           windowId: this.windowId,
           appendTo: _this.element.find('.tabContentArea'),
           canvasID: this.canvasID,
-          state: _this.state
+          state: _this.state,
+          eventEmitter: _this.eventEmitter
         });
       }
 
@@ -115,11 +121,12 @@
     },
 
     updateState: function(newState, initial) {
+      var _this = this;
       if (!arguments.length) return this.panelState;
       jQuery.extend(true, this.panelState, newState);
 
       if (!initial) {
-        jQuery.publish('sidePanelStateUpdated.' + this.windowId, this.panelState);
+        _this.eventEmitter.publish('sidePanelStateUpdated.' + this.windowId, this.panelState);
       }
 
       /*var enableSidePanel = false;
@@ -152,18 +159,18 @@
 
     listenForActions: function() {
       var _this = this;
-      jQuery.subscribe('sidePanelStateUpdated.' + this.windowId, function(_, data) {
+      _this.eventEmitter.subscribe('sidePanelStateUpdated.' + this.windowId, function(_, data) {
         _this.render(data);
       });
 
-      jQuery.subscribe('sidePanelResized', function() {
+      _this.eventEmitter.subscribe('sidePanelResized', function() {
       });
 
-      jQuery.subscribe('sidePanelToggled.' + this.windowId, function() {
+      _this.eventEmitter.subscribe('sidePanelToggled.' + this.windowId, function() {
         _this.panelToggled();
       });
 
-      jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
+      _this.eventEmitter.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         var windowObject = _this.state.getWindowObjectById(_this.windowId);
         if (windowObject.annotationsAvailable[windowObject.viewType]) {
           if (_this.state.getWindowAnnotationsList(_this.windowId).length > 0) {
@@ -172,7 +179,7 @@
         }
       });
 
-      jQuery.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, newCanvasId) {
+      _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, newCanvasId) {
         _this.canvasID = newCanvasId;
       });
 
@@ -202,14 +209,15 @@
     ].join('')),
 
     toggle: function (enableSidePanel) {
+      var _this = this;
       if (!enableSidePanel) {
         jQuery(this.appendTo).hide();
-        jQuery.publish('ADD_CLASS.'+this.windowId, 'focus-max-width');
-        jQuery.publish('HIDE_ICON_TOC.'+this.windowId);                
+        _this.eventEmitter.publish('ADD_CLASS.'+this.windowId, 'focus-max-width');
+        _this.eventEmitter.publish('HIDE_ICON_TOC.'+this.windowId);                
       } else {
         jQuery(this.appendTo).show({effect: "fade", duration: 300, easing: "easeInCubic"});
-        jQuery.publish('REMOVE_CLASS.'+this.windowId, 'focus-max-width');
-        jQuery.publish('SHOW_ICON_TOC.'+this.windowId);                
+        _this.eventEmitter.publish('REMOVE_CLASS.'+this.windowId, 'focus-max-width');
+        _this.eventEmitter.publish('SHOW_ICON_TOC.'+this.windowId);                
       }
     }
   };
