@@ -132,8 +132,20 @@
       var _this = this;
 
       e.preventDefault();
-      var url = e.originalEvent.dataTransfer.getData("text/plain");
-      if (url) {
+      var text_url = e.originalEvent.dataTransfer.getData("text/plain");
+      if (text_url) {
+        _this.handleDrop(text_url);
+      } else {
+        e.originalEvent.dataTransfer.items[0].getAsString(function(url) {
+          _this.handleDrop(url);
+        });
+      }
+    },
+
+    handleDrop: function(url) {
+        var _this = this;
+
+        url = url || text_url;
         var manifestUrl = $.getQueryParams(url).manifest,
             canvasId = $.getQueryParams(url).canvas,
             imageInfoUrl = $.getQueryParams(url).image,
@@ -198,11 +210,7 @@
 
             jQuery.publish('ADD_WINDOW', windowConfig);
           }
-      });
-    } else {
-      _this.element.removeClass('draggedOver');
-      dropTarget.hide();
-    }
+        });
     },
 
     clearSlot: function() {
