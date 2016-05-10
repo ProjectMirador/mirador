@@ -18,9 +18,11 @@ describe('MainMenu', function () {
         }
       };
 
+      this.eventEmitter = new Mirador.EventEmitter();
       this.viewerDiv = jQuery('<div>');
       this.mainMenu = new Mirador.MainMenu({
-        state: new Mirador.SaveController({"mainMenuSettings": mainMenuSettings}),
+        state: new Mirador.SaveController({"mainMenuSettings": mainMenuSettings, eventEmitter:this.eventEmitter}),
+        eventEmitter: this.eventEmitter,
         appendTo: this.viewerDiv,
         mainMenuBarCls:             'menu-bar',
       });
@@ -43,9 +45,9 @@ describe('MainMenu', function () {
     ];
     menu_invocations.forEach(function(test) {
       it("can detect clicking " + test.name + " and publishes event", function() {
-        spyOn(jQuery, 'publish');
+        spyOn(this.eventEmitter, 'publish');
         this.viewerDiv.find(test.selector).trigger('click');
-        expect(jQuery.publish).toHaveBeenCalledWith(test.event);
+        expect(this.eventEmitter.publish).toHaveBeenCalledWith(test.event);
       });
     });
 
@@ -62,8 +64,10 @@ describe('MainMenu', function () {
         }
       };
       this.viewerDiv = jQuery('<div>');
+      this.eventEmitter = new Mirador.EventEmitter();
       this.mainMenu = new Mirador.MainMenu({
-        state: new Mirador.SaveController({"mainMenuSettings": mainMenuSettings}),
+        state: new Mirador.SaveController({"mainMenuSettings": mainMenuSettings, eventEmitter: this.eventEmitter}),
+        eventEmitter: this.eventEmitter,
         appendTo: this.viewerDiv,
         mainMenuBarCls:             'menu-bar',
       });
@@ -113,9 +117,10 @@ describe('MainMenu', function () {
       };
 
       this.viewerDiv = jQuery('<div>');
-
+      this.eventEmitter = new Mirador.EventEmitter();
       this.mainMenu = new Mirador.MainMenu({
-        state: new Mirador.SaveController({"mainMenuSettings": mainMenuSettings}),
+        state: new Mirador.SaveController({"mainMenuSettings": mainMenuSettings, eventEmitter: this.eventEmitter}),
+        eventEmitter: this.eventEmitter,
         appendTo:       this.viewerDiv,
         mainMenuBarCls: 'menu-bar'
       });

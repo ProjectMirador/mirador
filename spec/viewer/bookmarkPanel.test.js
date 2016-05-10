@@ -1,9 +1,11 @@
 describe('BookmarkPanel', function() {
   beforeEach(function() {
+    this.eventEmitter = new Mirador.EventEmitter();
     this.viewerDiv = jQuery('<div>');
     this.panel = new Mirador.BookmarkPanel({
       appendTo: this.viewerDiv,
-      state: new Mirador.SaveController({})
+      state: new Mirador.SaveController(jQuery.extend(true, {}, Mirador.DEFAULT_SETTINGS, {eventEmitter:this.eventEmitter})),
+      eventEmitter: this.eventEmitter
     })
   });
   
@@ -15,8 +17,8 @@ describe('BookmarkPanel', function() {
   it('should listen for actions', function() {
     spyOn(this.panel, 'onPanelVisible');
     spyOn(this.panel, 'onConfigUpdated');
-    jQuery.publish('bookmarkPanelVisible');
-    jQuery.publish('saveControllerConfigUpdated');
+    this.eventEmitter.publish('bookmarkPanelVisible');
+    this.eventEmitter.publish('saveControllerConfigUpdated');
     expect(this.panel.onPanelVisible).toHaveBeenCalled();
     expect(this.panel.onConfigUpdated).toHaveBeenCalled();
   });

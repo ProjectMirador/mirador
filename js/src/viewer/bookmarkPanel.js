@@ -5,8 +5,8 @@
     jQuery.extend(true, this, {
       element: null,
       appendTo: null,
-			state: null,
-			eventEmitter: null
+	  state: null,
+	  eventEmitter: null
     }, options);
 
     this.init();

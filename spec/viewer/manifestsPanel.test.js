@@ -3,9 +3,11 @@ describe('ManifestsPanel', function() {
     jasmine.getJSONFixtures().fixturesPath = 'spec/fixtures';
     this.dummyManifestContent = getJSONFixture('dummyManifest.json');
     this.viewerDiv = jQuery('<div>');
+    this.eventEmitter = new Mirador.EventEmitter();
     this.panel = new Mirador.ManifestsPanel({
       appendTo: this.viewerDiv,
-      state: new Mirador.SaveController({})
+      state: new Mirador.SaveController({eventEmitter: this.eventEmitter}),
+      eventEmitter: this.eventEmitter
     })
   });
 
@@ -17,8 +19,8 @@ describe('ManifestsPanel', function() {
     var manifest = new Mirador.Manifest(null, 'Dummy Location', this.dummyManifestContent);
     spyOn(this.panel, 'onPanelVisible');
     spyOn(this.panel, 'onManifestReceived');
-    jQuery.publish('manifestsPanelVisible.set');
-    jQuery.publish('manifestReceived', manifest);
+    this.eventEmitter.publish('manifestsPanelVisible.set');
+    this.eventEmitter.publish('manifestReceived', manifest);
     expect(this.panel.onPanelVisible).toHaveBeenCalled();
     expect(this.panel.onManifestReceived).toHaveBeenCalled();
   });
@@ -52,16 +54,16 @@ describe('ManifestsPanel', function() {
   });
 
   it('should add manifest from url', function() {
-    spyOn(jQuery, 'publish');
+    spyOn(this.eventEmitter, 'publish');
     var url = "http://example.com/manifest.json";
     this.panel.addManifestUrl(url);
-    expect(jQuery.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', url, "(Added from URL)");
+    expect(this.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', url, "(Added from URL)");
   });
   
   it('should toggle load window', function() {
-    spyOn(jQuery, 'publish');
+    spyOn(this.eventEmitter, 'publish');
     this.panel.togglePanel();
-    expect(jQuery.publish).toHaveBeenCalledWith('TOGGLE_LOAD_WINDOW');
+    expect(this.eventEmitter.publish).toHaveBeenCalledWith('TOGGLE_LOAD_WINDOW');
   });
   
   it('should filter manifests', function() {
@@ -102,9 +104,9 @@ describe('ManifestsPanel', function() {
   });
   
   it('should resize', function() {
-    spyOn(jQuery, 'publish');
+    spyOn(this.eventEmitter, 'publish');
     this.panel.resizePanel();
-    expect(jQuery.publish).toHaveBeenCalledWith('manifestPanelWidthChanged', this.panel.resultsWidth);
+    expect(this.eventEmitter.publish).toHaveBeenCalledWith('manifestPanelWidthChanged', this.panel.resultsWidth);
   });
   
   it('should receive a new manifest', function() {

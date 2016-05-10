@@ -3,6 +3,7 @@ describe('Table of Contents', function() {
   beforeEach(function(){
     jasmine.getJSONFixtures().fixturesPath = 'spec/fixtures';
 
+    this.eventEmitter = new Mirador.EventEmitter();
     this.v1SimpleStructures = getJSONFixture('simpleStructuresFixtureV1.json'),
     this.v1SimpleStructuresTemplateData = '[{"@id":"http://www.example.org/iiif/book1/range/r1.json","@type":"sc:Range","label":"Introduction","canvases":["http://www.example.org/iiif/book1/canvas/p1.json"],"id":"http://www.example.org/iiif/book1/range/r1.json","within":"root","level":0,"children":[{"@id":"http://www.example.org/iiif/book1/range/r2.json","@type":"sc:Range","label":"Part 1","within":"http://www.example.org/iiif/book1/range/r1.json","canvases":["http://www.example.org/iiif/book1/canvas/p2.json","http://www.example.org/iiif/book1/canvas/p3.json#xywh=0,0,750,300"],"id":"http://www.example.org/iiif/book1/range/r2.json","level":1}]}]',
     this.v2SimpleStructures = getJSONFixture('simpleStructuresFixtureV2.json'),
@@ -26,7 +27,8 @@ describe('Table of Contents', function() {
         manifestVersion: '1',
         appendTo: this.sandbox,
         windowId: 'dummyID',
-        canvasID: 1234
+        canvasID: 1234,
+        eventEmitter: this.eventEmitter
       });
 
       expect(this.sandbox.find('.toc')).toExist();
@@ -39,7 +41,8 @@ describe('Table of Contents', function() {
         manifestVersion: '1',
         appendTo: this.sandbox,
         windowId: 'dummyID',
-        canvasID: 1234
+        canvasID: 1234,
+        eventEmitter: this.eventEmitter
       });
 
       expect(this.sandbox.find('.toc-link')).toExist();
@@ -51,7 +54,8 @@ describe('Table of Contents', function() {
         structures: [],
         appendTo: this.sandbox,
         windowId: 'dummyID',
-        canvasID: 1234
+        canvasID: 1234,
+        eventEmitter: this.eventEmitter
       });
 
       expect(this.sandbox.find('.toc')).toExist();
@@ -64,7 +68,8 @@ describe('Table of Contents', function() {
         manifestVersion: '1',
         appendTo: this.sandbox,
         windowId: 'dummyID',
-        canvasID: 1234
+        canvasID: 1234,
+        eventEmitter: this.eventEmitter
       });
 
 console.log(Object.keys(testToc.tocData));
@@ -92,7 +97,8 @@ console.log(Object.keys(testToc.tocData));
         manifestVersion: '1',
         appendTo: this.sandbox,
         windowId: 'dummyID',
-        canvasID: 1234
+        canvasID: 1234,
+        eventEmitter: this.eventEmitter
       });
 
       expect(testToc.structures.length).toEqual(2);
@@ -107,7 +113,8 @@ console.log(Object.keys(testToc.tocData));
         manifestVersion: '2',
         appendTo: this.sandbox,
         windowId: 'dummyID',
-        canvasID: 1234
+        canvasID: 1234,
+        eventEmitter: this.eventEmitter
       });
 
       console.log(JSON.stringify(testToc.extractV1RangeTrees(this.v2SimpleStructures), null, 2));
