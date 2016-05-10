@@ -48,6 +48,21 @@
                 userLogo:    this.state.getStateProperty('mainMenuSettings').userLogo
             }));
 
+            this.element.find('.mainmenu-button').each(function() {
+              jQuery(this).qtip({
+                content: {
+                  text: jQuery(this).attr('title'),
+                },
+                position: {
+                  my: 'top center',
+                  at: 'bottom center'
+                },
+                style: {
+                  classes: 'qtip-dark qtip-shadow qtip-rounded'
+                },
+              });
+            });
+
             this.listenForActions();
             this.bindEvents();
         },
@@ -106,7 +121,7 @@
         '<ul class="{{mainMenuCls}}">',
         '{{#if showBookmark}}',
           '<li>',
-            '<a href="javascript:;" class="bookmark-workspace" title="{{t "bookmark"}}">',
+            '<a href="javascript:;" class="bookmark-workspace mainmenu-button" title="{{t "bookmarkTooltip"}}" aria-label="{{t "bookmarkTooltip"}}">',
               '<span class="fa fa-bookmark fa-lg fa-fw"></span> {{t "bookmark"}}',
             '</a>',
           '</li>',
@@ -120,14 +135,14 @@
         '{{/if}}',*/
         '{{#if showLayout}}',
           '<li>',
-            '<a href="javascript:;" class="change-layout" title="{{t "changeLayout"}}">',
+            '<a href="javascript:;" class="change-layout mainmenu-button" title="{{t "changeLayoutTooltip"}}" aria-label="{{t "changeLayoutTooltip"}}">',
               '<span class="fa fa-th-large fa-lg fa-fw"></span> {{t "changeLayout"}}',
             '</a>',
           '</li>',
         '{{/if}}',
         '{{#if showFullScreenViewer}}',
           '<li>',
-            '<a href="javascript:;" class="fullscreen-viewer" title="{{t "fullScreen"}}">',
+            '<a href="javascript:;" class="fullscreen-viewer mainmenu-button" title="{{t "fullScreenTooltip"}}" aria-label="{{t "fullScreenTooltip"}}">',
               '<span class="fa fa-expand fa-lg fa-fw"></span> {{t "fullScreen"}}',
             '</a>',
           '</li>',

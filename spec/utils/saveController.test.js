@@ -1,4 +1,4 @@
-describe('saveController', function () {
+describe('SaveController', function () {
 
   beforeEach(function() {
     this.config = {
