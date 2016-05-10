@@ -53,7 +53,6 @@
         windowId: this.windowId,
         annotationLayerAvailable: false,
         showNextPrev : this.imagesList.length !== 1,
-        state: this.state,
         eventEmitter: this.eventEmitter
       });
 
@@ -356,6 +355,7 @@ bindEvents: function() {
     // need next single page for lining pages up
     // don't need for continuous or individuals
     next: function() {
+      var _this = this;
       var next;
       if (this.currentImgIndex % 2 === 0) {
         next = this.currentImgIndex + 1;

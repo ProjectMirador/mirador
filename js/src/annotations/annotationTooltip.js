@@ -6,6 +6,7 @@
       targetElement: null,
       annotations: [],
       windowId: "",
+      eventEmitter: null
     }, options);
 
     this.init();
@@ -68,8 +69,8 @@
         },
         events: {
           render: function(event, api) {
-            jQuery.publish('annotationEditorAvailable.' + _this.windowId);
-            jQuery.publish('disableTooltips.' + _this.windowId);
+            _this.eventEmitter.publish('annotationEditorAvailable.' + _this.windowId);
+            _this.eventEmitter.publish('disableTooltips.' + _this.windowId);
 
             jQuery(selector).parent().parent().draggable();
 
@@ -97,7 +98,7 @@
 
               api.destroy();
               //reenable viewer tooltips
-              jQuery.publish('enableTooltips.' + _this.windowId);
+              _this.eventEmitter.publish('enableTooltips.' + _this.windowId);
               _this.activeEditor = null;
               _this.activeEditorTip = null;
 
@@ -197,7 +198,7 @@
         }
         var display = jQuery(this).parents('.annotation-display');
         var id = display.attr('data-anno-id');
-        jQuery.publish('annotationDeleted.' + _this.windowId, [id]);
+        _this.eventEmitter.publish('annotationDeleted.' + _this.windowId, [id]);
         api.hide();
         display.remove();
       });
@@ -291,10 +292,11 @@
     },
 
     setTooltipContent: function(annotations) {
+      var _this = this;
       var api = jQuery(this.targetElement).qtip('api');
       if (api) {
         api.set({'content.text': this.getViewerContent(annotations)});
-        jQuery.publish('tooltipViewerSet.' + this.windowId);
+        _this.eventEmitter.publish('tooltipViewerSet.' + this.windowId);
       }
     },
 
@@ -350,9 +352,10 @@
     },
 
     freezeQtip: function(api, oaAnno, viewerParams) {
+      var _this = this;
       if (this.inEditOrCreateMode) { throw 'AnnotationTooltip already in edit mode'; }
       this.inEditOrCreateMode = true;
-      jQuery.publish('disableRectTool.' + this.windowId);
+      _this.eventEmitter.publish('disableRectTool.' + this.windowId);
       var editorContainer = this.editorTemplate({
         id: jQuery.isEmptyObject(oaAnno) ? "" : oaAnno['@id'],
         windowId: this.windowId
@@ -361,7 +364,7 @@
         'content.text': editorContainer,
         'hide.event': false
       });
-      jQuery.publish('annotationEditorAvailable.' + this.windowId);
+      _this.eventEmitter.publish('annotationEditorAvailable.' + this.windowId);
       //add rich text editor
       this.activeEditor = new this.editor(
         jQuery.extend({}, this.editorOptions, {
@@ -376,9 +379,10 @@
     },
 
     unFreezeQtip: function(api, oaAnno, viewerParams) {
+      var _this = this;
       if (!this.inEditOrCreateMode) { throw 'AnnotationTooltip not in edit mode'; }
       this.inEditOrCreateMode = false;
-      jQuery.publish('enableRectTool.' + this.windowId);
+      _this.eventEmitter.publish('enableRectTool.' + this.windowId);
       api.set({
         'content.text': this.getViewerContent([oaAnno]),
         'hide.event': 'mouseleave'

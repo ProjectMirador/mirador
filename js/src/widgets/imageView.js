@@ -31,6 +31,7 @@
   $.ImageView.prototype = {
 
     init: function() {    
+      var _this = this;
       // check (for thumbnail view) if the canvasID is set. 
       // If not, make it page/item 1.
       if (this.canvasID !== null) {
@@ -71,7 +72,8 @@
         annotationCreationAvailable: this.annotationCreationAvailable,
         annoEndpointAvailable: this.annoEndpointAvailable,
         showNextPrev : this.imagesList.length !== 1,
-        availableTools: this.availableTools
+        availableTools: this.availableTools,
+        eventEmitter: this.eventEmitter
       });
 
       this.bindEvents();

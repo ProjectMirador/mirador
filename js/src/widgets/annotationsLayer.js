@@ -54,7 +54,8 @@
         list: _this.annotationsList, // must be passed by reference.
         visible: false,
         windowId: _this.windowId,
-        state: _this.state
+        state: _this.state,
+        eventEmitter: _this.eventEmitter
       });
       this.modeSwitch();
     },
