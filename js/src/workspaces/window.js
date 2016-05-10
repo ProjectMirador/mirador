@@ -463,6 +463,7 @@
               manifest: _this.manifest,
               appendTo: _this.element.find('.'+panelType),
               state:  _this.state,
+              eventEmitter: _this.eventEmitter,
               windowId: _this.id,
               panel: true,
               canvasID: _this.currentCanvasID,
@@ -517,6 +518,7 @@
         this.sidePanel = new $.SidePanel({
               windowId: _this.id,
               state: _this.state,
+              eventEmitter: _this.eventEmitter,
               appendTo: _this.element.find('.sidePanel'),
               manifest: _this.manifest,
               canvasID: _this.currentCanvasID,
@@ -658,6 +660,7 @@
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
           state:  this.state,
+          eventEmitter: this.eventEmitter,
           windowId: this.id,
           canvasID: this.currentCanvasID,
           imagesList: this.imagesList
@@ -677,6 +680,7 @@
           appendTo: this.element.find('.view-container'),
           windowId: this.id,
           state:  this.state,
+          eventEmitter: this.eventEmitter,
           canvasID: canvasID,
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
@@ -701,6 +705,7 @@
           appendTo: this.element.find('.view-container'),
           windowId: this.id,
           state:  this.state,
+          eventEmitter: this.eventEmitter,
           canvasID: canvasID,
           imagesList: this.imagesList,
           osdOptions: this.focusOptions,
@@ -721,6 +726,7 @@
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
           state:  this.state,
+          eventEmitter: this.eventEmitter,
           windowId: this.id,
           canvasID: this.currentCanvasID,
           imagesList: this.imagesList,
@@ -816,6 +822,7 @@
           options.dfd = dfd;
           options.windowID = _this.id;
           options.imagesList = _this.imagesList;
+          options.eventEmitter = _this.eventEmitter;
           _this.endpoint = new $[module](options);
         }
         _this.endpoint.search({ "uri" : _this.currentCanvasID});
