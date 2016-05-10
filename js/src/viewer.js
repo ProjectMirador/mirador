@@ -284,21 +284,24 @@
 
       var windowConfig = {
         manifest: this.state.getStateProperty('manifests')[options.loadedManifest],
-        currentFocus : options.viewType,
-        focusesOriginal : options.availableViews,
-        currentCanvasID : options.canvasID,
+        viewType : options.viewType,
+        availableViews : options.availableViews,
+        canvasID : options.canvasID,
         id : options.id,
-        focusOptions : options.windowOptions,
+        windowOptions : options.windowOptions,
+        //need to do the rewrite from setting to param for window
         bottomPanelAvailable : options.bottomPanel,
         bottomPanelVisible : options.bottomPanelVisible,
+        //need to do the rewrite from setting to param for window
         sidePanelAvailable : options.sidePanel,
         sidePanelOptions : options.sidePanelOptions,
         sidePanelVisible : options.sidePanelVisible,
+        //need to do the rewrite from setting to param for window
         overlayAvailable : options.overlay,
-        annotationLayerAvailable : options.annotationLayer,
-        annotationCreationAvailable : options.annotationCreation,
+        annotationLayer : options.annotationLayer,
+        annotationCreation : options.annotationCreation,
         annotationState : options.annotationState,
-        fullScreenAvailable : options.fullScreen,
+        fullScreen : options.fullScreen,
         slotAddress: slotAddress,
         displayLayout : options.displayLayout,
         layoutOptions: options.layoutOptions
