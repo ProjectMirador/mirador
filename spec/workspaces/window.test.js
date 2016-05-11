@@ -21,35 +21,39 @@ describe('Window', function() {
         this.toggle = jasmine.createSpy();
         this.adjustHeight = jasmine.createSpy();
       });
-      this.window = new Mirador.Window({
-        state: new Mirador.SaveController(Mirador.DEFAULT_SETTINGS),
-        manifest: {
-          jsonLd: {
-            sequences: [
-              { viewingHint: 'paged',
-                canvases: [{
-                  '@id': ''
-                }]
-            }]
+      var state = new Mirador.SaveController(Mirador.DEFAULT_SETTINGS);
+      this.window = new Mirador.Window(jQuery.extend(true, 
+        {}, 
+        state.getStateProperty('windowSettings'),
+        {
+          state: state,
+          manifest: {
+            jsonLd: {
+              sequences: [
+                { viewingHint: 'paged',
+                  canvases: [{
+                    '@id': ''
+                  }]
+              }]
+            },
+            getCanvases: function() { return [{
+              '@id': '',
+              'images':[{
+              }]
+            }];
+            },
+            getAnnotationsListUrl: function() {
+              return false; // returning false for non-existent value is probably not a good practice?
+            },
+            getStructures: function() {
+              return [];
+            },
+            getVersion: function() {
+              return '1';
+            }
           },
-          getCanvases: function() { return [{
-            '@id': '',
-            'images':[{
-            }]
-          }];
-          },
-          getAnnotationsListUrl: function() {
-            return false; // returning false for non-existent value is probably not a good practice?
-          },
-          getStructures: function() {
-            return [];
-          },
-          getVersion: function() {
-            return '1';
-          }
-        },
-        appendTo: this.appendTo
-      });
+          appendTo: this.appendTo
+      }));
     });
 
     afterEach(function() {
