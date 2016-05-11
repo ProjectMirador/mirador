@@ -24,7 +24,6 @@
         showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable,
         showAnno : this.annotationLayerAvailable
       })).appendTo(this.appendTo);
-
       if (this.annotationLayerAvailable && this.annoEndpointAvailable) {
         this.contextControls = new $.ContextControls({
           element: null,
@@ -34,6 +33,8 @@
           annotationCreationAvailable: this.annotationCreationAvailable,
           annotationRefresh: this.annotationRefresh,
           availableAnnotationTools: this.availableAnnotationTools,
+          availableAnnotationStylePickers: this.availableAnnotationStylePickers,
+          state:this.state,
           eventEmitter: this.eventEmitter
         });
       }

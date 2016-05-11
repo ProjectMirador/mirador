@@ -28,7 +28,7 @@ describe('Overlay', function() {
         'segments': true,
         'tolerance': 0
       },
-      onDrawFinish: function() {
+      'onDrawFinish': function() {
       },
       getName: function(tool) {
         return tool.idPrefix + '1';
@@ -79,6 +79,14 @@ describe('Overlay', function() {
         'contentSize': {
           'x': 800,
           'y': 600
+        },
+        'getBounds': function() {
+          return {
+            'x': 0,
+            'y': 0,
+            'width': 800,
+            'height': 600
+          };
         }
       },
       'addHandler': function(eventName, functionBody) {

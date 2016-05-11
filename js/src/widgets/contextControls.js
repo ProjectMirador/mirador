@@ -19,20 +19,79 @@
 
     init: function() {
       var _this = this;
+      var showStrokeStyle = false;
+      this.availableAnnotationStylePickers.forEach(function(picker){
+        if(picker == 'StrokeType'){
+          showStrokeStyle = true;
+        }
+      });
       this.element = jQuery(this.annotationTemplate({
         tools : _this.availableAnnotationTools,
         showEdit : this.annotationCreationAvailable,
+        showStrokeStyle: showStrokeStyle,
         showRefresh : this.annotationRefresh
       })).appendTo(this.container.find('.mirador-osd-annotation-controls'));
-
       this.setBorderFillColorPickers();
+
+     if(showStrokeStyle){
+       this.addStrokeStylePicker();
+     }
       this.hide();
       this.bindEvents();
     },
 
+    addColorPicker:function(selector,options){
+      this.container.find(selector).spectrum(options);
+    },
+
+    getImagePath:function(imageName){
+      return this.state.getStateProperty('buildPath') + this.state.getStateProperty('imagesPath') + imageName;
+    },
+
+    setBackgroundImage:function(el,imageName){
+      el.css('background-image','url('+this.getImagePath(imageName)+')');
+    },
+
+    removeBackgroundImage:function(el){
+      el.css('background-image','');
+    },
+
+    addStrokeStylePicker:function(){
+      var _this = this;
+      var setBackground = {
+        'solid':function(el){
+          _this.setBackgroundImage(el,'border_type_1.png');
+        },
+        'dashed':function(el){
+          _this.setBackgroundImage(el, 'border_type_2.png');
+        },
+        'dotdashed':function(el){
+          _this.setBackgroundImage(el,  'border_type_3.png');
+        }
+      };
+
+      setBackground.solid(this.container.find('.mirador-line-type .solid'));
+      setBackground.dashed(this.container.find('.mirador-line-type .dashed'));
+      setBackground.dotdashed(this.container.find('.mirador-line-type .dotdashed'));
+
+      this.container.find('.mirador-line-type').on('mouseenter', function() {
+        _this.container.find('.type-list').stop().slideFadeToggle(300);
+      });
+      this.container.find('.mirador-line-type').on('mouseleave', function() {
+        _this.container.find('.type-list').stop().slideFadeToggle(300);
+      });
+      this.container.find('.mirador-line-type').find('ul li').on('click', function() {
+        var className = jQuery(this).find('i').attr('class').replace(/fa/, '').replace(/ /, '');
+        _this.removeBackgroundImage(_this.container.find('.mirador-line-type>i'));
+        setBackground[className](_this.container.find('.mirador-line-type>i'));
+        _this.eventEmitter.publish('toggleBorderType.' + _this.windowId, className);
+      });
+
+    },
+
     setBorderFillColorPickers: function() {
       var _this = this;
-      _this.container.find(".borderColorPicker").spectrum({
+      this.addColorPicker('.borderColorPicker',{
         showInput: true,
         showInitial: true,
         showPalette: true,
@@ -52,7 +111,7 @@
         hide: function(color) {
           color = jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId);
           if (color) {
-            _this.eventEmitter.publish('changeBorderColor.' + _this.windowId, color.toHexString());
+            _this.eventEmitter.publish('changeBorderColor.' + _this.windowId, [color.toHexString()]);
           }
         },
         maxSelectionSize: 4,
@@ -65,8 +124,8 @@
       _this.container.find(".borderColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>border_color</i>");
       
       var borderPicker = jQuery('.borderColorPickerPop'+_this.windowId);
-      borderPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>Cancel');
-      borderPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>Choose</a>');
+      borderPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>'+i18n.t('cancel'));
+      borderPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>'+ i18n.t('colorPickerChoose') +'</a>');
       borderPicker.find('button.sp-choose').hide();
       
       borderPicker.find('a.sp-cancel').on('click', function() {
@@ -74,18 +133,33 @@
       });
       
       jQuery._data(borderPicker.find(".sp-cancel")[0], "events").click.reverse();
-      
+
       borderPicker.find('a.sp-choose').on('click',function(){
         borderPicker.find('button.sp-choose').click();
+        color = jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId);
+        if (color) {
+          jQuery.publish('changeBorderColor.' + _this.windowId, color.toHexString());
+        }
       });
-      
-      _this.container.find(".fillColorPicker").spectrum({
+      jQuery('.draw-tool:has(input.borderColorPicker)').mouseover(function() {
+        if(borderPicker.hasClass("sp-hidden")) {
+          jQuery(this).find(".sp-preview").click();
+        }
+      });
+      jQuery('.draw-tool:has(input.borderColorPicker)').mouseleave(function() {
+        if(!borderPicker.hasClass("sp-hidden")) {
+          jQuery(this).find(".sp-preview").click();
+        }
+      });
+
+      _this.addColorPicker('.fillColorPicker',{
         showInput: true,
         showInitial: true,
         showAlpha: true,
         showPalette: true,
         showSelectionPalette: true,
         appendTo: 'parent',
+        clickoutFiresChange: true,
         containerClassName: 'fillColorPickerPop'+_this.windowId,
         preferredFormat: "rgb",
         show: function(color) {
@@ -114,8 +188,8 @@
       
       var fillPicker = jQuery('.fillColorPickerPop'+_this.windowId);
       
-      fillPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>Cancel');
-      fillPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>Choose</a>');
+      fillPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>'+i18n.t('cancel'));
+      fillPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>'+i18n.t('colorPickerChoose')+'</a>');
       fillPicker.find('button.sp-choose').hide();
       
       fillPicker.find('a.sp-cancel').on('click', function() {
@@ -123,9 +197,23 @@
       });
       
       jQuery._data(fillPicker.find(".sp-cancel")[0], "events").click.reverse();
-      
+
       fillPicker.find('a.sp-choose').on('click',function(){
         fillPicker.find('button.sp-choose').click();
+        color = jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId);
+        if (color) {
+          _this.eventEmitter.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
+        }
+      });
+      jQuery('.draw-tool:has(input.fillColorPicker)').mouseover(function() {
+        if(fillPicker.hasClass("sp-hidden")) {
+          jQuery(this).find(".sp-preview").click();
+        }
+      });
+      jQuery('.draw-tool:has(input.fillColorPicker)').mouseleave(function() {
+        if(!fillPicker.hasClass("sp-hidden")) {
+          jQuery(this).find(".sp-preview").click();
+        }
       });
     },
 
@@ -168,6 +256,16 @@
                                    '<a class="hud-control draw-tool">',
                                    '<input type="text" class="fillColorPicker"/>',
                                    '</a>',
+                                   '{{#if showStrokeStyle}}',
+                                   '<a href="javascript:;" class="mirador-btn draw-tool mirador-line-type" role="button" aria-label="Change Line Type">',
+                                   '<i class="material-icons solid">create</i>',
+                                   '<ul class="dropdown type-list">',
+                                   '<li><i class="fa solid"></i> {{t "strokeStylePickerSolid"}}</li>',
+                                   '<li><i class="fa dashed"></i> {{t "strokeStylePickerDashed"}}</li>',
+                                   '<li><i class="fa dotdashed"></i> {{t "strokeStylePickerDotdashed"}}</li>',
+                                   '</ul>',
+                                   '</a>',
+                                   '{{/if}}',
                                    '<a class="hud-control draw-tool" style="color:#abcdef;">',
                                    '|',
                                    '</a>',
