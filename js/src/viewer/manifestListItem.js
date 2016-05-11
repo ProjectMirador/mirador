@@ -103,6 +103,10 @@
 
         _this.imagesTotalWidth += (width + _this.margin);
         if (_this.imagesTotalWidth >= _this.maxPreviewImagesWidth) {
+          // outsized image will inherited
+          if (value.width > _this.maxPreviewImagesWidth) {
+            _this.tplData.images.push(value);
+          }
           _this.imagesTotalWidth -= (width + _this.margin);
           return false;
         }
@@ -237,14 +241,16 @@
           '</div>',
         '</div>',
       '</div>',
-      '<div class="preview-images">',
-      '{{#each images}}',
-        '<img src="{{url}}" width="{{width}}" height="{{height}}" class="preview-image flash" data-image-id="{{id}}">',
-      '{{/each}}',
+      '<div class="preview-thumb">',
+        '<div class="preview-images">',
+        '{{#each images}}',
+          '<img src="{{url}}" width="{{width}}" height="{{height}}" class="preview-image flash" data-image-id="{{id}}">',
+        '{{/each}}',
+        '</div>',
+        '{{#if remaining}}',
+          '<i class="fa fa fa-ellipsis-h remaining"></i>',
+        '{{/if}}',
       '</div>',
-      '{{#if remaining}}',
-        '<i class="fa fa fa-ellipsis-h remaining"></i>',
-      '{{/if}}',
       '</li>'
     ].join(''))
   };
