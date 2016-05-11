@@ -64,4 +64,12 @@ describe('EventEmitter', function () {
     em.unsubscribe(eventName, obj.callback);
     expect(jQuery.unsubscribe).toHaveBeenCalledWith(prefix + eventName, obj.callback);
   });
+  
+  it('should log events when debug mode is enabled', function() {
+    var em = new Mirador.EventEmitter({"debug": true});
+    var eventName = "foo";
+    spyOn(console, 'trace');
+    em.publish(eventName);
+    expect(console.trace).toHaveBeenCalled();    
+  });
 });
