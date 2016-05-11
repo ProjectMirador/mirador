@@ -14,6 +14,7 @@
       //slotAddress:       null,
       currentImageMode:  'ImageView',
       imageModes:        ['ImageView', 'BookView'],
+      originalImageModes:        ['ImageView', 'BookView'],
       //viewType:          'ThumbnailsView',
       //availableViews:    ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
       focuses:           ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
@@ -99,7 +100,8 @@
 
       _this.removeBookView();
 
-      //remove any imageModes that are not available as a focus
+      //reset imagemodes and then remove any imageModes that are not available as a focus
+      this.imageModes = this.originalImageModes;
       this.imageModes = jQuery.map(this.imageModes, function(value, index) {
         if (jQuery.inArray(value, _this.focuses) === -1) return null;
         return value;

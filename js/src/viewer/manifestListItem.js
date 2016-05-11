@@ -150,7 +150,7 @@
         var windowConfig = {
           manifest: _this.manifest,
           canvasID: jQuery(this).attr('data-image-id'),
-          viewType: 'ImageView'
+          viewType: _this.state.getStateProperty('windowSettings').viewType //get the view type from settings rather than always defaulting to ImageView
         };
         jQuery.publish('ADD_WINDOW', windowConfig);
       });
