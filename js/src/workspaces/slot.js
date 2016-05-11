@@ -163,8 +163,8 @@
             // image view. If we don't specify the focus, the
             // window will open in thumbnail view with the
             // chosen page highlighted.
-            windowConfig.currentCanvasID = canvasId;
-            windowConfig.currentFocus = 'ImageView';
+            windowConfig.canvasID = canvasId;
+            windowConfig.viewType = 'ImageView';
           }
 
           jQuery.publish('ADD_WINDOW', windowConfig);
@@ -204,8 +204,8 @@
               // image view. If we don't specify the focus, the
               // window will open in thumbnail view with the
               // chosen page highlighted.
-              windowConfig.currentCanvasID = canvasId;
-              windowConfig.currentFocus = 'ImageView';
+              windowConfig.canvasID = canvasId;
+              windowConfig.viewType = 'ImageView';
             }
 
             jQuery.publish('ADD_WINDOW', windowConfig);

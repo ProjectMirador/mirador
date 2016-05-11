@@ -5,17 +5,17 @@
     jQuery.extend(this, {
       element:           null,
       scrollImageRatio:  0.9,
-      manifest:          null,
+      //manifest:          null,
       canvasID:          null,
       focusImages:       [],
       imagesList:        null,
       annotationsList:   [],
       endpoint:          null,
-      slotAddress:       null,
+      //slotAddress:       null,
       currentImageMode:  'ImageView',
       imageModes:        ['ImageView', 'BookView'],
-      viewType:          'ThumbnailsView',
-      availableViews:    ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
+      //viewType:          'ThumbnailsView',
+      //availableViews:    ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
       focuses:           ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
       focusModules:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
       focusOverlaysAvailable: {
@@ -37,15 +37,15 @@
         }
       },
       windowOptions: null,
-      id : null,
+      //id : null,
       sidePanel: null, //the actual module for the side panel
-      sidePanelAvailable: true,
-      sidePanelOptions: {
-        "toc" : true,
-        "annotations" : false,
-        "layers" : false
-      },
-      sidePanelVisible: true,
+      //sidePanelAvailable: true,
+      // sidePanelOptions: {
+      //   "toc" : true,
+      //   "annotations" : false,
+      //   "layers" : false
+      // },
+      //sidePanelVisible: true,
       annotationsAvailable: {
         'ThumbnailsView' : false,
         'ImageView' : true,
@@ -53,23 +53,23 @@
         'BookView' : false
       },
       bottomPanel: null, //the actual module for the bottom panel
-      bottomPanelAvailable: true,
-      bottomPanelVisible: true,
+      //bottomPanelAvailable: true,
+      //bottomPanelVisible: true,
       overlay: null,
-      annotationLayer: true,
-      annotationCreation: true,
+      //annotationLayer: true,
+      //annotationCreation: true,
       annoEndpointAvailable : false,
-      annotationState : 'annoOff',
-      fullScreen : true,
-      displayLayout: true,
-      layoutOptions : {
-        "newObject" : true,
-        "close" : true,
-        "slotRight" : true,
-        "slotLeft" : true,
-        "slotAbove" : true,
-        "slotBelow" : true
-      },
+      //annotationState : 'annoOff',
+      //fullScreen : true,
+      //displayLayout: true,
+      // layoutOptions : {
+      //   "newObject" : true,
+      //   "close" : true,
+      //   "slotRight" : true,
+      //   "slotLeft" : true,
+      //   "slotAbove" : true,
+      //   "slotBelow" : true
+      // },
       iconClasses: {
         "ImageView" : "fa fa-photo fa-lg fa-fw",
         "BookView" : "fa fa-columns fa-lg fa-fw",

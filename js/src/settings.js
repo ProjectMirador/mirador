@@ -38,6 +38,7 @@
                                 //only valid if no windowObjects have been initialized
                                 //if there are multiple slots, it will be bound to the first slot and the selected manifest will open in that slot
 
+    //default window settings, but can be changed in Mirador configuration on initialization
     'windowSettings' : {
       "availableViews" : ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'], //any subset removes others
       "viewType" : 'ThumbnailsView', //one of [_'ThumbnailsView'_, 'ImageView', 'ScrollView', 'BookView'] - if using availableViews, must be in subset
@@ -71,6 +72,7 @@
 
     'windowObjects' : [
       /* Using the same settings listed in `windowSettings`, change the settings for a specific window
+       * Structured as an array of objects
        * A few additional settings only available in `windowObjecs`
        * "loadedManifest": [manifestURI] e.g. "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/manifest.json"
        * "canvasID": [canvas URI] e.g. "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/canvas/canvas-12"
@@ -78,10 +80,6 @@
        * "windowOptions" : [data specific to the view type, such as OSD bounds and zoom level - automatically saved in SaveController]
        */
     ],
-
-    'defaultWindowSettings': {
-
-    },
 
     // Control for whether or not to auto hide controls on the OSD canvas and specific durations in milliseconds
     // durations assume `autoHideControls` is true

@@ -139,8 +139,8 @@
       this.element.on('click', function() {
         var windowConfig = {
           manifest: _this.manifest,
-          currentCanvasID: null,
-          currentFocus: 'ThumbnailsView'
+          canvasID: null,
+          viewType: 'ThumbnailsView'
         };
         jQuery.publish('ADD_WINDOW', windowConfig);
       });
@@ -149,8 +149,8 @@
         e.stopPropagation();
         var windowConfig = {
           manifest: _this.manifest,
-          currentCanvasID: jQuery(this).attr('data-image-id'),
-          currentFocus: 'ImageView'
+          canvasID: jQuery(this).attr('data-image-id'),
+          viewType: 'ImageView'
         };
         jQuery.publish('ADD_WINDOW', windowConfig);
       });

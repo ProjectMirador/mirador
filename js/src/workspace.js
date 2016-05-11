@@ -422,8 +422,8 @@
           slotAddress: slot.layoutAddress, 
           state: _this.state,
           appendTo: slot.element,
-          currentCanvasID: window.currentCanvasID,
-          currentFOcus: window.currentFocus
+          canvasID: window.canvasID,
+          viewType: window.viewType
         });
       });
     },
@@ -475,7 +475,31 @@
         windowConfig.id = windowConfig.id || $.genUUID();
 
         jQuery.publish("windowSlotAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
-        newWindow = new $.Window(windowConfig);
+
+        //extend the windowConfig with the default settings
+        var mergedConfig = jQuery.extend(true, {}, _this.state.getStateProperty('windowSettings'), windowConfig);
+
+        //"rename" some keys in the merged object to align settings parameters with window parameters        
+        if (mergedConfig.loadedManifest) {
+          mergedConfig.manifest = _this.state.getStateProperty('manifests')[mergedConfig.loadedManifest];
+          delete mergedConfig.loadedManifest;
+        }
+
+        if (mergedConfig.bottomPanel) {
+          mergedConfig.bottomPanelAvailable = mergedConfig.bottomPanel;
+          delete mergedConfig.bottomPanel;
+        }
+
+        if (mergedConfig.sidePanel) {
+          mergedConfig.sidePanelAvailable = mergedConfig.sidePanel;
+          delete mergedConfig.sidePanel;
+        }
+
+        if (mergedConfig.overlay) {
+          mergedConfig.overlayAvailable = mergedConfig.overlay;
+          delete mergedConfig.overlay;
+        }
+        newWindow = new $.Window(mergedConfig);
         _this.windows.push(newWindow);
 
         targetSlot.window = newWindow;
