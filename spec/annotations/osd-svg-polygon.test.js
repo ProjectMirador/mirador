@@ -66,8 +66,6 @@ describe('Polygon', function() {
 
     expect(shape.closed).toBe(false);
 
-    expect(shape.fullySelected).toBe(true);
-
     expect(shape.name).toBe(this.polygon.idPrefix + '1');
 
     expect(shape.segments.length).toBe(1);
