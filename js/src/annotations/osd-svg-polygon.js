@@ -32,6 +32,21 @@
       }
     },
 
+    onHover:function(activate,shape,hoverColor){
+      // shape needs to have hovered styles
+      if(activate && !shape.data.hovered){
+        shape.data.nonHoverStroke = shape.strokeColor.clone();
+        shape.data.hovered = true;
+        shape.strokeColor = hoverColor;
+      }
+      // shape is not longer hovered
+      if(!activate && shape.data.hovered){
+        shape.strokeColor = shape.data.nonHoverStroke.clone();
+        delete shape.data.nonHoverStroke;
+        delete shape.data.hovered;
+      }
+    },
+
     onMouseUp: function(event, overlay) {
       // Empty block.
     },

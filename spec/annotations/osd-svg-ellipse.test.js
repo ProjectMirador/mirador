@@ -560,5 +560,36 @@ describe('Ellipse', function() {
 
       expect(document.body.style.cursor).toBe('default');
     });
+
+    it('should change stroke when hovering ellipse',function(){
+      var red = {
+        r:1,
+        g:0,
+        b:0
+      };
+      this.ellipse.onHover(true,this.shape,'red');
+
+      expect(this.shape.data.hovered).toBe(true);
+      expect(this.shape.strokeColor.red).toBe(red.r);
+      expect(this.shape.strokeColor.green).toBe(red.g);
+      expect(this.shape.strokeColor.blue).toBe(red.b);
+    });
+
+    it('should change stroke back to original when not hovering ellipse',function(){
+
+      var oldColor = this.shape.strokeColor;
+      this.ellipse.onHover(true,this.shape,'red');
+
+      expect(this.shape.data.nonHoverStroke.red).toBe(oldColor.red);
+      expect(this.shape.data.nonHoverStroke.green).toBe(oldColor.green);
+      expect(this.shape.data.nonHoverStroke.blue).toBe(oldColor.blue);
+
+      this.ellipse.onHover(false,this.shape);
+      expect(this.shape.data.hovered).toBe(undefined);
+      expect(this.shape.strokeColor.red).toBe(oldColor.red);
+      expect(this.shape.strokeColor.green).toBe(oldColor.green);
+      expect(this.shape.strokeColor.blue).toBe(oldColor.blue);
+    });
+
   });
 });

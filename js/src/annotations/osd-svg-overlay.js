@@ -31,7 +31,8 @@
       availableAnnotationDrawingTools: availableAnnotationDrawingTools,
       availableExternalCommentsPanel: availableExternalCommentsPanel,
       dashArray: [],
-      fixedShapeSize: 10,
+      fixedShapeSize: drawingToolsSettings.fixedShapeSize,
+      shapeHandleSize:drawingToolsSettings.shapeHandleSize,
       hitOptions: {
         handles: true,
         stroke: true,
@@ -375,18 +376,24 @@
       this.removeFocus();
     },
 
+    // get the tool which controls given shape
+    getTool:function(shape){
+      for(var i=0;i<this.tools.length;i++){
+        if(shape.name.toString().indexOf(this.tools[i].idPrefix) !== -1){
+          return this.tools[i];
+        }
+      }
+    },
+
     // replaces paper.js objects with the required properties only.
     // 'shapes' coordinates are image coordiantes
     replaceShape: function(shape, annotation) {
-      var _this = this;
+
       //backward compatibility when changing shapes points
-      this.tools.forEach(function(tool,index){
-        if(shape.name.toString().indexOf(tool.idPrefix) !== -1){
-          if(_this.tools[index].SEGMENT_POINTS_COUNT && _this.tools[index].SEGMENT_POINTS_COUNT !== shape.segments.length){
-            _this.tools[index].adaptSegments(shape,_this);
-          }
-        }
-      });
+      var shapeTool = this.getTool(shape);
+      if(shapeTool && shapeTool.SEGMENT_POINTS_COUNT && shapeTool.SEGMENT_POINTS_COUNT !== shape.segments.length){
+        shapeTool.adaptSegments(shape,this);
+      }
 
       var cloned = new this.paperScope.Path({
         segments: shape.segments,
@@ -614,7 +621,7 @@
         eventEmitter: this.eventEmitter,
         windowId: this.windowId
       });
-
+      
       if (this.availableExternalCommentsPanel) {
         this.eventEmitter.publish('annotationShapeCreated.' + this.windowId, [this, shape]);
         return;
