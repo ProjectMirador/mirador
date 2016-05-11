@@ -102,6 +102,22 @@ describe('Freehand', function() {
       delete this.freehand;
     });
 
+    it('should update selection', function() {
+      var ellipseTool = new Mirador.Ellipse();
+      var initialPoint = {
+        'x': 987,
+        'y': 654
+      };
+      var ellipse = ellipseTool.createShape(initialPoint, overlay);
+      this.freehand.updateSelection(true, ellipse, overlay);
+
+      expect(this.shape.selected).toBe(false);
+
+      this.freehand.updateSelection(true, this.shape, overlay);
+
+      expect(this.shape.selected).toBe(true);
+    });
+
     it('should do nothing', function() {
       var event = getEvent({
         'x': 100,
