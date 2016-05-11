@@ -17,7 +17,7 @@
 
   $.ContextControls.prototype = {
 
-    init: function() {    
+    init: function() {
       var _this = this;
       this.element = jQuery(this.annotationTemplate({
         tools : _this.availableAnnotationTools,
@@ -98,7 +98,6 @@
           jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, color);
         },
         hide: function(color) {
-          var _this = this;
           color = jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId);
           if (color) {
             _this.eventEmitter.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
@@ -139,7 +138,7 @@
     },
 
     bindEvents: function() {
-      var _this = this;      
+      var _this = this;
       this.container.find('.mirador-osd-back').on('click', function() {
         _this.element.remove();
         _this.element = jQuery(_this.template()).appendTo(_this.container);

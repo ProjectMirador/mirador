@@ -98,7 +98,6 @@
                     }
                   };
                 }
-
                 oaAnnos[oaAnnos.length - 1].on.selector.value = _this.svgOverlay.getSVGString(shapeArray);
                 annotationShapesAreEdited = true;
                 break;

@@ -75,7 +75,7 @@ describe('Pin', function() {
 
     expect(shape.name).toBe(this.pin.idPrefix + '1');
 
-    expect(shape.segments.length).toBe(1);
+    expect(shape.segments.length).toBe(5);
 
     expect(shape.segments[0].point.x).toBe(initialPoint.x);
     expect(shape.segments[0].point.y).toBe(initialPoint.y);
@@ -97,6 +97,33 @@ describe('Pin', function() {
     afterEach(function() {
       delete this.shape;
       delete this.pin;
+    });
+
+    it('should update selection', function() {
+      var ellipseTool = new Mirador.Ellipse();
+      var initialPoint = {
+        'x': 987,
+        'y': 654
+      };
+      var ellipse = ellipseTool.createShape(initialPoint, overlay);
+      this.pin.updateSelection(true, ellipse, overlay);
+
+      expect(this.shape.selected).toBe(false);
+
+      var event = getEvent(initialPoint);
+
+      this.pin.onMouseUp(event, overlay);
+      this.pin.updateSelection(true, this.shape, overlay);
+
+      var redColor = {
+        red:1,
+        green: 0,
+        blue:0
+      };
+
+      expect(this.shape.strokeColor.red).toBe(redColor.red);
+      expect(this.shape.strokeColor.green).toBe(redColor.green);
+      expect(this.shape.strokeColor.blue).toBe(redColor.blue);
     });
 
     it('should do nothing', function() {
