@@ -37,11 +37,11 @@
     },
 
     tabStateUpdated: function(data) {
-        if (data.tabs[data.selectedTabIndex].options.id === 'tocTab') {
-            this.element.show();
-        } else {
-            this.element.hide();
-        }
+      if (data.tabs[data.selectedTabIndex].options.id === 'tocTab') {
+        this.element.show();
+      } else {
+        this.element.hide();
+      }
     },
 
     getTplData: function() {
@@ -59,8 +59,8 @@
       case '2':
         ranges = _this.extractV2RangeTrees(_this.structures);
         break;
-      // case '2.1':
-      //   _this.extractV21RangeTrees(_this.structures);
+        // case '2.1':
+        //   _this.extractV21RangeTrees(_this.structures);
       }
 
       if (ranges.length < 2) {
@@ -72,11 +72,11 @@
 
     initTocData: function() {
       var _this = this,
-      tocData = {};
+          tocData = {};
 
       _this.structures.forEach(function(structure) {
         var rangeID = structure['@id'],
-        attrString = '[data-rangeid="' + rangeID +'"]';
+            attrString = '[data-rangeid="' + rangeID +'"]';
 
         tocData[structure['@id']] = {
           element: _this.element.find(attrString).closest('li')
@@ -188,35 +188,39 @@
 
     render: function() {
       var _this = this,
-      toDeselect = jQuery.map(_this.previousSelectedElements, function(rangeID) {
+          toDeselect = _this.previousSelectedElements.map(function(rangeID) {
             return _this.tocData[rangeID].element.toArray();
-      }),
-      toSelect = jQuery.map(_this.selectedElements, function(rangeID) {
+          }),
+          toSelect = _this.selectedElements.map(function(rangeID) {
             return _this.tocData[rangeID].element.toArray();
-      }),
-      toOpen = jQuery.map(_this.selectedElements, function(rangeID) {
-          if ((jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.previousSelectedElements) < 0)) {
+          }),
+          toOpen = _this.selectedElements.filter(function(rangeID) {
+            return (jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.previousSelectedElements) < 0);
+          }).map(function(rangeID) {
             return _this.tocData[rangeID].element.toArray();
-          } else { return false; }
-      }),
-      toClose = jQuery.map(_this.previousSelectedElements, function(rangeID) {
-          if ((jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.selectedElements) < 0)) {
+          }),
+          toClose = _this.previousSelectedElements.filter(function(rangeID){
+            return (jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.selectedElements) < 0);
+          }).map(function(rangeID) {
             return _this.tocData[rangeID].element.toArray();
-          } else { return false; }
-      });
+          });
 
       // Deselect elements
       jQuery(toDeselect).removeClass('selected');
+      console.log(toDeselect);
 
       // Select new elements
       jQuery(toSelect).addClass('selected');
+      console.log(toSelect);
 
       // Scroll to new elements
       scroll();
 
       // Open new ones
+      console.log(toOpen);
       jQuery(toOpen).toggleClass('open').find('ul:first').slideFadeToggle();
       // Close old ones (find way to keep scroll position).
+      console.log(toClose);
       jQuery(toClose).toggleClass('open').find('ul:first').slideFadeToggle(400, 'swing', scroll);
 
       // Get the sum of the outer height of all elements to be removed.
@@ -303,26 +307,26 @@
     },
 
     emptyTemplate: Handlebars.compile([
-            '<ul class="toc">',
-            '<li class="leaf-item open">',
-            '<h2><span>No index available</span></h2>',
-            '</ul>',
-        ].join('')),
+      '<ul class="toc">',
+      '<li class="leaf-item open">',
+      '<h2><span>No index available</span></h2>',
+      '</ul>',
+    ].join('')),
 
     template: function(tplData) {
 
       var template = Handlebars.compile([
         '<ul class="toc">',
-          '{{#nestedRangeLevel ranges}}',
-            '<li class="{{#if children}}has-child{{else}}leaf-item{{/if}}"">',
-              '{{{tocLevel id label level children}}}',
-              '{{#if children}}',
-                '<ul>',
-                '{{{nestedRangeLevel children}}}',
-                '</ul>',
-              '{{/if}}',
-            '<li>',
-          '{{/nestedRangeLevel}}',
+        '{{#nestedRangeLevel ranges}}',
+        '<li class="{{#if children}}has-child{{else}}leaf-item{{/if}}">',
+        '{{{tocLevel id label level children}}}',
+        '{{#if children}}',
+        '<ul>',
+        '{{{nestedRangeLevel children}}}',
+        '</ul>',
+        '{{/if}}',
+        '<li>',
+        '{{/nestedRangeLevel}}',
         '</ul>'
       ].join(''));
 
@@ -344,7 +348,7 @@
 
       Handlebars.registerHelper('tocLevel', function(id, label, level, children) {
         var caret = '<i class="fa fa-caret-right toc-caret"></i>',
-        cert = '<i class="fa fa-certificate star"></i>';
+            cert = '<i class="fa fa-certificate star"></i>';
         return '<h' + (level+1) + '><a class="toc-link" data-rangeID="' + id + '">' + caret + cert + '<span>' + label + '</span></a></h' + (level+1) + '>';
       });
 
