@@ -23,7 +23,8 @@
       prefix:    null,
       dfd:       null,
       annotationsList: [],        
-      windowID: null
+      windowID: null,
+      eventEmitter: null
     }, options);
 
     this.init();

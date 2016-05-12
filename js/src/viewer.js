@@ -15,6 +15,7 @@
       resizeRatio:            {},
       currentWorkspaceVisible: true,
       state:                  null,
+      eventEmitter:           null,
       overlayStates:          {
         'workspacePanelVisible': false,
         'manifestsPanelVisible': false,
@@ -76,7 +77,7 @@
 
       // add main menu
       if (showMainMenu) {
-        this.mainMenu = new $.MainMenu({ appendTo: this.element, state: this.state });
+        this.mainMenu = new $.MainMenu({ appendTo: this.element, state: this.state, eventEmitter: this.eventEmitter });
       }
 
       // add viewer area
@@ -93,18 +94,20 @@
       this.workspace = new $.Workspace({
         layoutDescription: this.layout.charAt(0) === '{' ? JSON.parse(this.layout) : $.layoutDescriptionFromGridString(this.layout),
         appendTo: this.element.find('.mirador-viewer'),
-        state: this.state
+        state: this.state,
+        eventEmitter: this.eventEmitter
       });
 
       this.workspacePanel = new $.WorkspacePanel({
         appendTo: this.element.find('.mirador-viewer'),
-        state: this.state
+        state: this.state,
+        eventEmitter: this.eventEmitter
       });
 
-      this.manifestsPanel = new $.ManifestsPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state });
+      this.manifestsPanel = new $.ManifestsPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state, eventEmitter: this.eventEmitter });
       //only instatiate bookmarkPanel if we need it
       if (showMainMenu && this.state.getStateProperty('mainMenuSettings').buttons.bookmark) {
-        this.bookmarkPanel = new $.BookmarkPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state });
+        this.bookmarkPanel = new $.BookmarkPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state, eventEmitter: this.eventEmitter });
       }
 
       // set this to be displayed
@@ -124,7 +127,7 @@
       var _this = this;
 
       // check that windows are loading first to set state of slot?
-      jQuery.subscribe('manifestReceived', function(event, newManifest) {
+      _this.eventEmitter.subscribe('manifestReceived', function(event, newManifest) {
         if (_this.state.getStateProperty('windowObjects')) {
           var check = jQuery.grep(_this.state.getStateProperty('windowObjects'), function(object, index) {
             return object.loadedManifest === newManifest.uri;
@@ -135,43 +138,43 @@
         }
       });
 
-      jQuery.subscribe('TOGGLE_WORKSPACE_PANEL', function(event) {
+      _this.eventEmitter.subscribe('TOGGLE_WORKSPACE_PANEL', function(event) {
         _this.toggleWorkspacePanel();
       });
 
-      jQuery.subscribe('TOGGLE_BOOKMARK_PANEL', function(event) {
+      _this.eventEmitter.subscribe('TOGGLE_BOOKMARK_PANEL', function(event) {
         _this.toggleBookmarkPanel();
       });
 
-      jQuery.subscribe('TOGGLE_FULLSCREEN', function(event) {
+      _this.eventEmitter.subscribe('TOGGLE_FULLSCREEN', function(event) {
         if ($.fullscreenElement()) {
           $.exitFullscreen();
           //enable any window-specific fullscreen buttons
-          jQuery.publish('ENABLE_WINDOW_FULLSCREEN');
+          _this.eventEmitter.publish('ENABLE_WINDOW_FULLSCREEN');
         } else {
           $.enterFullscreen(_this.element[0]);
           //disable any window-specific fullscreen buttons
-          jQuery.publish('DISABLE_WINDOW_FULLSCREEN');
+          _this.eventEmitter.publish('DISABLE_WINDOW_FULLSCREEN');
         }
       });
       
       jQuery(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function() {
-        jQuery.publish('MAINMENU_FULLSCREEN_BUTTON');
+        _this.eventEmitter.publish('MAINMENU_FULLSCREEN_BUTTON');
         // in case the user clicked ESC instead of clicking on the toggle fullscreen button, reenable the window fullscreen button
         if (!$.fullscreenElement()) {
-          jQuery.publish('ENABLE_WINDOW_FULLSCREEN');
+          _this.eventEmitter.publish('ENABLE_WINDOW_FULLSCREEN');
         }
       });
 
-      jQuery.subscribe('TOGGLE_LOAD_WINDOW', function(event) {
+      _this.eventEmitter.subscribe('TOGGLE_LOAD_WINDOW', function(event) {
         _this.toggleLoadWindow();
       });
 
-      jQuery.subscribe('ADD_MANIFEST_FROM_URL', function(event, url, location) {
+      _this.eventEmitter.subscribe('ADD_MANIFEST_FROM_URL', function(event, url, location) {
         _this.addManifestFromUrl(url, location);
       });
 
-      jQuery.subscribe('TOGGLE_OVERLAYS_FALSE', function(event) {
+      _this.eventEmitter.subscribe('TOGGLE_OVERLAYS_FALSE', function(event) {
         jQuery.each(_this.overlayStates, function(oState, value) {
           // toggles the other top-level panels closed and focuses the
           // workspace. For instance, after selecting an object from the
@@ -200,7 +203,7 @@
       } else {
         this[prop] = value;
       }
-      jQuery.publish(prop + '.set', value);
+      _this.eventEmitter.publish(prop + '.set', value);
     },
 
     // Sets state of overlays that layer over the UI state
@@ -267,9 +270,9 @@
 
       if (!_this.state.getStateProperty('manifests')[url]) {
         manifest = new $.Manifest(url, location, content);
-        jQuery.publish('manifestQueued', manifest, location);
+        _this.eventEmitter.publish('manifestQueued', manifest, location);
         manifest.request.done(function() {
-          jQuery.publish('manifestReceived', manifest);
+          _this.eventEmitter.publish('manifestReceived', manifest);
         });
       }
     },
@@ -277,6 +280,7 @@
     loadManifestFromConfig: function(options) {
       // check if there are available slots, otherwise don't process this object from config
       //if we have more windowObjects that slots in the layout, return
+      var _this = this;
       var slotAddress = options.slotAddress ? options.slotAddress : this.workspace.getAvailableSlot() ? this.workspace.getAvailableSlot().layoutAddress : null;
       if (!slotAddress) {
         return;
@@ -304,7 +308,7 @@
         layoutOptions: options.layoutOptions
       };
 
-      jQuery.publish('ADD_WINDOW', windowConfig);
+      _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
     }
   };
 

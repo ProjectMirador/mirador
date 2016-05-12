@@ -5,7 +5,9 @@
       element:           null,
       appendTo:          null,
       manifest:          null,
-      visible:           null
+      visible:           null,
+      state:             null,
+      eventEmitter:      null
     }, options);
 
     this.init();
@@ -30,11 +32,12 @@
     },
 
     localState: function(state, initial) {
+      var _this = this;
       if (!arguments.length) return this.layerTabState;
       this.layerTabState = state;
 
       if (!initial) {
-        jQuery.publish('layersTabStateUpdated.' + this.windowId, this.layerTabState);
+        _this.eventEmitter.publish('layersTabStateUpdated.' + this.windowId, this.layerTabState);
       }
 
       return this.layerTabState;
@@ -57,15 +60,15 @@
     listenForActions: function() {
       var _this = this;
 
-      jQuery.subscribe('layersTabStateUpdated.' + _this.windowId, function(_, data) {
+      _this.eventEmitter.subscribe('layersTabStateUpdated.' + _this.windowId, function(_, data) {
         _this.render(data);
       });
 
-      jQuery.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
+      _this.eventEmitter.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
         _this.tabStateUpdated(data.layersTab);
       });
 
-      jQuery.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasID) {
+      _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasID) {
         //update layers for this canvasID
       });
     },

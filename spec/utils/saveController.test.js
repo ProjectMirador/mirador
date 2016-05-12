@@ -1,9 +1,11 @@
 describe('SaveController', function () {
 
   beforeEach(function() {
+    this.eventEmitter = new Mirador.EventEmitter();
     this.config = {
       id: 'mock_viewer_id',
-      saveSession: false
+      saveSession: false,
+      eventEmitter: this.eventEmitter
     }; 
   });
   
@@ -29,7 +31,7 @@ describe('SaveController', function () {
       // Just making sure bindEvents() is being called.
       
       // windowUpdated
-      jQuery.publish('windowUpdated', {});
+      this.eventEmitter.publish('windowUpdated', {});
       expect(this.saveController.get('windowObjects', 'currentConfig')).toEqual([{}]);
     });
   });
@@ -49,7 +51,7 @@ describe('SaveController', function () {
       // Just making sure bindEvents() is being called.
       
       // windowUpdated
-      jQuery.publish('windowUpdated', {});
+      this.eventEmitter.publish('windowUpdated', {});
       expect(this.saveController.get('windowObjects', 'currentConfig')).toEqual([{}]);
     });
   });
@@ -134,7 +136,7 @@ describe('SaveController', function () {
         { '@id': 'mock_annotation_1' },
         { '@id': 'mock_annotation_2' }
       ];
-      jQuery.publish('ANNOTATIONS_LIST_UPDATED', { windowId: windowId, 
+      this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', { windowId: windowId, 
         annotationsList: annotationsList });
       expect(saveController.getWindowAnnotationsList(windowId)[0]['@id']).toBe('mock_annotation_1');
       expect(saveController.getWindowAnnotationsList(windowId)[1]['@id']).toBe('mock_annotation_2');

@@ -15,7 +15,9 @@
             windowOptionsMenuCls:       'mirador-window-options-menu',
             clearLocalStorageCls:       'clear-local-storage',
             clearLocalStorageDialogCls: 'mirador-main-menu-clear-local-storage',
-            collectionsListingCls:      'mirador-listing-collections'
+            collectionsListingCls:      'mirador-listing-collections',
+            state:                      null,
+            eventEmitter:               null
         }, options);
 
         this.element  = this.element || jQuery('<div/>');
@@ -68,7 +70,7 @@
         listenForActions: function() {
           var _this = this;
 
-          jQuery.subscribe('MAINMENU_FULLSCREEN_BUTTON', function(event) {
+          _this.eventEmitter.subscribe('MAINMENU_FULLSCREEN_BUTTON', function(event) {
             var fullScreenButton = _this.element.find('.fullscreen-viewer span');
             if (fullScreenButton.hasClass('fa-expand')) {
               fullScreenButton.removeClass('fa-expand').addClass('fa-compress');
@@ -82,7 +84,7 @@
             var _this = this;
             //change 'change-layout' to mouseover events rather than click?
             this.element.find('.change-layout').on('click', function() { 
-              jQuery.publish('TOGGLE_WORKSPACE_PANEL');
+              _this.eventEmitter.publish('TOGGLE_WORKSPACE_PANEL');
               //remove active class from other buttons
               _this.element.find('.bookmark-workspace').removeClass('active');
               if (jQuery(this).hasClass('active')) {
@@ -93,7 +95,7 @@
             });
 
             this.element.find('.bookmark-workspace').on('click', function() { 
-              jQuery.publish('TOGGLE_BOOKMARK_PANEL');
+              _this.eventEmitter.publish('TOGGLE_BOOKMARK_PANEL');
               //remove active class from other buttons
               _this.element.find('.change-layout').removeClass('active');
               if (jQuery(this).hasClass('active')) {
@@ -106,7 +108,7 @@
             // when options are implemented, this will need to do something
             this.element.find('.window-options').on('click', function() { });
             this.element.find('.fullscreen-viewer').on('click', function() {
-              jQuery.publish('TOGGLE_FULLSCREEN');
+              _this.eventEmitter.publish('TOGGLE_FULLSCREEN');
             });
         },
 

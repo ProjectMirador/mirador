@@ -28,7 +28,8 @@
       username:  "mirador-test",
       annotationsList: [],        //OA list for Mirador use
       annotationsListCatch: null,  //internal list for module use
-      windowID: null
+      windowID: null,
+      eventEmitter: null
     }, options);
 
     this.init();
@@ -95,7 +96,7 @@
               _this.annotationsList.push(_this.getAnnotationInOA(value));
             });
             _this.dfd.resolve(true);
-            jQuery.publish('catchAnnotationsLoaded.'+_this.windowID, _this.annotationsListCatch);
+            _this.eventEmitter.publish('catchAnnotationsLoaded.'+_this.windowID, _this.annotationsListCatch);
           }
         },
         error: function() {
@@ -123,7 +124,7 @@
         if (typeof successCallback === "function") {
           successCallback();
         }
-        jQuery.publish('catchAnnotationDeleted.'+_this.windowID, annotationID);
+        _this.eventEmitter.publish('catchAnnotationDeleted.'+_this.windowID, annotationID);
       },
       error: function() {
         if (typeof errorCallback === "function") {
@@ -152,7 +153,7 @@
           if (typeof successCallback === "function") {
             successCallback();
           }
-          jQuery.publish('catchAnnotationUpdated.'+_this.windowID, annotation);
+          _this.eventEmitter.publish('catchAnnotationUpdated.'+_this.windowID, annotation);
         },
         error: function() {
           if (typeof errorCallback === "function") {
@@ -185,7 +186,7 @@
           if (typeof successCallback === "function") {
             successCallback(_this.getAnnotationInOA(data));
           }
-          jQuery.publish('catchAnnotationCreated.'+_this.windowID, data);
+          _this.eventEmitter.publish('catchAnnotationCreated.'+_this.windowID, data);
         },
         error: function() {
           if (typeof errorCallback === "function") {

@@ -8,7 +8,8 @@
       mode: null,
       windowId: null,
       annoEndpointAvailable: false,
-      annotationCreationAvailable: true
+      annotationCreationAvailable: true,
+      eventEmitter: null
     }, options);
 
     this.init();
@@ -42,7 +43,7 @@
         hide: function(color) {
           color = jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId);
           if (color) {
-            jQuery.publish('changeBorderColor.' + _this.windowId, color.toHexString());
+            _this.eventEmitter.publish('changeBorderColor.' + _this.windowId, color.toHexString());
           }
         },
         maxSelectionSize: 4,
@@ -82,9 +83,10 @@
           jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, color);
         },
         hide: function(color) {
+          var _this = this;
           color = jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId);
           if (color) {
-            jQuery.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
+            _this.eventEmitter.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
           }
         },
         maxSelectionSize: 4,

@@ -7,6 +7,7 @@ describe('WorkspacePanel', function() {
   };
   
   beforeEach(function() {
+    this.eventEmitter = new Mirador.EventEmitter();
     this.viewerDiv = jQuery('<div>');
     this.workspace = {
       setLayout: jasmine.createSpy()
@@ -14,7 +15,8 @@ describe('WorkspacePanel', function() {
     this.panel = new Mirador.WorkspacePanel({
       appendTo: this.viewerDiv, 
       workspace: this.workspace,
-      state: new Mirador.SaveController({"workspacePanelSettings": workspacePanelSettings}),
+      state: new Mirador.SaveController({"workspacePanelSettings": workspacePanelSettings, eventEmitter: this.eventEmitter}),
+      eventEmitter: this.eventEmitter
     });
   });
 
@@ -25,7 +27,7 @@ describe('WorkspacePanel', function() {
   
   it('should listen for actions', function() {
     spyOn(this.panel, 'onPanelVisible');
-    jQuery.publish('workspacePanelVisible');
+    this.eventEmitter.publish('workspacePanelVisible');
     expect(this.panel.onPanelVisible).toHaveBeenCalled();
   });
   
@@ -73,10 +75,10 @@ describe('WorkspacePanel', function() {
   it('should publish events when a layout is selected', function() {
     var gridString = '2x2';
     var layoutDescription = Mirador.layoutDescriptionFromGridString(gridString);
-    spyOn(jQuery, 'publish');
+    spyOn(this.eventEmitter, 'publish');
     this.panel.select(gridString);
-    expect(jQuery.publish).toHaveBeenCalledWith('RESET_WORKSPACE_LAYOUT', {layoutDescription: layoutDescription});
-    expect(jQuery.publish).toHaveBeenCalledWith('TOGGLE_WORKSPACE_PANEL');
+    expect(this.eventEmitter.publish).toHaveBeenCalledWith('RESET_WORKSPACE_LAYOUT', {layoutDescription: layoutDescription});
+    expect(this.eventEmitter.publish).toHaveBeenCalledWith('TOGGLE_WORKSPACE_PANEL');
   });
 
   it('should render the grid', function() {

@@ -5,7 +5,8 @@
       parent: null,
       osd: null,
       list: null,
-      annotationsToShapesMap: {}
+      annotationsToShapesMap: {},
+      eventEmitter: null
     }, options);
 
     this.init();
@@ -15,7 +16,7 @@
   $.OsdRegionDrawTool.prototype = {
 
     init: function() {
-      this.svgOverlay = this.osdViewer.svgOverlay(this.osdViewer.id, this.windowId, this.state);
+      this.svgOverlay = this.osdViewer.svgOverlay(this.osdViewer.id, this.windowId, this.state, this.eventEmitter);
       this.svgOverlay.show();
       this.svgOverlay.disable();
     },
@@ -50,7 +51,7 @@
                   if (!window.confirm("Do you want to delete this shape and annotation?")) {
                     return false;
                   }
-                  jQuery.publish('annotationDeleted.' + _this.windowId, [oaAnno['@id']]);
+                  _this.eventEmitter.publish('annotationDeleted.' + _this.windowId, [oaAnno['@id']]);
                   this.svgOverlay.removeFocus();
                   return true;
                 } else {
@@ -67,7 +68,7 @@
                     };
                   }
                   oaAnno.on.selector.value = _this.svgOverlay.getSVGString(shapeArray);
-                  jQuery.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
+                  _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
                   this.svgOverlay.removeFocus();
                   return true;
                 }
@@ -110,7 +111,7 @@
         }
       }
       for (var j = 0; j < oaAnnos.length; j++) {
-        jQuery.publish('annotationUpdated.' + _this.windowId, [oaAnnos[j]]);
+        _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnnos[j]]);
       }
       this.svgOverlay.restoreEditedShapes();
     },
@@ -142,13 +143,14 @@
         return deferred;
       });
       jQuery.when.apply(jQuery, deferreds).done(function() {
-        jQuery.publish('overlaysRendered.' + _this.windowId);
+        _this.eventEmitter.publish('overlaysRendered.' + _this.windowId);
       });
 
       var windowElement = _this.state.getWindowElement(_this.windowId);
       this.annoTooltip = new $.AnnotationTooltip({
         targetElement: jQuery(this.osdViewer.element),
         state: _this.state,
+        eventEmitter: _this.eventEmitter,
         windowId: _this.parent.windowId
       });
       this.annoTooltip.initializeViewerUpgradableToEditor({
@@ -157,7 +159,7 @@
         getAnnoFromRegion: _this.getAnnoFromRegion.bind(this),
         onAnnotationSaved: function(oaAnno) {
           //save to endpoint
-          jQuery.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
+          _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
         }
       });
       this.svgOverlay.paperScope.view.draw();
@@ -209,36 +211,36 @@
     bindEvents: function() {
       var _this = this;
 
-      jQuery.subscribe('refreshOverlay.' + _this.windowId, function(event) {
+      _this.eventEmitter.subscribe('refreshOverlay.' + _this.windowId, function(event) {
         _this.svgOverlay.restoreEditedShapes();
         _this.svgOverlay.deselectAll();
         _this.svgOverlay.mode = '';
         _this.render();
       });
-      jQuery.subscribe('deleteShape.' + _this.windowId, function(event) {
+      _this.eventEmitter.subscribe('deleteShape.' + _this.windowId, function(event) {
         _this.deleteShape();
       });
-      jQuery.subscribe('updateEditedShape.' + _this.windowId, function(event) {
+      _this.eventEmitter.subscribe('updateEditedShape.' + _this.windowId, function(event) {
         _this.saveEditedShape();
       });
 
-      jQuery.subscribe('updateTooltips.' + _this.windowId, function(event, location, absoluteLocation) {
+      _this.eventEmitter.subscribe('updateTooltips.' + _this.windowId, function(event, location, absoluteLocation) {
         if (_this.annoTooltip && !_this.annoTooltip.inEditOrCreateMode) {
           _this.showTooltipsFromMousePosition(event, location, absoluteLocation);
         }
       });
 
-      jQuery.subscribe('removeTooltips.' + _this.windowId, function() {
+      _this.eventEmitter.subscribe('removeTooltips.' + _this.windowId, function() {
         jQuery(_this.osdViewer.element).qtip('destroy', true);
       });
 
-      jQuery.subscribe('disableTooltips.' + _this.windowId, function() {
+      _this.eventEmitter.subscribe('disableTooltips.' + _this.windowId, function() {
         if (_this.annoTooltip) {
           _this.annoTooltip.inEditOrCreateMode = true;
         }
       });
 
-      jQuery.subscribe('enableTooltips.' + _this.windowId, function() {
+      _this.eventEmitter.subscribe('enableTooltips.' + _this.windowId, function() {
         if (_this.annoTooltip) {
           _this.annoTooltip.inEditOrCreateMode = false;
         }
