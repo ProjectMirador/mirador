@@ -5,7 +5,9 @@
     jQuery.extend(true, this, {
       element: null,
       appendTo: null,
-      workspace: null
+      workspace: null,
+      state: null,
+      eventEmitter: null
     }, options);
 
     this.init();
@@ -35,7 +37,7 @@
 
     listenForActions: function() {
       var _this = this;
-      jQuery.subscribe('workspacePanelVisible.set', function(_, stateValue) {
+      _this.eventEmitter.subscribe('workspacePanelVisible.set', function(_, stateValue) {
         _this.onPanelVisible(_, stateValue);
       });
     },
@@ -61,8 +63,8 @@
     select: function(gridString) {
       var _this = this;
       var layoutDescription = $.layoutDescriptionFromGridString(gridString);
-      jQuery.publish('RESET_WORKSPACE_LAYOUT', {layoutDescription: layoutDescription});
-      jQuery.publish('TOGGLE_WORKSPACE_PANEL');
+      _this.eventEmitter.publish('RESET_WORKSPACE_LAYOUT', {layoutDescription: layoutDescription});
+      _this.eventEmitter.publish('TOGGLE_WORKSPACE_PANEL');
     },
 
     hover: function(gridString) {

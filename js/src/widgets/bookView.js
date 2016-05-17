@@ -20,7 +20,8 @@
         osdBounds:        null,
         zoomLevel:        null
       },
-      stitchTileMargin: 10
+      stitchTileMargin: 10,
+      eventEmitter: null
     }, options);
 
     this.init();
@@ -30,6 +31,7 @@
   $.BookView.prototype = {
 
     init: function() {
+      var _this = this;
       if (this.canvasID !== null) {
         this.currentImgIndex = $.getImageIndexById(this.imagesList, this.canvasID);
       }
@@ -51,7 +53,7 @@
         windowId: this.windowId,
         annotationLayerAvailable: false,
         showNextPrev : this.imagesList.length !== 1,
-        state: this.state
+        eventEmitter: this.eventEmitter
       });
 
       if (this.manifest.jsonLd.sequences[0].viewingDirection) {
@@ -68,9 +70,9 @@
       this.listenForActions();
 
       if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
-        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, false);
+        _this.eventEmitter.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, false);
       } else {
-        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, null);
+        _this.eventEmitter.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, null);
       }
     },
 
@@ -84,7 +86,7 @@
       firstCanvasId = _this.imagesList[0]['@id'],
       lastCanvasId = _this.imagesList[_this.imagesList.length-1]['@id'];
 
-      jQuery.subscribe('bottomPanelSet.' + _this.windowId, function(event, visible) {
+      _this.eventEmitter.subscribe('bottomPanelSet.' + _this.windowId, function(event, visible) {
         var dodgers = _this.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls');
         var arrows = _this.element.find('.mirador-osd-next, .mirador-osd-previous');
         if (visible === true) {
@@ -96,12 +98,12 @@
         }
       });
 
-      jQuery.subscribe('fitBounds.' + _this.windowId, function(event, bounds) {
+      _this.eventEmitter.subscribe('fitBounds.' + _this.windowId, function(event, bounds) {
         var rect = _this.osd.viewport.imageToViewportRectangle(Number(bounds.x), Number(bounds.y), Number(bounds.width), Number(bounds.height));
         _this.osd.viewport.fitBoundsWithConstraints(rect, false);
       });
 
-      jQuery.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasId) {
+      _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasId) {
         // If it is the first canvas, hide the "go to previous" button, otherwise show it.
         if (canvasId === firstCanvasId) {
           _this.element.find('.mirador-osd-previous').hide();
@@ -173,7 +175,7 @@ bindEvents: function() {
       });
 
       this.element.find('.mirador-osd-toggle-bottom-panel').on('click', function() {
-        jQuery.publish('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + _this.windowId);
+        _this.eventEmitter.publish('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + _this.windowId);
       });
     },
 
@@ -190,7 +192,7 @@ bindEvents: function() {
     setBounds: function() {
       var _this = this;
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
-      jQuery.publish("imageBoundsUpdated", {
+      _this.eventEmitter.publish("imageBoundsUpdated", {
         id: _this.windowId, 
           osdBounds: {
             x: _this.osdOptions.osdBounds.x, 
@@ -219,9 +221,9 @@ bindEvents: function() {
 
     adjustWidth: function(className, hasClass) {
       if (hasClass) {
-        jQuery.publish('REMOVE_CLASS.'+this.windowId, className);
+        _this.eventEmitter.publish('REMOVE_CLASS.'+this.windowId, className);
       } else {
-        jQuery.publish('ADD_CLASS.'+this.windowId, className);
+        _this.eventEmitter.publish('ADD_CLASS.'+this.windowId, className);
       }
     },
 
@@ -353,6 +355,7 @@ bindEvents: function() {
     // need next single page for lining pages up
     // don't need for continuous or individuals
     next: function() {
+      var _this = this;
       var next;
       if (this.currentImgIndex % 2 === 0) {
         next = this.currentImgIndex + 1;
@@ -360,7 +363,7 @@ bindEvents: function() {
         next = this.currentImgIndex + 2;
       }
       if (next < this.imagesList.length) {
-        jQuery.publish('SET_CURRENT_CANVAS_ID.' + this.windowId, this.imagesList[next]['@id']);
+        _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + this.windowId, this.imagesList[next]['@id']);
       }
     },
 
@@ -368,6 +371,7 @@ bindEvents: function() {
     // need previous single page for lining things up
     // don't need for continuous or individuals
     previous: function() {
+      var _this = this;
       var prev;
       if (this.currentImgIndex % 2 === 0) {
         prev = this.currentImgIndex - 2;
@@ -375,7 +379,7 @@ bindEvents: function() {
         prev = this.currentImgIndex - 1;
       }
       if (prev >= 0) {
-        jQuery.publish('SET_CURRENT_CANVAS_ID.' + this.windowId, this.imagesList[prev]['@id']);
+        _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + this.windowId, this.imagesList[prev]['@id']);
       }
     },
 
@@ -455,7 +459,7 @@ bindEvents: function() {
       jQuery.each(stitchList, function(index, image) {
         _this.focusImages.push(image['@id']);
       });
-      jQuery.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: this.focusImages});
+      _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: this.focusImages});
       return stitchList;
     }
   };

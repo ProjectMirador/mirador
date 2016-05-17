@@ -5,7 +5,9 @@
             element:           null,
             appendTo:          null,
             manifest:          null,
-            visible:           null
+            visible:           null,
+            state:             null,
+            eventEmitter:      null
         }, options);
 
         this.init();
@@ -31,11 +33,12 @@
             this.bindEvents();
         },
         localState: function(state, initial) {
+            var _this = this;
             if (!arguments.length) return this.annoTabState;
             this.annoTabState = state;
 
             if (!initial) {
-                jQuery.publish('annotationsTabStateUpdated.' + this.windowId, this.annoTabState);
+                _this.eventEmitter.publish('annotationsTabStateUpdated.' + this.windowId, this.annoTabState);
             }
 
             return this.annoTabState;
@@ -107,22 +110,22 @@
         listenForActions: function() {
             var _this = this;
 
-            jQuery.subscribe('annotationsTabStateUpdated.' + _this.windowId, function(_, data) {
+            _this.eventEmitter.subscribe('annotationsTabStateUpdated.' + _this.windowId, function(_, data) {
                 _this.render(data);
             });
 
-            jQuery.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
+            _this.eventEmitter.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
                 _this.tabStateUpdated(data.annotationsTab);
             });
 
 
-            jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(_, data) {
+            _this.eventEmitter.subscribe('annotationListLoaded.' + _this.windowId, function(_, data) {
                 _this.annotationListLoaded();
             });
 
-            jQuery.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event) {
+            _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event) {
 
-              jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
+              _this.eventEmitter.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
                   _this.annotationListLoaded();
               });
 
@@ -130,11 +133,11 @@
 
             });
 
-            jQuery.subscribe('listSelected.' + _this.windowId, function(event, listId) {
+            _this.eventEmitter.subscribe('listSelected.' + _this.windowId, function(event, listId) {
                 _this.selectList(listId);
             });
 
-            jQuery.subscribe('listDeselected.' + _this.windowId, function(event, listId) {
+            _this.eventEmitter.subscribe('listDeselected.' + _this.windowId, function(event, listId) {
                 _this.deselectList(listId);
             });
 
@@ -148,10 +151,10 @@
                 var listClicked = jQuery(this).data('id');
                 if(_this.localState().selectedList === listClicked){
                     //_this.deselectList(listClicked);
-                    jQuery.publish('listDeselected.' + _this.windowId, listClicked);
+                    _this.eventEmitter.publish('listDeselected.' + _this.windowId, listClicked);
                 }else{
                     //_this.selectList(listClicked);
-                    jQuery.publish('listSelected.' + _this.windowId, listClicked);
+                    _this.eventEmitter.publish('listSelected.' + _this.windowId, listClicked);
                 }
 
             });
