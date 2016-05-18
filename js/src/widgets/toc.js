@@ -189,39 +189,43 @@
     render: function() {
       var _this = this,
           toDeselect = _this.previousSelectedElements.map(function(rangeID) {
-            return _this.tocData[rangeID].element.toArray();
+            return _this.tocData[rangeID].element;
           }),
           toSelect = _this.selectedElements.map(function(rangeID) {
-            return _this.tocData[rangeID].element.toArray();
+            return _this.tocData[rangeID].element;
           }),
           toOpen = _this.selectedElements.filter(function(rangeID) {
             return (jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.previousSelectedElements) < 0);
           }).map(function(rangeID) {
-            return _this.tocData[rangeID].element.toArray();
+            return _this.tocData[rangeID].element;
           }),
-          toClose = _this.previousSelectedElements.filter(function(rangeID){
+          toClose = _this.previousSelectedElements.filter(function(rangeID) {
             return (jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.selectedElements) < 0);
           }).map(function(rangeID) {
-            return _this.tocData[rangeID].element.toArray();
+            return _this.tocData[rangeID].element;
           });
 
       // Deselect elements
-      jQuery(toDeselect).removeClass('selected');
-      console.log(toDeselect);
+      toDeselect.forEach(function(element) {
+          element.removeClass('selected');
+      });
 
       // Select new elements
-      jQuery(toSelect).addClass('selected');
-      console.log(toSelect);
-
+      toSelect.forEach(function(element) {
+        element.addClass('selected');
+      });
       // Scroll to new elements
       scroll();
 
-      // Open new ones
-      console.log(toOpen);
-      jQuery(toOpen).toggleClass('open').find('ul:first').slideFadeToggle();
-      // Close old ones (find way to keep scroll position).
-      console.log(toClose);
-      jQuery(toClose).toggleClass('open').find('ul:first').slideFadeToggle(400, 'swing', scroll);
+      // Open newly opened sections
+      toOpen.forEach(function(element) {
+        element.addClass('open').find('ul:first').slideFadeToggle();
+      });
+
+      // Close previously opened selections (find way to keep scroll position).
+      toClose.forEach(function(element) {
+        element.removeClass('open').find('ul:first').slideFadeToggle(400, 'swing', scroll);
+      });
 
       // Get the sum of the outer height of all elements to be removed.
       // Subtract from current parent height to retreive the new height.
@@ -271,8 +275,7 @@
 
         var rangeID = jQuery(this).parent().data().rangeid;
         _this.setOpenItem(rangeID);
-
-        jQuery(this).closest('li').toggleClass('open').find('ul:first').slideFadeToggle();
+        _this.render();
       });
     },
 
