@@ -141,8 +141,8 @@
       this.element.on('click', function() {
         var windowConfig = {
           manifest: _this.manifest,
-          currentCanvasID: null,
-          currentFocus: 'ThumbnailsView'
+          canvasID: null,
+          viewType: 'ThumbnailsView'
         };
         _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
       });
@@ -151,8 +151,8 @@
         e.stopPropagation();
         var windowConfig = {
           manifest: _this.manifest,
-          currentCanvasID: jQuery(this).attr('data-image-id'),
-          currentFocus: 'ImageView'
+          canvasID: jQuery(this).attr('data-image-id'),
+          viewType: _this.state.getStateProperty('windowSettings').viewType //get the view type from settings rather than always defaulting to ImageView
         };
         _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
       });

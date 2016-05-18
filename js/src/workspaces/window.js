@@ -7,17 +7,14 @@
       eventEmitter:      null,
       element:           null,
       scrollImageRatio:  0.9,
-      manifest:          null,
-      currentCanvasID:    null,
+      canvasID:          null,
       focusImages:       [],
       imagesList:        null,
       annotationsList:   [],
       endpoint:          null,
-      slotAddress:     null,
       currentImageMode:  'ImageView',
       imageModes:        ['ImageView', 'BookView'],
-      currentFocus:      'ThumbnailsView',
-      focusesOriginal:   ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
+      originalImageModes:['ImageView', 'BookView'],
       focuses:           ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'],
       focusModules:           {'ThumbnailsView': null, 'ImageView': null, 'ScrollView': null, 'BookView': null},
       focusOverlaysAvailable: {
@@ -38,16 +35,8 @@
           'bottomPanel' : {'ThumbnailsView' : true}
         }
       },
-      focusOptions: null,
-      id : null,
+      windowOptions: null,
       sidePanel: null, //the actual module for the side panel
-      sidePanelAvailable: true,
-      sidePanelOptions: {
-        "toc" : true,
-        "annotations" : false,
-        "layers" : false
-      },
-      sidePanelVisible: true,
       annotationsAvailable: {
         'ThumbnailsView' : false,
         'ImageView' : true,
@@ -55,23 +44,8 @@
         'BookView' : false
       },
       bottomPanel: null, //the actual module for the bottom panel
-      bottomPanelAvailable: true,
-      bottomPanelVisible: true,
       overlay: null,
-      annotationLayerAvailable: true,
-      annotationCreationAvailable: true,
       annoEndpointAvailable : false,
-      annotationState : 'annoOff',
-      fullScreenAvailable : true,
-      displayLayout: true,
-      layoutOptions : {
-        "newObject" : true,
-        "close" : true,
-        "slotRight" : true,
-        "slotLeft" : true,
-        "slotAbove" : true,
-        "slotBelow" : true
-      },
       iconClasses: {
         "ImageView" : "fa fa-photo fa-lg fa-fw",
         "BookView" : "fa fa-columns fa-lg fa-fw",
@@ -89,7 +63,7 @@
     init: function () {
       var _this = this,
       manifest = _this.manifest.jsonLd,
-      focusState = _this.currentFocus,
+      focusState = _this.viewType,
       templateData = {};
 
       //make sure annotations list is cleared out when changing objects within window
@@ -101,20 +75,21 @@
 
       _this.removeBookView();
 
-      //remove any imageModes that are not available as a focus
+      //reset imagemodes and then remove any imageModes that are not available as a focus
+      this.imageModes = this.originalImageModes;
       this.imageModes = jQuery.map(this.imageModes, function(value, index) {
         if (jQuery.inArray(value, _this.focuses) === -1) return null;
         return value;
       });
 
       _this.imagesList = _this.manifest.getCanvases();
-      if (!_this.currentCanvasID) {
-        _this.currentCanvasID = _this.imagesList[0]['@id'];
+      if (!_this.canvasID) {
+        _this.canvasID = _this.imagesList[0]['@id'];
       }
 
       this.annoEndpointAvailable = !jQuery.isEmptyObject(_this.state.getStateProperty('annotationEndpoint'));
-      if (!this.annotationLayerAvailable) {
-        this.annotationCreationAvailable = false;
+      if (!this.annotationLayer) {
+        this.annotationCreation = false;
         this.annoEndpointAvailable = false;
         this.annotationState = 'annoOff';
       }
@@ -162,8 +137,8 @@
           return _this.layoutOptions[element] === false;
         });
       }
-      templateData.currentFocusClass = _this.iconClasses[_this.currentFocus];
-      templateData.showFullScreen = _this.fullScreenAvailable;
+      templateData.currentFocusClass = _this.iconClasses[_this.viewType];
+      templateData.showFullScreen = _this.fullScreen;
       _this.element = jQuery(this.template(templateData)).appendTo(_this.appendTo);
       this.element.find('.manifest-info .mirador-tooltip').each(function() {
         jQuery(this).qtip({
@@ -218,16 +193,16 @@
       _this.bindNavigation();
       switch(focusState) {
         case 'ThumbnailsView':
-          _this.toggleThumbnails(_this.currentCanvasID);
+          _this.toggleThumbnails(_this.canvasID);
         break;
         case 'ImageView':
-          _this.toggleImageView(_this.currentCanvasID);
+          _this.toggleImageView(_this.canvasID);
         break;
         case 'BookView':
-          _this.toggleBookView(_this.currentCanvasID);
+          _this.toggleBookView(_this.canvasID);
         break;
         case 'ScrollView':
-          _this.toggleScrollView(_this.currentCanvasID);
+          _this.toggleScrollView(_this.canvasID);
         break;
         default:
           break;
@@ -249,9 +224,9 @@
 
     update: function(options) {
       jQuery.extend(this, options);
-      if (this.focusOptions) {
-        this.focusOptions.osdBounds = null;
-        this.focusOptions.zoomLevel = null;
+      if (this.windowOptions) {
+        this.windowOptions.osdBounds = null;
+        this.windowOptions.zoomLevel = null;
       }
       this.init();
     },
@@ -259,7 +234,7 @@
     // reset whether BookView is available every time as a user might switch between paged and non-paged objects within a single slot/window
     removeBookView: function() {
       var _this = this;
-      this.focuses = this.focusesOriginal;
+      this.focuses = this.availableViews;
       var manifest = this.manifest.jsonLd;
       if (manifest.sequences[0].viewingHint) {
         if (manifest.sequences[0].viewingHint.toLowerCase() !== 'paged') {
@@ -359,7 +334,7 @@
         if (_this.focusModules.ScrollView) {
           var containerHeight = _this.element.find('.view-container').height();
           var triggerShow = false;
-          if (_this.currentFocus === "ScrollView") {
+          if (_this.viewType === "ScrollView") {
             triggerShow = true;
           }
           _this.focusModules.ScrollView.reloadImages(Math.floor(containerHeight * _this.scrollImageRatio), triggerShow);
@@ -466,7 +441,7 @@
               eventEmitter: _this.eventEmitter,
               windowId: _this.id,
               panel: true,
-              canvasID: _this.currentCanvasID,
+              canvasID: _this.canvasID,
               imagesList: _this.imagesList,
               thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
             });
@@ -521,7 +496,7 @@
               eventEmitter: _this.eventEmitter,
               appendTo: _this.element.find('.sidePanel'),
               manifest: _this.manifest,
-              canvasID: _this.currentCanvasID,
+              canvasID: _this.canvasID,
               layersTabAvailable: layersTabAvailable,
               tocTabAvailable: tocAvailable,
               annotationsTabAvailable: annotationsTabAvailable,
@@ -601,9 +576,9 @@
 
     adjustFocusSize: function(panelType, panelState) {
       if (panelType === 'bottomPanel') {
-        this.focusModules[this.currentFocus].adjustHeight('focus-max-height', panelState);
+        this.focusModules[this.viewType].adjustHeight('focus-max-height', panelState);
       } else if (panelType === 'sidePanel') {
-        this.focusModules[this.currentFocus].adjustWidth('focus-max-width', panelState);
+        this.focusModules[this.viewType].adjustWidth('focus-max-width', panelState);
       } else {}
     },
 
@@ -628,7 +603,7 @@
     toggleFocus: function(focusState, imageMode) {
       var _this = this;
 
-      this.currentFocus = focusState;
+      this.viewType = focusState;
       if (imageMode && jQuery.inArray(imageMode, this.imageModes) > -1) {
         this.currentImageMode = imageMode;
       }
@@ -645,8 +620,8 @@
       _this.eventEmitter.publish("focusUpdated");
       _this.eventEmitter.publish("windowUpdated", {
         id: _this.id,
-        viewType: _this.currentFocus,
-        canvasID: _this.currentCanvasID,
+        viewType: _this.viewType,
+        canvasID: _this.canvasID,
         imageMode: _this.currentImageMode,
         loadedManifest: _this.manifest.jsonLd['@id'],
         slotAddress: _this.slotAddress
@@ -654,7 +629,7 @@
     },
 
     toggleThumbnails: function(canvasID) {
-      this.currentCanvasID = canvasID;
+      this.canvasID = canvasID;
       if (this.focusModules.ThumbnailsView === null) {
         this.focusModules.ThumbnailsView = new $.ThumbnailsView({
           manifest: this.manifest,
@@ -662,7 +637,7 @@
           state:  this.state,
           eventEmitter: this.eventEmitter,
           windowId: this.id,
-          canvasID: this.currentCanvasID,
+          canvasID: this.canvasID,
           imagesList: this.imagesList
         });
       } else {
@@ -673,7 +648,7 @@
     },
 
     toggleImageView: function(canvasID) {
-      this.currentCanvasID = canvasID;
+      this.canvasID = canvasID;
       if (this.focusModules.ImageView === null) {
         this.focusModules.ImageView = new $.ImageView({
           manifest: this.manifest,
@@ -683,10 +658,10 @@
           eventEmitter: this.eventEmitter,
           canvasID: canvasID,
           imagesList: this.imagesList,
-          osdOptions: this.focusOptions,
+          osdOptions: this.windowOptions,
           bottomPanelAvailable: this.bottomPanelAvailable,
-          annotationLayerAvailable: this.annotationLayerAvailable,
-          annotationCreationAvailable: this.annotationCreationAvailable,
+          annotationLayerAvailable: this.annotationLayer,
+          annotationCreationAvailable: this.annotationCreation,
           annoEndpointAvailable: this.annoEndpointAvailable,
           annotationState : this.annotationState
         });
@@ -698,7 +673,7 @@
     },
 
     toggleBookView: function(canvasID) {
-      this.currentCanvasID = canvasID;
+      this.canvasID = canvasID;
       if (this.focusModules.BookView === null) {
         this.focusModules.BookView = new $.BookView({
           manifest: this.manifest,
@@ -708,7 +683,7 @@
           eventEmitter: this.eventEmitter,
           canvasID: canvasID,
           imagesList: this.imagesList,
-          osdOptions: this.focusOptions,
+          osdOptions: this.windowOptions,
           bottomPanelAvailable: this.bottomPanelAvailable
         });
       } else {
@@ -719,7 +694,7 @@
     },
 
     toggleScrollView: function(canvasID) {
-      this.currentCanvasID = canvasID;
+      this.canvasID = canvasID;
       if (this.focusModules.ScrollView === null) {
         var containerHeight = this.element.find('.view-container').height();
         this.focusModules.ScrollView = new $.ScrollView({
@@ -728,7 +703,7 @@
           state:  this.state,
           eventEmitter: this.eventEmitter,
           windowId: this.id,
-          canvasID: this.currentCanvasID,
+          canvasID: this.canvasID,
           imagesList: this.imagesList,
           thumbInfo: {thumbsHeight: Math.floor(containerHeight * this.scrollImageRatio), listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}
         });
@@ -746,7 +721,7 @@
 
     setCurrentCanvasID: function(canvasID) {
       var _this = this;
-      this.currentCanvasID = canvasID;
+      this.canvasID = canvasID;
       _this.eventEmitter.publish('removeTooltips.' + _this.id);
       _this.eventEmitter.unsubscribe(('annotationListLoaded.' + _this.id));
       while(_this.annotationsList.length > 0) {
@@ -755,10 +730,10 @@
       this.getAnnotations();
       switch(this.currentImageMode) {
         case 'ImageView':
-          this.toggleImageView(this.currentCanvasID);
+          this.toggleImageView(this.canvasID);
         break;
         case 'BookView':
-          this.toggleBookView(this.currentCanvasID);
+          this.toggleBookView(this.canvasID);
         break;
         default:
           break;
@@ -777,9 +752,9 @@
 
     updateManifestInfo: function() {
       var _this = this;
-      _this.element.find('.mirador-icon-view-type > i:first').removeClass().addClass(_this.iconClasses[_this.currentFocus]);
+      _this.element.find('.mirador-icon-view-type > i:first').removeClass().addClass(_this.iconClasses[_this.viewType]);
       
-      if (this.focusOverlaysAvailable[this.currentFocus].overlay.MetadataView) {
+      if (this.focusOverlaysAvailable[this.viewType].overlay.MetadataView) {
         this.element.find('.mirador-icon-metadata-view').addClass('selected');
       }
     },
@@ -791,7 +766,7 @@
     getAnnotations: function() {
       //first look for manifest annotations
       var _this = this,
-      url = _this.manifest.getAnnotationsListUrl(_this.currentCanvasID);
+      url = _this.manifest.getAnnotationsListUrl(_this.canvasID);
 
       if (url !== false) {
         jQuery.get(url, function(list) {
@@ -825,7 +800,7 @@
           options.eventEmitter = _this.eventEmitter;
           _this.endpoint = new $[module](options);
         }
-        _this.endpoint.search({ "uri" : _this.currentCanvasID});
+        _this.endpoint.search({ "uri" : _this.canvasID});
 
         dfd.done(function(loaded) {
           _this.annotationsList = _this.annotationsList.concat(_this.endpoint.annotationsList);
@@ -875,23 +850,23 @@
       });
 
       this.element.find('.single-image-option').on('click', function() {
-        _this.toggleImageView(_this.currentCanvasID);
+        _this.toggleImageView(_this.canvasID);
       });
 
       this.element.find('.book-option').on('click', function() {
-        _this.toggleBookView(_this.currentCanvasID);
+        _this.toggleBookView(_this.canvasID);
       });
 
       this.element.find('.scroll-option').on('click', function() {
-        _this.toggleScrollView(_this.currentCanvasID);
+        _this.toggleScrollView(_this.canvasID);
       });
 
       this.element.find('.thumbnails-option').on('click', function() {
-        _this.toggleThumbnails(_this.currentCanvasID);
+        _this.toggleThumbnails(_this.canvasID);
       });
 
       this.element.find('.mirador-icon-metadata-view').on('click', function() {
-        _this.toggleMetadataOverlay(_this.currentFocus);
+        _this.toggleMetadataOverlay(_this.viewType);
       });
 
       this.element.find('.mirador-icon-toc').on('click', function() {

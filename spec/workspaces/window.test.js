@@ -23,36 +23,40 @@ describe('Window', function() {
         this.toggle = jasmine.createSpy();
         this.adjustHeight = jasmine.createSpy();
       });
-      this.window = new Mirador.Window({
-        state: new Mirador.SaveController(jQuery.extend(true, {}, Mirador.DEFAULT_SETTINGS, {eventEmitter:this.eventEmitter})),
-        eventEmitter: this.eventEmitter,
-        manifest: {
-          jsonLd: {
-            sequences: [
-              { viewingHint: 'paged',
-                canvases: [{
-                  '@id': ''
-                }]
-            }]
+      var state = new Mirador.SaveController(jQuery.extend(true, {}, Mirador.DEFAULT_SETTINGS, {eventEmitter:this.eventEmitter}));
+      this.window = new Mirador.Window(jQuery.extend(true, 
+        {}, 
+        state.getStateProperty('windowSettings'),
+        {
+          state: state,
+          eventEmitter: this.eventEmitter,
+          manifest: {
+            jsonLd: {
+              sequences: [
+                { viewingHint: 'paged',
+                  canvases: [{
+                    '@id': ''
+                  }]
+              }]
+            },
+            getCanvases: function() { return [{
+              '@id': '',
+              'images':[{
+              }]
+            }];
+            },
+            getAnnotationsListUrl: function() {
+              return false; // returning false for non-existent value is probably not a good practice?
+            },
+            getStructures: function() {
+              return [];
+            },
+            getVersion: function() {
+              return '1';
+            }
           },
-          getCanvases: function() { return [{
-            '@id': '',
-            'images':[{
-            }]
-          }];
-          },
-          getAnnotationsListUrl: function() {
-            return false; // returning false for non-existent value is probably not a good practice?
-          },
-          getStructures: function() {
-            return [];
-          },
-          getVersion: function() {
-            return '1';
-          }
-        },
-        appendTo: this.appendTo
-      });
+          appendTo: this.appendTo
+      }));
     });
 
     afterEach(function() {

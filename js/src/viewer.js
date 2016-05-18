@@ -280,34 +280,16 @@
     loadManifestFromConfig: function(options) {
       // check if there are available slots, otherwise don't process this object from config
       //if we have more windowObjects that slots in the layout, return
+      // it may not be necesary to set the slotAddress here since it is also covered in workspace
       var _this = this;
       var slotAddress = options.slotAddress ? options.slotAddress : this.workspace.getAvailableSlot() ? this.workspace.getAvailableSlot().layoutAddress : null;
+      options.slotAddress = slotAddress;
       if (!slotAddress) {
         return;
       }
 
-      var windowConfig = {
-        manifest: this.state.getStateProperty('manifests')[options.loadedManifest],
-        currentFocus : options.viewType,
-        focusesOriginal : options.availableViews,
-        currentCanvasID : options.canvasID,
-        id : options.id,
-        focusOptions : options.windowOptions,
-        bottomPanelAvailable : options.bottomPanel,
-        bottomPanelVisible : options.bottomPanelVisible,
-        sidePanelAvailable : options.sidePanel,
-        sidePanelOptions : options.sidePanelOptions,
-        sidePanelVisible : options.sidePanelVisible,
-        overlayAvailable : options.overlay,
-        annotationLayerAvailable : options.annotationLayer,
-        annotationCreationAvailable : options.annotationCreation,
-        annotationState : options.annotationState,
-        fullScreenAvailable : options.fullScreen,
-        slotAddress: slotAddress,
-        displayLayout : options.displayLayout,
-        layoutOptions: options.layoutOptions
-      };
-
+      //make a copy of options and pass that so we don't get a circular reference
+      var windowConfig = jQuery.extend(true, {}, options);
       _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
     }
   };
