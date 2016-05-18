@@ -57,7 +57,7 @@
       manifest = _this.manifest.jsonLd;
 
       this.tplData = {
-        label: manifest.label,
+        label: $.JsonLd.getTextValue(manifest.label),
         repository: location,
         canvasCount: manifest.sequences[0].canvases.length,
         images: []
