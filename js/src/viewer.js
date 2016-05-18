@@ -42,13 +42,21 @@
 
     init: function() {
       var _this = this;
+      // initialize i18next
+      // the interface cannot begin to load until the translation keys are received
+      i18n.init({
+        debug: true,
+        getAsync: true,
+        resGetPath: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('i18nPath')+'__lng__/__ns__.json'
+      }, _this.setupViewer.bind(_this)); // becuase this is a callback, we need to bind "_this" to explicitly retain the calling context of this function (the viewer object instance)
+    },
+
+    setupViewer: function() {
+      var _this = this;
       //add background and positioning information on the root element that is provided in config
       var backgroundImage = _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('imagesPath') + 'debut_dark.png';
       this.element.css('background-color', '#333').css('background-image','url('+backgroundImage+')').css('background-position','left top')
       .css('background-repeat','repeat').css('position','fixed');
-
-      //initialize i18next
-      i18n.init({debug: false, getAsync: false, resGetPath: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('i18nPath')+'__lng__/__ns__.json'});
 
       //register Handlebars helper
       Handlebars.registerHelper('t', function(i18n_key) {
