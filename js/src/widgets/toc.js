@@ -344,6 +344,7 @@
         }
 
         children.forEach(function(child) {
+          child.label = $.JsonLd.getTextValue(child.label);
           out = out + previousTemplate(child);
         });
 

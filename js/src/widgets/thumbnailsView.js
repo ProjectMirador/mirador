@@ -53,7 +53,7 @@
 
         return {
           thumbUrl: thumbnailUrl,
-          title:    canvas.label,
+          title:    $.JsonLd.getTextValue(canvas.label),
           id:       canvas['@id'],
           width:    width,
           highlight: _this.currentImgIndex === index ? 'highlight' : ''
