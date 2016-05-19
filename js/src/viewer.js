@@ -48,7 +48,7 @@
       .css('background-repeat','repeat').css('position','fixed');
 
       //initialize i18next
-      i18n.init({debug: false, getAsync: false, resGetPath: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('i18nPath')+'__lng__/__ns__.json'});
+      i18n.init({fallbackLng: 'en', load: 'unspecific', debug: false, getAsync: false, resGetPath: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('i18nPath')+'__lng__/__ns__.json'});
 
       //register Handlebars helper
       Handlebars.registerHelper('t', function(i18n_key) {
