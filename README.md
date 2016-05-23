@@ -83,7 +83,7 @@ A Mirador instance will fill its container (not stretch it to a certain size). T
 
 There can be as many instances of Mirador running on one page as desired. Simply name them differently and point them to different elements on the page.
 
-For more information, see the [wiki](https://github.com/IIIF/mirador/wiki), submit an [issue](https://github.com/mirador/mirador/issues), or ask on [gitter](https://gitter.im/IIIF/mirador).
+For more information, see the [wiki](https://github.com/IIIF/mirador/wiki), submit an [issue](https://github.com/IIIF/mirador/issues), or ask on [gitter](https://gitter.im/IIIF/mirador).
 
 ### Project Diagnostics
 [![Build Status](https://travis-ci.org/IIIF/mirador.svg?branch=release2.1)](https://travis-ci.org/IIIF/mirador?branch=release2.1) [![Coverage Status](https://coveralls.io/repos/github/IIIF/mirador/badge.svg?branch=release2.1&upToDate=true)](https://coveralls.io/github/IIIF/mirador?branch=release2.1&upToDate=true)
