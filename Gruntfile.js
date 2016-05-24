@@ -24,7 +24,7 @@ module.exports = function(grunt) {
   // libraries/plugins
   vendors = [
     'js/lib/jquery.min.js',
-    'js/lib/jquery-ui-1.9.2.min.js',
+    'js/lib/jquery-ui.min.js',
     'js/lib/jquery.scrollTo.min.js',
     'js/lib/jquery.qtip.min.js',
     'js/lib/state-machine.min.js',
@@ -36,6 +36,9 @@ module.exports = function(grunt) {
     'js/lib/URI.min.js',
     'js/lib/mousetrap.min.js',
     'js/lib/isfahan.js',
+    'js/lib/paper-full.min.js',
+    'js/lib/spectrum.js',
+    'js/lib/jquery.awesome-cursor.js',
     'js/lib/i18next.min.js'
   ],
 
@@ -91,11 +94,12 @@ module.exports = function(grunt) {
         src: [
         'css/normalize.css',
         'css/font-awesome.css',
-        'css/jquery-ui.custom.min.css',
+        'css/jquery-ui.min.css',
         'css/layout-default-latest.css',
         'css/jquery.qtip.min.css',
+        'css/spectrum.css',
         'css/mirador.css',
-        '!css/mirador-combined.css'
+        'css/material-icons.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'
       }
@@ -103,7 +107,7 @@ module.exports = function(grunt) {
 
     cssmin: {
       minify: {
-        src: 'css/mirador-combined.css',
+        src: 'build/mirador/css/mirador-combined.css',
         dest: 'build/mirador/css/mirador-combined.min.css'
       }
     },
@@ -151,11 +155,11 @@ module.exports = function(grunt) {
         }, {
           src: 'js/lib/parse.min.js',
           dest: 'build/mirador/parse.min.js'
-        }, {	    
+        }, {
           src: 'js/lib/ZeroClipboard.swf',
           dest: 'build/mirador/ZeroClipboard.swf'
         }, {
-	  expand: true,	    
+	  expand: true,
           src: 'locales/**',
           dest: 'build/mirador'
         }]
@@ -193,13 +197,14 @@ module.exports = function(grunt) {
 
     watch: {
       all: {
-        options: { 
-          livereload: true 
+        options: {
+          livereload: true
         },
         files: [
           'Gruntfile.js',
           'js/src/*.js',
           'js/src/*/*.js',
+          'locales/*/*.json',
           'images/*',
           'css/*.css',
           'index.html'
@@ -234,26 +239,23 @@ module.exports = function(grunt) {
     githooks: {
       all: {
         'pre-commit': 'jshint cover'
-        // 'post-checkout': 
+        // 'post-checkout':
       }
     },
 
     coveralls: {
       options: {
-        src: 'reports/coverage/PhantomJS 1.9.8 (Mac OS X)/lcov.info',
+        src: 'reports/coverage/PhantomJS*/lcov.info',
         force: 'true'
       },
       ci: {
-        src: 'reports/coverage/PhantomJS 1.9.8 (Mac OS X)/lcov.info'
+        src: 'reports/coverage/PhantomJS*/lcov.info'
       }
     },
 
     karma : {
       options: {
-        basePath: '',
-        frameworks: ['jasmine'],
-        files: [].concat(vendors, sources, specs, ['bower_components/sinon-server/index.js', 'bower_components/jasmine-jquery/lib/jasmine-jquery.js'], {pattern: 'spec/data/manifest.json', included: false} ),
-        exclude: exclude,
+        configFile: 'karma.conf.js',
         proxies: {
           '/spec': 'http://localhost:9876/base/spec'
         },
@@ -265,12 +267,6 @@ module.exports = function(grunt) {
           ],
           dir: 'reports/coverage'
         },
-        port: 9876, // Note: web server port
-        colors: true, // Note: enable / disable colors in the output (reporters and logs)
-        logLevel: 'INFO',
-        autoWatch: false,
-        captureTimeout: 60000, // Note: If browser does not capture in given timeout [ms], kill it
-        singleRun: false,
         sauceLabs: {
         },
         customLaunchers: {
@@ -337,7 +333,7 @@ module.exports = function(grunt) {
       browsers: {
         reporters: ['spec', 'saucelabs'],
         browsers: [
-          'sl_win7_chrome', 
+          'sl_win7_chrome',
           'sl_win7_firefox',
           // 'sl_win7_ie9',
           // 'sl_win7_ie10',
@@ -400,7 +396,7 @@ module.exports = function(grunt) {
   // Coverage task.
   // Runs instanbul coverage
   grunt.registerTask('cover', 'karma:cover');
-  
+
   // ----------
   // Runs this on travis.
   grunt.registerTask('ci', [

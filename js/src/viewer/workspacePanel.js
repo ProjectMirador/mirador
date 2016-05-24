@@ -5,10 +5,9 @@
     jQuery.extend(true, this, {
       element: null,
       appendTo: null,
-      parent: null,
       workspace: null,
-      maxRows: null,
-      maxColumns: null
+      state: null,
+      eventEmitter: null
     }, options);
 
     this.init();
@@ -19,7 +18,7 @@
     init: function () {
       var _this = this,
       templateData = {
-        rows: $.layoutDescriptionFromGridString(_this.maxColumns + 'x' + _this.maxRows).children.map(function(column, rowIndex) {
+        rows: $.layoutDescriptionFromGridString(_this.state.getStateProperty('workspacePanelSettings').maxColumns + 'x' + _this.state.getStateProperty('workspacePanelSettings').maxRows).children.map(function(column, rowIndex) {
           column.columns = column.children.map(function(row, columnIndex) {
             row.gridString = (rowIndex+1) + 'x' + (columnIndex+1);
             return row;
@@ -29,55 +28,65 @@
       };
 
       this.element = jQuery(this.template(templateData)).appendTo(this.appendTo);
-      var backgroundImage = _this.parent.buildPath + _this.parent.imagesPath + 'debut_dark.png';
+      var backgroundImage = _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('imagesPath') + 'debut_dark.png';
       this.element.css('background-image','url('+backgroundImage+')').css('background-repeat','repeat');
+      
       this.bindEvents();
+      this.listenForActions();
+    },
+
+    listenForActions: function() {
+      var _this = this;
+      _this.eventEmitter.subscribe('workspacePanelVisible.set', function(_, stateValue) {
+        _this.onPanelVisible(_, stateValue);
+      });
     },
 
     bindEvents: function() {
       var _this = this;
-      jQuery.subscribe('workspacePanelVisible.set', function(_, stateValue) {
-        if (stateValue) { _this.show(); return; }
-        _this.hide();
-      });
 
       _this.element.find('.grid-item').on('click', function() {
         var gridString = jQuery(this).data('gridstring');
-        _this.onSelect(gridString);
+        _this.select(gridString);
       });
 
       _this.element.find('.grid-item').on('mouseover', function() {
         var gridString = jQuery(this).data('gridstring');
-        _this.onHover(gridString);
+        _this.hover(gridString);
       });
       
       _this.element.find('.select-grid').on('mouseout', function() {
-        _this.element.find('.grid-item').removeClass('hovered');
-        _this.element.find('.grid-instructions').show();
-        _this.element.find('.grid-text').hide();
+        _this.reset();
       });
     },
 
-    onSelect: function(gridString) {
+    select: function(gridString) {
       var _this = this;
       var layoutDescription = $.layoutDescriptionFromGridString(gridString);
-      _this.workspace.resetLayout(layoutDescription);
-      _this.parent.toggleWorkspacePanel();
+      _this.eventEmitter.publish('RESET_WORKSPACE_LAYOUT', {layoutDescription: layoutDescription});
+      _this.eventEmitter.publish('TOGGLE_WORKSPACE_PANEL');
     },
 
-    onHover: function(gridString) {
+    hover: function(gridString) {
       var _this = this,
       highestRow = gridString.charAt(0),
       highestColumn = gridString.charAt(2),
       gridItems = _this.element.find('.grid-item');
       gridItems.removeClass('hovered');
       gridItems.filter(function(index) {
-        var element = jQuery(this);
-        var change = element.data('gridstring').charAt(0) <= highestRow && element.data('gridstring').charAt(2)<=highestColumn;
+        var gridString = jQuery(this).data('gridstring');
+        var change = gridString.charAt(0) <= highestRow && gridString.charAt(2) <= highestColumn;
         return change;
       }).addClass('hovered');
       _this.element.find('.grid-instructions').hide();
       _this.element.find('.grid-text').text(gridString).show();
+    },
+    
+    reset: function() {
+      var _this = this;
+      _this.element.find('.grid-item').removeClass('hovered');
+      _this.element.find('.grid-instructions').show();
+      _this.element.find('.grid-text').hide();
     },
 
     hide: function() {
@@ -86,6 +95,12 @@
 
     show: function() {
       jQuery(this.element).show({effect: "fade", duration: 160, easing: "easeInCubic"});
+    },
+
+    onPanelVisible: function(_, stateValue) {
+      var _this = this;
+      if (stateValue) { _this.show(); return; }
+      _this.hide();
     },
 
     template: Handlebars.compile([

@@ -5,7 +5,6 @@
     jQuery.extend(this, {
       manifest:             null,
       element:              null,
-      parent:               null,
       metadataTypes:        null,
       metadataListingCls:   'metadata-listing'
     }, options);
@@ -21,7 +20,7 @@
           tplData = {
             metadataListingCls: this.metadataListingCls
           };
-          
+
       _this.manifest = _this.manifest.jsonLd;
       this.metadataTypes = {};
 
@@ -104,7 +103,7 @@
     var _this = this,
         str,
         next,
-        label, 
+        label,
         format;
     if (obj instanceof Array) {
       str = '';
@@ -140,7 +139,7 @@
           mdList[label] = value;
         });
       }
- 
+
       return mdList;
     },
 
@@ -177,21 +176,21 @@
     },
 
     toggle: function(stateValue) {
-        if (stateValue) { 
-            this.show(); 
+        if (stateValue) {
+            this.show();
         } else {
             this.hide();
         }
     },
-    
+
     show: function() {
         var element = jQuery(this.element);
         if (this.panel) {
             element = element.parent();
         }
-        element.show({effect: "slide", direction: "right", duration: 300, easing: "swing"});    
+        element.show({effect: "slide", direction: "right", duration: 300, easing: "swing"});
     },
-    
+
     hide: function() {
         var element = jQuery(this.element);
         if (this.panel) {
@@ -218,7 +217,7 @@
 
       return textWithLinks;
     },
-    
+
     template: Handlebars.compile([
     '<div class="sub-title">{{t "Manuscript Information"}}:</div>',
         '<div class="{{metadataListingCls}}">',

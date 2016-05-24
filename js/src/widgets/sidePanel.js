@@ -1,205 +1,225 @@
 (function($) {
 
-    $.SidePanel= function(options) {
-        jQuery.extend(true, this, {
-            element:           null,
-            appendTo:          null,
-            parent:            null,
-            manifest:          null,
-            panelState:        {},
-            tocTabAvailable:   false,
-            annotationsTabAvailable: false,
-            layersTabAvailable: false,
-            toolsTabAvailable: false,
-            hasStructures:     false
-        }, options);
+  $.SidePanel= function(options) {
+    jQuery.extend(true, this, {
+      element:           null,
+      appendTo:          null,
+      manifest:          null,
+      panelState:        {},
+      tocTabAvailable:   false,
+      annotationsTabAvailable: false,
+      layersTabAvailable: false,
+      toolsTabAvailable: false,
+      hasStructures:     false,
+      state:             null,
+      eventEmitter:      null
+    }, options);
 
-        this.init();
-    };
+    this.init();
+  };
 
-    $.SidePanel.prototype = {
-        init: function() {
-            var _this = this;
-            this.windowId = this.parent.id;
+  $.SidePanel.prototype = {
+    init: function() {
+      var _this = this;
 
-            this.state({
-                tabs : [
-                {
-                    name : 'toc',
-                    options : {
-                        available: _this.tocTabAvailable,
-                        id:'tocTab', 
-                        label:'Index'
-                    }
-                },
-                /*{
-                    name : 'annotations',
-                    options : {
-                        available: _this.annotationsTabAvailable,
-                        id:'annotationsTab', 
-                        label:'Annotations'
-                    }
-                },*/
-                /*{
-                    name : 'layers',
-                    options : {
-                        available: _this.layersTabAvailable,
-                        id:'layersTab', 
-                        label:'Layers'
-                    }
-                },
-                {
-                    name : 'tools',
-                    options : {
-                        available: _this.toolsTabAvailable,
-                        id:'toolsTab', 
-                        label:'Tools'
-                    }
-                }*/
-                ],
-                width: 280,
-                open: true
-            }, true);
-
-            this.listenForActions();
-            this.render(this.state());
-
-            this.loadSidePanelComponents();
-        },  
-
-        loadSidePanelComponents: function() {
-            var _this = this;
-
-            new $.Tabs({
-                windowId: this.parent.id,
-                appendTo: this.appendTo,
-                tabs : this.panelState.tabs,
-                parent : this
-            });
-
-            if (this.tocTabAvailable) {
-                new $.TableOfContents({
-                    manifest: this.manifest,
-                    appendTo: this.element.find('.tabContentArea'),
-                    parent: this.parent,
-                    panel: true,
-                    canvasID: this.parent.currentCanvasID
-                });
+      this.updateState({
+        tabs : [
+          {
+            name : 'toc',
+            options : {
+              available: _this.tocTabAvailable,
+              id:'tocTab', 
+              label:'Index'
             }
-            if (_this.annotationsTabAvailable) {
-                new $.AnnotationsTab({
-                    manifest: _this.manifest,
-                    parent: this.parent,
-                    appendTo: _this.element.find('.tabContentArea'),
-                    tabs: _this.state.tabs
-                });
+          },
+          /*{
+           name : 'annotations',
+           options : {
+           available: _this.annotationsTabAvailable,
+           id:'annotationsTab', 
+           label:'Annotations'
+           }
+           },*/
+          {
+            name : 'layers',
+            options : {
+              available: _this.layersTabAvailable,
+              id:'layersTab', 
+              label:'Layers'
             }
+          },
+          /*{
+           name : 'tools',
+           options : {
+           available: _this.toolsTabAvailable,
+           id:'toolsTab', 
+           label:'Tools'
+           }
+           }*/
+        ],
+        width: 280,
+        open: true
+      }, true);
 
-        },
+      this.listenForActions();
+      this.render(this.updateState());
 
-        update: function(name, availability) {
-            var state = this.panelState;
-            jQuery.each(state.tabs, function(index, value) {
-                if (value.name === name) {
-                    value.options.available = availability;
-                }
-            });
-            this.state(state);
-        },
+      this.loadSidePanelComponents();
+    },
 
-        state: function(state, initial) {
-            if (!arguments.length) return this.panelState;
-            jQuery.extend(true, this.panelState, state);
+    loadSidePanelComponents: function() {
+      var _this = this;
 
-            if (!initial) {
-                jQuery.publish('sidePanelStateUpdated.' + this.windowId, this.panelState);
-            }
+      new $.Tabs({
+        windowId: this.windowId,
+        appendTo: this.appendTo,
+        tabs : this.panelState.tabs,
+        hasStructures : this.hasStructures,
+        eventEmitter: this.eventEmitter
+      });
 
-            /*var enableSidePanel = false;
-            jQuery.each(this.panelState.tabs, function(index, value) {
-                if (value.options.available) {
-                    enableSidePanel = true;
-                }
-            });
+      if (this.tocTabAvailable) {
+        new $.TableOfContents({
+          structures: this.manifest.getStructures(),
+          appendTo: this.element.find('.tabContentArea'),
+          windowId: this.windowId,
+          canvasID: this.canvasID,
+          manifestVersion: this.manifest.getVersion(),
+          eventEmitter: this.eventEmitter
+        });
+      }
+      if (_this.annotationsTabAvailable) {
+        new $.AnnotationsTab({
+          manifest: _this.manifest,
+          windowId: this.windowId,
+          appendTo: _this.element.find('.tabContentArea'),
+          state: _this.state,
+          eventEmitter: _this.eventEmitter
+        });
+      }
+      if (_this.layersTabAvailable) {
+        new $.LayersTab({
+          manifest: _this.manifest,
+          windowId: this.windowId,
+          appendTo: _this.element.find('.tabContentArea'),
+          canvasID: this.canvasID,
+          state: _this.state,
+          eventEmitter: _this.eventEmitter
+        });
+      }
 
-            this.toggle(enableSidePanel);*/
+    },
 
-            return this.panelState;
-        },
-
-        panelToggled: function() {
-            var state = this.state(),
-                open = !state.open;
-
-            state.open = open;
-            this.state(state);
-        },
-
-        // doesn't do anything right now
-        // getTemplateData: function() {
-        //     return {
-        //         annotationsTab: this.state().annotationsTab,
-        //         tocTab: this.state().tocTab
-        //     };
-        // },
-
-        listenForActions: function() {
-            var _this = this;
-            jQuery.subscribe('sidePanelStateUpdated.' + this.windowId, function(_, data) {
-                _this.render(data);
-            });
-
-            jQuery.subscribe('sidePanelResized', function() {
-            });
-
-            jQuery.subscribe('sidePanelToggled.' + this.windowId, function() {
-                _this.panelToggled();
-            });
-
-            jQuery.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
-                if (_this.parent.annotationsAvailable[_this.parent.currentFocus]) {
-                    if (_this.parent.annotationsList.length > 0) {
-                        _this.update('annotations', true);
-                    }
-                }
-            });
-
-        },
-
-        render: function(renderingData) {
-            var _this = this;
-
-            if (!this.element) {
-                this.element = this.appendTo;
-                jQuery(_this.template(renderingData)).appendTo(_this.appendTo);
-                return;
-            }
-
-            if (renderingData.open) {
-                this.appendTo.removeClass('minimized');
-            } else {
-                this.appendTo.addClass('minimized');
-            }
-        },
-
-        template: Handlebars.compile([
-            '<div class="tabContentArea">',
-            '<ul class="tabGroup">',
-            '</ul>',
-            '</div>'
-        ].join('')),
-
-        toggle: function (enableSidePanel) {
-            if (!enableSidePanel) {
-                jQuery(this.appendTo).hide();
-                this.parent.element.find('.view-container').addClass('focus-max-width');
-                this.parent.element.find('.mirador-icon-toc').hide();
-            } else {
-                jQuery(this.appendTo).show({effect: "fade", duration: 300, easing: "easeInCubic"});
-                this.parent.element.find('.view-container').removeClass('focus-max-width');
-                this.parent.element.find('.mirador-icon-toc').show();                
-            }
+    update: function(name, availability) {
+      var updatedState = this.panelState;
+      jQuery.each(updatedState.tabs, function(index, value) {
+        if (value.name === name) {
+          value.options.available = availability;
         }
-    };
+      });
+      this.updateState(updatedState);
+    },
+
+    updateState: function(newState, initial) {
+      var _this = this;
+      if (!arguments.length) return this.panelState;
+      jQuery.extend(true, this.panelState, newState);
+
+      if (!initial) {
+        _this.eventEmitter.publish('sidePanelStateUpdated.' + this.windowId, this.panelState);
+      }
+
+      /*var enableSidePanel = false;
+       jQuery.each(this.panelState.tabs, function(index, value) {
+       if (value.options.available) {
+       enableSidePanel = true;
+       }
+       });
+
+       this.toggle(enableSidePanel);*/
+
+      return this.panelState;
+    },
+
+    panelToggled: function() {
+      var currentState = this.updateState(),
+          open = !currentState.open;
+
+      currentState.open = open;
+      this.updateState(currentState);
+    },
+
+    // doesn't do anything right now
+    // getTemplateData: function() {
+    //     return {
+    //         annotationsTab: this.state().annotationsTab,
+    //         tocTab: this.state().tocTab
+    //     };
+    // },
+
+    listenForActions: function() {
+      var _this = this;
+      _this.eventEmitter.subscribe('sidePanelStateUpdated.' + this.windowId, function(_, data) {
+        _this.render(data);
+      });
+
+      _this.eventEmitter.subscribe('sidePanelResized', function() {
+      });
+
+      _this.eventEmitter.subscribe('sidePanelToggled.' + this.windowId, function() {
+        _this.panelToggled();
+      });
+
+      _this.eventEmitter.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
+        var windowObject = _this.state.getWindowObjectById(_this.windowId);
+        if (windowObject.annotationsAvailable[windowObject.viewType]) {
+          if (_this.state.getWindowAnnotationsList(_this.windowId).length > 0) {
+            _this.update('annotations', true);
+          }
+        }
+      });
+
+      _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, newCanvasId) {
+        _this.canvasID = newCanvasId;
+      });
+
+    },
+
+    render: function(renderingData) {
+      var _this = this;
+
+      if (!this.element) {
+        this.element = this.appendTo;
+        jQuery(_this.template(renderingData)).appendTo(_this.appendTo);
+        return;
+      }
+
+      if (renderingData.open) {
+        this.appendTo.removeClass('minimized');
+      } else {
+        this.appendTo.addClass('minimized');
+      }
+    },
+
+    template: Handlebars.compile([
+      '<div class="tabContentArea">',
+      '<ul class="tabGroup">',
+      '</ul>',
+      '</div>'
+    ].join('')),
+
+    toggle: function (enableSidePanel) {
+      var _this = this;
+      if (!enableSidePanel) {
+        jQuery(this.appendTo).hide();
+        _this.eventEmitter.publish('ADD_CLASS.'+this.windowId, 'focus-max-width');
+        _this.eventEmitter.publish('HIDE_ICON_TOC.'+this.windowId);                
+      } else {
+        jQuery(this.appendTo).show({effect: "fade", duration: 300, easing: "easeInCubic"});
+        _this.eventEmitter.publish('REMOVE_CLASS.'+this.windowId, 'focus-max-width');
+        _this.eventEmitter.publish('SHOW_ICON_TOC.'+this.windowId);                
+      }
+    }
+  };
 
 }(Mirador));

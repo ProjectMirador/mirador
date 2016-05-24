@@ -12,9 +12,10 @@
       appendTo:             null,
       thumbInfo:            {thumbsHeight: 150, listingCssCls: 'listing-thumbs', thumbnailCls: 'thumbnail-view'},
       defaultThumbHeight:   150,
-      parent:               null,
+      windowId:             null,
       panel:                false,
-      lazyLoadingFactor:    1.5  //should be >= 1
+      lazyLoadingFactor:    1.5,  //should be >= 1
+      eventEmitter:         null
     }, options);
 
     this.init();
@@ -30,6 +31,7 @@
 
       this.loadContent();
       this.bindEvents();
+      this.listenForActions();
     },
 
     loadContent: function() {
@@ -51,7 +53,7 @@
 
         return {
           thumbUrl: thumbnailUrl,
-          title:    canvas.label,
+          title:    $.JsonLd.getTextValue(canvas.label),
           id:       canvas['@id'],
           width:    width,
           highlight: _this.currentImgIndex === index ? 'highlight' : ''
@@ -80,15 +82,27 @@
     currentImageChanged: function() {
       var _this = this,
       target = _this.element.find('.highlight'),
-      scrollPosition;
+      scrollPosition,
+      windowObject = this.state.getWindowObjectById(this.windowId);
 
-      if (this.parent.currentFocus === 'BookView') {
+      if (windowObject && windowObject.viewType === 'BookView') {
         scrollPosition = _this.element.scrollLeft() + (target.position().left + (target.next().width() + target.outerWidth())/2) - _this.element.width()/2;
       } else {
 
         scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
       }
       _this.element.scrollTo(scrollPosition, 900);
+    },
+
+    listenForActions: function() {
+      var _this = this;
+      _this.eventEmitter.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event) {
+        _this.currentImageChanged();
+      });
+
+      _this.eventEmitter.subscribe('windowResize', $.debounce(function(){
+        _this.loadImages();
+      }, 100));
     },
 
     bindEvents: function() {
@@ -101,19 +115,11 @@
         _this.loadImages();
       });
 
-      jQuery.subscribe('windowResize', $.debounce(function(){
-        _this.loadImages();
-      }, 100));
-
       //add any other events that would trigger thumbnail display (resize, etc)
 
       _this.element.find('.thumbnail-image').on('click', function() {
         var canvasID = jQuery(this).attr('data-image-id');
-        _this.parent.setCurrentCanvasID(canvasID);
-      });
-
-      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(event) {
-        _this.currentImageChanged();
+        _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasID);
       });
     },
 
@@ -201,10 +207,11 @@
     },
 
     adjustWidth: function(className, hasClass) {
+      var _this = this;
       if (hasClass) {
-        this.parent.element.find('.view-container').removeClass(className);
+        _this.eventEmitter.publish('REMOVE_CLASS.'+this.windowId, className);
       } else {
-        this.parent.element.find('.view-container').addClass(className);
+        _this.eventEmitter.publish('ADD_CLASS.'+this.windowId, className);
       }
     },
 

@@ -4,7 +4,7 @@
 
     jQuery.extend(true, this, {
       element:                    null,
-      parent:                     null,
+      appendTo:                   null,
       manifest:                   null,
       loadStatus:                 null,
       thumbHeight:                80,
@@ -18,7 +18,9 @@
       imagesTotalWidth:           0,
       tplData:                    null,
       allImages:                  [],
-      remaining:                  0
+      remaining:                  0,
+      state:                      null,
+      eventEmitter:               null
     }, options);
 
     this.init();
@@ -43,9 +45,10 @@
       });
 
       this.fetchTplData(this.manifestId);
-      this.element = jQuery(this.template(this.tplData)).prependTo(this.parent.manifestListElement).hide().fadeIn('slow');
+      this.element = jQuery(this.template(this.tplData)).prependTo(this.appendTo).hide().fadeIn('slow');
 
       this.bindEvents();
+      this.listenForActions();
     },
 
     fetchTplData: function() {
@@ -54,7 +57,7 @@
       manifest = _this.manifest.jsonLd;
 
       this.tplData = {
-        label: manifest.label,
+        label: $.JsonLd.getTextValue(manifest.label),
         repository: location,
         canvasCount: manifest.sequences[0].canvases.length,
         images: []
@@ -71,9 +74,9 @@
         if (_this.tplData.repository === '(Added from URL)') {
           repo = '';
         }
-        var imageName = $.viewer.repoImages[repo || 'other'] || $.viewer.repoImages.other;
+        var imageName = _this.state.getStateProperty('repoImages')[repo || 'other'] || _this.state.getStateProperty('repoImages').other;
 
-        return $.viewer.buildPath + $.viewer.logosPath + imageName;
+        return _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('logosPath') + imageName;
       })();
 
       for ( var i=0; i < manifest.sequences[0].canvases.length; i++) {
@@ -119,6 +122,14 @@
 
     },
 
+    listenForActions: function() {
+      var _this = this;
+
+      _this.eventEmitter.subscribe('manifestPanelWidthChanged', function(event, newWidth){
+        _this.updateDisplay(newWidth);
+      });
+    },
+
     bindEvents: function() {
       var _this = this;
 
@@ -130,24 +141,26 @@
       this.element.on('click', function() {
         var windowConfig = {
           manifest: _this.manifest,
-          currentCanvasID: null,
-          currentFocus: 'ThumbnailsView'
+          canvasID: null,
+          viewType: 'ThumbnailsView'
         };
-        $.viewer.workspace.addWindow(windowConfig);
+        _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
       });
 
       this.element.find('.preview-image').on('click', function(e) {
         e.stopPropagation();
         var windowConfig = {
           manifest: _this.manifest,
-          currentCanvasID: jQuery(this).attr('data-image-id'),
-          currentFocus: 'ImageView'
+          canvasID: jQuery(this).attr('data-image-id'),
+          viewType: _this.state.getStateProperty('windowSettings').viewType //get the view type from settings rather than always defaulting to ImageView
         };
-        $.viewer.workspace.addWindow(windowConfig);
+        _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
       });
+    },
 
-      jQuery.subscribe('manifestPanelWidthChanged', function(event, newWidth){
-        var newMaxPreviewWidth = newWidth - (_this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.remainingWidth);
+    updateDisplay: function(newWidth) {
+        var _this = this,
+        newMaxPreviewWidth = newWidth - (_this.repoWidth + _this.margin + _this.metadataWidth + _this.margin + _this.remainingWidth);
         newMaxPreviewWidth = newMaxPreviewWidth * 0.95;
         var image = null;
 
@@ -196,7 +209,6 @@
           }
         }
         _this.maxPreviewImagesWidth = newMaxPreviewWidth;
-      });
     },
 
     hide: function() {
