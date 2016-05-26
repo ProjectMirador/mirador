@@ -34,7 +34,7 @@
       
       this.eventEmitter = config.eventEmitter;
       
-      // Don't want to save session, therefore don't set up save controller
+      // Don't want to save session
       if (config.saveSession === false) {
         this.currentConfig = config;
         this.bindEvents();
@@ -129,6 +129,17 @@
 
     getStateProperty: function(prop) {
       return this.get(prop, 'currentConfig');
+    },
+
+    getManifestIndex: function(manifestUri) {
+      var manifestIndex = -1;
+      jQuery.each(this.currentConfig.data, function(index, dataObj) {
+        if (dataObj.manifestUri === manifestUri) {
+          manifestIndex = index;
+          return false;
+        }
+      });
+      return manifestIndex;
     },
 
     get: function(prop, parent) {

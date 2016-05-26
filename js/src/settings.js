@@ -38,6 +38,9 @@
                                 //only valid if no windowObjects have been initialized
                                 //if there are multiple slots, it will be bound to the first slot and the selected manifest will open in that slot
 
+    // whether or not to preserve the order of the manifests, as provided in the configuration, in the manifest listing page
+    'preserveManifestOrder' : false,
+
     //default window settings, but can be changed in Mirador configuration on initialization
     'windowSettings' : {
       "availableViews" : ['ThumbnailsView', 'ImageView', 'ScrollView', 'BookView'], //any subset removes others
