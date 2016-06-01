@@ -1,5 +1,5 @@
 // This file defines the global Mirador constructor function.
-// This is the entry point to Miraodr and is intentionally sparse.
+// This is the entry point to Mirador and is intentionally sparse.
 (function(global) {
   function Mirador(config) {
     if (this instanceof Mirador) {

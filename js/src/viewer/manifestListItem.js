@@ -45,7 +45,28 @@
       });
 
       this.fetchTplData(this.manifestId);
-      this.element = jQuery(this.template(this.tplData)).prependTo(this.appendTo).hide().fadeIn('slow');
+      
+      if (_this.state.getStateProperty('preserveManifestOrder')) {
+        if (this.appendTo.children().length === 0) {
+          this.element = jQuery(this.template(this.tplData)).prependTo(this.appendTo).hide().fadeIn('slow');          
+        } else {
+          var liList = _this.appendTo.find('li');
+          jQuery.each(liList, function(index, item) {
+              var prev = parseFloat(jQuery(item).attr('data-index-number'));
+              var next = parseFloat(jQuery(liList[index+1]).attr('data-index-number'));
+              var current = _this.tplData.index;
+              if (current <= prev && (next > current || isNaN(next)) ) {
+                _this.element = jQuery(_this.template(_this.tplData)).insertBefore(jQuery(item)).hide().fadeIn('slow');
+                return false;
+              } else if (current > prev && (current < next || isNaN(next))) {                
+                _this.element = jQuery(_this.template(_this.tplData)).insertAfter(jQuery(item)).hide().fadeIn('slow');
+                return false;
+              }
+          });
+        }
+      } else {
+        this.element = jQuery(this.template(this.tplData)).prependTo(this.appendTo).hide().fadeIn('slow');
+      }
 
       this.bindEvents();
       this.listenForActions();
@@ -60,7 +81,8 @@
         label: $.JsonLd.getTextValue(manifest.label),
         repository: location,
         canvasCount: manifest.sequences[0].canvases.length,
-        images: []
+        images: [],
+        index: _this.state.getManifestIndex(manifest['@id'])
       };
 
       this.tplData.repoImage = (function() {
@@ -224,7 +246,7 @@
     },
 
     template: Handlebars.compile([
-      '<li>',
+      '<li data-index-number={{index}}>',
       '<div class="repo-image">',
         '<img src="{{repoImage}}" alt="repoImg">',
       '</div>',
