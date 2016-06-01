@@ -284,8 +284,8 @@
       // http://stackoverflow.com/questions/6081483/maximum-size-of-a-canvas-element
       var maxSize = 2048;
       var realSize = {
-        width: this.viewer.viewport.getContainerSize().x / viewportBounds.width,
-        height: this.viewer.viewport.getContainerSize().x / viewportBounds.width / this.viewer.viewport.contentAspectX,
+        width: this.viewer.viewport.containerSize.x / viewportBounds.width,
+        height: this.viewer.viewport.containerSize.x / viewportBounds.width / this.viewer.viewport.contentAspectX,
         offsetX: 0,
         offsetY: 0,
         scale: 1
