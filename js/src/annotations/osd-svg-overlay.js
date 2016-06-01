@@ -54,18 +54,18 @@
     var _this = this;
     this.state = state;
     this.eventEmitter = eventEmitter;
-    this.viewer.addHandler('animation', function() {
+    var _thisResize = function() {
       _this.resize();
-    });
-    this.viewer.addHandler('open', function() {
-      _this.resize();
-    });
-    this.viewer.addHandler('animation-finish', function() {
-      _this.resize();
-    });
-    this.viewer.addHandler('update-viewport', function() {
-      _this.resize();
-    });
+    };
+    this.viewer.addHandler('animation', _thisResize);
+    this.viewer.addHandler('open', _thisResize);
+    this.viewer.addHandler('animation-finish', _thisResize);
+    this.viewer.addHandler('update-viewport', _thisResize);
+    this.viewer.addHandler('resize', _thisResize);
+    this.viewer.addHandler('rotate', _thisResize);
+    this.viewer.addHandler('constrain', _thisResize);
+    
+    
     _this.eventEmitter.subscribe('toggleDrawingTool.' + _this.windowId, function(event, tool) {
       jQuery('#' + osdViewerId).parent().find('.hud-container').find('.draw-tool').removeClass('selected');
       if (_this.disabled) {
@@ -284,8 +284,8 @@
       // http://stackoverflow.com/questions/6081483/maximum-size-of-a-canvas-element
       var maxSize = 2048;
       var realSize = {
-        width: this.viewer.viewport.containerSize.x / viewportBounds.width,
-        height: this.viewer.viewport.containerSize.y / viewportBounds.height,
+        width: this.viewer.viewport.getContainerSize().x / viewportBounds.width,
+        height: this.viewer.viewport.getContainerSize().x / viewportBounds.width / this.viewer.viewport.contentAspectX,
         offsetX: 0,
         offsetY: 0,
         scale: 1
@@ -412,12 +412,12 @@
     // creating shapes used for backward compatibility.
     // shape coordinates are viewport coordinates.
     createRectangle: function(shape, annotation) {
-      var scale = this.viewer.viewport.containerSize.x;
       var paperItems = [];
       var rect = new $.Rectangle();
+      var newShape = this.viewer.viewport.viewportToImageRectangle(shape);
       var initialPoint = {
-        'x': shape.x * scale,
-        'y': shape.y * scale
+        'x': newShape.x,
+        'y': newShape.y
       };
       var currentMode = this.mode;
       var currentPath = this.path;
@@ -431,8 +431,8 @@
       this.path = rect.createShape(initialPoint, this);
       var eventData = {
         'delta': {
-          'x': shape.width * scale,
-          'y': shape.height * scale
+          'x': newShape.width,
+          'y': newShape.height
         }
       };
       rect.onMouseDrag(eventData, this);
