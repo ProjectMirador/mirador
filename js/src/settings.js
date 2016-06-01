@@ -31,6 +31,7 @@
     },
 
     'manifests' : [],
+    'data' : [],
 
     'layout': '1x1',
 
