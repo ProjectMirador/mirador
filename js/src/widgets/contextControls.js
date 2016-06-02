@@ -21,7 +21,8 @@
       var _this = this;
       this.element = jQuery(this.template({
         tools : _this.availableTools,
-        showEdit : this.annotationCreationAvailable
+        showEdit : this.annotationCreationAvailable,
+        showRefresh : this.annotationRefresh
       })).appendTo(this.container);
       _this.container.find(".borderColorPicker").spectrum({
         showInput: true,
@@ -163,9 +164,11 @@
                                    '<a class="hud-control draw-tool mirador-osd-save-mode">',
                                    '<i class="fa fa-lg fa-save"></i>',
                                    '</a>',
-                                   '<a class="hud-control draw-tool mirador-osd-refresh-mode">',
-                                   '<i class="fa fa-lg fa-refresh"></i>',
-                                   '</a>',
+                                   '{{#if showRefresh}}',
+                                     '<a class="hud-control draw-tool mirador-osd-refresh-mode">',
+                                     '<i class="fa fa-lg fa-refresh"></i>',
+                                     '</a>',
+                                   '{{/if}}',
                                    '{{/if}}',
                                    /*'<a class="mirador-osd-list hud-control">',
                                    '<i class="fa fa-lg fa-list"></i>',

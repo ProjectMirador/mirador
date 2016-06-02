@@ -32,6 +32,7 @@
           mode: 'displayAnnotations',
           windowId: this.windowId,
           annotationCreationAvailable: this.annotationCreationAvailable,
+          annotationRefresh: this.annotationRefresh,
           availableTools: this.availableTools,
           eventEmitter: this.eventEmitter
         });
