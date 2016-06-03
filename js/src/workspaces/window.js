@@ -741,8 +741,6 @@
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
-      //console.log("need to empty and hide.  Can i find bbAnnosContainer in this2 ?");
-      //console.log(_this);
       _this.element.find(jQuery(".bbAnnosContainer")).empty().hide();
       this.getAnnotations();
       switch(this.currentImageMode) {

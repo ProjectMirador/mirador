@@ -883,6 +883,9 @@ li.highlight {
     color: #FFF !important;
     font-size: 1.5em !important;
 }
+.fa-caret-right.selected{
+  transform: rotate(90deg);
+}
 .toc li.leaf-item i.star {
   display: inline-block;
 }
@@ -1258,7 +1261,7 @@ li.highlight {
 
 .mirador-img-manipulation{
   right:-320px;
-  height: 289px;
+  height: 261px;
   width: auto;
   position: absolute;
   background-color: black;
@@ -1267,7 +1270,7 @@ li.highlight {
   border-left: 1px solid white;
   opacity:1 !important;
   text-align: left;
-  bottom: -26px;
+  bottom: 16px;
   font-size: 88%;
 
 }

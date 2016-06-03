@@ -166,8 +166,6 @@
       else { return false; }
     },
     getStructures: function() {
-      console.log("manifest.js getting structures.  This must be where ranges['uri','uri','uri'] is polluted and turned in children[obj.obj.obj], out of order.");
-      console.log(this);
       var _this = this;
       return _this.jsonLd.structures;
     },

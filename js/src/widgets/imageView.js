@@ -830,19 +830,12 @@
     },
 
     createOpenSeadragonInstance: function(imageUrl) {
-     // console.log("On OSD creation with url: "+imageUrl);
       var infoJsonUrl = imageUrl + '/info.json',
       uniqueID = $.genUUID(),
       osdID = 'mirador-osd-' + uniqueID,
       infoJson,
       _this = this;
-
-     // console.log("create osd.  what is _this?");
-      //console.log(_this);
-
       this.element.find('.' + this.osdCls).remove();
-
-      //needs tweaking so that it can handle a no .json file present.  it still needs to work.  
       jQuery.getJSON(infoJsonUrl).done(function (infoJson, status, jqXHR) {
         _this.elemOsd =
           jQuery('<div/>')
@@ -1037,10 +1030,7 @@
               })();
             }
           }, 100, true));
-        //BH edit: wrapping the image element in a canvas causes the image not to load.  OSD will not build a viewport
-        //  
-        // var fakeCanvas = jQuery("<img class='fix' src='"+imageUrl+"'/>");
-        //   jQuery(_this.osd.canvas).append(fakeCanvas);       
+      
        });
     },
 

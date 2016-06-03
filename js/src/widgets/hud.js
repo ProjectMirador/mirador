@@ -40,16 +40,6 @@
       this.bindEvents();
     },
      
-    // //BH edit to allow commenting annotations when images are non-IIIF
-    // bbShowAnnos: function(){
-    //   this.parent.element.find(".bbAnnosContainer").show(); //imageview
-    // },
-
-    // //BH edit to allow commenting annotations when images are non-IIIF
-    // bbHideAnnos: function(){
-    //   this.parent.element.find(".bbAnnosContainer").hide();//imageview
-    // },
-
     bindEvents: function() {
       var _this = this;
     },
@@ -197,7 +187,7 @@
                                  '</a>',
                                  '</div>',
                                  '<div title="View Image Manipulation Tools" class="mirador-pan-zoom-toggle hud-control">',
-                                 '<img class="viewImgManip closed" src="../brokenBooks/images/imageadjust.png">',
+                                 '<img class="viewImgManip closed" src="images/imageadjust.png">',
                                  '</div>',
                                  '<div class="mirador-img-manipulation hud-control">',
                                  '<div title="Change Image Brightness" class="mirador-osd-brightness hud-control">',

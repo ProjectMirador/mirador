@@ -26,12 +26,9 @@
     init: function () {
       var _this = this;
       if (!_this.structures || _this.structures.length === 0) {
-        console.log("no structures in init()");
         this.element = jQuery(this.emptyTemplate()).appendTo(this.appendTo);
       } 
       else {
-        console.log("init had structures...");
-        console.log(_this.structures);
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
         this.tocData = _this.initTocData();
         this.selectedElements = $.getRangeIDByCanvasID(_this.structures, _this.canvasID);
@@ -113,7 +110,6 @@
     },
 
     extractV1RangeTrees: function(rangeList) {
-      console.log("extracting v1");
       var tree, parent;
       // Recursively build tree/table of contents data structure
       // Begins with the list of topmost categories
@@ -239,7 +235,11 @@
             return parentest;
         }
        
-        /* Helper function to pull an object out of the rangeList by its @id property or return an empty object */
+        /* 
+          Helper function to pull an object out of the rangeList by its @id property or return an empty object.
+          BE CAREFUL HERE.  An empty object returned means a URI was in range.ranges[] but was not in manifest.structures[], which is an ERROR.
+          We do not want the TOC to print out an empty holder for this.  Essentially we would like the algorithm to SKIP THIS CHILD.
+         */
         function pullFromStructures(uri, rangeList){
             var pull_this_out = {};
             for(var i=0; i<rangeList.length; i++){
@@ -257,17 +257,24 @@
           // To aid recursion, define the tree if it does not exist,
           // but use the tree that is being recursively built
           // by the call below.
+          var children_uris = [];
+          var children = [];
           tree = typeof tree !== 'undefined' ? tree : [];
           parent = typeof parent !== 'undefined' ? parent : getParentest(flatRanges);
-          var children_uris = parent.ranges; //use the ranges property to ensure order
-          var children = [];
+          if(typeof parent.ranges !== 'undefined'){ 
+            children_uris = parent.ranges;
+          }
           for(var i=0; i<children_uris.length; i++){ //get the children in order by their @id property from the structures array
-              children.push(pullFromStructures(children_uris[i], flatRanges));
+            var new_child = pullFromStructures(children_uris[i], flatRanges);
+            if(!jQuery.isEmptyObject(new_child)){
+              //BE CAREFUL HERE.  his is an error, we dont want this child to be a part of the recursion.
+              children.push(new_child);
+            }
           }
           if ( children.length ) {
-            if ( parent.within === 'root') { 
+            if ( parent.within === 'root' || parent.id == 'root') { 
               // If there are children and their parent's
-              // id is a root, bind them to the tree object.
+              // id is a root or within is root, bind them to the tree object.
               //
               // This begins the construction of the object,
               // and all non-top-level children are now
@@ -294,7 +301,7 @@
             // The function cannot continue to the return
             // statement until this line stops being called,
             // which only happens when "children" is empty.
-            jQuery.each( children, function( index, child ){ unflatten( flatRanges, child ); } );
+            jQuery.each(children, function( index, child ){unflatten(flatRanges, child);});
           }
           return tree;
         }
@@ -302,28 +309,21 @@
      },
 
     render: function() {
-      //console.log("jeez, im rendering.");
       var _this = this,
           toDeselect = _this.previousSelectedElements.map(function(rangeID) {
-            // console.log("R1");
             return _this.tocData[rangeID].element;
           }),
           toSelect = _this.selectedElements.map(function(rangeID) {
-            // console.log("R2");
             return _this.tocData[rangeID].element;
           }),
           toOpen = _this.selectedElements.filter(function(rangeID) {
-            // console.log("R3");
             return (jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.previousSelectedElements) < 0);
           }).map(function(rangeID) {
-            // console.log("R4");
             return _this.tocData[rangeID].element;
           }),
           toClose = _this.previousSelectedElements.filter(function(rangeID) {
-            // console.log("R5");
             return (jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.selectedElements) < 0);
           }).map(function(rangeID) {
-              // console.log("R6");
             return _this.tocData[rangeID].element;
           });
 
@@ -337,25 +337,16 @@
         element.addClass('selected');
       });
 
-      // console.log("toOpen");
-      // console.log(toOpen);
-
-      // console.log("toClose");
-      // console.log(toClose);
       // Scroll to new elements
       scroll();
 
       // Open newly opened sections
       toOpen.forEach(function(element) {
-        //console.log("open redner on this element child ul, listed below");
-        //console.log(jQuery(element).find("ul:first"));
         jQuery(element).addClass('open').find('ul:first').slideFadeToggle();
       });
 
       // Close previously opened selections (find way to keep scroll position).
       toClose.forEach(function(element) {
-        //console.log("close render on this element child ul, listed below");
-        //console.log(jQuery(element).find("ul:first"));
         jQuery(element).removeClass('open').find('ul:first').slideFadeToggle(400, 'swing', scroll);
       });
 
@@ -393,7 +384,6 @@
       });
 
       _this.element.find('.toc-link').on('click', function(event) {
-        //console.log("clicked a TOC-LINK");
         event.stopPropagation();
 
         var rangeID = jQuery(this).data().rangeid,
@@ -409,10 +399,8 @@
         var rangeID = jQuery(this).parent().data().rangeid;
         _this.setOpenItem(rangeID);
         _this.render();
-        //This way does not open up the list.  The event is detected, but nothing happens.
-        //Below is the old way, and it __succeeds____
-        //console.log("firing toggle directly in click event to circumvent the error for now.");
-        jQuery(caret).parents("li:first").toggleClass('open').find('ul:first').slideFadeToggle();
+        //BH FIX: This way does not open up the list.  The event is detected, but nothing happens.
+        jQuery(caret).toggleClass("selected").parents("li:first").toggleClass('open').find('ul:first').slideFadeToggle();
       });
 
     },
@@ -426,7 +414,6 @@
       var _this = this;
 
       if (jQuery.inArray(rangeID, _this.openElements)<0) {
-        //console.log("push this range id into open item array.");
         _this.openElements.push(rangeID);
       } else {
         _this.openElements.splice(jQuery.inArray(rangeID, _this.openElements), 1);
@@ -476,8 +463,6 @@
 
       Handlebars.registerHelper('nestedRangeLevel', function(children, options) {
         var out = '';
-       // console.log("nested range.  children: ");
-        //console.log(children);
         if (options.fn !== undefined) {
           previousTemplate = options.fn;
         }
@@ -489,11 +474,9 @@
       });
 
       Handlebars.registerHelper('tocLevel', function(id, label, level, children) {
-       // console.log("toc level handlebar.  label: "+label);
-        //console.log(children);
         var caret = '<i class="fa fa-caret-right toc-caret"></i>',
-        cert = '<i class="fa fa-certificate star"></i>';
-        //cert = '<i class="fa star"></i>';
+        //cert = '<i class="fa fa-certificate star"></i>';
+        cert = '<i class="fa star"></i>';
         //BH edit: move caret to the right of the label.
         return '<h' + (level+1) + '><a class="toc-link" data-rangeID="' + id + '"><span>' + label + '</span>' + caret + cert + '</a></h' + (level+1) + '>';   
       });
