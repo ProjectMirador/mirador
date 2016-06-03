@@ -39,7 +39,7 @@
 
       this.bindEvents();
     },
-
+     
     bindEvents: function() {
       var _this = this;
     },
@@ -123,6 +123,7 @@
             });
           },
           ondisplayOff: function(event, from, to) { 
+
             if (_this.annoEndpointAvailable) {
               _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
               _this.contextControls.hide(function() {
@@ -183,6 +184,39 @@
                                  '</a>',
                                  '<a class="mirador-osd-go-home hud-control" role="button" aria-label="Reset image bounds">',
                                  '<i class="fa fa-home"></i>',
+                                 '</a>',
+                                 '</div>',
+                                 '<div title="View Image Manipulation Tools" class="mirador-pan-zoom-toggle hud-control">',
+                                 '<img class="viewImgManip closed" src="images/imageadjust.png">',
+                                 '</div>',
+                                 '<div class="mirador-img-manipulation hud-control">',
+                                 '<div title="Change Image Brightness" class="mirador-osd-brightness hud-control">',
+                                 '<span>Brightness</span>',
+                                 '<span class="brightnessSlider"></span>',
+                                 '<img class="imgManipIcon" src="../brokenBooks/images/brightness.png">',
+                                 '</div>',
+                                 '<div title="Change Image Contrast" class="mirador-osd-contrast hud-control">',
+                                 '<span>Contrast</span>',
+                                 '<span class="contrastSlider"></span>',
+                                 '<img class="imgManipIcon" src="../brokenBooks/images/contrast.png">',
+                                 '</div>',
+                                 '<a title="Toggle Grayscale" class="mirador-osd-toggle-grayscale hud-control">',
+                                 '<span>Grayscale</span><img class="imgManipIcon" src="../brokenBooks/images/grayscale.png">',
+                                 '</a>',
+                                 '<a title="Invert Colors" class="mirador-osd-toggle-invert hud-control">',
+                                 '<span>Invert<span><img class="imgManipIcon" src="../brokenBooks/images/invert.png">',
+                                 '</a>',
+                                 '<a title="Rotate +180 degrees" class="mirador-osd-flip hud-control">',
+                                 '<i class="fa fa-refresh"></i>',
+                                 '</a>',
+                                 '<a title="Rotate +90 degrees" class="mirador-osd-positive-rotate hud-control">',
+                                 '<i class="fa fa-rotate-right"></i>',
+                                 '</a>',
+                                 '<a title="Rotate -90 degrees" class="mirador-osd-negative-rotate hud-control">',
+                                 '<i class="fa fa-rotate-left"></i>',
+                                 '</a>',
+                                 '<a title="Remove Tool Effects" class="mirador-osd-filters-off hud-control">',
+                                 '<span>RESET</span>',
                                  '</a>',
                                  '</div>'
     ].join(''))

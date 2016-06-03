@@ -67,6 +67,9 @@
       templateData = {};
 
       //make sure annotations list is cleared out when changing objects within window
+      //console.log("need to empty and hide maybe?  Can i find bbAnnosContainer in this 1?");
+     // console.log(_this);
+      //_this.element.find(jQuery(".bbAnnosContainer")).empty().hide();
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
@@ -83,6 +86,16 @@
       });
 
       _this.imagesList = _this.manifest.getCanvases();
+      // if (!_this.currentCanvasID) {
+      //   //TODO:  If we have just a range that is going to organize, its possible there are no canvases.  What should I do?
+      //   if(_this.imagesList[0] === undefined){
+      //     _this.currentCanvasID = "nocanvas";
+      //   }
+      //   else{
+      //     _this.currentCanvasID = _this.imagesList[0]['@id'];
+      //   }
+      
+      //below is 2.1
       if (!_this.canvasID) {
         _this.canvasID = _this.imagesList[0]['@id'];
       }
@@ -91,6 +104,7 @@
       if (!this.annotationLayer) {
         this.annotationCreation = false;
         this.annoEndpointAvailable = false;
+        this.annotationOn = false;
         this.annotationState = 'annoOff';
       }
       _this.getAnnotations();
@@ -370,7 +384,7 @@
         },
         function() {
           //provide useful feedback to user
-          console.log("There was an error saving this new annotation");
+          // console.log("There was an error saving this new annotation");
           //remove this overlay because we couldn't save annotation
           jQuery(osdOverlay).remove();
         });
@@ -388,7 +402,7 @@
           _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         },
         function() {
-          console.log("There was an error updating this annotation");
+          // console.log("There was an error updating this annotation");
         });
       });
 
@@ -632,8 +646,8 @@
       this.canvasID = canvasID;
       if (this.focusModules.ThumbnailsView === null) {
         this.focusModules.ThumbnailsView = new $.ThumbnailsView({
-          manifest: this.manifest,
-          appendTo: this.element.find('.view-container'),
+          manifest: this.manifest, 
+          appendTo: this.element.find('.view-container'), 
           state:  this.state,
           eventEmitter: this.eventEmitter,
           windowId: this.id,
@@ -727,6 +741,7 @@
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
+      _this.element.find(jQuery(".bbAnnosContainer")).empty().hide();
       this.getAnnotations();
       switch(this.currentImageMode) {
         case 'ImageView':
@@ -770,21 +785,69 @@
 
       if (url !== false) {
         jQuery.get(url, function(list) {
+          //console.log("Got anno list");
+          if(typeof list !== "object"){
+            //bh edit: test for case where it is a string, not an object and cast if necessary.
+            list = JSON.parse(list);
+          }
+          //console.log(list);
+          //console.log("Got the resources");
+          var annoListID = list["@id"];
+          if(jQuery("div[listID='"+annoListID+"']").length > 0){
+            return false;
+          }
           _this.annotationsList = _this.annotationsList.concat(list.resources);
-          jQuery.each(_this.annotationsList, function(index, value) {
-            //if there is no ID for this annotation, set a random one
-            if (typeof value['@id'] === 'undefined') {
-              value['@id'] = $.genUUID();
+          if(_this.annotationsList.length > 0 && typeof _this.annotationsList[0] !== "object"){
+            _this.annotationsList = JSON.parse(_this.annotationsList);
+          }
+          //console.log(_this.annotationsList);
+          var oneofours = false;
+          var goAhead = true;
+          if(url.indexOf("/annotationstore/annotation")){ // one of ours, which will not render out annotation w/o a viewport
+            //bh edit: make this check for if it is an item from SLU anno store.  If it is not, do not run special code.
+            oneofours = true;
+            var showAnnos = _this.element.find('.bbAnnosContainer');
+            showAnnos.attr("listID", annoListID);
+            if(showAnnos.length === 0){
+              goAhead = false;
             }
-            //indicate this is a manifest annotation - which affects the UI
-            value.endpoint = "manifest";
-          });
+          }
+          if(oneofours && goAhead){
+            jQuery("div[listID='"+annoListID+"']").empty();
+            jQuery.each(_this.annotationsList, function(index, value) {
+              //if there is no ID for this annotation, set a random one
+              if (typeof value['@id'] === 'undefined') {
+                value['@id'] = $.genUUID();
+              }
+              //indicate this is a manifest annotation - which affects the UI
+              value.endpoint = "manifest";
+              
+                //Has to be a slu item, container must exist.
+                var anno = value;
+                var annoLabel = anno.label;
+                annoLabel = annoLabel.trim();
+                var annoText = anno.resource["cnt:chars"];
+                var annoHtml = jQuery("<div annoID='"+anno['@id']+"' class='bbAnno'><span class='bbAnnoLabel'>"+annoLabel+":</span> <span class='bbAnnoText'>"+annoText+"</span></div>");
+                if(annoText === undefined || annoText === ""){
+
+                }
+                else{
+                  jQuery("div[listID='"+annoListID+"']").append(annoHtml);
+                }
+                
+              
+            });
+          }
           _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         });
+        }
+      else{
+        // console.log("url was false");
       }
 
       // next check endpoint
       if (this.annoEndpointAvailable) {
+        console.log("Endpoint available");
         var dfd = jQuery.Deferred(),
         module = _this.state.getStateProperty('annotationEndpoint').module,
         options = _this.state.getStateProperty('annotationEndpoint').options || {}; //grab anything from the config that should be passed directly to the endpoint
@@ -813,6 +876,9 @@
           });
           _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         });
+      }
+      else{
+        // console.log("Anno endpoint not available");
       }
     },
 
