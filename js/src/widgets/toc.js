@@ -26,8 +26,12 @@
     init: function () {
       var _this = this;
       if (!_this.structures || _this.structures.length === 0) {
+        console.log("no structures in init()");
         this.element = jQuery(this.emptyTemplate()).appendTo(this.appendTo);
-      } else {
+      } 
+      else {
+        console.log("init had structures...");
+        console.log(_this.structures);
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
         this.tocData = _this.initTocData();
         this.selectedElements = $.getRangeIDByCanvasID(_this.structures, _this.canvasID);
@@ -36,6 +40,23 @@
       }
       this.bindEvents();
     },
+
+    // setRanges: function() {
+    //   var _this = this,
+    //   ranges = [];
+    //   jQuery.each(_this.structures, function(index, range) {
+    //     if (range['@type'] === 'sc:Range') {
+    //       ranges.push({
+    //         id: range['@id'],
+    //         canvases: range.canvases,
+    //         within: range.within,
+    //         label: range.label
+    //       });
+    //     }
+    //   });
+    //   return ranges;
+
+    // },
 
     tabStateUpdated: function(data) {
       if (data.tabs[data.selectedTabIndex].options.id === 'tocTab') {
@@ -47,25 +68,30 @@
 
     getTplData: function() {
       var _this = this,
-          filteredStructures = _this.structures.map(function(structure) {
-            structure.id = structure['@id'];
-            return structure;
-          }),
-          ranges;
-
-      switch (_this.manifestVersion) {
-      case '1':
-        ranges = _this.extractV1RangeTrees(_this.structures);
-        break;
-      case '2':
-        ranges = _this.extractV2RangeTrees(_this.structures);
-        break;
-        // case '2.1':
-        //   _this.extractV21RangeTrees(_this.structures);
-      }
+      filteredStructures = _this.structures.map(function(structure) {
+        structure.id = structure['@id'];
+        return structure;
+      }),
+      ranges =  _this.extractV21RangeTrees(_this.structures);
+      // switch (_this.manifestVersion) {
+      // case '1':
+      //   ranges = _this.extractV1RangeTrees(_this.structures);
+      //   break;
+      // case '2':
+      //   ranges = _this.extractV2RangeTrees(_this.structures);
+      //   break;
+      //   // case '2.1':
+      //   //   _this.extractV21RangeTrees(_this.structures);
+      // }
 
       if (ranges.length < 2) {
-        ranges = ranges[0].children;
+         ranges = ranges[0].children; //Why do this?  It doesn't make sense here. 2.1 wants this uncommented, seemed to work fine. 
+        /*
+            BH edit
+            A range can exist outside of a parent.  Therefore, even if the length is just one, we still 
+            want to return the array of one range.  The template function checks the one item, realizes it doesn't have
+            children and deems it a leaf, which is what we want. 
+        */
       }
 
       return ranges;
@@ -83,11 +109,11 @@
           element: _this.element.find(attrString).closest('li')
         };
       });
-
       return tocData;
     },
 
     extractV1RangeTrees: function(rangeList) {
+      console.log("extracting v1");
       var tree, parent;
       // Recursively build tree/table of contents data structure
       // Begins with the list of topmost categories
@@ -137,6 +163,8 @@
       return unflatten(rangeList);
     },
 
+    /* 
+    */
     extractV2RangeTrees: function(rangeList) {
       var tree, parent;
       // Recursively build tree/table of contents data structure
@@ -155,7 +183,7 @@
             //
             // This begins the construction of the object,
             // and all non-top-level children are now
-            // bound the these base nodes set on the tree
+            // bound to these base nodes set on the tree
             // object.
             children.forEach(function(child) {
               child.level = 0;
@@ -170,7 +198,6 @@
             // Because "child" is passed as
             // the second parameter in the next call,
             // in the next iteration "parent" will be the
-            // first child bound here.
             children.forEach(function(child) {
               child.level = parent.level+1;
             });
@@ -186,23 +213,117 @@
 
       return unflatten(rangeList);
     },
+    
+     extractV21RangeTrees: function(rangeList){
+      /*
+        In order for this to work, there must be a most parent aggregating range to start from that stands out from all the other ranges.
+        range.within = 'root' works here, that will be our most parent range that will list and order the next highest level children (and this continues recursively until
+        the leaves).  From there, the ranges property actually orders the structures for us, so we can use the range id's to pull them out of the array of all ranges 
+        we already have.  That way, the ranges will always be in order, and we don't have to worry about structures being an actual list because there are many 
+        situations where it simply is not.  range.within to track the tree also causes troubles because a range can be within multiple ranges, but mirador only looks for
+        it to be within one.  This algorithm will solve that problem as well. 
+
+        contact bhaberbe@slu.edu (thehabes on github) with questions.  See IIIF/mirador issue #680.
+      */
+
+        /* Helper function to find the root object from a manifest's structures array, or return a 'root' holder object. */
+        var tree, parent;
+        function getParentest(rangeList){
+            var parentest = {'@id': "root", label: "Table of Contents", within:"root" };
+            for(var i=0; i<rangeList.length; i++){
+                if(rangeList[i].within && rangeList[i].within == "root"){ //There can only be one range with this, otherwise this algorithm breaks.
+                    parentest = rangeList[i];
+                    break; //no need to keep looking, there is only 1.
+                }
+            }
+            return parentest;
+        }
+       
+        /* Helper function to pull an object out of the rangeList by its @id property or return an empty object */
+        function pullFromStructures(uri, rangeList){
+            var pull_this_out = {};
+            for(var i=0; i<rangeList.length; i++){
+                if(rangeList[i]["@id"] == uri){
+                    pull_this_out = rangeList[i];
+                    break;
+                }
+            }
+            return pull_this_out;
+        }
+   
+        // Recursively build tree/table of contents data structure
+        // Begins with the list of topmost categories
+        function unflatten(flatRanges, parent, tree) {
+          // To aid recursion, define the tree if it does not exist,
+          // but use the tree that is being recursively built
+          // by the call below.
+          tree = typeof tree !== 'undefined' ? tree : [];
+          parent = typeof parent !== 'undefined' ? parent : getParentest(flatRanges);
+          var children_uris = parent.ranges; //use the ranges property to ensure order
+          var children = [];
+          for(var i=0; i<children_uris.length; i++){ //get the children in order by their @id property from the structures array
+              children.push(pullFromStructures(children_uris[i], flatRanges));
+          }
+          if ( children.length ) {
+            if ( parent.within === 'root') { 
+              // If there are children and their parent's
+              // id is a root, bind them to the tree object.
+              //
+              // This begins the construction of the object,
+              // and all non-top-level children are now
+              // bound to these base nodes set on the tree
+              // object.
+              children.forEach(function(child) {
+                child.level = 0;
+              });
+              tree = children;
+            } else {
+              // If the parent does not have a top-level id,
+              // bind the children to the parent node in this
+              // recursion level before handing it over for
+              // another spin.
+              //
+              // Because "child" is passed as
+              // the second parameter in the next call,
+              // in the next iteration "parent" will be the
+              children.forEach(function(child) {
+                child.level = parent.level+1;
+              });
+              parent.children = children;
+            }
+            // The function cannot continue to the return
+            // statement until this line stops being called,
+            // which only happens when "children" is empty.
+            jQuery.each( children, function( index, child ){ unflatten( flatRanges, child ); } );
+          }
+          return tree;
+        }
+        return unflatten(rangeList);
+     },
 
     render: function() {
+      //console.log("jeez, im rendering.");
       var _this = this,
           toDeselect = _this.previousSelectedElements.map(function(rangeID) {
+            // console.log("R1");
             return _this.tocData[rangeID].element;
           }),
           toSelect = _this.selectedElements.map(function(rangeID) {
+            // console.log("R2");
             return _this.tocData[rangeID].element;
           }),
           toOpen = _this.selectedElements.filter(function(rangeID) {
+            // console.log("R3");
             return (jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.previousSelectedElements) < 0);
           }).map(function(rangeID) {
+            // console.log("R4");
             return _this.tocData[rangeID].element;
           }),
           toClose = _this.previousSelectedElements.filter(function(rangeID) {
+            // console.log("R5");
             return (jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.selectedElements) < 0);
           }).map(function(rangeID) {
+              // console.log("R6");
             return _this.tocData[rangeID].element;
           });
 
@@ -215,17 +336,27 @@
       toSelect.forEach(function(element) {
         element.addClass('selected');
       });
+
+      // console.log("toOpen");
+      // console.log(toOpen);
+
+      // console.log("toClose");
+      // console.log(toClose);
       // Scroll to new elements
       scroll();
 
       // Open newly opened sections
       toOpen.forEach(function(element) {
-        element.addClass('open').find('ul:first').slideFadeToggle();
+        //console.log("open redner on this element child ul, listed below");
+        //console.log(jQuery(element).find("ul:first"));
+        jQuery(element).addClass('open').find('ul:first').slideFadeToggle();
       });
 
       // Close previously opened selections (find way to keep scroll position).
       toClose.forEach(function(element) {
-        element.removeClass('open').find('ul:first').slideFadeToggle(400, 'swing', scroll);
+        //console.log("close render on this element child ul, listed below");
+        //console.log(jQuery(element).find("ul:first"));
+        jQuery(element).removeClass('open').find('ul:first').slideFadeToggle(400, 'swing', scroll);
       });
 
       // Get the sum of the outer height of all elements to be removed.
@@ -238,7 +369,7 @@
         if (head.length > 0) {
           _this.element.scrollTo(head, 400);
         }
-      }
+      } 
 
     },
 
@@ -262,6 +393,7 @@
       });
 
       _this.element.find('.toc-link').on('click', function(event) {
+        //console.log("clicked a TOC-LINK");
         event.stopPropagation();
 
         var rangeID = jQuery(this).data().rangeid,
@@ -272,12 +404,17 @@
       });
 
       _this.element.find('.toc-caret').on('click', function(event) {
+        var caret = this;
         event.stopPropagation();
-
         var rangeID = jQuery(this).parent().data().rangeid;
         _this.setOpenItem(rangeID);
         _this.render();
+        //This way does not open up the list.  The event is detected, but nothing happens.
+        //Below is the old way, and it __succeeds____
+        //console.log("firing toggle directly in click event to circumvent the error for now.");
+        jQuery(caret).parents("li:first").toggleClass('open').find('ul:first').slideFadeToggle();
       });
+
     },
 
     setActive: function(active) {
@@ -289,6 +426,7 @@
       var _this = this;
 
       if (jQuery.inArray(rangeID, _this.openElements)<0) {
+        //console.log("push this range id into open item array.");
         _this.openElements.push(rangeID);
       } else {
         _this.openElements.splice(jQuery.inArray(rangeID, _this.openElements), 1);
@@ -338,23 +476,26 @@
 
       Handlebars.registerHelper('nestedRangeLevel', function(children, options) {
         var out = '';
-
+       // console.log("nested range.  children: ");
+        //console.log(children);
         if (options.fn !== undefined) {
           previousTemplate = options.fn;
         }
-
         children.forEach(function(child) {
           child.label = $.JsonLd.getTextValue(child.label);
           out = out + previousTemplate(child);
         });
-
         return out;
       });
 
       Handlebars.registerHelper('tocLevel', function(id, label, level, children) {
+       // console.log("toc level handlebar.  label: "+label);
+        //console.log(children);
         var caret = '<i class="fa fa-caret-right toc-caret"></i>',
-            cert = '<i class="fa fa-certificate star"></i>';
-        return '<h' + (level+1) + '><a class="toc-link" data-rangeID="' + id + '">' + caret + cert + '<span>' + label + '</span></a></h' + (level+1) + '>';
+        cert = '<i class="fa fa-certificate star"></i>';
+        //cert = '<i class="fa star"></i>';
+        //BH edit: move caret to the right of the label.
+        return '<h' + (level+1) + '><a class="toc-link" data-rangeID="' + id + '"><span>' + label + '</span>' + caret + cert + '</a></h' + (level+1) + '>';   
       });
 
       return template(tplData);

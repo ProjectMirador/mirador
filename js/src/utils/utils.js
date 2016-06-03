@@ -46,12 +46,34 @@
       }
     } else {
       // No thumbnail, use main image
-      var resource = canvas.images[0].resource;
+       //BH edit for no image found
+        var resource = "";
+        if(canvas.images[0] === undefined || canvas.images[0] === ""){
+          //place a holder image.  
+          resource = {
+                            "@id":"http://165.134.241.141/brokenBooks/images/imgNotFound.png",
+                            "format":"image/jpg",
+                            "@type":"dctypes:Image",
+                            "service":
+                                {                                       
+                                    "@context": "http://iiif.io/api/image/2/context.json",
+                                    "profile":"http://iiif.io/api/image/2/profiles/level2.json",
+                                    "@id" : "http://165.134.241.141/brokenBooks/images/imgNotFound.png"
+                                },
+                            "width": 667,
+                            "height":1000
+                        };
+        }
+        else{
+          resource = canvas.images[0].resource;
+        }
+        //End BH edit
       service = resource['default'] ? resource['default'].service : resource.service;
       if (service.hasOwnProperty('@context')) {
         version = $.Iiif.getVersionFromContext(service['@context']);
       }
-      thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+      thumbnailUrl = resource["@id"];          
+      //thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
     }
     return thumbnailUrl;
   };
@@ -212,15 +234,29 @@
     dfd = jQuery.Deferred();
 
     img.onload = function() {
+      console.log("image load successful.");
       dfd.resolve(img.src);
     };
 
     img.onerror = function() {
-      dfd.reject(img.src);
+      console.log("image had an error");
+      var defaultImage = "http://165.134.241.141/brokenBooks/images/imgNotResolved.png";
+      if(imageUrl === undefined || imageUrl === ""){
+        defaultImage = "http://165.134.241.141/brokenBooks/images/imgNotFound.png";
+      }
+      dfd.resolve(defaultImage);
+      imageUrl = defaultImage;
+      //dfd.reject(img.src);
     };
 
     dfd.fail(function() {
       console.log('image failed to load: ' + img.src);
+      var defaultImage2 = "http://165.134.241.141/brokenBooks/images/imgNotResolved.png";
+      if(imageUrl === undefined || imageUrl === ""){
+        defaultImage2 = "http://165.134.241.141/brokenBooks/images/imgNotFound.png";
+      }
+      dfd.resolve(defaultImage2);
+      imageUrl = defaultImage2;
     });
 
     img.src = imageUrl;

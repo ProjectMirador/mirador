@@ -76,6 +76,10 @@
         eventEmitter: this.eventEmitter
       });
 
+      if (this.annotationOn && this.hud.annoState.current === 'annoOff') {
+        this.hud.annoState.displayOn(null);
+      }
+
       this.bindEvents();
       this.listenForActions();
 
@@ -97,7 +101,7 @@
       lastCanvasId = _this.imagesList[_this.imagesList.length-1]['@id'];
 
       _this.eventEmitter.subscribe('bottomPanelSet.' + _this.windowId, function(event, visible) {
-        var dodgers = _this.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls');
+        var dodgers = _this.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls, .mirador-img-manipulation, .mirador-pan-zoom-toggle');
         var arrows = _this.element.find('.mirador-osd-next, .mirador-osd-previous');
         if (visible === true) {
           dodgers.css({transform: 'translateY(-130px)'});
@@ -176,6 +180,16 @@
       //Related to Annotations HUD
     },
 
+        //BH edit to allow commenting annotations when images are non-IIIF
+    bbShowAnnos: function(){
+      this.element.find(".bbAnnosContainer").show(); //imageview
+    },
+
+    //BH edit to allow commenting annotations when images are non-IIIF
+    bbHideAnnos: function(){
+      this.element.find(".bbAnnosContainer").hide();//imageview
+    },
+
     bindEvents: function() {
       var _this = this;
 
@@ -192,10 +206,29 @@
           _this.hud.annoState.startup(this);
         }
         if (_this.hud.annoState.current === 'annoOff') {
-          _this.hud.annoState.displayOn(this);
-        } else {
-          _this.hud.annoState.displayOff(this);
-        }
+          if(_this.osd.viewport){
+            //BH edit for toggling annotations from BB on non-IIIF images
+            _this.bbShowAnnos();
+            _this.hud.annoState.displayOn(this);
+          }
+          else{ //it is one of ours
+            //BH edit for toggling annotations on non-IIIF image
+            _this.bbShowAnnos();
+            _this.hud.annoState.displayOn(this);
+          }
+          
+        } 
+        else {
+          if(_this.osd.viewport){
+            _this.bbHideAnnos();
+            _this.hud.annoState.displayOff(this);
+          }
+          else{ //it is one of ours
+            //BH edit for toggling annotations on non-IIIF image
+            _this.bbHideAnnos();
+            _this.hud.annoState.displayOff(this);
+          }
+        } 
       },300));
 
       this.element.find('.mirador-osd-go-home').on('click', function() {
@@ -291,6 +324,442 @@
         this.element.find('.material-icons:contains(\'' + _this.availableTools[value] + '\')').on('click', make_handler(_this.availableTools[value]));
       }
       //related the ContextControls
+
+      this.element.find('.mirador-osd-annotations-layer').on('click', function() {
+       
+
+      });
+
+  
+       this.element.find('.mirador-osd-flip').on('click', function() {
+        //Can do html rotations if we detect no viewport.
+        var osd = _this.osd;
+        if ( osd.viewport ) {
+        var currentRotation = parseInt(osd.viewport.getRotation());
+          osd.viewport.setRotation(
+            currentRotation + 180
+          );
+          osd.viewport.applyConstraints();
+        }
+      });
+      this.element.find('.mirador-osd-positive-rotate').on('click', function() {
+        var osd = _this.osd;
+        //Can do html rotations if we detect no viewport.
+        if ( osd.viewport ) {
+        var currentRotation = parseInt(osd.viewport.getRotation());
+            osd.viewport.setRotation(
+            currentRotation + 90
+          );
+          osd.viewport.applyConstraints();
+        }
+      });
+      this.element.find('.mirador-osd-negative-rotate').on('click', function() {
+        //Can do html rotations if we detect no viewport.
+        var osd = _this.osd;
+        if ( osd.viewport ) {
+          var currentRotation = parseInt(osd.viewport.getRotation());
+            osd.viewport.setRotation(
+            currentRotation - 90
+          );
+          osd.viewport.applyConstraints();
+        }
+      });
+      this.element.find('.mirador-osd-toggle-grayscale').on('click', function() {
+        var osd = _this.osd;
+        if ( osd.viewport ) {
+          if(osd.viewport.viewer.canvas.className.indexOf('grayscaleEffect') >= 0){
+            osd.viewport.viewer.canvas.className = osd.viewport.viewer.canvas.className.replace('grayscaleEffect', '');
+          }
+          else{
+            osd.viewport.viewer.canvas.className = osd.viewport.viewer.canvas.className + " grayscaleEffect";
+          }
+          osd.viewport.applyConstraints();
+        }
+        else{
+          if(osd.canvas.className.indexOf('grayscaleEffect') >= 0){
+            osd.canvas.className = osd.canvas.className.replace('grayscaleEffect', '');
+          }
+          else{
+            osd.canvas.className = osd.canvas.className + " grayscaleEffect";
+          }
+          osd.applyConstraints();
+        }
+      });
+      
+      this.element.find('.mirador-osd-toggle-invert').on('click', function() {
+        var osd = _this.osd;
+        if ( osd.viewport ) {
+          if(osd.viewport.viewer.canvas.className.indexOf('invertEffect') >= 0){
+            osd.viewport.viewer.canvas.className = osd.viewport.viewer.canvas.className.replace('invertEffect', '');
+          }
+          else{
+            osd.viewport.viewer.canvas.className = osd.viewport.viewer.canvas.className + " invertEffect";
+          }
+          osd.viewport.applyConstraints();
+        }
+        else{
+          if(osd.canvas.className.indexOf('invertEffect') >= 0){
+            osd.canvas.className = osd.canvas.className.replace('invertEffect', '');
+          }
+          else{
+            osd.canvas.className = osd.canvas.className + " invertEffect";
+          }
+          osd.applyConstraints();
+        }
+      });
+      /*
+        This removes all filters and zooms so that the user can click it to return to the 'normal' starting position of the image
+      */
+      
+      this.element.find('.mirador-osd-filters-off').on('click', function(event) {
+        var osd = _this.osd;
+        if ( osd.viewport ) {
+          osd.viewport.viewer.canvas.className = osd.viewport.viewer.canvas.className.replace('invertEffect', '');
+          osd.viewport.viewer.canvas.className = osd.viewport.viewer.canvas.className.replace('grayscaleEffect', '');
+          osd.viewport.viewer.canvas.parentNode.style.webkitFilter = "";
+          osd.viewport.viewer.canvas.parentNode.style.mozFilter = "";
+          osd.viewport.viewer.canvas.parentNode.style.filter = "";
+          osd.viewport.setRotation(0);
+          //osd.viewport.zoomTo(1);
+          jQuery(".brightnessSlider").slider("option","value",100); //reset sliders.
+          jQuery(".contrastSlider").slider("option","value",100); //reset sliders.
+          osd.viewport.applyConstraints();
+        }
+        else{
+          osd.canvas.className = osd.viewport.viewer.canvas.className.replace('invertEffect', '');
+          osd.canvas.className = osd.viewport.viewer.canvas.className.replace('grayscaleEffect', '');
+          osd.canvas.parentNode.style.webkitFilter = "";
+          osd.canvas.parentNode.style.mozFilter = "";
+          osd.canvas.parentNode.style.filter = "";
+          //osd.viewport.setRotation(0);
+          // osd.viewport.zoomTo(0);
+          jQuery(".brightnessSlider").slider("option","value",100); //reset sliders.
+          jQuery(".contrastSlider").slider("option","value",100); //reset sliders.
+          osd.applyConstraints();
+        }
+      });
+
+      this.element.find('.mirador-pan-zoom-toggle').on('click', function(event){
+        event = event || window.event;
+        if(event.target.className.indexOf("opened") > -1 ){
+          event.target.className = "viewImgManip closed";
+          event.target.parentNode.style.right = "33px";
+          event.target.parentNode.nextSibling.style.right = "-320px";
+          event.target.parentNode.previousSibling.style.right = "2px";
+          event.target.parentNode.setAttribute("title", "View Image Manipulation Tools");
+        }
+        else if (event.target.className.indexOf("closed") > -1){
+          event.target.className = "viewImgManip opened";
+          event.target.parentNode.nextSibling.style.right = "32px";
+          event.target.parentNode.previousSibling.style.right = "226px";
+          event.target.parentNode.style.right = "238px";
+          event.target.parentNode.setAttribute("title", "Hide Image Manipulation Tools");
+        }
+        else{
+          //You hit an odd target.  
+        }
+      });
+
+      this.element.find(".brightnessSlider").slider({
+          orientation: "horizontal",
+          range: "min",
+          min: 0,
+          max: 200,
+          value:100,
+          slide: function( event, ui ) {
+            var osd = _this.osd;
+            var newFilter = "";
+            var moz = false;
+              //Need to be able to tell which vendor preifxes I need.  Order is always brightness then contrast, so I can put brightness in right away here.
+              if( navigator.userAgent.indexOf("Chrome") != -1 ) {
+                newFilter = "-webkit-filter: brightness("+ui.value+"%)";
+              } 
+              else if( navigator.userAgent.indexOf("Opera") != -1 ) {
+                newFilter = "-o-filter: brightness("+ui.value+"%)";
+              }
+              else if( navigator.userAgent.indexOf("MSIE") != -1 ) {
+                newFilter="filter: brightness("+ui.value+"%)";
+              } 
+              else if( navigator.userAgent.indexOf("Firefox") != -1 ) {
+                //The latst version of firefox does not use the -moz- prefix
+                newFilter = "filter: brightness("+ui.value+"%)";
+                moz = true;
+              } 
+              else {
+                //Not a browser we accounted for so filter will not work
+              }
+              var currentContrast = "100%";
+              var currentStyle = "";
+              if ( osd.viewport ) {
+                currentStyle  = osd.viewport.viewer.canvas.parentNode.getAttribute("style");
+              }
+              else{
+                currentStyle  = osd.canvas.parentNode.getAttribute("style");
+              }
+               
+              var alteredStyle = "";
+              var pieceToRemove = "";
+              var filterString = "";
+              var contrastPiece = "";
+              //Account for the different ways filter can be represented and alter it accordingly
+              if(currentStyle.indexOf("-webkit-filter") >= 0){
+                //get current contrast to preserve its value as it will not change. 
+                if ( osd.viewport ) {
+                  filterString = osd.viewport.viewer.canvas.parentNode.style.webkitFilter;
+                }
+                else{
+                  filterString = osd.canvas.parentNode.style.webkitFilter;
+                }
+                
+
+                //Break the contrast piece off so that we can play with the brightness piece
+                contrastPiece = filterString.substring(filterString.lastIndexOf(" "), filterString.lastIndexOf(")") + 1);
+                filterString.replace(contrastPiece, "");
+
+                //Get the current contrast
+                currentContrast = contrastPiece.substring(contrastPiece.indexOf("(")+1, contrastPiece.lastIndexOf(")"));
+
+                //Remove the existing filter in the style string.
+                pieceToRemove = currentStyle.substring(currentStyle.indexOf("-webkit-filter"), currentStyle.lastIndexOf(";") + 1);
+
+                //Add the second half of the filter
+                newFilter += " contrast("+currentContrast+");";
+
+                //Piece the style string back together
+                alteredStyle = currentStyle.replace(pieceToRemove, "") + newFilter;    
+              }
+              else if(currentStyle.indexOf("-moz-filter") >= 0){
+                //The current version of firefox uses filter without the -moz- prefix 
+                
+              }
+               else if(currentStyle.indexOf("-o-filter") >= 0){
+                //get current contrast to preserve its value as it will not change. 
+                if ( osd.viewport ) {
+                  filterString = osd.viewport.viewer.canvas.parentNode.style.webkitFilter;
+                }
+                else{
+                  filterString = osd.canvas.parentNode.style.webkitFilter;
+                }
+
+                //Break the contrast piece off so that we can play with the brightness piece
+                contrastPiece = filterString.substring(filterString.lastIndexOf(" "), filterString.lastIndexOf(")") + 1);
+                filterString.replace(contrastPiece, "");
+
+                //Get the current contrast
+                currentContrast = contrastPiece.substring(contrastPiece.indexOf("(")+1, contrastPiece.lastIndexOf(")"));
+
+                //Remove the existing filter in the style string.
+                pieceToRemove = currentStyle.substring(currentStyle.indexOf("-o-filter"), currentStyle.lastIndexOf(";") + 1);
+
+                //Add the second half of the filter
+                newFilter += " contrast("+currentContrast+");";
+
+                //Piece the style string back together
+                alteredStyle = currentStyle.replace(pieceToRemove, "") + newFilter;    
+              }
+              else if(currentStyle.indexOf("filter") >= 0){
+                //get current contrast to preserve its value as it will not change. 
+                if ( osd.viewport ) {
+                  if(moz){
+                    filterString = osd.viewport.viewer.canvas.parentNode.style.filter;
+                  }
+                  else{
+                    filterString = osd.viewport.viewer.canvas.parentNode.style.webkitFilter;
+                  }
+                  
+                }
+                else{
+                  if(moz){
+                    filterString = osd.canvas.parentNode.style.filter;
+                  }
+                  else{
+                    filterString = osd.canvas.parentNode.style.webkitFilter;
+                  }
+                  
+                }
+               
+
+                //Break the contrast piece off so that we can play with the brightness piece
+                contrastPiece = filterString.substring(filterString.lastIndexOf(" "), filterString.lastIndexOf(")") + 1);
+                filterString.replace(contrastPiece, "");
+
+                //Get the current contrast
+                currentContrast = contrastPiece.substring(contrastPiece.indexOf("(")+1, contrastPiece.lastIndexOf(")"));
+
+                //Remove the existing filter in the style string.
+                pieceToRemove = currentStyle.substring(currentStyle.indexOf("filter"), currentStyle.lastIndexOf(";") + 1);
+
+                //Add the second half of the filter
+                newFilter += " contrast("+currentContrast+");";
+
+                //Piece the style string back together
+                alteredStyle = currentStyle.replace(pieceToRemove, "") + newFilter;
+              }
+              else{
+                //There was no filter found, so we have to contruct it for the first time.
+                newFilter += " contrast(100%);";
+                alteredStyle = currentStyle + " "+newFilter;    
+              }
+              if ( osd.viewport ) {
+                  osd.viewport.viewer.canvas.parentNode.setAttribute("style",alteredStyle);
+              }
+              else{
+                osd.canvas.parentNode.setAttribute("style",alteredStyle);
+              }
+              
+            }
+      });
+
+      this.element.find(".contrastSlider").slider({
+         orientation: "horizontal",
+          range: "min",
+          min: 0,
+          max: 200,
+          value:100,
+          slide: function( event, ui ) {
+            var osd = _this.osd;
+            var newFilter = "-webkit-filter: ";
+            var moz = false;
+            //First find any existing filter for brightness and remove it.
+              
+              //Need to be able to tell which vendor preifxes I need if any.  
+              if( navigator.userAgent.indexOf("Chrome") != -1 ) {
+                newFilter = "-webkit-filter: ";
+              } 
+              else if( navigator.userAgent.indexOf("Opera") != -1 ) {
+                newFilter = "-o-filter: ";
+              }
+              else if( navigator.userAgent.indexOf("MSIE") != -1 ) {
+                newFilter="filter: ";
+              } 
+              else if( navigator.userAgent.indexOf("Firefox") != -1 ) {
+                //newFilter = "-moz-filter: "  as of the latest version of firefox, it works without the prefix. 
+                newFilter = "filter: ";
+                moz = true;
+              } 
+              else {
+                //unsupported
+              }
+              var currentBrightness = "100%";
+              var currentStyle = "";
+              if ( osd.viewport ) {
+                  currentStyle = osd.viewport.viewer.canvas.parentNode.getAttribute("style");
+              }
+              else{
+                currentStyle = osd.canvas.parentNode.getAttribute("style");
+              }
+              var alteredStyle = "";
+              var pieceToRemove = "";
+              var filterString = "";
+              var brightnessPiece = "";
+              var contrastPiece = "";
+              //Account for the different ways filter can be represented and alter it accordingly
+              if(currentStyle.indexOf("-webkit-filter") >= 0){
+                //get current brightness to preserve its value as it will not change. 
+                if ( osd.viewport ) {
+                  filterString = osd.viewport.viewer.canvas.parentNode.style.webkitFilter;
+                }
+                else{
+                  filterString = osd.canvas.parentNode.style.webkitFilter;
+                }
+                
+
+                //break contrast piece from the string so we can play with brightness and contrast separately
+                contrastPiece = filterString.substring(filterString.lastIndexOf(" "), filterString.lastIndexOf(")") + 1);
+                brightnessPiece = filterString.replace(contrastPiece, "");
+
+                //Get the current brightness value
+                currentBrightness = brightnessPiece.substring(brightnessPiece.indexOf("(")+1, brightnessPiece.lastIndexOf(")"));
+
+                //Remove current filter string from the style attribute
+                pieceToRemove = currentStyle.substring(currentStyle.indexOf("-webkit-filter"), currentStyle.lastIndexOf(";") + 1);
+
+                //Put the pieces of the filter together
+                newFilter += "brightness("+currentBrightness+") contrast("+ui.value+"%);";
+                alteredStyle = currentStyle.replace(pieceToRemove, "") + newFilter;    
+              }
+              else if(currentStyle.indexOf("-moz-filter") >= 0){
+                //The latest version of firefox works without the -moz- prefix
+
+              }
+              else if(currentStyle.indexOf("-o-filter") >= 0){
+                //get current contrast to preserve its value as it will not change. 
+                if ( osd.viewport ) {
+                  filterString = osd.viewport.viewer.canvas.parentNode.style.webkitFilter;
+                }
+                else{
+                  filterString = osd.canvas.parentNode.style.webkitFilter;
+                }
+
+                //Break the contrast piece off so that we can play with the brightness piece
+                contrastPiece = filterString.substring(filterString.lastIndexOf(" "), filterString.lastIndexOf(")") + 1);
+                filterString.replace(contrastPiece, "");
+
+                //Get the current contrast
+                currentContrast = contrastPiece.substring(contrastPiece.indexOf("(")+1, contrastPiece.lastIndexOf(")"));
+
+                //Remove the existing filter in the style string.
+                pieceToRemove = currentStyle.substring(currentStyle.indexOf("-o-filter"), currentStyle.lastIndexOf(";") + 1);
+
+                //Add the second half of the filter
+                newFilter += " contrast("+currentContrast+");";
+
+                //Piece the style string back together
+                alteredStyle = currentStyle.replace(pieceToRemove, "") + newFilter;    
+              }
+              else if(currentStyle.indexOf("filter") >= 0){
+                //get current brightness to preserve its value as it will not change. 
+                if ( osd.viewport ) {
+                  if(moz){
+                    filterString = osd.viewport.viewer.canvas.parentNode.style.filter;
+                  }
+                  else{
+                    filterString = osd.viewport.viewer.canvas.parentNode.style.webkitFilter;
+                  }
+                  
+                }
+                else{
+                  if(moz){
+                    filterString = osd.canvas.parentNode.style.filter;
+                  }
+                  else{
+                    filterString = osd.canvas.parentNode.style.webkitFilter;
+                  }
+                  
+                }
+
+                //break contrast piece from the string so we can play with brightness and contrast separately
+                contrastPiece = filterString.substring(filterString.lastIndexOf(" "), filterString.lastIndexOf(")") + 1);
+                brightnessPiece = filterString.replace(contrastPiece, "");
+
+                //Get the current brightness value
+                currentBrightness = brightnessPiece.substring(brightnessPiece.indexOf("(")+1, brightnessPiece.lastIndexOf(")"));
+
+                //Remove current filter string from the style attribute
+                pieceToRemove = currentStyle.substring(currentStyle.indexOf("filter"), currentStyle.lastIndexOf(";") + 1);
+
+                //Put the pieces of the filter together
+                newFilter += "brightness("+currentBrightness+") contrast("+ui.value+"%);";
+                alteredStyle = currentStyle.replace(pieceToRemove, "") + newFilter;    
+              }
+              else{
+                newFilter += "brightness(100%) contrast("+ui.value+"%);";
+                alteredStyle = currentStyle + " "+newFilter;    
+              }
+              if ( osd.viewport ) {
+                  osd.viewport.viewer.canvas.parentNode.setAttribute("style",alteredStyle);
+              }
+              else{
+                osd.canvas.parentNode.setAttribute("style",alteredStyle);
+              }
+        }
+      });
+        
+        if(_this.element.find(".bbAnnosContainer").length === 0){
+          //BH edit.  Create container for this image view's annotations.
+          var windowSlotAnnos = jQuery("<div class='bbAnnosContainer'></div>");
+          _this.element.append(windowSlotAnnos);
+        }
     },
 
     getPanByValue: function() {
@@ -361,14 +830,19 @@
     },
 
     createOpenSeadragonInstance: function(imageUrl) {
+     // console.log("On OSD creation with url: "+imageUrl);
       var infoJsonUrl = imageUrl + '/info.json',
       uniqueID = $.genUUID(),
       osdID = 'mirador-osd-' + uniqueID,
       infoJson,
       _this = this;
 
+     // console.log("create osd.  what is _this?");
+      //console.log(_this);
+
       this.element.find('.' + this.osdCls).remove();
 
+      //needs tweaking so that it can handle a no .json file present.  it still needs to work.  
       jQuery.getJSON(infoJsonUrl).done(function (infoJson, status, jqXHR) {
         _this.elemOsd =
           jQuery('<div/>')
@@ -456,6 +930,25 @@
           // that annotations appear.
           jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
 
+          jQuery(_this.osd.canvas).on('mousemove', $.throttle(function(event) {
+            if (_this.hud.annoState.current === 'annoOnEditOn') {
+              var insideCanvas = (function() {
+                var elementCoordinates = OpenSeadragon.getMousePosition(event);
+                //console.log(elementCoordinates);
+                //var tiledImage = _this.osd.world.getItemAt(0);
+                //var imageCoordinates = tiledImage.viewerElementToImageCoordinates(elementCoordinates);
+                //var viewportCoordinates = tiledImage.imageToViewportCoordinates(imageCoordinates);
+                //console.log(imageCoordinates);
+                //console.log(viewportCoordinates);
+                //console.log(_this.osd.viewport.pointFromPixel(event.position));
+                /*if (viewportCoordinates.x >= 0 && viewportCoordinates.y >= 0) {
+                  jQuery(_this.osd.canvas).css('cursor', 'crosshair');
+                }*/
+
+              })();
+            }
+          }, 100, true));
+
           _this.osd.addHandler('zoom', $.debounce(function() {
             _this.setBounds();
           }, 500));
@@ -464,7 +957,91 @@
             _this.setBounds();
           }, 500));
         });
-      });
+      })
+      .fail(function(){
+        //BH edit:  On fail, then it is not an image with a IIIF service.  We can only build certain parts of OSD
+        //but we can still get the image out
+        _this.elemOsd =
+          jQuery('<div/>')
+        .addClass(_this.osdCls)
+        .attr('id', osdID)
+        .appendTo(_this.element);
+
+        //I may not know the height or width of this image or canvas.  Our application does not allow for drawing annotations, so we are not concerned with height/width
+        //when we make the canvases.  They are just filled with arbitrary values.  
+
+        var currentCanvasIndex = _this.currentImgIndex;
+        var currentCanvasHeight = _this.imagesList[currentCanvasIndex].height;
+        var currentCanvasWidth = _this.imagesList[currentCanvasIndex].width;
+        
+        _this.osd = $.OpenSeadragon({
+          'id':           osdID,
+          'tileSources':  [
+              { 
+              'type': 'legacy-image-pyramid',
+              'levels':[{ 
+                'url': imageUrl,
+                'height': currentCanvasHeight,
+                'width': currentCanvasWidth
+              }
+              ]
+            }], //This is the consequence of not getting the JSON.  It creates the viewport on which the OSD functions are called.  Without it, OSD does not work.
+          'uniqueID' : uniqueID
+        });
+
+         
+
+        _this.osd.addHandler('open', function(){
+          // console.log(_this.osdOptions.osdBounds);
+          if (_this.osdOptions.osdBounds) {
+            //var rect = new OpenSeadragon.Rect(0, 0, 1000, 1500);
+            var rect = new OpenSeadragon.Rect(0, 0, parseInt(currentCanvasWidth), parseInt(currentCanvasHeight));
+            _this.osd.viewport.fitBounds(rect, true);
+            //_this.osd.container.fitBounds(rect, true);
+          }
+
+          _this.addAnnotationsLayer(_this.elemAnno);
+          //re-add correct annotationsLayer mode based on annoState
+          if (_this.hud.annoState.current !== "annoOff") {
+            jQuery.publish('modeChange.' + _this.windowId, 'displayAnnotations');          
+          }
+
+          // A hack. Pop the osd overlays layer after the canvas so 
+          // that annotations appear.
+          jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
+
+          _this.osd.addHandler('zoom', $.debounce(function() {
+            _this.setBounds();
+          }, 500));
+
+          _this.osd.addHandler('pan', $.debounce(function(){
+            _this.setBounds();
+          }, 500));
+        });
+
+        jQuery(_this.osd.canvas).on('mousemove', $.throttle(function(event) {
+            if (_this.hud.annoState.current === 'annoOnEditOn') {
+              var insideCanvas = (function() {
+                var elementCoordinates = OpenSeadragon.getMousePosition(event);
+                //console.log(elementCoordinates);
+                //var tiledImage = _this.osd.world.getItemAt(0);
+                //var imageCoordinates = tiledImage.viewerElementToImageCoordinates(elementCoordinates);
+                //var viewportCoordinates = tiledImage.imageToViewportCoordinates(imageCoordinates);
+                //console.log(imageCoordinates);
+                //console.log(viewportCoordinates);
+                //console.log(_this.osd.viewport.pointFromPixel(event.position));
+                /*if (viewportCoordinates.x >= 0 && viewportCoordinates.y >= 0) {
+                  jQuery(_this.osd.canvas).css('cursor', 'crosshair');
+                }*/
+
+              })();
+            }
+          }, 100, true));
+        //BH edit: wrapping the image element in a canvas causes the image not to load.  OSD will not build a viewport
+        //  
+        // var fakeCanvas = jQuery("<img class='fix' src='"+imageUrl+"'/>");
+        //   jQuery(_this.osd.canvas).append(fakeCanvas);       
+       });
     },
 
     addAnnotationsLayer: function(element) {
@@ -477,9 +1054,14 @@
         element: element,
         eventEmitter: _this.eventEmitter
       });
-    },
+
+    }, 
 
     updateImage: function(canvasID) {
+      //console.log("Load new full image.  Need to empty and hide bbAnnos.  Can i find it in this 3 ?");
+      //console.log(this);
+      this.element.find(jQuery(".bbAnnosContainer")).empty().hide();
+      //bh edit: hide the anno containers.  We can make it specific to the canvas. 
       var _this = this;
       if (this.canvasID !== canvasID) {
         this.canvasID = canvasID;
