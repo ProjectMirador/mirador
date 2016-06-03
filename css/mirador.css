@@ -99,7 +99,7 @@ a {
   .mirador-main-menu-bar {
     background-color: #000;
     border-bottom: 1px solid #555;
-    color: #fff;
+    color: white; /* #fff */
     height: 33px;
     width: 100%;
     top: -10px;
@@ -219,7 +219,7 @@ a {
   width: 24%;
   text-align: right;
   padding-right: 10px;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 
@@ -676,11 +676,12 @@ li.highlight {
   background-color: #333;
 }
 .manifest-info {
-  overflow: auto;
+  overflow: hidden;
   background: #fafafa;
 }
 .manifest-info .mirador-btn {
-  font-size: .8em;
+  font-size: .8em !important;
+  display: inline !important;
 }
 .content-container {
   position: absolute;
@@ -699,7 +700,7 @@ li.highlight {
   left: 0;
   bottom: 0;
   top:0;
-  background-color: #efefef;
+  background-color: #B6B9BA; /*#efefef*/
   border-right: 1px solid lightgray;
   box-sizing: border-box;
   overflow: hidden;
@@ -723,7 +724,7 @@ li.highlight {
   height:100%;
   float: left;
   /*display: none;*/
-  background-color: #efefef;
+  background-color: #B6B9BA; /* #efefef */
   border-right: 1px solid lightgray;
   box-sizing: border-box;
   overflow: hidden;
@@ -739,7 +740,7 @@ li.highlight {
 
 .sidePanel .tab {
   padding: 4px 6px;
-  border-left:0;
+  border-left: 0;
   border-bottom: 2px solid black;
   display: inline-block;
   cursor: pointer;
@@ -772,7 +773,6 @@ li.highlight {
  content: "";
  height: 1px;
  background: linear-gradient(to right,  rgba(0,0,0,0) 0%,rgba(147,147,147,1) 50%,rgba(0,0,0,0) 100%);
-
  display: block;
  margin-top: 10px;
 }
@@ -837,7 +837,7 @@ li.highlight {
 }
 .toc a.toc-link:hover {
   cursor: pointer;
-  background-color: #dddddd;
+  background-color: #DDD;
   display:block;
   overflow:hidden;
 }
@@ -857,6 +857,7 @@ li.highlight {
   margin-bottom: 5px;
 }
 .toc li.open {
+  
 }
 .toc li.selected {
   cursor: pointer;
@@ -877,6 +878,10 @@ li.highlight {
 }
 .toc li.leaf-item i.toc-caret {
   display: none
+}
+.fa-caret-right {
+    color: #FFF !important;
+    font-size: 1.5em !important;
 }
 .toc li.leaf-item i.star {
   display: inline-block;
@@ -947,7 +952,7 @@ li.highlight {
   overflow-y: scroll;
   height: 80%;
   word-wrap: break-word;
-  font-size: 70%;
+  font-size: 75%;
   display: none;
 }
 .bottomPanel {
@@ -1072,7 +1077,7 @@ li.highlight {
   cursor: pointer;
   color:white;
   text-shadow: 0 0 5px black;
-  /*transition: all 0.3s ease;*/
+  transition: all 0.3s ease;
   opacity: 0.6;
   font-size: 18px;
   z-index:2;
@@ -1252,16 +1257,19 @@ li.highlight {
 }
 
 .mirador-img-manipulation{
-  right:-350px;
+  right:-320px;
   height: 289px;
   width: auto;
   position: absolute;
   background-color: black;
-  padding: 16px;
+  /*padding: 16px;*/
+  padding-left: 10px;
+  border-left: 1px solid white;
   opacity:1 !important;
   text-align: left;
-  bottom: 0px;
+  bottom: -26px;
   font-size: 88%;
+
 }
 .mirador-osd-up {
   position:absolute;
@@ -2100,16 +2108,20 @@ a.mirador-icon-window-menu, a.mirador-icon-view-type {
   overflow-y: scroll;
   max-height: 90%;
   word-wrap: break-word;
+  font-size: .9em;
+  transition: all 0.3s ease;
+  border-left: 2px solid black;
+  border-bottom: 2px solid black;
 }
 
 .bbAnnoLabel{
   /*font-size: 18px;*/
-  width: 8em;
+  width: 10em;
   text-transform: capitalize;
   color: #555;
   display: table-cell;
   line-height: 1.5;
-  padding: 3px 0;
+  padding: 3px;
 }
 
 .bbAnnoText{
@@ -2123,7 +2135,7 @@ a.mirador-icon-window-menu, a.mirador-icon-view-type {
 .bbAnno{
   margin: 5px 2px;
   text-align: left;
-  max-width: 400px;
+  max-width: 99%;
 }
 
 .imgManipIcon{

@@ -384,7 +384,7 @@
         },
         function() {
           //provide useful feedback to user
-          console.log("There was an error saving this new annotation");
+          // console.log("There was an error saving this new annotation");
           //remove this overlay because we couldn't save annotation
           jQuery(osdOverlay).remove();
         });
@@ -402,7 +402,7 @@
           _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         },
         function() {
-          console.log("There was an error updating this annotation");
+          // console.log("There was an error updating this annotation");
         });
       });
 
@@ -840,14 +840,11 @@
               
             });
           }
-          jQuery.publish('annotationListLoaded.' + _this.id);
-            //indicate this is a manifest annotation - which affects the UI
-            value.endpoint = "manifest";
-          });
           _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
-      }
+        });
+        }
       else{
-        console.log("url was false");
+        // console.log("url was false");
       }
 
       // next check endpoint
@@ -883,7 +880,7 @@
         });
       }
       else{
-        console.log("Anno endpoint not available");
+        // console.log("Anno endpoint not available");
       }
     },
 
