@@ -663,7 +663,8 @@
           annotationLayerAvailable: this.annotationLayer,
           annotationCreationAvailable: this.annotationCreation,
           annoEndpointAvailable: this.annoEndpointAvailable,
-          annotationState : this.annotationState
+          annotationState : this.annotationState,
+          annotationRefresh: this.annotationRefresh
         });
       } else {
         var view = this.focusModules.ImageView;

@@ -70,6 +70,7 @@
         windowId: this.windowId,
         annotationLayerAvailable: this.annotationLayerAvailable,
         annotationCreationAvailable: this.annotationCreationAvailable,
+        annotationRefresh: this.annotationRefresh,
         annoEndpointAvailable: this.annoEndpointAvailable,
         showNextPrev : this.imagesList.length !== 1,
         availableTools: this.availableTools,

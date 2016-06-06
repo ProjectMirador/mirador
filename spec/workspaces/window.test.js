@@ -18,6 +18,10 @@ describe('Window', function() {
         this.adjustHeight = jasmine.createSpy();
         this.updateFocusImages = jasmine.createSpy();
       });
+      spyOn(Mirador, 'ImageView').and.callFake(function() {
+        this.toggle = jasmine.createSpy();
+        this.adjustHeight = jasmine.createSpy();
+      });
       spyOn(Mirador, 'BookView').and.callFake(function() {
         this.updateImages = jasmine.createSpy();
         this.toggle = jasmine.createSpy();
@@ -70,7 +74,7 @@ describe('Window', function() {
         expect(this.appendTo.find('.remove-object-option').css('display')).toBe('none');
         expect(this.appendTo.find('.book-option')).toExist();
         expect(this.appendTo.find('.scroll-option')).toExist();
-        var calls = Mirador.ThumbnailsView.calls;
+        var calls = Mirador.ImageView.calls;
         expect(calls.count()).toBe(1);
         expect(calls.first().args[0].appendTo.is(this.appendTo.find('.view-container'))).toBe(true);
       });
