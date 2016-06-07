@@ -232,20 +232,29 @@
       }
     },
 
-    next: function() {
-      var next = this.currentImgIndex + 1;
-
-      if (next < this.imagesList.length) {
-        this.parent.setCurrentCanvasID(this.imagesList[next]['@id']);
+    next: function(skip) {
+      var next = this.currentImgIndex + 1 + skip;
+      if (next >= this.imagesList.length) {
+        next = this.imagesList.length - 1;
       }
+      this.parent.setCurrentCanvasID(this.imagesList[next]['@id']);
     },
 
-    previous: function() {
-      var prev = this.currentImgIndex - 1;
-
-      if (prev >= 0) {
-        this.parent.setCurrentCanvasID(this.imagesList[prev]['@id']);
+    previous: function(skip) {
+      var prev = this.currentImgIndex - 1 - skip;
+      if (prev < 0) {
+        prev = 0;
       }
+      this.parent.setCurrentCanvasID(this.imagesList[prev]['@id']);
+    },
+
+    first: function () {
+      this.parent.setCurrentCanvasID(this.imagesList[0]['@id']);
+
+    },
+
+    last: function() {
+      this.parent.setCurrentCanvasID(this.imagesList[this.imagesList.length - 1]['@id']);
     }
   };
 

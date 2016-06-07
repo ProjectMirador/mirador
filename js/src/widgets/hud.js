@@ -21,10 +21,11 @@
       this.createStateMachine();
 
       this.element = jQuery(this.template({
-        showNextPrev : this.parent.imagesList.length !== 1, 
+        showNextPrev : this.parent.imagesList.length !== 1,
         showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable,
         showAnno : this.annotationLayerAvailable,
-        showFullScreen : this.fullScreenAvailable
+        showFullScreen : this.fullScreenAvailable,
+        showExtendedNavigation : $.viewer.showExtendedNavigation
       })).appendTo(this.element);
 
       if (this.annotationLayerAvailable && this.annoEndpointAvailable) {
@@ -52,12 +53,38 @@
       firstCanvasId = _this.parent.imagesList[0]['@id'],
       lastCanvasId = _this.parent.imagesList[_this.parent.imagesList.length-1]['@id'];
 
+      this.parent.element.find('.mirador-osd-first').on('click', function() {
+        _this.parent.first();
+      });
+
       this.parent.element.find('.mirador-osd-next').on('click', function() {
-        _this.parent.next();
+        _this.parent.next(0);
+      });
+      this.parent.element.find('.mirador-osd-next-3').on('click', function() {
+        _this.parent.next(2);
+      });
+      this.parent.element.find('.mirador-osd-next-5').on('click', function() {
+        _this.parent.next(4);
+      });
+      this.parent.element.find('.mirador-osd-next-10').on('click', function() {
+        _this.parent.next(9);
       });
 
       this.parent.element.find('.mirador-osd-previous').on('click', function() {
-        _this.parent.previous();
+        _this.parent.previous(0);
+      });
+      this.parent.element.find('.mirador-osd-previous-3').on('click', function() {
+        _this.parent.previous(2);
+      });
+      this.parent.element.find('.mirador-osd-previous-5').on('click', function() {
+        _this.parent.previous(4);
+      });
+      this.parent.element.find('.mirador-osd-previous-10').on('click', function() {
+        _this.parent.previous(9);
+      });
+
+      this.parent.element.find('.mirador-osd-last').on('click', function() {
+        _this.parent.last();
       });
 
       this.parent.element.find('.mirador-osd-annotations-layer').on('click', function() {
@@ -152,15 +179,60 @@
         if (canvasId === firstCanvasId) {
           _this.parent.element.find('.mirador-osd-previous').hide();
           _this.parent.element.find('.mirador-osd-next').show();
-        } else if (canvasId === lastCanvasId) {
+        }
+        // If it is the last canvas, hide the "go to next" button, otherwise show it.
+        else if (canvasId === lastCanvasId) {
           _this.parent.element.find('.mirador-osd-next').hide();
           _this.parent.element.find('.mirador-osd-previous').show();
         } else {
           _this.parent.element.find('.mirador-osd-next').show();
           _this.parent.element.find('.mirador-osd-previous').show();
         }
-        // If it is the last canvas, hide the "go to previous" button, otherwise show it.
+
+        // If the extended navigation is disabled, it is not necessary to check for the buttons
+        if($.viewer.showExtendedNavigation) {
+          _this.handleExtendedNavigation();
+        }
       });
+    },
+
+    handleExtendedNavigation: function() {
+      // Hide/Show the skip x buttons if there aren't enough images in that direction
+      var _this = this;
+      var currentIndex = _this.parent.currentImgIndex + 1;
+      var imageCount = _this.parent.imagesList.length;
+      var steps = [3, 5, 10];
+      var factor = _this.parent.parent.currentImageMode === "ImageView" ? 1 : 2;
+
+      // Calculating if step is possible
+      steps.forEach(function(step) {
+        // Back buttons
+        if (currentIndex - (step * factor) <= 0) {
+          _this.parent.element.find('.mirador-osd-previous-' + step).hide();
+        } else if (currentIndex - (step * factor) > 0) {
+          _this.parent.element.find('.mirador-osd-previous-' + step).show();
+        }
+
+        // Forward buttons
+        if (currentIndex + (step * factor) > imageCount) {
+          _this.parent.element.find('.mirador-osd-next-' + step).hide();
+        } else if (currentIndex + (step * factor) <= imageCount) {
+          _this.parent.element.find('.mirador-osd-next-' + step).show();
+        }
+      });
+
+      // Checking if at first or last image
+      if (currentIndex - 1 <= 0) {
+        _this.parent.element.find('.mirador-osd-first').hide();
+      } else if (currentIndex - 1 > 0) {
+        _this.parent.element.find('.mirador-osd-first').show();
+      }
+
+      if (currentIndex + 1 > imageCount) {
+        _this.parent.element.find('.mirador-osd-last').hide();
+      } else if (currentIndex + 1 <= imageCount) {
+        _this.parent.element.find('.mirador-osd-last').show();
+      }
     },
 
     createStateMachine: function() {
@@ -294,6 +366,22 @@
                                  '<a class="mirador-osd-previous hud-control ">',
                                  '<i class="fa fa-3x fa-chevron-left "></i>',
                                  '</a>',
+                                 '{{#if showExtendedNavigation}}',
+                                 '<div class="extendedNav skipPrevious">',
+                                 '<a class="mirador-osd-first hud-control ">',
+                                 '<i class="fa fa-chevron-left"></i><span>{{t "firstPage"}}</span>',
+                                 '</a>',
+                                 '<a class="mirador-osd-previous-10 hud-control ">',
+                                 '<i class="fa fa-chevron-left"></i><span>10</span>',
+                                 '</a>',
+                                 '<a class="mirador-osd-previous-5 hud-control ">',
+                                 '<i class="fa fa-chevron-left"></i><span>5</span>',
+                                 '</a>',
+                                 '<a class="mirador-osd-previous-3 hud-control ">',
+                                 '<i class="fa fa-chevron-left"></i><span>3</span>',
+                                 '</a>',
+                                 '</div>',
+                                 '{{/if}}',
                                  '{{/if}}',
                                  '{{#if showFullScreen}}',
                                  '<a class="mirador-osd-fullscreen hud-control" role="button" aria-label="Toggle fullscreen">',
@@ -309,6 +397,22 @@
                                  '<a class="mirador-osd-next hud-control ">',
                                  '<i class="fa fa-3x fa-chevron-right"></i>',
                                  '</a>',
+                                 '{{#if showExtendedNavigation}}',
+                                 '<div class="extendedNav skipNext">',
+                                 '<a class="mirador-osd-next-3 hud-control ">',
+                                 '<span>3</span><i class="fa fa-chevron-right"></i>',
+                                 '</a>',
+                                 '<a class="mirador-osd-next-5 hud-control ">',
+                                 '<span>5</span><i class="fa fa-chevron-right"></i>',
+                                 '</a>',
+                                 '<a class="mirador-osd-next-10 hud-control ">',
+                                 '<span>10</span><i class="fa fa-chevron-right"></i>',
+                                 '</a>',
+                                 '<a class="mirador-osd-last hud-control ">',
+                                 '<span>{{t "lastPage"}}</span><i class="fa fa-chevron-right"></i>',
+                                 '</a>',
+                                 '</div>',
+                                 '{{/if}}',
                                  '{{/if}}',
                                  '{{#if showBottomPanel}}',
                                  '<a class="mirador-osd-toggle-bottom-panel hud-control " role="button" aria-label="Toggle Bottom Panel">',
