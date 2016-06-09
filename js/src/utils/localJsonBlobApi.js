@@ -15,21 +15,19 @@
     
     $.LocalJSONBlobAPI = function(opts) {
           this.options = {
-              storage: "localStorage"
+              storage: window.localStorage
           };
-          for (var key in opts) {
-              this.options[key] = opts[key];
-          }
+          jQuery.extend(this.options, opts);
     };
 
     $.LocalJSONBlobAPI.prototype = {
         readSync: function(blobId) {
-            return JSON.parse(window[this.options.storage].getItem(blobId));
+            return JSON.parse(this.options.storage.getItem(blobId));
         },
         save: function(blob) {
             var deferred = jQuery.Deferred(),
                 uuid = generateUUID();
-            window[this.options.storage].setItem("BM-" + uuid, JSON.stringify(blob));
+            this.options.storage.setItem("BM-" + uuid, JSON.stringify(blob));
             deferred.resolve("BM-" + uuid);
             return deferred.promise();
         }
