@@ -56,6 +56,7 @@
       },
       "sidePanelVisible" : true, //whether or not to make the side panel visible in this window on load. This setting is dependent on sidePanel being true
       "overlay" : true, //whether or not to make the metadata overlay available/visible in this window
+      "canvasControls": ['Annotation', 'Manipulation'], // These are, at the top level, the types of controls available to be displayed on a canvas.  
       "annotationLayer" : true, //whether or not to make annotation layer available in this window
       "annotationCreation" : true, /*whether or not to make annotation creation available in this window,
                              only valid if annotationLayer is set to True and an annotationEndpoint is defined.
@@ -95,17 +96,6 @@
     'availableAnnotationModes': [
 
     ],
-
-    'availableAnnotationDrawingTools': [
-       'Rectangle', 'Ellipse', 'Freehand', 'Polygon', 'Pin'
-    ],
-
-    'drawingToolsSettings': {
-      'doubleClickReactionTime': 300,
-      'strokeColor': 'deepSkyBlue',
-      'fillColor': 'deepSkyBlue',
-      'fillColorAlpha': 0.0
-    },
 
     'availableCanvasTools': [
 
@@ -159,9 +149,21 @@
      *  }
      **/
     'annotationEndpoint': {},
+    
     'annotationBodyEditor': {
       'module': 'TinyMCEAnnotationBodyEditor',
       'options': {}
+    },
+
+    'availableAnnotationDrawingTools': [
+       'Rectangle', 'Ellipse', 'Freehand', 'Polygon', 'Pin'
+    ],
+
+    'drawingToolsSettings': {
+      'doubleClickReactionTime': 300,
+      'strokeColor': 'deepSkyBlue',
+      'fillColor': 'deepSkyBlue',
+      'fillColorAlpha': 0.0
     },
 
     'jsonStorageEndpoint': {

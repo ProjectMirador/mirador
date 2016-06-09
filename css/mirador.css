@@ -1165,11 +1165,22 @@ li.highlight {
   top: 10px;
   left: 10px;
   transition: none;
+  width: 100%
 }
 .mirador-osd-context-controls a {
   float:left;
   margin:0 10px 0 0;
   font-weight: normal;
+}
+.mirador-annotation-controls {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+.mirador-manipulation-controls {
+  position: absolute;
+  top: 30px;
+  left: 0px;
 }
 
 /* color picker custom style

@@ -20,10 +20,27 @@
     init: function() {    
       var _this = this;
       this.element = jQuery(this.template({
-        tools : _this.availableTools,
+        tools : _this.availableAnnotationTools,
         showEdit : this.annotationCreationAvailable,
         showRefresh : this.annotationRefresh
       })).appendTo(this.container);
+      
+      this.setBorderFillColorPickers();
+      this.hide();
+      this.bindEvents();
+    },
+
+    show: function() {
+      this.element.fadeIn("200");
+    },
+
+    hide: function(complete) {
+      this.element.fadeOut("200", complete);
+    },
+
+    setBorderFillColorPickers: function() {
+      var _this = this;
+      
       _this.container.find(".borderColorPicker").spectrum({
         showInput: true,
         showInitial: true,
@@ -53,18 +70,25 @@
           ["white", "cyan", "magenta", "yellow"]
         ]
       });
+      
       _this.container.find(".borderColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>border_color</i>");
+      
       var borderPicker = jQuery('.borderColorPickerPop'+_this.windowId);
+      
       borderPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>Cancel');
       borderPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>Choose</a>');
       borderPicker.find('button.sp-choose').hide();
+      
       borderPicker.find('a.sp-cancel').on('click', function() {
         jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, null);
       });
+      
       jQuery._data(borderPicker.find(".sp-cancel")[0], "events").click.reverse();
+      
       borderPicker.find('a.sp-choose').on('click',function(){
         borderPicker.find('button.sp-choose').click();
       });
+      
       _this.container.find(".fillColorPicker").spectrum({
         showInput: true,
         showInitial: true,
@@ -96,28 +120,24 @@
           ["white", "cyan", "magenta", "yellow"]
         ]
       });
+      
       _this.container.find(".fillColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>format_color_fill</i>");
+      
       var fillPicker = jQuery('.fillColorPickerPop'+_this.windowId);
+      
       fillPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>Cancel');
       fillPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>Choose</a>');
       fillPicker.find('button.sp-choose').hide();
+      
       fillPicker.find('a.sp-cancel').on('click', function() {
         jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, null);
       });
+      
       jQuery._data(fillPicker.find(".sp-cancel")[0], "events").click.reverse();
+      
       fillPicker.find('a.sp-choose').on('click',function(){
         fillPicker.find('button.sp-choose').click();
       });
-      this.hide();
-      this.bindEvents();
-    },
-
-    show: function() {
-      this.element.fadeIn("200");
-    },
-
-    hide: function(complete) {
-      this.element.fadeOut("200", complete);
     },
 
     bindEvents: function() {
@@ -131,6 +151,7 @@
 
     template: Handlebars.compile([
                                  '<div class="mirador-osd-context-controls hud-container">',
+                                   '<div class="mirador-annotation-controls">',
                                    '<a class="mirador-osd-close hud-control" role="button" aria-label="Turn off annotations">',
                                    '<i class="fa fa-lg fa-times"></i>',
                                    '</a>',
@@ -170,6 +191,40 @@
                                      '</a>',
                                    '{{/if}}',
                                    '{{/if}}',
+                                   '</div>',
+                                   '<div class="mirador-manipulation-controls">',
+                                   '<a class="hud-control mirador-toggle-manipulation">',
+                                   '<i class="material-icons">tune</i>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-rotate-right">',
+                                   '<i class="fa fa-lg fa-rotate-right"></i>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-rotate-left">',
+                                   '<i class="fa fa-lg fa-rotate-left"></i>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-brightness">',
+                                   '<i class="material-icons">wb_sunny</i>',
+                                   '<i class="fa fa-caret-down"></i>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-contrast">',
+                                   '<i class="material-icons">brightness_6</i>',
+                                   '<i class="fa fa-caret-down"></i>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-saturation">',
+                                   '<i class="material-icons">gradient</i>',
+                                   '<i class="fa fa-caret-down"></i>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-grayscale">',
+                                   '<i class="material-icons">filter_b_and_w</i>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-invert">',
+                                   '<i class="material-icons">invert_colors</i>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-reset">',
+                                   '<i class="fa fa-lg fa-refresh"></i>',
+                                   '</a>',
+                                   '</div>',
+                                   '</div>',
                                    /*'<a class="mirador-osd-list hud-control">',
                                    '<i class="fa fa-lg fa-list"></i>',
                                    '</a>',*/

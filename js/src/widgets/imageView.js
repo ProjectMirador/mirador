@@ -54,11 +54,11 @@
       _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
 
       var allTools = $.getTools();
-      this.availableTools = [];
+      this.availableAnnotationTools = [];
       for ( var i = 0; i < this.state.getStateProperty('availableAnnotationDrawingTools').length; i++) {
         for ( var j = 0; j < allTools.length; j++) {
           if (this.state.getStateProperty('availableAnnotationDrawingTools')[i] == allTools[j].name) {
-            this.availableTools.push(allTools[j].logoClass);
+            this.availableAnnotationTools.push(allTools[j].logoClass);
           }
         }
       }
@@ -73,7 +73,7 @@
         annotationRefresh: this.annotationRefresh,
         annoEndpointAvailable: this.annoEndpointAvailable,
         showNextPrev : this.imagesList.length !== 1,
-        availableTools: this.availableTools,
+        availableAnnotationTools: this.availableAnnotationTools,
         eventEmitter: this.eventEmitter
       });
 
@@ -288,8 +288,8 @@
           _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shapeMode);
         };
       }
-      for (var value in _this.availableTools) {
-        this.element.find('.material-icons:contains(\'' + _this.availableTools[value] + '\')').on('click', make_handler(_this.availableTools[value]));
+      for (var value in _this.availableAnnotationTools) {
+        this.element.find('.material-icons:contains(\'' + _this.availableAnnotationTools[value] + '\')').on('click', make_handler(_this.availableAnnotationTools[value]));
       }
       //related the ContextControls
     },

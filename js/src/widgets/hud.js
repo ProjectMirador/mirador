@@ -33,7 +33,7 @@
           windowId: this.windowId,
           annotationCreationAvailable: this.annotationCreationAvailable,
           annotationRefresh: this.annotationRefresh,
-          availableTools: this.availableTools,
+          availableAnnotationTools: this.availableAnnotationTools,
           eventEmitter: this.eventEmitter
         });
       }
