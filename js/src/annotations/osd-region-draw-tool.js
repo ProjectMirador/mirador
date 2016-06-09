@@ -184,6 +184,10 @@
           }
         }
       }
+      if (_this.svgOverlay.availableExternalCommentsPanel) {
+        _this.eventEmitter.publish('annotationMousePosition.' + _this.parent.windowId, [annotations]);
+        return;
+      }
       _this.annoTooltip.showViewer({
         annotations: annotations,
         triggerEvent: event,
