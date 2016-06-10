@@ -54,11 +54,11 @@
       _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
 
       var allTools = $.getTools(this.state.getStateProperty('drawingToolsSettings'));
-      this.availableTools = [];
+      this.availableAnnotationTools = [];
       for ( var i = 0; i < this.state.getStateProperty('availableAnnotationDrawingTools').length; i++) {
         for ( var j = 0; j < allTools.length; j++) {
           if (this.state.getStateProperty('availableAnnotationDrawingTools')[i] == allTools[j].name) {
-            this.availableTools.push(allTools[j].logoClass);
+            this.availableAnnotationTools.push(allTools[j].logoClass);
           }
         }
       }
@@ -73,7 +73,7 @@
         annotationRefresh: this.annotationRefresh,
         annoEndpointAvailable: this.annoEndpointAvailable,
         showNextPrev : this.imagesList.length !== 1,
-        availableTools: this.availableTools,
+        availableAnnotationTools: this.availableAnnotationTools,
         eventEmitter: this.eventEmitter
       });
 
@@ -248,10 +248,6 @@
       });
 
       //related the ContextControls
-      this.element.find('.mirador-osd-close').on('click', $.debounce(function() {
-        _this.hud.annoState.displayOff();
-      },300));
-
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
         if (_this.hud.annoState.current === 'annoOnCreateOff') {
           _this.hud.annoState.createOn();
@@ -276,9 +272,6 @@
       this.element.find('.mirador-osd-save-mode').on('click', function() {
         _this.eventEmitter.publish('updateEditedShape.'+_this.windowId, '');
       });
-      this.element.find('.mirador-osd-close').on('click', function() {
-        _this.eventEmitter.publish('toggleDefaultDrawingTool.'+_this.windowId);
-      });
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
         _this.eventEmitter.publish('toggleDefaultDrawingTool.'+_this.windowId);
       });
@@ -288,8 +281,8 @@
           _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shapeMode);
         };
       }
-      for (var value in _this.availableTools) {
-        this.element.find('.material-icons:contains(\'' + _this.availableTools[value] + '\')').on('click', make_handler(_this.availableTools[value]));
+      for (var value in _this.availableAnnotationTools) {
+        this.element.find('.material-icons:contains(\'' + _this.availableAnnotationTools[value] + '\')').on('click', make_handler(_this.availableAnnotationTools[value]));
       }
       //related the ContextControls
     },
