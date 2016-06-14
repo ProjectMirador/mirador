@@ -64,6 +64,9 @@
     var assoc  = {};
     var decode = function (s) { return decodeURIComponent(s.replace(/\+/g, " ")); };
     var queryString = url.split('?')[1];
+    if (typeof queryString === "undefined") {
+      return {};
+    }
     var keyValues = queryString.split('&');
 
     for(var i in keyValues) {
