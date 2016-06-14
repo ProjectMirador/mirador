@@ -195,6 +195,8 @@
         if (_this.hud.annoState.current === 'annoOff') {
           _this.hud.annoState.displayOn(this);
         } else {
+          //make sure to force the controls back to auto fade
+          _this.forceShowControls = false;
           _this.hud.annoState.displayOff(this);
         }
       },300));
