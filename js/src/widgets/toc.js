@@ -197,9 +197,9 @@
         function getParentest(rangeList){
             var parentest = {'@id': "root", label: "Table of Contents", within:"root" };
             for(var i=0; i<rangeList.length; i++){
-                if(rangeList[i].within && rangeList[i].within == "root"){ //There can only be one range with this, otherwise this algorithm breaks.
+                if(rangeList[i].within && rangeList[i].within == "root"){ 
                     parentest = rangeList[i];
-                    break; //no need to keep looking, there is only 1.
+                    break; //There can only be one range considered the ultimate aggregator.
                 }
             }
             return parentest;
@@ -235,10 +235,9 @@
             children_uris = parent.ranges;
           }
           for(var i=0; i<children_uris.length; i++){ //get the children in order by their @id property from the structures array
-            var new_child = pullFromStructures(children_uris[i], flatRanges);
-            if(!jQuery.isEmptyObject(new_child)){
-              //BE CAREFUL HERE.  his is an error, we dont want this child to be a part of the recursion.
-              children.push(new_child);
+            var new_child = pullFromStructures(children_uris[i], flatRanges);//Remember from earlier, if this was an empty child, we wanted to skip it.  
+            if(!jQuery.isEmptyObject(new_child)){ //check if empty
+              children.push(new_child); //push to our array if not empty
             }
           }
           if ( children.length ) {
