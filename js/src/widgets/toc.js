@@ -197,7 +197,7 @@
         function getParentest(rangeList){
             var parentest = {'@id': "root", label: "Table of Contents", within:"root" };
             for(var i=0; i<rangeList.length; i++){
-                if(rangeList[i].within && rangeList[i].within == "root"){ 
+                if(rangeList[i].within && rangeList[i].within === "root"){ 
                     parentest = rangeList[i];
                     break; //There can only be one range considered the ultimate aggregator.
                 }
@@ -241,7 +241,7 @@
             }
           }
           if ( children.length ) {
-            if ( parent.within === 'root' || parent.id == 'root') { 
+            if ( parent.within === 'root' || parent.id === 'root') { 
               // If there are children and their parent's
               // id is a root or within is root, bind them to the tree object.
               //
