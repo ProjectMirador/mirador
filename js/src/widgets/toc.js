@@ -60,8 +60,8 @@
       case '2':
         ranges = _this.extractV2RangeTrees(_this.structures);
         break;
-        // case '2.1':
-        //   _this.extractV21RangeTrees(_this.structures);
+        case '2.1':
+          _this.extractV21RangeTrees(_this.structures);
       }
 
       if (ranges.length < 2) {
