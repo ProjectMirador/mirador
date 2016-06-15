@@ -208,7 +208,7 @@
         /* 
           Helper function to pull an object out of the rangeList by its @id property or return an empty object.
           BE CAREFUL HERE.  An empty object returned means a URI was in range.ranges[] but was not in manifest.structures[], which is an ERROR.
-          We do not want the TOC to print out an empty holder for this.  Essentially we would like the algorithm to SKIP THIS CHILD.
+          We do not want the TOC to print out an empty holder for this.  Essentially we would like the algorithm to SKIP this child.
          */
         function pullFromStructures(uri, rangeList){
             var pull_this_out = {};
