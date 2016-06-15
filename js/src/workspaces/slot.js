@@ -134,7 +134,7 @@
       var _this = this;
 
       e.preventDefault();
-      var text_url = e.originalEvent.dataTransfer.getData("text/plain");
+      var text_url = e.originalEvent.dataTransfer.getData("text");
       if (text_url) {
         _this.handleDrop(text_url);
       } else {
