@@ -108,7 +108,11 @@
     bindEvents: function() {
       var _this = this;
       _this.element.find('img').on('load', function() {
-        jQuery(this).hide().fadeIn(750);
+        jQuery(this).hide().fadeIn(750,function(){
+          // Under firefox $.show() used under display:none iframe does not change the display.
+          // This is workaround for https://github.com/IIIF/mirador/issues/929
+          jQuery(this).css('display', 'block');
+        });
       });
 
       jQuery(_this.element).scroll(function() {
@@ -199,6 +203,9 @@
         duration: 300,
         easing: "easeInCubic",
         complete: function() {
+          // Under firefox $.show() used under display:none iframe does not change the display.
+          // This is workaround for https://github.com/IIIF/mirador/issues/929
+          jQuery(this).css('display', 'block');
           _this.loadImages();
         }
       });
