@@ -73,26 +73,12 @@ describe('Pin', function() {
 
     expect(shape.closed).toBe(true);
 
-    expect(shape.fullySelected).toBe(true);
-
     expect(shape.name).toBe(this.pin.idPrefix + '1');
 
-    expect(shape.segments.length).toBe(5);
+    expect(shape.segments.length).toBe(1);
 
     expect(shape.segments[0].point.x).toBe(initialPoint.x);
     expect(shape.segments[0].point.y).toBe(initialPoint.y);
-
-    expect(shape.segments[1].point.x).toBe(initialPoint.x + pinScale);
-    expect(shape.segments[1].point.y).toBe(initialPoint.y - 2 * pinScale);
-
-    expect(shape.segments[2].point.x).toBe(initialPoint.x);
-    expect(shape.segments[2].point.y).toBe(initialPoint.y - 3 * pinScale);
-
-    expect(shape.segments[3].point.x).toBe(initialPoint.x - pinScale);
-    expect(shape.segments[3].point.y).toBe(initialPoint.y - 2 * pinScale);
-
-    expect(shape.segments[4].point.x).toBe(initialPoint.x);
-    expect(shape.segments[4].point.y).toBe(initialPoint.y);
   });
 
   describe('Pin Mouse Tool', function() {
