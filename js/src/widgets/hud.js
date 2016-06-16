@@ -28,7 +28,7 @@
       if (this.annotationLayerAvailable && this.annoEndpointAvailable) {
         this.contextControls = new $.ContextControls({
           element: null,
-          container: this.appendTo,
+          container: this.element.find('.mirador-osd-context-controls'),
           mode: 'displayAnnotations',
           windowId: this.windowId,
           annotationCreationAvailable: this.annotationCreationAvailable,
@@ -68,13 +68,10 @@
             });
           },
           ondisplayOn: function(event, from, to) { 
+            _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-annotations-layer', 'selected']);
             if (_this.annoEndpointAvailable) {
-                _this.eventEmitter.publish('HUD_FADE_OUT.' + _this.windowId, ['.mirador-osd-annotations-layer', duration, function() {      
                   _this.contextControls.show();
-                }]);
-            } else {
-              _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-annotations-layer', 'selected']);
-            }
+            } 
             _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
             _this.eventEmitter.publish(('windowUpdated'), {
               id: _this.windowId,
@@ -95,10 +92,8 @@
             }
             if (_this.annoEndpointAvailable) {
               if (from === "annoOff") {
-                _this.eventEmitter.publish('HUD_FADE_OUT.' + _this.windowId, ['.mirador-osd-annotations-layer', duration, function() {      
-                  _this.contextControls.show();
-                  enableEditingAnnotations();
-                }]);
+                _this.contextControls.show();
+                enableEditingAnnotations();
               } else {
                 enableEditingAnnotations();
               }
@@ -126,12 +121,9 @@
           ondisplayOff: function(event, from, to) { 
             if (_this.annoEndpointAvailable) {
               _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
-              _this.contextControls.hide(function() {
-                _this.eventEmitter.publish('HUD_FADE_IN.' + _this.windowId, ['.mirador-osd-annotations-layer', duration]);
-              });
-            } else {
-              _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-annotations-layer', 'selected']);
-            }
+              _this.contextControls.hide();
+            } 
+            _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-annotations-layer', 'selected']);
             _this.eventEmitter.publish('modeChange.' + _this.windowId, 'default');
             _this.eventEmitter.publish(('windowUpdated'), {
               id: _this.windowId,
@@ -143,16 +135,21 @@
     },
 
     template: Handlebars.compile([
+                                 '<div class="mirador-hud">',
                                  '{{#if showNextPrev}}',
                                  '<a class="mirador-osd-previous hud-control ">',
                                  '<i class="fa fa-3x fa-chevron-left "></i>',
                                  '</a>',
                                  '{{/if}}',
+                                 '<div class="mirador-osd-context-controls hud-container">',
                                  '{{#if showAnno}}',
-                                 '<a class="mirador-osd-annotations-layer hud-control" role="button" aria-label="Toggle annotations">',
-                                 '<i class="fa fa-lg fa-comments"></i>',
-                                 '</a>',
+                                  '<div class="mirador-osd-annotation-controls">',
+                                  '<a class="mirador-osd-annotations-layer hud-control" role="button" aria-label="Toggle annotations">',
+                                  '<i class="fa fa-lg fa-comments"></i>',
+                                  '</a>',
+                                  '</div>',
                                  '{{/if}}',
+                                 '</div>',
                                  '{{#if showNextPrev}}',
                                  '<a class="mirador-osd-next hud-control ">',
                                  '<i class="fa fa-3x fa-chevron-right"></i>',
@@ -185,6 +182,7 @@
                                  '<a class="mirador-osd-go-home hud-control" role="button" aria-label="Reset image bounds">',
                                  '<i class="fa fa-home"></i>',
                                  '</a>',
+                                 '</div>',
                                  '</div>'
     ].join(''))
 

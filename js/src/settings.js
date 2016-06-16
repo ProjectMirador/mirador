@@ -97,6 +97,24 @@
 
     ],
 
+    'availableAnnotationDrawingTools': [
+       'Rectangle', 'Ellipse', 'Freehand', 'Polygon', 'Pin'
+    ],
+
+    'drawingToolsSettings': {
+      // Additional tool settings.
+      /**
+       *'Pin': {
+       *},
+       **/
+      'doubleClickReactionTime': 300,
+      'strokeColor': 'deepSkyBlue',
+      'fillColor': 'deepSkyBlue',
+      'fillColorAlpha': 0.0
+    },
+
+    'availableExternalCommentsPanel': false,
+
     'availableCanvasTools': [
 
     ],
@@ -153,17 +171,6 @@
     'annotationBodyEditor': {
       'module': 'TinyMCEAnnotationBodyEditor',
       'options': {}
-    },
-
-    'availableAnnotationDrawingTools': [
-       'Rectangle', 'Ellipse', 'Freehand', 'Polygon', 'Pin'
-    ],
-
-    'drawingToolsSettings': {
-      'doubleClickReactionTime': 300,
-      'strokeColor': 'deepSkyBlue',
-      'fillColor': 'deepSkyBlue',
-      'fillColorAlpha': 0.0
     },
 
     'jsonStorageEndpoint': {

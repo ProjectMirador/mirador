@@ -19,28 +19,20 @@
 
     init: function() {    
       var _this = this;
-      this.element = jQuery(this.template({
+
+      this.element = jQuery(this.annotationTemplate({
         tools : _this.availableAnnotationTools,
         showEdit : this.annotationCreationAvailable,
         showRefresh : this.annotationRefresh
-      })).appendTo(this.container);
-      
+      })).appendTo(this.container.find('.mirador-osd-annotation-controls'));
+
       this.setBorderFillColorPickers();
       this.hide();
       this.bindEvents();
     },
 
-    show: function() {
-      this.element.fadeIn("200");
-    },
-
-    hide: function(complete) {
-      this.element.fadeOut("200", complete);
-    },
-
     setBorderFillColorPickers: function() {
       var _this = this;
-      
       _this.container.find(".borderColorPicker").spectrum({
         showInput: true,
         showInitial: true,
@@ -140,6 +132,14 @@
       });
     },
 
+    show: function() {
+      this.element.fadeIn("150");
+    },
+
+    hide: function() {
+      this.element.fadeOut("150");
+    },
+
     bindEvents: function() {
       var _this = this;      
       this.container.find('.mirador-osd-back').on('click', function() {
@@ -149,12 +149,7 @@
       });
     },
 
-    template: Handlebars.compile([
-                                 '<div class="mirador-osd-context-controls hud-container">',
-                                   '<div class="mirador-annotation-controls">',
-                                   '<a class="mirador-osd-close hud-control" role="button" aria-label="Turn off annotations">',
-                                   '<i class="fa fa-lg fa-times"></i>',
-                                   '</a>',
+    annotationTemplate: Handlebars.compile([
                                    '{{#if showEdit}}',
                                    '<a class="mirador-osd-edit-mode hud-control" role="button" aria-label="Make a new annotation using mouse">',
                                    '<i class="fa fa-lg fa-edit"></i>',
@@ -234,7 +229,6 @@
                                    /*'<a class="mirador-osd-rect-tool hud-control" role="button">',
                                    '<i class="fa fa-lg fa-gear"></i>',
                                    '</a>',*/
-                                 '</div>'
     ].join('')),
 
     // for accessibility, make sure to add aria-labels just like above

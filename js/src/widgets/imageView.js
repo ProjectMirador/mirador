@@ -53,7 +53,7 @@
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
       _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
 
-      var allTools = $.getTools();
+      var allTools = $.getTools(this.state.getStateProperty('drawingToolsSettings'));
       this.availableAnnotationTools = [];
       for ( var i = 0; i < this.state.getStateProperty('availableAnnotationDrawingTools').length; i++) {
         for ( var j = 0; j < allTools.length; j++) {
@@ -195,6 +195,8 @@
         if (_this.hud.annoState.current === 'annoOff') {
           _this.hud.annoState.displayOn(this);
         } else {
+          //make sure to force the controls back to auto fade
+          _this.forceShowControls = false;
           _this.hud.annoState.displayOff(this);
         }
       },300));
@@ -248,10 +250,6 @@
       });
 
       //related the ContextControls
-      this.element.find('.mirador-osd-close').on('click', $.debounce(function() {
-        _this.hud.annoState.displayOff();
-      },300));
-
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
         if (_this.hud.annoState.current === 'annoOnCreateOff') {
           _this.hud.annoState.createOn();
@@ -275,9 +273,6 @@
       });
       this.element.find('.mirador-osd-save-mode').on('click', function() {
         _this.eventEmitter.publish('updateEditedShape.'+_this.windowId, '');
-      });
-      this.element.find('.mirador-osd-close').on('click', function() {
-        _this.eventEmitter.publish('toggleDefaultDrawingTool.'+_this.windowId);
       });
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
         _this.eventEmitter.publish('toggleDefaultDrawingTool.'+_this.windowId);
