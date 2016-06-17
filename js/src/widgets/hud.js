@@ -143,9 +143,9 @@
 
     template: Handlebars.compile([
                                  '{{#if showNextPrev}}',
-                                 '<a class="mirador-osd-previous hud-control ">',
+                                 '<!--<a class="mirador-osd-previous hud-control ">',
                                  '<i class="fa fa-3x fa-chevron-left "></i>',
-                                 '</a>',
+                                 '</a>-->',
                                  '{{/if}}',
                                  '{{#if showAnno}}',
                                  '<a class="mirador-osd-annotations-layer hud-control" role="button" aria-label="Toggle annotations">',
@@ -153,9 +153,9 @@
                                  '</a>',
                                  '{{/if}}',
                                  '{{#if showNextPrev}}',
-                                 '<a class="mirador-osd-next hud-control ">',
+                                 '<!--<a class="mirador-osd-next hud-control ">',
                                  '<i class="fa fa-3x fa-chevron-right"></i>',
-                                 '</a>',
+                                 '</a>-->',
                                  '{{/if}}',
                                  '{{#if showBottomPanel}}',
                                  '<a class="mirador-osd-toggle-bottom-panel hud-control" role="button" aria-label="Toggle Bottom Panel">',
