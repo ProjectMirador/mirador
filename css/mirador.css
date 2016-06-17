@@ -567,7 +567,7 @@ li.highlight {
 .grid-item.hovered .grid-icon {
   background:deepSkyBlue;
   box-shadow: 0 0 10px black;
-  transform: scale(1.1) translateY(-10px) translateX(-5px);
+  transform: scale(1.1) translateY(-10px) translateqX(-5px);
   transition: all 0.2s ease-out;
 }
 .grid-text {
@@ -1814,6 +1814,8 @@ a.mirador-icon-window-menu, a.mirador-icon-view-type {
   clear: both;
 }
 .qtip-viewer .qtip-content {
+  min-width: 275px;
+  max-height: 200px;
   overflow: auto;
 }
 .annotation-tooltip {
