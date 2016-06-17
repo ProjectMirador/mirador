@@ -188,7 +188,7 @@
         _this.previous();
       });
 
-      this.element.find('.mirador-osd-annotations-layer').on('click', $.debounce(function() {
+      this.element.find('.mirador-osd-annotations-layer').on('click', function() {
         if (_this.hud.annoState.current === 'none') {
           _this.hud.annoState.startup(this);
         }
@@ -199,7 +199,18 @@
           _this.forceShowControls = false;
           _this.hud.annoState.displayOff(this);
         }
-      },300));
+      });
+
+      this.element.find('.mirador-manipulation-toggle').on('click', function() {
+        if (_this.hud.manipulationState.current === 'none') {
+          _this.hud.manipulationState.startup(this);
+        }
+        if (_this.hud.manipulationState.current === 'manipulationOff') {
+          _this.hud.manipulationState.displayOn(this);
+        } else {
+          _this.hud.manipulationState.displayOff(this);
+        }
+      });
 
       this.element.find('.mirador-osd-go-home').on('click', function() {
         _this.osd.viewport.goHome();
@@ -249,7 +260,7 @@
         _this.eventEmitter.publish('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + _this.windowId);
       });
 
-      //related the ContextControls
+      //Annotation specific controls
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
         if (_this.hud.annoState.current === 'annoOnCreateOff') {
           _this.hud.annoState.createOn();
@@ -286,7 +297,155 @@
       for (var value in _this.availableAnnotationTools) {
         this.element.find('.material-icons:contains(\'' + _this.availableAnnotationTools[value] + '\')').on('click', make_handler(_this.availableAnnotationTools[value]));
       }
-      //related the ContextControls
+      //Annotation specific controls
+
+      //Image manipulation controls
+      //set the original values for all of the CSS filter options
+      var filterValues = {
+        "brightness" : "brightness(100%)",
+        "contrast" : "contrast(100%)",
+        "saturate" : "saturate(100%)",
+        "grayscale" : "grayscale(0%)",
+        "invert" : "invert(0%)"
+      };
+
+      function setFilterCSS() {
+        var filterCSS = jQuery.map(filterValues, function(value, key) { return value; }).join(" "),
+        osdCanvas = jQuery(_this.osd.canvas);
+        osdCanvas.css({
+          'filter'         : filterCSS,
+          '-webkit-filter' : filterCSS,
+          '-moz-filter'    : filterCSS,
+          '-o-filter'      : filterCSS,
+          '-ms-filter'     : filterCSS
+        });
+      }
+
+      this.element.find('.mirador-osd-rotate-right').on('click', function() {
+        if (_this.osd) {
+          var currentRotation = _this.osd.viewport.getRotation();
+          _this.osd.viewport.setRotation(currentRotation + 90);
+        }
+      });
+
+      this.element.find('.mirador-osd-rotate-left').on('click', function() {
+        if (_this.osd) {
+          var currentRotation = _this.osd.viewport.getRotation();
+          _this.osd.viewport.setRotation(currentRotation - 90);
+        }
+      });
+
+      this.element.find('.mirador-osd-brightness-slider').slider({
+        orientation: "vertical",
+        range: "min",
+        min: 0,
+        max: 200,
+        value: 100,
+        slide: function(event, ui) {
+          filterValues.brightness = "brightness("+ui.value+"%)";
+          setFilterCSS();
+        }
+      }).hide();
+
+      this.element.find('.mirador-osd-brightness').on('mouseenter',
+        function() {
+          _this.element.find('.mirador-osd-brightness-slider').stop().slideFadeToggle(200);
+        }).on('mouseleave',
+        function() {
+          _this.element.find('.mirador-osd-brightness-slider').stop().slideFadeToggle(200);
+      });
+
+      this.element.find('.mirador-osd-contrast-slider').slider({
+        orientation: "vertical",
+        range: "min",
+        min: 0,
+        max: 200,
+        value: 100,
+        slide: function(event, ui) {
+          filterValues.contrast = "contrast("+ui.value+"%)";
+          setFilterCSS();
+        }
+      }).hide();
+
+      this.element.find('.mirador-osd-contrast').on('mouseenter',
+        function() {
+          _this.element.find('.mirador-osd-contrast-slider').stop().slideFadeToggle(200);
+        }).on('mouseleave',
+        function() {
+          _this.element.find('.mirador-osd-constrast-slider').stop().slideFadeToggle(200);
+      });
+
+      this.element.find('.mirador-osd-saturation-slider').slider({
+        orientation: "vertical",
+        range: "min",
+        min: 0,
+        max: 200,
+        value: 100,
+        slide: function(event, ui) {
+          filterValues.saturate = "saturate("+ui.value+"%)";
+          setFilterCSS();
+        }
+      }).hide();
+
+      this.element.find('.mirador-osd-saturation').on('mouseenter',
+        function() {
+          _this.element.find('.mirador-osd-saturation-slider').stop().slideFadeToggle(200);
+        }).on('mouseleave',
+        function() {
+          _this.element.find('.mirador-osd-saturation-slider').stop().slideFadeToggle(200);
+      });
+
+      this.element.find('.mirador-osd-grayscale').on('click', function() {
+        if (jQuery(this).hasClass('selected')) {
+          filterValues.grayscale = "grayscale(0%)";
+          jQuery(this).removeClass('selected');
+        } else {
+          filterValues.grayscale = "grayscale(100%)";
+          jQuery(this).addClass('selected');
+        }
+        setFilterCSS();
+      });
+
+      this.element.find('.mirador-osd-invert').on('click', function() {
+        if (jQuery(this).hasClass('selected')) {
+          filterValues.invert = "invert(0%)";
+          jQuery(this).removeClass('selected');
+        } else {
+          filterValues.invert = "invert(100%)";
+          jQuery(this).addClass('selected');
+        }
+        setFilterCSS();
+      });
+
+      this.element.find('.mirador-osd-reset').on('click', function() {
+        //reset rotation
+        if (_this.osd) {
+          _this.osd.viewport.setRotation(0);
+        }
+
+        //reset brightness
+        filterValues.brightness = "brightness(100%)";
+        _this.element.find('.mirador-osd-brightness-slider').slider('option','value',100);
+
+        //reset contrast
+        filterValues.contrast = "contrast(100%)";
+        _this.element.find('.mirador-osd-contrast-slider').slider('option','value',100);
+
+        //reset saturation
+        filterValues.saturate = "saturate(100%)";
+        _this.element.find('.mirador-osd-saturation-slider').slider('option','value',100);
+
+        //reset grayscale
+        filterValues.grayscale = "grayscale(0%)";
+        _this.element.find('.mirador-osd-grayscale').removeClass('selected');
+
+        //reset color inversion
+        filterValues.invert = "invert(0%)";
+        _this.element.find('.mirador-osd-invert').removeClass('selected');
+
+        setFilterCSS();
+      });
+      //Image manipulation controls
     },
 
     getPanByValue: function() {

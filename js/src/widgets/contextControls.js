@@ -20,15 +20,41 @@
     init: function() {    
       var _this = this;
 
-      this.element = jQuery(this.annotationTemplate({
+      this.annotationElement = jQuery(this.annotationTemplate({
         tools : _this.availableAnnotationTools,
         showEdit : this.annotationCreationAvailable,
         showRefresh : this.annotationRefresh
       })).appendTo(this.container.find('.mirador-osd-annotation-controls'));
 
+      this.manipulationElement = jQuery(this.manipulationTemplate({
+      })).appendTo(this.container.find('.mirador-manipulation-controls'));
+
+      this.setQtips();
+
+      this.annotationElement.hide();
+      this.manipulationElement.hide();
+
       this.setBorderFillColorPickers();
-      this.hide();
       this.bindEvents();
+    },
+
+    setQtips: function() {
+      var _this = this;
+      _this.manipulationElement.each(function() {
+        jQuery(this).qtip({
+          content: {
+            text: jQuery(this).attr('title'),
+          },
+          position: {
+            my: 'bottom center',
+            at: 'top center',
+            viewport: true
+          },
+          style: {
+            classes: 'qtip-dark qtip-shadow qtip-rounded'
+          }
+        });
+      });
     },
 
     setBorderFillColorPickers: function() {
@@ -132,21 +158,29 @@
       });
     },
 
-    show: function() {
-      this.element.fadeIn("150");
+    annotationShow: function() {
+      this.annotationElement.fadeIn("150");
     },
 
-    hide: function() {
-      this.element.fadeOut("150");
+    annotationHide: function() {
+      this.annotationElement.fadeOut("150");
+    },
+
+    manipulationShow: function() {
+      this.manipulationElement.fadeIn("150");
+    },
+
+    manipulationHide: function() {
+      this.manipulationElement.fadeOut("150");
     },
 
     bindEvents: function() {
       var _this = this;      
-      this.container.find('.mirador-osd-back').on('click', function() {
-        _this.element.remove();
-        _this.element = jQuery(_this.template()).appendTo(_this.container);
-        _this.bindEvents();
-      });
+      // this.container.find('.mirador-osd-back').on('click', function() {
+      //   _this.element.remove();
+      //   _this.element = jQuery(_this.template()).appendTo(_this.container);
+      //   _this.bindEvents();
+      // });
     },
 
     annotationTemplate: Handlebars.compile([
@@ -185,41 +219,7 @@
                                      '<i class="fa fa-lg fa-refresh"></i>',
                                      '</a>',
                                    '{{/if}}',
-                                   '{{/if}}',
-                                   '</div>',
-                                   '<div class="mirador-manipulation-controls">',
-                                   '<a class="hud-control mirador-toggle-manipulation">',
-                                   '<i class="material-icons">tune</i>',
-                                   '</a>',
-                                   '<a class="hud-control mirador-rotate-right">',
-                                   '<i class="fa fa-lg fa-rotate-right"></i>',
-                                   '</a>',
-                                   '<a class="hud-control mirador-rotate-left">',
-                                   '<i class="fa fa-lg fa-rotate-left"></i>',
-                                   '</a>',
-                                   '<a class="hud-control mirador-brightness">',
-                                   '<i class="material-icons">wb_sunny</i>',
-                                   '<i class="fa fa-caret-down"></i>',
-                                   '</a>',
-                                   '<a class="hud-control mirador-contrast">',
-                                   '<i class="material-icons">brightness_6</i>',
-                                   '<i class="fa fa-caret-down"></i>',
-                                   '</a>',
-                                   '<a class="hud-control mirador-saturation">',
-                                   '<i class="material-icons">gradient</i>',
-                                   '<i class="fa fa-caret-down"></i>',
-                                   '</a>',
-                                   '<a class="hud-control mirador-grayscale">',
-                                   '<i class="material-icons">filter_b_and_w</i>',
-                                   '</a>',
-                                   '<a class="hud-control mirador-invert">',
-                                   '<i class="material-icons">invert_colors</i>',
-                                   '</a>',
-                                   '<a class="hud-control mirador-reset">',
-                                   '<i class="fa fa-lg fa-refresh"></i>',
-                                   '</a>',
-                                   '</div>',
-                                   '</div>',
+                                   '{{/if}}'
                                    /*'<a class="mirador-osd-list hud-control">',
                                    '<i class="fa fa-lg fa-list"></i>',
                                    '</a>',*/
@@ -229,6 +229,39 @@
                                    /*'<a class="mirador-osd-rect-tool hud-control" role="button">',
                                    '<i class="fa fa-lg fa-gear"></i>',
                                    '</a>',*/
+    ].join('')),
+
+    manipulationTemplate: Handlebars.compile([
+                                   '<a class="hud-control mirador-osd-rotate-right" title="{{t "rotateRightTooltip"}}">',
+                                   '<i class="fa fa-lg fa-rotate-right"></i>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-osd-rotate-left" title="{{t "rotateLeftTooltip"}}">',
+                                   '<i class="fa fa-lg fa-rotate-left"></i>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-osd-brightness" title="{{t "brightnessTooltip"}}">',
+                                   '<i class="material-icons">wb_sunny</i>',
+                                   '<i class="fa fa-caret-down"></i>',
+                                   '<div class="mirador-osd-brightness-slider mirador-slider"/>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-osd-contrast" title="{{t "contrastTooltip"}}">',
+                                   '<i class="material-icons">brightness_6</i>',
+                                   '<i class="fa fa-caret-down"></i>',
+                                   '<div class="mirador-osd-contrast-slider mirador-slider"/>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-osd-saturation" title="{{t "saturationTooltip"}}">',
+                                   '<i class="material-icons">gradient</i>',
+                                   '<i class="fa fa-caret-down"></i>',
+                                   '<div class="mirador-osd-saturation-slider mirador-slider"/>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-osd-grayscale" title="{{t "grayscaleTooltip"}}">',
+                                   '<i class="material-icons">filter_b_and_w</i>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-osd-invert" title="{{t "invertTooltip"}}">',
+                                   '<i class="material-icons">invert_colors</i>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-osd-reset" title="{{t "resetTooltip"}}">',
+                                   '<i class="fa fa-lg fa-refresh"></i>',
+                                   '</a>'
     ].join('')),
 
     // for accessibility, make sure to add aria-labels just like above
