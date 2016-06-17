@@ -1814,8 +1814,6 @@ a.mirador-icon-window-menu, a.mirador-icon-view-type {
   clear: both;
 }
 .qtip-viewer .qtip-content {
-  min-width: 275px;
-  max-height: 200px;
   overflow: auto;
 }
 .annotation-tooltip {
