@@ -17,7 +17,6 @@
       lazyLoadingFactor:    1.5,  //should be >= 1
       eventEmitter:         null
     }, options);
-    
     this.init();
   };
 
