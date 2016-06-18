@@ -17,7 +17,7 @@
       lazyLoadingFactor:    1.5,  //should be >= 1
       eventEmitter:         null
     }, options);
-    this.imagesList.reverse();
+
     this.init();
   };
 
