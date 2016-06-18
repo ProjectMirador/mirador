@@ -83,6 +83,9 @@
       });
 
       _this.imagesList = _this.manifest.getCanvases();
+      if(_this.manifest.getViewingDirection() == 'right-to-left'){
+          _this.imagesList.reverse();
+      }
       if (!_this.canvasID) {
         _this.canvasID = _this.imagesList[0]['@id'];
       }
