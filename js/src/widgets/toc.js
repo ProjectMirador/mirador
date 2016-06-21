@@ -241,7 +241,7 @@
             }
           }
           if ( children.length ) {
-            if ( parent.within === 'root' || parent.id === 'root') { 
+            if ( parent.within === 'root' || parent["@id"] === 'root') { 
               // If there are children and their parent's
               // id is a root or within is root, bind them to the tree object.
               //
