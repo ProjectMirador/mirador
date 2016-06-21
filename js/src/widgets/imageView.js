@@ -410,9 +410,9 @@
           hideHUD();
           jQuery(_this.element).on('mousemove', function() {
             window.clearTimeout(timeoutID);
+            _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
             // When a user is in annotation create mode, force show the controls so they don't disappear when in a qtip, so check for that
             if (!_this.forceShowControls) {
-              _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
               timeoutID = window.setTimeout(hideHUD, timeoutDuration);
             }
           }).on('mouseleave', function() {
