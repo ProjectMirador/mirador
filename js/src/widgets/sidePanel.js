@@ -20,7 +20,7 @@
     $.SidePanel.prototype = {
         init: function() {
             var _this = this;
-
+            this.searchTabAvailable = this.manifest.getSearchWithinService();
             this.updateState({
                 tabs : [
                 {
