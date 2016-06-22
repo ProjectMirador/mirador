@@ -70,10 +70,10 @@
       });
     },
 
-    displaySearchWithin: function(query_params){
+    displaySearchWithin: function(query_params, searchUrl){
       var _this = this;
       if (query_params !== "") {
-        searchService = (_this.manifest.getSearchWithinService());
+        
         this.searchObject = new $.SearchWithinResults({
           manifest: _this.manifest,
           appendTo: _this.element.find(".search-results-list"),
@@ -82,7 +82,8 @@
           windowId: _this.windowId,
           imagesList: _this.imagesList,
           thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'},
-          query_params: query_params
+          query_params: query_params,
+          searchService: searchUrl
         });
       }
     },
@@ -97,13 +98,16 @@
         var motivation = _this.element.find(".js-motivation").val();
         var date = _this.element.find(".js-date").val();
         var user = _this.element.find(".js-user").val();
-
+        var searchUrl = _this.element.find("#search-within-selector").val();
+        console.log(searchUrl);
+        
         _this.displaySearchWithin({
           "q": query,
           "motivation": motivation,
           "date": date,
           "user": user
-        });
+        }, searchUrl);
+        
       });
 
       this.element.find(".js-search-expand").on('click', function(event){
@@ -124,10 +128,15 @@
     render: function(state) {
       var _this = this;
 
-      // TODO: if there was more than one searchservice on a manifest, 
-      // only the first one search service on the manifest level will be included.
+      var searchServiceIdArray = this.manifest.getSearchWithinService().map(function(data){
+        return {
+          "url": data['@id'], 
+          "label": data.label
+        };
+      }); 
+
       templateData = {
-        searchService: this.manifest.getSearchWithinService()["@id"]
+        searchService: searchServiceIdArray
       };
 
       if (!this.element) {
@@ -147,12 +156,15 @@
 
     template: Handlebars.compile([
       '<div class="searchResults">',
-        '<select style="width: 100%">',
-          '<option>Select Search Services</option>',
-          '<option>{{ searchService }}</option>',
+        '<label>Select Search Service',
+        '<select id="search-within-selector" style="width: 100%">',
+          '{{#each searchService}}',
+          '<option value="{{ url }}">{{#if label}}{{ label }}{{ else }} {{ url }}{{/if}}</option>',
+          '{{/each}}',
         '</select>',
+        '</label>',
         '<form id="search-form" class="js-perform-query">',
-          '<input class="js-query" type="text" placeholder="search"/>',
+          '<input class="js-query" type="text" placeholder="search text"/>',
 
           '<input style="margin: 10px 0" type="submit"/>',
 

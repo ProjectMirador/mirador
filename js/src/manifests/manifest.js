@@ -197,18 +197,20 @@
       var _this = this;
       var serviceProperty = _this.jsonLd.service;
 
-      var service = {};
+      var service = [];
       if (serviceProperty.constructor === Array){
         for (var i = 0; i < serviceProperty.length; i++){
-          if (serviceProperty[i]["@context"] === "http://iiif.io/api/search/0/context.json"){
-            //returns the first service object with the correct contest
-            service = serviceProperty[i];
-            break;
+          //TODO: should we be filtering search by context
+          if (serviceProperty[i]["@context"] === "http://iiif.io/api/search/0/context.json" || 
+            serviceProperty[i]["@context"] === "http://iiif.io/api/search/1/context.json") {
+            //returns the first service object with the correct context
+            service.push(serviceProperty[i]);
           }
         }
       }
-      else if (_this.jsonLd.service["@context"] === "http://iiif.io/api/search/0/context.json"){
-        service = _this.jsonLd.service;
+      else if (_this.jsonLd.service["@context"] === "http://iiif.io/api/search/0/context.json" || 
+        serviceProperty["@context"] === "http://iiif.io/api/search/1/context.json"){
+        service.push(_this.jsonLd.service);
       }
       else {
         //no service object with the right context is found

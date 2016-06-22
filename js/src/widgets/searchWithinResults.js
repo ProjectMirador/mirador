@@ -17,7 +17,7 @@ $.SearchWithinResults = function(options) {
     element:              null,
     metadataTypes:        null,
     metadataListingCls:   'metadata-listing',
-    searchService:        null,
+    searchService:     null,
     windowId:             null,
     query_params:         null,
     currentPage:          1,
@@ -30,8 +30,7 @@ $.SearchWithinResults.prototype = {
 
   init: function() {
     this.registerHandlebars();
-    this.searchService = this.manifest.getSearchWithinService();
-
+    
     jQuery(this.appendTo).empty();
     this.element = jQuery(this.template()).appendTo(this.appendTo);
     jQuery("<hr/><h3>Search results for: " + this.query_params.q + "</h3><hr/>")
@@ -50,7 +49,7 @@ $.SearchWithinResults.prototype = {
       }
     }
 
-    var url = this.searchService['@id'] + '?' + query_string;
+    var url = this.searchService + '?' + query_string;
     this.doSearchFromUrl(url);
   },
 
