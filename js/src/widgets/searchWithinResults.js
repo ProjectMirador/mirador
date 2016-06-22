@@ -104,17 +104,21 @@ $.SearchWithinResults.prototype = {
   },
 
   processResults: function(searchResults) {
+    
+    this.searchResults = searchResults;
     //create tplData array
     if (searchResults.hits) {
       this.tplData = this.getHits(searchResults);
     } else {
       this.tplData = this.getSearchAnnotations(searchResults);
     }
+    
 
     jQuery(Handlebars.compile('{{> resultsList }}')(this.tplData)).appendTo(jQuery(this.element.find('.search-results-container')));
     this.bindEvents();
 
-    this.setPager(searchResults);
+    //this.setPager(searchResults);
+    this.setPager();
   },
 
   /**
@@ -141,18 +145,23 @@ $.SearchWithinResults.prototype = {
    *
    * @param  results - IIIF Search results
    */
-  setPager: function(results) {
-    if (!this.needsPager(results)) {
+  setPager: function() {
+    var _this = this;
+    //using _this.searchResults throughout because passing in results as parameter 
+    //in the function broke everything. Value of "results" was getting changed 
+    //unexpectedly.
+    
+    if (!this.needsPager(_this.searchResults)) {
       return;
     }
-    var _this = this;
+    
 
     if (!this.onPageCount) { // This will be set with initial page and not be changed.
-      this.onPageCount = results.resources.length;
+      this.onPageCount = _this.searchResults.resources.length;
     }
 
     this.element.find('.search-results-pager').pagination({
-        items: results.within.total,
+        items: _this.searchResults.within.total,
         itemsOnPage: _this.onPageCount,
         currentPage: _this.currentPage,
         displayedPages: 1,
@@ -164,18 +173,17 @@ $.SearchWithinResults.prototype = {
         nextText: '<i class="fa fa-lg fa-angle-right"></i>',
         onPageClick: function(pageNumber, event) {
           event.preventDefault();
-
-          // See if target is next/prev. Next/Prev buttons have correct page number.
           if (pageNumber == _this.currentPage - 1) {
             goPrev();
           } else if (pageNumber == _this.currentPage + 1) {
             goNext();
           } else if (pageNumber == 1) {
-            _this.doSearchFromUrl(results.within.first);
+            _this.doSearchFromUrl(_this.searchResults.within.first);
             _this.currentPage = 1;
           } else {
             // Assume this is the last page........
-            _this.doSearchFromUrl(results.within.last);
+            
+            _this.doSearchFromUrl(_this.searchResults.within.last);
             _this.currentPage = parseInt(
               _this.element.find('.search-results-pager li:nth-last-child(2)').text()
             );
@@ -184,12 +192,13 @@ $.SearchWithinResults.prototype = {
     });
 
     function goNext() {
-      _this.doSearchFromUrl(results.next);
+      _this.doSearchFromUrl(_this.searchResults.next);
       _this.currentPage++;
     }
     function goPrev() {
-      _this.doSearchFromUrl(results.prev);
+      _this.doSearchFromUrl(_this.searchResults.prev);
       _this.currentPage--;
+      //console.log(_this.searchResults.next);
     }
   },
 
@@ -203,47 +212,46 @@ $.SearchWithinResults.prototype = {
     return num | 0;
   },
 
+  parseSearchAnnotation: function(annotation){
+    var _this = this;
+    var canvasid = annotation.on;
+    // deals with possibiliy of "on" propert taking an object
+    if (typeof canvasid === 'object') {
+      canvasid = annotation.on['@id'];
+    }
+    
+    var canvaslabel = _this.getLabel(annotation);
+
+    // Split ID from Coordinates if necessary
+    var id_parts = _this.splitBaseUrlAndCoordinates(canvasid);
+
+    return {
+      canvasid: id_parts.base,
+      coordinates: id_parts.coords,
+      canvaslabel: canvaslabel,
+      resulttext: annotation.resource.chars
+    };
+
+
+  },
   getSearchAnnotations: function(searchResults) {
     var _this = this;
     tplData = [];
     //add condition here to make sure searchResults.resources is not null
     if (searchResults.resources !== null) {
-      searchResults.resources.forEach(function(result){
-        // Set to resouce.on, which is usually a simple String ID
-        var canvasid = result.on;
-        var canvaslabel = _this.getLabel(result);
-
-        
-        // TODO: i turned this off so that we could results that don't yet have a 
-        // canvas identifier. It might be nice to allow these to display but provide 
-        // a graceful error message for these, indicating to the user that no canvas
-        // identifier is currently available. Click events for these kinds of results
-        // should be disabled.
-
-        //if (!canvaslabel) {   // Do not add this result if no label is found
-          //return;
-        //}
-
-        // If resource.on is an Object, containing extra information about the
-        // parent object, set ID appropriately
-        if (typeof canvasid === 'object') {
-          canvasid = result.on['@id'];
-        }
-
-        // Split ID from Coordinates if necessary
-        var id_parts = _this.splitBaseUrlAndCoordinates(canvasid);
-
-        resultobject = {
-          canvasid: id_parts.base,
-          coordinates: id_parts.coords,
-          canvaslabel: canvaslabel,
-          resulttext: result.resource.chars
-        };
-
-        tplData.push(resultobject);
-      });
-    }
+      //This conditional handles if the results come back as a single object or as an array
+      //TODO: This possibility is not yet handled in the getHits function
+      if (!Array.isArray(searchResults.resources)){
+        annotation = searchResults.resources;
+        tplData.push(_this.parseSearchAnnotation(annotation));
+      }
+      else {
+        searchResults.resources.forEach(function(annotation){
+          tplData.push(_this.parseSearchAnnotation(annotation));
+        });
+      }
     return tplData;
+    }
   },
 
   //TODO: getHits is mostly working, but the when you click on a 
