@@ -209,7 +209,7 @@
     getSearchWithinService: function(){
       var _this = this;
       var serviceProperty = _this.jsonLd.service;
-
+console.log('[Manifest] trying to get search service.');
       var service = [];
       if (serviceProperty.constructor === Array){
         for (var i = 0; i < serviceProperty.length; i++){

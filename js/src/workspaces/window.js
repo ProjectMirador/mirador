@@ -476,7 +476,7 @@
     updateSidePanel: function() {
       if (!this.sidePanelAvailable) {
         return;
-      }
+      }console.log('[Window] updating side panel.');
       var _this = this,
       tocAvailable = _this.sidePanelOptions.toc,
       annotationsTabAvailable = _this.sidePanelOptions.annotations,
@@ -575,18 +575,10 @@
 
     adjustFocusSize: function(panelType, panelState) {
       if (panelType === 'bottomPanel') {
-// <<<<<<< HEAD
-//         this.focusModules[this.currentFocus].adjustHeight('focus-max-height', panelState);
-//       }
-//       else if (panelType === 'sidePanel') {
-//         this.focusModules[this.currentFocus].adjustWidth('focus-max-width', panelState);
-//       }
-// =======
         this.focusModules[this.viewType].adjustHeight('focus-max-height', panelState);
       } else if (panelType === 'sidePanel') {
         this.focusModules[this.viewType].adjustWidth('focus-max-width', panelState);
       } else {}
-// >>>>>>> ee143e91a4b3a415ad329f11408e8c485d038c41
     },
 
     toggleMetadataOverlay: function(focusState) {
