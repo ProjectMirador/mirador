@@ -47,6 +47,7 @@ describe('Overlay', function() {
     this.canvas = jQuery('<canvas></canvas>');
     this.canvas.attr('id', 'draw_canvas_' + id);
     jasmine.getFixtures().set(this.canvas);
+    this.eventEmitter = new Mirador.EventEmitter();
     this.windowObjMock = {
       'windowId': id,
       'viewer': {
@@ -64,6 +65,12 @@ describe('Overlay', function() {
         },
         'pixelFromPoint': function(point, current) {
           return point;
+        },
+        'getBounds': function(current) {
+          return {
+            'x': 800,
+            'y': 600
+          };
         },
         'containerSize': {
           'x': 800,
@@ -83,7 +90,29 @@ describe('Overlay', function() {
       'fillColor': 'deepSkyBlue',
       'fillColorAlpha': 0.0
     };
-    this.overlay = new Mirador.Overlay(this.viewerMock, this.windowObjMock, drawingToolsSettings, []);
+    var state = new Mirador.SaveController({eventEmitter: this.eventEmitter});
+    /*
+    
+    TODO RADOSLAV
+     getStateProperty: function(key) {
+     if (key === 'drawingToolsSettings') {
+     return {
+     'doubleClickReactionTime': 300,
+     'strokeColor': 'deepSkyBlue',
+     'fillColor': 'deepSkyBlue',
+     'fillColorAlpha': 0.0
+     };
+     }
+     if (key === 'availableAnnotationDrawingTools') {
+     return [];
+     }
+     if (key === 'availableExternalCommentsPanel') {
+     return false;
+     }
+     return null;
+     }
+     */
+    this.overlay = new Mirador.Overlay(this.viewerMock, this.windowObjMock.viewer.id, this.windowObjMock.windowId, state, this.eventEmitter);
   });
 
   afterEach(function() {
@@ -91,32 +120,32 @@ describe('Overlay', function() {
   });
 
   it('toggleDrawingTool', function() {
-    jQuery.publish('toggleDrawingTool.' + this.windowObjMock.windowId, [null]);
+    this.eventEmitter.publish('toggleDrawingTool.' + this.windowObjMock.windowId, [null]);
 
     expect(this.overlay.currentTool).toBeNull();
 
     this.pin = new Mirador.Pin();
     this.overlay.disabled = true;
-    jQuery.publish('toggleDrawingTool.' + this.windowObjMock.windowId, [this.pin.logoClass]);
+    this.eventEmitter.publish('toggleDrawingTool.' + this.windowObjMock.windowId, [this.pin.logoClass]);
 
     expect(this.overlay.currentTool).toBeNull();
 
     this.overlay.disabled = false;
-    jQuery.publish('toggleDrawingTool.' + this.windowObjMock.windowId, [this.pin.logoClass]);
+    this.eventEmitter.publish('toggleDrawingTool.' + this.windowObjMock.windowId, [this.pin.logoClass]);
 
     expect(this.overlay.currentTool).not.toBeNull();
     expect(this.overlay.currentTool.logoClass).toBe(this.pin.logoClass);
   });
 
   it('toggleDefaultDrawingTool', function() {
-    jQuery.publish('toggleDefaultDrawingTool.' + this.windowObjMock.windowId, []);
+    this.eventEmitter.publish('toggleDefaultDrawingTool.' + this.windowObjMock.windowId, []);
 
     expect(this.overlay.currentTool).toBeNull();
 
     this.overlay.disabled = false;
     this.rectangle = new Mirador.Rectangle();
     this.overlay.availableAnnotationDrawingTools = ['Rectangle', 'Pin'];
-    jQuery.publish('toggleDefaultDrawingTool.' + this.windowObjMock.windowId, []);
+    this.eventEmitter.publish('toggleDefaultDrawingTool.' + this.windowObjMock.windowId, []);
 
     expect(this.overlay.currentTool).not.toBeNull();
     expect(this.overlay.currentTool.logoClass).toBe(this.rectangle.logoClass);
@@ -124,7 +153,7 @@ describe('Overlay', function() {
 
   it('changeBorderColor', function() {
     var color = '#ff0000';
-    jQuery.publish('changeBorderColor.' + this.windowObjMock.windowId, [color]);
+    this.eventEmitter.publish('changeBorderColor.' + this.windowObjMock.windowId, [color]);
 
     expect(this.overlay.strokeColor).toBe(color);
 
@@ -141,7 +170,7 @@ describe('Overlay', function() {
     expect(this.overlay.hoveredPath.strokeColor.green).toBe(0);
     expect(this.overlay.hoveredPath.strokeColor.blue).toBe(0);
 
-    jQuery.publish('changeBorderColor.' + this.windowObjMock.windowId, [color]);
+    this.eventEmitter.publish('changeBorderColor.' + this.windowObjMock.windowId, [color]);
 
     expect(this.overlay.strokeColor).toBe(color);
     expect(this.overlay.hoveredPath.strokeColor.red).toBe(0);
@@ -152,7 +181,7 @@ describe('Overlay', function() {
   it('changeFillColor', function() {
     var color = '#00ff00';
     var alpha = 0.0;
-    jQuery.publish('changeFillColor.' + this.windowObjMock.windowId, [color, alpha]);
+    this.eventEmitter.publish('changeFillColor.' + this.windowObjMock.windowId, [color, alpha]);
 
     expect(this.overlay.fillColor).toBe(color);
     expect(this.overlay.fillColorAlpha).toBe(alpha);
@@ -172,7 +201,7 @@ describe('Overlay', function() {
     expect(this.overlay.hoveredPath.fillColor.blue).toBe(0);
     expect(this.overlay.hoveredPath.fillColor.alpha).toBe(1);
 
-    jQuery.publish('changeFillColor.' + this.windowObjMock.windowId, [color, alpha]);
+    this.eventEmitter.publish('changeFillColor.' + this.windowObjMock.windowId, [color, alpha]);
 
     expect(this.overlay.fillColor).toBe(color);
     expect(this.overlay.fillColorAlpha).toBe(alpha);
@@ -186,7 +215,7 @@ describe('Overlay', function() {
 
     expect(this.overlay.hoveredPath.fillColor).toBeUndefined();
 
-    jQuery.publish('changeFillColor.' + this.windowObjMock.windowId, [color, alpha]);
+    this.eventEmitter.publish('changeFillColor.' + this.windowObjMock.windowId, [color, alpha]);
 
     expect(this.overlay.hoveredPath.fillColor).toBeUndefined();
   });
@@ -411,7 +440,7 @@ describe('Overlay', function() {
   });
 
   it('parseSVG', function() {
-    var svg = '<svg xmlns="http://www.w3.org/2000/svg"><g><path xmlns="http://www.w3.org/2000/svg" d="M207.55023,187.98214l143.12613,0l143.12613,0l0,97.81055l0,97.81055l-143.12613,0l-143.12613,0l0,-97.81055z" data-paper-data="{&quot;rotation&quot;:0,&quot;annotation&quot;:null}" id="rectangle_154807a4-4121-43f0-a920-5e6792523959" fill-opacity="0.5" fill="#008000" stroke="#ff0000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="sans-serif" font-weight="normal" font-size="12" text-anchor="start" mix-blend-mode="normal"/><path xmlns="http://www.w3.org/2000/svg" d="M465.02563,80.868c27.12902,-14.80678 65.56711,-23.45636 103.98969,-23.45148c38.42258,0.00488 76.82965,8.66424 103.98969,23.45148c27.16004,14.78724 43.07305,35.70236 43.07394,56.61687c0.00089,20.91451 -15.91035,41.82842 -43.07394,56.61687c-27.16359,14.78845 -66.01382,23.21455 -103.98969,23.45148c-37.97587,0.23693 -76.58764,-8.53597 -103.98969,-23.45148c-27.40205,-14.91551 -43.17951,-35.75374 -43.07394,-56.61687c0.10556,-20.86313 15.94492,-41.81009 43.07394,-56.61687z" data-paper-data="{&quot;rotation&quot;:0,&quot;annotation&quot;:null}" id="circle_3c667714-d8cf-4b52-80eb-d22e863cf486" fill-opacity="0.5" fill="#008000" stroke="#ff0000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="sans-serif" font-weight="normal" font-size="12" text-anchor="start" mix-blend-mode="normal"/></g></svg>'
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg"><g><path d="M207.55023,187.98214l143.12613,0l143.12613,0l0,97.81055l0,97.81055l-143.12613,0l-143.12613,0l0,-97.81055z" data-paper-data="{&quot;rotation&quot;:0,&quot;annotation&quot;:null}" id="rectangle_154807a4-4121-43f0-a920-5e6792523959" fill-opacity="0.5" fill="#008000" stroke="#ff0000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="sans-serif" font-weight="normal" font-size="12" text-anchor="start" mix-blend-mode="normal"/><path xmlns="http://www.w3.org/2000/svg" d="M465.02563,80.868c27.12902,-14.80678 65.56711,-23.45636 103.98969,-23.45148c38.42258,0.00488 76.82965,8.66424 103.98969,23.45148c27.16004,14.78724 43.07305,35.70236 43.07394,56.61687c0.00089,20.91451 -15.91035,41.82842 -43.07394,56.61687c-27.16359,14.78845 -66.01382,23.21455 -103.98969,23.45148c-37.97587,0.23693 -76.58764,-8.53597 -103.98969,-23.45148c-27.40205,-14.91551 -43.17951,-35.75374 -43.07394,-56.61687c0.10556,-20.86313 15.94492,-41.81009 43.07394,-56.61687z" data-paper-data="{&quot;rotation&quot;:0,&quot;annotation&quot;:null}" id="circle_3c667714-d8cf-4b52-80eb-d22e863cf486" fill-opacity="0.5" fill="#008000" stroke="#ff0000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="sans-serif" font-weight="normal" font-size="12" text-anchor="start" mix-blend-mode="normal"></path></g></svg>'
     var annotation = {};
     var result = this.overlay.parseSVG(svg, annotation);
 
@@ -422,7 +451,7 @@ describe('Overlay', function() {
 
   // set of tests for both import and export functionality. Simulates load and store of annotation shapes.
   it('getSVGString1', function() {
-    var svg = '<svg xmlns=\'http://www.w3.org/2000/svg\'><g><path d="M207.55023,187.98214l143.12613,0l143.12613,0l0,97.81055l0,97.81055l-143.12613,0l-143.12613,0l0,-97.81055z" data-paper-data="{&quot;rotation&quot;:0,&quot;annotation&quot;:null}" id="rectangle_154807a4-4121-43f0-a920-5e6792523959" fill-opacity="0.5" fill="#008000" stroke="#ff0000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="sans-serif" font-weight="normal" font-size="12" text-anchor="start" mix-blend-mode="normal"></path><path d="M465.02563,80.868c27.12902,-14.80678 65.56711,-23.45636 103.98969,-23.45148c38.42258,0.00488 76.82965,8.66424 103.98969,23.45148c27.16004,14.78724 43.07305,35.70236 43.07394,56.61687c0.00089,20.91451 -15.91035,41.82842 -43.07394,56.61687c-27.16359,14.78845 -66.01382,23.21455 -103.98969,23.45148c-37.97587,0.23693 -76.58764,-8.53597 -103.98969,-23.45148c-27.40205,-14.91551 -43.17951,-35.75374 -43.07394,-56.61687c0.10556,-20.86313 15.94492,-41.81009 43.07394,-56.61687z" data-paper-data="{&quot;rotation&quot;:0,&quot;annotation&quot;:null}" id="circle_3c667714-d8cf-4b52-80eb-d22e863cf486" fill-opacity="0.5" fill="#008000" stroke="#ff0000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="sans-serif" font-weight="normal" font-size="12" text-anchor="start" mix-blend-mode="normal"></path></g></svg>'
+    var svg = '<svg xmlns=\'http://www.w3.org/2000/svg\'><g><path d="M207.55023,187.98214l143.12613,0l143.12613,0l0,97.81055l0,97.81055l-143.12613,0l-143.12613,0l0,-97.81055z" data-paper-data="{&quot;rotation&quot;:0,&quot;annotation&quot;:null}" id="rectangle_154807a4-4121-43f0-a920-5e6792523959" fill-opacity="0.5" fill="#008000" stroke="#ff0000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="sans-serif" font-weight="normal" font-size="12" text-anchor="start" mix-blend-mode="normal"></path><path d="M465.02563,80.868c27.12902,-14.80678 65.56711,-23.45636 103.98969,-23.45148c38.42258,0.00488 76.82965,8.66424 103.98969,23.45148c27.16004,14.78724 43.07305,35.70236 43.07394,56.61687c0.00089,20.91451 -15.91035,41.82842 -43.07394,56.61687c-27.16359,14.78845 -66.01382,23.21455 -103.98969,23.45148c-37.97587,0.23693 -76.58764,-8.53597 -103.98969,-23.45148c-27.40205,-14.91551 -43.17951,-35.75374 -43.07394,-56.61687c0.10556,-20.86313 15.94492,-41.81009 43.07394,-56.61687z" data-paper-data="{&quot;rotation&quot;:0,&quot;annotation&quot;:null}" id="circle_3c667714-d8cf-4b52-80eb-d22e863cf486" fill-opacity="0.5" fill="#008000" stroke="#ff0000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="sans-serif" font-weight="normal" font-size="12" text-anchor="start" mix-blend-mode="normal"></path></g></svg>';
     var annotation = {};
     var result = this.overlay.parseSVG(svg, annotation);
     var exportedSVG = this.overlay.getSVGString(result);
@@ -431,7 +460,7 @@ describe('Overlay', function() {
   });
 
   it('getSVGString2', function() {
-    var svgTestTwo = '<svg xmlns=\'http://www.w3.org/2000/svg\'><path d="M207.55023,187.98214l143.12613,0l143.12613,0l0,97.81055l0,97.81055l-143.12613,0l-143.12613,0l0,-97.81055z" data-paper-data="{&quot;rotation&quot;:0,&quot;annotation&quot;:null}" id="rectangle_154807a4-4121-43f0-a920-5e6792523959" fill-opacity="0.5" fill="#008000" stroke="#ff0000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="sans-serif" font-weight="normal" font-size="12" text-anchor="start" mix-blend-mode="normal"></path></svg>'
+    var svgTestTwo = '<svg xmlns=\'http://www.w3.org/2000/svg\'><path d="M207.55023,187.98214l143.12613,0l143.12613,0l0,97.81055l0,97.81055l-143.12613,0l-143.12613,0l0,-97.81055z" data-paper-data="{&quot;rotation&quot;:0,&quot;annotation&quot;:null}" id="rectangle_154807a4-4121-43f0-a920-5e6792523959" fill-opacity="0.5" fill="#008000" stroke="#ff0000" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="sans-serif" font-weight="normal" font-size="12" text-anchor="start" mix-blend-mode="normal"></path></svg>';
     var annotation = {};
     var result = this.overlay.parseSVG(svgTestTwo, annotation);
     var exportedSVGTestTwo = this.overlay.getSVGString(result);

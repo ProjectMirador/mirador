@@ -9,7 +9,9 @@
       focused:          null,
       appendTo:         null,
       window:           null,
-      windowElement:    null
+      windowElement:    null,
+      state:            null,
+      eventEmitter:     null
     }, options);
 
     this.init();
@@ -20,7 +22,7 @@
     init: function () {
       this.element = jQuery(this.template({
         workspaceSlotCls: this.workspaceSlotCls,
-        slotID: this.slotId 
+        slotID: this.slotId
       }));
       this.element.appendTo(this.appendTo);
 
@@ -31,7 +33,7 @@
     listenForActions: function() {
       var _this = this;
 
-      jQuery.subscribe('windowRemoved', function(event, id) {
+      _this.eventEmitter.subscribe('windowRemoved', function(event, id) {
         if (_this.window && _this.window.id === id) {
           // This prevents the save controller
           // from attempting to re-save the window
@@ -40,64 +42,64 @@
         }
       });
 
-      jQuery.subscribe('layoutChanged', function(event, layoutRoot) {
+      _this.eventEmitter.subscribe('layoutChanged', function(event, layoutRoot) {
         // Must reset the slotAddress of the window.
         if (_this.window) {
           _this.window.slotAddress = _this.layoutAddress;
-          jQuery.publish('windowSlotAddressUpdated', {
+          _this.eventEmitter.publish('windowSlotAddressUpdated', {
             id: _this.window.id,
             slotAddress: _this.window.slotAddress
           });
         }
       });
 
-      jQuery.subscribe('HIDE_REMOVE_SLOT', function(event) {
+      _this.eventEmitter.subscribe('HIDE_REMOVE_SLOT', function(event) {
         _this.element.find('.remove-slot-option').hide();
         if (_this.window) {
-          jQuery.publish('HIDE_REMOVE_OBJECT.' + _this.window.id);
-        }
-      });
-      
-      jQuery.subscribe('SHOW_REMOVE_SLOT', function(event) {
-        _this.element.find('.remove-slot-option').show();
-        if (_this.window) {
-          jQuery.publish('SHOW_REMOVE_OBJECT.' + _this.window.id);
+          _this.eventEmitter.publish('HIDE_REMOVE_OBJECT.' + _this.window.id);
         }
       });
 
-      jQuery.subscribe('ADD_ITEM_FROM_WINDOW', function(event, id) {
+      _this.eventEmitter.subscribe('SHOW_REMOVE_SLOT', function(event) {
+        _this.element.find('.remove-slot-option').show();
+        if (_this.window) {
+          _this.eventEmitter.publish('SHOW_REMOVE_OBJECT.' + _this.window.id);
+        }
+      });
+
+      _this.eventEmitter.subscribe('ADD_ITEM_FROM_WINDOW', function(event, id) {
         if (_this.window && _this.window.id === id) {
           _this.addItem();
         }
       });
 
-      jQuery.subscribe('REMOVE_SLOT_FROM_WINDOW', function(event, id) {
+      _this.eventEmitter.subscribe('REMOVE_SLOT_FROM_WINDOW', function(event, id) {
         if (_this.window && _this.window.id === id) {
-          jQuery.publish('REMOVE_NODE', _this);
+          _this.eventEmitter.publish('REMOVE_NODE', _this);
         }
       });
 
-      jQuery.subscribe('SPLIT_RIGHT_FROM_WINDOW', function(event, id) {
+      _this.eventEmitter.subscribe('SPLIT_RIGHT_FROM_WINDOW', function(event, id) {
         if (_this.window && _this.window.id === id) {
-          jQuery.publish('SPLIT_RIGHT', _this);
+          _this.eventEmitter.publish('SPLIT_RIGHT', _this);
         }
       });
 
-      jQuery.subscribe('SPLIT_LEFT_FROM_WINDOW', function(event, id) {
+      _this.eventEmitter.subscribe('SPLIT_LEFT_FROM_WINDOW', function(event, id) {
         if (_this.window && _this.window.id === id) {
-          jQuery.publish('SPLIT_LEFT', _this);
+          _this.eventEmitter.publish('SPLIT_LEFT', _this);
         }
       });
 
-      jQuery.subscribe('SPLIT_DOWN_FROM_WINDOW', function(event, id) {
+      _this.eventEmitter.subscribe('SPLIT_DOWN_FROM_WINDOW', function(event, id) {
         if (_this.window && _this.window.id === id) {
-          jQuery.publish('SPLIT_DOWN', _this);
+          _this.eventEmitter.publish('SPLIT_DOWN', _this);
         }
       });
 
-      jQuery.subscribe('SPLIT_UP_FROM_WINDOW', function(event, id) {
+      _this.eventEmitter.subscribe('SPLIT_UP_FROM_WINDOW', function(event, id) {
         if (_this.window && _this.window.id === id) {
-          jQuery.publish('SPLIT_UP', _this);
+          _this.eventEmitter.publish('SPLIT_UP', _this);
         }
       });
     },
@@ -108,7 +110,7 @@
 
       this.element.find('.addItemLink').on('click', function(){ _this.addItem(); });
       this.element.find('.remove-slot-option').on('click', function(){
-        jQuery.publish('REMOVE_NODE', _this);
+        _this.eventEmitter.publish('REMOVE_NODE', _this);
       });
       this.element.on('dragover', function(e) {
         e.preventDefault();
@@ -132,8 +134,22 @@
       var _this = this;
 
       e.preventDefault();
-      e.originalEvent.dataTransfer.items[0].getAsString(function(url){
+      var text_url = e.originalEvent.dataTransfer.getData("text/plain");
+      if (text_url) {
+        _this.handleDrop(text_url);
+      } else {
+        e.originalEvent.dataTransfer.items[0].getAsString(function(url) {
+          _this.handleDrop(url);
+        });
+      }
+    },
+
+    handleDrop: function(url) {
+        var _this = this;
+
+        url = url || text_url;
         var manifestUrl = $.getQueryParams(url).manifest,
+            collectionUrl = $.getQueryParams(url).collection,
             canvasId = $.getQueryParams(url).canvas,
             imageInfoUrl = $.getQueryParams(url).image,
             windowConfig;
@@ -150,23 +166,43 @@
             // image view. If we don't specify the focus, the
             // window will open in thumbnail view with the
             // chosen page highlighted.
-            windowConfig.currentCanvasID = canvasId;
-            windowConfig.currentFocus = 'ImageView';
+            windowConfig.canvasID = canvasId;
+            windowConfig.viewType = 'ImageView';
           }
 
-          jQuery.publish('ADD_WINDOW', windowConfig);
+          _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
 
-        } else if (typeof imageInfoUrl !== 'undefined') {
+        } 
+        
+        else if (typeof imageInfoUrl !== 'undefined') {
           if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
-            jQuery.publish('ADD_MANIFEST_FROM_URL', imageInfoUrl, "(Added from URL)");
+            _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', imageInfoUrl, "(Added from URL)");
           }
-        } else {
+        } 
+        else if (typeof collectionUrl !== 'undefined'){
+          jQuery.getJSON(collectionUrl).done(function (data, status, jqXHR) {
+            if (data.hasOwnProperty('manifests')){
+              jQuery.each(data.manifests, function (ci, mfst) {
+                if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
+                  _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', mfst['@id'], "(Added from URL)");
+                }
+              });
+            }
+          });
+
+          //TODO: 
+          //this works;
+          //but you might want to check if some "publish" action would be better
+          _this.addItem();
+          
+        }
+        else {
           if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
-            jQuery.publish('ADD_MANIFEST_FROM_URL', manifestUrl, "(Added from URL)");
+            _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', manifestUrl, "(Added from URL)");
           }
         }
 
-        jQuery.subscribe('manifestReceived', function(event, manifest) {
+        _this.eventEmitter.subscribe('manifestReceived', function(event, manifest) {
           var windowConfig;
           if (manifest.jsonLd['@id'] === manifestUrl || manifest.jsonLd['@id']+'/info.json' === imageInfoUrl) {
             // There are many manifests that may be received
@@ -191,14 +227,13 @@
               // image view. If we don't specify the focus, the
               // window will open in thumbnail view with the
               // chosen page highlighted.
-              windowConfig.currentCanvasID = canvasId;
-              windowConfig.currentFocus = 'ImageView';
+              windowConfig.canvasID = canvasId;
+              windowConfig.viewType = 'ImageView';
             }
 
-            jQuery.publish('ADD_WINDOW', windowConfig);
+            _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
           }
         });
-      });
     },
 
     clearSlot: function() {
@@ -216,7 +251,7 @@
       var _this = this;
       _this.focused = true;
 
-      jQuery.publish('ADD_SLOT_ITEM', _this);
+      _this.eventEmitter.publish('ADD_SLOT_ITEM', _this);
     },
 
     // template should be based on workspace type
@@ -243,7 +278,7 @@
                                 '</div>',
                                 '</h1>',
                                  '<h1 class="addItemText">{{t "addItem"}}</h1>',
-                                 '<h1 class="dropMeMessage">Drop to Load Manifest</h1>',
+                                 '<h1 class="dropMeMessage">{{t "dropToLoad"}}</h1>',
                                  '</div>',
                                  '<a class="addItemLink" role="button" aria-label="Add item"></a>',
                                  '<a class="remove-slot-option"><i class="fa fa-times fa-lg fa-fw"></i> {{t "close"}}</a>',
@@ -253,4 +288,3 @@
   };
 
 }(Mirador));
-

@@ -20,7 +20,7 @@
           tplData = {
             metadataListingCls: this.metadataListingCls
           };
-          
+
       _this.manifest = _this.manifest.jsonLd;
       this.metadataTypes = {};
 
@@ -103,7 +103,7 @@
     var _this = this,
         str,
         next,
-        label, 
+        label,
         format;
     if (obj instanceof Array) {
       str = '';
@@ -126,55 +126,20 @@
   getMetadataDetails: function(jsonLd) {
       // TODO: This should not default to English
       var mdList = {
-          'label':        '<b>' + jsonLd.label + '</b>' || '',
-          'description':  jsonLd.description || ''
+        'label': '<b>' + ($.JsonLd.getTextValue(jsonLd.label) || '') + '</b>',
+        'description':  $.JsonLd.getTextValue(jsonLd.description) || ''
       };
-      var value = "";
-      var label = "";
-      if (typeof mdList.description == "object") {
-        jQuery.each(mdList.description, function(index, item) {
-          if (typeof item == "string") {
-            value += item;
-            value += "<br/>";
-          } else {
-            // {@value: ..., @language: ...}
-            if (item['@language'] == "en") {
-              value += item['@value'];
-              value += "<br/>";                  
-            }
-          }
-        });        
-        mdList.description = value;
-      }
 
       if (jsonLd.metadata) {
         value = "";
         label = "";
         jQuery.each(jsonLd.metadata, function(index, item) {
-          if (typeof item.label === "string") {
-            label = item.label;
-          } else {
-            jQuery.each(item.label, function(i2, what) {
-              // {@value: ..., @language: ...}
-              if (what['@language'] === "en") {
-                label = what['@value'];
-              }
-            });
-          }
-          if (typeof item.value === "string") {
-            value = item.value;
-          } else {
-            jQuery.each(item.value, function(i3, what) {
-              // {@value: ..., @language: ...}
-              if (what['@language'] === "en") {
-                value = what['@value'];
-              }
-            });
-          } 
-        mdList[label] = value;
+          label = $.JsonLd.getTextValue(item.label);
+          value = $.JsonLd.getTextValue(item.value);
+          mdList[label] = value;
         });
       }
- 
+
       return mdList;
     },
 
@@ -211,21 +176,21 @@
     },
 
     toggle: function(stateValue) {
-        if (stateValue) { 
-            this.show(); 
+        if (stateValue) {
+            this.show();
         } else {
             this.hide();
         }
     },
-    
+
     show: function() {
         var element = jQuery(this.element);
         if (this.panel) {
             element = element.parent();
         }
-        element.show({effect: "slide", direction: "right", duration: 300, easing: "swing"});    
+        element.show({effect: "slide", direction: "right", duration: 300, easing: "swing"});
     },
-    
+
     hide: function() {
         var element = jQuery(this.element);
         if (this.panel) {
@@ -252,7 +217,7 @@
 
       return textWithLinks;
     },
-    
+
     template: Handlebars.compile([
     '<div class="sub-title">{{t "details"}}:</div>',
         '<div class="{{metadataListingCls}}">',

@@ -1,9 +1,12 @@
 {
     "addItem": "Add Item", 
     "changeLayout": "Change Layout",
+    "changeLayoutTooltip": "Change the number of visible slots",
     "selectGrid": "Select a grid below",
     "bookmark": "Bookmark",
+    "bookmarkTooltip": "Bookmark this Mirador instance",
     "close": "Close",
+    "closeTooltip": "Close this window",
     "bookmarkTitle": "Bookmark or Share Your Workspace",
     "filterObjects": "Filter objects",
     "addNewObject": "Add new object from URL",
@@ -22,6 +25,7 @@
     "imageView": "Image View",
     "bookView": "Book View",
     "scrollView": "Scroll View",
+    "thumbnailsView": "Gallery View",
     "comments": "Comments",
     "addTagsHere": "Add tags here",
     "save": "Save",
@@ -32,5 +36,12 @@
     "newObject": "New Object",
     "objectMetadata": "Object Metadata",
     "fullScreen": "Full Screen",
-    "logo": "Logo"
+    "fullScreenTooltip": "Toggle full screen",
+    "fullScreenWindowTooltip": "Toggle this window to full screen",
+    "logo": "Logo",
+    "load": "Load",
+    "dropToLoad": "Drop to Load Manifest",
+    "viewTypeTooltip": "Change view type",
+    "metadataTooltip": "View information/metadata about this object",
+    "sidePanelTooltip": "Toggle the side panel"
 }

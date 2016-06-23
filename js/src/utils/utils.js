@@ -56,14 +56,6 @@
     return thumbnailUrl;
   };
 
-  $.getImagesListByManifest = function(manifest) {
-    return manifest.sequences[0].canvases;
-  };
-
-  $.getCollectionTitle = function(metadata) {
-    return metadata.details.label || '';
-  };
-
   /* 
      miscellaneous utilities
      */
@@ -153,30 +145,6 @@
     };
   };
 
-  $.parseRegion  = function(url) {
-    url = new URI(url);
-    var regionString = url.hash();
-    regionArray = regionString.split('=')[1].split(',');
-    return regionArray;
-  };
-
-  $.getOsdFrame = function(region, currentImg) {
-    var imgWidth = currentImg.width,
-    imgHeight = currentImg.height,
-    canvasWidth = currentImg.canvasWidth,
-    canvasHeight = currentImg.canvasHeight,
-    widthNormaliser = imgWidth/canvasWidth,
-    heightNormaliser = imgHeight/canvasHeight,
-    rectX = (region[0]*widthNormaliser)/imgWidth,
-    rectY = (region[1]*heightNormaliser)/imgWidth,
-    rectW = (region[2]*widthNormaliser)/imgWidth,
-    rectH = (region[3]*heightNormaliser)/imgWidth;
-
-    var osdFrame = new OpenSeadragon.Rect(rectX,rectY,rectW,rectH);
-
-    return osdFrame;
-  };
-
   // http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
   $.isOnScreen = function(elem, outsideViewportFactor) {
     var factor = 1;
@@ -238,23 +206,6 @@
     return layoutDescription;
   };
 
-  $.generateRange = function(start, stop, step) {
-    if (arguments.length <= 1) {
-      stop = start || 0;
-      start = 0;
-    }
-    step = step || 1;
-
-    var length = Math.max(Math.ceil((stop - start) / step), 0);
-    var range = Array(length);
-
-    for (var idx = 0; idx < length; idx++, start += step) {
-      range[idx] = start;
-    }
-
-    return range;
-  };
-
   // Configurable Promises
   $.createImagePromise = function(imageUrl) {
     var img = new Image(),
@@ -274,6 +225,37 @@
 
     img.src = imageUrl;
     return dfd.promise();
+  };
+
+  $.enterFullscreen = function(el) {
+    if (el.requestFullscreen) {
+      el.requestFullscreen();
+    } else if (el.mozRequestFullScreen) {
+      el.mozRequestFullScreen();
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen();
+    } else if (el.msRequestFullscreen) {
+      el.msRequestFullscreen();
+    }
+  };
+
+  $.exitFullscreen = function() {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  };
+
+  $.isFullscreen = function() {
+    var fullscreen = $.fullscreenElement();
+    return (fullscreen.length > 0);
+  };
+
+  $.fullscreenElement = function() {
+    return (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement);
   };
 
 }(Mirador));

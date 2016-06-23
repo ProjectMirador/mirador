@@ -8,7 +8,9 @@
       slots:            [],
       windows:          [],
       appendTo:         null,
-      layoutDescription:    null
+      layoutDescription:    null,
+      state:            null,
+      eventEmitter:     null
     }, options);
 
     this.element  = this.element || jQuery('<div class="workspace-container" id="workspace">');
@@ -34,11 +36,11 @@
     listenForActions: function() {
       var _this = this;
 
-      jQuery.subscribe('resizeMirador', function(event) {
+      _this.eventEmitter.subscribe('resizeMirador', function(event) {
         _this.calculateLayout();
       });
 
-      jQuery.subscribe('manifestQueued', function(event, manifestPromise) {
+      _this.eventEmitter.subscribe('manifestQueued', function(event, manifestPromise) {
         // Trawl windowObjects preemptively for slotAddresses and
         // notify those slots to display a "loading" state.
         // Similar to the operation of the manifestLoadStatusIndicator
@@ -60,41 +62,41 @@
         }
       });
 
-      jQuery.subscribe('windowRemoved', function(event, windowId) {
+      _this.eventEmitter.subscribe('windowRemoved', function(event, windowId) {
         _this.windows = jQuery.grep(_this.windows, function(window) {
           return window.id !== windowId;
         });
       });
 
-      jQuery.subscribe('REMOVE_NODE', function(event, node){
+      _this.eventEmitter.subscribe('REMOVE_NODE', function(event, node){
         _this.removeNode(node);
       });
 
-      jQuery.subscribe('ADD_SLOT_ITEM', function(event, slot){
+      _this.eventEmitter.subscribe('ADD_SLOT_ITEM', function(event, slot){
         _this.addItem(slot);
       });
 
-      jQuery.subscribe('ADD_WINDOW', function(event, windowConfig) {
+      _this.eventEmitter.subscribe('ADD_WINDOW', function(event, windowConfig) {
         _this.addWindow(windowConfig);
       });
 
-      jQuery.subscribe('SPLIT_RIGHT', function(event, slot) {
+      _this.eventEmitter.subscribe('SPLIT_RIGHT', function(event, slot) {
         _this.splitRight(slot);
       });
 
-      jQuery.subscribe('SPLIT_LEFT', function(event, slot) {
+      _this.eventEmitter.subscribe('SPLIT_LEFT', function(event, slot) {
         _this.splitLeft(slot);
       });
 
-      jQuery.subscribe('SPLIT_DOWN', function(event, slot) {
+      _this.eventEmitter.subscribe('SPLIT_DOWN', function(event, slot) {
         _this.splitDown(slot);
       });
 
-      jQuery.subscribe('SPLIT_UP', function(event, slot) {
+      _this.eventEmitter.subscribe('SPLIT_UP', function(event, slot) {
         _this.splitUp(slot);
       });
 
-      jQuery.subscribe('RESET_WORKSPACE_LAYOUT', function(event, options) {
+      _this.eventEmitter.subscribe('RESET_WORKSPACE_LAYOUT', function(event, options) {
         _this.resetLayout(options.layoutDescription);
       });
     },
@@ -121,7 +123,7 @@
       } else {
         this[prop] = value;
       }
-      jQuery.publish(prop + '.set', value);
+      _this.eventEmitter.publish(prop + '.set', value);
     },
 
     calculateLayout: function(resetting) {
@@ -165,7 +167,8 @@
           layoutAddress: d.address,
           focused: true,
           appendTo: appendTo,
-          state: _this.state
+          state: _this.state,
+          eventEmitter: _this.eventEmitter
         }));
       });
 
@@ -182,7 +185,7 @@
         slot = slotMap[d.id];
 
         if (slot && slot.window && !resetting) {
-          jQuery.publish("windowRemoved", slot.window.id);
+          _this.eventEmitter.publish("windowRemoved", slot.window.id);
         }
         
         // nullify the window parameter of old slots
@@ -200,13 +203,13 @@
 
       var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
 
-      jQuery.publish("layoutChanged", root);
-      jQuery.publish('slotsUpdated', {slots: _this.slots});
+      _this.eventEmitter.publish("layoutChanged", root);
+      _this.eventEmitter.publish('slotsUpdated', {slots: _this.slots});
 
       if (_this.slots.length <= 1) {
-          jQuery.publish('HIDE_REMOVE_SLOT');
+          _this.eventEmitter.publish('HIDE_REMOVE_SLOT');
         } else {
-          jQuery.publish('SHOW_REMOVE_SLOT');
+          _this.eventEmitter.publish('SHOW_REMOVE_SLOT');
         }
     },
 
@@ -409,7 +412,7 @@
         // function because we need the other windows to remain,
         // so we filter them here.
         _this.windows.splice(0, _this.windows.length -_this.slots.length).forEach(function(removedWindow){
-          jQuery.publish('windowRemoved', removedWindow.id);
+          _this.eventEmitter.publish('windowRemoved', removedWindow.id);
         });
       }
       
@@ -422,8 +425,8 @@
           slotAddress: slot.layoutAddress, 
           state: _this.state,
           appendTo: slot.element,
-          currentCanvasID: window.currentCanvasID,
-          currentFOcus: window.currentFocus
+          canvasID: window.canvasID,
+          viewType: window.viewType
         });
       });
     },
@@ -442,8 +445,9 @@
     },
 
     addItem: function(slot) {
+      var _this = this;
       this.focusedSlot = slot;
-      jQuery.publish('TOGGLE_LOAD_WINDOW');
+      _this.eventEmitter.publish('TOGGLE_LOAD_WINDOW');
     },
 
     addWindow: function(windowConfig) {
@@ -459,7 +463,7 @@
       // toggles the other top-level panels closed and focuses the
       // workspace. For instance, after selecting an object from the
       // manifestPanel.
-      jQuery.publish('TOGGLE_OVERLAYS_FALSE');
+      _this.eventEmitter.publish('TOGGLE_OVERLAYS_FALSE');
 
       if (windowConfig.slotAddress) {
         targetSlot = _this.getSlotFromAddress(windowConfig.slotAddress);
@@ -469,24 +473,49 @@
 
       windowConfig.appendTo = targetSlot.element;
       windowConfig.state = _this.state;
+      windowConfig.eventEmitter = _this.eventEmitter;
 
       if (!targetSlot.window) {
         windowConfig.slotAddress = targetSlot.layoutAddress;
         windowConfig.id = windowConfig.id || $.genUUID();
 
-        jQuery.publish("windowSlotAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
-        newWindow = new $.Window(windowConfig);
+        _this.eventEmitter.publish("windowSlotAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
+
+        //extend the windowConfig with the default settings
+        var mergedConfig = jQuery.extend(true, {}, _this.state.getStateProperty('windowSettings'), windowConfig);
+
+        //"rename" some keys in the merged object to align settings parameters with window parameters        
+        if (mergedConfig.loadedManifest) {
+          mergedConfig.manifest = _this.state.getStateProperty('manifests')[mergedConfig.loadedManifest];
+          delete mergedConfig.loadedManifest;
+        }
+
+        if (mergedConfig.bottomPanel) {
+          mergedConfig.bottomPanelAvailable = mergedConfig.bottomPanel;
+          delete mergedConfig.bottomPanel;
+        }
+
+        if (mergedConfig.sidePanel) {
+          mergedConfig.sidePanelAvailable = mergedConfig.sidePanel;
+          delete mergedConfig.sidePanel;
+        }
+
+        if (mergedConfig.overlay) {
+          mergedConfig.overlayAvailable = mergedConfig.overlay;
+          delete mergedConfig.overlay;
+        }
+        newWindow = new $.Window(mergedConfig);
         _this.windows.push(newWindow);
 
         targetSlot.window = newWindow;
 
-        jQuery.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
+        _this.eventEmitter.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
 
-        jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
+        _this.eventEmitter.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
       } else {
         targetSlot.window.element.remove();
         targetSlot.window.update(windowConfig);
-        jQuery.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
+        _this.eventEmitter.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
         // The target slot already has a window in it, so just update that window instead,
         // using the appropriate saving functions, etc. This obviates the need changing the
         // parent, slotAddress, setting a new ID, and so on.

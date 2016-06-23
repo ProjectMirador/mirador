@@ -12,7 +12,6 @@
       elemOsd:          null,
       manifest:         null,
       osd:              null,
-      fullscreen:       null,
       osdOptions: {
         osdBounds:        null,
         zoomLevel:        null
@@ -21,7 +20,9 @@
       elemAnno:         null,
       annoCls:          'annotation-canvas',
       annotationLayerAvailable: null,
-      annotationsLayer: null 
+      annotationsLayer: null,
+      forceShowControls: false,
+      eventEmitter:     null
     }, options);
 
     this.init();
@@ -30,6 +31,7 @@
   $.ImageView.prototype = {
 
     init: function() {    
+      var _this = this;
       // check (for thumbnail view) if the canvasID is set. 
       // If not, make it page/item 1.
       if (this.canvasID !== null) {
@@ -49,14 +51,14 @@
       .appendTo(this.element);
 
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-      jQuery.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
+      _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
 
-      var allTools = $.getTools();
-      this.availableTools = [];
+      var allTools = $.getTools(this.state.getStateProperty('drawingToolsSettings'));
+      this.availableAnnotationTools = [];
       for ( var i = 0; i < this.state.getStateProperty('availableAnnotationDrawingTools').length; i++) {
         for ( var j = 0; j < allTools.length; j++) {
           if (this.state.getStateProperty('availableAnnotationDrawingTools')[i] == allTools[j].name) {
-            this.availableTools.push(allTools[j].logoClass);
+            this.availableAnnotationTools.push(allTools[j].logoClass);
           }
         }
       }
@@ -68,19 +70,20 @@
         windowId: this.windowId,
         annotationLayerAvailable: this.annotationLayerAvailable,
         annotationCreationAvailable: this.annotationCreationAvailable,
+        annotationRefresh: this.annotationRefresh,
         annoEndpointAvailable: this.annoEndpointAvailable,
-        fullScreenAvailable : this.fullScreenAvailable,
         showNextPrev : this.imagesList.length !== 1,
-        availableTools: this.availableTools
+        availableAnnotationTools: this.availableAnnotationTools,
+        eventEmitter: this.eventEmitter
       });
 
       this.bindEvents();
       this.listenForActions();
 
       if (typeof this.bottomPanelAvailable !== 'undefined' && !this.bottomPanelAvailable) {
-        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, false);
+        _this.eventEmitter.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, false);
       } else {
-        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, null);
+        _this.eventEmitter.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, null);
       }
     },
 
@@ -94,7 +97,7 @@
       firstCanvasId = _this.imagesList[0]['@id'],
       lastCanvasId = _this.imagesList[_this.imagesList.length-1]['@id'];
 
-      jQuery.subscribe('bottomPanelSet.' + _this.windowId, function(event, visible) {
+      _this.eventEmitter.subscribe('bottomPanelSet.' + _this.windowId, function(event, visible) {
         var dodgers = _this.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls');
         var arrows = _this.element.find('.mirador-osd-next, .mirador-osd-previous');
         if (visible === true) {
@@ -106,12 +109,12 @@
         }
       });
 
-      jQuery.subscribe('fitBounds.' + _this.windowId, function(event, bounds) {
+      _this.eventEmitter.subscribe('fitBounds.' + _this.windowId, function(event, bounds) {
         var rect = _this.osd.viewport.imageToViewportRectangle(Number(bounds.x), Number(bounds.y), Number(bounds.width), Number(bounds.height));
         _this.osd.viewport.fitBoundsWithConstraints(rect, false);
       });
 
-      jQuery.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasId) {
+      _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasId) {
         // If it is the first canvas, hide the "go to previous" button, otherwise show it.
         if (canvasId === firstCanvasId) {
           _this.element.find('.mirador-osd-previous').hide();
@@ -127,48 +130,48 @@
       });
 
       //Related to Annotations HUD
-      jQuery.subscribe('HUD_REMOVE_CLASS.' + _this.windowId, function(event, elementSelector, className) {
+      _this.eventEmitter.subscribe('HUD_REMOVE_CLASS.' + _this.windowId, function(event, elementSelector, className) {
         _this.element.find(elementSelector).removeClass(className);
       });
 
-      jQuery.subscribe('HUD_ADD_CLASS.' + _this.windowId, function(event, elementSelector, className) {
+      _this.eventEmitter.subscribe('HUD_ADD_CLASS.' + _this.windowId, function(event, elementSelector, className) {
         _this.element.find(elementSelector).addClass(className);
       });
 
-      jQuery.subscribe('HUD_FADE_IN.' + _this.windowId, function(event, elementSelector, duration) {
+      _this.eventEmitter.subscribe('HUD_FADE_IN.' + _this.windowId, function(event, elementSelector, duration) {
         _this.element.find(elementSelector).fadeIn(duration);
       });
 
-      jQuery.subscribe('HUD_FADE_OUT.' + _this.windowId, function(event, elementSelector, duration, complete) {
+      _this.eventEmitter.subscribe('HUD_FADE_OUT.' + _this.windowId, function(event, elementSelector, duration, complete) {
         _this.element.find(elementSelector).fadeOut(duration, complete);
       });
 
-      jQuery.subscribe('initBorderColor.' + _this.windowId, function(event, color) {
+      _this.eventEmitter.subscribe('initBorderColor.' + _this.windowId, function(event, color) {
         _this.element.find('.borderColorPicker').spectrum('set', color);
       });
-      jQuery.subscribe('initFillColor.' + _this.windowId, function(event, color, alpha) {
+      _this.eventEmitter.subscribe('initFillColor.' + _this.windowId, function(event, color, alpha) {
         var colorObj = tinycolor(color);
         colorObj.setAlpha(alpha);
         _this.element.find('.fillColorPicker').spectrum('set', colorObj);
       });
-      jQuery.subscribe('disableBorderColorPicker.'+_this.windowId, function(event, disablePicker) {
+      _this.eventEmitter.subscribe('disableBorderColorPicker.'+_this.windowId, function(event, disablePicker) {
         if(disablePicker) {
           _this.element.find('.borderColorPicker').spectrum("disable");
         }else{
           _this.element.find('.borderColorPicker').spectrum("enable");
         }
       });
-      jQuery.subscribe('disableFillColorPicker.'+_this.windowId, function(event, disablePicker) {
+      _this.eventEmitter.subscribe('disableFillColorPicker.'+_this.windowId, function(event, disablePicker) {
         if(disablePicker) {
           _this.element.find('.fillColorPicker').spectrum("disable");
         }else{
           _this.element.find('.fillColorPicker').spectrum("enable");
         }
       });
-      jQuery.subscribe('showDrawTools.'+_this.windowId, function(event) {
+      _this.eventEmitter.subscribe('showDrawTools.'+_this.windowId, function(event) {
         _this.element.find('.draw-tool').show();
       });
-      jQuery.subscribe('hideDrawTools.'+_this.windowId, function(event) {
+      _this.eventEmitter.subscribe('hideDrawTools.'+_this.windowId, function(event) {
         _this.element.find('.draw-tool').hide();
       });
       //Related to Annotations HUD
@@ -192,6 +195,8 @@
         if (_this.hud.annoState.current === 'annoOff') {
           _this.hud.annoState.displayOn(this);
         } else {
+          //make sure to force the controls back to auto fade
+          _this.forceShowControls = false;
           _this.hud.annoState.displayOff(this);
         }
       },300));
@@ -240,60 +245,46 @@
         }
       });
 
-      this.element.find('.mirador-osd-fullscreen').on('click', function() {
-        if (OpenSeadragon.isFullScreen()) {
-          OpenSeadragon.exitFullScreen();
-        } else {
-          jQuery.publish('REQUEST_OSD_FULL_SCREEN.' + _this.windowId);
-        }
-      });
-
-      jQuery(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function() {
-        _this.fullScreen();
-      });
-
       this.element.find('.mirador-osd-toggle-bottom-panel').on('click', function() {
-        jQuery.publish('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + _this.windowId);
+        _this.eventEmitter.publish('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + _this.windowId);
       });
 
       //related the ContextControls
-      this.element.find('.mirador-osd-close').on('click', $.debounce(function() {
-        _this.hud.annoState.displayOff();
-      },300));
-
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
         if (_this.hud.annoState.current === 'annoOnCreateOff') {
           _this.hud.annoState.createOn();
+          //when a user is in Create mode, don't let the controls auto fade as it could be distracting to the user
+          _this.forceShowControls = true;
+          _this.element.find(".hud-control").stop(true, true).removeClass('hidden', _this.state.getStateProperty('fadeDuration'));
         } else if (_this.hud.annoState.current === 'annoOnCreateOn') {
           _this.hud.annoState.createOff();
+          //go back to allowing the controls to auto fade
+          _this.forceShowControls = false;
         }
       });
 
       this.element.find('.mirador-osd-refresh-mode').on('click', function() {
         //update annotation list from endpoint
-        jQuery.publish('updateAnnotationList.'+_this.windowId);
-        jQuery.publish('refreshOverlay.'+_this.windowId, '');
+        _this.eventEmitter.publish('updateAnnotationList.'+_this.windowId);
+        _this.eventEmitter.publish('refreshOverlay.'+_this.windowId, '');
       });
       this.element.find('.mirador-osd-delete-mode').on('click', function() {
-        jQuery.publish('deleteShape.'+_this.windowId, '');
+        _this.eventEmitter.publish('deleteShape.'+_this.windowId, '');
       });
       this.element.find('.mirador-osd-save-mode').on('click', function() {
-        jQuery.publish('updateEditedShape.'+_this.windowId, '');
-      });
-      this.element.find('.mirador-osd-close').on('click', function() {
-        jQuery.publish('toggleDefaultDrawingTool.'+_this.windowId);
+        _this.eventEmitter.publish('updateEditedShape.'+_this.windowId, '');
       });
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
-        jQuery.publish('toggleDefaultDrawingTool.'+_this.windowId);
+        _this.eventEmitter.publish('toggleDefaultDrawingTool.'+_this.windowId);
       });
 
       function make_handler(shapeMode) {
         return function () {
-          jQuery.publish('toggleDrawingTool.'+_this.windowId, shapeMode);
+          _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shapeMode);
         };
       }
-      for (var value in _this.availableTools) {
-        this.element.find('.material-icons:contains(\'' + _this.availableTools[value] + '\')').on('click', make_handler(_this.availableTools[value]));
+      for (var value in _this.availableAnnotationTools) {
+        this.element.find('.material-icons:contains(\'' + _this.availableAnnotationTools[value] + '\')').on('click', make_handler(_this.availableAnnotationTools[value]));
       }
       //related the ContextControls
     },
@@ -308,26 +299,10 @@
       return panBy;
     },
 
-    fullScreen: function() {
-      var replacementButton;
-
-      if (!OpenSeadragon.isFullScreen()) {
-        replacementButton = jQuery('<i class="fa fa-expand"></i>');
-        this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
-        this.element.find('.mirador-osd-toggle-bottom-panel').show();
-        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, true);
-      } else {
-        replacementButton = jQuery('<i class="fa fa-compress"></i>');
-        this.element.find('.mirador-osd-fullscreen').empty().append(replacementButton);
-        this.element.find('.mirador-osd-toggle-bottom-panel').hide();
-        jQuery.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, false);
-      }
-    },
-
     setBounds: function() {
       var _this = this;
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
-      jQuery.publish("imageBoundsUpdated", {
+      _this.eventEmitter.publish("imageBoundsUpdated", {
         id: _this.windowId, 
           osdBounds: {
             x: _this.osdOptions.osdBounds.x, 
@@ -337,7 +312,7 @@
           }
       });
       var rectangle = this.osd.viewport.viewportToImageRectangle(this.osdOptions.osdBounds);
-      jQuery.publish("imageRectangleUpdated", {
+      _this.eventEmitter.publish("imageRectangleUpdated", {
         id: _this.windowId,
         osdBounds: {
           x: Math.round(rectangle.x),
@@ -361,14 +336,21 @@
     },
 
     show: function() {
-      jQuery(this.element).show({effect: "fade", duration: 300, easing: "easeInCubic"});
+      jQuery(this.element).show({
+        effect: "fade", duration: 300, easing: "easeInCubic", complete: function () {
+          // Under firefox $.show() used under display:none iframe does not change the display.
+          // This is workaround for https://github.com/IIIF/mirador/issues/929
+          jQuery(this).css('display', 'block');
+        }
+      });
     },
 
     adjustWidth: function(className, hasClass) {
+      var _this = this;
       if (hasClass) {
-        jQuery.publish('REMOVE_CLASS.'+this.windowId, className);
+        _this.eventEmitter.publish('REMOVE_CLASS.'+this.windowId, className);
       } else {
-        jQuery.publish('ADD_CLASS.'+this.windowId, className);
+        _this.eventEmitter.publish('ADD_CLASS.'+this.windowId, className);
       }
     },
 
@@ -407,7 +389,7 @@
             'x': -10000000,
             'y': -10000000
           };
-          jQuery.publish('updateTooltips.' + _this.windowId, [point, point]);
+          _this.eventEmitter.publish('updateTooltips.' + _this.windowId, [point, point]);
         }, 30));
 
         _this.osd.addHandler('pan', $.debounce(function(){
@@ -415,11 +397,34 @@
             'x': -10000000,
             'y': -10000000
           };
-          jQuery.publish('updateTooltips.' + _this.windowId, [point, point]);
+          _this.eventEmitter.publish('updateTooltips.' + _this.windowId, [point, point]);
         }, 30));
 
+        if (_this.state.getStateProperty('autoHideControls')) {
+          var timeoutID = null,
+          fadeDuration = _this.state.getStateProperty('fadeDuration'),
+          timeoutDuration = _this.state.getStateProperty('timeoutDuration');
+          var hideHUD = function() {
+            _this.element.find(".hud-control").stop(true, true).addClass('hidden', fadeDuration);
+          };
+          hideHUD();
+          jQuery(_this.element).on('mousemove', function() {
+            window.clearTimeout(timeoutID);
+            _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
+            // When a user is in annotation create mode, force show the controls so they don't disappear when in a qtip, so check for that
+            if (!_this.forceShowControls) {
+              timeoutID = window.setTimeout(hideHUD, timeoutDuration);
+            }
+          }).on('mouseleave', function() {
+            if (!_this.forceShowControls) {
+              window.clearTimeout(timeoutID);
+              hideHUD();
+            }
+          });
+        }
+
         _this.osd.addHandler('open', function(){
-          jQuery.publish('osdOpen.'+_this.windowId);
+          _this.eventEmitter.publish('osdOpen.'+_this.windowId);
           if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
@@ -471,11 +476,13 @@
         annotationsList: _this.state.getWindowAnnotationsList(_this.windowId) || [],
         viewer: _this.osd,
         windowId: _this.windowId,
-        element: element
+        element: element,
+        eventEmitter: _this.eventEmitter
       });
     },
 
     updateImage: function(canvasID) {
+      var _this = this;
       if (this.canvasID !== canvasID) {
         this.canvasID = canvasID;
         this.currentImgIndex = $.getImageIndexById(this.imagesList, canvasID);
@@ -486,25 +493,27 @@
         };
         this.osd.close();
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-        jQuery.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
+        _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
       } else {
-        jQuery.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
+        _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
       }
     },
 
     next: function() {
+      var _this = this;
       var next = this.currentImgIndex + 1;
 
       if (next < this.imagesList.length) {
-        jQuery.publish('SET_CURRENT_CANVAS_ID.' + this.windowId, this.imagesList[next]['@id']);
+        _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + this.windowId, this.imagesList[next]['@id']);
       }
     },
 
     previous: function() {
+      var _this = this;
       var prev = this.currentImgIndex - 1;
 
       if (prev >= 0) {
-        jQuery.publish('SET_CURRENT_CANVAS_ID.' + this.windowId, this.imagesList[prev]['@id']);
+        _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + this.windowId, this.imagesList[prev]['@id']);
       }
     }
   };
