@@ -50,6 +50,12 @@
       return shape;
     },
 
+    updateSelection: function(selected, item, overlay) {
+      if (item._name.toString().indexOf(this.idPrefix) != -1) {
+        item.fullySelected = selected;
+      }
+    },
+
     onMouseUp: function(event, overlay) {
       if (overlay.mode == 'create' && overlay.path) {
         overlay.onDrawFinish();

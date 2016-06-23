@@ -33,6 +33,7 @@
       dashArray: [],
       fixedShapeSize: 10,
       hitOptions: {
+        handles: true,
         stroke: true,
         segments: true,
         tolerance: 5
@@ -66,8 +67,8 @@
     this.viewer.addHandler('resize', _thisResize);
     this.viewer.addHandler('rotate', _thisResize);
     this.viewer.addHandler('constrain', _thisResize);
-    
-    
+
+
     _this.eventEmitter.subscribe('toggleDrawingTool.' + _this.windowId, function(event, tool) {
       jQuery('#' + osdViewerId).parent().find('.hud-container').find('.draw-tool').removeClass('selected');
       if (_this.disabled) {
@@ -135,7 +136,7 @@
       this.paperScope = new paper.PaperScope();
       this.paperScope.setup('draw_canvas_' + _this.windowId);
       this.paperScope.activate();
-      this.paperScope.project.options.handleSize = 10;
+      this.paperScope.project.options.handleSize = _this.state.getStateProperty('shapeHandleSize');
       jQuery(_this.canvas).attr('keepalive', 'true');
       this.paperScope.view.onFrame = function(event) {
         if (_this.paperScope.snapPoint) {
@@ -185,7 +186,6 @@
     },
 
     onMouseDrag: function(event) {
-      var _this = this;
       if (!this.overlay.disabled) {
         event.stopPropagation();
         this.overlay.currentTool.onMouseDrag(event, this.overlay);
@@ -194,15 +194,15 @@
           'x': event.event.clientX,
           'y': event.event.clientY
         };
-        _this.overlay.eventEmitter.publish('updateTooltips.' + this.overlay.windowId, [event.point, absolutePoint]);
+        this.overlay.eventEmitter.publish('updateTooltips.' + this.overlay.windowId, [event.point, absolutePoint]);
       }
       this.overlay.paperScope.view.draw();
     },
 
     onMouseMove: function(event) {
-      var _this = this;
       this.overlay.cursorLocation = event.point;
       if (!this.overlay.disabled) {
+        // We are in drawing mode
         if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
           document.body.style.cursor = "pointer";
         } else {
@@ -215,13 +215,12 @@
           'x': event.event.clientX,
           'y': event.event.clientY
         };
-        _this.overlay.eventEmitter.publish('updateTooltips.' + this.overlay.windowId, [event.point, absolutePoint]);
+        this.overlay.eventEmitter.publish('updateTooltips.' + this.overlay.windowId, [event.point, absolutePoint]);
       }
       this.overlay.paperScope.view.draw();
     },
 
     onMouseDown: function(event) {
-      var _this = this;
       if (this.overlay.disabled) {
         return;
       }
@@ -239,8 +238,8 @@
           prefix = prefix.substring(0, prefix.lastIndexOf('_') + 1);
           for (var j = 0; j < this.overlay.tools.length; j++) {
             if (this.overlay.tools[j].idPrefix == prefix) {
-              _this.overlay.eventEmitter.publish('toggleDrawingTool.' + this.overlay.windowId, this.overlay.tools[j].logoClass);
-              this.overlay.paperScope.project.activeLayer.selected = false;
+              this.overlay.eventEmitter.publish('toggleDrawingTool.' + this.overlay.windowId, this.overlay.tools[j].logoClass);
+              this.overlay.updateSelection(false, this.overlay.paperScope.project.activeLayer);
               this.overlay.hoveredPath = null;
               this.overlay.segment = null;
               this.overlay.path = null;
@@ -287,6 +286,17 @@
       }
     },
 
+    updateSelection: function(selected, item) {
+      if(item && item._name){
+        for (var i = 0; i < this.tools.length; i++) {
+          if (item._name.toString().indexOf(this.tools[i].idPrefix) != -1) {
+            this.tools[i].updateSelection(selected, item, this);
+            break;
+          }
+        }
+      }
+    },
+
     resize: function() {
       var viewportBounds = this.viewer.viewport.getBounds(true);
       /* in viewport coordinates */
@@ -323,34 +333,34 @@
     hover: function() {
       if (!this.currentTool) {
         if (this.hoveredPath) {
-          this.hoveredPath.selected = false;
+          this.updateSelection(false, this.hoveredPath);
           this.hoveredPath = null;
         }
       } else if (this.hoveredPath) {
         if (this.hoveredPath._name.toString().indexOf(this.currentTool.idPrefix) == -1) {
-          this.hoveredPath.selected = false;
+          this.updateSelection(false, this.hoveredPath);
           this.hoveredPath = null;
         }
         if (this.path && this.path._name.toString().indexOf(this.currentTool.idPrefix) != -1) {
           if (this.hoveredPath) {
-            this.hoveredPath.selected = false;
+            this.updateSelection(false, this.hoveredPath);
           }
           this.hoveredPath = this.path;
-          this.hoveredPath.selected = true;
+          this.updateSelection(true, this.hoveredPath);
         }
       } else if (this.path && this.path._name.toString().indexOf(this.currentTool.idPrefix) != -1) {
         this.hoveredPath = this.path;
-        this.hoveredPath.selected = true;
+        this.updateSelection(true, this.hoveredPath);
       }
     },
 
     removeFocus: function() {
       if (this.hoveredPath) {
-        this.hoveredPath.selected = false;
+        this.updateSelection(false, this.hoveredPath);
         this.hoveredPath = null;
       }
       if (this.path) {
-        this.path.selected = false;
+        this.updateSelection(false, this.path);
         this.path = null;
       }
     },
@@ -361,17 +371,28 @@
     },
 
     restoreDraftShapes: function() {
-      this.draftPaths = [];
+      this.clearDraftData();
       this.removeFocus();
     },
 
     // replaces paper.js objects with the required properties only.
     // 'shapes' coordinates are image coordiantes
     replaceShape: function(shape, annotation) {
+      var _this = this;
+      //backward compatibility when changing shapes points
+      this.tools.forEach(function(tool,index){
+        if(shape.name.toString().indexOf(tool.idPrefix) !== -1){
+          if(_this.tools[index].SEGMENT_POINTS_COUNT && _this.tools[index].SEGMENT_POINTS_COUNT !== shape.segments.length){
+            _this.tools[index].adaptSegments(shape,_this);
+          }
+        }
+      });
+
       var cloned = new this.paperScope.Path({
         segments: shape.segments,
         name: shape.name
       });
+
       cloned.strokeWidth = 1 / this.paperScope.view.zoom;
       cloned.strokeColor = shape.strokeColor;
       cloned.dashArray = shape.dashArray;
@@ -400,8 +421,8 @@
       var rect = new $.Rectangle();
       var newShape = this.viewer.viewport.viewportToImageRectangle(shape);
       var initialPoint = {
-        'x': newShape.x,
-        'y': newShape.y
+        'x': newShape.x * scale,
+        'y': newShape.y * scale
       };
       var currentMode = this.mode;
       var currentPath = this.path;
@@ -415,14 +436,14 @@
       this.path = rect.createShape(initialPoint, this);
       var eventData = {
         'delta': {
-          'x': newShape.width,
-          'y': newShape.height
+          'x': newShape.width * scale,
+          'y': newShape.height * scale
         }
       };
       rect.onMouseDrag(eventData, this);
       paperItems.push(this.path);
       paperItems[0].data.annotation = annotation;
-      paperItems[0].selected = false;
+      this.updateSelection(false, paperItems[0]);
       this.strokeColor = strokeColor;
       this.fillColor = fillColor;
       this.fillColorAlpha = fillColorAlpha;
@@ -506,25 +527,23 @@
     },
 
     disable: function() {
-      var _this = this;
       this.disabled = true;
-      _this.eventEmitter.publish('hideDrawTools.' + this.windowId);
-      _this.eventEmitter.publish('disableBorderColorPicker.' + this.windowId, this.disabled);
-      _this.eventEmitter.publish('disableFillColorPicker.' + this.windowId, this.disabled);
-      _this.eventEmitter.publish('enableTooltips.' + this.windowId);
+      this.eventEmitter.publish('hideDrawTools.' + this.windowId);
+      this.eventEmitter.publish('disableBorderColorPicker.' + this.windowId, this.disabled);
+      this.eventEmitter.publish('disableFillColorPicker.' + this.windowId, this.disabled);
+      this.eventEmitter.publish('enableTooltips.' + this.windowId);
       this.deselectAll();
     },
 
     enable: function() {
-      var _this = this;
       var setDefaultTool = this.disabled;
       this.disabled = false;
-      _this.eventEmitter.publish('showDrawTools.' + this.windowId);
-      _this.eventEmitter.publish('disableBorderColorPicker.' + this.windowId, this.disabled);
-      _this.eventEmitter.publish('disableFillColorPicker.' + this.windowId, this.disabled);
-      _this.eventEmitter.publish('disableTooltips.' + this.windowId);
+      this.eventEmitter.publish('showDrawTools.' + this.windowId);
+      this.eventEmitter.publish('disableBorderColorPicker.' + this.windowId, this.disabled);
+      this.eventEmitter.publish('disableFillColorPicker.' + this.windowId, this.disabled);
+      this.eventEmitter.publish('disableTooltips.' + this.windowId);
       if (setDefaultTool) {
-        _this.eventEmitter.publish('toggleDefaultDrawingTool.' + this.windowId);
+        this.eventEmitter.publish('toggleDefaultDrawingTool.' + this.windowId);
       }
     },
 
@@ -533,8 +552,7 @@
     },
 
     destroyCommentPanel: function() {
-      var _this = this;
-      _this.eventEmitter.publish('removeTooltips.' + this.windowId);
+      this.eventEmitter.publish('removeTooltips.' + this.windowId);
       jQuery(this.canvas).parents('.mirador-osd').qtip('destroy', true);
       this.commentPanel = null;
     },
@@ -548,6 +566,7 @@
       if (shapes.length > 1) {
         svg += "<g>";
         for (var i = 0; i < shapes.length; i++) {
+          this.updateSelection(false,shapes[i]);
           if (shapes[i].data.fixedSize) {
             this.fitFixedSizeShapes(shapes[i]);
           }
@@ -560,6 +579,7 @@
         }
         svg += "</g>";
       } else {
+        this.updateSelection(false,shapes[0]);
         if (shapes[0].data.fixedSize) {
           this.fitFixedSizeShapes(shapes[0]);
         }
@@ -580,10 +600,10 @@
         return;
       }
       if (this.hoveredPath) {
-        this.hoveredPath.selected = false;
+        this.updateSelection(false, this.hoveredPath);
       }
       this.hoveredPath = shape;
-      this.hoveredPath.selected = true;
+      this.updateSelection(true, this.hoveredPath);
       this.segment = null;
       this.path = null;
       this.mode = '';
@@ -594,11 +614,12 @@
         eventEmitter: this.eventEmitter,
         windowId: this.windowId
       });
-      var _this = this;
-      if (_this.availableExternalCommentsPanel) {
-        _this.eventEmitter.publish('annotationShapeCreated.' + _this.windowId, [_this, shape]);
+
+      if (this.availableExternalCommentsPanel) {
+        this.eventEmitter.publish('annotationShapeCreated.' + _this.windowId, [_this, shape]);
         return;
       }
+      var _this = this;
       annoTooltip.showEditor({
         annotation: {},
         onAnnotationCreated: function(oaAnno) {
@@ -611,7 +632,6 @@
               "value": svg
             }
           };
-
           //save to endpoint
           _this.eventEmitter.publish('annotationCreated.' + _this.windowId, [oaAnno, shape]);
         },
@@ -627,6 +647,7 @@
     clearDraftData: function() {
       var _this = this;
       for (var idx = 0; idx < _this.draftPaths.length; idx++) {
+        _this.updateSelection(false, this.draftPaths[idx]);
         _this.draftPaths[idx].remove();
       }
       _this.draftPaths = [];
@@ -634,7 +655,6 @@
         _this.path.remove();
       }
       _this.paperScope.view.update(true);
-      _this.paperScope.project.activeLayer.selected = false;
       _this.hoveredPath = null;
       _this.segment = null;
       _this.path = null;

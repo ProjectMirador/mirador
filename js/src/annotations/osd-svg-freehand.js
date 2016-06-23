@@ -26,6 +26,12 @@
       return shape;
     },
 
+    updateSelection: function(selected, item, overlay) {
+      if (item._name.toString().indexOf(this.idPrefix) != -1) {
+        item.selected = selected;
+      }
+    },
+
     onMouseUp: function(event, overlay) {
       if (overlay.path) {
         overlay.path.simplify();
