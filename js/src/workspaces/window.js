@@ -476,7 +476,7 @@
     updateSidePanel: function() {
       if (!this.sidePanelAvailable) {
         return;
-      }console.log('[Window] updating side panel.');
+      }
       var _this = this,
       tocAvailable = _this.sidePanelOptions.toc,
       annotationsTabAvailable = _this.sidePanelOptions.annotations,

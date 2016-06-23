@@ -53,7 +53,7 @@
       }
     },
 
-    toggle: function() {console.log('[SearchTab] wrong toggle function.');},
+    toggle: function() {},
 
     listenForActions: function() {
       var _this = this;
@@ -84,7 +84,8 @@
           imagesList: _this.imagesList,
           thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'},
           query_params: query_params,
-          searchService: searchUrl
+          searchService: searchUrl,
+          eventEmitter: _this.eventEmitter
         });
       }
     },
@@ -100,7 +101,6 @@
         var date = _this.element.find(".js-date").val();
         var user = _this.element.find(".js-user").val();
         var searchUrl = _this.element.find("#search-within-selector").val();
-        console.log(searchUrl);
 
         _this.displaySearchWithin({
           "q": query,

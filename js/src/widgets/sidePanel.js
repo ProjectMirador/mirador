@@ -116,7 +116,6 @@
         });
       }
       if (_this.searchTabAvailable) {
-        console.log('[SideBar] creating new search tab... [' + _this.windowId + ']');
           new $.SearchTab({
               manifest: _this.manifest,
               windowId: this.windowId,
