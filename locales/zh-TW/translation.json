@@ -25,6 +25,7 @@
     "imageView": "圖像視圖",
     "bookView": "書本視圖",
     "scrollView": "滾動視圖",
+    "thumbnailsView": "圖庫視圖",
     "comments": "評論",
     "addTagsHere": "添加標簽",
     "save": "保存",
@@ -33,5 +34,7 @@
     "delete": "刪除",
     "newObject": "建立新物件",
     "fullScreen": "全屏",
-    "logo": "徽標"
+    "logo": "徽標",
+    "load": "負荷",
+    "dropToLoad": "下降到裝載艙單"
 }

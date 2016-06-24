@@ -15,6 +15,7 @@
       resizeRatio:            {},
       currentWorkspaceVisible: true,
       state:                  null,
+      eventEmitter:           null,
       overlayStates:          {
         'workspacePanelVisible': false,
         'manifestsPanelVisible': false,
@@ -41,13 +42,24 @@
 
     init: function() {
       var _this = this;
+
+      //initialize i18next
+      i18n.init({
+        fallbackLng: 'en', 
+        load: 'unspecific', 
+        debug: false, 
+        getAsync: true, 
+        resGetPath: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('i18nPath')+'__lng__/__ns__.json'
+      }, _this.setupViewer.bind(_this)); 
+      // because this is a callback, we need to bind "_this" to explicitly retain the calling context of this function (the viewer object instance));
+    },
+
+    setupViewer: function() {
+      var _this = this;
       //add background and positioning information on the root element that is provided in config
       var backgroundImage = _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('imagesPath') + 'debut_dark.png';
       this.element.css('background-color', '#333').css('background-image','url('+backgroundImage+')').css('background-position','left top')
       .css('background-repeat','repeat').css('position','fixed');
-
-      //initialize i18next
-      i18n.init({debug: false, getAsync: false, resGetPath: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('i18nPath')+'__lng__/__ns__.json'});
 
       //register Handlebars helper
       Handlebars.registerHelper('t', function(i18n_key) {
@@ -60,14 +72,23 @@
       jQuery.each(this.state.getStateProperty('mainMenuSettings').buttons, function(key, value) {
         if (value) { showMainMenu = true; }
       });
-      //even if buttons are available, developer can override and set show to false
+      // but, mainMenu should be displayed if we have userButtons and/or userLogo defined
+      if (this.state.getStateProperty('mainMenuSettings').userButtons && this.state.getStateProperty('mainMenuSettings').userButtons.length > 0) {
+        showMainMenu = true;
+      }
+      if (this.state.getStateProperty('mainMenuSettings').userLogo && !jQuery.isEmptyObject(this.state.getStateProperty('mainMenuSettings').userLogo)) {
+        showMainMenu = true;
+      }
+
+      //even if all these buttons are available, developer can override and set show to false,
+      //in which case, don't show mainMenu at all
       if (this.state.getStateProperty('mainMenuSettings').show === false) {
         showMainMenu = false;
       }
 
       // add main menu
       if (showMainMenu) {
-        this.mainMenu = new $.MainMenu({ appendTo: this.element, state: this.state });
+        this.mainMenu = new $.MainMenu({ appendTo: this.element, state: this.state, eventEmitter: this.eventEmitter });
       }
 
       // add viewer area
@@ -84,16 +105,21 @@
       this.workspace = new $.Workspace({
         layoutDescription: this.layout.charAt(0) === '{' ? JSON.parse(this.layout) : $.layoutDescriptionFromGridString(this.layout),
         appendTo: this.element.find('.mirador-viewer'),
-        state: this.state
+        state: this.state,
+        eventEmitter: this.eventEmitter
       });
 
       this.workspacePanel = new $.WorkspacePanel({
         appendTo: this.element.find('.mirador-viewer'),
-        state: this.state
+        state: this.state,
+        eventEmitter: this.eventEmitter
       });
 
-      this.manifestsPanel = new $.ManifestsPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state });
-      this.bookmarkPanel = new $.BookmarkPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state });
+      this.manifestsPanel = new $.ManifestsPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state, eventEmitter: this.eventEmitter });
+      //only instatiate bookmarkPanel if we need it
+      if (showMainMenu && this.state.getStateProperty('mainMenuSettings').buttons.bookmark) {
+        this.bookmarkPanel = new $.BookmarkPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state, eventEmitter: this.eventEmitter });
+      }
 
       // set this to be displayed
       this.set('currentWorkspaceVisible', true);
@@ -112,7 +138,7 @@
       var _this = this;
 
       // check that windows are loading first to set state of slot?
-      jQuery.subscribe('manifestReceived', function(event, newManifest) {
+      _this.eventEmitter.subscribe('manifestReceived', function(event, newManifest) {
         if (_this.state.getStateProperty('windowObjects')) {
           var check = jQuery.grep(_this.state.getStateProperty('windowObjects'), function(object, index) {
             return object.loadedManifest === newManifest.uri;
@@ -123,27 +149,43 @@
         }
       });
 
-      jQuery.subscribe('TOGGLE_WORKSPACE_PANEL', function(event) {
+      _this.eventEmitter.subscribe('TOGGLE_WORKSPACE_PANEL', function(event) {
         _this.toggleWorkspacePanel();
       });
 
-      jQuery.subscribe('TOGGLE_BOOKMARK_PANEL', function(event) {
+      _this.eventEmitter.subscribe('TOGGLE_BOOKMARK_PANEL', function(event) {
         _this.toggleBookmarkPanel();
       });
 
-      jQuery.subscribe('TOGGLE_FULLSCREEN', function(event) {
-        _this.fullscreenElement() ? _this.exitFullscreen() : _this.enterFullscreen();
+      _this.eventEmitter.subscribe('TOGGLE_FULLSCREEN', function(event) {
+        if ($.fullscreenElement()) {
+          $.exitFullscreen();
+          //enable any window-specific fullscreen buttons
+          _this.eventEmitter.publish('ENABLE_WINDOW_FULLSCREEN');
+        } else {
+          $.enterFullscreen(_this.element[0]);
+          //disable any window-specific fullscreen buttons
+          _this.eventEmitter.publish('DISABLE_WINDOW_FULLSCREEN');
+        }
+      });
+      
+      jQuery(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function() {
+        _this.eventEmitter.publish('MAINMENU_FULLSCREEN_BUTTON');
+        // in case the user clicked ESC instead of clicking on the toggle fullscreen button, reenable the window fullscreen button
+        if (!$.fullscreenElement()) {
+          _this.eventEmitter.publish('ENABLE_WINDOW_FULLSCREEN');
+        }
       });
 
-      jQuery.subscribe('TOGGLE_LOAD_WINDOW', function(event) {
+      _this.eventEmitter.subscribe('TOGGLE_LOAD_WINDOW', function(event) {
         _this.toggleLoadWindow();
       });
 
-      jQuery.subscribe('ADD_MANIFEST_FROM_URL', function(event, url, location) {
+      _this.eventEmitter.subscribe('ADD_MANIFEST_FROM_URL', function(event, url, location) {
         _this.addManifestFromUrl(url, location);
       });
 
-      jQuery.subscribe('TOGGLE_OVERLAYS_FALSE', function(event) {
+      _this.eventEmitter.subscribe('TOGGLE_OVERLAYS_FALSE', function(event) {
         jQuery.each(_this.overlayStates, function(oState, value) {
           // toggles the other top-level panels closed and focuses the
           // workspace. For instance, after selecting an object from the
@@ -172,7 +214,7 @@
       } else {
         this[prop] = value;
       }
-      jQuery.publish(prop + '.set', value);
+      _this.eventEmitter.publish(prop + '.set', value);
     },
 
     // Sets state of overlays that layer over the UI state
@@ -198,38 +240,6 @@
 
     toggleBookmarkPanel: function() {
       this.toggleOverlay('bookmarkPanelVisible');
-    },
-
-    enterFullscreen: function() {
-      var el = this.element[0];
-      if (el.requestFullscreen) {
-        el.requestFullscreen();
-      } else if (el.mozRequestFullScreen) {
-        el.mozRequestFullScreen();
-      } else if (el.webkitRequestFullscreen) {
-        el.webkitRequestFullscreen();
-      } else if (el.msRequestFullscreen) {
-        el.msRequestFullscreen();
-      }
-    },
-
-    exitFullscreen: function() {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      }
-    },
-
-    isFullscreen: function() {
-      var fullscreen = this.fullscreenElement();
-      return (fullscreen.length > 0);
-    },
-
-    fullscreenElement: function() {
-      return (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement);
     },
 
     getManifestsData: function() {
@@ -271,9 +281,9 @@
 
       if (!_this.state.getStateProperty('manifests')[url]) {
         manifest = new $.Manifest(url, location, content);
-        jQuery.publish('manifestQueued', manifest, location);
+        _this.eventEmitter.publish('manifestQueued', manifest, location);
         manifest.request.done(function() {
-          jQuery.publish('manifestReceived', manifest);
+          _this.eventEmitter.publish('manifestReceived', manifest);
         });
       }
     },
@@ -281,34 +291,17 @@
     loadManifestFromConfig: function(options) {
       // check if there are available slots, otherwise don't process this object from config
       //if we have more windowObjects that slots in the layout, return
+      // it may not be necesary to set the slotAddress here since it is also covered in workspace
+      var _this = this;
       var slotAddress = options.slotAddress ? options.slotAddress : this.workspace.getAvailableSlot() ? this.workspace.getAvailableSlot().layoutAddress : null;
+      options.slotAddress = slotAddress;
       if (!slotAddress) {
         return;
       }
 
-      var windowConfig = {
-        manifest: this.state.getStateProperty('manifests')[options.loadedManifest],
-        currentFocus : options.viewType,
-        focusesOriginal : options.availableViews,
-        currentCanvasID : options.canvasID,
-        id : options.id,
-        focusOptions : options.windowOptions,
-        bottomPanelAvailable : options.bottomPanel,
-        bottomPanelVisible : options.bottomPanelVisible,
-        sidePanelAvailable : options.sidePanel,
-        sidePanelOptions : options.sidePanelOptions,
-        sidePanelVisible : options.sidePanelVisible,
-        overlayAvailable : options.overlay,
-        annotationLayerAvailable : options.annotationLayer,
-        annotationCreationAvailable : options.annotationCreation,
-        annotationState : options.annotationState,
-        fullScreenAvailable : options.fullScreen,
-        slotAddress: slotAddress,
-        displayLayout : options.displayLayout,
-        layoutOptions: options.layoutOptions
-      };
-
-      jQuery.publish('ADD_WINDOW', windowConfig);
+      //make a copy of options and pass that so we don't get a circular reference
+      var windowConfig = jQuery.extend(true, {}, options);
+      _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
     }
   };
 

@@ -6,8 +6,9 @@
       appendTo:          null,
       manifest:          null,
       visible:           null,
-      canvasID:     null,
-      windowId: null,
+      canvasID:          null,
+      windowId:          null,
+      eventEmitter:      null,
     }, options);
 
     this.init();
@@ -33,7 +34,7 @@
       this.searchTabState = state;
 
       if (!initial) {
-        jQuery.publish('searchTabStateUpdated.' + this.windowId, this.searchTabState);
+        this.eventEmitter.publish('searchTabStateUpdated.' + this.windowId, this.searchTabState);
       }
 
       return this.searchTabState;
@@ -61,19 +62,19 @@
       //    _this.render(data);
       //});
 
-      jQuery.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
+      this.eventEmitter.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
         _this.tabStateUpdated(data);
       });
 
-      jQuery.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event) {
-
-      });
+      // eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event) {
+      //
+      // });
     },
 
     displaySearchWithin: function(query_params, searchUrl){
       var _this = this;
       if (query_params !== "") {
-        
+
         this.searchObject = new $.SearchWithinResults({
           manifest: _this.manifest,
           appendTo: _this.element.find(".search-results-list"),
@@ -83,7 +84,8 @@
           imagesList: _this.imagesList,
           thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'},
           query_params: query_params,
-          searchService: searchUrl
+          searchService: searchUrl,
+          eventEmitter: _this.eventEmitter
         });
       }
     },
@@ -99,15 +101,14 @@
         var date = _this.element.find(".js-date").val();
         var user = _this.element.find(".js-user").val();
         var searchUrl = _this.element.find("#search-within-selector").val();
-        console.log(searchUrl);
-        
+
         _this.displaySearchWithin({
           "q": query,
           "motivation": motivation,
           "date": date,
           "user": user
         }, searchUrl);
-        
+
       });
 
       this.element.find(".js-search-expand").on('click', function(event){
@@ -130,10 +131,10 @@
 
       var searchServiceIdArray = this.manifest.getSearchWithinService().map(function(data){
         return {
-          "url": data['@id'], 
+          "url": data['@id'],
           "label": data.label
         };
-      }); 
+      });
 
       templateData = {
         searchService: searchServiceIdArray

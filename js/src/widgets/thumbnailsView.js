@@ -14,7 +14,8 @@
       defaultThumbHeight:   150,
       windowId:             null,
       panel:                false,
-      lazyLoadingFactor:    1.5  //should be >= 1
+      lazyLoadingFactor:    1.5,  //should be >= 1
+      eventEmitter:         null
     }, options);
 
     this.init();
@@ -52,7 +53,7 @@
 
         return {
           thumbUrl: thumbnailUrl,
-          title:    canvas.label,
+          title:    $.JsonLd.getTextValue(canvas.label),
           id:       canvas['@id'],
           width:    width,
           highlight: _this.currentImgIndex === index ? 'highlight' : ''
@@ -95,11 +96,11 @@
 
     listenForActions: function() {
       var _this = this;
-      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event) {
+      _this.eventEmitter.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event) {
         _this.currentImageChanged();
       });
 
-      jQuery.subscribe('windowResize', $.debounce(function(){
+      _this.eventEmitter.subscribe('windowResize', $.debounce(function(){
         _this.loadImages();
       }, 100));
     },
@@ -107,7 +108,11 @@
     bindEvents: function() {
       var _this = this;
       _this.element.find('img').on('load', function() {
-        jQuery(this).hide().fadeIn(750);
+        jQuery(this).hide().fadeIn(750,function(){
+          // Under firefox $.show() used under display:none iframe does not change the display.
+          // This is workaround for https://github.com/IIIF/mirador/issues/929
+          jQuery(this).css('display', 'block');
+        });
       });
 
       jQuery(_this.element).scroll(function() {
@@ -118,7 +123,7 @@
 
       _this.element.find('.thumbnail-image').on('click', function() {
         var canvasID = jQuery(this).attr('data-image-id');
-        jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasID);
+        _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasID);
       });
     },
 
@@ -198,16 +203,20 @@
         duration: 300,
         easing: "easeInCubic",
         complete: function() {
+          // Under firefox $.show() used under display:none iframe does not change the display.
+          // This is workaround for https://github.com/IIIF/mirador/issues/929
+          jQuery(this).css('display', 'block');
           _this.loadImages();
         }
       });
     },
 
     adjustWidth: function(className, hasClass) {
+      var _this = this;
       if (hasClass) {
-        jQuery.publish('REMOVE_CLASS.'+this.windowId, className);
+        _this.eventEmitter.publish('REMOVE_CLASS.'+this.windowId, className);
       } else {
-        jQuery.publish('ADD_CLASS.'+this.windowId, className);
+        _this.eventEmitter.publish('ADD_CLASS.'+this.windowId, className);
       }
     },
 

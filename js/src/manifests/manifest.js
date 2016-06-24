@@ -66,9 +66,11 @@
       var _this = this;
       this.canvasMap = {};
 
-      this.getCanvases().forEach(function(canvas) {
-        _this.canvasMap[canvas['@id']] = canvas;
-      });
+      if (this.getCanvases()) {
+        this.getCanvases().forEach(function(canvas) {
+          _this.canvasMap[canvas['@id']] = canvas;
+        });
+      }
     },
     initFromInfoJson: function(infoJsonUrl) {
       var _this = this;
@@ -77,7 +79,6 @@
         dataType: 'json',
         async: true
       });
-
       this.request.done(function(jsonLd) {
         _this.jsonLd = _this.generateInfoWrapper(jsonLd);
       });
@@ -88,7 +89,7 @@
       this.request.done(function(jsonLd) {
         _this.jsonLd = jsonLd;
       });
-      setTimeout(function () { _this.request.resolve(manifestContent); }, 0);
+      _this.request.resolve(manifestContent); // resolve immediately
     },
     getThumbnailForCanvas : function(canvas, width) {
       var version = "1.1",
@@ -124,8 +125,20 @@
       }
       return thumbnailUrl;
     },
+    getVersion: function() {
+      var versionMap = {
+        'http://www.shared-canvas.org/ns/context.json': '1', // is this valid?
+        'http://iiif.io/api/presentation/1/context.json': '1',
+        'http://iiif.io/api/presentation/2/context.json': '2',
+        'http://iiif.io/api/presentation/2.1/context.json': '2.1'
+      };
+      return versionMap[this.jsonLd['@context']];
+    },
     getCanvases : function() {
       var _this = this;
+      if (!this.jsonLd || !this.jsonLd.sequences || !this.jsonLd.sequences[0]) {
+        return undefined;
+      }
       return _this.jsonLd.sequences[0].canvases;
     },
     getAnnotationsListUrl: function(canvasId) {
@@ -174,8 +187,8 @@
                       '@id': infoJson,
                       '@type': "dctypes:Image",
                       format: "image/jpeg",
-                      height: infoJson.width,
-                      width: infoJson.height,
+                      height: infoJson.height,
+                      width: infoJson.width,
                       service: {
                         '@id': infoJson['@id'],
                         '@context': infoJson['@context'],
@@ -196,19 +209,18 @@
     getSearchWithinService: function(){
       var _this = this;
       var serviceProperty = _this.jsonLd.service;
-
       var service = [];
       if (serviceProperty.constructor === Array){
         for (var i = 0; i < serviceProperty.length; i++){
           //TODO: should we be filtering search by context
-          if (serviceProperty[i]["@context"] === "http://iiif.io/api/search/0/context.json" || 
+          if (serviceProperty[i]["@context"] === "http://iiif.io/api/search/0/context.json" ||
             serviceProperty[i]["@context"] === "http://iiif.io/api/search/1/context.json") {
             //returns the first service object with the correct context
             service.push(serviceProperty[i]);
           }
         }
       }
-      else if (_this.jsonLd.service["@context"] === "http://iiif.io/api/search/0/context.json" || 
+      else if (_this.jsonLd.service["@context"] === "http://iiif.io/api/search/0/context.json" ||
         serviceProperty["@context"] === "http://iiif.io/api/search/1/context.json"){
         service.push(_this.jsonLd.service);
       }

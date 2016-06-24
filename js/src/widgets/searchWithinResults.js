@@ -5,9 +5,9 @@
  * the provided search query is given tothe provided IIIF Search service.
  * The response is displayed as a list.
  *
- * Parameter 'query_params': {q: query, motivation: motivation, date: date, user: user, box: box}
+ * Parameter 'query_params': {q: query, motivation: motivation, date: date, user: user}
  *
- * Currently follows IIIF Search API v0.9.1-draft
+ * Currently follows IIIF Content Search API v1.0
  * (http://iiif.io/api/search/0.9/)
  */
 $.SearchWithinResults = function(options) {
@@ -17,10 +17,14 @@ $.SearchWithinResults = function(options) {
     element:              null,
     metadataTypes:        null,
     metadataListingCls:   'metadata-listing',
+    /** Search service URL */
     searchService:     null,
     windowId:             null,
+    /** {q: query, motivation: motivation, date: date, user: user} */
     query_params:         null,
+    /** Used for paging. This assumes that searches start on page 1... */
     currentPage:          1,
+    eventEmitter:         null
   }, options);
 
   this.init();
@@ -30,7 +34,7 @@ $.SearchWithinResults.prototype = {
 
   init: function() {
     this.registerHandlebars();
-    
+
     jQuery(this.appendTo).empty();
     this.element = jQuery(this.template()).appendTo(this.appendTo);
     jQuery("<hr/><h3>Search results for: " + this.query_params.q + "</h3><hr/>")
@@ -53,6 +57,15 @@ $.SearchWithinResults.prototype = {
     this.doSearchFromUrl(url);
   },
 
+  /**
+   * AJAX request is made from here!
+   *
+   * TODO Perhaps emit a search event here for the purposes of
+   * state tracking or analytics?
+   *
+   * @param  {[type]} url [description]
+   * @return {[type]}     [description]
+   */
   doSearchFromUrl: function(url) {
     var _this = this;
 
@@ -73,65 +86,63 @@ $.SearchWithinResults.prototype = {
     .always();
   },
 
-  
+
   displayResultCounts: function(searchResults){
-
     var total = searchResults.within.total,
-      startResultNumber = searchResults.startIndex + 1,
-      endResultNumber = "";
+    startResultNumber = searchResults.startIndex + 1,
+    endResultNumber = "";
 
+    //if there is only only resource, it will not be array and therefore we can't
+    //take the length of it; this conditions check first to see if the resources
+    //property contains an array or single object
 
-      //if there is only only resource, it will not be array and therefore we can't 
-      //take the length of it; this conditions check first to see if the resources 
-      //property contains an array or single object
+    // TODO: not that this single object vs. array seems to be problem throughout.
+    // Pages with only one result do not display properly. See for example:
+    // http://exist.scta.info/exist/apps/scta/iiif/pl-zbsSII72/search?q=fides&page=3
 
-      // TODO: not that this single object vs. array seems to be problem throughout. 
-      // Pages with only one result do not display properly. See for example: 
-      // http://exist.scta.info/exist/apps/scta/iiif/pl-zbsSII72/search?q=fides&page=3
+    if (searchResults.resources.constructor === Array) {
+      endResultNumber = searchResults.startIndex + searchResults.resources.length;
+    }
+    else {
+      endResultNumber = searchResults.startIndex + 1;
+    }
 
-      if (searchResults.resources.constructor === Array) {
-        endResultNumber = searchResults.startIndex + searchResults.resources.length;  
-      }
-      else {
-        endResultNumber = searchResults.startIndex + 1;  
-      }
-      
-  
     jQuery('.search-results-count').html("<hr/><p>Showing " + startResultNumber + " - " + endResultNumber + " out of " + total + "</p><hr/>");
-      
-
-
   },
 
   processResults: function(searchResults) {
-    
-    this.searchResults = searchResults;
     //create tplData array
     if (searchResults.hits) {
       this.tplData = this.getHits(searchResults);
     } else {
       this.tplData = this.getSearchAnnotations(searchResults);
     }
-    
 
     jQuery(Handlebars.compile('{{> resultsList }}')(this.tplData)).appendTo(jQuery(this.element.find('.search-results-container')));
     this.bindEvents();
 
-    //this.setPager(searchResults);
-    this.setPager();
+    this.setPager(searchResults);
   },
 
   /**
    * Look for necessary properties that point to the need for paging.
+   * Check for total number of results vs number of returned results.
    *
    * @param  results IIIF Search results
    * @return TRUE if paging is needed
    */
   needsPager: function(results) {
-    // Check for total number of results vs number of returned results
-    return results &&
-        results.within && results.within.total &&
-        results.resources && results.resources.length < results.within.total;
+    // Check for some properties on the search results
+    if (!results || !results.within || !results.resources) {
+      return false;
+    }
+    var total = results.within.total;
+    // Check if 'resources' (list of annotations) is an array, or single value
+    if (Array.isArray(results.resources)) {
+      return results.resources.length < total;
+    } else {
+      return total > 1;
+    }
   },
 
   /**
@@ -145,23 +156,25 @@ $.SearchWithinResults.prototype = {
    *
    * @param  results - IIIF Search results
    */
-  setPager: function() {
+  setPager: function(searchResults) {
     var _this = this;
-    //using _this.searchResults throughout because passing in results as parameter 
-    //in the function broke everything. Value of "results" was getting changed 
-    //unexpectedly.
-    
-    if (!this.needsPager(_this.searchResults)) {
+    var pager = this.element.find('.search-results-pager');
+
+    if (!this.needsPager(searchResults)) {
       return;
     }
-    
 
+    /*
+     * Hack to get proper page numbers.
+     * TODO probably shouldn't use this library if it requires page numbers,
+     * instead have something with ONLY FIRST/LAST and PREV/NEXT controls.
+     */
     if (!this.onPageCount) { // This will be set with initial page and not be changed.
-      this.onPageCount = _this.searchResults.resources.length;
+      this.onPageCount = searchResults.resources.length;
     }
 
-    this.element.find('.search-results-pager').pagination({
-        items: _this.searchResults.within.total,
+    pager.pagination({
+        items: searchResults.within.total,
         itemsOnPage: _this.onPageCount,
         currentPage: _this.currentPage,
         displayedPages: 1,
@@ -173,33 +186,37 @@ $.SearchWithinResults.prototype = {
         nextText: '<i class="fa fa-lg fa-angle-right"></i>',
         onPageClick: function(pageNumber, event) {
           event.preventDefault();
+          pager.pagination('disable');
+
           if (pageNumber == _this.currentPage - 1) {
-            goPrev();
+            _this.currentPage--;
+            _this.doSearchFromUrl(searchResults.prev);
           } else if (pageNumber == _this.currentPage + 1) {
-            goNext();
+            _this.currentPage++;
+            _this.doSearchFromUrl(searchResults.next);
           } else if (pageNumber == 1) {
-            _this.doSearchFromUrl(_this.searchResults.within.first);
+            _this.doSearchFromUrl(searchResults.within.first);
             _this.currentPage = 1;
           } else {
             // Assume this is the last page........
-            
-            _this.doSearchFromUrl(_this.searchResults.within.last);
+            _this.doSearchFromUrl(searchResults.within.last);
+            /*
+             *  NOTE: There is no good way to get the page number from the search URL.
+             *  IIIF Content Search v1.0 spec (I do not think) does not define
+             *  how to specify a page.
+             *  	-- For example, the page could be put into the URL
+             *  query string, or it could be put into the URL fragment, or somewhere
+             *  else.
+             *
+             *  This hack pulls the number of the last page on the pager. :/
+             */
             _this.currentPage = parseInt(
               _this.element.find('.search-results-pager li:nth-last-child(2)').text()
             );
           }
         }
     });
-
-    function goNext() {
-      _this.doSearchFromUrl(_this.searchResults.next);
-      _this.currentPage++;
-    }
-    function goPrev() {
-      _this.doSearchFromUrl(_this.searchResults.prev);
-      _this.currentPage--;
-      //console.log(_this.searchResults.next);
-    }
+    pager.pagination('enable');
   },
 
   /**
@@ -219,7 +236,7 @@ $.SearchWithinResults.prototype = {
     if (typeof canvasid === 'object') {
       canvasid = annotation.on['@id'];
     }
-    
+
     var canvaslabel = _this.getLabel(annotation);
 
     // Split ID from Coordinates if necessary
@@ -254,10 +271,10 @@ $.SearchWithinResults.prototype = {
     }
   },
 
-  //TODO: getHits is mostly working, but the when you click on a 
+  //TODO: getHits is mostly working, but the when you click on a
   //hit it doesn't take you to the correct canvas
 
-  //use the this manifest as test data: 
+  //use the this manifest as test data:
   //http://wellcomelibrary.org/iiif/b18035978/manifest
   // here are examples search results for this manifest
   ///http://wellcomelibrary.org/annoservices/search/b18035978?q=morality
@@ -368,21 +385,21 @@ $.SearchWithinResults.prototype = {
   bindEvents: function() {
     var _this = this;
 
-    jQuery.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event, canvasID) {
-        //if (!_this.structures) { return; }
-        //_this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, canvasID));
-        //_this.render();
+    // jQuery.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event, canvasID) {
+    //     //if (!_this.structures) { return; }
+    //     //_this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, canvasID));
+    //     //_this.render();
+    //
+    //   });
 
-      });
-
-    //TODO 
+    //TODO
     //This function works to move the user to the specified canvas
     //but if there are associated coordinates, it does not yet know how to highlight
     //those coordinates.
 
     //thie miniAnnotatList attempted to do this, but is no longer working
     //it needs to be replaced by a new strategy.
-    
+
     this.element.find('.js-show-canvas').on("click", function() {
       event.stopPropagation();
 
@@ -405,7 +422,7 @@ $.SearchWithinResults.prototype = {
         }];
 
       //_this.parent.annotationsList = miniAnnotationList;
-      jQuery.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasid);
+      _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasid);
     });
   },
 
@@ -423,7 +440,7 @@ $.SearchWithinResults.prototype = {
             '{{#if hit.match}}',
               '<span class="highlight">{{hit.match}}</span>',
             '{{else}}',
-              '{{{resulttext}}}',   // If this text must NOT be escaped, use:   '{{{resulttext}}}'
+              '{{{resulttext}}}',   // If this text must NOT be escaped, use:   '{{resulttext}}'
             '{{/if}}',
             '{{#if hit.after}}',
               '{{ hit.after}}',
