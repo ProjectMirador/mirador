@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <link rel="stylesheet" type="text/css" href="build/mirador/css/mirador-combined.css">
@@ -8,53 +8,115 @@
     <style type="text/css">
      #viewer {  width: 100%; height: 100%; }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div id="viewer"></div>
 
     <script src="build/mirador/mirador.js"></script>
     <script type="text/javascript">
 
-     $(function() {
-       Mirador({
-         "id": "viewer",
-         "layout": "1x1",
-         "data": [
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/drs:48309543", "location": "Harvard University"}, // Harvard Scroll
-           { "manifestUri": "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/manifest.json", "location": "Stanford University"},
-           { "manifestUri": "http://dms-data.stanford.edu/data/manifests/Stanford/ege1/manifest.json", "location": "Stanford University"},
-           { "manifestUri": "http://dms-data.stanford.edu/data/manifests/BnF/jr903ng8662/manifest.json ", "location": "Stanford University"},
-           { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/Admont23", "location": "Yale University"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/drs:5981093", "location": "Harvard University"},
-           { "manifestUri": "http://dams.llgc.org.uk/iiif/4574752/manifest.json", "location": "National Library of Wales"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/via:olvwork576793", "location": "Harvard University"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/drs:14033171", "location": "Harvard University"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/drs:46909368", "location": "Harvard University"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/drs:18259372", "location": "Harvard University"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/drs:48331776", "location": "Harvard University"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/huam:299843", "location": "Harvard University"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/huam:213052", "location": "Harvard University"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/huam:169892", "location": "Harvard University"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/huam:304136", "location": "Harvard University"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/huam:311074", "location": "Harvard University"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/huam:200515", "location": "Harvard University"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/huam:320161", "location": "Harvard University"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/huam:198021", "location": "Harvard University"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/huam:165773", "location": "Harvard University"},
-           { "manifestUri": "http://oculus-dev.harvardx.harvard.edu/manifests/huam:320567", "location": "Harvard University"},
-           { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/Admont43", "location": "Yale University"},
-           { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BeineckeMS10", "location": "Yale University"},
-           { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BodleianMSBodley113", "location": "Yale University"},
-           { "manifestUri": "http://iiif.biblissima.fr/manifests/ark:/12148/btv1b84539771/manifest.json", "location":'BnF' },
-           { "manifestUri": "http://iiif.biblissima.fr/manifests/ark:/12148/btv1b10500687r/manifest.json", "location": 'BnF'},
-           { "manifestUri": "http://www.e-codices.unifr.ch/metadata/iiif/sl-0002/manifest.json", "location": 'e-codices'},
-           { "manifestUri": "http://www.e-codices.unifr.ch/metadata/iiif/bge-cl0015/manifest.json", "location": 'e-codices'},
-           { "manifestUri": "http://dzkimgs.l.u-tokyo.ac.jp/iiif/zuzoubu/12b02/manifest.json", "location": "University of Tokyo"}
-         ],
-         "windowObjects": [],
-         "annotationEndpoint": { "name":"Local Storage", "module": "LocalStorageEndpoint" }
-       });
-     });
-    </script>
-  </body>
+    $(function() {
+
+      Mirador({
+        "id": "viewer",
+        "layout": "1x1",
+        "mainMenuSettings" : {
+          
+          "show": true, 
+          "buttons" : {"bookmark" : true, "layout" : true},
+          "userButtons" : [
+            {
+            "label": "About SCTA",
+            "iconClass": "fa fa-link",
+            "attributes" : {"class": "links", "href": "http://scta.info"}
+            }
+          ],
+          
+          "userLogo": {
+            "label": "Sentences Commentary Text Archive Image Viewer", 
+            "attributes": { "id": "scta-logo", "href": "http://scta.info"}
+          }
+        },
+        
+        "data" : selectdataset("remote"),
+        //"data" : [
+        //  {"collectionUri" : "http://scta.info/iiif/collection/scta"}
+        //]
+        
+        //"windowObjects" : [
+        //  {"loadedManifest" : "http://scta.info/iiif/pg-lon/manifest", 
+        //  "canvasID" : "http://scta.info/iiif/pg-lon/canvas/L20r", 
+        //  "viewType" : "ImageView"}
+        //]
+        
+      });
+    });
+
+  function selectdataset(source){
+    
+    if (source == 'local')
+      var baseurl = "localhost:4567"
+    else if (source == 'remote')
+      var baseurl = "scta.info"
+    
+
+    var dataset = [   
+      {"manifestUri": "http://" + baseurl + "/iiif/pg-lon/manifest", "location": "British Library"},
+      {"manifestUri": "http://" + baseurl + "/iiif/pp-sorb2/manifest"},
+      {"manifestUri": "http://" + baseurl + "/iiif/rh-bnf15884/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/jr-bnf15369/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/rh-bnf14576/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/rk-bnf14576/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/rdm-bnf14563/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/dsp-bnf14454/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/dsp-bnf14564/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/rhe-bnf14514/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/jdso-bnf3061/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/jdso-bnf3114/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/jdso-bnf3063/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/jdso-bnf14564/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/hsc-bnf3073/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/tda-bnf14577/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/go-bnf3068/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/fm-bnf3423/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/pa-bnf15363/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/pdt-bnf14556/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/pdt-bnf14899/manifest"},
+      {"manifestUri": "http://" + baseurl + "/iiif/pdt-bnf17483/manifest"},
+      {"manifestUri": "http://" + baseurl + "/iiif/pl-bnf15705/manifest"},
+      {"manifestUri": "http://" + baseurl + "/iiif/gdr-bnf15889/manifest"},
+      {"manifestUri": "http://" + baseurl + "/iiif/gdr-bnf15890/manifest"},
+      {"manifestUri": "http://" + baseurl + "/iiif/gdr-bnf15891/manifest"},
+      {"manifestUri": "http://" + baseurl + "/iiif/rfr-bnf15853/manifest"},
+      {"manifestUri": "http://" + baseurl + "/iiif/pp-svict/manifest"},
+      {"manifestUri": "http://" + baseurl + "/iiif/pp-reims/manifest"},
+      {"manifestUri": "http://" + baseurl + "/iiif/pp-vat/manifest"},
+      {"manifestUri": "http://" + baseurl + "/iiif/pp-sorb/manifest"},
+      //{"manifestUri": "http://" + baseurl + "/iiif/wdr-penn/manifest"},
+      {"manifestUri": "http://" + baseurl + "/iiif/wdr-wettf15/manifest"},
+      //{"manifestUri": "http://" + baseurl + "/iiif/pl-penn1147/manifest"},
+      //{"manifestUri": "http://" + baseurl + "/iiif/anon1-penn727/manifest"},
+      {"manifestUri": "http://" + baseurl + "/iiif/wdr-gks1363/manifest"},
+      {"manifestUri": "http://" + baseurl + "/iiif/pday-bnf15898/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/pl-bda446/manifest", "location": "Bibliotheque de l'Arsenal"},
+      {"manifestUri": "http://" + baseurl + "/iiif/pdc-fcc20/manifest", "location": "Freiburg, Couvent des Cordeliers"},
+      {"manifestUri": "http://" + baseurl + "/iiif/nddm-bnf/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/atv-Paris1490/manifest", "location": "Bibliotheque nationale de France"},
+      {"manifestUri": "http://" + baseurl + "/iiif/pl-zbsSII72/manifest"},
+      {"manifestUri": "http://" + baseurl + "/iiif/ta-harv245/manifest", "location": "Harvard University"},
+      {"manifestUri": "http://" + baseurl + "/iiif/bb-harv265/manifest", "location": "Harvard University"}
+
+
+    ];
+    return [dataset[0], dataset[27], dataset[28], dataset[29], dataset[30], dataset[31], dataset[32], dataset[38]]
+    }
+  </script>
+  <!-- segement.io tracking script -->
+  <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("zUcSpArlSFgVvkL20FxsHDoeDPHBXQ0Q");
+analytics.page()
+}}();
+</script>
+</body>
 </html>
