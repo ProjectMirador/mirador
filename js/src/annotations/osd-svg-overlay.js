@@ -616,7 +616,7 @@
       });
 
       if (this.availableExternalCommentsPanel) {
-        this.eventEmitter.publish('annotationShapeCreated.' + _this.windowId, [_this, shape]);
+        this.eventEmitter.publish('annotationShapeCreated.' + this.windowId, [this, shape]);
         return;
       }
       var _this = this;
