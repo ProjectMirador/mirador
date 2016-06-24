@@ -102,6 +102,22 @@ describe('Polygon', function() {
       delete this.polygon;
     });
 
+    it('should update selection', function() {
+      var ellipseTool = new Mirador.Ellipse();
+      var initialPoint = {
+        'x': 987,
+        'y': 654
+      };
+      var ellipse = ellipseTool.createShape(initialPoint, overlay);
+      this.polygon.updateSelection(true, ellipse, overlay);
+
+      expect(this.shape.selected).toBe(false);
+
+      this.polygon.updateSelection(true, this.shape, overlay);
+
+      expect(this.shape.selected).toBe(true);
+    });
+
     it('should do nothing', function() {
       var event = getEvent({
         'x': 100,
