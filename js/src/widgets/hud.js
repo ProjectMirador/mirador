@@ -18,25 +18,24 @@
 
     init: function() {   
       this.createStateMachines();
-
+      
       this.element = jQuery(this.template({
         showNextPrev : this.showNextPrev, 
         showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable,
-        showAnno : this.annotationLayerAvailable
+        showAnno : this.canvasControls.annotations.annotationLayer,
+        showImageControls : this.canvasControls.imageManipulation.manipulationLayer
       })).appendTo(this.appendTo);
 
-      if (this.annotationLayerAvailable && this.annoEndpointAvailable) {
-        this.contextControls = new $.ContextControls({
-          element: null,
-          container: this.element.find('.mirador-osd-context-controls'),
-          mode: 'displayAnnotations',
-          windowId: this.windowId,
-          annotationCreationAvailable: this.annotationCreationAvailable,
-          annotationRefresh: this.annotationRefresh,
-          availableAnnotationTools: this.availableAnnotationTools,
-          eventEmitter: this.eventEmitter
-        });
-      }
+      this.contextControls = new $.ContextControls({
+        element: null,
+        container: this.element.find('.mirador-osd-context-controls'),
+        mode: 'displayAnnotations',
+        windowId: this.windowId,
+        canvasControls: this.canvasControls,
+        annoEndpointAvailable: this.annoEndpointAvailable,
+        availableAnnotationTools: this.availableAnnotationTools,
+        eventEmitter: this.eventEmitter
+      });
 
       this.bindEvents();
     },
@@ -182,14 +181,13 @@
                                   '</a>',
                                   '</div>',
                                  '{{/if}}',
-                                 //TODO: implement this boolean setting 
-                                 //'{{#if showImageControls}}',
+                                 '{{#if showImageControls}}',
                                   '<div class="mirador-manipulation-controls">',
                                   '<a class="mirador-manipulation-toggle hud-control" role="button" aria-label="Toggle image manipulation">',
                                   '<i class="material-icons">tune</i>',
                                   '</a>',
                                   '</div>',
-                                 //'{{/if}}',
+                                 '{{/if}}',
                                  '</div>',
                                  '{{#if showNextPrev}}',
                                  '<a class="mirador-osd-next hud-control ">',

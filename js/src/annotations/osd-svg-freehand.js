@@ -3,7 +3,8 @@
     jQuery.extend(this, {
       name: 'Freehand',
       logoClass: 'gesture',
-      idPrefix: 'smooth_path_'
+      idPrefix: 'smooth_path_',
+      tooltip: 'freehandTooltip'
     }, options);
 
     this.init();

@@ -3,7 +3,8 @@
     jQuery.extend(this, {
       name: 'Pin',
       logoClass: 'room',
-      idPrefix: 'pin_'
+      idPrefix: 'pin_',
+      tooltip: 'pinTooltip'
     }, options);
 
     this.init();

@@ -51,5 +51,12 @@
     "saturationTooltip": "Adjust saturation",
     "grayscaleTooltip": "Toggle grayscale",
     "invertTooltip": "Invert colors",
-    "resetTooltip": "Reset all controls"
+    "resetTooltip": "Reset all controls",
+    "rectangleTooltip": "Rectangle annotation",
+    "ellipseTooltip": "Oval annotation",
+    "freehandTooltip": "Freeform annotation",
+    "pinTooltip": "Pin annotation",
+    "polygonTooltip": "Polygon annotation",
+    "borderColorTooltip": "Choose annotation border color",
+    "fillColorTooltip": "Choose annotation fill color"
 }

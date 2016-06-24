@@ -19,7 +19,6 @@
       osdCls: 'mirador-osd',
       elemAnno:         null,
       annoCls:          'annotation-canvas',
-      annotationLayerAvailable: null,
       annotationsLayer: null,
       forceShowControls: false,
       eventEmitter:     null
@@ -58,7 +57,10 @@
       for ( var i = 0; i < this.state.getStateProperty('availableAnnotationDrawingTools').length; i++) {
         for ( var j = 0; j < allTools.length; j++) {
           if (this.state.getStateProperty('availableAnnotationDrawingTools')[i] == allTools[j].name) {
-            this.availableAnnotationTools.push(allTools[j].logoClass);
+            var values = {};
+            values.logoClass = allTools[j].logoClass;
+            values.tooltip = allTools[j].tooltip;
+            this.availableAnnotationTools.push(values);
           }
         }
       }
@@ -68,9 +70,7 @@
         appendTo: this.element,
         bottomPanelAvailable: this.bottomPanelAvailable,
         windowId: this.windowId,
-        annotationLayerAvailable: this.annotationLayerAvailable,
-        annotationCreationAvailable: this.annotationCreationAvailable,
-        annotationRefresh: this.annotationRefresh,
+        canvasControls: this.canvasControls,
         annoEndpointAvailable: this.annoEndpointAvailable,
         showNextPrev : this.imagesList.length !== 1,
         availableAnnotationTools: this.availableAnnotationTools,

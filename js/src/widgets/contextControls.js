@@ -8,7 +8,6 @@
       mode: null,
       windowId: null,
       annoEndpointAvailable: false,
-      annotationCreationAvailable: true,
       eventEmitter: null
     }, options);
 
@@ -20,27 +19,31 @@
     init: function() {    
       var _this = this;
 
-      this.annotationElement = jQuery(this.annotationTemplate({
-        tools : _this.availableAnnotationTools,
-        showEdit : this.annotationCreationAvailable,
-        showRefresh : this.annotationRefresh
-      })).appendTo(this.container.find('.mirador-osd-annotation-controls'));
+      var annotationProperties = this.canvasControls.annotations;
 
-      this.manipulationElement = jQuery(this.manipulationTemplate({
-      })).appendTo(this.container.find('.mirador-manipulation-controls'));
+      if (annotationProperties.annotationLayer && this.annoEndpointAvailable) {
+        this.annotationElement = jQuery(this.annotationTemplate({
+          tools : _this.availableAnnotationTools,
+          showEdit : annotationProperties.annotationCreation,
+          showRefresh : annotationProperties.annotationRefresh
+        })).appendTo(this.container.find('.mirador-osd-annotation-controls'));
+        this.annotationElement.hide();
+        this.setQtips(this.annotationElement);
+        this.setBorderFillColorPickers();
+      }
 
-      this.setQtips();
+      if (this.canvasControls.imageManipulation.manipulationLayer) {
+        this.manipulationElement = jQuery(this.manipulationTemplate({
+        })).appendTo(this.container.find('.mirador-manipulation-controls'));
+        this.setQtips(this.manipulationElement);
+        this.manipulationElement.hide();
+      }
 
-      this.annotationElement.hide();
-      this.manipulationElement.hide();
-
-      this.setBorderFillColorPickers();
       this.bindEvents();
     },
 
-    setQtips: function() {
-      var _this = this;
-      _this.manipulationElement.each(function() {
+    setQtips: function(element) {
+      element.each(function() {
         jQuery(this).qtip({
           content: {
             text: jQuery(this).attr('title'),
@@ -192,17 +195,17 @@
                                    '|',
                                    '</a>',
                                    '{{#each tools}}',
-                                   '<a class="mirador-osd-{{this}}-mode hud-control draw-tool">',
-                                   '<i class="material-icons">{{this}}</i>',
+                                   '<a class="mirador-osd-{{this.logoClass}}-mode hud-control draw-tool" title="{{t this.tooltip}}">',
+                                   '<i class="material-icons">{{this.logoClass}}</i>',
                                    '</a>',
                                    '{{/each}}',
                                    '<a class="hud-control draw-tool" style="color:#abcdef;">',
                                    '|',
                                    '</a>',
-                                   '<a class="hud-control draw-tool">',
+                                   '<a class="hud-control draw-tool" title="{{t "borderColorTooltip"}}">',
                                    '<input type="text" class="borderColorPicker"/>',
                                    '</a>',
-                                   '<a class="hud-control draw-tool">',
+                                   '<a class="hud-control draw-tool" title="{{t "fillColorTooltip"}}">',
                                    '<input type="text" class="fillColorPicker"/>',
                                    '</a>',
                                    '<a class="hud-control draw-tool" style="color:#abcdef;">',
