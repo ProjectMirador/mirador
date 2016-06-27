@@ -423,13 +423,12 @@
     // creating shapes used for backward compatibility.
     // shape coordinates are viewport coordinates.
     createRectangle: function(shape, annotation) {
-      var scale = this.viewer.viewport.contentSize.x;
       var paperItems = [];
       var rect = new $.Rectangle();
       var newShape = this.viewer.viewport.viewportToImageRectangle(shape);
       var initialPoint = {
-        'x': newShape.x * scale,
-        'y': newShape.y * scale
+        'x': newShape.x,
+        'y': newShape.y
       };
       var currentMode = this.mode;
       var currentPath = this.path;
@@ -443,8 +442,8 @@
       this.path = rect.createShape(initialPoint, this);
       var eventData = {
         'delta': {
-          'x': newShape.width * scale,
-          'y': newShape.height * scale
+          'x': newShape.width,
+          'y': newShape.height
         }
       };
       rect.onMouseDrag(eventData, this);

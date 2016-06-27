@@ -73,7 +73,7 @@
         }
       }
     },
-    //TODO Radoslav unit test
+    
     onHover:function(activate,shape,hoverColor){
       // shape needs to have hovered styles
       if(activate && !shape.data.hovered){
