@@ -38,10 +38,10 @@ describe('Rectangle', function() {
     this.canvas.attr('id', 'paperId');
     jasmine.getFixtures().set(this.canvas);
     paper.setup(this.canvas.attr('id'));
-    this.rect = new Mirador.Rectangle();
+    this.rectangle = new Mirador.Rectangle();
   });
   afterAll(function() {
-    delete this.rect;
+    delete this.rectangle;
   });
 
   it('should create rectangular shape', function() {
@@ -50,7 +50,7 @@ describe('Rectangle', function() {
       'y': 456
     };
     var overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, null, null, null);
-    var shape = this.rect.createShape(initialPoint, overlay);
+    var shape = this.rectangle.createShape(initialPoint, overlay);
 
     expect(overlay.mode).toBe('create');
 
@@ -72,7 +72,7 @@ describe('Rectangle', function() {
 
     expect(shape.fullySelected).toBe(true);
 
-    expect(shape.name).toBe(this.rect.idPrefix + '1');
+    expect(shape.name).toBe(this.rectangle.idPrefix + '1');
 
     expect(shape.segments.length).toBe(9);
 
@@ -109,17 +109,17 @@ describe('Rectangle', function() {
 
     beforeEach(function() {
       overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
-      this.rect = new Mirador.Rectangle();
+      this.rectangle = new Mirador.Rectangle();
       this.initialPoint = {
         'x': 987,
         'y': 654
       };
-      this.shape = this.rect.createShape(this.initialPoint, overlay);
+      this.shape = this.rectangle.createShape(this.initialPoint, overlay);
     });
 
     afterEach(function() {
       delete this.shape;
-      delete this.rect;
+      delete this.rectangle;
     });
 
     it('should update selection', function() {
@@ -130,19 +130,49 @@ describe('Rectangle', function() {
         'y': 654
       };
       var ellipse = ellipseTool.createShape(initialPoint, overlay);
-      this.rect.updateSelection(true, ellipse, overlay);
+      this.rectangle.updateSelection(true, ellipse, overlay);
 
       expect(this.shape.fullySelected).toBe(false);
 
-      this.rect.updateSelection(true, this.shape, overlay);
+      this.rectangle.updateSelection(true, this.shape, overlay);
 
       expect(this.shape.fullySelected).toBe(true);
 
       this.shape.scale(-10);
 
-      this.rect.updateSelection(true, this.shape, overlay);
+      this.rectangle.updateSelection(true, this.shape, overlay);
 
       expect(this.shape.fullySelected).toBe(true);
+    });
+
+    it('should change stroke when hovering rectangle',function(){
+      var red = {
+        r:1,
+        g:0,
+        b:0
+      };
+      this.rectangle.onHover(true,this.shape,'red');
+
+      expect(this.shape.data.hovered).toBe(true);
+      expect(this.shape.strokeColor.red).toBe(red.r);
+      expect(this.shape.strokeColor.green).toBe(red.g);
+      expect(this.shape.strokeColor.blue).toBe(red.b);
+    });
+
+    it('should change stroke back to original when not hovering rectangle',function(){
+
+      var oldColor = this.shape.strokeColor;
+      this.rectangle.onHover(true,this.shape,'red');
+
+      expect(this.shape.data.nonHoverStroke.red).toBe(oldColor.red);
+      expect(this.shape.data.nonHoverStroke.green).toBe(oldColor.green);
+      expect(this.shape.data.nonHoverStroke.blue).toBe(oldColor.blue);
+
+      this.rectangle.onHover(false,this.shape);
+      expect(this.shape.data.hovered).toBe(undefined);
+      expect(this.shape.strokeColor.red).toBe(oldColor.red);
+      expect(this.shape.strokeColor.green).toBe(oldColor.green);
+      expect(this.shape.strokeColor.blue).toBe(oldColor.blue);
     });
 
     it('should do nothing', function() {
@@ -159,7 +189,7 @@ describe('Rectangle', function() {
         };
         expected.push(point);
       }
-      this.rect.onMouseDrag(event, overlay);
+      this.rectangle.onMouseDrag(event, overlay);
 
       expect(this.shape.segments.length).toBe(expected.length);
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
@@ -174,7 +204,7 @@ describe('Rectangle', function() {
         'y': -3
       });
       overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'translate', this.shape, null);
-      this.rect.onMouseDrag(event, overlay);
+      this.rectangle.onMouseDrag(event, overlay);
 
       expect(this.shape.segments[0].point.x - event.delta.x).toBe(this.initialPoint.x - 2);
       expect(this.shape.segments[0].point.y - event.delta.y).toBe(this.initialPoint.y - 2);
@@ -210,7 +240,7 @@ describe('Rectangle', function() {
         'y': 100
       });
       overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, this.shape.segments[5]);
-      this.rect.onMouseDrag(event, overlay);
+      this.rectangle.onMouseDrag(event, overlay);
 
       expect(this.shape.segments[0].point.x).toBe(this.initialPoint.x - 2);
       expect(this.shape.segments[0].point.y).toBe(this.initialPoint.y - 2);
@@ -244,7 +274,7 @@ describe('Rectangle', function() {
         'y': 10
       });
       overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, this.shape.segments[0]);
-      this.rect.onMouseDrag(event2, overlay);
+      this.rectangle.onMouseDrag(event2, overlay);
 
       expect(this.shape.segments[0].point.x - event2.delta.x).toBe(this.initialPoint.x - 2);
       expect(this.shape.segments[0].point.y - event2.delta.y).toBe(this.initialPoint.y - 2);
@@ -280,7 +310,7 @@ describe('Rectangle', function() {
         'y': 100
       });
       overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, this.shape.segments[2]);
-      this.rect.onMouseDrag(event, overlay);
+      this.rectangle.onMouseDrag(event, overlay);
 
       expect(this.shape.segments[0].point.x).toBe(this.initialPoint.x - 2);
       expect(this.shape.segments[0].point.y - event.delta.y).toBe(this.initialPoint.y - 2);
@@ -314,7 +344,7 @@ describe('Rectangle', function() {
         'y': 10
       });
       overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, this.shape.segments[4]);
-      this.rect.onMouseDrag(event2, overlay);
+      this.rectangle.onMouseDrag(event2, overlay);
 
       expect(this.shape.segments[0].point.x).toBe(this.initialPoint.x - 2);
       expect(this.shape.segments[0].point.y - event.delta.y).toBe(this.initialPoint.y - 2);
@@ -378,7 +408,7 @@ describe('Rectangle', function() {
         point = rotatePoint(point, localCenterPoint, rotationAngle);
         expected.push(point);
       }
-      this.rect.onMouseDrag(event, overlay);
+      this.rectangle.onMouseDrag(event, overlay);
 
       expect(this.shape.segments.length).toBe(expected.length);
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
@@ -394,17 +424,17 @@ describe('Rectangle', function() {
       });
       overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
       spyOn(overlay, 'onDrawFinish');
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.path).not.toBeNull();
       expect(overlay.onDrawFinish.calls.count()).toEqual(0);
 
-      this.rect.onMouseUp(event, overlay);
+      this.rectangle.onMouseUp(event, overlay);
 
       expect(overlay.onDrawFinish.calls.count()).toEqual(1);
 
       overlay.mode = '';
-      this.rect.onMouseUp(event, overlay);
+      this.rectangle.onMouseUp(event, overlay);
 
       expect(overlay.onDrawFinish.calls.count()).toEqual(1);
     });
@@ -415,14 +445,14 @@ describe('Rectangle', function() {
         'y': this.initialPoint.y - 1
       });
       overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('translate');
       expect(overlay.segment).toBeNull();
       expect(overlay.path).toBe(this.shape);
       expect(document.body.style.cursor).toBe('move');
 
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('');
       expect(overlay.segment).toBeNull();
@@ -433,14 +463,14 @@ describe('Rectangle', function() {
         'y': this.initialPoint.y
       });
       overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[5]);
       expect(overlay.path).toBe(this.shape);
       expect(document.body.style.cursor).toContain('data:image/png;base64');
 
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('');
       expect(overlay.segment).toBeNull();
@@ -450,7 +480,7 @@ describe('Rectangle', function() {
         'x': this.initialPoint.x,
         'y': this.initialPoint.y - 1
       });
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[4]);
@@ -464,7 +494,7 @@ describe('Rectangle', function() {
         'x': this.initialPoint.x,
         'y': this.initialPoint.y - 2
       });
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[3]);
@@ -478,7 +508,7 @@ describe('Rectangle', function() {
         'x': this.initialPoint.x - 1,
         'y': this.initialPoint.y - 2
       });
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[1]);
@@ -492,7 +522,7 @@ describe('Rectangle', function() {
         'x': this.initialPoint.x - 2,
         'y': this.initialPoint.y - 2
       });
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[0]);
@@ -506,7 +536,7 @@ describe('Rectangle', function() {
         'x': this.initialPoint.x - 1,
         'y': this.initialPoint.y
       });
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[6]);
@@ -520,7 +550,7 @@ describe('Rectangle', function() {
         'x': this.initialPoint.x - 2,
         'y': this.initialPoint.y
       });
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[7]);
@@ -534,7 +564,7 @@ describe('Rectangle', function() {
         'x': this.initialPoint.x - 2,
         'y': this.initialPoint.y - 1
       });
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[8]);
@@ -548,8 +578,8 @@ describe('Rectangle', function() {
         'x': this.initialPoint.x - 1,
         'y': this.initialPoint.y - 22
       });
-      this.rect.updateSelection(true, this.shape, overlay);
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.updateSelection(true, this.shape, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBeNull();
@@ -561,7 +591,7 @@ describe('Rectangle', function() {
         'y': this.initialPoint.y - 1
       });
       overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'translate', null, null);
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(document.body.style.cursor).toBe('default');
 
@@ -570,7 +600,7 @@ describe('Rectangle', function() {
         'y': this.initialPoint.y + 100
       });
       overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(document.body.style.cursor).toBe('default');
 
@@ -579,7 +609,7 @@ describe('Rectangle', function() {
         'y': this.initialPoint.y - 100
       });
       overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', this.shape, null);
-      this.rect.onMouseDown(event, overlay);
+      this.rectangle.onMouseDown(event, overlay);
 
       expect(document.body.style.cursor).toBe('default');
     });
