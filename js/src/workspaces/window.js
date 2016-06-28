@@ -350,7 +350,7 @@
       });
 
       jQuery(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function() {
-        _this.fullScreen();
+        _this.toggleFullScreen();
       });
 
     },
@@ -815,7 +815,7 @@
       }
     },
 
-    fullScreen: function() {
+    toggleFullScreen: function() {
       var _this = this;
       if (!OpenSeadragon.isFullScreen()) {
         this.element.find('.mirador-osd-fullscreen i').removeClass('fa-compress').addClass('fa-expand');

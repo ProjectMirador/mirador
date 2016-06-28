@@ -22,11 +22,13 @@ describe('Ellipse', function() {
       'viewZoom': 1,
       'hitOptions': {
         'fill': true,
-        'stroke': true,
+        'handles': true,
         'segments': true,
         'tolerance': 0
       },
       onDrawFinish: function() {
+      },
+      updateSelection: function() {
       },
       getName: function(tool) {
         return tool.idPrefix + '1';
@@ -56,7 +58,7 @@ describe('Ellipse', function() {
 
     expect(overlay.mode).toBe('create');
 
-    expect(overlay.segment).toBe(shape.segments[4]);
+    expect(overlay.segment).toBe(shape.segments[6]);
 
     expect(shape.strokeColor.red).toBe(1);
     expect(shape.strokeColor.green).toBe(0);
@@ -74,7 +76,7 @@ describe('Ellipse', function() {
 
     expect(shape.name).toBe(this.ellipse.idPrefix + '1');
 
-    expect(shape.segments.length).toBe(8);
+    expect(shape.segments.length).toBe(10);
 
     expect(shape.segments[0].point.x).toBe(initialPoint.x - 2);
     expect(shape.segments[0].point.y).toBe(initialPoint.y - 2);
@@ -82,23 +84,29 @@ describe('Ellipse', function() {
     expect(shape.segments[1].point.x).toBe(initialPoint.x - 1);
     expect(shape.segments[1].point.y).toBe(initialPoint.y - diagonalSize - 1);
 
-    expect(shape.segments[2].point.x).toBe(initialPoint.x);
-    expect(shape.segments[2].point.y).toBe(initialPoint.y - 2);
+    expect(shape.segments[2].point.x).toBe(initialPoint.x - 1);
+    expect(shape.segments[2].point.y).toBe(initialPoint.y - diagonalSize - 1);
 
-    expect(shape.segments[3].point.x).toBe(initialPoint.x + diagonalSize - 1);
-    expect(shape.segments[3].point.y).toBe(initialPoint.y - 1);
+    expect(shape.segments[3].point.x).toBe(initialPoint.x - 1);
+    expect(shape.segments[3].point.y).toBe(initialPoint.y - diagonalSize - 1);
 
     expect(shape.segments[4].point.x).toBe(initialPoint.x);
-    expect(shape.segments[4].point.y).toBe(initialPoint.y);
+    expect(shape.segments[4].point.y).toBe(initialPoint.y - 2);
 
-    expect(shape.segments[5].point.x).toBe(initialPoint.x - 1);
-    expect(shape.segments[5].point.y).toBe(initialPoint.y + diagonalSize - 1);
+    expect(shape.segments[5].point.x).toBe(initialPoint.x + diagonalSize - 1);
+    expect(shape.segments[5].point.y).toBe(initialPoint.y - 1);
 
-    expect(shape.segments[6].point.x).toBe(initialPoint.x - 2);
+    expect(shape.segments[6].point.x).toBe(initialPoint.x);
     expect(shape.segments[6].point.y).toBe(initialPoint.y);
 
-    expect(shape.segments[7].point.x).toBe(initialPoint.x - diagonalSize - 1);
-    expect(shape.segments[7].point.y).toBe(initialPoint.y - 1);
+    expect(shape.segments[7].point.x).toBe(initialPoint.x - 1);
+    expect(shape.segments[7].point.y).toBe(initialPoint.y + diagonalSize - 1);
+
+    expect(shape.segments[8].point.x).toBe(initialPoint.x - 2);
+    expect(shape.segments[8].point.y).toBe(initialPoint.y);
+
+    expect(shape.segments[9].point.x).toBe(initialPoint.x - diagonalSize - 1);
+    expect(shape.segments[9].point.y).toBe(initialPoint.y - 1);
   });
 
   describe('Ellipse Mouse Tool', function() {
@@ -117,6 +125,39 @@ describe('Ellipse', function() {
     afterEach(function() {
       delete this.shape;
       delete this.ellipse;
+    });
+
+    it('should update selection', function() {
+      this.shape.selected = false;
+      var rectTool = new Mirador.Rectangle();
+      var initialPoint = {
+        'x': 987,
+        'y': 654
+      };
+      var rect = rectTool.createShape(initialPoint, overlay);
+      this.ellipse.updateSelection(true, rect, overlay);
+
+      expect(this.shape.selected).toBe(false);
+
+      this.ellipse.updateSelection(true, this.shape, overlay);
+
+      expect(this.shape.selected).toBe(true);
+
+      this.shape.scale(-10);
+
+      this.ellipse.updateSelection(true, this.shape, overlay);
+
+      expect(this.shape.selected).toBe(true);
+
+      this.ellipse.updateSelection(false, this.shape, overlay);
+
+      expect(this.shape.selected).toBe(false);
+
+      this.shape.add(new Segment(0, 0));
+
+      this.ellipse.updateSelection(false, this.shape, overlay);
+
+      expect(this.shape.segments.length).toBe(10);
     });
 
     it('should do nothing', function() {
@@ -156,80 +197,129 @@ describe('Ellipse', function() {
       expect(this.shape.segments[1].point.x - event.delta.x).toBe(this.initialPoint.x - 1);
       expect(this.shape.segments[1].point.y - event.delta.y).toBe(this.initialPoint.y - diagonalSize - 1);
 
-      expect(this.shape.segments[2].point.x - event.delta.x).toBe(this.initialPoint.x);
-      expect(this.shape.segments[2].point.y - event.delta.y).toBe(this.initialPoint.y - 2);
+      expect(this.shape.segments[2].point.x - event.delta.x).toBe(this.initialPoint.x - 1);
+      expect(this.shape.segments[2].point.y - event.delta.y).toBe(this.initialPoint.y - diagonalSize - 1);
 
-      expect(this.shape.segments[3].point.x - event.delta.x).toBe(this.initialPoint.x + diagonalSize - 1);
-      expect(this.shape.segments[3].point.y - event.delta.y).toBe(this.initialPoint.y - 1);
+      expect(this.shape.segments[3].point.x - event.delta.x).toBe(this.initialPoint.x - 1);
+      expect(this.shape.segments[3].point.y - event.delta.y).toBe(this.initialPoint.y - diagonalSize - 1);
 
       expect(this.shape.segments[4].point.x - event.delta.x).toBe(this.initialPoint.x);
-      expect(this.shape.segments[4].point.y - event.delta.y).toBe(this.initialPoint.y);
+      expect(this.shape.segments[4].point.y - event.delta.y).toBe(this.initialPoint.y - 2);
 
-      expect(this.shape.segments[5].point.x - event.delta.x).toBe(this.initialPoint.x - 1);
-      expect(this.shape.segments[5].point.y - event.delta.y).toBe(this.initialPoint.y + diagonalSize - 1);
+      expect(this.shape.segments[5].point.x - event.delta.x).toBe(this.initialPoint.x + diagonalSize - 1);
+      expect(this.shape.segments[5].point.y - event.delta.y).toBe(this.initialPoint.y - 1);
 
-      expect(this.shape.segments[6].point.x - event.delta.x).toBe(this.initialPoint.x - 2);
+      expect(this.shape.segments[6].point.x - event.delta.x).toBe(this.initialPoint.x);
       expect(this.shape.segments[6].point.y - event.delta.y).toBe(this.initialPoint.y);
 
-      expect(this.shape.segments[7].point.x - event.delta.x).toBe(this.initialPoint.x - diagonalSize - 1);
-      expect(this.shape.segments[7].point.y - event.delta.y).toBe(this.initialPoint.y - 1);
+      expect(this.shape.segments[7].point.x - event.delta.x).toBe(this.initialPoint.x - 1);
+      expect(this.shape.segments[7].point.y - event.delta.y).toBe(this.initialPoint.y + diagonalSize - 1);
+
+      expect(this.shape.segments[8].point.x - event.delta.x).toBe(this.initialPoint.x - 2);
+      expect(this.shape.segments[8].point.y - event.delta.y).toBe(this.initialPoint.y);
+
+      expect(this.shape.segments[9].point.x - event.delta.x).toBe(this.initialPoint.x - diagonalSize - 1);
+      expect(this.shape.segments[9].point.y - event.delta.y).toBe(this.initialPoint.y - 1);
     });
 
     it('should resize the whole ellipse shape', function() {
       var event = getEvent({
         'x': 10,
-        'y': -100
+        'y': 100
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, this.shape.segments[2]);
+      var diagonalSizeX = event.delta.x * (2 / (1 + Math.sqrt(1 / 2)));
+      var diagonalSizeY = event.delta.y * (2 / (1 + Math.sqrt(1 / 2)));
+      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, this.shape.segments[6]);
       this.ellipse.onMouseDrag(event, overlay);
 
-      expect(this.shape.segments[0].point.x + event.delta.x).toBeCloseTo(this.initialPoint.x - 2, 1);
+      expect(this.shape.segments[0].point.x - diagonalSizeX * ((2 - Math.sqrt(2)) / 4)).toBeCloseTo(this.initialPoint.x - 2, 1);
+      expect(this.shape.segments[0].point.y - diagonalSizeY * ((2 - Math.sqrt(2)) / 4)).toBeCloseTo(this.initialPoint.y - 2, 1);
+
+      expect(this.shape.segments[1].point.x - diagonalSizeX / 2).toBeCloseTo(this.initialPoint.x - 1, 1);
+      expect(this.shape.segments[1].point.y).toBeCloseTo(this.initialPoint.y - diagonalSize - 1, 1);
+
+      expect(this.shape.segments[2].point.x - diagonalSizeX / 2).toBeCloseTo(this.initialPoint.x - 1, 1);
+      expect(this.shape.segments[2].point.y).toBeCloseTo(this.initialPoint.y - diagonalSize - 1, 1);
+
+      expect(this.shape.segments[3].point.x - diagonalSizeX / 2).toBeCloseTo(this.initialPoint.x - 1, 1);
+      expect(this.shape.segments[3].point.y).toBeCloseTo(this.initialPoint.y - diagonalSize - 1, 1);
+
+      expect(this.shape.segments[4].point.x - diagonalSizeX * ((2 + Math.sqrt(2)) / 4)).toBeCloseTo(this.initialPoint.x, 1);
+      expect(this.shape.segments[4].point.y - diagonalSizeY * ((2 - Math.sqrt(2)) / 4)).toBeCloseTo(this.initialPoint.y - 2, 1);
+
+      expect(this.shape.segments[5].point.x - diagonalSizeX).toBeCloseTo(this.initialPoint.x + diagonalSize - 1, 1);
+      expect(this.shape.segments[5].point.y - diagonalSizeY / 2).toBeCloseTo(this.initialPoint.y - 1, 1);
+
+      expect(this.shape.segments[6].point.x - event.delta.x).toBeCloseTo(this.initialPoint.x, 1);
+      expect(this.shape.segments[6].point.y - event.delta.y).toBeCloseTo(this.initialPoint.y, 1);
+
+      expect(this.shape.segments[7].point.x - diagonalSizeX / 2).toBeCloseTo(this.initialPoint.x - 1, 1);
+      expect(this.shape.segments[7].point.y - diagonalSizeY).toBeCloseTo(this.initialPoint.y + diagonalSize - 1, 1);
+
+      expect(this.shape.segments[8].point.x - diagonalSizeX * ((2 - Math.sqrt(2)) / 4)).toBeCloseTo(this.initialPoint.x - 2, 1);
+      expect(this.shape.segments[8].point.y - diagonalSizeY * ((2 + Math.sqrt(2)) / 4)).toBeCloseTo(this.initialPoint.y, 1);
+
+      expect(this.shape.segments[9].point.x).toBeCloseTo(this.initialPoint.x - diagonalSize - 1, 1);
+      expect(this.shape.segments[9].point.y - diagonalSizeY / 2).toBeCloseTo(this.initialPoint.y - 1, 1);
+    });
+
+
+    it('should resize the whole ellipse shape 2', function() {
+      var event = getEvent({
+        'x': 10,
+        'y': 100
+      });
+      var diagonalSizeX = event.delta.x * (2 / (1 + Math.sqrt(1 / 2)));
+      var diagonalSizeY = event.delta.y * (2 / (1 + Math.sqrt(1 / 2)));
+      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, this.shape.segments[0]);
+      this.ellipse.onMouseDrag(event, overlay);
+
+      expect(this.shape.segments[0].point.x - event.delta.x).toBeCloseTo(this.initialPoint.x - 2, 1);
       expect(this.shape.segments[0].point.y - event.delta.y).toBeCloseTo(this.initialPoint.y - 2, 1);
 
-      expect(this.shape.segments[1].point.x).toBeCloseTo(this.initialPoint.x - 1, 1);
-      expect(this.shape.segments[1].point.y - event.delta.y * diagonalSize).toBeCloseTo(this.initialPoint.y - diagonalSize - 1, 1);
+      expect(this.shape.segments[1].point.x - diagonalSizeX / 2).toBeCloseTo(this.initialPoint.x - 1, 1);
+      expect(this.shape.segments[1].point.y - diagonalSizeY).toBeCloseTo(this.initialPoint.y - diagonalSize - 1, 1);
 
-      expect(this.shape.segments[2].point.x - event.delta.x).toBeCloseTo(this.initialPoint.x, 1);
-      expect(this.shape.segments[2].point.y - event.delta.y).toBeCloseTo(this.initialPoint.y - 2, 1);
+      expect(this.shape.segments[2].point.x - diagonalSizeX / 2).toBeCloseTo(this.initialPoint.x - 1, 1);
+      expect(this.shape.segments[2].point.y - diagonalSizeY).toBeCloseTo(this.initialPoint.y - diagonalSize - 1, 1);
 
-      expect(this.shape.segments[3].point.x - event.delta.x * diagonalSize).toBeCloseTo(this.initialPoint.x + diagonalSize - 1, 1);
-      expect(this.shape.segments[3].point.y).toBeCloseTo(this.initialPoint.y - 1, 1);
+      expect(this.shape.segments[3].point.x - diagonalSizeX / 2).toBeCloseTo(this.initialPoint.x - 1, 1);
+      expect(this.shape.segments[3].point.y - diagonalSizeY).toBeCloseTo(this.initialPoint.y - diagonalSize - 1, 1);
 
-      expect(this.shape.segments[4].point.x - event.delta.x).toBeCloseTo(this.initialPoint.x, 1);
-      expect(this.shape.segments[4].point.y + event.delta.y).toBeCloseTo(this.initialPoint.y, 1);
+      expect(this.shape.segments[4].point.x - diagonalSizeX * ((2 - Math.sqrt(2)) / 4)).toBeCloseTo(this.initialPoint.x, 1);
+      expect(this.shape.segments[4].point.y - event.delta.y).toBeCloseTo(this.initialPoint.y - 2, 1);
 
-      expect(this.shape.segments[5].point.x).toBeCloseTo(this.initialPoint.x - 1, 1);
-      expect(this.shape.segments[5].point.y + event.delta.y * diagonalSize).toBeCloseTo(this.initialPoint.y + diagonalSize - 1, 1);
+      expect(this.shape.segments[5].point.x).toBeCloseTo(this.initialPoint.x + diagonalSize - 1, 1);
+      expect(this.shape.segments[5].point.y - diagonalSizeY / 2).toBeCloseTo(this.initialPoint.y - 1, 1);
 
-      expect(this.shape.segments[6].point.x + event.delta.x).toBeCloseTo(this.initialPoint.x - 2, 1);
-      expect(this.shape.segments[6].point.y + event.delta.y).toBeCloseTo(this.initialPoint.y, 1);
+      expect(this.shape.segments[6].point.x - diagonalSizeX * ((2 - Math.sqrt(2)) / 4)).toBeCloseTo(this.initialPoint.x, 1);
+      expect(this.shape.segments[6].point.y - diagonalSizeY * ((2 - Math.sqrt(2)) / 4)).toBeCloseTo(this.initialPoint.y, 1);
 
-      expect(this.shape.segments[7].point.x + event.delta.x * diagonalSize).toBeCloseTo(this.initialPoint.x - diagonalSize - 1, 1);
-      expect(this.shape.segments[7].point.y).toBeCloseTo(this.initialPoint.y - 1, 1);
+      expect(this.shape.segments[7].point.x - diagonalSizeX / 2).toBeCloseTo(this.initialPoint.x - 1, 1);
+      expect(this.shape.segments[7].point.y).toBeCloseTo(this.initialPoint.y + diagonalSize - 1, 1);
 
-      event = getEvent({
-        'x': -100,
-        'y': 10
-      });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'create', this.shape, null);
-      var expected = [];
-      for (var idx = 0; idx < this.shape.segments.length; idx++) {
-        var point = {
-          'x': this.shape.segments[idx].point.x,
-          'y': this.shape.segments[idx].point.y
-        };
-        point.x += event.delta.x / 2 + Math.cos((3 - idx) * Math.PI / 4) * event.delta.x / 2;
-        point.y += event.delta.y / 2 - Math.sin((3 - idx) * Math.PI / 4) * event.delta.y / 2;
-        expected.push(point);
-      }
+      expect(this.shape.segments[8].point.x - event.delta.x).toBeCloseTo(this.initialPoint.x - 2, 1);
+      expect(this.shape.segments[8].point.y - diagonalSizeY * ((2 - Math.sqrt(2)) / 4)).toBeCloseTo(this.initialPoint.y, 1);
+
+      expect(this.shape.segments[9].point.x - diagonalSizeX).toBeCloseTo(this.initialPoint.x - diagonalSize - 1, 1);
+      expect(this.shape.segments[9].point.y - diagonalSizeY / 2).toBeCloseTo(this.initialPoint.y - 1, 1);
+
+      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, this.shape.segments[8]);
       this.ellipse.onMouseDrag(event, overlay);
 
-      expect(this.shape.segments.length).toBe(expected.length);
-      for (var idx = 0; idx < this.shape.segments.length; idx++) {
-        expect(this.shape.segments[idx].point.x).toBeCloseTo(expected[idx].x, 1);
-        expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 1);
-      }
+      expect(overlay.mode).toBe('deform');
+
+      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, this.shape.segments[7]);
+      this.ellipse.onMouseDrag(event, overlay);
+
+      expect(overlay.mode).toBe('deform');
+
+      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, this.shape.segments[5]);
+      this.ellipse.onMouseDrag(event, overlay);
+
+      expect(overlay.mode).toBe('deform');
     });
+
 
     function rotatePoint(point, initialPoint, angle) {
       var angleRad = angle * Math.PI / 180.0;
@@ -239,14 +329,7 @@ describe('Ellipse', function() {
       };
     }
 
-    function scalePoint(point, initialPoint, scale) {
-      return {
-        x: scale * (point.x - initialPoint.x) + initialPoint.x,
-        y: scale * (point.y - initialPoint.y) + initialPoint.y
-      };
-    }
-
-    it('should rotate and scale the whole ellipse shape', function() {
+    it('should rotate the whole ellipse shape', function() {
       var size = {
         'x': 1,
         'y': 1
@@ -255,18 +338,20 @@ describe('Ellipse', function() {
       var rotationAngle = -90;
       // -90 degrees rotation + scale
       var event = getEvent({
-        'x': -size.x * diagonalSize * scale,
-        'y': size.y * diagonalSize
+        'x': -size.x,
+        'y': size.y
+      }, {
+        'x': this.shape.position.x,
+        'y': this.shape.position.y - size.y
       });
       var localCenterPoint = {
-        'x': this.initialPoint.x - size.x,
-        'y': this.initialPoint.y - size.y
+        'x': this.shape.position.x,
+        'y': this.shape.position.y
       };
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, this.shape.segments[1]);
+      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, null);
       var expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = this.shape.segments[idx].point;
-        point = scalePoint(point, localCenterPoint, scale);
         point = rotatePoint(point, localCenterPoint, rotationAngle);
         expected.push(point);
       }
@@ -274,8 +359,8 @@ describe('Ellipse', function() {
 
       expect(this.shape.segments.length).toBe(expected.length);
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
-        expect(this.shape.segments[idx].point.x).toBeCloseTo(expected[idx].x, 1);
-        expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 1);
+        expect(this.shape.segments[idx].point.x).toBeCloseTo(expected[idx].x, 6);
+        expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
     });
 
@@ -328,9 +413,9 @@ describe('Ellipse', function() {
       this.ellipse.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
-      expect(overlay.segment).toBe(this.shape.segments[4]);
+      expect(overlay.segment).toBe(this.shape.segments[6]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toBe('move');
+      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       this.ellipse.onMouseDown(event, overlay);
 
@@ -339,13 +424,112 @@ describe('Ellipse', function() {
       expect(overlay.path).toBeNull();
 
       event = getEvent({}, {
-        'x': this.initialPoint.x,
+        'x': this.initialPoint.x + diagonalSize - 1,
         'y': this.initialPoint.y - 1
       });
       this.ellipse.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
-      expect(overlay.segment).toBe(this.shape.segments[3]);
+      expect(overlay.segment).toBe(this.shape.segments[5]);
+      expect(overlay.path).toBe(this.shape);
+      expect(document.body.style.cursor).toContain('data:image/png;base64');
+
+      overlay.mode = '';
+      overlay.segment = null;
+      overlay.path = null;
+      event = getEvent({}, {
+        'x': this.initialPoint.x,
+        'y': this.initialPoint.y - 2
+      });
+      this.ellipse.onMouseDown(event, overlay);
+
+      expect(overlay.mode).toBe('deform');
+      expect(overlay.segment).toBe(this.shape.segments[4]);
+      expect(overlay.path).toBe(this.shape);
+      expect(document.body.style.cursor).toContain('data:image/png;base64');
+
+      overlay.mode = '';
+      overlay.segment = null;
+      overlay.path = null;
+      event = getEvent({}, {
+        'x': this.initialPoint.x - 1,
+        'y': this.initialPoint.y - diagonalSize - 1
+      });
+      this.ellipse.onMouseDown(event, overlay);
+
+      expect(overlay.mode).toBe('deform');
+      expect(overlay.segment).toBe(this.shape.segments[1]);
+      expect(overlay.path).toBe(this.shape);
+      expect(document.body.style.cursor).toContain('data:image/png;base64');
+
+      overlay.mode = '';
+      overlay.segment = null;
+      overlay.path = null;
+      event = getEvent({}, {
+        'x': this.initialPoint.x - 2,
+        'y': this.initialPoint.y - 2
+      });
+      this.ellipse.onMouseDown(event, overlay);
+
+      expect(overlay.mode).toBe('deform');
+      expect(overlay.segment).toBe(this.shape.segments[0]);
+      expect(overlay.path).toBe(this.shape);
+      expect(document.body.style.cursor).toContain('data:image/png;base64');
+
+      overlay.mode = '';
+      overlay.segment = null;
+      overlay.path = null;
+      event = getEvent({}, {
+        'x': this.initialPoint.x - 1,
+        'y': this.initialPoint.y + diagonalSize - 1
+      });
+      this.ellipse.onMouseDown(event, overlay);
+
+      expect(overlay.mode).toBe('deform');
+      expect(overlay.segment).toBe(this.shape.segments[7]);
+      expect(overlay.path).toBe(this.shape);
+      expect(document.body.style.cursor).toContain('data:image/png;base64');
+
+      overlay.mode = '';
+      overlay.segment = null;
+      overlay.path = null;
+      event = getEvent({}, {
+        'x': this.initialPoint.x - 2,
+        'y': this.initialPoint.y
+      });
+      this.ellipse.onMouseDown(event, overlay);
+
+      expect(overlay.mode).toBe('deform');
+      expect(overlay.segment).toBe(this.shape.segments[8]);
+      expect(overlay.path).toBe(this.shape);
+      expect(document.body.style.cursor).toContain('data:image/png;base64');
+
+      overlay.mode = '';
+      overlay.segment = null;
+      overlay.path = null;
+      event = getEvent({}, {
+        'x': this.initialPoint.x - diagonalSize - 1,
+        'y': this.initialPoint.y - 1
+      });
+      this.ellipse.onMouseDown(event, overlay);
+
+      expect(overlay.mode).toBe('deform');
+      expect(overlay.segment).toBe(this.shape.segments[9]);
+      expect(overlay.path).toBe(this.shape);
+      expect(document.body.style.cursor).toContain('data:image/png;base64');
+
+      overlay.mode = '';
+      overlay.segment = null;
+      overlay.path = null;
+      event = getEvent({}, {
+        'x': this.initialPoint.x - 1,
+        'y': this.initialPoint.y - diagonalSize - 21
+      });
+      this.ellipse.updateSelection(true, this.shape, overlay);
+      this.ellipse.onMouseDown(event, overlay);
+
+      expect(overlay.mode).toBe('deform');
+      expect(overlay.segment).toBeNull();
       expect(overlay.path).toBe(this.shape);
       expect(document.body.style.cursor).toContain('data:image/png;base64');
 
@@ -376,5 +560,36 @@ describe('Ellipse', function() {
 
       expect(document.body.style.cursor).toBe('default');
     });
+
+    it('should change stroke when hovering ellipse',function(){
+      var red = {
+        r:1,
+        g:0,
+        b:0
+      };
+      this.ellipse.onHover(true,this.shape,'red');
+
+      expect(this.shape.data.hovered).toBe(true);
+      expect(this.shape.strokeColor.red).toBe(red.r);
+      expect(this.shape.strokeColor.green).toBe(red.g);
+      expect(this.shape.strokeColor.blue).toBe(red.b);
+    });
+
+    it('should change stroke back to original when not hovering ellipse',function(){
+
+      var oldColor = this.shape.strokeColor;
+      this.ellipse.onHover(true,this.shape,'red');
+
+      expect(this.shape.data.nonHoverStroke.red).toBe(oldColor.red);
+      expect(this.shape.data.nonHoverStroke.green).toBe(oldColor.green);
+      expect(this.shape.data.nonHoverStroke.blue).toBe(oldColor.blue);
+
+      this.ellipse.onHover(false,this.shape);
+      expect(this.shape.data.hovered).toBe(undefined);
+      expect(this.shape.strokeColor.red).toBe(oldColor.red);
+      expect(this.shape.strokeColor.green).toBe(oldColor.green);
+      expect(this.shape.strokeColor.blue).toBe(oldColor.blue);
+    });
+
   });
 });

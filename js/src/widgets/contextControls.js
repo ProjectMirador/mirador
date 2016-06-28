@@ -129,7 +129,6 @@
           jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, color);
         },
         hide: function(color) {
-          var _this = this;
           color = jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId);
           if (color) {
             _this.eventEmitter.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
