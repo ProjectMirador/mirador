@@ -187,11 +187,11 @@
 
     annotationTemplate: Handlebars.compile([
                                    '{{#if showEdit}}',
-                                   '<a class="mirador-osd-edit-mode hud-control selected">',
+                                   '<a class="mirador-osd-pointer-mode hud-control selected">',
                                    '<i class="fa fa-mouse-pointer"></i>',
                                    '</a>',
                                    '{{#each tools}}',
-                                   '<a class="mirador-osd-{{this.logoClass}}-mode hud-control" title="{{t this.tooltip}}">',
+                                   '<a class="mirador-osd-{{this.logoClass}}-mode hud-control mirador-osd-edit-mode" title="{{t this.tooltip}}">',
                                    '<i class="material-icons">{{this.logoClass}}</i>',
                                    '</a>',
                                    '{{/each}}',
