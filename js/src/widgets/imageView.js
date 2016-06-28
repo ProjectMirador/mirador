@@ -29,9 +29,9 @@
 
   $.ImageView.prototype = {
 
-    init: function() {    
+    init: function() {
       var _this = this;
-      // check (for thumbnail view) if the canvasID is set. 
+      // check (for thumbnail view) if the canvasID is set.
       // If not, make it page/item 1.
       if (this.canvasID !== null) {
         this.currentImgIndex = $.getImageIndexById(this.imagesList, this.canvasID);
@@ -64,7 +64,7 @@
           }
         }
       }
-      // The hud controls are consistent 
+      // The hud controls are consistent
       // throughout any updates to the osd canvas.
       this.hud = new $.Hud({
         appendTo: this.element,
@@ -349,10 +349,10 @@
 
       this.element.find('.mirador-osd-brightness').on('mouseenter',
         function() {
-          _this.element.find('.mirador-osd-brightness-slider').stop().slideFadeToggle(200);
+          _this.element.find('.mirador-osd-brightness-slider').stop(true, true).show();
         }).on('mouseleave',
         function() {
-          _this.element.find('.mirador-osd-brightness-slider').stop().slideFadeToggle(200);
+          _this.element.find('.mirador-osd-brightness-slider').stop(true, true).hide();
       });
 
       this.element.find('.mirador-osd-contrast-slider').slider({
@@ -369,10 +369,10 @@
 
       this.element.find('.mirador-osd-contrast').on('mouseenter',
         function() {
-          _this.element.find('.mirador-osd-contrast-slider').stop().slideFadeToggle(200);
+          _this.element.find('.mirador-osd-contrast-slider').stop(true, true).show();
         }).on('mouseleave',
         function() {
-          _this.element.find('.mirador-osd-constrast-slider').stop().slideFadeToggle(200);
+          _this.element.find('.mirador-osd-contrast-slider').stop(true, true).hide();
       });
 
       this.element.find('.mirador-osd-saturation-slider').slider({
@@ -389,10 +389,10 @@
 
       this.element.find('.mirador-osd-saturation').on('mouseenter',
         function() {
-          _this.element.find('.mirador-osd-saturation-slider').stop().slideFadeToggle(200);
+          _this.element.find('.mirador-osd-saturation-slider').stop(true, true).show();
         }).on('mouseleave',
         function() {
-          _this.element.find('.mirador-osd-saturation-slider').stop().slideFadeToggle(200);
+          _this.element.find('.mirador-osd-saturation-slider').stop(true, true).hide();
       });
 
       this.element.find('.mirador-osd-grayscale').on('click', function() {
@@ -462,11 +462,11 @@
       var _this = this;
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       _this.eventEmitter.publish("imageBoundsUpdated", {
-        id: _this.windowId, 
+        id: _this.windowId,
           osdBounds: {
-            x: _this.osdOptions.osdBounds.x, 
-            y: _this.osdOptions.osdBounds.y, 
-            width: _this.osdOptions.osdBounds.width, 
+            x: _this.osdOptions.osdBounds.x,
+            y: _this.osdOptions.osdBounds.y,
+            width: _this.osdOptions.osdBounds.width,
             height: _this.osdOptions.osdBounds.height
           }
       });
@@ -483,8 +483,8 @@
     },
 
     toggle: function(stateValue) {
-      if (stateValue) { 
-        this.show(); 
+      if (stateValue) {
+        this.show();
       } else {
         this.hide();
       }
@@ -593,7 +593,7 @@
           }
 
           _this.addAnnotationsLayer(_this.elemAnno);
-            
+
           // if current annoState is 'none' that means it has been initialized but not used
           // use annotationState to choose event
           if (_this.hud.annoState.current === 'none') {
@@ -613,7 +613,7 @@
             }
           }
 
-          // A hack. Pop the osd overlays layer after the canvas so 
+          // A hack. Pop the osd overlays layer after the canvas so
           // that annotations appear.
           jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
 
