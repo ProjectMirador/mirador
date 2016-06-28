@@ -75,7 +75,7 @@ describe('Pin', function() {
 
     expect(shape.name).toBe(this.pin.idPrefix + '1');
 
-    expect(shape.segments.length).toBe(1);
+    expect(shape.segments.length).toBe(5);
 
     expect(shape.segments[0].point.x).toBe(initialPoint.x);
     expect(shape.segments[0].point.y).toBe(initialPoint.y);
@@ -97,6 +97,63 @@ describe('Pin', function() {
     afterEach(function() {
       delete this.shape;
       delete this.pin;
+    });
+
+    it('should update selection', function() {
+      var ellipseTool = new Mirador.Ellipse();
+      var initialPoint = {
+        'x': 987,
+        'y': 654
+      };
+      var ellipse = ellipseTool.createShape(initialPoint, overlay);
+      this.pin.updateSelection(true, ellipse, overlay);
+
+      expect(this.shape.selected).toBe(false);
+
+      var event = getEvent(initialPoint);
+
+      this.pin.onMouseUp(event, overlay);
+      this.pin.updateSelection(true, this.shape, overlay);
+
+      var redColor = {
+        red:1,
+        green: 0,
+        blue:0
+      };
+
+      expect(this.shape.strokeColor.red).toBe(redColor.red);
+      expect(this.shape.strokeColor.green).toBe(redColor.green);
+      expect(this.shape.strokeColor.blue).toBe(redColor.blue);
+    });
+
+    it('should change stroke when hovering pin',function(){
+      var red = {
+        r:1,
+        g:0,
+        b:0
+      };
+      this.pin.onHover(true,this.shape,'red');
+
+      expect(this.shape.data.hovered).toBe(true);
+      expect(this.shape.strokeColor.red).toBe(red.r);
+      expect(this.shape.strokeColor.green).toBe(red.g);
+      expect(this.shape.strokeColor.blue).toBe(red.b);
+    });
+
+    it('should change stroke back to original when not hovering pin',function(){
+
+      var oldColor = this.shape.strokeColor;
+      this.pin.onHover(true,this.shape,'red');
+
+      expect(this.shape.data.nonHoverStroke.red).toBe(oldColor.red);
+      expect(this.shape.data.nonHoverStroke.green).toBe(oldColor.green);
+      expect(this.shape.data.nonHoverStroke.blue).toBe(oldColor.blue);
+
+      this.pin.onHover(false,this.shape);
+      expect(this.shape.data.hovered).toBe(undefined);
+      expect(this.shape.strokeColor.red).toBe(oldColor.red);
+      expect(this.shape.strokeColor.green).toBe(oldColor.green);
+      expect(this.shape.strokeColor.blue).toBe(oldColor.blue);
     });
 
     it('should do nothing', function() {

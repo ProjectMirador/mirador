@@ -102,6 +102,52 @@ describe('Polygon', function() {
       delete this.polygon;
     });
 
+    it('should update selection', function() {
+      var ellipseTool = new Mirador.Ellipse();
+      var initialPoint = {
+        'x': 987,
+        'y': 654
+      };
+      var ellipse = ellipseTool.createShape(initialPoint, overlay);
+      this.polygon.updateSelection(true, ellipse, overlay);
+
+      expect(this.shape.selected).toBe(false);
+
+      this.polygon.updateSelection(true, this.shape, overlay);
+
+      expect(this.shape.selected).toBe(true);
+    });
+
+    it('should change stroke when hovering polygon',function(){
+      var red = {
+        r:1,
+        g:0,
+        b:0
+      };
+      this.polygon.onHover(true,this.shape,'red');
+
+      expect(this.shape.data.hovered).toBe(true);
+      expect(this.shape.strokeColor.red).toBe(red.r);
+      expect(this.shape.strokeColor.green).toBe(red.g);
+      expect(this.shape.strokeColor.blue).toBe(red.b);
+    });
+
+    it('should change stroke back to original when not hovering polygon',function(){
+
+      var oldColor = this.shape.strokeColor;
+      this.polygon.onHover(true,this.shape,'red');
+
+      expect(this.shape.data.nonHoverStroke.red).toBe(oldColor.red);
+      expect(this.shape.data.nonHoverStroke.green).toBe(oldColor.green);
+      expect(this.shape.data.nonHoverStroke.blue).toBe(oldColor.blue);
+
+      this.polygon.onHover(false,this.shape);
+      expect(this.shape.data.hovered).toBe(undefined);
+      expect(this.shape.strokeColor.red).toBe(oldColor.red);
+      expect(this.shape.strokeColor.green).toBe(oldColor.green);
+      expect(this.shape.strokeColor.blue).toBe(oldColor.blue);
+    });
+
     it('should do nothing', function() {
       var event = getEvent({
         'x': 100,
