@@ -208,7 +208,7 @@
                                   //  '<i class="fa fa-lg fa-save"></i>',
                                   //  '</a>',
                                    '{{#if showRefresh}}',
-                                     '<a class="hud-control draw-tool mirador-osd-refresh-mode">',
+                                     '<a class="hud-control mirador-osd-refresh-mode">',
                                      '<i class="fa fa-lg fa-refresh"></i>',
                                      '</a>',
                                    '{{/if}}',

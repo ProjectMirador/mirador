@@ -168,12 +168,16 @@
           _this.element.find('.fillColorPicker').spectrum("enable");
         }
       });
-      _this.eventEmitter.subscribe('showDrawTools.'+_this.windowId, function(event) {
-        _this.element.find('.draw-tool').show();
+
+      _this.eventEmitter.subscribe('SET_STATE_MACHINE_CREATEOFF.' + _this.windowId, function(event) {
+        _this.hud.annoState.createOff();
       });
-      _this.eventEmitter.subscribe('hideDrawTools.'+_this.windowId, function(event) {
-        _this.element.find('.draw-tool').hide();
-      });
+      // _this.eventEmitter.subscribe('showDrawTools.'+_this.windowId, function(event) {
+      //   _this.element.find('.draw-tool').show();
+      // });
+      // _this.eventEmitter.subscribe('hideDrawTools.'+_this.windowId, function(event) {
+      //   _this.element.find('.draw-tool').hide();
+      // });
       //Related to Annotations HUD
     },
 
@@ -262,12 +266,18 @@
 
       //Annotation specific controls
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
+        var shape = jQuery(this).find('.material-icons').html();
         if (_this.hud.annoState.current === 'annoOnCreateOff') {
-          _this.hud.annoState.createOn();
+          _this.hud.annoState.createOn('.mirador-osd-'+shape+'-mode');
           //when a user is in Create mode, don't let the controls auto fade as it could be distracting to the user
           _this.forceShowControls = true;
           _this.element.find(".hud-control").stop(true, true).removeClass('hidden', _this.state.getStateProperty('fadeDuration'));
-        } else if (_this.hud.annoState.current === 'annoOnCreateOn') {
+        }
+      });
+
+      this.element.find('.mirador-osd-pointer-mode').on('click', function() {
+        // go back to pointer mode
+        if (_this.hud.annoState.current === 'annoOnCreateOn') {
           _this.hud.annoState.createOff();
           //go back to allowing the controls to auto fade
           _this.forceShowControls = false;
@@ -279,24 +289,24 @@
         _this.eventEmitter.publish('updateAnnotationList.'+_this.windowId);
         _this.eventEmitter.publish('refreshOverlay.'+_this.windowId, '');
       });
-      this.element.find('.mirador-osd-delete-mode').on('click', function() {
-        _this.eventEmitter.publish('deleteShape.'+_this.windowId, '');
-      });
-      this.element.find('.mirador-osd-save-mode').on('click', function() {
-        _this.eventEmitter.publish('updateEditedShape.'+_this.windowId, '');
-      });
-      this.element.find('.mirador-osd-edit-mode').on('click', function() {
-        _this.eventEmitter.publish('toggleDefaultDrawingTool.'+_this.windowId);
-      });
+      // this.element.find('.mirador-osd-delete-mode').on('click', function() {
+      //   _this.eventEmitter.publish('deleteShape.'+_this.windowId, '');
+      // });
+      // this.element.find('.mirador-osd-save-mode').on('click', function() {
+      //   _this.eventEmitter.publish('updateEditedShape.'+_this.windowId, '');
+      // });
+      // this.element.find('.mirador-osd-edit-mode').on('click', function() {
+      //   _this.eventEmitter.publish('toggleDefaultDrawingTool.'+_this.windowId);
+      // });
 
-      function make_handler(shapeMode) {
-        return function () {
-          _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shapeMode);
-        };
-      }
-      for (var value in _this.availableAnnotationTools) {
-        this.element.find('.material-icons:contains(\'' + _this.availableAnnotationTools[value] + '\')').on('click', make_handler(_this.availableAnnotationTools[value]));
-      }
+      // function make_handler(shapeMode) {
+      //   return function () {
+      //     _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shapeMode);
+      //   };
+      // }
+      // for (var value in _this.availableAnnotationTools) {
+      //   this.element.find('.material-icons:contains(\'' + _this.availableAnnotationTools[value] + '\')').on('click', make_handler(_this.availableAnnotationTools[value]));
+      // }
       //Annotation specific controls
 
       //Image manipulation controls
