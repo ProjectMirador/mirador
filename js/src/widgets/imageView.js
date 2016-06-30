@@ -569,28 +569,28 @@
           _this.eventEmitter.publish('updateTooltips.' + _this.windowId, [point, point]);
         }, 30));
 
-        if (_this.state.getStateProperty('autoHideControls')) {
-          var timeoutID = null,
-          fadeDuration = _this.state.getStateProperty('fadeDuration'),
-          timeoutDuration = _this.state.getStateProperty('timeoutDuration');
-          var hideHUD = function() {
-            _this.element.find(".hud-control").stop(true, true).addClass('hidden', fadeDuration);
-          };
-          hideHUD();
-          jQuery(_this.element).on('mousemove', function() {
-            window.clearTimeout(timeoutID);
-            _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
-            // When a user is in annotation create mode, force show the controls so they don't disappear when in a qtip, so check for that
-            if (!_this.forceShowControls) {
-              timeoutID = window.setTimeout(hideHUD, timeoutDuration);
-            }
-          }).on('mouseleave', function() {
-            if (!_this.forceShowControls) {
-              window.clearTimeout(timeoutID);
-              hideHUD();
-            }
-          });
-        }
+//        if (_this.state.getStateProperty('autoHideControls')) {
+//          var timeoutID = null,
+//          fadeDuration = _this.state.getStateProperty('fadeDuration'),
+//          timeoutDuration = _this.state.getStateProperty('timeoutDuration');
+//          var hideHUD = function() {
+//            _this.element.find(".hud-control").stop(true, true).addClass('hidden', fadeDuration);
+//          };
+//          hideHUD();
+//          jQuery(_this.element).on('mousemove', function() {
+//            window.clearTimeout(timeoutID);
+//            _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
+//            // When a user is in annotation create mode, force show the controls so they don't disappear when in a qtip, so check for that
+//            if (!_this.forceShowControls) {
+//              timeoutID = window.setTimeout(hideHUD, timeoutDuration);
+//            }
+//          }).on('mouseleave', function() {
+//            if (!_this.forceShowControls) {
+//              window.clearTimeout(timeoutID);
+//              hideHUD();
+//            }
+//          });
+//        }
 
         _this.osd.addHandler('open', function(){
           _this.eventEmitter.publish('osdOpen.'+_this.windowId);
