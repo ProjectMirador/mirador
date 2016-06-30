@@ -98,7 +98,6 @@
                     }
                   };
                 }
-
                 oaAnnos[oaAnnos.length - 1].on.selector.value = _this.svgOverlay.getSVGString(shapeArray);
                 annotationShapesAreEdited = true;
                 break;
@@ -172,17 +171,33 @@
         stroke: true,
         segments: true
       };
+      var hoverColor = this.state.getStateProperty('drawingToolsSettings').hoverColor;
       var annotations = [];
       for (var key in _this.annotationsToShapesMap) {
         if (_this.annotationsToShapesMap.hasOwnProperty(key)) {
           var shapeArray = _this.annotationsToShapesMap[key];
           for (var idx = 0; idx < shapeArray.length; idx++) {
+            var shapeTool = this.svgOverlay.getTool(shapeArray[idx]);
             if (shapeArray[idx].hitTest(location, hitOptions)) {
               annotations.push(shapeArray[idx].data.annotation);
+              if(shapeTool.onHover){
+                for(var k=0;k<shapeArray.length;k++){
+                  shapeTool.onHover(true,shapeArray[k],hoverColor);
+                }
+              }
               break;
+            }else{
+              if(shapeTool.onHover){
+                shapeTool.onHover(false,shapeArray[idx]);
+              }
             }
           }
         }
+      }
+      this.svgOverlay.paperScope.view.draw();
+      if (_this.svgOverlay.availableExternalCommentsPanel) {
+        _this.eventEmitter.publish('annotationMousePosition.' + _this.parent.windowId, [annotations]);
+        return;
       }
       _this.annoTooltip.showViewer({
         annotations: annotations,

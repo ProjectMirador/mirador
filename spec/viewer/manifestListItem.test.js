@@ -39,7 +39,10 @@ describe('ManifestListItem', function () {
     '<div class="repo-image"><img src="build/mirador/images/logos/iiif_logo.png" alt="repoImg"></div>'+
     '<div class="select-metadata"><div class="manifest-title"><h3 title="Dummy Manifest">Dummy Manifest</h3></div>'+
     '<div class="item-info"><div class="item-info-row"><div class="repo-label">Dummy Location</div>'+
-    '<div class="canvas-count">1 </div></div></div></div><div class="preview-images"></div><i class="fa fa fa-ellipsis-h remaining"></i></li>'+
+    '<div class="canvas-count">1 </div></div></div></div>'+
+    '<div class="preview-thumb">'+
+    '<div class="preview-images"><img src="http://www.example.org/iiif/image/1/full/22,/0/native.jpg" width="22.846563295533443" height="80" class="preview-image flash" data-image-id="http://www.example.org/iiif/book1/canvas/p1">'+
+    '</div></div></li>'+
     '<li data-index-number="1"></li>'+
     '<li data-index-number="5"></li>'+
     '<li data-index-number="8"></li>'+
@@ -74,7 +77,10 @@ describe('ManifestListItem', function () {
     '<div class="repo-image"><img src="build/mirador/images/logos/iiif_logo.png" alt="repoImg"></div>'+
     '<div class="select-metadata"><div class="manifest-title"><h3 title="Dummy Manifest">Dummy Manifest</h3></div>'+
     '<div class="item-info"><div class="item-info-row"><div class="repo-label">Dummy Location</div>'+
-    '<div class="canvas-count">1 </div></div></div></div><div class="preview-images"></div><i class="fa fa fa-ellipsis-h remaining"></i></li>'+
+    '<div class="canvas-count">1 </div></div></div></div>'+
+    '<div class="preview-thumb">'+
+    '<div class="preview-images"><img src="http://www.example.org/iiif/image/1/full/22,/0/native.jpg" width="22.846563295533443" height="80" class="preview-image flash" data-image-id="http://www.example.org/iiif/book1/canvas/p1">'+
+    '</div></div></li>'+
     '<li data-index-number="5"></li>'+
     '<li data-index-number="8"></li>'+
     '<li data-index-number="13"></li>'+
@@ -113,7 +119,10 @@ describe('ManifestListItem', function () {
     '<div class="repo-image"><img src="build/mirador/images/logos/iiif_logo.png" alt="repoImg"></div>'+
     '<div class="select-metadata"><div class="manifest-title"><h3 title="Dummy Manifest">Dummy Manifest</h3></div>'+
     '<div class="item-info"><div class="item-info-row"><div class="repo-label">Dummy Location</div>'+
-    '<div class="canvas-count">1 </div></div></div></div><div class="preview-images"></div><i class="fa fa fa-ellipsis-h remaining"></i></li>'+    
+    '<div class="canvas-count">1 </div></div></div></div>'+
+    '<div class="preview-thumb">'+
+    '<div class="preview-images"><img src="http://www.example.org/iiif/image/1/full/22,/0/native.jpg" width="22.846563295533443" height="80" class="preview-image flash" data-image-id="http://www.example.org/iiif/book1/canvas/p1">'+
+    '</div></div></li>'+
     '<li data-index-number="8"></li>'+
     '<li data-index-number="13"></li>'+
     '<li data-index-number="14"></li>'+
@@ -166,7 +175,10 @@ describe('ManifestListItem', function () {
     '<div class="repo-image"><img src="build/mirador/images/logos/iiif_logo.png" alt="repoImg"></div>'+
     '<div class="select-metadata"><div class="manifest-title"><h3 title="Dummy Manifest">Dummy Manifest</h3></div>'+
     '<div class="item-info"><div class="item-info-row"><div class="repo-label">Dummy Location</div>'+
-    '<div class="canvas-count">1 </div></div></div></div><div class="preview-images"></div><i class="fa fa fa-ellipsis-h remaining"></i></li>'+
+    '<div class="canvas-count">1 </div></div></div></div>'+
+    '<div class="preview-thumb">'+
+    '<div class="preview-images"><img src="http://www.example.org/iiif/image/1/full/22,/0/native.jpg" width="22.846563295533443" height="80" class="preview-image flash" data-image-id="http://www.example.org/iiif/book1/canvas/p1">'+
+    '</div></div></li>'+
     '</ul>';
 
     expect(this.appendTo[0].outerHTML).toBe(expectedHTML);
@@ -193,7 +205,10 @@ describe('ManifestListItem', function () {
     '<div class="repo-image"><img src="build/mirador/images/logos/iiif_logo.png" alt="repoImg"></div>'+
     '<div class="select-metadata"><div class="manifest-title"><h3 title="Dummy Manifest">Dummy Manifest</h3></div>'+
     '<div class="item-info"><div class="item-info-row"><div class="repo-label">Dummy Location</div>'+
-    '<div class="canvas-count">1 </div></div></div></div><div class="preview-images"></div><i class="fa fa fa-ellipsis-h remaining"></i></li>'+
+    '<div class="canvas-count">1 </div></div></div></div>'+
+    '<div class="preview-thumb">'+
+    '<div class="preview-images"><img src="http://www.example.org/iiif/image/1/full/22,/0/native.jpg" width="22.846563295533443" height="80" class="preview-image flash" data-image-id="http://www.example.org/iiif/book1/canvas/p1">'+
+    '</div></div></li>'+
     '<li data-index-number="-1"></li>'+
     '<li data-index-number="1"></li>'+
     '<li data-index-number="5"></li>'+

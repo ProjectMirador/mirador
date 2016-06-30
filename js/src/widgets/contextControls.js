@@ -17,12 +17,21 @@
 
   $.ContextControls.prototype = {
 
-    init: function() {    
+    init: function() {
       var _this = this;
-      this.element = jQuery(this.template({
-        tools : _this.availableTools,
-        showEdit : this.annotationCreationAvailable
-      })).appendTo(this.container);
+      this.element = jQuery(this.annotationTemplate({
+        tools : _this.availableAnnotationTools,
+        showEdit : this.annotationCreationAvailable,
+        showRefresh : this.annotationRefresh
+      })).appendTo(this.container.find('.mirador-osd-annotation-controls'));
+
+      this.setBorderFillColorPickers();
+      this.hide();
+      this.bindEvents();
+    },
+
+    setBorderFillColorPickers: function() {
+      var _this = this;
       _this.container.find(".borderColorPicker").spectrum({
         showInput: true,
         showInitial: true,
@@ -52,18 +61,24 @@
           ["white", "cyan", "magenta", "yellow"]
         ]
       });
+      
       _this.container.find(".borderColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>border_color</i>");
+      
       var borderPicker = jQuery('.borderColorPickerPop'+_this.windowId);
       borderPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>Cancel');
       borderPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>Choose</a>');
       borderPicker.find('button.sp-choose').hide();
+      
       borderPicker.find('a.sp-cancel').on('click', function() {
         jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, null);
       });
+      
       jQuery._data(borderPicker.find(".sp-cancel")[0], "events").click.reverse();
+      
       borderPicker.find('a.sp-choose').on('click',function(){
         borderPicker.find('button.sp-choose').click();
       });
+      
       _this.container.find(".fillColorPicker").spectrum({
         showInput: true,
         showInitial: true,
@@ -83,7 +98,6 @@
           jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, color);
         },
         hide: function(color) {
-          var _this = this;
           color = jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId);
           if (color) {
             _this.eventEmitter.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
@@ -95,32 +109,36 @@
           ["white", "cyan", "magenta", "yellow"]
         ]
       });
+      
       _this.container.find(".fillColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>format_color_fill</i>");
+      
       var fillPicker = jQuery('.fillColorPickerPop'+_this.windowId);
+      
       fillPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>Cancel');
       fillPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>Choose</a>');
       fillPicker.find('button.sp-choose').hide();
+      
       fillPicker.find('a.sp-cancel').on('click', function() {
         jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, null);
       });
+      
       jQuery._data(fillPicker.find(".sp-cancel")[0], "events").click.reverse();
+      
       fillPicker.find('a.sp-choose').on('click',function(){
         fillPicker.find('button.sp-choose').click();
       });
-      this.hide();
-      this.bindEvents();
     },
 
     show: function() {
-      this.element.fadeIn("200");
+      this.element.fadeIn("150");
     },
 
-    hide: function(complete) {
-      this.element.fadeOut("200", complete);
+    hide: function() {
+      this.element.fadeOut("150");
     },
 
     bindEvents: function() {
-      var _this = this;      
+      var _this = this;
       this.container.find('.mirador-osd-back').on('click', function() {
         _this.element.remove();
         _this.element = jQuery(_this.template()).appendTo(_this.container);
@@ -128,11 +146,7 @@
       });
     },
 
-    template: Handlebars.compile([
-                                 '<div class="mirador-osd-context-controls hud-container">',
-                                   '<a class="mirador-osd-close hud-control" role="button" aria-label="Turn off annotations">',
-                                   '<i class="fa fa-lg fa-times"></i>',
-                                   '</a>',
+    annotationTemplate: Handlebars.compile([
                                    '{{#if showEdit}}',
                                    '<a class="mirador-osd-edit-mode hud-control" role="button" aria-label="Make a new annotation using mouse">',
                                    '<i class="fa fa-lg fa-edit"></i>',
@@ -163,9 +177,11 @@
                                    '<a class="hud-control draw-tool mirador-osd-save-mode">',
                                    '<i class="fa fa-lg fa-save"></i>',
                                    '</a>',
-                                   '<a class="hud-control draw-tool mirador-osd-refresh-mode">',
-                                   '<i class="fa fa-lg fa-refresh"></i>',
-                                   '</a>',
+                                   '{{#if showRefresh}}',
+                                     '<a class="hud-control draw-tool mirador-osd-refresh-mode">',
+                                     '<i class="fa fa-lg fa-refresh"></i>',
+                                     '</a>',
+                                   '{{/if}}',
                                    '{{/if}}',
                                    /*'<a class="mirador-osd-list hud-control">',
                                    '<i class="fa fa-lg fa-list"></i>',
@@ -176,7 +192,6 @@
                                    /*'<a class="mirador-osd-rect-tool hud-control" role="button">',
                                    '<i class="fa fa-lg fa-gear"></i>',
                                    '</a>',*/
-                                 '</div>'
     ].join('')),
 
     // for accessibility, make sure to add aria-labels just like above

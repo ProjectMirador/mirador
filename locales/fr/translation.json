@@ -1,10 +1,13 @@
 {
-    "addItem": "Ajouter un objet", 
+    "addItem": "Ajouter un objet",
     "changeLayout": "Changer la disposition",
-    "selectGrid": "Sélectionner une grille",
-    "bookmark": "Ajouter aux favoris",
+    "changeLayoutTooltip": "Changer le nombre de fenêtres visibles",
+    "selectGrid": "Sélectionner la grille de votre choix",
+    "bookmark": "Sauvegarder / Partager",
+    "bookmarkTooltip": "Obtenir le lien vers cet espace de travail",
     "close": "Fermer",
-    "bookmarkTitle": "Ajouter aux favoris ou partager son espace de travail",
+    "closeTooltip": "Fermer cette fenêtre",
+    "bookmarkTitle": "Sauvegarder ou partager cet espace de travail",
     "filterObjects": "Filtrer la liste",
     "addNewObject": "Ajouter un objet à partir d'une URL",
     "more": "restants",
@@ -33,7 +36,12 @@
     "newObject": "Nouvel objet",
     "objectMetadata": "Métadonnées",
     "fullScreen": "Plein écran",
+    "fullScreenTooltip": "Ouvrir en plein écran",
+    "fullScreenWindowTooltip": "Ouvrir cette fenêtre en plein écran",
     "logo": "Logo",
-    "load": "Charger",
-    "dropToLoad": "Déposer ici pour ajouter l'objet"
+    "load": "Ajouter",
+    "dropToLoad": "Déposer ici pour ajouter l'objet",
+    "viewTypeTooltip": "Changer le type de vue",
+    "metadataTooltip": "Afficher les informations/métadonnées",
+    "sidePanelTooltip": "Ouvrir le panneau latéral"
 }

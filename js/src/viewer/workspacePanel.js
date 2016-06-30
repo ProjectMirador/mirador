@@ -94,7 +94,15 @@
     },
 
     show: function() {
-      jQuery(this.element).show({effect: "fade", duration: 160, easing: "easeInCubic"});
+      var onComplete = function () {
+        // Under firefox $.show() used under display:none iframe does not change the display.
+        // This is workaround for https://github.com/IIIF/mirador/issues/929
+        jQuery(this).css('display', 'block');
+      };
+
+      jQuery(this.element).show({
+        effect: "fade", duration: 160, easing: "easeInCubic", complete: onComplete
+      });
     },
 
     onPanelVisible: function(_, stateValue) {

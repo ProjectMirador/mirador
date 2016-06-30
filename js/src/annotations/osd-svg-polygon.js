@@ -18,12 +18,33 @@
       var _this = this;
       var shape = new overlay.paperScope.Path({
         segments: [initialPoint],
+        dashArray: overlay.dashArray,
         strokeWidth: 1 / overlay.paperScope.view.zoom,
         strokeColor: overlay.strokeColor,
-        fullySelected: true,
         name: overlay.getName(_this)
       });
       return shape;
+    },
+
+    updateSelection: function(selected, item, overlay) {
+      if (item._name.toString().indexOf(this.idPrefix) != -1) {
+        item.selected = selected;
+      }
+    },
+
+    onHover:function(activate,shape,hoverColor){
+      // shape needs to have hovered styles
+      if(activate && !shape.data.hovered){
+        shape.data.nonHoverStroke = shape.strokeColor.clone();
+        shape.data.hovered = true;
+        shape.strokeColor = hoverColor;
+      }
+      // shape is not longer hovered
+      if(!activate && shape.data.hovered){
+        shape.strokeColor = shape.data.nonHoverStroke.clone();
+        delete shape.data.nonHoverStroke;
+        delete shape.data.hovered;
+      }
     },
 
     onMouseUp: function(event, overlay) {

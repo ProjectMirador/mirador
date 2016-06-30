@@ -350,7 +350,7 @@
       });
 
       jQuery(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function() {
-        _this.fullScreen();
+        _this.toggleFullScreen();
       });
 
     },
@@ -663,7 +663,8 @@
           annotationLayerAvailable: this.annotationLayer,
           annotationCreationAvailable: this.annotationCreation,
           annoEndpointAvailable: this.annoEndpointAvailable,
-          annotationState : this.annotationState
+          annotationState : this.annotationState,
+          annotationRefresh: this.annotationRefresh
         });
       } else {
         var view = this.focusModules.ImageView;
@@ -816,7 +817,7 @@
       }
     },
 
-    fullScreen: function() {
+    toggleFullScreen: function() {
       var _this = this;
       if (!OpenSeadragon.isFullScreen()) {
         this.element.find('.mirador-osd-fullscreen i').removeClass('fa-compress').addClass('fa-expand');

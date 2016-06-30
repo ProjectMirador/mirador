@@ -66,8 +66,6 @@ describe('Freehand', function() {
 
     expect(shape.closed).toBe(false);
 
-    expect(shape.fullySelected).toBe(true);
-
     expect(shape.name).toBe(this.freehand.idPrefix + '1');
 
     expect(shape.segments.length).toBe(1);
@@ -102,6 +100,52 @@ describe('Freehand', function() {
     afterEach(function() {
       delete this.shape;
       delete this.freehand;
+    });
+
+    it('should update selection', function() {
+      var ellipseTool = new Mirador.Ellipse();
+      var initialPoint = {
+        'x': 987,
+        'y': 654
+      };
+      var ellipse = ellipseTool.createShape(initialPoint, overlay);
+      this.freehand.updateSelection(true, ellipse, overlay);
+
+      expect(this.shape.selected).toBe(false);
+
+      this.freehand.updateSelection(true, this.shape, overlay);
+
+      expect(this.shape.selected).toBe(true);
+    });
+
+    it('should change stroke when hovering freehand',function(){
+      var red = {
+        r:1,
+        g:0,
+        b:0
+      };
+      this.freehand.onHover(true,this.shape,'red');
+
+      expect(this.shape.data.hovered).toBe(true);
+      expect(this.shape.strokeColor.red).toBe(red.r);
+      expect(this.shape.strokeColor.green).toBe(red.g);
+      expect(this.shape.strokeColor.blue).toBe(red.b);
+    });
+
+    it('should change stroke back to original when not hovering freehand',function(){
+
+      var oldColor = this.shape.strokeColor;
+      this.freehand.onHover(true,this.shape,'red');
+
+      expect(this.shape.data.nonHoverStroke.red).toBe(oldColor.red);
+      expect(this.shape.data.nonHoverStroke.green).toBe(oldColor.green);
+      expect(this.shape.data.nonHoverStroke.blue).toBe(oldColor.blue);
+
+      this.freehand.onHover(false,this.shape);
+      expect(this.shape.data.hovered).toBe(undefined);
+      expect(this.shape.strokeColor.red).toBe(oldColor.red);
+      expect(this.shape.strokeColor.green).toBe(oldColor.green);
+      expect(this.shape.strokeColor.blue).toBe(oldColor.blue);
     });
 
     it('should do nothing', function() {

@@ -127,5 +127,9 @@ describe('Utils', function() {
       expect(queryParams.manifest).toBe("http://www.e-codices.unifr.ch/metadata/iiif/kba-0003/manifest.json");
       expect(queryParams.canvas).toBe("http://www.e-codices.unifr.ch/metadata/iiif/kba-0003/canvas/kba-0003_002r.json");
     });
+    it('should properly parse a url without query parameters', function() {
+      var queryParams = this.utils.getQueryParams('http://www.google.com');
+      expect(queryParams).toEqual({});
+    });
   });
 });
