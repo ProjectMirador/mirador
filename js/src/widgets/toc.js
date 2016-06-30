@@ -58,11 +58,10 @@
         ranges = _this.extractV1RangeTrees(_this.structures);
         break;
       case '2':
-        ranges = _this.extractV21RangeTrees(_this.structures);
+        ranges = _this.extractV2RangeTrees(_this.structures);
         break;
-      case '2.1':
-         ranges =  _this.extractV21RangeTrees(_this.structures);
-          break;
+        // case '2.1':
+        //   _this.extractV21RangeTrees(_this.structures);
       }
 
       if (ranges.length < 2) {
@@ -187,96 +186,6 @@
 
       return unflatten(rangeList);
     },
-
-    extractV21RangeTrees: function(rangeList){
-      /*
-        contact bhaberbe@slu.edu (thehabes on github) with questions.  See IIIF/mirador issue #680.
-      */
-
-        /* Helper function to find the root object from a manifest's structures array, or return a 'root' holder object. */
-        var tree, parent;
-        function getParentest(rangeList){
-            var parentest = {'@id': "root", label: "Table of Contents", within:"root" };
-            for(var i=0; i<rangeList.length; i++){
-                if(rangeList[i].within && rangeList[i].within === "root"){ 
-                    parentest = rangeList[i];
-                    break; //There can only be one range considered the ultimate aggregator.
-                }
-            }
-            return parentest;
-        }
-       
-        /* 
-          Helper function to pull an object out of the rangeList by its @id property or return an empty object.
-          BE CAREFUL HERE.  An empty object returned means a URI was in range.ranges[] but was not in manifest.structures[], which is an ERROR.
-          We do not want the TOC to print out an empty holder for this.  Essentially we would like the algorithm to SKIP this child.
-         */
-        function pullFromStructures(uri, rangeList){
-            var pull_this_out = {};
-            for(var i=0; i<rangeList.length; i++){
-                if(rangeList[i]["@id"] == uri){
-                    pull_this_out = rangeList[i];
-                    break;
-                }
-            }
-            return pull_this_out;
-        }
-   
-        // Recursively build tree/table of contents data structure
-        // Begins with the list of topmost categories
-        function unflatten(flatRanges, parent, tree) {
-          // To aid recursion, define the tree if it does not exist,
-          // but use the tree that is being recursively built
-          // by the call below.
-          var children_uris = [];
-          var children = [];
-          tree = typeof tree !== 'undefined' ? tree : [];
-          parent = typeof parent !== 'undefined' ? parent : getParentest(flatRanges);
-          if(typeof parent.ranges !== 'undefined'){ 
-            children_uris = parent.ranges;
-          }
-          for(var i=0; i<children_uris.length; i++){ //get the children in order by their @id property from the structures array
-            var new_child = pullFromStructures(children_uris[i], flatRanges);//Remember from earlier, if this was an empty child, we wanted to skip it.  
-            if(!jQuery.isEmptyObject(new_child)){ //check if empty
-              children.push(new_child); //push to our array if not empty
-            }
-          }
-          if ( children.length ) {
-            if ( parent.within === 'root' || parent["@id"] === 'root') { 
-              // If there are children and their parent's
-              // id is a root or within is root, bind them to the tree object.
-              //
-              // This begins the construction of the object,
-              // and all non-top-level children are now
-              // bound to these base nodes set on the tree
-              // object.
-              children.forEach(function(child) {
-                child.level = 0;
-              });
-              tree = children;
-            } else {
-              // If the parent does not have a top-level id,
-              // bind the children to the parent node in this
-              // recursion level before handing it over for
-              // another spin.
-              //
-              // Because "child" is passed as
-              // the second parameter in the next call,
-              // in the next iteration "parent" will be the
-              children.forEach(function(child) {
-                child.level = parent.level+1;
-              });
-              parent.children = children;
-            }
-            // The function cannot continue to the return
-            // statement until this line stops being called,
-            // which only happens when "children" is empty.
-            jQuery.each(children, function( index, child ){unflatten(flatRanges, child);});
-          }
-          return tree;
-        }
-        return unflatten(rangeList);
-     },
 
     render: function() {
       var _this = this,
