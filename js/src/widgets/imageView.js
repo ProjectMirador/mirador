@@ -30,9 +30,9 @@
 
   $.ImageView.prototype = {
 
-    init: function() {    
+    init: function() {
       var _this = this;
-      // check (for thumbnail view) if the canvasID is set. 
+      // check (for thumbnail view) if the canvasID is set.
       // If not, make it page/item 1.
       if (this.canvasID !== null) {
         this.currentImgIndex = $.getImageIndexById(this.imagesList, this.canvasID);
@@ -62,7 +62,7 @@
           }
         }
       }
-      // The hud controls are consistent 
+      // The hud controls are consistent
       // throughout any updates to the osd canvas.
       this.hud = new $.Hud({
         appendTo: this.element,
@@ -303,11 +303,11 @@
       var _this = this;
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       _this.eventEmitter.publish("imageBoundsUpdated", {
-        id: _this.windowId, 
+        id: _this.windowId,
           osdBounds: {
-            x: _this.osdOptions.osdBounds.x, 
-            y: _this.osdOptions.osdBounds.y, 
-            width: _this.osdOptions.osdBounds.width, 
+            x: _this.osdOptions.osdBounds.x,
+            y: _this.osdOptions.osdBounds.y,
+            width: _this.osdOptions.osdBounds.width,
             height: _this.osdOptions.osdBounds.height
           }
       });
@@ -324,8 +324,8 @@
     },
 
     toggle: function(stateValue) {
-      if (stateValue) { 
-        this.show(); 
+      if (stateValue) {
+        this.show();
       } else {
         this.hide();
       }
@@ -400,28 +400,28 @@
           _this.eventEmitter.publish('updateTooltips.' + _this.windowId, [point, point]);
         }, 30));
 
-        if (_this.state.getStateProperty('autoHideControls')) {
-          var timeoutID = null,
-          fadeDuration = _this.state.getStateProperty('fadeDuration'),
-          timeoutDuration = _this.state.getStateProperty('timeoutDuration');
-          var hideHUD = function() {
-            _this.element.find(".hud-control").stop(true, true).addClass('hidden', fadeDuration);
-          };
-          hideHUD();
-          jQuery(_this.element).on('mousemove', function() {
-            window.clearTimeout(timeoutID);
-            _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
-            // When a user is in annotation create mode, force show the controls so they don't disappear when in a qtip, so check for that
-            if (!_this.forceShowControls) {
-              timeoutID = window.setTimeout(hideHUD, timeoutDuration);
-            }
-          }).on('mouseleave', function() {
-            if (!_this.forceShowControls) {
-              window.clearTimeout(timeoutID);
-              hideHUD();
-            }
-          });
-        }
+//        if (_this.state.getStateProperty('autoHideControls')) {
+//          var timeoutID = null,
+//          fadeDuration = _this.state.getStateProperty('fadeDuration'),
+//          timeoutDuration = _this.state.getStateProperty('timeoutDuration');
+//          var hideHUD = function() {
+//            _this.element.find(".hud-control").stop(true, true).addClass('hidden', fadeDuration);
+//          };
+//          hideHUD();
+//          jQuery(_this.element).on('mousemove', function() {
+//            window.clearTimeout(timeoutID);
+//            _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
+//            // When a user is in annotation create mode, force show the controls so they don't disappear when in a qtip, so check for that
+//            if (!_this.forceShowControls) {
+//              timeoutID = window.setTimeout(hideHUD, timeoutDuration);
+//            }
+//          }).on('mouseleave', function() {
+//            if (!_this.forceShowControls) {
+//              window.clearTimeout(timeoutID);
+//              hideHUD();
+//            }
+//          });
+//        }
 
         _this.osd.addHandler('open', function(){
           _this.eventEmitter.publish('osdOpen.'+_this.windowId);
@@ -434,7 +434,7 @@
           }
 
           _this.addAnnotationsLayer(_this.elemAnno);
-            
+
           // if current annoState is 'none' that means it has been initialized but not used
           // use annotationState to choose event
           if (_this.hud.annoState.current === 'none') {
@@ -454,7 +454,7 @@
             }
           }
 
-          // A hack. Pop the osd overlays layer after the canvas so 
+          // A hack. Pop the osd overlays layer after the canvas so
           // that annotations appear.
           jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
 
