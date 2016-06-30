@@ -69,9 +69,9 @@
           },
           ondisplayOn: function(event, from, to) {
             _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-annotations-layer', 'selected']);
-            // if (_this.annoEndpointAvailable) {
-            //       _this.contextControls.annotationShow();
-            // }
+            if (_this.annoEndpointAvailable) {
+                  _this.contextControls.annotationShow();
+            }
             _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
             _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-pointer-mode', 'selected']);
             _this.eventEmitter.publish(('windowUpdated'), {
@@ -86,7 +86,7 @@
               annotationState: to
             });
           },
-          oncreateOn: function(event, from, to, className) {
+          oncreateOn: function(event, from, to, shape) {
             // function enableEditingAnnotations() {
             //   _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
             //   _this.eventEmitter.publish('modeChange.' + _this.windowId, 'editingAnnotations');
@@ -101,7 +101,7 @@
             // }
             _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-pointer-mode', 'selected']);
             _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
-            _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, [className, 'selected']);
+            _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-'+shape+'-mode', 'selected']);
             _this.eventEmitter.publish('modeChange.' + _this.windowId, 'editingAnnotations');
             _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shape);
 

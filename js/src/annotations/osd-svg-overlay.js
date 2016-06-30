@@ -89,24 +89,24 @@
 
     _this.eventEmitter.subscribe('toggleDefaultDrawingTool.' + _this.windowId, function(event) {
       // jQuery('#' + osdViewerId).parent().find('.hud-container').find('.draw-tool').removeClass('selected');
-      // if (_this.disabled) {
-      //   jQuery('.qtip' + _this.windowId).qtip('hide');
-      //   return;
-      // }
-      // jQuery('#' + osdViewerId).parents(".window").find(".qtip-viewer").hide();
-      // _this.currentTool = null;
-      // for (var i = 0; i < _this.availableAnnotationDrawingTools.length; i++) {
-      //   for (var j = 0; j < _this.tools.length; j++) {
-      //     if (_this.availableAnnotationDrawingTools[i] == _this.tools[j].name) {
-      //       _this.currentTool = _this.tools[j];
-      //       jQuery('#' + osdViewerId).parent().find('.hud-container').find('.material-icons:contains(\'' + _this.tools[j].logoClass + '\')').parent('.draw-tool').addClass('selected');
-      //       break;
-      //     }
-      //   }
-      //   if (_this.currentTool) {
-      //     break;
-      //   }
-      // }
+      if (_this.disabled) {
+        jQuery('.qtip' + _this.windowId).qtip('hide');
+        return;
+      }
+      jQuery('#' + osdViewerId).parents(".window").find(".qtip-viewer").hide();
+      _this.currentTool = null;
+      for (var i = 0; i < _this.availableAnnotationDrawingTools.length; i++) {
+        for (var j = 0; j < _this.tools.length; j++) {
+          if (_this.availableAnnotationDrawingTools[i] == _this.tools[j].name) {
+            _this.currentTool = _this.tools[j];
+            // jQuery('#' + osdViewerId).parent().find('.hud-container').find('.material-icons:contains(\'' + _this.tools[j].logoClass + '\')').parent('.draw-tool').addClass('selected');
+            break;
+          }
+        }
+        if (_this.currentTool) {
+          break;
+        }
+      }
       console.log('triggered toggleDefaultDrawingTool');
     });
 

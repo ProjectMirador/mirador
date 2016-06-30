@@ -268,7 +268,7 @@
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
         var shape = jQuery(this).find('.material-icons').html();
         if (_this.hud.annoState.current === 'annoOnCreateOff') {
-          _this.hud.annoState.createOn('.mirador-osd-'+shape+'-mode');
+          _this.hud.annoState.createOn(shape);
           //when a user is in Create mode, don't let the controls auto fade as it could be distracting to the user
           _this.forceShowControls = true;
           _this.element.find(".hud-control").stop(true, true).removeClass('hidden', _this.state.getStateProperty('fadeDuration'));
