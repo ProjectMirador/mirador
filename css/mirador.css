@@ -148,7 +148,7 @@ a {
 .mirador-main-menu .icon-window-options,
 .mirador-main-menu .icon-clear-local-storage {
   background-image: url('../images/mirador-icons.png');
-  background-repeat: none;
+  background-repeat: no-repeat;
   cursor: pointer;
   display: inline-block;
   height: 20px;
@@ -515,7 +515,7 @@ li.highlight {
   width:25px;
   height:25px;
   color:red;
-  border: 1 px solid red;
+  border: 1px solid red;
 }
 
 .select-results {
@@ -1100,6 +1100,48 @@ li.highlight {
   right:1%;
   top:50%;
   margin-top:-35px;
+}
+.extendedNav {
+  z-index: 100;
+  font-size: 20px;
+  position: absolute;
+  /* width: 250px; */
+  /* height: 40px; */
+  /* text-align: center; */
+  top: 0;
+  padding: 20px 10px 10px;
+  opacity: 0.5;
+  transition: opacity 0.5s;
+}
+.extendedNav:hover{
+  opacity: 1;
+}
+.extendedNav.skipPrevious {
+  right: 50%;
+  text-align: right;
+}
+.extendedNav.skipNext {
+  left: 50%;
+  text-align: left;
+}
+.extendedNav a {
+  margin: 5px;
+  padding: 6px 7px 0;
+  border-radius: 5px;
+  background-color: white;
+  color: rgba(0,0,0,0.7);
+  text-shadow: none;
+  box-shadow: 0 0 5px black;
+  text-decoration: none;
+  font-size: 14px;
+}
+.extendedNav a .fa{
+  font-size: 20px;
+}
+.extendedNav a span {
+  position: relative;
+  top: -4px;
+  margin: 0 3px;
 }
 .mirador-osd-annotations-layer {
   position:absolute;
@@ -1766,7 +1808,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   box-sizing: border-box;
 }
 
-// qtip overrides.
+/* qtip overrides. */
 .qtip {
 }
 .qtip-bootstrap {

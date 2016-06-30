@@ -151,11 +151,11 @@ module.exports = function(grunt) {
         }, {
           src: 'js/lib/parse.min.js',
           dest: 'build/mirador/parse.min.js'
-        }, {	    
+        }, {
           src: 'js/lib/ZeroClipboard.swf',
           dest: 'build/mirador/ZeroClipboard.swf'
         }, {
-	  expand: true,	    
+	  expand: true,
           src: 'locales/**',
           dest: 'build/mirador'
         }]
@@ -193,8 +193,8 @@ module.exports = function(grunt) {
 
     watch: {
       all: {
-        options: { 
-          livereload: true 
+        options: {
+          livereload: true
         },
         files: [
           'Gruntfile.js',
@@ -217,7 +217,7 @@ module.exports = function(grunt) {
         jshintrc: '.jshintrc',
         globals: {
           Mirador: true
-        },
+        }
       },
       beforeconcat: sources
 
@@ -337,7 +337,7 @@ module.exports = function(grunt) {
       browsers: {
         reporters: ['spec', 'saucelabs'],
         browsers: [
-          'sl_win7_chrome', 
+          'sl_win7_chrome',
           'sl_win7_firefox',
           // 'sl_win7_ie9',
           // 'sl_win7_ie10',
@@ -400,7 +400,7 @@ module.exports = function(grunt) {
   // Coverage task.
   // Runs instanbul coverage
   grunt.registerTask('cover', 'karma:cover');
-  
+
   // ----------
   // Runs this on travis.
   grunt.registerTask('ci', [

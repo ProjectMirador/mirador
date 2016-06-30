@@ -217,31 +217,43 @@
     // next two pages for paged objects
     // need next single page for lining pages up
     // don't need for continuous or individuals
-    next: function() {
+    next: function(skip) {
       var next;
       if (this.currentImgIndex % 2 === 0) {
-        next = this.currentImgIndex + 1;
+        next = this.currentImgIndex + 1 + (skip * 2);
       } else {
-        next = this.currentImgIndex + 2;
+        next = this.currentImgIndex + 2 + (skip * 2);
       }
       if (next < this.imagesList.length) {
         this.parent.setCurrentCanvasID(this.imagesList[next]['@id']);
+      } else {
+        this.last();
       }
     },
 
     // previous two pages for paged objects
     // need previous single page for lining things up
     // don't need for continuous or individuals
-    previous: function() {
+    previous: function(skip) {
       var prev;
       if (this.currentImgIndex % 2 === 0) {
-        prev = this.currentImgIndex - 2;
+        prev = this.currentImgIndex - 2 - (skip * 2);
       } else {
-        prev = this.currentImgIndex - 1;
+        prev = this.currentImgIndex - 1 - (skip * 2);
       }
       if (prev >= 0) {
         this.parent.setCurrentCanvasID(this.imagesList[prev]['@id']);
+      } else {
+        this.first();
       }
+    },
+
+    first: function () {
+      this.parent.setCurrentCanvasID(this.imagesList[0]['@id']);
+    },
+
+    last: function() {
+      this.parent.setCurrentCanvasID(this.imagesList[this.imagesList.length - 1]['@id']);
     },
 
     getStitchList: function() {

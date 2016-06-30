@@ -571,6 +571,7 @@
         view.updateImage(canvasID);
       }
       this.toggleFocus('ImageView', 'ImageView');
+      this.focusModules.ImageView.hud.handleExtendedNavigation();
     },
 
     toggleBookView: function(canvasID) {
@@ -592,6 +593,7 @@
         view.updateImage(canvasID);
       }
       this.toggleFocus('BookView', 'BookView');
+      this.focusModules.BookView.hud.handleExtendedNavigation();
     },
 
     toggleScrollView: function(canvasID) {

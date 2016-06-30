@@ -91,7 +91,7 @@
     'availableAnnotationDrawingTools': [
 
     ],
-    
+
     'availableCanvasTools': [
 
     ],
@@ -113,11 +113,13 @@
     'workspacePanelSettings': {
       'maxRows': 5,
       'maxColumns': 5,
-      'preserveWindows': true 
+      'preserveWindows': true
     },
 
     //true or false.  controls display of "Add new object from URL" on manifest listing page
     'showAddFromURLBox' : true,
+
+    'showExtendedNavigation' : false,
 
     'buildPath' : 'build/mirador/',
 
@@ -136,7 +138,7 @@
      *  {
      *  name: 'backend name',
      *  module: 'NameEndpoint',
-     *  options: 
+     *  options:
      *  { 'url': '',
      *    'storeId': 123,
      *    'APIKey': '23983hf98j3f9283jf2983fj'
