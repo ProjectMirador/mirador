@@ -84,7 +84,9 @@
 
       _this.imagesList = _this.manifest.getCanvases();
       if (!_this.canvasID) {
-        _this.canvasID = _this.imagesList[0]['@id'];
+        var ci = isNaN(this.canvasIndex) ? 0 : parseInt(this.canvasIndex);
+        ci = ci >= 0 && ci < _this.imagesList.length ? ci : 0;
+        _this.canvasID = _this.imagesList[ci]['@id'];
       }
 
       this.annoEndpointAvailable = !jQuery.isEmptyObject(_this.state.getStateProperty('annotationEndpoint'));
