@@ -122,6 +122,10 @@
       };
       return versionMap[this.jsonLd['@context']];
     },
+    getViewingDirection : function(){
+      var _this = this;
+      return _this.jsonLd.viewingDirection;
+    },
     getCanvases : function() {
       var _this = this;
       return _this.jsonLd.sequences[0].canvases;
