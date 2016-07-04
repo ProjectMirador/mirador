@@ -109,7 +109,7 @@
 
     onDoubleClick: function(event, overlay) {
       if (overlay.path) {
-        if (overlay.path.segments[0].point.getDistance(overlay.path.segments[overlay.path.segments.length - 1].point) < overlay.hitOptions.tolerance) {
+        if (overlay.path.segments[0].point.getDistance(overlay.path.segments[overlay.path.segments.length - 1].point)*overlay.paperScope.view.zoom < overlay.hitOptions.tolerance) {
           overlay.path.closed = true;
           overlay.path.fillColor = overlay.fillColor;
           overlay.path.fillColor.alpha = overlay.fillColorAlpha;
