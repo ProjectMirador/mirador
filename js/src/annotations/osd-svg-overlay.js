@@ -61,12 +61,16 @@
     var _thisResize = function() {
       _this.resize();
     };
+    var _thisRotate = function(event) {
+      _this.rotate(event);
+      _this.resize();
+    };
     this.viewer.addHandler('animation', _thisResize);
     this.viewer.addHandler('open', _thisResize);
     this.viewer.addHandler('animation-finish', _thisResize);
     this.viewer.addHandler('update-viewport', _thisResize);
     this.viewer.addHandler('resize', _thisResize);
-    this.viewer.addHandler('rotate', _thisResize);
+    this.viewer.addHandler('rotate', _thisRotate);
     this.viewer.addHandler('constrain', _thisResize);
 
 
@@ -132,6 +136,8 @@
 
   $.Overlay.prototype = {
     init: function() {
+      // Keep track of the last rotation angle
+      this.lastAngle = 0;
       // Initialization of Paper.js overlay.
       var _this = this;
       this.paperScope = new paper.PaperScope();
@@ -286,6 +292,13 @@
         shape.scale(scale, shape.segments[0].point);
       }
     },
+    
+    rotate: function (event) {
+      if (this.paperScope && this.paperScope.view) {
+        this.paperScope.view._matrix.rotate(event.degrees-this.lastAngle, this.paperScope.view.center);
+        this.lastAngle = event.degrees;
+      }
+    },
 
     updateSelection: function(selected, item) {
       if(item && item._name){
@@ -310,11 +323,21 @@
       this.canvas.style.marginLeft = "0px";
       this.canvas.style.marginTop = "0px";
       if (this.paperScope && this.paperScope.view) {
-        this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
-        this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
-        this.paperScope.view.center = new this.paperScope.Size(
-          this.viewer.viewport.contentSize.x * viewportBounds.x + this.paperScope.view.bounds.width / 2,
-          this.viewer.viewport.contentSize.x * viewportBounds.y + this.paperScope.view.bounds.height / 2);
+        if (this.lastAngle.toString() === '90' || this.lastAngle.toString() === '270') {
+          this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
+          this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
+          this.paperScope.view.center = new this.paperScope.Size(
+            (this.viewer.viewport.contentSize.x * (viewportBounds.x-(viewportBounds.height-viewportBounds.width)/2)) + this.paperScope.view.bounds.width / 2,
+            (this.viewer.viewport.contentSize.x * (viewportBounds.y+(viewportBounds.height-viewportBounds.width)/2)) + this.paperScope.view.bounds.height / 2              
+          );
+        } else {
+          this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
+          this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
+          this.paperScope.view.center = new this.paperScope.Size(
+            this.viewer.viewport.contentSize.x * viewportBounds.x + this.paperScope.view.bounds.width / 2,
+            this.viewer.viewport.contentSize.x * viewportBounds.y + this.paperScope.view.bounds.height / 2
+          );
+        }
         this.paperScope.view.update(true);
         var allItems = this.paperScope.project.getItems({
           name: /_/
