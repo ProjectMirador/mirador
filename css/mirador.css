@@ -1675,6 +1675,15 @@ ul.scroll-listing-thumbs li .thumb-label {
   top: -0.5em;
 }
 
+.ui-slider, ui-slider-vertical {
+  width: 10px;
+}
+.ui-slider-handle {
+}
+.ui-slider-range {
+  background: deepSkyBlue;
+}
+
 /* metadata view
 ---------------------------------------------------------------------------- */
 
