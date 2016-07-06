@@ -12,9 +12,25 @@ describe('Overlay', function() {
     };
   }
 
-  function getOverlay(paperScope, strokeColor, fillColor, fillColorAlpha, mode, path, segment) {
+  function getAnnotationUtils(){
+    return {
+      Icon:function(){
+
+      }
+    }
+  }
+
+  function getState(){
+    return {
+      getStateProperty:function(){}
+    }
+  }
+
+  function getOverlay(paperScope, strokeColor, fillColor, fillColorAlpha, mode, path, segment,annotationUtils,state) {
     return {
       'paperScope': paperScope,
+      'annotationUtils':annotationUtils,
+      'state':state,
       'strokeColor': strokeColor,
       'fillColor': fillColor,
       'fillColorAlpha': fillColorAlpha,
@@ -169,7 +185,12 @@ describe('Overlay', function() {
       'x': 123,
       'y': 456
     };
-    var overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, null, null, null);
+    var overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, null, null, null,getAnnotationUtils(),getState());
+
+    spyOn(this.rectangle,'updateSelection').and.callFake(function(){
+      return ;
+    });
+
     this.overlay.hoveredPath = this.rectangle.createShape(initialPoint, overlay);
 
     expect(this.overlay.hoveredPath.strokeColor.red).toBe(1);
@@ -199,7 +220,7 @@ describe('Overlay', function() {
       'x': 123,
       'y': 456
     };
-    var overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, null, null, null);
+    var overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, null, null, null,getAnnotationUtils(),getState());
     this.overlay.hoveredPath = this.rectangle.createShape(initialPoint, overlay);
 
     expect(this.overlay.hoveredPath.fillColor.red).toBe(0);
@@ -244,7 +265,7 @@ describe('Overlay', function() {
       'x': 123,
       'y': 456
     };
-    var overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, null, null, null);
+    var overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, null, null, null,getAnnotationUtils(),getState());
     this.overlay.hoveredPath = this.rectangle.createShape(initialPoint, overlay);
     this.overlay.onDrawFinish();
 

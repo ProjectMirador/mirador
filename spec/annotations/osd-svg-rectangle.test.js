@@ -73,7 +73,7 @@ describe('Rectangle', function() {
 
     expect(shape.data.rotation).toBe(0);
 
-    expect(shape.fullySelected).toBe(true);
+    expect(shape.selected).toBe(true);
 
     expect(shape.name).toBe(this.rectangle.idPrefix + '1');
 
@@ -126,26 +126,26 @@ describe('Rectangle', function() {
     });
 
     it('should update selection', function() {
-      this.shape.fullySelected = false;
+      this.shape.selected = false;
       var ellipseTool = new Mirador.Ellipse();
       var initialPoint = {
         'x': 987,
         'y': 654
       };
       var ellipse = ellipseTool.createShape(initialPoint, overlay);
-      this.rectangle.updateSelection(true, ellipse, overlay);
+      ellipseTool.updateSelection(true, ellipse, overlay);
 
-      expect(this.shape.fullySelected).toBe(false);
+      expect(this.shape.selected).toBe(false);
 
       this.rectangle.updateSelection(true, this.shape, overlay);
 
-      expect(this.shape.fullySelected).toBe(true);
+      expect(this.shape.selected).toBe(true);
 
       this.shape.scale(-10);
 
       this.rectangle.updateSelection(true, this.shape, overlay);
 
-      expect(this.shape.fullySelected).toBe(true);
+      expect(this.shape.selected).toBe(true);
     });
 
     it('should change stroke when hovering rectangle',function(){
@@ -404,7 +404,7 @@ describe('Rectangle', function() {
         'x': this.shape.position.x,
         'y': this.shape.position.y
       };
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, null);
+      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'rotate', this.shape, null);
       var expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = this.shape.segments[idx].point;
