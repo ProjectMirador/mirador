@@ -361,9 +361,16 @@
         min: 0,
         max: 200,
         value: 100,
+        create: function(event, ui) {
+          var v = jQuery(this).slider('value'),
+              span = jQuery('<span class="percent">').text(v + '%');
+
+          jQuery(this).find('.ui-slider-handle').append(span);
+        },
         slide: function(event, ui) {
           filterValues.contrast = "contrast("+ui.value+"%)";
           setFilterCSS();
+          jQuery(this).find('.percent').text(ui.value + '%');
         }
       }).hide();
 

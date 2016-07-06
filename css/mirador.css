@@ -1675,12 +1675,34 @@ ul.scroll-listing-thumbs li .thumb-label {
   top: -0.5em;
 }
 
-.ui-slider, ui-slider-vertical {
-  width: 10px;
+.hud-control .ui-slider-handle .percent {
+  position: absolute;
+  left: 17px;
+  top:-0.3em;
+  display:block;
+  color: white;
+  text-shadow: 0 0 3px black;
 }
-.ui-slider-handle {
+
+.hud-control .ui-slider, .ui-slider-vertical {
+  width: 3px;
+  margin-left: 27px;
+  margin-bottom: 20px;
+  height:100px;
 }
-.ui-slider-range {
+
+.hud-control .ui-slider-vertical .ui-slider-handle {
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 40px;
+  margin-bottom: -.35em;
+}
+
+.hud-control .ui-slider-vertical .ui-slider-handle:focus {
+  outline:0;
+}
+
+.hud-control .ui-slider-range {
   background: deepSkyBlue;
 }
 
