@@ -43,5 +43,11 @@
     "dropToLoad": "Drop to Load Manifest",
     "viewTypeTooltip": "Change view type",
     "metadataTooltip": "View information/metadata about this object",
-    "sidePanelTooltip": "Toggle the side panel"
+    "sidePanelTooltip": "Toggle the side panel",
+
+    "colorPickerChoose":"Choose",
+
+    "strokeStylePickerSolid":"Solid",
+    "strokeStylePickerDashed":"Dashes",
+    "strokeStylePickerDotdashed":"Dots &amp; Dashes"
 }

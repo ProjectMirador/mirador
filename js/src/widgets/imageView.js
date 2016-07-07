@@ -73,7 +73,9 @@
         annotationRefresh: this.annotationRefresh,
         annoEndpointAvailable: this.annoEndpointAvailable,
         showNextPrev : this.imagesList.length !== 1,
+        availableAnnotationStylePickers: this.state.getStateProperty('availableAnnotationStylePickers'),
         availableAnnotationTools: this.availableAnnotationTools,
+        state: this.state,
         eventEmitter: this.eventEmitter
       });
 

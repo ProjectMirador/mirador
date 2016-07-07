@@ -53,6 +53,7 @@
         windowId: this.windowId,
         annotationLayerAvailable: false,
         showNextPrev : this.imagesList.length !== 1,
+        state:this.state,
         eventEmitter: this.eventEmitter
       });
 

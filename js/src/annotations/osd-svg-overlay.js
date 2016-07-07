@@ -45,6 +45,7 @@
     this.tools = $.getTools(drawingToolsSettings);
     this.currentTool = null;
     // Default colors.
+    this.dashArray = [];
     this.strokeColor = drawingToolsSettings.fillColor;
     this.fillColor = drawingToolsSettings.fillColor;
     this.fillColorAlpha = drawingToolsSettings.fillColorAlpha;
@@ -113,6 +114,7 @@
         _this.paperScope.view.draw();
       }
     });
+
     _this.eventEmitter.subscribe('changeFillColor.' + _this.windowId, function(event, color, alpha) {
       _this.fillColor = color;
       _this.fillColorAlpha = alpha;
@@ -122,6 +124,21 @@
         _this.paperScope.view.draw();
       }
     });
+
+    _this.eventEmitter.subscribe('toggleBorderType.' + _this.windowId, function (event, type) {
+      if (type == 'solid') {
+        _this.dashArray = [];
+      } else if (type == 'dashed') {
+        _this.dashArray = [5, 5];
+      } else if (type == 'dotdashed') {
+        _this.dashArray = [2, 5, 7, 5];
+      }
+      if (_this.hoveredPath) {
+        _this.hoveredPath.dashArray = _this.dashArray;
+        _this.paperScope.view.draw();
+      }
+    });
+
     _this.eventEmitter.publish('initBorderColor.' + _this.windowId, _this.strokeColor);
     _this.eventEmitter.publish('initFillColor.' + _this.windowId, [_this.fillColor, _this.fillColorAlpha]);
 
