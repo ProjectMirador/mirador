@@ -35,9 +35,21 @@ describe('ContextControls', function() {
 
     it('should add stroke picker',function(){
       spyOn(Mirador.ContextControls.prototype,'addStrokeStylePicker');
+      var canvasControls = {
+        "annotations" : {
+          "annotationLayer" : true,
+          "annotationCreation" : true,
+          "annotationState" : 'annoOff',
+          "annotationRefresh" : false,
+        },
+        "imageManipulation" : {
+          "manipulationLayer" : true
+        }
+      };
       var contextControls = new Mirador.ContextControls({
         container:this.container,
-        availableAnnotationStylePickers:['StrokeType']
+        availableAnnotationStylePickers:['StrokeType'],
+        canvasControls: canvasControls
       });
 
       expect(contextControls.addStrokeStylePicker).toHaveBeenCalled();
@@ -45,4 +57,4 @@ describe('ContextControls', function() {
 
   });
 
-}); 
+});

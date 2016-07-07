@@ -3,7 +3,8 @@
     jQuery.extend(this, {
       name: 'Polygon',
       logoClass: 'timeline',
-      idPrefix: 'rough_path_'
+      idPrefix: 'rough_path_',
+      tooltip: 'polygonTooltip'
     }, options);
 
     this.init();
