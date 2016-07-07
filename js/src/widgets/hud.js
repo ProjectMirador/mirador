@@ -55,7 +55,7 @@
           { name: 'startup',  from: 'none',  to: 'annoOff' },
           { name: 'displayOn',  from: 'annoOff',  to: 'annoOnCreateOff' },
           { name: 'refreshCreateOff',  from: 'annoOnCreateOff',  to: 'annoOnCreateOff' },
-          { name: 'createOn', from: ['annoOff','annoOnCreateOff'], to: 'annoOnCreateOn' },
+          { name: 'createOn', from: ['annoOff','annoOnCreateOff', 'annoOnCreateOn'], to: 'annoOnCreateOn' },
           { name: 'refreshCreateOn',  from: 'annoOnCreateOn',  to: 'annoOnCreateOn' },
           { name: 'createOff',  from: 'annoOnCreateOn',    to: 'annoOnCreateOff' },
           { name: 'displayOff', from: ['annoOnCreateOn','annoOnCreateOff'], to: 'annoOff' }

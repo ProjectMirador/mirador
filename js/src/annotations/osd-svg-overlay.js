@@ -107,7 +107,6 @@
           break;
         }
       }
-      console.log('triggered toggleDefaultDrawingTool');
     });
 
     _this.eventEmitter.subscribe('changeBorderColor.' + _this.windowId, function(event, color) {
