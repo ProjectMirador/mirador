@@ -294,9 +294,10 @@
           _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shapeMode);
         };
       }
-      for (var value in _this.availableAnnotationTools) {
-        this.element.find('.material-icons:contains(\'' + _this.availableAnnotationTools[value] + '\')').on('click', make_handler(_this.availableAnnotationTools[value]));
-      }
+      jQuery.each(_this.availableAnnotationTools, function(index, value) {
+        var shape = value.logoClass;
+        _this.element.find('.material-icons:contains(\'' + shape + '\')').on('click', make_handler(shape));
+      });
       //Annotation specific controls
 
       //Image manipulation controls
