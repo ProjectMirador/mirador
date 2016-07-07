@@ -193,19 +193,19 @@ bindEvents: function() {
       var _this = this;
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       _this.eventEmitter.publish("imageBoundsUpdated", {
-        id: _this.windowId, 
+        id: _this.windowId,
           osdBounds: {
-            x: _this.osdOptions.osdBounds.x, 
-            y: _this.osdOptions.osdBounds.y, 
-            width: _this.osdOptions.osdBounds.width, 
+            x: _this.osdOptions.osdBounds.x,
+            y: _this.osdOptions.osdBounds.y,
+            width: _this.osdOptions.osdBounds.width,
             height: _this.osdOptions.osdBounds.height
           }
       });
     },
 
     toggle: function(stateValue) {
-      if (stateValue) { 
-        this.show(); 
+      if (stateValue) {
+        this.show();
       } else {
         this.hide();
       }
@@ -247,7 +247,7 @@ bindEvents: function() {
       this.currentImg = this.imagesList[this.currentImgIndex];
       var newList = this.getStitchList();
       var is_same = this.stitchList.length == newList.length && this.stitchList.every(function(element, index) {
-        return element === newList[index]; 
+        return element === newList[index];
       });
       if (!is_same) {
         this.stitchList = newList;
@@ -296,23 +296,23 @@ bindEvents: function() {
           'toolbarID' : toolbarID
         });
 
-        if (_this.state.getStateProperty('autoHideControls')) {
-          var timeoutID = null,
-          fadeDuration = _this.state.getStateProperty('fadeDuration'),
-          timeoutDuration = _this.state.getStateProperty('timeoutDuration');
-          var hideHUD = function() {
-            _this.element.find(".hud-control").stop(true, true).addClass('hidden', fadeDuration);
-          };
-          hideHUD();
-          jQuery(_this.element).on('mousemove', function() {
-            window.clearTimeout(timeoutID);
-            _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
-            timeoutID = window.setTimeout(hideHUD, timeoutDuration);
-          }).on('mouseleave', function() {
-            window.clearTimeout(timeoutID);
-            hideHUD();
-          });
-        }
+        // if (_this.state.getStateProperty('autoHideControls')) {
+        //   var timeoutID = null,
+        //   fadeDuration = _this.state.getStateProperty('fadeDuration'),
+        //   timeoutDuration = _this.state.getStateProperty('timeoutDuration');
+        //   var hideHUD = function() {
+        //     _this.element.find(".hud-control").stop(true, true).addClass('hidden', fadeDuration);
+        //   };
+        //   hideHUD();
+        //   jQuery(_this.element).on('mousemove', function() {
+        //     window.clearTimeout(timeoutID);
+        //     _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
+        //     timeoutID = window.setTimeout(hideHUD, timeoutDuration);
+        //   }).on('mouseleave', function() {
+        //     window.clearTimeout(timeoutID);
+        //     hideHUD();
+        //   });
+        // }
 
         _this.osd.addHandler('open', function(){
           _this.addLayer(tileSources.slice(1), aspectRatio);

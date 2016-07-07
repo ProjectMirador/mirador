@@ -287,6 +287,7 @@
         _this.eventEmitter.publish('updateAnnotationList.'+_this.windowId);
         _this.eventEmitter.publish('refreshOverlay.'+_this.windowId, '');
       });
+
       // this.element.find('.mirador-osd-delete-mode').on('click', function() {
       //   _this.eventEmitter.publish('deleteShape.'+_this.windowId, '');
       // });
@@ -296,15 +297,16 @@
       // this.element.find('.mirador-osd-edit-mode').on('click', function() {
       //   _this.eventEmitter.publish('toggleDefaultDrawingTool.'+_this.windowId);
       // });
-
+      //
       // function make_handler(shapeMode) {
       //   return function () {
       //     _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shapeMode);
       //   };
       // }
-      // for (var value in _this.availableAnnotationTools) {
-      //   this.element.find('.material-icons:contains(\'' + _this.availableAnnotationTools[value] + '\')').on('click', make_handler(_this.availableAnnotationTools[value]));
-      // }
+      // jQuery.each(_this.availableAnnotationTools, function(index, value) {
+      //   var shape = value.logoClass;
+      //   _this.element.find('.material-icons:contains(\'' + shape + '\')').on('click', make_handler(shape));
+      // });
       //Annotation specific controls
 
       //Image manipulation controls
@@ -349,9 +351,16 @@
         min: 0,
         max: 200,
         value: 100,
+        create: function(event, ui) {
+          var v = jQuery(this).slider('value'),
+              span = jQuery('<span class="percent">').text(v + '%');
+
+          jQuery(this).find('.ui-slider-handle').append(span);
+        },
         slide: function(event, ui) {
-          filterValues.brightness = "brightness("+ui.value+"%)";
+          filterValues.contrast = "contrast("+ui.value+"%)";
           setFilterCSS();
+          jQuery(this).find('.percent').text(ui.value + '%');
         }
       }).hide();
 
@@ -369,9 +378,16 @@
         min: 0,
         max: 200,
         value: 100,
+        create: function(event, ui) {
+          var v = jQuery(this).slider('value'),
+              span = jQuery('<span class="percent">').text(v + '%');
+
+          jQuery(this).find('.ui-slider-handle').append(span);
+        },
         slide: function(event, ui) {
           filterValues.contrast = "contrast("+ui.value+"%)";
           setFilterCSS();
+          jQuery(this).find('.percent').text(ui.value + '%');
         }
       }).hide();
 
@@ -389,9 +405,16 @@
         min: 0,
         max: 200,
         value: 100,
+        create: function(event, ui) {
+          var v = jQuery(this).slider('value'),
+              span = jQuery('<span class="percent">').text(v + '%');
+
+          jQuery(this).find('.ui-slider-handle').append(span);
+        },
         slide: function(event, ui) {
-          filterValues.saturate = "saturate("+ui.value+"%)";
+          filterValues.contrast = "contrast("+ui.value+"%)";
           setFilterCSS();
+          jQuery(this).find('.percent').text(ui.value + '%');
         }
       }).hide();
 
@@ -434,14 +457,17 @@
         //reset brightness
         filterValues.brightness = "brightness(100%)";
         _this.element.find('.mirador-osd-brightness-slider').slider('option','value',100);
+        _this.element.find('.mirador-osd-brightness-slider').find('.percent').text(100 + '%');
 
         //reset contrast
         filterValues.contrast = "contrast(100%)";
         _this.element.find('.mirador-osd-contrast-slider').slider('option','value',100);
+        _this.element.find('.mirador-osd-contrast-slider').find('.percent').text(100 + '%');
 
         //reset saturation
         filterValues.saturate = "saturate(100%)";
         _this.element.find('.mirador-osd-saturation-slider').slider('option','value',100);
+        _this.element.find('.mirador-osd-saturation-slider').find('.percent').text(100 + '%');
 
         //reset grayscale
         filterValues.grayscale = "grayscale(0%)";
