@@ -43,5 +43,20 @@
     "dropToLoad": "Drop to Load Manifest",
     "viewTypeTooltip": "Change view type",
     "metadataTooltip": "View information/metadata about this object",
-    "sidePanelTooltip": "Toggle the side panel"
+    "sidePanelTooltip": "Toggle the side panel",
+    "rotateRightTooltip": "Rotate 90&deg; right",
+    "rotateLeftTooltip": "Rotate 90&deg; left",
+    "brightnessTooltip": "Adjust brightness",
+    "contrastTooltip": "Adjust contrast",
+    "saturationTooltip": "Adjust saturation",
+    "grayscaleTooltip": "Toggle grayscale",
+    "invertTooltip": "Invert colors",
+    "resetTooltip": "Reset all controls",
+    "rectangleTooltip": "Rectangle annotation",
+    "ellipseTooltip": "Oval annotation",
+    "freehandTooltip": "Freeform annotation",
+    "pinTooltip": "Pin annotation",
+    "polygonTooltip": "Polygon annotation",
+    "borderColorTooltip": "Choose annotation border color",
+    "fillColorTooltip": "Choose annotation fill color"
 }

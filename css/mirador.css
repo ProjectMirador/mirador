@@ -1159,11 +1159,22 @@ li.highlight {
   top: 10px;
   left: 10px;
   transition: none;
+  width: 100%
 }
 .mirador-osd-context-controls a {
   float:left;
   margin:0 10px 0 0;
   font-weight: normal;
+}
+.mirador-annotation-controls {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+.mirador-manipulation-controls {
+  position: absolute;
+  top: 30px;
+  left: 0px;
 }
 
 /* color picker custom style
@@ -1662,6 +1673,37 @@ ul.scroll-listing-thumbs li .thumb-label {
 
 .mirador-widget-toolbar .ui-slider-handle {
   top: -0.5em;
+}
+
+.hud-control .ui-slider-handle .percent {
+  position: absolute;
+  left: 17px;
+  top:-0.3em;
+  display:block;
+  color: white;
+  text-shadow: 0 0 3px black;
+}
+
+.hud-control .ui-slider, .ui-slider-vertical {
+  width: 3px;
+  margin-left: 27px;
+  margin-bottom: 20px;
+  height:100px;
+}
+
+.hud-control .ui-slider-vertical .ui-slider-handle {
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 40px;
+  margin-bottom: -.35em;
+}
+
+.hud-control .ui-slider-vertical .ui-slider-handle:focus {
+  outline:0;
+}
+
+.hud-control .ui-slider-range {
+  background: deepSkyBlue;
 }
 
 /* metadata view
