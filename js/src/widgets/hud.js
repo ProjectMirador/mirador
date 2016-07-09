@@ -34,7 +34,8 @@
         canvasControls: this.canvasControls,
         annoEndpointAvailable: this.annoEndpointAvailable,
         availableAnnotationTools: this.availableAnnotationTools,
-        eventEmitter: this.eventEmitter
+        eventEmitter: this.eventEmitter,
+        state: this.state
       });
 
       this.bindEvents();

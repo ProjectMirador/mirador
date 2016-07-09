@@ -62,102 +62,61 @@
 
     setBorderFillColorPickers: function() {
       var _this = this;
+      var defaultBorderColor = _this.state.getStateProperty('drawingToolsSettings').strokeColor,
+      defaultFillColor = _this.state.getStateProperty('drawingToolsSettings').fillColor,
+      defaultAlpha = _this.state.getStateProperty('drawingToolsSettings').fillColorAlpha,
+      colorObj = tinycolor(defaultFillColor);
+      colorObj.setAlpha(defaultAlpha);
+
       _this.container.find(".borderColorPicker").spectrum({
         showInput: true,
-        showInitial: true,
+        showInitial: false,
         showPalette: true,
+        showButtons: false,
         showSelectionPalette: true,
+        hideAfterPaletteSelect: true,
         appendTo: 'parent',
         containerClassName: 'borderColorPickerPop'+_this.windowId,
         preferredFormat: "rgb",
-        show: function(color) {
-          jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, color);
-        },
-        change: function(color) {
-          jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, color);
-        },
-        move: function(color) {
-          jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, color);
-        },
         hide: function(color) {
-          color = jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId);
-          if (color) {
-            _this.eventEmitter.publish('changeBorderColor.' + _this.windowId, color.toHexString());
-          }
+          _this.eventEmitter.publish('changeBorderColor.' + _this.windowId, color.toHexString());
+          jQuery(this).spectrum("set", color.toHexString());
         },
         maxSelectionSize: 4,
+        color: defaultBorderColor,
         palette: [
-          ["black", "red", "green", "blue"],
-          ["white", "cyan", "magenta", "yellow"]
+          [defaultBorderColor, "black", "red", "green"],
+          ["white", "blue", "magenta", "yellow"]
         ]
       });
 
       _this.container.find(".borderColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>border_color</i>");
-
-      var borderPicker = jQuery('.borderColorPickerPop'+_this.windowId);
-
-      borderPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>Cancel');
-      borderPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>Choose</a>');
-      borderPicker.find('button.sp-choose').hide();
-
-      borderPicker.find('a.sp-cancel').on('click', function() {
-        jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, null);
-      });
-
-      jQuery._data(borderPicker.find(".sp-cancel")[0], "events").click.reverse();
-
-      borderPicker.find('a.sp-choose').on('click',function(){
-        borderPicker.find('button.sp-choose').click();
-      });
+      _this.container.find(".borderColorPicker").next(".sp-replacer").append('<i class="fa fa-caret-down dropdown"></i>');
 
       _this.container.find(".fillColorPicker").spectrum({
         showInput: true,
-        showInitial: true,
+        showInitial: false,
         showAlpha: true,
         showPalette: true,
+        showButtons: false,
         showSelectionPalette: true,
         appendTo: 'parent',
         containerClassName: 'fillColorPickerPop'+_this.windowId,
         preferredFormat: "rgb",
-        show: function(color) {
-          jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, color);
-        },
-        change: function(color) {
-          jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, color);
-        },
-        move: function(color) {
-          jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, color);
-        },
         hide: function(color) {
-          color = jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId);
-          if (color) {
-            _this.eventEmitter.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
-          }
+          _this.eventEmitter.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
+          jQuery(this).spectrum("set", color);
         },
         maxSelectionSize: 4,
+        color: colorObj,
         palette: [
-          ["black", "red", "green", "blue"],
-          ["white", "cyan", "magenta", "yellow"]
+          [colorObj, "black", "red", "green"],
+          ["white", "blue", "magenta", "yellow"]
         ]
       });
 
       _this.container.find(".fillColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>format_color_fill</i>");
-
-      var fillPicker = jQuery('.fillColorPickerPop'+_this.windowId);
-
-      fillPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>Cancel');
-      fillPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>Choose</a>');
-      fillPicker.find('button.sp-choose').hide();
-
-      fillPicker.find('a.sp-cancel').on('click', function() {
-        jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, null);
-      });
-
-      jQuery._data(fillPicker.find(".sp-cancel")[0], "events").click.reverse();
-
-      fillPicker.find('a.sp-choose').on('click',function(){
-        fillPicker.find('button.sp-choose').click();
-      });
+      _this.container.find(".fillColorPicker").next(".sp-replacer").append('<i class="fa fa-caret-down dropdown"></i>');
     },
 
     annotationShow: function() {
@@ -195,10 +154,10 @@
                                    '<i class="material-icons">{{this.logoClass}}</i>',
                                    '</a>',
                                    '{{/each}}',
-                                   '<a class="hud-control" title="{{t "borderColorTooltip"}}">',
+                                   '<a class="hud-control mirador-osd-color-picker" title="{{t "borderColorTooltip"}}">',
                                    '<input type="text" class="borderColorPicker"/>',
                                    '</a>',
-                                   '<a class="hud-control" title="{{t "fillColorTooltip"}}">',
+                                   '<a class="hud-control mirador-osd-color-picker" title="{{t "fillColorTooltip"}}">',
                                    '<input type="text" class="fillColorPicker"/>',
                                    '</a>',
                                   //  '<a class="hud-control draw-tool mirador-osd-delete-mode">',

@@ -74,7 +74,8 @@
         annoEndpointAvailable: this.annoEndpointAvailable,
         showNextPrev : this.imagesList.length !== 1,
         availableAnnotationTools: this.availableAnnotationTools,
-        eventEmitter: this.eventEmitter
+        eventEmitter: this.eventEmitter,
+        state: this.state
       });
 
       this.bindEvents();
@@ -146,38 +147,9 @@
         _this.element.find(elementSelector).fadeOut(duration, complete);
       });
 
-      _this.eventEmitter.subscribe('initBorderColor.' + _this.windowId, function(event, color) {
-        _this.element.find('.borderColorPicker').spectrum('set', color);
-      });
-      _this.eventEmitter.subscribe('initFillColor.' + _this.windowId, function(event, color, alpha) {
-        var colorObj = tinycolor(color);
-        colorObj.setAlpha(alpha);
-        _this.element.find('.fillColorPicker').spectrum('set', colorObj);
-      });
-      _this.eventEmitter.subscribe('disableBorderColorPicker.'+_this.windowId, function(event, disablePicker) {
-        if(disablePicker) {
-          _this.element.find('.borderColorPicker').spectrum("disable");
-        }else{
-          _this.element.find('.borderColorPicker').spectrum("enable");
-        }
-      });
-      _this.eventEmitter.subscribe('disableFillColorPicker.'+_this.windowId, function(event, disablePicker) {
-        if(disablePicker) {
-          _this.element.find('.fillColorPicker').spectrum("disable");
-        }else{
-          _this.element.find('.fillColorPicker').spectrum("enable");
-        }
-      });
-
       _this.eventEmitter.subscribe('SET_STATE_MACHINE_CREATEOFF.' + _this.windowId, function(event) {
         _this.hud.annoState.createOff();
       });
-      // _this.eventEmitter.subscribe('showDrawTools.'+_this.windowId, function(event) {
-      //   _this.element.find('.draw-tool').show();
-      // });
-      // _this.eventEmitter.subscribe('hideDrawTools.'+_this.windowId, function(event) {
-      //   _this.element.find('.draw-tool').hide();
-      // });
       //Related to Annotations HUD
     },
 

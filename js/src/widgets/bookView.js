@@ -53,7 +53,8 @@
         windowId: this.windowId,
         annotationLayerAvailable: false,
         showNextPrev : this.imagesList.length !== 1,
-        eventEmitter: this.eventEmitter
+        eventEmitter: this.eventEmitter,
+        state: this.state
       });
 
       if (this.manifest.jsonLd.sequences[0].viewingDirection) {

@@ -1,7 +1,7 @@
-body { 
-  padding: 0; 
-  margin: 0; 
-  overflow: hidden; 
+body {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
 }
 a {
   color: inherit; /* blue colors for links too */
@@ -86,9 +86,9 @@ a {
   #load-controls form {
     float: none;
   }
-  
+
   #url-load-form {
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
   }
 }
 
@@ -485,7 +485,7 @@ li.highlight {
   margin-right: 6px;
 }
 #url-load-form {
-  float: right; 
+  float: right;
 }
 #url-load-form input[type="text"] {
   width: 250px;
@@ -500,7 +500,7 @@ li.highlight {
   color:black;
 }
 #manifest-search-form input:focus, #url-load-form input:focus,
-#manifest-search-form input:focus, 
+#manifest-search-form input:focus,
 #url-load-form input:focus,
 #url-load-form input[type="submit"]:hover{
   outline:none;
@@ -908,10 +908,10 @@ li.highlight {
   font-weight: bold;
 }
 
-/* 
+/*
 .toc li:hover > h2 a {
-  font-weight: bold; 
-} 
+  font-weight: bold;
+}
 */
 .view-container {
   margin-left: 280px;
@@ -1180,96 +1180,39 @@ li.highlight {
 /* color picker custom style
 ---------------------------------------------------------------------------- */
 
-.draw-tool * {
-  text-shadow: none !important;
+.mirador-osd-color-picker * {
+  text-shadow: none;
 }
 
-.draw-tool>i {
-  text-shadow: 0 0 5px black !important;
+.sp-dd {
+  display: none;
 }
 
-.draw-tool .sp-replacer {
-  vertical-align: top;
-  margin-top: 2px;
-  height: 14px !important;
+.mirador-osd-color-picker .dropdown {
+  font-size: .8em;
+  height: 30px;
+  vertical-align: middle;
 }
 
-.mirador-line-type:hover {
-  border-color: #F0C49B;
-  color: #111;
-  transition: all 0.3s ease;
-  opacity: 1;
-}
-
-.mirador-line-type {
-  border-radius: 5px !important;
-  padding: 0px !important;
-  height: 22px !important;
-  width: 67px !important;
-  opacity: 0.6;
-  border: 1px solid #91765d;
-  background: white none repeat scroll 0 0;
-  margin: 2px 10px 0px 0px !important;
-}
-
-.mirador-line-type ul {
-  color: #333333;
-  margin-top: 0px !important;
-}
-
-.mirador-line-type li {
-  text-shadow: none !important;
-  font-size: 10px !important;
-}
-
-.mirador-line-type>span {
-  color: black;
-  float: right;
-  margin-right: 5px;
-}
-
-.mirador-line-type>i {
-  vertical-align: top;
-  width: 30px !important;
-  margin: 4px 0px 0px 4px !important;
-}
-
-.mirador-line-type i {
-  color: #333333;
-  width: 45px;
-  height: 10px;
-  font-size: 15px !important;
-  background-repeat: no-repeat;
-}
-
-.sp-button-container a {
-  color: #555555 !important;
-  text-shadow: none !important;
-  margin: 0 0 0 15px !important;
-  text-decoration: none !important;
-  text-decoration-line: underline !important;
-}
-
-.borderColorPicker + div + .sp-container, .fillColorPicker + div + .sp-container {
-  width: 300px !important;
-  border-width: 0px !important;
+.mirador-osd-color-picker .sp-container {
+  width: 300px;
+  border-color: #ccc;
   opacity: 0.9;
+  border-radius: 3px;
 }
 
-.borderColorPicker + div .sp-preview, .fillColorPicker + div .sp-preview {
-  height: 10px !important;
+.mirador-osd-color-picker .sp-preview {
+  height: 10px;
 }
-.borderColorPicker + div .sp-dd, .fillColorPicker + div .sp-dd {
-  height: 6px !important;
-  line-height: 6px !important;
-}
-.borderColorPicker + div.sp-replacer, .fillColorPicker + div.sp-replacer {
-  border-radius: 5px !important;
+.mirador-osd-color-picker .sp-replacer {
+  border-color: #ccc;
+  height: 11px;
+  border-radius: 3px;
 }
 
-.borderColorPicker + div .material-icons, .fillColorPicker + div .material-icons {
+.mirador-osd-color-picker .material-icons {
   float: left;
-  font-size: 12px !important;
+  font-size: 12px;
   margin: 0 5px 0 0;
 }
 
@@ -1874,10 +1817,10 @@ a.mirador-icon-window-menu, a.mirador-icon-view-type {
   width: 30px;
 }
 
-.mirador-viewer a.mirador-icon-view-type:hover, 
-.mirador-viewer a.mirador-icon-metadata-view:hover, 
-.mirador-viewer a.mirador-icon-empty-slot:hover, 
-.mirador-viewer a.mirador-icon-window-menu:hover, 
+.mirador-viewer a.mirador-icon-view-type:hover,
+.mirador-viewer a.mirador-icon-metadata-view:hover,
+.mirador-viewer a.mirador-icon-empty-slot:hover,
+.mirador-viewer a.mirador-icon-window-menu:hover,
 .mirador-viewer a.mirador-icon-toc:hover,
 .mirador-viewer a.mirador-osd-fullscreen:hover {
   color: black;
