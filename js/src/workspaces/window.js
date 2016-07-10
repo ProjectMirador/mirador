@@ -88,10 +88,10 @@
       }
 
       this.annoEndpointAvailable = !jQuery.isEmptyObject(_this.state.getStateProperty('annotationEndpoint'));
-      if (!this.annotationLayer) {
-        this.annotationCreation = false;
+      if (!this.canvasControls.annotations.annotationLayer) {
+        this.canvasControls.annotations.annotationCreation = false;
         this.annoEndpointAvailable = false;
-        this.annotationState = 'annoOff';
+        this.canvasControls.annotations.annotationState = 'annoOff';
       }
       _this.getAnnotations();
 
@@ -350,7 +350,7 @@
       });
 
       jQuery(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function() {
-        _this.fullScreen();
+        _this.toggleFullScreen();
       });
 
     },
@@ -659,11 +659,9 @@
           imagesList: this.imagesList,
           osdOptions: this.windowOptions,
           bottomPanelAvailable: this.bottomPanelAvailable,
-          annotationLayerAvailable: this.annotationLayer,
-          annotationCreationAvailable: this.annotationCreation,
           annoEndpointAvailable: this.annoEndpointAvailable,
-          annotationState : this.annotationState,
-          annotationRefresh: this.annotationRefresh
+          canvasControls: this.canvasControls,
+          annotationState : this.canvasControls.annotations.annotationState
         });
       } else {
         var view = this.focusModules.ImageView;
@@ -816,7 +814,7 @@
       }
     },
 
-    fullScreen: function() {
+    toggleFullScreen: function() {
       var _this = this;
       if (!OpenSeadragon.isFullScreen()) {
         this.element.find('.mirador-osd-fullscreen i').removeClass('fa-compress').addClass('fa-expand');

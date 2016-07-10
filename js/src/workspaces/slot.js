@@ -148,7 +148,7 @@
         var _this = this;
 
         url = url || text_url;
-        var manifestUrl = $.getQueryParams(url).manifest,
+        var manifestUrl = $.getQueryParams(url).manifest || url,
             collectionUrl = $.getQueryParams(url).collection,
             canvasId = $.getQueryParams(url).canvas,
             imageInfoUrl = $.getQueryParams(url).image,

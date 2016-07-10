@@ -3,7 +3,8 @@
     jQuery.extend(this, {
       name: 'Pin',
       logoClass: 'room',
-      idPrefix: 'pin_'
+      idPrefix: 'pin_',
+      tooltip: 'pinTooltip'
     }, options);
 
     this.init();
@@ -16,10 +17,15 @@
     createShape: function(initialPoint, overlay) {
       overlay.mode = 'create';
       var _this = this;
-      var pathData = '';
       var size = overlay.fixedShapeSize;
+      var pathData = '';
       pathData += 'M' + initialPoint.x + ',' + initialPoint.y;
-      pathData += 'c' + (size * -2) + ',' + (size * -3) + ' ' + (size * 2) + ',' + (size * -3) + ' 0,0z';
+      pathData += ' Q' + initialPoint.x + ',' + (initialPoint.y - size);
+      pathData += ' ' + (initialPoint.x + size) + ',' + (initialPoint.y - 2 * size);
+      pathData += ' A' + size + ',' + size + ' 0 1 0';
+      pathData += ' ' + (initialPoint.x - size) + ',' + (initialPoint.y - 2 * size);
+      pathData += ' Q' + initialPoint.x + ',' + (initialPoint.y - size);
+      pathData += ' ' + initialPoint.x + ',' + initialPoint.y;
       var shape = new overlay.paperScope.Path(pathData);
       shape.name = overlay.getName(_this);
       shape.dashArray = overlay.dashArray;
@@ -30,6 +36,33 @@
       shape.closed = true;
       overlay.fitFixedSizeShapes(shape);
       return shape;
+    },
+
+    updateSelection: function(selected, item, overlay) {
+      var selectedStrokeColor = 'red';
+      //item.selected = selected;
+      if (item._name.toString().indexOf(this.idPrefix) != -1) {
+        if(selected){
+         item.strokeColor = selectedStrokeColor;
+        }else{
+          item.strokeColor = overlay.strokeColor;
+        }
+      }
+    },
+    
+    onHover:function(activate,shape,hoverColor){
+      // shape needs to have hovered styles
+      if(activate && !shape.data.hovered){
+        shape.data.nonHoverStroke = shape.strokeColor.clone();
+        shape.data.hovered = true;
+        shape.strokeColor = hoverColor;
+      }
+      // shape is not longer hovered
+      if(!activate && shape.data.hovered){
+        shape.strokeColor = shape.data.nonHoverStroke.clone();
+        delete shape.data.nonHoverStroke;
+        delete shape.data.hovered;
+      }
     },
 
     onMouseUp: function(event, overlay) {

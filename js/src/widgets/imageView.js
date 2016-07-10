@@ -19,7 +19,6 @@
       osdCls: 'mirador-osd',
       elemAnno:         null,
       annoCls:          'annotation-canvas',
-      annotationLayerAvailable: null,
       annotationsLayer: null,
       forceShowControls: false,
       eventEmitter:     null
@@ -30,9 +29,9 @@
 
   $.ImageView.prototype = {
 
-    init: function() {    
+    init: function() {
       var _this = this;
-      // check (for thumbnail view) if the canvasID is set. 
+      // check (for thumbnail view) if the canvasID is set.
       // If not, make it page/item 1.
       if (this.canvasID !== null) {
         this.currentImgIndex = $.getImageIndexById(this.imagesList, this.canvasID);
@@ -58,19 +57,20 @@
       for ( var i = 0; i < this.state.getStateProperty('availableAnnotationDrawingTools').length; i++) {
         for ( var j = 0; j < allTools.length; j++) {
           if (this.state.getStateProperty('availableAnnotationDrawingTools')[i] == allTools[j].name) {
-            this.availableAnnotationTools.push(allTools[j].logoClass);
+            var values = {};
+            values.logoClass = allTools[j].logoClass;
+            values.tooltip = allTools[j].tooltip;
+            this.availableAnnotationTools.push(values);
           }
         }
       }
-      // The hud controls are consistent 
+      // The hud controls are consistent
       // throughout any updates to the osd canvas.
       this.hud = new $.Hud({
         appendTo: this.element,
         bottomPanelAvailable: this.bottomPanelAvailable,
         windowId: this.windowId,
-        annotationLayerAvailable: this.annotationLayerAvailable,
-        annotationCreationAvailable: this.annotationCreationAvailable,
-        annotationRefresh: this.annotationRefresh,
+        canvasControls: this.canvasControls,
         annoEndpointAvailable: this.annoEndpointAvailable,
         showNextPrev : this.imagesList.length !== 1,
         availableAnnotationTools: this.availableAnnotationTools,
@@ -188,7 +188,7 @@
         _this.previous();
       });
 
-      this.element.find('.mirador-osd-annotations-layer').on('click', $.debounce(function() {
+      this.element.find('.mirador-osd-annotations-layer').on('click', function() {
         if (_this.hud.annoState.current === 'none') {
           _this.hud.annoState.startup(this);
         }
@@ -199,7 +199,18 @@
           _this.forceShowControls = false;
           _this.hud.annoState.displayOff(this);
         }
-      },300));
+      });
+
+      this.element.find('.mirador-manipulation-toggle').on('click', function() {
+        if (_this.hud.manipulationState.current === 'none') {
+          _this.hud.manipulationState.startup(this);
+        }
+        if (_this.hud.manipulationState.current === 'manipulationOff') {
+          _this.hud.manipulationState.displayOn(this);
+        } else {
+          _this.hud.manipulationState.displayOff(this);
+        }
+      });
 
       this.element.find('.mirador-osd-go-home').on('click', function() {
         _this.osd.viewport.goHome();
@@ -249,7 +260,7 @@
         _this.eventEmitter.publish('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + _this.windowId);
       });
 
-      //related the ContextControls
+      //Annotation specific controls
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
         if (_this.hud.annoState.current === 'annoOnCreateOff') {
           _this.hud.annoState.createOn();
@@ -283,10 +294,183 @@
           _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shapeMode);
         };
       }
-      for (var value in _this.availableAnnotationTools) {
-        this.element.find('.material-icons:contains(\'' + _this.availableAnnotationTools[value] + '\')').on('click', make_handler(_this.availableAnnotationTools[value]));
+      jQuery.each(_this.availableAnnotationTools, function(index, value) {
+        var shape = value.logoClass;
+        _this.element.find('.material-icons:contains(\'' + shape + '\')').on('click', make_handler(shape));
+      });
+      //Annotation specific controls
+
+      //Image manipulation controls
+      //set the original values for all of the CSS filter options
+      var filterValues = {
+        "brightness" : "brightness(100%)",
+        "contrast" : "contrast(100%)",
+        "saturate" : "saturate(100%)",
+        "grayscale" : "grayscale(0%)",
+        "invert" : "invert(0%)"
+      };
+
+      function setFilterCSS() {
+        var filterCSS = jQuery.map(filterValues, function(value, key) { return value; }).join(" "),
+        osdCanvas = jQuery(_this.osd.canvas);
+        osdCanvas.css({
+          'filter'         : filterCSS,
+          '-webkit-filter' : filterCSS,
+          '-moz-filter'    : filterCSS,
+          '-o-filter'      : filterCSS,
+          '-ms-filter'     : filterCSS
+        });
       }
-      //related the ContextControls
+
+      this.element.find('.mirador-osd-rotate-right').on('click', function() {
+        if (_this.osd) {
+          var currentRotation = _this.osd.viewport.getRotation();
+          _this.osd.viewport.setRotation(currentRotation + 90);
+        }
+      });
+
+      this.element.find('.mirador-osd-rotate-left').on('click', function() {
+        if (_this.osd) {
+          var currentRotation = _this.osd.viewport.getRotation();
+          _this.osd.viewport.setRotation(currentRotation - 90);
+        }
+      });
+
+      this.element.find('.mirador-osd-brightness-slider').slider({
+        orientation: "vertical",
+        range: "min",
+        min: 0,
+        max: 200,
+        value: 100,
+        create: function(event, ui) {
+          var v = jQuery(this).slider('value'),
+              span = jQuery('<span class="percent">').text(v + '%');
+
+          jQuery(this).find('.ui-slider-handle').append(span);
+        },
+        slide: function(event, ui) {
+          filterValues.contrast = "contrast("+ui.value+"%)";
+          setFilterCSS();
+          jQuery(this).find('.percent').text(ui.value + '%');
+        }
+      }).hide();
+
+      this.element.find('.mirador-osd-brightness').on('mouseenter',
+        function() {
+          _this.element.find('.mirador-osd-brightness-slider').stop(true, true).show();
+        }).on('mouseleave',
+        function() {
+          _this.element.find('.mirador-osd-brightness-slider').stop(true, true).hide();
+      });
+
+      this.element.find('.mirador-osd-contrast-slider').slider({
+        orientation: "vertical",
+        range: "min",
+        min: 0,
+        max: 200,
+        value: 100,
+        create: function(event, ui) {
+          var v = jQuery(this).slider('value'),
+              span = jQuery('<span class="percent">').text(v + '%');
+
+          jQuery(this).find('.ui-slider-handle').append(span);
+        },
+        slide: function(event, ui) {
+          filterValues.contrast = "contrast("+ui.value+"%)";
+          setFilterCSS();
+          jQuery(this).find('.percent').text(ui.value + '%');
+        }
+      }).hide();
+
+      this.element.find('.mirador-osd-contrast').on('mouseenter',
+        function() {
+          _this.element.find('.mirador-osd-contrast-slider').stop(true, true).show();
+        }).on('mouseleave',
+        function() {
+          _this.element.find('.mirador-osd-contrast-slider').stop(true, true).hide();
+      });
+
+      this.element.find('.mirador-osd-saturation-slider').slider({
+        orientation: "vertical",
+        range: "min",
+        min: 0,
+        max: 200,
+        value: 100,
+        create: function(event, ui) {
+          var v = jQuery(this).slider('value'),
+              span = jQuery('<span class="percent">').text(v + '%');
+
+          jQuery(this).find('.ui-slider-handle').append(span);
+        },
+        slide: function(event, ui) {
+          filterValues.contrast = "contrast("+ui.value+"%)";
+          setFilterCSS();
+          jQuery(this).find('.percent').text(ui.value + '%');
+        }
+      }).hide();
+
+      this.element.find('.mirador-osd-saturation').on('mouseenter',
+        function() {
+          _this.element.find('.mirador-osd-saturation-slider').stop(true, true).show();
+        }).on('mouseleave',
+        function() {
+          _this.element.find('.mirador-osd-saturation-slider').stop(true, true).hide();
+      });
+
+      this.element.find('.mirador-osd-grayscale').on('click', function() {
+        if (jQuery(this).hasClass('selected')) {
+          filterValues.grayscale = "grayscale(0%)";
+          jQuery(this).removeClass('selected');
+        } else {
+          filterValues.grayscale = "grayscale(100%)";
+          jQuery(this).addClass('selected');
+        }
+        setFilterCSS();
+      });
+
+      this.element.find('.mirador-osd-invert').on('click', function() {
+        if (jQuery(this).hasClass('selected')) {
+          filterValues.invert = "invert(0%)";
+          jQuery(this).removeClass('selected');
+        } else {
+          filterValues.invert = "invert(100%)";
+          jQuery(this).addClass('selected');
+        }
+        setFilterCSS();
+      });
+
+      this.element.find('.mirador-osd-reset').on('click', function() {
+        //reset rotation
+        if (_this.osd) {
+          _this.osd.viewport.setRotation(0);
+        }
+
+        //reset brightness
+        filterValues.brightness = "brightness(100%)";
+        _this.element.find('.mirador-osd-brightness-slider').slider('option','value',100);
+        _this.element.find('.mirador-osd-brightness-slider').find('.percent').text(100 + '%');
+
+        //reset contrast
+        filterValues.contrast = "contrast(100%)";
+        _this.element.find('.mirador-osd-contrast-slider').slider('option','value',100);
+        _this.element.find('.mirador-osd-contrast-slider').find('.percent').text(100 + '%');
+
+        //reset saturation
+        filterValues.saturate = "saturate(100%)";
+        _this.element.find('.mirador-osd-saturation-slider').slider('option','value',100);
+        _this.element.find('.mirador-osd-saturation-slider').find('.percent').text(100 + '%');
+
+        //reset grayscale
+        filterValues.grayscale = "grayscale(0%)";
+        _this.element.find('.mirador-osd-grayscale').removeClass('selected');
+
+        //reset color inversion
+        filterValues.invert = "invert(0%)";
+        _this.element.find('.mirador-osd-invert').removeClass('selected');
+
+        setFilterCSS();
+      });
+      //Image manipulation controls
     },
 
     getPanByValue: function() {
@@ -303,11 +487,11 @@
       var _this = this;
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       _this.eventEmitter.publish("imageBoundsUpdated", {
-        id: _this.windowId, 
+        id: _this.windowId,
           osdBounds: {
-            x: _this.osdOptions.osdBounds.x, 
-            y: _this.osdOptions.osdBounds.y, 
-            width: _this.osdOptions.osdBounds.width, 
+            x: _this.osdOptions.osdBounds.x,
+            y: _this.osdOptions.osdBounds.y,
+            width: _this.osdOptions.osdBounds.width,
             height: _this.osdOptions.osdBounds.height
           }
       });
@@ -324,8 +508,8 @@
     },
 
     toggle: function(stateValue) {
-      if (stateValue) { 
-        this.show(); 
+      if (stateValue) {
+        this.show();
       } else {
         this.hide();
       }
@@ -400,28 +584,28 @@
           _this.eventEmitter.publish('updateTooltips.' + _this.windowId, [point, point]);
         }, 30));
 
-        if (_this.state.getStateProperty('autoHideControls')) {
-          var timeoutID = null,
-          fadeDuration = _this.state.getStateProperty('fadeDuration'),
-          timeoutDuration = _this.state.getStateProperty('timeoutDuration');
-          var hideHUD = function() {
-            _this.element.find(".hud-control").stop(true, true).addClass('hidden', fadeDuration);
-          };
-          hideHUD();
-          jQuery(_this.element).on('mousemove', function() {
-            window.clearTimeout(timeoutID);
-            _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
-            // When a user is in annotation create mode, force show the controls so they don't disappear when in a qtip, so check for that
-            if (!_this.forceShowControls) {
-              timeoutID = window.setTimeout(hideHUD, timeoutDuration);
-            }
-          }).on('mouseleave', function() {
-            if (!_this.forceShowControls) {
-              window.clearTimeout(timeoutID);
-              hideHUD();
-            }
-          });
-        }
+//        if (_this.state.getStateProperty('autoHideControls')) {
+//          var timeoutID = null,
+//          fadeDuration = _this.state.getStateProperty('fadeDuration'),
+//          timeoutDuration = _this.state.getStateProperty('timeoutDuration');
+//          var hideHUD = function() {
+//            _this.element.find(".hud-control").stop(true, true).addClass('hidden', fadeDuration);
+//          };
+//          hideHUD();
+//          jQuery(_this.element).on('mousemove', function() {
+//            window.clearTimeout(timeoutID);
+//            _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
+//            // When a user is in annotation create mode, force show the controls so they don't disappear when in a qtip, so check for that
+//            if (!_this.forceShowControls) {
+//              timeoutID = window.setTimeout(hideHUD, timeoutDuration);
+//            }
+//          }).on('mouseleave', function() {
+//            if (!_this.forceShowControls) {
+//              window.clearTimeout(timeoutID);
+//              hideHUD();
+//            }
+//          });
+//        }
 
         _this.osd.addHandler('open', function(){
           _this.eventEmitter.publish('osdOpen.'+_this.windowId);
@@ -434,7 +618,7 @@
           }
 
           _this.addAnnotationsLayer(_this.elemAnno);
-            
+
           // if current annoState is 'none' that means it has been initialized but not used
           // use annotationState to choose event
           if (_this.hud.annoState.current === 'none') {
@@ -454,7 +638,7 @@
             }
           }
 
-          // A hack. Pop the osd overlays layer after the canvas so 
+          // A hack. Pop the osd overlays layer after the canvas so
           // that annotations appear.
           jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
 
