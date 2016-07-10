@@ -72,7 +72,6 @@
 
 
     _this.eventEmitter.subscribe('toggleDrawingTool.' + _this.windowId, function(event, tool) {
-      jQuery('#' + osdViewerId).parent().find('.hud-container').find('.draw-tool').removeClass('selected');
       if (_this.disabled) {
         jQuery('.qtip' + _this.windowId).qtip('hide');
         return;
@@ -80,14 +79,13 @@
       jQuery('#' + osdViewerId).parents(".window").find(".qtip-viewer").hide();
       _this.currentTool = null;
       for (var i = 0; i < _this.tools.length; i++) {
-        if (_this.tools[i].logoClass == tool) {
+        if (_this.tools[i].logoClass === tool) {
           _this.currentTool = _this.tools[i];
-          jQuery('#' + osdViewerId).parent().find('.hud-container').find('.material-icons:contains(\'' + tool + '\')').parent('.draw-tool').addClass('selected');
         }
       }
     });
+
     _this.eventEmitter.subscribe('toggleDefaultDrawingTool.' + _this.windowId, function(event) {
-      jQuery('#' + osdViewerId).parent().find('.hud-container').find('.draw-tool').removeClass('selected');
       if (_this.disabled) {
         jQuery('.qtip' + _this.windowId).qtip('hide');
         return;
@@ -98,7 +96,6 @@
         for (var j = 0; j < _this.tools.length; j++) {
           if (_this.availableAnnotationDrawingTools[i] == _this.tools[j].name) {
             _this.currentTool = _this.tools[j];
-            jQuery('#' + osdViewerId).parent().find('.hud-container').find('.material-icons:contains(\'' + _this.tools[j].logoClass + '\')').parent('.draw-tool').addClass('selected');
             break;
           }
         }
@@ -107,6 +104,7 @@
         }
       }
     });
+
     _this.eventEmitter.subscribe('changeBorderColor.' + _this.windowId, function(event, color) {
       _this.strokeColor = color;
       if (_this.hoveredPath) {
@@ -138,9 +136,6 @@
         _this.paperScope.view.draw();
       }
     });
-
-    _this.eventEmitter.publish('initBorderColor.' + _this.windowId, _this.strokeColor);
-    _this.eventEmitter.publish('initFillColor.' + _this.windowId, [_this.fillColor, _this.fillColorAlpha]);
 
     this.resize();
     this.show();
@@ -637,7 +632,7 @@
         eventEmitter: this.eventEmitter,
         windowId: this.windowId
       });
-      
+
       if (this.availableExternalCommentsPanel) {
         this.eventEmitter.publish('annotationShapeCreated.' + this.windowId, [this, shape]);
         return;

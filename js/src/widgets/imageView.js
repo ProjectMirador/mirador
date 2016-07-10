@@ -148,33 +148,8 @@
         _this.element.find(elementSelector).fadeOut(duration, complete);
       });
 
-      _this.eventEmitter.subscribe('initBorderColor.' + _this.windowId, function(event, color) {
-        _this.element.find('.borderColorPicker').spectrum('set', color);
-      });
-      _this.eventEmitter.subscribe('initFillColor.' + _this.windowId, function(event, color, alpha) {
-        var colorObj = tinycolor(color);
-        colorObj.setAlpha(alpha);
-        _this.element.find('.fillColorPicker').spectrum('set', colorObj);
-      });
-      _this.eventEmitter.subscribe('disableBorderColorPicker.'+_this.windowId, function(event, disablePicker) {
-        if(disablePicker) {
-          _this.element.find('.borderColorPicker').spectrum("disable");
-        }else{
-          _this.element.find('.borderColorPicker').spectrum("enable");
-        }
-      });
-      _this.eventEmitter.subscribe('disableFillColorPicker.'+_this.windowId, function(event, disablePicker) {
-        if(disablePicker) {
-          _this.element.find('.fillColorPicker').spectrum("disable");
-        }else{
-          _this.element.find('.fillColorPicker').spectrum("enable");
-        }
-      });
-      _this.eventEmitter.subscribe('showDrawTools.'+_this.windowId, function(event) {
-        _this.element.find('.draw-tool').show();
-      });
-      _this.eventEmitter.subscribe('hideDrawTools.'+_this.windowId, function(event) {
-        _this.element.find('.draw-tool').hide();
+      _this.eventEmitter.subscribe('SET_STATE_MACHINE_CREATEOFF.' + _this.windowId, function(event) {
+        _this.hud.annoState.createOff();
       });
       //Related to Annotations HUD
     },
@@ -264,12 +239,16 @@
 
       //Annotation specific controls
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
-        if (_this.hud.annoState.current === 'annoOnCreateOff') {
-          _this.hud.annoState.createOn();
-          //when a user is in Create mode, don't let the controls auto fade as it could be distracting to the user
-          _this.forceShowControls = true;
-          _this.element.find(".hud-control").stop(true, true).removeClass('hidden', _this.state.getStateProperty('fadeDuration'));
-        } else if (_this.hud.annoState.current === 'annoOnCreateOn') {
+        var shape = jQuery(this).find('.material-icons').html();
+        _this.hud.annoState.createOn(shape);
+        //when a user is in Create mode, don't let the controls auto fade as it could be distracting to the user
+        _this.forceShowControls = true;
+        _this.element.find(".hud-control").stop(true, true).removeClass('hidden', _this.state.getStateProperty('fadeDuration'));
+      });
+
+      this.element.find('.mirador-osd-pointer-mode').on('click', function() {
+        // go back to pointer mode
+        if (_this.hud.annoState.current === 'annoOnCreateOn') {
           _this.hud.annoState.createOff();
           //go back to allowing the controls to auto fade
           _this.forceShowControls = false;
@@ -281,25 +260,26 @@
         _this.eventEmitter.publish('updateAnnotationList.'+_this.windowId);
         _this.eventEmitter.publish('refreshOverlay.'+_this.windowId, '');
       });
-      this.element.find('.mirador-osd-delete-mode').on('click', function() {
-        _this.eventEmitter.publish('deleteShape.'+_this.windowId, '');
-      });
-      this.element.find('.mirador-osd-save-mode').on('click', function() {
-        _this.eventEmitter.publish('updateEditedShape.'+_this.windowId, '');
-      });
-      this.element.find('.mirador-osd-edit-mode').on('click', function() {
-        _this.eventEmitter.publish('toggleDefaultDrawingTool.'+_this.windowId);
-      });
 
-      function make_handler(shapeMode) {
-        return function () {
-          _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shapeMode);
-        };
-      }
-      jQuery.each(_this.availableAnnotationTools, function(index, value) {
-        var shape = value.logoClass;
-        _this.element.find('.material-icons:contains(\'' + shape + '\')').on('click', make_handler(shape));
-      });
+      // this.element.find('.mirador-osd-delete-mode').on('click', function() {
+      //   _this.eventEmitter.publish('deleteShape.'+_this.windowId, '');
+      // });
+      // this.element.find('.mirador-osd-save-mode').on('click', function() {
+      //   _this.eventEmitter.publish('updateEditedShape.'+_this.windowId, '');
+      // });
+      // this.element.find('.mirador-osd-edit-mode').on('click', function() {
+      //   _this.eventEmitter.publish('toggleDefaultDrawingTool.'+_this.windowId);
+      // });
+      //
+      // function make_handler(shapeMode) {
+      //   return function () {
+      //     _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shapeMode);
+      //   };
+      // }
+      // jQuery.each(_this.availableAnnotationTools, function(index, value) {
+      //   var shape = value.logoClass;
+      //   _this.element.find('.material-icons:contains(\'' + shape + '\')').on('click', make_handler(shape));
+      // });
       //Annotation specific controls
 
       //Image manipulation controls

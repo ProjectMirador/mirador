@@ -95,6 +95,8 @@
 
               var annotation = _this.activeEditor.createAnnotation();
               if (params.onAnnotationCreated) { params.onAnnotationCreated(annotation); }
+              // return to pointer mode
+              _this.eventEmitter.publish('SET_STATE_MACHINE_CREATEOFF.' + _this.windowId);
 
               api.destroy();
               //reenable viewer tooltips
