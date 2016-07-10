@@ -112,8 +112,8 @@
       });
       this.container.find('.mirador-line-type').find('ul li').on('click', function() {
         var className = jQuery(this).find('i').attr('class').replace(/fa/, '').replace(/ /, '');
-        _this.removeBackgroundImage(_this.container.find('.mirador-line-type>i'));
-        setBackground[className](_this.container.find('.mirador-line-type>i'));
+        _this.removeBackgroundImage(_this.container.find('.mirador-line-type .border-type-image'));
+        setBackground[className](_this.container.find('.mirador-line-type .border-type-image'));
         _this.eventEmitter.publish('toggleBorderType.' + _this.windowId, className);
       });
     },
@@ -149,18 +149,7 @@
       });
 
       _this.container.find(".borderColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>border_color</i>");
-      _this.container.find(".borderColorPicker").next(".sp-replacer").append('<i class="fa fa-caret-down dropdown"></i>');
-
-      // jQuery('.draw-tool:has(input.borderColorPicker)').mouseover(function() {
-      //   if(borderPicker.hasClass("sp-hidden")) {
-      //     jQuery(this).find(".sp-preview").click();
-      //   }
-      // });
-      // jQuery('.draw-tool:has(input.borderColorPicker)').mouseleave(function() {
-      //   if(!borderPicker.hasClass("sp-hidden")) {
-      //     jQuery(this).find(".sp-preview").click();
-      //   }
-      // });
+      _this.container.find(".borderColorPicker").next(".sp-replacer").append('<i class="fa fa-caret-down dropdown-icon"></i>');
 
       _this.addColorPicker('.fillColorPicker',{
         showInput: true,
@@ -186,18 +175,7 @@
       });
 
       _this.container.find(".fillColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>format_color_fill</i>");
-      _this.container.find(".fillColorPicker").next(".sp-replacer").append('<i class="fa fa-caret-down dropdown"></i>');
-
-      // jQuery('.draw-tool:has(input.fillColorPicker)').mouseover(function() {
-      //   if(fillPicker.hasClass("sp-hidden")) {
-      //     jQuery(this).find(".sp-preview").click();
-      //   }
-      // });
-      // jQuery('.draw-tool:has(input.fillColorPicker)').mouseleave(function() {
-      //   if(!fillPicker.hasClass("sp-hidden")) {
-      //     jQuery(this).find(".sp-preview").click();
-      //   }
-      // });
+      _this.container.find(".fillColorPicker").next(".sp-replacer").append('<i class="fa fa-caret-down dropdown-icon"></i>');
     },
 
     annotationShow: function() {
@@ -218,11 +196,6 @@
 
     bindEvents: function() {
       var _this = this;
-      // this.container.find('.mirador-osd-back').on('click', function() {
-      //   _this.element.remove();
-      //   _this.element = jQuery(_this.template()).appendTo(_this.container);
-      //   _this.bindEvents();
-      // });
     },
 
     annotationTemplate: Handlebars.compile([
@@ -235,15 +208,11 @@
                                    '<i class="material-icons">{{this.logoClass}}</i>',
                                    '</a>',
                                    '{{/each}}',
-                                   '<a class="hud-control mirador-osd-color-picker" title="{{t "borderColorTooltip"}}">',
-                                   '<input type="text" class="borderColorPicker"/>',
-                                   '</a>',
-                                   '<a class="hud-control mirador-osd-color-picker" title="{{t "fillColorTooltip"}}">',
-                                   '<input type="text" class="fillColorPicker"/>',
-                                   '</a>',
                                    '{{#if showStrokeStyle}}',
-                                   '<a href="javascript:;" class="mirador-btn mirador-line-type" role="button" aria-label="Change Line Type">',
-                                   '<i class="material-icons solid">create</i>',
+                                   '<a class="hud-control mirador-line-type" role="button" aria-label="Change Line Type">',
+                                   '<i class="material-icons mirador-border-icon">create</i>',
+                                   '<i class="border-type-image solid"></i>',
+                                   '<i class="fa fa-caret-down dropdown-icon"></i>',
                                    '<ul class="dropdown type-list">',
                                    '<li><i class="fa solid"></i> {{t "strokeStylePickerSolid"}}</li>',
                                    '<li><i class="fa dashed"></i> {{t "strokeStylePickerDashed"}}</li>',
@@ -251,6 +220,12 @@
                                    '</ul>',
                                    '</a>',
                                    '{{/if}}',
+                                   '<a class="hud-control mirador-osd-color-picker" title="{{t "borderColorTooltip"}}">',
+                                   '<input type="text" class="borderColorPicker"/>',
+                                   '</a>',
+                                   '<a class="hud-control mirador-osd-color-picker" title="{{t "fillColorTooltip"}}">',
+                                   '<input type="text" class="fillColorPicker"/>',
+                                   '</a>',
                                   //  '<a class="hud-control draw-tool mirador-osd-delete-mode">',
                                   //  '<i class="fa fa-lg fa-trash-o"></i>',
                                   //  '</a>',
@@ -263,15 +238,6 @@
                                      '</a>',
                                    '{{/if}}',
                                    '{{/if}}'
-                                   /*'<a class="mirador-osd-list hud-control">',
-                                   '<i class="fa fa-lg fa-list"></i>',
-                                   '</a>',*/
-                                   /*'<a class="mirador-osd-search hud-control" role="button">',
-                                   '<i class="fa fa-lg fa-search"></i>',
-                                   '</a>',*/
-                                   /*'<a class="mirador-osd-rect-tool hud-control" role="button">',
-                                   '<i class="fa fa-lg fa-gear"></i>',
-                                   '</a>',*/
     ].join('')),
 
     manipulationTemplate: Handlebars.compile([
