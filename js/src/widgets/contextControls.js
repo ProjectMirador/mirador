@@ -149,7 +149,7 @@
       });
 
       _this.container.find(".borderColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>border_color</i>");
-      _this.container.find(".borderColorPicker").next(".sp-replacer").append('<i class="fa fa-caret-down dropdown-icon"></i>');
+      // _this.container.find(".borderColorPicker").next(".sp-replacer").append('<i class="fa fa-caret-down dropdown-icon"></i>');
 
       _this.addColorPicker('.fillColorPicker',{
         showInput: true,
@@ -175,7 +175,7 @@
       });
 
       _this.container.find(".fillColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>format_color_fill</i>");
-      _this.container.find(".fillColorPicker").next(".sp-replacer").append('<i class="fa fa-caret-down dropdown-icon"></i>');
+      // _this.container.find(".fillColorPicker").next(".sp-replacer").append('<i class="fa fa-caret-down dropdown-icon"></i>');
     },
 
     annotationShow: function() {
@@ -209,7 +209,7 @@
                                    '</a>',
                                    '{{/each}}',
                                    '{{#if showStrokeStyle}}',
-                                   '<a class="hud-control mirador-line-type" role="button" aria-label="Change Line Type">',
+                                   '<a class="hud-control mirador-line-type" role="button" aria-label="{{t "borderTypeTooltip"}}" title="{{t "borderTypeTooltip"}}">',
                                    '<i class="material-icons mirador-border-icon">create</i>',
                                    '<i class="border-type-image solid"></i>',
                                    '<i class="fa fa-caret-down dropdown-icon"></i>',

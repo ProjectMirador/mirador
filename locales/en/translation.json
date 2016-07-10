@@ -61,6 +61,7 @@
     "freehandTooltip": "Freeform annotation",
     "pinTooltip": "Pin annotation",
     "polygonTooltip": "Polygon annotation",
-    "borderColorTooltip": "Choose annotation border color",
-    "fillColorTooltip": "Choose annotation fill color"
+    "borderColorTooltip": "Choose border color",
+    "borderTypeTooltip": "Choose border style",
+    "fillColorTooltip": "Choose fill color"
 }
