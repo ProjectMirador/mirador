@@ -53,7 +53,10 @@
         windowId: this.windowId,
         annotationLayerAvailable: false,
         showNextPrev : this.imagesList.length !== 1,
-        eventEmitter: this.eventEmitter
+        eventEmitter: this.eventEmitter,
+        showAnno: false,
+        showImageControls: false,
+        showContextControls: false
       });
 
       if (this.manifest.jsonLd.sequences[0].viewingDirection) {
