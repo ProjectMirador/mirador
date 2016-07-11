@@ -626,40 +626,49 @@
       this.path = null;
       this.mode = '';
       this.draftPaths.push(shape);
-      var annoTooltip = new $.AnnotationTooltip({
-        targetElement: jQuery(this.canvas).parents('.mirador-osd'),
-        state: this.state,
-        eventEmitter: this.eventEmitter,
-        windowId: this.windowId
-      });
+      if (typeof this.annoTooltip === 'undefined' || !this.annoTooltip) {
+        this.annoTooltip = new $.AnnotationTooltip({
+          targetElement: jQuery(this.canvas).parents('.mirador-osd'),
+          state: this.state,
+          eventEmitter: this.eventEmitter,
+          windowId: this.windowId
+        });
+      }
 
       if (this.availableExternalCommentsPanel) {
         this.eventEmitter.publish('annotationShapeCreated.' + this.windowId, [this, shape]);
         return;
       }
       var _this = this;
-      annoTooltip.showEditor({
-        annotation: {},
-        onAnnotationCreated: function(oaAnno) {
-          var svg = _this.getSVGString(_this.draftPaths);
-          oaAnno.on = {
-            "@type": "oa:SpecificResource",
-            "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
-            "selector": {
-              "@type": "oa:SvgSelector",
-              "value": svg
-            }
-          };
-          //save to endpoint
-          _this.eventEmitter.publish('annotationCreated.' + _this.windowId, [oaAnno, shape]);
-        },
-        onCancel: function() {
-          _this.clearDraftData();
-        },
-        onCompleted: function() {
-          _this.clearDraftData();
-        }
-      });
+      if (typeof this.annoEditorVisible === 'undefined' || !this.annoEditorVisible)  {
+        this.annoTooltip.showEditor({
+          annotation: {},
+          onAnnotationCreated: function(oaAnno) {
+            var svg = _this.getSVGString(_this.draftPaths);
+            oaAnno.on = {
+              "@type": "oa:SpecificResource",
+              "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
+              "selector": {
+                "@type": "oa:SvgSelector",
+                "value": svg
+              }
+            };
+            //save to endpoint
+            _this.eventEmitter.publish('annotationCreated.' + _this.windowId, [oaAnno, shape]);
+          },
+          onCancel: function() {
+            _this.clearDraftData();
+            _this.annoTooltip = null;
+            _this.annoEditorVisible = false;
+          },
+          onCompleted: function() {
+            _this.clearDraftData();
+            _this.annoTooltip = null;
+            _this.annoEditorVisible = false;
+          }
+        });
+        _this.annoEditorVisible = true;
+      }
     },
 
     clearDraftData: function() {
