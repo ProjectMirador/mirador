@@ -1922,7 +1922,7 @@ a.mirador-icon-window-menu, a.mirador-icon-view-type {
   overflow: auto;
 }
 .annotation-tooltip {
-  padding: 7px;
+  padding: 10px;
 }
 .annotation-display {
   position:relative;

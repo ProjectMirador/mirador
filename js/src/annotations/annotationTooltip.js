@@ -72,7 +72,7 @@
             _this.eventEmitter.publish('annotationEditorAvailable.' + _this.windowId);
             _this.eventEmitter.publish('disableTooltips.' + _this.windowId);
 
-            jQuery(selector).parent().parent().draggable();
+            api.elements.tooltip.draggable();
 
             jQuery(selector).on("submit", function(event) {
               event.preventDefault();
@@ -375,6 +375,7 @@
         }));
       this.activeEditor.show('form.annotation-tooltip');
       jQuery(api.elements.tooltip).removeClass("qtip-viewer");
+      api.elements.tooltip.draggable();
       if (viewerParams.onEnterEditMode) {
         viewerParams.onEnterEditMode(api, oaAnno);
       }
