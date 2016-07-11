@@ -1159,7 +1159,7 @@ li.highlight {
   top: 10px;
   left: 10px;
   transition: none;
-  width: 100%
+  /*width: 100%*/
 }
 .mirador-osd-context-controls a {
   float:left;

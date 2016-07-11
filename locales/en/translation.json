@@ -63,5 +63,6 @@
     "polygonTooltip": "Polygon annotation",
     "borderColorTooltip": "Choose border color",
     "borderTypeTooltip": "Choose border style",
-    "fillColorTooltip": "Choose fill color"
+    "fillColorTooltip": "Choose fill color",
+    "cancelAnnotation": "Do you want to cancel this annotation?"
 }

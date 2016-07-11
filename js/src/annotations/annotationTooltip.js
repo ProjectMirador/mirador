@@ -82,7 +82,7 @@
             jQuery(selector + ' a.cancel').on("click", function(event) {
               event.preventDefault();
               if (_this.activeEditor.isDirty()) {
-                if (!window.confirm("Do you want to cancel this annotation?")) {
+                if (!window.confirm(i18n.t('cancelAnnotation'))) {
                   return false;
                 }
               }
@@ -195,7 +195,7 @@
 
       jQuery(selector + ' a.delete').on("click", function(event) {
         event.preventDefault();
-        if (!window.confirm("Do you want to delete this annotation?")) {
+        if (!window.confirm(i18n.t('deleteAnnotation'))) {
           return false;
         }
         var display = jQuery(this).parents('.annotation-display');

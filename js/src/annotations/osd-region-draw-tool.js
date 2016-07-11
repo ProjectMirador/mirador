@@ -48,14 +48,14 @@
               if (shapeArray[idx].name == _this.svgOverlay.hoveredPath.name) {
                 oaAnno = shapeArray[idx].data.annotation;
                 if (shapeArray.length == 1) {
-                  if (!window.confirm("Do you want to delete this shape and annotation?")) {
+                  if (!window.confirm(i18n.t('deleteShapeAnnotation'))) {
                     return false;
                   }
                   _this.eventEmitter.publish('annotationDeleted.' + _this.windowId, [oaAnno['@id']]);
                   this.svgOverlay.removeFocus();
                   return true;
                 } else {
-                  if (!window.confirm("Do you want to delete this shape?")) {
+                  if (!window.confirm(i18n.t('deleteShape'))) {
                     return false;
                   }
                   shapeArray.splice(idx, 1);
