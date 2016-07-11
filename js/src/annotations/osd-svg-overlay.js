@@ -546,9 +546,9 @@
 
     disable: function() {
       this.disabled = true;
-      this.eventEmitter.publish('hideDrawTools.' + this.windowId);
-      this.eventEmitter.publish('disableBorderColorPicker.' + this.windowId, this.disabled);
-      this.eventEmitter.publish('disableFillColorPicker.' + this.windowId, this.disabled);
+      // this.eventEmitter.publish('hideDrawTools.' + this.windowId);
+      // this.eventEmitter.publish('disableBorderColorPicker.' + this.windowId, this.disabled);
+      // this.eventEmitter.publish('disableFillColorPicker.' + this.windowId, this.disabled);
       this.eventEmitter.publish('enableTooltips.' + this.windowId);
       this.deselectAll();
     },
@@ -556,9 +556,9 @@
     enable: function() {
       var setDefaultTool = this.disabled;
       this.disabled = false;
-      this.eventEmitter.publish('showDrawTools.' + this.windowId);
-      this.eventEmitter.publish('disableBorderColorPicker.' + this.windowId, this.disabled);
-      this.eventEmitter.publish('disableFillColorPicker.' + this.windowId, this.disabled);
+      // this.eventEmitter.publish('showDrawTools.' + this.windowId);
+      // this.eventEmitter.publish('disableBorderColorPicker.' + this.windowId, this.disabled);
+      // this.eventEmitter.publish('disableFillColorPicker.' + this.windowId, this.disabled);
       this.eventEmitter.publish('disableTooltips.' + this.windowId);
       if (setDefaultTool) {
         this.eventEmitter.publish('toggleDefaultDrawingTool.' + this.windowId);

@@ -57,7 +57,8 @@
           { name: 'startup',  from: 'none',  to: 'annoOff' },
           { name: 'displayOn',  from: 'annoOff',  to: 'annoOnCreateOff' },
           { name: 'refreshCreateOff',  from: 'annoOnCreateOff',  to: 'annoOnCreateOff' },
-          { name: 'createOn', from: ['annoOff','annoOnCreateOff', 'annoOnCreateOn'], to: 'annoOnCreateOn' },
+          { name: 'createOn', from: ['annoOff','annoOnCreateOff'], to: 'annoOnCreateOn' },
+          { name: 'changeShape', from: ['annoOnCreateOn'], to: 'annoOnCreateOn' },
           { name: 'refreshCreateOn',  from: 'annoOnCreateOn',  to: 'annoOnCreateOn' },
           { name: 'createOff',  from: 'annoOnCreateOn',    to: 'annoOnCreateOff' },
           { name: 'displayOff', from: ['annoOnCreateOn','annoOnCreateOff'], to: 'annoOff' }
@@ -107,6 +108,15 @@
             _this.eventEmitter.publish('modeChange.' + _this.windowId, 'editingAnnotations');
             _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shape);
 
+            _this.eventEmitter.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
+          },
+          onchangeShape: function(event, from, to, shape) {
+            _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
+            _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-'+shape+'-mode', 'selected']);
+            _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shape);
             _this.eventEmitter.publish(('windowUpdated'), {
               id: _this.windowId,
               annotationState: to
