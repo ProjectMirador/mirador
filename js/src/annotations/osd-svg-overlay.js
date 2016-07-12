@@ -46,7 +46,7 @@
     this.currentTool = null;
     // Default colors.
     this.dashArray = [];
-    this.strokeColor = drawingToolsSettings.fillColor;
+    this.strokeColor = drawingToolsSettings.strokeColor;
     this.fillColor = drawingToolsSettings.fillColor;
     this.fillColorAlpha = drawingToolsSettings.fillColorAlpha;
     this.viewer = viewer;
