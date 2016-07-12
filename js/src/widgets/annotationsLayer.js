@@ -73,19 +73,19 @@
     },
 
     enterDisplayAnnotations: function() {
-      jQuery(this.viewer.canvas).css('cursor', 'default');
+      // jQuery(this.viewer.canvas).css('cursor', 'default');
       this.drawTool.exitEditMode(true);
       this.drawTool.render();
     },
 
     enterEditAnnotations: function() {
-      jQuery(this.viewer.canvas).css('cursor', 'crosshair');
+      // jQuery(this.viewer.canvas).css('cursor', 'crosshair');
       this.drawTool.enterEditMode();
       this.drawTool.render();
     },
 
     enterDefault: function() {
-      jQuery(this.viewer.canvas).css('cursor', 'default');
+      // jQuery(this.viewer.canvas).css('cursor', 'default');
       this.drawTool.exitEditMode(false);
     }
   };
