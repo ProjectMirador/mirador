@@ -74,7 +74,7 @@
         }
       }
     },
-    
+
     onHover:function(activate,shape,hoverColor){
       // shape needs to have hovered styles
       if(activate && !shape.data.hovered){
@@ -188,14 +188,14 @@
         }
       }else{
         // out of the shape return back to crosshair
-        jQuery(overlay.viewer.canvas).css('cursor','crosshair');
+        jQuery(overlay.viewer.canvas).css('cursor','default');
       }
     },
 
     setCursor:function(hitResult,overlay){
 
       if(hitResult.type === 'stroke'){
-        jQuery(overlay.viewer.canvas).css('cursor','move');
+        jQuery(overlay.viewer.canvas).css('cursor','pointer');
         return;
       }
       var cursor = '';
@@ -269,7 +269,7 @@
             overlay.mode = 'translate';
             overlay.segment = null;
             overlay.path = null;
-            document.body.style.cursor = "move";
+            document.body.style.cursor = "default";
           }
         } else {
           document.body.style.cursor = "default";

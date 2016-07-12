@@ -53,7 +53,7 @@
       this.updateSelection(true, shape, overlay);
       return shape;
     },
-    
+
     updateSelection: function(selected, item, overlay) {
       if (item._name.toString().indexOf(this.idPrefix) != -1) {
         if (item.segments.length > 10) {
@@ -218,7 +218,7 @@
           this.setCursor(hitResult,overlay);
         }
       }else{
-        jQuery(overlay.viewer.canvas).css('cursor','crosshair');
+        jQuery(overlay.viewer.canvas).css('cursor','default');
       }
     },
 
@@ -226,7 +226,7 @@
     setCursor:function(hitResult,overlay){
 
       if(hitResult.type === 'stroke'){
-        jQuery(overlay.viewer.canvas).css('cursor','move');
+        jQuery(overlay.viewer.canvas).css('cursor','pointer');
         return;
       }
       var cursor = '';
@@ -302,7 +302,7 @@
             overlay.mode = 'translate';
             overlay.segment = null;
             overlay.path = null;
-            document.body.style.cursor = "move";
+            document.body.style.cursor = "default";
           }
         } else {
           document.body.style.cursor = "default";
