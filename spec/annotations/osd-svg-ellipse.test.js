@@ -12,6 +12,9 @@ describe('Ellipse', function() {
 
   function getOverlay(paperScope, strokeColor, fillColor, fillColorAlpha, mode, path, segment) {
     return {
+      'viewer':{
+        canvas:''
+      },
       'paperScope': paperScope,
       'strokeColor': strokeColor,
       'fillColor': fillColor,
@@ -415,7 +418,6 @@ describe('Ellipse', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[6]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       this.ellipse.onMouseDown(event, overlay);
 
@@ -432,7 +434,6 @@ describe('Ellipse', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[5]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       overlay.mode = '';
       overlay.segment = null;
@@ -446,7 +447,6 @@ describe('Ellipse', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[4]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       overlay.mode = '';
       overlay.segment = null;
@@ -460,7 +460,6 @@ describe('Ellipse', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[1]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       overlay.mode = '';
       overlay.segment = null;
@@ -474,7 +473,6 @@ describe('Ellipse', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[0]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       overlay.mode = '';
       overlay.segment = null;
@@ -488,7 +486,6 @@ describe('Ellipse', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[7]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       overlay.mode = '';
       overlay.segment = null;
@@ -502,7 +499,6 @@ describe('Ellipse', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[8]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       overlay.mode = '';
       overlay.segment = null;
@@ -516,7 +512,6 @@ describe('Ellipse', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[9]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       overlay.mode = '';
       overlay.segment = null;
@@ -531,7 +526,6 @@ describe('Ellipse', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBeNull();
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       event = getEvent({}, {
         'x': this.initialPoint.x - 1,
