@@ -11,6 +11,9 @@ describe('Rectangle', function() {
 
   function getOverlay(paperScope, strokeColor, fillColor, fillColorAlpha, mode, path, segment) {
     return {
+      'viewer':{
+        canvas:''
+      },
       'paperScope': paperScope,
       'strokeColor': strokeColor,
       'fillColor': fillColor,
@@ -468,7 +471,6 @@ describe('Rectangle', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[5]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       this.rectangle.onMouseDown(event, overlay);
 
@@ -485,7 +487,6 @@ describe('Rectangle', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[4]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       overlay.mode = '';
       overlay.segment = null;
@@ -499,7 +500,6 @@ describe('Rectangle', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[3]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       overlay.mode = '';
       overlay.segment = null;
@@ -513,7 +513,6 @@ describe('Rectangle', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[1]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       overlay.mode = '';
       overlay.segment = null;
@@ -527,7 +526,6 @@ describe('Rectangle', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[0]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       overlay.mode = '';
       overlay.segment = null;
@@ -541,7 +539,6 @@ describe('Rectangle', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[6]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       overlay.mode = '';
       overlay.segment = null;
@@ -555,7 +552,6 @@ describe('Rectangle', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[7]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       overlay.mode = '';
       overlay.segment = null;
@@ -569,7 +565,6 @@ describe('Rectangle', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[8]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       overlay.mode = '';
       overlay.segment = null;
@@ -584,7 +579,6 @@ describe('Rectangle', function() {
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBeNull();
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
       event = getEvent({}, {
         'x': this.initialPoint.x - 1,

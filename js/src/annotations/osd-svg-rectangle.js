@@ -98,7 +98,7 @@
     },
 
     onMouseUp: function(event, overlay) {
-      if (overlay.mode == 'create' && overlay.path) {
+      if (overlay.mode === 'create' && overlay.path) {
         overlay.onDrawFinish();
       }
     },
@@ -180,7 +180,73 @@
     },
 
     onMouseMove: function(event, overlay) {
-      // Empty block.
+      var hitResult = overlay.paperScope.project.hitTest(event.point, overlay.hitOptions);
+
+      if(hitResult && hitResult.item._name.indexOf(this.idPrefix)!==-1){
+        if(!overlay.disabled && overlay.path){
+          this.setCursor(hitResult,overlay);
+        }
+      }else{
+        // out of the shape return back to crosshair
+        jQuery(overlay.viewer.canvas).css('cursor','crosshair');
+      }
+    },
+
+    setCursor:function(hitResult,overlay){
+
+      if(hitResult.type === 'stroke'){
+        jQuery(overlay.viewer.canvas).css('cursor','move');
+        return;
+      }
+      var cursor = '';
+      var rotation = hitResult.item.data.rotation;
+      switch (hitResult.segment) {
+        case hitResult.item.segments[0]:
+          cursor = 'arrows-v';
+          rotation -= 45;
+          break;
+        case hitResult.item.segments[1]:
+          cursor = 'arrows-v';
+          break;
+        case hitResult.item.segments[2]:
+          cursor = 'arrows-v';
+          break;
+        case hitResult.item.segments[3]:
+          cursor = 'arrows-v';
+          rotation += 45;
+          break;
+        case hitResult.item.segments[4]:
+          cursor = 'arrows-h';
+          break;
+        case hitResult.item.segments[5]:
+          cursor = 'arrows-v';
+          rotation -= 45;
+          break;
+        case hitResult.item.segments[6]:
+          cursor = 'arrows-v';
+          break;
+        case hitResult.item.segments[7]:
+          cursor = 'arrows-v';
+          rotation += 45;
+          break;
+        case hitResult.item.segments[8]:
+          cursor = 'arrows-h';
+          break;
+        default:
+          cursor = 'crosshair';
+          break;
+      }
+
+      // soon to be changed to raster
+      if(hitResult.type === 'handle-out'){
+        cursor = 'repeat';
+      }
+      jQuery(overlay.viewer.canvas).awesomeCursor(cursor, {
+        color: 'white',
+        hotspot: 'center',
+        rotate: rotation
+      });
+
     },
 
     onMouseDown: function(event, overlay) {
@@ -192,54 +258,12 @@
             overlay.segment = null;
             overlay.path = null;
             if (hitResult.type == 'handle-out') {
-              jQuery('body').awesomeCursor('repeat', {
+              jQuery(overlay.viewer.canvas).awesomeCursor('repeat', {
                 color: 'white',
                 hotspot: 'center'
               });
             } else {
-              var cursor = '';
-              var rotation = hitResult.item.data.rotation;
-              switch (hitResult.segment) {
-                case hitResult.item.segments[0]:
-                  cursor = 'arrows-v';
-                  rotation -= 45;
-                  break;
-                case hitResult.item.segments[1]:
-                  cursor = 'arrows-v';
-                  break;
-                case hitResult.item.segments[2]:
-                  cursor = 'arrows-v';
-                  break;
-                case hitResult.item.segments[3]:
-                  cursor = 'arrows-v';
-                  rotation += 45;
-                  break;
-                case hitResult.item.segments[4]:
-                  cursor = 'arrows-h';
-                  break;
-                case hitResult.item.segments[5]:
-                  cursor = 'arrows-v';
-                  rotation -= 45;
-                  break;
-                case hitResult.item.segments[6]:
-                  cursor = 'arrows-v';
-                  break;
-                case hitResult.item.segments[7]:
-                  cursor = 'arrows-v';
-                  rotation += 45;
-                  break;
-                case hitResult.item.segments[8]:
-                  cursor = 'arrows-h';
-                  break;
-                default:
-                  cursor = 'default';
-                  break;
-              }
-              jQuery('body').awesomeCursor(cursor, {
-                color: 'white',
-                hotspot: 'center',
-                rotate: rotation
-              });
+              this.setCursor(hitResult,overlay);
             }
           } else {
             overlay.mode = 'translate';
