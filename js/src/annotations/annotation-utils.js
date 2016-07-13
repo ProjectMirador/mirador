@@ -7,7 +7,7 @@
   var Icon = function(paperScope,opts){
     this.paperScope = paperScope;
     this.raster = new paperScope.Raster(opts);
-    if(opts.onLoad){
+    if(opts && opts.onLoad){
       this.raster.onLoad = opts.onLoad;
     }
   };
@@ -21,11 +21,6 @@
 
     translateByPoint:function(point){
       this.raster.position = this.raster.position.add(point);
-    },
-
-
-    click:function(){
-      this.onClick();
     },
 
     setOnMouseDownListener:function(callback){

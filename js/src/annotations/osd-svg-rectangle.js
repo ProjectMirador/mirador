@@ -44,7 +44,7 @@
       //   ┌ ─ ─ ─ ┐
       // 8 │       │ 4
       //   └ ─ ─ ─ ┘
-      // 7     6     5
+      // 7     6     5(initial point)
       // points 1 & 2 are workaround used to draw rotation handle
 
       segments.push(new overlay.paperScope.Point(initialPoint.x - 2 * pixel, initialPoint.y - 2 * pixel));
@@ -142,10 +142,6 @@
       if (overlay.mode === 'create' && overlay.path) {
         overlay.onDrawFinish();
       }
-    },
-
-    rotate: function () {
-
     },
 
     translate: function(event, overlay) {
@@ -305,9 +301,6 @@
           break;
         case hitResult.item.segments[8]:
           cursor = 'arrows-h';
-          break;
-        default:
-          cursor = 'default';
           break;
       }
 

@@ -238,7 +238,7 @@ module.exports = function(grunt) {
 
     githooks: {
       all: {
-        //'pre-commit': 'jshint cover'
+        'pre-commit': 'jshint cover'
         // 'post-checkout':
       }
     },
