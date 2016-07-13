@@ -10,7 +10,7 @@
     }, options);
 
     this.init();
-    this.bindEvents();
+    this.listenForActions();
   };
 
   $.OsdRegionDrawTool.prototype = {
@@ -138,7 +138,7 @@
           shapeArray = _this.svgOverlay.createRectangle(shapeObj, annotation);
         }
         _this.svgOverlay.restoreLastView(shapeArray);
-        _this.annotationsToShapesMap[$.genUUID()] = shapeArray;
+        _this.annotationsToShapesMap[annotation['@id']] = shapeArray;
         return deferred;
       });
       jQuery.when.apply(jQuery, deferreds).done(function() {
@@ -223,7 +223,7 @@
       });
     },
 
-    bindEvents: function() {
+    listenForActions: function() {
       var _this = this;
 
       _this.eventEmitter.subscribe('refreshOverlay.' + _this.windowId, function(event) {
@@ -232,9 +232,11 @@
         _this.svgOverlay.mode = '';
         _this.render();
       });
+
       _this.eventEmitter.subscribe('deleteShape.' + _this.windowId, function(event) {
         _this.deleteShape();
       });
+
       _this.eventEmitter.subscribe('updateEditedShape.' + _this.windowId, function(event) {
         _this.saveEditedShape();
       });
@@ -260,6 +262,16 @@
           _this.annoTooltip.inEditOrCreateMode = false;
         }
         _this.svgOverlay.restoreDraftShapes();
+      });
+
+      _this.eventEmitter.subscribe('ENABLE_EDITING.' + _this.windowId, function(event, annotationId) {
+        //disable shapes not associated with this annotation
+        //shapes associated with this annotation should have their handles enabled
+        var paths = _this.annotationsToShapesMap[annotationId];
+        jQuery.each(paths, function(index, path) {
+          console.log(path);
+        });
+
       });
     },
 

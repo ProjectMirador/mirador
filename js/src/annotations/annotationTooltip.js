@@ -210,6 +210,7 @@
         var display = jQuery(this).parents('.annotation-display');
         var id = display.attr('data-anno-id');
         var oaAnno = viewerParams.getAnnoFromRegion(id)[0];
+        _this.eventEmitter.publish('ENABLE_EDITING.' + _this.windowId, id);
         _this.freezeQtip(api, oaAnno, viewerParams);
         _this.removeAllEvents(api, viewerParams);
         _this.addEditorEvents(api, viewerParams);
