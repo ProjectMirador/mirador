@@ -123,6 +123,7 @@
       'fillColorAlpha': 0.0,
       'shapeHandleSize':10,
       'fixedShapeSize':10,
+      'newlyCreatedShapeStrokeWidthFactor':5,
       'hoverColor':'yellow'
     },
 

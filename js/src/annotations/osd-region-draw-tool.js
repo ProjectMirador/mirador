@@ -28,9 +28,11 @@
     },
 
     enterCreateShapeMode: function() {
-      this.osdViewer.setMouseNavEnabled(false);
-      this.svgOverlay.show();
-      this.svgOverlay.enable();
+      if(!this.svgOverlay.inEditMode){
+        this.osdViewer.setMouseNavEnabled(false);
+        this.svgOverlay.show();
+        this.svgOverlay.enable();
+      }
     },
 
     enterEditMode: function() {
@@ -122,6 +124,7 @@
               }
 
             });
+
           } else {
             var svg = _this.svgOverlay.getSVGString(_this.svgOverlay.draftPaths);
             oaAnno.on = {

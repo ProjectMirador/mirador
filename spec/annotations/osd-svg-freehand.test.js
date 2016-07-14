@@ -152,7 +152,7 @@ describe('Freehand', function() {
         'y': -3
       });
       this.freehand.updateSelection(true,this.shape,overlay);
-      overlay.mode = 'edit';
+      overlay.mode = 'translate';
       overlay.path = this.shape;
       var expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
@@ -172,7 +172,7 @@ describe('Freehand', function() {
 
       var selectedPointIndex = 1;
       overlay = MockOverlay.getOverlay(paper);
-      overlay.mode = 'edit';
+      overlay.mode = 'deform';
       overlay.path = this.shape;
       overlay.segment  = this.shape.segments[selectedPointIndex];
       expected = [];
@@ -233,6 +233,7 @@ describe('Freehand', function() {
       this.freehand.onMouseUp(event, overlay);
     });
 
+    // TODO this should be refactored
     it('should select freehand shape', function() {
       var event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x - 100,
@@ -244,7 +245,6 @@ describe('Freehand', function() {
       expect(overlay.mode).toBe('create');
       expect(overlay.segment).toBeNull();
       expect(overlay.path).not.toBe(this.shape);
-      expect(document.body.style.cursor).toBe('default');
 
       event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x - 100,
@@ -270,17 +270,14 @@ describe('Freehand', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      expect(document.body.style.cursor).toBe('default');
-
       overlay = MockOverlay.getOverlay(paper);
-      overlay.mode = 'edit';
+      overlay.mode = 'translate';
       this.freehand.onMouseDown(event, overlay);
 
       expect(overlay.segment.point.x).toBe(event.point.x);
       expect(overlay.segment.point.y).toBe(event.point.y);
 
       expect(overlay.path).not.toBe(this.shape);
-      expect(document.body.style.cursor).toBe('move');
 
       overlay = MockOverlay.getOverlay(paper);
       overlay.mode = 'translate';
@@ -346,7 +343,7 @@ describe('Freehand', function() {
       });
 
       MockOverlay.getOverlay(paper);
-      overlay.mode='edit'
+      overlay.mode='edit';
       overlay.path = this.shape;
 
       expected = [];
