@@ -105,7 +105,7 @@
             _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-pointer-mode', 'selected']);
             _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
             _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-'+shape+'-mode', 'selected']);
-            _this.eventEmitter.publish('modeChange.' + _this.windowId, 'editingAnnotations');
+            _this.eventEmitter.publish('modeChange.' + _this.windowId, 'creatingAnnotation');
             _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shape);
 
             _this.eventEmitter.publish(('windowUpdated'), {
@@ -123,13 +123,14 @@
             });
           },
           onrefreshCreateOn: function(event, from, to) {
-            _this.eventEmitter.publish('modeChange.' + _this.windowId, 'editingAnnotations');
+            _this.eventEmitter.publish('modeChange.' + _this.windowId, 'creatingAnnotation');
             _this.eventEmitter.publish(('windowUpdated'), {
               id: _this.windowId,
               annotationState: to
             });
           },
           oncreateOff: function(event, from, to) {
+            //TODO publish an event to cancel any active annotation editing that was going on
             _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
             _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-pointer-mode', 'selected']);
             _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
@@ -139,6 +140,7 @@
             });
           },
           ondisplayOff: function(event, from, to) {
+            //TODO publish an event to cancel any active annotation editing that was going on
             if (_this.annoEndpointAvailable) {
               _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
               _this.contextControls.annotationHide();

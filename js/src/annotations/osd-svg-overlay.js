@@ -12,6 +12,7 @@
   };
 
   $.Overlay = function(viewer, osdViewerId, windowId, state, eventEmitter) {
+    console.log('calling new overlay');
     var drawingToolsSettings = state.getStateProperty('drawingToolsSettings');
     var availableAnnotationDrawingTools = state.getStateProperty('availableAnnotationDrawingTools');
     var availableExternalCommentsPanel = state.getStateProperty('availableExternalCommentsPanel');
@@ -181,6 +182,25 @@
       mouseTool.onMouseDown = _this.onMouseDown;
       mouseTool.onDoubleClick = _this.onDoubleClick;
       jQuery.data(document.body, 'draw_canvas_' + _this.windowId, mouseTool);
+
+      this.listenForActions();
+    },
+
+    listenForActions: function() {
+      var _this = this;
+
+      this.eventEmitter.subscribe('SET_OVERLAY_EDITING.' + this.windowId, function(event, options) {
+        //disable shapes not associated with this annotation
+        //shapes associated with this annotation should have their handles enabled
+        console.log(_this);
+        console.log(options.shape);
+        if (options.shape && options.shape._name) {
+          options.shape.data.editable = options.isEditable;
+          var tool = _this.getTool(options.shape);
+          //tool.setEditable(options.isEditable);
+          //call a function that all tools have
+        }
+      });
     },
 
     onMouseUp: function(event) {
@@ -235,12 +255,22 @@
     },
 
     onMouseDown: function(event) {
+      console.log(this.overlay);
       if (this.overlay.disabled) {
+        console.log("overlay is disabled, no mouse down");
         return;
       }
       event.stopPropagation();
       var date = new Date();
       var time = date.getTime();
+      var overlayEditable = true;
+      if (this.overlay.path) {
+        if (typeof this.overlay.path.data.editable !== 'undefined') {
+          overlayEditable = this.overlay.path.data.editable;
+        }
+      }
+      console.log(overlayEditable);
+      console.log(this.overlay.path);
       if (time - this.overlay.latestMouseDownTime < this.overlay.doubleClickReactionTime) {
         this.overlay.latestMouseDownTime = time;
         this.onDoubleClick(event);
@@ -262,7 +292,7 @@
             }
           }
         }
-        if (this.overlay.currentTool) {
+        if (this.overlay.currentTool && overlayEditable) {
           this.overlay.currentTool.onMouseDown(event, this.overlay);
           if (this.overlay.mode == 'translate' || this.overlay.mode == 'deform' || this.overlay.mode == 'edit') {
             if (this.overlay.path && this.overlay.path.data.annotation) {

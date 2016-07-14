@@ -21,6 +21,12 @@
       this.svgOverlay.disable();
     },
 
+    enterCreateMode: function() {
+      this.osdViewer.setMouseNavEnabled(false);
+      this.svgOverlay.show();
+      this.svgOverlay.enable();
+    },
+
     enterEditMode: function() {
       this.osdViewer.setMouseNavEnabled(false);
       this.svgOverlay.show();
@@ -37,47 +43,47 @@
       }
     },
 
-    deleteShape: function() {
-      var _this = this;
-      if (_this.svgOverlay.hoveredPath) {
-        var oaAnno = null;
-        for (var key in _this.annotationsToShapesMap) {
-          if (_this.annotationsToShapesMap.hasOwnProperty(key)) {
-            var shapeArray = _this.annotationsToShapesMap[key];
-            for (var idx = 0; idx < shapeArray.length; idx++) {
-              if (shapeArray[idx].name == _this.svgOverlay.hoveredPath.name) {
-                oaAnno = shapeArray[idx].data.annotation;
-                if (shapeArray.length == 1) {
-                  if (!window.confirm(i18n.t('deleteShapeAnnotation'))) {
-                    return false;
-                  }
-                  _this.eventEmitter.publish('annotationDeleted.' + _this.windowId, [oaAnno['@id']]);
-                  this.svgOverlay.removeFocus();
-                  return true;
-                } else {
-                  if (!window.confirm(i18n.t('deleteShape'))) {
-                    return false;
-                  }
-                  shapeArray.splice(idx, 1);
-                  // backward compatibility
-                  if (typeof oaAnno.on !== 'object') {
-                    oaAnno.on = {
-                      'selector': {
-                        'value': ''
-                      }
-                    };
-                  }
-                  oaAnno.on.selector.value = _this.svgOverlay.getSVGString(shapeArray);
-                  _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
-                  this.svgOverlay.removeFocus();
-                  return true;
-                }
-              }
-            }
-          }
-        }
-      }
-    },
+    // deleteShape: function() {
+    //   var _this = this;
+    //   if (_this.svgOverlay.hoveredPath) {
+    //     var oaAnno = null;
+    //     for (var key in _this.annotationsToShapesMap) {
+    //       if (_this.annotationsToShapesMap.hasOwnProperty(key)) {
+    //         var shapeArray = _this.annotationsToShapesMap[key];
+    //         for (var idx = 0; idx < shapeArray.length; idx++) {
+    //           if (shapeArray[idx].name == _this.svgOverlay.hoveredPath.name) {
+    //             oaAnno = shapeArray[idx].data.annotation;
+    //             if (shapeArray.length == 1) {
+    //               if (!window.confirm(i18n.t('deleteShapeAnnotation'))) {
+    //                 return false;
+    //               }
+    //               _this.eventEmitter.publish('annotationDeleted.' + _this.windowId, [oaAnno['@id']]);
+    //               this.svgOverlay.removeFocus();
+    //               return true;
+    //             } else {
+    //               if (!window.confirm(i18n.t('deleteShape'))) {
+    //                 return false;
+    //               }
+    //               shapeArray.splice(idx, 1);
+    //               // backward compatibility
+    //               if (typeof oaAnno.on !== 'object') {
+    //                 oaAnno.on = {
+    //                   'selector': {
+    //                     'value': ''
+    //                   }
+    //                 };
+    //               }
+    //               oaAnno.on.selector.value = _this.svgOverlay.getSVGString(shapeArray);
+    //               _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
+    //               this.svgOverlay.removeFocus();
+    //               return true;
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // },
 
     saveEditedShape: function() {
       var _this = this;
@@ -233,9 +239,9 @@
         _this.render();
       });
 
-      _this.eventEmitter.subscribe('deleteShape.' + _this.windowId, function(event) {
-        _this.deleteShape();
-      });
+      // _this.eventEmitter.subscribe('deleteShape.' + _this.windowId, function(event) {
+      //   _this.deleteShape();
+      // });
 
       _this.eventEmitter.subscribe('updateEditedShape.' + _this.windowId, function(event) {
         _this.saveEditedShape();
@@ -264,14 +270,19 @@
         _this.svgOverlay.restoreDraftShapes();
       });
 
-      _this.eventEmitter.subscribe('ENABLE_EDITING.' + _this.windowId, function(event, annotationId) {
-        //disable shapes not associated with this annotation
-        //shapes associated with this annotation should have their handles enabled
-        var paths = _this.annotationsToShapesMap[annotationId];
-        jQuery.each(paths, function(index, path) {
-          console.log(path);
+      _this.eventEmitter.subscribe('SET_ANNOTATION_EDITING.' + _this.windowId, function(event, annotationId, isEditable) {
+        jQuery.each(_this.annotationsToShapesMap, function(key, value) {
+          // if we have a matching annotationId, pass the boolean value on for each path, otherwise, always pass false
+          if (key === annotationId) {
+            jQuery.each(value, function(index, path) {
+              _this.eventEmitter.publish('SET_OVERLAY_EDITING.' + _this.windowId, {'shape' : path, 'isEditable' : isEditable});
+            });
+          } else {
+            jQuery.each(value, function(index, path) {
+              _this.eventEmitter.publish('SET_OVERLAY_EDITING.' + _this.windowId, {'shape' : path, 'isEditable' : false});
+            });
+          }
         });
-
       });
     },
 

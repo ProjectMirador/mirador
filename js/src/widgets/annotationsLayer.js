@@ -23,6 +23,7 @@
       var _this = this;
       _this.eventEmitter.unsubscribe(('modeChange.' + _this.windowId));
 
+      this.createStateMachine();
       this.createRenderer();
       this.bindEvents();
       this.listenForActions();
@@ -46,6 +47,36 @@
       var _this = this;
     },
 
+    createStateMachine: function() {
+      var _this = this;
+      this.layerState = StateMachine.create({
+        events: [
+          { name: 'startup', from: 'none', to: 'default' },
+          { name: 'defaultState', from: ['default', 'display', 'create', 'edit'], to: 'default' },
+          { name: 'displayAnnotations', from: ['default', 'display', 'create', 'edit'], to: 'display' },
+          { name: 'createAnnotation', from: ['default','display'], to: 'create' },
+          { name: 'editAnnotation', from: ['default','display'], to: 'edit' }
+        ],
+        callbacks: {
+          onstartup: function(event) {
+            _this.enterDefault();
+          },
+          ondefaultState: function(event) {
+            _this.enterDefault();
+          },
+          ondisplayAnnotations: function(event) {
+            _this.enterDisplayAnnotations();
+          },
+          oncreateAnnotation: function(event) {
+            _this.enterCreateAnnotation();
+          },
+          oneditAnnotation: function(event) {
+            _this.enterEditAnnotation();
+          }
+        }
+      });
+    },
+
     createRenderer: function() {
       var _this = this;
       this.drawTool = new $.OsdRegionDrawTool({
@@ -57,7 +88,7 @@
         state: _this.state,
         eventEmitter: _this.eventEmitter
       });
-      this.modeSwitch();
+      this.layerState.startup();
     },
 
     updateRenderer: function() {
@@ -66,26 +97,35 @@
     },
 
     modeSwitch: function() {
-      if (this.mode === 'displayAnnotations') { this.enterDisplayAnnotations(); }
-      else if (this.mode === 'editingAnnotations') { this.enterEditAnnotations(); }
-      else if (this.mode === 'default') { this.enterDefault(); }
+      if (this.mode === 'displayAnnotations') { this.layerState.displayAnnotations(); }
+      else if (this.mode === 'editingAnnotation') { this.layerState.editAnnotation(); }
+      else if (this.mode === 'creatingAnnotation') {
+        //if the state machine is currently in 'edit' mode, it means we shouldn't rerender anything,
+        //but simply switch tools (triggered from HUD)
+        if (this.layerState.current !== 'edit') {
+          this.layerState.createAnnotation();
+        }
+      }
+      else if (this.mode === 'default') { this.layerState.defaultState(); }
       else {}
     },
 
     enterDisplayAnnotations: function() {
-      // jQuery(this.viewer.canvas).css('cursor', 'default');
       this.drawTool.exitEditMode(true);
       this.drawTool.render();
     },
 
-    enterEditAnnotations: function() {
-      // jQuery(this.viewer.canvas).css('cursor', 'crosshair');
-      this.drawTool.enterEditMode();
+    enterCreateAnnotation: function() {
+      this.drawTool.enterCreateMode();
       this.drawTool.render();
     },
 
+    enterEditAnnotation: function() {
+      this.drawTool.enterEditMode();
+      //this.drawTool.render();
+    },
+
     enterDefault: function() {
-      // jQuery(this.viewer.canvas).css('cursor', 'default');
       this.drawTool.exitEditMode(false);
     }
   };

@@ -210,11 +210,11 @@
         var display = jQuery(this).parents('.annotation-display');
         var id = display.attr('data-anno-id');
         var oaAnno = viewerParams.getAnnoFromRegion(id)[0];
-        _this.eventEmitter.publish('ENABLE_EDITING.' + _this.windowId, id);
         _this.freezeQtip(api, oaAnno, viewerParams);
         _this.removeAllEvents(api, viewerParams);
         _this.addEditorEvents(api, viewerParams);
-      });
+        _this.eventEmitter.publish('SET_ANNOTATION_EDITING.' + _this.windowId, [id, true]);
+        _this.eventEmitter.publish('modeChange.' + _this.windowId, 'editingAnnotation');      });
     },
 
     addEditorEvents: function(api, viewerParams) {
@@ -231,6 +231,7 @@
         var display = jQuery(this).parents('.annotation-editor');
         var id = display.attr('data-anno-id');
         var oaAnno = viewerParams.getAnnoFromRegion(id)[0];
+        _this.eventEmitter.publish('SET_ANNOTATION_EDITING.' + _this.windowId, [id, false]);
         _this.activeEditor.updateAnnotation(oaAnno);
         viewerParams.onAnnotationSaved(oaAnno);
         _this.unFreezeQtip(api, oaAnno, viewerParams);
@@ -241,6 +242,7 @@
         var display = jQuery(this).parents('.annotation-editor');
         var id = display.attr('data-anno-id');
         var oaAnno = viewerParams.getAnnoFromRegion(id)[0];
+        _this.eventEmitter.publish('SET_ANNOTATION_EDITING.' + _this.windowId, [id, false]);
         _this.unFreezeQtip(api, oaAnno, viewerParams);
       });
     },

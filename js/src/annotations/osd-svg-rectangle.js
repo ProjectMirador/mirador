@@ -75,6 +75,10 @@
       }
     },
 
+    setEditable: function(isEditable) {
+      console.log(this);
+    },
+
     onHover:function(activate,shape,hoverColor){
       // shape needs to have hovered styles
       if(activate && !shape.data.hovered){
