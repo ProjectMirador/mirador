@@ -33,6 +33,7 @@
       availableExternalCommentsPanel: availableExternalCommentsPanel,
       dashArray: [],
       fixedShapeSize: drawingToolsSettings.fixedShapeSize,
+      selectedColor: drawingToolsSettings.selectedColor || '#004c66',
       shapeHandleSize:drawingToolsSettings.shapeHandleSize,
       hitOptions: {
         handles: true,
@@ -327,9 +328,6 @@
 
     fitFixedSizeShapes: function(shape) {
       shape.data.fixedSize = true;
-      if(this.getTool(shape).onResize){
-        this.getTool(shape).onResize(shape,this);
-      }
 
       if (shape.name.toString().indexOf('pin_') != -1) {
         var scale = 1 / shape.bounds.width;
@@ -343,6 +341,7 @@
       if(item && item._name){
         var shapeTool = this.getTool(item);
         if(shapeTool){
+          item.selectedColor = this.selectedColor;
           shapeTool.updateSelection(selected, item, this);
         }
       }
@@ -372,6 +371,9 @@
         for (var j = 0; j < allItems.length; j++) {
           if (allItems[j].data.fixedSize) {
             this.fitFixedSizeShapes(allItems[j]);
+          }
+          if(this.getTool(allItems[j]).onResize){
+            this.getTool(allItems[j]).onResize(allItems[j],this);
           }
           allItems[j].strokeWidth = allItems[j].data.currentStrokeValue / this.paperScope.view.zoom;
           if (allItems[j].style) {

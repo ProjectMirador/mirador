@@ -152,7 +152,7 @@ describe('Polygon', function() {
         'x': 3,
         'y': -3
       });
-
+      this.polygon.updateSelection(true,this.shape,overlay);
       overlay.mode = 'edit';
       overlay.path = this.shape;
 
@@ -268,6 +268,7 @@ describe('Polygon', function() {
         'y': this.initialPoint.y - 100
       });
       overlay.mode = '';
+      this.polygon.updateSelection(true,this.shape,overlay);
       this.polygon.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('create');

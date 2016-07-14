@@ -151,7 +151,7 @@ describe('Freehand', function() {
         'x': 3,
         'y': -3
       });
-
+      this.freehand.updateSelection(true,this.shape,overlay);
       overlay.mode = 'edit';
       overlay.path = this.shape;
       var expected = [];

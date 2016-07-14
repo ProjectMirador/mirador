@@ -116,6 +116,7 @@
        *'Pin': {
        *},
        **/
+      //'selectedColor': 'red',
       'doubleClickReactionTime': 300,
       'strokeColor': 'deepSkyBlue',
       'fillColor': 'deepSkyBlue',
