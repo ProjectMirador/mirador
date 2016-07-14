@@ -62,7 +62,7 @@
         }
         item.smooth({from: -7, to: 1});
         item.selected = selected;
-        item.segments[2].selected = false;
+        item.segments[2].selected = selected;
         var inHandle = item.segments[7].handleIn.clone();
         inHandle = inHandle.multiply(-1);
         var outHandle = item.segments[7].handleOut.clone();
@@ -75,7 +75,8 @@
         item.segments[3].handleOut = outHandle;
 
         if (selected) {
-          item.segments[2].handleOut = new overlay.paperScope.Point(0, -32 / overlay.paperScope.view.zoom);
+          item.segments[2].handleOut = new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom);
+          item.segments[2].data = 'rotation_handle';
           item.segments[2].handleOut = item.segments[2].handleOut.rotate(item.data.rotation, item.segments[2]);
           var point = item.segments[2].point.clone();
           point = point.add(item.segments[2].handleOut);
@@ -83,37 +84,36 @@
             item.segments[2].handleOut = item.segments[2].handleOut.rotate(180, item.segments[2]);
           }
 
-          if (!item.data.rotationIcon) {
-            item.data.rotationIcon = new overlay.annotationUtils.Icon(overlay.paperScope, {
-              source: overlay.state.getStateProperty('buildPath') + overlay.state.getStateProperty('imagesPath') + 'rotate_icon.png',
-              position: point,
-              name: item.name + this.partOfPrefix +'rotate',
-              onLoad: function () {
-                item.data.rotationIcon.setSize(item.data.rotationIcon.getWidth() / 2 * (1 / overlay.paperScope.view.zoom), item.data.rotationIcon.getHeight() / 2 * (1 / overlay.paperScope.view.zoom));
-                item.data.rotationIcon.rotate(item.data.rotation);
-              }
-            });
-
-            item.data.rotationIcon.addData('type', 'rotationIcon');
-            item.data.rotationIcon.addData('self', item.data.rotationIcon);
-            item.data.rotationIcon.addData('parent', item);
-            item.data.rotationIcon.setOnMouseDownListener(function (rotateIconRaster) {
-              overlay.mode = 'rotate';
-              overlay.path = rotateIconRaster.data.parent;
-
-              jQuery('body').awesomeCursor('repeat', {
-                color: 'white',
-                hotspot: 'center'
-              });
-            });
-
-          }
+          // if (!item.data.rotationIcon) {
+          //   item.data.rotationIcon = new overlay.annotationUtils.Icon(overlay.paperScope, {
+          //     source: overlay.state.getStateProperty('buildPath') + overlay.state.getStateProperty('imagesPath') + 'rotate_icon.png',
+          //     position: point,
+          //     name: item.name + this.partOfPrefix + 'rotate',
+          //     onLoad: function () {
+          //       item.data.rotationIcon.setSize(item.data.rotationIcon.getWidth() / 2 * (1 / overlay.paperScope.view.zoom), item.data.rotationIcon.getHeight() / 2 * (1 / overlay.paperScope.view.zoom));
+          //       item.data.rotationIcon.rotate(item.data.rotation);
+          //     }
+          //   });
+          //
+          //   item.data.rotationIcon.addData('type', 'rotationIcon');
+          //   item.data.rotationIcon.addData('self', item.data.rotationIcon);
+          //   item.data.rotationIcon.addData('parent', item);
+          //   item.data.rotationIcon.setOnMouseDownListener(function (rotateIconRaster) {
+          //     overlay.mode = 'rotate';
+          //     overlay.path = rotateIconRaster.data.parent;
+          //
+          //     jQuery('body').awesomeCursor('repeat', {
+          //       color: 'white',
+          //       hotspot: 'center'
+          //     });
+          //   });
+          // }
 
         } else {
-          if (item.data.rotationIcon) {
-            item.data.rotationIcon.remove();
-            item.data.rotationIcon = null;
-          }
+          // if (item.data.rotationIcon) {
+          //   item.data.rotationIcon.remove();
+          //   item.data.rotationIcon = null;
+          // }
           item.segments[2].handleOut = new overlay.paperScope.Point(0, 0);
         }
       }
@@ -145,7 +145,7 @@
         overlay.path.segments[i].point.x += event.delta.x;
         overlay.path.segments[i].point.y += event.delta.y;
       }
-      overlay.path.data.rotationIcon.translateByXY(event.delta.x, event.delta.y);
+      //overlay.path.data.rotationIcon.translateByXY(event.delta.x, event.delta.y);
     },
 
     onMouseDrag: function (event, overlay) {
@@ -162,7 +162,7 @@
         rotation = rotation * (180 / Math.PI);
         overlay.path.rotate(rotation, overlay.path.position);
 
-        overlay.path.data.rotationIcon.rotate(rotation, overlay.path.position);
+       // overlay.path.data.rotationIcon.rotate(rotation, overlay.path.position);
 
         overlay.path.data.rotation += rotation;
         return;
@@ -193,7 +193,7 @@
         var moveRightSize = idx === 4 || idx === 5 || idx === 6;
         var moveLeftSize = idx === 0 || idx === 8 || idx === 9;
         if (moveTopSize) {
-          overlay.path.data.rotationIcon.translateByPoint(translationY);
+          //overlay.path.data.rotationIcon.translateByPoint(translationY);
           overlay.path.segments[1].point = overlay.path.segments[1].point.add(translationY);
           overlay.path.segments[2].point = overlay.path.segments[2].point.add(translationY);
           overlay.path.segments[3].point = overlay.path.segments[3].point.add(translationY);
@@ -242,7 +242,7 @@
         }
         if (moveRightSize || moveLeftSize) {
           translationX = translationX.multiply(0.5);
-          overlay.path.data.rotationIcon.translateByPoint(translationX);
+          //overlay.path.data.rotationIcon.translateByPoint(translationX);
           overlay.path.segments[1].point = overlay.path.segments[1].point.add(translationX);
           overlay.path.segments[2].point = overlay.path.segments[2].point.add(translationX);
           overlay.path.segments[3].point = overlay.path.segments[3].point.add(translationX);
@@ -252,7 +252,7 @@
         point = point.add(overlay.path.segments[2].handleOut);
         if (overlay.path.contains(point)) {
           overlay.path.segments[2].handleOut = overlay.path.segments[2].handleOut.rotate(180, overlay.path.segments[2]);
-          overlay.path.data.rotationIcon.translateByPoint(overlay.path.segments[2].handleOut.multiply(2));
+          //overlay.path.data.rotationIcon.translateByPoint(overlay.path.segments[2].handleOut.multiply(2));
         }
 
         if (overlay.path.segments.length > 10) {
@@ -276,6 +276,14 @@
 
     setCursor:function(hitResult,overlay){
 
+      if(hitResult.type === 'handle-out' && hitResult.segment.data === 'rotation_handle'){
+        jQuery(overlay.viewer.canvas).awesomeCursor('repeat', {
+          color: 'white',
+          hotspot: 'center'
+        });
+        return;
+      }
+
       if(hitResult.type === 'stroke' || hitResult.type === 'handle-in' || hitResult.type === 'handle-out'){
         jQuery(overlay.viewer.canvas).css('cursor','pointer');
         return;
@@ -290,8 +298,7 @@
         }
         jQuery(overlay.viewer.canvas).awesomeCursor(cursor, {
           color: 'white',
-          hotspot: 'center',
-          rotate: rotation
+          hotspot: 'center'
         });
 
         return;
@@ -333,9 +340,6 @@
         case hitResult.item.segments[9]:
           cursor = 'arrows-h';
           break;
-        default:
-          cursor = 'default';
-          break;
       }
 
       jQuery(overlay.viewer.canvas).awesomeCursor(cursor, {
@@ -363,6 +367,14 @@
             overlay.segment = null;
             overlay.path = null;
             this.setCursor(hitResult, overlay);
+          }
+
+          if(hitResult.type === 'handle-out' && hitResult.segment.data === 'rotation_handle'){
+            overlay.mode = 'rotate';
+            overlay.segment = null;
+            overlay.path = hitResult.item;
+            this.setCursor(hitResult,overlay);
+            return;
           }
 
           if (hitResult.type === 'stroke' || hitResult.type === 'handle-in' || hitResult.type === 'handle-out') {

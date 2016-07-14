@@ -69,48 +69,48 @@
         item.selected = selected;
         if (selected) {
 
-          item.segments[1].handleOut = new overlay.paperScope.Point(0, 32 / overlay.paperScope.view.zoom);
+          item.segments[1].handleOut = new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom);
           item.segments[1].handleOut = item.segments[1].handleOut.rotate(item.data.rotation, item.segments[1]);
           var point = item.segments[1].point.clone();
           point = point.add(item.segments[1].handleOut);
-          if (!item.data.rotationIcon) {
-            item.data.rotationIcon = new overlay.annotationUtils.Icon(overlay.paperScope,{
-              source: overlay.state.getStateProperty('buildPath') + overlay.state.getStateProperty('imagesPath')+'rotate_icon.png',
-              position: point,
-              name:item.name+this.partOfPrefix+'rotate',
-              onLoad:function() {
-                // might need change depends on the image used
-                item.data.rotationIcon.setSize(item.data.rotationIcon.getWidth()/2*(1/overlay.paperScope.view.zoom),item.data.rotationIcon.getHeight()/2* (1/overlay.paperScope.view.zoom));
-                item.data.rotationIcon.rotate(item.data.rotation);
-              }
-            });
 
-            item.data.rotationIcon.addData('type','rotationIcon');
-            item.data.rotationIcon.addData('self',item.data.rotationIcon);
-            item.data.rotationIcon.addData('parent',item);
-            item.data.rotationIcon.setOnMouseDownListener(function(rotateIconRaster){
-              overlay.mode = 'rotate';
-              overlay.path = rotateIconRaster.data.parent;
+          // if (!item.data.rotationIcon) {
+          //   item.data.rotationIcon = new overlay.annotationUtils.Icon(overlay.paperScope, {
+          //     source: overlay.state.getStateProperty('buildPath') + overlay.state.getStateProperty('imagesPath') + 'rotate_icon.png',
+          //     position: point,
+          //     name: item.name + this.partOfPrefix + 'rotate',
+          //     onLoad: function () {
+          //       // might need change depends on the image used
+          //       item.data.rotationIcon.setSize(item.data.rotationIcon.getWidth() / 2 * (1 / overlay.paperScope.view.zoom), item.data.rotationIcon.getHeight() / 2 * (1 / overlay.paperScope.view.zoom));
+          //       item.data.rotationIcon.rotate(item.data.rotation);
+          //     }
+          //   });
+          //
+          //   item.data.rotationIcon.addData('type', 'rotationIcon');
+          //   item.data.rotationIcon.addData('self', item.data.rotationIcon);
+          //   item.data.rotationIcon.addData('parent', item);
+          //   item.data.rotationIcon.setOnMouseDownListener(function (rotateIconRaster) {
+          //     overlay.mode = 'rotate';
+          //     overlay.path = rotateIconRaster.data.parent;
+          //
+          //     jQuery(overlay.viewer.canvas).awesomeCursor('repeat', {
+          //       color: 'white',
+          //       hotspot: 'center'
+          //     });
+          //   });
+          // }
 
-              jQuery(overlay.viewer.canvas).awesomeCursor('repeat', {
-                color: 'white',
-                hotspot: 'center'
-              });
-
-            });
-
-          }
 
           if (item.contains(point)) {
             item.segments[1].handleOut = item.segments[1].handleOut.rotate(180, item.segments[1]);
-            item.data.rotationIcon.translateByPoint(item.segments[1].handleOut.multiply(2));
+            //item.data.rotationIcon.translateByPoint(item.segments[1].handleOut.multiply(2));
           }
-          item.segments[1].handleOut.selected = false;
+          item.segments[1].handleOut.selected = true;
         } else {
-          if(item.data.rotationIcon){
-            item.data.rotationIcon.remove();
-            item.data.rotationIcon = null;
-          }
+          // if (item.data.rotationIcon) {
+          //   item.data.rotationIcon.remove();
+          //   item.data.rotationIcon = null;
+          // }
           item.segments[1].handleOut = new overlay.paperScope.Point(0, 0);
         }
       }
@@ -149,7 +149,7 @@
         overlay.path.segments[i].point.x += event.delta.x;
         overlay.path.segments[i].point.y += event.delta.y;
       }
-      overlay.path.data.rotationIcon.translateByXY(event.delta.x,event.delta.y);
+      //overlay.path.data.rotationIcon.translateByXY(event.delta.x,event.delta.y);
     },
 
     onMouseDrag: function (event, overlay) {
@@ -166,8 +166,7 @@
         rotation = rotation * (180 / Math.PI);
         overlay.path.rotate(rotation, overlay.path.position);
 
-        //should I make inverted dependency
-        overlay.path.data.rotationIcon.rotate(rotation,overlay.path.position);
+        //overlay.path.data.rotationIcon.rotate(rotation,overlay.path.position);
 
         overlay.path.data.rotation += rotation;
         return;
@@ -194,7 +193,7 @@
         var moveRightSize = idx === 3 || idx === 4 || idx === 5;
         var moveLeftSize = idx === 0 || idx === 7 || idx === 8;
         if (moveTopSize) {
-          overlay.path.data.rotationIcon.translateByPoint(translationY);
+          //overlay.path.data.rotationIcon.translateByPoint(translationY);
           overlay.path.segments[0].point = overlay.path.segments[0].point.add(translationY);
           overlay.path.segments[1].point = overlay.path.segments[1].point.add(translationY);
           overlay.path.segments[2].point = overlay.path.segments[2].point.add(translationY);
@@ -222,7 +221,7 @@
           }
           if (moveRightSize || moveLeftSize) {
             translationX = translationX.multiply(0.5);
-            overlay.path.data.rotationIcon.translateByPoint(translationX);
+            //overlay.path.data.rotationIcon.translateByPoint(translationX);
             overlay.path.segments[1].point = overlay.path.segments[1].point.add(translationX);
             overlay.path.segments[2].point = overlay.path.segments[2].point.add(translationX);
             overlay.path.segments[6].point = overlay.path.segments[6].point.add(translationX);
@@ -231,7 +230,7 @@
           point = point.add(overlay.path.segments[1].handleOut);
           if (overlay.path.contains(point)) {
             overlay.path.segments[1].handleOut = overlay.path.segments[1].handleOut.rotate(180, overlay.path.segments[1]);
-            overlay.path.data.rotationIcon.translateByPoint(overlay.path.segments[1].handleOut.multiply(2));
+            //overlay.path.data.rotationIcon.translateByPoint(overlay.path.segments[1].handleOut.multiply(2));
           }
       }
     },
@@ -248,6 +247,14 @@
     },
 
     setCursor:function(hitResult,overlay){
+      if(hitResult.type === 'handle-out'){
+        jQuery(overlay.viewer.canvas).awesomeCursor('repeat', {
+          color: 'white',
+          hotspot: 'center'
+        });
+        return;
+      }
+
       if(hitResult.type === 'stroke'){
         jQuery(overlay.viewer.canvas).css('cursor','pointer');
         return;
@@ -262,8 +269,7 @@
         }
         jQuery(overlay.viewer.canvas).awesomeCursor(cursor, {
           color: 'white',
-          hotspot: 'center',
-          rotate: rotation
+          hotspot: 'center'
         });
 
         return;
@@ -316,6 +322,18 @@
       var hitResult = overlay.paperScope.project.hitTest(event.point, overlay.hitOptions);
       if (hitResult && hitResult.item._name.toString().indexOf(this.idPrefix) != -1) {
         if (overlay.mode !== 'deform' && overlay.mode !== 'translate' && overlay.mode !== 'create') {
+
+          if(hitResult.type === 'handle-out'){
+
+            overlay.mode = 'rotate';
+            overlay.path = hitResult.item;
+            jQuery(overlay.viewer.canvas).awesomeCursor('repeat', {
+              color: 'white',
+              hotspot: 'center'
+            });
+
+            return;
+          }
 
           if (hitResult.item._name.toString().indexOf(this.partOfPrefix) !== -1) {
             hitResult.item.data.self.onMouseDown(); // TODO should check this for memory leak
