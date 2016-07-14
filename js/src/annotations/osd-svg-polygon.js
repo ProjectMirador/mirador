@@ -4,8 +4,7 @@
       name: 'Polygon',
       logoClass: 'timeline',
       idPrefix: 'rough_path_',
-      tooltip: 'polygonTooltip',
-      partOfPrefix:'_partOf'
+      tooltip: 'polygonTooltip'
     }, options);
 
     this.init();
@@ -159,7 +158,7 @@
 
     onMouseDown: function(event, overlay) {
       var hitResult = overlay.paperScope.project.hitTest(event.point, overlay.hitOptions);
-      if (hitResult && hitResult.item._name.toString().indexOf(this.idPrefix) != -1) {
+      if (hitResult && hitResult.item._name.toString().indexOf(this.idPrefix) !== -1) {
 
         if (hitResult.item._name.toString().indexOf(this.partOfPrefix) !== -1) {
           hitResult.item.data.self.onMouseDown();

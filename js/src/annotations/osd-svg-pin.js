@@ -5,7 +5,6 @@
       logoClass: 'room',
       idPrefix: 'pin_',
       tooltip: 'pinTooltip',
-      partOfPrefix:'_partOf'
     }, options);
 
     this.init();

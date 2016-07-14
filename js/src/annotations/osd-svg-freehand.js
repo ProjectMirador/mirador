@@ -5,7 +5,6 @@
       logoClass: 'gesture',
       idPrefix: 'smooth_path_',
       tooltip: 'freehandTooltip',
-      partOfPrefix:'_partOf'
     }, options);
 
     this.init();

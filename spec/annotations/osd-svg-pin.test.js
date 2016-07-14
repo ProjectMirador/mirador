@@ -64,7 +64,7 @@ describe('Pin', function() {
       delete this.pin;
     });
 
-    it('should update selection', function() {
+    it('should update selection to true', function() {
       var initialPoint = {
         'x': 987,
         'y': 654
@@ -72,7 +72,6 @@ describe('Pin', function() {
 
       var event = TestUtils.getEvent(initialPoint);
 
-      this.pin.onMouseUp(event, overlay);
       this.pin.updateSelection(true, this.shape, overlay);
 
       var redColor = {
@@ -84,6 +83,31 @@ describe('Pin', function() {
       expect(this.shape.strokeColor.red).toBe(redColor.red);
       expect(this.shape.strokeColor.green).toBe(redColor.green);
       expect(this.shape.strokeColor.blue).toBe(redColor.blue);
+      expect(this.shape.data.deleteIcon).not.toBeUndefined;
+    });
+
+    it('should update selection to false', function() {
+      var initialPoint = {
+        'x': 987,
+        'y': 654
+      };
+
+      var event = TestUtils.getEvent(initialPoint);
+
+      this.pin.updateSelection(true, this.shape, overlay);
+
+      this.pin.updateSelection(false, this.shape, overlay);
+
+      var redColor = {
+        red:1,
+        green: 0,
+        blue:0
+      };
+
+      expect(this.shape.strokeColor.red).toBe(redColor.red);
+      expect(this.shape.strokeColor.green).toBe(redColor.green);
+      expect(this.shape.strokeColor.blue).toBe(redColor.blue);
+      expect(this.shape.data.deleteIcon).toBeUndefined;
     });
 
     it('should change stroke when hovering pin',function(){
@@ -224,39 +248,31 @@ describe('Pin', function() {
 
       expect(overlay.mode).toBe('create');
     });
-/*
-      TODO Will fix it when refactoring the ping tool
-      event = TestUtils.getEvent({}, {
-        'x': this.initialPoint.x + 100,
-        'y': this.initialPoint.y + 100
-      });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'translate', null, null);
-      this.pin.onMouseDown(event, overlay);
 
-      expect(overlay.mode).toBe('translate');
-      expect(overlay.segment).toBeNull();
-      expect(overlay.path).toBeNull();
 
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', null, null);
-      this.pin.onMouseDown(event, overlay);
+    it('should resize the trash can icon',function(){
+      var _this = this;
+      var item = {
+        '_name':{
+          toString:function(){
+            return _this.pin.idPrefix + _this.pin.partOfPrefix + 'delete';
+          }
+        },
+        data:{
+          self:new overlay.annotationUtils.DeleteActionIcon(),
+          parent:{ // should use mock shape
+            data:{
+              rotation:1
+            },
+            contains:jasmine.createSpy().and.returnValue(true)
+          }
+        }
+      };
 
-      expect(overlay.mode).toBe('deform');
-      expect(overlay.segment).toBeNull();
-      expect(overlay.path).toBeNull();
+      this.pin.onResize(item,overlay);
 
-      event = TestUtils.getEvent({}, {
-        'x': this.initialPoint.x,
-        'y': this.initialPoint.y
-      });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'translate', this.shape, null);
-      this.pin.onMouseDown(event, overlay);
-
-      expect(overlay.mode).toBe('');
-      expect(overlay.segment).toBeNull();
-      expect(overlay.path).toBeNull();
-      expect(document.body.style.cursor).toBe('default');
-
-      */
+      expect(item.data.self.resize).toHaveBeenCalledWith(24);
+    });
 
   });
 
