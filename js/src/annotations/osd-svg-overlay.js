@@ -20,7 +20,7 @@
       osdViewerId: osdViewerId,
       windowId: windowId,
       commentPanel: null,
-      mode: '', // Possible modes: 'create', 'translate', 'deform', 'edit' and '' as default.
+      mode: '', // Possible modes: 'create', 'translate', 'deform','rotate', 'edit' and '' as default.
       draftPaths: [],
       editedPaths: [],
       hoveredPath: null,
@@ -151,6 +151,7 @@
       this.paperScope.activate();
       this.paperScope.project.options.handleSize = _this.state.getStateProperty('shapeHandleSize');
       jQuery(_this.canvas).attr('keepalive', 'true');
+      this.annotationUtils = new $.AnnotationUtils();
       this.paperScope.view.onFrame = function(event) {
         if (_this.paperScope.snapPoint) {
           _this.paperScope.snapPoint.remove();
@@ -186,7 +187,7 @@
     onMouseUp: function(event) {
       if (!this.overlay.disabled) {
         event.stopPropagation();
-        jQuery(this.overlay.viewer.canvas).css('cursor','crosshair');
+        jQuery(this.overlay.viewer.canvas).css('cursor','default');
         if (this.overlay.mode === 'deform' || this.overlay.mode === 'edit') {
           this.overlay.segment = null;
           this.overlay.path = null;
@@ -216,12 +217,11 @@
       this.overlay.cursorLocation = event.point;
       if (!this.overlay.disabled) {
         // We are in drawing mode
-       // if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
-       //
-       //   document.body.style.cursor = "pointer";
-       // } else {
-       //   document.body.style.cursor = "default";
-      //  }
+        if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
+          document.body.style.cursor = "pointer";
+        } else {
+          document.body.style.cursor = "default";
+        }
         event.stopPropagation();
         this.overlay.currentTool.onMouseMove(event, this.overlay);
       } else {
@@ -247,21 +247,18 @@
       } else {
         this.overlay.latestMouseDownTime = time;
         var hitResult = this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions);
-        if (hitResult && (!this.overlay.currentTool || (hitResult.item._name.toString().indexOf(this.overlay.currentTool.idPrefix) == -1 && this.overlay.mode === ''))) {
+
+        if (hitResult && (!this.overlay.currentTool || (hitResult.item._name.toString().indexOf(this.overlay.currentTool.idPrefix) === -1 && this.overlay.mode === ''))) {
           var prefix = hitResult.item._name.toString();
           prefix = prefix.substring(0, prefix.lastIndexOf('_') + 1);
           for (var j = 0; j < this.overlay.tools.length; j++) {
             if (this.overlay.tools[j].idPrefix == prefix) {
               this.overlay.eventEmitter.publish('toggleDrawingTool.' + this.overlay.windowId, this.overlay.tools[j].logoClass);
-              this.overlay.updateSelection(false, this.overlay.paperScope.project.activeLayer);
-              this.overlay.hoveredPath = null;
-              this.overlay.segment = null;
-              this.overlay.path = null;
-              this.overlay.mode = '';
               break;
             }
           }
         }
+
         if (this.overlay.currentTool) {
           this.overlay.currentTool.onMouseDown(event, this.overlay);
           if (this.overlay.mode == 'translate' || this.overlay.mode == 'deform' || this.overlay.mode == 'edit') {
@@ -293,6 +290,10 @@
 
     fitFixedSizeShapes: function(shape) {
       shape.data.fixedSize = true;
+      if(this.getTool(shape).onResize){
+        this.getTool(shape).onResize(shape,this);
+      }
+
       if (shape.name.toString().indexOf('pin_') != -1) {
         var scale = 1 / shape.bounds.width;
         scale *= this.fixedShapeSize / this.paperScope.view.zoom;
@@ -301,12 +302,11 @@
     },
 
     updateSelection: function(selected, item) {
+
       if(item && item._name){
-        for (var i = 0; i < this.tools.length; i++) {
-          if (item._name.toString().indexOf(this.tools[i].idPrefix) != -1) {
-            this.tools[i].updateSelection(selected, item, this);
-            break;
-          }
+        var shapeTool = this.getTool(item);
+        if(shapeTool){
+          shapeTool.updateSelection(selected, item, this);
         }
       }
     },
@@ -345,24 +345,45 @@
     },
 
     hover: function() {
-      if (!this.currentTool) {
-        if (this.hoveredPath) {
+
+      if(!this.currentTool){
+        return;
+      }
+
+      if (!this.currentTool && this.hoveredPath) {
+        this.updateSelection(false, this.hoveredPath);
+        this.hoveredPath = null;
+      }
+
+      if (this.hoveredPath) {
+
+        if (this.hoveredPath._name.toString().indexOf(this.currentTool.idPrefix) === -1) {
           this.updateSelection(false, this.hoveredPath);
           this.hoveredPath = null;
         }
-      } else if (this.hoveredPath) {
-        if (this.hoveredPath._name.toString().indexOf(this.currentTool.idPrefix) == -1) {
-          this.updateSelection(false, this.hoveredPath);
-          this.hoveredPath = null;
-        }
-        if (this.path && this.path._name.toString().indexOf(this.currentTool.idPrefix) != -1) {
+        if (this.path && this.path._name.toString().indexOf(this.currentTool.idPrefix) !== -1 ) {
+
+          //should make exception for the dynamically attached paths to shapes
+          if(this.currentTool.partOfPrefix && this.path._name.toString().indexOf(this.currentTool.partOfPrefix) !== -1){
+            return;
+          }
+
           if (this.hoveredPath) {
-            this.updateSelection(false, this.hoveredPath);
+            if(this.hoveredPath._name.toString() === this.path._name.toString() ){
+              return;
+            }else{
+              this.updateSelection(false, this.hoveredPath);
+            }
+
           }
           this.hoveredPath = this.path;
           this.updateSelection(true, this.hoveredPath);
         }
-      } else if (this.path && this.path._name.toString().indexOf(this.currentTool.idPrefix) != -1) {
+        return;
+
+      }
+
+      if (this.path && this.path._name.toString().indexOf(this.currentTool.idPrefix) != -1) {
         this.hoveredPath = this.path;
         this.updateSelection(true, this.hoveredPath);
       }

@@ -2,43 +2,6 @@ paper.install(window);
 
 describe('Freehand', function() {
 
-  function getEvent(delta, point, modifiers) {
-    return {
-      'delta': delta,
-      'point': point,
-      'modifiers': modifiers
-    };
-  }
-
-  function getOverlay(paperScope, strokeColor, fillColor, fillColorAlpha, mode, path, segment, fillOptionsOnly) {
-    var hitOptions = {
-      'fill': true,
-      'stroke': true,
-      'segments': true,
-      'tolerance': 0
-    };
-    if (fillOptionsOnly) {
-      hitOptions.stroke = false;
-      hitOptions.segments = false;
-      hitOptions.tolerance = 5;
-    }
-    return {
-      'paperScope': paperScope,
-      'strokeColor': strokeColor,
-      'fillColor': fillColor,
-      'fillColorAlpha': fillColorAlpha,
-      'mode': mode,
-      'path': path,
-      'segment': segment,
-      'hitOptions': hitOptions,
-      onDrawFinish: function() {
-      },
-      getName: function(tool) {
-        return tool.idPrefix + '1';
-      }
-    };
-  }
-
   beforeAll(function() {
     this.canvas = jQuery('<canvas></canvas>');
     this.canvas.attr('id', 'paperId');
@@ -55,7 +18,7 @@ describe('Freehand', function() {
       'x': 123,
       'y': 456
     };
-    var overlay = getOverlay(paper, '#ff0000', '#00ff00');
+    var overlay = MockOverlay.getOverlay(paper);
     var shape = this.freehand.createShape(initialPoint, overlay);
 
     expect(overlay.mode).toBe('create');
@@ -78,7 +41,7 @@ describe('Freehand', function() {
     var overlay;
 
     beforeEach(function() {
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+      overlay = MockOverlay.getOverlay(paper);
       this.freehand = new Mirador.Freehand();
       this.initialPoint = {
         'x': 987,
@@ -149,11 +112,11 @@ describe('Freehand', function() {
     });
 
     it('should do nothing', function() {
-      var event = getEvent({
+      var event = TestUtils.getEvent({
         'x': 100,
         'y': 100
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+      overlay.mode = '';
       var localCenterPoint = {
         'x': this.initialPoint.x - 1,
         'y': this.initialPoint.y - 1
@@ -173,8 +136,8 @@ describe('Freehand', function() {
         expect(this.shape.segments[idx].point.x).toBeCloseTo(expected[idx].x, 6);
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
-
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'edit', null, null);
+      overlay = MockOverlay.getOverlay(paper);
+      overlay.mode = 'edit';
       this.freehand.onMouseDrag(event, overlay);
 
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
@@ -184,11 +147,13 @@ describe('Freehand', function() {
     });
 
     it('should edit the whole freehand shape', function() {
-      var event = getEvent({
+      var event = TestUtils.getEvent({
         'x': 3,
         'y': -3
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'edit', this.shape, null);
+
+      overlay.mode = 'edit';
+      overlay.path = this.shape;
       var expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -206,7 +171,10 @@ describe('Freehand', function() {
       }
 
       var selectedPointIndex = 1;
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'edit', this.shape, this.shape.segments[selectedPointIndex]);
+      overlay = MockOverlay.getOverlay(paper);
+      overlay.mode = 'edit';
+      overlay.path = this.shape;
+      overlay.segment  = this.shape.segments[selectedPointIndex];
       expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         if (idx == selectedPointIndex) {
@@ -231,11 +199,12 @@ describe('Freehand', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      event = getEvent({}, {
+      event = TestUtils.getEvent({}, {
         'x': 100,
         'y': 100
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'create', this.shape, null);
+      overlay.mode = 'create';
+      overlay.path = this.shape;
       expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -255,22 +224,21 @@ describe('Freehand', function() {
     });
 
     it('should finish freehand shape', function() {
-      var event = getEvent();
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'create', this.shape, null);
-
+      var event = TestUtils.getEvent();
+      overlay.mode = 'create';
+      overlay.shape = this.shape;
       this.freehand.onMouseUp(event, overlay);
-
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'create', null, null);
+      overlay.mode = 'create';
 
       this.freehand.onMouseUp(event, overlay);
     });
 
     it('should select freehand shape', function() {
-      var event = getEvent({}, {
+      var event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x - 100,
         'y': this.initialPoint.y - 100
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+      overlay.mode = '';
       this.freehand.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('create');
@@ -278,13 +246,14 @@ describe('Freehand', function() {
       expect(overlay.path).not.toBe(this.shape);
       expect(document.body.style.cursor).toBe('default');
 
-      event = getEvent({}, {
+      event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x - 100,
         'y': this.initialPoint.y - 100
       }, {
         'shift': null
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'create', this.shape, null);
+      overlay.mode = 'create';
+      overlay.path = this.shape;
       var expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -303,7 +272,8 @@ describe('Freehand', function() {
 
       expect(document.body.style.cursor).toBe('default');
 
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'edit', null, null);
+      overlay = MockOverlay.getOverlay(paper);
+      overlay.mode = 'edit';
       this.freehand.onMouseDown(event, overlay);
 
       expect(overlay.segment.point.x).toBe(event.point.x);
@@ -312,16 +282,19 @@ describe('Freehand', function() {
       expect(overlay.path).not.toBe(this.shape);
       expect(document.body.style.cursor).toBe('move');
 
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'translate', this.shape, null);
+      overlay = MockOverlay.getOverlay(paper);
+      overlay.mode = 'translate';
+      overlay.path = this.shape;
+
       this.freehand.onMouseDown(event, overlay);
 
-      event = getEvent({}, {
+      event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x + 5,
         'y': this.initialPoint.y
       }, {
         'shift': 'selected'
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+
       expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -332,6 +305,8 @@ describe('Freehand', function() {
           expected.push(point);
         }
       }
+
+      overlay = overlay = MockOverlay.getOverlay(paper);
       this.freehand.onMouseDown(event, overlay);
 
       expect(this.shape.segments.length).toBe(expected.length);
@@ -340,13 +315,13 @@ describe('Freehand', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      event = getEvent({}, {
+      event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x + 3,
         'y': this.initialPoint.y
       }, {
         'shift': 'selected'
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+      overlay.mode = '';
       expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -363,13 +338,17 @@ describe('Freehand', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      event = getEvent({}, {
+      event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x + 3,
         'y': this.initialPoint.y
       }, {
         'shift': null
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'edit', this.shape, null);
+
+      MockOverlay.getOverlay(paper);
+      overlay.mode='edit'
+      overlay.path = this.shape;
+
       expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -386,13 +365,14 @@ describe('Freehand', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      event = getEvent({}, {
+      event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x + 3,
         'y': this.initialPoint.y
       }, {
         'shift': null
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'edit', null, null);
+      overlay = MockOverlay.getOverlay(paper);
+      overlay.mode = 'edit';
       expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -409,7 +389,7 @@ describe('Freehand', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      event = getEvent({}, {
+      event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x + 100,
         'y': this.initialPoint.y
       }, {
@@ -431,13 +411,18 @@ describe('Freehand', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      event = getEvent({}, {
+      event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x,
         'y': this.initialPoint.y
       }, {
         'shift': null
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'edit', null, null, true);
+      overlay = MockOverlay.getOverlay(paper);
+      overlay.mode = 'edit';
+      overlay.hitOptions.stroke = false;
+      overlay.hitOptions.segments = false;
+      overlay.hitOptions.tolerance = 5;
+
       this.shape.closed = true;
       this.shape.fillColor = '#0000ff';
       expected = [];
