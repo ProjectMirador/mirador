@@ -55,7 +55,7 @@
       this.svgOverlay.paperScope.project.clear();
       var _this = this;
       _this.annotationsToShapesMap = {};
-      var deferreds = jQuery.map(this.list, function(annotation) {
+      var deferreds = jQuery.map(this.list, function(annotation) { // TODO should refactor to handle annotation without shapes
         var deferred = jQuery.Deferred();
         var shapeArray;
         if (typeof annotation.on === 'object') {
@@ -90,32 +90,53 @@
         container: windowElement,
         viewport: windowElement,
         getAnnoFromRegion: _this.getAnnoFromRegion.bind(this),
-        onSaveClickCheck: function (oaAnno) {
+        onAnnotationSaved: function (oaAnno) {
+          var onAnnotationSaved = jQuery.Deferred();
 
           if (!_this.svgOverlay.draftPaths.length) {
-            // TODO use global notification system
-            return window.confirm('There are no shapes related to this annotation. Saving the annotation will delete it.');
-          }
-          return true;
-        },
-        onAnnotationSaved: function(oaAnno) {
+            new $.DialogBuilder().dialog({
+              message: i18n.t('editModalSaveAnnotationWithNoShapesMsg'),
+              buttons: {
+                success: {
+                  label: i18n.t('editModalBtnSaveWithoutShapes'),
+                  className: 'btn-success disabled',
+                  callback: function () {
+                    // TODO currently we do not support this option
+                  }
+                },
+                danger: {
+                  label: i18n.t('editModalBtnDeleteAnnotation'),
+                  className: 'btn-danger',
+                  callback: function () {
+                    _this.eventEmitter.publish('annotationDeleted.' + _this.windowId, [oaAnno['@id']]);
+                    onAnnotationSaved.resolve();
+                  }
+                },
+                main: {
+                  label: i18n.t('cancel'),
+                  className: 'btn-default',
+                  callback: function () {
+                    onAnnotationSaved.reject();
+                  }
+                }
+              }
 
-          if(!_this.svgOverlay.draftPaths.length){
-            _this.eventEmitter.publish('annotationDeleted.' + _this.windowId, [oaAnno['@id']]);
-            return;
+            });
+          } else {
+            var svg = _this.svgOverlay.getSVGString(_this.svgOverlay.draftPaths);
+            oaAnno.on = {
+              "@type": "oa:SpecificResource",
+              "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
+              "selector": {
+                "@type": "oa:SvgSelector",
+                "value": svg
+              }
+            };
+            //save to endpoint
+            _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
+            onAnnotationSaved.resolve();
           }
-
-          var svg = _this.svgOverlay.getSVGString(_this.svgOverlay.draftPaths);
-          oaAnno.on = {
-            "@type": "oa:SpecificResource",
-            "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
-            "selector": {
-              "@type": "oa:SvgSelector",
-              "value": svg
-            }
-          };
-          //save to endpoint
-          _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
+          return onAnnotationSaved.promise();
         }
       });
       this.svgOverlay.paperScope.view.draw();
