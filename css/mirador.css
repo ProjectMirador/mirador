@@ -1175,6 +1175,7 @@ li.highlight {
   position: absolute;
   top: 30px;
   left: 0px;
+  min-width: 330px;
 }
 
 /* color picker custom style

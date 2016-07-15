@@ -268,16 +268,6 @@
         _this.eventEmitter.publish('refreshOverlay.'+_this.windowId, '');
       });
 
-      // this.element.find('.mirador-osd-delete-mode').on('click', function() {
-      //   _this.eventEmitter.publish('deleteShape.'+_this.windowId, '');
-      // });
-      // this.element.find('.mirador-osd-save-mode').on('click', function() {
-      //   _this.eventEmitter.publish('updateEditedShape.'+_this.windowId, '');
-      // });
-      // this.element.find('.mirador-osd-edit-mode').on('click', function() {
-      //   _this.eventEmitter.publish('toggleDefaultDrawingTool.'+_this.windowId);
-      // });
-      //
       // function make_handler(shapeMode) {
       //   return function () {
       //     _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shapeMode);

@@ -20,10 +20,13 @@
       var shape = new overlay.paperScope.Path({
         segments: [initialPoint],
         dashArray: overlay.dashArray,
-        strokeWidth: 1 / overlay.paperScope.view.zoom,
         strokeColor: overlay.strokeColor,
         name: overlay.getName(_this)
       });
+      shape.data.defaultStrokeValue = 1;
+      shape.data.editStrokeValue = 5;
+      shape.data.currentStrokeValue = shape.data.defaultStrokeValue;
+      shape.strokeWidth = shape.data.currentStrokeValue / overlay.paperScope.view.zoom;
       return shape;
     },
 

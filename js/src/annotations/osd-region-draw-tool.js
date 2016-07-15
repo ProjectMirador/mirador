@@ -30,7 +30,7 @@
     enterEditMode: function() {
       this.osdViewer.setMouseNavEnabled(false);
       this.svgOverlay.show();
-      this.svgOverlay.enable();
+      this.svgOverlay.enableEdit();
     },
 
     exitEditMode: function(showAnnotations) {
@@ -41,84 +41,6 @@
       } else {
         this.svgOverlay.hide();
       }
-    },
-
-    // deleteShape: function() {
-    //   var _this = this;
-    //   if (_this.svgOverlay.hoveredPath) {
-    //     var oaAnno = null;
-    //     for (var key in _this.annotationsToShapesMap) {
-    //       if (_this.annotationsToShapesMap.hasOwnProperty(key)) {
-    //         var shapeArray = _this.annotationsToShapesMap[key];
-    //         for (var idx = 0; idx < shapeArray.length; idx++) {
-    //           if (shapeArray[idx].name == _this.svgOverlay.hoveredPath.name) {
-    //             oaAnno = shapeArray[idx].data.annotation;
-    //             if (shapeArray.length == 1) {
-    //               if (!window.confirm(i18n.t('deleteShapeAnnotation'))) {
-    //                 return false;
-    //               }
-    //               _this.eventEmitter.publish('annotationDeleted.' + _this.windowId, [oaAnno['@id']]);
-    //               this.svgOverlay.removeFocus();
-    //               return true;
-    //             } else {
-    //               if (!window.confirm(i18n.t('deleteShape'))) {
-    //                 return false;
-    //               }
-    //               shapeArray.splice(idx, 1);
-    //               // backward compatibility
-    //               if (typeof oaAnno.on !== 'object') {
-    //                 oaAnno.on = {
-    //                   'selector': {
-    //                     'value': ''
-    //                   }
-    //                 };
-    //               }
-    //               oaAnno.on.selector.value = _this.svgOverlay.getSVGString(shapeArray);
-    //               _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
-    //               this.svgOverlay.removeFocus();
-    //               return true;
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // },
-
-    saveEditedShape: function() {
-      var _this = this;
-      var oaAnnos = [];
-      for (var key in _this.annotationsToShapesMap) {
-        if (_this.annotationsToShapesMap.hasOwnProperty(key)) {
-          var shapeArray = _this.annotationsToShapesMap[key];
-          var annotationShapesAreEdited = false;
-          for (var i = 0; i < _this.svgOverlay.editedPaths.length; i++) {
-            for (var idx = 0; idx < shapeArray.length; idx++) {
-              if (shapeArray[idx].name == _this.svgOverlay.editedPaths[i].name) {
-                oaAnnos.push(shapeArray[idx].data.annotation);
-                // backward compatibility
-                if (typeof oaAnnos[oaAnnos.length - 1].on !== 'object') {
-                  oaAnnos[oaAnnos.length - 1].on = {
-                    'selector': {
-                      'value': ''
-                    }
-                  };
-                }
-                oaAnnos[oaAnnos.length - 1].on.selector.value = _this.svgOverlay.getSVGString(shapeArray);
-                annotationShapesAreEdited = true;
-                break;
-              }
-            }
-            if (annotationShapesAreEdited) {
-              break;
-            }
-          }
-        }
-      }
-      for (var j = 0; j < oaAnnos.length; j++) {
-        _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnnos[j]]);
-      }
-      this.svgOverlay.restoreEditedShapes();
     },
 
     render: function() {
@@ -239,14 +161,6 @@
         _this.render();
       });
 
-      // _this.eventEmitter.subscribe('deleteShape.' + _this.windowId, function(event) {
-      //   _this.deleteShape();
-      // });
-
-      _this.eventEmitter.subscribe('updateEditedShape.' + _this.windowId, function(event) {
-        _this.saveEditedShape();
-      });
-
       _this.eventEmitter.subscribe('updateTooltips.' + _this.windowId, function(event, location, absoluteLocation) {
         if (_this.annoTooltip && !_this.annoTooltip.inEditOrCreateMode) {
           _this.showTooltipsFromMousePosition(event, location, absoluteLocation);
@@ -275,14 +189,26 @@
           // if we have a matching annotationId, pass the boolean value on for each path, otherwise, always pass false
           if (key === annotationId) {
             jQuery.each(value, function(index, path) {
-              _this.eventEmitter.publish('SET_OVERLAY_EDITING.' + _this.windowId, {'shape' : path, 'isEditable' : isEditable});
+              //just in case, force the shape to be non hovered
+              var tool = _this.svgOverlay.getTool(path);
+              tool.onHover(false, path);
+
+              path.data.editable = isEditable;
+              if (isEditable) {
+                path.data.currentStrokeValue = path.data.editStrokeValue;
+                path.strokeWidth = path.data.currentStrokeValue / _this.svgOverlay.paperScope.view.zoom;
+              } else {
+                path.data.currentStrokeValue = path.data.defaultStrokeValue;
+                path.strokeWidth = path.data.currentStrokeValue / _this.svgOverlay.paperScope.view.zoom;
+              }
             });
           } else {
             jQuery.each(value, function(index, path) {
-              _this.eventEmitter.publish('SET_OVERLAY_EDITING.' + _this.windowId, {'shape' : path, 'isEditable' : false});
+              path.data.editable = false;
             });
           }
         });
+        _this.svgOverlay.paperScope.view.draw();
       });
     },
 

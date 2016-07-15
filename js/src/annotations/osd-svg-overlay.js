@@ -12,12 +12,12 @@
   };
 
   $.Overlay = function(viewer, osdViewerId, windowId, state, eventEmitter) {
-    console.log('calling new overlay');
     var drawingToolsSettings = state.getStateProperty('drawingToolsSettings');
     var availableAnnotationDrawingTools = state.getStateProperty('availableAnnotationDrawingTools');
     var availableExternalCommentsPanel = state.getStateProperty('availableExternalCommentsPanel');
     jQuery.extend(this, {
       disabled: true,
+      inEditMode: false,
       osdViewerId: osdViewerId,
       windowId: windowId,
       commentPanel: null,
@@ -73,6 +73,7 @@
 
 
     _this.eventEmitter.subscribe('toggleDrawingTool.' + _this.windowId, function(event, tool) {
+      //qtip code should NOT be here
       if (_this.disabled) {
         jQuery('.qtip' + _this.windowId).qtip('hide');
         return;
@@ -87,6 +88,7 @@
     });
 
     _this.eventEmitter.subscribe('toggleDefaultDrawingTool.' + _this.windowId, function(event) {
+      //qtip code should NOT be here
       if (_this.disabled) {
         jQuery('.qtip' + _this.windowId).qtip('hide');
         return;
@@ -183,25 +185,6 @@
       mouseTool.onMouseDown = _this.onMouseDown;
       mouseTool.onDoubleClick = _this.onDoubleClick;
       jQuery.data(document.body, 'draw_canvas_' + _this.windowId, mouseTool);
-
-      this.listenForActions();
-    },
-
-    listenForActions: function() {
-      var _this = this;
-
-      this.eventEmitter.subscribe('SET_OVERLAY_EDITING.' + this.windowId, function(event, options) {
-        //disable shapes not associated with this annotation
-        //shapes associated with this annotation should have their handles enabled
-        console.log(_this);
-        console.log(options.shape);
-        if (options.shape && options.shape._name) {
-          options.shape.data.editable = options.isEditable;
-          var tool = _this.getTool(options.shape);
-          //tool.setEditable(options.isEditable);
-          //call a function that all tools have
-        }
-      });
     },
 
     onMouseUp: function(event) {
@@ -215,14 +198,20 @@
         if (this.overlay.mode != 'create') {
           this.overlay.mode = '';
         }
-        this.overlay.currentTool.onMouseUp(event, this.overlay);
+        if (this.overlay.currentTool) {
+          //we may not currently have a tool if the user is in edit mode and didn't click on an editable shape
+          this.overlay.currentTool.onMouseUp(event, this.overlay);
+        }
       }
     },
 
     onMouseDrag: function(event) {
       if (!this.overlay.disabled) {
         event.stopPropagation();
-        this.overlay.currentTool.onMouseDrag(event, this.overlay);
+        if (this.overlay.currentTool) {
+          //we may not currently have a tool if the user is in edit mode and didn't click on an editable shape
+          this.overlay.currentTool.onMouseDrag(event, this.overlay);
+        }
       } else {
         var absolutePoint = {
           'x': event.event.clientX,
@@ -243,7 +232,9 @@
           document.body.style.cursor = "default";
         }
         event.stopPropagation();
-        this.overlay.currentTool.onMouseMove(event, this.overlay);
+        if (this.overlay.currentTool) {
+          this.overlay.currentTool.onMouseMove(event, this.overlay);
+        }
       } else {
         var absolutePoint = {
           'x': event.event.clientX,
@@ -255,29 +246,33 @@
     },
 
     onMouseDown: function(event) {
-      console.log(this.overlay);
       if (this.overlay.disabled) {
-        console.log("overlay is disabled, no mouse down");
         return;
       }
       event.stopPropagation();
       var date = new Date();
       var time = date.getTime();
-      var overlayEditable = true;
-      if (this.overlay.path) {
-        if (typeof this.overlay.path.data.editable !== 'undefined') {
-          overlayEditable = this.overlay.path.data.editable;
-        }
-      }
-      console.log(overlayEditable);
-      console.log(this.overlay.path);
       if (time - this.overlay.latestMouseDownTime < this.overlay.doubleClickReactionTime) {
         this.overlay.latestMouseDownTime = time;
         this.onDoubleClick(event);
       } else {
         this.overlay.latestMouseDownTime = time;
         var hitResult = this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions);
-
+        if (this.overlay.inEditMode) {
+          //if in edit mode, clear the current tool in case the user clicked on an "empty" space
+          //if the user (re)clicked on an editable shape, the currentTool gets set below
+          //if the user has clicked on "empty" space, return and don't do anything more
+          this.overlay.currentTool = null;
+          if (hitResult) {
+            var overlayEditable = false;
+            if (typeof hitResult.item.data.editable !== 'undefined') {
+              overlayEditable = hitResult.item.data.editable;
+            }
+            if (!overlayEditable) {
+              return;
+            }
+          }
+        }
         if (hitResult && (!this.overlay.currentTool || (hitResult.item._name.toString().indexOf(this.overlay.currentTool.idPrefix) === -1 && this.overlay.mode === ''))) {
           var prefix = hitResult.item._name.toString();
           prefix = prefix.substring(0, prefix.lastIndexOf('_') + 1);
@@ -288,7 +283,7 @@
             }
           }
         }
-        if (this.overlay.currentTool && overlayEditable) {
+        if (this.overlay.currentTool) {
           this.overlay.currentTool.onMouseDown(event, this.overlay);
           if (this.overlay.mode == 'translate' || this.overlay.mode == 'deform' || this.overlay.mode == 'edit') {
             if (this.overlay.path && this.overlay.path.data.annotation) {
@@ -365,9 +360,9 @@
           if (allItems[j].data.fixedSize) {
             this.fitFixedSizeShapes(allItems[j]);
           }
-          allItems[j].strokeWidth = 1 / this.paperScope.view.zoom;
+          allItems[j].strokeWidth = allItems[j].data.currentStrokeValue / this.paperScope.view.zoom;
           if (allItems[j].style) {
-            allItems[j].style.strokeWidth = 1 / this.paperScope.view.zoom;
+            allItems[j].style.strokeWidth = allItems[j].data.currentStrokeValue / this.paperScope.view.zoom;
           }
         }
       }
@@ -463,7 +458,10 @@
         name: shape.name
       });
 
-      cloned.strokeWidth = 1 / this.paperScope.view.zoom;
+      cloned.data.defaultStrokeValue = 1;
+      cloned.data.editStrokeValue = 5;
+      cloned.data.currentStrokeValue = cloned.data.defaultStrokeValue;
+      cloned.strokeWidth = cloned.data.currentStrokeValue / this.paperScope.view.zoom;
       cloned.strokeColor = shape.strokeColor;
       cloned.dashArray = shape.dashArray;
       if (shape.fillColor) {
@@ -553,7 +551,7 @@
           if (shapeArray[idx].name == this.editedPaths[i].name) {
             shapeArray[idx].segments = this.editedPaths[i].segments;
             shapeArray[idx].name = this.editedPaths[i].name;
-            shapeArray[idx].strokeWidth = 1 / this.paperScope.view.zoom;
+            shapeArray[idx].strokeWidth = shapeArray[idx].data.currentStrokeValue / this.paperScope.view.zoom;
             shapeArray[idx].strokeColor = this.editedPaths[i].strokeColor;
             shapeArray[idx].dashArray = this.editedPaths[i].dashArray;
             if (this.editedPaths[i].fillColor) {
@@ -564,7 +562,7 @@
             }
             if (this.editedPaths[i].style) {
               shapeArray[idx].style = this.editedPaths[i].style;
-              shapeArray[idx].style.strokeWidth = 1 / this.paperScope.view.zoom;
+              shapeArray[idx].style.strokeWidth = shapeArray[idx].data.currentStrokeValue / this.paperScope.view.zoom;
             }
             shapeArray[idx].closed = this.editedPaths[i].closed;
             shapeArray[idx].data.rotation = this.editedPaths[i].data.rotation;
@@ -597,19 +595,21 @@
 
     disable: function() {
       this.disabled = true;
-      // this.eventEmitter.publish('hideDrawTools.' + this.windowId);
-      // this.eventEmitter.publish('disableBorderColorPicker.' + this.windowId, this.disabled);
-      // this.eventEmitter.publish('disableFillColorPicker.' + this.windowId, this.disabled);
+      this.inEditMode = false;
       this.eventEmitter.publish('enableTooltips.' + this.windowId);
       this.deselectAll();
+    },
+
+    enableEdit: function() {
+      this.disabled = false;
+      this.inEditMode = true;
+      this.eventEmitter.publish('disableTooltips.' + this.windowId);
     },
 
     enable: function() {
       var setDefaultTool = this.disabled;
       this.disabled = false;
-      // this.eventEmitter.publish('showDrawTools.' + this.windowId);
-      // this.eventEmitter.publish('disableBorderColorPicker.' + this.windowId, this.disabled);
-      // this.eventEmitter.publish('disableFillColorPicker.' + this.windowId, this.disabled);
+      this.inEditMode = false;
       this.eventEmitter.publish('disableTooltips.' + this.windowId);
       if (setDefaultTool) {
         this.eventEmitter.publish('toggleDefaultDrawingTool.' + this.windowId);

@@ -44,7 +44,10 @@
         name: overlay.getName(_this)
       });
       shape.dashArray = overlay.dashArray;
-      shape.strokeWidth = 1 / overlay.paperScope.view.zoom;
+      shape.data.defaultStrokeValue = 1;
+      shape.data.editStrokeValue = 5;
+      shape.data.currentStrokeValue = shape.data.defaultStrokeValue;
+      shape.strokeWidth = shape.data.currentStrokeValue / overlay.paperScope.view.zoom;
       shape.strokeColor = overlay.strokeColor;
       shape.fillColor = overlay.fillColor;
       shape.fillColor.alpha = overlay.fillColorAlpha;
