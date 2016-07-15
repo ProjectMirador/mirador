@@ -271,10 +271,11 @@
         this.overlay.latestMouseDownTime = time;
         var hitResult = this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions);
         if (this.overlay.inEditMode) {
-          //if in edit mode, clear the current tool in case the user clicked on an "empty" space
+          //if in edit mode, clear the current tool and mode in case the user clicked on an "empty" space
           //if the user (re)clicked on an editable shape, the currentTool gets set below
           //if the user has clicked on "empty" space, return and don't do anything more
           this.overlay.currentTool = null;
+          this.overlay.mode = "";
           if (hitResult) {
             var overlayEditable = false;
             if (typeof hitResult.item.data.editable !== 'undefined') {
