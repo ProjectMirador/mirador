@@ -140,6 +140,8 @@
     onMouseUp: function (event, overlay) {
       if (overlay.mode == 'create' && overlay.path) {
         overlay.onDrawFinish();
+      } else if (overlay.mode === 'translate' || overlay.mode === 'deform' && overlay.path) {
+        overlay.onEditFinish();
       }
     },
 
