@@ -142,8 +142,13 @@
     },
 
     onMouseUp: function(event, overlay) {
+      console.log('on mouse up');
+      console.log(overlay.mode);
+      console.log(overlay.path);
       if (overlay.mode === 'create' && overlay.path) {
         overlay.onDrawFinish();
+      } else if (overlay.mode === 'translate' || overlay.mode === 'deform' && overlay.path) {
+        overlay.onEditFinish();
       }
     },
 
@@ -380,7 +385,6 @@
         }
         return;
       }
-
       overlay.path = this.createShape(event.point, overlay);
     },
 

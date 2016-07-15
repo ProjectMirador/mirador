@@ -93,7 +93,7 @@
 
     updateRenderer: function() {
       this.drawTool.list = this.annotationsList;
-      this.modeSwitch();
+      // this.modeSwitch();
     },
 
     modeSwitch: function() {

@@ -85,6 +85,15 @@
         viewport: windowElement,
         getAnnoFromRegion: _this.getAnnoFromRegion.bind(this),
         onAnnotationSaved: function(oaAnno) {
+          var svg = _this.svgOverlay.getSVGString(_this.svgOverlay.draftPaths);
+          oaAnno.on = {
+            "@type": "oa:SpecificResource",
+            "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
+            "selector": {
+              "@type": "oa:SvgSelector",
+              "value": svg
+            }
+          };
           //save to endpoint
           _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
         }
@@ -184,17 +193,18 @@
         _this.svgOverlay.restoreDraftShapes();
       });
 
-      _this.eventEmitter.subscribe('SET_ANNOTATION_EDITING.' + _this.windowId, function(event, annotationId, isEditable) {
-        jQuery.each(_this.annotationsToShapesMap, function(key, value) {
+      _this.eventEmitter.subscribe('SET_ANNOTATION_EDITING.' + _this.windowId, function(event, options) {
+        jQuery.each(_this.annotationsToShapesMap, function(key, paths) {
           // if we have a matching annotationId, pass the boolean value on for each path, otherwise, always pass false
-          if (key === annotationId) {
-            jQuery.each(value, function(index, path) {
+          if (key === options.annotationId) {
+            _this.eventEmitter.publish('SET_OVERLAY_TOOLTIP.' + _this.windowId, {"tooltip" : options.tooltip, "paths" : paths});
+            jQuery.each(paths, function(index, path) {
               //just in case, force the shape to be non hovered
               var tool = _this.svgOverlay.getTool(path);
               tool.onHover(false, path);
 
-              path.data.editable = isEditable;
-              if (isEditable) {
+              path.data.editable = options.isEditable;
+              if (options.isEditable) {
                 path.data.currentStrokeValue = path.data.editStrokeValue;
                 path.strokeWidth = path.data.currentStrokeValue / _this.svgOverlay.paperScope.view.zoom;
               } else {
@@ -203,7 +213,7 @@
               }
             });
           } else {
-            jQuery.each(value, function(index, path) {
+            jQuery.each(paths, function(index, path) {
               path.data.editable = false;
             });
           }

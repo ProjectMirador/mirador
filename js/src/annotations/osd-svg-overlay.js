@@ -185,19 +185,31 @@
       mouseTool.onMouseDown = _this.onMouseDown;
       mouseTool.onDoubleClick = _this.onDoubleClick;
       jQuery.data(document.body, 'draw_canvas_' + _this.windowId, mouseTool);
+
+      this.listenForActions();
+    },
+
+    listenForActions: function() {
+      var _this = this;
+
+      this.eventEmitter.subscribe('SET_OVERLAY_TOOLTIP.' + this.windowId, function(event, options) {
+        _this.annoTooltip = options.tooltip;
+        _this.annoEditorVisible = true;
+        _this.draftPaths = options.paths;
+      });
     },
 
     onMouseUp: function(event) {
       if (!this.overlay.disabled) {
         event.stopPropagation();
         jQuery(this.overlay.viewer.canvas).css('cursor','default');
-        if (this.overlay.mode === 'deform' || this.overlay.mode === 'edit') {
-          this.overlay.segment = null;
-          this.overlay.path = null;
-        }
-        if (this.overlay.mode != 'create') {
-          this.overlay.mode = '';
-        }
+        // if (this.overlay.mode === 'deform' || this.overlay.mode === 'edit') {
+        //   this.overlay.segment = null;
+        //   this.overlay.path = null;
+        // }
+        // if (this.overlay.mode != 'create') {
+        //   this.overlay.mode = '';
+        // }
         if (this.overlay.currentTool) {
           //we may not currently have a tool if the user is in edit mode and didn't click on an editable shape
           this.overlay.currentTool.onMouseUp(event, this.overlay);
@@ -277,7 +289,7 @@
           var prefix = hitResult.item._name.toString();
           prefix = prefix.substring(0, prefix.lastIndexOf('_') + 1);
           for (var j = 0; j < this.overlay.tools.length; j++) {
-            if (this.overlay.tools[j].idPrefix == prefix) {
+            if (this.overlay.tools[j].idPrefix === prefix) {
               this.overlay.eventEmitter.publish('toggleDrawingTool.' + this.overlay.windowId, this.overlay.tools[j].logoClass);
               break;
             }
@@ -285,11 +297,11 @@
         }
         if (this.overlay.currentTool) {
           this.overlay.currentTool.onMouseDown(event, this.overlay);
-          if (this.overlay.mode == 'translate' || this.overlay.mode == 'deform' || this.overlay.mode == 'edit') {
+          if (this.overlay.mode === 'translate' || this.overlay.mode === 'deform' || this.overlay.mode === 'edit') {
             if (this.overlay.path && this.overlay.path.data.annotation) {
               var inArray = false;
               for (var i = 0; i < this.overlay.editedPaths.length; i++) {
-                if (this.overlay.editedPaths[i].name == this.overlay.path.name) {
+                if (this.overlay.editedPaths[i].name === this.overlay.path.name) {
                   inArray = true;
                   break;
                 }
@@ -720,6 +732,15 @@
         });
         _this.annoEditorVisible = true;
       }
+    },
+
+    onEditFinish: function() {
+      var _this = this;
+      jQuery.each(this.draftPaths, function(index, value) {
+        if (_this.path.name === value.name) {
+          _this.draftPaths[index] = _this.path;
+        }
+      });
     },
 
     clearDraftData: function() {
