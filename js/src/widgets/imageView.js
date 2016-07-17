@@ -148,8 +148,8 @@
         _this.element.find(elementSelector).fadeOut(duration, complete);
       });
 
-      _this.eventEmitter.subscribe('SET_STATE_MACHINE_CREATEOFF.' + _this.windowId, function(event) {
-        _this.hud.annoState.createOff();
+      _this.eventEmitter.subscribe('SET_STATE_MACHINE_POINTER.' + _this.windowId, function(event) {
+        _this.hud.annoState.choosePointer();
       });
       //Related to Annotations HUD
     },
@@ -169,7 +169,7 @@
         if (_this.hud.annoState.current === 'none') {
           _this.hud.annoState.startup(this);
         }
-        if (_this.hud.annoState.current === 'annoOff') {
+        if (_this.hud.annoState.current === 'off') {
           _this.hud.annoState.displayOn(this);
         } else {
           //make sure to force the controls back to auto fade
@@ -240,14 +240,11 @@
       //Annotation specific controls
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
         var shape = jQuery(this).find('.material-icons').html();
-        if (_this.hud.annoState.current === 'annoOnCreateOn') {
-          console.log("calling change shape");
-          _this.hud.annoState.changeShape(shape);
+        if (_this.hud.annoState.current === 'pointer') {
+          _this.hud.annoState.chooseShape(shape);
         } else {
-          console.log("calling create on");
-          _this.hud.annoState.createOn(shape);
+          _this.hud.annoState.changeShape(shape);
         }
-        console.log(_this.hud.annoState);
         //when a user is in Create mode, don't let the controls auto fade as it could be distracting to the user
         _this.forceShowControls = true;
         _this.element.find(".hud-control").stop(true, true).removeClass('hidden', _this.state.getStateProperty('fadeDuration'));
@@ -255,8 +252,8 @@
 
       this.element.find('.mirador-osd-pointer-mode').on('click', function() {
         // go back to pointer mode
-        if (_this.hud.annoState.current === 'annoOnCreateOn') {
-          _this.hud.annoState.createOff();
+        if (_this.hud.annoState.current === 'shape') {
+          _this.hud.annoState.choosePointer();
           //go back to allowing the controls to auto fade
           _this.forceShowControls = false;
         }
@@ -602,19 +599,21 @@
           // use annotationState to choose event
           if (_this.hud.annoState.current === 'none') {
               _this.hud.annoState.startup(null);
-            if (_this.annotationState === 'annoOnCreateOff') {
+            if (_this.annotationState === 'off') {
               _this.hud.annoState.displayOn(null);
-            } else if (_this.annotationState === 'annoOnCreateOn') {
-              _this.hud.annoState.createOn(null);
             }
+            // else if (_this.annotationState === 'annoOnCreateOn') {
+            //   _this.hud.annoState.createOn(null);
+            // }
           } else {
             // if the current state is not 'none' then we need to update the annotations layer,
             // with the current state, for the new canvas
-            if (_this.hud.annoState.current === 'annoOnCreateOff') {
-              _this.hud.annoState.refreshCreateOff(null);
-            } else if (_this.hud.annoState.current === 'annoOnCreateOn') {
-              _this.hud.annoState.refreshCreateOn(null);
-            }
+            //TODO
+            // if (_this.hud.annoState.current === 'annoOnCreateOff') {
+            //   _this.hud.annoState.refreshCreateOff(null);
+            // } else if (_this.hud.annoState.current === 'annoOnCreateOn') {
+            //   _this.hud.annoState.refreshCreateOn(null);
+            // }
           }
 
           // A hack. Pop the osd overlays layer after the canvas so

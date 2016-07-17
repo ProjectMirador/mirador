@@ -54,14 +54,14 @@
       //initial state is 'none'
       this.annoState = StateMachine.create({
         events: [
-          { name: 'startup',  from: 'none',  to: 'annoOff' },
-          { name: 'displayOn',  from: 'annoOff',  to: 'annoOnCreateOff' },
-          { name: 'refreshCreateOff',  from: 'annoOnCreateOff',  to: 'annoOnCreateOff' },
-          { name: 'createOn', from: ['annoOff','annoOnCreateOff'], to: 'annoOnCreateOn' },
-          { name: 'changeShape', from: ['annoOnCreateOn'], to: 'annoOnCreateOn' },
-          { name: 'refreshCreateOn',  from: 'annoOnCreateOn',  to: 'annoOnCreateOn' },
-          { name: 'createOff',  from: 'annoOnCreateOn',    to: 'annoOnCreateOff' },
-          { name: 'displayOff', from: ['annoOnCreateOn','annoOnCreateOff'], to: 'annoOff' }
+          { name: 'startup', from: 'none', to: 'off' },
+          { name: 'displayOn', from: 'off', to: 'pointer'},
+          { name: 'displayOff', from: ['pointer', 'shape'], to: 'off'},
+          { name: 'choosePointer', from: ['pointer', 'shape'], to: 'pointer'},
+          { name: 'chooseShape', from: 'pointer', to: 'shape'},
+          { name: 'changeShape', from: 'shape', to: 'shape'},
+          { name: 'refresh', from: 'pointer', to: 'pointer'},
+          { name: 'refresh', from: 'shape', to: 'shape'}
         ],
         callbacks: {
           onstartup: function(event, from, to) {
@@ -82,26 +82,31 @@
               annotationState: to
             });
           },
-          onrefreshCreateOff: function(event, from, to) {
+          ondisplayOff: function(event, from, to) {
+            //TODO publish an event to cancel any active annotation editing that was going on
+            if (_this.annoEndpointAvailable) {
+              _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
+              _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-pointer-mode', 'selected']);
+              _this.contextControls.annotationHide();
+            }
+            _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-annotations-layer', 'selected']);
+            _this.eventEmitter.publish('modeChange.' + _this.windowId, 'default');
+            _this.eventEmitter.publish(('windowUpdated'), {
+              id: _this.windowId,
+              annotationState: to
+            });
+          },
+          onchoosePointer: function(event, from, to) {
+            //TODO publish an event to cancel any active annotation editing that was going on
+            _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
+            _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-pointer-mode', 'selected']);
             _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
             _this.eventEmitter.publish(('windowUpdated'), {
               id: _this.windowId,
               annotationState: to
             });
           },
-          oncreateOn: function(event, from, to, shape) {
-            // function enableEditingAnnotations() {
-            //   _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
-            //   _this.eventEmitter.publish('modeChange.' + _this.windowId, 'editingAnnotations');
-            // }
-            // if (_this.annoEndpointAvailable) {
-            //   if (from === "annoOff") {
-            //     _this.contextControls.annotationShow();
-            //     enableEditingAnnotations();
-            //   } else {
-            //     enableEditingAnnotations();
-            //   }
-            // }
+          onchooseShape: function(event, from, to, shape) {
             _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-pointer-mode', 'selected']);
             _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
             _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-'+shape+'-mode', 'selected']);
@@ -114,43 +119,19 @@
             });
           },
           onchangeShape: function(event, from, to, shape) {
+            _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-pointer-mode', 'selected']);
             _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
             _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-'+shape+'-mode', 'selected']);
+            //don't need to trigger a mode change, just change tool
             _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shape);
+
             _this.eventEmitter.publish(('windowUpdated'), {
               id: _this.windowId,
               annotationState: to
             });
           },
-          onrefreshCreateOn: function(event, from, to) {
-            _this.eventEmitter.publish('modeChange.' + _this.windowId, 'creatingAnnotation');
-            _this.eventEmitter.publish(('windowUpdated'), {
-              id: _this.windowId,
-              annotationState: to
-            });
-          },
-          oncreateOff: function(event, from, to) {
-            //TODO publish an event to cancel any active annotation editing that was going on
-            _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
-            _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-pointer-mode', 'selected']);
-            _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
-            _this.eventEmitter.publish(('windowUpdated'), {
-              id: _this.windowId,
-              annotationState: to
-            });
-          },
-          ondisplayOff: function(event, from, to) {
-            //TODO publish an event to cancel any active annotation editing that was going on
-            if (_this.annoEndpointAvailable) {
-              _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
-              _this.contextControls.annotationHide();
-            }
-            _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-annotations-layer', 'selected']);
-            _this.eventEmitter.publish('modeChange.' + _this.windowId, 'default');
-            _this.eventEmitter.publish(('windowUpdated'), {
-              id: _this.windowId,
-              annotationState: to
-            });
+          onrefresh: function(event, from, to) {
+            //TODO
           }
         }
       });

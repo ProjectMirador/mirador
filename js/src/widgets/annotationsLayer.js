@@ -53,9 +53,10 @@
         events: [
           { name: 'startup', from: 'none', to: 'default' },
           { name: 'defaultState', from: ['default', 'display', 'create', 'edit'], to: 'default' },
-          { name: 'displayAnnotations', from: ['default', 'display', 'create', 'edit'], to: 'display' },
+          { name: 'displayAnnotations', from: ['default', 'display', 'create', 'edit', 'newShape'], to: 'display' },
           { name: 'createAnnotation', from: ['default','display'], to: 'create' },
-          { name: 'editAnnotation', from: ['default','display'], to: 'edit' }
+          { name: 'createShape', from: 'edit', to: 'newShape'},
+          { name: 'editAnnotation', from: ['default','display', 'newShape'], to: 'edit' }
         ],
         callbacks: {
           onstartup: function(event) {
@@ -69,6 +70,9 @@
           },
           oncreateAnnotation: function(event) {
             _this.enterCreateAnnotation();
+          },
+          oncreateShape: function(event) {
+            _this.enterCreateShape();
           },
           oneditAnnotation: function(event) {
             _this.enterEditAnnotation();
@@ -100,10 +104,10 @@
       if (this.mode === 'displayAnnotations') { this.layerState.displayAnnotations(); }
       else if (this.mode === 'editingAnnotation') { this.layerState.editAnnotation(); }
       else if (this.mode === 'creatingAnnotation') {
-        //if the state machine is currently in 'edit' mode, it means we shouldn't rerender anything,
-        //but simply switch tools (triggered from HUD)
         if (this.layerState.current !== 'edit') {
           this.layerState.createAnnotation();
+        } else {
+          this.layerState.createShape();
         }
       }
       else if (this.mode === 'default') { this.layerState.defaultState(); }
@@ -120,9 +124,12 @@
       this.drawTool.render();
     },
 
+    enterCreateShape: function() {
+      this.drawTool.enterCreateShapeMode();
+    },
+
     enterEditAnnotation: function() {
       this.drawTool.enterEditMode();
-      //this.drawTool.render();
     },
 
     enterDefault: function() {

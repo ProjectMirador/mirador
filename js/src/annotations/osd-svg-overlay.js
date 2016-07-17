@@ -194,7 +194,7 @@
 
       this.eventEmitter.subscribe('SET_OVERLAY_TOOLTIP.' + this.windowId, function(event, options) {
         _this.annoTooltip = options.tooltip;
-        _this.annoEditorVisible = true;
+        _this.annoEditorVisible = options.visible;
         _this.draftPaths = options.paths;
       });
     },
@@ -624,9 +624,9 @@
       this.disabled = false;
       this.inEditMode = false;
       this.eventEmitter.publish('disableTooltips.' + this.windowId);
-      if (setDefaultTool) {
-        this.eventEmitter.publish('toggleDefaultDrawingTool.' + this.windowId);
-      }
+      // if (setDefaultTool) {
+      //   this.eventEmitter.publish('toggleDefaultDrawingTool.' + this.windowId);
+      // }
     },
 
     refresh: function() {

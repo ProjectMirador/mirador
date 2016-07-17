@@ -27,6 +27,12 @@
       this.svgOverlay.enable();
     },
 
+    enterCreateShapeMode: function() {
+      this.osdViewer.setMouseNavEnabled(false);
+      this.svgOverlay.show();
+      this.svgOverlay.enable();
+    },
+
     enterEditMode: function() {
       this.osdViewer.setMouseNavEnabled(false);
       this.svgOverlay.show();
@@ -197,7 +203,11 @@
         jQuery.each(_this.annotationsToShapesMap, function(key, paths) {
           // if we have a matching annotationId, pass the boolean value on for each path, otherwise, always pass false
           if (key === options.annotationId) {
-            _this.eventEmitter.publish('SET_OVERLAY_TOOLTIP.' + _this.windowId, {"tooltip" : options.tooltip, "paths" : paths});
+            if (options.isEditable) {
+              _this.eventEmitter.publish('SET_OVERLAY_TOOLTIP.' + _this.windowId, {"tooltip" : options.tooltip, "visible" : true, "paths" : paths});
+            } else {
+              _this.eventEmitter.publish('SET_OVERLAY_TOOLTIP.' + _this.windowId, {"tooltip" : null, "visible" : false, "paths" : []});
+            }
             jQuery.each(paths, function(index, path) {
               //just in case, force the shape to be non hovered
               var tool = _this.svgOverlay.getTool(path);
