@@ -595,25 +595,28 @@
 
           _this.addAnnotationsLayer(_this.elemAnno);
 
-          // if current annoState is 'none' that means it has been initialized but not used
-          // use annotationState to choose event
-          if (_this.hud.annoState.current === 'none') {
-              _this.hud.annoState.startup(null);
-            if (_this.annotationState === 'off') {
-              _this.hud.annoState.displayOn(null);
-            }
-            // else if (_this.annotationState === 'annoOnCreateOn') {
-            //   _this.hud.annoState.createOn(null);
-            // }
+          //get the state before resetting it so we can get back to that state
+          var originalState = _this.hud.annoState.current;
+          var selected = _this.element.find('.mirador-osd-edit-mode.selected');
+          var shape = null;
+          if (selected) {
+            shape = selected.find('.material-icons').html();
+          }
+          if (originalState === 'none') {
+            _this.hud.annoState.startup();
+          } else if (originalState === 'off') {
+            //original state if off, so don't need to do anything
           } else {
-            // if the current state is not 'none' then we need to update the annotations layer,
-            // with the current state, for the new canvas
-            //TODO
-            // if (_this.hud.annoState.current === 'annoOnCreateOff') {
-            //   _this.hud.annoState.refreshCreateOff(null);
-            // } else if (_this.hud.annoState.current === 'annoOnCreateOn') {
-            //   _this.hud.annoState.refreshCreateOn(null);
-            // }
+            _this.hud.annoState.displayOff();
+          }
+
+          if (originalState === 'pointer') {
+            _this.hud.annoState.displayOn();
+          } else if (originalState === 'shape') {
+            _this.hud.annoState.displayOn();
+            _this.hud.annoState.chooseShape(shape);
+          } else {
+            //original state if off, so don't need to do anything
           }
 
           // A hack. Pop the osd overlays layer after the canvas so
@@ -631,6 +634,7 @@
       });
     },
 
+    //TODO reuse annotationsLayer with IIIFManifestLayouts
     addAnnotationsLayer: function(element) {
       var _this = this;
       _this.annotationsLayer = new $.AnnotationsLayer({
