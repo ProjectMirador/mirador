@@ -45,12 +45,12 @@
 
       //initialize i18next
       i18n.init({
-        fallbackLng: 'en', 
-        load: 'unspecific', 
-        debug: false, 
-        getAsync: true, 
+        fallbackLng: 'en',
+        load: 'unspecific',
+        debug: false,
+        getAsync: true,
         resGetPath: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('i18nPath')+'__lng__/__ns__.json'
-      }, _this.setupViewer.bind(_this)); 
+      }, _this.setupViewer.bind(_this));
       // because this is a callback, we need to bind "_this" to explicitly retain the calling context of this function (the viewer object instance));
     },
 
@@ -168,7 +168,7 @@
           _this.eventEmitter.publish('DISABLE_WINDOW_FULLSCREEN');
         }
       });
-      
+
       jQuery(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function() {
         _this.eventEmitter.publish('MAINMENU_FULLSCREEN_BUTTON');
         // in case the user clicked ESC instead of clicking on the toggle fullscreen button, reenable the window fullscreen button
@@ -289,18 +289,13 @@
     },
 
     loadManifestFromConfig: function(options) {
-      // check if there are available slots, otherwise don't process this object from config
-      //if we have more windowObjects that slots in the layout, return
-      // it may not be necesary to set the slotAddress here since it is also covered in workspace
       var _this = this;
-      var slotAddress = options.slotAddress ? options.slotAddress : this.workspace.getAvailableSlot() ? this.workspace.getAvailableSlot().layoutAddress : null;
-      options.slotAddress = slotAddress;
-      if (!slotAddress) {
-        return;
-      }
 
       //make a copy of options and pass that so we don't get a circular reference
       var windowConfig = jQuery.extend(true, {}, options);
+      //delete this old set of options (because they will be replaced by the actions from ADD_WINDOW)
+      _this.eventEmitter.publish('DELETE_FROM_CONFIG', options);
+      
       _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
     }
   };

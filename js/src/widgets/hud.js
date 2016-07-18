@@ -6,7 +6,6 @@
       element:   null,
       windowId:  null,
       annoState: null,
-      showAnnotations: true,
       annoEndpointAvailable: false,
       eventEmitter: null
     }, options);
@@ -19,25 +18,27 @@
     init: function() {
       this.createStateMachines();
 
+      var showAnno = typeof this.showAnno !== 'undefined' ? this.showAnno : this.canvasControls.annotations.annotationLayer,
+      showImageControls = typeof this.showImageControls !== 'undefined' ? this.showImageControls : this.canvasControls.imageManipulation.manipulationLayer;
       this.element = jQuery(this.template({
         showNextPrev : this.showNextPrev,
         showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable,
-        showAnno : this.canvasControls.annotations.annotationLayer,
-        showImageControls : this.canvasControls.imageManipulation.manipulationLayer
+        showAnno : showAnno,
+        showImageControls : showImageControls
       })).appendTo(this.appendTo);
 
-      this.contextControls = new $.ContextControls({
-        element: null,
-        container: this.element.find('.mirador-osd-context-controls'),
-        mode: 'displayAnnotations',
-        windowId: this.windowId,
-        canvasControls: this.canvasControls,
-        annoEndpointAvailable: this.annoEndpointAvailable,
-        availableAnnotationTools: this.availableAnnotationTools,
-        availableAnnotationStylePickers: this.availableAnnotationStylePickers,
-        state: this.state,
-        eventEmitter: this.eventEmitter
-      });
+      if (showAnno || showImageControls) {
+        this.contextControls = new $.ContextControls({
+          element: null,
+          container: this.element.find('.mirador-osd-context-controls'),
+          mode: 'displayAnnotations',
+          windowId: this.windowId,
+          canvasControls: this.canvasControls,
+          annoEndpointAvailable: this.annoEndpointAvailable,
+          availableAnnotationTools: this.availableAnnotationTools,
+          eventEmitter: this.eventEmitter
+        });
+      }
 
       this.bindEvents();
     },
