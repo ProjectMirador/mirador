@@ -36,6 +36,8 @@
           canvasControls: this.canvasControls,
           annoEndpointAvailable: this.annoEndpointAvailable,
           availableAnnotationTools: this.availableAnnotationTools,
+          availableAnnotationStylePickers: this.availableAnnotationStylePickers,
+          state: this.state,
           eventEmitter: this.eventEmitter
         });
       }
