@@ -64,5 +64,6 @@
     "borderColorTooltip": "Choose border color",
     "borderTypeTooltip": "Choose border style",
     "fillColorTooltip": "Choose fill color",
-    "cancelAnnotation": "Do you want to cancel this annotation?"
+    "cancelAnnotation": "Do you want to cancel this annotation?",
+    "deleteAnnotation": "Do you want to delete this annotation and all associated shapes?"
 }
