@@ -136,7 +136,7 @@
     'mainMenuSettings': {
       'show': true,
       'buttons' : {
-        'bookmark' : true,
+        'bookmark' : false,
         'layout' : true,
         'options' : false,
         'fullScreenViewer': true
@@ -179,7 +179,7 @@
      *  }
      **/
     'annotationEndpoint': {},
-    
+
     'annotationBodyEditor': {
       'module': 'TinyMCEAnnotationBodyEditor',
       'options': {}
