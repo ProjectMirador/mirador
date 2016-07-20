@@ -87,6 +87,28 @@
             item.segments[2].handleOut = item.segments[2].handleOut.rotate(180, item.segments[2]);
           }
 
+          if (!item.data.deleteIcon) {
+            item.data.deleteIcon = new overlay.annotationUtils.DeleteActionIcon(overlay.paperScope, {
+              name: item.name + this.partOfPrefix + 'delete',
+              fillColor: item.selectedColor
+            });
+
+            item.data.deleteIcon.addData('parent', item);
+            item.data.deleteIcon.addData('pivot',item.segments[7].point);
+            item.data.deleteIcon.addData('type', 'deleteIcon');
+            item.data.deleteIcon.addData('self', item.data.deleteIcon);
+
+
+            item.data.deleteIcon.setPosition(item.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom).rotate(item.data.rotation)));
+            item.data.deleteIcon.setOnMouseDownListener(overlay);
+
+          }
+
+          if (!item.data.group) {
+            item.data.group = new overlay.annotationUtils.Group(overlay.paperScope,[item,item.data.deleteIcon.getItem(),item.data.deleteIcon.getMask().getItem()]);
+          }
+
+
           // if (!item.data.rotationIcon) {
           //   item.data.rotationIcon = new overlay.annotationUtils.Icon(overlay.paperScope, {
           //     source: overlay.state.getStateProperty('buildPath') + overlay.state.getStateProperty('imagesPath') + 'rotate_icon.png',
@@ -112,12 +134,45 @@
           //   });
           // }
 
+          if(item.contains(item.data.deleteIcon.getItem().position)){
+            item.data.deleteIcon.setPosition(item.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom).rotate(item.data.rotation)));
+            item.data.deleteIcon.rotate(180,item.data.deleteIcon.getData('pivot'));
+            item.data.deleteIcon.rotate(180);
+          }
+
         } else {
           // if (item.data.rotationIcon) {
           //   item.data.rotationIcon.remove();
           //   item.data.rotationIcon = null;
           // }
+
+          if(item.data.group){
+            item.data.group.remove();
+            item.data.group = null;
+            overlay.paperScope.project.activeLayer.addChild(item);
+          }
+
+          if(item.data.deleteIcon){
+            item.data.deleteIcon.remove();
+            item.data.deleteIcon = null;
+          }
+
           item.segments[2].handleOut = new overlay.paperScope.Point(0, 0);
+        }
+      }
+    },
+
+    onResize:function(item,overlay){
+      if(item._name.toString().indexOf(this.partOfPrefix)!== -1){
+        if(item._name.toString().indexOf('delete') !== -1){
+          item.data.self.setPosition(item.data.self.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom).rotate(item.data.parent.data.rotation)));
+
+          if(item.data.parent.contains(item.position)){
+            item.data.self.rotate(180,item.data.self.getData('pivot'));
+            item.data.self.rotate(180);
+          }
+
+          item.data.self.resize(24 *  1 / overlay.paperScope.view.zoom);
         }
       }
     },
@@ -151,6 +206,22 @@
         overlay.path.segments[i].point.y += event.delta.y;
       }
       //overlay.path.data.rotationIcon.translateByXY(event.delta.x, event.delta.y);
+      overlay.path.data.deleteIcon.translateByXY(event.delta.x,event.delta.y);
+    },
+
+    rotate:function(event,overlay){
+      var center = overlay.path.position;
+      var rotation = Math.atan2(event.point.y - center.y + event.delta.y, event.point.x - center.x + event.delta.x) - Math.atan2(event.point.y - center.y, event.point.x - center.x);
+      rotation = rotation * (180 / Math.PI);
+
+      //overlay.path.rotate(rotation, overlay.path.position);
+
+      overlay.path.data.group.rotate(rotation,overlay.path.position);
+
+      overlay.path.data.deleteIcon.rotate(-rotation);
+      // overlay.path.data.rotationIcon.rotate(rotation, overlay.path.position);
+
+      overlay.path.data.rotation += rotation;
     },
 
     onMouseDrag: function (event, overlay) {
@@ -160,16 +231,7 @@
       }
 
       if (overlay.mode === 'rotate') {
-        var center = overlay.path.position;
-        var oldPoint = new overlay.paperScope.Point(event.point.x - center.x, event.point.y - center.y);
-        var newPoint = new overlay.paperScope.Point(event.point.x - center.x + event.delta.x, event.point.y - center.y + event.delta.y);
-        var rotation = Math.atan2(newPoint.y, newPoint.x) - Math.atan2(oldPoint.y, oldPoint.x);
-        rotation = rotation * (180 / Math.PI);
-        overlay.path.rotate(rotation, overlay.path.position);
-
-       // overlay.path.data.rotationIcon.rotate(rotation, overlay.path.position);
-
-        overlay.path.data.rotation += rotation;
+        this.rotate(event, overlay);
         return;
       }
 
@@ -211,6 +273,9 @@
           overlay.path.segments[8].point = overlay.path.segments[8].point.add(trTop);
         }
         if (moveBottomSize) {
+
+          overlay.path.data.deleteIcon.translateByPoint(translationY);
+
           overlay.path.segments[7].point = overlay.path.segments[7].point.add(translationY);
           var trBottom = translationY.clone();
           trBottom = trBottom.multiply((1 + Math.sqrt(1 / 2)) / 2);
@@ -248,6 +313,7 @@
         if (moveRightSize || moveLeftSize) {
           translationX = translationX.multiply(0.5);
           //overlay.path.data.rotationIcon.translateByPoint(translationX);
+          overlay.path.data.deleteIcon.translateByPoint(translationX);
           overlay.path.segments[1].point = overlay.path.segments[1].point.add(translationX);
           overlay.path.segments[2].point = overlay.path.segments[2].point.add(translationX);
           overlay.path.segments[3].point = overlay.path.segments[3].point.add(translationX);
@@ -258,6 +324,11 @@
         if (overlay.path.contains(point)) {
           overlay.path.segments[2].handleOut = overlay.path.segments[2].handleOut.rotate(180, overlay.path.segments[2]);
           //overlay.path.data.rotationIcon.translateByPoint(overlay.path.segments[2].handleOut.multiply(2));
+        }
+
+        if(overlay.path.contains(overlay.path.data.deleteIcon.getItem().position)){
+          overlay.path.data.deleteIcon.rotate(180,overlay.path.data.deleteIcon.getData('pivot'));
+          overlay.path.data.deleteIcon.rotate(180);
         }
 
         if (overlay.path.segments.length > 10) {
@@ -294,18 +365,11 @@
         return;
       }
 
-      var cursor = 'pencil';
+      var cursor = '';
 
       // mouse over attached icon
       if(hitResult.type === 'pixel'){
-        if(hitResult.item._name.toString().indexOf('rotate') !==-1){
-          cursor = 'repeat';
-        }
-        jQuery(overlay.viewer.canvas).awesomeCursor(cursor, {
-          color: 'white',
-          hotspot: 'center'
-        });
-
+        jQuery(overlay.viewer.canvas).css('cursor', 'pointer');
         return;
       }
 

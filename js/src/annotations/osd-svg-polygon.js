@@ -4,7 +4,8 @@
       name: 'Polygon',
       logoClass: 'timeline',
       idPrefix: 'rough_path_',
-      tooltip: 'polygonTooltip'
+      tooltip: 'polygonTooltip',
+      partOfPrefix:'_partOf'
     }, options);
 
     this.init();
@@ -33,7 +34,80 @@
     updateSelection: function(selected, item, overlay) {
       if (item._name.toString().indexOf(this.idPrefix) != -1) {
         item.selected = selected;
+
+        if(selected){
+          if (!item.data.deleteIcon) {
+            item.data.deleteIcon = new overlay.annotationUtils.DeleteActionIcon(overlay.paperScope, {
+              name: item.name + this.partOfPrefix + 'delete',
+              fillColor:item.selectedColor
+            });
+            item.data.deleteIcon.addData('pivot',new overlay.paperScope.Point(this.getPivotPointForDeleteIcon(item)));
+            item.data.deleteIcon.addData('type', 'deleteIcon');
+            item.data.deleteIcon.addData('self', item.data.deleteIcon);
+            item.data.deleteIcon.addData('parent', item);
+            item.data.deleteIcon.setPosition(item.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom)));
+            item.data.deleteIcon.setOnMouseDownListener(overlay);
+          }
+        }else{
+
+          if(item.data.deleteIcon){
+            item.data.deleteIcon.remove();
+            item.data.deleteIcon = null;
+          }
+        }
       }
+    },
+
+    onResize:function(item,overlay){
+      if(item._name.toString().indexOf(this.partOfPrefix)!== -1){
+        if(item._name.toString().indexOf('delete') !==-1){
+
+          item.data.self.setPosition(item.data.self.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom)));
+          item.data.self.resize(24 *  1 / overlay.paperScope.view.zoom);
+        }
+      }
+    },
+
+    getPivotPointForDeleteIcon:function(item){
+      var points = [];
+
+      for(var i=0;i<item.segments.length;i++){
+        points.push(item.segments[i].point);
+      }
+
+      return {
+        x:this.getGeometricCenterOfPoints(points).x,
+        y:this.getLowestPoint(points).y
+      };
+    },
+
+    getLowestPoint: function (points) {
+      var lx = 0;
+      var ly = 0;
+
+      for (var i = 0; i < points.length; i++) {
+        lx = Math.max(lx, points[i].x);
+        ly = Math.max(ly, points[i].y);
+      }
+
+      return {
+        x: lx,
+        y: ly
+      };
+    },
+
+    getGeometricCenterOfPoints: function (points) {
+      var cx = 0;
+      var cy = 0;
+      for(var i= 0;i<points.length;i++){
+        cx +=points[i].x;
+        cy +=points[i].y;
+      }
+
+      return {
+        x:cx/points.length,
+        y:cy/points.length
+      };
     },
 
     onHover:function(activate,shape,hoverColor){
@@ -52,7 +126,6 @@
     },
 
     onMouseUp: function(event, overlay) {
-      // Empty block.
     },
 
     onMouseDrag: function(event, overlay) {
@@ -60,10 +133,23 @@
         if (overlay.segment) {
           overlay.segment.point.x += event.delta.x;
           overlay.segment.point.y += event.delta.y;
-        } else if (overlay.path) {
+
+          var path = overlay.segment.path;
+          path.data.deleteIcon.addData('pivot',new overlay.paperScope.Point(this.getPivotPointForDeleteIcon(path)));
+          path.data.deleteIcon.setPosition(path.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom)));
+
+          return;
+        }
+
+        if (overlay.path) {
           overlay.path.position.x += event.delta.x;
           overlay.path.position.y += event.delta.y;
+          if(overlay.path.data.deleteIcon){
+            overlay.path.data.deleteIcon.translateByXY(event.delta.x,event.delta.y);
+          }
+
         }
+
       }
     },
 
@@ -74,6 +160,12 @@
     onMouseDown: function(event, overlay) {
       var hitResult = overlay.paperScope.project.hitTest(event.point, overlay.hitOptions);
       if (hitResult && hitResult.item._name.toString().indexOf(this.idPrefix) != -1) {
+
+        if (hitResult.item._name.toString().indexOf(this.partOfPrefix) !== -1) {
+          hitResult.item.data.self.onMouseDown();
+          return;
+        }
+
         if (!overlay.path) {
           overlay.mode = 'edit';
           overlay.segment = null;
@@ -85,10 +177,17 @@
       } else {
         document.body.style.cursor = "default";
       }
+
+
       if (overlay.mode === '') {
         overlay.path = this.createShape(event.point, overlay);
       } else if (overlay.mode === 'create') {
         overlay.path.add(event.point);
+
+        overlay.path.data.deleteIcon.addData('pivot',new overlay.paperScope.Point(this.getPivotPointForDeleteIcon(overlay.path)));
+        overlay.path.data.deleteIcon.setPosition(overlay.path.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom)));
+
+
       } else if (overlay.mode === 'edit') {
         if (hitResult) {
           if (event.modifiers.shift) {
@@ -112,6 +211,8 @@
     },
 
     onDoubleClick: function(event, overlay) {
+      // I am able to create additional annotations to current shape on double click
+      // Is this okey?
       if (overlay.path) {
         if (overlay.path.segments[0].point.getDistance(overlay.path.segments[overlay.path.segments.length - 1].point)*overlay.paperScope.view.zoom < overlay.hitOptions.tolerance) {
           overlay.path.closed = true;

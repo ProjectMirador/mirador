@@ -148,6 +148,7 @@ describe('Pin', function() {
         'x': 3,
         'y': -3
       });
+      this.pin.updateSelection(true,this.shape,overlay);
       overlay.mode = 'translate';
       overlay.path = this.shape;
       var expected = [];

@@ -510,26 +510,9 @@ describe('Ellipse', function() {
       expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
     });
 
-    it('should change cursor using awesomeCursor lib',function(){
-      var hitResult = {
-        type: 'pixel',
-        item: {
-          '_name': {
-            toString: function () {
-              return 'rotate';
-            }
-          }
-        }
-      };
-
-      overlay.viewer.canvas = this.canvas;
-      jQuery.prototype.awesomeCursor = jasmine.createSpy().and.callThrough();
-
-      this.ellipse.setCursor(hitResult,overlay);
-
-      expect(jQuery.prototype.awesomeCursor.calls.count()).toBe(1);
-
-    });
+    // it('should change cursor when hovering icon',function(){
+    //
+    // });
 
     it('should change cursor to default',function(){
       var event = TestUtils.getEvent({},{

@@ -19,10 +19,13 @@
           segments: true,
           tolerance: 0
         },
+        selectedColor:'red',
         fitFixedSizeShapes: jasmine.createSpy(),
         fixedShapeSize: 5,
         annotationUtils: {
-          Icon: MockIcon
+          Icon: MockItem,
+          DeleteActionIcon:MockItem,
+          Group: MockGroup
         },
         state: {
           getStateProperty: jasmine.createSpy()
@@ -32,6 +35,6 @@
           return tool.idPrefix + '1';
         }
       }
-    },
+    }
   }
 })();
