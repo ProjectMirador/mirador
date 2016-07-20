@@ -51,7 +51,7 @@
     "saturationTooltip": "Adjust saturation",
     "grayscaleTooltip": "Toggle grayscale",
     "invertTooltip": "Invert colors",
-    "resetTooltip": "Reset all controls",
+    "resetTooltip": "Reset image",
     "rectangleTooltip": "Rectangle annotation",
     "ellipseTooltip": "Oval annotation",
     "freehandTooltip": "Freeform annotation",
