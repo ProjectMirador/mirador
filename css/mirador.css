@@ -1,8 +1,3 @@
-body { 
-  padding: 0; 
-  margin: 0; 
-  overflow: hidden; 
-}
 a {
   color: inherit; /* blue colors for links too */
   text-decoration: inherit; /* no underline */
@@ -86,9 +81,9 @@ a {
   #load-controls form {
     float: none;
   }
-  
+
   #url-load-form {
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
   }
 }
 
@@ -485,7 +480,7 @@ li.highlight {
   margin-right: 6px;
 }
 #url-load-form {
-  float: right; 
+  float: right;
 }
 #url-load-form input[type="text"] {
   width: 250px;
@@ -500,7 +495,7 @@ li.highlight {
   color:black;
 }
 #manifest-search-form input:focus, #url-load-form input:focus,
-#manifest-search-form input:focus, 
+#manifest-search-form input:focus,
 #url-load-form input:focus,
 #url-load-form input[type="submit"]:hover{
   outline:none;
@@ -908,10 +903,10 @@ li.highlight {
   font-weight: bold;
 }
 
-/* 
+/*
 .toc li:hover > h2 a {
-  font-weight: bold; 
-} 
+  font-weight: bold;
+}
 */
 .view-container {
   margin-left: 280px;
@@ -1874,10 +1869,10 @@ a.mirador-icon-window-menu, a.mirador-icon-view-type {
   width: 30px;
 }
 
-.mirador-viewer a.mirador-icon-view-type:hover, 
-.mirador-viewer a.mirador-icon-metadata-view:hover, 
-.mirador-viewer a.mirador-icon-empty-slot:hover, 
-.mirador-viewer a.mirador-icon-window-menu:hover, 
+.mirador-viewer a.mirador-icon-view-type:hover,
+.mirador-viewer a.mirador-icon-metadata-view:hover,
+.mirador-viewer a.mirador-icon-empty-slot:hover,
+.mirador-viewer a.mirador-icon-window-menu:hover,
 .mirador-viewer a.mirador-icon-toc:hover,
 .mirador-viewer a.mirador-osd-fullscreen:hover {
   color: black;

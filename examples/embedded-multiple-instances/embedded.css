@@ -8,8 +8,7 @@
 }
 
 .mirador_viewer {
-  display: block !important;
-  position: absolute !important;
+  position: absolute;
   width: 100%;
   top: 0;
   bottom: 0;
