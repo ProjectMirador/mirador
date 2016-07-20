@@ -59,7 +59,7 @@
       //add background and positioning information on the root element that is provided in config
       var backgroundImage = _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('imagesPath') + 'debut_dark.png';
       this.element.css('background-color', '#333').css('background-image','url('+backgroundImage+')').css('background-position','left top')
-      .css('background-repeat','repeat').css('position','fixed');
+      .css('background-repeat','repeat');
 
       //register Handlebars helper
       Handlebars.registerHelper('t', function(i18n_key) {
@@ -295,7 +295,7 @@
       var windowConfig = jQuery.extend(true, {}, options);
       //delete this old set of options (because they will be replaced by the actions from ADD_WINDOW)
       _this.eventEmitter.publish('DELETE_FROM_CONFIG', options);
-      
+
       _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
     }
   };
