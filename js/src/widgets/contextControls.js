@@ -34,6 +34,12 @@
 
       if (this.canvasControls.imageManipulation.manipulationLayer) {
         this.manipulationElement = jQuery(this.manipulationTemplate({
+          showRotate: this.canvasControls.imageManipulation.controls.rotate,
+          showBrightness: this.canvasControls.imageManipulation.controls.brightness,
+          showContrast: this.canvasControls.imageManipulation.controls.contrast,
+          showSaturate: this.canvasControls.imageManipulation.controls.saturate,
+          showGrayscale: this.canvasControls.imageManipulation.controls.grayscale,
+          showInvert: this.canvasControls.imageManipulation.controls.invert
         })).appendTo(this.container.find('.mirador-manipulation-controls'));
         this.setQtips(this.manipulationElement);
         this.manipulationElement.hide();
@@ -234,33 +240,45 @@
     ].join('')),
 
     manipulationTemplate: Handlebars.compile([
+                                   '{{#if showRotate}}',
                                    '<a class="hud-control mirador-osd-rotate-right" title="{{t "rotateRightTooltip"}}">',
                                    '<i class="fa fa-lg fa-rotate-right"></i>',
                                    '</a>',
                                    '<a class="hud-control mirador-osd-rotate-left" title="{{t "rotateLeftTooltip"}}">',
                                    '<i class="fa fa-lg fa-rotate-left"></i>',
                                    '</a>',
+                                   '{{/if}}',
+                                   '{{#if showBrightness}}',
                                    '<a class="hud-control mirador-osd-brightness" title="{{t "brightnessTooltip"}}">',
                                    '<i class="material-icons">wb_sunny</i>',
                                    '<i class="fa fa-caret-down"></i>',
                                    '<div class="mirador-osd-brightness-slider mirador-slider"/>',
                                    '</a>',
+                                   '{{/if}}',
+                                   '{{#if showContrast}}',
                                    '<a class="hud-control mirador-osd-contrast" title="{{t "contrastTooltip"}}">',
                                    '<i class="material-icons">brightness_6</i>',
                                    '<i class="fa fa-caret-down"></i>',
                                    '<div class="mirador-osd-contrast-slider mirador-slider"/>',
                                    '</a>',
+                                   '{{/if}}',
+                                   '{{#if showSaturate}}',
                                    '<a class="hud-control mirador-osd-saturation" title="{{t "saturationTooltip"}}">',
                                    '<i class="material-icons">gradient</i>',
                                    '<i class="fa fa-caret-down"></i>',
                                    '<div class="mirador-osd-saturation-slider mirador-slider"/>',
                                    '</a>',
+                                   '{{/if}}',
+                                   '{{#if showGrayscale}}',
                                    '<a class="hud-control mirador-osd-grayscale" title="{{t "grayscaleTooltip"}}">',
                                    '<i class="material-icons">filter_b_and_w</i>',
                                    '</a>',
+                                   '{{/if}}',
+                                   '{{#if showInvert}}',
                                    '<a class="hud-control mirador-osd-invert" title="{{t "invertTooltip"}}">',
                                    '<i class="material-icons">invert_colors</i>',
                                    '</a>',
+                                   '{{/if}}',
                                    '<a class="hud-control mirador-osd-reset" title="{{t "resetTooltip"}}">',
                                    '<i class="fa fa-lg fa-refresh"></i>',
                                    '</a>'

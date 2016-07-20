@@ -95,6 +95,13 @@
       }
       _this.getAnnotations();
 
+      // if manipulationLayer is true,  but all individual options are set to false, set manipulationLayer to false
+      if (this.canvasControls.imageManipulation.manipulationLayer) {
+        this.canvasControls.imageManipulation.manipulationLayer = !Object.keys(this.canvasControls.imageManipulation.controls).every(function(element, index, array) {
+          return _this.canvasControls.imageManipulation.controls[element] === false;
+        });
+      }
+
       //for use by SidePanel, which needs to know if the current view can have the annotations tab
       _this.eventEmitter.publish(('windowUpdated'), {
         id: _this.id,
@@ -293,7 +300,7 @@
       });
 
       _this.eventEmitter.subscribe('UPDATE_FOCUS_IMAGES.' + this.id, function(event, images) {
-        _this.updateFocusImages(images.array); 
+        _this.updateFocusImages(images.array);
       });
 
       _this.eventEmitter.subscribe('HIDE_ICON_TOC.' + this.id, function(event) {
@@ -316,13 +323,13 @@
         var visible = !_this.bottomPanelVisible;
         _this.bottomPanelVisibility(visible);
       });
-      
+
       _this.eventEmitter.subscribe('DISABLE_WINDOW_FULLSCREEN', function(event) {
         _this.element.find('.mirador-osd-fullscreen').hide();
       });
 
       _this.eventEmitter.subscribe('ENABLE_WINDOW_FULLSCREEN', function(event) {
-        _this.element.find('.mirador-osd-fullscreen').show();        
+        _this.element.find('.mirador-osd-fullscreen').show();
       });
     },
 
@@ -506,7 +513,7 @@
         this.sidePanel.update('annotations', annotationsTabAvailable);
       }
     },
- 
+
     get: function(prop, parent) {
       if (parent) {
         return this[parent][prop];
@@ -752,7 +759,7 @@
     updateManifestInfo: function() {
       var _this = this;
       _this.element.find('.mirador-icon-view-type > i:first').removeClass().addClass(_this.iconClasses[_this.viewType]);
-      
+
       if (this.focusOverlaysAvailable[this.viewType].overlay.MetadataView) {
         this.element.find('.mirador-icon-metadata-view').addClass('selected');
       }
