@@ -84,7 +84,7 @@
         targetElement: jQuery(this.osdViewer.element),
         state: _this.state,
         eventEmitter: _this.eventEmitter,
-        windowId: _this.parent.windowId
+        windowId: _this.windowId
       });
       this.annoTooltip.initializeViewerUpgradableToEditor({
         container: windowElement,
@@ -139,7 +139,7 @@
       }
       this.svgOverlay.paperScope.view.draw();
       if (_this.svgOverlay.availableExternalCommentsPanel) {
-        _this.eventEmitter.publish('annotationMousePosition.' + _this.parent.windowId, [annotations]);
+        _this.eventEmitter.publish('annotationMousePosition.' + _this.windowId, [annotations]);
         return;
       }
       _this.annoTooltip.showViewer({
