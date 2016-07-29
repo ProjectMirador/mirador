@@ -236,6 +236,9 @@
         }
 
         var translation = new overlay.paperScope.Point(event.delta.x, event.delta.y);
+        var osdPoint = new OpenSeadragon.Point(event.event.offsetX, event.event.offsetY);
+        console.log(osdPoint);
+        console.log(overlay.viewer.viewport.pointFromPixel(osdPoint));
         var rot = overlay.path.data.rotation;
         translation = translation.rotate(-rot);
         var translationX = new overlay.paperScope.Point(translation.x, 0);
