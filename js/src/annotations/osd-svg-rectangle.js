@@ -4,10 +4,8 @@
       name: 'Rectangle',
       logoClass: 'check_box_outline_blank',
       idPrefix: 'rectangle_',
-      partOfPrefix:'_partOf',
       tooltip: 'rectangleTooltip'
     }, options);
-
     this.init();
   };
 

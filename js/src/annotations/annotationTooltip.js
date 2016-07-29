@@ -94,7 +94,9 @@
 
             jQuery(selector + ' a.save').on("click", function(event) {
               event.preventDefault();
-
+              if(!params.onSaveClickCheck()){
+                return;
+              }
               var annotation = _this.activeEditor.createAnnotation();
               if (params.onAnnotationCreated) { params.onAnnotationCreated(annotation); }
               // return to pointer mode
@@ -239,6 +241,11 @@
         var display = jQuery(this).parents('.annotation-editor');
         var id = display.attr('data-anno-id');
         var oaAnno = viewerParams.getAnnoFromRegion(id)[0];
+
+        if(!viewerParams.onSaveClickCheck(oaAnno)){
+          return;
+        }
+
         _this.activeEditor.updateAnnotation(oaAnno);
         viewerParams.onAnnotationSaved(oaAnno);
         _this.unFreezeQtip(api, oaAnno, viewerParams);

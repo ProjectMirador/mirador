@@ -90,7 +90,21 @@
         container: windowElement,
         viewport: windowElement,
         getAnnoFromRegion: _this.getAnnoFromRegion.bind(this),
+        onSaveClickCheck: function (oaAnno) {
+
+          if (!_this.svgOverlay.draftPaths.length) {
+            // TODO use global notification system
+            return window.confirm('There are no shapes related to this annotation. Saving the annotation will delete it.');
+          }
+          return true;
+        },
         onAnnotationSaved: function(oaAnno) {
+
+          if(!_this.svgOverlay.draftPaths.length){
+            _this.eventEmitter.publish('annotationDeleted.' + _this.windowId, [oaAnno['@id']]);
+            return;
+          }
+
           var svg = _this.svgOverlay.getSVGString(_this.svgOverlay.draftPaths);
           oaAnno.on = {
             "@type": "oa:SpecificResource",

@@ -4,7 +4,6 @@
       name: 'Ellipse',
       logoClass: 'radio_button_unchecked',
       idPrefix: 'ellipse_',
-      partOfPrefix:'_partOf',
       tooltip: 'ellipseTooltip'
     }, options);
 

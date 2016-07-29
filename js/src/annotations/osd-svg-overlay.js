@@ -3,6 +3,7 @@
     if (this.svgOverlayTools) {
       return this.svgOverlayTools;
     }
+    options.partOfPrefix = '_partOf';
     this.svgOverlayTools = [new $.Rectangle(options), new $.Freehand(options), new $.Polygon(options), new $.Ellipse(options), new $.Pin(options)];
     return this.svgOverlayTools;
   };
@@ -35,6 +36,7 @@
       fixedShapeSize: drawingToolsSettings.fixedShapeSize,
       selectedColor: drawingToolsSettings.selectedColor || '#004c66',
       shapeHandleSize:drawingToolsSettings.shapeHandleSize,
+      partOfPrefix:'_partOf',
       hitOptions: {
         handles: true,
         stroke: true,
@@ -43,7 +45,6 @@
       }
     });
 
-    // Initialization of overlay object.
     this.tools = $.getTools(drawingToolsSettings);
     this.currentTool = null;
     // Default colors.
@@ -71,6 +72,12 @@
     this.viewer.addHandler('resize', _thisResize);
     this.viewer.addHandler('rotate', _thisResize);
     this.viewer.addHandler('constrain', _thisResize);
+
+    var _thisDestroy = function(){
+      _this.destroy();
+    };
+
+    this.viewer.addHandler('close',_thisDestroy);
 
 
     _this.eventEmitter.subscribe('toggleDrawingTool.' + _this.windowId, function(event, tool) {
@@ -107,6 +114,14 @@
           break;
         }
       }
+    });
+
+    _this.eventEmitter.subscribe('deleteShape.' + _this.windowId, function (event, shape) {
+      // TODO use global notification system
+      if (window.confirm("Are you sure you want to delete the shape?")) {
+        _this.deleteShape(shape);
+      }
+
     });
 
     _this.eventEmitter.subscribe('changeBorderColor.' + _this.windowId, function(event, color) {
@@ -200,6 +215,18 @@
       });
     },
 
+    deleteShape:function(shape){
+
+      for(var i=0;i<this.draftPaths.length;i++){
+        if(this.draftPaths[i]._name.toString() === shape._name.toString()){
+          this.draftPaths.splice(i,1);
+          break;
+        }
+      }
+      this.removeFocus();
+      shape.remove();
+    },
+
     onMouseUp: function(event) {
       if (!this.overlay.disabled) {
         event.stopPropagation();
@@ -282,6 +309,11 @@
             if (typeof hitResult.item.data.editable !== 'undefined') {
               overlayEditable = hitResult.item.data.editable;
             }
+            // if item is part of shape it is editable
+            // part of shape items only appear when the shape is selected
+            if(hitResult.item._name.toString().indexOf(this.overlay.partOfPrefix) !== -1){
+              overlayEditable = true;
+            }
             if (!overlayEditable) {
               return;
             }
@@ -289,7 +321,7 @@
         }
         if (hitResult && (!this.overlay.currentTool || (hitResult.item._name.toString().indexOf(this.overlay.currentTool.idPrefix) === -1 && this.overlay.mode === ''))) {
           var prefix = hitResult.item._name.toString();
-          prefix = prefix.substring(0, prefix.lastIndexOf('_') + 1);
+          prefix = prefix.substring(0, prefix.indexOf('_') + 1);
           for (var j = 0; j < this.overlay.tools.length; j++) {
             if (this.overlay.tools[j].idPrefix === prefix) {
               this.overlay.eventEmitter.publish('toggleDrawingTool.' + this.overlay.windowId, this.overlay.tools[j].logoClass);
@@ -709,6 +741,9 @@
       if (typeof this.annoEditorVisible === 'undefined' || !this.annoEditorVisible)  {
         this.annoTooltip.showEditor({
           annotation: {},
+          onSaveClickCheck: function () {
+            return _this.draftPaths.length;
+          },
           onAnnotationCreated: function(oaAnno) {
             var svg = _this.getSVGString(_this.draftPaths);
             oaAnno.on = {
@@ -761,6 +796,29 @@
       _this.segment = null;
       _this.path = null;
       _this.mode = '';
+    },
+
+    // Should unsubscribe from all events
+    // Should have no references in order to be garbage collected
+    destroy:function(){
+      this.eventEmitter.unsubscribe('deleteShape.' + this.windowId);
+      this.eventEmitter.unsubscribe('toggleDrawingTool.' + this.windowId);
+      this.eventEmitter.unsubscribe('toggleBorderType.' + this.windowId);
+      this.eventEmitter.unsubscribe('toggleDefaultDrawingTool.' + this.windowId);
+      this.eventEmitter.unsubscribe('deleteShape.' + this.windowId);
+      this.eventEmitter.unsubscribe('changeBorderColor.' + this.windowId);
+      this.eventEmitter.unsubscribe('changeFillColor.' + this.windowId);
+      this.eventEmitter.unsubscribe('changeBorderColor.' + this.windowId);
+      this.eventEmitter.unsubscribe('SET_OVERLAY_TOOLTIP.' + this.windowId);
+
+      this.viewer.removeAllHandlers('animation');
+      this.viewer.removeAllHandlers('open');
+      this.viewer.removeAllHandlers('animation-finish');
+      this.viewer.removeAllHandlers('update-viewport');
+      this.viewer.removeAllHandlers('resize');
+      this.viewer.removeAllHandlers('rotate');
+      this.viewer.removeAllHandlers('constrain');
+      this.viewer.removeAllHandlers('close');
     }
   };
 }(Mirador));

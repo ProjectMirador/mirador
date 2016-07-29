@@ -574,6 +574,31 @@ describe('Rectangle', function() {
 
     });
 
+    it('should resize the trash can icon',function(){
+      var _this = this;
+      var item = {
+        '_name':{
+          toString:function(){
+            return _this.rectangle.idPrefix + _this.rectangle.partOfPrefix + 'delete';
+          }
+        },
+        data:{
+          self:new overlay.annotationUtils.DeleteActionIcon(),
+          parent:{ // should use mock shape
+            data:{
+              rotation:1
+            },
+            contains:jasmine.createSpy().and.returnValue(true)
+          }
+        }
+      };
+
+      this.rectangle.onResize(item,overlay);
+
+      expect(item.data.self.resize).toHaveBeenCalledWith(24);
+      expect(item.data.self.rotate).toHaveBeenCalledWith(180);
+    });
+
   });
   
 });
