@@ -455,4 +455,23 @@ describe('Overlay', function() {
     //expect(svgTestTwo).toEqual(exportedSVGTestTwo);
   });
 
+  it('should delete shape',function(){
+
+    var mockShape = {
+      '_name': {
+        toString: function () {
+
+        }
+      },
+      remove:jasmine.createSpy()
+    };
+
+    this.overlay.draftPaths = [mockShape];
+
+    this.overlay.deleteShape(mockShape);
+
+    expect(this.overlay.draftPaths.length).toBe(0);
+    expect(mockShape.remove.calls.any()).toBe(true);
+  });
+
 });

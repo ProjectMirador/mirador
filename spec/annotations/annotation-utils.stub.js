@@ -11,6 +11,7 @@
     click: jasmine.createSpy(),
     setOnMouseDownListener: jasmine.createSpy(),
     onMouseDown: jasmine.createSpy(),
+    resize:jasmine.createSpy(),
     remove: jasmine.createSpy(),
     rotate: jasmine.createSpy(),
     getWidth: jasmine.createSpy(),
@@ -49,7 +50,8 @@
 
   AnnotationUtilsStub.prototype = {
     Icon: MockItem,
-    DeleteActionIcon: MockItem,
+    PointText:MockItem,
+    DeleteActionIcon:MockItem,
     Group: MockGroup
   };
 

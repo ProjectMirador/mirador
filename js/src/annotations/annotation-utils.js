@@ -121,8 +121,7 @@
   };
   DeleteActionIcon.prototype.setOnMouseDownListener = function (overlay) {
     this.mouseDown = function () {
-      console.log('SHOULD DELETE_SHAPE');
-      overlay.eventEmitter.publish('deleteShape.' + overlay.windowId, '');
+      overlay.eventEmitter.publish('deleteShape.' + overlay.windowId, this.getData('parent'));
     };
   };
   DeleteActionIcon.prototype.rotate = function(angle,pivot){

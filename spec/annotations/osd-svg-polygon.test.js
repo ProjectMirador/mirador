@@ -81,6 +81,22 @@ describe('Polygon', function() {
       expect(this.shape.selected).toBe(true);
     });
 
+    it('should update selection to true', function() {
+      this.polygon.updateSelection(true, this.shape, overlay);
+
+      expect(this.shape.selected).toBe(true);
+      expect(this.shape.data.deleteIcon).not.toBeUndefined;
+    });
+
+    it('should update selection to false', function() {
+      this.polygon.updateSelection(true, this.shape, overlay);
+      this.polygon.updateSelection(false, this.shape, overlay);
+
+      expect(this.shape.selected).toBe(false);
+      expect(this.shape.data.deleteIcon).toBeUndefined;
+    });
+
+
     it('should change stroke when hovering polygon',function(){
       var red = {
         r:1,
@@ -473,6 +489,32 @@ describe('Polygon', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
     });
+
+    it('should resize the trash can icon when resized',function(){
+      var _this = this;
+      var item = {
+        '_name':{
+          toString:function(){
+            return _this.polygon.idPrefix + _this.polygon.partOfPrefix + 'delete';
+          }
+        },
+        data:{
+          self:new overlay.annotationUtils.DeleteActionIcon(),
+          parent:{ // should use mock shape
+            data:{
+              rotation:1
+            },
+            contains:jasmine.createSpy().and.returnValue(true)
+          }
+        }
+      };
+
+      this.polygon.onResize(item,overlay);
+
+      expect(item.data.self.resize).toHaveBeenCalledWith(24);
+    });
+
+
   });
 
 });

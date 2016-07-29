@@ -3,7 +3,7 @@
     getOverlay: function (paperScope) {
       return {
         viewer: {
-          canvas: ''
+          canvas: '',
         },
         paperScope: paperScope,
         strokeColor: 'red',
@@ -22,11 +22,7 @@
         selectedColor:'red',
         fitFixedSizeShapes: jasmine.createSpy(),
         fixedShapeSize: 5,
-        annotationUtils: {
-          Icon: MockItem,
-          DeleteActionIcon:MockItem,
-          Group: MockGroup
-        },
+        annotationUtils: new AnnotationUtilsStub(),
         state: {
           getStateProperty: jasmine.createSpy()
         },
