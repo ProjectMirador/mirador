@@ -349,7 +349,7 @@
           jQuery(this).find('.ui-slider-handle').append(span);
         },
         slide: function(event, ui) {
-          filterValues.contrast = "contrast("+ui.value+"%)";
+          filterValues.brightness = "brightness("+ui.value+"%)";
           setFilterCSS();
           jQuery(this).find('.percent').text(ui.value + '%');
         }
@@ -403,7 +403,7 @@
           jQuery(this).find('.ui-slider-handle').append(span);
         },
         slide: function(event, ui) {
-          filterValues.contrast = "contrast("+ui.value+"%)";
+          filterValues.saturate = "saturate("+ui.value+"%)";
           setFilterCSS();
           jQuery(this).find('.percent').text(ui.value + '%');
         }

@@ -95,6 +95,13 @@
       }
       _this.getAnnotations();
 
+      // if manipulationLayer is true,  but all individual options are set to false, set manipulationLayer to false
+      if (this.canvasControls.imageManipulation.manipulationLayer) {
+        this.canvasControls.imageManipulation.manipulationLayer = !Object.keys(this.canvasControls.imageManipulation.controls).every(function(element, index, array) {
+          return _this.canvasControls.imageManipulation.controls[element] === false;
+        });
+      }
+
       //for use by SidePanel, which needs to know if the current view can have the annotations tab
       _this.eventEmitter.publish(('windowUpdated'), {
         id: _this.id,

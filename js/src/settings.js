@@ -66,8 +66,15 @@
           "annotationRefresh" : false, //whether or not to display the refresh icon for annotations
         },
         "imageManipulation" : {
-          "manipulationLayer" : true
-          //TODO: settings for individual image manipulation controls
+          "manipulationLayer" : true,
+          "controls" : {
+            "rotate" : true,
+            "brightness" : true,
+            "contrast" : true,
+            "saturate" : true,
+            "grayscale" : true,
+            "invert" : true
+          }
         }
       },
       "fullScreen" : true, //whether or not to make the window's fullScreen button visible to user
@@ -136,7 +143,7 @@
     'mainMenuSettings': {
       'show': true,
       'buttons' : {
-        'bookmark' : true,
+        'bookmark' : false,
         'layout' : true,
         'options' : false,
         'fullScreenViewer': true
@@ -179,7 +186,7 @@
      *  }
      **/
     'annotationEndpoint': {},
-    
+
     'annotationBodyEditor': {
       'module': 'TinyMCEAnnotationBodyEditor',
       'options': {}
