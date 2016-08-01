@@ -65,5 +65,10 @@
     "borderTypeTooltip": "Choose border style",
     "fillColorTooltip": "Choose fill color",
     "cancelAnnotation": "Do you want to cancel this annotation?",
-    "deleteAnnotation": "Do you want to delete this annotation and all associated shapes?"
+    "deleteAnnotation": "Do you want to delete this annotation and all associated shapes?",
+    "deleteShape":"Do you want to delete this shape?",
+    "editModalSaveAnnotationWithNoShapesMsg":"There are no shapes related to this annotation.",
+    "editModalBtnSaveWithoutShapes":"Save annotation without shapes",
+    "editModalBtnDeleteAnnotation":"Delete this annotation"
+
 }
