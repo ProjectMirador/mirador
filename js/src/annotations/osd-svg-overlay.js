@@ -227,6 +227,22 @@
       shape.remove();
     },
 
+    getMousePositionInImage: function(mousePosition) {
+      if (mousePosition.x < 0) {
+        mousePosition.x = 0;
+      }
+      if (mousePosition.x > 1) {
+        mousePosition.x = 1;
+      }
+      if (mousePosition.y < 0) {
+        mousePosition.y = 0;
+      }
+      if (mousePosition.y > (1/this.osdViewer.source.aspectRatio)) {
+        mousePosition.y = (1/this.osdViewer.source.aspectRatio);
+      }
+      return mousePosition;
+    },
+
     onMouseUp: function(event) {
       if (!this.overlay.disabled) {
         event.stopPropagation();
@@ -249,6 +265,8 @@
       if (!this.overlay.disabled) {
         event.stopPropagation();
         if (this.overlay.currentTool) {
+          var osdPoint = new OpenSeadragon.Point(event.event.offsetX, event.event.offsetY);
+          console.log(this.overlay.viewer.viewport.pointFromPixel(osdPoint));
           //we may not currently have a tool if the user is in edit mode and didn't click on an editable shape
           this.overlay.currentTool.onMouseDrag(event, this.overlay);
         }
