@@ -25,6 +25,8 @@ module.exports = function(grunt) {
   vendors = [
     'js/lib/jquery.min.js',
     'js/lib/jquery-ui.min.js',
+    'js/lib/modal.js',
+    'js/lib/bootbox.js',
     'js/lib/jquery.scrollTo.min.js',
     'js/lib/jquery.qtip.min.js',
     'js/lib/state-machine.min.js',
@@ -92,14 +94,15 @@ module.exports = function(grunt) {
       },
       css: {
         src: [
-        'css/normalize.css',
-        'css/font-awesome.min.css',
-        'css/jquery-ui.min.css',
-        'css/layout-default-latest.css',
-        'css/jquery.qtip.min.css',
-        'css/spectrum.css',
-        'css/mirador.css',
-        'css/material-icons.css'
+          'css/bootstrap.modals.css',
+          'css/normalize.css',
+          'css/font-awesome.min.css',
+          'css/jquery-ui.min.css',
+          'css/layout-default-latest.css',
+          'css/jquery.qtip.min.css',
+          'css/spectrum.css',
+          'css/mirador.css',
+          'css/material-icons.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'
       }

@@ -22,7 +22,7 @@ describe('Overlay', function() {
     this.canvas = jQuery('<canvas></canvas>');
     this.canvas.attr('id', 'draw_canvas_' + id);
     jasmine.getFixtures().set(this.canvas);
-    this.eventEmitter = new Mirador.EventEmitter(); // TODO should stub
+    this.eventEmitter = new Mirador.EventEmitter();// TODO should stub
     this.windowObjMock = {
       'windowId': id,
       'viewer': {
@@ -65,6 +65,8 @@ describe('Overlay', function() {
         }
       },
       'addHandler': function(eventName, functionBody) {
+      },
+      'removeAllHandlers':function(eventName){
       }
     };
     var drawingToolsSettings = {
@@ -73,6 +75,7 @@ describe('Overlay', function() {
       'fillColor': 'deepSkyBlue',
       'fillColorAlpha': 0.0
     };
+
     var state = new Mirador.SaveController({eventEmitter: this.eventEmitter}); // TODO should stub this
 
      state.getStateProperty = function(key) {
@@ -93,7 +96,7 @@ describe('Overlay', function() {
        return null;
      };
 
-    this.overlay = new Mirador.Overlay(this.viewerMock, this.windowObjMock.viewer.id, this.windowObjMock.windowId, state, this.eventEmitter);
+    this.overlay = new Mirador.Overlay(this.viewerMock, this.windowObjMock.viewer.id, this.windowObjMock.windowId, state, new MockEventEmitter(this.eventEmitter));
     this.overlay.annotationUtils = new AnnotationUtilsStub();
   });
 
@@ -473,5 +476,14 @@ describe('Overlay', function() {
     expect(this.overlay.draftPaths.length).toBe(0);
     expect(mockShape.remove.calls.any()).toBe(true);
   });
+
+  it('should unsubscibe from all events when destroying',function(){
+    this.overlay.destroy();
+    for(var key in this.overlay.eventEmitter.events){
+      expect(this.overlay.eventEmitter.events[key]).toBe(0);
+    }
+  });
+
+
 
 });

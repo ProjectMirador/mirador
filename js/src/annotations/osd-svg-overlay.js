@@ -79,7 +79,6 @@
 
     this.viewer.addHandler('close',_thisDestroy);
 
-
     _this.eventEmitter.subscribe('toggleDrawingTool.' + _this.windowId, function(event, tool) {
       //qtip code should NOT be here
       if (_this.disabled) {
@@ -116,13 +115,10 @@
       }
     });
 
-    _this.eventEmitter.subscribe('deleteShape.' + _this.windowId, function (event, shape) {
-      // TODO use global notification system
-      if (window.confirm("Are you sure you want to delete the shape?")) {
-        _this.deleteShape(shape);
-      }
-
-    });
+    var _thisHandleDeleteShapeEvent = function(event,shape){
+      _this.handleDeleteShapeEvent(event,shape);
+    };
+    _this.eventEmitter.subscribe('deleteShape.' + _this.windowId, _thisHandleDeleteShapeEvent);
 
     _this.eventEmitter.subscribe('changeBorderColor.' + _this.windowId, function(event, color) {
       _this.strokeColor = color;
@@ -203,6 +199,15 @@
       jQuery.data(document.body, 'draw_canvas_' + _this.windowId, mouseTool);
 
       this.listenForActions();
+    },
+
+    handleDeleteShapeEvent: function (event, shape) {
+      var _this = this;
+      new $.DialogBuilder().confirm(i18n.t('deleteShape'), function (result) {
+        if (result) {
+          _this.deleteShape(shape);
+        }
+      });
     },
 
     listenForActions: function() {
@@ -823,7 +828,6 @@
       this.eventEmitter.unsubscribe('toggleDrawingTool.' + this.windowId);
       this.eventEmitter.unsubscribe('toggleBorderType.' + this.windowId);
       this.eventEmitter.unsubscribe('toggleDefaultDrawingTool.' + this.windowId);
-      this.eventEmitter.unsubscribe('deleteShape.' + this.windowId);
       this.eventEmitter.unsubscribe('changeBorderColor.' + this.windowId);
       this.eventEmitter.unsubscribe('changeFillColor.' + this.windowId);
       this.eventEmitter.unsubscribe('changeBorderColor.' + this.windowId);
