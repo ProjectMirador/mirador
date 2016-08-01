@@ -213,7 +213,7 @@
       overlay.path.data.rotation += rotation;
     },
 
-    onMouseDrag: function (event, overlay) {
+    onMouseDrag: function (event, overlay, osdDeltaPoint) {
       if (overlay.mode == 'translate') {
         this.translate(event, overlay);
         return;
@@ -234,7 +234,6 @@
         }
 
         var translation = new overlay.paperScope.Point(event.delta.x, event.delta.y);
-        var osdPoint = new OpenSeadragon.Point(event.event.offsetX, event.event.offsetY);
         var rot = overlay.path.data.rotation;
         translation = translation.rotate(-rot);
         var translationX = new overlay.paperScope.Point(translation.x, 0);

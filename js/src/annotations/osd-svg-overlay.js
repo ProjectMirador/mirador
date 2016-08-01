@@ -242,8 +242,8 @@
       if (mousePosition.y < 0) {
         mousePosition.y = 0;
       }
-      if (mousePosition.y > (1/this.osdViewer.source.aspectRatio)) {
-        mousePosition.y = (1/this.osdViewer.source.aspectRatio);
+      if (mousePosition.y > (1/this.viewer.source.aspectRatio)) {
+        mousePosition.y = (1/this.viewer.source.aspectRatio);
       }
       return mousePosition;
     },
@@ -270,10 +270,20 @@
       if (!this.overlay.disabled) {
         event.stopPropagation();
         if (this.overlay.currentTool) {
-          var osdPoint = new OpenSeadragon.Point(event.event.offsetX, event.event.offsetY);
-          console.log(this.overlay.viewer.viewport.pointFromPixel(osdPoint));
+          var oldPoint = new OpenSeadragon.Point(event.event.offsetX, event.event.offsetY);
+          console.log("point coordinates");
+          console.log(event.point);
+          console.log("delta coordinates");
+          console.log(event.delta);
+          console.log("pixel coordinates");
+          console.log(oldPoint);
+          console.log("viewport coordinates");
+          console.log(this.overlay.viewer.viewport.pointFromPixel(oldPoint));
+          var newPoint = this.overlay.getMousePositionInImage(this.overlay.viewer.viewport.pointFromPixel(oldPoint));
+          console.log('new position');
+          console.log(newPoint);
           //we may not currently have a tool if the user is in edit mode and didn't click on an editable shape
-          this.overlay.currentTool.onMouseDrag(event, this.overlay);
+          this.overlay.currentTool.onMouseDrag(event, this.overlay, newPoint);
         }
       } else {
         var absolutePoint = {
