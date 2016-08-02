@@ -96,7 +96,7 @@
           var onAnnotationSaved = jQuery.Deferred();
 
           if (!_this.svgOverlay.draftPaths.length) {
-            new $.DialogBuilder().dialog({
+            new $.DialogBuilder(_this.svgOverlay.slotWindowElement).dialog({
               message: i18n.t('editModalSaveAnnotationWithNoShapesMsg'),
               buttons: {
                 success: {

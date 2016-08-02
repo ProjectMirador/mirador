@@ -56,13 +56,14 @@
     this.viewer = viewer;
     this.canvas = document.createElement('canvas');
     // workaround to remove focus from editor
-    jQuery(this.canvas).attr("tabindex", "0").mousedown(function(){ jQuery(this).focus();});
+    jQuery(this.canvas).attr('tabindex', '0').mousedown(function(){ jQuery(this).focus();});
     this.canvas.id = 'draw_canvas_' + this.windowId;
     // Drawing of overlay border during development.
     // this.canvas.style.border = '1px solid yellow';
     this.viewer.canvas.appendChild(this.canvas);
 
     var _this = this;
+    this.slotWindowElement = jQuery('#' + osdViewerId).parents('.window');
     this.state = state;
     this.eventEmitter = eventEmitter;
     var _thisResize = function() {
@@ -88,7 +89,7 @@
         jQuery('.qtip' + _this.windowId).qtip('hide');
         return;
       }
-      jQuery('#' + osdViewerId).parents(".window").find(".qtip-viewer").hide();
+      jQuery('#' + osdViewerId).parents('.window').find('.qtip-viewer').hide();
       _this.currentTool = null;
       for (var i = 0; i < _this.tools.length; i++) {
         if (_this.tools[i].logoClass === tool) {
@@ -103,7 +104,7 @@
         jQuery('.qtip' + _this.windowId).qtip('hide');
         return;
       }
-      jQuery('#' + osdViewerId).parents(".window").find(".qtip-viewer").hide();
+      jQuery('#' + osdViewerId).parents('.window').find('.qtip-viewer').hide();
       _this.currentTool = null;
       for (var i = 0; i < _this.availableAnnotationDrawingTools.length; i++) {
         for (var j = 0; j < _this.tools.length; j++) {
@@ -207,7 +208,7 @@
 
     handleDeleteShapeEvent: function (event, shape) {
       var _this = this;
-      new $.DialogBuilder().confirm(i18n.t('deleteShape'), function (result) {
+      new $.DialogBuilder(this.slotWindowElement).confirm(i18n.t('deleteShape'), function (result) {
         if (result) {
           _this.deleteShape(shape);
         }
@@ -276,9 +277,9 @@
       if (!this.overlay.disabled) {
         // We are in drawing mode
         if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
-          document.body.style.cursor = "pointer";
+          document.body.style.cursor = 'pointer';
         } else {
-          document.body.style.cursor = "default";
+          document.body.style.cursor = 'default';
         }
         event.stopPropagation();
         if (this.overlay.currentTool) {
@@ -417,8 +418,8 @@
       this.canvas.style.WebkitTransform = transform;
       this.canvas.style.msTransform = transform;
       this.canvas.style.transform = transform;
-      this.canvas.style.marginLeft = "0px";
-      this.canvas.style.marginTop = "0px";
+      this.canvas.style.marginLeft = '0px';
+      this.canvas.style.marginTop = '0px';
       if (this.paperScope && this.paperScope.view) {
         this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
         this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
@@ -599,7 +600,7 @@
       var paperItems = [];
       var svgParser = new DOMParser();
       var svgDOM = svgParser.parseFromString(svg, "text/xml");
-      if (svgDOM.documentElement.nodeName == "parsererror") {
+      if (svgDOM.documentElement.nodeName == 'parsererror') {
         return; // if svg is not valid XML structure - backward compatibility.
       }
       var svgTag = this.paperScope.project.importSVG(svg);
