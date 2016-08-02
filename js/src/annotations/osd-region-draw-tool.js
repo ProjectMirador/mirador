@@ -57,11 +57,13 @@
       this.svgOverlay.paperScope.project.clear();
       var _this = this;
       _this.annotationsToShapesMap = {};
-      var deferreds = jQuery.map(this.list, function(annotation) { // TODO should refactor to handle annotation without shapes
+      var deferreds = jQuery.map(this.list, function(annotation) {
         var deferred = jQuery.Deferred();
-        var shapeArray;
-        if (typeof annotation.on === 'object') {
-          if (annotation.on.selector.value.indexOf('<svg') != -1) {
+        if(annotation.on && !annotation.on.selector){
+          console.log('no shape attached on this annotation',annotation); // temporary until view for full list of annotations for current canvas is contributed
+          return deferred;
+        } else if (typeof annotation.on === 'object') {
+          if (annotation.on.selector.value.indexOf('<svg') !== -1) {
             shapeArray = _this.svgOverlay.parseSVG(annotation.on.selector.value, annotation);
           } else {
             var shape = annotation.on.selector.value.split('=')[1].split(',');
@@ -96,14 +98,20 @@
           var onAnnotationSaved = jQuery.Deferred();
 
           if (!_this.svgOverlay.draftPaths.length) {
-            new $.DialogBuilder(_this.svgOverlay.slotWindowElement).dialog({
+            new $.DialogBuilder(windowElement).dialog({
               message: i18n.t('editModalSaveAnnotationWithNoShapesMsg'),
               buttons: {
                 success: {
                   label: i18n.t('editModalBtnSaveWithoutShapes'),
-                  className: 'btn-success disabled',
+                  className: 'btn-success',
                   callback: function () {
-                    // TODO currently we do not support this option
+                    oaAnno.on = {
+                      "@type": "oa:SpecificResource",
+                      "full": _this.state.getWindowObjectById(_this.windowId).canvasID
+                    };
+                    //save to endpoint
+                    _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
+                    onAnnotationSaved.resolve();
                   }
                 },
                 danger: {

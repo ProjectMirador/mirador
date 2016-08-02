@@ -63,7 +63,7 @@
     this.viewer.canvas.appendChild(this.canvas);
 
     var _this = this;
-    this.slotWindowElement = jQuery('#' + osdViewerId).parents('.window');
+    this.slotWindowElement = state.getWindowElement(this.windowId);
     this.state = state;
     this.eventEmitter = eventEmitter;
     var _thisResize = function() {
