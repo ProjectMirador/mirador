@@ -424,10 +424,8 @@
         if (overlay.mode != 'deform' && overlay.mode != 'translate' && overlay.mode != 'create') {
 
           if (hitResult.item._name.toString().indexOf(this.partOfPrefix) !== -1) {
-
             hitResult.item.data.self.onMouseDown();
             return;
-
           }
 
           if (hitResult.type === 'segment') {

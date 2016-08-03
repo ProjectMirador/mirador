@@ -4,7 +4,7 @@
       name: 'Freehand',
       logoClass: 'gesture',
       idPrefix: 'smooth_path_',
-      tooltip: 'freehandTooltip',
+      tooltip: 'freehandTooltip'
     }, options);
 
     this.init();
@@ -31,7 +31,8 @@
     },
 
     updateSelection: function(selected, item, overlay) {
-      if (item._name.toString().indexOf(this.idPrefix) != -1) {
+      if (item._name.toString().indexOf(this.idPrefix) !== -1) {
+
         item.selected = selected;
 
         if(selected){
@@ -44,6 +45,7 @@
             item.data.deleteIcon.addData('type', 'deleteIcon');
             item.data.deleteIcon.addData('self', item.data.deleteIcon);
             item.data.deleteIcon.addData('parent', item);
+
             item.data.deleteIcon.setPosition(item.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom)));
             item.data.deleteIcon.setOnMouseDownListener(overlay);
           }
@@ -124,15 +126,19 @@
         delete shape.data.hovered;
       }
     },
+
     onMouseUp: function(event, overlay) {
-      if (overlay.path) {
-        overlay.path.simplify();
-        overlay.onDrawFinish();
+
+      if(overlay.mode === 'create'){
+        if (overlay.path) {
+          overlay.path.simplify();
+          overlay.onDrawFinish();
+        }
       }
     },
 
     onMouseDrag: function(event, overlay) {
-      if (overlay.mode === 'edit') {
+      if (overlay.mode === 'deform') {
         if (overlay.segment) {
           overlay.segment.point.x += event.delta.x;
           overlay.segment.point.y += event.delta.y;
@@ -142,24 +148,30 @@
           path.data.deleteIcon.addData('pivot',new overlay.paperScope.Point(this.getPivotPointForDeleteIcon(path)));
           path.data.deleteIcon.setPosition(path.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom)));
 
-
-        } else if (overlay.path) {
-          overlay.path.position.x += event.delta.x;
-          overlay.path.position.y += event.delta.y;
-          if(overlay.path.data.deleteIcon){
-            overlay.path.data.deleteIcon.translateByXY(event.delta.x,event.delta.y);
-          }
         }
 
+        return;
+      }
+
+      if (overlay.mode === 'translate') {
+        if (overlay.path) {
+          overlay.path.position.x += event.delta.x;
+          overlay.path.position.y += event.delta.y;
+          if (overlay.path.data.deleteIcon) {
+            overlay.path.data.deleteIcon.translateByXY(event.delta.x, event.delta.y);
+          }
+        }
         return;
       }
 
       if (overlay.mode === 'create') {
         overlay.path.add(event.point);
 
-        overlay.path.data.deleteIcon.addData('pivot',new overlay.paperScope.Point(this.getPivotPointForDeleteIcon(overlay.path)));
-        overlay.path.data.deleteIcon.setPosition(overlay.path.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom)));
-      }
+        if(overlay.path.data.deleteIcon){
+          overlay.path.data.deleteIcon.addData('pivot',new overlay.paperScope.Point(this.getPivotPointForDeleteIcon(overlay.path)));
+          overlay.path.data.deleteIcon.setPosition(overlay.path.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom)));
+        }
+       }
     },
 
     onMouseMove: function(event, overlay) {
@@ -169,45 +181,44 @@
     onMouseDown: function(event, overlay) {
       var hitResult = overlay.paperScope.project.hitTest(event.point, overlay.hitOptions);
       if (hitResult && hitResult.item._name.toString().indexOf(this.idPrefix) != -1) {
-
         if (hitResult.item._name.toString().indexOf(this.partOfPrefix) !== -1) {
           hitResult.item.data.self.onMouseDown();
           return;
         }
 
-        if (!overlay.path) {
-          overlay.mode = 'edit';
-          overlay.segment = null;
-          overlay.path = null;
-          document.body.style.cursor = "move";
-        } else {
-          document.body.style.cursor = "default";
-        }
-      } else {
-        document.body.style.cursor = "default";
-      }
-      if (overlay.mode === '') {
-        overlay.path = this.createShape(event.point, overlay);
-      } else if (overlay.mode === 'edit') {
-        if (hitResult) {
-          if (event.modifiers.shift) {
-            if (hitResult.type == 'segment') {
-              hitResult.segment.remove();
-              hitResult.item.smooth();
-            }
-          } else if (overlay.path) {
-            overlay.segment = null;
-            overlay.path = null;
-            overlay.mode = '';
-          } else {
+        if (overlay.mode !== 'create') {
+
+          if (hitResult.type === 'stroke') {
+            overlay.mode = 'translate';
             overlay.path = hitResult.item;
-            if (hitResult.type == 'segment') {
-              overlay.segment = hitResult.segment;
-            } else if (hitResult.type == 'fill') {
-              overlay.paperScope.project.activeLayer.addChild(hitResult.item);
+            return;
+          }
+
+          if (hitResult.type === 'segment' || hitResult.type === 'handle-out' || hitResult.type === 'handle-in') {
+            // When shift is being pressed and segment point selected it deletes
+            if(event.modifiers.shift){
+              if(hitResult.item.segments.length > 2){
+                hitResult.segment.remove();
+                return;
+              }
+
             }
+            overlay.mode = 'deform';
+            overlay.segment = hitResult.segment;
+            overlay.path = hitResult.item;
+            return;
           }
         }
+      } else {
+        if(overlay.mode !=='create'){
+          overlay.mode = '';
+        }
+      }
+
+
+      if (overlay.mode === '') {
+        overlay.path = this.createShape(event.point, overlay);
+        return;
       }
     },
 
