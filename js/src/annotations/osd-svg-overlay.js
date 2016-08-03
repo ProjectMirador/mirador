@@ -227,6 +227,13 @@
         _this.annoEditorVisible = options.visible;
         _this.draftPaths = options.paths;
       });
+
+      this.eventEmitter.subscribe('CANCEL_ACTIVE_ANNOTATIONS.' + this.windowId, function(event) {
+        //for now, don't worry about getting user confirmation, just cancel everything
+        _this.clearDraftData();
+        _this.annoTooltip = null;
+        _this.annoEditorVisible = false;
+      });
     },
 
     deleteShape:function(shape){

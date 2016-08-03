@@ -60,7 +60,7 @@
       var deferreds = jQuery.map(this.list, function(annotation) {
         var deferred = jQuery.Deferred();
         if(annotation.on && !annotation.on.selector){
-          console.log('no shape attached on this annotation',annotation); // temporary until view for full list of annotations for current canvas is contributed
+          // temporary until view for full list of annotations for current canvas is contributed
           return deferred;
         } else if (typeof annotation.on === 'object') {
           if (annotation.on.selector.value.indexOf('<svg') !== -1) {
