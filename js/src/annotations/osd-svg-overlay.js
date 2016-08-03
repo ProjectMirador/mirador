@@ -83,6 +83,10 @@
 
     this.viewer.addHandler('close',_thisDestroy);
 
+    _this.eventEmitter.subscribe('modeChange.' + _this.windowId,function(event,newMode){
+      _this.currentTool = '';
+    });
+
     _this.eventEmitter.subscribe('toggleDrawingTool.' + _this.windowId, function(event, tool) {
       //qtip code should NOT be here
       if (_this.disabled) {
@@ -857,6 +861,7 @@
       this.eventEmitter.unsubscribe('changeFillColor.' + this.windowId);
       this.eventEmitter.unsubscribe('changeBorderColor.' + this.windowId);
       this.eventEmitter.unsubscribe('SET_OVERLAY_TOOLTIP.' + this.windowId);
+      this.eventEmitter.unsubscribe('modeChange.' + this.windowId);
 
       this.viewer.removeAllHandlers('animation');
       this.viewer.removeAllHandlers('open');
