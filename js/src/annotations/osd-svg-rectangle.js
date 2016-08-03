@@ -327,73 +327,24 @@
         if(!overlay.disabled && overlay.hoveredPath && hitResult.item._name.toString().indexOf(overlay.hoveredPath._name.toString()) !==-1){
           this.setCursor(hitResult,overlay);
         }
-      }else{
-        jQuery(overlay.viewer.canvas).css('cursor','default');
       }
     },
 
     setCursor:function(hitResult,overlay){
-      if(hitResult.type === 'handle-out'){
-        jQuery(overlay.viewer.canvas).awesomeCursor('repeat', {
-          color: 'white',
-          hotspot: 'center'
-        });
-        return;
-      }
 
       if(hitResult.type === 'stroke'){
-        jQuery(overlay.viewer.canvas).css('cursor','pointer');
+        jQuery(overlay.viewer.canvas).css('cursor','move');
         return;
       }
-
-      var cursor = '';
 
       if(hitResult.type === 'pixel'){
         jQuery(overlay.viewer.canvas).css('cursor', 'pointer');
         return;
       }
 
-
-      var rotation = hitResult.item.data.rotation;
-      switch (hitResult.segment) {
-        case hitResult.item.segments[0]:
-          cursor = 'arrows-v';
-          rotation -= 45;
-          break;
-        case hitResult.item.segments[1]:
-          cursor = 'arrows-v';
-          break;
-        case hitResult.item.segments[2]:
-          cursor = 'arrows-v';
-          break;
-        case hitResult.item.segments[3]:
-          cursor = 'arrows-v';
-          rotation += 45;
-          break;
-        case hitResult.item.segments[4]:
-          cursor = 'arrows-h';
-          break;
-        case hitResult.item.segments[5]:
-          cursor = 'arrows-v';
-          rotation -= 45;
-          break;
-        case hitResult.item.segments[6]:
-          cursor = 'arrows-v';
-          break;
-        case hitResult.item.segments[7]:
-          cursor = 'arrows-v';
-          rotation += 45;
-          break;
-        case hitResult.item.segments[8]:
-          cursor = 'arrows-h';
-          break;
+      if(hitResult.segment){
+        jQuery(overlay.viewer.canvas).css('cursor','pointer');
       }
-
-      jQuery(overlay.viewer.canvas).awesomeCursor(cursor, {
-        color: 'white',
-        hotspot: 'center',
-        rotate: rotation
-      });
 
     },
 

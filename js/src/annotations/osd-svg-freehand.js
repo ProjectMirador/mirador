@@ -175,7 +175,34 @@
     },
 
     onMouseMove: function(event, overlay) {
-      // Empty block.
+      var hitResult = overlay.paperScope.project.hitTest(event.point, overlay.hitOptions);
+      if(hitResult && hitResult.item._name.toString().indexOf(this.idPrefix)!==-1){
+        if(!overlay.disabled && overlay.hoveredPath && hitResult.item._name.toString().indexOf(overlay.hoveredPath._name.toString()) !==-1){
+          this.setCursor(hitResult,overlay);
+        }
+      }
+    },
+
+    setCursor:function(hitResult,overlay){
+      if(hitResult.type === 'stroke'){
+        jQuery(overlay.viewer.canvas).css('cursor','move');
+        return;
+      }
+      if(hitResult.type === 'handle-in' || hitResult.type === 'handle-out'){
+        jQuery(overlay.viewer.canvas).css('cursor','pointer');
+        return;
+      }
+
+      // mouse over attached icon
+      if(hitResult.type === 'pixel'){
+        jQuery(overlay.viewer.canvas).css('cursor', 'pointer');
+        return;
+      }
+
+      if(hitResult.segment){
+        jQuery(overlay.viewer.canvas).css('cursor','pointer');
+      }
+
     },
 
     onMouseDown: function(event, overlay) {
