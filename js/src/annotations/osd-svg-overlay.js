@@ -871,6 +871,7 @@
       this.eventEmitter.unsubscribe('changeBorderColor.' + this.windowId);
       this.eventEmitter.unsubscribe('SET_OVERLAY_TOOLTIP.' + this.windowId);
       this.eventEmitter.unsubscribe('modeChange.' + this.windowId);
+      this.eventEmitter.unsubscribe('CANCEL_ACTIVE_ANNOTATIONS.' + this.windowId);
 
       this.viewer.removeAllHandlers('animation');
       this.viewer.removeAllHandlers('open');
