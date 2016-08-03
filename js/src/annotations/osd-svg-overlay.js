@@ -757,6 +757,7 @@
       // Set special style for newly created shapes
       var newlyCreatedStrokeFactor = this.drawingToolsSettings.newlyCreatedShapeStrokeWidthFactor || 5;
       shape.data.newlyCreated = true;
+      shape.data.currentStrokeValue *= newlyCreatedStrokeFactor;
       shape.strokeWidth *= newlyCreatedStrokeFactor;
 
       this.hoveredPath = shape;
@@ -793,6 +794,7 @@
             for(var i=0;i<_this.draftPaths.length;i++){
               if(_this.draftPaths[i].data && _this.draftPaths[i].data.newlyCreated){
                 _this.draftPaths[i].strokeWidth /= newlyCreatedStrokeFactor;
+                _this.draftPaths[i].data.currentStrokeValue /=newlyCreatedStrokeFactor;
                 delete _this.draftPaths[i].data.newlyCreated;
               }
             }
