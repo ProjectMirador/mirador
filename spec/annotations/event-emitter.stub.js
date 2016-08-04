@@ -6,12 +6,12 @@
 
   window.MockEventEmitter.prototype = {
     subscribe: function (eventName, callback) {
-      this.eventEmmiter.subscribe(eventName,callback);
       if(this.events[eventName]){
         this.events[eventName]++;
       }else{
         this.events[eventName] = 1;
       }
+      return this.eventEmmiter.subscribe(eventName,callback);
     },
     publish: function (eventName,args) {
       this.eventEmmiter.publish(eventName,args);
