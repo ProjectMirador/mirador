@@ -51,6 +51,7 @@
   AnnotationUtilsStub.prototype = {
     Icon: MockItem,
     PointText:MockItem,
+    RotationIcon:MockItem,
     DeleteActionIcon:MockItem,
     Group: MockGroup
   };

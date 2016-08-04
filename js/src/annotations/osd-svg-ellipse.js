@@ -77,9 +77,9 @@
         item.segments[3].handleOut = outHandle;
 
         if (selected) {
-          item.segments[2].handleOut = new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom);
-          item.segments[2].data = 'rotation_handle';
-          item.segments[2].handleOut = item.segments[2].handleOut.rotate(item.data.rotation, item.segments[2]);
+         // item.segments[2].handleOut = new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom);
+         // item.segments[2].data = 'rotation_handle';
+         // item.segments[2].handleOut = item.segments[2].handleOut.rotate(item.data.rotation, item.segments[2]);
           var point = item.segments[2].point.clone();
           point = point.add(item.segments[2].handleOut);
           if (item.contains(point)) {
@@ -97,41 +97,32 @@
             item.data.deleteIcon.addData('type', 'deleteIcon');
             item.data.deleteIcon.addData('self', item.data.deleteIcon);
 
-
             item.data.deleteIcon.setPosition(item.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom).rotate(item.data.rotation)));
             item.data.deleteIcon.setOnMouseDownListener(overlay);
 
           }
 
-          if (!item.data.group) {
-            item.data.group = new overlay.annotationUtils.Group(overlay.paperScope,[item,item.data.deleteIcon.getItem(),item.data.deleteIcon.getMask().getItem()]);
+          if (!item.data.rotationIcon) {
+
+            item.data.rotationIcon = new overlay.annotationUtils.RotationIcon(overlay.paperScope, {
+              name: item.name + this.partOfPrefix + 'rotation',
+              fillColor: item.selectedColor
+            });
+
+            item.data.rotationIcon.addData('pivot',item.segments[3].point);
+            item.data.rotationIcon.addData('type', 'rotationIcon');
+            item.data.rotationIcon.addData('self', item.data.rotationIcon);
+            item.data.rotationIcon.addData('parent', item);
+
+            item.data.rotationIcon.setPosition(item.data.rotationIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom).rotate(item.data.rotation)));
+
+            item.data.rotationIcon.setOnMouseDownListener(overlay);
+
           }
 
-
-          // if (!item.data.rotationIcon) {
-          //   item.data.rotationIcon = new overlay.annotationUtils.Icon(overlay.paperScope, {
-          //     source: overlay.state.getStateProperty('buildPath') + overlay.state.getStateProperty('imagesPath') + 'rotate_icon.png',
-          //     position: point,
-          //     name: item.name + this.partOfPrefix + 'rotate',
-          //     onLoad: function () {
-          //       item.data.rotationIcon.setSize(item.data.rotationIcon.getWidth() / 2 * (1 / overlay.paperScope.view.zoom), item.data.rotationIcon.getHeight() / 2 * (1 / overlay.paperScope.view.zoom));
-          //       item.data.rotationIcon.rotate(item.data.rotation);
-          //     }
-          //   });
-          //
-          //   item.data.rotationIcon.addData('type', 'rotationIcon');
-          //   item.data.rotationIcon.addData('self', item.data.rotationIcon);
-          //   item.data.rotationIcon.addData('parent', item);
-          //   item.data.rotationIcon.setOnMouseDownListener(function (rotateIconRaster) {
-          //     overlay.mode = 'rotate';
-          //     overlay.path = rotateIconRaster.data.parent;
-          //
-          //     jQuery('body').awesomeCursor('repeat', {
-          //       color: 'white',
-          //       hotspot: 'center'
-          //     });
-          //   });
-          // }
+          if (!item.data.group) {
+            item.data.group = new overlay.annotationUtils.Group(overlay.paperScope,[item,item.data.deleteIcon.getItem(),item.data.deleteIcon.getMask().getItem(),item.data.rotationIcon.getItem(),item.data.rotationIcon.getMask().getItem()]);
+          }
 
           if(item.contains(item.data.deleteIcon.getItem().position)){
             item.data.deleteIcon.setPosition(item.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom).rotate(item.data.rotation)));
@@ -139,12 +130,13 @@
             item.data.deleteIcon.rotate(180);
           }
 
-        } else {
-          // if (item.data.rotationIcon) {
-          //   item.data.rotationIcon.remove();
-          //   item.data.rotationIcon = null;
-          // }
+          if(item.contains(item.data.rotationIcon.getItem().position)){
+            item.data.rotationIcon.setPosition(item.data.rotationIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom).rotate(item.data.rotation)));
+            item.data.rotationIcon.rotate(180,item.data.rotationIcon.getData('pivot'));
+            item.data.rotationIcon.rotate(180);
+          }
 
+        } else {
           if(item.data.group){
             item.data.group.remove();
             item.data.group = null;
@@ -154,6 +146,11 @@
           if(item.data.deleteIcon){
             item.data.deleteIcon.remove();
             item.data.deleteIcon = null;
+          }
+
+          if(item.data.rotationIcon){
+            item.data.rotationIcon.remove();
+            item.data.rotationIcon = null;
           }
 
           item.segments[2].handleOut = new overlay.paperScope.Point(0, 0);
@@ -173,6 +170,18 @@
 
           item.data.self.resize(24 *  1 / overlay.paperScope.view.zoom);
         }
+
+        if(item._name.toString().indexOf('rotation') !== -1){
+          item.data.self.setPosition(item.data.self.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom).rotate(item.data.parent.data.rotation)));
+
+          if(item.data.parent.contains(item.position)){
+            item.data.self.rotate(180,item.data.self.getData('pivot'));
+            item.data.self.rotate(180);
+          }
+
+          item.data.self.resize(16 *  1 / overlay.paperScope.view.zoom);
+        }
+
       }
     },
 
@@ -204,7 +213,8 @@
         overlay.path.segments[i].point.x += event.delta.x;
         overlay.path.segments[i].point.y += event.delta.y;
       }
-      //overlay.path.data.rotationIcon.translateByXY(event.delta.x, event.delta.y);
+
+      overlay.path.data.rotationIcon.translateByXY(event.delta.x, event.delta.y);
       overlay.path.data.deleteIcon.translateByXY(event.delta.x,event.delta.y);
     },
 
@@ -213,12 +223,11 @@
       var rotation = Math.atan2(event.point.y - center.y + event.delta.y, event.point.x - center.x + event.delta.x) - Math.atan2(event.point.y - center.y, event.point.x - center.x);
       rotation = rotation * (180 / Math.PI);
 
-      //overlay.path.rotate(rotation, overlay.path.position);
 
       overlay.path.data.group.rotate(rotation,overlay.path.position);
 
       overlay.path.data.deleteIcon.rotate(-rotation);
-      // overlay.path.data.rotationIcon.rotate(rotation, overlay.path.position);
+      overlay.path.data.rotationIcon.rotate(-rotation);
 
       overlay.path.data.rotation += rotation;
     },
@@ -259,7 +268,7 @@
         var moveRightSize = idx === 4 || idx === 5 || idx === 6;
         var moveLeftSize = idx === 0 || idx === 8 || idx === 9;
         if (moveTopSize) {
-          //overlay.path.data.rotationIcon.translateByPoint(translationY);
+          overlay.path.data.rotationIcon.translateByPoint(translationY);
           overlay.path.segments[1].point = overlay.path.segments[1].point.add(translationY);
           overlay.path.segments[2].point = overlay.path.segments[2].point.add(translationY);
           overlay.path.segments[3].point = overlay.path.segments[3].point.add(translationY);
@@ -311,7 +320,7 @@
         }
         if (moveRightSize || moveLeftSize) {
           translationX = translationX.multiply(0.5);
-          //overlay.path.data.rotationIcon.translateByPoint(translationX);
+          overlay.path.data.rotationIcon.translateByPoint(translationX);
           overlay.path.data.deleteIcon.translateByPoint(translationX);
           overlay.path.segments[1].point = overlay.path.segments[1].point.add(translationX);
           overlay.path.segments[2].point = overlay.path.segments[2].point.add(translationX);
@@ -328,6 +337,11 @@
         if(overlay.path.contains(overlay.path.data.deleteIcon.getItem().position)){
           overlay.path.data.deleteIcon.rotate(180,overlay.path.data.deleteIcon.getData('pivot'));
           overlay.path.data.deleteIcon.rotate(180);
+        }
+
+        if(overlay.path.contains(overlay.path.data.rotationIcon.getItem().position)){
+          overlay.path.data.rotationIcon.rotate(180,overlay.path.data.rotationIcon.getData('pivot'));
+          overlay.path.data.rotationIcon.rotate(180);
         }
 
         if (overlay.path.segments.length > 10) {
@@ -425,6 +439,9 @@
 
           if (hitResult.item._name.toString().indexOf(this.partOfPrefix) !== -1) {
             hitResult.item.data.self.onMouseDown();
+            if(overlay.mode === 'rotate'){
+              overlay.path = hitResult.item.data.self.getItem().data.parent;
+            }
             return;
           }
 
@@ -433,14 +450,6 @@
             overlay.segment = null;
             overlay.path = null;
             this.setCursor(hitResult, overlay);
-          }
-
-          if(hitResult.type === 'handle-out' && hitResult.segment.data === 'rotation_handle'){
-            overlay.mode = 'rotate';
-            overlay.segment = null;
-            overlay.path = hitResult.item;
-            this.setCursor(hitResult,overlay);
-            return;
           }
 
           if (hitResult.type === 'stroke' || hitResult.type === 'handle-in' || hitResult.type === 'handle-out') {
