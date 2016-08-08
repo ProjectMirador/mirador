@@ -97,66 +97,97 @@
 
   PointText.constructor = PointText;
 
-  function DeleteActionIcon(paperScope,opts){
+  function PointTextIcon(paperScope,opts){
     this.paperScope = paperScope;
     opts.justification = 'center';
     opts.font = 'FontAwesome';
-    opts.fillColor = opts.fillColor || 'black';
-    opts.fontSize = opts.size || (24 * 1 / paperScope.view.zoom);
-    opts.content = '\uf014';
+    this.content = opts.content;
     PointText.call(this,paperScope,opts);
-
-    this.rasterMask = new Icon(paperScope,{
-      name: opts.name.replace('delete','Delete_mask'),
-      size: new paperScope.Size(opts.fontSize ,opts.fontSize)
-    });
 
     this.rasterMask.addData('self',this);
   }
 
-  DeleteActionIcon.prototype = Object.create(PointText.prototype, {});
-  DeleteActionIcon.prototype.setPosition = function(point){
+  PointTextIcon.prototype = Object.create(PointText.prototype, {});
+
+  PointTextIcon.prototype.setPosition = function(point){
     this.rasterMask.setPosition(point);
     PointText.prototype.setPosition.call(this,point);
   };
+
+  PointTextIcon.prototype.rotate = function(angle,pivot){
+    this.rasterMask.rotate(angle,pivot);
+    PointText.prototype.rotate.call(this,angle,pivot);
+  };
+  PointTextIcon.prototype.translateByPoint = function (point) {
+    this.rasterMask.translateByPoint(point);
+    PointText.prototype.translateByPoint.call(this,point);
+  };
+  PointTextIcon.prototype.translateByXY = function (x,y){
+    this.rasterMask.translateByXY(x,y);
+    PointText.prototype.translateByXY.call(this,x,y);
+  };
+  PointTextIcon.prototype.remove = function () {
+    this.rasterMask.remove();
+    PointText.prototype.remove.call(this);
+  };
+  PointTextIcon.prototype.resize = function (size) {
+    this.rasterMask.resize(new this.paperScope.Size(size,size));
+    PointText.prototype.resize.call(this,size);
+  };
+
+  PointTextIcon.prototype.getMask = function () {
+    return this.rasterMask;
+  };
+
+  PointTextIcon.prototype.constructor = PointTextIcon;
+
+  function DeleteActionIcon(paperScope,opts){
+    this.paperScope = paperScope;
+    opts.fillColor = opts.fillColor || 'black';
+    opts.fontSize = opts.size || (24 * 1 / paperScope.view.zoom);
+    opts.content = '\uf014';
+    this.rasterMask = new Icon(paperScope,{
+      name: opts.name.replace('delete','Delete_mask'),
+      size: new paperScope.Size(opts.fontSize ,opts.fontSize)
+    });
+    PointTextIcon.call(this,paperScope,opts);
+  }
+
+  DeleteActionIcon.prototype = Object.create(PointTextIcon.prototype, {});
+
   DeleteActionIcon.prototype.setOnMouseDownListener = function (overlay) {
     this.mouseDown = function () {
       overlay.eventEmitter.publish('deleteShape.' + overlay.windowId, [this.getData('parent')]);
     };
   };
-  DeleteActionIcon.prototype.rotate = function(angle,pivot){
-    this.rasterMask.rotate(angle,pivot);
-    PointText.prototype.rotate.call(this,angle,pivot);
-  };
-  DeleteActionIcon.prototype.translateByPoint = function (point) {
-    this.rasterMask.translateByPoint(point);
-    PointText.prototype.translateByPoint.call(this,point);
-  };
-  DeleteActionIcon.prototype.translateByXY = function (x,y){
-    this.rasterMask.translateByXY(x,y);
-    PointText.prototype.translateByXY.call(this,x,y);
-  };
-  DeleteActionIcon.prototype.remove = function () {
-    this.rasterMask.remove();
-    PointText.prototype.remove.call(this);
-  };
-  DeleteActionIcon.prototype.resize = function (size) {
-    this.rasterMask.resize(new this.paperScope.Size(size,size));
-    PointText.prototype.resize.call(this,size);
-  };
 
-  DeleteActionIcon.prototype.getMask = function () {
-    return this.rasterMask;
-  };
-  
-  DeleteActionIcon.prototype.constructor = DeleteActionIcon;
+  function RotationIcon(paperScope,opts){
+    this.paperScope = paperScope;
+    opts.justification = 'center';
+    opts.fillColor = opts.fillColor || 'black';
+    opts.fontSize = opts.size || (16 * 1 / paperScope.view.zoom);
+    opts.content = '\uf01e';
+    this.rasterMask = new Icon(paperScope,{
+      name: opts.name.replace('rotation','Rotation_mask'),
+      size: new paperScope.Size(opts.fontSize ,opts.fontSize)
+    });
+    PointTextIcon.call(this,paperScope,opts);
+  }
 
+  RotationIcon.prototype = Object.create(PointTextIcon.prototype, {});
+
+  RotationIcon.prototype.setOnMouseDownListener = function (overlay) {
+    this.mouseDown = function () {
+      overlay.mode = 'rotate';
+    };
+  };
 
 
   $.AnnotationUtils.prototype = {
     Icon:Icon,
     PointText:PointText,
     DeleteActionIcon:DeleteActionIcon,
+    RotationIcon:RotationIcon,
     Group:Group
   };
 

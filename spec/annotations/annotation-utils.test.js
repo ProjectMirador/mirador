@@ -91,7 +91,41 @@ describe('Annotation utils', function () {
       });
 
       it('should use defined trashcan icon', function () {
-        //console.log(this.icon);
+        expect(this.icon.content).toBe('\uf014');
+      });
+
+      it('should fire delete shape event onMouseDown',function(){
+        var overlay = {
+          eventEmitter:{
+            publish:jasmine.createSpy()
+          }
+        };
+
+        this.icon.setOnMouseDownListener(overlay);
+        this.icon.mouseDown();
+        expect(overlay.eventEmitter.publish).toHaveBeenCalled();
+      });
+
+    });
+
+    describe('RotationIcon', function () {
+      beforeEach(function () {
+        this.icon = new Mirador.AnnotationUtils().RotationIcon;
+        this.icon = new this.icon(paperScope,{name:''});
+      });
+
+      it('should use defined rotate icon', function () {
+        expect(this.icon.content).toBe('\uf01e');
+      });
+
+      it('should set overlay mode to rotate onMouseDown',function(){
+        var overlay = {
+          mode:''
+        };
+
+        this.icon.setOnMouseDownListener(overlay);
+        this.icon.mouseDown();
+        expect(overlay.mode).toBe('rotate');
       });
 
     });

@@ -264,16 +264,6 @@
         _this.eventEmitter.publish('updateAnnotationList.'+_this.windowId);
         _this.eventEmitter.publish('refreshOverlay.'+_this.windowId, '');
       });
-
-      // function make_handler(shapeMode) {
-      //   return function () {
-      //     _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shapeMode);
-      //   };
-      // }
-      // jQuery.each(_this.availableAnnotationTools, function(index, value) {
-      //   var shape = value.logoClass;
-      //   _this.element.find('.material-icons:contains(\'' + shape + '\')').on('click', make_handler(shape));
-      // });
       //Annotation specific controls
 
       //Image manipulation controls

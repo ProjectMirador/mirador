@@ -422,7 +422,7 @@
           annotation: oaAnno,
           windowId: this.windowId
         }));
-      this.activeEditor.show('form.annotation-tooltip');
+      this.activeEditor.show('form#annotation-editor-'+this.windowId);
       jQuery(api.elements.tooltip).removeClass("qtip-viewer");
       api.elements.tooltip.draggable();
       if (viewerParams.onEnterEditMode) {

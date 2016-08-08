@@ -66,8 +66,15 @@
           "annotationRefresh" : false, //whether or not to display the refresh icon for annotations
         },
         "imageManipulation" : {
-          "manipulationLayer" : true
-          //TODO: settings for individual image manipulation controls
+          "manipulationLayer" : true,
+          "controls" : {
+            "rotate" : true,
+            "brightness" : true,
+            "contrast" : true,
+            "saturate" : true,
+            "grayscale" : true,
+            "invert" : true
+          }
         }
       },
       "fullScreen" : true, //whether or not to make the window's fullScreen button visible to user
@@ -123,6 +130,7 @@
       'fillColorAlpha': 0.0,
       'shapeHandleSize':10,
       'fixedShapeSize':10,
+      'newlyCreatedShapeStrokeWidthFactor':5,
       'hoverColor':'yellow'
     },
 
@@ -139,7 +147,7 @@
     'mainMenuSettings': {
       'show': true,
       'buttons' : {
-        'bookmark' : true,
+        'bookmark' : false,
         'layout' : true,
         'options' : false,
         'fullScreenViewer': true
@@ -182,7 +190,7 @@
      *  }
      **/
     'annotationEndpoint': {},
-    
+
     'annotationBodyEditor': {
       'module': 'TinyMCEAnnotationBodyEditor',
       'options': {}

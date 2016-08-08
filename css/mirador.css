@@ -1,8 +1,3 @@
-body {
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-}
 a {
   color: inherit; /* blue colors for links too */
   text-decoration: inherit; /* no underline */
@@ -2008,4 +2003,11 @@ a.mirador-icon-window-menu, a.mirador-icon-view-type {
 
 .mce-edit-area iframe {
   height: 75px !important;
+}
+
+/* Disable outlines when canvas is focused
+---------------------------------------------------------------------------- */
+canvas {
+  outline: none;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
 }

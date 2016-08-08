@@ -169,7 +169,7 @@ describe('Polygon', function() {
         'y': -3
       });
       this.polygon.updateSelection(true,this.shape,overlay);
-      overlay.mode = 'edit';
+      overlay.mode = 'translate';
       overlay.path = this.shape;
 
       var expected = [];
@@ -190,7 +190,7 @@ describe('Polygon', function() {
 
       var selectedPointIndex = 1;
       overlay = MockOverlay.getOverlay(paper);
-      overlay.mode = 'edit';
+      overlay.mode = 'deform';
       overlay.path = this.shape;
       overlay.segment = this.shape.segments[selectedPointIndex];
 
@@ -224,7 +224,7 @@ describe('Polygon', function() {
         'x': 100,
         'y': 100
       });
-      overlay.mode = '';
+      overlay.mode = 'create';
       var expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -243,6 +243,7 @@ describe('Polygon', function() {
 
       overlay = MockOverlay.getOverlay(paper);
       overlay.path = this.shape;
+      overlay.mode = 'create';
       this.polygon.onDoubleClick(event, overlay);
 
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
@@ -259,6 +260,7 @@ describe('Polygon', function() {
       overlay.hitOptions.stroke = false;
       overlay.hitOptions.segments = false;
       overlay.hitOptions.tolerance = 5;
+      overlay.mode = 'create';
 
       expected.push(this.initialPoint);
       this.shape.add(this.initialPoint);

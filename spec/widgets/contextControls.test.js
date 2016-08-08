@@ -43,7 +43,15 @@ describe('ContextControls', function() {
           "annotationRefresh" : false,
         },
         "imageManipulation" : {
-          "manipulationLayer" : true
+          "manipulationLayer" : true,
+          "controls" : {
+            "rotate" : true,
+            "brightness" : true,
+            "contrast" : true,
+            "saturate" : true,
+            "grayscale" : true,
+            "invert" : true
+          }
         }
       };
       var contextControls = new Mirador.ContextControls({

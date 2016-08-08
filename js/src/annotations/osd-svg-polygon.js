@@ -35,7 +35,7 @@
         item.selected = selected;
 
         if(selected){
-          if (!item.data.deleteIcon) {
+          if (!item.data.deleteIcon && overlay.mode !=='create') {
             item.data.deleteIcon = new overlay.annotationUtils.DeleteActionIcon(overlay.paperScope, {
               name: item.name + this.partOfPrefix + 'delete',
               fillColor:item.selectedColor
@@ -125,35 +125,40 @@
     },
 
     onMouseUp: function(event, overlay) {
+
     },
 
     onMouseDrag: function(event, overlay) {
-      if (overlay.mode === 'edit') {
+      if (overlay.mode === 'deform') {
         if (overlay.segment) {
           overlay.segment.point.x += event.delta.x;
           overlay.segment.point.y += event.delta.y;
 
           var path = overlay.segment.path;
-          path.data.deleteIcon.addData('pivot',new overlay.paperScope.Point(this.getPivotPointForDeleteIcon(path)));
-          path.data.deleteIcon.setPosition(path.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom)));
+
+          if(path.data.deleteIcon){
+            path.data.deleteIcon.addData('pivot', new overlay.paperScope.Point(this.getPivotPointForDeleteIcon(path)));
+            path.data.deleteIcon.setPosition(path.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom)));
+          }
 
           return;
         }
+      }
 
+      if (overlay.mode === 'translate') {
         if (overlay.path) {
           overlay.path.position.x += event.delta.x;
           overlay.path.position.y += event.delta.y;
-          if(overlay.path.data.deleteIcon){
-            overlay.path.data.deleteIcon.translateByXY(event.delta.x,event.delta.y);
+          if (overlay.path.data.deleteIcon) {
+            overlay.path.data.deleteIcon.translateByXY(event.delta.x, event.delta.y);
           }
 
         }
-
       }
     },
 
     onMouseMove: function(event, overlay) {
-      // Empty block.
+      // TODO should fix the mouse over cursor changes
     },
 
     onMouseDown: function(event, overlay) {
@@ -165,61 +170,74 @@
           return;
         }
 
-        if (!overlay.path) {
-          overlay.mode = 'edit';
-          overlay.segment = null;
-          overlay.path = null;
-          document.body.style.cursor = "move";
-        } else {
-          document.body.style.cursor = "default";
+        if (overlay.mode !== 'create') {
+          if (!overlay.path) {
+            overlay.mode = 'edit';
+            overlay.segment = null;
+            overlay.path = null;
+            document.body.style.cursor = "move";
+          } else {
+
+            document.body.style.cursor = "default";
+          }
+
+          if (hitResult.type === 'stroke') {
+            overlay.mode = 'translate';
+            overlay.path = hitResult.item;
+            return;
+          }
+
+          if (hitResult.type === 'segment') {
+            // When shift is being pressed and segment point selected it deletes
+            if(event.modifiers.shift){
+              if(hitResult.item.segments.length > 2){
+                hitResult.segment.remove();
+                return;
+              }
+
+            }
+            overlay.mode = 'deform';
+            overlay.segment = hitResult.segment;
+            overlay.path = hitResult.item;
+            return;
+          }
+
+
         }
       } else {
-        document.body.style.cursor = "default";
+        if(overlay.mode !=='create'){
+          overlay.mode = '';
+        }
       }
-
 
       if (overlay.mode === '') {
         overlay.path = this.createShape(event.point, overlay);
-      } else if (overlay.mode === 'create') {
+
+        return;
+      }
+      if (overlay.mode === 'create') {
         overlay.path.add(event.point);
 
-        overlay.path.data.deleteIcon.addData('pivot',new overlay.paperScope.Point(this.getPivotPointForDeleteIcon(overlay.path)));
-        overlay.path.data.deleteIcon.setPosition(overlay.path.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom)));
-
-
-      } else if (overlay.mode === 'edit') {
-        if (hitResult) {
-          if (event.modifiers.shift) {
-            if (hitResult.type == 'segment') {
-              hitResult.segment.remove();
-            }
-          } else if (overlay.path) {
-            overlay.segment = null;
-            overlay.path = null;
-            overlay.mode = '';
-          } else {
-            overlay.path = hitResult.item;
-            if (hitResult.type == 'segment') {
-              overlay.segment = hitResult.segment;
-            } else if (hitResult.type == 'fill') {
-              overlay.paperScope.project.activeLayer.addChild(hitResult.item);
-            }
-          }
-        }
+        return;
       }
+
     },
 
     onDoubleClick: function(event, overlay) {
-      // I am able to create additional annotations to current shape on double click
-      // Is this okey?
-      if (overlay.path) {
-        if (overlay.path.segments[0].point.getDistance(overlay.path.segments[overlay.path.segments.length - 1].point)*overlay.paperScope.view.zoom < overlay.hitOptions.tolerance) {
-          overlay.path.closed = true;
-          overlay.path.fillColor = overlay.fillColor;
-          overlay.path.fillColor.alpha = overlay.fillColorAlpha;
+      if (overlay.mode === 'create') {
+        if (overlay.path && overlay.path.segments.length > 1) {
+
+          if (overlay.path.segments[0].point.getDistance(overlay.path.segments[overlay.path.segments.length - 1].point) * overlay.paperScope.view.zoom < overlay.hitOptions.tolerance) {
+            overlay.path.closed = true;
+            overlay.path.fillColor = overlay.fillColor;
+            overlay.path.fillColor.alpha = overlay.fillColorAlpha;
+            overlay.path.segments[overlay.path.segments.length - 1].remove();
+          }
+          overlay.onDrawFinish();
         }
+
       }
-      overlay.onDrawFinish();
+
     }
   };
 }(Mirador));

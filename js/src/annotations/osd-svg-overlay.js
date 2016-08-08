@@ -14,6 +14,7 @@
 
   $.Overlay = function(viewer, osdViewerId, windowId, state, eventEmitter) {
     var drawingToolsSettings = state.getStateProperty('drawingToolsSettings');
+    this.drawingToolsSettings = drawingToolsSettings;
     var availableAnnotationDrawingTools = state.getStateProperty('availableAnnotationDrawingTools');
     var availableExternalCommentsPanel = state.getStateProperty('availableExternalCommentsPanel');
     jQuery.extend(this, {
@@ -54,12 +55,15 @@
     this.fillColorAlpha = drawingToolsSettings.fillColorAlpha;
     this.viewer = viewer;
     this.canvas = document.createElement('canvas');
+    // workaround to remove focus from editor
+    jQuery(this.canvas).attr('tabindex', '0').mousedown(function(){ jQuery(this).focus();});
     this.canvas.id = 'draw_canvas_' + this.windowId;
     // Drawing of overlay border during development.
     // this.canvas.style.border = '1px solid yellow';
     this.viewer.canvas.appendChild(this.canvas);
 
     var _this = this;
+    this.slotWindowElement = state.getWindowElement(this.windowId);
     this.state = state;
     this.eventEmitter = eventEmitter;
     var _thisResize = function() {
@@ -79,13 +83,17 @@
 
     this.viewer.addHandler('close',_thisDestroy);
 
+    _this.eventEmitter.subscribe('modeChange.' + _this.windowId,function(event,newMode){
+      _this.currentTool = '';
+    });
+
     _this.eventEmitter.subscribe('toggleDrawingTool.' + _this.windowId, function(event, tool) {
       //qtip code should NOT be here
       if (_this.disabled) {
         jQuery('.qtip' + _this.windowId).qtip('hide');
         return;
       }
-      jQuery('#' + osdViewerId).parents(".window").find(".qtip-viewer").hide();
+      jQuery('#' + osdViewerId).parents('.window').find('.qtip-viewer').hide();
       _this.currentTool = null;
       for (var i = 0; i < _this.tools.length; i++) {
         if (_this.tools[i].logoClass === tool) {
@@ -100,7 +108,7 @@
         jQuery('.qtip' + _this.windowId).qtip('hide');
         return;
       }
-      jQuery('#' + osdViewerId).parents(".window").find(".qtip-viewer").hide();
+      jQuery('#' + osdViewerId).parents('.window').find('.qtip-viewer').hide();
       _this.currentTool = null;
       for (var i = 0; i < _this.availableAnnotationDrawingTools.length; i++) {
         for (var j = 0; j < _this.tools.length; j++) {
@@ -196,6 +204,7 @@
       mouseTool.onMouseMove = _this.onMouseMove;
       mouseTool.onMouseDown = _this.onMouseDown;
       mouseTool.onDoubleClick = _this.onDoubleClick;
+      mouseTool.onKeyDown = function(event){};
       jQuery.data(document.body, 'draw_canvas_' + _this.windowId, mouseTool);
 
       this.listenForActions();
@@ -203,7 +212,7 @@
 
     handleDeleteShapeEvent: function (event, shape) {
       var _this = this;
-      new $.DialogBuilder().confirm(i18n.t('deleteShape'), function (result) {
+      new $.DialogBuilder(this.slotWindowElement).confirm(i18n.t('deleteShape'), function (result) {
         if (result) {
           _this.deleteShape(shape);
         }
@@ -217,6 +226,13 @@
         _this.annoTooltip = options.tooltip;
         _this.annoEditorVisible = options.visible;
         _this.draftPaths = options.paths;
+      });
+
+      this.eventEmitter.subscribe('CANCEL_ACTIVE_ANNOTATIONS.' + this.windowId, function(event) {
+        //for now, don't worry about getting user confirmation, just cancel everything
+        _this.clearDraftData();
+        _this.annoTooltip = null;
+        _this.annoEditorVisible = false;
       });
     },
 
@@ -300,9 +316,9 @@
       if (!this.overlay.disabled) {
         // We are in drawing mode
         if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
-          document.body.style.cursor = "pointer";
+          document.body.style.cursor = 'pointer';
         } else {
-          document.body.style.cursor = "default";
+          document.body.style.cursor = 'default';
         }
         event.stopPropagation();
         if (this.overlay.currentTool) {
@@ -331,53 +347,72 @@
       } else {
         this.overlay.latestMouseDownTime = time;
         var hitResult = this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions);
-        if (this.overlay.inEditMode) {
-          //if in edit mode, clear the current tool and mode in case the user clicked on an "empty" space
+
+        // no need for this check we have already disabled the current shape editing when not in edit mode
+        // by using the editable check, although having such info is okey to keep inside the code
+        //if (this.overlay.inEditMode) {
+          //if in edit mode, clear the current tool and mode in case the user clicked on an "empty" space // not okey what if i want to draw another shape
           //if the user (re)clicked on an editable shape, the currentTool gets set below
           //if the user has clicked on "empty" space, return and don't do anything more
-          this.overlay.currentTool = null;
-          this.overlay.mode = "";
-          if (hitResult) {
-            var overlayEditable = false;
-            if (typeof hitResult.item.data.editable !== 'undefined') {
-              overlayEditable = hitResult.item.data.editable;
-            }
-            // if item is part of shape it is editable
-            // part of shape items only appear when the shape is selected
-            if(hitResult.item._name.toString().indexOf(this.overlay.partOfPrefix) !== -1){
-              overlayEditable = true;
-            }
-            if (!overlayEditable) {
-              return;
-            }
-          }
+        //}
+
+        if(this.overlay.mode !== 'create'){
+          this.overlay.mode = '';
+          this.currentTool = null;
         }
+
+        if (hitResult && this.overlay.mode !== 'create') {
+
+          var overlayEditable = false;
+          if (typeof hitResult.item.data.editable !== 'undefined') {
+            overlayEditable = hitResult.item.data.editable; // TODO should remove this editable variable when persisting the svg (will reduce length of string/memory)
+          }
+          // if item is part of shape it is editable
+          // part of shape items only appear when the shape is selected
+          if (hitResult.item._name.toString().indexOf(this.overlay.partOfPrefix) !== -1) {
+            overlayEditable = true;
+          }
+          if (!overlayEditable) {
+            return;
+          }
+
+        }
+
         if (hitResult && (!this.overlay.currentTool || (hitResult.item._name.toString().indexOf(this.overlay.currentTool.idPrefix) === -1 && this.overlay.mode === ''))) {
           var prefix = hitResult.item._name.toString();
           prefix = prefix.substring(0, prefix.indexOf('_') + 1);
+
+          // nasty workaround some names contain `_` inside their name
+          var longPrefix = hitResult.item._name.toString().split('_');
+
+          longPrefix = longPrefix[0] + '_' + longPrefix[1] + '_';
+
           for (var j = 0; j < this.overlay.tools.length; j++) {
-            if (this.overlay.tools[j].idPrefix === prefix) {
+
+            if (this.overlay.tools[j].idPrefix === prefix || this.overlay.tools[j].idPrefix === longPrefix) {
               this.overlay.eventEmitter.publish('toggleDrawingTool.' + this.overlay.windowId, this.overlay.tools[j].logoClass);
               break;
             }
           }
         }
+
         if (this.overlay.currentTool) {
           this.overlay.currentTool.onMouseDown(event, this.overlay);
-          if (this.overlay.mode === 'translate' || this.overlay.mode === 'deform' || this.overlay.mode === 'edit') {
-            if (this.overlay.path && this.overlay.path.data.annotation) {
-              var inArray = false;
-              for (var i = 0; i < this.overlay.editedPaths.length; i++) {
-                if (this.overlay.editedPaths[i].name === this.overlay.path.name) {
-                  inArray = true;
-                  break;
-                }
-              }
-              if (!inArray) {
-                this.overlay.editedPaths.push(this.overlay.path);
-              }
-            }
-          }
+          // should check if this is used anywhere and remove it if not used
+          // if (this.overlay.mode === 'translate' || this.overlay.mode === 'deform' || this.overlay.mode === 'edit') {
+          //   if (this.overlay.path && this.overlay.path.data.annotation) {
+          //     var inArray = false;
+          //     for (var i = 0; i < this.overlay.editedPaths.length; i++) {
+          //       if (this.overlay.editedPaths[i].name === this.overlay.path.name) {
+          //         inArray = true;
+          //         break;
+          //       }
+          //     }
+          //     if (!inArray) {
+          //       this.overlay.editedPaths.push(this.overlay.path);
+          //     }
+          //   }
+          // }
         }
       }
       this.overlay.hover();
@@ -385,6 +420,7 @@
     },
 
     onDoubleClick: function(event) {
+
       event.stopPropagation();
       if (this.overlay.currentTool) {
         this.overlay.currentTool.onDoubleClick(event, this.overlay);
@@ -421,8 +457,8 @@
       this.canvas.style.WebkitTransform = transform;
       this.canvas.style.msTransform = transform;
       this.canvas.style.transform = transform;
-      this.canvas.style.marginLeft = "0px";
-      this.canvas.style.marginTop = "0px";
+      this.canvas.style.marginLeft = '0px';
+      this.canvas.style.marginTop = '0px';
       if (this.paperScope && this.paperScope.view) {
         this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
         this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
@@ -603,7 +639,7 @@
       var paperItems = [];
       var svgParser = new DOMParser();
       var svgDOM = svgParser.parseFromString(svg, "text/xml");
-      if (svgDOM.documentElement.nodeName == "parsererror") {
+      if (svgDOM.documentElement.nodeName == 'parsererror') {
         return; // if svg is not valid XML structure - backward compatibility.
       }
       var svgTag = this.paperScope.project.importSVG(svg);
@@ -744,6 +780,7 @@
     },
 
     onDrawFinish: function() {
+
       var shape = this.path;
       if (!shape) {
         return;
@@ -751,12 +788,22 @@
       if (this.hoveredPath) {
         this.updateSelection(false, this.hoveredPath);
       }
+
+      // Set special style for newly created shapes
+      var newlyCreatedStrokeFactor = this.drawingToolsSettings.newlyCreatedShapeStrokeWidthFactor || 5;
+      shape.data.newlyCreated = true;
+      shape.data.currentStrokeValue *= newlyCreatedStrokeFactor;
+      shape.strokeWidth *= newlyCreatedStrokeFactor;
+
       this.hoveredPath = shape;
-      this.updateSelection(true, this.hoveredPath);
       this.segment = null;
       this.path = null;
       this.mode = '';
       this.draftPaths.push(shape);
+
+      shape.data.editable = true;
+
+      this.updateSelection(true, this.hoveredPath);
       if (typeof this.annoTooltip === 'undefined' || !this.annoTooltip) {
         this.annoTooltip = new $.AnnotationTooltip({
           targetElement: jQuery(this.canvas).parents('.mirador-osd'),
@@ -778,6 +825,15 @@
             return _this.draftPaths.length;
           },
           onAnnotationCreated: function(oaAnno) {
+            //should remove the styles added for newly created annotation
+            for(var i=0;i<_this.draftPaths.length;i++){
+              if(_this.draftPaths[i].data && _this.draftPaths[i].data.newlyCreated){
+                _this.draftPaths[i].strokeWidth /= newlyCreatedStrokeFactor;
+                _this.draftPaths[i].data.currentStrokeValue /=newlyCreatedStrokeFactor;
+                delete _this.draftPaths[i].data.newlyCreated;
+              }
+            }
+
             var svg = _this.getSVGString(_this.draftPaths);
             oaAnno.on = {
               "@type": "oa:SpecificResource",
@@ -842,6 +898,8 @@
       this.eventEmitter.unsubscribe('changeFillColor.' + this.windowId);
       this.eventEmitter.unsubscribe('changeBorderColor.' + this.windowId);
       this.eventEmitter.unsubscribe('SET_OVERLAY_TOOLTIP.' + this.windowId);
+      this.eventEmitter.unsubscribe('modeChange.' + this.windowId);
+      this.eventEmitter.unsubscribe('CANCEL_ACTIVE_ANNOTATIONS.' + this.windowId);
 
       this.viewer.removeAllHandlers('animation');
       this.viewer.removeAllHandlers('open');

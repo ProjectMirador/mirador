@@ -70,8 +70,8 @@
         item.selected = selected;
         if (selected) {
 
-          item.segments[1].handleOut = new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom);
-          item.segments[1].handleOut = item.segments[1].handleOut.rotate(item.data.rotation, item.segments[1]);
+          //item.segments[1].handleOut = new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom);
+         // item.segments[1].handleOut = item.segments[1].handleOut.rotate(item.data.rotation, item.segments[1]);
 
           if (!item.data.deleteIcon) {
 
@@ -86,65 +86,54 @@
             item.data.deleteIcon.addData('parent', item);
 
             item.data.deleteIcon.setPosition(item.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom).rotate(item.data.rotation)));
-            //item.data.deleteIcon.rotate(item.data.rotation);
-
 
             item.data.deleteIcon.setOnMouseDownListener(overlay);
 
           }
 
+          if (!item.data.rotationIcon) {
+
+            item.data.rotationIcon = new overlay.annotationUtils.RotationIcon(overlay.paperScope, {
+              name: item.name + this.partOfPrefix + 'rotation',
+              fillColor: item.selectedColor
+            });
+
+            item.data.rotationIcon.addData('pivot',item.segments[1].point);
+            item.data.rotationIcon.addData('type', 'rotationIcon');
+            item.data.rotationIcon.addData('self', item.data.rotationIcon);
+            item.data.rotationIcon.addData('parent', item);
+
+            item.data.rotationIcon.setPosition(item.data.rotationIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom).rotate(item.data.rotation)));
+
+            item.data.rotationIcon.setOnMouseDownListener(overlay);
+
+          }
+
           if (!item.data.group) {
-            item.data.group = new overlay.annotationUtils.Group(overlay.paperScope,[item,item.data.deleteIcon.getItem(),item.data.deleteIcon.getMask().getItem()]);
+            item.data.group = new overlay.annotationUtils.Group(overlay.paperScope,[item,item.data.deleteIcon.getItem(),item.data.deleteIcon.getMask().getItem(),item.data.rotationIcon.getItem(),item.data.rotationIcon.getMask().getItem()]);
           }
 
           var point = item.segments[1].point.clone();
           point = point.add(item.segments[1].handleOut);
 
-          // if (!item.data.rotationIcon) {
-          //   item.data.rotationIcon = new overlay.annotationUtils.Icon(overlay.paperScope, {
-          //     source: overlay.state.getStateProperty('buildPath') + overlay.state.getStateProperty('imagesPath') + 'rotate_icon.png',
-          //     position: point,
-          //     name: item.name + this.partOfPrefix + 'rotate',
-          //     onLoad: function () {
-          //       // might need change depends on the image used
-          //       item.data.rotationIcon.setSize(item.data.rotationIcon.getWidth() / 2 * (1 / overlay.paperScope.view.zoom), item.data.rotationIcon.getHeight() / 2 * (1 / overlay.paperScope.view.zoom));
-          //       item.data.rotationIcon.rotate(item.data.rotation);
-          //     }
-          //   });
-          //
-          //   item.data.rotationIcon.addData('type', 'rotationIcon');
-          //   item.data.rotationIcon.addData('self', item.data.rotationIcon);
-          //   item.data.rotationIcon.addData('parent', item);
-          //   item.data.rotationIcon.setOnMouseDownListener(function (rotateIconRaster) {
-          //     overlay.mode = 'rotate';
-          //     overlay.path = rotateIconRaster.data.parent;
-          //
-          //     jQuery(overlay.viewer.canvas).awesomeCursor('repeat', {
-          //       color: 'white',
-          //       hotspot: 'center'
-          //     });
-          //   });
-          // }
-
-
           if (item.contains(point)) {
             item.segments[1].handleOut = item.segments[1].handleOut.rotate(180, item.segments[1]);
-            //item.data.rotationIcon.translateByPoint(item.segments[1].handleOut.multiply(2));
           }
 
           if(item.contains(item.data.deleteIcon.getItem().position)){
             item.data.deleteIcon.setPosition(item.data.deleteIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom).rotate(item.data.rotation)));
             item.data.deleteIcon.rotate(180,item.data.deleteIcon.getData('pivot'));
             item.data.deleteIcon.rotate(180);
-
           }
 
-          item.segments[1].handleOut.selected = true;
+          if(item.contains(item.data.rotationIcon.getItem().position)){
+            item.data.rotationIcon.setPosition(item.data.rotationIcon.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom).rotate(item.data.rotation)));
+            item.data.rotationIcon.rotate(180,item.data.rotationIcon.getData('pivot'));
+            item.data.rotationIcon.rotate(180);
+          }
+
+          item.segments[1].handleOut.selected = false;
         } else {
-          // if (item.data.rotationIcon) {
-          //   item.data.rotationIcon.remove();
-          //   item.data.rotationIcon = null;
-          // }
 
           if(item.data.group){
             item.data.group.remove();
@@ -155,6 +144,11 @@
           if(item.data.deleteIcon){
             item.data.deleteIcon.remove();
             item.data.deleteIcon = null;
+          }
+
+          if(item.data.rotationIcon){
+            item.data.rotationIcon.remove();
+            item.data.rotationIcon = null;
           }
           item.segments[1].handleOut = new overlay.paperScope.Point(0, 0);
         }
@@ -196,7 +190,7 @@
         overlay.path.segments[i].point.x += event.delta.x;
         overlay.path.segments[i].point.y += event.delta.y;
       }
-      //overlay.path.data.rotationIcon.translateByXY(event.delta.x,event.delta.y);
+      overlay.path.data.rotationIcon.translateByXY(event.delta.x,event.delta.y);
       overlay.path.data.deleteIcon.translateByXY(event.delta.x,event.delta.y);
     },
 
@@ -208,8 +202,7 @@
       overlay.path.data.group.rotate(rotation,overlay.path.position);
 
       overlay.path.data.deleteIcon.rotate(-rotation);
-
-      //overlay.path.data.rotationIcon.rotate(rotation,overlay.path.position);
+      overlay.path.data.rotationIcon.rotate(-rotation);
       overlay.path.data.rotation += rotation;
     },
 
@@ -245,7 +238,7 @@
         var moveRightSize = idx === 3 || idx === 4 || idx === 5;
         var moveLeftSize = idx === 0 || idx === 7 || idx === 8;
         if (moveTopSize) {
-          //overlay.path.data.rotationIcon.translateByPoint(translationY);
+          overlay.path.data.rotationIcon.translateByPoint(translationY);
           overlay.path.segments[0].point = overlay.path.segments[0].point.add(translationY);
           overlay.path.segments[1].point = overlay.path.segments[1].point.add(translationY);
           overlay.path.segments[2].point = overlay.path.segments[2].point.add(translationY);
@@ -263,43 +256,47 @@
           overlay.path.segments[4].point = overlay.path.segments[4].point.add(translationY);
           overlay.path.segments[8].point = overlay.path.segments[8].point.add(translationY);
         }
-          if (moveRightSize) {
-            overlay.path.segments[3].point = overlay.path.segments[3].point.add(translationX);
-            overlay.path.segments[4].point = overlay.path.segments[4].point.add(translationX);
-            overlay.path.segments[5].point = overlay.path.segments[5].point.add(translationX);
-          }
-          if (moveLeftSize) {
-            overlay.path.segments[0].point = overlay.path.segments[0].point.add(translationX);
-            overlay.path.segments[7].point = overlay.path.segments[7].point.add(translationX);
-            overlay.path.segments[8].point = overlay.path.segments[8].point.add(translationX);
-          }
-          if (moveRightSize || moveLeftSize) {
-            translationX = translationX.multiply(0.5);
-            //overlay.path.data.rotationIcon.translateByPoint(translationX);
-            overlay.path.data.deleteIcon.translateByPoint(translationX);
+        if (moveRightSize) {
+          overlay.path.segments[3].point = overlay.path.segments[3].point.add(translationX);
+          overlay.path.segments[4].point = overlay.path.segments[4].point.add(translationX);
+          overlay.path.segments[5].point = overlay.path.segments[5].point.add(translationX);
+        }
+        if (moveLeftSize) {
+          overlay.path.segments[0].point = overlay.path.segments[0].point.add(translationX);
+          overlay.path.segments[7].point = overlay.path.segments[7].point.add(translationX);
+          overlay.path.segments[8].point = overlay.path.segments[8].point.add(translationX);
+        }
+        if (moveRightSize || moveLeftSize) {
+          translationX = translationX.multiply(0.5);
+          overlay.path.data.rotationIcon.translateByPoint(translationX);
+          overlay.path.data.deleteIcon.translateByPoint(translationX);
 
-            overlay.path.segments[1].point = overlay.path.segments[1].point.add(translationX);
-            overlay.path.segments[2].point = overlay.path.segments[2].point.add(translationX);
-            overlay.path.segments[6].point = overlay.path.segments[6].point.add(translationX);
-          }
-          var point = overlay.path.segments[1].point.clone();
-          point = point.add(overlay.path.segments[1].handleOut);
-          if (overlay.path.contains(point)) {
-            overlay.path.segments[1].handleOut = overlay.path.segments[1].handleOut.rotate(180, overlay.path.segments[1]);
-            //overlay.path.data.rotationIcon.translateByPoint(overlay.path.segments[1].handleOut.multiply(2));
-          }
+          overlay.path.segments[1].point = overlay.path.segments[1].point.add(translationX);
+          overlay.path.segments[2].point = overlay.path.segments[2].point.add(translationX);
+          overlay.path.segments[6].point = overlay.path.segments[6].point.add(translationX);
+        }
+        var point = overlay.path.segments[1].point.clone();
+        point = point.add(overlay.path.segments[1].handleOut);
+        if (overlay.path.contains(point)) { // TODO should delete this
+          overlay.path.segments[1].handleOut = overlay.path.segments[1].handleOut.rotate(180, overlay.path.segments[1]);
+        }
 
-          if(overlay.path.contains(overlay.path.data.deleteIcon.getItem().position)){
-            overlay.path.data.deleteIcon.rotate(180,overlay.path.data.deleteIcon.getData('pivot'));
-            overlay.path.data.deleteIcon.rotate(180);
-          }
+        if (overlay.path.contains(overlay.path.data.deleteIcon.getItem().position)) {
+          overlay.path.data.deleteIcon.rotate(180, overlay.path.data.deleteIcon.getData('pivot'));
+          overlay.path.data.deleteIcon.rotate(180);
+        }
+
+        if (overlay.path.contains(overlay.path.data.rotationIcon.getItem().position)) {
+          overlay.path.data.rotationIcon.rotate(180, overlay.path.data.rotationIcon.getData('pivot'));
+          overlay.path.data.rotationIcon.rotate(180);
+        }
+
       }
     },
 
     onResize:function(item,overlay){
       if(item._name.toString().indexOf(this.partOfPrefix)!== -1){
         if(item._name.toString().indexOf('delete') !==-1){
-
           item.data.self.setPosition(item.data.self.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom).rotate(item.data.parent.data.rotation)));
 
           if(item.data.parent.contains(item.position)){
@@ -309,6 +306,18 @@
 
           item.data.self.resize(24 *  1 / overlay.paperScope.view.zoom);
         }
+
+        if(item._name.toString().indexOf('rotation') !== -1){
+          item.data.self.setPosition(item.data.self.getData('pivot').add(new overlay.paperScope.Point(0, 21 / overlay.paperScope.view.zoom).rotate(item.data.parent.data.rotation)));
+
+          if(item.data.parent.contains(item.position)){
+            item.data.self.rotate(180,item.data.self.getData('pivot'));
+            item.data.self.rotate(180);
+          }
+
+          item.data.self.resize(16 *  1 / overlay.paperScope.view.zoom);
+        }
+
       }
     },
 
@@ -392,21 +401,11 @@
       var hitResult = overlay.paperScope.project.hitTest(event.point, overlay.hitOptions);
       if (hitResult && hitResult.item._name.toString().indexOf(this.idPrefix) != -1) {
         if (overlay.mode !== 'deform' && overlay.mode !== 'translate' && overlay.mode !== 'create') {
-
-          if(hitResult.type === 'handle-out'){
-
-            overlay.mode = 'rotate';
-            overlay.path = hitResult.item;
-            jQuery(overlay.viewer.canvas).awesomeCursor('repeat', {
-              color: 'white',
-              hotspot: 'center'
-            });
-
-            return;
-          }
-
           if (hitResult.item._name.toString().indexOf(this.partOfPrefix) !== -1) {
             hitResult.item.data.self.onMouseDown(); // TODO should check this for memory leak
+            if(overlay.mode === 'rotate'){
+              overlay.path = hitResult.item.data.self.getItem().data.parent;
+            }
             return;
           }
 
