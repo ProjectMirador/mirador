@@ -44,6 +44,10 @@
     "viewTypeTooltip": "Change view type",
     "metadataTooltip": "View information/metadata about this object",
     "sidePanelTooltip": "Toggle the side panel",
+    "colorPickerChoose":"Choose",
+    "strokeStylePickerSolid":"Solid",
+    "strokeStylePickerDashed":"Dashes",
+    "strokeStylePickerDotdashed":"Dots &amp; Dashes",
     "rotateRightTooltip": "Rotate 90&deg; right",
     "rotateLeftTooltip": "Rotate 90&deg; left",
     "brightnessTooltip": "Adjust brightness",
@@ -57,6 +61,14 @@
     "freehandTooltip": "Freeform annotation",
     "pinTooltip": "Pin annotation",
     "polygonTooltip": "Polygon annotation",
-    "borderColorTooltip": "Choose annotation border color",
-    "fillColorTooltip": "Choose annotation fill color"
+    "borderColorTooltip": "Choose border color",
+    "borderTypeTooltip": "Choose border style",
+    "fillColorTooltip": "Choose fill color",
+    "cancelAnnotation": "Do you want to cancel this annotation?",
+    "deleteAnnotation": "Do you want to delete this annotation and all associated shapes?",
+    "deleteShape":"Do you want to delete this shape?",
+    "editModalSaveAnnotationWithNoShapesMsg":"There are no shapes related to this annotation.",
+    "editModalBtnSaveWithoutShapes":"Save annotation without shapes",
+    "editModalBtnDeleteAnnotation":"Delete this annotation"
+
 }

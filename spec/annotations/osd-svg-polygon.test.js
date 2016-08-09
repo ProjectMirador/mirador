@@ -1,44 +1,7 @@
 paper.install(window);
 
 describe('Polygon', function() {
-
-  function getEvent(delta, point, modifiers) {
-    return {
-      'delta': delta,
-      'point': point,
-      'modifiers': modifiers
-    };
-  }
-
-  function getOverlay(paperScope, strokeColor, fillColor, fillColorAlpha, mode, path, segment, fillOptionsOnly) {
-    var hitOptions = {
-      'fill': true,
-      'stroke': true,
-      'segments': true,
-      'tolerance': 0
-    };
-    if (fillOptionsOnly) {
-      hitOptions.stroke = false;
-      hitOptions.segments = false;
-      hitOptions.tolerance = 5;
-    }
-    return {
-      'paperScope': paperScope,
-      'strokeColor': strokeColor,
-      'fillColor': fillColor,
-      'fillColorAlpha': fillColorAlpha,
-      'mode': mode,
-      'path': path,
-      'segment': segment,
-      'hitOptions': hitOptions,
-      onDrawFinish: function() {
-      },
-      getName: function(tool) {
-        return tool.idPrefix + '1';
-      }
-    };
-  }
-
+  
   beforeAll(function() {
     this.canvas = jQuery('<canvas></canvas>');
     this.canvas.attr('id', 'paperId');
@@ -55,7 +18,7 @@ describe('Polygon', function() {
       'x': 123,
       'y': 456
     };
-    var overlay = getOverlay(paper, '#ff0000');
+    var overlay = MockOverlay.getOverlay(paper);
     var shape = this.polygon.createShape(initialPoint, overlay);
 
     expect(overlay.mode).toBe('create');
@@ -78,7 +41,7 @@ describe('Polygon', function() {
     var overlay;
 
     beforeEach(function() {
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+      overlay = MockOverlay.getOverlay(paper);
       this.polygon = new Mirador.Polygon();
       this.initialPoint = {
         'x': 987,
@@ -103,7 +66,7 @@ describe('Polygon', function() {
     });
 
     it('should update selection', function() {
-      var ellipseTool = new Mirador.Ellipse();
+      var ellipseTool = new Mirador.Ellipse(); // TODO should use stub
       var initialPoint = {
         'x': 987,
         'y': 654
@@ -117,6 +80,22 @@ describe('Polygon', function() {
 
       expect(this.shape.selected).toBe(true);
     });
+
+    it('should update selection to true', function() {
+      this.polygon.updateSelection(true, this.shape, overlay);
+
+      expect(this.shape.selected).toBe(true);
+      expect(this.shape.data.deleteIcon).not.toBeUndefined;
+    });
+
+    it('should update selection to false', function() {
+      this.polygon.updateSelection(true, this.shape, overlay);
+      this.polygon.updateSelection(false, this.shape, overlay);
+
+      expect(this.shape.selected).toBe(false);
+      expect(this.shape.data.deleteIcon).toBeUndefined;
+    });
+
 
     it('should change stroke when hovering polygon',function(){
       var red = {
@@ -149,11 +128,11 @@ describe('Polygon', function() {
     });
 
     it('should do nothing', function() {
-      var event = getEvent({
+      var event = TestUtils.getEvent({
         'x': 100,
         'y': 100
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+      overlay = MockOverlay.getOverlay(paper);
       var localCenterPoint = {
         'x': this.initialPoint.x - 1,
         'y': this.initialPoint.y - 1
@@ -174,7 +153,8 @@ describe('Polygon', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'edit', null, null);
+      overlay = MockOverlay.getOverlay(paper);
+      overlay.mode = 'edit';
       this.polygon.onMouseDrag(event, overlay);
 
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
@@ -184,11 +164,14 @@ describe('Polygon', function() {
     });
 
     it('should edit the whole polygon shape', function() {
-      var event = getEvent({
+      var event = TestUtils.getEvent({
         'x': 3,
         'y': -3
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'edit', this.shape, null);
+      this.polygon.updateSelection(true,this.shape,overlay);
+      overlay.mode = 'translate';
+      overlay.path = this.shape;
+
       var expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -206,7 +189,11 @@ describe('Polygon', function() {
       }
 
       var selectedPointIndex = 1;
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'edit', this.shape, this.shape.segments[selectedPointIndex]);
+      overlay = MockOverlay.getOverlay(paper);
+      overlay.mode = 'deform';
+      overlay.path = this.shape;
+      overlay.segment = this.shape.segments[selectedPointIndex];
+
       expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         if (idx == selectedPointIndex) {
@@ -233,11 +220,11 @@ describe('Polygon', function() {
     });
 
     it('should finish generation of polygon shape', function() {
-      var event = getEvent({
+      var event = TestUtils.getEvent({
         'x': 100,
         'y': 100
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+      overlay.mode = 'create';
       var expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -254,7 +241,9 @@ describe('Polygon', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', this.shape, null);
+      overlay = MockOverlay.getOverlay(paper);
+      overlay.path = this.shape;
+      overlay.mode = 'create';
       this.polygon.onDoubleClick(event, overlay);
 
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
@@ -262,11 +251,17 @@ describe('Polygon', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      event = getEvent({
+      event = TestUtils.getEvent({
         'x': this.initialPoint.x,
         'y': this.initialPoint.y
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', this.shape, null, true);
+      overlay = MockOverlay.getOverlay(paper);
+      overlay.path = this.shape;
+      overlay.hitOptions.stroke = false;
+      overlay.hitOptions.segments = false;
+      overlay.hitOptions.tolerance = 5;
+      overlay.mode = 'create';
+
       expected.push(this.initialPoint);
       this.shape.add(this.initialPoint);
       this.polygon.onDoubleClick(event, overlay);
@@ -278,33 +273,65 @@ describe('Polygon', function() {
 
       expect(this.shape.closed).toBe(true);
 
-      expect(this.shape.fillColor.red).toBe(0);
-      expect(this.shape.fillColor.green).toBe(1);
+      expect(this.shape.fillColor.red).toBe(1);
+      expect(this.shape.fillColor.green).toBe(0);
       expect(this.shape.fillColor.blue).toBe(0);
 
       expect(this.shape.fillColor.alpha).toBe(overlay.fillColorAlpha);
     });
 
+    it('should change cursor on mouse move',function(){
+      var event = TestUtils.getEvent({}, {
+        'x': this.initialPoint.x,
+        'y': this.initialPoint.y
+      });
+      overlay.viewer.canvas = this.canvas;
+      overlay.hoveredPath = this.shape;
+      this.polygon.onMouseMove(event,overlay);
+
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
+    });
+
+    it('should set cursor to pointer when stoke is hit',function(){
+      var hitResult = {
+        type:'stroke'
+      };
+      overlay.viewer.canvas = this.canvas;
+      this.polygon.setCursor(hitResult,overlay);
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('move');
+    });
+
+    it('should set cursor to pointer when icon is hit',function(){
+      var hitResult = {
+        type:'pixel'
+      };
+      overlay.viewer.canvas = this.canvas;
+      this.polygon.setCursor(hitResult,overlay);
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
+    });
+
     it('should select polygon shape', function() {
-      var event = getEvent({}, {
+      var event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x - 100,
         'y': this.initialPoint.y - 100
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+      overlay.mode = '';
+      this.polygon.updateSelection(true,this.shape,overlay);
       this.polygon.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('create');
       expect(overlay.segment).toBeNull();
       expect(overlay.path).not.toBe(this.shape);
-      expect(document.body.style.cursor).toBe('default');
-
-      event = getEvent({}, {
+      event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x - 100,
         'y': this.initialPoint.y - 100
       }, {
         'shift': null
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'create', this.shape, null);
+
+      overlay.mode = 'create';
+      overlay.path = this.shape;
+
       var expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -322,9 +349,9 @@ describe('Polygon', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      expect(document.body.style.cursor).toBe('default');
+      overlay = MockOverlay.getOverlay(paper);
+      overlay.mode  = 'edit';
 
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'edit', null, null);
       this.polygon.onMouseDown(event, overlay);
 
       expect(overlay.segment.point.x).toBe(event.point.x);
@@ -333,16 +360,21 @@ describe('Polygon', function() {
       expect(overlay.path).not.toBe(this.shape);
       expect(document.body.style.cursor).toBe('move');
 
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'translate', this.shape, null);
+      overlay = MockOverlay.getOverlay(paper);
+      overlay.mode = 'translate';
+      overlay.path = this.shape;
       this.polygon.onMouseDown(event, overlay);
 
-      event = getEvent({}, {
+      event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x + 5,
         'y': this.initialPoint.y
       }, {
         'shift': 'selected'
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+
+      overlay = MockOverlay.getOverlay(paper);
+      overlay.mode = '';
+
       expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -361,13 +393,13 @@ describe('Polygon', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      event = getEvent({}, {
+      event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x + 3,
         'y': this.initialPoint.y
       }, {
         'shift': 'selected'
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+      overlay = MockOverlay.getOverlay(paper);
       expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -384,13 +416,16 @@ describe('Polygon', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      event = getEvent({}, {
+      event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x + 3,
         'y': this.initialPoint.y
       }, {
         'shift': null
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'edit', this.shape, null);
+      overlay = MockOverlay.getOverlay(paper);
+      overlay.edit = 'edit';
+      overlay.path = this.shape;
+
       expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -407,13 +442,15 @@ describe('Polygon', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      event = getEvent({}, {
+      event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x + 3,
         'y': this.initialPoint.y
       }, {
         'shift': null
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'edit', null, null);
+
+      overlay = MockOverlay.getOverlay(paper);
+      overlay.mode = 'edit';
       expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -430,7 +467,7 @@ describe('Polygon', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      event = getEvent({}, {
+      event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x + 100,
         'y': this.initialPoint.y
       }, {
@@ -452,13 +489,16 @@ describe('Polygon', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
 
-      event = getEvent({}, {
+      event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x,
         'y': this.initialPoint.y
       }, {
         'shift': null
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'edit', null, null, true);
+      overlay.mode = 'edit';
+      overlay.hitOptions.stroke = false;
+      overlay.hitOptions.segments = false;
+      overlay.hitOptions.tolerance = 5;
       this.shape.closed = true;
       this.shape.fillColor = '#0000ff';
       expected = [];
@@ -477,5 +517,32 @@ describe('Polygon', function() {
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
     });
+
+    it('should resize the trash can icon when resized',function(){
+      var _this = this;
+      var item = {
+        '_name':{
+          toString:function(){
+            return _this.polygon.idPrefix + _this.polygon.partOfPrefix + 'delete';
+          }
+        },
+        data:{
+          self:new overlay.annotationUtils.DeleteActionIcon(),
+          parent:{ // should use mock shape
+            data:{
+              rotation:1
+            },
+            contains:jasmine.createSpy().and.returnValue(true)
+          }
+        }
+      };
+
+      this.polygon.onResize(item,overlay);
+
+      expect(item.data.self.resize).toHaveBeenCalledWith(24);
+    });
+
+
   });
+
 });

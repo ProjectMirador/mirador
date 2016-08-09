@@ -114,19 +114,23 @@
     'availableAnnotationDrawingTools': [
        'Rectangle', 'Ellipse', 'Freehand', 'Polygon', 'Pin'
     ],
-
+    'availableAnnotationStylePickers':[
+        'StrokeColor','FillColor','StrokeType'
+    ],
     'drawingToolsSettings': {
       // Additional tool settings.
       /**
        *'Pin': {
        *},
        **/
+      //'selectedColor': 'red',
       'doubleClickReactionTime': 300,
       'strokeColor': 'deepSkyBlue',
       'fillColor': 'deepSkyBlue',
       'fillColorAlpha': 0.0,
       'shapeHandleSize':10,
       'fixedShapeSize':10,
+      'newlyCreatedShapeStrokeWidthFactor':5,
       'hoverColor':'yellow'
     },
 
