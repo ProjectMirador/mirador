@@ -252,15 +252,15 @@
       if (mousePosition.x < 0) {
         mousePosition.x = 0;
       }
-      if (mousePosition.x > 1) {
-        mousePosition.x = 1;
-      }
+      // if (mousePosition.x > 1) {
+      //   mousePosition.x = 1;
+      // }
       if (mousePosition.y < 0) {
         mousePosition.y = 0;
       }
-      if (mousePosition.y > (1/this.viewer.source.aspectRatio)) {
-        mousePosition.y = (1/this.viewer.source.aspectRatio);
-      }
+      // if (mousePosition.y > (1/this.viewer.source.aspectRatio)) {
+      //   mousePosition.y = (1/this.viewer.source.aspectRatio);
+      // }
       return mousePosition;
     },
 
@@ -270,7 +270,7 @@
         jQuery(this.overlay.viewer.canvas).css('cursor','default');
         // if (this.overlay.mode === 'deform' || this.overlay.mode === 'edit') {
         //   this.overlay.segment = null;
-        //   this.overlay.path = null;
+        //   this.overlay.()) = null;
         // }
         // if (this.overlay.mode != 'create') {
         //   this.overlay.mode = '';
@@ -286,20 +286,19 @@
       if (!this.overlay.disabled) {
         event.stopPropagation();
         if (this.overlay.currentTool) {
-          var oldPoint = new OpenSeadragon.Point(event.event.offsetX, event.event.offsetY);
-          console.log("point coordinates");
-          console.log(event.point);
-          console.log("delta coordinates");
-          console.log(event.delta);
-          console.log("pixel coordinates");
-          console.log(oldPoint);
-          console.log("viewport coordinates");
-          console.log(this.overlay.viewer.viewport.pointFromPixel(oldPoint));
-          var newPoint = this.overlay.getMousePositionInImage(this.overlay.viewer.viewport.pointFromPixel(oldPoint));
-          console.log('new position');
-          console.log(newPoint);
+          event.point = this.overlay.getMousePositionInImage(event.point);
+          // var oldPoint = new OpenSeadragon.Point(event.event.offsetX, event.event.offsetY);
+          // console.log("delta coordinates");
+          // console.log(event.delta);
+          // console.log("pixel coordinates");
+          // console.log(oldPoint);
+          // console.log("viewport coordinates");
+          // console.log(this.overlay.viewer.viewport.pointFromPixel(oldPoint));
+          // var newPoint = this.overlay.getMousePositionInImage(this.overlay.viewer.viewport.pointFromPixel(oldPoint));
+          // console.log('new position');
+          // console.log(newPoint);
           //we may not currently have a tool if the user is in edit mode and didn't click on an editable shape
-          this.overlay.currentTool.onMouseDrag(event, this.overlay, newPoint);
+          this.overlay.currentTool.onMouseDrag(event, this.overlay);
         }
       } else {
         var absolutePoint = {
@@ -397,6 +396,15 @@
         }
 
         if (this.overlay.currentTool) {
+          var bounds = this.overlay.viewer.viewport.getBounds(true);
+          console.log(bounds);
+          var topLeft = this.overlay.viewer.viewport.viewportToViewerElementCoordinates(bounds.getTopLeft());
+          var bottomRight = this.overlay.viewer.viewport.viewportToViewerElementCoordinates(bounds.getBottomRight());
+          console.log(bottomRight);
+          console.log(topLeft);
+          console.log("point coordinates");
+          console.log(event.point);
+          event.point = this.overlay.getMousePositionInImage(event.point);
           this.overlay.currentTool.onMouseDown(event, this.overlay);
           // should check if this is used anywhere and remove it if not used
           // if (this.overlay.mode === 'translate' || this.overlay.mode === 'deform' || this.overlay.mode === 'edit') {

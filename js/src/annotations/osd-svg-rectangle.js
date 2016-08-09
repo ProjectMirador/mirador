@@ -206,7 +206,7 @@
       overlay.path.data.rotation += rotation;
     },
 
-    onMouseDrag: function (event, overlay, osdDeltaPoint) {
+    onMouseDrag: function (event, overlay) {
       if (overlay.mode == 'translate') {
         this.translate(event, overlay);
         return;
