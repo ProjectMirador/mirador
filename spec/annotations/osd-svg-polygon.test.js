@@ -280,6 +280,36 @@ describe('Polygon', function() {
       expect(this.shape.fillColor.alpha).toBe(overlay.fillColorAlpha);
     });
 
+    it('should change cursor on mouse move',function(){
+      var event = TestUtils.getEvent({}, {
+        'x': this.initialPoint.x,
+        'y': this.initialPoint.y
+      });
+      overlay.viewer.canvas = this.canvas;
+      overlay.hoveredPath = this.shape;
+      this.polygon.onMouseMove(event,overlay);
+
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
+    });
+
+    it('should set cursor to pointer when stoke is hit',function(){
+      var hitResult = {
+        type:'stroke'
+      };
+      overlay.viewer.canvas = this.canvas;
+      this.polygon.setCursor(hitResult,overlay);
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('move');
+    });
+
+    it('should set cursor to pointer when icon is hit',function(){
+      var hitResult = {
+        type:'pixel'
+      };
+      overlay.viewer.canvas = this.canvas;
+      this.polygon.setCursor(hitResult,overlay);
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
+    });
+
     it('should select polygon shape', function() {
       var event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x - 100,
@@ -292,8 +322,6 @@ describe('Polygon', function() {
       expect(overlay.mode).toBe('create');
       expect(overlay.segment).toBeNull();
       expect(overlay.path).not.toBe(this.shape);
-      expect(document.body.style.cursor).toBe('default');
-
       event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x - 100,
         'y': this.initialPoint.y - 100
@@ -320,8 +348,6 @@ describe('Polygon', function() {
         expect(this.shape.segments[idx].point.x).toBeCloseTo(expected[idx].x, 6);
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
-
-      expect(document.body.style.cursor).toBe('default');
 
       overlay = MockOverlay.getOverlay(paper);
       overlay.mode  = 'edit';

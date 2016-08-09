@@ -526,7 +526,7 @@ describe('Rectangle', function() {
 
     });
 
-    it('should change cursor to pointer',function(){
+    it('should change cursor to move when stroke is hit',function(){
      var hitResult = {
        type:'stroke'
      };
@@ -534,7 +534,7 @@ describe('Rectangle', function() {
       overlay.viewer.canvas = this.canvas;
       this.rectangle.setCursor(hitResult,overlay);
 
-      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('move');
     });
 
     // it('should change cursor to pointer when hovering delete icon',function(){
@@ -542,15 +542,16 @@ describe('Rectangle', function() {
     //
     // });
 
-    it('should change cursor to default',function(){
+    it('should change cursor on mouse move',function(){
       var event = TestUtils.getEvent({},{
-        x: 1000,
-        y: 1000
+        x: this.initialPoint.x,
+        y: this.initialPoint.y
       });
       overlay.viewer.canvas = this.canvas;
+      overlay.hoveredPath = this.shape;
       this.rectangle.onMouseMove(event,overlay);
 
-      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('default');
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
     });
 
     it('should not update selection if the item is part of selected shape',function(){

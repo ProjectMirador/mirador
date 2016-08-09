@@ -315,9 +315,9 @@
       if (!this.overlay.disabled) {
         // We are in drawing mode
         if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
-          document.body.style.cursor = 'pointer';
+          //document.body.style.cursor = 'pointer';
         } else {
-          document.body.style.cursor = 'default';
+          jQuery(this.overlay.viewer.canvas).css('cursor','default');
         }
         event.stopPropagation();
         if (this.overlay.currentTool) {
@@ -906,6 +906,7 @@
       this.eventEmitter.unsubscribe('changeFillColor.' + this.windowId);
       this.eventEmitter.unsubscribe('changeBorderColor.' + this.windowId);
       this.eventEmitter.unsubscribe('SET_OVERLAY_TOOLTIP.' + this.windowId);
+      this.eventEmitter.unsubscribe('CANCEL_ACTIVE_ANNOTATIONS.' + this.windowId);
       this.eventEmitter.unsubscribe('modeChange.' + this.windowId);
       this.eventEmitter.unsubscribe('CANCEL_ACTIVE_ANNOTATIONS.' + this.windowId);
 
