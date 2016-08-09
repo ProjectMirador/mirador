@@ -249,6 +249,35 @@ describe('Pin', function() {
       expect(overlay.mode).toBe('create');
     });
 
+    it('should change cursor on mouse move',function(){
+      var event = TestUtils.getEvent({}, {
+        'x': this.initialPoint.x,
+        'y': this.initialPoint.y
+      });
+      overlay.viewer.canvas = this.canvas;
+      overlay.hoveredPath = this.shape;
+      this.pin.onMouseMove(event,overlay);
+
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('move');
+    });
+
+    it('should set cursor to pointer when stoke is hit',function(){
+      var hitResult = {
+        type:'stroke'
+      };
+      overlay.viewer.canvas = this.canvas;
+      this.pin.setCursor(hitResult,overlay);
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('move');
+    });
+
+    it('should set cursor to pointer when icon is hit',function(){
+      var hitResult = {
+        type:'pixel'
+      };
+      overlay.viewer.canvas = this.canvas;
+      this.pin.setCursor(hitResult,overlay);
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
+    });
 
     it('should resize the trash can icon',function(){
       var _this = this;

@@ -40,7 +40,7 @@ describe('ContextControls', function() {
           "annotationLayer" : true,
           "annotationCreation" : true,
           "annotationState" : 'annoOff',
-          "annotationRefresh" : false,
+          "annotationRefresh" : false
         },
         "imageManipulation" : {
           "manipulationLayer" : true,

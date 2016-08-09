@@ -477,7 +477,7 @@ describe('Ellipse', function() {
     });
 
 
-    it('should change cursor to pointer when stroke is hit',function(){
+    it('should change cursor to move when stroke is hit',function(){
       var hitResult = {
         type:'stroke'
       };
@@ -485,10 +485,10 @@ describe('Ellipse', function() {
       overlay.viewer.canvas = this.canvas;
       this.ellipse.setCursor(hitResult,overlay);
 
-      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('move');
     });
 
-    it('should change cursor to pointer when handle-in is hit',function(){
+    it('should change cursor to move when handle-in is hit',function(){
       var hitResult = {
         type:'handle-in'
       };
@@ -496,10 +496,10 @@ describe('Ellipse', function() {
       overlay.viewer.canvas = this.canvas;
       this.ellipse.setCursor(hitResult,overlay);
 
-      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('move');
     });
 
-    it('should change cursor to pointer when handle-out is hit',function(){
+    it('should change cursor to move when handle-out is hit',function(){
       var hitResult = {
         type:'handle-in'
       };
@@ -507,22 +507,22 @@ describe('Ellipse', function() {
       overlay.viewer.canvas = this.canvas;
       this.ellipse.setCursor(hitResult,overlay);
 
-      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('move');
     });
 
     // it('should change cursor when hovering icon',function(){
     //
     // });
 
-    it('should change cursor to default',function(){
+    it('should change cursor on mouse move',function(){
       var event = TestUtils.getEvent({},{
-        x: 1000,
-        y: 1000
+        x: this.initialPoint.x,
+        y: this.initialPoint.y
       });
       overlay.viewer.canvas = this.canvas;
       this.ellipse.onMouseMove(event,overlay);
 
-      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('default');
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('move');
     });
 
     it('should not update selection if the item is part of selected shape',function(){
