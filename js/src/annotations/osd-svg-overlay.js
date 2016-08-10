@@ -252,16 +252,71 @@
       if (mousePosition.x < 0) {
         mousePosition.x = 0;
       }
-      // if (mousePosition.x > 1) {
-      //   mousePosition.x = 1;
-      // }
+      if (mousePosition.x > this.viewer.tileSources.width) {
+        mousePosition.x = this.viewer.tileSources.width;
+      }
       if (mousePosition.y < 0) {
         mousePosition.y = 0;
       }
-      // if (mousePosition.y > (1/this.viewer.source.aspectRatio)) {
-      //   mousePosition.y = (1/this.viewer.source.aspectRatio);
-      // }
+      if (mousePosition.y > this.viewer.tileSources.height) {
+        mousePosition.y = this.viewer.tileSources.height;
+      }
       return mousePosition;
+    },
+
+    adjustDelta: function(lastPoint, currentPoint, delta) {
+      var newDelta = delta;
+      //first do the x coordinate
+
+      // check if the user has moved the mouse past the left edge of the image
+      // if so, the delta should be the negative value of lastPoint, which takes the delta.x to the left edge
+      if (currentPoint.x < 0) {
+        newDelta.x = Math.min(-lastPoint.x, 0);
+      }
+      // check if the user's last mouse position was past the left edge of the image, but
+      // they have moved the mouse back within the bounds of the image
+      // if so, calculate positive delta using currentPoint
+      if (lastPoint.x < 0 && currentPoint.x > 0 && lastPoint.x < currentPoint.x) {
+        newDelta.x = currentPoint.x;
+      }
+      // check if the user has moved the mouse past the right edge of the image
+      // if so, the delta should be the value of the image width - lastPoint, or 0, whichever is higher
+      // taking the delta to the right edge (or keeping it there)
+      if (currentPoint.x > this.viewer.tileSources.width) {
+        newDelta.x = Math.max(this.viewer.tileSources.width - lastPoint.x, 0);
+      }
+      // check if the user's last mouse position was past the right edge of the image, but they have moved
+      // the mouse back within the bounds of the image
+      // if so, calculate negative delta from width to current mouse position
+      if (lastPoint.x > this.viewer.tileSources.width && currentPoint.x < this.viewer.tileSources.width && lastPoint.x > currentPoint.x) {
+        newDelta.x = currentPoint.x - this.viewer.tileSources.width;
+      }
+
+      //then y coordinate
+
+      // check if the user has moved the mouse past the top edge of the image
+      // if so, delta should be negative value of lastPoint, which takes delta.y to the top edge
+      if (currentPoint.y < 0) {
+        newDelta.y = Math.min(-lastPoint.y, 0);
+      }
+      // check if user's last mouse position was past the top edge
+      // but has moved the mouse back within the bounds of the image
+      // calculate positive delta using currentPoint
+      if (lastPoint.y < 0 && currentPoint.y > 0 && lastPoint.y < currentPoint.y) {
+        newDelta.y = currentPoint.y;
+      }
+      // check if the user has moved the mouse past the bottom edge of the image
+      // if so, the delta should be the value of image height - lastPoint, or 0, whichever is higher
+      if (currentPoint.y > this.viewer.tileSources.height) {
+        newDelta.y = Math.max(this.viewer.tileSources.height - lastPoint.y, 0);
+      }
+      // check if user's last mouse position was past the bottom edge of the image,
+      // but they have moved the mouse back within the bounds of the image
+      // if so, calculate negative delta from height to current mouse position
+      if (lastPoint.y > this.viewer.tileSources.height && currentPoint.y < this.viewer.tileSources.height && lastPoint.y > currentPoint.y) {
+        newDelta.y = currentPoint.y - this.viewer.tileSources.height;
+      }
+      return newDelta;
     },
 
     onMouseUp: function(event) {
@@ -286,17 +341,7 @@
       if (!this.overlay.disabled) {
         event.stopPropagation();
         if (this.overlay.currentTool) {
-          event.point = this.overlay.getMousePositionInImage(event.point);
-          // var oldPoint = new OpenSeadragon.Point(event.event.offsetX, event.event.offsetY);
-          // console.log("delta coordinates");
-          // console.log(event.delta);
-          // console.log("pixel coordinates");
-          // console.log(oldPoint);
-          // console.log("viewport coordinates");
-          // console.log(this.overlay.viewer.viewport.pointFromPixel(oldPoint));
-          // var newPoint = this.overlay.getMousePositionInImage(this.overlay.viewer.viewport.pointFromPixel(oldPoint));
-          // console.log('new position');
-          // console.log(newPoint);
+          event.delta = this.overlay.adjustDelta(event.lastPoint, event.point, event.delta);
           //we may not currently have a tool if the user is in edit mode and didn't click on an editable shape
           this.overlay.currentTool.onMouseDrag(event, this.overlay);
         }
@@ -315,7 +360,6 @@
       if (!this.overlay.disabled) {
         // We are in drawing mode
         if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
-          //document.body.style.cursor = 'pointer';
         } else {
           jQuery(this.overlay.viewer.canvas).css('cursor','default');
         }
@@ -346,14 +390,6 @@
       } else {
         this.overlay.latestMouseDownTime = time;
         var hitResult = this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions);
-
-        // no need for this check we have already disabled the current shape editing when not in edit mode
-        // by using the editable check, although having such info is okey to keep inside the code
-        //if (this.overlay.inEditMode) {
-          //if in edit mode, clear the current tool and mode in case the user clicked on an "empty" space // not okey what if i want to draw another shape
-          //if the user (re)clicked on an editable shape, the currentTool gets set below
-          //if the user has clicked on "empty" space, return and don't do anything more
-        //}
 
         if(this.overlay.mode !== 'create'){
           this.overlay.mode = '';
@@ -396,31 +432,8 @@
         }
 
         if (this.overlay.currentTool) {
-          var bounds = this.overlay.viewer.viewport.getBounds(true);
-          console.log(bounds);
-          var topLeft = this.overlay.viewer.viewport.viewportToViewerElementCoordinates(bounds.getTopLeft());
-          var bottomRight = this.overlay.viewer.viewport.viewportToViewerElementCoordinates(bounds.getBottomRight());
-          console.log(bottomRight);
-          console.log(topLeft);
-          console.log("point coordinates");
-          console.log(event.point);
           event.point = this.overlay.getMousePositionInImage(event.point);
           this.overlay.currentTool.onMouseDown(event, this.overlay);
-          // should check if this is used anywhere and remove it if not used
-          // if (this.overlay.mode === 'translate' || this.overlay.mode === 'deform' || this.overlay.mode === 'edit') {
-          //   if (this.overlay.path && this.overlay.path.data.annotation) {
-          //     var inArray = false;
-          //     for (var i = 0; i < this.overlay.editedPaths.length; i++) {
-          //       if (this.overlay.editedPaths[i].name === this.overlay.path.name) {
-          //         inArray = true;
-          //         break;
-          //       }
-          //     }
-          //     if (!inArray) {
-          //       this.overlay.editedPaths.push(this.overlay.path);
-          //     }
-          //   }
-          // }
         }
       }
       this.overlay.hover();
