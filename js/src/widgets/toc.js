@@ -222,6 +222,8 @@
       toOpen.forEach(function(element) {
         element.addClass('open').find('ul:first').slideFadeToggle();
       });
+      console.log(toOpen);
+      console.log(toClose);
 
       // Close previously opened selections (find way to keep scroll position).
       toClose.forEach(function(element) {
@@ -257,6 +259,7 @@
 
       _this.eventEmitter.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event, canvasID) {
         if (!_this.structures) { return; }
+        console.log('changing pages');
         _this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, canvasID));
         _this.render();
       });
@@ -287,11 +290,20 @@
 
     setOpenItem: function(rangeID) {
       var _this = this;
+      var inOpenList = jQuery.inArray(rangeID, _this.openElements) > -1;
 
-      if (jQuery.inArray(rangeID, _this.openElements)<0) {
+      console.log(_this.openElements);
+      console.log(inOpenList);
+      if (!inOpenList) {
+        // if the range isn't in the open elements list
+        // put it in.
         _this.openElements.push(rangeID);
+        console.log(_this.openElements);
       } else {
+        // otherwise remove it.
+        // jQuery.inArray() returns the index.
         _this.openElements.splice(jQuery.inArray(rangeID, _this.openElements), 1);
+        console.log(_this.openElements);
       }
     },
 
