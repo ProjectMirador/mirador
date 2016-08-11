@@ -319,6 +319,36 @@
       return newDelta;
     },
 
+    adjustDeltaForShape: function(lastPoint, currentPoint, downPoint, delta, bounds) {
+      //first check along x axis
+      if (lastPoint.x < currentPoint.x) {
+        //moving to the right, delta should be based on the right most edge
+        if (bounds.x + bounds.width > this.viewer.tileSources.width) {
+          delta.x = this.viewer.tileSources.width - (bounds.x + bounds.width);
+        }
+      } else {
+        //moving to the left, prevent it from going past the left edge.  if it does, use the shapes x value as the delta
+        if (bounds.x < 0) {
+          delta.x = Math.abs(bounds.x);
+        }
+      }
+
+      //check along y axis
+      if (lastPoint.y < currentPoint.y) {
+        // moving to the bottom
+        if (bounds.y + bounds.height > this.viewer.tileSources.height) {
+          delta.y = this.viewer.tileSources.height - (bounds.y + bounds.height);
+        }
+      } else {
+        //moving to the top
+        if (bounds.y < 0) {
+          delta.y = Math.abs(bounds.y);
+        }
+      }
+
+      return delta;
+    },
+
     onMouseUp: function(event) {
       if (!this.overlay.disabled) {
         event.stopPropagation();
@@ -341,7 +371,13 @@
       if (!this.overlay.disabled) {
         event.stopPropagation();
         if (this.overlay.currentTool) {
-          event.delta = this.overlay.adjustDelta(event.lastPoint, event.point, event.delta);
+          if (this.overlay.mode === 'translate' || this.overlay.mode === 'rotate') {
+            var bounds = this.overlay.path.bounds;
+            // we already have a shape, and we are moving it, need to account for that, rather than mouse position
+            event.delta = this.overlay.adjustDeltaForShape(event.lastPoint, event.point, event.downPoint, event.delta, bounds);
+          } else {
+            event.delta = this.overlay.adjustDelta(event.lastPoint, event.point, event.delta);
+          }
           //we may not currently have a tool if the user is in edit mode and didn't click on an editable shape
           this.overlay.currentTool.onMouseDrag(event, this.overlay);
         }
