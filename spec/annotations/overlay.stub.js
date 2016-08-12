@@ -29,7 +29,11 @@
         onDrawFinish: jasmine.createSpy(),
         getName: function (tool) {
           return tool.idPrefix + '1';
-        }
+        },
+        show: jasmine.createSpy(),
+        hide: jasmine.createSpy(),
+        disable: jasmine.createSpy(),
+        destroy: jasmine.createSpy()
       }
     }
   }

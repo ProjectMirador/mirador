@@ -262,7 +262,7 @@
       this.element.find('.mirador-osd-refresh-mode').on('click', function() {
         //update annotation list from endpoint
         _this.eventEmitter.publish('updateAnnotationList.'+_this.windowId);
-        _this.eventEmitter.publish('refreshOverlay.'+_this.windowId, '');
+       // _this.eventEmitter.publish('refreshOverlay.'+_this.windowId, '');
       });
       //Annotation specific controls
 
