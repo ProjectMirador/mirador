@@ -227,6 +227,8 @@
         });
 
         toOpen.forEach(function(element) {
+          // if you open a range below an open range, it scrolls back up to the first open range
+          // TODO fix that
           element.addClass('open').find('ul:first').slideFadeToggle(250, 'swing', scroll);
         });
       } else {
