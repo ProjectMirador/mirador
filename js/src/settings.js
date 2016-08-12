@@ -135,6 +135,8 @@
     },
 
     'availableExternalCommentsPanel': false,
+    'shapeHandleSize':10,
+
 
     'availableCanvasTools': [
 
