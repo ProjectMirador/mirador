@@ -66,7 +66,6 @@
         // case '2.1':
         //   _this.extractV21RangeTrees(_this.structures);
       }
-
       if (ranges.length < 2) {
         ranges = ranges[0].children;
       }
@@ -150,7 +149,32 @@
         // by the call below.
         tree = typeof tree !== 'undefined' ? tree : [];
         parent = typeof parent !== 'undefined' ? parent : {'@id': "root", label: "Table of Contents" };
-        var children = jQuery.grep(flatRanges, function(child) { if (!child.within) { child.within = 'root'; } return child.within == parent['@id']; });
+        var children = [];
+        if (parent.ranges) {
+          jQuery.each(parent.ranges, function(index, id) {
+            children.push(jQuery.grep(flatRanges, function(range, index) {
+              if (range['@id'] === id) {
+                return range;
+              }
+            })[0]);
+          });
+        } else if (parent['@id'] === 'root') {
+          // we have created a dummy root node, get the top most range as only child
+          var top = jQuery.grep(flatRanges, function(range, index) {
+            //check if we have a viewingHint
+            if (range.hasOwnProperty('viewingHint') && range.viewingHint === 'top') {
+              //found the top most range
+              return range;
+            }
+          })[0];
+          if (top) {
+            children.push(top);
+          }
+          // if we still don't have children, use the first range (assuming it is top level)
+          if (children.length === 0) {
+            children.push(flatRanges[0]);
+          }
+        }
         if ( children.length ) {
           if ( parent['@id'] === 'root') {
             // If there are children and their parent's
@@ -227,9 +251,10 @@
         });
 
         toOpen.forEach(function(element) {
-          // if you open a range below an open range, it scrolls back up to the first open range
-          // TODO fix that
-          element.addClass('open').find('ul:first').slideFadeToggle(250, 'swing', scroll);
+          // TODO if you open a range below an open range, it scrolls back up to the first open range
+          // comment out scrolling for now
+          //element.addClass('open').find('ul:first').slideFadeToggle(250, 'swing', scroll);
+          element.addClass('open').find('ul:first').slideFadeToggle();
         });
       } else {
         toOpen.forEach(function(element) {
