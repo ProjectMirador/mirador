@@ -16,11 +16,23 @@
   ['subscribe', 'unsubscribe', 'publish'].forEach(function(action) {
     $.EventEmitter.prototype[action] = function() {
       var args = Array.prototype.slice.call(arguments);
+      var event;
+      if(action === 'subscribe'){
+        event = {
+          name:args[0],
+          handler:args[1]
+        };
+      }
+
       args[0] = this.emitterId.toString() +"::"+ args[0];
       if (this.debug) {
         console.trace("EventEmitter:"+action+":", args);
       }
       jQuery[action].apply(jQuery, args);
+
+      if(event){
+        return event;
+      }
     };
   });
 })(Mirador);
