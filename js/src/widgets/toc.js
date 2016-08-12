@@ -10,6 +10,7 @@
       manifestVersion:   null,
       previousSelectedElements: [],
       selectedElements: [],
+      previousOpenElements: [],
       openElements:     [],
       hoveredElement:   [],
       selectContext:    null,
@@ -20,6 +21,8 @@
 
     this.init();
 
+    var self = this;
+    window.render = function() {self.render();};
   };
 
   $.TableOfContents.prototype = {
@@ -30,7 +33,7 @@
       } else {
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
         this.tocData = _this.initTocData();
-        this.selectedElements = $.getRangeIDByCanvasID(_this.structures, _this.canvasID);
+        this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, _this.canvasID));
         this.element.find('.has-child ul').hide();
         this.render();
       }
@@ -188,60 +191,74 @@
     },
 
     render: function() {
-      var _this = this,
-          toDeselect = _this.previousSelectedElements.map(function(rangeID) {
-            return _this.tocData[rangeID].element;
-          }),
+
+      var _this = this;
+      var toDeselect = _this.previousSelectedElements.map(function(rangeID) {
+        return _this.tocData[rangeID].element;
+      }),
           toSelect = _this.selectedElements.map(function(rangeID) {
             return _this.tocData[rangeID].element;
           }),
-          toOpen = _this.selectedElements.filter(function(rangeID) {
-            return (jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.previousSelectedElements) < 0);
+          toOpen = _this.openElements.filter(function(rangeID) {
+            return jQuery.inArray(rangeID, _this.previousOpenElements) === -1;
           }).map(function(rangeID) {
             return _this.tocData[rangeID].element;
           }),
-          toClose = _this.previousSelectedElements.filter(function(rangeID) {
-            return (jQuery.inArray(rangeID, _this.openElements) < 0) && (jQuery.inArray(rangeID, _this.selectedElements) < 0);
+          toClose = _this.previousOpenElements.filter(function(rangeID) {
+            return jQuery.inArray(rangeID, _this.openElements) === -1;
           }).map(function(rangeID) {
             return _this.tocData[rangeID].element;
           });
 
-      // Deselect elements
-      toDeselect.forEach(function(element) {
+      if (_this.previousSelectedElements !== _this.selectedElements) {
+        // Deselect elements
+        toDeselect.forEach(function(element) {
           element.removeClass('selected');
-      });
+        });
 
-      // Select new elements
-      toSelect.forEach(function(element) {
-        element.addClass('selected');
-      });
-      // Scroll to new elements
-      scroll();
+        // Select new elements
+        toSelect.forEach(function(element) {
+          element.addClass('selected');
+        });
+
+        scroll();
+
+        toOpen.forEach(function(element) {
+          element.addClass('open').find('ul:first').slideFadeToggle();
+        });
+
+        toClose.forEach(function(element) {
+          element.removeClass('open');
+          element.find('ul:first').slideFadeToggle(400, 'swing', scroll);
+        });
+
+        console.log("toOpen: ");
+        console.log(toOpen);
+        console.log("toCLose: ");
+        console.log(toClose);
+      } else {
+        console.log('what about now');
+        toOpen.forEach(function(element) {
+          element.addClass('open').find('ul:first').slideFadeToggle();
+        });
+
+        toClose.forEach(function(element) {
+          element.removeClass('open').find('ul:first').slideFadeToggle();
+        });
+
+        console.log("toOpen: ");
+        console.log(toOpen);
+        console.log("toCLose: ");
+        console.log(toClose);
+      }
 
       // Open newly opened sections
-      toOpen.forEach(function(element) {
-        element.addClass('open').find('ul:first').slideFadeToggle();
-      });
-      console.log(toOpen);
-      console.log(toClose);
-
-      // Close previously opened selections (find way to keep scroll position).
-      toClose.forEach(function(element) {
-        element.removeClass('open').find('ul:first').slideFadeToggle(400, 'swing', scroll);
-      });
-
-      // Get the sum of the outer height of all elements to be removed.
-      // Subtract from current parent height to retreive the new height.
-      // Scroll with respect to this.
-      scroll();
-
       function scroll() {
         var head = _this.element.find('.selected').first();
         if (head.length > 0) {
           _this.element.scrollTo(head, 400);
         }
       }
-
     },
 
     bindEvents: function() {
@@ -259,7 +276,6 @@
 
       _this.eventEmitter.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event, canvasID) {
         if (!_this.structures) { return; }
-        console.log('changing pages');
         _this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, canvasID));
         _this.render();
       });
@@ -268,8 +284,7 @@
         event.stopPropagation();
 
         var rangeID = jQuery(this).data().rangeid,
-            canvasID = jQuery.grep(_this.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0],
-            isLeaf = jQuery(this).closest('li').hasClass('leaf-item');
+            canvasID = jQuery.grep(_this.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0];
 
         _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasID);
       });
@@ -278,6 +293,7 @@
         event.stopPropagation();
 
         var rangeID = jQuery(this).parent().data().rangeid;
+        console.log(rangeID);
         _this.setOpenItem(rangeID);
         _this.render();
       });
@@ -289,22 +305,21 @@
     },
 
     setOpenItem: function(rangeID) {
-      var _this = this;
-      var inOpenList = jQuery.inArray(rangeID, _this.openElements) > -1;
+      var _this = this,
+          alreadyOpen = jQuery.inArray(rangeID, _this.openElements) !== -1;
 
+      _this.previousOpenElements = _this.openElements;
+      _this.openElements = (function() {
+        if (alreadyOpen) {
+          return _this.openElements.filter(function(elementID) {
+            return elementID !== rangeID;
+          });
+        }
+        return _this.openElements.map(function(elementID) {return elementID;}).concat([rangeID]);
+      })();
+
+      console.log(_this.previousOpenElements);
       console.log(_this.openElements);
-      console.log(inOpenList);
-      if (!inOpenList) {
-        // if the range isn't in the open elements list
-        // put it in.
-        _this.openElements.push(rangeID);
-        console.log(_this.openElements);
-      } else {
-        // otherwise remove it.
-        // jQuery.inArray() returns the index.
-        _this.openElements.splice(jQuery.inArray(rangeID, _this.openElements), 1);
-        console.log(_this.openElements);
-      }
     },
 
     // focusCursorFrame: function() {
@@ -320,6 +335,19 @@
 
       _this.previousSelectedElements = _this.selectedElements;
       _this.selectedElements = rangeIDs;
+      _this.previousOpenElements = _this.openElements;
+      // Ensure that all new selected elements are added to
+      // the list of open elements,
+      // and all previously selected elements are removed.
+      _this.openElements = _this.openElements.filter(function(openElementID) {
+        return jQuery.inArray(openElementID, _this.previousSelectedElements) === -1;
+      }).concat(rangeIDs);
+      console.log('selected before and after');
+      console.log(_this.previousSelectedElements);
+      console.log(_this.selectedElements);
+      console.log('open before and after');
+      console.log(_this.previousOpenElements);
+      console.log(_this.openElements);
     },
 
     emptyTemplate: Handlebars.compile([
