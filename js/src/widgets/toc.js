@@ -221,23 +221,15 @@
           element.addClass('selected');
         });
 
-        scroll();
-
-        toOpen.forEach(function(element) {
-          element.addClass('open').find('ul:first').slideFadeToggle();
-        });
-
         toClose.forEach(function(element) {
           element.removeClass('open');
-          element.find('ul:first').slideFadeToggle(400, 'swing', scroll);
+          element.find('ul:first').slideFadeToggle();
         });
 
-        console.log("toOpen: ");
-        console.log(toOpen);
-        console.log("toCLose: ");
-        console.log(toClose);
+        toOpen.forEach(function(element) {
+          element.addClass('open').find('ul:first').slideFadeToggle(250, 'swing', scroll);
+        });
       } else {
-        console.log('what about now');
         toOpen.forEach(function(element) {
           element.addClass('open').find('ul:first').slideFadeToggle();
         });
@@ -245,11 +237,6 @@
         toClose.forEach(function(element) {
           element.removeClass('open').find('ul:first').slideFadeToggle();
         });
-
-        console.log("toOpen: ");
-        console.log(toOpen);
-        console.log("toCLose: ");
-        console.log(toClose);
       }
 
       // Open newly opened sections
@@ -293,7 +280,6 @@
         event.stopPropagation();
 
         var rangeID = jQuery(this).parent().data().rangeid;
-        console.log(rangeID);
         _this.setOpenItem(rangeID);
         _this.render();
       });
@@ -318,16 +304,12 @@
         return _this.openElements.map(function(elementID) {return elementID;}).concat([rangeID]);
       })();
 
-      console.log(_this.previousOpenElements);
-      console.log(_this.openElements);
     },
 
     // focusCursorFrame: function() {
-    //   console.log('focusCursorFrame');
     // },
 
     // hoverItem: function() {
-    //   console.log('hoverItem');
     // },
 
     setSelectedElements: function(rangeIDs) {
@@ -341,13 +323,10 @@
       // and all previously selected elements are removed.
       _this.openElements = _this.openElements.filter(function(openElementID) {
         return jQuery.inArray(openElementID, _this.previousSelectedElements) === -1;
-      }).concat(rangeIDs);
-      console.log('selected before and after');
-      console.log(_this.previousSelectedElements);
-      console.log(_this.selectedElements);
-      console.log('open before and after');
-      console.log(_this.previousOpenElements);
-      console.log(_this.openElements);
+      }).concat(rangeIDs).filter(function(openElementID,index,openElements){
+        // this filters out any duplicates, which would cause a bug.
+        return index === openElements.indexOf(openElementID);
+      });
     },
 
     emptyTemplate: Handlebars.compile([
