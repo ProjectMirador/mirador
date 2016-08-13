@@ -512,7 +512,6 @@
 
         _this.eventEmitter.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
 
-        _this.eventEmitter.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
       } else {
         targetSlot.window.element.remove();
         targetSlot.window.update(windowConfig);

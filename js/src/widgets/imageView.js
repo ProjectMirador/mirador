@@ -658,7 +658,6 @@
     next: function() {
       var _this = this;
       var next = this.currentImgIndex + 1;
-
       if (next < this.imagesList.length) {
         _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + this.windowId, this.imagesList[next]['@id']);
       }
