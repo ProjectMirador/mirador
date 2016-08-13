@@ -152,11 +152,14 @@
         var children = [];
         if (parent.ranges) {
           jQuery.each(parent.ranges, function(index, id) {
-            children.push(jQuery.grep(flatRanges, function(range, index) {
+            var child = jQuery.grep(flatRanges, function(range, index) {
               if (range['@id'] === id) {
                 return range;
               }
-            })[0]);
+            })[0];
+            if (child) {
+              children.push(child);
+            }
           });
         } else if (parent['@id'] === 'root') {
           // we have created a dummy root node, get the top most range as only child
