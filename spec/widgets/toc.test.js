@@ -6,6 +6,7 @@ describe('Table of Contents', function() {
     this.eventEmitter = new Mirador.EventEmitter();
     this.v1SimpleStructures = getJSONFixture('simpleStructuresFixtureV1.json'),
     this.v1SimpleStructuresTemplateData = '[{"@id":"http://www.example.org/iiif/book1/range/r1.json","@type":"sc:Range","label":"Introduction","canvases":["http://www.example.org/iiif/book1/canvas/p1.json"],"id":"http://www.example.org/iiif/book1/range/r1.json","within":"root","level":0,"children":[{"@id":"http://www.example.org/iiif/book1/range/r2.json","@type":"sc:Range","label":"Part 1","within":"http://www.example.org/iiif/book1/range/r1.json","canvases":["http://www.example.org/iiif/book1/canvas/p2.json","http://www.example.org/iiif/book1/canvas/p3.json#xywh=0,0,750,300"],"id":"http://www.example.org/iiif/book1/range/r2.json","level":1}]}]',
+    this.simpleStructuresElement = '<ul class="toc"><li class="leaf-item"><h2><a class="toc-link" data-rangeid="http://www.example.org/iiif/book1/range/r2.json"><i class="fa fa-caret-right toc-caret"></i><i class="fa fa-certificate star"></i><span>Part 1</span></a></h2></li><li></li></ul>';
     this.v2SimpleStructures = getJSONFixture('simpleStructuresFixtureV2.json'),
     // v21SimpleStructures = getJSONFixture('simpleStructuresFixtureV21.json'),
     this.realisticV1 = getJSONFixture('Richardson7manifest.json'),
@@ -89,7 +90,7 @@ describe('Table of Contents', function() {
 
     });
 
-    it('should return a tree of ranges from the structures (v1.0)', function() {
+    it('should return an HTML element from the structures (v1.0)', function() {
       var testToc = new Mirador.TableOfContents({
         structures: this.v1SimpleStructures.structures,
         manifestVersion: '1',
@@ -100,11 +101,11 @@ describe('Table of Contents', function() {
       });
 
       expect(testToc.structures.length).toEqual(2);
-      expect(JSON.stringify(testToc.extractV1RangeTrees(testToc.structures)))
-        .toEqual(this.v1SimpleStructuresTemplateData);
+      expect(testToc.element[0].outerHTML)
+        .toBe(this.simpleStructuresElement);
     });
 
-    xit('should return a tree of ranges from the structures (v2.0)', function() {
+    it('should return an HTML element from the structures (v2.0)', function() {
 
       var testToc = new Mirador.TableOfContents({
         structures: this.v2SimpleStructures.structures,
@@ -116,8 +117,8 @@ describe('Table of Contents', function() {
       });
 
       expect(testToc.structures.length).toEqual(2);
-      expect(JSON.stringify(testToc.extractV2RangeTrees(this.v2SimpleStructures)))
-        .toEqual(this.v1SimpleStructuresTemplateData);
+      expect(testToc.element[0].outerHTML)
+        .toBe(this.simpleStructuresElement);
     });
 
     xit('should return a tree of ranges from the structures (v2.1)', function() {
