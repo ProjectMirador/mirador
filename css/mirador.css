@@ -856,8 +856,12 @@ li.highlight {
 }
 .toc-link i {
   color: rgba(0,0,0,0.4);
-  margin-right:8px;
+  margin-right:0.4em;
   transition: all 0.2s linear;
+}
+.toc-caret {
+  padding: 0.4em;
+  margin: -0.4em;
 }
 .toc-link i:hover {
   color: black;

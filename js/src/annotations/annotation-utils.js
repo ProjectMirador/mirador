@@ -158,6 +158,7 @@
   DeleteActionIcon.prototype.setOnMouseDownListener = function (overlay) {
     this.mouseDown = function () {
       overlay.eventEmitter.publish('deleteShape.' + overlay.windowId, [this.getData('parent')]);
+      overlay.mode = 'delete';
     };
   };
 

@@ -98,6 +98,7 @@
       }
       jQuery('#' + osdViewerId).parents('.window').find('.qtip-viewer').hide();
       _this.currentTool = null;
+      _this.mode = '';
       for (var i = 0; i < _this.tools.length; i++) {
         if (_this.tools[i].logoClass === tool) {
           _this.currentTool = _this.tools[i];
@@ -592,9 +593,9 @@
         this.overlay.latestMouseDownTime = time;
         var hitResult = this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions);
 
-        if(this.overlay.mode !== 'create'){
+        if (this.overlay.mode !== 'create' && this.overlay.mode !=='') {
           this.overlay.mode = '';
-          this.currentTool = null;
+          this.overlay.currentTool = null;
         }
 
         if (hitResult && this.overlay.mode !== 'create') {
@@ -1022,6 +1023,7 @@
       this.segment = null;
       this.path = null;
       this.mode = '';
+      this.currentTool =null;
       this.draftPaths.push(shape);
 
       shape.data.editable = true;
@@ -1037,7 +1039,7 @@
       }
 
       if (this.availableExternalCommentsPanel) {
-        this.eventEmitter.publish('annotationShapeCreated.' + this.windowId, [this, shape]);//ne trbqva toq this
+        this.eventEmitter.publish('annotationShapeCreated.' + this.windowId, [this, shape]);
         return;
       }
       var _this = this;
