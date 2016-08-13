@@ -66,7 +66,7 @@ describe('Overlay', function() {
       },
       'addHandler': function(eventName, functionBody) {
       },
-      'removeAllHandlers':function(eventName){
+      'removeHandler':function(eventName,functionBody){
       }
     };
     var drawingToolsSettings = {
@@ -521,10 +521,10 @@ describe('Overlay', function() {
   });
 
   it('should unsubscibe from all events when destroying',function(){
-    this.overlay.destroy();
-    for(var key in this.overlay.eventEmitter.events){
-      expect(this.overlay.eventEmitter.events[key]).toBe(0);
-    }
+   this.overlay.destroy();
+   for(var key in this.overlay.eventEmitter.events){
+     expect(this.overlay.eventEmitter.events[key]).toBe(0);
+   }
   });
 
 
