@@ -43,6 +43,7 @@ module.exports = function(config) {
       'js/src/widgets/*.js',
       'js/src/utils/*.js',
       // spec
+      'spec/**/*.stub.js',
       'spec/**/*.js',
       {pattern: 'spec/data/*', watched: true, served: true, included: false},
       {pattern: 'spec/fixtures/*json', watched: true, served: true, included: false},

@@ -23,6 +23,7 @@
       var _this = this;
       _this.eventEmitter.unsubscribe(('modeChange.' + _this.windowId));
 
+      this.createStateMachine();
       this.createRenderer();
       this.bindEvents();
       this.listenForActions();
@@ -46,6 +47,40 @@
       var _this = this;
     },
 
+    createStateMachine: function() {
+      var _this = this;
+      this.layerState = StateMachine.create({
+        events: [
+          { name: 'startup', from: 'none', to: 'default' },
+          { name: 'defaultState', from: ['default', 'display', 'create', 'edit'], to: 'default' },
+          { name: 'displayAnnotations', from: ['default', 'display', 'create', 'edit', 'newShape'], to: 'display' },
+          { name: 'createAnnotation', from: ['default','display'], to: 'create' },
+          { name: 'createShape', from: 'edit', to: 'newShape'},
+          { name: 'editAnnotation', from: ['default','display', 'newShape'], to: 'edit' }
+        ],
+        callbacks: {
+          onstartup: function(event) {
+            _this.enterDefault();
+          },
+          ondefaultState: function(event) {
+            _this.enterDefault();
+          },
+          ondisplayAnnotations: function(event) {
+            _this.enterDisplayAnnotations();
+          },
+          oncreateAnnotation: function(event) {
+            _this.enterCreateAnnotation();
+          },
+          oncreateShape: function(event) {
+            _this.enterCreateShape();
+          },
+          oneditAnnotation: function(event) {
+            _this.enterEditAnnotation();
+          }
+        }
+      });
+    },
+
     createRenderer: function() {
       var _this = this;
       this.drawTool = new $.OsdRegionDrawTool({
@@ -57,18 +92,25 @@
         state: _this.state,
         eventEmitter: _this.eventEmitter
       });
-      this.modeSwitch();
+      this.layerState.startup();
     },
 
     updateRenderer: function() {
       this.drawTool.list = this.annotationsList;
-      this.modeSwitch();
+      // this.modeSwitch();
     },
 
     modeSwitch: function() {
-      if (this.mode === 'displayAnnotations') { this.enterDisplayAnnotations(); }
-      else if (this.mode === 'editingAnnotations') { this.enterEditAnnotations(); }
-      else if (this.mode === 'default') { this.enterDefault(); }
+      if (this.mode === 'displayAnnotations') { this.layerState.displayAnnotations(); }
+      else if (this.mode === 'editingAnnotation') { this.layerState.editAnnotation(); }
+      else if (this.mode === 'creatingAnnotation') {
+        if (this.layerState.current !== 'edit') {
+          this.layerState.createAnnotation();
+        } else {
+          this.layerState.createShape();
+        }
+      }
+      else if (this.mode === 'default') { this.layerState.defaultState(); }
       else {}
     },
 
@@ -77,9 +119,17 @@
       this.drawTool.render();
     },
 
-    enterEditAnnotations: function() {
-      this.drawTool.enterEditMode();
+    enterCreateAnnotation: function() {
+      this.drawTool.enterCreateMode();
       this.drawTool.render();
+    },
+
+    enterCreateShape: function() {
+      this.drawTool.enterCreateShapeMode();
+    },
+
+    enterEditAnnotation: function() {
+      this.drawTool.enterEditMode();
     },
 
     enterDefault: function() {
