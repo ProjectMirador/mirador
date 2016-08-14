@@ -1924,6 +1924,9 @@ a.mirador-icon-window-menu, a.mirador-icon-view-type {
 .annotation-tooltip {
   padding: 10px;
 }
+.annotation-editor {
+  cursor: move;
+}
 .annotation-display {
   position:relative;
   border-left:0;

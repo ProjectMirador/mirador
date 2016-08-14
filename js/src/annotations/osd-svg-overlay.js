@@ -414,13 +414,59 @@
       shape.remove();
     },
 
+    getMousePositionInImage: function(mousePosition) {
+      if (mousePosition.x < 0) {
+        mousePosition.x = 0;
+      }
+      if (mousePosition.x > this.viewer.tileSources.width) {
+        mousePosition.x = this.viewer.tileSources.width;
+      }
+      if (mousePosition.y < 0) {
+        mousePosition.y = 0;
+      }
+      if (mousePosition.y > this.viewer.tileSources.height) {
+        mousePosition.y = this.viewer.tileSources.height;
+      }
+      return mousePosition;
+    },
+
+    adjustDeltaForShape: function(lastPoint, currentPoint, delta, bounds) {
+      //first check along x axis
+      if (lastPoint.x < currentPoint.x) {
+        //moving to the right, delta should be based on the right most edge
+        if (bounds.x + bounds.width > this.viewer.tileSources.width) {
+          delta.x = this.viewer.tileSources.width - (bounds.x + bounds.width);
+        }
+      } else {
+        //moving to the left, prevent it from going past the left edge.  if it does, use the shapes x value as the delta
+        if (bounds.x < 0) {
+          delta.x = Math.abs(bounds.x);
+        }
+      }
+
+      //check along y axis
+      if (lastPoint.y < currentPoint.y) {
+        // moving to the bottom
+        if (bounds.y + bounds.height > this.viewer.tileSources.height) {
+          delta.y = this.viewer.tileSources.height - (bounds.y + bounds.height);
+        }
+      } else {
+        //moving to the top
+        if (bounds.y < 0) {
+          delta.y = Math.abs(bounds.y);
+        }
+      }
+
+      return delta;
+    },
+
     onMouseUp: function(event) {
       if (!this.overlay.disabled) {
         event.stopPropagation();
         jQuery(this.overlay.viewer.canvas).css('cursor','default');
         // if (this.overlay.mode === 'deform' || this.overlay.mode === 'edit') {
         //   this.overlay.segment = null;
-        //   this.overlay.path = null;
+        //   this.overlay.()) = null;
         // }
         // if (this.overlay.mode != 'create') {
         //   this.overlay.mode = '';
@@ -436,6 +482,15 @@
       if (!this.overlay.disabled) {
         event.stopPropagation();
         if (this.overlay.currentTool) {
+          if (this.overlay.currentTool.name === 'Freehand' && this.overlay.mode === 'create') {
+            //freehand create needs to use mouse position because bounds are not accurate until shape is finished
+            event.point = this.overlay.getMousePositionInImage(event.point);
+            event.delta = event.point - event.lastPoint;
+          } else {
+            var bounds = this.overlay.path.bounds;
+            // we already have a shape, and we are moving it, need to account for that, rather than mouse position
+            event.delta = this.overlay.adjustDeltaForShape(event.lastPoint, event.point, event.delta, bounds);
+          }
           //we may not currently have a tool if the user is in edit mode and didn't click on an editable shape
           this.overlay.currentTool.onMouseDrag(event, this.overlay);
         }
@@ -454,7 +509,6 @@
       if (!this.overlay.disabled) {
         // We are in drawing mode
         if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
-          //document.body.style.cursor = 'pointer';
         } else {
           jQuery(this.overlay.viewer.canvas).css('cursor','default');
         }
@@ -486,14 +540,7 @@
         this.overlay.latestMouseDownTime = time;
         var hitResult = this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions);
 
-        // no need for this check we have already disabled the current shape editing when not in edit mode
-        // by using the editable check, although having such info is okey to keep inside the code
-        //if (this.overlay.inEditMode) {
-          //if in edit mode, clear the current tool and mode in case the user clicked on an "empty" space // not okey what if i want to draw another shape
-          //if the user (re)clicked on an editable shape, the currentTool gets set below
-          //if the user has clicked on "empty" space, return and don't do anything more
-        //}
-        if(this.overlay.mode !== 'create' && this.overlay.mode !==''){
+        if (this.overlay.mode !== 'create' && this.overlay.mode !=='') {
           this.overlay.mode = '';
           this.overlay.currentTool = null;
         }
@@ -534,22 +581,8 @@
         }
 
         if (this.overlay.currentTool) {
+          event.point = this.overlay.getMousePositionInImage(event.point);
           this.overlay.currentTool.onMouseDown(event, this.overlay);
-          // should check if this is used anywhere and remove it if not used
-          // if (this.overlay.mode === 'translate' || this.overlay.mode === 'deform' || this.overlay.mode === 'edit') {
-          //   if (this.overlay.path && this.overlay.path.data.annotation) {
-          //     var inArray = false;
-          //     for (var i = 0; i < this.overlay.editedPaths.length; i++) {
-          //       if (this.overlay.editedPaths[i].name === this.overlay.path.name) {
-          //         inArray = true;
-          //         break;
-          //       }
-          //     }
-          //     if (!inArray) {
-          //       this.overlay.editedPaths.push(this.overlay.path);
-          //     }
-          //   }
-          // }
         }
       }
       this.overlay.hover();
