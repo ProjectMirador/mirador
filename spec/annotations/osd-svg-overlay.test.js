@@ -378,8 +378,8 @@ describe('Overlay', function() {
     spyOn(this.rectangle, 'onMouseDown');
     spyOn(this.rectangle, 'onDoubleClick');
     this.overlay.viewer.tileSources = {
-      'width': 800,
-      'height': 600
+      'width': 998,
+      'height': 998
     }
     var event = getEvent({
       'x': 100,
