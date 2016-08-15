@@ -62,21 +62,22 @@
       _this.annotationsToShapesMap = {};
       var deferreds = jQuery.map(this.list, function(annotation) {
         var deferred = jQuery.Deferred();
-        if(annotation.on && !annotation.on.selector){
-          // temporary until view for full list of annotations for current canvas is contributed
-          return deferred;
-        } else if (typeof annotation.on === 'object') {
-          if (annotation.on.selector.value.indexOf('<svg') !== -1) {
+        if (annotation.on && typeof annotation.on === 'object') {
+          if (!annotation.on.selector) {
+            return deferred;
+          } else if (annotation.on.selector.value.indexOf('<svg') !== -1) {
             shapeArray = _this.svgOverlay.parseSVG(annotation.on.selector.value, annotation);
           } else {
             var shape = annotation.on.selector.value.split('=')[1].split(',');
             shape = _this.svgOverlay.viewer.viewport.imageToViewportRectangle(shape[0], shape[1], shape[2], shape[3]);
             shapeArray = _this.svgOverlay.createRectangle(shape, annotation);
           }
-        } else {
+        } else if (annotation.on && typeof annotation.on === 'string') {
           var shapeObj = annotation.on.split('#')[1].split('=')[1].split(',');
           shapeObj = _this.svgOverlay.viewer.viewport.imageToViewportRectangle(shapeObj[0], shapeObj[1], shapeObj[2], shapeObj[3]);
           shapeArray = _this.svgOverlay.createRectangle(shapeObj, annotation);
+        } else {
+          return deferred;
         }
         _this.svgOverlay.restoreLastView(shapeArray);
         _this.annotationsToShapesMap[annotation['@id']] = shapeArray;
