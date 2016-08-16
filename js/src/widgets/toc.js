@@ -67,7 +67,9 @@
         //   _this.extractV21RangeTrees(_this.structures);
       }
       if (ranges.length < 2) {
-        ranges = ranges[0].children;
+        if (ranges[0].children) {
+          ranges = ranges[0].children;
+        }
       }
 
       return ranges;
@@ -152,6 +154,8 @@
         var children = [];
         if (parent.ranges) {
           jQuery.each(parent.ranges, function(index, id) {
+            //make sure id is a string for grepping
+            id = typeof id === 'object' ? id['@id'] : id;
             var child = jQuery.grep(flatRanges, function(range, index) {
               if (range['@id'] === id) {
                 return range;
@@ -173,9 +177,18 @@
           if (top) {
             children.push(top);
           }
-          // if we still don't have children, use the first range (assuming it is top level)
+          // if we still don't have children, loop through and look for a range with children
+          // if we still can't find one, then create a dummy range in which all ranges are its children
           if (children.length === 0) {
-            children.push(flatRanges[0]);
+            jQuery.each(flatRanges, function(index, range) {
+              if (range.ranges) {
+                children.push(range);
+                return false;
+              }
+            });
+            if (children.length === 0) {
+              children.push({"ranges" : flatRanges});
+            }
           }
         }
         if ( children.length ) {
