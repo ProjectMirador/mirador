@@ -631,8 +631,8 @@
         this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
         this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
         this.paperScope.view.center = new this.paperScope.Size(
-          this.viewer.viewport.contentSize.x * viewportBounds.x + this.paperScope.view.bounds.width / 2,
-          this.viewer.viewport.contentSize.x * viewportBounds.y + this.paperScope.view.bounds.height / 2);
+          this.viewer.world.getItemAt(0).source.dimensions.x * viewportBounds.x + this.paperScope.view.bounds.width / 2,
+          this.viewer.world.getItemAt(0).source.dimensions.x * viewportBounds.y + this.paperScope.view.bounds.height / 2);
         this.paperScope.view.update(true);
         var allItems = this.paperScope.project.getItems({
           name: /_/

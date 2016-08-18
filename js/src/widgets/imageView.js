@@ -284,7 +284,7 @@
 
       function setFilterCSS() {
         var filterCSS = jQuery.map(filterValues, function(value, key) { return value; }).join(" "),
-        osdCanvas = jQuery(_this.osd.canvas);
+        osdCanvas = jQuery(_this.osd.drawer.canvas);
         osdCanvas.css({
           'filter'         : filterCSS,
           '-webkit-filter' : filterCSS,
@@ -614,10 +614,6 @@
           } else {
             //original state if off, so don't need to do anything
           }
-
-          // A hack. Pop the osd overlays layer after the canvas so
-          // that annotations appear.
-          jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
 
           _this.osd.addHandler('zoom', $.debounce(function() {
             _this.setBounds();
