@@ -71,13 +71,16 @@
     this._thisResize = function(){
       _this.resize();
     };
-
+    this._thisRotate = function(event) {
+      _this.rotate(event);
+      _this.resize();
+    };
     this.viewer.addHandler('animation', this._thisResize);
     this.viewer.addHandler('open', this._thisResize);
     this.viewer.addHandler('animation-finish', this._thisResize);
     this.viewer.addHandler('update-viewport', this._thisResize);
     this.viewer.addHandler('resize',this._thisResize);
-    this.viewer.addHandler('rotate', this._thisResize);
+    this.viewer.addHandler('rotate', this._thisRotate);
     this.viewer.addHandler('constrain',this._thisResize);
 
     this._thisDestroy = function(){
@@ -325,6 +328,7 @@
     init: function() {
       // Initialization of Paper.js overlay.
       var _this = this;
+      this.lastAngle = 0;
       this.paperScope = new paper.PaperScope();
       this.paperScope.setup('draw_canvas_' + _this.windowId);
       this.paperScope.activate();
@@ -613,6 +617,13 @@
           item.selectedColor = this.selectedColor;
           shapeTool.updateSelection(selected, item, this);
         }
+      }
+    },
+
+    rotate: function (event) {
+      if (this.paperScope && this.paperScope.view) {
+        this.paperScope.view._matrix.rotate(event.degrees-this.lastAngle, this.paperScope.view.center);
+        this.lastAngle = event.degrees;
       }
     },
 
