@@ -157,6 +157,13 @@
           _this.hud.annoState.choosePointer();
         }
       });
+
+      _this.eventEmitter.subscribe('DEFAULT_CURSOR.' + _this.windowId, function(event) {
+        jQuery(_this.osd.canvas).css("cursor", "default");
+      });
+      _this.eventEmitter.subscribe('CROSSHAIR_CURSOR.' + _this.windowId, function(event) {
+        jQuery(_this.osd.canvas).css("cursor", "crosshair");
+      });
       //Related to Annotations HUD
     },
 

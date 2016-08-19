@@ -1062,7 +1062,6 @@ li.highlight {
   pointer-events: none;
 }*/
 .hud-control {
-  cursor: pointer;
   color:white;
   text-shadow: 0 0 5px black;
   /*transition: all 0.3s ease;*/
@@ -1071,7 +1070,6 @@ li.highlight {
   z-index:2;
 }
 .hud-container {
-  cursor: pointer;
   color:white;
   text-shadow: 0 0 5px black;
   transition: all 0.3s ease;
@@ -1080,6 +1078,7 @@ li.highlight {
 }
 .hud-control:hover {
   /*transition: all 0.3s ease;*/
+  cursor: pointer;
   opacity: 1;
 }
 .hud-control.selected {

@@ -465,7 +465,7 @@
     onMouseUp: function(event) {
       if (!this.overlay.disabled) {
         event.stopPropagation();
-        jQuery(this.overlay.viewer.canvas).css('cursor','default');
+        //jQuery(this.overlay.viewer.canvas).css('cursor','default');
         // if (this.overlay.mode === 'deform' || this.overlay.mode === 'edit') {
         //   this.overlay.segment = null;
         //   this.overlay.()) = null;
@@ -510,10 +510,10 @@
       this.overlay.cursorLocation = event.point;
       if (!this.overlay.disabled) {
         // We are in drawing mode
-        if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
-        } else {
-          jQuery(this.overlay.viewer.canvas).css('cursor','default');
-        }
+        // if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
+        // } else {
+        //   //jQuery(this.overlay.viewer.canvas).css('cursor','default');
+        // }
         event.stopPropagation();
         if (this.overlay.currentTool) {
           this.overlay.currentTool.onMouseMove(event, this.overlay);
