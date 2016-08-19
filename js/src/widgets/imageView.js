@@ -600,19 +600,19 @@
           }
           if (originalState === 'none') {
             _this.hud.annoState.startup();
-          } else if (originalState === 'off') {
-            //original state if off, so don't need to do anything
+          } else if (originalState === 'off' || _this.annotationState === 'off') {
+            //original state is off, so don't need to do anything
           } else {
             _this.hud.annoState.displayOff();
           }
 
-          if (originalState === 'pointer') {
+          if (originalState === 'pointer' || _this.annotationState === 'on') {
             _this.hud.annoState.displayOn();
           } else if (originalState === 'shape') {
             _this.hud.annoState.displayOn();
             _this.hud.annoState.chooseShape(shape);
           } else {
-            //original state if off, so don't need to do anything
+            //original state is off, so don't need to do anything
           }
 
           _this.osd.addHandler('zoom', $.debounce(function() {

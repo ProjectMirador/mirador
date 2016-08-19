@@ -24,6 +24,21 @@
       config.mainMenuSettings.buttons = {};
     }
 
+    // if a user used dot notation for nested settings, unpack
+    // e.g. windowSettings.canvasControls.annotations.annotationState
+    function index(previousValue,currentValue,currentIndex) {
+      var newObj = {};
+      newObj[currentValue] = previousValue;
+      return newObj;
+    }
+    jQuery.each(config, function(key, value) {
+      if (typeof key === "string" && key.indexOf('.') !== -1) {
+        var array = key.split('.').reverse();
+        var object = array.reduce(index, value);
+        delete config[key];
+        jQuery.extend(true, config, object);
+      }
+    });
     this.init(jQuery.extend(true, {}, $.DEFAULT_SETTINGS, config));
   };
 
