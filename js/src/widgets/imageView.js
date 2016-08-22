@@ -157,6 +157,13 @@
           _this.hud.annoState.choosePointer();
         }
       });
+
+      _this.eventEmitter.subscribe('DEFAULT_CURSOR.' + _this.windowId, function(event) {
+        jQuery(_this.osd.canvas).css("cursor", "default");
+      });
+      _this.eventEmitter.subscribe('CROSSHAIR_CURSOR.' + _this.windowId, function(event) {
+        jQuery(_this.osd.canvas).css("cursor", "crosshair");
+      });
       //Related to Annotations HUD
     },
 
@@ -284,7 +291,7 @@
 
       function setFilterCSS() {
         var filterCSS = jQuery.map(filterValues, function(value, key) { return value; }).join(" "),
-        osdCanvas = jQuery(_this.osd.canvas);
+        osdCanvas = jQuery(_this.osd.drawer.canvas);
         osdCanvas.css({
           'filter'         : filterCSS,
           '-webkit-filter' : filterCSS,
@@ -600,24 +607,20 @@
           }
           if (originalState === 'none') {
             _this.hud.annoState.startup();
-          } else if (originalState === 'off') {
-            //original state if off, so don't need to do anything
+          } else if (originalState === 'off' || _this.annotationState === 'off') {
+            //original state is off, so don't need to do anything
           } else {
             _this.hud.annoState.displayOff();
           }
 
-          if (originalState === 'pointer') {
+          if (originalState === 'pointer' || _this.annotationState === 'on') {
             _this.hud.annoState.displayOn();
           } else if (originalState === 'shape') {
             _this.hud.annoState.displayOn();
             _this.hud.annoState.chooseShape(shape);
           } else {
-            //original state if off, so don't need to do anything
+            //original state is off, so don't need to do anything
           }
-
-          // A hack. Pop the osd overlays layer after the canvas so
-          // that annotations appear.
-          jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
 
           _this.osd.addHandler('zoom', $.debounce(function() {
             _this.setBounds();

@@ -62,7 +62,7 @@
           "annotationCreation" : true, /*whether or not to make annotation creation available in this window,
                        only valid if annotationLayer is set to True and an annotationEndpoint is defined.
                        This setting does NOT affect whether or not a user can edit an individual annotation that has already been created.*/
-          "annotationState" : 'annoOff', //[_'annoOff'_, 'annoOnCreateOff', 'annoOnCreateOn'] whether or not to turn on the annotation layer on window load
+          "annotationState" : 'off', //[_'off'_, 'on'] whether or not to turn on the annotation layer on window load
           "annotationRefresh" : false, //whether or not to display the refresh icon for annotations
         },
         "imageManipulation" : {

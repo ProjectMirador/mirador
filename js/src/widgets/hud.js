@@ -80,6 +80,7 @@
             }
             _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
             _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-pointer-mode', 'selected']);
+            _this.eventEmitter.publish('DEFAULT_CURSOR.' + _this.windowId);
             _this.eventEmitter.publish(('windowUpdated'), {
               id: _this.windowId,
               annotationState: to
@@ -104,6 +105,7 @@
             _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-pointer-mode', 'selected']);
             _this.eventEmitter.publish('CANCEL_ACTIVE_ANNOTATIONS.'+_this.windowId);
             _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
+            _this.eventEmitter.publish('DEFAULT_CURSOR.' + _this.windowId);
             _this.eventEmitter.publish(('windowUpdated'), {
               id: _this.windowId,
               annotationState: to
@@ -114,6 +116,7 @@
             _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
             _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-'+shape+'-mode', 'selected']);
             _this.eventEmitter.publish('modeChange.' + _this.windowId, 'creatingAnnotation');
+            _this.eventEmitter.publish('CROSSHAIR_CURSOR.' + _this.windowId);
             _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shape);
 
             _this.eventEmitter.publish(('windowUpdated'), {
@@ -125,6 +128,7 @@
             _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-pointer-mode', 'selected']);
             _this.eventEmitter.publish('HUD_REMOVE_CLASS.'+_this.windowId, ['.mirador-osd-edit-mode', 'selected']);
             _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-'+shape+'-mode', 'selected']);
+            _this.eventEmitter.publish('CROSSHAIR_CURSOR.' + _this.windowId);
             //don't need to trigger a mode change, just change tool
             _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shape);
 

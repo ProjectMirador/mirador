@@ -71,13 +71,16 @@
     this._thisResize = function(){
       _this.resize();
     };
-
+    this._thisRotate = function(event) {
+      _this.rotate(event);
+      _this.resize();
+    };
     this.viewer.addHandler('animation', this._thisResize);
     this.viewer.addHandler('open', this._thisResize);
     this.viewer.addHandler('animation-finish', this._thisResize);
     this.viewer.addHandler('update-viewport', this._thisResize);
     this.viewer.addHandler('resize',this._thisResize);
-    this.viewer.addHandler('rotate', this._thisResize);
+    this.viewer.addHandler('rotate', this._thisRotate);
     this.viewer.addHandler('constrain',this._thisResize);
 
     this._thisDestroy = function(){
@@ -325,6 +328,7 @@
     init: function() {
       // Initialization of Paper.js overlay.
       var _this = this;
+      this.lastAngle = 0;
       this.paperScope = new paper.PaperScope();
       this.paperScope.setup('draw_canvas_' + _this.windowId);
       this.paperScope.activate();
@@ -461,7 +465,7 @@
     onMouseUp: function(event) {
       if (!this.overlay.disabled) {
         event.stopPropagation();
-        jQuery(this.overlay.viewer.canvas).css('cursor','default');
+        //jQuery(this.overlay.viewer.canvas).css('cursor','default');
         // if (this.overlay.mode === 'deform' || this.overlay.mode === 'edit') {
         //   this.overlay.segment = null;
         //   this.overlay.()) = null;
@@ -506,10 +510,10 @@
       this.overlay.cursorLocation = event.point;
       if (!this.overlay.disabled) {
         // We are in drawing mode
-        if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
-        } else {
-          jQuery(this.overlay.viewer.canvas).css('cursor','default');
-        }
+        // if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
+        // } else {
+        //   //jQuery(this.overlay.viewer.canvas).css('cursor','default');
+        // }
         event.stopPropagation();
         if (this.overlay.currentTool) {
           this.overlay.currentTool.onMouseMove(event, this.overlay);
@@ -616,6 +620,13 @@
       }
     },
 
+    rotate: function (event) {
+      if (this.paperScope && this.paperScope.view) {
+        this.paperScope.view._matrix.rotate(event.degrees-this.lastAngle, this.paperScope.view.center);
+        this.lastAngle = event.degrees;
+      }
+    },
+
     resize: function() {
       var viewportBounds = this.viewer.viewport.getBounds(true);
       /* in viewport coordinates */
@@ -631,8 +642,8 @@
         this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
         this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
         this.paperScope.view.center = new this.paperScope.Size(
-          this.viewer.viewport.contentSize.x * viewportBounds.x + this.paperScope.view.bounds.width / 2,
-          this.viewer.viewport.contentSize.x * viewportBounds.y + this.paperScope.view.bounds.height / 2);
+          this.viewer.world.getItemAt(0).source.dimensions.x * viewportBounds.x + this.paperScope.view.bounds.width / 2,
+          this.viewer.world.getItemAt(0).source.dimensions.x * viewportBounds.y + this.paperScope.view.bounds.height / 2);
         this.paperScope.view.update(true);
         var allItems = this.paperScope.project.getItems({
           name: /_/
