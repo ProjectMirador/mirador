@@ -21,8 +21,8 @@
         "id": "viewer",
         "layout": "1x1",
         "mainMenuSettings" : {
-          
-          "show": true, 
+
+          "show": true,
           "buttons" : {"bookmark" : true, "layout" : true},
           "userButtons" : [
             {
@@ -31,29 +31,29 @@
             "attributes" : {"class": "links", "href": "http://scta.info"}
             }
           ],
-          
+
           "userLogo": {
-            "label": "Sentences Commentary Text Archive Image Viewer", 
+            "label": "Sentences Commentary Text Archive Image Viewer",
             "attributes": { "id": "scta-logo", "href": "http://scta.info"}
           }
         },
-        
+
         "data" : selectdataset("remote"),
         "windowObjects": [],
         "annotationEndpoint": { "name":"Local Storage", "module": "LocalStorageEndpoint" }
-        
+
       });
     });
 
   function selectdataset(source){
-    
+
     if (source == 'local')
       var baseurl = "localhost:4567"
     else if (source == 'remote')
       var baseurl = "scta.info"
-    
 
-    var dataset = [   
+
+    var dataset = [
       {"manifestUri": "http://" + baseurl + "/iiif/263-venz253/manifest"},
       {"manifestUri": "http://" + baseurl + "/iiif/263-kra726/manifest"},
       {"manifestUri": "http://" + baseurl + "/iiif/pl-hopkins/manifest"},
@@ -109,8 +109,8 @@
     return [dataset[0], dataset[1], dataset[3], dataset[4], dataset[5], dataset[27], dataset[28], dataset[29], dataset[30], dataset[31], dataset[32], dataset[38]]
     }
   </script>
-  
-  
+
+
 </script>
 </body>
 </html>
