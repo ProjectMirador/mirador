@@ -73,7 +73,9 @@
         canvasControls: this.canvasControls,
         annoEndpointAvailable: this.annoEndpointAvailable,
         showNextPrev : this.imagesList.length !== 1,
+        availableAnnotationStylePickers: this.state.getStateProperty('availableAnnotationStylePickers'),
         availableAnnotationTools: this.availableAnnotationTools,
+        state: this.state,
         eventEmitter: this.eventEmitter
       });
 
@@ -146,33 +148,21 @@
         _this.element.find(elementSelector).fadeOut(duration, complete);
       });
 
-      _this.eventEmitter.subscribe('initBorderColor.' + _this.windowId, function(event, color) {
-        _this.element.find('.borderColorPicker').spectrum('set', color);
-      });
-      _this.eventEmitter.subscribe('initFillColor.' + _this.windowId, function(event, color, alpha) {
-        var colorObj = tinycolor(color);
-        colorObj.setAlpha(alpha);
-        _this.element.find('.fillColorPicker').spectrum('set', colorObj);
-      });
-      _this.eventEmitter.subscribe('disableBorderColorPicker.'+_this.windowId, function(event, disablePicker) {
-        if(disablePicker) {
-          _this.element.find('.borderColorPicker').spectrum("disable");
-        }else{
-          _this.element.find('.borderColorPicker').spectrum("enable");
+      _this.eventEmitter.subscribe('SET_STATE_MACHINE_POINTER.' + _this.windowId, function(event) {
+        if (_this.hud.annoState.current === 'none') {
+          _this.hud.annoState.startup();
+        } else if (_this.hud.annoState.current === 'off') {
+          _this.hud.annoState.displayOn();
+        } else {
+          _this.hud.annoState.choosePointer();
         }
       });
-      _this.eventEmitter.subscribe('disableFillColorPicker.'+_this.windowId, function(event, disablePicker) {
-        if(disablePicker) {
-          _this.element.find('.fillColorPicker').spectrum("disable");
-        }else{
-          _this.element.find('.fillColorPicker').spectrum("enable");
-        }
+
+      _this.eventEmitter.subscribe('DEFAULT_CURSOR.' + _this.windowId, function(event) {
+        jQuery(_this.osd.canvas).css("cursor", "default");
       });
-      _this.eventEmitter.subscribe('showDrawTools.'+_this.windowId, function(event) {
-        _this.element.find('.draw-tool').show();
-      });
-      _this.eventEmitter.subscribe('hideDrawTools.'+_this.windowId, function(event) {
-        _this.element.find('.draw-tool').hide();
+      _this.eventEmitter.subscribe('CROSSHAIR_CURSOR.' + _this.windowId, function(event) {
+        jQuery(_this.osd.canvas).css("cursor", "crosshair");
       });
       //Related to Annotations HUD
     },
@@ -192,7 +182,7 @@
         if (_this.hud.annoState.current === 'none') {
           _this.hud.annoState.startup(this);
         }
-        if (_this.hud.annoState.current === 'annoOff') {
+        if (_this.hud.annoState.current === 'off') {
           _this.hud.annoState.displayOn(this);
         } else {
           //make sure to force the controls back to auto fade
@@ -262,13 +252,21 @@
 
       //Annotation specific controls
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
-        if (_this.hud.annoState.current === 'annoOnCreateOff') {
-          _this.hud.annoState.createOn();
-          //when a user is in Create mode, don't let the controls auto fade as it could be distracting to the user
-          _this.forceShowControls = true;
-          _this.element.find(".hud-control").stop(true, true).removeClass('hidden', _this.state.getStateProperty('fadeDuration'));
-        } else if (_this.hud.annoState.current === 'annoOnCreateOn') {
-          _this.hud.annoState.createOff();
+        var shape = jQuery(this).find('.material-icons').html();
+        if (_this.hud.annoState.current === 'pointer') {
+          _this.hud.annoState.chooseShape(shape);
+        } else {
+          _this.hud.annoState.changeShape(shape);
+        }
+        //when a user is in Create mode, don't let the controls auto fade as it could be distracting to the user
+        _this.forceShowControls = true;
+        _this.element.find(".hud-control").stop(true, true).removeClass('hidden', _this.state.getStateProperty('fadeDuration'));
+      });
+
+      this.element.find('.mirador-osd-pointer-mode').on('click', function() {
+        // go back to pointer mode
+        if (_this.hud.annoState.current === 'shape') {
+          _this.hud.annoState.choosePointer();
           //go back to allowing the controls to auto fade
           _this.forceShowControls = false;
         }
@@ -277,26 +275,7 @@
       this.element.find('.mirador-osd-refresh-mode').on('click', function() {
         //update annotation list from endpoint
         _this.eventEmitter.publish('updateAnnotationList.'+_this.windowId);
-        _this.eventEmitter.publish('refreshOverlay.'+_this.windowId, '');
-      });
-      this.element.find('.mirador-osd-delete-mode').on('click', function() {
-        _this.eventEmitter.publish('deleteShape.'+_this.windowId, '');
-      });
-      this.element.find('.mirador-osd-save-mode').on('click', function() {
-        _this.eventEmitter.publish('updateEditedShape.'+_this.windowId, '');
-      });
-      this.element.find('.mirador-osd-edit-mode').on('click', function() {
-        _this.eventEmitter.publish('toggleDefaultDrawingTool.'+_this.windowId);
-      });
-
-      function make_handler(shapeMode) {
-        return function () {
-          _this.eventEmitter.publish('toggleDrawingTool.'+_this.windowId, shapeMode);
-        };
-      }
-      jQuery.each(_this.availableAnnotationTools, function(index, value) {
-        var shape = value.logoClass;
-        _this.element.find('.material-icons:contains(\'' + shape + '\')').on('click', make_handler(shape));
+       // _this.eventEmitter.publish('refreshOverlay.'+_this.windowId, '');
       });
       //Annotation specific controls
 
@@ -312,7 +291,7 @@
 
       function setFilterCSS() {
         var filterCSS = jQuery.map(filterValues, function(value, key) { return value; }).join(" "),
-        osdCanvas = jQuery(_this.osd.canvas);
+        osdCanvas = jQuery(_this.osd.drawer.canvas);
         osdCanvas.css({
           'filter'         : filterCSS,
           '-webkit-filter' : filterCSS,
@@ -619,28 +598,29 @@
 
           _this.addAnnotationsLayer(_this.elemAnno);
 
-          // if current annoState is 'none' that means it has been initialized but not used
-          // use annotationState to choose event
-          if (_this.hud.annoState.current === 'none') {
-              _this.hud.annoState.startup(null);
-            if (_this.annotationState === 'annoOnCreateOff') {
-              _this.hud.annoState.displayOn(null);
-            } else if (_this.annotationState === 'annoOnCreateOn') {
-              _this.hud.annoState.createOn(null);
-            }
+          //get the state before resetting it so we can get back to that state
+          var originalState = _this.hud.annoState.current;
+          var selected = _this.element.find('.mirador-osd-edit-mode.selected');
+          var shape = null;
+          if (selected) {
+            shape = selected.find('.material-icons').html();
+          }
+          if (originalState === 'none') {
+            _this.hud.annoState.startup();
+          } else if (originalState === 'off' || _this.annotationState === 'off') {
+            //original state is off, so don't need to do anything
           } else {
-            // if the current state is not 'none' then we need to update the annotations layer,
-            // with the current state, for the new canvas
-            if (_this.hud.annoState.current === 'annoOnCreateOff') {
-              _this.hud.annoState.refreshCreateOff(null);
-            } else if (_this.hud.annoState.current === 'annoOnCreateOn') {
-              _this.hud.annoState.refreshCreateOn(null);
-            }
+            _this.hud.annoState.displayOff();
           }
 
-          // A hack. Pop the osd overlays layer after the canvas so
-          // that annotations appear.
-          jQuery(_this.osd.canvas).children().first().remove().appendTo(_this.osd.canvas);
+          if (originalState === 'pointer' || _this.annotationState === 'on') {
+            _this.hud.annoState.displayOn();
+          } else if (originalState === 'shape') {
+            _this.hud.annoState.displayOn();
+            _this.hud.annoState.chooseShape(shape);
+          } else {
+            //original state is off, so don't need to do anything
+          }
 
           _this.osd.addHandler('zoom', $.debounce(function() {
             _this.setBounds();
@@ -653,6 +633,7 @@
       });
     },
 
+    //TODO reuse annotationsLayer with IIIFManifestLayouts
     addAnnotationsLayer: function(element) {
       var _this = this;
       _this.annotationsLayer = new $.AnnotationsLayer({
@@ -686,7 +667,6 @@
     next: function() {
       var _this = this;
       var next = this.currentImgIndex + 1;
-
       if (next < this.imagesList.length) {
         _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + this.windowId, this.imagesList[next]['@id']);
       }

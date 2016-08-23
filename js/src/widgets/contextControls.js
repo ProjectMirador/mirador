@@ -18,18 +18,28 @@
 
     init: function() {
       var _this = this;
-
+      var showStrokeStyle = false;
+      this.availableAnnotationStylePickers.forEach(function(picker){
+        if(picker == 'StrokeType'){
+          showStrokeStyle = true;
+        }
+      });
       var annotationProperties = this.canvasControls.annotations;
 
       if (annotationProperties.annotationLayer && this.annoEndpointAvailable) {
         this.annotationElement = jQuery(this.annotationTemplate({
           tools : _this.availableAnnotationTools,
           showEdit : annotationProperties.annotationCreation,
+          showStrokeStyle: showStrokeStyle,
           showRefresh : annotationProperties.annotationRefresh
         })).appendTo(this.container.find('.mirador-osd-annotation-controls'));
         this.annotationElement.hide();
         this.setQtips(this.annotationElement);
         this.setBorderFillColorPickers();
+      }
+
+      if(showStrokeStyle){
+        this.addStrokeStylePicker();
       }
 
       if (this.canvasControls.imageManipulation.manipulationLayer) {
@@ -66,104 +76,113 @@
       });
     },
 
+    addColorPicker:function(selector,options){
+      this.container.find(selector).spectrum(options);
+    },
+
+    getImagePath:function(imageName){
+      return this.state.getStateProperty('buildPath') + this.state.getStateProperty('imagesPath') + imageName;
+    },
+
+    setBackgroundImage:function(el,imageName){
+      el.css('background-image','url('+this.getImagePath(imageName)+')');
+    },
+
+    removeBackgroundImage:function(el){
+      el.css('background-image','');
+    },
+
+    addStrokeStylePicker:function(){
+      var _this = this;
+      var setBackground = {
+        'solid':function(el){
+          _this.setBackgroundImage(el,'border_type_1.png');
+        },
+        'dashed':function(el){
+          _this.setBackgroundImage(el, 'border_type_2.png');
+        },
+        'dotdashed':function(el){
+          _this.setBackgroundImage(el,  'border_type_3.png');
+        }
+      };
+
+      setBackground.solid(this.container.find('.mirador-line-type .solid'));
+      setBackground.dashed(this.container.find('.mirador-line-type .dashed'));
+      setBackground.dotdashed(this.container.find('.mirador-line-type .dotdashed'));
+
+      this.container.find('.mirador-line-type').on('mouseenter', function() {
+        _this.container.find('.type-list').stop().slideFadeToggle(300);
+      });
+      this.container.find('.mirador-line-type').on('mouseleave', function() {
+        _this.container.find('.type-list').stop().slideFadeToggle(300);
+      });
+      this.container.find('.mirador-line-type').find('ul li').on('click', function() {
+        var className = jQuery(this).find('i').attr('class').replace(/fa/, '').replace(/ /, '');
+        _this.removeBackgroundImage(_this.container.find('.mirador-line-type .border-type-image'));
+        setBackground[className](_this.container.find('.mirador-line-type .border-type-image'));
+        _this.eventEmitter.publish('toggleBorderType.' + _this.windowId, className);
+      });
+    },
+
     setBorderFillColorPickers: function() {
       var _this = this;
-      _this.container.find(".borderColorPicker").spectrum({
+      var defaultBorderColor = _this.state.getStateProperty('drawingToolsSettings').strokeColor,
+      defaultFillColor = _this.state.getStateProperty('drawingToolsSettings').fillColor,
+      defaultAlpha = _this.state.getStateProperty('drawingToolsSettings').fillColorAlpha,
+      colorObj = tinycolor(defaultFillColor);
+      colorObj.setAlpha(defaultAlpha);
+
+      this.addColorPicker('.borderColorPicker',{
         showInput: true,
-        showInitial: true,
+        showInitial: false,
         showPalette: true,
+        showButtons: false,
         showSelectionPalette: true,
+        hideAfterPaletteSelect: true,
         appendTo: 'parent',
         containerClassName: 'borderColorPickerPop'+_this.windowId,
         preferredFormat: "rgb",
-        show: function(color) {
-          jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, color);
-        },
-        change: function(color) {
-          jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, color);
-        },
-        move: function(color) {
-          jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, color);
-        },
         hide: function(color) {
-          color = jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId);
-          if (color) {
-            _this.eventEmitter.publish('changeBorderColor.' + _this.windowId, color.toHexString());
-          }
+          _this.eventEmitter.publish('changeBorderColor.' + _this.windowId, color.toHexString());
+          jQuery(this).spectrum("set", color.toHexString());
         },
         maxSelectionSize: 4,
+        color: defaultBorderColor,
         palette: [
-          ["black", "red", "green", "blue"],
-          ["white", "cyan", "magenta", "yellow"]
+          [defaultBorderColor, "black", "red", "green"],
+          ["white", "blue", "magenta", "yellow"]
         ]
       });
 
       _this.container.find(".borderColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>border_color</i>");
+      // _this.container.find(".borderColorPicker").next(".sp-replacer").append('<i class="fa fa-caret-down dropdown-icon"></i>');
 
-      var borderPicker = jQuery('.borderColorPickerPop'+_this.windowId);
-
-      borderPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>Cancel');
-      borderPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>Choose</a>');
-      borderPicker.find('button.sp-choose').hide();
-
-      borderPicker.find('a.sp-cancel').on('click', function() {
-        jQuery.data(document.body, 'borderColorPickerPop' + _this.windowId, null);
-      });
-
-      jQuery._data(borderPicker.find(".sp-cancel")[0], "events").click.reverse();
-
-      borderPicker.find('a.sp-choose').on('click',function(){
-        borderPicker.find('button.sp-choose').click();
-      });
-
-      _this.container.find(".fillColorPicker").spectrum({
+      _this.addColorPicker('.fillColorPicker',{
         showInput: true,
-        showInitial: true,
+        showInitial: false,
         showAlpha: true,
         showPalette: true,
+        showButtons: false,
         showSelectionPalette: true,
+        hideAfterPaletteSelect: true,
         appendTo: 'parent',
+        clickoutFiresChange: true,
         containerClassName: 'fillColorPickerPop'+_this.windowId,
         preferredFormat: "rgb",
-        show: function(color) {
-          jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, color);
-        },
-        change: function(color) {
-          jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, color);
-        },
-        move: function(color) {
-          jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, color);
-        },
         hide: function(color) {
-          color = jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId);
-          if (color) {
-            _this.eventEmitter.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
-          }
+          _this.eventEmitter.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
+          jQuery(this).spectrum("set", color);
         },
         maxSelectionSize: 4,
+        color: colorObj,
         palette: [
-          ["black", "red", "green", "blue"],
-          ["white", "cyan", "magenta", "yellow"]
+          [colorObj, "black", "red", "green"],
+          ["white", "blue", "magenta", "yellow"]
         ]
       });
 
       _this.container.find(".fillColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>format_color_fill</i>");
-
-      var fillPicker = jQuery('.fillColorPickerPop'+_this.windowId);
-
-      fillPicker.find(".sp-cancel").html('<i class="fa fa-times-circle-o fa-fw"></i>Cancel');
-      fillPicker.find(".sp-cancel").parent().append('<a class="sp-choose" href="#"><i class="fa fa-thumbs-o-up fa-fw"></i>Choose</a>');
-      fillPicker.find('button.sp-choose').hide();
-
-      fillPicker.find('a.sp-cancel').on('click', function() {
-        jQuery.data(document.body, 'fillColorPickerPop' + _this.windowId, null);
-      });
-
-      jQuery._data(fillPicker.find(".sp-cancel")[0], "events").click.reverse();
-
-      fillPicker.find('a.sp-choose').on('click',function(){
-        fillPicker.find('button.sp-choose').click();
-      });
+      // _this.container.find(".fillColorPicker").next(".sp-replacer").append('<i class="fa fa-caret-down dropdown-icon"></i>');
     },
 
     annotationShow: function() {
@@ -184,59 +203,42 @@
 
     bindEvents: function() {
       var _this = this;
-      // this.container.find('.mirador-osd-back').on('click', function() {
-      //   _this.element.remove();
-      //   _this.element = jQuery(_this.template()).appendTo(_this.container);
-      //   _this.bindEvents();
-      // });
     },
 
     annotationTemplate: Handlebars.compile([
                                    '{{#if showEdit}}',
-                                   '<a class="mirador-osd-edit-mode hud-control" role="button" aria-label="Make a new annotation using mouse">',
-                                   '<i class="fa fa-lg fa-edit"></i>',
-                                   '</a>',
-                                   '<a class="hud-control draw-tool" style="color:#abcdef;">',
-                                   '|',
+                                   '<a class="mirador-osd-pointer-mode hud-control selected">',
+                                   '<i class="fa fa-mouse-pointer"></i>',
                                    '</a>',
                                    '{{#each tools}}',
-                                   '<a class="mirador-osd-{{this.logoClass}}-mode hud-control draw-tool" title="{{t this.tooltip}}">',
+                                   '<a class="mirador-osd-{{this.logoClass}}-mode hud-control mirador-osd-edit-mode" title="{{t this.tooltip}}">',
                                    '<i class="material-icons">{{this.logoClass}}</i>',
                                    '</a>',
                                    '{{/each}}',
-                                   '<a class="hud-control draw-tool" style="color:#abcdef;">',
-                                   '|',
+                                   '{{#if showStrokeStyle}}',
+                                   '<a class="hud-control mirador-line-type" role="button" aria-label="{{t "borderTypeTooltip"}}" title="{{t "borderTypeTooltip"}}">',
+                                   '<i class="material-icons mirador-border-icon">create</i>',
+                                   '<i class="border-type-image solid"></i>',
+                                   '<i class="fa fa-caret-down dropdown-icon"></i>',
+                                   '<ul class="dropdown type-list">',
+                                   '<li><i class="fa solid"></i> {{t "strokeStylePickerSolid"}}</li>',
+                                   '<li><i class="fa dashed"></i> {{t "strokeStylePickerDashed"}}</li>',
+                                   '<li><i class="fa dotdashed"></i> {{t "strokeStylePickerDotdashed"}}</li>',
+                                   '</ul>',
                                    '</a>',
-                                   '<a class="hud-control draw-tool" title="{{t "borderColorTooltip"}}">',
+                                   '{{/if}}',
+                                   '<a class="hud-control mirador-osd-color-picker" title="{{t "borderColorTooltip"}}">',
                                    '<input type="text" class="borderColorPicker"/>',
                                    '</a>',
-                                   '<a class="hud-control draw-tool" title="{{t "fillColorTooltip"}}">',
+                                   '<a class="hud-control mirador-osd-color-picker" title="{{t "fillColorTooltip"}}">',
                                    '<input type="text" class="fillColorPicker"/>',
                                    '</a>',
-                                   '<a class="hud-control draw-tool" style="color:#abcdef;">',
-                                   '|',
-                                   '</a>',
-                                   '<a class="hud-control draw-tool mirador-osd-delete-mode">',
-                                   '<i class="fa fa-lg fa-trash-o"></i>',
-                                   '</a>',
-                                   '<a class="hud-control draw-tool mirador-osd-save-mode">',
-                                   '<i class="fa fa-lg fa-save"></i>',
-                                   '</a>',
                                    '{{#if showRefresh}}',
-                                     '<a class="hud-control draw-tool mirador-osd-refresh-mode">',
+                                     '<a class="hud-control mirador-osd-refresh-mode">',
                                      '<i class="fa fa-lg fa-refresh"></i>',
                                      '</a>',
                                    '{{/if}}',
                                    '{{/if}}'
-                                   /*'<a class="mirador-osd-list hud-control">',
-                                   '<i class="fa fa-lg fa-list"></i>',
-                                   '</a>',*/
-                                   /*'<a class="mirador-osd-search hud-control" role="button">',
-                                   '<i class="fa fa-lg fa-search"></i>',
-                                   '</a>',*/
-                                   /*'<a class="mirador-osd-rect-tool hud-control" role="button">',
-                                   '<i class="fa fa-lg fa-gear"></i>',
-                                   '</a>',*/
     ].join('')),
 
     manipulationTemplate: Handlebars.compile([

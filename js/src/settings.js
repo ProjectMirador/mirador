@@ -62,7 +62,7 @@
           "annotationCreation" : true, /*whether or not to make annotation creation available in this window,
                        only valid if annotationLayer is set to True and an annotationEndpoint is defined.
                        This setting does NOT affect whether or not a user can edit an individual annotation that has already been created.*/
-          "annotationState" : 'annoOff', //[_'annoOff'_, 'annoOnCreateOff', 'annoOnCreateOn'] whether or not to turn on the annotation layer on window load
+          "annotationState" : 'off', //[_'off'_, 'on'] whether or not to turn on the annotation layer on window load
           "annotationRefresh" : false, //whether or not to display the refresh icon for annotations
         },
         "imageManipulation" : {
@@ -114,19 +114,23 @@
     'availableAnnotationDrawingTools': [
        'Rectangle', 'Ellipse', 'Freehand', 'Polygon', 'Pin'
     ],
-
+    'availableAnnotationStylePickers':[
+        'StrokeColor','FillColor','StrokeType'
+    ],
     'drawingToolsSettings': {
       // Additional tool settings.
       /**
        *'Pin': {
        *},
        **/
+      //'selectedColor': 'red',
       'doubleClickReactionTime': 300,
       'strokeColor': 'deepSkyBlue',
       'fillColor': 'deepSkyBlue',
       'fillColorAlpha': 0.0,
       'shapeHandleSize':10,
       'fixedShapeSize':10,
+      'newlyCreatedShapeStrokeWidthFactor':5,
       'hoverColor':'yellow'
     },
 

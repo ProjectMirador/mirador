@@ -2,37 +2,6 @@ paper.install(window);
 
 describe('Rectangle', function() {
 
-  function getEvent(delta, point) {
-    return {
-      'delta': delta,
-      'point': point
-    };
-  }
-
-  function getOverlay(paperScope, strokeColor, fillColor, fillColorAlpha, mode, path, segment) {
-    return {
-      'paperScope': paperScope,
-      'strokeColor': strokeColor,
-      'fillColor': fillColor,
-      'fillColorAlpha': fillColorAlpha,
-      'mode': mode,
-      'path': path,
-      'segment': segment,
-      'viewZoom': 1,
-      'hitOptions': {
-        'fill': true,
-        'handles': true,
-        'segments': true,
-        'tolerance': 0
-      },
-      onDrawFinish: function() {
-      },
-      getName: function(tool) {
-        return tool.idPrefix + '1';
-      }
-    };
-  }
-
   beforeAll(function() {
     this.canvas = jQuery('<canvas></canvas>');
     this.canvas.attr('id', 'paperId');
@@ -49,7 +18,8 @@ describe('Rectangle', function() {
       'x': 123,
       'y': 456
     };
-    var overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, null, null, null);
+    var overlay = MockOverlay.getOverlay(paper);
+
     var shape = this.rectangle.createShape(initialPoint, overlay);
 
     expect(overlay.mode).toBe('create');
@@ -60,8 +30,8 @@ describe('Rectangle', function() {
     expect(shape.strokeColor.green).toBe(0);
     expect(shape.strokeColor.blue).toBe(0);
 
-    expect(shape.fillColor.red).toBe(0);
-    expect(shape.fillColor.green).toBe(1);
+    expect(shape.fillColor.red).toBe(1);
+    expect(shape.fillColor.green).toBe(0);
     expect(shape.fillColor.blue).toBe(0);
 
     expect(shape.fillColor.alpha).toBe(overlay.fillColorAlpha);
@@ -70,7 +40,7 @@ describe('Rectangle', function() {
 
     expect(shape.data.rotation).toBe(0);
 
-    expect(shape.fullySelected).toBe(true);
+    expect(shape.selected).toBe(true);
 
     expect(shape.name).toBe(this.rectangle.idPrefix + '1');
 
@@ -108,7 +78,7 @@ describe('Rectangle', function() {
     var overlay;
 
     beforeEach(function() {
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+      overlay = MockOverlay.getOverlay(paper);
       this.rectangle = new Mirador.Rectangle();
       this.initialPoint = {
         'x': 987,
@@ -122,27 +92,17 @@ describe('Rectangle', function() {
       delete this.rectangle;
     });
 
-    it('should update selection', function() {
-      this.shape.fullySelected = false;
-      var ellipseTool = new Mirador.Ellipse();
-      var initialPoint = {
-        'x': 987,
-        'y': 654
-      };
-      var ellipse = ellipseTool.createShape(initialPoint, overlay);
-      this.rectangle.updateSelection(true, ellipse, overlay);
+    it('should update selection to false', function() {
+      // when created the shape is selected by default
+      expect(this.shape.selected).toBe(true);
 
-      expect(this.shape.fullySelected).toBe(false);
+      this.rectangle.updateSelection(false, this.shape, overlay);
+
+      expect(this.shape.selected).toBe(false);
 
       this.rectangle.updateSelection(true, this.shape, overlay);
 
-      expect(this.shape.fullySelected).toBe(true);
-
-      this.shape.scale(-10);
-
-      this.rectangle.updateSelection(true, this.shape, overlay);
-
-      expect(this.shape.fullySelected).toBe(true);
+      expect(this.shape.selected).toBe(true);
     });
 
     it('should change stroke when hovering rectangle',function(){
@@ -175,12 +135,11 @@ describe('Rectangle', function() {
       expect(this.shape.strokeColor.blue).toBe(oldColor.blue);
     });
 
-    it('should do nothing', function() {
-      var event = getEvent({
+    it('should do nothing on mouse drag when there is not set mode', function () {
+      var event = TestUtils.getEvent({
         'x': 100,
         'y': 100
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
       var expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -189,6 +148,9 @@ describe('Rectangle', function() {
         };
         expected.push(point);
       }
+
+      overlay.mode = '';
+
       this.rectangle.onMouseDrag(event, overlay);
 
       expect(this.shape.segments.length).toBe(expected.length);
@@ -199,11 +161,14 @@ describe('Rectangle', function() {
     });
 
     it('should translate the whole rectangular shape', function() {
-      var event = getEvent({
+      var event = TestUtils.getEvent({
         'x': 3,
         'y': -3
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'translate', this.shape, null);
+
+      overlay.mode = 'translate';
+      overlay.path = this.shape;
+
       this.rectangle.onMouseDrag(event, overlay);
 
       expect(this.shape.segments[0].point.x - event.delta.x).toBe(this.initialPoint.x - 2);
@@ -234,12 +199,14 @@ describe('Rectangle', function() {
       expect(this.shape.segments[8].point.y - event.delta.y).toBe(this.initialPoint.y - 1);
     });
 
-    it('should resize the whole rectangular shape', function() {
-      var event = getEvent({
+    it('should resize the whole rectangular shape when resized from the bottom right corner and then from the top left corner', function() {
+      var event = TestUtils.getEvent({
         'x': 10,
         'y': 100
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, this.shape.segments[5]);
+      overlay.mode = 'deform';
+      overlay.path = this.shape;
+      overlay.segment = this.shape.segments[5];
       this.rectangle.onMouseDrag(event, overlay);
 
       expect(this.shape.segments[0].point.x).toBe(this.initialPoint.x - 2);
@@ -269,11 +236,11 @@ describe('Rectangle', function() {
       expect(this.shape.segments[8].point.x).toBe(this.initialPoint.x - 2);
       expect(this.shape.segments[8].point.y - event.delta.y / 2).toBe(this.initialPoint.y - 1);
 
-      var event2 = getEvent({
+      var event2 = TestUtils.getEvent({
         'x': 100,
         'y': 10
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, this.shape.segments[0]);
+      overlay.segment = this.shape.segments[0];
       this.rectangle.onMouseDrag(event2, overlay);
 
       expect(this.shape.segments[0].point.x - event2.delta.x).toBe(this.initialPoint.x - 2);
@@ -304,12 +271,16 @@ describe('Rectangle', function() {
       expect(this.shape.segments[8].point.y - event.delta.y / 2 - event2.delta.y / 2).toBe(this.initialPoint.y - 1);
     });
 
-    it('should resize the whole rectangular shape 2', function() {
-      var event = getEvent({
+
+    it('should resize the whole rectangular shape from top middle corner and then left middle', function() {
+      var event = TestUtils.getEvent({
         'x': 10,
         'y': 100
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, this.shape.segments[2]);
+      overlay.mode = 'deform';
+      overlay.path = this.shape;
+      overlay.segment = this.shape.segments[2];
+
       this.rectangle.onMouseDrag(event, overlay);
 
       expect(this.shape.segments[0].point.x).toBe(this.initialPoint.x - 2);
@@ -339,11 +310,11 @@ describe('Rectangle', function() {
       expect(this.shape.segments[8].point.x).toBe(this.initialPoint.x - 2);
       expect(this.shape.segments[8].point.y - event.delta.y / 2).toBe(this.initialPoint.y - 1);
 
-      var event2 = getEvent({
+      var event2 = TestUtils.getEvent({
         'x': 100,
         'y': 10
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, this.shape.segments[4]);
+      overlay .segment = this.shape.segments[4];
       this.rectangle.onMouseDrag(event2, overlay);
 
       expect(this.shape.segments[0].point.x).toBe(this.initialPoint.x - 2);
@@ -374,14 +345,6 @@ describe('Rectangle', function() {
       expect(this.shape.segments[8].point.y - event.delta.y / 2).toBe(this.initialPoint.y - 1);
     });
 
-    function rotatePoint(point, initialPoint, angle) {
-      var angleRad = angle * Math.PI / 180.0;
-      return {
-        x: Math.cos(angleRad) * (point.x - initialPoint.x) - Math.sin(angleRad) * (point.y - initialPoint.y) + initialPoint.x,
-        y: Math.sin(angleRad) * (point.x - initialPoint.x) + Math.cos(angleRad) * (point.y - initialPoint.y) + initialPoint.y
-      };
-    }
-
     it('should rotate the whole rectangular shape', function() {
       var size = {
         'x': 1,
@@ -390,7 +353,7 @@ describe('Rectangle', function() {
       var scale = 2;
       var rotationAngle = -90;
       // -90 degrees rotation + scale
-      var event = getEvent({
+      var event = TestUtils.getEvent({
         'x': -size.x,
         'y': size.y
       }, {
@@ -401,11 +364,14 @@ describe('Rectangle', function() {
         'x': this.shape.position.x,
         'y': this.shape.position.y
       };
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', this.shape, null);
+
+      overlay.mode = 'rotate';
+      overlay.path = this.shape;
+
       var expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = this.shape.segments[idx].point;
-        point = rotatePoint(point, localCenterPoint, rotationAngle);
+        point = TestUtils.rotatePoint(point, localCenterPoint, rotationAngle);
         expected.push(point);
       }
       this.rectangle.onMouseDrag(event, overlay);
@@ -418,12 +384,11 @@ describe('Rectangle', function() {
     });
 
     it('should create rectangular shape', function() {
-      var event = getEvent({}, {
+      var event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x + 1000,
         'y': this.initialPoint.y + 1000
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
-      spyOn(overlay, 'onDrawFinish');
+
       this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.path).not.toBeNull();
@@ -434,184 +399,207 @@ describe('Rectangle', function() {
       expect(overlay.onDrawFinish.calls.count()).toEqual(1);
 
       overlay.mode = '';
+      overlay.onDrawFinish.calls.reset();
+
       this.rectangle.onMouseUp(event, overlay);
 
-      expect(overlay.onDrawFinish.calls.count()).toEqual(1);
+      expect(overlay.onDrawFinish.calls.count()).toEqual(0);
     });
 
-    it('should select rectangular shape', function() {
-      var event = getEvent({}, {
-        'x': this.initialPoint.x - 1,
-        'y': this.initialPoint.y - 1
-      });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
-      this.rectangle.onMouseDown(event, overlay);
+    it('should select point[5] deform rectangular', function() {
 
-      expect(overlay.mode).toBe('translate');
-      expect(overlay.segment).toBeNull();
-      expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toBe('move');
-
-      this.rectangle.onMouseDown(event, overlay);
-
-      expect(overlay.mode).toBe('');
-      expect(overlay.segment).toBeNull();
-      expect(overlay.path).toBeNull();
-
-      event = getEvent({}, {
+      var event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x,
         'y': this.initialPoint.y
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+      overlay.mode = '';
+
       this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[5]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
+    });
 
-      this.rectangle.onMouseDown(event, overlay);
+    it('should select point[4] to deform rectangular', function() {
 
-      expect(overlay.mode).toBe('');
-      expect(overlay.segment).toBeNull();
-      expect(overlay.path).toBeNull();
-
-      event = getEvent({}, {
+     var event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x,
         'y': this.initialPoint.y - 1
       });
+      overlay.mode = '';
+
       this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[4]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
+    });
 
-      overlay.mode = '';
-      overlay.segment = null;
-      overlay.path = null;
-      event = getEvent({}, {
+    it('should select point[3] to deform rectangular', function() {
+
+      var event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x,
         'y': this.initialPoint.y - 2
       });
+
+      overlay.mode = '';
+
       this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[3]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
+    });
 
-      overlay.mode = '';
-      overlay.segment = null;
-      overlay.path = null;
-      event = getEvent({}, {
+    it('should select point[1] to deform rectangular', function() {
+
+      var event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x - 1,
         'y': this.initialPoint.y - 2
       });
+      overlay.mode = '';
       this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[1]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
+    });
 
-      overlay.mode = '';
-      overlay.segment = null;
-      overlay.path = null;
-      event = getEvent({}, {
+    it('should select point[0] to deform rectangular', function() {
+
+     var event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x - 2,
         'y': this.initialPoint.y - 2
       });
+      overlay.mode = '';
       this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[0]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
-      overlay.mode = '';
-      overlay.segment = null;
-      overlay.path = null;
-      event = getEvent({}, {
+    });
+
+    it('should select point[6] to deform rectangular', function() {
+
+     var event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x - 1,
         'y': this.initialPoint.y
       });
+      overlay.mode  = '';
       this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[6]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
-      overlay.mode = '';
-      overlay.segment = null;
-      overlay.path = null;
-      event = getEvent({}, {
+    });
+
+    it('should select point[7] to deform rectangular', function() {
+
+      var event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x - 2,
         'y': this.initialPoint.y
       });
+      overlay.mode = '';
       this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[7]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
-      overlay.mode = '';
-      overlay.segment = null;
-      overlay.path = null;
-      event = getEvent({}, {
+    });
+
+    it('should select point[8] to deform rectangular', function() {
+
+      var event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x - 2,
         'y': this.initialPoint.y - 1
       });
+      overlay.mode = '';
       this.rectangle.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('deform');
       expect(overlay.segment).toBe(this.shape.segments[8]);
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
 
-      overlay.mode = '';
-      overlay.segment = null;
-      overlay.path = null;
-      event = getEvent({}, {
-        'x': this.initialPoint.x - 1,
-        'y': this.initialPoint.y - 22
-      });
-      this.rectangle.updateSelection(true, this.shape, overlay);
-      this.rectangle.onMouseDown(event, overlay);
-
-      expect(overlay.mode).toBe('deform');
-      expect(overlay.segment).toBeNull();
-      expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toContain('data:image/png;base64');
-
-      event = getEvent({}, {
-        'x': this.initialPoint.x - 1,
-        'y': this.initialPoint.y - 1
-      });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'translate', null, null);
-      this.rectangle.onMouseDown(event, overlay);
-
-      expect(document.body.style.cursor).toBe('default');
-
-      event = getEvent({}, {
-        'x': this.initialPoint.x + 100,
-        'y': this.initialPoint.y + 100
-      });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
-      this.rectangle.onMouseDown(event, overlay);
-
-      expect(document.body.style.cursor).toBe('default');
-
-      event = getEvent({}, {
-        'x': this.initialPoint.x - 100,
-        'y': this.initialPoint.y - 100
-      });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', this.shape, null);
-      this.rectangle.onMouseDown(event, overlay);
-
-      expect(document.body.style.cursor).toBe('default');
     });
+
+    it('should change cursor to move when stroke is hit',function(){
+     var hitResult = {
+       type:'stroke'
+     };
+
+      overlay.viewer.canvas = this.canvas;
+      this.rectangle.setCursor(hitResult,overlay);
+
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('move');
+    });
+
+    // it('should change cursor to pointer when hovering delete icon',function(){
+    //
+    //
+    // });
+
+    it('should change cursor on mouse move',function(){
+      var event = TestUtils.getEvent({},{
+        x: this.initialPoint.x,
+        y: this.initialPoint.y
+      });
+      overlay.viewer.canvas = this.canvas;
+      overlay.hoveredPath = this.shape;
+      this.rectangle.onMouseMove(event,overlay);
+
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
+    });
+
+    it('should not update selection if the item is part of selected shape',function(){
+      var _this = this;
+      var item = {
+        '_name':{
+          toString:function(){
+            return _this.rectangle.idPrefix + _this.rectangle.partOfPrefix;
+          }
+        }
+      };
+      this.rectangle.updateSelection(true,item,overlay);
+      expect(item.selected).toBeUndefined();
+    });
+
+    it('should adapt segments (old rects have different pivot points)',function(){
+
+      this.rectangle.adaptSegments(this.shape);
+      expect(this.shape.segments[1].point.x).toBe(this.shape.segments[2].point.x);
+      expect(this.shape.segments[1].point.y).toBe(this.shape.segments[2].point.y);
+
+    });
+
+    it('should resize the trash can icon',function(){
+      var _this = this;
+      var item = {
+        '_name':{
+          toString:function(){
+            return _this.rectangle.idPrefix + _this.rectangle.partOfPrefix + 'delete';
+          }
+        },
+        data:{
+          self:new overlay.annotationUtils.DeleteActionIcon(),
+          parent:{ // should use mock shape
+            data:{
+              rotation:1
+            },
+            contains:jasmine.createSpy().and.returnValue(true)
+          }
+        }
+      };
+
+      this.rectangle.onResize(item,overlay);
+
+      expect(item.data.self.resize).toHaveBeenCalledWith(24);
+      expect(item.data.self.rotate).toHaveBeenCalledWith(180);
+    });
+
   });
+  
 });

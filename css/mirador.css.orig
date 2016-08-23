@@ -1,8 +1,3 @@
-body { 
-  padding: 0; 
-  margin: 0; 
-  overflow: hidden; 
-}
 a {
   color: inherit; /* blue colors for links too */
   text-decoration: inherit; /* no underline */
@@ -10,9 +5,9 @@ a {
 
 /* jquery-ui-dialog theming/customisation (overrides to reset neutral defaults)
 ----------------------------------------------------------------------------
- */
-  .ui-dialog-titlebar {
-    display:none;
+*/
+.ui-dialog-titlebar {
+  display:none;
 }
 .ui-dialog {
   overflow:hidden;
@@ -59,10 +54,10 @@ a {
 /*----------------------------------------------------------------------------
 /* Mirador styles
 ----------------------------------------------------------------------------
- */
+*/
 
-  .mirador-viewer, .mirador-main-menu-bar, .mirador-status-bar {
-    font-family: 'Open Sans', 'Lucida Grande', Verdana, Arial,sans-serif;
+.mirador-viewer, .mirador-main-menu-bar, .mirador-status-bar {
+  font-family: 'Open Sans', 'Lucida Grande', Verdana, Arial,sans-serif;
 }
 
 .mirador-viewer {
@@ -86,9 +81,9 @@ a {
   #load-controls form {
     float: none;
   }
-  
+
   #url-load-form {
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
   }
 }
 
@@ -96,15 +91,15 @@ a {
 /* main menu
 ---------------------------------------------------------------------------- */
 
-  .mirador-main-menu-bar {
-    background-color: #000;
-    border-bottom: 1px solid #555;
-    color: #fff;
-    height: 33px;
-    width: 100%;
-    /*padding: 4px;*/
-    font-size: 14px;
-    top: 0;
+.mirador-main-menu-bar {
+  background-color: #000;
+  border-bottom: 1px solid #555;
+  color: #fff;
+  height: 33px;
+  width: 100%;
+  /*padding: 4px;*/
+  font-size: 14px;
+  top: 0;
 }
 
 .mirador-main-menu {
@@ -130,36 +125,27 @@ a {
   padding: 0 15px;
 }
 
-.mirador-main-menu a,
-.mirador-main-menu a:active,
-.mirador-main-menu a:visited {
+.mirador-main-menu a {
   color: #fff;
   font-weight: normal;
   text-decoration: none;
+  opacity: 0.6;
 }
 
-.mirador-main-menu a:focus {
+.mirador-main-menu a:hover {
+  opacity: 1;
+}
+
+.mirador-main-menu a.active {
+  opacity: 1;
+  border-bottom: 2px solid deepskyblue;
+}
+
+
+/*.mirador-main-menu a:focus {
   border-bottom: 2px solid deepskyblue;
   outline: none;
-}
-
-.mirador-main-menu .icon-bookmark-workspace,
-.mirador-main-menu .icon-load-window,
-.mirador-main-menu .icon-window-options,
-.mirador-main-menu .icon-clear-local-storage {
-  background-image: url('../images/mirador-icons.png');
-  background-repeat: none;
-  cursor: pointer;
-  display: inline-block;
-  height: 20px;
-  margin: 0 2px -7px 0;
-  width: 20px;
-}
-
-.mirador-main-menu .icon-bookmark-workspace { background-position: -221px -41px; }
-.mirador-main-menu .icon-load-window { background-position: -241px -41px; }
-.mirador-main-menu .icon-window-options { background-position: -261px -41px; }
-.mirador-main-menu .icon-clear-local-storage { background-position: -60px -80px; }
+}*/
 
 .mirador-main-menu-bar .window-options-menu {
   position: relative;
@@ -169,12 +155,12 @@ a {
 }
 /* status bar
 ---------------------------------------------------------------------------- */
-  .mirador-status-bar {
-    background-color: #ccc;
-    border-top: 1px solid #000;
-    bottom: 0;
-    color: #000;
-    position: fixed;
+.mirador-status-bar {
+  background-color: #ccc;
+  border-top: 1px solid #000;
+  bottom: 0;
+  color: #000;
+  position: fixed;
 }
 
 .mirador-status-bar-msg-left, .mirador-status-bar-msg-right {
@@ -196,9 +182,9 @@ a {
 /* main menu window options
 ---------------------------------------------------------------------------- */
 .mirador-window-options-menu {
-    list-style: none;
-    margin: 0;
-    padding: 10px 5px;
+  list-style: none;
+  margin: 0;
+  padding: 10px 5px;
 }
 
 .mirador-window-options-menu li {
@@ -229,13 +215,13 @@ a {
 /* main menu select menu
 ---------------------------------------------------------------------------- */
 #workspace-select-menu, #workspaceContainer {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(255,255,255,0.94);
-    display: none;
-    overflow: hidden;
-    z-index: 5;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255,255,255,0.94);
+  display: none;
+  overflow: hidden;
+  z-index: 5;
 }
 #manifest-select-menu {
   position: absolute;
@@ -274,7 +260,7 @@ a {
 #bookmark-panel h3 {
   text-align: center;
 }
-.container {
+#manifest-select-menu .container {
   position: relative;
   width: 100%;
   height:100%;
@@ -409,6 +395,10 @@ a {
   margin-right:15px;
   height: 80px;
 }
+.preview-thumb {
+  display: inline-flex;
+  position: absolute;
+}
 .preview-images {
   margin-right:0;
 }
@@ -490,7 +480,7 @@ li.highlight {
   margin-right: 6px;
 }
 #url-load-form {
-  float: right; 
+  float: right;
 }
 #url-load-form input[type="text"] {
   width: 250px;
@@ -505,7 +495,7 @@ li.highlight {
   color:black;
 }
 #manifest-search-form input:focus, #url-load-form input:focus,
-#manifest-search-form input:focus, 
+#manifest-search-form input:focus,
 #url-load-form input:focus,
 #url-load-form input[type="submit"]:hover{
   outline:none;
@@ -644,22 +634,22 @@ li.highlight {
   box-shadow: inset 0 0 35px rgba(94, 219, 255, 1);
 }
 .slot.draggedOver .dropMeMessage, .slot.draggedOver .dropIcon {
-    display:block;
+  display:block;
 }
 .dropMeMessage, .dropIcon {
-    display:none;
+  display:none;
 }
 .slot.draggedOver .addItemText, .slot.draggedOver .plus span {
-    display:none;
+  display:none;
 }
 .addItemLink {
-    display:block;
-    position:absolute;
-    top:0;
-    bottom:0;
-    right:0;
-    left:0;
-    cursor: pointer;
+  display:block;
+  position:absolute;
+  top:0;
+  bottom:0;
+  right:0;
+  left:0;
+  cursor: pointer;
 }
 .dropMask {
   position:absolute;
@@ -697,7 +687,7 @@ li.highlight {
 
 
 .sidePanel {
-    position:absolute;
+  position:absolute;
   width:280px;
   left: 0;
   bottom: 0;
@@ -714,10 +704,10 @@ li.highlight {
 }
 
 .sidePanel.minimized {
-    transition: all 0.2s ease-out;
-    transform: translateX(-280px);
-    opacity:0;
-    border:none;
+  transition: all 0.2s ease-out;
+  transform: translateX(-280px);
+  opacity:0;
+  border:none;
 }
 
 .tabContentArea {
@@ -733,63 +723,63 @@ li.highlight {
 }
 
 .sidePanel .tabGroup {
-    list-style-type:none;
-    margin:0;
-    padding:0;
+  list-style-type:none;
+  margin:0;
+  padding:0;
 }
 
 .sidePanel .tab {
-    padding: 4px 6px;
-    border-left:0;
-    border-bottom: 2px solid black;
-    display: inline-block;
-    cursor: pointer;
-    border-radius: 3px 3px 0 0;
+  padding: 4px 6px;
+  border-left:0;
+  border-bottom: 2px solid black;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 3px 3px 0 0;
 }
 
 .sidePanel .tab:not(.selected):hover {
-    border: 2px solid rgba(0,0,0,0.3);
-    border-bottom: 2px solid black;
-    padding:4px 4px;
+  border: 2px solid rgba(0,0,0,0.3);
+  border-bottom: 2px solid black;
+  padding:4px 4px;
 }
 
 .sidePanel .tab.selected {
-    border: 2px solid black;
-    border-bottom:0;
-    border-radius: 3px 3px 0 0;
-    margin: 0 -2px;
+  border: 2px solid black;
+  border-bottom:0;
+  border-radius: 3px 3px 0 0;
+  margin: 0 -2px;
 }
 .annotationsPanel ul {
-    padding:0;
-    margin:0;
- }
+  padding:0;
+  margin:0;
+}
 .sidePanel .annotationListItem {
-    list-style-type: none;
-    border-left:0;
-    border-right:0;
-    padding:10px 10px 0 10px;
+  list-style-type: none;
+  border-left:0;
+  border-right:0;
+  padding:10px 10px 0 10px;
 }
 .sidePanel .annotationListItem:after {
-                 content: "";
-                 height: 1px;
-                 background: linear-gradient(to right,  rgba(0,0,0,0) 0%,rgba(147,147,147,1) 50%,rgba(0,0,0,0) 100%);
+ content: "";
+ height: 1px;
+ background: linear-gradient(to right,  rgba(0,0,0,0) 0%,rgba(147,147,147,1) 50%,rgba(0,0,0,0) 100%);
 
-                 display: block;
-                 margin-top: 10px;
-             }
+ display: block;
+ margin-top: 10px;
+}
 .sidePanel .annotationListItem.focused {
-    background-color: #ddd;
-    border-left: 3px solid lightBlue;
+  background-color: #ddd;
+  border-left: 3px solid lightBlue;
 }
 
 .sidePanel .annotationListItem:hover {
-    background-color: #ddd;
-    border-left: 3px solid lightBlue;
+  background-color: #ddd;
+  border-left: 3px solid lightBlue;
 }
 
 .sidePanel .annotationListItem.selected {
-    background-color: #ccc;
-    border-left: 3px solid deepskyblue;
+  background-color: #ccc;
+  border-left: 3px solid deepskyblue;
 }
 
 .sidePanel a:hover {
@@ -802,7 +792,8 @@ li.highlight {
 }
 .sidePanel h1:hover, .sidePanel h2:hover, .sidePanel h3:hover, .sidePanel h4:hover {
 }
-/*.sidePanel h2 {
+/*
+.sidePanel h2 {
   font-size: 1.5em;
 }
 .sidePanel h3 {
@@ -813,7 +804,8 @@ li.highlight {
 }
 .sidePanel h5 {
   font-size: .75em;
-}*/
+}
+*/
 .toc {
   margin:0;
   overflow-y: scroll;
@@ -864,8 +856,12 @@ li.highlight {
 }
 .toc-link i {
   color: rgba(0,0,0,0.4);
-  margin-right:8px;
+  margin-right:0.4em;
   transition: all 0.2s linear;
+}
+.toc-caret {
+  padding: 0.4em;
+  margin: -0.4em;
 }
 .toc-link i:hover {
   color: black;
@@ -911,9 +907,11 @@ li.highlight {
   font-weight: bold;
 }
 
-/* .toc li:hover > h2 a { */
-/*   font-weight: bold; */
-/* } */
+/*
+.toc li:hover > h2 a {
+  font-weight: bold;
+}
+*/
 .view-container {
   margin-left: 280px;
   height: 100%;
@@ -964,12 +962,12 @@ li.highlight {
 /* window views
 ---------------------------------------------------------------------------- */
 
-  .thumbnail-view, .image-view, .book-view, .scroll-view {
-    height: 100%;
-    width: 100%;
-    background-color: black;
-    display: none;
-    overflow-y: scroll;
+.thumbnail-view, .image-view, .book-view, .scroll-view {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  display: none;
+  overflow-y: scroll;
 }
 .image-view, .book-view {
   overflow: hidden;
@@ -990,12 +988,12 @@ li.highlight {
 /* panels
 ---------------------------------------------------------------------------- */
 
-  .panel-thumbnail-view {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    overflow-x: scroll;
-    overflow-y: hidden;
+.panel-thumbnail-view {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 .panel-thumbnail-view ul.panel-listing-thumbs {
@@ -1046,34 +1044,32 @@ li.highlight {
 /* openseadragon
 ---------------------------------------------------------------------------- */
 
-  .mirador-osd {
-    background-color: #000;
-    width: 100%;
-    height: 100%;
+.mirador-osd {
+  background-color: #000;
+  width: 100%;
+  height: 100%;
 }
 
 /* Canvas HUD
 ----------------------- */
-  .mirador-canvas-hud {
-    position:absolute;
-    left: 0;
-    top:0;
-    bottom:0;
-    right:0;
-    background: rgba(255, 0, 128, 0.5);
-    pointer-events: none;
-}
+/*.mirador-canvas-hud {
+  position:absolute;
+  left: 0;
+  top:0;
+  bottom:0;
+  right:0;
+  background: rgba(255, 0, 128, 0.5);
+  pointer-events: none;
+}*/
 .hud-control {
-  cursor: pointer;
   color:white;
   text-shadow: 0 0 5px black;
-  transition: all 0.3s ease;
+  /*transition: all 0.3s ease;*/
   opacity: 0.6;
   font-size: 18px;
   z-index:2;
 }
 .hud-container {
-  cursor: pointer;
   color:white;
   text-shadow: 0 0 5px black;
   transition: all 0.3s ease;
@@ -1081,12 +1077,16 @@ li.highlight {
   z-index:2;
 }
 .hud-control:hover {
-  transition: all 0.3s ease;
+  /*transition: all 0.3s ease;*/
+  cursor: pointer;
   opacity: 1;
 }
-.mirador-osd-edit-mode.selected, .mirador-osd-annotations-layer.selected {
+.hud-control.selected {
   opacity: 1;
   /*transition: none;*/
+}
+.hud-control.hidden {
+  opacity: 0;
 }
 .mirador-osd-previous {
   position:absolute;
@@ -1101,23 +1101,11 @@ li.highlight {
   top:50%;
   margin-top:-35px;
 }
-.mirador-osd-annotations-layer {
-  position:absolute;
-  top: 10px;
-  left: 10px;
-  transition: none;
-}
 .mirador-osd-toggle-bottom-panel {
   position: absolute;
   bottom:0;
   right:50%;
   margin-right: -25px;
-}
-.mirador-osd-fullscreen {
-  position:absolute;
-  right:10px;
-  top:10px;
-  z-index: 2;
 }
 .mirador-pan-zoom-controls {
   position: absolute;
@@ -1169,52 +1157,131 @@ li.highlight {
   top: 10px;
   left: 10px;
   transition: none;
+  /*width: 100%*/
 }
 .mirador-osd-context-controls a {
   float:left;
   margin:0 10px 0 0;
   font-weight: normal;
 }
+.mirador-annotation-controls {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+.mirador-manipulation-controls {
+  position: absolute;
+  top: 30px;
+  left: 0px;
+  min-width: 330px;
+}
 
 /* color picker custom style
 ---------------------------------------------------------------------------- */
 
-.sp-button-container a {
-  color: #555555 !important;
-  text-shadow: none !important;
-  margin: 0 0 0 15px !important;
-  text-decoration: none !important;
-  text-decoration-line: underline !important;
+.mirador-osd-color-picker * {
+  text-shadow: none;
 }
 
-.borderColorPicker + div + .sp-container, .fillColorPicker + div + .sp-container {
-  width: 300px !important;
+.sp-dd {
+  display: none;
 }
 
-.borderColorPicker + div .sp-preview, .fillColorPicker + div .sp-preview {
-  height: 10px !important;
-}
-.borderColorPicker + div .sp-dd, .fillColorPicker + div .sp-dd {
-  height: 6px !important;
-  line-height: 6px !important;
-}
-.borderColorPicker + div.sp-replacer, .fillColorPicker + div.sp-replacer {
-  border-radius: 5px !important;
+.mirador-osd-color-picker .dropdown-icon {
+  font-size: .8em;
+  height: 30px;
+  vertical-align: middle;
 }
 
-.borderColorPicker + div .material-icons, .fillColorPicker + div .material-icons {
+.mirador-osd-color-picker .sp-container {
+  width: 300px;
+  border-color: #ccc;
+  opacity: 0.9;
+  border-radius: 3px;
+}
+
+.mirador-osd-color-picker .sp-preview {
+  height: 10px;
+}
+
+.mirador-osd-color-picker .sp-replacer {
+  border-color: #ccc;
+  height: 11px;
+  border-radius: 3px;
+}
+
+.mirador-osd-color-picker .material-icons {
   float: left;
-  font-size: 12px !important;
+  font-size: 12px;
   margin: 0 5px 0 0;
+}
+
+.hud-control.mirador-line-type {
+  height: 11px;
+  border-radius: 3px;
+  margin: 2px 11px 0 0;
+  padding: 4px;
+  width: 57px;
+  border: 1px solid #ccc;
+  background: #eee none repeat scroll 0 0;
+  text-shadow: none;
+  color: #333;
+}
+
+/*.mirador-line-type ul {
+  color: #333333;
+  margin-top: 0px;
+}
+
+.mirador-line-type li {
+  text-shadow: none;
+  font-size: 10px;
+}*/
+
+.mirador-line-type ul.dropdown.type-list {
+    margin-top: -14px;
+    border-radius: 3px;
+    margin-left: -5px;
+    font-size: 10px;
+    box-shadow: none;
+    width: 140px;
+}
+
+.mirador-line-type ul i {
+    display: inline-block;
+    width: 25px;
+    height: 1em;
+    background: no-repeat;
+    margin-right: 10px;
+}
+
+.mirador-line-type .mirador-border-icon {
+  font-size: 12px;
+  margin: 0 5px 0 0;
+  float: left;
+}
+
+.mirador-line-type .border-type-image {
+  display: inline-block;
+  width: 25px;
+  height: 1em;
+  background: no-repeat;
+  margin: 0 5px 2px 0;
+}
+
+.mirador-line-type .dropdown-icon {
+  font-size: .8em;
+  height: 30px;
+  vertical-align: middle;
 }
 
 /* image view
 ---------------------------------------------------------------------------- */
 
-  .mirador-image-view-nav-toolbar {
-    position:relative;
-    float: right;
-    margin-right: 5px;
+.mirador-image-view-nav-toolbar {
+  position:relative;
+  float: right;
+  margin-right: 5px;
 }
 
 .mirador-image-view-bg {
@@ -1310,24 +1377,24 @@ text {
 
 /* scale
 ----------------*/
-  .mirador-image-scale.hidden {
-    display:none;
+.mirador-image-scale.hidden {
+  display:none;
 }
 
 /* annotation list
 -----------------*/
-  .annotationListPanel {
-    background-color: #f0f0f0;
-    width:200px;
-    height:100%;
-    position:absolute;
-    right:0;
-    top:0;
-    margin:0;
-    padding: 0;
-    z-index:2;
-    box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
-    border-left:1px solid gray;
+.annotationListPanel {
+  background-color: #f0f0f0;
+  width:200px;
+  height:100%;
+  position:absolute;
+  right:0;
+  top:0;
+  margin:0;
+  padding: 0;
+  z-index:2;
+  box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+  border-left:1px solid gray;
 }
 .annotationPanelHeader {
   padding: 0 10px;
@@ -1405,7 +1472,8 @@ text {
   border: 3px solid orangered;
   box-shadow: 0px 0px 8px rgba(0,0,0,0.7);
 }
-/*.annotation:hover {
+/*
+.annotation:hover {
   border: 3px solid orangered;
   opacity: 0.5;
   box-shadow: 0px 0px 15px rgba(0,0,0,1);
@@ -1414,7 +1482,8 @@ text {
   border: 3px solid orangered;
   opacity: 1;
   box-shadow: 0px 0px 8px rgba(0,0,0,0.7);
-}*/
+}
+*/
 .annotation.hovered {
   border: 3px solid orangered;
   opacity: 0.5;
@@ -1475,11 +1544,11 @@ text {
 /* image choice controls
 ------------------------*/
 
-  .mirador-image-view-choices {
-    list-style: none;
-    max-height: 350px;
-    overflow: auto;
-    padding: 0;
+.mirador-image-view-choices {
+  list-style: none;
+  max-height: 350px;
+  overflow: auto;
+  padding: 0;
 }
 
 .mirador-image-view-choices li {
@@ -1505,11 +1574,11 @@ text {
 /* scroll view
 ---------------------------------------------------------------------------- */
 
-  ul.scroll-listing-thumbs {
-    clear: both;
-    list-style: none;
-    padding: 0;
-    white-space: nowrap;
+ul.scroll-listing-thumbs {
+  clear: both;
+  list-style: none;
+  padding: 0;
+  white-space: nowrap;
 }
 
 ul.scroll-listing-thumbs li {
@@ -1545,11 +1614,11 @@ ul.scroll-listing-thumbs li .thumb-label {
 /* thumbnails view
 ---------------------------------------------------------------------------- */
 
-  .mirador-viewer ul.listing-thumbs {
-    clear: both;
-    list-style: none;
-    overflow: auto;
-    padding: 0;
+.mirador-viewer ul.listing-thumbs {
+  clear: both;
+  list-style: none;
+  overflow: auto;
+  padding: 0;
 }
 
 .mirador-viewer ul.listing-thumbs li {
@@ -1608,20 +1677,49 @@ ul.scroll-listing-thumbs li .thumb-label {
   top: -0.5em;
 }
 
+.hud-control .ui-slider-handle .percent {
+  position: absolute;
+  left: 17px;
+  top:-0.3em;
+  display:block;
+  color: white;
+  text-shadow: 0 0 3px black;
+}
+
+.hud-control .ui-slider, .ui-slider-vertical {
+  width: 3px;
+  margin-left: 27px;
+  margin-bottom: 20px;
+  height:100px;
+}
+
+.hud-control .ui-slider-vertical .ui-slider-handle {
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 40px;
+  margin-bottom: -.35em;
+}
+
+.hud-control .ui-slider-vertical .ui-slider-handle:focus {
+  outline:0;
+}
+
+.hud-control .ui-slider-range {
+  background: deepSkyBlue;
+}
+
 /* metadata view
 ---------------------------------------------------------------------------- */
 
-  .mirador-viewer .sub-title {
-    border-bottom: 1px dotted #ccc;
-    color: #666;
-    font-weight: bold;
-    margin: 10px 20px 0 20px;
-    padding: 0 5px 5px 0;
+.mirador-viewer .sub-title {
+  border-bottom: 2px solid #ccc;
+  color: #666;
+  font-weight: bold;
+  margin: 10px 20px 5px 20px;
+  padding: 0 5px 5px 0;
 }
 
 .mirador-viewer .metadata-listing {
-  display: table;
-  table-layout: fixed;
   width: 100%;
   margin: 0;
   padding: 0px 20px 10px 20px;
@@ -1629,18 +1727,16 @@ ul.scroll-listing-thumbs li .thumb-label {
 }
 
 .mirador-viewer .metadata-item {
-  padding-bottom: 5px;
+  padding: 5px 0;
 }
 
 .mirador-viewer .metadata-label, .mirador-viewer .metadata-value {
   line-height: 1.5;
-  margin-left: 3%;
 }
 
 .mirador-viewer .metadata-label {
   text-transform: capitalize;
   color: #555;
-  margin-left: 3%;
   font-style: italic;
 }
 
@@ -1648,8 +1744,12 @@ ul.scroll-listing-thumbs li .thumb-label {
   vertical-align: bottom;
 }
 
-.mirador-viewer .metadata-listing a:hover {
+.mirador-viewer .metadata-listing a {
   border-bottom: 1px dotted #005EBD;
+}
+
+.mirador-viewer .metadata-listing a:hover {
+  border-bottom: 1px dotted #dddddd;
 }
 
 .mirador-metadata-view-nav-toolbar {
@@ -1658,29 +1758,29 @@ ul.scroll-listing-thumbs li .thumb-label {
 }
 
 .metadata-logo {
-  width: 80px;
-  margin-left: 3%;
+  max-height: 120px;
+  max-width: 100%;
 }
 
 
 /* initial loader
 ---------------------------------------------------------------------------- */
-  .mirador-loading {
-    background-color: #fff;
-    border: 1px solid #999;
-    padding: 20px;
+.mirador-loading {
+  background-color: #fff;
+  border: 1px solid #999;
+  padding: 20px;
 }
 
 
 /* buttons and icons
 ---------------------------------------------------------------------------- */
-  .mirador-btn {
-    cursor: pointer;
-    display: inline-block;
-    height: 20px;
-    width: 20px;
-    margin-top: 9px;
-    /*margin-left: 3px;*/
+.mirador-btn {
+  cursor: pointer;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  margin-top: 9px;
+  /*margin-left: 3px;*/
 }
 
 .mirador-btn.disabled {
@@ -1704,21 +1804,23 @@ a.mirador-icon-annotations [class^="icon-"] {
   color: black
 }
 
-ul.dropdown {
+.mirador-viewer ul.dropdown {
   display: none;
   width: 160px;
   z-index: 3;
-  opacity: 0.9;
+  opacity: 0.98;
   background-color: #efefef;
   text-align: center;
   list-style: none;
   position: absolute;
   padding:0;
-  margin-top:9px;
+  margin-top:10px;
   height: auto;
+  box-shadow: 0px 2px 4px #B1B1B1;
+  border: 1px solid #B1B1B1;
 }
 
-.dropdown li {
+.mirador-viewer .dropdown li {
   margin:0;
   cursor: pointer;
   box-sizing: border-box;
@@ -1727,7 +1829,8 @@ ul.dropdown {
   width:100%;
   text-align:left;
 }
-.dropdown li:hover {
+
+.mirador-viewer .dropdown li:hover {
   border-left: 3px solid deepskyblue;
   background-color: #dddddd;
   padding-left: 7px;
@@ -1742,7 +1845,7 @@ ul.dropdown {
   left: 0;
 }
 
-a.mirador-icon-image-view [class^="icon-"] {
+a.mirador-icon-view-type [class^="icon-"] {
   display:block;
   position:absolute;
 }
@@ -1751,16 +1854,8 @@ a.mirador-icon-empty-slot [class^="icon-"] {
   display:block;
   position:absolute;
 }
-div.manifest-info a.mirador-btn.mirador-icon-toc {
-  background-color: #efefef;
-  height: 100%;
-  margin-top: 0px;
-  padding-top: 9px;
-  height: 34px;
-  width: 24px;
-  z-index:4;
-}
-.mirador-viewer a.mirador-icon-image-view, .mirador-viewer a.mirador-icon-thumbs-view, .mirador-viewer a.mirador-icon-metadata-view  {
+
+.mirador-viewer a.mirador-icon-view-type, .mirador-viewer a.mirador-icon-metadata-view, .mirador-viewer a.mirador-osd-fullscreen  {
   background: none;
   color: rgb( 146, 145, 145 );
   box-sizing: border-box;
@@ -1768,7 +1863,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   padding-bottom:30px;
 }
 
-.mirador-viewer a.mirador-icon-window-menu, .mirador-viewer a.mirador-icon-toc  {
+.mirador-viewer a.mirador-icon-window-menu, .mirador-viewer a.mirador-icon-toc, .mirador-viewer a.mirador-close-window  {
   float:left;
   background: none;
   color: rgb( 146, 145, 145 );
@@ -1777,17 +1872,20 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   padding-bottom:30px;
 }
 
-.mirador-viewer a.mirador-icon-image-view:hover, 
-.mirador-viewer a.mirador-icon-thumbs-view:hover, 
-.mirador-viewer a.mirador-icon-metadata-view:hover, 
-.mirador-viewer a.mirador-icon-empty-slot:hover, 
-.mirador-viewer a.mirador-icon-window-menu:hover, 
-.mirador-viewer a.mirador-icon-toc:hover {
+a.mirador-icon-window-menu, a.mirador-icon-view-type {
+  width: 30px;
+}
+
+.mirador-viewer a.mirador-icon-view-type:hover,
+.mirador-viewer a.mirador-icon-metadata-view:hover,
+.mirador-viewer a.mirador-icon-empty-slot:hover,
+.mirador-viewer a.mirador-icon-window-menu:hover,
+.mirador-viewer a.mirador-icon-toc:hover,
+.mirador-viewer a.mirador-osd-fullscreen:hover {
   color: black;
 }
 
-.mirador-viewer a.mirador-icon-image-view.selected,
-.mirador-viewer a.mirador-icon-thumbs-view.selected,
+.mirador-viewer a.mirador-icon-view-type.selected,
 .mirador-viewer a.mirador-icon-toc.selected,
 .mirador-viewer a.mirador-icon-metadata-view.selected {
   color: black;
@@ -1797,6 +1895,12 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   background: none;
   /*color: rgb( 146, 145, 145 );*/
   box-sizing: border-box;
+}
+
+.menu-divider {
+  color: #B1B1B1;
+  margin: 0px;
+  height: 0px;
 }
 
 // qtip overrides.
@@ -1811,13 +1915,16 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   padding: 0;
   clear: both;
 }
-.qtip-content {
+.qtip-viewer .qtip-content {
   min-width: 275px;
   max-height: 200px;
   overflow: auto;
 }
 .annotation-tooltip {
-  padding: 7px;
+  padding: 10px;
+}
+.annotation-editor {
+  cursor: move;
 }
 .annotation-display {
   position:relative;
@@ -1828,7 +1935,7 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   border-bottom: 1px solid gray;
 }
 .annotation-display:last-child {
-    border: none;
+  border: none;
 }
 .annotation-tooltip .button-container {
   text-align: right;
@@ -1869,6 +1976,12 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
   margin-left: 5px;
   text-decoration: underline;
 }
+.annotation-display  .text-viewer a {
+  border-bottom: 1px dotted #005EBD;
+}
+.annotation-display .text-viewer a:hover {
+  border-bottom: 1px dotted #dddddd;
+}
 .text-viewer p {
   margin-top: 0;
 }
@@ -1895,23 +2008,25 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 }
 
 .mce-edit-area iframe {
-    height: 75px !important;
+  height: 75px !important;
 }
-<<<<<<< HEAD
-=======
 
-/* Search Within */
+
+/* Disable outlines when canvas is focused
+---------------------------------------------------------------------------- */
+canvas {
+  outline: none;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
+}
+
+
+/* Search Within 
+---------------------------------------------------------------------------  */
+
 .searchResults  {
   overflow: scroll;
-  background-color: white;
-  color: black;
-  opacity: .9;
-  position: absolute;
-  right: 0;
-  top: 0%;
-  width: 300px;
   height: 100%;
-  z-index: 1;
+  
   padding: 15px;
 }
 .result-wrapper {
@@ -1955,5 +2070,4 @@ div.manifest-info a.mirador-btn.mirador-icon-toc {
 }
 .search-results-list .result-wrapper .result-paragraph .highlight {
   background-color: rgb(255, 255, 0);
-}
->>>>>>> feature/search-within
+	}

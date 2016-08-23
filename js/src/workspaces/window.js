@@ -91,7 +91,7 @@
       if (!this.canvasControls.annotations.annotationLayer) {
         this.canvasControls.annotations.annotationCreation = false;
         this.annoEndpointAvailable = false;
-        this.canvasControls.annotations.annotationState = 'annoOff';
+        this.canvasControls.annotations.annotationState = 'off';
       }
       _this.getAnnotations();
 

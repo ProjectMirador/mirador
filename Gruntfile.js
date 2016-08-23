@@ -25,12 +25,14 @@ module.exports = function(grunt) {
   vendors = [
     'js/lib/jquery.min.js',
     'js/lib/jquery-ui.min.js',
+    'js/lib/modal.js',
+    'js/lib/bootbox.js',
     'js/lib/jquery.scrollTo.min.js',
     'js/lib/jquery.qtip.min.js',
     'js/lib/state-machine.min.js',
     'js/lib/tinymce.min.js',
     'js/lib/handlebars.js',
-    'js/lib/openseadragon.min.js',
+    'js/lib/openseadragon.js',
     'js/lib/d3.v3.min.js',
     'js/lib/pubsub.min.js',
     'js/lib/URI.min.js',
@@ -38,7 +40,6 @@ module.exports = function(grunt) {
     'js/lib/isfahan.js',
     'js/lib/paper-full.min.js',
     'js/lib/spectrum.js',
-    'js/lib/jquery.awesome-cursor.js',
     'js/lib/i18next.min.js',
     'bower_components/simplePagination.js/jquery.simplePagination.js'
   ],
@@ -93,15 +94,16 @@ module.exports = function(grunt) {
       },
       css: {
         src: [
-        'css/normalize.css',
-        'css/font-awesome.css',
-        'css/jquery-ui.min.css',
-        'css/layout-default-latest.css',
-        'css/jquery.qtip.min.css',
-        'css/spectrum.css',
-        'css/mirador.css',
-        'bower_components/simplePagination.js/simplePagination.css',
-        'css/material-icons.css'
+          'css/bootstrap.modals.css',
+          'css/normalize.css',
+          'css/font-awesome.min.css',
+          'css/jquery-ui.min.css',
+          'css/layout-default-latest.css',
+          'css/jquery.qtip.min.css',
+          'css/spectrum.css',
+          'css/mirador.css',
+          'css/material-icons.css',
+          'bower_components/simplePagination.js/simplePagination.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'
       }

@@ -3,41 +3,6 @@ paper.install(window);
 describe('Pin', function() {
   var pinNumber;
 
-  function getEvent(delta, point) {
-    return {
-      'delta': delta,
-      'point': point
-    };
-  }
-
-  function getOverlay(paperScope, strokeColor, fillColor, fillColorAlpha, mode, path, segment) {
-    return {
-      'currentPinSize': 1.0,
-      'paperScope': paperScope,
-      'strokeColor': strokeColor,
-      'fillColor': fillColor,
-      'fillColorAlpha': fillColorAlpha,
-      'mode': mode,
-      'path': path,
-      'segment': segment,
-      'fixedShapeSize': 5,
-      'hitOptions': {
-        'fill': true,
-        'stroke': true,
-        'segments': true,
-        'tolerance': 0
-      },
-      'fitFixedSizeShapes': function() {
-      },
-      onDrawFinish: function() {
-      },
-      getName: function(tool) {
-        pinNumber++;
-        return tool.idPrefix + pinNumber;
-      }
-    };
-  }
-
   beforeAll(function() {
     this.canvas = jQuery('<canvas></canvas>');
     this.canvas.attr('id', 'paperId');
@@ -46,6 +11,7 @@ describe('Pin', function() {
     this.pin = new Mirador.Pin();
     pinNumber = 0;
   });
+
   afterAll(function() {
     delete this.pin;
   });
@@ -55,8 +21,7 @@ describe('Pin', function() {
       'x': 123,
       'y': 456
     };
-    var overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0);
-    var pinScale = 5 / overlay.currentPinSize;
+    var overlay = MockOverlay.getOverlay(paper);
     var shape = this.pin.createShape(initialPoint, overlay);
 
     expect(overlay.mode).toBe('create');
@@ -65,8 +30,8 @@ describe('Pin', function() {
     expect(shape.strokeColor.green).toBe(0);
     expect(shape.strokeColor.blue).toBe(0);
 
-    expect(shape.fillColor.red).toBe(0);
-    expect(shape.fillColor.green).toBe(1);
+    expect(shape.fillColor.red).toBe(1);
+    expect(shape.fillColor.green).toBe(0);
     expect(shape.fillColor.blue).toBe(0);
 
     expect(shape.fillColor.alpha).toBe(overlay.fillColorAlpha);
@@ -85,7 +50,7 @@ describe('Pin', function() {
     var overlay;
 
     beforeEach(function() {
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+      overlay = MockOverlay.getOverlay(paper);
       this.pin = new Mirador.Pin();
       this.initialPoint = {
         'x': 987,
@@ -99,20 +64,14 @@ describe('Pin', function() {
       delete this.pin;
     });
 
-    it('should update selection', function() {
-      var ellipseTool = new Mirador.Ellipse();
+    it('should update selection to true', function() {
       var initialPoint = {
         'x': 987,
         'y': 654
       };
-      var ellipse = ellipseTool.createShape(initialPoint, overlay);
-      this.pin.updateSelection(true, ellipse, overlay);
 
-      expect(this.shape.selected).toBe(false);
+      var event = TestUtils.getEvent(initialPoint);
 
-      var event = getEvent(initialPoint);
-
-      this.pin.onMouseUp(event, overlay);
       this.pin.updateSelection(true, this.shape, overlay);
 
       var redColor = {
@@ -124,6 +83,31 @@ describe('Pin', function() {
       expect(this.shape.strokeColor.red).toBe(redColor.red);
       expect(this.shape.strokeColor.green).toBe(redColor.green);
       expect(this.shape.strokeColor.blue).toBe(redColor.blue);
+      expect(this.shape.data.deleteIcon).not.toBeUndefined;
+    });
+
+    it('should update selection to false', function() {
+      var initialPoint = {
+        'x': 987,
+        'y': 654
+      };
+
+      var event = TestUtils.getEvent(initialPoint);
+
+      this.pin.updateSelection(true, this.shape, overlay);
+
+      this.pin.updateSelection(false, this.shape, overlay);
+
+      var redColor = {
+        red:1,
+        green: 0,
+        blue:0
+      };
+
+      expect(this.shape.strokeColor.red).toBe(redColor.red);
+      expect(this.shape.strokeColor.green).toBe(redColor.green);
+      expect(this.shape.strokeColor.blue).toBe(redColor.blue);
+      expect(this.shape.data.deleteIcon).toBeUndefined;
     });
 
     it('should change stroke when hovering pin',function(){
@@ -156,12 +140,12 @@ describe('Pin', function() {
       expect(this.shape.strokeColor.blue).toBe(oldColor.blue);
     });
 
-    it('should do nothing', function() {
-      var event = getEvent({
+    it('should do nothing when no mode is selected', function() {
+      var event = TestUtils.getEvent({
         'x': 100,
         'y': 100
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+      overlay.mode = '';
       var localCenterPoint = {
         'x': this.initialPoint.x - 1,
         'y': this.initialPoint.y - 1
@@ -184,11 +168,13 @@ describe('Pin', function() {
     });
 
     it('should translate the whole pin shape', function() {
-      var event = getEvent({
+      var event = TestUtils.getEvent({
         'x': 3,
         'y': -3
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'translate', this.shape, null);
+      this.pin.updateSelection(true,this.shape,overlay);
+      overlay.mode = 'translate';
+      overlay.path = this.shape;
       var expected = [];
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
         var point = {
@@ -204,8 +190,24 @@ describe('Pin', function() {
         expect(this.shape.segments[idx].point.x).toBeCloseTo(expected[idx].x, 6);
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
+    });
 
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'translate', null, null);
+    it('should  not translate the whole pin shape when no pin is selected', function() {
+      var event = TestUtils.getEvent({
+        'x': 3,
+        'y': -3
+      });
+      overlay.mode = 'translate';
+      overlay.path = this.shape;
+      var expected = [];
+      for (var idx = 0; idx < this.shape.segments.length; idx++) {
+        var point = {
+          'x': this.shape.segments[idx].point.x + event.delta.x,
+          'y': this.shape.segments[idx].point.y + event.delta.y
+        };
+        expected.push(point);
+      }
+      overlay.mode = 'translate';
       this.pin.onMouseDrag(event, overlay);
 
       for (var idx = 0; idx < this.shape.segments.length; idx++) {
@@ -214,63 +216,93 @@ describe('Pin', function() {
       }
     });
 
-    it('should select pin shape', function() {
-      var event = getEvent({}, {
+    it('should select pin shape for translate', function() {
+      var event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x,
         'y': this.initialPoint.y
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+
+      overlay.mode = '';
       this.pin.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('translate');
       expect(overlay.segment).toBeNull();
       expect(overlay.path).toBe(this.shape);
-      expect(document.body.style.cursor).toBe('move');
 
       this.pin.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('');
       expect(overlay.segment).toBeNull();
       expect(overlay.path).toBeNull();
+    });
 
-      event = getEvent({}, {
+    it('should create pin',function(){
+
+      var event = TestUtils.getEvent({}, {
         'x': this.initialPoint.x + 100,
         'y': this.initialPoint.y + 100
       });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'translate', null, null);
-      this.pin.onMouseDown(event, overlay);
 
-      expect(overlay.mode).toBe('translate');
-      expect(overlay.segment).toBeNull();
-      expect(overlay.path).toBeNull();
-
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'deform', null, null);
-      this.pin.onMouseDown(event, overlay);
-
-      expect(overlay.mode).toBe('deform');
-      expect(overlay.segment).toBeNull();
-      expect(overlay.path).toBeNull();
-
-      event = getEvent({}, {
-        'x': this.initialPoint.x,
-        'y': this.initialPoint.y
-      });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, 'translate', this.shape, null);
-      this.pin.onMouseDown(event, overlay);
-
-      expect(overlay.mode).toBe('');
-      expect(overlay.segment).toBeNull();
-      expect(overlay.path).toBeNull();
-      expect(document.body.style.cursor).toBe('default');
-
-      event = getEvent({}, {
-        'x': this.initialPoint.x + 100,
-        'y': this.initialPoint.y + 100
-      });
-      overlay = getOverlay(paper, '#ff0000', '#00ff00', 1.0, '', null, null);
+      overlay.mode = '';
       this.pin.onMouseDown(event, overlay);
 
       expect(overlay.mode).toBe('create');
     });
+
+    it('should change cursor on mouse move',function(){
+      var event = TestUtils.getEvent({}, {
+        'x': this.initialPoint.x,
+        'y': this.initialPoint.y
+      });
+      overlay.viewer.canvas = this.canvas;
+      overlay.hoveredPath = this.shape;
+      this.pin.onMouseMove(event,overlay);
+
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('move');
+    });
+
+    it('should set cursor to pointer when stoke is hit',function(){
+      var hitResult = {
+        type:'stroke'
+      };
+      overlay.viewer.canvas = this.canvas;
+      this.pin.setCursor(hitResult,overlay);
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('move');
+    });
+
+    it('should set cursor to pointer when icon is hit',function(){
+      var hitResult = {
+        type:'pixel'
+      };
+      overlay.viewer.canvas = this.canvas;
+      this.pin.setCursor(hitResult,overlay);
+      expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
+    });
+
+    it('should resize the trash can icon',function(){
+      var _this = this;
+      var item = {
+        '_name':{
+          toString:function(){
+            return _this.pin.idPrefix + _this.pin.partOfPrefix + 'delete';
+          }
+        },
+        data:{
+          self:new overlay.annotationUtils.DeleteActionIcon(),
+          parent:{ // should use mock shape
+            data:{
+              rotation:1
+            },
+            contains:jasmine.createSpy().and.returnValue(true)
+          }
+        }
+      };
+
+      this.pin.onResize(item,overlay);
+
+      expect(item.data.self.resize).toHaveBeenCalledWith(24);
+    });
+
   });
+
 });
