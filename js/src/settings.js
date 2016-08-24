@@ -171,12 +171,6 @@
 
     'imagesPath' : 'images/',
 
-    'logosPath' : 'images/logos/',
-
-    'repoImages' : {
-      'other': 'iiif_logo.png'
-    },
-
     /**
      *  Annotation backend that have instance-specific configuration data as a hash, e.g.:
      *  {
