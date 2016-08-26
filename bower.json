@@ -27,7 +27,8 @@
     "paper": "git://github.com/paperjs/paper.js.git#*",
     "spectrum": "git://github.com/bgrins/spectrum.git#*",
     "jquery-awesome-cursor": "git://github.com/jwarby/jquery-awesome-cursor.git#*",
-    "qTip2": "~2.2.1"
+    "qTip2": "~2.2.1",
+    "simplePagination.js": "*"
   },
   "devDependencies": {
     "sinon-server": "http://sinonjs.org/releases/sinon-server-1.12.2.js",

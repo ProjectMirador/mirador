@@ -40,7 +40,8 @@
         jsonLd: null,
         location: location,
         uri: manifestUri,
-        request: null
+        request: null,
+        canvasMap: null
       });
 
       this.init(manifestUri);
@@ -58,7 +59,18 @@
 
       this.request.done(function(jsonLd) {
         _this.jsonLd = jsonLd;
+        _this.buildCanvasMap();
       });
+    },
+    buildCanvasMap: function() {
+      var _this = this;
+      this.canvasMap = {};
+
+      if (this.getCanvases()) {
+        this.getCanvases().forEach(function(canvas) {
+          _this.canvasMap[canvas['@id']] = canvas;
+        });
+      }
     },
     initFromInfoJson: function(infoJsonUrl) {
       var _this = this;
@@ -124,6 +136,9 @@
     },
     getCanvases : function() {
       var _this = this;
+      if (!this.jsonLd || !this.jsonLd.sequences || !this.jsonLd.sequences[0]) {
+        return undefined;
+      }
       return _this.jsonLd.sequences[0].canvases;
     },
     getAnnotationsListUrl: function(canvasId) {
@@ -189,7 +204,44 @@
       };
 
       return dummyManifest;
+    },
+    // my added function
+    getSearchWithinService: function(){
+      var _this = this;
+      var serviceProperty = _this.jsonLd.service;
+      var service = [];
+      if (serviceProperty.constructor === Array){
+        for (var i = 0; i < serviceProperty.length; i++){
+          //TODO: should we be filtering search by context
+          if (serviceProperty[i]["@context"] === "http://iiif.io/api/search/0/context.json" ||
+            serviceProperty[i]["@context"] === "http://iiif.io/api/search/1/context.json") {
+            //returns the first service object with the correct context
+            service.push(serviceProperty[i]);
+          }
+        }
+      }
+      else if (_this.jsonLd.service["@context"] === "http://iiif.io/api/search/0/context.json" ||
+        serviceProperty["@context"] === "http://iiif.io/api/search/1/context.json"){
+        service.push(_this.jsonLd.service);
+      }
+      else {
+        //no service object with the right context is found
+        service = null;
+      }
+      return service;
+    },
+
+    /**
+     * Get the label of the a canvas by ID
+     * @param  {[type]} canvasId ID of desired canvas
+     * @return {[type]}          string
+     */
+    getCanvasLabel: function(canvasId) {
+      console.assert(canvasId && canvasId !== '', "No canvasId was specified.");
+      var canvas = this.canvasMap[canvasId.split('#')[0]];
+      return canvas ? canvas.label : undefined;
     }
+
   };
 
 }(Mirador));

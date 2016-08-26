@@ -21,14 +21,14 @@
   $.SidePanel.prototype = {
     init: function() {
       var _this = this;
-
+      this.searchTabAvailable = this.manifest.getSearchWithinService();
       this.updateState({
         tabs : [
           {
             name : 'toc',
             options : {
               available: _this.tocTabAvailable,
-              id:'tocTab', 
+              id:'tocTab',
               label:'Index'
             }
           },
@@ -36,7 +36,7 @@
            name : 'annotations',
            options : {
            available: _this.annotationsTabAvailable,
-           id:'annotationsTab', 
+           id:'annotationsTab',
            label:'Annotations'
            }
            },*/
@@ -44,15 +44,23 @@
             name : 'layers',
             options : {
               available: _this.layersTabAvailable,
-              id:'layersTab', 
+              id:'layersTab',
               label:'Layers'
             }
+          },
+          {
+              name : 'search',
+              options : {
+                  available: _this.searchTabAvailable,
+                  id:'searchTab',
+                  label:'Search'
+              }
           },
           /*{
            name : 'tools',
            options : {
            available: _this.toolsTabAvailable,
-           id:'toolsTab', 
+           id:'toolsTab',
            label:'Tools'
            }
            }*/
@@ -106,6 +114,17 @@
           state: _this.state,
           eventEmitter: _this.eventEmitter
         });
+      }
+      if (_this.searchTabAvailable) {
+          new $.SearchTab({
+              manifest: _this.manifest,
+              windowId: this.windowId,
+              widgetId: "searchTab",
+              canvasID: this.canvasID,
+              appendTo: _this.element.find('.tabContentArea'),
+              eventEmitter: _this.eventEmitter
+              //tabs: _this.sidePanelState.tabs
+          });
       }
 
     },
@@ -213,11 +232,11 @@
       if (!enableSidePanel) {
         jQuery(this.appendTo).hide();
         _this.eventEmitter.publish('ADD_CLASS.'+this.windowId, 'focus-max-width');
-        _this.eventEmitter.publish('HIDE_ICON_TOC.'+this.windowId);                
+        _this.eventEmitter.publish('HIDE_ICON_TOC.'+this.windowId);
       } else {
         jQuery(this.appendTo).show({effect: "fade", duration: 300, easing: "easeInCubic"});
         _this.eventEmitter.publish('REMOVE_CLASS.'+this.windowId, 'focus-max-width');
-        _this.eventEmitter.publish('SHOW_ICON_TOC.'+this.windowId);                
+        _this.eventEmitter.publish('SHOW_ICON_TOC.'+this.windowId);
       }
     }
   };
