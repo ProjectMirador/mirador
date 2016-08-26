@@ -91,6 +91,10 @@
 
    this.eventsSubscriptions.push(_this.eventEmitter.subscribe('modeChange.' + _this.windowId,function(event,newMode){
       _this.currentTool = '';
+      //if we are switching between editing and drawing, remove an old path
+      if (_this.inEditMode && _this.path) {
+        _this.removeFocus();
+      }
     }));
 
     this.eventsSubscriptions.push(_this.eventEmitter.subscribe('toggleDrawingTool.' + _this.windowId, function(event, tool) {
@@ -509,11 +513,14 @@
     onMouseMove: function(event) {
       this.overlay.cursorLocation = event.point;
       if (!this.overlay.disabled) {
-        // We are in drawing mode
-        // if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
-        // } else {
-        //   //jQuery(this.overlay.viewer.canvas).css('cursor','default');
-        // }
+        //We are in drawing mode
+        if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
+          this.overlay.eventEmitter.publish('POINTER_CURSOR.' + this.overlay.windowId);
+        } else if (this.overlay.currentTool && !this.overlay.path) {
+          this.overlay.eventEmitter.publish('CROSSHAIR_CURSOR.' + this.overlay.windowId);
+        } else {
+          this.overlay.eventEmitter.publish('DEFAULT_CURSOR.' + this.overlay.windowId);
+        }
         event.stopPropagation();
         if (this.overlay.currentTool) {
           this.overlay.currentTool.onMouseMove(event, this.overlay);
@@ -583,6 +590,7 @@
         }
 
         if (this.overlay.currentTool) {
+          this.overlay.eventEmitter.publish('HUD_REMOVE_CLASS.'+this.overlay.windowId, ['.hud-dropdown', 'hud-disabled']);
           event.point = this.overlay.getMousePositionInImage(event.point);
           this.overlay.currentTool.onMouseDown(event, this.overlay);
         }
@@ -978,7 +986,6 @@
       this.segment = null;
       this.path = null;
       this.mode = '';
-      this.currentTool =null;
       this.draftPaths.push(shape);
 
       shape.data.editable = true;
