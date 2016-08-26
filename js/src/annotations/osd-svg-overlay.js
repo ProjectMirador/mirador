@@ -493,9 +493,11 @@
             event.point = this.overlay.getMousePositionInImage(event.point);
             event.delta = event.point - event.lastPoint;
           } else {
-            var bounds = this.overlay.path.bounds;
-            // we already have a shape, and we are moving it, need to account for that, rather than mouse position
-            event.delta = this.overlay.adjustDeltaForShape(event.lastPoint, event.point, event.delta, bounds);
+            if(this.overlay.path){
+              var bounds = this.overlay.path.bounds;
+              // we already have a shape, and we are moving it, need to account for that, rather than mouse position
+              event.delta = this.overlay.adjustDeltaForShape(event.lastPoint, event.point, event.delta, bounds);
+            }
           }
           //we may not currently have a tool if the user is in edit mode and didn't click on an editable shape
           this.overlay.currentTool.onMouseDrag(event, this.overlay);
