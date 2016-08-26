@@ -12,7 +12,6 @@
     this.eventsSubscriptions = [];
 
     this.init();
-    this.listenForActions();
   };
 
   $.OsdRegionDrawTool.prototype = {
@@ -21,6 +20,8 @@
       this.svgOverlay = this.osdViewer.svgOverlay(this.osdViewer.id, this.windowId, this.state, this.eventEmitter);
       this.svgOverlay.show();
       this.svgOverlay.disable();
+
+      this.listenForActions();
     },
 
     enterCreateMode: function() {
@@ -178,6 +179,10 @@
       };
 
       _this.osdViewer.addHandler('close', this._thisDestroy);
+
+      this.eventsSubscriptions.push(this.eventEmitter.subscribe('DESTROY_EVENTS.'+this.windowId, function(event) {
+        _this.destroy();
+      }));
 
       this.eventsSubscriptions.push(_this.eventEmitter.subscribe('refreshOverlay.' + _this.windowId, function(event) {
         _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
