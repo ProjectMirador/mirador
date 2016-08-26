@@ -164,6 +164,9 @@
       _this.eventEmitter.subscribe('CROSSHAIR_CURSOR.' + _this.windowId, function(event) {
         jQuery(_this.osd.canvas).css("cursor", "crosshair");
       });
+      _this.eventEmitter.subscribe('POINTER_CURSOR.' + _this.windowId, function(event) {
+        jQuery(_this.osd.canvas).css("cursor", "pointer");
+      });
       //Related to Annotations HUD
     },
 

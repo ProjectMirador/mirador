@@ -1076,7 +1076,10 @@ li.highlight {
   font-size: 18px;
   z-index:2;
 }
-.hud-control:hover {
+.hud-control.hud-disabled {
+  opacity: 0.3;
+}
+.hud-control:not(.hud-disabled):hover {
   /*transition: all 0.3s ease;*/
   cursor: pointer;
   opacity: 1;
@@ -1208,6 +1211,7 @@ li.highlight {
   border-color: #ccc;
   height: 11px;
   border-radius: 3px;
+  cursor: default;
 }
 
 .mirador-osd-color-picker .material-icons {

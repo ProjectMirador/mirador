@@ -18,10 +18,18 @@
 
     init: function() {
       var _this = this;
-      var showStrokeStyle = false;
-      this.availableAnnotationStylePickers.forEach(function(picker){
-        if(picker == 'StrokeType'){
+      var showStrokeStyle = false,
+      showStrokeColor = false,
+      showFillColor = false;
+      this.availableAnnotationStylePickers.forEach(function(picker) {
+        if (picker === 'StrokeType') {
           showStrokeStyle = true;
+        }
+        if (picker === 'FillColor') {
+          showFillColor = true;
+        }
+        if (picker === 'StrokeColor') {
+          showStrokeColor = true;
         }
       });
       var annotationProperties = this.canvasControls.annotations;
@@ -31,6 +39,8 @@
           tools : _this.availableAnnotationTools,
           showEdit : annotationProperties.annotationCreation,
           showStrokeStyle: showStrokeStyle,
+          showStrokeColor: showStrokeColor,
+          showFillColor: showFillColor,
           showRefresh : annotationProperties.annotationRefresh
         })).appendTo(this.container.find('.mirador-osd-annotation-controls'));
         this.annotationElement.hide();
@@ -109,19 +119,6 @@
       setBackground.solid(this.container.find('.mirador-line-type .solid'));
       setBackground.dashed(this.container.find('.mirador-line-type .dashed'));
       setBackground.dotdashed(this.container.find('.mirador-line-type .dotdashed'));
-
-      this.container.find('.mirador-line-type').on('mouseenter', function() {
-        _this.container.find('.type-list').stop().slideFadeToggle(300);
-      });
-      this.container.find('.mirador-line-type').on('mouseleave', function() {
-        _this.container.find('.type-list').stop().slideFadeToggle(300);
-      });
-      this.container.find('.mirador-line-type').find('ul li').on('click', function() {
-        var className = jQuery(this).find('i').attr('class').replace(/fa/, '').replace(/ /, '');
-        _this.removeBackgroundImage(_this.container.find('.mirador-line-type .border-type-image'));
-        setBackground[className](_this.container.find('.mirador-line-type .border-type-image'));
-        _this.eventEmitter.publish('toggleBorderType.' + _this.windowId, className);
-      });
     },
 
     setBorderFillColorPickers: function() {
@@ -146,6 +143,9 @@
           _this.eventEmitter.publish('changeBorderColor.' + _this.windowId, color.toHexString());
           jQuery(this).spectrum("set", color.toHexString());
         },
+        move: function(color) {
+          _this.eventEmitter.publish('changeBorderColor.' + _this.windowId, color.toHexString());
+        },
         maxSelectionSize: 4,
         color: defaultBorderColor,
         palette: [
@@ -164,7 +164,6 @@
         showPalette: true,
         showButtons: false,
         showSelectionPalette: true,
-        hideAfterPaletteSelect: true,
         appendTo: 'parent',
         clickoutFiresChange: true,
         containerClassName: 'fillColorPickerPop'+_this.windowId,
@@ -172,6 +171,9 @@
         hide: function(color) {
           _this.eventEmitter.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
           jQuery(this).spectrum("set", color);
+        },
+        move: function(color) {
+          _this.eventEmitter.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
         },
         maxSelectionSize: 4,
         color: colorObj,
@@ -203,6 +205,19 @@
 
     bindEvents: function() {
       var _this = this;
+
+      this.container.find('.mirador-line-type.hud-enabled').on('mouseenter', function() {
+        _this.container.find('.type-list').stop().slideFadeToggle(300);
+      });
+      this.container.find('.mirador-line-type.hud-enabled').on('mouseleave', function() {
+        _this.container.find('.type-list').stop().slideFadeToggle(300);
+      });
+      this.container.find('.mirador-line-type.hud-enabled').find('ul li').on('click', function() {
+        var className = jQuery(this).find('i').attr('class').replace(/fa/, '').replace(/ /, '');
+        _this.removeBackgroundImage(_this.container.find('.mirador-line-type .border-type-image'));
+        setBackground[className](_this.container.find('.mirador-line-type .border-type-image'));
+        _this.eventEmitter.publish('toggleBorderType.' + _this.windowId, className);
+      });
     },
 
     annotationTemplate: Handlebars.compile([
@@ -216,7 +231,7 @@
                                    '</a>',
                                    '{{/each}}',
                                    '{{#if showStrokeStyle}}',
-                                   '<a class="hud-control mirador-line-type" role="button" aria-label="{{t "borderTypeTooltip"}}" title="{{t "borderTypeTooltip"}}">',
+                                   '<a class="hud-control hud-dropdown hud-disabled mirador-line-type" aria-label="{{t "borderTypeTooltip"}}" title="{{t "borderTypeTooltip"}}">',
                                    '<i class="material-icons mirador-border-icon">create</i>',
                                    '<i class="border-type-image solid"></i>',
                                    '<i class="fa fa-caret-down dropdown-icon"></i>',
@@ -227,12 +242,16 @@
                                    '</ul>',
                                    '</a>',
                                    '{{/if}}',
-                                   '<a class="hud-control mirador-osd-color-picker" title="{{t "borderColorTooltip"}}">',
+                                   '{{#if showStrokeColor}}',
+                                   '<a class="hud-control hud-dropdown hud-disabled mirador-osd-color-picker" title="{{t "borderColorTooltip"}}">',
                                    '<input type="text" class="borderColorPicker"/>',
                                    '</a>',
-                                   '<a class="hud-control mirador-osd-color-picker" title="{{t "fillColorTooltip"}}">',
+                                   '{{/if}}',
+                                   '{{#if showFillColor}}',
+                                   '<a class="hud-control hud-dropdown hud-disabled mirador-osd-color-picker" title="{{t "fillColorTooltip"}}">',
                                    '<input type="text" class="fillColorPicker"/>',
                                    '</a>',
+                                   '{{/if}}',
                                    '{{#if showRefresh}}',
                                      '<a class="hud-control mirador-osd-refresh-mode">',
                                      '<i class="fa fa-lg fa-refresh"></i>',
