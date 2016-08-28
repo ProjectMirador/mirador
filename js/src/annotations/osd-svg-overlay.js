@@ -19,7 +19,7 @@
     var availableExternalCommentsPanel = state.getStateProperty('availableExternalCommentsPanel');
     jQuery.extend(this, {
       disabled: true,
-      inEditMode: false,
+      inEditOrCreateMode: false,
       osdViewerId: osdViewerId,
       windowId: windowId,
       commentPanel: null,
@@ -156,21 +156,13 @@
         _this.destroy();
       }));
 
-      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('modeChange.' + _this.windowId,function(event,newMode){
-        _this.currentTool = '';
-        //if we are switching between editing and drawing, remove an old path
-        if (_this.inEditMode && _this.path) {
-          _this.removeFocus();
-        }
-      }));
-
       this.eventsSubscriptions.push(_this.eventEmitter.subscribe('toggleDrawingTool.' + _this.windowId, function(event, tool) {
         //qtip code should NOT be here
         if (_this.disabled) {
-          jQuery('.qtip' + _this.windowId).qtip('hide');
+        //   jQuery('.qtip' + _this.windowId).qtip('hide');
           return;
         }
-        jQuery('#' + _this.osdViewerId).parents('.window').find('.qtip-viewer').hide();
+        // jQuery('#' + _this.osdViewerId).parents('.window').find('.qtip-viewer').hide();
         _this.currentTool = null;
         _this.mode = '';
         for (var i = 0; i < _this.tools.length; i++) {
@@ -178,26 +170,9 @@
             _this.currentTool = _this.tools[i];
           }
         }
-      }));
-
-      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('toggleDefaultDrawingTool.' + _this.windowId, function(event) {
-        //qtip code should NOT be here
-        if (_this.disabled) {
-          jQuery('.qtip' + _this.windowId).qtip('hide');
-          return;
-        }
-        jQuery('#' + _this.osdViewerId).parents('.window').find('.qtip-viewer').hide();
-        _this.currentTool = null;
-        for (var i = 0; i < _this.availableAnnotationDrawingTools.length; i++) {
-          for (var j = 0; j < _this.tools.length; j++) {
-            if (_this.availableAnnotationDrawingTools[i] == _this.tools[j].name) {
-              _this.currentTool = _this.tools[j];
-              break;
-            }
-          }
-          if (_this.currentTool) {
-            break;
-          }
+        //if we are switching between editing and drawing, remove an old path
+        if (_this.inEditOrCreateMode && _this.path) {
+          _this.removeFocus();
         }
       }));
 
@@ -297,8 +272,8 @@
             "isEditable" : false,
             "tooltip" : _this
           });
-          _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
           // return to pointer mode
+          _this.inEditOrCreateMode = false;
           _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' + _this.windowId);
 
         },function(){
@@ -315,7 +290,7 @@
           "isEditable" : false,
           "tooltip" : _this.annoTooltip // whats the point of this? maybe when we add confirm for cancel?
         });
-        _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
+        _this.inEditOrCreateMode = false;
         // return to pointer mode
         _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' +_this.windowId);
 
@@ -349,6 +324,7 @@
         _this.eventEmitter.publish('annotationCreated.' + _this.windowId, [oaAnno]);
 
         // return to pointer mode
+        _this.inEditOrCreateMode = false;
         _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' + _this.windowId);
 
         //reenable viewer tooltips
@@ -361,6 +337,7 @@
 
       this.eventsSubscriptions.push(_this.eventEmitter.subscribe('onAnnotationCreatedCanceled.'+_this.windowId,function(event,cancelCallback,immediate){
         var cancel = function(){
+          _this.inEditOrCreateMode = false;
           _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' + _this.windowId);
 
           _this.clearDraftData();
@@ -382,10 +359,11 @@
         }
       }));
 
-      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('onAnnotationDeleted.' + _this.windowId,function(event,id,callback){
+      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('onAnnotationDeleted.' + _this.windowId, function(event, id, callback) {
+        _this.inEditOrCreateMode = false;
         _this.eventEmitter.publish('annotationDeleted.' + _this.windowId, [id]);
-        _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
-        if(callback){
+        _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' + _this.windowId);
+        if (callback) {
           callback();
         }
       }));
@@ -401,14 +379,6 @@
         _this.clearDraftData();
         _this.annoTooltip = null;
         _this.annoEditorVisible = false;
-      }));
-
-      this.eventsSubscriptions.push(this.eventEmitter.subscribe('ANNOTATIONS_LIST_UPDATED',function(event,opts){
-
-        if(_this.windowId === opts.windowId){
-          _this.eventEmitter.publish('refreshOverlay.'+_this.windowId);
-        }
-
       }));
     },
 
@@ -903,25 +873,21 @@
 
     disable: function() {
       this.disabled = true;
-      this.inEditMode = false;
+      this.inEditOrCreateMode = false;
       this.eventEmitter.publish('enableTooltips.' + this.windowId);
       this.deselectAll();
     },
 
     enableEdit: function() {
       this.disabled = false;
-      this.inEditMode = true;
+      this.inEditOrCreateMode = true;
       this.eventEmitter.publish('disableTooltips.' + this.windowId);
     },
 
     enable: function() {
-      var setDefaultTool = this.disabled;
       this.disabled = false;
-      this.inEditMode = false;
+      //this.inEditOrCreateMode = false;
       this.eventEmitter.publish('disableTooltips.' + this.windowId);
-      // if (setDefaultTool) {
-      //   this.eventEmitter.publish('toggleDefaultDrawingTool.' + this.windowId);
-      // }
     },
 
     refresh: function() {
@@ -977,6 +943,7 @@
       if (!shape) {
         return;
       }
+      this.inEditOrCreateMode = true;
       if (this.hoveredPath) {
         this.updateSelection(false, this.hoveredPath);
       }
@@ -1018,7 +985,7 @@
             return _this.draftPaths.length;
           },
           onAnnotationCreated: function(oaAnno) {
-            _this.eventEmitter.publish('onAnnotationCreated.'+_this.windowId,[oaAnno,shape]);
+            _this.eventEmitter.publish('onAnnotationCreated.'+_this.windowId,[oaAnno]);
           }
         });
         _this.annoEditorVisible = true;
