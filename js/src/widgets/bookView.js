@@ -228,6 +228,7 @@ bindEvents: function() {
     },
 
     adjustWidth: function(className, hasClass) {
+      var _this = this;
       if (hasClass) {
         _this.eventEmitter.publish('REMOVE_CLASS.'+this.windowId, className);
       } else {
