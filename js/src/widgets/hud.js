@@ -55,6 +55,16 @@
       this.eventEmitter.subscribe('ENABLE_TOOLTIPS_BY_CLASS.' + this.windowId, function(event, className) {
         _this.element.find(className).qtip('enable');
       });
+
+      this.eventEmitter.subscribe('SET_STATE_MACHINE_POINTER.' + this.windowId, function(event) {
+        if (_this.annoState.current === 'none') {
+          _this.annoState.startup();
+        } else if (_this.annoState.current === 'off') {
+          _this.annoState.displayOn();
+        } else {
+          _this.annoState.choosePointer();
+        }
+      });
     },
 
     bindEvents: function() {
@@ -119,7 +129,6 @@
             _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.mirador-osd-pointer-mode', 'selected']);
             _this.eventEmitter.publish('HUD_ADD_CLASS.'+_this.windowId, ['.hud-dropdown', 'hud-disabled']);
             _this.eventEmitter.publish('DISABLE_TOOLTIPS_BY_CLASS.'+_this.windowId, '.hud-dropdown');
-            _this.eventEmitter.publish('CANCEL_ACTIVE_ANNOTATIONS.'+_this.windowId);
             _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
             _this.eventEmitter.publish('DEFAULT_CURSOR.' + _this.windowId);
             _this.eventEmitter.publish(('windowUpdated'), {

@@ -214,11 +214,11 @@
         var id = display.attr('data-anno-id');
         var oaAnno = viewerParams.getAnnoFromRegion(id)[0];
         // Don't show built in editor if external is available
-        if(!_this.state.getStateProperty('availableExternalCommentsPanel')){
+        if (!_this.state.getStateProperty('availableExternalCommentsPanel')) {
            _this.freezeQtip(api, oaAnno, viewerParams);
            _this.removeAllEvents(api, viewerParams);
            _this.addEditorEvents(api, viewerParams);
-        }else{
+        } else {
           _this.eventEmitter.publish('annotationInEditMode.' + _this.windowId,[oaAnno]);
         }
 

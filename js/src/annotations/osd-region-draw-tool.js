@@ -24,24 +24,42 @@
       this.listenForActions();
     },
 
-    enterCreateMode: function() {
-      this.osdViewer.setMouseNavEnabled(false);
-      this.svgOverlay.show();
-      this.svgOverlay.enable();
+    enterDisplayAnnotations: function() {
+      // if a user selected the pointer mode but is still actively
+      // working on an annotation, don't re-render
+      if (!this.svgOverlay.inEditOrCreateMode) {
+        this.exitEditMode(true);
+        this.render();
+      }
     },
 
-    enterCreateShapeMode: function() {
-      if(!this.svgOverlay.inEditMode){
+    enterCreateAnnotation: function() {
+      // if a user selected went from pointer to a shape but is still actively
+      // working on an annotation, don't re-render
+      if (!this.svgOverlay.inEditOrCreateMode) {
+        this.osdViewer.setMouseNavEnabled(false);
+        this.svgOverlay.show();
+        this.svgOverlay.enable();
+        this.render();
+      }
+    },
+
+    enterCreateShape: function() {
+      if (!this.svgOverlay.inEditOrCreateMode) {
         this.osdViewer.setMouseNavEnabled(false);
         this.svgOverlay.show();
         this.svgOverlay.enable();
       }
     },
 
-    enterEditMode: function() {
+    enterEditAnnotation: function() {
       this.osdViewer.setMouseNavEnabled(false);
       this.svgOverlay.show();
       this.svgOverlay.enableEdit();
+    },
+
+    enterDefault: function() {
+      this.exitEditMode(false);
     },
 
     exitEditMode: function(showAnnotations) {
@@ -55,7 +73,6 @@
     },
 
     render: function() {
-
       this.svgOverlay.restoreEditedShapes();
       this.svgOverlay.paperScope.activate();
       this.svgOverlay.paperScope.project.clear();
@@ -182,16 +199,6 @@
 
       this.eventsSubscriptions.push(this.eventEmitter.subscribe('DESTROY_EVENTS.'+this.windowId, function(event) {
         _this.destroy();
-      }));
-
-      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('refreshOverlay.' + _this.windowId, function(event) {
-        _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
-        // return to pointer mode
-        _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' + _this.windowId);
-        _this.svgOverlay.restoreEditedShapes();
-        _this.svgOverlay.deselectAll();
-        _this.svgOverlay.mode = '';
-        _this.render();
       }));
 
       this.eventsSubscriptions.push(_this.eventEmitter.subscribe('updateTooltips.' + _this.windowId, function(event, location, absoluteLocation) {
