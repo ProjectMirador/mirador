@@ -121,9 +121,24 @@
 
     handleDeleteShapeEvent: function (event, shape) {
       var _this = this;
-      new $.DialogBuilder(this.slotWindowElement).confirm(i18n.t('deleteShape'), function (result) {
-        if (result) {
-          _this.deleteShape(shape);
+      new $.DialogBuilder(this.slotWindowElement).dialog({
+        message: i18n.t('deleteShape'),
+        closeButton: false,
+        buttons: {
+          'no': {
+            label: i18n.t('no'),
+            className: 'btn-default',
+            callback: function() {
+              return;
+            }
+          },
+          'yes': {
+            label: i18n.t('yes'),
+            className: 'btn-primary',
+            callback: function() {
+              _this.deleteShape(shape);
+            }
+          }
         }
       });
     },
@@ -215,10 +230,10 @@
 
       this.eventsSubscriptions.push(_this.eventEmitter.subscribe('annotationEditSave.'+_this.windowId,function(event,oaAnno){
         var onAnnotationSaved = jQuery.Deferred();
-        var windowElement = _this.state.getWindowElement(_this.windowId);
         if (!_this.draftPaths.length) {
-            new $.DialogBuilder(windowElement).dialog({
+            new $.DialogBuilder(_this.slotWindowElement).dialog({
               message: i18n.t('editModalSaveAnnotationWithNoShapesMsg'),
+              closeButton: false,
               buttons: {
                 success: {
                   label: i18n.t('editModalBtnSaveWithoutShapes'),
@@ -345,16 +360,30 @@
           _this.annoEditorVisible = false;
         };
         if (!immediate) {
-          new $.DialogBuilder().confirm(i18n.t('cancelAnnotation'), function (result) {
-            if (!result) {
-              return;
-            }
-            cancel();
-            if (cancelCallback) {
-              cancelCallback();
+          new $.DialogBuilder(_this.slotWindowElement).dialog({
+            message: i18n.t('cancelAnnotation'),
+            closeButton: false,
+            buttons: {
+              'no': {
+                label: i18n.t('no'),
+                className: 'btn-default',
+                callback: function() {
+                  return;
+                }
+              },
+              'yes': {
+                label: i18n.t('yes'),
+                className: 'btn-primary',
+                callback: function() {
+                  cancel();
+                  if (cancelCallback) {
+                    cancelCallback();
+                  }
+                }
+              }
             }
           });
-        }else{
+        } else {
           cancel();
         }
       }));
