@@ -273,6 +273,10 @@
             "selector": {
               "@type": "oa:SvgSelector",
               "value": svg
+            },
+            "within": {
+              "@id": _this.state.getWindowObjectById(_this.windowId).loadedManifest,
+              "@type": "sc:Manifest"
             }
           };
           //save to endpoint
@@ -333,6 +337,10 @@
           "selector": {
             "@type": "oa:SvgSelector",
             "value": svg
+          },
+          "within": {
+            "@id": _this.state.getWindowObjectById(_this.windowId).loadedManifest,
+              "@type": "sc:Manifest"
           }
         };
         //save to endpoint
