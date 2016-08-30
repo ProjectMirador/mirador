@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Zen Viewer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      #viewer {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+      }
+    </style>
+    <link rel="stylesheet" type="text/css" href="css/mirador-combined.css">
+    <script src="mirador.js"></script>
+  </head>
+  <body>
+    <div id="viewer"></div>
+    <script type="text/javascript">
+      $(function() {
+       Mirador({
+         id: "viewer",
+         buildPath: "",
+         data: [
+           { manifestUri: "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/manifest.json", location: "Stanford University" }         
+         ],
+         windowObjects: [{
+           loadedManifest: "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/manifest.json",
+           canvasID: "http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/canvas/canvas-8",
+           viewType: "ImageView",
+           displayLayout: false,
+           bottomPanel: false,
+           bottomPanelAvailable: false,
+           bottomPanelVisible: false,
+           sidePanel: false,
+           annotationLayer: false
+         }]
+       });
+     });
+    </script>
+  </body>
+</html>
