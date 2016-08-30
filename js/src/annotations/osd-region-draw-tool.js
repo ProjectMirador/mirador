@@ -41,6 +41,8 @@
         this.svgOverlay.show();
         this.svgOverlay.enable();
         this.render();
+      } else {
+        this.svgOverlay.checkToRemoveFocus();
       }
     },
 
@@ -49,6 +51,8 @@
         this.osdViewer.setMouseNavEnabled(false);
         this.svgOverlay.show();
         this.svgOverlay.enable();
+      } else {
+        this.svgOverlay.checkToRemoveFocus();
       }
     },
 
