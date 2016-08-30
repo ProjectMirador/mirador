@@ -32,6 +32,17 @@
           showStrokeColor = true;
         }
       });
+      this.setBackground = {
+        'solid':function(el){
+          _this.setBackgroundImage(el,'border_type_1.png');
+        },
+        'dashed':function(el){
+          _this.setBackgroundImage(el, 'border_type_2.png');
+        },
+        'dotdashed':function(el){
+          _this.setBackgroundImage(el,  'border_type_3.png');
+        }
+      };
       var annotationProperties = this.canvasControls.annotations;
 
       if (annotationProperties.annotationLayer && this.annoEndpointAvailable) {
@@ -103,22 +114,9 @@
     },
 
     addStrokeStylePicker:function(){
-      var _this = this;
-      var setBackground = {
-        'solid':function(el){
-          _this.setBackgroundImage(el,'border_type_1.png');
-        },
-        'dashed':function(el){
-          _this.setBackgroundImage(el, 'border_type_2.png');
-        },
-        'dotdashed':function(el){
-          _this.setBackgroundImage(el,  'border_type_3.png');
-        }
-      };
-
-      setBackground.solid(this.container.find('.mirador-line-type .solid'));
-      setBackground.dashed(this.container.find('.mirador-line-type .dashed'));
-      setBackground.dotdashed(this.container.find('.mirador-line-type .dotdashed'));
+      this.setBackground.solid(this.container.find('.mirador-line-type .solid'));
+      this.setBackground.dashed(this.container.find('.mirador-line-type .dashed'));
+      this.setBackground.dotdashed(this.container.find('.mirador-line-type .dotdashed'));
     },
 
     setBorderFillColorPickers: function() {
@@ -205,17 +203,27 @@
 
     bindEvents: function() {
       var _this = this;
-
-      this.container.find('.mirador-line-type.hud-enabled').on('mouseenter', function() {
+      // for some reason using :not selector isn't working for mouseenter/mouseleave,
+      // so check for hud-disabled at the beginning instead
+      this.container.find('.mirador-line-type').on('mouseenter', function() {
+        if (jQuery(this).hasClass('hud-disabled')) {
+          return false;
+        }
         _this.container.find('.type-list').stop().slideFadeToggle(300);
       });
-      this.container.find('.mirador-line-type.hud-enabled').on('mouseleave', function() {
+      this.container.find('.mirador-line-type').on('mouseleave', function() {
+        if (jQuery(this).hasClass('hud-disabled')) {
+          return false;
+        }
         _this.container.find('.type-list').stop().slideFadeToggle(300);
       });
-      this.container.find('.mirador-line-type.hud-enabled').find('ul li').on('click', function() {
+      this.container.find('.mirador-line-type').find('ul li').on('click', function() {
+        if (jQuery(this).hasClass('hud-disabled')) {
+          return false;
+        }
         var className = jQuery(this).find('i').attr('class').replace(/fa/, '').replace(/ /, '');
         _this.removeBackgroundImage(_this.container.find('.mirador-line-type .border-type-image'));
-        setBackground[className](_this.container.find('.mirador-line-type .border-type-image'));
+        _this.setBackground[className](_this.container.find('.mirador-line-type .border-type-image'));
         _this.eventEmitter.publish('toggleBorderType.' + _this.windowId, className);
       });
     },
