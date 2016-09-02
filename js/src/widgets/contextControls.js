@@ -55,7 +55,7 @@
           showRefresh : annotationProperties.annotationRefresh
         })).appendTo(this.container.find('.mirador-osd-annotation-controls'));
         this.annotationElement.hide();
-        this.setQtips(this.annotationElement);
+        this.setQtips(this.container.find('.mirador-osd-annotation-controls'));
         this.setBorderFillColorPickers();
       }
 
@@ -72,7 +72,7 @@
           showGrayscale: this.canvasControls.imageManipulation.controls.grayscale,
           showInvert: this.canvasControls.imageManipulation.controls.invert
         })).appendTo(this.container.find('.mirador-manipulation-controls'));
-        this.setQtips(this.manipulationElement);
+        this.setQtips(this.container.find('.mirador-manipulation-controls'));
         this.manipulationElement.hide();
       }
 
@@ -80,7 +80,8 @@
     },
 
     setQtips: function(element) {
-      element.each(function() {
+      var _this = this;
+      element.find('a').each(function() {
         jQuery(this).qtip({
           content: {
             text: jQuery(this).attr('title'),
@@ -88,7 +89,8 @@
           position: {
             my: 'bottom center',
             at: 'top center',
-            viewport: true
+            viewport: true,
+            container: _this.qtipElement
           },
           style: {
             classes: 'qtip-dark qtip-shadow qtip-rounded'
@@ -230,7 +232,7 @@
 
     annotationTemplate: Handlebars.compile([
                                    '{{#if showEdit}}',
-                                   '<a class="mirador-osd-pointer-mode hud-control selected">',
+                                   '<a class="mirador-osd-pointer-mode hud-control selected" title="{{t "pointerTooltip"}}">',
                                    '<i class="fa fa-mouse-pointer"></i>',
                                    '</a>',
                                    '{{#each tools}}',

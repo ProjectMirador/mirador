@@ -662,6 +662,7 @@
         this.focusModules.ImageView = new $.ImageView({
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
+          qtipElement: this.element,
           windowId: this.id,
           state:  this.state,
           eventEmitter: this.eventEmitter,
