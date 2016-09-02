@@ -50,7 +50,7 @@ describe('Window', function() {
             }];
             },
             getAnnotationsListUrl: function() {
-              return false; // returning false for non-existent value is probably not a good practice?
+              return [];
             },
             getStructures: function() {
               return [];
