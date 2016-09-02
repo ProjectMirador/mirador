@@ -177,10 +177,12 @@
         }
         if (_this.hud.annoState.current === 'off') {
           _this.hud.annoState.displayOn(this);
+          _this.annotationState = 'on';
         } else {
           //make sure to force the controls back to auto fade
           _this.forceShowControls = false;
           _this.hud.annoState.displayOff(this);
+          _this.annotationState = 'off';
         }
       });
 
