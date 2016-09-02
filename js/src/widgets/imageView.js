@@ -68,6 +68,7 @@
       // throughout any updates to the osd canvas.
       this.hud = new $.Hud({
         appendTo: this.element,
+        qtipElement: this.qtipElement,
         bottomPanelAvailable: this.bottomPanelAvailable,
         windowId: this.windowId,
         canvasControls: this.canvasControls,
