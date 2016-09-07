@@ -29,7 +29,7 @@
         };
 
         $.MyLocalAnnotationEndpoint.prototype = {
-          init: function() {    
+          init: function() {
           },
 
           search: function(options, successCallback, errorCallback) {
@@ -79,16 +79,16 @@
               _this.annotationsList = jQuery.grep(_this.annotationsList, function(value, index) {
                 return value['@id'] !== annotationID;
               });
-  
+
               // Remove endpoint reference before JSON.stringify
               // IMPORTANT: Failure to do this would result in a circular reference error!
               jQuery.each(_this.annotationsList, function(index, value) {
                 delete value.endpoint;
               });
-  
+
               // Rewrite the local storage annotation list with updated version
               localStorage.setItem(key, JSON.stringify(_this.annotationsList));
-  
+
               // Add back endpoint reference after JSON.stringify
               jQuery.each(_this.annotationsList, function(index, value) {
                 value.endpoint = _this;
@@ -98,7 +98,7 @@
               if (typeof successCallback === "function") {
                 successCallback();
               }
-            } 
+            }
 
             // Unsuccessful, run error callback if specified
             catch (e) {
@@ -114,11 +114,11 @@
             // Find canvas ID and annotation ID
             key = oaAnnotation.on.full,
             annotationID = oaAnnotation['@id'];
-  
+
             try {
               // If annotation list isn't loaded, reload
               if (_this.annotationsList.length === 0) {
-                _this.annotationsList = _this.getAnnotationList(key); 
+                _this.annotationsList = _this.getAnnotationList(key);
               }
               // Find the matching annotation in the array and update it
               jQuery.each(_this.annotationsList, function(index, value) {
@@ -210,12 +210,12 @@
           id: "viewer",
           buildPath: "",
           data: [
-            { manifestUri: "http://iiif.lib.harvard.edu/manifests/drs:48309543", location: "Harvard University" },
-            { manifestUri: "http://iiif.lib.harvard.edu/manifests/drs:5981093", location: "Harvard University" },
-            { manifestUri: "http://iiif.lib.harvard.edu/manifests/via:olvwork576793", location: "Harvard University" },
-            { manifestUri: "http://iiif.lib.harvard.edu/manifests/drs:14033171", location: "Harvard University" },
-            { manifestUri: "http://iiif.lib.harvard.edu/manifests/drs:46909368", location: "Harvard University" },
-            { manifestUri: "http://iiif.lib.harvard.edu/manifests/drs:48331776", location: "Harvard University" },
+            { manifestUri: "https://iiif.lib.harvard.edu/manifests/drs:48309543", location: "Harvard University" },
+            { manifestUri: "https://iiif.lib.harvard.edu/manifests/drs:5981093", location: "Harvard University" },
+            { manifestUri: "https://iiif.lib.harvard.edu/manifests/via:olvwork576793", location: "Harvard University" },
+            { manifestUri: "https://iiif.lib.harvard.edu/manifests/drs:14033171", location: "Harvard University" },
+            { manifestUri: "https://iiif.lib.harvard.edu/manifests/drs:46909368", location: "Harvard University" },
+            { manifestUri: "https://iiif.lib.harvard.edu/manifests/drs:48331776", location: "Harvard University" },
             { manifestUri: "http://iiif.harvardartmuseums.org/manifests/object/299843", location: "Harvard University" },
             { manifestUri: "http://iiif.harvardartmuseums.org/manifests/object/304136", location: "Harvard University" },
             { manifestUri: "http://iiif.harvardartmuseums.org/manifests/object/198021", location: "Harvard University" },
