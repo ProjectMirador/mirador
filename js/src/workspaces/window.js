@@ -52,7 +52,7 @@
         "ScrollView" : "fa fa-ellipsis-h fa-lg fa-fw",
         "ThumbnailsView" : "fa fa-th fa-lg fa-rotate-90 fa-fw"
       },
-      unsupportedBrowser = false;
+      unsupportedBrowser = false
     }, options);
 
     this.init();
