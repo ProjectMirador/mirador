@@ -24,8 +24,8 @@
         Set those feature hide/show flags to false here.
       */
       if(showImageControls){ //first, make sure this is already true in the first place
-        showImageControls = this.unsupportedBrowser; //if it is true, we would still want to hide it if using an unsupported browser
-        this.canvasControls.imageManipulation.manipulationLayer = this.unsupportedBrowser; //not 100% sure if we have to do this, but it seems like it.
+        showImageControls = !this.unsupportedBrowser; //if it is true, we would still want to hide it if using an unsupported browser
+        this.canvasControls.imageManipulation.manipulationLayer = !this.unsupportedBrowser; //not 100% sure if we have to do this, but it seems like it.
       }
       //any other hud elements to hide could be listed like showImageControls below in if statements. 
       this.element = jQuery(this.template({
