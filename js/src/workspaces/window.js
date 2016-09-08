@@ -908,6 +908,11 @@
       });
     },
     
+    /*
+      Current unsupported browsers:
+         - Microsoft IE
+         - Microsof Edge
+    */
     detectUnsupportedBrowsers: function(){
       var isIE = !!navigator.userAgent.match(/Trident/g) || !!navigator.userAgent.match(/MSIE/g) || !!navigator.userAgent.match(/Edge/g);
       return isIE;
