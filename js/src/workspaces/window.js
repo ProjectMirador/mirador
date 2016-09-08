@@ -66,7 +66,7 @@
       manifest = _this.manifest.jsonLd,
       focusState = _this.viewType,
       templateData = {};
-      this.unsupportedBrowser = detectUnsupportedBrowsers();
+      this.unsupportedBrowser = _this.detectUnsupportedBrowsers();
       //make sure annotations list is cleared out when changing objects within window
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
