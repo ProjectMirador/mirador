@@ -227,6 +227,8 @@
         }
       });
       var currentState = this.get(state, 'overlayStates');
+      console.log(currentState);
+      console.log(state);
       this.set(state, !currentState, {parent: 'overlayStates'});
     },
 

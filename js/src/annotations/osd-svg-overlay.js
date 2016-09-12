@@ -507,7 +507,6 @@
     },
 
     onMouseMove: function(event) {
-      this.overlay.cursorLocation = event.point;
       if (!this.overlay.disabled) {
         // We are in drawing mode
         if (this.overlay.paperScope.project.hitTest(event.point, this.overlay.hitOptions)) {
@@ -519,11 +518,15 @@
           this.overlay.currentTool.onMouseMove(event, this.overlay);
         }
       } else {
-        var absolutePoint = {
-          'x': event.event.clientX,
-          'y': event.event.clientY
-        };
-        this.overlay.eventEmitter.publish('updateTooltips.' + this.overlay.windowId, [event.point, absolutePoint]);
+        window.thingy = this.overlay.state;
+        // if (this.overlay.viewer.)
+        if ('I say so' === true) {
+          var absolutePoint = {
+            'x': event.event.clientX,
+            'y': event.event.clientY
+          };
+          this.overlay.eventEmitter.publish('updateTooltips.' + this.overlay.windowId, [event.point, absolutePoint]);
+        }
       }
       this.overlay.paperScope.view.draw();
     },
