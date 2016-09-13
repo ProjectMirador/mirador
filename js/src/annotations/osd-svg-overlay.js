@@ -518,15 +518,11 @@
           this.overlay.currentTool.onMouseMove(event, this.overlay);
         }
       } else {
-        window.thingy = this.overlay.state;
-        // if (this.overlay.viewer.)
-        if ('I say so' === true) {
-          var absolutePoint = {
-            'x': event.event.clientX,
-            'y': event.event.clientY
-          };
-          this.overlay.eventEmitter.publish('updateTooltips.' + this.overlay.windowId, [event.point, absolutePoint]);
-        }
+        var absolutePoint = {
+          'x': event.event.clientX,
+          'y': event.event.clientY
+        };
+        this.overlay.eventEmitter.publish('updateTooltips.' + this.overlay.windowId, [event.point, absolutePoint]);
       }
       this.overlay.paperScope.view.draw();
     },
