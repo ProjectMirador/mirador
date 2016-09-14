@@ -6,6 +6,7 @@
     "addSlotLeft": "左にスロット追加",
     "addSlotRight": "右にスロット追加",
     "addTagsHere": "ここでタグを追加",
+    "annotationTooltip": "アノテーション",
     "bookmark": "ブックマーク",
     "bookmarkTitle": "現在の表示内容をブックマーク",
     "bookmarkTooltip": "このインスタンスをブックマーク",
@@ -39,7 +40,8 @@
     "fullScreen": "全画面表示",
     "fullScreenTooltip": "フルスクリーン表示",
     "fullScreenWindowTooltip": "このウインドウをフルスクリーン表示",
-    "grayscaleTooltip": "グレースケールに切替え",
+    "grayscaleTooltip": "グレースケール",
+    "imageManipulationTooltip": "画像操作",
     "imageView": "画像表示モード",
     "invertTooltip": "色反転",
     "item": "アイテム",
@@ -53,6 +55,7 @@
     "no": "いいえ",
     "objectMetadata": "オブジェクトのメタデータ",
     "pinTooltip": "ピンポイントで注釈",
+    "pointerTooltip": "ポインター",
     "polygonTooltip": "多角形で注釈",
     "rectangleTooltip": "矩形で注釈",
     "resetTooltip": "設定をリセット",
@@ -69,6 +72,6 @@
     "thumbnailsView": "ギャラリー表示モード",
     "unspecified": "未特定の",
     "url": "URL",
-    "viewTypeTooltip": "表示モードを切替え",
+    "viewTypeTooltip": "表示モード切替え",
     "yes": "はい"
 }
