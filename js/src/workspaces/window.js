@@ -781,7 +781,7 @@
         jQuery.each(urls, function(index, url) {
           jQuery.get(url, function(list) {
             var annotations = list.resources;
-            jQuery.each(_this.annotationsList, function(index, value) {
+            jQuery.each(annotations, function(index, value) {
               //if there is no ID for this annotation, set a random one
               if (typeof value['@id'] === 'undefined') {
                 value['@id'] = $.genUUID();
@@ -790,7 +790,7 @@
               value.endpoint = "manifest";
             });
             // publish event only if one url fetch is successful
-            _this.annotationsList = _this.annotationsList.concat(list.resources);
+            _this.annotationsList = _this.annotationsList.concat(annotations);
             _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
           });
         });
