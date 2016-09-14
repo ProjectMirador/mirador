@@ -41,5 +41,10 @@ describe('JsonLd', function () {
       expect(Mirador.JsonLd.getTextValue(sample, 'en')).toEqual("Super waahoo");
       expect(Mirador.JsonLd.getTextValue(sample)).toEqual("Super waahoo");
     });
+    
+    it('should return a <br/> delimited string when given an array of strings', function() {
+      var sample = ["waahoo", "woohah", "foobar"];
+      expect(Mirador.JsonLd.getTextValue(sample)).toEqual("waahoo<br/>woohah<br/>foobar<br/>");
+    })
   });
 });
