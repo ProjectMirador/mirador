@@ -49,7 +49,7 @@ describe('Window', function() {
               }]
             }];
             },
-            getAnnotationsListUrl: function() {
+            getAnnotationsListUrls: function() {
               return [];
             },
             getStructures: function() {
