@@ -284,6 +284,7 @@
         "grayscale" : "grayscale(0%)",
         "invert" : "invert(0%)"
       };
+      // console.log(modernizr);
 
       function setFilterCSS() {
         var filterCSS = jQuery.map(filterValues, function(value, key) { return value; }).join(" "),
