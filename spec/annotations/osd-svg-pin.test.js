@@ -248,6 +248,24 @@ describe('Pin', function() {
 
       expect(overlay.mode).toBe('create');
     });
+    
+    it('should bubble onMouseDown event when the part-of prefix is found', function() {
+      var mockHitResult = {
+        item: {
+          _name: "abcdefg",
+          data: { self: { onMouseDown: jasmine.createSpy('onMouseDown') } }
+        }
+      };
+      spyOn(overlay.paperScope.project, 'hitTest').and.returnValue(mockHitResult);
+      this.pin.partOfPrefix = "cde";
+      this.pin.idPrefix = "ab";
+      var event = TestUtils.getEvent({}, {
+        x: this.initialPoint.x,
+        y: this.initialPoint.y
+      });
+      this.pin.onMouseDown(event, overlay);
+      expect(mockHitResult.item.data.self.onMouseDown).toHaveBeenCalled();
+    });
 
     it('should change cursor on mouse move',function(){
       var event = TestUtils.getEvent({}, {
