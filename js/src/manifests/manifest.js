@@ -126,15 +126,19 @@
       var _this = this;
       return _this.jsonLd.sequences[0].canvases;
     },
-    getAnnotationsListUrl: function(canvasId) {
+    getAnnotationsListUrls: function(canvasId) {
       var _this = this;
       var canvas = jQuery.grep(_this.getCanvases(), function(canvas, index) {
         return canvas['@id'] === canvasId;
-      })[0];
+      })[0],
+      annotationsListUrls = [];
 
       if (canvas && canvas.otherContent) {
-        return canvas.otherContent[0]['@id'];
-      } else { return false; }
+        for (var i = 0; i < canvas.otherContent.length; i++) {
+          annotationsListUrls.push(canvas.otherContent[i]['@id']);
+        }
+      }
+      return annotationsListUrls;
     },
     getStructures: function() {
       var _this = this;

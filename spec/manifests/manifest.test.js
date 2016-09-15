@@ -240,10 +240,11 @@ describe('Manifest', function() {
     });
   });
   
-  describe('getAnnotationsListUrl', function () {
-    it('assuming otherContent has a single annotation list', function (done) {
+  describe('getAnnotationsListUrls', function () {
+    it('assuming otherContent has two annotation lists', function (done) {
       var canvasId = 'http://example.org/iiif/book1/canvas/p1';
-      var listId = 'http://example.org/iiif/book1/canvas/p1';
+      var listId1 = 'http://example.org/iiif/book1/canvas/p1/list/l1';
+      var listId2 = 'http://example.org/iiif/book1/canvas/p1/list/l2';
       var content = {
         sequences: [
           {
@@ -252,7 +253,11 @@ describe('Manifest', function() {
                 '@id': canvasId,
                 otherContent: [
                   {
-                    "@id": listId,
+                    "@id": listId1,
+                    "@type": "sc:AnnotationList"
+                  },
+                  {
+                    "@id": listId2,
                     "@type": "sc:AnnotationList"
                   }
                 ]
@@ -263,15 +268,14 @@ describe('Manifest', function() {
       };
       var manifestInstance = new Mirador.Manifest(null, null, content);
       setTimeout(function () { 
-        var annotationListUrl = manifestInstance.getAnnotationsListUrl(canvasId);
-        expect(annotationListUrl).toEqual(listId);
+        var annotationListUrl = manifestInstance.getAnnotationsListUrls(canvasId);
+        expect(annotationListUrl).toEqual([listId1, listId2]);
         done();
       }, 0);
     });
     
     it('when canvas does not have otherContent', function (done) {
       var canvasId = 'http://example.org/iiif/book1/canvas/p1';
-      var listId = 'http://example.org/iiif/book1/canvas/p1';
       var content = {
         sequences: [
           {
@@ -285,8 +289,8 @@ describe('Manifest', function() {
       };
       var manifestInstance = new Mirador.Manifest(null, null, content);
       setTimeout(function () { 
-        var annotationListUrl = manifestInstance.getAnnotationsListUrl(canvasId);
-        expect(annotationListUrl).toEqual(false); // XXX: why return false?
+        var annotationListUrl = manifestInstance.getAnnotationsListUrls(canvasId);
+        expect(annotationListUrl.length).toEqual(0);
         done();
       }, 0);
     });
