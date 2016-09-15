@@ -17,13 +17,10 @@ describe('ImageView', function() {
   
   beforeEach(function() {
     jasmine.getJSONFixtures().fixturesPath = 'spec/fixtures';
-    // WARNING: Need to stub to stop OpenSeadragon from crashing PhantomJS
-    // If you can make this not happen, remove this line and test the method
-    spyOn(Mirador.ImageView.prototype, 'createOpenSeadragonInstance');
     this.viewContainer = document.createElement('div', {
       class: 'view-container'
     });
-    this.fixture = getJSONFixture('BNF-condorcet-florus-dispersus-manifest.json');
+    this.fixture = getJSONFixture('Richardson7manifest.json');
     this.manifest = new Mirador.Manifest(
       this.fixture['@id'], 'IIIF', this.fixture
     );
@@ -45,7 +42,7 @@ describe('ImageView', function() {
       imagesList: this.imagesList,
       state: this.state,
       bottomPanelAvailable: true,
-      annoEndpointAvailable: false,
+      annoEndpointAvailable: true,
       canvasControls: this.canvasControls,
       annotationState: this.canvasControls.annotations.annotationState
     });
@@ -57,9 +54,62 @@ describe('ImageView', function() {
   });
   
   // TODO: Fill in tests for what needs initializing
-  xdescribe('Initialization', function() {
-    it('should initialize', function() {
-      
+  describe('Initialization', function() {
+    it('should initialize with above defaults', function() {
+      expect(true).toBe(true); //Force beforeEach() to run
+    });
+    it('should initialize with a specified canvasID', function() {
+      this.imageView = new Mirador.ImageView({
+        manifest: this.manifest,
+        appendTo: this.appendTo,
+        windowId: this.windowId,
+        eventEmitter: this.eventEmitter,
+        imagesList: this.imagesList,
+        canvasID: this.imagesList[1]['@id'],
+        state: this.state,
+        bottomPanelAvailable: true,
+        annoEndpointAvailable: false,
+        canvasControls: this.canvasControls,
+        annotationState: this.canvasControls.annotations.annotationState
+      });
+      subject = this.imageView;
+      expect(subject.currentImgIndex).toEqual(1);
+    });
+    it('should initialize with null osdOptions', function() {
+      this.imageView = new Mirador.ImageView({
+        manifest: this.manifest,
+        appendTo: this.appendTo,
+        windowId: this.windowId,
+        eventEmitter: this.eventEmitter,
+        imagesList: this.imagesList,
+        canvasID: this.imagesList[1]['@id'],
+        osdOptions: null,
+        state: this.state,
+        bottomPanelAvailable: true,
+        annoEndpointAvailable: false,
+        canvasControls: this.canvasControls,
+        annotationState: this.canvasControls.annotations.annotationState
+      });
+      subject = this.imageView;
+      expect(subject.currentImgIndex).toEqual(1);
+    });
+    it('should initialize with null osdOptions', function() {
+      spyOn(this.eventEmitter, 'publish');
+      this.imageView = new Mirador.ImageView({
+        manifest: this.manifest,
+        appendTo: this.appendTo,
+        windowId: this.windowId,
+        eventEmitter: this.eventEmitter,
+        imagesList: this.imagesList,
+        osdOptions: null,
+        state: this.state,
+        bottomPanelAvailable: false,
+        annoEndpointAvailable: false,
+        canvasControls: this.canvasControls,
+        annotationState: this.canvasControls.annotations.annotationState
+      });
+      subject = this.imageView;
+      expect(this.eventEmitter.publish).toHaveBeenCalledWith('SET_BOTTOM_PANEL_VISIBILITY.' + this.windowId, false);
     });
   });
 
@@ -442,7 +492,7 @@ describe('ImageView', function() {
     beforeEach(function() {
       spyOn(jQuery.prototype, 'show').and.stub();
     });
-    it('should hide', function() {
+    it('should show', function() {
       subject.show();
       expect(jQuery.prototype.show).toHaveBeenCalled();
     });
@@ -475,9 +525,8 @@ describe('ImageView', function() {
     });
   });
 
-  // WARNING: This method has been spied out to stop PhantomJS from crashing.
-  xdescribe('createOpenSeadragonInstance', function() {
-
+  describe('createOpenSeadragonInstance', function() {
+    
   });
 
   describe('addAnnotationsLayer', function() {
@@ -490,10 +539,9 @@ describe('ImageView', function() {
     });
   });
 
-  // TODO: Fix openseadragon crash
   describe('updateImage', function() {
     beforeEach(function() {
-      subject.canvasId = this.imagesList[0]['@id'];
+      subject.canvasID = this.imagesList[0]['@id'];
       spyOn(subject.eventEmitter, 'publish');
     });
     describe('Different from original', function() {
@@ -517,7 +565,7 @@ describe('ImageView', function() {
           close: function() {}
         };
         spyOn(subject.osd, 'close');
-        subject.updateImage(this.imagesList[0]['@id']);
+        subject.updateImage(subject.canvasID);
       });
       it('should fire event', function() {
         expect(subject.eventEmitter.publish).toHaveBeenCalled();
