@@ -31,6 +31,7 @@ module.exports = function(config) {
       'js/lib/paper-full.min.js',
       'js/lib/spectrum.js',
       'js/lib/i18next.min.js',
+      'js/lib/modernizr.custom.js',
       'bower_components/sinon-server/index.js',
       'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
       // app
