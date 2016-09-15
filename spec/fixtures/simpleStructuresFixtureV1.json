@@ -1,0 +1,21 @@
+{"structures": [
+    {
+      "@id": "http://www.example.org/iiif/book1/range/r1.json",
+      "@type": "sc:Range",
+      "label": "Introduction",
+      "canvases": [
+        "http://www.example.org/iiif/book1/canvas/p1.json"
+      ]
+    },
+    {
+      "@id": "http://www.example.org/iiif/book1/range/r2.json",
+      "@type": "sc:Range",
+      "label": "Part 1",
+      "within": "http://www.example.org/iiif/book1/range/r1.json",
+      "canvases": [
+        "http://www.example.org/iiif/book1/canvas/p2.json",
+        "http://www.example.org/iiif/book1/canvas/p3.json#xywh=0,0,750,300"
+      ]
+    }
+  ]
+}

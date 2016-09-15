@@ -6,7 +6,8 @@
             appendTo:          null,
             windowId:          null,
             tabState:          {},
-            tabs:              []
+            tabs:              [],
+            eventEmitter:      null
         }, options);
 
         this.init();
@@ -27,11 +28,12 @@
             this.bindEvents();
         },
         state: function(state, initial) {
+            var _this = this;
             if (!arguments.length) return this.tabState;
             jQuery.extend(true, this.tabState, state);
 
            if (!initial) {
-                jQuery.publish('tabStateUpdated.' + this.windowId, this.tabState);
+                _this.eventEmitter.publish('tabStateUpdated.' + this.windowId, this.tabState);
            }
 
             return this.tabState;
@@ -50,22 +52,22 @@
         listenForActions: function() {
             var _this = this;
 
-            jQuery.subscribe('tabStateUpdated.' + this.windowId, function(_, data) {
+            _this.eventEmitter.subscribe('tabStateUpdated.' + this.windowId, function(_, data) {
                 _this.render(data);
             });
 
-            jQuery.subscribe('tabSelected.' + this.windowId, function(_, data) {
+            _this.eventEmitter.subscribe('tabSelected.' + this.windowId, function(_, data) {
                 _this.tabSelected(data);
             });
 
-            jQuery.subscribe('tabFocused.', function() {
+            _this.eventEmitter.subscribe('tabFocused.', function() {
             });
         },
         bindEvents: function() {
             var _this = this;
 
             this.element.find('.tab').on('click', function(event) {
-                jQuery.publish('tabSelected.' + _this.windowId, jQuery( ".tabGroup li" ).index( this ));
+                _this.eventEmitter.publish('tabSelected.' + _this.windowId, jQuery( this ).index());
             });
         },
         render: function(renderingData) {
@@ -79,8 +81,8 @@
                 renderingData.tabs = tabs;
                 if(renderingData.tabs.length === 1){                    
                     // TODO: temporary logic to minimize side panel if only tab is toc and toc is empty
-                    if (renderingData.tabs[0].name === 'toc' && !_this.parent.hasStructures) {
-                        jQuery.publish("sidePanelVisibilityByTab." + _this.windowId, false);
+                    if (renderingData.tabs[0].name === 'toc' && !_this.hasStructures) {
+                        _this.eventEmitter.publish("sidePanelVisibilityByTab." + _this.windowId, false);
                     }
 
                     // don't show button if only one tab

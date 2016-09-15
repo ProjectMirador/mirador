@@ -1,0 +1,19 @@
+.mirador_container {
+  position: relative;
+  display: inline-block;
+  border: 5px solid green;
+  margin: 10px;
+  width: 45%;
+  height: 500px;
+}
+
+.mirador_viewer {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+}
+
+h1 {
+  margin-left: 10px;
+}

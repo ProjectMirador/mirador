@@ -1,5 +1,6 @@
 describe('Workspace', function() {
   beforeEach(function(){
+    this.eventEmitter = new Mirador.EventEmitter();
     this.viewer = {};
     this.viewerDiv = jQuery('<div/>');
     jasmine.getFixtures().set(this.viewerDiv);
@@ -16,7 +17,8 @@ describe('Workspace', function() {
       this.workspace = new Mirador.Workspace({
         parent:                     this.viewer, //viewer
         appendTo: this.viewerDiv,
-        layoutDescription: Mirador.layoutDescriptionFromGridString('1x2')
+        layoutDescription: Mirador.layoutDescriptionFromGridString('1x2'),
+        eventEmitter: this.eventEmitter
       });
       expect(this.workspace.layoutDescription.children.length).toEqual(2);
       expect(this.workspace.slots.length).toEqual(2);
@@ -31,7 +33,8 @@ describe('Workspace', function() {
       this.workspace = new Mirador.Workspace({
         parent:                     this.viewer, //viewer
         appendTo: this.viewerDiv,
-        layoutDescription: Mirador.layoutDescriptionFromGridString('1x2')
+        layoutDescription: Mirador.layoutDescriptionFromGridString('1x2'),
+        eventEmitter: this.eventEmitter
       });
       var originalId = this.workspace.layoutDescription.children[0].id;
 
@@ -48,7 +51,8 @@ describe('Workspace', function() {
       this.workspace = new Mirador.Workspace({
         parent:                     this.viewer, //viewer
         appendTo: this.viewerDiv,
-        layoutDescription: Mirador.layoutDescriptionFromGridString('1x1')
+        layoutDescription: Mirador.layoutDescriptionFromGridString('1x1'),
+        eventEmitter: this.eventEmitter
       });
       var originalId = this.workspace.layoutDescription.id;
 
@@ -66,7 +70,8 @@ describe('Workspace', function() {
       this.workspace = new Mirador.Workspace({
         parent:                     this.viewer, //viewer
         appendTo: this.viewerDiv,
-        layoutDescription: Mirador.layoutDescriptionFromGridString('1x1')
+        layoutDescription: Mirador.layoutDescriptionFromGridString('1x1'),
+        eventEmitter: this.eventEmitter
       });
       var originalId = this.workspace.layoutDescription.id;
 
@@ -87,7 +92,8 @@ describe('Workspace', function() {
       this.workspace = new Mirador.Workspace({
         parent:                     this.viewer, //viewer
         appendTo: this.viewerDiv,
-        layoutDescription: Mirador.layoutDescriptionFromGridString('1x3')
+        layoutDescription: Mirador.layoutDescriptionFromGridString('1x3'),
+        eventEmitter: this.eventEmitter
       });
       var originalId = this.workspace.layoutDescription.id;
 
@@ -121,7 +127,8 @@ describe('Workspace', function() {
       this.workspace = new Mirador.Workspace({
         parent:                     this.viewer, //viewer
         appendTo: this.viewerDiv,
-        layoutDescription: Mirador.layoutDescriptionFromGridString('1x2')
+        layoutDescription: Mirador.layoutDescriptionFromGridString('1x2'),
+        eventEmitter: this.eventEmitter
       });
       var originalId = this.workspace.slots[1].slotID;
 
@@ -143,7 +150,8 @@ describe('Workspace', function() {
       this.workspace = new Mirador.Workspace({
         parent:                     this.viewer, //viewer
         appendTo: this.viewerDiv,
-        layoutDescription: Mirador.layoutDescriptionFromGridString('1x2')
+        layoutDescription: Mirador.layoutDescriptionFromGridString('1x2'),
+        eventEmitter: this.eventEmitter
       });
       var originalId = this.workspace.slots[1].slotID;
 
@@ -168,7 +176,8 @@ describe('Workspace', function() {
       this.workspace = new Mirador.Workspace({
         parent:                     this.viewer, //viewer
         appendTo: this.viewerDiv,
-        layoutDescription: Mirador.layoutDescriptionFromGridString('1x2')
+        layoutDescription: Mirador.layoutDescriptionFromGridString('1x2'),
+        eventEmitter: this.eventEmitter
       });
       var originalId = this.workspace.slots[1].slotID;
 
