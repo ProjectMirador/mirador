@@ -6,7 +6,9 @@
     "type": "git",
     "url": "https://github.com/IIIF/mirador"
   },
+  "license": "Apache-2.0",
   "devDependencies": {
+    "gitbook": "3.2.0",
     "gitbook-cli": "2.3.0",
     "gitbook-plugin-search": "2.2.1",
     "grunt": ">=0.4.5 <1.0.0",
