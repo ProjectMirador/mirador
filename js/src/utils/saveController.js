@@ -98,7 +98,7 @@
 
       // see: http://html5demos.com/history and http://diveintohtml5.info/history.html
       // put history stuff here, for a great cross-browser demo, see: http://browserstate.github.io/history.js/demo/
-      //http://stackoverflow.com/questions/17801614/popstate-passing-popped-state-to-event-handler
+      // http://stackoverflow.com/questions/17801614/popstate-passing-popped-state-to-event-handler
 
       //also remove ?json bit so it's a clean URL
       var cleanURL = window.location.href.replace(window.location.search, "");

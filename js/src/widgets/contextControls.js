@@ -65,6 +65,7 @@
 
       if (this.canvasControls.imageManipulation.manipulationLayer) {
         this.manipulationElement = jQuery(this.manipulationTemplate({
+          filtersSupported: Modernizr.cssfilters,
           showRotate: this.canvasControls.imageManipulation.controls.rotate,
           showBrightness: this.canvasControls.imageManipulation.controls.brightness,
           showContrast: this.canvasControls.imageManipulation.controls.contrast,
@@ -279,6 +280,8 @@
                                    '<i class="fa fa-lg fa-rotate-left"></i>',
                                    '</a>',
                                    '{{/if}}',
+
+                                '{{#if filtersSupported}}',
                                    '{{#if showBrightness}}',
                                    '<a class="hud-control mirador-osd-brightness" title="{{t "brightnessTooltip"}}">',
                                    '<i class="material-icons">wb_sunny</i>',
@@ -312,7 +315,8 @@
                                    '{{/if}}',
                                    '<a class="hud-control mirador-osd-reset" title="{{t "resetTooltip"}}">',
                                    '<i class="fa fa-lg fa-refresh"></i>',
-                                   '</a>'
+                                   '</a>',
+      '{{/if}}',
     ].join('')),
 
     // for accessibility, make sure to add aria-labels just like above

@@ -284,6 +284,7 @@
         "grayscale" : "grayscale(0%)",
         "invert" : "invert(0%)"
       };
+      // console.log(modernizr);
 
       function setFilterCSS() {
         var filterCSS = jQuery.map(filterValues, function(value, key) { return value; }).join(" "),
@@ -588,13 +589,13 @@
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
           } else {
-            //else reset bounds for this image
+            // else reset bounds for this image
             _this.setBounds();
           }
 
           _this.addAnnotationsLayer(_this.elemAnno);
 
-          //get the state before resetting it so we can get back to that state
+          // get the state before resetting it so we can get back to that state
           var originalState = _this.hud.annoState.current;
           var selected = _this.element.find('.mirador-osd-edit-mode.selected');
           var shape = null;
