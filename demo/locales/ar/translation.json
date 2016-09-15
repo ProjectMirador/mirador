@@ -22,6 +22,7 @@
     "imageView": "مشاهدة الصورة",
     "bookView": "مشاهدة الكتاب",
     "scrollView": "مشاهدة الانتقال",
+    "thumbnailsView": "مشاهدة ظفر الإبهام",
     "comments": "التعليقات",
     "addTagsHere": "أضف الإشارة هنا",
     "save": "حفظ",
@@ -32,7 +33,9 @@
     "newObject": "موضوع جديد",
     "objectMetadata": "البيانات الوصفية للموضوع",
     "fullScreen": "ملء الشاشة",
-    "logo": "الشعار"
+    "logo": "الشعار",
+    "load": "عبأ",
+    "dropToLoad": "إسقاط لتحميل واضح"
 }
 
 
