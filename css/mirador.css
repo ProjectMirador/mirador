@@ -233,7 +233,7 @@ a {
   top: 0;
   display: none;
   overflow: hidden;
-  z-index: 18000;
+  z-index: 18000; /* Must be higher than Qtip elements. */
   background-color: #fff;
   box-shadow: 0 0 6px #333;
 }
