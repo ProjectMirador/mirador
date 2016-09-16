@@ -22,9 +22,8 @@
      $(function() {
        Mirador({
          "id": "viewer",
-         "layout": "1x1",
+         "layout": "1x2",
          "buildPath": "",
-         "openManifestsPage": true,
          "data": [
            { "manifestUri": "https://iiif.lib.harvard.edu/manifests/drs:48309543", "location": "Harvard University"},
            { "manifestUri": "https://iiif.lib.harvard.edu/manifests/drs:5981093", "location": "Harvard University"},
@@ -67,7 +66,31 @@
            { "manifestUri": "http://digi.vatlib.it/iiif/MSS_Vat.lat.3225/manifest.json", "location": "Vatican Library"},
            { "manifestUri": "http://media.nga.gov/public/manifests/nga_highlights.json", "location": "National Gallery of Art"}
          ],
-         "windowObjects": [],
+         "windowObjects": [{
+           loadedManifest: "http://iiif.harvardartmuseums.org/manifests/object/299843",
+           viewType: "ImageView",
+           slotAddress: "row1.column1",
+           windowOptions: {
+             osdBounds: {
+               height: 0.267295274602414,
+               width: 0.43429019471185254,
+               x: 0.2,
+               y: 0.396141728
+             }
+           }
+         },{
+           loadedManifest: "http://media.nga.gov/public/manifests/nga_highlights.json",
+           slotAddress: "row1.column2",
+           viewType: "ImageView",
+           windowOptions: {
+             osdBounds: {
+               height: 0.4,
+               width: 0.6,
+               x: 0.2,
+               y: 0.3961
+             }
+           }
+         }],
          "annotationEndpoint": { "name":"Local Storage", "module": "LocalStorageEndpoint" }
        });
      });
