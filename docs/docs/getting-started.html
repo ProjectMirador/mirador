@@ -1,0 +1,773 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Getting Started | Mirador</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.5.2">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="../gitbook/style.css">
+    
+        
+        <link rel="stylesheet" href="../gitbook/plugins/gitbook-plugin-highlight/website.css">
+        
+    
+        
+        <link rel="stylesheet" href="../gitbook/plugins/gitbook-plugin-fontsettings/website.css">
+        
+    
+    
+
+        
+    
+    
+    <link rel="next" href="../docs/api-reference.html" />
+    
+    
+    <link rel="prev" href="../index.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="1" data-chapter-title="Getting Started" data-filepath="docs/getting-started.md" data-basepath=".." data-revision="Thu Sep 15 2016 19:52:59 GMT-0700 (PDT)">
+    
+
+<div class="book-summary">
+    <nav role="navigation">
+        <ul class="summary">
+            
+            
+            
+            
+
+            
+
+            
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="../index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Introduction
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter active" data-level="1" data-path="docs/getting-started.html">
+            
+                
+                    <a href="../docs/getting-started.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        Getting Started
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2" data-path="docs/api-reference.html">
+            
+                
+                    <a href="../docs/api-reference.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.</b>
+                        
+                        API and Events reference
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3" data-path="docs/code-tours.html">
+            
+                
+                    <a href="../docs/code-tours.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                        Source Code Tours
+                    </a>
+            
+            
+        </li>
+    
+
+
+            
+            <li class="divider"></li>
+            <li>
+                <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                    Published with GitBook
+                </a>
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header" role="navigation">
+    <!-- Actions Left -->
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../" >Mirador</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1" role="main">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <h2 id="getting-started-tutorials">Getting Started Tutorials</h2>
+<h3 id="simple-viewer-installation-"><strong>Simple Viewer Installation </strong></h3>
+<p>One of the most common configurations is to create an HTML page in which Mirador takes up the full width and height of the page, with all of the default features activated. There are only a few configuration options that are required to get a fully featured Mirador instance: the <a href="https://github.com/IIIF/mirador/wiki/Configuration-Guides#the-container" target="_blank">container</a> and the <a href="https://github.com/IIIF/mirador/wiki/Configuration-Guides#manifests" target="_blank">manifests</a> to load into Mirador.</p>
+<h4 id="the-container">The Container</h4>
+<p>To initialize Mirador, it needs to be attached to an existing HTML <strong>div</strong> through that element&apos;s <strong>id</strong>. You also need to explicitly set that element&apos;s width and height. In this example, we are using the full width and height of the page.</p>
+<pre><code class="lang-html"><span class="hljs-meta">&lt;!DOCTYPE html&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Simple Viewer<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+      <span class="hljs-selector-id">#viewer</span> {
+        <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;
+        <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;
+        <span class="hljs-attribute">position</span>: fixed;
+      }
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;build/mirador/css/mirador-combined.css&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;build/mirador/mirador.js&quot;</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;viewer&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span>&gt;</span><span class="javascript">
+      $(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+        Mirador({
+          id: <span class="hljs-string">&quot;viewer&quot;</span>,
+          data: [<span class="hljs-comment">/* Manifests and collections here *]
+        });
+      });
+    </span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+<p><img src="image_0.png" alt="image alt text"></p>
+<p>Changing the height and width of Mirador&apos;s root element allows you to place it in an HTML page with other content.</p>
+<h4 id="manifests">Manifests</h4>
+<p>There are several different ways to add a manifest to your Mirador instance.</p>
+<p>The first way is to pass an object into the data array that identifies the desired manifestUri:</p>
+<pre><code class="lang-javascript">Mirador({
+  id: <span class="hljs-string">&quot;viewer&quot;</span>,
+  data: [
+    { manifestUri: <span class="hljs-string">&quot;http://iiif/id/and/uri/of/your/manifest.json&quot;</span>, location: <span class="hljs-string">&quot;My Repository&quot;</span> }
+  ]
+});
+</code></pre>
+<p>Second, you can pass in an object pointing to a collectionUri, which contains a list of manifests that Mirador will parse:</p>
+<pre><code class="lang-javascript">Mirador({
+  id: <span class="hljs-string">&quot;viewer&quot;</span>,
+  data: [{
+  <span class="hljs-string">&quot;collectionUri&quot;</span>:
+  <span class="hljs-string">&quot;http://iiif/id/and/uri/of/your/collection.json&quot;</span>
+}
+]);
+</code></pre>
+<p>Note that the current version of Mirador can <strong>only </strong>parse collections that are one level deep. So if your collection data is a collection of collections, Mirador will not be able to find all of your manifests. However, supporting more deeply nested collections is on the Mirador roadmap.</p>
+<p>Within the application itself, there are two other ways for end users to add manifests to Mirador:</p>
+<ol>
+<li>If showAddFromURLBox has not been disabled, an end user can add a known IIIF manifest URL through the Add new object from URL box: </li>
+</ol>
+<p><img src="image_1.png" alt="image alt text"></p>
+<ol>
+<li>Mirador can handle an end user dropping a IIIF manifest into a window using <a href="http://zimeon.github.io/iiif-dragndrop/" target="_blank">IIIF Drag-and-drop</a>: </li>
+</ol>
+<p><img src="image_2.gif" alt="image alt text"></p>
+<p>Specifying Which Manifest Will Open</p>
+<p>By default, Mirador is configured to open with a single window. You can specify which manifest will be open in that window by using the windowObjects key. The windowObjects key expects an array of objects. Within the object you can name the manifest that will be opened with loadedManifest and even specify which canvas the viewer will focus on with canvasID. The default view is the ImageView viewType. If you want the viewer to open with a different view, you need specify this with &quot;viewType&quot; (e.g., &quot;ThumbnailsView&quot;). Other options that can be added to windowObjects can be found in the <a href="https://github.com/IIIF/mirador/wiki/Complete-Configuration-API#loaded-objects" target="_blank">Complete Configuration API</a>.</p>
+<pre><code class="lang-javascript">Mirador({  id: <span class="hljs-string">&quot;viewer&quot;</span>,
+  data: [{ 
+  manifestUri: <span class="hljs-string">&quot;http://iiif/id/and/uri/of/your/manifest.json&quot;</span>, 
+  location: <span class="hljs-string">&quot;My Repository&quot;</span> 
+  }],  
+  windowObjects: [{
+  loadedManifest: <span class="hljs-string">&quot;http://iiif/id/and/uri/of/your/manifest.json&quot;</span>,
+  canvasID: <span class="hljs-string">&quot;http://iiif/id/and/uri/of/your/canvas/canvas-id&quot;</span>,
+  viewType: <span class="hljs-string">&quot;ImageView&quot;</span>
+  }]
+  });
+</code></pre>
+<p><img src="image_3.png" alt="image alt text"></p>
+<h4 id="view-type">View Type</h4>
+<p>There are four possible viewTypes in the current version of Mirador: ImageView (displayed above), BookView, ThumbnailsView, and ScrollView.  </p>
+<h5 id="bookview">BookView</h5>
+<p>Like the <a href="https://github.com/IIIF/mirador/wiki/Configuration-Guides#specifying-which-manifest-will-open" target="_blank">previous </a>viewType, this configuration provides a minimal, zooming reader, similar to the Internet Archive Bookreader. The instance is configured to show a specific book of the developer&apos;s choosing, displayed in a 2-page spread. </p>
+<pre><code class="lang-javascript">Mirador({
+id: <span class="hljs-string">&quot;viewer&quot;</span>,
+  data: [{
+  manifestUri: <span class="hljs-string">&quot;http://iiif/id/and/uri/of/your/manifest.json&quot;</span>, 
+  location: <span class="hljs-string">&quot;My Repository&quot;</span> 
+  }],
+  windowObjects: [{
+  loadedManifest: <span class="hljs-string">&quot;http://iiif/id/and/uri/of/your/manifest.json&quot;</span>,
+  canvasID: <span class="hljs-string">&quot;http://iiif/id/and/uri/of/your/canvas/canvas-id&quot;</span>,
+  viewType: <span class="hljs-string">&quot;BookView&quot;</span>
+  }]
+});
+</code></pre>
+<p><img src="image_4.png" alt="image alt text"></p>
+<h5 id="thumbnailsview">ThumbnailsView</h5>
+<p>The ThumbnailsView viewType configuration displays thumbnail images of all of the pages of the designated book laid out in a grid pattern, from which the user can select and click on a page to view more closely. Unlike the previous viewTypes, the images in ThumbnailsView are not zoomable. </p>
+<p><img src="image_5.png" alt="image alt text"></p>
+<h5 id="scrollview">ScrollView</h5>
+<p>Like the previous viewType, ScrollView displays thumbnail images of the designated book, this time in a side-scrolling format, for the user to select from for closer viewing. As with ThumbnailsView, ScrollView does not display zoomable images.</p>
+<p><img src="image_6.png" alt="image alt text"></p>
+<h4 id="describing-layouts">Describing Layouts</h4>
+<p>By default, Mirador opens with a single viewing window. However, it is possible to configure Mirador to open up with any number of windows, positioned in a grid, using the layout option. If you want to specify which window a specific manifest loads into, use slotAddress in windowObjects. Otherwise, Mirador, will arbitrarily load objects into windows based on a first-come, first-served basis. To create an instance of Mirador that opens two windows side by side and places a manifest in each window use this:</p>
+<pre><code class="lang-javascript">Mirador({
+id: <span class="hljs-string">&quot;viewer&quot;</span>,
+layout: <span class="hljs-string">&quot;1x2&quot;</span>,
+data: [{
+manifestUri: <span class="hljs-string">&quot;http://iiif.lib.harvard.edu/manifests/drs:5981093&quot;</span>, 
+location: <span class="hljs-string">&quot;Harvard University&quot;</span> 
+},
+{
+manifestUri: <span class="hljs-string">&quot;http://iiif.biblissima.fr/manifests/ark:/12148/btv1b84539771/manifest.json&quot;</span>,
+location: <span class="hljs-string">&quot;BnF&quot;</span>
+}],
+windowObjects: [{
+loadedManifest: <span class="hljs-string">&quot;http://iiif.lib.harvard.edu/manifests/drs:5981093&quot;</span>,
+slotAddress: <span class="hljs-string">&quot;row1.column1&quot;</span>,
+viewType: <span class="hljs-string">&quot;ImageView&quot;</span>
+},
+{
+loadedManifest: <span class="hljs-string">&quot;http://iiif.biblissima.fr/manifests/ark:/12148/btv1b84539771/manifest.json&quot;</span>,
+slotAddress: <span class="hljs-string">&quot;row1.column2&quot;</span>,
+viewType: <span class="hljs-string">&quot;ImageView&quot;</span>
+}]
+);
+</code></pre>
+<p><img src="image_7.png" alt="image alt text"></p>
+<p>It is also possible to have non-grid layouts in Mirador. You can create these custom layouts using a drop down menu in Mirador:</p>
+<p><img src="image_8.png" alt="image alt text"></p>
+<p><img src="image_9.png" alt="image alt text"></p>
+<h3 id="configuring-mirador-path">Configuring Mirador Path</h3>
+<p>By default, Mirador looks for its associated images, translations and other associated files at the relative path ./build/mirador. If you wish to serve Mirador from another location, you can change this by setting the buildPath option:</p>
+<pre><code class="lang-javascript">Mirador({
+  id: <span class="hljs-string">&quot;viewer&quot;</span>,
+  buildPath: <span class="hljs-string">&quot;http://cdn.yoursite.com/mirador&quot;</span>,
+  data: [{
+  manifestUri: <span class="hljs-string">&quot;http://iiif/id/and/uri/of/your/manifest.json&quot;</span>,
+  location: <span class="hljs-string">&quot;My Repository&quot;</span>
+  }]
+});
+</code></pre>
+<h2 id="zen-mode"><strong>Zen Mode</strong></h2>
+<p>A barebones version of the viewer can be created by turning off the top menu bar, the sidebar, and the bottom thumbnails bar. Doing so prevents the user from opening other objects, spawning more workspace slots or windows, and closing the current window.</p>
+<p><img src="image_10.png" alt="image alt text"></p>
+<p>The configuration and initialisation for this mode looks like this: </p>
+<pre><code class="lang-javascript">Mirador({
+  id: <span class="hljs-string">&quot;viewer&quot;</span>,
+  buildPath: <span class="hljs-string">&quot;&quot;</span>,
+  data: [{ 
+  manifestUri: <span class="hljs-string">&quot;http://iiif/id/and/uri/of/your/manifest.json&quot;</span>,
+    location: <span class="hljs-string">&quot;My Repository&quot;</span>
+    }
+    <span class="hljs-comment">// For a working example, try:</span>
+    <span class="hljs-comment">// { manifestUri: &quot;http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/manifest.json&quot;, location: &quot;Stanford University&quot; }</span>
+  ],
+  mainMenuSettings: {
+    show: <span class="hljs-literal">false</span>
+  }
+  windowObjects: [{
+    loadedManifest: <span class="hljs-string">&quot;http://same/iiif/id/as/above/to/your/manifest.json&quot;</span>,
+    canvasID: <span class="hljs-string">&quot;http://iiif/id/and/uri/of/your/canvas/canvas-id&quot;</span>,
+    <span class="hljs-comment">// For a working example, try:</span>
+    <span class="hljs-comment">// loadedManifest: &quot;http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/manifest.json&quot;,</span>
+    <span class="hljs-comment">// canvasID: &quot;http://dms-data.stanford.edu/data/manifests/Walters/qm670kv1873/canvas/canvas-8&quot;,</span>
+    viewType: <span class="hljs-string">&quot;ImageView&quot;</span>,
+    displayLayout: <span class="hljs-literal">false</span>,
+    bottomPanel: <span class="hljs-literal">false</span>,
+    bottomPanelAvailable: <span class="hljs-literal">false</span>,
+    bottomPanelVisible: <span class="hljs-literal">false</span>,
+    sidePanel: <span class="hljs-literal">false</span>,
+    annotationLayer: <span class="hljs-literal">false</span>
+  }]
+});
+</code></pre>
+<h2 id="embedding">Embedding</h2>
+<h3 id="iframe">Iframe</h3>
+<p>To embed a Mirador instance in an iframe, create a <a href="https://github.com/IIIF/mirador/wiki/Configuration-Guides#full-screen-with-all-options" target="_blank">full-screen</a> instance with any configuration options you need. Your iframe element will look something like this:</p>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;Mirador&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;*URL to Mirador instance*&quot;</span> <span class="hljs-attr">allowfullscreen</span>=<span class="hljs-string">&quot;true&quot;</span> <span class="hljs-attr">webkitallowfullscreen</span>=<span class="hljs-string">&quot;true&quot;</span> <span class="hljs-attr">mozallowfullscreen</span>=<span class="hljs-string">&quot;true&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
+</code></pre>
+<p>You can change the size and style of the iframe as you need to, and Mirador will exist within its bounds. Adding the allowfullscreen attributes allows the fullscreen option in Mirador to work. If you choose to disable this in Mirador, you do not need to have these attributes in your iframe.</p>
+<p>With the current version of Mirador, you can embed any number of viewers this way.</p>
+<p><img src="image_11.png" alt="image alt text"></p>
+<h3 id="inside-a-div-on-same-web-page">Inside a div on same web page</h3>
+<p>You can also embed Mirador inside a div. To do this, embed both the mirador-combined.css and mirador.js, the fixed-size div and the call to Mirador() as you would do with a full-screen setup. If you have set a CSS margin attribute in your main body tag, you need to add !important to it to prevent the mirador-combined.css from overriding it. </p>
+<p>With the current version of Mirador, you can only embed one viewer this way. If you want to embed multiple viewers you must use iframes.</p>
+<pre><code class="lang-html"><span class="hljs-meta">&lt;!DOCTYPE html&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Embedding in a div<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span>&gt;</span><span class="css">
+    <span class="hljs-selector-tag">html</span> {
+      <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#999</span>;
+    }
+    <span class="hljs-selector-tag">body</span> {
+      <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#fff</span>;
+      <span class="hljs-attribute">padding</span>: <span class="hljs-number">1em</span> <span class="hljs-number">0</span>;
+      <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span> <span class="hljs-number">5%</span> <span class="hljs-meta">!important</span>;
+      <span class="hljs-attribute">width</span>: <span class="hljs-number">90%</span>;
+    }
+    <span class="hljs-selector-id">#viewer</span> {
+      <span class="hljs-attribute">display</span>: block;
+      <span class="hljs-attribute">width</span>: <span class="hljs-number">90%</span>;
+      <span class="hljs-attribute">height</span>: <span class="hljs-number">600px</span>;
+      <span class="hljs-attribute">margin</span>: <span class="hljs-number">1em</span> <span class="hljs-number">5%</span>;
+      <span class="hljs-attribute">position</span>: relative;
+    }
+    <span class="hljs-selector-tag">h1</span>, <span class="hljs-selector-tag">h2</span> {
+      <span class="hljs-attribute">text-align</span>: center;
+    }
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;build/mirador/css/mirador-combined.css&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;build/mirador/mirador.js&quot;</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Embedded Default Viewer<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>The following viewer has been added using default settings.<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;viewer&quot;</span> <span class="hljs-attr">allowfullscreen</span>=<span class="hljs-string">&quot;allowfullscreen&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span>&gt;</span><span class="javascript">
+    $(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+      Mirador({
+        id: <span class="hljs-string">&quot;viewer&quot;</span>,
+        data: [<span class="hljs-comment">/* &#x2026; */</span>]
+      });
+    });
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+<p><img src="image_12.png" alt="image alt text"></p>
+<h3 id="annotation-saving-creating-an-endpoint-adaptor">Annotation Saving (Creating an endpoint adaptor)</h3>
+<p>To build an endpoint adaptor, you can start with the template provided in js/src/annotations/endpoint.js. All endpoint adaptors must implement the following functions:</p>
+<table>
+  <tr>
+    <td>Function</td>
+    <td>Description</td>
+    <td>Parameters</td>
+    <td>Success</td>
+    <td>Fail</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Search</td>
+    <td>Search for annotations that satisfy the parameters specified in options</td>
+    <td>options
+successCallbackerrorCallback</td>
+    <td>successCallback</td>
+    <td>errorCallback</td>
+  </tr>
+  <tr>
+    <td>Delete</td>
+    <td>Delete the annotation with the given annotation ID</td>
+    <td>annotationID
+successCallback
+errorCallback</td>
+    <td>successCallback</td>
+    <td>errorCallback</td>
+  </tr>
+  <tr>
+    <td>Update</td>
+    <td>Submit the annotation as an edit</td>
+    <td>oaAnnotation
+successCallback
+errorCallback</td>
+    <td>successCallback</td>
+    <td>errorCallback</td>
+  </tr>
+  <tr>
+    <td>Create</td>
+    <td>Submit the annotation as a new annotation</td>
+    <td>oaAnnotation
+successCallback
+errorCallback</td>
+    <td>successCallback</td>
+    <td>errorCallback</td>
+  </tr>
+</table>
+
+
+<p>Before calling JSON.stringify() on an annotationsList entry, remember to delete its endpoint key to avoid a circular reference to the endpoint. Afterwards, remember to add it back.</p>
+<h4 id="example-implementation-with-local-storage">Example implementation with local storage</h4>
+<h5 id="search">Search</h5>
+<p>For simplicity, assume that you don&apos;t need additional parameters beyond the URI of the canvas to request.</p>
+<pre><code class="lang-javascript">search: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">options, successCallback, errorCallback</span>) </span>{
+  <span class="hljs-keyword">var</span> _this = <span class="hljs-keyword">this</span>;
+  <span class="hljs-keyword">this</span>.annotationsList = []; <span class="hljs-comment">//clear out current list</span>
+  <span class="hljs-keyword">try</span> {
+
+    <span class="hljs-comment">//Load the list of annotations under the canvas URI from local storage (if entry exists)</span>
+    <span class="hljs-keyword">var</span> data = localStorage.getItem(options.uri);
+    <span class="hljs-keyword">if</span> (data) {
+         _this.annotationsList = <span class="hljs-built_in">JSON</span>.parse(data);
+    }
+
+    <span class="hljs-comment">//Attach a reference to this endpoint to each entry</span>
+    <span class="hljs-comment">//Don&apos;t forget to do this or the annotation won&apos;t respond</span>
+    jQuery.each(_this.annotationsList, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">index, value</span>) </span>{
+      value.endpoint = _this;
+    });
+
+    <span class="hljs-comment">// Done</span>
+    <span class="hljs-comment">// Run the callback if specified, otherwise resolve the endpoint&apos;s data state</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> successCallback === <span class="hljs-string">&quot;function&quot;</span>) {
+      successCallback(_this.annotationsList);
+    }
+    <span class="hljs-keyword">else</span> {
+      _this.dfd.resolve(<span class="hljs-literal">true</span>);
+    }
+  }
+
+  <span class="hljs-comment">// Catching errors</span>
+  <span class="hljs-comment">// Run the callback if specified, otherwise perform some default action or show an error log</span>
+  <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> errorCallback === <span class="hljs-string">&quot;function&quot;</span>) {
+      errorCallback();
+    }
+    <span class="hljs-keyword">else</span> {
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&quot;There was an error searching this endpoint&quot;</span>);
+    }
+  }
+}
+</code></pre>
+<h5 id="delete">Delete</h5>
+<p>Search for the deleted ID from the annotation list for the current canvas, remove its entry from the annotation list and overwrite the storage&apos;s copy of the annotation list with it.</p>
+<pre><code class="lang-javascript">deleteAnnotation: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">annotationID, successCallback, errorCallback</span>) </span>{
+  <span class="hljs-keyword">var</span> _this = <span class="hljs-keyword">this</span>,
+  key = _this.annotationsList[<span class="hljs-number">0</span>].on.full; <span class="hljs-comment">//Find current canvas URI from loaded annotation list</span>
+
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-comment">// Create a new annotation list without the deleted ID</span>
+    _this.annotationsList = jQuery.grep(_this.annotationsList, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">value, index</span>) </span>{
+      <span class="hljs-keyword">return</span> value[<span class="hljs-string">&apos;@id&apos;</span>] !== annotationID;
+    });
+
+    <span class="hljs-comment">// Remove endpoint reference before JSON.stringify</span>
+    <span class="hljs-comment">// IMPORTANT: Failure to do this would result in a circular reference error!</span>
+    jQuery.each(_this.annotationsList, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">index, value</span>) </span>{
+      <span class="hljs-keyword">delete</span> value.endpoint;
+    });
+
+    <span class="hljs-comment">// Rewrite the local storage annotation list with updated version</span>
+    localStorage.setItem(key, <span class="hljs-built_in">JSON</span>.stringify(_this.annotationsList));
+
+    <span class="hljs-comment">// Add back endpoint reference after JSON.stringify</span>
+    jQuery.each(_this.annotationsList, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">index, value</span>) </span>{
+      value.endpoint = _this;
+    });
+
+    <span class="hljs-comment">// Run success callback if specified</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> successCallback === <span class="hljs-string">&quot;function&quot;</span>) {
+      successCallback();
+    }
+  } 
+
+  <span class="hljs-comment">// Unsuccessful, run error callback if specified</span>
+  <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> errorCallback === <span class="hljs-string">&quot;function&quot;</span>) {
+      errorCallback();
+    }
+  }
+}
+</code></pre>
+<h5 id="update">Update</h5>
+<p>From the given Open Annotation item, find its ID and canvas ID, then replace the corresponding entry in the annotation list with the same ID. Once done, overwrite the storage&apos;s copy of the annotation list.</p>
+<pre><code class="lang-javascript">update: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">oaAnnotation, successCallback, errorCallback</span>) </span>{
+  <span class="hljs-keyword">var</span> _this = <span class="hljs-keyword">this</span>,
+
+  <span class="hljs-comment">// Find canvas ID and annotation ID</span>
+  key = oaAnnotation.on.full,
+  annotationID = oaAnnotation[<span class="hljs-string">&apos;@id&apos;</span>];
+
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-comment">// If annotation list isn&apos;t loaded, reload</span>
+    <span class="hljs-keyword">if</span> (_this.annotationsList.length === <span class="hljs-number">0</span>) {
+      _this.annotationsList = _this.getAnnotationList(key); 
+    }
+
+    <span class="hljs-comment">// Find the matching annotation in the array and update it</span>
+    jQuery.each(_this.annotationsList, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">index, value</span>) </span>{
+      <span class="hljs-keyword">if</span> (value[<span class="hljs-string">&apos;@id&apos;</span>] === annotationID) {
+        _this.annotationsList[index] = oaAnnotation;
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+      }
+    });
+
+    <span class="hljs-comment">// Remove endpoint reference before JSON.stringify</span>
+    jQuery.each(_this.annotationsList, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">index, value</span>) </span>{
+      <span class="hljs-keyword">delete</span> value.endpoint;
+    });
+
+    <span class="hljs-comment">// Overwrite storage with updated annotation list</span>
+    localStorage.setItem(key, <span class="hljs-built_in">JSON</span>.stringify(_this.annotationsList));
+
+    <span class="hljs-comment">// Add back endpoint reference after JSON.stringify</span>
+    jQuery.each(_this.annotationsList, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">index, value</span>) </span>{
+      value.endpoint = _this;
+    });
+
+    <span class="hljs-comment">// Done, run success callback if specified</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> successCallback === <span class="hljs-string">&quot;function&quot;</span>) {
+      successCallback(oaAnnotation);
+    }
+  }
+
+  <span class="hljs-comment">// Failed, run error callback if specified</span>
+  <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> errorCallback === <span class="hljs-string">&quot;function&quot;</span>) {
+      errorCallback();
+    }
+  }
+
+}
+</code></pre>
+<h5 id="create">Create</h5>
+<p>From the given Open Annotation item, find its canvas ID, then add it to the annotation list under that canvas. Once done, overwrite the storage&apos;s copy of the annotation list and return the newly inserted annotation in Open Annotation form.</p>
+<pre><code class="lang-javascript">create: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">oaAnnotation, successCallback, errorCallback</span>) </span>{
+  <span class="hljs-keyword">var</span> _this = <span class="hljs-keyword">this</span>,
+
+  <span class="hljs-comment">// Find the canvas to annotate on</span>
+  key = oaAnnotation.on.full;
+
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-comment">// Reload the annotation list if empty</span>
+    <span class="hljs-keyword">if</span> (_this.annotationsList.length === <span class="hljs-number">0</span>) {
+      _this.annotationsList = _this.getAnnotationList(key);
+    }
+
+    <span class="hljs-comment">// Generate a new annotation ID and insert into annotation list</span>
+    oaAnnotation[<span class="hljs-string">&quot;@id&quot;</span>] = key + <span class="hljs-string">&apos;/&apos;</span> + <span class="hljs-built_in">Date</span>.now();
+    _this.annotationsList.push(oaAnnotation);
+
+    <span class="hljs-comment">// Remove endpoint reference before JSON.stringify</span>
+    jQuery.each(_this.annotationsList, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">index, value</span>) </span>{
+      <span class="hljs-keyword">delete</span> value.endpoint;
+    });
+
+    <span class="hljs-comment">// Overwrite the local storage with updated annotation list</span>
+    localStorage.setItem(key, <span class="hljs-built_in">JSON</span>.stringify(_this.annotationsList));
+
+    <span class="hljs-comment">// Add endpoint reference after JSON.stringify</span>
+    jQuery.each(_this.annotationsList, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">index, value</span>) </span>{
+      value.endpoint = _this;
+    });
+
+    <span class="hljs-comment">// Done, run success callback if specified</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> successCallback === <span class="hljs-string">&quot;function&quot;</span>) {
+      successCallback(oaAnnotation);
+    }
+  }
+
+  <span class="hljs-comment">// Failed, run error callback if specified</span>
+
+  <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> errorCallback === <span class="hljs-string">&quot;function&quot;</span>) {
+      errorCallback();
+    }
+  }
+}
+</code></pre>
+<h5 id="using-remote-state-endpoint">Using remote state endpoint</h5>
+<p>To begin using your new remote state endpoint, add the key annotationStorageEndpoint to your setup, and enable annotationLayer and annotationCreation under windowObjects:</p>
+<pre><code class="lang-javascript">$(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  Mirador({
+    id: <span class="hljs-string">&quot;viewer&quot;</span>,
+    data: [<span class="hljs-comment">/* Manifests and collections here *],
+    annotationEndpoint: {
+       name: &apos;Local Storage Endpoint&apos;,
+       module: &apos;LocalStorageEndpoint&apos;,
+       options: { <span class="hljs-comment">/* Options here */</span> }
+    },
+    windowObjects: [{
+      annotationLayer: true,
+       annotationCreation: true,
+       annotationState: &apos;annoOncreateOn&apos;
+    }]
+  });
+});
+</span></code></pre>
+<p><img src="image_13.png" alt="image alt text"></p>
+<p>For more example implementations involving annotation servers, see the following built-in endpoint adaptors:</p>
+<ul>
+<li><p>js/src/annotations/catchEndpoint.js (CATCH)</p>
+</li>
+<li><p>js/src/annotations/simpleASEndpoint.js (Simple Annotation Server)</p>
+</li>
+</ul>
+<h3 id="remote-state-saving">Remote State Saving</h3>
+<p>To integrate with your own state storage for bookmarking and viewer state sharing, start with the following template (see Implementor comments below):</p>
+<pre><code class="lang-javascript">(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">$</span>) </span>{
+
+  <span class="hljs-comment">// IMPLEMENTOR: Rename RemoteStateEndpoint</span>
+  $.RemoteStateEndpoint = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">opts</span>) </span>{
+    <span class="hljs-keyword">this</span>.options = {
+      <span class="hljs-comment">/* IMPLEMENTOR: Set up parameter defaults here (e.g. URLs, user credentials, etc.) */</span>
+    };
+    jQuery.extend(<span class="hljs-keyword">this</span>.options, opts);
+  };
+
+  <span class="hljs-comment">// IMPLEMENTOR: Rename RemoteStateEndpoint</span>
+
+  $.RemoteStateEndpoint.prototype = {
+    readSync: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">blobID</span>) </span>{
+      <span class="hljs-comment">/* IMPLEMENTOR: Return the JSON object referenced by &lt;blobID&gt; here */</span>
+    },
+    save: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">blob</span>) </span>{
+      <span class="hljs-keyword">var</span> deferred = jQuery.Deferred(),
+      <span class="hljs-comment">/* IMPLEMENTOR: Save the given JSON object &lt;blob&gt; and return a jQuery deferred promise that will resolve to the blob ID identifying it. */</span>
+    }
+
+  };
+
+}(Mirador));
+</code></pre>
+<p>This can be added as an additional .js file in js/src/utils, or embedded on the page where Mirador is being run.</p>
+<p>All remote state endpoints must implement the following functions:</p>
+<ul>
+<li><p>readSync(blobId): Return the JSON object stored under the specified blob ID.</p>
+</li>
+<li><p>save(blob): Save the given JSON object blob and return a jQuery deferred promise that resolves to the blob ID identifying it.</p>
+</li>
+</ul>
+<h5 id="example-implementation-with-local-storage">Example implementation with local storage</h5>
+<p>Default options: For this example, the integrator should have a choice between local storage or session storage, and an optional prefix before each entry.</p>
+<pre><code class="lang-javascript">$.MyLocalStateEndpoint = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">opts</span>) </span>{
+  <span class="hljs-keyword">this</span>.options = {
+    storage: <span class="hljs-built_in">window</span>.localStorage,
+    prefix: <span class="hljs-string">&quot;&quot;</span>
+  };
+  jQuery.extend(<span class="hljs-keyword">this</span>.options, opts);
+};
+</code></pre>
+<h5 id="readsync-read-from-the-specified-storage">readSync: Read from the specified storage</h5>
+<pre><code class="lang-javascript">readSync: function(blobId) {
+
+  return JSON.parse(this.options.storage.getItem(blobId));
+
+}
+
+##### save: Save to the specified storage under the current time
+
+```` javascript
+save: function(blob) {
+
+  var deferred = jQuery.Deferred(),
+      date = new Date,
+      _date = date.getFullYear() + &quot;-&quot; + date.getMonth() + &quot;-&quot; + date.getDay() + &quot;-&quot; + date.getHours() + &quot;-&quot; + date.getMinutes() + &quot;-&quot; + date.getSeconds();
+
+  this.options.storage.setItem(this.options.prefix + _date, JSON.stringify(blob));
+  deferred.resolve(this.options.prefix + _date);
+
+  return deferred.promise();
+}
+</code></pre>
+<p>To begin using your new remote state endpoint, add the key jsonStorageEndpoint to your setup, and enable saveSession and mainMenuSettings.buttons.bookmark:</p>
+<pre><code class="lang-javascript">$(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  Mirador({
+    id: <span class="hljs-string">&quot;viewer&quot;</span>,
+    data: [<span class="hljs-comment">/* Manifests and collections here */</span>],
+    mainMenuSettings: {
+      buttons: {
+        bookmark: <span class="hljs-literal">true</span>
+      }
+    },
+    jsonStorageEndpoint: {
+      name: <span class="hljs-string">&quot;My local time state endpoint&quot;</span>,
+      <span class="hljs-built_in">module</span>: <span class="hljs-string">&quot;MyLocalStateEndpoint&quot;</span>,
+      options: { <span class="hljs-comment">/* Set parameters here in key-value form */</span> }
+    },
+    saveSession: <span class="hljs-literal">true</span>
+  });
+});
+</code></pre>
+<p><img src="image_14.png" alt="image alt text"></p>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../index.html" class="navigation navigation-prev " aria-label="Previous page: Introduction"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="../docs/api-reference.html" class="navigation navigation-next " aria-label="Next page: API and Events reference"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="../gitbook/app.js"></script>
+
+    
+    <script src="../gitbook/plugins/gitbook-plugin-sharing/buttons.js"></script>
+    
+
+    
+    <script src="../gitbook/plugins/gitbook-plugin-fontsettings/fontsettings.js"></script>
+    
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"highlight":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>

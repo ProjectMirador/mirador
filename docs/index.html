@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Introduction | Mirador</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Build StatusStories in Ready">
+        <meta name="generator" content="GitBook 2.5.2">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="gitbook/style.css">
+    
+        
+        <link rel="stylesheet" href="gitbook/plugins/gitbook-plugin-highlight/website.css">
+        
+    
+        
+        <link rel="stylesheet" href="gitbook/plugins/gitbook-plugin-fontsettings/website.css">
+        
+    
+    
+
+        
+    
+    
+    <link rel="next" href="./docs/getting-started.html" />
+    
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="0" data-chapter-title="Introduction" data-filepath="README.md" data-basepath="." data-revision="Thu Sep 15 2016 19:52:59 GMT-0700 (PDT)">
+    
+
+<div class="book-summary">
+    <nav role="navigation">
+        <ul class="summary">
+            
+            
+            
+            
+
+            
+
+            
+    
+        <li class="chapter active" data-level="0" data-path="index.html">
+            
+                
+                    <a href="./index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Introduction
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="docs/getting-started.html">
+            
+                
+                    <a href="./docs/getting-started.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        Getting Started
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="2" data-path="docs/api-reference.html">
+            
+                
+                    <a href="./docs/api-reference.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.</b>
+                        
+                        API and Events reference
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3" data-path="docs/code-tours.html">
+            
+                
+                    <a href="./docs/code-tours.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                        Source Code Tours
+                    </a>
+            
+            
+        </li>
+    
+
+
+            
+            <li class="divider"></li>
+            <li>
+                <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                    Published with GitBook
+                </a>
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header" role="navigation">
+    <!-- Actions Left -->
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="./" >Mirador</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1" role="main">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <p><a href="https://travis-ci.org/IIIF/mirador?branch=release2.1" target="_blank"><img src="https://travis-ci.org/IIIF/mirador.svg?branch=release2.1" alt="Build Status"></a>
+<a href="http://waffle.io/iiif/mirador" target="_blank"><img src="https://badge.waffle.io/iiif/mirador.svg?label=ready&amp;title=Ready" alt="Stories in Ready"></a></p>
+<h1 id="mirador">Mirador</h1>
+<p><img src="http://projectmirador.github.io/mirador/img/banner.jpg" alt="mirador banner">
+<strong>Mirador is a multi-repository, configurable, extensible, and easy-to-integrate viewer and annotation creation and comparison environment for IIIF resources, ranging from deep-zooming artwork, to complex manuscript objects. It provides a tiling windowed environment for comparing multiple image-based resources, synchronised structural and visual navigation of content using openSeadragon, Open Annotation compliant annotation creation and viewing on deep-zoomable canvases, metadata display, bookreading, and bookmarking.</strong></p>
+<h3 id="see-a-demo"><a href="http://projectmirador.org/demo/" target="_blank">See a Demo</a></h3>
+<h3 id="getting-started"><a href="http://projectmirador.org/docs/getting-started.html" target="_blank">Getting Started</a></h3>
+<h3 id="run-in-development">Run in Development</h3>
+<p>Mirador uses <a href="http://nodejs.org/" target="_blank">node.js</a> and a build system to assemble, test, and manage the development resources. If you have never used these tools before, you may need to install them.</p>
+<ol>
+<li>Install Node, if you haven&apos;t already (available at the link above)  </li>
+<li>Install the Grunt command line runner (if you haven&apos;t already); on the command line, run <code>npm install -g grunt-cli</code>  </li>
+<li>Clone the mirador repository (if you haven&apos;t already done so above)</li>
+<li>On the command line, go into the mirador folder</li>
+<li>Install all dependencies with <code>npm install</code> and <code>bower install</code>. Run `grunt&apos;.</li>
+</ol>
+<h3 id="run-tests">Run Tests</h3>
+<p><code>grunt test</code></p>
+<p>For more information, see the <a href="http://projectmirador.org/docs/getting-started.html" target="_blank">Docs</a>, submit an <a href="https://github.com/projectmirador/mirador/issues" target="_blank">issue</a>, or ask on <a href="http://bit.ly/iiif-slack" target="_blank">slack</a>.</p>
+<h3 id="project-diagnostics">Project Diagnostics</h3>
+<p> <a href="https://coveralls.io/github/IIIF/mirador?branch=release2.1&amp;upToDate=true" target="_blank"><img src="https://coveralls.io/repos/github/IIIF/mirador/badge.svg?branch=release2.1&amp;upToDate=true" alt="Coverage Status"></a></p>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        
+        <a href="./docs/getting-started.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Getting Started"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="gitbook/app.js"></script>
+
+    
+    <script src="gitbook/plugins/gitbook-plugin-sharing/buttons.js"></script>
+    
+
+    
+    <script src="gitbook/plugins/gitbook-plugin-fontsettings/fontsettings.js"></script>
+    
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"highlight":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>

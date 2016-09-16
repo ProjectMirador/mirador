@@ -1,0 +1,77 @@
+{
+  "@context": "http://www.shared-canvas.org/ns/context.json",
+  "@id": "http://dms-data.stanford.edu/Walters/bd183mz0176/manifest.json",
+  "@type": "sc:Manifest",
+  "label": "Walters MS 688",
+  "agent": "",
+  "date": "Early 11th century AH / 17th CE",
+  "description": "This manuscript illustration of a group\n                    of youths before a king and his courtiers was executed in Iran during the early\n                    eleventh century AH / seventeenth CE. Stylistically it relates to manuscript\n                    production in Shiraz in the tenth century AH / sixteenth CE and early eleventh\n                    century AH / seventeenth CE. The painting is framed by illuminated borders in\n                    tones of gold. The back of the leaf has additional illumination and no\n                    text. For full description, see http://www.thedigitalwalters.org/Data/WaltersManuscripts/html/W688/description.html",
+  "attribution": "Provided by the Walters Art Museum, Baltimore, MD",
+  "license": "Licensed for use under Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported Access Rights, http://creativecommons.org/licenses/by-nc-sa/3.0/legalcode. Images are free for any noncommercial use, provided you follow the terms of this license. You do not need to apply to the Walters prior to using the images. We ask only that you cite the source of the images as the Walters Art Museum (see citation style at http://www.thedigitalwalters.org/03_ReadMe.html). Additionally, we request that a copy of any work created using these materials be sent to the Curator of Manuscripts and Rare Books at the Walters Art Museum, 600 N. Charles Street, Baltimore, MD 21201, mss-curator@thewalters.org.",
+  "seeAlso": {
+    "@id": "http://purl.stanford.edu/bd183mz0176.mods",
+    "profile": "application/mods+xml"
+  },
+  "within": "http://dms-data.stanford.edu/Walters/",
+  "sequences": [
+    {
+      "@id": "http://dms-data.stanford.edu/Walters/bd183mz0176/normal",
+      "@type": "sc:Sequence",
+      "label": "Current page order",
+      "canvases": [
+        {
+          "@id": "http://dms-data.stanford.edu/Walters/bd183mz0176/canvas/canvas-1",
+          "@type": "sc:Canvas",
+          "label": "fol. W.688a",
+          "height": 4851,
+          "width": 3071,
+          "resources": [
+            {
+              "@id": "http://dms-data.stanford.edu/Walters/bd183mz0176/imageanno/anno-1",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "resource": {
+                "@id": "http://stacks.stanford.edu/image/bd183mz0176/W688_000001_300",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 4851,
+                "width": 3071,
+                "service": {
+                  "@id": "https://stacks.stanford.edu/image/iiif/bd183mz0176%252FW688_000001_300",
+                  "profile": "http://library.stanford.edu/iiif/image-api/1.1/conformance.html#level1"
+                }
+              },
+              "on": "http://dms-data.stanford.edu/Walters/bd183mz0176/canvas/canvas-1"
+            }
+          ]
+        },
+        {
+          "@id": "http://dms-data.stanford.edu/Walters/bd183mz0176/canvas/canvas-2",
+          "@type": "sc:Canvas",
+          "label": "fol. W.688b",
+          "height": 4817,
+          "width": 3038,
+          "resources": [
+            {
+              "@id": "http://dms-data.stanford.edu/Walters/bd183mz0176/imageanno/anno-2",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "resource": {
+                "@id": "http://stacks.stanford.edu/image/bd183mz0176/W688_000002_300",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 4817,
+                "width": 3038,
+                "service": {
+                  "@id": "https://stacks.stanford.edu/image/iiif/bd183mz0176%252FW688_000002_300",
+                  "profile": "http://library.stanford.edu/iiif/image-api/1.1/conformance.html#level1"
+                }
+              },
+              "on": "http://dms-data.stanford.edu/Walters/bd183mz0176/canvas/canvas-2"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
