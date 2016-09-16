@@ -65,7 +65,7 @@
       });
 
       _this.eventEmitter.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
-        _this.tabStateUpdated(data.layersTab);
+        _this.tabStateUpdated(data.tabs[data.selectedTabIndex].options.id == 'layersTab');
       });
 
       _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasID) {
@@ -82,10 +82,13 @@
       var _this = this,
       templateData = {};
 
-      if (this.element) {
-        _this.appendTo.find(".layersPanel").remove();
+      if (!this.element) {
+        this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
+        _this.bindEvents();
+      } else {
+        jQuery(_this.appendTo).find(".layersPanel").remove();
+        this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
       }
-      this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
       
       _this.bindEvents();
 
