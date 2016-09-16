@@ -7,7 +7,7 @@
 ###[See a Demo](http://projectmirador.org/demo/)
 ###[Getting Started](http://projectmirador.org/docs/getting-started.html)
 
-### Getting Started as a Contributor
+### Run in Development
 Mirador uses [node.js](http://nodejs.org/) and a build system to assemble, test, and manage the development resources. If you have never used these tools before, you may need to install them.
 
  1. Install Node, if you haven't already (available at the link above)  
