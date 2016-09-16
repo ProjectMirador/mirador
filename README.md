@@ -2,7 +2,7 @@
 [![Stories in Ready](https://badge.waffle.io/iiif/mirador.svg?label=ready&title=Ready)](http://waffle.io/iiif/mirador)
 
 #Mirador
-![mirador banner](http://projectmirador.github.io/mirador/img/banner.jpg)?
+![mirador banner](http://projectmirador.github.io/mirador/img/banner.jpg)
 Mirador is a multi-repository, configurable, extensible, and easy-to-integrate viewer and annotation creation and comparison environment for IIIF resources, ranging from deep-zooming artwork, to complex manuscript objects. It provides a tiling windowed environment for comparing multiple image-based resources, synchronised structural and visual navigation of content using openSeadragon, Open Annotation compliant annotation creation and viewing on deep-zoomable canvases, metadata display, bookreading, and bookmarking.
 ###[See a Demo](http://projectmirador.org/demo/)
 ###[Getting Started](http://projectmirador.org/docs/getting-started.html)
