@@ -340,18 +340,19 @@
           }
         };
         //save to endpoint
-        _this.eventEmitter.publish('annotationCreated.' + _this.windowId, [oaAnno]);
+        _this.eventEmitter.publish('annotationCreated.' + _this.windowId, [oaAnno, function() {
+          // stuff that needs to be called after the annotation has been created on the backend
+          // return to pointer mode
+          _this.inEditOrCreateMode = false;
+          _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' + _this.windowId);
 
-        // return to pointer mode
-        _this.inEditOrCreateMode = false;
-        _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' + _this.windowId);
+          //reenable viewer tooltips
+          _this.eventEmitter.publish('enableTooltips.' + _this.windowId);
 
-        //reenable viewer tooltips
-        _this.eventEmitter.publish('enableTooltips.' + _this.windowId);
-
-        _this.clearDraftData();
-        _this.annoTooltip = null;
-        _this.annoEditorVisible = false;
+          _this.clearDraftData();
+          _this.annoTooltip = null;
+          _this.annoEditorVisible = false;
+        }]);
       }));
 
       this.eventsSubscriptions.push(_this.eventEmitter.subscribe('onAnnotationCreatedCanceled.'+_this.windowId,function(event,cancelCallback,immediate){
