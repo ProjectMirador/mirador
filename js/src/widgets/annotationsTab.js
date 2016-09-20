@@ -115,7 +115,7 @@
             });
 
             _this.eventEmitter.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
-                _this.tabStateUpdated(data.annotationsTab);
+                _this.tabStateUpdated(data.tabs[data.selectedTabIndex].options.id == 'annotationsTab');
             });
 
 
@@ -125,9 +125,9 @@
 
             _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event) {
 
-              _this.eventEmitter.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
-                  _this.annotationListLoaded();
-              });
+            _this.eventEmitter.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
+                _this.annotationListLoaded();
+            });
 
               _this.selectList(_this.localState().selectedList);
 
@@ -168,7 +168,7 @@
             if (!this.element) {
                 this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
             } else {
-                _this.appendTo.find(".annotationsPanel").remove();
+                jQuery(_this.appendTo).find(".annotationsPanel").remove();
                 this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
             }
             _this.bindEvents();
