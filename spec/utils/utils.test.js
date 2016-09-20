@@ -70,6 +70,20 @@ describe('Utils', function() {
       expect(this.utils.getThumbnailForCanvas(this.imagesList[0], "20")).toEqual("http://0.0.0.0/iiif/thumbnail/full/20,/0/default.jpg");
     });
   });
+  
+  describe('jQuery.fn.slideFadeToggle()', function() {
+    var elem;
+    beforeEach(function() {
+      elem = document.createElement('div');
+      $('<p>Waahoo</p>').appendTo(elem);
+    });
+    it('should hide a shown element', function(done) {
+      jQuery(elem).slideFadeToggle(10, 'linear', function() {
+        expect(jQuery(this)).not.toBeVisible();
+        done();
+      });
+    });
+  });
 
   describe('XHR utils', function() {
     beforeEach(function() {
