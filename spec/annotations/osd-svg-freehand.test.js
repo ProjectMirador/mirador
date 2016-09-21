@@ -79,6 +79,11 @@ describe('Freehand', function() {
       this.freehand.updateSelection(true, this.shape, overlay);
 
       expect(this.shape.selected).toBe(true);
+    
+      this.freehand.updateSelection(false, this.shape, overlay);
+      
+      expect(this.shape.selected).toBe(false);
+      expect(this.shape.data.deleteIcon).toBe(null);
     });
 
     it('should change stroke when hovering freehand',function(){
@@ -227,10 +232,11 @@ describe('Freehand', function() {
       var event = TestUtils.getEvent();
       overlay.mode = 'create';
       overlay.shape = this.shape;
+      overlay.path = this.shape;
+      spyOn(overlay.path, 'simplify').and.callThrough();
       this.freehand.onMouseUp(event, overlay);
-      overlay.mode = 'create';
-
-      this.freehand.onMouseUp(event, overlay);
+      expect(overlay.path.simplify).toHaveBeenCalled();
+      expect(overlay.onDrawFinish).toHaveBeenCalled();
     });
 
     // TODO this should be refactored
@@ -439,6 +445,19 @@ describe('Freehand', function() {
       }
     });
 
+    it('should select prefixed shapes', function() {
+      var event = TestUtils.getEvent();
+      spyOn(overlay.paperScope.project, 'hitTest').and.returnValue({
+        item: this.shape
+      });
+      this.shape._name = "12-ABCD-EFG";
+      this.shape.data.self = jasmine.createSpyObj('self', ['onMouseDown']);
+      this.freehand.idPrefix = "ABCD";
+      this.freehand.partOfPrefix = "12";
+      this.freehand.onMouseDown(event, overlay);
+      expect(this.shape.data.self.onMouseDown).toHaveBeenCalled();
+    });
+
     it('should resize the trash can icon when resized',function(){
       var _this = this;
       var item = {
@@ -474,6 +493,16 @@ describe('Freehand', function() {
       this.freehand.onMouseMove(event,overlay);
 
       expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
+    });
+    
+    it('should set cursor to pointer on handle-in or handle-out', function() {
+      var _this = this;
+      jQuery.each(['handle-in', 'handle-out'], function(k, v) {
+        var hitResult = { type: v };
+        overlay.viewer.canvas = _this.canvas;
+        _this.freehand.setCursor(hitResult, overlay);
+        expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
+      });
     });
 
     it('should set cursor to move when stoke is hit',function(){
