@@ -38,7 +38,6 @@ describe('JsonLd', function () {
         "@value": "Super waahoo",
         "@language": "en"
       };
-      debugger;
       expect(Mirador.JsonLd.getTextValue(sample, 'en')).toEqual("Super waahoo");
       expect(Mirador.JsonLd.getTextValue(sample)).toEqual("Super waahoo");
     });
