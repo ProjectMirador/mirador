@@ -88,7 +88,7 @@
           eventEmitter: this.eventEmitter
         });
       }
-      if (_this.annotationsTabAvailable) {
+      /*if (_this.annotationsTabAvailable) {
         new $.AnnotationsTab({
           manifest: _this.manifest,
           windowId: this.windowId,
@@ -96,7 +96,7 @@
           state: _this.state,
           eventEmitter: _this.eventEmitter
         });
-      }
+      }*/
       if (_this.layersTabAvailable) {
         new $.LayersTab({
           manifest: _this.manifest,
@@ -170,14 +170,14 @@
         _this.panelToggled();
       });
 
-      _this.eventEmitter.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
+      /*_this.eventEmitter.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         var windowObject = _this.state.getWindowObjectById(_this.windowId);
         if (windowObject.annotationsAvailable[windowObject.viewType]) {
           if (_this.state.getWindowAnnotationsList(_this.windowId).length > 0) {
             _this.update('annotations', true);
           }
         }
-      });
+      });*/
 
       _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, newCanvasId) {
         _this.canvasID = newCanvasId;
