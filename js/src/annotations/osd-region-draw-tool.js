@@ -90,10 +90,12 @@
             return deferred;
           } else if (annotation.on.selector.value.indexOf('<svg') !== -1) {
             shapeArray = _this.svgOverlay.parseSVG(annotation.on.selector.value, annotation);
-          } else {
+          } else if (annotation.on.selector.value.indexOf('xywh=') !== -1) {
             shapeArray = _this.parseRectangle(annotation.on.selector.value, annotation);
+          } else {
+            return deferred;
           }
-        } else if (annotation.on && typeof annotation.on === 'string') {
+        } else if (annotation.on && typeof annotation.on === 'string' && annotation.on.indexOf('xywh=') !== -1) {
           shapeArray = _this.parseRectangle(annotation.on, annotation);
         } else {
           return deferred;
