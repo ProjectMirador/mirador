@@ -8,11 +8,11 @@ describe('Slot', function () {
       id: 'MOCK_WINDOW_1',
       element: windowElement
     };
-    
+
     var windowConfig = {
       state: new Mirador.SaveController(jQuery.extend(true, {}, Mirador.DEFAULT_SETTINGS, {eventEmitter:this.eventEmitter}))
     };
-    
+
     this.slot = new Mirador.Slot({
       window: mockWindow,
       eventEmitter: this.eventEmitter
@@ -22,14 +22,14 @@ describe('Slot', function () {
   describe('listenForActions', function () {
     it('should respond to windowRemoved', function () {
       var window = this.slot.window;
-      expect(this.appendTo.find('#MOCK_WINDOW_1').size()).toBe(1);
+      expect(this.appendTo.find('#MOCK_WINDOW_1').length).toBe(1);
       expect(window.element.attr('id')).toEqual('MOCK_WINDOW_1');
       this.eventEmitter.publish('windowRemoved', 'MOCK_WINDOW_1');
       expect(this.slot.window).toBe(undefined);
-      expect(this.appendTo.find('#MOCK_WINDOW_1').size()).toBe(0);
+      expect(this.appendTo.find('#MOCK_WINDOW_1').length).toBe(0);
     });
   });
-  
+
   xit('bindEvents', function () {
   });
   xit('dropItem', function () {
