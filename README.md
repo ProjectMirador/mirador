@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/IIIF/mirador.svg?branch=release2.1)](https://travis-ci.org/IIIF/mirador?branch=release2.1)
-[![Stories in Ready](https://badge.waffle.io/iiif/mirador.svg?label=ready&title=Ready)](http://waffle.io/iiif/mirador)
+[![Build Status](https://travis-ci.org/ProjectMirador/mirador.svg?branch=master)](https://travis-ci.org/ProjectMirador/mirador?branch=master)
+[![Stories in Ready](https://badge.waffle.io/ProjectMirador/mirador.svg?label=ready&title=Ready)](http://waffle.io/iiif/mirador)
 
 #Mirador
 ![mirador banner](http://projectmirador.github.io/mirador/img/banner.jpg)
@@ -22,4 +22,4 @@ Mirador uses [node.js](http://nodejs.org/) and a build system to assemble, test,
 For more information, see the [Docs](http://projectmirador.org/docs/getting-started.html), submit an [issue](https://github.com/projectmirador/mirador/issues), or ask on [slack](http://bit.ly/iiif-slack).
 
 ### Project Diagnostics
- [![Coverage Status](https://coveralls.io/repos/github/IIIF/mirador/badge.svg?branch=release2.1&upToDate=true)](https://coveralls.io/github/IIIF/mirador?branch=release2.1&upToDate=true)
+ [![Coverage Status](https://coveralls.io/repos/github/ProjectMirador/mirador/badge.svg?branch=master&upToDate=true)](https://coveralls.io/github/ProjectMirador/mirador?branch=master&upToDate=true)
