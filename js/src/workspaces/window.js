@@ -169,7 +169,7 @@
           }
         });
       });
-      //TODO: this needs to switch the postion when it is a right to left manifest
+      //TODO: this needs to switch the position when it is a right to left manifest
       this.element.find('.manifest-info .window-manifest-title').qtip({
         content: {
           text: jQuery(this).attr('title'),
