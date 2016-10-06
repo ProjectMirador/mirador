@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/IIIF/mirador.svg?branch=release2.1)](https://travis-ci.org/IIIF/mirador?branch=release2.1)
+[![Build Status](https://travis-ci.org/ProjectMirador/mirador.svg?branch=master)](https://travis-ci.org/ProjectMirador/mirador?branch=master)
 [![Stories in Ready](https://badge.waffle.io/iiif/mirador.svg?label=ready&title=Ready)](http://waffle.io/iiif/mirador)
 
 #Mirador
