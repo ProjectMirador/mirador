@@ -1,12 +1,12 @@
 {
   "name": "sinon-server",
   "_cacheHeaders": {
-    "ETag": "\"2081a2-e092-50a0a3729f2c0\"",
-    "Last-Modified": "Fri, 12 Dec 2014 19:51:15 GMT",
+    "ETag": "\"57075b51-e092\"",
+    "Last-Modified": "Fri, 08 Apr 2016 07:18:41 GMT",
     "Content-Length": "57490",
-    "Content-Type": "application/javascript"
+    "Content-Type": "application/x-javascript; charset=utf-8"
   },
-  "_release": "e-tag:2081a2-e0",
+  "_release": "e-tag:57075b51-",
   "main": "index.js",
   "_source": "http://sinonjs.org/releases/sinon-server-1.12.2.js",
   "_target": "*",

@@ -1,17 +1,19 @@
 {
   "name": "jasmine-core",
-  "version": "2.2.1",
   "homepage": "http://jasmine.github.io",
   "authors": [
     "slackersoft <gregg@slackersoft.net>"
   ],
   "description": "Official packaging of Jasmine's core files",
   "keywords": [
+    "test",
     "jasmine",
+    "tdd",
     "bdd"
   ],
   "license": "MIT",
   "moduleType": "globals",
+  "main": "lib/jasmine-core/jasmine.js",
   "ignore": [
     "**/.*",
     "dist",

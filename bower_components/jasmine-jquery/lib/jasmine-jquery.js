@@ -1,7 +1,7 @@
 /*!
 Jasmine-jQuery: a set of jQuery helpers for Jasmine tests.
 
-Version 2.0.5
+Version 2.0.7
 
 https://github.com/velesin/jasmine-jquery
 
@@ -125,6 +125,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         async: false, // must be synchronous to guarantee that no tests are run before fixture is loaded
         cache: false,
         url: url,
+        dataType: 'html',
         success: function (data, status, $xhr) {
           htmlText = $xhr.responseText
         }
@@ -144,7 +145,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                 htmlText += '<script>' + $xhr.responseText + '</script>'
             },
             error: function ($xhr, status, err) {
-                throw new Error('Script could not be loaded: ' + scriptSrc + ' (status: ' + status + ', message: ' + err.message + ')')
+                throw new Error('Script could not be loaded: ' + url + ' (status: ' + status + ', message: ' + err.message + ')')
             }
         });
       })
@@ -319,7 +320,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       if (Object.prototype.toString.call(expectedArgs) !== '[object Array]')
         actualArgs = actualArgs[0]
 
-      return util.equals(expectedArgs, actualArgs, customEqualityTesters)
+      return util.equals(actualArgs, expectedArgs, customEqualityTesters)
     },
 
     wasPrevented: function (selector, eventName) {
@@ -559,6 +560,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       toHandle: function () {
         return {
           compare: function (actual, event) {
+            if ( !actual || actual.length === 0 ) return { pass: false };
             var events = $._data($(actual).get(0), "events")
 
             if (!events || !event || typeof event !== "string") {
@@ -589,6 +591,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       toHandleWith: function () {
         return {
           compare: function (actual, eventName, eventHandler) {
+            if ( !actual || actual.length === 0 ) return { pass: false };
             var normalizedEventName = eventName.split('.')[0]
               , stack = $._data($(actual).get(0), "events")[normalizedEventName]
 

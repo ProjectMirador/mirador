@@ -15,7 +15,7 @@ Please attempt to keep commits to `master` small, but cohesive. If a feature is 
 
 We attempt to stick to [Semantic Versioning](http://semver.org/). Most of the time, development should be against a new minor version - fixing bugs and adding new features that are backwards compatible.
 
-The current version lives in the file `/package.json`. This version will be the version number that is currently released. When releasing a new version, update `package.json` and `bower.json` with the new version and `grunt build:copyVersionToGem` to update the gem version number.
+The current version lives in the file `/package.json`. This version will be the version number that is currently released. When releasing a new version, update `package.json` with the new version and `grunt build:copyVersionToGem` to update the gem version number.
 
 This version is used by both `jasmine.js` and the `jasmine-core` Ruby gem.
 
@@ -37,8 +37,6 @@ When ready to release - specs are all green and the stories are done:
 ### Build standalone distribution
 
 1. Build the standalone distribution with `grunt buildStandaloneDist`
-1. Make sure you add the new ZIP file to git
- 1. Should we still do this? Given we want to use github releases...
 
 ### Release the Python egg
 
@@ -61,7 +59,7 @@ When ready to release - specs are all green and the stories are done:
 
 Probably only need to do this when releasing a minor version, and not a patch version.
 
-1. `cp edge ${version}` to copy the current edge docs to the new version
+1. `cp -R edge ${version}` to copy the current edge docs to the new version
 1. Add a link to the new version in `index.html`
 
 ### Finally
