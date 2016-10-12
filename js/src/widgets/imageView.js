@@ -104,11 +104,11 @@
         var dodgers = _this.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls');
         var arrows = _this.element.find('.mirador-osd-next, .mirador-osd-previous');
         if (visible === true) {
-          dodgers.css({transform: 'translateY(-130px)'});
-          arrows.css({transform: 'translateY(-65px)'});
+          dodgers.addClass('bottom-panel-open');
+          arrows.addClass('bottom-panel-open');
         } else {
-          dodgers.css({transform: 'translateY(0)'});
-          arrows.css({transform: 'translateY(0)'});
+          dodgers.removeClass('bottom-panel-open');
+          arrows.removeClass('bottom-panel-open');
         }
       });
 
