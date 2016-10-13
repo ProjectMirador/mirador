@@ -42,21 +42,22 @@ describe('BookmarkPanel', function() {
   });
 
   it('should update the share url when the saveController config is updated', function() {
-    var shareUrl;
-    var blobId = "123abc";
-    var dfd = jQuery.Deferred();
-    var storageModuleMock = {
-      save: function(config) {
-        return dfd.promise();
-      }
-    };
+    var shareUrl,
+        blobId = "123abc",
+        dfd = jQuery.Deferred(),
+        storageModuleMock = {
+          save: function(config) {
+            return dfd.promise();
+          }
+        },
+        urlBar = this.viewerDiv.find('#share-url');
 
     this.panel.storageModule = storageModuleMock;
     this.panel.onConfigUpdated();
-    dfd.resolve(blobId);
-    shareUrl = this.viewerDiv.find('#share-url').val();
-
-    expect(shareUrl).toBeDefined();
-    expect(shareUrl).toContain("?json="+blobId);
+    dfd.resolve(blobId).then(function() {
+      shareUrl = urlBar.val();
+      expect(shareUrl).toBeDefined();
+      expect(shareUrl).toContain("?json="+blobId);
+    }); // place the test runs at the end of the promise chain.
   });
 });

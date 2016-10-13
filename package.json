@@ -4,7 +4,7 @@
   "description": "Multi-window image viewer, a web-based tool to support researcher goals",
   "repository": {
     "type": "git",
-    "url": "https://github.com/IIIF/mirador"
+    "url": "https://github.com/ProjectMirador/mirador"
   },
   "license": "Apache-2.0",
   "devDependencies": {
