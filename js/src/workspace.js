@@ -236,7 +236,7 @@
       }
 
       function mutateAndAdd(node, indexDifference) {
-        // Locally mutate the tree to accomodate a
+        // Locally mutate the tree to accommodate a
         // sibling of another kind, transforming
         // both the target node and its parent.
         var newParent = _this.newNode(node.type, node.parent);

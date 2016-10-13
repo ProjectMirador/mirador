@@ -10,7 +10,7 @@
   /*display: block !important;*/
 
   /* Position is "fixed" in mirador.css.
-   * We cannot confine it within a div with a fixed postion.
+   * We cannot confine it within a div with a fixed position.
    */
   position: absolute !important;
   

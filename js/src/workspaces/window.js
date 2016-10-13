@@ -169,7 +169,7 @@
           }
         });
       });
-      //TODO: this needs to switch the postion when it is a right to left manifest
+      //TODO: this needs to switch the position when it is a right to left manifest
       this.element.find('.manifest-info .window-manifest-title').qtip({
         content: {
           text: jQuery(this).attr('title'),
@@ -366,22 +366,20 @@
 
     bindAnnotationEvents: function() {
       var _this = this;
-      _this.eventEmitter.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
+      _this.eventEmitter.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, eventCallback) {
         var annoID;
         //first function is success callback, second is error callback
         _this.endpoint.create(oaAnno, function(data) {
           //the success callback expects the OA annotation be returned
           annoID = String(data['@id']); //just in case it returns a number
           _this.annotationsList.push(data);
-          //update overlay so it can be a part of the annotationList rendering
-          jQuery(osdOverlay).removeClass('osd-select-rectangle').addClass('annotation').attr('id', annoID);
           _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
+          //anything that depends on the completion of other bits, call them now
+          eventCallback();
         },
         function() {
           //provide useful feedback to user
           console.log("There was an error saving this new annotation");
-          //remove this overlay because we couldn't save annotation
-          jQuery(osdOverlay).remove();
         });
       });
 
