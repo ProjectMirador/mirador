@@ -23,7 +23,7 @@
       // accessor methods. We can just set the
       // jsonLd directly, and the request needs to
       // be a jQuery deferred object that is completed
-      // imediately upon creation. This allows
+      // immediately upon creation. This allows
       // components listening for this request to finish
       // to react immediately without having to be
       // re-written.
