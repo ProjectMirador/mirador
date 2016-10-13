@@ -425,6 +425,15 @@ describe("jasmine.Fixtures using real AJAX call", function () {
       expect($("#anchor_01").length).toBe(1)
     })
   })
+  
+  describe("When the fixture contains a HTML 5 style checked checkbox", function () {
+	var fixtureUrl = "fixture_with_checkbox_with_checked.html"
+	
+	it("Then the fixture is loaded successfully", function () {
+	  jasmine.getFixtures().load(fixtureUrl)
+	  expect('#' + jasmine.getFixtures().containerId).toContainElement('#checked-box')
+	})
+  })
 })
 
 describe("jQuery matcher", function () {
@@ -1090,6 +1099,11 @@ describe("jQuery matcher", function () {
         $(document).trigger('event', { different_key: "value1" })
         expect('event').not.toHaveBeenTriggeredOnAndWith(document, { key1: "value1" })
       })
+
+      it('should pass if the arguments match using jasmine.objectContaining', function () {
+        $(document).trigger('event', { key1: "value1", key2: "value2" })
+        expect('event').toHaveBeenTriggeredOnAndWith(document, jasmine.objectContaining({ key1: "value1" }))
+      })
     })
 
     describe("when extra parameter is an array", function () {
@@ -1338,6 +1352,15 @@ describe("jQuery matcher", function () {
       $(object).bind('click', function (){})
       expect($(object)).toHandle('click')
     })
+
+    it('should not fail when actual has no matches', function (){
+        expect($('#notreal')).not.toHandle('click')
+    })
+
+    it('should not fail when actual is null', function (){
+        expect(null).not.toHandle('click')
+    })
+
   })
 
   describe('toHandleWith', function () {
@@ -1412,6 +1435,15 @@ describe("jQuery matcher", function () {
       $(object).bind('click.namespaced', handler)
       expect($(object)).toHandleWith('click.namespaced', handler)
     })
+
+    it('should not fail when actual has no matches', function (){
+      expect($('#notreal')).not.toHandleWith('click')
+    })
+
+    it('should not fail when actual is null', function (){
+      expect(null).not.toHandleWith('click')
+    })
+
   })
 })
 

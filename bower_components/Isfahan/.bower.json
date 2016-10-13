@@ -1,34 +1,11 @@
 {
   "name": "Isfahan",
   "homepage": "https://github.com/aeschylus/Isfahan",
-  "authors": [
-    "aeschylus <scipioaffricanus@gmail.com>"
-  ],
-  "description": "A simple tiling window manager built with d3.js",
-  "keywords": [
-    "window",
-    "manager",
-    "layout",
-    "d3.js"
-  ],
-  "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "app/bower_components",
-    "test",
-    "tests"
-  ],
-  "dependencies": {
-    "d3": "~3.4.12",
-    "jquery": "~2.1.1"
-  },
-  "_release": "4803a7a24e",
+  "_release": "b837f960cf",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "4803a7a24ef32aad1597ef20dea0218577474039"
+    "commit": "b837f960cf1fbbb9117d0eb2a4cab88e82a6e6c5"
   },
   "_source": "https://github.com/aeschylus/Isfahan.git",
   "_target": "*",
