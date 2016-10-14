@@ -5,7 +5,7 @@
 ![mirador banner](http://projectmirador.github.io/mirador/img/banner.jpg)
 **Mirador is a multi-repository, configurable, extensible, and easy-to-integrate viewer and annotation creation and comparison environment for IIIF resources, ranging from deep-zooming artwork, to complex manuscript objects. It provides a tiling windowed environment for comparing multiple image-based resources, synchronised structural and visual navigation of content using openSeadragon, Open Annotation compliant annotation creation and viewing on deep-zoomable canvases, metadata display, bookreading, and bookmarking.**
 ###[See a Demo](http://projectmirador.org/demo/)
-###[Getting Started](http://projectmirador.org/docs/getting-started.html)
+###[Getting Started](http://projectmirador.org/docs/docs/getting-started.html)
 
 ### Run in Development
 Mirador uses [node.js](http://nodejs.org/) and a build system to assemble, test, and manage the development resources. If you have never used these tools before, you may need to install them.
@@ -19,7 +19,7 @@ Mirador uses [node.js](http://nodejs.org/) and a build system to assemble, test,
 ### Run Tests
 `grunt test`
 
-For more information, see the [Docs](http://projectmirador.org/docs/getting-started.html), submit an [issue](https://github.com/projectmirador/mirador/issues), or ask on [slack](http://bit.ly/iiif-slack).
+For more information, see the [Docs](http://projectmirador.org/docs/docs/getting-started.html), submit an [issue](https://github.com/projectmirador/mirador/issues), or ask on [slack](http://bit.ly/iiif-slack).
 
 ### Project Diagnostics
  [![Coverage Status](https://coveralls.io/repos/github/ProjectMirador/mirador/badge.svg?branch=master&upToDate=true)](https://coveralls.io/github/ProjectMirador/mirador?branch=master&upToDate=true)
