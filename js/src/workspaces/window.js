@@ -51,7 +51,8 @@
         "BookView" : "fa fa-columns fa-lg fa-fw",
         "ScrollView" : "fa fa-ellipsis-h fa-lg fa-fw",
         "ThumbnailsView" : "fa fa-th fa-lg fa-rotate-90 fa-fw"
-      }
+      },
+      unsupportedBrowser = false
     }, options);
 
     this.init();
@@ -65,7 +66,7 @@
       manifest = _this.manifest.jsonLd,
       focusState = _this.viewType,
       templateData = {};
-
+      this.unsupportedBrowser = _this.detectUnsupportedBrowsers();
       //make sure annotations list is cleared out when changing objects within window
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
@@ -909,6 +910,16 @@
       this.element.find('.add-slot-above').on('click', function() {
         _this.eventEmitter.publish('SPLIT_UP_FROM_WINDOW', _this.id);
       });
+    },
+    
+    /*
+      Current unsupported browsers:
+         - Microsoft IE
+         - Microsof Edge
+    */
+    detectUnsupportedBrowsers: function(){
+      var unsupported = !!navigator.userAgent.match(/Trident/g) || !!navigator.userAgent.match(/MSIE/g) || !!navigator.userAgent.match(/Edge/g);
+      return unsupported;
     },
 
     // template should be based on workspace type

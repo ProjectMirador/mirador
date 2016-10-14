@@ -17,9 +17,17 @@
 
     init: function() {
       this.createStateMachines();
-
       var showAnno = typeof this.showAnno !== 'undefined' ? this.showAnno : this.canvasControls.annotations.annotationLayer,
       showImageControls = typeof this.showImageControls !== 'undefined' ? this.showImageControls : this.canvasControls.imageManipulation.manipulationLayer;
+      /* 
+        unsupported browsers are detected at the window level.  If it is an unsupported browser, we want to hide certain features.
+        Set those feature hide/show flags to false here.
+      */
+      if(showImageControls){ //first, make sure this is already true in the first place
+        showImageControls = !this.unsupportedBrowser; //if it is true, we would still want to hide it if using an unsupported browser
+        this.canvasControls.imageManipulation.manipulationLayer = !this.unsupportedBrowser; //not 100% sure if we have to do this, but it seems like it.
+      }
+      //any other hud elements to hide could be listed like showImageControls below in if statements. 
       this.element = jQuery(this.template({
         showNextPrev : this.showNextPrev,
         showBottomPanel : typeof this.bottomPanelAvailable === 'undefined' ? true : this.bottomPanelAvailable,
