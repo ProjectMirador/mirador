@@ -123,20 +123,6 @@ describe('Overlay', function() {
     expect(this.overlay.currentTool.logoClass).toBe(this.pin.logoClass);
   });
 
-  it('toggleDefaultDrawingTool', function() {
-    this.eventEmitter.publish('toggleDefaultDrawingTool.' + this.windowObjMock.windowId, []);
-
-    expect(this.overlay.currentTool).toBeNull();
-
-    this.overlay.disabled = false;
-    this.rectangle = new Mirador.Rectangle();
-    this.overlay.availableAnnotationDrawingTools = ['Rectangle', 'Pin'];
-    this.eventEmitter.publish('toggleDefaultDrawingTool.' + this.windowObjMock.windowId, []);
-
-    expect(this.overlay.currentTool).not.toBeNull();
-    expect(this.overlay.currentTool.logoClass).toBe(this.rectangle.logoClass);
-  });
-
   it('changeBorderColor', function() {
     var color = '#ff0000';
     this.eventEmitter.publish('changeBorderColor.' + this.windowObjMock.windowId, [color]);

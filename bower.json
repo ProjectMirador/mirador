@@ -1,7 +1,7 @@
 {
-  "name": "Mirador",
-  "version": "2.0.0",
-  "homepage": "https://github.com/IIIF/m2",
+  "name": "mirador",
+  "version": "2.1.1",
+  "homepage": "https://github.com/ProjectMirador/mirador",
   "authors": [
     "aeschylus <scipioaffricanus@gmail.com>"
   ],
@@ -20,6 +20,7 @@
     "tests"
   ],
   "dependencies": {
+    "jquery": "https://code.jquery.com/jquery-3.1.1.min.js",
     "jquery-ui": "*",
     "jquery.scrollTo": "~1.4.12",
     "mousetrap": "~1.4.6",
@@ -33,5 +34,8 @@
   "devDependencies": {
     "sinon-server": "http://sinonjs.org/releases/sinon-server-1.12.2.js",
     "jasmine-jquery": "~2.0.6"
+  },
+  "resolutions": {
+    "jquery": ">=1.7.2"
   }
 }

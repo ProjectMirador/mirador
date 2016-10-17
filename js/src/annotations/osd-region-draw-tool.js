@@ -12,7 +12,6 @@
     this.eventsSubscriptions = [];
 
     this.init();
-    this.listenForActions();
   };
 
   $.OsdRegionDrawTool.prototype = {
@@ -21,26 +20,50 @@
       this.svgOverlay = this.osdViewer.svgOverlay(this.osdViewer.id, this.windowId, this.state, this.eventEmitter);
       this.svgOverlay.show();
       this.svgOverlay.disable();
+
+      this.listenForActions();
     },
 
-    enterCreateMode: function() {
-      this.osdViewer.setMouseNavEnabled(false);
-      this.svgOverlay.show();
-      this.svgOverlay.enable();
-    },
-
-    enterCreateShapeMode: function() {
-      if(!this.svgOverlay.inEditMode){
-        this.osdViewer.setMouseNavEnabled(false);
-        this.svgOverlay.show();
-        this.svgOverlay.enable();
+    enterDisplayAnnotations: function() {
+      // if a user selected the pointer mode but is still actively
+      // working on an annotation, don't re-render
+      if (!this.svgOverlay.inEditOrCreateMode) {
+        this.exitEditMode(true);
+        this.render();
       }
     },
 
-    enterEditMode: function() {
+    enterCreateAnnotation: function() {
+      // if a user selected went from pointer to a shape but is still actively
+      // working on an annotation, don't re-render
+      if (!this.svgOverlay.inEditOrCreateMode) {
+        this.osdViewer.setMouseNavEnabled(false);
+        this.svgOverlay.show();
+        this.svgOverlay.enable();
+        this.render();
+      } else {
+        this.svgOverlay.checkToRemoveFocus();
+      }
+    },
+
+    enterCreateShape: function() {
+      if (!this.svgOverlay.inEditOrCreateMode) {
+        this.osdViewer.setMouseNavEnabled(false);
+        this.svgOverlay.show();
+        this.svgOverlay.enable();
+      } else {
+        this.svgOverlay.checkToRemoveFocus();
+      }
+    },
+
+    enterEditAnnotation: function() {
       this.osdViewer.setMouseNavEnabled(false);
       this.svgOverlay.show();
       this.svgOverlay.enableEdit();
+    },
+
+    enterDefault: function() {
+      this.exitEditMode(false);
     },
 
     exitEditMode: function(showAnnotations) {
@@ -54,7 +77,6 @@
     },
 
     render: function() {
-
       this.svgOverlay.restoreEditedShapes();
       this.svgOverlay.paperScope.activate();
       this.svgOverlay.paperScope.project.clear();
@@ -68,10 +90,12 @@
             return deferred;
           } else if (annotation.on.selector.value.indexOf('<svg') !== -1) {
             shapeArray = _this.svgOverlay.parseSVG(annotation.on.selector.value, annotation);
-          } else {
+          } else if (annotation.on.selector.value.indexOf('xywh=') !== -1) {
             shapeArray = _this.parseRectangle(annotation.on.selector.value, annotation);
+          } else {
+            return deferred;
           }
-        } else if (annotation.on && typeof annotation.on === 'string') {
+        } else if (annotation.on && typeof annotation.on === 'string' && annotation.on.indexOf('xywh=') !== -1) {
           shapeArray = _this.parseRectangle(annotation.on, annotation);
         } else {
           return deferred;
@@ -179,14 +203,8 @@
 
       _this.osdViewer.addHandler('close', this._thisDestroy);
 
-      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('refreshOverlay.' + _this.windowId, function(event) {
-        _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
-        // return to pointer mode
-        _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' + _this.windowId);
-        _this.svgOverlay.restoreEditedShapes();
-        _this.svgOverlay.deselectAll();
-        _this.svgOverlay.mode = '';
-        _this.render();
+      this.eventsSubscriptions.push(this.eventEmitter.subscribe('DESTROY_EVENTS.'+this.windowId, function(event) {
+        _this.destroy();
       }));
 
       this.eventsSubscriptions.push(_this.eventEmitter.subscribe('updateTooltips.' + _this.windowId, function(event, location, absoluteLocation) {

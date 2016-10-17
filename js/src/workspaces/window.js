@@ -72,6 +72,8 @@
       }
       //unsubscribe from stale events as they will be updated with new module calls
       _this.eventEmitter.unsubscribe(('currentCanvasIDUpdated.' + _this.id));
+      //make sure annotation-related events are destroyed so things work properly as we switch between objects
+      _this.eventEmitter.publish('DESTROY_EVENTS.'+_this.id);
 
       _this.removeBookView();
 
@@ -167,7 +169,7 @@
           }
         });
       });
-      //TODO: this needs to switch the postion when it is a right to left manifest
+      //TODO: this needs to switch the position when it is a right to left manifest
       this.element.find('.manifest-info .window-manifest-title').qtip({
         content: {
           text: jQuery(this).attr('title'),
@@ -364,22 +366,20 @@
 
     bindAnnotationEvents: function() {
       var _this = this;
-      _this.eventEmitter.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, osdOverlay) {
+      _this.eventEmitter.subscribe('annotationCreated.'+_this.id, function(event, oaAnno, eventCallback) {
         var annoID;
         //first function is success callback, second is error callback
         _this.endpoint.create(oaAnno, function(data) {
           //the success callback expects the OA annotation be returned
           annoID = String(data['@id']); //just in case it returns a number
           _this.annotationsList.push(data);
-          //update overlay so it can be a part of the annotationList rendering
-          jQuery(osdOverlay).removeClass('osd-select-rectangle').addClass('annotation').attr('id', annoID);
           _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
+          //anything that depends on the completion of other bits, call them now
+          eventCallback();
         },
         function() {
           //provide useful feedback to user
           console.log("There was an error saving this new annotation");
-          //remove this overlay because we couldn't save annotation
-          jQuery(osdOverlay).remove();
         });
       });
 
@@ -659,6 +659,7 @@
         this.focusModules.ImageView = new $.ImageView({
           manifest: this.manifest,
           appendTo: this.element.find('.view-container'),
+          qtipElement: this.element,
           windowId: this.id,
           state:  this.state,
           eventEmitter: this.eventEmitter,
@@ -771,20 +772,24 @@
     getAnnotations: function() {
       //first look for manifest annotations
       var _this = this,
-      url = _this.manifest.getAnnotationsListUrl(_this.canvasID);
+      urls = _this.manifest.getAnnotationsListUrls(_this.canvasID);
 
-      if (url !== false) {
-        jQuery.get(url, function(list) {
-          _this.annotationsList = _this.annotationsList.concat(list.resources);
-          jQuery.each(_this.annotationsList, function(index, value) {
-            //if there is no ID for this annotation, set a random one
-            if (typeof value['@id'] === 'undefined') {
-              value['@id'] = $.genUUID();
-            }
-            //indicate this is a manifest annotation - which affects the UI
-            value.endpoint = "manifest";
+      if (urls.length !== 0) {
+        jQuery.each(urls, function(index, url) {
+          jQuery.get(url, function(list) {
+            var annotations = list.resources;
+            jQuery.each(annotations, function(index, value) {
+              //if there is no ID for this annotation, set a random one
+              if (typeof value['@id'] === 'undefined') {
+                value['@id'] = $.genUUID();
+              }
+              //indicate this is a manifest annotation - which affects the UI
+              value.endpoint = "manifest";
+            });
+            // publish event only if one url fetch is successful
+            _this.annotationsList = _this.annotationsList.concat(annotations);
+            _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
           });
-          _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
         });
       }
 

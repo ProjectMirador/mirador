@@ -95,9 +95,10 @@
           }
         });
       }
+
       // see: http://html5demos.com/history and http://diveintohtml5.info/history.html
       // put history stuff here, for a great cross-browser demo, see: http://browserstate.github.io/history.js/demo/
-      //http://stackoverflow.com/questions/17801614/popstate-passing-popped-state-to-event-handler
+      // http://stackoverflow.com/questions/17801614/popstate-passing-popped-state-to-event-handler
 
       //also remove ?json bit so it's a clean URL
       var cleanURL = window.location.href.replace(window.location.search, "");
@@ -184,6 +185,10 @@
       // listen to existing events and use the
       // available data to update the appropriate
       // field in the stored config.
+
+      _this.eventEmitter.subscribe('manifestsPanelVisible.set', function(event, manifestPanelVisible) {
+        _this.set("manifestPanelVisible", manifestPanelVisible, {parent: "currentConfig"} );
+      });
 
       _this.eventEmitter.subscribe('windowUpdated', function(event, options) {
         var windowObjects = _this.currentConfig.windowObjects;
@@ -299,6 +304,7 @@
         });
         _this.set("windowObjects", windowObjects, {parent: "currentConfig"} );
       });
+
 
       _this.eventEmitter.subscribe('DELETE_FROM_CONFIG', function(event, options) {
         var windowObjects = jQuery.grep(_this.currentConfig.windowObjects, function(window, index) {

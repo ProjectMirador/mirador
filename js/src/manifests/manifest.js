@@ -23,7 +23,7 @@
       // accessor methods. We can just set the
       // jsonLd directly, and the request needs to
       // be a jQuery deferred object that is completed
-      // imediately upon creation. This allows
+      // immediately upon creation. This allows
       // components listening for this request to finish
       // to react immediately without having to be
       // re-written.
@@ -141,15 +141,19 @@
       }
       return _this.jsonLd.sequences[0].canvases;
     },
-    getAnnotationsListUrl: function(canvasId) {
+    getAnnotationsListUrls: function(canvasId) {
       var _this = this;
       var canvas = jQuery.grep(_this.getCanvases(), function(canvas, index) {
         return canvas['@id'] === canvasId;
-      })[0];
+      })[0],
+      annotationsListUrls = [];
 
       if (canvas && canvas.otherContent) {
-        return canvas.otherContent[0]['@id'];
-      } else { return false; }
+        for (var i = 0; i < canvas.otherContent.length; i++) {
+          annotationsListUrls.push(canvas.otherContent[i]['@id']);
+        }
+      }
+      return annotationsListUrls;
     },
     getStructures: function() {
       var _this = this;

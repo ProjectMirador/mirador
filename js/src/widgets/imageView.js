@@ -68,6 +68,7 @@
       // throughout any updates to the osd canvas.
       this.hud = new $.Hud({
         appendTo: this.element,
+        qtipElement: this.qtipElement,
         bottomPanelAvailable: this.bottomPanelAvailable,
         windowId: this.windowId,
         canvasControls: this.canvasControls,
@@ -103,11 +104,11 @@
         var dodgers = _this.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls');
         var arrows = _this.element.find('.mirador-osd-next, .mirador-osd-previous');
         if (visible === true) {
-          dodgers.css({transform: 'translateY(-130px)'});
-          arrows.css({transform: 'translateY(-65px)'});
+          dodgers.addClass('bottom-panel-open');
+          arrows.addClass('bottom-panel-open');
         } else {
-          dodgers.css({transform: 'translateY(0)'});
-          arrows.css({transform: 'translateY(0)'});
+          dodgers.removeClass('bottom-panel-open');
+          arrows.removeClass('bottom-panel-open');
         }
       });
 
@@ -148,21 +149,14 @@
         _this.element.find(elementSelector).fadeOut(duration, complete);
       });
 
-      _this.eventEmitter.subscribe('SET_STATE_MACHINE_POINTER.' + _this.windowId, function(event) {
-        if (_this.hud.annoState.current === 'none') {
-          _this.hud.annoState.startup();
-        } else if (_this.hud.annoState.current === 'off') {
-          _this.hud.annoState.displayOn();
-        } else {
-          _this.hud.annoState.choosePointer();
-        }
-      });
-
       _this.eventEmitter.subscribe('DEFAULT_CURSOR.' + _this.windowId, function(event) {
         jQuery(_this.osd.canvas).css("cursor", "default");
       });
       _this.eventEmitter.subscribe('CROSSHAIR_CURSOR.' + _this.windowId, function(event) {
         jQuery(_this.osd.canvas).css("cursor", "crosshair");
+      });
+      _this.eventEmitter.subscribe('POINTER_CURSOR.' + _this.windowId, function(event) {
+        jQuery(_this.osd.canvas).css("cursor", "pointer");
       });
       //Related to Annotations HUD
     },
@@ -184,10 +178,12 @@
         }
         if (_this.hud.annoState.current === 'off') {
           _this.hud.annoState.displayOn(this);
+          _this.annotationState = 'on';
         } else {
           //make sure to force the controls back to auto fade
           _this.forceShowControls = false;
           _this.hud.annoState.displayOff(this);
+          _this.annotationState = 'off';
         }
       });
 
@@ -299,6 +295,38 @@
           '-o-filter'      : filterCSS,
           '-ms-filter'     : filterCSS
         });
+      }
+
+      function resetImageManipulationControls() {
+        //reset rotation
+        if (_this.osd) {
+          _this.osd.viewport.setRotation(0);
+        }
+
+        //reset brightness
+        filterValues.brightness = "brightness(100%)";
+        _this.element.find('.mirador-osd-brightness-slider').slider('option','value',100);
+        _this.element.find('.mirador-osd-brightness-slider').find('.percent').text(100 + '%');
+
+        //reset contrast
+        filterValues.contrast = "contrast(100%)";
+        _this.element.find('.mirador-osd-contrast-slider').slider('option','value',100);
+        _this.element.find('.mirador-osd-contrast-slider').find('.percent').text(100 + '%');
+
+        //reset saturation
+        filterValues.saturate = "saturate(100%)";
+        _this.element.find('.mirador-osd-saturation-slider').slider('option','value',100);
+        _this.element.find('.mirador-osd-saturation-slider').find('.percent').text(100 + '%');
+
+        //reset grayscale
+        filterValues.grayscale = "grayscale(0%)";
+        _this.element.find('.mirador-osd-grayscale').removeClass('selected');
+
+        //reset color inversion
+        filterValues.invert = "invert(0%)";
+        _this.element.find('.mirador-osd-invert').removeClass('selected');
+
+        setFilterCSS();
       }
 
       this.element.find('.mirador-osd-rotate-right').on('click', function() {
@@ -419,35 +447,11 @@
       });
 
       this.element.find('.mirador-osd-reset').on('click', function() {
-        //reset rotation
-        if (_this.osd) {
-          _this.osd.viewport.setRotation(0);
-        }
+        resetImageManipulationControls();
+      });
 
-        //reset brightness
-        filterValues.brightness = "brightness(100%)";
-        _this.element.find('.mirador-osd-brightness-slider').slider('option','value',100);
-        _this.element.find('.mirador-osd-brightness-slider').find('.percent').text(100 + '%');
-
-        //reset contrast
-        filterValues.contrast = "contrast(100%)";
-        _this.element.find('.mirador-osd-contrast-slider').slider('option','value',100);
-        _this.element.find('.mirador-osd-contrast-slider').find('.percent').text(100 + '%');
-
-        //reset saturation
-        filterValues.saturate = "saturate(100%)";
-        _this.element.find('.mirador-osd-saturation-slider').slider('option','value',100);
-        _this.element.find('.mirador-osd-saturation-slider').find('.percent').text(100 + '%');
-
-        //reset grayscale
-        filterValues.grayscale = "grayscale(0%)";
-        _this.element.find('.mirador-osd-grayscale').removeClass('selected');
-
-        //reset color inversion
-        filterValues.invert = "invert(0%)";
-        _this.element.find('.mirador-osd-invert').removeClass('selected');
-
-        setFilterCSS();
+      this.eventEmitter.subscribe('resetImageManipulationControls.'+this.windowId, function() {
+        resetImageManipulationControls();
       });
       //Image manipulation controls
     },
@@ -592,13 +596,13 @@
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
           } else {
-            //else reset bounds for this image
+            // else reset bounds for this image
             _this.setBounds();
           }
 
           _this.addAnnotationsLayer(_this.elemAnno);
 
-          //get the state before resetting it so we can get back to that state
+          // get the state before resetting it so we can get back to that state
           var originalState = _this.hud.annoState.current;
           var selected = _this.element.find('.mirador-osd-edit-mode.selected');
           var shape = null;
@@ -656,6 +660,7 @@
           osdBounds:        null,
           zoomLevel:        null
         };
+        this.eventEmitter.publish('resetImageManipulationControls.'+this.windowId);
         this.osd.close();
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});

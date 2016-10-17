@@ -236,7 +236,7 @@
       }
 
       function mutateAndAdd(node, indexDifference) {
-        // Locally mutate the tree to accomodate a
+        // Locally mutate the tree to accommodate a
         // sibling of another kind, transforming
         // both the target node and its parent.
         var newParent = _this.newNode(node.type, node.parent);
@@ -486,22 +486,22 @@
         var mergedConfig = jQuery.extend(true, {}, _this.state.getStateProperty('windowSettings'), windowConfig);
 
         //"rename" some keys in the merged object to align settings parameters with window parameters
-        if (mergedConfig.loadedManifest) {
+        if (mergedConfig.hasOwnProperty('loadedManifest')) {
           mergedConfig.manifest = _this.state.getStateProperty('manifests')[mergedConfig.loadedManifest];
           delete mergedConfig.loadedManifest;
         }
 
-        if (mergedConfig.bottomPanel) {
+        if (mergedConfig.hasOwnProperty('bottomPanel')) {
           mergedConfig.bottomPanelAvailable = mergedConfig.bottomPanel;
           delete mergedConfig.bottomPanel;
         }
 
-        if (mergedConfig.sidePanel) {
+        if (mergedConfig.hasOwnProperty('sidePanel')) {
           mergedConfig.sidePanelAvailable = mergedConfig.sidePanel;
           delete mergedConfig.sidePanel;
         }
 
-        if (mergedConfig.overlay) {
+        if (mergedConfig.hasOwnProperty('overlay')) {
           mergedConfig.overlayAvailable = mergedConfig.overlay;
           delete mergedConfig.overlay;
         }

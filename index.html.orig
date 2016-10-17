@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="build/mirador/css/mirador-combined.css">
     <title>Mirador Viewer</title>
     <style type="text/css">
-     #viewer {  width: 100%; height: 100%; }
+     #viewer {  width: 100%; height: 100%; position: fixed;}
     </style>
 </head>
 <body>
@@ -22,8 +22,8 @@
         "id": "viewer",
         "layout": "1x1",
         "mainMenuSettings" : {
-          
-          "show": true, 
+
+          "show": true,
           "buttons" : {"bookmark" : true, "layout" : true},
           "userButtons" : [
             {
@@ -32,36 +32,29 @@
             "attributes" : {"class": "links", "href": "http://scta.info"}
             }
           ],
-          
+
           "userLogo": {
-            "label": "Sentences Commentary Text Archive Image Viewer", 
+            "label": "Sentences Commentary Text Archive Image Viewer",
             "attributes": { "id": "scta-logo", "href": "http://scta.info"}
           }
         },
-        
+
         "data" : selectdataset("remote"),
-        //"data" : [
-        //  {"collectionUri" : "http://scta.info/iiif/collection/scta"}
-        //]
-        
-        //"windowObjects" : [
-        //  {"loadedManifest" : "http://scta.info/iiif/pg-lon/manifest", 
-        //  "canvasID" : "http://scta.info/iiif/pg-lon/canvas/L20r", 
-        //  "viewType" : "ImageView"}
-        //]
-        
+        "windowObjects": [],
+        "annotationEndpoint": { "name":"Local Storage", "module": "LocalStorageEndpoint" }
+
       });
     });
 
   function selectdataset(source){
-    
+
     if (source == 'local')
       var baseurl = "localhost:4567"
     else if (source == 'remote')
       var baseurl = "scta.info"
-    
 
-    var dataset = [   
+
+    var dataset = [
       {"manifestUri": "http://" + baseurl + "/iiif/263-venz253/manifest"},
       {"manifestUri": "http://" + baseurl + "/iiif/263-kra726/manifest"},
       {"manifestUri": "http://" + baseurl + "/iiif/pl-hopkins/manifest"},
@@ -117,8 +110,8 @@
     return [dataset[0], dataset[1], dataset[3], dataset[4], dataset[5], dataset[27], dataset[28], dataset[29], dataset[30], dataset[31], dataset[32], dataset[38]]
     }
   </script>
-  
-  
+
+
 </script>
 </body>
 =======
@@ -127,12 +120,12 @@
          "id": "viewer",
          "layout": "1x1",
          "data": [
-           { "manifestUri": "http://iiif.lib.harvard.edu/manifests/drs:48309543", "location": "Harvard University"},
-           { "manifestUri": "http://iiif.lib.harvard.edu/manifests/drs:5981093", "location": "Harvard University"},
-           { "manifestUri": "http://iiif.lib.harvard.edu/manifests/via:olvwork576793", "location": "Harvard University"},
-           { "manifestUri": "http://iiif.lib.harvard.edu/manifests/drs:14033171", "location": "Harvard University"},
-           { "manifestUri": "http://iiif.lib.harvard.edu/manifests/drs:46909368", "location": "Harvard University"},
-           { "manifestUri": "http://iiif.lib.harvard.edu/manifests/drs:48331776", "location": "Harvard University"},
+           { "manifestUri": "https://iiif.lib.harvard.edu/manifests/drs:48309543", "location": "Harvard University"},
+           { "manifestUri": "https://iiif.lib.harvard.edu/manifests/drs:5981093", "location": "Harvard University"},
+           { "manifestUri": "https://iiif.lib.harvard.edu/manifests/via:olvwork576793", "location": "Harvard University"},
+           { "manifestUri": "https://iiif.lib.harvard.edu/manifests/drs:14033171", "location": "Harvard University"},
+           { "manifestUri": "https://iiif.lib.harvard.edu/manifests/drs:46909368", "location": "Harvard University"},
+           { "manifestUri": "https://iiif.lib.harvard.edu/manifests/drs:48331776", "location": "Harvard University"},
            { "manifestUri": "http://iiif.harvardartmuseums.org/manifests/object/299843", "location": "Harvard University"},
            { "manifestUri": "http://iiif.harvardartmuseums.org/manifests/object/304136", "location": "Harvard University"},
            { "manifestUri": "http://iiif.harvardartmuseums.org/manifests/object/198021", "location": "Harvard University"},
@@ -144,6 +137,9 @@
            { "manifestUri": "https://purl.stanford.edu/rd447dz7630/iiif/manifest.json", "location": "Stanford University"},
            { "manifestUri": "http://dms-data.stanford.edu/data/manifests/Stanford/ege1/manifest.json", "location": "Stanford University"},
            { "manifestUri": "http://dams.llgc.org.uk/iiif/4574752/manifest.json", "location": "National Library of Wales"},
+           { "manifestUri": "http://dev.llgc.org.uk/iiif/ww1posters.json", "location": "National Library of Wales"},
+           { "manifestUri": "http://dams.llgc.org.uk/iiif/newspaper/issue/3320640/manifest.json", "location": "National Library of Wales"},
+           { "manifestUri": "http://dams.llgc.org.uk/iiif/2.0/1465298/manifest.json", "location": "National Library of Wales"},
            { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/Admont23", "location": "Yale University"},
            { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/Admont43", "location": "Yale University"},
            { "manifestUri": "http://manifests.ydc2.yale.edu/manifest/BeineckeMS10", "location": "Yale University"},
@@ -174,5 +170,5 @@
      });
     </script>
   </body>
->>>>>>> upstream/release2.1
+>>>>>>> upstream-master
 </html>

@@ -191,21 +191,33 @@
       jQuery(selector + ' a.delete').on("click", function(event) {
         event.preventDefault();
         var elem = this;
-        new $.DialogBuilder().confirm(i18n.t('deleteAnnotation'),function(result){
-          if(!result){
-            return;
+        new $.DialogBuilder(viewerParams.container).dialog({
+          message: i18n.t('deleteAnnotation'),
+          closeButton: false,
+          buttons: {
+            'no': {
+              label: i18n.t('no'),
+              className: 'btn-default',
+              callback: function() {
+                return;
+              }
+            },
+            'yes': {
+              label: i18n.t('yes'),
+              className: 'btn-primary',
+              callback: function() {
+                var display = jQuery(elem).parents('.annotation-display');
+                var id = display.attr('data-anno-id');
+                var callback = function(){
+                  api.hide();
+                  display.remove();
+                };
+
+                _this.eventEmitter.publish('onAnnotationDeleted.' + _this.windowId, [id,callback]);
+              }
+            }
           }
-          var display = jQuery(elem).parents('.annotation-display');
-          var id = display.attr('data-anno-id');
-          var callback = function(){
-            api.hide();
-            display.remove();
-          };
-
-          _this.eventEmitter.publish('onAnnotationDeleted.' + _this.windowId, [id,callback]);
-
         });
-
       });
 
       jQuery(selector + ' a.edit').on("click", function(event) {
@@ -214,11 +226,11 @@
         var id = display.attr('data-anno-id');
         var oaAnno = viewerParams.getAnnoFromRegion(id)[0];
         // Don't show built in editor if external is available
-        if(!_this.state.getStateProperty('availableExternalCommentsPanel')){
+        if (!_this.state.getStateProperty('availableExternalCommentsPanel')) {
            _this.freezeQtip(api, oaAnno, viewerParams);
            _this.removeAllEvents(api, viewerParams);
            _this.addEditorEvents(api, viewerParams);
-        }else{
+        } else {
           _this.eventEmitter.publish('annotationInEditMode.' + _this.windowId,[oaAnno]);
         }
 

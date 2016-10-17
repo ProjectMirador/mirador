@@ -40,13 +40,12 @@ module.exports = function(grunt) {
     'js/lib/isfahan.js',
     'js/lib/paper-full.min.js',
     'js/lib/spectrum.js',
-<<<<<<< HEAD
-    'js/lib/jquery.awesome-cursor.js',
     'js/lib/i18next.min.js',
+<<<<<<< HEAD
     'bower_components/simplePagination.js/jquery.simplePagination.js'
 =======
-    'js/lib/i18next.min.js'
->>>>>>> upstream/release2.1
+    'js/lib/modernizr.custom.js'
+>>>>>>> upstream-master
   ],
 
   // libraries/plugins for running tests
@@ -99,17 +98,6 @@ module.exports = function(grunt) {
       },
       css: {
         src: [
-<<<<<<< HEAD
-        'css/normalize.css',
-        'css/font-awesome.css',
-        'css/jquery-ui.min.css',
-        'css/layout-default-latest.css',
-        'css/jquery.qtip.min.css',
-        'css/spectrum.css',
-        'css/mirador.css',
-        'bower_components/simplePagination.js/simplePagination.css',
-        'css/material-icons.css'
-=======
           'css/bootstrap.modals.css',
           'css/normalize.css',
           'css/font-awesome.min.css',
@@ -118,8 +106,8 @@ module.exports = function(grunt) {
           'css/jquery.qtip.min.css',
           'css/spectrum.css',
           'css/mirador.css',
-          'css/material-icons.css'
->>>>>>> upstream/release2.1
+          'css/material-icons.css',
+          'bower_components/simplePagination.js/simplePagination.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'
       }

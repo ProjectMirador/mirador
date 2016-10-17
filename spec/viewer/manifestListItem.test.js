@@ -20,7 +20,7 @@ describe('ManifestListItem', function () {
     var listItem = new Mirador.ManifestListItem({
       appendTo: this.appendTo,
       state: new Mirador.SaveController({
-        eventEmitter:this.eventEmitter, 
+        eventEmitter:this.eventEmitter,
         preserveManifestOrder: true,
         data: [
           { "manifestUri": "http://www.example.org/iiif/book1/manifest"},
@@ -35,8 +35,8 @@ describe('ManifestListItem', function () {
 
     var expectedHTML = '<ul>'+
     '<li data-index-number="-1"></li>'+
-    '<li data-index-number="0" style="display: list-item; opacity: 0; ">'+
-    '<div class="repo-image"><img src="build/mirador/images/logos/iiif_logo.png" alt="repoImg"></div>'+
+    '<li data-index-number="0" style="opacity: 0; ">'+
+    '<div class="repo-image"><span class="default-logo"></span></div>'+
     '<div class="select-metadata"><div class="manifest-title"><h3 title="Dummy Manifest">Dummy Manifest</h3></div>'+
     '<div class="item-info"><div class="item-info-row"><div class="repo-label">Dummy Location</div>'+
     '<div class="canvas-count">1 </div></div></div></div>'+
@@ -57,7 +57,7 @@ describe('ManifestListItem', function () {
     var listItem = new Mirador.ManifestListItem({
       appendTo: this.appendTo,
       state: new Mirador.SaveController({
-        eventEmitter:this.eventEmitter, 
+        eventEmitter:this.eventEmitter,
         preserveManifestOrder: true,
         data: [
           { "manifestUri": "http://www.example.org/iiif/book2/manifest"},
@@ -73,8 +73,8 @@ describe('ManifestListItem', function () {
     var expectedHTML = '<ul>'+
     '<li data-index-number="-1"></li>'+
     '<li data-index-number="1"></li>'+
-    '<li data-index-number="2" style="display: list-item; opacity: 0; ">'+
-    '<div class="repo-image"><img src="build/mirador/images/logos/iiif_logo.png" alt="repoImg"></div>'+
+    '<li data-index-number="2" style="opacity: 0; ">'+
+    '<div class="repo-image"><span class="default-logo"></span></div>'+
     '<div class="select-metadata"><div class="manifest-title"><h3 title="Dummy Manifest">Dummy Manifest</h3></div>'+
     '<div class="item-info"><div class="item-info-row"><div class="repo-label">Dummy Location</div>'+
     '<div class="canvas-count">1 </div></div></div></div>'+
@@ -94,7 +94,7 @@ describe('ManifestListItem', function () {
     var listItem = new Mirador.ManifestListItem({
       appendTo: this.appendTo,
       state: new Mirador.SaveController({
-        eventEmitter:this.eventEmitter, 
+        eventEmitter:this.eventEmitter,
         preserveManifestOrder: true,
         data: [
           { "manifestUri": "http://www.example.org/iiif/book2/manifest"},
@@ -115,8 +115,8 @@ describe('ManifestListItem', function () {
     '<li data-index-number="-1"></li>'+
     '<li data-index-number="1"></li>'+
     '<li data-index-number="5"></li>'+
-    '<li data-index-number="6" style="display: list-item; opacity: 0; ">'+
-    '<div class="repo-image"><img src="build/mirador/images/logos/iiif_logo.png" alt="repoImg"></div>'+
+    '<li data-index-number="6" style="opacity: 0; ">'+
+    '<div class="repo-image"><span class="default-logo"></span></div>'+
     '<div class="select-metadata"><div class="manifest-title"><h3 title="Dummy Manifest">Dummy Manifest</h3></div>'+
     '<div class="item-info"><div class="item-info-row"><div class="repo-label">Dummy Location</div>'+
     '<div class="canvas-count">1 </div></div></div></div>'+
@@ -135,7 +135,7 @@ describe('ManifestListItem', function () {
     var listItem = new Mirador.ManifestListItem({
       appendTo: this.appendTo,
       state: new Mirador.SaveController({
-        eventEmitter:this.eventEmitter, 
+        eventEmitter:this.eventEmitter,
         preserveManifestOrder: true,
         data: [
           { "manifestUri": "http://www.example.org/iiif/book2/manifest"},
@@ -171,8 +171,8 @@ describe('ManifestListItem', function () {
     '<li data-index-number="13"></li>'+
     '<li data-index-number="14"></li>'+
     '<li data-index-number="16"></li>'+
-    '<li data-index-number="17" style="display: list-item; opacity: 0; ">'+
-    '<div class="repo-image"><img src="build/mirador/images/logos/iiif_logo.png" alt="repoImg"></div>'+
+    '<li data-index-number="17" style="opacity: 0; ">'+
+    '<div class="repo-image"><span class="default-logo"></span></div>'+
     '<div class="select-metadata"><div class="manifest-title"><h3 title="Dummy Manifest">Dummy Manifest</h3></div>'+
     '<div class="item-info"><div class="item-info-row"><div class="repo-label">Dummy Location</div>'+
     '<div class="canvas-count">1 </div></div></div></div>'+
@@ -188,7 +188,7 @@ describe('ManifestListItem', function () {
     var listItem = new Mirador.ManifestListItem({
       appendTo: this.appendTo,
       state: new Mirador.SaveController({
-        eventEmitter:this.eventEmitter, 
+        eventEmitter:this.eventEmitter,
         preserveManifestOrder: true,
         data: [
           { "manifestUri": "http://www.example.org/iiif/book2/manifest"},
@@ -201,8 +201,8 @@ describe('ManifestListItem', function () {
     });
 
     var expectedHTML = '<ul>'+
-    '<li data-index-number="-1" style="display: list-item; opacity: 0; ">'+
-    '<div class="repo-image"><img src="build/mirador/images/logos/iiif_logo.png" alt="repoImg"></div>'+
+    '<li data-index-number="-1" style="opacity: 0; ">'+
+    '<div class="repo-image"><span class="default-logo"></span></div>'+
     '<div class="select-metadata"><div class="manifest-title"><h3 title="Dummy Manifest">Dummy Manifest</h3></div>'+
     '<div class="item-info"><div class="item-info-row"><div class="repo-label">Dummy Location</div>'+
     '<div class="canvas-count">1 </div></div></div></div>'+
