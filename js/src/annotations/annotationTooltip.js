@@ -153,19 +153,19 @@
           event: false
         },
         events: {
-          show: function(event, api) {
+          shown: function(event, api) {
             if (params.onTooltipShown) { params.onTooltipShown(event, api); }
           },
           hidden: function(event, api) {
             if (params.onTooltipHidden) { params.onTooltipHidden(event, api); }
+            _this.removeAllEvents(api, params);
           },
           visible: function (event, api) {
-            _this.removeAllEvents(api, params);
             _this.addViewerEvents(api, params);
           },
           move: function (event, api) {
-            _this.removeAllEvents(api, params);
-            _this.addViewerEvents(api, params);
+           // _this.removeAllEvents(api, params);
+           // _this.addViewerEvents(api, params);
           }
         }
       });
@@ -232,6 +232,8 @@
            _this.addEditorEvents(api, viewerParams);
         } else {
           _this.eventEmitter.publish('annotationInEditMode.' + _this.windowId,[oaAnno]);
+          api.destroy();
+          jQuery(api.tooltip).remove();
         }
 
         _this.eventEmitter.publish('SET_ANNOTATION_EDITING.' + _this.windowId, {

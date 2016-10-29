@@ -402,10 +402,10 @@
 
       _this.eventEmitter.subscribe('annotationUpdated.'+_this.id, function(event, oaAnno) {
         //first function is success callback, second is error callback
-        _this.endpoint.update(oaAnno, function() {
+        _this.endpoint.update(oaAnno, function(data) {
           jQuery.each(_this.annotationsList, function(index, value) {
-            if (value['@id'] === oaAnno['@id']) {
-              _this.annotationsList[index] = oaAnno;
+            if (value['@id'] === data['@id']) {
+              _this.annotationsList[index] = data;
               return false;
             }
           });
