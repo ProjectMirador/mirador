@@ -11,7 +11,7 @@
     "IIIF"
   ],
   "license": "Apache 2",
-  "private": "false",
+  "private": false,
   "ignore": [
     "**/.*",
     "node_modules",
