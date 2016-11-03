@@ -10,7 +10,7 @@ describe('Mirador | mirador.js', function() {
         done();
       }, 2000);
 
-      Mirador({
+      testContext.mirador = Mirador({
         id: 'viewer',
         layout: "1x2",
         buildPath: 'spec/',
@@ -21,7 +21,7 @@ describe('Mirador | mirador.js', function() {
           "widgets": []
         }]
       });
-  };
+  }
 
   // Tests for object initialization
   describe('Initialization', function() {
@@ -33,28 +33,19 @@ describe('Mirador | mirador.js', function() {
     });
 
     it('should render manifest list items', function() {
-      expect(Mirador.viewer.manifests['spec/data/Walters/bd183mz0176/manifest.json']).not.toBe(null);
-    });
-
-    it('should push in manifest list items', function() {
-      expect(Mirador.viewer.manifestsPanel.manifestListItems.length).toBe(1);
+      expect(this.mirador.viewer.manifestsPanel.manifestListItems.length).toBe(1);
     });
 
   });
   describe('open object from blank workspace', function() {
-    var testContext = {};
-
     it('should start Mirador as blank workspace', function(done) {
-      startMirador(done, testContext);
     });
 
     it('should Select Objects', function(done) {
-      expect(testContext.viewerDiv.find('.addItemLink').first()).toExist();
-      testContext.viewerDiv.find('.addItemLink').first().click();
-
-      setTimeout(function() {
-        done();
-      }, 2000);
+      expect(this.viewerDiv.find('.addItemLink').first()).toExist();
+      this.viewerDiv.find('.addItemLink').first().click();
+      this.viewerDiv.find('.select-metadata').first().click();
+      expect(this.mirador.viewer.workspace.windows[0].manifest.uri).toEqual('spec/data/manifest.json');
     });
 
     it('should show logo specified in manifest', function(done){
@@ -71,24 +62,13 @@ describe('Mirador | mirador.js', function() {
       expect(testContext.viewerDiv.find('.window').first()).not.toExist();
       expect(testContext.viewerDiv.find('.select-metadata').first()).toBeVisible();
       testContext.viewerDiv.find('.select-metadata').first().click();
-      
-      setTimeout(function() {
-        done();
-      }, 2000);
     });
 
     it('should click first page in thumbnail view', function(done) {
       expect(testContext.viewerDiv.find('.window').first()).toExist();
-      setTimeout(function() {
-        done();
-      }, 2000);
     });
-    
+
     it('should click the next button', function(done) {
-      setTimeout(function() {
-        testContext.viewerDiv.remove();
-        done();
-      }, 2000);
-    })
+    });
   });
 });
