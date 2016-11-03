@@ -25,11 +25,12 @@ describe('Mirador | mirador.js', function() {
 
   // Tests for object initialization
   describe('Initialization', function() {
-    beforeEach(function(done) {
+    beforeAll(function(done) {
       startMirador(done, this);
     });
-    afterEach(function() {
+    afterAll(function() {
       this.viewerDiv.remove();
+      delete this.mirador;
     });
 
     it('should render manifest list items', function() {
@@ -38,6 +39,14 @@ describe('Mirador | mirador.js', function() {
 
   });
   describe('open object from blank workspace', function() {
+    beforeAll(function(done) {
+      startMirador(done, this);
+    });
+    afterAll(function() {
+      this.viewerDiv.remove();
+      delete this.mirador;
+    });
+
     it('should start Mirador as blank workspace', function(done) {
     });
 
