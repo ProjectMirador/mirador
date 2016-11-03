@@ -46,6 +46,7 @@ module.exports = function(config) {
       'spec/**/*.stub.js',
       'spec/**/*.js',
       {pattern: 'spec/data/*', watched: true, served: true, included: false},
+      {pattern: 'spec/locales/**', watched: true, served: true, included: false},
       {pattern: 'spec/fixtures/*json', watched: true, served: true, included: false},
     ],
 

@@ -13,6 +13,7 @@ describe('Mirador | mirador.js', function() {
       Mirador({
         id: 'viewer',
         layout: "1x2",
+        buildPath: 'spec/',
         data: [{
           "manifestUri": "spec/data/manifest.json",
           "location": "Stanford University",
