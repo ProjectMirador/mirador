@@ -51,9 +51,10 @@ module.exports = function(config) {
 
 
     // list of files to exclude
-    exclude: [
-      'spec/mirador.test.js'
-    ],
+    // exclude: [
+    // This file holds the integration tests for Mirador
+    //   'spec/mirador.test.js'
+    // ],
 
 
     // preprocess matching files before serving them to the browser
