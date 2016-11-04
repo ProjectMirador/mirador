@@ -84,14 +84,6 @@ module.exports = function(grunt) {
     },
 
     concat: {
-      js: {
-        options: {
-          banner: '//! <%= pkg.name %> <%= pkg.version %>\n' + '//! Built on <%= grunt.template.today("yyyy-mm-dd") %>\n',
-          process: true
-        },
-        src:  [ "<banner>" ].concat(vendors, sources),
-        dest: distribution
-      },
       css: {
         src: [
           'css/bootstrap.modals.css',
@@ -118,10 +110,11 @@ module.exports = function(grunt) {
     uglify: {
       options: {
         preserveComments: 'some',
-        mangle: false
+        mangle: false,
+        sourceMap: true
       },
       mirador: {
-        src: [ distribution ],
+        src: [ vendors, sources ],
         dest: minified
       }
     },
@@ -363,7 +356,7 @@ module.exports = function(grunt) {
   // ----------
   // Build task.
   // Cleans out the build folder and builds the code and images into it, checking lint.
-  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'jshint', 'concat', 'cssmin', 'copy' ]);
+  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'jshint', 'concat', 'uglify', 'cssmin', 'copy' ]);
 
   // ----------
   // Dev Build task.
