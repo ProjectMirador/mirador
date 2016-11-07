@@ -30,10 +30,6 @@
     "jquery-awesome-cursor": "git://github.com/jwarby/jquery-awesome-cursor.git#*",
     "qtip2": "~2.2.1"
   },
-  "devDependencies": {
-    "sinon-server": "http://sinonjs.org/releases/sinon-server-1.12.2.js",
-    "jasmine-jquery": "~2.0.6"
-  },
   "resolutions": {
     "jquery": ">=1.7.2"
   }
