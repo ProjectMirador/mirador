@@ -40,10 +40,11 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-safari-launcher": "^0.1.1",
     "karma-sauce-launcher": "^0.2.10",
-    "karma-spec-reporter": "^0.0.16"
+    "karma-spec-reporter": "^0.0.16",
+    "sinon": "^1.17.6"
   },
   "scripts": {
-    "start": "bower install && grunt",
+    "start": "grunt",
     "test": "./node_modules/grunt-cli/bin/grunt cover jshint coveralls --verbose --full",
     "travis": "./node_modules/grunt-cli/bin/grunt ci --verbose --force",
     "postinstall": "./node_modules/grunt-cli/bin/grunt githooks"
