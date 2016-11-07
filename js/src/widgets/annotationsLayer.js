@@ -17,8 +17,6 @@
     this.init();
   };
 
-  $.AnnotationsLayer.DISPLAY_ANNOTATIONS = 'displayAnnotations';
-
   $.AnnotationsLayer.prototype = {
 
     init: function() {

@@ -41,51 +41,5 @@ describe('JsonLd', function () {
       expect(Mirador.JsonLd.getTextValue(sample, 'en')).toEqual("Super waahoo");
       expect(Mirador.JsonLd.getTextValue(sample)).toEqual("Super waahoo");
     });
-
-    it('should return all values when no value has a langue associated', function() {
-      var sample = ['First value',
-                    'Second value'];
-      expect(Mirador.JsonLd.getTextValue(sample)).toEqual('First value<br/>Second value');
-    });
-
-    it('should return all values that best match the language preference', function() {
-      var sample = [
-        'This is a value without a language.',
-        {'@value': "This is an American value.",
-         '@language': "en-US"},
-        {'@value': "This ia a British value.",
-         '@language': "en-UK"},
-        'This is another value without a language.',
-        {'@value': "C'est une valeur française.",
-         '@language': "fr"}];
-      window.navigator.languages = ['en-US', 'en']
-      expect(Mirador.JsonLd.getTextValue(sample)).toEqual("This is an American value.");
-    });
-
-    it('should pick a language if all values have a language but none match the preference', function() {
-      var sample = [
-        {'@value': "This is an American value.",
-         '@language': "en-US"},
-        {'@value': "This is another American value.",
-         '@language': "en-US"},
-        {'@value': "C'est une valeur française.",
-         '@language': "fr"}];
-      window.navigator.languages = ['de-DE', 'de'];
-      expect(Mirador.JsonLd.getTextValue(sample))
-        .toEqual('This is an American value.<br/>' +
-                 'This is another American value.');
-    });
-
-    it('should return all values without an associated language if some have one, but none match the preference', function() {
-      var sample = [
-        {'@value': "C'est une valeur française.",
-         '@language': "fr"},
-        'This is a value without a language.',
-        'This is another value without a language.'];
-      window.navigator.languages = ['en-US', 'en'];
-      expect(Mirador.JsonLd.getTextValue(sample))
-        .toEqual('This is a value without a language.<br/>' +
-                 'This is another value without a language.');
-    })
   });
 });

@@ -414,13 +414,6 @@
         _this.annoTooltip = null;
         _this.annoEditorVisible = false;
       }));
-
-      this.eventsSubscriptions.push(this.eventEmitter.subscribe("ANNOTATIONS_LIST_UPDATED",function(event,options){
-        if(options.windowId) {
-          _this.eventEmitter.publish("refreshOverlay." + _this.windowId);
-        }
-      }));
-
     },
 
     deleteShape:function(shape){
