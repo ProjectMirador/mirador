@@ -40,7 +40,8 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-safari-launcher": "^0.1.1",
     "karma-sauce-launcher": "^0.2.10",
-    "karma-spec-reporter": "^0.0.16"
+    "karma-spec-reporter": "^0.0.16",
+    "sinon": "^1.17.6"
   },
   "scripts": {
     "start": "bower install && grunt",
