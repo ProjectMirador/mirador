@@ -364,7 +364,6 @@
       //delete targetSlot;
       _this.layoutDescription = root;
       _this.calculateLayout();
-      _this.eventEmitter.publish('slotRemoved',targetSlot);
     },
 
     newNode: function(type, parent) {

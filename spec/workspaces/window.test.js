@@ -2,12 +2,11 @@ describe('Window', function() {
   describe('Basic Operation', function() {
     beforeEach(function() {
       this.eventEmitter = new Mirador.EventEmitter();
-      this.mockedEventEmitter = new MockEventEmitter(this.eventEmitter);
       this.appendTo = jQuery('<div/>');
       Mirador.viewer = {
         // all of this global state should be 
         // removed as soon as possible.
-        eventEmitter: this.mockedEventEmitter,
+        eventEmitter: this.eventEmitter,
         annotationEndpoints: [],
         workspace: {
           slots: []
@@ -91,32 +90,9 @@ describe('Window', function() {
         expect(bottomPanelCalls.count()).toBe(1);
       });
     });
-
-    describe('Destroying', function () {
-
-      it('should respond to windowRemoved', function () {
-        spyOn(this.window,'destroy');
-        this.eventEmitter.publish('windowRemoved', this.window.id);
-        expect(this.window.destroy).toHaveBeenCalled();
-      });
-
-      it('should unsubscribe from all events', function () {
-        this.window.destroy();
-        for(var key in this.window.eventEmitter.events){
-          expect(this.window.eventEmitter.events[key]).toBe(0);
-        }
-      });
-
-      it('should remove dom element',function(){
-        this.window.destroy();
-        expect(this.appendTo.find('.window').length).toBe(0);
-      })
-
-    });
-
   });
 
   describe('Configuration', function() {
 
   });
-});
+})
