@@ -2,15 +2,11 @@ describe('Slot', function () {
   beforeEach(function () {
     var windowElement = jQuery('<div id="MOCK_WINDOW_1"/>');
     this.appendTo = jQuery('<div/>').append(windowElement);
-    this.eventEmitter = new Mirador.EventEmitter();
+    this.eventEmitter = new MockEventEmitter(new Mirador.EventEmitter());
 
     var mockWindow = {
       id: 'MOCK_WINDOW_1',
       element: windowElement
-    };
-
-    var windowConfig = {
-      state: new Mirador.SaveController(jQuery.extend(true, {}, Mirador.DEFAULT_SETTINGS, {eventEmitter:this.eventEmitter}))
     };
 
     this.slot = new Mirador.Slot({
@@ -20,13 +16,23 @@ describe('Slot', function () {
   });
 
   describe('listenForActions', function () {
-    it('should respond to windowRemoved', function () {
-      var window = this.slot.window;
-      expect(this.appendTo.find('#MOCK_WINDOW_1').length).toBe(1);
-      expect(window.element.attr('id')).toEqual('MOCK_WINDOW_1');
-      this.eventEmitter.publish('windowRemoved', 'MOCK_WINDOW_1');
+    it('should respond to slotRemoved event', function () {
+      spyOn(this.slot, 'clearSlot');
+      this.eventEmitter.publish('slotRemoved', {
+        slotID: this.slot.slotID
+      });
+      expect(this.slot.clearSlot).toHaveBeenCalled();
+    });
+  });
+
+  describe('destroyEvents', function () {
+    it('should unsubscribe from all eventEmitter subscriptions', function () {
+      this.slot.window = {};
+      this.slot.clearSlot();
+      for(var key in this.slot.eventEmitter.events){
+        expect(this.slot.eventEmitter.events[key]).toBe(0);
+      }
       expect(this.slot.window).toBe(undefined);
-      expect(this.appendTo.find('#MOCK_WINDOW_1').length).toBe(0);
     });
   });
 
