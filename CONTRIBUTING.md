@@ -6,7 +6,7 @@ Mirador uses [node.js](http://nodejs.org/) and a build system to assemble, test,
  2. Install the Grunt command line runner (if you haven't already); on the command line, run `npm install -g grunt-cli`  
  3. Clone the mirador repository (if you haven't already done so above); `git clone https://github.com/ProjectMirador/mirador.git`
  4. On the command line, go into the mirador folder
- 5. Install all dependencies with `npm install` and `bower install`. Run `grunt`
+ 5. Install all dependencies with `npm install`. Run `grunt`
 
 A good practice is to clone the project into a directory that is being served by a running http server such as apache or nginx. However, if you would like to test and develop without using an external server, you may then run `grunt server`.
 
@@ -23,7 +23,7 @@ Even small changes should follow the branching strategy outlined above, though t
 Mirador currently uses [gitbook](https://github.com/GitbookIO/gitbook) for its documentation. You can find the current documentation in the `docs` folder on any branch. The docs will be re-generated for the website when submitted, and kept up to date with the current master.
 Documentation updates are always welcome, and should be included with any fundamentally new changes. For general documentation submission, checkout the master branch and branch from it into a documentation branch. Add to the gitbook files stored in the `docs` directory.
 ### Updating and Running the Project
-Install all dependencies with `npm install` and `bower install`. Run `grunt`. This ensures that any new changes from the remote are picked up in your development build.
+Install all dependencies with `npm install`. Run `grunt`. This ensures that any new changes from the remote are picked up in your development build.
 
 Create a branch for your work:
 e.g.: `git checkout -b my-feature-branch` or `git checkout -b my-bug-fix`
