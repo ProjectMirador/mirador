@@ -36,6 +36,12 @@ describe('ManifestListItem', function () {
     var html = jQuery.parseHTML(this.appendTo[0].outerHTML);
     var testImage = jQuery(html).find('li[data-index-number="0"] img');
 
+    var ids = [];
+    jQuery(html).find('li').each(function(i, el){
+      ids.push(jQuery(this).data('index-number'));
+    });
+
+    expect(ids).toEqual([-1, 0, 1, 5, 8, 13, 14, 16]);
     expect(testImage).toHaveData('image-id', 'http://www.example.org/iiif/book1/canvas/p1');
 
   });
@@ -59,7 +65,12 @@ describe('ManifestListItem', function () {
 
     var html = jQuery.parseHTML(this.appendTo[0].outerHTML);
     var testImage = jQuery(html).find('li[data-index-number="2"] img');
+    var ids = [];
+    jQuery(html).find('li').each(function(i, el){
+      ids.push(jQuery(this).data('index-number'));
+    });
 
+    expect(ids).toEqual([-1, 1, 2, 5, 8, 13, 14, 16]);
     expect(testImage).toHaveData('image-id', 'http://www.example.org/iiif/book1/canvas/p1');
 
   });
@@ -87,7 +98,12 @@ describe('ManifestListItem', function () {
 
     var html = jQuery.parseHTML(this.appendTo[0].outerHTML);
     var testImage = jQuery(html).find('li[data-index-number="6"] img');
+    var ids = [];
+    jQuery(html).find('li').each(function(i, el){
+      ids.push(jQuery(this).data('index-number'));
+    });
 
+    expect(ids).toEqual([-1, 1, 5, 6, 8, 13, 14, 16]);
     expect(testImage).toHaveData('image-id', 'http://www.example.org/iiif/book1/canvas/p1');
 
   });
@@ -127,6 +143,12 @@ describe('ManifestListItem', function () {
     var html = jQuery.parseHTML(this.appendTo[0].outerHTML);
     var testImage = jQuery(html).find('li[data-index-number="17"] img');
 
+    var ids = [];
+    jQuery(html).find('li').each(function(i, el){
+      ids.push(jQuery(this).data('index-number'));
+    });
+
+    expect(ids).toEqual([-1, 1, 5, 8, 13, 14, 16, 17]);
     expect(testImage).toHaveData('image-id', 'http://www.example.org/iiif/book1/canvas/p1');
 
   });
