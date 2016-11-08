@@ -7,7 +7,7 @@ discovery.html
 js/discovery
 node_modules/
 npm-debug.log
-reports/
+coverage/
 data/ecodices
 data/BnF
 data/Harvard
