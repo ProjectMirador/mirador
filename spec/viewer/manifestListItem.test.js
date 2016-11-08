@@ -33,24 +33,17 @@ describe('ManifestListItem', function () {
       manifest: this.manifest
     });
 
-    var expectedHTML = '<ul>'+
-    '<li data-index-number="-1"></li>'+
-    '<li data-index-number="0" style="opacity: 0; ">'+
-    '<div class="repo-image"><span class="default-logo"></span></div>'+
-    '<div class="select-metadata"><div class="manifest-title"><h3 title="Dummy Manifest">Dummy Manifest</h3></div>'+
-    '<div class="item-info"><div class="item-info-row"><div class="repo-label">Dummy Location</div>'+
-    '<div class="canvas-count">1 </div></div></div></div>'+
-    '<div class="preview-thumb">'+
-    '<div class="preview-images"><img src="http://www.example.org/iiif/image/1/full/22,/0/native.jpg" width="22.846563295533443" height="80" class="preview-image flash" data-image-id="http://www.example.org/iiif/book1/canvas/p1">'+
-    '</div></div></li>'+
-    '<li data-index-number="1"></li>'+
-    '<li data-index-number="5"></li>'+
-    '<li data-index-number="8"></li>'+
-    '<li data-index-number="13"></li>'+
-    '<li data-index-number="14"></li>'+
-    '<li data-index-number="16"></li></ul>';
+    var html = jQuery.parseHTML(this.appendTo[0].outerHTML);
+    var testImage = jQuery(html).find('li[data-index-number="0"] img');
 
-    expect(this.appendTo[0].outerHTML).toBe(expectedHTML);
+    var ids = [];
+    jQuery(html).find('li').each(function(i, el){
+      ids.push(jQuery(this).data('index-number'));
+    });
+
+    expect(ids).toEqual([-1, 0, 1, 5, 8, 13, 14, 16]);
+    expect(testImage).toHaveData('image-id', 'http://www.example.org/iiif/book1/canvas/p1');
+
   });
 
   it('insert index 2', function() {
@@ -70,24 +63,16 @@ describe('ManifestListItem', function () {
       manifest: this.manifest
     });
 
-    var expectedHTML = '<ul>'+
-    '<li data-index-number="-1"></li>'+
-    '<li data-index-number="1"></li>'+
-    '<li data-index-number="2" style="opacity: 0; ">'+
-    '<div class="repo-image"><span class="default-logo"></span></div>'+
-    '<div class="select-metadata"><div class="manifest-title"><h3 title="Dummy Manifest">Dummy Manifest</h3></div>'+
-    '<div class="item-info"><div class="item-info-row"><div class="repo-label">Dummy Location</div>'+
-    '<div class="canvas-count">1 </div></div></div></div>'+
-    '<div class="preview-thumb">'+
-    '<div class="preview-images"><img src="http://www.example.org/iiif/image/1/full/22,/0/native.jpg" width="22.846563295533443" height="80" class="preview-image flash" data-image-id="http://www.example.org/iiif/book1/canvas/p1">'+
-    '</div></div></li>'+
-    '<li data-index-number="5"></li>'+
-    '<li data-index-number="8"></li>'+
-    '<li data-index-number="13"></li>'+
-    '<li data-index-number="14"></li>'+
-    '<li data-index-number="16"></li></ul>';
+    var html = jQuery.parseHTML(this.appendTo[0].outerHTML);
+    var testImage = jQuery(html).find('li[data-index-number="2"] img');
+    var ids = [];
+    jQuery(html).find('li').each(function(i, el){
+      ids.push(jQuery(this).data('index-number'));
+    });
 
-    expect(this.appendTo[0].outerHTML).toBe(expectedHTML);
+    expect(ids).toEqual([-1, 1, 2, 5, 8, 13, 14, 16]);
+    expect(testImage).toHaveData('image-id', 'http://www.example.org/iiif/book1/canvas/p1');
+
   });
 
   it('insert index 6', function() {
@@ -111,24 +96,16 @@ describe('ManifestListItem', function () {
       manifest: this.manifest
     });
 
-    var expectedHTML = '<ul>'+
-    '<li data-index-number="-1"></li>'+
-    '<li data-index-number="1"></li>'+
-    '<li data-index-number="5"></li>'+
-    '<li data-index-number="6" style="opacity: 0; ">'+
-    '<div class="repo-image"><span class="default-logo"></span></div>'+
-    '<div class="select-metadata"><div class="manifest-title"><h3 title="Dummy Manifest">Dummy Manifest</h3></div>'+
-    '<div class="item-info"><div class="item-info-row"><div class="repo-label">Dummy Location</div>'+
-    '<div class="canvas-count">1 </div></div></div></div>'+
-    '<div class="preview-thumb">'+
-    '<div class="preview-images"><img src="http://www.example.org/iiif/image/1/full/22,/0/native.jpg" width="22.846563295533443" height="80" class="preview-image flash" data-image-id="http://www.example.org/iiif/book1/canvas/p1">'+
-    '</div></div></li>'+
-    '<li data-index-number="8"></li>'+
-    '<li data-index-number="13"></li>'+
-    '<li data-index-number="14"></li>'+
-    '<li data-index-number="16"></li></ul>';
+    var html = jQuery.parseHTML(this.appendTo[0].outerHTML);
+    var testImage = jQuery(html).find('li[data-index-number="6"] img');
+    var ids = [];
+    jQuery(html).find('li').each(function(i, el){
+      ids.push(jQuery(this).data('index-number'));
+    });
 
-    expect(this.appendTo[0].outerHTML).toBe(expectedHTML);
+    expect(ids).toEqual([-1, 1, 5, 6, 8, 13, 14, 16]);
+    expect(testImage).toHaveData('image-id', 'http://www.example.org/iiif/book1/canvas/p1');
+
   });
 
   it('insert index 17', function() {
@@ -163,25 +140,17 @@ describe('ManifestListItem', function () {
       manifest: this.manifest
     });
 
-    var expectedHTML = '<ul>'+
-    '<li data-index-number="-1"></li>'+
-    '<li data-index-number="1"></li>'+
-    '<li data-index-number="5"></li>'+
-    '<li data-index-number="8"></li>'+
-    '<li data-index-number="13"></li>'+
-    '<li data-index-number="14"></li>'+
-    '<li data-index-number="16"></li>'+
-    '<li data-index-number="17" style="opacity: 0; ">'+
-    '<div class="repo-image"><span class="default-logo"></span></div>'+
-    '<div class="select-metadata"><div class="manifest-title"><h3 title="Dummy Manifest">Dummy Manifest</h3></div>'+
-    '<div class="item-info"><div class="item-info-row"><div class="repo-label">Dummy Location</div>'+
-    '<div class="canvas-count">1 </div></div></div></div>'+
-    '<div class="preview-thumb">'+
-    '<div class="preview-images"><img src="http://www.example.org/iiif/image/1/full/22,/0/native.jpg" width="22.846563295533443" height="80" class="preview-image flash" data-image-id="http://www.example.org/iiif/book1/canvas/p1">'+
-    '</div></div></li>'+
-    '</ul>';
+    var html = jQuery.parseHTML(this.appendTo[0].outerHTML);
+    var testImage = jQuery(html).find('li[data-index-number="17"] img');
 
-    expect(this.appendTo[0].outerHTML).toBe(expectedHTML);
+    var ids = [];
+    jQuery(html).find('li').each(function(i, el){
+      ids.push(jQuery(this).data('index-number'));
+    });
+
+    expect(ids).toEqual([-1, 1, 5, 8, 13, 14, 16, 17]);
+    expect(testImage).toHaveData('image-id', 'http://www.example.org/iiif/book1/canvas/p1');
+
   });
 
   it('insert another at index -1', function() {
@@ -200,25 +169,11 @@ describe('ManifestListItem', function () {
       manifest: this.manifest
     });
 
-    var expectedHTML = '<ul>'+
-    '<li data-index-number="-1" style="opacity: 0; ">'+
-    '<div class="repo-image"><span class="default-logo"></span></div>'+
-    '<div class="select-metadata"><div class="manifest-title"><h3 title="Dummy Manifest">Dummy Manifest</h3></div>'+
-    '<div class="item-info"><div class="item-info-row"><div class="repo-label">Dummy Location</div>'+
-    '<div class="canvas-count">1 </div></div></div></div>'+
-    '<div class="preview-thumb">'+
-    '<div class="preview-images"><img src="http://www.example.org/iiif/image/1/full/22,/0/native.jpg" width="22.846563295533443" height="80" class="preview-image flash" data-image-id="http://www.example.org/iiif/book1/canvas/p1">'+
-    '</div></div></li>'+
-    '<li data-index-number="-1"></li>'+
-    '<li data-index-number="1"></li>'+
-    '<li data-index-number="5"></li>'+
-    '<li data-index-number="8"></li>'+
-    '<li data-index-number="13"></li>'+
-    '<li data-index-number="14"></li>'+
-    '<li data-index-number="16"></li>'+
-    '</ul>';
+    var html = jQuery.parseHTML(this.appendTo[0].outerHTML);
+    var testImage = jQuery(html).find('li[data-index-number="-1"] img');
 
-    expect(this.appendTo[0].outerHTML).toBe(expectedHTML);
+    expect(testImage).toHaveData('image-id', 'http://www.example.org/iiif/book1/canvas/p1');
+
   });
 
   xit('fetchTplData', function () {
