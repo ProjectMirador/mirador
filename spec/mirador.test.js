@@ -6,10 +6,6 @@ describe('Mirador | mirador.js', function() {
     testContext.viewerDiv.attr('id', 'viewer');
     testContext.viewerDiv.appendTo('body');
 
-    setTimeout(function() {
-      done();
-    }, 2000);
-
     testContext.mirador = Mirador({
       id: 'viewer',
       layout: "1x2",
@@ -21,6 +17,10 @@ describe('Mirador | mirador.js', function() {
         "widgets": []
       }]
     });
+
+    testContext.mirador.viewer.eventEmitter.subscribe('manifestListItemRendered', function() {
+      done();
+    });
   }
 
   // Tests for object initialization
@@ -29,6 +29,8 @@ describe('Mirador | mirador.js', function() {
       startMirador(done, this);
     });
     afterAll(function() {
+      jQuery(window).unbind('resize');
+      d3.select(window).on('resize', null);
       this.viewerDiv.remove();
       delete this.mirador;
     });
