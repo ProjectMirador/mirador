@@ -205,7 +205,7 @@
           textWithLinks = text,
           matches;
 
-      if (typeof text === 'string') {
+      if (typeof text === 'string' && textWithLinks.indexOf('<a ') == -1) {
         matches = text.match(regexUrl);
 
         if (matches) {
