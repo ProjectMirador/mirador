@@ -230,6 +230,7 @@
           }
         }
         _this.maxPreviewImagesWidth = newMaxPreviewWidth;
+        _this.eventEmitter.publish('manifestListItemRendered');
     },
 
     hide: function() {

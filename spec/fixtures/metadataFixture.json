@@ -23,6 +23,14 @@
     {
       "label":"Single HTML with valid elements",
       "value":"<span><b>bold</b><i>italic</i><br/><a href='http://iiif.io/'><img src='http://iiif.io/img/logo-iiif-34x30.png'></a></span>"
-	  }
+	  },
+    {
+      "label": "Single text with single URL",
+      "value": "There's an URL: http://example.com"
+    },
+    {
+      "label": "Single text with multiple URLs",
+      "value": "There's an URL: http://example.com and here's another: http://foobar.org"
+    }
   ]
 }

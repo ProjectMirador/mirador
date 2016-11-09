@@ -22,6 +22,7 @@ module.exports = function(grunt) {
   // libraries/plugins
   vendors = [
     'js/lib/jquery.min.js',
+    'js/lib/jquery-migrate-3.0.0.min.js',
     'js/lib/jquery-ui.min.js',
     'js/lib/modal.js',
     'js/lib/bootbox.js',
@@ -233,7 +234,7 @@ module.exports = function(grunt) {
 
     githooks: {
       all: {
-        'pre-commit': 'jshint cover'
+        'pre-commit': 'jshint'
         // 'post-checkout':
       }
     },
