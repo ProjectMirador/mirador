@@ -43,12 +43,6 @@ module.exports = function(grunt) {
     'js/lib/modernizr.custom.js'
   ],
 
-  // libraries/plugins for running tests
-  specJs = [
-    'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
-    'bower_components/sinon-server/index.js'
-  ],
-
   // source files
   sources = [
     'js/src/*.js',
