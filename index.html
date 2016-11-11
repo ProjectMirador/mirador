@@ -16,11 +16,13 @@
   <body>
     <div id="viewer"></div>
 
-    <script src="build/mirador/mirador.min.js"></script>
+    <script src="build/mirador/mirador.js"></script>
     <script type="text/javascript">
 
      $(function() {
-       Mirador({
+       // Called without "let" or "var"
+       // so we can play with it in the browser
+       myMiradorInstance = Mirador({
          "id": "viewer",
          "layout": "1x1",
          "data": [
@@ -73,5 +75,8 @@
        });
      });
     </script>
+    // This enables live reloading of assets for improved developer experience.
+    // Remove if copying this page as a basis for another project.
+    <script src="//localhost:35729/livereload.js"></script>
   </body>
 </html>
