@@ -63,7 +63,21 @@ describe('MetadataView', function() {
 
   });
 
-  xdescribe('addLinksToUris', function() {
+  describe('addLinksToUris', function() {
+    it('should properly wrap a single URL in an anchor tag', function() {
+      var withLinksAdded = Mirador.MetadataView.prototype.addLinksToUris(this.fixture.metadata[5].value);
+      expect(withLinksAdded).toBe("There's an URL: <a href=\"http://example.com\" target=\"_blank\">http://example.com</a>");
+    });
+    it('should properly wrap multiple URLs in anchor tags', function() {
+      var withLinksAdded = Mirador.MetadataView.prototype.addLinksToUris(this.fixture.metadata[6].value);
+      expect(withLinksAdded).toBe(
+        "There's an URL: <a href=\"http://example.com\" target=\"_blank\">http://example.com</a> and here's another: " +
+        "<a href=\"http://foobar.org\" target=\"_blank\">http://foobar.org</a>");
+    });
+    it('should not wrap links in pre-existing anchor tags with an anchor tag', function() {
+      var withLinksAdded = Mirador.MetadataView.prototype.addLinksToUris(this.fixture.metadata[4].value);
+      expect(withLinksAdded).toBe(this.fixture.metadata[4].value);
+    });
 
   });
 });
