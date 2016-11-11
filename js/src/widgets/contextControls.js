@@ -147,6 +147,9 @@
         move: function(color) {
           _this.eventEmitter.publish('changeBorderColor.' + _this.windowId, color.toHexString());
         },
+        show: function(color) {
+          _this.setColorPickerInCanvas('.borderColorPicker');
+        },
         maxSelectionSize: 4,
         color: defaultBorderColor,
         palette: [
@@ -176,6 +179,9 @@
         move: function(color) {
           _this.eventEmitter.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
         },
+        show: function(color) {
+          _this.setColorPickerInCanvas('.fillColorPicker');
+        },
         maxSelectionSize: 4,
         color: colorObj,
         palette: [
@@ -186,6 +192,19 @@
 
       _this.container.find(".fillColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>format_color_fill</i>");
       // _this.container.find(".fillColorPicker").next(".sp-replacer").append('<i class="fa fa-caret-down dropdown-icon"></i>');
+    },
+
+    setColorPickerInCanvas: function(selector) {
+      // check for the selector being out of canvas
+      var pickerContainer=this.container.find(selector).siblings('.sp-container').first(),
+      pickerOffset=pickerContainer.offset(),
+      windowWidth = this.state.windowsElements[this.windowId].width();
+      if (pickerContainer.width() + pickerOffset.left > windowWidth) {
+        pickerContainer.offset({
+          top: pickerOffset.top,
+          left: windowWidth - (pickerContainer.width())
+        });
+      }
     },
 
     annotationShow: function() {

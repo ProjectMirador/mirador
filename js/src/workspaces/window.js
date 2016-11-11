@@ -823,7 +823,7 @@
           _this.endpoint.set('dfd', dfd);
         } else {
           options.dfd = dfd;
-          options.windowIDwindowID = _this.id;
+          options.windowID = _this.id;
           options.imagesList = _this.imagesList;
           options.eventEmitter = _this.eventEmitter;
           _this.endpoint = new $[module](options);

@@ -22,6 +22,7 @@ module.exports = function(grunt) {
   // libraries/plugins
   vendors = [
     'js/lib/jquery.min.js',
+    'js/lib/jquery-migrate-3.0.0.min.js',
     'js/lib/jquery-ui.min.js',
     'js/lib/modal.js',
     'js/lib/bootbox.js',
@@ -40,12 +41,6 @@ module.exports = function(grunt) {
     'js/lib/spectrum.js',
     'js/lib/i18next.min.js',
     'js/lib/modernizr.custom.js'
-  ],
-
-  // libraries/plugins for running tests
-  specJs = [
-    'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
-    'bower_components/sinon-server/index.js'
   ],
 
   // source files
@@ -82,14 +77,6 @@ module.exports = function(grunt) {
     },
 
     concat: {
-      js: {
-        options: {
-          banner: '//! <%= pkg.name %> <%= pkg.version %>\n' + '//! Built on <%= grunt.template.today("yyyy-mm-dd") %>\n',
-          process: true
-        },
-        src:  [ "<banner>" ].concat(vendors, sources),
-        dest: distribution
-      },
       css: {
         src: [
           'css/bootstrap.modals.css',
@@ -116,10 +103,11 @@ module.exports = function(grunt) {
     uglify: {
       options: {
         preserveComments: 'some',
-        mangle: false
+        mangle: false,
+        sourceMap: true
       },
       mirador: {
-        src: [ distribution ],
+        src: [ vendors, sources ],
         dest: minified
       }
     },
@@ -239,7 +227,7 @@ module.exports = function(grunt) {
 
     githooks: {
       all: {
-        'pre-commit': 'jshint cover'
+        'pre-commit': 'jshint'
         // 'post-checkout':
       }
     },
@@ -271,7 +259,7 @@ module.exports = function(grunt) {
   // ----------
   // Build task.
   // Cleans out the build folder and builds the code and images into it, checking lint.
-  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'jshint', 'concat', 'cssmin', 'copy' ]);
+  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'jshint', 'concat', 'uglify', 'cssmin', 'copy' ]);
 
   // ----------
   // Dev Build task.
