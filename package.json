@@ -42,10 +42,9 @@
     "sinon": "^1.17.6"
   },
   "scripts": {
-    "start": "bower install && grunt",
+    "start": "grunt serve",
     "test": "./node_modules/.bin/karma start ./karma.conf.js",
-    "travis": "./node_modules/grunt-cli/bin/grunt ci --verbose --force & npm run test",
-    "postinstall": "./node_modules/grunt-cli/bin/grunt githooks"
+    "travis": "./node_modules/grunt-cli/bin/grunt ci --verbose --force & npm run test"
   },
   "dependencies": {},
   "engine": "node < 7.0.0"
