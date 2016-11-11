@@ -47,5 +47,6 @@
     "travis": "./node_modules/grunt-cli/bin/grunt ci --verbose --force & npm run test",
     "postinstall": "./node_modules/grunt-cli/bin/grunt githooks"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "engine": "node < 7.0.0"
 }
