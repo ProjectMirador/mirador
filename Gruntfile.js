@@ -12,7 +12,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-githooks');
-  // grunt.loadNpmTasks('jasmine-jquery');
 
   // ----------
   var distribution = 'build/mirador/mirador.js',
@@ -43,12 +42,6 @@ module.exports = function(grunt) {
     'js/lib/modernizr.custom.js'
   ],
 
-  // libraries/plugins for running tests
-  specJs = [
-    'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
-    'bower_components/sinon-server/index.js'
-  ],
-
   // source files
   sources = [
     'js/src/*.js',
@@ -58,14 +51,7 @@ module.exports = function(grunt) {
     'js/src/workspaces/*.js',
     'js/src/widgets/*.js',
     'js/src/utils/*.js'
-  ],
-
-  specs = ['spec/**/*js'];
-  exclude = [];
-
-  if (!grunt.option('full')) {
-    exclude.push('spec/mirador.test.js');
-  }
+  ];
 
   // ----------
   // Project configuration.
@@ -83,6 +69,14 @@ module.exports = function(grunt) {
     },
 
     concat: {
+      js: {
+        options: {
+          banner: '//! <%= pkg.name %> <%= pkg.version %>\n' + '//! Built on <%= grunt.template.today("yyyy-mm-dd") %>\n',
+          process: true
+        },
+        src:  [ "<banner>" ].concat(vendors, sources),
+        dest: distribution
+      },
       css: {
         src: [
           'css/bootstrap.modals.css',
@@ -113,7 +107,7 @@ module.exports = function(grunt) {
         sourceMap: true
       },
       mirador: {
-        src: [ vendors, sources ],
+        src: [vendors, sources],
         dest: minified
       }
     },
@@ -154,7 +148,7 @@ module.exports = function(grunt) {
           src: 'js/lib/ZeroClipboard.swf',
           dest: 'build/mirador/ZeroClipboard.swf'
         }, {
-	  expand: true,
+          expand: true,
           src: 'locales/**',
           dest: 'build/mirador'
         }]
@@ -184,7 +178,6 @@ module.exports = function(grunt) {
       server: {
         options: {
           port: 8000,
-          keepalive: true,
           base: '.'
         }
       }
@@ -193,7 +186,12 @@ module.exports = function(grunt) {
     watch: {
       all: {
         options: {
-          livereload: true
+          livereload: {
+            // Here we watch the files the sass task will compile to
+            // These files are sent to the live reload server after sass compiles to them
+            options: { livereload: true },
+            files: ['build/**/*']
+          }
         },
         files: [
           'Gruntfile.js',
@@ -217,10 +215,9 @@ module.exports = function(grunt) {
         jshintrc: '.jshintrc',
         globals: {
           Mirador: true
-        },
+        }
       },
       beforeconcat: sources
-
     },
 
     'git-describe': {
@@ -228,13 +225,6 @@ module.exports = function(grunt) {
         options: {
           prop: 'gitInfo'
         }
-      }
-    },
-
-    githooks: {
-      all: {
-        'pre-commit': 'jshint'
-        // 'post-checkout':
       }
     },
 
@@ -265,12 +255,12 @@ module.exports = function(grunt) {
   // ----------
   // Build task.
   // Cleans out the build folder and builds the code and images into it, checking lint.
-  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'jshint', 'concat', 'uglify', 'cssmin', 'copy' ]);
+  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'jshint', 'concat:css', 'uglify', 'cssmin', 'copy']);
 
   // ----------
   // Dev Build task.
   // Build, but skip the time-consuming and obscurantist minification and uglification.
-  grunt.registerTask('dev_build', [ 'clean:build', 'git-describe', 'jshint', 'concat', 'copy' ]);
+  grunt.registerTask('dev_build', [ 'clean:build', 'git-describe', 'jshint', 'concat', 'copy']);
 
   // ----------
   // Package task.
@@ -290,7 +280,7 @@ module.exports = function(grunt) {
   // ----------
   // Connect task.
   // Runs server at specified port
-  grunt.registerTask('server', ['connect']);
+  grunt.registerTask('serve', ['dev_build', 'connect:server', 'watch']);
 
   // ----------
   // Runs this on travis.

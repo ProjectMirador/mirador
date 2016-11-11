@@ -41,10 +41,10 @@
     "karma-spec-reporter": "^0.0.16"
   },
   "scripts": {
-    "start": "bower install && grunt",
+    "start": "grunt serve",
     "test": "./node_modules/.bin/karma start ./karma.conf.js",
     "travis": "./node_modules/grunt-cli/bin/grunt ci --verbose --force & npm run test",
-    "postinstall": "./node_modules/grunt-cli/bin/grunt githooks"
+    "postinstall": "npm install"
   },
   "dependencies": {}
 }
