@@ -38,12 +38,14 @@
     "karma-phantomjs-launcher": "^1.0",
     "karma-safari-launcher": "^0.1.1",
     "karma-sauce-launcher": "^0.2.10",
-    "karma-spec-reporter": "^0.0.16"
+    "karma-spec-reporter": "^0.0.16",
+    "sinon": "^1.17.6"
   },
   "scripts": {
     "start": "grunt serve",
     "test": "./node_modules/.bin/karma start ./karma.conf.js",
     "travis": "./node_modules/grunt-cli/bin/grunt ci --verbose --force & npm run test"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "engine": "node < 7.0.0"
 }
