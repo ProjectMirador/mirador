@@ -451,31 +451,56 @@
       return mousePosition;
     },
 
-    adjustDeltaForShape: function(lastPoint, currentPoint, delta, bounds) {
-      //first check along x axis
-      if (lastPoint.x < currentPoint.x) {
-        //moving to the right, delta should be based on the right most edge
-        if (bounds.x + bounds.width > this.viewer.tileSources.width) {
-          delta.x = this.viewer.tileSources.width - (bounds.x + bounds.width);
-        }
-      } else {
-        //moving to the left, prevent it from going past the left edge.  if it does, use the shapes x value as the delta
-        if (bounds.x < 0) {
-          delta.x = Math.abs(bounds.x);
-        }
+    adjustDeltaForShape: function(lastPoint, currentPoint, delta) {
+      //first do the x coordinate
+
+      // check if the user has moved the mouse past the left edge of the image
+      // if so, the delta should be the negative value of lastPoint, which takes the delta.x to the left edge
+      if (currentPoint.x < 0) {
+        delta.x = Math.min(lastPoint.x, 0);
+      }
+      // check if the user's last mouse position was past the left edge of the image, but
+      // they have moved the mouse back within the bounds of the image
+      // if so, calculate positive delta using currentPoint
+      if (lastPoint.x < 0 && currentPoint.x > 0 && lastPoint.x < currentPoint.x) {
+        delta.x = currentPoint.x;
+      }
+      // check if the user has moved the mouse past the right edge of the image
+      // if so, the delta should be the value of the image width - lastPoint, or 0, whichever is higher
+      // taking the delta to the right edge (or keeping it there)
+      if (currentPoint.x > this.viewer.tileSources.width) {
+        delta.x = Math.max(this.viewer.tileSources.width - lastPoint.x, 0);
+      }
+      // check if the user's last mouse position was past the right edge of the image, but they have moved
+      // the mouse back within the bounds of the image
+      // if so, calculate negative delta from width to current mouse position
+      if (lastPoint.x > this.viewer.tileSources.width && currentPoint.x < this.viewer.tileSources.width && lastPoint.x > currentPoint.x) {
+        delta.x = currentPoint.x - this.viewer.tileSources.width;
       }
 
-      //check along y axis
-      if (lastPoint.y < currentPoint.y) {
-        // moving to the bottom
-        if (bounds.y + bounds.height > this.viewer.tileSources.height) {
-          delta.y = this.viewer.tileSources.height - (bounds.y + bounds.height);
-        }
-      } else {
-        //moving to the top
-        if (bounds.y < 0) {
-          delta.y = Math.abs(bounds.y);
-        }
+      //then y coordinate
+
+      // check if the user has moved the mouse past the top edge of the image
+      // if so, delta should be negative value of lastPoint, which takes delta.y to the top edge
+      if (currentPoint.y < 0) {
+        delta.y = Math.min(-lastPoint.y, 0);
+      }
+      // check if user's last mouse position was past the top edge
+      // but has moved the mouse back within the bounds of the image
+      // calculate positive delta using currentPoint
+      if (lastPoint.y < 0 && currentPoint.y > 0 && lastPoint.y < currentPoint.y) {
+        delta.y = currentPoint.y;
+      }
+      // check if the user has moved the mouse past the bottom edge of the image
+      // if so, the delta should be the value of image height - lastPoint, or 0, whichever is higher
+      if (currentPoint.y > this.viewer.tileSources.height) {
+        delta.y = Math.max(this.viewer.tileSources.height - lastPoint.y, 0);
+      }
+      // check if user's last mouse position was past the bottom edge of the image,
+      // but they have moved the mouse back within the bounds of the image
+      // if so, calculate negative delta from height to current mouse position
+      if (lastPoint.y > this.viewer.tileSources.height && currentPoint.y < this.viewer.tileSources.height && lastPoint.y > currentPoint.y) {
+        delta.y = currentPoint.y - this.viewer.tileSources.height;
       }
 
       return delta;
@@ -511,7 +536,7 @@
             if(this.overlay.path){
               var bounds = this.overlay.path.bounds;
               // we already have a shape, and we are moving it, need to account for that, rather than mouse position
-              event.delta = this.overlay.adjustDeltaForShape(event.lastPoint, event.point, event.delta, bounds);
+              event.delta = this.overlay.adjustDeltaForShape(event.lastPoint, event.point, event.delta);
             }
           }
           //we may not currently have a tool if the user is in edit mode and didn't click on an editable shape
