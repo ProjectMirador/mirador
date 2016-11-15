@@ -257,6 +257,10 @@ describe('Overlay', function() {
   it('onMouseDrag', function() {
     this.rectangle = new Mirador.Rectangle(); // TODO should use stubbed tool
     spyOn(this.rectangle, 'onMouseDrag');
+    this.overlay.viewer.tileSources = {
+      'width': 998,
+      'height': 998
+    }
     var event = getEvent({
       'x': 100,
       'y': 100
@@ -528,6 +532,34 @@ describe('Overlay', function() {
    }
   });
 
-
-
+  describe('adjustDeltaForShape', function() {
+    var delta;
+    var previousPoint;
+    beforeEach(function() {
+      this.overlay.viewer.tileSources = {
+        'width': 998,
+        'height': 998
+      };
+      delta = new Point(5, 5);
+      previousPoint = new Point(9, 9);
+    });
+    it('when in current bounds does not affect delta', function() {
+      var mousePoint = new Point(10, 10);
+      var newDelta = this.overlay.adjustDeltaForShape(previousPoint, mousePoint, delta);
+      expect(newDelta.x).toBe(5);
+      expect(newDelta.y).toBe(5);
+    });
+    it('when greater than tileSources bounds', function() {
+      var mousePoint = new Point(999, 999);
+      var newDelta = this.overlay.adjustDeltaForShape(previousPoint, mousePoint, delta);
+      expect(newDelta.x).toBe(989);
+      expect(newDelta.y).toBe(989);
+    });
+    it('when less than tileSources bounds', function() {
+      var mousePoint = new Point(-1, -1);
+      var newDelta = this.overlay.adjustDeltaForShape(previousPoint, mousePoint, delta);
+      expect(newDelta.x).toBe(0);
+      expect(newDelta.y).toBe(-9);
+    });
+  });
 });
