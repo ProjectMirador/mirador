@@ -106,6 +106,7 @@ describe('Overlay', function() {
   });
 
   it('toggleDrawingTool', function() {
+    expect(1).toBe(1);
     this.eventEmitter.publish('toggleDrawingTool.' + this.windowObjMock.windowId, [null]);
 
     expect(this.overlay.currentTool).toBeNull();
