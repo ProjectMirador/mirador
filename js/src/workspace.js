@@ -69,6 +69,11 @@
         });
       });
 
+      _this.eventEmitter.subscribe('REMOVE_WINDOW', function(event, windowId){
+        console.log(windowId);
+        _this.removeWindow(windowId);
+      });
+
       _this.eventEmitter.subscribe('REMOVE_NODE', function(event, node){
         _this.removeNode(node);
       });
@@ -414,8 +419,9 @@
         // function because we need the other windows to remain,
         // so we filter them here.
         _this.windows.splice(0, _this.windows.length -_this.slots.length).forEach(function(removedWindow){
-          _this.eventEmitter.publish('windowRemoved', removedWindow.id);
+          _this.eventEmitter.publish('REMOVE_WINDOW', removedWindow.id);
         });
+
       }
 
       _this.windows.forEach(function(window) {
@@ -512,7 +518,7 @@
         targetSlot.window = newWindow;
 
         _this.eventEmitter.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
-
+        
       } else {
         targetSlot.window.element.remove();
         targetSlot.window.update(windowConfig);
@@ -521,6 +527,13 @@
         // using the appropriate saving functions, etc. This obviates the need changing the
         // parent, slotAddress, setting a new ID, and so on.
       }
+    },
+
+    removeWindow: function() {
+      var _this = this;
+      _this.windows.splice(0, _this.windows.length -_this.slots.length).forEach(function(removedWindow){
+        _this.eventEmitter.publish('windowRemoved', removedWindow.id);
+      });
     }
   };
 }(Mirador));
