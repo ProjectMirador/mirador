@@ -5,7 +5,7 @@
   };
 
   MockItem.prototype = {
-    getItem: jasmine.createSpy().and.callFake(function() { return this }),
+    getItem: jasmine.createSpy().and.callFake(function() { return this; }),
     translateByXY: jasmine.createSpy(),
     translateByPoint: jasmine.createSpy(),
     click: jasmine.createSpy(),
@@ -22,7 +22,7 @@
       if (key === 'pivot') {
         return {
           add: jasmine.createSpy()
-        }
+        };
       }
     },
     getMask:function () {
