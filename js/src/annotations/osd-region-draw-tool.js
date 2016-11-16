@@ -30,6 +30,8 @@
       if (!this.svgOverlay.inEditOrCreateMode) {
         this.exitEditMode(true);
         this.render();
+      } else {
+        this.svgOverlay.checkToRemoveFocus();
       }
     },
 
