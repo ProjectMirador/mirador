@@ -64,7 +64,6 @@
       });
 
       _this.eventEmitter.subscribe('REMOVE_WINDOW', function(event, windowId){
-        console.log(windowId);
         _this.removeWindow(windowId);
       });
 
@@ -518,11 +517,6 @@
 
   removeWindow: function(windowId) {
     var _this = this;
-
-    // Used to be jquery.grep()
-    // _this.windows = jQuery.grep(_this.windows, function(window) {
-    //   return window.id !== windowId;
-    // });
 
     _this.windows = _this.windows.filter(function(window) {
       return window.id !== windowId;
