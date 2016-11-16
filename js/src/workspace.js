@@ -63,10 +63,8 @@
         }
       });
 
-      _this.eventEmitter.subscribe('windowRemoved', function(event, windowId) {
-        _this.windows = jQuery.grep(_this.windows, function(window) {
-          return window.id !== windowId;
-        });
+      _this.eventEmitter.subscribe('REMOVE_WINDOW', function(event, windowId){
+        _this.removeWindow(windowId);
       });
 
       _this.eventEmitter.subscribe('REMOVE_NODE', function(event, node){
@@ -129,7 +127,7 @@
 
     calculateLayout: function(resetting) {
       var _this = this,
-      layout;
+          layout;
 
       _this.layout = layout = new Isfahan({
         containerId: _this.element.attr('id'),
@@ -144,7 +142,7 @@
 
       // Data Join.
       var divs = d3.select("#" + _this.element.attr('id')).selectAll(".layout-slot")
-      .data(data, function(d) { return d.id; });
+            .data(data, function(d) { return d.id; });
 
       // Implicitly updates the existing elements.
       // Must come before the enter function.
@@ -158,48 +156,48 @@
 
       // Enter
       divs.enter().append("div")
-      .attr("class", "layout-slot")
-      .attr("data-layout-slot-id", function(d) { return d.id; })
-      .call(cell)
-      .each(function(d) {
-        var appendTo = _this.element.children('div').filter('[data-layout-slot-id="'+ d.id+'"]')[0];
-        _this.slots.push(new $.Slot({
-          slotID: d.id,
-          layoutAddress: d.address,
-          focused: true,
-          appendTo: appendTo,
-          state: _this.state,
-          eventEmitter: _this.eventEmitter
-        }));
-      });
+        .attr("class", "layout-slot")
+        .attr("data-layout-slot-id", function(d) { return d.id; })
+        .call(cell)
+        .each(function(d) {
+          var appendTo = _this.element.children('div').filter('[data-layout-slot-id="'+ d.id+'"]')[0];
+          _this.slots.push(new $.Slot({
+            slotID: d.id,
+            layoutAddress: d.address,
+            focused: true,
+            appendTo: appendTo,
+            state: _this.state,
+            eventEmitter: _this.eventEmitter
+          }));
+        });
 
       // Exit
       divs.exit()
-      .remove("div")
-      .each(function(d) {
-        var slotMap = _this.slots.reduce(function(map, temp_slot) {
-          if (d.id === temp_slot.slotID) {
-            map[d.id] = temp_slot;
+        .remove("div")
+        .each(function(d) {
+          var slotMap = _this.slots.reduce(function(map, temp_slot) {
+            if (d.id === temp_slot.slotID) {
+              map[d.id] = temp_slot;
+            }
+            return map;
+          }, {}),
+              slot = slotMap[d.id];
+
+          if (slot && slot.window && !resetting) {
+            _this.eventEmitter.publish('REMOVE_WINDOW', window.id);
           }
-          return map;
-        }, {}),
-        slot = slotMap[d.id];
 
-        if (slot && slot.window && !resetting) {
-          _this.eventEmitter.publish("windowRemoved", slot.window.id);
-        }
-
-        // nullify the window parameter of old slots
-        slot.window = null;
-        _this.slots.splice(_this.slots.indexOf(slot), 1);
-      });
+          // nullify the window parameter of old slots
+          slot.window = null;
+          _this.slots.splice(_this.slots.indexOf(slot), 1);
+        });
 
       function cell() {
         this
-        .style("left", function(d) { return d.x + "px"; })
-        .style("top", function(d) { return d.y + "px"; })
-        .style("width", function(d) { return Math.max(0, d.dx ) + "px"; })
-        .style("height", function(d) { return Math.max(0, d.dy ) + "px"; });
+          .style("left", function(d) { return d.x + "px"; })
+          .style("top", function(d) { return d.y + "px"; })
+          .style("width", function(d) { return Math.max(0, d.dx ) + "px"; })
+          .style("height", function(d) { return Math.max(0, d.dy ) + "px"; });
       }
 
       var root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
@@ -208,22 +206,22 @@
       _this.eventEmitter.publish('slotsUpdated', {slots: _this.slots});
 
       if (_this.slots.length <= 1) {
-          _this.eventEmitter.publish('HIDE_REMOVE_SLOT');
-        } else {
-          _this.eventEmitter.publish('SHOW_REMOVE_SLOT');
-        }
+        _this.eventEmitter.publish('HIDE_REMOVE_SLOT');
+      } else {
+        _this.eventEmitter.publish('SHOW_REMOVE_SLOT');
+      }
     },
 
     split: function(targetSlot, direction) {
       var _this = this,
-      node = jQuery.grep(_this.layout, function(node) { return node.id === targetSlot.slotID; })[0];
+          node = jQuery.grep(_this.layout, function(node) { return node.id === targetSlot.slotID; })[0];
       nodeIndex = node.parent ? node.parent.children.indexOf(node) : 0,
       nodeIsNotRoot = node.parent;
 
       function addSibling(node, indexDifference) {
         if (nodeIsNotRoot) {
           var siblingIndex = nodeIndex + indexDifference,
-          newSibling = _this.newNode(node.type, node);
+              newSibling = _this.newNode(node.type, node);
 
           node.parent.children.splice(siblingIndex, 0, newSibling);
           _this.layout.push(newSibling);
@@ -337,11 +335,11 @@
     removeNode: function(targetSlot) {
       // de-mutate the tree structure.
       var _this = this,
-      node = jQuery.grep(_this.layout, function(node) { return node.id === targetSlot.slotID; })[0],
-      nodeIndex = node.parent.children.indexOf(node),
-      parentIndex,
-      remainingNode,
-      root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
+          node = jQuery.grep(_this.layout, function(node) { return node.id === targetSlot.slotID; })[0],
+          nodeIndex = node.parent.children.indexOf(node),
+          parentIndex,
+          remainingNode,
+          root = jQuery.grep(_this.layout, function(node) { return !node.parent;})[0];
 
       if (node.parent.children.length === 2) {
         // de-mutate the tree without destroying
@@ -400,22 +398,21 @@
       // as many windows into places as can
       // fit.
       var _this = this,
-      deletedWindows;
+          deletedWindows;
 
       if (_this.windows.length > _this.slots.length) {
-        // splice modifies the original array and
-        // returns the deleted items,
-        // so we can just perform a forEach on the
-        // return value, and have the saveController
-        // remove these windows in response to the event
-        // (which otherwise it would not do).
+        // This issues the REMOVE_WINDOW action for
+        // the earliest windows for which a slot will
+        // not be available after the layout changes.
         //
-        // The event was not called in the calculateLayout
-        // function because we need the other windows to remain,
-        // so we filter them here.
-        _this.windows.splice(0, _this.windows.length -_this.slots.length).forEach(function(removedWindow){
-          _this.eventEmitter.publish('windowRemoved', removedWindow.id);
-        });
+        // We use slice, not splice, here because it is
+        // non-destructive. The actual state mutation will
+        // be handled in the action callback, since only
+        // actions should be allowed to mutate global state.
+        _this.windows.slice(0, _this.windows.length -_this.slots.length)
+          .forEach(function(removedWindow){
+            _this.eventEmitter.publish('REMOVE_WINDOW', removedWindow.id);
+          });
       }
 
       _this.windows.forEach(function(window) {
@@ -477,50 +474,54 @@
       windowConfig.state = _this.state;
       windowConfig.eventEmitter = _this.eventEmitter;
 
-      if (!targetSlot.window) {
-        windowConfig.slotAddress = targetSlot.layoutAddress;
-        windowConfig.id = windowConfig.id || $.genUUID();
-
-        _this.eventEmitter.publish("windowSlotAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
-
-        //extend the windowConfig with the default settings
-        var mergedConfig = jQuery.extend(true, {}, _this.state.getStateProperty('windowSettings'), windowConfig);
-
-        //"rename" some keys in the merged object to align settings parameters with window parameters
-        if (mergedConfig.hasOwnProperty('loadedManifest')) {
-          mergedConfig.manifest = _this.state.getStateProperty('manifests')[mergedConfig.loadedManifest];
-          delete mergedConfig.loadedManifest;
-        }
-
-        if (mergedConfig.hasOwnProperty('bottomPanel')) {
-          mergedConfig.bottomPanelAvailable = mergedConfig.bottomPanel;
-          delete mergedConfig.bottomPanel;
-        }
-
-        if (mergedConfig.hasOwnProperty('sidePanel')) {
-          mergedConfig.sidePanelAvailable = mergedConfig.sidePanel;
-          delete mergedConfig.sidePanel;
-        }
-
-        if (mergedConfig.hasOwnProperty('overlay')) {
-          mergedConfig.overlayAvailable = mergedConfig.overlay;
-          delete mergedConfig.overlay;
-        }
-        newWindow = new $.Window(mergedConfig);
-        _this.windows.push(newWindow);
-
-        targetSlot.window = newWindow;
-
-        _this.eventEmitter.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
-
-      } else {
-        targetSlot.window.element.remove();
-        targetSlot.window.update(windowConfig);
-        _this.eventEmitter.publish(('currentCanvasIDUpdated.' + windowConfig.id), windowConfig.currentCanvasID);
-        // The target slot already has a window in it, so just update that window instead,
-        // using the appropriate saving functions, etc. This obviates the need changing the
-        // parent, slotAddress, setting a new ID, and so on.
+      if (targetSlot.window) {
+        _this.eventEmitter.publish('REMOVE_WINDOW', targetSlot.window.id);
       }
-    }
-  };
+
+      windowConfig.slotAddress = targetSlot.layoutAddress;
+      windowConfig.id = windowConfig.id || $.genUUID();
+
+      _this.eventEmitter.publish("windowSlotAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
+
+      //extend the windowConfig with the default settings
+      var mergedConfig = jQuery.extend(true, {}, _this.state.getStateProperty('windowSettings'), windowConfig);
+
+      //"rename" some keys in the merged object to align settings parameters with window parameters
+      if (mergedConfig.hasOwnProperty('loadedManifest')) {
+        mergedConfig.manifest = _this.state.getStateProperty('manifests')[mergedConfig.loadedManifest];
+        delete mergedConfig.loadedManifest;
+      }
+
+      if (mergedConfig.hasOwnProperty('bottomPanel')) {
+        mergedConfig.bottomPanelAvailable = mergedConfig.bottomPanel;
+        delete mergedConfig.bottomPanel;
+      }
+
+      if (mergedConfig.hasOwnProperty('sidePanel')) {
+        mergedConfig.sidePanelAvailable = mergedConfig.sidePanel;
+        delete mergedConfig.sidePanel;
+      }
+
+      if (mergedConfig.hasOwnProperty('overlay')) {
+        mergedConfig.overlayAvailable = mergedConfig.overlay;
+        delete mergedConfig.overlay;
+      }
+      newWindow = new $.Window(mergedConfig);
+      _this.windows.push(newWindow);
+
+      targetSlot.window = newWindow;
+
+      _this.eventEmitter.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
+
+  },
+
+  removeWindow: function(windowId) {
+    var _this = this;
+
+    _this.windows = _this.windows.filter(function(window) {
+      return window.id !== windowId;
+    });
+    _this.eventEmitter.publish('windowRemoved', windowId);
+  }
+};
 }(Mirador));
