@@ -102,21 +102,44 @@
           }
         }
       };
-      var mouseTool = jQuery.data(document.body, 'draw_canvas_' + _this.windowId);
+      
+      // Key for saving mouse tool as data attribute
+      // TODO: It seems its main use is for destroy the old paperjs mouse tool
+      // when a new Overlay is instantiated. Maybe a better scheme can be
+      // devised in the future?
+      this.mouseToolKey = 'draw_canvas_' + _this.windowId;
+      
+      this.setMouseTool();
+      this.listenForActions();
+    },
+    
+    /**
+     * Adds a Tool that handles mouse events for the paperjs scope.
+     */
+    setMouseTool: function() {
+      this.removeMouseTool();
+
+      var mouseTool = new this.paperScope.Tool();
+      mouseTool.overlay = this;
+      mouseTool.onMouseUp = this.onMouseUp;
+      mouseTool.onMouseDrag = this.onMouseDrag;
+      mouseTool.onMouseMove = this.onMouseMove;
+      mouseTool.onMouseDown = this.onMouseDown;
+      mouseTool.onDoubleClick = this.onDoubleClick;
+      mouseTool.onKeyDown = function(event){};
+
+      jQuery.data(document.body, this.mouseToolKey, mouseTool);
+    },
+    
+    /**
+     * Removes the mouse Tool from the paperjs scope.
+     */
+    removeMouseTool: function() {
+      var mouseTool = jQuery.data(document.body, this.mouseToolKey);
       if (mouseTool) {
         mouseTool.remove();
+        jQuery.removeData(document.body, this.mouseToolKey);
       }
-      mouseTool = new this.paperScope.Tool();
-      mouseTool.overlay = this;
-      mouseTool.onMouseUp = _this.onMouseUp;
-      mouseTool.onMouseDrag = _this.onMouseDrag;
-      mouseTool.onMouseMove = _this.onMouseMove;
-      mouseTool.onMouseDown = _this.onMouseDown;
-      mouseTool.onDoubleClick = _this.onDoubleClick;
-      mouseTool.onKeyDown = function(event){};
-      jQuery.data(document.body, 'draw_canvas_' + _this.windowId, mouseTool);
-
-      this.listenForActions();
     },
 
     handleDeleteShapeEvent: function (event, shape) {
