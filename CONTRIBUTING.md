@@ -6,11 +6,9 @@ Mirador uses [node.js](http://nodejs.org/) and a build system to assemble, test,
  2. Install the Grunt command line runner (if you haven't already); on the command line, run `npm install -g grunt-cli`  
  3. Clone the mirador repository (if you haven't already done so above); `git clone https://github.com/ProjectMirador/mirador.git`
  4. On the command line, go into the mirador folder
- 5. Install all dependencies with `npm install` and `bower install`. Run `grunt`
+ 5. Install all dependencies with `npm install` and `bower install`. Run `npm start`
 
-A good practice is to clone the project into a directory that is being served by a running http server such as apache or nginx. However, if you would like to test and develop without using an external server, you may then run `grunt server`.
-
-Either visit the root folder of the project on your local server, or, if you are using `grunt server`, see the example working at `localhost:8000`.
+`npm start` will run a local server that is available at `localhost:8000`.
 
 ## How to Contribute
 ### Making Changes 
@@ -23,7 +21,7 @@ Even small changes should follow the branching strategy outlined above, though t
 Mirador currently uses [gitbook](https://github.com/GitbookIO/gitbook) for its documentation. You can find the current documentation in the `docs` folder on any branch. The docs will be re-generated for the website when submitted, and kept up to date with the current master.
 Documentation updates are always welcome, and should be included with any fundamentally new changes. For general documentation submission, checkout the master branch and branch from it into a documentation branch. Add to the gitbook files stored in the `docs` directory.
 ### Updating and Running the Project
-Install all dependencies with `npm install` and `bower install`. Run `grunt`. This ensures that any new changes from the remote are picked up in your development build.
+Install all dependencies with `npm install` and `bower install`. Run `npm start`. This ensures that any new changes from the remote are picked up in your development build.
 
 Create a branch for your work:
 e.g.: `git checkout -b my-feature-branch` or `git checkout -b my-bug-fix`
@@ -31,7 +29,7 @@ e.g.: `git checkout -b my-feature-branch` or `git checkout -b my-bug-fix`
 ### Usual Development
 Once you have built the necessary files and created a branch for your feature or bug fix work, you are ready to code. 
 
-To enable interactive reloading of the browser each time a file is saved, run `grunt watch` in a separate terminal process (the task writes to stdout). Note that this will require middleware or a [livereload browser extension](http://feedback.livereload.com/knowledgebase/articles/86242-how-do-i-install-and-use-the-browser-extensions). 
+Live interactive reloading of the browser each time a file is saved is enabled and used in the `npm start` command. Note that this will require middleware or a [livereload browser extension](http://feedback.livereload.com/knowledgebase/articles/86242-how-do-i-install-and-use-the-browser-extensions). 
 ### Submitting Your Contribution
 Since your 
 ### Design Review
