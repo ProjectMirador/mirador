@@ -1,14 +1,11 @@
 describe('Mirador | mirador.js', function() {
   function startMirador(done, testContext) {
     localStorage.clear();
+    var manifestLoadedCount = 0;
 
     testContext.viewerDiv = jQuery('<div/>');
     testContext.viewerDiv.attr('id', 'viewer');
     testContext.viewerDiv.appendTo('body');
-
-    setTimeout(function() {
-      done();
-    }, 2000);
 
     testContext.mirador = Mirador({
       id: 'viewer',
@@ -24,6 +21,14 @@ describe('Mirador | mirador.js', function() {
         "location": "Stanford University",
         "title": "Walters"
       }]
+    });
+
+    testContext.mirador.viewer.eventEmitter.subscribe('manifestListItemRendered', function(data) {
+      manifestLoadedCount++;
+      if (manifestLoadedCount === 2) {
+        done();
+      }
+      return;
     });
   }
 
