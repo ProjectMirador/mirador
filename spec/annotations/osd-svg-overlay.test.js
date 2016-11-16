@@ -528,6 +528,45 @@ describe('Overlay', function() {
    }
   });
 
-
-
+  describe('adjustDeltaForShape', function() {
+   var delta;
+   var previousPoint;
+   var bounds;
+   beforeEach(function() {
+     this.overlay.viewer.tileSources = {
+       'width': 998,
+       'height': 998
+     };
+     bounds = {
+       'x': 0,
+       'y': 0,
+       'width': 100,
+       'height': 100
+     };
+     delta = new Point(5, 5);
+     previousPoint = new Point(9, 9);
+   });
+   it('when in current bounds does not affect delta', function() {
+     var mousePoint = new Point(10, 10);
+     var newDelta = this.overlay.adjustDeltaForShape(previousPoint, mousePoint, delta, bounds);
+     expect(newDelta.x).toBe(5);
+     expect(newDelta.y).toBe(5);
+   });
+   it('when greater than tileSources bounds', function() {
+     var mousePoint = new Point(999, 999);
+     bounds.width = 1000;
+     bounds.height = 1000;
+     var newDelta = this.overlay.adjustDeltaForShape(previousPoint, mousePoint, delta, bounds);
+     expect(newDelta.x).toBe(-2);
+     expect(newDelta.y).toBe(-2);
+   });
+   it('when less than tileSources bounds', function() {
+     var mousePoint = new Point(-10, -10);
+     bounds.x = -5;
+     bounds.y = -5;
+     var newDelta = this.overlay.adjustDeltaForShape(previousPoint, mousePoint, delta, bounds);
+     expect(newDelta.x).toBe(5);
+     expect(newDelta.y).toBe(5);
+   });
+ });
 });

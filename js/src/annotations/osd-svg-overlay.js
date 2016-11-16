@@ -456,7 +456,7 @@
       if (lastPoint.x < currentPoint.x) {
         //moving to the right, delta should be based on the right most edge
         if (bounds.x + bounds.width > this.viewer.tileSources.width) {
-          delta.x = this.viewer.tileSources.width - (bounds.x + bounds.width);
+          delta.x = this.viewer.tileSources.width - Math.abs(Math.abs(bounds.x) + bounds.width);
         }
       } else {
         //moving to the left, prevent it from going past the left edge.  if it does, use the shapes x value as the delta
@@ -469,7 +469,7 @@
       if (lastPoint.y < currentPoint.y) {
         // moving to the bottom
         if (bounds.y + bounds.height > this.viewer.tileSources.height) {
-          delta.y = this.viewer.tileSources.height - (bounds.y + bounds.height);
+          delta.y = this.viewer.tileSources.height - Math.abs(Math.abs(bounds.y) + bounds.height);
         }
       } else {
         //moving to the top
