@@ -1,6 +1,6 @@
 {
   "name": "Mirador",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Multi-window image viewer, a web-based tool to support researcher goals",
   "repository": {
     "type": "git",
