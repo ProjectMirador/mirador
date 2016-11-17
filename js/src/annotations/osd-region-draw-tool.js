@@ -25,11 +25,15 @@
     },
 
     enterDisplayAnnotations: function() {
+      this.svgOverlay.setMouseTool();
+      
       // if a user selected the pointer mode but is still actively
       // working on an annotation, don't re-render
       if (!this.svgOverlay.inEditOrCreateMode) {
         this.exitEditMode(true);
         this.render();
+      } else {
+        this.svgOverlay.checkToRemoveFocus();
       }
     },
 
@@ -63,6 +67,10 @@
     },
 
     enterDefault: function() {
+      // Removing the Tool explicitly because otherwise mouse events keep
+      // firing in default mode where they shouldn't.
+      this.svgOverlay.removeMouseTool();
+
       this.exitEditMode(false);
     },
 
