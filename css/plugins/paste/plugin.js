@@ -480,7 +480,7 @@ define("tinymce/pasteplugin/Clipboard", [
 			for (i = 0; i < pasteBinClones.length; i++) {
 				clone = pasteBinClones[i];
 
-				// Pasting plain text produces pastebins in pastebinds makes sence right!?
+				// Pasting plain text produces pastebins in pastebinds makes sense right!?
 				if (clone.firstChild && clone.firstChild.id == 'mcepastebin') {
 					clone = clone.firstChild;
 				}
