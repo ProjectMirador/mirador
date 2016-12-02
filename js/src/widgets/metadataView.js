@@ -40,7 +40,7 @@
           if (typeof value === 'string' && value !== '') {
             tplData[metadataKey].push({
               label: _this.extractLabelFromAttribute(key),
-              value: (metadataKey === 'links') ? value : _this.addLinksToUris(value)
+              value: (metadataKey === 'links') ? _this.addLinksToUris(value) : value
             });
           }
         });
