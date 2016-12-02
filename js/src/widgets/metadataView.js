@@ -146,7 +146,7 @@
    getMetadataRights: function(jsonLd) {
        return {
            'license':      jsonLd.license || '',
-           'attribution':  $.jsonLd.getTextValue(jsonLd.attribution || '')
+           'attribution':  $.JsonLd.getTextValue(jsonLd.attribution || '')
         };
    },
 

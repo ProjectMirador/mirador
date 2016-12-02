@@ -39,7 +39,8 @@ module.exports = function(grunt) {
     'js/lib/paper-full.min.js',
     'js/lib/spectrum.js',
     'js/lib/i18next.min.js',
-    'js/lib/modernizr.custom.js'
+    'js/lib/modernizr.custom.js',
+    'js/lib/sanitize-html.min.js'
   ],
 
   // source files
