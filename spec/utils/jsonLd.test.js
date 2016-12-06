@@ -89,9 +89,9 @@ describe('JsonLd', function () {
     });
 
     it('should only allow HTML elements permitted by the specification', function() {
-      var withScript = '<span>This <strong>looks</strong> <emph>harmless</emph>.<script>window.alert("boom!")</script></span>';
+      var withScript = '<span>This <strong>looks</strong> <em>harmless</em>.<script>window.alert("boom!")</script></span>';
       expect(Mirador.JsonLd.getTextValue(withScript)).toEqual(
-        "<span>This <strong>looks</strong> <emph>harmless</emph>.</span>");
+        "<span>This <strong>looks</strong> <em>harmless</em>.</span>");
     });
   });
 });
