@@ -26,6 +26,7 @@
     "mousetrap": "~1.4.6",
     "URIjs": "https://github.com/medialize/URI.js.git#~1.13.2",
     "paper": "git://github.com/paperjs/paper.js.git#*",
+    "sanitize-html": "~1.11.4",
     "spectrum": "git://github.com/bgrins/spectrum.git#*",
     "qtip2": "~2.2.1"
   },
