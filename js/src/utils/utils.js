@@ -270,4 +270,14 @@
     return (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement);
   };
 
+  $.sanitizeHtml = function(dirty) {
+    return sanitizeHtml(dirty, {
+      allowedTags: ['a', 'b', 'br', 'i', 'img', 'p', 'span', 'strong', 'em'],
+      allowedAttributes: {
+        'a': ['href'],
+        'img': ['src', 'alt']
+      }
+    });
+  };
+
 }(Mirador));
