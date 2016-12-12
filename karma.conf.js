@@ -32,6 +32,7 @@ module.exports = function(config) {
       'js/lib/spectrum.js',
       'js/lib/i18next.min.js',
       'js/lib/modernizr.custom.js',
+      'js/lib/sanitize-html.min.js',
       'node_modules/sinon/pkg/sinon.js',
       'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
       // app
