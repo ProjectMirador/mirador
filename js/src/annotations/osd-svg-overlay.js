@@ -285,19 +285,12 @@
               }
             });
         } else {
-          var svg = _this.getSVGString(_this.draftPaths);
-          oaAnno.on = {
-            "@type": "oa:SpecificResource",
-            "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
-            "selector": {
-              "@type": "oa:SvgSelector",
-              "value": svg
-            },
-            "within": {
-              "@id": _this.state.getWindowObjectById(_this.windowId).loadedManifest,
-              "@type": "sc:Manifest"
-            }
-          };
+          var writeStrategy = new $.Mirador21Strategy();
+          writeStrategy.buildAnnotation({
+            annotation: oaAnno,
+            window: _this.state.getWindowObjectById(_this.windowId),
+            overlay: _this
+          });
           //save to endpoint
           _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
           onAnnotationSaved.resolve();
@@ -348,20 +341,13 @@
             delete _this.draftPaths[i].data.newlyCreatedStrokeFactor;
           }
         }
-
-        var svg = _this.getSVGString(_this.draftPaths);
-        oaAnno.on = {
-          "@type": "oa:SpecificResource",
-          "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
-          "selector": {
-            "@type": "oa:SvgSelector",
-            "value": svg
-          },
-          "within": {
-            "@id": _this.state.getWindowObjectById(_this.windowId).loadedManifest,
-              "@type": "sc:Manifest"
-          }
-        };
+        
+        var writeStrategy = new $.Mirador21Strategy();
+        writeStrategy.buildAnnotation({
+          annotation: oaAnno,
+          window: _this.state.getWindowObjectById(_this.windowId),
+          overlay: _this
+        });
         //save to endpoint
         _this.eventEmitter.publish('annotationCreated.' + _this.windowId, [oaAnno, function() {
           // stuff that needs to be called after the annotation has been created on the backend
