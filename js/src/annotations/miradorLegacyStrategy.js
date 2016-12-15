@@ -24,12 +24,12 @@
     
     buildAnnotation: function(options) {
       var oaAnno = options.annotation,
-          window = options.window,
+          win = options.window,
           overlay = options.overlay,
           bounds = overlay.draftPaths[0].bounds;
       oaAnno.on = {
         "@type": "oa:SpecificResource",
-        "full": window.canvasID,
+        "full": win.canvasID,
         "selector": {
           "@type": "oa:FragmentSelector",
           "value": "xywh=" + bounds.x + "," + bounds.y + "," + bounds.width + "," + bounds.height

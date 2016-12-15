@@ -24,18 +24,18 @@
     
     buildAnnotation: function(options) {
       var oaAnno = options.annotation,
-          window = options.window,
+          win = options.window,
           overlay = options.overlay,
           svg = overlay.getSVGString(overlay.draftPaths);
       oaAnno.on = {
           "@type": "oa:SpecificResource",
-          "full": window.canvasID,
+          "full": win.canvasID,
           "selector": {
             "@type": "oa:SvgSelector",
             "value": svg
           },
           "within": {
-            "@id": window.loadedManifest,
+            "@id": win.loadedManifest,
             "@type": "sc:Manifest"
           }
         };
