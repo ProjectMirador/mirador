@@ -12,6 +12,8 @@
     return new $.Overlay(this, osdViewerId, windowId, state, eventEmitter);
   };
 
+  var FILL_COLOR_ALPHA_WORKAROUND = 0.00001;
+
   $.Overlay = function(viewer, osdViewerId, windowId, state, eventEmitter) {
     var drawingToolsSettings = state.getStateProperty('drawingToolsSettings');
     this.drawingToolsSettings = drawingToolsSettings;
@@ -225,6 +227,9 @@
 
       this.eventsSubscriptions.push(_this.eventEmitter.subscribe('changeFillColor.' + _this.windowId, function(event, color, alpha) {
         _this.fillColor = color;
+        if(alpha === 0){
+          alpha = FILL_COLOR_ALPHA_WORKAROUND;
+        }
         _this.fillColorAlpha = alpha;
         if (_this.hoveredPath && _this.hoveredPath.closed) {
           _this.hoveredPath.fillColor = color;
@@ -794,6 +799,11 @@
       cloned.dashArray = shape.dashArray;
       if (shape.fillColor) {
         cloned.fillColor = shape.fillColor;
+
+        // workaround for paper js fill hit test
+        if(shape.fillColor.alpha === 0){
+          shape.fillColor.alpha = FILL_COLOR_ALPHA_WORKAROUND;
+        }
         if (shape.fillColor.alpha) {
           cloned.fillColor.alpha = shape.fillColor.alpha;
         }
@@ -822,10 +832,10 @@
       var currentPath = this.path;
       var strokeColor = this.strokeColor;
       var fillColor = this.fillColor;
-      var fillColorAlpha = this.fillColorAlpha;
+      var fillColorAlpha = this.fillColorAlpha || FILL_COLOR_ALPHA_WORKAROUND;
       this.strokeColor = this.state.getStateProperty('drawingToolsSettings').strokeColor;
       this.fillColor = this.state.getStateProperty('drawingToolsSettings').fillColor;
-      this.fillColorAlpha = this.state.getStateProperty('drawingToolsSettings').fillColorAlpha;
+      this.fillColorAlpha = this.state.getStateProperty('drawingToolsSettings').fillColorAlpha || FILL_COLOR_ALPHA_WORKAROUND;
       this.mode = 'create';
       this.path = rect.createShape(initialPoint, this);
       var eventData = {

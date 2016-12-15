@@ -184,7 +184,7 @@
               slot = slotMap[d.id];
 
           if (slot && slot.window && !resetting) {
-            _this.eventEmitter.publish('REMOVE_WINDOW', window.id);
+            _this.eventEmitter.publish('REMOVE_WINDOW', slot.window.id);
           }
 
           // nullify the window parameter of old slots
