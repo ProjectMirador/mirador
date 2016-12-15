@@ -96,7 +96,7 @@
         
         addManifestUrl: function(url) {
           var _this = this;
-          _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', url, "(Added from URL)");
+          _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [url, "(Added from URL)"]);
         },
         
         togglePanel: function(event) {
