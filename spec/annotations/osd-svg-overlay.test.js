@@ -152,11 +152,11 @@ describe('Overlay', function() {
 
   it('changeFillColor', function() {
     var color = '#00ff00';
-    var alpha = 0.0;
+    var alpha = 0.00001;
     this.eventEmitter.publish('changeFillColor.' + this.windowObjMock.windowId, [color, alpha]);
 
     expect(this.overlay.fillColor).toBe(color);
-    expect(this.overlay.fillColorAlpha).toBe(alpha);
+    expect(this.overlay.fillColorAlpha).toBe(0.00001);
 
     color = '#ff0000';
 
@@ -171,7 +171,7 @@ describe('Overlay', function() {
     expect(this.overlay.hoveredPath.fillColor.red).toBe(0);
     expect(this.overlay.hoveredPath.fillColor.green).toBe(1);
     expect(this.overlay.hoveredPath.fillColor.blue).toBe(0);
-    expect(this.overlay.hoveredPath.fillColor.alpha).toBe(0);
+    expect(this.overlay.hoveredPath.fillColor.alpha).toBe(0.00001);
 
     alpha = 0.5;
     this.eventEmitter.publish('changeFillColor.' + this.windowObjMock.windowId, [color, alpha]);
@@ -186,11 +186,6 @@ describe('Overlay', function() {
     this.polygon = new Mirador.Polygon(); // TODO should use the dummy tool
     this.overlay.hoveredPath = this.polygon.createShape(initialPoint, this.overlay);
 
-    expect(this.overlay.hoveredPath.fillColor).toBeUndefined();
-
-    this.eventEmitter.publish('changeFillColor.' + this.windowObjMock.windowId, [color, alpha]);
-
-    expect(this.overlay.hoveredPath.fillColor).toBeUndefined();
   });
 
   it('getTools', function() {
@@ -528,6 +523,17 @@ describe('Overlay', function() {
    }
   });
 
-
+  it('set and remove mouse tool', function() {
+    var key = this.overlay.mouseToolKey;
+    var paperScope = this.overlay.paperScope;
+    
+    this.overlay.setMouseTool();
+    expect(paperScope.tools.length).toEqual(1);
+    expect(jQuery.data(document.body, key)).toBe(paperScope.tools[0]);
+    
+    this.overlay.removeMouseTool();
+    expect(paperScope.tools.length).toEqual(0);
+    expect(jQuery.data(document.body, key)).toBeUndefined();
+  });
 
 });

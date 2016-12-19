@@ -189,10 +189,15 @@
         if (newMaxPreviewWidth < _this.maxPreviewImagesWidth ) {
           while (_this.imagesTotalWidth >= newMaxPreviewWidth) {
             image = _this.tplData.images.pop();
-            _this.imagesTotalWidth -= (image.width + _this.margin);
+            
+            if (image) {
+              _this.imagesTotalWidth -= (image.width + _this.margin);
 
-            //remove image from dom
-            _this.element.find('img[data-image-id="'+image.id+'"]').remove();
+              //remove image from dom
+              _this.element.find('img[data-image-id="'+image.id+'"]').remove();
+            } else {
+              break;
+            }
           }
           //check if need to add ellipsis
           if (_this.remaining === 0 && _this.allImages.length - _this.tplData.images.length > 0) {
@@ -230,6 +235,7 @@
           }
         }
         _this.maxPreviewImagesWidth = newMaxPreviewWidth;
+        _this.eventEmitter.publish('manifestListItemRendered');
     },
 
     hide: function() {
