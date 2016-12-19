@@ -1106,18 +1106,61 @@ li.highlight {
   top:50%;
   margin-top:-35px;
   width: 40px;
+  -webkit-transform : translateY(0px);
+  -moz-transform    : translateY(0px);
+  -ms-transform     : translateY(0px);
+  -o-transform      : translateY(0px);
+  transform         : translateY(0px);
+  transition: all 0.2s ease-out;
+}
+.mirador-osd-previous.bottom-panel-open {
+  -webkit-transform : translateY(-65px);
+  -moz-transform    : translateY(-65px);
+  -ms-transform     : translateY(-65px);
+  -o-transform      : translateY(-65px);
+  transform         : translateY(-65px);
+  transition: all 0.2s ease-out;
 }
 .mirador-osd-next {
   position:absolute;
   right:1%;
   top:50%;
   margin-top:-35px;
+  -webkit-transform : translateY(0px);
+  -moz-transform    : translateY(0px);
+  -ms-transform     : translateY(0px);
+  -o-transform      : translateY(0px);
+  transform         : translateY(0px);
+  transition: all 0.2s ease-out;
+}
+.mirador-osd-next.bottom-panel-open {
+  -webkit-transform : translateY(-65px);
+  -moz-transform    : translateY(-65px);
+  -ms-transform     : translateY(-65px);
+  -o-transform      : translateY(-65px);
+  transform         : translateY(-65px);
+  transition: all 0.2s ease-out;
 }
 .mirador-osd-toggle-bottom-panel {
   position: absolute;
   bottom:0;
   right:50%;
   margin-right: -25px;
+  -webkit-transform : translateY(0px);
+  -moz-transform    : translateY(0px);
+  -ms-transform     : translateY(0px);
+  -o-transform      : translateY(0px);
+  transform         : translateY(0px);
+  transition: all 0.2s ease-out;
+}
+
+.mirador-osd-toggle-bottom-panel.bottom-panel-open {
+  -webkit-transform : translateY(-130px);
+  -moz-transform    : translateY(-130px);
+  -ms-transform     : translateY(-130px);
+  -o-transform      : translateY(-130px);
+  transform         : translateY(-130px);
+  transition: all 0.2s ease-out;
 }
 .mirador-pan-zoom-controls {
   position: absolute;
@@ -1126,6 +1169,14 @@ li.highlight {
   bottom:0;
   right:0;
   margin:1%;
+}
+.mirador-pan-zoom-controls.bottom-panel-open {
+  -webkit-transform : translateY(-130px);
+  -moz-transform    : translateY(-130px);
+  -ms-transform     : translateY(-130px);
+  -o-transform      : translateY(-130px);
+  transform         : translateY(-130px);
+  transition: all 0.2s ease-out;
 }
 .mirador-osd-up {
   position:absolute;

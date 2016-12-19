@@ -206,6 +206,10 @@ describe('Workspace', function() {
     expect(this.workspace.windows.length).toBe(1);
   });
 
+  describe('Removing Windows', function() {
+
+  });
+
   xdescribe('Resetting Layout', function() {
     var mockManifest = {
 
