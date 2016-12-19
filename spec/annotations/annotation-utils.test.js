@@ -30,7 +30,7 @@ describe('Annotation utils', function () {
       this.y = y;
       this.add = function (point) {
         return new position(this.x + point.x, this.y + point.y);
-      }
+      };
     };
 
     describe('Icon', function () {

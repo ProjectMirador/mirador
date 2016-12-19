@@ -12,6 +12,8 @@
     return new $.Overlay(this, osdViewerId, windowId, state, eventEmitter);
   };
 
+  var FILL_COLOR_ALPHA_WORKAROUND = 0.00001;
+
   $.Overlay = function(viewer, osdViewerId, windowId, state, eventEmitter) {
     var drawingToolsSettings = state.getStateProperty('drawingToolsSettings');
     this.drawingToolsSettings = drawingToolsSettings;
@@ -102,21 +104,44 @@
           }
         }
       };
-      var mouseTool = jQuery.data(document.body, 'draw_canvas_' + _this.windowId);
+      
+      // Key for saving mouse tool as data attribute
+      // TODO: It seems its main use is for destroy the old paperjs mouse tool
+      // when a new Overlay is instantiated. Maybe a better scheme can be
+      // devised in the future?
+      this.mouseToolKey = 'draw_canvas_' + _this.windowId;
+      
+      this.setMouseTool();
+      this.listenForActions();
+    },
+    
+    /**
+     * Adds a Tool that handles mouse events for the paperjs scope.
+     */
+    setMouseTool: function() {
+      this.removeMouseTool();
+
+      var mouseTool = new this.paperScope.Tool();
+      mouseTool.overlay = this;
+      mouseTool.onMouseUp = this.onMouseUp;
+      mouseTool.onMouseDrag = this.onMouseDrag;
+      mouseTool.onMouseMove = this.onMouseMove;
+      mouseTool.onMouseDown = this.onMouseDown;
+      mouseTool.onDoubleClick = this.onDoubleClick;
+      mouseTool.onKeyDown = function(event){};
+
+      jQuery.data(document.body, this.mouseToolKey, mouseTool);
+    },
+    
+    /**
+     * Removes the mouse Tool from the paperjs scope.
+     */
+    removeMouseTool: function() {
+      var mouseTool = jQuery.data(document.body, this.mouseToolKey);
       if (mouseTool) {
         mouseTool.remove();
+        jQuery.removeData(document.body, this.mouseToolKey);
       }
-      mouseTool = new this.paperScope.Tool();
-      mouseTool.overlay = this;
-      mouseTool.onMouseUp = _this.onMouseUp;
-      mouseTool.onMouseDrag = _this.onMouseDrag;
-      mouseTool.onMouseMove = _this.onMouseMove;
-      mouseTool.onMouseDown = _this.onMouseDown;
-      mouseTool.onDoubleClick = _this.onDoubleClick;
-      mouseTool.onKeyDown = function(event){};
-      jQuery.data(document.body, 'draw_canvas_' + _this.windowId, mouseTool);
-
-      this.listenForActions();
     },
 
     handleDeleteShapeEvent: function (event, shape) {
@@ -202,6 +227,9 @@
 
       this.eventsSubscriptions.push(_this.eventEmitter.subscribe('changeFillColor.' + _this.windowId, function(event, color, alpha) {
         _this.fillColor = color;
+        if(alpha === 0){
+          alpha = FILL_COLOR_ALPHA_WORKAROUND;
+        }
         _this.fillColorAlpha = alpha;
         if (_this.hoveredPath && _this.hoveredPath.closed) {
           _this.hoveredPath.fillColor = color;
@@ -414,6 +442,13 @@
         _this.annoTooltip = null;
         _this.annoEditorVisible = false;
       }));
+
+      this.eventsSubscriptions.push(this.eventEmitter.subscribe("ANNOTATIONS_LIST_UPDATED",function(event,options){
+        if(options.windowId) {
+          _this.eventEmitter.publish("refreshOverlay." + _this.windowId);
+        }
+      }));
+
     },
 
     deleteShape:function(shape){
@@ -778,6 +813,11 @@
       cloned.dashArray = shape.dashArray;
       if (shape.fillColor) {
         cloned.fillColor = shape.fillColor;
+
+        // workaround for paper js fill hit test
+        if(shape.fillColor.alpha === 0){
+          shape.fillColor.alpha = FILL_COLOR_ALPHA_WORKAROUND;
+        }
         if (shape.fillColor.alpha) {
           cloned.fillColor.alpha = shape.fillColor.alpha;
         }
@@ -806,10 +846,10 @@
       var currentPath = this.path;
       var strokeColor = this.strokeColor;
       var fillColor = this.fillColor;
-      var fillColorAlpha = this.fillColorAlpha;
+      var fillColorAlpha = this.fillColorAlpha || FILL_COLOR_ALPHA_WORKAROUND;
       this.strokeColor = this.state.getStateProperty('drawingToolsSettings').strokeColor;
       this.fillColor = this.state.getStateProperty('drawingToolsSettings').fillColor;
-      this.fillColorAlpha = this.state.getStateProperty('drawingToolsSettings').fillColorAlpha;
+      this.fillColorAlpha = this.state.getStateProperty('drawingToolsSettings').fillColorAlpha || FILL_COLOR_ALPHA_WORKAROUND;
       this.mode = 'create';
       this.path = rect.createShape(initialPoint, this);
       var eventData = {
