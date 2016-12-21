@@ -175,7 +175,7 @@
         
         else if (typeof imageInfoUrl !== 'undefined') {
           if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
-            _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', imageInfoUrl, "(Added from URL)");
+            _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [imageInfoUrl, "(Added from URL)"]);
           }
         } 
         else if (typeof collectionUrl !== 'undefined'){
@@ -183,7 +183,7 @@
             if (data.hasOwnProperty('manifests')){
               jQuery.each(data.manifests, function (ci, mfst) {
                 if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
-                  _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', mfst['@id'], "(Added from URL)");
+                  _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [mfst['@id'], "(Added from URL)"]);
                 }
               });
             }
@@ -197,7 +197,7 @@
         }
         else {
           if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
-            _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', manifestUrl, "(Added from URL)");
+            _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [manifestUrl, "(Added from URL)"]);
           }
         }
 
