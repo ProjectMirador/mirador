@@ -105,7 +105,6 @@
                 // Get the IIIF Image API via the @context
                 if (service.hasOwnProperty('@context')) {
                     version = $.Iiif.getVersionFromContext(service['@context']);
-                    console.log('version');
                 }
                 thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
             }
