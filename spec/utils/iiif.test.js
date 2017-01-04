@@ -76,6 +76,35 @@ describe('Iiif', function () {
     });
   });
   
+  describe('getComplianceLevelFromProfile', function () {
+    it('should identify 0 from string', function() {
+      var profile = 'http://iiif.io/api/image/2/level0.json';
+      expect(Mirador.Iiif.getComplianceLevelFromProfile(profile)).toEqual(0);
+    });
+    it('should identify 2 from array', function() {
+      var profile = [
+        "http://iiif.io/api/image/2/level2.json",
+        {
+        "formats" : [ "gif", "pdf" ],
+        "qualities" : [ "color", "gray" ],
+        "supports" : [
+            "canonicalLinkHeader", "rotationArbitrary", "profileLinkHeader", "http://example.com/feature/"
+        ]
+        }
+      ];
+      expect(Mirador.Iiif.getComplianceLevelFromProfile(profile)).toEqual(2);
+    });
+    it('should return -1 for empty profile', function() {
+      var profile = null;
+      expect(Mirador.Iiif.getComplianceLevelFromProfile(profile)).toEqual(-1);
+    });
+    it('should return -1 for unrecognised profile', function() {
+      var profile = "http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level0";
+      expect(Mirador.Iiif.getComplianceLevelFromProfile(profile)).toEqual(-1);
+    });
+  });
+  
+  
   describe('makeUriWithWidth', function () {
     it('should return native.jpg URL for IIIF v1.x', function() {
       expect(Mirador.Iiif.makeUriWithWidth('http://images.waahoo.com/iiif/MYTEST', 512, '1.1')).toEqual('http://images.waahoo.com/iiif/MYTEST/full/512,/0/native.jpg');
