@@ -35,5 +35,10 @@
     "fullScreen": "Vollbild",
     "logo": "Logo",
     "load": "Laden",
-    "dropToLoad": "Fallen hier zu laden manifestieren"
+    "dropToLoad": "Fallen hier zu laden manifestieren",
+    "license": "Lizenz",
+    "attribution": "Bereitgestellt von",
+    "related": "Verwandte Resourcen",
+    "seeAlso": "Siehe auch",
+    "within": "Teil von"
 }

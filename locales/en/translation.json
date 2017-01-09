@@ -7,6 +7,7 @@
     "addSlotRight": "Add Slot Right",
     "addTagsHere": "Add tags here",
     "annotationTooltip": "Toggle annotations",
+    "attribution": "Attribution",
     "bookmark": "Bookmark",
     "bookmarkTitle": "Bookmark or Share Your Workspace",
     "bookmarkTooltip": "Bookmark this Mirador instance",
@@ -46,6 +47,7 @@
     "invertTooltip": "Invert colors",
     "item": "item",
     "items": "items",
+    "license": "License",
     "links": "Links",
     "load": "Load",
     "logo": "Logo",
@@ -58,6 +60,7 @@
     "pointerTooltip": "Pointer",
     "polygonTooltip": "Polygon annotation",
     "rectangleTooltip": "Rectangle annotation",
+    "related": "Related",
     "resetTooltip": "Reset image",
     "rights": "Rights",
     "rightsStatus": "Rights Status",
@@ -66,6 +69,7 @@
     "saturationTooltip": "Adjust saturation",
     "save": "Save",
     "scrollView": "Scroll View",
+    "seeAlso": "See Also",
     "selectGrid": "Select a grid below",
     "sidePanelTooltip": "Toggle the side panel",
     "solid":"Solid",
@@ -73,5 +77,6 @@
     "unspecified": "Unspecified",
     "url": "URL",
     "viewTypeTooltip": "Change view type",
+    "within": "Within",
     "yes": "Yes"
 }
