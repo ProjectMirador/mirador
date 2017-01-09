@@ -12,7 +12,6 @@
     this.init();
   };
 
-
   $.MetadataView.prototype = {
 
     init: function() {
@@ -166,9 +165,6 @@
     label = label.replace(/^@/, '');
     label = label.replace(/([A-Z])/g, ' $1');
     label = label.replace(/\s{2,}/g, ' ');
-    label = label.replace(/\w\S*/g, function(txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
 
     return label;
   },
@@ -197,7 +193,7 @@
         if (this.panel) {
             element = element.parent();
         }
-        element.hide({effect: "slide", direction: "right", duration: 300, easing: "swing"});    
+        element.hide({effect: "slide", direction: "right", duration: 300, easing: "swing"});
     },
 
     addLinksToUris: function(text) {
