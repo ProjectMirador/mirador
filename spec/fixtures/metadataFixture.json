@@ -31,6 +31,10 @@
     {
       "label": "Single text with multiple URLs",
       "value": "There's an URL: http://example.com and here's another: http://foobar.org"
+    },
+    {
+      "label": "Single text with single URL already wrapped in an anchor tag, but without target blank",
+      "value": "There's an URL: <a href='http://example.com'>foobar</a>"
     }
   ]
 }
