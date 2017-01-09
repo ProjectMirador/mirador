@@ -22,7 +22,7 @@
     },
     {
       "label":"Single HTML with valid elements",
-      "value":"<span><b>bold</b><i>italic</i><br/><a href='http://iiif.io/'><img src='http://iiif.io/img/logo-iiif-34x30.png'></a></span>"
+      "value":"<span><b>bold</b><i>italic</i><br><a href=\"http://iiif.io/\" target=\"_blank\"><img src=\"http://iiif.io/img/logo-iiif-34x30.png\"></a></span>"
 	  },
     {
       "label": "Single text with single URL",
