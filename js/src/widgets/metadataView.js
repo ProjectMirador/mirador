@@ -163,7 +163,6 @@
     var label = attr;
 
     label = label.replace(/^@/, '');
-    label = label.replace(/([A-Z])/g, ' $1');
     label = label.replace(/\s{2,}/g, ' ');
 
     return label;
