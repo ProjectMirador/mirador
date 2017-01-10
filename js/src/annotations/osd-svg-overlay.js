@@ -104,17 +104,17 @@
           }
         }
       };
-      
+
       // Key for saving mouse tool as data attribute
       // TODO: It seems its main use is for destroy the old paperjs mouse tool
       // when a new Overlay is instantiated. Maybe a better scheme can be
       // devised in the future?
       this.mouseToolKey = 'draw_canvas_' + _this.windowId;
-      
+
       this.setMouseTool();
       this.listenForActions();
     },
-    
+
     /**
      * Adds a Tool that handles mouse events for the paperjs scope.
      */
@@ -132,7 +132,7 @@
 
       jQuery.data(document.body, this.mouseToolKey, mouseTool);
     },
-    
+
     /**
      * Removes the mouse Tool from the paperjs scope.
      */
@@ -147,18 +147,18 @@
     handleDeleteShapeEvent: function (event, shape) {
       var _this = this;
       new $.DialogBuilder(this.slotWindowElement).dialog({
-        message: i18n.t('deleteShape'),
+        message: i18next.t('deleteShape'),
         closeButton: false,
         buttons: {
           'no': {
-            label: i18n.t('no'),
+            label: i18next.t('no'),
             className: 'btn-default',
             callback: function() {
               return;
             }
           },
           'yes': {
-            label: i18n.t('yes'),
+            label: i18next.t('yes'),
             className: 'btn-primary',
             callback: function() {
               _this.deleteShape(shape);
@@ -256,11 +256,11 @@
         var onAnnotationSaved = jQuery.Deferred();
         if (!_this.draftPaths.length) {
             new $.DialogBuilder(_this.slotWindowElement).dialog({
-              message: i18n.t('editModalSaveAnnotationWithNoShapesMsg'),
+              message: i18next.t('editModalSaveAnnotationWithNoShapesMsg'),
               closeButton: false,
               buttons: {
                 success: {
-                  label: i18n.t('editModalBtnSaveWithoutShapes'),
+                  label: i18next.t('editModalBtnSaveWithoutShapes'),
                   className: 'btn-success',
                   callback: function () {
                     oaAnno.on = {
@@ -273,7 +273,7 @@
                   }
                 },
                 danger: {
-                  label: i18n.t('editModalBtnDeleteAnnotation'),
+                  label: i18next.t('editModalBtnDeleteAnnotation'),
                   className: 'btn-danger',
                   callback: function () {
                     _this.eventEmitter.publish('annotationDeleted.' + _this.windowId, [oaAnno['@id']]);
@@ -281,7 +281,7 @@
                   }
                 },
                 main: {
-                  label: i18n.t('cancel'),
+                  label: i18next.t('cancel'),
                   className: 'btn-default',
                   callback: function () {
                     onAnnotationSaved.reject();
@@ -394,18 +394,18 @@
         };
         if (!immediate) {
           new $.DialogBuilder(_this.slotWindowElement).dialog({
-            message: i18n.t('cancelAnnotation'),
+            message: i18next.t('cancelAnnotation'),
             closeButton: false,
             buttons: {
               'no': {
-                label: i18n.t('no'),
+                label: i18next.t('no'),
                 className: 'btn-default',
                 callback: function() {
                   return;
                 }
               },
               'yes': {
-                label: i18n.t('yes'),
+                label: i18next.t('yes'),
                 className: 'btn-primary',
                 callback: function() {
                   cancel();
