@@ -44,7 +44,7 @@
       var _this = this;
 
       //initialize i18next
-      i18next.init({
+      i18next.use(i18nextXHRBackend).use(i18nextBrowserLanguageDetector).init({
         fallbackLng: 'en',
         load: 'unspecific',
         debug: false,
