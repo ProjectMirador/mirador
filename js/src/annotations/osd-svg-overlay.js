@@ -290,7 +290,7 @@
               }
             });
         } else {
-          var writeStrategy = new $.Mirador21Strategy();
+          var writeStrategy = new $.MiradorDualStrategy();
           writeStrategy.buildAnnotation({
             annotation: oaAnno,
             window: _this.state.getWindowObjectById(_this.windowId),
@@ -347,7 +347,7 @@
           }
         }
         
-        var writeStrategy = new $.Mirador21Strategy();
+        var writeStrategy = new $.MiradorDualStrategy();
         writeStrategy.buildAnnotation({
           annotation: oaAnno,
           window: _this.state.getWindowObjectById(_this.windowId),
