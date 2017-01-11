@@ -43,13 +43,15 @@
       };
 
       tplData.thumbs = jQuery.map(this.imagesList, function(canvas, index) {
-        if (canvas.width === 0) {
-          return {};
+        var width, thumbnailUrl;
+        if (canvas.width > 0 && canvas.height > 0) {
+          var aspectRatio = canvas.height/canvas.width;
+          width = (_this.thumbInfo.thumbsHeight/aspectRatio);
+          thumbnailUrl = $.getThumbnailForCanvas(canvas, width);
+        } else {
+          width = _this.thumbInfo.thumbsHeight / 1.42;
+          thumbnailUrl = _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('imagesPath') + 'noimage.png';
         }
-
-        var aspectRatio = canvas.height/canvas.width,
-        width = (_this.thumbInfo.thumbsHeight/aspectRatio),
-        thumbnailUrl = $.getThumbnailForCanvas(canvas, width);
 
         return {
           thumbUrl: thumbnailUrl,
@@ -88,7 +90,6 @@
       if (windowObject && windowObject.viewType === 'BookView') {
         scrollPosition = _this.element.scrollLeft() + (target.position().left + (target.next().width() + target.outerWidth())/2) - _this.element.width()/2;
       } else {
-
         scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
       }
       _this.element.scrollTo(scrollPosition, 900);

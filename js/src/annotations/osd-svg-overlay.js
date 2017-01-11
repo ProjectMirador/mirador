@@ -690,7 +690,7 @@
       this.canvas.style.transform = transform;
       this.canvas.style.marginLeft = '0px';
       this.canvas.style.marginTop = '0px';
-      if (this.paperScope && this.paperScope.view) {
+      if (this.paperScope && this.paperScope.view && this.viewer.world.getItemCount() > 0) {
         this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
         this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
         this.paperScope.view.center = new this.paperScope.Size(

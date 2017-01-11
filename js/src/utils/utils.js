@@ -219,6 +219,7 @@
 
   // Configurable Promises
   $.createImagePromise = function(imageUrl) {
+
     var img = new Image(),
     dfd = jQuery.Deferred();
 
@@ -231,10 +232,14 @@
     };
 
     dfd.fail(function() {
-      console.log('image failed to load: ' + img.src);
+      if (img.src) {
+        console.log('image failed to load: ' + img.src);
+      }
     });
 
-    img.src = imageUrl;
+    if (imageUrl) {
+      img.src = imageUrl;
+    }
     return dfd.promise();
   };
 

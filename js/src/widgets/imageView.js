@@ -528,6 +528,15 @@
       }
     },
 
+    createMissingImageWidget: function() {
+      this.element.find('.missing-image').remove();
+      this.element.find('.' + this.osdCls).remove();
+      this.element.append(
+        "<div class='missing-image'>" +
+        " <p>" + i18n.t('missingImages') + "</p>" +
+        "</div>");
+    },
+
     createOpenSeadragonInstance: function(imageUrl) {
       var infoJsonUrl = imageUrl + '/info.json',
       uniqueID = $.genUUID(),
@@ -535,6 +544,7 @@
       infoJson,
       _this = this;
 
+      this.element.find('.missing-image').remove();
       this.element.find('.' + this.osdCls).remove();
 
       jQuery.getJSON(infoJsonUrl).done(function (infoJson, status, jqXHR) {
@@ -661,11 +671,14 @@
         };
         this.eventEmitter.publish('resetImageManipulationControls.'+this.windowId);
         this.osd.close();
-        this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-        _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
-      } else {
-        _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
+        var imgUrl = $.Iiif.getImageUrl(this.currentImg);
+        if (imgUrl) {
+          this.createOpenSeadragonInstance(imgUrl);
+        } else {
+          this.createMissingImageWidget();
+        }
       }
+      _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
     },
 
     next: function() {

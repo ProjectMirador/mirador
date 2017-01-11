@@ -52,6 +52,7 @@
     "load": "Load",
     "logo": "Logo",
     "metadataTooltip": "View information/metadata about this object",
+    "missingImages": "Unfortunately this canvas does not reference any images",
     "more": "more",
     "newObject": "Replace Object",
     "no": "No",

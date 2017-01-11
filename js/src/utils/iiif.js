@@ -4,6 +4,9 @@
   $.Iiif = {
 
     getImageUrl: function(image) {
+      if (!image.images) {
+        return null;
+      }
 
       if (!image.images[0].resource.service) {
         id = image.images[0].resource['default'].service['@id'];

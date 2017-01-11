@@ -258,7 +258,9 @@ bindEvents: function() {
           osdBounds:        null,
           zoomLevel:        null
         };
-        this.osd.close();
+        if (this.osd) {
+          this.osd.close();
+        }
         this.createOpenSeadragonInstance();
       }
     },
@@ -276,13 +278,23 @@ bindEvents: function() {
       this.element.find('.' + this.osdCls).remove();
 
       jQuery.each(this.stitchList, function(index, image) {
-        var imageUrl = $.Iiif.getImageUrl(image),
-        infoJsonUrl = imageUrl + '/info.json';
-
-        jQuery.getJSON(infoJsonUrl).done(function (data, status, jqXHR) {
-          tileSources.splice(index, 0, data);
+        if (!image.images) {
+          tileSources.splice(index, 0, {
+            type: 'image',
+            width: 1024,
+            height: 1448,
+            url: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('imagesPath') + 'noimage_big.png'
+          });
           if (tileSources.length === _this.stitchList.length ) { dfd.resolve(); }
-        });
+        } else {
+          var imageUrl = $.Iiif.getImageUrl(image),
+          infoJsonUrl = imageUrl + '/info.json';
+
+          jQuery.getJSON(infoJsonUrl).done(function (data, status, jqXHR) {
+            tileSources.splice(index, 0, data);
+            if (tileSources.length === _this.stitchList.length ) { dfd.resolve(); }
+          });
+        }
       });
 
       dfd.done(function () {
