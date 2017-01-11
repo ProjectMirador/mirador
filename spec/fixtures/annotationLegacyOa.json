@@ -1,0 +1,12 @@
+{
+  "@id": "http://iiif.ultrawaahoo.net/annotations/27",
+  "@type": "oa:Annotation",
+  "motivation": "sc:painting",
+  "resource": {
+    "@id": "http://iiif.ultrawaahoo.net/annotations/27",
+    "@type": "cnt:ContentAsText",
+    "format": "text/plain",
+    "chars": "This is a legacy annotation."
+  },
+  "on": "http://iiif.ultrawaahoo.net/canvases/3927#xywh=154,304,3507,164"
+}
