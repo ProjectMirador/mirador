@@ -189,7 +189,7 @@
         if (newMaxPreviewWidth < _this.maxPreviewImagesWidth ) {
           while (_this.imagesTotalWidth >= newMaxPreviewWidth) {
             image = _this.tplData.images.pop();
-            
+
             if (image) {
               _this.imagesTotalWidth -= (image.width + _this.margin);
 
@@ -257,7 +257,7 @@
       '</div>',
       '<div class="select-metadata">',
         '<div class="manifest-title">',
-          '<h3 title="{{label}}">{{label}}</h3>',
+          '<h3 title="{{{label}}}">{{{label}}}</h3>',
         '</div>',
         '<div class="item-info">',
           '<div class="item-info-row">',
