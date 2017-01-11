@@ -146,17 +146,17 @@
 
    getMetadataRights: function(jsonLd) {
        return [
-         {label: 'license', value: jsonLd.license || ''},
-         {label: 'attribution', value: $.JsonLd.getTextValue(jsonLd.attribution) || ''}
+         {label: i18n.t('license'), value: jsonLd.license || ''},
+         {label: i18n.t('attribution'), value: $.JsonLd.getTextValue(jsonLd.attribution) || ''}
         ];
    },
 
    getMetadataLinks: function(jsonLd) {
      // #414
       return [
-        {label: 'related', value: this.stringifyRelated(jsonLd.related || '')},
-        {label: 'seeAlso', value: this.stringifyRelated(jsonLd.seeAlso || '')},
-        {label: 'within',  value: this.stringifyObject(jsonLd.within || '')}
+        {label: i18n.t('related'), value: this.stringifyRelated(jsonLd.related || '')},
+        {label: i18n.t('seeAlso'), value: this.stringifyRelated(jsonLd.seeAlso || '')},
+        {label: i18n.t('within'),  value: this.stringifyObject(jsonLd.within || '')}
       ];
    },
 
