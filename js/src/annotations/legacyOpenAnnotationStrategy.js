@@ -26,7 +26,7 @@
           win = options.window,
           overlay = options.overlay,
           bounds = overlay.draftPaths[0].bounds;
-      oaAnno.on = win.canvasID + "#xywh=" + bounds.x + "," + bounds.y + "," + bounds.width + "," + bounds.height;
+      oaAnno.on = win.canvasID + "#xywh=" + Math.round(bounds.x) + "," + Math.round(bounds.y) + "," + Math.round(bounds.width) + "," + Math.round(bounds.height);
       return oaAnno;
     },
     

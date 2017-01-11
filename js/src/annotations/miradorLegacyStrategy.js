@@ -34,7 +34,7 @@
         "full": win.canvasID,
         "selector": {
           "@type": "oa:FragmentSelector",
-          "value": "xywh=" + bounds.x + "," + bounds.y + "," + bounds.width + "," + bounds.height
+          "value": "xywh=" + Math.round(bounds.x) + "," + Math.round(bounds.y) + "," + Math.round(bounds.width) + "," + Math.round(bounds.height)
         }
       };
       return oaAnno;
