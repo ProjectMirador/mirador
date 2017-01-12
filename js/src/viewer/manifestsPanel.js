@@ -26,6 +26,38 @@
                 showURLBox : this.state.getStateProperty('showAddFromURLBox')
             })).appendTo(this.appendTo);
             this.manifestListElement = this.element.find('ul');
+            jQuery('#collection-tree').jstree({
+              core: {
+                data: [
+                  { 
+                    text: 'Preloaded Manifests (2)',
+                    icon: 'fa fa-suitcase',
+                    children: []
+                  }, 
+                  {
+                    text: 'My Objects (0)',
+                    icon: 'fa fa-user',
+                    children: []
+                  },
+                  {
+                     text: 'The Arivox Creed Records (3)',
+                     icon: 'fa fa-folder',
+                     state: {
+                       opened: true,
+                       selected: true
+                     },
+                     children: [
+                       { text: 'Proclamations of Telcrova', icon: 'fa fa-folder' },
+                       { text: 'Verses of Al-Davanus', icon: 'fa fa-folder' },
+                       { text: 'Death Warrant Repository', icon: 'fa fa-folder' }
+                     ]
+                  }
+                ],
+                themes: {
+                  dots: false
+                }
+              }
+            });
             
             //this code gives us the max width of the results area, used to determine how many preview images to show
             //cloning the element and adjusting the display and visibility means it won't break the normal flow
@@ -159,6 +191,8 @@
                 '</form>',
               '</div>',
             '</div>',
+              '<div id="collection-tree">',
+              '</div>',
               '<div class="select-results">',
                 '<ul class="items-listing">',
                 '</ul>',
