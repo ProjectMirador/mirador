@@ -258,6 +258,10 @@
               jQuery.each(data.manifests, function (ci, mfst) {
                 _this.addManifestFromUrl(mfst['@id'], '', null);
               });
+            } else if (data.hasOwnProperty('members')){
+              jQuery.each(data.members, function (ci, mfst) {
+                _this.addManifestFromUrl(mfst['@id'], '', null);
+              });
             }
           }).fail(function(jqXHR, status, error) {
             console.log(jqXHR, status, error);

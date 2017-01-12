@@ -78,6 +78,9 @@ describe('MetadataView', function() {
       var withLinksAdded = Mirador.MetadataView.prototype.addLinksToUris(this.fixture.metadata[4].value);
       expect(withLinksAdded).toBe(this.fixture.metadata[4].value);
     });
-
+    it('should add target blank to existing links', function() {
+      var withAttributeAdded = Mirador.MetadataView.prototype.addLinksToUris(this.fixture.metadata[7].value);
+      expect(withAttributeAdded).toBe("There's an URL: <a href=\"http://example.com\" target=\"_blank\">foobar</a>")
+    });
   });
 });

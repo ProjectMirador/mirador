@@ -204,15 +204,22 @@
       // http://stackoverflow.com/questions/8188645/javascript-regex-to-match-a-url-in-a-field-of-text
       var regexUrl = /(http|ftp|https):\/\/[\w\-]+(\.[\w\-]+)+([\w.,@?\^=%&amp;:\/~+#\-]*[\w@?\^=%&amp;\/~+#\-])?/gi,
           textWithLinks = text,
-          matches;
+          matches,
+          parsedTextWithLinks;
 
-      if (typeof text === 'string' && textWithLinks.indexOf('<a ') == -1) {
-        matches = text.match(regexUrl);
+      if (typeof text === 'string') {
+        if (textWithLinks.indexOf('<a ') === -1) {
+          matches = text.match(regexUrl);
 
-        if (matches) {
-          jQuery.each(matches, function(index, match) {
-            textWithLinks = textWithLinks.replace(match, '<a href="' + match + '" target="_blank">' + match + '</a>');
-          });
+          if (matches) {
+            jQuery.each(matches, function(index, match) {
+              textWithLinks = textWithLinks.replace(match, '<a href="' + match + '" target="_blank">' + match + '</a>');
+            });
+          }
+        } else {
+          parsedTextWithLinks = jQuery('<div />').append(textWithLinks);
+          jQuery(parsedTextWithLinks[0]).find('a').attr('target', '_blank');
+          textWithLinks = parsedTextWithLinks[0].innerHTML;
         }
       }
 
