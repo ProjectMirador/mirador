@@ -9,6 +9,10 @@
             manifestListItems:          [],
             manifestListElement:        null,
             manifestLoadStatusIndicator: null,
+            treeElement:                null,
+            expectedThings:             [],
+            preloadedManifests:         [],
+            userManifests:              [],
             resultsWidth:               0,
             state:                      null,
             eventEmitter:               null
@@ -22,41 +26,46 @@
     $.ManifestsPanel.prototype = {
 
         init: function() {
+            var _this = this;
             this.element = jQuery(this.template({
                 showURLBox : this.state.getStateProperty('showAddFromURLBox')
             })).appendTo(this.appendTo);
             this.manifestListElement = this.element.find('ul');
-            jQuery('#collection-tree').jstree({
+            
+            // Collection tree
+            jQuery.each(this.state.currentConfig.data, function(_, v) {
+              if (v.hasOwnProperty('manifestUri')) {
+                _this.preloadedManifests.push(v.manifestUri);
+              }
+            });
+            this.expectedThings = this.preloadedManifests;
+            this.treeElement = jQuery('#collection-tree').jstree({
               core: {
                 data: [
-                  { 
-                    text: 'Preloaded Manifests (2)',
+                  {
+                    id: 'preload',
+                    text: 'Preloaded Manifests',
                     icon: 'fa fa-suitcase',
+                    state: {
+                      selected: true
+                    },
                     children: []
                   }, 
                   {
-                    text: 'My Objects (0)',
+                    id: 'user',
+                    text: 'My Objects',
                     icon: 'fa fa-user',
                     children: []
-                  },
-                  {
-                     text: 'The Arivox Creed Records (3)',
-                     icon: 'fa fa-folder',
-                     state: {
-                       opened: true,
-                       selected: true
-                     },
-                     children: [
-                       { text: 'Proclamations of Telcrova', icon: 'fa fa-folder' },
-                       { text: 'Verses of Al-Davanus', icon: 'fa fa-folder' },
-                       { text: 'Death Warrant Repository', icon: 'fa fa-folder' }
-                     ]
                   }
                 ],
                 themes: {
                   dots: false
-                }
+                },
+                check_callback: true,
+                multiple: false
               }
+            }).on('select_node.jstree', function(event, data) {
+              _this.changeNode(data.node);
             });
             
             //this code gives us the max width of the results area, used to determine how many preview images to show
@@ -86,6 +95,15 @@
 
           _this.eventEmitter.subscribe('manifestReceived', function(event, newManifest) {
             _this.onManifestReceived(event, newManifest);
+          });
+          
+          _this.eventEmitter.subscribe('ADD_MANIFEST_FROM_URL', function(event, stuff) {
+            _this.treeElement.jstree('deselect_all');
+            _this.treeElement.jstree('select_node', 'user');
+            if (_this.userManifests.indexOf(stuff) == -1) {
+              _this.userManifests.push(stuff);
+            }
+            
           });
         },
 
@@ -163,13 +181,54 @@
 
         onManifestReceived: function(event, newManifest) {
           var _this = this;
-          _this.manifestListItems.push(new $.ManifestListItem({ 
-            manifest: newManifest, 
-            resultsWidth: _this.resultsWidth, 
-            state: _this.state,
-            eventEmitter: _this.eventEmitter,
-            appendTo: _this.manifestListElement }));
-          _this.element.find('#manifest-search').keyup();
+          if (_this.expectedThings.indexOf(newManifest.uri) != -1) {
+            _this.manifestListItems.push(new $.ManifestListItem({ 
+              manifest: newManifest, 
+              resultsWidth: _this.resultsWidth, 
+              state: _this.state,
+              eventEmitter: _this.eventEmitter,
+              appendTo: _this.manifestListElement }));
+            _this.element.find('#manifest-search').keyup();
+          }
+        },
+        
+        clearManifestItems: function() {
+          this.manifestListItems = [];
+          this.manifestListElement.html('');
+        },
+        
+        changeNode: function(node) {
+          var _this = this;
+          this.clearManifestItems();
+          switch (node.id) {
+            case 'preload': _this.expectedThings = _this.preloadedManifests; break;
+            case 'user': _this.expectedThings = _this.userManifests; break;
+          }
+          jQuery.each(_this.expectedThings, function(_, expectedThing) {
+            _this.addManifestFromUrl(expectedThing);
+          });
+          this.element.find('#manifest-search').keyup();
+        },
+        
+        addManifestFromUrl: function(url) {
+          var _this = this,
+            manifest;
+          if (_this.state.getStateProperty('manifests')[url]) {
+            manifest = _this.state.getStateProperty('manifests')[url];
+            _this.manifestListItems.push(new $.ManifestListItem({ 
+              manifest: manifest, 
+              resultsWidth: _this.resultsWidth, 
+              state: _this.state,
+              eventEmitter: _this.eventEmitter,
+              appendTo: _this.manifestListElement }));
+          }
+          else {
+            manifest = new $.Manifest(url, '');
+            _this.eventEmitter.publish('manifestQueued', manifest, '');
+            manifest.request.done(function() {
+              _this.eventEmitter.publish('manifestReceived', manifest);
+            });
+          }
         },
 
         template: $.Handlebars.compile([
