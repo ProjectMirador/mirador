@@ -83,4 +83,32 @@ describe('MetadataView', function() {
       expect(withAttributeAdded).toBe("There's an URL: <a href=\"http://example.com\" target=\"_blank\">foobar</a>")
     });
   });
+
+  describe('renderWithin', function() {
+    it('should render simple strings as-sis', function() {
+      var within = "http://example.com";
+      expect(Mirador.MetadataView.prototype.getWithin(within)).toBe(within);
+    });
+
+    it('should render a collection object without a label', function() {
+      var within = {'@id': 'http://example.com', '@type': 'sc:Collection'};
+      expect(Mirador.MetadataView.prototype.getWithin(within)).toBe(
+        '<a href="http://example.com" target="_blank">http://example.com</a>');
+    });
+
+    it('should render a collection object with a label', function() {
+      var within = {'@id': 'http://example.com', '@type': 'sc:Collection', 'label': 'foobar'};
+      expect(Mirador.MetadataView.prototype.getWithin(within)).toBe(
+        '<a href="http://example.com" target="_blank">foobar</a>');
+    });
+
+    it('should render a list of collection objects', function() {
+      var within = [
+        {'@id': 'http://example.com', '@type': 'sc:Collection', 'label': 'foobar'},
+        {'@id': 'http://foo.org', '@type': 'sc:Collection', 'label': 'barfoo'}];
+      expect(Mirador.MetadataView.prototype.getWithin(within)).toBe(
+        '<a href="http://example.com" target="_blank">foobar</a><br/>' +
+        '<a href="http://foo.org" target="_blank">barfoo</a>');
+    });
+  });
 });
