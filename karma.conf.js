@@ -18,6 +18,7 @@ module.exports = function(config) {
       'node_modules/jquery/dist/jquery.min.js',
       'node_modules/jquery-ui-dist/jquery-ui.min.js',
       'node_modules/jquery.scrollto/jquery.scrollTo.min.js',
+      'js/lib/jstree.min.js',
       'js/lib/jquery.qtip.min.js',
       'node_modules/javascript-state-machine/state-machine.min.js',
       'node_modules/tinymce/tinymce.min.js',
