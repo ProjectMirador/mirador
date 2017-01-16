@@ -72,6 +72,10 @@ describe('ManifestsPanel', function() {
     var item = null;
 
     this.panel.onManifestReceived(null, manifest);
+    expect(this.panel.manifestListItems.length).toBe(0);
+    
+    this.panel.expectedThings.push(manifest.uri);
+    this.panel.onManifestReceived(null, manifest);
     expect(this.panel.manifestListItems.length).toBe(1);
     
     item = this.panel.element.find('.items-listing li:first');
@@ -109,11 +113,75 @@ describe('ManifestsPanel', function() {
     expect(this.eventEmitter.publish).toHaveBeenCalledWith('manifestPanelWidthChanged', this.panel.resultsWidth);
   });
   
-  it('should receive a new manifest', function() {
+  it('should not respond to non-expected manifests', function() {
     var manifest = new Mirador.Manifest(null, 'Dummy Location', this.dummyManifestContent);
     expect(this.panel.manifestListItems.length).toBe(0);
     this.panel.onManifestReceived(null, manifest);
+    expect(this.panel.manifestListItems.length).toBe(0);
+  });
+  
+  it('should receive a new manifest when expected', function() {
+    var manifest = new Mirador.Manifest(null, 'Dummy Location', this.dummyManifestContent);
+    expect(this.panel.manifestListItems.length).toBe(0);
+    this.panel.expectedThings.push(manifest.uri);
+    this.panel.onManifestReceived(null, manifest);
     expect(this.panel.manifestListItems.length).toBe(1);
   });
+  
+  it('should receive drops in the My Objects folder', function() {
+    expect(this.panel.userManifests).not.toContain('http://www.example.org/manifest.json');
+    this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', 'http://www.example.org/manifest.json');
+    expect(this.panel.userManifests).toContain('http://www.example.org/manifest.json');
+  });
 
+  it('should clear itself', function() {
+    var manifest = new Mirador.Manifest(null, 'Dummy Location', this.dummyManifestContent);
+    expect(this.panel.manifestListItems.length).toBe(0);
+    this.panel.expectedThings.push(manifest.uri);
+    this.panel.onManifestReceived(null, manifest);
+    expect(this.panel.manifestListItems.length).toBe(1);
+    this.panel.clearManifestItems();
+    expect(this.panel.manifestListItems.length).toBe(0);
+    expect(this.panel.element.find('.items-listing li').length).toBe(0);
+  });
+  
+  describe('Folder changes', function() {
+    beforeEach(function() {
+      this.panel.preloadedManifests = ['http://www.example.org/foo.json', 'http://www.example.org/bar.json'];
+      this.panel.userManifests = ['http://www.example.org/waa.json', 'http://www.example.org/hoo.json'];
+    });
+    
+    it('should cleanly change to preloads', function() {
+      this.panel.changeNode({ id: 'preload' });
+      expect(this.panel.expectedThings).toContain('http://www.example.org/foo.json');
+      expect(this.panel.expectedThings).toContain('http://www.example.org/bar.json');
+      expect(this.panel.expectedThings).not.toContain('http://www.example.org/waa.json');
+      expect(this.panel.expectedThings).not.toContain('http://www.example.org/hoo.json');
+    });
+
+    it('should cleanly change to my objects', function() {
+      this.panel.changeNode({ id: 'user' });
+      expect(this.panel.expectedThings).not.toContain('http://www.example.org/foo.json');
+      expect(this.panel.expectedThings).not.toContain('http://www.example.org/bar.json');
+      expect(this.panel.expectedThings).toContain('http://www.example.org/waa.json');
+      expect(this.panel.expectedThings).toContain('http://www.example.org/hoo.json');
+    });
+  });
+  
+  
+  describe('Adding manifests from URL', function() {
+    it('should grab cached manifests from the state manager and add it right away', function() {
+      var manifest = new Mirador.Manifest(this.dummyManifestContent['@id'], 'Dummy Location', this.dummyManifestContent);
+      this.panel.eventEmitter.publish('manifestQueued', manifest, '');
+      expect(this.panel.manifestListItems.length).toBe(0);
+      this.panel.addManifestFromUrl(manifest.uri);
+      expect(this.panel.manifestListItems.length).toBe(1);
+    });
+    it('should grab new manifests from the source and not add it just yet', function() {
+      var manifest = new Mirador.Manifest(this.dummyManifestContent['@id'], 'Dummy Location', this.dummyManifestContent);
+      expect(this.panel.manifestListItems.length).toBe(0);
+      this.panel.addManifestFromUrl(manifest.uri);
+      expect(this.panel.manifestListItems.length).toBe(0);
+    });
+  });
 });
