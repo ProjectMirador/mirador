@@ -848,12 +848,8 @@
       var _this = this;
       if (!OpenSeadragon.isFullScreen()) {
         this.element.find('.mirador-osd-fullscreen i').removeClass('fa-compress').addClass('fa-expand');
-        this.element.find('.mirador-osd-toggle-bottom-panel').show();
-        _this.eventEmitter.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.id, true);
       } else {
         this.element.find('.mirador-osd-fullscreen i').removeClass('fa-expand').addClass('fa-compress');
-        this.element.find('.mirador-osd-toggle-bottom-panel').hide();
-        _this.eventEmitter.publish('SET_BOTTOM_PANEL_VISIBILITY.' + this.id, false);
       }
     },
 
