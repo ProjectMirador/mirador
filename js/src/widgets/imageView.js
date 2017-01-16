@@ -529,11 +529,16 @@
     },
 
     createMissingImageWidget: function() {
-      this.element.find('.missing-image').remove();
+      this.element.find('.missing-image-container').remove();
       this.element.find('.' + this.osdCls).remove();
       this.element.append(
-        "<div class='missing-image'>" +
-        " <p>" + i18n.t('missingImages') + "</p>" +
+        "<div class='missing-image-container'>" +
+        "  <div class='missing-image'>" +
+        "    <p class='no-image-labels'>" +
+        $.JsonLd.getTextValue(this.currentImg.label) +
+        "    </p>" +
+        "    <p class='no-image-error'>" + i18n.t('missingImages') + "</p>" +
+        "  </div>" +
         "</div>");
     },
 
@@ -544,7 +549,7 @@
       infoJson,
       _this = this;
 
-      this.element.find('.missing-image').remove();
+      this.element.find('.missing-image-container').remove();
       this.element.find('.' + this.osdCls).remove();
 
       jQuery.getJSON(infoJsonUrl).done(function (infoJson, status, jqXHR) {

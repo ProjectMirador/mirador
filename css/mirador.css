@@ -2082,7 +2082,7 @@ canvas {
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
 }
 
-.missing-image {
+.missing-image-container {
   height: calc(100% - 150px);
   display: flex;
   align-items: center;
@@ -2090,6 +2090,11 @@ canvas {
 }
 
 .missing-image p {
+  text-align: center;
   color: white;
   font-size: 2em;
+}
+
+.missing-image .no-image-labels {
+  font-weight: bold;
 }
