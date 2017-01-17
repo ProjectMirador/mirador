@@ -79,4 +79,108 @@ describe('Collection', function() {
       expect(collectionInstance.getVersion()).toEqual('2.1');
     });
   });
+  
+  describe('getManifestUris for collection', function() {
+    it('should return manifest URIs for a collection with a \"manifests\" key', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "collections": [
+          {
+            "@id": "http://example.org/iiif/collection/part2",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 2"
+          }
+        ],
+        "manifests": [
+          {
+            "@id": "http://example.org/iiif/book1/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 1"
+          },
+          {
+            "@id": "http://example.org/iiif/book2/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 2"
+          }
+        ],
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getManifestUris()).toEqual([
+        "http://example.org/iiif/book1/manifest", 
+        "http://example.org/iiif/book2/manifest"
+      ]);
+    });
+    it('should return manifest URIs for a collection with a \"members\" key', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "members": [
+          {
+            "@id": "http://example.org/iiif/book1/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 1"
+          },
+          {
+            "@id": "http://example.org/iiif/collection/part2",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 2"
+          },
+          {
+            "@id": "http://example.org/iiif/book2/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 2"
+          }
+        ],
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getManifestUris()).toEqual([
+        "http://example.org/iiif/book1/manifest", 
+        "http://example.org/iiif/book2/manifest"
+      ]);
+    });
+    it('should return empty array for a collection without either key', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "collections": [
+          {
+            "@id": "http://example.org/iiif/collection/part2",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 2"
+          }
+        ]
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getManifestUris()).toEqual([]);
+    });
+    it('should return empty array for a collection with a \"members\" key but no manifests in it', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "members": [
+          {
+            "@id": "http://example.org/iiif/collection/part1",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 1"
+          },
+          {
+            "@id": "http://example.org/iiif/collection/part2",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 2"
+          }
+        ]
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getManifestUris()).toEqual([]);
+    });
+  });
 });

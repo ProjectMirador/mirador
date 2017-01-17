@@ -254,20 +254,12 @@
         } else if (manifest.hasOwnProperty('manifestUri')) {
           var url = manifest.manifestUri;
           _this.addManifestFromUrl(url, manifest.location ? manifest.location : '', null);
+        } else if (manifest.hasOwnProperty('collectionContent')) {
+          var collectionContent = manifest.collectionContent;
+          _this.addCollectionFromUrl(collectionContent['@id'], manifest.location ? manifest.location : '', collectionContent);
         } else if (manifest.hasOwnProperty('collectionUri')) {
-          jQuery.getJSON(manifest.collectionUri).done(function (data, status, jqXHR) {
-            if (data.hasOwnProperty('manifests')){
-              jQuery.each(data.manifests, function (ci, mfst) {
-                _this.addManifestFromUrl(mfst['@id'], '', null);
-              });
-            } else if (data.hasOwnProperty('members')){
-              jQuery.each(data.members, function (ci, mfst) {
-                _this.addManifestFromUrl(mfst['@id'], '', null);
-              });
-            }
-          }).fail(function(jqXHR, status, error) {
-            console.log(jqXHR, status, error);
-          });
+          var collectionUrl = manifest.collectionUri;
+          _this.addCollectionFromUrl(collectionUrl, manifest.location ? manifest.location : '', null);
         }
       });
     },
@@ -290,6 +282,18 @@
         _this.eventEmitter.publish('manifestQueued', manifest, location);
         manifest.request.done(function() {
           _this.eventEmitter.publish('manifestReceived', manifest);
+        });
+      }
+    },
+    
+    addCollectionFromUrl: function(url, location, content) {
+      var _this = this,
+        collection;
+      if (!_this.state.getStateProperty('manifests')[url]) {
+        collection = new $.Collection(url, location, content);
+        _this.eventEmitter.publish('manifestQueued', collection, location);
+        collection.request.done(function() {
+          _this.eventEmitter.publish('collectionReceived', [collection, url, null]);
         });
       }
     },

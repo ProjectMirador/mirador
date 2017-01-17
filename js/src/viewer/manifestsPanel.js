@@ -13,6 +13,7 @@
             expectedThings:             [],
             preloadedManifests:         [],
             userManifests:              [],
+            nodeManifests:              {},
             resultsWidth:               0,
             state:                      null,
             eventEmitter:               null
@@ -95,6 +96,10 @@
 
           _this.eventEmitter.subscribe('manifestReceived', function(event, newManifest) {
             _this.onManifestReceived(event, newManifest);
+          });
+          
+          _this.eventEmitter.subscribe('collectionReceived', function(event, newCollection, parentUri, parentNodeId) {
+            _this.onCollectionReceived(event, newCollection, parentUri, parentNodeId);
           });
           
           _this.eventEmitter.subscribe('ADD_MANIFEST_FROM_URL', function(event, stuff) {
@@ -192,6 +197,18 @@
           }
         },
         
+        onCollectionReceived: function(event, newCollection, parentUri, parentNodeId) {
+          var _this = this;
+          var q = newCollection.jsonLd.label;
+          _this.treeElement.jstree('create_node', parentNodeId, {
+            text: q,
+            icon: 'fa fa-folder',
+            children: []
+          }, 'last', function(newNode) {
+            _this.nodeManifests[newNode.id] = newCollection.getManifestUris();
+          });
+        },
+        
         clearManifestItems: function() {
           this.manifestListItems = [];
           this.manifestListElement.html('');
@@ -203,6 +220,7 @@
           switch (node.id) {
             case 'preload': _this.expectedThings = _this.preloadedManifests; break;
             case 'user': _this.expectedThings = _this.userManifests; break;
+            default: _this.expectedThings = _this.nodeManifests[node.id]; break;
           }
           jQuery.each(_this.expectedThings, function(_, expectedThing) {
             _this.addManifestFromUrl(expectedThing);

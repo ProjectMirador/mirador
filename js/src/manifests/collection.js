@@ -50,6 +50,21 @@
         'http://iiif.io/api/presentation/2.1/context.json': '2.1'
       };
       return versionMap[this.jsonLd['@context']];
+    },
+    getManifestUris: function() {
+      if (this.jsonLd.manifests) {
+        return jQuery.map(this.jsonLd.manifests, function(v, _) {
+          return v['@id'];
+        });
+      }
+      if (this.jsonLd.members) {
+        return jQuery.map(this.jsonLd.members, function(v, _) {
+          if (v['@type'] === 'sc:Manifest') {
+            return v['@id'];
+          }
+        });
+      }
+      return [];
     }
   };
 

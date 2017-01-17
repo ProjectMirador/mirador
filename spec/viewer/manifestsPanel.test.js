@@ -17,12 +17,21 @@ describe('ManifestsPanel', function() {
 
   it('should listen for actions', function() {
     var manifest = new Mirador.Manifest(null, 'Dummy Location', this.dummyManifestContent);
+    var collection = new Mirador.Collection(null, 'Dummy Location', {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://example.org/iiif/collection/top",
+      "@type": "sc:Collection",
+      "label": "Top Level Collection for Example Organization"
+    });
     spyOn(this.panel, 'onPanelVisible');
     spyOn(this.panel, 'onManifestReceived');
+    spyOn(this.panel, 'onCollectionReceived');
     this.eventEmitter.publish('manifestsPanelVisible.set');
     this.eventEmitter.publish('manifestReceived', manifest);
+    this.eventEmitter.publish('collectionReceived', collection);
     expect(this.panel.onPanelVisible).toHaveBeenCalled();
     expect(this.panel.onManifestReceived).toHaveBeenCalled();
+    expect(this.panel.onCollectionReceived).toHaveBeenCalled();
   });
   
   it('should bind events', function() {
