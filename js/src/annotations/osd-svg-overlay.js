@@ -167,7 +167,6 @@
           }
         }
       });
-      _this.eventEmitter.publish('DIALOG_CREATED.' + _this.windowId, ['mirador-dialog']);
     },
 
     listenForActions: function() {
@@ -292,7 +291,6 @@
                 }
               }
             });
-            _this.eventEmitter.publish('DIALOG_CREATED.' + _this.windowId, ['mirador-dialog']);
         } else {
           var writeStrategy = new $.MiradorDualStrategy();
           writeStrategy.buildAnnotation({
@@ -407,7 +405,6 @@
               }
             }
           });
-          _this.eventEmitter.publish('DIALOG_CREATED.' + _this.windowId, ['mirador-dialog']);
         } else {
           cancel();
         }
