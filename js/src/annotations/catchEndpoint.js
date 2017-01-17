@@ -40,7 +40,7 @@
     init: function() {
       this.catchOptions = {
         user: {
-          id: this.userid, 
+          id: this.userid,
           name: this.username
         },
         permissions: {
@@ -82,7 +82,7 @@
           contextId: _this.context_id,
           collectionId: _this.collection_id,
           media: options.media ? options.media : "image",
-          limit: options.limit ? options.limit : -1 
+          limit: options.limit ? options.limit : -1
         },
 
         contentType: "application/json; charset=utf-8",
@@ -109,9 +109,9 @@
 
       });
     },
-    
+
     deleteAnnotation: function(annotationID, successCallback, errorCallback) {
-      var _this = this;        
+      var _this = this;
       jQuery.ajax({
        url: this.prefix+"/destroy/"+annotationID,
        type: 'DELETE',
@@ -134,12 +134,12 @@
 
     });
     },
-    
+
     update: function(oaAnnotation, successCallback, errorCallback) {
       var annotation = this.getAnnotationInEndpoint(oaAnnotation),
       _this = this,
       annotationID = annotation.id;
-      
+
       jQuery.ajax({
         url: this.prefix+"/update/"+annotationID,
         type: 'POST',
@@ -172,7 +172,7 @@
 
     createCatchAnnotation: function(catchAnnotation, successCallback, errorCallback) {
       var _this = this;
-      
+
       jQuery.ajax({
         url: this.prefix+"/create",
         type: 'POST',
@@ -198,7 +198,7 @@
 
     userAuthorize: function(action, annotation) {
       var token, tokens, _i, _len;
-      //if this is an instructor, they have access to student annotations      
+      //if this is an instructor, they have access to student annotations
       if (this.roles && (this.roles.indexOf('Instructor') !== -1 || this.roles.indexOf('Administrator') !== -1)){
           return true;
       }
@@ -224,7 +224,7 @@
 
     //Convert Endpoint annotation to OA
     getAnnotationInOA: function(annotation) {
-      var id, 
+      var id,
       motivation = [],
       resource = [],
       on,
@@ -236,7 +236,7 @@
       if (annotation.tags.length > 0) {
         motivation.push("oa:tagging");
         jQuery.each(annotation.tags, function(index, value) {
-          resource.push({      
+          resource.push({
             "@type":"oa:Tag",
             "chars":value
           });
@@ -297,7 +297,7 @@
       var annotation = {},
       tags = [],
       text;
-      
+
       if (oaAnnotation["@id"]) {
         annotation.id = oaAnnotation["@id"];
       }
@@ -305,7 +305,7 @@
       annotation.media = "image";
       jQuery.each(oaAnnotation.resource, function(index, value) {
         if (value['@type'] === 'oa:Tag') {
-          tags.push(value.chars); 
+          tags.push(value.chars);
         } else if (value['@type'] === 'dctypes:Text') {
           text = value.chars;
         }
@@ -317,27 +317,26 @@
       annotation.contextId = this.context_id;
       annotation.collectionId = this.collection_id;
 
-      var region = oaAnnotation.on.selector.value;
+      var region = oaAnnotation.on.selector.item.value;
       var regionArray;
       if (region.indexOf('<svg') !== -1) {
         //this is an svg string, so don't do anything special
         annotation.rangePosition = region;
-      } else {
-        regionArray = region.split('=')[1].split(',');
-        annotation.rangePosition = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
       }
+      var coords = oaAnnotation.on.selector.default.value;
+      regionArray = coords.split('=')[1].split(',');
 
-      // var imageUrl = $.Iiif.getImageUrl(this.parent.imagesList[$.getImageIndexById(this.parent.imagesList, oaAnnotation.on.full)]);
-      // imageUrl = imageUrl + "/" + regionArray.join(',') + "/full/0/native.jpg";
-      // annotation.thumb = imageUrl;
+      var imageUrl = $.Iiif.getImageUrl(this.parent.imagesList[$.getImageIndexById(this.parent.imagesList, oaAnnotation.on.full)]);
+      imageUrl = imageUrl + "/" + regionArray.join(',') + "/full/0/native.jpg";
+      annotation.thumb = imageUrl;
 
       // region = oaAnnotation.on.scope.value;
       // regionArray = region.split('=')[1].split(',');
       // annotation.bounds = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
 
       annotation.updated = new Date().toISOString();
-      if (oaAnnotation.annotatedAt) { 
-        annotation.created = oaAnnotation.annotatedAt; 
+      if (oaAnnotation.annotatedAt) {
+        annotation.created = oaAnnotation.annotatedAt;
       } else {
         annotation.created = annotation.updated;
       }
