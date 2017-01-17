@@ -255,9 +255,16 @@
         motivation.push("oa:commenting");
         on = { "@type" : "oa:SpecificResource",
           "full" : annotation.uri,
-          "selector" : {
-            "@type" : "oa:FragmentSelector",
-            "value" : value
+          "selector": {
+            "@type": "oa:Choice",
+            "default": {
+              "@type": "oa:FragmentSelector",
+              "value": "xywh=" + annotation.bounds.x + "," + annotation.bounds.y + "," + annotation.bounds.width + "," + annotation.bounds.height
+            },
+            "item": {
+              "@type": "oa:SvgSelector",
+              "value": value
+            }
           }
           // ,
           // "scope": {
