@@ -326,13 +326,10 @@
       var coords = oaAnnotation.on.selector.default.value;
       regionArray = coords.split('=')[1].split(',');
 
-      var imageUrl = $.Iiif.getImageUrl(this.parent.imagesList[$.getImageIndexById(this.parent.imagesList, oaAnnotation.on.full)]);
+      var imageUrl = $.Iiif.getImageUrl(this.imagesList[$.getImageIndexById(this.imagesList, oaAnnotation.on.full)]);
       imageUrl = imageUrl + "/" + regionArray.join(',') + "/full/0/native.jpg";
       annotation.thumb = imageUrl;
-
-      // region = oaAnnotation.on.scope.value;
-      // regionArray = region.split('=')[1].split(',');
-      // annotation.bounds = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
+      annotation.bounds = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
 
       annotation.updated = new Date().toISOString();
       if (oaAnnotation.annotatedAt) {
