@@ -65,6 +65,47 @@
         });
       }
       return [];
+    },
+    getManifestBlocks: function() {
+      if (this.jsonLd.manifests) {
+        return this.jsonLd.manifests;
+      }
+      if (this.jsonLd.members) {
+        return jQuery.map(this.jsonLd.members, function(v, _) {
+          if (v['@type'] === 'sc:Manifest') {
+            return v;
+          }
+        });
+      }
+      return [];
+    },
+    getCollectionUris: function() {
+      if (this.jsonLd.collections) {
+        return jQuery.map(this.jsonLd.collections, function(v, _) {
+          return v['@id'];
+        });
+      }
+      if (this.jsonLd.members) {
+        return jQuery.map(this.jsonLd.members, function(v, _) {
+          if (v['@type'] === 'sc:Collection') {
+            return v['@id'];
+          }
+        });
+      }
+      return [];
+    },
+    getCollectionBlocks: function() {
+      if (this.jsonLd.collections) {
+        return this.jsonLd.collections;
+      }
+      if (this.jsonLd.members) {
+        return jQuery.map(this.jsonLd.members, function(v, _) {
+          if (v['@type'] === 'sc:Collection') {
+            return v;
+          }
+        });
+      }
+      return [];
     }
   };
 

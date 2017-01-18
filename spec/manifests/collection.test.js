@@ -183,4 +183,358 @@ describe('Collection', function() {
       expect(collectionInstance.getManifestUris()).toEqual([]);
     });
   });
+  
+  describe('getManifestBlocks for collection', function() {
+    it('should return manifest blocks for a collection with a \"manifests\" key', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "collections": [
+          {
+            "@id": "http://example.org/iiif/collection/part2",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 2"
+          }
+        ],
+        "manifests": [
+          {
+            "@id": "http://example.org/iiif/book1/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 1"
+          },
+          {
+            "@id": "http://example.org/iiif/book2/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 2"
+          }
+        ],
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getManifestBlocks()).toEqual([
+        {
+          "@id": "http://example.org/iiif/book1/manifest",
+          "@type": "sc:Manifest",
+          "label": "Book 1"
+        },
+        {
+          "@id": "http://example.org/iiif/book2/manifest",
+          "@type": "sc:Manifest",
+          "label": "Book 2"
+        }
+      ]);
+    });
+    it('should return manifest blocks for a collection with a \"members\" key', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "members": [
+          {
+            "@id": "http://example.org/iiif/book1/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 1"
+          },
+          {
+            "@id": "http://example.org/iiif/collection/part2",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 2"
+          },
+          {
+            "@id": "http://example.org/iiif/book2/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 2"
+          }
+        ],
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getManifestBlocks()).toEqual([
+        {
+          "@id": "http://example.org/iiif/book1/manifest",
+          "@type": "sc:Manifest",
+          "label": "Book 1"
+        },
+        {
+          "@id": "http://example.org/iiif/book2/manifest",
+          "@type": "sc:Manifest",
+          "label": "Book 2"
+        }
+      ]);
+    });
+    it('should return empty array for a collection without either key', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "collections": [
+          {
+            "@id": "http://example.org/iiif/collection/part2",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 2"
+          }
+        ]
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getManifestBlocks()).toEqual([]);
+    });
+    it('should return empty array for a collection with a \"members\" key but no manifests in it', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "members": [
+          {
+            "@id": "http://example.org/iiif/collection/part1",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 1"
+          },
+          {
+            "@id": "http://example.org/iiif/collection/part2",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 2"
+          }
+        ]
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getManifestBlocks()).toEqual([]);
+    });
+  });
+  
+  describe('getCollectionUris for collection', function() {
+    it('should return collection URIs for a collection with a \"collections\" key', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "manifests": [
+          {
+            "@id": "http://example.org/iiif/book1/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 1"
+          }
+        ],
+        "collections": [
+          {
+            "@id": "http://example.org/iiif/collection/part1",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 1"
+          },
+          {
+            "@id": "http://example.org/iiif/collection/part2",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 2"
+          }
+        ]
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getCollectionUris()).toEqual([
+        "http://example.org/iiif/collection/part1", 
+        "http://example.org/iiif/collection/part2"
+      ]);
+    });
+    it('should return collection URIs for a collection with a \"members\" key', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "members": [
+          {
+            "@id": "http://example.org/iiif/collection/part1",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 1"
+          },
+          {
+            "@id": "http://example.org/iiif/book1/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 1"
+          },
+          {
+            "@id": "http://example.org/iiif/collection/part2",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 2"
+          }
+        ]
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getCollectionUris()).toEqual([
+        "http://example.org/iiif/collection/part1", 
+        "http://example.org/iiif/collection/part2"
+      ]);
+    });
+    it('should return empty array for a collection without either key', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "manifests": [
+          {
+            "@id": "http://example.org/iiif/book1/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 1"
+          },
+          {
+            "@id": "http://example.org/iiif/book2/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 2"
+          }
+        ]
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getCollectionUris()).toEqual([]);
+    });
+    it('should return empty array for a collection with a \"members\" key but no manifests in it', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "members": [
+          {
+            "@id": "http://example.org/iiif/book1/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 1"
+          },
+          {
+            "@id": "http://example.org/iiif/book2/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 2"
+          }
+        ]
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getCollectionUris()).toEqual([]);
+    });
+  });
+  
+  describe('getCollectionBlocks for collection', function() {
+    it('should return collection URIs for a collection with a \"collections\" key', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "manifests": [
+          {
+            "@id": "http://example.org/iiif/book1/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 1"
+          }
+        ],
+        "collections": [
+          {
+            "@id": "http://example.org/iiif/collection/part1",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 1"
+          },
+          {
+            "@id": "http://example.org/iiif/collection/part2",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 2"
+          }
+        ]
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getCollectionBlocks()).toEqual([
+        {
+          "@id": "http://example.org/iiif/collection/part1",
+          "@type": "sc:Collection",
+          "label": "Sub Collection 1"
+        },
+        {
+          "@id": "http://example.org/iiif/collection/part2",
+          "@type": "sc:Collection",
+          "label": "Sub Collection 2"
+        }
+      ]);
+    });
+    it('should return collection URIs for a collection with a \"members\" key', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "members": [
+          {
+            "@id": "http://example.org/iiif/collection/part1",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 1"
+          },
+          {
+            "@id": "http://example.org/iiif/book1/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 1"
+          },
+          {
+            "@id": "http://example.org/iiif/collection/part2",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 2"
+          }
+        ]
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getCollectionBlocks()).toEqual([
+        {
+          "@id": "http://example.org/iiif/collection/part1",
+          "@type": "sc:Collection",
+          "label": "Sub Collection 1"
+        },
+        {
+          "@id": "http://example.org/iiif/collection/part2",
+          "@type": "sc:Collection",
+          "label": "Sub Collection 2"
+        }
+      ]);
+    });
+    it('should return empty array for a collection without either key', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "manifests": [
+          {
+            "@id": "http://example.org/iiif/book1/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 1"
+          },
+          {
+            "@id": "http://example.org/iiif/book2/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 2"
+          }
+        ]
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getCollectionBlocks()).toEqual([]);
+    });
+    it('should return empty array for a collection with a \"members\" key but no manifests in it', function() {
+      var content = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "members": [
+          {
+            "@id": "http://example.org/iiif/book1/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 1"
+          },
+          {
+            "@id": "http://example.org/iiif/book2/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 2"
+          }
+        ]
+      };
+      var collectionInstance = new Mirador.Collection(null, null, content);
+      expect(collectionInstance.getCollectionBlocks()).toEqual([]);
+    });
+  });
 });
