@@ -151,7 +151,7 @@
         contentType: "application/json; charset=utf-8",
         success: function(data) {
           if (typeof successCallback === "function") {
-            successCallback();
+            successCallback(_this.getAnnotationInOA(data));
           }
           _this.eventEmitter.publish('catchAnnotationUpdated.'+_this.windowID, annotation);
         },
