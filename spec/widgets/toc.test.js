@@ -60,7 +60,7 @@ describe('Table of Contents', function() {
       });
 
       expect(this.sandbox.find('.toc')).toExist();
-      expect(this.sandbox.find('h2 span')).toContainText('No index available');
+      expect(this.sandbox.find('h2 span')).toContainText(i18n.t('noIndex'));
     });
 
     it('should set tocData with a cached element for each range', function() {
