@@ -325,12 +325,12 @@
           }
         },
         
-        addCollectionNode: function(nodeId, collection) {
+        addCollectionNode: function(nodeId, collection, unexpanded) {
           var _this = this,
               subcollectionBlocks = collection.getCollectionBlocks();
           var newNodeId = _this.treeElement.jstree('create_node', nodeId ? nodeId : null, {
             text: collection.jsonLd.label,
-            icon: 'fa fa-folder',
+            icon: unexpanded ? 'fa fa-spinner fa-pulse' : 'fa fa-folder',
             children: []
           }, 'last');
           // Register the new node's apparent contents
@@ -339,16 +339,18 @@
           _this.nodeManifests[newNodeId] = collection.getManifestUris();
           _this.nodeChildren[newNodeId] = [];
           // Add subcollections
-          jQuery.each(subcollectionBlocks, function(i, v) {
-            var nid = _this.treeElement.jstree('create_node', newNodeId, {
-              text: v.label,
-              icon: 'fa fa-folder',
-              children: []
-            }, 'last');
-            _this.registerNodeIdUriPair(nid, v['@id']);
-            _this.unexpandedNodes[nid] = true;
-            _this.nodeChildren[newNodeId].push(nid);
-          });
+          if (!unexpanded) {
+            jQuery.each(subcollectionBlocks, function(i, v) {
+              var nid = _this.treeElement.jstree('create_node', newNodeId, {
+                text: v.label,
+                icon: 'fa fa-spinner fa-pulse',
+                children: []
+              }, 'last');
+              _this.registerNodeIdUriPair(nid, v['@id']);
+              _this.unexpandedNodes[nid] = true;
+              _this.nodeChildren[newNodeId].push(nid);
+            });
+          }
           return newNodeId;
         },
         
@@ -365,8 +367,9 @@
               _this.nodeChildren[n] = [];
               delete _this.unexpandedNodes[n];
               jQuery.each(collectionBlocks, function(i, v) {
-                _this.nodeChildren[n].push(_this.addCollectionNode(n, new $.Collection(v['@id'], null, v)));
+                _this.nodeChildren[n].push(_this.addCollectionNode(n, new $.Collection(v['@id'], null, v), true));
               });
+              _this.treeElement.jstree('set_icon', n, 'fa fa-folder');
             }
           });
           
