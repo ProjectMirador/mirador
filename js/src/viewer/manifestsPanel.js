@@ -19,6 +19,7 @@
             uriToNodeId:                {},
             nodeChildren:               {},
             unexpandedNodes:            {},
+            treeQueue:                  [], //Holds collections before the tree is ready; will be removed when ready
             resultsWidth:               0,
             state:                      null,
             eventEmitter:               null
@@ -74,6 +75,15 @@
               _this.changeNode(data.node);
             }).on('open_node.jstree', function(event, data) {
               _this.expandNode(data.node);
+            }).on('ready.jstree', function() {
+              jQuery.each(_this.treeQueue, function(_, v) {
+                if (v[3]) {
+                  _this.updateCollectionNode(v[3], v[1]);
+                } else {
+                  _this.addCollectionNode(v[3], v[1]);
+                }
+              });
+              delete _this.treeQueue;
             });
             
             //this code gives us the max width of the results area, used to determine how many preview images to show
@@ -205,6 +215,11 @@
         },
         
         onCollectionReceived: function(event, newCollection, uri, parentNodeId) {
+          // If the tree isn't ready, hold it and move on
+          if (typeof this.treeQueue !== 'undefined') {
+            this.treeQueue.push([event, newCollection, uri, parentNodeId]);
+            return;
+          }
           // Update nodes if the target isn't top; create new node if the target is top
           if (parentNodeId) {
             this.updateCollectionNode(parentNodeId, newCollection);
