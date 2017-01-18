@@ -14,6 +14,11 @@
             preloadedManifests:         [],
             userManifests:              [],
             nodeManifests:              {},
+            nodeCollections:            {},
+            nodeIdToUri:                {},
+            uriToNodeId:                {},
+            nodeChildren:               {},
+            unexpandedNodes:            {},
             resultsWidth:               0,
             state:                      null,
             eventEmitter:               null
@@ -67,6 +72,8 @@
               }
             }).on('select_node.jstree', function(event, data) {
               _this.changeNode(data.node);
+            }).on('open_node.jstree', function(event, data) {
+              _this.expandNode(data.node);
             });
             
             //this code gives us the max width of the results area, used to determine how many preview images to show
@@ -197,21 +204,28 @@
           }
         },
         
-        onCollectionReceived: function(event, newCollection, parentUri, parentNodeId) {
-          var _this = this;
-          var q = newCollection.jsonLd.label;
-          _this.treeElement.jstree('create_node', parentNodeId, {
-            text: q,
-            icon: 'fa fa-folder',
-            children: []
-          }, 'last', function(newNode) {
-            _this.nodeManifests[newNode.id] = newCollection.getManifestUris();
-          });
+        onCollectionReceived: function(event, newCollection, uri, parentNodeId) {
+          // Update nodes if the target isn't top; create new node if the target is top
+          if (parentNodeId) {
+            this.updateCollectionNode(parentNodeId, newCollection);
+          } else {
+            this.addCollectionNode(parentNodeId, newCollection);
+          }
         },
         
         clearManifestItems: function() {
           this.manifestListItems = [];
           this.manifestListElement.html('');
+        },
+        
+        registerNodeIdUriPair: function(nodeId, uri) {
+          // Set up 2-way correspondence between node IDs and URIs
+          this.nodeIdToUri[nodeId] = uri;
+          if (this.uriToNodeId[uri]) {
+            this.uriToNodeId[uri].push(nodeId);
+          } else {
+            this.uriToNodeId[uri] = [nodeId];
+          }
         },
         
         changeNode: function(node) {
@@ -222,10 +236,25 @@
             case 'user': _this.expectedThings = _this.userManifests; break;
             default: _this.expectedThings = _this.nodeManifests[node.id]; break;
           }
+          // Populate and refresh the manifests listings
           jQuery.each(_this.expectedThings, function(_, expectedThing) {
             _this.addManifestFromUrl(expectedThing);
           });
           this.element.find('#manifest-search').keyup();
+          
+        },
+        
+        expandNode: function(node) {
+          var _this = this;
+          switch (node.id) {
+            case 'preload': break; //TODO: Handle this
+            case 'user': break; //TODO: Handle this
+            default: 
+              jQuery.each(_this.nodeCollections[node.id], function(_, uri) {
+                _this.updateCollectionFromUrl(uri, node.id);
+              });
+            break;
+          }
         },
         
         addManifestFromUrl: function(url) {
@@ -247,6 +276,85 @@
               _this.eventEmitter.publish('manifestReceived', manifest);
             });
           }
+        },
+        
+        addCollectionFromUrl: function(url, nodeId) {
+          var _this = this,
+            collection;
+          if (typeof _this.state.getStateProperty('manifests')[url] !== 'undefined') {
+            collection = _this.state.getStateProperty('manifests')[url];
+            _this.addCollectionNode(nodeId, collection);
+          }
+          else {
+            collection = new $.Collection(url, '');
+            _this.eventEmitter.publish('manifestQueued', collection, '');
+            collection.request.done(function() {
+              _this.eventEmitter.publish('collectionReceived', [collection, url, nodeId ? nodeId : null]);
+            });
+          }
+        },
+        
+        updateCollectionFromUrl: function(url, nodeId) {
+          var _this = this,
+            collection;
+          if (typeof _this.state.getStateProperty('manifests')[url] !== 'undefined') {
+            collection = _this.state.getStateProperty('manifests')[url];
+            _this.updateCollectionNode(nodeId, collection);
+          }
+          else {
+            collection = new $.Collection(url, '');
+            _this.eventEmitter.publish('manifestQueued', collection, '');
+            collection.request.done(function() {
+              _this.eventEmitter.publish('collectionReceived', [collection, url, nodeId ? nodeId : null]);
+            });
+          }
+        },
+        
+        addCollectionNode: function(nodeId, collection) {
+          var _this = this,
+              subcollectionBlocks = collection.getCollectionBlocks();
+          var newNodeId = _this.treeElement.jstree('create_node', nodeId ? nodeId : null, {
+            text: collection.jsonLd.label,
+            icon: 'fa fa-folder',
+            children: []
+          }, 'last');
+          // Register the new node's apparent contents
+          _this.registerNodeIdUriPair(newNodeId, collection.jsonLd['@id']);
+          _this.nodeCollections[newNodeId] = collection.getCollectionUris();
+          _this.nodeManifests[newNodeId] = collection.getManifestUris();
+          _this.nodeChildren[newNodeId] = [];
+          // Add subcollections
+          jQuery.each(subcollectionBlocks, function(i, v) {
+            var nid = _this.treeElement.jstree('create_node', newNodeId, {
+              text: v.label,
+              icon: 'fa fa-folder',
+              children: []
+            }, 'last');
+            _this.registerNodeIdUriPair(nid, v['@id']);
+            _this.unexpandedNodes[nid] = true;
+            _this.nodeChildren[newNodeId].push(nid);
+          });
+          return newNodeId;
+        },
+        
+        updateCollectionNode: function(nodeId, collection) {
+          var _this = this,
+              atId = collection.uri,
+              collectionBlocks = collection.getCollectionBlocks(),
+              collectionUris = collection.getCollectionUris(),
+              manifestUris = collection.getManifestUris();
+          jQuery.each(_this.nodeChildren[nodeId], function(_, n) {
+            if (_this.nodeIdToUri[n] == atId) {
+              _this.nodeCollections[n] = collectionUris;
+              _this.nodeManifests[n] = manifestUris;
+              _this.nodeChildren[n] = [];
+              delete _this.unexpandedNodes[n];
+              jQuery.each(collectionBlocks, function(i, v) {
+                _this.nodeChildren[n].push(_this.addCollectionNode(n, new $.Collection(v['@id'], null, v)));
+              });
+            }
+          });
+          
         },
 
         template: $.Handlebars.compile([
