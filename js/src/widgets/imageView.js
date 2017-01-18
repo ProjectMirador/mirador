@@ -49,7 +49,12 @@
       .addClass(this.annoCls)
       .appendTo(this.element);
 
-      this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+      var imgUrl = $.Iiif.getImageUrl(this.currentImg);
+      if (imgUrl) {
+        this.createOpenSeadragonInstance(imgUrl);
+      } else {
+        this.createMissingImageWidget();
+      }
       _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
 
       var allTools = $.getTools(this.state.getStateProperty('drawingToolsSettings'));
@@ -285,15 +290,17 @@
       };
 
       function setFilterCSS() {
-        var filterCSS = jQuery.map(filterValues, function(value, key) { return value; }).join(" "),
-        osdCanvas = jQuery(_this.osd.drawer.canvas);
-        osdCanvas.css({
-          'filter'         : filterCSS,
-          '-webkit-filter' : filterCSS,
-          '-moz-filter'    : filterCSS,
-          '-o-filter'      : filterCSS,
-          '-ms-filter'     : filterCSS
-        });
+        if (_this.osd) {
+          var filterCSS = jQuery.map(filterValues, function(value, key) { return value; }).join(" ");
+          var osdCanvas = jQuery(_this.osd.drawer.canvas);
+          osdCanvas.css({
+            'filter'         : filterCSS,
+            '-webkit-filter' : filterCSS,
+            '-moz-filter'    : filterCSS,
+            '-o-filter'      : filterCSS,
+            '-ms-filter'     : filterCSS
+          });
+        }
       }
 
       function resetImageManipulationControls() {
@@ -675,7 +682,9 @@
           zoomLevel:        null
         };
         this.eventEmitter.publish('resetImageManipulationControls.'+this.windowId);
-        this.osd.close();
+        if (this.osd) {
+          this.osd.close();
+        }
         var imgUrl = $.Iiif.getImageUrl(this.currentImg);
         if (imgUrl) {
           this.createOpenSeadragonInstance(imgUrl);
