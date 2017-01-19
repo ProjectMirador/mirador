@@ -1,9 +1,17 @@
 language: node_js
 node_js:
-- '5'
+  - '5'
 before_install:
-- npm install
+  - npm install
 # before-script:
-# - grunt test cover
+#   - grunt test cover
 script:
-- npm run travis
+  - npm run travis
+env:
+  - CXX=g++-4.8
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
