@@ -362,9 +362,6 @@
           _this.nodeCollections[newNodeId] = collection.getCollectionUris();
           _this.nodeManifests[newNodeId] = collection.getManifestUris();
           _this.nodeChildren[newNodeId] = [];
-          if (expanded) {
-            _this.unexpandedNodes[newNodeId] = true;
-          }
           // Add subcollections
           if (!unexpanded) {
             jQuery.each(subcollectionBlocks, function(i, v) {
@@ -388,14 +385,14 @@
               collectionUris = collection.getCollectionUris(),
               manifestUris = collection.getManifestUris();
           jQuery.each(_this.nodeChildren[nodeId], function(_, n) {
-            if (_this.nodeIdToUri[n] == atId && !_this.unexpandedNodes[n]) {
+            if (_this.nodeIdToUri[n] == atId) {
               _this.nodeCollections[n] = collectionUris;
               _this.nodeManifests[n] = manifestUris;
               _this.nodeChildren[n] = [];
               jQuery.each(collectionBlocks, function(i, v) {
                 _this.nodeChildren[n].push(_this.addCollectionNode(n, new $.Collection(v['@id'], null, v), true));
               });
-              delete _this.unexpandedNodes[n];
+              delete _this.unexpandedNodes[nodeId];
               _this.treeElement.jstree('set_icon', n, 'fa fa-folder');
             }
           });
