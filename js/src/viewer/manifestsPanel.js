@@ -80,9 +80,9 @@
               delete _this.treeQueue;
               jQuery.each(theQueue, function(_, v) {
                 if (v.length == 4) {
-                  _this.onCollectionReceived.apply(v);
+                  _this.onCollectionReceived.apply(_this, v);
                 } else {
-                  _this.onCollectionNotReceived.apply(v);
+                  _this.onCollectionNotReceived.apply(_this, v);
                 }
               });
             });
