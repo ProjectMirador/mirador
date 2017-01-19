@@ -60,7 +60,7 @@
                   }, 
                   {
                     id: 'user',
-                    text: 'My Objects',
+                    text: 'My Manifests',
                     icon: 'fa fa-user',
                     children: []
                   }
