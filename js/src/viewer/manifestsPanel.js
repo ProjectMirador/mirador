@@ -77,10 +77,17 @@
               _this.expandNode(data.node);
             }).on('ready.jstree', function() {
               jQuery.each(_this.treeQueue, function(_, v) {
-                if (v[3]) {
-                  _this.updateCollectionNode(v[3], v[1]);
+                if (v.length == 4) {
+                  if (v[3]) {
+                    _this.updateCollectionNode(v[3], v[1]);
+                  } else {
+                    _this.addCollectionNode(v[3], v[1]);
+                  }
                 } else {
-                  _this.addCollectionNode(v[3], v[1]);
+                  jQuery.each(_this.uriToNodeId[v[1]], function(_, nodeId) {
+                    _this.treeElement.jstree('set_icon', nodeId, 'fa fa-ban');
+                    _this.treeElement.jstree('disable_node', nodeId);
+                  });
                 }
               });
               delete _this.treeQueue;
@@ -117,6 +124,10 @@
           
           _this.eventEmitter.subscribe('collectionReceived', function(event, newCollection, parentUri, parentNodeId) {
             _this.onCollectionReceived(event, newCollection, parentUri, parentNodeId);
+          });
+          
+          _this.eventEmitter.subscribe('collectionNotReceived', function(event, parentUri, parentNodeId) {
+            _this.onCollectionNotReceived(event, parentUri, parentNodeId);
           });
           
           _this.eventEmitter.subscribe('ADD_MANIFEST_FROM_URL', function(event, stuff) {
@@ -228,6 +239,19 @@
           }
         },
         
+        onCollectionNotReceived: function(event, uri, parentNodeId) {
+          if (typeof this.treeQueue !== 'undefined') {
+            this.treeQueue.push([event, uri, parentNodeId]);
+            return;
+          }
+          // Mark the child node belonging to this as a fail
+          var _this = this;
+          jQuery.each(this.uriToNodeId[uri], function(_, nodeId) {
+            _this.treeElement.jstree('set_icon', nodeId, 'fa fa-ban');
+            _this.treeElement.jstree('disable_node', nodeId);
+          });
+        },
+        
         clearManifestItems: function() {
           this.manifestListItems = [];
           this.manifestListElement.html('');
@@ -306,6 +330,9 @@
             collection.request.done(function() {
               _this.eventEmitter.publish('collectionReceived', [collection, url, nodeId ? nodeId : null]);
             });
+            collection.request.fail(function() {
+              _this.eventEmitter.publish('collectionNotReceived', [url, nodeId ? nodeId : null]);
+            });
           }
         },
         
@@ -321,6 +348,9 @@
             _this.eventEmitter.publish('manifestQueued', collection, '');
             collection.request.done(function() {
               _this.eventEmitter.publish('collectionReceived', [collection, url, nodeId ? nodeId : null]);
+            });
+            collection.request.fail(function() {
+              _this.eventEmitter.publish('collectionNotReceived', [url, nodeId ? nodeId : null]);
             });
           }
         },
