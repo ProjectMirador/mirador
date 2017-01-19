@@ -279,15 +279,9 @@
         
         expandNode: function(node) {
           var _this = this;
-          switch (node.id) {
-            case 'preload': break; //TODO: Handle this
-            case 'user': break; //TODO: Handle this
-            default: 
-              jQuery.each(_this.nodeCollections[node.id], function(_, uri) {
-                _this.updateCollectionFromUrl(uri, node.id);
-              });
-            break;
-          }
+          jQuery.each(_this.nodeCollections[node.id], function(_, uri) {
+            _this.updateCollectionFromUrl(uri, node.id);
+          });
         },
         
         addManifestFromUrl: function(url) {
