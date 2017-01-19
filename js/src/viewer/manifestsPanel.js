@@ -76,21 +76,15 @@
             }).on('open_node.jstree', function(event, data) {
               _this.expandNode(data.node);
             }).on('ready.jstree', function() {
-              jQuery.each(_this.treeQueue, function(_, v) {
+              var theQueue = _this.treeQueue.slice(0);
+              delete _this.treeQueue;
+              jQuery.each(theQueue, function(_, v) {
                 if (v.length == 4) {
-                  if (v[3]) {
-                    _this.updateCollectionNode(v[3], v[1]);
-                  } else {
-                    _this.addCollectionNode(v[3], v[1]);
-                  }
+                  _this.onCollectionReceived.apply(v);
                 } else {
-                  jQuery.each(_this.uriToNodeId[v[1]], function(_, nodeId) {
-                    _this.treeElement.jstree('set_icon', nodeId, 'fa fa-ban');
-                    _this.treeElement.jstree('disable_node', nodeId);
-                  });
+                  _this.onCollectionNotReceived.apply(v);
                 }
               });
-              delete _this.treeQueue;
             });
             
             //this code gives us the max width of the results area, used to determine how many preview images to show
