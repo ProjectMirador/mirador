@@ -175,8 +175,23 @@ describe('ManifestsPanel', function() {
       expect(this.panel.expectedThings).toContain('http://www.example.org/waa.json');
       expect(this.panel.expectedThings).toContain('http://www.example.org/hoo.json');
     });
+    
+    it('should cleanly change to a loaded collection', function() {
+      this.panel.nodeManifests['foo'] = ['http://www.example.org/coo.json'];
+      this.panel.changeNode({ id: 'foo' });
+      expect(this.panel.expectedThings).toContain('http://www.example.org/coo.json');
+    });
   });
   
+  describe('Expanding nodes', function() {
+    it('should expand subcollection URLs', function() {
+      spyOn(this.panel, 'updateCollectionFromUrl');
+      this.panel.nodeCollections['abc'] = ['http://www.example.org/foo.json', 'http://www.example.org/bar.json'];
+      this.panel.expandNode({ id: 'abc' });
+      expect(this.panel.updateCollectionFromUrl).toHaveBeenCalledWith('http://www.example.org/foo.json', 'abc');
+      expect(this.panel.updateCollectionFromUrl).toHaveBeenCalledWith('http://www.example.org/bar.json', 'abc');
+    });
+  });
   
   describe('Adding manifests from URL', function() {
     it('should grab cached manifests from the state manager and add it right away', function() {
@@ -191,6 +206,209 @@ describe('ManifestsPanel', function() {
       expect(this.panel.manifestListItems.length).toBe(0);
       this.panel.addManifestFromUrl(manifest.uri);
       expect(this.panel.manifestListItems.length).toBe(0);
+    });
+  });
+  
+  describe('Adding collections from URL', function() {
+    var dummyCollection;
+    beforeEach(function() {
+      dummyCollection = new Mirador.Collection("http://example.org/iiif/collection/top", 'Dummy Location', {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization"
+      });
+      spyOn(this.panel, 'addCollectionNode');
+    });
+    it('should grab cached collectionss from the state manager and add it right away', function() {
+      this.panel.eventEmitter.publish('manifestQueued', dummyCollection, '');
+      expect(this.panel.addCollectionNode).not.toHaveBeenCalled();
+      this.panel.addCollectionFromUrl(dummyCollection.uri);
+      expect(this.panel.addCollectionNode).toHaveBeenCalled();
+    });
+    it('should grab new manifests from the source and not add it just yet', function() {
+      expect(this.panel.addCollectionNode).not.toHaveBeenCalled();
+      this.panel.addCollectionFromUrl(dummyCollection.uri);
+      expect(this.panel.addCollectionNode).not.toHaveBeenCalled();
+    });
+  });
+  
+  describe('Updating collections from URL', function() {
+    var dummyCollection;
+    beforeEach(function() {
+      dummyCollection = new Mirador.Collection("http://example.org/iiif/collection/top", 'Dummy Location', {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization"
+      });
+      spyOn(this.panel, 'updateCollectionNode');
+    });
+    it('should grab cached collectionss from the state manager and update it right away', function() {
+      this.panel.eventEmitter.publish('manifestQueued', dummyCollection, '');
+      expect(this.panel.updateCollectionNode).not.toHaveBeenCalled();
+      this.panel.updateCollectionFromUrl(dummyCollection.uri);
+      expect(this.panel.updateCollectionNode).toHaveBeenCalled();
+    });
+    it('should grab new manifests from the source and not updated it just yet', function() {
+      expect(this.panel.updateCollectionNode).not.toHaveBeenCalled();
+      this.panel.updateCollectionFromUrl(dummyCollection.uri);
+      expect(this.panel.updateCollectionNode).not.toHaveBeenCalled();
+    });
+  });
+  
+  describe('Receiving good collections', function() {
+    var collection;
+    beforeEach(function() {
+      collection = new Mirador.Collection(null, 'Dummy Location', {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization"
+      });
+      spyOn(this.panel, 'addCollectionNode');
+      spyOn(this.panel, 'updateCollectionNode');
+    });
+    it('should defer if the tree is not ready', function() {
+      this.panel.treeQueue = [];
+      this.panel.eventEmitter.publish('collectionReceived', [collection, collection.uri, null]);
+      expect(this.panel.treeQueue[0].length).toEqual(4);
+      expect(this.panel.addCollectionNode).not.toHaveBeenCalled();
+      expect(this.panel.updateCollectionNode).not.toHaveBeenCalled();
+    });
+    it('should add a new node if no parent node ID is specified', function() {
+      delete this.panel.treeQueue;
+      this.panel.eventEmitter.publish('collectionReceived', [collection, collection.uri, null]);
+      expect(this.panel.addCollectionNode).toHaveBeenCalled();
+      expect(this.panel.updateCollectionNode).not.toHaveBeenCalled();
+    });
+    it('should update under an existing node if a parent node ID is specified', function() {
+      delete this.panel.treeQueue;
+      this.panel.eventEmitter.publish('collectionReceived', [collection, collection.uri, 'dummyNode']);
+      expect(this.panel.addCollectionNode).not.toHaveBeenCalled();
+      expect(this.panel.updateCollectionNode).toHaveBeenCalled();
+    });
+  });
+  
+  describe('Receiving failed collections', function() {
+    beforeEach(function() {
+      spyOn(jQuery.fn, 'jstree');
+    });
+    it('should defer if the tree is not ready', function() {
+      this.panel.treeQueue = [];
+      this.panel.eventEmitter.publish('collectionNotReceived', ['foo', null]);
+      expect(jQuery.fn.jstree).not.toHaveBeenCalled();
+    });
+    it('mark all nodes of this URI as defective', function() {
+      delete this.panel.treeQueue;
+      this.panel.registerNodeIdUriPair('nodeId', 'foo');
+      this.panel.eventEmitter.publish('collectionNotReceived', ['foo', 'nodeId']);
+      expect(jQuery.fn.jstree).toHaveBeenCalledWith('set_icon', 'nodeId', 'fa fa-ban');
+      expect(jQuery.fn.jstree).toHaveBeenCalledWith('disable_node', 'nodeId');
+    });
+  });
+  
+  describe('Registering nodeID-URI pairings', function() {
+    it('should register a URI once successfully', function() {
+      this.panel.registerNodeIdUriPair('nodeId', 'http://www.foo.net/stuff.json');
+      expect(this.panel.nodeIdToUri['nodeId']).toEqual('http://www.foo.net/stuff.json');
+      expect(this.panel.uriToNodeId['http://www.foo.net/stuff.json']).toEqual(['nodeId']);
+    });
+    it('should register a URI twice successfully', function() {
+      this.panel.registerNodeIdUriPair('nodeId', 'http://www.foo.net/stuff.json');
+      this.panel.registerNodeIdUriPair('nodeId2', 'http://www.foo.net/stuff.json');
+      expect(this.panel.nodeIdToUri['nodeId']).toEqual('http://www.foo.net/stuff.json');
+      expect(this.panel.nodeIdToUri['nodeId2']).toEqual('http://www.foo.net/stuff.json');
+      expect(this.panel.uriToNodeId['http://www.foo.net/stuff.json']).toEqual(['nodeId', 'nodeId2']);
+    });
+  });
+  
+  describe('Adding nodes', function() {
+    var collection;
+    beforeEach(function() {
+      collection = new Mirador.Collection("http://example.org/iiif/collection/top", null, {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "collections": [
+          {
+            "@id": "http://example.org/iiif/collection/part2",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 2"
+          }
+        ],
+        "manifests": [
+          {
+            "@id": "http://example.org/iiif/book1/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 1"
+          },
+          {
+            "@id": "http://example.org/iiif/book2/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 2"
+          }
+        ],
+      });
+    });
+    it('should add unexpanded nodes', function() {
+      var newNodeId = this.panel.addCollectionNode(null, collection, true);
+      expect(newNodeId).not.toBeUndefined();
+      expect(this.panel.nodeCollections[newNodeId]).toEqual(["http://example.org/iiif/collection/part2"]);
+      expect(this.panel.nodeManifests[newNodeId]).toEqual(["http://example.org/iiif/book1/manifest", "http://example.org/iiif/book2/manifest"]);
+      expect(this.panel.nodeChildren[newNodeId]).toEqual([]);
+    });
+    it('should add expanded nodes', function() {
+      var newNodeId = this.panel.addCollectionNode(null, collection);
+      expect(newNodeId).not.toBeUndefined();
+      expect(this.panel.nodeCollections[newNodeId]).toEqual(["http://example.org/iiif/collection/part2"]);
+      expect(this.panel.nodeManifests[newNodeId]).toEqual(["http://example.org/iiif/book1/manifest", "http://example.org/iiif/book2/manifest"]);
+      expect(this.panel.nodeChildren[newNodeId].length).toEqual(1);
+    });
+  });
+  
+  describe('Updating nodes', function() {
+    var collection;
+    beforeEach(function() {
+      spyOn(this.panel, 'addCollectionNode');
+      spyOn(jQuery.fn, 'jstree');
+      collection = new Mirador.Collection("http://example.org/iiif/collection/top", null, {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization",
+        "collections": [
+          {
+            "@id": "http://example.org/iiif/collection/part2",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 2"
+          }
+        ],
+        "manifests": [
+          {
+            "@id": "http://example.org/iiif/book1/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 1"
+          },
+          {
+            "@id": "http://example.org/iiif/book2/manifest",
+            "@type": "sc:Manifest",
+            "label": "Book 2"
+          }
+        ],
+      });
+    });
+    it('should update information', function() {
+      this.panel.registerNodeIdUriPair('junk', "http://example.org/iiif/collection/supertop");
+      this.panel.nodeCollections['junk'] = "http://example.org/iiif/collection/top";
+      this.panel.registerNodeIdUriPair('abc', "http://example.org/iiif/collection/top");
+      this.panel.nodeChildren['junk'] = ['abc'];
+      
+      this.panel.updateCollectionNode('junk', collection);
+      expect(this.panel.nodeCollections['abc']).toEqual(["http://example.org/iiif/collection/part2"]);
+      expect(this.panel.nodeManifests['abc']).toEqual(["http://example.org/iiif/book1/manifest", "http://example.org/iiif/book2/manifest"]);
+      expect(this.panel.nodeChildren['abc'].length).toEqual(1);
     });
   });
 });
