@@ -125,12 +125,11 @@
           });
           
           _this.eventEmitter.subscribe('ADD_MANIFEST_FROM_URL', function(event, stuff) {
-            _this.treeElement.jstree('deselect_all');
-            _this.treeElement.jstree('select_node', 'user');
             if (_this.userManifests.indexOf(stuff) == -1) {
               _this.userManifests.push(stuff);
             }
-            
+            _this.treeElement.jstree('deselect_all');
+            _this.treeElement.jstree('select_node', 'user');
           });
         },
 
