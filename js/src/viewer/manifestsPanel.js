@@ -406,6 +406,9 @@
             icon: unexpanded ? 'fa fa-spinner fa-pulse' : 'fa fa-folder',
             children: []
           }, 'last');
+          if (unexpanded) {
+            _this.treeElement.jstree('disable_node', newNodeId);
+          }
           // Register the new node's apparent contents
           _this.registerNodeIdUriPair(newNodeId, collection.jsonLd['@id']);
           _this.nodeCollections[newNodeId] = collection.getCollectionUris();
@@ -422,6 +425,7 @@
               _this.registerNodeIdUriPair(nid, v['@id']);
               _this.unexpandedNodes[nid] = true;
               _this.nodeChildren[newNodeId].push(nid);
+              _this.treeElement.jstree('disable_node', nid);
             });
           }
           return newNodeId;
@@ -443,6 +447,7 @@
               });
               delete _this.unexpandedNodes[nodeId];
               _this.treeElement.jstree('set_icon', n, 'fa fa-folder');
+              _this.treeElement.jstree('enable_node', n);
             }
           });
           
