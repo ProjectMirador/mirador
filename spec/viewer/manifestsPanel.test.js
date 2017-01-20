@@ -26,20 +26,26 @@ describe('ManifestsPanel', function() {
     spyOn(this.panel, 'onPanelVisible');
     spyOn(this.panel, 'onManifestReceived');
     spyOn(this.panel, 'onCollectionReceived');
+    spyOn(this.panel, 'addObjectFromUrl');
+    spyOn(this.panel, 'addCollectionFromUrl');
     this.eventEmitter.publish('manifestsPanelVisible.set');
     this.eventEmitter.publish('manifestReceived', manifest);
     this.eventEmitter.publish('collectionReceived', collection);
+    this.eventEmitter.publish('ADD_OBJECT_FROM_URL', [collection.uri, 'Dummy Location']);
+    this.eventEmitter.publish('ADD_COLLECTION_FROM_URL', [collection.uri, 'Dummy Location']);
     expect(this.panel.onPanelVisible).toHaveBeenCalled();
     expect(this.panel.onManifestReceived).toHaveBeenCalled();
     expect(this.panel.onCollectionReceived).toHaveBeenCalled();
+    expect(this.panel.addObjectFromUrl).toHaveBeenCalled();
+    expect(this.panel.addCollectionFromUrl).toHaveBeenCalled();
   });
   
   it('should bind events', function() {
     var element = this.panel.element;
     
-    spyOn(this.panel, 'addManifestUrl');
+    spyOn(this.panel, 'addObjectUrl');
     element.find('form#url-load-form').trigger('submit');
-    expect(this.panel.addManifestUrl).toHaveBeenCalled();
+    expect(this.panel.addObjectUrl).toHaveBeenCalled();
     
     spyOn(this.panel, 'togglePanel');
     element.find('.remove-object-option').trigger('click');
@@ -67,6 +73,13 @@ describe('ManifestsPanel', function() {
     var url = "http://example.com/manifest.json";
     this.panel.addManifestUrl(url);
     expect(this.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', [url, "(Added from URL)"]);
+  });
+  
+  it('should add object from url', function() {
+    spyOn(this.eventEmitter, 'publish');
+    var url = "http://example.com/manifest.json";
+    this.panel.addObjectUrl(url);
+    expect(this.eventEmitter.publish).toHaveBeenCalledWith('ADD_OBJECT_FROM_URL', [url, "(Added from URL)"]);
   });
   
   it('should toggle load window', function() {
@@ -216,9 +229,16 @@ describe('ManifestsPanel', function() {
         "@context": "http://iiif.io/api/presentation/2/context.json",
         "@id": "http://example.org/iiif/collection/top",
         "@type": "sc:Collection",
-        "label": "Top Level Collection for Example Organization"
+        "label": "Top Level Collection for Example Organization",
+        "collections": [
+          {
+            "@id": "http://example.org/iiif/collection/part2",
+            "@type": "sc:Collection",
+            "label": "Sub Collection 2"
+          }
+        ]
       });
-      spyOn(this.panel, 'addCollectionNode');
+      spyOn(this.panel, 'addCollectionNode').and.returnValue('qqqq');
     });
     it('should grab cached collectionss from the state manager and add it right away', function() {
       this.panel.eventEmitter.publish('manifestQueued', dummyCollection, '');
@@ -230,6 +250,16 @@ describe('ManifestsPanel', function() {
       expect(this.panel.addCollectionNode).not.toHaveBeenCalled();
       this.panel.addCollectionFromUrl(dummyCollection.uri);
       expect(this.panel.addCollectionNode).not.toHaveBeenCalled();
+    });
+    it('should also jump to the node if the jumpToIt parameter is set', function() {
+      spyOn(jQuery.fn, 'jstree');
+      this.panel.eventEmitter.publish('manifestQueued', dummyCollection, '');
+      expect(this.panel.addCollectionNode).not.toHaveBeenCalled();
+      this.panel.addCollectionFromUrl(dummyCollection.uri, null, true);
+      expect(this.panel.addCollectionNode).toHaveBeenCalled();
+      expect(jQuery.fn.jstree).toHaveBeenCalledWith('deselect_all');
+      expect(jQuery.fn.jstree).toHaveBeenCalledWith('select_node', 'qqqq');
+      expect(jQuery.fn.jstree).toHaveBeenCalledWith('open_node', 'qqqq');
     });
   });
   
@@ -409,6 +439,48 @@ describe('ManifestsPanel', function() {
       expect(this.panel.nodeCollections['abc']).toEqual(["http://example.org/iiif/collection/part2"]);
       expect(this.panel.nodeManifests['abc']).toEqual(["http://example.org/iiif/book1/manifest", "http://example.org/iiif/book2/manifest"]);
       expect(this.panel.nodeChildren['abc'].length).toEqual(1);
+    });
+  });
+  
+  describe('Adding objects from URL', function() {
+    var manifest, collection, responseValue;
+    beforeEach(function() {
+      manifest = new Mirador.Manifest(this.dummyManifestContent['@id'], 'Dummy Location', this.dummyManifestContent);
+      collection = new Mirador.Collection("http://example.org/iiif/collection/top", 'Dummy Location', {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@id": "http://example.org/iiif/collection/top",
+        "@type": "sc:Collection",
+        "label": "Top Level Collection for Example Organization"
+      });
+      spyOn(jQuery, 'ajax').and.callFake(function(args) {
+        args.success(responseValue);
+      });
+    });
+    it('should add loaded collections', function() {
+      this.panel.eventEmitter.publish('manifestQueued', collection, '');
+      spyOn(this.panel.eventEmitter, 'publish');
+      this.panel.addObjectFromUrl(collection.uri, "From Foo");
+      expect(this.panel.eventEmitter.publish).toHaveBeenCalledWith('ADD_COLLECTION_FROM_URL', [collection.uri, "From Foo"]);
+    });
+    it('should add loaded manifests', function() {
+      this.panel.eventEmitter.publish('manifestQueued', manifest, '');
+      spyOn(this.panel.eventEmitter, 'publish');
+      this.panel.addObjectFromUrl(manifest.uri, "From Foo");
+      expect(this.panel.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', [manifest.uri, "From Foo"]);
+    });
+    it('should add new collections', function() {
+      spyOn(this.panel.eventEmitter, 'publish');
+      responseValue = collection.jsonLd;
+      this.panel.addObjectFromUrl(collection.uri, "From Foo");
+      expect(this.panel.eventEmitter.publish).toHaveBeenCalledWith('manifestQueued', jasmine.any(Object), '');
+      expect(this.panel.eventEmitter.publish).toHaveBeenCalledWith('ADD_COLLECTION_FROM_URL', [collection.uri, "From Foo"]);
+    });
+    it('should add new manifests', function() {
+      spyOn(this.panel.eventEmitter, 'publish');
+      responseValue = manifest.jsonLd;
+      this.panel.addObjectFromUrl(manifest.uri, "From Foo");
+      expect(this.panel.eventEmitter.publish).toHaveBeenCalledWith('manifestQueued', jasmine.any(Object), '');
+      expect(this.panel.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', [manifest.uri, "From Foo"]);
     });
   });
 });

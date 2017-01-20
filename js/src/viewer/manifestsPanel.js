@@ -124,12 +124,20 @@
             _this.onCollectionNotReceived(event, parentUri, parentNodeId);
           });
           
-          _this.eventEmitter.subscribe('ADD_MANIFEST_FROM_URL', function(event, stuff) {
-            if (_this.userManifests.indexOf(stuff) == -1) {
-              _this.userManifests.push(stuff);
+          _this.eventEmitter.subscribe('ADD_MANIFEST_FROM_URL', function(event, url) {
+            if (_this.userManifests.indexOf(url) == -1) {
+              _this.userManifests.push(url);
             }
             _this.treeElement.jstree('deselect_all');
             _this.treeElement.jstree('select_node', 'user');
+          });
+          
+          _this.eventEmitter.subscribe('ADD_COLLECTION_FROM_URL', function(event, url, source) {
+            _this.addCollectionFromUrl(url, null, true);
+          });
+          
+          _this.eventEmitter.subscribe('ADD_OBJECT_FROM_URL', function(event, url, source) {
+            _this.addObjectFromUrl(url, source, true);
           });
         },
 
@@ -139,7 +147,7 @@
             // handle interface events
             this.element.find('form#url-load-form').on('submit', function(event) {
               event.preventDefault();
-              _this.addManifestUrl(jQuery(this).find('input').val());
+              _this.addObjectUrl(jQuery(this).find('input').val());
             });
 
             this.element.find('.remove-object-option').on('click', function(event) {
@@ -173,6 +181,11 @@
         addManifestUrl: function(url) {
           var _this = this;
           _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [url, "(Added from URL)"]);
+        },
+        
+        addObjectUrl: function(url) {
+          var _this = this;
+          _this.eventEmitter.publish('ADD_OBJECT_FROM_URL', [url, "(Added from URL)"]);
         },
         
         togglePanel: function(event) {
@@ -283,6 +296,42 @@
           });
         },
         
+        addObjectFromUrl: function(url, source) {
+          var _this = this,
+            object = _this.state.getStateProperty('manifests')[url];
+          if (object) {
+            switch (object.jsonLd['@type']) {
+              case 'sc:Collection':
+                _this.eventEmitter.publish('ADD_COLLECTION_FROM_URL', [url, source]);
+              break;
+              case 'sc:Manifest':
+                _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [url, source]);
+              break;
+            }
+          }
+          else {
+            jQuery.ajax({
+              url: url,
+              dataType: 'json',
+              type: 'GET',
+              success: function(data) {
+                switch (data['@type']) {
+                  case 'sc:Collection':
+                    object = new $.Collection(url, source, data);
+                    _this.eventEmitter.publish('manifestQueued', object, '');
+                    _this.eventEmitter.publish('ADD_COLLECTION_FROM_URL', [url, source]);
+                  break;
+                  case 'sc:Manifest':
+                    object = new $.Manifest(url, source, data);
+                    _this.eventEmitter.publish('manifestQueued', object, '');
+                    _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [url, source]);
+                  break;
+                }
+              }
+            });
+          }
+        },
+        
         addManifestFromUrl: function(url) {
           var _this = this,
             manifest;
@@ -304,12 +353,19 @@
           }
         },
         
-        addCollectionFromUrl: function(url, nodeId) {
+        addCollectionFromUrl: function(url, nodeId, jumpToIt) {
           var _this = this,
             collection;
           if (typeof _this.state.getStateProperty('manifests')[url] !== 'undefined') {
             collection = _this.state.getStateProperty('manifests')[url];
-            _this.addCollectionNode(nodeId, collection);
+            var newNode = _this.addCollectionNode(nodeId, collection);
+            if (jumpToIt) {
+              _this.treeElement.jstree('deselect_all');
+              _this.treeElement.jstree('select_node', newNode);
+              if (collection.getCollectionUris().length > 0) {
+                _this.treeElement.jstree('open_node', newNode);
+              }
+            }
           }
           else {
             collection = new $.Collection(url, '');
