@@ -349,6 +349,7 @@
 
       var canvas = this.imagesList[$.getImageIndexById(this.imagesList, oaAnnotation.on.full)];
       var imageUrl = $.getThumbnailForCanvas(canvas, 300);
+      imageUrl = imageUrl.replace('full', regionArray.join(','));
       annotation.thumb = imageUrl;
       annotation.bounds = {"x":regionArray[0], "y":regionArray[1], "width":regionArray[2], "height":regionArray[3]};
 
