@@ -434,6 +434,7 @@ describe('ManifestsPanel', function() {
       this.panel.nodeCollections['junk'] = "http://example.org/iiif/collection/top";
       this.panel.registerNodeIdUriPair('abc', "http://example.org/iiif/collection/top");
       this.panel.nodeChildren['junk'] = ['abc'];
+      this.panel.unexpandedNodes['abc'] = true;
       
       this.panel.updateCollectionNode('junk', collection);
       expect(this.panel.nodeCollections['abc']).toEqual(["http://example.org/iiif/collection/part2"]);

@@ -428,6 +428,9 @@
               _this.treeElement.jstree('disable_node', nid);
             });
           }
+          else {
+            _this.unexpandedNodes[newNodeId] = true;
+          }
           return newNodeId;
         },
         
@@ -438,14 +441,16 @@
               collectionUris = collection.getCollectionUris(),
               manifestUris = collection.getManifestUris();
           jQuery.each(_this.nodeChildren[nodeId], function(_, n) {
-            if (_this.nodeIdToUri[n] == atId) {
+            if (_this.nodeIdToUri[n] == atId && _this.unexpandedNodes[n]) {
               _this.nodeCollections[n] = collectionUris;
               _this.nodeManifests[n] = manifestUris;
               _this.nodeChildren[n] = [];
               jQuery.each(collectionBlocks, function(i, v) {
-                _this.nodeChildren[n].push(_this.addCollectionNode(n, new $.Collection(v['@id'], null, v), true));
+                var nn = _this.addCollectionNode(n, new $.Collection(v['@id'], null, v), true);
+                _this.nodeChildren[n].push(nn);
+                _this.unexpandedNodes[nn] = true;
               });
-              delete _this.unexpandedNodes[nodeId];
+              delete _this.unexpandedNodes[n];
               _this.treeElement.jstree('set_icon', n, 'fa fa-folder');
               _this.treeElement.jstree('enable_node', n);
             }
