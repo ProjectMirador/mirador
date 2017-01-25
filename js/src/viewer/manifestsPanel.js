@@ -300,13 +300,15 @@
           var _this = this,
             object = _this.state.getStateProperty('manifests')[url];
           if (object) {
-            switch (object.jsonLd['@type']) {
-              case 'sc:Collection':
-                _this.eventEmitter.publish('ADD_COLLECTION_FROM_URL', [url, source]);
-              break;
-              case 'sc:Manifest':
-                _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [url, source]);
-              break;
+            if (object.jsonLd) {
+              switch (object.jsonLd['@type']) {
+                case 'sc:Collection':
+                  _this.eventEmitter.publish('ADD_COLLECTION_FROM_URL', [url, source]);
+                break;
+                case 'sc:Manifest':
+                  _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [url, source]);
+                break;
+              }
             }
           }
           else {
@@ -388,7 +390,9 @@
             collection;
           if (typeof _this.state.getStateProperty('manifests')[url] !== 'undefined') {
             collection = _this.state.getStateProperty('manifests')[url];
-            _this.updateCollectionNode(nodeId, collection);
+            if (collection.jsonLd) {
+              _this.updateCollectionNode(nodeId, collection);
+            }
           }
           else {
             collection = new $.Collection(url, '');
