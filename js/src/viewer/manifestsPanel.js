@@ -19,6 +19,7 @@
             uriToNodeId:                {},
             nodeChildren:               {},
             unexpandedNodes:            {},
+            topCollectionsUris:         {},
             treeQueue:                  [], //Holds collections before the tree is ready; will be removed when ready
             resultsWidth:               0,
             state:                      null,
@@ -360,6 +361,14 @@
         addCollectionFromUrl: function(url, nodeId, jumpToIt) {
           var _this = this,
             collection;
+          if (!nodeId) {
+            if (_this.topCollectionsUris[url]) {
+              return;
+            }
+            else {
+              _this.topCollectionsUris[url] = true;
+            }
+          }
           if (typeof _this.state.getStateProperty('manifests')[url] !== 'undefined') {
             collection = _this.state.getStateProperty('manifests')[url];
             if (collection.jsonLd) {

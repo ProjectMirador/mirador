@@ -261,6 +261,15 @@ describe('ManifestsPanel', function() {
       expect(jQuery.fn.jstree).toHaveBeenCalledWith('select_node', 'qqqq');
       expect(jQuery.fn.jstree).toHaveBeenCalledWith('open_node', 'qqqq');
     });
+    it('should add to the top-level only once per URI', function() {
+      this.panel.eventEmitter.publish('manifestQueued', dummyCollection, '');
+      expect(this.panel.addCollectionNode).not.toHaveBeenCalled();
+      this.panel.addCollectionFromUrl(dummyCollection.uri, null);
+      expect(this.panel.addCollectionNode).toHaveBeenCalled();
+      this.panel.addCollectionNode.calls.reset();
+      this.panel.addCollectionFromUrl(dummyCollection.uri, null);
+      expect(this.panel.addCollectionNode).not.toHaveBeenCalled();
+    });
   });
   
   describe('Updating collections from URL', function() {
