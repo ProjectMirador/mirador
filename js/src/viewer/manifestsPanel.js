@@ -337,12 +337,14 @@
             manifest;
           if (_this.state.getStateProperty('manifests')[url]) {
             manifest = _this.state.getStateProperty('manifests')[url];
-            _this.manifestListItems.push(new $.ManifestListItem({ 
-              manifest: manifest, 
-              resultsWidth: _this.resultsWidth, 
-              state: _this.state,
-              eventEmitter: _this.eventEmitter,
-              appendTo: _this.manifestListElement }));
+            if (manifest.jsonLd) {
+              _this.manifestListItems.push(new $.ManifestListItem({ 
+                manifest: manifest, 
+                resultsWidth: _this.resultsWidth, 
+                state: _this.state,
+                eventEmitter: _this.eventEmitter,
+                appendTo: _this.manifestListElement }));
+            }
           }
           else {
             manifest = new $.Manifest(url, '');
@@ -358,12 +360,14 @@
             collection;
           if (typeof _this.state.getStateProperty('manifests')[url] !== 'undefined') {
             collection = _this.state.getStateProperty('manifests')[url];
-            var newNode = _this.addCollectionNode(nodeId, collection);
-            if (jumpToIt) {
-              _this.treeElement.jstree('deselect_all');
-              _this.treeElement.jstree('select_node', newNode);
-              if (collection.getCollectionUris().length > 0) {
-                _this.treeElement.jstree('open_node', newNode);
+            if (collection.jsonLd) {
+              var newNode = _this.addCollectionNode(nodeId, collection);
+              if (jumpToIt) {
+                _this.treeElement.jstree('deselect_all');
+                _this.treeElement.jstree('select_node', newNode);
+                if (collection.getCollectionUris().length > 0) {
+                  _this.treeElement.jstree('open_node', newNode);
+                }
               }
             }
           }
