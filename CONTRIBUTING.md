@@ -38,24 +38,24 @@ Live interactive reloading of the browser each time a file is saved is enabled a
  If the version number included in the `package.json` does not already accurately reflect the version to be released, be sure to increment the number according to [SemVer](http://semver.org/) conventions. Bump the third number for a small patch that does not change or add any new functionality; bump the second number if the branch includes any new features that do not interfere with or change existing features; and bump the first ("major") version number if the changes to be released break or change the API for existing functionality.  
 2. Merge Development Branch into Master
 3. Create a New Local Tag
-After all new changes have been merged into master, checkout master locally, and create a git tag for the new version:
-`git checkout master`
-`git tag v[VERSION_NUMBER]`
-This will give the current state of the project a name and freeze it in time.
+ After all new changes have been merged into master, checkout master locally, and create a git tag for the new version:
+ `git checkout master`
+ `git tag v[VERSION_NUMBER]`
+ This will give the current state of the project a name and freeze it in time.
 4. Push Tag to Github
-Now push the tagged version to github (from master):
-`git push --tags`
+ Now push the tagged version to github (from master):
+ `git push --tags`
 
-This should cause the new version to appear under the "releases" section of the github project page, and will allow npm to access it in the next step.
+ This should cause the new version to appear under the "releases" section of the github project page, and will allow npm to access it in  the next step.
 5. Publish to NPM
-Assuming the commiter has access to the project's package management account on npm, publishing the most recent version requires logging into npm on the command line.
-Then simply type `npm publish` to post the new package version to the registry.
-To configure your npm user locally, refer to the npm-adduser [documentation](https://docs.npmjs.com/cli/adduser).
+ Assuming the commiter has access to the project's package management account on npm, publishing the most recent version requires   logging into npm on the command line.
+ Then simply type `npm publish` to post the new package version to the registry.
+ To configure your npm user locally, refer to the npm-adduser [documentation](https://docs.npmjs.com/cli/adduser).
 6. Create Build and Add it to the New Release
-Type npm
+ Type npm
 7. Update the gh-pages Demo Instance to Show Off the Latest Features
 7. Update Release Notes
-Using the github commit log, compile a bulleted list of the features and changes added to the new release.
+ Using the github commit log, compile a bulleted list of the features and changes added to the new release.
 8. Announce New Release on the Mailing Lists and Slack
 
 ### Design Review
