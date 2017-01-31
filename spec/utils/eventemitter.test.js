@@ -66,10 +66,38 @@ describe('EventEmitter', function () {
   });
   
   it('should log events when debug mode is enabled', function() {
-    var em = new Mirador.EventEmitter({"debug": true});
+    var em = new Mirador.EventEmitter({debug: true});
     var eventName = "foo";
-    spyOn(console, 'trace');
+    spyOn(console, 'log');
     em.publish(eventName);
-    expect(console.trace).toHaveBeenCalled();    
+    expect(console.log).toHaveBeenCalled();
+  });
+  
+  it('should recognize trace option when logging events', function() {
+    var em = new Mirador.EventEmitter({debug: true, trace: true});
+    spyOn(console, 'trace');
+    em.publish('foo');
+    expect(console.trace).toHaveBeenCalled();
+  });
+  
+  it('should recognize exclude patterns when logging events', function() {
+    var em = new Mirador.EventEmitter({debug: true});
+    spyOn(console, 'log');
+    em.excludePatterns = ['hello'];
+    em.publish('hello_world');
+    expect(console.log).not.toHaveBeenCalled();
+    em.publish('goodbye_world');
+    expect(console.log).toHaveBeenCalled();
+  });
+
+  it('should log when subscribed handlers are called in debug mode', function() {
+    var em = new Mirador.EventEmitter({debug: true});
+    var handler = jasmine.createSpy('bar');
+    spyOn(console, 'log');
+    em.subscribe('foo', handler);
+    expect(console.log.calls.count()).toEqual(1); // trace from subscribe
+    em.publish('foo');
+    expect(console.log.calls.count()).toEqual(3); // trace from publish and handler
+    expect(handler).toHaveBeenCalled();
   });
 });
