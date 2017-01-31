@@ -16,7 +16,7 @@
   /************************
    * BEGIN debug settings *
    ************************/
-  $.EventEmitter.debug = true;
+  $.EventEmitter.debug = false;
   $.EventEmitter.trace = false;
 
   // Event IDs that contains any substring in the array will be ignored by the logger
