@@ -57,6 +57,11 @@
       this.scaffoldMap[handler] = scaffold;
       return scaffold;
     },
+    unscaffold: function(handler) {
+      var scaffold = this.scaffoldMap[handler];
+      delete this.scaffoldMap[handler];
+      return scaffold;
+    }
   };
   /**********************
    * END debug settings *
@@ -82,7 +87,7 @@
 
       if (action === 'unsubscribe') {
         if (logging) {
-          args[1] = this.logger.scaffoldMap[args[1]];
+          args[1] = this.logger.unscaffold(args[1]);
         }
       }
 
