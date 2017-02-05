@@ -81,9 +81,10 @@ describe('EventEmitter', function () {
   });
   
   it('should recognize exclude patterns when logging events', function() {
-    var em = new Mirador.EventEmitter({debug: true});
+    var em = new Mirador.EventEmitter({debug: true,
+      debugExclude: ['hello'] 
+    });
     spyOn(console, 'log');
-    em.excludePatterns = ['hello'];
     em.publish('hello_world');
     expect(console.log).not.toHaveBeenCalled();
     em.publish('goodbye_world');
