@@ -21,6 +21,7 @@
     jQuery.extend(this, {
       token:     null,
       prefix:    null,
+      params:    "",
       dfd:       null,
       context_id: "None",
       collection_id: "None",
@@ -66,7 +67,7 @@
       this.annotationsList = []; //clear out current list
 
       jQuery.ajax({
-        url: this.prefix+"/search",
+        url: this.prefix+"/search" + params,
         type: 'GET',
         dataType: 'json',
         headers: {
@@ -113,7 +114,7 @@
     deleteAnnotation: function(annotationID, successCallback, errorCallback) {
       var _this = this;
       jQuery.ajax({
-       url: this.prefix+"/destroy/"+annotationID,
+       url: this.prefix+"/destroy/"+annotationID + params,
        type: 'DELETE',
        dataType: 'json',
        headers: {
@@ -141,7 +142,7 @@
       annotationID = annotation.id;
 
       jQuery.ajax({
-        url: this.prefix+"/update/"+annotationID,
+        url: this.prefix+"/update/"+annotationID + params,
         type: 'POST',
         dataType: 'json',
         headers: {
@@ -174,7 +175,7 @@
       var _this = this;
 
       jQuery.ajax({
-        url: this.prefix+"/create",
+        url: this.prefix+"/create" + params,
         type: 'POST',
         dataType: 'json',
         headers: {
