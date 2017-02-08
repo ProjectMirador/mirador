@@ -303,7 +303,8 @@
 
     // Converts OA Annotation to endpoint format
     getAnnotationInEndpoint: function(oaAnnotation) {
-      var uris = [];
+      var _this = this,
+      uris = [];
       oaAnnotation.on.forEach(function(value) {
         if (jQuery.inArray(value.full, uris) === -1) {
           uris.push(value.full);
@@ -352,7 +353,7 @@
           "height" : Math.max.apply(null, bottom) - Math.min.apply(null, top)
         };
 
-        var canvas = this.imagesList[$.getImageIndexById(this.imagesList, uri)];
+        var canvas = _this.imagesList[$.getImageIndexById(_this.imagesList, uri)];
         var imageUrl = $.getThumbnailForCanvas(canvas, 300);
         imageUrl = imageUrl.replace('full', newRect.x+','+newRect.y+','+newRect.width+','+newRect.height);
         annotation.thumb = imageUrl;
