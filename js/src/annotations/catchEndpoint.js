@@ -167,9 +167,10 @@
     //takes OA Annotation, gets Endpoint Annotation, and saves
     //if successful, MUST return the OA rendering of the annotation
     create: function(oaAnnotation, successCallback, errorCallback) {
-      var annotations = this.getAnnotationInEndpoint(oaAnnotation);
+      var _this = this,
+      annotations = this.getAnnotationInEndpoint(oaAnnotation);
       annotations.forEach(function(annotation) {
-        this.createCatchAnnotation(annotation, successCallback, errorCallback);
+        _this.createCatchAnnotation(annotation, successCallback, errorCallback);
       });
     },
 
