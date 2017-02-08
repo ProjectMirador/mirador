@@ -333,8 +333,8 @@
         annotation.text = text;
 
         annotation.uri = uri;
-        annotation.contextId = this.context_id;
-        annotation.collectionId = this.collection_id;
+        annotation.contextId = _this.context_id;
+        annotation.collectionId = _this.collection_id;
         annotation.rangePosition = oaAnnotation.on;
 
         var coordsArray = [];
@@ -371,9 +371,9 @@
           annotation.user.name = oaAnnotation.annotatedBy.name;
           annotation.user.id = oaAnnotation.annotatedBy['@id'];
         } else {
-          annotation.user = this.catchOptions.user;
+          annotation.user = _this.catchOptions.user;
         }
-        annotation.permissions = this.catchOptions.permissions;
+        annotation.permissions = _this.catchOptions.permissions;
         annotation.archived = false;
         annotation.ranges = [];
         annotation.parent = "0";
