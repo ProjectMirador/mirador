@@ -340,7 +340,8 @@
 
         var coordsArray = [];
         oaAnnotation.on.forEach(function(value) {
-          coordsArray.push(value.selector.default.value.split('=')[1].split(','));
+          var xywh = value.selector.default.value.split('=')[1].split(',');
+          coordsArray.push(xywh.map(function(i) {return parseInt(i);}));
         });
         var left = coordsArray.map(function(i) {return i[0];});
         var top = coordsArray.map(function(i) {return i[1];});
