@@ -104,17 +104,17 @@
           }
         }
       };
-      
+
       // Key for saving mouse tool as data attribute
       // TODO: It seems its main use is for destroy the old paperjs mouse tool
       // when a new Overlay is instantiated. Maybe a better scheme can be
       // devised in the future?
       this.mouseToolKey = 'draw_canvas_' + _this.windowId;
-      
+
       this.setMouseTool();
       this.listenForActions();
     },
-    
+
     /**
      * Adds a Tool that handles mouse events for the paperjs scope.
      */
@@ -132,7 +132,7 @@
 
       jQuery.data(document.body, this.mouseToolKey, mouseTool);
     },
-    
+
     /**
      * Removes the mouse Tool from the paperjs scope.
      */
@@ -149,6 +149,7 @@
       new $.DialogBuilder(this.slotWindowElement).dialog({
         message: i18n.t('deleteShape'),
         closeButton: false,
+        className: 'mirador-dialog',
         buttons: {
           'no': {
             label: i18n.t('no'),
@@ -258,6 +259,7 @@
             new $.DialogBuilder(_this.slotWindowElement).dialog({
               message: i18n.t('editModalSaveAnnotationWithNoShapesMsg'),
               closeButton: false,
+              className: 'mirador-dialog',
               buttons: {
                 success: {
                   label: i18n.t('editModalBtnSaveWithoutShapes'),
@@ -290,19 +292,12 @@
               }
             });
         } else {
-          var svg = _this.getSVGString(_this.draftPaths);
-          oaAnno.on = {
-            "@type": "oa:SpecificResource",
-            "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
-            "selector": {
-              "@type": "oa:SvgSelector",
-              "value": svg
-            },
-            "within": {
-              "@id": _this.state.getWindowObjectById(_this.windowId).loadedManifest,
-              "@type": "sc:Manifest"
-            }
-          };
+          var writeStrategy = new $.MiradorDualStrategy();
+          writeStrategy.buildAnnotation({
+            annotation: oaAnno,
+            window: _this.state.getWindowObjectById(_this.windowId),
+            overlay: _this
+          });
           //save to endpoint
           _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
           onAnnotationSaved.resolve();
@@ -354,19 +349,12 @@
           }
         }
 
-        var svg = _this.getSVGString(_this.draftPaths);
-        oaAnno.on = {
-          "@type": "oa:SpecificResource",
-          "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
-          "selector": {
-            "@type": "oa:SvgSelector",
-            "value": svg
-          },
-          "within": {
-            "@id": _this.state.getWindowObjectById(_this.windowId).loadedManifest,
-              "@type": "sc:Manifest"
-          }
-        };
+        var writeStrategy = new $.MiradorDualStrategy();
+        writeStrategy.buildAnnotation({
+          annotation: oaAnno,
+          window: _this.state.getWindowObjectById(_this.windowId),
+          overlay: _this
+        });
         //save to endpoint
         _this.eventEmitter.publish('annotationCreated.' + _this.windowId, [oaAnno, function() {
           // stuff that needs to be called after the annotation has been created on the backend
@@ -396,6 +384,7 @@
           new $.DialogBuilder(_this.slotWindowElement).dialog({
             message: i18n.t('cancelAnnotation'),
             closeButton: false,
+            className: 'mirador-dialog',
             buttons: {
               'no': {
                 label: i18n.t('no'),

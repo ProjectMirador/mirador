@@ -39,7 +39,37 @@
         jQuery.extend(true, config, object);
       }
     });
-    this.init(jQuery.extend(true, {}, $.DEFAULT_SETTINGS, config));
+
+    /*
+    We want to deep copy/merge nested objects in the config, but array values should be overwritten
+    So, stringify arrays so extend overwrites them and then convert them back to arrays
+    */
+    function iterateStringify(object) {
+      for (var property in object) {
+        if (object.hasOwnProperty(property)) {
+          if (object[property] instanceof Array) {
+            object[property] = JSON.stringify(object[property]);
+          } else if (typeof object[property] === "object") {
+            iterateStringify(object[property]);
+          } else {}
+        }
+      }
+    }
+    function iterateParse(object) {
+      for (var property in object) {
+        if (object.hasOwnProperty(property)) {
+          if (typeof object[property] === "string" && object[property][0] === '[') {
+            object[property] = JSON.parse(object[property]);
+          } else if (typeof object[property] === "object") {
+            iterateParse(object[property]);
+          } else {}
+        }
+      }
+    }
+    iterateStringify(config);
+    var newConfig = jQuery.extend(true, {}, $.DEFAULT_SETTINGS, config);
+    iterateParse(newConfig);
+    this.init(newConfig);
   };
 
   $.SaveController.prototype = {
