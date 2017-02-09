@@ -186,6 +186,12 @@
                   _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [mfst['@id'], "(Added from URL)"]);
                 }
               });
+            } else if (data.hasOwnProperty('members')){
+              jQuery.each(data.members, function (ci, mfst) {
+                if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
+                  _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [mfst['@id'], "(Added from URL)"]);
+                }
+              });
             }
           });
 
