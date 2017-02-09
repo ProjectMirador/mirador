@@ -149,6 +149,7 @@
       new $.DialogBuilder(this.slotWindowElement).dialog({
         message: i18next.t('deleteShape'),
         closeButton: false,
+        className: 'mirador-dialog',
         buttons: {
           'no': {
             label: i18next.t('no'),
@@ -258,6 +259,7 @@
             new $.DialogBuilder(_this.slotWindowElement).dialog({
               message: i18next.t('editModalSaveAnnotationWithNoShapesMsg'),
               closeButton: false,
+              className: 'mirador-dialog',
               buttons: {
                 success: {
                   label: i18next.t('editModalBtnSaveWithoutShapes'),
@@ -346,7 +348,7 @@
             delete _this.draftPaths[i].data.newlyCreatedStrokeFactor;
           }
         }
-        
+
         var writeStrategy = new $.MiradorDualStrategy();
         writeStrategy.buildAnnotation({
           annotation: oaAnno,
@@ -382,6 +384,7 @@
           new $.DialogBuilder(_this.slotWindowElement).dialog({
             message: i18next.t('cancelAnnotation'),
             closeButton: false,
+            className: 'mirador-dialog',
             buttons: {
               'no': {
                 label: i18next.t('no'),

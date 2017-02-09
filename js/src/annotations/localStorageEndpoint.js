@@ -22,7 +22,7 @@
       token:     null,
       prefix:    null,
       dfd:       null,
-      annotationsList: [],        
+      annotationsList: [],
       windowID: null,
       eventEmitter: null
     }, options);
@@ -66,111 +66,147 @@
         }
       }
     },
-    
+
     deleteAnnotation: function(annotationID, successCallback, errorCallback) {
       var _this = this,
-      key = _this.annotationsList[0].on.full;
-      
-      try {
-        //find the matching annotation in the array and update it
-        _this.annotationsList = jQuery.grep(_this.annotationsList, function(value, index) {
-          return value['@id'] !== annotationID;
-        });
+      keys = [];
+      jQuery.each(_this.annotationsList[0].on, function(index, value) {
+        if (jQuery.inArray(value.full, keys) === -1) {
+          keys.push(value.full);
+        }
+      });
 
-        //remove endpoint reference before JSON.stringify
-        jQuery.each(_this.annotationsList, function(index, value) {
-          delete value.endpoint;
-        });
-
-        localStorage.setItem(key, JSON.stringify(_this.annotationsList));
-
-        //add endpoint reference after JSON.stringify
-        jQuery.each(_this.annotationsList, function(index, value) {
-          value.endpoint = _this;
-        });
-
-        if (typeof successCallback === "function") {
-          successCallback();
-        } 
-      } catch (e) {
+      if (keys.length === 0) {
         if (typeof errorCallback === "function") {
           errorCallback();
-        } 
+        }
       }
+      jQuery.each(keys, function(index, key) {
+        try {
+          //find the matching annotation in the array and update it
+          _this.annotationsList = jQuery.grep(_this.annotationsList, function(value, index) {
+            return value['@id'] !== annotationID;
+          });
+
+          //remove endpoint reference before JSON.stringify
+          jQuery.each(_this.annotationsList, function(index, value) {
+            delete value.endpoint;
+          });
+
+          localStorage.setItem(key, JSON.stringify(_this.annotationsList));
+
+          //add endpoint reference after JSON.stringify
+          jQuery.each(_this.annotationsList, function(index, value) {
+            value.endpoint = _this;
+          });
+
+          if (typeof successCallback === "function") {
+            successCallback();
+          }
+        } catch (e) {
+          if (typeof errorCallback === "function") {
+            errorCallback();
+          }
+        }
+      });
     },
-    
+
     update: function(oaAnnotation, successCallback, errorCallback) {
       var _this = this,
-      key = oaAnnotation.on.full,
-      annotationID = oaAnnotation['@id'];
-      
-      try {
-        if (_this.annotationsList.length === 0) {
-          _this.annotationsList = _this.getAnnotationList(key);          
+      annotationID = oaAnnotation['@id'],
+      keys = [];
+      jQuery.each(oaAnnotation.on, function(index, value) {
+        if (jQuery.inArray(value.full, keys) === -1) {
+          keys.push(value.full);
         }
-        //find the matching annotation in the array and update it
-        jQuery.each(_this.annotationsList, function(index, value) {
-          if (value['@id'] === annotationID) {
-            _this.annotationsList[index] = oaAnnotation;
-            return false;
-          }
-        });
+      });
 
-        //remove endpoint reference before JSON.stringify
-        jQuery.each(_this.annotationsList, function(index, value) {
-          delete value.endpoint;
-        });
-
-        localStorage.setItem(key, JSON.stringify(_this.annotationsList));
-
-        //add endpoint reference after JSON.stringify
-        jQuery.each(_this.annotationsList, function(index, value) {
-          value.endpoint = _this;
-        });
-
-        if (typeof successCallback === "function") {
-          successCallback(oaAnnotation);
-        } 
-      } catch (e) {
+      if (keys.length === 0) {
         if (typeof errorCallback === "function") {
           errorCallback();
-        } 
+        }
       }
+      jQuery.each(keys, function(index, key) {
+        try {
+          if (_this.annotationsList.length === 0) {
+            _this.annotationsList = _this.getAnnotationList(key);
+          }
+          //find the matching annotation in the array and update it
+          jQuery.each(_this.annotationsList, function(index, value) {
+            if (value['@id'] === annotationID) {
+              _this.annotationsList[index] = oaAnnotation;
+              return false;
+            }
+          });
+
+          //remove endpoint reference before JSON.stringify
+          jQuery.each(_this.annotationsList, function(index, value) {
+            delete value.endpoint;
+          });
+
+          localStorage.setItem(key, JSON.stringify(_this.annotationsList));
+
+          //add endpoint reference after JSON.stringify
+          jQuery.each(_this.annotationsList, function(index, value) {
+            value.endpoint = _this;
+          });
+
+          if (typeof successCallback === "function") {
+            successCallback(oaAnnotation);
+          }
+        } catch (e) {
+          if (typeof errorCallback === "function") {
+            errorCallback();
+          }
+        }
+      });
     },
 
     //takes OA Annotation, gets Endpoint Annotation, and saves
     //if successful, MUST return the OA rendering of the annotation
     create: function(oaAnnotation, successCallback, errorCallback) {
       var _this = this,
-      key = oaAnnotation.on.full;
-
-      try {
-        if (_this.annotationsList.length === 0) {
-          _this.annotationsList = _this.getAnnotationList(key);          
+      keys = [];
+      jQuery.each(oaAnnotation.on, function(index, value) {
+        if (jQuery.inArray(value.full, keys) === -1) {
+          keys.push(value.full);
         }
-        oaAnnotation["@id"] = $.genUUID();
-        _this.annotationsList.push(oaAnnotation);
+      });
 
-        //remove endpoint reference before JSON.stringify
-        jQuery.each(_this.annotationsList, function(index, value) {
-          delete value.endpoint;
-        });
-
-        localStorage.setItem(key, JSON.stringify(_this.annotationsList));
-
-        //add endpoint reference after JSON.stringify
-        jQuery.each(_this.annotationsList, function(index, value) {
-          value.endpoint = _this;
-        });
-
-        if (typeof successCallback === "function") {
-          successCallback(oaAnnotation);
-        } 
-      } catch (e) {
+      if (keys.length === 0) {
         if (typeof errorCallback === "function") {
           errorCallback();
-        } 
+        }
       }
+      jQuery.each(keys, function(index, key) {
+        try {
+          if (_this.annotationsList.length === 0) {
+            _this.annotationsList = _this.getAnnotationList(key);
+          }
+          oaAnnotation["@id"] = $.genUUID();
+          _this.annotationsList.push(oaAnnotation);
+
+          //remove endpoint reference before JSON.stringify
+          jQuery.each(_this.annotationsList, function(index, value) {
+            delete value.endpoint;
+          });
+
+          localStorage.setItem(key, JSON.stringify(_this.annotationsList));
+
+          //add endpoint reference after JSON.stringify
+          jQuery.each(_this.annotationsList, function(index, value) {
+            value.endpoint = _this;
+          });
+
+          if (typeof successCallback === "function") {
+            successCallback(oaAnnotation);
+          }
+        } catch (e) {
+          if (typeof errorCallback === "function") {
+            errorCallback();
+          }
+        }
+      });
     },
 
     getAnnotationList: function(key) {
