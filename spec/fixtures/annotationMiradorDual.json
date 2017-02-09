@@ -11,7 +11,7 @@
       "chars": "<p>something</p>"
     }
   ],
-  "on": {
+  "on": [{
     "@type": "oa:SpecificResource",
     "full": "https://oculus-dev.harvardx.harvard.edu/manifests/huam:320567/canvas/canvas-10466656.json",
     "selector": {
@@ -29,6 +29,6 @@
       "@id": "https://oculus-dev.harvardx.harvard.edu/manifests/huam:320567",
       "@type": "sc:Manifest"
     }
-  },
+  }],
   "@id": "d2eda2e2-951a-4f88-b4ec-03a7b25a5d07"
 }
