@@ -94,25 +94,27 @@
       this.svgOverlay.paperScope.project.clear();
       var _this = this;
       _this.annotationsToShapesMap = {};
+      var strategies = [
+        new $.Mirador21Strategy(),
+        new $.LegacyOpenAnnotationStrategy(),
+        new $.MiradorLegacyStrategy(),
+        new $.MiradorDualStrategy()
+      ];
 
       for (var i = 0; i < this.list.length; i++) {
         var shapeArray;
         var annotation = this.list[i];
-        if (annotation.on && typeof annotation.on === 'object') {
-          if (!annotation.on.selector) {
-            continue;
-          } else if (annotation.on.selector.value.indexOf('<svg') !== -1) {
-            shapeArray = _this.svgOverlay.parseSVG(annotation.on.selector.value, annotation);
-          } else if (annotation.on.selector.value.indexOf('xywh=') !== -1) {
-            shapeArray = _this.parseRectangle(annotation.on.selector.value, annotation);
-          } else {
-           continue;
+        if (typeof annotation === 'object' && annotation.on) {
+          var j;
+          for (j = 0; j < strategies.length; j++) {
+            if (strategies[j].isThisType(annotation)) {
+              shapeArray = strategies[j].parseRegion(annotation, _this);
+              break;
+            }
           }
-        } else if (annotation.on && typeof annotation.on === 'string' && annotation.on.indexOf('xywh=') !== -1) {
-          shapeArray = _this.parseRectangle(annotation.on, annotation);
-        } else {
-          continue;
+          if (j === strategies.length) continue;
         }
+        
         _this.svgOverlay.restoreLastView(shapeArray);
         _this.annotationsToShapesMap[annotation['@id']] = shapeArray;
       }

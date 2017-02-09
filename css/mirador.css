@@ -514,7 +514,7 @@ li.highlight {
   width:25px;
   height:25px;
   color:red;
-  border: 1 px solid red;
+  border: 1px solid red;
 }
 
 .select-results {
@@ -1967,7 +1967,7 @@ a.mirador-icon-window-menu, a.mirador-icon-view-type {
   height: 0px;
 }
 
-// qtip overrides.
+/* qtip overrides. */
 .qtip {
 }
 .qtip-bootstrap {
