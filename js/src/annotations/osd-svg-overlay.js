@@ -104,17 +104,17 @@
           }
         }
       };
-      
+
       // Key for saving mouse tool as data attribute
       // TODO: It seems its main use is for destroy the old paperjs mouse tool
       // when a new Overlay is instantiated. Maybe a better scheme can be
       // devised in the future?
       this.mouseToolKey = 'draw_canvas_' + _this.windowId;
-      
+
       this.setMouseTool();
       this.listenForActions();
     },
-    
+
     /**
      * Adds a Tool that handles mouse events for the paperjs scope.
      */
@@ -132,7 +132,7 @@
 
       jQuery.data(document.body, this.mouseToolKey, mouseTool);
     },
-    
+
     /**
      * Removes the mouse Tool from the paperjs scope.
      */
@@ -149,6 +149,7 @@
       new $.DialogBuilder(this.slotWindowElement).dialog({
         message: i18n.t('deleteShape'),
         closeButton: false,
+        className: 'mirador-dialog',
         buttons: {
           'no': {
             label: i18n.t('no'),
@@ -258,6 +259,7 @@
             new $.DialogBuilder(_this.slotWindowElement).dialog({
               message: i18n.t('editModalSaveAnnotationWithNoShapesMsg'),
               closeButton: false,
+              className: 'mirador-dialog',
               buttons: {
                 success: {
                   label: i18n.t('editModalBtnSaveWithoutShapes'),
@@ -346,7 +348,7 @@
             delete _this.draftPaths[i].data.newlyCreatedStrokeFactor;
           }
         }
-        
+
         var writeStrategy = new $.MiradorDualStrategy();
         writeStrategy.buildAnnotation({
           annotation: oaAnno,
@@ -382,6 +384,7 @@
           new $.DialogBuilder(_this.slotWindowElement).dialog({
             message: i18n.t('cancelAnnotation'),
             closeButton: false,
+            className: 'mirador-dialog',
             buttons: {
               'no': {
                 label: i18n.t('no'),
