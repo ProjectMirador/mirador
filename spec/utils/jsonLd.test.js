@@ -45,7 +45,7 @@ describe('JsonLd', function () {
     it('should return all values when no value has a langue associated', function() {
       var sample = ['First value',
                     'Second value'];
-      expect(Mirador.JsonLd.getTextValue(sample)).toEqual('First value<br/>Second value');
+      expect(Mirador.JsonLd.getTextValue(sample)).toEqual('First value<br />Second value');
     });
 
     it('should return all values that best match the language preference', function() {
@@ -72,7 +72,7 @@ describe('JsonLd', function () {
          '@language': "fr"}];
       window.navigator.languages = ['de-DE', 'de'];
       expect(Mirador.JsonLd.getTextValue(sample))
-        .toEqual('This is an American value.<br/>' +
+        .toEqual('This is an American value.<br />' +
                  'This is another American value.');
     });
 
@@ -84,8 +84,14 @@ describe('JsonLd', function () {
         'This is another value without a language.'];
       window.navigator.languages = ['en-US', 'en'];
       expect(Mirador.JsonLd.getTextValue(sample))
-        .toEqual('This is a value without a language.<br/>' +
+        .toEqual('This is a value without a language.<br />' +
                  'This is another value without a language.');
-    })
+    });
+
+    it('should only allow HTML elements permitted by the specification', function() {
+      var withScript = '<span>This <strong>looks</strong> <em>harmless</em>.<script>window.alert("boom!")</script></span>';
+      expect(Mirador.JsonLd.getTextValue(withScript)).toEqual(
+        "<span>This <strong>looks</strong> <em>harmless</em>.</span>");
+    });
   });
 });

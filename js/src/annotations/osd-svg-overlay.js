@@ -12,6 +12,8 @@
     return new $.Overlay(this, osdViewerId, windowId, state, eventEmitter);
   };
 
+  var FILL_COLOR_ALPHA_WORKAROUND = 0.00001;
+
   $.Overlay = function(viewer, osdViewerId, windowId, state, eventEmitter) {
     var drawingToolsSettings = state.getStateProperty('drawingToolsSettings');
     this.drawingToolsSettings = drawingToolsSettings;
@@ -102,17 +104,17 @@
           }
         }
       };
-      
+
       // Key for saving mouse tool as data attribute
       // TODO: It seems its main use is for destroy the old paperjs mouse tool
       // when a new Overlay is instantiated. Maybe a better scheme can be
       // devised in the future?
       this.mouseToolKey = 'draw_canvas_' + _this.windowId;
-      
+
       this.setMouseTool();
       this.listenForActions();
     },
-    
+
     /**
      * Adds a Tool that handles mouse events for the paperjs scope.
      */
@@ -130,7 +132,7 @@
 
       jQuery.data(document.body, this.mouseToolKey, mouseTool);
     },
-    
+
     /**
      * Removes the mouse Tool from the paperjs scope.
      */
@@ -147,6 +149,7 @@
       new $.DialogBuilder(this.slotWindowElement).dialog({
         message: i18n.t('deleteShape'),
         closeButton: false,
+        className: 'mirador-dialog',
         buttons: {
           'no': {
             label: i18n.t('no'),
@@ -225,6 +228,9 @@
 
       this.eventsSubscriptions.push(_this.eventEmitter.subscribe('changeFillColor.' + _this.windowId, function(event, color, alpha) {
         _this.fillColor = color;
+        if(alpha === 0){
+          alpha = FILL_COLOR_ALPHA_WORKAROUND;
+        }
         _this.fillColorAlpha = alpha;
         if (_this.hoveredPath && _this.hoveredPath.closed) {
           _this.hoveredPath.fillColor = color;
@@ -253,6 +259,7 @@
             new $.DialogBuilder(_this.slotWindowElement).dialog({
               message: i18n.t('editModalSaveAnnotationWithNoShapesMsg'),
               closeButton: false,
+              className: 'mirador-dialog',
               buttons: {
                 success: {
                   label: i18n.t('editModalBtnSaveWithoutShapes'),
@@ -285,19 +292,12 @@
               }
             });
         } else {
-          var svg = _this.getSVGString(_this.draftPaths);
-          oaAnno.on = {
-            "@type": "oa:SpecificResource",
-            "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
-            "selector": {
-              "@type": "oa:SvgSelector",
-              "value": svg
-            },
-            "within": {
-              "@id": _this.state.getWindowObjectById(_this.windowId).loadedManifest,
-              "@type": "sc:Manifest"
-            }
-          };
+          var writeStrategy = new $.MiradorDualStrategy();
+          writeStrategy.buildAnnotation({
+            annotation: oaAnno,
+            window: _this.state.getWindowObjectById(_this.windowId),
+            overlay: _this
+          });
           //save to endpoint
           _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
           onAnnotationSaved.resolve();
@@ -349,19 +349,12 @@
           }
         }
 
-        var svg = _this.getSVGString(_this.draftPaths);
-        oaAnno.on = {
-          "@type": "oa:SpecificResource",
-          "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
-          "selector": {
-            "@type": "oa:SvgSelector",
-            "value": svg
-          },
-          "within": {
-            "@id": _this.state.getWindowObjectById(_this.windowId).loadedManifest,
-              "@type": "sc:Manifest"
-          }
-        };
+        var writeStrategy = new $.MiradorDualStrategy();
+        writeStrategy.buildAnnotation({
+          annotation: oaAnno,
+          window: _this.state.getWindowObjectById(_this.windowId),
+          overlay: _this
+        });
         //save to endpoint
         _this.eventEmitter.publish('annotationCreated.' + _this.windowId, [oaAnno, function() {
           // stuff that needs to be called after the annotation has been created on the backend
@@ -391,6 +384,7 @@
           new $.DialogBuilder(_this.slotWindowElement).dialog({
             message: i18n.t('cancelAnnotation'),
             closeButton: false,
+            className: 'mirador-dialog',
             buttons: {
               'no': {
                 label: i18n.t('no'),
@@ -808,6 +802,11 @@
       cloned.dashArray = shape.dashArray;
       if (shape.fillColor) {
         cloned.fillColor = shape.fillColor;
+
+        // workaround for paper js fill hit test
+        if(shape.fillColor.alpha === 0){
+          shape.fillColor.alpha = FILL_COLOR_ALPHA_WORKAROUND;
+        }
         if (shape.fillColor.alpha) {
           cloned.fillColor.alpha = shape.fillColor.alpha;
         }
@@ -836,10 +835,10 @@
       var currentPath = this.path;
       var strokeColor = this.strokeColor;
       var fillColor = this.fillColor;
-      var fillColorAlpha = this.fillColorAlpha;
+      var fillColorAlpha = this.fillColorAlpha || FILL_COLOR_ALPHA_WORKAROUND;
       this.strokeColor = this.state.getStateProperty('drawingToolsSettings').strokeColor;
       this.fillColor = this.state.getStateProperty('drawingToolsSettings').fillColor;
-      this.fillColorAlpha = this.state.getStateProperty('drawingToolsSettings').fillColorAlpha;
+      this.fillColorAlpha = this.state.getStateProperty('drawingToolsSettings').fillColorAlpha || FILL_COLOR_ALPHA_WORKAROUND;
       this.mode = 'create';
       this.path = rect.createShape(initialPoint, this);
       var eventData = {

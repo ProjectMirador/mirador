@@ -45,7 +45,7 @@
         return '';
       }
       else if (typeof propertyValue === 'string') {
-        return propertyValue;
+        return $.sanitizeHtml(propertyValue);
       }
       else if (Array.isArray(propertyValue)) {
         var displayLanguage = getDisplayLanguage(languages, propertyValue);
@@ -62,9 +62,9 @@
           }
           text += textToAdd;
         });
-        return text;
+        return $.sanitizeHtml(text);
       } else {
-        return propertyValue['@value'];
+        return $.sanitizeHtml(propertyValue['@value']);
       }
     }
   };

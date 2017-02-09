@@ -29,18 +29,18 @@
       this.metadataTypes.links = _this.getMetadataLinks(_this.manifest);
 
       //vvvvv This is *not* how this should be done.
-      jQuery.each(this.metadataTypes, function(metadataKey, metadataValue) {
+      jQuery.each(this.metadataTypes, function(metadataKey, metadataValues) {
         tplData[metadataKey] = [];
 
-        jQuery.each(metadataValue, function(key, value) {
-          if (typeof value === 'object') {
-            value = _this.stringifyObject(value);
+        jQuery.each(metadataValues, function(idx, itm) {
+          if (typeof itm.value === 'object') {
+            itm.value = _this.stringifyObject(itm.value);
           }
 
-          if (typeof value === 'string' && value !== '') {
+          if (typeof itm.value === 'string' && itm.value !== '') {
             tplData[metadataKey].push({
-              label: _this.extractLabelFromAttribute(key),
-              value: (metadataKey === 'links') ? value : _this.addLinksToUris(value)
+              label: _this.extractLabelFromAttribute(itm.label),
+              value: (metadataKey === 'links') ? itm.value : _this.addLinksToUris(itm.value)
             });
           }
         });
@@ -124,11 +124,12 @@
   },
 
   getMetadataDetails: function(jsonLd) {
-      // TODO: This should not default to English
-      var mdList = {
-        'label': '<b>' + ($.JsonLd.getTextValue(jsonLd.label) || '') + '</b>',
-        'description':  $.JsonLd.getTextValue(jsonLd.description) || ''
-      };
+      var mdList = [
+        { label: 'label',
+          value: '<b>' + ($.JsonLd.getTextValue(jsonLd.label) || '') + '</b>' },
+        { label: 'description',
+          value: $.JsonLd.getTextValue(jsonLd.description) || '' }
+      ];
 
       if (jsonLd.metadata) {
         value = "";
@@ -136,7 +137,7 @@
         jQuery.each(jsonLd.metadata, function(index, item) {
           label = $.JsonLd.getTextValue(item.label);
           value = $.JsonLd.getTextValue(item.value);
-          mdList[label] = value;
+          mdList.push({label: label, value: value});
         });
       }
 
@@ -144,19 +145,19 @@
     },
 
    getMetadataRights: function(jsonLd) {
-       return {
-           'license':      jsonLd.license || '',
-           'attribution':  jsonLd.attribution || ''
-        };
+       return [
+         {label: i18n.t('license'), value: jsonLd.license || ''},
+         {label: i18n.t('attribution'), value: $.JsonLd.getTextValue(jsonLd.attribution) || ''}
+        ];
    },
 
    getMetadataLinks: function(jsonLd) {
      // #414
-      return {
-          'related': this.stringifyRelated(jsonLd.related || ''),
-          'seeAlso': this.stringifyRelated(jsonLd.seeAlso || ''),
-          'within':  this.stringifyObject(jsonLd.within || '')
-        };
+      return [
+        {label: i18n.t('related'), value: this.stringifyRelated(jsonLd.related || '')},
+        {label: i18n.t('seeAlso'), value: this.stringifyRelated(jsonLd.seeAlso || '')},
+        {label: i18n.t('within'),  value: this.stringifyObject(jsonLd.within || '')}
+      ];
    },
 
    extractLabelFromAttribute: function(attr) {
@@ -196,22 +197,29 @@
         if (this.panel) {
             element = element.parent();
         }
-        element.hide({effect: "slide", direction: "right", duration: 300, easing: "swing"});    
+        element.hide({effect: "slide", direction: "right", duration: 300, easing: "swing"});
     },
 
     addLinksToUris: function(text) {
       // http://stackoverflow.com/questions/8188645/javascript-regex-to-match-a-url-in-a-field-of-text
       var regexUrl = /(http|ftp|https):\/\/[\w\-]+(\.[\w\-]+)+([\w.,@?\^=%&amp;:\/~+#\-]*[\w@?\^=%&amp;\/~+#\-])?/gi,
           textWithLinks = text,
-          matches;
+          matches,
+          parsedTextWithLinks;
 
-      if (typeof text === 'string' && textWithLinks.indexOf('<a ') == -1) {
-        matches = text.match(regexUrl);
+      if (typeof text === 'string') {
+        if (textWithLinks.indexOf('<a ') === -1) {
+          matches = text.match(regexUrl);
 
-        if (matches) {
-          jQuery.each(matches, function(index, match) {
-            textWithLinks = textWithLinks.replace(match, '<a href="' + match + '" target="_blank">' + match + '</a>');
-          });
+          if (matches) {
+            jQuery.each(matches, function(index, match) {
+              textWithLinks = textWithLinks.replace(match, '<a href="' + match + '" target="_blank">' + match + '</a>');
+            });
+          }
+        } else {
+          parsedTextWithLinks = jQuery('<div />').append(textWithLinks);
+          jQuery(parsedTextWithLinks[0]).find('a').attr('target', '_blank');
+          textWithLinks = parsedTextWithLinks[0].innerHTML;
         }
       }
 

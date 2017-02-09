@@ -68,7 +68,6 @@
         },
         events: {
           render: function(event, api) {
-            _this.eventEmitter.publish('annotationEditorAvailable.' + _this.windowId);
             _this.eventEmitter.publish('disableTooltips.' + _this.windowId);
 
             api.elements.tooltip.draggable();
@@ -103,6 +102,7 @@
             });
 
             _this.activeEditor.show(selector);
+            _this.eventEmitter.publish('annotationEditorAvailable.' + _this.windowId);
           }
 
         }
@@ -375,7 +375,7 @@
           showDelete = annotation.endpoint.userAuthorize('delete', annotation);
         }
         htmlAnnotations.push({
-          annoText : annoText,
+          annoText : $.sanitizeHtml(annoText),
           tags : tags,
           id : annotation['@id'],
           username : username,
@@ -405,7 +405,6 @@
         'content.text': editorContainer,
         'hide.event': false
       });
-      _this.eventEmitter.publish('annotationEditorAvailable.' + this.windowId);
       //add rich text editor
       this.activeEditor = new this.editor(
         jQuery.extend({}, this.editorOptions, {
@@ -413,6 +412,7 @@
           windowId: this.windowId
         }));
       this.activeEditor.show('form#annotation-editor-'+this.windowId);
+      _this.eventEmitter.publish('annotationEditorAvailable.' + this.windowId);
       jQuery(api.elements.tooltip).removeClass("qtip-viewer");
       api.elements.tooltip.draggable();
       if (viewerParams.onEnterEditMode) {
