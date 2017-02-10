@@ -81,15 +81,18 @@ describe('MetadataView', function() {
 
   describe('getMetadataDetails', function() {
     it('should grab English details', function() {
-      expect(subject.getMetadataDetails(this.manifest.jsonLd)).toEqual({
-        label: '<b></b>',
-        description: '',
-        'Single': 'default',
-        'Multiple with default': 'English',
-        'Multiple without default': 'English',
-        'Single HTML with invalid elements': "<span style='height:500px'>test <script language='Javascript'>alert('bad!');</script><blink>bad</blink></span>",
-        'Single HTML with valid elements': "<span><b>bold</b><i>italic</i><br/><a href='http://iiif.io/'><img src='http://iiif.io/img/logo-iiif-34x30.png'></a></span>"
-      });
+      expect(subject.getMetadataDetails(this.manifest.jsonLd)).toEqual([
+        { label: 'label', value: '<b></b>' },
+        { label: 'description', value: '' },
+        { label: 'Single', value: 'default' },
+        { label: 'Multiple with default', value: 'English' },
+        { label: 'Multiple without default', value: 'English' },
+        { label: 'Single HTML with invalid elements', value: "<span>test bad</span>" },
+        { label: 'Single HTML with valid elements', value: "<span><b>bold</b><i>italic</i><br /><a href=\"http://iiif.io/\"><img src=\"http://iiif.io/img/logo-iiif-34x30.png\" /></a></span>" },
+        { label: 'Single text with single URL', value: "There's an URL: http://example.com" },
+        { label: 'Single text with multiple URLs', value: "There's an URL: http://example.com and here's another: http://foobar.org" },
+        { label: "Single text with single URL already wrapped in an anchor tag, but without target blank", value: "There's an URL: <a href=\"http://example.com\">foobar</a>" }
+      ]);
     });
   });
 
@@ -98,16 +101,16 @@ describe('MetadataView', function() {
       expect(subject.getMetadataRights({
         license: 'CC-BY-ND 2.0',
         attribution: 'Oodlepods Fellowship International'
-      })).toEqual({
-        license: 'CC-BY-ND 2.0',
-        attribution: 'Oodlepods Fellowship International'
-      });
+      })).toEqual([
+        { label: 'license', value: 'CC-BY-ND 2.0' },
+        { label: 'attribution', value: 'Oodlepods Fellowship International' }
+      ]);
     });
     it('should default to blanks when not present', function() {
-      expect(subject.getMetadataRights(this.manifest.jsonLd)).toEqual({
-        license: '',
-        attribution: ''
-      });
+      expect(subject.getMetadataRights(this.manifest.jsonLd)).toEqual([
+        { label: 'license', value: '' },
+        { label: 'attribution', value: '' }
+      ]);
     });
   });
 
@@ -117,18 +120,18 @@ describe('MetadataView', function() {
         related: "http://news.example.net",
         seeAlso: "http://oodlepods.example.net",
         within: "Oodlepods Monthly Issue #6"
-      })).toEqual({
-        related: '<a href="http://news.example.net" target="_blank">http://news.example.net</a>',
-        seeAlso: '<a href="http://oodlepods.example.net" target="_blank">http://oodlepods.example.net</a>',
-        within: 'Oodlepods Monthly Issue #6'
-      });
+      })).toEqual([
+        { label: 'related', value: '<a href="http://news.example.net" target="_blank">http://news.example.net</a>' },
+        { label: 'seeAlso', value: '<a href="http://oodlepods.example.net" target="_blank">http://oodlepods.example.net</a>' },
+        { label: 'within', value: 'Oodlepods Monthly Issue #6' }
+      ]);
     });
     it('should default to blanks when not present', function() {
-      expect(subject.getMetadataLinks(this.manifest.jsonLd)).toEqual({
-        related: '',
-        seeAlso: '',
-        within: ''
-      });
+      expect(subject.getMetadataLinks(this.manifest.jsonLd)).toEqual([
+        { label: 'related', value: '' },
+        { label: 'seeAlso', value: '' },
+        { label: 'within', value: '' }
+      ]);
     });
   });
 

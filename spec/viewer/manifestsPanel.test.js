@@ -62,7 +62,7 @@ describe('ManifestsPanel', function() {
     spyOn(this.eventEmitter, 'publish');
     var url = "http://example.com/manifest.json";
     this.panel.addManifestUrl(url);
-    expect(this.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', url, "(Added from URL)");
+    expect(this.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', [url, "(Added from URL)"]);
   });
   
   it('should toggle load window', function() {

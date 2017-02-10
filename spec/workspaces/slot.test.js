@@ -28,14 +28,6 @@ describe('Slot', function () {
     beforeEach(function() {
       spyOn(subject.eventEmitter, 'publish').and.callThrough();
     });
-    it('should respond to windowRemoved', function () {
-      var window = this.slot.window;
-      expect(this.appendTo.find('#MOCK_WINDOW_1').size()).toBe(1);
-      expect(window.element.attr('id')).toEqual('MOCK_WINDOW_1');
-      this.eventEmitter.publish('windowRemoved', 'MOCK_WINDOW_1');
-      expect(this.slot.window).toBe(undefined);
-      expect(this.appendTo.find('#MOCK_WINDOW_1').size()).toBe(0);
-    });
     it('should respond to layoutChanged', function() {
       subject.eventEmitter.publish('layoutChanged', '2x2');
       expect(subject.eventEmitter.publish).toHaveBeenCalledWith('windowSlotAddressUpdated', {
@@ -151,7 +143,7 @@ describe('Slot', function () {
     });
     it('should handle manifest-only URLs (not cached)', function() {
       subject.handleDrop(manifestUrl);
-      expect(subject.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', manifestUrl, '(Added from URL)');
+      expect(subject.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', [manifestUrl, '(Added from URL)']);
       var mani = new Mirador.Manifest(manifestUrl, 'IIIF', fullFixture);
       subject.eventEmitter.publish('manifestReceived', mani);
       expect(subject.eventEmitter.publish).toHaveBeenCalledWith('ADD_WINDOW', {
@@ -170,7 +162,7 @@ describe('Slot', function () {
     it('should handle manifest URLs with canvas (not cached)', function() {
       fullUrl = 'http://projectmirador.org?manifest=' + manifestUrl + '&canvas=' + canvasUrl;
       subject.handleDrop(fullUrl);
-      expect(subject.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', manifestUrl, '(Added from URL)');
+      expect(subject.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', [manifestUrl, '(Added from URL)']);
       var mani = new Mirador.Manifest(manifestUrl, 'IIIF', fullFixture);
       subject.eventEmitter.publish('manifestReceived', mani);
       expect(subject.eventEmitter.publish).toHaveBeenCalledWith('ADD_WINDOW', {
@@ -194,7 +186,7 @@ describe('Slot', function () {
     it('should handle single-image URLs', function() {
       fullUrl = 'http://projectmirador.org?canvasId=' + canvasUrl + '&image=' + imageInfoUrl;
       subject.handleDrop(fullUrl);
-      expect(subject.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', imageInfoUrl, '(Added from URL)');
+      expect(subject.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', [imageInfoUrl, '(Added from URL)']);
     });
     it('should handle collection URLs', function() {
       spyOn(jQuery, 'getJSON').and.returnValue({
@@ -221,8 +213,8 @@ describe('Slot', function () {
       });
       fullUrl = 'http://projectmirador.org?collection=' + collectionUrl;
       subject.handleDrop(fullUrl);
-      expect(subject.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', manifestUrl, '(Added from URL)');
-      expect(subject.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', "http://demos.biblissima-condorcet.fr/iiif/metadata/florus-dispersus/manifest.json", '(Added from URL)');
+      expect(subject.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', [manifestUrl, '(Added from URL)']);
+      expect(subject.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', ["http://demos.biblissima-condorcet.fr/iiif/metadata/florus-dispersus/manifest.json", '(Added from URL)']);
     });
   });
   

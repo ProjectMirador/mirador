@@ -20,7 +20,7 @@
       saveModule = jsonStorageEndpoint.module,
       saveOptions = jsonStorageEndpoint.options;
       this.storageModule = new $[saveModule](saveOptions);
-      
+
       this.bindEvents();
       this.listenForActions();
     },

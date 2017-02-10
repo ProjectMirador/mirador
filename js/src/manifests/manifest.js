@@ -23,7 +23,7 @@
       // accessor methods. We can just set the
       // jsonLd directly, and the request needs to
       // be a jQuery deferred object that is completed
-      // imediately upon creation. This allows
+      // immediately upon creation. This allows
       // components listening for this request to finish
       // to react immediately without having to be
       // re-written.
@@ -81,6 +81,7 @@
     },
     getThumbnailForCanvas : function(canvas, width) {
       var version = "1.1",
+      compliance = -1,
       service,
       thumbnailUrl;
 
@@ -93,12 +94,20 @@
         if (typeof(canvas.thumbnail) == 'string') {
           thumbnailUrl = canvas.thumbnail;
         } else if (canvas.thumbnail.hasOwnProperty('service')) {
-          // Get the IIIF Image API via the @context
-          service = canvas.thumbnail.service;
-          if (service.hasOwnProperty('@context')) {
-            version = $.Iiif.getVersionFromContext(service['@context']);
-          }
-          thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+            service = canvas.thumbnail.service;
+            if(service.hasOwnProperty('profile')) {
+               compliance = $.Iiif.getComplianceLevelFromProfile(service.profile);    
+            }
+            if(compliance === 0){
+                // don't change existing behaviour unless compliance is explicitly 0            
+                thumbnailUrl = canvas.thumbnail['@id'];
+            } else {
+                // Get the IIIF Image API via the @context
+                if (service.hasOwnProperty('@context')) {
+                    version = $.Iiif.getVersionFromContext(service['@context']);
+                }
+                thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+            }
         } else {
           thumbnailUrl = canvas.thumbnail['@id'];
         }

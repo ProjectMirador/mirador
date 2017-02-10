@@ -66,6 +66,8 @@
       focusState = _this.viewType,
       templateData = {};
 
+      this.events = [];
+
       //make sure annotations list is cleared out when changing objects within window
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
@@ -169,7 +171,7 @@
           }
         });
       });
-      //TODO: this needs to switch the postion when it is a right to left manifest
+      //TODO: this needs to switch the position when it is a right to left manifest
       this.element.find('.manifest-info .window-manifest-title').qtip({
         content: {
           text: jQuery(this).attr('title'),
@@ -229,6 +231,21 @@
         this.bottomPanelVisibility(this.bottomPanelVisible);
       }
       this.sidePanelVisibility(this.sidePanelVisible, '0s');
+
+      this.events.push(this.eventEmitter.subscribe('windowRemoved',function(event,id){
+        if(_this.id === id){
+          _this.destroy();
+        }
+      }));
+    },
+
+    destroy:function(){
+      var _this = this;
+      this.events.forEach(function(event){
+        _this.eventEmitter.unsubscribe(event.name,event.handler);
+      });
+
+      this.element.remove();
     },
 
     update: function(options) {
@@ -266,15 +283,15 @@
         }
       });
 
-      _this.eventEmitter.subscribe('HIDE_REMOVE_OBJECT.' + _this.id, function(event) {
+      _this.events.push(_this.eventEmitter.subscribe('HIDE_REMOVE_OBJECT.' + _this.id, function(event) {
         _this.element.find('.remove-object-option').hide();
-      });
+      }));
 
-      _this.eventEmitter.subscribe('SHOW_REMOVE_OBJECT.' + _this.id, function(event) {
+      _this.events.push(this.eventEmitter.subscribe('SHOW_REMOVE_OBJECT.' + _this.id, function(event) {
         _this.element.find('.remove-object-option').show();
-      });
+      }));
 
-      _this.eventEmitter.subscribe('sidePanelStateUpdated.' + this.id, function(event, state) {
+      _this.events.push(_this.eventEmitter.subscribe('sidePanelStateUpdated.' + this.id, function(event, state) {
         if (state.open) {
             _this.element.find('.mirador-icon-toc').addClass('selected');
             _this.element.find('.view-container').removeClass('maximised');
@@ -282,57 +299,57 @@
             _this.element.find('.mirador-icon-toc').removeClass('selected');
             _this.element.find('.view-container').addClass('maximised');
         }
-      });
+      }));
 
       // TODO: temporary logic to minimize side panel if only tab is toc and toc is empty
-      _this.eventEmitter.subscribe('sidePanelVisibilityByTab.' + this.id, function(event, visible) {
+      _this.events.push(_this.eventEmitter.subscribe('sidePanelVisibilityByTab.' + this.id, function(event, visible) {
         _this.sidePanelVisibility(visible, '0s');
-      });
+      }));
 
-      _this.eventEmitter.subscribe('SET_CURRENT_CANVAS_ID.' + this.id, function(event, canvasID) {
+      _this.events.push(_this.eventEmitter.subscribe('SET_CURRENT_CANVAS_ID.' + this.id, function(event, canvasID) {
         _this.setCurrentCanvasID(canvasID);
-      });
+      }));
 
-      _this.eventEmitter.subscribe('REMOVE_CLASS.' + this.id, function(event, className) {
+      _this.events.push(_this.eventEmitter.subscribe('REMOVE_CLASS.' + this.id, function(event, className) {
         _this.element.find('.view-container').removeClass(className);
-      });
+      }));
 
-      _this.eventEmitter.subscribe('ADD_CLASS.' + this.id, function(event, className) {
+      _this.events.push(_this.eventEmitter.subscribe('ADD_CLASS.' + this.id, function(event, className) {
         _this.element.find('.view-container').addClass(className);
-      });
+      }));
 
-      _this.eventEmitter.subscribe('UPDATE_FOCUS_IMAGES.' + this.id, function(event, images) {
+      _this.events.push(_this.eventEmitter.subscribe('UPDATE_FOCUS_IMAGES.' + this.id, function(event, images) {
         _this.updateFocusImages(images.array);
-      });
+      }));
 
-      _this.eventEmitter.subscribe('HIDE_ICON_TOC.' + this.id, function(event) {
+      _this.events.push(_this.eventEmitter.subscribe('HIDE_ICON_TOC.' + this.id, function(event) {
         _this.element.find('.mirador-icon-toc').hide();
-      });
+      }));
 
-      _this.eventEmitter.subscribe('SHOW_ICON_TOC.' + this.id, function(event) {
+      _this.events.push(_this.eventEmitter.subscribe('SHOW_ICON_TOC.' + this.id, function(event) {
         _this.element.find('.mirador-icon-toc').show();
-      });
+      }));
 
-      _this.eventEmitter.subscribe('SET_BOTTOM_PANEL_VISIBILITY.' + this.id, function(event, visibility) {
+      _this.events.push(_this.eventEmitter.subscribe('SET_BOTTOM_PANEL_VISIBILITY.' + this.id, function(event, visibility) {
         if (typeof visibility !== 'undefined' && visibility !== null) {
           _this.bottomPanelVisibility(visibility);
         } else {
           _this.bottomPanelVisibility(_this.bottomPanelVisible);
         }
-      });
+      }));
 
-      _this.eventEmitter.subscribe('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + this.id, function(event) {
+      _this.events.push(_this.eventEmitter.subscribe('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + this.id, function(event) {
         var visible = !_this.bottomPanelVisible;
         _this.bottomPanelVisibility(visible);
-      });
+      }));
 
-      _this.eventEmitter.subscribe('DISABLE_WINDOW_FULLSCREEN', function(event) {
+      _this.events.push(_this.eventEmitter.subscribe('DISABLE_WINDOW_FULLSCREEN', function(event) {
         _this.element.find('.mirador-osd-fullscreen').hide();
-      });
+      }));
 
-      _this.eventEmitter.subscribe('ENABLE_WINDOW_FULLSCREEN', function(event) {
+      _this.events.push(_this.eventEmitter.subscribe('ENABLE_WINDOW_FULLSCREEN', function(event) {
         _this.element.find('.mirador-osd-fullscreen').show();
-      });
+      }));
     },
 
     bindEvents: function() {
@@ -385,10 +402,10 @@
 
       _this.eventEmitter.subscribe('annotationUpdated.'+_this.id, function(event, oaAnno) {
         //first function is success callback, second is error callback
-        _this.endpoint.update(oaAnno, function() {
+        _this.endpoint.update(oaAnno, function(data) {
           jQuery.each(_this.annotationsList, function(index, value) {
-            if (value['@id'] === oaAnno['@id']) {
-              _this.annotationsList[index] = oaAnno;
+            if (value['@id'] === data['@id']) {
+              _this.annotationsList[index] = data;
               return false;
             }
           });
@@ -971,7 +988,7 @@
                                  '{{#if sidePanel}}',
                                  '<a href="javascript:;" class="mirador-btn mirador-icon-toc selected mirador-tooltip" title="{{t "sidePanelTooltip"}}" aria-label="{{t "sidePanelTooltip"}}"><i class="fa fa-bars fa-lg fa-fw"></i></a>',
                                  '{{/if}}',
-                                 '<h3 class="window-manifest-title" title="{{title}}" aria-label="{{title}}">{{title}}</h3>',
+                                 '<h3 class="window-manifest-title" title="{{{title}}}" aria-label="{{{title}}}">{{{title}}}</h3>',
                                  '</div>',
                                  '<div class="content-container">',
                                  '{{#if sidePanel}}',

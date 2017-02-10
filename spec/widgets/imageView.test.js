@@ -122,19 +122,19 @@ describe('ImageView', function() {
         arrow_next = subject.element.find('.mirador-osd-next');
         arrow_prev = subject.element.find('.mirador-osd-previous');
       });
-      it('should show the panel for true', function() {
+      it('should adjust canvas controls to accommodate bottom panel height', function() {
         subject.eventEmitter.publish('bottomPanelSet.' + this.windowId, true);
-        expect(dodger_bottom_panel.attr('style').indexOf('translateY(-130px)')).not.toBeLessThan(0);
-        expect(dodger_zoom.attr('style').indexOf('translateY(-130px)')).not.toBeLessThan(0);
-        expect(arrow_next.attr('style').indexOf('translateY(-65px)')).not.toBeLessThan(0);
-        expect(arrow_prev.attr('style').indexOf('translateY(-65px)')).not.toBeLessThan(0);
+        expect(dodger_bottom_panel).toHaveClass('bottom-panel-open');
+        expect(dodger_zoom).toHaveClass('bottom-panel-open');
+        expect(arrow_next).toHaveClass('bottom-panel-open');
+        expect(arrow_prev).toHaveClass('bottom-panel-open');
       });
-      it('should hide the panel for false', function() {
+      it('should adjust canvas controls to accommodate the absence of the bottom panel', function() {
         subject.eventEmitter.publish('bottomPanelSet.' + this.windowId, false);
-        expect(dodger_bottom_panel.attr('style').indexOf('translateY(0px)')).not.toBeLessThan(0);
-        expect(dodger_zoom.attr('style').indexOf('translateY(0px)')).not.toBeLessThan(0);
-        expect(arrow_next.attr('style').indexOf('translateY(0px)')).not.toBeLessThan(0);
-        expect(arrow_prev.attr('style').indexOf('translateY(0px)')).not.toBeLessThan(0);
+        expect(dodger_bottom_panel).not.toHaveClass('bottom-panel-open');
+        expect(dodger_zoom).not.toHaveClass('bottom-panel-open');
+        expect(arrow_next).not.toHaveClass('bottom-panel-open');
+        expect(arrow_prev).not.toHaveClass('bottom-panel-open');
       });
     });
     describe('fitBounds', function() {
