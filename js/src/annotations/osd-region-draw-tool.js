@@ -25,11 +25,15 @@
     },
 
     enterDisplayAnnotations: function() {
+      this.svgOverlay.setMouseTool();
+      
       // if a user selected the pointer mode but is still actively
       // working on an annotation, don't re-render
       if (!this.svgOverlay.inEditOrCreateMode) {
         this.exitEditMode(true);
         this.render();
+      } else {
+        this.svgOverlay.checkToRemoveFocus();
       }
     },
 
@@ -63,6 +67,10 @@
     },
 
     enterDefault: function() {
+      // Removing the Tool explicitly because otherwise mouse events keep
+      // firing in default mode where they shouldn't.
+      this.svgOverlay.removeMouseTool();
+
       this.exitEditMode(false);
     },
 
@@ -76,37 +84,40 @@
       }
     },
 
-    render: function() {
+    render: function () {
+
+      if(this.parent.mode !== $.AnnotationsLayer.DISPLAY_ANNOTATIONS){
+        return ;
+      }
       this.svgOverlay.restoreEditedShapes();
       this.svgOverlay.paperScope.activate();
       this.svgOverlay.paperScope.project.clear();
       var _this = this;
       _this.annotationsToShapesMap = {};
-      var deferreds = jQuery.map(this.list, function(annotation) {
-        var deferred = jQuery.Deferred(),
-        shapeArray;
-        if (annotation.on && typeof annotation.on === 'object') {
-          if (!annotation.on.selector) {
-            return deferred;
-          } else if (annotation.on.selector.value.indexOf('<svg') !== -1) {
-            shapeArray = _this.svgOverlay.parseSVG(annotation.on.selector.value, annotation);
-          } else if (annotation.on.selector.value.indexOf('xywh=') !== -1) {
-            shapeArray = _this.parseRectangle(annotation.on.selector.value, annotation);
-          } else {
-            return deferred;
+      var strategies = [
+        new $.Mirador21Strategy(),
+        new $.LegacyOpenAnnotationStrategy(),
+        new $.MiradorLegacyStrategy(),
+        new $.MiradorDualStrategy()
+      ];
+
+      for (var i = 0; i < this.list.length; i++) {
+        var shapeArray;
+        var annotation = this.list[i];
+        if (typeof annotation === 'object' && annotation.on) {
+          var j;
+          for (j = 0; j < strategies.length; j++) {
+            if (strategies[j].isThisType(annotation)) {
+              shapeArray = strategies[j].parseRegion(annotation, _this);
+              break;
+            }
           }
-        } else if (annotation.on && typeof annotation.on === 'string' && annotation.on.indexOf('xywh=') !== -1) {
-          shapeArray = _this.parseRectangle(annotation.on, annotation);
-        } else {
-          return deferred;
+          if (j === strategies.length) continue;
         }
+        
         _this.svgOverlay.restoreLastView(shapeArray);
         _this.annotationsToShapesMap[annotation['@id']] = shapeArray;
-        return deferred;
-      });
-      jQuery.when.apply(jQuery, deferreds).done(function() {
-        _this.eventEmitter.publish('overlaysRendered.' + _this.windowId);
-      });
+      }
 
       var windowElement = _this.state.getWindowElement(_this.windowId);
       this.annoTooltip = new $.AnnotationTooltip({
@@ -121,6 +132,7 @@
         getAnnoFromRegion: _this.getAnnoFromRegion.bind(this)
       });
       this.svgOverlay.paperScope.view.draw();
+      _this.eventEmitter.publish('annotationsRendered.' + _this.windowId);
     },
 
     parseRectangle: function(rectString, annotation) {
@@ -260,6 +272,10 @@
           }
         });
         _this.svgOverlay.paperScope.view.draw();
+      }));
+
+      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('refreshOverlay.' + _this.windowId, function (event) {
+        _this.render();
       }));
     },
 

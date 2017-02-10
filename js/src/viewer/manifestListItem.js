@@ -189,10 +189,15 @@
         if (newMaxPreviewWidth < _this.maxPreviewImagesWidth ) {
           while (_this.imagesTotalWidth >= newMaxPreviewWidth) {
             image = _this.tplData.images.pop();
-            _this.imagesTotalWidth -= (image.width + _this.margin);
 
-            //remove image from dom
-            _this.element.find('img[data-image-id="'+image.id+'"]').remove();
+            if (image) {
+              _this.imagesTotalWidth -= (image.width + _this.margin);
+
+              //remove image from dom
+              _this.element.find('img[data-image-id="'+image.id+'"]').remove();
+            } else {
+              break;
+            }
           }
           //check if need to add ellipsis
           if (_this.remaining === 0 && _this.allImages.length - _this.tplData.images.length > 0) {
@@ -230,6 +235,7 @@
           }
         }
         _this.maxPreviewImagesWidth = newMaxPreviewWidth;
+        _this.eventEmitter.publish('manifestListItemRendered');
     },
 
     hide: function() {
@@ -251,7 +257,7 @@
       '</div>',
       '<div class="select-metadata">',
         '<div class="manifest-title">',
-          '<h3 title="{{label}}">{{label}}</h3>',
+          '<h3 title="{{{label}}}">{{{label}}}</h3>',
         '</div>',
         '<div class="item-info">',
           '<div class="item-info-row">',

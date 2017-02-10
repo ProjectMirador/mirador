@@ -47,6 +47,7 @@
         statusbar: false,
         toolbar_items_size: 'small',
         toolbar: "bold italic | bullist numlist | link image media | removeformat",
+        default_link_target:"_blank",
         setup: function(editor) {
           editor.on('init', function(args) {
             tinymce.execCommand('mceFocus', false, args.target.id);

@@ -36,6 +36,8 @@ describe('SidePanel', function() {
   describe('Initialization', function() {
     it('should initialize', function() {
       expect(true).toBe(true); //Force beforeEach() setup to run
+      expect(this.sidePanel instanceof Mirador.SidePanel).toBeTruthy();
+      expect(this.sidePanel.appendTo).toBeTruthy();
     });
   });
 
@@ -103,11 +105,8 @@ describe('SidePanel', function() {
   });
 
   describe('render', function() {
-    it('should minimize and unminimize', function() {
-      subject.render({ open: false });
-      expect(subject.appendTo).toHaveClass('minimized');
-      subject.render({ open: true });
-      expect(subject.appendTo).not.toHaveClass('minimized');
+    it('should render on initialization', function() {
+      expect(this.sidePanel.appendTo.html()).toBeTruthy();
     });
   });
 

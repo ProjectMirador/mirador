@@ -140,7 +140,25 @@ describe('Manifest', function() {
         expect(thumbnail).toEqual(thumbnailUrl);
       });
 
-      it('when canvas.thumbnail has a service', function () {
+
+      it('when canvas.thumbnail has a level 0 service', function () {
+        var thumbnailUrl = 'http://www.example.org/iiif/book1/thumbnail/p1.jpg';
+        var canvas = {
+          thumbnail: {
+            '@id': thumbnailUrl,
+            service: {
+              '@id': 'http://example.org/images/book1-page1',
+              profile: 'http://iiif.io/api/image/2/level0.json'
+            }
+          }
+        };
+        var manifestInstance = new Mirador.Manifest(null, null, {});
+        var thumbnail = manifestInstance.getThumbnailForCanvas(canvas);
+        expect(thumbnail).toEqual(thumbnailUrl);
+      });
+      
+      
+      it('when canvas.thumbnail has a level 1 or level 2 service', function () {
         var canvas = {
           thumbnail: {
             '@id': 'http://example.org/images/book1-page1/full/80,100/0/default.jpg',

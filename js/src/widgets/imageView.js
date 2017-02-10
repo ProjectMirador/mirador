@@ -104,11 +104,11 @@
         var dodgers = _this.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls');
         var arrows = _this.element.find('.mirador-osd-next, .mirador-osd-previous');
         if (visible === true) {
-          dodgers.css({transform: 'translateY(-130px)'});
-          arrows.css({transform: 'translateY(-65px)'});
+          dodgers.addClass('bottom-panel-open');
+          arrows.addClass('bottom-panel-open');
         } else {
-          dodgers.css({transform: 'translateY(0)'});
-          arrows.css({transform: 'translateY(0)'});
+          dodgers.removeClass('bottom-panel-open');
+          arrows.removeClass('bottom-panel-open');
         }
       });
 
@@ -270,8 +270,7 @@
 
       this.element.find('.mirador-osd-refresh-mode').on('click', function() {
         //update annotation list from endpoint
-        _this.eventEmitter.publish('updateAnnotationList.'+_this.windowId);
-       // _this.eventEmitter.publish('refreshOverlay.'+_this.windowId, '');
+        _this.eventEmitter.publish('updateAnnotationList.' + _this.windowId);
       });
       //Annotation specific controls
 
@@ -284,7 +283,6 @@
         "grayscale" : "grayscale(0%)",
         "invert" : "invert(0%)"
       };
-      // console.log(modernizr);
 
       function setFilterCSS() {
         var filterCSS = jQuery.map(filterValues, function(value, key) { return value; }).join(" "),
@@ -296,6 +294,38 @@
           '-o-filter'      : filterCSS,
           '-ms-filter'     : filterCSS
         });
+      }
+
+      function resetImageManipulationControls() {
+        //reset rotation
+        if (_this.osd) {
+          _this.osd.viewport.setRotation(0);
+        }
+
+        //reset brightness
+        filterValues.brightness = "brightness(100%)";
+        _this.element.find('.mirador-osd-brightness-slider').slider('option','value',100);
+        _this.element.find('.mirador-osd-brightness-slider').find('.percent').text(100 + '%');
+
+        //reset contrast
+        filterValues.contrast = "contrast(100%)";
+        _this.element.find('.mirador-osd-contrast-slider').slider('option','value',100);
+        _this.element.find('.mirador-osd-contrast-slider').find('.percent').text(100 + '%');
+
+        //reset saturation
+        filterValues.saturate = "saturate(100%)";
+        _this.element.find('.mirador-osd-saturation-slider').slider('option','value',100);
+        _this.element.find('.mirador-osd-saturation-slider').find('.percent').text(100 + '%');
+
+        //reset grayscale
+        filterValues.grayscale = "grayscale(0%)";
+        _this.element.find('.mirador-osd-grayscale').removeClass('selected');
+
+        //reset color inversion
+        filterValues.invert = "invert(0%)";
+        _this.element.find('.mirador-osd-invert').removeClass('selected');
+
+        setFilterCSS();
       }
 
       this.element.find('.mirador-osd-rotate-right').on('click', function() {
@@ -416,35 +446,11 @@
       });
 
       this.element.find('.mirador-osd-reset').on('click', function() {
-        //reset rotation
-        if (_this.osd) {
-          _this.osd.viewport.setRotation(0);
-        }
+        resetImageManipulationControls();
+      });
 
-        //reset brightness
-        filterValues.brightness = "brightness(100%)";
-        _this.element.find('.mirador-osd-brightness-slider').slider('option','value',100);
-        _this.element.find('.mirador-osd-brightness-slider').find('.percent').text(100 + '%');
-
-        //reset contrast
-        filterValues.contrast = "contrast(100%)";
-        _this.element.find('.mirador-osd-contrast-slider').slider('option','value',100);
-        _this.element.find('.mirador-osd-contrast-slider').find('.percent').text(100 + '%');
-
-        //reset saturation
-        filterValues.saturate = "saturate(100%)";
-        _this.element.find('.mirador-osd-saturation-slider').slider('option','value',100);
-        _this.element.find('.mirador-osd-saturation-slider').find('.percent').text(100 + '%');
-
-        //reset grayscale
-        filterValues.grayscale = "grayscale(0%)";
-        _this.element.find('.mirador-osd-grayscale').removeClass('selected');
-
-        //reset color inversion
-        filterValues.invert = "invert(0%)";
-        _this.element.find('.mirador-osd-invert').removeClass('selected');
-
-        setFilterCSS();
+      this.eventEmitter.subscribe('resetImageManipulationControls.'+this.windowId, function() {
+        resetImageManipulationControls();
       });
       //Image manipulation controls
     },
@@ -653,6 +659,7 @@
           osdBounds:        null,
           zoomLevel:        null
         };
+        this.eventEmitter.publish('resetImageManipulationControls.'+this.windowId);
         this.osd.close();
         this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
