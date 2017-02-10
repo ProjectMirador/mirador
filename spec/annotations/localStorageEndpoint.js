@@ -144,7 +144,7 @@ describe('LocalStorageEndpoint', function() {
       expect(errorCallback).not.toHaveBeenCalled();
     });
     it('should run the error callback when unsuccessful', function() {
-      spyOn(jQuery, 'each').and.throwError('fail');
+      spyOn(JSON, 'stringify').and.throwError('fail');
       subject.update(updated, successCallback, errorCallback);
       expect(successCallback).not.toHaveBeenCalled();
       expect(errorCallback).toHaveBeenCalled();
@@ -183,7 +183,7 @@ describe('LocalStorageEndpoint', function() {
       expect(errorCallback).not.toHaveBeenCalled();
     });
     it('should run the error callback when unsuccessful', function() {
-      spyOn(jQuery, 'each').and.throwError('fail');
+      spyOn(JSON, 'stringify').and.throwError('fail');
       subject.create(new_anno, successCallback, errorCallback);
       expect(successCallback).not.toHaveBeenCalled();
       expect(errorCallback).toHaveBeenCalled();
