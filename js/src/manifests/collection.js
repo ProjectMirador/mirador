@@ -1,5 +1,6 @@
 (function($){
 
+  // This is an analogue of the Manifest utility class, but for collections
   $.Collection = function(collectionUri, location, collectionContent) {
     if (collectionContent) {
       jQuery.extend(true, this, {
@@ -42,6 +43,8 @@
       });
       _this.request.resolve(collectionContent); // resolve immediately
     },
+    
+    // Get the IIIF API version of this collection
     getVersion: function() {
       var versionMap = {
         'http://www.shared-canvas.org/ns/context.json': '1', // is this valid?
@@ -51,12 +54,16 @@
       };
       return versionMap[this.jsonLd['@context']];
     },
+    
+    // Return a list of sub-manifest URIs contained in this collection
     getManifestUris: function() {
+      // "manifests" key present
       if (this.jsonLd.manifests) {
         return jQuery.map(this.jsonLd.manifests, function(v, _) {
           return v['@id'];
         });
       }
+      // "members" key present, sift-out non-manifests
       if (this.jsonLd.members) {
         return jQuery.map(this.jsonLd.members, function(v, _) {
           if (v['@type'] === 'sc:Manifest') {
@@ -64,12 +71,17 @@
           }
         });
       }
+      // Neither present
       return [];
     },
+    
+    // Return a list of sub-manifest JSON blocks contained in this collection
     getManifestBlocks: function() {
+      // "manifests" key present
       if (this.jsonLd.manifests) {
         return this.jsonLd.manifests;
       }
+      // "members" key present, sift-out non-manifests
       if (this.jsonLd.members) {
         return jQuery.map(this.jsonLd.members, function(v, _) {
           if (v['@type'] === 'sc:Manifest') {
@@ -77,14 +89,19 @@
           }
         });
       }
+      // Neither present
       return [];
     },
+    
+    // Return a list of sub-collection URIs contained in this collection
     getCollectionUris: function() {
+      // "collections" key present
       if (this.jsonLd.collections) {
         return jQuery.map(this.jsonLd.collections, function(v, _) {
           return v['@id'];
         });
       }
+      // "members" key present, sift-out non-collections
       if (this.jsonLd.members) {
         return jQuery.map(this.jsonLd.members, function(v, _) {
           if (v['@type'] === 'sc:Collection') {
@@ -92,12 +109,17 @@
           }
         });
       }
+      // Neither present
       return [];
     },
+    
+    // Return a list of sub-collection JSON blocks contained in this collection
     getCollectionBlocks: function() {
+      // "collections" key present
       if (this.jsonLd.collections) {
         return this.jsonLd.collections;
       }
+      // "members" key present, sift out non-collections
       if (this.jsonLd.members) {
         return jQuery.map(this.jsonLd.members, function(v, _) {
           if (v['@type'] === 'sc:Collection') {
@@ -105,6 +127,7 @@
           }
         });
       }
+      // Neither present
       return [];
     }
   };
