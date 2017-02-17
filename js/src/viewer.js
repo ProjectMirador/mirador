@@ -198,6 +198,19 @@
 
     bindEvents: function() {
       var _this = this;
+      Mousetrap.bind(['left'], function() {
+        _this.previous();
+      });
+      Mousetrap.bind(['right', 'space'], function() {
+        _this.next();
+      });
+      Mousetrap.bind(['enter'], function(){
+        _this.toggleMaximumFullscreen();
+       
+      });
+      Mousetrap.bind(['i'], function(){
+        _this.toggleMetadataOverlay();
+      });
     },
 
     get: function(prop, parent) {
@@ -217,6 +230,20 @@
       _this.eventEmitter.publish(prop + '.set', value);
     },
 
+    previous: function() {
+      if (this.workspace.hasAnythingZoomed()) {
+        return;
+      }
+      this.workspace.previous();
+    },
+
+    next: function() {
+      if (this.workspace.hasAnythingZoomed()) {
+        return;
+      }
+      this.workspace.next();
+    },
+
     // Sets state of overlays that layer over the UI state
     toggleOverlay: function(state) {
       var _this = this;
@@ -228,6 +255,21 @@
       });
       var currentState = this.get(state, 'overlayStates');
       this.set(state, !currentState, {parent: 'overlayStates'});
+    },
+
+    toggleMaximumFullscreen: function() {
+        if (this.workspace.windows.length == 1) {
+          jQuery('.mirador-osd-fullscreen').click();
+        }
+        else {
+          this.eventEmitter.publish('TOGGLE_FULLSCREEN');
+        }
+    },
+
+    toggleMetadataOverlay: function() {
+      this.workspace.windows.forEach(function(w) {
+        w.toggleMetadataOverlay(w.viewType);
+      });
     },
 
     toggleLoadWindow: function() {

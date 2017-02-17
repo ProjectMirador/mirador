@@ -513,15 +513,33 @@
 
       _this.eventEmitter.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
 
-  },
+    },
 
-  removeWindow: function(windowId) {
-    var _this = this;
+    removeWindow: function(windowId) {
+      var _this = this;
 
-    _this.windows = _this.windows.filter(function(window) {
-      return window.id !== windowId;
-    });
-    _this.eventEmitter.publish('windowRemoved', windowId);
-  }
-};
+      _this.windows = _this.windows.filter(function(window) {
+        return window.id !== windowId;
+      });
+      _this.eventEmitter.publish('windowRemoved', windowId);
+    },
+
+    previous: function() {
+      this.windows.forEach(function(window) {
+        window.previous();
+      });
+    },
+
+    next: function() {
+      this.windows.forEach(function(window) {
+        window.next();
+      });
+    },
+
+    hasAnythingZoomed: function() {
+      return this.windows.some(function(window) {
+        return window.isZoomed();
+      });
+    }
+  };
 }(Mirador));
