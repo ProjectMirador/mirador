@@ -7,7 +7,10 @@
     }, config);
     this.emitterId = $.EventEmitter.nextId();
     if (this.debug) {
-      this.logger = new $.EventEmitter.Logger(this);
+      this.logger = new $.EventEmitter.Logger({
+        trace: this.trace,
+        debugExclude: this.debugExclude
+      });
     }
   };
 
@@ -22,25 +25,26 @@
    ************************/
   $.EventEmitter.debug = false;
   $.EventEmitter.trace = false;
-  
+
   // Event IDs that contains any substring in the array will be ignored by the logger
   // e.g. ['updateTooltips', 'ANNO.*UPDATED']
   $.EventEmitter.excludePatterns = [];
-  
-  $.EventEmitter.Logger = function(emitter) {
-    this.emitter = emitter;
+
+  $.EventEmitter.Logger = function(options) {
+    this.trace = options.trace;
+    this.debugExclude = options.debugExclude;
     this.scaffoldMap = {};
   };
   $.EventEmitter.Logger.prototype = {
     log: function() {
-      if (this.emitter.trace) {
+      if (this.trace) {
         console.trace.apply(console, arguments);
       } else {
         console.log.apply(console, arguments);
       }
     },
     exclude: function(str) {
-      var patterns = this.emitter.debugExclude;
+      var patterns = this.debugExclude;
       for (var i = 0; i < patterns.length; ++i) {
         if (str.match(patterns[i])) {
           return true;
