@@ -137,30 +137,33 @@
     },
 
     update: function(oaAnnotation, successCallback, errorCallback) {
-      var annotation = this.getAnnotationInEndpoint(oaAnnotation),
-      _this = this,
-      annotationID = annotation.id;
+      var annotations = this.getAnnotationInEndpoint(oaAnnotation),
+      _this = this;
 
-      jQuery.ajax({
-        url: this.prefix+"/update/"+annotationID + this.params,
-        type: 'POST',
-        dataType: 'json',
-        headers: {
-          "x-annotator-auth-token": this.token
-        },
-        data: JSON.stringify(annotation),
-        contentType: "application/json; charset=utf-8",
-        success: function(data) {
-          if (typeof successCallback === "function") {
-            successCallback(_this.getAnnotationInOA(data));
+      annotations.forEach(function(annotation) {
+        var annotationID = annotation.id;
+
+        jQuery.ajax({
+          url: _this.prefix+"/update/"+annotationID + _this.params,
+          type: 'POST',
+          dataType: 'json',
+          headers: {
+            "x-annotator-auth-token": _this.token
+          },
+          data: JSON.stringify(annotation),
+          contentType: "application/json; charset=utf-8",
+          success: function(data) {
+            if (typeof successCallback === "function") {
+              successCallback(_this.getAnnotationInOA(data));
+            }
+            _this.eventEmitter.publish('catchAnnotationUpdated.'+_this.windowID, annotation);
+          },
+          error: function() {
+            if (typeof errorCallback === "function") {
+              errorCallback();
+            }
           }
-          _this.eventEmitter.publish('catchAnnotationUpdated.'+_this.windowID, annotation);
-        },
-        error: function() {
-          if (typeof errorCallback === "function") {
-            errorCallback();
-          }
-        }
+        });
       });
     },
 

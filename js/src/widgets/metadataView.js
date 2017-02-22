@@ -12,7 +12,6 @@
     this.init();
   };
 
-
   $.MetadataView.prototype = {
 
     init: function() {
@@ -164,11 +163,7 @@
     var label = attr;
 
     label = label.replace(/^@/, '');
-    label = label.replace(/([A-Z])/g, ' $1');
     label = label.replace(/\s{2,}/g, ' ');
-    label = label.replace(/\w\S*/g, function(txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
 
     return label;
   },
