@@ -1799,7 +1799,6 @@ ul.scroll-listing-thumbs li .thumb-label {
 }
 
 .mirador-viewer .metadata-label {
-  text-transform: capitalize;
   color: #555;
   font-style: italic;
 }
