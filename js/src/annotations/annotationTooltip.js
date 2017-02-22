@@ -144,9 +144,6 @@
           classes: 'qtip-bootstrap qtip-viewer',
           tip: false
         },
-        show: {
-          event: false
-        },
         hide: {
           fixed: true,
           delay: 300,
