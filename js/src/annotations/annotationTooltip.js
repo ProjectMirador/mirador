@@ -144,9 +144,6 @@
           classes: 'qtip-bootstrap qtip-viewer',
           tip: false
         },
-        show: {
-          event: false
-        },
         hide: {
           fixed: true,
           delay: 300,
@@ -196,18 +193,18 @@
         event.preventDefault();
         var elem = this;
         new $.DialogBuilder(viewerParams.container).dialog({
-          message: i18n.t('deleteAnnotation'),
+          message: i18next.t('deleteAnnotation'),
           closeButton: false,
           buttons: {
             'no': {
-              label: i18n.t('no'),
+              label: i18next.t('no'),
               className: 'btn-default',
               callback: function() {
                 return;
               }
             },
             'yes': {
-              label: i18n.t('yes'),
+              label: i18next.t('yes'),
               className: 'btn-primary',
               callback: function() {
                 var display = jQuery(elem).parents('.annotation-display');

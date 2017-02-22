@@ -12,7 +12,6 @@
     this.init();
   };
 
-
   $.MetadataView.prototype = {
 
     init: function() {
@@ -150,17 +149,17 @@
 
    getMetadataRights: function(jsonLd) {
        return [
-         {label: i18n.t('license'), value: jsonLd.license || ''},
-         {label: i18n.t('attribution'), value: $.JsonLd.getTextValue(jsonLd.attribution) || ''}
+         {label: i18next.t('license'), value: jsonLd.license || ''},
+         {label: i18next.t('attribution'), value: $.JsonLd.getTextValue(jsonLd.attribution) || ''}
         ];
    },
 
    getMetadataLinks: function(jsonLd) {
      // #414
       return [
-        {label: i18n.t('related'), value: this.stringifyRelated(jsonLd.related || '')},
-        {label: i18n.t('seeAlso'), value: this.stringifyRelated(jsonLd.seeAlso || '')},
-        {label: i18n.t('within'),  value: this.getWithin(jsonLd.within || '')}
+        {label: i18next.t('related'), value: this.stringifyRelated(jsonLd.related || '')},
+        {label: i18next.t('seeAlso'), value: this.stringifyRelated(jsonLd.seeAlso || '')},
+        {label: i18next.t('within'),  value: this.getWthin(jsonLd.within || '')}
       ];
    },
 
@@ -180,11 +179,7 @@
     var label = attr;
 
     label = label.replace(/^@/, '');
-    label = label.replace(/([A-Z])/g, ' $1');
     label = label.replace(/\s{2,}/g, ' ');
-    label = label.replace(/\w\S*/g, function(txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
 
     return label;
   },
