@@ -159,7 +159,7 @@
       return [
         {label: i18next.t('related'), value: this.stringifyRelated(jsonLd.related || '')},
         {label: i18next.t('seeAlso'), value: this.stringifyRelated(jsonLd.seeAlso || '')},
-        {label: i18next.t('within'),  value: this.getWthin(jsonLd.within || '')}
+        {label: i18next.t('within'),  value: this.getWithin(jsonLd.within || '')}
       ];
    },
 
