@@ -15,7 +15,7 @@ describe('Overlay', function() {
   beforeEach(function() {
     //register Handlebars helper
     Handlebars.registerHelper('t', function(i18n_key) {
-      var result = i18n.t(i18n_key);
+      var result = i18next.t(i18n_key);
       return new Handlebars.SafeString(result);
     });
 
@@ -526,11 +526,11 @@ describe('Overlay', function() {
   it('set and remove mouse tool', function() {
     var key = this.overlay.mouseToolKey;
     var paperScope = this.overlay.paperScope;
-    
+
     this.overlay.setMouseTool();
     expect(paperScope.tools.length).toEqual(1);
     expect(jQuery.data(document.body, key)).toBe(paperScope.tools[0]);
-    
+
     this.overlay.removeMouseTool();
     expect(paperScope.tools.length).toEqual(0);
     expect(jQuery.data(document.body, key)).toBeUndefined();

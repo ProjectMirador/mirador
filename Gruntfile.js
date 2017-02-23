@@ -39,6 +39,8 @@ module.exports = function(grunt) {
     'js/lib/paper-core.min.js',
     'js/lib/spectrum.js',
     'js/lib/i18next.min.js',
+    'js/lib/i18nextBrowserLanguageDetector.min.js',
+    'js/lib/i18nextXHRBackend.min.js',
     'js/lib/modernizr.custom.js',
     'js/lib/sanitize-html.min.js'
   ],
@@ -84,7 +86,6 @@ module.exports = function(grunt) {
           'css/normalize.css',
           'css/font-awesome.min.css',
           'css/jquery-ui.min.css',
-          'css/layout-default-latest.css',
           'css/jquery.qtip.min.css',
           'css/spectrum.css',
           'css/mirador.css',

@@ -32,31 +32,38 @@ Once you have built the necessary files and created a branch for your feature or
 Live interactive reloading of the browser each time a file is saved is enabled and used in the `npm start` command. Note that this will require middleware or a [livereload browser extension](http://feedback.livereload.com/knowledgebase/articles/86242-how-do-i-install-and-use-the-browser-extensions). 
 ### Submitting Your Contribution
 ### Publishing a New Release
-1. Ensure all Tests Pass
- All development occurs on the pinned development branch. Ensure that all tests with merged features are passing in travis before moving on to the release process. The release consists of merging the main development branch with master, therefore all changes must be fully integrated and functioning in the development branch.
-1. Change Version Number in package.json
- If the version number included in the `package.json` does not already accurately reflect the version to be released, be sure to increment the number according to [SemVer](http://semver.org/) conventions. Bump the third number for a small patch that does not change or add any new functionality; bump the second number if the branch includes any new features that do not interfere with or change existing features; and bump the first ("major") version number if the changes to be released break or change the API for existing functionality.  
-2. Merge Development Branch into Master
-3. Create a New Local Tag
- After all new changes have been merged into master, checkout master locally, and create a git tag for the new version:
+
+#### 1. Ensure all Tests Pass
+All development occurs on the pinned development branch. Ensure that all tests with merged features are passing in travis before moving on to the release process. The release consists of merging the main development branch with master, therefore all changes must be fully integrated and functioning in the development branch. Do not create any new release branches until the current release has been merged into master.
+
+#### 2. Change version number in package.json
+If the version number included in the `package.json` does not already accurately reflect the version to be released, be sure to increment the number according to [SemVer](http://semver.org/) conventions. Bump the third number for a small patch that does not change or add any new functionality; bump the second number if the branch includes any new features that do not interfere with or change existing features; and bump the first ("major") version number if the changes to be released break or change the API for existing functionality.  
+
+#### 3. Merge the Release Branch into Master
+For example, if the current release branch is x.x.1, ensure that all feature branches (such as "fix_annotation_bug#1234") have been merged into the x.x.1 release branch as Github Pull Requests, and then merge the x.x.1 (which will be the default branch) into master through the Github interface (through a PR).
+
+#### 4. Create a New Local Tag
+After all new changes have been merged into master, checkout master locally, and create a git tag for the new version:
  `git checkout master`
  `git tag v[VERSION_NUMBER]`
  This will give the current state of the project a name and freeze it in time.
-4. Push Tag to Github
- Now push the tagged version to github (from master):
+
+#### 5. Push Tag to Github
+Now push the tagged version to github (from master):
  `git push --tags`
 
- This should cause the new version to appear under the "releases" section of the github project page, and will allow npm to access it in  the next step.
-5. Publish to NPM
- Assuming the commiter has access to the project's package management account on npm, publishing the most recent version requires   logging into npm on the command line.
- Then simply type `npm publish` to post the new package version to the registry.
- To configure your npm user locally, refer to the npm-adduser [documentation](https://docs.npmjs.com/cli/adduser).
-6. Create Build and Add it to the New Release
- Type npm
-7. Update the gh-pages Demo Instance to Show Off the Latest Features
-7. Update Release Notes
- Using the github commit log, compile a bulleted list of the features and changes added to the new release.
-8. Announce New Release on the Mailing Lists and Slack
+ This will cause the new version to appear under the "releases" section of the github project page, and will allow npm to access it in  the next step.
+#### 6. Create Build and Add it to the New Release
+#### 7. Update the gh-pages Demo Instance to Show Off the Latest Features
+#### 8. Update Release Notes
+Using the github commit log, compile a bulleted list of the features and changes added to the new release.
+
+#### 9. Publish to NPM
+Assuming the commiter has access to the project's package management account on npm, publishing the most recent version requires   logging into npm on the command line.
+Then simply type `npm publish` to post the new package version to the registry.
+To configure your npm user locally, refer to the npm-adduser [documentation](https://docs.npmjs.com/cli/adduser).
+
+#### 10. Announce New Release on the Mailing Lists and Slack
 
 ### Design Review
 Design review can happen in one of two ways, though both ways start with an issue or issues describing the interaction requirements. Once an issue has been created for a new UI-heavy feature, whether or not a prototype is complete, the feature goes up for design review. This is generally a three-step process:
