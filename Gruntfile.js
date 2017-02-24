@@ -27,7 +27,7 @@ module.exports = function(grunt) {
     'node_modules/bootbox/bootbox.js',
     'node_modules/jquery.scrollto/jquery.scrollTo.min.js',
     'js/lib/jquery.qtip.min.js',
-    'js/lib/state-machine.min.js',
+    'node_modules/javascript-state-machine/state-machine.min.js',
     'js/lib/tinymce.min.js',
     'node_modules/handlebars/dist/handlebars.js',
     'js/lib/openseadragon.js',
