@@ -505,7 +505,7 @@
       var _this = this,
       tocAvailable = _this.sidePanelOptions.toc,
       annotationsTabAvailable = _this.sidePanelOptions.annotations,
-      layersTabAvailable = _this.sidePanelOptions.layers,
+      layersTabAvailable = _this.sidePanelOptions.layersTabAvailable,
       hasStructures = true;
 
       var structures = _this.manifest.getStructures();
@@ -641,7 +641,7 @@
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
       this.updateSidePanel();
-      _this.eventEmitter.publish("focusUpdated");
+      _this.eventEmitter.publish("focusUpdated" + _this.id, focusState);
       _this.eventEmitter.publish("windowUpdated", {
         id: _this.id,
         viewType: _this.viewType,
