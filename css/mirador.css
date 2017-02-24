@@ -1983,6 +1983,9 @@ a.mirador-icon-window-menu, a.mirador-icon-view-type {
   max-height: 200px;
   overflow: auto;
 }
+.qtip-content {
+  text-align: inherit;
+}
 .annotation-tooltip {
   padding: 10px;
 }
