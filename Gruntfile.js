@@ -38,9 +38,9 @@ module.exports = function(grunt) {
     'js/lib/isfahan.js',
     'js/lib/paper-core.min.js',
     'js/lib/spectrum.js',
-    'js/lib/i18next.min.js',
-    'js/lib/i18nextBrowserLanguageDetector.min.js',
-    'js/lib/i18nextXHRBackend.min.js',
+    'node_modules/i18next/i18next.min.js',
+    'node_modules/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js',
+    'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
     'js/lib/modernizr.custom.js',
     'js/lib/sanitize-html.min.js'
   ],
