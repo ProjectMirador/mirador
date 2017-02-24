@@ -44,7 +44,7 @@
       var _this = this;
 
       //initialize i18next
-      i18n.init({
+      i18next.use(i18nextXHRBackend).use(i18nextBrowserLanguageDetector).init({
         fallbackLng: 'en',
         load: 'unspecific',
         debug: false,
@@ -63,7 +63,7 @@
 
       //register Handlebars helper
       Handlebars.registerHelper('t', function(i18n_key) {
-        var result = i18n.t(i18n_key);
+        var result = i18next.t(i18n_key);
         return new Handlebars.SafeString(result);
       });
 

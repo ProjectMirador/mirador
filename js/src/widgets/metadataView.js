@@ -12,7 +12,6 @@
     this.init();
   };
 
-
   $.MetadataView.prototype = {
 
     init: function() {
@@ -85,7 +84,11 @@
       return str + ' ]';
     }
 
-    if (typeof obj === 'object') {
+    if (typeof obj === 'object' && obj['@type'] === 'sc:Collection') {
+      var collectionUrl = obj['@id'];
+      var collectionLabel = obj.label || collectionUrl;
+      return '<a href="' + collectionUrl + '" target="_blank">' + collectionLabel + '</a>';
+    } else if (typeof obj === 'object') {
       str = '<div style="margin-left:' +  nestingMargin + 'px">';
       for (var i in obj) {
         if (obj.hasOwnProperty(i)) {
@@ -146,29 +149,37 @@
 
    getMetadataRights: function(jsonLd) {
        return [
-         {label: i18n.t('license'), value: jsonLd.license || ''},
-         {label: i18n.t('attribution'), value: $.JsonLd.getTextValue(jsonLd.attribution) || ''}
+         {label: i18next.t('license'), value: jsonLd.license || ''},
+         {label: i18next.t('attribution'), value: $.JsonLd.getTextValue(jsonLd.attribution) || ''}
         ];
    },
 
    getMetadataLinks: function(jsonLd) {
      // #414
       return [
-        {label: i18n.t('related'), value: this.stringifyRelated(jsonLd.related || '')},
-        {label: i18n.t('seeAlso'), value: this.stringifyRelated(jsonLd.seeAlso || '')},
-        {label: i18n.t('within'),  value: this.stringifyObject(jsonLd.within || '')}
+        {label: i18next.t('related'), value: this.stringifyRelated(jsonLd.related || '')},
+        {label: i18next.t('seeAlso'), value: this.stringifyRelated(jsonLd.seeAlso || '')},
+        {label: i18next.t('within'),  value: this.getWithin(jsonLd.within || '')}
       ];
+   },
+
+   getWithin: function(within) {
+     if (typeof within === 'object' && within['@type'] === 'sc:Collection') {
+      var collectionUrl = within['@id'];
+      var collectionLabel = within.label || collectionUrl;
+      return '<a href="' + collectionUrl + '" target="_blank">' + collectionLabel + '</a>';
+     } else if (within instanceof Array) {
+       return within.map(this.getWithin).join("<br/>");
+     } else {
+       return this.stringifyObject(within);
+     }
    },
 
    extractLabelFromAttribute: function(attr) {
     var label = attr;
 
     label = label.replace(/^@/, '');
-    label = label.replace(/([A-Z])/g, ' $1');
     label = label.replace(/\s{2,}/g, ' ');
-    label = label.replace(/\w\S*/g, function(txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
 
     return label;
   },
