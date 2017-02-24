@@ -187,7 +187,12 @@
 
     'annotationBodyEditor': {
       'module': 'TinyMCEAnnotationBodyEditor',
-      'options': {}
+      'options': {
+        config: {
+          plugins: "image link media directionality",
+          toolbar: "bold italic | bullist numlist | link image media | removeformat | ltr rtl"
+        }
+      }
     },
 
     'jsonStorageEndpoint': {

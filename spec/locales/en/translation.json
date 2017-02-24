@@ -53,6 +53,7 @@
     "more": "more",
     "newObject": "Replace Object",
     "no": "No",
+    "noIndex": "No index available",
     "objectMetadata": "Object Metadata",
     "pinTooltip": "Pin annotation",
     "pointerTooltip": "Pointer",
