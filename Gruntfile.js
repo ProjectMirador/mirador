@@ -20,8 +20,8 @@ module.exports = function(grunt) {
 
   // libraries/plugins
   vendors = [
-    'js/lib/jquery.min.js',
-    'js/lib/jquery-migrate-3.0.0.min.js',
+    'node_modules/jquery/dist/jquery.min.js',
+    'node_modules/jquery-migrate/dist/jquery-migrate.min.js',
     'js/lib/jquery-ui.min.js',
     'js/lib/modal.js',
     'node_modules/bootbox/bootbox.js',
