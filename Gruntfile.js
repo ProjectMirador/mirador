@@ -22,7 +22,7 @@ module.exports = function(grunt) {
   vendors = [
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/jquery-migrate/dist/jquery-migrate.min.js',
-    'js/lib/jquery-ui.min.js',
+    'node_modules/jquery-ui-dist/jquery-ui.min.js',
     'js/lib/modal.js',
     'node_modules/bootbox/bootbox.js',
     'js/lib/jquery.scrollTo.min.js',
