@@ -46,6 +46,8 @@
     "test": "./node_modules/.bin/karma start ./karma.conf.js",
     "travis": "./node_modules/grunt-cli/bin/grunt ci --verbose --force & npm run test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "d3": "^3.5.17"
+  },
   "engine": "node < 7.0.0"
 }
