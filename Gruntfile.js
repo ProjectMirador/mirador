@@ -28,7 +28,7 @@ module.exports = function(grunt) {
     'node_modules/jquery.scrollto/jquery.scrollTo.min.js',
     'js/lib/jquery.qtip.min.js',
     'node_modules/javascript-state-machine/state-machine.min.js',
-    'js/lib/tinymce.min.js',
+    'node_modules/tinymce/tinymce.min.js',
     'node_modules/handlebars/dist/handlebars.js',
     'js/lib/openseadragon.js',
     'node_modules/d3/d3.min.js',
@@ -122,17 +122,17 @@ module.exports = function(grunt) {
           dest: 'build/mirador/'
         }, {
           expand: true,
-          cwd: 'css/',
+          cwd: 'node_modules/tinymce',
           src: 'themes/**',
           dest: 'build/mirador'
         }, {
           expand: true,
-          cwd: 'css/',
+          cwd: 'node_modules/tinymce',
           src: 'skins/**',
           dest: 'build/mirador'
         }, {
           expand: true,
-          cwd: 'css/',
+          cwd: 'node_modules/tinymce',
           src: 'plugins/**',
           dest: 'build/mirador'
         }, {
