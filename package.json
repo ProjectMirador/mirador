@@ -60,7 +60,9 @@
     "jquery-plugin": "git+https://github.com/cowboy/jquery-tiny-pubsub.git",
     "jquery-ui-dist": "^1.12.1",
     "jquery.scrollto": "^1.4.12",
+    "mousetrap": "^1.4.6",
     "openseadragon": "^2.2.1",
+    "paper": "^0.10.2",
     "tinymce": "^4.1.7",
     "urijs": "^1.16.1"
   },
