@@ -63,6 +63,7 @@
     "mousetrap": "^1.4.6",
     "openseadragon": "^2.2.1",
     "paper": "^0.10.2",
+    "spectrum-colorpicker": "^1.8.0",
     "tinymce": "^4.1.7",
     "urijs": "^1.16.1"
   },

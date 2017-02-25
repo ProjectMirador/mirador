@@ -37,7 +37,7 @@ module.exports = function(grunt) {
     'node_modules/mousetrap/mousetrap.min.js',
     'js/lib/isfahan.js',
     'node_modules/paper/dist/paper-core.min.js',
-    'js/lib/spectrum.js',
+    'node_modules/spectrum-colorpicker/spectrum.js',
     'node_modules/i18next/i18next.min.js',
     'node_modules/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js',
     'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
@@ -87,7 +87,7 @@ module.exports = function(grunt) {
           'css/font-awesome.min.css',
           'css/jquery-ui.min.css',
           'css/jquery.qtip.min.css',
-          'css/spectrum.css',
+          'node_modules/spectrum-colorpicker/spectrum.css',
           'css/mirador.css',
           'css/material-icons.css'
         ],
