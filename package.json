@@ -61,6 +61,7 @@
     "jquery-plugin": "git+https://github.com/cowboy/jquery-tiny-pubsub.git",
     "jquery-ui-dist": "^1.12.1",
     "jquery.scrollto": "^1.4.12",
+    "material-design-icons": "^3.0.1",
     "mousetrap": "^1.4.6",
     "openseadragon": "^2.2.1",
     "paper": "^0.10.2",

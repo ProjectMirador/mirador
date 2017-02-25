@@ -145,6 +145,11 @@ module.exports = function(grunt) {
           src: 'fonts/*',
           dest: 'build/mirador'
         }, {
+          expand: true,
+          cwd: 'node_modules/material-design-icons/iconfont',
+          src: 'MaterialIcons*',
+          dest: 'build/mirador/fonts'
+        }, {
           src: 'js/lib/parse.min.js',
           dest: 'build/mirador/parse.min.js'
         }, {
