@@ -57,6 +57,7 @@
     "javascript-state-machine": "^2.3.4",
     "jquery": "^3.1.1",
     "jquery-migrate": "^3.0.0",
+    "jquery-plugin": "git+https://github.com/cowboy/jquery-tiny-pubsub.git",
     "jquery-ui-dist": "^1.12.1",
     "jquery.scrollto": "^1.4.12",
     "openseadragon": "^2.2.1",
