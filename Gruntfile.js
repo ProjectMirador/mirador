@@ -30,7 +30,7 @@ module.exports = function(grunt) {
     'node_modules/javascript-state-machine/state-machine.min.js',
     'node_modules/tinymce/tinymce.min.js',
     'node_modules/handlebars/dist/handlebars.js',
-    'js/lib/openseadragon.js',
+    'node_modules/openseadragon/build/openseadragon/openseadragon.js',
     'node_modules/d3/d3.min.js',
     'js/lib/pubsub.min.js',
     'js/lib/URI.min.js',
