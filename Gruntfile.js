@@ -33,7 +33,7 @@ module.exports = function(grunt) {
     'node_modules/openseadragon/build/openseadragon/openseadragon.js',
     'node_modules/d3/d3.min.js',
     'node_modules/jquery-plugin/dist/ba-tiny-pubsub.js',
-    'js/lib/URI.min.js',
+    'node_modules/urijs/src/URI.min.js',
     'js/lib/mousetrap.min.js',
     'js/lib/isfahan.js',
     'js/lib/paper-core.min.js',
