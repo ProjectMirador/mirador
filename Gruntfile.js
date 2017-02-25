@@ -84,7 +84,7 @@ module.exports = function(grunt) {
         src: [
           'css/bootstrap.modals.css',
           'css/normalize.css',
-          'css/font-awesome.min.css',
+          'node_modules/font-awesome/css/font-awesome.min.css',
           'css/jquery-ui.min.css',
           'css/jquery.qtip.min.css',
           'node_modules/spectrum-colorpicker/spectrum.css',
@@ -141,6 +141,7 @@ module.exports = function(grunt) {
           dest: 'build/mirador'
         }, {
           expand: true,
+          cwd: 'node_modules/font-awesome',
           src: 'fonts/*',
           dest: 'build/mirador'
         }, {
