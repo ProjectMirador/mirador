@@ -546,6 +546,38 @@
       }
     },
 
+    currentView: function() {
+      switch (this.viewType) {
+        case 'ImageView':
+          return this.focusModules.ImageView;
+        case 'BookView':
+          return this.focusModules.BookView;
+      }
+      return null;
+    },
+
+    isZoomed: function() {
+      var view = this.currentView();
+      if (view) {
+        return 1 < view.osd.viewport.getZoom(true);  
+      }
+      return false;
+    },
+
+    previous: function() {
+      var view = this.currentView();
+      if (view !== null) {
+        view.previous();
+      }
+    },
+
+    next: function() {
+      var view = this.currentView();
+      if (view !== null) {
+        view.next();
+      }
+    },
+
     /*setTOCBoolean: function(boolValue) {
       var _this = this;
       jQuery.each(this.focusOverlaysAvailable, function(key, value) {
