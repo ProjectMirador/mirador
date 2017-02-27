@@ -48,8 +48,9 @@
         fallbackLng: 'en',
         load: 'unspecific',
         debug: false,
-        getAsync: true,
-        resGetPath: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('i18nPath')+'__lng__/__ns__.json'
+        backend: {
+          loadPath: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('i18nPath')+'{{lng}}/{{ns}}.json'
+        }
       }, _this.setupViewer.bind(_this));
       // because this is a callback, we need to bind "_this" to explicitly retain the calling context of this function (the viewer object instance));
     },
