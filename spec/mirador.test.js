@@ -44,6 +44,10 @@ describe('Mirador | mirador.js', function() {
       delete this.mirador;
     });
 
+    it('should apply the correct class to the container', function() {
+      expect(jQuery('#viewer').hasClass('mirador-container')).toBe(true);
+    });
+
     it('should render manifest list items', function() {
       console.log(this.mirador.viewer.manifestsPanel.manifestListItems.length)
       expect(this.mirador.viewer.manifestsPanel.manifestListItems.length).toBe(2);
