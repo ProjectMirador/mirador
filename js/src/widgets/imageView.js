@@ -325,6 +325,9 @@
         filterValues.invert = "invert(0%)";
         _this.element.find('.mirador-osd-invert').removeClass('selected');
 
+        //reset mirror
+        jQuery(_this.osd.canvas).removeClass('mirador-mirror');
+
         setFilterCSS();
       }
 
@@ -443,6 +446,18 @@
           jQuery(this).addClass('selected');
         }
         setFilterCSS();
+      });
+
+      this.element.find('.mirador-osd-mirror').on('click', function() {
+        if (jQuery(this).hasClass('selected')) {
+          jQuery(_this.osd.canvas).removeClass('mirador-mirror');
+          jQuery(this).removeClass('selected');
+          _this.eventEmitter.publish('disableManipulation', 'mirror');
+        } else {
+          jQuery(_this.osd.canvas).addClass('mirador-mirror');
+          jQuery(this).addClass('selected');
+          _this.eventEmitter.publish('enableManipulation', 'mirror');
+        }
       });
 
       this.element.find('.mirador-osd-reset').on('click', function() {
