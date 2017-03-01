@@ -39,6 +39,12 @@
         /*transition: all 0.03s ease-out;*/
         display: inline-block;
 
+        &.highlight {
+          margin-bottom: 11px !important;
+          padding-left: 8px !important;
+          padding-right: 8px !important;
+        }
+
         img {
           background-color: @gray;
           min-height: 25px;
@@ -46,6 +52,21 @@
           margin: 0 auto;
           display: block;
           box-sizing:border-box;
+
+          &.thumbnail-image {
+            background-color: gray;
+            box-shadow: 0px 0px 5px @black-a60;
+            float:left;
+            margin-right:15px;
+            /*height: 80px;*/
+            /* background-image: url(../images/loading.gif); */
+            /* background-position: center; */
+            /* background-repeat: no-repeat; */
+          }
+
+          &.thumbnail-image.highlight {
+            border: 2px solid deepskyblue;
+          }
 
           &:hover {
             border:2px solid @blue-bfff-a70;
