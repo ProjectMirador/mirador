@@ -1,0 +1,37 @@
+.mirador-container {
+  ul.scroll-listing-thumbs {
+    clear: both;
+    list-style: none;
+    padding: 0;
+    white-space: nowrap;
+  }
+
+  ul.scroll-listing-thumbs li {
+    box-sizing:border-box;
+    margin: 0 0 15px 0;
+    padding: 10px 10px 10px 10px;
+    /*transition: all 0.05s ease-out;*/
+    display: inline-block;
+  }
+
+  ul.scroll-listing-thumbs li img {
+    background-color: @gray-ee;
+    min-height: 25px;
+    min-width: 25px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  ul.scroll-listing-thumbs li .thumb-label {
+    clear: both;
+    color: @gray-99;
+    font-size: 12px;
+    margin: 0 auto;
+    max-width: 200px;
+    text-align: left;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    text-align: center;
+  }
+}

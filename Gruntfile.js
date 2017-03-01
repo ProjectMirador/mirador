@@ -9,6 +9,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-git-describe');
+  grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-githooks');
@@ -92,6 +93,14 @@ module.exports = function(grunt) {
           'css/material-icons.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'
+      }
+    },
+
+    less: {
+      compile: {
+        files: {
+          'css/mirador.css': 'css/mirador.less/main.less'
+        }
       }
     },
 
@@ -208,6 +217,7 @@ module.exports = function(grunt) {
           'locales/*/*.json',
           'images/*',
           'css/*.css',
+          'css/mirador/**/*.less',
           'index.html'
         ],
         tasks: 'dev_build'
@@ -263,12 +273,12 @@ module.exports = function(grunt) {
   // ----------
   // Build task.
   // Cleans out the build folder and builds the code and images into it, checking lint.
-  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'jshint', 'concat:css', 'uglify', 'cssmin', 'copy']);
+  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'jshint', 'less', 'concat:css', 'uglify', 'cssmin', 'copy']);
 
   // ----------
   // Dev Build task.
   // Build, but skip the time-consuming and obscurantist minification and uglification.
-  grunt.registerTask('dev_build', [ 'clean:build', 'git-describe', 'jshint', 'concat', 'copy']);
+  grunt.registerTask('dev_build', [ 'clean:build', 'git-describe', 'jshint', 'less', 'concat', 'copy']);
 
   // ----------
   // Package task.

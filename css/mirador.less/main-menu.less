@@ -1,0 +1,94 @@
+.mirador-container {
+  .mirador-main-menu-bar {
+    background-color: @black;
+    border-bottom: 1px solid @gray-55;
+    color: @white;
+    height: 33px;
+    width: 100%;
+    /*padding: 4px;*/
+    font-size: 14px;
+    top: 0;
+
+    .window-options-menu {
+      position: relative;
+      border-radius: 0;
+      display: none;
+      /*z-index: 10000;*/
+    }
+  }
+
+  .mirador-main-menu {
+    float: right;
+    list-style: none;
+    margin: 0;
+    padding: 8px 12px 0 0;
+    text-align: right;
+
+    li {
+      cursor: pointer;
+      float: left;
+      padding: 0 15px;
+    }
+
+    a {
+      color: @white;
+      font-weight: normal;
+      text-decoration: none;
+      opacity: 0.6;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      &:active {
+        opacity: 1;
+        border-bottom: 2px solid @deep-sky-blue;
+      }
+    }
+
+    /* a:focus {
+      border-bottom: 2px solid deepskyblue;
+      outline: none;
+    }*/
+  }
+
+  .mirador-main-menu.user-buttons {
+    padding-right: 0;
+  }
+
+  .mirador-main-menu.user-logo {
+    padding-right: 0;
+    padding-left: 0;
+    float: left;
+  }
+
+  .mirador-window-options-menu {
+    list-style: none;
+    margin: 0;
+    padding: 10px 5px;
+
+    li {
+      cursor: pointer;
+      padding: 3px 5px;
+    }
+  }
+
+  .window-manifest-title {
+    text-overflow: ellipsis;
+    max-width: 80%;
+    overflow: hidden;
+    white-space: nowrap;
+    padding-left: 10px;
+    margin: 8px 0px 8px 0px;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .window-manifest-navigation {
+    float: right;
+    width: 24%;
+    text-align: right;
+    padding-right: 10px;
+    font-size: 16px;
+  }
+}

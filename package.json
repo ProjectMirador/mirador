@@ -21,6 +21,7 @@
     "grunt-contrib-cssmin": "*",
     "grunt-contrib-jasmine": "*",
     "grunt-contrib-jshint": "*",
+    "grunt-contrib-less": "^1.4.0",
     "grunt-contrib-uglify": "*",
     "grunt-contrib-watch": "*",
     "grunt-git-describe": "*",
