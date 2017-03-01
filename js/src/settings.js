@@ -86,7 +86,12 @@
         "slotRight" : true,
         "slotLeft" : true,
         "slotAbove" : true,
-        "slotBelow" : true,
+        "slotBelow" : true
+      },
+      //
+      "physicalRuler": {
+        "enabled":false,
+        "physicalUnits":"in" //if this prop has other value than `in` or it is not presented at all then metric system will be used
       }
     },
 
