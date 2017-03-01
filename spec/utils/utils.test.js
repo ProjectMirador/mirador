@@ -51,7 +51,7 @@ describe('Utils', function() {
     // it('should return JSON data for a given URL via ajax call', function() {
     //   var data = { 'a': 'b' },
     //   error; // undefined
-    //   
+    //
     //   this.server.respondWith("GET", "http://manifest/url/success",
     //                           [200, { "Content-Type": "application/json" },
     //                             JSON.stringify(data)]);
@@ -115,9 +115,29 @@ describe('Utils', function() {
     });
   });
 
-  xdescribe('getThumbnailForCanvas', function() {
-    it('should get the proper thumbnail for a canvas', function () {
-      
+  describe('getThumbnailForCanvas', function() {
+    it('should get the proper thumbnail for a canvas when thumbnail is given as a string', function() {
+      var stringUrl = 'http://images.example.org/thumbnail/1';
+      var canvas = {
+        '@id': 'http://manifests.example.org/canvas/1',
+        thumbnail: stringUrl
+      };
+      expect(this.utils.getThumbnailForCanvas(canvas, 100)).toEqual(stringUrl);
+    });
+
+    it('should get the proper thumbnail for a canvas when thumbnail is given as a service', function() {
+      var canvas = {
+        '@id': 'http://manifests.example.org/canvas/2',
+        thumbnail: {
+          service: {
+            profile: 'http://iiif.io/api/image/2/level1.json',
+            '@context': 'http://iiif.io/api/image/2/context.json',
+            '@id': 'http://images.example.org/image/1'
+          }
+        }
+      }
+      expect(this.utils.getThumbnailForCanvas(canvas, 100))
+        .toEqual('http://images.example.org/image/1/full/100,/0/default.jpg');
     });
   });
 

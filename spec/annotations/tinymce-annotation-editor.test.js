@@ -15,7 +15,6 @@ describe('TinyMCEAnnotationBodyEditor', function() {
 
   describe('Initialization', function() {
     it('should initialize with provided default configs', function() {
-      console.log(subject)
       expect(subject.config.plugins).toBe('');
       expect(subject.config.toolbar).toBe('')
     });
