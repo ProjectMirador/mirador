@@ -513,6 +513,14 @@
 
       _this.eventEmitter.publish("windowAdded", {id: windowConfig.id, slotAddress: windowConfig.slotAddress});
 
+      jQuery(targetSlot.element).on("mouseleave", function(event) {
+        _this.eventEmitter.publish('slotLeave.' + windowConfig.id, {windowId: windowConfig.id, slotAddress: windowConfig.slotAddress});
+      });
+
+      jQuery(targetSlot.element).on("mouseenter", function(event) {
+        _this.eventEmitter.publish('slotEnter.' + windowConfig.id, {windowId: windowConfig.id, slotAddress: windowConfig.slotAddress});
+      });
+
   },
 
   removeWindow: function(windowId) {
