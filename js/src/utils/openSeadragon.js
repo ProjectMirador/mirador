@@ -16,7 +16,7 @@
       }, options)
 
     );
-    
+
     return osd;
 
   };
