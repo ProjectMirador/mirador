@@ -4,7 +4,5 @@ node_js:
 - '5'
 before_install:
 - npm install
-# before-script:
-# - grunt test cover
 script:
 - npm run travis
