@@ -120,7 +120,8 @@
      */
     setMouseTool: function() {
       this.removeMouseTool();
-
+      this.paperScope.activate();
+      
       this.mouseTool = new this.paperScope.Tool();
       this.mouseTool.overlay = this;
       this.mouseTool.onMouseUp = this.onMouseUp;
