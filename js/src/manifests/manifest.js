@@ -111,7 +111,7 @@
         } else {
           thumbnailUrl = canvas.thumbnail['@id'];
         }
-      } else if (canvas.images) {
+      } else if (canvas.images && canvas.images.length) {
         // No thumbnail, use main image
         var resource = canvas.images[0].resource;
         service = resource['default'] ? resource['default'].service : resource.service;
