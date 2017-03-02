@@ -33,11 +33,14 @@
 
       li {
         box-sizing:border-box;
-        /*float: left;*/
-        /*margin: 0 0 15px 0;*/
         padding: 0px 10px 0px 10px;
-        /*transition: all 0.03s ease-out;*/
         display: inline-block;
+        margin-bottom: 11px;
+
+        &.highlight {
+          padding-left: 8px;
+          padding-right: 8px;
+        }
 
         img {
           background-color: @gray;
@@ -46,6 +49,17 @@
           margin: 0 auto;
           display: block;
           box-sizing:border-box;
+
+          &.thumbnail-image {
+            background-color: gray;
+            box-shadow: 0px 0px 5px @black-a60;
+            float:left;
+            margin-right:15px;
+          }
+
+          &.thumbnail-image.highlight {
+            border: 2px solid deepskyblue;
+          }
 
           &:hover {
             border:2px solid @blue-bfff-a70;

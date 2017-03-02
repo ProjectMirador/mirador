@@ -120,28 +120,24 @@
      */
     setMouseTool: function() {
       this.removeMouseTool();
-
       this.paperScope.activate();
-      var mouseTool = new this.paperScope.Tool();
-      mouseTool.overlay = this;
-      mouseTool.onMouseUp = this.onMouseUp;
-      mouseTool.onMouseDrag = this.onMouseDrag;
-      mouseTool.onMouseMove = this.onMouseMove;
-      mouseTool.onMouseDown = this.onMouseDown;
-      mouseTool.onDoubleClick = this.onDoubleClick;
-      mouseTool.onKeyDown = function(event){};
-
-      jQuery.data(document.body, this.mouseToolKey, mouseTool);
+      
+      this.mouseTool = new this.paperScope.Tool();
+      this.mouseTool.overlay = this;
+      this.mouseTool.onMouseUp = this.onMouseUp;
+      this.mouseTool.onMouseDrag = this.onMouseDrag;
+      this.mouseTool.onMouseMove = this.onMouseMove;
+      this.mouseTool.onMouseDown = this.onMouseDown;
+      this.mouseTool.onDoubleClick = this.onDoubleClick;
+      this.mouseTool.onKeyDown = function(event){};
     },
 
     /**
      * Removes the mouse Tool from the paperjs scope.
      */
     removeMouseTool: function() {
-      var mouseTool = jQuery.data(document.body, this.mouseToolKey);
-      if (mouseTool) {
-        mouseTool.remove();
-        jQuery.removeData(document.body, this.mouseToolKey);
+      if (this.mouseTool) {
+        this.mouseTool.remove();
       }
     },
 
