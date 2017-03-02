@@ -200,10 +200,7 @@
       pickerOffset=pickerContainer.offset(),
       windowWidth = this.state.windowsElements[this.windowId].width();
       if (pickerContainer.width() + pickerOffset.left > windowWidth) {
-        pickerContainer.offset({
-          top: pickerOffset.top,
-          left: windowWidth - (pickerContainer.width())
-        });
+        pickerContainer.css('left', windowWidth - (pickerContainer.outerWidth()));
       }
     },
 
