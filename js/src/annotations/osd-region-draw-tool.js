@@ -26,7 +26,7 @@
 
     enterDisplayAnnotations: function() {
       this.svgOverlay.setMouseTool();
-      
+
       // if a user selected the pointer mode but is still actively
       // working on an annotation, don't re-render
       if (!this.svgOverlay.inEditOrCreateMode) {
@@ -114,7 +114,7 @@
           }
           if (j === strategies.length) continue;
         }
-        
+
         _this.svgOverlay.restoreLastView(shapeArray);
         _this.annotationsToShapesMap[annotation['@id']] = shapeArray;
       }
@@ -161,17 +161,18 @@
           var shapeArray = _this.annotationsToShapesMap[key];
           for (var idx = 0; idx < shapeArray.length; idx++) {
             var shapeTool = this.svgOverlay.getTool(shapeArray[idx]);
+            var hoverWidth = shapeArray[idx].data.strokeWidth / this.svgOverlay.paperScope.view.zoom;
             if (shapeArray[idx].hitTest(location, hitOptions)) {
               annotations.push(shapeArray[idx].data.annotation);
               if(shapeTool.onHover){
                 for(var k=0;k<shapeArray.length;k++){
-                  shapeTool.onHover(true,shapeArray[k],hoverColor);
+                  shapeTool.onHover(true,shapeArray[k],hoverWidth,hoverColor);
                 }
               }
               break;
             }else{
               if(shapeTool.onHover){
-                shapeTool.onHover(false,shapeArray[idx]);
+                shapeTool.onHover(false,shapeArray[idx],hoverWidth);
               }
             }
           }
@@ -252,18 +253,15 @@
               _this.eventEmitter.publish('SET_OVERLAY_TOOLTIP.' + _this.windowId, {"tooltip" : null, "visible" : false, "paths" : []});
             }
             jQuery.each(paths, function(index, path) {
-              //just in case, force the shape to be non hovered
-              var tool = _this.svgOverlay.getTool(path);
-              tool.onHover(false, path);
-
               path.data.editable = options.isEditable;
               if (options.isEditable) {
-                path.data.currentStrokeValue = path.data.editStrokeValue;
-                path.strokeWidth = path.data.currentStrokeValue / _this.svgOverlay.paperScope.view.zoom;
+                path.strokeWidth = (path.data.strokeWidth + 5) / _this.svgOverlay.paperScope.view.zoom;
               } else {
-                path.data.currentStrokeValue = path.data.defaultStrokeValue;
-                path.strokeWidth = path.data.currentStrokeValue / _this.svgOverlay.paperScope.view.zoom;
+                path.strokeWidth = path.data.strokeWidth / _this.svgOverlay.paperScope.view.zoom;
               }
+              //just in case, force the shape to be non hovered
+              var tool = _this.svgOverlay.getTool(path);
+              tool.onHover(false, path, path.strokeWidth);
             });
           } else {
             jQuery.each(paths, function(index, path) {
