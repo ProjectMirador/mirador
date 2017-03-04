@@ -34,14 +34,20 @@
       });
       this.setBackground = {
         'solid':function(el){
-          _this.setBackgroundImage(el,'border_type_1.png');
+          _this.setBackgroundImage(el, 'border_type_1.png');
         },
         'dashed':function(el){
           _this.setBackgroundImage(el, 'border_type_2.png');
         },
         'dotdashed':function(el){
-          _this.setBackgroundImage(el,  'border_type_3.png');
-        }
+          _this.setBackgroundImage(el, 'border_type_3.png');
+        },
+        'thick':function(el){
+          _this.setBackgroundImage(el, 'border_type_4.png');
+        },
+        'thickest':function(el){
+          _this.setBackgroundImage(el, 'border_type_5.png');
+        },
       };
       var annotationProperties = this.canvasControls.annotations;
 
@@ -118,6 +124,8 @@
 
     addStrokeStylePicker:function(){
       this.setBackground.solid(this.container.find('.mirador-line-type .solid'));
+      this.setBackground.thick(this.container.find('.mirador-line-type .thick'));
+      this.setBackground.thickest(this.container.find('.mirador-line-type .thickest'));
       this.setBackground.dashed(this.container.find('.mirador-line-type .dashed'));
       this.setBackground.dotdashed(this.container.find('.mirador-line-type .dotdashed'));
     },
@@ -264,6 +272,8 @@
                                    '<i class="fa fa-caret-down dropdown-icon"></i>',
                                    '<ul class="dropdown type-list">',
                                    '<li><i class="fa solid"></i> {{t "solid"}}</li>',
+                                   '<li><i class="fa thick"></i> {{t "thick"}}</li>',
+                                   '<li><i class="fa thickest"></i> {{t "thickest"}}</li>',
                                    '<li><i class="fa dashed"></i> {{t "dashed"}}</li>',
                                    '<li><i class="fa dotdashed"></i> {{t "dotDashed"}}</li>',
                                    '</ul>',

@@ -523,17 +523,15 @@ describe('Overlay', function() {
    }
   });
 
-  it('set and remove mouse tool', function() {
+  it('sets and removes the mouse tool', function() {
     var key = this.overlay.mouseToolKey;
     var paperScope = this.overlay.paperScope;
 
     this.overlay.setMouseTool();
     expect(paperScope.tools.length).toEqual(1);
-    expect(jQuery.data(document.body, key)).toBe(paperScope.tools[0]);
 
     this.overlay.removeMouseTool();
     expect(paperScope.tools.length).toEqual(0);
-    expect(jQuery.data(document.body, key)).toBeUndefined();
   });
 
 });
