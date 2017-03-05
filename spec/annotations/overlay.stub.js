@@ -33,7 +33,8 @@
         show: jasmine.createSpy(),
         hide: jasmine.createSpy(),
         disable: jasmine.createSpy(),
-        destroy: jasmine.createSpy()
+        destroy: jasmine.createSpy(),
+        restoreEditedShapes: jasmine.createSpy()
       }
     }
   }
