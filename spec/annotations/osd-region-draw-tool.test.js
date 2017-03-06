@@ -1,21 +1,9 @@
 describe('OsdRegionDrawTool', function() {
 
   beforeEach(function() {
-    var config = {
-      osdViewer:{
-        svgOverlay:function(){
-          return MockOverlay.getOverlay();
-        },
-        addHandler:jasmine.createSpy(),
-        removeHandler:jasmine.createSpy()
-      },
-      eventEmitter: new MockEventEmitter(new Mirador.EventEmitter())
-    };
-    this.drawTool = new Mirador.OsdRegionDrawTool(config);
   });
 
   afterEach(function() {
-
   });
 
   xdescribe('Initialization', function() {
@@ -50,7 +38,7 @@ describe('OsdRegionDrawTool', function() {
           }
         }
       }];
-      var drawTool = createDrawToolForRenderingTest(annotations);
+      var drawTool = createDrawTool(annotations);
       drawTool.render();
     });
   });
@@ -68,14 +56,15 @@ describe('OsdRegionDrawTool', function() {
   });
 
   it('should unsubscibe from all events when destroying',function(){
-    this.drawTool.destroy();
-    for(var key in this.drawTool.eventEmitter.events){
-      expect(this.drawTool.eventEmitter.events[key]).toBe(0);
+    var drawTool = createDrawTool([]);
+    drawTool.destroy();
+    for(var key in drawTool.eventEmitter.events){
+      expect(drawTool.eventEmitter.events[key]).toBe(0);
     }
-    expect(this.drawTool.osdViewer.addHandler.callCount).toBe(this.drawTool.osdViewer.removeHandler.callCount);
+    expect(drawTool.osdViewer.addHandler.callCount).toBe(drawTool.osdViewer.removeHandler.callCount);
   });
 
-  function createDrawToolForRenderingTest(annotations) {
+  function createDrawTool(annotations) {
     var windowId = 'window1';
     jQuery('document.body').append(jQuery('<div>').attr('id', windowId));
     var osdViewerElem = jQuery('<div/>');
@@ -94,7 +83,7 @@ describe('OsdRegionDrawTool', function() {
     var mockSaveController = {
       currentConfig: {
         annotationBodyEditor: {
-          module: function() { console.log('HHHHH'); }
+          module: jasmine.createSpy()
         }
       },
       getWindowElement: function() {
@@ -107,7 +96,8 @@ describe('OsdRegionDrawTool', function() {
     var mockOpenSeadragon = {
       addHandler: jasmine.createSpy(),
       svgOverlay: mockSvgOverlay,
-      element: osdViewerElem
+      element: osdViewerElem,
+      removeHandler:jasmine.createSpy()
     };
     return new Mirador.OsdRegionDrawTool({
       eventEmitter: new MockEventEmitter(new Mirador.EventEmitter()),
