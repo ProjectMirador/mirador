@@ -66,19 +66,6 @@
           _this.annoState.choosePointer();
         }
       });
-
-      this.eventEmitter.subscribe('slotLeave.' + _this.windowId, function(event, eventData) {
-        if (_this.element.showAnno) {
-          _this.annoState.ondisplayOn();
-        }
-      });
-
-      this.eventEmitter.subscribe('slotEnter.' + _this.windowId, function(event, eventData) {
-        if (_this.element.showAnno) {
-          _this.eventEmitter.publish('CANCEL_ACTIVE_ANNOTATIONS.'+_this.windowId);
-          _this.eventEmitter.publish('DISABLE_TOOLTIPS_BY_CLASS.' + _this.windowId, '.hud-dropdown');
-        }
-      });
     },
 
     bindEvents: function() {
