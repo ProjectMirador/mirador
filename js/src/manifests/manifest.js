@@ -80,6 +80,7 @@
       });
       this.request.done(function(jsonLd) {
         _this.jsonLd = _this.generateInfoWrapper(jsonLd);
+        _this.buildCanvasesIndex();
       });
     },
     initFromManifestContent: function (manifestContent) {
@@ -89,6 +90,13 @@
         _this.jsonLd = jsonLd;
       });
       _this.request.resolve(manifestContent); // resolve immediately
+    },
+    buildCanvasesIndex: function(){
+      this.canvases = this.getCanvases().reduce(function(canvasesIndex, canvas) {
+        canvasesIndex[canvas['@id']] = canvas;
+        return canvasesIndex;
+      }, {});
+      // Now you can get canvases with manifest.canvases[CanvasID]
     },
     getThumbnailForCanvas : function(canvas, width) {
       var version = "1.1",
