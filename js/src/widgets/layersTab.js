@@ -91,6 +91,7 @@
     },
 
     render: function(state) {
+      console.log(state);
       var _this = this,
           templateData = {
             active: state.active ? '' : 'inactive'

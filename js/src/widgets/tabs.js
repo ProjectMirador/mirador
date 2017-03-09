@@ -19,7 +19,6 @@
 
             this.state({
                 tabs : this.tabs,
-                // tabs: [{id:'tocTab', label:'Indices'}, {id:'searchTab', label:'Search'}],
                 selectedTabIndex: 0
             }, true);
             this.listenForActions();
