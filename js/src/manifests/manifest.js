@@ -92,8 +92,13 @@
       _this.request.resolve(manifestContent); // resolve immediately
     },
     buildCanvasesIndex: function(){
-      this.canvases = this.getCanvases().reduce(function(canvasesIndex, canvas) {
-        canvasesIndex[canvas['@id']] = canvas;
+      this.canvases = this.getCanvases().reduce(function(canvasesIndex, canvas, index) {
+        var eventedCanvas = new iiifEventedCanvas({
+          canvas: canvas,
+          index: index,
+          dispatcher: this.eventEmitter
+        });
+        canvasesIndex[canvas['@id']] = eventedCanvas;
         return canvasesIndex;
       }, {});
       // Now you can get canvases with manifest.canvases[CanvasID]

@@ -2,6 +2,7 @@
 
   $.LayersTab = function(options) {
     jQuery.extend(true, this, {
+      windowId:          null,
       element:           null,
       appendTo:          null,
       manifest:          null,
@@ -91,10 +92,19 @@
     },
 
     render: function(state) {
-      console.log(state);
       var _this = this,
+          canvasModel = _this.state.getWindowObjectById(_this.windowId).currentCanvasModel,
           templateData = {
-            active: state.active ? '' : 'inactive'
+            active: state.active ? '' : 'inactive',
+            hasLayers: false, //canvasModel.images.length > 0,
+            // layers: canvasModel.images.map(function(imageResource){
+            //   return {
+            //     title: imageResource.label,
+            //     opacity: imageResource.getOpacity(),
+            //     loadingStatus: imageResource.getStatus(),
+            //     visibility: imageResource.getVisible()
+            //   };
+            // })
           };
 
       if (this.element) {
@@ -113,6 +123,21 @@
 
     template: Handlebars.compile([
       '<div class="layersPanel {{active}}">',
+      '<p>Manipulate images available on this canvas. Drag and Drop to adjust layering.</p>',
+      '{{#if hasLayers}}',
+      '<ul class="layers-listing">',
+      '{{#each layers}}',
+      '<li class="layers-list-item {{this.loadingStatus}}">',
+      '<input type=checkbox>',
+      '<img class="layer-thumb">',
+      '<h4>{{this.title}}</h4>',
+      '<input class="opacity-slider" type="range" min="0" max="100" step="2" value="{{this.opacity}}">',
+      '</li>',
+      '{{/each}}',
+      '</ul>',
+      '{{else}}',
+      '<h4>There are no image layers on this canvas</h4>',
+      '{{/if}}',
       '</div>',
     ].join(''))
   };
