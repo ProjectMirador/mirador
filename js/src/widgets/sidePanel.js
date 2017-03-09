@@ -7,7 +7,6 @@
       manifest:          null,
       panelState:        {},
       tocTabAvailable:   null,
-      tocTabAvailable:   false,
       annotationsTabAvailable: false,
       layersTabAvailable: false,
       searchTabAvailable: null,
