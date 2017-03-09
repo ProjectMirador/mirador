@@ -764,12 +764,6 @@
     setCurrentCanvasID: function(canvasID) {
       var _this = this;
       _this.canvasID = canvasID;
-      _this.currentCanvasModel = new iiifEventedCanvas({
-        canvas: _this.manifest.canvases[canvasID],
-        index: $.getImageIndexById(_this.imagesList, canvasID),
-        dispatcher: _this.eventEmitter
-      });
-      console.log(_this.currentCanvasModel);
       _this.eventEmitter.publish('removeTooltips.' + _this.id);
       _this.eventEmitter.unsubscribe(('annotationListLoaded.' + _this.id));
       while(_this.annotationsList.length > 0) {
