@@ -580,8 +580,8 @@
 
     sidePanelVisibility: function(visible, transitionDuration) {
       var _this = this;
-      _this.sidePanelVisible = visible,
-      tocIconElement = this.element.find('.mirador-icon-toc'),
+      _this.sidePanelVisible = visible;
+      var tocIconElement = this.element.find('.mirador-icon-toc'),
       sidePanelElement = this.element.find('.sidePanel'),
       viewContainerElement = this.element.find('.view-container');
 
