@@ -93,6 +93,11 @@
     },
     buildCanvasesIndex: function(){
       this.canvases = this.getCanvases().reduce(function(canvasesIndex, canvas) {
+        canvas.model = new iiifEventedCanvas({
+          canvas: canvas,
+          index: 0,
+          dispatcher: this.eventEmitter
+        });
         canvasesIndex[canvas['@id']] = canvas;
         return canvasesIndex;
       }, {});
