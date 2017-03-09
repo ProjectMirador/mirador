@@ -128,15 +128,15 @@
       this.svgOverlay.paperScope.view.draw();
       _this.eventEmitter.publish('annotationsRendered.' + _this.windowId);
 
-      _this.eventEmitter.subscribe('slotLeave.' + _this.windowId, function(event, eventData) {
+      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('slotLeave.' + _this.windowId, function(event, eventData) {
         var strokeColor = _this.state.getStateProperty('drawingToolsSettings').strokeColor;
         _this.setShapesColor(strokeColor);
-      });
+      }));
 
-      _this.eventEmitter.subscribe('slotEnter.' + _this.windowId, function(event, eventData) {
+      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('slotEnter.' + _this.windowId, function(event, eventData) {
         var hoverColor = _this.state.getStateProperty('drawingToolsSettings').hoverColor;
         _this.setShapesColor(hoverColor);
-      });
+      }));
     },
 
     setShapesColor: function(color) {

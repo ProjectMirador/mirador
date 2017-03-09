@@ -24,6 +24,8 @@
     init: function() {
       var _this = this;
       _this.eventEmitter.unsubscribe(('modeChange.' + _this.windowId));
+      _this.eventEmitter.unsubscribe(('slotLeave.' + _this.windowId));
+      _this.eventEmitter.unsubscribe(('slotEnter.' + _this.windowId));
 
       this.createStateMachine();
       this.createRenderer();
@@ -49,7 +51,7 @@
         _this.modeSwitch();
       });
 
-      this.eventEmitter.subscribe('slotEnter.' + _this.windowId, function(event, eventData) {
+      _this.eventEmitter.subscribe('slotEnter.' + _this.windowId, function(event, eventData) {
         if (_this.element.showAnno) {
           _this.layerState.defaultState();
           _this.modeSwitch();
