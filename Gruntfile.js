@@ -25,6 +25,7 @@ module.exports = function(grunt) {
     'node_modules/jquery-migrate/dist/jquery-migrate.min.js',
     'node_modules/jquery-ui-dist/jquery-ui.min.js',
     'node_modules/bootstrap/js/modal.js',
+    'node_modules/bootstrap/js/transition.js',
     'node_modules/bootbox/bootbox.js',
     'node_modules/jquery.scrollto/jquery.scrollTo.min.js',
     'js/lib/jquery.qtip.min.js',
