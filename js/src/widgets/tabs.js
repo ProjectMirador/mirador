@@ -16,6 +16,7 @@
     $.Tabs.prototype = {
         init: function() {
             var _this = this;
+          console.log(this.tabs);
 
             this.state({
                 tabs : this.tabs,
