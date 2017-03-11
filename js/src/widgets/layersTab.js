@@ -76,6 +76,8 @@
       });
 
       _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasID) {
+        _this.canvasID = canvasID;
+        _this.render();
         //update layers for this canvasID
       });
 
@@ -93,18 +95,18 @@
 
     render: function(state) {
       var _this = this,
-          canvasModel = _this.state.getWindowObjectById(_this.windowId).currentCanvasModel,
+          canvasModel = _this.manifest.canvases[_this.canvasID],
           templateData = {
             active: state.active ? '' : 'inactive',
-            hasLayers: false, //canvasModel.images.length > 0,
-            // layers: canvasModel.images.map(function(imageResource){
-            //   return {
-            //     title: imageResource.label,
-            //     opacity: imageResource.getOpacity(),
-            //     loadingStatus: imageResource.getStatus(),
-            //     visibility: imageResource.getVisible()
-            //   };
-            // })
+            hasLayers: canvasModel.images.length > 0,
+            layers: canvasModel.images.map(function(imageResource){
+              return {
+                title: imageResource.label,
+                opacity: imageResource.getOpacity(),
+                loadingStatus: imageResource.getStatus(),
+                visibility: imageResource.getVisible()
+              };
+            })
           };
 
       if (this.element) {

@@ -110,9 +110,9 @@
       if (_this.layersTabAvailable) {
         new $.LayersTab({
           manifest: _this.manifest,
-          windowId: this.windowId,
+          windowId: _this.windowId,
           appendTo: _this.element.find('.tabContentArea'),
-          canvasID: this.canvasID,
+          canvasID: _this.canvasID,
           state: _this.state,
           eventEmitter: _this.eventEmitter
         });
