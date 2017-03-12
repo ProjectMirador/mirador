@@ -6,7 +6,8 @@
       currentImg:       null,
       windowId:         null,
       currentImgIndex:  0,
-      canvasID:          null,
+      canvasID:         null,
+      canvasModel:      null,
       imagesList:       [],
       element:          null,
       elemOsd:          null,
@@ -43,6 +44,7 @@
           zoomLevel:        null
         };
       }
+      this.canvasModel = _this.manifest.canvases[_this.canvasID];
       this.currentImg = this.imagesList[this.currentImgIndex];
       this.element = jQuery(this.template()).appendTo(this.appendTo);
       this.elemAnno = jQuery('<div/>')
@@ -50,6 +52,8 @@
       .appendTo(this.element);
 
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+      // this.initialiseImageCanvas();
+
       _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
 
       var allTools = $.getTools(this.state.getStateProperty('drawingToolsSettings'));
@@ -131,6 +135,18 @@
         }
         // If it is the last canvas, hide the "go to previous" button, otherwise show it.
       });
+
+      _this.eventEmitter.subscribe('image-needed', _this.loadImage);
+      _this.eventEmitter.subscribe('image-show', _this.showImage);
+      _this.eventEmitter.subscribe('image-hide', _this.hideImage);
+      _this.eventEmitter.subscribe('image-removed', _this.removeImage);
+      _this.eventEmitter.subscribe('image-opacity-updated', _this.updateImageOpacity);
+      // These will come soon.
+      // _this.eventEmitter.subscribe('image-layering-index-updated');
+      // _this.eventEmitter.subscribe('image-position-updated');
+      // _this.eventEmitter.subscribe('image-rotation-updated');
+      // _this.eventEmitter.subscribe('image-scale-updated');
+      // _this.eventEmitter.subscribe('canvas-position-updated');
 
       //Related to Annotations HUD
       _this.eventEmitter.subscribe('HUD_REMOVE_CLASS.' + _this.windowId, function(event, elementSelector, className) {
@@ -455,6 +471,12 @@
       //Image manipulation controls
     },
 
+    loadImage: function() {console.log('load');},
+    showImage: function() {console.log('show');},
+    hideImage: function() {console.log('hide');},
+    removeImage: function() {console.log('remove');},
+    updateImageOpacity: function() {console.log('update opacity');},
+
     getPanByValue: function() {
       var bounds = this.osd.viewport.getBounds(true);
       //for now, let's keep 50% of the image on the screen
@@ -526,6 +548,27 @@
       } else {
         this.element.addClass(className);
       }
+    },
+
+    initialiseImageCanvas: function() {
+      var _this = this,
+          uniqueID = $.genUUID(),
+          osdID = 'mirador-osd-' + uniqueID,
+          canvasModel = _this.manifest.canvases[_this.canvasID];
+
+      _this.elemOsd =
+        jQuery('<div/>')
+        .addClass(_this.osdCls)
+        .attr('id', osdID)
+        .appendTo(_this.element);
+
+      _this.osd = OpenSeadragon({
+        element: _this.elemOsd,
+        showNavigationControl: false,
+        preserveViewport: true,
+        blendTime: 0.1,
+        alwaysBlend: false
+      });
     },
 
     createOpenSeadragonInstance: function(imageUrl) {
