@@ -17,13 +17,13 @@
   $.LayersTab.prototype = {
     init: function() {
       var _this = this;
-      this.windowId = this.windowId;
 
       this.localState({
         id: 'layersTab',
         visible: this.visible,
-        selectedList: null,
-        empty: true
+        active: true, // needs to be a function of the window state
+        canvasID: _this.canvasID,
+        empty: false // needs to be a function of the canvasModel
       }, true);
 
       this.listenForActions();
@@ -56,6 +56,14 @@
       this.localState(localState);
     },
 
+    canvasIdUpdated: function(event, canvasID) {
+      var localState = this.localState();
+      localState.canvasID = canvasID;
+      console.log(canvasID);
+
+      this.localState(localState);
+    },
+
     imageFocusUpdated: function(focus) {
       var localState = this.localState();
       localState.active = (focus === 'ThumbnailsView') ? false : true;
@@ -75,13 +83,10 @@
         _this.tabStateUpdated(data.layersTab);
       });
 
-      _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasID) {
-        _this.canvasID = canvasID;
-        _this.render();
-        //update layers for this canvasID
-      });
+      _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, _this.canvasIdUpdated.bind(_this));
 
       _this.eventEmitter.subscribe('focusUpdated' + _this.windowId, function(event, focus) {
+        console.log('changed views');
         // update the disabled state of the layersTab
         // since it cannot be used in overview mode
         _this.imageFocusUpdated(focus);
@@ -94,8 +99,9 @@
     },
 
     render: function(state) {
+      console.log(state);
       var _this = this,
-          canvasModel = _this.manifest.canvases[_this.canvasID],
+          canvasModel = _this.manifest.canvases[state.canvasID],
           templateData = {
             active: state.active ? '' : 'inactive',
             hasLayers: canvasModel.images.length > 0,
@@ -104,10 +110,12 @@
                 title: imageResource.label,
                 opacity: imageResource.getOpacity(),
                 loadingStatus: imageResource.getStatus(),
-                visibility: imageResource.getVisible()
+                visibility: imageResource.getVisible(),
+                url: imageResource.url
               };
             })
           };
+      console.log(templateData);
 
       if (this.element) {
         _this.appendTo.find(".layersPanel").remove();
