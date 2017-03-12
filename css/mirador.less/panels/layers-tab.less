@@ -1,0 +1,33 @@
+.layersPanel {
+  .layers-listing {
+    padding: 0;
+    list-style-type:none;
+  }
+  .layers-list-item {
+    .clearfix();
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+    padding: 10px 10px 10px 0;
+    margin-right: 20px;
+    img {
+      float:left;
+      width: 60px;
+      height: 60px;
+      border: 1px solid gray;
+      box-shadow: inset 0 0 12px gray;
+      margin-right:10px;
+    }
+    h4 {
+      margin-bottom: 5px;
+    }
+    [type=checkbox] { display:none; } /* to hide the checkbox itself */
+    [type=checkbox] + label:before {
+      font-family: FontAwesome;
+      display: inline-block;
+    }
+    [type=checkbox] + label:before { content: "\f096"; }
+    [type=checkbox] + label:before { content: "\f096"; }
+    [type=checkbox]:checked+label:before { content: "\f046"; }
+    [type=checkbox]:checked+label:before { letter-spacing: 5px; }
+  }
+}

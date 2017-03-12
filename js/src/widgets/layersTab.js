@@ -99,7 +99,6 @@
     },
 
     render: function(state) {
-      console.log(state);
       var _this = this,
           canvasModel = _this.manifest.canvases[state.canvasID],
           templateData = {
@@ -115,7 +114,6 @@
               };
             })
           };
-      console.log(templateData);
 
       if (this.element) {
         _this.appendTo.find(".layersPanel").remove();
@@ -138,10 +136,16 @@
       '<ul class="layers-listing">',
       '{{#each layers}}',
       '<li class="layers-list-item {{this.loadingStatus}}">',
-      '<input type=checkbox>',
-      '<img class="layer-thumb">',
       '<h4>{{this.title}}</h4>',
+      '<img class="layer-thumb">',
+      '<label>opacity (100%)</label>',
       '<input class="opacity-slider" type="range" min="0" max="100" step="2" value="{{this.opacity}}">',
+      '<div>',
+      '<form>',
+      '<input type=checkbox>',
+      '<label> visibility (off)</label>',
+      '</form>',
+      '</div>',
       '</li>',
       '{{/each}}',
       '</ul>',
