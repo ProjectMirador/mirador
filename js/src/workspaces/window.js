@@ -780,6 +780,7 @@
         default:
           break;
       }
+      console.log(canvasID);
       _this.eventEmitter.publish(('currentCanvasIDUpdated.' + _this.id), canvasID);
     },
 
