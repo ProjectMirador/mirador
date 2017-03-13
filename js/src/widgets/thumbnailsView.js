@@ -85,11 +85,12 @@
       scrollPosition,
       windowObject = this.state.getWindowObjectById(this.windowId);
 
-      if (windowObject && windowObject.viewType === 'BookView') {
-        scrollPosition = _this.element.scrollLeft() + (target.position().left + (target.next().width() + target.outerWidth())/2) - _this.element.width()/2;
-      } else {
-
-        scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
+      if (target.position()) {
+        if (windowObject && windowObject.viewType === 'BookView') {
+          scrollPosition = _this.element.scrollLeft() + (target.position().left + (target.next().width() + target.outerWidth())/2) - _this.element.width()/2;
+        } else {
+          scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
+        }
       }
       _this.element.scrollTo(scrollPosition, 900);
     },
@@ -128,8 +129,8 @@
     },
 
     toggle: function(stateValue) {
-      if (stateValue) { 
-        this.show(); 
+      if (stateValue) {
+        this.show();
       } else {
         this.hide();
       }
