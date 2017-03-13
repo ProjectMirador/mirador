@@ -19,6 +19,7 @@
 
             this.state({
                 tabs : this.tabs,
+                // tabs: [{id:'tocTab', label:'Indices'}, {id:'searchTab', label:'Search'}],
                 selectedTabIndex: 0
             }, true);
             this.listenForActions();
@@ -44,7 +45,8 @@
         getTemplateData: function() {
             return {
                 annotationsTab: this.state().annotationsTab,
-                tocTab: this.state().tocTab
+                tocTab: this.state().tocTab,
+                searchTab: this.state().searchTab
             };
         },
         listenForActions: function() {
