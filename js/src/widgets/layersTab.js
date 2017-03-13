@@ -131,7 +131,7 @@
 
     template: Handlebars.compile([
       '<div class="layersPanel {{active}}">',
-      '<p>Manipulate images available on this canvas. Drag and Drop to adjust layering.</p>',
+      '<p>Manipulate images available on this canvas. (Put canvas metadata here?...)</p>',
       '{{#if hasLayers}}',
       '<ul class="layers-listing">',
       '{{#each layers}}',
