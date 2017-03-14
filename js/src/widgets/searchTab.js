@@ -77,7 +77,7 @@
 
         this.searchObject = new $.SearchWithinResults({
           manifest: _this.manifest,
-          appendTo: _this.element.find(".search-resultsList"),
+          appendTo: _this.element.find(".search-results-list"),
           panel: true,
           canvasID: _this.canvasID,
           windowId: _this.windowId,
@@ -179,7 +179,7 @@
               // '<input class="js-box" type="text" placeholder="box: x, y, w, h"/>',
             '</div>',
           '</form>',
-          '<div class="search-resultsList"></div>',
+          '<div class="search-results-list"></div>',
         '{{else}}',
           'No search service available',
         '{{/if}}',

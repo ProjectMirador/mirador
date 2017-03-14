@@ -423,7 +423,6 @@ $.SearchWithinResults.prototype = {
         },
         "on": canvasid + (coordinates ? "#" + coordinates : '')
         }];
-      console.log(canvasid, coordinates);
       //_this.parent.annotationsList = miniAnnotationList;
       _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasid);
     });

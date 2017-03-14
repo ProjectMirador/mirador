@@ -10,7 +10,7 @@
       // annotationsTabAvailable: false,
       layersTabAvailable: null,
       // toolsTabAvailable: false,
-      searchTabAvailable: true,
+      searchTabAvailable: null,
       hasStructures:     false,
       state:             null,
       eventEmitter:      null

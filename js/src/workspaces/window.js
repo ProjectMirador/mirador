@@ -506,6 +506,7 @@
       tocAvailable = _this.sidePanelOptions.toc,
       annotationsTabAvailable = _this.sidePanelOptions.annotations,
       layersTabAvailable = _this.sidePanelOptions.layersTabAvailable,
+      searchTabAvailable = _this.sidePanelOptions.searchTabAvailable,
       hasStructures = true;
 
       var structures = _this.manifest.getStructures();
@@ -523,6 +524,7 @@
               canvasID: _this.canvasID,
               layersTabAvailable: layersTabAvailable,
               tocTabAvailable: tocAvailable,
+              searchTabAvailable: searchTabAvailable,
               annotationsTabAvailable: annotationsTabAvailable,
               hasStructures: hasStructures
         });
