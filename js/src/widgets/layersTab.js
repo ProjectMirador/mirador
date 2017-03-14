@@ -96,21 +96,47 @@
     bindEvents: function() {
       var _this = this;
 
+      this.element.on('input', '.opacity-slider', function(event) {
+        var canvasModel = _this.manifest.canvases[_this.localState().canvasID],
+            eventedImageResource = canvasModel.getImageById(event.currentTarget.attributes['data-imageid'].nodeValue);
+
+        eventedImageResource.setOpacity(event.currentTarget.attributes.value.nodeValue/100);
+      });
+      this.element.on('change', '.visibility-toggle', function(event) {
+        var canvasModel = _this.manifest.canvases[_this.localState().canvasID],
+            eventedImageResource = canvasModel.getImageById(event.currentTarget.attributes['data-imageid'].nodeValue);
+        if(event.currentTarget.checked) {
+          eventedImageResource.show();
+        } else {
+          eventedImageResource.hide();
+        }
+      });
+      // this.element.find('.mirador-osd-next').on('dragstart', function() {
+      // });
+      // this.element.find('.mirador-osd-next').on('dragover', function() {
+      //   check that child image (in images with "choice") is not dragged outside its parent.
+      // });
+      // this.element.find('.mirador-osd-next').on('drop', function() {
+      //   Reorder the images on the canvas.
+      // });
     },
 
     render: function(state) {
+      console.log(this.manifest.canvases[state.canvasID]);
       var _this = this,
           canvasModel = _this.manifest.canvases[state.canvasID],
           templateData = {
             active: state.active ? '' : 'inactive',
             hasLayers: canvasModel.images.length > 0,
+            canvasTitle: canvasModel.label,
             layers: canvasModel.images.map(function(imageResource){
               return {
+                imageId: imageResource.id,
                 title: imageResource.label,
                 opacity: imageResource.getOpacity(),
                 loadingStatus: imageResource.getStatus(),
                 visibility: imageResource.getVisible(),
-                url: imageResource.url
+                url: imageResource.thumbUrl
               };
             })
           };
@@ -131,21 +157,24 @@
 
     template: Handlebars.compile([
       '<div class="layersPanel {{active}}">',
-      '<p>Manipulate images available on this canvas. (Put canvas metadata here?...)</p>',
+      '<h3>Images for {{canvasTitle}}</h3>',
       '{{#if hasLayers}}',
       '<ul class="layers-listing">',
       '{{#each layers}}',
-      '<li class="layers-list-item {{this.loadingStatus}}">',
+      '<li class="layers-list-item {{loadingStatus}}">',
       '<h4>{{this.title}}</h4>',
-      '<img class="layer-thumb">',
-      '<label>opacity (100%)</label>',
-      '<input class="opacity-slider" type="range" min="0" max="100" step="2" value="{{this.opacity}}">',
-      '<div>',
-      '<form>',
-      '<input type=checkbox>',
-      '<label> visibility (off)</label>',
-      '</form>',
+      '<div class="thumb-container">',
+      '<img class="layer-thumb" src="{{url}}">',
       '</div>',
+      '<form>',
+      '<label>opacity (100%)</label>',
+      '<input class="opacity-slider" data-imageid="{{imageId}}" type="range" min="0" max="100" step="2" value="{{this.opacity}}">',
+      '<div>',
+      '<input class="visibility-toggle" data-imageid="{{imageId}}" type=checkbox>',
+      '<label> visibility (off)</label>',
+      '</div>',
+      '</form>',
+      '<a>more</a>',
       '</li>',
       '{{/each}}',
       '</ul>',
