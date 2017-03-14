@@ -144,7 +144,7 @@
     },
     getCanvases : function() {
       var _this = this;
-      return _this.jsonLd.sequences[0].canvases;
+      return _this.jsonLd.sequences && _this.jsonLd.sequences[0].canvases;
     },
     getAnnotationsListUrls: function(canvasId) {
       var _this = this;
