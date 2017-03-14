@@ -106,7 +106,7 @@ module.exports = function(grunt) {
     less: {
       compile: {
         files: {
-          'css/mirador.css': 'css/mirador.less/main.less'
+          'css/mirador.css': 'css/less/main.less'
         }
       }
     },

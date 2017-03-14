@@ -71,6 +71,20 @@
       this.localState(localState);
     },
 
+    updateImageResourceStatus: function(event, imageResource) {
+      console.log(event);
+      console.log(imageResource);
+    },
+    showImageResource: function() {
+      // console.log('show');
+    },
+    hideImageResource: function() {
+      // console.log('hide');
+    },
+    updateImageResourceOpacity: function() {
+      // console.log('update opacity');
+    },
+
     listenForActions: function() {
       var _this = this;
 
@@ -84,6 +98,10 @@
       });
 
       _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, _this.canvasIdUpdated.bind(_this));
+      _this.eventEmitter.subscribe('image-needed, image-status-updated', _this.updateImageResourceStatus.bind(_this));
+      _this.eventEmitter.subscribe('image-show', _this.showImageResource.bind(_this));
+      _this.eventEmitter.subscribe('image-hide', _this.hideImageResource.bind(_this));
+      _this.eventEmitter.subscribe('image-opacity-updated', _this.updateImageResourceOpacity.bind(_this));
 
       _this.eventEmitter.subscribe('focusUpdated' + _this.windowId, function(event, focus) {
         console.log('changed views');
@@ -122,7 +140,6 @@
     },
 
     render: function(state) {
-      console.log(this.manifest.canvases[state.canvasID]);
       var _this = this,
           canvasModel = _this.manifest.canvases[state.canvasID],
           templateData = {
