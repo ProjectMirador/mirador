@@ -21,33 +21,36 @@ module.exports = function(grunt) {
 
   // libraries/plugins
   vendors = [
-    'js/lib/jquery.min.js',
-    'js/lib/jquery-migrate-3.0.0.min.js',
-    'js/lib/jquery-ui.min.js',
-    'js/lib/modal.js',
-    'js/lib/bootbox.js',
-    'js/lib/jquery.scrollTo.min.js',
+    'node_modules/jquery/dist/jquery.min.js',
+    'node_modules/jquery-migrate/dist/jquery-migrate.min.js',
+    'node_modules/jquery-ui-dist/jquery-ui.min.js',
+    'node_modules/bootstrap/js/modal.js',
+    'node_modules/bootstrap/js/transition.js',
+    'node_modules/bootbox/bootbox.js',
+    'node_modules/jquery.scrollto/jquery.scrollTo.min.js',
     'js/lib/jquery.qtip.min.js',
-    'js/lib/state-machine.min.js',
-    'js/lib/tinymce.min.js',
-    'js/lib/handlebars.js',
-    'js/lib/openseadragon.js',
-    'js/lib/d3.v3.min.js',
-    'js/lib/pubsub.min.js',
-    'js/lib/URI.min.js',
-    'js/lib/mousetrap.min.js',
+    'node_modules/javascript-state-machine/state-machine.min.js',
+    'node_modules/tinymce/tinymce.min.js',
+    'node_modules/handlebars/dist/handlebars.js',
+    'node_modules/openseadragon/build/openseadragon/openseadragon.js',
+    'node_modules/d3/d3.min.js',
+    'node_modules/jquery-plugin/dist/ba-tiny-pubsub.js',
+    'node_modules/urijs/src/URI.min.js',
+    'node_modules/mousetrap/mousetrap.min.js',
     'js/lib/isfahan.js',
-    'js/lib/paper-core.min.js',
-    'js/lib/spectrum.js',
-    'js/lib/i18next.min.js',
-    'js/lib/i18nextBrowserLanguageDetector.min.js',
-    'js/lib/i18nextXHRBackend.min.js',
+    'node_modules/paper/dist/paper-core.min.js',
+    'node_modules/spectrum-colorpicker/spectrum.js',
+    'node_modules/i18next/i18next.min.js',
+    'node_modules/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js',
+    'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
     'js/lib/modernizr.custom.js',
     'js/lib/sanitize-html.min.js'
   ],
 
   // source files
   sources = [
+    'js/src/mirador.js', 
+    'js/src/utils/handlebars.js',
     'js/src/*.js',
     'js/src/viewer/*.js',
     'js/src/manifests/*.js',
@@ -85,10 +88,10 @@ module.exports = function(grunt) {
         src: [
           'css/bootstrap.modals.css',
           'css/normalize.css',
-          'css/font-awesome.min.css',
+          'node_modules/font-awesome/css/font-awesome.min.css',
           'css/jquery-ui.min.css',
           'css/jquery.qtip.min.css',
-          'css/spectrum.css',
+          'node_modules/spectrum-colorpicker/spectrum.css',
           'css/mirador.css',
           'css/material-icons.css'
         ],
@@ -131,17 +134,17 @@ module.exports = function(grunt) {
           dest: 'build/mirador/'
         }, {
           expand: true,
-          cwd: 'css/',
+          cwd: 'node_modules/tinymce',
           src: 'themes/**',
           dest: 'build/mirador'
         }, {
           expand: true,
-          cwd: 'css/',
+          cwd: 'node_modules/tinymce',
           src: 'skins/**',
           dest: 'build/mirador'
         }, {
           expand: true,
-          cwd: 'css/',
+          cwd: 'node_modules/tinymce',
           src: 'plugins/**',
           dest: 'build/mirador'
         }, {
@@ -150,8 +153,14 @@ module.exports = function(grunt) {
           dest: 'build/mirador'
         }, {
           expand: true,
+          cwd: 'node_modules/font-awesome',
           src: 'fonts/*',
           dest: 'build/mirador'
+        }, {
+          expand: true,
+          cwd: 'node_modules/material-design-icons/iconfont',
+          src: 'MaterialIcons*',
+          dest: 'build/mirador/fonts'
         }, {
           src: 'js/lib/parse.min.js',
           dest: 'build/mirador/parse.min.js'

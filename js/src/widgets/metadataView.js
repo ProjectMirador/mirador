@@ -237,7 +237,7 @@
       return textWithLinks;
     },
 
-    template: Handlebars.compile([
+    template: $.Handlebars.compile([
     '<div class="sub-title">{{t "details"}}:</div>',
         '<div class="{{metadataListingCls}}">',
           '{{#each details}}',

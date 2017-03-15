@@ -11,7 +11,6 @@
         defaultZoomLevel: 0,
         blendTime:        0.1,
         alwaysBlend:      false,
-        prefixUrl:        'images/openseadragon/',
         showNavigationControl: false
       }, options)
 

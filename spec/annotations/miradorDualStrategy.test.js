@@ -1,6 +1,6 @@
 describe('Mirador SVG-xywh Open Annotation Strategy', function() {
   var subject;
-  
+
   beforeEach(function() {
     jasmine.getJSONFixtures().fixturesPath = 'spec/fixtures';
     subject = new Mirador.MiradorDualStrategy();
@@ -15,7 +15,7 @@ describe('Mirador SVG-xywh Open Annotation Strategy', function() {
       expect(true).toBe(true);
     });
   });
-  
+
   describe('isThisType', function() {
     it('should not recognize a legacy OA annotation', function() {
       expect(subject.isThisType(this.legacyOa)).toBe(false);
@@ -30,10 +30,10 @@ describe('Mirador SVG-xywh Open Annotation Strategy', function() {
       expect(subject.isThisType(this.miradorDualOa)).toBe(true);
     });
   });
-  
+
   describe('buildAnnotation', function() {
     var annotation, window, overlay;
-    
+
     beforeEach(function() {
       // Generate mocks
       annotation = {
@@ -56,11 +56,11 @@ describe('Mirador SVG-xywh Open Annotation Strategy', function() {
         loadedManifest: "https://oculus-dev.harvardx.harvard.edu/manifests/huam:320567"
       };
       overlay = {
-        getSVGString: jasmine.createSpy('getSVGString').and.returnValue("<svg xmlns='http://www.w3.org/2000/svg'><path xmlns=\"http://www.w3.org/2000/svg\" d=\"M1000.24213,219.15375l98.78935,0l0,0l98.78935,0l0,74.09201l0,74.09201l-98.78935,0l-98.78935,0l0,-74.09201z\" data-paper-data=\"{&quot;defaultStrokeValue&quot;:1,&quot;editStrokeValue&quot;:5,&quot;currentStrokeValue&quot;:5,&quot;rotation&quot;:0,&quot;annotation&quot;:null,&quot;editable&quot;:true}\" id=\"rectangle_7e2b56fa-b18b-4d09-a575-0bb19f560b56\" fill-opacity=\"0\" fill=\"#00bfff\" fill-rule=\"nonzero\" stroke=\"#00bfff\" stroke-width=\"30.87167\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\" stroke-miterlimit=\"10\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" font-family=\"sans-serif\" font-weight=\"normal\" font-size=\"12\" text-anchor=\"start\" style=\"mix-blend-mode: normal\"/></svg>"),
-        draftPaths: [{bounds: { x: 1000, y: 219, width: 198, height: 148 }}] 
+        getSVGString: jasmine.createSpy('getSVGString').and.returnValue("<svg xmlns='http://www.w3.org/2000/svg'><path xmlns=\"http://www.w3.org/2000/svg\" d=\"M1000.24213,219.15375l98.78935,0l0,0l98.78935,0l0,74.09201l0,74.09201l-98.78935,0l-98.78935,0l0,-74.09201z\" data-paper-data=\"{&quot;strokeWidth&quot;:1,&quot;rotation&quot;:0,&quot;annotation&quot;:null,&quot;editable&quot;:true}\" id=\"rectangle_7e2b56fa-b18b-4d09-a575-0bb19f560b56\" fill-opacity=\"0\" fill=\"#00bfff\" fill-rule=\"nonzero\" stroke=\"#00bfff\" stroke-width=\"30.87167\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\" stroke-miterlimit=\"10\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" font-family=\"sans-serif\" font-weight=\"normal\" font-size=\"12\" text-anchor=\"start\" style=\"mix-blend-mode: normal\"/></svg>"),
+        draftPaths: [{bounds: { x: 1000, y: 219, width: 198, height: 148 }}]
       };
     });
-    
+
     it('should build the on attribute in the annotation', function() {
       expect(subject.buildAnnotation({
         "annotation": annotation,
@@ -69,10 +69,10 @@ describe('Mirador SVG-xywh Open Annotation Strategy', function() {
       })).toEqual(this.miradorDualOa);
     });
   });
-  
+
   describe('parseRegion', function() {
     var result, osdRegionDrawTool;
-    
+
     beforeEach(function() {
       osdRegionDrawTool = {
         svgOverlay: {
