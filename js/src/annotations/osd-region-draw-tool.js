@@ -127,6 +127,31 @@
       });
       this.svgOverlay.paperScope.view.draw();
       _this.eventEmitter.publish('annotationsRendered.' + _this.windowId);
+
+      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('slotLeave.' + _this.windowId, function(event, eventData) {
+        var strokeColor = _this.state.getStateProperty('drawingToolsSettings').strokeColor;
+        _this.setShapesColor(strokeColor);
+      }));
+
+      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('slotEnter.' + _this.windowId, function(event, eventData) {
+        var hoverColor = _this.state.getStateProperty('drawingToolsSettings').hoverColor;
+        _this.setShapesColor(hoverColor);
+      }));
+    },
+
+    setShapesColor: function(color) {
+      for (var key in this.annotationsToShapesMap) {
+        if (this.annotationsToShapesMap.hasOwnProperty(key)) {
+          var shapeArray = this.annotationsToShapesMap[key];
+          for (var idx = 0; idx < shapeArray.length; idx++) {
+            var shape = shapeArray[idx],
+                shapeTool = this.svgOverlay.getTool(shape),
+                hoverWidth = shape.data.strokeWidth / this.svgOverlay.paperScope.view.zoom;
+            shapeTool.onHover(true, shape, hoverWidth, color);
+          }
+        }
+      }
+      this.svgOverlay.paperScope.view.draw();
     },
 
     prepareShapeArray: function(annotation, strategies) {
