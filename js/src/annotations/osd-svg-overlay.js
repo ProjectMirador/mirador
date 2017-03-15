@@ -974,7 +974,7 @@
     },
 
     destroyCommentPanel: function() {
-      this.eventEmitter.publish('removeTooltips.' + this.windowId);
+      this.eventEmitter.publish('CLOSE_COMMENT_PANEL.' + this.windowId);
       jQuery(this.canvas).parents('.mirador-osd').qtip('destroy', true);
       this.commentPanel = null;
     },

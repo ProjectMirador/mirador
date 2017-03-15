@@ -38,6 +38,7 @@ module.exports = function(grunt) {
     'node_modules/urijs/src/URI.min.js',
     'node_modules/mousetrap/mousetrap.min.js',
     'js/lib/isfahan.js',
+    'node_modules/iiif-evented-canvas/iiif-evented-canvas.umd.js',
     'node_modules/paper/dist/paper-core.min.js',
     'node_modules/spectrum-colorpicker/spectrum.js',
     'node_modules/i18next/i18next.min.js',

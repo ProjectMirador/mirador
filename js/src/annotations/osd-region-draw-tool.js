@@ -232,7 +232,11 @@
         }
       }));
 
-      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('removeTooltips.' + _this.windowId, function() {
+      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function() {
+        jQuery(_this.osdViewer.element).qtip('destroy', true);
+      }));
+
+      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('CLOSE_COMMENT_PANEL.' + _this.windowId, function() {
         jQuery(_this.osdViewer.element).qtip('destroy', true);
       }));
 

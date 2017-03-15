@@ -691,6 +691,13 @@
         });
       } else {
         var view = this.focusModules.ImageView;
+
+        // TODO: Refactor so that the parent (window.js) is
+        // not calling the methods of its child modules.
+        //
+        // Somthing like deleting this entire function,
+        // or at least this "else" branch. The update event
+        // for updating the image view 
         view.updateImage(canvasID);
       }
       this.toggleFocus('ImageView', 'ImageView');
@@ -740,13 +747,18 @@
 
     updateFocusImages: function(imageList) {
       this.focusImages = imageList;
+
+      // TODO: Refactor so this no longer calls its child.
+      // The rendering behaviour of the bottom panel
+      // need only depend on what the current image and mode are.
+      // As-is these events have snaked around up and down
+      // between window and imageView.
       if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
 
     setCurrentCanvasID: function(canvasID) {
       var _this = this;
       this.canvasID = canvasID;
-      _this.eventEmitter.publish('removeTooltips.' + _this.id);
       _this.eventEmitter.unsubscribe(('annotationListLoaded.' + _this.id));
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
