@@ -90,7 +90,7 @@
       }
     },
 
-    template: Handlebars.compile([
+    template: $.Handlebars.compile([
                                  '<div class="image-view">',
                                  '</div>'
     ].join('')),

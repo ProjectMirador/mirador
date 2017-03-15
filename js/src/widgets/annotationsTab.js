@@ -180,7 +180,7 @@
                 this.element.hide();
             }
         },
-        template: Handlebars.compile([
+        template: $.Handlebars.compile([
             '<div class="annotationsPanel">',
             '<ul class="annotationSources">',
             '{{#each annotationSources}}',

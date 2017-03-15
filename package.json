@@ -43,9 +43,9 @@
     "sinon": "^1.17.6"
   },
   "scripts": {
-    "start": "grunt serve",
+    "start": "./node_modules/.bin/grunt serve",
     "test": "./node_modules/.bin/karma start ./karma.conf.js",
-    "travis": "./node_modules/grunt-cli/bin/grunt ci --verbose --force & npm run test"
+    "travis": "./node_modules/.bin/grunt ci --verbose --force & npm run test"
   },
   "dependencies": {
     "bootbox": "^4.4.0",
