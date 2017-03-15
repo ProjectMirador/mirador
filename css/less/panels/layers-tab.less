@@ -1,7 +1,10 @@
+// TODO: Go back through less files and remove mirador-container
+// wherever it appears explicitly, as it is
+// causing specificity problems.
+.mirador-container .layersPanel h3 {
+  margin:10px 0;
+}
 .layersPanel {
-  h3 {
-    margin:10px 0;
-  }
   .layers-listing {
     padding: 0;
     list-style-type:none;
@@ -36,5 +39,8 @@
     h4 {
       margin-bottom: 5px;
     }
+  }
+  .visibility-toggle {
+    margin-bottom: 10px;
   }
 }

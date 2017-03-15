@@ -26,10 +26,10 @@
         empty: false // needs to be a function of the canvasModel
       }, true);
 
-      this.listenForActions();
       this.render(this.localState());
       this.loadTabComponents();
       this.bindEvents();
+      this.listenForActions();
     },
 
     localState: function(state, initial) {
@@ -72,17 +72,22 @@
     },
 
     updateImageResourceStatus: function(event, imageResource) {
-      console.log(event);
-      console.log(imageResource);
     },
-    showImageResource: function() {
-      // console.log('show');
+    showImageResource: function(event, imageResource) {
+      this.element.find('.visibility-toggle[data-imageid="'+ imageResource.id + '"]').prop('checked', true);
+      this.element.find('.visibility-label[data-imageid="'+ imageResource.id + '"]').text('on');
+      this.element.find('.opacity-slider[data-imageid="'+ imageResource.id + '"]').prop('disabled', false);
+      this.element.find('.opacity-label[data-imageid="'+ imageResource.id + '"]').removeClass('disabled').text("(" + Math.ceil(imageResource.getOpacity()*100) + ")%");
     },
-    hideImageResource: function() {
-      // console.log('hide');
+    hideImageResource: function(event, imageResource) {
+      this.element.find('.visibility-toggle[data-imageid="'+ imageResource.id + '"]').prop('checked', false);
+      this.element.find('.visibility-label[data-imageid="'+ imageResource.id + '"]').text('off');
+      this.element.find('.opacity-slider[data-imageid="'+ imageResource.id + '"]').prop('disabled', true);
+      this.element.find('.opacity-label[data-imageid="'+ imageResource.id + '"]').addClass('disabled').text("(disabled)");
     },
-    updateImageResourceOpacity: function() {
-      // console.log('update opacity');
+    updateImageResourceOpacity: function(event, imageResource) {
+      this.element.find('.opacity-slider[data-imageid="'+ imageResource.id + '"]').val(imageResource.getOpacity()*100);
+      this.element.find('.opacity-label[data-imageid="'+ imageResource.id + '"]').text("(" + Math.ceil(imageResource.getOpacity()*100) + ")%");
     },
 
     listenForActions: function() {
@@ -98,7 +103,7 @@
       });
 
       _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, _this.canvasIdUpdated.bind(_this));
-      _this.eventEmitter.subscribe('image-needed, image-status-updated', _this.updateImageResourceStatus.bind(_this));
+      // _this.eventEmitter.subscribe('image-needed, image-status-updated', _this.updateImageResourceStatus.bind(_this));
       _this.eventEmitter.subscribe('image-show', _this.showImageResource.bind(_this));
       _this.eventEmitter.subscribe('image-hide', _this.hideImageResource.bind(_this));
       _this.eventEmitter.subscribe('image-opacity-updated', _this.updateImageResourceOpacity.bind(_this));
@@ -114,11 +119,21 @@
     bindEvents: function() {
       var _this = this;
 
+      this.element.find('img').on('load', function(event) {
+        // fades in thumbs when they finish loading.
+        jQuery(this).addClass('loaded');
+      });
+
+      this.element.find('img').on('error', function(event) {
+        // prevents failed images from showing.
+        jQuery(this).addClass('failed');
+      });
+
       this.element.on('input', '.opacity-slider', function(event) {
         var canvasModel = _this.manifest.canvases[_this.localState().canvasID],
             eventedImageResource = canvasModel.getImageById(event.currentTarget.attributes['data-imageid'].nodeValue);
 
-        eventedImageResource.setOpacity(event.currentTarget.attributes.value.nodeValue/100);
+        eventedImageResource.setOpacity(event.currentTarget.value/100);
       });
       this.element.on('change', '.visibility-toggle', function(event) {
         var canvasModel = _this.manifest.canvases[_this.localState().canvasID],
@@ -150,7 +165,7 @@
               return {
                 imageId: imageResource.id,
                 title: imageResource.label,
-                opacity: imageResource.getOpacity(),
+                opacity: imageResource.getOpacity()*100, // scale factor for limitations of html5 slider element
                 loadingStatus: imageResource.getStatus(),
                 visibility: imageResource.getVisible(),
                 url: imageResource.thumbUrl
@@ -184,14 +199,15 @@
       '<img class="layer-thumb" src="{{url}}">',
       '</div>',
       '<form>',
-      '<label>opacity (100%)</label>',
-      '<input class="opacity-slider" data-imageid="{{imageId}}" type="range" min="0" max="100" step="2" value="{{this.opacity}}">',
       '<div>',
-      '<input class="visibility-toggle" data-imageid="{{imageId}}" type=checkbox>',
-      '<label> visibility (off)</label>',
+      '<input class="visibility-toggle" data-imageid="{{imageId}}" type=checkbox {{#if visibility}}checked{{/if}}>',
+      '<label> visibility (<span class="visibility-label" data-imageid="{{imageId}}">{{#if visibility}}on{{else}}off{{/if}}</span>)</label>',
       '</div>',
+      '<label>opacity <span class="opacity-label {{#unless visibility}}disabled{{/unless}}" data-imageid="{{imageId}}">',
+      '{{#unless visibility}}(disabled){{else}}({{opacity}})%{{/unless}}',
+      '</span></label>',
+      '<input class="opacity-slider" data-imageid="{{imageId}}" type="range" min="0" max="100" step="2" value="{{opacity}}" {{#unless visibility}}disabled{{/unless}}>',
       '</form>',
-      '<a>more</a>',
       '</li>',
       '{{/each}}',
       '</ul>',
