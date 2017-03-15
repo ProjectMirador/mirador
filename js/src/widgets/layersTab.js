@@ -97,7 +97,7 @@
       }
     },
 
-    template: Handlebars.compile([
+    template: $.Handlebars.compile([
       '<div class="layersPanel">',
       '</div>',
       ].join(''))

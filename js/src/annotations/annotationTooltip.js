@@ -433,7 +433,7 @@
     },
 
     //when this is being used to edit an existing annotation, insert them into the inputs
-    editorTemplate: Handlebars.compile([
+    editorTemplate: $.Handlebars.compile([
       '<form id="annotation-editor-{{windowId}}" class="annotation-editor annotation-tooltip" {{#if id}}data-anno-id="{{id}}"{{/if}}>',
       '<div>',
       // need to add a delete, if permissions allow
@@ -445,7 +445,7 @@
       '</form>'
     ].join('')),
 
-    viewerTemplate: Handlebars.compile([
+    viewerTemplate: $.Handlebars.compile([
       '<div class="all-annotations" id="annotation-viewer-{{windowId}}">',
       '{{#each annotations}}',
       '<div class="annotation-display annotation-tooltip" data-anno-id="{{id}}">',
