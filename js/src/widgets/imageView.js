@@ -51,8 +51,8 @@
       .addClass(this.annoCls)
       .appendTo(this.element);
 
-      this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-      // this.initialiseImageCanvas();
+      // this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+      this.initialiseImageCanvas();
 
       _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
 
@@ -136,11 +136,11 @@
         // If it is the last canvas, hide the "go to previous" button, otherwise show it.
       });
 
-      _this.eventEmitter.subscribe('image-needed', _this.loadImage);
-      _this.eventEmitter.subscribe('image-show', _this.showImage);
-      _this.eventEmitter.subscribe('image-hide', _this.hideImage);
-      _this.eventEmitter.subscribe('image-removed', _this.removeImage);
-      _this.eventEmitter.subscribe('image-opacity-updated', _this.updateImageOpacity);
+      _this.eventEmitter.subscribe('image-needed', _this.loadImage.bind(_this));
+      _this.eventEmitter.subscribe('image-show', _this.showImage.bind(_this));
+      _this.eventEmitter.subscribe('image-hide', _this.hideImage.bind(_this));
+      _this.eventEmitter.subscribe('image-removed', _this.removeImage.bind(_this));
+      _this.eventEmitter.subscribe('image-opacity-updated', _this.updateImageOpacity.bind(_this));
       // These will come soon.
       // _this.eventEmitter.subscribe('image-layering-index-updated');
       // _this.eventEmitter.subscribe('image-position-updated');
@@ -471,11 +471,92 @@
       //Image manipulation controls
     },
 
-    loadImage: function() {console.log('load');},
-    showImage: function() {console.log('show');},
-    hideImage: function() {console.log('hide');},
-    removeImage: function() {console.log('remove');},
-    updateImageOpacity: function() {console.log('update opacity');},
+    loadImage: function(event, imageResource) {
+      var _this = this;
+
+      // We've already loaded this tilesource
+      if(imageResource.status === 'drawn') {
+        return;
+      }
+
+      imageResource.setStatus('requested');
+      var bounds = imageResource.getGlobalBounds();
+
+      _this.osd.addTiledImage({
+        x: bounds.x,
+        y: bounds.y,
+        width: bounds.width,
+        tileSource: imageResource.tileSource,
+        opacity: imageResource.opacity,
+        clip: imageResource.clipRegion,
+        index: imageResource.zIndex,
+
+        success: function(event) {
+          var tiledImage = event.item;
+
+          imageResource.osdTiledImage = tiledImage;
+          imageResource.setStatus('loaded');
+          _this.syncAllImageResourceProperties(imageResource);
+
+          var tileDrawnHandler = function(event) {
+            if (event.tiledImage === tiledImage) {
+              imageResource.setStatus('drawn');
+              _this.osd.removeHandler('tile-drawn', tileDrawnHandler);
+            }
+          };
+          _this.osd.addHandler('tile-drawn', tileDrawnHandler);
+        },
+
+        error: function(event) {
+          // Add any auth information here.
+          //
+          // var errorInfo = {
+          //   id: imageResource.osdTileSource,
+          //   message: event.message,
+          //   source: event.source
+          // };
+          imageResource.setStatus('failed');
+        }
+      });
+    },
+    showImage: function(event, imageResource) {
+      // Check whether or not this item has been drawn.
+      // This implies that the request has been issued already
+      // and the opacity can be updated.
+      if (imageResource.getStatus() === 'drawn') {
+        this.updateImageOpacity(null, imageResource);
+      }
+    },
+    hideImage: function(event, imageResource) {
+      if (imageResource.getStatus() === 'drawn') {
+        imageResource.osdTiledImage.setOpacity(0);
+      }
+    },
+    removeImage: function() {
+      console.log('remove');
+    },
+    updateImageOpacity: function(event, imageResource) {
+      if(imageResource.osdTiledImage) {
+        imageResource.osdTiledImage.setOpacity(imageResource.opacity * imageResource.parent.getOpacity());
+      }
+    },
+    syncAllImageResourceProperties: function(imageResource) {
+      if(imageResource.osdTiledImage) {
+        var bounds = imageResource.getGlobalBounds();
+        // If ever the clipRegion parameter becomes
+        // writable, add it here.
+        imageResource.osdTiledImage.setPosition({
+          x:bounds.x,
+          y:bounds.y
+        }, true);
+        imageResource.osdTiledImage.setWidth(bounds.width, true);
+        imageResource.osdTiledImage.setOpacity(
+          imageResource.getOpacity() * imageResource.parent.getOpacity()
+        );
+        // This will be for the drag and drop functionality.
+        // _this.updateImageLayeringIndex(imageResource);
+      }
+    },
 
     getPanByValue: function() {
       var bounds = this.osd.viewport.getBounds(true);
@@ -552,8 +633,7 @@
 
     initialiseImageCanvas: function() {
       var _this = this,
-          uniqueID = $.genUUID(),
-          osdID = 'mirador-osd-' + uniqueID,
+          osdID = 'mirador-osd-' + $.genUUID(),
           canvasModel = _this.manifest.canvases[_this.canvasID];
 
       _this.elemOsd =
@@ -563,11 +643,12 @@
         .appendTo(_this.element);
 
       _this.osd = OpenSeadragon({
-        element: _this.elemOsd,
-        showNavigationControl: false,
+        id: osdID,
+        uniqueID: osdID,
         preserveViewport: true,
         blendTime: 0.1,
-        alwaysBlend: false
+        alwaysBlend: false,
+        showNavigationControl: false
       });
     },
 
@@ -708,8 +789,8 @@
           zoomLevel:        null
         };
         this.eventEmitter.publish('resetImageManipulationControls.'+this.windowId);
-        this.osd.close();
-        this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+        // this.osd.close();
+        // this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
         _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
       } else {
         _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
