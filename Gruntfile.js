@@ -47,6 +47,8 @@ module.exports = function(grunt) {
 
   // source files
   sources = [
+    'js/src/mirador.js', 
+    'js/src/utils/handlebars.js',
     'js/src/*.js',
     'js/src/viewer/*.js',
     'js/src/manifests/*.js',

@@ -36,7 +36,7 @@
       this.maxPreviewImagesWidth = this.resultsWidth - (this.repoWidth + this.margin + this.metadataWidth + this.margin + this.remainingWidth);
       this.maxPreviewImagesWidth = this.maxPreviewImagesWidth * 0.95;
 
-      Handlebars.registerHelper('pluralize', function(count, singular, plural) {
+      $.Handlebars.registerHelper('pluralize', function(count, singular, plural) {
         if (count === 1) {
           return singular;
         } else {
@@ -246,7 +246,7 @@
       var _this = this;
     },
 
-    template: Handlebars.compile([
+    template: $.Handlebars.compile([
       '<li data-index-number={{index}}>',
       '<div class="repo-image">',
         '{{#if repoImage}}',

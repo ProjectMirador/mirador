@@ -62,10 +62,10 @@
       this.element.css('background-color', '#333').css('background-image','url('+backgroundImage+')').css('background-position','left top')
       .css('background-repeat','repeat');
 
-      //register Handlebars helper
-      Handlebars.registerHelper('t', function(i18n_key) {
+      //register $.Handlebars helper
+      $.Handlebars.registerHelper('t', function(i18n_key) {
         var result = i18next.t(i18n_key);
-        return new Handlebars.SafeString(result);
+        return new $.Handlebars.SafeString(result);
       });
 
       //check all buttons in mainMenu.  If they are all set to false, then don't show mainMenu

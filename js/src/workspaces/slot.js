@@ -272,7 +272,7 @@
     },
 
     // template should be based on workspace type
-    template: Handlebars.compile([
+    template: $.Handlebars.compile([
                                  '<div id="{{slotID}}" class="{{workspaceSlotCls}}">',
                                  '<div class="slotIconContainer">',
                                  // '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="Replace object"><i class="fa fa-table fa-lg fa-fw"></i>',

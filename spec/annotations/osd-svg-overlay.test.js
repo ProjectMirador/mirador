@@ -14,9 +14,9 @@ describe('Overlay', function() {
 
   beforeEach(function() {
     //register Handlebars helper
-    Handlebars.registerHelper('t', function(i18n_key) {
+    Mirador.Handlebars.registerHelper('t', function(i18n_key) {
       var result = i18next.t(i18n_key);
-      return new Handlebars.SafeString(result);
+      return new Mirador.Handlebars.SafeString(result);
     });
 
     var id = 'test';
