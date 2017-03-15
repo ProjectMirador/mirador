@@ -16,7 +16,7 @@
     },
     _attachEvents:function(el){
       var _this = this;
-      jQuery(el).on("shown.bs.modal",function(){
+      el.init(function(){
         // set bigger z-index that one used in qtip
         var zIndex = 20000;
 
@@ -24,7 +24,7 @@
         // workaround because bootstap does not support external configuration for backdrop parent
         jQuery('.modal-backdrop').prependTo(_this.container).css('z-index',zIndex);
       });
-      jQuery(el).on("hidden.bs.modal",function(){
+      jQuery(el).on('hidden.bs.modal',function(){
         jQuery('.modal-backdrop').remove();
       });
     }

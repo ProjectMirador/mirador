@@ -372,7 +372,7 @@
       });
     },
 
-    emptyTemplate: Handlebars.compile([
+    emptyTemplate: $.Handlebars.compile([
       '<ul class="toc">',
       '<li class="leaf-item open">',
       '<h2><span>{{t "noIndex"}}</span></h2>',
@@ -381,7 +381,7 @@
 
     template: function(tplData) {
 
-      var template = Handlebars.compile([
+      var template = $.Handlebars.compile([
         '<ul class="toc">',
         '{{#nestedRangeLevel ranges}}',
         '<li class="{{#if children}}has-child{{else}}leaf-item{{/if}}">',
@@ -398,7 +398,7 @@
 
       var previousTemplate;
 
-      Handlebars.registerHelper('nestedRangeLevel', function(children, options) {
+      $.Handlebars.registerHelper('nestedRangeLevel', function(children, options) {
         var out = '';
 
         if (options.fn !== undefined) {
@@ -413,7 +413,7 @@
         return out;
       });
 
-      Handlebars.registerHelper('tocLevel', function(id, label, level, children) {
+      $.Handlebars.registerHelper('tocLevel', function(id, label, level, children) {
         var caret = '<i class="fa fa-caret-right toc-caret"></i>',
             cert = '<i class="fa fa-certificate star"></i>';
         return '<h' + (level+1) + '><a class="toc-link" data-rangeID="' + id + '">' + caret + cert + '<span>' + label + '</span></a></h' + (level+1) + '>';
