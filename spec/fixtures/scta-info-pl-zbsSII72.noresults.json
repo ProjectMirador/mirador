@@ -1,0 +1,16 @@
+{
+  "resources" : null,
+  "within" : {
+    "total" : 0,
+    "first" : "http://exist.scta.info/exist/apps/scta/iiif/pl-zbsSII72/search?q=notfound&page=1",
+    "last" : "http://exist.scta.info/exist/apps/scta/iiif/pl-zbsSII72/search?q=notfound&page=0",
+    "@type" : "sc:Layer",
+    "@id" : "http://exist.scta.info/exist/apps/scta/iiif/pl-zbsSII72/search?q=notfound"
+  },
+  "@context" : "http://iiif.io/api/search/0/context.json",
+  "startIndex" : 0,
+  "prev" : "http://exist.scta.info/exist/apps/scta/iiif/pl-zbsSII72/search?q=notfound&page=0",
+  "next" : "http://exist.scta.info/exist/apps/scta/iiif/pl-zbsSII72/search?q=notfound&page=1",
+  "@type" : "sc:AnnotationList",
+  "@id" : "http://exist.scta.info/exist/apps/scta/iiif/pl-zbsSII72/search?q=notfound&page=1"
+}

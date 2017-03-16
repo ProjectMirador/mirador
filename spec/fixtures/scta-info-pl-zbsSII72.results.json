@@ -1,0 +1,106 @@
+{
+  "resources" : [ {
+    "resource" : {
+      "@type" : "cnt:ContentAsText",
+      "chars" : "<p>Unde  <span style=\"font-variant: small-caps\">Augustinus </span>\n    <em>Ad Orosium </em> ait: \n            Spiritum sanctum \n              nec genitum nec ingenitum  <span style=\"background-color: yellow;\">fides </span> certa declarat; quia si dixerimus \n              ingenitum, duos patres affirmare videbimur; si autem genitum, \n              duos filios credere culpamur.  \n          Sicut enim solus Filius dicitur \n          genitus, ita et solus Pater dicitur ingenitus, eo quod ab alio non sit. </p>"
+    },
+    "motivation" : "sc:painting",
+    "@type" : "oa:Annotation",
+    "@id" : "http://scta.info/iiif/pl-zbsSII72/search/annotations/pll1d13c4-d1e3486",
+    "on" : "http://scta.info/iiif/pl-zbsSII72/canvas/"
+  }, {
+    "resource" : {
+      "@type" : "cnt:ContentAsText",
+      "chars" : "<p>Ut enim ait  <span style=\"font-variant: small-caps\">Augustinus </span> super eundem locum, exponens \n          illud  <span style=\"font-variant: small-caps\">Apostoli </span> verbum: \n            Ab  <span style=\"font-variant: small-caps\">Apostolo </span> praedicata est eis  <span style=\"background-color: yellow;\">fides </span>, \n              in    qua praedicatione adventum et praesentiam sancti Spiritus senserant, \n              sicut illo tempore in novitate invitationis ad fidem etiam \n              sensibilibus miraculis praesentia sancti Spiritus apparebat, ut in \n               <em>Actibus Apostolorum </em> legitur.  \n          Aperte hic ostendit, quomodo illis \n          Spiritum sanctum Apostolus tribuerit, non utique ipsum mittendo \n          in eos; sed praedicando eis fidem Christi, quam illis recipientibus, \n          quod Spiritus sanctus in eis esset, aliquibus signis visibilibus \n          monstrabatur. Non ergo homines, quantumcumque sancti, dare possunt \n          Spiritum sanctum. </p>"
+    },
+    "motivation" : "sc:painting",
+    "@type" : "oa:Annotation",
+    "@id" : "http://scta.info/iiif/pl-zbsSII72/search/annotations/pll1d14c3-d1e3579",
+    "on" : "http://scta.info/iiif/pl-zbsSII72/canvas/"
+  }, {
+    "resource" : {
+      "@type" : "cnt:ContentAsText",
+      "chars" : "<p>Hoc autem Sanctorum auctoritates negare videntur. Dicit enim \n           <span style=\"font-variant: small-caps\">Augustinus </span> in libro  <em>De spiritu et littera </em>.  Unde est dilectio, \n              nisi unde et ipsa  <span style=\"background-color: yellow;\">fides </span>, id est a Spiritu sancto? Non enim \n              esset in nobis, nisi \n                diffunderetur in cordibus per Spiritum.  \n              Caritas autem Dei dicta est diffundi in cordibus nostris, non qua \n              nos ipse diligit, sed qua nos facit dilectores suos. Sicut iustitia \n              Dei dicitur, qua nos iusti eius munere efficimur; et Domini salus, \n              qua nos salvat; et  <span style=\"background-color: yellow;\">fides </span> Christi, qua nos fideles facit.  \n          His verbis \n          videtur monstrari distinctio inter caritate, qua Deus diligit, et \n          qua nos diligimus. Et sicut iustitia nostra dicitur Dei, non quod \n          ipse sit ea iustus, sed quia ea nos iustos facit, similiter et  <span style=\"background-color: yellow;\">fides </span> \n          et salus; sic videtur dicta caritas Dei, quae est in nobis, non quod \n          ipse ea diligat, sed quia ea nos diligere facit. </p>"
+    },
+    "motivation" : "sc:painting",
+    "@type" : "oa:Annotation",
+    "@id" : "http://scta.info/iiif/pl-zbsSII72/search/annotations/pll1d17c6-d1e3480",
+    "on" : "http://scta.info/iiif/pl-zbsSII72/canvas/"
+  }, {
+    "resource" : {
+      "@type" : "cnt:ContentAsText",
+      "chars" : "<p>Cum ergo ab  <span style=\"font-variant: small-caps\">Apostolo </span> dicitur \n            caritas Dei diffundi in cordibus \n              nostris,  \n          non est dicta caritas Dei, qua diligit nos, sed qua \n          facit nos diligere; id est, non ibi appellatur caritas Dei, eo quod \n          Deus nos ea diligit, sed eo quod nos ea sui dilectores facit. Et \n          quod ea ratione posset dici caritas Dei, quia nos ea diligere facit, \n            \n          ex simili genere locutionis ostenditur; sicut dicitur iustitia Dei, qua \n          nos iustificat, et Domini salus, qua nos salvat, et  <span style=\"background-color: yellow;\">fides </span> Christi, \n          qua nos fideles facit. </p>"
+    },
+    "motivation" : "sc:painting",
+    "@type" : "oa:Annotation",
+    "@id" : "http://scta.info/iiif/pl-zbsSII72/search/annotations/pll1d17c6-d1e3546",
+    "on" : "http://scta.info/iiif/pl-zbsSII72/canvas/"
+  }, {
+    "resource" : {
+      "@type" : "cnt:ContentAsText",
+      "chars" : "<p>Sed aliud est, inquiunt, quod magis urget. Dixit enim  <span style=\"font-variant: small-caps\">Augustinus </span> \n          supra, quod dilectio est a Spiritu sancto, a quo  <span style=\"background-color: yellow;\">fides </span>. \n          Sicut ergo  <span style=\"background-color: yellow;\">fides </span> non est Spiritus sanctus, a quo est, ita nec caritas. \n          Quomodo enim caritas Spiritus sanctus est, si ab ipso est? \n          Nam si ab ipso est, et ipse est, ergo Spiritus sanctus a se ipso est. </p>"
+    },
+    "motivation" : "sc:painting",
+    "@type" : "oa:Annotation",
+    "@id" : "http://scta.info/iiif/pl-zbsSII72/search/annotations/pll1d17c6-d1e3565",
+    "on" : "http://scta.info/iiif/pl-zbsSII72/canvas/"
+  }, {
+    "resource" : {
+      "@type" : "cnt:ContentAsText",
+      "chars" : "<p>Ad quod dicimus: Spiritus sanctus quidem a se ipso non est, \n          sed tamen et a se ipso datur nobis, ut supra dictum est. Dat \n          enim se ipsum nobis Spiritus sanctus. Et ex hoc sensu dictum est, \n          quod caritas ab ipso est in nobis, et tamen ipsa Spiritus sanctus \n          est.  <span style=\"background-color: yellow;\">Fides </span> autem est a Spiritu sancto, et non est Spiritus sanctus, \n          quia donum vel datum solummodo est, non Deus dans. </p>"
+    },
+    "motivation" : "sc:painting",
+    "@type" : "oa:Annotation",
+    "@id" : "http://scta.info/iiif/pl-zbsSII72/search/annotations/pll1d17c6-d1e3571",
+    "on" : "http://scta.info/iiif/pl-zbsSII72/canvas/"
+  }, {
+    "resource" : {
+      "@type" : "cnt:ContentAsText",
+      "chars" : "<p>\n    <span style=\"background-color: yellow;\">Fides </span> enim catholica sicut coaeternas, ita et coaequales tres \n          personas asserit. Aequalis est enim in omnibus Patri Filius, et Patri \n          et Filio Spiritus sanctus; quia ut  <span style=\"font-variant: small-caps\">Augustinus </span> in libro  <em>De \n            fide ad Petrum </em>,   breviter aperiens quomodo intelligatur aequalitas, \n          docet: \n            Nullus horum alium aut praecedit aeternitate, aut \n              excedit magnitudine, aut superat potestate; quia nec Filio nec \n              Spiritu sancto, quantum ad naturae divinae unitatem pertinet, \n              aut anterior aut maior est Pater, nec Filius Spiritu sancto. Aeternum \n              quippe et sine initio est, quod Filius de Patris natura extitit, \n              et aeternum ac sine initio est, quod Spiritus sanctus de natura \n              Patris Filiique procedit. Ob hoc ergo tres unum recte credimus et \n              dicimus Deum, quia una prorsus aeternitas, una immensitas, una \n              naturaliter trium personarum est divinitas. </p>"
+    },
+    "motivation" : "sc:painting",
+    "@type" : "oa:Annotation",
+    "@id" : "http://scta.info/iiif/pl-zbsSII72/search/annotations/pll1d19c1-d1e3480",
+    "on" : "http://scta.info/iiif/pl-zbsSII72/canvas/"
+  }, {
+    "resource" : {
+      "@type" : "cnt:ContentAsText",
+      "chars" : "<p>Unde  <span style=\"font-variant: small-caps\">Ambrosius </span> in II libro  <em>De Trinitate </em> ait: \n            Quo purius niteat  <span style=\"background-color: yellow;\">fides </span>, tripartita videtur derivanda distinctio. Sunt enim \n              nomina quaedam, quae evidenter proprietatem deitatis ostendunt: \n              et sunt quaedam, quae perspicuam divinae maiestatis exprimunt \n              veritatem; alia vero sunt, quae translative et per similitudinem \n              de Deo dicuntur. Proprietatis itaque indicia sunt: generatio, Filius, \n              Verbum et huiusmodi; unitatis vero aeternae; sapientia, virtus, \n              veritas et huiusmodi; similitudinis vero: splendor, character, speculum et huiusmodi. </p>"
+    },
+    "motivation" : "sc:painting",
+    "@type" : "oa:Annotation",
+    "@id" : "http://scta.info/iiif/pl-zbsSII72/search/annotations/pll1d22c1-d1e3528",
+    "on" : "http://scta.info/iiif/pl-zbsSII72/canvas/"
+  }, {
+    "resource" : {
+      "@type" : "cnt:ContentAsText",
+      "chars" : "<p>Unde  <span style=\"font-variant: small-caps\">Augustinus </span>, quid a Graecis vel a Latinis necessitate \n          de ineffabili Trinitate dictum sit aperiens, in VII libro  <em>De Trinitate </em> \n          ait: \n            Loquendi causa de ineffabilibus, ut fari aliquo modo \n              possemus, dictum est a Graecis una essentia, tres substantiae, (id \n              est una usia, tres hypostases; aliter enim Graeci accipiunt substantiam,    \n              quam Latini). A Latinis autem dictum est una essentia vel \n              substantia, tres personae, quia non aliter in sermone nostro, id est \n              Latino, essentia quam substantia solet intelligi. Et ut intelligatur \n              saltem in aenigmate, placuit ita dici, ut cum quaereretur, quod tria \n              sint, aliquid diceretur, quae tria esse  <span style=\"background-color: yellow;\">fides </span> vera pronuntiat, cum \n              et Patrem non dicit esse Filium, et Spiritum sanctum, scilicet Donum \n              Dei, nec Patrem dicit esse, nec Filium. Cum ergo quaeritur, \n              quod tria vel quid tres, conferimus nos ad inveniendum aliquod \n              nomen, quo complectamur haec tria. Neque occurrit animo, quia \n              supereminentia divinitatis usitati eloquii facultatem excedit. Verius \n              enim cogitatur Deus quam dicitur, et verius est quam cogitatur.  Pater ergo et Filius et Spiritus sanctus, quoniam tres sunt, \n              quid tres sint quaeramus, quid commune habeant. Non enim possunt \n              dici tres patres, quoniam tantum Pater ibi Pater est; nec tres \n              filii, cum nec Pater ibi sit Filius, nec Spiritus sanctus; nec tres spiritus \n              sancti, quia Spiritus sanctus propria significatione, qua etiam \n              Donum Dei dicitur, nec Pater est, nec Filius. Quid igitur tres? Si \n              tres personae esse dicuntur, commune est eis id quod persona est.  Certe enim quia Pater est persona, et Filius est persona, et Spiritus \n              sanctus est persona, ideo dicuntur tres personae.  Propterea ergo \n              dicimus tres personas, quia commune est eis id quod persona est. </p>"
+    },
+    "motivation" : "sc:painting",
+    "@type" : "oa:Annotation",
+    "@id" : "http://scta.info/iiif/pl-zbsSII72/search/annotations/pll1d23c2-d1e3504",
+    "on" : "http://scta.info/iiif/pl-zbsSII72/canvas/"
+  }, {
+    "resource" : {
+      "@type" : "cnt:ContentAsText",
+      "chars" : "<p>Ad hoc autem, quod illi dicunt: Cum quaeritur, quid tres, vel \n          quid tria, de essentia quaeritur, quia non invenitur, quid illi tres \n          sint nisi essentia - per hoc volentes nos inducere, ut nomine personae \n          essentiam intelligamus, cum respondemus: tres personas - \n          ita dicimus: Indubitabiliter verum est, quia non invenitur unum \n          aliquid, quod illi tres sint nisi essentia; unum enim sunt illi tres, \n          id est essentia divina. Unde Veritas ait: \n            Ego et Pater unum sumus.  \n          Verumtamen, cum quaeritur, quid tres, vel quid tria, non \n          de essentia quaeritur, nec ibi quid ad essentiam refertur; sed cum \n           <span style=\"background-color: yellow;\">fides </span> catholica tres ese profiteretur, sicut  <span style=\"font-variant: small-caps\">Ioannes </span> in  <em>Epistola \n            canonica </em> ait: \n            Tres sunt, qui testimonium perhibent in caelo,  \n          quaerebatur, quid illi tres essent, id est, an essent tres res, et \n          quae tres res, et quo nomine illae tres res significarentur. Et ideo \n            \n          loquendi necessitate inventum est ad respondendum hoc nomen \n          persona, et dictum est: tres personae. </p>"
+    },
+    "motivation" : "sc:painting",
+    "@type" : "oa:Annotation",
+    "@id" : "http://scta.info/iiif/pl-zbsSII72/search/annotations/pll1d25c2-d1e3548",
+    "on" : "http://scta.info/iiif/pl-zbsSII72/canvas/"
+  } ],
+  "within" : {
+    "total" : 21,
+    "first" : "http://exist.scta.info/exist/apps/scta/iiif/pl-zbsSII72/search?q=fides&page=1",
+    "last" : "http://exist.scta.info/exist/apps/scta/iiif/pl-zbsSII72/search?q=fides&page=3",
+    "@type" : "sc:Layer",
+    "@id" : "http://exist.scta.info/exist/apps/scta/iiif/pl-zbsSII72/search?q=fides"
+  },
+  "@context" : "http://iiif.io/api/search/0/context.json",
+  "startIndex" : 0,
+  "prev" : "http://exist.scta.info/exist/apps/scta/iiif/pl-zbsSII72/search?q=fides&page=3",
+  "next" : "http://exist.scta.info/exist/apps/scta/iiif/pl-zbsSII72/search?q=fides&page=2",
+  "@type" : "sc:AnnotationList",
+  "@id" : "http://exist.scta.info/exist/apps/scta/iiif/pl-zbsSII72/search?q=fides&page=1"
+}
