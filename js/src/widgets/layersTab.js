@@ -59,7 +59,6 @@
     canvasIdUpdated: function(event, canvasID) {
       var localState = this.localState();
       localState.canvasID = canvasID;
-      console.log(canvasID);
 
       this.localState(localState);
     },
