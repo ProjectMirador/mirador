@@ -140,7 +140,7 @@
           _this.element.find('#manifest-search').keyup();
         },
 
-        template: Handlebars.compile([
+        template: $.Handlebars.compile([
           '<div id="manifest-select-menu">',
           '<div class="container">',
             '<div class="manifest-panel-controls">',
