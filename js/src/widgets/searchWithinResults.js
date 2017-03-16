@@ -86,7 +86,9 @@ $.SearchWithinResults.prototype = {
         jQuery('.search-results-count').html("<hr/><p>No results</p><hr/>");
       }
     })
-    .fail()
+    .fail(function() {
+        jQuery('.search-results-count').html("<hr/><p>No results</p><hr/>");
+    })
     .always();
   },
 
@@ -163,7 +165,8 @@ $.SearchWithinResults.prototype = {
     var _this = this;
     var pager = this.element.find('.search-results-pager');
 
-    if (!this.needsPager(searchResults)) {
+    // HACK: pager.pagination will be undefined until canvasID are set properly
+    if (!this.needsPager(searchResults) || !pager.pagination) {
       return;
     }
 
