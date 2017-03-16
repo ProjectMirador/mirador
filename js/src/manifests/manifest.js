@@ -249,8 +249,10 @@
      */
     getCanvasLabel: function(canvasId) {
       console.assert(canvasId && canvasId !== '', "No canvasId was specified.");
-      var canvas = this.canvasMap[canvasId.split('#')[0]];
-      return canvas ? canvas.label : undefined;
+      if (canvasId.indexOf('#') >= 0) {
+        var canvas = this.canvasMap[canvasId.split('#')[0]];
+        return canvas ? canvas.label : undefined;
+      }
     }
   };
 
