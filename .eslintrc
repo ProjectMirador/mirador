@@ -5,5 +5,13 @@
     "jQuery": true
   },
   "rules": {
+    "no-param-reassign": [
+      2, {
+        "props": true,
+        "ignorePropertyModificationsFor": [
+          "$"
+        ]
+      }
+    ]
   }
 }
