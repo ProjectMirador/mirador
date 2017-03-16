@@ -650,6 +650,11 @@
         alwaysBlend: false,
         showNavigationControl: false
       });
+
+      console.log(canvasModel.getMainImages());
+      canvasModel.getMainImages().forEach(function(imageResource) {
+        _this.loadImage(null, imageResource);
+      });
     },
 
     createOpenSeadragonInstance: function(imageUrl) {
