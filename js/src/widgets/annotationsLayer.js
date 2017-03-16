@@ -24,8 +24,6 @@
     init: function() {
       var _this = this;
       _this.eventEmitter.unsubscribe(('modeChange.' + _this.windowId));
-      _this.eventEmitter.unsubscribe(('slotLeave.' + _this.windowId));
-      _this.eventEmitter.unsubscribe(('slotEnter.' + _this.windowId));
 
       this.createStateMachine();
       this.createRenderer();
@@ -44,18 +42,6 @@
       _this.eventEmitter.subscribe('annotationListLoaded.' + _this.windowId, function(event) {
         _this.annotationsList = _this.state.getWindowAnnotationsList(_this.windowId);
         _this.updateRenderer();
-      });
-
-      _this.eventEmitter.subscribe('slotLeave.' + _this.windowId, function(event, eventData) {
-        _this.layerState.defaultState();
-        _this.modeSwitch();
-      });
-
-      _this.eventEmitter.subscribe('slotEnter.' + _this.windowId, function(event, eventData) {
-        if (_this.element.showAnno) {
-          _this.layerState.defaultState();
-          _this.modeSwitch();
-        }
       });
     },
 
