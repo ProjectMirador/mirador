@@ -262,7 +262,7 @@
         _this.eventEmitter.publish('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + _this.windowId);
       });
 
-      //Annotation specific controls
+      // Annotation specific controls
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
         var shape = jQuery(this).find('.material-icons').html();
         if (_this.hud.annoState.current === 'pointer') {
@@ -533,7 +533,6 @@
       }
     },
     removeImage: function() {
-      console.log('remove');
     },
     updateImageOpacity: function(event, imageResource) {
       if(imageResource.osdTiledImage) {
@@ -651,8 +650,7 @@
         showNavigationControl: false
       });
 
-      console.log(canvasModel.getMainImages());
-      canvasModel.getMainImages().forEach(function(imageResource) {
+      canvasModel.getVisibleImages().forEach(function(imageResource) {
         _this.loadImage(null, imageResource);
       });
     },
