@@ -90,10 +90,11 @@
 
       _this.imagesList = _this.manifest.getCanvases();
       if (!_this.canvasID) {
+        // By default, the first in the sequence is the selected Canvas
         _this.canvasID = _this.imagesList[0]['@id'];
-        var canvasModel = _this.manifest.canvases[_this.canvasID];
-        canvasModel.show(); // This causes all "main" (non-choice) images to be requested.
       }
+
+      _this.manifest.canvases[_this.canvasID].show(); // Causes all default images to show on the canvas
 
       this.annoEndpointAvailable = !jQuery.isEmptyObject(_this.state.getStateProperty('annotationEndpoint'));
       if (!this.canvasControls.annotations.annotationLayer) {
@@ -658,7 +659,7 @@
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
       this.updateSidePanel();
-      _this.eventEmitter.publish("focusUpdated" + _this.id, focusState);
+      // _this.eventEmitter.publish("focusUpdated" + _this.id, focusState);
       _this.eventEmitter.publish("windowUpdated", {
         id: _this.id,
         viewType: _this.viewType,

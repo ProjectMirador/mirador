@@ -27,7 +27,6 @@
       }, true);
 
       this.render(this.localState());
-      this.loadTabComponents();
       this.bindEvents();
       this.listenForActions();
     },
@@ -42,11 +41,6 @@
       }
 
       return this.layerTabState;
-    },
-
-    loadTabComponents: function() {
-      var _this = this;
-
     },
 
     tabStateUpdated: function(visible) {
@@ -108,9 +102,11 @@
       _this.eventEmitter.subscribe('image-opacity-updated', _this.updateImageResourceOpacity.bind(_this));
 
       _this.eventEmitter.subscribe('focusUpdated' + _this.windowId, function(event, focus) {
-        console.log('changed views');
+
+
         // update the disabled state of the layersTab
         // since it cannot be used in overview mode
+        // but is visible/available in image mode.
         _this.imageFocusUpdated(focus);
       });
     },
