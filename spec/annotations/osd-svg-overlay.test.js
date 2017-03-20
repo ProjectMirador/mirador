@@ -1,5 +1,3 @@
-paper.install(window);
-
 describe('Overlay', function() {
 
   function getEvent(delta, point, lastPoint, event) {
@@ -79,23 +77,23 @@ describe('Overlay', function() {
 
     var state = new Mirador.SaveController({eventEmitter: this.eventEmitter}); // TODO should stub this
 
-     state.getStateProperty = function(key) {
-     if (key === 'drawingToolsSettings') {
-       return {
-         'doubleClickReactionTime': 300,
-         'strokeColor': 'deepSkyBlue',
-         'fillColor': 'deepSkyBlue',
-         'fillColorAlpha': 0.0
-       };
-     }
-     if (key === 'availableAnnotationDrawingTools') {
-       return [];
-     }
-     if (key === 'availableExternalCommentsPanel') {
-       return false;
-     }
-       return null;
+    state.getStateProperty = function(key) {
+    if (key === 'drawingToolsSettings') {
+     return {
+       'doubleClickReactionTime': 300,
+       'strokeColor': 'deepSkyBlue',
+       'fillColor': 'deepSkyBlue',
+       'fillColorAlpha': 0.0
      };
+    }
+    if (key === 'availableAnnotationDrawingTools') {
+     return [];
+    }
+    if (key === 'availableExternalCommentsPanel') {
+     return false;
+    }
+     return null;
+    };
 
     this.overlay = new Mirador.Overlay(this.viewerMock, this.windowObjMock.viewer.id, this.windowObjMock.windowId, state, new MockEventEmitter(this.eventEmitter));
     this.overlay.annotationUtils = new AnnotationUtilsStub();
@@ -534,6 +532,42 @@ describe('Overlay', function() {
     this.overlay.removeMouseTool();
     expect(paperScope.tools.length).toEqual(0);
     expect(jQuery.data(document.body, key)).toBeUndefined();
+  });
+
+  describe("When there are two overlays: ", function() {
+
+    beforeEach(function() {
+      var state = new Mirador.SaveController({eventEmitter: this.eventEmitter});
+
+      this.overlay2 = new Mirador.Overlay(this.viewerMock, this.windowObjMock.viewer.id, this.windowObjMock.windowId, state, new MockEventEmitter(this.eventEmitter));
+      this.overlay2.annotationUtils = new AnnotationUtilsStub();
+    });
+
+    afterEach(function() {
+      delete this.overlay2;
+    });
+
+    it("creates different paperScopes for each overlay", function() {
+      expect(this.overlay.paperScope._id).not.toEqual(this.overlay2.paperScope._id);
+    });
+
+    it("the global paper object should be set to the most recently instantiated paperScope", function() {
+      // since overlay2 was created most recently, the global paper object should be set to the paperScope of overlay2
+      expect(paper._id).toEqual(this.overlay2.paperScope._id);
+    });
+
+    it("correctly sets the global paper object when an overlay's setMouseTool method is called", function(){
+      // make sure the global paper object is set to the paperScope of overlay2
+      expect(paper._id).toEqual(this.overlay2.paperScope._id);
+      // call setMouseTool on the first overlay
+      this.overlay.setMouseTool();
+      // make sure the global paper object is set to the paperScope of the first overlay
+      expect(paper._id).toEqual(this.overlay.paperScope._id);
+      // call setMouseTool on overlay2 and check the global paper object again
+      this.overlay2.setMouseTool();
+      expect(paper._id).toEqual(this.overlay2.paperScope._id);
+      expect(paper._id).not.toEqual(this.overlay.paperScope._id);
+    });
   });
 
 });
