@@ -307,7 +307,12 @@
       }));
 
       _this.events.push(_this.eventEmitter.subscribe('SET_CURRENT_CANVAS_ID.' + this.id, function(event, canvasID) {
-        _this.setCurrentCanvasID(canvasID);
+        if (typeof canvasID === "string") {
+          _this.setCurrentCanvasID(canvasID);
+        } else {
+          _this.setNextCanvasBounds(canvasID.bounds);
+          _this.setCurrentCanvasID(canvasID.canvasID);
+        }
       }));
 
       _this.events.push(_this.eventEmitter.subscribe('REMOVE_CLASS.' + this.id, function(event, className) {
@@ -691,10 +696,13 @@
           canvasControls: this.canvasControls,
           annotationState : this.canvasControls.annotations.annotationState
         });
-      } else {
-        var view = this.focusModules.ImageView;
-        view.updateImage(canvasID);
-      }
+        } else {
+          var view = this.focusModules.ImageView;
+          if (this.boundsToFocusOnNextOpen) {
+            view.boundsToFocusOnNextOpen = this.boundsToFocusOnNextOpen;
+          }
+          view.updateImage(canvasID);
+        }
       this.toggleFocus('ImageView', 'ImageView');
     },
 
@@ -765,6 +773,12 @@
           break;
       }
       _this.eventEmitter.publish(('currentCanvasIDUpdated.' + _this.id), canvasID);
+    },
+
+    setNextCanvasBounds: function(bounds) {
+      if (bounds) {
+        this.boundsToFocusOnNextOpen = bounds;
+      }
     },
 
     replaceWindow: function(newSlotAddress, newElement) {
