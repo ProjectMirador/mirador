@@ -1,0 +1,122 @@
+{
+  "@context": "http://iiif.io/api/search/0/context.json",
+  "@id": "http://wellcomelibrary.org/annoservices/search/b18035978?q=figures",
+  "@type": "sc:AnnotationList",
+  "within": {
+    "@type": "sc:Layer",
+    "total": 11
+  },
+  "startIndex": 0,
+  "resources": [
+    {
+      "@id": "http://wellcomelibrary.org/iiif/b18035978/annos/searchResults/a25h0r1220,2462,126,44",
+      "@type": "oa:Annotation",
+      "motivation": "sc:painting",
+      "resource": {
+        "@type": "cnt:ContentAsText",
+        "chars": "figures"
+      },
+      "on": "http://wellcomelibrary.org/iiif/b18035978/canvas/c25#xywh=1220,2462,126,44"
+    },
+    {
+      "@id": "http://wellcomelibrary.org/iiif/b18035978/annos/searchResults/a26h1r1495,375,150,58",
+      "@type": "oa:Annotation",
+      "motivation": "sc:painting",
+      "resource": {
+        "@type": "cnt:ContentAsText",
+        "chars": "figures"
+      },
+      "on": "http://wellcomelibrary.org/iiif/b18035978/canvas/c26#xywh=1495,375,150,58"
+    },
+    {
+      "@id": "http://wellcomelibrary.org/iiif/b18035978/annos/searchResults/a27h2r708,893,145,56",
+      "@type": "oa:Annotation",
+      "motivation": "sc:painting",
+      "resource": {
+        "@type": "cnt:ContentAsText",
+        "chars": "figures"
+      },
+      "on": "http://wellcomelibrary.org/iiif/b18035978/canvas/c27#xywh=708,893,145,56"
+    },
+    {
+      "@id": "http://wellcomelibrary.org/iiif/b18035978/annos/searchResults/a29h3r520,370,145,56",
+      "@type": "oa:Annotation",
+      "motivation": "sc:painting",
+      "resource": {
+        "@type": "cnt:ContentAsText",
+        "chars": "figures"
+      },
+      "on": "http://wellcomelibrary.org/iiif/b18035978/canvas/c29#xywh=520,370,145,56"
+    },
+    {
+      "@id": "http://wellcomelibrary.org/iiif/b18035978/annos/searchResults/a32h4r1424,1867,148,58",
+      "@type": "oa:Annotation",
+      "motivation": "sc:painting",
+      "resource": {
+        "@type": "cnt:ContentAsText",
+        "chars": "figures"
+      },
+      "on": "http://wellcomelibrary.org/iiif/b18035978/canvas/c32#xywh=1424,1867,148,58"
+    },
+    {
+      "@id": "http://wellcomelibrary.org/iiif/b18035978/annos/searchResults/a33h5r316,1061,127,44",
+      "@type": "oa:Annotation",
+      "motivation": "sc:painting",
+      "resource": {
+        "@type": "cnt:ContentAsText",
+        "chars": "figures"
+      },
+      "on": "http://wellcomelibrary.org/iiif/b18035978/canvas/c33#xywh=316,1061,127,44"
+    },
+    {
+      "@id": "http://wellcomelibrary.org/iiif/b18035978/annos/searchResults/a48h6r1100,631,160,58",
+      "@type": "oa:Annotation",
+      "motivation": "sc:painting",
+      "resource": {
+        "@type": "cnt:ContentAsText",
+        "chars": "figures,"
+      },
+      "on": "http://wellcomelibrary.org/iiif/b18035978/canvas/c48#xywh=1100,631,160,58"
+    },
+    {
+      "@id": "http://wellcomelibrary.org/iiif/b18035978/annos/searchResults/a48h7r1321,2670,128,46",
+      "@type": "oa:Annotation",
+      "motivation": "sc:painting",
+      "resource": {
+        "@type": "cnt:ContentAsText",
+        "chars": "figures"
+      },
+      "on": "http://wellcomelibrary.org/iiif/b18035978/canvas/c48#xywh=1321,2670,128,46"
+    },
+    {
+      "@id": "http://wellcomelibrary.org/iiif/b18035978/annos/searchResults/a51h8r512,2025,146,57",
+      "@type": "oa:Annotation",
+      "motivation": "sc:painting",
+      "resource": {
+        "@type": "cnt:ContentAsText",
+        "chars": "figures"
+      },
+      "on": "http://wellcomelibrary.org/iiif/b18035978/canvas/c51#xywh=512,2025,146,57"
+    },
+    {
+      "@id": "http://wellcomelibrary.org/iiif/b18035978/annos/searchResults/a55h9r979,383,145,57",
+      "@type": "oa:Annotation",
+      "motivation": "sc:painting",
+      "resource": {
+        "@type": "cnt:ContentAsText",
+        "chars": "figures"
+      },
+      "on": "http://wellcomelibrary.org/iiif/b18035978/canvas/c55#xywh=979,383,145,57"
+    },
+    {
+      "@id": "http://wellcomelibrary.org/iiif/b18035978/annos/searchResults/a56h10r1340,2244,128,45",
+      "@type": "oa:Annotation",
+      "motivation": "sc:painting",
+      "resource": {
+        "@type": "cnt:ContentAsText",
+        "chars": "figures"
+      },
+      "on": "http://wellcomelibrary.org/iiif/b18035978/canvas/c56#xywh=1340,2244,128,45"
+    }
+  ]
+}
