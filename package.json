@@ -45,7 +45,8 @@
   "scripts": {
     "start": "./node_modules/.bin/grunt serve",
     "test": "./node_modules/.bin/karma start ./karma.conf.js",
-    "travis": "./node_modules/.bin/grunt ci --verbose --force & npm run test"
+    "travis": "./node_modules/.bin/grunt ci --verbose --force & npm run test",
+    "update_demo": "./bin/update_demo.sh"
   },
   "dependencies": {
     "bootbox": "^4.4.0",
