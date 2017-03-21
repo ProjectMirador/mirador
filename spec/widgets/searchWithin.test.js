@@ -7,18 +7,19 @@ describe('Search tab', function() {
 
     this.searchURI = "/search?q="
     this.eventEmitter = new Mirador.EventEmitter();
-    this.jsonLd = getJSONFixture('scta-info-pl-zbsSII72.json');
-    this.results = getJSONFixture('scta-info-pl-zbsSII72.results.json');
+    this.jsonLd = getJSONFixture('searchManifest.json');
+    this.results = getJSONFixture('searchManifest.results.json');
     this.manifest = new Mirador.Manifest(null, null, this.jsonLd);
     this.jsonLdNoSearch = getJSONFixture('BNF-condorcet-florus-dispersus-manifest.json');
-    this.noResults = getJSONFixture('scta-info-pl-zbsSII72.noresults.json');
+    this.noResults = getJSONFixture('searchManifest.noresults.json');
     this.manifestNoSearch = new Mirador.Manifest(null, null, this.jsonLdNoSearch);
     this.sandbox = sandbox();
+    this.windowId = '380c9e54-7561-4010-a99f-f132f5dc13fd';
     this.createSearchTab = function(manifest) {
       return new Mirador.SearchTab({
         manifest: manifest,
         appendTo: _this.sandbox,
-        windowId: 'dummyID',
+        windowId: this.windowId,
         canvasID: 1234,
         eventEmitter: _this.eventEmitter
       });
@@ -97,6 +98,23 @@ describe('Search tab', function() {
       this.sandbox.find('#search-within-form input.js-query').val('notfound');
       this.sandbox.find('#search-within-form').trigger('submit');
       expect(this.sandbox.find('.search-result')).not.toExist();
+    });
+
+    it('should allow clicking on results after searching for some text', function() {
+      this.sandbox.find('#search-within-form input.js-query').val('found');
+      this.sandbox.find('#search-within-form').trigger('submit');
+      var hit = this.sandbox.find('.result-paragraph').first();
+      expect(hit.trigger.bind(hit, 'click')).not.toThrow();
+    });
+
+    it('should navigate to a specific canvas after clicking on a search result', function() {
+      spyOn(this.eventEmitter, 'publish').and.callThrough();
+      this.sandbox.find('#search-within-form input.js-query').val('found');
+      this.sandbox.find('#search-within-form').trigger('submit');
+      var hit = this.sandbox.find('.result-paragraph').first(),
+          canvasId = hit.attr('data-canvasid');
+      hit.trigger('click');
+      expect(this.eventEmitter.publish).toHaveBeenCalledWith('SET_CURRENT_CANVAS_ID.' + this.windowId, canvasId);
     });
   });
 });
