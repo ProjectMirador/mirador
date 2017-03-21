@@ -255,7 +255,7 @@
       });
     },
 
-    annotationTemplate: Handlebars.compile([
+    annotationTemplate: $.Handlebars.compile([
                                    '{{#if showEdit}}',
                                    '<a class="mirador-osd-pointer-mode hud-control selected" title="{{t "pointerTooltip"}}">',
                                    '<i class="fa fa-mouse-pointer"></i>',
@@ -297,7 +297,7 @@
                                    '{{/if}}'
     ].join('')),
 
-    manipulationTemplate: Handlebars.compile([
+    manipulationTemplate: $.Handlebars.compile([
                                    '{{#if showRotate}}',
                                    '<a class="hud-control mirador-osd-rotate-right" title="{{t "rotateRightTooltip"}}">',
                                    '<i class="fa fa-lg fa-rotate-right"></i>',
@@ -346,7 +346,7 @@
     ].join('')),
 
     // for accessibility, make sure to add aria-labels just like above
-    editorTemplate: Handlebars.compile([
+    editorTemplate: $.Handlebars.compile([
                                  '<div class="mirador-osd-context-controls hud-container">',
                                    '<a class="mirador-osd-back hud-control" role="button">',
                                    '<i class="fa fa-lg fa-arrow-left"></i>',

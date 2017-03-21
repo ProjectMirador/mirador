@@ -929,7 +929,7 @@
     },
 
     // template should be based on workspace type
-    template: Handlebars.compile([
+    template: $.Handlebars.compile([
                                  '<div class="window">',
                                  '<div class="manifest-info">',
                                  '<div class="window-manifest-navigation">',

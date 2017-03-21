@@ -213,7 +213,7 @@
       }
     },
 
-    template: Handlebars.compile([
+    template: $.Handlebars.compile([
       '<div class="tabContentArea">',
       '<ul class="tabGroup">',
       '</ul>',

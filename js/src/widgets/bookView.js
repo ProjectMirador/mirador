@@ -78,7 +78,7 @@
       }
     },
 
-    template: Handlebars.compile([
+    template: $.Handlebars.compile([
                                  '<div class="book-view">',
                                  '</div>'
     ].join('')),
