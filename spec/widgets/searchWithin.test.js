@@ -107,14 +107,20 @@ describe('Search tab', function() {
       expect(hit.trigger.bind(hit, 'click')).not.toThrow();
     });
 
-    it('should navigate to a specific canvas after clicking on a search result', function() {
+    it('should navigate to a specific canvas and bounds after clicking on a search result', function() {
       spyOn(this.eventEmitter, 'publish').and.callThrough();
       this.sandbox.find('#search-within-form input.js-query').val('found');
       this.sandbox.find('#search-within-form').trigger('submit');
       var hit = this.sandbox.find('.result-paragraph').first(),
-          canvasId = hit.attr('data-canvasid');
+          canvasID = hit.attr('data-canvasid'),
+          coordinates = hit.attr('data-coordinates'),
+          xywh = coordinates && coordinates.split('=')[1].split(',').map(Number),
+          bounds = xywh && {x: xywh[0], y: xywh[1], width: xywh[2], height: xywh[3]};
       hit.trigger('click');
-      expect(this.eventEmitter.publish).toHaveBeenCalledWith('SET_CURRENT_CANVAS_ID.' + this.windowId, canvasId);
+      expect(this.eventEmitter.publish).toHaveBeenCalledWith('SET_CURRENT_CANVAS_ID.' + this.windowId, {
+        "canvasID": canvasID,
+        "bounds": bounds
+      });
     });
   });
 });
