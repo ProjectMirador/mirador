@@ -254,9 +254,8 @@ $.SearchWithinResults.prototype = {
       canvaslabel: canvaslabel,
       resulttext: annotation.resource.chars
     };
-
-
   },
+
   getSearchAnnotations: function(searchResults) {
     var _this = this;
     tplData = [];
@@ -277,15 +276,6 @@ $.SearchWithinResults.prototype = {
     }
   },
 
-  //TODO: getHits is mostly working, but the when you click on a
-  //hit it doesn't take you to the correct canvas
-
-  //use the this manifest as test data:
-  //http://wellcomelibrary.org/iiif/b18035978/manifest
-  // here are examples search results for this manifest
-  ///http://wellcomelibrary.org/annoservices/search/b18035978?q=morality
-
-
   getHits: function(searchResults) {
     var _this = this;
     tplData = [];
@@ -294,34 +284,32 @@ $.SearchWithinResults.prototype = {
       //note that at present it is only retrieving the first annotation
       //but a hit annotation property takes an array and could have more than one
       //annotation -- its not a very common case but a possibility.
-      var annotation = hit.annotations[0];
-      //canvases could come back as an array
-      var canvases = _this.getHitResources(searchResults, annotation);
+      var annotation = hit.annotations[0],
+        //canvases could come back as an array
+        resource = _this.getHitResources(searchResults, annotation)[0],
+        canvasLabel = _this.getLabel(resource),
+        canvasID = resource && resource.on;
 
-      var resource = canvases[0];
-      var canvasid = resource;
-      var canvaslabel = _this.getLabel(resource);
-
-      if (!canvaslabel) {   // Do not add this result if no label is found
+      // Do not add this result if no label is found
+      if (!canvasLabel) {
         return;
       }
 
       // If you have the full annotation, set ID and label appropriately
-      if (typeof canvasid === 'object') {
-        canvasid = resource.on['@id'];
+      if (typeof canvasID === 'object') {
+        canvasID = resource.on['@id'];
       }
 
       // Extract coordinates if necessary
-      var id_parts = _this.splitBaseUrlAndCoordinates(canvasid);
+      var canvasIDParts = _this.splitBaseUrlAndCoordinates(canvasID);
 
-      resultobject = {
-        canvasid: id_parts.base,
-        coordinates: id_parts.coords,
-        canvaslabel: canvaslabel,
+      resultObject = {
+        canvasid: canvasIDParts.base,
+        coordinates: canvasIDParts.coords,
+        canvaslabel: canvasLabel,
         hit: hit      // TODO must handle different results structures, see IIIF search spec for different responses
       };
-
-      tplData.push(resultobject);
+      tplData.push(resultObject);
     });
     return tplData;
   },
@@ -406,7 +394,7 @@ $.SearchWithinResults.prototype = {
     //thie miniAnnotatList attempted to do this, but is no longer working
     //it needs to be replaced by a new strategy.
 
-    this.element.find('.js-show-canvas').on("click", function() {
+    this.element.find('.js-show-canvas').on("click", function(event) {
       event.stopPropagation();
 
       var canvasid = jQuery(this).attr('data-canvasid');
