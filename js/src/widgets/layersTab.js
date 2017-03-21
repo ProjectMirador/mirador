@@ -65,6 +65,13 @@
     },
 
     updateImageResourceStatus: function(event, imageResource) {
+      var _this = this;
+
+      ['loaded', 'requested', 'initialized', 'drawn'].forEach(function(statusString){
+        _this.element.find('.layers-list-item[data-imageid="'+ imageResource.id + '"]').removeClass(statusString);
+      });
+
+      this.element.find('.layers-list-item[data-imageid="'+ imageResource.id + '"]').addClass(imageResource.getStatus());
     },
     showImageResource: function(event, imageResource) {
       this.element.find('.visibility-toggle[data-imageid="'+ imageResource.id + '"]').prop('checked', true);
@@ -96,7 +103,7 @@
       });
 
       _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, _this.canvasIdUpdated.bind(_this));
-      // _this.eventEmitter.subscribe('image-needed, image-status-updated', _this.updateImageResourceStatus.bind(_this));
+      _this.eventEmitter.subscribe('image-status-updated', _this.updateImageResourceStatus.bind(_this));
       _this.eventEmitter.subscribe('image-show', _this.showImageResource.bind(_this));
       _this.eventEmitter.subscribe('image-hide', _this.hideImageResource.bind(_this));
       _this.eventEmitter.subscribe('image-opacity-updated', _this.updateImageResourceOpacity.bind(_this));
@@ -117,11 +124,14 @@
       this.element.find('img').on('load', function(event) {
         // fades in thumbs when they finish loading.
         jQuery(this).addClass('loaded');
+        jQuery(this).closest('.thumb-container').removeClass('awaiting-thumbnail');
       });
 
       this.element.find('img').on('error', function(event) {
         // prevents failed images from showing.
         jQuery(this).addClass('failed');
+        jQuery(this).closest('.thumb-container').removeClass('awaiting-thumbnail');
+        jQuery(this).closest('.thumb-container').addClass('thumb-failed');
       });
 
       this.element.on('input', '.opacity-slider', function(event) {
@@ -130,6 +140,7 @@
 
         eventedImageResource.setOpacity(event.currentTarget.value/100);
       });
+
       this.element.on('change', '.visibility-toggle', function(event) {
         var canvasModel = _this.manifest.canvases[_this.localState().canvasID],
             eventedImageResource = canvasModel.getImageById(event.currentTarget.attributes['data-imageid'].nodeValue);
@@ -188,10 +199,13 @@
       '{{#if hasLayers}}',
       '<ul class="layers-listing">',
       '{{#each layers}}',
-      '<li class="layers-list-item {{loadingStatus}}">',
+      '<li class="layers-list-item {{loadingStatus}}" data-imageid="{{imageId}}">',
       '<h4>{{this.title}}</h4>',
-      '<div class="thumb-container">',
-      '<img class="layer-thumb" src="{{url}}">',
+      '<div class="thumb-container awaiting-thumbnail">',
+      '<img class="layer-thumb" src="{{url}}" alt="{{canvasTitle}} title="{{canvasTitle}}">',
+      '<span class="spinner"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></span>',
+      '<span class="failed"><i class="fa fa-ban fa-3x fa-fw"></i></span>',
+      '<span class="thumb-failed"><i class="fa fa-picture-o fa-3x fa-fw"></i></span>',
       '</div>',
       '<form>',
       '<div>',

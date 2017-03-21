@@ -650,7 +650,10 @@
         showNavigationControl: false
       });
 
+      console.log(canvasModel.getVisibleImages());
       canvasModel.getVisibleImages().forEach(function(imageResource) {
+        console.log(imageResource);
+        window.imageResource = imageResource;
         _this.loadImage(null, imageResource);
       });
     },
