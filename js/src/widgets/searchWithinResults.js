@@ -397,8 +397,10 @@ $.SearchWithinResults.prototype = {
     this.element.find('.js-show-canvas').on("click", function(event) {
       event.stopPropagation();
 
-      var canvasid = jQuery(this).attr('data-canvasid');
-      var coordinates = jQuery(this).attr('data-coordinates');
+      var canvasid = jQuery(this).attr('data-canvasid'),
+          coordinates = jQuery(this).attr('data-coordinates'),
+          xywh = coordinates && coordinates.split('=')[1].split(',').map(Number),
+          bounds = xywh && {x: xywh[0], y: xywh[1], width: xywh[2], height: xywh[3]};
       jQuery(".result-wrapper").css("background-color", "inherit");
       jQuery(this).parent().css("background-color", "lightyellow");
       //if there was more than one annotation
@@ -415,7 +417,11 @@ $.SearchWithinResults.prototype = {
         "on": canvasid + (coordinates ? "#" + coordinates : '')
         }];
       //_this.parent.annotationsList = miniAnnotationList;
-      _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasid);
+      var options = {
+        "canvasID": canvasid,
+        "bounds": bounds
+      };
+      _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, options);
     });
   },
 
