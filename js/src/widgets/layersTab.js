@@ -130,6 +130,7 @@
 
         eventedImageResource.setOpacity(event.currentTarget.value/100);
       });
+
       this.element.on('change', '.visibility-toggle', function(event) {
         var canvasModel = _this.manifest.canvases[_this.localState().canvasID],
             eventedImageResource = canvasModel.getImageById(event.currentTarget.attributes['data-imageid'].nodeValue);
@@ -191,7 +192,7 @@
       '<li class="layers-list-item {{loadingStatus}}">',
       '<h4>{{this.title}}</h4>',
       '<div class="thumb-container">',
-      '<img class="layer-thumb" src="{{url}}">',
+      '<img class="layer-thumb" src="{{url}}" alt="{{canvasTitle}} title="{{canvasTitle}}">',
       '</div>',
       '<form>',
       '<div>',
