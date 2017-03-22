@@ -50,7 +50,7 @@ module.exports = function(grunt) {
 
   // source files
   sources = [
-    'js/src/mirador.js', 
+    'js/src/mirador.js',
     'js/src/utils/handlebars.js',
     'js/src/*.js',
     'js/src/viewer/*.js',
@@ -222,7 +222,7 @@ module.exports = function(grunt) {
           'locales/*/*.json',
           'images/*',
           'css/*.css',
-          'css/mirador/**/*.less',
+          'css/mirador.less/**/*.less',
           'index.html'
         ],
         tasks: 'dev_build'
