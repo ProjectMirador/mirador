@@ -38,6 +38,8 @@ module.exports = function(config) {
       'node_modules/sinon/pkg/sinon.js',
       'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
       // app
+      'js/src/mirador.js', 
+      'js/src/utils/handlebars.js',
       'js/src/*.js',
       'js/src/viewer/*.js',
       'js/src/manifests/*.js',

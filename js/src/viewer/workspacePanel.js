@@ -111,7 +111,7 @@
       _this.hide();
     },
 
-    template: Handlebars.compile([
+    template: $.Handlebars.compile([
                                  '<div id="workspace-select-menu">',
                                  '<h1>{{t "changeLayout"}}</h1>',
                                  '<h3 class="grid-text"></h3>',

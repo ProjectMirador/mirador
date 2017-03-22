@@ -112,7 +112,7 @@
             });
         },
 
-        template: Handlebars.compile([
+        template: $.Handlebars.compile([
         '{{#if userLogo}}',
           '<ul class="user-logo {{mainMenuCls}}">',
             '{{userlogo userLogo}}',
@@ -244,14 +244,14 @@
         }
     };
 
-    Handlebars.registerHelper('userbtns', function (userButtons) {
-        return new Handlebars.SafeString(
+    $.Handlebars.registerHelper('userbtns', function (userButtons) {
+        return new $.Handlebars.SafeString(
             jQuery('<ul class="user-buttons ' + this.mainMenuCls +'"></ul>').append(processUserButtons(userButtons)).get(0).outerHTML
         );
     });
 
-    Handlebars.registerHelper('userlogo', function (userLogo) {
-        return new Handlebars.SafeString(
+    $.Handlebars.registerHelper('userlogo', function (userLogo) {
+        return new $.Handlebars.SafeString(
             processUserBtn(userLogo).get(0).outerHTML
         );
     });
