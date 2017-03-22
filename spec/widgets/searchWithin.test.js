@@ -122,5 +122,55 @@ describe('Search tab', function() {
         "bounds": bounds
       });
     });
+
+    it('should show annotations when a search result is linked to more than one', function() {
+      this.sandbox.find('#search-within-form input.js-query').val('found');
+      this.sandbox.find('#search-within-form').trigger('submit');
+      expect(this.sandbox.find('.search-annotation').first()).toExist();
+    });
+
+    it('should allow clicking on annotations when a search result is linked to more than one', function() {
+      this.sandbox.find('#search-within-form input.js-query').val('found');
+      this.sandbox.find('#search-within-form').trigger('submit');
+      var anno = this.sandbox.find('.search-annotation').first();
+      expect(anno).toExist();
+      expect(anno.trigger.bind(anno, 'click')).not.toThrow();
+    });
+
+    it('should navigate to a specific bounds and canvas after clicking on an search result linked annotation', function() {
+      spyOn(this.eventEmitter, 'publish').and.callThrough();
+      this.sandbox.find('#search-within-form input.js-query').val('found');
+      this.sandbox.find('#search-within-form').trigger('submit');
+      var anno = this.sandbox.find('.search-annotation').first(),
+          canvasID = anno.attr('data-canvasid'),
+          coordinates = anno.attr('data-coordinates'),
+          xywh = coordinates && coordinates.split('=')[1].split(',').map(Number),
+          bounds = xywh && {x: xywh[0], y: xywh[1], width: xywh[2], height: xywh[3]};
+      anno.trigger('click');
+      expect(this.eventEmitter.publish).toHaveBeenCalledWith('SET_CURRENT_CANVAS_ID.' + this.windowId, {
+        "canvasID": canvasID,
+        "bounds": bounds
+      });
+    });
+
+    it('should not change canvas after clicking on a second annotation linked to a search result', function() {
+      this.sandbox.find('#search-within-form input.js-query').val('found');
+      this.sandbox.find('#search-within-form').trigger('submit');
+      var anno1 = this.sandbox.find('.search-annotation').first(),
+          anno2 = this.sandbox.find('.search-annotation:nth-child(2)').first(),
+          canvasID1 = anno2.attr('data-canvasid'),
+          canvasID2 = anno2.attr('data-canvasid'),
+          coordinates = anno2.attr('data-coordinates'),
+          xywh = coordinates && coordinates.split('=')[1].split(',').map(Number),
+          bounds = xywh && {x: xywh[0], y: xywh[1], width: xywh[2], height: xywh[3]};
+      anno1.trigger('click');
+      spyOn(this.eventEmitter, 'publish').and.callThrough();
+      anno2.trigger('click');
+      expect(canvasID1).toBe(canvasID2);
+      expect(this.eventEmitter.publish).toHaveBeenCalledWith('SET_CURRENT_CANVAS_ID.' + this.windowId, {
+        "canvasID": canvasID2,
+        "bounds": bounds
+      });
+    });
   });
 });
