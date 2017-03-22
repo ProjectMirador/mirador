@@ -122,7 +122,6 @@ $.SearchWithinResults.prototype = {
     } else {
       this.tplData = this.getSearchAnnotations(searchResults);
     }
-
     jQuery(Handlebars.compile('{{> resultsList }}')(this.tplData)).appendTo(jQuery(this.element.find('.search-results-container')));
     this.bindEvents();
 
@@ -284,32 +283,34 @@ $.SearchWithinResults.prototype = {
       //note that at present it is only retrieving the first annotation
       //but a hit annotation property takes an array and could have more than one
       //annotation -- its not a very common case but a possibility.
-      var annotation = hit.annotations[0],
+      var resultObject, resultObjects = [];
+      hit.annotations.forEach(function(annotation) {
         //canvases could come back as an array
-        resource = _this.getHitResources(searchResults, annotation)[0],
-        canvasLabel = _this.getLabel(resource),
-        canvasID = resource && resource.on;
-
-      // Do not add this result if no label is found
-      if (!canvasLabel) {
-        return;
+        var resource = _this.getHitResources(searchResults, annotation)[0],
+            canvasLabel = _this.getLabel(resource),
+            canvasID = resource && resource.on;
+        // If you have the full annotation, set ID and label appropriately
+        if (typeof canvasID === 'object') {
+          canvasID = resource.on['@id'];
+        }
+        // Extract coordinates if necessary
+        var canvasIDParts = _this.splitBaseUrlAndCoordinates(canvasID);
+        resultObject = {
+          canvasid: canvasIDParts.base,
+          coordinates: canvasIDParts.coords,
+          canvaslabel: canvasLabel,
+          hit: hit      // TODO must handle different results structures, see IIIF search spec for different responses
+        };
+        resultObjects.push(resultObject);
+      });
+      // First result is returned and gets attached an array of all annotations
+      if (resultObjects) {
+        resultObject = resultObjects[0];
+        if (resultObjects.length > 1) {
+          resultObject.annotations = resultObjects;
+        }
+        tplData.push(resultObject);
       }
-
-      // If you have the full annotation, set ID and label appropriately
-      if (typeof canvasID === 'object') {
-        canvasID = resource.on['@id'];
-      }
-
-      // Extract coordinates if necessary
-      var canvasIDParts = _this.splitBaseUrlAndCoordinates(canvasID);
-
-      resultObject = {
-        canvasid: canvasIDParts.base,
-        coordinates: canvasIDParts.coords,
-        canvaslabel: canvasLabel,
-        hit: hit      // TODO must handle different results structures, see IIIF search spec for different responses
-      };
-      tplData.push(resultObject);
     });
     return tplData;
   },
@@ -432,6 +433,16 @@ $.SearchWithinResults.prototype = {
           '<a class="search-result search-title js-show-canvas" data-canvasid="{{canvasid}}" data-coordinates="{{coordinates}}">',
             '{{canvaslabel}}',
           '</a>',
+          '{{#if annotations}}',
+            '<div>',
+            'Annotations: ',
+            '{{#each annotations}}',
+              '<a class="search-result search-annotation js-show-canvas" data-canvasid="{{canvasid}}" data-coordinates="{{coordinates}}">',
+                '<i class="fa fa-fw" aria-hidden="true"></i>',
+              '</a>',
+            '{{/each}}',
+            '</div>',
+          '{{/if}}',
           '<div class="search-result result-paragraph js-show-canvas" data-canvasid="{{canvasid}}" data-coordinates="{{coordinates}}">',
             '{{#if hit.before}}',
               '{{hit.before}} ',
