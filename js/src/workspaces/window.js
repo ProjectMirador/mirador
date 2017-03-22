@@ -310,8 +310,13 @@
         if (typeof canvasID === "string") {
           _this.setCurrentCanvasID(canvasID);
         } else {
-          _this.setNextCanvasBounds(canvasID.bounds);
-          _this.setCurrentCanvasID(canvasID.canvasID);
+          if (_this.canvasID !== canvasID.canvasID) {
+            // Order is important
+            _this.setNextCanvasBounds(canvasID.bounds);
+            _this.setCurrentCanvasID(canvasID.canvasID);
+          } else {
+            _this.eventEmitter.publish('fitBounds.' + _this.id, canvasID.bounds);
+          }
         }
       }));
 
