@@ -16,7 +16,11 @@
     border-bottom: 1px solid gray;
     padding: 10px 10px 10px 0;
     margin-right: 20px;
+    &>h4 {
+      margin-bottom: 5px;
+    }
     .thumb-container {
+      position:relative;
       float:left;
       width: 60px;
       height: 60px;
@@ -32,21 +36,57 @@
         box-shadow: inset 0 0 12px gray;
         top: 50%;
         transform: translateY(-50%);
+        &.loaded {
+          transition: all 0.2s ease-out;
+          opacity:1;
+        }
       }
-      .loaded {
+      .spinner, .failed, .thumb-failed {
+        position:absolute;
+        display:inline-block;
+        width:100%;
+        margin:0 auto;
+        top:50%;
+        transform: translateY(-50%);
+        opacity:0;
         transition: all 0.2s ease-out;
-        opacity:1;
+        color: #666;
       }
+      &.awaiting-thumbnail {
+        .spinner {
+          opacity:1;
+        }
+      }
+    }
+    &.requested {
+      .spinner {
+        opacity: 1;
+        transition: all 0.2s ease-out;
+      }
+      .thumb-container img {
+        transition: all 0.2s ease-out;
+        opacity: 0.5;
+      }
+    }
+    &.failed {
       .failed {
-        visbility:hidden;
+        opacity:1;
+        transition: all 0.2s ease-out;
+      }
+      .thumb-container img {
+        transition: all 0.2s ease-out;
+        opacity: 0.5;
+      }
+      .thumb-failed {
+        opacity: 0;
+      }
+      .thumb-container.awaiting-thumbnail .spinner {
+        opacity:0;
         transition: all 0.2s ease-out;
       }
     }
-    h4 {
-      margin-bottom: 5px;
+    .visibility-toggle {
+      margin-bottom: 10px;
     }
-  }
-  .visibility-toggle {
-    margin-bottom: 10px;
   }
 }
