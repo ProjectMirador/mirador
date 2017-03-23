@@ -650,12 +650,54 @@
         showNavigationControl: false
       });
 
-      console.log(canvasModel.getVisibleImages());
+      // console.log(canvasModel.getVisibleImages());
+      // _this.positionCanvas(canvasModel);
+      // console.log(canvasModel.getBounds());
+
+      var canvasBounds = canvasModel.getBounds();
+      var rect = new OpenSeadragon.Rect(
+        canvasBounds.x,
+        canvasBounds.y,
+        canvasBounds.width,
+        canvasBounds.height
+      );
+      _this.osd.viewport.fitBounds(rect, true); // center viewport before image is placed.
+
       canvasModel.getVisibleImages().forEach(function(imageResource) {
         console.log(imageResource);
         window.imageResource = imageResource;
         _this.loadImage(null, imageResource);
       });
+    },
+
+    positionCanvas: function(canvasModel) {
+      var _this = this;
+
+      layout = manifestLayout({
+        canvases: [canvasModel.canvas],
+        width: _this.element.innerWidth(),
+        height: _this.element.innerHeight(),
+        viewingDirection: 'right-to-left',
+        viewingMode: 'individuals',
+        canvasHeight: 200,
+        canvasWidth: 200,
+        selectedCanvas: canvasModel.canvas['@id'],
+        framePadding: {
+          top: 10,
+          bottom: 10,
+          left: 10,
+          right: 10
+        },
+        viewportPadding: {
+          top: 5,
+          left: 10,
+          right: 10,
+          bottom: 10
+        },
+        minimumImageGap: 5, // precent of viewport
+        facingCanvasPadding: 0.1 // precent of viewport
+      }).detail();
+      canvasModel.setBounds(layout.x, layout.y, layout.width, layout.height);
     },
 
     createOpenSeadragonInstance: function(imageUrl) {

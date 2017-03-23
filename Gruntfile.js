@@ -48,6 +48,7 @@ module.exports = function(grunt) {
     'js/lib/modernizr.custom.js',
     'js/lib/sanitize-html.min.js',
     'node_modules/iiif-evented-canvas/dist/iiif-evented-canvas.umd.min.js',
+    'node_modules/iiif-layout-functions/dist/iiif-layout-functions.umd.min.js',
   ],
 
   // source files
