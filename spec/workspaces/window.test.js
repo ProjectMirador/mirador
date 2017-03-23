@@ -5,7 +5,7 @@ describe('Window', function() {
       this.mockedEventEmitter = new MockEventEmitter(this.eventEmitter);
       this.appendTo = jQuery('<div/>');
       Mirador.viewer = {
-        // all of this global state should be 
+        // all of this global state should be
         // removed as soon as possible.
         eventEmitter: this.mockedEventEmitter,
         annotationEndpoints: [],
@@ -29,8 +29,8 @@ describe('Window', function() {
         this.adjustHeight = jasmine.createSpy();
       });
       var state = new Mirador.SaveController(jQuery.extend(true, {}, Mirador.DEFAULT_SETTINGS, {eventEmitter:this.eventEmitter}));
-      this.window = new Mirador.Window(jQuery.extend(true, 
-        {}, 
+      this.window = new Mirador.Window(jQuery.extend(true,
+        {},
         state.getStateProperty('windowSettings'),
         {
           state: state,
@@ -60,7 +60,15 @@ describe('Window', function() {
               return '1';
             }
           },
-          appendTo: this.appendTo
+          appendTo: this.appendTo,
+          userButtons: [{
+            'iconClass': 'fa-file-text-o',
+            'attributes': {
+              'class': 'mirador-icon-text',
+              'href': 'http://example.com',
+              'target': '_blank'
+            }
+          }]
       }));
     });
 
@@ -78,6 +86,13 @@ describe('Window', function() {
         var calls = Mirador.ImageView.calls;
         expect(calls.count()).toBe(1);
         expect(calls.first().args[0].appendTo.is(this.appendTo.find('.view-container'))).toBe(true);
+      });
+
+      it('should place user buttons in DOM', function(){
+        expect(this.appendTo.find('.mirador-icon-text')).toExist();
+        expect(this.appendTo.find('.mirador-icon-text').attr('href')).toBe('http://example.com');
+        expect(this.appendTo.find('.mirador-icon-text').attr('target')).toBe('_blank');
+        expect(this.appendTo.find('.mirador-icon-text').has('i.fa.fa-lg.fa-fw.fa-file-text-o').length).toBe(1);
       });
     });
     describe('Menu Events', function() {
