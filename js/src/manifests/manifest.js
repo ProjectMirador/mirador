@@ -200,7 +200,7 @@
       // Takes in info.json and creates the
       // dummy manifest wrapper around it
       // that will allow it to behave like a
-      // manifest with one canvas in it, with
+     // manifest with one canvas in it, with
       // one image on it. Some of the metadata
       // of the image will be used as the
       // label, and so on, of the manifest.
