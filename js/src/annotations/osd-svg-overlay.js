@@ -12,6 +12,7 @@
     return new $.Overlay(this, osdViewerId, windowId, state, eventEmitter);
   };
 
+  // Wat? TODO:...
   var FILL_COLOR_ALPHA_WORKAROUND = 0.00001;
 
   $.Overlay = function(viewer, osdViewerId, windowId, state, eventEmitter) {
@@ -714,7 +715,6 @@
     },
 
     hover: function() {
-
       if(!this.currentTool){
         return;
       }
@@ -781,6 +781,7 @@
 
     // get the tool which controls given shape
     getTool:function(shape){
+      console.log('getting tool');
       for(var i=0;i<this.tools.length;i++){
         if(shape.name.toString().indexOf(this.tools[i].idPrefix) !== -1){
           return this.tools[i];
