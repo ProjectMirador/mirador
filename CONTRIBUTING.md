@@ -3,10 +3,9 @@
 Mirador uses [node.js](http://nodejs.org/) and a build system to assemble, test, and manage the development resources. If you have never used these tools before, you may need to install them.
 
  1. Install Node, if you haven't already (available at the link above)  
- 2. Install the Grunt command line runner (if you haven't already); on the command line, run `npm install -g grunt-cli`  
- 3. Clone the mirador repository (if you haven't already done so above); `git clone https://github.com/ProjectMirador/mirador.git`
- 4. On the command line, go into the mirador folder
- 5. Install all dependencies with `npm install` and `bower install`. Run `npm start`
+ 1. Clone the mirador repository (if you haven't already done so above); `git clone https://github.com/ProjectMirador/mirador.git`
+ 1. On the command line, go into the mirador folder
+ 1. Install all dependencies with `npm install`. Run `npm start`
 
 `npm start` will run a local server that is available at `localhost:8000`.
 
@@ -21,7 +20,7 @@ Even small changes should follow the branching strategy outlined above, though t
 Mirador currently uses [gitbook](https://github.com/GitbookIO/gitbook) for its documentation. You can find the current documentation in the `docs` folder on any branch. The docs will be re-generated for the website when submitted, and kept up to date with the current master.
 Documentation updates are always welcome, and should be included with any fundamentally new changes. For general documentation submission, checkout the master branch and branch from it into a documentation branch. Add to the gitbook files stored in the `docs` directory.
 ### Updating and Running the Project
-Install all dependencies with `npm install` and `bower install`. Run `npm start`. This ensures that any new changes from the remote are picked up in your development build.
+Install all dependencies with `npm install`. Run `npm start`. This ensures that any new changes from the remote are picked up in your development build.
 
 Create a branch for your work:
 e.g.: `git checkout -b my-feature-branch` or `git checkout -b my-bug-fix`
@@ -78,7 +77,7 @@ Mirador uses the node.js runtime for its development environment, and to bundle 
 #### The NPM package manager
 Dependencies are managed primarily with the NPM package manager, and releases are primarily distributed over npm. It is recommended that any new dependencies being added are tracked with a specific version in the `package.json` and installed with npm. The final build dependency is then copied into the `js/lib` directory for inclusion into Mirador. Only this copied final version of the dependency should be versioned (added to git).
 #### Javascript Resources
-#### Bower Package Manager
+#### Bower Package Manager [DEPRECATED]
 Some resources are managed with bower, but this is being phased out. It is recommended that no new dependency be added through bower unless it is truly unavailable on NPM.
 ### Project Management with Grunt
 [Grunt](http://gruntjs.com/) is a utility for managing repetitive tasks involved in the development process, such as building, linting, format-checking, and compressing files, running tests and generating coverage reports, and reloading the browser on file changes (for interactive feedback during feature development). A variety of tasks have been automated for developer convenience.

@@ -16,18 +16,15 @@
 
     createShape: function(initialPoint, overlay) {
       overlay.mode = 'create';
-      var pixel = 1 / overlay.paperScope.view.zoom;
-      var segments = this._createSegments(initialPoint,pixel,overlay);
+      var segments = this._createSegments(initialPoint, overlay);
       var shape = new overlay.paperScope.Path({
         segments: segments,
         fullySelected: true,
         name: overlay.getName(this)
       });
       shape.dashArray = overlay.dashArray;
-      shape.data.defaultStrokeValue = 1;
-      shape.data.editStrokeValue = 5;
-      shape.data.currentStrokeValue = shape.data.defaultStrokeValue;
-      shape.strokeWidth = shape.data.currentStrokeValue / overlay.paperScope.view.zoom;
+      shape.data.strokeWidth = overlay.strokeWidth;
+      shape.strokeWidth = shape.data.strokeWidth / overlay.paperScope.view.zoom;
       shape.strokeColor = overlay.strokeColor;
       shape.fillColor = overlay.fillColor;
       shape.fillColor.alpha = overlay.fillColorAlpha;
@@ -38,7 +35,7 @@
       return shape;
     },
 
-    _createSegments:function(initialPoint,pixel, overlay){
+    _createSegments:function(initialPoint, overlay){
       var segments = [];
       // point indexes
       // 0    1&2    3
@@ -47,16 +44,16 @@
       //   └ ─ ─ ─ ┘
       // 7     6     5(initial point)
       // points 1 & 2 are workaround used to draw rotation handle
-
-      segments.push(new overlay.paperScope.Point(initialPoint.x - 2 * pixel, initialPoint.y - 2 * pixel));
-      segments.push(new overlay.paperScope.Point(initialPoint.x - 1 * pixel, initialPoint.y - 2 * pixel));
-      segments.push(new overlay.paperScope.Point(initialPoint.x - 1 * pixel, initialPoint.y - 2 * pixel));
-      segments.push(new overlay.paperScope.Point(initialPoint.x, initialPoint.y - 2 * pixel));
-      segments.push(new overlay.paperScope.Point(initialPoint.x, initialPoint.y - 1 * pixel));
+      segments.push(new overlay.paperScope.Point(initialPoint.x - 2, initialPoint.y - 2));
+      segments.push(new overlay.paperScope.Point(initialPoint.x - 1, initialPoint.y - 2));
+      segments.push(new overlay.paperScope.Point(initialPoint.x - 1, initialPoint.y - 2));
+      segments.push(new overlay.paperScope.Point(initialPoint.x, initialPoint.y - 2));
+      segments.push(new overlay.paperScope.Point(initialPoint.x, initialPoint.y - 1));
       segments.push(new overlay.paperScope.Point(initialPoint.x, initialPoint.y));
-      segments.push(new overlay.paperScope.Point(initialPoint.x - 1 * pixel, initialPoint.y));
-      segments.push(new overlay.paperScope.Point(initialPoint.x - 2 * pixel, initialPoint.y));
-      segments.push(new overlay.paperScope.Point(initialPoint.x - 2 * pixel, initialPoint.y - 1 * pixel));
+      segments.push(new overlay.paperScope.Point(initialPoint.x - 1, initialPoint.y));
+      segments.push(new overlay.paperScope.Point(initialPoint.x - 2, initialPoint.y));
+      segments.push(new overlay.paperScope.Point(initialPoint.x - 2, initialPoint.y - 1));
+
       return segments;
     },
 
@@ -155,17 +152,19 @@
       }
     },
 
-    onHover:function(activate,shape,hoverColor){
+    onHover:function(activate,shape,hoverWidth,hoverColor){
+      shape.strokeWidth = hoverWidth;
+
       // shape needs to have hovered styles
       if(activate && !shape.data.hovered){
-        shape.data.nonHoverStroke = shape.strokeColor.clone();
+        shape.data.nonHoverStrokeColor = shape.strokeColor.clone();
         shape.data.hovered = true;
         shape.strokeColor = hoverColor;
       }
       // shape is not longer hovered
       if(!activate && shape.data.hovered){
-        shape.strokeColor = shape.data.nonHoverStroke.clone();
-        delete shape.data.nonHoverStroke;
+        shape.strokeColor = shape.data.nonHoverStrokeColor.clone();
+        delete shape.data.nonHoverStrokeColorColor;
         delete shape.data.hovered;
       }
     },

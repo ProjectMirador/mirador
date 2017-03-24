@@ -2,9 +2,9 @@ describe('TinyMCEAnnotationBodyEditor', function() {
   var subject;
 
   beforeEach(function() {
-    Handlebars.registerHelper('t', function(i18n_key) {
+    Mirador.Handlebars.registerHelper('t', function(i18n_key) {
       var result = i18next.t(i18n_key);
-      return new Handlebars.SafeString(result);
+      return new Mirador.Handlebars.SafeString(result);
     });
     subject = new Mirador.TinyMCEAnnotationBodyEditor();
   });
@@ -15,7 +15,6 @@ describe('TinyMCEAnnotationBodyEditor', function() {
 
   describe('Initialization', function() {
     it('should initialize with provided default configs', function() {
-      console.log(subject)
       expect(subject.config.plugins).toBe('');
       expect(subject.config.toolbar).toBe('')
     });

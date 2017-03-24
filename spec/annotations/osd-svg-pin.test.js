@@ -116,7 +116,7 @@ describe('Pin', function() {
         g:0,
         b:0
       };
-      this.pin.onHover(true,this.shape,'red');
+      this.pin.onHover(true,this.shape,1,'red');
 
       expect(this.shape.data.hovered).toBe(true);
       expect(this.shape.strokeColor.red).toBe(red.r);
@@ -127,13 +127,13 @@ describe('Pin', function() {
     it('should change stroke back to original when not hovering pin',function(){
 
       var oldColor = this.shape.strokeColor;
-      this.pin.onHover(true,this.shape,'red');
+      this.pin.onHover(true,this.shape,1,'red');
 
-      expect(this.shape.data.nonHoverStroke.red).toBe(oldColor.red);
-      expect(this.shape.data.nonHoverStroke.green).toBe(oldColor.green);
-      expect(this.shape.data.nonHoverStroke.blue).toBe(oldColor.blue);
+      expect(this.shape.data.nonHoverStrokeColor.red).toBe(oldColor.red);
+      expect(this.shape.data.nonHoverStrokeColor.green).toBe(oldColor.green);
+      expect(this.shape.data.nonHoverStrokeColor.blue).toBe(oldColor.blue);
 
-      this.pin.onHover(false,this.shape);
+      this.pin.onHover(false,this.shape,1);
       expect(this.shape.data.hovered).toBe(undefined);
       expect(this.shape.strokeColor.red).toBe(oldColor.red);
       expect(this.shape.strokeColor.green).toBe(oldColor.green);

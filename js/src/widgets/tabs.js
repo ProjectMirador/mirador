@@ -98,7 +98,7 @@
             this.element.find(tabClass).addClass('selected');
 
         },
-        template: Handlebars.compile([
+        template: $.Handlebars.compile([
           '<ul class="tabGroup">',
             '{{#each tabs}}',
             '<li class="tab {{this.options.id}} {{#unless @index}}selected{{/unless}}" data-tabId="{{this.options.id}}">',
