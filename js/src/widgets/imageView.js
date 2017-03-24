@@ -47,11 +47,9 @@
       this.currentImg = this.imagesList[this.currentImgIndex];
       this.element = jQuery(this.template()).appendTo(this.appendTo);
       this.elemAnno = jQuery('<div/>')
-      .addClass(this.annoCls)
-      .appendTo(this.element);
+        .addClass(this.annoCls)
+        .appendTo(this.element);
 
-      // this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-      this.initialiseImageCanvas();
 
       _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
 
@@ -83,6 +81,7 @@
         eventEmitter: this.eventEmitter
       });
 
+      this.initialiseImageCanvas();
       this.bindEvents();
       this.listenForActions();
 
@@ -94,8 +93,9 @@
     },
 
     template: $.Handlebars.compile([
-                                 '<div class="image-view">',
-                                 '</div>'
+       '<div class="image-view">',
+       '</div>'
+
     ].join('')),
 
     listenForActions: function() {
@@ -285,7 +285,7 @@
 
       function setFilterCSS() {
         var filterCSS = jQuery.map(filterValues, function(value, key) { return value; }).join(" "),
-        osdCanvas = jQuery(_this.osd.drawer.canvas);
+            osdCanvas = jQuery(_this.osd.drawer.canvas);
         osdCanvas.css({
           'filter'         : filterCSS,
           '-webkit-filter' : filterCSS,
@@ -361,12 +361,12 @@
       }).hide();
 
       this.element.find('.mirador-osd-brightness').on('mouseenter',
-        function() {
-          _this.element.find('.mirador-osd-brightness-slider').stop(true, true).show();
-        }).on('mouseleave',
-        function() {
-          _this.element.find('.mirador-osd-brightness-slider').stop(true, true).hide();
-      });
+                                                      function() {
+                                                        _this.element.find('.mirador-osd-brightness-slider').stop(true, true).show();
+                                                      }).on('mouseleave',
+                                                            function() {
+                                                              _this.element.find('.mirador-osd-brightness-slider').stop(true, true).hide();
+                                                            });
 
       this.element.find('.mirador-osd-contrast-slider').slider({
         orientation: "vertical",
@@ -388,12 +388,12 @@
       }).hide();
 
       this.element.find('.mirador-osd-contrast').on('mouseenter',
-        function() {
-          _this.element.find('.mirador-osd-contrast-slider').stop(true, true).show();
-        }).on('mouseleave',
-        function() {
-          _this.element.find('.mirador-osd-contrast-slider').stop(true, true).hide();
-      });
+                                                    function() {
+                                                      _this.element.find('.mirador-osd-contrast-slider').stop(true, true).show();
+                                                    }).on('mouseleave',
+                                                          function() {
+                                                            _this.element.find('.mirador-osd-contrast-slider').stop(true, true).hide();
+                                                          });
 
       this.element.find('.mirador-osd-saturation-slider').slider({
         orientation: "vertical",
@@ -415,12 +415,12 @@
       }).hide();
 
       this.element.find('.mirador-osd-saturation').on('mouseenter',
-        function() {
-          _this.element.find('.mirador-osd-saturation-slider').stop(true, true).show();
-        }).on('mouseleave',
-        function() {
-          _this.element.find('.mirador-osd-saturation-slider').stop(true, true).hide();
-      });
+                                                      function() {
+                                                        _this.element.find('.mirador-osd-saturation-slider').stop(true, true).show();
+                                                      }).on('mouseleave',
+                                                            function() {
+                                                              _this.element.find('.mirador-osd-saturation-slider').stop(true, true).hide();
+                                                            });
 
       this.element.find('.mirador-osd-grayscale').on('click', function() {
         if (jQuery(this).hasClass('selected')) {
@@ -456,8 +456,8 @@
 
     currentCanvasIDUpdated: function(event, canvasId) {
       var _this = this,
-      firstCanvasId = _this.imagesList[0]['@id'],
-      lastCanvasId = _this.imagesList[_this.imagesList.length-1]['@id'];
+          firstCanvasId = _this.imagesList[0]['@id'],
+          lastCanvasId = _this.imagesList[_this.imagesList.length-1]['@id'];
 
       // If it is the first canvas, hide the "go to previous" button, otherwise show it.
       if (canvasId === firstCanvasId) {
@@ -471,7 +471,6 @@
         _this.element.find('.mirador-osd-previous').show();
       }
       // If it is the last canvas, hide the "go to previous" button, otherwise show it.
-
     },
 
     loadImage: function(event, imageResource) {
@@ -576,12 +575,12 @@
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       _this.eventEmitter.publish("imageBoundsUpdated", {
         id: _this.windowId,
-          osdBounds: {
-            x: _this.osdOptions.osdBounds.x,
-            y: _this.osdOptions.osdBounds.y,
-            width: _this.osdOptions.osdBounds.width,
-            height: _this.osdOptions.osdBounds.height
-          }
+        osdBounds: {
+          x: _this.osdOptions.osdBounds.x,
+          y: _this.osdOptions.osdBounds.y,
+          width: _this.osdOptions.osdBounds.width,
+          height: _this.osdOptions.osdBounds.height
+        }
       });
       var rectangle = this.osd.viewport.viewportToImageRectangle(this.osdOptions.osdBounds);
       _this.eventEmitter.publish("imageRectangleUpdated", {
@@ -665,152 +664,74 @@
 
       canvasModel.show();
       canvasModel.getVisibleImages().forEach(function(imageResource) {
-        console.log(imageResource);
         _this.loadImage(null, imageResource);
       });
-    },
 
-    positionCanvas: function(canvasModel) {
-      var _this = this;
+      _this.osd.addHandler('zoom', $.debounce(function(){
+        var point = {
+          'x': -10000000,
+          'y': -10000000
+        };
+        _this.eventEmitter.publish('updateTooltips.' + _this.windowId, [point, point]);
+      }, 30));
 
-      layout = manifestLayout({
-        canvases: [canvasModel.canvas],
-        width: _this.element.innerWidth(),
-        height: _this.element.innerHeight(),
-        viewingDirection: 'right-to-left',
-        viewingMode: 'individuals',
-        canvasHeight: 200,
-        canvasWidth: 200,
-        selectedCanvas: canvasModel.canvas['@id'],
-        framePadding: {
-          top: 10,
-          bottom: 10,
-          left: 10,
-          right: 10
-        },
-        viewportPadding: {
-          top: 5,
-          left: 10,
-          right: 10,
-          bottom: 10
-        },
-        minimumImageGap: 5, // precent of viewport
-        facingCanvasPadding: 0.1 // precent of viewport
-      }).detail();
-      canvasModel.setBounds(layout.x, layout.y, layout.width, layout.height);
-    },
+      _this.osd.addHandler('pan', $.debounce(function(){
+        var point = {
+          'x': -10000000,
+          'y': -10000000
+        };
+        _this.eventEmitter.publish('updateTooltips.' + _this.windowId, [point, point]);
+      }, 30));
 
-    createOpenSeadragonInstance: function(imageUrl) {
-      var infoJsonUrl = imageUrl + '/info.json',
-      uniqueID = $.genUUID(),
-      osdID = 'mirador-osd-' + uniqueID,
-      infoJson,
-      _this = this;
+      // Maintain this as an external API.
+      _this.eventEmitter.publish('osdOpen.'+_this.windowId);
+      _this.addAnnotationsLayer(_this.elemAnno);
 
-      this.element.find('.' + this.osdCls).remove();
 
-      jQuery.getJSON(infoJsonUrl).done(function (infoJson, status, jqXHR) {
-        _this.elemOsd =
-          jQuery('<div/>')
-        .addClass(_this.osdCls)
-        .attr('id', osdID)
-        .appendTo(_this.element);
+      if (_this.osdOptions.osdBounds) {
+        var newBounds = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
+        _this.osd.viewport.fitBounds(newBounds, true);
+      } else {
+        // else reset bounds for this image
+        _this.setBounds();
+      }
 
-        _this.osd = $.OpenSeadragon({
-          'id':           osdID,
-          'tileSources':  infoJson,
-          'uniqueID' : uniqueID
-        });
+      if (_this.boundsToFocusOnNextOpen) {
+        _this.eventEmitter.publish('fitBounds.' + _this.windowId, _this.boundsToFocusOnNextOpen);
+        _this.boundsToFocusOnNextOpen = null;
+      }
 
-        _this.osd.addHandler('zoom', $.debounce(function(){
-          var point = {
-            'x': -10000000,
-            'y': -10000000
-          };
-          _this.eventEmitter.publish('updateTooltips.' + _this.windowId, [point, point]);
-        }, 30));
+      // get the state before resetting it so we can get back to that state
+      var originalState = _this.hud.annoState.current;
+      var selected = _this.element.find('.mirador-osd-edit-mode.selected');
+      var shape = null;
+      if (selected) {
+        shape = selected.find('.material-icons').html();
+      }
+      if (originalState === 'none') {
+        _this.hud.annoState.startup();
+      } else if (originalState === 'off' || _this.annotationState === 'off') {
+        //original state is off, so don't need to do anything
+      } else {
+        _this.hud.annoState.displayOff();
+      }
 
-        _this.osd.addHandler('pan', $.debounce(function(){
-          var point = {
-            'x': -10000000,
-            'y': -10000000
-          };
-          _this.eventEmitter.publish('updateTooltips.' + _this.windowId, [point, point]);
-        }, 30));
+      if (originalState === 'pointer' || _this.annotationState === 'on') {
+        _this.hud.annoState.displayOn();
+      } else if (originalState === 'shape') {
+        _this.hud.annoState.displayOn();
+        _this.hud.annoState.chooseShape(shape);
+      } else {
+        //original state is off, so don't need to do anything
+      }
 
-//        if (_this.state.getStateProperty('autoHideControls')) {
-//          var timeoutID = null,
-//          fadeDuration = _this.state.getStateProperty('fadeDuration'),
-//          timeoutDuration = _this.state.getStateProperty('timeoutDuration');
-//          var hideHUD = function() {
-//            _this.element.find(".hud-control").stop(true, true).addClass('hidden', fadeDuration);
-//          };
-//          hideHUD();
-//          jQuery(_this.element).on('mousemove', function() {
-//            window.clearTimeout(timeoutID);
-//            _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
-//            // When a user is in annotation create mode, force show the controls so they don't disappear when in a qtip, so check for that
-//            if (!_this.forceShowControls) {
-//              timeoutID = window.setTimeout(hideHUD, timeoutDuration);
-//            }
-//          }).on('mouseleave', function() {
-//            if (!_this.forceShowControls) {
-//              window.clearTimeout(timeoutID);
-//              hideHUD();
-//            }
-//          });
-//        }
+      _this.osd.addHandler('zoom', $.debounce(function() {
+        _this.setBounds();
+      }, 500));
 
-        _this.osd.addHandler('open', function(){
-          _this.eventEmitter.publish('osdOpen.'+_this.windowId);
-          if (_this.osdOptions.osdBounds) {
-            var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
-            _this.osd.viewport.fitBounds(rect, true);
-          } else {
-            // else reset bounds for this image
-            _this.setBounds();
-          }
-
-          if (_this.boundsToFocusOnNextOpen) {
-            _this.eventEmitter.publish('fitBounds.' + _this.windowId, _this.boundsToFocusOnNextOpen);
-            _this.boundsToFocusOnNextOpen = null;
-          }
-
-          _this.addAnnotationsLayer(_this.elemAnno);
-
-          // get the state before resetting it so we can get back to that state
-          var originalState = _this.hud.annoState.current;
-          var selected = _this.element.find('.mirador-osd-edit-mode.selected');
-          var shape = null;
-          if (selected) {
-            shape = selected.find('.material-icons').html();
-          }
-          if (originalState === 'none') {
-            _this.hud.annoState.startup();
-          } else if (originalState === 'off' || _this.annotationState === 'off') {
-            //original state is off, so don't need to do anything
-          } else {
-            _this.hud.annoState.displayOff();
-          }
-
-          if (originalState === 'pointer' || _this.annotationState === 'on') {
-            _this.hud.annoState.displayOn();
-          } else if (originalState === 'shape') {
-            _this.hud.annoState.displayOn();
-            _this.hud.annoState.chooseShape(shape);
-          } else {
-            //original state is off, so don't need to do anything
-          }
-
-          _this.osd.addHandler('zoom', $.debounce(function() {
-            _this.setBounds();
-          }, 500));
-
-          _this.osd.addHandler('pan', $.debounce(function(){
-            _this.setBounds();
-          }, 500));
-        });
-      });
+      _this.osd.addHandler('pan', $.debounce(function(){
+        _this.setBounds();
+      }, 500));
     },
 
     //TODO reuse annotationsLayer with IIIFManifestLayouts
@@ -830,7 +751,7 @@
       var _this = this;
       if (this.canvasID !== canvasID) {
         this.canvases[_this.canvasID].getVisibleImages().forEach(function(imageResource){
-            imageResource.hide();
+          imageResource.hide();
         });
         this.canvasID = canvasID;
         this.currentImgIndex = $.getImageIndexById(this.imagesList, canvasID);
