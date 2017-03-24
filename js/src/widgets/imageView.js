@@ -7,7 +7,7 @@
       windowId:         null,
       currentImgIndex:  0,
       canvasID:         null,
-      canvasModel:      null,
+      canvases:         null,
       imagesList:       [],
       element:          null,
       elemOsd:          null,
@@ -44,7 +44,6 @@
           zoomLevel:        null
         };
       }
-      this.canvasModel = _this.manifest.canvases[_this.canvasID];
       this.currentImg = this.imagesList[this.currentImgIndex];
       this.element = jQuery(this.template()).appendTo(this.appendTo);
       this.elemAnno = jQuery('<div/>')
@@ -100,9 +99,7 @@
     ].join('')),
 
     listenForActions: function() {
-      var _this = this,
-      firstCanvasId = _this.imagesList[0]['@id'],
-      lastCanvasId = _this.imagesList[_this.imagesList.length-1]['@id'];
+      var _this = this;
 
       _this.eventEmitter.subscribe('bottomPanelSet.' + _this.windowId, function(event, visible) {
         var dodgers = _this.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls');
@@ -121,26 +118,12 @@
         _this.osd.viewport.fitBoundsWithConstraints(rect, false);
       });
 
-      _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasId) {
-        // If it is the first canvas, hide the "go to previous" button, otherwise show it.
-        if (canvasId === firstCanvasId) {
-          _this.element.find('.mirador-osd-previous').hide();
-          _this.element.find('.mirador-osd-next').show();
-        } else if (canvasId === lastCanvasId) {
-          _this.element.find('.mirador-osd-next').hide();
-          _this.element.find('.mirador-osd-previous').show();
-        } else {
-          _this.element.find('.mirador-osd-next').show();
-          _this.element.find('.mirador-osd-previous').show();
-        }
-        // If it is the last canvas, hide the "go to previous" button, otherwise show it.
-      });
-
-      _this.eventEmitter.subscribe('image-needed', _this.loadImage.bind(_this));
-      _this.eventEmitter.subscribe('image-show', _this.showImage.bind(_this));
-      _this.eventEmitter.subscribe('image-hide', _this.hideImage.bind(_this));
-      _this.eventEmitter.subscribe('image-removed', _this.removeImage.bind(_this));
-      _this.eventEmitter.subscribe('image-opacity-updated', _this.updateImageOpacity.bind(_this));
+      _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, _this.currentCanvasIDUpdated.bind(_this));
+      _this.eventEmitter.subscribe('image-needed' + _this.windowId, _this.loadImage.bind(_this));
+      _this.eventEmitter.subscribe('image-show' + _this.windowId, _this.showImage.bind(_this));
+      _this.eventEmitter.subscribe('image-hide' + _this.windowId, _this.hideImage.bind(_this));
+      _this.eventEmitter.subscribe('image-removed' + _this.windowId, _this.removeImage.bind(_this));
+      _this.eventEmitter.subscribe('image-opacity-updated' + _this.windowId, _this.updateImageOpacity.bind(_this));
       // These will come soon.
       // _this.eventEmitter.subscribe('image-layering-index-updated');
       // _this.eventEmitter.subscribe('image-position-updated');
@@ -471,6 +454,26 @@
       //Image manipulation controls
     },
 
+    currentCanvasIDUpdated: function(event, canvasId) {
+      var _this = this,
+      firstCanvasId = _this.imagesList[0]['@id'],
+      lastCanvasId = _this.imagesList[_this.imagesList.length-1]['@id'];
+
+      // If it is the first canvas, hide the "go to previous" button, otherwise show it.
+      if (canvasId === firstCanvasId) {
+        _this.element.find('.mirador-osd-previous').hide();
+        _this.element.find('.mirador-osd-next').show();
+      } else if (canvasId === lastCanvasId) {
+        _this.element.find('.mirador-osd-next').hide();
+        _this.element.find('.mirador-osd-previous').show();
+      } else {
+        _this.element.find('.mirador-osd-next').show();
+        _this.element.find('.mirador-osd-previous').show();
+      }
+      // If it is the last canvas, hide the "go to previous" button, otherwise show it.
+
+    },
+
     loadImage: function(event, imageResource) {
       var _this = this;
 
@@ -528,6 +531,7 @@
       }
     },
     hideImage: function(event, imageResource) {
+      console.log('hidden');
       if (imageResource.getStatus() === 'drawn') {
         imageResource.osdTiledImage.setOpacity(0);
       }
@@ -633,7 +637,7 @@
     initialiseImageCanvas: function() {
       var _this = this,
           osdID = 'mirador-osd-' + $.genUUID(),
-          canvasModel = _this.manifest.canvases[_this.canvasID];
+          canvasModel = _this.canvases[_this.canvasID];
 
       _this.elemOsd =
         jQuery('<div/>')
@@ -650,10 +654,6 @@
         showNavigationControl: false
       });
 
-      // console.log(canvasModel.getVisibleImages());
-      // _this.positionCanvas(canvasModel);
-      // console.log(canvasModel.getBounds());
-
       var canvasBounds = canvasModel.getBounds();
       var rect = new OpenSeadragon.Rect(
         canvasBounds.x,
@@ -663,9 +663,9 @@
       );
       _this.osd.viewport.fitBounds(rect, true); // center viewport before image is placed.
 
+      canvasModel.show();
       canvasModel.getVisibleImages().forEach(function(imageResource) {
         console.log(imageResource);
-        window.imageResource = imageResource;
         _this.loadImage(null, imageResource);
       });
     },
@@ -829,9 +829,24 @@
     updateImage: function(canvasID) {
       var _this = this;
       if (this.canvasID !== canvasID) {
+        this.canvases[_this.canvasID].getVisibleImages().forEach(function(imageResource){
+            imageResource.hide();
+        });
         this.canvasID = canvasID;
         this.currentImgIndex = $.getImageIndexById(this.imagesList, canvasID);
         this.currentImg = this.imagesList[this.currentImgIndex];
+
+        var newCanvas = this.canvases[_this.canvasID];
+        var canvasBounds = newCanvas.getBounds();
+        var rect = new OpenSeadragon.Rect(
+          canvasBounds.x,
+          canvasBounds.y,
+          canvasBounds.width,
+          canvasBounds.height
+        );
+        _this.osd.viewport.fitBounds(rect, true); // center viewport before image is placed.
+        newCanvas.show();
+
         this.osdOptions = {
           osdBounds:        null,
           zoomLevel:        null

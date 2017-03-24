@@ -1,6 +1,6 @@
 (function($){
 
-  $.Manifest = function(manifestUri, location, manifestContent, emitter) {
+  $.Manifest = function(manifestUri, location, manifestContent) {
     if (manifestContent) {
       jQuery.extend(true, this, {
         jsonLd: null,
@@ -32,7 +32,6 @@
         location: location,
         uri: manifestUri,
         request: null,
-        eventEmitter: emitter
       });
 
       this.initFromInfoJson(manifestUri);
@@ -46,23 +45,6 @@
 
       this.init(manifestUri);
     }
-
-    // Sadly, the emitter we use in Mirador
-    // does not have the "standard" node.js
-    // eventEmitter interface. So we need to
-    // alias or proxy its functions here.
-    //
-    // We use .bind(emitter) to ensure its
-    // internal "this"es continue to refer
-    // to itself. "this" sinks ships.
-    emitter.on = emitter.subscribe.bind(emitter);
-    emitter.off = emitter.unsubscribe.bind(emitter);
-    emitter.emit = emitter.publish.bind(emitter);
-
-    // TODO: switch out mirador's event emitter
-    // for a more robust alternative with a standard
-    // interface.
-    this.eventEmitter = emitter;
   };
 
   $.Manifest.prototype = {
@@ -76,7 +58,6 @@
 
       this.request.done(function(jsonLd) {
         _this.jsonLd = jsonLd;
-        _this.buildCanvasMap();
       });
     },
     buildCanvasMap: function() {
@@ -98,7 +79,6 @@
       });
       this.request.done(function(jsonLd) {
         _this.jsonLd = _this.generateInfoWrapper(jsonLd);
-        _this.buildCanvasesIndex();
       });
     },
     initFromManifestContent: function (manifestContent) {
@@ -108,19 +88,6 @@
         _this.jsonLd = jsonLd;
       });
       _this.request.resolve(manifestContent); // resolve immediately
-    },
-    buildCanvasesIndex: function(){
-      var _this = this;
-      this.canvases = this.getCanvases().reduce(function(canvasesIndex, canvas, index) {
-        var eventedCanvas = new iiifEventedCanvas({
-          canvas: canvas,
-          index: index,
-          dispatcher: _this.eventEmitter
-        });
-        canvasesIndex[canvas['@id']] = eventedCanvas;
-        return canvasesIndex;
-      }, {});
-      // Now you can get canvases with manifest.canvases[CanvasID]
     },
     getThumbnailForCanvas : function(canvas, width) {
       var version = "1.1",
