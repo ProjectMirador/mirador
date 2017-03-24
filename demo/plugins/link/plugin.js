@@ -1,8 +1,8 @@
 /**
  * plugin.js
  *
- * Copyright, Moxiecode Systems AB
  * Released under LGPL License.
+ * Copyright (c) 1999-2015 Ephox Corp. All rights reserved
  *
  * License: http://www.tinymce.com/license
  * Contributing: http://www.tinymce.com/contributing
@@ -11,18 +11,138 @@
 /*global tinymce:true */
 
 tinymce.PluginManager.add('link', function(editor) {
+	var attachState = {};
+
+	function isLink(elm) {
+		return elm && elm.nodeName === 'A' && elm.href;
+	}
+
+	function hasLinks(elements) {
+		return tinymce.util.Tools.grep(elements, isLink).length > 0;
+	}
+
+	function getLink(elm) {
+		return editor.dom.getParent(elm, 'a[href]');
+	}
+
+	function getSelectedLink() {
+		return getLink(editor.selection.getStart());
+	}
+
+	function getHref(elm) {
+		// Returns the real href value not the resolved a.href value
+		var href = elm.getAttribute('data-mce-href');
+		return href ? href : elm.getAttribute('href');
+	}
+
+	function isContextMenuVisible() {
+		var contextmenu = editor.plugins.contextmenu;
+		return contextmenu ? contextmenu.isContextMenuVisible() : false;
+	}
+
+	var hasOnlyAltModifier = function (e) {
+		return e.altKey === true && e.shiftKey === false && e.ctrlKey === false && e.metaKey === false;
+	};
+
+	function leftClickedOnAHref(elm) {
+		var sel, rng, node;
+		if (editor.settings.link_context_toolbar && !isContextMenuVisible() && isLink(elm)) {
+			sel = editor.selection;
+			rng = sel.getRng();
+			node = rng.startContainer;
+			// ignore cursor positions at the beginning/end (to make context toolbar less noisy)
+			if (node.nodeType == 3 && sel.isCollapsed() && rng.startOffset > 0 && rng.startOffset < node.data.length) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function appendClickRemove(link, evt) {
+		document.body.appendChild(link);
+		link.dispatchEvent(evt);
+		document.body.removeChild(link);
+	}
+
+	function openDetachedWindow(url) {
+		// Chrome and Webkit has implemented noopener and works correctly with/without popup blocker
+		// Firefox has it implemented noopener but when the popup blocker is activated it doesn't work
+		// Edge has only implemented noreferrer and it seems to remove opener as well
+		// Older IE versions pre IE 11 falls back to a window.open approach
+		if (!tinymce.Env.ie || tinymce.Env.ie > 10) {
+			var link = document.createElement('a');
+			link.target = '_blank';
+			link.href = url;
+			link.rel = 'noreferrer noopener';
+
+			var evt = document.createEvent('MouseEvents');
+			evt.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+
+			appendClickRemove(link, evt);
+		} else {
+			var win = window.open('', '_blank');
+			if (win) {
+				win.opener = null;
+				var doc = win.document;
+				doc.open();
+				doc.write('<meta http-equiv="refresh" content="0; url=' + tinymce.DOM.encode(url) + '">');
+				doc.close();
+			}
+		}
+	}
+
+	function gotoLink(a) {
+		if (a) {
+			var href = getHref(a);
+			if (/^#/.test(href)) {
+				var targetEl = editor.$(href);
+				if (targetEl.length) {
+					editor.selection.scrollIntoView(targetEl[0], true);
+				}
+			} else {
+				openDetachedWindow(a.href);
+			}
+		}
+	}
+
+	function gotoSelectedLink() {
+		gotoLink(getSelectedLink());
+	}
+
+	function toggleViewLinkState() {
+        var self = this;
+
+		var toggleVisibility = function (e) {
+			if (hasLinks(e.parents)) {
+				self.show();
+			} else {
+				self.hide();
+			}
+		};
+
+		if (!hasLinks(editor.dom.getParents(editor.selection.getStart()))) {
+			self.hide();
+		}
+
+        editor.on('nodechange', toggleVisibility);
+
+		self.on('remove', function () {
+			editor.off('nodechange', toggleVisibility);
+		});
+	}
+
 	function createLinkList(callback) {
 		return function() {
 			var linkList = editor.settings.link_list;
 
-			if (typeof(linkList) == "string") {
+			if (typeof linkList == "string") {
 				tinymce.util.XHR.send({
 					url: linkList,
 					success: function(text) {
 						callback(tinymce.util.JSON.parse(text));
 					}
 				});
-			} else if (typeof(linkList) == "function") {
+			} else if (typeof linkList == "function") {
 				linkList(callback);
 			} else {
 				callback(linkList);
@@ -112,8 +232,24 @@ tinymce.PluginManager.add('link', function(editor) {
 			}
 
 			tinymce.each(e.meta, function(value, key) {
-				win.find('#' + key).value(value);
+				var inp = win.find('#' + key);
+
+				if (key === 'text') {
+					if (initialText.length === 0) {
+						inp.value(value);
+						data.text = value;
+					}
+				} else {
+					inp.value(value);
+				}
 			});
+
+			if (meta.attach) {
+				attachState = {
+					href: this.value(),
+					attach: meta.attach
+				};
+			}
 
 			if (!meta.text) {
 				updateText.call(this);
@@ -145,6 +281,10 @@ tinymce.PluginManager.add('link', function(editor) {
 			return true;
 		}
 
+		function onBeforeCall(e) {
+			e.meta = win.toJSON();
+		}
+
 		selectedElm = selection.getNode();
 		anchorElm = dom.getParent(selectedElm, 'a[href]');
 		onlyText = isOnlyTextSelected();
@@ -152,8 +292,8 @@ tinymce.PluginManager.add('link', function(editor) {
 		data.text = initialText = anchorElm ? (anchorElm.innerText || anchorElm.textContent) : selection.getContent({format: 'text'});
 		data.href = anchorElm ? dom.getAttrib(anchorElm, 'href') : '';
 
-		if ((value = dom.getAttrib(anchorElm, 'target'))) {
-			data.target = value;
+		if (anchorElm) {
+			data.target = dom.getAttrib(anchorElm, 'target');
 		} else if (editor.settings.default_link_target) {
 			data.target = editor.settings.default_link_target;
 		}
@@ -196,6 +336,7 @@ tinymce.PluginManager.add('link', function(editor) {
 				onselect: linkListChangeHandler,
 				value: editor.convertURL(data.href, 'href'),
 				onPostRender: function() {
+					/*eslint consistent-this:0*/
 					linkListCtrl = this;
 				}
 			};
@@ -265,7 +406,8 @@ tinymce.PluginManager.add('link', function(editor) {
 					autofocus: true,
 					label: 'Url',
 					onchange: urlChange,
-					onkeyup: updateText
+					onkeyup: updateText,
+					onbeforecall: onBeforeCall
 				},
 				textListCtrl,
 				linkTitleCtrl,
@@ -276,6 +418,7 @@ tinymce.PluginManager.add('link', function(editor) {
 				classListCtrl
 			],
 			onSubmit: function(e) {
+				/*eslint dot-notation: 0*/
 				var href;
 
 				data = tinymce.extend(data, e.data);
@@ -285,15 +428,34 @@ tinymce.PluginManager.add('link', function(editor) {
 				function delayedConfirm(message, callback) {
 					var rng = editor.selection.getRng();
 
-					window.setTimeout(function() {
+					tinymce.util.Delay.setEditorTimeout(editor, function() {
 						editor.windowManager.confirm(message, function(state) {
 							editor.selection.setRng(rng);
 							callback(state);
 						});
-					}, 0);
+					});
 				}
 
-				function insertLink() {
+				function toggleTargetRules(rel, isUnsafe) {
+					var rules = 'noopener noreferrer';
+
+					function addTargetRules(rel) {
+						rel = removeTargetRules(rel);
+						return rel ? [rel, rules].join(' ') : rules;
+					}
+
+					function removeTargetRules(rel) {
+						var regExp = new RegExp('(' + rules.replace(' ', '|') + ')', 'g');
+						if (rel) {
+							rel = tinymce.trim(rel.replace(regExp, ''));
+						}
+						return rel ? rel : null;
+					}
+
+					return isUnsafe ? addTargetRules(rel) : removeTargetRules(rel);
+				}
+
+				function createLink() {
 					var linkAttrs = {
 						href: href,
 						target: data.target ? data.target : null,
@@ -301,6 +463,15 @@ tinymce.PluginManager.add('link', function(editor) {
 						"class": data["class"] ? data["class"] : null,
 						title: data.title ? data.title : null
 					};
+
+					if (!editor.settings.allow_unsafe_link_target) {
+						linkAttrs.rel = toggleTargetRules(linkAttrs.rel, linkAttrs.target == '_blank');
+					}
+
+					if (href === attachState.href) {
+						attachState.attach();
+						attachState = {};
+					}
 
 					if (anchorElm) {
 						editor.focus();
@@ -326,6 +497,10 @@ tinymce.PluginManager.add('link', function(editor) {
 					}
 				}
 
+				function insertLink() {
+					editor.undoManager.transact(createLink);
+				}
+
 				if (!href) {
 					editor.execCommand('unlink');
 					return;
@@ -347,8 +522,9 @@ tinymce.PluginManager.add('link', function(editor) {
 					return;
 				}
 
-				// Is www. prefixed
-				if (/^\s*www\./i.test(href)) {
+				// Is not protocol prefixed
+				if ((editor.settings.link_assume_external_targets && !/^\w+:/i.test(href)) ||
+					(!editor.settings.link_assume_external_targets && /^\s*www[\.|\d\.]/i.test(href))) {
 					delayedConfirm(
 						'The URL you entered seems to be an external link. Do you want to add the required http:// prefix?',
 						function(state) {
@@ -371,7 +547,7 @@ tinymce.PluginManager.add('link', function(editor) {
 	editor.addButton('link', {
 		icon: 'link',
 		tooltip: 'Insert/edit link',
-		shortcut: 'Ctrl+K',
+		shortcut: 'Meta+K',
 		onclick: createLinkList(showDialog),
 		stateSelector: 'a[href]'
 	});
@@ -383,15 +559,54 @@ tinymce.PluginManager.add('link', function(editor) {
 		stateSelector: 'a[href]'
 	});
 
-	editor.addShortcut('Ctrl+K', '', createLinkList(showDialog));
+
+	if (editor.addContextToolbar) {
+		editor.addButton('openlink', {
+			icon: 'newtab',
+			tooltip: 'Open link',
+			onclick: gotoSelectedLink
+		});
+
+		editor.addContextToolbar(
+			leftClickedOnAHref,
+			'openlink | link unlink'
+		);
+	}
+
+
+	editor.addShortcut('Meta+K', '', createLinkList(showDialog));
 	editor.addCommand('mceLink', createLinkList(showDialog));
+
+	editor.on('click', function (e) {
+		var link = getLink(e.target);
+		if (link && tinymce.util.VK.metaKeyPressed(e)) {
+			e.preventDefault();
+			gotoLink(link);
+		}
+	});
+
+	editor.on('keydown', function (e) {
+		var link = getSelectedLink();
+		if (link && e.keyCode === 13 && hasOnlyAltModifier(e)) {
+			e.preventDefault();
+			gotoLink(link);
+		}
+	});
 
 	this.showDialog = showDialog;
 
+	editor.addMenuItem('openlink', {
+		text: 'Open link',
+		icon: 'newtab',
+		onclick: gotoSelectedLink,
+		onPostRender: toggleViewLinkState,
+		prependToContext: true
+	});
+
 	editor.addMenuItem('link', {
 		icon: 'link',
-		text: 'Insert link',
-		shortcut: 'Ctrl+K',
+		text: 'Link',
+		shortcut: 'Meta+K',
 		onclick: createLinkList(showDialog),
 		stateSelector: 'a[href]',
 		context: 'insert',

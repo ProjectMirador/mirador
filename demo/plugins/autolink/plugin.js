@@ -1,8 +1,8 @@
 /**
  * plugin.js
  *
- * Copyright 2011, Moxiecode Systems AB
  * Released under LGPL License.
+ * Copyright (c) 1999-2015 Ephox Corp. All rights reserved
  *
  * License: http://www.tinymce.com/license
  * Contributing: http://www.tinymce.com/contributing
@@ -12,6 +12,11 @@
 
 tinymce.PluginManager.add('autolink', function(editor) {
 	var AutoUrlDetectState;
+	var AutoLinkPattern = /^(https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.|(?:mailto:)?[A-Z0-9._%+\-]+@)(.+)$/i;
+
+	if (editor.settings.autolink_pattern) {
+		AutoLinkPattern = editor.settings.autolink_pattern;
+	}
 
 	editor.on("keydown", function(e) {
 		if (e.keyCode == 13) {
@@ -95,11 +100,16 @@ tinymce.PluginManager.add('autolink', function(editor) {
 			}
 		}
 
+		// Never create a link when we are inside a link
+		if (editor.selection.getNode().tagName == 'A') {
+			return;
+		}
+
 		// We need at least five characters to form a URL,
 		// hence, at minimum, five characters from the beginning of the line.
 		rng = editor.selection.getRng(true).cloneRange();
 		if (rng.startOffset < 5) {
-			// During testing, the caret is placed inbetween two text nodes.
+			// During testing, the caret is placed between two text nodes.
 			// The previous text node contains the URL.
 			prev = rng.endContainer.previousSibling;
 			if (!prev) {
@@ -174,7 +184,7 @@ tinymce.PluginManager.add('autolink', function(editor) {
 		}
 
 		text = rng.toString();
-		matches = text.match(/^(https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.|(?:mailto:)?[A-Z0-9._%+\-]+@)(.+)$/i);
+		matches = text.match(AutoLinkPattern);
 
 		if (matches) {
 			if (matches[1] == 'www.') {
@@ -187,6 +197,11 @@ tinymce.PluginManager.add('autolink', function(editor) {
 
 			editor.selection.setRng(rng);
 			editor.execCommand('createlink', false, matches[1] + matches[2]);
+
+			if (editor.settings.default_link_target) {
+				editor.dom.setAttrib(editor.selection.getNode(), 'target', editor.settings.default_link_target);
+			}
+
 			editor.selection.moveToBookmark(bookmark);
 			editor.nodeChanged();
 		}
