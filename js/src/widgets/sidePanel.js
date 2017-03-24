@@ -113,6 +113,7 @@
           windowId: _this.windowId,
           appendTo: _this.element.find('.tabContentArea'),
           canvasID: _this.canvasID,
+          canvases: _this.canvases,
           state: _this.state,
           eventEmitter: _this.eventEmitter
         });

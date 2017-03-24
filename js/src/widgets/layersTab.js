@@ -103,10 +103,10 @@
       });
 
       _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, _this.canvasIdUpdated.bind(_this));
-      _this.eventEmitter.subscribe('image-status-updated', _this.updateImageResourceStatus.bind(_this));
-      _this.eventEmitter.subscribe('image-show', _this.showImageResource.bind(_this));
-      _this.eventEmitter.subscribe('image-hide', _this.hideImageResource.bind(_this));
-      _this.eventEmitter.subscribe('image-opacity-updated', _this.updateImageResourceOpacity.bind(_this));
+      _this.eventEmitter.subscribe('image-status-updated' + _this.windowId, _this.updateImageResourceStatus.bind(_this));
+      _this.eventEmitter.subscribe('image-show' + _this.windowId, _this.showImageResource.bind(_this));
+      _this.eventEmitter.subscribe('image-hide' + _this.windowId, _this.hideImageResource.bind(_this));
+      _this.eventEmitter.subscribe('image-opacity-updated' + _this.windowId, _this.updateImageResourceOpacity.bind(_this));
 
       _this.eventEmitter.subscribe('focusUpdated' + _this.windowId, function(event, focus) {
 
@@ -135,14 +135,14 @@
       });
 
       this.element.on('input', '.opacity-slider', function(event) {
-        var canvasModel = _this.manifest.canvases[_this.localState().canvasID],
+        var canvasModel = _this.canvases[_this.localState().canvasID],
             eventedImageResource = canvasModel.getImageById(event.currentTarget.attributes['data-imageid'].nodeValue);
 
         eventedImageResource.setOpacity(event.currentTarget.value/100);
       });
 
       this.element.on('change', '.visibility-toggle', function(event) {
-        var canvasModel = _this.manifest.canvases[_this.localState().canvasID],
+        var canvasModel = _this.canvases[_this.localState().canvasID],
             eventedImageResource = canvasModel.getImageById(event.currentTarget.attributes['data-imageid'].nodeValue);
         if(event.currentTarget.checked) {
           eventedImageResource.show();
@@ -162,7 +162,7 @@
 
     render: function(state) {
       var _this = this,
-          canvasModel = _this.manifest.canvases[state.canvasID],
+          canvasModel = _this.canvases[state.canvasID],
           templateData = {
             active: state.active ? '' : 'inactive',
             hasLayers: canvasModel.images.length > 0,
