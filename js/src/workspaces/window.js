@@ -724,7 +724,8 @@
         canvasID: _this.canvasID,
         imageMode: _this.currentImageMode,
         loadedManifest: _this.manifest.jsonLd['@id'],
-        slotAddress: _this.slotAddress
+        slotAddress: _this.slotAddress,
+        canvases: _this.canvases
       });
     },
 
@@ -834,7 +835,6 @@
       // publication of the state update event currentCanvasIDUpdated
       // below.
       _this.eventEmitter.publish('removeTooltips.' + _this.id);
-      _this.eventEmitter.unsubscribe(('annotationListLoaded.' + _this.id));
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
