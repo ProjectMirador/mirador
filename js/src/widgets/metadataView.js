@@ -128,9 +128,9 @@
 
   getMetadataDetails: function(jsonLd) {
       var mdList = [
-        { label: 'label',
+        { label: i18next.t('label'),
           value: '<b>' + ($.JsonLd.getTextValue(jsonLd.label) || '') + '</b>' },
-        { label: 'description',
+        { label: i18next.t('description'),
           value: $.JsonLd.getTextValue(jsonLd.description) || '' }
       ];
 
