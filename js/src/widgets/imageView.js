@@ -164,6 +164,12 @@
     bindEvents: function() {
       var _this = this;
 
+      this.element.find('.hud-control').click(function(){
+        _this.eventEmitter.publish('slotActivated.'+_this.windowId,{
+          view:'ImageView'
+        });
+      });
+
       this.element.find('.mirador-osd-next').on('click', function() {
         _this.next();
       });
@@ -545,9 +551,11 @@
         .appendTo(_this.element);
 
         _this.osd = $.OpenSeadragon({
-          'id':           osdID,
-          'tileSources':  infoJson,
-          'uniqueID' : uniqueID
+          'id': osdID,
+          'tileSources': infoJson,
+          'uniqueID': uniqueID,
+          'currentCanvas': _this.currentImg,
+          'state': _this.state
         });
 
         _this.osd.addHandler('zoom', $.debounce(function(){
