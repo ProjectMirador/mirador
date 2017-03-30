@@ -686,7 +686,13 @@
     },
 
     resize: function() {
+      var _this = this;
       var viewportBounds = this.viewer.viewport.getBounds(true);
+      console.log(viewportBounds);
+      var originWindow = this.state.getWindowObjectById(this.windowId);
+      if ( !originWindow.canvases ) { return; } // no-op if canvases are not initialised.
+      var currentCanvasModel = originWindow.canvases[originWindow.canvasID];
+
       /* in viewport coordinates */
       this.canvas.width = this.viewer.viewport.containerSize.x;
       this.canvas.height = this.viewer.viewport.containerSize.y;
@@ -698,15 +704,16 @@
       this.canvas.style.marginTop = '0px';
       if (this.paperScope && this.paperScope.view) {
         this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
-        // this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
-        // this.paperScope.view.center = new this.paperScope.Size(
-        //   this.viewer.world.getItemAt(0).source.dimensions.x * viewportounds.x + this.paperScope.view.bounds.width / 2,
-        //   this.viewer.world.getItemAt(0).source.dimensions.x * viewportBounds.y + this.paperScope.view.bounds.height / 2);
-        this.paperScope.view.zoom = 0.2;
-        this.paperScope.view.center = new this.paperScope.Size(1500, 1500);
-        // console.log(this.paperScope.view);
+
+        this.paperScope.view.zoom = _this.canvas.width * this.viewer.viewport.getZoom(true);
+        this.paperScope.view.center = new this.paperScope.Size(
+          this.viewer.viewport.getCenter(true).x,
+          this.viewer.viewport.getCenter(true).y
+        );
+
+        console.log(this.paperScope.view.center);
+        console.log(this.paperScope.view.zoom);
         this.paperScope.view.update(true);
-        // console.log(this.paperScope.view);
         var allItems = this.paperScope.project.getItems({
           name: /_/
         });
