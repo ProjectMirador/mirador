@@ -463,27 +463,34 @@
     },
 
     getMousePositionInImage: function(mousePosition) {
+      var _this = this;
+      var originWindow = this.state.getWindowObjectById(this.windowId);
+      var currentCanvasModel = originWindow.canvases[originWindow.canvasID];
+
       if (mousePosition.x < 0) {
         mousePosition.x = 0;
       }
-      if (mousePosition.x > this.viewer.tileSources.width) {
-        mousePosition.x = this.viewer.tileSources.width;
+      if (mousePosition.x > currentCanvasModel.getBounds().width) {
+        mousePosition.x = currentCanvasModel.getBounds().width;
       }
       if (mousePosition.y < 0) {
         mousePosition.y = 0;
       }
-      if (mousePosition.y > this.viewer.tileSources.height) {
-        mousePosition.y = this.viewer.tileSources.height;
+      if (mousePosition.y > currentCanvasModel.getBounds().height) {
+        mousePosition.y = currentCanvasModel.getBounds().height;
       }
       return mousePosition;
     },
 
     adjustDeltaForShape: function(lastPoint, currentPoint, delta, bounds) {
+      var originWindow = this.state.getWindowObjectById(this.windowId);
+      var currentCanvasModel = originWindow.canvases[originWindow.canvasID];
+
       //first check along x axis
       if (lastPoint.x < currentPoint.x) {
         //moving to the right, delta should be based on the right most edge
-        if (bounds.x + bounds.width > this.viewer.tileSources.width) {
-          delta.x = this.viewer.tileSources.width - (bounds.x + bounds.width);
+        if (bounds.x + bounds.width > currentCanvasModel.getBounds().width) {
+          delta.x = currentCanvasModel.getBounds().width - (bounds.x + bounds.width);
         }
       } else {
         //moving to the left, prevent it from going past the left edge.  if it does, use the shapes x value as the delta
@@ -495,8 +502,8 @@
       //check along y axis
       if (lastPoint.y < currentPoint.y) {
         // moving to the bottom
-        if (bounds.y + bounds.height > this.viewer.tileSources.height) {
-          delta.y = this.viewer.tileSources.height - (bounds.y + bounds.height);
+        if (bounds.y + bounds.height > currentCanvasModel.getBounds().height) {
+          delta.y = currentCanvasModel.getBounds().height - (bounds.y + bounds.height);
         }
       } else {
         //moving to the top
@@ -691,11 +698,15 @@
       this.canvas.style.marginTop = '0px';
       if (this.paperScope && this.paperScope.view) {
         this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
-        this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
-        this.paperScope.view.center = new this.paperScope.Size(
-          this.viewer.world.getItemAt(0).source.dimensions.x * viewportBounds.x + this.paperScope.view.bounds.width / 2,
-          this.viewer.world.getItemAt(0).source.dimensions.x * viewportBounds.y + this.paperScope.view.bounds.height / 2);
+        // this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
+        // this.paperScope.view.center = new this.paperScope.Size(
+        //   this.viewer.world.getItemAt(0).source.dimensions.x * viewportounds.x + this.paperScope.view.bounds.width / 2,
+        //   this.viewer.world.getItemAt(0).source.dimensions.x * viewportBounds.y + this.paperScope.view.bounds.height / 2);
+        this.paperScope.view.zoom = 0.2;
+        this.paperScope.view.center = new this.paperScope.Size(1500, 1500);
+        // console.log(this.paperScope.view);
         this.paperScope.view.update(true);
+        // console.log(this.paperScope.view);
         var allItems = this.paperScope.project.getItems({
           name: /_/
         });
@@ -781,7 +792,6 @@
 
     // get the tool which controls given shape
     getTool:function(shape){
-      console.log('getting tool');
       for(var i=0;i<this.tools.length;i++){
         if(shape.name.toString().indexOf(this.tools[i].idPrefix) !== -1){
           return this.tools[i];

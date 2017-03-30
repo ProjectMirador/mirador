@@ -687,7 +687,6 @@
       _this.eventEmitter.publish('osdOpen.'+_this.windowId);
       _this.addAnnotationsLayer(_this.elemAnno);
 
-
       if (_this.osdOptions.osdBounds) {
         var newBounds = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
         _this.osd.viewport.fitBounds(newBounds, true);

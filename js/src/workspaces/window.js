@@ -724,7 +724,8 @@
         canvasID: _this.canvasID,
         imageMode: _this.currentImageMode,
         loadedManifest: _this.manifest.jsonLd['@id'],
-        slotAddress: _this.slotAddress
+        slotAddress: _this.slotAddress,
+        canvases: _this.canvases
       });
     },
 
