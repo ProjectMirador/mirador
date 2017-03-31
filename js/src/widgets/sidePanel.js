@@ -8,7 +8,7 @@
       panelState:        {},
       tocTabAvailable:   null,
       // annotationsTabAvailable: false,
-      layersTabAvailable: null,
+      // layersTabAvailable: null,
       // toolsTabAvailable: false,
       searchTabAvailable: null,
       hasStructures:     false,
@@ -41,14 +41,14 @@
            label:'Annotations'
            }
            },*/
-          {
-            name : 'layers',
-            options : {
-              available: _this.layersTabAvailable,
-              id:'layersTab',
-              label:'Layers'
-            }
-          },
+          // {
+          //   name : 'layers',
+          //   options : {
+          //     available: _this.layersTabAvailable,
+          //     id:'layersTab',
+          //     label:'Layers'
+          //   }
+          // },
           /*{
            name : 'tools',
            options : {
@@ -116,16 +116,16 @@
           eventEmitter: _this.eventEmitter
         });
       }
-      if (_this.layersTabAvailable) {
-        new $.LayersTab({
-          manifest: _this.manifest,
-          windowId: this.windowId,
-          appendTo: _this.element.find('.tabContentArea'),
-          canvasID: this.canvasID,
-          state: _this.state,
-          eventEmitter: _this.eventEmitter
-        });
-      }
+      // if (_this.layersTabAvailable) {
+      //   new $.LayersTab({
+      //     manifest: _this.manifest,
+      //     windowId: this.windowId,
+      //     appendTo: _this.element.find('.tabContentArea'),
+      //     canvasID: this.canvasID,
+      //     state: _this.state,
+      //     eventEmitter: _this.eventEmitter
+      //   });
+      // }
 
     },
 
