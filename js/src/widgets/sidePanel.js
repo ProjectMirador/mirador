@@ -6,11 +6,10 @@
       appendTo:          null,
       manifest:          null,
       panelState:        {},
-      tocTabAvailable:   null,
-      // annotationsTabAvailable: false,
-      // layersTabAvailable: null,
-      // toolsTabAvailable: false,
-      searchTabAvailable: null,
+      tocTabAvailable:   false,
+      annotationsTabAvailable: false,
+      layersTabAvailable: false,
+      toolsTabAvailable: false,
       hasStructures:     false,
       state:             null,
       eventEmitter:      null
@@ -29,7 +28,7 @@
             name : 'toc',
             options : {
               available: _this.tocTabAvailable,
-              id:'tocTab',
+              id:'tocTab', 
               label:'Index'
             }
           },
@@ -37,34 +36,26 @@
            name : 'annotations',
            options : {
            available: _this.annotationsTabAvailable,
-           id:'annotationsTab',
+           id:'annotationsTab', 
            label:'Annotations'
            }
            },*/
-          // {
-          //   name : 'layers',
-          //   options : {
-          //     available: _this.layersTabAvailable,
-          //     id:'layersTab',
-          //     label:'Layers'
-          //   }
-          // },
+          {
+            name : 'layers',
+            options : {
+              available: _this.layersTabAvailable,
+              id:'layersTab', 
+              label:'Layers'
+            }
+          },
           /*{
            name : 'tools',
            options : {
            available: _this.toolsTabAvailable,
-           id:'toolsTab',
+           id:'toolsTab', 
            label:'Tools'
            }
            }*/
-          {
-            name : 'search',
-            options : {
-              available: _this.searchTabAvailable,
-              id: 'searchTab',
-              label: 'Search'
-            }
-          }
         ],
         width: 280,
         open: true
@@ -106,26 +97,16 @@
           eventEmitter: _this.eventEmitter
         });
       }
-      if (_this.searchTabAvailable) {
-        new $.SearchTab({
+      if (_this.layersTabAvailable) {
+        new $.LayersTab({
           manifest: _this.manifest,
           windowId: this.windowId,
           appendTo: _this.element.find('.tabContentArea'),
+          canvasID: this.canvasID,
           state: _this.state,
-          manifestVersion: this.manifest.getVersion(),
           eventEmitter: _this.eventEmitter
         });
       }
-      // if (_this.layersTabAvailable) {
-      //   new $.LayersTab({
-      //     manifest: _this.manifest,
-      //     windowId: this.windowId,
-      //     appendTo: _this.element.find('.tabContentArea'),
-      //     canvasID: this.canvasID,
-      //     state: _this.state,
-      //     eventEmitter: _this.eventEmitter
-      //   });
-      // }
 
     },
 
@@ -225,11 +206,11 @@
       if (!enableSidePanel) {
         jQuery(this.appendTo).hide();
         _this.eventEmitter.publish('ADD_CLASS.'+this.windowId, 'focus-max-width');
-        _this.eventEmitter.publish('HIDE_ICON_TOC.'+this.windowId);
+        _this.eventEmitter.publish('HIDE_ICON_TOC.'+this.windowId);                
       } else {
         jQuery(this.appendTo).show({effect: "fade", duration: 300, easing: "easeInCubic"});
         _this.eventEmitter.publish('REMOVE_CLASS.'+this.windowId, 'focus-max-width');
-        _this.eventEmitter.publish('SHOW_ICON_TOC.'+this.windowId);
+        _this.eventEmitter.publish('SHOW_ICON_TOC.'+this.windowId);                
       }
     }
   };

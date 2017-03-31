@@ -43,7 +43,6 @@ module.exports = function(grunt) {
     'node_modules/i18next/i18next.min.js',
     'node_modules/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js',
     'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
-    'bower_components/simplePagination.js/jquery.simplePagination.js',
     'js/lib/modernizr.custom.js',
     'js/lib/sanitize-html.min.js'
   ],
@@ -94,8 +93,7 @@ module.exports = function(grunt) {
           'css/jquery.qtip.min.css',
           'node_modules/spectrum-colorpicker/spectrum.css',
           'css/mirador.css',
-          'css/material-icons.css',
-          'bower_components/simplePagination.js/simplePagination.css'
+          'css/material-icons.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'
       }

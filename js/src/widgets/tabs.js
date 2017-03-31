@@ -19,7 +19,8 @@
 
             this.state({
                 tabs : this.tabs,
-                // tabs: [{id:'tocTab', label:'Indices'}, {id:'searchTab', label:'Search'}],
+                //tabs: [{id:'tocTab', label:'Indices'}, {id:'annotationsTab', label:'Annotations'}],
+                //tabs: [{id:'tocTab', label:'Indices'}],
                 selectedTabIndex: 0
             }, true);
             this.listenForActions();
@@ -45,8 +46,7 @@
         getTemplateData: function() {
             return {
                 annotationsTab: this.state().annotationsTab,
-                tocTab: this.state().tocTab,
-                searchTab: this.state().searchTab
+                tocTab: this.state().tocTab
             };
         },
         listenForActions: function() {
@@ -79,15 +79,15 @@
                     return value.options.available;
                 });
                 renderingData.tabs = tabs;
-                if(renderingData.tabs.length === 1){
+                if(renderingData.tabs.length === 1){                    
                     // TODO: temporary logic to minimize side panel if only tab is toc and toc is empty
                     if (renderingData.tabs[0].name === 'toc' && !_this.hasStructures) {
                         _this.eventEmitter.publish("sidePanelVisibilityByTab." + _this.windowId, false);
                     }
 
                     // don't show button if only one tab
-                    renderingData.tabs = [];
-                }
+                    renderingData.tabs = []; 
+                } 
                 //TODO: add text if there is one label or no content within this tab
                 this.element = jQuery(_this.template(renderingData)).prependTo(_this.appendTo);
                 return;

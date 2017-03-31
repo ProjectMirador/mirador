@@ -58,18 +58,7 @@
 
       this.request.done(function(jsonLd) {
         _this.jsonLd = jsonLd;
-        _this.buildCanvasMap();
       });
-    },
-    buildCanvasMap: function() {
-      var _this = this;
-      this.canvasMap = {};
-
-      if (this.getCanvases()) {
-        this.getCanvases().forEach(function(canvas) {
-          _this.canvasMap[canvas['@id']] = canvas;
-        });
-      }
     },
     initFromInfoJson: function(infoJsonUrl) {
       var _this = this;
@@ -107,10 +96,10 @@
         } else if (canvas.thumbnail.hasOwnProperty('service')) {
             service = canvas.thumbnail.service;
             if(service.hasOwnProperty('profile')) {
-               compliance = $.Iiif.getComplianceLevelFromProfile(service.profile);
+               compliance = $.Iiif.getComplianceLevelFromProfile(service.profile);    
             }
             if(compliance === 0){
-                // don't change existing behaviour unless compliance is explicitly 0
+                // don't change existing behaviour unless compliance is explicitly 0            
                 thumbnailUrl = canvas.thumbnail['@id'];
             } else {
                 // Get the IIIF Image API via the @context
@@ -144,7 +133,7 @@
     },
     getCanvases : function() {
       var _this = this;
-      return _this.jsonLd.sequences && _this.jsonLd.sequences[0].canvases;
+      return _this.jsonLd.sequences[0].canvases;
     },
     getAnnotationsListUrls: function(canvasId) {
       var _this = this;
@@ -213,46 +202,6 @@
       };
 
       return dummyManifest;
-    },
-    getSearchWithinService: function(){
-      var _this = this;
-      var serviceProperty = _this.jsonLd.service;
-      var service = [];
-      if (serviceProperty === undefined){
-        service = null;
-      }
-      else if (serviceProperty.constructor === Array){
-        for (var i = 0; i < serviceProperty.length; i++){
-          //TODO: should we be filtering search by context
-          if (serviceProperty[i]["@context"] === "http://iiif.io/api/search/0/context.json" ||
-            serviceProperty[i]["@context"] === "http://iiif.io/api/search/1/context.json") {
-            //returns the first service object with the correct context
-            service.push(serviceProperty[i]);
-          }
-        }
-      }
-      else if (_this.jsonLd.service["@context"] === "http://iiif.io/api/search/0/context.json" ||
-        serviceProperty["@context"] === "http://iiif.io/api/search/1/context.json"){
-        service.push(_this.jsonLd.service);
-      }
-      else {
-        //no service object with the right context is found
-        service = null;
-      }
-      return service;
-    },
-
-    /**
-     * Get the label of the a canvas by ID
-     * @param  {[type]} canvasId ID of desired canvas
-     * @return {[type]}          string
-     */
-    getCanvasLabel: function(canvasId) {
-      console.assert(canvasId && canvasId !== '', "No canvasId was specified.");
-      if (this.canvasMap && canvasId.indexOf('#') >= 0) {
-        var canvas = this.canvasMap[canvasId.split('#')[0]];
-        return canvas ? canvas.label : undefined;
-      }
     }
   };
 

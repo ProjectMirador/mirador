@@ -55,17 +55,11 @@
       this.localState(localState);
     },
 
-    imageFocusUpdated: function(focus) {
-      var localState = this.localState();
-      localState.active = (focus === 'ThumbnailsView') ? false : true;
-
-      this.localState(localState);
-    },
+    toggle: function() {},
 
     listenForActions: function() {
       var _this = this;
 
-      // This event is fired by the component itself anytime its local state is updated.
       _this.eventEmitter.subscribe('layersTabStateUpdated.' + _this.windowId, function(_, data) {
         _this.render(data);
       });
@@ -77,12 +71,6 @@
       _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasID) {
         //update layers for this canvasID
       });
-
-      _this.eventEmitter.subscribe('focusUpdated' + _this.windowId, function(event, focus) {
-        // update the disabled state of the layersTab
-        // since it cannot be used in overview mode
-        _this.imageFocusUpdated(focus);
-      });
     },
 
     bindEvents: function() {
@@ -92,16 +80,15 @@
 
     render: function(state) {
       var _this = this,
-          templateData = {
-            active: state.active ? '' : 'inactive'
-          };
+      templateData = {};
 
       if (this.element) {
         _this.appendTo.find(".layersPanel").remove();
       }
       this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
-
+      
       _this.bindEvents();
+
 
       if (state.visible) {
         this.element.show();
@@ -110,10 +97,10 @@
       }
     },
 
-    template: Handlebars.compile([
-      '<div class="layersPanel {{active}}">',
+    template: $.Handlebars.compile([
+      '<div class="layersPanel">',
       '</div>',
-    ].join(''))
+      ].join(''))
   };
 
 }(Mirador));

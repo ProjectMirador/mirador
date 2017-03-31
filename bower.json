@@ -21,8 +21,7 @@
   ],
   "dependencies": {
     "sanitize-html": "~1.11.4",
-    "qtip2": "~2.2.1",
-    "simplePagination.js": "*"
+    "qtip2": "~2.2.1"
   },
   "resolutions": {
     "jquery": ">=1.7.2"
