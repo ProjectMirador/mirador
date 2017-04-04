@@ -572,6 +572,7 @@
 
     setBounds: function() {
       var _this = this;
+
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       _this.eventEmitter.publish("imageBoundsUpdated", {
         id: _this.windowId,
@@ -582,7 +583,7 @@
           height: _this.osdOptions.osdBounds.height
         }
       });
-      var rectangle = this.osd.viewport.viewportToImageRectangle(this.osdOptions.osdBounds);
+      var rectangle = this.osdOptions.osdBounds; // In ImageView, viewport coordinates are in the same as Canvas Coordinates.
       _this.eventEmitter.publish("imageRectangleUpdated", {
         id: _this.windowId,
         osdBounds: {
@@ -590,7 +591,8 @@
           y: Math.round(rectangle.y),
           width: Math.round(rectangle.width),
           height: Math.round(rectangle.height)
-        }
+        },
+        warning: 'Warning, image rectangle now based on canvas dimensions, not the constituent images.'
       });
     },
 

@@ -688,10 +688,9 @@
     resize: function() {
       var _this = this;
       var viewportBounds = this.viewer.viewport.getBounds(true);
-      console.log(viewportBounds);
-      var originWindow = this.state.getWindowObjectById(this.windowId);
-      if ( !originWindow.canvases ) { return; } // no-op if canvases are not initialised.
-      var currentCanvasModel = originWindow.canvases[originWindow.canvasID];
+      // var originWindow = this.state.getWindowObjectById(this.windowId);
+      // if ( !originWindow.canvases ) { return; } // no-op if canvases are not initialised.
+      // var currentCanvasModel = originWindow.canvases[originWindow.canvasID];
 
       /* in viewport coordinates */
       this.canvas.width = this.viewer.viewport.containerSize.x;
@@ -704,15 +703,12 @@
       this.canvas.style.marginTop = '0px';
       if (this.paperScope && this.paperScope.view) {
         this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
-
         this.paperScope.view.zoom = _this.canvas.width * this.viewer.viewport.getZoom(true);
         this.paperScope.view.center = new this.paperScope.Size(
           this.viewer.viewport.getCenter(true).x,
           this.viewer.viewport.getCenter(true).y
         );
 
-        console.log(this.paperScope.view.center);
-        console.log(this.paperScope.view.zoom);
         this.paperScope.view.update(true);
         var allItems = this.paperScope.project.getItems({
           name: /_/
