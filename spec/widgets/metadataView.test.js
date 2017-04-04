@@ -85,7 +85,7 @@ describe('MetadataView', function() {
   });
 
   describe('renderWithin', function() {
-    it('should render simple strings as-sis', function() {
+    it('should render simple strings as-is', function() {
       var within = "http://example.com";
       expect(Mirador.MetadataView.prototype.getWithin(within)).toBe(within);
     });
@@ -109,6 +109,12 @@ describe('MetadataView', function() {
       expect(Mirador.MetadataView.prototype.getWithin(within)).toBe(
         '<a href="http://example.com" target="_blank">foobar</a><br/>' +
         '<a href="http://foo.org" target="_blank">barfoo</a>');
+    });
+
+    it('should render a list of strings <br/>-concatenated', function() {
+      var within = ['http://example.com/foo', 'http://example.com/bar'];
+      expect(Mirador.MetadataView.prototype.getWithin(within)).toBe(
+        'http://example.com/foo<br/>http://example.com/bar');
     });
   });
 });
