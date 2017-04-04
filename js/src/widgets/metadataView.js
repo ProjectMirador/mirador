@@ -169,7 +169,7 @@
       var collectionLabel = within.label || collectionUrl;
       return '<a href="' + collectionUrl + '" target="_blank">' + collectionLabel + '</a>';
      } else if (within instanceof Array) {
-       return within.map(this.getWithin).join("<br/>");
+       return within.map(this.getWithin, this).join("<br/>");
      } else {
        return this.stringifyObject(within);
      }
