@@ -90,6 +90,7 @@
       // add main menu
       if (showMainMenu) {
         this.mainMenu = new $.MainMenu({ appendTo: this.element, state: this.state, eventEmitter: this.eventEmitter });
+        this.eventEmitter.publish('mainMenuInitialized');
       }
 
       // add viewer area
