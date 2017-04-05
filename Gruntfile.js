@@ -43,13 +43,14 @@ module.exports = function(grunt) {
     'node_modules/i18next/i18next.min.js',
     'node_modules/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js',
     'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
+    'bower_components/simplePagination.js/jquery.simplePagination.js',
     'js/lib/modernizr.custom.js',
     'js/lib/sanitize-html.min.js'
   ],
 
   // source files
   sources = [
-    'js/src/mirador.js', 
+    'js/src/mirador.js',
     'js/src/utils/handlebars.js',
     'js/src/*.js',
     'js/src/viewer/*.js',
@@ -93,7 +94,8 @@ module.exports = function(grunt) {
           'css/jquery.qtip.min.css',
           'node_modules/spectrum-colorpicker/spectrum.css',
           'css/mirador.css',
-          'css/material-icons.css'
+          'css/material-icons.css',
+          'bower_components/simplePagination.js/simplePagination.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'
       }
@@ -220,7 +222,7 @@ module.exports = function(grunt) {
           'locales/*/*.json',
           'images/*',
           'css/*.css',
-          'css/mirador/**/*.less',
+          'css/mirador.less/**/*.less',
           'index.html'
         ],
         tasks: 'dev_build'
