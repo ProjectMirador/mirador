@@ -309,7 +309,17 @@
       }));
 
       _this.events.push(_this.eventEmitter.subscribe('SET_CURRENT_CANVAS_ID.' + this.id, function(event, canvasID) {
-        _this.setCurrentCanvasID(canvasID);
+        if (typeof canvasID === "string") {
+          _this.setCurrentCanvasID(canvasID);
+        } else {
+          if (_this.canvasID !== canvasID.canvasID) {
+            // Order is important
+            _this.setNextCanvasBounds(canvasID.bounds);
+            _this.setCurrentCanvasID(canvasID.canvasID);
+          } else {
+            _this.eventEmitter.publish('fitBounds.' + _this.id, canvasID.bounds);
+          }
+        }
       }));
 
       _this.events.push(_this.eventEmitter.subscribe('REMOVE_CLASS.' + this.id, function(event, className) {
@@ -507,7 +517,8 @@
       var _this = this,
       tocAvailable = _this.sidePanelOptions.toc,
       annotationsTabAvailable = _this.sidePanelOptions.annotations,
-      layersTabAvailable = _this.sidePanelOptions.layers,
+      layersTabAvailable = _this.sidePanelOptions.layersTabAvailable,
+      searchTabAvailable = _this.sidePanelOptions.searchTabAvailable,
       hasStructures = true;
 
       var structures = _this.manifest.getStructures();
@@ -525,6 +536,7 @@
               canvasID: _this.canvasID,
               layersTabAvailable: layersTabAvailable,
               tocTabAvailable: tocAvailable,
+              searchTabAvailable: searchTabAvailable,
               annotationsTabAvailable: annotationsTabAvailable,
               hasStructures: hasStructures
         });
@@ -643,7 +655,7 @@
       this.updateManifestInfo();
       this.updatePanelsAndOverlay(focusState);
       this.updateSidePanel();
-      _this.eventEmitter.publish("focusUpdated");
+      _this.eventEmitter.publish("focusUpdated" + _this.id, focusState);
       _this.eventEmitter.publish("windowUpdated", {
         id: _this.id,
         viewType: _this.viewType,
@@ -691,10 +703,13 @@
           canvasControls: this.canvasControls,
           annotationState : this.canvasControls.annotations.annotationState
         });
-      } else {
-        var view = this.focusModules.ImageView;
-        view.updateImage(canvasID);
-      }
+        } else {
+          var view = this.focusModules.ImageView;
+          if (this.boundsToFocusOnNextOpen) {
+            view.boundsToFocusOnNextOpen = this.boundsToFocusOnNextOpen;
+          }
+          view.updateImage(canvasID);
+        }
       this.toggleFocus('ImageView', 'ImageView');
     },
 
@@ -765,6 +780,12 @@
           break;
       }
       _this.eventEmitter.publish(('currentCanvasIDUpdated.' + _this.id), canvasID);
+    },
+
+    setNextCanvasBounds: function(bounds) {
+      if (bounds) {
+        this.boundsToFocusOnNextOpen = bounds;
+      }
     },
 
     replaceWindow: function(newSlotAddress, newElement) {
