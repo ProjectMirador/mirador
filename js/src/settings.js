@@ -215,7 +215,18 @@
     'lockController' : {
       'lockProfile' : 'lazyZoom',
       'notifyMaxMin' : true
-    }
+    },
+	
+	//Default settings for the sanitizeHTML function
+	"sanitizeHtmlSettings": {
+		"allowedTags": ['a', 'b', 'br', 'i', 'img', 'p', 'span', 'strong', 'em'],
+		"allowedAttributes": 
+			{
+				'a': ['href', 'target'],
+				'img': ['src', 'alt'],
+				'p': ['dir']
+			}
+	}
   };
 
 }(Mirador));

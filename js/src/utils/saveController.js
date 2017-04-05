@@ -78,6 +78,8 @@
       var _this = this;
 
       this.eventEmitter = config.eventEmitter;
+	  
+	  $.sanitizeHtmlSettings = config.sanitizeHtmlSettings;
 
       // Don't want to save session
       if (config.saveSession === false) {
