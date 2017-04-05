@@ -51,7 +51,8 @@
         "BookView" : "fa fa-columns fa-lg fa-fw",
         "ScrollView" : "fa fa-ellipsis-h fa-lg fa-fw",
         "ThumbnailsView" : "fa fa-th fa-lg fa-rotate-90 fa-fw"
-      }
+      },
+      userButtons: null
     }, options);
 
     this.init();
@@ -150,6 +151,7 @@
       }
       templateData.currentFocusClass = _this.iconClasses[_this.viewType];
       templateData.showFullScreen = _this.fullScreen;
+      templateData.userButtons = _this.userButtons;
       _this.element = jQuery(this.template(templateData)).appendTo(_this.appendTo);
       this.element.find('.manifest-info .mirador-tooltip').each(function() {
         jQuery(this).qtip({
@@ -952,6 +954,9 @@
                                  '<div class="window">',
                                  '<div class="manifest-info">',
                                  '<div class="window-manifest-navigation">',
+                                 '{{#if userButtons}}',
+                                   '{{windowuserbtns userButtons}}',
+                                 '{{/if}}',
                                  '<a href="javascript:;" class="mirador-btn mirador-icon-view-type" role="button" title="{{t "viewTypeTooltip"}}" aria-label="{{t "viewTypeTooltip"}}">',
                                  '<i class="{{currentFocusClass}}"></i>',
                                  '<i class="fa fa-caret-down"></i>',
@@ -1025,5 +1030,41 @@
                                  '</div>'
     ].join(''))
   };
+
+  var processUserButtons = function (buttons){
+    return buttons.map(function(button, index){
+      return processUserButton(button);
+    });
+  };
+
+  var processUserButton = function(button){
+    var $a = jQuery('<a>');
+    var $i = jQuery('<i>', {'class': 'fa fa-lg fa-fw'});
+    try {
+      if(!button.iconClass){
+        throw "userButtons must have an iconClass";
+      }
+      // add custom attributes to the button element
+      if(button.attributes){
+        $a.attr(button.attributes);
+      }
+      // add default class to the button element
+      $a.addClass('mirador-btn');
+      // add custom classes to the icon element
+      $i.addClass(button.iconClass);
+      // append the icon element to the button element
+      $a.append($i);
+      return $a.get(0).outerHTML;
+    }catch(error){
+      console && console.error && console.error(error);
+      return '';
+    }
+  };
+
+  $.Handlebars.registerHelper('windowuserbtns', function(userButtons){
+    return new $.Handlebars.SafeString(
+      processUserButtons(userButtons).join('')
+    );
+  });
 
 }(Mirador));
