@@ -52,7 +52,10 @@
       //control what is available in the side panel. if "sidePanel" is false, these options won't be applied
       "sidePanelOptions" : {
         "toc" : true,
-        "annotations" : false
+        "annotations" : false,
+        "tocTabAvailable": true,
+        // "layersTabAvailable": true,
+        "searchTabAvailable": false,
       },
       "sidePanelVisible" : true, //whether or not to make the side panel visible in this window on load. This setting is dependent on sidePanel being true
       "overlay" : true, //whether or not to make the metadata overlay available/visible in this window
@@ -219,16 +222,15 @@
 	
 	//Default settings for the sanitizeHTML function
 	"sanitizeHtmlSettings": {
-		"allowedTags": ['a', 'b', 'br', 'i', 'img', 'p', 'span', 'strong', 'em', 'li', 'ul', 'ol', 'iframe', 'video', 'source'],
-		"allowedAttributes": 
-			{
-				'a': ['href', 'target'],
-				'img': ['src', 'alt'],
-				'p': ['dir'],
-				'video': ['poster', 'controls', 'width', 'height'],
-				'source': ['src'],
-				'iframe': ['src', 'width', 'height', 'frameborder', 'allowfullscreen']
-			}
+	  "allowedTags": ['a', 'b', 'br', 'i', 'img', 'p', 'span', 'strong', 'em', 'li', 'ul', 'ol', 'iframe', 'video', 'source'],
+	  "allowedAttributes": {
+		'a': ['href', 'target'],
+		'img': ['src', 'alt'],
+		'p': ['dir'],
+		'video': ['poster', 'controls', 'width', 'height'],
+		'source': ['src'],
+		'iframe': ['src', 'width', 'height', 'frameborder', 'allowfullscreen']
+	  }
 	}
   };
 
