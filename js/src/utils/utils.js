@@ -257,7 +257,9 @@
       document.mozCancelFullScreen();
     } else if (document.webkitExitFullscreen) {
       document.webkitExitFullscreen();
-    }
+    } else if (document.msExitFullscreen) {
+	  document.msExitFullscreen();
+	}
   };
 
   $.isFullscreen = function() {
@@ -266,7 +268,7 @@
   };
 
   $.fullscreenElement = function() {
-    return (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement);
+    return (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
   };
 
   $.sanitizeHtml = function(dirty) {
