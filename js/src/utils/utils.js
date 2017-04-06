@@ -271,7 +271,7 @@
 
   $.sanitizeHtml = function(dirty) {
     return sanitizeHtml(dirty, {
-      allowedTags: ['a', 'b', 'br', 'i', 'img', 'p', 'span', 'strong', 'em'],
+      allowedTags: ['a', 'b', 'br', 'i', 'img', 'p', 'span', 'strong', 'em', 'ul', 'ol', 'li'],
       allowedAttributes: {
         'a': ['href', 'target'],
         'img': ['src', 'alt'],
