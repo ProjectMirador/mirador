@@ -220,18 +220,18 @@
       'notifyMaxMin' : true
     },
 	
-	//Default settings for the sanitizeHTML function
-	"sanitizeHtmlSettings": {
-	  "allowedTags": ['a', 'b', 'br', 'i', 'img', 'p', 'span', 'strong', 'em', 'li', 'ul', 'ol', 'iframe', 'video', 'source'],
-	  "allowedAttributes": {
-		'a': ['href', 'target'],
-		'img': ['src', 'alt'],
-		'p': ['dir'],
-		'video': ['poster', 'controls', 'width', 'height'],
-		'source': ['src'],
-		'iframe': ['src', 'width', 'height', 'frameborder', 'allowfullscreen']
-	  }
-	}
+    //Default settings for the sanitizeHTML function
+    "sanitizeHtmlSettings": {
+      "allowedTags": ['a', 'b', 'br', 'i', 'img', 'p', 'span', 'strong', 'em', 'li', 'ul', 'ol', 'iframe', 'video', 'source'],
+      "allowedAttributes": {
+        'a': ['href', 'target'],
+        'img': ['src', 'alt'],
+        'p': ['dir'],
+        'video': ['poster', 'controls', 'width', 'height'],
+        'source': ['src'],
+        'iframe': ['src', 'width', 'height', 'frameborder', 'allowfullscreen']
+      }
+    }
   };
 
 }(Mirador));
