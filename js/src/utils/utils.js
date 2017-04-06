@@ -270,7 +270,7 @@
   };
 
   $.sanitizeHtml = function(dirty) {
-	return sanitizeHtml(dirty, $.sanitizeHtmlSettings);
+    return sanitizeHtml(dirty, $.sanitizeHtmlSettings);
   };
 
 }(Mirador));
