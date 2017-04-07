@@ -258,7 +258,8 @@
         }
         if (_this.hoveredPath) {
           _this.hoveredPath.dashArray = _this.dashArray;
-          _this.hoveredPath.strokeWidth = _this.strokeWidth;
+          _this.hoveredPath.strokeWidth = _this.strokeWidth / _this.paperScope.view.zoom;
+          _this.hoveredPath.data.strokeWidth = _this.strokeWidth;
           _this.paperScope.view.draw();
         }
       }));
