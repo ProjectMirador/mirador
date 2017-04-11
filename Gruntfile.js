@@ -45,7 +45,8 @@ module.exports = function(grunt) {
     'node_modules/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js',
     'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
     'js/lib/modernizr.custom.js',
-    'js/lib/sanitize-html.min.js'
+    'js/lib/sanitize-html.min.js',
+    'node_modules/image-picker/image-picker/image-picker.min.js'
   ],
 
   // source files
@@ -53,6 +54,7 @@ module.exports = function(grunt) {
     'js/src/mirador.js',
     'js/src/utils/handlebars.js',
     'js/src/*.js',
+    'js/src/layers/*.js',
     'js/src/viewer/*.js',
     'js/src/manifests/*.js',
     'js/src/annotations/*.js',
@@ -94,7 +96,9 @@ module.exports = function(grunt) {
           'css/jquery.qtip.min.css',
           'node_modules/spectrum-colorpicker/spectrum.css',
           'css/mirador.css',
-          'css/material-icons.css'
+          'css/material-icons.css',
+          'css/layers.css',
+          'node_modules/image-picker/image-picker/image-picker.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'
       }

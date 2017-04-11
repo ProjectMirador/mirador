@@ -199,6 +199,13 @@
       }
     },
 
+    'layersSettings':{
+      'enabled': false,
+      'initialImageStrategy':{
+        'module':'DefaultInitialImageStrategy'
+      }
+    },
+
     'jsonStorageEndpoint': {
       'name': 'JSONBlob API Endpoint',
       'module': 'JSONBlobAPI',

@@ -92,7 +92,8 @@
         visible: false,
         windowId: _this.windowId,
         state: _this.state,
-        eventEmitter: _this.eventEmitter
+        eventEmitter: _this.eventEmitter,
+        initialImageStrategy:_this.initialImageStrategy
       });
       this.layerState.startup();
     },

@@ -1,22 +1,24 @@
-
-(function($) {
+(function ($) {
 
   $.Iiif = {
 
-    getImageUrl: function(image) {
+    getImageUrl: function (cavas) {
+      return $.Iiif._getImageUrl(cavas.images[0]);
+    },
 
-      if (!image.images[0].resource.service) {
-        id = image.images[0].resource['default'].service['@id'];
+    _getImageUrl: function (image) {
+      if (!image.resource.service) {
+        id = image.resource['default'].service['@id'];
         id = id.replace(/\/$/, "");
         return id;
       }
-      var id = image.images[0].resource.service['@id'];
+      var id = image.resource.service['@id'];
       id = id.replace(/\/$/, "");
 
       return id;
     },
 
-    getVersionFromContext: function(context) {
+    getVersionFromContext: function (context) {
       if (context == "http://iiif.io/api/image/2/context.json") {
         return "2.0";
       } else {
@@ -83,8 +85,36 @@
       }
 
       return json.image_host;
-    }
+    },
 
+    getThumbnailForImage: function (image, width) {
+      if (image && image.resource && image.resource && image.resource.service) {
+        var version = $.Iiif.getVersionFromContext(image.resource.service['@context']);
+        return $.Iiif.makeUriWithWidth(image.resource.service['@id'], width, version);
+      }
+    },
+
+    getAllImagesFromManifest: function (manifest) {
+      var images = {};
+
+      if (manifest.sequences) {
+        manifest.sequences.forEach(function (sequence) {
+          if (sequence.canvases) {
+            sequence.canvases.forEach(function (canvas) {
+              if (canvas.images) {
+                canvas.images.forEach(function (image) {
+                  if (image.resource.service) {
+                    var imageId = image.resource.service['@id'];
+                    images[imageId] = image;
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+      return images;
+    }
   };
 
 }(Mirador));

@@ -6,7 +6,8 @@
       osd: null,
       list: null,
       annotationsToShapesMap: {},
-      eventEmitter: null
+      eventEmitter: null,
+      initialImageStrategy:null
     }, options);
 
     this.eventsSubscriptions = [];
@@ -17,7 +18,7 @@
   $.OsdRegionDrawTool.prototype = {
 
     init: function() {
-      this.svgOverlay = this.osdViewer.svgOverlay(this.osdViewer.id, this.windowId, this.state, this.eventEmitter);
+      this.svgOverlay = this.osdViewer.svgOverlay(this.osdViewer.id, this.windowId, this.state, this.eventEmitter,this.initialImageStrategy);
       this.svgOverlay.show();
       this.svgOverlay.disable();
 

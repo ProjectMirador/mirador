@@ -8,13 +8,13 @@
     return this.svgOverlayTools;
   };
 
-  OpenSeadragon.Viewer.prototype.svgOverlay = function(osdViewerId, windowId, state, eventEmitter) {
-    return new $.Overlay(this, osdViewerId, windowId, state, eventEmitter);
+  OpenSeadragon.Viewer.prototype.svgOverlay = function (osdViewerId, windowId, state, eventEmitter, initialImageStrategy) {
+    return new $.Overlay(this, osdViewerId, windowId, state, eventEmitter, initialImageStrategy);
   };
 
   var FILL_COLOR_ALPHA_WORKAROUND = 0.00001;
 
-  $.Overlay = function(viewer, osdViewerId, windowId, state, eventEmitter) {
+  $.Overlay = function(viewer, osdViewerId, windowId, state, eventEmitter, initialImageStrategy) {
     var drawingToolsSettings = state.getStateProperty('drawingToolsSettings');
     this.drawingToolsSettings = drawingToolsSettings;
     var availableAnnotationDrawingTools = state.getStateProperty('availableAnnotationDrawingTools');
@@ -71,6 +71,8 @@
     this.state = state;
     this.eventEmitter = eventEmitter;
     this.eventsSubscriptions = [];
+
+    this.initialImageStrategy = initialImageStrategy;
 
     this.resize();
     this.show();
@@ -678,44 +680,47 @@
       }
     },
 
-    resize: function() {
-      var viewportBounds = this.viewer.viewport.getBounds(true);
-      /* in viewport coordinates */
-      this.canvas.width = this.viewer.viewport.containerSize.x;
-      this.canvas.height = this.viewer.viewport.containerSize.y;
-      var transform = 'translate(0px,0px)';
-      this.canvas.style.WebkitTransform = transform;
-      this.canvas.style.msTransform = transform;
-      this.canvas.style.transform = transform;
-      this.canvas.style.marginLeft = '0px';
-      this.canvas.style.marginTop = '0px';
-      if (this.paperScope && this.paperScope.view) {
-        this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
-        this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
-        // openseadragon world population is asnyc and resize may be called before any tiledImages appear in the world
-        if(!this.viewer.world.getItemAt(0)){
-          return ;
+    resize: function () {
+      var _this = this;
+
+      var image = this.initialImageStrategy.getTiledImages().done(function (imageResources) {
+        var viewportBounds = _this.viewer.viewport.getBounds(true);
+        var tiledImage = imageResources[_this.initialImageStrategy.chooseInitialImage().index].tiledImage;
+        /* in viewport coordinates */
+        _this.canvas.width = _this.viewer.viewport.containerSize.x;
+        _this.canvas.height = _this.viewer.viewport.containerSize.y;
+        var transform = 'translate(0px,0px)';
+        _this.canvas.style.WebkitTransform = transform;
+        _this.canvas.style.msTransform = transform;
+        _this.canvas.style.transform = transform;
+        _this.canvas.style.marginLeft = '0px';
+        _this.canvas.style.marginTop = '0px';
+        if (_this.paperScope && _this.paperScope.view && tiledImage) {
+          _this.paperScope.view.viewSize = new _this.paperScope.Size(_this.canvas.width, _this.canvas.height);
+          _this.paperScope.view.zoom = tiledImage.viewportToImageZoom(_this.viewer.viewport.getZoom(true));
+          _this.paperScope.view.center = new _this.paperScope.Size(
+            tiledImage.source.dimensions.x * viewportBounds.x + _this.paperScope.view.bounds.width / 2,
+            tiledImage.source.dimensions.x * viewportBounds.y + _this.paperScope.view.bounds.height / 2);
+          _this.paperScope.view.update(true);
+          var allItems = _this.paperScope.project.getItems({
+            name: /_/
+          });
+          for (var j = 0; j < allItems.length; j++) {
+            if (allItems[j].data.fixedSize) {
+              _this.fitFixedSizeShapes(allItems[j]);
+            }
+            if (_this.getTool(allItems[j]).onResize) {
+              _this.getTool(allItems[j]).onResize(allItems[j], _this);
+            }
+            allItems[j].strokeWidth = allItems[j].data.strokeWidth / _this.paperScope.view.zoom;
+            allItems[j].strokeWidth = allItems[j].data.strokeWidth / _this.paperScope.view.zoom;
+            if (allItems[j].style) {
+              allItems[j].style.strokeWidth = allItems[j].data.strokeWidth / _this.paperScope.view.zoom;
+            }
+          }
         }
-        this.paperScope.view.center = new this.paperScope.Size(
-          this.viewer.world.getItemAt(0).source.dimensions.x * viewportBounds.x + this.paperScope.view.bounds.width / 2,
-          this.viewer.world.getItemAt(0).source.dimensions.x * viewportBounds.y + this.paperScope.view.bounds.height / 2);
-        this.paperScope.view.update(true);
-        var allItems = this.paperScope.project.getItems({
-          name: /_/
-        });
-        for (var j = 0; j < allItems.length; j++) {
-          if (allItems[j].data.fixedSize) {
-            this.fitFixedSizeShapes(allItems[j]);
-          }
-          if(this.getTool(allItems[j]).onResize){
-            this.getTool(allItems[j]).onResize(allItems[j],this);
-          }
-          allItems[j].strokeWidth = allItems[j].data.strokeWidth / this.paperScope.view.zoom;
-          if (allItems[j].style) {
-            allItems[j].style.strokeWidth = allItems[j].data.strokeWidth / this.paperScope.view.zoom;
-          }
-        }
-      }
+
+      });
     },
 
     hover: function() {

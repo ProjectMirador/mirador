@@ -44,12 +44,20 @@
         };
       }
       this.currentImg = this.imagesList[this.currentImgIndex];
+
+      this.layersSettings = this.state.getStateProperty('layersSettings');
+
+      this.initialImageStrategy = new $[this.layersSettings.initialImageStrategy.module]();
+      //I suggest this being in the shared context
+      this.initialImageStrategy.setCanvas(this.currentImg);
+
       this.element = jQuery(this.template()).appendTo(this.appendTo);
       this.elemAnno = jQuery('<div/>')
       .addClass(this.annoCls)
       .appendTo(this.element);
 
-      this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+      this.createOpenSeadragonInstance();
+
       _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
 
       var allTools = $.getTools(this.state.getStateProperty('drawingToolsSettings'));
@@ -483,16 +491,16 @@
             height: _this.osdOptions.osdBounds.height
           }
       });
-      var rectangle = this.osd.viewport.viewportToImageRectangle(this.osdOptions.osdBounds);
-      _this.eventEmitter.publish("imageRectangleUpdated", {
-        id: _this.windowId,
-        osdBounds: {
-          x: Math.round(rectangle.x),
-          y: Math.round(rectangle.y),
-          width: Math.round(rectangle.width),
-          height: Math.round(rectangle.height)
-        }
-      });
+      // var rectangle = this.osd.viewport.viewportToImageRectangle(this.osdOptions.osdBounds);
+      // _this.eventEmitter.publish("imageRectangleUpdated", {
+      //   id: _this.windowId,
+      //   osdBounds: {
+      //     x: Math.round(rectangle.x),
+      //     y: Math.round(rectangle.y),
+      //     width: Math.round(rectangle.width),
+      //     height: Math.round(rectangle.height)
+      //   }
+      // });
     },
 
     toggle: function(stateValue) {
@@ -534,12 +542,14 @@
       }
     },
 
-    createOpenSeadragonInstance: function(imageUrl) {
+    createOpenSeadragonInstance: function () {
+      var imageUrl = this.initialImageStrategy.chooseInitialImage(this.currentImg).url;
+
       var infoJsonUrl = imageUrl + '/info.json',
-      uniqueID = $.genUUID(),
-      osdID = 'mirador-osd-' + uniqueID,
-      infoJson,
-      _this = this;
+        uniqueID = $.genUUID(),
+        osdID = 'mirador-osd-' + uniqueID,
+        infoJson,
+        _this = this;
 
       this.element.find('.' + this.osdCls).remove();
 
@@ -597,8 +607,24 @@
 //          });
 //        }
 
-        _this.osd.addHandler('open', function(){
-          _this.eventEmitter.publish('osdOpen.'+_this.windowId);
+        _this.osd.addHandler('open', function () {
+          _this.eventEmitter.publish('osdOpen.' + _this.windowId, [_this.osd, _this.canvasID]);
+
+          if (_this.layersSettings.enabled) {
+
+            var MultiImageRenderer = new $.OSDLayersRenderer({
+              osd: _this.osd,
+              windowId: _this.windowId,
+              canvas: _this.currentImg,
+              eventEmitter: _this.eventEmitter,
+              state: _this.state,
+              initialImageStrategy: _this.initialImageStrategy
+            });
+
+
+          }
+
+
           if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
@@ -653,7 +679,8 @@
         viewer: _this.osd,
         windowId: _this.windowId,
         element: element,
-        eventEmitter: _this.eventEmitter
+        eventEmitter: _this.eventEmitter,
+        initialImageStrategy: _this.initialImageStrategy
       });
     },
 
@@ -663,13 +690,14 @@
         this.canvasID = canvasID;
         this.currentImgIndex = $.getImageIndexById(this.imagesList, canvasID);
         this.currentImg = this.imagesList[this.currentImgIndex];
+        this.initialImageStrategy.setCanvas(this.currentImg);
         this.osdOptions = {
-          osdBounds:        null,
-          zoomLevel:        null
+          osdBounds: null,
+          zoomLevel: null
         };
-        this.eventEmitter.publish('resetImageManipulationControls.'+this.windowId);
+        this.eventEmitter.publish('resetImageManipulationControls.' + this.windowId);
         this.osd.close();
-        this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+        this.createOpenSeadragonInstance();
         _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
       } else {
         _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});

@@ -1,0 +1,236 @@
+.layersPanel {
+    height: 95%;
+    width: calc(100% - 20px);
+}
+
+/*Layers component*/
+
+.layers {
+    padding: 10px;
+    margin-top: 10px;
+    margin-left: 0px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.layers ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    margin-bottom:64px;
+}
+
+/*Layer component*/
+
+.layer {
+    border: 1px solid #8c8c8c;
+    border-bottom: 0px;
+    background: #f8f8f8;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    position: relative;
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    min-height: 56px;
+}
+
+.layer .drag-handle {
+    position: absolute;
+    left: 0;
+    width: 10%;
+    height: 100%;
+    border-right: 1px solid #c4c4c4;
+    cursor: pointer;
+}
+
+.layer .drag-handle > svg {
+    margin-top: 18px;
+}
+
+.layer .layer-control {
+    padding-right: 5px;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.layer label.layer-control > input {
+    visibility: hidden;
+    position: absolute;
+}
+
+.layer label.layer-control > input + i:before {
+    font-family: FontAwesome;
+}
+
+.layer .main-section {
+
+}
+
+.layer .hidden {
+    display: none;
+}
+
+/*Visible control*/
+.layer label.layer-visible > input + i:before {
+    content: "\f06e";
+    color: grey;
+}
+
+.layer label.layer-visible > input:checked + i:before {
+    color: black;
+}
+
+/*Lock control*/
+.layer label.layer-lock > input + i:before {
+    content: "\f09c";
+    color: black;
+}
+
+.layer label.layer-lock > input:checked + i:before {
+    content: "\f023";
+}
+
+.layer label.layer-lock > input:disabled + i:before {
+    color:grey;
+}
+
+/*Transform control*/
+.layer label.layer-transform {
+
+}
+
+.layer .layer-transform-container .layer-transform-actions .save:hover{
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+.layer .layer-transform-container .layer-transform-actions .save i{
+    color:green;
+}
+
+.layer .layer-transform-container .layer-transform-actions .cancel:hover{
+    cursor:pointer;
+    text-decoration:underline;
+}
+
+.layer .layer-transform-container .layer-transform-actions .cancel i{
+    color:red;
+}
+
+/*Effects control*/
+.layer label.layer-effects > input + i:before {
+    content: "\f0d7";
+    color: black;
+}
+
+.layer label.layer-effects > input:checked + i:before {
+    content: "\f0da";
+}
+
+.layer section {
+    margin-left: 15%;
+    position: relative;
+    min-height: 56px;
+    width: 82%;
+    display: inline-block;
+}
+
+.layer section .thumbnail-image {
+    width: 56px;
+    height: 56px;
+    float: left;
+    margin-top: 4px;
+    box-shadow:none;
+    background-color:transparent;
+}
+
+.layer section .thumbnail-image img {
+    border: 1px solid black;
+    width: 48px;
+    height: 48px;
+    padding: 2px;
+    float: none;
+    position: absolute;
+}
+
+.layer section .title {
+    margin-top: 10px;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.layer .horizontal-menu {
+    margin-top: 8px;
+    float: left;
+}
+
+.layer .reset-button {
+    float: right;
+    margin-top: 8px;
+}
+
+.layer-effects-container {
+    padding: 10px;
+}
+
+.layer-effects-container .layer-control-slider-container{
+    margin:5px;
+}
+
+.layer-effects-container .layer-control-slider {
+    height: 0.4em;
+    width:55%;
+    display:inline-block;
+    margin-left:5px;
+}
+
+.layer-effects-container .layer-control-slider .ui-slider-handle {
+    height: 0.5em;
+    width: 0.5em;
+    top: -0.1em;
+    margin-left: -0.3em;
+    cursor: pointer;
+}
+
+.layer .clearfix:before,
+.layer .clearfix:after {
+    content: "";
+    display: table;
+}
+
+.layer .clearfix:after {
+    clear: both;
+}
+
+.layer .clearfix {
+    zoom: 1; /* ie 6/7 */
+}
+
+/*Add layers button*/
+.layers .add-layers.layer{
+    height:51px;
+    min-height:0;
+    color:gray;
+    cursor:pointer;
+}
+.layers .add-layers.layer:hover{
+    box-shadow:inset 0 0 2px gray;
+    color:lightgrey;
+}
+
+.layers .layer.add-layers h4{
+    text-align:center;
+}
+
+.layers .layer.add-layers .plus{
+    font-size:30px;
+    margin-bottom:0px;
+    text-align: center;
+}
+
+.thumbnails.image_picker_selector{
+    max-height:300px;
+}
