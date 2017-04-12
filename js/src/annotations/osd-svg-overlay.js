@@ -153,18 +153,18 @@
         closeButton: false,
         className: 'mirador-dialog',
         buttons: {
-          'no': {
-            label: i18next.t('no'),
-            className: 'btn-default',
-            callback: function() {
-              return;
-            }
-          },
           'yes': {
             label: i18next.t('yes'),
             className: 'btn-primary',
-            callback: function() {
+            callback: function () {
               _this.deleteShape(shape);
+            }
+          },
+          'no': {
+            label: i18next.t('no'),
+            className: 'btn-default',
+            callback: function () {
+              return;
             }
           }
         }
