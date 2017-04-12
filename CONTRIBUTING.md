@@ -87,7 +87,9 @@ Some resources are managed with bower, but this is being phased out. It is recom
 #### Tasks
 ### Testing and Coverage
 ### Version Control
-### Editorconfig and jsHint
+### JavaScript Style
 Contributors use a variety of text editors according to circumstance and preference. This can introduce inconsistencies in the source text files, such as spaces being replaced with tabs, indentation spans being shortened, and whitespace being added or subtracted from the end of lines. Using your editor's [EditorConfig](http://editorconfig.org/) plugin resolves these inconsistencies while allowing each developer to use her own preferences while developing.
 
-[JSHint](http://jshint.com) will notify you of inconsistencies in the style of the code. Mirador uses the AirBnB [styleguide](https://github.com/airbnb/javascript/tree/es5-deprecated/es5) for ES5. 
+DEPRECATED [NON-FUNCTIONAL]. [JSHint](http://jshint.com) will notify you of inconsistencies in the style of the code. Mirador uses the AirBnB [styleguide](https://github.com/airbnb/javascript/tree/es5-deprecated/es5) for ES5.
+
+[eslint](http://eslint.org/). Mirador uses the AirBnb Javascript styleguide for ES5 as codified by AirBnb in [eslint-config-airbnb-base](https://www.npmjs.com/package/eslint-config-airbnb-base#eslint-config-airbnb-baselegacy). Make sure any changes you make conform to this style. You can check this by running the `npm run lint`. Error checking for this is not turned on in the continuous integration build at the moment, but will be in the future.
