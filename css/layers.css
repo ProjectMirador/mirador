@@ -211,7 +211,7 @@
 
 /*Add layers button*/
 .layers .add-layers.layer{
-    height:51px;
+    height:64px;
     min-height:0;
     color:gray;
     cursor:pointer;
