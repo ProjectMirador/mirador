@@ -365,11 +365,11 @@
         //if it is a manifest annotation, don't allow editing or deletion
         //otherwise, check annotation in endpoint
         var showUpdate = false;
-        if (annotation.endpoint !== 'manifest') {
+        if (typeof annotation.endpoint !== 'undefined' && annotation.endpoint !== 'manifest') {
           showUpdate = annotation.endpoint.userAuthorize('update', annotation);
         }
         var showDelete = false;
-        if (annotation.endpoint !== 'manifest') {
+        if (typeof annotation.endpoint !== 'undefined' && annotation.endpoint !== 'manifest') {
           showDelete = annotation.endpoint.userAuthorize('delete', annotation);
         }
         htmlAnnotations.push({

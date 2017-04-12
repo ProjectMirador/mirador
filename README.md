@@ -4,8 +4,9 @@
 #Mirador
 ![mirador banner](http://projectmirador.github.io/mirador/img/banner.jpg)
 **Mirador is a multi-repository, configurable, extensible, and easy-to-integrate viewer and annotation creation and comparison environment for IIIF resources, ranging from deep-zooming artwork, to complex manuscript objects. It provides a tiling windowed environment for comparing multiple image-based resources, synchronised structural and visual navigation of content using openSeadragon, Open Annotation compliant annotation creation and viewing on deep-zoomable canvases, metadata display, bookreading, and bookmarking.**
-###[See a Demo](http://projectmirador.org/demo/)
-###[Getting Started](http://projectmirador.org/docs/docs/getting-started.html)
+
+### [See a Demo](http://projectmirador.org/demo/)
+### [Getting Started](http://projectmirador.org/docs/docs/getting-started.html)
 
 ### Run in Development
 Mirador uses [node.js](http://nodejs.org/) and a build system to assemble, test, and manage the development resources. If you have never used these tools before, you may need to install them.

@@ -607,6 +607,11 @@
             _this.setBounds();
           }
 
+          if (_this.boundsToFocusOnNextOpen) {
+            _this.eventEmitter.publish('fitBounds.' + _this.windowId, _this.boundsToFocusOnNextOpen);
+            _this.boundsToFocusOnNextOpen = null;
+          }
+
           _this.addAnnotationsLayer(_this.elemAnno);
 
           // get the state before resetting it so we can get back to that state

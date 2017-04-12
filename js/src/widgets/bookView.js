@@ -335,6 +335,11 @@ bindEvents: function() {
             }
           };
 
+          if (_this.boundsToFocusOnNextOpen) {
+            _this.eventEmitter.publish('fitBounds.' + _this.windowId, _this.boundsToFocusOnNextOpen);
+            _this.boundsToFocusOnNextOpen = null;
+          }
+
           _this.osd.world.addHandler( "add-item", addItemHandler );
 
           _this.osd.addHandler('zoom', $.debounce(function(){
