@@ -11,7 +11,8 @@
       eventEmitter: null,
       windowId: null,
       state: null,
-      initialImageStrategy: null
+      initialImageStrategy: null,
+      layersEnabled: null
     }, options);
 
     this.init();
@@ -154,7 +155,7 @@
 
       _this.imageResources.forEach(function (image, index) {
 
-        if (index !== initialImageIndex) {
+        if (index !== initialImageIndex && _this.layersEnabled) {
           image.openTileSource();
         }
       });
