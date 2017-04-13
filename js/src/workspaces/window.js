@@ -791,7 +791,7 @@
       //first look for manifest annotations
       var _this = this,
       urls = _this.manifest.getAnnotationsListUrls(_this.canvasID);
-
+      var manifestAnnotations = [];
       if (urls.length !== 0) {
         jQuery.each(urls, function(index, url) {
           jQuery.get(url, function(list) {
@@ -806,6 +806,7 @@
             });
             // publish event only if one url fetch is successful
             _this.annotationsList = _this.annotationsList.concat(annotations);
+            manifestAnnotations = annotations;
             _this.eventEmitter.publish('ANNOTATIONS_LIST_UPDATED', {windowId: _this.id, annotationsList: _this.annotationsList});
           });
         });
@@ -831,7 +832,10 @@
         _this.endpoint.search({ "uri" : _this.canvasID});
 
         dfd.done(function(loaded) {
-          _this.annotationsList = _this.annotationsList.concat(_this.endpoint.annotationsList);
+          while(_this.annotationsList.length > 0) {
+            _this.annotationsList.pop();
+          }
+          _this.annotationsList = _this.annotationsList.concat(manifestAnnotations).concat(_this.endpoint.annotationsList);
           // clear out some bad data
           _this.annotationsList = jQuery.grep(_this.annotationsList, function (value, index) {
             if (typeof value.on === "undefined") {
