@@ -835,7 +835,6 @@
       // publication of the state update event currentCanvasIDUpdated
       // below.
       _this.eventEmitter.publish('removeTooltips.' + _this.id);
-      _this.eventEmitter.unsubscribe(('annotationListLoaded.' + _this.id));
       while(_this.annotationsList.length > 0) {
         _this.annotationsList.pop();
       }
