@@ -14,12 +14,12 @@ describe('ImageView', function() {
     3372.000000000001,
     0
   );
-  
+
   beforeEach(function() {
     jasmine.getJSONFixtures().fixturesPath = 'spec/fixtures';
     // WARNING: Need to stub to stop OpenSeadragon from crashing PhantomJS
     // If you can make this not happen, remove this line and test the method
-    spyOn(Mirador.ImageView.prototype, 'createOpenSeadragonInstance');
+    spyOn(Mirador.ImageView.prototype, 'initialiseImageCanvas');
     this.viewContainer = document.createElement('div', {
       class: 'view-container'
     });
@@ -460,7 +460,7 @@ describe('ImageView', function() {
       expect(subject.eventEmitter.publish).toHaveBeenCalledWith('ADD_CLASS.'+this.windowId, 'xekko');
     });
   });
-  
+
   describe('adjustHeight', function() {
     it('should remove class when hasClass is true', function() {
       subject.element.addClass('xekko');
@@ -475,7 +475,7 @@ describe('ImageView', function() {
   });
 
   // WARNING: This method has been spied out to stop PhantomJS from crashing.
-  xdescribe('createOpenSeadragonInstance', function() {
+  xdescribe('initialiseImageCanvas', function() {
 
   });
 
@@ -492,22 +492,21 @@ describe('ImageView', function() {
   // TODO: Fix openseadragon crash
   describe('updateImage', function() {
     beforeEach(function() {
-      subject.canvasId = this.imagesList[0]['@id'];
+      var oldCanvasID = this.imagesList[0]['@id'];
+      console.log(oldCanvasID);
+      subject.canvasID = oldCanvasID;
       spyOn(subject.eventEmitter, 'publish');
     });
     describe('Different from original', function() {
       beforeEach(function() {
-        subject.osd = {
-          close: function() {}
-        };
-        spyOn(subject.osd, 'close');
         subject.updateImage(this.imagesList[1]['@id']);
+      });
+      it('should change the canvasID on the object', function() {
+        expect(subject.canvasID).not.toEqual(this.imagesList[0]['@id']);
+        expect(subject.canvasID).toEqual(this.imagesList[1]['@id']);
       });
       it('should fire event', function() {
         expect(subject.eventEmitter.publish).toHaveBeenCalled();
-      });
-      it('should close Openseadragon', function() {
-        expect(subject.osd.close).toHaveBeenCalled();
       });
     });
     describe('Same as original', function() {
