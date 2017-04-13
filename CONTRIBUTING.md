@@ -13,7 +13,7 @@ Mirador uses [node.js](http://nodejs.org/) and a build system to assemble, test,
 ### Making Changes 
 Contributions are always welcome, however, it will always be helpful to begin any large change by submitting an issue, or reviewing an existing issue. This will give the developer community a chance to point you in the right direction, let you know of any connected issues that may not be obvious, and provide feedback about how the feature might fit into the current roadmap. Contributions that involve major changes to the UI will need to have a design audit completed before they can be fully integrated. See the Design section below for information about the design review process.
 
-To make a contribution, update the master and current release branches. At any time, there is one "next release" branch named after the corresponding github milestone. Currently the upcoming release is 2.1.2. Make a discrete change representing a bite-sized chunk of work, and write an informative commit message. We do not enforce any rebasing strategy, but we may ask you to rebase if you have many small and intermediate commits with unhelpful messages. "One commit per PR" is a worthy goal.
+To make a contribution, pull the latest `master` and `develop` branches. Switch to the `develop` branch and make create a new branch from it, with a reference to the issue for the feature or bug you are working on. Make a discrete change representing a bite-sized chunk of work, and write an informative commit message. We do not enforce any rebasing strategy, but we may ask you to rebase if you have many small and intermediate commits with unhelpful messages. "One commit per PR" is a worthy goal, but not mandatory.
 ### Making Small Changes
 Even small changes should follow the branching strategy outlined above, though they may not need a long discussion. It may still be helpful to create an issue for them, though it is not strictly necessary.
 ### Updating Documentation
@@ -33,13 +33,13 @@ Live interactive reloading of the browser each time a file is saved is enabled a
 ### Publishing a New Release
 
 #### 1. Ensure all Tests Pass
-All development occurs on the pinned development branch. Ensure that all tests with merged features are passing in travis before moving on to the release process. The release consists of merging the main development branch with master, therefore all changes must be fully integrated and functioning in the development branch. Do not create any new release branches until the current release has been merged into master.
+All development occurs on the protected `develop` branch, which is set as the default. Ensure that all tests with merged features are passing in travis before moving on to the release process. The release consists of merging the main development branch with master, therefore all changes must be fully integrated and functioning in the `develop` branch. Tags are then created from `master`, and development continues along the parallel `develop` branch.
 
 #### 2. Change version number in package.json
 If the version number included in the `package.json` does not already accurately reflect the version to be released, be sure to increment the number according to [SemVer](http://semver.org/) conventions. Bump the third number for a small patch that does not change or add any new functionality; bump the second number if the branch includes any new features that do not interfere with or change existing features; and bump the first ("major") version number if the changes to be released break or change the API for existing functionality.  
 
-#### 3. Merge the Release Branch into Master
-For example, if the current release branch is x.x.1, ensure that all feature branches (such as "fix_annotation_bug#1234") have been merged into the x.x.1 release branch as Github Pull Requests, and then merge the x.x.1 (which will be the default branch) into master through the Github interface (through a PR).
+#### 3. Merge the Develop Branch into Master
+Ensure that all feature branches (such as "fix_annotation_bug#1234") have been merged into the `develop` branch as Github Pull Requests, and then merge `develop` (which will be the default branch) into master through the Github interface (through a PR).
 
 #### 4. Create a New Local Tag
 After all new changes have been merged into master, checkout master locally, and create a git tag for the new version:
