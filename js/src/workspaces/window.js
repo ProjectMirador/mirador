@@ -382,15 +382,20 @@
       this.element.find('.mirador-osd-fullscreen').on('click', function() {
         if ($.fullscreenElement()) {
           $.exitFullscreen();
+          _this.element.find('.mirador-icon-window-menu').show();
         } else {
           $.enterFullscreen(_this.element[0]);
+          _this.element.find('.mirador-icon-window-menu').hide();
         }
       });
 
       jQuery(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function() {
         _this.toggleFullScreen();
+        // in case the user clicked ESC instead of clicking on the toggle fullscreen button, reenable the window layout button
+        if (!$.fullscreenElement()) {
+          _this.element.find('.mirador-icon-window-menu').show();
+        }
       });
-
     },
 
     bindAnnotationEvents: function() {
