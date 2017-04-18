@@ -47,7 +47,22 @@ describe('ImageView', function() {
       bottomPanelAvailable: true,
       annoEndpointAvailable: false,
       canvasControls: this.canvasControls,
-      annotationState: this.canvasControls.annotations.annotationState
+      annotationState: this.canvasControls.annotations.annotationState,
+      canvasID: 'myCanvasId',
+      canvases: {
+        'myCanvasId': {
+          getVisibleImages: function() { return []; },
+          getBounds: function() {
+            return {
+              'x': 800,
+              'y': 600,
+              'width': 800,
+              'height': 600
+            };
+          }
+        },
+
+      }
     });
     subject = this.imageView;
   });
