@@ -560,13 +560,9 @@
             _this.adjustFocusSize(panelType, displayed);
           }
 
-          //update current image for all valid panels
         });
       });
 
-      //update panels with current image
-      //console.log(this.focusImages);
-      //if (this.bottomPanel) { this.bottomPanel.updateFocusImages(this.focusImages); }
     },
 
     updateSidePanel: function() {

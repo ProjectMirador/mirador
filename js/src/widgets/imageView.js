@@ -530,7 +530,6 @@
       }
     },
     hideImage: function(event, imageResource) {
-      console.log('hidden');
       if (imageResource.getStatus() === 'drawn') {
         imageResource.osdTiledImage.setOpacity(0);
       }
