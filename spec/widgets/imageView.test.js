@@ -48,9 +48,8 @@ describe('ImageView', function() {
       annoEndpointAvailable: false,
       canvasControls: this.canvasControls,
       annotationState: this.canvasControls.annotations.annotationState,
-      canvasID: 'myCanvasId',
       canvases: {
-        'myCanvasId': {
+        'http://gallica.bnf.fr/iiif/ark:/12148/btv1b8438674r/canvas/f13': {
           getVisibleImages: function() { return []; },
           getBounds: function() {
             return {
@@ -59,9 +58,23 @@ describe('ImageView', function() {
               'width': 800,
               'height': 600
             };
+          },
+          show: function() {
           }
         },
-
+        'http://gallica.bnf.fr/iiif/ark:/12148/btv1b8438674r/canvas/f14': {
+          getVisibleImages: function() { return []; },
+          getBounds: function() {
+            return {
+              'x': 800,
+              'y': 600,
+              'width': 800,
+              'height': 600
+            };
+          },
+          show: function() {
+          }
+        }
       }
     });
     subject = this.imageView;
@@ -508,12 +521,18 @@ describe('ImageView', function() {
   describe('updateImage', function() {
     beforeEach(function() {
       var oldCanvasID = this.imagesList[0]['@id'];
-      console.log(oldCanvasID);
       subject.canvasID = oldCanvasID;
       spyOn(subject.eventEmitter, 'publish');
     });
     describe('Different from original', function() {
       beforeEach(function() {
+        subject.osd = {
+          viewport: {
+            imageToViewportRectangle: jasmine.createSpy('imageToViewportRectangle').and.returnValue(new OpenSeadragon.Rect(1, 2, 640, 480, 0)),
+            fitBoundsWithConstraints: jasmine.createSpy('fitBoundsWithConstraints'),
+            fitBounds: jasmine.createSpy('fitBoundsWithConstraints')
+          }
+        };
         subject.updateImage(this.imagesList[1]['@id']);
       });
       it('should change the canvasID on the object', function() {
