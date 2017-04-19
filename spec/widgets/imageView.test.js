@@ -14,16 +14,16 @@ describe('ImageView', function() {
     3372.000000000001,
     0
   );
-  
+
   beforeEach(function() {
     jasmine.getJSONFixtures().fixturesPath = 'spec/fixtures';
     // WARNING: Need to stub to stop OpenSeadragon from crashing PhantomJS
     // If you can make this not happen, remove this line and test the method
-    spyOn(Mirador.ImageView.prototype, 'createOpenSeadragonInstance');
+    spyOn(Mirador.ImageView.prototype, 'initialiseImageCanvas');
     this.viewContainer = document.createElement('div', {
       class: 'view-container'
     });
-    this.fixture = getJSONFixture('BNF-condorcet-florus-dispersus-manifest.json');
+    this.fixture = getJSONFixture('Richardson7manifest.json');
     this.manifest = new Mirador.Manifest(
       this.fixture['@id'], 'IIIF', this.fixture
     );
@@ -47,7 +47,35 @@ describe('ImageView', function() {
       bottomPanelAvailable: true,
       annoEndpointAvailable: false,
       canvasControls: this.canvasControls,
-      annotationState: this.canvasControls.annotations.annotationState
+      annotationState: this.canvasControls.annotations.annotationState,
+      canvases: {
+        'https://oculus-dev.harvardx.harvard.edu/manifests/drs:5981093/canvas/canvas-5981094.json': {
+          getVisibleImages: function() { return []; },
+          getBounds: function() {
+            return {
+              'x': 800,
+              'y': 600,
+              'width': 800,
+              'height': 600
+            };
+          },
+          show: function() {
+          }
+        },
+        'https://oculus-dev.harvardx.harvard.edu/manifests/drs:5981093/canvas/canvas-5981096.json': {
+          getVisibleImages: function() { return []; },
+          getBounds: function() {
+            return {
+              'x': 800,
+              'y': 600,
+              'width': 800,
+              'height': 600
+            };
+          },
+          show: function() {
+          }
+        }
+      }
     });
     subject = this.imageView;
   });
@@ -55,7 +83,7 @@ describe('ImageView', function() {
   afterEach(function() {
     delete this.imageView;
   });
-  
+
   // TODO: Fill in tests for what needs initializing
   xdescribe('Initialization', function() {
     it('should initialize', function() {
@@ -227,13 +255,13 @@ describe('ImageView', function() {
       subject.element.find('.mirador-osd-next').click();
       expect(subject.next).toHaveBeenCalled();
     });
-    
+
     it('should respond to clicks on previous', function() {
       spyOn(subject, 'previous');
       subject.element.find('.mirador-osd-previous').click();
       expect(subject.previous).toHaveBeenCalled();
     });
-    
+
     it('should respond to clicks on rotate right', function() {
       subject.osd = {
         viewport: {
@@ -244,7 +272,7 @@ describe('ImageView', function() {
       subject.element.find('.mirador-osd-rotate-right').click();
       expect(subject.osd.viewport.setRotation).toHaveBeenCalledWith(180);
     });
-    
+
     it('should respond to clicks on rotate left', function() {
       subject.osd = {
         viewport: {
@@ -255,7 +283,7 @@ describe('ImageView', function() {
       subject.element.find('.mirador-osd-rotate-left').click();
       expect(subject.osd.viewport.setRotation).toHaveBeenCalledWith(180);
     });
-    
+
     it('should respond to clicks on home', function() {
       subject.osd = {
         viewport: {
@@ -265,13 +293,13 @@ describe('ImageView', function() {
       subject.element.find('.mirador-osd-go-home').click();
       expect(subject.osd.viewport.goHome).toHaveBeenCalled();
     });
-    
+
     it('should toggle bottom panel', function() {
       spyOn(subject.eventEmitter, 'publish');
       subject.element.find('.mirador-osd-toggle-bottom-panel').click();
       expect(subject.eventEmitter.publish).toHaveBeenCalledWith('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + this.windowId);
     });
-    
+
     describe('direction buttons', function() {
       var panPoint = new OpenSeadragon.Point(1, 2);
       beforeEach(function() {
@@ -297,7 +325,7 @@ describe('ImageView', function() {
         expect(subject.osd.viewport.panBy).toHaveBeenCalledWith(new OpenSeadragon.Point(1, 0));
       });
     });
-    
+
     describe('zoom buttons', function() {
       beforeEach(function() {
         subject.osd = {
@@ -314,7 +342,7 @@ describe('ImageView', function() {
         expect(subject.osd.viewport.zoomBy).toHaveBeenCalledWith(1/2);
       });
     });
-    
+
     describe('annotation layer toggle', function() {
       beforeEach(function() {
         spyOn(subject.hud.annoState, 'startup');
@@ -337,7 +365,7 @@ describe('ImageView', function() {
         expect(subject.hud.annoState.displayOff).toHaveBeenCalled();
       });
     });
-    
+
     describe('manipulation toggle', function() {
       beforeEach(function() {
         spyOn(subject.hud.manipulationState, 'startup');
@@ -360,7 +388,7 @@ describe('ImageView', function() {
         expect(subject.hud.manipulationState.displayOff).toHaveBeenCalled();
       });
     });
-    
+
     // TODO: Find way to test annotation and manipulation tools without
     // "displayOn inappropriate in current state pointer" error
   });
@@ -460,7 +488,7 @@ describe('ImageView', function() {
       expect(subject.eventEmitter.publish).toHaveBeenCalledWith('ADD_CLASS.'+this.windowId, 'xekko');
     });
   });
-  
+
   describe('adjustHeight', function() {
     it('should remove class when hasClass is true', function() {
       subject.element.addClass('xekko');
@@ -475,7 +503,7 @@ describe('ImageView', function() {
   });
 
   // WARNING: This method has been spied out to stop PhantomJS from crashing.
-  xdescribe('createOpenSeadragonInstance', function() {
+  xdescribe('initialiseImageCanvas', function() {
 
   });
 
@@ -492,22 +520,27 @@ describe('ImageView', function() {
   // TODO: Fix openseadragon crash
   describe('updateImage', function() {
     beforeEach(function() {
-      subject.canvasId = this.imagesList[0]['@id'];
+      var oldCanvasID = this.imagesList[0]['@id'];
+      subject.canvasID = oldCanvasID;
       spyOn(subject.eventEmitter, 'publish');
     });
     describe('Different from original', function() {
       beforeEach(function() {
         subject.osd = {
-          close: function() {}
+          viewport: {
+            imageToViewportRectangle: jasmine.createSpy('imageToViewportRectangle').and.returnValue(new OpenSeadragon.Rect(1, 2, 640, 480, 0)),
+            fitBoundsWithConstraints: jasmine.createSpy('fitBoundsWithConstraints'),
+            fitBounds: jasmine.createSpy('fitBoundsWithConstraints')
+          }
         };
-        spyOn(subject.osd, 'close');
         subject.updateImage(this.imagesList[1]['@id']);
+      });
+      it('should change the canvasID on the object', function() {
+        expect(subject.canvasID).not.toEqual(this.imagesList[0]['@id']);
+        expect(subject.canvasID).toEqual(this.imagesList[1]['@id']);
       });
       it('should fire event', function() {
         expect(subject.eventEmitter.publish).toHaveBeenCalled();
-      });
-      it('should close Openseadragon', function() {
-        expect(subject.osd.close).toHaveBeenCalled();
       });
     });
     describe('Same as original', function() {
@@ -555,4 +588,4 @@ describe('ImageView', function() {
       expect(this.eventEmitter.publish).not.toHaveBeenCalled();
     });
   });
-}); 
+});

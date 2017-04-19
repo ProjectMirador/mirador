@@ -46,7 +46,9 @@ module.exports = function(grunt) {
     'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
     'bower_components/simplePagination.js/jquery.simplePagination.js',
     'js/lib/modernizr.custom.js',
-    'js/lib/sanitize-html.min.js'
+    'js/lib/sanitize-html.min.js',
+    'node_modules/iiif-evented-canvas/dist/iiif-evented-canvas.umd.min.js',
+    'node_modules/iiif-layout-functions/dist/iiif-layout-functions.umd.min.js',
   ],
 
   // source files
@@ -105,7 +107,7 @@ module.exports = function(grunt) {
     less: {
       compile: {
         files: {
-          'css/mirador.css': 'css/mirador.less/main.less'
+          'css/mirador.css': 'css/less/main.less'
         }
       }
     },
@@ -210,8 +212,6 @@ module.exports = function(grunt) {
       all: {
         options: {
           livereload: {
-            // Here we watch the files the sass task will compile to
-            // These files are sent to the live reload server after sass compiles to them
             options: { livereload: true },
             files: ['build/**/*']
           }
