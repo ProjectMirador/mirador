@@ -23,7 +23,7 @@ describe('ImageView', function() {
     this.viewContainer = document.createElement('div', {
       class: 'view-container'
     });
-    this.fixture = getJSONFixture('BNF-condorcet-florus-dispersus-manifest.json');
+    this.fixture = getJSONFixture('Richardson7manifest.json');
     this.manifest = new Mirador.Manifest(
       this.fixture['@id'], 'IIIF', this.fixture
     );
@@ -49,7 +49,7 @@ describe('ImageView', function() {
       canvasControls: this.canvasControls,
       annotationState: this.canvasControls.annotations.annotationState,
       canvases: {
-        'http://gallica.bnf.fr/iiif/ark:/12148/btv1b8438674r/canvas/f13': {
+        'https://oculus-dev.harvardx.harvard.edu/manifests/drs:5981093/canvas/canvas-5981094.json': {
           getVisibleImages: function() { return []; },
           getBounds: function() {
             return {
@@ -62,7 +62,7 @@ describe('ImageView', function() {
           show: function() {
           }
         },
-        'http://gallica.bnf.fr/iiif/ark:/12148/btv1b8438674r/canvas/f14': {
+        'https://oculus-dev.harvardx.harvard.edu/manifests/drs:5981093/canvas/canvas-5981096.json': {
           getVisibleImages: function() { return []; },
           getBounds: function() {
             return {

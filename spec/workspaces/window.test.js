@@ -45,9 +45,36 @@ describe('Window', function() {
               }]
             },
             getCanvases: function() { return [{
-              '@id': '',
-              'images':[{
-              }]
+              // This is an example of one canvas from richardson 7.
+              label: "(seq. 3)",
+              width: 4680,
+              '@type': "sc:Canvas",
+              images: [
+                {
+                  resource: {
+                    service: {
+                      profile: "http://library.stanford.edu/iiif/image-api/1.1/conformance.html#level1",
+                      '@context': "http://iiif.io/api/image/1/context.json",
+                      '@id': "https://ids.lib.harvard.edu/ids/iiif/5981098"
+                    },
+                    format: "image/jpeg",
+                    height: 5112,
+                    width: 4680,
+                    '@id': "https://ids.lib.harvard.edu/ids/iiif/5981098/full/full/0/native.jpg",
+                    '@type': "dctypes:Image"
+                  },
+                  on: "https://iiif.lib.harvard.edu/manifests/drs:5981093/canvas/canvas-5981098.json",
+                  motivation: "sc:painting",
+                  '@id': "https://iiif.lib.harvard.edu/manifests/drs:5981093/annotation/anno-5981098.json",
+                  '@type': "oa:Annotation"
+                }
+              ],
+              height: 5112,
+              '@id': "https://iiif.lib.harvard.edu/manifests/drs:5981093/canvas/canvas-5981098.json",
+              thumbnail: {
+                '@id': "https://ids.lib.harvard.edu/ids/iiif/5981098/full/,150/0/native.jpg",
+                '@type': "dctypes:Image"
+}
             }];
             },
             getAnnotationsListUrls: function() {
