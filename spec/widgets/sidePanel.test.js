@@ -1,12 +1,14 @@
 describe('SidePanel', function() {
-  
+
   function createSidePanel(sidePanelOptions) {
-    sidePanelOptions = sidePanelOptions || {};	
+    sidePanelOptions = sidePanelOptions || {};
 
     var eventEmitter = new Mirador.EventEmitter();
     var state = new Mirador.SaveController(jQuery.extend(
       true, {}, Mirador.DEFAULT_SETTINGS, {eventEmitter: eventEmitter}
     ));
+
+    jasmine.getJSONFixtures().fixturesPath = 'spec/fixtures';
     var fixture = getJSONFixture('BNF-condorcet-florus-dispersus-manifest.json');
     var manifest = new Mirador.Manifest(fixture['@id'], 'IIIF', fixture);
     var canvasID = manifest.getCanvases()[0]['@id'];
@@ -21,56 +23,102 @@ describe('SidePanel', function() {
       canvasID: canvasID,
       layersTabAvailable: false,
       tocTabAvailable: false,
-      annotationsTabAvailable: false,
+      searchTabAvailable: false,
       hasStructures: false
     }, sidePanelOptions);
+
+    console.info('sidePanel created');
 
     return new Mirador.SidePanel(config);
   }
 
-  beforeEach(function() {
-    jasmine.getJSONFixtures().fixturesPath = 'spec/fixtures';
-    this.sidePanel = createSidePanel();
+  describe('Methods using fixed configuration', function() {
+    beforeEach(function() {
+      spyOn(Mirador, 'TableOfContents').and.callThrough();
+      spyOn(Mirador, 'SearchTab').and.callThrough();
+      spyOn(Mirador, 'LayersTab').and.callThrough();
+      this.sidePanel = createSidePanel();
+    });
+
+    afterEach(function() {
+      delete this.sidePanel;
+    });
+
+    describe('Initialization', function() {
+      it('should initialize', function() {
+        expect(this.sidePanel instanceof Mirador.SidePanel).toBeTruthy();
+        expect(this.sidePanel.appendTo).toBeTruthy();
+      });
+    });
+
+    describe('loadSidePanelComponents', function() {
+      describe('should show all unavailable by default', function() {
+        this.sidePanel = createSidePanel();
+        it('should show toc is not available', function(){
+          expect(Mirador.TableOfContents).not.toHaveBeenCalled();
+        });
+        it('should show searchTab is not available', function(){
+          expect(Mirador.SearchTab).not.toHaveBeenCalled();
+        });
+        it('should show layerTab is not available', function(){
+          expect(Mirador.LayersTab).not.toHaveBeenCalled();
+        });
+      });
+    });
+
+    xdescribe('update', function() {
+
+    });
+
+    xdescribe('updateState', function() {
+
+    });
+
+    xdescribe('panelToggled', function() {
+
+    });
+
+    xdescribe('listenForActions', function() {
+
+    });
+
+    describe('render', function() {
+      it('should render on initialization', function() {
+        expect(this.sidePanel.appendTo.html()).toBeTruthy();
+      });
+    });
+
+    xdescribe('toggle', function() {
+
+    });
+
   });
 
-  afterEach(function() {
+  describe('loadSidePanelComponents with varying configurations', function() {
+    afterEach(function(){
+      delete this.sidePanel;
+    });
 
-  });
-
-  describe('Initialization', function() {
-    it('should initialize', function() {
-      expect(this.sidePanel instanceof Mirador.SidePanel).toBeTruthy();
-      expect(this.sidePanel.appendTo).toBeTruthy();
+    describe('should initialise all tabs if they are configured to be available', function() {
+      beforeEach(function() {
+        spyOn(Mirador, 'TableOfContents');
+        spyOn(Mirador, 'SearchTab');
+        spyOn(Mirador, 'LayersTab');
+        this.sidePanel = createSidePanel({
+          layersTabAvailable: true,
+          tocTabAvailable: true,
+          searchTabAvailable: true
+        });
+      });
+      it('should initialise Toc', function(){
+        expect(Mirador.TableOfContents).toHaveBeenCalled();
+      });
+      it('should initialise SearchTab', function(){
+        expect(Mirador.SearchTab).toHaveBeenCalled();
+      });
+      it('should initialise LayersTab', function(){
+        expect(Mirador.LayersTab).toHaveBeenCalled();
+      });
     });
   });
-
-  xdescribe('loadSidePanelComponents', function() {
-
-  });
-
-  xdescribe('update', function() {
-
-  });
-
-  xdescribe('updateState', function() {
-
-  });
-
-  xdescribe('panelToggled', function() {
-
-  });
-
-  xdescribe('listenForActions', function() {
-
-  });
-
-  describe('render', function() {
-    it('should render on initialization', function() {
-      expect(this.sidePanel.appendTo.html()).toBeTruthy();
-    });
-  });
-
-  xdescribe('toggle', function() {
-
-  });
-}); 
+});
