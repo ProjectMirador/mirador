@@ -12,9 +12,10 @@
       appendTo:             null,
       thumbInfo:            {thumbsHeight: 150, listingCssCls: 'listing-thumbs', thumbnailCls: 'thumbnail-view'},
       defaultThumbHeight:   150,
-      parent:               null,
+      windowId:             null,
       panel:                false,
-      lazyLoadingFactor:    1.5  //should be >= 1
+      lazyLoadingFactor:    1.5,  //should be >= 1
+      eventEmitter:         null
     }, options);
 
     this.init();
@@ -30,6 +31,7 @@
 
       this.loadContent();
       this.bindEvents();
+      this.listenForActions();
     },
 
     loadContent: function() {
@@ -51,7 +53,7 @@
 
         return {
           thumbUrl: thumbnailUrl,
-          title:    canvas.label,
+          title:    $.JsonLd.getTextValue(canvas.label),
           id:       canvas['@id'],
           width:    width,
           highlight: _this.currentImgIndex === index ? 'highlight' : ''
@@ -80,46 +82,55 @@
     currentImageChanged: function() {
       var _this = this,
       target = _this.element.find('.highlight'),
-      scrollPosition;
+      scrollPosition,
+      windowObject = this.state.getWindowObjectById(this.windowId);
 
-      if (this.parent.currentFocus === 'BookView') {
-        scrollPosition = _this.element.scrollLeft() + (target.position().left + (target.next().width() + target.outerWidth())/2) - _this.element.width()/2;
-      } else {
-
-        scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
+      if (target.position()) {
+        if (windowObject && windowObject.viewType === 'BookView') {
+          scrollPosition = _this.element.scrollLeft() + (target.position().left + (target.next().width() + target.outerWidth())/2) - _this.element.width()/2;
+        } else {
+          scrollPosition = _this.element.scrollLeft() + (target.position().left + target.width()/2) - _this.element.width()/2;
+        }
       }
       _this.element.scrollTo(scrollPosition, 900);
+    },
+
+    listenForActions: function() {
+      var _this = this;
+      _this.eventEmitter.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event) {
+        _this.currentImageChanged();
+      });
+
+      _this.eventEmitter.subscribe('windowResize', $.debounce(function(){
+        _this.loadImages();
+      }, 100));
     },
 
     bindEvents: function() {
       var _this = this;
       _this.element.find('img').on('load', function() {
-        jQuery(this).hide().fadeIn(750);
+        jQuery(this).hide().fadeIn(750,function(){
+          // Under firefox $.show() used under display:none iframe does not change the display.
+          // This is workaround for https://github.com/IIIF/mirador/issues/929
+          jQuery(this).css('display', 'block');
+        });
       });
 
       jQuery(_this.element).scroll(function() {
         _this.loadImages();
       });
 
-      jQuery.subscribe('windowResize', $.debounce(function(){
-        _this.loadImages();
-      }, 100));
-
       //add any other events that would trigger thumbnail display (resize, etc)
 
       _this.element.find('.thumbnail-image').on('click', function() {
         var canvasID = jQuery(this).attr('data-image-id');
-        _this.parent.setCurrentCanvasID(canvasID);
-      });
-
-      jQuery.subscribe(('currentCanvasIDUpdated.' + _this.parent.id), function(event) {
-        _this.currentImageChanged();
+        _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasID);
       });
     },
 
     toggle: function(stateValue) {
-      if (stateValue) { 
-        this.show(); 
+      if (stateValue) {
+        this.show();
       } else {
         this.hide();
       }
@@ -161,11 +172,11 @@
       }
     },
 
-    template: Handlebars.compile([
+    template: $.Handlebars.compile([
                                  '<div class="{{thumbnailCls}}">',
-                                 '<ul class="{{listingCssCls}}">',
+                                 '<ul class="{{listingCssCls}}" role="list" aria-label="Thumbnails">',
                                  '{{#thumbs}}',
-                                 '<li class="{{highlight}}">',
+                                 '<li class="{{highlight}}" role="listitem" aria-label="Thumbnail">',
                                  '<img class="thumbnail-image {{highlight}}" title="{{title}}" data-image-id="{{id}}" src="" data="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',
                                  '<div class="thumb-label">{{title}}</div>',
                                  '</li>',
@@ -193,16 +204,20 @@
         duration: 300,
         easing: "easeInCubic",
         complete: function() {
+          // Under firefox $.show() used under display:none iframe does not change the display.
+          // This is workaround for https://github.com/IIIF/mirador/issues/929
+          jQuery(this).css('display', 'block');
           _this.loadImages();
         }
       });
     },
 
     adjustWidth: function(className, hasClass) {
+      var _this = this;
       if (hasClass) {
-        this.parent.element.find('.view-container').removeClass(className);
+        _this.eventEmitter.publish('REMOVE_CLASS.'+this.windowId, className);
       } else {
-        this.parent.element.find('.view-container').addClass(className);
+        _this.eventEmitter.publish('ADD_CLASS.'+this.windowId, className);
       }
     },
 

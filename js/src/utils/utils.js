@@ -22,6 +22,7 @@
 
   $.getThumbnailForCanvas = function(canvas, width) {
     var version = "1.1",
+    compliance = -1,
     service,
     thumbnailUrl;
 
@@ -34,13 +35,20 @@
       if (typeof(canvas.thumbnail) == 'string') {
         thumbnailUrl = canvas.thumbnail;
       } else if (canvas.thumbnail.hasOwnProperty('service')) {
-        // Get the IIIF Image API via the @context
         service = canvas.thumbnail.service;
-        if (service.hasOwnProperty('@context')) {
-          version = $.Iiif.getVersionFromContext(service['@context']);
-          console.log('version');
+        if(service.hasOwnProperty('profile')) {
+            compliance = $.Iiif.getComplianceLevelFromProfile(service.profile);    
         }
-        thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+        if(compliance === 0){
+            // don't change existing behaviour unless compliance is explicitly 0            
+            thumbnailUrl = canvas.thumbnail['@id'];
+        } else {
+            // Get the IIIF Image API via the @context
+            if (service.hasOwnProperty('@context')) {
+                version = $.Iiif.getVersionFromContext(service['@context']);
+            }
+            thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+        }
       } else {
         thumbnailUrl = canvas.thumbnail['@id'];
       }
@@ -56,14 +64,6 @@
     return thumbnailUrl;
   };
 
-  $.getImagesListByManifest = function(manifest) {
-    return manifest.sequences[0].canvases;
-  };
-
-  $.getCollectionTitle = function(metadata) {
-    return metadata.details.label || '';
-  };
-
   /* 
      miscellaneous utilities
      */
@@ -72,6 +72,9 @@
     var assoc  = {};
     var decode = function (s) { return decodeURIComponent(s.replace(/\+/g, " ")); };
     var queryString = url.split('?')[1];
+    if (typeof queryString === "undefined") {
+      return {};
+    }
     var keyValues = queryString.split('&');
 
     for(var i in keyValues) {
@@ -153,30 +156,6 @@
     };
   };
 
-  $.parseRegion  = function(url) {
-    url = new URI(url);
-    var regionString = url.hash();
-    regionArray = regionString.split('=')[1].split(',');
-    return regionArray;
-  };
-
-  $.getOsdFrame = function(region, currentImg) {
-    var imgWidth = currentImg.width,
-    imgHeight = currentImg.height,
-    canvasWidth = currentImg.canvasWidth,
-    canvasHeight = currentImg.canvasHeight,
-    widthNormaliser = imgWidth/canvasWidth,
-    heightNormaliser = imgHeight/canvasHeight,
-    rectX = (region[0]*widthNormaliser)/imgWidth,
-    rectY = (region[1]*heightNormaliser)/imgWidth,
-    rectW = (region[2]*widthNormaliser)/imgWidth,
-    rectH = (region[3]*heightNormaliser)/imgWidth;
-
-    var osdFrame = new OpenSeadragon.Rect(rectX,rectY,rectW,rectH);
-
-    return osdFrame;
-  };
-
   // http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
   $.isOnScreen = function(elem, outsideViewportFactor) {
     var factor = 1;
@@ -238,23 +217,6 @@
     return layoutDescription;
   };
 
-  $.generateRange = function(start, stop, step) {
-    if (arguments.length <= 1) {
-      stop = start || 0;
-      start = 0;
-    }
-    step = step || 1;
-
-    var length = Math.max(Math.ceil((stop - start) / step), 0);
-    var range = Array(length);
-
-    for (var idx = 0; idx < length; idx++, start += step) {
-      range[idx] = start;
-    }
-
-    return range;
-  };
-
   // Configurable Promises
   $.createImagePromise = function(imageUrl) {
     var img = new Image(),
@@ -274,6 +236,48 @@
 
     img.src = imageUrl;
     return dfd.promise();
+  };
+
+  $.enterFullscreen = function(el) {
+    if (el.requestFullscreen) {
+      el.requestFullscreen();
+    } else if (el.mozRequestFullScreen) {
+      el.mozRequestFullScreen();
+    } else if (el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen();
+    } else if (el.msRequestFullscreen) {
+      el.msRequestFullscreen();
+    }
+  };
+
+  $.exitFullscreen = function() {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  };
+
+  $.isFullscreen = function() {
+    var fullscreen = $.fullscreenElement();
+    return (fullscreen.length > 0);
+  };
+
+  $.fullscreenElement = function() {
+    return (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement);
+  };
+
+  $.sanitizeHtml = function(dirty) {
+    return sanitizeHtml(dirty, {
+      allowedTags: ['a', 'b', 'br', 'i', 'img', 'p', 'span', 'strong', 'em', 'ul', 'ol', 'li'],
+      allowedAttributes: {
+        'a': ['href', 'target'],
+        'img': ['src', 'alt'],
+        'p': ['dir']
+      }
+    });
   };
 
 }(Mirador));

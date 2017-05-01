@@ -1,16 +1,7 @@
-(function($) {
+(function ($) {
+  $.WidgetStatusBar = function WidgetStatusBar(options) {
+    jQuery.extend(true, this, {
 
-  $.WidgetStatusBar = function(options) {
-
-     jQuery.extend(true, this, {
-
-     }, $.DEFAULT_SETTINGS, options);
-
+    }, $.DEFAULT_SETTINGS, options);
   };
-
-  $.WidgetStatusBar.prototype = {
-
-  };
-
 }(Mirador));
-

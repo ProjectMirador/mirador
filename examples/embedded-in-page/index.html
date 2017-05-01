@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <link rel="stylesheet" type="text/css" href="../../build/mirador/css/mirador-combined.css"/>
+  <link rel="stylesheet" type="text/css" href="embedded.css"/>
+  <script type="text/javascript" src="../../build/mirador/mirador.js"></script>
+  <script type="text/javascript" src="embedded.js"></script>
+  <script type="text/javascript" src="config-1.js"></script>
+  <script type="text/javascript" src="config-2.js"></script>
+  <script type="text/javascript" src="config-3.js"></script>
+  <title>Embedded Mirador Viewers</title>
+</head>
+<body>
+  <h1>Mirador Embedded</h1>
+  <p>
+    Change config: 
+    <select id="config_select">
+      <option value="config_1">Single slot</option>
+      <option value="config_2">Zen mode</option>
+      <option value="config_3" selected>Multi Slot</option>
+    </select>
+  </p>
+  <div class="mirador_container">
+    <div id="mirador_viewer_1" class="mirador_viewer"></div>
+  </div>
+</body>
+</html>

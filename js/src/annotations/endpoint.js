@@ -22,7 +22,7 @@
       dfd:             null,
       annotationsList: [],        //OA list for Mirador use
       windowID:        null,
-      parent:          null
+      eventEmitter:    null
     }, options);
 
     this.init();

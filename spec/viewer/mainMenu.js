@@ -1,27 +1,28 @@
-describe('MainMenu Class', function () {
+describe('MainMenu', function () {
+
   describe('default configuration', function() {
     beforeEach(function() {
 
       //register Handlebars helper
       Handlebars.registerHelper('t', function(i18n_key) {
-        var result = i18n.t(i18n_key);
+        var result = i18next.t(i18n_key);
         return new Handlebars.SafeString(result);
       });
-      
-      this.viewer = {
-        toggleBookmarkPanel: jasmine.createSpy(),
-        toggleWorkspacePanel: jasmine.createSpy()
-      };
-      this.viewer.mainMenuSettings = {
+
+      var mainMenuSettings = {
         'buttons' : {
           'bookmark' : true,
           'layout' : true,
-          'options' : false
+          'options' : false,
+          'fullScreenViewer': true
         }
       };
+
+      this.eventEmitter = new Mirador.EventEmitter();
       this.viewerDiv = jQuery('<div>');
       this.mainMenu = new Mirador.MainMenu({
-        parent:                     this.viewer, //viewer
+        state: new Mirador.SaveController({"mainMenuSettings": mainMenuSettings, eventEmitter:this.eventEmitter}),
+        eventEmitter: this.eventEmitter,
         appendTo: this.viewerDiv,
         mainMenuBarCls:             'menu-bar',
       });
@@ -32,18 +33,22 @@ describe('MainMenu Class', function () {
     it('properly renders the template', function () {
       expect(this.viewerDiv.find('.bookmark-workspace')).toExist();
       expect(this.viewerDiv.find('.change-layout')).toExist();
+      expect(this.viewerDiv.find('.fullscreen-viewer')).toExist();
       expect(this.mainMenu.element).toHaveClass('menu-bar');
     });
 
     // Tests events handling
-    it('can detect clicking on the elements', function () {
-      this.viewerDiv.find('.bookmark-workspace').trigger('click');
-      expect(this.viewer.toggleBookmarkPanel).toHaveBeenCalledWith();
-    });
-
-    it('can detect change-layout menu invocation', function () {
-      this.viewerDiv.find('.change-layout').trigger('click');
-      expect(this.viewer.toggleWorkspacePanel).toHaveBeenCalledWith();
+    var menu_invocations = [
+      {'name': 'bookmark', 'selector': '.bookmark-workspace', 'event': 'TOGGLE_BOOKMARK_PANEL'},
+      {'name': 'layout', 'selector': '.change-layout', 'event': 'TOGGLE_WORKSPACE_PANEL'},
+      {'name': 'fullscreen', 'selector': '.fullscreen-viewer', 'event': 'TOGGLE_FULLSCREEN'}
+    ];
+    menu_invocations.forEach(function(test) {
+      it("can detect clicking " + test.name + " and publishes event", function() {
+        spyOn(this.eventEmitter, 'publish');
+        this.viewerDiv.find(test.selector).trigger('click');
+        expect(this.eventEmitter.publish).toHaveBeenCalledWith(test.event);
+      });
     });
 
   });
@@ -51,11 +56,7 @@ describe('MainMenu Class', function () {
   describe('toggling behaviour', function() {
 
     beforeEach(function() {
-      this.viewer = {
-        toggleBookmarkPanel: jasmine.createSpy(),
-        toggleSwitchWorkspace: jasmine.createSpy()
-      };
-      this.viewer.mainMenuSettings = {
+      var mainMenuSettings = {
         'buttons' : {
           'bookmark' : true,
           'layout' : false,
@@ -63,8 +64,10 @@ describe('MainMenu Class', function () {
         }
       };
       this.viewerDiv = jQuery('<div>');
+      this.eventEmitter = new Mirador.EventEmitter();
       this.mainMenu = new Mirador.MainMenu({
-        parent:                     this.viewer, //viewer
+        state: new Mirador.SaveController({"mainMenuSettings": mainMenuSettings, eventEmitter: this.eventEmitter}),
+        eventEmitter: this.eventEmitter,
         appendTo: this.viewerDiv,
         mainMenuBarCls:             'menu-bar',
       });
@@ -82,10 +85,7 @@ describe('MainMenu Class', function () {
     beforeEach(function () {
 
       spyOn(console, 'log');
-
-      this.viewer = {};
-
-      this.viewer.mainMenuSettings = {
+      var mainMenuSettings = {
         /* Setup will fail without 'buttons' */
         'buttons' : {
           'bookmark' : true,
@@ -114,12 +114,13 @@ describe('MainMenu Class', function () {
           "label": "Logo",
           "attributes": {"id": "logo"}
         }
-      }
+      };
 
       this.viewerDiv = jQuery('<div>');
-
+      this.eventEmitter = new Mirador.EventEmitter();
       this.mainMenu = new Mirador.MainMenu({
-        parent:         this.viewer,
+        state: new Mirador.SaveController({"mainMenuSettings": mainMenuSettings, eventEmitter: this.eventEmitter}),
+        eventEmitter: this.eventEmitter,
         appendTo:       this.viewerDiv,
         mainMenuBarCls: 'menu-bar'
       });

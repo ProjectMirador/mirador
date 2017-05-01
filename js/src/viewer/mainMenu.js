@@ -3,7 +3,6 @@
     $.MainMenu = function(options) {
 
         jQuery.extend(true, this, {
-            parent:                     null, //viewer
             element:                    null,
             mainMenuHeight:             null,
             mainMenuWidth:              null,
@@ -16,7 +15,9 @@
             windowOptionsMenuCls:       'mirador-window-options-menu',
             clearLocalStorageCls:       'clear-local-storage',
             clearLocalStorageDialogCls: 'mirador-main-menu-clear-local-storage',
-            collectionsListingCls:      'mirador-listing-collections'
+            collectionsListingCls:      'mirador-listing-collections',
+            state:                      null,
+            eventEmitter:               null
         }, options);
 
         this.element  = this.element || jQuery('<div/>');
@@ -39,33 +40,79 @@
 
             this.element.append(this.template({
                 mainMenuCls: this.mainMenuCls,
-                showBookmark : this.parent.mainMenuSettings.buttons.bookmark,
-                showLayout : this.parent.mainMenuSettings.buttons.layout,
-                showOptions: this.parent.mainMenuSettings.buttons.options,
-                showFullScreenViewer : this.parent.mainMenuSettings.buttons.fullScreenViewer,
-                userButtons: this.parent.mainMenuSettings.userButtons,
-                userLogo:    this.parent.mainMenuSettings.userLogo
+                showBookmark : this.state.getStateProperty('mainMenuSettings').buttons.bookmark,
+                showLayout : this.state.getStateProperty('mainMenuSettings').buttons.layout,
+                showOptions: this.state.getStateProperty('mainMenuSettings').buttons.options,
+                showFullScreenViewer : this.state.getStateProperty('mainMenuSettings').buttons.fullScreenViewer,
+                userButtons: this.state.getStateProperty('mainMenuSettings').userButtons,
+                userLogo:    this.state.getStateProperty('mainMenuSettings').userLogo
             }));
 
+            this.element.find('.mainmenu-button').each(function() {
+              jQuery(this).qtip({
+                content: {
+                  text: jQuery(this).attr('title'),
+                },
+                position: {
+                  my: 'top center',
+                  at: 'bottom center'
+                },
+                style: {
+                  classes: 'qtip-dark qtip-shadow qtip-rounded'
+                },
+              });
+            });
+
+            this.listenForActions();
             this.bindEvents();
+        },
+
+        listenForActions: function() {
+          var _this = this;
+
+          _this.eventEmitter.subscribe('MAINMENU_FULLSCREEN_BUTTON', function(event) {
+            var fullScreenButton = _this.element.find('.fullscreen-viewer span');
+            if (fullScreenButton.hasClass('fa-expand')) {
+              fullScreenButton.removeClass('fa-expand').addClass('fa-compress');
+            } else {
+              fullScreenButton.removeClass('fa-compress').addClass('fa-expand');
+            }
+          });
         },
 
         bindEvents: function() {
             var _this = this;
             //change 'change-layout' to mouseover events rather than click?
             this.element.find('.change-layout').on('click', function() { 
-              _this.parent.toggleWorkspacePanel(); 
+              _this.eventEmitter.publish('TOGGLE_WORKSPACE_PANEL');
+              //remove active class from other buttons
+              _this.element.find('.bookmark-workspace').removeClass('active');
+              if (jQuery(this).hasClass('active')) {
+                jQuery(this).removeClass('active');
+              } else {
+                jQuery(this).addClass('active');
+              }
             });
-            this.element.find('.bookmark-workspace').on('click', function() { _this.parent.toggleBookmarkPanel(); 
+
+            this.element.find('.bookmark-workspace').on('click', function() { 
+              _this.eventEmitter.publish('TOGGLE_BOOKMARK_PANEL');
+              //remove active class from other buttons
+              _this.element.find('.change-layout').removeClass('active');
+              if (jQuery(this).hasClass('active')) {
+                jQuery(this).removeClass('active');
+              } else {
+                jQuery(this).addClass('active');
+              }
             });
+
             // when options are implemented, this will need to do something
             this.element.find('.window-options').on('click', function() { });
             this.element.find('.fullscreen-viewer').on('click', function() {
-              _this.parent.fullscreenElement() ? _this.parent.exitFullscreen() : _this.parent.enterFullscreen();
+              _this.eventEmitter.publish('TOGGLE_FULLSCREEN');
             });
         },
 
-        template: Handlebars.compile([
+        template: $.Handlebars.compile([
         '{{#if userLogo}}',
           '<ul class="user-logo {{mainMenuCls}}">',
             '{{userlogo userLogo}}',
@@ -74,29 +121,29 @@
         '<ul class="{{mainMenuCls}}">',
         '{{#if showBookmark}}',
           '<li>',
-            '<a href="javascript:;" class="bookmark-workspace" title="{{t "bookmark"}}">',
-              '<span class="icon-bookmark-workspace"></span>{{t "bookmark"}}',
+            '<a href="javascript:;" class="bookmark-workspace mainmenu-button" title="{{t "bookmarkTooltip"}}" aria-label="{{t "bookmarkTooltip"}}">',
+              '<span class="fa fa-bookmark fa-lg fa-fw"></span> {{t "bookmark"}}',
             '</a>',
           '</li>',
         '{{/if}}',
         /*'{{#if showOptions}}',
           '<li>',
             '<a href="javascript:;" class="window-options" title="Window Options">',
-              '<span class="icon-window-options"></span>Options',
+              '<span class=""></span>Options',
             '</a>',
           '</li>',
         '{{/if}}',*/
         '{{#if showLayout}}',
           '<li>',
-            '<a href="javascript:;" class="change-layout" title="{{t "changeLayout"}}">',
-              '<span class="icon-window-options"></span>{{t "changeLayout"}}',
+            '<a href="javascript:;" class="change-layout mainmenu-button" title="{{t "changeLayoutTooltip"}}" aria-label="{{t "changeLayoutTooltip"}}">',
+              '<span class="fa fa-th-large fa-lg fa-fw"></span> {{t "changeLayout"}}',
             '</a>',
           '</li>',
         '{{/if}}',
         '{{#if showFullScreenViewer}}',
           '<li>',
-            '<a href="javascript:;" class="fullscreen-viewer" title="{{t "fullScreen"}}">',
-              '<span class="fa fa-expand"></span> {{t "fullScreen"}}',
+            '<a href="javascript:;" class="fullscreen-viewer mainmenu-button" title="{{t "fullScreenTooltip"}}" aria-label="{{t "fullScreenTooltip"}}">',
+              '<span class="fa fa-expand fa-lg fa-fw"></span> {{t "fullScreen"}}',
             '</a>',
           '</li>',
         '{{/if}}',
@@ -197,14 +244,14 @@
         }
     };
 
-    Handlebars.registerHelper('userbtns', function (userButtons) {
-        return new Handlebars.SafeString(
+    $.Handlebars.registerHelper('userbtns', function (userButtons) {
+        return new $.Handlebars.SafeString(
             jQuery('<ul class="user-buttons ' + this.mainMenuCls +'"></ul>').append(processUserButtons(userButtons)).get(0).outerHTML
         );
     });
 
-    Handlebars.registerHelper('userlogo', function (userLogo) {
-        return new Handlebars.SafeString(
+    $.Handlebars.registerHelper('userlogo', function (userLogo) {
+        return new $.Handlebars.SafeString(
             processUserBtn(userLogo).get(0).outerHTML
         );
     });

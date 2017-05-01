@@ -5,14 +5,12 @@
     jQuery.extend(this, {
       manifest:             null,
       element:              null,
-      parent:               null,
       metadataTypes:        null,
       metadataListingCls:   'metadata-listing'
     }, options);
 
     this.init();
   };
-
 
   $.MetadataView.prototype = {
 
@@ -21,7 +19,7 @@
           tplData = {
             metadataListingCls: this.metadataListingCls
           };
-          
+
       _this.manifest = _this.manifest.jsonLd;
       this.metadataTypes = {};
 
@@ -30,18 +28,18 @@
       this.metadataTypes.links = _this.getMetadataLinks(_this.manifest);
 
       //vvvvv This is *not* how this should be done.
-      jQuery.each(this.metadataTypes, function(metadataKey, metadataValue) {
+      jQuery.each(this.metadataTypes, function(metadataKey, metadataValues) {
         tplData[metadataKey] = [];
 
-        jQuery.each(metadataValue, function(key, value) {
-          if (typeof value === 'object') {
-            value = _this.stringifyObject(value);
+        jQuery.each(metadataValues, function(idx, itm) {
+          if (typeof itm.value === 'object') {
+            itm.value = _this.stringifyObject(itm.value);
           }
 
-          if (typeof value === 'string' && value !== '') {
+          if (typeof itm.value === 'string' && itm.value !== '') {
             tplData[metadataKey].push({
-              label: _this.extractLabelFromAttribute(key),
-              value: (metadataKey === 'links') ? value : _this.addLinksToUris(value)
+              label: _this.extractLabelFromAttribute(itm.label),
+              value: (metadataKey === 'links') ? itm.value : _this.addLinksToUris(itm.value)
             });
           }
         });
@@ -86,7 +84,11 @@
       return str + ' ]';
     }
 
-    if (typeof obj === 'object') {
+    if (typeof obj === 'object' && obj['@type'] === 'sc:Collection') {
+      var collectionUrl = obj['@id'];
+      var collectionLabel = obj.label || collectionUrl;
+      return '<a href="' + collectionUrl + '" target="_blank">' + collectionLabel + '</a>';
+    } else if (typeof obj === 'object') {
       str = '<div style="margin-left:' +  nestingMargin + 'px">';
       for (var i in obj) {
         if (obj.hasOwnProperty(i)) {
@@ -104,7 +106,7 @@
     var _this = this,
         str,
         next,
-        label, 
+        label,
         format;
     if (obj instanceof Array) {
       str = '';
@@ -125,85 +127,59 @@
   },
 
   getMetadataDetails: function(jsonLd) {
-      // TODO: This should not default to English
-      var mdList = {
-          'label':        '<b>' + jsonLd.label + '</b>' || '',
-          'description':  jsonLd.description || ''
-      };
-      var value = "";
-      var label = "";
-      if (typeof mdList.description == "object") {
-        jQuery.each(mdList.description, function(index, item) {
-          if (typeof item == "string") {
-            value += item;
-            value += "<br/>";
-          } else {
-            // {@value: ..., @language: ...}
-            if (item['@language'] == "en") {
-              value += item['@value'];
-              value += "<br/>";                  
-            }
-          }
-        });        
-        mdList.description = value;
-      }
+      var mdList = [
+        { label: i18next.t('label'),
+          value: '<b>' + ($.JsonLd.getTextValue(jsonLd.label) || '') + '</b>' },
+        { label: i18next.t('description'),
+          value: $.JsonLd.getTextValue(jsonLd.description) || '' }
+      ];
 
       if (jsonLd.metadata) {
         value = "";
         label = "";
         jQuery.each(jsonLd.metadata, function(index, item) {
-          if (typeof item.label === "string") {
-            label = item.label;
-          } else {
-            jQuery.each(item.label, function(i2, what) {
-              // {@value: ..., @language: ...}
-              if (what['@language'] === "en") {
-                label = what['@value'];
-              }
-            });
-          }
-          if (typeof item.value === "string") {
-            value = item.value;
-          } else {
-            jQuery.each(item.value, function(i3, what) {
-              // {@value: ..., @language: ...}
-              if (what['@language'] === "en") {
-                value = what['@value'];
-              }
-            });
-          } 
-        mdList[label] = value;
+          label = $.JsonLd.getTextValue(item.label);
+          value = $.JsonLd.getTextValue(item.value);
+          mdList.push({label: label, value: value});
         });
       }
- 
+
       return mdList;
     },
 
    getMetadataRights: function(jsonLd) {
-       return {
-           'license':      jsonLd.license || '',
-           'attribution':  jsonLd.attribution || ''
-        };
+       return [
+         {label: i18next.t('license'), value: jsonLd.license || ''},
+         {label: i18next.t('attribution'), value: $.JsonLd.getTextValue(jsonLd.attribution) || ''}
+        ];
    },
 
    getMetadataLinks: function(jsonLd) {
      // #414
-      return {
-          'related': this.stringifyRelated(jsonLd.related || ''),
-          'seeAlso': this.stringifyRelated(jsonLd.seeAlso || ''),
-          'within':  this.stringifyObject(jsonLd.within || '')
-        };
+      return [
+        {label: i18next.t('related'), value: this.stringifyRelated(jsonLd.related || '')},
+        {label: i18next.t('seeAlso'), value: this.stringifyRelated(jsonLd.seeAlso || '')},
+        {label: i18next.t('within'),  value: this.getWithin(jsonLd.within || '')}
+      ];
+   },
+
+   getWithin: function(within) {
+     if (typeof within === 'object' && within['@type'] === 'sc:Collection') {
+      var collectionUrl = within['@id'];
+      var collectionLabel = within.label || collectionUrl;
+      return '<a href="' + collectionUrl + '" target="_blank">' + collectionLabel + '</a>';
+     } else if (within instanceof Array) {
+       return within.map(this.getWithin, this).join("<br/>");
+     } else {
+       return this.stringifyObject(within);
+     }
    },
 
    extractLabelFromAttribute: function(attr) {
     var label = attr;
 
     label = label.replace(/^@/, '');
-    label = label.replace(/([A-Z])/g, ' $1');
     label = label.replace(/\s{2,}/g, ' ');
-    label = label.replace(/\w\S*/g, function(txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
 
     return label;
   },
@@ -212,49 +188,56 @@
     },
 
     toggle: function(stateValue) {
-        if (stateValue) { 
-            this.show(); 
+        if (stateValue) {
+            this.show();
         } else {
             this.hide();
         }
     },
-    
+
     show: function() {
         var element = jQuery(this.element);
         if (this.panel) {
             element = element.parent();
         }
-        element.show({effect: "slide", direction: "right", duration: 300, easing: "swing"});    
+        element.show({effect: "slide", direction: "right", duration: 300, easing: "swing"});
     },
-    
+
     hide: function() {
         var element = jQuery(this.element);
         if (this.panel) {
             element = element.parent();
         }
-        element.hide({effect: "slide", direction: "right", duration: 300, easing: "swing"});    
+        element.hide({effect: "slide", direction: "right", duration: 300, easing: "swing"});
     },
 
     addLinksToUris: function(text) {
       // http://stackoverflow.com/questions/8188645/javascript-regex-to-match-a-url-in-a-field-of-text
       var regexUrl = /(http|ftp|https):\/\/[\w\-]+(\.[\w\-]+)+([\w.,@?\^=%&amp;:\/~+#\-]*[\w@?\^=%&amp;\/~+#\-])?/gi,
           textWithLinks = text,
-          matches;
+          matches,
+          parsedTextWithLinks;
 
       if (typeof text === 'string') {
-        matches = text.match(regexUrl);
+        if (textWithLinks.indexOf('<a ') === -1) {
+          matches = text.match(regexUrl);
 
-        if (matches) {
-          jQuery.each(matches, function(index, match) {
-            textWithLinks = textWithLinks.replace(match, '<a href="' + match + '" target="_blank">' + match + '</a>');
-          });
+          if (matches) {
+            jQuery.each(matches, function(index, match) {
+              textWithLinks = textWithLinks.replace(match, '<a href="' + match + '" target="_blank">' + match + '</a>');
+            });
+          }
+        } else {
+          parsedTextWithLinks = jQuery('<div />').append(textWithLinks);
+          jQuery(parsedTextWithLinks[0]).find('a').attr('target', '_blank');
+          textWithLinks = parsedTextWithLinks[0].innerHTML;
         }
       }
 
       return textWithLinks;
     },
-    
-    template: Handlebars.compile([
+
+    template: $.Handlebars.compile([
     '<div class="sub-title">{{t "details"}}:</div>',
         '<div class="{{metadataListingCls}}">',
           '{{#each details}}',
