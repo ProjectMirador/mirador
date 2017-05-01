@@ -94,6 +94,7 @@ module.exports = function(grunt) {
           'node_modules/font-awesome/css/font-awesome.min.css',
           'css/jquery-ui.min.css',
           'css/jstree.css',
+          'css/collection-tree-mod.css',
           'css/jquery.qtip.min.css',
           'node_modules/spectrum-colorpicker/spectrum.css',
           'css/mirador.css',
