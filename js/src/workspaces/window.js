@@ -817,7 +817,7 @@
 
       if (urls.length !== 0) {
         jQuery.each(urls, function(index, url) {
-          jQuery.get(url, function(list) {
+          jQuery.getJSON(url, function(list) {
             var annotations = list.resources;
             jQuery.each(annotations, function(index, value) {
               //if there is no ID for this annotation, set a random one
