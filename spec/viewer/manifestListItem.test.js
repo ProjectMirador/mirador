@@ -175,6 +175,38 @@ describe('ManifestListItem', function () {
     expect(testImage).toHaveData('image-id', 'http://www.example.org/iiif/book1/canvas/p1');
 
   });
+  
+  it('insert at a forced position', function() {
+    var listItem = new Mirador.ManifestListItem({
+      appendTo: this.appendTo,
+      state: new Mirador.SaveController({
+        eventEmitter:this.eventEmitter,
+        preserveManifestOrder: true,
+        data: [
+          { "manifestUri": "http://www.example.org/iiif/book1/manifest"},
+          { "manifestUri": "http://www.example.org/iiif/book2/manifest"},
+          { "manifestUri": "http://www.example.org/iiif/book3/manifest"},
+          { "manifestUri": this.manifest.uri},
+        ]
+      }),
+      eventEmitter: this.eventEmitter,
+      resultsWidth: 500,
+      forcedIndex: 0,
+      manifest: this.manifest
+    });
+
+    var html = jQuery.parseHTML(this.appendTo[0].outerHTML);
+    var testImage = jQuery(html).find('li[data-index-number="0"] img');
+
+    var ids = [];
+    jQuery(html).find('li').each(function(i, el){
+      ids.push(jQuery(this).data('index-number'));
+    });
+
+    expect(ids).toEqual([-1, 0, 1, 5, 8, 13, 14, 16]);
+    expect(testImage).toHaveData('image-id', 'http://www.example.org/iiif/book1/canvas/p1');
+
+  });
 
   xit('fetchTplData', function () {
   });

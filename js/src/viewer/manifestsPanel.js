@@ -249,6 +249,7 @@
               resultsWidth: _this.resultsWidth, 
               state: _this.state,
               eventEmitter: _this.eventEmitter,
+              forcedIndex: _this.expectedThings.indexOf(newManifest.uri),
               appendTo: _this.manifestListElement }));
             _this.element.find('#manifest-search').keyup();
           }
@@ -386,6 +387,7 @@
                 resultsWidth: _this.resultsWidth, 
                 state: _this.state,
                 eventEmitter: _this.eventEmitter,
+                forcedIndex: _this.expectedThings.indexOf(url),
                 appendTo: _this.manifestListElement }));
             }
           }
