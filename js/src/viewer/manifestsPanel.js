@@ -55,7 +55,7 @@
                 data: [
                   {
                     id: 'preload',
-                    text: 'Preloaded Manifests',
+                    text: i18next.t('preloadedManifests'),
                     icon: 'fa fa-suitcase',
                     state: {
                       selected: true
@@ -64,7 +64,7 @@
                   }, 
                   {
                     id: 'user',
-                    text: 'My Manifests',
+                    text: i18next.t('myManifests'),
                     icon: 'fa fa-user',
                     children: []
                   }
