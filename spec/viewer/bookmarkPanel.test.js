@@ -60,4 +60,16 @@ describe('BookmarkPanel', function() {
       expect(shareUrl).toContain("?json="+blobId);
     }); // place the test runs at the end of the promise chain.
   });
+  
+  it('should show itself', function() {
+    spyOn(jQuery.fn, 'show').and.callThrough();
+    this.panel.show();
+    expect(jQuery.fn.show).toHaveBeenCalled();
+  });
+  
+  it('should hide itself', function() {
+    spyOn(jQuery.fn, 'hide').and.callThrough();
+    this.panel.hide();
+    expect(jQuery.fn.hide).toHaveBeenCalled();
+  });
 });
