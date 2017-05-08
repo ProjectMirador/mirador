@@ -40,6 +40,11 @@ describe('ManifestsPanel', function() {
     element.find('#manifest-search').trigger('keyup');
     expect(this.panel.filterManifests).toHaveBeenCalled();
     
+    spyOn(jQuery.Event.prototype, 'preventDefault').and.callThrough();
+    expect(jQuery.Event.prototype.preventDefault).not.toHaveBeenCalled();
+    element.find('#manifest-search-form').submit();
+    expect(jQuery.Event.prototype.preventDefault).toHaveBeenCalled();
+    
     spyOn(this.panel, 'resizePanel');
     jQuery(window).trigger('resize');
     expect(this.panel.resizePanel).toHaveBeenCalled();

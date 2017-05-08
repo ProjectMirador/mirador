@@ -82,18 +82,20 @@ describe('Polygon', function() {
     });
 
     it('should update selection to true', function() {
+      overlay.mode = 'edit';
       this.polygon.updateSelection(true, this.shape, overlay);
 
       expect(this.shape.selected).toBe(true);
-      expect(this.shape.data.deleteIcon).not.toBeUndefined;
+      expect(this.shape.data.deleteIcon).not.toBeUndefined();
     });
 
     it('should update selection to false', function() {
+      overlay.mode = 'edit'
       this.polygon.updateSelection(true, this.shape, overlay);
       this.polygon.updateSelection(false, this.shape, overlay);
 
       expect(this.shape.selected).toBe(false);
-      expect(this.shape.data.deleteIcon).toBeUndefined;
+      expect(this.shape.data.deleteIcon).toBe(null);
     });
 
 
@@ -168,6 +170,7 @@ describe('Polygon', function() {
         'x': 3,
         'y': -3
       });
+      overlay.mode = 'edit';
       this.polygon.updateSelection(true,this.shape,overlay);
       overlay.mode = 'translate';
       overlay.path = this.shape;
@@ -290,6 +293,16 @@ describe('Polygon', function() {
       this.polygon.onMouseMove(event,overlay);
 
       expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
+    });
+    
+    it('should set cursor to pointer on handle-in or handle-out', function() {
+      var _this = this;
+      jQuery.each(['handle-in', 'handle-out'], function(k, v) {
+        var hitResult = { type: v };
+        overlay.viewer.canvas = _this.canvas;
+        _this.polygon.setCursor(hitResult, overlay);
+        expect(jQuery(overlay.viewer.canvas).css('cursor')).toBe('pointer');
+      });
     });
 
     it('should set cursor to pointer when stoke is hit',function(){
@@ -516,6 +529,19 @@ describe('Polygon', function() {
         expect(this.shape.segments[idx].point.x).toBeCloseTo(expected[idx].x, 6);
         expect(this.shape.segments[idx].point.y).toBeCloseTo(expected[idx].y, 6);
       }
+    });
+    
+    it('should select prefixed shapes', function() {
+      var event = TestUtils.getEvent();
+      spyOn(overlay.paperScope.project, 'hitTest').and.returnValue({
+        item: this.shape
+      });
+      this.shape._name = "12-ABCD-EFG";
+      this.shape.data.self = jasmine.createSpyObj('self', ['onMouseDown']);
+      this.polygon.idPrefix = "ABCD";
+      this.polygon.partOfPrefix = "12";
+      this.polygon.onMouseDown(event, overlay);
+      expect(this.shape.data.self.onMouseDown).toHaveBeenCalled();
     });
 
     it('should resize the trash can icon when resized',function(){
