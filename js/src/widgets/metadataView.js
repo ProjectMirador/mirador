@@ -128,9 +128,9 @@
 
   getMetadataDetails: function(jsonLd) {
       var mdList = [
-        { label: 'label',
+        { label: i18next.t('label'),
           value: '<b>' + ($.JsonLd.getTextValue(jsonLd.label) || '') + '</b>' },
-        { label: 'description',
+        { label: i18next.t('description'),
           value: $.JsonLd.getTextValue(jsonLd.description) || '' }
       ];
 
@@ -169,7 +169,7 @@
       var collectionLabel = within.label || collectionUrl;
       return '<a href="' + collectionUrl + '" target="_blank">' + collectionLabel + '</a>';
      } else if (within instanceof Array) {
-       return within.map(this.getWithin).join("<br/>");
+       return within.map(this.getWithin, this).join("<br/>");
      } else {
        return this.stringifyObject(within);
      }

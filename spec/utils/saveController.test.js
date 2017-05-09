@@ -1,6 +1,7 @@
 describe('SaveController', function () {
 
   beforeEach(function() {
+    localStorage.clear();
     this.eventEmitter = new Mirador.EventEmitter();
     this.config = {
       id: 'mock_viewer_id',

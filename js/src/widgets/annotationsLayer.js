@@ -47,12 +47,14 @@
       });
 
       _this.eventEmitter.subscribe('slotLeave.' + _this.windowId, function(event, eventData) {
-        _this.layerState.defaultState();
-        _this.modeSwitch();
+        if (_this.layerState.current == "display") {
+          _this.layerState.defaultState();
+          _this.modeSwitch();
+        }
       });
 
       _this.eventEmitter.subscribe('slotEnter.' + _this.windowId, function(event, eventData) {
-        if (_this.element.showAnno) {
+        if (_this.element.showAnno && _this.layerState.current == "display") {
           _this.layerState.defaultState();
           _this.modeSwitch();
         }
