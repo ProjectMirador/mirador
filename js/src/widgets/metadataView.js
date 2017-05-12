@@ -38,6 +38,7 @@
 
           if (typeof itm.value === 'string' && itm.value !== '') {
             tplData[metadataKey].push({
+              identifier: itm.identifier || '',
               label: _this.extractLabelFromAttribute(itm.label),
               value: (metadataKey === 'links') ? itm.value : _this.addLinksToUris(itm.value)
             });
@@ -147,21 +148,38 @@
       return mdList;
     },
 
-   getMetadataRights: function(jsonLd) {
-       return [
-         {label: i18next.t('license'), value: jsonLd.license || ''},
-         {label: i18next.t('attribution'), value: $.JsonLd.getTextValue(jsonLd.attribution) || ''}
-        ];
-   },
+  getMetadataRights: function(jsonLd) {
+    return [
+      {
+        identifier: 'license',
+        label: i18next.t('license'),
+        value: jsonLd.license || ''
+      }, {
+        identifier: 'attribution',
+        label: i18next.t('attribution'),
+        value: $.JsonLd.getTextValue(jsonLd.attribution) || ''
+      }
+    ];
+  },
 
-   getMetadataLinks: function(jsonLd) {
-     // #414
-      return [
-        {label: i18next.t('related'), value: this.stringifyRelated(jsonLd.related || '')},
-        {label: i18next.t('seeAlso'), value: this.stringifyRelated(jsonLd.seeAlso || '')},
-        {label: i18next.t('within'),  value: this.getWithin(jsonLd.within || '')}
-      ];
-   },
+  getMetadataLinks: function(jsonLd) {
+    // #414
+    return [
+      {
+        identifier: 'related',
+        label: i18next.t('related'),
+        value: this.stringifyRelated(jsonLd.related || '')
+      }, {
+        identifier: 'seeAlso',
+        label: i18next.t('seeAlso'),
+        value: this.stringifyRelated(jsonLd.seeAlso || '')
+      }, {
+        identifier: 'within',
+        label: i18next.t('within'),
+        value: this.getWithin(jsonLd.within || '')
+      }
+    ];
+  },
 
    getWithin: function(within) {
      if (typeof within === 'object' && within['@type'] === 'sc:Collection') {
@@ -248,7 +266,7 @@
         '{{#if rights}}',
         '<div class="{{metadataListingCls}}">',
           '{{#each rights}}',
-            '<div class="metadata-item"><div class="metadata-label">{{label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
+            '<div class="metadata-item {{identifier}}"><div class="metadata-label">{{label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
           '{{/each}}',
           '{{#if logo}}',
             '<div class="metadata-item"><div class="metadata-label">{{t "logo"}}:</div><img class="metadata-logo" src="{{logo}}"/></div>',
@@ -263,7 +281,7 @@
         '<div class="sub-title">{{t "links"}}:</div>',
         '<div class="{{metadataListingCls}}">',
           '{{#each links}}',
-            '<div class="metadata-item"><div class="metadata-label">{{label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
+            '<div class="metadata-item {{identifier}}"><div class="metadata-label">{{label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
           '{{/each}}',
         // '{{#if relatedLinks}}',
         //   '<dt>{{label}}:</dt><dd>{{{value}}}</dd>',
