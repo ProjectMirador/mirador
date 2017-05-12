@@ -50,9 +50,9 @@ describe('MetadataView', function() {
   describe('stringifyRelated', function() {
     it('should handle arrays of strings', function() {
       expect(subject.stringifyRelated([
-        'http://projectmirador.org', 
-        '', 
-        'http://iiif.io', 
+        'http://projectmirador.org',
+        '',
+        'http://iiif.io',
         'http://github.com/iiif'
       ])).toEqual(
         '<a href="http://projectmirador.org" target="_blank">http://projectmirador.org</a>' +
@@ -102,14 +102,14 @@ describe('MetadataView', function() {
         license: 'CC-BY-ND 2.0',
         attribution: 'Oodlepods Fellowship International'
       })).toEqual([
-        { label: 'license', value: 'CC-BY-ND 2.0' },
-        { label: 'attribution', value: 'Oodlepods Fellowship International' }
+        { identifier: 'license', label: 'license', value: 'CC-BY-ND 2.0' },
+        { identifier: 'attribution', label: 'attribution', value: 'Oodlepods Fellowship International' }
       ]);
     });
     it('should default to blanks when not present', function() {
       expect(subject.getMetadataRights(this.manifest.jsonLd)).toEqual([
-        { label: 'license', value: '' },
-        { label: 'attribution', value: '' }
+        { identifier: 'license', label: 'license', value: '' },
+        { identifier: 'attribution', label: 'attribution', value: '' }
       ]);
     });
   });
@@ -121,16 +121,16 @@ describe('MetadataView', function() {
         seeAlso: "http://oodlepods.example.net",
         within: "Oodlepods Monthly Issue #6"
       })).toEqual([
-        { label: 'related', value: '<a href="http://news.example.net" target="_blank">http://news.example.net</a>' },
-        { label: 'seeAlso', value: '<a href="http://oodlepods.example.net" target="_blank">http://oodlepods.example.net</a>' },
-        { label: 'within', value: 'Oodlepods Monthly Issue #6' }
+        { identifier: 'related', label: 'related', value: '<a href="http://news.example.net" target="_blank">http://news.example.net</a>' },
+        { identifier: 'seeAlso', label: 'seeAlso', value: '<a href="http://oodlepods.example.net" target="_blank">http://oodlepods.example.net</a>' },
+        { identifier: 'within', label: 'within', value: 'Oodlepods Monthly Issue #6' }
       ]);
     });
     it('should default to blanks when not present', function() {
       expect(subject.getMetadataLinks(this.manifest.jsonLd)).toEqual([
-        { label: 'related', value: '' },
-        { label: 'seeAlso', value: '' },
-        { label: 'within', value: '' }
+        { identifier: 'related', label: 'related', value: '' },
+        { identifier: 'seeAlso', label: 'seeAlso', value: '' },
+        { identifier: 'within', label: 'within', value: '' }
       ]);
     });
   });
