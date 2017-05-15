@@ -75,13 +75,11 @@
     },
     showImageResource: function(event, imageResource) {
       this.element.find('.visibility-toggle[data-imageid="'+ imageResource.id + '"]').prop('checked', true);
-      this.element.find('.visibility-label[data-imageid="'+ imageResource.id + '"]').text('on');
       this.element.find('.opacity-slider[data-imageid="'+ imageResource.id + '"]').prop('disabled', false);
       this.element.find('.opacity-label[data-imageid="'+ imageResource.id + '"]').removeClass('disabled').text("(" + Math.ceil(imageResource.getOpacity()*100) + ")%");
     },
     hideImageResource: function(event, imageResource) {
       this.element.find('.visibility-toggle[data-imageid="'+ imageResource.id + '"]').prop('checked', false);
-      this.element.find('.visibility-label[data-imageid="'+ imageResource.id + '"]').text('off');
       this.element.find('.opacity-slider[data-imageid="'+ imageResource.id + '"]').prop('disabled', true);
       this.element.find('.opacity-label[data-imageid="'+ imageResource.id + '"]').addClass('disabled').text("(disabled)");
     },
@@ -211,7 +209,7 @@
       '<form>',
       '<div>',
       '<input class="visibility-toggle" data-imageid="{{imageId}}" type=checkbox {{#if visibility}}checked{{/if}}>',
-      '<label> visibility (<span class="visibility-label" data-imageid="{{imageId}}">{{#if visibility}}on{{else}}off{{/if}}</span>)</label>',
+      '<label> visibile</label>',
       '</div>',
       '<label>opacity <span class="opacity-label {{#unless visibility}}disabled{{/unless}}" data-imageid="{{imageId}}">',
       '{{#unless visibility}}(disabled){{else}}({{opacity}})%{{/unless}}',
