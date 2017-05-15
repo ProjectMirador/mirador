@@ -45,7 +45,7 @@
 
     tabStateUpdated: function(visible) {
       var localState = this.localState();
-      localState.visible = localState.visible ? false : true;
+      localState.visible =  visible;
 
       this.localState(localState);
     },
@@ -99,7 +99,8 @@
       });
 
       _this.eventEmitter.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
-        _this.tabStateUpdated(data.layersTab);
+        var visible = data.tabs[data.selectedTabIndex].options.id === 'layersTab';
+        _this.tabStateUpdated(visible);
       });
 
       _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, _this.canvasIdUpdated.bind(_this));
