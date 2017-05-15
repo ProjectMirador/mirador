@@ -76,7 +76,8 @@
             "contrast" : true,
             "saturate" : true,
             "grayscale" : true,
-            "invert" : true
+            "invert" : true,
+            "mirror" : false
           }
         }
       },
