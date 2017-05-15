@@ -77,7 +77,8 @@
           showContrast: this.canvasControls.imageManipulation.controls.contrast,
           showSaturate: this.canvasControls.imageManipulation.controls.saturate,
           showGrayscale: this.canvasControls.imageManipulation.controls.grayscale,
-          showInvert: this.canvasControls.imageManipulation.controls.invert
+          showInvert: this.canvasControls.imageManipulation.controls.invert,
+          showMirror: this.canvasControls.imageManipulation.controls.mirror
         })).appendTo(this.container.find('.mirador-manipulation-controls'));
         this.setQtips(this.container.find('.mirador-manipulation-controls'));
         this.manipulationElement.hide();
@@ -337,6 +338,11 @@
                                    '{{#if showInvert}}',
                                    '<a class="hud-control mirador-osd-invert" title="{{t "invertTooltip"}}">',
                                    '<i class="material-icons">invert_colors</i>',
+                                   '</a>',
+                                   '{{/if}}',
+                                   '{{#if showMirror}}',
+                                   '<a class="hud-control mirador-osd-mirror" title="{{t "mirrorTooltip"}}">',
+                                   '<i class="material-icons">swap_horiz</i>',
                                    '</a>',
                                    '{{/if}}',
                                    '<a class="hud-control mirador-osd-reset" title="{{t "resetTooltip"}}">',
