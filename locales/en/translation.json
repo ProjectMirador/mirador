@@ -54,6 +54,7 @@
     "load": "Load",
     "logo": "Logo",
     "metadataTooltip": "View information/metadata about this object",
+    "mirrorTooltip": "Mirror image",
     "more": "more",
     "myManifests": "My Manifests",
     "newObject": "Replace Object",
