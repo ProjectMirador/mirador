@@ -125,7 +125,7 @@
     initializeViewerUpgradableToEditor: function(params) {
       var _this = this;
       _this.activeEditorTip = jQuery(_this.targetElement).qtip({
-        overwrite: false,
+        overwrite: true,
         content: {
           text: ''
         },
@@ -144,35 +144,36 @@
           classes: 'qtip-bootstrap qtip-viewer',
           tip: false
         },
+        show: {
+          event: false
+        },
         hide: {
           fixed: true,
           delay: 300,
           event: false
         },
         events: {
-          shown: function(event, api) {
+          show: function(event, api) {
             if (params.onTooltipShown) { params.onTooltipShown(event, api); }
+            api.cache.hidden = false;
           },
           hidden: function(event, api) {
             if (params.onTooltipHidden) { params.onTooltipHidden(event, api); }
             _this.removeAllEvents(api, params);
+            api.cache.hidden = true;
           },
           visible: function (event, api) {
-            _this.removeAllEvents(api, params);
-            _this.addViewerEvents(api, params);
+
           },
           move: function (event, api) {
-            if (api.cache.contentUpdated) {
-              _this.removeAllEvents(api, params);
-              _this.addViewerEvents(api, params);
-            }
-           api.cache.contentUpdated = false;
+
           }
         }
       });
       var api = jQuery(_this.targetElement).qtip('api');
       api.cache.annotations = [];
       api.cache.hidden = true;
+      api.cache.params = params;
     },
 
     removeAllEvents: function(api, viewerParams) {
@@ -210,6 +211,7 @@
                 var display = jQuery(elem).parents('.annotation-display');
                 var id = display.attr('data-anno-id');
                 var callback = function(){
+                  _this.removeAllEvents();
                   api.hide();
                   display.remove();
                 };
@@ -233,6 +235,7 @@
            _this.addEditorEvents(api, viewerParams);
         } else {
           _this.eventEmitter.publish('annotationInEditMode.' + _this.windowId,[oaAnno]);
+          _this.removeAllEvents(viewerParams);
           api.destroy();
           jQuery(api.tooltip).remove();
         }
@@ -263,7 +266,6 @@
 
         _this.activeEditor.updateAnnotation(oaAnno);
         _this.eventEmitter.publish('annotationEditSave.'+_this.windowId,[oaAnno]);
-
       });
 
       jQuery(selector + ' a.cancel').on("click", function(event) {
@@ -271,8 +273,8 @@
         var display = jQuery(this).parents('.annotation-editor');
         var id = display.attr('data-anno-id');
         var oaAnno = viewerParams.getAnnoFromRegion(id)[0];
+        _this.removeAllEvents();
         _this.unFreezeQtip(api, oaAnno, viewerParams);
-
         _this.eventEmitter.publish('annotationEditCancel.' + _this.windowId,[id]);
 
       });
@@ -316,14 +318,14 @@
         }
         if (api.cache.hidden || !isTheSame) {
           api.disable(false);
-          api.cache.contentUpdated = false;
           _this.setTooltipContent(params.annotations);
           api.cache.origin = params.triggerEvent;
           api.reposition(params.triggerEvent, true);
           api.show(params.triggerEvent);
           api.cache.annotations = params.annotations;
           api.cache.hidden = false;
-          api.disable(true);
+          _this.removeAllEvents();
+          _this.addViewerEvents(api,api.cache.params);
         }
       }
     },
@@ -332,7 +334,6 @@
       var _this = this;
       var api = jQuery(this.targetElement).qtip('api');
       if (api) {
-        api.cache.contentUpdated = true;
         api.set({'content.text': this.getViewerContent(annotations)});
         _this.eventEmitter.publish('tooltipViewerSet.' + this.windowId);
       }
@@ -364,11 +365,11 @@
         //if it is a manifest annotation, don't allow editing or deletion
         //otherwise, check annotation in endpoint
         var showUpdate = false;
-        if (typeof annotation.endpoint !== 'undefined' && annotation.endpoint !== 'manifest') {
+        if (annotation.endpoint !== 'manifest') {
           showUpdate = annotation.endpoint.userAuthorize('update', annotation);
         }
         var showDelete = false;
-        if (typeof annotation.endpoint !== 'undefined' && annotation.endpoint !== 'manifest') {
+        if (annotation.endpoint !== 'manifest') {
           showDelete = annotation.endpoint.userAuthorize('delete', annotation);
         }
         htmlAnnotations.push({
