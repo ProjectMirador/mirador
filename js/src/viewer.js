@@ -291,7 +291,7 @@
         manifest.request.done(function() {
           _this.eventEmitter.publish('manifestReceived', manifest);
         });
-        manifest.request.error(function(error, type, msg) {
+        manifest.request.fail(function(error, type, msg) {
           var data = {
             url: url,
             reason: null
