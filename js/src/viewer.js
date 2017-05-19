@@ -297,7 +297,7 @@
             reason: null
           };
           if (error.readyState === 0) {
-            if (location.protocol === 'https:' && !manifestUri.startsWith('https:')) {
+            if (window.location.protocol === 'https:' && !url.startsWith('https:')) {
               data.reason = i18next.t("mixedContentError");
             } else {
               data.reason = i18next.t("networkError");
