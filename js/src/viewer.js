@@ -291,6 +291,29 @@
         manifest.request.done(function() {
           _this.eventEmitter.publish('manifestReceived', manifest);
         });
+        manifest.request.error(function(error, type, msg) {
+          var data = {
+            url: url,
+            reason: null
+          };
+          if (error.readyState === 0) {
+            if (location.protocol === 'https:' && !manifestUri.startsWith('https:')) {
+              data.reason = i18next.t("mixedContentError");
+            } else {
+              data.reason = i18next.t("networkError");
+            }
+          } else if (error.readyState === 4) {
+            data.reason = msg;
+          } else {
+            data.reason = i18next.t("unknownLoadingError");
+          }
+          var modal = jQuery(_this.loadingErrorTemplate(data)).appendTo(document.body);
+          modal.modal({ show: true });
+          modal.on('hidden.bs.modal', function() {
+            jQuery('.modal-backdrop').remove();
+          });
+          _this.eventEmitter.publish('ERROR_LOADING_MANIFEST', data);
+        });
       }
     },
 
@@ -303,7 +326,27 @@
       _this.eventEmitter.publish('DELETE_FROM_CONFIG', options);
 
       _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
-    }
+    },
+
+    loadingErrorTemplate: $.Handlebars.compile([
+      '<div class="modal fade" tabindex="-1" role="dialog">',
+      '  <div class="modal-dialog" role="document">',
+      '    <div class="modal-content">',
+      '      <div class="modal-header">',
+      '        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>',
+      '        <h4 class="modal-title">{{t "couldNotLoadManifest"}}</h4>',
+      '      </div>',
+      '      <div class="modal-body">',
+      '        <p><strong>URL:</strong> <a href="{{ url }}">{{ url }}</a></p>',
+      '        <p><strong>{{t "reason" }}:</strong> {{ reason }}</p>',
+      '      </div>',
+      '      <div class="modal-footer">',
+      '        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>',
+      '      </div>',
+      '    </div><!-- /.modal-content -->',
+      '  </div><!-- /.modal-dialog -->',
+      '</div><!-- /.modal -->'
+    ].join(''))
   };
 
 }(Mirador));

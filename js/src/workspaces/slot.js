@@ -153,6 +153,14 @@
             imageInfoUrl = $.getQueryParams(url).image,
             windowConfig;
 
+        _this.eventEmitter.subscribe('ERROR_LOADING_MANIFEST', function() {
+          var dropTarget = _this.element.find('.dropMask');
+          if (dropTarget) {
+            dropTarget.hide();
+            _this.element.removeClass('draggedOver');
+          }
+        });
+
         if (typeof _this.state.getStateProperty('manifests')[manifestUrl] !== 'undefined') {
           windowConfig = {
             manifest: _this.state.getStateProperty('manifests')[manifestUrl],
@@ -194,8 +202,6 @@
               });
             }
           });
-
-          //TODO: 
           //this works;
           //but you might want to check if some "publish" action would be better
           _this.addItem();
