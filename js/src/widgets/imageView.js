@@ -114,7 +114,7 @@
       });
 
       _this.eventEmitter.subscribe('fitBounds.' + _this.windowId, function(event, bounds) {
-        var rect = _this.osd.viewport.imageToViewportRectangle(Number(bounds.x), Number(bounds.y), Number(bounds.width), Number(bounds.height));
+        var rect = new OpenSeadragon.Rect(bounds.x, bounds.y, bounds.width, bounds.height);
         _this.osd.viewport.fitBoundsWithConstraints(rect, false);
       });
 
@@ -696,11 +696,6 @@
         _this.setBounds();
       }
 
-      if (_this.boundsToFocusOnNextOpen) {
-        _this.eventEmitter.publish('fitBounds.' + _this.windowId, _this.boundsToFocusOnNextOpen);
-        _this.boundsToFocusOnNextOpen = null;
-      }
-
       // get the state before resetting it so we can get back to that state
       var originalState = _this.hud.annoState.current;
       var selected = _this.element.find('.mirador-osd-edit-mode.selected');
@@ -773,13 +768,9 @@
           zoomLevel:        null
         };
         this.eventEmitter.publish('resetImageManipulationControls.'+this.windowId);
-        // this.osd.close();
-        // this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-        _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
-      } else {
-        _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
       }
-    },
+      _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
+      },
 
     next: function() {
       var _this = this;
