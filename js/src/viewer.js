@@ -308,10 +308,7 @@
             data.reason = i18next.t("unknownLoadingError");
           }
           var modal = jQuery(_this.loadingErrorTemplate(data)).appendTo(document.body);
-          modal.modal({ show: true });
-          modal.on('hidden.bs.modal', function() {
-            jQuery('.modal-backdrop').remove();
-          });
+          modal.modal('show');
           _this.eventEmitter.publish('ERROR_LOADING_MANIFEST', data);
         });
       }
@@ -343,9 +340,9 @@
       '      <div class="modal-footer">',
       '        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>',
       '      </div>',
-      '    </div><!-- /.modal-content -->',
-      '  </div><!-- /.modal-dialog -->',
-      '</div><!-- /.modal -->'
+      '    </div>',
+      '  </div>',
+      '</div>'
     ].join(''))
   };
 
