@@ -644,4 +644,38 @@ describe('ImageView', function() {
       expect(this.eventEmitter.publish).not.toHaveBeenCalled();
     });
   });
+
+  describe('manipulation tools', function() {
+    describe('mirror', function() {
+      beforeEach(function() {
+        var allCanvasControls = jQuery.extend(
+          true, {}, Mirador.DEFAULT_SETTINGS.windowSettings.canvasControls, {
+            'imageManipulation': { 'controls': { 'mirror': true } }
+          }
+        );
+        subject = new Mirador.ImageView(
+          jQuery.extend(true, subject, {canvasControls: allCanvasControls })
+        );
+        subject.osd = {
+          canvas: '<canvas></canvas>'
+        };
+      });
+      it('when clicked, fires enableManipulation, mirror', function() {
+        spyOn(subject.eventEmitter, 'publish');
+        subject.element.find('.mirador-osd-mirror').click();
+        expect(subject.eventEmitter.publish).toHaveBeenCalledWith('enableManipulation', 'mirror');
+      });
+      it('when clicked, adds mirador-mirror class', function() {
+        spyOn(jQuery.fn, 'addClass');
+        subject.element.find('.mirador-osd-mirror').click();
+        expect(jQuery.fn.addClass).toHaveBeenCalledWith('mirador-mirror');
+      });
+      it('when clicked again, removes mirador-mirror class', function() {
+        spyOn(jQuery.fn, 'removeClass');
+        subject.element.find('.mirador-osd-mirror').click();
+        subject.element.find('.mirador-osd-mirror').click();
+        expect(jQuery.fn.removeClass).toHaveBeenCalledWith('mirador-mirror');
+      });
+    });
+  });
 });

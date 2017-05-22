@@ -73,6 +73,8 @@
     this.eventEmitter = eventEmitter;
     this.eventsSubscriptions = [];
 
+    this.horizontallyFlipped = false;
+
     this.resize();
     this.show();
     this.init();
@@ -448,6 +450,17 @@
         }
       }));
 
+      this.eventsSubscriptions.push(this.eventEmitter.subscribe("enableManipulation",function(event, tool){
+        if(tool === 'mirror') {
+          _this.horizontallyFlipped = true;
+        }
+      }));
+
+      this.eventsSubscriptions.push(this.eventEmitter.subscribe("disableManipulation",function(event, tool){
+        if(tool === 'mirror') {
+          _this.horizontallyFlipped = false;
+        }
+      }));
     },
 
     deleteShape:function(shape){
@@ -479,6 +492,9 @@
       if (mousePosition.y > currentCanvasModel.getBounds().height) {
         mousePosition.y = currentCanvasModel.getBounds().height;
       }
+      if (this.horizontallyFlipped) {
+        mousePosition.x = this.viewer.tileSources.width - mousePosition.x;
+      }
       return mousePosition;
     },
 
@@ -497,6 +513,9 @@
         if (bounds.x < 0) {
           delta.x = Math.abs(bounds.x);
         }
+      }
+      if (this.horizontallyFlipped) {
+        delta.x = -delta.x;
       }
 
       //check along y axis

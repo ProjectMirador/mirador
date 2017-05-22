@@ -32,6 +32,9 @@
 
     init: function() {
       var _this = this;
+      this.horizontallyFlipped = false;
+      this.originalDragHandler = null;
+
       // check (for thumbnail view) if the canvasID is set.
       // If not, make it page/item 1.
       if (this.canvasID !== null) {
@@ -208,7 +211,11 @@
       });
       this.element.find('.mirador-osd-right').on('click', function() {
         var panBy = _this.getPanByValue();
-        _this.osd.viewport.panBy(new OpenSeadragon.Point(panBy.x, 0));
+        if (_this.horizontallyFlipped) {
+          _this.osd.viewport.panBy(new OpenSeadragon.Point(-panBy.x, 0));
+        } else {
+          _this.osd.viewport.panBy(new OpenSeadragon.Point(panBy.x, 0));
+        }
         _this.osd.viewport.applyConstraints();
       });
       this.element.find('.mirador-osd-down').on('click', function() {
@@ -218,7 +225,11 @@
       });
       this.element.find('.mirador-osd-left').on('click', function() {
         var panBy = _this.getPanByValue();
-        _this.osd.viewport.panBy(new OpenSeadragon.Point(-panBy.x, 0));
+        if (_this.horizontallyFlipped) {
+          _this.osd.viewport.panBy(new OpenSeadragon.Point(panBy.x, 0));
+        } else {
+          _this.osd.viewport.panBy(new OpenSeadragon.Point(-panBy.x, 0));
+        }
         _this.osd.viewport.applyConstraints();
       });
 
@@ -323,6 +334,10 @@
         //reset color inversion
         filterValues.invert = "invert(0%)";
         _this.element.find('.mirador-osd-invert').removeClass('selected');
+
+        //reset mirror
+        jQuery(_this.osd.canvas).removeClass('mirador-mirror');
+        _this.osd.viewport.viewer.innerTracker.dragHandler = _this.originalDragHandler;
 
         setFilterCSS();
       }
@@ -443,6 +458,33 @@
         }
         setFilterCSS();
       });
+
+      this.element.find('.mirador-osd-mirror').on('click', function() {
+        if (!_this.originalDragHandler) {
+          _this.originalDragHandler = _this.osd.viewport && _this.osd.viewport.viewer.innerTracker.dragHandler;
+        }
+        if (jQuery(this).hasClass('selected')) {
+          jQuery(_this.osd.canvas).removeClass('mirador-mirror');
+          jQuery(this).removeClass('selected');
+          _this.eventEmitter.publish('disableManipulation', 'mirror');
+          if (_this.osd.viewport) {
+            _this.osd.viewport.viewer.innerTracker.dragHandler = _this.originalDragHandler;
+          }
+          _this.horizontallyFlipped = false;
+        } else {
+          jQuery(_this.osd.canvas).addClass('mirador-mirror');
+          jQuery(this).addClass('selected');
+          _this.eventEmitter.publish('enableManipulation', 'mirror');
+          if (_this.osd.viewport) {
+            var viewer = _this.osd.viewport.viewer;
+            viewer.innerTracker.dragHandler = OpenSeadragon.delegate(viewer, function(event) {
+              event.delta.x = -event.delta.x;
+              _this.originalDragHandler(event);
+            });
+          }
+          _this.horizontallyFlipped = true;
+        }
+    });
 
       this.element.find('.mirador-osd-reset').on('click', function() {
         resetImageManipulationControls();
