@@ -96,4 +96,16 @@
       margin-bottom: 10px;
     }
   }
+  .disabled-overlay {
+    display: none;
+  }
+}
+.layersPanel.inactive>*:not(.disabled-overlay){
+  display: none;
+}
+.layersPanel.inactive .disabled-overlay {
+  padding: 10px;
+  display: block;
+  box-sizing: border-box;
+  color: dimgray;
 }

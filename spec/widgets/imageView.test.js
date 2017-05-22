@@ -84,9 +84,11 @@ describe('ImageView', function() {
     delete this.imageView;
   });
 
-  // TODO: Fill in tests for what needs initializing
+  // TODO: Fill in tests for what needs initializing, must fix osd
+  // availability issue.
   xdescribe('Initialization', function() {
-    it('should initialize', function() {
+    it('should call initialiseImageCanvas', function() {
+      expect(subject.initialiseimagecanvas).toHaveBeenCalled();
     });
   });
 
@@ -113,6 +115,11 @@ describe('ImageView', function() {
         expect(arrow_next).not.toHaveClass('bottom-panel-open');
         expect(arrow_prev).not.toHaveClass('bottom-panel-open');
       });
+    });
+    xdescribe('InitialiseImageCanvas', function() {
+      console.info(Object.keys(subject.osd));
+      console.info(subject.osd.world.items.length);
+      expect(subject.osd.world.items.length>1).toBe(true);
     });
     describe('fitBounds', function() {
       beforeEach(function() {

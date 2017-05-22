@@ -59,7 +59,7 @@
 
     imageFocusUpdated: function(focus) {
       var localState = this.localState();
-      localState.active = (focus === 'ThumbnailsView') ? false : true;
+      localState.active = (focus !== 'ImageView') ? false : true;
 
       this.localState(localState);
     },
@@ -81,7 +81,7 @@
     hideImageResource: function(event, imageResource) {
       this.element.find('.visibility-toggle[data-imageid="'+ imageResource.id + '"]').prop('checked', false);
       this.element.find('.opacity-slider[data-imageid="'+ imageResource.id + '"]').prop('disabled', true);
-      this.element.find('.opacity-label[data-imageid="'+ imageResource.id + '"]').addClass('disabled').text("(disabled)");
+      this.element.find('.opacity-label[data-imageid="'+ imageResource.id + '"]').addClass('disabled').text("(" + i18next.t('disabledOpacityMessage') + ")");
     },
     updateImageResourceOpacity: function(event, imageResource) {
       this.element.find('.opacity-slider[data-imageid="'+ imageResource.id + '"]').val(imageResource.getOpacity()*100);
@@ -149,14 +149,6 @@
           eventedImageResource.hide();
         }
       });
-      // this.element.find('.mirador-osd-next').on('dragstart', function() {
-      // });
-      // this.element.find('.mirador-osd-next').on('dragover', function() {
-      //   check that child image (in images with "choice") is not dragged outside its parent.
-      // });
-      // this.element.find('.mirador-osd-next').on('drop', function() {
-      //   Reorder the images on the canvas.
-      // });
     },
 
     render: function(state) {
@@ -164,10 +156,16 @@
           canvasModel = _this.canvases[state.canvasID],
           templateData = {
             active: state.active ? '' : 'inactive',
+            imagesFor: i18next.t('imagesFor'),
             hasLayers: canvasModel.images.length > 0,
             canvasTitle: canvasModel.label,
+            disabledLayersTabMessage: i18next.t('disabledLayersTabMessage'),
             layers: canvasModel.images.map(function(imageResource){
               return {
+                visibleLabel: i18next.t('visibleLabel'),
+                opacityLabel: i18next.t('opacityLabel'),
+                disabledOpacityMessage: i18next.t('disabledOpacityMessage'),
+                emptyTemplateMessage: i18next.t('emptyTemplateMessage'),
                 imageId: imageResource.id,
                 title: imageResource.label,
                 opacity: imageResource.getOpacity()*100, // scale factor for limitations of html5 slider element
@@ -194,7 +192,7 @@
 
     template: Handlebars.compile([
       '<div class="layersPanel {{active}}">',
-      '<h3>Images for {{canvasTitle}}</h3>',
+      '<h3>{{imagesFor}} {{canvasTitle}}</h3>',
       '{{#if hasLayers}}',
       '<ul class="layers-listing">',
       '{{#each layers}}',
@@ -209,10 +207,10 @@
       '<form>',
       '<div>',
       '<input class="visibility-toggle" data-imageid="{{imageId}}" type=checkbox {{#if visibility}}checked{{/if}}>',
-      '<label> visibile</label>',
+      '<label> {{this.visibleLabel}}</label>',
       '</div>',
-      '<label>opacity <span class="opacity-label {{#unless visibility}}disabled{{/unless}}" data-imageid="{{imageId}}">',
-      '{{#unless visibility}}(disabled){{else}}({{opacity}})%{{/unless}}',
+      '<label>{{this.opacityLabel}} <span class="opacity-label {{#unless visibility}}disabled{{/unless}}" data-imageid="{{imageId}}">',
+      '{{#unless visibility}}({{this.dsabledOpacityLabel}}){{else}}({{opacity}})%{{/unless}}',
       '</span></label>',
       '<input class="opacity-slider" data-imageid="{{imageId}}" type="range" min="0" max="100" step="2" value="{{opacity}}" {{#unless visibility}}disabled{{/unless}}>',
       '</form>',
@@ -220,8 +218,11 @@
       '{{/each}}',
       '</ul>',
       '{{else}}',
-      '<h4>There are no image layers on this canvas</h4>',
+      '<h4>{{emptyTemplateMessage}}</h4>',
       '{{/if}}',
+      '<div class="disabled-overlay">',
+      '<h3>{{disabledLayersTabMessage}}</h3>',
+      '</div>',
       '</div>',
     ].join(''))
   };

@@ -223,7 +223,7 @@ module.exports = function(grunt) {
           'locales/*/*.json',
           'images/*',
           'css/*.css',
-          'css/mirador.less/**/*.less',
+          'css/less/**/*.less',
           'index.html'
         ],
         tasks: 'dev_build'

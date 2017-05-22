@@ -27,8 +27,6 @@ describe('SidePanel', function() {
       hasStructures: false
     }, sidePanelOptions);
 
-    console.info('sidePanel created');
-
     return new Mirador.SidePanel(config);
   }
 

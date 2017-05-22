@@ -54,7 +54,7 @@
         "toc" : true,
         "annotations" : false,
         "tocTabAvailable": true,
-        "layersTabAvailable": true,
+        "layersTabAvailable": false,
         "searchTabAvailable": false
       },
       "sidePanelVisible" : true, //whether or not to make the side panel visible in this window on load. This setting is dependent on sidePanel being true
