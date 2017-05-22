@@ -111,10 +111,13 @@ describe('WorkspacePanel', function() {
   });
 
   ['hide', 'show'].forEach(function(action) {
-    it('should ' + action, function() {
-      spyOn(jQuery.fn, action);
+    it('should ' + action, function(done) {
+      spyOn(jQuery.fn, action).and.callThrough();
       this.panel[action]();
-      expect(jQuery.fn[action]).toHaveBeenCalled();
+      setTimeout(function() {
+        expect(jQuery.fn[action]).toHaveBeenCalled();
+        done();
+      }, 200);
     });
   });
 
