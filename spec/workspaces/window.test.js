@@ -77,7 +77,7 @@ describe('Window', function() {
               thumbnail: {
                 '@id': "https://ids.lib.harvard.edu/ids/iiif/5981098/full/,150/0/native.jpg",
                 '@type': "dctypes:Image"
-}
+              }
             }, {
               '@id': "https://purl.stanford.edu/qm670kv1873/iiif/canvas/image_1",
               '@type': "sc:Canvas",
@@ -122,7 +122,8 @@ describe('Window', function() {
               'href': 'http://example.com',
               'target': '_blank'
             }
-          }]
+          }],
+          showManifestButton: true
         }));
     });
 
@@ -145,6 +146,13 @@ describe('Window', function() {
         var calls = Mirador.ImageView.calls;
         expect(calls.count()).toBe(1);
         expect(calls.first().args[0].appendTo.is(this.appendTo.find('.view-container'))).toBe(true);
+      });
+
+      it('should place default buttons in DOM', function(){
+        expect(this.appendTo.find('.mirador-icon-manifest-link')).toExist();
+        expect(this.appendTo.find('.mirador-icon-view-type')).toExist();
+        expect(this.appendTo.find('.mirador-icon-metadata-view')).toExist();
+        expect(this.appendTo.find('.mirador-osd-fullscreen')).toExist();
       });
 
       it('should place user buttons in DOM', function(){
