@@ -337,7 +337,9 @@
 
         //reset mirror
         jQuery(_this.osd.canvas).removeClass('mirador-mirror');
-        _this.osd.viewport.viewer.innerTracker.dragHandler = _this.originalDragHandler;
+        if (_this.originalDragHandler) {
+          _this.osd.viewport.viewer.innerTracker.dragHandler = _this.originalDragHandler;
+        }
 
         setFilterCSS();
       }
