@@ -110,7 +110,7 @@
       }
     },
 
-    template: Handlebars.compile([
+    template: $.Handlebars.compile([
       '<div class="layersPanel {{active}}">',
       '</div>',
     ].join(''))
