@@ -54,7 +54,8 @@
         "ScrollView" : "fa fa-ellipsis-h fa-lg fa-fw",
         "ThumbnailsView" : "fa fa-th fa-lg fa-rotate-90 fa-fw"
       },
-      userButtons: null
+      userButtons: null,
+      showManifestButton: false
     }, options);
 
     this.init();
@@ -156,6 +157,10 @@
       templateData.currentFocusClass = _this.iconClasses[_this.viewType];
       templateData.showFullScreen = _this.fullScreen;
       templateData.userButtons = _this.userButtons;
+      templateData.showManifestButton = _this.showManifestButton;
+      if(_this.showManifestButton) {
+        templateData.manifestLink = manifest['@id'];
+      }
       _this.element = jQuery(this.template(templateData)).appendTo(_this.appendTo);
       this.element.find('.manifest-info .mirador-tooltip').each(function() {
         jQuery(this).qtip({
@@ -1010,6 +1015,11 @@
          '<div class="window-manifest-navigation">',
          '{{#if userButtons}}',
            '{{windowuserbtns userButtons}}',
+         '{{/if}}',
+         '{{#if showManifestButton}}',
+         '<a href="{{manifestLink}}" target="_blank" class="mirador-btn mirador-icon-manifest-link mirador-tooltip" role="button" title="{{t "manifestTooltip"}}" aria-label="{{t "manifestTooltip"}}">',
+         '<i class="fa fa-file-text-o fa-lg fa-fw"></i>',
+         '</a>',
          '{{/if}}',
          '<a href="javascript:;" class="mirador-btn mirador-icon-view-type" role="button" title="{{t "viewTypeTooltip"}}" aria-label="{{t "viewTypeTooltip"}}">',
          '<i class="{{currentFocusClass}}"></i>',
