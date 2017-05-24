@@ -52,6 +52,7 @@
     "links": "Links",
     "load": "Laden",
     "logo": "Logo",
+    "manifestTooltip": "Manifest dieses Objekts anzeigen",
     "metadataTooltip": "Informationen/Metadaten über dieses Objekt anzeigen",
     "more": "mehr",
     "newObject": "Neues Objekt",
