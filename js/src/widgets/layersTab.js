@@ -8,7 +8,9 @@
       manifest:          null,
       visible:           null,
       state:             null,
-      eventEmitter:      null
+      eventEmitter:      null,
+      canvasID:          null,
+      canvases:          null
     }, options);
 
     this.init();
