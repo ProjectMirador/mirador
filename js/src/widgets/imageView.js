@@ -589,7 +589,8 @@
         _this.osd = $.OpenSeadragon({
           'id':           osdID,
           'tileSources':  infoJson,
-          'uniqueID' : uniqueID
+          'uniqueID' : uniqueID,
+          'visibilityRatio': 0.9
         });
 
         _this.osd.addHandler('zoom', $.debounce(function(){
