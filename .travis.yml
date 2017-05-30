@@ -1,8 +1,14 @@
 language: node_js
 sudo: false
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-5
+    - g++-5
 node_js:
-- '5'
-- 'v6.10.3'
+- '8'
 before_install:
 - npm install
 script:
