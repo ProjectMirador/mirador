@@ -122,7 +122,7 @@ $.SearchWithinResults.prototype = {
     } else {
       this.tplData = this.getSearchAnnotations(searchResults);
     }
-    jQuery(Handlebars.compile('{{> resultsList }}')(this.tplData)).appendTo(jQuery(this.element.find('.search-results-container')));
+    jQuery($.Handlebars.compile('{{> resultsList }}')(this.tplData)).appendTo(jQuery(this.element.find('.search-results-container')));
     this.bindEvents();
 
     this.setPager(searchResults);
@@ -430,7 +430,7 @@ $.SearchWithinResults.prototype = {
   },
 
   registerHandlebars: function() {
-    Handlebars.registerPartial('resultsList', [
+    $.Handlebars.registerPartial('resultsList', [
       '{{#each this}}',
         '<div class="result-wrapper">',
           '<a class="search-result search-title js-show-canvas" data-canvasid="{{canvasid}}" data-coordinates="{{coordinates}}">',
@@ -476,7 +476,7 @@ $.SearchWithinResults.prototype = {
    *    var templateData = { template data goes here }
    *    var htmlString = template(templateData);
    */
-  template: Handlebars.compile([
+  template: $.Handlebars.compile([
     '<div>',
       '<div class="search-results-messages"></div>',
       '<div class="search-results-count"></div>',

@@ -192,7 +192,7 @@
       }
     },
 
-    template: Handlebars.compile([
+    template: $.Handlebars.compile([
       '<div class="layersPanel {{active}}">',
       '<h3>{{imagesFor}} {{canvasTitle}}</h3>',
       '{{#if hasLayers}}',
