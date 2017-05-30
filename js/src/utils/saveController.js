@@ -297,6 +297,18 @@
         _this.set('manifests', manifests, {parent: 'currentConfig'});
       });
 
+      _this.eventEmitter.subscribe('ERROR_LOADING_MANIFEST', function(evt, eventData) {
+        var data = _this.currentConfig.data,
+            url = eventData.url;
+
+        _this.currentConfig.data = _this.currentConfig.data.filter(function(manifestObject) {
+          return manifestObject.manifestUri !== url;
+        });
+        var manifests = _this.currentConfig.manifests;
+        delete manifests[url];
+        _this.set('manifests', manifests, {parent: 'currentConfig'});
+      });
+
       _this.eventEmitter.subscribe("slotsUpdated", function(event, options) {
         _this.slots = options.slots;
       });
