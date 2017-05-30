@@ -194,11 +194,12 @@
       'options': {
         config: {
           plugins: "image link media directionality",
-          toolbar: "bold italic | bullist numlist | link image media | removeformat | ltr rtl"
+          toolbar: "bold italic | bullist numlist | link image media | removeformat | ltr rtl",
+          tags: []
         }
       }
     },
-
+    
     'jsonStorageEndpoint': {
       'name': 'JSONBlob API Endpoint',
       'module': 'JSONBlobAPI',
