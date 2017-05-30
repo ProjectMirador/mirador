@@ -689,7 +689,7 @@
         .attr('id', osdID)
         .appendTo(_this.element);
 
-      _this.osd = OpenSeadragon({
+      _this.osd = $.OpenSeadragon({
         id: osdID,
         uniqueID: osdID,
         preserveViewport: true,
