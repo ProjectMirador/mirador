@@ -18,16 +18,20 @@ describe('Window', function() {
         this.toggle = jasmine.createSpy();
         this.adjustHeight = jasmine.createSpy();
         this.updateFocusImages = jasmine.createSpy();
+        this.updateImage = jasmine.createSpy();
       });
       spyOn(Mirador, 'ImageView').and.callFake(function() {
         this.toggle = jasmine.createSpy();
         this.adjustHeight = jasmine.createSpy();
+        this.updateImage = jasmine.createSpy();
       });
       spyOn(Mirador, 'BookView').and.callFake(function() {
         this.updateImages = jasmine.createSpy();
         this.toggle = jasmine.createSpy();
         this.adjustHeight = jasmine.createSpy();
+        this.updateImage = jasmine.createSpy();
       });
+
       var state = new Mirador.SaveController(jQuery.extend(true, {}, Mirador.DEFAULT_SETTINGS, {eventEmitter:this.eventEmitter}));
       this.window = new Mirador.Window(jQuery.extend(true,
         {},
@@ -45,20 +49,70 @@ describe('Window', function() {
               }]
             },
             getCanvases: function() { return [{
-              '@id': '',
-              'images':[{
+              // This is an example of one canvas from richardson 7.
+              label: "(seq. 3)",
+              width: 4680,
+              '@type': "sc:Canvas",
+              images: [{
+                  resource: {
+                    service: {
+                      profile: "http://library.stanford.edu/iiif/image-api/1.1/conformance.html#level1",
+                      '@context': "http://iiif.io/api/image/1/context.json",
+                      '@id': "https://ids.lib.harvard.edu/ids/iiif/5981098"
+                    },
+                    format: "image/jpeg",
+                    height: 5112,
+                    width: 4680,
+                    '@id': "https://ids.lib.harvard.edu/ids/iiif/5981098/full/full/0/native.jpg",
+                    '@type': "dctypes:Image"
+                  },
+                  on: "https://iiif.lib.harvard.edu/manifests/drs:5981093/canvas/canvas-5981098.json",
+                  motivation: "sc:painting",
+                  '@id': "https://iiif.lib.harvard.edu/manifests/drs:5981093/annotation/anno-5981098.json",
+                  '@type': "oa:Annotation"
+                }
+              ],
+              height: 5112,
+              '@id': "https://iiif.lib.harvard.edu/manifests/drs:5981093/canvas/canvas-5981098.json",
+              thumbnail: {
+                '@id': "https://ids.lib.harvard.edu/ids/iiif/5981098/full/,150/0/native.jpg",
+                '@type': "dctypes:Image"
+}
+            }, {
+              '@id': "https://purl.stanford.edu/qm670kv1873/iiif/canvas/image_1",
+              '@type': "sc:Canvas",
+              label: "Upper board outside",
+              height: 2236,
+              width: 1732,
+              images: [{
+                '@id': "https://purl.stanford.edu/qm670kv1873/iiif/annotation/image_1",
+                '@type': "oa:Annotation",
+                motivation: "sc:painting",
+                resource: {
+                  '@id': "https://stacks.stanford.edu/image/iiif/qm670kv1873%2FW168_000001_300/full/full/0/default.jpg",
+                  '@type': "dctypes:Image",
+                  format: "image/jpeg",
+                  height: 2236,
+                  width: 1732,
+                  service: {
+                    '@context': "http://iiif.io/api/image/2/context.json",
+                    '@id': "https://stacks.stanford.edu/image/iiif/qm670kv1873%2FW168_000001_300",
+                    profile: "http://iiif.io/api/image/2/level1.json"
+                  }
+                },
+                on: "https://purl.stanford.edu/qm670kv1873/iiif/canvas/image_1"
               }]
             }];
-            },
-            getAnnotationsListUrls: function() {
-              return [];
-            },
-            getStructures: function() {
-              return [];
-            },
-            getVersion: function() {
-              return '1';
-            }
+          },
+          getAnnotationsListUrls: function() {
+            return [];
+          },
+          getStructures: function() {
+            return [];
+          },
+          getVersion: function() {
+            return '1';
+          }
           },
           appendTo: this.appendTo,
           userButtons: [{
@@ -69,7 +123,7 @@ describe('Window', function() {
               'target': '_blank'
             }
           }]
-      }));
+        }));
     });
 
     afterEach(function() {
@@ -77,6 +131,11 @@ describe('Window', function() {
     });
 
     describe('Initialisation', function() {
+      it('should build the canvases index', function() {
+        expect(this.window.canvases['https://iiif.lib.harvard.edu/manifests/drs:5981093/canvas/canvas-5981098.json']).not.toBe('undefined');
+        expect(Object.keys(this.window.canvases).length).toEqual(2);
+        expect(typeof this.window.canvases['https://iiif.lib.harvard.edu/manifests/drs:5981093/canvas/canvas-5981098.json'].getBounds).toBe('function');
+      });
       it('should place itself in DOM', function() {
         expect(true).toBe(true);
         expect(this.appendTo.find('.window')).toExist();
@@ -107,6 +166,16 @@ describe('Window', function() {
       });
     });
 
+    describe('Navigation events', function() {
+      it('changing the canvasID changes the focused canvasModel', function() {
+        expect(this.window.canvasID).toEqual('https://iiif.lib.harvard.edu/manifests/drs:5981093/canvas/canvas-5981098.json');
+        this.window.setCurrentCanvasID('https://purl.stanford.edu/qm670kv1873/iiif/canvas/image_1');
+        expect(this.window.canvasID).toEqual('https://purl.stanford.edu/qm670kv1873/iiif/canvas/image_1');
+        this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + this.window.id, 'https://iiif.lib.harvard.edu/manifests/drs:5981093/canvas/canvas-5981098.json');
+        expect(this.window.canvasID).toEqual('https://iiif.lib.harvard.edu/manifests/drs:5981093/canvas/canvas-5981098.json');
+      });
+    });
+
     describe('Destroying', function () {
 
       it('should respond to windowRemoved', function () {
@@ -125,7 +194,7 @@ describe('Window', function() {
       it('should remove dom element',function(){
         this.window.destroy();
         expect(this.appendTo.find('.window').length).toBe(0);
-      })
+      });
 
     });
 
