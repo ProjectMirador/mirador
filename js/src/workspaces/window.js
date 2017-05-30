@@ -279,9 +279,9 @@
       _this.eventEmitter.subscribe('bottomPanelSet.' + _this.id, function(event, visible) {
         var panel = _this.element.find('.bottomPanel');
         if (visible === true) {
-          panel.css({transform: 'translateY(0)'});
+          panel.removeClass('minimized');
         } else {
-          panel.css({transform: 'translateY(100%)'});
+          panel.addClass('minimized');
         }
       });
 

@@ -124,7 +124,13 @@
 bindEvents: function() {
       var _this = this;
 
-      this.element.find('.mirador-osd-next').on('click', function() {
+      this.element.find('.hud-control').click(function () {
+        _this.eventEmitter.publish('slotActivated.' + _this.windowId, {
+          view: 'BookView'
+        });
+      });
+
+      this.element.find('.mirador-osd-next').on('click', function () {
         _this.next();
       });
 

@@ -260,7 +260,8 @@
         }
         if (_this.hoveredPath) {
           _this.hoveredPath.dashArray = _this.dashArray;
-          _this.hoveredPath.strokeWidth = _this.strokeWidth;
+          _this.hoveredPath.strokeWidth = _this.strokeWidth / _this.paperScope.view.zoom;
+          _this.hoveredPath.data.strokeWidth = _this.strokeWidth;
           _this.paperScope.view.draw();
         }
       }));
@@ -710,6 +711,10 @@
       if (this.paperScope && this.paperScope.view) {
         this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
         this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
+        // openseadragon world population is asnyc and resize may be called before any tiledImages appear in the world
+        if(!this.viewer.world.getItemAt(0)){
+          return ;
+        }
         this.paperScope.view.center = new this.paperScope.Size(
           this.viewer.world.getItemAt(0).source.dimensions.x * viewportBounds.x + this.paperScope.view.bounds.width / 2,
           this.viewer.world.getItemAt(0).source.dimensions.x * viewportBounds.y + this.paperScope.view.bounds.height / 2);

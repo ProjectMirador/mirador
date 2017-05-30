@@ -34,6 +34,7 @@ module.exports = function(grunt) {
     'node_modules/tinymce/tinymce.min.js',
     'node_modules/handlebars/dist/handlebars.js',
     'node_modules/openseadragon/build/openseadragon/openseadragon.js',
+    'js/lib/openseadragon-scalebar.js',
     'node_modules/d3/d3.min.js',
     'node_modules/jquery-plugin/dist/ba-tiny-pubsub.js',
     'node_modules/urijs/src/URI.min.js',

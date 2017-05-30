@@ -177,6 +177,7 @@
         showPalette: true,
         showButtons: false,
         showSelectionPalette: true,
+        hideAfterPaletteSelect: true,
         appendTo: 'parent',
         clickoutFiresChange: true,
         containerClassName: 'fillColorPickerPop'+_this.windowId,
