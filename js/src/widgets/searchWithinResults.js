@@ -402,8 +402,11 @@ $.SearchWithinResults.prototype = {
           coordinates = jQuery(this).attr('data-coordinates'),
           xywh = coordinates && coordinates.split('=')[1].split(',').map(Number),
           bounds = xywh && {x: xywh[0], y: xywh[1], width: xywh[2], height: xywh[3]};
-      jQuery(".result-wrapper").css("background-color", "inherit");
+      jQuery(".result-wrapper,.result-wrapper *").css("background-color", "");
       jQuery(this).parent().css("background-color", "lightyellow");
+      if (jQuery(this).is("a")) {
+        jQuery(this).parent().next().css("background-color", "lightyellow");
+      }
       //if there was more than one annotation
       //(for example if a word crossed a line and needed two coordinates sets)
       //the miniAnnotationList should have multiple objects
@@ -435,7 +438,7 @@ $.SearchWithinResults.prototype = {
           '</a>',
           '{{#if annotations}}',
             '<div>',
-            'Annotations: ',
+            '<em>Annotations</em>: ',
             '{{#each annotations}}',
               '<a class="search-result search-annotation js-show-canvas" data-canvasid="{{canvasid}}" data-coordinates="{{coordinates}}">',
                 '<i class="fa fa-fw" aria-hidden="true"></i>',
