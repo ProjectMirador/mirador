@@ -7,9 +7,8 @@
       manifest:          null,
       panelState:        {},
       tocTabAvailable:   null,
-      // annotationsTabAvailable: false,
-      // layersTabAvailable: null,
-      // toolsTabAvailable: false,
+      annotationsTabAvailable: false,
+      layersTabAvailable: false,
       searchTabAvailable: null,
       hasStructures:     false,
       state:             null,
@@ -41,22 +40,6 @@
            label:'Annotations'
            }
            },*/
-          // {
-          //   name : 'layers',
-          //   options : {
-          //     available: _this.layersTabAvailable,
-          //     id:'layersTab',
-          //     label:'Layers'
-          //   }
-          // },
-          /*{
-           name : 'tools',
-           options : {
-           available: _this.toolsTabAvailable,
-           id:'toolsTab',
-           label:'Tools'
-           }
-           }*/
           {
             name : 'search',
             options : {
@@ -64,7 +47,15 @@
               id: 'searchTab',
               label: 'Search'
             }
-          }
+          },
+          {
+            name : 'layers',
+            options : {
+              available: _this.layersTabAvailable,
+              id:'layersTab',
+              label:'Layers'
+            }
+          },
         ],
         width: 280,
         open: true
@@ -116,16 +107,17 @@
           eventEmitter: _this.eventEmitter
         });
       }
-      // if (_this.layersTabAvailable) {
-      //   new $.LayersTab({
-      //     manifest: _this.manifest,
-      //     windowId: this.windowId,
-      //     appendTo: _this.element.find('.tabContentArea'),
-      //     canvasID: this.canvasID,
-      //     state: _this.state,
-      //     eventEmitter: _this.eventEmitter
-      //   });
-      // }
+      if (_this.layersTabAvailable) {
+        new $.LayersTab({
+          manifest: _this.manifest,
+          windowId: _this.windowId,
+          appendTo: _this.element.find('.tabContentArea'),
+          canvasID: _this.canvasID,
+          canvases: _this.canvases,
+          state: _this.state,
+          eventEmitter: _this.eventEmitter
+        });
+      }
 
     },
 
