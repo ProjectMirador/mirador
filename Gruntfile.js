@@ -4,6 +4,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks("gruntify-eslint");
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -45,7 +46,9 @@ module.exports = function(grunt) {
     'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
     'bower_components/simplePagination.js/jquery.simplePagination.js',
     'js/lib/modernizr.custom.js',
-    'js/lib/sanitize-html.min.js'
+    'js/lib/sanitize-html.min.js',
+    'node_modules/iiif-evented-canvas/dist/iiif-evented-canvas.umd.min.js',
+    'node_modules/iiif-layout-functions/dist/iiif-layout-functions.umd.min.js',
   ],
 
   // source files
@@ -104,7 +107,7 @@ module.exports = function(grunt) {
     less: {
       compile: {
         files: {
-          'css/mirador.css': 'css/mirador.less/main.less'
+          'css/mirador.css': 'css/less/main.less'
         }
       }
     },
@@ -209,8 +212,6 @@ module.exports = function(grunt) {
       all: {
         options: {
           livereload: {
-            // Here we watch the files the sass task will compile to
-            // These files are sent to the live reload server after sass compiles to them
             options: { livereload: true },
             files: ['build/**/*']
           }
@@ -222,11 +223,18 @@ module.exports = function(grunt) {
           'locales/*/*.json',
           'images/*',
           'css/*.css',
-          'css/mirador.less/**/*.less',
+          'css/less/**/*.less',
           'index.html'
         ],
         tasks: 'dev_build'
       }
+    },
+
+    eslint: {
+      options: {
+        silent: true
+      },
+      src: sources
     },
 
     jshint: {
@@ -274,16 +282,19 @@ module.exports = function(grunt) {
       grunt.file.copy(abspath, dest);
     });
   });
+  // ----------
+  // Lint task
+  grunt.registerTask('lint', ['jshint', 'eslint'])
 
   // ----------
   // Build task.
   // Cleans out the build folder and builds the code and images into it, checking lint.
-  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'jshint', 'less', 'concat:css', 'uglify', 'cssmin', 'copy']);
+  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'lint', 'less', 'concat:css', 'uglify', 'cssmin', 'copy']);
 
   // ----------
   // Dev Build task.
   // Build, but skip the time-consuming and obscurantist minification and uglification.
-  grunt.registerTask('dev_build', [ 'clean:build', 'git-describe', 'jshint', 'less', 'concat', 'copy']);
+  grunt.registerTask('dev_build', [ 'clean:build', 'git-describe', 'lint', 'less', 'concat', 'copy']);
 
   // ----------
   // Package task.
@@ -308,6 +319,6 @@ module.exports = function(grunt) {
   // ----------
   // Runs this on travis.
   grunt.registerTask('ci', [
-                     'jshint'
+                     'lint'
   ]);
 };

@@ -6,7 +6,8 @@
       currentImg:       null,
       windowId:         null,
       currentImgIndex:  0,
-      canvasID:          null,
+      canvasID:         null,
+      canvases:         null,
       imagesList:       [],
       element:          null,
       elemOsd:          null,
@@ -31,6 +32,9 @@
 
     init: function() {
       var _this = this;
+      this.horizontallyFlipped = false;
+      this.originalDragHandler = null;
+
       // check (for thumbnail view) if the canvasID is set.
       // If not, make it page/item 1.
       if (this.canvasID !== null) {
@@ -46,10 +50,10 @@
       this.currentImg = this.imagesList[this.currentImgIndex];
       this.element = jQuery(this.template()).appendTo(this.appendTo);
       this.elemAnno = jQuery('<div/>')
-      .addClass(this.annoCls)
-      .appendTo(this.element);
+        .addClass(this.annoCls)
+        .appendTo(this.element);
 
-      this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+
       _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
 
       var allTools = $.getTools(this.state.getStateProperty('drawingToolsSettings'));
@@ -80,6 +84,7 @@
         eventEmitter: this.eventEmitter
       });
 
+      this.initialiseImageCanvas();
       this.bindEvents();
       this.listenForActions();
 
@@ -91,14 +96,13 @@
     },
 
     template: $.Handlebars.compile([
-                                 '<div class="image-view">',
-                                 '</div>'
+       '<div class="image-view">',
+       '</div>'
+
     ].join('')),
 
     listenForActions: function() {
-      var _this = this,
-      firstCanvasId = _this.imagesList[0]['@id'],
-      lastCanvasId = _this.imagesList[_this.imagesList.length-1]['@id'];
+      var _this = this;
 
       _this.eventEmitter.subscribe('bottomPanelSet.' + _this.windowId, function(event, visible) {
         var dodgers = _this.element.find('.mirador-osd-toggle-bottom-panel, .mirador-pan-zoom-controls');
@@ -113,24 +117,22 @@
       });
 
       _this.eventEmitter.subscribe('fitBounds.' + _this.windowId, function(event, bounds) {
-        var rect = _this.osd.viewport.imageToViewportRectangle(Number(bounds.x), Number(bounds.y), Number(bounds.width), Number(bounds.height));
+        var rect = new OpenSeadragon.Rect(bounds.x, bounds.y, bounds.width, bounds.height);
         _this.osd.viewport.fitBoundsWithConstraints(rect, false);
       });
 
-      _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasId) {
-        // If it is the first canvas, hide the "go to previous" button, otherwise show it.
-        if (canvasId === firstCanvasId) {
-          _this.element.find('.mirador-osd-previous').hide();
-          _this.element.find('.mirador-osd-next').show();
-        } else if (canvasId === lastCanvasId) {
-          _this.element.find('.mirador-osd-next').hide();
-          _this.element.find('.mirador-osd-previous').show();
-        } else {
-          _this.element.find('.mirador-osd-next').show();
-          _this.element.find('.mirador-osd-previous').show();
-        }
-        // If it is the last canvas, hide the "go to previous" button, otherwise show it.
-      });
+      _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, _this.currentCanvasIDUpdated.bind(_this));
+      _this.eventEmitter.subscribe('image-needed' + _this.windowId, _this.loadImage.bind(_this));
+      _this.eventEmitter.subscribe('image-show' + _this.windowId, _this.showImage.bind(_this));
+      _this.eventEmitter.subscribe('image-hide' + _this.windowId, _this.hideImage.bind(_this));
+      _this.eventEmitter.subscribe('image-removed' + _this.windowId, _this.removeImage.bind(_this));
+      _this.eventEmitter.subscribe('image-opacity-updated' + _this.windowId, _this.updateImageOpacity.bind(_this));
+      // These will come soon.
+      // _this.eventEmitter.subscribe('image-layering-index-updated');
+      // _this.eventEmitter.subscribe('image-position-updated');
+      // _this.eventEmitter.subscribe('image-rotation-updated');
+      // _this.eventEmitter.subscribe('image-scale-updated');
+      // _this.eventEmitter.subscribe('canvas-position-updated');
 
       //Related to Annotations HUD
       _this.eventEmitter.subscribe('HUD_REMOVE_CLASS.' + _this.windowId, function(event, elementSelector, className) {
@@ -209,7 +211,11 @@
       });
       this.element.find('.mirador-osd-right').on('click', function() {
         var panBy = _this.getPanByValue();
-        _this.osd.viewport.panBy(new OpenSeadragon.Point(panBy.x, 0));
+        if (_this.horizontallyFlipped) {
+          _this.osd.viewport.panBy(new OpenSeadragon.Point(-panBy.x, 0));
+        } else {
+          _this.osd.viewport.panBy(new OpenSeadragon.Point(panBy.x, 0));
+        }
         _this.osd.viewport.applyConstraints();
       });
       this.element.find('.mirador-osd-down').on('click', function() {
@@ -219,7 +225,11 @@
       });
       this.element.find('.mirador-osd-left').on('click', function() {
         var panBy = _this.getPanByValue();
-        _this.osd.viewport.panBy(new OpenSeadragon.Point(-panBy.x, 0));
+        if (_this.horizontallyFlipped) {
+          _this.osd.viewport.panBy(new OpenSeadragon.Point(panBy.x, 0));
+        } else {
+          _this.osd.viewport.panBy(new OpenSeadragon.Point(-panBy.x, 0));
+        }
         _this.osd.viewport.applyConstraints();
       });
 
@@ -246,7 +256,7 @@
         _this.eventEmitter.publish('TOGGLE_BOTTOM_PANEL_VISIBILITY.' + _this.windowId);
       });
 
-      //Annotation specific controls
+      // Annotation specific controls
       this.element.find('.mirador-osd-edit-mode').on('click', function() {
         var shape = jQuery(this).find('.material-icons').html();
         if (_this.hud.annoState.current === 'pointer') {
@@ -286,7 +296,7 @@
 
       function setFilterCSS() {
         var filterCSS = jQuery.map(filterValues, function(value, key) { return value; }).join(" "),
-        osdCanvas = jQuery(_this.osd.drawer.canvas);
+            osdCanvas = jQuery(_this.osd.drawer.canvas);
         osdCanvas.css({
           'filter'         : filterCSS,
           '-webkit-filter' : filterCSS,
@@ -325,6 +335,12 @@
         filterValues.invert = "invert(0%)";
         _this.element.find('.mirador-osd-invert').removeClass('selected');
 
+        //reset mirror
+        jQuery(_this.osd.canvas).removeClass('mirador-mirror');
+        if (_this.originalDragHandler) {
+          _this.osd.viewport.viewer.innerTracker.dragHandler = _this.originalDragHandler;
+        }
+
         setFilterCSS();
       }
 
@@ -362,12 +378,12 @@
       }).hide();
 
       this.element.find('.mirador-osd-brightness').on('mouseenter',
-        function() {
-          _this.element.find('.mirador-osd-brightness-slider').stop(true, true).show();
-        }).on('mouseleave',
-        function() {
-          _this.element.find('.mirador-osd-brightness-slider').stop(true, true).hide();
-      });
+                                                      function() {
+                                                        _this.element.find('.mirador-osd-brightness-slider').stop(true, true).show();
+                                                      }).on('mouseleave',
+                                                            function() {
+                                                              _this.element.find('.mirador-osd-brightness-slider').stop(true, true).hide();
+                                                            });
 
       this.element.find('.mirador-osd-contrast-slider').slider({
         orientation: "vertical",
@@ -389,12 +405,12 @@
       }).hide();
 
       this.element.find('.mirador-osd-contrast').on('mouseenter',
-        function() {
-          _this.element.find('.mirador-osd-contrast-slider').stop(true, true).show();
-        }).on('mouseleave',
-        function() {
-          _this.element.find('.mirador-osd-contrast-slider').stop(true, true).hide();
-      });
+                                                    function() {
+                                                      _this.element.find('.mirador-osd-contrast-slider').stop(true, true).show();
+                                                    }).on('mouseleave',
+                                                          function() {
+                                                            _this.element.find('.mirador-osd-contrast-slider').stop(true, true).hide();
+                                                          });
 
       this.element.find('.mirador-osd-saturation-slider').slider({
         orientation: "vertical",
@@ -416,12 +432,12 @@
       }).hide();
 
       this.element.find('.mirador-osd-saturation').on('mouseenter',
-        function() {
-          _this.element.find('.mirador-osd-saturation-slider').stop(true, true).show();
-        }).on('mouseleave',
-        function() {
-          _this.element.find('.mirador-osd-saturation-slider').stop(true, true).hide();
-      });
+                                                      function() {
+                                                        _this.element.find('.mirador-osd-saturation-slider').stop(true, true).show();
+                                                      }).on('mouseleave',
+                                                            function() {
+                                                              _this.element.find('.mirador-osd-saturation-slider').stop(true, true).hide();
+                                                            });
 
       this.element.find('.mirador-osd-grayscale').on('click', function() {
         if (jQuery(this).hasClass('selected')) {
@@ -445,6 +461,33 @@
         setFilterCSS();
       });
 
+      this.element.find('.mirador-osd-mirror').on('click', function() {
+        if (!_this.originalDragHandler) {
+          _this.originalDragHandler = _this.osd.viewport && _this.osd.viewport.viewer.innerTracker.dragHandler;
+        }
+        if (jQuery(this).hasClass('selected')) {
+          jQuery(_this.osd.canvas).removeClass('mirador-mirror');
+          jQuery(this).removeClass('selected');
+          _this.eventEmitter.publish('disableManipulation', 'mirror');
+          if (_this.osd.viewport) {
+            _this.osd.viewport.viewer.innerTracker.dragHandler = _this.originalDragHandler;
+          }
+          _this.horizontallyFlipped = false;
+        } else {
+          jQuery(_this.osd.canvas).addClass('mirador-mirror');
+          jQuery(this).addClass('selected');
+          _this.eventEmitter.publish('enableManipulation', 'mirror');
+          if (_this.osd.viewport) {
+            var viewer = _this.osd.viewport.viewer;
+            viewer.innerTracker.dragHandler = OpenSeadragon.delegate(viewer, function(event) {
+              event.delta.x = -event.delta.x;
+              _this.originalDragHandler(event);
+            });
+          }
+          _this.horizontallyFlipped = true;
+        }
+    });
+
       this.element.find('.mirador-osd-reset').on('click', function() {
         resetImageManipulationControls();
       });
@@ -453,6 +496,111 @@
         resetImageManipulationControls();
       });
       //Image manipulation controls
+    },
+
+    currentCanvasIDUpdated: function(event, canvasId) {
+      var _this = this,
+          firstCanvasId = _this.imagesList[0]['@id'],
+          lastCanvasId = _this.imagesList[_this.imagesList.length-1]['@id'];
+
+      // If it is the first canvas, hide the "go to previous" button, otherwise show it.
+      if (canvasId === firstCanvasId) {
+        _this.element.find('.mirador-osd-previous').hide();
+        _this.element.find('.mirador-osd-next').show();
+      } else if (canvasId === lastCanvasId) {
+        _this.element.find('.mirador-osd-next').hide();
+        _this.element.find('.mirador-osd-previous').show();
+      } else {
+        _this.element.find('.mirador-osd-next').show();
+        _this.element.find('.mirador-osd-previous').show();
+      }
+      // If it is the last canvas, hide the "go to previous" button, otherwise show it.
+    },
+
+    loadImage: function(event, imageResource) {
+      var _this = this;
+
+      // We've already loaded this tilesource
+      if(imageResource.status === 'drawn') {
+        return;
+      }
+
+      imageResource.setStatus('requested');
+      var bounds = imageResource.getGlobalBounds();
+
+      _this.osd.addTiledImage({
+        x: bounds.x,
+        y: bounds.y,
+        width: bounds.width,
+        tileSource: imageResource.tileSource,
+        opacity: imageResource.opacity,
+        clip: imageResource.clipRegion,
+        index: imageResource.zIndex,
+
+        success: function(event) {
+          var tiledImage = event.item;
+
+          imageResource.osdTiledImage = tiledImage;
+          imageResource.setStatus('loaded');
+          _this.syncAllImageResourceProperties(imageResource);
+
+          var tileDrawnHandler = function(event) {
+            if (event.tiledImage === tiledImage) {
+              imageResource.setStatus('drawn');
+              _this.osd.removeHandler('tile-drawn', tileDrawnHandler);
+            }
+          };
+          _this.osd.addHandler('tile-drawn', tileDrawnHandler);
+        },
+
+        error: function(event) {
+          // Add any auth information here.
+          //
+          // var errorInfo = {
+          //   id: imageResource.osdTileSource,
+          //   message: event.message,
+          //   source: event.source
+          // };
+          imageResource.setStatus('failed');
+        }
+      });
+    },
+    showImage: function(event, imageResource) {
+      // Check whether or not this item has been drawn.
+      // This implies that the request has been issued already
+      // and the opacity can be updated.
+      if (imageResource.getStatus() === 'drawn') {
+        this.updateImageOpacity(null, imageResource);
+      }
+    },
+    hideImage: function(event, imageResource) {
+      if (imageResource.getStatus() === 'drawn') {
+        imageResource.osdTiledImage.setOpacity(0);
+      }
+    },
+    removeImage: function() {
+    },
+    updateImageOpacity: function(event, imageResource) {
+      if(imageResource.osdTiledImage) {
+        imageResource.osdTiledImage.setOpacity(imageResource.opacity * imageResource.parent.getOpacity());
+      }
+    },
+    syncAllImageResourceProperties: function(imageResource) {
+      if(imageResource.osdTiledImage) {
+        var bounds = imageResource.getGlobalBounds();
+        // If ever the clipRegion parameter becomes
+        // writable, add it here.
+        imageResource.osdTiledImage.setPosition({
+          x:bounds.x,
+          y:bounds.y
+        }, true);
+        imageResource.osdTiledImage.setWidth(bounds.width, true);
+        imageResource.osdTiledImage.setOpacity(
+          imageResource.getOpacity() * imageResource.parent.getOpacity()
+        );
+        // This will be for the drag and drop functionality.
+        // _this.updateImageLayeringIndex(imageResource);
+      }
     },
 
     getPanByValue: function() {
@@ -467,17 +615,18 @@
 
     setBounds: function() {
       var _this = this;
+
       this.osdOptions.osdBounds = this.osd.viewport.getBounds(true);
       _this.eventEmitter.publish("imageBoundsUpdated", {
         id: _this.windowId,
-          osdBounds: {
-            x: _this.osdOptions.osdBounds.x,
-            y: _this.osdOptions.osdBounds.y,
-            width: _this.osdOptions.osdBounds.width,
-            height: _this.osdOptions.osdBounds.height
-          }
+        osdBounds: {
+          x: _this.osdOptions.osdBounds.x,
+          y: _this.osdOptions.osdBounds.y,
+          width: _this.osdOptions.osdBounds.width,
+          height: _this.osdOptions.osdBounds.height
+        }
       });
-      var rectangle = this.osd.viewport.viewportToImageRectangle(this.osdOptions.osdBounds);
+      var rectangle = this.osdOptions.osdBounds; // In ImageView, viewport coordinates are in the same as Canvas Coordinates.
       _this.eventEmitter.publish("imageRectangleUpdated", {
         id: _this.windowId,
         osdBounds: {
@@ -485,7 +634,8 @@
           y: Math.round(rectangle.y),
           width: Math.round(rectangle.width),
           height: Math.round(rectangle.height)
-        }
+        },
+        warning: 'Warning, image rectangle now based on canvas dimensions, not the constituent images.'
       });
     },
 
@@ -528,117 +678,99 @@
       }
     },
 
-    createOpenSeadragonInstance: function(imageUrl) {
-      var infoJsonUrl = imageUrl + '/info.json',
-      uniqueID = $.genUUID(),
-      osdID = 'mirador-osd-' + uniqueID,
-      infoJson,
-      _this = this;
+    initialiseImageCanvas: function() {
+      var _this = this,
+          osdID = 'mirador-osd-' + $.genUUID(),
+          canvasModel = _this.canvases[_this.canvasID];
 
-      this.element.find('.' + this.osdCls).remove();
-
-      jQuery.getJSON(infoJsonUrl).done(function (infoJson, status, jqXHR) {
-        _this.elemOsd =
-          jQuery('<div/>')
+      _this.elemOsd =
+        jQuery('<div/>')
         .addClass(_this.osdCls)
         .attr('id', osdID)
         .appendTo(_this.element);
 
-        _this.osd = $.OpenSeadragon({
-          'id':           osdID,
-          'tileSources':  infoJson,
-          'uniqueID' : uniqueID
-        });
-
-        _this.osd.addHandler('zoom', $.debounce(function(){
-          var point = {
-            'x': -10000000,
-            'y': -10000000
-          };
-          _this.eventEmitter.publish('updateTooltips.' + _this.windowId, [point, point]);
-        }, 30));
-
-        _this.osd.addHandler('pan', $.debounce(function(){
-          var point = {
-            'x': -10000000,
-            'y': -10000000
-          };
-          _this.eventEmitter.publish('updateTooltips.' + _this.windowId, [point, point]);
-        }, 30));
-
-//        if (_this.state.getStateProperty('autoHideControls')) {
-//          var timeoutID = null,
-//          fadeDuration = _this.state.getStateProperty('fadeDuration'),
-//          timeoutDuration = _this.state.getStateProperty('timeoutDuration');
-//          var hideHUD = function() {
-//            _this.element.find(".hud-control").stop(true, true).addClass('hidden', fadeDuration);
-//          };
-//          hideHUD();
-//          jQuery(_this.element).on('mousemove', function() {
-//            window.clearTimeout(timeoutID);
-//            _this.element.find(".hud-control").stop(true, true).removeClass('hidden', fadeDuration);
-//            // When a user is in annotation create mode, force show the controls so they don't disappear when in a qtip, so check for that
-//            if (!_this.forceShowControls) {
-//              timeoutID = window.setTimeout(hideHUD, timeoutDuration);
-//            }
-//          }).on('mouseleave', function() {
-//            if (!_this.forceShowControls) {
-//              window.clearTimeout(timeoutID);
-//              hideHUD();
-//            }
-//          });
-//        }
-
-        _this.osd.addHandler('open', function(){
-          _this.eventEmitter.publish('osdOpen.'+_this.windowId);
-          if (_this.osdOptions.osdBounds) {
-            var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
-            _this.osd.viewport.fitBounds(rect, true);
-          } else {
-            // else reset bounds for this image
-            _this.setBounds();
-          }
-
-          if (_this.boundsToFocusOnNextOpen) {
-            _this.eventEmitter.publish('fitBounds.' + _this.windowId, _this.boundsToFocusOnNextOpen);
-            _this.boundsToFocusOnNextOpen = null;
-          }
-
-          _this.addAnnotationsLayer(_this.elemAnno);
-
-          // get the state before resetting it so we can get back to that state
-          var originalState = _this.hud.annoState.current;
-          var selected = _this.element.find('.mirador-osd-edit-mode.selected');
-          var shape = null;
-          if (selected) {
-            shape = selected.find('.material-icons').html();
-          }
-          if (originalState === 'none') {
-            _this.hud.annoState.startup();
-          } else if (originalState === 'off' || _this.annotationState === 'off') {
-            //original state is off, so don't need to do anything
-          } else {
-            _this.hud.annoState.displayOff();
-          }
-
-          if (originalState === 'pointer' || _this.annotationState === 'on') {
-            _this.hud.annoState.displayOn();
-          } else if (originalState === 'shape') {
-            _this.hud.annoState.displayOn();
-            _this.hud.annoState.chooseShape(shape);
-          } else {
-            //original state is off, so don't need to do anything
-          }
-
-          _this.osd.addHandler('zoom', $.debounce(function() {
-            _this.setBounds();
-          }, 500));
-
-          _this.osd.addHandler('pan', $.debounce(function(){
-            _this.setBounds();
-          }, 500));
-        });
+      _this.osd = $.OpenSeadragon({
+        id: osdID,
+        uniqueID: osdID,
+        preserveViewport: true,
+        blendTime: 0.1,
+        alwaysBlend: false,
+        showNavigationControl: false
       });
+
+      var canvasBounds = canvasModel.getBounds();
+      var rect = new OpenSeadragon.Rect(
+        canvasBounds.x,
+        canvasBounds.y,
+        canvasBounds.width,
+        canvasBounds.height
+      );
+      _this.osd.viewport.fitBounds(rect, true); // center viewport before image is placed.
+
+      canvasModel.show();
+      canvasModel.getVisibleImages().forEach(function(imageResource) {
+        _this.loadImage(null, imageResource);
+      });
+
+      _this.osd.addHandler('zoom', $.debounce(function(){
+        var point = {
+          'x': -10000000,
+          'y': -10000000
+        };
+        _this.eventEmitter.publish('updateTooltips.' + _this.windowId, [point, point]);
+      }, 30));
+
+      _this.osd.addHandler('pan', $.debounce(function(){
+        var point = {
+          'x': -10000000,
+          'y': -10000000
+        };
+        _this.eventEmitter.publish('updateTooltips.' + _this.windowId, [point, point]);
+      }, 30));
+
+      // Maintain this as an external API.
+      _this.eventEmitter.publish('osdOpen.'+_this.windowId);
+      _this.addAnnotationsLayer(_this.elemAnno);
+
+      if (_this.osdOptions.osdBounds) {
+        var newBounds = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
+        _this.osd.viewport.fitBounds(newBounds, true);
+      } else {
+        // else reset bounds for this image
+        _this.setBounds();
+      }
+
+      // get the state before resetting it so we can get back to that state
+      var originalState = _this.hud.annoState.current;
+      var selected = _this.element.find('.mirador-osd-edit-mode.selected');
+      var shape = null;
+      if (selected) {
+        shape = selected.find('.material-icons').html();
+      }
+      if (originalState === 'none') {
+        _this.hud.annoState.startup();
+      } else if (originalState === 'off' || _this.annotationState === 'off') {
+        //original state is off, so don't need to do anything
+      } else {
+        _this.hud.annoState.displayOff();
+      }
+
+      if (originalState === 'pointer' || _this.annotationState === 'on') {
+        _this.hud.annoState.displayOn();
+      } else if (originalState === 'shape') {
+        _this.hud.annoState.displayOn();
+        _this.hud.annoState.chooseShape(shape);
+      } else {
+        //original state is off, so don't need to do anything
+      }
+
+      _this.osd.addHandler('zoom', $.debounce(function() {
+        _this.setBounds();
+      }, 500));
+
+      _this.osd.addHandler('pan', $.debounce(function(){
+        _this.setBounds();
+      }, 500));
     },
 
     //TODO reuse annotationsLayer with IIIFManifestLayouts
@@ -657,21 +789,32 @@
     updateImage: function(canvasID) {
       var _this = this;
       if (this.canvasID !== canvasID) {
+        this.canvases[_this.canvasID].getVisibleImages().forEach(function(imageResource){
+          imageResource.hide();
+        });
         this.canvasID = canvasID;
         this.currentImgIndex = $.getImageIndexById(this.imagesList, canvasID);
         this.currentImg = this.imagesList[this.currentImgIndex];
+
+        var newCanvas = this.canvases[_this.canvasID];
+        var canvasBounds = newCanvas.getBounds();
+        var rect = new OpenSeadragon.Rect(
+          canvasBounds.x,
+          canvasBounds.y,
+          canvasBounds.width,
+          canvasBounds.height
+        );
+        _this.osd.viewport.fitBounds(rect, true); // center viewport before image is placed.
+        newCanvas.show();
+
         this.osdOptions = {
           osdBounds:        null,
           zoomLevel:        null
         };
         this.eventEmitter.publish('resetImageManipulationControls.'+this.windowId);
-        this.osd.close();
-        this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
-        _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
-      } else {
-        _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
       }
-    },
+      _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [canvasID]});
+      },
 
     next: function() {
       var _this = this;

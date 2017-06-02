@@ -174,6 +174,12 @@
     left: 10px;
     transition: none;
     /*width: 100%*/
+    >div {
+      clear: both;
+      >a:first-child {
+        margin-bottom: 10px;
+      }
+    }
   }
   .mirador-osd-context-controls a {
     float:left;
@@ -186,10 +192,14 @@
     left: 0px;
   }
   .mirador-manipulation-controls {
-    position: absolute;
-    top: 30px;
-    left: 0px;
-    min-width: 330px;
+    min-width: 364px;
+  }
+  .mirador-mirror {
+    -moz-transform: scale(-1, 1);
+    -webkit-transform: scale(-1, 1);
+    -o-transform: scale(-1, 1);
+    transform: scale(-1, 1);
+    filter: FlipH;
   }
 
   /* color picker custom style

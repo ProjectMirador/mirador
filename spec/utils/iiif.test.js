@@ -66,6 +66,11 @@ describe('Iiif', function () {
   });
   
   describe('getVersionFromContext', function () {
+    it('should handle array contexts', function() {
+      var context = ['http://iiif.io/api/image/2/context.json',
+                     {'someField': 'ns:some-field'}];
+      expect(Mirador.Iiif.getVersionFromContext(context)).toEqual('2.0');
+    });
     it('should identify 2.0', function() {
       var context = 'http://iiif.io/api/image/2/context.json';
       expect(Mirador.Iiif.getVersionFromContext(context)).toEqual('2.0');
@@ -114,6 +119,18 @@ describe('Iiif', function () {
     });
   });
   
-  xit('getImageHostUrl', function () {
+  describe('getImageHostUrl', function () {
+    it('should return image_host if it exists', function() {
+      expect(Mirador.Iiif.getImageHostUrl({ image_host: "http://0.0.0.0/abc" })).toEqual("http://0.0.0.0/abc");
+    });
+    it('should return identifier portion if it exists', function() {
+      expect(Mirador.Iiif.getImageHostUrl({ '@id': "http://0.0.0.0/abc/def", identifier: "def" })).toEqual("http://0.0.0.0/abc");
+    });
+    it('should split URL in half if found', function() {
+      expect(Mirador.Iiif.getImageHostUrl({'@id': "http://0.0.0.0/abc/def"})).toEqual("http://0.0.0.0/abc");
+    });
+    it('should return empty string if all attempts fail', function() {
+      expect(Mirador.Iiif.getImageHostUrl({})).toEqual('');
+    });
   });
 });

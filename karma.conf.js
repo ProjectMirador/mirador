@@ -37,8 +37,9 @@ module.exports = function(config) {
       'js/lib/sanitize-html.min.js',
       'node_modules/sinon/pkg/sinon.js',
       'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
+      'node_modules/iiif-evented-canvas/dist/iiif-evented-canvas.umd.min.js',
       // app
-      'js/src/mirador.js', 
+      'js/src/mirador.js',
       'js/src/utils/handlebars.js',
       'js/src/*.js',
       'js/src/viewer/*.js',
@@ -49,10 +50,9 @@ module.exports = function(config) {
       'js/src/utils/*.js',
       // spec
       'spec/**/*.stub.js',
-      'spec/**/*.js',
       {pattern: 'spec/data/*', watched: true, served: true, included: false},
-      {pattern: 'spec/fixtures/*json', watched: true, served: true, included: false},
-    ],
+      {pattern: 'spec/fixtures/*json', watched: true, served: true, included: false}
+    ].concat(!process.env.KARMA_SPECS ? ['spec/**/*.js'] : process.env.KARMA_SPECS.split(',')),
 
 
     // list of files to exclude

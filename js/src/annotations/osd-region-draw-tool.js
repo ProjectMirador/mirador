@@ -21,6 +21,8 @@
       this.svgOverlay.show();
       this.svgOverlay.disable();
 
+      this.horizontallyFlipped = false;
+
       this.listenForActions();
     },
 
@@ -162,6 +164,9 @@
       };
       var hoverColor = this.state.getStateProperty('drawingToolsSettings').hoverColor;
       var annotations = [];
+      if (this.horizontallyFlipped) {
+        location.x = this.svgOverlay.viewer.tileSources.width - location.x;
+      }
       for (var key in _this.annotationsToShapesMap) {
         if (_this.annotationsToShapesMap.hasOwnProperty(key)) {
           var shapeArray = _this.annotationsToShapesMap[key];
@@ -280,6 +285,17 @@
 
       this.eventsSubscriptions.push(_this.eventEmitter.subscribe('refreshOverlay.' + _this.windowId, function (event) {
         _this.render();
+      }));
+
+      this.eventsSubscriptions.push(this.eventEmitter.subscribe("enableManipulation",function(event, tool){
+        if(tool === 'mirror') {
+          _this.horizontallyFlipped = true;
+        }
+      }));
+      this.eventsSubscriptions.push(this.eventEmitter.subscribe("disableManipulation",function(event, tool){
+        if(tool === 'mirror') {
+          _this.horizontallyFlipped = false;
+        }
       }));
     },
 
