@@ -49,6 +49,7 @@ module.exports = function(grunt) {
     'js/lib/sanitize-html.min.js',
     'node_modules/iiif-evented-canvas/dist/iiif-evented-canvas.umd.min.js',
     'node_modules/iiif-layout-functions/dist/iiif-layout-functions.umd.min.js',
+    'node_modules/select2/dist/js/select2.full.min.js'
   ],
 
   // source files
@@ -96,6 +97,7 @@ module.exports = function(grunt) {
           'css/jquery-ui.min.css',
           'css/jquery.qtip.min.css',
           'node_modules/spectrum-colorpicker/spectrum.css',
+          'node_modules/select2/dist/css/select2.min.css',
           'css/mirador.css',
           'css/material-icons.css',
           'bower_components/simplePagination.js/simplePagination.css'
