@@ -17,6 +17,11 @@
     },
 
     getVersionFromContext: function(context) {
+      if (context instanceof Array) {
+        context = context.filter(function(ctx) {
+          return typeof ctx === "string" && ctx.indexOf('http://iiif.io') === 0;
+        })[0];
+      }
       if (context == "http://iiif.io/api/image/2/context.json") {
         return "2.0";
       } else {

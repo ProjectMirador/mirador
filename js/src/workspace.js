@@ -502,6 +502,13 @@
         delete mergedConfig.sidePanel;
       }
 
+      if (windowConfig.state.currentConfig.hasOwnProperty('sidePanelOptions')) {
+        jQuery.extend(
+          mergedConfig.sidePanelOptions,
+          windowConfig.state.currentConfig.sidePanelOptions
+        );
+      }
+
       if (mergedConfig.hasOwnProperty('overlay')) {
         mergedConfig.overlayAvailable = mergedConfig.overlay;
         delete mergedConfig.overlay;

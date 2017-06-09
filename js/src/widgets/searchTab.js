@@ -156,7 +156,7 @@
       }
     },
 
-    template: Handlebars.compile([
+    template: $.Handlebars.compile([
       '<div class="search-results">',
         '{{#if searchService}}',
           '<label>Select Search Service',
