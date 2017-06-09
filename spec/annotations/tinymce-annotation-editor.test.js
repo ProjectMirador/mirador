@@ -49,7 +49,10 @@ describe('TinyMCEAnnotationBodyEditor', function() {
     this.windowId = '380c9e54-7561-4010-a99f-f132f5dc13fd';
     this.tinyMce = new Mirador.TinyMCEAnnotationBodyEditor({
       annotation: this.annotation,
-      windowId: this.windowId
+      windowId: this.windowId,
+      config: {
+        tags: ["config1", "config2"]
+      }
     });
     subject = this.tinyMce;
     subject.show('#mycontainer');
@@ -59,12 +62,12 @@ describe('TinyMCEAnnotationBodyEditor', function() {
     delete this.tinyMce;
     $('body').html('');
   });
-  
+
   describe('Initialization', function() {
     it('should initialize', function() {
       expect(true).toBe(true); //Force beforeEach() setup to run
       expect(this.sandbox.find('.text-editor').val()).toEqual('<p>Waahoo</p>');
-      expect(this.sandbox.find('.tags-editor').val()).toEqual('tagged silly');
+      expect(this.sandbox.find('.tags-editor').val()).toEqual(['tagged', 'silly']);
     });
     it('should initialize with legacy annotations', function() {
       this.annotation.resource = {
@@ -80,7 +83,7 @@ describe('TinyMCEAnnotationBodyEditor', function() {
       expect(this.sandbox.find('.text-editor').val()).toEqual('Old stuff');
     });
   });
-  
+
   describe('isDirty', function() {
     var dirty;
     beforeEach(function() {
@@ -109,9 +112,36 @@ describe('TinyMCEAnnotationBodyEditor', function() {
         })
       };
     });
-    it('should create a full annotation', function() {
+    it('should create a full annotation with tags from config', function() {
       this.sandbox.find('.text-editor').val('Sample annotation');
-      this.sandbox.find('.tags-editor').val('tag nags');
+      this.sandbox.find('.tags-editor').val(['config1', 'config2']).trigger('change');
+      expect(subject.createAnnotation()).toEqual({
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@type": "oa:Annotation",
+        "motivation": ['oa:tagging', 'oa:commenting'],
+        "resource": [
+          {
+            "@type": "oa:Tag",
+            "chars": "config1"
+          },
+          {
+            "@type": "oa:Tag",
+            "chars": "config2"
+          },
+          {
+            "@type": "dctypes:Text",
+            "format": "text/html",
+            "chars": "Sample annotation"
+          }
+        ]
+      });
+    });
+
+    it('should create a full annotation with new tags', function() {
+      this.sandbox.find('.text-editor').val('Sample annotation');
+      this.sandbox.find('.tags-editor').append('<option value="tag">tag</option>');
+      this.sandbox.find('.tags-editor').append('<option value="nags">nags</option>');
+      this.sandbox.find('.tags-editor').val(['tag', 'nags']).trigger('change');
       expect(subject.createAnnotation()).toEqual({
         "@context": "http://iiif.io/api/presentation/2/context.json",
         "@type": "oa:Annotation",
@@ -144,7 +174,7 @@ describe('TinyMCEAnnotationBodyEditor', function() {
         })
       };
     });
-    it('should update the given annotation', function() {
+    it('should update the given annotation with new tags', function() {
       var oaAnno = {
         "@context": "http://iiif.io/api/presentation/2/context.json",
         "@type": "oa:Annotation",
@@ -156,7 +186,9 @@ describe('TinyMCEAnnotationBodyEditor', function() {
         }]
       };
       this.sandbox.find('.text-editor').val('Sample annotation 2');
-      this.sandbox.find('.tags-editor').val('tag2 nags2');
+      this.sandbox.find('.tags-editor').append('<option value="tag2">tag2</option>');
+      this.sandbox.find('.tags-editor').append('<option value="nags2">nags2</option>');
+      this.sandbox.find('.tags-editor').val(['tag2', 'nags2']).trigger('change');
       subject.updateAnnotation(oaAnno);
       expect(oaAnno).toEqual({
         "@context": "http://iiif.io/api/presentation/2/context.json",
@@ -179,5 +211,42 @@ describe('TinyMCEAnnotationBodyEditor', function() {
         ]
       });
     });
+
+    it('should update the given annotation with tags from config', function() {
+      var oaAnno = {
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@type": "oa:Annotation",
+        "motivation": ['oa:commenting'],
+        "resource": [{
+          "@type": "dctypes:Text",
+          "format": "text/html",
+          "chars": "Sample annotation"
+        }]
+      };
+      this.sandbox.find('.text-editor').val('Sample annotation 2');
+      this.sandbox.find('.tags-editor').val(['config1', 'config2']).trigger('change');
+      subject.updateAnnotation(oaAnno);
+      expect(oaAnno).toEqual({
+        "@context": "http://iiif.io/api/presentation/2/context.json",
+        "@type": "oa:Annotation",
+        "motivation": ['oa:commenting', 'oa:tagging'],
+        "resource": [
+          {
+            "@type": "dctypes:Text",
+            "format": "text/html",
+            "chars": "Sample annotation 2"
+          },
+          {
+            "@type": "oa:Tag",
+            "chars": "config1"
+          },
+          {
+            "@type": "oa:Tag",
+            "chars": "config2"
+          }
+        ]
+      });
+    });
+
   });
-}); 
+});
