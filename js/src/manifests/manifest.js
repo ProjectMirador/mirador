@@ -3,10 +3,10 @@
   $.Manifest = function(manifestUri, location, manifestContent) {
     if (manifestContent) {
       jQuery.extend(true, this, {
-          jsonLd: null,
-          location: location,
-          uri: manifestUri,
-          request: null
+        jsonLd: null,
+        location: location,
+        uri: manifestUri,
+        request: null
       });
       this.initFromManifestContent(manifestContent);
     } else if (manifestUri.indexOf('info.json') !== -1) {
@@ -31,7 +31,7 @@
         jsonLd: null,
         location: location,
         uri: manifestUri,
-        request: null
+        request: null,
       });
 
       this.initFromInfoJson(manifestUri);
@@ -58,7 +58,6 @@
 
       this.request.done(function(jsonLd) {
         _this.jsonLd = jsonLd;
-        _this.buildCanvasMap();
       });
     },
     buildCanvasMap: function() {
@@ -168,7 +167,7 @@
       // Takes in info.json and creates the
       // dummy manifest wrapper around it
       // that will allow it to behave like a
-      // manifest with one canvas in it, with
+     // manifest with one canvas in it, with
       // one image on it. Some of the metadata
       // of the image will be used as the
       // label, and so on, of the manifest.
