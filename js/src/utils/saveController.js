@@ -72,6 +72,7 @@
     this.init(newConfig);
   };
 
+
   $.SaveController.prototype = {
 
     init: function(config) {
@@ -372,6 +373,37 @@
 
     },
 
+  cleanup: function(obj) {
+
+    /**
+     * Setup a Set to track the objects we have
+     * already cloned - this clean circular refs.
+     **/
+    var clonedSet = new Set();
+
+    function cloner(obj) {
+
+      if(obj === null || typeof(obj) != 'object') {
+        return obj;
+      }
+
+      if (!clonedSet.has(obj)) {
+        clonedSet.add(obj);
+        var temp = Array.isArray(obj) ? [] : {};
+        for(var key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            temp[key] = cloner(obj[key]);
+          }
+        }
+        return temp;
+      }
+
+      return undefined;
+    }
+
+    return cloner(obj);
+  }
+
     save: function() {
       var _this = this;
 
@@ -379,7 +411,7 @@
       // localStorage is a key:value store that
       // only accepts strings.
 
-      localStorage.setItem(_this.sessionID, JSON.stringify(_this.currentConfig));
+      localStorage.setItem(_this.sessionID, JSON.stringify(_this.cleanup(_this.currentConfig)));
     }
 
   };
