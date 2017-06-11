@@ -10,6 +10,8 @@
     }, options);
 
     this.init();
+    this.bindEvents();
+
   };
 
   $.MetadataView.prototype = {
@@ -20,12 +22,18 @@
             metadataListingCls: this.metadataListingCls
           };
 
-      _this.manifest = _this.manifest.jsonLd;
+      if ( typeof _this.manifest.jsonLd !== 'undefined' ) {
+        _this.manifest = _this.manifest.jsonLd;
+      }
+
       this.metadataTypes = {};
 
       // Populate canvas specific metadata
       if ( _this.imageMetadata ) {
-        this.metadataTypes.imageMetadata = _this.imageMetadata;
+        var metadataArray = Object.keys(_this.imageMetadata).map( function(key) {
+           return { label: key, value: _this.imageMetadata[key] };
+        });
+        this.metadataTypes.imageMetadata = metadataArray;
       }
 
       this.metadataTypes.details = _this.getMetadataDetails(_this.manifest);
@@ -61,8 +69,12 @@
         tplData.logo = logo;
       }
 
+      // Clean up before appending, to make sure
+      // that after loading the canvas metadata we start
+      // with a clean metadata panel.
+      this.appendTo.empty();
+
       this.element = jQuery(this.template(tplData)).appendTo(this.appendTo);
-      this.bindEvents();
     },
 
   // Base code from https://github.com/padolsey/prettyprint.js. Modified to fit Mirador needs
@@ -209,7 +221,7 @@
 
     bindEvents: function() {
       var _this = this;
-      jQuery.subscribe('ANNOTATIONS_LIST_UPDATED', function(event, options) {
+      this.eventEmitter.subscribe('ANNOTATIONS_LIST_UPDATED', function(event, options) {
         _this.updateMetadata(options);
       });
     },
@@ -220,6 +232,17 @@
         } else {
             this.hide();
         }
+    },
+
+    isMetadataAnnotation: function(annotation) {
+      if (typeof annotation.motivation !== 'undefined' &&
+          typeof annotation.motivation.indexOf === 'function' &&
+          annotation.motivation.indexOf('oa:describing') >= 0 ) {
+            // We are reserving 'oa:describing' annotation type
+            // to provide image specific metadata.
+            return true;
+      }
+      return false;
     },
 
     findImageAnnotation: function() {
