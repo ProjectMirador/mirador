@@ -23,6 +23,11 @@
       _this.manifest = _this.manifest.jsonLd;
       this.metadataTypes = {};
 
+      // Populate canvas specific metadata
+      if ( _this.imageMetadata ) {
+        this.metadataTypes.imageMetadata = _this.imageMetadata;
+      }
+
       this.metadataTypes.details = _this.getMetadataDetails(_this.manifest);
       this.metadataTypes.rights = _this.getMetadataRights(_this.manifest);
       this.metadataTypes.links = _this.getMetadataLinks(_this.manifest);
@@ -203,6 +208,10 @@
   },
 
     bindEvents: function() {
+      var _this = this;
+      jQuery.subscribe('ANNOTATIONS_LIST_UPDATED', function(event, options) {
+        _this.updateMetadata(options);
+      });
     },
 
     toggle: function(stateValue) {
@@ -213,7 +222,39 @@
         }
     },
 
+    findImageAnnotation: function() {
+      var imageAnnotation;
+      var annotations = this.state.windowsAnnotationsLists[this.windowId];
+      if (typeof annotations !== 'undefined') {
+        for (var i=0, len=annotations.length; i<len && !imageAnnotation; i++) {
+          var annotation = annotations[i];
+          if (this.isMetadataAnnotation(annotation)) {
+            imageAnnotation = annotation;
+          }
+        }
+      }
+      return imageAnnotation;
+    },
+
+    updateMetadata: function(options) {
+      // This was a refresh due to an updated list of
+      // annotations being loaded, we only change our
+      // metadata if the the annotations have been updated
+      // for our window.
+      if (typeof options !== 'undefined') {
+        if (options.windowId !== this.windowId) {
+          return;
+        }
+      }
+      var currentImageAnnotation = this.findImageAnnotation();
+      if (typeof currentImageAnnotation !== 'undefined') {
+        this.imageMetadata = currentImageAnnotation.resource;
+        this.init();
+      }
+    },
+
     show: function() {
+        this.updateMetadata();
         var element = jQuery(this.element);
         if (this.panel) {
             element = element.parent();
@@ -256,6 +297,14 @@
     },
 
     template: $.Handlebars.compile([
+    '{{#if imageMetadata}}',
+      '<div class="sub-title">{{t "mediadetails"}}:</div>',
+        '<div class="{{metadataListingCls}}">',
+          '{{#each imageMetadata}}',
+            '<div class="metadata-item"><div class="metadata-label">{{label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
+          '{{/each}}',
+        '</div>',
+    '{{/if}}',
     '<div class="sub-title">{{t "details"}}:</div>',
         '<div class="{{metadataListingCls}}">',
           '{{#each details}}',
