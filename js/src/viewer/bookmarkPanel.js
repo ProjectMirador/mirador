@@ -47,7 +47,7 @@
 
     onConfigUpdated: function() {
       var _this = this;
-      _this.storageModule.save(_this.state.currentConfig)
+      _this.storageModule.save(_this.state.cleanup(_this.state.currentConfig))
       .then(function(blobId) {
         var bookmarkURL = window.location.href.replace(window.location.hash, '') + "?json="+blobId;
         _this.element.find('#share-url').val(bookmarkURL).focus().select();
