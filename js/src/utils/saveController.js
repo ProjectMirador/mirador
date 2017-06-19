@@ -376,10 +376,11 @@
     cleanup: function(obj) {
 
       /**
-       * Setup a Set to track the objects we have
-       * already cloned - this clean circular refs.
+       * Setup an array-based implementation of a Set
+       * to track the objects we have
+       * already cloned - this will generically clean circular refs.
        **/
-      var clonedSet = new Set();
+      var clonedSet = [];
 
       function cloner(obj) {
 
@@ -387,8 +388,8 @@
           return obj;
         }
 
-        if (!clonedSet.has(obj)) {
-          clonedSet.add(obj);
+        if (clonedSet.indexOf(obj) === -1) {
+          clonedSet.push(obj);
           var temp = Array.isArray(obj) ? [] : {};
           for(var key in obj) {
             if (obj.hasOwnProperty(key)) {
