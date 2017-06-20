@@ -82,7 +82,17 @@
            slotAddress: "row1.column2",
            viewType: "ImageView"
          }],
-         "annotationEndpoint": { "name":"Local Storage", "module": "LocalStorageEndpoint" }
+         "annotationEndpoint": { "name":"Local Storage", "module": "LocalStorageEndpoint" },
+         "windowSettings": {
+           "canvasControls": { // The types of controls available to be displayed on a canvas
+             "imageManipulation" : {
+               "manipulationLayer" : true,
+               "controls" : {
+                 "mirror" : true
+               }
+             }
+           }
+         }
        });
      });
     </script>

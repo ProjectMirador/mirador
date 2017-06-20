@@ -73,16 +73,13 @@
            { "manifestUri": "http://scta.info/iiif/pg-lon/manifest", "location": "Wellcome Library"}
          ],
          "annotationEndpoint": { "name":"Local Storage", "module": "LocalStorageEndpoint" },
-         "canvasControls": { // The types of controls available to be displayed on a canvas
-           "imageManipulation" : {
-             "controls" : {
-               "rotate" : true,
-               "brightness" : true,
-               "contrast" : true,
-               "saturate" : true,
-               "grayscale" : true,
-               "invert" : true,
-               "mirror" : true
+         "windowSettings": {
+           "canvasControls": { // The types of controls available to be displayed on a canvas
+             "imageManipulation" : {
+               "manipulationLayer" : true,
+               "controls" : {
+                 "mirror" : true
+               }
              }
            }
          },
