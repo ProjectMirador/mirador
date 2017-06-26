@@ -157,6 +157,9 @@
 
     showTooltipsFromMousePosition: function(event, location, absoluteLocation) {
       var _this = this;
+      var originWindow = this.state.getWindowObjectById(this.windowId);
+      var currentCanvasModel = originWindow.canvases[originWindow.canvasID];
+
       var hitOptions = {
         fill: true,
         stroke: true,
@@ -165,7 +168,7 @@
       var hoverColor = this.state.getStateProperty('drawingToolsSettings').hoverColor;
       var annotations = [];
       if (this.horizontallyFlipped) {
-        location.x = this.svgOverlay.viewer.tileSources.width - location.x;
+        location.x = currentCanvasModel.getBounds().width;
       }
       for (var key in _this.annotationsToShapesMap) {
         if (_this.annotationsToShapesMap.hasOwnProperty(key)) {
