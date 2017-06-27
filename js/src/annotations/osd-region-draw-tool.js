@@ -168,7 +168,7 @@
       var hoverColor = this.state.getStateProperty('drawingToolsSettings').hoverColor;
       var annotations = [];
       if (this.horizontallyFlipped) {
-        location.x = currentCanvasModel.getBounds().width;
+        location.x = currentCanvasModel.getBounds().width - location.x;
       }
       for (var key in _this.annotationsToShapesMap) {
         if (_this.annotationsToShapesMap.hasOwnProperty(key)) {
