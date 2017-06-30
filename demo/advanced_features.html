@@ -22,6 +22,7 @@
      $(function() {
        myMiradorInstance = Mirador({
          "id": "viewer",
+         "layout": "1x2",
          "buildPath": "",
          "data": [
            { "manifestUri": "https://iiif.lib.harvard.edu/manifests/drs:48309543", "location": "Harvard University"},
@@ -70,8 +71,18 @@
            { "manifestUri": "http://digi.vatlib.it/iiif/MSS_Vat.lat.3225/manifest.json", "location": "Vatican Library"},
            { "manifestUri": "http://media.nga.gov/public/manifests/nga_highlights.json", "location": "National Gallery of Art"},
            { "manifestUri": "https://media.nga.gov/public/manifests/multispectral_demo.json", "location": "National Gallery of Art"},
-           { "manifestUri": "http://scta.info/iiif/pg-lon/manifest", "location": "Wellcome Library"}
+           { "manifestUri": "http://scta.info/iiif/pg-lon/manifest", "location": "Wellcome Library"},
+           { "manifestUri": "https://wellcomelibrary.org/iiif/b18035978/manifest", "location": "Wellcome Library"}
          ],
+         "windowObjects": [{
+           loadedManifest: "http://demos.biblissima-condorcet.fr/iiif/metadata/BVMM/chateauroux/manifest.json",
+           viewType: "ImageView",
+           slotAddress: "row1.column1"
+         }, {
+           loadedManifest: "https://wellcomelibrary.org/iiif/b18035978/manifest",
+           slotAddress: "row1.column2",
+           viewType: "ImageView"
+         }],
          "annotationEndpoint": { "name":"Local Storage", "module": "LocalStorageEndpoint" },
          "windowSettings": {
            "canvasControls": { // The types of controls available to be displayed on a canvas
