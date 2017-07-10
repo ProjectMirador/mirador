@@ -493,7 +493,7 @@
         mousePosition.y = currentCanvasModel.getBounds().height;
       }
       if (this.horizontallyFlipped) {
-        mousePosition.x = this.viewer.tileSources.width - mousePosition.x;
+        mousePosition.x = currentCanvasModel.getBounds().width - mousePosition.x;
       }
       return mousePosition;
     },
