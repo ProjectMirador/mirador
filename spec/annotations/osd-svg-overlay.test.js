@@ -370,10 +370,6 @@ describe('Overlay', function() {
     this.rectangle = new Mirador.Rectangle(); // TODO should use stubbed tool
     spyOn(this.rectangle, 'onMouseDown');
     spyOn(this.rectangle, 'onDoubleClick');
-    this.overlay.viewer.tileSources = {
-      'width': 998,
-      'height': 998
-    }
     var event = getEvent({
       'x': 100,
       'y': 100
