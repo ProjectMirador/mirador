@@ -46,7 +46,10 @@ module.exports = function(grunt) {
     'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
     'bower_components/simplePagination.js/jquery.simplePagination.js',
     'js/lib/modernizr.custom.js',
-    'js/lib/sanitize-html.min.js'
+    'js/lib/sanitize-html.min.js',
+    'node_modules/iiif-evented-canvas/dist/iiif-evented-canvas.umd.min.js',
+    'node_modules/iiif-layout-functions/dist/iiif-layout-functions.umd.min.js',
+    'node_modules/select2/dist/js/select2.full.min.js'
   ],
 
   // source files
@@ -94,6 +97,7 @@ module.exports = function(grunt) {
           'css/jquery-ui.min.css',
           'css/jquery.qtip.min.css',
           'node_modules/spectrum-colorpicker/spectrum.css',
+          'node_modules/select2/dist/css/select2.min.css',
           'css/mirador.css',
           'css/material-icons.css',
           'bower_components/simplePagination.js/simplePagination.css'
@@ -105,7 +109,7 @@ module.exports = function(grunt) {
     less: {
       compile: {
         files: {
-          'css/mirador.css': 'css/mirador.less/main.less'
+          'css/mirador.css': 'css/less/main.less'
         }
       }
     },
@@ -210,8 +214,6 @@ module.exports = function(grunt) {
       all: {
         options: {
           livereload: {
-            // Here we watch the files the sass task will compile to
-            // These files are sent to the live reload server after sass compiles to them
             options: { livereload: true },
             files: ['build/**/*']
           }
@@ -223,7 +225,7 @@ module.exports = function(grunt) {
           'locales/*/*.json',
           'images/*',
           'css/*.css',
-          'css/mirador.less/**/*.less',
+          'css/less/**/*.less',
           'index.html'
         ],
         tasks: 'dev_build'

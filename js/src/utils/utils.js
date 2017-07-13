@@ -37,10 +37,10 @@
       } else if (canvas.thumbnail.hasOwnProperty('service')) {
         service = canvas.thumbnail.service;
         if(service.hasOwnProperty('profile')) {
-            compliance = $.Iiif.getComplianceLevelFromProfile(service.profile);    
+            compliance = $.Iiif.getComplianceLevelFromProfile(service.profile);
         }
         if(compliance === 0){
-            // don't change existing behaviour unless compliance is explicitly 0            
+            // don't change existing behaviour unless compliance is explicitly 0
             thumbnailUrl = canvas.thumbnail['@id'];
         } else {
             // Get the IIIF Image API via the @context
@@ -64,7 +64,7 @@
     return thumbnailUrl;
   };
 
-  /* 
+  /*
      miscellaneous utilities
      */
 
@@ -199,17 +199,17 @@
     // Javascript does not have range expansions quite yet,
     // long live the humble for loop.
     // Use a closure to contain the column and row variables.
-    for (var i = 0, c = columns; i < c; i++) { 
+    for (var i = 0, c = columns; i < c; i++) {
       var column = { type: 'column'};
 
       if (rowsPerColumn > 1) {
         column.children = [];
-        for (var j = 0, r = rowsPerColumn; j < r; j++) { 
+        for (var j = 0, r = rowsPerColumn; j < r; j++) {
           column.children.push({
             type: 'row'
           });
         }
-      } 
+      }
 
       layoutDescription.children.push(column);
     }

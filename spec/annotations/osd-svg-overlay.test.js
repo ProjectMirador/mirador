@@ -23,9 +23,14 @@ describe('Overlay', function() {
     jasmine.getFixtures().set(this.canvas);
     this.eventEmitter = new Mirador.EventEmitter();// TODO should stub
     this.windowObjMock = {
+      'id': id,
       'windowId': id,
       'viewer': {
         'id': 'viewerId'
+      },
+      'canvasID': 'myCanvasId',
+      'canvases': {
+        'myCanvasId': {}
       }
     };
     this.viewerMock = {
@@ -75,7 +80,10 @@ describe('Overlay', function() {
       'fillColorAlpha': 0.0
     };
 
-    var state = new Mirador.SaveController({eventEmitter: this.eventEmitter}); // TODO should stub this
+    var state = new Mirador.SaveController({
+      eventEmitter: this.eventEmitter,
+      windowObjects: [this.windowObjMock]
+    }); // TODO should stub this
 
     state.getStateProperty = function(key) {
     if (key === 'drawingToolsSettings') {
@@ -95,6 +103,12 @@ describe('Overlay', function() {
      return null;
     };
 
+    state.currentConfig.windowObjects[0].canvases['myCanvasId'].getBounds = function() {
+      return {
+        'x': 800,
+        'y': 600
+      };
+    };
     this.overlay = new Mirador.Overlay(this.viewerMock, this.windowObjMock.viewer.id, this.windowObjMock.windowId, state, new MockEventEmitter(this.eventEmitter));
     this.overlay.annotationUtils = new AnnotationUtilsStub();
   });
@@ -356,10 +370,6 @@ describe('Overlay', function() {
     this.rectangle = new Mirador.Rectangle(); // TODO should use stubbed tool
     spyOn(this.rectangle, 'onMouseDown');
     spyOn(this.rectangle, 'onDoubleClick');
-    this.overlay.viewer.tileSources = {
-      'width': 998,
-      'height': 998
-    }
     var event = getEvent({
       'x': 100,
       'y': 100
