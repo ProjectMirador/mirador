@@ -147,6 +147,12 @@ describe('Window', function() {
         expect(calls.first().args[0].appendTo.is(this.appendTo.find('.view-container'))).toBe(true);
       });
 
+      it('should place default buttons in DOM', function(){
+        expect(this.appendTo.find('.mirador-icon-view-type')).toExist();
+        expect(this.appendTo.find('.mirador-icon-metadata-view')).toExist();
+        expect(this.appendTo.find('.mirador-osd-fullscreen')).toExist();
+      });
+
       it('should place user buttons in DOM', function(){
         expect(this.appendTo.find('.mirador-icon-text')).toExist();
         expect(this.appendTo.find('.mirador-icon-text').attr('href')).toBe('http://example.com');
