@@ -10,6 +10,8 @@
     }, options);
 
     this.init();
+    this.bindEvents();
+
   };
 
   $.MetadataView.prototype = {
@@ -20,8 +22,19 @@
             metadataListingCls: this.metadataListingCls
           };
 
-      _this.manifest = _this.manifest.jsonLd;
+      if ( typeof _this.manifest.jsonLd !== 'undefined' ) {
+        _this.manifest = _this.manifest.jsonLd;
+      }
+
       this.metadataTypes = {};
+
+      // Populate canvas specific metadata
+      if ( _this.imageMetadata ) {
+        var metadataArray = Object.keys(_this.imageMetadata).map( function(key) {
+           return { label: key, value: _this.imageMetadata[key] };
+        });
+        this.metadataTypes.imageMetadata = metadataArray;
+      }
 
       this.metadataTypes.details = _this.getMetadataDetails(_this.manifest);
       this.metadataTypes.rights = _this.getMetadataRights(_this.manifest);
@@ -56,8 +69,12 @@
         tplData.logo = logo;
       }
 
+      // Clean up before appending, to make sure
+      // that after loading the canvas metadata we start
+      // with a clean metadata panel.
+      this.appendTo.empty();
+
       this.element = jQuery(this.template(tplData)).appendTo(this.appendTo);
-      this.bindEvents();
     },
 
   // Base code from https://github.com/padolsey/prettyprint.js. Modified to fit Mirador needs
@@ -203,6 +220,10 @@
   },
 
     bindEvents: function() {
+      var _this = this;
+      this.eventEmitter.subscribe('ANNOTATIONS_LIST_UPDATED', function(event, options) {
+        _this.updateMetadata(options);
+      });
     },
 
     toggle: function(stateValue) {
@@ -213,7 +234,50 @@
         }
     },
 
+    isMetadataAnnotation: function(annotation) {
+      if (typeof annotation.motivation !== 'undefined' &&
+          typeof annotation.motivation.indexOf === 'function' &&
+          annotation.motivation.indexOf('oa:describing') >= 0 ) {
+            // We are reserving 'oa:describing' annotation type
+            // to provide image specific metadata.
+            return true;
+      }
+      return false;
+    },
+
+    findImageAnnotation: function() {
+      var imageAnnotation;
+      var annotations = this.state.windowsAnnotationsLists[this.windowId];
+      if (typeof annotations !== 'undefined') {
+        for (var i=0, len=annotations.length; i<len && !imageAnnotation; i++) {
+          var annotation = annotations[i];
+          if (this.isMetadataAnnotation(annotation)) {
+            imageAnnotation = annotation;
+          }
+        }
+      }
+      return imageAnnotation;
+    },
+
+    updateMetadata: function(options) {
+      // This was a refresh due to an updated list of
+      // annotations being loaded, we only change our
+      // metadata if the the annotations have been updated
+      // for our window.
+      if (typeof options !== 'undefined') {
+        if (options.windowId !== this.windowId) {
+          return;
+        }
+      }
+      var currentImageAnnotation = this.findImageAnnotation();
+      if (typeof currentImageAnnotation !== 'undefined') {
+        this.imageMetadata = currentImageAnnotation.resource;
+        this.init();
+      }
+    },
+
     show: function() {
+        this.updateMetadata();
         var element = jQuery(this.element);
         if (this.panel) {
             element = element.parent();
@@ -256,6 +320,14 @@
     },
 
     template: $.Handlebars.compile([
+    '{{#if imageMetadata}}',
+      '<div class="sub-title">{{t "mediadetails"}}:</div>',
+        '<div class="{{metadataListingCls}}">',
+          '{{#each imageMetadata}}',
+            '<div class="metadata-item"><div class="metadata-label">{{label}}:</div><div class="metadata-value">{{{value}}}</div></div>',
+          '{{/each}}',
+        '</div>',
+    '{{/if}}',
     '<div class="sub-title">{{t "details"}}:</div>',
         '<div class="{{metadataListingCls}}">',
           '{{#each details}}',
