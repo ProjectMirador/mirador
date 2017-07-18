@@ -29,7 +29,7 @@
             options : {
               available: _this.tocTabAvailable,
               id:'tocTab',
-              label:'Index'
+              label: i18next.t('tabTitleIndex')
             }
           },
           /*{
@@ -45,7 +45,7 @@
             options : {
               available: _this.searchTabAvailable,
               id: 'searchTab',
-              label: 'Search'
+              label: i18next.t('tabTitleSearch')
             }
           },
           {
@@ -53,7 +53,7 @@
             options : {
               available: _this.layersTabAvailable,
               id:'layersTab',
-              label:'Layers'
+              label: i18next.t('tabTitleLayers')
             }
           },
         ],
