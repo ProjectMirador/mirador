@@ -174,6 +174,10 @@
         label: i18next.t('seeAlso'),
         value: this.stringifyRelated(jsonLd.seeAlso || '')
       }, {
+        identifier: 'manifest',
+        label: i18next.t('manifest'),
+        value: this.stringifyRelated(jsonLd['@id'] || '')
+      }, {
         identifier: 'within',
         label: i18next.t('within'),
         value: this.getWithin(jsonLd.within || '')
