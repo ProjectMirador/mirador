@@ -58,6 +58,7 @@
   "links": "Links",
   "load": "Load",
   "logo": "Logo",
+  "manifest": "IIIF Manifest",
   "metadataTooltip": "View information/metadata about this object",
   "mirrorTooltip": "Mirror image",
   "mixedContentError": "The manifest is served via HTTP, while the website running Mirador is served using HTTPS. For reasons of security, your browser prevented the manifest from loading. This was done to not accidentally leak confidential information to third parties. If you want to view the desired manifest, either switch to a Mirador version that is hosted from an HTTP site or urge the provider of the manifest to serve its content via HTTPS.",
