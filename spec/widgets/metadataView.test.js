@@ -115,6 +115,9 @@ describe('MetadataView', function() {
   });
 
   describe('getMetadataLinks', function() {
+    it('should always display the manifest id', function() {
+      expect(subject.getMetadataLinks(this.manifest.jsonLd)[2].value).toContain('http://www.example.org/iiif/book1/manifest');
+    });
     it('should grab metadata links when present', function() {
       expect(subject.getMetadataLinks({
         related: "http://news.example.net",
