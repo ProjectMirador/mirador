@@ -5,13 +5,13 @@ describe('JsonLd', function () {
       expect(Mirador.JsonLd.getTextValue(null, 'txg')).toEqual('');
       expect(Mirador.JsonLd.getTextValue(null)).toEqual('');
     });
-    
+
     it('should return the same string when given a string', function() {
       expect(Mirador.JsonLd.getTextValue('waahoo', 'en')).toEqual('waahoo');
       expect(Mirador.JsonLd.getTextValue('waahoo', 'xto')).toEqual('waahoo');
       expect(Mirador.JsonLd.getTextValue('waahoo')).toEqual('waahoo');
     });
-    
+
     it('should return the localized name when given an array of translations', function() {
       // Short sample
       var sample = [
@@ -32,7 +32,7 @@ describe('JsonLd', function () {
       //Should default to en
       expect(Mirador.JsonLd.getTextValue(sample)).toEqual("Alternate Title");
     });
-    
+
     it('should return "@value" key when given an object', function() {
       var sample = {
         "@value": "Super waahoo",
@@ -58,7 +58,7 @@ describe('JsonLd', function () {
         'This is another value without a language.',
         {'@value': "C'est une valeur française.",
          '@language': "fr"}];
-      window.navigator.languages = ['en-US', 'en']
+      i18next.languages = ['en-US', 'en']
       expect(Mirador.JsonLd.getTextValue(sample)).toEqual("This is an American value.");
     });
 

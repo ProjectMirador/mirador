@@ -66,6 +66,11 @@ describe('Iiif', function () {
   });
   
   describe('getVersionFromContext', function () {
+    it('should handle array contexts', function() {
+      var context = ['http://iiif.io/api/image/2/context.json',
+                     {'someField': 'ns:some-field'}];
+      expect(Mirador.Iiif.getVersionFromContext(context)).toEqual('2.0');
+    });
     it('should identify 2.0', function() {
       var context = 'http://iiif.io/api/image/2/context.json';
       expect(Mirador.Iiif.getVersionFromContext(context)).toEqual('2.0');

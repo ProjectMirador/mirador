@@ -43,15 +43,27 @@
     init: function() {
       var _this = this;
 
-      //initialize i18next
-      i18next.use(i18nextXHRBackend).use(i18nextBrowserLanguageDetector).init({
+      // i18next options
+      var i18nextOptions = {
         fallbackLng: 'en',
         load: 'unspecific',
         debug: false,
         backend: {
           loadPath: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('i18nPath')+'{{lng}}/{{ns}}.json'
         }
-      }, _this.setupViewer.bind(_this));
+      };
+
+      // set the language from configuration
+      var configuredLanguage = _this.state.getStateProperty('language');
+      if(configuredLanguage){
+        i18nextOptions.lng = configuredLanguage;
+      }
+
+      //initialize i18next
+      i18next.use(i18nextXHRBackend).use(i18nextBrowserLanguageDetector).init(
+        i18nextOptions,
+        _this.setupViewer.bind(_this)
+      );
       // because this is a callback, we need to bind "_this" to explicitly retain the calling context of this function (the viewer object instance));
     },
 

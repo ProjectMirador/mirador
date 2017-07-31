@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" type="text/css" href="../build/mirador/css/mirador-combined.css">
+    <title>Mirador Viewer</title>
+    <style type="text/css">
+     #viewer {
+       width: 100%;
+       height: 100%;
+       position: fixed;
+     }
+    </style>
+  </head>
+  <body>
+    <div id="viewer"></div>
+
+    <script src="../build/mirador/mirador.js"></script>
+    <script type="text/javascript">
+
+     $(function() {
+       // Called without "let" or "var"
+       // so we can play with it in the browser
+       myMiradorInstance = Mirador({
+         "id": "viewer",
+         "buildPath" : "/",
+         "layout": "1x1",
+         "data": [
+           { "manifestUri": "https://wellcomelibrary.org/iiif/b18035978/manifest", "location": "Harvard University"}
+         ],
+         "windowObjects": [],
+         "sidePanelOptions" : {
+           "searchTabAvailable": true
+         },
+         "annotationEndpoint": { "name":"Local Storage", "module": "LocalStorageEndpoint" }
+       });
+     });
+    </script>
+    <!-- This enables live reloading of assets for improved developer experience. -->
+    <!-- Remove if copying this page as a basis for another project. -->
+    <script src="//localhost:35729/livereload.js"></script>
+  </body>
+</html>

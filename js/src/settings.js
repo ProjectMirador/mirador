@@ -54,8 +54,8 @@
         "toc" : true,
         "annotations" : false,
         "tocTabAvailable": true,
-        // "layersTabAvailable": true,
-        "searchTabAvailable": false,
+        "layersTabAvailable": false,
+        "searchTabAvailable": false
       },
       "sidePanelVisible" : true, //whether or not to make the side panel visible in this window on load. This setting is dependent on sidePanel being true
       "overlay" : true, //whether or not to make the metadata overlay available/visible in this window
@@ -194,11 +194,12 @@
       'options': {
         config: {
           plugins: "image link media directionality",
-          toolbar: "bold italic | bullist numlist | link image media | removeformat | ltr rtl"
+          toolbar: "bold italic | bullist numlist | link image media | removeformat | ltr rtl",
+          tags: []
         }
       }
     },
-
+    
     'jsonStorageEndpoint': {
       'name': 'JSONBlob API Endpoint',
       'module': 'JSONBlobAPI',
