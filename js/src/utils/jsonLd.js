@@ -34,7 +34,7 @@
 
   $.JsonLd = {
     getTextValue: function(propertyValue, language) {
-      var languages = window.navigator.languages || ['en'];
+      var languages = i18next.languages || ['en'];
       if (typeof language === 'string') {
         languages = [language].concat(languages);
       } else if (Array.isArray(language)) {
