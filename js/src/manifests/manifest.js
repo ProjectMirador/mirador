@@ -252,6 +252,10 @@
         var canvas = this.canvasMap[canvasId.split('#')[0]];
         return canvas ? canvas.label : undefined;
       }
+    },
+    getViewingDirection : function(){
+        var _this = this;
+        return _this.jsonLd.viewingDirection;
     }
   };
 
