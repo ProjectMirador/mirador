@@ -28,23 +28,23 @@
             name : 'toc',
             options : {
               available: _this.tocTabAvailable,
-              id:'tocTab', 
+              id:'tocTab',
               label:'Index'
             }
           },
-          /*{
+          {
            name : 'annotations',
            options : {
            available: _this.annotationsTabAvailable,
-           id:'annotationsTab', 
+           id:'annotationsTab',
            label:'Annotations'
            }
-           },*/
+          },
           {
             name : 'layers',
             options : {
               available: _this.layersTabAvailable,
-              id:'layersTab', 
+              id:'layersTab',
               label:'Layers'
             }
           },
@@ -52,7 +52,7 @@
            name : 'tools',
            options : {
            available: _this.toolsTabAvailable,
-           id:'toolsTab', 
+           id:'toolsTab',
            label:'Tools'
            }
            }*/
@@ -93,6 +93,7 @@
           manifest: _this.manifest,
           windowId: this.windowId,
           appendTo: _this.element.find('.tabContentArea'),
+          canvasID: this.canvasID,
           state: _this.state,
           eventEmitter: _this.eventEmitter
         });
@@ -206,11 +207,11 @@
       if (!enableSidePanel) {
         jQuery(this.appendTo).hide();
         _this.eventEmitter.publish('ADD_CLASS.'+this.windowId, 'focus-max-width');
-        _this.eventEmitter.publish('HIDE_ICON_TOC.'+this.windowId);                
+        _this.eventEmitter.publish('HIDE_ICON_TOC.'+this.windowId);
       } else {
         jQuery(this.appendTo).show({effect: "fade", duration: 300, easing: "easeInCubic"});
         _this.eventEmitter.publish('REMOVE_CLASS.'+this.windowId, 'focus-max-width');
-        _this.eventEmitter.publish('SHOW_ICON_TOC.'+this.windowId);                
+        _this.eventEmitter.publish('SHOW_ICON_TOC.'+this.windowId);
       }
     }
   };

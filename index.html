@@ -26,8 +26,9 @@
          "id": "viewer",
          "layout": "1x1",
          "data": [
-           { "manifestUri": "https://iiif.lib.harvard.edu/manifests/drs:48309543", "location": "Harvard University"},
-           { "manifestUri": "https://iiif.lib.harvard.edu/manifests/drs:5981093", "location": "Harvard University"},
+           { "manifestUri": "https://scta.info/iiif/codex/sorb/manifest"},
+           { "manifestUri": "https://scta.info/iiif/graciliscommentary/lon/manifest"}
+           /*{ "manifestUri": "https://iiif.lib.harvard.edu/manifests/drs:5981093", "location": "Harvard University"},
            { "manifestUri": "https://iiif.lib.harvard.edu/manifests/via:olvwork576793", "location": "Harvard University"},
            { "manifestUri": "https://iiif.lib.harvard.edu/manifests/drs:14033171", "location": "Harvard University"},
            { "manifestUri": "https://iiif.lib.harvard.edu/manifests/drs:46909368", "location": "Harvard University"},
@@ -68,10 +69,15 @@
            { "manifestUri": "http://dzkimgs.l.u-tokyo.ac.jp/iiif/zuzoubu/12b02/manifest.json", "location": "University of Tokyo"},
            { "manifestUri": "http://www2.dhii.jp/nijl/NIJL0018/099-0014/manifest_tags.json", "location": "NIJL"},
            { "manifestUri": "http://digi.vatlib.it/iiif/MSS_Vat.lat.3225/manifest.json", "location": "Vatican Library"},
-           { "manifestUri": "http://media.nga.gov/public/manifests/nga_highlights.json", "location": "National Gallery of Art"}
+           { "manifestUri": "http://media.nga.gov/public/manifests/nga_highlights.json", "location": "National Gallery of Art"} */
          ],
          "windowObjects": [],
-         "annotationEndpoint": { "name":"Local Storage", "module": "LocalStorageEndpoint" }
+         "annotationEndpoint": { "name":"Local Storage", "module": "LocalStorageEndpoint" },
+         'windowSettings' : {
+           "sidePanelOptions" : {
+             "annotations" : true
+           }
+         }
        });
      });
     </script>

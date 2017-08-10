@@ -43,6 +43,13 @@
       margin: 0 -2px;
     }
 
+    .annotationListItemAlt {
+      list-style-type: none;
+      border-left:0;
+      border-right:0;
+      padding:10px 10px 10px 10px;
+    }
+
     .annotationListItem {
       list-style-type: none;
       border-left:0;
@@ -122,9 +129,23 @@
     transition: all 0.3s ease;
   }
 
-  .annotationsPanel ul {
-    padding:0;
-    margin:0;
+  .annotationsPanel {
+    margin: 0;
+    overflow-y: scroll;
+    width: 280px;
+    padding-right: 10px;
+    position: absolute;
+    box-sizing: border-box;
+    left: 0;
+    top: 0px;
+    bottom: 0;
+    list-style-type: none;
+    font-size: 75%;
+
+    ul {
+      padding:0;
+      margin:0;
+    }
   }
 
   .toc {
@@ -153,6 +174,7 @@
         overflow:hidden;
       }
     }
+
 
     ul {
       margin:0;

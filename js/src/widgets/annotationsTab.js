@@ -58,8 +58,10 @@
                 annotationSources = [],
                 localState = this.localState();
             jQuery.each(_this.state.getWindowAnnotationsList(_this.windowId), function(index, value) {
-                if(typeof value.endpoint === 'string') {
-                    annotationSources.push('manifest');
+                if(value.endpoint && typeof value.endpoint === 'string' ) {
+                    annotationSources.push(value.resource);
+                } else if(value.resource.endpoint && typeof value.resource.endpoint === 'string' ) {
+                    annotationSources.push(value.resource);
                 } else {
                     annotationSources.push(value.endpoint.name);
                 }
@@ -148,14 +150,15 @@
 
             listItems.on('click', function(event) {
                 //event.stopImmediatePropagation();
-                var listClicked = jQuery(this).data('id');
-                if(_this.localState().selectedList === listClicked){
-                    //_this.deselectList(listClicked);
-                    _this.eventEmitter.publish('listDeselected.' + _this.windowId, listClicked);
-                }else{
-                    //_this.selectList(listClicked);
-                    _this.eventEmitter.publish('listSelected.' + _this.windowId, listClicked);
-                }
+
+                // var listClicked = jQuery(this).data('id');
+                // if(_this.localState().selectedList === listClicked){
+                //     //_this.deselectList(listClicked);
+                //     _this.eventEmitter.publish('listDeselected.' + _this.windowId, listClicked);
+                // }else{
+                //     //_this.selectList(listClicked);
+                //     _this.eventEmitter.publish('listSelected.' + _this.windowId, listClicked);
+                // }
 
             });
 
@@ -184,8 +187,11 @@
             '<div class="annotationsPanel">',
             '<ul class="annotationSources">',
             '{{#each annotationSources}}',
-            '<li class="annotationListItem {{#if this.selected}}selected{{/if}} {{#if this.focused }}focused{{/if}}" data-id="{{this.annotationSource}}">',
-                    '<span>{{this.annotationSource}}</span>',
+            // '<li class="annotationListItem {{#if this.selected}}selected{{/if}} {{#if this.focused }}focused{{/if}}" data-id="{{this.annotationSource.label}}">',
+            '<li class="annotationListItemAlt">',
+                    '<span style="font-weight: bold">{{{this.annotationSource.label}}}</span>',
+                    '<br/>',
+                    '<span>{{{this.annotationSource.chars}}}</span>',
             '</li>',
             '{{/each}}',
             '</ul>',
