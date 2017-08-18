@@ -231,11 +231,13 @@
 
       this.bindEvents();
 
-      if (this.imagesList.length === 1) {
-        this.bottomPanelVisibility(false);
-      } else {
+      // For now, disable the check for a single image because minimizing the bottom panel
+      // is happening at the wrong time compared to the display/transformation of canvas controls
+      // if (this.imagesList.length === 1) {
+      //   this.bottomPanelVisibility(false);
+      // } else {
         this.bottomPanelVisibility(this.bottomPanelVisible);
-      }
+      // }
       this.sidePanelVisibility(this.sidePanelVisible, '0s');
 
       this.events.push(this.eventEmitter.subscribe('windowRemoved',function(event,id){
