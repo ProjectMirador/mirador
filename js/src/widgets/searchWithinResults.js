@@ -37,7 +37,7 @@ $.SearchWithinResults.prototype = {
 
     jQuery(this.appendTo).empty();
     this.element = jQuery(this.template()).appendTo(this.appendTo);
-    jQuery("<hr/><h3>Search results for: " + this.query_params.q + "</h3><hr/>")
+    jQuery("<h3>Search results for: " + this.query_params.q + "</h3>")
         .appendTo(this.appendTo.find('.search-results-messages'));
     this.doSearchFromQuery(this.query_params);
   },
@@ -83,11 +83,11 @@ $.SearchWithinResults.prototype = {
           // show results list
           _this.processResults(searchResults);
       } else {
-        jQuery('.search-results-count').html("<hr/><p>No results</p><hr/>");
+        jQuery('.search-results-count').html("<p>No results</p>");
       }
     })
     .fail(function() {
-        jQuery('.search-results-count').html("<hr/><p>No results</p><hr/>");
+        jQuery('.search-results-count').html("<p>No results</p>");
     })
     .always();
   },
@@ -112,7 +112,7 @@ $.SearchWithinResults.prototype = {
       endResultNumber = searchResults.startIndex + 1;
     }
 
-    jQuery('.search-results-count').html("<hr/><p>Showing " + startResultNumber + " - " + endResultNumber + " out of " + total + "</p><hr/>");
+    jQuery('.search-results-count').html("<p>Showing " + startResultNumber + " - " + endResultNumber + " out of " + total + "</p>");
   },
 
   processResults: function(searchResults) {
@@ -438,12 +438,12 @@ $.SearchWithinResults.prototype = {
           '</a>',
           '{{#if annotations}}',
             '<div>',
-            '<em>Annotations</em>: ',
-            '{{#each annotations}}',
-              '<a class="search-result search-annotation js-show-canvas" data-canvasid="{{canvasid}}" data-coordinates="{{coordinates}}">',
-                '<i class="fa fa-fw" aria-hidden="true"></i>',
-              '</a>',
-            '{{/each}}',
+              '<em>Annotations</em>: ',
+              '{{#each annotations}}',
+                '<a class="search-result search-annotation js-show-canvas" data-canvasid="{{canvasid}}" data-coordinates="{{coordinates}}">',
+                  '<i class="fa fa-fw" aria-hidden="true"></i>',
+                '</a>',
+              '{{/each}}',
             '</div>',
           '{{/if}}',
           '<div class="search-result result-paragraph js-show-canvas" data-canvasid="{{canvasid}}" data-coordinates="{{coordinates}}">',
