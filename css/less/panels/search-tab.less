@@ -1,0 +1,44 @@
+.mirador-container {
+
+	.search-results {
+		padding:0 5px 0 0;
+    margin:0;
+    position:absolute;
+    height: 100%;
+
+    select {
+      margin: 5px 0 10px 0;
+    }
+	}
+
+	.search-results-list {
+		position: relative;
+		height: 100%;
+
+		.search-results-messages {
+			border-top: 1px solid @gray-b1;
+    	padding-top: 10px;
+    	margin-top: 10px;
+		}
+
+		.search-results-count {
+			font-size: .85em;
+		}
+
+    .search-results-container {
+      overflow-y: scroll;
+      position: absolute;
+      height: 70%;
+    }
+
+    .result-wrapper {
+			margin-bottom: 5px;
+
+			.result-paragraph {
+				.highlight {
+					background-color: rgb(255, 255, 0);
+				}
+    	}
+    } 
+	}
+}

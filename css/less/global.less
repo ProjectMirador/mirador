@@ -157,4 +157,27 @@
     /*color: @gray-91;*/
     box-sizing: border-box;
   }
+
+  input[type="submit"],
+  input[type="text"] {
+    height:25px;
+    border:1px solid @light-gray;
+    transition: border-color 0.3s ease-out;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: @deep-sky-blue;
+  }
+
+  input[type="submit"] {
+    color: gray;
+    background: @white;
+  }
+
+  input[type="submit"]:hover {
+    outline: none;
+    border-color: @deep-sky-blue;
+    color: @black-33;
+  }
 }
