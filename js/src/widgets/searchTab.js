@@ -159,15 +159,14 @@
     template: $.Handlebars.compile([
       '<div class="search-results">',
         '{{#if searchService}}',
-          '<label>Select Search Service',
+        '<label for="search-within-selector">{{t "searchLabelSelect"}}</label>',
           '<select id="search-within-selector" style="width: 100%">',
             '{{#each searchService}}',
             '<option value="{{ url }}">{{#if label}}{{ label }}{{ else }} {{ url }}{{/if}}</option>',
             '{{/each}}',
           '</select>',
-          '</label>',
           '<form id="search-within-form" class="js-perform-query">',
-            '<input class="js-query" type="text" placeholder="search text"/>',
+            '<input class="js-query" type="text" placeholder="{{t "searchText"}}"/>',
 
             '<input style="margin: 10px 0" type="submit"/>',
 
@@ -181,7 +180,7 @@
           '</form>',
           '<div class="search-results-list"></div>',
         '{{else}}',
-          'No search service available',
+          '{{t "searchNotAvailable"}}',
         '{{/if}}',
       '</div>',
     ].join(''))
