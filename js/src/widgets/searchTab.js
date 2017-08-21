@@ -116,11 +116,11 @@
 
         _this.element.find(".js-search-expanded").slideToggle("fast");
 
-        if (jQuery(this).text() === "more"){
-          jQuery(this).html("less");
+        if (jQuery(this).text() === i18next.t("more")){
+          jQuery(this).text(i18next.t("less"));
         }
-        else if (jQuery(this).text() === "less"){
-          jQuery(this).html("more");
+        else if (jQuery(this).text() === i18next.t("less")){
+          jQuery(this).text(i18next.t("more"));
         }
       });
 
@@ -168,9 +168,9 @@
           '<form id="search-within-form" class="js-perform-query">',
             '<input class="js-query" type="text" placeholder="{{t "searchText"}}"/>',
 
-            '<input style="margin: 10px 0" type="submit"/>',
+            '<input style="margin: 10px 0" type="submit" value="{{t "submit"}}"/>',
 
-            '<a class="js-search-expand" style="display: block; margin: 0 0 5px 0">more</a>',
+            '<a class="js-search-expand" style="display: block; margin: 0 0 5px 0">{{t "more"}}</a>',
             '<div class="js-search-expanded" style="display: none;">',
               '<input class="js-motivation" type="text" placeholder="motivation"/>',
               '<input class="js-date" type="text" placeholder="date"/>',

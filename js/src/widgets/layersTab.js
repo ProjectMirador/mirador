@@ -169,7 +169,7 @@
                 disabledOpacityMessage: i18next.t('disabledOpacityMessage'),
                 emptyTemplateMessage: i18next.t('emptyTemplateMessage'),
                 imageId: imageResource.id,
-                title: imageResource.label,
+                title: imageResource.label === 'No Label' ? i18next.t('noLabel') : imageResource.label,
                 opacity: imageResource.getOpacity()*100, // scale factor for limitations of html5 slider element
                 loadingStatus: imageResource.getStatus(),
                 visibility: imageResource.getVisible(),
