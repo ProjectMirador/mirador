@@ -170,7 +170,7 @@
 
             '<input style="margin: 10px 0" type="submit"/>',
 
-            '<a class="js-search-expand" style="display: block; margin: 0 0 5px 0">more</a>',
+            '<div style="margin-bottom: 5px"><a class="js-search-expand" href="#">more</a></div>',
             '<div class="js-search-expanded" style="display: none;">',
               '<input class="js-motivation" type="text" placeholder="motivation"/>',
               '<input class="js-date" type="text" placeholder="date"/>',
