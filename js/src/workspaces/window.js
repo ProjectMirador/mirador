@@ -90,6 +90,9 @@
       });
 
       _this.imagesList = _this.manifest.getCanvases();
+      if (_this.imagesList.length === 1) {
+        _this.bottomPanelVisible = false;
+      }
       if (!_this.canvasID) {
         // By default, the first in the sequence is the selected Canvas
         _this.canvasID = _this.imagesList[0]['@id'];
@@ -231,11 +234,7 @@
 
       this.bindEvents();
 
-      if (this.imagesList.length === 1) {
-        this.bottomPanelVisibility(false);
-      } else {
-        this.bottomPanelVisibility(this.bottomPanelVisible);
-      }
+      this.bottomPanelVisibility(this.bottomPanelVisible);
       this.sidePanelVisibility(this.sidePanelVisible, '0s');
 
       this.events.push(this.eventEmitter.subscribe('windowRemoved',function(event,id){
