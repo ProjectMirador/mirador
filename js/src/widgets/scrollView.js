@@ -16,12 +16,12 @@
       vDirectionStatus: '',
       lazyLoadingFactor:    1.5  //should be >= 1
     }, options);
-    
+
     jQuery.extend($.ScrollView.prototype, $.ThumbnailsView.prototype);
     this.init();
-    if(this.vDirectionStatus == 'rtl'){
-	jQuery('.scroll-view').addClass('v-direction-rtl');
+    if(this.vDirectionStatus == 'rtl') {
+      jQuery(this.appendTo).find('.scroll-view').addClass('v-direction-rtl');
     }
   };
-  
+
 }(Mirador));

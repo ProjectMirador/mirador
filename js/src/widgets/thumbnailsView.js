@@ -23,7 +23,6 @@
     this.init();
   };
 
-
   $.ThumbnailsView.prototype = {
 
     init: function() {
@@ -31,16 +30,16 @@
         this.currentImgIndex = $.getImageIndexById(this.imagesList, this.canvasID);
       }
       if(this.vDirectionStatus == 'rtl'){
-	  this.imagesList =  this.imagesListLtr.concat();
+        this.imagesList =  this.imagesListLtr.concat();
       }
       this.loadContent();
       if(this.vDirectionStatus == 'rtl'){
-	 var fCanvasId = this.imagesList[0]['@id'];
-	 var fCanvasThumSelector = 'img.thumbnail-image[data-image-id="'+fCanvasId+'"]';
-         jQuery(fCanvasThumSelector).parents('.panel-thumbnail-view').addClass('v-direction-rtl');
-         jQuery(fCanvasThumSelector).parents('.thumbnail-view').find('li').each(function(){
-            jQuery(this).addClass('thumbnail-rtl');
-         });
+        var firstCanvasId = this.imagesList[0]['@id'];
+        var firstCanvasThumbSelector = 'img.thumbnail-image[data-image-id="'+firstCanvasId+'"]';
+        jQuery(this.appendTo).find('.panel-thumbnail-view').addClass('v-direction-rtl');
+        jQuery(this.appendTo).find('.thumbnail-view').find('li').each(function(){
+          jQuery(this).addClass('thumbnail-rtl');
+        });
       }
       this.bindEvents();
       this.listenForActions();
