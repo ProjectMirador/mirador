@@ -38,6 +38,7 @@ module.exports = function(config) {
       'js/lib/sanitize-html.min.js',
       'node_modules/sinon/pkg/sinon.js',
       'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
+      'node_modules/iiif-evented-canvas/dist/iiif-evented-canvas.umd.min.js',
       // app
       'js/src/mirador.js',
       'js/src/utils/handlebars.js',

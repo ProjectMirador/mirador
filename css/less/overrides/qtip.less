@@ -68,7 +68,7 @@
     /* background-color: black; */
   }
 
-  .text-editor, .tags-editor {
+  .text-editor, .tags-editor, .select2-container {
     padding: 5px;
     display: block;
     margin: 6px 0px 6px 0px;
@@ -77,6 +77,13 @@
     box-shadow: inset 0 0 7px @gray;
     resize: vertical;
     border: 1px solid @gray;
+    width: 200px;
+
+    .select2-selection--multiple {
+      border: none;
+      background-color: inherit;
+      font-size: 16px;
+    }
   }
 
   .annotation-display.annotation-tooltip .button-container {
