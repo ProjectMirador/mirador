@@ -450,6 +450,34 @@ describe('ImageView', function() {
     // TODO: Find way to test annotation and manipulation tools without
     // "displayOn inappropriate in current state pointer" error
   });
+  describe('Order of imagesList', function() {
+    it('should be reversed for r-t-l sequences and manifests', function() {
+
+      this.fixture.viewingDirection = "right-to-left";
+      var manifest = new Mirador.Manifest(
+        this.fixture['@id'], 'IIIF', this.fixture
+      ),
+          imagesList = manifest.getCanvases(),
+          imagesListLtr = imagesList.concat(),
+          imagesListRtl = imagesList.concat();
+      imagesListRtl.reverse();
+      var imageView = new Mirador.ImageView({
+        manifest: manifest,
+        appendTo: this.appendTo,
+        windowId: this.windowId,
+        eventEmitter: this.eventEmitter,
+        imagesList: imagesList,
+        imagesListLtr: imagesListLtr,
+        imagesListRtl: imagesListRtl,
+        state: this.state,
+        bottomPanelAvailable: true,
+        annoEndpointAvailable: true,
+        canvasControls: this.canvasControls,
+        annotationState: this.canvasControls.annotations.annotationState
+      });
+      expect(imagesList[imagesList.length - 1]).toBe(imageView.imagesListRtl[0]);
+    });
+  });
 
   describe('getPanByValue', function() {
     beforeEach(function() {
@@ -459,7 +487,7 @@ describe('ImageView', function() {
             return viewportBounds;
           }
         }
-      }
+      };
     });
     it('should return half height and width', function() {
       expect(subject.getPanByValue().x).toBeCloseTo(viewportBounds.width/2 , 2);

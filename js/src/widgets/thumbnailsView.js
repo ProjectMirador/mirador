@@ -9,6 +9,8 @@
       manifest:             null,
       element:              null,
       imagesList:           [],
+      imagesListLtr:           [],
+      vDirectionStatus:           '',
       appendTo:             null,
       thumbInfo:            {thumbsHeight: 150, listingCssCls: 'listing-thumbs', thumbnailCls: 'thumbnail-view'},
       defaultThumbHeight:   150,
@@ -21,15 +23,24 @@
     this.init();
   };
 
-
   $.ThumbnailsView.prototype = {
 
     init: function() {
       if (this.canvasID !== null) {
         this.currentImgIndex = $.getImageIndexById(this.imagesList, this.canvasID);
       }
-
+      if(this.vDirectionStatus == 'rtl'){
+        this.imagesList =  this.imagesListLtr.concat();
+      }
       this.loadContent();
+      if(this.vDirectionStatus == 'rtl'){
+        var firstCanvasId = this.imagesList[0]['@id'];
+        var firstCanvasThumbSelector = 'img.thumbnail-image[data-image-id="'+firstCanvasId+'"]';
+        jQuery(this.appendTo).find('.panel-thumbnail-view').addClass('v-direction-rtl');
+        jQuery(this.appendTo).find('.thumbnail-view').find('li').each(function(){
+          jQuery(this).addClass('thumbnail-rtl');
+        });
+      }
       this.bindEvents();
       this.listenForActions();
     },

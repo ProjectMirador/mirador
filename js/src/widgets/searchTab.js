@@ -116,11 +116,11 @@
 
         _this.element.find(".js-search-expanded").slideToggle("fast");
 
-        if (jQuery(this).text() === "more"){
-          jQuery(this).html("less");
+        if (jQuery(this).text() === i18next.t("more")){
+          jQuery(this).text(i18next.t("less"));
         }
-        else if (jQuery(this).text() === "less"){
-          jQuery(this).html("more");
+        else if (jQuery(this).text() === i18next.t("less")){
+          jQuery(this).text(i18next.t("more"));
         }
       });
 
@@ -159,19 +159,18 @@
     template: $.Handlebars.compile([
       '<div class="search-results">',
         '{{#if searchService}}',
-          '<label>Select Search Service',
+        '<label for="search-within-selector">{{t "searchLabelSelect"}}</label>',
           '<select id="search-within-selector" style="width: 100%">',
             '{{#each searchService}}',
             '<option value="{{ url }}">{{#if label}}{{ label }}{{ else }} {{ url }}{{/if}}</option>',
             '{{/each}}',
           '</select>',
-          '</label>',
           '<form id="search-within-form" class="js-perform-query">',
-            '<input class="js-query" type="text" placeholder="search text"/>',
+            '<input class="js-query" type="text" placeholder="{{t "searchText"}}"/>',
 
-            '<input style="margin: 10px 0" type="submit"/>',
+            '<input style="margin: 10px 0" type="submit" value="{{t "submit"}}"/>',
 
-            '<a class="js-search-expand" style="display: block; margin: 0 0 5px 0">more</a>',
+            '<div style="margin-bottom: 5px"><a class="js-search-expand" href="#">{{t "more"}}</a></div>',
             '<div class="js-search-expanded" style="display: none;">',
               '<input class="js-motivation" type="text" placeholder="motivation"/>',
               '<input class="js-date" type="text" placeholder="date"/>',
@@ -181,7 +180,7 @@
           '</form>',
           '<div class="search-results-list"></div>',
         '{{else}}',
-          'No search service available',
+          '{{t "searchNotAvailable"}}',
         '{{/if}}',
       '</div>',
     ].join(''))

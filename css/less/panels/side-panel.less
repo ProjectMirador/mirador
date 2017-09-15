@@ -22,25 +22,30 @@
     }
 
     .tab {
-      padding: 4px 6px;
-      border-left:0;
-      border-bottom: 2px solid @black;
+      padding: 8px;
+      margin-right: 2px;
       display: inline-block;
       cursor: pointer;
-      border-radius: 3px 3px 0 0;
+      background: @gray-dd;
+      border-width: 1px 1px 0 1px;
+      border-color: @gray-b1;
+      border-style: solid;
+      color: @gray-66;
+      font-size: .9em;
     }
-
+  
     .tab:not(.selected):hover {
-      border: 2px solid @black-a30;
-      border-bottom: 2px solid @black;
-      padding:4px 4px;
+      background: @light-gray;
+      color: @black-33;
     }
 
     .tab.selected {
-      border: 2px solid @black;
-      border-bottom:0;
-      border-radius: 3px 3px 0 0;
-      margin: 0 -2px;
+      font-weight: bold;
+      color: @black-33;
+      background: @gray-ef;
+      border-top-width: 1px;
+      border-top-style: solid;
+      border-top-color: deepskyblue;
     }
 
     .annotationListItem {
@@ -78,6 +83,18 @@
       text-decoration: none;
     }
 
+    h2 {
+      font-size: 1em;
+    }
+
+    h3 {
+      font-size: .9em;
+    }
+
+    h4 {
+      font-size: .8em;
+    }
+
     h1, h2, h3, h4 {
       margin:0;
       padding:0;
@@ -86,21 +103,6 @@
 
     h1:hover, h2:hover, h3:hover, h4:hover {
     }
-
-    /*
-    h2 {
-      font-size: 1.5em;
-    }
-    h3 {
-      font-size: 1.25em;
-    }
-    h4 {
-      font-size: 1.0em;
-    }
-    h5 {
-      font-size: .75em;
-    }
-    */
   }
 
   .sidePanel.minimized {
@@ -120,28 +122,12 @@
     box-sizing: border-box;
     overflow: hidden;
     transition: all 0.3s ease;
+    margin-top: 8px;
   }
 
   .annotationsPanel ul {
     padding:0;
     margin:0;
-  }
-
-  .search-results {
-    padding:0 5px 0 0;
-    margin:0;
-    position:absolute;
-    height: 100%;
-
-    .search-results-container {
-      overflow-y: scroll;
-      position: absolute;
-      height: 70%;
-    }
-
-    .search-results-list .result-wrapper .result-paragraph .highlight {
-      background-color: rgb(255, 255, 0);
-    }
   }
 
   .toc {
@@ -155,7 +141,7 @@
     top:0px;
     bottom:0;
     list-style-type:none;
-    font-size: 75%;
+    margin-bottom: 30px; /* fix overflow-y bug when .tabGroup is present */
 
     a.toc-link {
       color: black;
@@ -186,6 +172,7 @@
       position:relative;
       margin-left:8px;
       margin-bottom: 5px;
+      border-left: 4px solid @gray-ef;
 
       &.open {
       }
@@ -196,6 +183,10 @@
         border-left: 4px solid @deep-sky-blue;
         transition: all 0.2s ease-out;
       }
+    }
+
+    > li {
+      margin-left: 0;
     }
   }
 
@@ -273,9 +264,9 @@
     color:black;
   }
 
-  .toc li:hover>h2 a.toc-link, .toc li:hover>h3 a.toc-link, .toc li:hover>h4 a.toc-link, .toc li:hover>h5 a.toc-link, .toc li:hover>h6 a.toc-link {
-    font-weight: bold;
-  }
+  // .toc li:hover>h2 a.toc-link, .toc li:hover>h3 a.toc-link, .toc li:hover>h4 a.toc-link, .toc li:hover>h5 a.toc-link, .toc li:hover>h6 a.toc-link {
+  //   font-weight: bold;
+  // }
 
   /*
   .toc li:hover > h2 a {

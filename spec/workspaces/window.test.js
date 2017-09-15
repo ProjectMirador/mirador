@@ -33,7 +33,8 @@ describe('Window', function() {
       });
 
       var state = new Mirador.SaveController(jQuery.extend(true, {}, Mirador.DEFAULT_SETTINGS, {eventEmitter:this.eventEmitter}));
-      this.window = new Mirador.Window(jQuery.extend(true,
+      this.window = new Mirador.Window(jQuery.extend(
+        true,
         {},
         state.getStateProperty('windowSettings'),
         {
@@ -46,7 +47,7 @@ describe('Window', function() {
                   canvases: [{
                     '@id': ''
                   }]
-              }]
+                }]
             },
             getCanvases: function() { return [{
               // This is an example of one canvas from richardson 7.
@@ -54,30 +55,30 @@ describe('Window', function() {
               width: 4680,
               '@type': "sc:Canvas",
               images: [{
-                  resource: {
-                    service: {
-                      profile: "http://library.stanford.edu/iiif/image-api/1.1/conformance.html#level1",
-                      '@context': "http://iiif.io/api/image/1/context.json",
-                      '@id': "https://ids.lib.harvard.edu/ids/iiif/5981098"
-                    },
-                    format: "image/jpeg",
-                    height: 5112,
-                    width: 4680,
-                    '@id': "https://ids.lib.harvard.edu/ids/iiif/5981098/full/full/0/native.jpg",
-                    '@type': "dctypes:Image"
+                resource: {
+                  service: {
+                    profile: "http://library.stanford.edu/iiif/image-api/1.1/conformance.html#level1",
+                    '@context': "http://iiif.io/api/image/1/context.json",
+                    '@id': "https://ids.lib.harvard.edu/ids/iiif/5981098"
                   },
-                  on: "https://iiif.lib.harvard.edu/manifests/drs:5981093/canvas/canvas-5981098.json",
-                  motivation: "sc:painting",
-                  '@id': "https://iiif.lib.harvard.edu/manifests/drs:5981093/annotation/anno-5981098.json",
-                  '@type': "oa:Annotation"
-                }
-              ],
+                  format: "image/jpeg",
+                  height: 5112,
+                  width: 4680,
+                  '@id': "https://ids.lib.harvard.edu/ids/iiif/5981098/full/full/0/native.jpg",
+                  '@type': "dctypes:Image"
+                },
+                on: "https://iiif.lib.harvard.edu/manifests/drs:5981093/canvas/canvas-5981098.json",
+                motivation: "sc:painting",
+                '@id': "https://iiif.lib.harvard.edu/manifests/drs:5981093/annotation/anno-5981098.json",
+                '@type': "oa:Annotation"
+              }
+                      ],
               height: 5112,
               '@id': "https://iiif.lib.harvard.edu/manifests/drs:5981093/canvas/canvas-5981098.json",
               thumbnail: {
                 '@id': "https://ids.lib.harvard.edu/ids/iiif/5981098/full/,150/0/native.jpg",
                 '@type': "dctypes:Image"
-}
+              }
             }, {
               '@id': "https://purl.stanford.edu/qm670kv1873/iiif/canvas/image_1",
               '@type': "sc:Canvas",
@@ -103,16 +104,19 @@ describe('Window', function() {
                 on: "https://purl.stanford.edu/qm670kv1873/iiif/canvas/image_1"
               }]
             }];
-          },
-          getAnnotationsListUrls: function() {
-            return [];
-          },
-          getStructures: function() {
-            return [];
-          },
-          getVersion: function() {
-            return '1';
-          }
+                                    },
+            getAnnotationsListUrls: function() {
+              return [];
+            },
+            getStructures: function() {
+              return [];
+            },
+            getVersion: function() {
+              return '1';
+            },
+            getViewingDirection: function() {
+              return 'right-to-left';
+            }
           },
           appendTo: this.appendTo,
           userButtons: [{
@@ -147,6 +151,12 @@ describe('Window', function() {
         expect(calls.first().args[0].appendTo.is(this.appendTo.find('.view-container'))).toBe(true);
       });
 
+      it('should place default buttons in DOM', function(){
+        expect(this.appendTo.find('.mirador-icon-view-type')).toExist();
+        expect(this.appendTo.find('.mirador-icon-metadata-view')).toExist();
+        expect(this.appendTo.find('.mirador-osd-fullscreen')).toExist();
+      });
+
       it('should place user buttons in DOM', function(){
         expect(this.appendTo.find('.mirador-icon-text')).toExist();
         expect(this.appendTo.find('.mirador-icon-text').attr('href')).toBe('http://example.com');
@@ -154,6 +164,7 @@ describe('Window', function() {
         expect(this.appendTo.find('.mirador-icon-text').has('i.fa.fa-lg.fa-fw.fa-file-text-o').length).toBe(1);
       });
     });
+
     describe('Menu Events', function() {
       xit('should change to book view when button is clicked', function() {
         expect(this.appendTo.find('.book-option')).toExist();
@@ -163,6 +174,13 @@ describe('Window', function() {
         var bottomPanelCalls = this.window.bottomPanel.updateFocusImages.calls;
         expect(calls.count()).toBe(1);
         expect(bottomPanelCalls.count()).toBe(1);
+      });
+    });
+
+    describe('r-t-l viewing', function() {
+      it('causes the imagesList ordering to be reversed and the derivative lists to be generated', function() {
+        expect(this.window.imagesListRtl[0]).toBe(this.window.imagesList[this.window.imagesList.length-1]);
+        expect(this.window.vDirectionStatus).toBe('rtl');
       });
     });
 
