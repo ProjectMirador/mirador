@@ -129,7 +129,7 @@
         eventEmitter: this.eventEmitter
       });
 
-      this.manifestsPanel = new $.ManifestsPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state, eventEmitter: this.eventEmitter });
+      this.manifestsPanel = new $[this.state.getStateProperty('manifestsPanel').module](jQuery.extend({}, this.state.getStateProperty('manifestsPanel').options, { appendTo: this.element.find('.mirador-viewer'), state: this.state, eventEmitter: this.eventEmitter }));
       //only instatiate bookmarkPanel if we need it
       if (showMainMenu && this.state.getStateProperty('mainMenuSettings').buttons.bookmark) {
         this.bookmarkPanel = new $.BookmarkPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state, eventEmitter: this.eventEmitter });

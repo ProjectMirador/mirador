@@ -210,6 +210,13 @@
       }
     },
 
+    'manifestsPanel': {
+      'name': 'Manifests panel with collection tree',
+      'module': 'ManifestsPanel',
+      'options': {
+      }
+    },
+    
     'sharingEndpoint': {
       'url': '',
       'storeId': 123,
