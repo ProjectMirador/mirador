@@ -100,7 +100,7 @@
             //this code gives us the max width of the results area, used to determine how many preview images to show
             //cloning the element and adjusting the display and visibility means it won't break the normal flow
             var clone = this.element.clone().css("visibility","hidden").css("display", "block").appendTo(this.appendTo);
-            this.resultsWidth = clone.find('.select-results').outerWidth();
+            this.resultsWidth = clone.find('.member-select-results').outerWidth();
             this.controlsHeight = clone.find('.manifest-panel-controls').outerHeight();
             this.paddingListElement = this.controlsHeight;
             this.manifestListElement.css("padding-bottom", this.paddingListElement);
@@ -108,7 +108,7 @@
             
             // this.manifestLoadStatusIndicator = new $.ManifestLoadStatusIndicator({
             //   manifests: this.parent.manifests,
-            //   appendTo: this.element.find('.select-results')
+            //   appendTo: this.element.find('.member-select-results')
             // });
             this.bindEvents();
             this.listenForActions();
@@ -228,7 +228,7 @@
         resizePanel: function() {
           var _this = this;
           var clone = _this.element.clone().css("visibility","hidden").css("display", "block").appendTo(_this.appendTo);
-          _this.resultsWidth = clone.find('.select-results').outerWidth();
+          _this.resultsWidth = clone.find('.member-select-results').outerWidth();
           clone.remove();
           _this.eventEmitter.publish("manifestPanelWidthChanged", _this.resultsWidth);
         },
@@ -566,7 +566,7 @@
             '</div>',
               '<div id="collection-tree">',
               '</div>',
-              '<div class="select-results">',
+              '<div class="member-select-results">',
                 '<ul class="items-listing">',
                 '</ul>',
               '</div>',
