@@ -9,6 +9,7 @@
       canvasID:         null,
       canvases:         null,
       imagesList:       [],
+      imagesListRtl:    [],
       element:          null,
       elemOsd:          null,
       manifest:         null,
@@ -22,7 +23,8 @@
       annoCls:          'annotation-canvas',
       annotationsLayer: null,
       forceShowControls: false,
-      eventEmitter:     null
+      eventEmitter:     null,
+      vDirectionStatus: ''
     }, options);
 
     this.init();
@@ -34,7 +36,9 @@
       var _this = this;
       this.horizontallyFlipped = false;
       this.originalDragHandler = null;
-
+      if(this.vDirectionStatus == 'rtl'){
+          this.imagesList =  this.imagesListRtl.concat();
+       }
       // check (for thumbnail view) if the canvasID is set.
       // If not, make it page/item 1.
       if (this.canvasID !== null) {

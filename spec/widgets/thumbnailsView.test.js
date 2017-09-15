@@ -63,6 +63,28 @@ describe('ThumbnailsView', function () {
     });
   });
 
+  describe('r-t-l viewing', function() {
+    it('should add proper CSS to list items, floating right', function() {
+      var thumbnailsView = new Mirador.ThumbnailsView({
+        manifest: this.manifest,
+        appendTo: this.appendTo,
+        windowId: this.windowId,
+        eventEmitter: this.eventEmitter,
+        imagesList: this.imagesList,
+        imagesListLtr: this.imagesList.concat(),
+        vDirectionStatus: 'rtl',
+        state: this.state,
+        bottomPanelAvailable: true,
+        annoEndpointAvailable: false,
+        canvasControls: this.canvasControls,
+        annotationState: this.canvasControls.annotations.annotationState,
+        canvasId: this.imagesList[3]['@id']
+      });
+
+      expect(jQuery(thumbnailsView.appendTo).find('.thumbnail-view li')).toHaveClass('thumbnail-rtl');
+    });
+  });
+
   describe('loadContent', function () {
     beforeEach(function() {
       this.imagesList[this.imagesList.length-1].width = 0; // Zero out width of last canvas, as a test
@@ -275,7 +297,7 @@ describe('ThumbnailsView', function () {
       expect(subject.eventEmitter.publish).toHaveBeenCalledWith('ADD_CLASS.'+this.windowId, 'xekko');
     });
   });
-  
+
   describe('adjustHeight', function() {
     it('should remove class when hasClass is true', function() {
       subject.element.addClass('xekko');
@@ -288,4 +310,4 @@ describe('ThumbnailsView', function () {
       expect(subject.element.hasClass('xekko')).toBe(true);
     });
   });
-}); 
+});
