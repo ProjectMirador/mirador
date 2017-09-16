@@ -33,7 +33,7 @@
       color: @gray-66;
       font-size: .9em;
     }
-  
+
     .tab:not(.selected):hover {
       background: @light-gray;
       color: @black-33;
@@ -46,6 +46,13 @@
       border-top-width: 1px;
       border-top-style: solid;
       border-top-color: deepskyblue;
+    }
+
+    .annotationListItemAlt {
+      list-style-type: none;
+      border-left:0;
+      border-right:0;
+      padding:10px 10px 10px 10px;
     }
 
     .annotationListItem {
@@ -125,10 +132,26 @@
     margin-top: 8px;
   }
 
-  .annotationsPanel ul {
-    padding:0;
-    margin:0;
-  }
+  .annotationsPanel {
+    margin: 0;
+    margin-bottom: 10px;
+    padding-bottom: 100px;
+    overflow-y: scroll;
+    width: 280px;
+    padding-right: 10px;
+    position: absolute;
+    box-sizing: border-box;
+    left: 0;
+    top: 0px;
+    bottom: 0;
+    list-style-type: none;
+    font-size: 75%;
+
+    ul {
+      padding:0;
+      margin:0;
+     }
+   }
 
   .toc {
     margin:0;

@@ -48,20 +48,29 @@
 
         },
         tabStateUpdated: function(visible) {
-            var localState = this.localState();
-            localState.visible = localState.visible ? false : true;
-
+            localState = this.localState();
+            localState.visible = visible;
             this.localState(localState);
+            visible ? this.element.show() : this.element.hide();
         },
         annotationListLoaded: function() {
             var _this = this,
-                annotationSources = [],
-                localState = this.localState();
+            annotationSources = [],
+            localState = this.localState();
             jQuery.each(_this.state.getWindowAnnotationsList(_this.windowId), function(index, value) {
-                if(typeof value.endpoint === 'string') {
-                    annotationSources.push('manifest');
-                } else {
-                    annotationSources.push(value.endpoint.name);
+                if(value.endpoint && typeof value.endpoint === 'string') {
+                    annotationSources.push(value.resource);
+                }
+                else if(value.resource.endpoint && typeof value.resource.endpoint === 'string') {
+                  annotationSources.push(value.resource);
+                }
+                else {
+                    //this is where annotations from an attached endpoint could be added as well
+                    // local storage doesn't seem to be working on current dev branch
+                    // so I can't test this, thus I've simply turned it off for the time being
+
+
+                    //annotationSources.push(value.endpoint.name);
                 }
             });
 
@@ -146,18 +155,18 @@
             var _this = this,
                 listItems = this.element.find('.annotationListItem');
 
-            listItems.on('click', function(event) {
-                //event.stopImmediatePropagation();
-                var listClicked = jQuery(this).data('id');
-                if(_this.localState().selectedList === listClicked){
-                    //_this.deselectList(listClicked);
-                    _this.eventEmitter.publish('listDeselected.' + _this.windowId, listClicked);
-                }else{
-                    //_this.selectList(listClicked);
-                    _this.eventEmitter.publish('listSelected.' + _this.windowId, listClicked);
-                }
-
-            });
+            // listItems.on('click', function(event) {
+            //     //event.stopImmediatePropagation();
+            //     var listClicked = jQuery(this).data('id');
+            //     if(_this.localState().selectedList === listClicked){
+            //         //_this.deselectList(listClicked);
+            //         _this.eventEmitter.publish('listDeselected.' + _this.windowId, listClicked);
+            //     }else{
+            //         //_this.selectList(listClicked);
+            //         _this.eventEmitter.publish('listSelected.' + _this.windowId, listClicked);
+            //     }
+            //
+            // });
 
         },
         render: function(state) {
@@ -184,8 +193,12 @@
             '<div class="annotationsPanel">',
             '<ul class="annotationSources">',
             '{{#each annotationSources}}',
-            '<li class="annotationListItem {{#if this.selected}}selected{{/if}} {{#if this.focused }}focused{{/if}}" data-id="{{this.annotationSource}}">',
-                    '<span>{{this.annotationSource}}</span>',
+            //'<li class="annotationListItem {{#if this.selected}}selected{{/if}} {{#if this.focused }}focused{{/if}}" data-id="{{this.annotationSource.chars}}">',
+            '<li class="annotationListItemAlt" {{#if this.selected}}selected{{/if}} {{#if this.focused }}focused{{/if}}">',
+            '<span style="font-weight: bold">{{{this.annotationSource.label}}}</span>',
+            '<br/>',
+            '<span>{{{this.annotationSource.chars}}}</span>',
+            //'<span>{{this.annotationSource}}</span>',
             '</li>',
             '{{/each}}',
             '</ul>',
