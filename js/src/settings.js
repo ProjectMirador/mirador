@@ -211,7 +211,7 @@
     },
 
     'manifestsPanel': {
-      'name': 'Manifests panel with collection tree',
+      'name': 'Classic Mirador Manifests Panel',
       'module': 'ManifestsPanel',
       'options': {
       }
