@@ -43,15 +43,27 @@
     init: function() {
       var _this = this;
 
-      //initialize i18next
-      i18next.use(i18nextXHRBackend).use(i18nextBrowserLanguageDetector).init({
+      // i18next options
+      var i18nextOptions = {
         fallbackLng: 'en',
         load: 'unspecific',
         debug: false,
         backend: {
           loadPath: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('i18nPath')+'{{lng}}/{{ns}}.json'
         }
-      }, _this.setupViewer.bind(_this));
+      };
+
+      // set the language from configuration
+      var configuredLanguage = _this.state.getStateProperty('language');
+      if(configuredLanguage){
+        i18nextOptions.lng = configuredLanguage;
+      }
+
+      //initialize i18next
+      i18next.use(i18nextXHRBackend).use(i18nextBrowserLanguageDetector).init(
+        i18nextOptions,
+        _this.setupViewer.bind(_this)
+      );
       // because this is a callback, we need to bind "_this" to explicitly retain the calling context of this function (the viewer object instance));
     },
 
@@ -117,7 +129,7 @@
         eventEmitter: this.eventEmitter
       });
 
-      this.manifestsPanel = new $.ManifestsPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state, eventEmitter: this.eventEmitter });
+      this.manifestsPanel = new $[this.state.getStateProperty('manifestsPanel').module](jQuery.extend({}, this.state.getStateProperty('manifestsPanel').options, { appendTo: this.element.find('.mirador-viewer'), state: this.state, eventEmitter: this.eventEmitter }));
       //only instatiate bookmarkPanel if we need it
       if (showMainMenu && this.state.getStateProperty('mainMenuSettings').buttons.bookmark) {
         this.bookmarkPanel = new $.BookmarkPanel({ appendTo: this.element.find('.mirador-viewer'), state: this.state, eventEmitter: this.eventEmitter });
@@ -254,20 +266,12 @@
         } else if (manifest.hasOwnProperty('manifestUri')) {
           var url = manifest.manifestUri;
           _this.addManifestFromUrl(url, manifest.location ? manifest.location : '', null);
+        } else if (manifest.hasOwnProperty('collectionContent')) {
+          var collectionContent = manifest.collectionContent;
+          _this.addCollectionFromUrl(collectionContent['@id'], manifest.location ? manifest.location : '', collectionContent);
         } else if (manifest.hasOwnProperty('collectionUri')) {
-          jQuery.getJSON(manifest.collectionUri).done(function (data, status, jqXHR) {
-            if (data.hasOwnProperty('manifests')){
-              jQuery.each(data.manifests, function (ci, mfst) {
-                _this.addManifestFromUrl(mfst['@id'], '', null);
-              });
-            } else if (data.hasOwnProperty('members')){
-              jQuery.each(data.members, function (ci, mfst) {
-                _this.addManifestFromUrl(mfst['@id'], '', null);
-              });
-            }
-          }).fail(function(jqXHR, status, error) {
-            console.log(jqXHR, status, error);
-          });
+          var collectionUrl = manifest.collectionUri;
+          _this.addCollectionFromUrl(collectionUrl, manifest.location ? manifest.location : '', null);
         }
       });
     },
@@ -290,6 +294,18 @@
         _this.eventEmitter.publish('manifestQueued', manifest, location);
         manifest.request.done(function() {
           _this.eventEmitter.publish('manifestReceived', manifest);
+        });
+      }
+    },
+    
+    addCollectionFromUrl: function(url, location, content) {
+      var _this = this,
+        collection;
+      if (!_this.state.getStateProperty('manifests')[url]) {
+        collection = new $.Collection(url, location, content);
+        _this.eventEmitter.publish('manifestQueued', collection, location);
+        collection.request.done(function() {
+          _this.eventEmitter.publish('collectionReceived', [collection, url, null]);
         });
       }
     },

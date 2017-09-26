@@ -171,13 +171,13 @@
 
           _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
 
-        } 
-        
+        }
+
         else if (typeof imageInfoUrl !== 'undefined') {
           if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
             _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [imageInfoUrl, "(Added from URL)"]);
           }
-        } 
+        }
         else if (typeof collectionUrl !== 'undefined'){
           jQuery.getJSON(collectionUrl).done(function (data, status, jqXHR) {
             if (data.hasOwnProperty('manifests')){
@@ -195,11 +195,11 @@
             }
           });
 
-          //TODO: 
+          //TODO:
           //this works;
           //but you might want to check if some "publish" action would be better
           _this.addItem();
-          
+
         }
         else {
           if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
@@ -274,6 +274,7 @@
     // template should be based on workspace type
     template: $.Handlebars.compile([
                                  '<div id="{{slotID}}" class="{{workspaceSlotCls}}">',
+                                 '<a class="remove-slot-option"><i class="fa fa-times fa-lg fa-fw"></i> {{t "close"}}</a>',
                                  '<div class="slotIconContainer">',
                                  // '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="Replace object"><i class="fa fa-table fa-lg fa-fw"></i>',
                                  // '<ul class="dropdown slot-controls">',
@@ -298,7 +299,6 @@
                                  '<h1 class="dropMeMessage">{{t "dropToLoad"}}</h1>',
                                  '</div>',
                                  '<a class="addItemLink" role="button" aria-label="Add item"></a>',
-                                 '<a class="remove-slot-option"><i class="fa fa-times fa-lg fa-fw"></i> {{t "close"}}</a>',
       '<a class="dropMask"></a>',
                                  '</div>'
     ].join(''))

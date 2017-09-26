@@ -12,6 +12,7 @@
     return new $.Overlay(this, osdViewerId, windowId, state, eventEmitter);
   };
 
+  // Wat? TODO:...
   var FILL_COLOR_ALPHA_WORKAROUND = 0.00001;
 
   $.Overlay = function(viewer, osdViewerId, windowId, state, eventEmitter) {
@@ -475,30 +476,37 @@
     },
 
     getMousePositionInImage: function(mousePosition) {
+      var _this = this;
+      var originWindow = this.state.getWindowObjectById(this.windowId);
+      var currentCanvasModel = originWindow.canvases[originWindow.canvasID];
+
       if (mousePosition.x < 0) {
         mousePosition.x = 0;
       }
-      if (mousePosition.x > this.viewer.tileSources.width) {
-        mousePosition.x = this.viewer.tileSources.width;
+      if (mousePosition.x > currentCanvasModel.getBounds().width) {
+        mousePosition.x = currentCanvasModel.getBounds().width;
       }
       if (mousePosition.y < 0) {
         mousePosition.y = 0;
       }
-      if (mousePosition.y > this.viewer.tileSources.height) {
-        mousePosition.y = this.viewer.tileSources.height;
+      if (mousePosition.y > currentCanvasModel.getBounds().height) {
+        mousePosition.y = currentCanvasModel.getBounds().height;
       }
       if (this.horizontallyFlipped) {
-        mousePosition.x = this.viewer.tileSources.width - mousePosition.x;
+        mousePosition.x = currentCanvasModel.getBounds().width - mousePosition.x;
       }
       return mousePosition;
     },
 
     adjustDeltaForShape: function(lastPoint, currentPoint, delta, bounds) {
+      var originWindow = this.state.getWindowObjectById(this.windowId);
+      var currentCanvasModel = originWindow.canvases[originWindow.canvasID];
+
       //first check along x axis
       if (lastPoint.x < currentPoint.x) {
         //moving to the right, delta should be based on the right most edge
-        if (bounds.x + bounds.width > this.viewer.tileSources.width) {
-          delta.x = this.viewer.tileSources.width - (bounds.x + bounds.width);
+        if (bounds.x + bounds.width > currentCanvasModel.getBounds().width) {
+          delta.x = currentCanvasModel.getBounds().width - (bounds.x + bounds.width);
         }
       } else {
         //moving to the left, prevent it from going past the left edge.  if it does, use the shapes x value as the delta
@@ -513,8 +521,8 @@
       //check along y axis
       if (lastPoint.y < currentPoint.y) {
         // moving to the bottom
-        if (bounds.y + bounds.height > this.viewer.tileSources.height) {
-          delta.y = this.viewer.tileSources.height - (bounds.y + bounds.height);
+        if (bounds.y + bounds.height > currentCanvasModel.getBounds().height) {
+          delta.y = currentCanvasModel.getBounds().height - (bounds.y + bounds.height);
         }
       } else {
         //moving to the top
@@ -697,7 +705,12 @@
     },
 
     resize: function() {
+      var _this = this;
       var viewportBounds = this.viewer.viewport.getBounds(true);
+      // var originWindow = this.state.getWindowObjectById(this.windowId);
+      // if ( !originWindow.canvases ) { return; } // no-op if canvases are not initialised.
+      // var currentCanvasModel = originWindow.canvases[originWindow.canvasID];
+
       /* in viewport coordinates */
       this.canvas.width = this.viewer.viewport.containerSize.x;
       this.canvas.height = this.viewer.viewport.containerSize.y;
@@ -709,10 +722,12 @@
       this.canvas.style.marginTop = '0px';
       if (this.paperScope && this.paperScope.view) {
         this.paperScope.view.viewSize = new this.paperScope.Size(this.canvas.width, this.canvas.height);
-        this.paperScope.view.zoom = this.viewer.viewport.viewportToImageZoom(this.viewer.viewport.getZoom(true));
+        this.paperScope.view.zoom = _this.canvas.width * this.viewer.viewport.getZoom(true);
         this.paperScope.view.center = new this.paperScope.Size(
-          this.viewer.world.getItemAt(0).source.dimensions.x * viewportBounds.x + this.paperScope.view.bounds.width / 2,
-          this.viewer.world.getItemAt(0).source.dimensions.x * viewportBounds.y + this.paperScope.view.bounds.height / 2);
+          this.viewer.viewport.getCenter(true).x,
+          this.viewer.viewport.getCenter(true).y
+        );
+
         this.paperScope.view.update(true);
         var allItems = this.paperScope.project.getItems({
           name: /_/
@@ -733,7 +748,6 @@
     },
 
     hover: function() {
-
       if(!this.currentTool){
         return;
       }

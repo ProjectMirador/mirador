@@ -18,6 +18,7 @@ module.exports = function(config) {
       'node_modules/jquery/dist/jquery.min.js',
       'node_modules/jquery-ui-dist/jquery-ui.min.js',
       'node_modules/jquery.scrollto/jquery.scrollTo.min.js',
+      'node_modules/jstree/dist/jstree.min.js',
       'js/lib/jquery.qtip.min.js',
       'node_modules/javascript-state-machine/state-machine.min.js',
       'node_modules/tinymce/tinymce.min.js',
@@ -37,6 +38,7 @@ module.exports = function(config) {
       'js/lib/sanitize-html.min.js',
       'node_modules/sinon/pkg/sinon.js',
       'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
+      'node_modules/iiif-evented-canvas/dist/iiif-evented-canvas.umd.min.js',
       // app
       'js/src/mirador.js',
       'js/src/utils/handlebars.js',

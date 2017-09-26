@@ -1,6 +1,5 @@
 describe('ScrollView', function() {
   var subject;
-  
   beforeEach(function() {
     jasmine.getJSONFixtures().fixturesPath = 'spec/fixtures';
     this.viewContainer = document.createElement('div', {
@@ -26,11 +25,14 @@ describe('ScrollView', function() {
       windowId: this.windowId,
       eventEmitter: this.eventEmitter,
       imagesList: this.imagesList,
+      imagesListLtr: this.imagesList.concat(),
       state: this.state,
+      vDirectionStatus: 'rtl',
       bottomPanelAvailable: true,
       annoEndpointAvailable: false,
       canvasControls: this.canvasControls,
-      annotationState: this.canvasControls.annotations.annotationState
+      annotationState: this.canvasControls.annotations.annotationState,
+      thumbInfo: {listingCssCls: 'scroll-listing-thumbs', thumbnailCls: 'scroll-view'}
     });
     subject = this.scrollView;
   });
@@ -41,11 +43,13 @@ describe('ScrollView', function() {
 
   describe('Initialization', function() {
     it('should initialize', function() {
-      expect(true).toBe(true); //Force beforeEach() setup to run
+      expect(jQuery(subject.appendTo).find('.scroll-view')).toExist();
     });
   });
 
-  xdescribe('', function() {
-
+  describe('Right to Left scrollview', function() {
+    it('should have the correct CSS Class applied', function() {
+      expect(jQuery(subject.appendTo).find('.scroll-view')).toHaveClass('v-direction-rtl');
+    });
   });
-}); 
+});

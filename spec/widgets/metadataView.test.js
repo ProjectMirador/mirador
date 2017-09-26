@@ -9,7 +9,7 @@ describe('MetadataView', function() {
     $('body').append('<div id="metadata-view-container"></div>');
     this.sandbox = jQuery('#metadata-view-container');
     this.windowId = '380c9e54-7561-4010-a99f-f132f5dc13fd';
-    this.canvasID = 'https://oculus-dev.harvardx.harvard.edu/manifests/drs:5981093/canvas/canvas-5981522.json';
+    this.canvasID = 'https://iiif.lib.harvard.edu/manifests/drs:5981093/canvas/canvas-5981522.json';
     this.metadataView = new Mirador.MetadataView({
       manifest: this.manifest,
       appendTo: this.sandbox,
@@ -115,14 +115,19 @@ describe('MetadataView', function() {
   });
 
   describe('getMetadataLinks', function() {
+    it('should always display the manifest id', function() {
+      expect(subject.getMetadataLinks(this.manifest.jsonLd)[2].value).toContain('http://www.example.org/iiif/book1/manifest');
+    });
     it('should grab metadata links when present', function() {
       expect(subject.getMetadataLinks({
         related: "http://news.example.net",
         seeAlso: "http://oodlepods.example.net",
+        '@id': "http://www.example.org/iiif/book1/manifest",
         within: "Oodlepods Monthly Issue #6"
       })).toEqual([
         { identifier: 'related', label: 'related', value: '<a href="http://news.example.net" target="_blank">http://news.example.net</a>' },
         { identifier: 'seeAlso', label: 'seeAlso', value: '<a href="http://oodlepods.example.net" target="_blank">http://oodlepods.example.net</a>' },
+        { identifier: 'manifest', label: 'manifest', value: '<a href="http://www.example.org/iiif/book1/manifest" target="_blank">http://www.example.org/iiif/book1/manifest</a>'},
         { identifier: 'within', label: 'within', value: 'Oodlepods Monthly Issue #6' }
       ]);
     });
@@ -130,6 +135,7 @@ describe('MetadataView', function() {
       expect(subject.getMetadataLinks(this.manifest.jsonLd)).toEqual([
         { identifier: 'related', label: 'related', value: '' },
         { identifier: 'seeAlso', label: 'seeAlso', value: '' },
+        { identifier: 'manifest', label: 'manifest', value: '<a href="http://www.example.org/iiif/book1/manifest" target="_blank">http://www.example.org/iiif/book1/manifest</a>'},
         { identifier: 'within', label: 'within', value: '' }
       ]);
     });
