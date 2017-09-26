@@ -210,6 +210,13 @@
       }
     },
 
+    'manifestsPanel': {
+      'name': 'Classic Mirador Manifests Panel',
+      'module': 'ManifestsPanel',
+      'options': {
+      }
+    },
+    
     'sharingEndpoint': {
       'url': '',
       'storeId': 123,
