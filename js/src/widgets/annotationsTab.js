@@ -59,19 +59,20 @@
             localState = this.localState();
             jQuery.each(_this.state.getWindowAnnotationsList(_this.windowId), function(index, value) {
               //loads annoations from external annotationLists
-                if(value.endpoint && typeof value.endpoint === 'string') {
-                    annotationSources.push(value.resource);
-                }
-              //loads annoations from external annotationLists
-                else if(value.resource.endpoint && typeof value.resource.endpoint === 'string') {
+              if(value.endpoint && typeof value.endpoint === 'string') {
+                  annotationSources.push(value.resource);
+              }
+              else if (value.resource){
+                //loads annoations from external annotationLists
+                if(value.resource.endpoint && typeof value.resource.endpoint === 'string') {
                   annotationSources.push(value.resource);
                 }
+                //loads annoations from local annotation endpoint
                 else {
-                  //loads annoations from local annotation endpoint
                   annotationSources.push(value.resource[0]);
                 }
+              }
             });
-            console.log(annotationSources);
             // make unique
             annotationSources = annotationSources.filter(function(itm,i,annotationSources){
                 return i==annotationSources.indexOf(itm);
@@ -90,7 +91,6 @@
             if(localState.annotationLists.length){
               localState.empty = false;
             }
-
             this.localState(localState);
         },
         deselectList: function(listId) {
@@ -192,7 +192,7 @@
             '<ul class="annotationSources">',
             '{{#each annotationSources}}',
             //'<li class="annotationListItem {{#if this.selected}}selected{{/if}} {{#if this.focused }}focused{{/if}}" data-id="{{this.annotationSource.chars}}">',
-            '<li class="annotationListItemAlt" {{#if this.selected}}selected{{/if}} {{#if this.focused }}focused{{/if}}">',
+            '<li class="annotationListItem" {{#if this.selected}}selected{{/if}} {{#if this.focused }}focused{{/if}}">',
             '<span style="font-weight: bold">{{{this.annotationSource.label}}}</span>',
             '<br/>',
             '<span>{{{this.annotationSource.chars}}}</span>',
