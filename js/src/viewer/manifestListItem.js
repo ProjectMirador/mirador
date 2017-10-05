@@ -222,7 +222,7 @@
               _this.imagesTotalWidth += (image.width + _this.margin);
 
               //add image to dom
-              _this.element.find('.preview-images').append('<img src="'+image.url+'" width="'+image.width+'" height="'+image.height+'" class="preview-image flash" data-image-id="'+image.id+'">');
+              _this.element.find('.preview-images').append('<img data-src="'+image.url+'" width="'+image.width+'" height="'+image.height+'" class="preview-image flash" data-image-id="'+image.id+'">');
 
               //get next image
               index++;
@@ -254,7 +254,7 @@
       '<li data-index-number={{index}}>',
       '<div class="repo-image">',
         '{{#if repoImage}}',
-        '<img src="{{repoImage}}" alt="repoImg">',
+        '<img data-src="{{repoImage}}" alt="repoImg">',
         '{{else}}',
         '<span class="default-logo"></span>',
         '{{/if}}',
@@ -275,7 +275,7 @@
       '<div class="preview-thumb">',
         '<div class="preview-images">',
         '{{#each images}}',
-          '<img src="{{url}}" width="{{width}}" height="{{height}}" class="preview-image flash" data-image-id="{{id}}">',
+          '<img data-src="{{url}}" width="{{width}}" height="{{height}}" class="preview-image flash" data-image-id="{{id}}">',
         '{{/each}}',
         '</div>',
         '{{#if remaining}}',

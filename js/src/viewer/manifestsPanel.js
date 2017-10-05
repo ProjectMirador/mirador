@@ -10,6 +10,7 @@
             manifestListElement:        null,
             manifestLoadStatusIndicator: null,
             resultsWidth:               0,
+            lazyLoadingFactor:          1,
             state:                      null,
             eventEmitter:               null
         }, options);
@@ -82,6 +83,16 @@
             jQuery(window).resize($.throttle(function() {
               _this.resizePanel();
             }, 50, true));
+            
+            // Lazy loading
+            this.element.find('.select-results').on('scroll', $.throttle(function() {
+              jQuery(this).find('img[data-src]').each(function(_, v) {
+                if ($.isOnScreen(v, _this.lazyLoadingFactor)) {
+                  v.setAttribute('src', v.getAttribute('data-src'));
+                  v.removeAttribute('data-src');
+                }
+              });
+            }, 50, true)).scroll();
         },
         
         hide: function() {
@@ -92,6 +103,7 @@
         show: function() {
             var _this = this;
             jQuery(this.element).show({effect: "fade", duration: 160, easing: "easeInCubic"});
+            this.element.find('.select-results').scroll();
         },
         
         addManifestUrl: function(url) {
@@ -120,6 +132,7 @@
           var clone = _this.element.clone().css("visibility","hidden").css("display", "block").appendTo(_this.appendTo);
           _this.resultsWidth = clone.find('.select-results').outerWidth();
           clone.remove();
+          this.element.find('.select-results').scroll();
           _this.eventEmitter.publish("manifestPanelWidthChanged", _this.resultsWidth);
         },
         
@@ -138,6 +151,7 @@
             eventEmitter: _this.eventEmitter,
             appendTo: _this.manifestListElement }));
           _this.element.find('#manifest-search').keyup();
+          this.element.find('.select-results').scroll();
         },
 
         template: $.Handlebars.compile([

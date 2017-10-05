@@ -22,6 +22,7 @@
             topCollectionsUris:         {}, //A set of URIs already placed at the top level of the collection tree
             treeQueue:                  [], //A list that holds event triggers before the tree is ready; will be removed when ready
             resultsWidth:               0,
+            lazyLoadingFactor:          1,
             state:                      null,
             eventEmitter:               null
         }, options);
@@ -185,6 +186,16 @@
             jQuery(window).resize($.throttle(function() {
               _this.resizePanel();
             }, 50, true));
+            
+            // Lazy loading
+            this.element.find('.member-select-results').on('scroll', $.throttle(function() {
+              jQuery(this).find('img[data-src]').each(function(_, v) {
+                if ($.isOnScreen(v, _this.lazyLoadingFactor)) {
+                  v.setAttribute('src', v.getAttribute('data-src'));
+                  v.removeAttribute('data-src');
+                }
+              });
+            }, 50, true)).scroll();
         },
         
         hide: function() {
@@ -195,6 +206,7 @@
         show: function() {
             var _this = this;
             jQuery(this.element).show({effect: "fade", duration: 160, easing: "easeInCubic"});
+            this.element.find('.member-select-results').scroll();
         },
         
         // Send explicit request for adding a manifest from a URL
@@ -230,6 +242,7 @@
           var clone = _this.element.clone().css("visibility","hidden").css("display", "block").appendTo(_this.appendTo);
           _this.resultsWidth = clone.find('.member-select-results').outerWidth();
           clone.remove();
+          this.element.find('.select-results').scroll();
           _this.eventEmitter.publish("manifestPanelWidthChanged", _this.resultsWidth);
         },
         
@@ -252,6 +265,7 @@
               forcedIndex: _this.expectedThings.indexOf(newManifest.uri),
               appendTo: _this.manifestListElement }));
             _this.element.find('#manifest-search').keyup();
+            this.element.find('.member-select-results').scroll();
           }
         },
         
@@ -318,7 +332,7 @@
             _this.addManifestFromUrl(expectedThing);
           });
           this.element.find('#manifest-search').keyup();
-          
+          this.element.find('.member-select-results').scroll();
         },
         
         // Handler for expanding a node (> clicked)
@@ -389,6 +403,7 @@
                 eventEmitter: _this.eventEmitter,
                 forcedIndex: _this.expectedThings.indexOf(url),
                 appendTo: _this.manifestListElement }));
+              this.element.find('.member-select-results').scroll();
             }
           }
           // Cache miss: Queue the loading and defer the received event until it is done
