@@ -193,7 +193,7 @@
       jQuery(selector + ' a.delete').on("click", function(event) {
         event.preventDefault();
         var elem = this;
-        new $.DialogBuilder(viewerParams.container).dialog({
+        new $.DialogBuilder(document.body).dialog({
           message: i18next.t('deleteAnnotation'),
           closeButton: false,
           buttons: {
