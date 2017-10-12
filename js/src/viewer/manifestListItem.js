@@ -45,7 +45,11 @@
         }
       });
 
-      this.fetchTplData(this.manifestId);
+      if (this.manifest) {
+        this.fetchTplData(this.manifestId);
+      } else if (this.manifestRef) {
+        this.fetchRefTpl();
+      }
       if (this.forcedIndex !== null) {
         this.tplData.index = this.forcedIndex;
       }
@@ -143,6 +147,67 @@
 
     },
 
+    fetchRefTpl: function() {
+      var _this = this;
+      var location = this.manifestRef.location;
+      var ref = this.manifestRef;
+
+      this.tplData = {
+        label: $.JsonLd.getTextValue(ref.label),
+        repository: location,
+        canvasCount: undefined,
+        images: [],
+        index: _this.state.getManifestIndex(ref["@id"])
+      };
+
+      this.tplData.repoImage = (function() {
+        var repo = _this.tplData.repository;
+        if (ref.logo) {
+          if (typeof ref.logo === "string")
+            return ref.logo;
+          if (typeof ref.logo['@id'] !== 'undefined')
+            return ref.logo['@id'];
+        }
+        return '';
+      })();
+
+      if (ref.thumbnail) {
+        var thumbs = ref.thumbnail;
+        if (!Array.isArray(ref.thumbnail)) {
+          thumbs = [ref.thumbnail];
+        }
+        thumbs.forEach(function(thumb, index) {
+          var toAdd = {
+            height: _this.thumbHeight,
+            index: index
+          };
+
+          if (typeof thumb === "string") {
+            toAdd.url = thumb;
+          } else if (thumb.service && $.Iiif.getComplianceLevelFromProfile(thumb.service.profile) !== -1) {
+            // If there is a IIIF service available
+
+            var width;
+            if (ref.width) {
+              // Always prefer defined thumbnail width
+              width = ref.width;
+            } else if (thumb.service.width && thumb.service.height) {
+              // Service has actual dimensions of images, we can determine width from aspect ratio and our desired height
+              var aspectRatio = thumb.service.width / thumb.service.height;
+              width = Math.round(aspectRatio * _this.thumbHeight);    // Round to nearest int
+            } else {
+              // Some default
+              width = 60;
+            }
+
+            toAdd.width = width;
+            toAdd.url = $.Iiif.makeUriWithWidth(thumb.service["@id"], width, $.Iiif.getComplianceLevelFromProfile(thumb.service.profile));
+          }
+          _this.tplData.images.push(toAdd);
+        });
+      }
+    },
+
     render: function() {
 
     },
@@ -164,23 +229,40 @@
       });
 
       this.element.on('click', function() {
-        var windowConfig = {
-          manifest: _this.manifest,
-          canvasID: null,
-          viewType: 'ThumbnailsView'
-        };
-        _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
+        var viewType = "ThumbnailsView";
+
+        if (_this.manifest) {
+          _this.addWindow(_this.manifest, viewType);
+        } else if (_this.manifestRef) {
+          // For references, we must first load the manifest before adding a new window.
+          var manifestId = _this.manifestRef["@id"];
+          var location = _this.manifestRef.location;
+
+          var manifest = new $.Manifest(manifestId, location);
+          manifest.request.done(function() {
+            _this.addWindow(manifest, viewType);
+          });
+        }
       });
 
       this.element.find('.preview-image').on('click', function(e) {
         e.stopPropagation();
-        var windowConfig = {
-          manifest: _this.manifest,
-          canvasID: jQuery(this).attr('data-image-id'),
-          viewType: _this.state.getStateProperty('windowSettings').viewType //get the view type from settings rather than always defaulting to ImageView
-        };
-        _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
+        var canvasID = jQuery(this).attr('data-image-id');
+        if (canvasID) {
+          _this.addWindow(_this.manifest, canvasID, _this.state.getStateProperty('windowSettings').viewType);
+        } else {
+          _this.element.click();
+        }
       });
+    },
+
+    addWindow: function(manifest, viewType, canvasID) {
+      var windowConfig = {
+        "manifest": manifest,
+        "canvasID": canvasID,
+        "viewType": viewType
+      };
+      this.eventEmitter.publish('ADD_WINDOW', windowConfig);
     },
 
     updateDisplay: function(newWidth) {
