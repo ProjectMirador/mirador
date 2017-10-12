@@ -28,7 +28,7 @@
 
         var _this = this;
         _this.init();
-        
+
     };
 
     $.CollectionTreeManifestsPanel.prototype = {
@@ -39,7 +39,7 @@
                 showURLBox : this.state.getStateProperty('showAddFromURLBox')
             })).appendTo(this.appendTo);
             this.manifestListElement = this.element.find('ul');
-            
+
             // Populate the preloads folder with manifests in the configuration
             jQuery.each(this.state.currentConfig.data, function(_, v) {
               if (v.hasOwnProperty('manifestUri')) {
@@ -61,7 +61,7 @@
                       selected: true
                     },
                     children: []
-                  }, 
+                  },
                   {
                     id: 'user',
                     text: i18next.t('myManifests'),
@@ -96,7 +96,7 @@
                 }
               });
             });
-            
+
             //this code gives us the max width of the results area, used to determine how many preview images to show
             //cloning the element and adjusting the display and visibility means it won't break the normal flow
             var clone = this.element.clone().css("visibility","hidden").css("display", "block").appendTo(this.appendTo);
@@ -105,7 +105,7 @@
             this.paddingListElement = this.controlsHeight;
             this.manifestListElement.css("padding-bottom", this.paddingListElement);
             clone.remove();
-            
+
             // this.manifestLoadStatusIndicator = new $.ManifestLoadStatusIndicator({
             //   manifests: this.parent.manifests,
             //   appendTo: this.element.find('.member-select-results')
@@ -127,17 +127,17 @@
           _this.eventEmitter.subscribe('manifestReceived', function(event, newManifest) {
             _this.onManifestReceived(event, newManifest);
           });
-          
+
           // When a collection is received
           _this.eventEmitter.subscribe('collectionReceived', function(event, newCollection, parentUri, parentNodeId) {
             _this.onCollectionReceived(event, newCollection, parentUri, parentNodeId);
           });
-          
+
           // When a collection failed to load
           _this.eventEmitter.subscribe('collectionNotReceived', function(event, parentUri, parentNodeId) {
             _this.onCollectionNotReceived(event, parentUri, parentNodeId);
           });
-          
+
           // When Mirador gets an explicit request to load a manifest from a URL
           _this.eventEmitter.subscribe('ADD_MANIFEST_FROM_URL', function(event, url) {
             // Add it if it has not been loaded before
@@ -148,12 +148,12 @@
             _this.treeElement.jstree('deselect_all');
             _this.treeElement.jstree('select_node', 'user');
           });
-          
+
           // When Mirador gets an explicit request to load a collection from a URL
           _this.eventEmitter.subscribe('ADD_COLLECTION_FROM_URL', function(event, url, source) {
             _this.addCollectionFromUrl(url, null, true);
           });
-          
+
           // When Mirador gets a request to load an object (manifest or collection) from a URL (e.g. the "Add object from URL" form)
           _this.eventEmitter.subscribe('ADD_OBJECT_FROM_URL', function(event, url, source) {
             _this.addObjectFromUrl(url, source, true);
@@ -186,7 +186,7 @@
               _this.resizePanel();
             }, 50, true));
         },
-        
+
         hide: function() {
             var _this = this;
             jQuery(this.element).hide({effect: "fade", duration: 160, easing: "easeOutCubic"});
@@ -196,24 +196,24 @@
             var _this = this;
             jQuery(this.element).show({effect: "fade", duration: 160, easing: "easeInCubic"});
         },
-        
+
         // Send explicit request for adding a manifest from a URL
         addManifestUrl: function(url) {
           var _this = this;
           _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [url, "(Added from URL)"]);
         },
-        
+
         // Send explicit request for adding a manifest or collection from a URL
         addObjectUrl: function(url) {
           var _this = this;
           _this.eventEmitter.publish('ADD_OBJECT_FROM_URL', [url, "(Added from URL)"]);
         },
-        
+
         togglePanel: function(event) {
           var _this = this;
           _this.eventEmitter.publish('TOGGLE_LOAD_WINDOW');
         },
-        
+
         filterManifests: function(value) {
           var _this = this;
           if (value.length > 0) {
@@ -232,7 +232,7 @@
           clone.remove();
           _this.eventEmitter.publish("manifestPanelWidthChanged", _this.resultsWidth);
         },
-        
+
         onPanelVisible: function(_, stateValue) {
           var _this = this;
           if (stateValue) { _this.show(); return; }
@@ -242,19 +242,26 @@
         // Handler for when manifest data is loaded for the first time
         onManifestReceived: function(event, newManifest) {
           var _this = this;
+          var matches = _this.expectedThings.filter(function(thing) {
+            if (typeof thing === "string") {
+              return thing === newManifest.jsonLd["@id"];
+            } else {
+              return thing["@id"] === newManifest.jsonLd["@id"];
+            }
+          });
           // Show a manifest list item only if the currently selected "folder" expects it
-          if (_this.expectedThings.indexOf(newManifest.uri) != -1) {
-            _this.manifestListItems.push(new $.ManifestListItem({ 
-              manifest: newManifest, 
-              resultsWidth: _this.resultsWidth, 
+          if (matches.length > 0) {
+            _this.manifestListItems.push(new $.ManifestListItem({
+              manifest: newManifest,
+              resultsWidth: _this.resultsWidth,
               state: _this.state,
               eventEmitter: _this.eventEmitter,
-              forcedIndex: _this.expectedThings.indexOf(newManifest.uri),
+              forcedIndex: _this.expectedThings.indexOf(matches[0]),
               appendTo: _this.manifestListElement }));
             _this.element.find('#manifest-search').keyup();
           }
         },
-        
+
         // Handler for when collection data is loaded for the first time
         onCollectionReceived: function(event, newCollection, uri, parentNodeId) {
           // If the tree isn't ready, hold it and move on
@@ -269,7 +276,7 @@
             this.addCollectionNode(parentNodeId, newCollection);
           }
         },
-        
+
         // Handler for when collection data is loaded for the first time and failed
         onCollectionNotReceived: function(event, uri, parentNodeId) {
           // If the tree isn't ready, hold it and move on
@@ -284,13 +291,13 @@
             _this.treeElement.jstree('disable_node', nodeId); // Don't let the user click it
           });
         },
-        
+
         // Clean out the list of manifest items on the right side
         clearManifestItems: function() {
           this.manifestListItems = [];
           this.manifestListElement.html('');
         },
-        
+
         // Set up 2-way correspondence between node IDs and URIs
         registerNodeIdUriPair: function(nodeId, uri) {
           // Map node ID to URI
@@ -301,7 +308,7 @@
             this.uriToNodeId[uri] = [nodeId]; // New URI => new node ID
           }
         },
-        
+
         // Handler for selecting a new node
         changeNode: function(node) {
           var _this = this;
@@ -315,12 +322,41 @@
           }
           // Populate and refresh the manifests listings
           jQuery.each(_this.expectedThings, function(_, expectedThing) {
-            _this.addManifestFromUrl(expectedThing);
+            // TODO add references here for lazy loading, or load manifest
+            if (_this.shouldLazyLoad(expectedThing)) {
+              _this.addManifestReference(expectedThing);
+            } else {
+              _this.addManifestFromUrl(expectedThing);
+            }
           });
           this.element.find('#manifest-search').keyup();
-          
+
         },
-        
+
+        /**
+         * Determine whether or not a manifest can be lazy loaded, or if it
+         * must be requested and loaded in order to display nicely.
+         *
+         * From the IIIF Presentation spec, a manifest reference in a
+         * collection can contain lots of data in order to aid in display.
+         * If we determine that enough data exists for this object to
+         * display it nicely, then don't bother loading the manifest right
+         * now. Instead, wait until the user clicks on it to load.
+         *
+         * In order for a manifest reference to load nicely, it must at
+         * a minimum have:
+         *
+         * - Label
+         * - One or more thumbnails?
+         *
+         * @param manifestObj : manifest reference to investigate
+         * @returns TRUE if manifest should be lazy loaded
+         *          FALSE if manfiest must be loaded eagerly
+         */
+        shouldLazyLoad: function(manifestObj) {
+          return manifestObj && manifestObj.label && manifestObj.thumbnail && manifestObj.thumbnail.length > 0;
+        },
+
         // Handler for expanding a node (> clicked)
         expandNode: function(node) {
           var _this = this;
@@ -329,7 +365,7 @@
             _this.updateCollectionFromUrl(uri, node.id);
           });
         },
-        
+
         // Helper for loading a manifest or collection from a URL
         addObjectFromUrl: function(url, source) {
           var _this = this,
@@ -373,21 +409,22 @@
             });
           }
         },
-        
+
         // Helper for loading a manifest from a URL
-        addManifestFromUrl: function(url) {
+        addManifestFromUrl: function(manifestObj) {
           var _this = this,
             manifest;
+          var url = manifestObj["@id"];
           // Cache hit: Show the manifest panel item if it is loaded
           if (_this.state.getStateProperty('manifests')[url]) {
             manifest = _this.state.getStateProperty('manifests')[url];
             if (manifest.jsonLd) {
-              _this.manifestListItems.push(new $.ManifestListItem({ 
-                manifest: manifest, 
-                resultsWidth: _this.resultsWidth, 
+              _this.manifestListItems.push(new $.ManifestListItem({
+                manifest: manifest,
+                resultsWidth: _this.resultsWidth,
                 state: _this.state,
                 eventEmitter: _this.eventEmitter,
-                forcedIndex: _this.expectedThings.indexOf(url),
+                forcedIndex: _this.expectedThings.indexOf(manifestObj),
                 appendTo: _this.manifestListElement }));
             }
           }
@@ -400,7 +437,23 @@
             });
           }
         },
-        
+
+        /**
+         * If an object is already determined to have enough information
+         * to display without loading, let ManifestListItem display data
+         * and load object only when it is clicked by the user.
+         */
+        addManifestReference: function(manifestObj) {
+          this.manifestListItems.push(new $.ManifestListItem({
+            "manifestRef": manifestObj,
+            "resultsWidth": this.resultsWidth,
+            "state": this.state,
+            "eventEmitter": this.eventEmitter,
+            "forcedIndex": this.expectedThings.indexOf(manifestObj),
+            "appendTo": this.manifestListElement
+          }));
+        },
+
         // Helper for loading a manifest from a URL as a child node of some other node (null = top level)
         // Optionally, jump to that new child node if jumpToIt is specified as true
         addCollectionFromUrl: function(url, nodeId, jumpToIt) {
@@ -445,7 +498,7 @@
             });
           }
         },
-        
+
         // Helper for updating a subnode of nodeId corresponding to the specified URL
         updateCollectionFromUrl: function(url, nodeId) {
           var _this = this,
@@ -469,7 +522,7 @@
             });
           }
         },
-        
+
         // Helper for loading a Collection object as a child of nodeId
         // Optionally, skip seeding subnodes under this collection if unexpanded is specified; this marks it as "still loading"
         addCollectionNode: function(nodeId, collection, unexpanded) {
@@ -488,7 +541,7 @@
           // Register the new node's apparent contents
           _this.registerNodeIdUriPair(newNodeId, collection.jsonLd['@id']);
           _this.nodeCollections[newNodeId] = collection.getCollectionUris();
-          _this.nodeManifests[newNodeId] = collection.getManifestUris();
+          _this.nodeManifests[newNodeId] = collection.getManifestBlocks();
           _this.nodeChildren[newNodeId] = [];
           // Add subcollections if unexpanded is not specified
           if (!unexpanded) {
@@ -514,20 +567,20 @@
           // Return newly created node ID for future reference
           return newNodeId;
         },
-        
+
         // Helper for updating a subnode of nodeId corresponding to the specified URL
         updateCollectionNode: function(nodeId, collection) {
           var _this = this,
               atId = collection.uri,
               collectionBlocks = collection.getCollectionBlocks(),
               collectionUris = collection.getCollectionUris(),
-              manifestUris = collection.getManifestUris();
+              manifests = collection.getManifestBlocks();
           // Find the right node to update that corresponds to the collection's URI
           jQuery.each(_this.nodeChildren[nodeId], function(_, n) {
             if (_this.nodeIdToUri[n] == atId && _this.unexpandedNodes[n]) {
               // Register the node's contents
               _this.nodeCollections[n] = collectionUris;
-              _this.nodeManifests[n] = manifestUris;
+              _this.nodeManifests[n] = manifests;
               _this.nodeChildren[n] = [];
               // Add children under the node if it has any subcollections, but don't expand them yet
               jQuery.each(collectionBlocks, function(i, v) {
@@ -542,7 +595,7 @@
               _this.treeElement.jstree('enable_node', n);
             }
           });
-          
+
         },
 
         template: $.Handlebars.compile([
@@ -576,4 +629,3 @@
     };
 
 }(Mirador));
-
