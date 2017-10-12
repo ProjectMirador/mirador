@@ -414,7 +414,12 @@
         addManifestFromUrl: function(manifestObj) {
           var _this = this,
             manifest;
-          var url = manifestObj["@id"];
+          var url;
+          if (typeof manifestObj === "object") {
+            url = manifestObj["@id"];
+          } else if (typeof manifestObj === "string") {
+            url = manifestObj;
+          }
           // Cache hit: Show the manifest panel item if it is loaded
           if (_this.state.getStateProperty('manifests')[url]) {
             manifest = _this.state.getStateProperty('manifests')[url];
