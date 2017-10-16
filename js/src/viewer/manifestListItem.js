@@ -180,6 +180,7 @@
         thumbs.forEach(function(thumb, index) {
           var toAdd = {
             height: _this.thumbHeight,
+            id: thumb.depicts,
             index: index
           };
 
