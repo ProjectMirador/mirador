@@ -32,14 +32,14 @@
               label: i18next.t('tabTitleIndex')
             }
           },
-          /*{
+          {
            name : 'annotations',
            options : {
            available: _this.annotationsTabAvailable,
            id:'annotationsTab',
-           label:'Annotations'
+           label:'Anno.'
            }
-           },*/
+          },
           {
             name : 'search',
             options : {
