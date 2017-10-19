@@ -24,6 +24,7 @@ describe('SidePanel', function() {
       layersTabAvailable: false,
       tocTabAvailable: false,
       searchTabAvailable: false,
+      annotationsTabAvailable: false,
       hasStructures: false
     }, sidePanelOptions);
 
@@ -35,6 +36,7 @@ describe('SidePanel', function() {
       spyOn(Mirador, 'TableOfContents').and.callThrough();
       spyOn(Mirador, 'SearchTab').and.callThrough();
       spyOn(Mirador, 'LayersTab').and.callThrough();
+      spyOn(Mirador, 'AnnotationsTab').and.callThrough();
       this.sidePanel = createSidePanel();
     });
 
@@ -74,9 +76,9 @@ describe('SidePanel', function() {
       describe('update', function() {
         it('should make panels unavailable or available', function() {
           this.sidePanel.update('search', false);
-          expect(this.sidePanel.panelState.tabs[1].options.available).toBe(false);
+          expect(this.sidePanel.panelState.tabs[2].options.available).toBe(false);
           this.sidePanel.update('search', true);
-          expect(this.sidePanel.panelState.tabs[1].options.available).toBe(true);
+          expect(this.sidePanel.panelState.tabs[2].options.available).toBe(true);
         });
       });
 

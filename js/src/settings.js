@@ -55,7 +55,8 @@
         "annotations" : false,
         "tocTabAvailable": true,
         "layersTabAvailable": false,
-        "searchTabAvailable": false
+        "searchTabAvailable": false,
+        "annotationTabAvailable": false
       },
       "sidePanelVisible" : true, //whether or not to make the side panel visible in this window on load. This setting is dependent on sidePanel being true
       "overlay" : true, //whether or not to make the metadata overlay available/visible in this window
@@ -199,7 +200,7 @@
         }
       }
     },
-    
+
     'jsonStorageEndpoint': {
       'name': 'JSONBlob API Endpoint',
       'module': 'JSONBlobAPI',
