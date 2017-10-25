@@ -1,12 +1,12 @@
 /*
- * Edited version of https://github.com/IIIF/mirador/blob/9e3c6bbb894e044d01ad51aae1b70309939de5a9/js/src/annotations/catchEndpoint.js 
+ * Edited version of https://github.com/IIIF/mirador/blob/9e3c6bbb894e044d01ad51aae1b70309939de5a9/js/src/annotations/catchEndpoint.js
  * This module tries to store the annotation as is in a RDF store but some fiddeling is required. Fidles are:
- * 
+ *
  * - delete annotation fails if id has a / in it so have to send sanatised ids to mirador
  * - mirador requires an endpoint variable in the annotation pointing to this class.
- * 
+ *
  * Note: this endpoint doesn't currently support authentication, just returns allow all
- * 
+ *
  * All Endpoints need to have at least the following:
  * annotationsList - current list of OA Annotations
  * dfd - Deferred Object
@@ -16,7 +16,7 @@
  * update(oaAnnotation, returnSuccess, returnError)
  * deleteAnnotation(annotationID, returnSuccess, returnError) (delete is a reserved word)
  * TODO:
- * There is a bug in that if you create an annotation and then delete it (without moving pages) then click either the write annotation button 
+ * There is a bug in that if you create an annotation and then delete it (without moving pages) then click either the write annotation button
  * or try to create a new annotation the deleted annotation re-appears. Changing pages fixes the issue as the annoation is delete from the annotation store
  *
  */
@@ -42,7 +42,7 @@
     init: function() {
       this.catchOptions = {
         user: {
-          id: this.userid, 
+          id: this.userid,
           name: this.username
         },
         permissions: {
@@ -76,28 +76,39 @@
 
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-          if (typeof successCallback === "function") {
-            successCallback(data);
-          } else {
             _this.annotationsList = data; // gmr
             jQuery.each(_this.annotationsList, function(index, value) {
-              value.fullId = value["@id"];
-              value["@id"] = $.genUUID();
-              _this.idMapper[value["@id"]] = value.fullId;
-              value.endpoint = _this;
+                // Swap out URI of anno to shorter ID
+                value.fullId = value["@id"];
+                value["@id"] = $.genUUID();
+                _this.idMapper[value["@id"]] = value.fullId;
+                value.endpoint = _this;
+                // Ensure on is an array
+                _this.fixOn(value);
             });
-            _this.dfd.resolve(false);
-          }
+            if (typeof successCallback === "function") {
+                successCallback(data);
+            } else {
+                _this.dfd.resolve(true);
+            }
         },
-        error: function() {
+        error: function(xhr, statusText, err) {
           if (typeof errorCallback === "function") {
-            errorCallback();
+              errorCallback();
           } else {
-            console.log("The request for annotations has caused an error for endpoint: "+ options.uri);
+              _this.dfd.reject();
+              console.log("The request for annotations has caused an error for endpoint: "+ options.uri + " due to " + statusText);
           }
         }
 
       });
+    },
+
+    fixOn: function(annotation) {
+        if (annotation.on && !jQuery.isArray(annotation.on) && annotation.on.selector && annotation.on.selector.default) {
+            oldOn = annotation.on;
+            annotation.on = [ oldOn ];
+        }
     },
 
     deleteAnnotation: function(annotationID, returnSuccess, returnError) {
@@ -114,10 +125,16 @@
         },
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-          returnSuccess();
+            if (typeof returnSuccess === "function") {
+                returnSuccess();
+            }
         },
-        error: function() {
-          returnError();
+        error: function(xhr, statusText, err) {
+            if (typeof returnError === "function") {
+                returnError();
+            } else {
+                console.log('Failed to delete annotation ' + annotationID + " due to " + statusText);
+            }
         }
 
       });
@@ -143,11 +160,17 @@
         data: JSON.stringify(annotation),
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-          /* this returned data doesn't seem to be used anywhere */
-          returnSuccess();
+            _this.fixOn(data);
+            if (typeof returnSuccess === "function") {
+                returnSuccess(data);
+            }
         },
-        error: function() {
-          returnError();
+        error: function(xhr, statusText, err) {
+            if (typeof returnError === "function") {
+                returnError();
+            } else {
+                console.log('Failed to update annotation: ' + oaAnnotation["@id"] + " due to " + statusText);
+            }
         }
       });
       // this is what updates the viewer
@@ -174,11 +197,17 @@
           data["@id"] = $.genUUID();
           data.endpoint = _this;
           _this.idMapper[data["@id"]] = data.fullId;
-
-          returnSuccess(data);
+          _this.fixOn(data);
+          if (typeof returnSuccess === "function") {
+              returnSuccess(data);
+          }
         },
-        error: function() {
-          returnError();
+        error: function(xhr, statusText, err) {
+            if (typeof returnError === "function") {
+                returnError();
+            } else {
+                console.log('Failed to create annotation: ' + oaAnnotation["@id"] + " due to " + statusText);
+            }
         }
       });
     },
