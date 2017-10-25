@@ -75,7 +75,7 @@ $.SimpleASEndpoint = function (options) {
 
         contentType: 'application/json; charset=utf-8',
         success: function(data) {
-          this.annotationsList = data; // gmr
+          _this.annotationsList = data; // gmr
           jQuery.each(_this.annotationsList, function(index, value) {
             // Swap out URI of anno to shorter ID
             value.fullId = value['@id'];
