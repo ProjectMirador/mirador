@@ -75,6 +75,7 @@
     "mousetrap": "^1.4.6",
     "openseadragon": "^2.2.1",
     "paper": "^0.10.2",
+    "qtip2": "^3.0.3",
     "select2": "^4.0.3",
     "simple-pagination.js": "^1.6.0",
     "spectrum-colorpicker": "^1.8.0",
