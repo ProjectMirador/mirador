@@ -175,9 +175,6 @@ module.exports = function(grunt) {
           src: 'js/lib/parse.min.js',
           dest: 'build/mirador/parse.min.js'
         }, {
-          src: 'js/lib/ZeroClipboard.swf',
-          dest: 'build/mirador/ZeroClipboard.swf'
-        }, {
           expand: true,
           src: 'locales/**',
           dest: 'build/mirador'
