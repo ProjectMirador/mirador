@@ -76,6 +76,7 @@
     "openseadragon": "^2.2.1",
     "paper": "^0.10.2",
     "select2": "^4.0.3",
+    "simple-pagination.js": "^1.6.0",
     "spectrum-colorpicker": "^1.8.0",
     "tinymce": "^4.1.7",
     "urijs": "^1.16.1"
