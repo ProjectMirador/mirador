@@ -35,7 +35,7 @@ module.exports = function(config) {
       'node_modules/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js',
       'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
       'js/lib/modernizr.custom.js',
-      'js/lib/sanitize-html.min.js',
+      'node_modules/sanitize-html/dist/sanitize-html.min.js',
       'node_modules/sinon/pkg/sinon.js',
       'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
       'node_modules/iiif-evented-canvas/dist/iiif-evented-canvas.umd.min.js',

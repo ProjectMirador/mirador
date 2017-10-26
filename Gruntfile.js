@@ -47,7 +47,7 @@ module.exports = function(grunt) {
     'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
     'node_modules/simple-pagination.js/jquery.simplePagination.js',
     'js/lib/modernizr.custom.js',
-    'js/lib/sanitize-html.min.js',
+    'node_modules/sanitize-html/dist/sanitize-html.min.js',
     'node_modules/iiif-evented-canvas/dist/iiif-evented-canvas.umd.min.js',
     'node_modules/iiif-layout-functions/dist/iiif-layout-functions.umd.min.js',
     'node_modules/select2/dist/js/select2.full.min.js'
