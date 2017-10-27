@@ -12,11 +12,11 @@
 Mirador uses [Node.js](https://nodejs.org/) and a build system to assemble, test, and manage the development resources. If you have never used these tools before, you may need to install them.
 
  1. Install [Node.js](https://nodejs.org/)
- 2. Install the Grunt command line runner i.e. `npm install -g grunt-cli`
- 3. Install the Bower command line utility i.e. `npm install -g bower`
- 4. Clone the Mirador repository
- 5. Change into the Mirador directory
- 6. Install all dependencies with `npm install`. Run `npm start`.
+ 1. Install the Grunt command line runner i.e. `npm install -g grunt-cli`
+ 1. Install the Bower command line utility i.e. `npm install -g bower`
+ 1. Clone the Mirador repository
+ 1. Change into the Mirador directory
+ 1. Install all dependencies with `npm install`. Run `npm start`.
  
 ### Run Tests
 `npm test`
