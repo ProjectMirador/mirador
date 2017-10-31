@@ -66,6 +66,11 @@ describe('Iiif', function () {
   });
   
   describe('getVersionFromContext', function () {
+    it('should handle array contexts', function() {
+      var context = ['http://iiif.io/api/image/2/context.json',
+                     {'someField': 'ns:some-field'}];
+      expect(Mirador.Iiif.getVersionFromContext(context)).toEqual('2.0');
+    });
     it('should identify 2.0', function() {
       var context = 'http://iiif.io/api/image/2/context.json';
       expect(Mirador.Iiif.getVersionFromContext(context)).toEqual('2.0');
@@ -76,6 +81,35 @@ describe('Iiif', function () {
     });
   });
   
+  describe('getComplianceLevelFromProfile', function () {
+    it('should identify 0 from string', function() {
+      var profile = 'http://iiif.io/api/image/2/level0.json';
+      expect(Mirador.Iiif.getComplianceLevelFromProfile(profile)).toEqual(0);
+    });
+    it('should identify 2 from array', function() {
+      var profile = [
+        "http://iiif.io/api/image/2/level2.json",
+        {
+        "formats" : [ "gif", "pdf" ],
+        "qualities" : [ "color", "gray" ],
+        "supports" : [
+            "canonicalLinkHeader", "rotationArbitrary", "profileLinkHeader", "http://example.com/feature/"
+        ]
+        }
+      ];
+      expect(Mirador.Iiif.getComplianceLevelFromProfile(profile)).toEqual(2);
+    });
+    it('should return -1 for empty profile', function() {
+      var profile = null;
+      expect(Mirador.Iiif.getComplianceLevelFromProfile(profile)).toEqual(-1);
+    });
+    it('should return -1 for unrecognised profile', function() {
+      var profile = "http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level0";
+      expect(Mirador.Iiif.getComplianceLevelFromProfile(profile)).toEqual(-1);
+    });
+  });
+  
+  
   describe('makeUriWithWidth', function () {
     it('should return native.jpg URL for IIIF v1.x', function() {
       expect(Mirador.Iiif.makeUriWithWidth('http://images.waahoo.com/iiif/MYTEST', 512, '1.1')).toEqual('http://images.waahoo.com/iiif/MYTEST/full/512,/0/native.jpg');
@@ -85,6 +119,18 @@ describe('Iiif', function () {
     });
   });
   
-  xit('getImageHostUrl', function () {
+  describe('getImageHostUrl', function () {
+    it('should return image_host if it exists', function() {
+      expect(Mirador.Iiif.getImageHostUrl({ image_host: "http://0.0.0.0/abc" })).toEqual("http://0.0.0.0/abc");
+    });
+    it('should return identifier portion if it exists', function() {
+      expect(Mirador.Iiif.getImageHostUrl({ '@id': "http://0.0.0.0/abc/def", identifier: "def" })).toEqual("http://0.0.0.0/abc");
+    });
+    it('should split URL in half if found', function() {
+      expect(Mirador.Iiif.getImageHostUrl({'@id': "http://0.0.0.0/abc/def"})).toEqual("http://0.0.0.0/abc");
+    });
+    it('should return empty string if all attempts fail', function() {
+      expect(Mirador.Iiif.getImageHostUrl({})).toEqual('');
+    });
   });
 });

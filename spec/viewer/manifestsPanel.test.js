@@ -40,6 +40,11 @@ describe('ManifestsPanel', function() {
     element.find('#manifest-search').trigger('keyup');
     expect(this.panel.filterManifests).toHaveBeenCalled();
     
+    spyOn(jQuery.Event.prototype, 'preventDefault').and.callThrough();
+    expect(jQuery.Event.prototype.preventDefault).not.toHaveBeenCalled();
+    element.find('#manifest-search-form').submit();
+    expect(jQuery.Event.prototype.preventDefault).toHaveBeenCalled();
+    
     spyOn(this.panel, 'resizePanel');
     jQuery(window).trigger('resize');
     expect(this.panel.resizePanel).toHaveBeenCalled();
@@ -57,7 +62,7 @@ describe('ManifestsPanel', function() {
     spyOn(this.eventEmitter, 'publish');
     var url = "http://example.com/manifest.json";
     this.panel.addManifestUrl(url);
-    expect(this.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', url, "(Added from URL)");
+    expect(this.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', [url, "(Added from URL)"]);
   });
   
   it('should toggle load window', function() {

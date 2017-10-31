@@ -1,0 +1,175 @@
+.mirador-container {
+  .annotationListPanel {
+    background-color: @gray-f0;
+    width: 200px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    z-index: 2;
+    box-shadow: 0px 0px 5px @black-a30;
+    border-left: 1px solid @gray;
+  }
+
+  .annotationPanelHeader {
+    padding: 0 10px;
+  }
+
+  .annotationListPanel ul {
+    position: absolute;
+    bottom: 0;
+    top: 80px;
+    border-top: 1px solid @white;
+    list-style: none;
+    overflow: scroll;
+    overflow-x: hidden;
+    margin-bottom: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  .annotationListPanel ul li {
+    font-size: 80%;
+    margin: 0;
+    padding: 10px;
+    border-bottom: 1px solid @white;
+    box-sizing: border-box;
+  }
+
+  .annotationListPanel ul li:hover {
+    background-color: @light-gray;
+    cursor: pointer;
+    border-left: 2px solid @orange-red;
+    padding-left: 8px;
+  }
+
+  .annotationListPanel ul li.selected {
+    color: @white;
+    background-color: @gray;
+    cursor:pointer;
+    border-left: 3px solid @orange-red;
+    padding-left: 7px;
+  }
+
+  .annotationListPanel ul li.hovered {
+    background-color: @light-gray;
+    cursor:pointer;
+    border-left: 2px solid @orange-red;
+    padding-left: 8px;
+  }
+
+  .annotationListPanel ul li p {
+    margin: 0;
+  }
+
+  .annotationListPanel ul li p:hover {
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .annotationListPanel ul li a {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .annotationListPanel .resizeGrip {
+    position: absolute;
+    left: -7px;
+    bottom: 0;
+    top: 0;
+    width: 12px;
+    z-index: 3;
+    background: none;
+    display: block;
+    cursor: ew-resize;
+  }
+
+  .annotation, .osd-select-rectangle {
+    border: 2px solid @deep-sky-blue;
+    box-shadow: 0px 0px 5px @white;
+    box-sizing: border-box;
+  }
+
+  .annotation.selected {
+    border: 3px solid @orange-red;
+    box-shadow: 0px 0px 8px @black-a70;
+  }
+
+  /*
+  .annotation:hover {
+    border: 3px solid orangered;
+    opacity: 0.5;
+    box-shadow: 0px 0px 15px @black;
+  }
+
+  .annotation.selected:hover {
+    border: 3px solid orangered;
+    opacity: 1;
+    box-shadow: 0px 0px 8px @black-a70;
+  }
+  */
+
+  .annotation.hovered {
+    border: 3px solid orangered;
+    opacity: 0.5;
+    box-shadow: 0px 0px 15px @black;
+  }
+
+  .annotationDetails {
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: inherit;
+    padding-top: 25px;
+    color: white;
+    overflow: hidden;
+    height: 20%;
+    z-index: 2;
+    background: -moz-linear-gradient(top, @black-a00 0%, @black-a77 13%, @black-a77 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,@black-a00), color-stop(13%,@black-a77), color-stop(100%,@black-a77)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, @black-a00 0%,@black-a77 13%,@black-a77 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, @black-a00 0%,@black-a77 13%,@black-a77 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, @black-a00 0%,@black-a77 13%,@black-a77 100%); /* IE10+ */
+    background: linear-gradient(to bottom, @black-a00 0%,@black-a77 13%,@black-a77 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#c4000000',GradientType=0 ); /* IE6-9 */
+  }
+
+  .annotationDetailToggle {
+    float: right;
+    margin: 32px;
+    margin-top: 0;
+    cursor: pointer;
+  }
+
+  .osd-annotation-overlay {
+    display: none;
+  }
+
+  .displayBottomPanelButton {
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: inherit;
+    color: @white;
+    height: 75px;
+    z-index: 2;
+  }
+
+  .annotationDetails p {
+    width: 80%;
+    font-size: 1.3em;
+    font-weight: bold;
+    display: block;
+    margin: 0 auto;
+  }
+}

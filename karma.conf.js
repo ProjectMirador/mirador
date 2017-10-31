@@ -15,26 +15,33 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       // vendors
-      'js/lib/jquery.min.js',
-      'js/lib/jquery-ui.min.js',
-      'js/lib/jquery.scrollTo.min.js',
+      'node_modules/jquery/dist/jquery.min.js',
+      'node_modules/jquery-ui-dist/jquery-ui.min.js',
+      'node_modules/jquery.scrollto/jquery.scrollTo.min.js',
+      'node_modules/jstree/dist/jstree.min.js',
       'js/lib/jquery.qtip.min.js',
-      'js/lib/state-machine.min.js',
-      'js/lib/tinymce.min.js',
-      'js/lib/handlebars.js',
-      'js/lib/openseadragon.js',
-      'js/lib/d3.v3.min.js',
-      'js/lib/pubsub.min.js',
-      'js/lib/URI.min.js',
-      'js/lib/mousetrap.min.js',
+      'node_modules/javascript-state-machine/state-machine.min.js',
+      'node_modules/tinymce/tinymce.min.js',
+      'node_modules/handlebars/dist/handlebars.js',
+      'node_modules/openseadragon/build/openseadragon/openseadragon.js',
+      'node_modules/d3/d3.min.js',
+      'node_modules/jquery-plugin/dist/ba-tiny-pubsub.js',
+      'node_modules/urijs/src/URI.min.js',
+      'node_modules/mousetrap/mousetrap.min.js',
       'js/lib/isfahan.js',
-      'js/lib/paper-full.min.js',
-      'js/lib/spectrum.js',
-      'js/lib/i18next.min.js',
+      'node_modules/paper/dist/paper-core.min.js',
+      'node_modules/spectrum-colorpicker/spectrum.js',
+      'node_modules/i18next/i18next.min.js',
+      'node_modules/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js',
+      'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
       'js/lib/modernizr.custom.js',
-      'bower_components/sinon-server/index.js',
-      'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
+      'js/lib/sanitize-html.min.js',
+      'node_modules/sinon/pkg/sinon.js',
+      'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
+      'node_modules/iiif-evented-canvas/dist/iiif-evented-canvas.umd.min.js',
       // app
+      'js/src/mirador.js',
+      'js/src/utils/handlebars.js',
       'js/src/*.js',
       'js/src/viewer/*.js',
       'js/src/manifests/*.js',
@@ -44,28 +51,37 @@ module.exports = function(config) {
       'js/src/utils/*.js',
       // spec
       'spec/**/*.stub.js',
-      'spec/**/*.js',
       {pattern: 'spec/data/*', watched: true, served: true, included: false},
-      {pattern: 'spec/fixtures/*json', watched: true, served: true, included: false},
-    ],
+      {pattern: 'spec/fixtures/*json', watched: true, served: true, included: false}
+    ].concat(!process.env.KARMA_SPECS ? ['spec/**/*.js'] : process.env.KARMA_SPECS.split(',')),
 
 
     // list of files to exclude
-    exclude: [
-      'spec/mirador.test.js'
-    ],
+    // exclude: [
+    // This file holds the integration tests for Mirador
+    //   'spec/mirador.test.js'
+    // ],
 
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      'js/src/**/*.js': ['coverage']
+    },
+
+    proxies: {
+      '/spec': 'http://localhost:9876/base/spec'
     },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['spec'],
+    reporters: ['progress', 'coverage', 'coveralls'],
 
+    coverageReporter: {
+      type: 'lcov', // lcov or lcovonly are required for generating lcov.info files
+      dir: 'coverage/'
+    },
 
     // web server port
     port: 9876,

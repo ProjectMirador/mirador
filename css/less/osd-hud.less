@@ -1,0 +1,304 @@
+.mirador-container {
+  /* Disable outlines when canvas is focused
+  ---------------------------------------------------------------------------- */
+  canvas {
+    outline: none;
+    -webkit-tap-highlight-color: @transparent; /* mobile webkit */
+  }
+
+  .mirador-osd {
+    background-color: @black;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Canvas HUD
+  ----------------------- */
+  /*.mirador-canvas-hud {
+    position:absolute;
+    left: 0;
+    top:0;
+    bottom:0;
+    right:0;
+    background: rgba(255, 0, 128, 0.5);
+    pointer-events: none;
+  }*/
+  .hud-control {
+    color:white;
+    text-shadow: 0 0 5px @black;
+    /*transition: all 0.3s ease;*/
+    opacity: 0.6;
+    font-size: 18px;
+    z-index:2;
+  }
+  .hud-container {
+    color:white;
+    text-shadow: 0 0 5px @black;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    z-index:2;
+  }
+  .hud-control.hud-disabled {
+    opacity: 0.3;
+  }
+  .hud-control:not(.hud-disabled):hover {
+    /*transition: all 0.3s ease;*/
+    cursor: pointer;
+    opacity: 1;
+  }
+  .hud-control.selected {
+    opacity: 1;
+    /*transition: none;*/
+  }
+  .hud-control.hidden {
+    opacity: 0;
+  }
+  .mirador-osd-previous {
+    position:absolute;
+    left:1%;
+    top:50%;
+    margin-top:-35px;
+    width: 40px;
+    -webkit-transform : translateY(0px);
+    -moz-transform    : translateY(0px);
+    -ms-transform     : translateY(0px);
+    -o-transform      : translateY(0px);
+    transform         : translateY(0px);
+    transition: all 0.2s ease-out;
+  }
+  .mirador-osd-previous.bottom-panel-open {
+    -webkit-transform : translateY(-65px);
+    -moz-transform    : translateY(-65px);
+    -ms-transform     : translateY(-65px);
+    -o-transform      : translateY(-65px);
+    transform         : translateY(-65px);
+    transition: all 0.2s ease-out;
+  }
+  .mirador-osd-next {
+    position:absolute;
+    right:1%;
+    top:50%;
+    margin-top:-35px;
+    -webkit-transform : translateY(0px);
+    -moz-transform    : translateY(0px);
+    -ms-transform     : translateY(0px);
+    -o-transform      : translateY(0px);
+    transform         : translateY(0px);
+    transition: all 0.2s ease-out;
+  }
+  .mirador-osd-next.bottom-panel-open {
+    -webkit-transform : translateY(-65px);
+    -moz-transform    : translateY(-65px);
+    -ms-transform     : translateY(-65px);
+    -o-transform      : translateY(-65px);
+    transform         : translateY(-65px);
+    transition: all 0.2s ease-out;
+  }
+  .mirador-osd-toggle-bottom-panel {
+    position: absolute;
+    bottom:0;
+    right:50%;
+    margin-right: -25px;
+    -webkit-transform : translateY(0px);
+    -moz-transform    : translateY(0px);
+    -ms-transform     : translateY(0px);
+    -o-transform      : translateY(0px);
+    transform         : translateY(0px);
+    transition: all 0.2s ease-out;
+  }
+
+  .mirador-osd-toggle-bottom-panel.bottom-panel-open {
+    -webkit-transform : translateY(-130px);
+    -moz-transform    : translateY(-130px);
+    -ms-transform     : translateY(-130px);
+    -o-transform      : translateY(-130px);
+    transform         : translateY(-130px);
+    transition: all 0.2s ease-out;
+  }
+  .mirador-pan-zoom-controls {
+    position: absolute;
+    width: 100px;
+    height: 65px;
+    bottom:0;
+    right:0;
+    margin:1%;
+  }
+  .mirador-pan-zoom-controls.bottom-panel-open {
+    -webkit-transform : translateY(-130px);
+    -moz-transform    : translateY(-130px);
+    -ms-transform     : translateY(-130px);
+    -o-transform      : translateY(-130px);
+    transform         : translateY(-130px);
+    transition: all 0.2s ease-out;
+  }
+  .mirador-osd-up {
+    position:absolute;
+    right:20px;
+    top:0;
+  }
+  .mirador-osd-right {
+    position:absolute;
+    right:0;
+    top:20px;
+  }
+  .mirador-osd-down {
+    position:absolute;
+    right:20px;
+    top:40px;
+  }
+  .mirador-osd-left {
+    position:absolute;
+    right:40px;
+    top:20px;
+  }
+  .mirador-osd-zoom-in {
+    font-size:130%;
+    position:absolute;
+    right:70px;
+    top:5px;
+  }
+  .mirador-osd-zoom-out {
+    font-size:130%;
+    position:absolute;
+    right:70px;
+    top:30px;
+  }
+  .mirador-osd-go-home {
+    position: absolute;
+    right:20px;
+    top:20px;
+  }
+  .mirador-osd-context-controls {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    transition: none;
+    /*width: 100%*/
+    >div {
+      clear: both;
+      >a:first-child {
+        margin-bottom: 10px;
+      }
+    }
+  }
+  .mirador-osd-context-controls a {
+    float:left;
+    margin:0 10px 0 0;
+    font-weight: normal;
+  }
+  .mirador-annotation-controls {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
+  .mirador-manipulation-controls {
+    min-width: 364px;
+  }
+  .mirador-mirror {
+    -moz-transform: scale(-1, 1);
+    -webkit-transform: scale(-1, 1);
+    -o-transform: scale(-1, 1);
+    transform: scale(-1, 1);
+    filter: FlipH;
+  }
+
+  /* color picker custom style
+  ---------------------------------------------------------------------------- */
+
+  .mirador-osd-color-picker * {
+    text-shadow: none;
+  }
+
+  .sp-dd {
+    display: none;
+  }
+
+  .mirador-osd-color-picker .dropdown-icon {
+    font-size: .8em;
+    height: 30px;
+    vertical-align: middle;
+  }
+
+  .mirador-osd-color-picker .sp-container {
+    width: 300px;
+    border-color: @gray-cc;
+    opacity: 0.9;
+    border-radius: 3px;
+  }
+
+  .mirador-osd-color-picker .sp-preview {
+    height: 10px;
+  }
+
+  .mirador-osd-color-picker .sp-replacer {
+    border-color: @gray-cc;
+    height: 11px;
+    border-radius: 3px;
+    cursor: default;
+  }
+
+  .mirador-osd-color-picker .material-icons {
+    float: left;
+    font-size: 12px;
+    margin: 0 5px 0 0;
+  }
+
+  .hud-control.mirador-line-type {
+    height: 11px;
+    border-radius: 3px;
+    margin: 2px 11px 0 0;
+    padding: 4px;
+    width: 57px;
+    border: 1px solid @gray-cc;
+    background: @gray-ee none repeat scroll 0 0;
+    text-shadow: none;
+    color: @black-33;
+  }
+
+  /*.mirador-line-type ul {
+    color: @black-33;
+    margin-top: 0px;
+  }
+
+  .mirador-line-type li {
+    text-shadow: none;
+    font-size: 10px;
+  }*/
+
+  .mirador-line-type ul.dropdown.type-list {
+      margin-top: -14px;
+      border-radius: 3px;
+      margin-left: -5px;
+      font-size: 10px;
+      box-shadow: none;
+      width: 140px;
+  }
+
+  .mirador-line-type ul i {
+      display: inline-block;
+      width: 25px;
+      height: 1em;
+      background: no-repeat;
+      margin-right: 10px;
+  }
+
+  .mirador-line-type .mirador-border-icon {
+    font-size: 12px;
+    margin: 0 5px 0 0;
+    float: left;
+  }
+
+  .mirador-line-type .border-type-image {
+    display: inline-block;
+    width: 25px;
+    height: 1em;
+    background: no-repeat;
+    margin: 0 5px 2px 0;
+  }
+
+  .mirador-line-type .dropdown-icon {
+    font-size: .8em;
+    height: 30px;
+    vertical-align: middle;
+  }
+}

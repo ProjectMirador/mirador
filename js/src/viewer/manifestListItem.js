@@ -19,6 +19,7 @@
       tplData:                    null,
       allImages:                  [],
       remaining:                  0,
+      forcedIndex:                null,
       state:                      null,
       eventEmitter:               null
     }, options);
@@ -36,7 +37,7 @@
       this.maxPreviewImagesWidth = this.resultsWidth - (this.repoWidth + this.margin + this.metadataWidth + this.margin + this.remainingWidth);
       this.maxPreviewImagesWidth = this.maxPreviewImagesWidth * 0.95;
 
-      Handlebars.registerHelper('pluralize', function(count, singular, plural) {
+      $.Handlebars.registerHelper('pluralize', function(count, singular, plural) {
         if (count === 1) {
           return singular;
         } else {
@@ -45,6 +46,9 @@
       });
 
       this.fetchTplData(this.manifestId);
+      if (this.forcedIndex !== null) {
+        this.tplData.index = this.forcedIndex;
+      }
 
       if (_this.state.getStateProperty('preserveManifestOrder')) {
         if (this.appendTo.children().length === 0) {
@@ -189,10 +193,15 @@
         if (newMaxPreviewWidth < _this.maxPreviewImagesWidth ) {
           while (_this.imagesTotalWidth >= newMaxPreviewWidth) {
             image = _this.tplData.images.pop();
-            _this.imagesTotalWidth -= (image.width + _this.margin);
 
-            //remove image from dom
-            _this.element.find('img[data-image-id="'+image.id+'"]').remove();
+            if (image) {
+              _this.imagesTotalWidth -= (image.width + _this.margin);
+
+              //remove image from dom
+              _this.element.find('img[data-image-id="'+image.id+'"]').remove();
+            } else {
+              break;
+            }
           }
           //check if need to add ellipsis
           if (_this.remaining === 0 && _this.allImages.length - _this.tplData.images.length > 0) {
@@ -230,6 +239,7 @@
           }
         }
         _this.maxPreviewImagesWidth = newMaxPreviewWidth;
+        _this.eventEmitter.publish('manifestListItemRendered');
     },
 
     hide: function() {
@@ -240,7 +250,7 @@
       var _this = this;
     },
 
-    template: Handlebars.compile([
+    template: $.Handlebars.compile([
       '<li data-index-number={{index}}>',
       '<div class="repo-image">',
         '{{#if repoImage}}',
@@ -251,7 +261,7 @@
       '</div>',
       '<div class="select-metadata">',
         '<div class="manifest-title">',
-          '<h3 title="{{label}}">{{label}}</h3>',
+          '<h3 title="{{{label}}}">{{{label}}}</h3>',
         '</div>',
         '<div class="item-info">',
           '<div class="item-info-row">',

@@ -22,6 +22,7 @@
 
   $.getThumbnailForCanvas = function(canvas, width) {
     var version = "1.1",
+    compliance = -1,
     service,
     thumbnailUrl;
 
@@ -34,13 +35,20 @@
       if (typeof(canvas.thumbnail) == 'string') {
         thumbnailUrl = canvas.thumbnail;
       } else if (canvas.thumbnail.hasOwnProperty('service')) {
-        // Get the IIIF Image API via the @context
         service = canvas.thumbnail.service;
-        if (service.hasOwnProperty('@context')) {
-          version = $.Iiif.getVersionFromContext(service['@context']);
-          console.log('version');
+        if(service.hasOwnProperty('profile')) {
+            compliance = $.Iiif.getComplianceLevelFromProfile(service.profile);
         }
-        thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+        if(compliance === 0){
+            // don't change existing behaviour unless compliance is explicitly 0
+            thumbnailUrl = canvas.thumbnail['@id'];
+        } else {
+            // Get the IIIF Image API via the @context
+            if (service.hasOwnProperty('@context')) {
+                version = $.Iiif.getVersionFromContext(service['@context']);
+            }
+            thumbnailUrl = $.Iiif.makeUriWithWidth(service['@id'], width, version);
+        }
       } else {
         thumbnailUrl = canvas.thumbnail['@id'];
       }
@@ -56,7 +64,7 @@
     return thumbnailUrl;
   };
 
-  /* 
+  /*
      miscellaneous utilities
      */
 
@@ -191,17 +199,17 @@
     // Javascript does not have range expansions quite yet,
     // long live the humble for loop.
     // Use a closure to contain the column and row variables.
-    for (var i = 0, c = columns; i < c; i++) { 
+    for (var i = 0, c = columns; i < c; i++) {
       var column = { type: 'column'};
 
       if (rowsPerColumn > 1) {
         column.children = [];
-        for (var j = 0, r = rowsPerColumn; j < r; j++) { 
+        for (var j = 0, r = rowsPerColumn; j < r; j++) {
           column.children.push({
             type: 'row'
           });
         }
-      } 
+      }
 
       layoutDescription.children.push(column);
     }
@@ -259,6 +267,17 @@
 
   $.fullscreenElement = function() {
     return (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement);
+  };
+
+  $.sanitizeHtml = function(dirty) {
+    return sanitizeHtml(dirty, {
+      allowedTags: ['a', 'b', 'br', 'i', 'img', 'p', 'span', 'strong', 'em', 'ul', 'ol', 'li'],
+      allowedAttributes: {
+        'a': ['href', 'target'],
+        'img': ['src', 'alt'],
+        'p': ['dir']
+      }
+    });
   };
 
 }(Mirador));

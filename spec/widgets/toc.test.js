@@ -60,7 +60,7 @@ describe('Table of Contents', function() {
       });
 
       expect(this.sandbox.find('.toc')).toExist();
-      expect(this.sandbox.find('h2 span')).toContainText('No index available');
+      expect(this.sandbox.find('h2 span')).toContainText(i18next.t('noIndex'));
     });
 
     it('should set tocData with a cached element for each range', function() {
@@ -164,12 +164,83 @@ describe('Table of Contents', function() {
   });
 
   describe('Tab state interactions', function() {
-    xit('shows the toc element on tabStateUpdated when the selected tab is not the tocTab', function(){
-
+    var testToc;
+    beforeEach(function() {
+      testToc = new Mirador.TableOfContents({
+        structures: this.v1SimpleStructures.structures,
+        manifestVersion: '1',
+        appendTo: this.sandbox,
+        windowId: 'dummyID',
+        canvasID: 1234,
+        eventEmitter: this.eventEmitter
+      });
+      spyOn(testToc.element, 'show');
+      spyOn(testToc.element, 'hide');
+    });
+    
+    it('shows the toc element on tabStateUpdated when the selected tab is not the tocTab', function(){
+      var data = {
+        tabs: [{options:{id:'navTab'}}, {options:{id:'tocTab'}}],
+        selectedTabIndex: 1
+      };
+      testToc.tabStateUpdated(data);
+      expect(testToc.element.show).toHaveBeenCalled();
     });
 
-    xit('hides the toc element on tabStateUpdated when the selected tab is the tocTab', function(){
-
+    it('hides the toc element on tabStateUpdated when the selected tab is the tocTab', function(){
+      var data = {
+        tabs: [{options:{id:'navTab'}}, {options:{id:'tocTab'}}],
+        selectedTabIndex: 0
+      };
+      testToc.tabStateUpdated(data);
+      expect(testToc.element.hide).toHaveBeenCalled();
     });
+  });
+  
+  it('should set active', function() {
+    var testToc = new Mirador.TableOfContents({
+      structures: this.v1SimpleStructures.structures,
+      manifestVersion: '1',
+      appendTo: this.sandbox,
+      windowId: 'dummyID',
+      canvasID: 1234,
+      eventEmitter: this.eventEmitter
+    });
+    testToc.setActive(false);
+    expect(testToc.active).toBe(false);
+    testToc.setActive(true);
+    expect(testToc.active).toBe(true);
+  });
+  
+  it('should hide', function() {
+    var testToc = new Mirador.TableOfContents({
+      structures: this.v1SimpleStructures.structures,
+      manifestVersion: '1',
+      appendTo: this.sandbox,
+      windowId: 'dummyID',
+      canvasID: 1234,
+      eventEmitter: this.eventEmitter
+    });
+    spyOn(jQuery.fn, 'hide');
+    spyOn(this.eventEmitter, 'publish');
+    testToc.hide();
+    expect(jQuery.fn.hide).toHaveBeenCalled();
+    expect(this.eventEmitter.publish).toHaveBeenCalledWith('ADD_CLASS.dummyID', 'focus-max-width');
+  });
+  
+  it('should show', function() {
+    var testToc = new Mirador.TableOfContents({
+      structures: this.v1SimpleStructures.structures,
+      manifestVersion: '1',
+      appendTo: this.sandbox,
+      windowId: 'dummyID',
+      canvasID: 1234,
+      eventEmitter: this.eventEmitter
+    });
+    spyOn(jQuery.fn, 'show');
+    spyOn(this.eventEmitter, 'publish');
+    testToc.show();
+    expect(jQuery.fn.show).toHaveBeenCalled();
+    expect(this.eventEmitter.publish).toHaveBeenCalledWith('REMOVE_CLASS.dummyID', 'focus-max-width');
   });
 });

@@ -2,12 +2,13 @@
 _SpecRunner.html
 bkp
 css/discovery.css
+css/mirador.css
 dev.html
 discovery.html
 js/discovery
 node_modules/
 npm-debug.log
-reports/
+coverage/
 data/ecodices
 data/BnF
 data/Harvard

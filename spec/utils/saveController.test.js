@@ -1,6 +1,7 @@
 describe('SaveController', function () {
 
   beforeEach(function() {
+    localStorage.clear();
     this.eventEmitter = new Mirador.EventEmitter();
     this.config = {
       id: 'mock_viewer_id',
@@ -122,6 +123,32 @@ describe('SaveController', function () {
     });
   });
   
+  describe('Test Cleaning Up Objects', function () {
+    it('should remove circular references', function () {
+
+      var saveController = new Mirador.SaveController(this.config);
+      
+      var object_a = { valid: 'This is a valid value' };
+      var object_b = { valid: 'This is a valid value', invalid: object_a };
+      object_a.object_b = object_b;
+
+      var cleaned = saveController.cleanup(object_a);
+
+      /**
+        * The original object should be untouched. 
+        */
+      expect(object_a.object_b.invalid).not.toBeUndefined();
+
+      /**
+        * object_a reference in cleaned should be the only 
+        * value missing.
+        */
+      expect(cleaned.valid).toBe('This is a valid value');
+      expect(cleaned.object_b.invalid).toBeUndefined();
+      expect(cleaned.object_b.valid).toBe('This is a valid value');
+    });
+  });
+
   describe('Event handling', function () {
     xit('should handle windowUpdated', function () {
     });

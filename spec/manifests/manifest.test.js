@@ -140,7 +140,25 @@ describe('Manifest', function() {
         expect(thumbnail).toEqual(thumbnailUrl);
       });
 
-      it('when canvas.thumbnail has a service', function () {
+
+      it('when canvas.thumbnail has a level 0 service', function () {
+        var thumbnailUrl = 'http://www.example.org/iiif/book1/thumbnail/p1.jpg';
+        var canvas = {
+          thumbnail: {
+            '@id': thumbnailUrl,
+            service: {
+              '@id': 'http://example.org/images/book1-page1',
+              profile: 'http://iiif.io/api/image/2/level0.json'
+            }
+          }
+        };
+        var manifestInstance = new Mirador.Manifest(null, null, {});
+        var thumbnail = manifestInstance.getThumbnailForCanvas(canvas);
+        expect(thumbnail).toEqual(thumbnailUrl);
+      });
+      
+      
+      it('when canvas.thumbnail has a level 1 or level 2 service', function () {
         var canvas = {
           thumbnail: {
             '@id': 'http://example.org/images/book1-page1/full/80,100/0/default.jpg',
@@ -314,5 +332,46 @@ describe('Manifest', function() {
       }, 0);
     });
   });
-  
+
+  describe('getViewingDirection', function () {
+    it('should retrieve correct viewingDirection', function (done) {
+      var content1 = {
+        "@context": "http://www.shared-canvas.org/ns/context.json",
+        "@type": "sc:Manifest",
+        "@id": "http://manifests.example.com/iiif/EX/manifest",
+        "label": "Book 1",
+        "viewingDirection": "right-to-left",
+        "sequences": [{}]
+      };
+      var content2 = {
+        "@context": "http://www.shared-canvas.org/ns/context.json",
+        "@type": "sc:Manifest",
+        "@id": "http://manifests.example.com/iiif/EX/manifest",
+        "label": "Book 1",
+        "sequences": [{
+          "viewingDirection": 'right-to-left'
+        }]
+      };
+      var content3 = {
+        "@context": "http://www.shared-canvas.org/ns/context.json",
+        "@type": "sc:Manifest",
+        "@id": "http://manifests.example.com/iiif/EX/manifest",
+        "label": "Book 1",
+        "viewingDirection": "left-to-right",
+        "sequences": [{}]
+      };
+      var manifestInstance1 = new Mirador.Manifest(null, null, content1);
+      var manifestInstance2 = new Mirador.Manifest(null, null, content2);
+      var manifestInstance3 = new Mirador.Manifest(null, null, content3);
+      setTimeout(function () {
+        var viewingDirection1 = manifestInstance1.getViewingDirection();
+        var viewingDirection2 = manifestInstance2.getViewingDirection();
+        var viewingDirection3 = manifestInstance3.getViewingDirection();
+        expect(viewingDirection1).toEqual('right-to-left');
+        expect(viewingDirection2).toEqual('right-to-left');
+        expect(viewingDirection3).toEqual('left-to-right');
+        done();
+      }, 0);
+    });
+  });
 });

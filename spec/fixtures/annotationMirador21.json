@@ -1,0 +1,27 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@type": "oa:Annotation",
+  "motivation": [
+    "oa:commenting"
+  ],
+  "resource": [
+    {
+      "@type": "dctypes:Text",
+      "format": "text/html",
+      "chars": "<p>something</p>"
+    }
+  ],
+  "on": {
+    "@type": "oa:SpecificResource",
+    "full": "https://oculus-dev.harvardx.harvard.edu/manifests/huam:320567/canvas/canvas-10466656.json",
+    "selector": {
+      "@type": "oa:SvgSelector",
+      "value": "<svg xmlns='http://www.w3.org/2000/svg'><path xmlns=\"http://www.w3.org/2000/svg\" d=\"M1000.24213,219.15375l98.78935,0l0,0l98.78935,0l0,74.09201l0,74.09201l-98.78935,0l-98.78935,0l0,-74.09201z\" data-paper-data=\"{&quot;strokeWidth&quot;:1,&quot;rotation&quot;:0,&quot;annotation&quot;:null,&quot;editable&quot;:true}\" id=\"rectangle_7e2b56fa-b18b-4d09-a575-0bb19f560b56\" fill-opacity=\"0\" fill=\"#00bfff\" fill-rule=\"nonzero\" stroke=\"#00bfff\" stroke-width=\"30.87167\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\" stroke-miterlimit=\"10\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" font-family=\"sans-serif\" font-weight=\"normal\" font-size=\"12\" text-anchor=\"start\" style=\"mix-blend-mode: normal\"/></svg>"
+    },
+    "within": {
+      "@id": "https://oculus-dev.harvardx.harvard.edu/manifests/huam:320567",
+      "@type": "sc:Manifest"
+    }
+  },
+  "@id": "d2eda2e2-951a-4f88-b4ec-03a7b25a5d07"
+}

@@ -4,7 +4,12 @@
 
     jQuery.extend(this, {
       annotation: null,
-      windowId: null
+      windowId: null,
+      config: {
+        plugins: '',
+        toolbar: '',
+        tags: []
+      }
     }, options);
 
     this.init();
@@ -14,13 +19,13 @@
     init: function() {
       var _this = this;
       var annoText = "",
+        selectedTags = [],
         tags = [];
-
       if (!jQuery.isEmptyObject(_this.annotation)) {
         if (jQuery.isArray(_this.annotation.resource)) {
           jQuery.each(_this.annotation.resource, function(index, value) {
             if (value['@type'] === "oa:Tag") {
-              tags.push(value.chars);
+              selectedTags.push(value.chars);
             } else {
               annoText = value.chars;
             }
@@ -29,10 +34,17 @@
           annoText = _this.annotation.resource.chars;
         }
       }
+      (this.config.tags || []).forEach(function(item) {
+        if (selectedTags.indexOf(item) < 0) {
+          tags.push(item);
+        }
+      });
+      tags = tags.concat(selectedTags);
 
       this.editorMarkup = this.editorTemplate({
         content: annoText,
-        tags : tags.join(" "),
+        selectedTags : selectedTags,
+        tags: tags,
         windowId : _this.windowId
       });
     },
@@ -42,14 +54,20 @@
         .prepend(this.editorMarkup);
       tinymce.init({
         selector: selector + ' textarea',
-        plugins: "image link media",
+        plugins: this.config.plugins,
         menubar: false,
         statusbar: false,
         toolbar_items_size: 'small',
-        toolbar: "bold italic | bullist numlist | link image media | removeformat",
+        toolbar: this.config.toolbar,
+        default_link_target:"_blank",
         setup: function(editor) {
           editor.on('init', function(args) {
             tinymce.execCommand('mceFocus', false, args.target.id);
+            jQuery('.tags-editor').select2({
+              tags: true,
+              placeholder: "Add tags here..."
+              // tokenSeparators: [',', ' ']  // spaces for backward compatibility
+            });
           });
         }
       });
@@ -60,13 +78,8 @@
     },
 
     createAnnotation: function() {
-      var tagText = this.editorContainer.find('.tags-editor').val(),
-        resourceText = tinymce.activeEditor.getContent(),
-        tags = [];
-      tagText = $.trimString(tagText);
-      if (tagText) {
-        tags = tagText.split(/\s+/);
-      }
+      var tags = this.editorContainer.find('.tags-editor').val(),
+        resourceText = tinymce.activeEditor.getContent();
 
       var motivation = [],
         resource = [],
@@ -96,13 +109,8 @@
     },
 
     updateAnnotation: function(oaAnno) {
-      var tagText = this.editorContainer.find('.tags-editor').val(),
-        resourceText = tinymce.activeEditor.getContent(),
-        tags = [];
-      tagText = $.trimString(tagText);
-      if (tagText) {
-        tags = tagText.split(/\s+/);
-      }
+      var selectedTags = this.editorContainer.find('.tags-editor').val(),
+        resourceText = tinymce.activeEditor.getContent();
 
       var motivation = [],
         resource = [];
@@ -115,9 +123,9 @@
         return value["@type"] !== "oa:Tag";
       });
       //re-add tagging if we have them
-      if (tags.length > 0) {
+      if (selectedTags.length > 0) {
         oaAnno.motivation.push("oa:tagging");
-        jQuery.each(tags, function(index, value) {
+        jQuery.each(selectedTags, function(index, value) {
           oaAnno.resource.push({
             "@type": "oa:Tag",
             "chars": value
@@ -131,9 +139,18 @@
       });
     },
 
-    editorTemplate: Handlebars.compile([
+    editorTemplate: $.Handlebars.compile([
       '<textarea class="text-editor" placeholder="{{t "comments"}}…">{{#if content}}{{content}}{{/if}}</textarea>',
-      '<input id="tags-editor-{{windowId}}" class="tags-editor" placeholder="{{t "addTagsHere"}}…" {{#if tags}}value="{{tags}}"{{/if}}>'
+      '<select id="tags-editor-{{windowId}}" class="tags-editor" multiple="true">{{#each tags}}',
+      '<option value="{{this}}" {{#ifContains ../selectedTags this }}selected="selected"{{/ifContains}}>{{this}}</option>',
+      '{{/each}}</select>'
     ].join(''))
   };
+
+  // Handlebars helper: Contains
+  // check if a value is contained in an array
+  $.Handlebars.registerHelper("ifContains", function( array, value, options ){
+    array = ( array instanceof Array ) ? array : [array];
+    return (array.indexOf(value) > -1) ? options.fn( this ) : "";
+  });
 }(Mirador));

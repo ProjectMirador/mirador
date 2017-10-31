@@ -22,7 +22,7 @@ To initialize Mirador, it needs to be attached to an existing HTML **div** throu
       }
     </style>
     <link rel="stylesheet" type="text/css" href="build/mirador/css/mirador-combined.css">
-    <script src="build/mirador/mirador.js"></script>
+    <script src="build/mirador/mirador.min.js"></script>
   </head>
   <body>
     <div id="viewer"></div>
@@ -43,11 +43,11 @@ To initialize Mirador, it needs to be attached to an existing HTML **div** throu
 
 Changing the height and width of Mirador's root element allows you to place it in an HTML page with other content.
 
-#### Manifests
+#### Manifests and Collections
 
-There are several different ways to add a manifest to your Mirador instance.
+There are several different ways to add content to your Mirador instance.
 
-The first way is to pass an object into the data array that identifies the desired manifestUri:
+The first way is to pass an object into the data array that identifies the desired manifest URI:
 
 ```` javascript
 Mirador({
@@ -58,7 +58,7 @@ Mirador({
 });
 ````
 
-Second, you can pass in an object pointing to a collectionUri, which contains a list of manifests that Mirador will parse:
+Second, you can pass in an object pointing to a collection URI, which contains a list of manifests that Mirador will parse:
 
 ```` javascript
 Mirador({
@@ -70,15 +70,17 @@ Mirador({
 ]);
 ````
 
-Note that the current version of Mirador can **only **parse collections that are one level deep. So if your collection data is a collection of collections, Mirador will not be able to find all of your manifests. However, supporting more deeply nested collections is on the Mirador roadmap.
+The current version of Mirador supports collections of any nesting depth. Collections are displayed on the content tree as folder entries, which can be clicked on to display manifests filed under them. Sub-collections can also be accessed by clicking on the drop-down caret (if available).
+
+![Collection tree](image_collection_tree.png)
 
 Within the application itself, there are two other ways for end users to add manifests to Mirador:
 
-1. If showAddFromURLBox has not been disabled, an end user can add a known IIIF manifest URL through the Add new object from URL box: 
+1. If showAddFromURLBox has not been disabled, an end user can add a known IIIF manifest or collection URL through the Add new object from URL box:
 
-![image alt text](image_1.png)
+![image alt text](image_add_object_box.png)
 
-2. Mirador can handle an end user dropping a IIIF manifest into a window using [IIIF Drag-and-drop](http://zimeon.github.io/iiif-dragndrop/): 
+2. Mirador can handle an end user dropping a IIIF manifest into a window using [IIIF Drag-and-drop](http://zimeon.github.io/iiif-dragndrop/):
 
 ![image alt text](image_2.gif)
 
@@ -88,9 +90,9 @@ By default, Mirador is configured to open with a single window. You can specify 
 
 ```` javascript
 Mirador({  id: "viewer",
-  data: [{ 
-  manifestUri: "http://iiif/id/and/uri/of/your/manifest.json", 
-  location: "My Repository" 
+  data: [{
+  manifestUri: "http://iiif/id/and/uri/of/your/manifest.json",
+  location: "My Repository"
   }],  
   windowObjects: [{
   loadedManifest: "http://iiif/id/and/uri/of/your/manifest.json",
@@ -108,14 +110,14 @@ There are four possible viewTypes in the current version of Mirador: ImageView (
 
 ##### BookView
 
-Like the [previous ](https://github.com/IIIF/mirador/wiki/Configuration-Guides#specifying-which-manifest-will-open)viewType, this configuration provides a minimal, zooming reader, similar to the Internet Archive Bookreader. The instance is configured to show a specific book of the developer's choosing, displayed in a 2-page spread. 
+Like the [previous ](https://github.com/IIIF/mirador/wiki/Configuration-Guides#specifying-which-manifest-will-open)viewType, this configuration provides a minimal, zooming reader, similar to the Internet Archive Bookreader. The instance is configured to show a specific book of the developer's choosing, displayed in a 2-page spread.
 
 ```` javascript
 Mirador({
 id: "viewer",
   data: [{
-  manifestUri: "http://iiif/id/and/uri/of/your/manifest.json", 
-  location: "My Repository" 
+  manifestUri: "http://iiif/id/and/uri/of/your/manifest.json",
+  location: "My Repository"
   }],
   windowObjects: [{
   loadedManifest: "http://iiif/id/and/uri/of/your/manifest.json",
@@ -129,11 +131,11 @@ id: "viewer",
 
 ##### ThumbnailsView
 
-The ThumbnailsView viewType configuration displays thumbnail images of all of the pages of the designated book laid out in a grid pattern, from which the user can select and click on a page to view more closely. Unlike the previous viewTypes, the images in ThumbnailsView are not zoomable. 
+The ThumbnailsView viewType configuration displays thumbnail images of all of the pages of the designated book laid out in a grid pattern, from which the user can select and click on a page to view more closely. Unlike the previous viewTypes, the images in ThumbnailsView are not zoomable.
 
 ![image alt text](image_5.png)
 
-##### ScrollView 
+##### ScrollView
 
 Like the previous viewType, ScrollView displays thumbnail images of the designated book, this time in a side-scrolling format, for the user to select from for closer viewing. As with ThumbnailsView, ScrollView does not display zoomable images.
 
@@ -148,8 +150,8 @@ Mirador({
 id: "viewer",
 layout: "1x2",
 data: [{
-manifestUri: "http://iiif.lib.harvard.edu/manifests/drs:5981093", 
-location: "Harvard University" 
+manifestUri: "http://iiif.lib.harvard.edu/manifests/drs:5981093",
+location: "Harvard University"
 },
 {
 manifestUri: "http://iiif.biblissima.fr/manifests/ark:/12148/btv1b84539771/manifest.json",
@@ -197,13 +199,13 @@ A barebones version of the viewer can be created by turning off the top menu bar
 
 ![image alt text](image_10.png)
 
-The configuration and initialisation for this mode looks like this: 
+The configuration and initialisation for this mode looks like this:
 
 ```` javascript
 Mirador({
   id: "viewer",
   buildPath: "",
-  data: [{ 
+  data: [{
   manifestUri: "http://iiif/id/and/uri/of/your/manifest.json",
     location: "My Repository"
     }
@@ -248,7 +250,7 @@ With the current version of Mirador, you can embed any number of viewers this wa
 
 ### Inside a div on same web page
 
-You can also embed Mirador inside a div. To do this, embed both the mirador-combined.css and mirador.js, the fixed-size div and the call to Mirador() as you would do with a full-screen setup. If you have set a CSS margin attribute in your main body tag, you need to add !important to it to prevent the mirador-combined.css from overriding it. 
+You can also embed Mirador inside a div. To do this, embed both the mirador-combined.css and mirador.js, the fixed-size div and the call to Mirador() as you would do with a full-screen setup. If you have set a CSS margin attribute in your main body tag, you need to add !important to it to prevent the mirador-combined.css from overriding it.
 
 With the current version of Mirador, you can only embed one viewer this way. If you want to embed multiple viewers you must use iframes.
 
@@ -279,7 +281,7 @@ With the current version of Mirador, you can only embed one viewer this way. If 
     }
   </style>
   <link rel="stylesheet" type="text/css" href="build/mirador/css/mirador-combined.css">
-  <script src="build/mirador/mirador.js"></script>
+  <script src="build/mirador/mirador.min.js"></script>
 </head>
 <body>
   <h1>Embedded Default Viewer</h1>
@@ -438,7 +440,7 @@ deleteAnnotation: function(annotationID, successCallback, errorCallback) {
     if (typeof successCallback === "function") {
       successCallback();
     }
-  } 
+  }
 
   // Unsuccessful, run error callback if specified
   catch (e) {
@@ -457,15 +459,15 @@ From the given Open Annotation item, find its ID and canvas ID, then replace the
 ```` javascript
 update: function(oaAnnotation, successCallback, errorCallback) {
   var _this = this,
-  
+
   // Find canvas ID and annotation ID
   key = oaAnnotation.on.full,
   annotationID = oaAnnotation['@id'];
- 	 
+
   try {
     // If annotation list isn't loaded, reload
     if (_this.annotationsList.length === 0) {
-      _this.annotationsList = _this.getAnnotationList(key); 
+      _this.annotationsList = _this.getAnnotationList(key);
     }
 
     // Find the matching annotation in the array and update it
@@ -512,10 +514,10 @@ From the given Open Annotation item, find its canvas ID, then add it to the anno
 ```` javascript
 create: function(oaAnnotation, successCallback, errorCallback) {
   var _this = this,
-  
+
   // Find the canvas to annotate on
   key = oaAnnotation.on.full;
-  
+
   try {
     // Reload the annotation list if empty
     if (_this.annotationsList.length === 0) {
@@ -525,7 +527,7 @@ create: function(oaAnnotation, successCallback, errorCallback) {
     // Generate a new annotation ID and insert into annotation list
     oaAnnotation["@id"] = key + '/' + Date.now();
     _this.annotationsList.push(oaAnnotation);
-    
+
     // Remove endpoint reference before JSON.stringify
     jQuery.each(_this.annotationsList, function(index, value) {
       delete value.endpoint;
@@ -629,7 +631,7 @@ All remote state endpoints must implement the following functions:
 
 Default options: For this example, the integrator should have a choice between local storage or session storage, and an optional prefix before each entry.
 
-```` javascript 
+```` javascript
 $.MyLocalStateEndpoint = function(opts) {
   this.options = {
     storage: window.localStorage,

@@ -34,14 +34,20 @@
       });
       this.setBackground = {
         'solid':function(el){
-          _this.setBackgroundImage(el,'border_type_1.png');
+          _this.setBackgroundImage(el, 'border_type_1.png');
         },
         'dashed':function(el){
           _this.setBackgroundImage(el, 'border_type_2.png');
         },
         'dotdashed':function(el){
-          _this.setBackgroundImage(el,  'border_type_3.png');
-        }
+          _this.setBackgroundImage(el, 'border_type_3.png');
+        },
+        'thick':function(el){
+          _this.setBackgroundImage(el, 'border_type_4.png');
+        },
+        'thickest':function(el){
+          _this.setBackgroundImage(el, 'border_type_5.png');
+        },
       };
       var annotationProperties = this.canvasControls.annotations;
 
@@ -71,7 +77,8 @@
           showContrast: this.canvasControls.imageManipulation.controls.contrast,
           showSaturate: this.canvasControls.imageManipulation.controls.saturate,
           showGrayscale: this.canvasControls.imageManipulation.controls.grayscale,
-          showInvert: this.canvasControls.imageManipulation.controls.invert
+          showInvert: this.canvasControls.imageManipulation.controls.invert,
+          showMirror: this.canvasControls.imageManipulation.controls.mirror
         })).appendTo(this.container.find('.mirador-manipulation-controls'));
         this.setQtips(this.container.find('.mirador-manipulation-controls'));
         this.manipulationElement.hide();
@@ -118,6 +125,8 @@
 
     addStrokeStylePicker:function(){
       this.setBackground.solid(this.container.find('.mirador-line-type .solid'));
+      this.setBackground.thick(this.container.find('.mirador-line-type .thick'));
+      this.setBackground.thickest(this.container.find('.mirador-line-type .thickest'));
       this.setBackground.dashed(this.container.find('.mirador-line-type .dashed'));
       this.setBackground.dotdashed(this.container.find('.mirador-line-type .dotdashed'));
     },
@@ -146,6 +155,9 @@
         },
         move: function(color) {
           _this.eventEmitter.publish('changeBorderColor.' + _this.windowId, color.toHexString());
+        },
+        show: function(color) {
+          _this.setColorPickerInCanvas('.borderColorPicker');
         },
         maxSelectionSize: 4,
         color: defaultBorderColor,
@@ -176,6 +188,9 @@
         move: function(color) {
           _this.eventEmitter.publish('changeFillColor.' + _this.windowId, [color.toHexString(), color.getAlpha()]);
         },
+        show: function(color) {
+          _this.setColorPickerInCanvas('.fillColorPicker');
+        },
         maxSelectionSize: 4,
         color: colorObj,
         palette: [
@@ -186,6 +201,16 @@
 
       _this.container.find(".fillColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>format_color_fill</i>");
       // _this.container.find(".fillColorPicker").next(".sp-replacer").append('<i class="fa fa-caret-down dropdown-icon"></i>');
+    },
+
+    setColorPickerInCanvas: function(selector) {
+      // check for the selector being out of canvas
+      var pickerContainer=this.container.find(selector).siblings('.sp-container').first(),
+      pickerOffset=pickerContainer.offset(),
+      windowWidth = this.state.windowsElements[this.windowId].width();
+      if (pickerContainer.width() + pickerOffset.left > windowWidth) {
+        pickerContainer.css('left', windowWidth - (pickerContainer.outerWidth()));
+      }
     },
 
     annotationShow: function() {
@@ -231,7 +256,7 @@
       });
     },
 
-    annotationTemplate: Handlebars.compile([
+    annotationTemplate: $.Handlebars.compile([
                                    '{{#if showEdit}}',
                                    '<a class="mirador-osd-pointer-mode hud-control selected" title="{{t "pointerTooltip"}}">',
                                    '<i class="fa fa-mouse-pointer"></i>',
@@ -248,6 +273,8 @@
                                    '<i class="fa fa-caret-down dropdown-icon"></i>',
                                    '<ul class="dropdown type-list">',
                                    '<li><i class="fa solid"></i> {{t "solid"}}</li>',
+                                   '<li><i class="fa thick"></i> {{t "thick"}}</li>',
+                                   '<li><i class="fa thickest"></i> {{t "thickest"}}</li>',
                                    '<li><i class="fa dashed"></i> {{t "dashed"}}</li>',
                                    '<li><i class="fa dotdashed"></i> {{t "dotDashed"}}</li>',
                                    '</ul>',
@@ -271,7 +298,7 @@
                                    '{{/if}}'
     ].join('')),
 
-    manipulationTemplate: Handlebars.compile([
+    manipulationTemplate: $.Handlebars.compile([
                                    '{{#if showRotate}}',
                                    '<a class="hud-control mirador-osd-rotate-right" title="{{t "rotateRightTooltip"}}">',
                                    '<i class="fa fa-lg fa-rotate-right"></i>',
@@ -313,6 +340,11 @@
                                    '<i class="material-icons">invert_colors</i>',
                                    '</a>',
                                    '{{/if}}',
+                                   '{{#if showMirror}}',
+                                   '<a class="hud-control mirador-osd-mirror" title="{{t "mirrorTooltip"}}">',
+                                   '<i class="material-icons">swap_horiz</i>',
+                                   '</a>',
+                                   '{{/if}}',
                                    '<a class="hud-control mirador-osd-reset" title="{{t "resetTooltip"}}">',
                                    '<i class="fa fa-lg fa-refresh"></i>',
                                    '</a>',
@@ -320,7 +352,7 @@
     ].join('')),
 
     // for accessibility, make sure to add aria-labels just like above
-    editorTemplate: Handlebars.compile([
+    editorTemplate: $.Handlebars.compile([
                                  '<div class="mirador-osd-context-controls hud-container">',
                                    '<a class="mirador-osd-back hud-control" role="button">',
                                    '<i class="fa fa-lg fa-arrow-left"></i>',

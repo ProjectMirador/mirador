@@ -20,6 +20,7 @@
 
   $.Slot.prototype = {
     init: function () {
+      this.events = [];
       this.element = jQuery(this.template({
         workspaceSlotCls: this.workspaceSlotCls,
         slotID: this.slotId
@@ -30,78 +31,76 @@
       this.listenForActions();
     },
 
-    listenForActions: function() {
+    listenForActions: function () {
       var _this = this;
 
-      _this.eventEmitter.subscribe('windowRemoved', function(event, id) {
-        if (_this.window && _this.window.id === id) {
-          // This prevents the save controller
-          // from attempting to re-save the window
-          // after having already removed it.
-          _this.clearSlot();
-        }
-      });
+      this.events = [
+        _this.eventEmitter.subscribe('slotRemoved', function (event, slot) {
+          if (_this.slotID === slot.slotID) {
+            _this.clearSlot();
+          }
+        }),
 
-      _this.eventEmitter.subscribe('layoutChanged', function(event, layoutRoot) {
-        // Must reset the slotAddress of the window.
-        if (_this.window) {
-          _this.window.slotAddress = _this.layoutAddress;
-          _this.eventEmitter.publish('windowSlotAddressUpdated', {
-            id: _this.window.id,
-            slotAddress: _this.window.slotAddress
-          });
-        }
-      });
+        _this.eventEmitter.subscribe('layoutChanged', function (event, layoutRoot) {
+          // Must reset the slotAddress of the window.
+          if (_this.window) {
+            _this.window.slotAddress = _this.layoutAddress;
+            _this.eventEmitter.publish('windowSlotAddressUpdated', {
+              id: _this.window.id,
+              slotAddress: _this.window.slotAddress
+            });
+          }
+        }),
 
-      _this.eventEmitter.subscribe('HIDE_REMOVE_SLOT', function(event) {
-        _this.element.find('.remove-slot-option').hide();
-        if (_this.window) {
-          _this.eventEmitter.publish('HIDE_REMOVE_OBJECT.' + _this.window.id);
-        }
-      });
+        _this.eventEmitter.subscribe('HIDE_REMOVE_SLOT', function (event) {
+          _this.element.find('.remove-slot-option').hide();
+          if (_this.window) {
+            _this.eventEmitter.publish('HIDE_REMOVE_OBJECT.' + _this.window.id);
+          }
+        }),
 
-      _this.eventEmitter.subscribe('SHOW_REMOVE_SLOT', function(event) {
-        _this.element.find('.remove-slot-option').show();
-        if (_this.window) {
-          _this.eventEmitter.publish('SHOW_REMOVE_OBJECT.' + _this.window.id);
-        }
-      });
+        _this.eventEmitter.subscribe('SHOW_REMOVE_SLOT', function (event) {
+          _this.element.find('.remove-slot-option').show();
+          if (_this.window) {
+            _this.eventEmitter.publish('SHOW_REMOVE_OBJECT.' + _this.window.id);
+          }
+        }),
 
-      _this.eventEmitter.subscribe('ADD_ITEM_FROM_WINDOW', function(event, id) {
-        if (_this.window && _this.window.id === id) {
-          _this.addItem();
-        }
-      });
+        _this.eventEmitter.subscribe('ADD_ITEM_FROM_WINDOW', function (event, id) {
+          if (_this.window && _this.window.id === id) {
+            _this.addItem();
+          }
+        }),
 
-      _this.eventEmitter.subscribe('REMOVE_SLOT_FROM_WINDOW', function(event, id) {
-        if (_this.window && _this.window.id === id) {
-          _this.eventEmitter.publish('REMOVE_NODE', _this);
-        }
-      });
+        _this.eventEmitter.subscribe('REMOVE_SLOT_FROM_WINDOW', function (event, id) {
+          if (_this.window && _this.window.id === id) {
+            _this.eventEmitter.publish('REMOVE_NODE', _this);
+          }
+        }),
 
-      _this.eventEmitter.subscribe('SPLIT_RIGHT_FROM_WINDOW', function(event, id) {
-        if (_this.window && _this.window.id === id) {
-          _this.eventEmitter.publish('SPLIT_RIGHT', _this);
-        }
-      });
+        _this.eventEmitter.subscribe('SPLIT_RIGHT_FROM_WINDOW', function (event, id) {
+          if (_this.window && _this.window.id === id) {
+            _this.eventEmitter.publish('SPLIT_RIGHT', _this);
+          }
+        }),
 
-      _this.eventEmitter.subscribe('SPLIT_LEFT_FROM_WINDOW', function(event, id) {
-        if (_this.window && _this.window.id === id) {
-          _this.eventEmitter.publish('SPLIT_LEFT', _this);
-        }
-      });
+        _this.eventEmitter.subscribe('SPLIT_LEFT_FROM_WINDOW', function (event, id) {
+          if (_this.window && _this.window.id === id) {
+            _this.eventEmitter.publish('SPLIT_LEFT', _this);
+          }
+        }),
 
-      _this.eventEmitter.subscribe('SPLIT_DOWN_FROM_WINDOW', function(event, id) {
-        if (_this.window && _this.window.id === id) {
-          _this.eventEmitter.publish('SPLIT_DOWN', _this);
-        }
-      });
+        _this.eventEmitter.subscribe('SPLIT_DOWN_FROM_WINDOW', function (event, id) {
+          if (_this.window && _this.window.id === id) {
+            _this.eventEmitter.publish('SPLIT_DOWN', _this);
+          }
+        }),
 
-      _this.eventEmitter.subscribe('SPLIT_UP_FROM_WINDOW', function(event, id) {
-        if (_this.window && _this.window.id === id) {
-          _this.eventEmitter.publish('SPLIT_UP', _this);
-        }
-      });
+        _this.eventEmitter.subscribe('SPLIT_UP_FROM_WINDOW', function (event, id) {
+          if (_this.window && _this.window.id === id) {
+            _this.eventEmitter.publish('SPLIT_UP', _this);
+          }
+        })];
     },
 
     bindEvents: function() {
@@ -172,33 +171,39 @@
 
           _this.eventEmitter.publish('ADD_WINDOW', windowConfig);
 
-        } 
-        
+        }
+
         else if (typeof imageInfoUrl !== 'undefined') {
           if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
-            _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', imageInfoUrl, "(Added from URL)");
+            _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [imageInfoUrl, "(Added from URL)"]);
           }
-        } 
+        }
         else if (typeof collectionUrl !== 'undefined'){
           jQuery.getJSON(collectionUrl).done(function (data, status, jqXHR) {
             if (data.hasOwnProperty('manifests')){
               jQuery.each(data.manifests, function (ci, mfst) {
                 if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
-                  _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', mfst['@id'], "(Added from URL)");
+                  _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [mfst['@id'], "(Added from URL)"]);
+                }
+              });
+            } else if (data.hasOwnProperty('members')){
+              jQuery.each(data.members, function (ci, mfst) {
+                if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
+                  _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [mfst['@id'], "(Added from URL)"]);
                 }
               });
             }
           });
 
-          //TODO: 
+          //TODO:
           //this works;
           //but you might want to check if some "publish" action would be better
           _this.addItem();
-          
+
         }
         else {
           if (!_this.state.getStateProperty('manifests')[imageInfoUrl]) {
-            _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', manifestUrl, "(Added from URL)");
+            _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [manifestUrl, "(Added from URL)"]);
           }
         }
 
@@ -236,9 +241,21 @@
         });
     },
 
-    clearSlot: function() {
+    destroyEvents:function(){
+      var _this = this;
+      this.events.forEach(function(event){
+        _this.eventEmitter.unsubscribe(event.name,event.handler);
+      });
+    },
+
+    clearSlot: function () {
+      this.destroyEvents();
+
+      // @TODO This is not a task that slots should fulfil
+      // This prevents the save controller
+      // from attempting to re-save the window
+      // after having already removed it.
       if (this.window) {
-        this.window.element.remove();
         delete this.window;
       }
     },
@@ -255,8 +272,9 @@
     },
 
     // template should be based on workspace type
-    template: Handlebars.compile([
+    template: $.Handlebars.compile([
                                  '<div id="{{slotID}}" class="{{workspaceSlotCls}}">',
+                                 '<a class="remove-slot-option"><i class="fa fa-times fa-lg fa-fw"></i> {{t "close"}}</a>',
                                  '<div class="slotIconContainer">',
                                  // '<a href="javascript:;" class="mirador-btn mirador-icon-window-menu" title="Replace object"><i class="fa fa-table fa-lg fa-fw"></i>',
                                  // '<ul class="dropdown slot-controls">',
@@ -281,7 +299,6 @@
                                  '<h1 class="dropMeMessage">{{t "dropToLoad"}}</h1>',
                                  '</div>',
                                  '<a class="addItemLink" role="button" aria-label="Add item"></a>',
-                                 '<a class="remove-slot-option"><i class="fa fa-times fa-lg fa-fw"></i> {{t "close"}}</a>',
       '<a class="dropMask"></a>',
                                  '</div>'
     ].join(''))
