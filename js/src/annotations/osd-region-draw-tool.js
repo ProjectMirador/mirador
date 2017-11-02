@@ -109,6 +109,8 @@
           if (shapeArray.length > 0) {
             _this.svgOverlay.restoreLastView(shapeArray);
             _this.annotationsToShapesMap[annotation['@id']] = shapeArray;
+          } else {
+            console.log("ERROR couldn't find a strategy for " + annotation["@id"]);
           }
         } catch(e) {
           console.log('ERROR OsdRegionDrawTool#render anno:', annotation, 'error:', e);
