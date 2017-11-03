@@ -1,7 +1,6 @@
 module.exports = function(grunt) {
 
   // ----------
-  grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks("gruntify-eslint");
@@ -185,25 +184,6 @@ module.exports = function(grunt) {
       }
     },
 
-    compress: {
-      zip: {
-        options: {
-          archive: 'build/mirador.zip'
-        },
-        files: [
-          { expand: true, cwd: 'build/', src: ['mirador/**'] }
-        ]
-      },
-      tar: {
-        options: {
-          archive: 'build/mirador.tar'
-        },
-        files: [
-          { expand: true, cwd: 'build/', src: [ 'mirador/**' ] }
-        ]
-      }
-    },
-
     connect: {
       server: {
         options: {
@@ -289,27 +269,17 @@ module.exports = function(grunt) {
   });
   // ----------
   // Lint task
-  grunt.registerTask('lint', ['jshint', 'eslint'])
+  grunt.registerTask('lint', ['jshint', 'eslint']);
 
   // ----------
   // Build task.
   // Cleans out the build folder and builds the code and images into it, checking lint.
-  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'lint', 'less', 'concat:css', 'uglify', 'cssmin', 'copy']);
+  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'lint', 'less', 'concat', 'uglify', 'cssmin', 'copy']);
 
   // ----------
   // Dev Build task.
   // Build, but skip the time-consuming and obscurantist minification and uglification.
   grunt.registerTask('dev_build', [ 'clean:build', 'git-describe', 'lint', 'less', 'concat', 'copy']);
-
-  // ----------
-  // Package task.
-  // Builds and creates the .zip and .tar files.
-  grunt.registerTask('package', ['build', 'compress']);
-
-  // ----------
-  // Publish task.
-  // Cleans the built files out of the release folder and copies newly built ones over.
-  grunt.registerTask('publish', ['package', 'clean:release', 'copy:release']);
 
   // ----------
   // Default task.
