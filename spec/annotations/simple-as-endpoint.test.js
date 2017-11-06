@@ -75,7 +75,7 @@ describe('SimpleASEndpoint', function() {
       subject.search({uri: "http://sas.example.net"});
       expect(successCallback).not.toHaveBeenCalled();
       expect(errorCallback).not.toHaveBeenCalled();
-      expect(console.log).toHaveBeenCalledWith("The request for annotations has caused an error for endpoint: http://sas.example.net");
+      expect(console.log).toHaveBeenCalledWith("The request for annotations has caused an error for endpoint: http://sas.example.net due to undefined");
     });
     it('should run callback on failure if provided', function() {
       ajaxSuccess = false;
@@ -208,4 +208,4 @@ describe('SimpleASEndpoint', function() {
       expect(subject.userAuthorize('admin', {})).toBe(true);
     });
   });
-}); 
+});

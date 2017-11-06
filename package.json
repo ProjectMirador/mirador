@@ -1,7 +1,8 @@
 {
   "name": "mirador",
-  "version": "2.5.1",
+  "version": "2.6.1",
   "description": "Multi-window image viewer, a web-based tool to support researcher goals",
+  "files": ["dist/*"],
   "repository": {
     "type": "git",
     "url": "https://github.com/ProjectMirador/mirador"
@@ -52,6 +53,7 @@
     "test": "./node_modules/.bin/karma start ./karma.conf.js",
     "travis": "./node_modules/.bin/grunt ci --verbose --force & npm run test",
     "update_demo": "./bin/update_demo.sh",
+    "release": "./bin/create_release.sh",
     "lint": "./node_modules/.bin/eslint js/src"
   },
   "dependencies": {
