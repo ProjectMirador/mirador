@@ -1,16 +1,16 @@
 # remove previous packages
-rm -rf build/mirador*
+rm -rf build dist
 
 # build package
-node_modules/.bin/grunt package
+node_modules/.bin/grunt build
 
 # mk tmp release dir
 mkdir -p build/tmp/build/mirador
 
-# unzip build
-unzip build/mirador.zip -d build/tmp/build
+# copy mirador build into tmp folder
+cp -r build/mirador/* build/tmp/build/mirador
 
-# add example
+# add example(s)
 cp examples/example.html build/tmp/build
 
 cd build/tmp
@@ -22,4 +22,10 @@ mv build/build.zip ../
 tar -czvf build/build.tar.gz build/
 mv build/build.tar.gz ../
 
-cd -
+# remove temporary files
+cd .. && rm -rf tmp
+
+# make npm dist directory
+cd ..
+mkdir dist
+cp -r build/mirador/* dist
