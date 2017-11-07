@@ -2,7 +2,7 @@
 rm -rf build/mirador*
 
 # build package
-node_modules/.bin/grunt package
+node_modules/.bin/grunt build
 
 # mk tmp release dir
 mkdir build/tmp
@@ -27,6 +27,7 @@ cp -R build/tmp/mirador/themes demo
 
 # Copy over files
 cp build/tmp/mirador/mirador.min.js demo
+cp build/tmp/mirador/mirador.js demo
 cp build/tmp/mirador/ZeroClipboard.swf demo
 
 # Clean up extra files
