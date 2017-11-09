@@ -77,8 +77,6 @@ Mirador uses the node.js runtime for its development environment, and to bundle 
 #### The NPM package manager
 Dependencies are managed primarily with the NPM package manager, and releases are primarily distributed over npm. It is recommended that any new dependencies being added are tracked with a specific version in the `package.json` and installed with npm. The final build dependency is then copied into the `js/lib` directory for inclusion into Mirador. Only this copied final version of the dependency should be versioned (added to git).
 #### Javascript Resources
-#### Bower Package Manager [DEPRECATED]
-Some resources are managed with bower, but this is being phased out. It is recommended that no new dependency be added through bower unless it is truly unavailable on NPM.
 ### Project Management with Grunt
 [Grunt](http://gruntjs.com/) is a utility for managing repetitive tasks involved in the development process, such as building, linting, format-checking, and compressing files, running tests and generating coverage reports, and reloading the browser on file changes (for interactive feedback during feature development). A variety of tasks have been automated for developer convenience.
 #### Building and Compressing
