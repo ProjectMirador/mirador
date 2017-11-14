@@ -29,7 +29,7 @@ module.exports = function(grunt) {
     'node_modules/bootbox/bootbox.js',
     'node_modules/jquery.scrollto/jquery.scrollTo.min.js',
     'node_modules/jstree/dist/jstree.min.js',
-    'js/lib/jquery.qtip.min.js',
+    'node_modules/qtip2/dist/jquery.qtip.min.js',
     'node_modules/javascript-state-machine/state-machine.min.js',
     'node_modules/tinymce/tinymce.min.js',
     'node_modules/handlebars/dist/handlebars.js',
@@ -44,9 +44,9 @@ module.exports = function(grunt) {
     'node_modules/i18next/i18next.min.js',
     'node_modules/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js',
     'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
-    'bower_components/simplePagination.js/jquery.simplePagination.js',
+    'node_modules/simple-pagination.js/jquery.simplePagination.js',
     'js/lib/modernizr.custom.js',
-    'js/lib/sanitize-html.min.js',
+    'node_modules/sanitize-html/dist/sanitize-html.min.js',
     'node_modules/iiif-evented-canvas/dist/iiif-evented-canvas.umd.min.js',
     'node_modules/iiif-layout-functions/dist/iiif-layout-functions.umd.min.js',
     'node_modules/select2/dist/js/select2.full.min.js'
@@ -97,12 +97,12 @@ module.exports = function(grunt) {
           'css/jquery-ui.min.css',
           'node_modules/jstree/dist/themes/default/style.min.css',
           'css/collection-tree-mod.css',
-          'css/jquery.qtip.min.css',
+          'node_modules/qtip2/dist/jquery.qtip.min.css',
           'node_modules/spectrum-colorpicker/spectrum.css',
           'node_modules/select2/dist/css/select2.min.css',
           'css/mirador.css',
           'css/material-icons.css',
-          'bower_components/simplePagination.js/simplePagination.css'
+          'node_modules/simple-pagination.js/simplePagination.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'
       }
@@ -173,9 +173,6 @@ module.exports = function(grunt) {
         }, {
           src: 'js/lib/parse.min.js',
           dest: 'build/mirador/parse.min.js'
-        }, {
-          src: 'js/lib/ZeroClipboard.swf',
-          dest: 'build/mirador/ZeroClipboard.swf'
         }, {
           expand: true,
           src: 'locales/**',
