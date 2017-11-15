@@ -151,7 +151,7 @@ $.SimpleASEndpoint = function (options) {
       delete annotation.fullId;
       delete annotation.endpoint;
       jQuery.ajax({
-        url: _this.url + '/update/' + encodeURIComponent(annotationID) + '?APIKey=' + _this.APIKey, // this.prefix+
+        url: _this.url + '/update?APIKey=' + _this.APIKey, // this.prefix+
         type: 'POST',
         dataType: 'json',
         headers: {
