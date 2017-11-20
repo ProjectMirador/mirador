@@ -17,12 +17,21 @@ describe('ManifestsPanel', function() {
 
   it('should listen for actions', function() {
     var manifest = new Mirador.Manifest(null, 'Dummy Location', this.dummyManifestContent);
+    var collection = new Mirador.Collection(null, 'Dummy Location', {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://example.org/iiif/collection/top",
+      "@type": "sc:Collection",
+      "label": "Top Level Collection for Example Organization"
+    });
     spyOn(this.panel, 'onPanelVisible');
     spyOn(this.panel, 'onManifestReceived');
+    spyOn(this.panel, 'onCollectionReceived');
     this.eventEmitter.publish('manifestsPanelVisible.set');
     this.eventEmitter.publish('manifestReceived', manifest);
+    this.eventEmitter.publish('collectionReceived', collection, "http://example.org/iiif/collection/top")
     expect(this.panel.onPanelVisible).toHaveBeenCalled();
     expect(this.panel.onManifestReceived).toHaveBeenCalled();
+    expect(this.panel.onCollectionReceived).toHaveBeenCalled();
   });
   
   it('should bind events', function() {
@@ -121,4 +130,28 @@ describe('ManifestsPanel', function() {
     expect(this.panel.manifestListItems.length).toBe(1);
   });
 
+  it('should receive a collection and grab its manifests', function() {
+    spyOn(this.eventEmitter, 'publish');
+    var collection = new Mirador.Collection(null, 'Digital Library @ Villanova', {
+      "@context": "http://iiif.io/api/presentation/2/context.json",
+      "@id": "http://example.org/iiif/collection/top",
+      "@type": "sc:Collection",
+      "label": "Top Level Collection for Example Organization",
+      "manifests": [
+        {
+          "label": "The 'Adventurer's Oaths' from the Cardboard Drama of Esmeralda Grande",
+          "@id": "https://digital.library.villanova.edu/Item/vudl:2176/Manifest",
+          "@type": "sc:Manifest"
+        },
+        {
+          "label": "The Adventures of Seumas Beg The Visit From Abroad",
+          "@id": "https://digital.library.villanova.edu/Item/vudl:2112/Manifest",
+          "@type": "sc:Manifest"
+        }
+      ]
+    });
+    this.panel.onCollectionReceived(null, collection);
+    expect(this.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', ["https://digital.library.villanova.edu/Item/vudl:2176/Manifest", "Digital Library @ Villanova"]);
+    expect(this.eventEmitter.publish).toHaveBeenCalledWith('ADD_MANIFEST_FROM_URL', ["https://digital.library.villanova.edu/Item/vudl:2112/Manifest", "Digital Library @ Villanova"]);
+  })
 });
