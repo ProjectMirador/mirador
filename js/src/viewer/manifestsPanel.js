@@ -56,6 +56,10 @@
           _this.eventEmitter.subscribe('manifestReceived', function(event, newManifest) {
             _this.onManifestReceived(event, newManifest);
           });
+          
+          _this.eventEmitter.subscribe('collectionReceived', function(event, newCollection) {
+            _this.onCollectionReceived(event, newCollection);
+          });
         },
 
         bindEvents: function() {
@@ -153,6 +157,13 @@
           _this.element.find('#manifest-search').keyup();
           this.element.find('.select-results').scroll();
         },
+        
+        onCollectionReceived: function(event, newCollection) {
+          var _this = this;
+          jQuery.each(newCollection.getManifestUris(), function(_, v) {
+            _this.eventEmitter.publish('ADD_MANIFEST_FROM_URL', [v, newCollection.location]);
+          });
+        },
 
         template: $.Handlebars.compile([
           '<div id="manifest-select-menu">',
@@ -163,7 +174,7 @@
                 '{{#if showURLBox}}',
                   '<form action="" id="url-load-form">',
                     '<label for="url-loader">{{t "addNewObject"}}:</label>',
-                    '<input type="text" id="url-loader" name="url-load" placeholder="http://...">',
+                    '<input type="text" id="url-loader" name="url-load" placeholder="https://...">',
                     '<input type="submit" value="{{t "load"}}">',
                   '</form>',
                 '{{/if}}',
