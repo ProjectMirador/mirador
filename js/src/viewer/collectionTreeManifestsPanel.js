@@ -554,7 +554,7 @@
                 '{{#if showURLBox}}',
                   '<form action="" id="url-load-form">',
                     '<label for="url-loader">{{t "addNewObject"}}:</label>',
-                    '<input type="text" id="url-loader" name="url-load" placeholder="http://...">',
+                    '<input type="text" id="url-loader" name="url-load" placeholder="https://...">',
                     '<input type="submit" value="{{t "load"}}">',
                   '</form>',
                 '{{/if}}',
