@@ -49,7 +49,7 @@
         load: 'unspecific',
         debug: false,
         backend: {
-          loadPath: _this.state.getStateProperty('buildPath') + _this.state.getStateProperty('i18nPath')+'{{lng}}/{{ns}}.json'
+          loadPath: _this.state.getStateProperty('i18nPath')+'{{lng}}/{{ns}}.json'
         }
       };
 
@@ -297,7 +297,7 @@
         });
       }
     },
-    
+
     addCollectionFromUrl: function(url, location, content) {
       var _this = this,
         collection;

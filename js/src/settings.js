@@ -172,7 +172,7 @@
 
     'buildPath' : 'build/mirador/',
 
-    'i18nPath' : 'locales/',
+    'i18nPath' : 'build/mirador/locales/',
 
     'imagesPath' : 'images/',
 
@@ -217,7 +217,7 @@
       'options': {
       }
     },
-    
+
     'sharingEndpoint': {
       'url': '',
       'storeId': 123,
