@@ -1,0 +1,19 @@
+{
+  "name": "minimal_redux_poc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:umd": "webpack --output-filename index.umd.js"
+  },
+  "author": "Drew Winget <scipioaffricanus@gmail.com> (https://aeschylus.net/)",
+  "license": "MIT",
+  "dependencies": {
+    "jest": "21.2.1",
+    "redux": "3.7.2"
+  },
+  "devDependencies": {
+    "webpack": "3.10.0"
+  }
+}

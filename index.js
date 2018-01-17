@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-import { actions } from 'actions';
+// import { actions } from './actions';
 
 const initialState = {
   currentCanvas: 0
@@ -17,14 +17,21 @@ const initialState = {
  * follows a different convention (such as function maps) if it makes sense for your
  * project.
  */
+
 function stateCore(state = initialState, action) {
   switch (action.type) {
   case 'INCREMENT':
-    return state.currentCanvas + 1
+    console.log('incremented');
+    return Object.assign(state,{
+      currentCanvas: state.currentCanvas + 1
+    });
   case 'DECREMENT':
-    return state.currentCanvas - 1
+    console.log('decrement');
+    return Object.assign(state,{
+      currentCanvas: state.currentCanvas - 1
+    });
   default:
-    return state
+    return state;
   }
 }
 
@@ -42,6 +49,7 @@ store.subscribe(() =>
 
 // The only way to mutate the internal state is to dispatch an action.
 // The actions can be serialized, logged or stored and later replayed.
+// 0
 store.dispatch({ type: 'INCREMENT' })
 // 1
 store.dispatch({ type: 'INCREMENT' })
