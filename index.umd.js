@@ -709,12 +709,12 @@ function compose() {
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__actionTypes__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__coreState__ = __webpack_require__(25);
+
+
 
 // import { actions } from './actions';
-
-const initialState = {
-  currentCanvas: 0
-}
 
 /**
  * This is a reducer, a pure function with (state, action) => state signature.
@@ -729,17 +729,17 @@ const initialState = {
  * project.
  */
 
-function stateCore(state = initialState, action) {
+function stateCore(state = __WEBPACK_IMPORTED_MODULE_2__coreState__["a" /* default */], action) {
   switch (action.type) {
-  case 'INCREMENT':
+  case __WEBPACK_IMPORTED_MODULE_1__actionTypes__["b" /* INCREMENT */]:
     console.log('incremented');
     return Object.assign(state,{
-      currentCanvas: state.currentCanvas + 1
+      canvasIndex: state.canvasIndex + 1
     });
-  case 'DECREMENT':
+  case __WEBPACK_IMPORTED_MODULE_1__actionTypes__["a" /* DECREMENT */]:
     console.log('decrement');
     return Object.assign(state,{
-      currentCanvas: state.currentCanvas - 1
+      canvasIndex: state.canvasIndex - 1
     });
   default:
     return state;
@@ -748,25 +748,17 @@ function stateCore(state = initialState, action) {
 
 // Create a Redux store holding the state of your app.
 // Its API is { subscribe, dispatch, getState }.
-let store = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["a" /* createStore */])(stateCore)
+const store = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["a" /* createStore */])(stateCore);
+/* harmony export (immutable) */ __webpack_exports__["store"] = store;
+
 
 // You can use subscribe() to update the UI in response to state changes.
 // Normally you'd use a view binding library (e.g. React Redux) rather than subscribe() directly.
 // However it can also be handy to persist the current state in the localStorage.
 
-store.subscribe(() =>
-  console.log(store.getState())
-)
-
-// The only way to mutate the internal state is to dispatch an action.
-// The actions can be serialized, logged or stored and later replayed.
-// 0
-store.dispatch({ type: 'INCREMENT' })
-// 1
-store.dispatch({ type: 'INCREMENT' })
-// 2
-store.dispatch({ type: 'DECREMENT' })
-// 1
+// store.subscribe(() =>
+//   console.log(store.getState())
+// )
 
 
 /***/ }),
@@ -1377,6 +1369,59 @@ function applyMiddleware() {
     };
   };
 }
+
+/***/ }),
+/* 24 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const INCREMENT = 'INCREMENT';
+/* harmony export (immutable) */ __webpack_exports__["b"] = INCREMENT;
+
+const DECREMENT = 'DECREMENT';
+/* harmony export (immutable) */ __webpack_exports__["a"] = DECREMENT;
+
+const REQUEST_MANIFEST = 'REQUEST_MANIFEST';
+/* unused harmony export REQUEST_MANIFEST */
+
+const RECEIVE_MANIFEST = 'RECEIVE_MANIFEST';
+/* unused harmony export RECEIVE_MANIFEST */
+
+const ADD_MANIFEST = 'ADD_MANIFEST';
+/* unused harmony export ADD_MANIFEST */
+
+const ADD_WINDOW = 'ADD_WINDOW';
+/* unused harmony export ADD_WINDOW */
+
+const MOVE_WINDOW = 'MOVE_WINDOW';
+/* unused harmony export MOVE_WINDOW */
+
+const PICK_WINDOWING_SYSTEM = 'PICK_WINDOWING_SYSTEM';
+/* unused harmony export PICK_WINDOWING_SYSTEM */
+
+
+
+// Topics for understanding
+// redux modules for nested stores
+// state normalisation
+// (normalizer library)
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+  collectionIndex: 0,
+  manifestIndex: 0,
+  sequenceIndex: 0,
+  canvasIndex: 0,
+  rangeId: null,
+  xywh: null,
+  rotation: null
+});
+
 
 /***/ })
 /******/ ]);

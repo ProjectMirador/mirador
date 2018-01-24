@@ -1,9 +1,7 @@
 import { createStore } from 'redux';
+import * as ActionTypes from './actionTypes'
+import initialState from './coreState'
 // import { actions } from './actions';
-
-const initialState = {
-  currentCanvas: 0
-}
 
 /**
  * This is a reducer, a pure function with (state, action) => state signature.
@@ -20,15 +18,15 @@ const initialState = {
 
 function stateCore(state = initialState, action) {
   switch (action.type) {
-  case 'INCREMENT':
+  case ActionTypes.INCREMENT:
     console.log('incremented');
     return Object.assign(state,{
-      currentCanvas: state.currentCanvas + 1
+      canvasIndex: state.canvasIndex + 1
     });
-  case 'DECREMENT':
+  case ActionTypes.DECREMENT:
     console.log('decrement');
     return Object.assign(state,{
-      currentCanvas: state.currentCanvas - 1
+      canvasIndex: state.canvasIndex - 1
     });
   default:
     return state;
