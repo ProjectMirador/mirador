@@ -7,3 +7,9 @@ To run the module, first make sure you are in this directory (`minimal_redux_poc
 2. Open a nodejs console (type `node`) in this directory.
 3. Require the module under a variable name, for example, `state = require('./index.umd')`.
 4. The exported module currently has most of its functionality under the "store" property, so you may prefer to include it with `state = require('./index.umd').store`.
+
+Example Action
+
+To increment the canvas index run:
+
+`state.store.dispatch({type: "INCREMENT"})`
