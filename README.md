@@ -1,4 +1,4 @@
-** Running the module
+** Running the module **
 This module is intended to be a console-only version of the a Mirador-like viewer, with tests and the ability to manipulate the state tree through actions in the console.
 
 To run the module, first make sure you are in this directory (`minimal_redux_poc`), then:
