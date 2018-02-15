@@ -70,11 +70,67 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const ActionTypes = {
+  FOCUS_WINDOW: 'FOCUS_WINDOW',
+  REQUEST_MANIFEST: 'REQUEST_MANIFEST',
+  RECEIVE_MANIFEST: 'RECEIVE_MANIFEST',
+  ADD_MANIFEST: 'ADD_MANIFEST',
+  ADD_WINDOW: 'ADD_WINDOW',
+  NEXT_CANVAS: 'NEXT_CANVAS',
+  PREVIOUS_CANVAS: 'PREVIOUS_CANVAS',
+  REMOVE_WINDOW: 'REMOVE_WINDOW',
+  PICK_WINDOWING_SYSTEM: 'PICK_WINDOWING_SYSTEM'
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (ActionTypes);
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__combineReducers__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__compose__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(7);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_0__createStore__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_1__combineReducers__["a"]; });
+/* unused harmony reexport bindActionCreators */
+/* unused harmony reexport applyMiddleware */
+/* unused harmony reexport compose */
+
+
+
+
+
+
+
+/*
+* This is a dummy function to check if the function name has been altered by minification.
+* If the function has been minified and NODE_ENV !== 'production', warn the user.
+*/
+function isCrushed() {}
+
+if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+  Object(__WEBPACK_IMPORTED_MODULE_5__utils_warning__["a" /* default */])('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
+}
+
+
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -264,14 +320,14 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 1 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActionTypes; });
 /* harmony export (immutable) */ __webpack_exports__["b"] = createStore;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_symbol_observable__);
 
 
@@ -523,13 +579,13 @@ var ActionTypes = {
 }
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getPrototype_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getPrototype_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(17);
 
 
 
@@ -595,11 +651,11 @@ function isPlainObject(value) {
 
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__root_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__root_js__ = __webpack_require__(11);
 
 
 /** Built-in value references. */
@@ -609,7 +665,7 @@ var Symbol = __WEBPACK_IMPORTED_MODULE_0__root_js__["a" /* default */].Symbol;
 
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports) {
 
 var g;
@@ -636,7 +692,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -664,7 +720,7 @@ function warning(message) {
 }
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -703,108 +759,51 @@ function compose() {
 }
 
 /***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__actionTypes__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__coreState__ = __webpack_require__(25);
-
-
-
-// import { actions } from './actions';
-
-/**
- * This is a reducer, a pure function with (state, action) => state signature.
- * It describes how an action transforms the state into the next state.
- *
- * The shape of the state is up to you: it can be a primitive, an array, an object,
- * or even an Immutable.js data structure. The only important part is that you should
- * not mutate the state object, but return a new object if the state changes.
- *
- * In this example, we use a `switch` statement and strings, but you can use a helper that
- * follows a different convention (such as function maps) if it makes sense for your
- * project.
- */
-
-function stateCore(state = __WEBPACK_IMPORTED_MODULE_2__coreState__["a" /* default */], action) {
-  switch (action.type) {
-  case __WEBPACK_IMPORTED_MODULE_1__actionTypes__["b" /* INCREMENT */]:
-    console.log('incremented');
-    return Object.assign(state,{
-      canvasIndex: state.canvasIndex + 1
-    });
-  case __WEBPACK_IMPORTED_MODULE_1__actionTypes__["a" /* DECREMENT */]:
-    console.log('decrement');
-    return Object.assign(state,{
-      canvasIndex: state.canvasIndex - 1
-    });
-  default:
-    return state;
-  }
-}
-
-// Create a Redux store holding the state of your app.
-// Its API is { subscribe, dispatch, getState }.
-const store = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["a" /* createStore */])(stateCore);
-/* harmony export (immutable) */ __webpack_exports__["store"] = store;
-
-
-// You can use subscribe() to update the UI in response to state changes.
-// Normally you'd use a view binding library (e.g. React Redux) rather than subscribe() directly.
-// However it can also be handy to persist the current state in the localStorage.
-
-// store.subscribe(() =>
-//   console.log(store.getState())
-// )
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__combineReducers__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__compose__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(5);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__createStore__["b"]; });
-/* unused harmony reexport combineReducers */
-/* unused harmony reexport bindActionCreators */
-/* unused harmony reexport applyMiddleware */
-/* unused harmony reexport compose */
-
-
-
-
-
-
-
-/*
-* This is a dummy function to check if the function name has been altered by minification.
-* If the function has been minified and NODE_ENV !== 'production', warn the user.
-*/
-function isCrushed() {}
-
-if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
-  Object(__WEBPACK_IMPORTED_MODULE_5__utils_warning__["a" /* default */])('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
-}
-
-
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
-
-/***/ }),
 /* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRawTag_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__objectToString_js__ = __webpack_require__(13);
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__reducers_index__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(29);
+// Topics for understanding
+// redux modules for nested stores
+// state normalisation
+// (normalizer library)
+
+
+
+
+// import * as Actions from './actions';
+
+// Create a Redux store holding the state of your app.
+// Its API is { subscribe, dispatch, getState }.
+const store = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["b" /* createStore */])(__WEBPACK_IMPORTED_MODULE_1__reducers_index__["a" /* rootReducer */]);
+/* harmony export (immutable) */ __webpack_exports__["store"] = store;
+
+
+const actions = __WEBPACK_IMPORTED_MODULE_2__actions__;
+/* harmony export (immutable) */ __webpack_exports__["actions"] = actions;
+
+
+/*
+ * You can use subscribe() to update the UI in response to state changes.
+ * Normally you'd use a view binding library (e.g. React Redux) rather than subscribe() directly.
+ * However it can also be handy to persist the current state in the localStorage.
+ */
+
+store.subscribe(() => console.log('Current state:', store.getState()));
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRawTag_js__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__objectToString_js__ = __webpack_require__(14);
 
 
 
@@ -836,11 +835,11 @@ function baseGetTag(value) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__ = __webpack_require__(12);
 
 
 /** Detect free variable `self`. */
@@ -853,7 +852,7 @@ var root = __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__["a" /* default */] || fr
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -862,14 +861,14 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 /* harmony default export */ __webpack_exports__["a"] = (freeGlobal);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(6)))
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(5);
 
 
 /** Used for built-in method references. */
@@ -919,7 +918,7 @@ function getRawTag(value) {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -948,11 +947,11 @@ function objectToString(value) {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__overArg_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__overArg_js__ = __webpack_require__(16);
 
 
 /** Built-in value references. */
@@ -962,7 +961,7 @@ var getPrototype = Object(__WEBPACK_IMPORTED_MODULE_0__overArg_js__["a" /* defau
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -984,7 +983,7 @@ function overArg(func, transform) {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1020,14 +1019,14 @@ function isObjectLike(value) {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(18);
+module.exports = __webpack_require__(19);
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1037,7 +1036,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ponyfill = __webpack_require__(20);
+var _ponyfill = __webpack_require__(21);
 
 var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -1060,10 +1059,10 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(19)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(20)(module)))
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -1091,7 +1090,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1120,14 +1119,14 @@ function symbolObservablePonyfill(root) {
 };
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* unused harmony export default */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_es_isPlainObject__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_warning__ = __webpack_require__(5);
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = combineReducers;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_es_isPlainObject__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_warning__ = __webpack_require__(7);
 
 
 
@@ -1258,10 +1257,10 @@ function combineReducers(reducers) {
     return hasChanged ? nextState : state;
   };
 }
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1315,12 +1314,12 @@ function bindActionCreators(actionCreators, dispatch) {
 }
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export default */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__compose__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__compose__ = __webpack_require__(8);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 
@@ -1371,56 +1370,166 @@ function applyMiddleware() {
 }
 
 /***/ }),
-/* 24 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-const INCREMENT = 'INCREMENT';
-/* harmony export (immutable) */ __webpack_exports__["b"] = INCREMENT;
-
-const DECREMENT = 'DECREMENT';
-/* harmony export (immutable) */ __webpack_exports__["a"] = DECREMENT;
-
-const REQUEST_MANIFEST = 'REQUEST_MANIFEST';
-/* unused harmony export REQUEST_MANIFEST */
-
-const RECEIVE_MANIFEST = 'RECEIVE_MANIFEST';
-/* unused harmony export RECEIVE_MANIFEST */
-
-const ADD_MANIFEST = 'ADD_MANIFEST';
-/* unused harmony export ADD_MANIFEST */
-
-const ADD_WINDOW = 'ADD_WINDOW';
-/* unused harmony export ADD_WINDOW */
-
-const MOVE_WINDOW = 'MOVE_WINDOW';
-/* unused harmony export MOVE_WINDOW */
-
-const PICK_WINDOWING_SYSTEM = 'PICK_WINDOWING_SYSTEM';
-/* unused harmony export PICK_WINDOWING_SYSTEM */
-
-
-
-// Topics for understanding
-// redux modules for nested stores
-// state normalisation
-// (normalizer library)
-
-
-/***/ }),
 /* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony default export */ __webpack_exports__["a"] = ({
-  collectionIndex: 0,
-  manifestIndex: 0,
-  sequenceIndex: 0,
-  canvasIndex: 0,
-  rangeId: null,
-  xywh: null,
-  rotation: null
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__action_types__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__workspace__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__windows__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__manifests__ = __webpack_require__(28);
+
+
+
+
+
+
+
+
+/**
+ * This is a reducer, a pure function with (state, action) => state signature.
+ * It describes how an action transforms the state into the next state.
+ *
+ * The shape of the state is up to you: it can be a primitive, an array, an object,
+ * or even an Immutable.js data structure. The only important part is that you should
+ * not mutate the state object, but return a new object if the state changes.
+ *
+ * In this example, we use a `switch` statement and strings, but you can use a helper that
+ * follows a different convention (such as function maps) if it makes sense for your
+ * project.
+ */
+
+const rootReducer = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["a" /* combineReducers */])({
+  workspace: __WEBPACK_IMPORTED_MODULE_2__workspace__["a" /* workspaceReducer */],
+  windows: __WEBPACK_IMPORTED_MODULE_3__windows__["a" /* windowsReducer */],
+  manifests: __WEBPACK_IMPORTED_MODULE_4__manifests__["a" /* manifestsReducer */]
 });
+/* harmony export (immutable) */ __webpack_exports__["a"] = rootReducer;
+
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__action_types__ = __webpack_require__(0);
+
+
+const workspaceReducer = (state = {}, action) => {
+  console.log('Reducing', action.type);
+
+  switch (action.type) {
+    case __WEBPACK_IMPORTED_MODULE_0__action_types__["a" /* default */].FOCUS_WINDOW:
+      return Object.assign({}, state, {focusedWindowId: action.windowId});
+    default:
+      return state;
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = workspaceReducer;
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__action_types__ = __webpack_require__(0);
+
+
+const initialWindowState = {
+  canvasIndex: 0
+};
+
+const windowsReducer = (state = [], action) => {
+  console.log('Reducing', action.type);
+  switch (action.type) {
+    case __WEBPACK_IMPORTED_MODULE_0__action_types__["a" /* default */].ADD_WINDOW:
+      const window = {
+        id: `window.${new Date().valueOf()}`
+      };
+      return state.concat(Object.assign({}, initialWindowState, window));
+    case __WEBPACK_IMPORTED_MODULE_0__action_types__["a" /* default */].REMOVE_WINDOW:
+      return state.filter(window => window.id !== action.windowId);
+    case __WEBPACK_IMPORTED_MODULE_0__action_types__["a" /* default */].NEXT_CANVAS:
+      return state.map(window => {
+        if (window.id === action.windowId) {
+          return Object.assign({}, window, { canvasIndex: window.canvasIndex + 1 });
+        } else {
+          return window;
+        }
+      });
+    case __WEBPACK_IMPORTED_MODULE_0__action_types__["a" /* default */].PREVIOUS_CANVAS:
+      return state.map(window => {
+        if (window.id === action.windowId) {
+          return Object.assign({}, window, { canvasIndex: window.canvasIndex - 1 });
+        } else {
+          return window;
+        }
+      });
+    default:
+      return state;
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = windowsReducer;
+
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__action_types__ = __webpack_require__(0);
+
+
+const manifestsReducer = (state = [], action) => {
+  switch (action.type) {
+    default: return state;
+  }
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = manifestsReducer;
+
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (immutable) */ __webpack_exports__["focusWindow"] = focusWindow;
+/* harmony export (immutable) */ __webpack_exports__["addWindow"] = addWindow;
+/* harmony export (immutable) */ __webpack_exports__["removeWindow"] = removeWindow;
+/* harmony export (immutable) */ __webpack_exports__["nextCanvas"] = nextCanvas;
+/* harmony export (immutable) */ __webpack_exports__["previousCanvas"] = previousCanvas;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__action_types__ = __webpack_require__(0);
+
+
+/*
+ * Action creators
+ */
+
+function focusWindow(windowId) {
+  return { type: __WEBPACK_IMPORTED_MODULE_0__action_types__["a" /* default */].FOCUS_WINDOW, windowId };
+}
+
+function addWindow() {
+  return { type: __WEBPACK_IMPORTED_MODULE_0__action_types__["a" /* default */].ADD_WINDOW };
+}
+
+function removeWindow(windowId) {
+  return { type: __WEBPACK_IMPORTED_MODULE_0__action_types__["a" /* default */].REMOVE_WINDOW, windowId };
+}
+
+function nextCanvas(windowId) {
+  return { type: __WEBPACK_IMPORTED_MODULE_0__action_types__["a" /* default */].NEXT_CANVAS, windowId };
+}
+
+function previousCanvas(windowId) {
+  return { type: __WEBPACK_IMPORTED_MODULE_0__action_types__["a" /* default */].PREVIOUS_CANVAS, windowId };
+}
 
 
 /***/ })
