@@ -4,7 +4,7 @@
 // (normalizer library)
 
 import { createStore } from 'redux';
-import { rootReducer } from './reducers/index';
+import rootReducer from './reducers/index';
 import * as ActionCreators from './actions';
 // import * as Actions from './actions';
 

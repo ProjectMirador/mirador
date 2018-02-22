@@ -1,12 +1,14 @@
 import ActionTypes from '../action-types';
 
-export const workspaceReducer = (state = {}, action) => {
+const workspaceReducer = (state = {}, action) => {
   console.log('Reducing', action.type);
 
   switch (action.type) {
     case ActionTypes.FOCUS_WINDOW:
-      return Object.assign({}, state, {focusedWindowId: action.windowId});
+      return Object.assign({}, state, { focusedWindowId: action.windowId });
     default:
       return state;
   }
 };
+
+export { workspaceReducer as default };

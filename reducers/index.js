@@ -1,10 +1,7 @@
 import { combineReducers } from 'redux';
-
-import ActionTypes from '../action-types';
-
-import { workspaceReducer } from './workspace';
-import { windowsReducer } from './windows';
-import { manifestsReducer } from './manifests';
+import workspaceReducer from './workspace';
+import windowsReducer from './windows';
+import manifestsReducer from './manifests';
 
 /**
  * This is a reducer, a pure function with (state, action) => state signature.
@@ -19,8 +16,10 @@ import { manifestsReducer } from './manifests';
  * project.
  */
 
-export const rootReducer = combineReducers({
+const rootReducer = combineReducers({
   workspace: workspaceReducer,
   windows: windowsReducer,
-  manifests: manifestsReducer
+  manifests: manifestsReducer,
 });
+
+export default rootReducer;
