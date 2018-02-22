@@ -12,6 +12,15 @@ module.exports = {
     loaders: [
       { test: path.join(__dirname, 'src'),
         loader: 'babel-loader' }
-    ]
-  }
+    ],
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [
+          'eslint-loader',
+        ],
+      },
+    ],
+  },
 };
