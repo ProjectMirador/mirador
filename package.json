@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:umd": "webpack --output-filename index.umd.js"
+    "build:umd": "node_modules/.bin/webpack --output-filename index.umd.js"
   },
   "author": "Drew Winget <scipioaffricanus@gmail.com> (https://aeschylus.net/)",
   "license": "MIT",
