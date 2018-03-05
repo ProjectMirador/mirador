@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "node_modules/.bin/eslint ./",
     "test": "node_modules/.bin/jest",
+    "test:watch": "npm test -- --watch",
     "build:umd": "node_modules/.bin/webpack --output-filename index.umd.js"
   },
   "author": "Drew Winget <scipioaffricanus@gmail.com> (https://aeschylus.net/)",
@@ -20,6 +22,7 @@
     "eslint-config-airbnb": "^16.1.0",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jest": "^21.13.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "jest": "^22.4.2",
