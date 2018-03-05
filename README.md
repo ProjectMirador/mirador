@@ -27,3 +27,21 @@ store.dispatch(actions.focusWindow('window-1'))
 ```javascript
 store.getState()
 ```
+
+## Running the tests
+
+```sh
+$ npm test
+```
+
+or to continually watch the source files
+
+```sh
+$ npm run test:watch
+```
+
+## Linting the project
+
+```sh
+$ npm run lint
+```
