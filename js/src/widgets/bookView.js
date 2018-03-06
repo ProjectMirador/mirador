@@ -414,10 +414,17 @@
 
       this.focusImages = [];
 
-      if (this.viewingHint === 'individuals') {
+      viewingHint = this.viewingHint;
+      if(this.currentImg.viewingHint != undefined) {
+        viewingHint = this.currentImg.viewingHint;
+      }
+     
+      if (viewingHint === 'individuals') {
         // don't do any stitching, display like an imageView
         stitchList = [this.currentImg];
-      } else if (this.viewingHint === 'paged') {
+      } else if (viewingHint === 'facing-pages') {
+        stitchList = [this.currentImg];
+      } else if (viewingHint === 'paged') {
         // determine the other image for this pair based on index and viewingDirection
         if (this.currentImgIndex === 0 || this.currentImgIndex === this.imagesList.length-1) {
           //first page (front cover) or last page (back cover), display on its own
@@ -467,7 +474,7 @@
             break;
           }
         }
-      } else if (this.viewingHint === 'continuous') {
+      } else if (viewingHint === 'continuous') {
         // TODO: stitch all images together per the viewingDirection
       } else {
         // undefined viewingHint, don't do anything
