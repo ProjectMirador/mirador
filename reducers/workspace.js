@@ -1,6 +1,6 @@
 import ActionTypes from '../action-types';
 
-export const workspaceReducer = (state = {}, action) => {
+const workspaceReducer = (state = {}, action) => {
   console.log('Reducing', action.type);
 
   switch (action.type) {
@@ -14,3 +14,5 @@ export const workspaceReducer = (state = {}, action) => {
     return state;
   }
 };
+
+export { workspaceReducer as default };

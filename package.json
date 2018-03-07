@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:umd": "webpack --output-filename index.umd.js"
+    "lint": "node_modules/.bin/eslint ./",
+    "test": "npm run lint && node_modules/.bin/jest",
+    "test:watch": "npm test -- --watch",
+    "build:umd": "node_modules/.bin/webpack --output-filename index.umd.js"
   },
   "author": "Drew Winget <scipioaffricanus@gmail.com> (https://aeschylus.net/)",
   "license": "MIT",
@@ -16,6 +18,16 @@
     "redux": "3.7.2"
   },
   "devDependencies": {
+    "babel-jest": "^22.4.1",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.18.2",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jest": "^21.13.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
+    "jest": "^22.4.2",
     "webpack": "3.10.0"
   }
 }
