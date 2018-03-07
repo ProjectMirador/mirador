@@ -11,6 +11,7 @@
   "license": "MIT",
   "repository": "https://github.com/ProjectMirador/research-and-demos/tree/master/minimal_redux_poc",
   "dependencies": {
+    "axios": "0.18.0",
     "jest": "21.2.1",
     "redux": "3.7.2"
   },

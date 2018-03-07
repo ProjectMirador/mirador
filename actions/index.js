@@ -1,4 +1,5 @@
 import ActionTypes from '../action-types';
+import axios from 'axios';
 
 /*
  * Action creators
@@ -22,4 +23,18 @@ export function nextCanvas(windowId) {
 
 export function previousCanvas(windowId) {
   return { type: ActionTypes.PREVIOUS_CANVAS, windowId };
+}
+
+export function requestManifest(manifestId) {
+  axios.get(manifestId)
+    .then(function(result){
+      receiveManifest(result);
+    });
+}
+
+export function receiveManifest(manifest) {
+  return {
+    type: ActionTypes.RECEIVE_MANIFEST,
+    manifest: manifest,
+    manifestId: manifest['@id'] };
 }
