@@ -1,5 +1,5 @@
+// import axios from 'axios';
 import ActionTypes from '../action-types';
-import axios from 'axios';
 
 /*
  * Action creators
@@ -37,15 +37,16 @@ export function previousCanvas(windowId) {
 }
 
 export function requestManifest(manifestId) {
-  axios.get(manifestId)
-    .then(function(result){
-      receiveManifest(result);
-    });
+  return {
+    type: ActionTypes.REQUEST_MANIFEST,
+    manifestId,
+  };
 }
 
-export function receiveManifest(manifest) {
+export function receiveManifest(manifestId, manifestJson) {
   return {
     type: ActionTypes.RECEIVE_MANIFEST,
-    manifest: manifest,
-    manifestId: manifest['@id'] };
+    manifestId,
+    manifestJson, // Wrap in manifesto??
+  };
 }
