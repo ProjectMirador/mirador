@@ -55,4 +55,29 @@ describe('actions', () => {
       expect(actions.previousCanvas(id)).toEqual(expectedAction);
     });
   });
+  describe('requestManifest', () => {
+    it('requests a manifest given a url', () => {
+      const id = 'abc123';
+      const expectedAction = {
+        type: ActionTypes.REQUEST_MANIFEST,
+        manifestId: id,
+      };
+      expect(actions.requestManifest(id)).toEqual(expectedAction);
+    });
+  });
+  describe('receiveManifest', () => {
+    it('moves to the previous canvas', () => {
+      const id = 'abc123';
+      const json = {
+        id,
+        content: 'lots of metadata, canvases, and other IIIFy things',
+      };
+      const expectedAction = {
+        type: ActionTypes.RECEIVE_MANIFEST,
+        manifestId: id,
+        manifestJson: json,
+      };
+      expect(actions.receiveManifest(id, json)).toEqual(expectedAction);
+    });
+  });
 });
