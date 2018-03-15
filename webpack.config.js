@@ -1,5 +1,3 @@
-const path = require('path');
-
 module.exports = {
   entry: './index.js',
   output: {
@@ -9,19 +7,11 @@ module.exports = {
     library: 'mirador_poc_1',
   },
   module: {
-    loaders: [
-      {
-        test: path.join(__dirname, 'src'),
-        loader: 'babel-loader',
-      },
-    ],
     rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: [
-          'eslint-loader',
-        ],
+        use: ['babel-loader', 'eslint-loader'],
       },
     ],
   },
