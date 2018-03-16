@@ -6,6 +6,7 @@ module.exports = {
     libraryTarget: 'umd',
     library: 'mirador_poc_1',
   },
+  target: 'node',
   module: {
     rules: [
       {

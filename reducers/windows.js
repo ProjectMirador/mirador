@@ -1,7 +1,6 @@
 import ActionTypes from '../action-types';
 
 const windowsReducer = (state = [], action) => {
-  console.log('Reducing', action.type);
   switch (action.type) {
     case ActionTypes.ADD_WINDOW:
       return state.concat(Object.assign({}, action.payload));

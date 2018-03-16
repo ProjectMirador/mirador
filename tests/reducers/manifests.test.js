@@ -37,4 +37,23 @@ describe('manifests reducer', () => {
       },
     });
   });
+  it('should handle RECEIVE_MANIFEST_FAILURE', () => {
+    expect(reducer(
+      {
+        abc123: {
+          isFetching: true,
+        },
+      },
+      {
+        type: ActionTypes.RECEIVE_MANIFEST_FAILURE,
+        manifestId: 'abc123',
+        error: "This institution didn't enable CORS.",
+      },
+    )).toEqual({
+      abc123: {
+        isFetching: false,
+        error: "This institution didn't enable CORS.",
+      },
+    });
+  });
 });

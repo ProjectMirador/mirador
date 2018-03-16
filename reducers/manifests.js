@@ -15,6 +15,13 @@ const manifestsReducer = (state = {}, action) => {
           isFetching: false,
         },
       });
+    case ActionTypes.RECEIVE_MANIFEST_FAILURE:
+      return Object.assign({}, state, {
+        [action.manifestId]: {
+          error: action.error,
+          isFetching: false,
+        },
+      });
     default: return state;
   }
 };
