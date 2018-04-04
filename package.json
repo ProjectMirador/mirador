@@ -32,6 +32,13 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "jest": "^22.4.2",
+    "jest-fetch-mock": "^1.5.0",
+    "redux-mock-store": "^1.5.1",
     "webpack": "3.10.0"
+  },
+  "jest": {
+    "setupFiles": [
+      "./setupJest.js"
+    ]
   }
 }
