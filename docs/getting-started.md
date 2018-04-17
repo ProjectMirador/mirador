@@ -30,7 +30,7 @@ To initialize Mirador, it needs to be attached to an existing HTML **div** throu
       $(function() {
         Mirador({
           id: "viewer",
-          data: [/* Manifests and collections here *]
+          data: [/* Manifests and collections here */]
         });
       });
     </script>
