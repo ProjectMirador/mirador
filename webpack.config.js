@@ -4,9 +4,8 @@ module.exports = {
     path: __dirname,
     filename: 'index.umd.js',
     libraryTarget: 'umd',
-    library: 'mirador_poc_1',
+    library: 'm3core',
   },
-  target: 'node',
   module: {
     rules: [
       {
