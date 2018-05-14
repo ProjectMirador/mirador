@@ -21,11 +21,11 @@
     "addSlotBelow": "Voeg Slot toe onderaan",
     "imageView": "Beeld presentatie",
     "bookView": "Boek presentatie",
-    "scrollView": "Navigeer door presentatie",
-    "thumbnailsView": "Galerie presentatie",
+    "scrollView": "Scroll view",
+    "thumbnailsView": "Bekijk thumbnail",
     "comments": "Commentaar",
     "addTagsHere": "Voeg hier tags toe",
-    "save": "Bewaren",
+    "save": "Opslaan",
     "cancel": "Annuleren",
     "edit": "Bewerken",
     "delete": "Verwijderen",
@@ -34,6 +34,6 @@
     "objectMetadata": "Object Metadata",
     "fullScreen": "Volledig scherm",
     "logo": "Logo",
-    "load": "Opladen",
-    "dropToLoad": "Vallen hier om object te laden"
+    "load": "Laad",
+    "dropToLoad": "Drop hier om the laden"
 }
