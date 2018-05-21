@@ -6,6 +6,7 @@
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { createStore, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './reducers/index';
 import * as ActionCreators from './actions';
 
@@ -14,10 +15,10 @@ const loggerMiddleware = createLogger();
 // Its API is { subscribe, dispatch, getState }.
 export const store = createStore(
   rootReducer,
-  applyMiddleware(
+  composeWithDevTools(applyMiddleware(
     thunkMiddleware,
     loggerMiddleware,
-  ),
+  )),
 );
 
 export const actions = ActionCreators;
