@@ -45,3 +45,9 @@ $ npm run test:watch
 ```sh
 $ npm run lint
 ```
+
+## Debugging
+
+### Redux DevTools
+
+This is a web browser extension for debugging Redux applications. See https://github.com/zalmoxisus/redux-devtools-extension for installation and usage instructions.
