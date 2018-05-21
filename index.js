@@ -22,3 +22,4 @@ export const store = createStore(
 );
 
 export const actions = ActionCreators;
+export default { actions, store };
