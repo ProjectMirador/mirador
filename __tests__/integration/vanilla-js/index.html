@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Examples</title>
+    <script src="../../../index.umd.js"></script>
+  </head>
+  <body>
+
+  <input id="manifestURL" type="text"/><button id="fetchBtn" type="submit">Fetch Manifest</button>
+  <pre id="exampleManifest">
+
+  </pre>
+
+  <script>
+    document.getElementById("fetchBtn").addEventListener("click", function(){
+      let val = document.getElementById("manifestURL").value;
+      let f = m3core.actions.fetchManifest(val);
+      m3core.store.dispatch(f);
+    });
+
+    m3core.store.subscribe(() => {
+      let contents = ''
+      let state = m3core.store.getState();
+      let manifest = state.manifests[document.getElementById("manifestURL").value];
+      switch (manifest.isFetching) {
+        case true:
+          contents = 'spinner';
+          break;
+        case false:
+          if(manifest.error){
+            contents = manifest.error.message;
+          } else {
+            contents = JSON.stringify(manifest.json, 0, 3);
+          }
+          break;
+        default: contents = ''
+      }
+      document.getElementById("exampleManifest").innerHTML = contents;
+    });
+
+  </script>
+  </body>
+</html>

@@ -3,5 +3,8 @@
     "jest/globals": true
   },
   "extends": "airbnb",
+  "globals": {
+    page: true
+  },
   "plugins": ["jest"]
 }
