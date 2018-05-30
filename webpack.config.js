@@ -1,5 +1,3 @@
-const path = require('path');
-
 module.exports = [
   {
     entry: './index.js',
@@ -15,23 +13,6 @@ module.exports = [
           test: /\.js$/,
           exclude: /node_modules/,
           use: ['babel-loader', 'eslint-loader'],
-        },
-      ],
-    },
-  },
-  {
-    entry: './__tests__/integration/react-example/index.jsx',
-    output: {
-      path: path.join(__dirname, '__tests__/integration/react-example'),
-      filename: 'test-react.build.js',
-    },
-    resolve: { extensions: ['.js', '.jsx'] },
-    module: {
-      loaders: [
-        {
-          test: /\.jsx?$/,
-          exclude: /(node_modules)/,
-          loader: 'babel-loader',
         },
       ],
     },
