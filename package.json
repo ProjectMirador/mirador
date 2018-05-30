@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "lint": "node_modules/.bin/eslint ./",
-    "test": "npm run lint && node_modules/.bin/jest",
+    "server": "node_modules/.bin/http-server -p 4444",
+    "test": "npm run lint && npm run build && node_modules/.bin/jest",
     "test:watch": "npm test -- --watch",
-    "build:umd": "node_modules/.bin/webpack --output-filename index.umd.js"
+    "build": "node_modules/.bin/webpack"
   },
   "author": "Drew Winget <scipioaffricanus@gmail.com> (https://aeschylus.net/)",
   "license": "MIT",
