@@ -238,15 +238,17 @@
       var regexUrl = /(http|ftp|https):\/\/[\w\-]+(\.[\w\-]+)+([\w.,@?\^=%&amp;:\/~+#\-]*[\w@?\^=%&amp;\/~+#\-])?/gi,
           textWithLinks = text,
           matches,
+          decodedMatch,
           parsedTextWithLinks;
 
       if (typeof text === 'string') {
         if (textWithLinks.indexOf('<a ') === -1) {
-          matches = text.match(regexUrl);
+          matches = encodeURI(decodeURI(text)).match(regexUrl);
 
           if (matches) {
             jQuery.each(matches, function(index, match) {
-              textWithLinks = textWithLinks.replace(match, '<a href="' + match + '" target="_blank">' + match + '</a>');
+              decodedMatch = decodeURI(match);
+              textWithLinks = textWithLinks.replace(decodedMatch, '<a href="' + match + '" target="_blank">' + decodedMatch + '</a>');
             });
           }
         } else {
