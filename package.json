@@ -16,6 +16,7 @@
   "repository": "https://github.com/ProjectMirador/research-and-demos/tree/master/minimal_redux_poc",
   "dependencies": {
     "node-fetch": "2.1.1",
+    "react-redux": "^5.0.7",
     "redux": "3.7.2",
     "redux-devtools-extension": "^2.13.2",
     "redux-logger": "3.0.6",
@@ -24,7 +25,7 @@
   "devDependencies": {
     "babel-jest": "^22.4.1",
     "babel-loader": "7.1.4",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "eslint": "^4.18.2",
     "eslint-config-airbnb": "^16.1.0",
