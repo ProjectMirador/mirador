@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import m3core from '../../../index.umd';
 
 class App extends Component {
@@ -8,40 +9,30 @@ class App extends Component {
     this.state = {
       formValue: '',
       lastRequested: '',
-      content: 'Nothing Selected Yet',
     };
-    this.fetchManifest = this.fetchManifest.bind(this);
+    this.formSubmit = this.formSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-
-    m3core.store.subscribe(() => {
-      const manifest = m3core.store.getState().manifests[this.state.lastRequested];
-
-      if (manifest) {
-        if (manifest.isFetching) {
-          this.setState({
-            content: '☕',
-          });
-          return;
-        } else if (manifest.error) {
-          this.setState({
-            content: manifest.error.message,
-          });
-          return;
-        }
-
-        this.setState({
-          content: JSON.stringify(manifest.json, 0, 2),
-        });
-      }
-    });
   }
-  fetchManifest(event) {
+
+  computedContent() {
+    const manifest = this.props.manifests[this.state.lastRequested];
+    if (manifest) {
+      if (manifest.isFetching) {
+        return '☕';
+      } else if (manifest.error) {
+        return manifest.error.message;
+      }
+      return JSON.stringify(manifest.json, 0, 2);
+    }
+    return 'Nothing Selected Yet';
+  }
+
+  formSubmit(event) {
     event.preventDefault();
-    const f = m3core.actions.fetchManifest(this.state.formValue);
+    this.props.fetchManifest(this.state.formValue);
     this.setState({
       lastRequested: this.state.formValue,
     });
-    m3core.store.dispatch(f);
   }
   handleInputChange(event) {
     const that = this;
@@ -51,9 +42,12 @@ class App extends Component {
     });
   }
   render() {
+    const manifestList = Object.keys(this.props.manifests).map(manifest => (
+      <li key={manifest}>{manifest}</li>
+    ));
     return (
       <div className="App">
-        <form onSubmit={this.fetchManifest}>
+        <form onSubmit={this.formSubmit}>
           <input
             value={this.state.formValue}
             id="manifestURL"
@@ -62,8 +56,9 @@ class App extends Component {
           />
 
           <button id="fetchBtn" type="submit">Fetch Manifest</button>
+          <ul>{manifestList}</ul>
           <pre id="exampleManifest">
-            { this.state.content }
+            { this.computedContent() }
           </pre>
         </form>
       </div>
@@ -71,4 +66,24 @@ class App extends Component {
   }
 }
 
-export default App;
+App.propTypes = {
+  fetchManifest: PropTypes.func.isRequired,
+  manifests: PropTypes.instanceOf(Object).isRequired,
+};
+
+const mapStateToProps = state => (
+  {
+    manifests: state.manifests,
+  }
+);
+
+const mapDispatchToProps = dispatch => ({
+  fetchManifest: manifestUrl => (
+    dispatch(m3core.actions.fetchManifest(manifestUrl))
+  ),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(App);
