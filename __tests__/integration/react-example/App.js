@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import m3core from '../../../index.umd';
+import Display from './Display';
 
 class App extends Component {
   constructor(props) {
@@ -55,11 +56,12 @@ class App extends Component {
             onChange={this.handleInputChange}
           />
 
-          <button id="fetchBtn" type="submit">Fetch Manifest</button>
+          <button id="fetchBtn" type="submit">FetchManifest</button>
           <ul>{manifestList}</ul>
-          <pre id="exampleManifest">
-            { this.computedContent() }
-          </pre>
+
+          <Display
+            manifest={this.props.manifests[this.state.lastRequested]}
+          />
         </form>
       </div>
     );

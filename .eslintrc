@@ -4,7 +4,10 @@
   },
   "extends": "airbnb",
   "globals": {
-    page: true
+    "page": true
   },
-  "plugins": ["jest"]
+  "plugins": ["jest"],
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+  }
 }
