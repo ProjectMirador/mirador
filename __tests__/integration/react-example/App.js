@@ -3,16 +3,22 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import m3core from '../../../index.umd';
 import Display from './Display';
+import ManifestForm from './ManifestForm';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      formValue: '',
       lastRequested: '',
     };
-    this.formSubmit = this.formSubmit.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
+
+    this.setLastRequested = this.setLastRequested.bind(this);
+  }
+
+  setLastRequested(requested) {
+    this.setState({
+      lastRequested: requested,
+    });
   }
 
   computedContent() {
@@ -28,48 +34,24 @@ class App extends Component {
     return 'Nothing Selected Yet';
   }
 
-  formSubmit(event) {
-    event.preventDefault();
-    this.props.fetchManifest(this.state.formValue);
-    this.setState({
-      lastRequested: this.state.formValue,
-    });
-  }
-  handleInputChange(event) {
-    const that = this;
-    event.preventDefault();
-    that.setState({
-      formValue: event.target.value,
-    });
-  }
   render() {
     const manifestList = Object.keys(this.props.manifests).map(manifest => (
       <li key={manifest}>{manifest}</li>
     ));
     return (
       <div className="App">
-        <form onSubmit={this.formSubmit}>
-          <input
-            value={this.state.formValue}
-            id="manifestURL"
-            type="text"
-            onChange={this.handleInputChange}
-          />
+        <ManifestForm setLastRequested={this.setLastRequested} />
+        <ul>{manifestList}</ul>
 
-          <button id="fetchBtn" type="submit">FetchManifest</button>
-          <ul>{manifestList}</ul>
-
-          <Display
-            manifest={this.props.manifests[this.state.lastRequested]}
-          />
-        </form>
+        <Display
+          manifest={this.props.manifests[this.state.lastRequested]}
+        />
       </div>
     );
   }
 }
 
 App.propTypes = {
-  fetchManifest: PropTypes.func.isRequired,
   manifests: PropTypes.instanceOf(Object).isRequired,
 };
 
