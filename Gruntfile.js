@@ -101,7 +101,6 @@ module.exports = function(grunt) {
           'node_modules/spectrum-colorpicker/spectrum.css',
           'node_modules/select2/dist/css/select2.min.css',
           'css/mirador.css',
-          'css/material-icons.css',
           'node_modules/simple-pagination.js/simplePagination.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'
