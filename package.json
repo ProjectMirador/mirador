@@ -75,6 +75,7 @@
     "jquery.scrollto": "^1.4.12",
     "material-design-icons": "^3.0.1",
     "mousetrap": "^1.4.6",
+    "normalize.css": "^3.0.1",
     "openseadragon": "^2.2.1",
     "paper": "^0.10.2",
     "qtip2": "^3.0.3",

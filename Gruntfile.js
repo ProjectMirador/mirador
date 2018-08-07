@@ -92,7 +92,7 @@ module.exports = function(grunt) {
       css: {
         src: [
           'css/bootstrap.modals.css',
-          'css/normalize.css',
+          'node_modules/normalize.css/normalize.css',
           'node_modules/font-awesome/css/font-awesome.min.css',
           'css/jquery-ui.min.css',
           'node_modules/jstree/dist/themes/default/style.min.css',
