@@ -80,6 +80,13 @@ body {
    ========================================================================== */
 
 /**
+ * Address `outline` inconsistency between Chrome and other browsers.
+ */
+a:focus {
+    outline: thin dotted;
+}
+
+/**
  * Improve readability when focused and also mouse hovered in all browsers.
  */
 
@@ -135,8 +142,6 @@ hr {
     -moz-box-sizing: content-box;
     box-sizing: content-box;
     height: 0;
-    border:0;
-    border-bottom:1px solid rgba(0,0,0,0.4);
 }
 
 /**
