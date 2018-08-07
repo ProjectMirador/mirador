@@ -94,7 +94,7 @@ module.exports = function(grunt) {
           'css/bootstrap.modals.css',
           'node_modules/normalize.css/normalize.css',
           'node_modules/font-awesome/css/font-awesome.min.css',
-          'css/jquery-ui.min.css',
+          'node_modules/jquery-ui-dist/jquery-ui.min.css',
           'node_modules/jstree/dist/themes/default/style.min.css',
           'css/collection-tree-mod.css',
           'node_modules/qtip2/dist/jquery.qtip.min.css',
