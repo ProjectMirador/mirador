@@ -34,11 +34,11 @@ const Display = props => (
 );
 
 Display.propTypes = {
-  manifest: PropTypes.oneOfType([null, PropTypes.object]),
+  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 Display.defaultProps = {
-  manifest: null,
+  manifest: undefined,
 };
 
 export default Display;
