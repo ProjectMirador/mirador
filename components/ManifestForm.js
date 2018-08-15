@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import m3core from '../index';
+import { actions } from '../index';
 
 class ManifestForm extends Component {
   constructor(props) {
@@ -56,7 +56,7 @@ const mapStateToProps = () => (
 
 const mapDispatchToProps = dispatch => ({
   fetchManifest: manifestUrl => (
-    dispatch(m3core.actions.fetchManifest(manifestUrl))
+    dispatch(actions.fetchManifest(manifestUrl))
   ),
 });
 

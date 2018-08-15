@@ -4,7 +4,7 @@ module.exports = [
   {
     entry: './components/index.js',
     output: {
-      path: path.join(__dirname, './components'),
+      path: path.join(__dirname, './'),
       filename: 'mirador.min.js',
     },
     resolve: { extensions: ['.js'] },
