@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { actions } from '../index';
+import { actions } from '../../index';
 import Display from './Display';
 import ManifestForm from './ManifestForm';
 
