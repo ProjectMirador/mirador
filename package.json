@@ -6,10 +6,9 @@
   "scripts": {
     "lint": "node_modules/.bin/eslint ./",
     "server": "node_modules/.bin/http-server -p 4444",
-    "test": "npm run build && npm run build:dev && npm run lint && node_modules/.bin/jest",
+    "test": "npm run build && npm run lint && node_modules/.bin/jest",
     "test:watch": "npm test -- --watch",
-    "build": "node_modules/.bin/webpack",
-    "build:dev": "node_modules/.bin/webpack --config front-end.config.js"
+    "build": "node_modules/.bin/webpack"
   },
   "author": "Drew Winget <scipioaffricanus@gmail.com> (https://aeschylus.net/)",
   "license": "MIT",
