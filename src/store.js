@@ -7,8 +7,8 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import rootReducer from './src/reducers/index';
-import * as ActionCreators from './src/actions';
+import rootReducer from './reducers/index';
+import * as ActionCreators from './actions';
 
 const loggerMiddleware = createLogger();
 // Create a Redux store holding the state of your app.

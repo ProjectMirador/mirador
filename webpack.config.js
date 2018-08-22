@@ -1,9 +1,11 @@
+const path = require('path');
+
 module.exports = [
   {
-    entry: './index.js',
+    entry: './src/store.js',
     output: {
-      path: __dirname,
-      filename: 'index.umd.js',
+      path: path.join(__dirname, 'dist'),
+      filename: 'm3core.umd.js',
       libraryTarget: 'umd',
       library: 'm3core',
     },
