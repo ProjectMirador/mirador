@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = [
   {
-    entry: './components/index.js',
+    entry: './src/index.js',
     output: {
       path: path.join(__dirname, 'dist'),
       filename: 'mirador.min.js',
