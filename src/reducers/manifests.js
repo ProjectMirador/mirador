@@ -1,5 +1,8 @@
 import ActionTypes from '../action-types';
 
+/**
+ * manifestsReducer
+ */
 const manifestsReducer = (state = {}, action) => {
   switch (action.type) {
     case ActionTypes.REQUEST_MANIFEST:

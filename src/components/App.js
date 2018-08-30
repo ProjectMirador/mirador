@@ -5,7 +5,14 @@ import { actions } from '../store';
 import Display from './Display';
 import ManifestForm from './ManifestForm';
 
+/**
+ * This is the top level Mirador component.
+ * @prop {Object} manifests
+ */
 class App extends Component {
+  /**
+   * constructor -
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -15,12 +22,23 @@ class App extends Component {
     this.setLastRequested = this.setLastRequested.bind(this);
   }
 
+  /**
+   * setLastRequested - Sets the state lastRequested
+   *
+   * @private
+   */
   setLastRequested(requested) {
     this.setState({
       lastRequested: requested,
     });
   }
 
+  /**
+   * computedContent - computes the content to be displayed based on logic
+   *
+   * @return {type}  description
+   * @private
+   */
   computedContent() {
     const manifest = this.props.manifests[this.state.lastRequested];
     if (manifest) {
@@ -34,6 +52,10 @@ class App extends Component {
     return 'Nothing Selected Yet';
   }
 
+  /**
+   * render
+   * @return {String} - HTML markup for the component
+   */
   render() {
     const manifestList = Object.keys(this.props.manifests).map(manifest => (
       <li key={manifest}>{manifest}</li>
@@ -55,12 +77,22 @@ App.propTypes = {
   manifests: PropTypes.instanceOf(Object).isRequired,
 };
 
+/**
+ * mapStateToProps - to hook up connect
+ * @memberof App
+ * @private
+ */
 const mapStateToProps = state => (
   {
     manifests: state.manifests,
   }
 );
 
+/**
+ * mapDispatchToProps - used to hook up connect to action creators
+ * @memberof App
+ * @private
+ */
 const mapDispatchToProps = dispatch => ({
   fetchManifest: manifestUrl => (
     dispatch(actions.fetchManifest(manifestUrl))
