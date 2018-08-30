@@ -11,7 +11,7 @@
     "build": "node_modules/.bin/webpack"
   },
   "author": "Drew Winget <scipioaffricanus@gmail.com> (https://aeschylus.net/)",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": "https://github.com/ProjectMirador/research-and-demos/tree/master/minimal_redux_poc",
   "dependencies": {
     "node-fetch": "2.1.1",
