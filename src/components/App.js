@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { actions } from '../store';
 import Display from './Display';
 import ManifestForm from './ManifestForm';
+import ManifestListItem from './ManifestListItem';
 
 /**
  * This is the top level Mirador component.
@@ -58,7 +59,10 @@ class App extends Component {
    */
   render() {
     const manifestList = Object.keys(this.props.manifests).map(manifest => (
-      <li key={manifest}>{manifest}</li>
+      <ManifestListItem
+        key={manifest}
+        manifest={manifest}
+      />
     ));
     return (
       <div className="App">
