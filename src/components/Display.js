@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+
+/**
+ * Determines how to best display the content (or lack thereof) the manifest
+ * @private
+ */
 const displayContent = (manifest) => {
   if (manifest) {
     if (manifest.isFetching) {
@@ -13,6 +18,12 @@ const displayContent = (manifest) => {
   return 'Nothing Selected Yet';
 };
 
+/**
+ * Determines which classes should be used for display, based on the state of
+ * the manifest
+ * @memberof Display
+ * @private
+ */
 const stateClass = (manifest) => {
   if (manifest) {
     if (manifest.isFetching) {
@@ -25,10 +36,16 @@ const stateClass = (manifest) => {
   return 'empty';
 };
 
-const Display = props => (
+
+/**
+ * Displays a manifest
+ * @param {object} props
+ * @param {object} [props.manifest = undefined]
+ */
+const Display = ({ manifest }) => (
   <div className="Display">
-    <pre id="exampleManifest" className={stateClass(props.manifest)}>
-      {displayContent(props.manifest)}
+    <pre id="exampleManifest" className={stateClass(manifest)}>
+      {displayContent(manifest)}
     </pre>
   </div>
 );

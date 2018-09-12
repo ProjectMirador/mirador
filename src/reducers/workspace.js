@@ -1,5 +1,8 @@
 import ActionTypes from '../action-types';
 
+/**
+ * workspaceReducer
+ */
 const workspaceReducer = (state = {}, action) => {
   switch (action.type) {
     case ActionTypes.FOCUS_WINDOW:

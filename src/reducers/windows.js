@@ -1,5 +1,8 @@
 import ActionTypes from '../action-types';
 
+/**
+ * windowsReducer
+ */
 const windowsReducer = (state = [], action) => {
   switch (action.type) {
     case ActionTypes.ADD_WINDOW:
