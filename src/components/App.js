@@ -5,6 +5,7 @@ import { actions } from '../store';
 import Display from './Display';
 import ManifestForm from './ManifestForm';
 import ManifestListItem from './ManifestListItem';
+import Workspace from './Workspace';
 
 /**
  * This is the top level Mirador component.
@@ -72,6 +73,7 @@ class App extends Component {
         <Display
           manifest={this.props.manifests[this.state.lastRequested]}
         />
+        <Workspace />
       </div>
     );
   }
