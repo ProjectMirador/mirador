@@ -11,23 +11,21 @@ import PropTypes from 'prop-types';
  * @private
  */
 const Workspace = ({ windows }) => (
-// const Workspace = ({ windows, manifests }) => (
   <div className="mirador-workspace">
     {
       windows.map(window => (
-        <div className="window" key={window.id}>{window.id}</div>
-        //   <Window
-        //     key={window.id}
-        //     windowId={window.id}
-        //     manifest={manifests[window.manifestId]}
-        //   />
+        <div
+          className="window"
+          key={window.id}
+          id={window.id}
+        >{window.manifestId}</div>
       ))
     }
   </div>
 );
 
 Workspace.propTypes = {
-  windows: PropTypes.instanceOf(Array).isRequired, // manifests: PropTypes.instanceOf(Array),
+  windows: PropTypes.instanceOf(Array).isRequired,
 };
 
 /**
@@ -37,7 +35,7 @@ Workspace.propTypes = {
  */
 const mapStateToProps = state => (
   {
-    windows: state.windows, // manifests: state.manifests
+    windows: state.windows,
   }
 );
 

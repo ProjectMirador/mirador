@@ -29,7 +29,7 @@ export function addWindow(options) {
     id: `window.${new Date().valueOf()}`,
     canvasIndex: 0,
     collectionIndex: 0,
-    manifestIndex: 0,
+    manifestId: null,
     rangeId: null,
     xywh: null,
     rotation: null,

@@ -8,7 +8,7 @@ import { actions } from '../store';
  * Handling open button click
  */
 const handleOpenButtonClick = (event, manifest, addWindow) => {
-  addWindow({});
+  addWindow({ manifestId: manifest });
 };
 /**
  * Represents an item in a list of currently-loaded or loading manifests

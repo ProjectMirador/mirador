@@ -21,7 +21,7 @@ describe('actions', () => {
           id: 'helloworld',
           canvasIndex: 1,
           collectionIndex: 0,
-          manifestIndex: 0,
+          manifestId: null,
           rangeId: null,
           xywh: null,
           rotation: null,
