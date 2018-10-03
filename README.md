@@ -9,6 +9,14 @@ To run the module, first make sure you are in this directory (`minimal_redux_poc
 1. Import variable names from the module, for example, `let { store, actions } = require('./index.umd')`.
 1. The exported module currently has most of its functionality under the "store" property, so you may prefer to include it with `let state = require('./index.umd').store`.
 
+## Starting the project
+
+```sh
+$ npm start
+```
+
+Then navigate to [http://127.0.0.1:4444/__tests__/integration/mirador/](http://127.0.0.1:4444/__tests__/integration/mirador/)
+
 ### Example Action
 
 Add a window:

@@ -8,7 +8,9 @@
     "server": "node_modules/.bin/http-server -p 4444",
     "test": "npm run build && npm run lint && node_modules/.bin/jest",
     "test:watch": "npm test -- --watch",
-    "build": "node_modules/.bin/webpack"
+    "build": "node_modules/.bin/webpack",
+    "build:watch": "node_modules/.bin/webpack --watch",
+    "start": "npm run build && concurrently \"npm run build:watch\" \"npm run server\""
   },
   "license": "Apache-2.0",
   "contributors": [
@@ -34,6 +36,7 @@
     "babel-loader": "7.1.4",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
+    "concurrently": "^4.0.1",
     "css-loader": "^1.0.0",
     "enzyme": "^3.4.4",
     "enzyme-adapter-react-16": "^1.2.0",
