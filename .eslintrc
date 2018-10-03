@@ -18,6 +18,7 @@
         "ArrowFunctionExpression": true,
         "FunctionExpression": true,
       }
-    }]
+    }],
+    "react/prefer-stateless-function": "off"
   }
 }
