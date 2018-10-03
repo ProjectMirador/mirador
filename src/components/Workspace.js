@@ -1,9 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-// import { actions } from '../store';
-// import Window from './Window';
-
 
 /**
  * Represents a work area that contains any number of windows
@@ -18,7 +15,9 @@ const Workspace = ({ windows }) => (
           className="window"
           key={window.id}
           id={window.id}
-        >{window.manifestId}</div>
+        >
+          {window.manifestId}
+        </div>
       ))
     }
   </div>
@@ -39,5 +38,4 @@ const mapStateToProps = state => (
   }
 );
 
-// const mapDispatchToProps = dispatch => ({});
-export default connect(mapStateToProps)(Workspace); //  mapDispatchToProps,
+export default connect(mapStateToProps)(Workspace);
