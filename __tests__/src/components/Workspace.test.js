@@ -12,7 +12,6 @@ describe('Workspace', () => {
   });
 
   it('renders without an error', () => {
-    console.log(wrapper.debug());
     expect(wrapper.find('div.mirador-workspace').length).toBe(1);
     expect(wrapper.find('div.window').length).toBe(1);
     expect(wrapper.find('div.window').text()).toBe('foo');
