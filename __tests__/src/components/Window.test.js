@@ -1,19 +1,20 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { actions, store } from '../../../src/store';
-import Workspace from '../../../src/components/Workspace';
+import Window from '../../../src/components/Window';
 
-describe('Workspace', () => {
+describe('Window', () => {
   let wrapper;
+  let window;
   beforeEach(() => {
     store.dispatch(actions.receiveManifest({ manifestId: 'foo', manifestJson: '{}' }));
     store.dispatch(actions.addWindow({ manifestId: 'foo' }));
-    wrapper = shallow(<Workspace store={store} />).dive();
+    [window] = store.getState().windows;
+    wrapper = shallow(<Window store={store} id={window.id} />).dive();
   });
 
   it('renders without an error', () => {
-    const window = store.getState().windows[0];
-    expect(wrapper.find('div.mirador-workspace').length).toBe(1);
-    expect(wrapper.find(`#${window.id}`).length).toBe(1);
+    expect(wrapper.find('div.mirador-window').length).toBe(1);
+    expect(wrapper.find('div.mirador-window').text()).toBe(window.id);
   });
 });
