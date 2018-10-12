@@ -14,10 +14,10 @@ export default class ManifestMetadata extends Component {
     return (
       <div>
         <h3>
-          {this.props.manifest.json.getLabel().map(label => label.value)[0]}
+          {this.props.manifest.manifestation.getLabel().map(label => label.value)[0]}
         </h3>
         <div className="description">
-          {this.props.manifest.json.getDescription().map(label => label.value)}
+          {this.props.manifest.manifestation.getDescription().map(label => label.value)}
         </div>
       </div>
     );

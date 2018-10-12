@@ -31,7 +31,7 @@ describe('manifests reducer', () => {
     )).toMatchObject({
       abc123: {
         isFetching: false,
-        json: {},
+        manifestation: {},
       },
     });
   });

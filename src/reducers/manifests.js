@@ -15,7 +15,7 @@ const manifestsReducer = (state = {}, action) => {
     case ActionTypes.RECEIVE_MANIFEST:
       return Object.assign({}, state, {
         [action.manifestId]: {
-          json: manifesto.create(action.manifestJson),
+          manifestation: manifesto.create(action.manifestJson),
           isFetching: false,
         },
       });
