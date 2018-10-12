@@ -12,6 +12,6 @@ describe('Plain JavaScript example', () => {
     // TODO: Refactor the app so we get rid of the wait
     await page.waitFor(1000);
     const manifest = await page.$eval('#exampleManifest', e => e.innerHTML);
-    expect(manifest).toMatch(/http:\/\/iiif\.io\/api\/presentation\/2\/context\.json/);
+    await expect(manifest).toMatch(/http:\/\/iiif\.io\/api\/presentation\/2\/context\.json/);
   });
 });

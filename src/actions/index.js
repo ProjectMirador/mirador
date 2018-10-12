@@ -91,7 +91,7 @@ export function receiveManifest(manifestId, manifestJson) {
   return {
     type: ActionTypes.RECEIVE_MANIFEST,
     manifestId,
-    manifestJson, // Wrap in manifesto??
+    manifestJson,
   };
 }
 

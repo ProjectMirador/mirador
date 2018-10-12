@@ -19,6 +19,7 @@
   ],
   "repository": "https://github.com/ProjectMirador/research-and-demos/tree/master/minimal_redux_poc",
   "dependencies": {
+    "manifesto.js": "^3.0.9",
     "node-fetch": "2.1.1",
     "node-sass": "^4.9.2",
     "prop-types": "^15.6.2",

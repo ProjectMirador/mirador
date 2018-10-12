@@ -1,3 +1,4 @@
+import manifesto from 'manifesto.js';
 import ActionTypes from '../action-types';
 
 /**
@@ -14,7 +15,7 @@ const manifestsReducer = (state = {}, action) => {
     case ActionTypes.RECEIVE_MANIFEST:
       return Object.assign({}, state, {
         [action.manifestId]: {
-          json: action.manifestJson,
+          json: manifesto.create(action.manifestJson),
           isFetching: false,
         },
       });

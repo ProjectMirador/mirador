@@ -24,16 +24,14 @@ describe('manifests reducer', () => {
         manifestId: 'abc123',
         manifestJson: {
           id: 'abc123',
+          '@type': 'sc:Manifest',
           content: 'lots of canvases and metadata and such',
         },
       },
-    )).toEqual({
+    )).toMatchObject({
       abc123: {
         isFetching: false,
-        json: {
-          id: 'abc123',
-          content: 'lots of canvases and metadata and such',
-        },
+        json: {},
       },
     });
   });

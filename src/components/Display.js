@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import ManifestMetadata from './ManifestMetadata';
 
 /**
  * Determines how to best display the content (or lack thereof) the manifest
@@ -13,7 +13,7 @@ const displayContent = (manifest) => {
     } else if (manifest.error) {
       return manifest.error.message;
     }
-    return JSON.stringify(manifest.json, 0, 2);
+    return <ManifestMetadata manifest={manifest} />;
   }
   return 'Nothing Selected Yet';
 };
@@ -44,9 +44,9 @@ const stateClass = (manifest) => {
  */
 const Display = ({ manifest }) => (
   <div className="Display">
-    <pre id="exampleManifest" className={stateClass(manifest)}>
+    <div id="exampleManifest" className={stateClass(manifest)}>
       {displayContent(manifest)}
-    </pre>
+    </div>
   </div>
 );
 

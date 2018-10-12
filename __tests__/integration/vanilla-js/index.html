@@ -31,7 +31,7 @@
           if(manifest.error){
             contents = manifest.error.message;
           } else {
-            contents = JSON.stringify(manifest.json, 0, 3);
+            contents = JSON.stringify(manifest.json.__jsonld, 0, 3);
           }
           break;
         default: contents = ''
