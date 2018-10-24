@@ -16,6 +16,7 @@ describe('Window', () => {
 
   it('renders without an error', () => {
     expect(wrapper.find('div.mirador-window').length).toBe(1);
-    expect(wrapper.find('div.mirador-window').text()).toBe(window.id);
+    expect(wrapper.find('div.mirador-window h3').text()).toBe('Test 2 Manifest: Metadata Pairs');
+    expect(wrapper.find('div.mirador-window img').prop('src')).toBe('http://placekitten.com/200/300');
   });
 });
