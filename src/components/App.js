@@ -67,13 +67,15 @@ class App extends Component {
     ));
     return (
       <div className="App">
-        <ManifestForm setLastRequested={this.setLastRequested} />
-        <ul>{manifestList}</ul>
-
-        <Display
-          manifest={this.props.manifests[this.state.lastRequested]}
-        />
         <Workspace />
+        <div className="control-panel">
+          <ManifestForm setLastRequested={this.setLastRequested} />
+          <ul>{manifestList}</ul>
+
+          <Display
+            manifest={this.props.manifests[this.state.lastRequested]}
+          />
+        </div>
       </div>
     );
   }

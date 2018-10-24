@@ -1,3 +1,32 @@
 body {
   background: white;
+  height: 100%;
+}
+
+.control-panel {
+  position: absolute;
+  box-sizing: border-box;
+  padding: 15px;
+  margin:0px;
+  left:0;
+  top:0;
+  bottom:0;
+  width: 300px;
+  border-right: 2px solid black;
+}
+
+.mirador-workspace {
+  position: absolute;
+  box-sizing: border-box;
+  margin: 0;
+  padding-left: 300px;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  overflow: scroll;
+}
+
+.mirador-window {
+  border: 1px solid black;
 }
