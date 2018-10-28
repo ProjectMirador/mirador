@@ -137,7 +137,7 @@
         };
       });
 
-      templateData = {
+      var templateData = {
         searchService: searchServiceIdArray
       };
 
