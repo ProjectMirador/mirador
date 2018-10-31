@@ -31,7 +31,7 @@ export function addWindow(options) {
     collectionIndex: 0,
     manifestId: null,
     rangeId: null,
-    xywh: null,
+    xywh: [0, 0, 200, 200],
     rotation: null,
   };
   return { type: ActionTypes.ADD_WINDOW, payload: Object.assign({}, defaultOptions, options) };

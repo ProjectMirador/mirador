@@ -16,12 +16,20 @@ class Window extends Component {
   }
 
   /**
+   * Return style attributes
+   */
+  styleAttributes() {
+    return { width: `${this.props.window.xywh[2]}px`, height: `${this.props.window.xywh[3]}px` };
+  }
+
+  /**
    * Renders things
    * @param {object} props (from react/redux)
    */
   render() {
     return (
-      <div className="mirador-window">
+      <div className="mirador-window" style={this.styleAttributes()}>
+
         <h3>{this.props.manifest.manifestation.getLabel().map(label => label.value)[0]}</h3>
         <img src={this.thumbnail()} alt="" />
         <p>{this.props.window.id}</p>
