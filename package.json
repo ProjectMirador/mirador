@@ -23,7 +23,7 @@
     "grunt-contrib-connect": "*",
     "grunt-contrib-copy": "*",
     "grunt-contrib-cssmin": "*",
-    "grunt-contrib-jasmine": "*",
+    "grunt-contrib-jasmine": "^1.2.0",
     "grunt-contrib-jshint": "*",
     "grunt-contrib-less": "^1.4.0",
     "grunt-contrib-uglify": "*",

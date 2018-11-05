@@ -108,7 +108,7 @@
 
         var aspectRatio = canvas.height/canvas.width,
         width = (_this.thumbHeight/aspectRatio);
-        url = _this.manifest.getThumbnailForCanvas(canvas, width);
+        var url = _this.manifest.getThumbnailForCanvas(canvas, width);
 
         _this.allImages.push({
           url: url,

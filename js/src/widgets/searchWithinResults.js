@@ -2,7 +2,7 @@
 
 /**
  * UI + logic to get search results for a given search query. On initialization,
- * the provided search query is given tothe provided IIIF Search service.
+ * the provided search query is given to the provided IIIF Search service.
  * The response is displayed as a list.
  *
  * Parameter 'query_params': {q: query, motivation: motivation, date: date, user: user}
