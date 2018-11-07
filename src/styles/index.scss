@@ -30,4 +30,21 @@ body {
 .mirador-window {
   border: 1px solid black;
   overflow: hidden;
+  position: relative;
+}
+
+.mirador-window-heading {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, .65) 0%, rgba(0, 0, 0, 0) 100%);
+  color: white;
+  position: absolute;
+  z-index: 10;  
+}
+
+.mirador-osd-container {
+  background: gray;
+  bottom: 0;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
 }

@@ -22,6 +22,7 @@
     "manifesto.js": "^3.0.9",
     "node-fetch": "2.1.1",
     "node-sass": "^4.9.2",
+    "openseadragon": "^2.4.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",

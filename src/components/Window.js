@@ -1,12 +1,56 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import fetch from 'node-fetch';
+import OpenSeaDragon from 'openseadragon';
 
 /**
  * Represents a Window in the mirador workspace
  * @param {object} window
  */
 class Window extends Component {
+  /**
+   * @param {Object} props [description]
+   */
+  constructor(props) {
+    super(props);
+
+    this.miradorInstanceRef = React.createRef();
+  }
+  /**
+   * React lifecycle event
+   */
+  componentDidMount() {
+    const viewer = OpenSeaDragon({
+      id: this.miradorInstanceRef.current.id,
+      showNavigationControl: false,
+    });
+    const that = this;
+    fetch(`${this.props.manifest.manifestation.getSequences()[0].getCanvases()[0].getImages()[0].getResource().getServices()[0].id}/info.json`)
+      .then(response => response.json())
+      .then((json) => {
+        viewer.addTiledImage({
+          tileSource: json,
+          success: (event) => {
+            const tiledImage = event.item;
+
+            /**
+             * A callback for the tile after its drawn
+             * @param  {[type]} e event object
+             */
+            const tileDrawnHandler = (e) => {
+              if (e.tiledImage === tiledImage) {
+                viewer.removeHandler('tile-drawn', tileDrawnHandler);
+                that.miradorInstanceRef.current.style.display = 'block';
+              }
+            };
+            viewer.addHandler('tile-drawn', tileDrawnHandler);
+          },
+        });
+      })
+      .catch(error => console.log(error));
+  }
+
   /**
    * Fetches IIIF thumbnail URL
    */
@@ -29,10 +73,16 @@ class Window extends Component {
   render() {
     return (
       <div className="mirador-window" style={this.styleAttributes()}>
-
-        <h3>{this.props.manifest.manifestation.getLabel().map(label => label.value)[0]}</h3>
+        <div className="mirador-window-heading">
+          <h3>{this.props.manifest.manifestation.getLabel().map(label => label.value)[0]}</h3>
+        </div>
         <img src={this.thumbnail()} alt="" />
-        <p>{this.props.window.id}</p>
+        <div
+          className="mirador-osd-container"
+          style={{ display: 'none' }}
+          id={`${this.props.window.id}-osd`}
+          ref={this.miradorInstanceRef}
+        />
       </div>
     );
   }
