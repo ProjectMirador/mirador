@@ -23,7 +23,7 @@ describe('actions', () => {
           collectionIndex: 0,
           manifestId: null,
           rangeId: null,
-          xywh: [0, 0, 200, 200],
+          xywh: [0, 0, 400, 400],
           rotation: null,
         },
       };
