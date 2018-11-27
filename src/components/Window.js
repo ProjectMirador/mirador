@@ -21,6 +21,9 @@ class Window extends Component {
    * React lifecycle event
    */
   componentDidMount() {
+    if (!this.miradorInstanceRef.current) {
+      return false;
+    }
     const viewer = OpenSeaDragon({
       id: this.miradorInstanceRef.current.id,
       showNavigationControl: false,
@@ -49,6 +52,7 @@ class Window extends Component {
         });
       })
       .catch(error => console.log(error));
+    return false;
   }
 
   /**
