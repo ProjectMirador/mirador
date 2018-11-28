@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { actions } from '../store';
+import ns from '../config/css-ns';
 
 
 /**
@@ -23,7 +24,7 @@ const handleOpenButtonClick = (event, manifest, addWindow) => {
  * @private
  */
 const ManifestListItem = ({ manifest, addWindow }) => (
-  <li className="manifest-list-item">
+  <li className={ns('manifest-list-item')}>
     <button type="button" onClick={event => handleOpenButtonClick(event, manifest, addWindow)}>
       {manifest}
     </button>

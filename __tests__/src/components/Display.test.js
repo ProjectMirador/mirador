@@ -11,10 +11,10 @@ describe('Display', () => {
   });
   it('sets class based on manifest state', () => {
     let wrapper = shallow(<Display manifest={{ isFetching: true }} />);
-    expect(wrapper.find('.fetching').length).toBe(1);
+    expect(wrapper.find('.mirador-fetching').length).toBe(1);
 
     wrapper = shallow(<Display manifest={{ error: true }} />);
-    expect(wrapper.find('.error').length).toBe(1);
+    expect(wrapper.find('.mirador-error').length).toBe(1);
   });
   it('displays content', () => {
     let wrapper = shallow(<Display manifest={{ isFetching: true }} />);

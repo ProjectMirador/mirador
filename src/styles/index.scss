@@ -3,48 +3,50 @@ body {
   height: 100%;
 }
 
-.control-panel {
-  position: absolute;
-  box-sizing: border-box;
-  padding: 15px;
-  margin:0px;
-  left:0;
-  top:0;
-  bottom:0;
-  width: 300px;
-  border-right: 2px solid black;
-}
+.mirador {
+  &-control-panel {
+    position: absolute;
+    box-sizing: border-box;
+    padding: 15px;
+    margin:0px;
+    left:0;
+    top:0;
+    bottom:0;
+    width: 300px;
+    border-right: 2px solid black;
+  }
 
-.mirador-workspace {
-  position: absolute;
-  box-sizing: border-box;
-  margin: 0;
-  padding-left: 300px;
-  top:0;
-  right:0;
-  bottom:0;
-  left:0;
-  overflow: scroll;
-}
+  &-workspace {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding-left: 300px;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    overflow: scroll;
+  }
 
-.mirador-window {
-  border: 1px solid black;
-  overflow: hidden;
-  position: relative;
-}
+  &-window {
+    border: 1px solid black;
+    overflow: hidden;
+    position: relative;
+  }
 
-.mirador-window-heading {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, .65) 0%, rgba(0, 0, 0, 0) 100%);
-  color: white;
-  position: absolute;
-  z-index: 10;  
-}
+  &-window-heading {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .65) 0%, rgba(0, 0, 0, 0) 100%);
+    color: white;
+    position: absolute;
+    z-index: 10;  
+  }
 
-.mirador-osd-container {
-  background: gray;
-  bottom: 0;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  width: 100%;
+  &-osd-container {
+    background: gray;
+    bottom: 0;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
 }

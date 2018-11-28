@@ -6,7 +6,7 @@ import ManifestListItem from '../../../src/components/ManifestListItem';
 describe('ManifestListItem', () => {
   it('renders without an error', () => {
     const wrapper = shallow(<ManifestListItem manifest="http://example.com" store={store} />).dive();
-    expect(wrapper.find('li.manifest-list-item').length).toBe(1);
+    expect(wrapper.find('li.mirador-manifest-list-item').length).toBe(1);
     expect(wrapper.find('button').length).toBe(1);
     expect(wrapper.find('button').text()).toEqual('http://example.com');
   });

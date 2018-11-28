@@ -6,6 +6,7 @@ import Display from './Display';
 import ManifestForm from './ManifestForm';
 import ManifestListItem from './ManifestListItem';
 import Workspace from './Workspace';
+import ns from '../config/css-ns';
 
 /**
  * This is the top level Mirador component.
@@ -66,9 +67,9 @@ class App extends Component {
       />
     ));
     return (
-      <div className="App">
+      <div className={ns('app')}>
         <Workspace />
-        <div className="control-panel">
+        <div className={ns('control-panel')}>
           <ManifestForm setLastRequested={this.setLastRequested} />
           <ul>{manifestList}</ul>
 
