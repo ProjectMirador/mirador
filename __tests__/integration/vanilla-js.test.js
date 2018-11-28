@@ -1,6 +1,6 @@
 describe('Plain JavaScript example', () => {
   beforeAll(async () => {
-    await page.goto('http://127.0.0.1:4444/__tests__/integration/vanilla-js/');
+    await page.goto('http://127.0.0.1:4488/__tests__/integration/vanilla-js/');
   });
   it('has the correct page title', async () => {
     const title = await page.title();
