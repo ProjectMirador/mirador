@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "lint": "node_modules/.bin/eslint ./",
-    "server": "node_modules/.bin/http-server -p 4444",
+    "server": "node_modules/.bin/http-server",
     "test": "npm run build && npm run lint && node_modules/.bin/jest",
     "test:watch": "npm test -- --watch",
     "build": "node_modules/.bin/webpack",
     "build:watch": "node_modules/.bin/webpack --watch",
-    "start": "npm run build && concurrently \"npm run build:watch\" \"npm run server\""
+    "start": "npm run build && concurrently \"npm run build:watch\" \"npm run server -- -p 4444\""
   },
   "license": "Apache-2.0",
   "contributors": [
