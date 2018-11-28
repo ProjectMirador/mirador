@@ -5,9 +5,16 @@ import App from './components/App';
 import { store } from './store';
 import './styles/index.scss';
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById('mirador'),
-);
+/**
+ * Default Mirador instantiation
+ */
+export default function Mirador(config) {
+  ReactDOM.render(
+    <Provider store={store}>
+      <App config={config} />
+    </Provider>,
+    document.getElementById(config.id),
+  );
+}
+
+module.exports = Mirador;

@@ -24,6 +24,8 @@ module.exports = [
     output: {
       path: path.join(__dirname, 'dist'),
       filename: 'mirador.min.js',
+      libraryTarget: 'umd',
+      library: 'Mirador',
     },
     resolve: { extensions: ['.js'] },
     module: {

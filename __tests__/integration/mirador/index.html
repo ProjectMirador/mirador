@@ -9,5 +9,11 @@
   <body>
     <div id="mirador"></div>
     <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
+    <script type="text/javascript">
+      Mirador({
+        id: 'mirador',
+        plugins: ['HelloWorld']
+      });
+    </script>
   </body>
 </html>
