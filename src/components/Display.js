@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ManifestMetadata from './ManifestMetadata';
+import ns from '../config/css-ns';
 
 /**
  * Determines how to best display the content (or lack thereof) the manifest
@@ -44,7 +45,7 @@ const stateClass = (manifest) => {
  */
 const Display = ({ manifest }) => (
   <div className="Display">
-    <div id="exampleManifest" className={stateClass(manifest)}>
+    <div id="exampleManifest" className={ns(stateClass(manifest))}>
       {displayContent(manifest)}
     </div>
   </div>

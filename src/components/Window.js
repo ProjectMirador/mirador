@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import fetch from 'node-fetch';
 import OpenSeaDragon from 'openseadragon';
+import ns from '../config/css-ns';
 
 /**
  * Represents a Window in the mirador workspace
@@ -76,13 +77,13 @@ class Window extends Component {
    */
   render() {
     return (
-      <div className="mirador-window" style={this.styleAttributes()}>
-        <div className="mirador-window-heading">
+      <div className={ns('window')} style={this.styleAttributes()}>
+        <div className={ns('window-heading')}>
           <h3>{this.props.manifest.manifestation.getLabel().map(label => label.value)[0]}</h3>
         </div>
         <img src={this.thumbnail()} alt="" />
         <div
-          className="mirador-osd-container"
+          className={ns('osd-container')}
           style={{ display: 'none' }}
           id={`${this.props.window.id}-osd`}
           ref={this.miradorInstanceRef}

@@ -15,6 +15,6 @@ describe('ManifestMetadata', () => {
 
   it('renders without an error', () => {
     expect(wrapper.find('h3').text()).toBe('Test 2 Manifest: Metadata Pairs');
-    expect(wrapper.find('.description').length).toBe(1);
+    expect(wrapper.find('.mirador-description').length).toBe(1);
   });
 });

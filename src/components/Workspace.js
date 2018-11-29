@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Window from './Window';
+import ns from '../config/css-ns';
 
 /**
  * Represents a work area that contains any number of windows
@@ -9,7 +10,7 @@ import Window from './Window';
  * @private
  */
 const Workspace = ({ windows }) => (
-  <div className="mirador-workspace">
+  <div className={ns('workspace')}>
     {
       windows.map(window => (
         <Window
