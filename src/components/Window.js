@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import fetch from 'node-fetch';
 import OpenSeaDragon from 'openseadragon';
 import ns from '../config/css-ns';
+import WindowTopBar from './WindowTopBar';
 
 /**
  * Represents a Window in the mirador workspace
@@ -78,9 +79,10 @@ class Window extends Component {
   render() {
     return (
       <div className={ns('window')} style={this.styleAttributes()}>
-        <div className={ns('window-heading')}>
-          <h3>{this.props.manifest.manifestation.getLabel().map(label => label.value)[0]}</h3>
-        </div>
+        <WindowTopBar
+          windowId={this.props.window.id}
+          manifest={this.props.manifest}
+        />
         <img src={this.thumbnail()} alt="" />
         <div
           className={ns('osd-container')}

@@ -13,13 +13,16 @@ describe('Window', () => {
     [window] = store.getState().windows;
     wrapper = mount(
       <Window store={store} id={window.id} />,
-      // We need to attach this to something created by our JSDOM instance
-      { attachTo: document.getElementById('main') },
+      // We need to attach this to something created by our JSDOM instance.
+      // Also need to provide context of the store so that connected sub components
+      // can render effectively.
+      { attachTo: document.getElementById('main'), context: { store } },
     );
   });
 
   it('returns the width and height style attribute', () => {
-    expect(shallow(<Window store={store} id={window.id} />).dive().instance().styleAttributes())
+    wrapper = shallow(<Window store={store} id={window.id} />, { context: { store } });
+    expect(wrapper.dive().instance().styleAttributes())
       .toEqual({ width: '400px', height: '400px' });
   });
 
@@ -27,7 +30,6 @@ describe('Window', () => {
     expect(wrapper.find('.mirador-window').prop('style')).toHaveProperty('width', '400px');
     expect(wrapper.find('.mirador-window').prop('style')).toHaveProperty('height', '400px');
     expect(wrapper.find('div.mirador-window').length).toBe(1);
-    expect(wrapper.find('div.mirador-window h3').text()).toBe('Test 24 Manifest: Image with IIIF Service - adapted with real image');
     expect(wrapper.find('div.mirador-window img').prop('src')).toBe('http://placekitten.com/200/300');
   });
 
