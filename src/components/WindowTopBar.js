@@ -22,20 +22,6 @@ class WindowTopBar extends Component {
     );
   }
 }
-//
-// /**
-//  * mapStateToProps - used to hook up connect to action creators
-//  * @memberof Window
-//  * @private
-//  */
-// const mapStateToProps = ({ windows, manifests }, props) => {
-//   const window = windows.find(win => props.windowId === win.id);
-//   return {
-//     window,
-//     //
-//     manifest: manifests[window.manifestId],
-//   };
-// };
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
