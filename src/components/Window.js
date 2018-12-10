@@ -19,10 +19,12 @@ class Window extends Component {
 
     this.miradorInstanceRef = React.createRef();
   }
+
   /**
    * React lifecycle event
    */
   componentDidMount() {
+    const { manifest } = this.props;
     if (!this.miradorInstanceRef.current) {
       return false;
     }
@@ -31,7 +33,7 @@ class Window extends Component {
       showNavigationControl: false,
     });
     const that = this;
-    fetch(`${this.props.manifest.manifestation.getSequences()[0].getCanvases()[0].getImages()[0].getResource().getServices()[0].id}/info.json`)
+    fetch(`${manifest.manifestation.getSequences()[0].getCanvases()[0].getImages()[0].getResource().getServices()[0].id}/info.json`)
       .then(response => response.json())
       .then((json) => {
         viewer.addTiledImage({
@@ -61,7 +63,8 @@ class Window extends Component {
    * Fetches IIIF thumbnail URL
    */
   thumbnail() {
-    const thumb = this.props.manifest.manifestation.getThumbnail() || { id: 'http://placekitten.com/200/300' };
+    const { manifest } = this.props;
+    const thumb = manifest.manifestation.getThumbnail() || { id: 'http://placekitten.com/200/300' };
     return thumb.id;
   }
 
@@ -69,7 +72,8 @@ class Window extends Component {
    * Return style attributes
    */
   styleAttributes() {
-    return { width: `${this.props.window.xywh[2]}px`, height: `${this.props.window.xywh[3]}px` };
+    const { window } = this.props;
+    return { width: `${window.xywh[2]}px`, height: `${window.xywh[3]}px` };
   }
 
   /**
@@ -77,17 +81,18 @@ class Window extends Component {
    * @param {object} props (from react/redux)
    */
   render() {
+    const { manifest, window } = this.props;
     return (
       <div className={ns('window')} style={this.styleAttributes()}>
         <WindowTopBar
-          windowId={this.props.window.id}
-          manifest={this.props.manifest}
+          windowId={window.id}
+          manifest={manifest}
         />
         <img src={this.thumbnail()} alt="" />
         <div
           className={ns('osd-container')}
           style={{ display: 'none' }}
-          id={`${this.props.window.id}-osd`}
+          id={`${window.id}-osd`}
           ref={this.miradorInstanceRef}
         />
       </div>

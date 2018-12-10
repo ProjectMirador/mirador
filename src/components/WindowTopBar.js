@@ -14,10 +14,11 @@ class WindowTopBar extends Component {
    * @return {type}  description
    */
   render() {
+    const { manifest, removeWindow, windowId } = this.props;
     return (
       <div className={ns('window-top-bar')}>
-        <h3>{this.props.manifest.manifestation.getLabel().map(label => label.value)[0]}</h3>
-        <button className={ns('window-close')} aria-label="Close Window" onClick={() => this.props.removeWindow(this.props.windowId)}>&times;</button>
+        <h3>{manifest.manifestation.getLabel().map(label => label.value)[0]}</h3>
+        <button type="button" className={ns('window-close')} aria-label="Close Window" onClick={() => removeWindow(windowId)}>&times;</button>
       </div>
     );
   }

@@ -7,8 +7,10 @@
     "page": true,
     "document": true
   },
+  "parser": "babel-eslint",
   "plugins": ["jest"],
   "rules": {
+    "no-console": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "require-jsdoc": ["error", {
       "require": {
@@ -16,7 +18,7 @@
         "MethodDefinition": true,
         "ClassDeclaration": true,
         "ArrowFunctionExpression": true,
-        "FunctionExpression": true,
+        "FunctionExpression": true
       }
     }],
     "react/prefer-stateless-function": "off"

@@ -16,5 +16,3 @@ export default function Mirador(config) {
     document.getElementById(config.id),
   );
 }
-
-module.exports = Mirador;
