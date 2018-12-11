@@ -8,12 +8,10 @@
     "server": "node_modules/.bin/http-server",
     "test": "npm run build && npm run lint && node_modules/.bin/jest",
     "test:watch": "npm test -- --watch",
-    "build": "NODE_ENV=production webpack",
-    "build:watch": "NODE_ENV=development webpack --watch",
-    "start": "NODE_ENV=development npm run build && concurrently \"npm run build:watch\" \"npm run server -- -p 4444\""
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "build": "NODE_ENV=production webpack --mode=production",
+    "build:dev": "webpack --mode=development",
+    "build:watch": "webpack --watch --mode=development",
+    "start": "npm run build:dev && concurrently \"npm run build:watch\" \"npm run server -- -p 4444\""
   },
   "license": "Apache-2.0",
   "contributors": [
@@ -48,7 +46,9 @@
     "enzyme-adapter-react-16": "^1.2.0",
     "eslint": "^5.10.0",
     "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-react-app": "^3.0.5",
     "eslint-loader": "^2.1.1",
+    "eslint-plugin-flowtype": "^3.2.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jest": "^22.1.2",
     "eslint-plugin-jsx-a11y": "^6.1.2",

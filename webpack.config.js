@@ -44,7 +44,6 @@ const babelLoaderConfig = {
 
 module.exports = [
   {
-    mode: 'production',
     entry: './src/store.js',
     output: {
       path: path.join(__dirname, 'dist'),
@@ -60,7 +59,6 @@ module.exports = [
     },
   },
   {
-    mode: 'production',
     entry: './src/index.js',
     output: {
       path: path.join(__dirname, 'dist'),
