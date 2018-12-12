@@ -8,7 +8,7 @@
     "server": "node_modules/.bin/http-server",
     "test": "npm run build && npm run lint && node_modules/.bin/jest",
     "test:watch": "npm test -- --watch",
-    "build": "NODE_ENV=production webpack --mode=production",
+    "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
     "build:watch": "webpack --watch --mode=development",
     "start": "npm run build:dev && concurrently \"npm run build:watch\" \"npm run server -- -p 4444\""
@@ -35,11 +35,14 @@
     "sass-loader": "^7.1.0"
   },
   "devDependencies": {
-    "babel-core": "7.0.0-bridge.0",
+    "@babel/core": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
     "babel-jest": "^23.6.0",
+    "babel-loader": "^8.0.4",
     "babel-plugin-named-asset-import": "^0.2.3",
-    "babel-preset-react-app": "^6.1.0",
     "concurrently": "^4.0.1",
     "css-loader": "^1.0.0",
     "enzyme": "^3.4.4",
