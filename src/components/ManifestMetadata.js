@@ -12,13 +12,14 @@ export default class ManifestMetadata extends Component {
    * @param {object} props
    */
   render() {
+    const { manifest } = this.props;
     return (
       <div>
         <h3>
-          {this.props.manifest.manifestation.getLabel().map(label => label.value)[0]}
+          {manifest.manifestation.getLabel().map(label => label.value)[0]}
         </h3>
         <div className={ns('description')}>
-          {this.props.manifest.manifestation.getDescription().map(label => label.value)}
+          {manifest.manifestation.getDescription().map(label => label.value)}
         </div>
       </div>
     );

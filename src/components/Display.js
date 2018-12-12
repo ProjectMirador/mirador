@@ -11,7 +11,8 @@ const displayContent = (manifest) => {
   if (manifest) {
     if (manifest.isFetching) {
       return '☕';
-    } else if (manifest.error) {
+    }
+    if (manifest.error) {
       return manifest.error.message;
     }
     return <ManifestMetadata manifest={manifest} />;
@@ -29,7 +30,8 @@ const stateClass = (manifest) => {
   if (manifest) {
     if (manifest.isFetching) {
       return 'fetching';
-    } else if (manifest.error) {
+    }
+    if (manifest.error) {
       return 'error';
     }
     return '';

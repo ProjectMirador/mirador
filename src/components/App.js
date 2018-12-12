@@ -43,11 +43,14 @@ class App extends Component {
    * @private
    */
   computedContent() {
-    const manifest = this.props.manifests[this.state.lastRequested];
+    const { manifests } = this.props;
+    const { lastRequested } = this.state;
+    const manifest = manifests[lastRequested];
     if (manifest) {
       if (manifest.isFetching) {
         return '☕';
-      } else if (manifest.error) {
+      }
+      if (manifest.error) {
         return manifest.error.message;
       }
       return JSON.stringify(manifest.json, 0, 2);
@@ -60,7 +63,9 @@ class App extends Component {
    * @return {String} - HTML markup for the component
    */
   render() {
-    const manifestList = Object.keys(this.props.manifests).map(manifest => (
+    const { manifests } = this.props;
+    const { lastRequested } = this.state;
+    const manifestList = Object.keys(manifests).map(manifest => (
       <ManifestListItem
         key={manifest}
         manifest={manifest}
@@ -74,7 +79,7 @@ class App extends Component {
           <ul>{manifestList}</ul>
 
           <Display
-            manifest={this.props.manifests[this.state.lastRequested]}
+            manifest={manifests[lastRequested]}
           />
         </div>
       </div>
