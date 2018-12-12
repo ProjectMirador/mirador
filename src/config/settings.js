@@ -1,3 +1,3 @@
 export default {
-  manifestVersion: 'v2',
+  foo: 'bar',
 };
