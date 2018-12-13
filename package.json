@@ -6,8 +6,9 @@
   "scripts": {
     "lint": "node_modules/.bin/eslint ./",
     "server": "node_modules/.bin/http-server",
-    "test": "npm run build && npm run lint && node_modules/.bin/jest",
-    "test:watch": "npm test -- --watch",
+    "test": "npm run build && npm run lint && jest -c jest.json",
+    "test:coverage": "jest -c jest.json --coverage",
+    "test:watch": "jest -c jest.json --watch",
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
     "build:watch": "webpack --watch --mode=development",
@@ -67,14 +68,5 @@
     "style-loader": "^0.22.1",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2"
-  },
-  "jest": {
-    "preset": "jest-puppeteer",
-    "setupFiles": [
-      "./setupJest.js"
-    ],
-    "testPathIgnorePatterns": [
-      "__tests__/integration/react-example/.*jsx?"
-    ]
   }
 }
