@@ -1,7 +1,7 @@
 This document serves as a reference for the Mirador community and others interested in the project. It aims to outline agreed upon practices that are used in the development and maintenance of the Mirador software.
 
 ## Contributing to Mirador
-Contributions to Mirador are always welcome, however, it will always be helpful to begin any large change by submitting an issue or engaging with the Mirador community. For more on this, see [plugin architecture](#plugin-architecture). Mirador 3.0 and beyond adheres to [semantic versioning](https://semver.org/) providing adopters and contributors to better rely on what changes can be expected in released versions of the software.
+Contributions to Mirador are always welcome, however, it will always be helpful to begin any large change by submitting an issue or engaging with the Mirador community. For more on this, see [plugin architecture](#plugin-architecture). Mirador 3.0 and beyond adheres to [semantic versioning](https://semver.org/) so that adopters and contributors can better understand what changes can be expected in released versions of the software.
 
 All contributions should be submitted as a [GitHub pull request](https://help.github.com/articles/about-pull-requests/) to the `master` branch. Pull requests must be reviewed and accepted by another Mirador maintainer and pass all continuous integration checks. Contributions should have tests for the feature or bug fix, documentation and should conform to the Mirador agreed upon coding style. Contributions should not include a “built” version of Mirador, this will help in reducing merge conflicts.
 
