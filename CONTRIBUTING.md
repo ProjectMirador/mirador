@@ -6,7 +6,10 @@ Contributions to Mirador are always welcome, however, it will always be helpful 
 All contributions should be submitted as a [GitHub pull request](https://help.github.com/articles/about-pull-requests/) to the `master` branch. Pull requests must be reviewed and accepted by another Mirador maintainer and pass all continuous integration checks. Contributions should have tests for the feature or bug fix, documentation and should conform to the Mirador agreed upon coding style. Contributions should not include a “built” version of Mirador, this will help in reducing merge conflicts.
 
 ### Adding dependencies
-Careful consideration should be given when adding software dependencies to Mirador. Considerations should be given to: added size of the dependency, whether or not that dependency is maintained and tested, how the dependency may interact with Mirador embedded in other environments.
+Careful consideration should be given when adding software dependencies to Mirador. During the code review process, new dependencies may be evaluated on the following considerations: 
+- added size of the dependency
+- whether or not that dependency is maintained and tested
+- how the dependency may interact with Mirador embedded in other environments
 
 As a general rule, any dependencies added should not be committed directly, but should use a package manager to require the dependency.
 
