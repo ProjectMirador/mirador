@@ -1,3 +1,4 @@
 dist/
 coverage/
-
+.idea
+package-lock.json
