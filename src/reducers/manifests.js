@@ -26,6 +26,13 @@ const manifestsReducer = (state = {}, action) => {
           isFetching: false,
         },
       });
+    case ActionTypes.REMOVE_MANIFEST:
+      return Object.keys(state).reduce((object, key) => {
+        if (key !== action.manifestId) {
+          object[key] = state[key]; // eslint-disable-line no-param-reassign
+        }
+        return object;
+      }, {});
     default: return state;
   }
 };

@@ -54,4 +54,17 @@ describe('manifests reducer', () => {
       },
     });
   });
+  it('should handle REMOVE_MANIFEST', () => {
+    expect(reducer(
+      {
+        abc123: {
+          stuff: 'foo',
+        },
+      },
+      {
+        type: ActionTypes.REMOVE_MANIFEST,
+        manifestId: 'abc123',
+      },
+    )).toEqual({});
+  });
 });

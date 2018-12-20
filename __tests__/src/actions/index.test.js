@@ -124,4 +124,13 @@ describe('actions', () => {
       });
     });
   });
+  describe('removeManifest', () => {
+    it('removes an existing manifest', () => {
+      const expectedAction = {
+        type: ActionTypes.REMOVE_MANIFEST,
+        manifestId: 'foo',
+      };
+      expect(actions.removeManifest('foo')).toEqual(expectedAction);
+    });
+  });
 });

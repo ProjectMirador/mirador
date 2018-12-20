@@ -146,3 +146,13 @@ export function fetchManifest(manifestId) {
       .catch(error => dispatch(receiveManifestFailure(manifestId, error)));
   });
 }
+
+/**
+ * removeManifest - action creator
+ *
+ * @param  {String} manifestId
+ * @memberof ActionCreators
+ */
+export function removeManifest(manifestId) {
+  return { type: ActionTypes.REMOVE_MANIFEST, manifestId };
+}
