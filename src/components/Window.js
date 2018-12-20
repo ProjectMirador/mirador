@@ -1,73 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import fetch from 'node-fetch';
-import OpenSeaDragon from 'openseadragon';
 import ns from '../config/css-ns';
+import WindowBackground from './WindowBackground';
 import WindowTopBar from './WindowTopBar';
+import WindowViewer from './WindowViewer';
 
 /**
  * Represents a Window in the mirador workspace
  * @param {object} window
  */
 class Window extends Component {
-  /**
-   * @param {Object} props [description]
-   */
-  constructor(props) {
-    super(props);
-
-    this.miradorInstanceRef = React.createRef();
-  }
-
-  /**
-   * React lifecycle event
-   */
-  componentDidMount() {
-    const { manifest } = this.props;
-    if (!this.miradorInstanceRef.current) {
-      return false;
-    }
-    const viewer = OpenSeaDragon({
-      id: this.miradorInstanceRef.current.id,
-      showNavigationControl: false,
-    });
-    const that = this;
-    fetch(`${manifest.manifestation.getSequences()[0].getCanvases()[0].getImages()[0].getResource().getServices()[0].id}/info.json`)
-      .then(response => response.json())
-      .then((json) => {
-        viewer.addTiledImage({
-          tileSource: json,
-          success: (event) => {
-            const tiledImage = event.item;
-
-            /**
-             * A callback for the tile after its drawn
-             * @param  {[type]} e event object
-             */
-            const tileDrawnHandler = (e) => {
-              if (e.tiledImage === tiledImage) {
-                viewer.removeHandler('tile-drawn', tileDrawnHandler);
-                that.miradorInstanceRef.current.style.display = 'block';
-              }
-            };
-            viewer.addHandler('tile-drawn', tileDrawnHandler);
-          },
-        });
-      })
-      .catch(error => console.log(error));
-    return false;
-  }
-
-  /**
-   * Fetches IIIF thumbnail URL
-   */
-  thumbnail() {
-    const { manifest } = this.props;
-    const thumb = manifest.manifestation.getThumbnail() || { id: 'http://placekitten.com/200/300' };
-    return thumb.id;
-  }
-
   /**
    * Return style attributes
    */
@@ -77,8 +20,25 @@ class Window extends Component {
   }
 
   /**
+   * renderViewer
+   *
+   * @return {String, null}
+   */
+  renderViewer() {
+    const { manifest, window } = this.props;
+    if (manifest) {
+      return (
+        <WindowViewer
+          window={window}
+          manifest={manifest}
+        />
+      );
+    }
+    return null;
+  }
+
+  /**
    * Renders things
-   * @param {object} props (from react/redux)
    */
   render() {
     const { manifest, window } = this.props;
@@ -88,13 +48,10 @@ class Window extends Component {
           windowId={window.id}
           manifest={manifest}
         />
-        <img src={this.thumbnail()} alt="" />
-        <div
-          className={ns('osd-container')}
-          style={{ display: 'none' }}
-          id={`${window.id}-osd`}
-          ref={this.miradorInstanceRef}
+        <WindowBackground
+          manifest={manifest}
         />
+        {this.renderViewer()}
       </div>
     );
   }

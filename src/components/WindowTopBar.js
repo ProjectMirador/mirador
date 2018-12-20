@@ -10,14 +10,27 @@ import ns from '../config/css-ns';
  */
 class WindowTopBar extends Component {
   /**
-   * render - description
-   * @return {type}  description
+   * titleContent
+   *
+   * @return {String}
+   */
+  titleContent() {
+    const { manifest } = this.props;
+    if (manifest && manifest.manifestation) {
+      return manifest.manifestation.getLabel().map(label => label.value)[0];
+    }
+    return '';
+  }
+
+  /**
+   * render
+   * @return
    */
   render() {
-    const { manifest, removeWindow, windowId } = this.props;
+    const { removeWindow, windowId } = this.props;
     return (
       <div className={ns('window-top-bar')}>
-        <h3>{manifest.manifestation.getLabel().map(label => label.value)[0]}</h3>
+        <h3>{this.titleContent()}</h3>
         <button type="button" className={ns('window-close')} aria-label="Close Window" onClick={() => removeWindow(windowId)}>&times;</button>
       </div>
     );
