@@ -552,6 +552,12 @@
             if (event.tiledImage === tiledImage) {
               imageResource.setStatus('drawn');
               _this.osd.removeHandler('tile-drawn', tileDrawnHandler);
+              if (imageResource._initialOpacity === null) {
+                _this.updateImageOpacity(null, imageResource);
+              } else if (imageResource._initialOpacity === 0) {
+                imageResource.osdTiledImage.setOpacity(0);
+              }
+              delete imageResource._initialOpacity;
             }
           };
           _this.osd.addHandler('tile-drawn', tileDrawnHandler);
@@ -575,11 +581,15 @@
       // and the opacity can be updated.
       if (imageResource.getStatus() === 'drawn') {
         this.updateImageOpacity(null, imageResource);
+      } else {
+        imageResource._initialOpacity = null;
       }
     },
     hideImage: function(event, imageResource) {
       if (imageResource.getStatus() === 'drawn') {
         imageResource.osdTiledImage.setOpacity(0);
+      } else {
+        imageResource._initialOpacity = 0;
       }
     },
     removeImage: function() {
