@@ -69,6 +69,11 @@
           focusState = _this.viewType,
           templateData = {};
 
+      if (this.events) {
+        this.events.forEach(function(event){
+          _this.eventEmitter.unsubscribe(event.name,event.handler);
+        });
+      }
       this.events = [];
 
       //make sure annotations list is cleared out when changing objects within window
