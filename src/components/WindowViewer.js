@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import OpenSeaDragon from 'openseadragon';
 import fetch from 'node-fetch';
+import miradorWithPlugins from '../lib/miradorWithPlugins';
 import ns from '../config/css-ns';
 
 /**
@@ -15,7 +16,8 @@ class WindowViewer extends Component {
   constructor(props) {
     super(props);
 
-    this.miradorInstanceRef = React.createRef();
+    this.ref = React.createRef();
+    this.viewer = null;
   }
 
   /**
@@ -23,18 +25,18 @@ class WindowViewer extends Component {
    */
   componentDidMount() {
     const { manifest } = this.props;
-    if (!this.miradorInstanceRef.current) {
+    if (!this.ref.current) {
       return false;
     }
-    const viewer = OpenSeaDragon({
-      id: this.miradorInstanceRef.current.id,
+    this.viewer = OpenSeaDragon({
+      id: this.ref.current.id,
       showNavigationControl: false,
     });
     const that = this;
     fetch(`${manifest.manifestation.getSequences()[0].getCanvases()[0].getImages()[0].getResource().getServices()[0].id}/info.json`)
       .then(response => response.json())
       .then((json) => {
-        viewer.addTiledImage({
+        that.viewer.addTiledImage({
           tileSource: json,
           success: (event) => {
             const tiledImage = event.item;
@@ -45,11 +47,11 @@ class WindowViewer extends Component {
              */
             const tileDrawnHandler = (e) => {
               if (e.tiledImage === tiledImage) {
-                viewer.removeHandler('tile-drawn', tileDrawnHandler);
-                that.miradorInstanceRef.current.style.display = 'block';
+                that.viewer.removeHandler('tile-drawn', tileDrawnHandler);
+                that.ref.current.style.display = 'block';
               }
             };
-            viewer.addHandler('tile-drawn', tileDrawnHandler);
+            that.viewer.addHandler('tile-drawn', tileDrawnHandler);
           },
         });
       })
@@ -67,7 +69,7 @@ class WindowViewer extends Component {
         className={ns('osd-container')}
         style={{ display: 'none' }}
         id={`${window.id}-osd`}
-        ref={this.miradorInstanceRef}
+        ref={this.ref}
       />
     );
   }
@@ -78,4 +80,4 @@ WindowViewer.propTypes = {
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-export default WindowViewer;
+export default miradorWithPlugins(WindowViewer);
