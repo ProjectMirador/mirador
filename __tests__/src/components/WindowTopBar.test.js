@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { actions, store } from '../../../src/store';
 import WindowTopBar from '../../../src/components/WindowTopBar';
 import fixture from '../../fixtures/24.json';
@@ -12,8 +12,13 @@ describe('Window', () => {
     store.dispatch(actions.addWindow({ manifestId: 'foo' }));
     const manifest = store.getState().manifests.foo;
     [window] = store.getState().windows;
-    wrapper = shallow(<WindowTopBar store={store} manifest={manifest} windowId={window.id} />)
-      .dive();
+    wrapper = mount(
+      <WindowTopBar store={store} manifest={manifest} windowId={window.id} />,
+      // We need to attach this to something created by our JSDOM instance.
+      // Also need to provide context of the store so that connected sub components
+      // can render effectively.
+      { attachTo: document.getElementById('main'), context: { store } },
+    );
   });
 
   it('renders without an error', () => {

@@ -1,4 +1,5 @@
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
 const paths = require('./config/paths');
 
 const eslintLoaderConfig = {
@@ -79,6 +80,15 @@ module.exports = [
             'sass-loader', // compiles Sass to CSS, using Node Sass by default
           ],
         }],
+    },
+    optimization: {
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            mangle: false,
+          },
+        }),
+      ],
     },
   },
 ];
