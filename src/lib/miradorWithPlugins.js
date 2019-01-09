@@ -17,13 +17,13 @@ export default function miradorWithPlugins(WrappedComponent) {
     constructor(props) {
       super(props);
 
-      this.pluginParent = this.pluginParent.bind(this);
+      this.getPluginParent = this.getPluginParent.bind(this);
     }
 
     /**
      * pluginParent - access the plugin's "parent"
      */
-    pluginParent() {
+    getPluginParent() {
       return this.pluginParent;
     }
 
@@ -40,7 +40,7 @@ export default function miradorWithPlugins(WrappedComponent) {
           {componentPlugins(WrappedComponent.name, plugins)
             .map(component => React.createElement(
               connect(component.mapStateToProps, component.mapDispatchToProps)(component.component),
-              { key: component.name, ...this.props, pluginParent: this.pluginParent },
+              { key: component.name, ...this.props, pluginParent: this.getPluginParent },
             ))
           }
         </Fragment>
