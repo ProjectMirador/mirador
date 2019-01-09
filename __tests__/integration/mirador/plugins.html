@@ -8,8 +8,8 @@
   </head>
   <body>
     <div id="mirador"></div>
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="../../../node_modules/react/umd/react.development.js"></script>
+    <script src="../../../node_modules/react-dom/umd/react-dom.development.js"></script>
     <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
     <script type="text/javascript">
       class MiradorShareButton extends React.Component {
@@ -25,12 +25,12 @@
           return React.createElement('button', { className: 'share', onClick: this.handleClick}, 'Share');
         }
       }
-      miradorShareButton = {
+      const miradorShareButton = {
         name: 'miradorShareButton',
         component: MiradorShareButton,
         parent: 'WindowTopBarButtons',
       }
-      Mirador.plugins.miradorTopBarShare = miradorShareButton;
+      Mirador.plugins.miradorShareButton = miradorShareButton;
       class MiradorRuler extends React.Component {
         constructor(props) {
           super(props);
@@ -65,17 +65,23 @@
           return React.createElement('div', {className: 'mirador-ruler', style: {position: 'absolute', color: this.zoomToColor(this.state.zooming)}}, 'I am a ruler')
         }
       }
-      miradorRuler = {
+      const miradorRuler = {
         name: 'miradorRuler',
         component: MiradorRuler,
         parent: 'WindowViewer',
+        mapStateToProps: ({ manifests }, props) => {
+          return {
+            manifests // return the part of the state I need here.
+          }
+        },
+        mapDispatchToProps: (dispatch) => {
+          return {}
+        },
       }
       Mirador.plugins.miradorRuler = miradorRuler;
-    </script>
-    <script type="text/javascript">
       var miradorInstance = Mirador.viewer({
         id: 'mirador',
-        plugins: ['miradorShareButton']
+        plugins: ['miradorShareButton', 'miradorRuler']
       });
     </script>
   </body>
