@@ -34,26 +34,38 @@
       class MiradorRuler extends React.Component {
         constructor(props) {
           super(props);
+          this._isMounted = false;
           this.state = {
             zooming: false,
           }
           this.zoomToColor = this.zoomToColor.bind(this);
         }
         componentDidMount() {
-          this.props.pluginParent().viewer.addHandler('zoom', (e) => {
-            this.setState({
-              zooming: true
-            })
-          })
+          this._isMounted = true;
           const that = this;
+          this.props.pluginParent().viewer.addHandler('zoom', (e) => {
+            if (that._isMounted) {
+              that.setState({
+                zooming: true
+              })
+            }
+          })
           // Super hacky don't do this for real
           function resetStyle() {
-            that.setState({
-              zooming: false
-            })
+            if (that._isMounted) {
+              that.setState({
+                zooming: false
+              })
+            }
             setTimeout(resetStyle, 750)
           }
           resetStyle();
+        }
+        componentWillUnmount() {
+          this._isMounted = false;
+          if (this.props.pluginParent()) {
+            this.props.pluginParent().viewer.removeHandler('zoom');
+          }
         }
         zoomToColor(zooming) {
           if (zooming) {
@@ -62,13 +74,13 @@
           return 'black'
         }
         render() {
-          return React.createElement('div', {className: 'mirador-ruler', style: {position: 'absolute', color: this.zoomToColor(this.state.zooming)}}, 'I am a ruler')
+          return React.createElement('div', {className: 'mirador-ruler', style: { position: 'absolute', bottom: 0, color: this.zoomToColor(this.state.zooming)}}, 'I am a ruler')
         }
       }
       const miradorRuler = {
         name: 'miradorRuler',
         component: MiradorRuler,
-        parent: 'WindowViewer',
+        parent: 'OpenSeadragonViewer',
         mapStateToProps: ({ manifests }, props) => {
           return {
             manifests // return the part of the state I need here.
