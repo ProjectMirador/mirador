@@ -53,4 +53,12 @@ body {
     top: 0;
     width: 100%;
   }
+
+  &-osd-navigation {
+    bottom: 10px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+  }
 }

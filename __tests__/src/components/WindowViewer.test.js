@@ -26,4 +26,7 @@ describe('WindowViewer', () => {
     // do not effectively find elements (even though they are there)
     expect(wrapper.render().find('.openseadragon-canvas').length).toBe(1);
   });
+  it('has navigation controls', () => {
+    expect(wrapper.find('.mirador-osd-navigation').length).toBe(1);
+  });
 });

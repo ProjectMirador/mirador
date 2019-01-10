@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import OpenSeaDragon from 'openseadragon';
 import fetch from 'node-fetch';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import ns from '../config/css-ns';
+import OpenSeadragonViewer from './OpenSeadragonViewer';
+import ViewerNavigation from './ViewerNavigation';
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
- * and rendering OSD.
+ * OSD and Navigation
  */
 class WindowViewer extends Component {
   /**
@@ -16,47 +16,43 @@ class WindowViewer extends Component {
   constructor(props) {
     super(props);
 
-    this.ref = React.createRef();
-    this.viewer = null;
+    const { manifest } = this.props;
+    this.canvases = manifest.manifestation.getSequences()[0].getCanvases();
+    this.state = {
+      tileSources: [],
+    };
   }
 
   /**
-   * React lifecycle event
+   * componentDidMount - React lifecycle method
+   * Request the initial canvas on mount
    */
   componentDidMount() {
-    const { manifest } = this.props;
-    if (!this.ref.current) {
-      return false;
+    this.requestAndUpdateTileSources();
+  }
+
+  /**
+   * componentDidUpdate - React lifecycle method
+   * Request a new canvas if it is needed
+   */
+  componentDidUpdate(prevProps) {
+    const { window } = this.props;
+    if (prevProps.window.canvasIndex !== window.canvasIndex) {
+      this.requestAndUpdateTileSources();
     }
-    this.viewer = OpenSeaDragon({
-      id: this.ref.current.id,
-      showNavigationControl: false,
-    });
-    const that = this;
-    fetch(`${manifest.manifestation.getSequences()[0].getCanvases()[0].getImages()[0].getResource().getServices()[0].id}/info.json`)
+  }
+
+  /**
+   */
+  requestAndUpdateTileSources() {
+    const { window } = this.props;
+    fetch(`${this.canvases[window.canvasIndex].getImages()[0].getResource().getServices()[0].id}/info.json`)
       .then(response => response.json())
       .then((json) => {
-        that.viewer.addTiledImage({
-          tileSource: json,
-          success: (event) => {
-            const tiledImage = event.item;
-
-            /**
-             * A callback for the tile after its drawn
-             * @param  {[type]} e event object
-             */
-            const tileDrawnHandler = (e) => {
-              if (e.tiledImage === tiledImage) {
-                that.viewer.removeHandler('tile-drawn', tileDrawnHandler);
-                that.ref.current.style.display = 'block';
-              }
-            };
-            that.viewer.addHandler('tile-drawn', tileDrawnHandler);
-          },
+        this.setState({
+          tileSources: [json],
         });
-      })
-      .catch(error => console.log(error));
-    return false;
+      });
   }
 
   /**
@@ -64,13 +60,12 @@ class WindowViewer extends Component {
    */
   render() {
     const { window } = this.props;
+    const { tileSources } = this.state;
     return (
-      <div
-        className={ns('osd-container')}
-        style={{ display: 'none' }}
-        id={`${window.id}-osd`}
-        ref={this.ref}
-      />
+      <Fragment>
+        <OpenSeadragonViewer tileSources={tileSources} window={window} />
+        <ViewerNavigation window={window} canvases={this.canvases} />
+      </Fragment>
     );
   }
 }
