@@ -1,9 +1,5 @@
 language: node_js
-sudo: false
 node_js:
-- '5'
-- 'v6.10.3'
-before_install:
-- npm install
-script:
-- npm run travis
+  - 'node'
+before_script:
+  - npm install
