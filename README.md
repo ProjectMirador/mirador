@@ -1,3 +1,4 @@
+*NOTE: This README reflects the in development version of Mirador 3. For previous versions, please reference that release's README directly. Latest 2.x release: [v.2.7.0](https://github.com/ProjectMirador/mirador/tree/v2.7.0)*
 # Mirador
 [![Build Status](https://travis-ci.org/ProjectMirador/mirador.svg?branch=master)](https://travis-ci.org/ProjectMirador/mirador) [![Test Coverage](https://api.codeclimate.com/v1/badges/85265abbd7ce99df2d90/test_coverage)](https://codeclimate.com/github/ProjectMirador/mirador/test_coverage)
 
