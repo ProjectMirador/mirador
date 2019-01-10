@@ -1,3 +1,7 @@
+
+
+*NOTE: This README reflects the in development version of Mirador 3. For previous versions, please reference that release's README directly. Latest 2.x release: [v.2.7.0](https://github.com/ProjectMirador/mirador/tree/v2.7.0)*
+
 ## Running Mirador locally
 
 1. Run `npm install` to install the dependencies.
