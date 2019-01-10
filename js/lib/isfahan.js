@@ -45,6 +45,7 @@ var Isfahan = function(configObject) {
     n = group.length,
     x = rect.x,
     y = rect.y,
+    d,
     o;
     var offset = 0;
     while (++i < n) {

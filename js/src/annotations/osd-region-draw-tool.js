@@ -137,7 +137,7 @@
       if (typeof annotation === 'object' && annotation.on) {
         for (var i = 0; i < strategies.length; i++) {
           if (strategies[i].isThisType(annotation)) {
-            shapeArray = strategies[i].parseRegion(annotation, this);
+            var shapeArray = strategies[i].parseRegion(annotation, this);
             return shapeArray;
           }
         }
