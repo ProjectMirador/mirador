@@ -13,6 +13,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-githooks');
+  grunt.loadNpmTasks('grunt-css-selectors');
 
   // ----------
   var distribution = 'build/mirador/mirador.js',
@@ -94,7 +95,7 @@ module.exports = function(grunt) {
           'css/bootstrap.modals.css',
           'css/normalize.css',
           'node_modules/font-awesome/css/font-awesome.min.css',
-          'css/jquery-ui.min.css',
+          'css/jquery-ui-scoped.css',
           'node_modules/jstree/dist/themes/default/style.min.css',
           'css/collection-tree-mod.css',
           'node_modules/qtip2/dist/jquery.qtip.min.css',
@@ -249,6 +250,19 @@ module.exports = function(grunt) {
       ci: {
         src: 'reports/coverage/PhantomJS*/lcov.info'
       }
+    },
+
+    css_selectors: {
+      options: {
+        mutations: [{
+          prefix: '.mirador-container'
+        }]
+      },
+      your_target: {
+        files: {
+          'css/jquery-ui-scoped.css': ['css/jquery-ui.min.css']
+        }
+      }
     }
   });
 
@@ -269,14 +283,19 @@ module.exports = function(grunt) {
   grunt.registerTask('lint', ['jshint', 'eslint']);
 
   // ----------
+  // jQueryUI CSS task.
+  // Scopes all jQueryUI CSS selectors with '.mirador-container'.
+  grunt.registerTask('jqueryui_css', ['css_selectors']);
+
+  // ----------
   // Build task.
   // Cleans out the build folder and builds the code and images into it, checking lint.
-  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'lint', 'less', 'concat', 'uglify', 'cssmin', 'copy']);
+  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'lint', 'less', 'jqueryui_css', 'concat', 'uglify', 'cssmin', 'copy']);
 
   // ----------
   // Dev Build task.
   // Build, but skip the time-consuming and obscurantist minification and uglification.
-  grunt.registerTask('dev_build', [ 'clean:build', 'git-describe', 'lint', 'less', 'concat', 'copy']);
+  grunt.registerTask('dev_build', [ 'clean:build', 'git-describe', 'lint', 'less', 'jqueryui_css', 'concat', 'copy']);
 
   // ----------
   // Default task.
