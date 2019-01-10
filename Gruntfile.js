@@ -1,7 +1,6 @@
 module.exports = function(grunt) {
 
   // ----------
-  grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks("gruntify-eslint");
@@ -14,6 +13,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-githooks');
+  grunt.loadNpmTasks('grunt-css-selectors');
 
   // ----------
   var distribution = 'build/mirador/mirador.js',
@@ -29,7 +29,8 @@ module.exports = function(grunt) {
     'node_modules/bootstrap/js/transition.js',
     'node_modules/bootbox/bootbox.js',
     'node_modules/jquery.scrollto/jquery.scrollTo.min.js',
-    'js/lib/jquery.qtip.min.js',
+    'node_modules/jstree/dist/jstree.min.js',
+    'node_modules/qtip2/dist/jquery.qtip.min.js',
     'node_modules/javascript-state-machine/state-machine.min.js',
     'node_modules/tinymce/tinymce.min.js',
     'node_modules/handlebars/dist/handlebars.js',
@@ -44,9 +45,9 @@ module.exports = function(grunt) {
     'node_modules/i18next/i18next.min.js',
     'node_modules/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js',
     'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
-    'bower_components/simplePagination.js/jquery.simplePagination.js',
+    'node_modules/simple-pagination.js/jquery.simplePagination.js',
     'js/lib/modernizr.custom.js',
-    'js/lib/sanitize-html.min.js',
+    'node_modules/sanitize-html/dist/sanitize-html.min.js',
     'node_modules/iiif-evented-canvas/dist/iiif-evented-canvas.umd.min.js',
     'node_modules/iiif-layout-functions/dist/iiif-layout-functions.umd.min.js',
     'node_modules/select2/dist/js/select2.full.min.js'
@@ -94,13 +95,15 @@ module.exports = function(grunt) {
           'css/bootstrap.modals.css',
           'css/normalize.css',
           'node_modules/font-awesome/css/font-awesome.min.css',
-          'css/jquery-ui.min.css',
-          'css/jquery.qtip.min.css',
+          'css/jquery-ui-scoped.css',
+          'node_modules/jstree/dist/themes/default/style.min.css',
+          'css/collection-tree-mod.css',
+          'node_modules/qtip2/dist/jquery.qtip.min.css',
           'node_modules/spectrum-colorpicker/spectrum.css',
           'node_modules/select2/dist/css/select2.min.css',
           'css/mirador.css',
           'css/material-icons.css',
-          'bower_components/simplePagination.js/simplePagination.css'
+          'node_modules/simple-pagination.js/simplePagination.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'
       }
@@ -172,32 +175,10 @@ module.exports = function(grunt) {
           src: 'js/lib/parse.min.js',
           dest: 'build/mirador/parse.min.js'
         }, {
-          src: 'js/lib/ZeroClipboard.swf',
-          dest: 'build/mirador/ZeroClipboard.swf'
-        }, {
           expand: true,
           src: 'locales/**',
           dest: 'build/mirador'
         }]
-      }
-    },
-
-    compress: {
-      zip: {
-        options: {
-          archive: 'build/mirador.zip'
-        },
-        files: [
-          { expand: true, cwd: 'build/', src: ['mirador/**'] }
-        ]
-      },
-      tar: {
-        options: {
-          archive: 'build/mirador.tar'
-        },
-        files: [
-          { expand: true, cwd: 'build/', src: [ 'mirador/**' ] }
-        ]
       }
     },
 
@@ -269,6 +250,19 @@ module.exports = function(grunt) {
       ci: {
         src: 'reports/coverage/PhantomJS*/lcov.info'
       }
+    },
+
+    css_selectors: {
+      options: {
+        mutations: [{
+          prefix: '.mirador-container'
+        }]
+      },
+      your_target: {
+        files: {
+          'css/jquery-ui-scoped.css': ['css/jquery-ui.min.css']
+        }
+      }
     }
   });
 
@@ -286,27 +280,22 @@ module.exports = function(grunt) {
   });
   // ----------
   // Lint task
-  grunt.registerTask('lint', ['jshint', 'eslint'])
+  grunt.registerTask('lint', ['jshint', 'eslint']);
+
+  // ----------
+  // jQueryUI CSS task.
+  // Scopes all jQueryUI CSS selectors with '.mirador-container'.
+  grunt.registerTask('jqueryui_css', ['css_selectors']);
 
   // ----------
   // Build task.
   // Cleans out the build folder and builds the code and images into it, checking lint.
-  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'lint', 'less', 'concat:css', 'uglify', 'cssmin', 'copy']);
+  grunt.registerTask('build', [ 'clean:build', 'git-describe', 'lint', 'less', 'jqueryui_css', 'concat', 'uglify', 'cssmin', 'copy']);
 
   // ----------
   // Dev Build task.
   // Build, but skip the time-consuming and obscurantist minification and uglification.
-  grunt.registerTask('dev_build', [ 'clean:build', 'git-describe', 'lint', 'less', 'concat', 'copy']);
-
-  // ----------
-  // Package task.
-  // Builds and creates the .zip and .tar files.
-  grunt.registerTask('package', ['build', 'compress']);
-
-  // ----------
-  // Publish task.
-  // Cleans the built files out of the release folder and copies newly built ones over.
-  grunt.registerTask('publish', ['package', 'clean:release', 'copy:release']);
+  grunt.registerTask('dev_build', [ 'clean:build', 'git-describe', 'lint', 'less', 'jqueryui_css', 'concat', 'copy']);
 
   // ----------
   // Default task.

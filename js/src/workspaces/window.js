@@ -82,9 +82,10 @@
 
       _this.removeBookView();
 
+      this.viewingDirection = _this.manifest.getViewingDirection();
       //reset imagemodes and then remove any imageModes that are not available as a focus
       //add getting rtl value
-      if(_this.manifest.getViewingDirection() == 'right-to-left'){
+      if(this.viewingDirection == 'right-to-left'){
         _this.vDirectionStatus = 'rtl';
       }
       else{
@@ -551,7 +552,7 @@
               imagesList: _this.imagesList,
               imagesListLtr: _this.imagesListLtr,
               imagesListRtl: _this.imagesListRtl,
-              vDirectionStatus: _this.vDirectionStatus,		
+              vDirectionStatus: _this.vDirectionStatus,
               thumbInfo: {thumbsHeight: 80, listingCssCls: 'panel-listing-thumbs', thumbnailCls: 'panel-thumbnail-view'}
             });
           }
@@ -802,6 +803,7 @@
           imagesListRtl: this.imagesListRtl,
           imagesListLtr: this.imagesListLtr,
           vDirectionStatus: this.vDirectionStatus,
+          viewingDirection: this.viewingDirection,
           osdOptions: this.windowOptions,
           bottomPanelAvailable: this.bottomPanelAvailable
         });
@@ -900,7 +902,7 @@
 
       if (urls.length !== 0) {
         jQuery.each(urls, function(index, url) {
-          jQuery.get(url, function(list) {
+          jQuery.getJSON(url, function(list) {
             var annotations = list.resources;
             jQuery.each(annotations, function(index, value) {
               //if there is no ID for this annotation, set a random one

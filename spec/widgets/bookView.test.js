@@ -510,7 +510,7 @@ describe('BookView', function() {
       });
       it('stitches right-to-left', function() {
         subject.viewingDirection = 'right-to-left';
-        expect(subject.getStitchList()).toEqual([this.imagesList[4], this.imagesList[3]]);
+        expect(subject.getStitchList()).toEqual([this.imagesList[3], this.imagesList[4]]);
       });
       it('stitches top-down', function() {
         subject.viewingDirection = 'top-to-bottom';
@@ -533,7 +533,7 @@ describe('BookView', function() {
       });
       it('stitches right-to-left', function() {
         subject.viewingDirection = 'right-to-left';
-        expect(subject.getStitchList()).toEqual([this.imagesList[6], this.imagesList[5]]);
+        expect(subject.getStitchList()).toEqual([this.imagesList[5], this.imagesList[6]]);
       });
       it('stitches top-down', function() {
         subject.viewingDirection = 'top-to-bottom';

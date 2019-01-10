@@ -87,8 +87,8 @@
         return false;
       }
 
-      saveModule = config.jsonStorageEndpoint.module,
-      saveOptions = config.jsonStorageEndpoint.options;
+      var saveModule = config.jsonStorageEndpoint.module;
+      var saveOptions = config.jsonStorageEndpoint.options;
       _this.storageModule = new $[saveModule](saveOptions);
 
       var sessionID = window.location.hash.substring(1); // will return empty string if none exists, causing the or statement below to evaluate to false, generating a new sesssionID.

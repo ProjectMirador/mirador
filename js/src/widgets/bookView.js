@@ -410,6 +410,7 @@
           rightIndex = [],
           topIndex = [],
           bottomIndex = [],
+          viewAdjustedImgIndex = this.currentImgIndex,
           _this = this;
 
       this.focusImages = [];
@@ -418,11 +419,17 @@
         // don't do any stitching, display like an imageView
         stitchList = [this.currentImg];
       } else if (this.viewingHint === 'paged') {
+
+        // For RTL work out index from right hand side.
+        if (this.viewingDirection === 'right-to-left') {
+          viewAdjustedImgIndex = (this.imagesList.length-1) - this.currentImgIndex;
+        }
+
         // determine the other image for this pair based on index and viewingDirection
-        if (this.currentImgIndex === 0 || this.currentImgIndex === this.imagesList.length-1) {
+        if (viewAdjustedImgIndex === 0 || viewAdjustedImgIndex === this.imagesList.length-1) {
           //first page (front cover) or last page (back cover), display on its own
           stitchList = [this.currentImg];
-        } else if (this.currentImgIndex % 2 === 0) {
+        } else if (viewAdjustedImgIndex % 2 === 0) {
           // even, get previous page.  set order in array based on viewingDirection
           switch (this.viewingDirection) {
           case "left-to-right":
@@ -430,8 +437,8 @@
             stitchList = [this.imagesList[this.currentImgIndex-1], this.currentImg];
             break;
           case "right-to-left":
-            rightIndex[0] = this.currentImgIndex-1;
-            stitchList = [this.currentImg, this.imagesList[this.currentImgIndex-1]];
+            rightIndex[0] = this.currentImgIndex+1;
+            stitchList = [this.currentImg, this.imagesList[this.currentImgIndex+1]];
             break;
           case "top-to-bottom":
             topIndex[0] = this.currentImgIndex-1;
@@ -452,8 +459,8 @@
             stitchList = [this.currentImg, this.imagesList[this.currentImgIndex+1]];
             break;
           case "right-to-left":
-            leftIndex[0] = this.currentImgIndex+1;
-            stitchList = [this.imagesList[this.currentImgIndex+1], this.currentImg];
+            leftIndex[0] = this.currentImgIndex-1;
+            stitchList = [this.imagesList[this.currentImgIndex-1], this.currentImg];
             break;
           case "top-to-bottom":
             bottomIndex[0] = this.currentImgIndex+1;

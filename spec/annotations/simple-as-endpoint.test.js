@@ -75,7 +75,7 @@ describe('SimpleASEndpoint', function() {
       subject.search({uri: "http://sas.example.net"});
       expect(successCallback).not.toHaveBeenCalled();
       expect(errorCallback).not.toHaveBeenCalled();
-      expect(console.log).toHaveBeenCalledWith("The request for annotations has caused an error for endpoint: http://sas.example.net");
+      expect(console.log).toHaveBeenCalledWith("The request for annotations has caused an error for endpoint: http://sas.example.net due to undefined");
     });
     it('should run callback on failure if provided', function() {
       ajaxSuccess = false;
@@ -134,7 +134,7 @@ describe('SimpleASEndpoint', function() {
     it('should run callback on success', function() {
       subject.update(oaAnnotation, returnSuccess, returnError);
       expect(jQuery.ajax).toHaveBeenCalledWith(jasmine.objectContaining({
-        url: subject.url + "/update/AAA?APIKey=" + subject.APIKey,
+        url: subject.url + "/update?APIKey=" + subject.APIKey,
         type: 'POST'
       }));
       expect(returnSuccess).toHaveBeenCalled();
@@ -145,7 +145,7 @@ describe('SimpleASEndpoint', function() {
       ajaxSuccess = false;
       subject.update(oaAnnotation, returnSuccess, returnError);
       expect(jQuery.ajax).toHaveBeenCalledWith(jasmine.objectContaining({
-        url: subject.url + "/update/AAA?APIKey=" + subject.APIKey,
+        url: subject.url + "/update?APIKey=" + subject.APIKey,
         type: 'POST'
       }));
       expect(returnSuccess).not.toHaveBeenCalled();
@@ -208,4 +208,4 @@ describe('SimpleASEndpoint', function() {
       expect(subject.userAuthorize('admin', {})).toBe(true);
     });
   });
-}); 
+});

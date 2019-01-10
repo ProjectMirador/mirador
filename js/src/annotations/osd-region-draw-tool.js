@@ -109,6 +109,8 @@
           if (shapeArray.length > 0) {
             _this.svgOverlay.restoreLastView(shapeArray);
             _this.annotationsToShapesMap[annotation['@id']] = shapeArray;
+          } else {
+            console.log("ERROR couldn't find a strategy for " + annotation["@id"]);
           }
         } catch(e) {
           console.log('ERROR OsdRegionDrawTool#render anno:', annotation, 'error:', e);
@@ -135,7 +137,7 @@
       if (typeof annotation === 'object' && annotation.on) {
         for (var i = 0; i < strategies.length; i++) {
           if (strategies[i].isThisType(annotation)) {
-            shapeArray = strategies[i].parseRegion(annotation, this);
+            var shapeArray = strategies[i].parseRegion(annotation, this);
             return shapeArray;
           }
         }

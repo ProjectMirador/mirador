@@ -19,6 +19,7 @@
       tplData:                    null,
       allImages:                  [],
       remaining:                  0,
+      forcedIndex:                null,
       state:                      null,
       eventEmitter:               null
     }, options);
@@ -45,6 +46,9 @@
       });
 
       this.fetchTplData(this.manifestId);
+      if (this.forcedIndex !== null) {
+        this.tplData.index = this.forcedIndex;
+      }
 
       if (_this.state.getStateProperty('preserveManifestOrder')) {
         if (this.appendTo.children().length === 0) {
@@ -104,7 +108,7 @@
 
         var aspectRatio = canvas.height/canvas.width,
         width = (_this.thumbHeight/aspectRatio);
-        url = _this.manifest.getThumbnailForCanvas(canvas, width);
+        var url = _this.manifest.getThumbnailForCanvas(canvas, width);
 
         _this.allImages.push({
           url: url,

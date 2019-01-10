@@ -30,7 +30,7 @@ To initialize Mirador, it needs to be attached to an existing HTML **div** throu
       $(function() {
         Mirador({
           id: "viewer",
-          data: [/* Manifests and collections here *]
+          data: [/* Manifests and collections here */]
         });
       });
     </script>
@@ -43,11 +43,11 @@ To initialize Mirador, it needs to be attached to an existing HTML **div** throu
 
 Changing the height and width of Mirador's root element allows you to place it in an HTML page with other content.
 
-#### Manifests
+#### Manifests and Collections
 
-There are several different ways to add a manifest to your Mirador instance.
+There are several different ways to add content to your Mirador instance.
 
-The first way is to pass an object into the data array that identifies the desired manifestUri:
+The first way is to pass an object into the data array that identifies the desired manifest URI:
 
 ```` javascript
 Mirador({
@@ -58,7 +58,7 @@ Mirador({
 });
 ````
 
-Second, you can pass in an object pointing to a collectionUri, which contains a list of manifests that Mirador will parse:
+Second, you can pass in an object pointing to a collection URI, which contains a list of manifests that Mirador will parse:
 
 ```` javascript
 Mirador({
@@ -70,13 +70,15 @@ Mirador({
 ]);
 ````
 
-Note that the current version of Mirador can **only **parse collections that are one level deep. So if your collection data is a collection of collections, Mirador will not be able to find all of your manifests. However, supporting more deeply nested collections is on the Mirador roadmap.
+The current version of Mirador supports collections of any nesting depth. Collections are displayed on the content tree as folder entries, which can be clicked on to display manifests filed under them. Sub-collections can also be accessed by clicking on the drop-down caret (if available).
+
+![Collection tree](image_collection_tree.png)
 
 Within the application itself, there are two other ways for end users to add manifests to Mirador:
 
-1. If showAddFromURLBox has not been disabled, an end user can add a known IIIF manifest URL through the Add new object from URL box:
+1. If showAddFromURLBox has not been disabled, an end user can add a known IIIF manifest or collection URL through the Add new object from URL box:
 
-![image alt text](image_1.png)
+![image alt text](image_add_object_box.png)
 
 2. Mirador can handle an end user dropping a IIIF manifest into a window using [IIIF Drag-and-drop](http://zimeon.github.io/iiif-dragndrop/):
 
