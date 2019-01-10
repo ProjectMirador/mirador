@@ -3,7 +3,7 @@
     "src/**/*.{js,jsx}"
   ],
   "coverageDirectory": "<rootDir>/coverage",
-  "coverageReporters": ["html"],
+  "coverageReporters": ["html", "lcov"],
   "setupFiles": [
     "<rootDir>/setupJest.js"
   ],
