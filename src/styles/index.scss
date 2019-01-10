@@ -1,0 +1,64 @@
+body {
+  background: white;
+  height: 100%;
+}
+
+.mirador {
+  &-control-panel {
+    position: absolute;
+    box-sizing: border-box;
+    padding: 15px;
+    margin:0px;
+    left:0;
+    top:0;
+    bottom:0;
+    width: 300px;
+    border-right: 2px solid black;
+  }
+
+  &-workspace {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0;
+    padding-left: 300px;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    overflow: scroll;
+  }
+
+  &-window {
+    border: 1px solid black;
+    overflow: hidden;
+    position: relative;
+  }
+
+  &-window-top-bar {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .65) 0%, rgba(0, 0, 0, 0) 100%);
+    color: white;
+    position: absolute;
+    z-index: 10;
+
+    h3 {
+      margin: 0;
+    }
+  }
+
+  &-osd-container {
+    background: gray;
+    bottom: 0;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  &-osd-navigation {
+    bottom: 10px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+  }
+}

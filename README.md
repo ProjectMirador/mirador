@@ -1,26 +1,64 @@
-[![Build Status](https://travis-ci.org/ProjectMirador/mirador.svg?branch=master)](https://travis-ci.org/ProjectMirador/mirador?branch=master)
-[![Stories in Ready](https://badge.waffle.io/ProjectMirador/mirador.svg?label=ready&title=Ready)](http://waffle.io/iiif/mirador)
+## Running Mirador locally
 
-# Mirador
-![mirador banner](https://projectmirador.github.io/mirador/img/banner.jpg)
-**Mirador is a multi-repository, configurable, extensible, and easy-to-integrate viewer and annotation creation and comparison environment for IIIF resources, ranging from deep-zooming artwork, to complex manuscript objects. It provides a tiling windowed environment for comparing multiple image-based resources, synchronised structural and visual navigation of content using openSeadragon, Open Annotation compliant annotation creation and viewing on deep-zoomable canvases, metadata display, bookreading, and bookmarking.**
+1. Run `npm install` to install the dependencies.
 
-### [See a Demo](http://projectmirador.org/demo/)
-### [Getting Started](http://projectmirador.org/docs/docs/getting-started.html)
+## Starting the project
 
-### Run in Development
-Mirador uses [Node.js](https://nodejs.org/) and a build system to assemble, test, and manage the development resources. If you have never used these tools before, you may need to install them.
+```sh
+$ npm start
+```
 
- 1. Install [Node.js](https://nodejs.org/)
- 2. Install the Grunt command line runner i.e. `npm install -g grunt-cli`
- 1. Clone the Mirador repository
- 1. Change into the Mirador directory
- 1. Install all dependencies with `npm install`. Run `npm start`.
- 
-### Run Tests
-`npm test`
+Then navigate to [http://127.0.0.1:4444/__tests__/integration/mirador/](http://127.0.0.1:4444/__tests__/integration/mirador/)
 
-For more information, see the [Docs](http://projectmirador.org/docs/docs/getting-started.html), submit an [issue](https://github.com/projectmirador/mirador/issues), or ask on [Slack](http://bit.ly/iiif-slack).
+### Instantiating Mirador
 
-### Project Diagnostics
- [![Coverage Status](https://coveralls.io/repos/github/ProjectMirador/mirador/badge.svg?branch=master&upToDate=true)](https://coveralls.io/github/ProjectMirador/mirador?branch=master&upToDate=true)
+```javascript
+var miradorInstance = Mirador.viewer({
+  id: 'mirador' // id selector where Mirador should be instantiated
+});
+
+> miradorInstance
+{ actions, store }
+```
+
+### Example Action
+
+Add a window:
+```javascript
+store.dispatch(actions.addWindow());
+```
+
+To focus a window run:
+
+```javascript
+store.dispatch(actions.focusWindow('window-1'))
+```
+
+### Check current state
+
+```javascript
+store.getState()
+```
+
+## Running the tests
+
+```sh
+$ npm test # For headless CI=true npm test
+```
+
+or to continually watch the source files
+
+```sh
+$ npm run test:watch
+```
+
+## Linting the project
+
+```sh
+$ npm run lint
+```
+
+## Debugging
+Useful browser extensions for debugging/development purposes
+ - [React DevTools](https://github.com/facebook/react-devtools)
+ - [Redux DevTools](https://github.com/zalmoxisus/redux-devtools-extension)

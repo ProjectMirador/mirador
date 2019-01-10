@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>Mirador</title>
+  </head>
+  <body>
+    <div id="mirador"></div>
+    <script src="../../../node_modules/react/umd/react.development.js"></script>
+    <script src="../../../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
+    <script type="text/javascript">
+      class MiradorShareButton extends React.Component {
+        constructor(props) {
+          super(props);
+      
+          this.handleClick = this.handleClick.bind(this);
+        }
+        handleClick() {
+          alert('Share this stuff')
+        }
+        render() {
+          return React.createElement('button', { className: 'share', onClick: this.handleClick}, 'Share');
+        }
+      }
+      const miradorShareButton = {
+        name: 'miradorShareButton',
+        component: MiradorShareButton,
+        parent: 'WindowTopBarButtons',
+      }
+      Mirador.plugins.miradorShareButton = miradorShareButton;
+      class MiradorRuler extends React.Component {
+        constructor(props) {
+          super(props);
+          this._isMounted = false;
+          this.state = {
+            zooming: false,
+          }
+          this.zoomToColor = this.zoomToColor.bind(this);
+        }
+        componentDidMount() {
+          this._isMounted = true;
+          const that = this;
+          this.props.pluginParent().viewer.addHandler('zoom', (e) => {
+            if (that._isMounted) {
+              that.setState({
+                zooming: true
+              })
+            }
+          })
+          // Super hacky don't do this for real
+          function resetStyle() {
+            if (that._isMounted) {
+              that.setState({
+                zooming: false
+              })
+            }
+            setTimeout(resetStyle, 750)
+          }
+          resetStyle();
+        }
+        componentWillUnmount() {
+          this._isMounted = false;
+          if (this.props.pluginParent()) {
+            this.props.pluginParent().viewer.removeHandler('zoom');
+          }
+        }
+        zoomToColor(zooming) {
+          if (zooming) {
+            return 'red'
+          }
+          return 'black'
+        }
+        render() {
+          return React.createElement('div', {className: 'mirador-ruler', style: { position: 'absolute', bottom: 0, color: this.zoomToColor(this.state.zooming)}}, 'I am a ruler')
+        }
+      }
+      const miradorRuler = {
+        name: 'miradorRuler',
+        component: MiradorRuler,
+        parent: 'OpenSeadragonViewer',
+        mapStateToProps: ({ manifests }, props) => {
+          return {
+            manifests // return the part of the state I need here.
+          }
+        },
+        mapDispatchToProps: (dispatch) => {
+          return {}
+        },
+      }
+      Mirador.plugins.miradorRuler = miradorRuler;
+      var miradorInstance = Mirador.viewer({
+        id: 'mirador',
+        plugins: ['miradorShareButton', 'miradorRuler']
+      });
+    </script>
+  </body>
+</html>
