@@ -1,0 +1,41 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json", 
+  "@id": "http://iiif.io/api/presentation/2.0/example/fixtures/2/manifest.json", 
+  "@type": "sc:Manifest", 
+  "label": "Test 2 Manifest: Metadata Pairs", 
+  "metadata": [
+    {
+      "label": "date", 
+      "value": "some date"
+    }
+  ], 
+  "within": "http://iiif.io/api/presentation/2.0/example/fixtures/collection.json", 
+  "sequences": [
+    {
+      "@type": "sc:Sequence", 
+      "label": "Test 2 Sequence 1", 
+      "canvases": [
+        {
+          "@id": "http://iiif.io/api/presentation/2.0/example/fixtures/canvas/2/c1.json", 
+          "@type": "sc:Canvas", 
+          "label": "Test 2 Canvas: 1", 
+          "height": 1800, 
+          "width": 1200, 
+          "images": [
+            {
+              "@type": "oa:Annotation", 
+              "motivation": "sc:painting", 
+              "resource": {
+                "@id": "http://iiif.io/api/presentation/2.0/example/fixtures/resources/page1-full.png", 
+                "@type": "dctypes:Image", 
+                "height": 1800, 
+                "width": 1200
+              }, 
+              "on": "http://iiif.io/api/presentation/2.0/example/fixtures/canvas/2/c1.json"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "collectCoverageFrom": [
+    "src/**/*.{js,jsx}"
+  ],
+  "coverageDirectory": "<rootDir>/coverage",
+  "coverageReporters": ["html"],
+  "setupFiles": [
+    "<rootDir>/setupJest.js"
+  ],
+  "testMatch": [
+    "<rootDir>/**/__tests__/**/*.{js,jsx}",
+    "<rootDir>/src/**/?(*.)(spec|test|unit).{js,jsx}"
+  ],
+  "preset": "jest-puppeteer"
+}

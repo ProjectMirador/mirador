@@ -1,6 +1,0 @@
-{
-  "structure": {
-    "summary": "docs/SUMMARY.md"
-  },
-  "plugins": ["-search"]
-}

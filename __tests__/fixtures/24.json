@@ -1,0 +1,41 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json", 
+  "@id": "http://iiif.io/api/presentation/2.0/example/fixtures/24/manifest.json", 
+  "@type": "sc:Manifest", 
+  "label": "Test 24 Manifest: Image with IIIF Service - adapted with real image", 
+  "within": "http://iiif.io/api/presentation/2.0/example/fixtures/collection.json", 
+  "sequences": [
+    {
+      "@type": "sc:Sequence", 
+      "label": "Test 24 Sequence 1", 
+      "canvases": [
+        {
+          "@id": "http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json", 
+          "@type": "sc:Canvas", 
+          "label": "Test 24 Canvas: 1", 
+          "height": 1800, 
+          "width": 1200, 
+          "images": [
+            {
+              "@type": "oa:Annotation", 
+              "motivation": "sc:painting", 
+              "resource": {
+                "@id": "https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/full/0/default.jpg", 
+                "@type": "dctypes:Image", 
+                "format": "image/jpeg", 
+                "height": 3820, 
+                "width": 5426, 
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json", 
+                  "@id": "https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44", 
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }, 
+              "on": "http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

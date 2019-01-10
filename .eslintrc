@@ -1,17 +1,26 @@
 {
-  "extends": "airbnb-base/legacy",
-  "globals": {
-    "Mirador": true,
-    "jQuery": true
+  "env": {
+    "jest/globals": true
   },
+  "extends": ["airbnb","react-app"],
+  "globals": {
+    "page": true,
+    "document": true
+  },
+  "parser": "babel-eslint",
+  "plugins": ["jest"],
   "rules": {
-    "no-param-reassign": [
-      2, {
-        "props": true,
-        "ignorePropertyModificationsFor": [
-          "$"
-        ]
+    "no-console": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "require-jsdoc": ["error", {
+      "require": {
+        "FunctionDeclaration": true,
+        "MethodDefinition": true,
+        "ClassDeclaration": true,
+        "ArrowFunctionExpression": true,
+        "FunctionExpression": true
       }
-    ]
+    }],
+    "react/prefer-stateless-function": "off"
   }
 }
