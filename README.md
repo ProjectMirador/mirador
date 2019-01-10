@@ -1,3 +1,6 @@
+# Mirador
+[![Build Status](https://travis-ci.org/ProjectMirador/mirador.svg?branch=master)](https://travis-ci.org/ProjectMirador/mirador) [![Test Coverage](https://api.codeclimate.com/v1/badges/85265abbd7ce99df2d90/test_coverage)](https://codeclimate.com/github/ProjectMirador/mirador/test_coverage)
+
 ## Running Mirador locally
 
 1. Run `npm install` to install the dependencies.
