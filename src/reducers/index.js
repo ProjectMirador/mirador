@@ -2,20 +2,21 @@ import { combineReducers } from 'redux';
 import workspaceReducer from './workspace';
 import windowsReducer from './windows';
 import manifestsReducer from './manifests';
-import configReducer from './config';
 import infoResponsesReducer from './infoResponses';
+import configReducer from './config';
 
 /**
- * Action Creators for Mirador
- * @namespace RootReducer
+ * Function to create root reducer
+ * from plugin reducers.
+ * @namespace CreateRootReducer
  */
-
-const rootReducer = combineReducers({
-  workspace: workspaceReducer,
-  windows: windowsReducer,
-  manifests: manifestsReducer,
-  config: configReducer,
-  infoResponses: infoResponsesReducer,
-});
-
-export default rootReducer;
+export default function createRootReducer(pluginReducers) {
+  return combineReducers({
+    workspace: workspaceReducer,
+    windows: windowsReducer,
+    manifests: manifestsReducer,
+    infoResponses: infoResponsesReducer,
+    config: configReducer,
+    ...pluginReducers,
+  });
+}

@@ -1,3 +1,5 @@
+/* global miradorInstance */
+
 describe('Mirador plugin use', () => {
   beforeAll(async () => {
     await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/plugins.html');
@@ -17,5 +19,11 @@ describe('Mirador plugin use', () => {
   });
   it('displays "Ruler" plugin', async () => {
     await expect(page).toMatchElement('.mirador-ruler');
+    // await page.waitFor(1000);
+    // Test that composed reducer and actions are working.
+    const zooming = await page.evaluate(() => (
+      miradorInstance.store.getState().zooming
+    ));
+    await expect(zooming).toBe(false);
   });
 });

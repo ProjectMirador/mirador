@@ -15,7 +15,7 @@
       class MiradorShareButton extends React.Component {
         constructor(props) {
           super(props);
-      
+
           this.handleClick = this.handleClick.bind(this);
         }
         handleClick() {
@@ -45,6 +45,7 @@
           const that = this;
           this.props.pluginParent().viewer.addHandler('zoom', (e) => {
             if (that._isMounted) {
+              that.props.setZooming('123', true);
               that.setState({
                 zooming: true
               })
@@ -53,6 +54,7 @@
           // Super hacky don't do this for real
           function resetStyle() {
             if (that._isMounted) {
+              that.props.setZooming('123', false);
               that.setState({
                 zooming: false
               })
@@ -77,17 +79,41 @@
           return React.createElement('div', {className: 'mirador-ruler', style: { position: 'absolute', bottom: 0, color: this.zoomToColor(this.state.zooming)}}, 'I am a ruler')
         }
       }
+
+      const zoomReducer = (state = {}, action) => {
+        switch (action.type) {
+          case 'SET_ZOOMING':
+            return action.zooming;
+          default:
+            return state;
+        }
+      };
+
+      const setZooming = (windowId, zooming) => {
+        return { type: 'SET_ZOOMING', windowId, zooming };
+      }
+
       const miradorRuler = {
         name: 'miradorRuler',
         component: MiradorRuler,
         parent: 'OpenSeadragonViewer',
+        reducers: {
+          zooming: zoomReducer
+        },
+        actions: {
+          setZooming: setZooming
+        },
         mapStateToProps: ({ manifests }, props) => {
           return {
             manifests // return the part of the state I need here.
           }
         },
         mapDispatchToProps: (dispatch) => {
-          return {}
+          return {
+            setZooming: (windowId, level) => (
+              dispatch(setZooming(windowId, level))
+            ),
+          }
         },
       }
       Mirador.plugins.miradorRuler = miradorRuler;
