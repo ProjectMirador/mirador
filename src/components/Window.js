@@ -26,13 +26,22 @@ class Window extends Component {
    */
   renderViewer() {
     const { manifest, window } = this.props;
-    if (manifest) {
-      return (
-        <WindowViewer
-          window={window}
-          manifest={manifest}
-        />
-      );
+    if (!manifest) return null;
+    switch (manifest.isFetching) {
+      case true:
+        return 'loading';
+      case false:
+        if (manifest.manifestation) {
+          return (
+            <WindowViewer
+              window={window}
+              manifest={manifest}
+            />
+          );
+        }
+        break;
+      default:
+        return null;
     }
     return null;
   }
