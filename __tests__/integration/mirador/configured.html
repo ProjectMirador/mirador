@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>Mirador</title>
+  </head>
+  <body>
+    <div id="mirador"></div>
+    <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
+    <script type="text/javascript">
+     var miradorInstance = Mirador.viewer({
+       id: 'mirador',
+       miradorWindows: [
+         {
+           loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+         },
+         {
+           loadedManifest: 'https://media.nga.gov/public/manifests/nga_highlights.json'
+         }
+       ],
+     });
+    </script>
+  </body>
+</html>

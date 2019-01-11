@@ -16,6 +16,7 @@ class MiradorViewer {
   constructor(config) {
     this.config = config;
     this.processPlugins();
+    this.processWindows();
 
     const viewer = {
       actions,
@@ -33,6 +34,19 @@ class MiradorViewer {
     );
 
     return viewer;
+  }
+
+  /**
+   * Process Window
+   */
+  processWindows() {
+    const miradorWindows = this.config.miradorWindows || [];
+    miradorWindows.forEach((miradorWindow) => {
+      store.dispatch(actions.fetchManifest(miradorWindow.loadedManifest));
+      store.dispatch(actions.addWindow({
+        manifestId: miradorWindow.loadedManifest,
+      }));
+    });
   }
 
   /**
