@@ -38,10 +38,14 @@ class OpenSeadragonViewer extends Component {
   }
 
   /**
+   * When the tileSources change, make sure to close the OSD viewer.
    */
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const { tileSources } = this.props;
-    tileSources.forEach(tileSource => this.addTileSource(tileSource));
+    if (prevProps.tileSources !== tileSources) {
+      this.viewer.close();
+      tileSources.forEach(tileSource => this.addTileSource(tileSource));
+    }
   }
 
   /**
