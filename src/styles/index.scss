@@ -27,6 +27,7 @@ body {
   &-window {
     display: flex;
     flex-direction: column;
+    height: 100%;
   }
 
   &-osd-container {

@@ -11,20 +11,12 @@ import ConnectedThumbnailNavigation from './ThumbnailNavigation';
  */
 class Window extends Component {
   /**
-   * Return style attributes
-   */
-  styleAttributes() {
-    const { window } = this.props;
-    return { width: `${window.xywh[2]}px`, height: `${window.xywh[3]}px` };
-  }
-
-  /**
    * Renders things
    */
   render() {
     const { manifest, window } = this.props;
     return (
-      <div className={ns('window')} style={this.styleAttributes()}>
+      <div className={ns('window')}>
         <WindowTopBar
           windowId={window.id}
           manifest={manifest}
@@ -32,7 +24,6 @@ class Window extends Component {
         <ConnectedWindowMiddleContent
           window={window}
           manifest={manifest}
-          sideBarOpen={window.sideBarOpen}
         />
         <div className={ns('companion-bottom')}>
           <ConnectedThumbnailNavigation

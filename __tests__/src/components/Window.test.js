@@ -10,8 +10,6 @@ describe('Window', () => {
   it('should render outer element', () => {
     wrapper = shallow(<Window window={window} />);
     expect(wrapper.find('.mirador-window')).toHaveLength(1);
-    expect(wrapper.instance().styleAttributes())
-      .toEqual({ width: '400px', height: '500px' });
   });
   it('should render <ConnectedWindowTopBar>', () => {
     wrapper = shallow(<Window window={window} />);
