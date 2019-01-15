@@ -10,7 +10,7 @@ import ActionTypes from '../action-types';
 export function requestInfoResponse(infoId) {
   return {
     type: ActionTypes.REQUEST_INFO_RESPONSE,
-    infoId,
+    infoId
   };
 }
 
@@ -25,7 +25,7 @@ export function receiveInfoResponse(infoId, infoJson) {
   return {
     type: ActionTypes.RECEIVE_INFO_RESPONSE,
     infoId,
-    infoJson,
+    infoJson
   };
 }
 
@@ -40,7 +40,7 @@ export function receiveInfoResponseFailure(infoId, error) {
   return {
     type: ActionTypes.RECEIVE_INFO_RESPONSE_FAILURE,
     infoId,
-    error,
+    error
   };
 }
 
@@ -51,13 +51,13 @@ export function receiveInfoResponseFailure(infoId, error) {
  * @memberof ActionCreators
  */
 export function fetchInfoResponse(infoId) {
-  return ((dispatch) => {
+  return dispatch => {
     dispatch(requestInfoResponse(infoId));
     return fetch(infoId)
       .then(response => response.json())
       .then(json => dispatch(receiveInfoResponse(infoId, json)))
       .catch(error => dispatch(receiveInfoResponseFailure(infoId, error)));
-  });
+  };
 }
 
 /**

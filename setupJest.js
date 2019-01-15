@@ -15,7 +15,7 @@ global.fetch = require('jest-fetch-mock'); // eslint-disable-line import/no-extr
 global.window = window;
 global.document = window.document;
 global.navigator = {
-  userAgent: 'node.js',
+  userAgent: 'node.js'
 };
 
 Enzyme.configure({ adapter: new Adapter() });

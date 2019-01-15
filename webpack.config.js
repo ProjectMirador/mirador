@@ -9,13 +9,12 @@ const eslintLoaderConfig = {
     {
       options: {
         formatter: require.resolve('react-dev-utils/eslintFormatter'),
-        eslintPath: require.resolve('eslint'),
-
+        eslintPath: require.resolve('eslint')
       },
-      loader: require.resolve('eslint-loader'),
-    },
+      loader: require.resolve('eslint-loader')
+    }
   ],
-  include: paths.appSrc,
+  include: paths.appSrc
 };
 
 const babelLoaderConfig = {
@@ -29,17 +28,17 @@ const babelLoaderConfig = {
         {
           loaderMap: {
             svg: {
-              ReactComponent: '@svgr/webpack?-prettier,-svgo![path]',
-            },
-          },
-        },
-      ],
+              ReactComponent: '@svgr/webpack?-prettier,-svgo![path]'
+            }
+          }
+        }
+      ]
     ],
     cacheDirectory: true,
     // Save disk space when time isn't as important
     cacheCompression: true,
-    compact: true,
-  },
+    compact: true
+  }
 };
 
 module.exports = [
@@ -49,14 +48,11 @@ module.exports = [
       path: path.join(__dirname, 'dist'),
       filename: 'm3core.umd.js',
       libraryTarget: 'umd',
-      library: 'm3core',
+      library: 'm3core'
     },
     module: {
-      rules: [
-        eslintLoaderConfig,
-        babelLoaderConfig,
-      ],
-    },
+      rules: [eslintLoaderConfig, babelLoaderConfig]
+    }
   },
   {
     entry: './src/index.js',
@@ -65,7 +61,7 @@ module.exports = [
       filename: 'mirador.min.js',
       libraryTarget: 'umd',
       library: 'Mirador',
-      libraryExport: 'default',
+      libraryExport: 'default'
     },
     resolve: { extensions: ['.js'] },
     module: {
@@ -77,18 +73,19 @@ module.exports = [
           use: [
             'style-loader', // creates style nodes from JS strings
             'css-loader', // translates CSS into CommonJS
-            'sass-loader', // compiles Sass to CSS, using Node Sass by default
-          ],
-        }],
+            'sass-loader' // compiles Sass to CSS, using Node Sass by default
+          ]
+        }
+      ]
     },
     optimization: {
       minimizer: [
         new TerserPlugin({
           terserOptions: {
-            mangle: false,
-          },
-        }),
-      ],
-    },
-  },
+            mangle: false
+          }
+        })
+      ]
+    }
+  }
 ];

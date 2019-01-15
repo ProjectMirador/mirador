@@ -2,7 +2,7 @@ import init from './init';
 
 const exports = {
   viewer: init,
-  plugins: {},
+  plugins: {}
 };
 
 export default exports;

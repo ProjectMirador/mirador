@@ -7,7 +7,15 @@ import fixture from '../../fixtures/2.json';
 describe('Display', () => {
   it('renders without an error', () => {
     const wrapper = shallow(<Display manifest={{}} />);
-    expect(wrapper.contains(<div className="Display"><div id="exampleManifest" className=""><ManifestMetadata manifest={{}} /></div></div>)).toBe(true);
+    expect(
+      wrapper.contains(
+        <div className="Display">
+          <div id="exampleManifest" className="">
+            <ManifestMetadata manifest={{}} />
+          </div>
+        </div>
+      )
+    ).toBe(true);
   });
   it('sets class based on manifest state', () => {
     let wrapper = shallow(<Display manifest={{ isFetching: true }} />);

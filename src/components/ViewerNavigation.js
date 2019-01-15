@@ -51,19 +51,11 @@ class ViewerNavigation extends Component {
   render() {
     return (
       <div className={ns('osd-navigation')}>
-        <button
-          type="button"
-          disabled={!this.hasPreviousCanvas()}
-          onClick={this.previousCanvas}
-        >
-        &#8249;
+        <button type="button" disabled={!this.hasPreviousCanvas()} onClick={this.previousCanvas}>
+          &#8249;
         </button>
-        <button
-          type="button"
-          disabled={!this.hasNextCanvas()}
-          onClick={this.nextCanvas}
-        >
-        &#8250;
+        <button type="button" disabled={!this.hasNextCanvas()} onClick={this.nextCanvas}>
+          &#8250;
         </button>
       </div>
     );
@@ -74,9 +66,8 @@ ViewerNavigation.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   nextCanvas: PropTypes.func.isRequired,
   previousCanvas: PropTypes.func.isRequired,
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.object.isRequired // eslint-disable-line react/forbid-prop-types
 };
-
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -85,7 +76,10 @@ ViewerNavigation.propTypes = {
  */
 const mapDispatchToProps = dispatch => ({
   nextCanvas: windowId => dispatch(actions.nextCanvas(windowId)),
-  previousCanvas: windowId => dispatch(actions.previousCanvas(windowId)),
+  previousCanvas: windowId => dispatch(actions.previousCanvas(windowId))
 });
 
-export default connect(null, mapDispatchToProps)(miradorWithPlugins(ViewerNavigation));
+export default connect(
+  null,
+  mapDispatchToProps
+)(miradorWithPlugins(ViewerNavigation));

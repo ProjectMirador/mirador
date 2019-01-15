@@ -8,22 +8,22 @@ const infoResponsesReducer = (state = {}, action) => {
     case ActionTypes.REQUEST_INFO_RESPONSE:
       return Object.assign({}, state, {
         [action.infoId]: {
-          isFetching: true,
-        },
+          isFetching: true
+        }
       });
     case ActionTypes.RECEIVE_INFO_RESPONSE:
       return Object.assign({}, state, {
         [action.infoId]: {
           json: action.infoJson,
-          isFetching: false,
-        },
+          isFetching: false
+        }
       });
     case ActionTypes.RECEIVE_INFO_RESPONSE_FAILURE:
       return Object.assign({}, state, {
         [action.infoId]: {
           error: action.error,
-          isFetching: false,
-        },
+          isFetching: false
+        }
       });
     case ActionTypes.REMOVE_INFO_RESPONSE:
       return Object.keys(state).reduce((object, key) => {
@@ -32,7 +32,8 @@ const infoResponsesReducer = (state = {}, action) => {
         }
         return object;
       }, {});
-    default: return state;
+    default:
+      return state;
   }
 };
 

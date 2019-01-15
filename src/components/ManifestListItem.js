@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { actions } from '../store';
 import ns from '../config/css-ns';
 
-
 /**
  * Handling open button click
  */
@@ -33,7 +32,7 @@ const ManifestListItem = ({ manifest, addWindow }) => (
 
 ManifestListItem.propTypes = {
   manifest: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
-  addWindow: PropTypes.func.isRequired,
+  addWindow: PropTypes.func.isRequired
 };
 
 /**
@@ -41,9 +40,7 @@ ManifestListItem.propTypes = {
  * @memberof ManifestListItem
  * @private
  */
-const mapStateToProps = () => (
-  {}
-);
+const mapStateToProps = () => ({});
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -51,12 +48,10 @@ const mapStateToProps = () => (
  * @private
  */
 const mapDispatchToProps = dispatch => ({
-  addWindow: options => (
-    dispatch(actions.addWindow(options))
-  ),
+  addWindow: options => dispatch(actions.addWindow(options))
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ManifestListItem);

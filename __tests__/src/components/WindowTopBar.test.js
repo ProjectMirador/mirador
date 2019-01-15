@@ -17,12 +17,14 @@ describe('Window', () => {
       // We need to attach this to something created by our JSDOM instance.
       // Also need to provide context of the store so that connected sub components
       // can render effectively.
-      { attachTo: document.getElementById('main'), context: { store } },
+      { attachTo: document.getElementById('main'), context: { store } }
     );
   });
 
   it('renders without an error', () => {
-    expect(wrapper.find('div.mirador-window-top-bar h3').text()).toBe('Test 24 Manifest: Image with IIIF Service - adapted with real image');
+    expect(wrapper.find('div.mirador-window-top-bar h3').text()).toBe(
+      'Test 24 Manifest: Image with IIIF Service - adapted with real image'
+    );
     expect(wrapper.find('button.mirador-window-close'));
   });
 });

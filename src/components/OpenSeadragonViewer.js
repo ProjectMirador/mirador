@@ -32,7 +32,7 @@ class OpenSeadragonViewer extends Component {
       preserveViewport: true,
       blendTime: 0.1,
       alwaysBlend: false,
-      showNavigationControl: false,
+      showNavigationControl: false
     });
     tileSources.forEach(tileSource => this.addTileSource(tileSource));
   }
@@ -59,8 +59,7 @@ class OpenSeadragonViewer extends Component {
   addTileSource(tileSource) {
     this.viewer.addTiledImage({
       tileSource,
-      success: (event) => {
-      },
+      success: event => {}
     });
   }
 
@@ -71,23 +70,19 @@ class OpenSeadragonViewer extends Component {
     const { window } = this.props;
     return (
       <Fragment>
-        <div
-          className={ns('osd-container')}
-          id={`${window.id}-osd`}
-          ref={this.ref}
-        />
+        <div className={ns('osd-container')} id={`${window.id}-osd`} ref={this.ref} />
       </Fragment>
     );
   }
 }
 
 OpenSeadragonViewer.defaultProps = {
-  tileSources: [],
+  tileSources: []
 };
 
 OpenSeadragonViewer.propTypes = {
   tileSources: PropTypes.arrayOf(PropTypes.object),
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.object.isRequired // eslint-disable-line react/forbid-prop-types
 };
 
 export default miradorWithPlugins(OpenSeadragonViewer);

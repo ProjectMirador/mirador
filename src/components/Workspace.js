@@ -11,19 +11,14 @@ import ns from '../config/css-ns';
  */
 const Workspace = ({ windows }) => (
   <div className={ns('workspace')}>
-    {
-      windows.map(window => (
-        <Window
-          key={window.id}
-          id={window.id}
-        />
-      ))
-    }
+    {windows.map(window => (
+      <Window key={window.id} id={window.id} />
+    ))}
   </div>
 );
 
 Workspace.propTypes = {
-  windows: PropTypes.instanceOf(Array).isRequired,
+  windows: PropTypes.instanceOf(Array).isRequired
 };
 
 /**
@@ -31,10 +26,8 @@ Workspace.propTypes = {
  * @memberof Workspace
  * @private
  */
-const mapStateToProps = state => (
-  {
-    windows: state.windows,
-  }
-);
+const mapStateToProps = state => ({
+  windows: state.windows
+});
 
 export default connect(mapStateToProps)(Workspace);

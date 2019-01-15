@@ -9,9 +9,7 @@ describe('Config updating from instance', () => {
       const a = miradorInstance.actions.updateConfig({ foo: 'bat' });
       miradorInstance.store.dispatch(a);
     });
-    const config = await page.evaluate(() => (
-      miradorInstance.store.getState().config
-    ));
+    const config = await page.evaluate(() => miradorInstance.store.getState().config);
     await expect(config.foo).toBe('bat');
   });
 });

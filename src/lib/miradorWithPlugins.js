@@ -35,32 +35,41 @@ export default function miradorWithPlugins(WrappedComponent) {
       const { plugins } = config;
       return (
         <Fragment>
-          <WrappedComponent {...this.props} ref={(parent) => { this.pluginParent = parent; }} />
-          { /* TODO: Refactor .name here in some way so we dont need to rely on it */}
-          {componentPlugins(WrappedComponent.name, plugins)
-            .map(component => React.createElement(
-              connect(component.mapStateToProps, component.mapDispatchToProps)(component.component),
-              { key: component.name, ...this.props, pluginParent: this.getPluginParent },
-            ))
-          }
+          <WrappedComponent
+            {...this.props}
+            ref={parent => {
+              this.pluginParent = parent;
+            }}
+          />
+          {/* TODO: Refactor .name here in some way so we dont need to rely on it */}
+          {componentPlugins(WrappedComponent.name, plugins).map(component =>
+            React.createElement(
+              connect(
+                component.mapStateToProps,
+                component.mapDispatchToProps
+              )(component.component),
+              { key: component.name, ...this.props, pluginParent: this.getPluginParent }
+            )
+          )}
         </Fragment>
       );
     }
   }
 
-  const wrappedComponentName = WrappedComponent.displayName
-  || WrappedComponent.name
-  || 'Component';
+  const wrappedComponentName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   ConnectedComponent.displayName = `miradorWithPlugins(${wrappedComponentName})`;
 
   ConnectedComponent.propTypes = {
-    config: PropTypes.instanceOf(Object).isRequired,
+    config: PropTypes.instanceOf(Object).isRequired
   };
 
   /**
    */
   const mapStateToProps = state => ({ config: state.config });
 
-  return connect(mapStateToProps, null)(ConnectedComponent);
+  return connect(
+    mapStateToProps,
+    null
+  )(ConnectedComponent);
 }

@@ -27,12 +27,7 @@ class Window extends Component {
   renderViewer() {
     const { manifest, window } = this.props;
     if (manifest) {
-      return (
-        <WindowViewer
-          window={window}
-          manifest={manifest}
-        />
-      );
+      return <WindowViewer window={window} manifest={manifest} />;
     }
     return null;
   }
@@ -44,13 +39,8 @@ class Window extends Component {
     const { manifest, window } = this.props;
     return (
       <div className={ns('window')} style={this.styleAttributes()}>
-        <WindowTopBar
-          windowId={window.id}
-          manifest={manifest}
-        />
-        <WindowBackground
-          manifest={manifest}
-        />
+        <WindowTopBar windowId={window.id} manifest={manifest} />
+        <WindowBackground manifest={manifest} />
         {this.renderViewer()}
       </div>
     );
@@ -59,11 +49,11 @@ class Window extends Component {
 
 Window.propTypes = {
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.object // eslint-disable-line react/forbid-prop-types
 };
 
 Window.defaultProps = {
-  manifest: null,
+  manifest: null
 };
 
 /**
@@ -75,7 +65,7 @@ const mapStateToProps = ({ windows, manifests }, props) => {
   const window = windows.find(win => props.id === win.id);
   return {
     window,
-    manifest: manifests[window.manifestId],
+    manifest: manifests[window.manifestId]
   };
 };
 

@@ -6,7 +6,7 @@ describe('window actions', () => {
     it('should create a new window with merged defaults', () => {
       const options = {
         id: 'helloworld',
-        canvasIndex: 1,
+        canvasIndex: 1
       };
 
       const expectedAction = {
@@ -18,8 +18,8 @@ describe('window actions', () => {
           manifestId: null,
           rangeId: null,
           xywh: [0, 0, 400, 400],
-          rotation: null,
-        },
+          rotation: null
+        }
       };
       expect(actions.addWindow(options)).toEqual(expectedAction);
     });
@@ -29,7 +29,7 @@ describe('window actions', () => {
       const id = 'abc123';
       const expectedAction = {
         type: ActionTypes.REMOVE_WINDOW,
-        windowId: id,
+        windowId: id
       };
       expect(actions.removeWindow(id)).toEqual(expectedAction);
     });

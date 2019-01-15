@@ -15,7 +15,7 @@ class ManifestForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      formValue: '',
+      formValue: ''
     };
 
     this.formSubmit = this.formSubmit.bind(this);
@@ -44,7 +44,7 @@ class ManifestForm extends Component {
     const that = this;
     event.preventDefault();
     that.setState({
-      formValue: event.target.value,
+      formValue: event.target.value
     });
   }
 
@@ -56,13 +56,10 @@ class ManifestForm extends Component {
     const { formValue } = this.state;
     return (
       <form onSubmit={this.formSubmit}>
-        <input
-          value={formValue}
-          id="manifestURL"
-          type="text"
-          onChange={this.handleInputChange}
-        />
-        <button id="fetchBtn" type="submit">FetchManifest</button>
+        <input value={formValue} id="manifestURL" type="text" onChange={this.handleInputChange} />
+        <button id="fetchBtn" type="submit">
+          FetchManifest
+        </button>
       </form>
     );
   }
@@ -70,7 +67,7 @@ class ManifestForm extends Component {
 
 ManifestForm.propTypes = {
   fetchManifest: PropTypes.func.isRequired,
-  setLastRequested: PropTypes.func.isRequired,
+  setLastRequested: PropTypes.func.isRequired
 };
 
 /**
@@ -78,9 +75,7 @@ ManifestForm.propTypes = {
  * @memberof ManifestForm
  * @private
  */
-const mapStateToProps = () => (
-  {}
-);
+const mapStateToProps = () => ({});
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -88,12 +83,10 @@ const mapStateToProps = () => (
  * @private
  */
 const mapDispatchToProps = dispatch => ({
-  fetchManifest: manifestUrl => (
-    dispatch(actions.fetchManifest(manifestUrl))
-  ),
+  fetchManifest: manifestUrl => dispatch(actions.fetchManifest(manifestUrl))
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ManifestForm);

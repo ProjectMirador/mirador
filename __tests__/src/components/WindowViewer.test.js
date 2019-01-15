@@ -17,7 +17,7 @@ describe('WindowViewer', () => {
       // We need to attach this to something created by our JSDOM instance.
       // Also need to provide context of the store so that connected sub components
       // can render effectively.
-      { attachTo: document.getElementById('main'), context: { store } },
+      { attachTo: document.getElementById('main'), context: { store } }
     );
   });
 

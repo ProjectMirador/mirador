@@ -17,6 +17,6 @@ export default function createRootReducer(pluginReducers) {
     manifests: manifestsReducer,
     infoResponses: infoResponsesReducer,
     config: configReducer,
-    ...pluginReducers,
+    ...pluginReducers
   });
 }

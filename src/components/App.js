@@ -19,7 +19,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lastRequested: '',
+      lastRequested: ''
     };
 
     this.setLastRequested = this.setLastRequested.bind(this);
@@ -32,7 +32,7 @@ class App extends Component {
    */
   setLastRequested(requested) {
     this.setState({
-      lastRequested: requested,
+      lastRequested: requested
     });
   }
 
@@ -66,10 +66,7 @@ class App extends Component {
     const { manifests } = this.props;
     const { lastRequested } = this.state;
     const manifestList = Object.keys(manifests).map(manifest => (
-      <ManifestListItem
-        key={manifest}
-        manifest={manifest}
-      />
+      <ManifestListItem key={manifest} manifest={manifest} />
     ));
     return (
       <div className={ns('app')}>
@@ -78,9 +75,7 @@ class App extends Component {
           <ManifestForm setLastRequested={this.setLastRequested} />
           <ul>{manifestList}</ul>
 
-          <Display
-            manifest={manifests[lastRequested]}
-          />
+          <Display manifest={manifests[lastRequested]} />
         </div>
       </div>
     );
@@ -88,7 +83,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-  manifests: PropTypes.instanceOf(Object).isRequired,
+  manifests: PropTypes.instanceOf(Object).isRequired
 };
 
 /**
@@ -96,11 +91,9 @@ App.propTypes = {
  * @memberof App
  * @private
  */
-const mapStateToProps = state => (
-  {
-    manifests: state.manifests,
-  }
-);
+const mapStateToProps = state => ({
+  manifests: state.manifests
+});
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -108,12 +101,10 @@ const mapStateToProps = state => (
  * @private
  */
 const mapDispatchToProps = dispatch => ({
-  fetchManifest: manifestUrl => (
-    dispatch(actions.fetchManifest(manifestUrl))
-  ),
+  fetchManifest: manifestUrl => dispatch(actions.fetchManifest(manifestUrl))
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(App);

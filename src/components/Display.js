@@ -7,7 +7,7 @@ import ns from '../config/css-ns';
  * Determines how to best display the content (or lack thereof) the manifest
  * @private
  */
-const displayContent = (manifest) => {
+const displayContent = manifest => {
   if (manifest) {
     if (manifest.isFetching) {
       return '☕';
@@ -26,7 +26,7 @@ const displayContent = (manifest) => {
  * @memberof Display
  * @private
  */
-const stateClass = (manifest) => {
+const stateClass = manifest => {
   if (manifest) {
     if (manifest.isFetching) {
       return 'fetching';
@@ -38,7 +38,6 @@ const stateClass = (manifest) => {
   }
   return 'empty';
 };
-
 
 /**
  * Displays a manifest
@@ -54,11 +53,11 @@ const Display = ({ manifest }) => (
 );
 
 Display.propTypes = {
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.object // eslint-disable-line react/forbid-prop-types
 };
 
 Display.defaultProps = {
-  manifest: undefined,
+  manifest: undefined
 };
 
 export default Display;

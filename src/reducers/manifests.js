@@ -9,22 +9,22 @@ const manifestsReducer = (state = {}, action) => {
     case ActionTypes.REQUEST_MANIFEST:
       return Object.assign({}, state, {
         [action.manifestId]: {
-          isFetching: true,
-        },
+          isFetching: true
+        }
       });
     case ActionTypes.RECEIVE_MANIFEST:
       return Object.assign({}, state, {
         [action.manifestId]: {
           manifestation: manifesto.create(action.manifestJson),
-          isFetching: false,
-        },
+          isFetching: false
+        }
       });
     case ActionTypes.RECEIVE_MANIFEST_FAILURE:
       return Object.assign({}, state, {
         [action.manifestId]: {
           error: action.error,
-          isFetching: false,
-        },
+          isFetching: false
+        }
       });
     case ActionTypes.REMOVE_MANIFEST:
       return Object.keys(state).reduce((object, key) => {
@@ -33,7 +33,8 @@ const manifestsReducer = (state = {}, action) => {
         }
         return object;
       }, {});
-    default: return state;
+    default:
+      return state;
   }
 };
 

@@ -17,7 +17,7 @@ describe('Window', () => {
         // We need to attach this to something created by our JSDOM instance.
         // Also need to provide context of the store so that connected sub components
         // can render effectively.
-        { attachTo: document.getElementById('main'), context: { store } },
+        { attachTo: document.getElementById('main'), context: { store } }
       );
     });
 
@@ -27,15 +27,21 @@ describe('Window', () => {
 
     it('returns the width and height style attribute', () => {
       wrapper = shallow(<Window store={store} id={window.id} />, { context: { store } });
-      expect(wrapper.dive().instance().styleAttributes())
-        .toEqual({ width: '400px', height: '400px' });
+      expect(
+        wrapper
+          .dive()
+          .instance()
+          .styleAttributes()
+      ).toEqual({ width: '400px', height: '400px' });
     });
 
     it('renders without an error', () => {
       expect(wrapper.find('.mirador-window').prop('style')).toHaveProperty('width', '400px');
       expect(wrapper.find('.mirador-window').prop('style')).toHaveProperty('height', '400px');
       expect(wrapper.find('div.mirador-window').length).toBe(1);
-      expect(wrapper.find('div.mirador-window img').prop('src')).toBe('http://placekitten.com/200/300');
+      expect(wrapper.find('div.mirador-window img').prop('src')).toBe(
+        'http://placekitten.com/200/300'
+      );
     });
 
     it('renders the viewer', () => {
@@ -50,8 +56,7 @@ describe('Window', () => {
     });
 
     it('returns the width and height style attribute', () => {
-      expect(wrapper.instance().styleAttributes())
-        .toEqual({ width: '400px', height: '400px' });
+      expect(wrapper.instance().styleAttributes()).toEqual({ width: '400px', height: '400px' });
     });
 
     it('renders without an error', () => {

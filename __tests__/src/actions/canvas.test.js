@@ -7,7 +7,7 @@ describe('canvas actions', () => {
       const id = 'abc123';
       const expectedAction = {
         type: ActionTypes.NEXT_CANVAS,
-        windowId: id,
+        windowId: id
       };
       expect(actions.nextCanvas(id)).toEqual(expectedAction);
     });
@@ -17,7 +17,7 @@ describe('canvas actions', () => {
       const id = 'abc123';
       const expectedAction = {
         type: ActionTypes.PREVIOUS_CANVAS,
-        windowId: id,
+        windowId: id
       };
       expect(actions.previousCanvas(id)).toEqual(expectedAction);
     });

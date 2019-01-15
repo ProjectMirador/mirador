@@ -10,7 +10,7 @@ import ActionTypes from '../action-types';
 export function requestManifest(manifestId) {
   return {
     type: ActionTypes.REQUEST_MANIFEST,
-    manifestId,
+    manifestId
   };
 }
 
@@ -25,7 +25,7 @@ export function receiveManifest(manifestId, manifestJson) {
   return {
     type: ActionTypes.RECEIVE_MANIFEST,
     manifestId,
-    manifestJson,
+    manifestJson
   };
 }
 
@@ -40,7 +40,7 @@ export function receiveManifestFailure(manifestId, error) {
   return {
     type: ActionTypes.RECEIVE_MANIFEST_FAILURE,
     manifestId,
-    error,
+    error
   };
 }
 
@@ -51,13 +51,13 @@ export function receiveManifestFailure(manifestId, error) {
  * @memberof ActionCreators
  */
 export function fetchManifest(manifestId) {
-  return ((dispatch) => {
+  return dispatch => {
     dispatch(requestManifest(manifestId));
     return fetch(manifestId)
       .then(response => response.json())
       .then(json => dispatch(receiveManifest(manifestId, json)))
       .catch(error => dispatch(receiveManifestFailure(manifestId, error)));
-  });
+  };
 }
 
 /**

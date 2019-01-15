@@ -9,14 +9,13 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import createRootReducer from './reducers/index';
 import * as ActionCreators from './actions';
 
-
 /**
  * Configure Store
  */
 export function configureStore() {
   const store = createStore(
     createRootReducer(),
-    composeWithDevTools(applyMiddleware(thunkMiddleware)),
+    composeWithDevTools(applyMiddleware(thunkMiddleware))
   );
   store.pluginReducers = {};
   return store;

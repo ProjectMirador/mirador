@@ -15,9 +15,7 @@ export default class ManifestMetadata extends Component {
     const { manifest } = this.props;
     return (
       <div>
-        <h3>
-          {manifest.manifestation.getLabel().map(label => label.value)[0]}
-        </h3>
+        <h3>{manifest.manifestation.getLabel().map(label => label.value)[0]}</h3>
         <div className={ns('description')}>
           {manifest.manifestation.getDescription().map(label => label.value)}
         </div>
@@ -27,9 +25,9 @@ export default class ManifestMetadata extends Component {
 }
 
 ManifestMetadata.propTypes = {
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.object // eslint-disable-line react/forbid-prop-types
 };
 
 ManifestMetadata.defaultProps = {
-  manifest: null,
+  manifest: null
 };

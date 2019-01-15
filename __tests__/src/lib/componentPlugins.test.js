@@ -7,13 +7,13 @@ describe('componentPlugins', () => {
       plugins: {
         fooPlugin: {
           name: 'fooPlugin',
-          parent: 'FooComponent',
+          parent: 'FooComponent'
         },
         barPlugin: {
           name: 'barPlugin',
-          parent: 'FooComponent',
-        },
-      },
+          parent: 'FooComponent'
+        }
+      }
     };
   });
   afterAll(() => {

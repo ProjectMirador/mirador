@@ -15,7 +15,6 @@ class WindowBackground extends Component {
     return thumb.id;
   }
 
-
   /**
    * content - based off of manifest state
    *
@@ -42,20 +41,16 @@ class WindowBackground extends Component {
    */
   render() {
     const { manifest } = this.props;
-    return (
-      <div>
-        {this.content(manifest)}
-      </div>
-    );
+    return <div>{this.content(manifest)}</div>;
   }
 }
 
 WindowBackground.propTypes = {
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.object // eslint-disable-line react/forbid-prop-types
 };
 
 WindowBackground.defaultProps = {
-  manifest: null,
+  manifest: null
 };
 
 export default WindowBackground;

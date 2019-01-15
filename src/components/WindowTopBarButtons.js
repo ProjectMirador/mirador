@@ -10,9 +10,7 @@ class WindowTopBarButtons extends Component {
    * @return {type}  description
    */
   render() {
-    return (
-      <Fragment />
-    );
+    return <Fragment />;
   }
 }
 

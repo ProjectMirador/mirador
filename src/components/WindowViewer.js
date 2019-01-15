@@ -49,9 +49,11 @@ class WindowViewer extends Component {
   infoResponseIsInStore() {
     const { infoResponses } = this.props;
     const currentInfoResponse = infoResponses[this.imageInformationUri()];
-    return (currentInfoResponse !== undefined
-      && currentInfoResponse.isFetching === false
-      && currentInfoResponse.json !== undefined);
+    return (
+      currentInfoResponse !== undefined &&
+      currentInfoResponse.isFetching === false &&
+      currentInfoResponse.json !== undefined
+    );
   }
 
   /**
@@ -59,7 +61,12 @@ class WindowViewer extends Component {
    */
   imageInformationUri() {
     const { window } = this.props;
-    return `${this.canvases[window.canvasIndex].getImages()[0].getResource().getServices()[0].id}/info.json`;
+    return `${
+      this.canvases[window.canvasIndex]
+        .getImages()[0]
+        .getResource()
+        .getServices()[0].id
+    }/info.json`;
   }
 
   /**
@@ -68,9 +75,12 @@ class WindowViewer extends Component {
   tileInfoFetchedFromStore() {
     const { infoResponses } = this.props;
     return [infoResponses[this.imageInformationUri()]]
-      .filter(infoResponse => (infoResponse !== undefined
-        && infoResponse.isFetching === false
-        && infoResponse.error === undefined))
+      .filter(
+        infoResponse =>
+          infoResponse !== undefined &&
+          infoResponse.isFetching === false &&
+          infoResponse.error === undefined
+      )
       .map(infoResponse => infoResponse.json);
   }
 
@@ -81,10 +91,7 @@ class WindowViewer extends Component {
     const { window } = this.props;
     return (
       <Fragment>
-        <OpenSeadragonViewer
-          tileSources={this.tileInfoFetchedFromStore()}
-          window={window}
-        />
+        <OpenSeadragonViewer tileSources={this.tileInfoFetchedFromStore()} window={window} />
         <ViewerNavigation window={window} canvases={this.canvases} />
       </Fragment>
     );
@@ -96,11 +103,9 @@ class WindowViewer extends Component {
  * @memberof WindowViewer
  * @private
  */
-const mapStateToProps = state => (
-  {
-    infoResponses: state.infoResponses,
-  }
-);
+const mapStateToProps = state => ({
+  infoResponses: state.infoResponses
+});
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -108,14 +113,17 @@ const mapStateToProps = state => (
  * @private
  */
 const mapDispatchToProps = dispatch => ({
-  fetchInfoResponse: infoId => dispatch(actions.fetchInfoResponse(infoId)),
+  fetchInfoResponse: infoId => dispatch(actions.fetchInfoResponse(infoId))
 });
 
 WindowViewer.propTypes = {
   infoResponses: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   fetchInfoResponse: PropTypes.func.isRequired,
   manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.object.isRequired // eslint-disable-line react/forbid-prop-types
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(miradorWithPlugins(WindowViewer));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(miradorWithPlugins(WindowViewer));
