@@ -1,6 +1,6 @@
 {
-  "name": "minimal_redux_poc",
-  "version": "1.0.0",
+  "name": "mirador",
+  "version": "3.0.0-alpha.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
     "Drew Winget <scipioaffricanus@gmail.com> (https://aeschylus.net/)",
     "Jack Reed <phillipjreed@gmail.com> (https://www.jack-reed.com)"
   ],
-  "repository": "https://github.com/ProjectMirador/research-and-demos/tree/master/minimal_redux_poc",
+  "repository": "https://github.com/ProjectMirador/mirador",
   "dependencies": {
     "css-ns": "^1.2.2",
     "deepmerge": "^3.0.0",
