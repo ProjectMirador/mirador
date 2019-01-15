@@ -48,6 +48,12 @@ export default function miradorWithPlugins(WrappedComponent) {
     }
   }
 
+  const wrappedComponentName = WrappedComponent.displayName
+  || WrappedComponent.name
+  || 'Component';
+
+  ConnectedComponent.displayName = `miradorWithPlugins(${wrappedComponentName})`;
+
   ConnectedComponent.propTypes = {
     config: PropTypes.instanceOf(Object).isRequired,
   };
