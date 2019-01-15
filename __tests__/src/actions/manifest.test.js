@@ -19,7 +19,7 @@ describe('manifest actions', () => {
     });
   });
   describe('receiveManifest', () => {
-    it('moves to the previous canvas', () => {
+    it('receives a manifest', () => {
       const id = 'abc123';
       const json = {
         id,
