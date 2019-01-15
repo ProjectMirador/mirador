@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "node_modules/.bin/eslint ./",
+    "lint:fix": "node_modules/.bin/eslint ./ --fix",
     "server": "node_modules/.bin/http-server",
     "test": "npm run build && npm run lint && jest -c jest.json --coverage",
     "test:watch": "jest -c jest.json --watch",
