@@ -23,4 +23,4 @@ Mirador should be well tested at several different levels. A component or class 
 Added or modified code should be appropriately documented using JSDoc comments and established project conventions.
 
 ### Plugin architecture
-Mirador 3 shifted to a plugin architecture to better support the wide array of uses of Mirador. This allows for the design to accomodate plugins in more focused way. It also allows the community to maintain the core components while giving developers the freedom to develop new and innovative plugins. Your contribution might fit nicely as a Mirador plugin.
+Mirador 3 shifted to a plugin architecture to better support the wide array of uses of Mirador. This allows for the design to accommodate plugins in more focused way. It also allows the community to maintain the core components while giving developers the freedom to develop new and innovative plugins. Your contribution might fit nicely as a Mirador plugin.
