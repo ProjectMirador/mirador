@@ -44,16 +44,16 @@ const getReducers = pluginReducers => {
  * Process Plugins
  */
 const processPlugins = (plugins = []) => {
-  const actionCreators = [];
-  const reducers = [];
+  let actionCreators = [];
+  let reducers = [];
 
   plugins.forEach(pluginName => {
     const plugin = window.Mirador.plugins[pluginName];
 
     // Add Actions
-    actionCreators.concat(getActionCreators(plugin.actions));
-    // Add Reducers
-    reducers.concat(getReducers(plugin.reducers));
+    actionCreators = actionCreators.concat(getActionCreators(plugin.actions));
+    // Add ReduactionCreators = cers
+    reducers = reducers.concat(getReducers(plugin.reducers));
   });
 
   actionCreators.forEach(action => {
