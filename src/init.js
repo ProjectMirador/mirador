@@ -9,6 +9,38 @@ import settings from './config/settings';
 import './styles/index.scss';
 
 /**
+ * Generate action creators for a plugin
+ */
+const getActionCreators = pluginActions => {
+  const actionCreators = [];
+  if (pluginActions) {
+    Object.keys(pluginActions).forEach(actionName =>
+      actionCreators.push({
+        name: actionName,
+        action: pluginActions[actionName]
+      })
+    );
+  }
+  return actionCreators;
+};
+
+/**
+ * Generate reducers for a plugin
+ */
+const getReducers = pluginReducers => {
+  const reducers = [];
+  if (pluginReducers) {
+    Object.keys(pluginReducers).forEach(reducerName =>
+      reducers.push({
+        name: reducerName,
+        reducer: reducers[reducerName]
+      })
+    );
+  }
+  return reducers;
+};
+
+/**
  * Process Plugins
  */
 const processPlugins = (plugins = []) => {
@@ -19,23 +51,9 @@ const processPlugins = (plugins = []) => {
     const plugin = window.Mirador.plugins[pluginName];
 
     // Add Actions
-    if (plugin.actions) {
-      Object.keys(plugin.actions).forEach(actionName =>
-        actionCreators.push({
-          name: actionName,
-          action: plugin.actions[actionName]
-        })
-      );
-    }
+    actionCreators.concat(getActionCreators(plugin.actions));
     // Add Reducers
-    if (plugin.reducers) {
-      Object.keys(plugin.reducers).forEach(reducerName =>
-        reducers.push({
-          name: reducerName,
-          reducer: plugin.reducers[reducerName]
-        })
-      );
-    }
+    reducers.concat(getReducers(plugin.reducers));
   });
 
   actionCreators.forEach(action => {
