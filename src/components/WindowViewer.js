@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { actions } from '../store';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import OpenSeadragonViewer from './OpenSeadragonViewer';
-import ViewerNavigation from './ViewerNavigation';
+import ConnectedViewerNavigation from './ViewerNavigation';
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -85,7 +85,7 @@ class WindowViewer extends Component {
           tileSources={this.tileInfoFetchedFromStore()}
           window={window}
         />
-        <ViewerNavigation window={window} canvases={this.canvases} />
+        <ConnectedViewerNavigation window={window} canvases={this.canvases} />
       </Fragment>
     );
   }

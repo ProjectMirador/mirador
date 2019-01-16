@@ -7,7 +7,7 @@ import ns from '../config/css-ns';
 
 /**
  */
-class ViewerNavigation extends Component {
+export class ViewerNavigation extends Component {
   /**
    */
   constructor(props) {
