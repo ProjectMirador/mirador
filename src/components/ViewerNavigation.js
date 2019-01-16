@@ -52,6 +52,7 @@ class ViewerNavigation extends Component {
     return (
       <div className={ns('osd-navigation')}>
         <button
+          className={ns('previous-canvas-button')}
           type="button"
           disabled={!this.hasPreviousCanvas()}
           onClick={this.previousCanvas}
@@ -59,6 +60,7 @@ class ViewerNavigation extends Component {
         &#8249;
         </button>
         <button
+          className={ns('next-canvas-button')}
           type="button"
           disabled={!this.hasNextCanvas()}
           onClick={this.nextCanvas}
