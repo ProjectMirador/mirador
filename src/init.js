@@ -33,7 +33,7 @@ const getReducers = pluginReducers => {
     Object.keys(pluginReducers).forEach(reducerName =>
       reducers.push({
         name: reducerName,
-        reducer: reducers[reducerName]
+        reducer: pluginReducers[reducerName]
       })
     );
   }
