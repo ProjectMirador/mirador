@@ -42,7 +42,7 @@ const babelLoaderConfig = {
   },
 };
 
-module.exports = [
+const baseConfig = [
   {
     entry: './src/store.js',
     output: {
@@ -92,3 +92,11 @@ module.exports = [
     },
   },
 ];
+
+module.exports = (env, options) => {
+  const isProduction = options.mode === 'production';
+  return baseConfig.map((config) => {
+    config.devtool = !isProduction ? 'eval-source-map' : false; // eslint-disable-line no-param-reassign
+    return config;
+  });
+};
