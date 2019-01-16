@@ -14,8 +14,9 @@ const Workspace = ({ windows }) => (
     {
       windows.map(window => (
         <Window
-          key={window.id}
           id={window.id}
+          key={window.id}
+          window={window}
         />
       ))
     }

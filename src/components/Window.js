@@ -71,12 +71,8 @@ Window.defaultProps = {
  * @memberof Window
  * @private
  */
-const mapStateToProps = ({ windows, manifests }, props) => {
-  const window = windows.find(win => props.id === win.id);
-  return {
-    window,
-    manifest: manifests[window.manifestId],
-  };
-};
+const mapStateToProps = ({ manifests }, props) => ({
+  manifest: manifests[props.window.manifestId],
+});
 
 export default connect(mapStateToProps)(Window);

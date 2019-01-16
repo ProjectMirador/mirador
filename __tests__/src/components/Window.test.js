@@ -13,7 +13,7 @@ describe('Window', () => {
       store.dispatch(actions.addWindow({ manifestId: 'foo' }));
       [window] = store.getState().windows;
       wrapper = mount(
-        <Window store={store} id={window.id} />,
+        <Window store={store} window={window} id={window.id} />,
         // We need to attach this to something created by our JSDOM instance.
         // Also need to provide context of the store so that connected sub components
         // can render effectively.
@@ -26,7 +26,14 @@ describe('Window', () => {
     });
 
     it('returns the width and height style attribute', () => {
-      wrapper = shallow(<Window store={store} id={window.id} />, { context: { store } });
+      wrapper = shallow(
+        <Window
+          store={store}
+          window={window}
+          id={window.id}
+        />,
+        { context: { store } },
+      );
       expect(wrapper.dive().instance().styleAttributes())
         .toEqual({ width: '400px', height: '400px' });
     });
@@ -46,7 +53,14 @@ describe('Window', () => {
     beforeEach(() => {
       store.dispatch(actions.addWindow({ manifestId: 'foo' }));
       [window] = store.getState().windows;
-      wrapper = shallow(<Window store={store} id={window.id} />, { context: { store } }).dive();
+      wrapper = shallow(
+        <Window
+          store={store}
+          window={window}
+          id={window.id}
+        />,
+        { context: { store } },
+      ).dive();
     });
 
     it('returns the width and height style attribute', () => {
