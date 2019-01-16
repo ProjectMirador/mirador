@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { actions } from '../store';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import OpenSeadragonViewer from './OpenSeadragonViewer';
+import ConnectedOSDViewer from './OpenSeadragonViewer';
 import ConnectedViewerNavigation from './ViewerNavigation';
 
 /**
@@ -81,7 +81,7 @@ class WindowViewer extends Component {
     const { window } = this.props;
     return (
       <Fragment>
-        <OpenSeadragonViewer
+        <ConnectedOSDViewer
           tileSources={this.tileInfoFetchedFromStore()}
           window={window}
         />

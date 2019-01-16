@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { store } from '../../../src/store';
 import { ViewerNavigation } from '../../../src/components/ViewerNavigation';
 
 describe('ViewerNavigation', () => {

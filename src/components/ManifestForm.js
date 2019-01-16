@@ -8,7 +8,7 @@ import { actions } from '../store';
  * @prop {Function} fetchManifest
  * @prop {Function} setLastRequested
  */
-class ManifestForm extends Component {
+export class ManifestForm extends Component {
   /**
    * constructor -
    */

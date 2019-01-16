@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { actions } from '../store';
 import Display from './Display';
-import ManifestForm from './ManifestForm';
-import ManifestListItem from './ManifestListItem';
+import ConnectedManifestForm from './ManifestForm';
+import ConnectedManifestListItem from './ManifestListItem';
 import Workspace from './Workspace';
 import ns from '../config/css-ns';
 
@@ -12,7 +12,7 @@ import ns from '../config/css-ns';
  * This is the top level Mirador component.
  * @prop {Object} manifests
  */
-class App extends Component {
+export class App extends Component {
   /**
    * constructor -
    */
@@ -66,7 +66,7 @@ class App extends Component {
     const { manifests } = this.props;
     const { lastRequested } = this.state;
     const manifestList = Object.keys(manifests).map(manifest => (
-      <ManifestListItem
+      <ConnectedManifestListItem
         key={manifest}
         manifest={manifest}
       />
@@ -75,7 +75,7 @@ class App extends Component {
       <div className={ns('app')}>
         <Workspace />
         <div className={ns('control-panel')}>
-          <ManifestForm setLastRequested={this.setLastRequested} />
+          <ConnectedManifestForm setLastRequested={this.setLastRequested} />
           <ul>{manifestList}</ul>
 
           <Display

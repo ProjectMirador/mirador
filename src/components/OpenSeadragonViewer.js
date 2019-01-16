@@ -8,7 +8,7 @@ import ns from '../config/css-ns';
  * Represents a OpenSeadragonViewer in the mirador workspace. Responsible for mounting
  * and rendering OSD.
  */
-class OpenSeadragonViewer extends Component {
+export class OpenSeadragonViewer extends Component {
   /**
    * @param {Object} props
    */
