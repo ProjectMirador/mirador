@@ -85,9 +85,9 @@ ViewerNavigation.propTypes = {
  * @memberof ManifestForm
  * @private
  */
-const mapDispatchToProps = dispatch => ({
-  nextCanvas: windowId => dispatch(actions.nextCanvas(windowId)),
-  previousCanvas: windowId => dispatch(actions.previousCanvas(windowId)),
-});
+const mapDispatchToProps = {
+  nextCanvas: actions.nextCanvas,
+  previousCanvas: actions.previousCanvas,
+};
 
 export default connect(null, mapDispatchToProps)(miradorWithPlugins(ViewerNavigation));

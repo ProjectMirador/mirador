@@ -44,11 +44,7 @@ class WindowTopBar extends Component {
  * @memberof ManifestListItem
  * @private
  */
-const mapDispatchToProps = dispatch => ({
-  removeWindow: windowId => (
-    dispatch(actions.removeWindow(windowId))
-  ),
-});
+const mapDispatchToProps = { removeWindow: actions.removeWindow };
 
 WindowTopBar.propTypes = {
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types

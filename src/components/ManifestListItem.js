@@ -50,11 +50,7 @@ const mapStateToProps = () => (
  * @memberof ManifestListItem
  * @private
  */
-const mapDispatchToProps = dispatch => ({
-  addWindow: options => (
-    dispatch(actions.addWindow(options))
-  ),
-});
+const mapDispatchToProps = { addWindow: actions.addWindow };
 
 export default connect(
   mapStateToProps,

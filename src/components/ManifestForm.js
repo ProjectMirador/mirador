@@ -87,11 +87,7 @@ const mapStateToProps = () => (
  * @memberof ManifestForm
  * @private
  */
-const mapDispatchToProps = dispatch => ({
-  fetchManifest: manifestUrl => (
-    dispatch(actions.fetchManifest(manifestUrl))
-  ),
-});
+const mapDispatchToProps = { fetchManifest: actions.fetchManifest };
 
 export default connect(
   mapStateToProps,
