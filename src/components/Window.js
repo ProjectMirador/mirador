@@ -27,6 +27,15 @@ class Window extends Component {
   renderViewer() {
     const { manifest, window } = this.props;
     if (manifest && manifest.isFetching === false) {
+      if (manifest.error !== undefined) {
+        console.warn('manifest error: ', manifest.error);
+        return (
+          <div>
+            manifest fetching errored :(
+            <br />
+          </div>
+        );
+      }
       return (
         <WindowViewer
           window={window}
