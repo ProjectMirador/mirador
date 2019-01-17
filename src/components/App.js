@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { actions } from '../store';
 import WorkspaceControlPanel from './WorkspaceControlPanel';
@@ -42,7 +43,9 @@ const mapStateToProps = state => (
  */
 const mapDispatchToProps = { fetchManifest: actions.fetchManifest };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(App);
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  // further HOC go here
+);
+
+export default enhance(App);

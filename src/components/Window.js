@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ns from '../config/css-ns';
@@ -75,4 +76,9 @@ const mapStateToProps = ({ manifests }, props) => ({
   manifest: manifests[props.window.manifestId],
 });
 
-export default connect(mapStateToProps)(Window);
+const enhance = compose(
+  connect(mapStateToProps),
+  // further HOC go here
+);
+
+export default enhance(Window);

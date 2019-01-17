@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { actions } from '../store';
@@ -116,4 +117,10 @@ WindowViewer.propTypes = {
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(miradorWithPlugins(WindowViewer));
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  miradorWithPlugins,
+  // further HOC go here
+);
+
+export default enhance(WindowViewer);

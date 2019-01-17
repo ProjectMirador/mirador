@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import componentPlugins from './componentPlugins';
@@ -62,5 +63,11 @@ export default function miradorWithPlugins(WrappedComponent) {
    */
   const mapStateToProps = state => ({ config: state.config });
 
-  return connect(mapStateToProps, null)(ConnectedComponent);
+
+  const enhance = compose(
+    connect(mapStateToProps),
+    // further HOC go here
+  );
+
+  return enhance(ConnectedComponent);
 }
