@@ -41,3 +41,13 @@ export function addWindow(options) {
 export function removeWindow(windowId) {
   return { type: ActionTypes.REMOVE_WINDOW, windowId };
 }
+
+/**
+ * setZooming - action creator
+ *
+ * @param  {Object} payload
+ * @memberof ActionCreators
+ */
+export function setZooming(payload) {
+  return { type: ActionTypes.SET_ZOOMING_FOR_VIEWER, payload };
+}

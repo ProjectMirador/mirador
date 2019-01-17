@@ -25,11 +25,11 @@ const windowsReducer = (state = [], action) => {
       });
     case ActionTypes.SET_ZOOMING_FOR_VIEWER:
       return state.map((window) => {
-        if (window.id === action.windowId) {
+        if (window.id === action.payload.windowId) {
           return {
             ...window,
             viewer: {
-              zooming: action.payload.zooming,
+              zoom: action.payload.zoom,
             },
           };
         }
