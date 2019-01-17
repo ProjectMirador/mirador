@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import OpenSeadragon from 'openseadragon';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
@@ -70,13 +70,13 @@ export class OpenSeadragonViewer extends Component {
   render() {
     const { window } = this.props;
     return (
-      <Fragment>
+      <>
         <div
           className={ns('osd-container')}
           id={`${window.id}-osd`}
           ref={this.ref}
         />
-      </Fragment>
+      </>
     );
   }
 }
