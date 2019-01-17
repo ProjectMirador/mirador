@@ -14,7 +14,7 @@
     "build:dev": "webpack --mode=development",
     "build:watch": "webpack --watch --mode=development",
     "start": "npm run build:dev && concurrently \"npm run build:watch\" \"npm run server -- -p 4444\"",
-    "server:json": "json-server ./__tests__/fixtures/db.json --static ./__tests__/fixtures --port 5000  >> ./__tests__/logs/json-server.log 2>&1 </dev/null &"
+    "server:json": "json-server ./__tests__/fixtures/fixture-server-config.json --static ./__tests__/fixtures --port 5000  >> ./__tests__/logs/json-server.log 2>&1 </dev/null &"
   },
   "license": "Apache-2.0",
   "contributors": [
