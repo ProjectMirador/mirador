@@ -23,7 +23,7 @@ const handleOpenButtonClick = (event, manifest, addWindow) => {
  * @memberof ManifestListItem
  * @private
  */
-const ManifestListItem = ({ manifest, addWindow }) => (
+export const ManifestListItem = ({ manifest, addWindow }) => (
   <li className={ns('manifest-list-item')}>
     <button type="button" onClick={event => handleOpenButtonClick(event, manifest, addWindow)}>
       {manifest}

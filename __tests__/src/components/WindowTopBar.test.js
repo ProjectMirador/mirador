@@ -1,28 +1,36 @@
 import React from 'react';
-import { mount } from 'enzyme';
-import { actions, store } from '../../../src/store';
-import WindowTopBar from '../../../src/components/WindowTopBar';
-import fixture from '../../fixtures/24.json';
+import { shallow } from 'enzyme';
+import { WindowTopBar } from '../../../src/components/WindowTopBar';
 
-describe('Window', () => {
-  let wrapper;
-  let window;
+const manifestFixture = {
+  manifestation: {
+    getLabel: () => [{ value: 'Fixture Label' }],
+  },
+};
+
+describe('WindowTopBar', () => {
+  let topBar;
+  let mockRemoveWindow;
   beforeEach(() => {
-    store.dispatch(actions.receiveManifest('foo', fixture));
-    store.dispatch(actions.addWindow({ manifestId: 'foo' }));
-    const manifest = store.getState().manifests.foo;
-    [window] = store.getState().windows;
-    wrapper = mount(
-      <WindowTopBar store={store} manifest={manifest} windowId={window.id} />,
-      // We need to attach this to something created by our JSDOM instance.
-      // Also need to provide context of the store so that connected sub components
-      // can render effectively.
-      { attachTo: document.getElementById('main'), context: { store } },
+    mockRemoveWindow = jest.fn();
+    topBar = shallow(
+      <WindowTopBar
+        manifest={manifestFixture}
+        windowId="foo"
+        removeWindow={mockRemoveWindow}
+      />,
     );
   });
 
   it('renders without an error', () => {
-    expect(wrapper.find('div.mirador-window-top-bar h3').text()).toBe('Test 24 Manifest: Image with IIIF Service - adapted with real image');
-    expect(wrapper.find('button.mirador-window-close'));
+    expect(topBar.find('div.mirador-window-top-bar h3')
+      .text()).toBe('Fixture Label');
+    expect(topBar.find('button.mirador-window-close'));
+  });
+
+  it('calls the removeWindow prop when the close button is clicked', () => {
+    topBar.find('button').simulate('click');
+    expect(mockRemoveWindow).toHaveBeenCalledTimes(1);
+    expect(mockRemoveWindow).toHaveBeenCalledWith('foo');
   });
 });
