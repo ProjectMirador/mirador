@@ -3,7 +3,7 @@ import miradorWithPlugins from '../lib/miradorWithPlugins';
 /**
  *
  */
-class WindowTopBarButtons extends Component {
+export class WindowTopBarButtons extends Component {
   /**
    * render
    *

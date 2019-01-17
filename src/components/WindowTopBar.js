@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { actions } from '../store';
-import WindowTopBarButtons from './WindowTopBarButtons';
+import ConnectedWindowTopBarButtons from './WindowTopBarButtons';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import ns from '../config/css-ns';
 
 /**
  * WindowTopBar
  */
-class WindowTopBar extends Component {
+export class WindowTopBar extends Component {
   /**
    * titleContent
    *
@@ -32,7 +32,7 @@ class WindowTopBar extends Component {
     return (
       <div className={ns('window-top-bar')}>
         <h3>{this.titleContent()}</h3>
-        <WindowTopBarButtons windowId={windowId} />
+        <ConnectedWindowTopBarButtons windowId={windowId} />
         <button type="button" className={ns('window-close')} aria-label="Close Window" onClick={() => removeWindow(windowId)}>&times;</button>
       </div>
     );

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ns from '../config/css-ns';
 import WindowBackground from './WindowBackground';
-import WindowTopBar from './WindowTopBar';
+import ConnectedWindowTopBar from './WindowTopBar';
 import WindowViewer from './WindowViewer';
 
 /**
@@ -44,7 +44,7 @@ class Window extends Component {
     const { manifest, window } = this.props;
     return (
       <div className={ns('window')} style={this.styleAttributes()}>
-        <WindowTopBar
+        <ConnectedWindowTopBar
           windowId={window.id}
           manifest={manifest}
         />
