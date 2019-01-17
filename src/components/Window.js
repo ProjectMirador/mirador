@@ -26,7 +26,7 @@ class Window extends Component {
    */
   renderViewer() {
     const { manifest, window } = this.props;
-    if (manifest) {
+    if (manifest && manifest.isFetching === false) {
       return (
         <WindowViewer
           window={window}
