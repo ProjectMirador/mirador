@@ -1,0 +1,141 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "https://purl.stanford.edu/sn904cj3429/iiif/manifest",
+  "@type": "sc:Manifest",
+  "label": "Peter's San Francisco Locator. The Birds-Eye-View Map of the Exposition City. Published by Locator Publishing Co",
+  "attribution": "Property rights reside with the repository, Copyright (c) Stanford University.  Images may be reproduced or transmitted, but not for commercial use. For commercial use or commercial republication, contact rumseymapcenter@stanford.edu This work is licensed under a Creative Commons License. By downloading any images from this site, you agree to the terms of that license. ",
+  "logo": {
+    "@id": "https://stacks.stanford.edu/image/iiif/wy534zh7137%2FSULAIR_rosette/full/400,/0/default.jpg",
+    "service": {
+      "@context": "http://iiif.io/api/image/2/context.json",
+      "@id": "https://stacks.stanford.edu/image/iiif/wy534zh7137%2FSULAIR_rosette",
+      "profile": "http://iiif.io/api/image/2/level2.json"
+    }
+  },
+  "seeAlso": {
+    "@id": "https://purl.stanford.edu/sn904cj3429.mods",
+    "format": "application/mods+xml"
+  },
+  "metadata": [
+    {
+      "label": "Available Online",
+      "value": "<a href='https://purl.stanford.edu/sn904cj3429'>https://purl.stanford.edu/sn904cj3429</a>"
+    },
+    {
+      "label": "Title",
+      "value": "Peter's San Francisco Locator. The Birds-Eye-View Map of the Exposition City. Published by Locator Publishing Co"
+    },
+    {
+      "label": "Contributor",
+      "value": "Peter, C. Merriman."
+    },
+    {
+      "label": "Type",
+      "value": "map"
+    },
+    {
+      "label": "Type",
+      "value": "cartographic image"
+    },
+    {
+      "label": "Date",
+      "value": "1914"
+    },
+    {
+      "label": "Date",
+      "value": "1914."
+    },
+    {
+      "label": "Publisher",
+      "value": "Locator Publishing Co,"
+    },
+    {
+      "label": "Format",
+      "value": "1 map ; 1 maps ; 54 x 69 cm."
+    },
+    {
+      "label": "Format",
+      "value": "unmediated"
+    },
+    {
+      "label": "Description",
+      "value": "Color. Oblique view looking southwest. Compliments of Western Pacific. Includes a street index, points of interest, and a directory to the Panama-Pacific International Exposition."
+    },
+    {
+      "label": "Description",
+      "value": "Separate Map."
+    },
+    {
+      "label": "Description",
+      "value": "Pub list no.: 12027.000."
+    },
+    {
+      "label": "Subject",
+      "value": "Pictorial map"
+    },
+    {
+      "label": "Subject",
+      "value": "Pictorial map--Maps"
+    },
+    {
+      "label": "Coverage",
+      "value": "San Francisco (Calif.)"
+    },
+    {
+      "label": "Relation",
+      "value": "David Rumsey Map Collection at Stanford University Libraries"
+    },
+    {
+      "label": "PublishDate",
+      "value": "2017-08-29T17:46:09Z"
+    }
+  ],
+  "description": "Color. Oblique view looking southwest. Compliments of Western Pacific. Includes a street index, points of interest, and a directory to the Panama-Pacific International Exposition.",
+  "thumbnail": {
+    "@id": "https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000/full/!400,400/0/default.jpg",
+    "@type": "dctypes:Image",
+    "format": "image/jpeg",
+    "service": {
+      "@context": "http://iiif.io/api/image/2/context.json",
+      "@id": "https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000",
+      "profile": "http://iiif.io/api/image/2/level2.json"
+    }
+  },
+  "sequences": [
+    {
+      "@id": "https://purl.stanford.edu/sn904cj3429#sequence-1",
+      "@type": "sc:Sequence",
+      "label": "Current order",
+      "viewingDirection": "left-to-right",
+      "canvases": [
+        {
+          "@id": "https://purl.stanford.edu/sn904cj3429/iiif/canvas/sn904cj3429_1",
+          "@type": "sc:Canvas",
+          "label": "Image 1",
+          "height": 8777,
+          "width": 11302,
+          "images": [
+            {
+              "@id": "https://purl.stanford.edu/sn904cj3429/iiif/annotation/sn904cj3429_1",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "resource": {
+                "@id": "https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000/full/full/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8777,
+                "width": 11302,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              },
+              "on": "https://purl.stanford.edu/sn904cj3429/iiif/canvas/sn904cj3429_1"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
