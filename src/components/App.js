@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { actions } from '../store';
-import Display from './Display';
-import ConnectedManifestForm from './ManifestForm';
-import ConnectedManifestListItem from './ManifestListItem';
+import WorkspaceControlPanel from './WorkspaceControlPanel';
 import Workspace from './Workspace';
 import ns from '../config/css-ns';
 
@@ -14,82 +11,18 @@ import ns from '../config/css-ns';
  */
 export class App extends Component {
   /**
-   * constructor -
-   */
-  constructor(props) {
-    super(props);
-    this.state = {
-      lastRequested: '',
-    };
-
-    this.setLastRequested = this.setLastRequested.bind(this);
-  }
-
-  /**
-   * setLastRequested - Sets the state lastRequested
-   *
-   * @private
-   */
-  setLastRequested(requested) {
-    this.setState({
-      lastRequested: requested,
-    });
-  }
-
-  /**
-   * computedContent - computes the content to be displayed based on logic
-   *
-   * @return {type}  description
-   * @private
-   */
-  computedContent() {
-    const { manifests } = this.props;
-    const { lastRequested } = this.state;
-    const manifest = manifests[lastRequested];
-    if (manifest) {
-      if (manifest.isFetching) {
-        return '☕';
-      }
-      if (manifest.error) {
-        return manifest.error.message;
-      }
-      return JSON.stringify(manifest.json, 0, 2);
-    }
-    return 'Nothing Selected Yet';
-  }
-
-  /**
    * render
    * @return {String} - HTML markup for the component
    */
   render() {
-    const { manifests } = this.props;
-    const { lastRequested } = this.state;
-    const manifestList = Object.keys(manifests).map(manifest => (
-      <ConnectedManifestListItem
-        key={manifest}
-        manifest={manifest}
-      />
-    ));
     return (
       <div className={ns('app')}>
         <Workspace />
-        <div className={ns('control-panel')}>
-          <ConnectedManifestForm setLastRequested={this.setLastRequested} />
-          <ul>{manifestList}</ul>
-
-          <Display
-            manifest={manifests[lastRequested]}
-          />
-        </div>
+        <WorkspaceControlPanel />
       </div>
     );
   }
 }
-
-App.propTypes = {
-  manifests: PropTypes.instanceOf(Object).isRequired,
-};
 
 /**
  * mapStateToProps - to hook up connect
