@@ -12,7 +12,7 @@
 $ npm start
 ```
 
-Then navigate to [http://127.0.0.1:4444/__tests__/integration/mirador/](http://127.0.0.1:4444/__tests__/integration/mirador/)
+Then navigate to [http://127.0.0.1:4444/\_\_tests\_\_/integration/mirador/](http://127.0.0.1:4444/\_\_tests\_\_/integration/mirador/)
 
 ### Instantiating Mirador
 
