@@ -107,9 +107,7 @@ const mapStateToProps = state => (
  * @memberof WindowViewer
  * @private
  */
-const mapDispatchToProps = dispatch => ({
-  fetchInfoResponse: infoId => dispatch(actions.fetchInfoResponse(infoId)),
-});
+const mapDispatchToProps = { fetchInfoResponse: actions.fetchInfoResponse };
 
 WindowViewer.propTypes = {
   infoResponses: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
