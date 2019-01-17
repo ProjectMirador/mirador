@@ -21,7 +21,7 @@
   "repository": "https://github.com/ProjectMirador/mirador",
   "dependencies": {
     "css-ns": "^1.2.2",
-    "deepmerge": "^3.0.0",
+    "deepmerge": "^3.1.0",
     "manifesto.js": "^3.0.9",
     "node-fetch": "2.1.1",
     "node-sass": "^4.9.2",
@@ -57,7 +57,7 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jest": "^22.1.2",
     "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-react": "^7.12.4",
     "http-server": "^0.11.1",
     "jest": "^22.4.4",
     "jest-fetch-mock": "^1.5.0",
