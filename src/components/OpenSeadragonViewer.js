@@ -1,6 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import OpenSeadragon from 'openseadragon';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { actions } from '../store';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import ns from '../config/css-ns';
 
@@ -23,7 +26,7 @@ class OpenSeadragonViewer extends Component {
    * React lifecycle event
    */
   componentDidMount() {
-    const { tileSources } = this.props;
+    const { tileSources, setZooming, window } = this.props;
     if (!this.ref.current) {
       return;
     }
@@ -35,6 +38,9 @@ class OpenSeadragonViewer extends Component {
       showNavigationControl: false,
     });
     tileSources.forEach(tileSource => this.addTileSource(tileSource));
+    this.viewer.addHandler('zoom', (e) => {
+      // setZooming({ zoom: e.zoom, windowId: window.id });
+    });
   }
 
   /**
@@ -88,6 +94,21 @@ OpenSeadragonViewer.defaultProps = {
 OpenSeadragonViewer.propTypes = {
   tileSources: PropTypes.arrayOf(PropTypes.object),
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  setZooming: PropTypes.func.isRequired,
 };
 
-export default miradorWithPlugins(OpenSeadragonViewer);
+/**
+ * mapStateToProps - to hook up connect
+ * @memberof OpenSeadragonViewer
+ * @private
+ */
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = { setZooming: actions.setZooming };
+
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  miradorWithPlugins,
+);
+
+export default enhance(OpenSeadragonViewer);
