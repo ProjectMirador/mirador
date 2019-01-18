@@ -1,5 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
+
 /**
  *
  */
@@ -10,9 +11,7 @@ export class WindowTopBarButtons extends Component {
    * @return {type}  description
    */
   render() {
-    return (
-      <Fragment />
-    );
+    return (<></>);
   }
 }
 
