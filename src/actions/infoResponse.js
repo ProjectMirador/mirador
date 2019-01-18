@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import ActionTypes from '../action-types';
 
 /**
@@ -18,8 +17,8 @@ export function requestInfoResponse(infoId) {
  * receiveInfoResponse - action creator
  *
  * @param  {String} infoId
- * @param  {Object} manifestJson
- * @memberof ActionCreators
+ * @param  {Object} infoJson
+ * @memberof ActionCrActionTypeseators
  */
 export function receiveInfoResponse(infoId, infoJson) {
   return {
@@ -51,13 +50,10 @@ export function receiveInfoResponseFailure(infoId, error) {
  * @memberof ActionCreators
  */
 export function fetchInfoResponse(infoId) {
-  return ((dispatch) => {
-    dispatch(requestInfoResponse(infoId));
-    return fetch(infoId)
-      .then(response => response.json())
-      .then(json => dispatch(receiveInfoResponse(infoId, json)))
-      .catch(error => dispatch(receiveInfoResponseFailure(infoId, error)));
-  });
+  return {
+    type: ActionTypes.FETCH_INFO_RESPONSE,
+    infoId,
+  };
 }
 
 /**
@@ -67,5 +63,8 @@ export function fetchInfoResponse(infoId) {
  * @memberof ActionCreators
  */
 export function removeInfoResponse(infoId) {
-  return { type: ActionTypes.REMOVE_INFO_RESPONSE, infoId };
+  return {
+    type: ActionTypes.REMOVE_INFO_RESPONSE,
+    infoId,
+  };
 }

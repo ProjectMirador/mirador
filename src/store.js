@@ -4,11 +4,16 @@
 // (normalizer library)
 
 import thunkMiddleware from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createRootReducer from './reducers/index';
+import rootSaga from './sagas';
+
 import * as ActionCreators from './actions';
 
+
+const sagaMiddleware = createSagaMiddleware();
 
 /**
  * Configure Store
@@ -16,9 +21,10 @@ import * as ActionCreators from './actions';
 export function configureStore() {
   const store = createStore(
     createRootReducer(),
-    composeWithDevTools(applyMiddleware(thunkMiddleware)),
+    composeWithDevTools(applyMiddleware(thunkMiddleware, sagaMiddleware)),
   );
   store.pluginReducers = {};
+  sagaMiddleware.run(rootSaga);
   return store;
 }
 
