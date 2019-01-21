@@ -11,7 +11,7 @@ describe('window actions', () => {
 
       const expectedAction = {
         type: ActionTypes.ADD_WINDOW,
-        payload: {
+        window: {
           id: 'helloworld',
           canvasIndex: 1,
           collectionIndex: 0,

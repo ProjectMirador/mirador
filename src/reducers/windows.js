@@ -3,26 +3,37 @@ import ActionTypes from '../action-types';
 /**
  * windowsReducer
  */
-const windowsReducer = (state = [], action) => {
+const windowsReducer = (state = {}, action) => {
   switch (action.type) {
     case ActionTypes.ADD_WINDOW:
-      return state.concat({ ...action.payload });
+      return { ...state, [action.window.id]: action.window };
     case ActionTypes.REMOVE_WINDOW:
-      return state.filter(window => window.id !== action.windowId);
+      return Object.keys(state).reduce((object, key) => {
+        if (key !== action.windowId) {
+          object[key] = state[key]; // eslint-disable-line no-param-reassign
+        }
+        return object;
+      }, {});
     case ActionTypes.NEXT_CANVAS:
-      return state.map((window) => {
+      return Object.values(state).reduce((object, window) => {
         if (window.id === action.windowId) {
-          return { ...window, canvasIndex: window.canvasIndex + 1 };
+          return {
+            ...object,
+            [window.id]: { ...window, canvasIndex: window.canvasIndex + 1 },
+          };
         }
-        return window;
-      });
+        return { ...object, [window.id]: window };
+      }, {});
     case ActionTypes.PREVIOUS_CANVAS:
-      return state.map((window) => {
+      return Object.values(state).reduce((object, window) => {
         if (window.id === action.windowId) {
-          return { ...window, canvasIndex: window.canvasIndex - 1 };
+          return {
+            ...object,
+            [window.id]: { ...window, canvasIndex: window.canvasIndex - 1 },
+          };
         }
-        return window;
-      });
+        return { ...object, [window.id]: window };
+      }, {});
     default:
       return state;
   }
