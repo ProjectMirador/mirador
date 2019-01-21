@@ -1,1 +1,3 @@
-{}
+{
+  "invalid": { "invalid-key": "invalid-value" }
+}
