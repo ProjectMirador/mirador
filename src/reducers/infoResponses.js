@@ -6,11 +6,18 @@ import ActionTypes from '../action-types';
 const infoResponsesReducer = (state = {}, action) => {
   switch (action.type) {
     case ActionTypes.REQUEST_INFO_RESPONSE:
-      return { ...state, [action.infoId]: { isFetching: true } };
+      return {
+        ...state,
+        [action.infoId]: {
+          id: action.infoId,
+          isFetching: true,
+        },
+      };
     case ActionTypes.RECEIVE_INFO_RESPONSE:
       return {
         ...state,
         [action.infoId]: {
+          id: action.infoId,
           json: action.infoJson,
           isFetching: false,
         },
@@ -19,6 +26,7 @@ const infoResponsesReducer = (state = {}, action) => {
       return {
         ...state,
         [action.infoId]: {
+          id: action.infoId,
           error: action.error,
           isFetching: false,
         },
