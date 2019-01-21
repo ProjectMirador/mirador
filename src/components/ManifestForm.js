@@ -8,7 +8,7 @@ import { actions } from '../store';
  * @prop {Function} fetchManifest
  * @prop {Function} setLastRequested
  */
-class ManifestForm extends Component {
+export class ManifestForm extends Component {
   /**
    * constructor -
    */
@@ -87,11 +87,7 @@ const mapStateToProps = () => (
  * @memberof ManifestForm
  * @private
  */
-const mapDispatchToProps = dispatch => ({
-  fetchManifest: manifestUrl => (
-    dispatch(actions.fetchManifest(manifestUrl))
-  ),
-});
+const mapDispatchToProps = { fetchManifest: actions.fetchManifest };
 
 export default connect(
   mapStateToProps,

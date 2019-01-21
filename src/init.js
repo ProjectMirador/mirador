@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import deepmerge from 'deepmerge';
-import App from './components/App';
+import ConnectedApp from './components/App';
 import createRootReducer from './reducers/index';
 import { store, actions } from './store';
 import settings from './config/settings';
@@ -57,7 +57,7 @@ export default function (config) {
 
   ReactDOM.render(
     <Provider store={store}>
-      <App config={config} />
+      <ConnectedApp config={config} />
     </Provider>,
     document.getElementById(config.id),
   );

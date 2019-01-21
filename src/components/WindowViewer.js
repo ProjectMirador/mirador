@@ -1,9 +1,9 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { actions } from '../store';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import OpenSeadragonViewer from './OpenSeadragonViewer';
+import ConnectedOSDViewer from './OpenSeadragonViewer';
 import ConnectedViewerNavigation from './ViewerNavigation';
 
 /**
@@ -80,13 +80,13 @@ class WindowViewer extends Component {
   render() {
     const { window } = this.props;
     return (
-      <Fragment>
-        <OpenSeadragonViewer
+      <>
+        <ConnectedOSDViewer
           tileSources={this.tileInfoFetchedFromStore()}
           window={window}
         />
         <ConnectedViewerNavigation window={window} canvases={this.canvases} />
-      </Fragment>
+      </>
     );
   }
 }
@@ -107,9 +107,7 @@ const mapStateToProps = state => (
  * @memberof WindowViewer
  * @private
  */
-const mapDispatchToProps = dispatch => ({
-  fetchInfoResponse: infoId => dispatch(actions.fetchInfoResponse(infoId)),
-});
+const mapDispatchToProps = { fetchInfoResponse: actions.fetchInfoResponse };
 
 WindowViewer.propTypes = {
   infoResponses: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types

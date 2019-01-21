@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import componentPlugins from './componentPlugins';
@@ -34,7 +34,7 @@ export default function miradorWithPlugins(WrappedComponent) {
       const { config } = this.props;
       const { plugins } = config;
       return (
-        <Fragment>
+        <>
           <WrappedComponent {...this.props} ref={(parent) => { this.pluginParent = parent; }} />
           { /* TODO: Refactor .name here in some way so we dont need to rely on it */}
           {componentPlugins(WrappedComponent.name, plugins)
@@ -43,7 +43,7 @@ export default function miradorWithPlugins(WrappedComponent) {
               { key: component.name, ...this.props, pluginParent: this.getPluginParent },
             ))
           }
-        </Fragment>
+        </>
       );
     }
   }

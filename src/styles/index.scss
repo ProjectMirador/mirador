@@ -1,42 +1,44 @@
+@import 'variables';
+
 body {
-  background: white;
+  background: $white;
   height: 100%;
 }
 
 .mirador {
-  &-control-panel {
-    position: absolute;
+  &-workspace-control-panel {
+    border-right: 2px solid $black;
+    bottom: 0;
     box-sizing: border-box;
+    left: 0;
+    margin: 0;
     padding: 15px;
-    margin:0px;
-    left:0;
-    top:0;
-    bottom:0;
+    position: absolute;
+    top: 0;
     width: 300px;
-    border-right: 2px solid black;
   }
 
   &-workspace {
-    position: absolute;
+    bottom: 0;
     box-sizing: border-box;
+    left: 0;
     margin: 0;
-    padding-left: 300px;
-    top:0;
-    right:0;
-    bottom:0;
-    left:0;
     overflow: scroll;
+    padding-left: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
   }
 
   &-window {
-    border: 1px solid black;
+    border: 1px solid $black;
     overflow: hidden;
     position: relative;
   }
 
   &-window-top-bar {
-    background: linear-gradient(to bottom, rgba(0, 0, 0, .65) 0%, rgba(0, 0, 0, 0) 100%);
-    color: white;
+    background: linear-gradient(to bottom, $window-top-bar-gradient-top 0%, $window-top-bar-gradient-bottom 100%);
+    color: $white;
     position: absolute;
     z-index: 10;
 
@@ -46,7 +48,7 @@ body {
   }
 
   &-osd-container {
-    background: gray;
+    background: $gray;
     bottom: 0;
     height: 100%;
     position: absolute;

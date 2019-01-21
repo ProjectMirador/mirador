@@ -23,7 +23,7 @@ const handleOpenButtonClick = (event, manifest, addWindow) => {
  * @memberof ManifestListItem
  * @private
  */
-const ManifestListItem = ({ manifest, addWindow }) => (
+export const ManifestListItem = ({ manifest, addWindow }) => (
   <li className={ns('manifest-list-item')}>
     <button type="button" onClick={event => handleOpenButtonClick(event, manifest, addWindow)}>
       {manifest}
@@ -50,11 +50,7 @@ const mapStateToProps = () => (
  * @memberof ManifestListItem
  * @private
  */
-const mapDispatchToProps = dispatch => ({
-  addWindow: options => (
-    dispatch(actions.addWindow(options))
-  ),
-});
+const mapDispatchToProps = { addWindow: actions.addWindow };
 
 export default connect(
   mapStateToProps,
