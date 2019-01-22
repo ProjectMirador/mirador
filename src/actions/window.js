@@ -29,7 +29,7 @@ export function addWindow(options) {
     xywh: [0, 0, 400, 400],
     rotation: null,
   };
-  return { type: ActionTypes.ADD_WINDOW, payload: { ...defaultOptions, ...options } };
+  return { type: ActionTypes.ADD_WINDOW, window: { ...defaultOptions, ...options } };
 }
 
 /**

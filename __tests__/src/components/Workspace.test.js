@@ -13,7 +13,8 @@ describe('Workspace', () => {
   });
 
   it('renders without an error', () => {
-    const window = store.getState().windows[0];
+    const { windows } = store.getState();
+    const window = Object.values(windows)[0];
     expect(wrapper.find('div.mirador-workspace').length).toBe(1);
     expect(wrapper.find(`#${window.id}`).length).toBe(1);
   });

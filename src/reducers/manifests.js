@@ -10,6 +10,7 @@ const manifestsReducer = (state = {}, action) => {
       return {
         ...state,
         [action.manifestId]: {
+          id: action.manifestId,
           isFetching: true,
         },
       };
@@ -17,6 +18,7 @@ const manifestsReducer = (state = {}, action) => {
       return {
         ...state,
         [action.manifestId]: {
+          id: action.manifestId,
           manifestation: manifesto.create(action.manifestJson),
           isFetching: false,
         },
@@ -25,6 +27,7 @@ const manifestsReducer = (state = {}, action) => {
       return {
         ...state,
         [action.manifestId]: {
+          id: action.manifestId,
           error: action.error,
           isFetching: false,
         },

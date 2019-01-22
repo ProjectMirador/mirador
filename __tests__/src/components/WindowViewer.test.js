@@ -6,12 +6,12 @@ import fixture from '../../fixtures/version-2/024.json';
 
 describe('WindowViewer', () => {
   let wrapper;
-  let window;
   beforeEach(() => {
     store.dispatch(actions.receiveManifest('foo', fixture));
     store.dispatch(actions.addWindow({ manifestId: 'foo' }));
     const manifest = store.getState().manifests.foo;
-    [window] = store.getState().windows;
+    const { windows } = store.getState();
+    const window = Object.values(windows)[0];
     wrapper = mount(
       <WindowViewer manifest={manifest} window={window} />,
       // We need to attach this to something created by our JSDOM instance.

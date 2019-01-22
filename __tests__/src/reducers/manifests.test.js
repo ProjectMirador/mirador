@@ -8,6 +8,7 @@ describe('manifests reducer', () => {
       manifestId: 'abc123',
     })).toEqual({
       abc123: {
+        id: 'abc123',
         isFetching: true,
       },
     });
@@ -30,6 +31,7 @@ describe('manifests reducer', () => {
       },
     )).toMatchObject({
       abc123: {
+        id: 'abc123',
         isFetching: false,
         manifestation: {},
       },
@@ -49,6 +51,7 @@ describe('manifests reducer', () => {
       },
     )).toEqual({
       abc123: {
+        id: 'abc123',
         isFetching: false,
         error: "This institution didn't enable CORS.",
       },
