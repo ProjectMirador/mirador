@@ -1,16 +1,9 @@
 import React from 'react';
-<<<<<<< HEAD
-import { mount, shallow } from 'enzyme';
-import { actions, store } from '../../../src/store';
-import Window from '../../../src/components/Window';
-import fixture from '../../fixtures/version-2/024.json';
-=======
 import { shallow } from 'enzyme';
 import { Window } from '../../../src/components/Window';
 import ConnectedWindowTopBar from '../../../src/components/WindowTopBar';
 import WindowBackground from '../../../src/components/WindowBackground';
 import ConnectedWindowViewer from '../../../src/components/WindowViewer';
->>>>>>> Changed some files to work with new state layout.
 
 describe('Window', () => {
   let wrapper;
