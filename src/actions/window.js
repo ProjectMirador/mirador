@@ -19,8 +19,6 @@ export function focusWindow(windowId) {
  */
 export function addWindow(options) {
   const defaultOptions = {
-    // TODO: Windows should be a hash with id's as keys for easy lookups
-    // https://redux.js.org/faq/organizing-state#how-do-i-organize-nested-or-duplicate-data-in-my-state
     id: `window-${uuid()}`,
     canvasIndex: 0,
     collectionIndex: 0,
