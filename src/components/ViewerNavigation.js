@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
@@ -90,4 +91,10 @@ const mapDispatchToProps = {
   previousCanvas: actions.previousCanvas,
 };
 
-export default connect(null, mapDispatchToProps)(miradorWithPlugins(ViewerNavigation));
+const enhance = compose(
+  connect(null, mapDispatchToProps),
+  miradorWithPlugins,
+  // further HOC go here
+);
+
+export default enhance(ViewerNavigation);

@@ -1,4 +1,5 @@
 import React from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Window from './Window';
@@ -38,4 +39,9 @@ const mapStateToProps = state => (
   }
 );
 
-export default connect(mapStateToProps)(Workspace);
+const enhance = compose(
+  connect(mapStateToProps),
+  // further HOC go here
+);
+
+export default enhance(Workspace);
