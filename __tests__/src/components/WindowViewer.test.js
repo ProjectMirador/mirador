@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { actions, store } from '../../../src/store';
 import WindowViewer from '../../../src/components/WindowViewer';
-import fixture from '../../fixtures/24.json';
+import fixture from '../../fixtures/version-2/024.json';
 
 describe('WindowViewer', () => {
   let wrapper;

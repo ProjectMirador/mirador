@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { actions, store } from '../../../src/store';
 import WindowBackground from '../../../src/components/WindowBackground';
-import fixture from '../../fixtures/24.json';
+import fixture from '../../fixtures/version-2/024.json';
 
 describe('WindowBackground', () => {
   let wrapper;

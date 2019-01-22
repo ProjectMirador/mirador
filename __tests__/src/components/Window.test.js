@@ -2,7 +2,7 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { actions, store } from '../../../src/store';
 import Window from '../../../src/components/Window';
-import fixture from '../../fixtures/24.json';
+import fixture from '../../fixtures/version-2/024.json';
 
 describe('Window', () => {
   let wrapper;
