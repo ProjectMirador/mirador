@@ -1,81 +1,43 @@
 import React from 'react';
+<<<<<<< HEAD
 import { mount, shallow } from 'enzyme';
 import { actions, store } from '../../../src/store';
 import Window from '../../../src/components/Window';
 import fixture from '../../fixtures/version-2/024.json';
+=======
+import { shallow } from 'enzyme';
+import { Window } from '../../../src/components/Window';
+import ConnectedWindowTopBar from '../../../src/components/WindowTopBar';
+import WindowBackground from '../../../src/components/WindowBackground';
+import ConnectedWindowViewer from '../../../src/components/WindowViewer';
+>>>>>>> Changed some files to work with new state layout.
 
 describe('Window', () => {
   let wrapper;
-  let window;
-  describe('with a manifest present', () => {
-    beforeEach(() => {
-      store.dispatch(actions.receiveManifest('foo', fixture));
-      store.dispatch(actions.addWindow({ manifestId: 'foo' }));
-      [window] = store.getState().windows;
-      wrapper = mount(
-        <Window store={store} window={window} id={window.id} />,
-        // We need to attach this to something created by our JSDOM instance.
-        // Also need to provide context of the store so that connected sub components
-        // can render effectively.
-        { attachTo: document.getElementById('main'), context: { store } },
-      );
-    });
-
-    afterEach(() => {
-      store.dispatch(actions.removeManifest('foo'));
-    });
-
-    it('returns the width and height style attribute', () => {
-      wrapper = shallow(
-        <Window
-          store={store}
-          window={window}
-          id={window.id}
-        />,
-        { context: { store } },
-      );
-      expect(wrapper.dive().instance().styleAttributes())
-        .toEqual({ width: '400px', height: '400px' });
-    });
-
-    it('renders without an error', () => {
-      expect(wrapper.find('.mirador-window').prop('style')).toHaveProperty('width', '400px');
-      expect(wrapper.find('.mirador-window').prop('style')).toHaveProperty('height', '400px');
-      expect(wrapper.find('div.mirador-window').length).toBe(1);
-      expect(wrapper.find('div.mirador-window img').prop('src')).toBe('http://placekitten.com/200/300');
-    });
-
-    it('renders the viewer', () => {
-      expect(wrapper.find('WindowViewer').length).toBe(1);
-    });
+  let manifest;
+  const window = { id: 123, xywh: [0, 0, 400, 500] };
+  it('should render outer element', () => {
+    wrapper = shallow(<Window window={window} />);
+    expect(wrapper.find('.mirador-window')).toHaveLength(1);
+    expect(wrapper.instance().styleAttributes())
+      .toEqual({ width: '400px', height: '500px' });
   });
-  describe('without a manifest present', () => {
-    beforeEach(() => {
-      store.dispatch(actions.addWindow({ manifestId: 'foo' }));
-      [window] = store.getState().windows;
-      wrapper = shallow(
-        <Window
-          store={store}
-          window={window}
-          id={window.id}
-        />,
-        { context: { store } },
-      ).dive();
-    });
-
-    it('returns the width and height style attribute', () => {
-      expect(wrapper.instance().styleAttributes())
-        .toEqual({ width: '400px', height: '400px' });
-    });
-
-    it('renders without an error', () => {
-      expect(wrapper.find('.mirador-window').prop('style')).toHaveProperty('width', '400px');
-      expect(wrapper.find('.mirador-window').prop('style')).toHaveProperty('height', '400px');
-      expect(wrapper.find('div.mirador-window img').length).toBe(0);
-    });
-
-    it('does not render the viewer', () => {
-      expect(wrapper.find('WindowViewer').length).toBe(0);
-    });
+  it('should render <ConnectedWindowTopBar>', () => {
+    wrapper = shallow(<Window window={window} />);
+    expect(wrapper.find(ConnectedWindowTopBar)).toHaveLength(1);
+  });
+  it('should render <WindowBackground> if no manifest given', () => {
+    wrapper = shallow(<Window window={window} />);
+    expect(wrapper.find(WindowBackground)).toHaveLength(1);
+  });
+  it('should render <WindowBackground> if manifest is fetching', () => {
+    manifest = { id: 456, isFetching: true };
+    wrapper = shallow(<Window window={window} manifest={manifest} />);
+    expect(wrapper.find(WindowBackground)).toHaveLength(1);
+  });
+  it('should render <WindowViewer> if manifest is present', () => {
+    manifest = { id: 456, isFetching: false };
+    wrapper = shallow(<Window window={window} manifest={manifest} />);
+    expect(wrapper.find(ConnectedWindowViewer)).toHaveLength(1);
   });
 });
