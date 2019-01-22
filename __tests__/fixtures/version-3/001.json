@@ -1,0 +1,288 @@
+{
+  "@context": [
+    "http://www.w3.org/ns/anno.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://iiif.bodleian.ox.ac.uk/iiif/manifest/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "Bodleian Library: Human Freaks 2 (33)"
+    ]
+  },
+  "summary": "[Handbill of Mr. Becket, [1787] ]",
+  "metadata": [
+    {
+      "label": {
+        "en": [
+          "Title"
+        ]
+      },
+      "value": {
+        "en": [
+          "[Handbill of Mr. Becket, [1787] ]"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Other Titles"
+        ]
+      },
+      "value": {
+        "en": [
+          "To the nobility, gentry, and the curious for inspecting most extraordinary human beings, of the wild species born. Just arrived from abroad, and to be seen at Mr. Becket's, trunk maker, no. 31, Hay-market, ... three wonderful ph\u0086nomena, wild-born, of the human species: these are two females and a male, of a very small stature, ..."
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Creator"
+        ]
+      },
+      "value": {
+        "en": [
+          "Becket, Mr ([London], England) [author]"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Contributor"
+        ]
+      },
+      "value": {
+        "en": [
+          "Becket Mr [funder/Sponsor]",
+          "Incledon, Charles Benjamin, 1763-1826 [performer]"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Language"
+        ]
+      },
+      "value": {
+        "en": [
+          "English"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Date Statement"
+        ]
+      },
+      "value": {
+        "en": [
+          "[1787]"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Description"
+        ]
+      },
+      "value": {
+        "en": [
+          "Handbill of Mr. Becket, [1787] announcing curiosities and wonders"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Collection"
+        ]
+      },
+      "value": {
+        "en": [
+          "Ephemera",
+          "Entertainment Ephemera"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Subject"
+        ]
+      },
+      "value": {
+        "en": [
+          "Curiosities and wonders",
+          "Dwarfs",
+          "Abnormalities, Human",
+          "Printed ephemera",
+          "Human curiosities",
+          "Dwarfs",
+          "Hills",
+          "Umbrellas"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Other Identifier"
+        ]
+      },
+      "value": {
+        "en": [
+          "Human Freaks 2 (33)",
+          "003134",
+          "t188499"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Record Created"
+        ]
+      },
+      "value": {
+        "en": [
+          "2015-07-10T00:00:00Z"
+        ]
+      }
+    },
+    {
+      "label": {
+        "en": [
+          "Holding Institution"
+        ]
+      },
+      "value": {
+        "en": [
+          "Bodleian Libraries, University of Oxford"
+        ]
+      }
+    }
+  ],
+  "homepage": [
+    {
+      "id": "https://digital.bodleian.ox.ac.uk/inquire/p/9cca8fdd-4a61-4429-8ac1-f648764b4d6d",
+      "type": "Text",
+      "label": {
+        "en": [
+          "View on Digital Bodleian"
+        ]
+      },
+      "format": "text/html"
+    }
+  ],
+  "logo": [
+    {
+      "id": "https://iiif.bodleian.ox.ac.uk/iiif/image/b83fe9b4-3ffb-4890-aa3f-7d551dfd8b38/full/256,/0/default.jpg",
+      "type": "Image",
+      "service": {
+        "type": "ImageService2",
+        "profile": "level1",
+        "id": "https://iiif.bodleian.ox.ac.uk/iiif/image/b83fe9b4-3ffb-4890-aa3f-7d551dfd8b38"
+      }
+    }
+  ],
+  "thumbnail": [
+    {
+      "id": "https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d/full/256,/0/default.jpg",
+      "service": {
+        "type": "ImageService2",
+        "profile": "level1",
+        "id": "https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d"
+      }
+    }
+  ],
+  "requiredStatement": {
+    "label": {
+      "en": [
+        "Terms of Use"
+      ]
+    },
+    "value": {
+      "en": [
+        null
+      ]
+    }
+  },
+  "partOf": [
+    {
+      "id": "https://iiif.bodleian.ox.ac.uk/iiif/collection/ephemera",
+      "type": "Collection",
+      "label": {
+        "en": [
+          "Ephemera"
+        ]
+      }
+    },
+    {
+      "id": "https://iiif.bodleian.ox.ac.uk/iiif/collection/entertainment-ephemera",
+      "type": "Collection",
+      "label": {
+        "en": [
+          "Entertainment Ephemera"
+        ]
+      }
+    }
+  ],
+  "behavior": [
+    "individuals"
+  ],
+  "items": [
+    {
+      "id": "https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json",
+      "type": "Canvas",
+      "label": "Whole Page",
+      "width": 5776,
+      "height": 9125,
+      "items": [
+        {
+          "id": "https://iiif.bodleian.ox.ac.uk/iiif/annotationpage/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.bodleian.ox.ac.uk/iiif/annotation/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json",
+              "body": {
+                "id": "https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d",
+                "type": "Image",
+                "format": "image/jpeg",
+                "width": 5776,
+                "height": 9125,
+                "service": {
+                  "type": "ImageService2",
+                  "profile": "level1",
+                  "id": "https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "metadata": [
+        {
+          "label": {
+            "en": [
+              "Label"
+            ]
+          },
+          "value": {
+            "en": [
+              "Whole Page"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

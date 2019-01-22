@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { actions, store } from '../../../src/store';
 import Workspace from '../../../src/components/Workspace';
-import fixture from '../../fixtures/2.json';
+import fixture from '../../fixtures/version-2/002.json';
 
 describe('Workspace', () => {
   let wrapper;

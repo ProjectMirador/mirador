@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Display from '../../../src/components/Display';
 import ManifestMetadata from '../../../src/components/ManifestMetadata';
-import fixture from '../../fixtures/2.json';
+import fixture from '../../fixtures/version-2/002.json';
 
 describe('Display', () => {
   it('renders without an error', () => {

@@ -3,7 +3,7 @@ describe('Window actions', () => {
     await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/');
   });
   it('opens a window and closes it', async () => {
-    await expect(page).toFill('#manifestURL', 'http://localhost:5000/sn904cj3439.json');
+    await expect(page).toFill('#manifestURL', 'http://localhost:5000/api/sn904cj3439');
     await expect(page).toClick('#fetchBtn');
     // TODO: Refactor the app so we get rid of the wait
     await page.waitFor(1000);
