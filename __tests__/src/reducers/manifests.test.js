@@ -17,6 +17,7 @@ describe('manifests reducer', () => {
     expect(reducer(
       {
         abc123: {
+          id: 'abc123',
           isFetching: true,
         },
       },
@@ -41,6 +42,7 @@ describe('manifests reducer', () => {
     expect(reducer(
       {
         abc123: {
+          id: 'abc123',
           isFetching: true,
         },
       },
@@ -61,6 +63,11 @@ describe('manifests reducer', () => {
     expect(reducer(
       {
         abc123: {
+          id: 'abc123',
+          stuff: 'foo',
+        },
+        def456: {
+          id: 'def456',
           stuff: 'foo',
         },
       },
@@ -68,6 +75,11 @@ describe('manifests reducer', () => {
         type: ActionTypes.REMOVE_MANIFEST,
         manifestId: 'abc123',
       },
-    )).toEqual({});
+    )).toEqual({
+      def456: {
+        id: 'def456',
+        stuff: 'foo',
+      },
+    });
   });
 });
