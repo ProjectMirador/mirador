@@ -50,7 +50,6 @@ body {
   &-osd-container {
     background: $gray;
     bottom: 0;
-    height: 100%;
     position: absolute;
     top: 0;
     width: 100%;
@@ -63,5 +62,42 @@ body {
     right: 0;
     text-align: center;
     z-index: 33;
+  }
+
+  &-thumb-navigation {
+    bottom: 0;
+    padding-left: 8px;
+    padding-right: 8px;
+    position: absolute;
+    width: 100%;
+
+    ul {
+      display: flex;
+      flex-wrap: nowrap;
+      height: 100%;
+      list-style: none;
+      margin-block-end: 0;
+      margin-block-start: 0;
+      min-width: 100%;
+      overflow-x: auto;
+      padding-inline-start: 0;
+    }
+
+    li {
+      background-color: $gray;
+      border: 1px solid $black;
+      color: $white;
+      cursor: pointer;
+      display: flex;
+      flex: 0 0 auto;
+      height: 100%;
+      margin-left: 2px;
+      margin-right: 8px;
+      min-width: 40px;
+
+      &.mirador-current-canvas {
+        border: 3px solid $blue;
+      }
+    }
   }
 }
