@@ -1,7 +1,8 @@
 import React from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Window from './Window';
+import ConnectedWindow from './Window';
 import ns from '../config/css-ns';
 
 /**
@@ -12,8 +13,8 @@ import ns from '../config/css-ns';
 const Workspace = ({ windows }) => (
   <div className={ns('workspace')}>
     {
-      windows.map(window => (
-        <Window
+      Object.values(windows).map(window => (
+        <ConnectedWindow
           id={window.id}
           key={window.id}
           window={window}
@@ -24,7 +25,7 @@ const Workspace = ({ windows }) => (
 );
 
 Workspace.propTypes = {
-  windows: PropTypes.instanceOf(Array).isRequired,
+  windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 /**
@@ -38,4 +39,9 @@ const mapStateToProps = state => (
   }
 );
 
-export default connect(mapStateToProps)(Workspace);
+const enhance = compose(
+  connect(mapStateToProps),
+  // further HOC go here
+);
+
+export default enhance(Workspace);

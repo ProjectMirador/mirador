@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { actions, store } from '../../../src/store';
 import Workspace from '../../../src/components/Workspace';
-import fixture from '../../fixtures/2.json';
+import fixture from '../../fixtures/version-2/002.json';
 
 describe('Workspace', () => {
   let wrapper;
@@ -13,7 +13,8 @@ describe('Workspace', () => {
   });
 
   it('renders without an error', () => {
-    const window = store.getState().windows[0];
+    const { windows } = store.getState();
+    const window = Object.values(windows)[0];
     expect(wrapper.find('div.mirador-workspace').length).toBe(1);
     expect(wrapper.find(`#${window.id}`).length).toBe(1);
   });

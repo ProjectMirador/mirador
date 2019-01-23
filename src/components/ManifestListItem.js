@@ -1,4 +1,5 @@
 import React from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { actions } from '../store';
@@ -52,7 +53,9 @@ const mapStateToProps = () => (
  */
 const mapDispatchToProps = { addWindow: actions.addWindow };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ManifestListItem);
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  // further HOC go here
+);
+
+export default enhance(ManifestListItem);

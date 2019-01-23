@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { actions } from '../store';
@@ -56,4 +57,10 @@ WindowTopBar.defaultProps = {
   manifest: null,
 };
 
-export default connect(null, mapDispatchToProps)(miradorWithPlugins(WindowTopBar));
+const enhance = compose(
+  connect(null, mapDispatchToProps),
+  miradorWithPlugins,
+  // further HOC go here
+);
+
+export default enhance(WindowTopBar);

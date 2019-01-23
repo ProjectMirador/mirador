@@ -42,7 +42,7 @@ export class OpenSeadragonViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const { tileSources } = this.props;
-    if (prevProps.tileSources !== tileSources) {
+    if (!this.tileSourcesMatch(prevProps.tileSources)) {
       this.viewer.close();
       tileSources.forEach(tileSource => this.addTileSource(tileSource));
     }
@@ -61,6 +61,25 @@ export class OpenSeadragonViewer extends Component {
       tileSource,
       success: (event) => {
       },
+    });
+  }
+
+  /**
+   * tileSourcesMatch - compares previous tileSources to current to determine
+   * whether a refresh of the OSD viewer is needed.
+   * @param  {Array} prevTileSources
+   * @return {Boolean}
+   */
+  tileSourcesMatch(prevTileSources) {
+    const { tileSources } = this.props;
+    return tileSources.some((tileSource, index) => {
+      if (!prevTileSources[index]) {
+        return false;
+      }
+      if (tileSource['@id'] === prevTileSources[index]['@id']) {
+        return true;
+      }
+      return false;
     });
   }
 

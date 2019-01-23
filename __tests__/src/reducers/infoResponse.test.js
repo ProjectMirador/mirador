@@ -1,13 +1,14 @@
 import reducer from '../../../src/reducers/infoResponses';
 import ActionTypes from '../../../src/action-types';
 
-describe('manifests reducer', () => {
+describe('info response reducer', () => {
   it('should handle REQUEST_INFO_RESPONSE', () => {
     expect(reducer({}, {
       type: ActionTypes.REQUEST_INFO_RESPONSE,
       infoId: 'abc123',
     })).toEqual({
       abc123: {
+        id: 'abc123',
         isFetching: true,
       },
     });
@@ -30,6 +31,7 @@ describe('manifests reducer', () => {
       },
     )).toMatchObject({
       abc123: {
+        id: 'abc123',
         isFetching: false,
         json: {},
       },
@@ -49,6 +51,7 @@ describe('manifests reducer', () => {
       },
     )).toEqual({
       abc123: {
+        id: 'abc123',
         isFetching: false,
         error: "This institution didn't enable CORS.",
       },

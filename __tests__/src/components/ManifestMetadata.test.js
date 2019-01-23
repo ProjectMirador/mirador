@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { actions, store } from '../../../src/store';
 import ManifestMetadata from '../../../src/components/ManifestMetadata';
-import fixture from '../../fixtures/2.json';
+import fixture from '../../fixtures/version-2/002.json';
 
 describe('ManifestMetadata', () => {
   let wrapper;

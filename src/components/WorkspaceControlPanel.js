@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Display from './Display';
@@ -84,4 +85,9 @@ const mapStateToProps = state => (
   }
 );
 
-export default connect(mapStateToProps)(WorkspaceControlPanel);
+const enhance = compose(
+  connect(mapStateToProps),
+  // further HOC go here
+);
+
+export default enhance(WorkspaceControlPanel);

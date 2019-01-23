@@ -1,6 +1,6 @@
 module.exports = {
   launch: {
-    headless: process.env.CI === 'true',
+    headless: process.env.HEADLESS !== 'false',
   },
   server: {
     command: 'npm run server -- -p 4488',

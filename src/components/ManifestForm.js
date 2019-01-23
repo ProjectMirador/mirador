@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { actions } from '../store';
@@ -89,7 +90,9 @@ const mapStateToProps = () => (
  */
 const mapDispatchToProps = { fetchManifest: actions.fetchManifest };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ManifestForm);
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  // further HOC go here
+);
+
+export default enhance(ManifestForm);
