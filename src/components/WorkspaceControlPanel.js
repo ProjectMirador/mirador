@@ -54,7 +54,7 @@ class WorkspaceControlPanel extends Component {
     return (
       <div className={ns('workspace-control-panel')}>
         <span className={ns('svg-plus')}>
-          <CSvgPlus clickHandler={(e) => { console.log('TODO: a manifest selection possibility should appear'); }}/>
+          <CSvgPlus clickHandler={(e) => { console.log('TODO: a manifest selection possibility should appear'); }} />
         </span>
         <br />
         <br />

@@ -26,7 +26,8 @@ describe('WorkspaceControlPanel', () => {
   });
 
   it('contains svg images', () => {
-    expect((wrapper).find('SvgAdd').length).toBe(1);
+    expect((wrapper).find('SvgPlus').length).toBe(1);
     expect((wrapper).find('SvgDots').length).toBe(1);
+    expect((wrapper).find('SvgFrame').length).toBe(1);
   });
 });

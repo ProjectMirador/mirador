@@ -18,7 +18,7 @@ describe('SvgPlus', () => {
 
   it('should pass color property and render properly', () => {
     const fillColor = '#F00';
-    const wrapper = shallow(<SvgPlusImage color={fillColor}/>);
+    const wrapper = shallow(<SvgPlusImage color={fillColor} />);
 
     expect(wrapper.matchesElement(
       <svg>
