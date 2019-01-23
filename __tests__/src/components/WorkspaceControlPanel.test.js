@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { actions, store } from '../../../src/store';
+
 import WorkspaceControlPanel from '../../../src/components/WorkspaceControlPanel';
 import fixture from '../../fixtures/version-2/002.json';
 
@@ -22,5 +23,10 @@ describe('WorkspaceControlPanel', () => {
 
   it('renders a Display component', () => {
     expect(wrapper.find('Display').length).toBe(1);
+  });
+
+  it('contains svg images', () => {
+    expect((wrapper).find('SvgAdd').length).toBe(1);
+    expect((wrapper).find('SvgDots').length).toBe(1);
   });
 });
