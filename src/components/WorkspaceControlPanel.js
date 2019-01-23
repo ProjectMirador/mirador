@@ -8,6 +8,7 @@ import ConnectedManifestListItem from './ManifestListItem';
 import SvgAddManifestButton from './SvgAddButton';
 import ns from '../config/css-ns';
 import SvgMenuDots from './SvgMenuDotsVertical';
+import SvgFrameButton from './SvgFrame';
 
 /**
  * Provides the panel responsible for controlling the entire workspace
@@ -52,13 +53,19 @@ class WorkspaceControlPanel extends Component {
     return (
       <div className={ns('workspace-control-panel')}>
         <span className={ns('plus-button')}>
-          <SvgAddManifestButton />
+          <SvgAddManifestButton clickHandler={(e) => { console.log('TODO: a manifest selection possibility should appear'); }} />
         </span>
         <br />
         <br />
         <span className={ns('menu-dots')}>
-          <SvgMenuDots />
+          <SvgMenuDots clickHandler={(e) => { console.log('TODO: a menu should appear'); }} />
         </span>
+        <br />
+        <span>
+          <SvgFrameButton />
+        </span>
+
+
         <ConnectedManifestForm setLastRequested={this.setLastRequested} />
         <ul>{manifestList}</ul>
 
