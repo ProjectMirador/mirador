@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
-import Display from './Display';
+
 import ConnectedManifestForm from './ManifestForm';
 import ConnectedManifestListItem from './ManifestListItem';
-import SvgAddManifestButton from './SvgAddButton';
+import Display from './Display';
+import CSvgDots from './SvgDots';
+import CSvgPlus from './SvgPlus';
 import ns from '../config/css-ns';
-import SvgMenuDots from './SvgMenuDotsVertical';
 
 /**
  * Provides the panel responsible for controlling the entire workspace
@@ -51,13 +52,13 @@ class WorkspaceControlPanel extends Component {
     ));
     return (
       <div className={ns('workspace-control-panel')}>
-        <span className={ns('plus-button')}>
-          <SvgAddManifestButton />
+        <span className={ns('svg-plus')}>
+          <CSvgPlus />
         </span>
         <br />
         <br />
-        <span className={ns('menu-dots')}>
-          <SvgMenuDots />
+        <span className={ns('svg-dots')}>
+          <CSvgDots />
         </span>
         <ConnectedManifestForm setLastRequested={this.setLastRequested} />
         <ul>{manifestList}</ul>
