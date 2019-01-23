@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+
 import PropTypes from 'prop-types';
 
 /**
- * Icon for menues
+ * An svg image containing three dots
+ * @param {*} props
  */
-export class SvgMenuDotsVertivcal extends Component {
+export class SvgDots extends Component {
   /**
    * handle a click
    */
@@ -32,14 +34,14 @@ export class SvgMenuDotsVertivcal extends Component {
   }
 }
 
-SvgMenuDotsVertivcal.propTypes = {
+SvgDots.propTypes = {
   clickHandler: PropTypes.func,
   color: PropTypes.string,
 };
 
-SvgMenuDotsVertivcal.defaultProps = {
+SvgDots.defaultProps = {
   clickHandler: (e) => { console.log('No action defined'); },
   color: '#4d4d4d',
 };
 
-export default SvgMenuDotsVertivcal;
+export default SvgDots;
