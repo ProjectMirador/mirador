@@ -87,24 +87,32 @@ export class OpenSeadragonViewer extends Component {
    * Renders things
    */
   render() {
-    const { window } = this.props;
+    const { window, config, children } = this.props;
     return (
       <>
         <div
           className={ns('osd-container')}
           id={`${window.id}-osd`}
           ref={this.ref}
-        />
+          style={{
+            height: `calc(100% - ${config.thumbnailNavigationHeight}px)`,
+          }}
+        >
+          { children }
+        </div>
       </>
     );
   }
 }
 
 OpenSeadragonViewer.defaultProps = {
+  children: null,
   tileSources: [],
 };
 
 OpenSeadragonViewer.propTypes = {
+  children: PropTypes.element,
+  config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   tileSources: PropTypes.arrayOf(PropTypes.object),
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };

@@ -85,8 +85,9 @@ class WindowViewer extends Component {
         <ConnectedOSDViewer
           tileSources={this.tileInfoFetchedFromStore()}
           window={window}
-        />
-        <ConnectedViewerNavigation window={window} canvases={this.canvases} />
+        >
+          <ConnectedViewerNavigation window={window} canvases={this.canvases} />
+        </ConnectedOSDViewer>
       </>
     );
   }
