@@ -10,19 +10,26 @@ import ns from '../config/css-ns';
  * @memberof Workspace
  * @private
  */
-const Workspace = ({ windows }) => (
-  <div className={ns('workspace')}>
-    {
-      Object.values(windows).map(window => (
-        <ConnectedWindow
-          id={window.id}
-          key={window.id}
-          window={window}
-        />
-      ))
-    }
-  </div>
-);
+export class Workspace extends React.Component {
+  /**
+   * render
+   */
+  render() {
+    const { windows } = this.props;
+    return (
+      <div className={ns('workspace')}>
+        {
+          Object.values(windows).map(window => (
+            <ConnectedWindow
+              key={window.id}
+              window={window}
+            />
+          ))
+        }
+      </div>
+    );
+  }
+}
 
 Workspace.propTypes = {
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
