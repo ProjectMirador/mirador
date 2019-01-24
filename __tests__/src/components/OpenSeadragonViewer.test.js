@@ -9,11 +9,17 @@ describe('OpenSeadragonViewer', () => {
       <OpenSeadragonViewer
         tileSources={[{ '@id': 'http://foo' }]}
         window={{ id: 'base' }}
-      />,
+        config={{}}
+      >
+        <div className="foo" />
+      </OpenSeadragonViewer>,
     );
   });
   it('renders the component', () => {
     expect(wrapper.find('.mirador-osd-container').length).toBe(1);
+  });
+  it('renders child components', () => {
+    expect(wrapper.find('.foo').length).toBe(1);
   });
   describe('tileSourcesMatch', () => {
     it('when they do not match', () => {

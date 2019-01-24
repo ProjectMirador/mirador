@@ -77,4 +77,29 @@ describe('windows reducer', () => {
       },
     });
   });
+  it('should handle SET_CANVAS', () => {
+    expect(reducer({
+      abc123: {
+        id: 'abc123',
+        canvasIndex: 1,
+      },
+      def456: {
+        id: 'def456',
+        canvasIndex: 1,
+      },
+    }, {
+      type: ActionTypes.SET_CANVAS,
+      windowId: 'abc123',
+      canvasIndex: 5,
+    })).toEqual({
+      abc123: {
+        id: 'abc123',
+        canvasIndex: 5,
+      },
+      def456: {
+        id: 'def456',
+        canvasIndex: 1,
+      },
+    });
+  });
 });

@@ -6,6 +6,7 @@ import { actions } from '../store';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import ConnectedOSDViewer from './OpenSeadragonViewer';
 import ConnectedViewerNavigation from './ViewerNavigation';
+import ConnectedThumbnailNavigation from './ThumbnailNavigation';
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -85,8 +86,10 @@ class WindowViewer extends Component {
         <ConnectedOSDViewer
           tileSources={this.tileInfoFetchedFromStore()}
           window={window}
-        />
-        <ConnectedViewerNavigation window={window} canvases={this.canvases} />
+        >
+          <ConnectedViewerNavigation window={window} canvases={this.canvases} />
+        </ConnectedOSDViewer>
+        <ConnectedThumbnailNavigation window={window} canvases={this.canvases} />
       </>
     );
   }

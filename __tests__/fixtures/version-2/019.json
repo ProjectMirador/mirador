@@ -1,0 +1,68 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json",
+  "@type": "sc:Manifest",
+  "label": "Test 19 Manifest: Multiple Canvases",
+  "within": "http://iiif.io/api/presentation/2.1/example/fixtures/collection.json",
+  "sequences": [
+    {
+      "@type": "sc:Sequence",
+      "label": "Test 19 Sequence 1",
+      "canvases": [
+        {
+          "@id": "http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json",
+          "@type": "sc:Canvas",
+          "label": "Test 19 Canvas: 1",
+          "height": 1800,
+          "width": 1200,
+          "images": [
+            {
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "resource": {
+                "@id": "https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/full/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 3820,
+                "width": 5426,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              },
+              "on": "http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json"
+            }
+          ]
+        },
+        {
+          "@id": "https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1",
+          "@type": "sc:Canvas",
+          "label": "Image 1",
+          "height": 4421,
+          "width": 6501,
+          "images": [
+            {
+              "@id": "https://purl.stanford.edu/fr426cg9537/iiif/annotation/fr426cg9537_1",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "resource": {
+                "@id": "https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005/full/full/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 4421,
+                "width": 6501,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              },
+              "on": "https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
