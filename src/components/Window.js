@@ -3,7 +3,6 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ns from '../config/css-ns';
-import WindowBackground from './WindowBackground';
 import ConnectedWindowTopBar from './WindowTopBar';
 import WindowViewer from './WindowViewer';
 
@@ -47,9 +46,6 @@ export class Window extends Component {
       <div className={ns('window')} style={this.styleAttributes()}>
         <ConnectedWindowTopBar
           windowId={window.id}
-          manifest={manifest}
-        />
-        <WindowBackground
           manifest={manifest}
         />
         {this.renderViewer()}
