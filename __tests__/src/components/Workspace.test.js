@@ -1,21 +1,17 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { actions, store } from '../../../src/store';
-import Workspace from '../../../src/components/Workspace';
-import fixture from '../../fixtures/version-2/002.json';
+import { Workspace } from '../../../src/components/Workspace';
+import ConnectedWindow from '../../../src/components/Window';
 
 describe('Workspace', () => {
-  let wrapper;
-  beforeEach(() => {
-    store.dispatch(actions.receiveManifest('foo', fixture));
-    store.dispatch(actions.addWindow({ manifestId: 'foo' }));
-    wrapper = shallow(<Workspace store={store} />).dive();
-  });
-
-  it('renders without an error', () => {
-    const { windows } = store.getState();
-    const window = Object.values(windows)[0];
-    expect(wrapper.find('div.mirador-workspace').length).toBe(1);
-    expect(wrapper.find(`#${window.id}`).length).toBe(1);
+  const windows = { 1: { id: 1 }, 2: { id: 2 } };
+  it('should render properly', () => {
+    const wrapper = shallow(<Workspace windows={windows} />);
+    expect(wrapper.matchesElement(
+      <div className="mirador-workspace">
+        <ConnectedWindow window={{ id: 1 }} />
+        <ConnectedWindow window={{ id: 2 }} />
+      </div>,
+    )).toBe(true);
   });
 });
