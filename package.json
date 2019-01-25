@@ -34,6 +34,7 @@
     "react": "^16.7.0",
     "react-dom": "^16.4.0",
     "react-redux": "^5.0.7",
+    "react-virtualized": "^9.21.0",
     "redux": "4.0.1",
     "redux-devtools-extension": "^2.13.2",
     "redux-thunk": "2.2.0",
