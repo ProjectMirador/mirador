@@ -40,4 +40,20 @@ describe('MiradorViewer', () => {
       expect(instance.store.pluginReducers).toBeDefined();
     });
   });
+  describe('processConfig', () => {
+    it('transforms config values to actions to dispatch to store', () => {
+      instance = new MiradorViewer({
+        id: 'mirador',
+        windows: [{
+          loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+        },
+        {
+          loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+        },
+        ],
+      });
+
+      expect(Object.keys(instance.store.getState().windows).length).toBe(2);
+    });
+  });
 });
