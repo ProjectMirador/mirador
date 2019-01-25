@@ -24,9 +24,9 @@ const handleOpenButtonClick = (event, manifest, addWindow) => {
  * @memberof ManifestListItem
  * @private
  */
-export const ManifestListItem = ({ manifest, addWindow }) => (
+export const ManifestListItem = ({ manifest, addWindow, handleClose }) => (
   <li className={ns('manifest-list-item')}>
-    <button type="button" onClick={event => handleOpenButtonClick(event, manifest, addWindow)}>
+    <button type="button" onClick={(event) => { handleOpenButtonClick(event, manifest, addWindow); handleClose(); }}>
       {manifest}
     </button>
   </li>
@@ -35,6 +35,11 @@ export const ManifestListItem = ({ manifest, addWindow }) => (
 ManifestListItem.propTypes = {
   manifest: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
   addWindow: PropTypes.func.isRequired,
+  handleClose: PropTypes.func,
+};
+
+ManifestListItem.defaultProps = {
+  handleClose: () => {},
 };
 
 /**

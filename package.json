@@ -21,6 +21,9 @@
   ],
   "repository": "https://github.com/ProjectMirador/mirador",
   "dependencies": {
+    "@material-ui/core": "^3.9.0",
+    "@material-ui/icons": "^3.0.2",
+    "classnames": "^2.2.6",
     "css-ns": "^1.2.2",
     "deepmerge": "^3.1.0",
     "manifesto.js": "^3.0.9",

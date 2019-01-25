@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
-import Display from './Display';
+import List from '@material-ui/core/List';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import Menu from '@material-ui/core/Menu';
+import { withStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
 import ConnectedManifestForm from './ManifestForm';
 import ConnectedManifestListItem from './ManifestListItem';
+import ConnectedWorkspaceControlPanelButtons from './WorkspaceControlPanelButtons';
 import ns from '../config/css-ns';
 
 /**
@@ -18,9 +25,12 @@ class WorkspaceControlPanel extends Component {
     super(props);
     this.state = {
       lastRequested: '',
+      anchorEl: null,
     };
 
     this.setLastRequested = this.setLastRequested.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   /**
@@ -35,33 +45,72 @@ class WorkspaceControlPanel extends Component {
   }
 
   /**
+   * @private
+   */
+  handleClick(event) {
+    this.setState({
+      anchorEl: event.currentTarget,
+    });
+  }
+
+  /**
+   * @private
+   */
+  handleClose() {
+    this.setState({
+      anchorEl: null,
+    });
+  }
+
+  /**
    * render
    * @return {String} - HTML markup for the component
    */
   render() {
-    const { manifests } = this.props;
-    const { lastRequested } = this.state;
+    const { manifests, classes } = this.props;
+    const { lastRequested, anchorEl } = this.state;
     const manifestList = Object.keys(manifests).map(manifest => (
       <ConnectedManifestListItem
         key={manifest}
         manifest={manifest}
+        handleClose={this.handleClose}
       />
     ));
     return (
-      <div className={ns('workspace-control-panel')}>
-        <ConnectedManifestForm setLastRequested={this.setLastRequested} />
-        <ul>{manifestList}</ul>
+      <Drawer
+        className={classNames(classes.drawer, ns('workspace-control-panel'))}
+        variant="permanent"
+        classes={{ paper: classNames(classes.drawer) }}
+        open
+      >
+        <Menu id="add-form" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={this.handleClose}>
+          <ConnectedManifestForm id="add-form" setLastRequested={this.setLastRequested} />
+          <ul>{manifestList}</ul>
+          {lastRequested}
+        </Menu>
 
-        <Display
-          manifest={manifests[lastRequested]}
-        />
-      </div>
+        <List>
+          <Fab
+            color="primary"
+            id="addBtn"
+            aria-label="Add"
+            className={classes.fab}
+            aria-owns={anchorEl ? 'add-form' : undefined}
+            aria-haspopup="true"
+            onClick={this.handleClick}
+          >
+            <AddIcon />
+          </Fab>
+          <ConnectedWorkspaceControlPanelButtons />
+        </List>
+      </Drawer>
     );
   }
 }
 
 WorkspaceControlPanel.propTypes = {
   manifests: PropTypes.instanceOf(Object).isRequired,
+  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 /**
@@ -74,9 +123,19 @@ const mapStateToProps = state => (
     manifests: state.manifests,
   }
 );
+/**
+ * @private
+ */
+const styles = theme => ({
+  fab: {
+    margin: theme.spacing.unit,
+  },
+});
+
 
 const enhance = compose(
   connect(mapStateToProps),
+  withStyles(styles),
   // further HOC go here
 );
 

@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ns from '../config/css-ns';
 import ConnectedWindowTopBar from './WindowTopBar';
+import ConnectedWindowSideBar from './WindowSideBar';
 import WindowViewer from './WindowViewer';
+import ConnectedCompanionWindow from './CompanionWindow';
 
 /**
  * Represents a Window in the mirador workspace
@@ -45,6 +47,14 @@ export class Window extends Component {
     return (
       <div className={ns('window')} style={this.styleAttributes()}>
         <ConnectedWindowTopBar
+          windowId={window.id}
+          manifest={manifest}
+        />
+        <ConnectedCompanionWindow
+          windowId={window.id}
+          manifest={manifest}
+        />
+        <ConnectedWindowSideBar
           windowId={window.id}
           manifest={manifest}
         />
