@@ -1,4 +1,6 @@
 export default {
   windows: [],
-  thumbnailNavigationHeight: 150,
+  thumbnailNavigation: {
+    height: 150,
+  },
 };

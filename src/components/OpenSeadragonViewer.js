@@ -117,7 +117,7 @@ export class OpenSeadragonViewer extends Component {
           id={`${window.id}-osd`}
           ref={this.ref}
           style={{
-            height: `calc(100% - ${config.thumbnailNavigationHeight}px)`,
+            height: `calc(100% - ${config.thumbnailNavigation.height}px)`,
           }}
         >
           { children }

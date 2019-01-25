@@ -48,7 +48,7 @@ export class ThumbnailNavigation extends Component {
       <div
         className={ns('thumb-navigation')}
         style={{
-          height: `${config.thumbnailNavigationHeight}px`,
+          height: `${config.thumbnailNavigation.height}px`,
         }}
       >
         <ul>
