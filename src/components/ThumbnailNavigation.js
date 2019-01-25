@@ -41,9 +41,10 @@ export class ThumbnailNavigation extends Component {
    * Renders things
    */
   render() {
-    const {
-      config,
-    } = this.props;
+    const { config, window } = this.props;
+    if (!window.thumbnailNavigationDisplayed) {
+      return <></>;
+    }
     return (
       <div
         className={ns('thumb-navigation')}

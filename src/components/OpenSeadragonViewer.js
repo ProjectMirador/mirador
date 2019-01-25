@@ -106,10 +106,21 @@ export class OpenSeadragonViewer extends Component {
   }
 
   /**
+   * Returns the height of the thumbnail navigation drawer
+   */
+  calculatedThumbnailNavigationHeight() {
+    const { config, window } = this.props;
+    if (window.thumbnailNavigationDisplayed && config.thumbnailNavigation) {
+      return config.thumbnailNavigation.height;
+    }
+    return 0;
+  }
+
+  /**
    * Renders things
    */
   render() {
-    const { window, config, children } = this.props;
+    const { window, children } = this.props;
     return (
       <>
         <div
@@ -117,7 +128,7 @@ export class OpenSeadragonViewer extends Component {
           id={`${window.id}-osd`}
           ref={this.ref}
           style={{
-            height: `calc(100% - ${config.thumbnailNavigation.height}px)`,
+            height: `calc(100% - ${this.calculatedThumbnailNavigationHeight()}px)`,
           }}
         >
           { children }

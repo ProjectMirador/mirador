@@ -9,6 +9,7 @@ describe('WindowViewer', () => {
   beforeEach(() => {
     store.dispatch(actions.receiveManifest('foo', fixture));
     store.dispatch(actions.addWindow({ manifestId: 'foo' }));
+    store.dispatch(actions.setConfig({ thumbnailNavigation: { height: 150 } }));
     const manifest = store.getState().manifests.foo;
     const { windows } = store.getState();
     const window = Object.values(windows)[0];
