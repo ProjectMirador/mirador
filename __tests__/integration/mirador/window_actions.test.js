@@ -10,6 +10,9 @@ describe('Window actions', () => {
     await expect(page).toClick('li button');
     await expect(page).toMatchElement('.mirador-window');
     await expect(page).toClick('.mirador-window-close');
-    await expect(page).not.toMatchElement('.mirador-window');
+    const numWindows = await page.evaluate(page => (
+      document.querySelectorAll('.mirador-window').length
+    )); // only default configed windows found
+    await expect(numWindows).toBe(2);
   });
 });
