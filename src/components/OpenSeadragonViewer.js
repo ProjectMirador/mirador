@@ -44,7 +44,15 @@ export class OpenSeadragonViewer extends Component {
     const { tileSources } = this.props;
     if (!this.tileSourcesMatch(prevProps.tileSources)) {
       this.viewer.close();
-      tileSources.forEach(tileSource => this.addTileSource(tileSource));
+      Promise.all(
+        tileSources.map(tileSource => this.addTileSource(tileSource)),
+      ).then(() => {
+        // TODO: An incredibly naive way to evaluate this for now. Update this
+        // to handle multiple canvases in the future.
+        if (tileSources[0]) {
+          this.fitBounds(0, 0, tileSources[0].width, tileSources[0].height);
+        }
+      });
     }
   }
 
@@ -57,11 +65,25 @@ export class OpenSeadragonViewer extends Component {
   /**
    */
   addTileSource(tileSource) {
-    this.viewer.addTiledImage({
-      tileSource,
-      success: (event) => {
-      },
+    return new Promise((resolve, reject) => {
+      if (!this.viewer) {
+        return;
+      }
+      this.viewer.addTiledImage({
+        tileSource,
+        success: event => resolve(event),
+        error: event => reject(event),
+      });
     });
+  }
+
+  /**
+   */
+  fitBounds(x, y, w, h) {
+    this.viewer.viewport.fitBounds(
+      this.viewer.viewport.imageToViewportRectangle(x, y, w, h),
+      true,
+    );
   }
 
   /**
