@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
+import classNames from 'classnames';
 import { actions } from '../store';
 import ConnectedWindowTopBarButtons from './WindowTopBarButtons';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
@@ -37,8 +38,8 @@ export class WindowTopBar extends Component {
     const { removeWindow, windowId, classes } = this.props;
     return (
       <AppBar position="absolute">
-        <Toolbar className={ns('window-top-bar')}>
-          <Typography variant="h3" noWrap color="inherit" className={classes.grow}>
+        <Toolbar disableGutters className={classNames(classes.reallyDense, ns('window-top-bar'))} variant="dense">
+          <Typography variant="h3" noWrap color="inherit" className={classes.typographyBody}>
             {this.titleContent()}
           </Typography>
           <ConnectedWindowTopBarButtons windowId={windowId} />
@@ -68,8 +69,13 @@ WindowTopBar.defaultProps = {
 };
 
 const styles = {
-  grow: {
+  typographyBody: {
     flexGrow: 1,
+    fontSize: '1em',
+  },
+  reallyDense: {
+    minHeight: 32,
+    paddingLeft: 4,
   },
 };
 
