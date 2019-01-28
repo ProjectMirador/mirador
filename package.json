@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "node_modules/.bin/eslint ./ && node_modules/.bin/sass-lint -v ./src/styles/**/*",
     "server": "node_modules/.bin/http-server",
-    "test": "npm run build && npm run lint && jest -c jest.json",
+    "test": "npm run build && npm run lint && npm run size && jest -c jest.json",
     "test:watch": "jest -c jest.json --watch",
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
