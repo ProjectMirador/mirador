@@ -22,7 +22,7 @@ export class Window extends Component {
   /**
    * renderViewer
    *
-   * @return {String, null}
+   * @return {(String|null)}
    */
   renderViewer() {
     const { manifest, window } = this.props;
