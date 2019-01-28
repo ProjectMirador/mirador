@@ -24,7 +24,7 @@ describe('WindowTopBar', () => {
   });
 
   it('renders without an error', () => {
-    expect(topBar.dive().find('WithStyles(Toolbar)')
+    expect(topBar.find('WithStyles(Toolbar)')
       .dive()
       .find('WithStyles(Typography)')
       .dive()

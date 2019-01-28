@@ -50,15 +50,22 @@ export class Window extends Component {
           windowId={window.id}
           manifest={manifest}
         />
-        <ConnectedCompanionWindow
-          windowId={window.id}
-          manifest={manifest}
-        />
-        <ConnectedWindowSideBar
-          windowId={window.id}
-          manifest={manifest}
-        />
-        {this.renderViewer()}
+        <div className={ns('window-middle-content')}>
+          <ConnectedWindowSideBar
+            windowId={window.id}
+            manifest={manifest}
+          />
+          <ConnectedCompanionWindow
+            windowId={window.id}
+            manifest={manifest}
+          />
+          {this.renderViewer()}
+          <ConnectedCompanionWindow
+            windowId={window.id}
+            manifest={manifest}
+          />
+        </div>
+        <div className={ns('companion-bottom')} />
       </div>
     );
   }

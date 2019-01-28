@@ -106,17 +106,6 @@ export class OpenSeadragonViewer extends Component {
   }
 
   /**
-   * Returns the height of the thumbnail navigation drawer
-   */
-  calculatedThumbnailNavigationHeight() {
-    const { config, window } = this.props;
-    if (window.thumbnailNavigationDisplayed && config.thumbnailNavigation) {
-      return config.thumbnailNavigation.height;
-    }
-    return 0;
-  }
-
-  /**
    * Renders things
    */
   render() {
@@ -127,9 +116,6 @@ export class OpenSeadragonViewer extends Component {
           className={ns('osd-container')}
           id={`${window.id}-osd`}
           ref={this.ref}
-          style={{
-            height: `calc(100% - ${this.calculatedThumbnailNavigationHeight()}px)`,
-          }}
         >
           { children }
         </div>
@@ -145,7 +131,6 @@ OpenSeadragonViewer.defaultProps = {
 
 OpenSeadragonViewer.propTypes = {
   children: PropTypes.element,
-  config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   tileSources: PropTypes.arrayOf(PropTypes.object),
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };

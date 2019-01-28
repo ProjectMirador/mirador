@@ -18,18 +18,45 @@ body {
     top: 0;
   }
 
+  &-window-middle-content {
+    display: flex;
+    flex: 1;
+  }
+
   &-window {
-    border: 1px solid $black;
-    overflow: hidden;
-    position: relative;
+    display: flex;
+    flex-direction: column;
   }
 
   &-osd-container {
     background: $gray;
-    bottom: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
+    flex: 1;
+    position: relative;
+  }
+
+  &-window-sidebar {
+    background: lighten($gray, 60%);
+    display: inline;
+    flex: 0 0 50px;
+    overflow: hidden;
+  }
+
+  &-window-companion-side {
+    background: lighten($gray, 40%);
+    min-width: 75px;
+    overflow-x: auto;
+    resize: horizontal;
+  }
+
+  &-window-top-bar {
+    background: lighten($black, 80%);
+  }
+
+  &-companion-bottom {
+    background: lighten($black, 60%);
+    height: 20vh;
+    overflow-y: auto;
+    resize: vertical;
   }
 
   &-osd-navigation {
