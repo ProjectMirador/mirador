@@ -4,17 +4,18 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import Fab from '@material-ui/core/Fab';
+import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
-import Menu from '@material-ui/core/Menu';
+import MenuIcon from '@material-ui/icons/Menu';
+import FrameIcon from '@material-ui/icons/CropFree';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import ConnectedManifestForm from './ManifestForm';
+import Menu from '@material-ui/core/Menu';
+import Divider from '@material-ui/core/Divider';
 import ConnectedManifestListItem from './ManifestListItem';
-import ConnectedWorkspaceControlPanelButtons from './WorkspaceControlPanelButtons';
-import CSvgDots from './SvgDots';
-import CSvgPlus from './SvgPlus';
-import CSvgFrame from './SvgFrame';
+import ConnectedManifestForm from './ManifestForm';
 import ns from '../config/css-ns';
 
 /**
@@ -32,8 +33,10 @@ class WorkspaceControlPanel extends Component {
     };
 
     this.setLastRequested = this.setLastRequested.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.handleAddManifestClick = this.handleAddManifestClick.bind(this);
+    this.handleCloseManifestClick = this.handleAddManifestClick.bind(this);
+    this.handleMenuClick = this.handleMenuClick.bind(this);
+    this.handleCropClick = this.handleCropClick.bind(this);
   }
 
   /**
@@ -50,7 +53,7 @@ class WorkspaceControlPanel extends Component {
   /**
    * @private
    */
-  handleClick(event) {
+  handleAddManifestClick(event) {
     this.setState({
       anchorEl: event.currentTarget,
     });
@@ -59,10 +62,40 @@ class WorkspaceControlPanel extends Component {
   /**
    * @private
    */
-  handleClose() {
+  handleMenuClick(event) {
+    const state = { ...this.state };
+    this.setState(state);
+  }
+
+  /**
+   * @private
+   */
+  handleCropClick(event) {
+    const state = { ...this.state };
+    this.setState(state);
+  }
+
+  /**
+   * @private
+   */
+  handleAddManifestClose() {
     this.setState({
       anchorEl: null,
     });
+  }
+
+  /**
+   * @private
+   */
+  handleAddManifest(event) { // eslint-disable-line class-methods-use-this
+    console.log('TODO: a manifest selection possibility should appear!');
+  }
+
+  /**
+   * @private
+   */
+  handleShowMenu(event) { // eslint-disable-line class-methods-use-this
+    console.log('TODO: a menu should appear!');
   }
 
   /**
@@ -86,34 +119,59 @@ class WorkspaceControlPanel extends Component {
         classes={{ paper: classNames(classes.drawer) }}
         open
       >
-        <Menu id="add-form" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={this.handleClose}>
-          <div className={ns('svg-plus')}>
-            <CSvgPlus clickHandler={(e) => { console.log('TODO: a manifest selection possibility should appear'); }} />
-          </div>
-          <div className={ns('svg-dots')}>
-            <CSvgDots clickHandler={(e) => { console.log('TODO: a menu should appear'); }} />
-          </div>
-          <div>
-            <CSvgFrame />
-          </div>
-          <ConnectedManifestForm id="add-form" setLastRequested={this.setLastRequested} />
+        <Menu
+          id="add-form"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={this.handleClose}
+        >
+          <ConnectedManifestForm
+            id="add-form"
+            setLastRequested={this.setLastRequested}
+          />
           <ul>{manifestList}</ul>
           {lastRequested}
         </Menu>
 
         <List>
-          <Fab
-            color="primary"
-            id="addBtn"
-            aria-label="Add"
-            className={classes.fab}
-            aria-owns={anchorEl ? 'add-form' : undefined}
-            aria-haspopup="true"
-            onClick={this.handleClick}
-          >
-            <AddIcon />
-          </Fab>
-          <ConnectedWorkspaceControlPanelButtons />
+          <ListItem>
+            <Fab
+              color="primary"
+              id="addBtn"
+              aria-label="Add"
+              className={classes.fab}
+              aria-owns={anchorEl ? 'add-form' : undefined}
+              aria-haspopup="true"
+              onClick={this.handleAddClick}
+            >
+              <AddIcon />
+            </Fab>
+          </ListItem>
+          <Divider />
+          <ListItem>
+            <IconButton
+              color="primary"
+              id="menuBtn"
+              aria-label="Menu"
+              className={classNames(classes.ctlBtn)}
+              aria-haspopup="true"
+              onClick={this.handleMenuClick}
+            >
+              <MenuIcon />
+            </IconButton>
+          </ListItem>
+          <ListItem>
+            <IconButton
+              color="primary"
+              id="cropBtn"
+              aria-label="Crop"
+              className={classNames(classes.ctlBtn)}
+              aria-haspopup="true"
+              onClick={this.handleCropClick}
+            >
+              <FrameIcon />
+            </IconButton>
+          </ListItem>
         </List>
       </Drawer>
     );
@@ -135,11 +193,12 @@ const mapStateToProps = state => (
     manifests: state.manifests,
   }
 );
+
 /**
  * @private
  */
 const styles = theme => ({
-  fab: {
+  ctlBtn: {
     margin: theme.spacing.unit,
   },
 });

@@ -23,7 +23,7 @@ describe('WorkspaceControlPanel', () => {
 
   describe('handleClose', () => {
     it('resets the anchor state', () => {
-      wrapper.instance().handleClose();
+      wrapper.instance().handleAddManifestClose();
 
       expect(wrapper.dive().find('WithStyles(Menu)').props().open).toBe(false);
     });
@@ -31,15 +31,9 @@ describe('WorkspaceControlPanel', () => {
 
   describe('handleClick', () => {
     it('sets the anchor state', () => {
-      wrapper.instance().handleClick({ currentTarget: true });
+      wrapper.instance().handleAddManifestClick({ currentTarget: true });
 
       expect(wrapper.dive().find('WithStyles(Menu)').props().open).toBe(true);
     });
-  });
-
-  it('contains svg images', () => {
-    expect((wrapper).find('SvgPlus').length).toBe(1);
-    expect((wrapper).find('SvgDots').length).toBe(1);
-    expect((wrapper).find('SvgFrame').length).toBe(1);
   });
 });
