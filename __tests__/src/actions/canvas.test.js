@@ -22,4 +22,15 @@ describe('canvas actions', () => {
       expect(actions.previousCanvas(id)).toEqual(expectedAction);
     });
   });
+  describe('setCanvas', () => {
+    it('sets to a defined canvas', () => {
+      const id = 'abc123';
+      const expectedAction = {
+        type: ActionTypes.SET_CANVAS,
+        windowId: id,
+        canvasIndex: 100,
+      };
+      expect(actions.setCanvas(id, 100)).toEqual(expectedAction);
+    });
+  });
 });

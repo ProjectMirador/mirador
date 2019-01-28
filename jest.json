@@ -1,9 +1,13 @@
 {
+  "collectCoverage": true,
   "collectCoverageFrom": [
     "src/**/*.{js,jsx}"
   ],
   "coverageDirectory": "<rootDir>/coverage",
   "coverageReporters": ["html", "lcov"],
+  "moduleNameMapper": {
+    "\\.css$": "<rootDir>/__mocks__/css.js"
+  },
   "setupFiles": [
     "<rootDir>/setupJest.js"
   ],

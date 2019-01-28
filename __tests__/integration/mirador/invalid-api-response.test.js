@@ -3,6 +3,7 @@ describe('Mirador Invalid API Response Handler Test', () => {
     await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/');
   });
   it('breaks Mirador', async () => {
+    await expect(page).toClick('#addBtn');
     await expect(page).toFill('#manifestURL', 'http://localhost:5000/invalid');
     await expect(page).toClick('#fetchBtn');
     await page.waitFor(1000);

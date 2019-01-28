@@ -17,6 +17,7 @@ describe('window actions', () => {
           collectionIndex: 0,
           manifestId: null,
           rangeId: null,
+          thumbnailNavigationDisplayed: true,
           xywh: [0, 0, 400, 400],
           rotation: null,
         },

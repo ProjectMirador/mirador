@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { actions } from '../store';
 import WorkspaceControlPanel from './WorkspaceControlPanel';
-import Workspace from './Workspace';
+import ConnectedWorkspace from './Workspace';
 import ns from '../config/css-ns';
 
 /**
@@ -18,7 +20,8 @@ export class App extends Component {
   render() {
     return (
       <div className={ns('app')}>
-        <Workspace />
+        <CssBaseline />
+        <ConnectedWorkspace />
         <WorkspaceControlPanel />
       </div>
     );

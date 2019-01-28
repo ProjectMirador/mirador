@@ -2,7 +2,6 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Window } from '../../../src/components/Window';
 import ConnectedWindowTopBar from '../../../src/components/WindowTopBar';
-import WindowBackground from '../../../src/components/WindowBackground';
 import ConnectedWindowViewer from '../../../src/components/WindowViewer';
 
 describe('Window', () => {
@@ -18,15 +17,6 @@ describe('Window', () => {
   it('should render <ConnectedWindowTopBar>', () => {
     wrapper = shallow(<Window window={window} />);
     expect(wrapper.find(ConnectedWindowTopBar)).toHaveLength(1);
-  });
-  it('should render <WindowBackground> if no manifest given', () => {
-    wrapper = shallow(<Window window={window} />);
-    expect(wrapper.find(WindowBackground)).toHaveLength(1);
-  });
-  it('should render <WindowBackground> if manifest is fetching', () => {
-    manifest = { id: 456, isFetching: true };
-    wrapper = shallow(<Window window={window} manifest={manifest} />);
-    expect(wrapper.find(WindowBackground)).toHaveLength(1);
   });
   it('should render <WindowViewer> if manifest is present', () => {
     manifest = { id: 456, isFetching: false };

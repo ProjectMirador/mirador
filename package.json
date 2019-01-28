@@ -6,15 +6,13 @@
   "scripts": {
     "lint": "node_modules/.bin/eslint ./ && node_modules/.bin/sass-lint -v ./src/styles/**/*",
     "server": "node_modules/.bin/http-server",
-    "pretest": "npm run server:json",
-    "posttest": "node ./scripts/json-server/kill-server.js",
-    "test": "npm run build && npm run lint && jest -c jest.json --coverage",
+    "test": "npm run build && npm run lint && jest -c jest.json",
     "test:watch": "jest -c jest.json --watch",
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
     "build:watch": "webpack --watch --mode=development",
     "start": "npm run build:dev && concurrently \"npm run build:watch\" \"npm run server -- -p 4444\"",
-    "server:json": "node ./scripts/json-server/server.js >> ./scripts/json-server/json-server.log 2>&1 </dev/null &"
+    "server:json": "node ./scripts/json-server/server.js >> ./scripts/json-server/json-server.log"
   },
   "license": "Apache-2.0",
   "contributors": [
@@ -23,6 +21,9 @@
   ],
   "repository": "https://github.com/ProjectMirador/mirador",
   "dependencies": {
+    "@material-ui/core": "^3.9.0",
+    "@material-ui/icons": "^3.0.2",
+    "classnames": "^2.2.6",
     "css-ns": "^1.2.2",
     "deepmerge": "^3.1.0",
     "manifesto.js": "^3.0.9",
@@ -33,6 +34,7 @@
     "react": "^16.7.0",
     "react-dom": "^16.4.0",
     "react-redux": "^5.0.7",
+    "react-virtualized": "^9.21.0",
     "redux": "4.0.1",
     "redux-devtools-extension": "^2.13.2",
     "redux-thunk": "2.2.0",
@@ -48,6 +50,7 @@
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
     "babel-plugin-named-asset-import": "^0.2.3",
+    "codecov": "^3.1.0",
     "concurrently": "^4.0.1",
     "css-loader": "^1.0.0",
     "enzyme": "^3.4.4",

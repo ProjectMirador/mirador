@@ -1,3 +1,7 @@
 export default {
-  foo: 'bar',
+  windows: [],
+  thumbnailNavigation: {
+    displayedByDefault: true,
+    height: 150,
+  },
 };

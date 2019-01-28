@@ -16,14 +16,12 @@ class MiradorViewer {
   constructor(config) {
     this.config = config;
     this.processPlugins();
+    this.processConfig();
 
     const viewer = {
       actions,
       store,
     };
-
-    const action = actions.setConfig(deepmerge(settings, config));
-    store.dispatch(action);
 
     ReactDOM.render(
       <Provider store={store}>
@@ -33,6 +31,29 @@ class MiradorViewer {
     );
 
     return viewer;
+  }
+
+  /**
+   * Process config into actions
+   */
+  processConfig() {
+    const mergedConfig = deepmerge(settings, this.config);
+    const action = actions.setConfig(mergedConfig);
+    store.dispatch(action);
+
+    mergedConfig.windows.forEach((miradorWindow) => {
+      let thumbnailNavigationDisplayed;
+      if (miradorWindow.thumbnailNavigationDisplayed !== undefined) {
+        ({ thumbnailNavigationDisplayed } = miradorWindow);
+      } else {
+        thumbnailNavigationDisplayed = mergedConfig.thumbnailNavigation.displayedByDefault;
+      }
+      store.dispatch(actions.fetchManifest(miradorWindow.loadedManifest));
+      store.dispatch(actions.addWindow({
+        manifestId: miradorWindow.loadedManifest,
+        thumbnailNavigationDisplayed,
+      }));
+    });
   }
 
   /**

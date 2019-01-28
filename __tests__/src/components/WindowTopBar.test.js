@@ -18,18 +18,23 @@ describe('WindowTopBar', () => {
         manifest={manifestFixture}
         windowId="foo"
         removeWindow={mockRemoveWindow}
+        classes={{}}
       />,
     );
   });
 
   it('renders without an error', () => {
-    expect(topBar.find('div.mirador-window-top-bar h3')
+    expect(topBar.dive().find('WithStyles(Toolbar)')
+      .dive()
+      .find('WithStyles(Typography)')
+      .dive()
+      .dive()
       .text()).toBe('Fixture Label');
-    expect(topBar.find('button.mirador-window-close'));
+    expect(topBar.find('WithStyles(Button).mirador-window-close'));
   });
 
   it('calls the removeWindow prop when the close button is clicked', () => {
-    topBar.find('button').simulate('click');
+    topBar.find('WithStyles(Button)').simulate('click');
     expect(mockRemoveWindow).toHaveBeenCalledTimes(1);
     expect(mockRemoveWindow).toHaveBeenCalledWith('foo');
   });

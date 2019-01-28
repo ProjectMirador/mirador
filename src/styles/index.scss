@@ -6,18 +6,6 @@ body {
 }
 
 .mirador {
-  &-workspace-control-panel {
-    border-right: 2px solid $black;
-    bottom: 0;
-    box-sizing: border-box;
-    left: 0;
-    margin: 0;
-    padding: 15px;
-    position: absolute;
-    top: 0;
-    width: 64px;
-  }
-
   &-workspace {
     bottom: 0;
     box-sizing: border-box;
@@ -36,21 +24,9 @@ body {
     position: relative;
   }
 
-  &-window-top-bar {
-    background: linear-gradient(to bottom, $window-top-bar-gradient-top 0%, $window-top-bar-gradient-bottom 100%);
-    color: $white;
-    position: absolute;
-    z-index: 10;
-
-    h3 {
-      margin: 0;
-    }
-  }
-
   &-osd-container {
     background: $gray;
     bottom: 0;
-    height: 100%;
     position: absolute;
     top: 0;
     width: 100%;
@@ -62,5 +38,24 @@ body {
     position: absolute;
     right: 0;
     text-align: center;
+    z-index: 33;
+  }
+
+  &-thumb-navigation {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+
+    .mirador-thumbnail-nav-canvas {
+      background-color: $gray;
+      border: 1px solid $black;
+      color: $white;
+      cursor: pointer;
+      height: 100%;
+
+      &.mirador-current-canvas {
+        border: 3px solid $blue;
+      }
+    }
   }
 }
