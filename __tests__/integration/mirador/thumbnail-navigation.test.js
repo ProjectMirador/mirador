@@ -3,8 +3,6 @@
 describe('Thumbnail navigation', () => {
   beforeAll(async () => {
     await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/');
-    await expect(page).toClick('.mirador-window-close');
-    await expect(page).toClick('.mirador-window-close');
     await expect(page).toClick('#addBtn');
     await expect(page).toFill('#manifestURL', 'http://localhost:5000/api/019');
     await expect(page).toClick('#fetchBtn');

@@ -54,7 +54,6 @@ body {
 
   &-companion-bottom {
     background: lighten($black, 60%);
-    height: 20vh;
     overflow-y: auto;
     resize: vertical;
   }
@@ -69,9 +68,6 @@ body {
   }
 
   &-thumb-navigation {
-    bottom: 0;
-    position: absolute;
-    width: 100%;
 
     .mirador-thumbnail-nav-canvas {
       background-color: $gray;

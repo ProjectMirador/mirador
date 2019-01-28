@@ -1,7 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Grid from 'react-virtualized/dist/commonjs/Grid';
+import manifesto from 'manifesto.js';
 import { ThumbnailNavigation } from '../../../src/components/ThumbnailNavigation';
+import manifestJson from '../../fixtures/version-2/019.json';
 
 describe('ThumbnailNavigation', () => {
   let wrapper;
@@ -17,20 +19,11 @@ describe('ThumbnailNavigation', () => {
     );
     wrapper = shallow(
       <ThumbnailNavigation
-        canvases={[
-          {
-            index: 0,
-            getHeight: () => (1000),
-            getWidth: () => (2000),
-            getCanonicalImageUri: () => ('http://imageuri'),
-          },
-          {
-            index: 1,
-            getHeight: () => (1000),
-            getWidth: () => (2000),
-            getCanonicalImageUri: () => ('http://imageuri'),
-          },
-        ]}
+        manifest={{
+          id: 'http://foo',
+          manifestation: manifesto.create(manifestJson),
+          isFetching: false,
+        }}
         window={{
           id: 'foobar',
           canvasIndex: 1,
@@ -59,8 +52,8 @@ describe('ThumbnailNavigation', () => {
     expect(setCanvas).toHaveBeenCalledWith('foobar', 0);
   });
   it('sets up calculated width based off of height of area and dimensions of canvas', () => {
-    expect(renderedGrid.find('.mirador-thumbnail-nav-container').first().prop('style').width).toEqual(308);
-    expect(renderedGrid.find('.mirador-thumbnail-nav-canvas').first().prop('style').width).toEqual(300);
+    expect(renderedGrid.find('.mirador-thumbnail-nav-container').first().prop('style').width).toEqual(108);
+    expect(renderedGrid.find('.mirador-thumbnail-nav-canvas').first().prop('style').width).toEqual(100);
   });
   it('Grid is set with expected props for scrolling alignment', () => {
     expect(grid.props().scrollToAlignment).toBe('center');

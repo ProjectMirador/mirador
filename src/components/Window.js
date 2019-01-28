@@ -7,6 +7,7 @@ import ConnectedWindowTopBar from './WindowTopBar';
 import ConnectedWindowSideBar from './WindowSideBar';
 import WindowViewer from './WindowViewer';
 import ConnectedCompanionWindow from './CompanionWindow';
+import ConnectedThumbnailNavigation from './ThumbnailNavigation';
 
 /**
  * Represents a Window in the mirador workspace
@@ -65,7 +66,12 @@ export class Window extends Component {
             manifest={manifest}
           />
         </div>
-        <div className={ns('companion-bottom')} />
+        <div className={ns('companion-bottom')}>
+          <ConnectedThumbnailNavigation
+            window={window}
+            manifest={manifest}
+          />
+        </div>
       </div>
     );
   }
