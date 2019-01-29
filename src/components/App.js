@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { actions } from '../store';
 import WorkspaceControlPanel from './WorkspaceControlPanel';
 import ConnectedWorkspace from './Workspace';
 import ns from '../config/css-ns';
@@ -8,7 +12,7 @@ import ns from '../config/css-ns';
  * This is the top level Mirador component.
  * @prop {Object} manifests
  */
-class App extends Component {
+export class App extends Component {
   /**
    * render
    * @return {String} - HTML markup for the component
@@ -24,4 +28,27 @@ class App extends Component {
   }
 }
 
-export default App;
+/**
+ * mapStateToProps - to hook up connect
+ * @memberof App
+ * @private
+ */
+const mapStateToProps = state => (
+  {
+    manifests: state.manifests,
+  }
+);
+
+/**
+ * mapDispatchToProps - used to hook up connect to action creators
+ * @memberof App
+ * @private
+ */
+const mapDispatchToProps = { fetchManifest: actions.fetchManifest };
+
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  // further HOC go here
+);
+
+export default enhance(App);
