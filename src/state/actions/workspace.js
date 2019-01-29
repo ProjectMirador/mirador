@@ -1,6 +1,5 @@
 import ActionTypes from './action-types';
 
-/* eslint-disable import/prefer-default-export */
 /**
  * setWorkspaceFullscreen - action creator
  *
@@ -38,4 +37,34 @@ export function updateWorkspaceMosaicLayout(layout) {
  */
 export function setWorkspaceAddVisibility(isWorkspaceAddVisible) {
   return { type: ActionTypes.SET_WORKSPACE_ADD_VISIBILITY, isWorkspaceAddVisible };
+}
+
+/**
+ * setWorkspaceViewportPosition - action creator
+ *
+ * @param  {Object} position
+ * @memberof ActionCreators
+ */
+export function setWorkspaceViewportPosition(position) {
+  return {
+    type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
+    payload: {
+      position: {
+        x: position.x,
+        y: position.y,
+      },
+    },
+  };
+}
+
+/**
+ * toggleWorkspaceExposeMode - action creator
+ *
+ * @param  {Object} position
+ * @memberof ActionCreators
+ */
+export function toggleWorkspaceExposeMode() {
+  return {
+    type: ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE,
+  };
 }

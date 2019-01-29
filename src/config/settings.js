@@ -18,9 +18,9 @@ export default {
     height: 150,
   },
   workspace: {
-    type: 'mosaic',
+    type: 'freeform',
   },
   workspaceControlPanel: {
     enabled: true,
-  }
+  },
 };

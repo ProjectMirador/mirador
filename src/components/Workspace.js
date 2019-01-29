@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Window from '../containers/Window';
 import WorkspaceMosaic from '../containers/WorkspaceMosaic';
+import WorkspaceFreeform from '../containers/WorkspaceFreeform';
 import ns from '../config/css-ns';
 
 /**
@@ -17,6 +18,8 @@ class Workspace extends React.Component {
   workspaceByType() {
     const { workspaceType, windows } = this.props;
     switch (workspaceType) {
+      case 'freeform':
+        return <WorkspaceFreeform />;
       case 'mosaic':
         return <WorkspaceMosaic windows={windows} />;
       default:
@@ -39,7 +42,7 @@ class Workspace extends React.Component {
       <div
         className={
           classNames(
-            ns('workspace'),
+            ns('workspace-viewport'),
             (isWorkspaceControlPanelVisible && ns('workspace-with-control-panel')),
           )
         }

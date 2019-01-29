@@ -1,21 +1,27 @@
 @import 'variables';
 
 .mirador {
-  &-app {
-    height: 100%;
-    position: relative;
-    width: 100%;
+  &-viewer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  &-workspace-viewport {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
   }
 
   &-workspace {
-    bottom: 0;
     box-sizing: border-box;
-    left: 0;
     margin: 0;
     overflow: scroll;
     position: absolute;
-    right: 0;
-    top: 0;
   }
 
   &-workspace-with-control-panel {
@@ -35,6 +41,8 @@
   }
 
   &-window {
+    width:100%;
+    height:100%;
     display: flex;
     flex-direction: column;
     height: 100%;
