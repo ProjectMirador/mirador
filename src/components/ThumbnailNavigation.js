@@ -95,10 +95,13 @@ export class ThumbnailNavigation extends Component {
             <Grid
               cellRenderer={this.cellRenderer}
               columnCount={canvases.length}
+              columnIndex={window.canvasIndex}
               columnWidth={this.calculateScaledWidth}
               height={config.thumbnailNavigation.height}
               rowCount={1}
               rowHeight={config.thumbnailNavigation.height}
+              scrollToAlignment="center"
+              scrollToColumn={window.canvasIndex}
               width={width}
             />
           )}
