@@ -1,13 +1,20 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import Grid from 'react-virtualized/dist/commonjs/Grid';
 import { ThumbnailNavigation } from '../../../src/components/ThumbnailNavigation';
 
 describe('ThumbnailNavigation', () => {
   let wrapper;
   let setCanvas;
   let renderedGrid;
+  let grid;
   beforeEach(() => {
     setCanvas = jest.fn();
+    // Mock Grid's call to _scrollingContainer, which is handled by refs not
+    // available in `shallow`
+    Grid.prototype._scrollingContainer = jest.fn( // eslint-disable-line no-underscore-dangle
+      () => ({ scrollLeft: 0 }),
+    );
     wrapper = shallow(
       <ThumbnailNavigation
         canvases={[
@@ -33,10 +40,10 @@ describe('ThumbnailNavigation', () => {
         setCanvas={setCanvas}
       />,
     );
-    renderedGrid = wrapper.find('AutoSizer')
+    grid = wrapper.find('AutoSizer')
       .dive()
-      .find('Grid')
-      .dive();
+      .find('Grid');
+    renderedGrid = grid.dive();
   });
   it('renders the component', () => {
     expect(wrapper.find('.mirador-thumb-navigation').length).toBe(1);
@@ -54,5 +61,10 @@ describe('ThumbnailNavigation', () => {
   it('sets up calculated width based off of height of area and dimensions of canvas', () => {
     expect(renderedGrid.find('.mirador-thumbnail-nav-container').first().prop('style').width).toEqual(308);
     expect(renderedGrid.find('.mirador-thumbnail-nav-canvas').first().prop('style').width).toEqual(300);
+  });
+  it('Grid is set with expected props for scrolling alignment', () => {
+    expect(grid.props().scrollToAlignment).toBe('center');
+    expect(grid.props().scrollToColumn).toBe(1);
+    expect(grid.props().columnIndex).toBe(1);
   });
 });
