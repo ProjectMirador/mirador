@@ -14,7 +14,7 @@ describe('WorkspaceMenuButton', () => {
     expect(wrapper.find('WithStyles(IconButton)').length).toBe(1);
   });
   it('when clicked, updates the state', () => {
-    wrapper.find('WithStyles(IconButton)').simulate('click');
+    wrapper.find('WithStyles(IconButton)').simulate('click', {});
     // TODO: this is currently a no-op
   });
 });
