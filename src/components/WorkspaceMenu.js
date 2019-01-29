@@ -77,7 +77,11 @@ export class WorkspaceMenu extends Component {
 
 WorkspaceMenu.propTypes = {
   handleClose: PropTypes.func.isRequired,
-  anchorEl: PropTypes.string.isRequired,
+  anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+};
+
+WorkspaceMenu.defaultProps = {
+  anchorEl: null,
 };
 
 /**

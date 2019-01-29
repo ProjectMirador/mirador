@@ -13,6 +13,21 @@ import { actions } from '../store';
  */
 export class WindowList extends Component {
   /**
+   * Get the title for a window from its manifest title
+   * @private
+   */
+  titleContent(window) {
+    const { manifests } = this.props;
+
+    if (window.manifestId
+        && manifests[window.manifestId]
+        && manifests[window.manifestId].manifestation) {
+      return manifests[window.manifestId].manifestation.getLabel().map(label => label.value)[0];
+    }
+    return '[Untitled]';
+  }
+
+  /**
    * render
    * @return
    */
@@ -33,7 +48,7 @@ export class WindowList extends Component {
               onClick={(e) => { focusWindow(window.id); handleClose(e); }}
             >
               {
-                window.id
+                this.titleContent(window)
               }
             </MenuItem>
           ))
@@ -46,8 +61,13 @@ export class WindowList extends Component {
 WindowList.propTypes = {
   focusWindow: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
-  anchorEl: PropTypes.string.isRequired,
+  anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  manifests: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
+
+WindowList.defaultProps = {
+  anchorEl: null,
 };
 
 /**
@@ -67,6 +87,7 @@ const mapDispatchToProps = {
 const mapStateToProps = state => (
   {
     windows: state.windows,
+    manifests: state.manifests,
   }
 );
 
