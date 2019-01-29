@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
+import ConnectedWorkspaceFullScreenButton from './WorkspaceFullScreenButton';
 /**
  *
  */
@@ -15,6 +16,7 @@ export class WorkspaceControlPanelButtons extends Component {
     const { children } = this.props;
     return (
       <List>
+        <ConnectedWorkspaceFullScreenButton />
         {children}
       </List>
     );

@@ -10,6 +10,7 @@ describe('WorkspaceControlPanelButtons', () => {
   });
 
   it('renders without an error', () => {
-    expect(wrapper.find('List').length).toBe(1);
+    expect(wrapper.find('WithStyles(List)').length).toBe(1);
+    expect(wrapper.find('Connect(WithStyles(WorkspaceFullScreenButton))').length).toBe(1);
   });
 });
