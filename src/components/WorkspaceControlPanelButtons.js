@@ -1,6 +1,8 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import List from '@material-ui/core/List';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
+import ConnectedWorkspaceFullScreenButton from './WorkspaceFullScreenButton';
 /**
  *
  */
@@ -13,9 +15,10 @@ export class WorkspaceControlPanelButtons extends Component {
   render() {
     const { children } = this.props;
     return (
-      <Fragment>
+      <List>
+        <ConnectedWorkspaceFullScreenButton />
         {children}
-      </Fragment>
+      </List>
     );
   }
 }

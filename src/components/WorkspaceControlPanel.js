@@ -9,11 +9,11 @@ import Fab from '@material-ui/core/Fab';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import MenuIcon from '@material-ui/icons/Menu';
-import FrameIcon from '@material-ui/icons/CropFree';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Menu from '@material-ui/core/Menu';
 import Divider from '@material-ui/core/Divider';
+import ConnectedWorkspaceControlPanelButtons from './WorkspaceControlPanelButtons';
 import ConnectedManifestListItem from './ManifestListItem';
 import ConnectedManifestForm from './ManifestForm';
 import ns from '../config/css-ns';
@@ -36,7 +36,6 @@ class WorkspaceControlPanel extends Component {
     this.handleAddManifestClick = this.handleAddManifestClick.bind(this);
     this.handleAddManifestClose = this.handleAddManifestClose.bind(this);
     this.handleMenuClick = this.handleMenuClick.bind(this);
-    this.handleCropClick = this.handleCropClick.bind(this);
   }
 
   /**
@@ -63,14 +62,6 @@ class WorkspaceControlPanel extends Component {
    * @private
    */
   handleMenuClick() {
-    const state = { ...this.state };
-    this.setState(state);
-  }
-
-  /**
-   * @private
-   */
-  handleCropClick() {
     const state = { ...this.state };
     this.setState(state);
   }
@@ -145,19 +136,8 @@ class WorkspaceControlPanel extends Component {
               <MenuIcon />
             </IconButton>
           </ListItem>
-          <ListItem>
-            <IconButton
-              color="primary"
-              id="cropBtn"
-              aria-label="Crop"
-              className={classNames(classes.ctrlBtn)}
-              aria-haspopup="true"
-              onClick={this.handleCropClick}
-            >
-              <FrameIcon />
-            </IconButton>
-          </ListItem>
         </List>
+        <ConnectedWorkspaceControlPanelButtons />
       </Drawer>
     );
   }

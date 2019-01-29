@@ -7,3 +7,4 @@ export * from './window';
 export * from './manifest';
 export * from './infoResponse';
 export * from './canvas';
+export * from './workspace';
