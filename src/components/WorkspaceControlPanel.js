@@ -62,7 +62,7 @@ class WorkspaceControlPanel extends Component {
   /**
    * @private
    */
-  handleMenuClick(event) {
+  handleMenuClick() {
     const state = { ...this.state };
     this.setState(state);
   }
@@ -70,7 +70,7 @@ class WorkspaceControlPanel extends Component {
   /**
    * @private
    */
-  handleCropClick(event) {
+  handleCropClick() {
     const state = { ...this.state };
     this.setState(state);
   }
@@ -138,7 +138,7 @@ class WorkspaceControlPanel extends Component {
               color="primary"
               id="menuBtn"
               aria-label="Menu"
-              className={classNames(classes.ctlBtn)}
+              className={classNames(classes.ctrlBtn)}
               aria-haspopup="true"
               onClick={this.handleMenuClick}
             >
@@ -150,7 +150,7 @@ class WorkspaceControlPanel extends Component {
               color="primary"
               id="cropBtn"
               aria-label="Crop"
-              className={classNames(classes.ctlBtn)}
+              className={classNames(classes.ctrlBtn)}
               aria-haspopup="true"
               onClick={this.handleCropClick}
             >
@@ -183,7 +183,7 @@ const mapStateToProps = state => (
  * @private
  */
 const styles = theme => ({
-  ctlBtn: {
+  ctrlBtn: {
     margin: theme.spacing.unit,
   },
 });
