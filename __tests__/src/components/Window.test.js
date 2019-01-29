@@ -2,11 +2,10 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Window } from '../../../src/components/Window';
 import ConnectedWindowTopBar from '../../../src/components/WindowTopBar';
-import ConnectedWindowViewer from '../../../src/components/WindowViewer';
+import ConnectedWindowMiddleContent from '../../../src/components/WindowMiddleContent';
 
 describe('Window', () => {
   let wrapper;
-  let manifest;
   const window = { id: 123, xywh: [0, 0, 400, 500] };
   it('should render outer element', () => {
     wrapper = shallow(<Window window={window} />);
@@ -18,9 +17,12 @@ describe('Window', () => {
     wrapper = shallow(<Window window={window} />);
     expect(wrapper.find(ConnectedWindowTopBar)).toHaveLength(1);
   });
-  it('should render <WindowViewer> if manifest is present', () => {
-    manifest = { id: 456, isFetching: false };
-    wrapper = shallow(<Window window={window} manifest={manifest} />);
-    expect(wrapper.find(ConnectedWindowViewer)).toHaveLength(1);
+  it('should render <ConnectedWindowMiddleContent>', () => {
+    wrapper = shallow(<Window window={window} />);
+    expect(wrapper.find(ConnectedWindowMiddleContent)).toHaveLength(1);
+  });
+  it('should render bottom companions window areas', () => {
+    wrapper = shallow(<Window window={window} />);
+    expect(wrapper.find('.mirador-companion-bottom')).toHaveLength(1);
   });
 });
