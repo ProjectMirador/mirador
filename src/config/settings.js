@@ -44,5 +44,5 @@ export default {
   },
   workspaceControlPanel: {
     enabled: true,
-  }
+  },
 };

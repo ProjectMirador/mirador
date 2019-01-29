@@ -49,4 +49,29 @@ describe('workspace actions', () => {
       expect(actions.setWorkspaceAddVisibility(true)).toEqual(expectedAction);
     });
   });
+  describe('setWorkspaceViewportPosition', () => {
+    it('should set the workspace add visibility', () => {
+      const expectedAction = {
+        type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
+        payload: {
+          position: {
+            x: 20,
+            y: 20,
+          },
+        },
+      };
+      expect(actions.setWorkspaceViewportPosition({
+        x: 20,
+        y: 20,
+      })).toEqual(expectedAction);
+    });
+  });
+  describe('toggleWorkspaceExposeMode', () => {
+    it('should set the exposeMode to true', () => {
+      const expectedAction = {
+        type: ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE,
+      };
+      expect(actions.toggleWorkspaceExposeMode()).toEqual(expectedAction);
+    });
+  });
 });
