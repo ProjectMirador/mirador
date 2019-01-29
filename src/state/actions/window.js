@@ -25,7 +25,10 @@ export function addWindow(options) {
     manifestId: null,
     rangeId: null,
     thumbnailNavigationPosition: 'bottom', // bottom by default in settings.js
-    xywh: [0, 0, 400, 400],
+    width: 400,
+    height: 400,
+    x: 0,
+    y: 0,
     rotation: null,
   };
   return { type: ActionTypes.ADD_WINDOW, window: { ...defaultOptions, ...options } };
@@ -59,4 +62,38 @@ export function toggleWindowSideBar(windowId) {
  */
 export function setWindowThumbnailPosition(windowId, position) {
   return { type: ActionTypes.SET_WINDOW_THUMBNAIL_POSITION, windowId, position };
+}
+
+/**
+ * updateWindowPosition - action creator
+ *
+ * @param  {String} windowId
+ * @param  {Array} position
+ * @memberof ActionCreators
+ */
+export function updateWindowPosition(windowId, position) {
+  return {
+    type: ActionTypes.UPDATE_WINDOW_POSITION,
+    payload: {
+      windowId,
+      position,
+    },
+  };
+}
+
+/**
+ * setWindowSize - action creator
+ *
+ * @param  {String} windowId
+ * @param  {Object} size
+ * @memberof ActionCreators
+ */
+export function setWindowSize(windowId, size) {
+  return {
+    type: ActionTypes.SET_WINDOW_SIZE,
+    payload: {
+      windowId,
+      size,
+    },
+  };
 }
