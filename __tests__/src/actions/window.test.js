@@ -35,4 +35,15 @@ describe('window actions', () => {
       expect(actions.removeWindow(id)).toEqual(expectedAction);
     });
   });
+
+  describe('toggleWindowSideBar', () => {
+    it('returns the appropriate action type', () => {
+      const id = 'abc123';
+      const expectedAction = {
+        type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR,
+        windowId: id,
+      };
+      expect(actions.toggleWindowSideBar(id)).toEqual(expectedAction);
+    });
+  });
 });

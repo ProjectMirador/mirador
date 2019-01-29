@@ -29,6 +29,24 @@ describe('windows reducer', () => {
       },
     });
   });
+
+  it('should handle TOGGLE_WINDOW_SIDE_BAR by toggling the sideBarOpen attribute', () => {
+    const action = {
+      type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR,
+      windowId: 'abc123',
+    };
+    const before = {
+      abc123: { sideBarOpen: true },
+      abc321: { sideBarOpen: false },
+    };
+    const after = {
+      abc123: { sideBarOpen: false },
+      abc321: { sideBarOpen: false },
+    };
+
+    expect(reducer(before, action)).toEqual(after);
+  });
+
   it('should handle NEXT_CANVAS', () => {
     expect(reducer({
       abc123: {

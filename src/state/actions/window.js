@@ -40,3 +40,13 @@ export function addWindow(options) {
 export function removeWindow(windowId) {
   return { type: ActionTypes.REMOVE_WINDOW, windowId };
 }
+
+/**
+ * toggleWindowSideBar - action creator
+ *
+ * @param  {String} windowId
+ * @memberof ActionCreators
+ */
+export function toggleWindowSideBar(windowId) {
+  return { type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR, windowId };
+}
