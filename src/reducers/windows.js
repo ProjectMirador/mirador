@@ -14,6 +14,17 @@ const windowsReducer = (state = {}, action) => {
         }
         return object;
       }, {});
+    case ActionTypes.UPDATE_WINDOW_POSITION:
+      console.log(state);
+      console.log(action.payload.windowId);
+      console.log(state[action.payload.windowId]);
+      return {
+        ...state,
+        [action.payload.windowId]: {
+          ...state[action.payload.windowId],
+          xy: action.payload.position,
+        },
+      };
     case ActionTypes.NEXT_CANVAS:
       return setCanvasIndex(state, action.windowId, currentIndex => currentIndex + 1);
     case ActionTypes.PREVIOUS_CANVAS:
@@ -29,7 +40,7 @@ const windowsReducer = (state = {}, action) => {
  * @param {Object} state
  * @param {String} windowId
  * @param {Function} getIndex - gets curent canvas index passed and should return new index
-*/
+ */
 function setCanvasIndex(state, windowId, getIndex) {
   return Object.values(state).reduce((object, window) => {
     if (window.id === windowId) {

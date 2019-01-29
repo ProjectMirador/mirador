@@ -40,3 +40,20 @@ export function addWindow(options) {
 export function removeWindow(windowId) {
   return { type: ActionTypes.REMOVE_WINDOW, windowId };
 }
+
+/**
+ * updateWindowPosition - action creator
+ *
+ * @param  {String} windowId
+ * @param  {Array} position
+ * @memberof ActionCreators
+ */
+export function updateWindowPosition(windowId, position) {
+  return {
+    type: ActionTypes.UPDATE_WINDOW_POSITION,
+    payload: {
+      windowId,
+      position,
+    },
+  };
+}
