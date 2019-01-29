@@ -10,6 +10,7 @@ describe('WindowSideBar', () => {
   });
 
   it('renders without an error', () => {
-    expect(wrapper.find('WithStyles(Drawer)').length).toBe(1);
+    expect(wrapper.find('.mirador-window-sidebar').length).toBe(1);
+    expect(wrapper.find('WithStyles(List)').length).toBe(1);
   });
 });
