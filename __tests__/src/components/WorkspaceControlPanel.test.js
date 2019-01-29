@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { actions, store } from '../../../src/store';
-
 import WorkspaceControlPanel from '../../../src/components/WorkspaceControlPanel';
 import fixture from '../../fixtures/version-2/002.json';
 
@@ -21,19 +20,19 @@ describe('WorkspaceControlPanel', () => {
     expect(wrapper.find('ul Connect(ManifestListItem)').length).toBe(2);
   });
 
-  describe('handleClose', () => {
-    it('resets the anchor state', () => {
-      wrapper.instance().handleAddManifestClose();
-
-      expect(wrapper.dive().find('WithStyles(Menu)').props().open).toBe(false);
-    });
-  });
-
-  describe('handleClick', () => {
+  describe('handleAddManifestClick', () => {
     it('sets the anchor state', () => {
       wrapper.instance().handleAddManifestClick({ currentTarget: true });
 
       expect(wrapper.dive().find('WithStyles(Menu)').props().open).toBe(true);
+    });
+  });
+
+  describe('handleAddManifestClose', () => {
+    it('resets the anchor state', () => {
+      wrapper.instance().handleAddManifestClose();
+
+      expect(wrapper.dive().find('WithStyles(Menu)').props().open).toBe(false);
     });
   });
 });
