@@ -36,7 +36,7 @@ export class ThumbnailNavigation extends Component {
         manifest: props.manifest,
       };
     }
-    return [];
+    return null;
   }
 
   /**
