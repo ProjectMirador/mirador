@@ -13,4 +13,25 @@ describe('WorkspaceMenu', () => {
   it('renders without an error', () => {
     expect(wrapper.find('WithStyles(Menu)').length).toBe(1);
   });
+
+  it('closes the current menu when opening a submenu', () => {
+    wrapper.find('WithStyles(MenuItem)').simulate('click', {});
+    expect(handleClose).toBeCalled();
+  });
+
+  describe('handleWindowListClick', () => {
+    it('sets the anchor state', () => {
+      wrapper.instance().handleWindowListClick({ currentTarget: true });
+
+      expect(wrapper.find('Connect(WithStyles(WindowList))').props().open).toBe(true);
+    });
+  });
+
+  describe('handleWindowListClose', () => {
+    it('resets the anchor state', () => {
+      wrapper.instance().handleWindowListClose();
+
+      expect(wrapper.find('Connect(WithStyles(WindowList))').props().open).toBe(false);
+    });
+  });
 });
