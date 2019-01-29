@@ -38,6 +38,7 @@
     "node-sass": "^4.9.2",
     "openseadragon": "^2.4.0",
     "prop-types": "^15.6.2",
+    "raf-throttle": "^2.0.3",
     "react": "^16.7.0",
     "react-dom": "^16.4.0",
     "react-redux": "^5.0.7",

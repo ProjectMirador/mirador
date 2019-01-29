@@ -25,7 +25,8 @@ export function addWindow(options) {
     manifestId: null,
     rangeId: null,
     thumbnailNavigationDisplayed: true, // True by default in settings.js
-    xywh: [0, 0, 400, 400],
+    wh: [400, 400],
+    xy: [0, 0],
     rotation: null,
   };
   return { type: ActionTypes.ADD_WINDOW, window: { ...defaultOptions, ...options } };

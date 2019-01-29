@@ -18,7 +18,11 @@ export class Window extends Component {
    */
   styleAttributes() {
     const { window } = this.props;
-    return { width: `${window.xywh[2]}px`, height: `${window.xywh[3]}px` };
+    return {
+      transform: `translateX(${window.xy[0]}px) translateY(${window.xy[1]}px)`,
+      width: `${window.wh[0]}px`,
+      height: `${window.wh[1]}px`,
+    };
   }
 
   /**

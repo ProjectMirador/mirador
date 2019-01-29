@@ -21,7 +21,9 @@ body {
   &-window {
     border: 1px solid $black;
     overflow: hidden;
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 
   &-osd-container {

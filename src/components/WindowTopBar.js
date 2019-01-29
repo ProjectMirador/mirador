@@ -8,10 +8,25 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import classNames from 'classnames';
+import throttle from 'raf-throttle';
 import { actions } from '../store';
 import ConnectedWindowTopBarButtons from './WindowTopBarButtons';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import ns from '../config/css-ns';
+
+/**
+  * handleDrag
+  * @handleDrag
+  * dispatches the action to update windowposition after
+  * calculating inputs
+  */
+const handleDrag = throttle((event, windowId, updateWindowPosition) => {
+  const x = event.clientX - 100;
+  const y = event.clientY - 20;
+  console.log(`${x}, ${x}`);
+  console.log(event);
+  updateWindowPosition(windowId, [x, y]);
+});
 
 /**
  * WindowTopBar
@@ -35,9 +50,35 @@ export class WindowTopBar extends Component {
    * @return
    */
   render() {
-    const { removeWindow, windowId, classes } = this.props;
+    const {
+      removeWindow,
+      windowId,
+      updateWindowPosition,
+      classes,
+    } = this.props;
     return (
-      <AppBar position="absolute">
+      <AppBar
+        draggable="true"
+        onDragStart={(event) => {
+          document.addEventListener('dragover', () => {
+            // prevent default to allow drop
+            event.preventDefault();
+          }, false);
+
+          const dragImg = new Image();
+          dragImg.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+          event.dataTransfer.setDragImage(dragImg, 0, 0);
+        }}
+        onDrag={(event) => {
+          event.persist();
+          handleDrag(
+            event,
+            windowId,
+            updateWindowPosition,
+          );
+        }}
+        position="absolute"
+      >
         <Toolbar disableGutters className={classNames(classes.reallyDense, ns('window-top-bar'))} variant="dense">
           <Typography variant="h3" noWrap color="inherit" className={classes.typographyBody}>
             {this.titleContent()}
@@ -55,11 +96,15 @@ export class WindowTopBar extends Component {
  * @memberof ManifestListItem
  * @private
  */
-const mapDispatchToProps = { removeWindow: actions.removeWindow };
+const mapDispatchToProps = {
+  removeWindow: actions.removeWindow,
+  updateWindowPosition: actions.updateWindowPosition,
+};
 
 WindowTopBar.propTypes = {
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   removeWindow: PropTypes.func.isRequired,
+  updateWindowPosition: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
