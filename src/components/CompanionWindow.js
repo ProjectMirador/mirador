@@ -13,7 +13,7 @@ class CompanionWindow extends Component {
    */
   render() {
     return (
-      <div className={ns('window-companion-side')} />
+      <div className={ns('window-companion-side')} style={{ display: 'none' }} />
     );
   }
 }
