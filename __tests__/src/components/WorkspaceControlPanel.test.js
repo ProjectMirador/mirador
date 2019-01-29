@@ -20,19 +20,19 @@ describe('WorkspaceControlPanel', () => {
     expect(wrapper.find('ul Connect(ManifestListItem)').length).toBe(2);
   });
 
-  describe('handleClose', () => {
-    it('resets the anchor state', () => {
-      wrapper.instance().handleClose();
+  describe('handleAddManifestClick', () => {
+    it('sets the anchor state', () => {
+      wrapper.instance().handleAddManifestClick({ currentTarget: true });
 
-      expect(wrapper.dive().find('WithStyles(Menu)').props().open).toBe(false);
+      expect(wrapper.dive().find('WithStyles(Menu)').props().open).toBe(true);
     });
   });
 
-  describe('handleClick', () => {
-    it('sets the anchor state', () => {
-      wrapper.instance().handleClick({ currentTarget: true });
+  describe('handleAddManifestClose', () => {
+    it('resets the anchor state', () => {
+      wrapper.instance().handleAddManifestClose();
 
-      expect(wrapper.dive().find('WithStyles(Menu)').props().open).toBe(true);
+      expect(wrapper.dive().find('WithStyles(Menu)').props().open).toBe(false);
     });
   });
 });

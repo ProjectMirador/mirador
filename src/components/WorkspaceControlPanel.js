@@ -4,14 +4,18 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import Fab from '@material-ui/core/Fab';
+import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
-import Menu from '@material-ui/core/Menu';
+import MenuIcon from '@material-ui/icons/Menu';
+import FrameIcon from '@material-ui/icons/CropFree';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import ConnectedManifestForm from './ManifestForm';
+import Menu from '@material-ui/core/Menu';
+import Divider from '@material-ui/core/Divider';
 import ConnectedManifestListItem from './ManifestListItem';
-import ConnectedWorkspaceControlPanelButtons from './WorkspaceControlPanelButtons';
+import ConnectedManifestForm from './ManifestForm';
 import ns from '../config/css-ns';
 
 /**
@@ -29,8 +33,10 @@ class WorkspaceControlPanel extends Component {
     };
 
     this.setLastRequested = this.setLastRequested.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.handleAddManifestClick = this.handleAddManifestClick.bind(this);
+    this.handleAddManifestClose = this.handleAddManifestClose.bind(this);
+    this.handleMenuClick = this.handleMenuClick.bind(this);
+    this.handleCropClick = this.handleCropClick.bind(this);
   }
 
   /**
@@ -47,7 +53,7 @@ class WorkspaceControlPanel extends Component {
   /**
    * @private
    */
-  handleClick(event) {
+  handleAddManifestClick(event) {
     this.setState({
       anchorEl: event.currentTarget,
     });
@@ -56,7 +62,23 @@ class WorkspaceControlPanel extends Component {
   /**
    * @private
    */
-  handleClose() {
+  handleMenuClick() {
+    const state = { ...this.state };
+    this.setState(state);
+  }
+
+  /**
+   * @private
+   */
+  handleCropClick() {
+    const state = { ...this.state };
+    this.setState(state);
+  }
+
+  /**
+   * @private
+   */
+  handleAddManifestClose() {
     this.setState({
       anchorEl: null,
     });
@@ -73,7 +95,7 @@ class WorkspaceControlPanel extends Component {
       <ConnectedManifestListItem
         key={manifest}
         manifest={manifest}
-        handleClose={this.handleClose}
+        handleClose={this.handleAddManifestClose}
       />
     ));
     return (
@@ -83,25 +105,58 @@ class WorkspaceControlPanel extends Component {
         classes={{ paper: classNames(classes.drawer) }}
         open
       >
-        <Menu id="add-form" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={this.handleClose}>
-          <ConnectedManifestForm id="add-form" setLastRequested={this.setLastRequested} />
+        <Menu
+          id="ws-ctrl-pnl-mn"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={this.handleAddManifestClose}
+        >
+          <ConnectedManifestForm
+            id="add-form"
+            setLastRequested={this.setLastRequested}
+          />
           <ul>{manifestList}</ul>
           {lastRequested}
         </Menu>
-
         <List>
-          <Fab
-            color="primary"
-            id="addBtn"
-            aria-label="Add"
-            className={classes.fab}
-            aria-owns={anchorEl ? 'add-form' : undefined}
-            aria-haspopup="true"
-            onClick={this.handleClick}
-          >
-            <AddIcon />
-          </Fab>
-          <ConnectedWorkspaceControlPanelButtons />
+          <ListItem>
+            <Fab
+              color="primary"
+              id="addBtn"
+              aria-label="Add"
+              className={classes.fab}
+              aria-owns={anchorEl ? 'add-form' : undefined}
+              aria-haspopup="true"
+              onClick={this.handleAddManifestClick}
+            >
+              <AddIcon />
+            </Fab>
+          </ListItem>
+          <Divider />
+          <ListItem>
+            <IconButton
+              color="primary"
+              id="menuBtn"
+              aria-label="Menu"
+              className={classNames(classes.ctrlBtn)}
+              aria-haspopup="true"
+              onClick={this.handleMenuClick}
+            >
+              <MenuIcon />
+            </IconButton>
+          </ListItem>
+          <ListItem>
+            <IconButton
+              color="primary"
+              id="cropBtn"
+              aria-label="Crop"
+              className={classNames(classes.ctrlBtn)}
+              aria-haspopup="true"
+              onClick={this.handleCropClick}
+            >
+              <FrameIcon />
+            </IconButton>
+          </ListItem>
         </List>
       </Drawer>
     );
@@ -123,11 +178,12 @@ const mapStateToProps = state => (
     manifests: state.manifests,
   }
 );
+
 /**
  * @private
  */
 const styles = theme => ({
-  fab: {
+  ctrlBtn: {
     margin: theme.spacing.unit,
   },
 });

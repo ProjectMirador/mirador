@@ -8,9 +8,10 @@ describe('Thumbnail navigation', () => {
     await expect(page).toClick('#fetchBtn');
     // TODO: Refactor the app so we get rid of the wait
     await page.waitFor(1000);
-    await expect(page).toClick('li button');
+    await expect(page).toClick('.mirador-manifest-list-item');
     await page.waitFor(1000);
   });
+
   it('navigates a manifest using thumbnail navigation', async () => {
     await expect(page).toMatchElement('.mirador-thumb-navigation');
     let windows = await page.evaluate(() => (
