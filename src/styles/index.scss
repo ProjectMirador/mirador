@@ -21,6 +21,7 @@ body {
   &-window-middle-content {
     display: flex;
     flex: 1;
+    position: relative;
   }
 
   &-window {
@@ -36,9 +37,9 @@ body {
 
   &-window-sidebar {
     background: lighten($gray, 60%);
-    display: inline;
-    flex: 0 0 50px;
-    overflow: hidden;
+    height: 100%;
+    position: absolute;
+    width: 50px;
   }
 
   &-window-companion-side {
