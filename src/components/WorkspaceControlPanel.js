@@ -34,7 +34,7 @@ class WorkspaceControlPanel extends Component {
 
     this.setLastRequested = this.setLastRequested.bind(this);
     this.handleAddManifestClick = this.handleAddManifestClick.bind(this);
-    this.handleCloseManifestClick = this.handleAddManifestClick.bind(this);
+    this.handleAddManifestClose = this.handleAddManifestClose.bind(this);
     this.handleMenuClick = this.handleMenuClick.bind(this);
     this.handleCropClick = this.handleCropClick.bind(this);
   }
@@ -85,20 +85,6 @@ class WorkspaceControlPanel extends Component {
   }
 
   /**
-   * @private
-   */
-  handleAddManifest(event) { // eslint-disable-line class-methods-use-this
-    console.log('TODO: a manifest selection possibility should appear!');
-  }
-
-  /**
-   * @private
-   */
-  handleShowMenu(event) { // eslint-disable-line class-methods-use-this
-    console.log('TODO: a menu should appear!');
-  }
-
-  /**
    * render
    * @return {String} - HTML markup for the component
    */
@@ -109,7 +95,7 @@ class WorkspaceControlPanel extends Component {
       <ConnectedManifestListItem
         key={manifest}
         manifest={manifest}
-        handleClose={this.handleClose}
+        handleClose={this.handleAddManifestClose}
       />
     ));
     return (
@@ -120,10 +106,10 @@ class WorkspaceControlPanel extends Component {
         open
       >
         <Menu
-          id="add-form"
+          id="ws-ctrl-pnl-mn"
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
-          onClose={this.handleClose}
+          onClose={this.handleAddManifestClose}
         >
           <ConnectedManifestForm
             id="add-form"
@@ -132,7 +118,6 @@ class WorkspaceControlPanel extends Component {
           <ul>{manifestList}</ul>
           {lastRequested}
         </Menu>
-
         <List>
           <ListItem>
             <Fab
@@ -142,7 +127,7 @@ class WorkspaceControlPanel extends Component {
               className={classes.fab}
               aria-owns={anchorEl ? 'add-form' : undefined}
               aria-haspopup="true"
-              onClick={this.handleAddClick}
+              onClick={this.handleAddManifestClick}
             >
               <AddIcon />
             </Fab>
