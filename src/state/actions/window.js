@@ -1,5 +1,5 @@
 import uuid from 'uuid/v4';
-import ActionTypes from '../action-types';
+import ActionTypes from './action-types';
 
 /**
  * focusWindow - action creator

@@ -1,11 +1,13 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { actions, store } from '../../../src/store';
+import createStore from '../../../src/state/createStore';
+import * as actions from '../../../src/state/actions';
 import WorkspaceControlPanel from '../../../src/components/WorkspaceControlPanel';
 import fixture from '../../fixtures/version-2/002.json';
 
 describe('WorkspaceControlPanel', () => {
   let wrapper;
+  const store = createStore();
   beforeEach(() => {
     store.dispatch(actions.receiveManifest('foo', fixture));
     store.dispatch(actions.receiveManifest('bar', fixture));

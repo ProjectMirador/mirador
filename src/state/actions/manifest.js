@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import ActionTypes from '../action-types';
+import ActionTypes from './action-types';
 
 /**
  * requestManifest - action creator

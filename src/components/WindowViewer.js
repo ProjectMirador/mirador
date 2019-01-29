@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { actions } from '../store';
+import * as actions from '../state/actions';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import ConnectedOSDViewer from './OpenSeadragonViewer';
 import ConnectedViewerNavigation from './ViewerNavigation';

@@ -7,13 +7,12 @@ import thunkMiddleware from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createRootReducer from './reducers/index';
-import * as ActionCreators from './actions';
 
 
 /**
  * Configure Store
  */
-export function configureStore() {
+export default function () {
   const store = createStore(
     createRootReducer(),
     composeWithDevTools(applyMiddleware(thunkMiddleware)),
@@ -21,9 +20,3 @@ export function configureStore() {
   store.pluginReducers = {};
   return store;
 }
-
-// Create a Redux store holding the state of your app.
-// Its API is { subscribe, dispatch, getState }.
-export const store = configureStore();
-export const actions = ActionCreators;
-export default { actions, store };

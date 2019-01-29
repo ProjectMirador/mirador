@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import classNames from 'classnames';
-import { actions } from '../store';
+import * as actions from '../state/actions';
 import ConnectedWindowTopBarButtons from './WindowTopBarButtons';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import ns from '../config/css-ns';

@@ -1,10 +1,11 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { store } from '../../../src/store';
+import createStore from '../../../src/state/createStore';
 import { WindowSideBarButtons } from '../../../src/components/WindowSideBarButtons';
 
 describe('WindowSideBarButtons', () => {
   let wrapper;
+  const store = createStore();
   beforeEach(() => {
     wrapper = shallow(<WindowSideBarButtons store={store} />);
   });

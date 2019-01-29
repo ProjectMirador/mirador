@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import { actions } from '../store';
+import * as actions from '../state/actions';
 import ns from '../config/css-ns';
 
 /**
