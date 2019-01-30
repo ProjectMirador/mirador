@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Fullscreen from 'react-fullscreen-crossbrowser';
 import WorkspaceControlPanel from './WorkspaceControlPanel';
-import ConnectedWorkspace from './Workspace';
+import Workspace from '../containers/Workspace';
 import ns from '../config/css-ns';
 
 /**
@@ -24,7 +24,7 @@ class App extends Component {
           enabled={workspace.fullscreen}
           onChange={isFullscreenEnabled => fullscreenWorkspace(isFullscreenEnabled)}
         >
-          <ConnectedWorkspace />
+          <Workspace />
         </Fullscreen>
         <WorkspaceControlPanel />
       </div>
