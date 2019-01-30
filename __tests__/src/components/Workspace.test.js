@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Workspace } from '../../../src/components/Workspace';
+import Workspace from '../../../src/components/Workspace';
 import ConnectedWindow from '../../../src/components/Window';
 
 describe('Workspace', () => {
