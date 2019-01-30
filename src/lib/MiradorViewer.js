@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import deepmerge from 'deepmerge';
-import ConnectedApp from '../components/App';
+import App from '../containers/App';
 import createRootReducer from '../state/reducers/index';
 import createStore from '../state/createStore';
 import * as actions from '../state/actions';
@@ -26,7 +26,7 @@ class MiradorViewer {
 
     ReactDOM.render(
       <Provider store={store}>
-        <ConnectedApp config={config} />
+        <App config={config} />
       </Provider>,
       document.getElementById(config.id),
     );
