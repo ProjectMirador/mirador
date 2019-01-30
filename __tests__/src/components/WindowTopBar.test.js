@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { WindowTopBar } from '../../../src/components/WindowTopBar';
+import WindowTopBar from '../../../src/components/WindowTopBar';
 
 const manifestFixture = {
   manifestation: {
@@ -11,6 +11,7 @@ const manifestFixture = {
 describe('WindowTopBar', () => {
   let topBar;
   let mockRemoveWindow;
+
   beforeEach(() => {
     mockRemoveWindow = jest.fn();
     topBar = shallow(
@@ -20,22 +21,15 @@ describe('WindowTopBar', () => {
         removeWindow={mockRemoveWindow}
         classes={{}}
       />,
-    );
+    ).dive();
   });
 
-  it('renders without an error', () => {
-    expect(topBar.find('WithStyles(Toolbar)')
-      .dive()
-      .find('WithStyles(Typography)')
-      .dive()
-      .dive()
-      .text()).toBe('Fixture Label');
-    expect(topBar.find('WithStyles(Button).mirador-window-close'));
+  it('renders wrapping element', () => {
+    expect(topBar.find('.mirador-window-top-bar').length).toBe(1);
   });
 
-  it('calls the removeWindow prop when the close button is clicked', () => {
-    topBar.find('WithStyles(Button)').simulate('click');
-    expect(mockRemoveWindow).toHaveBeenCalledTimes(1);
-    expect(mockRemoveWindow).toHaveBeenCalledWith('foo');
+  it('provides removeWindow() function to the close button component', () => {
+    expect(topBar.find('.mirador-window-close').prop('onClick'))
+      .toBe(mockRemoveWindow);
   });
 });

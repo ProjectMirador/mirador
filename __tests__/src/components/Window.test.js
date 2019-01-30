@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Window from '../../../src/components/Window';
-import ConnectedWindowTopBar from '../../../src/components/WindowTopBar';
+import WindowTopBar from '../../../src/containers/WindowTopBar';
 import ConnectedWindowMiddleContent from '../../../src/components/WindowMiddleContent';
 
 describe('Window', () => {
@@ -15,7 +15,7 @@ describe('Window', () => {
   });
   it('should render <ConnectedWindowTopBar>', () => {
     wrapper = shallow(<Window window={window} />);
-    expect(wrapper.find(ConnectedWindowTopBar)).toHaveLength(1);
+    expect(wrapper.find(WindowTopBar)).toHaveLength(1);
   });
   it('should render <ConnectedWindowMiddleContent>', () => {
     wrapper = shallow(<Window window={window} />);
