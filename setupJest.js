@@ -29,5 +29,6 @@ class IntersectionObserverPolyfill {
 /* eslint-enable  require-jsdoc, class-methods-use-this */
 
 global.IntersectionObserver = IntersectionObserverPolyfill;
+global.Image = window.Image;
 
 Enzyme.configure({ adapter: new Adapter() });
