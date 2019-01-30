@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Window from '../../../src/components/Window';
 import WindowTopBar from '../../../src/containers/WindowTopBar';
-import ConnectedWindowMiddleContent from '../../../src/components/WindowMiddleContent';
+import WindowMiddleContent from '../../../src/containers/WindowMiddleContent';
 
 describe('Window', () => {
   let wrapper;
@@ -19,7 +19,7 @@ describe('Window', () => {
   });
   it('should render <ConnectedWindowMiddleContent>', () => {
     wrapper = shallow(<Window window={window} />);
-    expect(wrapper.find(ConnectedWindowMiddleContent)).toHaveLength(1);
+    expect(wrapper.find(WindowMiddleContent)).toHaveLength(1);
   });
   it('should render bottom companions window areas', () => {
     wrapper = shallow(<Window window={window} />);

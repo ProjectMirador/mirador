@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ConnectedWindowSideBar from './WindowSideBar';
 import ConnectedCompanionWindow from './CompanionWindow';
 import ConnectedWindowViewer from './WindowViewer';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
 import ns from '../config/css-ns';
 
 /**
  * WindowMiddleContent - component that renders the "middle" area of the
  * Mirador Window
  */
-export class WindowMiddleContent extends Component {
+class WindowMiddleContent extends Component {
   /**
    * renderViewer
    *
@@ -66,11 +63,4 @@ WindowMiddleContent.defaultProps = {
   manifest: null,
 };
 
-
-const enhance = compose(
-  connect(null, null),
-  miradorWithPlugins,
-  // further HOC go here
-);
-
-export default enhance(WindowMiddleContent);
+export default WindowMiddleContent;
