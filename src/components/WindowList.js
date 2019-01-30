@@ -7,7 +7,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { actions } from '../store';
+import * as actions from '../state/actions';
 
 /**
  */
