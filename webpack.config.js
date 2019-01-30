@@ -96,6 +96,7 @@ const baseConfig = [
 module.exports = (env, options) => {
   const isProduction = options.mode === 'production';
   return baseConfig.map((config) => {
+    config.mode = isProduction ? 'production' : 'development'; // eslint-disable-line no-param-reassign
     config.devtool = !isProduction ? 'eval-source-map' : false; // eslint-disable-line no-param-reassign
     return config;
   });
