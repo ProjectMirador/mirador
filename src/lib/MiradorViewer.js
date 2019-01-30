@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import deepmerge from 'deepmerge';
 import ConnectedApp from '../components/App';
-import createRootReducer from '../reducers/index';
-import { store, actions } from '../store';
+import createRootReducer from '../state/reducers/index';
+import createStore from '../state/createStore';
+import * as actions from '../state/actions';
 import settings from '../config/settings';
 
+const store = createStore();
 /**
  * Default Mirador instantiation
  */
@@ -17,7 +19,6 @@ class MiradorViewer {
     this.config = config;
     this.processPlugins();
     this.processConfig();
-
     const viewer = {
       actions,
       store,

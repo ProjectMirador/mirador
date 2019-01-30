@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Fullscreen from 'react-fullscreen-crossbrowser';
-import { actions } from '../store';
+import * as actions from '../state/actions';
 import WorkspaceControlPanel from './WorkspaceControlPanel';
 import ConnectedWorkspace from './Workspace';
 import ns from '../config/css-ns';

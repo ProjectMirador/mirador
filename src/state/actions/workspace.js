@@ -1,4 +1,4 @@
-import ActionTypes from '../action-types';
+import ActionTypes from './action-types';
 
 /* eslint-disable import/prefer-default-export */
 /**

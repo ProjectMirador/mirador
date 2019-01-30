@@ -1,5 +1,5 @@
-import reducer from '../../../src/reducers/windows';
-import ActionTypes from '../../../src/action-types';
+import reducer from '../../../src/state/reducers/windows';
+import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('windows reducer', () => {
   it('should handle ADD_WINDOW', () => {

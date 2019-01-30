@@ -1,11 +1,13 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { actions, store } from '../../../src/store';
+import createStore from '../../../src/state/createStore';
+import * as actions from '../../../src/state/actions';
 import WindowViewer from '../../../src/components/WindowViewer';
 import fixture from '../../fixtures/version-2/024.json';
 
 describe('WindowViewer', () => {
   let wrapper;
+  const store = createStore();
   beforeEach(() => {
     store.dispatch(actions.receiveManifest('foo', fixture));
     store.dispatch(actions.addWindow({ manifestId: 'foo' }));

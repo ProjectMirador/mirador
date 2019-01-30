@@ -44,7 +44,7 @@ const babelLoaderConfig = {
 
 const baseConfig = [
   {
-    entry: './src/store.js',
+    entry: './src/index-core.js',
     output: {
       path: path.join(__dirname, 'dist'),
       filename: 'm3core.umd.js',

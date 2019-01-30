@@ -1,5 +1,5 @@
-import reducer from '../../../src/reducers/infoResponses';
-import ActionTypes from '../../../src/action-types';
+import reducer from '../../../src/state/reducers/infoResponses';
+import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('info response reducer', () => {
   it('should handle REQUEST_INFO_RESPONSE', () => {

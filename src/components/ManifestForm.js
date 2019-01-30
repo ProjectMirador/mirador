@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { actions } from '../store';
+import * as actions from '../state/actions';
 
 /**
  * Provides a form for user input of a manifest url

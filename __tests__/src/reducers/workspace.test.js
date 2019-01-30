@@ -1,5 +1,5 @@
-import reducer from '../../../src/reducers/workspace';
-import ActionTypes from '../../../src/action-types';
+import reducer from '../../../src/state/reducers/workspace';
+import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('workspace reducer', () => {
   it('should handle FOCUS_WINDOW', () => {

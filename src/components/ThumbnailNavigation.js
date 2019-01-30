@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import Grid from 'react-virtualized/dist/commonjs/Grid';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import { actions } from '../store';
+import * as actions from '../state/actions';
 import ns from '../config/css-ns';
 import 'react-virtualized/styles.css';
 
