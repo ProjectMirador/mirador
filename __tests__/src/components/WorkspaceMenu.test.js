@@ -19,51 +19,19 @@ describe('WorkspaceMenu', () => {
     expect(handleClose).toBeCalled();
   });
 
-  describe('handleWindowListClick', () => {
+  describe('handleMenuItemClick', () => {
     it('sets the anchor state', () => {
-      wrapper.instance().handleWindowListClick({ currentTarget: true });
+      wrapper.instance().handleMenuItemClick('windowList', { currentTarget: true });
 
       expect(wrapper.find('Connect(WithStyles(WindowList))').props().open).toBe(true);
     });
   });
 
-  describe('handleWindowListClose', () => {
+  describe('handleMenuItemClose', () => {
     it('resets the anchor state', () => {
-      wrapper.instance().handleWindowListClose();
+      wrapper.instance().handleMenuItemClose('windowList')();
 
       expect(wrapper.find('Connect(WithStyles(WindowList))').props().open).toBe(false);
-    });
-  });
-
-  describe('handleSettingsClick', () => {
-    it('sets the anchor state', () => {
-      wrapper.instance().handleSettingsClick({ currentTarget: true });
-
-      expect(wrapper.find('Connect(WithStyles(WorkspaceSettings))').props().open).toBe(true);
-    });
-  });
-
-  describe('handleSettingsClose', () => {
-    it('resets the anchor state', () => {
-      wrapper.instance().handleSettingsClose();
-
-      expect(wrapper.find('Connect(WithStyles(WorkspaceSettings))').props().open).toBe(false);
-    });
-  });
-
-  describe('handleExportClick', () => {
-    it('sets the anchor state', () => {
-      wrapper.instance().handleExportClick({ currentTarget: true });
-
-      expect(wrapper.find('Connect(WithStyles(WorkspaceExport))').props().open).toBe(true);
-    });
-  });
-
-  describe('handleExportClose', () => {
-    it('resets the anchor state', () => {
-      wrapper.instance().handleExportClose();
-
-      expect(wrapper.find('Connect(WithStyles(WorkspaceExport))').props().open).toBe(false);
     });
   });
 });

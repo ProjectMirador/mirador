@@ -24,72 +24,37 @@ export class WorkspaceMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      windowListAnchorEl: null,
-      settingsAnchorEl: null,
-      exportAnchorEl: null,
+      windowList: {},
+      settings: {},
+      exportWorkspace: {},
     };
-    this.handleWindowListClick = this.handleWindowListClick.bind(this);
-    this.handleWindowListClose = this.handleWindowListClose.bind(this);
-    this.handleSettingsClick = this.handleSettingsClick.bind(this);
-    this.handleSettingsClose = this.handleSettingsClose.bind(this);
-    this.handleExportClick = this.handleExportClick.bind(this);
-    this.handleExportClose = this.handleExportClose.bind(this);
+    this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
+    this.handleMenuItemClose = this.handleMenuItemClose.bind(this);
   }
 
   /**
    * @private
    */
-  handleWindowListClick(event) {
-    this.setState({
-      windowListAnchorEl: event.currentTarget,
-    });
+  handleMenuItemClick(item, event) {
+    const obj = {};
+    obj[item] = {};
+    obj[item].open = true;
+    obj[item].anchorEl = event.currentTarget;
+    this.setState(obj);
   }
 
   /**
    * @private
    */
-  handleWindowListClose() {
-    this.setState({
-      windowListAnchorEl: null,
-    });
+  handleMenuItemClose(item) {
+    return (event) => {
+      const obj = {};
+      obj[item] = {};
+      obj[item].open = false;
+      obj[item].anchorEl = null;
+      this.setState(obj);
+    };
   }
-
-  /**
-   * @private
-   */
-  handleSettingsClick(event) {
-    this.setState({
-      settingsAnchorEl: event.currentTarget,
-    });
-  }
-
-  /**
-   * @private
-   */
-  handleSettingsClose() {
-    this.setState({
-      settingsAnchorEl: null,
-    });
-  }
-
-  /**
-   * @private
-   */
-  handleExportClick(event) {
-    this.setState({
-      exportAnchorEl: event.currentTarget,
-    });
-  }
-
-  /**
-   * @private
-   */
-  handleExportClose() {
-    this.setState({
-      exportAnchorEl: null,
-    });
-  }
-
 
   /**
    * render
@@ -97,15 +62,15 @@ export class WorkspaceMenu extends Component {
    */
   render() {
     const { handleClose, anchorEl } = this.props;
-    const { windowListAnchorEl, settingsAnchorEl, exportAnchorEl } = this.state;
+    const { windowList, settings, exportWorkspace } = this.state;
 
     return (
       <>
         <Menu id="workspace-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
           <MenuItem
             aria-haspopup="true"
-            onClick={(e) => { this.handleWindowListClick(e); handleClose(e); }}
-            aria-owns={windowListAnchorEl ? 'window-list-menu' : undefined}
+            onClick={(e) => { this.handleMenuItemClick('windowList', e); handleClose(e); }}
+            aria-owns={windowList.anchorEl ? 'window-list-menu' : undefined}
           >
             <ListItemIcon>
               <ViewHeadlineIcon />
@@ -115,8 +80,8 @@ export class WorkspaceMenu extends Component {
           <Divider />
           <MenuItem
             aria-haspopup="true"
-            onClick={(e) => { this.handleSettingsClick(e); handleClose(e); }}
-            aria-owns={settingsAnchorEl ? 'workspace-settings' : undefined}
+            onClick={(e) => { this.handleMenuItemClick('settings', e); handleClose(e); }}
+            aria-owns={settings.AnchorEl ? 'workspace-settings' : undefined}
           >
             <ListItemIcon>
               <SettingsIcon />
@@ -125,8 +90,8 @@ export class WorkspaceMenu extends Component {
           </MenuItem>
           <MenuItem
             aria-haspopup="true"
-            onClick={(e) => { this.handleExportClick(e); handleClose(e); }}
-            aria-owns={exportAnchorEl ? 'workspace-export' : undefined}
+            onClick={(e) => { this.handleMenuItemClick('exportWorkspace', e); handleClose(e); }}
+            aria-owns={exportWorkspace.AnchorEl ? 'workspace-export' : undefined}
           >
             <ListItemIcon>
               <SaveAltIcon />
@@ -135,17 +100,17 @@ export class WorkspaceMenu extends Component {
           </MenuItem>
         </Menu>
         <ConnectedWindowList
-          anchorEl={windowListAnchorEl}
-          open={Boolean(windowListAnchorEl)}
-          handleClose={this.handleWindowListClose}
+          anchorEl={windowList.anchorEl}
+          open={Boolean(windowList.anchorEl)}
+          handleClose={this.handleMenuItemClose('windowList')}
         />
         <ConnectedWorkspaceSettings
-          open={Boolean(settingsAnchorEl)}
-          handleClose={this.handleSettingsClose}
+          open={Boolean(settings.open)}
+          handleClose={this.handleMenuItemClose('settings')}
         />
         <ConnectedWorkspaceExport
-          open={Boolean(exportAnchorEl)}
-          handleClose={this.handleExportClose}
+          open={Boolean(exportWorkspace.open)}
+          handleClose={this.handleMenuItemClose('exportWorkspace')}
         />
       </>
     );
