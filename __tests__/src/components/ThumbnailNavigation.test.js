@@ -55,6 +55,9 @@ describe('ThumbnailNavigation', () => {
     expect(renderedGrid.find('.mirador-thumbnail-nav-container').first().prop('style').width).toEqual(108);
     expect(renderedGrid.find('.mirador-thumbnail-nav-canvas').first().prop('style').width).toEqual(100);
   });
+  it('renders canvas thumbnails', () => {
+    expect(renderedGrid.find('CanvasThumbnail').length).toBe(2);
+  });
   it('Grid is set with expected props for scrolling alignment', () => {
     expect(grid.props().scrollToAlignment).toBe('center');
     expect(grid.props().scrollToColumn).toBe(1);

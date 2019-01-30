@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import Grid from 'react-virtualized/dist/commonjs/Grid';
+import CanvasThumbnail from './CanvasThumbnail';
+import ManifestoCanvas from '../lib/ManifestoCanvas';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import * as actions from '../state/actions';
 import ns from '../config/css-ns';
@@ -59,7 +61,7 @@ export class ThumbnailNavigation extends Component {
       columnIndex, key, style,
     } = options;
     const {
-      window, setCanvas,
+      window, setCanvas, config,
     } = this.props;
     const { canvases } = this.state;
     const canvas = canvases[columnIndex];
@@ -77,7 +79,12 @@ export class ThumbnailNavigation extends Component {
             width: style.width - 8,
           }}
           className={ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${canvas.index}`, this.currentCanvasClass(canvas.index)])}
-        />
+        >
+          <CanvasThumbnail
+            imageUrl={new ManifestoCanvas(canvas).thumbnail(config.thumbnailNavigation.height)}
+            height={config.thumbnailNavigation.height}
+          />
+        </div>
       </div>
     );
   }
@@ -89,9 +96,8 @@ export class ThumbnailNavigation extends Component {
   calculateScaledWidth(options) {
     const { config } = this.props;
     const { canvases } = this.state;
-    const canvas = canvases[options.index];
-    const aspectRatio = canvas.getHeight() / canvas.getWidth();
-    return Math.floor(config.thumbnailNavigation.height / aspectRatio) + 8;
+    const canvas = new ManifestoCanvas(canvases[options.index]);
+    return Math.floor(config.thumbnailNavigation.height * canvas.aspectRatio) + 8;
   }
 
   /**
