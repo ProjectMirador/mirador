@@ -4,9 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ns from '../config/css-ns';
 import ConnectedWindowTopBar from './WindowTopBar';
-import ConnectedWindowSideBar from './WindowSideBar';
-import WindowViewer from './WindowViewer';
-import ConnectedCompanionWindow from './CompanionWindow';
+import ConnectedWindowMiddleContent from './WindowMiddleContent';
+import ConnectedThumbnailNavigation from './ThumbnailNavigation';
 
 /**
  * Represents a Window in the mirador workspace
@@ -22,24 +21,6 @@ export class Window extends Component {
   }
 
   /**
-   * renderViewer
-   *
-   * @return {(String|null)}
-   */
-  renderViewer() {
-    const { manifest, window } = this.props;
-    if (manifest && manifest.isFetching === false) {
-      return (
-        <WindowViewer
-          window={window}
-          manifest={manifest}
-        />
-      );
-    }
-    return null;
-  }
-
-  /**
    * Renders things
    */
   render() {
@@ -50,15 +31,16 @@ export class Window extends Component {
           windowId={window.id}
           manifest={manifest}
         />
-        <ConnectedCompanionWindow
-          windowId={window.id}
+        <ConnectedWindowMiddleContent
+          window={window}
           manifest={manifest}
         />
-        <ConnectedWindowSideBar
-          windowId={window.id}
-          manifest={manifest}
-        />
-        {this.renderViewer()}
+        <div className={ns('companion-bottom')}>
+          <ConnectedThumbnailNavigation
+            window={window}
+            manifest={manifest}
+          />
+        </div>
       </div>
     );
   }

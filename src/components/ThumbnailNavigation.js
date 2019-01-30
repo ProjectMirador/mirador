@@ -17,8 +17,26 @@ export class ThumbnailNavigation extends Component {
   constructor(props) {
     super(props);
 
+    const canvases = (props.manifest.manifestation)
+      ? props.manifest.manifestation.getSequences()[0].getCanvases() : [];
+    this.state = { canvases, manifest: props.manifest };
+
     this.cellRenderer = this.cellRenderer.bind(this);
     this.calculateScaledWidth = this.calculateScaledWidth.bind(this);
+  }
+
+  /**
+   */
+  static getDerivedStateFromProps(props, state) {
+    // Any time the manifest changes,
+    // Reset any parts of state that are tied to that manifest (canvases).
+    if (props.manifest !== state.manifest) {
+      return {
+        canvases: props.manifest.manifestation.getSequences()[0].getCanvases(),
+        manifest: props.manifest,
+      };
+    }
+    return null;
   }
 
   /**
@@ -41,8 +59,9 @@ export class ThumbnailNavigation extends Component {
       columnIndex, key, style,
     } = options;
     const {
-      window, setCanvas, canvases,
+      window, setCanvas,
     } = this.props;
+    const { canvases } = this.state;
     const canvas = canvases[columnIndex];
     return (
       <div
@@ -68,7 +87,8 @@ export class ThumbnailNavigation extends Component {
    * in this simple case, a column == canvas.
    */
   calculateScaledWidth(options) {
-    const { canvases, config } = this.props;
+    const { config } = this.props;
+    const { canvases } = this.state;
     const canvas = canvases[options.index];
     const aspectRatio = canvas.getHeight() / canvas.getWidth();
     return Math.floor(config.thumbnailNavigation.height / aspectRatio) + 8;
@@ -78,7 +98,8 @@ export class ThumbnailNavigation extends Component {
    * Renders things
    */
   render() {
-    const { config, canvases, window } = this.props;
+    const { config, window } = this.props;
+    const { canvases } = this.state;
     if (!window.thumbnailNavigationDisplayed) {
       return <></>;
     }
@@ -113,7 +134,7 @@ export class ThumbnailNavigation extends Component {
 
 ThumbnailNavigation.propTypes = {
   config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   setCanvas: PropTypes.func.isRequired,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };

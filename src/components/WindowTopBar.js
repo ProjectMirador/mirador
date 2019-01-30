@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -37,15 +36,13 @@ export class WindowTopBar extends Component {
   render() {
     const { removeWindow, windowId, classes } = this.props;
     return (
-      <AppBar position="absolute">
-        <Toolbar disableGutters className={classNames(classes.reallyDense, ns('window-top-bar'))} variant="dense">
-          <Typography variant="h3" noWrap color="inherit" className={classes.typographyBody}>
-            {this.titleContent()}
-          </Typography>
-          <ConnectedWindowTopBarButtons windowId={windowId} />
-          <Button color="inherit" className={ns('window-close')} aria-label="Close Window" onClick={() => removeWindow(windowId)}>&times;</Button>
-        </Toolbar>
-      </AppBar>
+      <Toolbar disableGutters className={classNames(classes.reallyDense, ns('window-top-bar'))} variant="dense">
+        <Typography variant="h3" noWrap color="inherit" className={classes.typographyBody}>
+          {this.titleContent()}
+        </Typography>
+        <ConnectedWindowTopBarButtons windowId={windowId} />
+        <Button color="inherit" className={ns('window-close')} aria-label="Close Window" onClick={() => removeWindow(windowId)}>&times;</Button>
+      </Toolbar>
     );
   }
 }
