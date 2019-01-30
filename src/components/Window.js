@@ -32,6 +32,7 @@ class Window extends Component {
         <ConnectedWindowMiddleContent
           window={window}
           manifest={manifest}
+          sideBarOpen={window.sideBarOpen}
         />
         <div className={ns('companion-bottom')}>
           <ConnectedThumbnailNavigation

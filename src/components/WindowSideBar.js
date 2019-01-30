@@ -18,10 +18,11 @@ export class WindowSideBar extends Component {
    */
   render() {
     const {
-      windowId, classes,
+      windowId, classes, sideBarOpen,
     } = this.props;
+
     return (
-      <div className={ns('window-sidebar')}>
+      <div className={ns(['window-sidebar', (sideBarOpen ? 'window-sidebar-open' : 'window-sidebar-closed')])}>
         <div className={classes.toolbar} />
         <List>
           <ConnectedWindowSideBarButtons windowId={windowId} />
@@ -35,6 +36,11 @@ export class WindowSideBar extends Component {
 WindowSideBar.propTypes = {
   windowId: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
+  sideBarOpen: PropTypes.bool,
+};
+
+WindowSideBar.defaultProps = {
+  sideBarOpen: false,
 };
 
 /**

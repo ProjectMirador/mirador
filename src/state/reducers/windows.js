@@ -14,6 +14,14 @@ const windowsReducer = (state = {}, action) => {
         }
         return object;
       }, {});
+    case ActionTypes.TOGGLE_WINDOW_SIDE_BAR:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          sideBarOpen: !state[action.windowId].sideBarOpen,
+        },
+      };
     case ActionTypes.NEXT_CANVAS:
       return setCanvasIndex(state, action.windowId, currentIndex => currentIndex + 1);
     case ActionTypes.PREVIOUS_CANVAS:

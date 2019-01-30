@@ -7,8 +7,9 @@ import Window from '../components/Window';
  * @memberof Window
  * @private
  */
-const mapStateToProps = ({ manifests }, props) => ({
+const mapStateToProps = ({ manifests, sideBarOpen }, props) => ({
   manifest: manifests[props.window.manifestId],
+  sideBarOpen,
 });
 
 const enhance = compose(

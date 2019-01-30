@@ -41,6 +41,7 @@ export class WindowMiddleContent extends Component {
         <ConnectedWindowSideBar
           windowId={window.id}
           manifest={manifest}
+          sideBarOpen={window.sideBarOpen}
         />
         <ConnectedCompanionWindow
           windowId={window.id}

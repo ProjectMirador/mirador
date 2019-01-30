@@ -11,6 +11,7 @@ import WindowTopBar from '../components/WindowTopBar';
  */
 const mapDispatchToProps = (dispatch, props) => ({
   removeWindow: () => dispatch(actions.removeWindow(props.windowId)),
+  toggleWindowSideBar: () => dispatch(actions.toggleWindowSideBar(props.windowId)),
 });
 
 const enhance = compose(

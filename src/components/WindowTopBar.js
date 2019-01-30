@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import classNames from 'classnames';
 import WindowTopBarButtons from '../containers/WindowTopBarButtons';
@@ -30,9 +32,18 @@ class WindowTopBar extends Component {
    * @return
    */
   render() {
-    const { removeWindow, windowId, classes } = this.props;
+    const {
+      removeWindow, windowId, classes, toggleWindowSideBar,
+    } = this.props;
     return (
       <Toolbar disableGutters className={classNames(classes.reallyDense, ns('window-top-bar'))} variant="dense">
+        <IconButton
+          aria-label="Open window side bar"
+          color="inherit"
+          onClick={() => toggleWindowSideBar(windowId)}
+        >
+          <MenuIcon />
+        </IconButton>
         <Typography variant="h3" noWrap color="inherit" className={classes.typographyBody}>
           {this.titleContent()}
         </Typography>
@@ -48,10 +59,12 @@ WindowTopBar.propTypes = {
   removeWindow: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  toggleWindowSideBar: PropTypes.func,
 };
 
 WindowTopBar.defaultProps = {
   manifest: null,
+  toggleWindowSideBar: () => {},
 };
 
 const styles = {

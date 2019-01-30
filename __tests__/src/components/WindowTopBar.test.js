@@ -11,14 +11,17 @@ const manifestFixture = {
 describe('WindowTopBar', () => {
   let topBar;
   let mockRemoveWindow;
+  let mockToggleWindowSideBar;
 
   beforeEach(() => {
     mockRemoveWindow = jest.fn();
+    mockToggleWindowSideBar = jest.fn();
     topBar = shallow(
       <WindowTopBar
         manifest={manifestFixture}
         windowId="foo"
         removeWindow={mockRemoveWindow}
+        toggleWindowSideBar={mockToggleWindowSideBar}
         classes={{}}
       />,
     ).dive();
@@ -31,5 +34,11 @@ describe('WindowTopBar', () => {
   it('provides removeWindow() function to the close button component', () => {
     expect(topBar.find('.mirador-window-close').prop('onClick'))
       .toBe(mockRemoveWindow);
+  });
+
+  it('calls the toggleWindowSideBar prop when the menu IconButton is clicked', () => {
+    topBar.find('WithStyles(IconButton)').simulate('click');
+    expect(mockToggleWindowSideBar).toHaveBeenCalledTimes(1);
+    expect(mockToggleWindowSideBar).toHaveBeenCalledWith('foo');
   });
 });
