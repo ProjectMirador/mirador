@@ -1,21 +1,17 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import classNames from 'classnames';
-import * as actions from '../state/actions';
 import ConnectedWindowTopBarButtons from './WindowTopBarButtons';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
 import ns from '../config/css-ns';
 
 /**
  * WindowTopBar
  */
-export class WindowTopBar extends Component {
+class WindowTopBar extends Component {
   /**
    * titleContent
    *
@@ -47,13 +43,6 @@ export class WindowTopBar extends Component {
   }
 }
 
-/**
- * mapDispatchToProps - used to hook up connect to action creators
- * @memberof ManifestListItem
- * @private
- */
-const mapDispatchToProps = { removeWindow: actions.removeWindow };
-
 WindowTopBar.propTypes = {
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   removeWindow: PropTypes.func.isRequired,
@@ -76,11 +65,4 @@ const styles = {
   },
 };
 
-const enhance = compose(
-  connect(null, mapDispatchToProps),
-  miradorWithPlugins,
-  withStyles(styles),
-  // further HOC go here
-);
-
-export default enhance(WindowTopBar);
+export default withStyles(styles)(WindowTopBar);

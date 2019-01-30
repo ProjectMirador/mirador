@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ns from '../config/css-ns';
-import ConnectedWindowTopBar from './WindowTopBar';
+import WindowTopBar from '../containers/WindowTopBar';
 import ConnectedWindowMiddleContent from './WindowMiddleContent';
 import ConnectedThumbnailNavigation from './ThumbnailNavigation';
 
@@ -25,7 +25,7 @@ class Window extends Component {
     const { manifest, window } = this.props;
     return (
       <div className={ns('window')} style={this.styleAttributes()}>
-        <ConnectedWindowTopBar
+        <WindowTopBar
           windowId={window.id}
           manifest={manifest}
         />
