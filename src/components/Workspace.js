@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ConnectedWindow from './Window';
+import Window from '../containers/Window';
 import ns from '../config/css-ns';
 
 /**
@@ -18,7 +18,7 @@ class Workspace extends React.Component {
       <div className={ns('workspace')}>
         {
           Object.values(windows).map(window => (
-            <ConnectedWindow
+            <Window
               key={window.id}
               window={window}
             />

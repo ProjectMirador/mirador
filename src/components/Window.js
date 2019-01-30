@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ns from '../config/css-ns';
 import ConnectedWindowTopBar from './WindowTopBar';
@@ -11,7 +9,7 @@ import ConnectedThumbnailNavigation from './ThumbnailNavigation';
  * Represents a Window in the mirador workspace
  * @param {object} window
  */
-export class Window extends Component {
+class Window extends Component {
   /**
    * Return style attributes
    */
@@ -55,18 +53,4 @@ Window.defaultProps = {
   manifest: null,
 };
 
-/**
- * mapStateToProps - used to hook up connect to action creators
- * @memberof Window
- * @private
- */
-const mapStateToProps = ({ manifests }, props) => ({
-  manifest: manifests[props.window.manifestId],
-});
-
-const enhance = compose(
-  connect(mapStateToProps),
-  // further HOC go here
-);
-
-export default enhance(Window);
+export default Window;
