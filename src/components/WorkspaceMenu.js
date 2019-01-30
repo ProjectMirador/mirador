@@ -5,6 +5,7 @@ import Divider from '@material-ui/core/Divider';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import { withStyles } from '@material-ui/core/styles';
@@ -12,6 +13,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ConnectedWindowList from './WindowList';
 import ConnectedWorkspaceSettings from './WorkspaceSettings';
+import ConnectedWorkspaceExport from './WorkspaceExport';
 
 /**
  */
@@ -24,11 +26,14 @@ export class WorkspaceMenu extends Component {
     this.state = {
       windowListAnchorEl: null,
       settingsAnchorEl: null,
+      exportAnchorEl: null,
     };
     this.handleWindowListClick = this.handleWindowListClick.bind(this);
     this.handleWindowListClose = this.handleWindowListClose.bind(this);
     this.handleSettingsClick = this.handleSettingsClick.bind(this);
     this.handleSettingsClose = this.handleSettingsClose.bind(this);
+    this.handleExportClick = this.handleExportClick.bind(this);
+    this.handleExportClose = this.handleExportClose.bind(this);
   }
 
   /**
@@ -68,12 +73,31 @@ export class WorkspaceMenu extends Component {
   }
 
   /**
+   * @private
+   */
+  handleExportClick(event) {
+    this.setState({
+      exportAnchorEl: event.currentTarget,
+    });
+  }
+
+  /**
+   * @private
+   */
+  handleExportClose() {
+    this.setState({
+      exportAnchorEl: null,
+    });
+  }
+
+
+  /**
    * render
    * @return
    */
   render() {
     const { handleClose, anchorEl } = this.props;
-    const { windowListAnchorEl, settingsAnchorEl } = this.state;
+    const { windowListAnchorEl, settingsAnchorEl, exportAnchorEl } = this.state;
 
     return (
       <>
@@ -99,6 +123,16 @@ export class WorkspaceMenu extends Component {
             </ListItemIcon>
             <Typography varient="inherit">Settings</Typography>
           </MenuItem>
+          <MenuItem
+            aria-haspopup="true"
+            onClick={(e) => { this.handleExportClick(e); handleClose(e); }}
+            aria-owns={exportAnchorEl ? 'workspace-export' : undefined}
+          >
+            <ListItemIcon>
+              <SaveAltIcon />
+            </ListItemIcon>
+            <Typography varient="inherit">Download/export workspace</Typography>
+          </MenuItem>
         </Menu>
         <ConnectedWindowList
           anchorEl={windowListAnchorEl}
@@ -108,6 +142,10 @@ export class WorkspaceMenu extends Component {
         <ConnectedWorkspaceSettings
           open={Boolean(settingsAnchorEl)}
           handleClose={this.handleSettingsClose}
+        />
+        <ConnectedWorkspaceExport
+          open={Boolean(exportAnchorEl)}
+          handleClose={this.handleExportClose}
         />
       </>
     );
