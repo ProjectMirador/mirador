@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import classNames from 'classnames';
-import ConnectedWindowTopBarButtons from './WindowTopBarButtons';
+import WindowTopBarButtons from '../containers/WindowTopBarButtons';
 import ns from '../config/css-ns';
 
 /**
@@ -36,7 +36,7 @@ class WindowTopBar extends Component {
         <Typography variant="h3" noWrap color="inherit" className={classes.typographyBody}>
           {this.titleContent()}
         </Typography>
-        <ConnectedWindowTopBarButtons windowId={windowId} />
+        <WindowTopBarButtons windowId={windowId} />
         <Button color="inherit" className={ns('window-close')} aria-label="Close Window" onClick={removeWindow}>&times;</Button>
       </Toolbar>
     );
