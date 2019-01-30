@@ -24,7 +24,12 @@ describe('WindowTopBar', () => {
     ).dive();
   });
 
-  it('renders without an error', () => {
+  it('renders wrapping element', () => {
     expect(topBar.find('.mirador-window-top-bar').length).toBe(1);
+  });
+
+  it('provides removeWindow() function to the close button component', () => {
+    expect(topBar.find('.mirador-window-close').prop('onClick'))
+      .toBe(mockRemoveWindow);
   });
 });

@@ -37,7 +37,7 @@ class WindowTopBar extends Component {
           {this.titleContent()}
         </Typography>
         <ConnectedWindowTopBarButtons windowId={windowId} />
-        <Button color="inherit" className={ns('window-close')} aria-label="Close Window" onClick={() => removeWindow(windowId)}>&times;</Button>
+        <Button color="inherit" className={ns('window-close')} aria-label="Close Window" onClick={removeWindow}>&times;</Button>
       </Toolbar>
     );
   }

@@ -9,7 +9,9 @@ import WindowTopBar from '../components/WindowTopBar';
  * @memberof ManifestListItem
  * @private
  */
-const mapDispatchToProps = { removeWindow: actions.removeWindow };
+const mapDispatchToProps = (dispatch, props) => ({
+  removeWindow: () => dispatch(actions.removeWindow(props.windowId)),
+});
 
 const enhance = compose(
   connect(null, mapDispatchToProps),
