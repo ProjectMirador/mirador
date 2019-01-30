@@ -18,4 +18,16 @@ global.navigator = {
   userAgent: 'node.js',
 };
 
+/* eslint-disable  require-jsdoc, class-methods-use-this */
+class IntersectionObserverPolyfill {
+  observe() {
+  }
+
+  disconnect() {
+  }
+}
+/* eslint-enable  require-jsdoc, class-methods-use-this */
+
+global.IntersectionObserver = IntersectionObserverPolyfill;
+
 Enzyme.configure({ adapter: new Adapter() });
