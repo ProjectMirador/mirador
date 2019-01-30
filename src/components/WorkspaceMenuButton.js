@@ -6,6 +6,7 @@ import ListItem from '@material-ui/core/ListItem';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import ConnectedWorkspaceMenu from './WorkspaceMenu';
 
 /**
  */
@@ -15,16 +16,29 @@ export class WorkspaceMenuButton extends Component {
    */
   constructor(props) {
     super(props);
-
+    this.state = {
+      anchorEl: null,
+    };
     this.handleMenuClick = this.handleMenuClick.bind(this);
+    this.handleMenuClose = this.handleMenuClose.bind(this);
   }
 
   /**
    * @private
    */
-  handleMenuClick() {
-    const state = { ...this.state };
-    this.setState(state);
+  handleMenuClick(event) {
+    this.setState({
+      anchorEl: event.currentTarget,
+    });
+  }
+
+  /**
+   * @private
+   */
+  handleMenuClose() {
+    this.setState({
+      anchorEl: null,
+    });
   }
 
   /**
@@ -33,19 +47,28 @@ export class WorkspaceMenuButton extends Component {
    */
   render() {
     const { classes } = this.props;
+    const { anchorEl } = this.state;
+
     return (
-      <ListItem>
-        <IconButton
-          color="primary"
-          id="menuBtn"
-          aria-label="Menu"
-          className={classes.ctrlBtn}
-          aria-haspopup="true"
-          onClick={this.handleMenuClick}
-        >
-          <MenuIcon />
-        </IconButton>
-      </ListItem>
+      <>
+        <ListItem>
+          <IconButton
+            color="primary"
+            id="menuBtn"
+            aria-label="Menu"
+            className={classes.ctrlBtn}
+            aria-haspopup="true"
+            onClick={this.handleMenuClick}
+            aria-owns={anchorEl ? 'workspace-menu' : undefined}
+          >
+            <MenuIcon />
+          </IconButton>
+        </ListItem>
+        <ConnectedWorkspaceMenu
+          anchorEl={anchorEl}
+          handleClose={this.handleMenuClose}
+        />
+      </>
     );
   }
 }
