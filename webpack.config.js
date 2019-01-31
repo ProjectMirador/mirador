@@ -43,6 +43,7 @@ const babelLoaderConfig = {
 };
 
 module.exports = {
+  mode: 'production',
   entry: {
     m3core: './src/index-core.js',
     mirador3: './src/index.js',
