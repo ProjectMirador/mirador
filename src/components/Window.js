@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
-import ConnectedWindowMiddleContent from './WindowMiddleContent';
+import WindowMiddleContent from '../containers/WindowMiddleContent';
 import ConnectedThumbnailNavigation from './ThumbnailNavigation';
 
 /**
@@ -29,7 +29,7 @@ class Window extends Component {
           windowId={window.id}
           manifest={manifest}
         />
-        <ConnectedWindowMiddleContent
+        <WindowMiddleContent
           window={window}
           manifest={manifest}
           sideBarOpen={window.sideBarOpen}
