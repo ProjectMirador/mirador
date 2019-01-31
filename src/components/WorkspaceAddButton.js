@@ -6,7 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { withStyles } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
 import ManifestForm from '../containers/ManifestForm';
-import ConnectedManifestListItem from './ManifestListItem';
+import ManifestListItem from '../containers/ManifestListItem';
 
 /**
  */
@@ -64,7 +64,7 @@ class WorkspaceAddButton extends Component {
     const { lastRequested, anchorEl } = this.state;
 
     const manifestList = Object.keys(manifests).map(manifest => (
-      <ConnectedManifestListItem
+      <ManifestListItem
         key={manifest}
         manifest={manifest}
         handleClose={this.handleAddManifestClose}
