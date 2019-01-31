@@ -23,7 +23,7 @@ describe('WorkspaceMenu', () => {
     it('sets the anchor state', () => {
       wrapper.instance().handleMenuItemClick('windowList', { currentTarget: true });
 
-      expect(wrapper.find('Connect(WithStyles(WindowList))').props().open).toBe(true);
+      expect(wrapper.find('Connect(WindowList)').props().open).toBe(true);
     });
   });
 
@@ -31,7 +31,7 @@ describe('WorkspaceMenu', () => {
     it('resets the anchor state', () => {
       wrapper.instance().handleMenuItemClose('windowList')();
 
-      expect(wrapper.find('Connect(WithStyles(WindowList))').props().open).toBe(false);
+      expect(wrapper.find('Connect(WindowList)').props().open).toBe(false);
     });
   });
 });

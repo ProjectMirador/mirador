@@ -8,7 +8,7 @@ import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import PropTypes from 'prop-types';
-import ConnectedWindowList from './WindowList';
+import WindowList from '../containers/WindowList';
 import ConnectedWorkspaceSettings from './WorkspaceSettings';
 import ConnectedWorkspaceExport from './WorkspaceExport';
 
@@ -96,7 +96,7 @@ class WorkspaceMenu extends Component {
             <Typography varient="inherit">Download/export workspace</Typography>
           </MenuItem>
         </Menu>
-        <ConnectedWindowList
+        <WindowList
           anchorEl={windowList.anchorEl}
           open={Boolean(windowList.anchorEl)}
           handleClose={this.handleMenuItemClose('windowList')}
