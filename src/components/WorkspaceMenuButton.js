@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ListItem from '@material-ui/core/ListItem';
 import { withStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ConnectedWorkspaceMenu from './WorkspaceMenu';
 
@@ -78,13 +76,6 @@ WorkspaceMenuButton.propTypes = {
 };
 
 /**
- * mapDispatchToProps - used to hook up connect to action creators
- * @memberof ManifestListItem
- * @private
- */
-const mapDispatchToProps = {};
-
-/**
  * @private
  */
 const styles = theme => ({
@@ -93,11 +84,4 @@ const styles = theme => ({
   },
 });
 
-
-const enhance = compose(
-  connect(null, mapDispatchToProps),
-  withStyles(styles),
-  // further HOC go here
-);
-
-export default enhance(WorkspaceMenuButton);
+export default withStyles(styles)(WorkspaceMenuButton);
