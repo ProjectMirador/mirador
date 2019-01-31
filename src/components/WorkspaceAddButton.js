@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import ListItem from '@material-ui/core/ListItem';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
@@ -12,7 +10,7 @@ import ConnectedManifestListItem from './ManifestListItem';
 
 /**
  */
-export class WorkspaceAddButton extends Component {
+class WorkspaceAddButton extends Component {
   /**
    * constructor -
    */
@@ -110,24 +108,6 @@ WorkspaceAddButton.propTypes = {
 };
 
 /**
- * mapDispatchToProps - used to hook up connect to action creators
- * @memberof ManifestListItem
- * @private
- */
-const mapDispatchToProps = {};
-
-/**
- * mapStateToProps - to hook up connect
- * @memberof WorkspaceControlPanel
- * @private
- */
-const mapStateToProps = state => (
-  {
-    manifests: state.manifests,
-  }
-);
-
-/**
  * @private
  */
 const styles = theme => ({
@@ -136,11 +116,4 @@ const styles = theme => ({
   },
 });
 
-
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withStyles(styles),
-  // further HOC go here
-);
-
-export default enhance(WorkspaceAddButton);
+export default withStyles(styles)(WorkspaceAddButton);

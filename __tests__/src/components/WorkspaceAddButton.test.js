@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { WorkspaceAddButton } from '../../../src/components/WorkspaceAddButton';
+import WorkspaceAddButton from '../../../src/components/WorkspaceAddButton';
 import fixture from '../../fixtures/version-2/002.json';
 
 describe('WorkspaceAddButton', () => {
@@ -8,10 +8,7 @@ describe('WorkspaceAddButton', () => {
   beforeEach(() => {
     wrapper = shallow(
       <WorkspaceAddButton manifests={{ foo: fixture, bar: fixture }} classes={{}} />,
-    );
-  });
-
-  it('renders without an error', () => {
+    ).dive();
   });
 
   it('renders a list item for each manifest in the state', () => {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ConnectedWorkspaceFullScreenButton from './WorkspaceFullScreenButton';
-import ConnectedWorkspaceAddButton from './WorkspaceAddButton';
+import WorkspaceAddButton from '../containers/WorkspaceAddButton';
 import ConnectedWorkspaceMenuButton from './WorkspaceMenuButton';
 /**
  *
@@ -17,7 +17,7 @@ class WorkspaceControlPanelButtons extends Component {
     const { children } = this.props;
     return (
       <List>
-        <ConnectedWorkspaceAddButton />
+        <WorkspaceAddButton />
         <ConnectedWorkspaceMenuButton />
         <ConnectedWorkspaceFullScreenButton />
         {children}
