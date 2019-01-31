@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import Grid from 'react-virtualized/dist/commonjs/Grid';
 import CanvasThumbnail from './CanvasThumbnail';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
-import * as actions from '../state/actions';
 import ns from '../config/css-ns';
 import 'react-virtualized/styles.css';
 
 /**
  */
-export class ThumbnailNavigation extends Component {
+class ThumbnailNavigation extends Component {
   /**
    */
   constructor(props) {
@@ -145,28 +141,4 @@ ThumbnailNavigation.propTypes = {
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-/**
- * mapStateToProps - used to hook up state to props
- * @memberof ThumbnailNavigation
- * @private
- */
-const mapStateToProps = ({ config }) => ({
-  config,
-});
-
-/**
- * mapDispatchToProps - used to hook up connect to action creators
- * @memberof ThumbnailNavigation
- * @private
- */
-const mapDispatchToProps = {
-  setCanvas: actions.setCanvas,
-};
-
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  miradorWithPlugins,
-  // further HOC go here
-);
-
-export default enhance(ThumbnailNavigation);
+export default ThumbnailNavigation;

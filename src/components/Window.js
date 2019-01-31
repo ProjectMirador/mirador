@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
 import WindowMiddleContent from '../containers/WindowMiddleContent';
-import ConnectedThumbnailNavigation from './ThumbnailNavigation';
+import ThumbnailNavigation from '../containers/ThumbnailNavigation';
 
 /**
  * Represents a Window in the mirador workspace
@@ -35,7 +35,7 @@ class Window extends Component {
           sideBarOpen={window.sideBarOpen}
         />
         <div className={ns('companion-bottom')}>
-          <ConnectedThumbnailNavigation
+          <ThumbnailNavigation
             window={window}
             manifest={manifest}
           />
