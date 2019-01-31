@@ -1,13 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import createStore from '../../../src/state/createStore';
-import { WorkspaceControlPanelButtons } from '../../../src/components/WorkspaceControlPanelButtons';
+import WorkspaceControlPanelButtons
+  from '../../../src/components/WorkspaceControlPanelButtons';
 
 describe('WorkspaceControlPanelButtons', () => {
   let wrapper;
-  const store = createStore();
   beforeEach(() => {
-    wrapper = shallow(<WorkspaceControlPanelButtons store={store} />);
+    wrapper = shallow(<WorkspaceControlPanelButtons />);
   });
 
   it('renders without an error', () => {

@@ -1,8 +1,5 @@
 import React from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import * as actions from '../state/actions';
 import ns from '../config/css-ns';
 
 
@@ -24,7 +21,7 @@ const handleOpenButtonClick = (event, manifest, addWindow) => {
  * @memberof ManifestListItem
  * @private
  */
-export const ManifestListItem = ({ manifest, addWindow, handleClose }) => (
+const ManifestListItem = ({ manifest, addWindow, handleClose }) => (
   <li className={ns('manifest-list-item')}>
     <button type="button" onClick={(event) => { handleOpenButtonClick(event, manifest, addWindow); handleClose(); }}>
       {manifest}
@@ -42,25 +39,4 @@ ManifestListItem.defaultProps = {
   handleClose: () => {},
 };
 
-/**
- * mapStateToProps - to hook up connect
- * @memberof ManifestListItem
- * @private
- */
-const mapStateToProps = () => (
-  {}
-);
-
-/**
- * mapDispatchToProps - used to hook up connect to action creators
- * @memberof ManifestListItem
- * @private
- */
-const mapDispatchToProps = { addWindow: actions.addWindow };
-
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  // further HOC go here
-);
-
-export default enhance(ManifestListItem);
+export default ManifestListItem;

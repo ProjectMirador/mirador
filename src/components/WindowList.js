@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import { withStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import * as actions from '../state/actions';
 
 /**
  */
-export class WindowList extends Component {
+class WindowList extends Component {
   /**
    * Get the title for a window from its manifest title
    * @private
@@ -70,38 +66,4 @@ WindowList.defaultProps = {
   anchorEl: null,
 };
 
-/**
- * mapDispatchToProps - used to hook up connect to action creators
- * @memberof ManifestListItem
- * @private
- */
-const mapDispatchToProps = {
-  focusWindow: actions.focusWindow,
-};
-
-/**
- * mapStateToProps - to hook up connect
- * @memberof WorkspaceControlPanel
- * @private
- */
-const mapStateToProps = state => (
-  {
-    windows: state.windows,
-    manifests: state.manifests,
-  }
-);
-
-/**
- * @private
- */
-const styles = theme => ({
-});
-
-
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withStyles(styles),
-  // further HOC go here
-);
-
-export default enhance(WindowList);
+export default WindowList;

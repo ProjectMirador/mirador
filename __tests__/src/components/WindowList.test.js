@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import MenuItem from '@material-ui/core/MenuItem';
-import { WindowList } from '../../../src/components/WindowList';
+import WindowList from '../../../src/components/WindowList';
 
 describe('WindowList', () => {
   let wrapper;
