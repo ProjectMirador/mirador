@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>Examples</title>
-    <script src="../../../dist/m3core.umd.js"></script>
+    <script src="../../../dist/m3core.js"></script>
   </head>
   <body>
 
@@ -15,13 +15,13 @@
   <script>
     document.getElementById("fetchBtn").addEventListener("click", function(){
       let val = document.getElementById("manifestURL").value;
-      let f = m3core.actions.fetchManifest(val);
-      m3core.store.dispatch(f);
+      let f = Mirador.actions.fetchManifest(val);
+      Mirador.store.dispatch(f);
     });
 
-    m3core.store.subscribe(() => {
+    Mirador.store.subscribe(() => {
       let contents = ''
-      let state = m3core.store.getState();
+      let state = Mirador.store.getState();
       let manifest = state.manifests[document.getElementById("manifestURL").value];
       switch (manifest.isFetching) {
         case true:

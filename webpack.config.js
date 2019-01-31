@@ -42,61 +42,36 @@ const babelLoaderConfig = {
   },
 };
 
-const baseConfig = [
-  {
-    entry: './src/index-core.js',
-    output: {
-      path: path.join(__dirname, 'dist'),
-      filename: 'm3core.umd.js',
-      libraryTarget: 'umd',
-      library: 'm3core',
-    },
-    module: {
-      rules: [
-        eslintLoaderConfig,
-        babelLoaderConfig,
-      ],
-    },
+module.exports = {
+  entry: {
+    m3core: './src/index-core.js',
+    mirador3: './src/index.js',
   },
-  {
-    entry: './src/index.js',
-    output: {
-      path: path.join(__dirname, 'dist'),
-      filename: 'mirador.min.js',
-      libraryTarget: 'umd',
-      library: 'Mirador',
-      libraryExport: 'default',
-    },
-    resolve: { extensions: ['.js'] },
-    module: {
-      rules: [
-        eslintLoaderConfig,
-        babelLoaderConfig,
-        {
-          test: /\.s?css$/,
-          use: [
-            'style-loader', // creates style nodes from JS strings
-            'css-loader', // translates CSS into CommonJS
-            'sass-loader', // compiles Sass to CSS, using Node Sass by default
-          ],
-        }],
-    },
-    optimization: {
-      minimizer: [
-        new TerserPlugin({
-          terserOptions: {
-            mangle: false,
-          },
-        }),
-      ],
-    },
+  output: {
+    filename: '[name].js',
+    path: path.join(__dirname, 'dist'),
+    libraryTarget: 'umd',
+    library: 'Mirador',
+    libraryExport: 'default',
   },
-];
-
-module.exports = (env, options) => {
-  const isProduction = options.mode === 'production';
-  return baseConfig.map((config) => {
-    config.devtool = !isProduction ? 'eval-source-map' : false; // eslint-disable-line no-param-reassign
-    return config;
-  });
+  resolve: {
+    extensions: ['.js'],
+  },
+  module: {
+    rules: [eslintLoaderConfig, babelLoaderConfig, {
+      test: /\.s?css$/,
+      use: ['style-loader', // creates style nodes from JS strings
+        'css-loader', // translates CSS into CommonJS
+        'sass-loader', // compiles Sass to CSS, using Node Sass by default
+      ],
+    }],
+  },
+  optimization: {
+    minimizer: [new TerserPlugin({
+      terserOptions: {
+        mangle: false,
+      },
+    }),
+    ],
+  },
 };
