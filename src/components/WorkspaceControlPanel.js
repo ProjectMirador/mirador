@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import ConnectedWorkspaceControlPanelButtons from './WorkspaceControlPanelButtons';
+import WorkspaceControlPanelButtons
+  from '../containers/WorkspaceControlPanelButtons';
 import ns from '../config/css-ns';
 
 /**
@@ -23,7 +24,7 @@ class WorkspaceControlPanel extends Component {
         classes={{ paper: classNames(classes.drawer) }}
         open
       >
-        <ConnectedWorkspaceControlPanelButtons />
+        <WorkspaceControlPanelButtons />
       </Drawer>
     );
   }
