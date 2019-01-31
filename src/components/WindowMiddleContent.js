@@ -39,6 +39,7 @@ class WindowMiddleContent extends Component {
           windowId={window.id}
           manifest={manifest}
           sideBarOpen={window.sideBarOpen}
+          sideBarPanel={window.sideBarPanel}
         />
         <CompanionWindow
           windowId={window.id}
