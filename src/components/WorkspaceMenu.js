@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
 import Menu from '@material-ui/core/Menu';
 import Divider from '@material-ui/core/Divider';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -8,8 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
-import { withStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ConnectedWindowList from './WindowList';
 import ConnectedWorkspaceSettings from './WorkspaceSettings';
@@ -17,7 +14,7 @@ import ConnectedWorkspaceExport from './WorkspaceExport';
 
 /**
  */
-export class WorkspaceMenu extends Component {
+class WorkspaceMenu extends Component {
   /**
    * constructor -
    */
@@ -126,24 +123,4 @@ WorkspaceMenu.defaultProps = {
   anchorEl: null,
 };
 
-/**
- * mapDispatchToProps - used to hook up connect to action creators
- * @memberof ManifestListItem
- * @private
- */
-const mapDispatchToProps = {};
-
-/**
- * @private
- */
-const styles = theme => ({
-});
-
-
-const enhance = compose(
-  connect(null, mapDispatchToProps),
-  withStyles(styles),
-  // further HOC go here
-);
-
-export default enhance(WorkspaceMenu);
+export default WorkspaceMenu;

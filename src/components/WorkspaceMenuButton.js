@@ -4,11 +4,11 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ListItem from '@material-ui/core/ListItem';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import ConnectedWorkspaceMenu from './WorkspaceMenu';
+import WorkspaceMenu from './WorkspaceMenu';
 
 /**
  */
-export class WorkspaceMenuButton extends Component {
+class WorkspaceMenuButton extends Component {
   /**
    * constructor -
    */
@@ -62,7 +62,7 @@ export class WorkspaceMenuButton extends Component {
             <MenuIcon />
           </IconButton>
         </ListItem>
-        <ConnectedWorkspaceMenu
+        <WorkspaceMenu
           anchorEl={anchorEl}
           handleClose={this.handleMenuClose}
         />
