@@ -8,6 +8,16 @@ import InfoIcon from '@material-ui/icons/Info';
  */
 class WindowSideBarButtons extends Component {
   /**
+   * sideBarPanelCurrentlySelected - return if the given sideBarPanel is currently selected
+   * @return Boolean
+   */
+  sideBarPanelCurrentlySelected(panelType) {
+    const { sideBarPanel } = this.props;
+
+    return sideBarPanel === panelType;
+  }
+
+  /**
    * render
    *
    * @return {type}  description
@@ -21,7 +31,9 @@ class WindowSideBarButtons extends Component {
           color="inherit"
           onClick={() => (toggleWindowSideBarPanel('info'))}
         >
-          <InfoIcon />
+          <InfoIcon
+            color={this.sideBarPanelCurrentlySelected('info') ? 'action' : 'inherit'}
+          />
         </IconButton>
       </>
     );
@@ -30,10 +42,12 @@ class WindowSideBarButtons extends Component {
 
 WindowSideBarButtons.propTypes = {
   toggleWindowSideBarPanel: PropTypes.func,
+  sideBarPanel: PropTypes.string,
 };
 
 WindowSideBarButtons.defaultProps = {
   toggleWindowSideBarPanel: () => {},
+  sideBarPanel: 'closed',
 };
 
 export default WindowSideBarButtons;

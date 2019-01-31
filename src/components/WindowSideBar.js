@@ -38,7 +38,7 @@ class WindowSideBar extends Component {
           }}
         >
           <List>
-            <WindowSideBarButtons windowId={windowId} />
+            <WindowSideBarButtons windowId={windowId} sideBarPanel={sideBarPanel} />
           </List>
         </Drawer>
         <Drawer
