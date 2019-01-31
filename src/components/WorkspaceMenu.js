@@ -10,7 +10,7 @@ import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import PropTypes from 'prop-types';
 import WindowList from '../containers/WindowList';
 import WorkspaceSettings from './WorkspaceSettings';
-import ConnectedWorkspaceExport from './WorkspaceExport';
+import WorkspaceExport from './WorkspaceExport';
 
 /**
  */
@@ -105,7 +105,7 @@ class WorkspaceMenu extends Component {
           open={Boolean(settings.open)}
           handleClose={this.handleMenuItemClose('settings')}
         />
-        <ConnectedWorkspaceExport
+        <WorkspaceExport
           open={Boolean(exportWorkspace.open)}
           handleClose={this.handleMenuItemClose('exportWorkspace')}
         />
