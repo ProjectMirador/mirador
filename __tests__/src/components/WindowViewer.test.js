@@ -1,35 +1,36 @@
 import React from 'react';
-import { mount } from 'enzyme';
-import createStore from '../../../src/state/createStore';
-import * as actions from '../../../src/state/actions';
+import { shallow } from 'enzyme';
+import manifesto from 'manifesto.js';
 import WindowViewer from '../../../src/components/WindowViewer';
+import ConnectedOSDViewer from '../../../src/components/OpenSeadragonViewer';
+import ConnectedViewerNavigation from '../../../src/components/ViewerNavigation';
 import fixture from '../../fixtures/version-2/024.json';
 
-describe('WindowViewer', () => {
-  let wrapper;
-  const store = createStore();
-  beforeEach(() => {
-    store.dispatch(actions.receiveManifest('foo', fixture));
-    store.dispatch(actions.addWindow({ manifestId: 'foo' }));
-    store.dispatch(actions.setConfig({ thumbnailNavigation: { height: 150 } }));
-    const manifest = store.getState().manifests.foo;
-    const { windows } = store.getState();
-    const window = Object.values(windows)[0];
-    wrapper = mount(
-      <WindowViewer manifest={manifest} window={window} />,
-      // We need to attach this to something created by our JSDOM instance.
-      // Also need to provide context of the store so that connected sub components
-      // can render effectively.
-      { attachTo: document.getElementById('main'), context: { store } },
-    );
-  });
+const mockManifest = {
+  id: 123,
+  manifestation: manifesto.create(fixture),
+};
 
-  it('OpenSeaDragon instantiates', () => {
-    // Hacky as heck thing we have to do, as `#find` (and other methods on ReactWrapper)
-    // do not effectively find elements (even though they are there)
-    expect(wrapper.render().find('.openseadragon-canvas').length).toBe(1);
-  });
-  it('has navigation controls', () => {
-    expect(wrapper.find('.mirador-osd-navigation').length).toBe(1);
+const mockWindow = {
+  canvasIndex: 0,
+};
+
+describe('WindowViewer', () => {
+  it('renders properly', () => {
+    const wrapper = shallow(
+      <WindowViewer
+        infoResponses={{}}
+        fetchInfoResponse={() => {}}
+        manifest={mockManifest}
+        window={mockWindow}
+      />,
+    );
+    expect(wrapper.matchesElement(
+      <>
+        <ConnectedOSDViewer>
+          <ConnectedViewerNavigation />
+        </ConnectedOSDViewer>
+      </>,
+    )).toBe(true);
   });
 });

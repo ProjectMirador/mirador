@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import WindowSideBar from '../containers/WindowSideBar';
 import CompanionWindow from '../containers/CompanionWindow';
-import ConnectedWindowViewer from './WindowViewer';
+import WindowViewer from '../containers/WindowViewer';
 import ns from '../config/css-ns';
 
 /**
@@ -19,7 +19,7 @@ class WindowMiddleContent extends Component {
     const { manifest, window } = this.props;
     if (manifest && manifest.isFetching === false) {
       return (
-        <ConnectedWindowViewer
+        <WindowViewer
           window={window}
           manifest={manifest}
         />

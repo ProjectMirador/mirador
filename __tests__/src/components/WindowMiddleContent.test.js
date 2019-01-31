@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import WindowMiddleContent from '../../../src/components/WindowMiddleContent';
 import CompanionWindow from '../../../src/containers/CompanionWindow';
 import WindowSideBar from '../../../src/containers/WindowSideBar';
-import ConnectedWindowViewer from '../../../src/components/WindowViewer';
+import WindowViewer from '../../../src/containers/WindowViewer';
 
 describe('WindowMiddleContent', () => {
   let wrapper;
@@ -23,6 +23,6 @@ describe('WindowMiddleContent', () => {
   it('should render <WindowViewer> if manifest is present', () => {
     manifest = { id: 456, isFetching: false };
     wrapper = shallow(<WindowMiddleContent window={window} manifest={manifest} />);
-    expect(wrapper.find(ConnectedWindowViewer)).toHaveLength(1);
+    expect(wrapper.find(WindowViewer)).toHaveLength(1);
   });
 });

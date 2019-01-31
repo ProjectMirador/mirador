@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import * as actions from '../state/actions';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
 import ConnectedOSDViewer from './OpenSeadragonViewer';
 import ConnectedViewerNavigation from './ViewerNavigation';
 
@@ -93,24 +89,6 @@ class WindowViewer extends Component {
   }
 }
 
-/**
- * mapStateToProps - to hook up connect
- * @memberof WindowViewer
- * @private
- */
-const mapStateToProps = state => (
-  {
-    infoResponses: state.infoResponses,
-  }
-);
-
-/**
- * mapDispatchToProps - used to hook up connect to action creators
- * @memberof WindowViewer
- * @private
- */
-const mapDispatchToProps = { fetchInfoResponse: actions.fetchInfoResponse };
-
 WindowViewer.propTypes = {
   infoResponses: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   fetchInfoResponse: PropTypes.func.isRequired,
@@ -118,10 +96,4 @@ WindowViewer.propTypes = {
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  miradorWithPlugins,
-  // further HOC go here
-);
-
-export default enhance(WindowViewer);
+export default WindowViewer;
