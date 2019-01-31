@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import WindowMiddleContent from '../../../src/components/WindowMiddleContent';
-import ConnectedCompanionWindow from '../../../src/components/CompanionWindow';
+import CompanionWindow from '../../../src/containers/CompanionWindow';
 import WindowSideBar from '../../../src/containers/WindowSideBar';
 import ConnectedWindowViewer from '../../../src/components/WindowViewer';
 
@@ -14,7 +14,7 @@ describe('WindowMiddleContent', () => {
   });
   it('should render <ConnectedCompanionWindow>', () => {
     wrapper = shallow(<WindowMiddleContent window={window} />);
-    expect(wrapper.find(ConnectedCompanionWindow)).toHaveLength(2);
+    expect(wrapper.find(CompanionWindow)).toHaveLength(2);
   });
   it('should render <ConnectedWindowSideBar>', () => {
     wrapper = shallow(<WindowMiddleContent window={window} />);

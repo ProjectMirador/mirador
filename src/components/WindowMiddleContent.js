@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import WindowSideBar from '../containers/WindowSideBar';
-import ConnectedCompanionWindow from './CompanionWindow';
+import CompanionWindow from '../containers/CompanionWindow';
 import ConnectedWindowViewer from './WindowViewer';
 import ns from '../config/css-ns';
 
@@ -40,12 +40,12 @@ class WindowMiddleContent extends Component {
           manifest={manifest}
           sideBarOpen={window.sideBarOpen}
         />
-        <ConnectedCompanionWindow
+        <CompanionWindow
           windowId={window.id}
           manifest={manifest}
         />
         {this.renderViewer()}
-        <ConnectedCompanionWindow
+        <CompanionWindow
           windowId={window.id}
           manifest={manifest}
         />
