@@ -50,3 +50,13 @@ export function removeWindow(windowId) {
 export function toggleWindowSideBar(windowId) {
   return { type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR, windowId };
 }
+
+/**
+ * toggleWindowSideBar - action creator
+ *
+ * @param  {String} windowId
+ * @memberof ActionCreators
+ */
+export function setWindowThumbnailPosition(windowId, position) {
+  return { type: ActionTypes.SET_WINDOW_THUMBNAIL_POSITION, windowId, position };
+}
