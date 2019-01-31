@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import classNames from 'classnames';
+import WindowTopMenuButton from './WindowTopMenuButton';
 import WindowTopBarButtons from '../containers/WindowTopBarButtons';
 import ns from '../config/css-ns';
 
@@ -48,6 +49,7 @@ class WindowTopBar extends Component {
           {this.titleContent()}
         </Typography>
         <WindowTopBarButtons windowId={windowId} />
+        <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
         <Button color="inherit" className={ns('window-close')} aria-label="Close Window" onClick={removeWindow}>&times;</Button>
       </Toolbar>
     );

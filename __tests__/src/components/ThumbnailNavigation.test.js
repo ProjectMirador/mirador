@@ -27,7 +27,7 @@ describe('ThumbnailNavigation', () => {
         window={{
           id: 'foobar',
           canvasIndex: 1,
-          thumbnailNavigationDisplayed: true,
+          thumbnailNavigationPosition: 'bottom',
         }}
         config={{ thumbnailNavigation: { height: 150 } }}
         setCanvas={setCanvas}

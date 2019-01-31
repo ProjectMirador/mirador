@@ -49,7 +49,7 @@ describe('MiradorViewer', () => {
         },
         {
           loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
-          thumbnailNavigationDisplayed: false,
+          thumbnailNavigationPosition: 'off',
         },
         ],
       });
@@ -57,8 +57,8 @@ describe('MiradorViewer', () => {
       const { windows } = instance.store.getState();
       const windowIds = Object.keys(windows);
       expect(Object.keys(windowIds).length).toBe(2);
-      expect(windows[windowIds[0]].thumbnailNavigationDisplayed).toBe(true);
-      expect(windows[windowIds[1]].thumbnailNavigationDisplayed).toBe(false);
+      expect(windows[windowIds[0]].thumbnailNavigationPosition).toBe('bottom');
+      expect(windows[windowIds[1]].thumbnailNavigationPosition).toBe('off');
     });
   });
 });
