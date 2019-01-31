@@ -43,16 +43,16 @@ class MiradorViewer {
     store.dispatch(action);
 
     mergedConfig.windows.forEach((miradorWindow) => {
-      let thumbnailNavigationDisplayed;
-      if (miradorWindow.thumbnailNavigationDisplayed !== undefined) {
-        ({ thumbnailNavigationDisplayed } = miradorWindow);
+      let thumbnailNavigationPosition;
+      if (miradorWindow.thumbnailNavigationPosition !== undefined) {
+        ({ thumbnailNavigationPosition } = miradorWindow);
       } else {
-        thumbnailNavigationDisplayed = mergedConfig.thumbnailNavigation.displayedByDefault;
+        thumbnailNavigationPosition = mergedConfig.thumbnailNavigation.defaultPosition;
       }
       store.dispatch(actions.fetchManifest(miradorWindow.loadedManifest));
       store.dispatch(actions.addWindow({
         manifestId: miradorWindow.loadedManifest,
-        thumbnailNavigationDisplayed,
+        thumbnailNavigationPosition,
       }));
     });
   }

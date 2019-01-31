@@ -24,7 +24,7 @@ export function addWindow(options) {
     collectionIndex: 0,
     manifestId: null,
     rangeId: null,
-    thumbnailNavigationDisplayed: true, // True by default in settings.js
+    thumbnailNavigationPosition: 'bottom', // bottom by default in settings.js
     xywh: [0, 0, 400, 400],
     rotation: null,
   };

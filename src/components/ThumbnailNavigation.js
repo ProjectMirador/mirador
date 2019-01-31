@@ -102,7 +102,7 @@ class ThumbnailNavigation extends Component {
   render() {
     const { config, window } = this.props;
     const { canvases } = this.state;
-    if (!window.thumbnailNavigationDisplayed) {
+    if (window.thumbnailNavigationPosition === 'off') {
       return <></>;
     }
     return (
