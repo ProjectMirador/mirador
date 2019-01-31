@@ -1,9 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import WindowMiddleContent from '../../../src/components/WindowMiddleContent';
-import ConnectedCompanionWindow from '../../../src/components/CompanionWindow';
-import ConnectedWindowSideBar from '../../../src/components/WindowSideBar';
-import ConnectedWindowViewer from '../../../src/components/WindowViewer';
+import CompanionWindow from '../../../src/containers/CompanionWindow';
+import WindowSideBar from '../../../src/containers/WindowSideBar';
+import WindowViewer from '../../../src/containers/WindowViewer';
 
 describe('WindowMiddleContent', () => {
   let wrapper;
@@ -14,15 +14,15 @@ describe('WindowMiddleContent', () => {
   });
   it('should render <ConnectedCompanionWindow>', () => {
     wrapper = shallow(<WindowMiddleContent window={window} />);
-    expect(wrapper.find(ConnectedCompanionWindow)).toHaveLength(2);
+    expect(wrapper.find(CompanionWindow)).toHaveLength(2);
   });
   it('should render <ConnectedWindowSideBar>', () => {
     wrapper = shallow(<WindowMiddleContent window={window} />);
-    expect(wrapper.find(ConnectedWindowSideBar)).toHaveLength(1);
+    expect(wrapper.find(WindowSideBar)).toHaveLength(1);
   });
   it('should render <WindowViewer> if manifest is present', () => {
     manifest = { id: 456, isFetching: false };
     wrapper = shallow(<WindowMiddleContent window={window} manifest={manifest} />);
-    expect(wrapper.find(ConnectedWindowViewer)).toHaveLength(1);
+    expect(wrapper.find(WindowViewer)).toHaveLength(1);
   });
 });

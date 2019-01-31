@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import ConnectedWindowSideBarButtons from './WindowSideBarButtons';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
+import WindowSideBarButtons from '../containers/WindowSideBarButtons';
 import ns from '../config/css-ns';
 
 /**
  * WindowSideBar
  */
-export class WindowSideBar extends Component {
+class WindowSideBar extends Component {
   /**
    * render
    * @return
@@ -25,7 +22,7 @@ export class WindowSideBar extends Component {
       <div className={ns(['window-sidebar', (sideBarOpen ? 'window-sidebar-open' : 'window-sidebar-closed')])}>
         <div className={classes.toolbar} />
         <List>
-          <ConnectedWindowSideBarButtons windowId={windowId} />
+          <WindowSideBarButtons windowId={windowId} />
         </List>
       </div>
     );
@@ -51,11 +48,4 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 });
 
-const enhance = compose(
-  connect(null, null),
-  miradorWithPlugins,
-  withStyles(styles),
-  // further HOC go here
-);
-
-export default enhance(WindowSideBar);
+export default withStyles(styles)(WindowSideBar);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { OpenSeadragonViewer } from '../../../src/components/OpenSeadragonViewer';
+import OpenSeadragonViewer from '../../../src/components/OpenSeadragonViewer';
 
 describe('OpenSeadragonViewer', () => {
   let wrapper;

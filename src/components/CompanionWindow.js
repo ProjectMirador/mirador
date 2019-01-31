@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
 import ns from '../config/css-ns';
 
 /**
@@ -18,4 +16,4 @@ class CompanionWindow extends Component {
   }
 }
 
-export default connect(null, null)(miradorWithPlugins((CompanionWindow)));
+export default CompanionWindow;

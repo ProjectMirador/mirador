@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
-import * as actions from '../state/actions';
 import ns from '../config/css-ns';
 
 /**
  */
-export class ViewerNavigation extends Component {
+class ViewerNavigation extends Component {
   /**
    */
   constructor(props) {
@@ -80,21 +76,4 @@ ViewerNavigation.propTypes = {
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-
-/**
- * mapDispatchToProps - used to hook up connect to action creators
- * @memberof ManifestForm
- * @private
- */
-const mapDispatchToProps = {
-  nextCanvas: actions.nextCanvas,
-  previousCanvas: actions.previousCanvas,
-};
-
-const enhance = compose(
-  connect(null, mapDispatchToProps),
-  miradorWithPlugins,
-  // further HOC go here
-);
-
-export default enhance(ViewerNavigation);
+export default ViewerNavigation;
