@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
 
 /**
  *
  */
-export class WindowSideBarButtons extends Component {
+class WindowSideBarButtons extends Component {
   /**
    * render
    *
@@ -15,4 +14,4 @@ export class WindowSideBarButtons extends Component {
   }
 }
 
-export default miradorWithPlugins(WindowSideBarButtons);
+export default WindowSideBarButtons;

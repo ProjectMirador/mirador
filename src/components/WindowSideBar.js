@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import ConnectedWindowSideBarButtons from './WindowSideBarButtons';
+import WindowSideBarButtons from '../containers/WindowSideBarButtons';
 import ns from '../config/css-ns';
 
 /**
@@ -22,7 +22,7 @@ class WindowSideBar extends Component {
       <div className={ns(['window-sidebar', (sideBarOpen ? 'window-sidebar-open' : 'window-sidebar-closed')])}>
         <div className={classes.toolbar} />
         <List>
-          <ConnectedWindowSideBarButtons windowId={windowId} />
+          <WindowSideBarButtons windowId={windowId} />
         </List>
       </div>
     );
