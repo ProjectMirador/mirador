@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import OpenSeadragon from 'openseadragon';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
 import ns from '../config/css-ns';
 
 /**
  * Represents a OpenSeadragonViewer in the mirador workspace. Responsible for mounting
  * and rendering OSD.
  */
-export class OpenSeadragonViewer extends Component {
+class OpenSeadragonViewer extends Component {
   /**
    * @param {Object} props
    */
@@ -135,4 +134,4 @@ OpenSeadragonViewer.propTypes = {
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-export default miradorWithPlugins(OpenSeadragonViewer);
+export default OpenSeadragonViewer;

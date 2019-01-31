@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import manifesto from 'manifesto.js';
 import WindowViewer from '../../../src/components/WindowViewer';
-import ConnectedOSDViewer from '../../../src/components/OpenSeadragonViewer';
+import OSDViewer from '../../../src/containers/OpenSeadragonViewer';
 import ConnectedViewerNavigation from '../../../src/components/ViewerNavigation';
 import fixture from '../../fixtures/version-2/024.json';
 
@@ -27,9 +27,9 @@ describe('WindowViewer', () => {
     );
     expect(wrapper.matchesElement(
       <>
-        <ConnectedOSDViewer>
+        <OSDViewer>
           <ConnectedViewerNavigation />
-        </ConnectedOSDViewer>
+        </OSDViewer>
       </>,
     )).toBe(true);
   });

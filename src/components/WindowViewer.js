@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ConnectedOSDViewer from './OpenSeadragonViewer';
+import OSDViewer from '../containers/OpenSeadragonViewer';
 import ConnectedViewerNavigation from './ViewerNavigation';
 
 /**
@@ -78,12 +78,12 @@ class WindowViewer extends Component {
     const { window } = this.props;
     return (
       <>
-        <ConnectedOSDViewer
+        <OSDViewer
           tileSources={this.tileInfoFetchedFromStore()}
           window={window}
         >
           <ConnectedViewerNavigation window={window} canvases={this.canvases} />
-        </ConnectedOSDViewer>
+        </OSDViewer>
       </>
     );
   }
