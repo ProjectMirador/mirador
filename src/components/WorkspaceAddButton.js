@@ -5,7 +5,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { withStyles } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
-import ConnectedManifestForm from './ManifestForm';
+import ManifestForm from '../containers/ManifestForm';
 import ConnectedManifestListItem from './ManifestListItem';
 
 /**
@@ -90,7 +90,7 @@ class WorkspaceAddButton extends Component {
           open={Boolean(anchorEl)}
           onClose={this.handleAddManifestClose}
         >
-          <ConnectedManifestForm
+          <ManifestForm
             id="add-form"
             setLastRequested={this.setLastRequested}
           />
