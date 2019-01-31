@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ConnectedWindowSideBar from './WindowSideBar';
+import WindowSideBar from '../containers/WindowSideBar';
 import ConnectedCompanionWindow from './CompanionWindow';
 import ConnectedWindowViewer from './WindowViewer';
 import ns from '../config/css-ns';
@@ -35,7 +35,7 @@ class WindowMiddleContent extends Component {
     const { manifest, window } = this.props;
     return (
       <div className={ns('window-middle-content')}>
-        <ConnectedWindowSideBar
+        <WindowSideBar
           windowId={window.id}
           manifest={manifest}
           sideBarOpen={window.sideBarOpen}

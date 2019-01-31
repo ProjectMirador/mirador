@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import WindowMiddleContent from '../../../src/components/WindowMiddleContent';
 import ConnectedCompanionWindow from '../../../src/components/CompanionWindow';
-import ConnectedWindowSideBar from '../../../src/components/WindowSideBar';
+import WindowSideBar from '../../../src/containers/WindowSideBar';
 import ConnectedWindowViewer from '../../../src/components/WindowViewer';
 
 describe('WindowMiddleContent', () => {
@@ -18,7 +18,7 @@ describe('WindowMiddleContent', () => {
   });
   it('should render <ConnectedWindowSideBar>', () => {
     wrapper = shallow(<WindowMiddleContent window={window} />);
-    expect(wrapper.find(ConnectedWindowSideBar)).toHaveLength(1);
+    expect(wrapper.find(WindowSideBar)).toHaveLength(1);
   });
   it('should render <WindowViewer> if manifest is present', () => {
     manifest = { id: 456, isFetching: false };
