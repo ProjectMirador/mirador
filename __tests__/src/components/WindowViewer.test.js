@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import manifesto from 'manifesto.js';
 import WindowViewer from '../../../src/components/WindowViewer';
 import OSDViewer from '../../../src/containers/OpenSeadragonViewer';
-import ConnectedViewerNavigation from '../../../src/components/ViewerNavigation';
+import ViewerNavigation from '../../../src/containers/ViewerNavigation';
 import fixture from '../../fixtures/version-2/024.json';
 
 const mockManifest = {
@@ -28,7 +28,7 @@ describe('WindowViewer', () => {
     expect(wrapper.matchesElement(
       <>
         <OSDViewer>
-          <ConnectedViewerNavigation />
+          <ViewerNavigation />
         </OSDViewer>
       </>,
     )).toBe(true);

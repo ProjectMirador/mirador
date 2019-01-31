@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import OSDViewer from '../containers/OpenSeadragonViewer';
-import ConnectedViewerNavigation from './ViewerNavigation';
+import ViewerNavigation from '../containers/ViewerNavigation';
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -82,7 +82,7 @@ class WindowViewer extends Component {
           tileSources={this.tileInfoFetchedFromStore()}
           window={window}
         >
-          <ConnectedViewerNavigation window={window} canvases={this.canvases} />
+          <ViewerNavigation window={window} canvases={this.canvases} />
         </OSDViewer>
       </>
     );
