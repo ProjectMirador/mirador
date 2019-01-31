@@ -13,11 +13,11 @@ describe('Window', () => {
     expect(wrapper.instance().styleAttributes())
       .toEqual({ width: '400px', height: '500px' });
   });
-  it('should render <ConnectedWindowTopBar>', () => {
+  it('should render <WindowTopBar>', () => {
     wrapper = shallow(<Window window={window} />);
     expect(wrapper.find(WindowTopBar)).toHaveLength(1);
   });
-  it('should render <ConnectedWindowMiddleContent>', () => {
+  it('should render <WindowMiddleContent>', () => {
     wrapper = shallow(<Window window={window} />);
     expect(wrapper.find(WindowMiddleContent)).toHaveLength(1);
   });
