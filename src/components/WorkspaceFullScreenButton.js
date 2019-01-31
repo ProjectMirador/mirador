@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
 import IconButton from '@material-ui/core/IconButton';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import ListItem from '@material-ui/core/ListItem';
 import { withStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import * as actions from '../state/actions';
 
 /**
  */
-export class WorkspaceFullScreenButton extends Component {
+class WorkspaceFullScreenButton extends Component {
   /**
    * render
    * @return
@@ -33,13 +30,6 @@ WorkspaceFullScreenButton.propTypes = {
 };
 
 /**
- * mapDispatchToProps - used to hook up connect to action creators
- * @memberof ManifestListItem
- * @private
- */
-const mapDispatchToProps = { fullscreenWorkspace: actions.fullscreenWorkspace };
-
-/**
  * @private
  */
 const styles = theme => ({
@@ -48,11 +38,4 @@ const styles = theme => ({
   },
 });
 
-
-const enhance = compose(
-  connect(null, mapDispatchToProps),
-  withStyles(styles),
-  // further HOC go here
-);
-
-export default enhance(WorkspaceFullScreenButton);
+export default withStyles(styles)(WorkspaceFullScreenButton);

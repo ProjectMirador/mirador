@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
-import ConnectedWorkspaceFullScreenButton from './WorkspaceFullScreenButton';
+import WorkspaceFullScreenButton from '../containers/WorkspaceFullScreenButton';
 import WorkspaceAddButton from '../containers/WorkspaceAddButton';
 import ConnectedWorkspaceMenuButton from './WorkspaceMenuButton';
 /**
@@ -19,7 +19,7 @@ class WorkspaceControlPanelButtons extends Component {
       <List>
         <WorkspaceAddButton />
         <ConnectedWorkspaceMenuButton />
-        <ConnectedWorkspaceFullScreenButton />
+        <WorkspaceFullScreenButton />
         {children}
       </List>
     );
