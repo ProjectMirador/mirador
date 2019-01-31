@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import 'intersection-observer'; // polyfill needed for Safari
 import IntersectionObserver from '@researchgate/react-intersection-observer';
 
 /**
