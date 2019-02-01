@@ -18,4 +18,12 @@ describe('workspace reducer', () => {
       fullscreen: true,
     });
   });
+  it('should handle UPDATE_WORKSPACE_MOSAIC_LAYOUT', () => {
+    expect(reducer([], {
+      type: ActionTypes.UPDATE_WORKSPACE_MOSAIC_LAYOUT,
+      layout: { foo: 'bar' },
+    })).toEqual({
+      layout: { foo: 'bar' },
+    });
+  });
 });

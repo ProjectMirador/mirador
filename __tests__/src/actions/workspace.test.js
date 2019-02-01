@@ -13,4 +13,15 @@ describe('workspace actions', () => {
       expect(actions.fullscreenWorkspace(options)).toEqual(expectedAction);
     });
   });
+  describe('updateWorkspaceMosaicLayout', () => {
+    it('should updates mosaic layout', () => {
+      const options = { foo: 'bar' };
+
+      const expectedAction = {
+        type: ActionTypes.UPDATE_WORKSPACE_MOSAIC_LAYOUT,
+        layout: { foo: 'bar' },
+      };
+      expect(actions.updateWorkspaceMosaicLayout(options)).toEqual(expectedAction);
+    });
+  });
 });
