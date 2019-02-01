@@ -7,8 +7,9 @@ import Window from '../components/Window';
  * @memberof Window
  * @private
  */
-const mapStateToProps = ({ manifests }, props) => ({
+const mapStateToProps = ({ manifests, windows }, props) => ({
   manifest: manifests[props.window.manifestId],
+  window: windows[props.window.id],
 });
 
 const enhance = compose(

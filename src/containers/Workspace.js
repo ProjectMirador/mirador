@@ -1,5 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import * as actions from '../state/actions';
 import Workspace from '../components/Workspace';
 
 /**
@@ -9,6 +10,7 @@ import Workspace from '../components/Workspace';
  */
 const mapStateToProps = state => (
   {
+    config: state.config,
     windows: state.windows,
   }
 );
