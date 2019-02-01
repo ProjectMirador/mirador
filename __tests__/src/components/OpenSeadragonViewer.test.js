@@ -1,15 +1,24 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import OpenSeadragon from 'openseadragon';
 import OpenSeadragonViewer from '../../../src/components/OpenSeadragonViewer';
+
+jest.mock('openseadragon');
 
 describe('OpenSeadragonViewer', () => {
   let wrapper;
+  let updateViewport;
   beforeEach(() => {
+    OpenSeadragon.mockClear();
+
+    updateViewport = jest.fn();
+
     wrapper = shallow(
       <OpenSeadragonViewer
         tileSources={[{ '@id': 'http://foo' }]}
         window={{ id: 'base' }}
         config={{}}
+        updateViewport={updateViewport}
       >
         <div className="foo" />
       </OpenSeadragonViewer>,
@@ -31,9 +40,6 @@ describe('OpenSeadragonViewer', () => {
   });
   describe('addTileSource', () => {
     it('calls addTiledImage asynchronously on the OSD viewer', async () => {
-      wrapper.instance().viewer = {
-        addTiledImage: jest.fn().mockResolvedValue('event'),
-      };
       wrapper.instance().addTileSource({}).then((event) => {
         expect(event).toBe('event');
       });
@@ -57,6 +63,89 @@ describe('OpenSeadragonViewer', () => {
       expect(
         wrapper.instance().viewer.viewport.fitBounds,
       ).toHaveBeenCalled();
+    });
+  });
+
+  describe('componentDidMount', () => {
+    let panTo;
+    let zoomTo;
+    let addHandler;
+    beforeEach(() => {
+      panTo = jest.fn();
+      zoomTo = jest.fn();
+      addHandler = jest.fn();
+
+      wrapper = shallow(
+        <OpenSeadragonViewer
+          tileSources={[{ '@id': 'http://foo' }]}
+          window={{ id: 'base', viewer: { x: 1, y: 0, zoom: 0.5 } }}
+          config={{}}
+          updateViewport={updateViewport}
+        >
+          <div className="foo" />
+        </OpenSeadragonViewer>,
+      );
+
+      wrapper.instance().ref = { current: true };
+
+      OpenSeadragon.mockImplementation(() => ({
+        viewport: { panTo, zoomTo },
+        addHandler,
+        addTiledImage: jest.fn().mockResolvedValue('event'),
+      }));
+    });
+
+    it('calls the OSD viewport panTo and zoomTo with the component state', () => {
+      wrapper.instance().componentDidMount();
+
+      expect(addHandler).toHaveBeenCalledWith('viewport-change', expect.anything());
+
+      expect(panTo).toHaveBeenCalledWith(
+        { x: 1, y: 0, zoom: 0.5 }, false,
+      );
+      expect(zoomTo).toHaveBeenCalledWith(
+        0.5, { x: 1, y: 0, zoom: 0.5 }, false,
+      );
+    });
+  });
+
+  describe('componentDidUpdate', () => {
+    it('calls the OSD viewport panTo and zoomTo with the component state', () => {
+      const panTo = jest.fn();
+      const zoomTo = jest.fn();
+
+      wrapper.instance().viewer = {
+        viewport: { panTo, zoomTo },
+      };
+
+      wrapper.setProps({ window: { id: 'base', viewer: { x: 0.5, y: 0.5, zoom: 0.1 } } });
+      wrapper.setProps({ window: { id: 'base', viewer: { x: 1, y: 0, zoom: 0.5 } } });
+
+      expect(panTo).toHaveBeenCalledWith(
+        { x: 1, y: 0, zoom: 0.5 }, false,
+      );
+      expect(zoomTo).toHaveBeenCalledWith(
+        0.5, { x: 1, y: 0, zoom: 0.5 }, false,
+      );
+    });
+  });
+
+  describe('onViewportChange', () => {
+    it('translates the OSD viewport data into an update to the component state', () => {
+      wrapper.instance().onViewportChange({
+        eventSource: {
+          viewport: {
+            centerSpringX: { target: { value: 1 } },
+            centerSpringY: { target: { value: 0 } },
+            zoomSpring: { target: { value: 0.5 } },
+          },
+        },
+      });
+
+      expect(updateViewport).toHaveBeenCalledWith(
+        'base',
+        { x: 1, y: 0, zoom: 0.5 },
+      );
     });
   });
 });

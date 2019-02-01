@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import * as actions from '../state/actions';
 import Workspace from '../components/Workspace';
 
 /**

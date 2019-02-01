@@ -33,4 +33,19 @@ describe('canvas actions', () => {
       expect(actions.setCanvas(id, 100)).toEqual(expectedAction);
     });
   });
+  describe('updateViewport', () => {
+    it('sets viewer state', () => {
+      const id = 'abc123';
+      const expectedAction = {
+        type: ActionTypes.UPDATE_VIEWPORT,
+        windowId: id,
+        payload: {
+          x: 1,
+          y: 0,
+          zoom: 0.5,
+        },
+      };
+      expect(actions.updateViewport(id, { x: 1, y: 0, zoom: 0.5 })).toEqual(expectedAction);
+    });
+  });
 });

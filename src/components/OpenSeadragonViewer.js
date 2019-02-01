@@ -16,13 +16,14 @@ class OpenSeadragonViewer extends Component {
 
     this.viewer = null;
     this.ref = React.createRef();
+    this.onViewportChange = this.onViewportChange.bind(this);
   }
 
   /**
    * React lifecycle event
    */
   componentDidMount() {
-    const { tileSources } = this.props;
+    const { tileSources, window } = this.props;
     if (!this.ref.current) {
       return;
     }
@@ -33,14 +34,22 @@ class OpenSeadragonViewer extends Component {
       alwaysBlend: false,
       showNavigationControl: false,
     });
+    this.viewer.addHandler('viewport-change', this.onViewportChange);
+
+    if (window.viewer) {
+      this.viewer.viewport.panTo(window.viewer, false);
+      this.viewer.viewport.zoomTo(window.viewer.zoom, window.viewer, false);
+    }
+
     tileSources.forEach(tileSource => this.addTileSource(tileSource));
   }
 
   /**
    * When the tileSources change, make sure to close the OSD viewer.
+   * When the viewport state changes, pan or zoom the OSD viewer as appropriate
    */
   componentDidUpdate(prevProps) {
-    const { tileSources } = this.props;
+    const { tileSources, window } = this.props;
     if (!this.tileSourcesMatch(prevProps.tileSources)) {
       this.viewer.close();
       Promise.all(
@@ -52,6 +61,15 @@ class OpenSeadragonViewer extends Component {
           this.fitBounds(0, 0, tileSources[0].width, tileSources[0].height);
         }
       });
+    } else if (window.viewer && prevProps.window.viewer) {
+      if (window.viewer.x !== prevProps.window.viewer.x
+        || window.viewer.y !== prevProps.window.viewer.y) {
+        this.viewer.viewport.panTo(window.viewer, false);
+      }
+
+      if (window.viewer.zoom !== prevProps.window.viewer.zoom) {
+        this.viewer.viewport.zoomTo(window.viewer.zoom, window.viewer, false);
+      }
     }
   }
 
@@ -59,6 +77,21 @@ class OpenSeadragonViewer extends Component {
    */
   componentWillUnmount() {
     this.viewer.removeAllHandlers();
+  }
+
+  /**
+   * Forward OSD state to redux
+   */
+  onViewportChange(event) {
+    const { updateViewport, window } = this.props;
+
+    const { viewport } = event.eventSource;
+
+    updateViewport(window.id, {
+      x: viewport.centerSpringX.target.value,
+      y: viewport.centerSpringY.target.value,
+      zoom: viewport.zoomSpring.target.value,
+    });
   }
 
   /**
@@ -132,6 +165,7 @@ OpenSeadragonViewer.propTypes = {
   children: PropTypes.element,
   tileSources: PropTypes.arrayOf(PropTypes.object),
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  updateViewport: PropTypes.func.isRequired,
 };
 
 export default OpenSeadragonViewer;
