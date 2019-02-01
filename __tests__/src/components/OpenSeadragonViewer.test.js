@@ -115,7 +115,13 @@ describe('OpenSeadragonViewer', () => {
       const zoomTo = jest.fn();
 
       wrapper.instance().viewer = {
-        viewport: { panTo, zoomTo },
+        viewport: {
+          centerSpringX: { target: { value: 10 } },
+          centerSpringY: { target: { value: 10 } },
+          zoomSpring: { target: { value: 1 } },
+          panTo,
+          zoomTo,
+        },
       };
 
       wrapper.setProps({ window: { id: 'base', viewer: { x: 0.5, y: 0.5, zoom: 0.1 } } });

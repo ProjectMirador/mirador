@@ -61,13 +61,15 @@ class OpenSeadragonViewer extends Component {
           this.fitBounds(0, 0, tileSources[0].width, tileSources[0].height);
         }
       });
-    } else if (window.viewer && prevProps.window.viewer) {
-      if (window.viewer.x !== prevProps.window.viewer.x
-        || window.viewer.y !== prevProps.window.viewer.y) {
+    } else if (window.viewer) {
+      const { viewport } = this.viewer;
+
+      if (window.viewer.x !== viewport.centerSpringX.target.value
+        || window.viewer.y !== viewport.centerSpringY.target.value) {
         this.viewer.viewport.panTo(window.viewer, false);
       }
 
-      if (window.viewer.zoom !== prevProps.window.viewer.zoom) {
+      if (window.viewer.zoom !== viewport.zoomSpring.target.value) {
         this.viewer.viewport.zoomTo(window.viewer.zoom, window.viewer, false);
       }
     }
