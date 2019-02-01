@@ -10,21 +10,13 @@ import Workspace from '../components/Workspace';
  */
 const mapStateToProps = state => (
   {
+    config: state.config,
     windows: state.windows,
-    workspace: state.workspace,
   }
 );
 
-
-/**
- * mapDispatchToProps - used to hook up connect to action creators
- * @memberof Workspace
- * @private
- */
-const mapDispatchToProps = { updateWorkspaceMosaicLayout: actions.updateWorkspaceMosaicLayout };
-
 const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps),
   // further HOC go here
 );
 

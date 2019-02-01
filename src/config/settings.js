@@ -4,4 +4,7 @@ export default {
     defaultPosition: 'bottom',
     height: 150,
   },
+  workspace: {
+    type: 'mosaic',
+  }
 };

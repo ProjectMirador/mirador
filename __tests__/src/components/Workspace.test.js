@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Mosaic } from 'react-mosaic-component';
 import Workspace from '../../../src/components/Workspace';
+import Window from '../../../src/containers/Window';
 
 describe('Workspace', () => {
   const windows = { 1: { id: 1 }, 2: { id: 2 } };
@@ -10,62 +10,31 @@ describe('Workspace', () => {
     wrapper = shallow(
       <Workspace
         windows={windows}
-        workspace={{}}
-        updateWorkspaceMosaicLayout={() => {}}
+        config={{ workspace: { type: 'mosaic' } }}
       />,
     );
   });
-  it('should render properly with an initialValue', () => {
-    expect(wrapper.matchesElement(
-      <div className="mirador-workspace">
-        <Mosaic initialValue={{ direction: 'row', first: '1', second: '2' }} />
-      </div>,
-    )).toBe(true);
+  it('should render properly', () => {
+    expect(wrapper.find('.mirador-workspace').length).toBe(1);
+    expect(wrapper.find('Connect(WorkspaceMosaic)').length).toBe(1);
   });
-  describe('determineWorkspaceLayout', () => {
-    it('when window ids do not match workspace layout', () => {
+  describe('workspaceByType', () => {
+    it('when mosaic', () => {
+      expect(wrapper.find('Connect(WorkspaceMosaic)').length).toBe(1);
+    });
+    it('anything else', () => {
       wrapper = shallow(
         <Workspace
           windows={windows}
-          workspace={{ layout: 'foo' }}
-          updateWorkspaceMosaicLayout={() => {}}
+          config={{ workspace: { type: 'foo' } }}
         />,
       );
-      expect(wrapper.instance().determineWorkspaceLayout()).toMatchObject({
-        direction: 'row', first: '1', second: '2',
-      });
-    });
-    it('when window ids match workspace layout', () => {
-      wrapper = shallow(
-        <Workspace
-          windows={{ foo: { id: 'foo' } }}
-          workspace={{ layout: 'foo' }}
-          updateWorkspaceMosaicLayout={() => {}}
-        />,
-      );
-      expect(wrapper.instance().determineWorkspaceLayout()).toBeNull();
-    });
-  });
-  describe('tileRenderer', () => {
-    it('when window is available', () => {
-      expect(wrapper.instance().tileRenderer('1')).not.toBeNull();
-    });
-    it('when window is not available', () => {
-      expect(wrapper.instance().tileRenderer('bar')).toBeNull();
-    });
-  });
-  describe('mosaicChange', () => {
-    it('calls the provided prop to update layout', () => {
-      const mock = jest.fn();
-      wrapper = shallow(
-        <Workspace
-          windows={{ foo: { id: 'foo' } }}
-          workspace={{ layout: 'foo' }}
-          updateWorkspaceMosaicLayout={mock}
-        />,
-      );
-      wrapper.instance().mosaicChange();
-      expect(mock).toBeCalled();
+      expect(wrapper.matchesElement(
+        <div className="mirador-workspace">
+          <Window window={{ id: 1 }} />
+          <Window window={{ id: 2 }} />
+        </div>,
+      )).toBe(true);
     });
   });
 });
