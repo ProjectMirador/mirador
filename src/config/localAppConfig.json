@@ -1,0 +1,16 @@
+{
+  "id": "mirador",
+  "windows": [
+    {
+      "loadedManifest": "https://iiif.harvardartmuseums.org/manifests/object/229213"
+    },
+    {
+      "loadedManifest": "https://media.nga.gov/public/manifests/nga_highlights.json",
+      "thumbnailNavigationDisplayed": false
+    }
+  ],
+  "thumbnailNavigation": {
+    "displayedByDefault": true,
+    "height": 150
+  }
+}

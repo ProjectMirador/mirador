@@ -95,6 +95,7 @@ module.exports = {
   appNodeModules: resolveApp('node_modules'),
   publicUrl: getPublicUrl(resolveApp('package.json')),
   servedPath: getServedPath(resolveApp('package.json')),
+  yarnLockFile: resolveApp('yarn.lock'),
 };
 
 module.exports.moduleFileExtensions = moduleFileExtensions;

@@ -22,7 +22,7 @@
   "size-limit": [
     {
       "limit": "300 KB",
-      "path": "dist/mirador3.js"
+      "path": "dist/mirador.js"
     }
   ],
   "dependencies": {
@@ -56,12 +56,13 @@
     "babel-eslint": "9.0.0",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
-    "babel-preset-react-app": "^7.0.0",
     "babel-plugin-named-asset-import": "^0.2.3",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "codecov": "^3.1.0",
     "concurrently": "^4.0.1",
     "css-loader": "^1.0.0",
+    "dotenv": "^6.2.0",
+    "dotenv-expand": "^4.2.0",
     "enzyme": "^3.4.4",
     "enzyme-adapter-react-16": "^1.2.0",
     "eslint": "^5.10.0",

@@ -5,14 +5,18 @@
 ## Running Mirador locally
 
 1. Run `npm install` to install the dependencies.
+2. To implement a custom developer configuration, create a `.env` file and add:
+```yaml
+REACT_APP_LOCAL_MIRADOR_CONFIG=./config/localAppConfig.json
+```
+The path is relative to `/src`
 
 ## Starting the project
 
 ```sh
 $ npm start
 ```
-
-Then navigate to [http://127.0.0.1:4444/\_\_tests\_\_/integration/mirador/](http://127.0.0.1:4444/\_\_tests\_\_/integration/mirador/)
+A browser window will open to the Mirador workspace.
 
 ### Instantiating Mirador
 

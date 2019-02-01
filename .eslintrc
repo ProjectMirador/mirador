@@ -11,6 +11,7 @@
   "plugins": ["jest"],
   "rules": {
     "no-console": "off",
+    "import/no-dynamic-require": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "require-jsdoc": ["error", {
       "require": {
