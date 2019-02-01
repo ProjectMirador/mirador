@@ -12,17 +12,6 @@ import ThumbnailNavigation from '../containers/ThumbnailNavigation';
  */
 class Window extends Component {
   /**
-   * Return style attributes
-   */
-  styleAttributes() {
-    const { window } = this.props;
-    return {
-      width: '100%',
-      height: '100%',
-    };
-  }
-
-  /**
    * Renders things
    */
   render() {
@@ -37,6 +26,7 @@ class Window extends Component {
       <Rnd
         size={{ width: window.width, height: window.height }}
         position={{ x: window.x, y: window.y }}
+        bounds="parent"
         onDragStop={(e, d) => {
           updateWindowPosition({ x: d.x, y: d.y });
         }}
@@ -49,7 +39,7 @@ class Window extends Component {
         }}
         dragHandleClassName={ns('window-top-bar')}
       >
-        <div className={ns('window')} style={this.styleAttributes()}>
+        <div className={ns('window')}>
           <WindowTopBar
             windowId={window.id}
             manifest={manifest}

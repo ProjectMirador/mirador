@@ -27,8 +27,8 @@ export function addWindow(options) {
     thumbnailNavigationPosition: 'bottom', // bottom by default in settings.js
     width: 400,
     height: 400,
-    x: 0,
-    y: 0,
+    x: 2700,
+    y: 2700,
     rotation: null,
   };
   return { type: ActionTypes.ADD_WINDOW, window: { ...defaultOptions, ...options } };

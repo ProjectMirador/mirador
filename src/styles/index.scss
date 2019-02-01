@@ -7,15 +7,18 @@ body {
 
 .mirador {
   &-workspace {
-    bottom: 0;
     box-sizing: border-box;
-    left: 0;
     margin: 0;
-    overflow: scroll;
-    padding-left: 100px;
+    padding: 0;
+    overflow: hidden;
     position: absolute;
-    right: 0;
-    top: 0;
+    // for pan testing
+    background-color:white;
+    background-image:
+    radial-gradient(midnightblue 9px, transparent 10px),
+    repeating-radial-gradient(midnightblue 0, midnightblue 4px, transparent 5px, transparent 20px, midnightblue 21px, midnightblue 25px, transparent 26px, transparent 50px);
+    background-size: 30px 30px, 90px 90px;
+    background-position: 0 0;
   }
 
   &-window-middle-content {
@@ -25,6 +28,8 @@ body {
   }
 
   &-window {
+    width:100%;
+    height:100%;
     display: flex;
     flex-direction: column;
   }

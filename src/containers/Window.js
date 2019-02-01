@@ -11,8 +11,6 @@ import Window from '../components/Window';
  */
 const mapDispatchToProps = (dispatch, props) => ({
   updateWindowPosition: (position) => {
-    console.log(props);
-    console.log(position);
     dispatch(
       actions.updateWindowPosition(props.window.id, position),
     );
