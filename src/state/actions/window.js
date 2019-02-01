@@ -52,9 +52,21 @@ export function toggleWindowSideBar(windowId) {
 }
 
 /**
- * toggleWindowSideBar - action creator
+ * toggleWindowSideBarPanel - action creator
  *
  * @param  {String} windowId
+ * @param  {String} panelType
+ * @memberof ActionCreators
+ */
+export function toggleWindowSideBarPanel(windowId, panelType) {
+  return { type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL, windowId, panelType };
+}
+
+/**
+ * setWindowThumbnailPosition - action creator
+ *
+ * @param  {String} windowId
+ * @param  {String} position
  * @memberof ActionCreators
  */
 export function setWindowThumbnailPosition(windowId, position) {

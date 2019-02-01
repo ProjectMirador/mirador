@@ -11,4 +11,16 @@ describe('WindowSideBarButtons', () => {
   it('renders without an error', () => {
     expect(wrapper.find('Fragment').length).toBe(1);
   });
+
+  it('triggers the toggleWindowSideBarPanel prop on click', () => {
+    const toggleWindowSideBarPanel = jest.fn();
+    wrapper = shallow(
+      <WindowSideBarButtons toggleWindowSideBarPanel={toggleWindowSideBarPanel} />,
+    );
+
+    const iconButton = wrapper.find('WithStyles(IconButton)[aria-label="Open information companion window"]');
+    expect(iconButton.simulate('click'));
+    expect(toggleWindowSideBarPanel).toHaveBeenCalledTimes(1);
+    expect(toggleWindowSideBarPanel).toHaveBeenCalledWith('info');
+  });
 });

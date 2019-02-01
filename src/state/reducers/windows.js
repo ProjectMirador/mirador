@@ -22,12 +22,25 @@ const windowsReducer = (state = {}, action) => {
           sideBarOpen: !state[action.windowId].sideBarOpen,
         },
       };
+
     case ActionTypes.SET_WINDOW_THUMBNAIL_POSITION:
       return {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
           thumbnailNavigationPosition: action.position,
+        },
+      };
+    case ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          sideBarPanel: (
+            state[action.windowId].sideBarPanel === action.panelType
+              ? 'closed'
+              : action.panelType
+          ),
         },
       };
     case ActionTypes.NEXT_CANVAS:

@@ -58,4 +58,17 @@ describe('window actions', () => {
       expect(actions.setWindowThumbnailPosition(id, 'right')).toEqual(expectedAction);
     });
   });
+
+  describe('toggleWindowSideBarPanel', () => {
+    it('returns the appropriate action type', () => {
+      const windowId = 'abc123';
+      const panelType = 'panelType';
+      const expectedAction = {
+        type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL,
+        windowId,
+        panelType,
+      };
+      expect(actions.toggleWindowSideBarPanel(windowId, 'panelType')).toEqual(expectedAction);
+    });
+  });
 });

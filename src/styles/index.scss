@@ -36,6 +36,10 @@ body {
     position: relative;
   }
 
+  &-window-sidebar-panel-drawer {
+    margin-left: $window-sidebar-width;
+  }
+
   &-window-companion-side {
     background: lighten($gray, 40%);
     min-width: 75px;
