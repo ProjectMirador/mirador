@@ -4,13 +4,25 @@ import App from '../../../src/components/App';
 
 describe('App', () => {
   it('renders without an error', () => {
-    const wrapper = shallow(<App manifests={[]} workspace={{}} />);
+    const wrapper = shallow(
+      <App
+        manifests={[]}
+        workspace={{}}
+        config={{ theme: 'light' }}
+      />,
+    );
     expect(wrapper.find('div.mirador-app').length).toBe(1);
   });
 
   describe('FullScreen', () => {
-    it('is enabled by the workspace.isFullscreenEnabled state', () => {
-      const wrapper = shallow(<App manifests={[]} workspace={{ isFullscreenEnabled: true }} />);
+    it('is enabled by the workspace.fullscreen state', () => {
+      const wrapper = shallow(
+        <App
+          manifests={[]}
+          workspace={{ isFullscreenEnabled: true }}
+          config={{ theme: 'light' }}
+        />,
+      );
       expect(wrapper.find('FullScreen').first().prop('enabled')).toEqual(true);
     });
   });
