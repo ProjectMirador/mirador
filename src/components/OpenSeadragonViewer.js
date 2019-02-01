@@ -32,6 +32,7 @@ class OpenSeadragonViewer extends Component {
       blendTime: 0.1,
       alwaysBlend: false,
       showNavigationControl: false,
+      preserveImageSizeOnResize: true,
     });
     tileSources.forEach(tileSource => this.addTileSource(tileSource));
   }
