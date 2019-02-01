@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import classNames from 'classnames';
+import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
 import Fullscreen from 'react-fullscreen-crossbrowser';
 import WorkspaceControlPanel from './WorkspaceControlPanel';
 import Workspace from '../containers/Workspace';
@@ -17,7 +17,9 @@ class App extends Component {
    * @return {String} - HTML markup for the component
    */
   render() {
-    const { workspace, setWorkspaceFullscreen, config } = this.props;
+    const {
+      workspace, setWorkspaceFullscreen, config, classes,
+    } = this.props;
     const theme = createMuiTheme({
       palette: {
         type: config.theme,
@@ -28,9 +30,8 @@ class App extends Component {
     });
 
     return (
-      <div className={ns('app')}>
+      <div className={classNames(classes.background, ns('app'))}>
         <MuiThemeProvider theme={theme}>
-          <CssBaseline />
           <Fullscreen
             enabled={workspace.isFullscreenEnabled}
             onChange={isFullscreenEnabled => setWorkspaceFullscreen(isFullscreenEnabled)}
@@ -47,6 +48,7 @@ class App extends Component {
 App.propTypes = {
   config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   workspace: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
   setWorkspaceFullscreen: PropTypes.func,
 };
 
@@ -55,4 +57,14 @@ App.defaultProps = {
   setWorkspaceFullscreen: () => {},
 };
 
-export default App;
+/**
+ Material UI style overrides
+ @private
+ */
+const styles = theme => ({
+  background: {
+    background: theme.palette.background.default,
+  },
+});
+
+export default withStyles(styles)(App);

@@ -11,7 +11,7 @@ describe('App', () => {
         config={{ theme: 'light' }}
       />,
     );
-    expect(wrapper.find('div.mirador-app').length).toBe(1);
+    expect(wrapper.dive().find('div.mirador-app').length).toBe(1);
   });
 
   describe('FullScreen', () => {
@@ -23,7 +23,7 @@ describe('App', () => {
           config={{ theme: 'light' }}
         />,
       );
-      expect(wrapper.find('FullScreen').first().prop('enabled')).toEqual(true);
+      expect(wrapper.dive().find('FullScreen').first().prop('enabled')).toEqual(true);
     });
   });
 });
