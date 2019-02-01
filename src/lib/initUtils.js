@@ -9,15 +9,15 @@ import createRootReducer from '../state/reducers';
 export const loadWindows = (config, store) => {
   // TODO simplify / fix unassignables / refactor dispatch
   config.windows.forEach((miradorWindow) => {
-    let thumbnailNavigationDisplayed;
-    if (miradorWindow.thumbnailNavigationDisplayed !== undefined) {
-      ({ thumbnailNavigationDisplayed } = miradorWindow);
+    let thumbnailNavigationPosition;
+    if (miradorWindow.thumbnailNavigationPosition !== undefined) {
+      ({ thumbnailNavigationPosition } = miradorWindow);
     } else {
-      thumbnailNavigationDisplayed = config.thumbnailNavigation.displayedByDefault;
+      thumbnailNavigationPosition = config.thumbnailNavigation.defaultPosition;
     }
     store.dispatch(actions.fetchManifest(miradorWindow.loadedManifest));
     store.dispatch(actions.addWindow({
-      manifestId: miradorWindow.loadedManifest, thumbnailNavigationDisplayed,
+      manifestId: miradorWindow.loadedManifest, thumbnailNavigationPosition,
     }));
   });
 };

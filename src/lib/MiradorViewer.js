@@ -26,7 +26,7 @@ class MiradorViewer {
 
     ReactDOM.render(
       <Provider store={store}>
-        <App config={config} />
+        <App />
       </Provider>,
       document.getElementById(config.id),
     );

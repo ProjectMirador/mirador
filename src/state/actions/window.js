@@ -24,7 +24,7 @@ export function addWindow(options) {
     collectionIndex: 0,
     manifestId: null,
     rangeId: null,
-    thumbnailNavigationDisplayed: true, // True by default in settings.js
+    thumbnailNavigationPosition: 'bottom', // bottom by default in settings.js
     xywh: [0, 0, 400, 400],
     rotation: null,
   };
@@ -49,4 +49,14 @@ export function removeWindow(windowId) {
  */
 export function toggleWindowSideBar(windowId) {
   return { type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR, windowId };
+}
+
+/**
+ * toggleWindowSideBar - action creator
+ *
+ * @param  {String} windowId
+ * @memberof ActionCreators
+ */
+export function setWindowThumbnailPosition(windowId, position) {
+  return { type: ActionTypes.SET_WINDOW_THUMBNAIL_POSITION, windowId, position };
 }

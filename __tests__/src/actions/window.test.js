@@ -17,7 +17,7 @@ describe('window actions', () => {
           collectionIndex: 0,
           manifestId: null,
           rangeId: null,
-          thumbnailNavigationDisplayed: true,
+          thumbnailNavigationPosition: 'bottom',
           xywh: [0, 0, 400, 400],
           rotation: null,
         },
@@ -44,6 +44,18 @@ describe('window actions', () => {
         windowId: id,
       };
       expect(actions.toggleWindowSideBar(id)).toEqual(expectedAction);
+    });
+  });
+
+  describe('setWindowThumbnailPosition', () => {
+    it('returns the appropriate action type', () => {
+      const id = 'abc123';
+      const expectedAction = {
+        type: ActionTypes.SET_WINDOW_THUMBNAIL_POSITION,
+        windowId: id,
+        position: 'right',
+      };
+      expect(actions.setWindowThumbnailPosition(id, 'right')).toEqual(expectedAction);
     });
   });
 });

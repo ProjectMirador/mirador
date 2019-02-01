@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { WorkspaceFullScreenButton } from '../../../src/components/WorkspaceFullScreenButton';
+import WorkspaceFullScreenButton from '../../../src/components/WorkspaceFullScreenButton';
 
 describe('WorkspaceFullScreenButton', () => {
   let wrapper;
@@ -9,7 +9,7 @@ describe('WorkspaceFullScreenButton', () => {
     fullscreenWorkspace = jest.fn();
     wrapper = shallow(
       <WorkspaceFullScreenButton classes={{}} fullscreenWorkspace={fullscreenWorkspace} />,
-    );
+    ).dive();
   });
 
   it('renders without an error', () => {

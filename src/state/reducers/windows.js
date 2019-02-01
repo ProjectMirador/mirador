@@ -22,6 +22,14 @@ const windowsReducer = (state = {}, action) => {
           sideBarOpen: !state[action.windowId].sideBarOpen,
         },
       };
+    case ActionTypes.SET_WINDOW_THUMBNAIL_POSITION:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          thumbnailNavigationPosition: action.position,
+        },
+      };
     case ActionTypes.NEXT_CANVAS:
       return setCanvasIndex(state, action.windowId, currentIndex => currentIndex + 1);
     case ActionTypes.PREVIOUS_CANVAS:

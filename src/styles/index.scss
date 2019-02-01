@@ -35,22 +35,6 @@ body {
     position: relative;
   }
 
-  &-window-sidebar {
-    background: lighten($gray, 60%);
-    height: 100%;
-    position: absolute;
-    transition: width 200ms linear;
-    z-index: 42;
-  }
-
-  &-window-sidebar-closed {
-    width: 0;
-  }
-
-  &-window-sidebar-open {
-    width: 50px;
-  }
-
   &-window-companion-side {
     background: lighten($gray, 40%);
     min-width: 75px;

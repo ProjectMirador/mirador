@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
-import ConnectedWorkspaceFullScreenButton from './WorkspaceFullScreenButton';
-import ConnectedWorkspaceAddButton from './WorkspaceAddButton';
-import ConnectedWorkspaceMenuButton from './WorkspaceMenuButton';
+import WorkspaceFullScreenButton from '../containers/WorkspaceFullScreenButton';
+import WorkspaceAddButton from '../containers/WorkspaceAddButton';
+import WorkspaceMenuButton from './WorkspaceMenuButton';
 /**
  *
  */
-export class WorkspaceControlPanelButtons extends Component {
+class WorkspaceControlPanelButtons extends Component {
   /**
    * render
    *
@@ -18,9 +17,9 @@ export class WorkspaceControlPanelButtons extends Component {
     const { children } = this.props;
     return (
       <List>
-        <ConnectedWorkspaceAddButton />
-        <ConnectedWorkspaceMenuButton />
-        <ConnectedWorkspaceFullScreenButton />
+        <WorkspaceAddButton />
+        <WorkspaceMenuButton />
+        <WorkspaceFullScreenButton />
         {children}
       </List>
     );
@@ -35,4 +34,4 @@ WorkspaceControlPanelButtons.defaultProps = {
   children: null,
 };
 
-export default miradorWithPlugins(WorkspaceControlPanelButtons);
+export default WorkspaceControlPanelButtons;
