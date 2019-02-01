@@ -7,9 +7,8 @@ import * as actions from './state/actions';
 import './styles/index.scss';
 import { loadWindows } from './lib/initUtils';
 
-const appLocalConfig = process.env.REACT_APP_LOCAL_MIRADOR_CONFIG;
-
 const store = createStore();
+const appLocalConfig = process.env.REACT_APP_LOCAL_MIRADOR_CONFIG;
 
 let devConfigFile;
 if (appLocalConfig) {
