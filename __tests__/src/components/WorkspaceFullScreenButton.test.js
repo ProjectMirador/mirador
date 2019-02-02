@@ -8,7 +8,10 @@ describe('WorkspaceFullScreenButton', () => {
   beforeEach(() => {
     setWorkspaceFullscreen = jest.fn();
     wrapper = shallow(
-      <WorkspaceFullScreenButton classes={{}} setWorkspaceFullscreen={setWorkspaceFullscreen} />,
+      <WorkspaceFullScreenButton
+        classes={{}}
+        setWorkspaceFullscreen={setWorkspaceFullscreen}
+      />,
     ).dive();
   });
 

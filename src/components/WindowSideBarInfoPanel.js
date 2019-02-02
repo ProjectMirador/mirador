@@ -39,10 +39,10 @@ class WindowSideBarInfoPanel extends Component {
    * @return
    */
   render() {
-    const { classes } = this.props;
+    const { classes, t } = this.props;
     return (
       <div className={ns('window-sidebar-info-panel')}>
-        <Typography variant="h2" className={classes.windowSideBarH2}>About this item</Typography>
+        <Typography variant="h2" className={classes.windowSideBarH2}>{t('aboutThisItem')}</Typography>
         <Typography variant="h3" className={classes.windowSideBarH3}>{this.manifestLabel()}</Typography>
         <Typography variant="body2">{this.manifestDescription()}</Typography>
       </div>
@@ -53,12 +53,14 @@ class WindowSideBarInfoPanel extends Component {
 WindowSideBarInfoPanel.propTypes = {
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  t: PropTypes.func,
 };
 
 
 WindowSideBarInfoPanel.defaultProps = {
   classes: {},
   manifest: {},
+  t: key => key,
 };
 
 /**

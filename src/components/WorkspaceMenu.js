@@ -58,7 +58,7 @@ class WorkspaceMenu extends Component {
    * @return
    */
   render() {
-    const { handleClose, anchorEl } = this.props;
+    const { handleClose, anchorEl, t } = this.props;
     const { windowList, settings, exportWorkspace } = this.state;
 
     return (
@@ -72,7 +72,7 @@ class WorkspaceMenu extends Component {
             <ListItemIcon>
               <ViewHeadlineIcon />
             </ListItemIcon>
-            <Typography varient="inherit">List all open windows</Typography>
+            <Typography varient="inherit">{t('listAllOpenWindows')}</Typography>
           </MenuItem>
           <Divider />
           <MenuItem
@@ -83,7 +83,7 @@ class WorkspaceMenu extends Component {
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
-            <Typography varient="inherit">Settings</Typography>
+            <Typography varient="inherit">{t('settings')}</Typography>
           </MenuItem>
           <MenuItem
             aria-haspopup="true"
@@ -93,7 +93,7 @@ class WorkspaceMenu extends Component {
             <ListItemIcon>
               <SaveAltIcon />
             </ListItemIcon>
-            <Typography varient="inherit">Download/export workspace</Typography>
+            <Typography varient="inherit">{t('downloadExportWorkspace')}</Typography>
           </MenuItem>
         </Menu>
         <WindowList
@@ -117,10 +117,12 @@ class WorkspaceMenu extends Component {
 WorkspaceMenu.propTypes = {
   handleClose: PropTypes.func.isRequired,
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  t: PropTypes.func,
 };
 
 WorkspaceMenu.defaultProps = {
   anchorEl: null,
+  t: key => key,
 };
 
 export default WorkspaceMenu;

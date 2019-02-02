@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import createStore from '../../../src/state/createStore';
 import * as actions from '../../../src/state/actions';
 import WindowSideBarPanel from '../../../src/components/WindowSideBarPanel';
+import WindowSideBarInfoPanel from '../../../src/containers/WindowSideBarInfoPanel';
 import fixture from '../../fixtures/version-2/001.json';
 
 describe('WindowSideBarPanel', () => {
@@ -21,7 +22,7 @@ describe('WindowSideBarPanel', () => {
     });
 
     it('renders the WindowSideBarInfoPanel', () => {
-      expect(wrapper.find('WithStyles(WindowSideBarInfoPanel)').length).toBe(1);
+      expect(wrapper.find(WindowSideBarInfoPanel).length).toBe(1);
     });
   });
 
@@ -31,7 +32,7 @@ describe('WindowSideBarPanel', () => {
     });
 
     it('does not render any panel component', () => {
-      expect(wrapper.find('WithStyes(WindowSideBarInfoPanel)').length).toBe(0);
+      expect(wrapper.find(WindowSideBarInfoPanel).length).toBe(0);
     });
   });
 });

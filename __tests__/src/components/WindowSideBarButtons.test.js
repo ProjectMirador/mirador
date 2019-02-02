@@ -18,7 +18,7 @@ describe('WindowSideBarButtons', () => {
       <WindowSideBarButtons toggleWindowSideBarPanel={toggleWindowSideBarPanel} />,
     );
 
-    const iconButton = wrapper.find('WithStyles(IconButton)[aria-label="Open information companion window"]');
+    const iconButton = wrapper.find('WithStyles(IconButton)[aria-label="openInfoCompanionWindow"]');
     expect(iconButton.simulate('click'));
     expect(toggleWindowSideBarPanel).toHaveBeenCalledTimes(1);
     expect(toggleWindowSideBarPanel).toHaveBeenCalledWith('info');

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import WindowSideBarInfoPanel from './WindowSideBarInfoPanel';
+import WindowSideBarInfoPanel from '../containers/WindowSideBarInfoPanel';
 
 /**
  * WindowSideBarPanel - the panel that pops out from the sidebar
