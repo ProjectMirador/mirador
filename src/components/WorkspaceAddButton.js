@@ -104,7 +104,7 @@ class WorkspaceAddButton extends Component {
 
 WorkspaceAddButton.propTypes = {
   manifests: PropTypes.instanceOf(Object).isRequired,
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.object.isRequired,
 };
 
 /**

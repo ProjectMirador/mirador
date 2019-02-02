@@ -49,8 +49,8 @@ class Workspace extends React.Component {
 }
 
 Workspace.propTypes = {
-  windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  windows: PropTypes.object.isRequired,
+  config: PropTypes.object.isRequired,
 };
 
 export default Workspace;

@@ -57,10 +57,10 @@ class WindowTopBar extends Component {
 }
 
 WindowTopBar.propTypes = {
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.object,
   removeWindow: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.object.isRequired,
   toggleWindowSideBar: PropTypes.func,
 };
 

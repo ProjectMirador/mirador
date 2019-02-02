@@ -33,7 +33,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-  workspace: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  workspace: PropTypes.object,
   fullscreenWorkspace: PropTypes.func,
 };
 

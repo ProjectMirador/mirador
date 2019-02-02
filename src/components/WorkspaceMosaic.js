@@ -84,8 +84,8 @@ class WorkspaceMosaic extends React.Component {
 
 WorkspaceMosaic.propTypes = {
   updateWorkspaceMosaicLayout: PropTypes.func.isRequired,
-  windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  workspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  windows: PropTypes.object.isRequired,
+  workspace: PropTypes.object.isRequired,
 };
 
 export default WorkspaceMosaic;

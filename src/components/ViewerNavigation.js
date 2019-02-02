@@ -70,10 +70,10 @@ class ViewerNavigation extends Component {
 }
 
 ViewerNavigation.propTypes = {
-  canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  canvases: PropTypes.array.isRequired,
   nextCanvas: PropTypes.func.isRequired,
   previousCanvas: PropTypes.func.isRequired,
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.object.isRequired,
 };
 
 export default ViewerNavigation;

@@ -90,10 +90,10 @@ class WindowViewer extends Component {
 }
 
 WindowViewer.propTypes = {
-  infoResponses: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  infoResponses: PropTypes.object.isRequired,
   fetchInfoResponse: PropTypes.func.isRequired,
-  manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.object.isRequired,
+  window: PropTypes.object.isRequired,
 };
 
 export default WindowViewer;

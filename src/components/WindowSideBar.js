@@ -68,8 +68,8 @@ class WindowSideBar extends Component {
 
 
 WindowSideBar.propTypes = {
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.object.isRequired,
+  manifest: PropTypes.object,
   windowId: PropTypes.string.isRequired,
   sideBarOpen: PropTypes.bool,
   sideBarPanel: PropTypes.string,

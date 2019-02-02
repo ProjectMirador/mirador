@@ -30,7 +30,7 @@ const ManifestListItem = ({ manifest, addWindow, handleClose }) => (
 );
 
 ManifestListItem.propTypes = {
-  manifest: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.string.isRequired,
   addWindow: PropTypes.func.isRequired,
   handleClose: PropTypes.func,
 };

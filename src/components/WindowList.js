@@ -57,9 +57,9 @@ class WindowList extends Component {
 WindowList.propTypes = {
   focusWindow: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
-  anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  manifests: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  anchorEl: PropTypes.object,
+  windows: PropTypes.object.isRequired,
+  manifests: PropTypes.object.isRequired,
 };
 
 WindowList.defaultProps = {

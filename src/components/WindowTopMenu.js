@@ -43,7 +43,7 @@ class WindowTopMenu extends Component {
 WindowTopMenu.propTypes = {
   windowId: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
-  anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  anchorEl: PropTypes.object,
 };
 
 WindowTopMenu.defaultProps = {

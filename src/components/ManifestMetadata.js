@@ -27,7 +27,7 @@ export default class ManifestMetadata extends Component {
 }
 
 ManifestMetadata.propTypes = {
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.object,
 };
 
 ManifestMetadata.defaultProps = {

@@ -56,8 +56,8 @@ class WindowMiddleContent extends Component {
 }
 
 WindowMiddleContent.propTypes = {
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.object.isRequired,
+  manifest: PropTypes.object,
 };
 
 WindowMiddleContent.defaultProps = {

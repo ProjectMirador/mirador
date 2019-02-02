@@ -135,10 +135,10 @@ class ThumbnailNavigation extends Component {
 }
 
 ThumbnailNavigation.propTypes = {
-  config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  config: PropTypes.object.isRequired,
+  manifest: PropTypes.object.isRequired,
   setCanvas: PropTypes.func.isRequired,
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.object.isRequired,
 };
 
 export default ThumbnailNavigation;

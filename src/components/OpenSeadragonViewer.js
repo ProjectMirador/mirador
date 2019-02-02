@@ -167,7 +167,7 @@ OpenSeadragonViewer.defaultProps = {
 OpenSeadragonViewer.propTypes = {
   children: PropTypes.element,
   tileSources: PropTypes.arrayOf(PropTypes.object),
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.object.isRequired,
   updateViewport: PropTypes.func.isRequired,
 };
 
