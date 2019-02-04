@@ -8,6 +8,19 @@ import PropTypes from 'prop-types';
  */
 class WorkspaceExport extends Component {
   /**
+   * @private
+   */
+  exportableState() {
+    const { state } = this.props;
+    const { config, windows } = state;
+
+    return JSON.stringify({
+      config,
+      windows,
+    }, null, 2);
+  }
+
+  /**
    * render
    * @return
    */
@@ -20,6 +33,9 @@ class WorkspaceExport extends Component {
         <DialogTitle id="form-dialog-title">Download/Export</DialogTitle>
         <DialogContent>
           {children}
+          <pre>
+            {this.exportableState()}
+          </pre>
         </DialogContent>
       </Dialog>
     );
@@ -30,6 +46,7 @@ WorkspaceExport.propTypes = {
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
   children: PropTypes.node,
+  state: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 WorkspaceExport.defaultProps = {
