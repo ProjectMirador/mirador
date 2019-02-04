@@ -51,6 +51,7 @@ class MiradorViewer {
       }
       store.dispatch(actions.fetchManifest(miradorWindow.loadedManifest));
       store.dispatch(actions.addWindow({
+        canvasIndex: (miradorWindow.canvasIndex || 0),
         manifestId: miradorWindow.loadedManifest,
         thumbnailNavigationPosition,
       }));
