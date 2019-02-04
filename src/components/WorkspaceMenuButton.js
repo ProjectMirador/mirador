@@ -72,7 +72,9 @@ class WorkspaceMenuButton extends Component {
 }
 
 WorkspaceMenuButton.propTypes = {
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.shape({
+    ctrlBtn: PropTypes.string,
+  }).isRequired,
 };
 
 /**

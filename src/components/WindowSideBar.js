@@ -68,7 +68,9 @@ class WindowSideBar extends Component {
 
 
 WindowSideBar.propTypes = {
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
+  classes: PropTypes.shape({
+    drawer: PropTypes.string,
+  }).isRequired,
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   windowId: PropTypes.string.isRequired,
   sideBarOpen: PropTypes.bool,

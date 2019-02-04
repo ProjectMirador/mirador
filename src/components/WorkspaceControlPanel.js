@@ -33,7 +33,9 @@ class WorkspaceControlPanel extends Component {
 }
 
 WorkspaceControlPanel.propTypes = {
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.shape({
+    drawer: PropTypes.string,
+  }).isRequired,
 };
 
 /**

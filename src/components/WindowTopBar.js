@@ -62,7 +62,10 @@ WindowTopBar.propTypes = {
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   removeWindow: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.shape({
+    reallyDense: PropTypes.string,
+    typographyBody: PropTypes.string,
+  }).isRequired,
   toggleWindowSideBar: PropTypes.func,
 };
 
