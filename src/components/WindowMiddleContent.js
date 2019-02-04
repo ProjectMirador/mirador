@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import WindowSideBar from '../containers/WindowSideBar';
 import CompanionWindow from '../containers/CompanionWindow';
 import WindowViewer from '../containers/WindowViewer';
+import * as shapes from '../shapes';
 import ns from '../config/css-ns';
 
 /**
@@ -56,8 +57,8 @@ class WindowMiddleContent extends Component {
 }
 
 WindowMiddleContent.propTypes = {
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.shape(shapes.windowShape).isRequired,
+  manifest: PropTypes.shape(shapes.manifestShape),
 };
 
 WindowMiddleContent.defaultProps = {

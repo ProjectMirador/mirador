@@ -7,7 +7,7 @@ import ViewerNavigation from '../../../src/containers/ViewerNavigation';
 import fixture from '../../fixtures/version-2/024.json';
 
 const mockManifest = {
-  id: 123,
+  id: '123',
   manifestation: manifesto.create(fixture),
 };
 

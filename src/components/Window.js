@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import * as shapes from '../shapes';
 import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
 import WindowMiddleContent from '../containers/WindowMiddleContent';
@@ -38,8 +39,8 @@ class Window extends Component {
 }
 
 Window.propTypes = {
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.shape(shapes.windowShape).isRequired,
+  manifest: PropTypes.shape(shapes.manifestShape),
 };
 
 Window.defaultProps = {

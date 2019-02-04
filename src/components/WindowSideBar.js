@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import WindowSideBarButtons from '../containers/WindowSideBarButtons';
 import WindowSideBarPanel from './WindowSideBarPanel';
+import * as shapes from '../shapes';
 import ns from '../config/css-ns';
 
 /**
@@ -71,7 +72,7 @@ WindowSideBar.propTypes = {
   classes: PropTypes.shape({
     drawer: PropTypes.string,
   }).isRequired,
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.shape(shapes.manifestShape),
   windowId: PropTypes.string.isRequired,
   sideBarOpen: PropTypes.bool,
   sideBarPanel: PropTypes.string,

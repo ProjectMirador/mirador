@@ -11,7 +11,7 @@ describe('ViewerNavigation', () => {
     previousCanvas = jest.fn();
     wrapper = shallow(
       <ViewerNavigation
-        canvases={[1, 2]}
+        canvases={[{ id: '1' }, { id: '2' }]}
         nextCanvas={nextCanvas}
         previousCanvas={previousCanvas}
         window={{ canvasIndex: 0 }}

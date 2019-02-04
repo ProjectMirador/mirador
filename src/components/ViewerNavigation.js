@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import * as shapes from '../shapes';
 import ns from '../config/css-ns';
 
 /**
@@ -70,10 +71,10 @@ class ViewerNavigation extends Component {
 }
 
 ViewerNavigation.propTypes = {
-  canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  canvases: PropTypes.arrayOf(PropTypes.shape(shapes.canvasShape)).isRequired,
   nextCanvas: PropTypes.func.isRequired,
   previousCanvas: PropTypes.func.isRequired,
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.shape(shapes.windowShape).isRequired,
 };
 
 export default ViewerNavigation;

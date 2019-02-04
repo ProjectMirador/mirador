@@ -52,8 +52,8 @@ class App extends Component {
 }
 
 App.propTypes = {
-  theme: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
-  isFullscreenEnabled: PropTypes.bool.isRequired, // eslint-disable-line react/forbid-prop-types
+  theme: PropTypes.string.isRequired,
+  isFullscreenEnabled: PropTypes.bool.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
   setWorkspaceFullscreen: PropTypes.func.isRequired,
 };

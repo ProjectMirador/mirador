@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import OpenSeadragon from 'openseadragon';
+import * as shapes from '../shapes';
 import ns from '../config/css-ns';
 
 /**
@@ -167,7 +168,7 @@ OpenSeadragonViewer.defaultProps = {
 OpenSeadragonViewer.propTypes = {
   children: PropTypes.element,
   tileSources: PropTypes.arrayOf(PropTypes.object),
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.shape(shapes.windowShape).isRequired,
   updateViewport: PropTypes.func.isRequired,
 };
 

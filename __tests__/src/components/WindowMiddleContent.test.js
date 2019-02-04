@@ -21,7 +21,7 @@ describe('WindowMiddleContent', () => {
     expect(wrapper.find(WindowSideBar)).toHaveLength(1);
   });
   it('should render <WindowViewer> if manifest is present', () => {
-    manifest = { id: 456, isFetching: false };
+    manifest = { id: '456', isFetching: false };
     wrapper = shallow(<WindowMiddleContent window={window} manifest={manifest} />);
     expect(wrapper.find(WindowViewer)).toHaveLength(1);
   });

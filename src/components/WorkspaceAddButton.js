@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
 import ManifestForm from '../containers/ManifestForm';
 import ManifestListItem from '../containers/ManifestListItem';
+import * as shapes from '../shapes';
 
 /**
  */
@@ -103,7 +104,7 @@ class WorkspaceAddButton extends Component {
 }
 
 WorkspaceAddButton.propTypes = {
-  manifests: PropTypes.instanceOf(Object).isRequired,
+  manifests: PropTypes.objectOf(PropTypes.shape(shapes.manifestShape)).isRequired,
   classes: PropTypes.shape({
     fab: PropTypes.string,
   }).isRequired,

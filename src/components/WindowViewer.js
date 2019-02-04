@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import OSDViewer from '../containers/OpenSeadragonViewer';
 import ViewerNavigation from '../containers/ViewerNavigation';
+import * as shapes from '../shapes';
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -90,10 +91,10 @@ class WindowViewer extends Component {
 }
 
 WindowViewer.propTypes = {
-  infoResponses: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  infoResponses: PropTypes.objectOf(PropTypes.shape(shapes.infoResponsesShape)).isRequired,
   fetchInfoResponse: PropTypes.func.isRequired,
-  manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.shape(shapes.manifestShape).isRequired,
+  window: PropTypes.shape(shapes.windowShape).isRequired,
 };
 
 export default WindowViewer;

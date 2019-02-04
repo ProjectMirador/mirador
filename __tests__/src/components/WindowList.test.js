@@ -17,7 +17,6 @@ describe('WindowList', () => {
 
     wrapper = shallow(
       <WindowList
-        anchorEl={{}}
         manifests={manifests}
         windows={windows}
         handleClose={handleClose}
@@ -36,7 +35,6 @@ describe('WindowList', () => {
 
       wrapper = shallow(
         <WindowList
-          anchorEl={{}}
           manifests={manifests}
           windows={windows}
           handleClose={handleClose}
@@ -64,7 +62,6 @@ describe('WindowList', () => {
 
       wrapper = shallow(
         <WindowList
-          anchorEl={{}}
           manifests={manifests}
           windows={windows}
           handleClose={handleClose}

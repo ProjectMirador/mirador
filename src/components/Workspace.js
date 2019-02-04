@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Window from '../containers/Window';
 import WorkspaceMosaic from '../containers/WorkspaceMosaic';
+import * as shapes from '../shapes';
 import ns from '../config/css-ns';
 
 /**
@@ -41,8 +42,8 @@ class Workspace extends React.Component {
 }
 
 Workspace.propTypes = {
-  windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  workspaceType: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
+  windows: PropTypes.objectOf(PropTypes.shape(shapes.windowShape)).isRequired,
+  workspaceType: PropTypes.string.isRequired,
 };
 
 export default Workspace;

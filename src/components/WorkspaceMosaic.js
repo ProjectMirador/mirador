@@ -5,6 +5,7 @@ import {
 } from 'react-mosaic-component';
 import 'react-mosaic-component/react-mosaic-component.css';
 import Window from '../containers/Window';
+import * as shapes from '../shapes';
 
 /**
  * Represents a work area that contains any number of windows
@@ -84,8 +85,8 @@ class WorkspaceMosaic extends React.Component {
 
 WorkspaceMosaic.propTypes = {
   updateWorkspaceMosaicLayout: PropTypes.func.isRequired,
-  windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  workspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  windows: PropTypes.objectOf(PropTypes.shape(shapes.windowShape)).isRequired,
+  workspace: PropTypes.shape(shapes.workspaceShape).isRequired,
 };
 
 export default WorkspaceMosaic;

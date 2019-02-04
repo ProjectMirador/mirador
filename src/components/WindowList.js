@@ -4,6 +4,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import PropTypes from 'prop-types';
+import * as shapes from '../shapes';
 
 /**
  */
@@ -57,9 +58,9 @@ class WindowList extends Component {
 WindowList.propTypes = {
   focusWindow: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
-  anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  manifests: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  anchorEl: PropTypes.element,
+  windows: PropTypes.shape(shapes.windowShape).isRequired,
+  manifests: PropTypes.objectOf(PropTypes.shape(shapes.manifestShape)).isRequired,
 };
 
 WindowList.defaultProps = {

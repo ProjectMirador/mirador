@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import WindowSideBarInfoPanel from './WindowSideBarInfoPanel';
+import * as shapes from '../shapes';
 
 /**
  * WindowSideBarPanel - the panel that pops out from the sidebar
@@ -35,7 +36,7 @@ class WindowSideBarPanel extends Component {
 }
 
 WindowSideBarPanel.propTypes = {
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.shape(shapes.manifestShape),
   sideBarPanel: PropTypes.string,
 };
 WindowSideBarPanel.defaultProps = {

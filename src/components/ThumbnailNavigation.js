@@ -4,6 +4,7 @@ import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import Grid from 'react-virtualized/dist/commonjs/Grid';
 import CanvasThumbnail from './CanvasThumbnail';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
+import * as shapes from '../shapes';
 import ns from '../config/css-ns';
 import 'react-virtualized/styles.css';
 
@@ -136,9 +137,9 @@ class ThumbnailNavigation extends Component {
 
 ThumbnailNavigation.propTypes = {
   config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.shape(shapes.manifestShape).isRequired,
   setCanvas: PropTypes.func.isRequired,
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.shape(shapes.windowShape).isRequired,
 };
 
 export default ThumbnailNavigation;

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import * as shapes from '../shapes';
 import ns from '../config/css-ns';
 
 /**
@@ -52,7 +53,7 @@ class WindowSideBarInfoPanel extends Component {
 
 WindowSideBarInfoPanel.propTypes = {
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.shape(shapes.manifestShape),
 };
 
 

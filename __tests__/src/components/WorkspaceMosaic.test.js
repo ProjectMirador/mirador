@@ -4,7 +4,7 @@ import { Mosaic } from 'react-mosaic-component';
 import WorkspaceMosaic from '../../../src/components/WorkspaceMosaic';
 
 describe('WorkspaceMosaic', () => {
-  const windows = { 1: { id: 1 }, 2: { id: 2 } };
+  const windows = { w1: { id: 'w1' }, w2: { id: 'w2' } };
   let wrapper;
   beforeEach(() => {
     wrapper = shallow(
@@ -17,7 +17,7 @@ describe('WorkspaceMosaic', () => {
   });
   it('should render properly with an initialValue', () => {
     expect(wrapper.matchesElement(
-      <Mosaic initialValue={{ direction: 'row', first: '1', second: '2' }} />,
+      <Mosaic initialValue={{ direction: 'row', first: 'w1', second: 'w2' }} />,
     )).toBe(true);
   });
   describe('determineWorkspaceLayout', () => {
@@ -30,7 +30,7 @@ describe('WorkspaceMosaic', () => {
         />,
       );
       expect(wrapper.instance().determineWorkspaceLayout()).toMatchObject({
-        direction: 'row', first: '1', second: '2',
+        direction: 'row', first: 'w1', second: 'w2',
       });
     });
     it('when window ids match workspace layout', () => {
@@ -46,7 +46,7 @@ describe('WorkspaceMosaic', () => {
   });
   describe('tileRenderer', () => {
     it('when window is available', () => {
-      expect(wrapper.instance().tileRenderer('1')).not.toBeNull();
+      expect(wrapper.instance().tileRenderer('w1')).not.toBeNull();
     });
     it('when window is not available', () => {
       expect(wrapper.instance().tileRenderer('bar')).toBeNull();

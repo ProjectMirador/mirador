@@ -4,7 +4,7 @@ import WorkspaceMosaic from '../../../src/containers/WorkspaceMosaic';
 import Window from '../../../src/containers/Window';
 import Workspace from '../../../src/components/Workspace';
 
-const windows = { 1: { id: 1 }, 2: { id: 2 } };
+const windows = { w1: { id: 'w1' }, w2: { id: 'w2' } };
 
 describe('Workspace', () => {
   describe('if workspace type is mosaic', () => {
@@ -28,8 +28,8 @@ describe('Workspace', () => {
 
       expect(wrapper.matchesElement(
         <div className="mirador-workspace">
-          <Window window={{ id: 1 }} />
-          <Window window={{ id: 2 }} />
+          <Window window={{ id: 'w1' }} />
+          <Window window={{ id: 'w2' }} />
         </div>,
       )).toBe(true);
     });

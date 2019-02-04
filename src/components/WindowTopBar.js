@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import WindowIcon from './WindowIcon';
 import WindowTopMenuButton from './WindowTopMenuButton';
 import WindowTopBarButtons from '../containers/WindowTopBarButtons';
+import * as shapes from '../shapes';
 import ns from '../config/css-ns';
 
 /**
@@ -59,7 +60,7 @@ class WindowTopBar extends Component {
 }
 
 WindowTopBar.propTypes = {
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.shape(shapes.manifestShape),
   removeWindow: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
   classes: PropTypes.shape({
