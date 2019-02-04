@@ -63,7 +63,7 @@ class WorkspaceSettings extends Component {
 
 WorkspaceSettings.propTypes = {
   handleClose: PropTypes.func.isRequired,
-  open: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
+  open: PropTypes.bool,
   children: PropTypes.node,
   updateConfig: PropTypes.func.isRequired,
   theme: PropTypes.string.isRequired,
