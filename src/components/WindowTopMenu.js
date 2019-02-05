@@ -5,6 +5,7 @@ import Divider from '@material-ui/core/Divider';
 import PropTypes from 'prop-types';
 import WindowThumbnailSettings from '../containers/WindowThumbnailSettings';
 import WindowViewSettings from '../containers/WindowViewSettings';
+import { WorkspaceContext } from '../contexts';
 
 /**
  */
@@ -18,18 +19,20 @@ class WindowTopMenu extends Component {
     // const {} = this.state;
 
     return (
-      <>
-        <Menu id={`window-menu_${windowId}`} anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-          <ListItem>
-            <WindowViewSettings windowId={windowId} />
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <WindowThumbnailSettings windowId={windowId} />
-          </ListItem>
-          <Divider />
-        </Menu>
-      </>
+      <WorkspaceContext.Consumer>
+        {workspaceRef => (
+          <Menu id={`window-menu_${windowId}`} container={workspaceRef.current} anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+            <ListItem>
+              <WindowViewSettings windowId={windowId} />
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <WindowThumbnailSettings windowId={windowId} />
+            </ListItem>
+            <Divider />
+          </Menu>
+        )}
+      </WorkspaceContext.Consumer>
     );
   }
 }

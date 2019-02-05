@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import WorkspaceMosaic from '../../../src/containers/WorkspaceMosaic';
 import Window from '../../../src/containers/Window';
 import Workspace from '../../../src/components/Workspace';
+import { WorkspaceContext } from '../../../src/contexts';
 
 const windows = { 1: { id: 1 }, 2: { id: 2 } };
 
@@ -15,7 +16,9 @@ describe('Workspace', () => {
 
       expect(wrapper.matchesElement(
         <div className="mirador-workspace">
-          <WorkspaceMosaic windows={windows} />
+          <WorkspaceContext.Provider>
+            <WorkspaceMosaic windows={windows} />
+          </WorkspaceContext.Provider>
         </div>,
       )).toBe(true);
     });
@@ -28,8 +31,10 @@ describe('Workspace', () => {
 
       expect(wrapper.matchesElement(
         <div className="mirador-workspace">
-          <Window window={{ id: 1 }} />
-          <Window window={{ id: 2 }} />
+          <WorkspaceContext.Provider>
+            <Window window={{ id: 1 }} />
+            <Window window={{ id: 2 }} />
+          </WorkspaceContext.Provider>
         </div>,
       )).toBe(true);
     });
