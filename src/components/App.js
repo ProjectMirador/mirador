@@ -16,13 +16,13 @@ class App extends Component {
    * @return {String} - HTML markup for the component
    */
   render() {
-    const { workspace, fullscreenWorkspace } = this.props;
+    const { workspace, setWorkspaceFullscreen } = this.props;
     return (
       <div className={ns('app')}>
         <CssBaseline />
         <Fullscreen
-          enabled={workspace.fullscreen}
-          onChange={isFullscreenEnabled => fullscreenWorkspace(isFullscreenEnabled)}
+          enabled={workspace.isFullscreenEnabled}
+          onChange={isFullscreenEnabled => setWorkspaceFullscreen(isFullscreenEnabled)}
         >
           <Workspace />
         </Fullscreen>
@@ -34,12 +34,12 @@ class App extends Component {
 
 App.propTypes = {
   workspace: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  fullscreenWorkspace: PropTypes.func,
+  setWorkspaceFullscreen: PropTypes.func,
 };
 
 App.defaultProps = {
   workspace: {},
-  fullscreenWorkspace: () => {},
+  setWorkspaceFullscreen: () => {},
 };
 
 export default App;

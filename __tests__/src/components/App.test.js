@@ -9,8 +9,8 @@ describe('App', () => {
   });
 
   describe('FullScreen', () => {
-    it('is enabled by the workspace.fullscreen state', () => {
-      const wrapper = shallow(<App manifests={[]} workspace={{ fullscreen: true }} />);
+    it('is enabled by the workspace.isFullscreenEnabled state', () => {
+      const wrapper = shallow(<App manifests={[]} workspace={{ isFullscreenEnabled: true }} />);
       expect(wrapper.find('FullScreen').first().prop('enabled')).toEqual(true);
     });
   });

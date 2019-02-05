@@ -4,11 +4,11 @@ import WorkspaceFullScreenButton from '../../../src/components/WorkspaceFullScre
 
 describe('WorkspaceFullScreenButton', () => {
   let wrapper;
-  let fullscreenWorkspace;
+  let setWorkspaceFullscreen;
   beforeEach(() => {
-    fullscreenWorkspace = jest.fn();
+    setWorkspaceFullscreen = jest.fn();
     wrapper = shallow(
-      <WorkspaceFullScreenButton classes={{}} fullscreenWorkspace={fullscreenWorkspace} />,
+      <WorkspaceFullScreenButton classes={{}} setWorkspaceFullscreen={setWorkspaceFullscreen} />,
     ).dive();
   });
 
@@ -17,6 +17,6 @@ describe('WorkspaceFullScreenButton', () => {
   });
   it('when clicked, sets the fullscreen state', () => {
     wrapper.find('WithStyles(IconButton)').simulate('click');
-    expect(fullscreenWorkspace).toHaveBeenCalledWith(true);
+    expect(setWorkspaceFullscreen).toHaveBeenCalledWith(true);
   });
 });

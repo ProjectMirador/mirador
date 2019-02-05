@@ -22,7 +22,7 @@ const mapStateToProps = state => (
  */
 const mapDispatchToProps = {
   fetchManifest: actions.fetchManifest,
-  fullscreenWorkspace: actions.fullscreenWorkspace,
+  setWorkspaceFullscreen: actions.setWorkspaceFullscreen,
 };
 
 const enhance = compose(

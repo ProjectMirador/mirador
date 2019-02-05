@@ -10,12 +10,12 @@ describe('workspace reducer', () => {
       focusedWindowId: 'abc123',
     });
   });
-  it('should handle FULLSCREEN_WORKSPACE', () => {
+  it('should handle SET_WORKSPACE_FULLSCREEN', () => {
     expect(reducer([], {
-      type: ActionTypes.FULLSCREEN_WORKSPACE,
-      fullscreen: true,
+      type: ActionTypes.SET_WORKSPACE_FULLSCREEN,
+      isFullscreenEnabled: true,
     })).toEqual({
-      fullscreen: true,
+      isFullscreenEnabled: true,
     });
   });
   it('should handle UPDATE_WORKSPACE_MOSAIC_LAYOUT', () => {
