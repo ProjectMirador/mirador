@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import classNames from 'classnames';
+import WindowIcon from './WindowIcon';
 import WindowTopMenuButton from './WindowTopMenuButton';
 import WindowTopBarButtons from '../containers/WindowTopBarButtons';
 import ns from '../config/css-ns';
@@ -34,7 +35,7 @@ class WindowTopBar extends Component {
    */
   render() {
     const {
-      removeWindow, windowId, classes, toggleWindowSideBar,
+      removeWindow, windowId, classes, toggleWindowSideBar, manifest,
     } = this.props;
     return (
       <Toolbar disableGutters className={classNames(classes.reallyDense, ns('window-top-bar'))} variant="dense">
@@ -45,6 +46,7 @@ class WindowTopBar extends Component {
         >
           <MenuIcon />
         </IconButton>
+        <WindowIcon manifestation={manifest.manifestation} />
         <Typography variant="h3" noWrap color="inherit" className={classes.typographyBody}>
           {this.titleContent()}
         </Typography>

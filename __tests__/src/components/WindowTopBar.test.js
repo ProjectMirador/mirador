@@ -36,6 +36,10 @@ describe('WindowTopBar', () => {
       .toBe(mockRemoveWindow);
   });
 
+  it('renders a window icon', () => {
+    expect(topBar.find('WithStyles(WindowIcon)').length).toBe(1);
+  });
+
   it('calls the toggleWindowSideBar prop when the menu IconButton is clicked', () => {
     topBar.find('WithStyles(IconButton)').simulate('click');
     expect(mockToggleWindowSideBar).toHaveBeenCalledTimes(1);
