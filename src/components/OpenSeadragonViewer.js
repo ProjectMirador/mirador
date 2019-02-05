@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import OpenSeadragon from 'openseadragon';
 import ns from '../config/css-ns';
+import ZoomControls from '../containers/ZoomControls';
 
 /**
  * Represents a OpenSeadragonViewer in the mirador workspace. Responsible for mounting
@@ -154,6 +155,7 @@ class OpenSeadragonViewer extends Component {
         >
           { children }
         </div>
+        <ZoomControls windowId={window.id} />
       </>
     );
   }

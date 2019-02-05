@@ -6,9 +6,19 @@ import WindowList from '../../../src/containers/WindowList';
 describe('WorkspaceMenu', () => {
   let wrapper;
   let handleClose;
+  const showZoomControls = false;
+  let toggleZoomControls;
+
   beforeEach(() => {
     handleClose = jest.fn();
-    wrapper = shallow(<WorkspaceMenu handleClose={handleClose} />);
+    toggleZoomControls = jest.fn();
+    wrapper = shallow(
+      <WorkspaceMenu
+        handleClose={handleClose}
+        showZoomControls={showZoomControls}
+        toggleZoomControls={toggleZoomControls}
+      />,
+    );
   });
 
   it('renders without an error', () => {
@@ -32,6 +42,13 @@ describe('WorkspaceMenu', () => {
     it('resets the anchor state', () => {
       wrapper.instance().handleMenuItemClose('windowList')();
       expect(wrapper.find(WindowList).props().open).toBe(false);
+    });
+  });
+
+  describe('handleZoomToggleClick', () => {
+    it('resets the anchor state', () => {
+      wrapper.instance().handleZoomToggleClick();
+      expect(toggleZoomControls).toBeCalledWith(true);
     });
   });
 });

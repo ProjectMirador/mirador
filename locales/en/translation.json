@@ -23,6 +23,9 @@
     "theme": "Theme",
     "thumbnails": "Thumbnails",
     "toggleWindowSideBar": "Toggle window sidebar",
-    "untitled": "[Untitled]"
+    "untitled": "[Untitled]",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "zoomReset": "Reset zoom"
   }
 }
