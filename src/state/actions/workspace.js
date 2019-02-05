@@ -2,13 +2,13 @@ import ActionTypes from './action-types';
 
 /* eslint-disable import/prefer-default-export */
 /**
- * fullscreenWorkspace - action creator
+ * setWorkspaceFullscreen - action creator
  *
- * @param  {String} windowId
+ * @param  {Boolean} isFullscreenEnabled
  * @memberof ActionCreators
  */
-export function fullscreenWorkspace(fullscreen) {
-  return { type: ActionTypes.FULLSCREEN_WORKSPACE, fullscreen };
+export function setWorkspaceFullscreen(isFullscreenEnabled) {
+  return { type: ActionTypes.SET_WORKSPACE_FULLSCREEN, isFullscreenEnabled };
 }
 
 /**

@@ -13,10 +13,10 @@ class WorkspaceFullScreenButton extends Component {
    * @return
    */
   render() {
-    const { classes, fullscreenWorkspace } = this.props;
+    const { classes, setWorkspaceFullscreen } = this.props;
     return (
       <ListItem>
-        <IconButton className={classes.ctrlBtn} aria-label="Full Screen" onClick={() => fullscreenWorkspace(true)}>
+        <IconButton className={classes.ctrlBtn} aria-label="Full Screen" onClick={() => setWorkspaceFullscreen(true)}>
           <FullscreenIcon />
         </IconButton>
       </ListItem>
@@ -25,7 +25,7 @@ class WorkspaceFullScreenButton extends Component {
 }
 
 WorkspaceFullScreenButton.propTypes = {
-  fullscreenWorkspace: PropTypes.func.isRequired,
+  setWorkspaceFullscreen: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 

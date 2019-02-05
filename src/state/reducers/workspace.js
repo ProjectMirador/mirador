@@ -7,8 +7,8 @@ const workspaceReducer = (state = {}, action) => {
   switch (action.type) {
     case ActionTypes.FOCUS_WINDOW:
       return { ...state, focusedWindowId: action.windowId };
-    case ActionTypes.FULLSCREEN_WORKSPACE:
-      return { ...state, fullscreen: action.fullscreen };
+    case ActionTypes.SET_WORKSPACE_FULLSCREEN:
+      return { ...state, isFullscreenEnabled: action.isFullscreenEnabled };
     case ActionTypes.UPDATE_WORKSPACE_MOSAIC_LAYOUT:
       return { ...state, layout: action.layout };
     default:

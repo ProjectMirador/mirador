@@ -8,6 +8,6 @@ import WorkspaceFullScreenButton
  * @memberof ManifestListItem
  * @private
  */
-const mapDispatchToProps = { fullscreenWorkspace: actions.fullscreenWorkspace };
+const mapDispatchToProps = { setWorkspaceFullscreen: actions.setWorkspaceFullscreen };
 
 export default connect(null, mapDispatchToProps)(WorkspaceFullScreenButton);

@@ -2,15 +2,22 @@ import * as actions from '../../../src/state/actions';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('workspace actions', () => {
-  describe('fullscreenWorkspace', () => {
-    it('should create a new window with merged defaults', () => {
-      const options = true;
-
+  describe('setWorkspaceFullscreen', () => {
+    it('should return correct action type if set to true', () => {
+      const receivedAction = actions.setWorkspaceFullscreen(true);
       const expectedAction = {
-        type: ActionTypes.FULLSCREEN_WORKSPACE,
-        fullscreen: true,
+        type: ActionTypes.SET_WORKSPACE_FULLSCREEN,
+        isFullscreenEnabled: true,
       };
-      expect(actions.fullscreenWorkspace(options)).toEqual(expectedAction);
+      expect(receivedAction).toEqual(expectedAction);
+    });
+    it('should return correct action type if set to false', () => {
+      const receivedAction = actions.setWorkspaceFullscreen(false);
+      const expectedAction = {
+        type: ActionTypes.SET_WORKSPACE_FULLSCREEN,
+        isFullscreenEnabled: false,
+      };
+      expect(receivedAction).toEqual(expectedAction);
     });
   });
   describe('updateWorkspaceMosaicLayout', () => {
