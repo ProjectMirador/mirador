@@ -21,7 +21,9 @@ class WorkspaceControlPanel extends Component {
       <Drawer
         className={classNames(classes.drawer, ns('workspace-control-panel'))}
         variant="permanent"
+        anchor="left"
         classes={{ paper: classNames(classes.drawer) }}
+        PaperProps={{ style: { position: 'absolute' } }}
         open
       >
         <WorkspaceControlPanelButtons />
@@ -40,6 +42,10 @@ WorkspaceControlPanel.propTypes = {
 const styles = theme => ({
   ctrlBtn: {
     margin: theme.spacing.unit,
+  },
+  drawer: {
+    overflowX: 'hidden',
+    height: '100%',
   },
 });
 
