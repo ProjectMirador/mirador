@@ -1,7 +1,8 @@
-import init from './init';
+import mirador from './lib/MiradorViewer';
+import './styles/index.scss';
 
 const exports = {
-  viewer: init,
+  viewer: mirador,
   plugins: {},
 };
 
