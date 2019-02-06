@@ -9,7 +9,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import PropTypes from 'prop-types';
 import WindowList from '../containers/WindowList';
-import WorkspaceSettings from './WorkspaceSettings';
+import WorkspaceSettings from '../containers/WorkspaceSettings';
 import WorkspaceExport from '../containers/WorkspaceExport';
 
 /**

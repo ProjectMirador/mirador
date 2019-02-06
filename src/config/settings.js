@@ -1,4 +1,5 @@
 export default {
+  theme: 'light', // dark also available
   windows: [],
   thumbnailNavigation: {
     defaultPosition: 'bottom',

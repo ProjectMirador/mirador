@@ -10,6 +10,7 @@ import App from '../components/App';
  */
 const mapStateToProps = state => (
   {
+    config: state.config,
     workspace: state.workspace,
     manifests: state.manifests,
   }
