@@ -17,6 +17,5 @@ export default function () {
     createRootReducer(),
     composeWithDevTools(applyMiddleware(thunkMiddleware)),
   );
-  store.pluginReducers = {};
   return store;
 }

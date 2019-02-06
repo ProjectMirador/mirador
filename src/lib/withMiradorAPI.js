@@ -1,14 +1,16 @@
 import React from 'react';
 
 import * as actions from '../state/actions';
-import createRootReducer from '../state/reducers';
+
+/*
+eslint max-len: ["error", { "ignoreComments": true }]
+*/
 
 /**
  * HoC that initializes a Mirador Application
  * @param store
  * @param config
- * @returns {function(*): {contextType?: React.Context<any>,
- * new(props: Readonly<P>): HOC, new(props: P, context?: any): HOC, prototype: HOC}}
+ * @returns {function(*): {contextType?: React.Context<any>, new(props: Readonly<P>): HOC, new(props: P, context?: any): HOC, prototype: HOC}}
  */
 export default function withMiradorAPI(store, config) {
   // TODO validate config schema before processing / handle invalid or missing configuration
@@ -20,7 +22,6 @@ export default function withMiradorAPI(store, config) {
    * doInitialization
    */
   function doInitialization() {
-    processPlugins();
     dispatchSetConfig(config);
     fetchManifests();
     addWindows(config);
@@ -84,40 +85,6 @@ export default function withMiradorAPI(store, config) {
       }
     });
     return positions;
-  }
-
-  /**
-   * processPlugins
-   */
-  function processPlugins() {
-    // TODO refactor / remove window dependency
-    const plugins = config.plugins || [];
-    const actionCreators = [];
-    const reducers = [];
-
-    plugins.forEach((pluginName) => {
-      const plugin = window.Mirador.plugins[pluginName];
-
-      // Add Actions
-      if (plugin.actions) {
-        Object.keys(plugin.actions)
-          .forEach(actionName => actionCreators.push({
-            name: actionName,
-            action: plugin.actions[actionName],
-          }));
-      }
-      // Add Reducers
-      if (plugin.reducers) {
-        Object.keys(plugin.reducers)
-          .forEach(reducerName => reducers.push({
-            name: reducerName,
-            reducer: plugin.reducers[reducerName],
-          }));
-      }
-    });
-    actionCreators.forEach((action) => { actions[action.name] = action.action; });
-    reducers.forEach((reducer) => { store.pluginReducers[reducer.name] = reducer.reducer; }); // eslint-disable-line
-    store.replaceReducer(createRootReducer(store.pluginReducers));
   }
 
   return function HOCFactory(WrappedComponent) {

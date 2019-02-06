@@ -37,7 +37,7 @@ describe('MiradorViewer', () => {
         plugins: ['fooPlugin'],
       });
       expect(instance.actions.fooAction).toBeDefined();
-      expect(instance.store.pluginReducers).toBeDefined();
+      expect(instance.store).toBeDefined();
     });
   });
   describe('processConfig', () => {
