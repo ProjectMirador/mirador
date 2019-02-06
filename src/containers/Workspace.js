@@ -9,7 +9,7 @@ import Workspace from '../components/Workspace';
  */
 const mapStateToProps = state => (
   {
-    config: state.config,
+    workspaceType: state.config.workspace.type,
     windows: state.windows,
   }
 );

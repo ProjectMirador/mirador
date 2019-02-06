@@ -11,19 +11,11 @@ import ns from '../config/css-ns';
  */
 class Workspace extends React.Component {
   /**
-   */
-  constructor(props) {
-    super(props);
-
-    this.workspaceByType = this.workspaceByType.bind(this);
-  }
-
-  /**
    * Determine which workspace to render by configured type
    */
   workspaceByType() {
-    const { config, windows } = this.props;
-    switch (config.workspace.type) {
+    const { workspaceType, windows } = this.props;
+    switch (workspaceType) {
       case 'mosaic':
         return <WorkspaceMosaic windows={windows} />;
       default:
@@ -50,7 +42,7 @@ class Workspace extends React.Component {
 
 Workspace.propTypes = {
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  workspaceType: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 export default Workspace;
