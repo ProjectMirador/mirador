@@ -13,28 +13,34 @@ import ns from '../config/css-ns';
  */
 class App extends Component {
   /**
-   * render
-   * @return {String} - HTML markup for the component
-   */
-  render() {
-    const {
-      workspace, setWorkspaceFullscreen, config, classes,
-    } = this.props;
-    const theme = createMuiTheme({
+  */
+  makeMuiTheme() {
+    const { theme } = this.props;
+    return createMuiTheme({
       palette: {
-        type: config.theme,
+        type: theme,
       },
       typography: {
         useNextVariants: true,
       },
     });
+  }
+
+  /**
+   * render
+   * @return {String} - HTML markup for the component
+   */
+  render() {
+    const {
+      isFullscreenEnabled, setWorkspaceFullscreen, classes,
+    } = this.props;
 
     return (
       <div className={classNames(classes.background, ns('app'))}>
-        <MuiThemeProvider theme={theme}>
+        <MuiThemeProvider theme={this.makeMuiTheme()}>
           <Fullscreen
-            enabled={workspace.isFullscreenEnabled}
-            onChange={isFullscreenEnabled => setWorkspaceFullscreen(isFullscreenEnabled)}
+            enabled={isFullscreenEnabled}
+            onChange={setWorkspaceFullscreen}
           >
             <Workspace />
           </Fullscreen>
@@ -46,15 +52,10 @@ class App extends Component {
 }
 
 App.propTypes = {
-  config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  workspace: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  theme: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
+  isFullscreenEnabled: PropTypes.bool.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
-  setWorkspaceFullscreen: PropTypes.func,
-};
-
-App.defaultProps = {
-  workspace: {},
-  setWorkspaceFullscreen: () => {},
+  setWorkspaceFullscreen: PropTypes.func.isRequired,
 };
 
 /**
