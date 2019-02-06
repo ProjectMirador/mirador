@@ -26,8 +26,6 @@ describe('WorkspaceExport', () => {
 
   it('renders an exportable version of state', () => {
     expect(wrapper.find('pre').length).toBe(1);
-    console.log(wrapper.find('pre').debug());
-    debugger; // eslint-disable-line
     expect(wrapper.find('pre').text()).toMatch('"config":');
     expect(wrapper.find('pre').text()).toMatch('"windows":');
     expect(wrapper.find('pre').text()).not.toMatch('"manifests":');
