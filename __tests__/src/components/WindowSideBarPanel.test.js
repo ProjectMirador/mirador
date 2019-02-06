@@ -21,7 +21,7 @@ describe('WindowSideBarPanel', () => {
     });
 
     it('renders the WindowSideBarInfoPanel', () => {
-      expect(wrapper.find('WindowSideBarInfoPanel').length).toBe(1);
+      expect(wrapper.find('WithStyles(WindowSideBarInfoPanel)').length).toBe(1);
     });
   });
 
@@ -31,7 +31,7 @@ describe('WindowSideBarPanel', () => {
     });
 
     it('does not render any panel component', () => {
-      expect(wrapper.find('WindowSideBarInfoPanel').length).toBe(0);
+      expect(wrapper.find('WithStyes(WindowSideBarInfoPanel)').length).toBe(0);
     });
   });
 });
