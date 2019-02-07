@@ -64,6 +64,8 @@
     "codecov": "^3.1.0",
     "concurrently": "^4.0.1",
     "css-loader": "^1.0.0",
+    "dotenv": "^6.2.0",
+    "dotenv-expand": "^4.2.0",
     "enzyme": "^3.4.4",
     "enzyme-adapter-react-16": "^1.8.0",
     "eslint": "^5.12.1",
