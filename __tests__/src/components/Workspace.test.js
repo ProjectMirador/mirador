@@ -27,7 +27,7 @@ describe('Workspace', () => {
       const wrapper = createWrapper();
 
       expect(wrapper.matchesElement(
-        <div className="mirador-workspace mirador-workspace-with-control-panel">
+        <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
           <WorkspaceMosaic windows={windows} />
         </div>,
       )).toBe(true);
@@ -38,7 +38,7 @@ describe('Workspace', () => {
       const wrapper = createWrapper({ workspaceType: 'bubu' });
 
       expect(wrapper.matchesElement(
-        <div className="mirador-workspace mirador-workspace-with-control-panel">
+        <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
           <Window window={{ id: 1 }} />
           <Window window={{ id: 2 }} />
         </div>,
