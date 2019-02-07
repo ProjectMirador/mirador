@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
 import ns from '../config/css-ns';
 
 /**
  * WindowSideBarInfoPanel
  */
-export default class WindowSideBarInfoPanel extends Component {
+class WindowSideBarInfoPanel extends Component {
   /**
    * manifestLabel - get the label from the manifesto manifestation
    * @return String
@@ -37,21 +39,34 @@ export default class WindowSideBarInfoPanel extends Component {
    * @return
    */
   render() {
+    const { classes } = this.props;
     return (
       <div className={ns('window-sidebar-info-panel')}>
-        <h2>About this item</h2>
-        <h3>{this.manifestLabel()}</h3>
-        <div>{this.manifestDescription()}</div>
+        <Typography variant="h2" className={classes.windowSideBarH2}>About this item</Typography>
+        <Typography variant="h3" className={classes.windowSideBarH3}>{this.manifestLabel()}</Typography>
+        <Typography variant="body2">{this.manifestDescription()}</Typography>
       </div>
     );
   }
 }
 
 WindowSideBarInfoPanel.propTypes = {
+  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 
 WindowSideBarInfoPanel.defaultProps = {
+  classes: {},
   manifest: {},
 };
+
+/**
+ * @private
+ */
+const styles = theme => ({
+  windowSideBarH2: theme.typography.h5,
+  windowSideBarH3: theme.typography.h6,
+});
+
+export default withStyles(styles)(WindowSideBarInfoPanel);
