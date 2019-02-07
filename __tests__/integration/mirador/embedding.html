@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <style type="text/css">
+     html, body {
+       height: 100%;
+       width: 100%;
+     }
+     #instanceOne {
+       width: 100%;
+       height: 50%;
+     }
+     #instanceTwo {
+       margin: 0 auto;
+       width: 800px;
+       height: 600px;
+     }
+    </style>
+    <title>Mirador</title>
+  </head>
+  <body>
+    <div id="instanceOne"></div>
+    <div id="instanceTwo"></div>
+    <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
+    <script type="text/javascript">
+     var miradorInstanceOne = Mirador.viewer({
+       id: 'instanceOne',
+       windows: [{
+         loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+         canvasIndex: 2,
+       },
+       {
+         loadedManifest: 'https://media.nga.gov/public/manifests/nga_highlights.json',
+         thumbnailNavigationPosition: 'off',
+       }]
+     });
+     var miradorInstanceTwo = Mirador.viewer({
+       id: 'instanceTwo',
+       windows: [{
+         loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+         canvasIndex: 2,
+       },
+       {
+         loadedManifest: 'https://media.nga.gov/public/manifests/nga_highlights.json',
+         thumbnailNavigationPosition: 'off',
+       }]
+     });
+    </script>
+  </body>
+</html>
