@@ -1,6 +1,12 @@
 @import 'variables';
 
 .mirador {
+  &-app {
+    height: 100%;
+    position: relative;
+    width: 100%;
+  }
+
   &-workspace {
     bottom: 0;
     box-sizing: border-box;
