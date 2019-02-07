@@ -10,9 +10,8 @@ import App from '../components/App';
  */
 const mapStateToProps = state => (
   {
-    config: state.config,
-    workspace: state.workspace,
-    manifests: state.manifests,
+    theme: state.config.theme,
+    isFullscreenEnabled: state.workspace.isFullscreenEnabled,
   }
 );
 
@@ -22,7 +21,6 @@ const mapStateToProps = state => (
  * @private
  */
 const mapDispatchToProps = {
-  fetchManifest: actions.fetchManifest,
   setWorkspaceFullscreen: actions.setWorkspaceFullscreen,
 };
 
