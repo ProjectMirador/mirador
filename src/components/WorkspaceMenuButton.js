@@ -51,7 +51,7 @@ class WorkspaceMenuButton extends Component {
       <>
         <ListItem>
           <IconButton
-            color="primary"
+            color="default"
             id="menuBtn"
             aria-label="Menu"
             className={classes.ctrlBtn}
