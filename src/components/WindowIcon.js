@@ -10,30 +10,32 @@ class WindowIcon extends Component {
    * @return
    */
   render() {
-    const {
-      manifestation, classes,
-    } = this.props;
+    const { manifestLogo, classes } = this.props;
 
-    if (manifestation && manifestation.getLogo()) {
-      return (<img src={manifestation.getLogo()} alt="" role="presentation" className={classes.logo} />);
-    }
+    const img = manifestLogo && (
+      <img
+        src={manifestLogo}
+        alt=""
+        role="presentation"
+        className={classes.logo}
+      />
+    );
 
     return (
-      <></>
+      <>
+        {img}
+      </>
     );
   }
 }
 
 WindowIcon.propTypes = {
-  manifestation: PropTypes.shape({
-    getLogo: PropTypes.func,
-  }),
-  classes: PropTypes.shape({ logo: PropTypes.string }),
+  manifestLogo: PropTypes.string,
+  classes: PropTypes.shape({ logo: PropTypes.string }).isRequired,
 };
 
 WindowIcon.defaultProps = {
-  manifestation: null,
-  classes: {},
+  manifestLogo: null,
 };
 
 const styles = {
