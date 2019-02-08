@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../state/actions';
+import { getThumbnailNavigationPosition } from '../state/selectors';
 import WindowThumbnailSettings from '../components/WindowThumbnailSettings';
 
 /**
@@ -17,7 +18,7 @@ const mapDispatchToProps = { setWindowThumbnailPosition: actions.setWindowThumbn
  */
 const mapStateToProps = (state, props) => (
   {
-    thumbnailNavigationPosition: state.windows[props.windowId].thumbnailNavigationPosition,
+    thumbnailNavigationPosition: getThumbnailNavigationPosition(state, props.windowId),
   }
 );
 

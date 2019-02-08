@@ -33,3 +33,13 @@ export function getManifestCanvases(manifest) {
 
   return manifest.manifestation.getSequences()[0].getCanvases();
 }
+
+/** Return position of thumbnail navigation in a certain window.
+* @param {object} state
+* @param {String} windowId
+* @param {String}
+*/
+export function getThumbnailNavigationPosition(state, windowId) {
+  return state.windows[windowId]
+    && state.windows[windowId].thumbnailNavigationPosition;
+}
