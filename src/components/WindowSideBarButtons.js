@@ -23,11 +23,15 @@ class WindowSideBarButtons extends Component {
    * @return {type}  description
    */
   render() {
-    const { toggleWindowSideBarPanel } = this.props;
+    const { toggleWindowSideBarPanel, t } = this.props;
     return (
       <>
         <IconButton
-          aria-label="Open information companion window"
+          aria-label={
+            this.sideBarPanelCurrentlySelected('info')
+              ? t('closeInfoCompanionWindow')
+              : t('openInfoCompanionWindow')
+          }
           onClick={() => (toggleWindowSideBarPanel('info'))}
         >
           <InfoIcon
@@ -42,11 +46,13 @@ class WindowSideBarButtons extends Component {
 WindowSideBarButtons.propTypes = {
   toggleWindowSideBarPanel: PropTypes.func,
   sideBarPanel: PropTypes.string,
+  t: PropTypes.func,
 };
 
 WindowSideBarButtons.defaultProps = {
   toggleWindowSideBarPanel: () => {},
   sideBarPanel: 'closed',
+  t: key => key,
 };
 
 export default WindowSideBarButtons;

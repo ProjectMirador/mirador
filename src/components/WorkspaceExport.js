@@ -26,11 +26,11 @@ class WorkspaceExport extends Component {
    */
   render() {
     const {
-      handleClose, open, children,
+      handleClose, open, children, t,
     } = this.props;
     return (
       <Dialog id="workspace-settings" open={open} onClose={handleClose}>
-        <DialogTitle id="form-dialog-title">Download/Export</DialogTitle>
+        <DialogTitle id="form-dialog-title">{t('downloadExport')}</DialogTitle>
         <DialogContent>
           {children}
           <pre>
@@ -47,11 +47,13 @@ WorkspaceExport.propTypes = {
   open: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
   children: PropTypes.node,
   state: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  t: PropTypes.func,
 };
 
 WorkspaceExport.defaultProps = {
   open: false,
   children: null,
+  t: key => key,
 };
 
 export default WorkspaceExport;

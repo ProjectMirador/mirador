@@ -34,15 +34,15 @@ class WorkspaceSettings extends Component {
    */
   render() {
     const {
-      handleClose, open, children, theme,
+      handleClose, open, children, theme, t,
     } = this.props;
     return (
       <Dialog id="workspace-settings" open={open} onClose={handleClose}>
-        <DialogTitle id="form-dialog-title">Settings</DialogTitle>
+        <DialogTitle id="form-dialog-title">{t('settings')}</DialogTitle>
         <DialogContent>
           {children}
           <FormControl>
-            <InputLabel htmlFor="theme-simple">Theme</InputLabel>
+            <InputLabel htmlFor="theme-simple">{t('theme')}</InputLabel>
             <Select
               value={theme}
               onChange={this.handleThemeChange}
@@ -51,8 +51,8 @@ class WorkspaceSettings extends Component {
                 id: 'theme-simple',
               }}
             >
-              <MenuItem value="light">Light</MenuItem>
-              <MenuItem value="dark">Dark</MenuItem>
+              <MenuItem value="light">{t('light')}</MenuItem>
+              <MenuItem value="dark">{t('dark')}</MenuItem>
             </Select>
           </FormControl>
         </DialogContent>
@@ -67,11 +67,13 @@ WorkspaceSettings.propTypes = {
   children: PropTypes.node,
   updateConfig: PropTypes.func.isRequired,
   theme: PropTypes.string.isRequired,
+  t: PropTypes.func,
 };
 
 WorkspaceSettings.defaultProps = {
   open: false,
   children: null,
+  t: key => key,
 };
 
 export default WorkspaceSettings;

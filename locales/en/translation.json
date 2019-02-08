@@ -1,0 +1,28 @@
+{
+  "translation": {
+    "aboutThisItem": "About this item",
+    "add": "Add",
+    "bottom": "Bottom",
+    "closeInfoCompanionWindow": "Close information companion window",
+    "closeMenu": "Close Menu",
+    "closeWindow": "Close window",
+    "dark": "Dark",
+    "downloadExport": "Download/Export",
+    "downloadExportWorkspace": "Download/export workspace",
+    "fetchManifest": "Fetch Manifest",
+    "fullScreen": "Full Screen",
+    "light": "Light",
+    "listAllOpenWindows": "List all open windows",
+    "menu": "Menu",
+    "off": "Off",
+    "openInfoCompanionWindow": "Open information companion window",
+    "openWindows": "Open windows",
+    "position": "Position",
+    "right": "Right",
+    "settings": "Settings",
+    "theme": "Theme",
+    "thumbnails": "Thumbnails",
+    "toggleWindowSideBar": "Toggle window sidebar",
+    "untitled": "[Untitled]"
+  }
+}

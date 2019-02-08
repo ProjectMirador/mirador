@@ -24,6 +24,7 @@ describe('WindowTopBar', () => {
         removeWindow={mockRemoveWindow}
         toggleWindowSideBar={mockToggleWindowSideBar}
         classes={{}}
+        t={key => key}
       />,
     ).dive();
   });

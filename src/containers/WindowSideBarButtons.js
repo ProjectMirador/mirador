@@ -1,5 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 import * as actions from '../state/actions';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import WindowSideBarButtons from '../components/WindowSideBarButtons';
@@ -19,6 +20,7 @@ const mapDispatchToProps = (dispatch, props) => ({
 const enhance = compose(
   connect(null, mapDispatchToProps),
   miradorWithPlugins,
+  withNamespaces(),
   // further HOC go here
 );
 

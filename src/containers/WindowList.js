@@ -1,4 +1,6 @@
 import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { withNamespaces } from 'react-i18next';
 import * as actions from '../state/actions';
 import WindowList from '../components/WindowList';
 
@@ -23,4 +25,10 @@ const mapStateToProps = state => (
   }
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(WindowList);
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withNamespaces(),
+  // further HOC
+);
+
+export default enhance(WindowList);

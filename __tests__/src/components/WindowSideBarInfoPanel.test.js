@@ -22,7 +22,7 @@ describe('WindowSideBarInfoPanel', () => {
   it('renders without an error', () => {
     expect(
       wrapper.find('WithStyles(Typography)[variant="h2"]').first().matchesElement(
-        <Typography>About this item</Typography>,
+        <Typography>aboutThisItem</Typography>,
       ),
     ).toBe(true);
 
