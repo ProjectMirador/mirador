@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import WindowTopMenuButton from '../../../src/components/WindowTopMenuButton';
+import WindowTopMenu from '../../../src/containers/WindowTopMenu';
 
 describe('WindowTopMenuButton', () => {
   let wrapper;
@@ -15,6 +16,6 @@ describe('WindowTopMenuButton', () => {
   });
   it('when clicked, updates the state', () => {
     wrapper.find('WithStyles(IconButton)').simulate('click', { currentTarget: 'x' });
-    expect(wrapper.find('Connect(miradorWithPlugins(WithStyles(WindowTopMenu)))').props().anchorEl).toBe('x');
+    expect(wrapper.find(WindowTopMenu).props().anchorEl).toBe('x');
   });
 });
