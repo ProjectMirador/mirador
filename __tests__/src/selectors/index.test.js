@@ -4,6 +4,7 @@ import {
   getWindowManifest,
   getManifestLogo,
   getManifestCanvases,
+  getThumbnailNavigationPosition,
 } from '../../../src/state/selectors';
 
 
@@ -67,5 +68,29 @@ describe('getManifestCanvases', () => {
     const received = getManifestCanvases(manifest);
     expect(received.length).toBe(1);
     expect(received[0].id).toBe('https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json');
+  });
+});
+
+describe('getThumbnailNavigationPosition', () => {
+  const state = {
+    windows: {
+      a: { id: 'a', thumbnailNavigationPosition: 'bottom' },
+      b: { id: 'b' },
+    },
+  };
+
+  it('should return thumbnail navigation position if window exists', () => {
+    const received = getThumbnailNavigationPosition(state, 'a');
+    expect(received).toBe('bottom');
+  });
+
+  it('should return undefined if position does not exist in window', () => {
+    const received = getThumbnailNavigationPosition(state, 'b');
+    expect(received).toBeUndefined();
+  });
+
+  it('should return undefined if window does not exists', () => {
+    const received = getThumbnailNavigationPosition(state, 'c');
+    expect(received).toBeUndefined();
   });
 });
