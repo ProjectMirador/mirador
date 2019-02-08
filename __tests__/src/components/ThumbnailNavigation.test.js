@@ -19,11 +19,9 @@ describe('ThumbnailNavigation', () => {
     );
     wrapper = shallow(
       <ThumbnailNavigation
-        manifest={{
-          id: 'http://foo',
-          manifestation: manifesto.create(manifestJson),
-          isFetching: false,
-        }}
+        canvases={
+          manifesto.create(manifestJson).getSequences()[0].getCanvases()
+        }
         window={{
           id: 'foobar',
           canvasIndex: 1,

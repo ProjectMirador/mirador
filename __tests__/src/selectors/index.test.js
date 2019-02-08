@@ -3,6 +3,7 @@ import manifestFixture from '../../fixtures/version-2/001.json';
 import {
   getWindowManifest,
   getManifestLogo,
+  getManifestCanvases,
 } from '../../../src/state/selectors';
 
 
@@ -51,5 +52,20 @@ describe('getManifestLogo()', () => {
     const manifest = { manifestation: manifesto.create({}) };
     const received = getManifestLogo(manifest);
     expect(received).toBeNull();
+  });
+});
+
+describe('getManifestCanvases', () => {
+  it('returns an empty array if the manifestation is not loaded', () => {
+    const manifest = {};
+    const received = getManifestCanvases(manifest);
+    expect(received).toEqual([]);
+  });
+
+  it('returns canvases from the manifest', () => {
+    const manifest = { manifestation: manifesto.create(manifestFixture) };
+    const received = getManifestCanvases(manifest);
+    expect(received.length).toBe(1);
+    expect(received[0].id).toBe('https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json');
   });
 });

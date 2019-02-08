@@ -15,26 +15,8 @@ class ThumbnailNavigation extends Component {
   constructor(props) {
     super(props);
 
-    const canvases = (props.manifest.manifestation)
-      ? props.manifest.manifestation.getSequences()[0].getCanvases() : [];
-    this.state = { canvases, manifest: props.manifest };
-
     this.cellRenderer = this.cellRenderer.bind(this);
     this.calculateScaledWidth = this.calculateScaledWidth.bind(this);
-  }
-
-  /**
-   */
-  static getDerivedStateFromProps(props, state) {
-    // Any time the manifest changes,
-    // Reset any parts of state that are tied to that manifest (canvases).
-    if (props.manifest !== state.manifest) {
-      return {
-        canvases: props.manifest.manifestation.getSequences()[0].getCanvases(),
-        manifest: props.manifest,
-      };
-    }
-    return null;
   }
 
   /**
@@ -57,9 +39,8 @@ class ThumbnailNavigation extends Component {
       columnIndex, key, style,
     } = options;
     const {
-      window, setCanvas, config,
+      window, setCanvas, config, canvases,
     } = this.props;
-    const { canvases } = this.state;
     const canvas = canvases[columnIndex];
     return (
       <div
@@ -90,8 +71,7 @@ class ThumbnailNavigation extends Component {
    * in this simple case, a column == canvas.
    */
   calculateScaledWidth(options) {
-    const { config } = this.props;
-    const { canvases } = this.state;
+    const { config, canvases } = this.props;
     const canvas = new ManifestoCanvas(canvases[options.index]);
     return Math.floor(config.thumbnailNavigation.height * canvas.aspectRatio) + 8;
   }
@@ -100,8 +80,7 @@ class ThumbnailNavigation extends Component {
    * Renders things
    */
   render() {
-    const { config, window } = this.props;
-    const { canvases } = this.state;
+    const { config, window, canvases } = this.props;
     if (window.thumbnailNavigationPosition === 'off') {
       return <></>;
     }
@@ -136,7 +115,7 @@ class ThumbnailNavigation extends Component {
 
 ThumbnailNavigation.propTypes = {
   config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   setCanvas: PropTypes.func.isRequired,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
