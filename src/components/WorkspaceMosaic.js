@@ -52,7 +52,7 @@ class WorkspaceMosaic extends React.Component {
    */
   determineWorkspaceLayout() {
     const { windows, workspace } = this.props;
-    const windowKeys = Object.keys(windows);
+    const windowKeys = Object.keys(windows).sort();
     const leaveKeys = getLeaves(workspace.layout);
     // Check every window is in the layout, and all layout windows are present
     // in store
