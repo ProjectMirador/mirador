@@ -28,11 +28,10 @@ class WindowSideBarButtons extends Component {
       <>
         <IconButton
           aria-label="Open information companion window"
-          color="inherit"
           onClick={() => (toggleWindowSideBarPanel('info'))}
         >
           <InfoIcon
-            color={this.sideBarPanelCurrentlySelected('info') ? 'action' : 'inherit'}
+            color={this.sideBarPanelCurrentlySelected('info') ? 'primary' : 'inherit'}
           />
         </IconButton>
       </>

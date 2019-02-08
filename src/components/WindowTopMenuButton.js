@@ -50,7 +50,7 @@ class WindowTopMenuButton extends Component {
     return (
       <>
         <IconButton
-          color="primary"
+          color="inherit"
           aria-label="Menu"
           className={classes.ctrlBtn}
           aria-haspopup="true"
