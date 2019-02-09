@@ -17,8 +17,19 @@ const mapDispatchToProps = (dispatch, props) => ({
   ),
 });
 
+
+/**
+ * mapStateToProps - used to hook up connect to state
+ * @memberof WindowSideButtons
+ * @private
+ */
+const mapStateToProps = (state, { windowId }) => ({
+  sideBarPanel: state.windows[windowId].sideBarPanel,
+});
+
+
 const enhance = compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   miradorWithPlugins,
   withNamespaces(),
   // further HOC go here

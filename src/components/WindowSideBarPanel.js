@@ -12,10 +12,10 @@ class WindowSideBarPanel extends Component {
    * @return React Component
    */
   activePanelComponent() {
-    const { manifest, sideBarPanel } = this.props;
+    const { windowId, sideBarPanel } = this.props;
     switch (sideBarPanel) {
       case 'info':
-        return <WindowSideBarInfoPanel manifest={manifest} />;
+        return <WindowSideBarInfoPanel windowId={windowId} />;
       default:
         return null;
     }
@@ -35,11 +35,10 @@ class WindowSideBarPanel extends Component {
 }
 
 WindowSideBarPanel.propTypes = {
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   sideBarPanel: PropTypes.string,
+  windowId: PropTypes.string.isRequired,
 };
 WindowSideBarPanel.defaultProps = {
-  manifest: {},
   sideBarPanel: 'closed', // Closed will fall out to the default null case for the actiuve panel
 };
 

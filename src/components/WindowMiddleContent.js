@@ -35,12 +35,7 @@ class WindowMiddleContent extends Component {
     const { manifest, window } = this.props;
     return (
       <div className={ns('window-middle-content')}>
-        <WindowSideBar
-          windowId={window.id}
-          manifest={manifest}
-          sideBarOpen={window.sideBarOpen}
-          sideBarPanel={window.sideBarPanel}
-        />
+        <WindowSideBar windowId={window.id} />
         <CompanionWindow
           windowId={window.id}
           manifest={manifest}

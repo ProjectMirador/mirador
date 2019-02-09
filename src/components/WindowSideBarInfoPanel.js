@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import LabelValueMetadata from './LabelValueMetadata';
 import ns from '../config/css-ns';
 
 /**
@@ -9,57 +11,55 @@ import ns from '../config/css-ns';
  */
 class WindowSideBarInfoPanel extends Component {
   /**
-   * manifestLabel - get the label from the manifesto manifestation
-   * @return String
-   */
-  manifestLabel() {
-    const { manifest } = this.props;
-
-    if (manifest.manifestation) {
-      return manifest.manifestation.getLabel().map(label => label.value)[0];
-    }
-    return '';
-  }
-
-  /**
-   * manifestDescription - get the description from the manifesto manifestation
-   * @return String
-   */
-  manifestDescription() {
-    const { manifest } = this.props;
-
-    if (manifest.manifestation) {
-      return manifest.manifestation.getDescription().map(label => label.value);
-    }
-    return '';
-  }
-
-  /**
    * render
    * @return
    */
   render() {
-    const { classes, t } = this.props;
+    const {
+      canvasDescription,
+      canvasLabel,
+      canvasMetadata,
+      classes,
+      manifestDescription,
+      manifestLabel,
+      manifestMetadata,
+      t,
+    } = this.props;
     return (
       <div className={ns('window-sidebar-info-panel')}>
         <Typography variant="h2" className={classes.windowSideBarH2}>{t('aboutThisItem')}</Typography>
-        <Typography variant="h3" className={classes.windowSideBarH3}>{this.manifestLabel()}</Typography>
-        <Typography variant="body2">{this.manifestDescription()}</Typography>
+        {canvasLabel && <Typography variant="h3" className={classes.windowSideBarH3}>{canvasLabel}</Typography>}
+        {canvasDescription && <Typography variant="body2">{canvasDescription}</Typography>}
+        {canvasMetadata && <LabelValueMetadata labelValuePairs={canvasMetadata} />}
+        <Divider />
+        {manifestLabel && <Typography variant="h3" className={classes.windowSideBarH3}>{manifestLabel}</Typography>}
+        {manifestDescription && <Typography variant="body2">{manifestDescription}</Typography>}
+        {manifestMetadata && <LabelValueMetadata labelValuePairs={manifestMetadata} />}
       </div>
     );
   }
 }
 
 WindowSideBarInfoPanel.propTypes = {
+  canvasDescription: PropTypes.string,
+  canvasLabel: PropTypes.string,
+  canvasMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  manifestLabel: PropTypes.string,
+  manifestDescription: PropTypes.string,
+  manifestMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
 };
 
 
 WindowSideBarInfoPanel.defaultProps = {
+  canvasDescription: null,
+  canvasLabel: null,
+  canvasMetadata: [],
   classes: {},
-  manifest: {},
+  manifestLabel: null,
+  manifestDescription: null,
+  manifestMetadata: [],
   t: key => key,
 };
 
