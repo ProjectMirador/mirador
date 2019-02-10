@@ -18,38 +18,25 @@ import ns from '../config/css-ns';
  */
 class WindowTopBar extends Component {
   /**
-   * titleContent
-   *
-   * @return {String}
-   */
-  titleContent() {
-    const { manifest } = this.props;
-    if (manifest && manifest.manifestation) {
-      return manifest.manifestation.getLabel().map(label => label.value)[0];
-    }
-    return '';
-  }
-
-  /**
    * render
    * @return
    */
   render() {
     const {
-      removeWindow, windowId, classes, toggleWindowSideBar, t,
+      removeWindow, windowId, classes, toggleWindowSideBar, t, manifestTitle,
     } = this.props;
     return (
       <Toolbar disableGutters className={classNames(classes.reallyDense, ns('window-top-bar'))} variant="dense">
         <IconButton
           aria-label={t('toggleWindowSideBar')}
           color="inherit"
-          onClick={() => toggleWindowSideBar(windowId)}
+          onClick={toggleWindowSideBar}
         >
           <MenuIcon />
         </IconButton>
         <WindowIcon windowId={windowId} />
         <Typography variant="h3" noWrap color="inherit" className={classes.typographyBody}>
-          {this.titleContent()}
+          {manifestTitle}
         </Typography>
         <WindowTopBarButtons windowId={windowId} />
         <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
@@ -60,17 +47,16 @@ class WindowTopBar extends Component {
 }
 
 WindowTopBar.propTypes = {
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  manifestTitle: PropTypes.string,
   removeWindow: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  toggleWindowSideBar: PropTypes.func,
+  toggleWindowSideBar: PropTypes.func.isRequired,
   t: PropTypes.func,
 };
 
 WindowTopBar.defaultProps = {
-  manifest: null,
-  toggleWindowSideBar: () => {},
+  manifestTitle: '',
   t: key => key,
 };
 

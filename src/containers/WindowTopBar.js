@@ -3,20 +3,26 @@ import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import * as actions from '../state/actions';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
+import { getWindowManifest, getManifestTitle } from '../state/selectors';
 import WindowTopBar from '../components/WindowTopBar';
+
+/** mapStateToProps */
+const mapStateToProps = (state, { windowId }) => ({
+  manifestTitle: getManifestTitle(getWindowManifest(state, windowId)),
+});
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
  * @memberof ManifestListItem
  * @private
  */
-const mapDispatchToProps = (dispatch, props) => ({
-  removeWindow: () => dispatch(actions.removeWindow(props.windowId)),
-  toggleWindowSideBar: () => dispatch(actions.toggleWindowSideBar(props.windowId)),
+const mapDispatchToProps = (dispatch, { windowId }) => ({
+  removeWindow: () => dispatch(actions.removeWindow(windowId)),
+  toggleWindowSideBar: () => dispatch(actions.toggleWindowSideBar(windowId)),
 });
 
 const enhance = compose(
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   miradorWithPlugins,
   withNamespaces(),
   // further HOC go here

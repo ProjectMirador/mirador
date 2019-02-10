@@ -1,10 +1,11 @@
 import manifesto from 'manifesto.js';
-import manifestFixture from '../../fixtures/version-2/001.json';
+import manifestFixture001 from '../../fixtures/version-2/001.json';
 import {
   getWindowManifest,
   getManifestLogo,
   getManifestCanvases,
   getThumbnailNavigationPosition,
+  getManifestTitle,
 } from '../../../src/state/selectors';
 
 
@@ -44,9 +45,9 @@ describe('getWindowManifest()', () => {
 
 describe('getManifestLogo()', () => {
   it('should return manifest logo id', () => {
-    const manifest = { manifestation: manifesto.create(manifestFixture) };
+    const manifest = { manifestation: manifesto.create(manifestFixture001) };
     const received = getManifestLogo(manifest);
-    expect(received).toEqual(manifestFixture.logo['@id']);
+    expect(received).toEqual(manifestFixture001.logo['@id']);
   });
 
   it('should return null if manifest has no logo', () => {
@@ -64,7 +65,7 @@ describe('getManifestCanvases', () => {
   });
 
   it('returns canvases from the manifest', () => {
-    const manifest = { manifestation: manifesto.create(manifestFixture) };
+    const manifest = { manifestation: manifesto.create(manifestFixture001) };
     const received = getManifestCanvases(manifest);
     expect(received.length).toBe(1);
     expect(received[0].id).toBe('https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json');
@@ -91,6 +92,25 @@ describe('getThumbnailNavigationPosition', () => {
 
   it('should return undefined if window does not exists', () => {
     const received = getThumbnailNavigationPosition(state, 'c');
+    expect(received).toBeUndefined();
+  });
+});
+
+describe('getManifestTitle', () => {
+  it('should return manifest title', () => {
+    const manifest = { manifestation: manifesto.create(manifestFixture001) };
+    const received = getManifestTitle(manifest);
+    expect(received).toBe('Bodleian Library Human Freaks 2 (33)');
+  });
+
+  it('should return undefined if manifest undefined', () => {
+    const received = getManifestTitle(undefined);
+    expect(received).toBeUndefined();
+  });
+
+  it('should return undefined if no manifestation', () => {
+    const manifest = {};
+    const received = getManifestTitle(manifest);
     expect(received).toBeUndefined();
   });
 });
