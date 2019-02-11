@@ -60,7 +60,7 @@ class WorkspaceAddButton extends Component {
    * @return
    */
   render() {
-    const { classes, manifests } = this.props;
+    const { classes, t, manifests } = this.props;
     const { lastRequested, anchorEl } = this.state;
 
     const manifestList = Object.keys(manifests).map(manifest => (
@@ -76,7 +76,7 @@ class WorkspaceAddButton extends Component {
         <Fab
           color="primary"
           id="addBtn"
-          aria-label="Add"
+          aria-label={t('add')}
           className={classes.fab}
           aria-owns={anchorEl ? 'add-form' : undefined}
           aria-haspopup="true"
@@ -105,6 +105,11 @@ class WorkspaceAddButton extends Component {
 WorkspaceAddButton.propTypes = {
   manifests: PropTypes.instanceOf(Object).isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  t: PropTypes.func,
+};
+
+WorkspaceAddButton.defaultProps = {
+  t: key => key,
 };
 
 /**

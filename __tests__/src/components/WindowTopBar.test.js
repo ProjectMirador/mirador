@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import WindowTopBar from '../../../src/components/WindowTopBar';
+import WindowIcon from '../../../src/containers/WindowIcon';
 
 const manifestFixture = {
   manifestation: {
@@ -23,6 +24,7 @@ describe('WindowTopBar', () => {
         removeWindow={mockRemoveWindow}
         toggleWindowSideBar={mockToggleWindowSideBar}
         classes={{}}
+        t={key => key}
       />,
     ).dive();
   });
@@ -37,7 +39,7 @@ describe('WindowTopBar', () => {
   });
 
   it('renders a window icon', () => {
-    expect(topBar.find('WithStyles(WindowIcon)').length).toBe(1);
+    expect(topBar.find(WindowIcon).length).toBe(1);
   });
 
   it('calls the toggleWindowSideBar prop when the menu IconButton is clicked', () => {

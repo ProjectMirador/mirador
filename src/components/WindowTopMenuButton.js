@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { withStyles } from '@material-ui/core/styles';
@@ -44,14 +43,14 @@ class WindowTopMenuButton extends Component {
    * @return
    */
   render() {
-    const { classes, windowId } = this.props;
+    const { classes, t, windowId } = this.props;
     const { anchorEl } = this.state;
 
     return (
       <>
         <IconButton
-          color="primary"
-          aria-label="Menu"
+          color="inherit"
+          aria-label={t('menu')}
           className={classes.ctrlBtn}
           aria-haspopup="true"
           onClick={this.handleMenuClick}
@@ -72,6 +71,11 @@ class WindowTopMenuButton extends Component {
 WindowTopMenuButton.propTypes = {
   windowId: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  t: PropTypes.func,
+};
+
+WindowTopMenuButton.defaultProps = {
+  t: key => key,
 };
 
 /**
@@ -83,10 +87,4 @@ const styles = theme => ({
   },
 });
 
-
-const enhance = compose(
-  withStyles(styles),
-  // further HOC go here
-);
-
-export default enhance(WindowTopMenuButton);
+export default withStyles(styles)(WindowTopMenuButton);

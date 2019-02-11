@@ -13,14 +13,14 @@ class WindowList extends Component {
    * @private
    */
   titleContent(window) {
-    const { manifests } = this.props;
+    const { manifests, t } = this.props;
 
     if (window.manifestId
         && manifests[window.manifestId]
         && manifests[window.manifestId].manifestation) {
       return manifests[window.manifestId].manifestation.getLabel().map(label => label.value)[0];
     }
-    return '[Untitled]';
+    return t('untitled');
   }
 
   /**
@@ -29,13 +29,13 @@ class WindowList extends Component {
    */
   render() {
     const {
-      handleClose, anchorEl, windows, focusWindow,
+      handleClose, anchorEl, windows, focusWindow, t,
     } = this.props;
     return (
       <Menu id="window-list-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <ListSubheader>
-          <Button color="inherit" aria-label="Close Menu" onClick={handleClose} align="right" style={{ float: 'right' }}>&times;</Button>
-          Open windows
+          <Button color="inherit" aria-label={t('closeMenu')} onClick={handleClose} align="right" style={{ float: 'right' }}>&times;</Button>
+          {t('openWindows')}
         </ListSubheader>
         {
           Object.values(windows).map(window => (
@@ -60,10 +60,12 @@ WindowList.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   manifests: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  t: PropTypes.func,
 };
 
 WindowList.defaultProps = {
   anchorEl: null,
+  t: key => key,
 };
 
 export default WindowList;

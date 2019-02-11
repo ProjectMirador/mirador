@@ -7,10 +7,11 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import classNames from 'classnames';
-import WindowIcon from './WindowIcon';
-import WindowTopMenuButton from './WindowTopMenuButton';
+import WindowIcon from '../containers/WindowIcon';
+import WindowTopMenuButton from '../containers/WindowTopMenuButton';
 import WindowTopBarButtons from '../containers/WindowTopBarButtons';
 import ns from '../config/css-ns';
+
 
 /**
  * WindowTopBar
@@ -35,24 +36,24 @@ class WindowTopBar extends Component {
    */
   render() {
     const {
-      removeWindow, windowId, classes, toggleWindowSideBar, manifest,
+      removeWindow, windowId, classes, toggleWindowSideBar, t,
     } = this.props;
     return (
       <Toolbar disableGutters className={classNames(classes.reallyDense, ns('window-top-bar'))} variant="dense">
         <IconButton
-          aria-label="Open window side bar"
+          aria-label={t('toggleWindowSideBar')}
           color="inherit"
           onClick={() => toggleWindowSideBar(windowId)}
         >
           <MenuIcon />
         </IconButton>
-        <WindowIcon manifestation={manifest.manifestation} />
+        <WindowIcon windowId={windowId} />
         <Typography variant="h3" noWrap color="inherit" className={classes.typographyBody}>
           {this.titleContent()}
         </Typography>
         <WindowTopBarButtons windowId={windowId} />
         <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
-        <Button color="inherit" className={ns('window-close')} aria-label="Close Window" onClick={removeWindow}>&times;</Button>
+        <Button color="inherit" className={ns('window-close')} aria-label={t('closeWindow')} onClick={removeWindow}>&times;</Button>
       </Toolbar>
     );
   }
@@ -64,11 +65,13 @@ WindowTopBar.propTypes = {
   windowId: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   toggleWindowSideBar: PropTypes.func,
+  t: PropTypes.func,
 };
 
 WindowTopBar.defaultProps = {
   manifest: null,
   toggleWindowSideBar: () => {},
+  t: key => key,
 };
 
 const styles = {

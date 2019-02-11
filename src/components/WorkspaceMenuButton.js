@@ -4,7 +4,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ListItem from '@material-ui/core/ListItem';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import WorkspaceMenu from './WorkspaceMenu';
+import WorkspaceMenu from '../containers/WorkspaceMenu';
 
 /**
  */
@@ -44,16 +44,16 @@ class WorkspaceMenuButton extends Component {
    * @return
    */
   render() {
-    const { classes } = this.props;
+    const { classes, t } = this.props;
     const { anchorEl } = this.state;
 
     return (
       <>
         <ListItem>
           <IconButton
-            color="primary"
+            color="default"
             id="menuBtn"
-            aria-label="Menu"
+            aria-label={t('menu')}
             className={classes.ctrlBtn}
             aria-haspopup="true"
             onClick={this.handleMenuClick}
@@ -73,6 +73,11 @@ class WorkspaceMenuButton extends Component {
 
 WorkspaceMenuButton.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  t: PropTypes.func,
+};
+
+WorkspaceMenuButton.defaultProps = {
+  t: key => key,
 };
 
 /**

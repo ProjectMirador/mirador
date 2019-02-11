@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import WorkspaceFullScreenButton from '../containers/WorkspaceFullScreenButton';
 import WorkspaceAddButton from '../containers/WorkspaceAddButton';
-import WorkspaceMenuButton from './WorkspaceMenuButton';
+import WorkspaceMenuButton from '../containers/WorkspaceMenuButton';
+
 /**
  *
  */

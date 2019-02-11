@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import WorkspaceMenu from '../../../src/components/WorkspaceMenu';
+import WindowList from '../../../src/containers/WindowList';
 
 describe('WorkspaceMenu', () => {
   let wrapper;
@@ -23,15 +24,14 @@ describe('WorkspaceMenu', () => {
     it('sets the anchor state', () => {
       wrapper.instance().handleMenuItemClick('windowList', { currentTarget: true });
 
-      expect(wrapper.find('Connect(WindowList)').props().open).toBe(true);
+      expect(wrapper.find(WindowList).props().open).toBe(true);
     });
   });
 
   describe('handleMenuItemClose', () => {
     it('resets the anchor state', () => {
       wrapper.instance().handleMenuItemClose('windowList')();
-
-      expect(wrapper.find('Connect(WindowList)').props().open).toBe(false);
+      expect(wrapper.find(WindowList).props().open).toBe(false);
     });
   });
 });

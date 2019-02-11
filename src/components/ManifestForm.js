@@ -52,6 +52,7 @@ class ManifestForm extends Component {
    */
   render() {
     const { formValue } = this.state;
+    const { t } = this.props;
     return (
       <form onSubmit={this.formSubmit}>
         <input
@@ -60,7 +61,7 @@ class ManifestForm extends Component {
           type="text"
           onChange={this.handleInputChange}
         />
-        <button id="fetchBtn" type="submit">FetchManifest</button>
+        <button id="fetchBtn" type="submit">{t('fetchManifest')}</button>
       </form>
     );
   }
@@ -69,6 +70,11 @@ class ManifestForm extends Component {
 ManifestForm.propTypes = {
   fetchManifest: PropTypes.func.isRequired,
   setLastRequested: PropTypes.func.isRequired,
+  t: PropTypes.func,
+};
+
+ManifestForm.defaultProps = {
+  t: key => key,
 };
 
 export default ManifestForm;

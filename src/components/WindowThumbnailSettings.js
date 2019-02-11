@@ -16,8 +16,6 @@ export default class WindowThumbnailSettings extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = {
-    };
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -36,28 +34,28 @@ export default class WindowThumbnailSettings extends Component {
    * @return {type}  description
    */
   render() {
-    const { thumbnailNavigationPosition } = this.props;
+    const { thumbnailNavigationPosition, t } = this.props;
 
     return (
       <>
-        <Typography>Thumbnails</Typography>
-        <RadioGroup aria-label="position" name="position" value={thumbnailNavigationPosition} onChange={this.handleChange} row>
+        <Typography>{t('thumbnails')}</Typography>
+        <RadioGroup aria-label={t('position')} name="position" value={thumbnailNavigationPosition} onChange={this.handleChange} row>
           <FormControlLabel
             value="off"
             control={<Radio color="primary" icon={<CancelPresentationIcon />} checkedIcon={<CancelPresentationIcon />} />}
-            label="Off"
+            label={t('off')}
             labelPlacement="bottom"
           />
           <FormControlLabel
             value="bottom"
             control={<Radio color="primary" icon={<ThumbnailNavigationBottomIcon />} checkedIcon={<ThumbnailNavigationBottomIcon />} />}
-            label="Bottom"
+            label={t('bottom')}
             labelPlacement="bottom"
           />
           <FormControlLabel
             value="right"
             control={<Radio color="primary" icon={<ThumbnailNavigationRightIcon />} checkedIcon={<ThumbnailNavigationRightIcon />} />}
-            label="Right"
+            label={t('right')}
             labelPlacement="bottom"
           />
         </RadioGroup>
@@ -88,4 +86,8 @@ WindowThumbnailSettings.propTypes = {
   windowId: PropTypes.string.isRequired,
   setWindowThumbnailPosition: PropTypes.func.isRequired,
   thumbnailNavigationPosition: PropTypes.string.isRequired,
+  t: PropTypes.func,
+};
+WindowThumbnailSettings.defaultProps = {
+  t: key => key,
 };

@@ -49,7 +49,7 @@ describe('WindowList', () => {
       expect(wrapper.find('WithStyles(MenuItem)').length).toBe(1);
       expect(wrapper.find('WithStyles(MenuItem)').key()).toBe('xyz');
       expect(
-        wrapper.find('WithStyles(MenuItem)').matchesElement(<MenuItem>[Untitled]</MenuItem>),
+        wrapper.find('WithStyles(MenuItem)').matchesElement(<MenuItem>untitled</MenuItem>),
       ).toBe(true);
       wrapper.find('WithStyles(MenuItem)').simulate('click', {});
       expect(handleClose).toBeCalled();
