@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 /**
  * Provides a form for user input of a manifest url
  * @prop {Function} fetchManifest
- * @prop {Function} setLastRequested
  */
 class ManifestForm extends Component {
   /**
@@ -26,11 +25,10 @@ class ManifestForm extends Component {
    * @private
    */
   formSubmit(event) {
-    const { fetchManifest, setLastRequested } = this.props;
+    const { fetchManifest } = this.props;
     const { formValue } = this.state;
     event.preventDefault();
     fetchManifest(formValue);
-    setLastRequested(formValue);
   }
 
   /**
@@ -69,7 +67,6 @@ class ManifestForm extends Component {
 
 ManifestForm.propTypes = {
   fetchManifest: PropTypes.func.isRequired,
-  setLastRequested: PropTypes.func.isRequired,
   t: PropTypes.func,
 };
 

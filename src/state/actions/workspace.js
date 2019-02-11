@@ -29,3 +29,13 @@ export function toggleZoomControls(showZoomControls) {
 export function updateWorkspaceMosaicLayout(layout) {
   return { type: ActionTypes.UPDATE_WORKSPACE_MOSAIC_LAYOUT, layout };
 }
+
+/**
+ * updateWorkspaceMosaicLayout - action creator
+ *
+ * @param  {Object} layout
+ * @memberof ActionCreators
+ */
+export function setWorkspaceAddVisibility(isWorkspaceAddVisible) {
+  return { type: ActionTypes.SET_WORKSPACE_ADD_VISIBILITY, isWorkspaceAddVisible };
+}

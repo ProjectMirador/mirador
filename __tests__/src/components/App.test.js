@@ -4,6 +4,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import Fullscreen from 'react-fullscreen-crossbrowser';
 import WorkspaceControlPanel from '../../../src/components/WorkspaceControlPanel';
 import Workspace from '../../../src/containers/Workspace';
+import WorkspaceAdd from '../../../src/containers/WorkspaceAdd';
 import App from '../../../src/components/App';
 
 /** */
@@ -48,5 +49,12 @@ describe('App', () => {
     wrapper = createWrapper({ isFullscreenEnabled: true });
     expect(wrapper.find(Fullscreen).first().prop('enabled'))
       .toEqual(true);
+  });
+
+  describe('with isWorkspaceAddVisible', () => {
+    const wrapper = createWrapper({ isWorkspaceAddVisible: true });
+
+    expect(wrapper.find(Workspace).length).toBe(0);
+    expect(wrapper.find(WorkspaceAdd).length).toBe(1);
   });
 });
