@@ -1,21 +1,54 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import WindowTopMenuButton from '../../../src/components/WindowTopMenuButton';
+import IconButton from '@material-ui/core/IconButton';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import WindowTopMenu from '../../../src/containers/WindowTopMenu';
+import WindowTopMenuButton from '../../../src/components/WindowTopMenuButton';
+
+/** create wrapper */
+function createWrapper(props) {
+  return shallow(
+    <WindowTopMenuButton
+      windowId="xyz"
+      classes={{}}
+      t={str => str}
+      {...props}
+    />,
+  ).dive(); // unwrap HOC created by withStyles()
+}
 
 describe('WindowTopMenuButton', () => {
-  let wrapper;
-  beforeEach(() => {
-    wrapper = shallow(
-      <WindowTopMenuButton classes={{}} windowId="xyz" />,
-    ).dive();
+  it('renders all needed elements', () => {
+    const wrapper = createWrapper();
+    expect(wrapper.find(IconButton).length).toBe(1);
+    expect(wrapper.find(MoreVertIcon).length).toBe(1);
+    expect(wrapper.find(WindowTopMenu).length).toBe(1);
   });
 
-  it('renders without an error', () => {
-    expect(wrapper.find('WithStyles(IconButton)').length).toBe(1);
+  it('passes correct props to <WindowTopMenu/>', () => {
+    const wrapper = createWrapper();
+    const props = wrapper.find(WindowTopMenu).first().props();
+    const { handleMenuClose } = wrapper.instance();
+    expect(props.windowId).toBe('xyz');
+    expect(props.anchorEl).toBe(null);
+    expect(props.handleClose).toBe(handleMenuClose);
   });
-  it('when clicked, updates the state', () => {
-    wrapper.find('WithStyles(IconButton)').simulate('click', { currentTarget: 'x' });
-    expect(wrapper.find(WindowTopMenu).props().anchorEl).toBe('x');
+
+  it('passes correct props to <IconButton/>', () => {
+    const wrapper = createWrapper();
+    const props = wrapper.find(IconButton).first().props();
+    const { handleMenuClick } = wrapper.instance();
+    expect(props.onClick).toBe(handleMenuClick);
+  });
+
+  it('toggles anchor element in <WindowTopMenu/> on menu open/close', () => {
+    const wrapper = createWrapper();
+    expect(wrapper.find(WindowTopMenu).first().props().anchorEl).toBe(null);
+
+    wrapper.instance().handleMenuClick({ currentTarget: 'bubu' });
+    expect(wrapper.find(WindowTopMenu).first().props().anchorEl).toBe('bubu');
+
+    wrapper.instance().handleMenuClose();
+    expect(wrapper.find(WindowTopMenu).first().props().anchorEl).toBe(null);
   });
 });
