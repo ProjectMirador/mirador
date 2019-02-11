@@ -43,3 +43,14 @@ export function getThumbnailNavigationPosition(state, windowId) {
   return state.windows[windowId]
     && state.windows[windowId].thumbnailNavigationPosition;
 }
+
+/**
+* Return manifest title
+* @param {object} manifest
+* @return {String}
+*/
+export function getManifestTitle(manifest) {
+  return manifest
+    && manifest.manifestation
+    && manifest.manifestation.getLabel().map(label => label.value)[0];
+}
