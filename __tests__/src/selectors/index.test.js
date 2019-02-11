@@ -6,6 +6,7 @@ import {
   getManifestCanvases,
   getThumbnailNavigationPosition,
   getManifestTitle,
+  getWindowViewType,
 } from '../../../src/state/selectors';
 
 
@@ -111,6 +112,30 @@ describe('getManifestTitle', () => {
   it('should return undefined if no manifestation', () => {
     const manifest = {};
     const received = getManifestTitle(manifest);
+    expect(received).toBeUndefined();
+  });
+});
+
+describe('getWindowViewType', () => {
+  const state = {
+    windows: {
+      a: { id: 'a', view: 'single' },
+      b: { id: 'b' },
+    },
+  };
+
+  it('should return view type if window exists', () => {
+    const received = getWindowViewType(state, 'a');
+    expect(received).toBe('single');
+  });
+
+  it('should return undefined if view type does not exist in window', () => {
+    const received = getWindowViewType(state, 'b');
+    expect(received).toBeUndefined();
+  });
+
+  it('should return undefined if window does not exists', () => {
+    const received = getWindowViewType(state, 'c');
     expect(received).toBeUndefined();
   });
 });

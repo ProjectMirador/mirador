@@ -22,7 +22,14 @@ const windowsReducer = (state = {}, action) => {
           sideBarOpen: !state[action.windowId].sideBarOpen,
         },
       };
-
+    case ActionTypes.SET_WINDOW_VIEW_TYPE:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          view: action.viewType,
+        },
+      };
     case ActionTypes.SET_WINDOW_THUMBNAIL_POSITION:
       return {
         ...state,
