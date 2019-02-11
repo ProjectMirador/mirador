@@ -10,7 +10,6 @@ import * as actions from '../state/actions';
 import settings from '../config/settings';
 import i18n from '../i18n';
 
-const store = createStore();
 /**
  * Default Mirador instantiation
  */
@@ -18,16 +17,17 @@ class MiradorViewer {
   /**
    */
   constructor(config) {
+    this.store = createStore();
     this.config = config;
     this.processPlugins();
     this.processConfig();
     const viewer = {
       actions,
-      store,
+      store: this.store,
     };
 
     ReactDOM.render(
-      <Provider store={store}>
+      <Provider store={this.store}>
         <I18nextProvider i18n={i18n}>
           <App config={config} />
         </I18nextProvider>
@@ -44,7 +44,7 @@ class MiradorViewer {
   processConfig() {
     const mergedConfig = deepmerge(settings, this.config);
     const action = actions.setConfig(mergedConfig);
-    store.dispatch(action);
+    this.store.dispatch(action);
 
     mergedConfig.windows.forEach((miradorWindow) => {
       let thumbnailNavigationPosition;
@@ -53,8 +53,8 @@ class MiradorViewer {
       } else {
         thumbnailNavigationPosition = mergedConfig.thumbnailNavigation.defaultPosition;
       }
-      store.dispatch(actions.fetchManifest(miradorWindow.loadedManifest));
-      store.dispatch(actions.addWindow({
+      this.store.dispatch(actions.fetchManifest(miradorWindow.loadedManifest));
+      this.store.dispatch(actions.addWindow({
         canvasIndex: (miradorWindow.canvasIndex || 0),
         manifestId: miradorWindow.loadedManifest,
         thumbnailNavigationPosition,
@@ -92,8 +92,8 @@ class MiradorViewer {
     });
 
     actionCreators.forEach((action) => { actions[action.name] = action.action; });
-    reducers.forEach((reducer) => { store.pluginReducers[reducer.name] = reducer.reducer; });
-    store.replaceReducer(createRootReducer(store.pluginReducers));
+    reducers.forEach((reducer) => { this.store.pluginReducers[reducer.name] = reducer.reducer; });
+    this.store.replaceReducer(createRootReducer(this.store.pluginReducers));
   }
 }
 
