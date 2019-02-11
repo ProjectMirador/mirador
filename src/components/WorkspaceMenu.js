@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Menu from '@material-ui/core/Menu';
 import Divider from '@material-ui/core/Divider';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import LoupeIcon from '@material-ui/icons/Loupe';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
@@ -22,6 +23,7 @@ class WorkspaceMenu extends Component {
     super(props);
     this.state = {
       windowList: {},
+      toggleZoom: {},
       settings: {},
       exportWorkspace: {},
     };
@@ -54,12 +56,28 @@ class WorkspaceMenu extends Component {
   }
 
   /**
+   * @private
+   */
+  handleZoomToggleClick() {
+    const { toggleZoomControls, showZoomControls } = this.props;
+    toggleZoomControls(!showZoomControls);
+  }
+
+  /**
    * render
    * @return
    */
   render() {
-    const { handleClose, anchorEl, t } = this.props;
-    const { windowList, settings, exportWorkspace } = this.state;
+    const {
+      handleClose, anchorEl, t, showZoomControls,
+    } = this.props;
+
+    const {
+      windowList,
+      toggleZoom,
+      settings,
+      exportWorkspace,
+    } = this.state;
 
     return (
       <>
@@ -73,6 +91,16 @@ class WorkspaceMenu extends Component {
               <ViewHeadlineIcon />
             </ListItemIcon>
             <Typography varient="inherit">{t('listAllOpenWindows')}</Typography>
+          </MenuItem>
+          <MenuItem
+            aria-haspopup="true"
+            onClick={(e) => { this.handleZoomToggleClick(e); handleClose(e); }}
+            aria-owns={toggleZoom.anchorEl ? 'toggle-zoom-menu' : undefined}
+          >
+            <ListItemIcon>
+              <LoupeIcon />
+            </ListItemIcon>
+            <Typography varient="inherit">{ showZoomControls ? 'Hide zoom controls' : 'Show Zoom Controls' }</Typography>
           </MenuItem>
           <Divider />
           <MenuItem
@@ -102,6 +130,10 @@ class WorkspaceMenu extends Component {
           handleClose={this.handleMenuItemClose('windowList')}
         />
         <WorkspaceSettings
+          open={Boolean(toggleZoom.open)}
+          handleClose={this.handleMenuItemClose('toggleZoom')}
+        />
+        <WorkspaceSettings
           open={Boolean(settings.open)}
           handleClose={this.handleMenuItemClose('settings')}
         />
@@ -116,6 +148,8 @@ class WorkspaceMenu extends Component {
 
 WorkspaceMenu.propTypes = {
   handleClose: PropTypes.func.isRequired,
+  toggleZoomControls: PropTypes.func,
+  showZoomControls: PropTypes.bool,
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
 };
@@ -123,6 +157,8 @@ WorkspaceMenu.propTypes = {
 WorkspaceMenu.defaultProps = {
   anchorEl: null,
   t: key => key,
+  showZoomControls: false,
+  toggleZoomControls: () => {},
 };
 
 export default WorkspaceMenu;

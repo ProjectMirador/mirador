@@ -12,6 +12,15 @@ export function setWorkspaceFullscreen(isFullscreenEnabled) {
 }
 
 /**
+ * toggleZoomControls - action creator
+ * @param {Boolean} showZoomControls
+ * @memberof ActionCreators
+*/
+export function toggleZoomControls(showZoomControls) {
+  return { type: ActionTypes.TOGGLE_ZOOM_CONTROLS, showZoomControls };
+}
+
+/**
  * updateWorkspaceMosaicLayout - action creator
  *
  * @param  {Object} layout

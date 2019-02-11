@@ -31,4 +31,13 @@ describe('workspace actions', () => {
       expect(actions.updateWorkspaceMosaicLayout(options)).toEqual(expectedAction);
     });
   });
+  describe('toggleZoomControls', () => {
+    it('should set the zoom control visibility', () => {
+      const expectedAction = {
+        type: ActionTypes.TOGGLE_ZOOM_CONTROLS,
+        showZoomControls: true,
+      };
+      expect(actions.toggleZoomControls(true)).toEqual(expectedAction);
+    });
+  });
 });

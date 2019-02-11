@@ -18,6 +18,14 @@ describe('workspace reducer', () => {
       isFullscreenEnabled: true,
     });
   });
+  it('should handle TOGGLE_ZOOM_CONTROLS', () => {
+    expect(reducer([], {
+      type: ActionTypes.TOGGLE_ZOOM_CONTROLS,
+      showZoomControls: true,
+    })).toEqual({
+      showZoomControls: true,
+    });
+  });
   it('should handle UPDATE_WORKSPACE_MOSAIC_LAYOUT', () => {
     expect(reducer([], {
       type: ActionTypes.UPDATE_WORKSPACE_MOSAIC_LAYOUT,
