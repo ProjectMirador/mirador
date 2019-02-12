@@ -62,7 +62,6 @@ class WindowSideBar extends Component {
   }
 }
 
-
 WindowSideBar.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
   windowId: PropTypes.string.isRequired,
