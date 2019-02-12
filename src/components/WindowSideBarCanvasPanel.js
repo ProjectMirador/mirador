@@ -17,7 +17,11 @@ class WindowSideBarCanvasPanel extends Component {
     return (
       <List>
         {
-          canvases.map(canvas => <ListItem key={canvas.__jsonld['@id']}><Typography variant="body2">{canvas.__jsonld.label}</Typography></ListItem>)// eslint-disable-line no-underscore-dangle
+          canvases && canvases.map(canvas => (
+            <ListItem key={canvas.__jsonld['@id']/* eslint-disable-line no-underscore-dangle */}>
+              <Typography variant="body2">{canvas.__jsonld.label /* eslint-disable-line no-underscore-dangle */}</Typography>
+            </ListItem>
+          ))
         }
       </List>
     );
