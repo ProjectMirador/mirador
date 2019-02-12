@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import deepmerge from 'deepmerge';
+import whyDidYouUpdate from 'why-did-you-update';
 import App from '../containers/App';
 import createRootReducer from '../state/reducers/index';
 import createStore from '../state/createStore';
 import * as actions from '../state/actions';
 import settings from '../config/settings';
 import i18n from '../i18n';
+
+whyDidYouUpdate(React);
 
 /**
  * Default Mirador instantiation
