@@ -272,6 +272,10 @@ describe('getIdAndLabelOfCanvases', () => {
         id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
         label: 'Image 1',
       },
+      {
+        id: 'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
+        label: 'Image 2',
+      },
     ];
     expect(received).toEqual(expected);
   });

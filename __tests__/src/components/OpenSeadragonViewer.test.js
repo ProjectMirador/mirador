@@ -15,7 +15,7 @@ describe('OpenSeadragonViewer', () => {
 
     wrapper = shallow(
       <OpenSeadragonViewer
-        tileSources={[{ '@id': 'http://foo' }]}
+        tileSources={[{ '@id': 'http://foo', width: 100, height: 200 }, { '@id': 'http://bar', width: 150, height: 201 }]}
         window={{ id: 'base' }}
         config={{}}
         updateViewport={updateViewport}
@@ -53,16 +53,28 @@ describe('OpenSeadragonViewer', () => {
       wrapper.instance().viewer = {
         viewport: {
           fitBounds: jest.fn(),
-          imageToViewportRectangle: jest.fn(),
         },
       };
       wrapper.instance().fitBounds(1, 2, 3, 4);
       expect(
-        wrapper.instance().viewer.viewport.imageToViewportRectangle,
-      ).toHaveBeenCalledWith(1, 2, 3, 4);
-      expect(
         wrapper.instance().viewer.viewport.fitBounds,
-      ).toHaveBeenCalled();
+      ).toHaveBeenCalledWith(expect.any(OpenSeadragon.Rect), true);
+    });
+  });
+  describe('boundsFromTileSources', () => {
+    it('generates bounds from a set of tileSources', () => {
+      expect(wrapper.instance().boundsFromTileSources()).toEqual(expect.arrayContaining(
+        [0, 0, 250, 201],
+      ));
+    });
+  });
+  describe('boundingRectFromTileSource', () => {
+    it('creates a bounding area for the current tileSource offset if needed', () => {
+      expect(wrapper.instance().boundingRectFromTileSource(
+        { '@id': 'http://bar', width: 150, height: 201 }, 1,
+      )).toEqual(expect.arrayContaining(
+        [100, 0, 150, 201],
+      ));
     });
   });
 

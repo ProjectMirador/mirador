@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import OSDViewer from '../containers/OpenSeadragonViewer';
 import ViewerNavigation from '../containers/ViewerNavigation';
+import ManifestoCanvas from '../lib/ManifestoCanvas';
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -24,7 +25,12 @@ class WindowViewer extends Component {
    */
   componentDidMount() {
     const { fetchInfoResponse } = this.props;
-    !this.infoResponseIsInStore() && fetchInfoResponse(this.imageInformationUri());
+
+    if (!this.infoResponseIsInStore()) {
+      this.currentCanvases().forEach((canvas) => {
+        fetchInfoResponse(new ManifestoCanvas(canvas).imageInformationUri);
+      });
+    }
   }
 
   /**
@@ -33,8 +39,12 @@ class WindowViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const { window, fetchInfoResponse } = this.props;
-    if (prevProps.window.canvasIndex !== window.canvasIndex && !this.infoResponseIsInStore()) {
-      fetchInfoResponse(this.imageInformationUri());
+    if (prevProps.window.view !== window.view
+      || (prevProps.window.canvasIndex !== window.canvasIndex && !this.infoResponseIsInStore())
+    ) {
+      this.currentCanvases().forEach((canvas) => {
+        fetchInfoResponse(new ManifestoCanvas(canvas).imageInformationUri);
+      });
     }
   }
 
@@ -44,31 +54,63 @@ class WindowViewer extends Component {
    * @return [Boolean]
    */
   infoResponseIsInStore() {
-    const { infoResponses } = this.props;
-    const currentInfoResponse = infoResponses[this.imageInformationUri()];
-    return (currentInfoResponse !== undefined
-      && currentInfoResponse.isFetching === false
-      && currentInfoResponse.json !== undefined);
+    const responses = this.currentInfoResponses();
+    if (responses.length === this.currentCanvases().length) {
+      return true;
+    }
+    return false;
   }
 
   /**
-   * Constructs an image information URI to request from a canvas
+   * Figures out how many and what canvases to present to a user based off of
+   * the view, number of canvases, and canvasIndex.
    */
-  imageInformationUri() {
+  currentCanvases() {
     const { window } = this.props;
-    return `${this.canvases[window.canvasIndex].getImages()[0].getResource().getServices()[0].id}/info.json`;
+    switch (window.view) {
+      case 'book':
+        if ( // FIXME: There is probably better logic floating around out there to determine this.
+          this.canvases.length > 0 // when there are canvases present
+          && window.canvasIndex !== 0 // when the first canvas is not selected
+          && window.canvasIndex + 1 !== this.canvases.length // when the last canvas is not selected
+        ) {
+          // For an even canvas
+          if (window.canvasIndex % 2 === 0) {
+            return [this.canvases[window.canvasIndex - 1], this.canvases[window.canvasIndex]];
+          }
+          return [this.canvases[window.canvasIndex], this.canvases[window.canvasIndex + 1]];
+        }
+        return [this.canvases[window.canvasIndex]];
+      default:
+        return [this.canvases[window.canvasIndex]];
+    }
+  }
+
+  /**
+   * currentInfoResponses - Selects infoResponses that are relevent to existing
+   * canvases to be displayed.
+   */
+  currentInfoResponses() {
+    const { infoResponses } = this.props;
+    const currentCanvases = this.currentCanvases();
+    return currentCanvases.map(canvas => (
+      infoResponses[new ManifestoCanvas(canvas).imageInformationUri]
+    )).filter(infoResponse => (infoResponse !== undefined
+      && infoResponse.isFetching === false
+      && infoResponse.error === undefined));
   }
 
   /**
    * Return an image information response from the store for the correct image
    */
   tileInfoFetchedFromStore() {
-    const { infoResponses } = this.props;
-    return [infoResponses[this.imageInformationUri()]]
-      .filter(infoResponse => (infoResponse !== undefined
-        && infoResponse.isFetching === false
-        && infoResponse.error === undefined))
+    const responses = this.currentInfoResponses()
       .map(infoResponse => infoResponse.json);
+    // Only return actual tileSources when all current canvases have completed.
+    if (responses.length === this.currentCanvases().length) {
+      return responses;
+    }
+    return [];
   }
 
   /**

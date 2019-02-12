@@ -7,6 +7,9 @@ export default {
       useNextVariants: true // set so that console deprecation warning is removed
     }
   },
+  window: {
+    defaultView: 'single',
+  },
   windows: [],
   thumbnailNavigation: {
     defaultPosition: 'bottom',

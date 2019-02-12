@@ -23,6 +23,12 @@ export default class ManifestoCanvas {
   }
 
   /**
+   */
+  get imageInformationUri() {
+    return `${this.canvas.getImages()[0].getResource().getServices()[0].id}/info.json`;
+  }
+
+  /**
    * Creates a canonical image request for a thumb
    * @param {Number} height
    */
