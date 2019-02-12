@@ -5,6 +5,7 @@ import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/
 import Fullscreen from 'react-fullscreen-crossbrowser';
 import WorkspaceControlPanel from './WorkspaceControlPanel';
 import Workspace from '../containers/Workspace';
+import WorkspaceAdd from '../containers/WorkspaceAdd';
 import ns from '../config/css-ns';
 
 /**
@@ -32,7 +33,7 @@ class App extends Component {
    */
   render() {
     const {
-      isFullscreenEnabled, setWorkspaceFullscreen, classes,
+      isFullscreenEnabled, setWorkspaceFullscreen, classes, isWorkspaceAddVisible,
     } = this.props;
 
     return (
@@ -42,7 +43,11 @@ class App extends Component {
             enabled={isFullscreenEnabled}
             onChange={setWorkspaceFullscreen}
           >
-            <Workspace />
+            {
+              isWorkspaceAddVisible
+                ? <WorkspaceAdd />
+                : <Workspace />
+             }
           </Fullscreen>
           <WorkspaceControlPanel />
         </MuiThemeProvider>
@@ -56,10 +61,12 @@ App.propTypes = {
   isFullscreenEnabled: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
   setWorkspaceFullscreen: PropTypes.func.isRequired,
+  isWorkspaceAddVisible: PropTypes.bool,
 };
 
 App.defaultProps = {
   isFullscreenEnabled: false,
+  isWorkspaceAddVisible: false,
 };
 /**
  Material UI style overrides

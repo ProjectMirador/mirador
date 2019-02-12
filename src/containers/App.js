@@ -12,6 +12,7 @@ const mapStateToProps = state => (
   {
     theme: state.config.theme,
     isFullscreenEnabled: state.workspace.isFullscreenEnabled,
+    isWorkspaceAddVisible: state.workspace.isWorkspaceAddVisible,
   }
 );
 

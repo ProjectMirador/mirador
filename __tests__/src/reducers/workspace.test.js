@@ -34,4 +34,12 @@ describe('workspace reducer', () => {
       layout: { foo: 'bar' },
     });
   });
+  it('should handle SET_WORKSPACE_ADD_VISIBILITY', () => {
+    expect(reducer([], {
+      type: ActionTypes.SET_WORKSPACE_ADD_VISIBILITY,
+      isWorkspaceAddVisible: true,
+    })).toEqual({
+      isWorkspaceAddVisible: true,
+    });
+  });
 });

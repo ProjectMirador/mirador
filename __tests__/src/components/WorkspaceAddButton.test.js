@@ -1,33 +1,39 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import ClearIcon from '@material-ui/icons/Clear';
 import WorkspaceAddButton from '../../../src/components/WorkspaceAddButton';
-import fixture from '../../fixtures/version-2/002.json';
+
+/** create wrapper */
+function createWrapper(props) {
+  return shallow(
+    <WorkspaceAddButton
+      classes={{}}
+      t={str => str}
+      {...props}
+    />,
+  ).dive(); // unwrap HOC created by withStyles()
+}
 
 describe('WorkspaceAddButton', () => {
-  let wrapper;
-  beforeEach(() => {
-    wrapper = shallow(
-      <WorkspaceAddButton manifests={{ foo: fixture, bar: fixture }} classes={{}} />,
-    ).dive();
+  it('renders a button to open the load window area', () => {
+    const setWorkspaceAddVisibility = jest.fn();
+    const wrapper = createWrapper({ isWorkspaceAddVisible: false, setWorkspaceAddVisibility });
+
+    expect(wrapper.find(AddIcon).length).toBe(1);
+
+    wrapper.find(Fab).simulate('click');
+    expect(setWorkspaceAddVisibility).toHaveBeenCalledWith(true);
   });
 
-  it('renders a list item for each manifest in the state', () => {
-    expect(wrapper.find('ul Connect(ManifestListItem)').length).toBe(2);
-  });
+  it('renders a button to close the load window area', () => {
+    const setWorkspaceAddVisibility = jest.fn();
+    const wrapper = createWrapper({ isWorkspaceAddVisible: true, setWorkspaceAddVisibility });
 
-  describe('handleAddManifestClick', () => {
-    it('sets the anchor state', () => {
-      wrapper.instance().handleAddManifestClick({ currentTarget: true });
+    expect(wrapper.find(ClearIcon).length).toBe(1);
 
-      expect(wrapper.dive().find('WithStyles(Menu)').props().open).toBe(true);
-    });
-  });
-
-  describe('handleAddManifestClose', () => {
-    it('resets the anchor state', () => {
-      wrapper.instance().handleAddManifestClose();
-
-      expect(wrapper.dive().find('WithStyles(Menu)').props().open).toBe(false);
-    });
+    wrapper.find(Fab).simulate('click');
+    expect(setWorkspaceAddVisibility).toHaveBeenCalledWith(false);
   });
 });

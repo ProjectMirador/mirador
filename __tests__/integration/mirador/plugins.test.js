@@ -8,7 +8,8 @@ describe('Mirador plugin use', () => {
     await expect(page).toClick('#fetchBtn');
     // TODO: Refactor the app so we get rid of the wait
     await page.waitFor(1000);
-    await expect(page).toClick('.mirador-manifest-list-item');
+    await expect(page).toMatchElement('li', { text: 'http://localhost:5000/api/sn904cj3439' });
+    await expect(page).toClick('li button');
   });
   it('displays "Share Button" plugin', async () => {
     await expect(page).toMatchElement('button', { text: 'Share' });
