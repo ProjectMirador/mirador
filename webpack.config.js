@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const paths = require('./config/paths');
 
@@ -90,6 +91,11 @@ const baseConfig = [
         }),
       ],
     },
+    plugins: [
+      new webpack.IgnorePlugin({
+        resourceRegExp: /@blueprintjs\/(core|icons)/, // ignore optional UI framework dependencies
+      }),
+    ],
   },
 ];
 
