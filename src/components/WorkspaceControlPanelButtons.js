@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import WorkspaceFullScreenButton from '../containers/WorkspaceFullScreenButton';
@@ -6,26 +6,23 @@ import WorkspaceAddButton from '../containers/WorkspaceAddButton';
 import WorkspaceMenuButton from '../containers/WorkspaceMenuButton';
 
 /**
- *
+ * WorkspaceControlPanelButtons
+ * @param props
+ * @returns {List}
+ * @constructor
  */
-class WorkspaceControlPanelButtons extends Component {
-  /**
-   * render
-   *
-   * @return {type}  description
-   */
-  render() {
-    const { children } = this.props;
-    return (
-      <List>
-        <WorkspaceAddButton />
-        <WorkspaceMenuButton />
-        <WorkspaceFullScreenButton />
-        {children}
-      </List>
-    );
-  }
+function WorkspaceControlPanelButtons(props) {
+  const { children } = props;
+  return (
+    <List>
+      <WorkspaceAddButton />
+      <WorkspaceMenuButton />
+      <WorkspaceFullScreenButton />
+      {children}
+    </List>
+  );
 }
+
 
 WorkspaceControlPanelButtons.propTypes = {
   children: PropTypes.node,

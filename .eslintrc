@@ -21,6 +21,6 @@
         "FunctionExpression": true
       }
     }],
-    "react/prefer-stateless-function": "off"
+    "react/prefer-stateless-function": [2, { "ignorePureComponents": false }]
   }
 }

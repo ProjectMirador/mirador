@@ -1,17 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 /**
- *
+ * WindowTopBarButtons
+ * @returns {*}
+ * @constructor
  */
-class WindowTopBarButtons extends Component {
-  /**
-   * render
-   *
-   * @return {type}  description
-   */
-  render() {
-    return (<></>);
-  }
+function WindowTopBarButtons() {
+  return (<></>);
 }
+
 
 export default WindowTopBarButtons;

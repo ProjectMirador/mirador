@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import Menu from '@material-ui/core/Menu';
 import Divider from '@material-ui/core/Divider';
@@ -6,27 +6,24 @@ import PropTypes from 'prop-types';
 import WindowThumbnailSettings from '../containers/WindowThumbnailSettings';
 
 /**
+ * WindowTopMenu
+ * @param props
+ * @returns {*}
+ * @constructor
  */
-class WindowTopMenu extends Component {
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const { handleClose, anchorEl, windowId } = this.props;
-    // const {} = this.state;
+function WindowTopMenu(props) {
+  const { handleClose, anchorEl, windowId } = props;
 
-    return (
-      <>
-        <Menu id={`window-menu_${windowId}`} anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-          <ListItem>
-            <WindowThumbnailSettings windowId={windowId} />
-          </ListItem>
-          <Divider />
-        </Menu>
-      </>
-    );
-  }
+  return (
+    <>
+      <Menu id={`window-menu_${windowId}`} anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+        <ListItem>
+          <WindowThumbnailSettings windowId={windowId} />
+        </ListItem>
+        <Divider />
+      </Menu>
+    </>
+  );
 }
 
 WindowTopMenu.propTypes = {

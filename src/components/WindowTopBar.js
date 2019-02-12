@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -12,39 +12,36 @@ import WindowTopMenuButton from '../containers/WindowTopMenuButton';
 import WindowTopBarButtons from '../containers/WindowTopBarButtons';
 import ns from '../config/css-ns';
 
-
 /**
  * WindowTopBar
+ * @param props
+ * @returns {Toolbar}
+ * @constructor
  */
-class WindowTopBar extends Component {
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const {
-      removeWindow, windowId, classes, toggleWindowSideBar, t, manifestTitle,
-    } = this.props;
-    return (
-      <Toolbar disableGutters className={classNames(classes.reallyDense, ns('window-top-bar'))} variant="dense">
-        <IconButton
-          aria-label={t('toggleWindowSideBar')}
-          color="inherit"
-          onClick={toggleWindowSideBar}
-        >
-          <MenuIcon />
-        </IconButton>
-        <WindowIcon windowId={windowId} />
-        <Typography variant="h3" noWrap color="inherit" className={classes.typographyBody}>
-          {manifestTitle}
-        </Typography>
-        <WindowTopBarButtons windowId={windowId} />
-        <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
-        <Button color="inherit" className={ns('window-close')} aria-label={t('closeWindow')} onClick={removeWindow}>&times;</Button>
-      </Toolbar>
-    );
-  }
+function WindowTopBar(props) {
+  const {
+    removeWindow, windowId, classes, toggleWindowSideBar, t, manifestTitle,
+  } = props;
+  return (
+    <Toolbar disableGutters className={classNames(classes.reallyDense, ns('window-top-bar'))} variant="dense">
+      <IconButton
+        aria-label={t('toggleWindowSideBar')}
+        color="inherit"
+        onClick={toggleWindowSideBar}
+      >
+        <MenuIcon />
+      </IconButton>
+      <WindowIcon windowId={windowId} />
+      <Typography variant="h3" noWrap color="inherit" className={classes.typographyBody}>
+        {manifestTitle}
+      </Typography>
+      <WindowTopBarButtons windowId={windowId} />
+      <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
+      <Button color="inherit" className={ns('window-close')} aria-label={t('closeWindow')} onClick={removeWindow}>&times;</Button>
+    </Toolbar>
+  );
 }
+
 
 WindowTopBar.propTypes = {
   manifestTitle: PropTypes.string,

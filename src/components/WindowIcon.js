@@ -1,33 +1,32 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
 /**
+ * WindowIcon
+ * @param props
+ * @returns {*}
+ * @constructor
  */
-class WindowIcon extends Component {
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const { manifestLogo, classes } = this.props;
+function WindowIcon(props) {
+  const { manifestLogo, classes } = props;
 
-    const img = manifestLogo && (
-      <img
-        src={manifestLogo}
-        alt=""
-        role="presentation"
-        className={classes.logo}
-      />
-    );
+  const img = manifestLogo && (
+    <img
+      src={manifestLogo}
+      alt=""
+      role="presentation"
+      className={classes.logo}
+    />
+  );
 
-    return (
-      <>
-        {img}
-      </>
-    );
-  }
+  return (
+    <>
+      {img}
+    </>
+  );
 }
+
 
 WindowIcon.propTypes = {
   manifestLogo: PropTypes.string,

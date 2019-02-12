@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Drawer from '@material-ui/core/Drawer';
@@ -10,60 +10,57 @@ import ns from '../config/css-ns';
 
 /**
  * WindowSideBar
+ * @param props
+ * @returns {*}
+ * @constructor
  */
-class WindowSideBar extends Component {
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const {
-      classes, manifest, windowId, sideBarOpen, sideBarPanel,
-    } = this.props;
+function WindowSideBar(props) {
+  const {
+    classes, manifest, windowId, sideBarOpen, sideBarPanel,
+  } = props;
 
-    return (
-      <>
-        <Drawer
-          variant="temporary"
-          className={classNames(classes.drawer)}
-          classes={{ paper: classNames(classes.drawer) }}
-          open={sideBarOpen}
-          anchor="left"
-          PaperProps={{ style: { position: 'relative' } }}
-          ModalProps={{
-            container: document.getElementById(windowId),
-            disablePortal: true,
-            hideBackdrop: true,
-            style: { position: 'absolute' },
-          }}
-        >
-          <List>
-            <WindowSideBarButtons windowId={windowId} sideBarPanel={sideBarPanel} />
-          </List>
-        </Drawer>
-        <Drawer
-          variant="temporary"
-          className={classNames(classes.drawer, ns('window-sidebar-panel-drawer'))}
-          classes={{ paper: classNames(classes.drawer) }}
-          open={sideBarOpen && sideBarPanel !== 'closed'}
-          anchor="left"
-          PaperProps={{ style: { position: 'relative', width: '200px' } }}
-          ModalProps={{
-            container: document.getElementById(windowId),
-            disablePortal: true,
-            hideBackdrop: true,
-            style: { position: 'absolute', width: '200px' },
-          }}
-        >
-          <WindowSideBarPanel
-            manifest={manifest}
-            windowId={windowId}
-            sideBarPanel={sideBarPanel}
-          />
-        </Drawer>
-      </>
-    );
-  }
+  return (
+    <>
+      <Drawer
+        variant="temporary"
+        className={classNames(classes.drawer)}
+        classes={{ paper: classNames(classes.drawer) }}
+        open={sideBarOpen}
+        anchor="left"
+        PaperProps={{ style: { position: 'relative' } }}
+        ModalProps={{
+          container: document.getElementById(windowId),
+          disablePortal: true,
+          hideBackdrop: true,
+          style: { position: 'absolute' },
+        }}
+      >
+        <List>
+          <WindowSideBarButtons windowId={windowId} sideBarPanel={sideBarPanel} />
+        </List>
+      </Drawer>
+      <Drawer
+        variant="temporary"
+        className={classNames(classes.drawer, ns('window-sidebar-panel-drawer'))}
+        classes={{ paper: classNames(classes.drawer) }}
+        open={sideBarOpen && sideBarPanel !== 'closed'}
+        anchor="left"
+        PaperProps={{ style: { position: 'relative', width: '200px' } }}
+        ModalProps={{
+          container: document.getElementById(windowId),
+          disablePortal: true,
+          hideBackdrop: true,
+          style: { position: 'absolute', width: '200px' },
+        }}
+      >
+        <WindowSideBarPanel
+          manifest={manifest}
+          windowId={windowId}
+          sideBarPanel={sideBarPanel}
+        />
+      </Drawer>
+    </>
+  );
 }
 
 
