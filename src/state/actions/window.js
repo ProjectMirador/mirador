@@ -27,6 +27,7 @@ export function addWindow(options) {
     thumbnailNavigationPosition: 'bottom', // bottom by default in settings.js
     xywh: [0, 0, 400, 400],
     rotation: null,
+    view: 'single',
   };
   return { type: ActionTypes.ADD_WINDOW, window: { ...defaultOptions, ...options } };
 }
@@ -71,4 +72,15 @@ export function toggleWindowSideBarPanel(windowId, panelType) {
  */
 export function setWindowThumbnailPosition(windowId, position) {
   return { type: ActionTypes.SET_WINDOW_THUMBNAIL_POSITION, windowId, position };
+}
+
+/**
+ * setWindowViewType - action creator
+ *
+ * @param  {String} windowId
+ * @param  {String} viewType
+ * @memberof ActionCreators
+ */
+export function setWindowViewType(windowId, viewType) {
+  return { type: ActionTypes.SET_WINDOW_VIEW_TYPE, windowId, viewType };
 }

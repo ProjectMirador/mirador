@@ -54,3 +54,12 @@ export function getManifestTitle(manifest) {
     && manifest.manifestation
     && manifest.manifestation.getLabel().map(label => label.value)[0];
 }
+
+/** Return type of view in a certain window.
+* @param {object} state
+* @param {String} windowId
+* @param {String}
+*/
+export function getWindowViewType(state, windowId) {
+  return state.windows[windowId] && state.windows[windowId].view;
+}

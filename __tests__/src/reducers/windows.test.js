@@ -65,6 +65,24 @@ describe('windows reducer', () => {
     expect(reducer(before, action)).toEqual(after);
   });
 
+  it('should handle SET_WINDOW_VIEW_TYPE by changing the view attribute', () => {
+    const action = {
+      type: ActionTypes.SET_WINDOW_VIEW_TYPE,
+      windowId: 'abc123',
+      viewType: 'book',
+    };
+    const before = {
+      abc123: { view: 'single' },
+      abc321: { view: 'book' },
+    };
+    const after = {
+      abc123: { view: 'book' },
+      abc321: { view: 'book' },
+    };
+
+    expect(reducer(before, action)).toEqual(after);
+  });
+
   describe('TOGGLE_WINDOW_SIDE_BAR_PANEL', () => {
     it('sets the sideBarPanel value to the given value when it was changed', () => {
       const action = {

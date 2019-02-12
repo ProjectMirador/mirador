@@ -4,6 +4,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Menu from '@material-ui/core/Menu';
 import Divider from '@material-ui/core/Divider';
 import WindowThumbnailSettings from '../../../src/containers/WindowThumbnailSettings';
+import WindowViewSettings from '../../../src/containers/WindowViewSettings';
 import WindowTopMenu from '../../../src/components/WindowTopMenu';
 
 /** create wrapper */
@@ -22,9 +23,10 @@ describe('WindowTopMenu', () => {
   it('renders all needed elements', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(Menu).length).toBe(1);
-    expect(wrapper.find(ListItem).length).toBe(1);
+    expect(wrapper.find(ListItem).length).toBe(2);
     expect(wrapper.find(WindowThumbnailSettings).length).toBe(1);
-    expect(wrapper.find(Divider).length).toBe(1);
+    expect(wrapper.find(WindowViewSettings).length).toBe(1);
+    expect(wrapper.find(Divider).length).toBe(2);
   });
 
   it('passes windowId to <WindowThumbnailSettings/>', () => {

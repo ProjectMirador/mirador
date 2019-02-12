@@ -20,6 +20,7 @@ describe('window actions', () => {
           thumbnailNavigationPosition: 'bottom',
           xywh: [0, 0, 400, 400],
           rotation: null,
+          view: 'single',
         },
       };
       expect(actions.addWindow(options)).toEqual(expectedAction);
@@ -56,6 +57,18 @@ describe('window actions', () => {
         position: 'right',
       };
       expect(actions.setWindowThumbnailPosition(id, 'right')).toEqual(expectedAction);
+    });
+  });
+
+  describe('setWindowViewType', () => {
+    it('returns the appropriate action type', () => {
+      const id = 'abc123';
+      const expectedAction = {
+        type: ActionTypes.SET_WINDOW_VIEW_TYPE,
+        windowId: id,
+        viewType: 'book',
+      };
+      expect(actions.setWindowViewType(id, 'book')).toEqual(expectedAction);
     });
   });
 
