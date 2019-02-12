@@ -24,7 +24,7 @@ class WindowViewer extends Component {
    */
   componentDidMount() {
     const { fetchInfoResponse } = this.props;
-    fetchInfoResponse(this.imageInformationUri());
+    !this.infoResponseIsInStore() && fetchInfoResponse(this.imageInformationUri());
   }
 
   /**
