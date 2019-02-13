@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import CloseIcon from '@material-ui/icons/Close';
 import Toolbar from '@material-ui/core/Toolbar';
 import classNames from 'classnames';
 import WindowIcon from '../containers/WindowIcon';
@@ -40,7 +40,14 @@ class WindowTopBar extends Component {
         </Typography>
         <WindowTopBarButtons windowId={windowId} />
         <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
-        <Button color="inherit" className={ns('window-close')} aria-label={t('closeWindow')} onClick={removeWindow}>&times;</Button>
+        <IconButton
+          color="inherit"
+          className={ns('window-close')}
+          aria-label={t('closeWindow')}
+          onClick={removeWindow}
+        >
+          <CloseIcon />
+        </IconButton>
       </Toolbar>
     );
   }

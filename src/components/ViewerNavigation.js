@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import IconButton from '@material-ui/core/IconButton';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import PropTypes from 'prop-types';
 import ns from '../config/css-ns';
 
@@ -48,22 +51,20 @@ class ViewerNavigation extends Component {
   render() {
     return (
       <div className={ns('osd-navigation')}>
-        <button
+        <IconButton
           className={ns('previous-canvas-button')}
-          type="button"
           disabled={!this.hasPreviousCanvas()}
           onClick={this.previousCanvas}
         >
-        &#8249;
-        </button>
-        <button
+          <ChevronLeftIcon />
+        </IconButton>
+        <IconButton
           className={ns('next-canvas-button')}
-          type="button"
           disabled={!this.hasNextCanvas()}
           onClick={this.nextCanvas}
         >
-        &#8250;
-        </button>
+          <ChevronRightIcon />
+        </IconButton>
       </div>
     );
   }
