@@ -4,7 +4,7 @@ import ActionTypes from '../actions/action-types';
 /**
  * configReducer - does a deep merge of the config
  */
-const configReducer = (state = {}, action) => {
+export const configReducer = (state = {}, action) => {
   switch (action.type) {
     case ActionTypes.UPDATE_CONFIG:
       return deepmerge(state, action.config);
@@ -14,5 +14,3 @@ const configReducer = (state = {}, action) => {
       return state;
   }
 };
-
-export { configReducer as default };

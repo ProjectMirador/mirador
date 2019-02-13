@@ -1,9 +1,9 @@
-import reducer from '../../../src/state/reducers/windows';
+import { windowsReducer } from '../../../src/state/reducers/windows';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('windows reducer', () => {
   it('should handle ADD_WINDOW', () => {
-    expect(reducer({}, {
+    expect(windowsReducer({}, {
       type: ActionTypes.ADD_WINDOW,
       window: { id: 'abc123' },
     })).toEqual({
@@ -13,7 +13,7 @@ describe('windows reducer', () => {
     });
   });
   it('should handle REMOVE_WINDOW', () => {
-    expect(reducer({
+    expect(windowsReducer({
       abc123: {
         id: 'abc123',
       },
@@ -44,7 +44,7 @@ describe('windows reducer', () => {
       abc321: { sideBarOpen: false },
     };
 
-    expect(reducer(before, action)).toEqual(after);
+    expect(windowsReducer(before, action)).toEqual(after);
   });
 
   it('should handle SET_WINDOW_THUMBNAIL_POSITION by changing the thumbnailNavigationPosition attribute', () => {
@@ -62,7 +62,7 @@ describe('windows reducer', () => {
       abc321: { thumbnailNavigationPosition: 'off' },
     };
 
-    expect(reducer(before, action)).toEqual(after);
+    expect(windowsReducer(before, action)).toEqual(after);
   });
 
   it('should handle SET_WINDOW_VIEW_TYPE by changing the view attribute', () => {
@@ -80,7 +80,7 @@ describe('windows reducer', () => {
       abc321: { view: 'book' },
     };
 
-    expect(reducer(before, action)).toEqual(after);
+    expect(windowsReducer(before, action)).toEqual(after);
   });
 
   describe('TOGGLE_WINDOW_SIDE_BAR_PANEL', () => {
@@ -99,7 +99,7 @@ describe('windows reducer', () => {
         abc321: { sideBarPanel: 'closed' },
       };
 
-      expect(reducer(before, action)).toEqual(after);
+      expect(windowsReducer(before, action)).toEqual(after);
     });
 
     it('sets the sideBarPanel value to "closed" when trying to open a panel that already is open', () => {
@@ -117,12 +117,12 @@ describe('windows reducer', () => {
         abc321: { sideBarPanel: 'closed' },
       };
 
-      expect(reducer(before, action)).toEqual(after);
+      expect(windowsReducer(before, action)).toEqual(after);
     });
   });
 
   it('should handle NEXT_CANVAS', () => {
-    expect(reducer({
+    expect(windowsReducer({
       abc123: {
         id: 'abc123',
         canvasIndex: 1,
@@ -146,7 +146,7 @@ describe('windows reducer', () => {
     });
   });
   it('should handle PREVIOUS_CANVAS', () => {
-    expect(reducer({
+    expect(windowsReducer({
       abc123: {
         id: 'abc123',
         canvasIndex: 4,
@@ -170,7 +170,7 @@ describe('windows reducer', () => {
     });
   });
   it('should handle SET_CANVAS', () => {
-    expect(reducer({
+    expect(windowsReducer({
       abc123: {
         id: 'abc123',
         canvasIndex: 1,
@@ -196,7 +196,7 @@ describe('windows reducer', () => {
   });
 
   it('should handle UPDATE_VIEWPORT', () => {
-    expect(reducer({
+    expect(windowsReducer({
       abc123: {
         id: 'abc123',
       },

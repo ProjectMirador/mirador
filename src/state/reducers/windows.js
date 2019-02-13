@@ -3,7 +3,7 @@ import ActionTypes from '../actions/action-types';
 /**
  * windowsReducer
  */
-const windowsReducer = (state = {}, action) => {
+export const windowsReducer = (state = {}, action) => {
   switch (action.type) {
     case ActionTypes.ADD_WINDOW:
       return { ...state, [action.window.id]: action.window };
@@ -88,5 +88,3 @@ function setCanvasIndex(state, windowId, getIndex) {
     return { ...object, [window.id]: window };
   }, {});
 }
-
-export default windowsReducer;

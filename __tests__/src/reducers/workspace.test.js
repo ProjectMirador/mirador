@@ -1,9 +1,9 @@
-import reducer from '../../../src/state/reducers/workspace';
+import { workspaceReducer } from '../../../src/state/reducers/workspace';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('workspace reducer', () => {
   it('should handle FOCUS_WINDOW', () => {
-    expect(reducer([], {
+    expect(workspaceReducer([], {
       type: ActionTypes.FOCUS_WINDOW,
       windowId: 'abc123',
     })).toEqual({
@@ -11,7 +11,7 @@ describe('workspace reducer', () => {
     });
   });
   it('should handle SET_WORKSPACE_FULLSCREEN', () => {
-    expect(reducer([], {
+    expect(workspaceReducer([], {
       type: ActionTypes.SET_WORKSPACE_FULLSCREEN,
       isFullscreenEnabled: true,
     })).toEqual({
@@ -19,7 +19,7 @@ describe('workspace reducer', () => {
     });
   });
   it('should handle TOGGLE_ZOOM_CONTROLS', () => {
-    expect(reducer([], {
+    expect(workspaceReducer([], {
       type: ActionTypes.TOGGLE_ZOOM_CONTROLS,
       showZoomControls: true,
     })).toEqual({
@@ -27,7 +27,7 @@ describe('workspace reducer', () => {
     });
   });
   it('should handle UPDATE_WORKSPACE_MOSAIC_LAYOUT', () => {
-    expect(reducer([], {
+    expect(workspaceReducer([], {
       type: ActionTypes.UPDATE_WORKSPACE_MOSAIC_LAYOUT,
       layout: { foo: 'bar' },
     })).toEqual({
@@ -35,7 +35,7 @@ describe('workspace reducer', () => {
     });
   });
   it('should handle SET_WORKSPACE_ADD_VISIBILITY', () => {
-    expect(reducer([], {
+    expect(workspaceReducer([], {
       type: ActionTypes.SET_WORKSPACE_ADD_VISIBILITY,
       isWorkspaceAddVisible: true,
     })).toEqual({

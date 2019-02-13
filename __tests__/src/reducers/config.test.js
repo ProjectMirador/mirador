@@ -1,10 +1,10 @@
-import reducer from '../../../src/state/reducers/config';
+import { configReducer } from '../../../src/state/reducers/config';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('config reducer', () => {
   describe('SET_CONFIG', () => {
     it('should handle SET_CONFIG', () => {
-      expect(reducer({}, {
+      expect(configReducer({}, {
         type: ActionTypes.SET_CONFIG,
         config: { manifestVersion: 'v3' },
       })).toEqual({
@@ -12,7 +12,7 @@ describe('config reducer', () => {
       });
     });
     it('does not deep merge', () => {
-      expect(reducer({ stuff: { foo: 'bar' } }, {
+      expect(configReducer({ stuff: { foo: 'bar' } }, {
         type: ActionTypes.SET_CONFIG,
         config: { stuff: { foo: 'bat' } },
       })).toEqual({
@@ -22,7 +22,7 @@ describe('config reducer', () => {
   });
   describe('UPDATE_CONFIG', () => {
     it('should handle UPDATE_CONFIG', () => {
-      expect(reducer({}, {
+      expect(configReducer({}, {
         type: ActionTypes.UPDATE_CONFIG,
         config: { manifestVersion: 'v3' },
       })).toEqual({
@@ -30,7 +30,7 @@ describe('config reducer', () => {
       });
     });
     it('does a deep merge', () => {
-      expect(reducer({ stuff: { foo: 'bar' }, hello: 'world' }, {
+      expect(configReducer({ stuff: { foo: 'bar' }, hello: 'world' }, {
         type: ActionTypes.UPDATE_CONFIG,
         config: { stuff: { foo: 'bat' } },
       })).toEqual({

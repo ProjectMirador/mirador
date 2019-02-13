@@ -4,7 +4,7 @@ import ActionTypes from '../actions/action-types';
 /**
  * manifestsReducer
  */
-const manifestsReducer = (state = {}, action) => {
+export const manifestsReducer = (state = {}, action) => {
   switch (action.type) {
     case ActionTypes.REQUEST_MANIFEST:
       return {
@@ -42,5 +42,3 @@ const manifestsReducer = (state = {}, action) => {
     default: return state;
   }
 };
-
-export default manifestsReducer;
