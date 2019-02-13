@@ -1,6 +1,24 @@
+import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
+import {
+  getManifestTitle, getManifestLogo, getManifestThumbnail, getManifestCanvases,
+} from '../state/selectors';
 import * as actions from '../state/actions';
 import ManifestListItem from '../components/ManifestListItem';
+
+/** */
+const mapStateToProps = (state, { manifestId }) => {
+  const manifest = state.manifests[manifestId];
+
+  return {
+    ready: !!manifest.manifestation,
+    title: getManifestTitle(manifest),
+    logo: getManifestLogo(manifest),
+    thumbnail: getManifestThumbnail(manifest),
+    size: getManifestCanvases(manifest).length,
+  };
+};
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -9,4 +27,10 @@ import ManifestListItem from '../components/ManifestListItem';
  */
 const mapDispatchToProps = { addWindow: actions.addWindow };
 
-export default connect(null, mapDispatchToProps)(ManifestListItem);
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withNamespaces(),
+  // further HOC go here
+);
+
+export default enhance(ManifestListItem);

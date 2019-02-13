@@ -19,14 +19,14 @@ function createWrapper(props) {
 describe('WorkspaceAddButton', () => {
   it('renders a list item for each manifest in the state', () => {
     const wrapper = createWrapper();
-    expect(wrapper.find('ul Connect(ManifestListItem)').length).toBe(2);
+    expect(wrapper.find('Connect(LoadNamespace(WithStyles(ManifestListItem)))').length).toBe(2);
   });
 
   it('toggles the workspace visibility', () => {
     const setWorkspaceAddVisibility = jest.fn();
     const wrapper = createWrapper({ setWorkspaceAddVisibility });
 
-    wrapper.find('ul Connect(ManifestListItem)').first().props().handleClose();
+    wrapper.find('Connect(LoadNamespace(WithStyles(ManifestListItem)))').first().props().handleClose();
     expect(setWorkspaceAddVisibility).toHaveBeenCalledWith(false);
   });
 });

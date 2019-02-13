@@ -12,6 +12,7 @@ import {
   getManifestDescription,
   getThumbnailNavigationPosition,
   getManifestTitle,
+  getManifestThumbnail,
   getWindowViewType,
 } from '../../../src/state/selectors';
 
@@ -60,6 +61,20 @@ describe('getManifestLogo()', () => {
   it('should return null if manifest has no logo', () => {
     const manifest = { manifestation: manifesto.create({}) };
     const received = getManifestLogo(manifest);
+    expect(received).toBeNull();
+  });
+});
+
+describe('getManifestThumbnail()', () => {
+  it('should return manifest thumbnail id', () => {
+    const manifest = { manifestation: manifesto.create(manifestFixture001) };
+    const received = getManifestThumbnail(manifest);
+    expect(received).toEqual(manifestFixture001.thumbnail['@id']);
+  });
+
+  it('should return null if manifest has no thumbnail', () => {
+    const manifest = { manifestation: manifesto.create({}) };
+    const received = getManifestThumbnail(manifest);
     expect(received).toBeNull();
   });
 });
