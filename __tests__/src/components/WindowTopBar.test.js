@@ -2,7 +2,6 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -31,13 +30,12 @@ describe('WindowTopBar', () => {
   it('renders all needed elements', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(Toolbar).length).toBe(1);
-    expect(wrapper.find(IconButton).length).toBe(1);
+    expect(wrapper.find(IconButton).length).toBe(2);
     expect(wrapper.find(MenuIcon).length).toBe(1);
     expect(wrapper.find(WindowIcon).length).toBe(1);
     expect(wrapper.find(Typography).length).toBe(1);
     expect(wrapper.find(WindowTopBarButtons).length).toBe(1);
     expect(wrapper.find(WindowTopMenuButton).length).toBe(1);
-    expect(wrapper.find(Button).length).toBe(1);
   });
 
   it('passes correct props to <IconButton/>', () => {
@@ -69,6 +67,6 @@ describe('WindowTopBar', () => {
   it('passes correct props to <Button/>', () => {
     const removeWindow = jest.fn();
     const wrapper = createWrapper({ removeWindow });
-    expect(wrapper.find(Button).first().props().onClick).toBe(removeWindow);
+    expect(wrapper.find(IconButton).last().props().onClick).toBe(removeWindow);
   });
 });
