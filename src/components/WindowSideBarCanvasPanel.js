@@ -12,14 +12,13 @@ class WindowSideBarCanvasPanel extends Component {
    * render
    */
   render() {
-    const { canvases } = this.props;
-
+    const { canvasesIdAndLabel } = this.props;
     return (
       <List>
         {
-          canvases && canvases.map(canvas => (
-            <ListItem key={canvas.__jsonld['@id']/* eslint-disable-line no-underscore-dangle */}>
-              <Typography variant="body2">{canvas.__jsonld.label /* eslint-disable-line no-underscore-dangle */}</Typography>
+          canvasesIdAndLabel.map(canvas => (
+            <ListItem key={canvas.id}>
+              <Typography variant="body2">{canvas.label}</Typography>
             </ListItem>
           ))
         }
@@ -30,7 +29,7 @@ class WindowSideBarCanvasPanel extends Component {
 
 WindowSideBarCanvasPanel.propTypes = {
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
-  canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  canvasesIdAndLabel: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 export default WindowSideBarCanvasPanel;

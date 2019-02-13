@@ -1,36 +1,37 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
-import createStore from '../../../src/state/createStore';
-import * as actions from '../../../src/state/actions';
 import WindowSideBarCanvasPanel from '../../../src/components/WindowSideBarCanvasPanel';
-import fixture from '../../fixtures/version-2/001.json';
 
 describe('WindowSideBarCanvasPanel', () => {
   let wrapper;
-  let manifest;
-  let canvases;
-  const store = createStore();
+  const canvasesIdAndLabel = [
+    {
+      id: 'testid1',
+      label: 'testLabel',
+    },
+    {
+      id: 'testid2',
+      label: 'testLabel2',
+    },
+  ];
 
   beforeEach(() => {
-    store.dispatch(actions.receiveManifest('foo', fixture));
-    manifest = store.getState().manifests.foo;
-    /* inject canvases directly via property */
-    canvases = manifest.manifestation.getSequences()[0].getCanvases();
     wrapper = shallow(
-      <WindowSideBarCanvasPanel manifest={manifest} canvases={canvases} />,
-    ).dive();
+      <WindowSideBarCanvasPanel canvasesIdAndLabel={canvasesIdAndLabel} windowId="xyz" />,
+    );
   });
 
-  it('renders without an error', () => {
-    expect(
-      wrapper.find('WithStyles(ListItem)').length,
-    ).toBe(canvases.length);
+  it('renders all needed elements', () => {
+    expect(wrapper.find(List).length).toBe(1);
+    expect(wrapper.find(ListItem).length).toBe(canvasesIdAndLabel.length);
+    expect(wrapper.find(Typography).length).toBe(canvasesIdAndLabel.length);
+  });
 
-    expect(
-      wrapper.find('WithStyles(ListItem) WithStyles(Typography)[variant="body2"]').first().matchesElement(
-        <Typography>{canvases[0].__jsonld.label}</Typography>, // eslint-disable-line no-underscore-dangle, max-len
-      ),
-    ).toBe(true);
+  it('should set the correct labels', () => {
+    expect(wrapper.find(Typography).at(0).render().text()).toBe(canvasesIdAndLabel[0].label);
+    expect(wrapper.find(Typography).at(1).render().text()).toBe(canvasesIdAndLabel[1].label);
   });
 });
