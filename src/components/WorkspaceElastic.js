@@ -9,7 +9,7 @@ import ns from '../config/css-ns';
  * @memberof Workspace
  * @private
  */
-class WorkspaceFreeform extends React.Component {
+class WorkspaceElastic extends React.Component {
   /**
    */
   render() {
@@ -54,11 +54,10 @@ class WorkspaceFreeform extends React.Component {
   }
 }
 
-
-WorkspaceFreeform.propTypes = {
+WorkspaceElastic.propTypes = {
   setWorkspaceViewportPosition: PropTypes.func.isRequired,
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   workspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-export default WorkspaceFreeform;
+export default WorkspaceElastic;

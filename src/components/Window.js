@@ -80,7 +80,7 @@ class Window extends Component {
    */
   render() {
     const { workspaceType } = this.props;
-    return workspaceType === 'freeform'
+    return workspaceType === 'elastic'
       ? this.draggableWorkspaceWindow() : this.baseWindow();
   }
 }

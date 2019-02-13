@@ -1,7 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../state/actions';
-import WorkspaceFreeform from '../components/WorkspaceFreeform';
+import WorkspaceElastic from '../components/WorkspaceElastic';
 
 /**
  * mapStateToProps - to hook up connect
@@ -38,4 +38,4 @@ const enhance = compose(
   // further HOC go here
 );
 
-export default enhance(WorkspaceFreeform);
+export default enhance(WorkspaceElastic);

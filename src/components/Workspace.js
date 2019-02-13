@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Window from '../containers/Window';
 import WorkspaceMosaic from '../containers/WorkspaceMosaic';
-import WorkspaceFreeform from '../containers/WorkspaceFreeform';
+import WorkspaceElastic from '../containers/WorkspaceElastic';
 import ns from '../config/css-ns';
 
 /**
@@ -18,8 +18,8 @@ class Workspace extends React.Component {
   workspaceByType() {
     const { workspaceType, windows } = this.props;
     switch (workspaceType) {
-      case 'freeform':
-        return <WorkspaceFreeform />;
+      case 'elastic':
+        return <WorkspaceElastic />;
       case 'mosaic':
         return <WorkspaceMosaic windows={windows} />;
       default:
