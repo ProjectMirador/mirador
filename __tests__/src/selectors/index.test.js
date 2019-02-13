@@ -13,6 +13,7 @@ import {
   getThumbnailNavigationPosition,
   getManifestTitle,
   getWindowViewType,
+  getIdAndLabelOfCanvases,
 } from '../../../src/state/selectors';
 
 
@@ -251,6 +252,32 @@ describe('getDestructuredMetadata', () => {
     const iiifResource = manifesto.create(manifestFixture019);
     const received = getDestructuredMetadata(iiifResource);
 
+    expect(received).toEqual([]);
+  });
+});
+
+describe('getIdAndLabelOfCanvases', () => {
+  it('should return id and label of each canvas in manifest', () => {
+    const canvases = manifesto
+      .create(manifestFixture019)
+      .getSequences()[0]
+      .getCanvases();
+    const received = getIdAndLabelOfCanvases(canvases);
+    const expected = [
+      {
+        id: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
+        label: 'Test 19 Canvas: 1',
+      },
+      {
+        id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
+        label: 'Image 1',
+      },
+    ];
+    expect(received).toEqual(expected);
+  });
+
+  it('should return empty array if canvas if empty', () => {
+    const received = getIdAndLabelOfCanvases([]);
     expect(received).toEqual([]);
   });
 });

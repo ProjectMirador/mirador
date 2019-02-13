@@ -35,6 +35,18 @@ export function getManifestCanvases(manifest) {
 }
 
 /**
+* Return ids and labels of canvases
+* @ param {Array} canvases
+* @return {Array} - [ {id: 'id', label: 'label' }, ... ]
+*/
+export function getIdAndLabelOfCanvases(canvases) {
+  return canvases.map(canvas => ({
+    id: canvas.__jsonld['@id'], // eslint-disable-line no-underscore-dangle
+    label: canvas.__jsonld.label, // eslint-disable-line no-underscore-dangle
+  }));
+}
+
+/**
 * Return the current canvas selected in a window
 * @param {object} state
 * @param {String} windowId
