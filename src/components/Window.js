@@ -16,7 +16,7 @@ class Window extends Component {
   render() {
     const { manifest, window } = this.props;
     return (
-      <div className={ns('window')}>
+      <div id={window.id} className={ns('window')}>
         <WindowTopBar
           windowId={window.id}
           manifest={manifest}

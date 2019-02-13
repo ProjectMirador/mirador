@@ -5,7 +5,7 @@ import Drawer from '@material-ui/core/Drawer';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import WindowSideBarButtons from '../containers/WindowSideBarButtons';
-import WindowSideBarPanel from './WindowSideBarPanel';
+import WindowSideBarPanel from '../containers/WindowSideBarPanel';
 import ns from '../config/css-ns';
 
 /**
@@ -18,7 +18,7 @@ class WindowSideBar extends Component {
    */
   render() {
     const {
-      classes, manifest, windowId, sideBarOpen, sideBarPanel,
+      classes, windowId, sideBarOpen, sideBarPanel,
     } = this.props;
 
     return (
@@ -38,7 +38,7 @@ class WindowSideBar extends Component {
           }}
         >
           <List>
-            <WindowSideBarButtons windowId={windowId} sideBarPanel={sideBarPanel} />
+            <WindowSideBarButtons windowId={windowId} />
           </List>
         </Drawer>
         <Drawer
@@ -55,11 +55,7 @@ class WindowSideBar extends Component {
             style: { position: 'absolute', width: '200px' },
           }}
         >
-          <WindowSideBarPanel
-            manifest={manifest}
-            windowId={windowId}
-            sideBarPanel={sideBarPanel}
-          />
+          <WindowSideBarPanel windowId={windowId} />
         </Drawer>
       </>
     );
@@ -69,14 +65,12 @@ class WindowSideBar extends Component {
 
 WindowSideBar.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   windowId: PropTypes.string.isRequired,
   sideBarOpen: PropTypes.bool,
   sideBarPanel: PropTypes.string,
 };
 
 WindowSideBar.defaultProps = {
-  manifest: {},
   sideBarOpen: false,
   sideBarPanel: 'closed',
 };
