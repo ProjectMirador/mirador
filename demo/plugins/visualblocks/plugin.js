@@ -1,208 +1,135 @@
 (function () {
+var visualblocks = (function () {
+  'use strict';
 
-var defs = {}; // id -> {dependencies, definition, instance (possibly undefined)}
-
-// Used when there is no 'main' module.
-// The name is probably (hopefully) unique so minification removes for releases.
-var register_3795 = function (id) {
-  var module = dem(id);
-  var fragments = id.split('.');
-  var target = Function('return this;')();
-  for (var i = 0; i < fragments.length - 1; ++i) {
-    if (target[fragments[i]] === undefined)
-      target[fragments[i]] = {};
-    target = target[fragments[i]];
-  }
-  target[fragments[fragments.length - 1]] = module;
-};
-
-var instantiate = function (id) {
-  var actual = defs[id];
-  var dependencies = actual.deps;
-  var definition = actual.defn;
-  var len = dependencies.length;
-  var instances = new Array(len);
-  for (var i = 0; i < len; ++i)
-    instances[i] = dem(dependencies[i]);
-  var defResult = definition.apply(null, instances);
-  if (defResult === undefined)
-     throw 'module [' + id + '] returned undefined';
-  actual.instance = defResult;
-};
-
-var def = function (id, dependencies, definition) {
-  if (typeof id !== 'string')
-    throw 'module id must be a string';
-  else if (dependencies === undefined)
-    throw 'no dependencies for ' + id;
-  else if (definition === undefined)
-    throw 'no definition function for ' + id;
-  defs[id] = {
-    deps: dependencies,
-    defn: definition,
-    instance: undefined
+  var Cell = function (initial) {
+    var value = initial;
+    var get = function () {
+      return value;
+    };
+    var set = function (v) {
+      value = v;
+    };
+    var clone = function () {
+      return Cell(get());
+    };
+    return {
+      get: get,
+      set: set,
+      clone: clone
+    };
   };
-};
 
-var dem = function (id) {
-  var actual = defs[id];
-  if (actual === undefined)
-    throw 'module [' + id + '] was undefined';
-  else if (actual.instance === undefined)
-    instantiate(id);
-  return actual.instance;
-};
+  var global = tinymce.util.Tools.resolve('tinymce.PluginManager');
 
-var req = function (ids, callback) {
-  var len = ids.length;
-  var instances = new Array(len);
-  for (var i = 0; i < len; ++i)
-    instances.push(dem(ids[i]));
-  callback.apply(null, callback);
-};
+  var fireVisualBlocks = function (editor, state) {
+    editor.fire('VisualBlocks', { state: state });
+  };
+  var $_57tnm1rljfuw8s6c = { fireVisualBlocks: fireVisualBlocks };
 
-var ephox = {};
+  var isEnabledByDefault = function (editor) {
+    return editor.getParam('visualblocks_default_state', false);
+  };
+  var getContentCss = function (editor) {
+    return editor.settings.visualblocks_content_css;
+  };
+  var $_bv9e0jrmjfuw8s6c = {
+    isEnabledByDefault: isEnabledByDefault,
+    getContentCss: getContentCss
+  };
 
-ephox.bolt = {
-  module: {
-    api: {
-      define: def,
-      require: req,
-      demand: dem
-    }
-  }
-};
+  var global$1 = tinymce.util.Tools.resolve('tinymce.dom.DOMUtils');
 
-var define = def;
-var require = req;
-var demand = dem;
-// this helps with minificiation when using a lot of global references
-var defineGlobal = function (id, ref) {
-  define(id, [], function () { return ref; });
-};
-/*jsc
-["tinymce.plugins.visualblocks.Plugin","tinymce.core.PluginManager","global!tinymce.util.Tools.resolve"]
-jsc*/
-defineGlobal("global!tinymce.util.Tools.resolve", tinymce.util.Tools.resolve);
-/**
- * ResolveGlobal.js
- *
- * Released under LGPL License.
- * Copyright (c) 1999-2017 Ephox Corp. All rights reserved
- *
- * License: http://www.tinymce.com/license
- * Contributing: http://www.tinymce.com/contributing
- */
+  var global$2 = tinymce.util.Tools.resolve('tinymce.util.Tools');
 
-define(
-  'tinymce.core.PluginManager',
-  [
-    'global!tinymce.util.Tools.resolve'
-  ],
-  function (resolve) {
-    return resolve('tinymce.PluginManager');
-  }
-);
-
-/**
- * Plugin.js
- *
- * Released under LGPL License.
- * Copyright (c) 1999-2017 Ephox Corp. All rights reserved
- *
- * License: http://www.tinymce.com/license
- * Contributing: http://www.tinymce.com/contributing
- */
-
-/**
- * This class contains all core logic for the code plugin.
- *
- * @class tinymce.visualblocks.Plugin
- * @private
- */
-define(
-  'tinymce.plugins.visualblocks.Plugin',
-  [
-    'tinymce.core.PluginManager'
-  ],
-  function (PluginManager) {
-    PluginManager.add('visualblocks', function (editor, url) {
-      var cssId, visualBlocksMenuItem, enabled;
-
-      // We don't support older browsers like IE6/7 and they don't provide prototypes for DOM objects
-      if (!window.NodeList) {
-        return;
-      }
-
-      function toggleActiveState() {
-        var self = this;
-
-        self.active(enabled);
-
-        editor.on('VisualBlocks', function () {
-          self.active(editor.dom.hasClass(editor.getBody(), 'mce-visualblocks'));
-        });
-      }
-
-      editor.addCommand('mceVisualBlocks', function () {
-        var dom = editor.dom, linkElm;
-
-        if (!cssId) {
-          cssId = dom.uniqueId();
-          linkElm = dom.create('link', {
-            id: cssId,
-            rel: 'stylesheet',
-            href: url + '/css/visualblocks.css'
-          });
-
-          editor.getDoc().getElementsByTagName('head')[0].appendChild(linkElm);
-        }
-
-        // Toggle on/off visual blocks while computing previews
-        editor.on("PreviewFormats AfterPreviewFormats", function (e) {
-          if (enabled) {
-            dom.toggleClass(editor.getBody(), 'mce-visualblocks', e.type == "afterpreviewformats");
-          }
-        });
-
-        dom.toggleClass(editor.getBody(), 'mce-visualblocks');
-        enabled = editor.dom.hasClass(editor.getBody(), 'mce-visualblocks');
-
-        if (visualBlocksMenuItem) {
-          visualBlocksMenuItem.active(dom.hasClass(editor.getBody(), 'mce-visualblocks'));
-        }
-
-        editor.fire('VisualBlocks');
-      });
-
-      editor.addButton('visualblocks', {
-        title: 'Show blocks',
-        cmd: 'mceVisualBlocks',
-        onPostRender: toggleActiveState
-      });
-
-      editor.addMenuItem('visualblocks', {
-        text: 'Show blocks',
-        cmd: 'mceVisualBlocks',
-        onPostRender: toggleActiveState,
-        selectable: true,
-        context: 'view',
-        prependToContext: true
-      });
-
-      editor.on('init', function () {
-        if (editor.settings.visualblocks_default_state) {
-          editor.execCommand('mceVisualBlocks', false, null, { skip_focus: true });
-        }
-      });
-
-      editor.on('remove', function () {
-        editor.dom.removeClass(editor.getBody(), 'mce-visualblocks');
-      });
+  var cssId = global$1.DOM.uniqueId();
+  var load = function (doc, url) {
+    var linkElements = global$2.toArray(doc.getElementsByTagName('link'));
+    var matchingLinkElms = global$2.grep(linkElements, function (head) {
+      return head.id === cssId;
     });
+    if (matchingLinkElms.length === 0) {
+      var linkElm = global$1.DOM.create('link', {
+        id: cssId,
+        rel: 'stylesheet',
+        href: url
+      });
+      doc.getElementsByTagName('head')[0].appendChild(linkElm);
+    }
+  };
+  var $_e4jscbrnjfuw8s6d = { load: load };
 
-    return function () { };
+  var toggleVisualBlocks = function (editor, pluginUrl, enabledState) {
+    var dom = editor.dom;
+    var contentCss = $_bv9e0jrmjfuw8s6c.getContentCss(editor);
+    $_e4jscbrnjfuw8s6d.load(editor.getDoc(), contentCss ? contentCss : pluginUrl + '/css/visualblocks.css');
+    dom.toggleClass(editor.getBody(), 'mce-visualblocks');
+    enabledState.set(!enabledState.get());
+    $_57tnm1rljfuw8s6c.fireVisualBlocks(editor, enabledState.get());
+  };
+  var $_fjy7plrkjfuw8s6a = { toggleVisualBlocks: toggleVisualBlocks };
+
+  var register = function (editor, pluginUrl, enabledState) {
+    editor.addCommand('mceVisualBlocks', function () {
+      $_fjy7plrkjfuw8s6a.toggleVisualBlocks(editor, pluginUrl, enabledState);
+    });
+  };
+  var $_3m6hpxrjjfuw8s69 = { register: register };
+
+  var setup = function (editor, pluginUrl, enabledState) {
+    editor.on('PreviewFormats AfterPreviewFormats', function (e) {
+      if (enabledState.get()) {
+        editor.dom.toggleClass(editor.getBody(), 'mce-visualblocks', e.type === 'afterpreviewformats');
+      }
+    });
+    editor.on('init', function () {
+      if ($_bv9e0jrmjfuw8s6c.isEnabledByDefault(editor)) {
+        $_fjy7plrkjfuw8s6a.toggleVisualBlocks(editor, pluginUrl, enabledState);
+      }
+    });
+    editor.on('remove', function () {
+      editor.dom.removeClass(editor.getBody(), 'mce-visualblocks');
+    });
+  };
+  var $_eu5jj6rqjfuw8s6f = { setup: setup };
+
+  var toggleActiveState = function (editor, enabledState) {
+    return function (e) {
+      var ctrl = e.control;
+      ctrl.active(enabledState.get());
+      editor.on('VisualBlocks', function (e) {
+        ctrl.active(e.state);
+      });
+    };
+  };
+  var register$1 = function (editor, enabledState) {
+    editor.addButton('visualblocks', {
+      active: false,
+      title: 'Show blocks',
+      cmd: 'mceVisualBlocks',
+      onPostRender: toggleActiveState(editor, enabledState)
+    });
+    editor.addMenuItem('visualblocks', {
+      text: 'Show blocks',
+      cmd: 'mceVisualBlocks',
+      onPostRender: toggleActiveState(editor, enabledState),
+      selectable: true,
+      context: 'view',
+      prependToContext: true
+    });
+  };
+  var $_3yp9ryrrjfuw8s6h = { register: register$1 };
+
+  global.add('visualblocks', function (editor, pluginUrl) {
+    var enabledState = Cell(false);
+    $_3m6hpxrjjfuw8s69.register(editor, pluginUrl, enabledState);
+    $_3yp9ryrrjfuw8s6h.register(editor, enabledState);
+    $_eu5jj6rqjfuw8s6f.setup(editor, pluginUrl, enabledState);
+  });
+  function Plugin () {
   }
-);
-dem('tinymce.plugins.visualblocks.Plugin')();
+
+  return Plugin;
+
+}());
 })();

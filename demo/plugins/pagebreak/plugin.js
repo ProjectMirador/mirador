@@ -1,231 +1,109 @@
 (function () {
+var pagebreak = (function () {
+  'use strict';
 
-var defs = {}; // id -> {dependencies, definition, instance (possibly undefined)}
+  var global = tinymce.util.Tools.resolve('tinymce.PluginManager');
 
-// Used when there is no 'main' module.
-// The name is probably (hopefully) unique so minification removes for releases.
-var register_3795 = function (id) {
-  var module = dem(id);
-  var fragments = id.split('.');
-  var target = Function('return this;')();
-  for (var i = 0; i < fragments.length - 1; ++i) {
-    if (target[fragments[i]] === undefined)
-      target[fragments[i]] = {};
-    target = target[fragments[i]];
-  }
-  target[fragments[fragments.length - 1]] = module;
-};
+  var global$1 = tinymce.util.Tools.resolve('tinymce.Env');
 
-var instantiate = function (id) {
-  var actual = defs[id];
-  var dependencies = actual.deps;
-  var definition = actual.defn;
-  var len = dependencies.length;
-  var instances = new Array(len);
-  for (var i = 0; i < len; ++i)
-    instances[i] = dem(dependencies[i]);
-  var defResult = definition.apply(null, instances);
-  if (defResult === undefined)
-     throw 'module [' + id + '] returned undefined';
-  actual.instance = defResult;
-};
-
-var def = function (id, dependencies, definition) {
-  if (typeof id !== 'string')
-    throw 'module id must be a string';
-  else if (dependencies === undefined)
-    throw 'no dependencies for ' + id;
-  else if (definition === undefined)
-    throw 'no definition function for ' + id;
-  defs[id] = {
-    deps: dependencies,
-    defn: definition,
-    instance: undefined
+  var getSeparatorHtml = function (editor) {
+    return editor.getParam('pagebreak_separator', '<!-- pagebreak -->');
   };
-};
+  var shouldSplitBlock = function (editor) {
+    return editor.getParam('pagebreak_split_block', false);
+  };
+  var $_cskctvhfjfuw8pss = {
+    getSeparatorHtml: getSeparatorHtml,
+    shouldSplitBlock: shouldSplitBlock
+  };
 
-var dem = function (id) {
-  var actual = defs[id];
-  if (actual === undefined)
-    throw 'module [' + id + '] was undefined';
-  else if (actual.instance === undefined)
-    instantiate(id);
-  return actual.instance;
-};
-
-var req = function (ids, callback) {
-  var len = ids.length;
-  var instances = new Array(len);
-  for (var i = 0; i < len; ++i)
-    instances.push(dem(ids[i]));
-  callback.apply(null, callback);
-};
-
-var ephox = {};
-
-ephox.bolt = {
-  module: {
-    api: {
-      define: def,
-      require: req,
-      demand: dem
-    }
-  }
-};
-
-var define = def;
-var require = req;
-var demand = dem;
-// this helps with minificiation when using a lot of global references
-var defineGlobal = function (id, ref) {
-  define(id, [], function () { return ref; });
-};
-/*jsc
-["tinymce.plugins.pagebreak.Plugin","tinymce.core.PluginManager","tinymce.core.Env","global!tinymce.util.Tools.resolve"]
-jsc*/
-defineGlobal("global!tinymce.util.Tools.resolve", tinymce.util.Tools.resolve);
-/**
- * ResolveGlobal.js
- *
- * Released under LGPL License.
- * Copyright (c) 1999-2017 Ephox Corp. All rights reserved
- *
- * License: http://www.tinymce.com/license
- * Contributing: http://www.tinymce.com/contributing
- */
-
-define(
-  'tinymce.core.PluginManager',
-  [
-    'global!tinymce.util.Tools.resolve'
-  ],
-  function (resolve) {
-    return resolve('tinymce.PluginManager');
-  }
-);
-
-/**
- * ResolveGlobal.js
- *
- * Released under LGPL License.
- * Copyright (c) 1999-2017 Ephox Corp. All rights reserved
- *
- * License: http://www.tinymce.com/license
- * Contributing: http://www.tinymce.com/contributing
- */
-
-define(
-  'tinymce.core.Env',
-  [
-    'global!tinymce.util.Tools.resolve'
-  ],
-  function (resolve) {
-    return resolve('tinymce.Env');
-  }
-);
-
-/**
- * Plugin.js
- *
- * Released under LGPL License.
- * Copyright (c) 1999-2017 Ephox Corp. All rights reserved
- *
- * License: http://www.tinymce.com/license
- * Contributing: http://www.tinymce.com/contributing
- */
-
-/**
- * This class contains all core logic for the pagebreak plugin.
- *
- * @class tinymce.pagebreak.Plugin
- * @private
- */
-define(
-  'tinymce.plugins.pagebreak.Plugin',
-  [
-    'tinymce.core.PluginManager',
-    'tinymce.core.Env'
-  ],
-  function (PluginManager, Env) {
-    PluginManager.add('pagebreak', function (editor) {
-      var pageBreakClass = 'mce-pagebreak', separatorHtml = editor.getParam('pagebreak_separator', '<!-- pagebreak -->');
-
-      var pageBreakSeparatorRegExp = new RegExp(separatorHtml.replace(/[\?\.\*\[\]\(\)\{\}\+\^\$\:]/g, function (a) {
-        return '\\' + a;
-      }), 'gi');
-
-      var pageBreakPlaceHolderHtml = '<img src="' + Env.transparentSrc + '" class="' +
-        pageBreakClass + '" data-mce-resize="false" data-mce-placeholder />';
-
-      // Register commands
-      editor.addCommand('mcePageBreak', function () {
-        if (editor.settings.pagebreak_split_block) {
-          editor.insertContent('<p>' + pageBreakPlaceHolderHtml + '</p>');
-        } else {
-          editor.insertContent(pageBreakPlaceHolderHtml);
-        }
-      });
-
-      // Register buttons
-      editor.addButton('pagebreak', {
-        title: 'Page break',
-        cmd: 'mcePageBreak'
-      });
-
-      editor.addMenuItem('pagebreak', {
-        text: 'Page break',
-        icon: 'pagebreak',
-        cmd: 'mcePageBreak',
-        context: 'insert'
-      });
-
-      editor.on('ResolveName', function (e) {
-        if (e.target.nodeName == 'IMG' && editor.dom.hasClass(e.target, pageBreakClass)) {
-          e.name = 'pagebreak';
-        }
-      });
-
-      editor.on('click', function (e) {
-        e = e.target;
-
-        if (e.nodeName === 'IMG' && editor.dom.hasClass(e, pageBreakClass)) {
-          editor.selection.select(e);
-        }
-      });
-
-      editor.on('BeforeSetContent', function (e) {
-        e.content = e.content.replace(pageBreakSeparatorRegExp, pageBreakPlaceHolderHtml);
-      });
-
-      editor.on('PreInit', function () {
-        editor.serializer.addNodeFilter('img', function (nodes) {
-          var i = nodes.length, node, className;
-
-          while (i--) {
-            node = nodes[i];
-            className = node.attr('class');
-            if (className && className.indexOf('mce-pagebreak') !== -1) {
-              // Replace parent block node if pagebreak_split_block is enabled
-              var parentNode = node.parent;
-              if (editor.schema.getBlockElements()[parentNode.name] && editor.settings.pagebreak_split_block) {
-                parentNode.type = 3;
-                parentNode.value = separatorHtml;
-                parentNode.raw = true;
-                node.remove();
-                continue;
-              }
-
-              node.type = 3;
-              node.value = separatorHtml;
-              node.raw = true;
+  var getPageBreakClass = function () {
+    return 'mce-pagebreak';
+  };
+  var getPlaceholderHtml = function () {
+    return '<img src="' + global$1.transparentSrc + '" class="' + getPageBreakClass() + '" data-mce-resize="false" data-mce-placeholder />';
+  };
+  var setup = function (editor) {
+    var separatorHtml = $_cskctvhfjfuw8pss.getSeparatorHtml(editor);
+    var pageBreakSeparatorRegExp = new RegExp(separatorHtml.replace(/[\?\.\*\[\]\(\)\{\}\+\^\$\:]/g, function (a) {
+      return '\\' + a;
+    }), 'gi');
+    editor.on('BeforeSetContent', function (e) {
+      e.content = e.content.replace(pageBreakSeparatorRegExp, getPlaceholderHtml());
+    });
+    editor.on('PreInit', function () {
+      editor.serializer.addNodeFilter('img', function (nodes) {
+        var i = nodes.length, node, className;
+        while (i--) {
+          node = nodes[i];
+          className = node.attr('class');
+          if (className && className.indexOf('mce-pagebreak') !== -1) {
+            var parentNode = node.parent;
+            if (editor.schema.getBlockElements()[parentNode.name] && $_cskctvhfjfuw8pss.shouldSplitBlock(editor)) {
+              parentNode.type = 3;
+              parentNode.value = separatorHtml;
+              parentNode.raw = true;
+              node.remove();
+              continue;
             }
+            node.type = 3;
+            node.value = separatorHtml;
+            node.raw = true;
           }
-        });
+        }
       });
     });
+  };
+  var $_56ra4rhdjfuw8psp = {
+    setup: setup,
+    getPlaceholderHtml: getPlaceholderHtml,
+    getPageBreakClass: getPageBreakClass
+  };
 
-    return function () { };
+  var register = function (editor) {
+    editor.addCommand('mcePageBreak', function () {
+      if (editor.settings.pagebreak_split_block) {
+        editor.insertContent('<p>' + $_56ra4rhdjfuw8psp.getPlaceholderHtml() + '</p>');
+      } else {
+        editor.insertContent($_56ra4rhdjfuw8psp.getPlaceholderHtml());
+      }
+    });
+  };
+  var $_7badtphcjfuw8pso = { register: register };
+
+  var setup$1 = function (editor) {
+    editor.on('ResolveName', function (e) {
+      if (e.target.nodeName === 'IMG' && editor.dom.hasClass(e.target, $_56ra4rhdjfuw8psp.getPageBreakClass())) {
+        e.name = 'pagebreak';
+      }
+    });
+  };
+  var $_78okmzhgjfuw8pst = { setup: setup$1 };
+
+  var register$1 = function (editor) {
+    editor.addButton('pagebreak', {
+      title: 'Page break',
+      cmd: 'mcePageBreak'
+    });
+    editor.addMenuItem('pagebreak', {
+      text: 'Page break',
+      icon: 'pagebreak',
+      cmd: 'mcePageBreak',
+      context: 'insert'
+    });
+  };
+  var $_4m919ihhjfuw8psu = { register: register$1 };
+
+  global.add('pagebreak', function (editor) {
+    $_7badtphcjfuw8pso.register(editor);
+    $_4m919ihhjfuw8psu.register(editor);
+    $_56ra4rhdjfuw8psp.setup(editor);
+    $_78okmzhgjfuw8pst.setup(editor);
+  });
+  function Plugin () {
   }
-);
-dem('tinymce.plugins.pagebreak.Plugin')();
+
+  return Plugin;
+
+}());
 })();
