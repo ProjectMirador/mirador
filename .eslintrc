@@ -10,6 +10,7 @@
   "parser": "babel-eslint",
   "plugins": ["jest"],
   "rules": {
+    "import/prefer-default-export": "off",
     "no-console": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "require-jsdoc": ["error", {
