@@ -1,5 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import WindowIcon from './WindowIcon';
 import ns from '../config/css-ns';
 
 
@@ -15,28 +23,72 @@ const handleOpenButtonClick = (event, manifest, addWindow) => {
  * @param {object} [props.manifest = string]
  */
 
-/**
- * Determines which classes should be used for display, based on the state of
- * the manifest
- * @memberof ManifestListItem
- * @private
- */
-const ManifestListItem = ({ manifest, addWindow, handleClose }) => (
-  <li className={ns('manifest-list-item')}>
-    <button type="button" onClick={(event) => { handleOpenButtonClick(event, manifest, addWindow); handleClose(); }}>
-      {manifest}
-    </button>
-  </li>
-);
+/** */
+class ManifestListItem extends React.Component {
+  /** */
+  render() {
+    const {
+      manifestId, title, thumbnail, logo, addWindow, handleClose, classes,
+    } = this.props;
+
+    return (
+      <Card className={classNames(classes.card, ns('manifest-list-item'))}>
+        <CardHeader
+          avatar={
+            <WindowIcon manifestLogo={logo} />
+          }
+          title={title || manifestId}
+        />
+
+        {
+          thumbnail && (
+            <CardMedia
+              className={classes.media}
+              image={thumbnail}
+            />
+          )
+        }
+        <CardContent>
+          <Button
+            color="primary"
+            onClick={
+              (event) => { handleOpenButtonClick(event, manifestId, addWindow); handleClose(); }
+            }
+          >
+            {title || manifestId}
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+}
 
 ManifestListItem.propTypes = {
-  manifest: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
+  manifestId: PropTypes.string.isRequired,
   addWindow: PropTypes.func.isRequired,
   handleClose: PropTypes.func,
+  title: PropTypes.string,
+  thumbnail: PropTypes.string,
+  logo: PropTypes.string,
+  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 ManifestListItem.defaultProps = {
   handleClose: () => {},
+  logo: null,
+  classes: {},
+  thumbnail: null,
+  title: null,
 };
 
-export default ManifestListItem;
+/** */
+const styles = theme => ({
+  card: {
+    maxWidth: 400,
+  },
+  media: {
+    height: 192,
+  },
+});
+
+export default withStyles(styles)(ManifestListItem);

@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
 import ns from '../config/css-ns';
 import ManifestForm from '../containers/ManifestForm';
 import ManifestListItem from '../containers/ManifestListItem';
@@ -17,11 +19,13 @@ class WorkspaceAdd extends React.Component {
     const { manifests, setWorkspaceAddVisibility } = this.props;
 
     const manifestList = Object.keys(manifests).map(manifest => (
-      <ManifestListItem
-        key={manifest}
-        manifest={manifest}
-        handleClose={() => setWorkspaceAddVisibility(false)}
-      />
+      <GridListTile key={`tile_${manifest}`}>
+        <ManifestListItem
+          key={manifest}
+          manifestId={manifest}
+          handleClose={() => setWorkspaceAddVisibility(false)}
+        />
+      </GridListTile>
     ));
 
     return (
@@ -29,7 +33,9 @@ class WorkspaceAdd extends React.Component {
         <ManifestForm
           id="add-form"
         />
-        <ul>{manifestList}</ul>
+        <GridList cellHeight={350} cols={3}>
+          {manifestList}
+        </GridList>
       </div>
     );
   }
