@@ -11,7 +11,6 @@ import WorkspaceElastic from '../components/WorkspaceElastic';
 const mapStateToProps = state => (
   {
     workspace: state.workspace,
-    config: state.config,
     windows: state.windows,
   }
 );
@@ -31,6 +30,16 @@ const mapDispatchToProps = (dispatch, props) => ({
   toggleWorkspaceExposeMode: size => dispatch(
     actions.toggleWorkspaceExposeMode(),
   ),
+  updateWindowPosition: (windowId, position) => {
+    dispatch(
+      actions.updateWindowPosition(windowId, position),
+    );
+  },
+  setWindowSize: (windowId, size) => {
+    dispatch(
+      actions.setWindowSize(windowId, size),
+    );
+  },
 });
 
 const enhance = compose(

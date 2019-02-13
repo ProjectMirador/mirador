@@ -17,6 +17,8 @@ class WorkspaceElastic extends React.Component {
       workspace,
       windows,
       setWorkspaceViewportPosition,
+      updateWindowPosition,
+      setWindowSize,
     } = this.props;
     return (
       <Rnd
@@ -43,10 +45,27 @@ class WorkspaceElastic extends React.Component {
       >
         {
           Object.values(windows).map(window => (
-            <Window
+            <Rnd
               key={window.id}
-              window={window}
-            />
+              size={{ width: window.width, height: window.height }}
+              position={{ x: window.x, y: window.y }}
+              bounds="parent"
+              onDragStop={(e, d) => {
+                updateWindowPosition(window.id, { x: d.x, y: d.y });
+              }}
+              onResize={(e, direction, ref, delta, position) => {
+                setWindowSize(window.id, {
+                  width: ref.style.width,
+                  height: ref.style.height,
+                  ...position,
+                });
+              }}
+              dragHandleClassName={ns('window-top-bar')}
+            >
+              <Window
+                window={window}
+              />
+            </Rnd>
           ))
         }
       </Rnd>
@@ -58,6 +77,8 @@ WorkspaceElastic.propTypes = {
   setWorkspaceViewportPosition: PropTypes.func.isRequired,
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   workspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  updateWindowPosition: PropTypes.func.isRequired,
+  setWindowSize: PropTypes.func.isRequired,
 };
 
 export default WorkspaceElastic;
