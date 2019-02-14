@@ -29,7 +29,7 @@ class MiradorViewer {
     ReactDOM.render(
       <Provider store={this.store}>
         <I18nextProvider i18n={i18n}>
-          <App config={config} />
+          <App />
         </I18nextProvider>
       </Provider>,
       document.getElementById(config.id),
