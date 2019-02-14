@@ -205,10 +205,10 @@ describe('getSelectedCanvas', () => {
     );
   });
 
-  it('should return an empty object when there is no manifestation to get a canvas from', () => {
+  it('should return undefined when there is no manifestation to get a canvas from', () => {
     const selectedCanvas = getSelectedCanvas(noManifestationState, 'a');
 
-    expect(selectedCanvas).toEqual({});
+    expect(selectedCanvas).toBeUndefined();
   });
 });
 
@@ -223,15 +223,14 @@ describe('getCanvasLabel', () => {
     expect(received).toBe('Whole Page');
   });
 
-  it('should return the given canvas index (+1) if the canvas is undefined', () => {
-    expect(getCanvasLabel(undefined)).toBe(1);
-    expect(getCanvasLabel(undefined, 2)).toBe(3);
+  it('should return undefined if the canvas is undefined', () => {
+    expect(getCanvasLabel(undefined)).toBeUndefined();
   });
 
-  it('should return the canvas index (+1) if no manifestation', () => {
-    const canvas = { getLabel: () => {} };
-    const received = getCanvasLabel(canvas);
-    expect(received).toBe(1);
+  it('should return the canvas index as (+1) as string if no label given', () => {
+    const canvas = { getLabel: () => [] };
+    const received = getCanvasLabel(canvas, 42);
+    expect(received).toBe('43');
   });
 });
 
