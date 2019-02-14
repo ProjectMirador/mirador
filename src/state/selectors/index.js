@@ -40,9 +40,9 @@ export function getManifestCanvases(manifest) {
 * @return {Array} - [ {id: 'id', label: 'label' }, ... ]
 */
 export function getIdAndLabelOfCanvases(canvases) {
-  return canvases.map(canvas => ({
-    id: canvas.__jsonld['@id'], // eslint-disable-line no-underscore-dangle
-    label: canvas.__jsonld.label, // eslint-disable-line no-underscore-dangle
+  return canvases.map((canvas, index) => ({
+    id: canvas.id,
+    label: getCanvasLabel(canvas, index),
   }));
 }
 
