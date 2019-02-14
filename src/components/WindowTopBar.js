@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
 import Toolbar from '@material-ui/core/Toolbar';
+import AppBar from '@material-ui/core/AppBar';
 import classNames from 'classnames';
 import WindowIcon from '../containers/WindowIcon';
 import WindowTopMenuButton from '../containers/WindowTopMenuButton';
@@ -26,29 +27,31 @@ class WindowTopBar extends Component {
       removeWindow, windowId, classes, toggleWindowSideBar, t, manifestTitle,
     } = this.props;
     return (
-      <Toolbar disableGutters className={classNames(classes.reallyDense, ns('window-top-bar'))} variant="dense">
-        <IconButton
-          aria-label={t('toggleWindowSideBar')}
-          color="inherit"
-          onClick={toggleWindowSideBar}
-        >
-          <MenuIcon />
-        </IconButton>
-        <WindowIcon windowId={windowId} />
-        <Typography variant="h3" noWrap color="inherit" className={classes.typographyBody}>
-          {manifestTitle}
-        </Typography>
-        <WindowTopBarButtons windowId={windowId} />
-        <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
-        <IconButton
-          color="inherit"
-          className={ns('window-close')}
-          aria-label={t('closeWindow')}
-          onClick={removeWindow}
-        >
-          <CloseIcon />
-        </IconButton>
-      </Toolbar>
+      <AppBar position="relative">
+        <Toolbar disableGutters className={classNames(classes.reallyDense, ns('window-top-bar'))} variant="dense">
+          <IconButton
+            aria-label={t('toggleWindowSideBar')}
+            color="inherit"
+            onClick={toggleWindowSideBar}
+          >
+            <MenuIcon />
+          </IconButton>
+          <WindowIcon windowId={windowId} />
+          <Typography variant="h3" noWrap color="inherit" className={classes.typographyBody}>
+            {manifestTitle}
+          </Typography>
+          <WindowTopBarButtons windowId={windowId} />
+          <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
+          <IconButton
+            color="inherit"
+            className={ns('window-close')}
+            aria-label={t('closeWindow')}
+            onClick={removeWindow}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
     );
   }
 }
