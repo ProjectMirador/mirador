@@ -53,6 +53,25 @@ export function toggleWindowSideBar(windowId) {
 }
 
 /**
+ * setWindowCompanionWindow - action creator
+ *
+ * @param  {String} windowId
+ * @param  {String} panelType The type of panel content to be rendered
+ *                            in the companion window (e.g. info, canvas_navigation)
+ * @param  {String} position The position of the companion window to
+ *                           set content for (e.g. right, bottom)
+ * @memberof ActionCreators
+ */
+export function setWindowCompanionWindow(windowId, panelType, position) {
+  return {
+    type: ActionTypes.SET_WINDOW_COMPANION_WINDOW,
+    windowId,
+    panelType,
+    position,
+  };
+}
+
+/**
  * toggleWindowSideBarPanel - action creator
  *
  * @param  {String} windowId
@@ -61,6 +80,23 @@ export function toggleWindowSideBar(windowId) {
  */
 export function toggleWindowSideBarPanel(windowId, panelType) {
   return { type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL, windowId, panelType };
+}
+
+/**
+ * popOutCompanionWindow - action creator
+ *
+ * @param  {String} windowId
+ * @param  {String} panelType The type of panel content to be rendered
+ *                            in the companion window (e.g. info, canvas_navigation)
+ * @param  {String} position The position of the companion window to
+ *                           set content for (e.g. right, bottom)
+ * @memberof ActionCreators
+ */
+export function popOutCompanionWindow(windowId, panelType, position) {
+  return ((dispatch) => {
+    dispatch(setWindowCompanionWindow(windowId, panelType, position));
+    dispatch(toggleWindowSideBarPanel(windowId, 'closed'));
+  });
 }
 
 /**

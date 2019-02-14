@@ -43,7 +43,7 @@ class WindowMiddleContent extends Component {
         {this.renderViewer()}
         <CompanionWindow
           windowId={window.id}
-          manifest={manifest}
+          position="right"
         />
       </div>
     );

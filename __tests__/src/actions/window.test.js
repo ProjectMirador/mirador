@@ -84,4 +84,39 @@ describe('window actions', () => {
       expect(actions.toggleWindowSideBarPanel(windowId, 'panelType')).toEqual(expectedAction);
     });
   });
+
+  describe('setWindowCompanionWindow', () => {
+    it('returns the appropriate action type', () => {
+      const windowId = 'abc123';
+      const panelType = 'info';
+      const position = 'right';
+      const expectedAction = {
+        type: ActionTypes.SET_WINDOW_COMPANION_WINDOW,
+        windowId,
+        panelType,
+        position,
+      };
+      expect(actions.setWindowCompanionWindow(windowId, 'info', 'right')).toEqual(expectedAction);
+    });
+  });
+
+  describe('popOutCompanionWindow', () => {
+    it('returns a thunk which dispatches the appropriate actions', () => {
+      const mockDispatch = jest.fn();
+      const windowId = 'abc123';
+      const panelType = 'info';
+      const position = 'right';
+      const thunk = actions.popOutCompanionWindow(windowId, panelType, position);
+
+      expect(typeof thunk).toEqual('function');
+      thunk(mockDispatch);
+      expect(mockDispatch).toHaveBeenCalledTimes(2);
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: ActionTypes.SET_WINDOW_COMPANION_WINDOW, windowId, panelType, position,
+      });
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL, windowId, panelType: 'closed',
+      });
+    });
+  });
 });
