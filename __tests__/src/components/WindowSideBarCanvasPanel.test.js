@@ -20,18 +20,35 @@ describe('WindowSideBarCanvasPanel', () => {
 
   beforeEach(() => {
     wrapper = shallow(
-      <WindowSideBarCanvasPanel canvasesIdAndLabel={canvasesIdAndLabel} windowId="xyz" />,
-    );
+      <WindowSideBarCanvasPanel
+        canvasesIdAndLabel={canvasesIdAndLabel}
+        classes={{}}
+        t={key => key}
+        windowId="xyz"
+      />,
+    ).dive();
   });
 
   it('renders all needed elements', () => {
+    expect(wrapper.find(Typography).at(0).render().text()).toBe('canvasIndex');
     expect(wrapper.find(List).length).toBe(1);
     expect(wrapper.find(ListItem).length).toBe(canvasesIdAndLabel.length);
-    expect(wrapper.find(Typography).length).toBe(canvasesIdAndLabel.length);
+    expect(wrapper.find(List).find(Typography).length).toBe(canvasesIdAndLabel.length);
   });
 
   it('should set the correct labels', () => {
-    expect(wrapper.find(Typography).at(0).render().text()).toBe(canvasesIdAndLabel[0].label);
-    expect(wrapper.find(Typography).at(1).render().text()).toBe(canvasesIdAndLabel[1].label);
+    expect(wrapper
+      .find(List)
+      .find(Typography)
+      .at(0)
+      .render()
+      .text()).toBe(canvasesIdAndLabel[0].label);
+
+    expect(wrapper
+      .find(List)
+      .find(Typography)
+      .at(1)
+      .render()
+      .text()).toBe(canvasesIdAndLabel[1].label);
   });
 });
