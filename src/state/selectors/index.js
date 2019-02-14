@@ -26,6 +26,17 @@ export function getManifestLogo(manifest) {
 * @param {object} manifest
 * @return {String|null}
 */
+export function getManifestThumbnail(manifest) {
+  return manifest.manifestation
+    && manifest.manifestation.getThumbnail()
+    && manifest.manifestation.getThumbnail().id;
+}
+
+/**
+* Return the logo of a manifest or null
+* @param {object} manifest
+* @return {String|null}
+*/
 export function getManifestCanvases(manifest) {
   if (!manifest.manifestation) {
     return [];
