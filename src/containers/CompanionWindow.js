@@ -1,5 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
+import * as actions from '../state/actions';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import { getCompanionWindowForPosition } from '../state/selectors';
 import CompanionWindow from '../components/CompanionWindow';
@@ -19,9 +21,19 @@ const mapStateToProps = (state, { windowId, position }) => {
   };
 };
 
+/**
+ * mapDispatchToProps - to hook up connect
+ * @memberof CompanionWindow
+ * @private
+ */
+const mapDispatchToProps = {
+  closeCompanionWindow: actions.setWindowCompanionWindow,
+};
+
 const enhance = compose(
-  connect(mapStateToProps, null),
+  connect(mapStateToProps, mapDispatchToProps),
   miradorWithPlugins,
+  withNamespaces(),
   // further HOC
 );
 

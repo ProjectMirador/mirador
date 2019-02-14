@@ -32,19 +32,12 @@ class WindowMiddleContent extends Component {
    * Render the component
    */
   render() {
-    const { manifest, window } = this.props;
+    const { window } = this.props;
     return (
       <div className={ns('window-middle-content')}>
         <WindowSideBar windowId={window.id} />
-        <CompanionWindow
-          windowId={window.id}
-          manifest={manifest}
-        />
         {this.renderViewer()}
-        <CompanionWindow
-          windowId={window.id}
-          position="right"
-        />
+        <CompanionWindow windowId={window.id} position="right" />
       </div>
     );
   }
