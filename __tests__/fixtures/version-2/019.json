@@ -61,6 +61,33 @@
               "on": "https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1"
             }
           ]
+        },
+        {
+          "@id": "https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1",
+          "@type": "sc:Canvas",
+          "label": "Image 2",
+          "height": 4288,
+          "width": 2848,
+          "images": [
+            {
+              "@id": "https://purl.stanford.edu/rz176rt6531/iiif/annotation/rz176rt6531_1",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "resource": {
+                "@id": "https://stacks.stanford.edu/image/iiif/rz176rt6531%2FPC0170_s3_Tree_Calendar_20081101_152516_0410/full/full/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 4288,
+                "width": 2848,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://stacks.stanford.edu/image/iiif/rz176rt6531%2FPC0170_s3_Tree_Calendar_20081101_152516_0410",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              },
+              "on": "https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1"
+            }
+          ]
         }
       ]
     }

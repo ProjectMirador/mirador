@@ -40,7 +40,7 @@ describe('ThumbnailNavigation', () => {
     expect(wrapper.find('.mirador-thumb-navigation').length).toBe(1);
   });
   it('renders li elements based off of number of canvases', () => {
-    expect(renderedGrid.find('.mirador-thumbnail-nav-canvas').length).toBe(2);
+    expect(renderedGrid.find('.mirador-thumbnail-nav-canvas').length).toBe(3);
   });
   it('sets a mirador-current-canvas class on current canvas', () => {
     expect(wrapper.find('.mirador-thumbnail-nav-canvas-1.mirador-current-canvas'));
@@ -54,7 +54,7 @@ describe('ThumbnailNavigation', () => {
     expect(renderedGrid.find('.mirador-thumbnail-nav-canvas').first().prop('style').width).toEqual(100);
   });
   it('renders canvas thumbnails', () => {
-    expect(renderedGrid.find('CanvasThumbnail').length).toBe(2);
+    expect(renderedGrid.find('CanvasThumbnail').length).toBe(3);
   });
   it('Grid is set with expected props for scrolling alignment', () => {
     expect(grid.props().scrollToAlignment).toBe('center');
