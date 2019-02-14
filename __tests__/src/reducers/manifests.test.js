@@ -1,9 +1,9 @@
-import reducer from '../../../src/state/reducers/manifests';
+import { manifestsReducer } from '../../../src/state/reducers/manifests';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('manifests reducer', () => {
   it('should handle REQUEST_MANIFEST', () => {
-    expect(reducer({}, {
+    expect(manifestsReducer({}, {
       type: ActionTypes.REQUEST_MANIFEST,
       manifestId: 'abc123',
     })).toEqual({
@@ -14,7 +14,7 @@ describe('manifests reducer', () => {
     });
   });
   it('should handle RECEIVE_MANIFEST', () => {
-    expect(reducer(
+    expect(manifestsReducer(
       {
         abc123: {
           id: 'abc123',
@@ -39,7 +39,7 @@ describe('manifests reducer', () => {
     });
   });
   it('should handle RECEIVE_MANIFEST_FAILURE', () => {
-    expect(reducer(
+    expect(manifestsReducer(
       {
         abc123: {
           id: 'abc123',
@@ -60,7 +60,7 @@ describe('manifests reducer', () => {
     });
   });
   it('should handle REMOVE_MANIFEST', () => {
-    expect(reducer(
+    expect(manifestsReducer(
       {
         abc123: {
           id: 'abc123',

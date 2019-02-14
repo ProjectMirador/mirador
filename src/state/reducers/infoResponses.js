@@ -3,7 +3,7 @@ import ActionTypes from '../actions/action-types';
 /**
  * infoResponsesReducer
  */
-const infoResponsesReducer = (state = {}, action) => {
+export const infoResponsesReducer = (state = {}, action) => {
   switch (action.type) {
     case ActionTypes.REQUEST_INFO_RESPONSE:
       return {
@@ -41,5 +41,3 @@ const infoResponsesReducer = (state = {}, action) => {
     default: return state;
   }
 };
-
-export default infoResponsesReducer;

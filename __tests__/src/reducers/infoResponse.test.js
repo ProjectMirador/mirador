@@ -1,9 +1,9 @@
-import reducer from '../../../src/state/reducers/infoResponses';
+import { infoResponsesReducer } from '../../../src/state/reducers/infoResponses';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('info response reducer', () => {
   it('should handle REQUEST_INFO_RESPONSE', () => {
-    expect(reducer({}, {
+    expect(infoResponsesReducer({}, {
       type: ActionTypes.REQUEST_INFO_RESPONSE,
       infoId: 'abc123',
     })).toEqual({
@@ -14,7 +14,7 @@ describe('info response reducer', () => {
     });
   });
   it('should handle RECEIVE_INFO_RESPONSE', () => {
-    expect(reducer(
+    expect(infoResponsesReducer(
       {
         abc123: {
           id: 'abc123',
@@ -39,7 +39,7 @@ describe('info response reducer', () => {
     });
   });
   it('should handle RECEIVE_INFO_RESPONSE_FAILURE', () => {
-    expect(reducer(
+    expect(infoResponsesReducer(
       {
         abc123: {
           id: 'abc123',
@@ -60,7 +60,7 @@ describe('info response reducer', () => {
     });
   });
   it('should handle REMOVE_INFO_RESPONSE', () => {
-    expect(reducer(
+    expect(infoResponsesReducer(
       {
         abc123: {
           id: 'abc123',
