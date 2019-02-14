@@ -1,5 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 import * as actions from '../state/actions';
 import WorkspaceAdd from '../components/WorkspaceAdd';
 
@@ -19,6 +20,7 @@ const mapDispatchToProps = { setWorkspaceAddVisibility: actions.setWorkspaceAddV
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
+  withNamespaces(),
   // further HOC go here
 );
 

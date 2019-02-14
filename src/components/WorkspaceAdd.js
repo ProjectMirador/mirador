@@ -1,6 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import AddIcon from '@material-ui/icons/Add';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import AppBar from '@material-ui/core/AppBar';
 import Drawer from '@material-ui/core/Drawer';
+import Fab from '@material-ui/core/Fab';
+import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
 import ns from '../config/css-ns';
 import ManifestForm from '../containers/ManifestForm';
 import ManifestListItem from '../containers/ManifestListItem';
@@ -11,11 +20,30 @@ import ManifestListItem from '../containers/ManifestListItem';
  * @private
  */
 class WorkspaceAdd extends React.Component {
+  /** */
+  constructor(props) {
+    super(props);
+
+    this.state = { addResourcesOpen: false };
+
+    this.setAddResourcesVisibility = this.setAddResourcesVisibility.bind(this);
+  }
+
+  /**
+   * @private
+   */
+  setAddResourcesVisibility(bool) {
+    this.setState({ addResourcesOpen: bool });
+  }
+
   /**
    * render
    */
   render() {
-    const { manifests, setWorkspaceAddVisibility } = this.props;
+    const {
+      manifests, setWorkspaceAddVisibility, t, classes,
+    } = this.props;
+    const { addResourcesOpen } = this.state;
 
     const manifestList = Object.keys(manifests).map(manifest => (
       <ManifestListItem
@@ -29,10 +57,15 @@ class WorkspaceAdd extends React.Component {
       <div className={ns('workspace-add')}>
         {manifestList}
 
+        <Fab variant="extended" disabled={addResourcesOpen} className={classes.fab} color="primary" onClick={() => (this.setAddResourcesVisibility(true))}>
+          <AddIcon />
+          {t('addResource')}
+        </Fab>
+
         <Drawer
-          variant="permanent"
-          open
+          variant="persistent"
           anchor="bottom"
+          open={addResourcesOpen}
           PaperProps={{ style: { position: 'absolute', left: 100 } }}
           ModalProps={{
             disablePortal: true,
@@ -40,9 +73,21 @@ class WorkspaceAdd extends React.Component {
             style: { position: 'absolute' },
           }}
         >
-          <ManifestForm
-            id="add-form"
-          />
+          <Paper
+            className={classes.form}
+          >
+            <AppBar position="absolute" color="primary" onClick={() => (this.setAddResourcesVisibility(false))}>
+              <Toolbar>
+                <IconButton className={classes.menuButton} color="inherit" aria-label={t('closeMenu')}>
+                  <ExpandMoreIcon />
+                </IconButton>
+                <Typography variant="h2" noWrap color="inherit" className={classes.typographyBody}>
+                  {t('addResource')}
+                </Typography>
+              </Toolbar>
+            </AppBar>
+            <ManifestForm onCancel={() => (this.setAddResourcesVisibility(false))} />
+          </Paper>
         </Drawer>
       </div>
     );
@@ -52,6 +97,36 @@ class WorkspaceAdd extends React.Component {
 WorkspaceAdd.propTypes = {
   manifests: PropTypes.instanceOf(Object).isRequired,
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
+  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  t: PropTypes.func,
 };
 
-export default WorkspaceAdd;
+WorkspaceAdd.defaultProps = {
+  classes: {},
+  t: key => key,
+};
+
+/** */
+const styles = theme => ({
+  form: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+    marginTop: 64,
+  },
+  fab: {
+    position: 'absolute',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2,
+  },
+  typographyBody: {
+    flexGrow: 1,
+    fontSize: '1em',
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20,
+  },
+});
+
+export default withStyles(styles)(WorkspaceAdd);
