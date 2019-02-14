@@ -7,6 +7,7 @@ import Workspace from '../../../src/containers/Workspace';
 import WorkspaceAdd from '../../../src/containers/WorkspaceAdd';
 import App from '../../../src/components/App';
 import settings from '../../../src/config/settings';
+import i18n from '../../../src/i18n';
 
 /** */
 function createWrapper(props) {
@@ -15,6 +16,7 @@ function createWrapper(props) {
       isFullscreenEnabled={false}
       setWorkspaceFullscreen={() => {}}
       theme={settings.theme}
+      translations={{}}
       classes={{}}
       {...props}
     />,
@@ -41,6 +43,11 @@ describe('App', () => {
     expect(theme.palette.type).toEqual('light');
     expect(theme.typography.useNextVariants).toBe(true);
     expect(Object.keys(theme).length).toBeGreaterThan(10);
+  });
+
+  it('sets up translations based on the config passed in', () => {
+    createWrapper({ translations: { en: { off: 'on' } } });
+    expect(i18n.t('off')).toEqual('on');
   });
 
   it('should pass setWorkspaceFullscreen to Fullscreen.onChange', () => {

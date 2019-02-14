@@ -7,6 +7,8 @@ export default {
       useNextVariants: true // set so that console deprecation warning is removed
     }
   },
+  translations: {
+  },
   window: {
     defaultView: 'single',
   },
