@@ -50,7 +50,21 @@ describe('WorkspaceMosaic', () => {
   });
   describe('tileRenderer', () => {
     it('when window is available', () => {
-      expect(wrapper.instance().tileRenderer('1')).not.toBeNull();
+      const renderedTile = wrapper.instance().tileRenderer('1', 'foo');
+      expect(renderedTile).not.toBeNull();
+      expect(shallow(renderedTile).find('DropTarget(DragSource(InternalMosaicWindow))').length).toEqual(1);
+      expect(shallow(renderedTile).props()).toEqual(expect.objectContaining({
+        toolbarControls: [],
+        additionalControls: [],
+        path: 'foo',
+      }));
+      expect(shallow(shallow(renderedTile).props().renderPreview()).matchesElement(
+        <div className="mosaic-preview">
+          <div className="mosaic-window-body">
+            <h4>Mirador</h4>
+          </div>
+        </div>,
+      )).toBe(true);
     });
     it('when window is not available', () => {
       expect(wrapper.instance().tileRenderer('bar')).toBeNull();

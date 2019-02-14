@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Mosaic, getLeaves, createBalancedTreeFromLeaves,
+  Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
 } from 'react-mosaic-component';
 import 'react-mosaic-component/react-mosaic-component.css';
 import Window from '../containers/Window';
@@ -69,10 +69,24 @@ export class WorkspaceMosaic extends React.Component {
     const window = windows[id];
     if (!window) return null;
     return (
-      <Window
-        key={window.id}
-        window={window}
-      />
+      <MosaicWindow
+        toolbarControls={[]}
+        additionalControls={[]}
+        path={path}
+        windowId={window.id}
+        renderPreview={() => (
+          <div className="mosaic-preview">
+            <div className="mosaic-window-body">
+              <h4>Mirador</h4>
+            </div>
+          </div>
+        )}
+      >
+        <Window
+          key={window.id}
+          window={window}
+        />
+      </MosaicWindow>
     );
   }
 

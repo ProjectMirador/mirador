@@ -5,6 +5,10 @@
     height: 100%;
     position: relative;
     width: 100%;
+
+    .mosaic-window-toolbar {
+      display: none;
+    }
   }
 
   &-workspace {
