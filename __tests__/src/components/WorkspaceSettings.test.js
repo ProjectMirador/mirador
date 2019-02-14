@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import WorkspaceSettings from '../../../src/components/WorkspaceSettings';
+import settings from '../../../src/config/settings';
 
 describe('WorkspaceSettings', () => {
   let wrapper;
@@ -16,7 +17,7 @@ describe('WorkspaceSettings', () => {
         open
         handleClose={handleClose}
         updateConfig={updateConfig}
-        theme="light"
+        theme={settings.theme}
       />,
     );
   });

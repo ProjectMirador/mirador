@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
+import AppBar from '@material-ui/core/AppBar';
 
 import WindowTopMenuButton from '../../../src/containers/WindowTopMenuButton';
 import WindowTopBarButtons from '../../../src/containers/WindowTopBarButtons';
@@ -29,6 +30,7 @@ function createWrapper(props) {
 describe('WindowTopBar', () => {
   it('renders all needed elements', () => {
     const wrapper = createWrapper();
+    expect(wrapper.find(AppBar).length).toBe(1);
     expect(wrapper.find(Toolbar).length).toBe(1);
     expect(wrapper.find(IconButton).length).toBe(2);
     expect(wrapper.find(MenuIcon).length).toBe(1);

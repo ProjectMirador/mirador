@@ -52,10 +52,6 @@
     resize: horizontal;
   }
 
-  &-window-top-bar {
-    background: lighten($black, 80%);
-  }
-
   &-companion-bottom {
     background: lighten($black, 60%);
     overflow-y: auto;
