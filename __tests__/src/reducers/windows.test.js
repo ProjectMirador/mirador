@@ -230,4 +230,87 @@ describe('windows reducer', () => {
       },
     });
   });
+
+  it('should handle UPDATE_VIEWPORT', () => {
+    expect(windowsReducer({
+      abc123: {
+        id: 'abc123',
+      },
+      def456: {
+        id: 'def456',
+      },
+    }, {
+      type: ActionTypes.UPDATE_VIEWPORT,
+      windowId: 'abc123',
+      payload: { x: 0, y: 1, zoom: 0.5 },
+    })).toEqual({
+      abc123: {
+        id: 'abc123',
+        viewer: { x: 0, y: 1, zoom: 0.5 },
+      },
+      def456: {
+        id: 'def456',
+      },
+    });
+  });
+  it('should handle SET_WINDOW_SIZE', () => {
+    expect(reducer({
+      abc123: {
+        id: 'abc123',
+      },
+      def456: {
+        id: 'def456',
+      },
+    }, {
+      type: ActionTypes.SET_WINDOW_SIZE,
+      payload: {
+        windowId: 'abc123',
+        size: {
+          x: 20,
+          y: 20,
+          width: 200,
+          height: 200,
+        },
+      },
+    })).toEqual({
+      abc123: {
+        id: 'abc123',
+        x: 20,
+        y: 20,
+        width: 200,
+        height: 200,
+      },
+      def456: {
+        id: 'def456',
+      },
+    });
+  });
+  it('should handle UPDATE_WINDOW_POSITION', () => {
+    expect(reducer({
+      abc123: {
+        id: 'abc123',
+      },
+      def456: {
+        id: 'def456',
+      },
+    }, {
+      type: ActionTypes.UPDATE_WINDOW_POSITION,
+      payload: {
+        windowId: 'abc123',
+        position: {
+          x: 20,
+          y: 20,
+        },
+      },
+    })).toEqual({
+      abc123: {
+        id: 'abc123',
+        x: 20,
+        y: 20,
+      },
+      def456: {
+        id: 'def456',
+      },
+    });
+  });
 });

@@ -42,4 +42,27 @@ describe('workspace reducer', () => {
       isWorkspaceAddVisible: true,
     });
   });
+  it('should handle SET_WORKSPACE_VIEWPORT_POSITION', () => {
+    expect(reducer([], {
+      type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
+      payload: {
+        position: {
+          x: 50,
+          y: 50,
+        },
+      },
+    })).toEqual({
+      viewportPosition: {
+        x: 50,
+        y: 50,
+      },
+    });
+  });
+  it('should handle TOGGLE_WORKSPACE_EXPOSE_MODE', () => {
+    expect(reducer([], {
+      type: ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE,
+    })).toEqual({
+      exposeModeOn: true,
+    });
+  });
 });
