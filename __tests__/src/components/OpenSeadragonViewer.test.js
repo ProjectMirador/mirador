@@ -64,7 +64,7 @@ describe('OpenSeadragonViewer', () => {
   describe('boundsFromTileSources', () => {
     it('generates bounds from a set of tileSources', () => {
       expect(wrapper.instance().boundsFromTileSources()).toEqual(expect.arrayContaining(
-        [0, 0, 250, 201],
+        [0, 0, 249, 200],
       ));
     });
   });
@@ -73,7 +73,7 @@ describe('OpenSeadragonViewer', () => {
       expect(wrapper.instance().boundingRectFromTileSource(
         { '@id': 'http://bar', width: 150, height: 201 }, 1,
       )).toEqual(expect.arrayContaining(
-        [100, 0, 150, 201],
+        [100, 0, 149, 200],
       ));
     });
   });
