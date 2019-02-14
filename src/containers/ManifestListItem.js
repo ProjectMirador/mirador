@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import {
-  getManifestTitle, getManifestLogo, getManifestThumbnail, getManifestCanvases,
+  getManifestTitle, getManifestLogo, getManifestThumbnail, getManifestCanvases, getManifestProvider,
 } from '../state/selectors';
 import * as actions from '../state/actions';
 import ManifestListItem from '../components/ManifestListItem';
@@ -16,6 +16,7 @@ const mapStateToProps = (state, { manifestId }) => {
     title: getManifestTitle(manifest),
     logo: getManifestLogo(manifest),
     thumbnail: getManifestThumbnail(manifest),
+    provider: getManifestProvider(manifest),
     size: getManifestCanvases(manifest).length,
   };
 };
