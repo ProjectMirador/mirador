@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import WindowSideBarInfoPanel from '../containers/WindowSideBarInfoPanel';
+import WindowSideBarCanvasPanel from '../containers/WindowSideBarCanvasPanel';
 
 /**
  * WindowSideBarPanel - the panel that pops out from the sidebar
@@ -16,6 +17,8 @@ class WindowSideBarPanel extends Component {
     switch (sideBarPanel) {
       case 'info':
         return <WindowSideBarInfoPanel windowId={windowId} />;
+      case 'canvas_navigation':
+        return <WindowSideBarCanvasPanel windowId={windowId} />;
       default:
         return null;
     }

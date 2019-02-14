@@ -35,6 +35,18 @@ export function getManifestCanvases(manifest) {
 }
 
 /**
+* Return ids and labels of canvases
+* @ param {Array} canvases
+* @return {Array} - [ {id: 'id', label: 'label' }, ... ]
+*/
+export function getIdAndLabelOfCanvases(canvases) {
+  return canvases.map((canvas, index) => ({
+    id: canvas.id,
+    label: getCanvasLabel(canvas, index),
+  }));
+}
+
+/**
 * Return the current canvas selected in a window
 * @param {object} state
 * @param {String} windowId

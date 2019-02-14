@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
+import ListIcon from '@material-ui/icons/FormatAlignJustify';
 
 /**
  *
@@ -36,6 +37,18 @@ class WindowSideBarButtons extends Component {
         >
           <InfoIcon
             color={this.sideBarPanelCurrentlySelected('info') ? 'primary' : 'inherit'}
+          />
+        </IconButton>
+        <IconButton
+          aria-label={
+            this.sideBarPanelCurrentlySelected('canvas_navigation')
+              ? t('closeCanvasNavigationCompanionWindow')
+              : t('openCanvasNavigationCompanionWindow')
+          }
+          onClick={() => (toggleWindowSideBarPanel('canvas_navigation'))}
+        >
+          <ListIcon
+            color={this.sideBarPanelCurrentlySelected('canvas_navigation') ? 'primary' : 'inherit'}
           />
         </IconButton>
       </>
