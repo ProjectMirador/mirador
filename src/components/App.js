@@ -14,31 +14,18 @@ import ns from '../config/css-ns';
  */
 class App extends Component {
   /**
-  */
-  makeMuiTheme() {
-    const { theme } = this.props;
-    return createMuiTheme({
-      palette: {
-        type: theme,
-      },
-      typography: {
-        useNextVariants: true,
-      },
-    });
-  }
-
-  /**
    * render
    * @return {String} - HTML markup for the component
    */
   render() {
     const {
-      isFullscreenEnabled, setWorkspaceFullscreen, classes, isWorkspaceAddVisible,
+      isFullscreenEnabled, setWorkspaceFullscreen, classes,
+      isWorkspaceAddVisible, theme,
     } = this.props;
 
     return (
       <div className={classNames(classes.background, ns('app'))}>
-        <MuiThemeProvider theme={this.makeMuiTheme()}>
+        <MuiThemeProvider theme={createMuiTheme(theme)}>
           <Fullscreen
             enabled={isFullscreenEnabled}
             onChange={setWorkspaceFullscreen}
@@ -57,7 +44,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-  theme: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
+  theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   isFullscreenEnabled: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
   setWorkspaceFullscreen: PropTypes.func.isRequired,

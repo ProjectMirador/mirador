@@ -6,6 +6,7 @@ import WorkspaceControlPanel from '../../../src/components/WorkspaceControlPanel
 import Workspace from '../../../src/containers/Workspace';
 import WorkspaceAdd from '../../../src/containers/WorkspaceAdd';
 import App from '../../../src/components/App';
+import settings from '../../../src/config/settings';
 
 /** */
 function createWrapper(props) {
@@ -13,7 +14,7 @@ function createWrapper(props) {
     <App
       isFullscreenEnabled={false}
       setWorkspaceFullscreen={() => {}}
-      theme="light"
+      theme={settings.theme}
       classes={{}}
       {...props}
     />,
@@ -32,6 +33,14 @@ describe('App', () => {
     expect(wrapper.find(Fullscreen).length).toBe(1);
     expect(wrapper.find(Workspace).length).toBe(1);
     expect(wrapper.find(WorkspaceControlPanel).length).toBe(1);
+  });
+
+  it('sets up a theme based on the config passed in merged w/ MaterialUI', () => {
+    const wrapper = createWrapper();
+    const { theme } = wrapper.find(MuiThemeProvider).props();
+    expect(theme.palette.type).toEqual('light');
+    expect(theme.typography.useNextVariants).toBe(true);
+    expect(Object.keys(theme).length).toBeGreaterThan(10);
   });
 
   it('should pass setWorkspaceFullscreen to Fullscreen.onChange', () => {

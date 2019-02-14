@@ -20,12 +20,18 @@ class WorkspaceSettings extends Component {
   }
 
   /**
-   * Propagate theme selection into the global state
+   * Propagate theme palette type selection into the global state
    */
   handleThemeChange(event) {
     const { updateConfig } = this.props;
 
-    updateConfig({ theme: event.target.value });
+    updateConfig({
+      theme: {
+        palette: {
+          type: event.target.value,
+        },
+      },
+    });
   }
 
   /**
@@ -44,7 +50,7 @@ class WorkspaceSettings extends Component {
           <FormControl>
             <InputLabel htmlFor="theme-simple">{t('theme')}</InputLabel>
             <Select
-              value={theme}
+              value={theme.palette.type}
               onChange={this.handleThemeChange}
               inputProps={{
                 name: 'theme',
@@ -66,7 +72,7 @@ WorkspaceSettings.propTypes = {
   open: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
   children: PropTypes.node,
   updateConfig: PropTypes.func.isRequired,
-  theme: PropTypes.string.isRequired,
+  theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
 };
 
