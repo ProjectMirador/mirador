@@ -254,7 +254,7 @@ describe('windows reducer', () => {
     });
   });
   it('should handle SET_WINDOW_SIZE', () => {
-    expect(reducer({
+    expect(windowsReducer({
       abc123: {
         id: 'abc123',
       },
@@ -286,7 +286,7 @@ describe('windows reducer', () => {
     });
   });
   it('should handle UPDATE_WINDOW_POSITION', () => {
-    expect(reducer({
+    expect(windowsReducer({
       abc123: {
         id: 'abc123',
       },

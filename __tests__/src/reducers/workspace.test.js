@@ -43,7 +43,7 @@ describe('workspace reducer', () => {
     });
   });
   it('should handle SET_WORKSPACE_VIEWPORT_POSITION', () => {
-    expect(reducer([], {
+    expect(workspaceReducer([], {
       type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
       payload: {
         position: {
@@ -59,7 +59,7 @@ describe('workspace reducer', () => {
     });
   });
   it('should handle TOGGLE_WORKSPACE_EXPOSE_MODE', () => {
-    expect(reducer([], {
+    expect(workspaceReducer([], {
       type: ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE,
     })).toEqual({
       exposeModeOn: true,
