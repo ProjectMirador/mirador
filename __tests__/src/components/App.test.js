@@ -14,6 +14,7 @@ function createWrapper(props) {
   return shallow(
     <App
       isFullscreenEnabled={false}
+      isWorkspaceControlPanelVisible
       setWorkspaceFullscreen={() => {}}
       theme={settings.theme}
       translations={{}}
@@ -65,6 +66,12 @@ describe('App', () => {
     wrapper = createWrapper({ isFullscreenEnabled: true });
     expect(wrapper.find(Fullscreen).first().prop('enabled'))
       .toEqual(true);
+  });
+
+  it('should not render WorkspaceControlPanel when isWorkspaceControlPanelVisible is false', () => {
+    const wrapper = createWrapper({ isWorkspaceControlPanelVisible: false });
+
+    expect(wrapper.find(WorkspaceControlPanel).length).toBe(0);
   });
 
   describe('with isWorkspaceAddVisible', () => {

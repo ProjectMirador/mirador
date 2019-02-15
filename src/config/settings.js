@@ -19,5 +19,8 @@ export default {
   },
   workspace: {
     type: 'mosaic',
+  },
+  workspaceControlPanel: {
+    enabled: true,
   }
 };

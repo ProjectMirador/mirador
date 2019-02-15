@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import Window from '../containers/Window';
 import WorkspaceMosaic from '../containers/WorkspaceMosaic';
 import ns from '../config/css-ns';
@@ -32,8 +33,17 @@ class Workspace extends React.Component {
    * render
    */
   render() {
+    const { isWorkspaceControlPanelVisible } = this.props;
+
     return (
-      <div className={ns('workspace')}>
+      <div
+        className={
+          classNames(
+            ns('workspace'),
+            (isWorkspaceControlPanelVisible && ns('workspace-with-control-panel')),
+          )
+        }
+      >
         {this.workspaceByType()}
       </div>
     );
@@ -41,6 +51,7 @@ class Workspace extends React.Component {
 }
 
 Workspace.propTypes = {
+  isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   workspaceType: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
 };

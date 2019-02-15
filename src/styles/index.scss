@@ -13,10 +13,13 @@
     left: 0;
     margin: 0;
     overflow: scroll;
-    padding-left: 100px;
     position: absolute;
     right: 0;
     top: 0;
+  }
+
+  &-workspace-with-control-panel {
+    padding-left: 100px; // The width of the control panel
   }
 
   &-workspace-add {
