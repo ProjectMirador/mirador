@@ -230,27 +230,4 @@ describe('windows reducer', () => {
       },
     });
   });
-
-  it('should handle UPDATE_VIEWPORT', () => {
-    expect(windowsReducer({
-      abc123: {
-        id: 'abc123',
-      },
-      def456: {
-        id: 'def456',
-      },
-    }, {
-      type: ActionTypes.UPDATE_VIEWPORT,
-      windowId: 'abc123',
-      payload: { x: 0, y: 1, zoom: 0.5 },
-    })).toEqual({
-      abc123: {
-        id: 'abc123',
-        viewer: { x: 0, y: 1, zoom: 0.5 },
-      },
-      def456: {
-        id: 'def456',
-      },
-    });
-  });
 });
