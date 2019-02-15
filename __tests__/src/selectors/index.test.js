@@ -4,6 +4,7 @@ import manifestFixture002 from '../../fixtures/version-2/002.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import {
   getCanvasLabel,
+  getCompanionWindowForPosition,
   getDestructuredMetadata,
   getSelectedCanvas,
   getWindowManifest,
@@ -297,5 +298,29 @@ describe('getIdAndLabelOfCanvases', () => {
   it('should return empty array if canvas if empty', () => {
     const received = getIdAndLabelOfCanvases([]);
     expect(received).toEqual([]);
+  });
+});
+
+describe('getCompanionWindowForPosition', () => {
+  const state = {
+    windows: { a: { companionWindows: { right: 'info' } } },
+  };
+
+  it('the companion window type based on the given position', () => {
+    const received = getCompanionWindowForPosition(state, 'a', 'right');
+
+    expect(received).toEqual('info');
+  });
+
+  it('returns undefined if the given window does not exist', () => {
+    const received = getCompanionWindowForPosition(state, 'b', 'right');
+
+    expect(received).toBeUndefined();
+  });
+
+  it('returns undefined if a companion window at the given position does not exist', () => {
+    const received = getCompanionWindowForPosition(state, 'a', 'bottom');
+
+    expect(received).toBeUndefined();
   });
 });
