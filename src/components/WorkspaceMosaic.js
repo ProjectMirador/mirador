@@ -20,6 +20,7 @@ class WorkspaceMosaic extends React.Component {
     this.tileRenderer = this.tileRenderer.bind(this);
     this.mosaicChange = this.mosaicChange.bind(this);
     this.determineWorkspaceLayout = this.determineWorkspaceLayout.bind(this);
+    this.zeroStateView = <div />;
   }
 
   /**
@@ -51,7 +52,7 @@ class WorkspaceMosaic extends React.Component {
    * this render. When the Mosaic changes, that will trigger a new store update.
    */
   determineWorkspaceLayout() {
-    const { windows, workspace } = this.props;
+    const { windows, workspace, updateWorkspaceMosaicLayout } = this.props;
     const windowKeys = Object.keys(windows).sort();
     const leaveKeys = getLeaves(workspace.layout);
     // Check every window is in the layout, and all layout windows are present
@@ -59,6 +60,7 @@ class WorkspaceMosaic extends React.Component {
     if (!windowKeys.every(e => leaveKeys.includes(e))
     || !leaveKeys.every(e => windowKeys.includes(e))) {
       const newLayout = createBalancedTreeFromLeaves(windowKeys);
+      updateWorkspaceMosaicLayout(newLayout);
       return newLayout;
     }
     return null;
@@ -75,7 +77,7 @@ class WorkspaceMosaic extends React.Component {
         initialValue={newLayout || workspace.layout}
         onChange={this.mosaicChange}
         className="mirador-mosaic"
-        zeroStateView={<div />}
+        zeroStateView={this.zeroStateView}
       />
     );
   }
