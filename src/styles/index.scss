@@ -47,13 +47,6 @@
     margin-left: $window-sidebar-width;
   }
 
-  &-window-companion-side {
-    background: lighten($gray, 40%);
-    min-width: 75px;
-    overflow-x: auto;
-    resize: horizontal;
-  }
-
   &-companion-bottom {
     background: lighten($black, 60%);
     overflow-y: auto;

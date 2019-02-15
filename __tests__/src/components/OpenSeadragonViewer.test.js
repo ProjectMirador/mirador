@@ -16,7 +16,7 @@ describe('OpenSeadragonViewer', () => {
     wrapper = shallow(
       <OpenSeadragonViewer
         tileSources={[{ '@id': 'http://foo', width: 100, height: 200 }, { '@id': 'http://bar', width: 150, height: 201 }]}
-        window={{ id: 'base' }}
+        windowId="base"
         config={{}}
         updateViewport={updateViewport}
       >
@@ -64,7 +64,7 @@ describe('OpenSeadragonViewer', () => {
   describe('boundsFromTileSources', () => {
     it('generates bounds from a set of tileSources', () => {
       expect(wrapper.instance().boundsFromTileSources()).toEqual(expect.arrayContaining(
-        [0, 0, 250, 201],
+        [0, 0, 249, 200],
       ));
     });
   });
@@ -73,7 +73,7 @@ describe('OpenSeadragonViewer', () => {
       expect(wrapper.instance().boundingRectFromTileSource(
         { '@id': 'http://bar', width: 150, height: 201 }, 1,
       )).toEqual(expect.arrayContaining(
-        [100, 0, 150, 201],
+        [100, 0, 149, 200],
       ));
     });
   });
@@ -90,7 +90,8 @@ describe('OpenSeadragonViewer', () => {
       wrapper = shallow(
         <OpenSeadragonViewer
           tileSources={[{ '@id': 'http://foo' }]}
-          window={{ id: 'base', viewer: { x: 1, y: 0, zoom: 0.5 } }}
+          windowId="base"
+          viewer={{ x: 1, y: 0, zoom: 0.5 }}
           config={{}}
           updateViewport={updateViewport}
         >
@@ -136,8 +137,8 @@ describe('OpenSeadragonViewer', () => {
         },
       };
 
-      wrapper.setProps({ window: { id: 'base', viewer: { x: 0.5, y: 0.5, zoom: 0.1 } } });
-      wrapper.setProps({ window: { id: 'base', viewer: { x: 1, y: 0, zoom: 0.5 } } });
+      wrapper.setProps({ viewer: { x: 0.5, y: 0.5, zoom: 0.1 } });
+      wrapper.setProps({ viewer: { x: 1, y: 0, zoom: 0.5 } });
 
       expect(panTo).toHaveBeenCalledWith(
         { x: 1, y: 0, zoom: 0.5 }, false,

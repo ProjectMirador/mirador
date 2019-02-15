@@ -158,3 +158,16 @@ export function getCanvasDescription(canvas) {
   return canvas
     && canvas.getProperty('description');
 }
+
+/**
+* Return the companion window string from state in a given windowId and position
+* @param {object} state
+* @param {String} windowId
+* @param {String} position
+* @return {String}
+*/
+export function getCompanionWindowForPosition(state, windowId, position) {
+  return state.windows[windowId]
+    && state.windows[windowId].companionWindows
+    && state.windows[windowId].companionWindows[position];
+}

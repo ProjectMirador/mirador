@@ -25,4 +25,22 @@ describe('WindowSideBarPanel', () => {
       expect(wrapper.find(WindowSideBarInfoPanel).length).toBe(0);
     });
   });
+
+  describe('when the pop out companion window button is clicked', () => {
+    it('triggers the popOutCompanionWindow prop with the appropriate args', () => {
+      const popOutCompanionWindowEvent = jest.fn();
+      wrapper = shallow(
+        <WindowSideBarPanel
+          windowId="abc123"
+          sideBarPanel="info"
+          popOutCompanionWindow={popOutCompanionWindowEvent}
+        />,
+      );
+
+      const popOutButton = wrapper.find('WithStyles(IconButton)');
+      popOutButton.simulate('click');
+      expect(popOutCompanionWindowEvent).toHaveBeenCalledTimes(1);
+      expect(popOutCompanionWindowEvent).toHaveBeenCalledWith('abc123', 'info', 'right');
+    });
+  });
 });

@@ -14,7 +14,7 @@ describe('WindowMiddleContent', () => {
   });
   it('should render <CompanionWindow>', () => {
     wrapper = shallow(<WindowMiddleContent window={window} />);
-    expect(wrapper.find(CompanionWindow)).toHaveLength(2);
+    expect(wrapper.find(CompanionWindow)).toHaveLength(1);
   });
   it('should render <WindowSideBar>', () => {
     wrapper = shallow(<WindowMiddleContent window={window} />);

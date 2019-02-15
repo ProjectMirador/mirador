@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import IconButton from '@material-ui/core/IconButton';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import WindowSideBarInfoPanel from '../containers/WindowSideBarInfoPanel';
 import WindowSideBarCanvasPanel from '../containers/WindowSideBarCanvasPanel';
 
@@ -29,8 +31,18 @@ class WindowSideBarPanel extends Component {
    * @return
    */
   render() {
+    const {
+      windowId, popOutCompanionWindow, sideBarPanel, t,
+    } = this.props;
     return (
       <div>
+        <IconButton
+          style={{ float: 'right' }}
+          aria-label={t('openInCompanionWindow')}
+          onClick={() => { popOutCompanionWindow(windowId, sideBarPanel, 'right'); }}
+        >
+          <OpenInNewIcon />
+        </IconButton>
         {this.activePanelComponent()}
       </div>
     );
@@ -38,11 +50,15 @@ class WindowSideBarPanel extends Component {
 }
 
 WindowSideBarPanel.propTypes = {
+  popOutCompanionWindow: PropTypes.func,
   sideBarPanel: PropTypes.string,
+  t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };
 WindowSideBarPanel.defaultProps = {
+  popOutCompanionWindow: () => {},
   sideBarPanel: 'closed', // Closed will fall out to the default null case for the actiuve panel
+  t: key => key,
 };
 
 export default WindowSideBarPanel;

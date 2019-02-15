@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
 import Fullscreen from 'react-fullscreen-crossbrowser';
+import { I18nextProvider } from 'react-i18next';
 import WorkspaceControlPanel from './WorkspaceControlPanel';
 import Workspace from '../containers/Workspace';
 import WorkspaceAdd from '../containers/WorkspaceAdd';
@@ -30,19 +31,21 @@ class App extends Component {
 
     return (
       <div className={classNames(classes.background, ns('app'))}>
-        <MuiThemeProvider theme={createMuiTheme(theme)}>
-          <Fullscreen
-            enabled={isFullscreenEnabled}
-            onChange={setWorkspaceFullscreen}
-          >
-            {
-              isWorkspaceAddVisible
-                ? <WorkspaceAdd />
-                : <Workspace />
-             }
-          </Fullscreen>
-          <WorkspaceControlPanel />
-        </MuiThemeProvider>
+        <I18nextProvider i18n={i18n}>
+          <MuiThemeProvider theme={createMuiTheme(theme)}>
+            <Fullscreen
+              enabled={isFullscreenEnabled}
+              onChange={setWorkspaceFullscreen}
+            >
+              {
+                isWorkspaceAddVisible
+                  ? <WorkspaceAdd />
+                  : <Workspace />
+               }
+            </Fullscreen>
+            <WorkspaceControlPanel />
+          </MuiThemeProvider>
+        </I18nextProvider>
       </div>
     );
   }
