@@ -122,7 +122,7 @@ class WindowViewer extends Component {
       <>
         <OSDViewer
           tileSources={this.tileInfoFetchedFromStore()}
-          window={window}
+          windowId={window.id}
         >
           <ViewerNavigation window={window} canvases={this.canvases} />
         </OSDViewer>

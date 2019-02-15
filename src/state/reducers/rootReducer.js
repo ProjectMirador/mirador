@@ -1,6 +1,11 @@
 import { combineReducers } from 'redux';
 import {
-  configReducer, infoResponsesReducer, manifestsReducer, windowsReducer, workspaceReducer,
+  configReducer,
+  infoResponsesReducer,
+  manifestsReducer,
+  viewersReducer,
+  windowsReducer,
+  workspaceReducer,
 } from '.';
 
 /**
@@ -15,6 +20,7 @@ export default function createRootReducer(pluginReducers) {
     manifests: manifestsReducer,
     infoResponses: infoResponsesReducer,
     config: configReducer,
+    viewers: viewersReducer,
     ...pluginReducers,
   });
 }
