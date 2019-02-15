@@ -42,4 +42,20 @@ describe('ManifestListItem', () => {
     expect(wrapper.find('WithStyles(ButtonBase)').length).toBe(1);
     expect(wrapper.find('WithStyles(ButtonBase) WithStyles(Typography)').children().text()).toEqual('http://example.com');
   });
+
+  it('displays the provider information', () => {
+    const addWindow = jest.fn();
+    const wrapper = shallow(
+      <ManifestListItem manifestId="http://example.com" ready provider="ACME" addWindow={addWindow} />,
+    ).dive();
+    expect(wrapper.find('WithStyles(Typography).mirador-manifest-list-item-provider').children().text()).toEqual('ACME');
+  });
+
+  it('displays a placeholder provider if no information is given', () => {
+    const addWindow = jest.fn();
+    const wrapper = shallow(
+      <ManifestListItem manifestId="http://example.com" ready addWindow={addWindow} />,
+    ).dive();
+    expect(wrapper.find('WithStyles(Typography).mirador-manifest-list-item-provider').children().text()).toEqual('addedFromUrl');
+  });
 });

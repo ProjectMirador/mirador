@@ -2,6 +2,7 @@ import manifesto from 'manifesto.js';
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture002 from '../../fixtures/version-2/002.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
+import manifestFixtureWithAProvider from '../../fixtures/version-3/with_a_provider.json';
 import {
   getCanvasLabel,
   getCompanionWindowForPosition,
@@ -12,6 +13,7 @@ import {
   getManifestCanvases,
   getManifestDescription,
   getThumbnailNavigationPosition,
+  getManifestProvider,
   getManifestTitle,
   getManifestThumbnail,
   getWindowViewType,
@@ -182,6 +184,24 @@ describe('getManifestDescription', () => {
   });
 });
 
+describe('getManifestProvider', () => {
+  it('should return manifest provider label', () => {
+    const manifest = { manifestation: manifesto.create(manifestFixtureWithAProvider) };
+    const received = getManifestProvider(manifest);
+    expect(received).toBe('Example Organization');
+  });
+
+  it('should return undefined if manifest undefined', () => {
+    const received = getManifestProvider(undefined);
+    expect(received).toBeUndefined();
+  });
+
+  it('should return undefined if no manifestation', () => {
+    const manifest = {};
+    const received = getManifestProvider(manifest);
+    expect(received).toBeUndefined();
+  });
+});
 describe('getSelectedCanvas', () => {
   const state = {
     windows: {

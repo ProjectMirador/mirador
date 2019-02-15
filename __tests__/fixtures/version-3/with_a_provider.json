@@ -1,0 +1,35 @@
+{
+  "@context": [
+  "http://www.w3.org/ns/anno.jsonld",
+  "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://example.com/with_a_provider.json",
+  "type": "Manifest",
+  "provider": [
+    {
+      "id": "https://example.org/about",
+      "type": "Agent",
+      "label": {"en": ["Example Organization"]},
+      "homepage": {
+        "id": "https://example.org/",
+        "type": "Text",
+        "label": {"en": ["Example Organization Homepage"]},
+        "format": "text/html"
+      },
+      "logo": {
+        "id": "https://example.org/images/logo.png",
+        "type": "Image",
+        "height": 100,
+        "width": 120
+      },
+      "seeAlso": [
+        {
+          "id": "https://data.example.org/about/us.jsonld",
+          "type": "Dataset",
+          "format": "application/ld+json",
+          "profile": "https://schema.org/"
+        }
+      ]
+    }
+  ]
+}
