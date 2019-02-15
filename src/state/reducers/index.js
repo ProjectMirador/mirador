@@ -1,3 +1,4 @@
+export * from './companion_windows';
 export * from './workspace';
 export * from './windows';
 export * from './manifests';
