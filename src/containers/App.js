@@ -14,6 +14,7 @@ const mapStateToProps = state => (
     translations: state.config.translations,
     isFullscreenEnabled: state.workspace.isFullscreenEnabled,
     isWorkspaceAddVisible: state.workspace.isWorkspaceAddVisible,
+    isWorkspaceControlPanelVisible: state.config.workspaceControlPanel.enabled,
   }
 );
 

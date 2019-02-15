@@ -22,7 +22,7 @@ class App extends Component {
   render() {
     const {
       isFullscreenEnabled, setWorkspaceFullscreen, classes,
-      isWorkspaceAddVisible, theme, translations,
+      isWorkspaceAddVisible, isWorkspaceControlPanelVisible, theme, translations,
     } = this.props;
 
     Object.keys(translations).forEach((lng) => {
@@ -43,7 +43,10 @@ class App extends Component {
                   : <Workspace />
                }
             </Fullscreen>
-            <WorkspaceControlPanel />
+            {
+              isWorkspaceControlPanelVisible
+                && <WorkspaceControlPanel />
+            }
           </MuiThemeProvider>
         </I18nextProvider>
       </div>
@@ -54,10 +57,11 @@ class App extends Component {
 App.propTypes = {
   theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   translations: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  isFullscreenEnabled: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
+  isFullscreenEnabled: PropTypes.bool,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
   setWorkspaceFullscreen: PropTypes.func.isRequired,
   isWorkspaceAddVisible: PropTypes.bool,
+  isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
 };
 
 App.defaultProps = {

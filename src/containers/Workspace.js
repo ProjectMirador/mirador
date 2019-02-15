@@ -9,6 +9,7 @@ import Workspace from '../components/Workspace';
  */
 const mapStateToProps = state => (
   {
+    isWorkspaceControlPanelVisible: state.config.workspaceControlPanel.enabled,
     workspaceType: state.config.workspace.type,
     windows: state.windows,
   }
