@@ -133,7 +133,7 @@ describe('window actions', () => {
             y: 20,
             width: 200,
             height: 200,
-          }
+          },
         },
       };
       expect(actions.setWindowThumbnailPosition(id, {

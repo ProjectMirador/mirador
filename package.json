@@ -23,7 +23,7 @@
   "repository": "https://github.com/ProjectMirador/mirador",
   "size-limit": [
     {
-      "limit": "300 KB",
+      "limit": "350 KB",
       "path": "dist/mirador.min.js"
     }
   ],
