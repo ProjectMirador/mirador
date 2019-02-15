@@ -60,6 +60,10 @@ export function getManifestCanvases(manifest) {
     return [];
   }
 
+  if (!manifest.manifestation.getSequences || !manifest.manifestation.getSequences()[0]) {
+    return [];
+  }
+
   return manifest.manifestation.getSequences()[0].getCanvases();
 }
 
