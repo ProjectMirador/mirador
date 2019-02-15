@@ -120,6 +120,28 @@ describe('window actions', () => {
       expect(mockDispatch).toHaveBeenCalledWith({
         type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL, windowId, panelType: 'closed',
       });
+
+  describe('setWindowSize', () => {
+    it('returns the appropriate action type', () => {
+      const id = 'abc123';
+      const expectedAction = {
+        type: ActionTypes.SET_WINDOW_THUMBNAIL_POSITION,
+        payload: {
+          windowId: id,
+          size: {
+            x: 20,
+            y: 20,
+            width: 200,
+            height: 200,
+          }
+        },
+      };
+      expect(actions.setWindowThumbnailPosition(id, {
+        x: 20,
+        y: 20,
+        width: 200,
+        width: 200,
+      })).toEqual(expectedAction);
     });
   });
 });
