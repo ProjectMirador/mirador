@@ -1,14 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { I18nextProvider } from 'react-i18next';
 import deepmerge from 'deepmerge';
 import App from '../containers/App';
 import createRootReducer from '../state/reducers/rootReducer';
 import createStore from '../state/createStore';
 import * as actions from '../state/actions';
 import settings from '../config/settings';
-import i18n from '../i18n';
 
 /**
  * Default Mirador instantiation
@@ -28,9 +26,7 @@ class MiradorViewer {
 
     ReactDOM.render(
       <Provider store={this.store}>
-        <I18nextProvider i18n={i18n}>
-          <App />
-        </I18nextProvider>
+        <App />
       </Provider>,
       document.getElementById(config.id),
     );
