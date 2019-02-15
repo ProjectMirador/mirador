@@ -102,17 +102,26 @@ class OpenSeadragonViewer extends Component {
    */
   boundsFromTileSources() {
     const { tileSources } = this.props;
-    let width = 0;
-    const heights = [0];
+    const heights = [];
+    const dimensions = [];
     tileSources.forEach((tileSource) => {
-      width += tileSource.width;
       heights.push(tileSource.height);
+      dimensions.push({
+        width: tileSource.width,
+        height: tileSource.height,
+      });
+    });
+    const minHeight = Math.min(...heights);
+    let scaledWidth = 0;
+    dimensions.forEach((dim) => {
+      const aspectRatio = dim.width / dim.height;
+      scaledWidth += Math.floor(minHeight * aspectRatio);
     });
     return [
       0,
       0,
-      width,
-      Math.max(...heights),
+      scaledWidth,
+      minHeight,
     ];
   }
 
@@ -126,12 +135,12 @@ class OpenSeadragonViewer extends Component {
     const wholeBounds = this.boundsFromTileSources();
     const { width } = tileSources[i];
     const { height } = tileSources[i];
+    const aspectRatio = width / height;
+    const scaledWidth = Math.floor(wholeBounds[3] * aspectRatio);
     let x = 0;
     if (i === 1) {
-      x = wholeBounds[2] - width;
+      x = wholeBounds[2] - scaledWidth;
     }
-    const aspectRatio = width / height;
-    const scaledWidth = Math.floor(aspectRatio * height);
     return [
       x,
       0,
