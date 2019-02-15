@@ -63,6 +63,12 @@ class MiradorViewer {
         thumbnailNavigationPosition,
       }));
     });
+
+    Object.keys(mergedConfig.manifests || {}).forEach((manifestId) => {
+      this.store.dispatch(
+        actions.fetchManifest(manifestId, mergedConfig.manifests[manifestId]),
+      );
+    });
   }
 
   /**

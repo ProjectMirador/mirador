@@ -44,19 +44,23 @@ describe('MiradorViewer', () => {
     it('transforms config values to actions to dispatch to store', () => {
       instance = new MiradorViewer({
         id: 'mirador',
-        windows: [{
-          loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
-          canvasIndex: 2,
-        },
-        {
-          loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
-          thumbnailNavigationPosition: 'off',
-          view: 'book',
-        },
+        windows: [
+          {
+            loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+            canvasIndex: 2,
+          },
+          {
+            loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+            thumbnailNavigationPosition: 'off',
+            view: 'book',
+          },
         ],
+        manifests: {
+          'http://media.nga.gov/public/manifests/nga_highlights.json': { provider: 'National Gallery of Art' },
+        },
       });
 
-      const { windows } = instance.store.getState();
+      const { windows, manifests } = instance.store.getState();
       const windowIds = Object.keys(windows);
       expect(Object.keys(windowIds).length).toBe(2);
       expect(windows[windowIds[0]].canvasIndex).toBe(2);
@@ -65,6 +69,10 @@ describe('MiradorViewer', () => {
       expect(windows[windowIds[1]].thumbnailNavigationPosition).toBe('off');
       expect(windows[windowIds[0]].view).toBe('single');
       expect(windows[windowIds[1]].view).toBe('book');
+
+      const manifestIds = Object.keys(manifests);
+      expect(Object.keys(manifestIds).length).toBe(2);
+      expect(manifests['http://media.nga.gov/public/manifests/nga_highlights.json'].provider).toBe('National Gallery of Art');
     });
   });
 });

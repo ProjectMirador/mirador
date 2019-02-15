@@ -7,10 +7,11 @@ import ActionTypes from './action-types';
  * @param  {String} manifestId
  * @memberof ActionCreators
  */
-export function requestManifest(manifestId) {
+export function requestManifest(manifestId, properties) {
   return {
     type: ActionTypes.REQUEST_MANIFEST,
     manifestId,
+    properties,
   };
 }
 
@@ -50,9 +51,9 @@ export function receiveManifestFailure(manifestId, error) {
  * @param  {String} manifestId
  * @memberof ActionCreators
  */
-export function fetchManifest(manifestId) {
+export function fetchManifest(manifestId, properties) {
   return ((dispatch) => {
-    dispatch(requestManifest(manifestId));
+    dispatch(requestManifest(manifestId, properties));
     return fetch(manifestId)
       .then(response => response.json())
       .then(json => dispatch(receiveManifest(manifestId, json)))
