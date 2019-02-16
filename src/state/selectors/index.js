@@ -188,7 +188,7 @@ export function getCanvasDescription(canvas) {
 * @return {String}
 */
 export function getCompanionWindowForPosition(state, windowId, position) {
-  return state.windows[windowId]
-    && state.windows[windowId].companionWindows
-    && state.windows[windowId].companionWindows[position];
+  return Object.values((state.companionWindows || [])).find(cw => (
+    cw.windowId === windowId && cw.position === position
+  ));
 }

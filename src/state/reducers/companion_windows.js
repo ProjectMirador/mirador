@@ -1,15 +1,5 @@
 import ActionTypes from '../actions/action-types';
-
-/**
- * getCompanionWindowForPosition - Finds the companion window with the given windowId and position
- * This will not be necessary once we have multiple companion windows in a single position and
- * we can convert this and SET_COMPANION_WINDOW into a simple ADD_COMPANION_WINDOW reducer
- */
-function getCompanionWindowForPosition(state, windowId, position) {
-  return Object.values(state).find(cw => (
-    cw.windowId === windowId && cw.position === position
-  ));
-}
+import { getCompanionWindowForPosition } from '../selectors';
 
 /**
  * companionWindowsReducer
@@ -27,7 +17,7 @@ export const companionWindowsReducer = (state = {}, action) => {
     // action params: id, windowId, position, content
     case ActionTypes.SET_COMPANION_WINDOW: {
       const companionWindowForPosition = getCompanionWindowForPosition(
-        state, action.windowId, action.position,
+        { companionWindows: state }, action.windowId, action.position,
       );
       let cwId;
       let cwObject;

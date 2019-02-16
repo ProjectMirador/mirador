@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import * as actions from '../state/actions';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import { getCompanionWindowForPosition } from '../state/selectors';
 import CompanionWindow from '../components/CompanionWindow';
 
 /**
@@ -11,13 +10,14 @@ import CompanionWindow from '../components/CompanionWindow';
  * @memberof CompanionWindow
  * @private
  */
-const mapStateToProps = (state, { windowId, position }) => {
-  const companionWindowForPosition = getCompanionWindowForPosition(state, windowId, position);
+const mapStateToProps = (state, { id }) => {
+  const companionWindow = state.companionWindows[id];
 
   return {
-    isDisplayed: (companionWindowForPosition
-                  && companionWindowForPosition.length > 0),
-    panelContent: companionWindowForPosition,
+    ...companionWindow,
+    isDisplayed: (companionWindow
+                  && companionWindow.content
+                  && companionWindow.content.length > 0),
   };
 };
 
@@ -27,7 +27,7 @@ const mapStateToProps = (state, { windowId, position }) => {
  * @private
  */
 const mapDispatchToProps = {
-  closeCompanionWindow: actions.setWindowCompanionWindow,
+  onCloseClick: actions.removeCompanionWindow,
 };
 
 const enhance = compose(

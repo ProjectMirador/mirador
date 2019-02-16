@@ -13,7 +13,7 @@ describe('WindowMiddleContent', () => {
     expect(wrapper.find('.mirador-window-middle-content')).toHaveLength(1);
   });
   it('should render <CompanionWindow>', () => {
-    wrapper = shallow(<WindowMiddleContent window={window} />);
+    wrapper = shallow(<WindowMiddleContent window={window} rightCompanionWindowId="x" />);
     expect(wrapper.find(CompanionWindow)).toHaveLength(1);
   });
   it('should render <WindowSideBar>', () => {

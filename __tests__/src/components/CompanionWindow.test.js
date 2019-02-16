@@ -7,8 +7,10 @@ import WindowSideBarInfoPanel from '../../../src/containers/WindowSideBarInfoPan
 function createWrapper(props) {
   return shallow(
     <CompanionWindow
-      windowId="abc123"
+      id="abc123"
+      windowId="x"
       classes={{}}
+      companionWindow={{}}
       position="right"
       {...props}
     />,
@@ -20,7 +22,7 @@ describe('CompanionWindow', () => {
 
   describe('when the panelContent is set to "info"', () => {
     it('renders the WindowSideBarInfoPanel', () => {
-      companionWindow = createWrapper({ panelContent: 'info' });
+      companionWindow = createWrapper({ content: 'info' });
       expect(companionWindow.find(WindowSideBarInfoPanel).length).toBe(1);
     });
   });
@@ -33,16 +35,16 @@ describe('CompanionWindow', () => {
   });
 
   describe('when the close companion window button is clicked', () => {
-    it('triggers the closeCompanionWindow prop with the appropriate args', () => {
-      const closeCompanionWindowEvent = jest.fn();
+    it('triggers the removeCompanionWindow prop with the appropriate args', () => {
+      const removeCompanionWindowEvent = jest.fn();
       companionWindow = createWrapper({
-        closeCompanionWindow: closeCompanionWindowEvent,
+        onCloseClick: removeCompanionWindowEvent,
       });
 
       const closeButton = companionWindow.find('WithStyles(IconButton)[aria-label="closeCompanionWindow"]');
       closeButton.simulate('click');
-      expect(closeCompanionWindowEvent).toHaveBeenCalledTimes(1);
-      expect(closeCompanionWindowEvent).toHaveBeenCalledWith('abc123', null, 'right');
+      expect(removeCompanionWindowEvent).toHaveBeenCalledTimes(1);
+      expect(removeCompanionWindowEvent).toHaveBeenCalledWith('abc123', 'x');
     });
   });
 });
