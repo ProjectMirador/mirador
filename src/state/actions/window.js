@@ -1,5 +1,6 @@
 import uuid from 'uuid/v4';
 import ActionTypes from './action-types';
+import { addCompanionWindow } from './companionWindow';
 
 /**
  * focusWindow - action creator
@@ -26,6 +27,7 @@ export function addWindow(options) {
     rangeId: null,
     thumbnailNavigationPosition: 'bottom', // bottom by default in settings.js
     xywh: [0, 0, 400, 400],
+    companionWindowIds: [],
     rotation: null,
     view: 'single',
   };
@@ -94,7 +96,7 @@ export function toggleWindowSideBarPanel(windowId, panelType) {
  */
 export function popOutCompanionWindow(windowId, panelType, position) {
   return ((dispatch) => {
-    dispatch(setWindowCompanionWindow(windowId, panelType, position));
+    dispatch(addCompanionWindow({ windowId, content: panelType, position }));
     dispatch(toggleWindowSideBarPanel(windowId, 'closed'));
   });
 }

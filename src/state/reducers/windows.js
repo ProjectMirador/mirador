@@ -50,15 +50,24 @@ export const windowsReducer = (state = {}, action) => {
           ),
         },
       };
-    case ActionTypes.SET_WINDOW_COMPANION_WINDOW:
+    case ActionTypes.SET_COMPANION_WINDOW: {
       return {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
-          companionWindows: {
-            ...state[action.windowId].companionWindows,
-            [action.position]: action.panelType,
-          },
+          companionWindowIds: Array.from(
+            new Set([].concat(state[action.windowId].companionWindowIds, action.id)),
+          ),
+        },
+      };
+    }
+    case ActionTypes.REMOVE_COMPANION_WINDOW:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          companionWindowIds: state[action.windowId]
+            .companionWindowIds.filter(id => id !== action.id),
         },
       };
     case ActionTypes.NEXT_CANVAS:

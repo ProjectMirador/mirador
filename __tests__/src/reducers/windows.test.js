@@ -157,6 +157,61 @@ describe('windows reducer', () => {
     });
   });
 
+  describe('SET_COMPANION_WINDOW', () => {
+    it('adds the id to the companin array', () => {
+      const action = {
+        type: ActionTypes.SET_COMPANION_WINDOW,
+        id: 'x',
+        windowId: 'abc123',
+      };
+      const before = {
+        abc123: { companionWindowIds: [] },
+      };
+      const after = {
+        abc123: { companionWindowIds: ['x'] },
+      };
+
+      expect(windowsReducer(before, action)).toEqual(after);
+    });
+
+    it('does not add id key that already exists', () => {
+      const action = {
+        type: ActionTypes.SET_COMPANION_WINDOW,
+        id: 'x',
+        windowId: 'abc123',
+        position: 'right',
+        panelType: 'info',
+      };
+      const before = {
+        abc123: { companionWindowIds: ['x'] },
+      };
+
+      const after = {
+        abc123: { companionWindowIds: ['x'] },
+      };
+
+      expect(windowsReducer(before, action)).toEqual(after);
+    });
+  });
+
+  describe('REMOVE_COMPANION_WINDOW', () => {
+    it('removes the id of the companionWindow from the ids array', () => {
+      const action = {
+        type: ActionTypes.REMOVE_COMPANION_WINDOW,
+        id: 'x',
+        windowId: 'abc123',
+      };
+      const before = {
+        abc123: { companionWindowIds: ['x'] },
+      };
+      const after = {
+        abc123: { companionWindowIds: [] },
+      };
+
+      expect(windowsReducer(before, action)).toEqual(after);
+    });
+  });
+
   it('should handle NEXT_CANVAS', () => {
     expect(windowsReducer({
       abc123: {

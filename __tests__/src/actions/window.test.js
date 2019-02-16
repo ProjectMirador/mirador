@@ -15,6 +15,7 @@ describe('window actions', () => {
           id: 'helloworld',
           canvasIndex: 1,
           collectionIndex: 0,
+          companionWindowIds: [],
           manifestId: null,
           rangeId: null,
           thumbnailNavigationPosition: 'bottom',
@@ -111,8 +112,9 @@ describe('window actions', () => {
       expect(typeof thunk).toEqual('function');
       thunk(mockDispatch);
       expect(mockDispatch).toHaveBeenCalledTimes(2);
+      const cwId = mockDispatch.mock.calls[0][0].id;
       expect(mockDispatch).toHaveBeenCalledWith({
-        type: ActionTypes.SET_WINDOW_COMPANION_WINDOW, windowId, panelType, position,
+        type: ActionTypes.SET_COMPANION_WINDOW, id: cwId, windowId, content: panelType, position,
       });
       expect(mockDispatch).toHaveBeenCalledWith({
         type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL, windowId, panelType: 'closed',
