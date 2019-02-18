@@ -16,7 +16,8 @@ class WindowSideBarCanvasPanel extends Component {
   render() {
     const {
       canvasesIdAndLabel, setCanvas, windowId, classes, t,
-    } = this.props:
+    } = this.props,
+
     return (
       <>
         <Typography variant="h2" className={classes.windowSideBarH2}>{t('canvasIndex')}</Typography>
@@ -47,9 +48,7 @@ WindowSideBarCanvasPanel.propTypes = {
  * custom style definitions
  */
 const styles = themes => ({
-  windowSideBarH2: {
-    theme.typography.h5,
-  }
+  windowSideBarH2: theme.typography.h5,
   clickable: {
     cursor: 'pointer',
   },
