@@ -157,9 +157,9 @@ export function getCanvasLabel(canvas, canvasIndex) {
 * @param {object} Manifesto IIIF Resource (e.g. canvas, manifest)
 * @return {Array[Object]}
 */
-export function getDestructuredMetadata(iiifResoruce) {
-  return (iiifResoruce
-    && iiifResoruce.getMetadata().map(labelValuePair => ({
+export function getDestructuredMetadata(iiifResource) {
+  return (iiifResource
+    && iiifResource.getMetadata().map(labelValuePair => ({
       label: labelValuePair.getLabel(),
       value: labelValuePair.getValue(),
     }))
