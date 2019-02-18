@@ -1,5 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import * as actions from '../state/actions';
 import { withNamespaces } from 'react-i18next';
 import WindowSideBarCanvasPanel from '../components/WindowSideBarCanvasPanel';
 import {
@@ -16,11 +17,14 @@ const mapStateToProps = (state, { windowId }) => {
   const canvases = getManifestCanvases(manifest);
   return {
     canvasesIdAndLabel: getIdAndLabelOfCanvases(canvases),
+    canvases,
   };
 };
 
+const mapDispatchToProps = { setCanvas: actions.setCanvas };
+
 const enhance = compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   withNamespaces(),
 );
 

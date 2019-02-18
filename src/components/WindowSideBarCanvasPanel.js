@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -13,7 +14,9 @@ class WindowSideBarCanvasPanel extends Component {
    * render
    */
   render() {
-    const { canvasesIdAndLabel, classes, t } = this.props;
+    const {
+      canvasesIdAndLabel, setCanvas, windowId, classes, t,
+    } = this.props:
     return (
       <>
         <Typography variant="h2" className={classes.windowSideBarH2}>{t('canvasIndex')}</Typography>
@@ -32,17 +35,24 @@ class WindowSideBarCanvasPanel extends Component {
 }
 
 WindowSideBarCanvasPanel.propTypes = {
-  windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
+  windowId: PropTypes.string.isRequired,
   canvasesIdAndLabel: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  setCanvas: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func.isRequired,
 };
 
 /**
  * @private
+ * custom style definitions
  */
-const styles = theme => ({
-  windowSideBarH2: theme.typography.h5,
+const styles = themes => ({
+  windowSideBarH2: {
+    theme.typography.h5,
+  }
+  clickable: {
+    cursor: 'pointer',
+  },
 });
 
 export default withStyles(styles)(WindowSideBarCanvasPanel);

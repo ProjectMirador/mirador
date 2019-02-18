@@ -31,4 +31,27 @@ describe('Window Sidebars', () => {
 
     await expect(page).toMatchElement(`#${windowId} button[aria-label="Open information companion window"]`);
   });
+
+  it('renders canvas navigation and updates canvas after clicking a navigation item', async () => {
+    await expect(page).toClick('#addBtn');
+    await expect(page).toFill('#manifestURL', 'http://localhost:5000/api/001');
+    await expect(page).toClick('#fetchBtn');
+    // TODO: Refactor the app so we get rid of the wait
+    await page.waitFor(1000);
+    await expect(page).toMatchElement('li', { text: 'http://localhost:5000/api/001' });
+    await expect(page).toClick('li button', { text: 'http://localhost:5000/api/001' });
+
+    const windows = await page.evaluate(() => (
+      miradorInstance.store.getState().windows
+    ));
+
+    const windowId = Object.values(windows)
+      .find(window => window.manifestId === 'http://localhost:5000/api/001')
+      .id;
+
+    await expect(page).toMatchElement(`#${windowId} button[aria-label="Toggle window sidebar"]`);
+    await expect(page).toClick(`#${windowId} button[aria-label="Toggle window sidebar"]`);
+
+    await expect(page).toMatchElement(`#${windowId} button[aria-label="Open canvas navigation companion window"]`);
+  });
 });

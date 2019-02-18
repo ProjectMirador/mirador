@@ -7,6 +7,7 @@ import WindowSideBarCanvasPanel from '../../../src/components/WindowSideBarCanva
 
 describe('WindowSideBarCanvasPanel', () => {
   let wrapper;
+  let setCanvas;
   const canvasesIdAndLabel = [
     {
       id: 'testid1',
@@ -19,12 +20,15 @@ describe('WindowSideBarCanvasPanel', () => {
   ];
 
   beforeEach(() => {
+    setCanvas = jest.fn();
+
     wrapper = shallow(
       <WindowSideBarCanvasPanel
-        canvasesIdAndLabel={canvasesIdAndLabel}
+	canvasesIdAndLabel={canvasesIdAndLabel}
         classes={{}}
         t={key => key}
-        windowId="xyz"
+	windowId="xyz"
+        setCanvas={setCanvas}
       />,
     ).dive();
   });
@@ -50,5 +54,10 @@ describe('WindowSideBarCanvasPanel', () => {
       .at(1)
       .render()
       .text()).toBe(canvasesIdAndLabel[1].label);
+  });
+
+  it('should call the onClick handler', () => {
+    wrapper.find(Typography).at(0).simulate('click');
+    expect(setCanvas).toHaveBeenCalledTimes(1);
   });
 });

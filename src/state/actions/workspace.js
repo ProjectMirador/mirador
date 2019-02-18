@@ -33,7 +33,7 @@ export function updateWorkspaceMosaicLayout(layout) {
 /**
  * updateWorkspaceMosaicLayout - action creator
  *
- * @param  {Object} layout
+ * @param  {Object} isWorkspaceAddVisible
  * @memberof ActionCreators
  */
 export function setWorkspaceAddVisibility(isWorkspaceAddVisible) {
