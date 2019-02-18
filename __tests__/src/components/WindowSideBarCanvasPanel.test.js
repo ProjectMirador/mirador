@@ -24,10 +24,10 @@ describe('WindowSideBarCanvasPanel', () => {
 
     wrapper = shallow(
       <WindowSideBarCanvasPanel
-	canvasesIdAndLabel={canvasesIdAndLabel}
+        canvasesIdAndLabel={canvasesIdAndLabel}
         classes={{}}
         t={key => key}
-	windowId="xyz"
+        windowId="xyz"
         setCanvas={setCanvas}
       />,
     ).dive();
@@ -57,7 +57,7 @@ describe('WindowSideBarCanvasPanel', () => {
   });
 
   it('should call the onClick handler', () => {
-    wrapper.find(Typography).at(0).simulate('click');
+    wrapper.find(Typography).at(1).simulate('click');
     expect(setCanvas).toHaveBeenCalledTimes(1);
   });
 });

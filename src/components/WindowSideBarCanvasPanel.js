@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -16,16 +15,22 @@ class WindowSideBarCanvasPanel extends Component {
   render() {
     const {
       canvasesIdAndLabel, setCanvas, windowId, classes, t,
-    } = this.props,
+    } = this.props;
 
     return (
       <>
         <Typography variant="h2" className={classes.windowSideBarH2}>{t('canvasIndex')}</Typography>
         <List>
           {
-            canvasesIdAndLabel.map(canvas => (
+            canvasesIdAndLabel.map((canvas, canvasIndex) => (
               <ListItem key={canvas.id}>
-                <Typography variant="body2">{canvas.label}</Typography>
+                <Typography
+                  className={classes.clickable}
+                  variant="body2"
+                  onClick={() => { setCanvas(windowId, canvasIndex); }}
+                >
+                  {canvas.label}
+                </Typography>
               </ListItem>
             ))
           }
@@ -47,7 +52,7 @@ WindowSideBarCanvasPanel.propTypes = {
  * @private
  * custom style definitions
  */
-const styles = themes => ({
+const styles = theme => ({
   windowSideBarH2: theme.typography.h5,
   clickable: {
     cursor: 'pointer',

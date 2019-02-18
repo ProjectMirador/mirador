@@ -1,7 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import * as actions from '../state/actions';
 import { withNamespaces } from 'react-i18next';
+import * as actions from '../state/actions';
 import WindowSideBarCanvasPanel from '../components/WindowSideBarCanvasPanel';
 import {
   getManifestCanvases,
@@ -17,7 +17,6 @@ const mapStateToProps = (state, { windowId }) => {
   const canvases = getManifestCanvases(manifest);
   return {
     canvasesIdAndLabel: getIdAndLabelOfCanvases(canvases),
-    canvases,
   };
 };
 
