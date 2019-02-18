@@ -150,19 +150,18 @@ export function getCanvasLabel(canvas, canvasIndex) {
 }
 
 /**
-* Return canvas metadata in a label / value structure
+* Return metadata in a label / value structure
 * This is a potential seam for pulling the i18n locale from
 * state and plucking out the appropriate language.
 * For now we're just getting the first.
-* @param {object} IIIF Resource
+* @param {object} Manifesto IIIF Resource (e.g. canvas, manifest)
 * @return {Array[Object]}
 */
-export function getDestructuredMetadata(iiifResoruce) {
-  return (iiifResoruce
-    && iiifResoruce.getMetadata()
-    && iiifResoruce.getMetadata().map(resource => ({
-      label: resource.label[0].value,
-      value: resource.value[0].value,
+export function getDestructuredMetadata(iiifResource) {
+  return (iiifResource
+    && iiifResource.getMetadata().map(labelValuePair => ({
+      label: labelValuePair.getLabel(),
+      value: labelValuePair.getValue(),
     }))
   );
 }
