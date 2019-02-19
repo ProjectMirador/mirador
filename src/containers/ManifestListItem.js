@@ -13,6 +13,8 @@ const mapStateToProps = (state, { manifestId }) => {
 
   return {
     ready: !!manifest.manifestation,
+    error: manifest.error,
+    isFetching: manifest.isFetching,
     title: getManifestTitle(manifest),
     logo: getManifestLogo(manifest),
     thumbnail: getManifestThumbnail(manifest),
@@ -26,7 +28,7 @@ const mapStateToProps = (state, { manifestId }) => {
  * @memberof ManifestListItem
  * @private
  */
-const mapDispatchToProps = { addWindow: actions.addWindow };
+const mapDispatchToProps = { addWindow: actions.addWindow, fetchManifest: actions.fetchManifest };
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),

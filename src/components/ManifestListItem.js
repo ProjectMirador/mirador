@@ -26,9 +26,29 @@ const handleOpenButtonClick = (event, manifest, addWindow) => {
 /** */
 class ManifestListItem extends React.Component {
   /** */
+  componentDidMount() {
+    const {
+      fetchManifest, manifestId, ready, isFetching, error,
+    } = this.props;
+
+    if (!ready && !error && !isFetching) fetchManifest(manifestId);
+  }
+
+  /** */
   render() {
     const {
-      manifestId, ready, title, thumbnail, logo, addWindow, handleClose, size, classes, provider, t,
+      manifestId,
+      ready,
+      title,
+      thumbnail,
+      logo,
+      addWindow,
+      handleClose,
+      size,
+      classes,
+      provider,
+      t,
+      error,
     } = this.props;
 
     const placeholder = (
@@ -47,6 +67,14 @@ class ManifestListItem extends React.Component {
         </Grid>
       </Grid>
     );
+
+    if (error) {
+      return (
+        <Paper elevation={1} className={classes.root} data-manifestid={manifestId}>
+          {error}
+        </Paper>
+      );
+    }
 
     return (
       <Paper elevation={1} className={classes.root} data-manifestid={manifestId}>
@@ -113,6 +141,9 @@ ManifestListItem.propTypes = {
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   provider: PropTypes.string,
   t: PropTypes.func,
+  fetchManifest: PropTypes.func.isRequired,
+  error: PropTypes.string,
+  isFetching: PropTypes.bool,
 };
 
 ManifestListItem.defaultProps = {
@@ -125,6 +156,8 @@ ManifestListItem.defaultProps = {
   size: 0,
   provider: null,
   t: key => key,
+  error: null,
+  isFetching: false,
 };
 
 /** */
