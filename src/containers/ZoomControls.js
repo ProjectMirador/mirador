@@ -12,7 +12,7 @@ import ZoomControls from '../components/ZoomControls';
 const mapStateToProps = (state, props) => (
   {
     showZoomControls: state.workspace.showZoomControls,
-    viewer: state.windows[props.windowId].viewer,
+    viewer: state.viewers[props.windowId],
   }
 );
 
