@@ -13,15 +13,24 @@ class WindowSideBarCanvasPanel extends Component {
    * render
    */
   render() {
-    const { canvasesIdAndLabel, classes, t } = this.props;
+    const {
+      canvasesIdAndLabel, setCanvas, windowId, classes, t,
+    } = this.props;
+
     return (
       <>
         <Typography variant="h2" className={classes.windowSideBarH2}>{t('canvasIndex')}</Typography>
         <List>
           {
-            canvasesIdAndLabel.map(canvas => (
+            canvasesIdAndLabel.map((canvas, canvasIndex) => (
               <ListItem key={canvas.id}>
-                <Typography variant="body2">{canvas.label}</Typography>
+                <Typography
+                  className={classes.clickable}
+                  variant="body2"
+                  onClick={() => { setCanvas(windowId, canvasIndex); }}
+                >
+                  {canvas.label}
+                </Typography>
               </ListItem>
             ))
           }
@@ -32,17 +41,22 @@ class WindowSideBarCanvasPanel extends Component {
 }
 
 WindowSideBarCanvasPanel.propTypes = {
-  windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
+  windowId: PropTypes.string.isRequired,
   canvasesIdAndLabel: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  setCanvas: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func.isRequired,
 };
 
 /**
  * @private
+ * custom style definitions
  */
 const styles = theme => ({
   windowSideBarH2: theme.typography.h5,
+  clickable: {
+    cursor: 'pointer',
+  },
 });
 
 export default withStyles(styles)(WindowSideBarCanvasPanel);
