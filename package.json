@@ -2,7 +2,10 @@
   "name": "mirador",
   "version": "3.0.0-alpha.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/mirador.min.js",
+  "files": [
+     "dist"
+  ],
   "scripts": {
     "lint": "node_modules/.bin/eslint ./ && node_modules/.bin/sass-lint -v ./src/styles/**/*",
     "server": "node_modules/.bin/http-server",
