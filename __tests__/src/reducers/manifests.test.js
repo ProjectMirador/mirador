@@ -18,6 +18,7 @@ describe('manifests reducer', () => {
         abc123: {
           id: 'abc123',
           isFetching: true,
+          error: 'Error fetching manifest',
         },
       },
       {
@@ -34,9 +35,11 @@ describe('manifests reducer', () => {
         id: 'abc123',
         isFetching: false,
         manifestation: {},
+        error: null,
       },
     });
   });
+
   it('should handle RECEIVE_MANIFEST_FAILURE', () => {
     expect(manifestsReducer(
       {
