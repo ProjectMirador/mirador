@@ -5,7 +5,7 @@ import SanitizedHtml from '../../../src/components/SanitizedHtml';
 const wrapper = shallow(
   <SanitizedHtml
     htmlString="<script>doBadThings()</script><b>Don't worry!</b>"
-    ruleSet="basic"
+    ruleSet="iiif"
   />,
 );
 
