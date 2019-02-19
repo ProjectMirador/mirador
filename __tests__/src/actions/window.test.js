@@ -86,21 +86,6 @@ describe('window actions', () => {
     });
   });
 
-  describe('setWindowCompanionWindow', () => {
-    it('returns the appropriate action type', () => {
-      const windowId = 'abc123';
-      const panelType = 'info';
-      const position = 'right';
-      const expectedAction = {
-        type: ActionTypes.SET_WINDOW_COMPANION_WINDOW,
-        windowId,
-        panelType,
-        position,
-      };
-      expect(actions.setWindowCompanionWindow(windowId, 'info', 'right')).toEqual(expectedAction);
-    });
-  });
-
   describe('popOutCompanionWindow', () => {
     it('returns a thunk which dispatches the appropriate actions', () => {
       const mockDispatch = jest.fn();
