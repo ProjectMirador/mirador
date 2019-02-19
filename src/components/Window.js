@@ -15,6 +15,8 @@ class Window extends Component {
    */
   render() {
     const { manifest, window } = this.props;
+    if (!window) return <></>;
+
     return (
       <div id={window.id} className={ns('window')}>
         <WindowTopBar
@@ -38,11 +40,12 @@ class Window extends Component {
 }
 
 Window.propTypes = {
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 Window.defaultProps = {
+  window: null,
   manifest: null,
 };
 
