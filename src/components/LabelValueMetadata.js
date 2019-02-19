@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import SanitizedHtml from './SanitizedHtml';
 
 /**
  * Renders label/value pair metadata in a dl
@@ -24,8 +25,12 @@ class LabelValueMetadata extends Component {
     return (
       <dl>
         {labelValuePairs.reduce((acc, labelValuePair, i) => acc.concat([
-          <dt key={`label-${i}`}>{labelValuePair.label}</dt>,
-          <dd key={`value-${i}`}>{labelValuePair.value}</dd>,
+          <dt key={`label-${i}`}>
+            {labelValuePair.label}
+          </dt>,
+          <dd key={`value-${i}`}>
+            <SanitizedHtml htmlString={labelValuePair.value} ruleSet="iiif" />
+          </dd>,
         ]), [])}
       </dl>
     );
