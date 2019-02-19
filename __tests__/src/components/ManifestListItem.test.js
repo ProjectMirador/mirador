@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import ManifestListItem from '../../../src/components/ManifestListItem';
+import ManifestListItemError from '../../../src/containers/ManifestListItemError';
 
 /** */
 function createWrapper(props) {
@@ -34,7 +35,7 @@ describe('ManifestListItem', () => {
     const wrapper = createWrapper({ error: 'This is an error message' });
 
     expect(wrapper.find('WithStyles(Paper)').length).toBe(1);
-    expect(wrapper.find('WithStyles(Paper)').children().text()).toEqual('This is an error message');
+    expect(wrapper.find(ManifestListItemError).length).toBe(1);
   });
   it('updates and adds window when button clicked', () => {
     const addWindow = jest.fn();
