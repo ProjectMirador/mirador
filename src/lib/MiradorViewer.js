@@ -66,7 +66,7 @@ class MiradorViewer {
 
     Object.keys(mergedConfig.manifests || {}).forEach((manifestId) => {
       this.store.dispatch(
-        actions.fetchManifest(manifestId, mergedConfig.manifests[manifestId]),
+        actions.requestManifest(manifestId, mergedConfig.manifests[manifestId]),
       );
     });
   }

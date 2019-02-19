@@ -13,7 +13,6 @@ export const manifestsReducer = (state = {}, action) => {
           ...state[action.manifestId],
           ...action.properties,
           id: action.manifestId,
-          isFetching: true,
         },
       };
     case ActionTypes.RECEIVE_MANIFEST:

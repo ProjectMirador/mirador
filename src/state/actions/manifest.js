@@ -53,7 +53,8 @@ export function receiveManifestFailure(manifestId, error) {
  */
 export function fetchManifest(manifestId, properties) {
   return ((dispatch) => {
-    dispatch(requestManifest(manifestId, properties));
+    dispatch(requestManifest(manifestId, { ...properties, isFetching: true }));
+
     return fetch(manifestId)
       .then(response => response.json())
       .then(json => dispatch(receiveManifest(manifestId, json)))

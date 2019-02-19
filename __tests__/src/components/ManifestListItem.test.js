@@ -30,6 +30,12 @@ describe('ManifestListItem', () => {
     expect(wrapper.find('.mirador-manifest-list-item').length).toBe(1);
     expect(wrapper.find('ReactPlaceholder').length).toBe(1);
   });
+  it('renders an error message if fetching the manifest failed', () => {
+    const wrapper = createWrapper({ error: 'This is an error message' });
+
+    expect(wrapper.find('WithStyles(Paper)').length).toBe(1);
+    expect(wrapper.find('WithStyles(Paper)').children().text()).toEqual('This is an error message');
+  });
   it('updates and adds window when button clicked', () => {
     const addWindow = jest.fn();
     const wrapper = createWrapper({ addWindow });

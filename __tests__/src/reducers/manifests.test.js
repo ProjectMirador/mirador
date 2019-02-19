@@ -9,7 +9,6 @@ describe('manifests reducer', () => {
     })).toEqual({
       abc123: {
         id: 'abc123',
-        isFetching: true,
       },
     });
   });
