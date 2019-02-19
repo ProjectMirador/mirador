@@ -37,7 +37,6 @@ class OpenSeadragonViewer extends Component {
       showNavigationControl: false,
       preserveImageSizeOnResize: true,
     });
-    console.log(this.viewer);
     this.viewer.addHandler('viewport-change', debounce(this.onViewportChange, 300));
 
     if (viewer) {
