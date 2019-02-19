@@ -3,17 +3,23 @@ import { shallow } from 'enzyme';
 import { Mosaic } from 'react-mosaic-component';
 import WorkspaceMosaic from '../../../src/components/WorkspaceMosaic';
 
+/** create wrapper */
+function createWrapper(props) {
+  return shallow(
+    <WorkspaceMosaic
+      windows={{}}
+      workspace={{}}
+      updateWorkspaceMosaicLayout={() => {}}
+      {...props}
+    />,
+  );
+}
+
 describe('WorkspaceMosaic', () => {
   const windows = { 1: { id: 1 }, 2: { id: 2 } };
   let wrapper;
   beforeEach(() => {
-    wrapper = shallow(
-      <WorkspaceMosaic
-        windows={windows}
-        workspace={{}}
-        updateWorkspaceMosaicLayout={() => {}}
-      />,
-    );
+    wrapper = createWrapper({ windows });
   });
   it('should render properly with an initialValue', () => {
     expect(wrapper.matchesElement(
@@ -22,25 +28,13 @@ describe('WorkspaceMosaic', () => {
   });
   describe('determineWorkspaceLayout', () => {
     it('when window ids do not match workspace layout', () => {
-      wrapper = shallow(
-        <WorkspaceMosaic
-          windows={windows}
-          workspace={{ layout: 'foo' }}
-          updateWorkspaceMosaicLayout={() => {}}
-        />,
-      );
+      wrapper = createWrapper({ windows, workspace: { layout: 'foo' } });
       expect(wrapper.instance().determineWorkspaceLayout()).toMatchObject({
         direction: 'row', first: '1', second: '2',
       });
     });
     it('when window ids match workspace layout', () => {
-      wrapper = shallow(
-        <WorkspaceMosaic
-          windows={{ foo: { id: 'foo' } }}
-          workspace={{ layout: 'foo' }}
-          updateWorkspaceMosaicLayout={() => {}}
-        />,
-      );
+      wrapper = createWrapper({ windows: { foo: { id: 'foo' } }, workspace: { layout: 'foo' } });
       expect(wrapper.instance().determineWorkspaceLayout()).toBeNull();
     });
   });
@@ -54,16 +48,11 @@ describe('WorkspaceMosaic', () => {
   });
   describe('mosaicChange', () => {
     it('calls the provided prop to update layout', () => {
-      const mock = jest.fn();
-      wrapper = shallow(
-        <WorkspaceMosaic
-          windows={{ foo: { id: 'foo' } }}
-          workspace={{ layout: 'foo' }}
-          updateWorkspaceMosaicLayout={mock}
-        />,
-      );
+      const updateWorkspaceMosaicLayout = jest.fn();
+      wrapper = createWrapper({ windows, updateWorkspaceMosaicLayout });
+
       wrapper.instance().mosaicChange();
-      expect(mock).toBeCalled();
+      expect(updateWorkspaceMosaicLayout).toBeCalled();
     });
   });
 });
