@@ -58,7 +58,13 @@ export function fetchManifest(manifestId, properties) {
     return fetch(manifestId)
       .then(response => response.json())
       .then(json => dispatch(receiveManifest(manifestId, json)))
-      .catch(error => dispatch(receiveManifestFailure(manifestId, error)));
+      .catch((error) => {
+        if (typeof error === 'object') { // Returned by JSON parse failure
+          dispatch(receiveManifestFailure(manifestId, String(error)));
+        } else {
+          dispatch(receiveManifestFailure(manifestId, error));
+        }
+      });
   });
 }
 
