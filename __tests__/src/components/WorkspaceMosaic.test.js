@@ -26,6 +26,16 @@ describe('WorkspaceMosaic', () => {
       <Mosaic initialValue={{ direction: 'row', first: '1', second: '2' }} />,
     )).toBe(true);
   });
+  describe('componentDidUpdate', () => {
+    it('updates the workspace layout when windows change', () => {
+      const updateWorkspaceMosaicLayout = jest.fn();
+      wrapper = createWrapper({ windows, updateWorkspaceMosaicLayout });
+
+      wrapper.setProps({ windows: { ...windows, 3: { id: 3 } } });
+
+      expect(updateWorkspaceMosaicLayout).toHaveBeenCalled();
+    });
+  });
   describe('determineWorkspaceLayout', () => {
     it('when window ids do not match workspace layout', () => {
       wrapper = createWrapper({ windows, workspace: { layout: 'foo' } });
