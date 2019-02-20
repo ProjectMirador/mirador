@@ -9,7 +9,7 @@ export const workspaceReducer = (
       x: -2500,
       y: -2500,
     },
-    exposedModeOn: false,
+    exposeModeOn: false,
   },
   action,
 ) => {
@@ -27,7 +27,7 @@ export const workspaceReducer = (
     case ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION:
       return { ...state, viewportPosition: action.payload.position };
     case ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE:
-      return { ...state, exposeModeOn: !state.exposedModeOn };
+      return { ...state, exposeModeOn: !state.exposeModeOn };
     default:
       return state;
   }

@@ -189,3 +189,23 @@ export function getCompanionWindowForPosition(state, windowId, position) {
     && state.windows[windowId].companionWindows
     && state.windows[windowId].companionWindows[position];
 }
+
+/**
+ * Return the bounding box for all open windows in the elastic workspace
+ * in workspace coordinates
+ * @param {object} state
+ * @return {object}
+ */
+export function getWorkspaceBoundingBox(windows) {
+  const windowObjects = Object.values(windows);
+  const minX = Math.min(...windowObjects.map(win => win.x));
+  const minY = Math.min(...windowObjects.map(win => win.y));
+  const maxX = Math.max(...windowObjects.map(win => win.x + win.width));
+  const maxY = Math.max(...windowObjects.map(win => win.y + win.height));
+  return {
+    x: minX,
+    y: minY,
+    width: maxX - minX,
+    height: maxY - minY,
+  };
+}

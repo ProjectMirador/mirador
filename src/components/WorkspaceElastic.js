@@ -15,11 +15,13 @@ class WorkspaceElastic extends React.Component {
   render() {
     const {
       workspace,
+      boundingBox,
       windows,
       setWorkspaceViewportPosition,
       updateWindowPosition,
       setWindowSize,
     } = this.props;
+    console.log(boundingBox);
     return (
       <Rnd
         default={{
@@ -77,6 +79,7 @@ WorkspaceElastic.propTypes = {
   setWorkspaceViewportPosition: PropTypes.func.isRequired,
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   workspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  boundingBox: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   updateWindowPosition: PropTypes.func.isRequired,
   setWindowSize: PropTypes.func.isRequired,
 };

@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../state/actions';
+import { getWorkspaceBoundingBox } from '../state/selectors';
 import WorkspaceElastic from '../components/WorkspaceElastic';
 
 /**
@@ -10,6 +11,7 @@ import WorkspaceElastic from '../components/WorkspaceElastic';
  */
 const mapStateToProps = state => (
   {
+    boundingBox: getWorkspaceBoundingBox(state.windows),
     workspace: state.workspace,
     windows: state.windows,
   }

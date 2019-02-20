@@ -18,7 +18,7 @@ export default {
     height: 150,
   },
   workspace: {
-    type: 'freeform',
+    type: 'elastic',
   },
   workspaceControlPanel: {
     enabled: true,
