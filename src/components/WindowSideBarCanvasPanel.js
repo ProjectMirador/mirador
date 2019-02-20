@@ -38,6 +38,8 @@ class WindowSideBarCanvasPanel extends Component {
             canvasesIdAndLabel.map((canvas, canvasIndex) => {
               const validationCanvas = new ValidationCanvas(canvases[canvasIndex]);
               const isValid = validationCanvas.hasValidDimensions;
+              const onClick = () => { setCanvas(windowId, canvasIndex); }; // eslint-disable-line require-jsdoc, max-len
+
               return (
                 <ListItem
                   key={canvas.id}
@@ -46,7 +48,7 @@ class WindowSideBarCanvasPanel extends Component {
                     className={classNames(classes.clickable)}
                     isValid={isValid}
                     imageUrl={validationCanvas.thumbnail(config.canvasNavigation.height)}
-                    onClick={() => { setCanvas(windowId, canvasIndex); }}
+                    onClick={onClick}
                     style={{
                       cursor: 'pointer',
                       height: config.canvasNavigation.height,
@@ -55,7 +57,7 @@ class WindowSideBarCanvasPanel extends Component {
                   />
                   <Typography
                     className={classNames(classes.clickable, classes.label)}
-                    onClick={() => { setCanvas(windowId, canvasIndex); }}
+                    onClick={onClick}
                     variant="body2"
                   >
                     {canvas.label}
