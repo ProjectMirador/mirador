@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
+import CanvasGroupings from '../lib/CanvasGroupings';
 import * as actions from '../state/actions';
 import ThumbnailNavigation from '../components/ThumbnailNavigation';
 import { getManifestCanvases } from '../state/selectors';
@@ -9,8 +10,8 @@ import { getManifestCanvases } from '../state/selectors';
  * @memberof ThumbnailNavigation
  * @private
  */
-const mapStateToProps = ({ config }, { manifest }) => ({
-  canvases: getManifestCanvases(manifest),
+const mapStateToProps = ({ config }, { manifest, window }) => ({
+  canvasGroupings: new CanvasGroupings(getManifestCanvases(manifest), window.view),
   config,
 });
 

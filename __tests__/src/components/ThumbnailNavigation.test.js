@@ -3,7 +3,26 @@ import { shallow } from 'enzyme';
 import Grid from 'react-virtualized/dist/commonjs/Grid';
 import manifesto from 'manifesto.js';
 import ThumbnailNavigation from '../../../src/components/ThumbnailNavigation';
+import CanvasGroupings from '../../../src/lib/CanvasGroupings';
 import manifestJson from '../../fixtures/version-2/019.json';
+
+/** create wrapper */
+function createWrapper(props) {
+  return shallow(
+    <ThumbnailNavigation
+      canvasGroupings={
+        new CanvasGroupings(manifesto.create(manifestJson).getSequences()[0].getCanvases())
+      }
+      window={{
+        id: 'foobar',
+        canvasIndex: 1,
+        thumbnailNavigationPosition: 'bottom',
+      }}
+      config={{ thumbnailNavigation: { height: 150 } }}
+      {...props}
+    />,
+  );
+}
 
 describe('ThumbnailNavigation', () => {
   let wrapper;
@@ -17,20 +36,7 @@ describe('ThumbnailNavigation', () => {
     Grid.prototype._scrollingContainer = jest.fn( // eslint-disable-line no-underscore-dangle
       () => ({ scrollLeft: 0 }),
     );
-    wrapper = shallow(
-      <ThumbnailNavigation
-        canvases={
-          manifesto.create(manifestJson).getSequences()[0].getCanvases()
-        }
-        window={{
-          id: 'foobar',
-          canvasIndex: 1,
-          thumbnailNavigationPosition: 'bottom',
-        }}
-        config={{ thumbnailNavigation: { height: 150 } }}
-        setCanvas={setCanvas}
-      />,
-    );
+    wrapper = createWrapper({ setCanvas });
     grid = wrapper.find('AutoSizer')
       .dive()
       .find('Grid');
@@ -39,7 +45,7 @@ describe('ThumbnailNavigation', () => {
   it('renders the component', () => {
     expect(wrapper.find('.mirador-thumb-navigation').length).toBe(1);
   });
-  it('renders li elements based off of number of canvases', () => {
+  it('renders containers based off of number of canvases', () => {
     expect(renderedGrid.find('.mirador-thumbnail-nav-canvas').length).toBe(3);
   });
   it('sets a mirador-current-canvas class on current canvas', () => {
@@ -59,6 +65,34 @@ describe('ThumbnailNavigation', () => {
   it('Grid is set with expected props for scrolling alignment', () => {
     expect(grid.props().scrollToAlignment).toBe('center');
     expect(grid.props().scrollToColumn).toBe(1);
-    expect(grid.props().columnIndex).toBe(1);
+  });
+  it('has a ref set used to reset on view change', () => {
+    expect(wrapper.instance().gridRef).not.toBe(null);
+  });
+  it('renders containers based off of canvas groupings ', () => {
+    wrapper = createWrapper({
+      setCanvas,
+      canvasGroupings: new CanvasGroupings(manifesto.create(manifestJson).getSequences()[0].getCanvases(), 'book'),
+    });
+    grid = wrapper.find('AutoSizer')
+      .dive()
+      .find('Grid');
+    renderedGrid = grid.dive();
+    expect(renderedGrid.find('.mirador-thumbnail-nav-canvas').length).toBe(2);
+    expect(renderedGrid.find('CanvasThumbnail').length).toBe(3);
+    expect(wrapper.instance().scrollToColumn()).toBe(1);
+  });
+  it('triggers a recomputeGridSize on view change', () => {
+    const mockRecompute = jest.fn();
+    wrapper.instance().gridRef = { current: { recomputeGridSize: mockRecompute } };
+    wrapper.setProps({
+      window: {
+        id: 'foobar',
+        canvasIndex: 1,
+        thumbnailNavigationPosition: 'bottom',
+        view: 'book',
+      },
+    });
+    expect(mockRecompute).toHaveBeenCalled();
   });
 });

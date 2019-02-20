@@ -111,4 +111,14 @@ describe('WindowViewer', () => {
       });
     });
   });
+  it('when view type changes', () => {
+    expect(wrapper.instance().canvasGroupings.groupings().length).toEqual(3);
+    wrapper.setProps({
+      window: {
+        canvasIndex: 0,
+        view: 'book',
+      },
+    });
+    expect(wrapper.instance().canvasGroupings.groupings().length).toEqual(2);
+  });
 });

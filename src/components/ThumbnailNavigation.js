@@ -17,21 +17,33 @@ class ThumbnailNavigation extends Component {
 
     this.cellRenderer = this.cellRenderer.bind(this);
     this.calculateScaledWidth = this.calculateScaledWidth.bind(this);
+    this.gridRef = React.createRef();
+  }
+
+  /**
+   * If the view has changed and the thumbnailNavigation is open, recompute all
+   * of the grids
+   */
+  componentDidUpdate(prevProps) {
+    const { window } = this.props;
+    if (prevProps.window.view !== window.view && window.thumbnailNavigationPosition !== 'off') {
+      this.gridRef.current.recomputeGridSize();
+    }
   }
 
   /**
    * Determines whether the current index is the rendered canvas, providing
    * a useful class.
    */
-  currentCanvasClass(canvasIndex) {
+  currentCanvasClass(canvasIndices) {
     const { window } = this.props;
-    if (window.canvasIndex === canvasIndex) return 'current-canvas';
+    if (canvasIndices.includes(window.canvasIndex)) return 'current-canvas';
     return '';
   }
 
   /**
-   * Renders a given "cell" for a react-virtualized Grid. Right now this is a
-   * "canvas" but in the future for paged items, would be connected canvases.
+   * Renders a given "cell" for a react-virtualized Grid. This is a grouping of
+   * canvases.
    * https://github.com/bvaughn/react-virtualized/blob/master/docs/Grid.md
    */
   cellRenderer(options) {
@@ -39,9 +51,9 @@ class ThumbnailNavigation extends Component {
       columnIndex, key, style,
     } = options;
     const {
-      window, setCanvas, config, canvases,
+      window, setCanvas, config, canvasGroupings,
     } = this.props;
-    const canvas = canvases[columnIndex];
+    const currentGroupings = canvasGroupings.groupings()[columnIndex];
     return (
       <div
         key={key}
@@ -52,13 +64,20 @@ class ThumbnailNavigation extends Component {
           style={{
             width: style.width - 8,
           }}
-          className={ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${canvas.index}`, this.currentCanvasClass(canvas.index)])}
+          className={ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${columnIndex}`, this.currentCanvasClass(currentGroupings.map(canvas => canvas.index))])}
         >
-          <CanvasThumbnail
-            onClick={() => setCanvas(window.id, canvas.index)}
-            imageUrl={new ManifestoCanvas(canvas).thumbnail(config.thumbnailNavigation.height)}
-            height={config.thumbnailNavigation.height}
-          />
+          {currentGroupings.map((canvas, i) => (
+            <div
+              key={i} // eslint-disable-line react/no-array-index-key
+              style={{ position: 'absolute', left: (style.width - 8) * i / 2, top: 2 }}
+            >
+              <CanvasThumbnail
+                onClick={() => setCanvas(window.id, currentGroupings[0].index)}
+                imageUrl={new ManifestoCanvas(canvas).thumbnail(config.thumbnailNavigation.height)}
+                height={config.thumbnailNavigation.height}
+              />
+            </div>
+          ))}
         </div>
       </div>
     );
@@ -66,19 +85,36 @@ class ThumbnailNavigation extends Component {
 
   /**
    * calculateScaledWidth - calculates the scaled width of a column for a Grid
-   * in this simple case, a column == canvas.
+   * in a simple case, a column == canvas. In a book view, a group (or two)
+   * canvases
    */
   calculateScaledWidth(options) {
-    const { config, canvases } = this.props;
-    const canvas = new ManifestoCanvas(canvases[options.index]);
-    return Math.floor(config.thumbnailNavigation.height * canvas.aspectRatio) + 8;
+    const { config, canvasGroupings } = this.props;
+    return canvasGroupings
+      .getCanvases(options.index)
+      .map(canvas => new ManifestoCanvas(canvas).aspectRatio)
+      .reduce((acc, current) => acc + Math.floor(config.thumbnailNavigation.height * current), 8);
+  }
+
+  /**
+   * In book view, this is halved to represent the proxy between the "canvasIndex"
+   * and the columnIndex (in this case the index of grouped canvases)
+   */
+  scrollToColumn() {
+    const { window } = this.props;
+    switch (window.view) {
+      case 'book':
+        return Math.ceil(window.canvasIndex / 2);
+      default:
+        return window.canvasIndex;
+    }
   }
 
   /**
    * Renders things
    */
   render() {
-    const { config, window, canvases } = this.props;
+    const { config, window, canvasGroupings } = this.props;
     if (window.thumbnailNavigationPosition === 'off') {
       return <></>;
     }
@@ -94,15 +130,15 @@ class ThumbnailNavigation extends Component {
           {({ height, width }) => (
             <Grid
               cellRenderer={this.cellRenderer}
-              columnCount={canvases.length}
-              columnIndex={window.canvasIndex}
+              columnCount={canvasGroupings.groupings().length}
               columnWidth={this.calculateScaledWidth}
               height={config.thumbnailNavigation.height}
               rowCount={1}
               rowHeight={config.thumbnailNavigation.height}
               scrollToAlignment="center"
-              scrollToColumn={window.canvasIndex}
+              scrollToColumn={this.scrollToColumn()}
               width={width}
+              ref={this.gridRef}
             />
           )}
         </AutoSizer>
@@ -113,7 +149,7 @@ class ThumbnailNavigation extends Component {
 
 ThumbnailNavigation.propTypes = {
   config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  canvasGroupings: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   setCanvas: PropTypes.func.isRequired,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
