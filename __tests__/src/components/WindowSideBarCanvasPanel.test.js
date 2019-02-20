@@ -49,7 +49,7 @@ describe('WindowSideBarCanvasPanel', () => {
     expect(wrapper
       .find(List)
       .find(Typography)
-      .at(0)
+      .at(1)
       .render()
       .text()).toBe(idsAndLabels[1].label);
   });
