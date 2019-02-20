@@ -49,15 +49,13 @@ class ThumbnailNavigation extends Component {
         className={ns('thumbnail-nav-container')}
       >
         <div
-          onClick={() => setCanvas(window.id, canvas.index)}
-          onKeyPress={() => setCanvas(window.id, canvas.index)}
-          role="presentation"
           style={{
             width: style.width - 8,
           }}
           className={ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${canvas.index}`, this.currentCanvasClass(canvas.index)])}
         >
           <CanvasThumbnail
+            onClick={() => setCanvas(window.id, canvas.index)}
             imageUrl={new ManifestoCanvas(canvas).thumbnail(config.thumbnailNavigation.height)}
             height={config.thumbnailNavigation.height}
           />

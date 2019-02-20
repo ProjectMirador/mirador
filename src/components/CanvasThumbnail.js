@@ -34,19 +34,22 @@ export default class CanvasThumbnail extends Component {
   /**
    */
   render() {
-    const { height } = this.props;
+    const {
+      height, isValid, onClick, style,
+    } = this.props;
     const { loaded, image } = this.state;
+    const imgStyle = { height, width: '100%', ...style };
     return (
-      <div>
-        <IntersectionObserver onChange={this.handleIntersection}>
-          <img
-            alt=""
-            src={loaded ? image.src : CanvasThumbnail.defaultImgPlaceholder}
-            height={height}
-            width="100%"
-          />
-        </IntersectionObserver>
-      </div>
+      <IntersectionObserver onChange={this.handleIntersection}>
+        <img
+          alt=""
+          onClick={onClick}
+          onKeyPress={onClick}
+          role="presentation"
+          src={loaded && isValid ? image.src : CanvasThumbnail.defaultImgPlaceholder}
+          style={imgStyle}
+        />
+      </IntersectionObserver>
     );
   }
 }
@@ -54,13 +57,17 @@ export default class CanvasThumbnail extends Component {
 // Transparent "gray"
 CanvasThumbnail.defaultImgPlaceholder = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==';
 
-
 CanvasThumbnail.propTypes = {
   imageUrl: PropTypes.string,
+  isValid: PropTypes.bool,
   height: PropTypes.number,
+  onClick: PropTypes.func.isRequired,
+  style: PropTypes.object, // eslint-disable-line react/forbid-prop-types,
 };
 
 CanvasThumbnail.defaultProps = {
   imageUrl: null,
+  isValid: true,
   height: 150,
+  style: {},
 };
