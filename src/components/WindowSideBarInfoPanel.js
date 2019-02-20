@@ -51,7 +51,6 @@ WindowSideBarInfoPanel.propTypes = {
   t: PropTypes.func,
 };
 
-
 WindowSideBarInfoPanel.defaultProps = {
   canvasDescription: null,
   canvasLabel: null,
