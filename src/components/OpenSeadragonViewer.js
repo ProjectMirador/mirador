@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import OpenSeadragon from 'openseadragon';
+import debounce from 'lodash/debounce';
 import ns from '../config/css-ns';
 import ZoomControls from '../containers/ZoomControls';
 
@@ -36,7 +37,7 @@ class OpenSeadragonViewer extends Component {
       showNavigationControl: false,
       preserveImageSizeOnResize: true,
     });
-    this.viewer.addHandler('viewport-change', this.onViewportChange);
+    this.viewer.addHandler('viewport-change', debounce(this.onViewportChange, 300));
 
     if (viewer) {
       this.viewer.viewport.panTo(viewer, false);

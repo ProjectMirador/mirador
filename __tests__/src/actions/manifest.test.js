@@ -45,7 +45,7 @@ describe('manifest actions', () => {
       it('dispatches the REQUEST_MANIFEST action', () => {
         store.dispatch(actions.fetchManifest('https://purl.stanford.edu/sn904cj3429/iiif/manifest'));
         expect(store.getActions()).toEqual([
-          { manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest', type: 'REQUEST_MANIFEST' },
+          { manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest', type: 'REQUEST_MANIFEST', properties: { isFetching: true } },
         ]);
       });
       it('dispatches the REQUEST_MANIFEST and then RECEIVE_MANIFEST', () => {

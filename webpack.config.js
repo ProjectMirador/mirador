@@ -86,7 +86,7 @@ const baseConfig = [
       minimizer: [
         new TerserPlugin({
           terserOptions: {
-            mangle: false,
+            keep_fnames: true,
           },
         }),
       ],

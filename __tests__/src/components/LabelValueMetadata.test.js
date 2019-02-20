@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import SanitizedHtml from '../../../src/components/SanitizedHtml';
 import LabelValueMetadata from '../../../src/components/LabelValueMetadata';
 
 describe('LabelValueMetadata', () => {
@@ -25,14 +26,23 @@ describe('LabelValueMetadata', () => {
 
     it('renders a dt/dd for each label/value pair', () => {
       expect(wrapper.find('dl').length).toEqual(1);
-
       expect(wrapper.find('dt').length).toEqual(2);
+      expect(wrapper.find('dd').length).toEqual(2);
+    });
+
+    it('renders correct labels in dt', () => {
       expect(wrapper.find('dt').first().text()).toEqual('Label 1');
       expect(wrapper.find('dt').last().text()).toEqual('Label 2');
+    });
 
-      expect(wrapper.find('dd').length).toEqual(2);
-      expect(wrapper.find('dd').first().text()).toEqual('Value 1');
-      expect(wrapper.find('dd').last().text()).toEqual('Value 2');
+    it('renders SanitizedHtml component in dt for each value', () => {
+      expect(wrapper.find('dd').first().find(SanitizedHtml).length).toBe(1);
+      expect(wrapper.find('dd').last().find(SanitizedHtml).length).toBe(1);
+    });
+
+    it('passes value string to SanitizedHtml', () => {
+      expect(wrapper.find(SanitizedHtml).first().props().htmlString).toBe('Value 1');
+      expect(wrapper.find(SanitizedHtml).last().props().htmlString).toBe('Value 2');
     });
   });
 

@@ -4,7 +4,9 @@ import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import LabelValueMetadata from './LabelValueMetadata';
+import SanitizedHtml from './SanitizedHtml';
 import ns from '../config/css-ns';
+
 
 /**
  * WindowSideBarInfoPanel
@@ -25,16 +27,48 @@ class WindowSideBarInfoPanel extends Component {
       manifestMetadata,
       t,
     } = this.props;
+
     return (
       <div className={ns('window-sidebar-info-panel')}>
-        <Typography variant="h2" className={classes.windowSideBarH2}>{t('aboutThisItem')}</Typography>
-        {canvasLabel && <Typography variant="h3" className={classes.windowSideBarH3}>{canvasLabel}</Typography>}
-        {canvasDescription && <Typography variant="body2">{canvasDescription}</Typography>}
-        {canvasMetadata && <LabelValueMetadata labelValuePairs={canvasMetadata} />}
+
+        <Typography variant="h2" className={classes.windowSideBarH2}>
+          {t('aboutThisItem')}
+        </Typography>
+
+        {canvasLabel && (
+          <Typography variant="h3" className={classes.windowSideBarH3}>
+            {canvasLabel}
+          </Typography>
+        )}
+
+        {canvasDescription && (
+          <Typography variant="body2">
+            <SanitizedHtml htmlString={canvasDescription} ruleSet="iiif" />
+          </Typography>
+        )}
+
+        {canvasMetadata.length > 0 && (
+          <LabelValueMetadata labelValuePairs={canvasMetadata} />
+        )}
+
         <Divider />
-        {manifestLabel && <Typography variant="h3" className={classes.windowSideBarH3}>{manifestLabel}</Typography>}
-        {manifestDescription && <Typography variant="body2">{manifestDescription}</Typography>}
-        {manifestMetadata && <LabelValueMetadata labelValuePairs={manifestMetadata} />}
+
+        {manifestLabel && (
+          <Typography variant="h3" className={classes.windowSideBarH3}>
+            {manifestLabel}
+          </Typography>
+        )}
+
+        {manifestDescription && (
+          <Typography variant="body2">
+            <SanitizedHtml htmlString={manifestDescription} ruleSet="iiif" />
+          </Typography>
+        )}
+
+        {manifestMetadata.length > 0 && (
+          <LabelValueMetadata labelValuePairs={manifestMetadata} />
+        )}
+
       </div>
     );
   }
