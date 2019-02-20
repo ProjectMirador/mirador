@@ -40,16 +40,18 @@ export default class CanvasThumbnail extends Component {
     const { loaded, image } = this.state;
     const imgStyle = { height, width: '100%', ...style };
     return (
-      <IntersectionObserver onChange={this.handleIntersection}>
-        <img
-          alt=""
-          onClick={onClick}
-          onKeyPress={onClick}
-          role="presentation"
-          src={loaded && isValid ? image.src : CanvasThumbnail.defaultImgPlaceholder}
-          style={imgStyle}
-        />
-      </IntersectionObserver>
+      <div>
+        <IntersectionObserver onChange={this.handleIntersection}>
+          <img
+            alt=""
+            onClick={onClick}
+            onKeyPress={onClick}
+            role="presentation"
+            src={loaded && isValid ? image.src : CanvasThumbnail.defaultImgPlaceholder}
+            style={imgStyle}
+          />
+        </IntersectionObserver>
+      </div>
     );
   }
 }
