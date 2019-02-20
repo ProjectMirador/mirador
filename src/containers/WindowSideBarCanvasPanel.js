@@ -6,7 +6,6 @@ import WindowSideBarCanvasPanel from '../components/WindowSideBarCanvasPanel';
 import {
   getManifestCanvases,
   getWindowManifest,
-  getIdAndLabelOfCanvases,
 } from '../state/selectors';
 
 /**
@@ -15,8 +14,10 @@ import {
 const mapStateToProps = (state, { windowId }) => {
   const manifest = getWindowManifest(state, windowId);
   const canvases = getManifestCanvases(manifest);
+  const { config } = state;
   return {
-    canvasesIdAndLabel: getIdAndLabelOfCanvases(canvases),
+    canvases,
+    config,
   };
 };
 
