@@ -5,6 +5,16 @@ export default {
   theme: { // Sets up a MaterialUI theme. See https://material-ui.com/customization/default-theme/
     palette: {
       type: 'light', // dark also available
+      primary: {
+        main: '#f5f5f5',
+        light: '#ffffff',
+        dark: '#eeeeee',
+      },
+      secondary: {
+        main: '#1967d2',
+        light: '#64b5f6',
+        dark: '#0d47a1',
+      },
     },
     typography: {
       useNextVariants: true // set so that console deprecation warning is removed
