@@ -11,6 +11,10 @@ export default {
     }
   },
   language: 'en',
+  availableLanguages: { // All the languages available in the language switcher
+    de: 'Deutsch',
+    en: 'English',
+  },
   translations: {
   },
   window: {
