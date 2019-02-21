@@ -20,7 +20,7 @@ function createWrapper(props) {
       windowId="xyz"
       classes={{}}
       t={str => str}
-      removeWindow={() => {}}
+      closeWindow={() => {}}
       toggleWindowSideBar={() => {}}
       {...props}
     />,
@@ -67,8 +67,8 @@ describe('WindowTopBar', () => {
   });
 
   it('passes correct props to <Button/>', () => {
-    const removeWindow = jest.fn();
-    const wrapper = createWrapper({ removeWindow });
-    expect(wrapper.find(IconButton).last().props().onClick).toBe(removeWindow);
+    const closeWindow = jest.fn();
+    const wrapper = createWrapper({ closeWindow });
+    expect(wrapper.find(IconButton).last().props().onClick).toBe(closeWindow);
   });
 });

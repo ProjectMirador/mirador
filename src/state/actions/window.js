@@ -1,6 +1,6 @@
 import uuid from 'uuid/v4';
 import ActionTypes from './action-types';
-import { addCompanionWindow } from './companionWindow';
+import { addCompanionWindow, removeCompanionWindow } from './companionWindow';
 
 /**
  * focusWindow - action creator
@@ -32,6 +32,11 @@ export function addWindow(options) {
     view: 'single',
   };
   return { type: ActionTypes.ADD_WINDOW, window: { ...defaultOptions, ...options } };
+}
+
+/** */
+export function updateWindow(id, payload) {
+  return { type: ActionTypes.UPDATE_WINDOW, id, payload };
 }
 
 /**
@@ -76,10 +81,40 @@ export function toggleWindowSideBarPanel(windowId, panelType) {
  * @memberof ActionCreators
  */
 export function popOutCompanionWindow(windowId, panelType, position) {
-  return ((dispatch) => {
-    dispatch(addCompanionWindow({ windowId, content: panelType, position }));
+  return (dispatch, getState) => {
+    const { companionWindowIds } = getState().windows[windowId];
+    companionWindowIds.map(id => dispatch(removeCompanionWindow(id)));
+
+    const action = dispatch(addCompanionWindow({ content: panelType, position }));
+
+    const companionWindowId = action.id;
+    dispatch(updateWindow(windowId, { companionWindowIds: [companionWindowId] }));
+
     dispatch(toggleWindowSideBarPanel(windowId, 'closed'));
-  });
+  };
+}
+
+/**
+* Clean up state and remove window
+*/
+export function closeWindow(windowId) {
+  return (dispatch, getState) => {
+    const { companionWindowIds } = getState().windows[windowId];
+    companionWindowIds.map(id => dispatch(removeCompanionWindow(id)));
+    dispatch(removeWindow(windowId));
+  };
+}
+
+/**
+* Close companion window and remove reference from window
+*/
+export function closeCompanionWindow(windowId, companionWindowId) {
+  return (dispatch, getState) => {
+    dispatch(removeCompanionWindow(companionWindowId));
+    const companionWindowIds = getState().windows[windowId].companionWindowIds
+      .filter(id => id !== companionWindowId);
+    dispatch(updateWindow(windowId, { companionWindowIds }));
+  };
 }
 
 /**

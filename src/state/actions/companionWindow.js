@@ -1,30 +1,26 @@
 import uuid from 'uuid/v4';
 import ActionTypes from './action-types';
 
-/**
- * addCompanionWindow - action creator
- *
- * @param  {Object} options
- * @memberof ActionCreators
- */
-export function addCompanionWindow(companionWindow) {
+const defaultProps = {
+  content: null,
+  position: null,
+};
+
+/** */
+export function addCompanionWindow(payload, defaults = defaultProps) {
   return {
-    type: ActionTypes.SET_COMPANION_WINDOW,
+    type: ActionTypes.ADD_COMPANION_WINDOW,
     id: `cw-${uuid()}`,
-    ...companionWindow,
+    payload: { ...defaults, ...payload },
   };
 }
 
-/**
- * removeCompanionWindow - action creator
- *
- * @param  {Object} options
- * @memberof ActionCreators
- */
-export function removeCompanionWindow(id, windowId) {
-  return {
-    type: ActionTypes.REMOVE_COMPANION_WINDOW,
-    id,
-    windowId,
-  };
+/** */
+export function updateCompanionWindow(id, payload) {
+  return { type: ActionTypes.UPDATE_COMPANION_WINDOW, id, payload };
+}
+
+/** */
+export function removeCompanionWindow(id) {
+  return { type: ActionTypes.REMOVE_COMPANION_WINDOW, id };
 }

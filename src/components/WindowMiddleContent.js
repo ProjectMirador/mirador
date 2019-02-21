@@ -32,29 +32,24 @@ class WindowMiddleContent extends Component {
    * Render the component
    */
   render() {
-    const { rightCompanionWindowId, window } = this.props;
+    const { companionWindowIds, window } = this.props;
     return (
       <div className={ns('window-middle-content')}>
         <WindowSideBar windowId={window.id} />
         {this.renderViewer()}
-        { // We can pass an array of ids here when we want to support
-          // multiple companion windows in a particular position
-          rightCompanionWindowId
-            && <CompanionWindow id={rightCompanionWindowId} windowId={window.id} />
-        }
+        { companionWindowIds.map(id => <CompanionWindow key={id} id={id} windowId={window.id} />) }
       </div>
     );
   }
 }
 
 WindowMiddleContent.propTypes = {
-  rightCompanionWindowId: PropTypes.string,
+  companionWindowIds: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 WindowMiddleContent.defaultProps = {
-  rightCompanionWindowId: null,
   manifest: null,
 };
 

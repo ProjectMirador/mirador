@@ -35,7 +35,7 @@ describe('CompanionWindow', () => {
   });
 
   describe('when the close companion window button is clicked', () => {
-    it('triggers the removeCompanionWindow prop with the appropriate args', () => {
+    it('triggers the onCloseClick prop with the appropriate args', () => {
       const removeCompanionWindowEvent = jest.fn();
       companionWindow = createWrapper({
         onCloseClick: removeCompanionWindowEvent,
@@ -44,7 +44,7 @@ describe('CompanionWindow', () => {
       const closeButton = companionWindow.find('WithStyles(IconButton)[aria-label="closeCompanionWindow"]');
       closeButton.simulate('click');
       expect(removeCompanionWindowEvent).toHaveBeenCalledTimes(1);
-      expect(removeCompanionWindowEvent).toHaveBeenCalledWith('abc123', 'x');
+      expect(removeCompanionWindowEvent).toHaveBeenCalledWith('x', 'abc123');
     });
   });
 });

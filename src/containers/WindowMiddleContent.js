@@ -1,17 +1,13 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { getCompanionWindowForPosition } from '../state/selectors';
+import { getCompantionWindowIds } from '../state/selectors';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import WindowMiddleContent from '../components/WindowMiddleContent';
 
 /** */
-const mapStateToProps = (state, { window }) => {
-  const rightCompanionWindow = getCompanionWindowForPosition(state, window.id, 'right');
-
-  return {
-    rightCompanionWindowId: rightCompanionWindow && rightCompanionWindow.id,
-  };
-};
+const mapStateToProps = (state, { window }) => ({
+  companionWindowIds: getCompantionWindowIds(state, window.id),
+});
 
 const enhance = compose(
   connect(mapStateToProps, null),

@@ -121,61 +121,6 @@ describe('windows reducer', () => {
     });
   });
 
-  describe('SET_COMPANION_WINDOW', () => {
-    it('adds the id to the companin array', () => {
-      const action = {
-        type: ActionTypes.SET_COMPANION_WINDOW,
-        id: 'x',
-        windowId: 'abc123',
-      };
-      const before = {
-        abc123: { companionWindowIds: [] },
-      };
-      const after = {
-        abc123: { companionWindowIds: ['x'] },
-      };
-
-      expect(windowsReducer(before, action)).toEqual(after);
-    });
-
-    it('does not add id key that already exists', () => {
-      const action = {
-        type: ActionTypes.SET_COMPANION_WINDOW,
-        id: 'x',
-        windowId: 'abc123',
-        position: 'right',
-        panelType: 'info',
-      };
-      const before = {
-        abc123: { companionWindowIds: ['x'] },
-      };
-
-      const after = {
-        abc123: { companionWindowIds: ['x'] },
-      };
-
-      expect(windowsReducer(before, action)).toEqual(after);
-    });
-  });
-
-  describe('REMOVE_COMPANION_WINDOW', () => {
-    it('removes the id of the companionWindow from the ids array', () => {
-      const action = {
-        type: ActionTypes.REMOVE_COMPANION_WINDOW,
-        id: 'x',
-        windowId: 'abc123',
-      };
-      const before = {
-        abc123: { companionWindowIds: ['x'] },
-      };
-      const after = {
-        abc123: { companionWindowIds: [] },
-      };
-
-      expect(windowsReducer(before, action)).toEqual(after);
-    });
-  });
-
   it('should handle NEXT_CANVAS', () => {
     expect(windowsReducer({
       abc123: {
@@ -247,6 +192,30 @@ describe('windows reducer', () => {
         id: 'def456',
         canvasIndex: 1,
       },
+    });
+  });
+
+  describe('UPDATE_WINDOW', () => {
+    it('updates an existing window', () => {
+      const action = {
+        type: ActionTypes.UPDATE_WINDOW,
+        id: 'abc123',
+        payload: { foo: 11, baz: 33 },
+      };
+      const beforeState = {
+        abc123: {
+          foo: 1,
+          bar: 2,
+        },
+      };
+      const expectedState = {
+        abc123: {
+          foo: 11,
+          bar: 2,
+          baz: 33,
+        },
+      };
+      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
     });
   });
 });

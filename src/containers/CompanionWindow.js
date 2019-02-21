@@ -27,7 +27,7 @@ const mapStateToProps = (state, { id }) => {
  * @private
  */
 const mapDispatchToProps = {
-  onCloseClick: actions.removeCompanionWindow,
+  onCloseClick: actions.closeCompanionWindow,
 };
 
 const enhance = compose(

@@ -27,6 +27,20 @@ describe('window actions', () => {
       expect(actions.addWindow(options)).toEqual(expectedAction);
     });
   });
+
+  describe('updateWindow', () => {
+    it('should return correct action object', () => {
+      const payload = {
+        foo: 1,
+        bar: 2,
+      };
+      const action = actions.updateWindow('window-123', payload);
+      expect(action.type).toBe(ActionTypes.UPDATE_WINDOW);
+      expect(action.id).toBe('window-123');
+      expect(action.payload).toEqual(payload);
+    });
+  });
+
   describe('removeWindow', () => {
     it('removes the window and returns windowId', () => {
       const id = 'abc123';
@@ -88,20 +102,41 @@ describe('window actions', () => {
 
   describe('popOutCompanionWindow', () => {
     it('returns a thunk which dispatches the appropriate actions', () => {
-      const mockDispatch = jest.fn();
+      const mockState = {
+        windows: {
+          abc123: {
+            companionWindowIds: ['cw-1'],
+          },
+        },
+      };
+      const mockDispatch = jest.fn(() => ({ id: 'cw-1' }));
+      const mockGetState = jest.fn(() => mockState);
       const windowId = 'abc123';
       const panelType = 'info';
       const position = 'right';
       const thunk = actions.popOutCompanionWindow(windowId, panelType, position);
 
       expect(typeof thunk).toEqual('function');
-      thunk(mockDispatch);
-      expect(mockDispatch).toHaveBeenCalledTimes(2);
-      const cwId = mockDispatch.mock.calls[0][0].id;
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: ActionTypes.SET_COMPANION_WINDOW, id: cwId, windowId, content: panelType, position,
+      thunk(mockDispatch, mockGetState);
+      expect(mockDispatch).toHaveBeenCalledTimes(4);
+
+      expect(mockDispatch).toHaveBeenNthCalledWith(1, {
+        type: ActionTypes.REMOVE_COMPANION_WINDOW,
+        id: 'cw-1',
       });
-      expect(mockDispatch).toHaveBeenCalledWith({
+
+      const addCompanionWindowAction = mockDispatch.mock.calls[1][0];
+      expect(addCompanionWindowAction.type).toBe(ActionTypes.ADD_COMPANION_WINDOW);
+      expect(addCompanionWindowAction.payload).toEqual({ content: 'info', position: 'right' });
+      expect(addCompanionWindowAction.id.startsWith('cw-')).toBe(true);
+
+      expect(mockDispatch).toHaveBeenNthCalledWith(3, {
+        type: ActionTypes.UPDATE_WINDOW,
+        id: 'abc123',
+        payload: { companionWindowIds: ['cw-1'] },
+      });
+
+      expect(mockDispatch).toHaveBeenNthCalledWith(4, {
         type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL, windowId, panelType: 'closed',
       });
     });
