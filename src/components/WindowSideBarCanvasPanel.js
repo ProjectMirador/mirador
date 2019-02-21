@@ -4,8 +4,14 @@ import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+<<<<<<< HEAD
 import { CanvasThumbnail } from './CanvasThumbnail';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
+=======
+import { withStyles } from '@material-ui/core/styles';
+import ManifestoCanvas from '../lib/ManifestoCanvas';
+import CanvasThumbnail from './CanvasThumbnail';
+>>>>>>> #1888 fixes import for ManifestoCanvas, re-adds padding for thumbnail grid cell
 import { getIdAndLabelOfCanvases } from '../state/selectors';
 
 /**
