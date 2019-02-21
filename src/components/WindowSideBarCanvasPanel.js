@@ -44,17 +44,19 @@ class WindowSideBarCanvasPanel extends Component {
                 <ListItem
                   key={canvas.id}
                 >
-                  <CanvasThumbnail
-                    className={classNames(classes.clickable)}
-                    isValid={isValid}
-                    imageUrl={validationCanvas.thumbnail(config.canvasNavigation.height)}
-                    onClick={onClick}
-                    style={{
-                      cursor: 'pointer',
-                      height: config.canvasNavigation.height,
-                      width: isValid ? WindowSideBarCanvasPanel.calculateScaledWidth(config.canvasNavigation.height, validationCanvas.aspectRatio) : 'auto',
-                    }}
-                  />
+                  <div>
+                    <CanvasThumbnail
+                      className={classNames(classes.clickable)}
+                      isValid={isValid}
+                      imageUrl={validationCanvas.thumbnail(config.canvasNavigation.height)}
+                      onClick={onClick}
+                      style={{
+                        cursor: 'pointer',
+                        height: config.canvasNavigation.height,
+                        width: isValid ? WindowSideBarCanvasPanel.calculateScaledWidth(config.canvasNavigation.height, validationCanvas.aspectRatio) : 'auto',
+                      }}
+                    />
+                  </div>
                   <Typography
                     className={classNames(classes.clickable, classes.label)}
                     onClick={onClick}
