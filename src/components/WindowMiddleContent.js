@@ -32,18 +32,19 @@ class WindowMiddleContent extends Component {
    * Render the component
    */
   render() {
-    const { window } = this.props;
+    const { companionWindowIds, window } = this.props;
     return (
       <div className={ns('window-middle-content')}>
         <WindowSideBar windowId={window.id} />
         {this.renderViewer()}
-        <CompanionWindow windowId={window.id} position="right" />
+        { companionWindowIds.map(id => <CompanionWindow key={id} id={id} windowId={window.id} />) }
       </div>
     );
   }
 }
 
 WindowMiddleContent.propTypes = {
+  companionWindowIds: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };

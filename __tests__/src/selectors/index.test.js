@@ -323,17 +323,20 @@ describe('getIdAndLabelOfCanvases', () => {
 
 describe('getCompanionWindowForPosition', () => {
   const state = {
-    windows: { a: { companionWindows: { right: 'info' } } },
+    companionWindows: {
+      abc: { id: 'abc', windowId: 'a', position: 'right' },
+      xyz: { id: 'xyz', windowId: 'b', position: 'bottom' },
+    },
   };
 
   it('the companion window type based on the given position', () => {
     const received = getCompanionWindowForPosition(state, 'a', 'right');
 
-    expect(received).toEqual('info');
+    expect(received.id).toEqual('abc');
   });
 
   it('returns undefined if the given window does not exist', () => {
-    const received = getCompanionWindowForPosition(state, 'b', 'right');
+    const received = getCompanionWindowForPosition(state, 'c', 'right');
 
     expect(received).toBeUndefined();
   });

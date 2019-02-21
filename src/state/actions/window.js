@@ -1,5 +1,6 @@
 import uuid from 'uuid/v4';
 import ActionTypes from './action-types';
+import { addCompanionWindow, removeCompanionWindow } from './companionWindow';
 
 /**
  * focusWindow - action creator
@@ -26,10 +27,16 @@ export function addWindow(options) {
     rangeId: null,
     thumbnailNavigationPosition: 'bottom', // bottom by default in settings.js
     xywh: [0, 0, 400, 400],
+    companionWindowIds: [],
     rotation: null,
     view: 'single',
   };
   return { type: ActionTypes.ADD_WINDOW, window: { ...defaultOptions, ...options } };
+}
+
+/** */
+export function updateWindow(id, payload) {
+  return { type: ActionTypes.UPDATE_WINDOW, id, payload };
 }
 
 /**
@@ -50,25 +57,6 @@ export function removeWindow(windowId) {
  */
 export function toggleWindowSideBar(windowId) {
   return { type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR, windowId };
-}
-
-/**
- * setWindowCompanionWindow - action creator
- *
- * @param  {String} windowId
- * @param  {String} panelType The type of panel content to be rendered
- *                            in the companion window (e.g. info, canvas_navigation)
- * @param  {String} position The position of the companion window to
- *                           set content for (e.g. right, bottom)
- * @memberof ActionCreators
- */
-export function setWindowCompanionWindow(windowId, panelType, position) {
-  return {
-    type: ActionTypes.SET_WINDOW_COMPANION_WINDOW,
-    windowId,
-    panelType,
-    position,
-  };
 }
 
 /**
@@ -93,10 +81,40 @@ export function toggleWindowSideBarPanel(windowId, panelType) {
  * @memberof ActionCreators
  */
 export function popOutCompanionWindow(windowId, panelType, position) {
-  return ((dispatch) => {
-    dispatch(setWindowCompanionWindow(windowId, panelType, position));
+  return (dispatch, getState) => {
+    const { companionWindowIds } = getState().windows[windowId];
+    companionWindowIds.map(id => dispatch(removeCompanionWindow(id)));
+
+    const action = dispatch(addCompanionWindow({ content: panelType, position }));
+
+    const companionWindowId = action.id;
+    dispatch(updateWindow(windowId, { companionWindowIds: [companionWindowId] }));
+
     dispatch(toggleWindowSideBarPanel(windowId, 'closed'));
-  });
+  };
+}
+
+/**
+* Clean up state and remove window
+*/
+export function closeWindow(windowId) {
+  return (dispatch, getState) => {
+    const { companionWindowIds } = getState().windows[windowId];
+    companionWindowIds.map(id => dispatch(removeCompanionWindow(id)));
+    dispatch(removeWindow(windowId));
+  };
+}
+
+/**
+* Close companion window and remove reference from window
+*/
+export function closeCompanionWindow(windowId, companionWindowId) {
+  return (dispatch, getState) => {
+    dispatch(removeCompanionWindow(companionWindowId));
+    const companionWindowIds = getState().windows[windowId].companionWindowIds
+      .filter(id => id !== companionWindowId);
+    dispatch(updateWindow(windowId, { companionWindowIds }));
+  };
 }
 
 /**

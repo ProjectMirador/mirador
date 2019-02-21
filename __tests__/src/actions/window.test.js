@@ -15,6 +15,7 @@ describe('window actions', () => {
           id: 'helloworld',
           canvasIndex: 1,
           collectionIndex: 0,
+          companionWindowIds: [],
           manifestId: null,
           rangeId: null,
           thumbnailNavigationPosition: 'bottom',
@@ -26,6 +27,20 @@ describe('window actions', () => {
       expect(actions.addWindow(options)).toEqual(expectedAction);
     });
   });
+
+  describe('updateWindow', () => {
+    it('should return correct action object', () => {
+      const payload = {
+        foo: 1,
+        bar: 2,
+      };
+      const action = actions.updateWindow('window-123', payload);
+      expect(action.type).toBe(ActionTypes.UPDATE_WINDOW);
+      expect(action.id).toBe('window-123');
+      expect(action.payload).toEqual(payload);
+    });
+  });
+
   describe('removeWindow', () => {
     it('removes the window and returns windowId', () => {
       const id = 'abc123';
@@ -85,36 +100,43 @@ describe('window actions', () => {
     });
   });
 
-  describe('setWindowCompanionWindow', () => {
-    it('returns the appropriate action type', () => {
-      const windowId = 'abc123';
-      const panelType = 'info';
-      const position = 'right';
-      const expectedAction = {
-        type: ActionTypes.SET_WINDOW_COMPANION_WINDOW,
-        windowId,
-        panelType,
-        position,
-      };
-      expect(actions.setWindowCompanionWindow(windowId, 'info', 'right')).toEqual(expectedAction);
-    });
-  });
-
   describe('popOutCompanionWindow', () => {
     it('returns a thunk which dispatches the appropriate actions', () => {
-      const mockDispatch = jest.fn();
+      const mockState = {
+        windows: {
+          abc123: {
+            companionWindowIds: ['cw-1'],
+          },
+        },
+      };
+      const mockDispatch = jest.fn(() => ({ id: 'cw-1' }));
+      const mockGetState = jest.fn(() => mockState);
       const windowId = 'abc123';
       const panelType = 'info';
       const position = 'right';
       const thunk = actions.popOutCompanionWindow(windowId, panelType, position);
 
       expect(typeof thunk).toEqual('function');
-      thunk(mockDispatch);
-      expect(mockDispatch).toHaveBeenCalledTimes(2);
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: ActionTypes.SET_WINDOW_COMPANION_WINDOW, windowId, panelType, position,
+      thunk(mockDispatch, mockGetState);
+      expect(mockDispatch).toHaveBeenCalledTimes(4);
+
+      expect(mockDispatch).toHaveBeenNthCalledWith(1, {
+        type: ActionTypes.REMOVE_COMPANION_WINDOW,
+        id: 'cw-1',
       });
-      expect(mockDispatch).toHaveBeenCalledWith({
+
+      const addCompanionWindowAction = mockDispatch.mock.calls[1][0];
+      expect(addCompanionWindowAction.type).toBe(ActionTypes.ADD_COMPANION_WINDOW);
+      expect(addCompanionWindowAction.payload).toEqual({ content: 'info', position: 'right' });
+      expect(addCompanionWindowAction.id.startsWith('cw-')).toBe(true);
+
+      expect(mockDispatch).toHaveBeenNthCalledWith(3, {
+        type: ActionTypes.UPDATE_WINDOW,
+        id: 'abc123',
+        payload: { companionWindowIds: ['cw-1'] },
+      });
+
+      expect(mockDispatch).toHaveBeenNthCalledWith(4, {
         type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL, windowId, panelType: 'closed',
       });
     });

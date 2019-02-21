@@ -1,3 +1,4 @@
+import { updateIn, merge } from 'immutable';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -7,6 +8,10 @@ export const windowsReducer = (state = {}, action) => {
   switch (action.type) {
     case ActionTypes.ADD_WINDOW:
       return { ...state, [action.window.id]: action.window };
+
+    case ActionTypes.UPDATE_WINDOW:
+      return updateIn(state, [action.id], orig => merge(orig, action.payload));
+
     case ActionTypes.REMOVE_WINDOW:
       return Object.keys(state).reduce((object, key) => {
         if (key !== action.windowId) {
@@ -48,17 +53,6 @@ export const windowsReducer = (state = {}, action) => {
               ? 'closed'
               : action.panelType
           ),
-        },
-      };
-    case ActionTypes.SET_WINDOW_COMPANION_WINDOW:
-      return {
-        ...state,
-        [action.windowId]: {
-          ...state[action.windowId],
-          companionWindows: {
-            ...state[action.windowId].companionWindows,
-            [action.position]: action.panelType,
-          },
         },
       };
     case ActionTypes.NEXT_CANVAS:

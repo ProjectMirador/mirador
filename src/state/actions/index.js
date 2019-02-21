@@ -2,6 +2,7 @@
  * Action Creators for Mirador
  * @namespace ActionCreators
  */
+export * from './companionWindow';
 export * from './config';
 export * from './window';
 export * from './manifest';

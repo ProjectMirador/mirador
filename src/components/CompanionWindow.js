@@ -17,8 +17,9 @@ class CompanionWindow extends Component {
    * @return React Component
    */
   activePanelComponent() {
-    const { windowId, panelContent } = this.props;
-    switch (panelContent) {
+    const { content, windowId } = this.props;
+
+    switch (content) {
       case 'info':
         return <WindowSideBarInfoPanel windowId={windowId} />;
       case 'canvas_navigation':
@@ -34,8 +35,9 @@ class CompanionWindow extends Component {
    */
   render() {
     const {
-      classes, closeCompanionWindow, isDisplayed, position, t, windowId,
+      classes, id, onCloseClick, isDisplayed, position, t, windowId,
     } = this.props;
+
     return (
       <Paper
         className={[classes.root, ns(`companion-window-${position}`)].join(' ')}
@@ -46,7 +48,7 @@ class CompanionWindow extends Component {
         <IconButton
           aria-label={t('closeCompanionWindow')}
           className={classes.closeButton}
-          onClick={() => { closeCompanionWindow(windowId, null, position); }}
+          onClick={() => { onCloseClick(windowId, id); }}
         >
           <CloseIcon />
         </IconButton>
@@ -57,18 +59,20 @@ class CompanionWindow extends Component {
 
 CompanionWindow.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
-  closeCompanionWindow: PropTypes.func,
+  content: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  onCloseClick: PropTypes.func,
+  position: PropTypes.string,
   isDisplayed: PropTypes.bool,
-  panelContent: PropTypes.string,
-  position: PropTypes.string.isRequired,
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };
 
 CompanionWindow.defaultProps = {
-  closeCompanionWindow: () => {},
-  panelContent: null,
+  content: null,
+  onCloseClick: () => {},
   isDisplayed: false,
+  position: null,
   t: key => key,
 };
 
