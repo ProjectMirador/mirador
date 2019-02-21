@@ -68,7 +68,7 @@ class ThumbnailNavigation extends Component {
         >
           {currentGroupings.map((canvas, i) => (
             <div
-              key={i} // eslint-disable-line react/no-array-index-key
+              key={canvas.index}
               style={{ position: 'absolute', left: (style.width - 8) * i / 2, top: 2 }}
             >
               <CanvasThumbnail
