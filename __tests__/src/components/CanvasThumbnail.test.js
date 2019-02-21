@@ -16,11 +16,11 @@ describe('CanvasThumbnail', () => {
 
   it('renders properly', () => {
     expect(wrapper.matchesElement(
-      <div>
+      <>
         <IntersectionObserver onChange={wrapper.instance().handleIntersection}>
           <img alt="" />
         </IntersectionObserver>
-      </div>,
+      </>,
     )).toBe(true);
   });
 

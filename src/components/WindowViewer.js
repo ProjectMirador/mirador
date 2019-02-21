@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import OSDViewer from '../containers/OpenSeadragonViewer';
 import ViewerNavigation from '../containers/ViewerNavigation';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
+import CanvasGroupings from '../lib/CanvasGroupings';
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -15,8 +16,9 @@ class WindowViewer extends Component {
   constructor(props) {
     super(props);
 
-    const { manifest } = this.props;
+    const { manifest, window } = this.props;
     this.canvases = manifest.manifestation.getSequences()[0].getCanvases();
+    this.canvasGroupings = new CanvasGroupings(this.canvases, window.view);
   }
 
   /**
@@ -46,6 +48,10 @@ class WindowViewer extends Component {
         fetchInfoResponse(new ManifestoCanvas(canvas).imageInformationUri);
       });
     }
+    // If the view changes, create a new instance
+    if (prevProps.window.view !== window.view) {
+      this.canvasGroupings = new CanvasGroupings(this.canvases, window.view);
+    }
   }
 
   /**
@@ -62,28 +68,12 @@ class WindowViewer extends Component {
   }
 
   /**
-   * Figures out how many and what canvases to present to a user based off of
-   * the view, number of canvases, and canvasIndex.
+   * Uses CanvasGroupings to figure out how many and what canvases to present to
+   * a user based off of the view, number of canvases, and canvasIndex.
    */
   currentCanvases() {
     const { window } = this.props;
-    switch (window.view) {
-      case 'book':
-        if ( // FIXME: There is probably better logic floating around out there to determine this.
-          this.canvases.length > 0 // when there are canvases present
-          && window.canvasIndex !== 0 // when the first canvas is not selected
-          && window.canvasIndex + 1 !== this.canvases.length // when the last canvas is not selected
-        ) {
-          // For an even canvas
-          if (window.canvasIndex % 2 === 0) {
-            return [this.canvases[window.canvasIndex - 1], this.canvases[window.canvasIndex]];
-          }
-          return [this.canvases[window.canvasIndex], this.canvases[window.canvasIndex + 1]];
-        }
-        return [this.canvases[window.canvasIndex]];
-      default:
-        return [this.canvases[window.canvasIndex]];
-    }
+    return this.canvasGroupings.getCanvases(window.canvasIndex);
   }
 
   /**

@@ -40,7 +40,7 @@ export default class CanvasThumbnail extends Component {
     const { loaded, image } = this.state;
     const imgStyle = { height, width: '100%', ...style };
     return (
-      <div>
+      <>
         <IntersectionObserver onChange={this.handleIntersection}>
           <img
             alt=""
@@ -51,7 +51,7 @@ export default class CanvasThumbnail extends Component {
             style={imgStyle}
           />
         </IntersectionObserver>
-      </div>
+      </>
     );
   }
 }
