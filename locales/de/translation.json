@@ -45,8 +45,6 @@
     "zoomReset": "Ansicht zurücksetzen",
     "hideZoomControls": "Zoom-Steuerung verbergen",
     "showZoomControls": "Zoom-Steuerung anzeigen",
-    "numItems": "{{number}} Elemente",
-
-
+    "numItems": "{{number}} Elemente"
   }
 }
