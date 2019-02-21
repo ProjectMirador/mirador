@@ -22,7 +22,7 @@ export default class CanvasThumbnail extends Component {
   handleIntersection(event) {
     const { imageUrl } = this.props;
     const { loaded } = this.state;
-    if (loaded) return;
+    if (loaded || !event.isIntersecting) return;
     const image = new Image();
     image.src = imageUrl;
     this.setState({
