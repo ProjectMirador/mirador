@@ -46,7 +46,7 @@ describe('ThumbnailNavigation', () => {
     expect(wrapper.find('.mirador-thumbnail-nav-canvas-1.mirador-current-canvas'));
   });
   it('when clicked, updates the current canvas', () => {
-    renderedGrid.find('.mirador-thumbnail-nav-canvas-0').simulate('click');
+    renderedGrid.find('.mirador-thumbnail-nav-canvas-0 CanvasThumbnail').simulate('click');
     expect(setCanvas).toHaveBeenCalledWith('foobar', 0);
   });
   it('sets up calculated width based off of height of area and dimensions of canvas', () => {
