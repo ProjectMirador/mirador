@@ -1,0 +1,42 @@
+{
+  "@id": "https://manifests.britishart.yale.edu/Osbornfa1",
+  "@type": "sc:Manifest",
+  "description": "Osborn fa1 IIIF Manifest created for the Digitally Enabled Scholarship with Medieval Manuscripts project at Yale University.",
+  "label": "New Haven, Beinecke Rare Book and Manuscript Library, Yale University, Osborn fa1",
+  "sequences": [
+    {
+      "@id": "https://manifests.britishart.yale.edu/sequence/Osbornfa1",
+      "@type": "sc:Sequence",
+      "canvases": [
+        {
+          "@id": "http://scale.ydc2.yale.edu/canvas/684c8053-0247-45a2-b55d-10dd3defebe4",
+          "@type": "sc:Canvas",
+          "height": 4438,
+          "images": [
+            {
+              "@id": "http://scale.ydc2.yale.edu/annotation/b38081da-8991-4464-a71e-d9891226a35f",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "http://scale.ydc2.yale.edu/canvas/684c8053-0247-45a2-b55d-10dd3defebe4",
+              "resource": {
+                "@id": "https://images.britishart.yale.edu/iiif/b38081da-8991-4464-a71e-d9891226a35f/full/full/0/native.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 4438,
+                "label": "Osborn fa1, [Bookplates]",
+                "service": {
+                  "@id": "https://images.britishart.yale.edu/iiif/b38081da-8991-4464-a71e-d9891226a35f/",
+                  "profile": "http://library.stanford.edu/iiif/image-api/1.1/conformance.html#level1",
+                  "@context": "http://iiif.io/api/image/1/context.json"
+                },
+                "width": 3603
+              }
+            }
+          ],
+          "label": "Osborn fa1, [Bookplates]",
+          "width": 3603
+        }
+      ]
+    }
+  ]
+}
