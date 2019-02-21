@@ -192,3 +192,12 @@ export function getCompanionWindowForPosition(state, windowId, position) {
     cw.windowId === windowId && cw.position === position
   ));
 }
+
+/**
+* Return compantion window ids from a window
+* @param {String} windowId
+* @return {Array}
+*/
+export function getCompantionWindowIds(state, windowId) {
+  return state.windows[windowId].companionWindowIds;
+}

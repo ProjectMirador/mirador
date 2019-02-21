@@ -24,7 +24,7 @@ class WindowTopBar extends Component {
    */
   render() {
     const {
-      removeWindow, windowId, classes, toggleWindowSideBar, t, manifestTitle,
+      closeWindow, windowId, classes, toggleWindowSideBar, t, manifestTitle,
     } = this.props;
     return (
       <AppBar position="relative">
@@ -46,7 +46,7 @@ class WindowTopBar extends Component {
             color="inherit"
             className={ns('window-close')}
             aria-label={t('closeWindow')}
-            onClick={removeWindow}
+            onClick={closeWindow}
           >
             <CloseIcon />
           </IconButton>
@@ -58,7 +58,7 @@ class WindowTopBar extends Component {
 
 WindowTopBar.propTypes = {
   manifestTitle: PropTypes.string,
-  removeWindow: PropTypes.func.isRequired,
+  closeWindow: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   toggleWindowSideBar: PropTypes.func.isRequired,
