@@ -24,7 +24,6 @@ const mapDispatchToProps = {
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  miradorWithPlugins,
   // further HOC go here
 );
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import OpenSeadragon from 'openseadragon';
 import debounce from 'lodash/debounce';
@@ -6,215 +6,197 @@ import ns from '../config/css-ns';
 import ZoomControls from '../containers/ZoomControls';
 
 /**
- * Represents a OpenSeadragonViewer in the mirador workspace. Responsible for mounting
+ * usePrevious Hook
+ * @param value
+ * @returns {any}
+ */
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
+
+/**
+ * Represents an OpenSeadragonViewer in the mirador workspace. Responsible for mounting
  * and rendering OSD.
  */
-class OpenSeadragonViewer extends Component {
-  /**
-   * @param {Object} props
-   */
-  constructor(props) {
-    super(props);
+const OpenSeadragonViewer = (props) => {
+  const {
+    tileSources, viewer, windowId, children, updateViewport,
+  } = props;
+  const osdRef = useRef();
+  const viewerInstance = useRef();
+  const wholeBounds = useRef();
+  const prevTileSources = usePrevious(tileSources);
 
-    this.viewer = null;
-    this.ref = React.createRef();
-    this.onViewportChange = this.onViewportChange.bind(this);
-  }
-
-  /**
-   * React lifecycle event
-   */
-  componentDidMount() {
-    const { tileSources, viewer } = this.props;
-    if (!this.ref.current) {
-      return;
-    }
-    this.viewer = new OpenSeadragon({
-      id: this.ref.current.id,
-      preserveViewport: true,
-      blendTime: 0.1,
-      alwaysBlend: false,
-      showNavigationControl: false,
-      preserveImageSizeOnResize: true,
-    });
-    this.viewer.addHandler('viewport-change', debounce(this.onViewportChange, 300));
-
-    if (viewer) {
-      this.viewer.viewport.panTo(viewer, false);
-      this.viewer.viewport.zoomTo(viewer.zoom, viewer, false);
+  useEffect(() => {
+    if (!viewerInstance.current) {
+      viewerInstance.current = new OpenSeadragon({
+        id: osdRef.current.id,
+        preserveViewport: true,
+        blendTime: 0.1,
+        alwaysBlend: false,
+        showNavigationControl: false,
+        preserveImageSizeOnResize: true,
+      });
     }
 
-    tileSources.forEach((tileSource, i) => this.addTileSource(tileSource, i));
-  }
+    if (viewerInstance.current) {
+      // set update viewer state handler
+      viewerInstance.current.addHandler('viewport-change', debounce(onViewportChange, 300));
+      if (viewer) {
+        const { viewport } = viewerInstance.current;
+        // set initial zoom
+        viewport.panTo(viewer, false);
+        viewport.zoomTo(viewer.zoom, viewer, false);
+        if (viewer.x !== viewport.centerSpringX.target.value
+          || viewer.y !== viewport.centerSpringY.target.value) {
+          viewport.panTo(viewer, false);
+        }
+        if (viewer.zoom !== viewport.zoomSpring.target.value) {
+          viewport.zoomTo(viewer.zoom, viewer, false);
+        }
+      }
+      // build bounds for all tile sources
+      wholeBounds.current = boundsFromTileSources();
+      // add tile sources to viewerInstance
+      tileSources.forEach((tileSource, i) => addTileSource(tileSource, i));
+    }
 
-  /**
-   * When the tileSources change, make sure to close the OSD viewer.
-   * When the viewport state changes, pan or zoom the OSD viewer as appropriate
-   */
-  componentDidUpdate(prevProps) {
-    const { tileSources, viewer } = this.props;
-    if (!this.tileSourcesMatch(prevProps.tileSources)) {
-      this.viewer.close();
+    // check for new tile sources
+    if (!tileSourcesMatch()) {
+      viewerInstance.current.close();
       Promise.all(
-        tileSources.map((tileSource, i) => this.addTileSource(tileSource, i)),
+        tileSources.map((tileSource, i) => addTileSource(tileSource, i)),
       ).then(() => {
         if (tileSources[0]) {
-          this.fitBounds(...this.boundsFromTileSources(), true);
+          fitBounds(...boundsFromTileSources(), true);
         }
       });
-    } else if (viewer) {
-      const { viewport } = this.viewer;
-
-      if (viewer.x !== viewport.centerSpringX.target.value
-        || viewer.y !== viewport.centerSpringY.target.value) {
-        this.viewer.viewport.panTo(viewer, false);
-      }
-
-      if (viewer.zoom !== viewport.zoomSpring.target.value) {
-        this.viewer.viewport.zoomTo(viewer.zoom, viewer, false);
-      }
     }
-  }
+    // clean up
+    return () => {
+      viewerInstance.current.removeAllHandlers();
+    };
+  });
 
   /**
+   *
+   * @param tileSource
+   * @param i
+   * @returns {Promise<any>}
    */
-  componentWillUnmount() {
-    this.viewer.removeAllHandlers();
-  }
+  const addTileSource = (tileSource, i = 0) => new Promise((resolve, reject) => {
+    const bounds = boundingRectFromTileSource(tileSource, i);
+    const rect = new OpenSeadragon.Rect(...bounds);
+    viewerInstance.current.addTiledImage({
+      tileSource,
+      fitBounds: rect,
+      success: event => resolve(event),
+      error: event => reject(event),
+    });
+  });
+
 
   /**
    * Forward OSD state to redux
    */
-  onViewportChange(event) {
-    const { updateViewport, windowId } = this.props;
-
-    const { viewport } = event.eventSource;
-
+  const onViewportChange = (e) => {
+    const { viewport } = e.eventSource;
     updateViewport(windowId, {
       x: viewport.centerSpringX.target.value,
       y: viewport.centerSpringY.target.value,
       zoom: viewport.zoomSpring.target.value,
     });
-  }
+  };
 
   /**
    * boundsFromTileSources - calculates the overall width/height
    * based on 0 -> n tileSources
    */
-  boundsFromTileSources() {
-    const { tileSources } = this.props;
+  const boundsFromTileSources = () => {
     const heights = [];
     const dimensions = [];
-    tileSources.forEach((tileSource) => {
-      heights.push(tileSource.height);
-      dimensions.push({
-        width: tileSource.width,
-        height: tileSource.height,
+    if (tileSources.length) {
+      tileSources.forEach((tileSource) => {
+        heights.push(tileSource.height);
+        dimensions.push({
+          width: tileSource.width, height: tileSource.height,
+        });
       });
-    });
-    const minHeight = Math.min(...heights);
-    let scaledWidth = 0;
-    dimensions.forEach((dim) => {
-      const aspectRatio = dim.width / dim.height;
-      scaledWidth += Math.floor(minHeight * aspectRatio);
-    });
-    return [
-      0,
-      0,
-      scaledWidth,
-      minHeight,
-    ];
-  }
+      const minHeight = Math.min(...heights);
+      let scaledWidth = 0;
+      dimensions.forEach((dim) => {
+        const aspectRatio = dim.width / dim.height;
+        scaledWidth += Math.floor(minHeight * aspectRatio);
+      });
+      return [0, 0, scaledWidth, minHeight];
+    }
+    return null;
+  };
 
   /**
    * boundingRectFromTileSource - Creates a bounding rectangle
    * in the Viewports space, using the current tileSource and the tileSource
    * total area. Limitation, can only handle tileSources with a length of 1 or 2
    */
-  boundingRectFromTileSource(tileSource, i) {
-    const { tileSources } = this.props;
-    const wholeBounds = this.boundsFromTileSources();
-    const { width } = tileSources[i];
-    const { height } = tileSources[i];
-    const aspectRatio = width / height;
-    const scaledWidth = Math.floor(wholeBounds[3] * aspectRatio);
-    let x = 0;
-    if (i === 1) {
-      x = wholeBounds[2] - scaledWidth;
-    }
-    return [
-      x,
-      0,
-      scaledWidth,
-      wholeBounds[3],
-    ];
-  }
-
-  /**
-   */
-  addTileSource(tileSource, i = 0) {
-    return new Promise((resolve, reject) => {
-      if (!this.viewer) {
-        return;
+  const boundingRectFromTileSource = (tileSource, i) => {
+    if (wholeBounds.current) {
+      const aspectRatio = tileSource.width / tileSource.height;
+      const scaledWidth = Math.floor(wholeBounds.current[3] * aspectRatio);
+      let x = 0;
+      if (i === 1) {
+        x = wholeBounds.current[2] - scaledWidth;
       }
-      this.viewer.addTiledImage({
-        tileSource,
-        fitBounds: new OpenSeadragon.Rect(
-          ...this.boundingRectFromTileSource(tileSource, i),
-        ),
-        success: event => resolve(event),
-        error: event => reject(event),
-      });
-    });
-  }
+      return [x, 0, scaledWidth, wholeBounds.current[3]];
+    }
+    return null;
+  };
 
   /**
+   *
+   * @param x
+   * @param y
+   * @param w
+   * @param h
    */
-  fitBounds(x, y, w, h) {
-    this.viewer.viewport.fitBounds(
+  const fitBounds = (x, y, w, h) => {
+    viewerInstance.current.viewport.fitBounds(
       new OpenSeadragon.Rect(x, y, w, h),
       true,
     );
-  }
+  };
 
   /**
    * tileSourcesMatch - compares previous tileSources to current to determine
    * whether a refresh of the OSD viewer is needed.
-   * @param  {Array} prevTileSources
    * @return {Boolean}
    */
-  tileSourcesMatch(prevTileSources) {
-    const { tileSources } = this.props;
-    return tileSources.some((tileSource, index) => {
+  const tileSourcesMatch = () => tileSources.some((tileSource, index) => {
+    if (prevTileSources) {
       if (!prevTileSources[index]) {
         return false;
       }
-      if (tileSource['@id'] === prevTileSources[index]['@id']) {
-        return true;
-      }
-      return false;
-    });
-  }
+      return tileSource['@id'] === prevTileSources[index]['@id'];
+    }
+    return null;
+  });
 
-  /**
-   * Renders things
-   */
-  render() {
-    const { windowId, children } = this.props;
-    return (
-      <>
-        <div
-          className={ns('osd-container')}
-          id={`${windowId}-osd`}
-          ref={this.ref}
-        >
-          { children }
-        </div>
-        <ZoomControls windowId={windowId} />
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <div
+        className={ns('osd-container')}
+        id={`${windowId}-osd`}
+        ref={osdRef}
+      >
+        { children }
+      </div>
+      <ZoomControls windowId={windowId} />
+    </>
+  );
+};
 
 OpenSeadragonViewer.defaultProps = {
   children: null,
