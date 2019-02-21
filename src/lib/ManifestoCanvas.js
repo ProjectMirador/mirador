@@ -25,7 +25,9 @@ export default class ManifestoCanvas {
   /**
    */
   get imageInformationUri() {
-    return `${this.canvas.getImages()[0].getResource().getServices()[0].id}/info.json`;
+    return `${
+      this.canvas.getImages()[0].getResource().getServices()[0].id.replace(/\/$/, '')
+    }/info.json`;
   }
 
   /**
