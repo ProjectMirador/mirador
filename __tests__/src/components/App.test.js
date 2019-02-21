@@ -13,6 +13,7 @@ import i18n from '../../../src/i18n';
 function createWrapper(props) {
   return shallow(
     <App
+      language="en"
       isFullscreenEnabled={false}
       isWorkspaceControlPanelVisible
       setWorkspaceFullscreen={() => {}}
@@ -79,5 +80,15 @@ describe('App', () => {
 
     expect(wrapper.find(Workspace).length).toBe(0);
     expect(wrapper.find(WorkspaceAdd).length).toBe(1);
+  });
+
+  describe('componentDidUpdate()', () => {
+    it('changes the i18n language if the language prop has been updated', () => {
+      const wrapper = createWrapper();
+
+      expect(i18n.language).toEqual('en');
+      wrapper.setProps({ language: 'de' });
+      expect(i18n.language).toEqual('de');
+    });
   });
 });

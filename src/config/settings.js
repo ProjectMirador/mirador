@@ -10,6 +10,7 @@ export default {
       useNextVariants: true // set so that console deprecation warning is removed
     }
   },
+  language: 'en',
   translations: {
   },
   window: {
