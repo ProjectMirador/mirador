@@ -31,7 +31,11 @@ const mapStateToProps = (state, { manifestId }) => {
  */
 const mapDispatchToProps = { addWindow: actions.addWindow, fetchManifest: actions.fetchManifest };
 
-/** */
+/**
+ *
+ * @param theme
+ * @returns {{root: {}, label: {textAlign: string, textTransform: string}}}
+ */
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),

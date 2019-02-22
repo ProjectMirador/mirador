@@ -79,4 +79,4 @@ WorkspaceMenuButton.defaultProps = {
   t: key => key,
 };
 
-export default (WorkspaceMenuButton);
+export default WorkspaceMenuButton;

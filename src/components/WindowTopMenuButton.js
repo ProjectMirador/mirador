@@ -77,4 +77,4 @@ WindowTopMenuButton.defaultProps = {
   t: key => key,
 };
 
-export default (WindowTopMenuButton);
+export default WindowTopMenuButton;

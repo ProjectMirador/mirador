@@ -5,7 +5,9 @@ import miradorWithPlugins from '../lib/miradorWithPlugins';
 import WorkspaceMenuButton from '../components/WorkspaceMenuButton';
 
 /**
- * @private
+ *
+ * @param theme
+ * @returns {{ctrlBtn: {margin: (number|string)}}}
  */
 const styles = theme => ({
   ctrlBtn: {
