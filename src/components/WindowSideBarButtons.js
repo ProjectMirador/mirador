@@ -37,7 +37,7 @@ export class WindowSideBarButtons extends Component {
           onClick={() => (toggleWindowSideBarPanel('info'))}
         >
           <InfoIcon
-            color={this.sideBarPanelCurrentlySelected('info') ? 'primary' : 'inherit'}
+            color={this.sideBarPanelCurrentlySelected('info') ? 'secondary' : 'inherit'}
           />
         </IconButton>
         <IconButton
@@ -49,7 +49,7 @@ export class WindowSideBarButtons extends Component {
           onClick={() => (toggleWindowSideBarPanel('canvas_navigation'))}
         >
           <CanvasIndexIcon
-            color={this.sideBarPanelCurrentlySelected('canvas_navigation') ? 'primary' : 'inherit'}
+            color={this.sideBarPanelCurrentlySelected('canvas_navigation') ? 'secondary' : 'inherit'}
           />
         </IconButton>
       </>
