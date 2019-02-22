@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Fullscreen from 'react-fullscreen-crossbrowser';
 import { I18nextProvider } from 'react-i18next';
-import WorkspaceControlPanel from './WorkspaceControlPanel';
+import WorkspaceControlPanel from '../containers/WorkspaceControlPanel';
 import Workspace from '../containers/Workspace';
 import WorkspaceAdd from '../containers/WorkspaceAdd';
 import ns from '../config/css-ns';
@@ -68,14 +68,6 @@ App.defaultProps = {
   isFullscreenEnabled: false,
   isWorkspaceAddVisible: false,
 };
-/**
- Material UI style overrides
- @private
- */
-const styles = theme => ({
-  background: {
-    background: theme.palette.background.default,
-  },
-});
 
-export default withStyles(styles)(App);
+
+export default App;

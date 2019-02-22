@@ -7,7 +7,7 @@ describe('WorkspaceMenuButton', () => {
   beforeEach(() => {
     wrapper = shallow(
       <WorkspaceMenuButton classes={{}} />,
-    ).dive();
+    );
   });
 
   it('renders without an error', () => {

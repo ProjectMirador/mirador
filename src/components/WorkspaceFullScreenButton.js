@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import ListItem from '@material-ui/core/ListItem';
-import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
 /**
@@ -34,13 +33,4 @@ WorkspaceFullScreenButton.defaultProps = {
   t: key => key,
 };
 
-/**
- * @private
- */
-const styles = theme => ({
-  ctrlBtn: {
-    margin: theme.spacing.unit,
-  },
-});
-
-export default withStyles(styles)(WorkspaceFullScreenButton);
+export default WorkspaceFullScreenButton;

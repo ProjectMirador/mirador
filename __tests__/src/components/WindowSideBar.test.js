@@ -5,7 +5,7 @@ import WindowSideBar from '../../../src/components/WindowSideBar';
 describe('WindowSideBar', () => {
   let wrapper;
   beforeEach(() => {
-    wrapper = shallow(<WindowSideBar windowId="1" classes={{}} />).dive();
+    wrapper = shallow(<WindowSideBar windowId="1" classes={{}} />);
   });
 
   it('renders without an error', () => {

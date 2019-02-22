@@ -13,7 +13,7 @@ function createWrapper(props) {
       t={str => str}
       {...props}
     />,
-  ).dive(); // unwrap HOC created by withStyles()
+  );
 }
 
 describe('WorkspaceAddButton', () => {

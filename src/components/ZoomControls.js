@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -117,18 +116,4 @@ ZoomControls.defaultProps = {
   t: key => key,
 };
 
-/**
- * @private
- */
-const styles = theme => ({
-  zoom_controls: {
-    position: 'absolute',
-    right: 0,
-  },
-  ListItem: {
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
-});
-
-export default withStyles(styles)(ZoomControls);
+export default ZoomControls;

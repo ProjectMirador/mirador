@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
+import { withStyles } from '@material-ui/core';
 import {
   getManifestTitle, getManifestLogo, getManifestThumbnail, getManifestCanvases, getManifestProvider,
 } from '../state/selectors';
@@ -30,10 +31,21 @@ const mapStateToProps = (state, { manifestId }) => {
  */
 const mapDispatchToProps = { addWindow: actions.addWindow, fetchManifest: actions.fetchManifest };
 
+/** */
+const styles = theme => ({
+  root: {
+    ...theme.mixins.gutters(),
+  },
+  label: {
+    textTransform: 'initial',
+    textAlign: 'left',
+  },
+});
+
 const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
   withNamespaces(),
-  // further HOC go here
+  withStyles(styles),
+  connect(mapStateToProps, mapDispatchToProps),
 );
 
 export default enhance(ManifestListItem);

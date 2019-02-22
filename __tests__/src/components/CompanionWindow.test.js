@@ -14,7 +14,7 @@ function createWrapper(props) {
       position="right"
       {...props}
     />,
-  ).dive(); // unwrap HOC created by withStyles()
+  );
 }
 
 describe('CompanionWindow', () => {

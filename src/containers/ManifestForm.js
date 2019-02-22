@@ -12,9 +12,8 @@ import ManifestForm from '../components/ManifestForm';
 const mapDispatchToProps = { fetchManifest: actions.fetchManifest };
 
 const enhance = compose(
-  connect(null, mapDispatchToProps),
   withNamespaces(),
-  // further HOC go here
+  connect(null, mapDispatchToProps),
 );
 
 export default enhance(ManifestForm);

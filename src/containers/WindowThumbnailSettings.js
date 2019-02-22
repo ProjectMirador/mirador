@@ -25,8 +25,8 @@ const mapStateToProps = (state, props) => (
 );
 
 const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
   withNamespaces(),
+  connect(mapStateToProps, mapDispatchToProps),
   miradorWithPlugins,
   // further HOC go here
 );

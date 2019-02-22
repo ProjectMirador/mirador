@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Grid from '@material-ui/core/Grid';
@@ -161,15 +160,4 @@ ManifestListItem.defaultProps = {
   isFetching: false,
 };
 
-/** */
-const styles = theme => ({
-  root: {
-    ...theme.mixins.gutters(),
-  },
-  label: {
-    textTransform: 'initial',
-    textAlign: 'left',
-  },
-});
-
-export default withStyles(styles)(ManifestListItem);
+export default ManifestListItem;

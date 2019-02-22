@@ -24,7 +24,7 @@ function createWrapper(props) {
       toggleWindowSideBar={() => {}}
       {...props}
     />,
-  ).dive(); // unwrap HOC created by withStyles()
+  );
 }
 
 describe('WindowTopBar', () => {

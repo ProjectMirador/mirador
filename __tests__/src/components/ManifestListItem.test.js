@@ -15,7 +15,7 @@ function createWrapper(props) {
       t={t => t}
       {...props}
     />,
-  ).dive(); // to unwrapp HOC created by withStyle()
+  );
 }
 
 describe('ManifestListItem', () => {

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ListItem from '@material-ui/core/ListItem';
-import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import WorkspaceMenu from '../containers/WorkspaceMenu';
 
@@ -80,13 +79,4 @@ WorkspaceMenuButton.defaultProps = {
   t: key => key,
 };
 
-/**
- * @private
- */
-const styles = theme => ({
-  ctrlBtn: {
-    margin: theme.spacing.unit,
-  },
-});
-
-export default withStyles(styles)(WorkspaceMenuButton);
+export default (WorkspaceMenuButton);

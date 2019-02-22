@@ -1,7 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import WorkspaceAdd from '../../../src/components/WorkspaceAdd';
+import ManifestListItem from '../../../src/containers/ManifestListItem';
 import fixture from '../../fixtures/version-2/002.json';
+import ManifestForm from '../../../src/containers/ManifestForm';
 
 /** create wrapper */
 function createWrapper(props) {
@@ -13,20 +15,20 @@ function createWrapper(props) {
       t={str => str}
       {...props}
     />,
-  ).dive();
+  );
 }
 
-describe('WorkspaceAddButton', () => {
+describe('WorkspaceAdd', () => {
   it('renders a list item for each manifest in the state', () => {
     const wrapper = createWrapper();
-    expect(wrapper.find('Connect(LoadNamespace(WithStyles(ManifestListItem)))').length).toBe(2);
+    expect(wrapper.find(ManifestListItem).length).toBe(2);
   });
 
   it('toggles the workspace visibility', () => {
     const setWorkspaceAddVisibility = jest.fn();
     const wrapper = createWrapper({ setWorkspaceAddVisibility });
 
-    wrapper.find('Connect(LoadNamespace(WithStyles(ManifestListItem)))').first().props().handleClose();
+    wrapper.find(ManifestListItem).first().props().handleClose();
     expect(setWorkspaceAddVisibility).toHaveBeenCalledWith(false);
   });
 
@@ -54,8 +56,8 @@ describe('WorkspaceAddButton', () => {
     const wrapper = createWrapper();
     wrapper.setState({ addResourcesOpen: true });
 
-    expect(wrapper.find('WithStyles(Drawer) Connect(LoadNamespace(ManifestForm))').length).toBe(1);
-    wrapper.find('WithStyles(Drawer) Connect(LoadNamespace(ManifestForm))').props().onCancel();
+    expect(wrapper.find('WithStyles(Drawer)').find(ManifestForm).length).toBe(1);
+    wrapper.find('WithStyles(Drawer)').find(ManifestForm).props().onCancel();
     expect(wrapper.find('WithStyles(Drawer)').props().open).toBe(false);
   });
 });
