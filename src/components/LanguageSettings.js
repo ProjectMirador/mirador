@@ -17,25 +17,25 @@ export default class LanguageSettings extends Component {
   */
   render() {
     const {
-      handleClick, languages, active,
+      handleClick, languages,
     } = this.props;
 
     return (
       <List>
         {
-          Object.keys(languages).map(language => (
+          languages.map(language => (
             <MenuItem
-              button={!(active(language))}
-              key={language}
-              onClick={() => { handleClick(language); }}
+              button={!language.current}
+              key={language.locale}
+              onClick={() => { handleClick(language.locale); }}
             >
               {
-                active(language)
+                language.current
                   && <ListItemIcon><CheckIcon /></ListItemIcon>
               }
               <ListItemText inset>
                 <Typography variant="inherit">
-                  {languages[language]}
+                  {language.label}
                 </Typography>
               </ListItemText>
             </MenuItem>
@@ -47,7 +47,12 @@ export default class LanguageSettings extends Component {
 }
 
 LanguageSettings.propTypes = {
-  active: PropTypes.func.isRequired,
   handleClick: PropTypes.func.isRequired,
-  languages: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  languages: PropTypes.arrayOf(
+    PropTypes.shape({
+      current: PropTypes.bool.isRequired,
+      label: PropTypes.string.isRequired,
+      locale: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };

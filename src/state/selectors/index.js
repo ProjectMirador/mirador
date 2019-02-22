@@ -201,3 +201,18 @@ export function getCompanionWindowForPosition(state, windowId, position) {
 export function getCompantionWindowIds(state, windowId) {
   return state.windows[windowId].companionWindowIds;
 }
+
+/**
+* Return languages from config (in state) and indicate which is currently set
+* @param {object} state
+* @return {Array} [ {locale: 'de', label: 'Deutsch', current: true}, ... ]
+*/
+export function getLanguagesFromConfigWithCurrent(state) {
+  const { availableLanguages, language } = state.config;
+
+  return Object.keys(availableLanguages).map(key => ({
+    locale: key,
+    label: availableLanguages[key],
+    current: key === language,
+  }));
+}

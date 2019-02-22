@@ -8,7 +8,6 @@ import LanguageSettings from '../../../src/components/LanguageSettings';
 function createWrapper(props) {
   return shallow(
     <LanguageSettings
-      active={lang => lang === 'de'}
       handleClick={() => {}}
       languages={{}}
       {...props}
@@ -18,10 +17,10 @@ function createWrapper(props) {
 
 describe('LanguageSettings', () => {
   let wrapper;
-  const languages = {
-    de: 'Deutsch',
-    en: 'English',
-  };
+  const languages = [
+    { locale: 'de', label: 'Deutsch', current: true },
+    { locale: 'en', label: 'English', current: false },
+  ];
 
 
   it('renders a list with a list item for each language passed in props', () => {
@@ -81,12 +80,5 @@ describe('LanguageSettings', () => {
 
     expect(mockHandleClick).toHaveBeenCalledTimes(1);
     expect(mockHandleClick).toHaveBeenCalledWith('en');
-  });
-
-  it('passes the language prop to the active prop function to determine if the given language is active', () => {
-    const mockActiveFn = jest.fn();
-    wrapper = createWrapper({ active: mockActiveFn, languages: { en: 'English' } });
-
-    expect(mockActiveFn).toHaveBeenCalledWith('en');
   });
 });

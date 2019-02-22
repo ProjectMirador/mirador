@@ -1,14 +1,13 @@
 import { connect } from 'react-redux';
 import * as actions from '../state/actions';
+import { getLanguagesFromConfigWithCurrent } from '../state/selectors';
 import LanguageSettings from '../components/LanguageSettings';
 
 /**
  * Map state to props for connect
  */
 const mapStateToProps = state => ({
-  languages: state.config.availableLanguages,
-  currentLanguage: state.config.language,
-  active: language => language === state.config.language,
+  languages: getLanguagesFromConfigWithCurrent(state),
 });
 
 /**
