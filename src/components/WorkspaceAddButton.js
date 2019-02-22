@@ -4,7 +4,6 @@ import ListItem from '@material-ui/core/ListItem';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import ClearIcon from '@material-ui/icons/Clear';
-import { withStyles } from '@material-ui/core/styles';
 
 /**
  */
@@ -49,13 +48,4 @@ WorkspaceAddButton.defaultProps = {
   isWorkspaceAddVisible: false,
 };
 
-/**
- * @private
- */
-const styles = theme => ({
-  ctrlBtn: {
-    margin: theme.spacing.unit,
-  },
-});
-
-export default withStyles(styles)(WorkspaceAddButton);
+export default WorkspaceAddButton;

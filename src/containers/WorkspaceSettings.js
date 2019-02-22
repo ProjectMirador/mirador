@@ -25,9 +25,8 @@ const mapStateToProps = state => (
 );
 
 const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
   withNamespaces(),
-  // further HOC go here
+  connect(mapStateToProps, mapDispatchToProps),
 );
 
 export default enhance(WorkspaceSettings);

@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
+import { withStyles } from '@material-ui/core/styles';
 import * as actions from '../state/actions';
 import WindowSideBarCanvasPanel from '../components/WindowSideBarCanvasPanel';
 import {
@@ -23,9 +24,27 @@ const mapStateToProps = (state, { windowId }) => {
 
 const mapDispatchToProps = { setCanvas: actions.setCanvas };
 
+/**
+ *
+ * @param theme
+ * @returns {{clickable: {cursor: string},
+ * label: {fontSize: string, paddingLeft: number}, windowSideBarH2: *}}
+ */
+const styles = theme => ({
+  windowSideBarH2: theme.typography.h5,
+  clickable: {
+    cursor: 'pointer',
+  },
+  label: {
+    fontSize: '8pt',
+    paddingLeft: 8,
+  },
+});
+
 const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
   withNamespaces(),
+  withStyles(styles),
+  connect(mapStateToProps, mapDispatchToProps),
 );
 
 export default enhance(WindowSideBarCanvasPanel);

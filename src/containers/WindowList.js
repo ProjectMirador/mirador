@@ -26,9 +26,8 @@ const mapStateToProps = state => (
 );
 
 const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
   withNamespaces(),
-  // further HOC
+  connect(mapStateToProps, mapDispatchToProps),
 );
 
 export default enhance(WindowList);

@@ -11,7 +11,12 @@ describe('WorkspaceControlPanel', () => {
   beforeEach(() => {
     store.dispatch(actions.receiveManifest('foo', fixture));
     store.dispatch(actions.receiveManifest('bar', fixture));
-    wrapper = shallow(<WorkspaceControlPanel store={store} />).dive();
+    wrapper = shallow(
+      <WorkspaceControlPanel
+        classes={{}}
+        store={store}
+      />,
+    );
   });
 
   it('renders without an error', () => {

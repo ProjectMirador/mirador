@@ -1,5 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/core/styles';
 import * as actions from '../state/actions';
 import App from '../components/App';
 
@@ -27,9 +28,20 @@ const mapDispatchToProps = {
   setWorkspaceFullscreen: actions.setWorkspaceFullscreen,
 };
 
+/**
+ *
+ * @param theme
+ * @returns {{background: {background: string}}}
+ */
+const styles = theme => ({
+  background: {
+    background: theme.palette.background.default,
+  },
+});
+
 const enhance = compose(
+  withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
-  // further HOC go here
 );
 
 export default enhance(App);

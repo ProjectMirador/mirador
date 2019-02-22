@@ -4,7 +4,6 @@ import Button from '@material-ui/core/Button';
 import ErrorIcon from '@material-ui/icons/ErrorOutline';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
 
 /**
  * ManifestListItemError renders a component displaying a
@@ -61,19 +60,4 @@ ManifestListItemError.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-/**
- Material UI styles
- @private
- */
-const styles = theme => ({
-  errorIcon: {
-    color: theme.palette.error.main,
-    height: '2rem',
-    width: '2rem',
-  },
-  manifestIdText: {
-    wordBreak: 'break-all',
-  },
-});
-
-export default withStyles(styles)(ManifestListItemError);
+export default ManifestListItemError;

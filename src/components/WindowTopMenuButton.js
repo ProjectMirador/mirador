@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import WindowTopMenu from '../containers/WindowTopMenu';
 
@@ -78,13 +77,4 @@ WindowTopMenuButton.defaultProps = {
   t: key => key,
 };
 
-/**
- * @private
- */
-const styles = theme => ({
-  ctrlBtn: {
-    margin: theme.spacing.unit,
-  },
-});
-
-export default withStyles(styles)(WindowTopMenuButton);
+export default WindowTopMenuButton;

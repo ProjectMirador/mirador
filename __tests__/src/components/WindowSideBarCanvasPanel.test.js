@@ -27,7 +27,7 @@ describe('WindowSideBarCanvasPanel', () => {
         setCanvas={setCanvas}
         config={{ canvasNavigation: { height: 100 } }}
       />,
-    ).dive();
+    );
   });
 
   it('renders all needed elements', () => {

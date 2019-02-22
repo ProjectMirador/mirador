@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { withStyles } from '@material-ui/core';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import WindowSideBar from '../components/WindowSideBar';
 
@@ -15,10 +16,30 @@ const mapStateToProps = (state, props) => (
   }
 );
 
+/**
+ *
+ * @param theme
+ * @returns {{toolbar: CSSProperties | toolbar | {minHeight}, grow: {flexGrow: number},
+ * drawer: {overflowX: string, left: number, flexShrink: number, width: number, height: string}}}
+ */
+const styles = theme => ({
+  toolbar: theme.mixins.toolbar,
+  drawer: {
+    overflowX: 'hidden',
+    left: 0,
+    width: 55,
+    flexShrink: 0,
+    height: '100%',
+  },
+  grow: {
+    flexGrow: 1,
+  },
+});
+
 const enhance = compose(
+  withStyles(styles),
   connect(mapStateToProps, null),
   miradorWithPlugins,
-  // further HOC
 );
 
 export default enhance(WindowSideBar);

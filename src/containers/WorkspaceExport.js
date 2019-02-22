@@ -12,10 +12,9 @@ import WorkspaceExport from '../components/WorkspaceExport';
 const mapStateToProps = state => ({ state });
 
 const enhance = compose(
+  withNamespaces(),
   connect(mapStateToProps, {}),
   miradorWithPlugins,
-  withNamespaces(),
-  // further HOC go here
 );
 
 export default enhance(WorkspaceExport);

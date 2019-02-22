@@ -21,7 +21,7 @@ describe('WindowSideBarInfoPanel', () => {
           manifestMetadata={metadata}
           t={str => str}
         />,
-      ).dive();
+      );
     });
 
     it('renders header', () => {
@@ -89,7 +89,7 @@ describe('WindowSideBarInfoPanel', () => {
     beforeEach(() => {
       wrapper = shallow(
         <WindowSideBarInfoPanel />,
-      ).dive();
+      );
     });
 
     it('does render header', () => {

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -70,15 +69,4 @@ WindowTopBar.defaultProps = {
   t: key => key,
 };
 
-const styles = {
-  typographyBody: {
-    flexGrow: 1,
-    fontSize: '1em',
-  },
-  reallyDense: {
-    minHeight: 32,
-    paddingLeft: 4,
-  },
-};
-
-export default withStyles(styles)(WindowTopBar);
+export default WindowTopBar;

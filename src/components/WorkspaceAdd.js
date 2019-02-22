@@ -9,7 +9,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
 import ns from '../config/css-ns';
 import ManifestForm from '../containers/ManifestForm';
 import ManifestListItem from '../containers/ManifestListItem';
@@ -106,27 +105,4 @@ WorkspaceAdd.defaultProps = {
   t: key => key,
 };
 
-/** */
-const styles = theme => ({
-  form: {
-    ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
-    marginTop: 64,
-  },
-  fab: {
-    position: 'absolute',
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 2,
-  },
-  typographyBody: {
-    flexGrow: 1,
-    fontSize: '1em',
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
-});
-
-export default withStyles(styles)(WorkspaceAdd);
+export default WorkspaceAdd;

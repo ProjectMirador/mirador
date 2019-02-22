@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
+import { withStyles } from '@material-ui/core';
 import * as actions from '../state/actions';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import CompanionWindow from '../components/CompanionWindow';
@@ -30,11 +31,30 @@ const mapDispatchToProps = {
   onCloseClick: actions.closeCompanionWindow,
 };
 
+/**
+ *
+ * @param theme
+ * @returns {{closeButton: {top: number, position: string, right: number},
+ * root: {overflowY: string, width: string}}}
+ */
+const styles = theme => ({
+  closeButton: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  },
+  root: {
+    ...theme.mixins.gutters(),
+    width: '200px',
+    overflowY: 'scroll',
+  },
+});
+
 const enhance = compose(
+  withNamespaces(),
+  withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
   miradorWithPlugins,
-  withNamespaces(),
-  // further HOC
 );
 
 export default enhance(CompanionWindow);

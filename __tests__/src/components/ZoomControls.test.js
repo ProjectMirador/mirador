@@ -12,12 +12,13 @@ describe('ZoomControls', () => {
     updateViewport = jest.fn();
     wrapper = shallow(
       <ZoomControls
+        classes={{}}
         windowId="xyz"
         viewer={viewer}
         showZoomControls={showZoomControls}
         updateViewport={updateViewport}
       />,
-    ).dive();
+    );
   });
 
   describe('with showZoomControls=false', () => {
@@ -32,12 +33,13 @@ describe('ZoomControls', () => {
       updateViewport = jest.fn();
       wrapper = shallow(
         <ZoomControls
+          classes={{}}
           windowId="xyz"
           viewer={viewer}
           showZoomControls
           updateViewport={updateViewport}
         />,
-      ).dive();
+      );
     });
 
     it('renders a couple buttons', () => {

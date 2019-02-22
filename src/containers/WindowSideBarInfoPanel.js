@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
+import { withStyles } from '@material-ui/core';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import {
   getDestructuredMetadata,
@@ -30,11 +31,21 @@ const mapStateToProps = (state, { windowId }) => ({
   manifestMetadata: getDestructuredMetadata(getWindowManifest(state, windowId).manifestation),
 });
 
+/**
+ *
+ * @param theme
+ * @returns {{windowSideBarH2: *, windowSideBarH3: *}}
+ */
+const styles = theme => ({
+  windowSideBarH2: theme.typography.h5,
+  windowSideBarH3: theme.typography.h6,
+});
+
 const enhance = compose(
-  connect(mapStateToProps, null),
   withNamespaces(),
+  withStyles(styles),
+  connect(mapStateToProps, null),
   miradorWithPlugins,
-  // further HOC
 );
 
 export default enhance(WindowSideBarInfoPanel);

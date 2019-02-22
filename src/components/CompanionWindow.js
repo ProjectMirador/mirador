@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
-import { withStyles } from '@material-ui/core/styles';
 import ns from '../config/css-ns';
 import WindowSideBarInfoPanel from '../containers/WindowSideBarInfoPanel';
 import WindowSideBarCanvasPanel from '../containers/WindowSideBarCanvasPanel';
@@ -76,20 +75,4 @@ CompanionWindow.defaultProps = {
   t: key => key,
 };
 
-/**
- * Styles for Material-UI HOC
- */
-const styles = theme => ({
-  closeButton: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
-  },
-  root: {
-    ...theme.mixins.gutters(),
-    width: '200px',
-    overflowY: 'scroll',
-  },
-});
-
-export default withStyles(styles)(CompanionWindow);
+export default CompanionWindow;

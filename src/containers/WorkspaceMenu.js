@@ -22,10 +22,9 @@ const mapStateToProps = state => (
 );
 
 const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
   withNamespaces(),
+  connect(mapStateToProps, mapDispatchToProps),
   miradorWithPlugins,
-  // further HOC
 );
 
 export default enhance(WorkspaceMenu);

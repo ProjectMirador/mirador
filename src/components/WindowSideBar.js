@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Drawer from '@material-ui/core/Drawer';
-import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import WindowSideBarButtons from '../containers/WindowSideBarButtons';
 import WindowSideBarPanel from '../containers/WindowSideBarPanel';
@@ -74,22 +73,4 @@ WindowSideBar.defaultProps = {
   sideBarPanel: 'closed',
 };
 
-/**
- Material UI style overrides
- @private
- */
-const styles = theme => ({
-  toolbar: theme.mixins.toolbar,
-  drawer: {
-    overflowX: 'hidden',
-    left: 0,
-    width: 55,
-    flexShrink: 0,
-    height: '100%',
-  },
-  grow: {
-    flexGrow: 1,
-  },
-});
-
-export default withStyles(styles)(WindowSideBar);
+export default WindowSideBar;

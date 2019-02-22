@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import { withStyles } from '@material-ui/core/styles';
 import ValidationCanvas from './ValidationCanvas';
 import CanvasThumbnail from './CanvasThumbnail';
 import { getIdAndLabelOfCanvases } from '../state/selectors';
@@ -83,19 +82,4 @@ WindowSideBarCanvasPanel.propTypes = {
   windowId: PropTypes.string.isRequired,
 };
 
-/**
- * @private
- * custom style definitions
- */
-const styles = theme => ({
-  windowSideBarH2: theme.typography.h5,
-  clickable: {
-    cursor: 'pointer',
-  },
-  label: {
-    fontSize: '8pt',
-    paddingLeft: 8,
-  },
-});
-
-export default withStyles(styles)(WindowSideBarCanvasPanel);
+export default WindowSideBarCanvasPanel;

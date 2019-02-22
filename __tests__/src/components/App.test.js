@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import Fullscreen from 'react-fullscreen-crossbrowser';
-import WorkspaceControlPanel from '../../../src/components/WorkspaceControlPanel';
+import WorkspaceControlPanel from '../../../src/containers/WorkspaceControlPanel';
 import Workspace from '../../../src/containers/Workspace';
 import WorkspaceAdd from '../../../src/containers/WorkspaceAdd';
 import App from '../../../src/components/App';
@@ -21,7 +21,7 @@ function createWrapper(props) {
       classes={{}}
       {...props}
     />,
-  ).dive(); // to unwrapp HOC created by withStyle()
+  );
 }
 
 describe('App', () => {

@@ -29,10 +29,9 @@ const mapStateToProps = (state, { windowId }) => ({
 
 
 const enhance = compose(
+  withNamespaces(),
   connect(mapStateToProps, mapDispatchToProps),
   miradorWithPlugins,
-  withNamespaces(),
-  // further HOC go here
 );
 
 export default enhance(WindowSideBarButtons);

@@ -9,13 +9,14 @@ import ManifestListItemError from '../../../src/components/ManifestListItemError
 function createWrapper(props) {
   return shallow(
     <ManifestListItemError
+      classes={{}}
       manifestId="http://example.com"
       onDismissClick={() => {}}
       onTryAgainClick={() => {}}
       t={key => key}
       {...props}
     />,
-  ).dive(); // unwrap HOC created by withStyles()
+  );
 }
 
 describe('ManifestListItemError', () => {

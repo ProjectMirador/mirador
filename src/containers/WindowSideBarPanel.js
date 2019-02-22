@@ -16,8 +16,7 @@ const mapStateToProps = (state, { windowId }) => ({
 });
 
 export default compose(
+  withNamespaces(),
   connect(mapStateToProps, mapDispatchToProps),
   miradorWithPlugins,
-  withNamespaces(),
-  // further HOC
 )(WindowSideBarPanel);

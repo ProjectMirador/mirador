@@ -12,7 +12,7 @@ describe('WorkspaceFullScreenButton', () => {
         classes={{}}
         setWorkspaceFullscreen={setWorkspaceFullscreen}
       />,
-    ).dive();
+    );
   });
 
   it('renders without an error', () => {
