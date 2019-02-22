@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import WindowTopBarButtons from '../../../src/components/WindowTopBarButtons';
+import { WindowTopBarButtons } from '../../../src/components/WindowTopBarButtons';
 
 describe('WindowTopBarButtons', () => {
   let wrapper;

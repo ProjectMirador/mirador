@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import WorkspaceSettings from '../../../src/components/WorkspaceSettings';
+import { WorkspaceSettings } from '../../../src/components/WorkspaceSettings';
 import settings from '../../../src/config/settings';
 
 describe('WorkspaceSettings', () => {

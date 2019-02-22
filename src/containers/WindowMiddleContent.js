@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { getCompantionWindowIds } from '../state/selectors';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import WindowMiddleContent from '../components/WindowMiddleContent';
+import { WindowMiddleContent } from '../components/WindowMiddleContent';
 
 /** */
 const mapStateToProps = (state, { window }) => ({

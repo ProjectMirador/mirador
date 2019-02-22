@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 
 /**
  */
-class ZoomControls extends Component {
+export class ZoomControls extends Component {
   /**
    * constructor -
    */
@@ -115,5 +115,3 @@ ZoomControls.defaultProps = {
   updateViewport: () => {},
   t: key => key,
 };
-
-export default ZoomControls;

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import * as actions from '../state/actions';
-import WorkspaceAdd from '../components/WorkspaceAdd';
+import { WorkspaceAdd } from '../components/WorkspaceAdd';
 
 /**
  * mapStateToProps - to hook up connect

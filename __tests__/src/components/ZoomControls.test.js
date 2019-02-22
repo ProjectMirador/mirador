@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import ZoomControls from '../../../src/components/ZoomControls';
+import { ZoomControls } from '../../../src/components/ZoomControls';
 
 describe('ZoomControls', () => {
   let wrapper;

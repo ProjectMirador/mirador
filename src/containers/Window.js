@@ -14,7 +14,6 @@ const mapStateToProps = ({ manifests, windows }, props) => ({
 
 const enhance = compose(
   connect(mapStateToProps),
-  // further HOC go here
 );
 
 export default enhance(Window);

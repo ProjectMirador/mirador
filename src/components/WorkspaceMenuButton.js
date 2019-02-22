@@ -7,7 +7,7 @@ import WorkspaceMenu from '../containers/WorkspaceMenu';
 
 /**
  */
-class WorkspaceMenuButton extends Component {
+export class WorkspaceMenuButton extends Component {
   /**
    * constructor -
    */
@@ -78,5 +78,3 @@ WorkspaceMenuButton.propTypes = {
 WorkspaceMenuButton.defaultProps = {
   t: key => key,
 };
-
-export default WorkspaceMenuButton;

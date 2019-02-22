@@ -14,7 +14,7 @@ import i18n from '../i18n';
  * This is the top level Mirador component.
  * @prop {Object} manifests
  */
-class App extends Component {
+export class App extends Component {
   /**
    * render
    * @return {String} - HTML markup for the component
@@ -68,6 +68,3 @@ App.defaultProps = {
   isFullscreenEnabled: false,
   isWorkspaceAddVisible: false,
 };
-
-
-export default App;

@@ -4,14 +4,13 @@ import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ValidationCanvas from './ValidationCanvas';
-import CanvasThumbnail from './CanvasThumbnail';
+import { CanvasThumbnail, ValidationCanvas } from '.';
 import { getIdAndLabelOfCanvases } from '../state/selectors';
 
 /**
  * a panel showing the canvases for a given manifest
  */
-class WindowSideBarCanvasPanel extends Component {
+export class WindowSideBarCanvasPanel extends Component {
   /**
    * calculateScaledWidth - calculates the scaled width according to the given width and aspectRatio
    */
@@ -81,5 +80,3 @@ WindowSideBarCanvasPanel.propTypes = {
   t: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };
-
-export default WindowSideBarCanvasPanel;

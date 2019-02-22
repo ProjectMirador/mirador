@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 /**
  */
-class WorkspaceFullScreenButton extends Component {
+export class WorkspaceFullScreenButton extends Component {
   /**
    * render
    * @return
@@ -32,5 +32,3 @@ WorkspaceFullScreenButton.propTypes = {
 WorkspaceFullScreenButton.defaultProps = {
   t: key => key,
 };
-
-export default WorkspaceFullScreenButton;

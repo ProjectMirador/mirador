@@ -15,7 +15,7 @@ import WorkspaceExport from '../containers/WorkspaceExport';
 
 /**
  */
-class WorkspaceMenu extends Component {
+export class WorkspaceMenu extends Component {
   /**
    * constructor -
    */
@@ -160,5 +160,3 @@ WorkspaceMenu.defaultProps = {
   showZoomControls: false,
   toggleZoomControls: () => {},
 };
-
-export default WorkspaceMenu;

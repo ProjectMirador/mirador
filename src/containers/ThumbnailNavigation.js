@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import CanvasGroupings from '../lib/CanvasGroupings';
 import * as actions from '../state/actions';
-import ThumbnailNavigation from '../components/ThumbnailNavigation';
+import { ThumbnailNavigation } from '../components/ThumbnailNavigation';
 import { getManifestCanvases } from '../state/selectors';
 /**
  * mapStateToProps - used to hook up state to props

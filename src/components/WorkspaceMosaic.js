@@ -11,7 +11,7 @@ import Window from '../containers/Window';
  * @memberof Workspace
  * @private
  */
-class WorkspaceMosaic extends React.Component {
+export class WorkspaceMosaic extends React.Component {
   /**
    */
   constructor(props) {
@@ -100,11 +100,8 @@ class WorkspaceMosaic extends React.Component {
   }
 }
 
-
 WorkspaceMosaic.propTypes = {
   updateWorkspaceMosaicLayout: PropTypes.func.isRequired,
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   workspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
-
-export default WorkspaceMosaic;

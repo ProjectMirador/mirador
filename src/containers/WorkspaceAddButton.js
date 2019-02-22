@@ -4,7 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import * as actions from '../state/actions';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import WorkspaceAddButton from '../components/WorkspaceAddButton';
+import { WorkspaceAddButton } from '../components/WorkspaceAddButton';
 
 /**
  * mapStateToProps - to hook up connect

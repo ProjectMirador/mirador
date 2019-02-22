@@ -10,7 +10,7 @@ import ns from '../config/css-ns';
 /**
  * WindowSideBar
  */
-class WindowSideBar extends Component {
+export class WindowSideBar extends Component {
   /**
    * render
    * @return
@@ -72,5 +72,3 @@ WindowSideBar.defaultProps = {
   sideBarOpen: false,
   sideBarPanel: 'closed',
 };
-
-export default WindowSideBar;

@@ -2,7 +2,7 @@ import ManifestoCanvas from '../lib/ManifestoCanvas';
 
 /**
  */
-export default class ValidationCanvas extends ManifestoCanvas {
+export class ValidationCanvas extends ManifestoCanvas {
   /**
    * checks whether the canvas has a valid height
    */

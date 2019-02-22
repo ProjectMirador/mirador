@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import WindowSideBar from '../components/WindowSideBar';
+import { WindowSideBar } from '../components/WindowSideBar';
 
 /**
  * mapStateToProps - to hook up connect

@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
  * Provides a form for user input of a manifest url
  * @prop {Function} fetchManifest
  */
-class ManifestForm extends Component {
+export class ManifestForm extends Component {
   /**
    * constructor -
    */
@@ -95,5 +95,3 @@ ManifestForm.defaultProps = {
   t: key => key,
   onCancel: null,
 };
-
-export default ManifestForm;

@@ -4,8 +4,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import manifesto from 'manifesto.js';
-import WindowSideBarCanvasPanel from '../../../src/components/WindowSideBarCanvasPanel';
-import CanvasThumbnail from '../../../src/components/CanvasThumbnail';
+import { CanvasThumbnail, WindowSideBarCanvasPanel } from '../../../src/components';
 import manifestJson from '../../fixtures/version-2/019.json';
 import { getIdAndLabelOfCanvases } from '../../../src/state/selectors';
 

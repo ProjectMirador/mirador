@@ -1,6 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import Workspace from '../components/Workspace';
+import { Workspace } from '../components/Workspace';
 
 /**
  * mapStateToProps - to hook up connect

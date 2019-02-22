@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import WindowTopMenu from '../../../src/containers/WindowTopMenu';
-import WindowTopMenuButton from '../../../src/components/WindowTopMenuButton';
+import { WindowTopMenuButton } from '../../../src/components/WindowTopMenuButton';
 
 /** create wrapper */
 function createWrapper(props) {

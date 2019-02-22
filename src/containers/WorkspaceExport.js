@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import WorkspaceExport from '../components/WorkspaceExport';
+import { WorkspaceExport } from '../components/WorkspaceExport';
 
 /**
  * mapStateToProps - to hook up connect

@@ -7,7 +7,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 
 /**
  */
-class WorkspaceAddButton extends Component {
+export class WorkspaceAddButton extends Component {
   /**
    * render
    * @return
@@ -47,5 +47,3 @@ WorkspaceAddButton.defaultProps = {
   t: key => key,
   isWorkspaceAddVisible: false,
 };
-
-export default WorkspaceAddButton;

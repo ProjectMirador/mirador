@@ -9,7 +9,7 @@ import ns from '../config/css-ns';
 /**
  * Provides the panel responsible for controlling the entire workspace
  */
-class WorkspaceControlPanel extends Component {
+export class WorkspaceControlPanel extends Component {
   /**
    * render
    * @return {String} - HTML markup for the component
@@ -34,5 +34,3 @@ class WorkspaceControlPanel extends Component {
 WorkspaceControlPanel.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
-
-export default WorkspaceControlPanel;

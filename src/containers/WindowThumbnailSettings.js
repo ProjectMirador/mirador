@@ -4,7 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import * as actions from '../state/actions';
 import { getThumbnailNavigationPosition } from '../state/selectors';
-import WindowThumbnailSettings from '../components/WindowThumbnailSettings';
+import { WindowThumbnailSettings } from '../components/WindowThumbnailSettings';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators

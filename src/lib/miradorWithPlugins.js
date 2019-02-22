@@ -49,11 +49,19 @@ export default function miradorWithPlugins(WrappedComponent) {
     }
   }
 
-  const wrappedComponentName = WrappedComponent.displayName
-  || WrappedComponent.name
-  || 'Component';
+  /**
+   *
+   * @param cname
+   * @returns {*|string}
+   */
+  const wrappedComponentName = (cname) => {
+    if (cname) {
+      return cname.name || 'Component';
+    }
+    return null;
+  };
 
-  ConnectedComponent.displayName = `miradorWithPlugins(${wrappedComponentName})`;
+  ConnectedComponent.displayName = `miradorWithPlugins(${wrappedComponentName(WrappedComponent)})`;
 
   ConnectedComponent.propTypes = {
     config: PropTypes.instanceOf(Object).isRequired,

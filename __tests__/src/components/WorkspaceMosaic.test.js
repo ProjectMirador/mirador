@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Mosaic } from 'react-mosaic-component';
-import WorkspaceMosaic from '../../../src/components/WorkspaceMosaic';
+import { WorkspaceMosaic } from '../../../src/components/WorkspaceMosaic';
 
 /** create wrapper */
 function createWrapper(props) {

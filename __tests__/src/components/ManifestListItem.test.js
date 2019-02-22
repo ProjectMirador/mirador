@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import ManifestListItem from '../../../src/components/ManifestListItem';
+import { ManifestListItem } from '../../../src/components/ManifestListItem';
 import ManifestListItemError from '../../../src/containers/ManifestListItemError';
 
 /** */

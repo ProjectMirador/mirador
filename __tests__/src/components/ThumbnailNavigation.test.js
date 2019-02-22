@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Grid from 'react-virtualized/dist/commonjs/Grid';
 import manifesto from 'manifesto.js';
-import ThumbnailNavigation from '../../../src/components/ThumbnailNavigation';
+import { ThumbnailNavigation } from '../../../src/components/ThumbnailNavigation';
 import CanvasGroupings from '../../../src/lib/CanvasGroupings';
 import manifestJson from '../../fixtures/version-2/019.json';
 

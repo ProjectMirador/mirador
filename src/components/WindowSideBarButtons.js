@@ -7,7 +7,7 @@ import ListIcon from '@material-ui/icons/FormatAlignJustify';
 /**
  *
  */
-class WindowSideBarButtons extends Component {
+export class WindowSideBarButtons extends Component {
   /**
    * sideBarPanelCurrentlySelected - return if the given sideBarPanel is currently selected
    * @return Boolean
@@ -67,5 +67,3 @@ WindowSideBarButtons.defaultProps = {
   sideBarPanel: 'closed',
   t: key => key,
 };
-
-export default WindowSideBarButtons;

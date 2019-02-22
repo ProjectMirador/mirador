@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import SanitizedHtml from './SanitizedHtml';
+import { SanitizedHtml } from './SanitizedHtml';
 
 /**
  * Renders label/value pair metadata in a dl
  * @prop {object} labelValuePair
  */
-class LabelValueMetadata extends Component {
+export class LabelValueMetadata extends Component {
   /**
    * render
    * @return {String} - HTML markup for the component
@@ -41,5 +41,3 @@ class LabelValueMetadata extends Component {
 LabelValueMetadata.propTypes = {
   labelValuePairs: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types,
 };
-
-export default LabelValueMetadata;

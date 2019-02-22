@@ -6,7 +6,7 @@ import htmlRules from '../lib/htmlRules';
 
 /**
 */
-class SanitizedHtml extends Component {
+export class SanitizedHtml extends Component {
   /**
   */
   render() {
@@ -26,5 +26,3 @@ SanitizedHtml.propTypes = {
   ruleSet: PropTypes.string.isRequired,
   htmlString: PropTypes.string.isRequired,
 };
-
-export default SanitizedHtml;

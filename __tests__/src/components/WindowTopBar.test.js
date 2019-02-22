@@ -10,7 +10,7 @@ import AppBar from '@material-ui/core/AppBar';
 import WindowTopMenuButton from '../../../src/containers/WindowTopMenuButton';
 import WindowTopBarButtons from '../../../src/containers/WindowTopBarButtons';
 import WindowIcon from '../../../src/containers/WindowIcon';
-import WindowTopBar from '../../../src/components/WindowTopBar';
+import { WindowTopBar } from '../../../src/components/WindowTopBar';
 
 /** create wrapper */
 function createWrapper(props) {

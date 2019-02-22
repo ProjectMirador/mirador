@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
-import WindowViewSettings from '../../../src/components/WindowViewSettings';
+import { WindowViewSettings } from '../../../src/components/WindowViewSettings';
 
 /** create wrapper */
 function createWrapper(props) {

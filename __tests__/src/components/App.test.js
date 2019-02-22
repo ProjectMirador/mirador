@@ -5,7 +5,7 @@ import Fullscreen from 'react-fullscreen-crossbrowser';
 import WorkspaceControlPanel from '../../../src/containers/WorkspaceControlPanel';
 import Workspace from '../../../src/containers/Workspace';
 import WorkspaceAdd from '../../../src/containers/WorkspaceAdd';
-import App from '../../../src/components/App';
+import { App } from '../../../src/components/App';
 import settings from '../../../src/config/settings';
 import i18n from '../../../src/i18n';
 

@@ -8,7 +8,7 @@ import WindowViewSettings from '../containers/WindowViewSettings';
 
 /**
  */
-class WindowTopMenu extends Component {
+export class WindowTopMenu extends Component {
   /**
    * render
    * @return
@@ -43,5 +43,3 @@ WindowTopMenu.propTypes = {
 WindowTopMenu.defaultProps = {
   anchorEl: null,
 };
-
-export default WindowTopMenu;

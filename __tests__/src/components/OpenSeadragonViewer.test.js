@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import OpenSeadragon from 'openseadragon';
-import OpenSeadragonViewer from '../../../src/components/OpenSeadragonViewer';
+import { OpenSeadragonViewer } from '../../../src/components/OpenSeadragonViewer';
 
 jest.mock('openseadragon');
 

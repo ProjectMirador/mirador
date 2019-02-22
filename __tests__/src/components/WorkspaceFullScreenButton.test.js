@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import WorkspaceFullScreenButton from '../../../src/components/WorkspaceFullScreenButton';
+import { WorkspaceFullScreenButton } from '../../../src/components/WorkspaceFullScreenButton';
 
 describe('WorkspaceFullScreenButton', () => {
   let wrapper;

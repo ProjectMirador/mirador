@@ -1,7 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../state/actions';
-import WorkspaceMosaic from '../components/WorkspaceMosaic';
+import { WorkspaceMosaic } from '../components/WorkspaceMosaic';
 
 /**
  * mapStateToProps - to hook up connect

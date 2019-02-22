@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 /**
  *
  */
-class WindowTopBarButtons extends Component {
+export class WindowTopBarButtons extends Component {
   /**
    * render
    *
@@ -13,5 +13,3 @@ class WindowTopBarButtons extends Component {
     return (<></>);
   }
 }
-
-export default WindowTopBarButtons;

@@ -9,7 +9,7 @@ import ns from '../config/css-ns';
  * WindowMiddleContent - component that renders the "middle" area of the
  * Mirador Window
  */
-class WindowMiddleContent extends Component {
+export class WindowMiddleContent extends Component {
   /**
    * renderViewer
    *
@@ -52,5 +52,3 @@ WindowMiddleContent.propTypes = {
 WindowMiddleContent.defaultProps = {
   manifest: null,
 };
-
-export default WindowMiddleContent;

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 /**
  */
-class WindowList extends Component {
+export class WindowList extends Component {
   /**
    * Get the title for a window from its manifest title
    * @private
@@ -67,5 +67,3 @@ WindowList.defaultProps = {
   anchorEl: null,
   t: key => key,
 };
-
-export default WindowList;

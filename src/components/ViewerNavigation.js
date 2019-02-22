@@ -7,7 +7,7 @@ import ns from '../config/css-ns';
 
 /**
  */
-class ViewerNavigation extends Component {
+export class ViewerNavigation extends Component {
   /**
    */
   constructor(props) {
@@ -76,5 +76,3 @@ ViewerNavigation.propTypes = {
   previousCanvas: PropTypes.func.isRequired,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
-
-export default ViewerNavigation;

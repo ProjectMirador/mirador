@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import createStore from '../../../src/state/createStore';
 import * as actions from '../../../src/state/actions';
-import WorkspaceControlPanel from '../../../src/components/WorkspaceControlPanel';
+import { WorkspaceControlPanel } from '../../../src/components/WorkspaceControlPanel';
 import fixture from '../../fixtures/version-2/002.json';
 
 describe('WorkspaceControlPanel', () => {

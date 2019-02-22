@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import ClearIcon from '@material-ui/icons/Clear';
-import WorkspaceAddButton from '../../../src/components/WorkspaceAddButton';
+import { WorkspaceAddButton } from '../../../src/components/WorkspaceAddButton';
 
 /** create wrapper */
 function createWrapper(props) {

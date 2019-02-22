@@ -5,7 +5,7 @@ import Menu from '@material-ui/core/Menu';
 import Divider from '@material-ui/core/Divider';
 import WindowThumbnailSettings from '../../../src/containers/WindowThumbnailSettings';
 import WindowViewSettings from '../../../src/containers/WindowViewSettings';
-import WindowTopMenu from '../../../src/components/WindowTopMenu';
+import { WindowTopMenu } from '../../../src/components/WindowTopMenu';
 
 /** create wrapper */
 function createWrapper(props) {

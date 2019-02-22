@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../state/actions';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import WindowViewer from '../components/WindowViewer';
+import { WindowViewer } from '../components/WindowViewer';
 
 /**
  * mapStateToProps - to hook up connect

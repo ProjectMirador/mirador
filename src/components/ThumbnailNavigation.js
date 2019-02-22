@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import Grid from 'react-virtualized/dist/commonjs/Grid';
-import CanvasThumbnail from './CanvasThumbnail';
+import { CanvasThumbnail } from './CanvasThumbnail';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
 import ns from '../config/css-ns';
 import 'react-virtualized/styles.css';
 
 /**
  */
-class ThumbnailNavigation extends Component {
+export class ThumbnailNavigation extends Component {
   /**
    */
   constructor(props) {
@@ -153,5 +153,3 @@ ThumbnailNavigation.propTypes = {
   setCanvas: PropTypes.func.isRequired,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
-
-export default ThumbnailNavigation;

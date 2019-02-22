@@ -24,7 +24,7 @@ const handleOpenButtonClick = (event, manifest, addWindow) => {
  */
 
 /** */
-class ManifestListItem extends React.Component {
+export class ManifestListItem extends React.Component {
   /** */
   componentDidMount() {
     const {
@@ -159,5 +159,3 @@ ManifestListItem.defaultProps = {
   error: null,
   isFetching: false,
 };
-
-export default ManifestListItem;
