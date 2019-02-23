@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Typography from '@material-ui/core/Typography';
 import { SanitizedHtml } from './SanitizedHtml';
 
 /**
@@ -26,10 +27,12 @@ export class LabelValueMetadata extends Component {
       <dl>
         {labelValuePairs.reduce((acc, labelValuePair, i) => acc.concat([
           <dt key={`label-${i}`}>
-            {labelValuePair.label}
+            <Typography variant="body2">{labelValuePair.label}</Typography>
           </dt>,
           <dd key={`value-${i}`}>
-            <SanitizedHtml htmlString={labelValuePair.value} ruleSet="iiif" />
+            <Typography variant="body2">
+              <SanitizedHtml htmlString={labelValuePair.value} ruleSet="iiif" />
+            </Typography>
           </dd>,
         ]), [])}
       </dl>
