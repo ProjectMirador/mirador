@@ -116,7 +116,7 @@ class ManifestListItem extends React.Component {
             </Grid>
             <Grid item xs={8} sm={4}>
               <Typography className={ns('manifest-list-item-provider')}>{provider || t('addedFromUrl')}</Typography>
-              <Typography>{`${size} items`}</Typography>
+              <Typography>{t('numItems', { number: size })}</Typography>
             </Grid>
 
             <Grid item xs={4} sm={2}>

@@ -26,6 +26,7 @@
     "listAllOpenWindows": "List all open windows",
     "manifestError": "The resource cannot be added:",
     "menu": "Menu",
+    "numItems": "{{number}} items",
     "off": "Off",
     "openInfoCompanionWindow": "Open information companion window",
     "openCanvasNavigationCompanionWindow": "Open canvas navigation companion window",
