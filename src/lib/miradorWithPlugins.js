@@ -33,36 +33,24 @@ export default function miradorWithPlugins(WrappedComponent) {
      */
     render() {
       const { config } = this.props;
-      if (config.usePluginSystem) {
-        const { plugins } = config;
-        return (
-          <>
-            <WrappedComponent
-              {...this.props}
-              ref={(parent) => {
-                this.pluginParent = parent;
-              }}
-            />
-            {componentPlugins(WrappedComponent.name, plugins)
-              .map(
-                component => React.createElement(
-                  connect(component.mapStateToProps,
-                    component.mapDispatchToProps)(component.component),
-                  { key: component.name, ...this.props, pluginParent: this.getPluginParent },
-                ),
-              )}
-          </>
-        );
-      }
+      const { plugins } = config;
       return (
-        <WrappedComponent {...this.props} />
+        <>
+          <WrappedComponent {...this.props} ref={(parent) => { this.pluginParent = parent; }} />
+          {componentPlugins(WrappedComponent.name, plugins)
+            .map(component => React.createElement(
+              connect(component.mapStateToProps, component.mapDispatchToProps)(component.component),
+              { key: component.name, ...this.props, pluginParent: this.getPluginParent },
+            ))
+          }
+        </>
       );
     }
   }
 
   const wrappedComponentName = WrappedComponent.name || 'Component';
-  ConnectedComponent.displayName = `miradorWithPlugins(${wrappedComponentName})`;
 
+  ConnectedComponent.displayName = `miradorWithPlugins(${wrappedComponentName})`;
 
   ConnectedComponent.propTypes = {
     config: PropTypes.instanceOf(Object).isRequired,
