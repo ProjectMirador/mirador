@@ -28,16 +28,10 @@
     padding-top: 20px;
   }
 
-  &-window-middle-content {
+  &-primary-window {
     display: flex;
     flex: 1;
     position: relative;
-  }
-
-  &-window {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
   }
 
   &-osd-container {

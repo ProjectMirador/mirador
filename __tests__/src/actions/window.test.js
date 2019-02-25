@@ -109,7 +109,7 @@ describe('window actions', () => {
           },
         },
       };
-      const mockDispatch = jest.fn(() => ({ id: 'cw-1' }));
+      const mockDispatch = jest.fn(() => ({ id: 'cw-2' }));
       const mockGetState = jest.fn(() => mockState);
       const windowId = 'abc123';
       const panelType = 'info';
@@ -118,25 +118,22 @@ describe('window actions', () => {
 
       expect(typeof thunk).toEqual('function');
       thunk(mockDispatch, mockGetState);
-      expect(mockDispatch).toHaveBeenCalledTimes(4);
+      expect(mockDispatch).toHaveBeenCalledTimes(3);
 
-      expect(mockDispatch).toHaveBeenNthCalledWith(1, {
-        type: ActionTypes.REMOVE_COMPANION_WINDOW,
-        id: 'cw-1',
-      });
-
-      const addCompanionWindowAction = mockDispatch.mock.calls[1][0];
+      const addCompanionWindowAction = mockDispatch.mock.calls[0][0];
       expect(addCompanionWindowAction.type).toBe(ActionTypes.ADD_COMPANION_WINDOW);
-      expect(addCompanionWindowAction.payload).toEqual({ content: 'info', position: 'right' });
-      expect(addCompanionWindowAction.id.startsWith('cw-')).toBe(true);
+      expect(addCompanionWindowAction.id).toMatch(/cw-.*/);
+      expect(addCompanionWindowAction.payload.content).toEqual('info');
+      expect(addCompanionWindowAction.payload.position).toEqual('right');
+      expect(addCompanionWindowAction.payload.id).toMatch(/cw-.*/);
 
-      expect(mockDispatch).toHaveBeenNthCalledWith(3, {
+      expect(mockDispatch).toHaveBeenNthCalledWith(2, {
         type: ActionTypes.UPDATE_WINDOW,
         id: 'abc123',
-        payload: { companionWindowIds: ['cw-1'] },
+        payload: { companionWindowIds: ['cw-1', 'cw-2'] },
       });
 
-      expect(mockDispatch).toHaveBeenNthCalledWith(4, {
+      expect(mockDispatch).toHaveBeenNthCalledWith(3, {
         type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL, windowId, panelType: 'closed',
       });
     });

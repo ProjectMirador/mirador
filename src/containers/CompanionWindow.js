@@ -14,12 +14,7 @@ import { CompanionWindow } from '../components/CompanionWindow';
 const mapStateToProps = (state, { id }) => {
   const companionWindow = state.companionWindows[id];
 
-  return {
-    ...companionWindow,
-    isDisplayed: (companionWindow
-                  && companionWindow.content
-                  && companionWindow.content.length > 0),
-  };
+  return { ...companionWindow };
 };
 
 /**
@@ -27,9 +22,10 @@ const mapStateToProps = (state, { id }) => {
  * @memberof CompanionWindow
  * @private
  */
-const mapDispatchToProps = {
-  onCloseClick: actions.closeCompanionWindow,
-};
+const mapDispatchToProps = (dispatch, { windowId, id }) => ({
+  onCloseClick: () => dispatch(actions.closeCompanionWindow(windowId, id)),
+  toggleAreaOfCompanionWindow: () => dispatch(actions.toggleAreaOfCompanionWindow(id)),
+});
 
 /**
  *
@@ -38,15 +34,14 @@ const mapDispatchToProps = {
  * root: {overflowY: string, width: string}}}
  */
 const styles = theme => ({
-  closeButton: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
-  },
-  root: {
+  content: {
     ...theme.mixins.gutters(),
-    width: '200px',
-    overflowY: 'scroll',
+  },
+  navigation: {
+    position: 'sticky',
+    top: '0',
+    background: 'white',
+    zIndex: 5,
   },
 });
 

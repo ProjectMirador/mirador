@@ -198,7 +198,7 @@ export function getCompanionWindowForPosition(state, windowId, position) {
 * @param {String} windowId
 * @return {Array}
 */
-export function getCompantionWindowIds(state, windowId) {
+export function getCompanionWindowIds(state, windowId) {
   return state.windows[windowId].companionWindowIds;
 }
 
@@ -215,4 +215,14 @@ export function getLanguagesFromConfigWithCurrent(state) {
     label: availableLanguages[key],
     current: key === language,
   }));
+}
+
+/**
+* Return companion windows of a window
+* @param {String} windowId
+* @return {Array}
+*/
+export function getCompanionWindowsOfWindow(state, windowId) {
+  return getCompanionWindowIds(state, windowId)
+    .map(id => state.companionWindows[id]);
 }

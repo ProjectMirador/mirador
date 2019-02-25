@@ -1,6 +1,6 @@
 import uuid from 'uuid/v4';
 import ActionTypes from './action-types';
-import { addCompanionWindow, removeCompanionWindow } from './companionWindow';
+import { addCompanionWindow, removeCompanionWindow, updateCompanionWindow } from './companionWindow';
 
 /**
  * focusWindow - action creator
@@ -82,13 +82,12 @@ export function toggleWindowSideBarPanel(windowId, panelType) {
  */
 export function popOutCompanionWindow(windowId, panelType, position) {
   return (dispatch, getState) => {
-    const { companionWindowIds } = getState().windows[windowId];
-    companionWindowIds.map(id => dispatch(removeCompanionWindow(id)));
-
     const action = dispatch(addCompanionWindow({ content: panelType, position }));
 
-    const companionWindowId = action.id;
-    dispatch(updateWindow(windowId, { companionWindowIds: [companionWindowId] }));
+    const { companionWindowIds } = getState().windows[windowId];
+
+    dispatch(updateWindow(windowId,
+      { companionWindowIds: [...companionWindowIds, action.id] }));
 
     dispatch(toggleWindowSideBarPanel(windowId, 'closed'));
   };
@@ -114,6 +113,18 @@ export function closeCompanionWindow(windowId, companionWindowId) {
     const companionWindowIds = getState().windows[windowId].companionWindowIds
       .filter(id => id !== companionWindowId);
     dispatch(updateWindow(windowId, { companionWindowIds }));
+  };
+}
+
+/**
+* Move companion window between right and bottom area
+* @param {String} companionWindowId
+*/
+export function toggleAreaOfCompanionWindow(companionWindowId) {
+  return (dispatch, getState) => {
+    const position = getState()
+      .companionWindows[companionWindowId].position === 'right' ? 'bottom' : 'right';
+    dispatch(updateCompanionWindow(companionWindowId, { position }));
   };
 }
 

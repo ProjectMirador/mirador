@@ -14,7 +14,7 @@ export * from './ValidationCanvas';
 export * from './ViewerNavigation';
 export * from './Window';
 export * from './WindowList';
-export * from './WindowMiddleContent';
+export * from './PrimaryWindow';
 export * from './WindowSideBar';
 export * from './WindowSideBarButtons';
 export * from './WindowSideBarCanvasPanel';

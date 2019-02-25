@@ -8,10 +8,11 @@ const defaultProps = {
 
 /** */
 export function addCompanionWindow(payload, defaults = defaultProps) {
+  const id = `cw-${uuid()}`;
   return {
     type: ActionTypes.ADD_COMPANION_WINDOW,
-    id: `cw-${uuid()}`,
-    payload: { ...defaults, ...payload },
+    id,
+    payload: { ...defaults, ...payload, id },
   };
 }
 

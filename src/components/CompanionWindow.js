@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/CloseSharp';
+import OpenWith from '@material-ui/icons/OpenWithSharp';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import ns from '../config/css-ns';
@@ -34,24 +36,36 @@ export class CompanionWindow extends Component {
    */
   render() {
     const {
-      classes, id, onCloseClick, isDisplayed, position, t, windowId,
+      classes, onCloseClick, position, t, toggleAreaOfCompanionWindow,
     } = this.props;
 
     return (
-      <Paper
-        className={[classes.root, ns(`companion-window-${position}`)].join(' ')}
-        style={{ display: isDisplayed ? null : 'none' }}
-        square
-      >
-        {this.activePanelComponent()}
-        <IconButton
-          aria-label={t('closeCompanionWindow')}
-          className={classes.closeButton}
-          onClick={() => { onCloseClick(windowId, id); }}
+      <div className={ns(`companion-window-${position}`)}>
+        <div className={classes.navigation}>
+          <IconButton
+            aria-label={t('toggleAreaOfCompanionWindow')}
+            onClick={toggleAreaOfCompanionWindow}
+          >
+            <OpenWith />
+          </IconButton>
+
+          <IconButton
+            aria-label={t('closeCompanionWindow')}
+            onClick={onCloseClick}
+          >
+            <CloseIcon />
+          </IconButton>
+
+          <Divider />
+        </div>
+
+        <Paper
+          className={classes.content}
+          square
         >
-          <CloseIcon />
-        </IconButton>
-      </Paper>
+          {this.activePanelComponent()}
+        </Paper>
+      </div>
     );
   }
 }
@@ -59,18 +73,17 @@ export class CompanionWindow extends Component {
 CompanionWindow.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
   content: PropTypes.string,
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
+  windowId: PropTypes.string.isRequired,
   onCloseClick: PropTypes.func,
   position: PropTypes.string,
-  isDisplayed: PropTypes.bool,
   t: PropTypes.func,
-  windowId: PropTypes.string.isRequired,
+  toggleAreaOfCompanionWindow: PropTypes.func.isRequired,
 };
 
 CompanionWindow.defaultProps = {
   content: null,
   onCloseClick: () => {},
-  isDisplayed: false,
   position: null,
   t: key => key,
 };
