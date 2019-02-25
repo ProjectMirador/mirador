@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@material-ui/icons/CloseSharp';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import ns from '../config/css-ns';

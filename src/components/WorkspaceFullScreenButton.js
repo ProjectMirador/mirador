@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import IconButton from '@material-ui/core/IconButton';
-import FullscreenIcon from '@material-ui/icons/Fullscreen';
+import FullscreenIcon from '@material-ui/icons/FullscreenSharp';
 import ListItem from '@material-ui/core/ListItem';
 import PropTypes from 'prop-types';
 

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import AddCircleIcon from '@material-ui/icons/AddCircleOutlineSharp';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircleOutlineSharp';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import PropTypes from 'prop-types';
 

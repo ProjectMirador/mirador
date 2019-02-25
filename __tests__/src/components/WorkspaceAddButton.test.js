@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import ClearIcon from '@material-ui/icons/Clear';
+import AddIcon from '@material-ui/icons/AddSharp';
+import CloseIcon from '@material-ui/icons/CloseSharp';
 import { WorkspaceAddButton } from '../../../src/components/WorkspaceAddButton';
 
 /** create wrapper */
@@ -31,7 +31,7 @@ describe('WorkspaceAddButton', () => {
     const setWorkspaceAddVisibility = jest.fn();
     const wrapper = createWrapper({ isWorkspaceAddVisible: true, setWorkspaceAddVisibility });
 
-    expect(wrapper.find(ClearIcon).length).toBe(1);
+    expect(wrapper.find(CloseIcon).length).toBe(1);
 
     wrapper.find(Fab).simulate('click');
     expect(setWorkspaceAddVisibility).toHaveBeenCalledWith(false);

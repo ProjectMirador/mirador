@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@material-ui/icons/InfoSharp';
 import ListIcon from '@material-ui/icons/FormatAlignJustify';
 
 /**

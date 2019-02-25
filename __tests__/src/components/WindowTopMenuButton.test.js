@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import IconButton from '@material-ui/core/IconButton';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import MoreVertIcon from '@material-ui/icons/MoreVertSharp';
 import WindowTopMenu from '../../../src/containers/WindowTopMenu';
 import { WindowTopMenuButton } from '../../../src/components/WindowTopMenuButton';
 

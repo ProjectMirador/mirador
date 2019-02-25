@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-import ErrorIcon from '@material-ui/icons/ErrorOutline';
+import ErrorIcon from '@material-ui/icons/ErrorOutlineSharp';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 

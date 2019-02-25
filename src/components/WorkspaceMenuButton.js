@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from '@material-ui/icons/MenuSharp';
 import ListItem from '@material-ui/core/ListItem';
 import PropTypes from 'prop-types';
 import WorkspaceMenu from '../containers/WorkspaceMenu';

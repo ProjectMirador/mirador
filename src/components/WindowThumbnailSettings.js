@@ -3,7 +3,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
-import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
+import ThumbnailsOffIcon from '@material-ui/icons/CropDinSharp';
 import VideoLabelIcon from '@material-ui/icons/VideoLabel';
 import PropTypes from 'prop-types';
 
@@ -42,7 +42,7 @@ export class WindowThumbnailSettings extends Component {
         <RadioGroup aria-label={t('position')} name="position" value={thumbnailNavigationPosition} onChange={this.handleChange} row>
           <FormControlLabel
             value="off"
-            control={<Radio color="primary" icon={<CancelPresentationIcon />} checkedIcon={<CancelPresentationIcon />} />}
+            control={<Radio color="primary" icon={<ThumbnailsOffIcon />} checkedIcon={<ThumbnailsOffIcon />} />}
             label={t('off')}
             labelPlacement="bottom"
           />
