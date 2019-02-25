@@ -10,6 +10,11 @@ export default {
       useNextVariants: true // set so that console deprecation warning is removed
     }
   },
+  language: 'en',
+  availableLanguages: { // All the languages available in the language switcher
+    de: 'Deutsch',
+    en: 'English',
+  },
   translations: {
   },
   window: {

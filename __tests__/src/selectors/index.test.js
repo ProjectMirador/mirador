@@ -7,6 +7,7 @@ import {
   getCanvasLabel,
   getCompanionWindowForPosition,
   getDestructuredMetadata,
+  getLanguagesFromConfigWithCurrent,
   getSelectedCanvas,
   getWindowManifest,
   getManifestLogo,
@@ -345,5 +346,20 @@ describe('getCompanionWindowForPosition', () => {
     const received = getCompanionWindowForPosition(state, 'a', 'bottom');
 
     expect(received).toBeUndefined();
+  });
+});
+
+describe('getLanguagesFromConfigWithCurrent', () => {
+  it('returns an array of objects with locale, label, and current properties', () => {
+    const state = {
+      config: { language: 'epo', availableLanguages: { epo: 'Esparanto', tlh: 'Klingon' } },
+    };
+
+    const expected = [
+      { locale: 'epo', label: 'Esparanto', current: true },
+      { locale: 'tlh', label: 'Klingon', current: false },
+    ];
+
+    expect(getLanguagesFromConfigWithCurrent(state)).toEqual(expected);
   });
 });
