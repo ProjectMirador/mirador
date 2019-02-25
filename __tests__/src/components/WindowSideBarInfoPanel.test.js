@@ -1,7 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
-import { LabelValueMetadata, SanitizedHtml, WindowSideBarInfoPanel } from '../../../src/components';
+import { WindowSideBarInfoPanel } from '../../../src/components/WindowSideBarInfoPanel';
+import { LabelValueMetadata } from '../../../src/components/LabelValueMetadata';
+import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
 
 describe('WindowSideBarInfoPanel', () => {
   const metadata = [{ label: {}, value: {} }];

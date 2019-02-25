@@ -1,8 +1,13 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Window from '../../../src/components/Window';
+import { Window } from '../../../src/components/Window';
 import WindowTopBar from '../../../src/containers/WindowTopBar';
 import WindowMiddleContent from '../../../src/containers/WindowMiddleContent';
+
+/** create wrapper */
+function createWrapper(window) {
+  return shallow(<Window window={window} />);
+}
 
 describe('Window', () => {
   let wrapper;
@@ -12,19 +17,19 @@ describe('Window', () => {
     expect(wrapper.find('.mirador-window')).toHaveLength(0);
   });
   it('should render outer element', () => {
-    wrapper = shallow(<Window window={window} />);
+    wrapper = createWrapper(window);
     expect(wrapper.find('.mirador-window')).toHaveLength(1);
   });
   it('should render <WindowTopBar>', () => {
-    wrapper = shallow(<Window window={window} />);
+    wrapper = createWrapper(window);
     expect(wrapper.find(WindowTopBar)).toHaveLength(1);
   });
   it('should render <WindowMiddleContent>', () => {
-    wrapper = shallow(<Window window={window} />);
+    wrapper = createWrapper(window);
     expect(wrapper.find(WindowMiddleContent)).toHaveLength(1);
   });
   it('should render bottom companions window areas', () => {
-    wrapper = shallow(<Window window={window} />);
+    wrapper = createWrapper(window);
     expect(wrapper.find('.mirador-companion-bottom')).toHaveLength(1);
   });
 });

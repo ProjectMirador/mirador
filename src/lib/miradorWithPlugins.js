@@ -33,35 +33,36 @@ export default function miradorWithPlugins(WrappedComponent) {
      */
     render() {
       const { config } = this.props;
-      const { plugins } = config;
+      if (config.usePluginSystem) {
+        const { plugins } = config;
+        return (
+          <>
+            <WrappedComponent
+              {...this.props}
+              ref={(parent) => {
+                this.pluginParent = parent;
+              }}
+            />
+            {componentPlugins(WrappedComponent.name, plugins)
+              .map(
+                component => React.createElement(
+                  connect(component.mapStateToProps,
+                    component.mapDispatchToProps)(component.component),
+                  { key: component.name, ...this.props, pluginParent: this.getPluginParent },
+                ),
+              )}
+          </>
+        );
+      }
       return (
-        <>
-          <WrappedComponent {...this.props} ref={(parent) => { this.pluginParent = parent; }} />
-          { /* TODO: Refactor .name here in some way so we dont need to rely on it */}
-          {componentPlugins(WrappedComponent.name, plugins)
-            .map(component => React.createElement(
-              connect(component.mapStateToProps, component.mapDispatchToProps)(component.component),
-              { key: component.name, ...this.props, pluginParent: this.getPluginParent },
-            ))
-          }
-        </>
+        <WrappedComponent {...this.props} />
       );
     }
   }
 
-  /**
-   *
-   * @param cname
-   * @returns {*|string}
-   */
-  const wrappedComponentName = (cname) => {
-    if (cname) {
-      return cname.name || 'Component';
-    }
-    return null;
-  };
+  const wrappedComponentName = WrappedComponent.name || 'Component';
+  ConnectedComponent.displayName = `miradorWithPlugins(${wrappedComponentName})`;
 
-  ConnectedComponent.displayName = `miradorWithPlugins(${wrappedComponentName(WrappedComponent)})`;
 
   ConnectedComponent.propTypes = {
     config: PropTypes.instanceOf(Object).isRequired,

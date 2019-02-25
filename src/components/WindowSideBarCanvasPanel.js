@@ -4,7 +4,8 @@ import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import { CanvasThumbnail, ValidationCanvas } from '.';
+import { CanvasThumbnail } from './CanvasThumbnail';
+import { ValidationCanvas } from './ValidationCanvas';
 import { getIdAndLabelOfCanvases } from '../state/selectors';
 
 /**

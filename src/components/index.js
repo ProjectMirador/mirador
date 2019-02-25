@@ -10,6 +10,7 @@ export * from './SanitizedHtml';
 export * from './ThumbnailNavigation';
 export * from './ValidationCanvas';
 export * from './ViewerNavigation';
+export * from './Window';
 export * from './WindowList';
 export * from './WindowMiddleContent';
 export * from './WindowSideBar';

@@ -12,6 +12,7 @@ export default {
   },
   translations: {
   },
+  usePluginSystem: true,
   window: {
     defaultView: 'single',
   },
