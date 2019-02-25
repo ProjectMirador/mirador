@@ -100,7 +100,9 @@ class WorkspaceMenu extends Component {
             <ListItemIcon>
               <LoupeIcon />
             </ListItemIcon>
-            <Typography varient="inherit">{ showZoomControls ? 'Hide zoom controls' : 'Show Zoom Controls' }</Typography>
+            <Typography varient="inherit">
+              { showZoomControls ? t('hideZoomControls') : t('showZoomControls') }
+            </Typography>
           </MenuItem>
           <Divider />
           <MenuItem
