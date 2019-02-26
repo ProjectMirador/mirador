@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import WorkspaceAdd from '../../../src/components/WorkspaceAdd';
+import { WorkspaceAdd } from '../../../src/components/WorkspaceAdd';
 import ManifestListItem from '../../../src/containers/ManifestListItem';
 import fixture from '../../fixtures/version-2/002.json';
 import ManifestForm from '../../../src/containers/ManifestForm';

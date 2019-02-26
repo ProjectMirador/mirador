@@ -1,5 +1,5 @@
 import { withStyles } from '@material-ui/core/styles';
-import WorkspaceControlPanel from '../components/WorkspaceControlPanel';
+import { WorkspaceControlPanel } from '../components/WorkspaceControlPanel';
 
 /**
  *

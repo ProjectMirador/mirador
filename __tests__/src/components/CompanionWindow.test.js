@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import CompanionWindow from '../../../src/components/CompanionWindow';
+import { CompanionWindow } from '../../../src/components/CompanionWindow';
 import WindowSideBarInfoPanel from '../../../src/containers/WindowSideBarInfoPanel';
 
 /** create wrapper */

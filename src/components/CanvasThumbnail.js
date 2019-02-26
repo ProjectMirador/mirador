@@ -6,7 +6,7 @@ import IntersectionObserver from '@researchgate/react-intersection-observer';
 /**
  * Uses InteractionObserver to "lazy" load canvas thumbnails that are in view.
  */
-export default class CanvasThumbnail extends Component {
+export class CanvasThumbnail extends Component {
   /**
    */
   constructor(props) {

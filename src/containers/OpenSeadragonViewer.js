@@ -1,7 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import OpenSeadragonViewer from '../components/OpenSeadragonViewer';
+import { OpenSeadragonViewer } from '../components/OpenSeadragonViewer';
 import * as actions from '../state/actions';
 
 /**

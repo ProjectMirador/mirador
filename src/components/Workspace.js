@@ -10,7 +10,7 @@ import ns from '../config/css-ns';
  * @memberof Workspace
  * @private
  */
-class Workspace extends React.Component {
+export class Workspace extends React.Component {
   /**
    * Determine which workspace to render by configured type
    */
@@ -55,5 +55,3 @@ Workspace.propTypes = {
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   workspaceType: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
 };
-
-export default Workspace;

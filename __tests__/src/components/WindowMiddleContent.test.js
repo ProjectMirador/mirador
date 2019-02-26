@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import WindowMiddleContent from '../../../src/components/WindowMiddleContent';
+import { WindowMiddleContent } from '../../../src/components/WindowMiddleContent';
 import CompanionWindow from '../../../src/containers/CompanionWindow';
 import WindowSideBar from '../../../src/containers/WindowSideBar';
 import WindowViewer from '../../../src/containers/WindowViewer';

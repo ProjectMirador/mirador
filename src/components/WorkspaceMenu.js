@@ -11,14 +11,14 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import PropTypes from 'prop-types';
 import LanguageSettings from '../containers/LanguageSettings';
-import NestedMenu from './NestedMenu';
+import { NestedMenu } from './NestedMenu';
 import WindowList from '../containers/WindowList';
 import WorkspaceSettings from '../containers/WorkspaceSettings';
 import WorkspaceExport from '../containers/WorkspaceExport';
 
 /**
  */
-class WorkspaceMenu extends Component {
+export class WorkspaceMenu extends Component {
   /**
    * constructor -
    */
@@ -171,5 +171,3 @@ WorkspaceMenu.defaultProps = {
   showZoomControls: false,
   toggleZoomControls: () => {},
 };
-
-export default WorkspaceMenu;

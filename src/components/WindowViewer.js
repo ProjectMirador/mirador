@@ -9,7 +9,7 @@ import CanvasGroupings from '../lib/CanvasGroupings';
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
  * OSD and Navigation
  */
-class WindowViewer extends Component {
+export class WindowViewer extends Component {
   /**
    * @param {Object} props
    */
@@ -127,5 +127,3 @@ WindowViewer.propTypes = {
   manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
-
-export default WindowViewer;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import WorkspaceMenuButton from '../../../src/components/WorkspaceMenuButton';
+import { WorkspaceMenuButton } from '../../../src/components/WorkspaceMenuButton';
 
 describe('WorkspaceMenuButton', () => {
   let wrapper;

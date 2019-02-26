@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import WindowSideBar from '../../../src/components/WindowSideBar';
+import { WindowSideBar } from '../../../src/components/WindowSideBar';
 
 describe('WindowSideBar', () => {
   let wrapper;

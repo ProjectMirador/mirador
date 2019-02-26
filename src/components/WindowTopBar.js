@@ -16,7 +16,7 @@ import ns from '../config/css-ns';
 /**
  * WindowTopBar
  */
-class WindowTopBar extends Component {
+export class WindowTopBar extends Component {
   /**
    * render
    * @return
@@ -68,5 +68,3 @@ WindowTopBar.defaultProps = {
   manifestTitle: '',
   t: key => key,
 };
-
-export default WindowTopBar;

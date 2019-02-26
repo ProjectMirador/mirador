@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import ManifestForm from '../../../src/components/ManifestForm';
+import { ManifestForm } from '../../../src/components/ManifestForm';
 
 /** create wrapper */
 function createWrapper(props) {

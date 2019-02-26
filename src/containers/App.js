@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import * as actions from '../state/actions';
-import App from '../components/App';
+import { App } from '../components/App';
 
 /**
  * mapStateToProps - to hook up connect

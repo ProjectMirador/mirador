@@ -6,7 +6,7 @@ import {
   getManifestTitle, getManifestLogo, getManifestThumbnail, getManifestCanvases, getManifestProvider,
 } from '../state/selectors';
 import * as actions from '../state/actions';
-import ManifestListItem from '../components/ManifestListItem';
+import { ManifestListItem } from '../components/ManifestListItem';
 
 /** */
 const mapStateToProps = (state, { manifestId }) => {

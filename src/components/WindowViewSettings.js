@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 /**
  *
  */
-export default class WindowViewSettings extends Component {
+export class WindowViewSettings extends Component {
   /**
    * constructor -
    */

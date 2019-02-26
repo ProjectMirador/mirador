@@ -8,7 +8,7 @@ import WorkspaceMenuButton from '../containers/WorkspaceMenuButton';
 /**
  *
  */
-class WorkspaceControlPanelButtons extends Component {
+export class WorkspaceControlPanelButtons extends Component {
   /**
    * render
    *
@@ -34,5 +34,3 @@ WorkspaceControlPanelButtons.propTypes = {
 WorkspaceControlPanelButtons.defaultProps = {
   children: null,
 };
-
-export default WorkspaceControlPanelButtons;

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withNamespaces } from 'react-i18next';
 import * as actions from '../state/actions';
-import ManifestForm from '../components/ManifestForm';
+import { ManifestForm } from '../components/ManifestForm';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators

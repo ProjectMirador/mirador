@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 /**
  */
-class WorkspaceExport extends Component {
+export class WorkspaceExport extends Component {
   /**
    * @private
    */
@@ -55,5 +55,3 @@ WorkspaceExport.defaultProps = {
   children: null,
   t: key => key,
 };
-
-export default WorkspaceExport;

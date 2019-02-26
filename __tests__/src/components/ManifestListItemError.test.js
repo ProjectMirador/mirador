@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
-import ManifestListItemError from '../../../src/components/ManifestListItemError';
+import { ManifestListItemError } from '../../../src/components/ManifestListItemError';
 
 /**
  * Helper function to wrap creating a ManifestListItemError component

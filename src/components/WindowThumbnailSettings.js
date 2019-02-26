@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 /**
  *
  */
-export default class WindowThumbnailSettings extends Component {
+export class WindowThumbnailSettings extends Component {
   /**
    * constructor -
    */

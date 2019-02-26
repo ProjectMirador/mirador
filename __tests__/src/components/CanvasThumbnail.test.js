@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import IntersectionObserver from '@researchgate/react-intersection-observer';
-import CanvasThumbnail from '../../../src/components/CanvasThumbnail';
+import { CanvasThumbnail } from '../../../src/components/CanvasThumbnail';
 
 describe('CanvasThumbnail', () => {
   let wrapper;

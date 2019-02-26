@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
-import LabelValueMetadata from './LabelValueMetadata';
-import SanitizedHtml from './SanitizedHtml';
+import { SanitizedHtml } from './SanitizedHtml';
+import { LabelValueMetadata } from './LabelValueMetadata';
 import ns from '../config/css-ns';
 
 
 /**
  * WindowSideBarInfoPanel
  */
-class WindowSideBarInfoPanel extends Component {
+export class WindowSideBarInfoPanel extends Component {
   /**
    * render
    * @return
@@ -98,5 +98,3 @@ WindowSideBarInfoPanel.defaultProps = {
   manifestMetadata: [],
   t: key => key,
 };
-
-export default WindowSideBarInfoPanel;

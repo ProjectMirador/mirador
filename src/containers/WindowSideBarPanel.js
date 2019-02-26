@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { withNamespaces } from 'react-i18next';
 import * as actions from '../state/actions';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import WindowSideBarPanel from '../components/WindowSideBarPanel';
+import { WindowSideBarPanel } from '../components/WindowSideBarPanel';
 
 /** */
 const mapDispatchToProps = {

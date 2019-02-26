@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
  * ManifestListItemError renders a component displaying a
  * message to the user about a problem loading a manifest
 */
-class ManifestListItemError extends Component {
+export class ManifestListItemError extends Component {
   /**
    * Returns the rendered component
   */
@@ -59,5 +59,3 @@ ManifestListItemError.propTypes = {
   onTryAgainClick: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
 };
-
-export default ManifestListItemError;

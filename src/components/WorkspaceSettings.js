@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 
 /**
  */
-class WorkspaceSettings extends Component {
+export class WorkspaceSettings extends Component {
   /**
    * constructor -
    */
@@ -81,5 +81,3 @@ WorkspaceSettings.defaultProps = {
   children: null,
   t: key => key,
 };
-
-export default WorkspaceSettings;

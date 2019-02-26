@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import SanitizedHtml from '../../../src/components/SanitizedHtml';
+import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
 
 const wrapper = shallow(
   <SanitizedHtml

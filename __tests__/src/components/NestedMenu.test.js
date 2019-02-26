@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import NestedMenu from '../../../src/components/NestedMenu';
+import { NestedMenu } from '../../../src/components/NestedMenu';
 
 /**
  * Helper function to wrap creating a NestedMenu component

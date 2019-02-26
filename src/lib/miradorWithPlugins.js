@@ -37,7 +37,6 @@ export default function miradorWithPlugins(WrappedComponent) {
       return (
         <>
           <WrappedComponent {...this.props} ref={(parent) => { this.pluginParent = parent; }} />
-          { /* TODO: Refactor .name here in some way so we dont need to rely on it */}
           {componentPlugins(WrappedComponent.name, plugins)
             .map(component => React.createElement(
               connect(component.mapStateToProps, component.mapDispatchToProps)(component.component),
@@ -49,9 +48,7 @@ export default function miradorWithPlugins(WrappedComponent) {
     }
   }
 
-  const wrappedComponentName = WrappedComponent.displayName
-  || WrappedComponent.name
-  || 'Component';
+  const wrappedComponentName = WrappedComponent.name || 'Component';
 
   ConnectedComponent.displayName = `miradorWithPlugins(${wrappedComponentName})`;
 

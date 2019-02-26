@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import WorkspaceMosaic from '../../../src/containers/WorkspaceMosaic';
 import Window from '../../../src/containers/Window';
-import Workspace from '../../../src/components/Workspace';
+import { Workspace } from '../../../src/components/Workspace';
 
 const windows = { 1: { id: 1 }, 2: { id: 2 } };
 

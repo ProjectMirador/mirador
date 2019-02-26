@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { fetchManifest, removeManifest } from '../state/actions/manifest';
-import ManifestListItemError from '../components/ManifestListItemError';
+import { ManifestListItemError } from '../components/ManifestListItemError';
 
 /** */
 const mapDispatchToProps = {

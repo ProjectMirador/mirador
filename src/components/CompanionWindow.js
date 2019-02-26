@@ -10,7 +10,7 @@ import WindowSideBarCanvasPanel from '../containers/WindowSideBarCanvasPanel';
 /**
  * CompanionWindow
  */
-class CompanionWindow extends Component {
+export class CompanionWindow extends Component {
   /**
    * activePanelComponent
    * @return React Component
@@ -74,5 +74,3 @@ CompanionWindow.defaultProps = {
   position: null,
   t: key => key,
 };
-
-export default CompanionWindow;

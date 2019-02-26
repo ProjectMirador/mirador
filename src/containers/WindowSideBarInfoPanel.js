@@ -12,7 +12,7 @@ import {
   getWindowManifest,
   getCanvasDescription,
 } from '../state/selectors';
-import WindowSideBarInfoPanel from '../components/WindowSideBarInfoPanel';
+import { WindowSideBarInfoPanel } from '../components/WindowSideBarInfoPanel';
 
 /**
  * mapStateToProps - to hook up connect

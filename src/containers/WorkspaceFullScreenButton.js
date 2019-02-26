@@ -4,7 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import * as actions from '../state/actions';
-import WorkspaceFullScreenButton
+import { WorkspaceFullScreenButton }
   from '../components/WorkspaceFullScreenButton';
 
 /**

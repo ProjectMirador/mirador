@@ -18,7 +18,7 @@ import ManifestListItem from '../containers/ManifestListItem';
  * @memberof Workspace
  * @private
  */
-class WorkspaceAdd extends React.Component {
+export class WorkspaceAdd extends React.Component {
   /** */
   constructor(props) {
     super(props);
@@ -104,5 +104,3 @@ WorkspaceAdd.defaultProps = {
   classes: {},
   t: key => key,
 };
-
-export default WorkspaceAdd;

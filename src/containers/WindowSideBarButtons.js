@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import * as actions from '../state/actions';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import WindowSideBarButtons from '../components/WindowSideBarButtons';
+import { WindowSideBarButtons } from '../components/WindowSideBarButtons';
 
 
 /**

@@ -9,7 +9,7 @@ import ZoomControls from '../containers/ZoomControls';
  * Represents a OpenSeadragonViewer in the mirador workspace. Responsible for mounting
  * and rendering OSD.
  */
-class OpenSeadragonViewer extends Component {
+export class OpenSeadragonViewer extends Component {
   /**
    * @param {Object} props
    */
@@ -229,5 +229,3 @@ OpenSeadragonViewer.propTypes = {
   updateViewport: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };
-
-export default OpenSeadragonViewer;

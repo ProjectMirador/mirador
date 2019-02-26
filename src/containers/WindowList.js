@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withNamespaces } from 'react-i18next';
 import * as actions from '../state/actions';
-import WindowList from '../components/WindowList';
+import { WindowList } from '../components/WindowList';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators

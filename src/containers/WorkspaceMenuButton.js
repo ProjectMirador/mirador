@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { withNamespaces } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import WorkspaceMenuButton from '../components/WorkspaceMenuButton';
+import { WorkspaceMenuButton } from '../components/WorkspaceMenuButton';
 
 /**
  *

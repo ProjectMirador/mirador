@@ -9,7 +9,7 @@ import ThumbnailNavigation from '../containers/ThumbnailNavigation';
  * Represents a Window in the mirador workspace
  * @param {object} window
  */
-class Window extends Component {
+export class Window extends Component {
   /**
    * Renders things
    */
@@ -48,5 +48,3 @@ Window.defaultProps = {
   window: null,
   manifest: null,
 };
-
-export default Window;
