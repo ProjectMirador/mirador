@@ -11,6 +11,7 @@ import { App } from '../components/App';
  */
 const mapStateToProps = state => (
   {
+    language: state.config.language,
     theme: state.config.theme,
     translations: state.config.translations,
     isFullscreenEnabled: state.workspace.isFullscreenEnabled,

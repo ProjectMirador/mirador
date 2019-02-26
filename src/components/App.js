@@ -15,6 +15,33 @@ import i18n from '../i18n';
  * @prop {Object} manifests
  */
 export class App extends Component {
+  /** */
+  constructor(props) {
+    super(props);
+
+    this.i18n = i18n;
+  }
+
+  /**
+   * Set i18n language on component mount
+   */
+  componentDidMount() {
+    const { language } = this.props;
+
+    this.i18n.changeLanguage(language);
+  }
+
+  /**
+   * Update the i18n language if it is changed
+   */
+  componentDidUpdate(prevProps) {
+    const { language } = this.props;
+
+    if (prevProps.language !== language) {
+      this.i18n.changeLanguage(language);
+    }
+  }
+
   /**
    * render
    * @return {String} - HTML markup for the component
@@ -26,12 +53,12 @@ export class App extends Component {
     } = this.props;
 
     Object.keys(translations).forEach((lng) => {
-      i18n.addResourceBundle(lng, 'translation', translations[lng], true, true);
+      this.i18n.addResourceBundle(lng, 'translation', translations[lng], true, true);
     });
 
     return (
       <div className={classNames(classes.background, ns('app'))}>
-        <I18nextProvider i18n={i18n}>
+        <I18nextProvider i18n={this.i18n}>
           <MuiThemeProvider theme={createMuiTheme(theme)}>
             <Fullscreen
               enabled={isFullscreenEnabled}
@@ -55,6 +82,7 @@ export class App extends Component {
 }
 
 App.propTypes = {
+  language: PropTypes.string.isRequired,
   theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   translations: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   isFullscreenEnabled: PropTypes.bool,
