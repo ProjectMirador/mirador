@@ -15,6 +15,9 @@ export default {
         light: '#64b5f6',
         dark: '#0d47a1',
       },
+      error: {
+        main: '#b00020',
+      },
     },
     typography: {
       useNextVariants: true // set so that console deprecation warning is removed
