@@ -22,17 +22,22 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   toggleWindowSideBar: () => dispatch(actions.toggleWindowSideBar(windowId)),
 });
 
-
-const styles = {
+/**
+ * @param theme
+ * @returns {{typographyBody: {flexGrow: number, fontSize: number|string},
+ * windowTopBarStyle: {minHeight: number, paddingLeft: number, backgroundColor: string}}}
+ */
+const styles = theme => ({
   typographyBody: {
     flexGrow: 1,
     fontSize: '1em',
   },
-  reallyDense: {
+  windowTopBarStyle: {
     minHeight: 32,
     paddingLeft: 4,
+    backgroundColor: theme.palette.primary.light,
   },
-};
+});
 
 const enhance = compose(
   withNamespaces(),
