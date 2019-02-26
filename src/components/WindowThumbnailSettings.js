@@ -3,10 +3,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
-import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
-import VideoLabelIcon from '@material-ui/icons/VideoLabel';
+import ThumbnailsOffIcon from '@material-ui/icons/CropDinSharp';
 import PropTypes from 'prop-types';
-
+import ThumbnailNavigationBottomIcon from './icons/ThumbnailNavigationBottomIcon';
+import ThumbnailNavigationRightIcon from './icons/ThumbnailNavigationRightIcon';
 /**
  *
  */
@@ -42,7 +42,7 @@ export class WindowThumbnailSettings extends Component {
         <RadioGroup aria-label={t('position')} name="position" value={thumbnailNavigationPosition} onChange={this.handleChange} row>
           <FormControlLabel
             value="off"
-            control={<Radio color="primary" icon={<CancelPresentationIcon />} checkedIcon={<CancelPresentationIcon />} />}
+            control={<Radio color="primary" icon={<ThumbnailsOffIcon />} checkedIcon={<ThumbnailsOffIcon />} />}
             label={t('off')}
             labelPlacement="bottom"
           />
@@ -62,24 +62,6 @@ export class WindowThumbnailSettings extends Component {
       </>
     );
   }
-}
-
-/**
- * @private
- */
-function ThumbnailNavigationBottomIcon(props) {
-  return (
-    <VideoLabelIcon />
-  );
-}
-
-/**
- * @private
- */
-function ThumbnailNavigationRightIcon(props) {
-  return (
-    <VideoLabelIcon style={{ transform: 'rotate(-90deg)' }} />
-  );
 }
 
 WindowThumbnailSettings.propTypes = {

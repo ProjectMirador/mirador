@@ -3,9 +3,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
-import PhotoIcon from '@material-ui/icons/Photo';
-import ViewAgendaIcon from '@material-ui/icons/ViewAgenda';
+import SingleIcon from '@material-ui/icons/CropOriginalSharp';
 import PropTypes from 'prop-types';
+import BookViewIcon from './icons/BookViewIcon';
 
 /**
  *
@@ -42,13 +42,13 @@ export class WindowViewSettings extends Component {
         <RadioGroup aria-label={t('position')} name="position" value={windowViewType} onChange={this.handleChange} row>
           <FormControlLabel
             value="single"
-            control={<Radio color="primary" icon={<PhotoIcon />} checkedIcon={<PhotoIcon />} />}
+            control={<Radio color="primary" icon={<SingleIcon />} checkedIcon={<SingleIcon />} />}
             label={t('single')}
             labelPlacement="bottom"
           />
           <FormControlLabel
             value="book"
-            control={<Radio color="primary" icon={<ViewAgendaIconRotated />} checkedIcon={<ViewAgendaIconRotated />} />}
+            control={<Radio color="primary" icon={<BookViewIcon />} checkedIcon={<BookViewIcon />} />}
             label={t('book')}
             labelPlacement="bottom"
           />
@@ -56,15 +56,6 @@ export class WindowViewSettings extends Component {
       </>
     );
   }
-}
-
-/**
- * @private
- */
-function ViewAgendaIconRotated(props) {
-  return (
-    <ViewAgendaIcon style={{ transform: 'rotate(-90deg)' }} />
-  );
 }
 
 WindowViewSettings.propTypes = {

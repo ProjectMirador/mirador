@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
-import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import OpenInNewIcon from '@material-ui/icons/OpenInNewSharp';
 import WindowSideBarInfoPanel from '../containers/WindowSideBarInfoPanel';
 import WindowSideBarCanvasPanel from '../containers/WindowSideBarCanvasPanel';
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import IconButton from '@material-ui/core/IconButton';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import MoreVertIcon from '@material-ui/icons/MoreVertSharp';
 import PropTypes from 'prop-types';
 import WindowTopMenu from '../containers/WindowTopMenu';
 
