@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import LanguageSettings from '../../../src/components/LanguageSettings';
+import { LanguageSettings } from '../../../src/components/LanguageSettings';
 
 /**
  * Helper function to create a shallow wrapper around LanguageSettings

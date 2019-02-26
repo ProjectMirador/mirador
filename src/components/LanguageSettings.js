@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
  * LanguageSettings ~ the workspace sub menu to change the language
  * of the application
 */
-export default class LanguageSettings extends Component {
+export class LanguageSettings extends Component {
   /**
    * Returns the rendered component
   */

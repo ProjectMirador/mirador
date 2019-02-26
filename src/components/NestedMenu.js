@@ -12,7 +12,7 @@ import ExpandMore from '@material-ui/icons/ExpandMoreSharp';
  * NestedMenu ~ A presentation component to render a menu item and have
  * it control the visibility of the MUI List passed in as the children
 */
-export default class NestedMenu extends Component {
+export class NestedMenu extends Component {
   /**
    * constructor -
    */
