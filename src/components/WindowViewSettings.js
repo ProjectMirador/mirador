@@ -4,8 +4,8 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
 import SingleIcon from '@material-ui/icons/CropOriginalSharp';
-import ViewAgendaIcon from '@material-ui/icons/ViewAgenda';
 import PropTypes from 'prop-types';
+import BookViewIcon from './icons/BookViewIcon';
 
 /**
  *
@@ -48,7 +48,7 @@ export class WindowViewSettings extends Component {
           />
           <FormControlLabel
             value="book"
-            control={<Radio color="primary" icon={<ViewAgendaIconRotated />} checkedIcon={<ViewAgendaIconRotated />} />}
+            control={<Radio color="primary" icon={<BookViewIcon />} checkedIcon={<BookViewIcon />} />}
             label={t('book')}
             labelPlacement="bottom"
           />
@@ -56,15 +56,6 @@ export class WindowViewSettings extends Component {
       </>
     );
   }
-}
-
-/**
- * @private
- */
-function ViewAgendaIconRotated(props) {
-  return (
-    <ViewAgendaIcon style={{ transform: 'rotate(-90deg)' }} />
-  );
 }
 
 WindowViewSettings.propTypes = {

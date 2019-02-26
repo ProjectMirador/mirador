@@ -4,9 +4,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import AddCircleIcon from '@material-ui/icons/AddCircleOutlineSharp';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircleOutlineSharp';
-import RefreshIcon from '@material-ui/icons/Refresh';
 import PropTypes from 'prop-types';
-
+import RestoreZoomIcon from './icons/RestoreZoomIcon';
 /**
  */
 export class ZoomControls extends Component {
@@ -87,7 +86,7 @@ export class ZoomControls extends Component {
         </ListItem>
         <ListItem>
           <IconButton aria-label={t('zoomReset')} onClick={this.handleZoomResetClick}>
-            <RefreshIcon />
+            <RestoreZoomIcon />
           </IconButton>
         </ListItem>
       </List>

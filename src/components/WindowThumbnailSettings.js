@@ -4,9 +4,9 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Typography from '@material-ui/core/Typography';
 import ThumbnailsOffIcon from '@material-ui/icons/CropDinSharp';
-import VideoLabelIcon from '@material-ui/icons/VideoLabel';
 import PropTypes from 'prop-types';
-
+import ThumbnailNavigationBottomIcon from './icons/ThumbnailNavigationBottomIcon';
+import ThumbnailNavigationRightIcon from './icons/ThumbnailNavigationRightIcon';
 /**
  *
  */
@@ -62,24 +62,6 @@ export class WindowThumbnailSettings extends Component {
       </>
     );
   }
-}
-
-/**
- * @private
- */
-function ThumbnailNavigationBottomIcon(props) {
-  return (
-    <VideoLabelIcon />
-  );
-}
-
-/**
- * @private
- */
-function ThumbnailNavigationRightIcon(props) {
-  return (
-    <VideoLabelIcon style={{ transform: 'rotate(-90deg)' }} />
-  );
 }
 
 WindowThumbnailSettings.propTypes = {
