@@ -9,6 +9,15 @@ export const windowsReducer = (state = {}, action) => {
     case ActionTypes.ADD_WINDOW:
       return { ...state, [action.window.id]: action.window };
 
+    case ActionTypes.MAXIMIZE_WINDOW:
+      return Object.keys(state).reduce((object, key) => {
+        if (key !== action.windowId) {
+          object[key] = state[key];
+          object[key].displayable = false;
+        }
+        return object;
+      }, {});
+
     case ActionTypes.UPDATE_WINDOW:
       return updateIn(state, [action.id], orig => merge(orig, action.payload));
 

@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/MenuSharp';
 import CloseIcon from '@material-ui/icons/CloseSharp';
+import FullscreenIcon from '@material-ui/icons/FullscreenSharp';
 import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 import classNames from 'classnames';
@@ -17,6 +18,14 @@ import ns from '../config/css-ns';
  * WindowTopBar
  */
 export class WindowTopBar extends Component {
+  /**
+   * maximizeWindow
+   * @return
+  */
+  maximizeWindow() {
+    console.log('maximized!')
+  }
+
   /**
    * render
    * @return
@@ -41,6 +50,14 @@ export class WindowTopBar extends Component {
           </Typography>
           <WindowTopBarButtons windowId={windowId} />
           <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
+          <IconButton
+            color="inherit"
+            className={ns('window-maximize')}
+            aria-label={t('maximizeWindow')}
+            onClick={this.maximizeWindow}
+          >
+            <FullscreenIcon />
+          </IconButton>
           <IconButton
             color="inherit"
             className={ns('window-close')}

@@ -47,6 +47,7 @@ export class WorkspaceMosaic extends React.Component {
    */
   determineWorkspaceLayout() {
     const { windows, workspace } = this.props;
+    console.log(windows);
     const windowKeys = Object.keys(windows).sort();
     const leaveKeys = getLeaves(workspace.layout);
     // Check every window is in the layout, and all layout windows are present
@@ -91,7 +92,7 @@ export class WorkspaceMosaic extends React.Component {
     return (
       <Mosaic
         renderTile={this.tileRenderer}
-        initialValue={workspace.layout || this.determineWorkspaceLayout()}
+        initialValue={this.determineWorkspaceLayout() || workspace.layout}
         onChange={this.mosaicChange}
         className="mirador-mosaic"
         zeroStateView={this.zeroStateView}
