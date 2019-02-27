@@ -10,8 +10,7 @@ import { ViewerNavigation } from '../components/ViewerNavigation';
  * @private
  */
 const mapDispatchToProps = {
-  nextCanvas: actions.nextCanvas,
-  previousCanvas: actions.previousCanvas,
+  setCanvas: actions.setCanvas,
 };
 
 const enhance = compose(

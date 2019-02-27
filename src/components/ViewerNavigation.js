@@ -19,22 +19,26 @@ export class ViewerNavigation extends Component {
   /**
    */
   nextCanvas() {
-    const { window, nextCanvas } = this.props;
-    if (this.hasNextCanvas()) nextCanvas(window.id);
+    const { window, setCanvas } = this.props;
+    if (this.hasNextCanvas()) {
+      setCanvas(window.id, window.canvasIndex + this.canvasIncrementor());
+    }
   }
 
   /**
    */
   hasNextCanvas() {
     const { window, canvases } = this.props;
-    return window.canvasIndex < canvases.length - 1;
+    return window.canvasIndex <= canvases.length - this.canvasIncrementor();
   }
 
   /**
    */
   previousCanvas() {
-    const { window, previousCanvas } = this.props;
-    if (this.hasPreviousCanvas()) previousCanvas(window.id);
+    const { window, setCanvas } = this.props;
+    if (this.hasPreviousCanvas()) {
+      setCanvas(window.id, Math.max(0, window.canvasIndex - this.canvasIncrementor()));
+    }
   }
 
   /**
@@ -42,6 +46,18 @@ export class ViewerNavigation extends Component {
   hasPreviousCanvas() {
     const { window } = this.props;
     return window.canvasIndex > 0;
+  }
+
+  /**
+   */
+  canvasIncrementor() {
+    const { window } = this.props;
+    switch (window.view) {
+      case 'book':
+        return 2;
+      default:
+        return 1;
+    }
   }
 
   /**
@@ -71,7 +87,6 @@ export class ViewerNavigation extends Component {
 
 ViewerNavigation.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-  nextCanvas: PropTypes.func.isRequired,
-  previousCanvas: PropTypes.func.isRequired,
+  setCanvas: PropTypes.func.isRequired,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
