@@ -27,7 +27,7 @@ export class WindowTopBar extends Component {
     } = this.props;
     return (
       <AppBar position="relative">
-        <Toolbar disableGutters className={classNames(classes.reallyDense, ns('window-top-bar'))} variant="dense">
+        <Toolbar disableGutters className={classNames(classes.windowTopBarStyle, ns('window-top-bar'))} variant="dense">
           <IconButton
             aria-label={t('toggleWindowSideBar')}
             color="inherit"

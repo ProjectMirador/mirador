@@ -107,7 +107,7 @@ export class ManifestListItem extends React.Component {
                     }
                   </Grid>
                   <Grid item xs={8} sm={9}>
-                    <Typography component="span" variant="subtitle1" color="primary">
+                    <Typography component="span" variant="subtitle1" color="secondary">
                       {title || manifestId}
                     </Typography>
                   </Grid>

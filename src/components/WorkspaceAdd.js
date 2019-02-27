@@ -56,7 +56,7 @@ export class WorkspaceAdd extends React.Component {
       <div className={ns('workspace-add')}>
         {manifestList}
 
-        <Fab variant="extended" disabled={addResourcesOpen} className={classes.fab} color="primary" onClick={() => (this.setAddResourcesVisibility(true))}>
+        <Fab variant="extended" disabled={addResourcesOpen} className={classes.fab} color="secondary" onClick={() => (this.setAddResourcesVisibility(true))}>
           <AddIcon />
           {t('addResource')}
         </Fab>
@@ -75,9 +75,9 @@ export class WorkspaceAdd extends React.Component {
           <Paper
             className={classes.form}
           >
-            <AppBar position="absolute" color="primary" onClick={() => (this.setAddResourcesVisibility(false))}>
+            <AppBar position="absolute" color="secondary" onClick={() => (this.setAddResourcesVisibility(false))}>
               <Toolbar>
-                <IconButton className={classes.menuButton} color="inherit" aria-label={t('closeMenu')}>
+                <IconButton className={classes.menuButton} color="secondary" aria-label={t('closeMenu')}>
                   <ExpandMoreIcon />
                 </IconButton>
                 <Typography variant="h2" noWrap color="inherit" className={classes.typographyBody}>

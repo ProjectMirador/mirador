@@ -19,7 +19,7 @@ export class WorkspaceAddButton extends Component {
     return (
       <ListItem>
         <Fab
-          color="primary"
+          color="secondary"
           id="addBtn"
           aria-label={isWorkspaceAddVisible ? t('closeWindow') : t('add')}
           className={classes.fab}

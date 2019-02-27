@@ -60,6 +60,7 @@ export class WindowSideBarCanvasPanel extends Component {
                     className={classNames(classes.clickable, classes.label)}
                     onClick={onClick}
                     variant="body2"
+                    color="secondary"
                   >
                     {canvas.label}
                   </Typography>

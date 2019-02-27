@@ -42,19 +42,19 @@ export class WindowThumbnailSettings extends Component {
         <RadioGroup aria-label={t('position')} name="position" value={thumbnailNavigationPosition} onChange={this.handleChange} row>
           <FormControlLabel
             value="off"
-            control={<Radio color="primary" icon={<ThumbnailsOffIcon />} checkedIcon={<ThumbnailsOffIcon />} />}
+            control={<Radio color="secondary" icon={<ThumbnailsOffIcon />} checkedIcon={<ThumbnailsOffIcon />} />}
             label={t('off')}
             labelPlacement="bottom"
           />
           <FormControlLabel
             value="bottom"
-            control={<Radio color="primary" icon={<ThumbnailNavigationBottomIcon />} checkedIcon={<ThumbnailNavigationBottomIcon />} />}
+            control={<Radio color="secondary" icon={<ThumbnailNavigationBottomIcon />} checkedIcon={<ThumbnailNavigationBottomIcon />} />}
             label={t('bottom')}
             labelPlacement="bottom"
           />
           <FormControlLabel
             value="right"
-            control={<Radio color="primary" icon={<ThumbnailNavigationRightIcon />} checkedIcon={<ThumbnailNavigationRightIcon />} />}
+            control={<Radio color="secondary" icon={<ThumbnailNavigationRightIcon />} checkedIcon={<ThumbnailNavigationRightIcon />} />}
             label={t('right')}
             labelPlacement="bottom"
           />
