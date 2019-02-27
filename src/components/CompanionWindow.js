@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/CloseSharp';
-import OpenWith from '@material-ui/icons/OpenWithSharp';
+import DragIndicatorIcon from '@material-ui/icons/DragIndicatorSharp';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import ns from '../config/css-ns';
@@ -46,7 +46,7 @@ export class CompanionWindow extends Component {
             aria-label={t('toggleAreaOfCompanionWindow')}
             onClick={toggleAreaOfCompanionWindow}
           >
-            <OpenWith />
+            <DragIndicatorIcon />
           </IconButton>
 
           <IconButton

@@ -138,4 +138,51 @@ describe('window actions', () => {
       });
     });
   });
+
+  describe('toggleAreaOfCompanionWindow', () => {
+    /**  execute action and return dispatch */
+    const executeAction = (state, companionWindowId) => {
+      const dispatch = jest.fn();
+      const getState = jest.fn(() => state);
+      const thunk = actions.toggleAreaOfCompanionWindow(companionWindowId);
+      thunk(dispatch, getState);
+      return dispatch;
+    };
+
+    describe('if current position is "right"', () => {
+      it('should update companion window position to "bottom"', () => {
+        const state = {
+          companionWindows: {
+            abc: { position: 'right' },
+          },
+        };
+        const dispatch = executeAction(state, 'abc');
+
+        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(dispatch).toHaveBeenCalledWith({
+          id: 'abc',
+          payload: { position: 'bottom' },
+          type: 'UPDATE_COMPANION_WINDOW',
+        });
+      });
+    });
+
+    describe('if current position is "bottom"', () => {
+      it('should update companion window position to "right"', () => {
+        const state = {
+          companionWindows: {
+            abc: { position: 'bottom' },
+          },
+        };
+        const dispatch = executeAction(state, 'abc');
+
+        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(dispatch).toHaveBeenCalledWith({
+          id: 'abc',
+          payload: { position: 'right' },
+          type: 'UPDATE_COMPANION_WINDOW',
+        });
+      });
+    });
+  });
 });
