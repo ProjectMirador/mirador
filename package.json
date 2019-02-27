@@ -67,7 +67,7 @@
     "babel-eslint": "9.0.0",
     "babel-jest": "^24.1.0",
     "babel-loader": "^8.0.4",
-    "babel-plugin-named-asset-import": "^0.2.3",
+    "babel-plugin-named-asset-import": "^0.3.1",
     "codecov": "^3.1.0",
     "concurrently": "^4.0.1",
     "css-loader": "^2.1.0",
