@@ -1,6 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { WorkspaceSettings } from '../components/WorkspaceSettings';
 import * as actions from '../state/actions';
 
@@ -25,7 +25,7 @@ const mapStateToProps = state => (
 );
 
 const enhance = compose(
-  withNamespaces(),
+  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
 );
 

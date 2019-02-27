@@ -1,6 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import * as actions from '../state/actions';
 import { getThumbnailNavigationPosition } from '../state/selectors';
@@ -25,7 +25,7 @@ const mapStateToProps = (state, props) => (
 );
 
 const enhance = compose(
-  withNamespaces(),
+  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   miradorWithPlugins,
   // further HOC go here

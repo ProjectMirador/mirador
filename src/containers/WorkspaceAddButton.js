@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import * as actions from '../state/actions';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
@@ -37,7 +37,7 @@ const styles = theme => ({
 });
 
 const enhance = compose(
-  withNamespaces(),
+  withTranslation(),
   withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
   miradorWithPlugins,
