@@ -52,17 +52,15 @@ describe('WindowSideBarInfoPanel', () => {
 
     it('renders canvas metadata in LabelValueMetadata component', () => {
       expect(
-        wrapper.find(Typography).at(3).matchesElement(
-          <Typography>
-            <LabelValueMetadata labelValuePairs={metadata} />
-          </Typography>,
+        wrapper.find(LabelValueMetadata).at(0).matchesElement(
+          <LabelValueMetadata labelValuePairs={metadata} />,
         ),
       ).toBe(true);
     });
 
     it('renders manifest label', () => {
       expect(
-        wrapper.find(Typography).at(4).matchesElement(
+        wrapper.find(Typography).at(3).matchesElement(
           <Typography>The Manifest Label</Typography>,
         ),
       ).toBe(true);
@@ -70,7 +68,7 @@ describe('WindowSideBarInfoPanel', () => {
 
     it('renders manifest description in SanitizedHtml component', () => {
       expect(
-        wrapper.find(Typography).at(5).matchesElement(
+        wrapper.find(Typography).at(4).matchesElement(
           <Typography>
             <SanitizedHtml htmlString="The Manifest Description" ruleSet="iiif" />
           </Typography>,
@@ -80,10 +78,8 @@ describe('WindowSideBarInfoPanel', () => {
 
     it('renders manifest metadata in LabelValueMetadata component', () => {
       expect(
-        wrapper.find(Typography).at(6).matchesElement(
-          <Typography>
-            <LabelValueMetadata labelValuePairs={metadata} />
-          </Typography>,
+        wrapper.find(LabelValueMetadata).at(1).matchesElement(
+          <LabelValueMetadata labelValuePairs={metadata} />,
         ),
       ).toBe(true);
     });

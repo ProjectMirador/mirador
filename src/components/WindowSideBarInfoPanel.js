@@ -47,9 +47,7 @@ export class WindowSideBarInfoPanel extends Component {
         )}
 
         {canvasMetadata.length > 0 && (
-          <Typography variant="body2">
-            <LabelValueMetadata labelValuePairs={canvasMetadata} />
-          </Typography>
+          <LabelValueMetadata labelValuePairs={canvasMetadata} />
         )}
 
         <Divider />
@@ -67,9 +65,7 @@ export class WindowSideBarInfoPanel extends Component {
         )}
 
         {manifestMetadata.length > 0 && (
-          <Typography variant="body2">
-            <LabelValueMetadata labelValuePairs={manifestMetadata} />
-          </Typography>
+          <LabelValueMetadata labelValuePairs={manifestMetadata} />
         )}
 
       </div>

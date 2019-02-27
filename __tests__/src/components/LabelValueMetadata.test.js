@@ -31,8 +31,8 @@ describe('LabelValueMetadata', () => {
     });
 
     it('renders correct labels in dt', () => {
-      expect(wrapper.find('dt').first().text()).toEqual('Label 1');
-      expect(wrapper.find('dt').last().text()).toEqual('Label 2');
+      expect(wrapper.find('dt WithStyles(Typography)').first().children().text()).toEqual('Label 1');
+      expect(wrapper.find('dt WithStyles(Typography)').last().children().text()).toEqual('Label 2');
     });
 
     it('renders SanitizedHtml component in dt for each value', () => {
