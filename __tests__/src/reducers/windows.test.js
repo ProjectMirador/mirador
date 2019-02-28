@@ -121,54 +121,6 @@ describe('windows reducer', () => {
     });
   });
 
-  it('should handle NEXT_CANVAS', () => {
-    expect(windowsReducer({
-      abc123: {
-        id: 'abc123',
-        canvasIndex: 1,
-      },
-      def456: {
-        id: 'def456',
-        canvasIndex: 1,
-      },
-    }, {
-      type: ActionTypes.NEXT_CANVAS,
-      windowId: 'abc123',
-    })).toEqual({
-      abc123: {
-        id: 'abc123',
-        canvasIndex: 2,
-      },
-      def456: {
-        id: 'def456',
-        canvasIndex: 1,
-      },
-    });
-  });
-  it('should handle PREVIOUS_CANVAS', () => {
-    expect(windowsReducer({
-      abc123: {
-        id: 'abc123',
-        canvasIndex: 4,
-      },
-      def456: {
-        id: 'def456',
-        canvasIndex: 1,
-      },
-    }, {
-      type: ActionTypes.PREVIOUS_CANVAS,
-      windowId: 'abc123',
-    })).toEqual({
-      abc123: {
-        id: 'abc123',
-        canvasIndex: 3,
-      },
-      def456: {
-        id: 'def456',
-        canvasIndex: 1,
-      },
-    });
-  });
   it('should handle SET_CANVAS', () => {
     expect(windowsReducer({
       abc123: {
