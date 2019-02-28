@@ -7,7 +7,6 @@ import CloseIcon from '@material-ui/icons/CloseSharp';
 import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 import classNames from 'classnames';
-import WindowIcon from '../containers/WindowIcon';
 import WindowTopMenuButton from '../containers/WindowTopMenuButton';
 import WindowTopBarButtons from '../containers/WindowTopBarButtons';
 import ns from '../config/css-ns';
@@ -35,7 +34,6 @@ export class WindowTopBar extends Component {
           >
             <MenuIcon />
           </IconButton>
-          <WindowIcon windowId={windowId} />
           <Typography variant="h3" noWrap color="inherit" className={classes.typographyBody}>
             {manifestTitle}
           </Typography>
