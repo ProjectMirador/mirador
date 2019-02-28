@@ -1,5 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import * as actions from '../state/actions';
 import { WorkspaceMosaic } from '../components/WorkspaceMosaic';
 
@@ -23,6 +24,7 @@ const mapStateToProps = state => (
 const mapDispatchToProps = { updateWorkspaceMosaicLayout: actions.updateWorkspaceMosaicLayout };
 
 const enhance = compose(
+  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   // further HOC go here
 );

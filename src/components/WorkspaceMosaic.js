@@ -65,7 +65,7 @@ export class WorkspaceMosaic extends React.Component {
    * Render a tile (Window) in the Mosaic.
    */
   tileRenderer(id, path) {
-    const { windows } = this.props;
+    const { windows, t } = this.props;
     const window = windows[id];
     if (!window) return null;
     return (
@@ -77,7 +77,7 @@ export class WorkspaceMosaic extends React.Component {
         renderPreview={() => (
           <div className="mosaic-preview">
             <div className="mosaic-window-body">
-              <h4>Mirador</h4>
+              <h4>{t('previewWindowTitle')}</h4>
             </div>
           </div>
         )}
@@ -115,7 +115,12 @@ export class WorkspaceMosaic extends React.Component {
 }
 
 WorkspaceMosaic.propTypes = {
+  t: PropTypes.func,
   updateWorkspaceMosaicLayout: PropTypes.func.isRequired,
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   workspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
+
+WorkspaceMosaic.defaultProps = {
+  t: key => key,
 };
