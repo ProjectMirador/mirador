@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import * as actions from '../state/actions';
 import { ManifestForm } from '../components/ManifestForm';
 
@@ -12,7 +12,7 @@ import { ManifestForm } from '../components/ManifestForm';
 const mapDispatchToProps = { fetchManifest: actions.fetchManifest };
 
 const enhance = compose(
-  withNamespaces(),
+  withTranslation(),
   connect(null, mapDispatchToProps),
 );
 

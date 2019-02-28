@@ -53,7 +53,7 @@ describe('manifest actions', () => {
           .then(() => {
             const expectedActions = store.getActions();
             expect(expectedActions).toEqual([
-              { manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest', type: 'REQUEST_MANIFEST' },
+              { manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest', type: 'REQUEST_MANIFEST', properties: { isFetching: true } },
               { manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest', manifestJson: { data: '12345' }, type: 'RECEIVE_MANIFEST' },
             ]);
           });
@@ -65,8 +65,8 @@ describe('manifest actions', () => {
           .then(() => {
             const expectedActions = store.getActions();
             expect(expectedActions).toEqual([
-              { manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest', type: 'REQUEST_MANIFEST' },
-              { manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest', error: new Error('invalid json response body at undefined reason: Unexpected end of JSON input'), type: 'RECEIVE_MANIFEST_FAILURE' },
+              { manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest', type: 'REQUEST_MANIFEST', properties: { isFetching: true } },
+              { manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest', error: 'FetchError: invalid json response body at undefined reason: Unexpected end of JSON input', type: 'RECEIVE_MANIFEST_FAILURE' },
             ]);
           });
       });
