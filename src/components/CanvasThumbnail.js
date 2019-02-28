@@ -91,14 +91,11 @@ export class CanvasThumbnail extends Component {
   /**
    */
   render() {
-    const { onClick } = this.props;
     return (
       <>
         <IntersectionObserver onChange={this.handleIntersection}>
           <img
             alt=""
-            onClick={onClick}
-            onKeyPress={onClick}
             role="presentation"
             src={this.imageSrc()}
             style={this.imageStyles()}
@@ -115,7 +112,6 @@ CanvasThumbnail.defaultImgPlaceholder = 'data:image/png;base64,iVBORw0KGgoAAAANS
 CanvasThumbnail.propTypes = {
   imageUrl: PropTypes.string,
   isValid: PropTypes.bool,
-  onClick: PropTypes.func.isRequired,
   maxHeight: PropTypes.number,
   maxWidth: PropTypes.number,
   aspectRatio: PropTypes.number,

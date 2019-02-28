@@ -4,7 +4,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import manifesto from 'manifesto.js';
-import { CanvasThumbnail } from '../../../src/components/CanvasThumbnail';
 import { WindowSideBarCanvasPanel } from '../../../src/components/WindowSideBarCanvasPanel';
 import manifestJson from '../../fixtures/version-2/019.json';
 import { getIdAndLabelOfCanvases } from '../../../src/state/selectors';
@@ -54,13 +53,8 @@ describe('WindowSideBarCanvasPanel', () => {
       .text()).toBe(idsAndLabels[1].label);
   });
 
-  it('should call the onClick handler of a navigation item\'s label', () => {
-    wrapper.find(Typography).at(1).simulate('click');
-    expect(setCanvas).toHaveBeenCalledTimes(1);
-  });
-
-  it('should call the onClick handler of a navigation item\'s thumbnail', () => {
-    wrapper.find(CanvasThumbnail).at(0).simulate('click');
+  it('should call the onClick handler of a list item', () => {
+    wrapper.find(ListItem).at(1).simulate('click');
     expect(setCanvas).toHaveBeenCalledTimes(1);
   });
 });

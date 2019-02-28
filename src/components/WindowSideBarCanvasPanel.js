@@ -36,6 +36,8 @@ export class WindowSideBarCanvasPanel extends Component {
               return (
                 <ListItem
                   key={canvas.id}
+                  onClick={onClick}
+                  button
                 >
                   <div>
                     <CanvasThumbnail
@@ -45,7 +47,6 @@ export class WindowSideBarCanvasPanel extends Component {
                       maxHeight={config.canvasNavigation.height}
                       maxWidth={config.canvasNavigation.width}
                       aspectRatio={manifestoCanvas.aspectRatio}
-                      onClick={onClick}
                       style={{
                         cursor: 'pointer',
                         height: config.canvasNavigation.height,
@@ -54,8 +55,7 @@ export class WindowSideBarCanvasPanel extends Component {
                     />
                   </div>
                   <Typography
-                    className={classNames(classes.clickable, classes.label)}
-                    onClick={onClick}
+                    className={classNames(classes.label)}
                     variant="body2"
                     color="secondary"
                   >
