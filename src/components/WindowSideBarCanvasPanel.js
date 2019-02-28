@@ -36,10 +36,11 @@ export class WindowSideBarCanvasPanel extends Component {
               return (
                 <ListItem
                   key={canvas.id}
+                  alignItems="flex-start"
                   onClick={onClick}
                   button
                 >
-                  <div>
+                  <div style={{ minWidth: 50 }}>
                     <CanvasThumbnail
                       className={classNames(classes.clickable)}
                       isValid={isValid}
@@ -47,17 +48,11 @@ export class WindowSideBarCanvasPanel extends Component {
                       maxHeight={config.canvasNavigation.height}
                       maxWidth={config.canvasNavigation.width}
                       aspectRatio={manifestoCanvas.aspectRatio}
-                      style={{
-                        cursor: 'pointer',
-                        height: config.canvasNavigation.height,
-                        width: isValid ? WindowSideBarCanvasPanel.calculateScaledWidth(config.canvasNavigation.height, validationCanvas.aspectRatio) : 'auto',
-                      }}
                     />
                   </div>
                   <Typography
                     className={classNames(classes.label)}
                     variant="body2"
-                    color="secondary"
                   >
                     {canvas.label}
                   </Typography>
