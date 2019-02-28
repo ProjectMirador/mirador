@@ -22,7 +22,7 @@ export class CanvasThumbnail extends Component {
   handleIntersection(event) {
     const { imageUrl } = this.props;
     const { loaded } = this.state;
-    if (loaded || !event.isIntersecting) return;
+    if (loaded || !event.isIntersecting || !imageUrl) return;
     const image = new Image();
     image.src = imageUrl;
     this.setState({
@@ -32,13 +32,37 @@ export class CanvasThumbnail extends Component {
   }
 
   /**
+   * Return a the image URL if it is loaded and valid, otherwise return a placeholder
+  */
+  imageSrc() {
+    const { isValid } = this.props;
+    const { loaded, image } = this.state;
+
+    if (loaded && isValid && image && image.src) {
+      return image.src;
+    }
+
+    return CanvasThumbnail.defaultImgPlaceholder;
+  }
+
+  /**
+   *
+  */
+  imageStyles() {
+    const { height, style } = this.props;
+    const { image } = this.state;
+
+    return {
+      height,
+      width: (image && image.src) ? '100%' : '110px',
+      ...style,
+    };
+  }
+
+  /**
    */
   render() {
-    const {
-      height, isValid, onClick, style,
-    } = this.props;
-    const { loaded, image } = this.state;
-    const imgStyle = { height, width: '100%', ...style };
+    const { onClick } = this.props;
     return (
       <>
         <IntersectionObserver onChange={this.handleIntersection}>
@@ -47,8 +71,8 @@ export class CanvasThumbnail extends Component {
             onClick={onClick}
             onKeyPress={onClick}
             role="presentation"
-            src={loaded && isValid ? image.src : CanvasThumbnail.defaultImgPlaceholder}
-            style={imgStyle}
+            src={this.imageSrc()}
+            style={this.imageStyles()}
           />
         </IntersectionObserver>
       </>
