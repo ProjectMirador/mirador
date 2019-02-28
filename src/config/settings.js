@@ -115,6 +115,13 @@ export default {
         lineHeight: "1.75em",
       },
       useNextVariants: true // set so that console deprecation warning is removed
+    },
+    overrides: {
+      MuiInput: {
+        input: {
+          backgroundColor: 'LightGray',
+        }
+      }
     }
   },
   language: 'en',

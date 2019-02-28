@@ -10,6 +10,7 @@ import { App } from '../components/App';
  */
 const mapStateToProps = state => (
   {
+    errors: state.errors,
     language: state.config.language,
     theme: state.config.theme,
     translations: state.config.translations,
@@ -23,6 +24,7 @@ const mapStateToProps = state => (
  * @private
  */
 const mapDispatchToProps = {
+  removeError: actions.removeError,
   setWorkspaceFullscreen: actions.setWorkspaceFullscreen,
 };
 

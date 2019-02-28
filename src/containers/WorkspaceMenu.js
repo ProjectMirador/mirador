@@ -7,7 +7,7 @@ import { WorkspaceMenu } from '../components/WorkspaceMenu';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
- * @memberof ManifestListItem
+ * @memberof WorkspaceMenu
  * @private
  */
 const mapDispatchToProps = {

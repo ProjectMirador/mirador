@@ -20,8 +20,8 @@ export class PrimaryWindow extends Component {
     if (manifest && manifest.isFetching === false) {
       return (
         <WindowViewer
-          window={window}
           manifest={manifest}
+          window={window}
         />
       );
     }

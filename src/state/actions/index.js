@@ -4,6 +4,7 @@
  */
 export * from './companionWindow';
 export * from './config';
+export * from './errors';
 export * from './window';
 export * from './manifest';
 export * from './infoResponse';

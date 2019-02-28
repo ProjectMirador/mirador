@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Menu from '@material-ui/core/Menu';
+import ImportIcon from '@material-ui/icons/Input';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
@@ -12,6 +13,7 @@ import WindowList from '../containers/WindowList';
 import WorkspaceSettings from '../containers/WorkspaceSettings';
 import WorkspaceSelectionDialog from '../containers/WorkspaceSelectionDialog';
 import WorkspaceExport from '../containers/WorkspaceExport';
+import WorkspaceImport from '../containers/WorkspaceImport';
 import ns from '../config/css-ns';
 
 /**
@@ -28,6 +30,7 @@ export class WorkspaceMenu extends Component {
       workspaceSelection: {},
       settings: {},
       exportWorkspace: {},
+      importWorkspace: {},
     };
     this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
     this.handleMenuItemClose = this.handleMenuItemClose.bind(this);
@@ -79,6 +82,7 @@ export class WorkspaceMenu extends Component {
     } = this.props;
 
     const {
+      importWorkspace,
       windowList,
       toggleZoom,
       settings,
@@ -153,6 +157,16 @@ export class WorkspaceMenu extends Component {
             </ListItemIcon>
             <Typography varient="inherit">{t('downloadExportWorkspace')}</Typography>
           </MenuItem>
+          <MenuItem
+            aria-haspopup="true"
+            onClick={(e) => { this.handleMenuItemClick('importWorkspace', e); handleClose(e); }}
+            aria-owns={exportWorkspace.AnchorEl ? 'workspace-import' : undefined}
+          >
+            <ListItemIcon>
+              <ImportIcon />
+            </ListItemIcon>
+            <Typography varient="inherit">{t('importWorkspace')}</Typography>
+          </MenuItem>
         </Menu>
         <WindowList
           anchorEl={windowList.anchorEl}
@@ -177,6 +191,10 @@ export class WorkspaceMenu extends Component {
           open={Boolean(exportWorkspace.open)}
           container={container}
           handleClose={this.handleMenuItemClose('exportWorkspace')}
+        />
+        <WorkspaceImport
+          open={Boolean(importWorkspace.open)}
+          handleClose={this.handleMenuItemClose('importWorkspace')}
         />
       </>
     );
