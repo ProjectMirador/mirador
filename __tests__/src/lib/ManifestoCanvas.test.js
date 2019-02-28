@@ -2,6 +2,7 @@ import manifesto from 'manifesto.js';
 import ManifestoCanvas from '../../../src/lib/ManifestoCanvas';
 import fixture from '../../fixtures/version-2/019.json';
 import imagev1Fixture from '../../fixtures/version-2/Osbornfa1.json';
+import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
 
 describe('ManifestoCanvas', () => {
   let instance;
@@ -27,6 +28,14 @@ describe('ManifestoCanvas', () => {
       );
       expect(imagev1Instance.imageInformationUri).toEqual('https://images.britishart.yale.edu/iiif/b38081da-8991-4464-a71e-d9891226a35f/info.json');
     });
+
+    it('is undefined if a canvas is empty (e.g. has no images)', () => {
+      const emptyCanvasInstance = new ManifestoCanvas(
+        manifesto.create(emptyCanvasFixture).getSequences()[0].getCanvases()[3],
+      );
+
+      expect(emptyCanvasInstance.imageInformationUri).toBeUndefined();
+    });
   });
   describe('aspectRatio', () => {
     it('calculates a width / height aspectRatio', () => {
@@ -43,6 +52,14 @@ describe('ManifestoCanvas', () => {
       expect(instance.thumbnail()).toEqual(
         'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/100,/0/default.jpg',
       );
+    });
+
+    it('returns undefined if there are no images to generate a thumbnail from', () => {
+      const emptyCanvasInstance = new ManifestoCanvas(
+        manifesto.create(emptyCanvasFixture).getSequences()[0].getCanvases()[3],
+      );
+
+      expect(emptyCanvasInstance.thumbnail()).toBeUndefined();
     });
   });
 });
