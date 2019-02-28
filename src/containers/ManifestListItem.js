@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import {
-  getManifestTitle, getManifestLogo, getManifestThumbnail, getManifestCanvases, getManifestProvider,
+  getManifestTitle, getManifestThumbnail, getManifestCanvases, getManifestProvider,
 } from '../state/selectors';
 import * as actions from '../state/actions';
 import { ManifestListItem } from '../components/ManifestListItem';
@@ -17,7 +17,6 @@ const mapStateToProps = (state, { manifestId }) => {
     error: manifest.error,
     isFetching: manifest.isFetching,
     title: getManifestTitle(manifest),
-    logo: getManifestLogo(manifest),
     thumbnail: getManifestThumbnail(manifest),
     provider: getManifestProvider(manifest),
     size: getManifestCanvases(manifest).length,

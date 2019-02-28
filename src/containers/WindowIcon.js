@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import { compose } from 'redux';
-import { getWindowManifest, getManifestLogo } from '../state/selectors';
+import { getManifestLogo } from '../state/selectors';
 import WindowIcon from '../components/WindowIcon';
 
 /** */
-const mapStateToProps = (state, { windowId }) => ({
-  manifestLogo: getManifestLogo(getWindowManifest(state, windowId)),
+const mapStateToProps = (state, { manifestId }) => ({
+  manifestLogo: getManifestLogo(state.manifests[manifestId]),
 });
 
 const styles = {

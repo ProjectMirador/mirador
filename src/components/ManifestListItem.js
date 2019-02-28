@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import ReactPlaceholder from 'react-placeholder';
 import { TextBlock, TextRow, RectShape } from 'react-placeholder/lib/placeholders';
 import ManifestListItemError from '../containers/ManifestListItemError';
-import WindowIcon from './WindowIcon';
+import WindowIcon from '../containers/WindowIcon';
 import ns from '../config/css-ns';
 import 'react-placeholder/lib/reactPlaceholder.css';
 
@@ -41,7 +41,6 @@ export class ManifestListItem extends React.Component {
       ready,
       title,
       thumbnail,
-      logo,
       addWindow,
       handleClose,
       size,
@@ -120,7 +119,7 @@ export class ManifestListItem extends React.Component {
             </Grid>
 
             <Grid item xs={4} sm={2}>
-              <WindowIcon className={ns('manifest-list-item-logo')} manifestLogo={logo} />
+              <WindowIcon className={ns('manifest-list-item-logo')} manifestId={manifestId} />
             </Grid>
           </Grid>
         </ReactPlaceholder>
@@ -136,7 +135,6 @@ ManifestListItem.propTypes = {
   ready: PropTypes.bool,
   title: PropTypes.string,
   thumbnail: PropTypes.string,
-  logo: PropTypes.string,
   size: PropTypes.number,
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   provider: PropTypes.string,
@@ -149,7 +147,6 @@ ManifestListItem.propTypes = {
 ManifestListItem.defaultProps = {
   handleClose: () => {},
   ready: false,
-  logo: null,
   thumbnail: null,
   title: null,
   classes: {},
