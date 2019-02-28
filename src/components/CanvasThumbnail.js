@@ -49,12 +49,41 @@ export class CanvasThumbnail extends Component {
    *
   */
   imageStyles() {
-    const { height, style } = this.props;
-    const { image } = this.state;
+    const {
+      maxHeight, maxWidth, aspectRatio, style,
+    } = this.props;
+
+    let height;
+    let width;
+
+    if (maxHeight && maxWidth && aspectRatio) {
+      const desiredAspectRatio = maxWidth / maxHeight;
+
+      // size to width
+      if (desiredAspectRatio < aspectRatio) {
+        height = maxWidth / aspectRatio;
+        width = maxWidth;
+      } else {
+        height = maxHeight;
+        width = maxHeight * aspectRatio;
+      }
+    } else if (maxHeight && maxWidth) {
+      height = maxHeight;
+      width = maxWidth;
+    } else if (maxHeight && !maxWidth) {
+      height = maxHeight;
+      width = 'auto';
+    } else if (!maxHeight && maxWidth) {
+      height = 'auto';
+      width = maxWidth;
+    } else {
+      height = 'auto';
+      width = 'auto';
+    }
 
     return {
       height,
-      width: (image && image.src) ? '100%' : '110px',
+      width,
       ...style,
     };
   }
@@ -86,14 +115,18 @@ CanvasThumbnail.defaultImgPlaceholder = 'data:image/png;base64,iVBORw0KGgoAAAANS
 CanvasThumbnail.propTypes = {
   imageUrl: PropTypes.string,
   isValid: PropTypes.bool,
-  height: PropTypes.number,
   onClick: PropTypes.func.isRequired,
+  maxHeight: PropTypes.number,
+  maxWidth: PropTypes.number,
+  aspectRatio: PropTypes.number,
   style: PropTypes.object, // eslint-disable-line react/forbid-prop-types,
 };
 
 CanvasThumbnail.defaultProps = {
   imageUrl: null,
   isValid: true,
-  height: 150,
+  maxHeight: null,
+  maxWidth: null,
+  aspectRatio: null,
   style: {},
 };

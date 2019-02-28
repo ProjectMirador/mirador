@@ -13,13 +13,6 @@ import { getIdAndLabelOfCanvases } from '../state/selectors';
  */
 export class WindowSideBarCanvasPanel extends Component {
   /**
-   * calculateScaledWidth - calculates the scaled width according to the given width and aspectRatio
-   */
-  static calculateScaledWidth(height, aspectRatio) {
-    return Math.floor(height * aspectRatio);
-  }
-
-  /**
    * render
    */
   render() {
@@ -48,7 +41,10 @@ export class WindowSideBarCanvasPanel extends Component {
                     <CanvasThumbnail
                       className={classNames(classes.clickable)}
                       isValid={isValid}
-                      imageUrl={manifestoCanvas.thumbnail(config.canvasNavigation.width, config.canvasNavigation.height)}
+                      imageUrl={manifestoCanvas.thumbnail(width, height)}
+                      maxHeight={config.canvasNavigation.height}
+                      maxWidth={config.canvasNavigation.width}
+                      aspectRatio={manifestoCanvas.aspectRatio}
                       onClick={onClick}
                       style={{
                         cursor: 'pointer',

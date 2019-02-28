@@ -74,7 +74,7 @@ export class ThumbnailNavigation extends Component {
               <CanvasThumbnail
                 onClick={() => setCanvas(window.id, currentGroupings[0].index)}
                 imageUrl={new ManifestoCanvas(canvas).thumbnail(null, config.thumbnailNavigation.height)}
-                height={config.thumbnailNavigation.height}
+                maxHeight={config.thumbnailNavigation.height}
               />
             </div>
           ))}
