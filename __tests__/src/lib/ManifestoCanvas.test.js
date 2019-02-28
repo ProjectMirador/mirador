@@ -43,14 +43,28 @@ describe('ManifestoCanvas', () => {
     });
   });
   describe('thumbnail', () => {
-    it('calculates a thumbnail image API request based off of height', () => {
+    it('calculates a thumbnail image API request based off of width, height and aspect ratio', () => {
+      expect(instance.thumbnail(100, 100)).toEqual(
+        'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/,100/0/default.jpg',
+      );
+
+      expect(instance.thumbnail(100, 1000)).toEqual(
+        'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/100,/0/default.jpg',
+      );
+    });
+    it('calculates a thumbnail image API request based off of width', () => {
       expect(instance.thumbnail(100)).toEqual(
-        'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/66,/0/default.jpg',
+        'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/100,/0/default.jpg',
+      );
+    });
+    it('calculates a thumbnail image API request based off of height', () => {
+      expect(instance.thumbnail(null, 100)).toEqual(
+        'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/,100/0/default.jpg',
       );
     });
     it('defaults to using 150 as a height', () => {
       expect(instance.thumbnail()).toEqual(
-        'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/100,/0/default.jpg',
+        'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/,150/0/default.jpg',
       );
     });
 

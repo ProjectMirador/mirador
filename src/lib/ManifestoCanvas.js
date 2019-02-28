@@ -43,14 +43,37 @@ export default class ManifestoCanvas {
    * Creates a canonical image request for a thumb
    * @param {Number} height
    */
-  thumbnail(height = 150) {
-    const width = Math.floor(height * this.aspectRatio);
+  thumbnail(maxWidth = undefined, maxHeight = undefined) {
+    let width;
+    let height;
 
     if (!this.imageInformationUri) {
       return undefined;
     }
 
-    return this.canonicalImageUri.replace(/\/full\/.*\/0\//, `/full/${width},/0/`);
+    if (maxWidth && maxHeight) {
+      const { aspectRatio } = this;
+      const desiredAspectRatio = maxWidth / maxHeight;
+
+      // size to width
+      if (desiredAspectRatio < aspectRatio) {
+        height = null;
+        width = maxWidth;
+      } else {
+        height = maxHeight;
+        width = null;
+      }
+    } else if (!maxWidth && !maxHeight) {
+      width = null;
+      height = '150';
+    } else {
+      width = maxWidth;
+      height = maxHeight;
+    }
+    // note that, although the IIIF server may support sizeByConfinedWh (e.g. !w,h)
+    // this is a IIIF level 2 feature, so we're instead providing w, or h,-style requests
+    // which are only level 1.
+    return this.canonicalImageUri.replace(/\/full\/.*\/0\//, `/full/${width || ''},${height || ''}/0/`);
   }
 
   /**

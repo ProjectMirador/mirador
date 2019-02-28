@@ -48,7 +48,7 @@ export class WindowSideBarCanvasPanel extends Component {
                     <CanvasThumbnail
                       className={classNames(classes.clickable)}
                       isValid={isValid}
-                      imageUrl={manifestoCanvas.thumbnail(config.canvasNavigation.height)}
+                      imageUrl={manifestoCanvas.thumbnail(config.canvasNavigation.width, config.canvasNavigation.height)}
                       onClick={onClick}
                       style={{
                         cursor: 'pointer',
