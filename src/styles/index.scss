@@ -5,6 +5,16 @@
     height: 100%;
     position: relative;
     width: 100%;
+
+    .mosaic-window-toolbar {
+      display: none;
+    }
+
+    .mosaic-window-body {
+      .mirador-window-top-bar {
+        cursor: move;
+      }
+    }
   }
 
   &-workspace {

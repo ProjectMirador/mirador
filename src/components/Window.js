@@ -11,18 +11,35 @@ import ThumbnailNavigation from '../containers/ThumbnailNavigation';
  */
 export class Window extends Component {
   /**
+   * wrappedTopBar - will conditionally wrap a WindowTopBar for needed
+   * additional functionality based on workspace type
+   */
+  wrappedTopBar() {
+    const { manifest, window, workspaceType } = this.props;
+    const { mosaicWindowActions } = this.context;
+    const topBar = (
+      <div>
+        <WindowTopBar
+          windowId={window.id}
+          manifest={manifest}
+        />
+      </div>
+    );
+    if (workspaceType !== 'mosaic') return topBar;
+    return mosaicWindowActions.connectDragSource(
+      topBar,
+    );
+  }
+
+  /**
    * Renders things
    */
   render() {
     const { manifest, window } = this.props;
     if (!window) return <></>;
-
     return (
       <div id={window.id} className={ns('window')}>
-        <WindowTopBar
-          windowId={window.id}
-          manifest={manifest}
-        />
+        {this.wrappedTopBar()}
         <WindowMiddleContent
           window={window}
           manifest={manifest}
@@ -39,12 +56,21 @@ export class Window extends Component {
   }
 }
 
+Window.contextTypes = {
+  mosaicWindowActions: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.object,
+  ]),
+};
+
 Window.propTypes = {
   window: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  workspaceType: PropTypes.string,
 };
 
 Window.defaultProps = {
   window: null,
   manifest: null,
+  workspaceType: null,
 };

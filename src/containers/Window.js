@@ -7,9 +7,10 @@ import { Window } from '../components/Window';
  * @memberof Window
  * @private
  */
-const mapStateToProps = ({ manifests, windows }, props) => ({
+const mapStateToProps = ({ manifests, windows, config }, props) => ({
   manifest: manifests[props.window.manifestId],
   window: windows[props.window.id],
+  workspaceType: config.workspace.type,
 });
 
 const enhance = compose(
