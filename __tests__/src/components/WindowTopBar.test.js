@@ -9,7 +9,6 @@ import AppBar from '@material-ui/core/AppBar';
 
 import WindowTopMenuButton from '../../../src/containers/WindowTopMenuButton';
 import WindowTopBarButtons from '../../../src/containers/WindowTopBarButtons';
-import WindowIcon from '../../../src/containers/WindowIcon';
 import { WindowTopBar } from '../../../src/components/WindowTopBar';
 
 /** create wrapper */
@@ -34,7 +33,6 @@ describe('WindowTopBar', () => {
     expect(wrapper.find(Toolbar).length).toBe(1);
     expect(wrapper.find(IconButton).length).toBe(2);
     expect(wrapper.find(MenuIcon).length).toBe(1);
-    expect(wrapper.find(WindowIcon).length).toBe(1);
     expect(wrapper.find(Typography).length).toBe(1);
     expect(wrapper.find(WindowTopBarButtons).length).toBe(1);
     expect(wrapper.find(WindowTopMenuButton).length).toBe(1);
@@ -44,11 +42,6 @@ describe('WindowTopBar', () => {
     const toggleWindowSideBar = jest.fn();
     const wrapper = createWrapper({ toggleWindowSideBar });
     expect(wrapper.find(IconButton).first().props().onClick).toBe(toggleWindowSideBar);
-  });
-
-  it('passes correct props to <WindowIcon/>', () => {
-    const wrapper = createWrapper();
-    expect(wrapper.find(WindowIcon).first().props().windowId).toBe('xyz');
   });
 
   it('passes correct props to <Typography/>', () => {
