@@ -4,6 +4,7 @@ describe('Mirador Invalid API Response Handler Test', () => {
   });
   it('breaks Mirador', async () => {
     await expect(page).toClick('#addBtn');
+    await expect(page).toClick('.mirador-add-resource-button');
     await expect(page).toFill('#manifestURL', 'http://localhost:5000/invalid');
     await expect(page).toClick('#fetchBtn');
     await page.waitFor(1000);
@@ -17,6 +18,7 @@ describe('Mirador Invalid API Response Handler Test', () => {
 
   it('renders an error message when a manifest cannot be loaded (and allows it to be dismissed)', async () => {
     await expect(page).toClick('#addBtn');
+    await expect(page).toClick('.mirador-add-resource-button');
     await expect(page).toFill('#manifestURL', 'http://localhost:5000/api/broken');
     await expect(page).toClick('#fetchBtn');
 
