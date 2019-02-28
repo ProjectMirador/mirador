@@ -1,24 +1,19 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
+import ErrorDialog from '../components/ErrorDialog';
 import * as actions from '../state/actions';
-import { App } from '../components/App';
-
+import { getLatestError } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
- * @memberof App
+ * @memberof ErrorDialog
  * @private
  */
-const mapStateToProps = state => (
-  {
-    errors: state.errors,
-    isFullscreenEnabled: state.workspace.isFullscreenEnabled,
-    language: state.config.language,
-    theme: state.config.theme,
-    translations: state.config.translations,
-  }
-);
+const mapStateToProps = state => ({
+  error: getLatestError(state),
+});
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -26,13 +21,14 @@ const mapStateToProps = state => (
  * @private
  */
 const mapDispatchToProps = {
+  addError: actions.addError,
   removeError: actions.removeError,
-  setWorkspaceFullscreen: actions.setWorkspaceFullscreen,
 };
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('App'),
+  withTranslation(),
+  withPlugins('ErrorDialog'),
 );
 
-export default enhance(App);
+export default enhance(ErrorDialog);

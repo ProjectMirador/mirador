@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import {
   companionWindowsReducer,
   configReducer,
+  errorsReducer,
   infoResponsesReducer,
   manifestsReducer,
   viewersReducer,
@@ -20,6 +21,7 @@ export default function createRootReducer(pluginReducers) {
     annotations: annotationsReducer,
     companionWindows: companionWindowsReducer,
     config: configReducer,
+    errors: errorsReducer,
     infoResponses: infoResponsesReducer,
     manifests: manifestsReducer,
     viewers: viewersReducer,

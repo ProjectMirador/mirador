@@ -6,6 +6,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from '../i18n';
 import WorkspaceArea from '../containers/WorkspaceArea';
 import '../styles/index.scss';
+import ErrorDialog from '../containers/ErrorDialog';
 
 /**
  * This is the top level Mirador component.
@@ -60,6 +61,7 @@ export class App extends Component {
         <I18nextProvider i18n={this.i18n}>
           <MuiThemeProvider theme={createMuiTheme(theme)}>
             <WorkspaceArea />
+            <ErrorDialog />
           </MuiThemeProvider>
         </I18nextProvider>
       </Fullscreen>

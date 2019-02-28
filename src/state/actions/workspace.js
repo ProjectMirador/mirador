@@ -1,4 +1,9 @@
+import _ from 'lodash';
 import ActionTypes from './action-types';
+import { importConfig } from './config';
+import { removeWindow, addWindow, updateWindow } from './window';
+import { updateViewport } from './canvas';
+import { fetchManifest } from './manifest';
 
 /**
  * setWorkspaceFullscreen - action creator
@@ -83,5 +88,42 @@ export function setWorkspaceViewportDimensions({ width, height }) {
 export function toggleWorkspaceExposeMode() {
   return {
     type: ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE,
+  };
+}
+
+/**
+ * importWorkspace - action creator
+ */
+export function importWorkspace(stateExport) {
+  return (dispatch, getState) => {
+    dispatch(importConfig(stateExport.config));
+    const { viewers } = stateExport;
+    const newWindows = stateExport.windows;
+    const newWindowsKeys = _.keys(newWindows);
+    const newWindowsCnt = newWindowsKeys.length;
+
+    const existingWindows = getState().windows;
+    const existingWindowsKeys = _.keys(existingWindows);
+    const existingWindowsCnt = existingWindowsKeys.length;
+
+    let currentKey = '';
+    // re-use existing windows
+    for (let i = 0; i < newWindowsCnt; i++) { // eslint-disable-line no-plusplus
+      dispatch(fetchManifest(newWindows[newWindowsKeys[i]].manifestId));
+      if (i < existingWindowsCnt) {
+        currentKey = existingWindowsKeys[i];
+        delete newWindows[newWindowsKeys[i]].id;
+        dispatch(updateWindow(existingWindowsKeys[i], newWindows[newWindowsKeys[i]]));
+      } else {
+        dispatch(addWindow(newWindows[newWindowsKeys[i]]));
+        currentKey = newWindowsKeys[i];
+      }
+      dispatch(updateViewport(currentKey, viewers[newWindowsKeys[i]]));
+    }
+
+    // clean up surplus windows if there are any
+    if (existingWindowsCnt > newWindowsCnt) {
+      Object.keys(existingWindows).slice(newWindowsCnt).map(windowId => dispatch(removeWindow(windowId))); // eslint-disable-line max-len
+    }
   };
 }
