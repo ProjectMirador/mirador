@@ -23,7 +23,7 @@ export class WindowTopBar extends Component {
    * @return
   */
   maximizeWindow() {
-    console.log('maximized!')
+    console.log('maximized!');
   }
 
   /**

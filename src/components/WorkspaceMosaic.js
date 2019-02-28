@@ -47,9 +47,17 @@ export class WorkspaceMosaic extends React.Component {
    */
   determineWorkspaceLayout() {
     const { windows, workspace } = this.props;
-    console.log(windows);
-    const windowKeys = Object.keys(windows).sort();
+    let windowKeys = Object.keys(windows).sort();
     const leaveKeys = getLeaves(workspace.layout);
+    console.log(Object.keys(windows));
+    // First, check to see if any windows are maximized
+    // const maximizedWindows = windowKeys.map(id => windows[id]).filter(window => window.maximized === true)
+    // if (maximizedWindows.length) {
+    //   windowKeys = maximizedWindows.map(window => window.id);
+    // }
+    windowKeys = [windowKeys[0]];
+    console.log(Object.keys(windows));
+    // console.log(windowKeys.map(id => windows[id]).filter(window => window.maximized === true));
     // Check every window is in the layout, and all layout windows are present
     // in store
     if (!windowKeys.every(e => leaveKeys.includes(e))
@@ -92,7 +100,7 @@ export class WorkspaceMosaic extends React.Component {
     return (
       <Mosaic
         renderTile={this.tileRenderer}
-        initialValue={this.determineWorkspaceLayout() || workspace.layout}
+        initialValue={workspace.layout || this.determineWorkspaceLayout()}
         onChange={this.mosaicChange}
         className="mirador-mosaic"
         zeroStateView={this.zeroStateView}

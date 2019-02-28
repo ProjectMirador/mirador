@@ -12,7 +12,8 @@ const mapStateToProps = state => (
   {
     isWorkspaceControlPanelVisible: state.config.workspaceControlPanel.enabled,
     workspaceType: state.config.workspace.type,
-    windows: pickBy(state.windows, window => window.displayable === true),
+    windows: state.windows,
+    // pickBy(state.windows, window => window.maximized === false),
     // Object.keys(state.windows)
     //   .map(id => state.windows[id])
     //   .filter(window => window.displayable === true),

@@ -11,9 +11,18 @@ export const windowsReducer = (state = {}, action) => {
 
     case ActionTypes.MAXIMIZE_WINDOW:
       return Object.keys(state).reduce((object, key) => {
-        if (key !== action.windowId) {
-          object[key] = state[key];
-          object[key].displayable = false;
+        if (key === action.windowId) {
+          object[key] = state[key]; // eslint-disable-line no-param-reassign
+          object[key].maximized = true; // eslint-disable-line no-param-reassign
+        }
+        return object;
+      }, {});
+
+    case ActionTypes.MINIMIZE_WINDOW:
+      return Object.keys(state).reduce((object, key) => {
+        if (key === action.windowId) {
+          object[key] = state[key]; // eslint-disable-line no-param-reassign
+          object[key].maximized = false; // eslint-disable-line no-param-reassign
         }
         return object;
       }, {});
