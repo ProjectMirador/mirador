@@ -30,7 +30,10 @@ export class WindowViewer extends Component {
 
     if (!this.infoResponseIsInStore()) {
       this.currentCanvases().forEach((canvas) => {
-        fetchInfoResponse(new ManifestoCanvas(canvas).imageInformationUri);
+        const { imageInformationUri } = new ManifestoCanvas(canvas);
+        if (imageInformationUri) {
+          fetchInfoResponse(imageInformationUri);
+        }
       });
     }
   }
@@ -45,7 +48,10 @@ export class WindowViewer extends Component {
       || (prevProps.window.canvasIndex !== window.canvasIndex && !this.infoResponseIsInStore())
     ) {
       this.currentCanvases().forEach((canvas) => {
-        fetchInfoResponse(new ManifestoCanvas(canvas).imageInformationUri);
+        const { imageInformationUri } = new ManifestoCanvas(canvas);
+        if (imageInformationUri) {
+          fetchInfoResponse(imageInformationUri);
+        }
       });
     }
     // If the view changes, create a new instance
