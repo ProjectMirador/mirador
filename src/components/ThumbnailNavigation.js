@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import Grid from 'react-virtualized/dist/commonjs/Grid';
+import GridListTile from '@material-ui/core/GridListTile';
 import { CanvasThumbnail } from './CanvasThumbnail';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
 import ns from '../config/css-ns';
@@ -66,18 +67,28 @@ export class ThumbnailNavigation extends Component {
           }}
           className={ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${columnIndex}`, this.currentCanvasClass(currentGroupings.map(canvas => canvas.index))])}
         >
-          {currentGroupings.map((canvas, i) => (
-            <div
-              key={canvas.index}
-              style={{ position: 'absolute', left: (style.width - 8) * i / 2, top: 2 }}
-            >
-              <CanvasThumbnail
+          {currentGroupings.map((canvas, i) => {
+            const { height } = config.thumbnailNavigation;
+            const manifestoCanvas = new ManifestoCanvas(canvas);
+
+            return (
+              <GridListTile
+                component="div"
+                key={canvas.index}
                 onClick={() => setCanvas(window.id, currentGroupings[0].index)}
-                imageUrl={new ManifestoCanvas(canvas).thumbnail(config.thumbnailNavigation.height)}
-                height={config.thumbnailNavigation.height}
-              />
-            </div>
-          ))}
+                style={{
+                  position: 'absolute', left: (style.width - 8) * i / 2, top: 2,
+                }}
+              >
+                <CanvasThumbnail
+                  imageUrl={manifestoCanvas.thumbnail(null, height)}
+                  maxHeight={config.thumbnailNavigation.height}
+                  maxWidth={style.width}
+                  aspectRatio={manifestoCanvas.aspectRatio}
+                />
+              </GridListTile>
+            );
+          })}
         </div>
       </div>
     );

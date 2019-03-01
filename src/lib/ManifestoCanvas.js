@@ -43,13 +43,70 @@ export default class ManifestoCanvas {
    * Creates a canonical image request for a thumb
    * @param {Number} height
    */
-  thumbnail(height = 150) {
-    const width = Math.floor(height * this.aspectRatio);
+  thumbnail(maxWidth = undefined, maxHeight = undefined) {
+    let width;
+    let height;
 
     if (!this.imageInformationUri) {
       return undefined;
     }
 
-    return this.canonicalImageUri.replace(/\/full\/.*\/0\//, `/full/${width},/0/`);
+    switch (this.thumbnailConstraints(maxWidth, maxHeight)) {
+      case 'sizeByH':
+        height = maxHeight;
+        break;
+      case 'sizeByW':
+        width = maxWidth;
+        break;
+      default:
+        height = '150';
+    }
+
+    // note that, although the IIIF server may support sizeByConfinedWh (e.g. !w,h)
+    // this is a IIIF level 2 feature, so we're instead providing w, or h,-style requests
+    // which are only level 1.
+    return this.canonicalImageUri.replace(/\/full\/.*\/0\//, `/full/${width || ''},${height || ''}/0/`);
+  }
+
+  /** @private */
+  thumbnailConstraints(maxWidth, maxHeight) {
+    if (!maxHeight && !maxWidth) return undefined;
+    if (maxHeight && !maxWidth) return 'sizeByH';
+    if (!maxHeight && maxWidth) return 'sizeByW';
+
+    const { aspectRatio } = this;
+    const desiredAspectRatio = maxWidth / maxHeight;
+
+    return desiredAspectRatio < aspectRatio ? 'sizeByW' : 'sizeByH';
+  }
+
+  /**
+   * checks whether the canvas has a valid height
+   */
+  get hasValidHeight() {
+    return (
+      typeof this.canvas.getHeight() === 'number'
+      && this.canvas.getHeight() > 0
+    );
+  }
+
+  /**
+   * checks whether the canvas has a valid height
+   */
+  get hasValidWidth() {
+    return (
+      typeof this.canvas.getHeight() === 'number'
+      && this.canvas.getHeight() > 0
+    );
+  }
+
+  /**
+   * checks whether the canvas has valid dimensions
+   */
+  get hasValidDimensions() {
+    return (
+      this.hasValidHeight
+      && this.hasValidWidth
+    );
   }
 }

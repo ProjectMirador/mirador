@@ -5,20 +5,13 @@ import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import { CanvasThumbnail } from './CanvasThumbnail';
-import { ValidationCanvas } from './ValidationCanvas';
+import ManifestoCanvas from '../lib/ManifestoCanvas';
 import { getIdAndLabelOfCanvases } from '../state/selectors';
 
 /**
  * a panel showing the canvases for a given manifest
  */
 export class WindowSideBarCanvasPanel extends Component {
-  /**
-   * calculateScaledWidth - calculates the scaled width according to the given width and aspectRatio
-   */
-  static calculateScaledWidth(height, aspectRatio) {
-    return Math.floor(height * aspectRatio);
-  }
-
   /**
    * render
    */
@@ -35,32 +28,31 @@ export class WindowSideBarCanvasPanel extends Component {
         <List>
           {
             canvasesIdAndLabel.map((canvas, canvasIndex) => {
-              const validationCanvas = new ValidationCanvas(canvases[canvasIndex]);
-              const isValid = validationCanvas.hasValidDimensions;
+              const { width, height } = config.canvasNavigation;
+              const manifestoCanvas = new ManifestoCanvas(canvases[canvasIndex]);
+              const isValid = manifestoCanvas.hasValidDimensions;
               const onClick = () => { setCanvas(windowId, canvasIndex); }; // eslint-disable-line require-jsdoc, max-len
 
               return (
                 <ListItem
                   key={canvas.id}
+                  alignItems="flex-start"
+                  onClick={onClick}
+                  button
                 >
-                  <div>
+                  <div style={{ minWidth: 50 }}>
                     <CanvasThumbnail
                       className={classNames(classes.clickable)}
                       isValid={isValid}
-                      imageUrl={validationCanvas.thumbnail(config.canvasNavigation.height)}
-                      onClick={onClick}
-                      style={{
-                        cursor: 'pointer',
-                        height: config.canvasNavigation.height,
-                        width: isValid ? WindowSideBarCanvasPanel.calculateScaledWidth(config.canvasNavigation.height, validationCanvas.aspectRatio) : 'auto',
-                      }}
+                      imageUrl={manifestoCanvas.thumbnail(width, height)}
+                      maxHeight={config.canvasNavigation.height}
+                      maxWidth={config.canvasNavigation.width}
+                      aspectRatio={manifestoCanvas.aspectRatio}
                     />
                   </div>
                   <Typography
-                    className={classNames(classes.clickable, classes.label)}
-                    onClick={onClick}
+                    className={classNames(classes.label)}
                     variant="body2"
-                    color="secondary"
                   >
                     {canvas.label}
                   </Typography>

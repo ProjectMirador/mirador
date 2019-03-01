@@ -45,16 +45,63 @@ export class CanvasThumbnail extends Component {
     return CanvasThumbnail.defaultImgPlaceholder;
   }
 
+  /** */
+  imageConstraints() {
+    const {
+      maxHeight, maxWidth, aspectRatio,
+    } = this.props;
+
+    if (maxHeight && maxWidth && aspectRatio) return 'sizeByConfinedWh';
+    if (maxHeight && maxWidth) return 'sizeByDistortedWh';
+    if (maxHeight && !maxWidth) return 'sizeByH';
+    if (!maxHeight && maxWidth) return 'sizeByW';
+
+    return undefined;
+  }
+
   /**
    *
   */
   imageStyles() {
-    const { height, style } = this.props;
-    const { image } = this.state;
+    const {
+      maxHeight, maxWidth, aspectRatio, style,
+    } = this.props;
+
+    let height;
+    let width;
+
+    switch (this.imageConstraints()) {
+      case 'sizeByConfinedWh':
+        // size to width
+        if ((maxWidth / maxHeight) < aspectRatio) {
+          height = maxWidth / aspectRatio;
+          width = maxWidth;
+        } else {
+          height = maxHeight;
+          width = maxHeight * aspectRatio;
+        }
+
+        break;
+      case 'sizeByDistortedWh':
+        height = maxHeight;
+        width = maxWidth;
+        break;
+      case 'sizeByH':
+        height = maxHeight;
+        width = 'auto';
+        break;
+      case 'sizeByW':
+        height = 'auto';
+        width = maxWidth;
+        break;
+      default:
+        height = 'auto';
+        width = 'auto';
+    }
 
     return {
       height,
-      width: (image && image.src) ? '100%' : '110px',
+      width,
       ...style,
     };
   }
@@ -62,14 +109,11 @@ export class CanvasThumbnail extends Component {
   /**
    */
   render() {
-    const { onClick } = this.props;
     return (
       <>
         <IntersectionObserver onChange={this.handleIntersection}>
           <img
             alt=""
-            onClick={onClick}
-            onKeyPress={onClick}
             role="presentation"
             src={this.imageSrc()}
             style={this.imageStyles()}
@@ -86,14 +130,17 @@ CanvasThumbnail.defaultImgPlaceholder = 'data:image/png;base64,iVBORw0KGgoAAAANS
 CanvasThumbnail.propTypes = {
   imageUrl: PropTypes.string,
   isValid: PropTypes.bool,
-  height: PropTypes.number,
-  onClick: PropTypes.func.isRequired,
+  maxHeight: PropTypes.number,
+  maxWidth: PropTypes.number,
+  aspectRatio: PropTypes.number,
   style: PropTypes.object, // eslint-disable-line react/forbid-prop-types,
 };
 
 CanvasThumbnail.defaultProps = {
   imageUrl: null,
   isValid: true,
-  height: 150,
+  maxHeight: null,
+  maxWidth: null,
+  aspectRatio: null,
   style: {},
 };

@@ -1,6 +1,7 @@
 export default {
   canvasNavigation: {
-    height: 100,
+    height: 50,
+    width: 50,
   },
   theme: { // Sets up a MaterialUI theme. See https://material-ui.com/customization/default-theme/
     palette: {

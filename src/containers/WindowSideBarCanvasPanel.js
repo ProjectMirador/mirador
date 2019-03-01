@@ -27,17 +27,12 @@ const mapDispatchToProps = { setCanvas: actions.setCanvas };
 /**
  *
  * @param theme
- * @returns {{clickable: {cursor: string},
- * label: {fontSize: string, paddingLeft: number}, windowSideBarH2: *}}
+ * @returns {label: {paddingLeft: number}, windowSideBarH2: *}}
  */
 const styles = theme => ({
   windowSideBarH2: theme.typography.h5,
-  clickable: {
-    cursor: 'pointer',
-  },
   label: {
-    fontSize: '8pt',
-    paddingLeft: 8,
+    paddingLeft: theme.spacing.unit,
   },
 });
 
