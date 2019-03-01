@@ -45,6 +45,20 @@ export class CanvasThumbnail extends Component {
     return CanvasThumbnail.defaultImgPlaceholder;
   }
 
+  /** */
+  imageConstraints() {
+    const {
+      maxHeight, maxWidth, aspectRatio,
+    } = this.props;
+
+    if (maxHeight && maxWidth && aspectRatio) return 'sizeByConfinedWh';
+    if (maxHeight && maxWidth) return 'sizeByDistortedWh';
+    if (maxHeight && !maxWidth) return 'sizeByH';
+    if (!maxHeight && maxWidth) return 'sizeByW';
+
+    return undefined;
+  }
+
   /**
    *
   */
@@ -56,29 +70,33 @@ export class CanvasThumbnail extends Component {
     let height;
     let width;
 
-    if (maxHeight && maxWidth && aspectRatio) {
-      const desiredAspectRatio = maxWidth / maxHeight;
+    switch (this.imageConstraints()) {
+      case 'sizeByConfinedWh':
+        // size to width
+        if ((maxWidth / maxHeight) < aspectRatio) {
+          height = maxWidth / aspectRatio;
+          width = maxWidth;
+        } else {
+          height = maxHeight;
+          width = maxHeight * aspectRatio;
+        }
 
-      // size to width
-      if (desiredAspectRatio < aspectRatio) {
-        height = maxWidth / aspectRatio;
-        width = maxWidth;
-      } else {
+        break;
+      case 'sizeByDistortedWh':
         height = maxHeight;
-        width = maxHeight * aspectRatio;
-      }
-    } else if (maxHeight && maxWidth) {
-      height = maxHeight;
-      width = maxWidth;
-    } else if (maxHeight && !maxWidth) {
-      height = maxHeight;
-      width = 'auto';
-    } else if (!maxHeight && maxWidth) {
-      height = 'auto';
-      width = maxWidth;
-    } else {
-      height = 'auto';
-      width = 'auto';
+        width = maxWidth;
+        break;
+      case 'sizeByH':
+        height = maxHeight;
+        width = 'auto';
+        break;
+      case 'sizeByW':
+        height = 'auto';
+        width = maxWidth;
+        break;
+      default:
+        height = 'auto';
+        width = 'auto';
     }
 
     return {
