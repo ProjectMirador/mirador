@@ -90,58 +90,16 @@ describe('window actions', () => {
     });
   });
 
-  describe('toggleWindowSideBarPanel', () => {
+  describe('setWindowSideBarPanel', () => {
     it('returns the appropriate action type', () => {
       const windowId = 'abc123';
       const panelType = 'panelType';
       const expectedAction = {
-        type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL,
+        type: ActionTypes.SET_WINDOW_SIDE_BAR_PANEL,
         windowId,
         panelType,
       };
-      expect(actions.toggleWindowSideBarPanel(windowId, 'panelType')).toEqual(expectedAction);
-    });
-  });
-
-  describe('popOutCompanionWindow', () => {
-    it('returns a thunk which dispatches the appropriate actions', () => {
-      const mockState = {
-        windows: {
-          abc123: {
-            companionWindowIds: ['cw-1'],
-          },
-        },
-      };
-      const mockDispatch = jest.fn(() => ({ id: 'cw-1' }));
-      const mockGetState = jest.fn(() => mockState);
-      const windowId = 'abc123';
-      const panelType = 'info';
-      const position = 'right';
-      const thunk = actions.popOutCompanionWindow(windowId, panelType, position);
-
-      expect(typeof thunk).toEqual('function');
-      thunk(mockDispatch, mockGetState);
-      expect(mockDispatch).toHaveBeenCalledTimes(4);
-
-      expect(mockDispatch).toHaveBeenNthCalledWith(1, {
-        type: ActionTypes.REMOVE_COMPANION_WINDOW,
-        id: 'cw-1',
-      });
-
-      const addCompanionWindowAction = mockDispatch.mock.calls[1][0];
-      expect(addCompanionWindowAction.type).toBe(ActionTypes.ADD_COMPANION_WINDOW);
-      expect(addCompanionWindowAction.payload).toMatchObject({ content: 'info', position: 'right' });
-      expect(addCompanionWindowAction.id.startsWith('cw-')).toBe(true);
-
-      expect(mockDispatch).toHaveBeenNthCalledWith(3, {
-        type: ActionTypes.UPDATE_WINDOW,
-        id: 'abc123',
-        payload: { companionWindowIds: ['cw-1'] },
-      });
-
-      expect(mockDispatch).toHaveBeenNthCalledWith(4, {
-        type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL, windowId, panelType: 'closed',
-      });
+      expect(actions.setWindowSideBarPanel(windowId, 'panelType')).toEqual(expectedAction);
     });
   });
 

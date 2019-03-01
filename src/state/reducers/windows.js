@@ -43,15 +43,13 @@ export const windowsReducer = (state = {}, action) => {
           thumbnailNavigationPosition: action.position,
         },
       };
-    case ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL:
+    case ActionTypes.SET_WINDOW_SIDE_BAR_PANEL:
       return {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
           sideBarPanel: (
-            state[action.windowId].sideBarPanel === action.panelType
-              ? 'closed'
-              : action.panelType
+            action.panelType
           ),
         },
       };

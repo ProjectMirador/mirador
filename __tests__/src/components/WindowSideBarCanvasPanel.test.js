@@ -19,6 +19,7 @@ describe('WindowSideBarCanvasPanel', () => {
 
     wrapper = shallow(
       <WindowSideBarCanvasPanel
+        id="asdf"
         canvases={canvases}
         classes={{}}
         t={key => key}
@@ -30,7 +31,7 @@ describe('WindowSideBarCanvasPanel', () => {
   });
 
   it('renders all needed elements', () => {
-    expect(wrapper.find(Typography).at(0).render().text()).toBe('canvasIndex');
+    expect(wrapper.props().title).toBe('canvasIndex');
     expect(wrapper.find(List).length).toBe(1);
     expect(wrapper.find(ListItem).length).toBe(3);
     expect(wrapper.find(List).find(Typography).length).toBe(3);

@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { withStyles } from '@material-ui/core/styles';
 import {
   getIdAndContentOfAnnotations,
   getSelectedCanvas,
@@ -24,15 +23,7 @@ const mapStateToProps = (state, { windowId }) => ({
   ),
 });
 
-/**
- * @param theme
- */
-const styles = theme => ({
-  windowSideBarH2: theme.typography.h5,
-});
-
 const enhance = compose(
-  withStyles(styles),
   withTranslation(),
   connect(mapStateToProps, null),
   // further HOC

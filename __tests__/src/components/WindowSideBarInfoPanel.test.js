@@ -13,6 +13,8 @@ describe('WindowSideBarInfoPanel', () => {
     beforeEach(() => {
       wrapper = shallow(
         <WindowSideBarInfoPanel
+          id="asdf"
+          windowId="zxcv"
           canvasLabel="The Canvas Label"
           canvasDescription="The Canvas Description"
           canvasMetadata={metadata}
@@ -26,15 +28,13 @@ describe('WindowSideBarInfoPanel', () => {
 
     it('renders header', () => {
       expect(
-        wrapper.find(Typography).at(0).matchesElement(
-          <Typography>aboutThisItem</Typography>,
-        ),
-      ).toBe(true);
+        wrapper.props().title,
+      ).toBe('aboutThisItem');
     });
 
     it('renders canvas label', () => {
       expect(
-        wrapper.find(Typography).at(1).matchesElement(
+        wrapper.find(Typography).at(0).matchesElement(
           <Typography>The Canvas Label</Typography>,
         ),
       ).toBe(true);
@@ -42,7 +42,7 @@ describe('WindowSideBarInfoPanel', () => {
 
     it('renders canvas description in SanitizedHtml component', () => {
       expect(
-        wrapper.find(Typography).at(2).matchesElement(
+        wrapper.find(Typography).at(1).matchesElement(
           <Typography>
             <SanitizedHtml htmlString="The Canvas Description" ruleSet="iiif" />
           </Typography>,
@@ -60,7 +60,7 @@ describe('WindowSideBarInfoPanel', () => {
 
     it('renders manifest label', () => {
       expect(
-        wrapper.find(Typography).at(3).matchesElement(
+        wrapper.find(Typography).at(2).matchesElement(
           <Typography>The Manifest Label</Typography>,
         ),
       ).toBe(true);
@@ -68,7 +68,7 @@ describe('WindowSideBarInfoPanel', () => {
 
     it('renders manifest description in SanitizedHtml component', () => {
       expect(
-        wrapper.find(Typography).at(4).matchesElement(
+        wrapper.find(Typography).at(3).matchesElement(
           <Typography>
             <SanitizedHtml htmlString="The Manifest Description" ruleSet="iiif" />
           </Typography>,
@@ -88,20 +88,12 @@ describe('WindowSideBarInfoPanel', () => {
   describe('when metadata is not present', () => {
     beforeEach(() => {
       wrapper = shallow(
-        <WindowSideBarInfoPanel />,
+        <WindowSideBarInfoPanel windowId="xyz" id="abc" />,
       );
     });
 
-    it('does render header', () => {
-      expect(
-        wrapper.find(Typography).first().matchesElement(
-          <Typography>aboutThisItem</Typography>,
-        ),
-      ).toBe(true);
-    });
-
     it('does not render empty elements elements', () => {
-      expect(wrapper.find(Typography).length).toBe(1); // only header element
+      expect(wrapper.find(Typography).length).toBe(0);
       expect(wrapper.find(LabelValueMetadata).length).toBe(0);
     });
   });

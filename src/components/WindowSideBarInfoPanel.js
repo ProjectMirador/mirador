@@ -4,6 +4,7 @@ import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { SanitizedHtml } from './SanitizedHtml';
 import { LabelValueMetadata } from './LabelValueMetadata';
+import CompanionWindow from '../containers/CompanionWindow';
 import ns from '../config/css-ns';
 
 
@@ -24,16 +25,13 @@ export class WindowSideBarInfoPanel extends Component {
       manifestDescription,
       manifestLabel,
       manifestMetadata,
+      windowId,
+      id,
       t,
     } = this.props;
 
     return (
-      <div className={ns('window-sidebar-info-panel')}>
-
-        <Typography variant="h2" className={classes.windowSideBarH2}>
-          {t('aboutThisItem')}
-        </Typography>
-
+      <CompanionWindow title={t('aboutThisItem')} paperClassName={ns('window-sidebar-info-panel')} windowId={windowId} id={id}>
         {canvasLabel && (
           <Typography variant="h3" className={classes.windowSideBarH3}>
             {canvasLabel}
@@ -68,7 +66,7 @@ export class WindowSideBarInfoPanel extends Component {
           <LabelValueMetadata labelValuePairs={manifestMetadata} />
         )}
 
-      </div>
+      </CompanionWindow>
     );
   }
 }
@@ -82,6 +80,8 @@ WindowSideBarInfoPanel.propTypes = {
   manifestDescription: PropTypes.string,
   manifestMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
+  windowId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 WindowSideBarInfoPanel.defaultProps = {

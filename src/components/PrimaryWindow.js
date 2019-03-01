@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import WindowSideBar from '../containers/WindowSideBar';
 import WindowViewer from '../containers/WindowViewer';
+import CompanionArea from '../containers/CompanionArea';
 import ns from '../config/css-ns';
 
 /**
@@ -35,6 +36,7 @@ export class PrimaryWindow extends Component {
     return (
       <div className={ns('primary-window')}>
         <WindowSideBar windowId={window.id} />
+        <CompanionArea windowId={window.id} position="left" />
         {this.renderViewer()}
       </div>
     );

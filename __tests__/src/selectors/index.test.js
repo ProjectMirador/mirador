@@ -409,9 +409,10 @@ describe('getIdAndLabelOfCanvases', () => {
 
 describe('getCompanionWindowForPosition', () => {
   const state = {
+    windows: { a: { companionWindowIds: ['abc'] } },
     companionWindows: {
-      abc: { id: 'abc', windowId: 'a', position: 'right' },
-      xyz: { id: 'xyz', windowId: 'b', position: 'bottom' },
+      abc: { id: 'abc', position: 'right' },
+      xyz: { id: 'xyz', position: 'bottom' },
     },
   };
 

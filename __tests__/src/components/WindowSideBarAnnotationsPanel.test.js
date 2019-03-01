@@ -6,6 +6,8 @@ import { WindowSideBarAnnotationsPanel } from '../../../src/components/WindowSid
 function createWrapper(props) {
   return shallow(
     <WindowSideBarAnnotationsPanel
+      id="xyz"
+      windowId="abc"
       {...props}
     />,
   );
@@ -17,7 +19,9 @@ describe('WindowSideBarAnnotationsPanel', () => {
   it('has a header', () => {
     wrapper = createWrapper();
 
-    expect(wrapper.find('WithStyles(Typography)[variant="h2"]').children().text()).toEqual('annotations');
+    expect(
+      wrapper.props().title,
+    ).toBe('annotations');
   });
 
   it('renders a list with a list item for each annotation', () => {

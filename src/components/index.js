@@ -18,7 +18,6 @@ export * from './WindowSideBar';
 export * from './WindowSideBarButtons';
 export * from './WindowSideBarCanvasPanel';
 export * from './WindowSideBarInfoPanel';
-export * from './WindowSideBarPanel';
 export * from './WindowThumbnailSettings';
 export * from './WindowTopBar';
 export * from './WindowTopBarButtons';
