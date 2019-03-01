@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Window } from '../components/Window';
 
+
 /**
  * mapStateToProps - used to hook up connect to action creators
  * @memberof Window

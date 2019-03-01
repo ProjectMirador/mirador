@@ -1,10 +1,13 @@
 @import 'variables';
 
 .mirador {
-  &-app {
-    height: 100%;
-    position: relative;
-    width: 100%;
+  &-viewer {
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
 
     .mosaic-window-toolbar {
       display: none;
@@ -17,14 +20,21 @@
     }
   }
 
-  &-workspace {
+  &-workspace-viewport {
     bottom: 0;
-    box-sizing: border-box;
     left: 0;
+    overflow: hidden;
     margin: 0;
     position: absolute;
     right: 0;
     top: 0;
+  }
+
+  &-workspace {
+    box-sizing: border-box;
+    margin: 0;
+    overflow: scroll;
+    position: absolute;
   }
 
   &-workspace-with-control-panel {
@@ -47,6 +57,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
   }
 
   &-osd-container {

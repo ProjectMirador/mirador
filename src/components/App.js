@@ -57,7 +57,7 @@ export class App extends Component {
     });
 
     return (
-      <div className={classNames(classes.background, ns('app'))}>
+      <div className={classNames(classes.background, ns('viewer'))}>
         <I18nextProvider i18n={this.i18n}>
           <MuiThemeProvider theme={createMuiTheme(theme)}>
             <Fullscreen

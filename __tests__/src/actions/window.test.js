@@ -19,7 +19,10 @@ describe('window actions', () => {
           manifestId: null,
           rangeId: null,
           thumbnailNavigationPosition: 'bottom',
-          xywh: [0, 0, 400, 400],
+          x: 2700,
+          y: 2700,
+          width: 400,
+          height: 400,
           rotation: null,
           view: 'single',
         },
@@ -139,6 +142,50 @@ describe('window actions', () => {
       expect(mockDispatch).toHaveBeenNthCalledWith(4, {
         type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL, windowId, panelType: 'closed',
       });
+    });
+  });
+
+  describe('setWindowSize', () => {
+    it('returns the appropriate action type', () => {
+      const id = 'abc123';
+      const expectedAction = {
+        type: ActionTypes.SET_WINDOW_SIZE,
+        payload: {
+          windowId: id,
+          size: {
+            x: 20,
+            y: 20,
+            width: 200,
+            height: 200,
+          },
+        },
+      };
+      expect(actions.setWindowSize(id, {
+        x: 20,
+        y: 20,
+        width: 200,
+        height: 200,
+      })).toEqual(expectedAction);
+    });
+  });
+
+  describe('updateWindowPosition', () => {
+    it('returns the appropriate action type', () => {
+      const id = 'abc123';
+      const expectedAction = {
+        type: ActionTypes.UPDATE_WINDOW_POSITION,
+        payload: {
+          windowId: id,
+          position: {
+            x: 20,
+            y: 20,
+          },
+        },
+      };
+      expect(actions.updateWindowPosition(id, {
+        x: 20,
+        y: 20,
+      })).toEqual(expectedAction);
     });
   });
 });

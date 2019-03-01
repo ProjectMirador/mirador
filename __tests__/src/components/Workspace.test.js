@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import WorkspaceMosaic from '../../../src/containers/WorkspaceMosaic';
+import WorkspaceElastic from '../../../src/containers/WorkspaceElastic';
 import Window from '../../../src/containers/Window';
 import { Workspace } from '../../../src/components/Workspace';
 
@@ -22,12 +23,23 @@ function createWrapper(props) {
 }
 
 describe('Workspace', () => {
+  describe('if workspace type is elastic', () => {
+    it('should render <WorkspaceElastic/> properly', () => {
+      const wrapper = createWrapper({ workspaceType: 'elastic' });
+
+      expect(wrapper.matchesElement(
+        <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
+          <WorkspaceElastic />
+        </div>,
+      )).toBe(true);
+    });
+  });
   describe('if workspace type is mosaic', () => {
     it('should render <WorkspaceMosaic/> properly', () => {
       const wrapper = createWrapper();
 
       expect(wrapper.matchesElement(
-        <div className="mirador-workspace mirador-workspace-with-control-panel">
+        <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
           <WorkspaceMosaic windows={windows} />
         </div>,
       )).toBe(true);
@@ -38,7 +50,7 @@ describe('Workspace', () => {
       const wrapper = createWrapper({ workspaceType: 'bubu' });
 
       expect(wrapper.matchesElement(
-        <div className="mirador-workspace mirador-workspace-with-control-panel">
+        <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
           <Window window={{ id: 1 }} />
           <Window window={{ id: 2 }} />
         </div>,
