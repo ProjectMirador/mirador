@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import OpenSeadragon from 'openseadragon';
 import { OpenSeadragonViewer } from '../../../src/components/OpenSeadragonViewer';
+import ZoomControls from '../../../src/containers/ZoomControls';
 
 jest.mock('openseadragon');
 
@@ -29,6 +30,9 @@ describe('OpenSeadragonViewer', () => {
   });
   it('renders child components', () => {
     expect(wrapper.find('.foo').length).toBe(1);
+  });
+  it('renders ZoomControls', () => {
+    expect(wrapper.find(ZoomControls).length).toBe(1);
   });
   describe('tileSourcesMatch', () => {
     it('when they do not match', () => {

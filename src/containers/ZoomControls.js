@@ -34,6 +34,8 @@ const styles = theme => ({
   zoom_controls: {
     position: 'absolute',
     right: 0,
+    zIndex: 33,
+    top: 0,
   },
   ListItem: {
     paddingTop: 0,
