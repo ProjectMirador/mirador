@@ -49,15 +49,14 @@ export class WorkspaceMosaic extends React.Component {
     const { windows, workspace } = this.props;
     let windowKeys = Object.keys(windows).sort();
     const leaveKeys = getLeaves(workspace.layout);
-    console.log(Object.keys(windows));
     // First, check to see if any windows are maximized
-    // const maximizedWindows = windowKeys.map(id => windows[id]).filter(window => window.maximized === true)
-    // if (maximizedWindows.length) {
-    //   windowKeys = maximizedWindows.map(window => window.id);
-    // }
-    windowKeys = [windowKeys[0]];
-    console.log(Object.keys(windows));
-    // console.log(windowKeys.map(id => windows[id]).filter(window => window.maximized === true));
+    const maximizedWindows = windowKeys
+      .map(id => windows[id])
+      .filter(window => window.maximized === true);
+
+    if (maximizedWindows.length) {
+      windowKeys = maximizedWindows.map(window => window.id);
+    }
     // Check every window is in the layout, and all layout windows are present
     // in store
     if (!windowKeys.every(e => leaveKeys.includes(e))

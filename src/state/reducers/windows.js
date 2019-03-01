@@ -10,23 +10,21 @@ export const windowsReducer = (state = {}, action) => {
       return { ...state, [action.window.id]: action.window };
 
     case ActionTypes.MAXIMIZE_WINDOW:
-      return Object.keys(state).reduce((object, key) => {
-        if (key === action.windowId) {
-          object[key] = state[key]; // eslint-disable-line no-param-reassign
-          object[key].maximized = true; // eslint-disable-line no-param-reassign
-        }
-        return object;
-      }, {});
-
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          maximized: true,
+        },
+      };
     case ActionTypes.MINIMIZE_WINDOW:
-      return Object.keys(state).reduce((object, key) => {
-        if (key === action.windowId) {
-          object[key] = state[key]; // eslint-disable-line no-param-reassign
-          object[key].maximized = false; // eslint-disable-line no-param-reassign
-        }
-        return object;
-      }, {});
-
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          maximized: false,
+        },
+      };
     case ActionTypes.UPDATE_WINDOW:
       return updateIn(state, [action.id], orig => merge(orig, action.payload));
 
