@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import ErrorDialog from '../components/ErrorDialog';
+import { ErrorDialog } from '../components/ErrorDialog';
 import * as actions from '../state/actions';
 import { getLatestError } from '../state/selectors';
 
@@ -26,6 +26,7 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
+  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   miradorWithPlugins,
   withTranslation(),

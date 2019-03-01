@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
-import WorkspaceImport from '../components/WorkspaceImport';
+import { WorkspaceImport } from '../components/WorkspaceImport';
 import * as actions from '../state/actions';
 
 /**
