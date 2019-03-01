@@ -18,7 +18,7 @@ export function requestManifest(manifestId, properties) {
 /**
  * receiveManifest - action creator
  *
- * @param  {String} windowId
+ * @param  {String} manifestId
  * @param  {Object} manifestJson
  * @memberof ActionCreators
  */
