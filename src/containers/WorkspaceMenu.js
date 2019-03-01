@@ -17,9 +17,10 @@ const mapDispatchToProps = { toggleZoomControls: actions.toggleZoomControls };
  * @memberof WindowViewer
  * @private
  */
-const mapStateToProps = state => (
-  { showZoomControls: state.workspace.showZoomControls }
-);
+const mapStateToProps = state => ({
+  containerId: state.config.id,
+  showZoomControls: state.workspace.showZoomControls,
+});
 
 const enhance = compose(
   withTranslation(),

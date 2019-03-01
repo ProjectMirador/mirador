@@ -4,6 +4,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import PropTypes from 'prop-types';
+import ns from '../config/css-ns';
 
 /**
  */
@@ -29,10 +30,16 @@ export class WindowList extends Component {
    */
   render() {
     const {
-      handleClose, anchorEl, windows, focusWindow, t,
+      containerId, handleClose, anchorEl, windows, focusWindow, t,
     } = this.props;
     return (
-      <Menu id="window-list-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+      <Menu
+        id="window-list-menu"
+        container={document.querySelector(`#${containerId} .${ns('viewer')}`)}
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
         <ListSubheader>
           <Button color="inherit" aria-label={t('closeMenu')} onClick={handleClose} align="right" style={{ float: 'right' }}>&times;</Button>
           {t('openWindows')}
@@ -55,6 +62,7 @@ export class WindowList extends Component {
 }
 
 WindowList.propTypes = {
+  containerId: PropTypes.string.isRequired,
   focusWindow: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types

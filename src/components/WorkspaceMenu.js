@@ -15,6 +15,7 @@ import { NestedMenu } from './NestedMenu';
 import WindowList from '../containers/WindowList';
 import WorkspaceSettings from '../containers/WorkspaceSettings';
 import WorkspaceExport from '../containers/WorkspaceExport';
+import ns from '../config/css-ns';
 
 /**
  */
@@ -72,7 +73,7 @@ export class WorkspaceMenu extends Component {
    */
   render() {
     const {
-      handleClose, anchorEl, t, showZoomControls,
+      containerId, handleClose, anchorEl, t, showZoomControls,
     } = this.props;
 
     const {
@@ -84,7 +85,13 @@ export class WorkspaceMenu extends Component {
 
     return (
       <>
-        <Menu id="workspace-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+        <Menu
+          id="workspace-menu"
+          container={document.querySelector(`#${containerId} .${ns('viewer')}`)}
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
           <MenuItem
             aria-haspopup="true"
             onClick={(e) => { this.handleMenuItemClick('windowList', e); handleClose(e); }}
@@ -158,6 +165,7 @@ export class WorkspaceMenu extends Component {
 }
 
 WorkspaceMenu.propTypes = {
+  containerId: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
   toggleZoomControls: PropTypes.func,
   showZoomControls: PropTypes.bool,

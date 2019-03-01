@@ -11,6 +11,7 @@ import { WindowTopMenu } from '../../../src/components/WindowTopMenu';
 function createWrapper(props) {
   return shallow(
     <WindowTopMenu
+      containerId="mirador"
       windowId="xyz"
       handleClose={() => {}}
       anchorEl={null}

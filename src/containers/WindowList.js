@@ -20,6 +20,7 @@ const mapDispatchToProps = {
  */
 const mapStateToProps = state => (
   {
+    containerId: state.config.id,
     windows: state.windows,
     manifests: state.manifests,
   }

@@ -17,6 +17,7 @@ describe('WindowList', () => {
 
     wrapper = shallow(
       <WindowList
+        containerId="mirador"
         anchorEl={{}}
         manifests={manifests}
         windows={windows}
@@ -36,6 +37,7 @@ describe('WindowList', () => {
 
       wrapper = shallow(
         <WindowList
+          containerId="mirador"
           anchorEl={{}}
           manifests={manifests}
           windows={windows}
@@ -64,6 +66,7 @@ describe('WindowList', () => {
 
       wrapper = shallow(
         <WindowList
+          containerId="mirador"
           anchorEl={{}}
           manifests={manifests}
           windows={windows}
