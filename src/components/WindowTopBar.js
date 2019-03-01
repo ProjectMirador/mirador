@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/MenuSharp';
 import CloseIcon from '@material-ui/icons/CloseSharp';
 import FullscreenIcon from '@material-ui/icons/FullscreenSharp';
+import FullscreenExitIcon from '@material-ui/icons/FullscreenExitSharp';
 import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 import classNames from 'classnames';
@@ -19,20 +20,13 @@ import ns from '../config/css-ns';
  */
 export class WindowTopBar extends Component {
   /**
-   * maximizeWindow
-   * @return
-  */
-  maximizeWindow() {
-    console.log('maximized!');
-  }
-
-  /**
    * render
    * @return
    */
   render() {
     const {
-      closeWindow, windowId, classes, toggleWindowSideBar, t, manifestTitle,
+      closeWindow, windowId, classes, toggleWindowSideBar,
+      t, manifestTitle, maximizeWindow, maximized, minimizeWindow,
     } = this.props;
     return (
       <AppBar position="relative">
@@ -54,9 +48,11 @@ export class WindowTopBar extends Component {
             color="inherit"
             className={ns('window-maximize')}
             aria-label={t('maximizeWindow')}
-            onClick={this.maximizeWindow}
+            onClick={(maximized ? minimizeWindow : maximizeWindow)}
           >
-            <FullscreenIcon />
+            {maximized
+              ? <FullscreenExitIcon />
+              : <FullscreenIcon />}
           </IconButton>
           <IconButton
             color="inherit"
@@ -74,6 +70,9 @@ export class WindowTopBar extends Component {
 
 WindowTopBar.propTypes = {
   manifestTitle: PropTypes.string,
+  maximizeWindow: PropTypes.func,
+  maximized: PropTypes.bool,
+  minimizeWindow: PropTypes.func,
   closeWindow: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -83,5 +82,8 @@ WindowTopBar.propTypes = {
 
 WindowTopBar.defaultProps = {
   manifestTitle: '',
+  maximizeWindow: () => {},
+  maximized: false,
+  minimizeWindow: () => {},
   t: key => key,
 };
