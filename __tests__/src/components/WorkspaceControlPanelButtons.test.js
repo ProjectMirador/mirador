@@ -11,7 +11,6 @@ describe('WorkspaceControlPanelButtons', () => {
   });
 
   it('renders without an error', () => {
-    expect(wrapper.find('WithStyles(List)').length).toBe(1);
     expect(wrapper.find(WorkspaceFullScreenButton).length).toBe(1);
   });
 });

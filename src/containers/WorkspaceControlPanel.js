@@ -8,6 +8,21 @@ import { WorkspaceControlPanel } from '../components/WorkspaceControlPanel';
  * drawer: {overflowX: string, height: string}}}
  */
 const styles = theme => ({
+  root: {
+    [theme.breakpoints.up('sm')]: {
+      left: 0,
+      right: 'auto',
+      width: 96,
+      height: '100%',
+    },
+  },
+  toolbar: {
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+      paddingLeft: theme.spacing.unit * 2,
+      paddingRight: theme.spacing.unit * 2,
+    },
+  },
   ctrlBtn: {
     margin: theme.spacing.unit,
   },

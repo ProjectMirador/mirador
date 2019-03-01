@@ -38,13 +38,25 @@
   }
 
   &-workspace-with-control-panel {
-    padding-left: 100px; // The width of the control panel
+    padding-top: 74px; // The height of the control panel
   }
 
   &-workspace-add {
-    padding-left: 110px;
-    padding-right: 20px;
-    padding-top: 20px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 92px;
+  }
+
+  @media (min-width: 600px) {
+    &-workspace-with-control-panel {
+      padding-left: 100px;
+      padding-top: 0;
+    }
+
+    &-workspace-add {
+      padding-left: 100px;
+      padding-top: 18px;
+    }
   }
 
   &-window-middle-content {
