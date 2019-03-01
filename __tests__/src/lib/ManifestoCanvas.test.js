@@ -3,6 +3,7 @@ import ManifestoCanvas from '../../../src/lib/ManifestoCanvas';
 import fixture from '../../fixtures/version-2/019.json';
 import imagev1Fixture from '../../fixtures/version-2/Osbornfa1.json';
 import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
+import otherContentFixture from '../../fixtures/version-2/299843.json';
 
 describe('ManifestoCanvas', () => {
   let instance;
@@ -10,6 +11,24 @@ describe('ManifestoCanvas', () => {
     instance = new ManifestoCanvas(
       manifesto.create(fixture).getSequences()[0].getCanvases()[0],
     );
+  });
+  describe('annotationListUris', () => {
+    describe('when no annotationLists are present', () => {
+      it('returns an empty array', () => {
+        expect(instance.annotationListUris).toEqual([]);
+      });
+    });
+    describe('when annotationLists are present', () => {
+      it('returns an array of uris', () => {
+        const otherContentInstance = new ManifestoCanvas(
+          manifesto.create(otherContentFixture).getSequences()[0].getCanvases()[0],
+        );
+        expect(otherContentInstance.annotationListUris.length).toEqual(1);
+        expect(otherContentInstance.annotationListUris).toEqual([
+          'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
+        ]);
+      });
+    });
   });
   describe('canonicalImageUri', () => {
     it('calls manifestos method to return a canonical imageUri', () => {
