@@ -41,7 +41,7 @@ export class WindowList extends Component {
         onClose={handleClose}
       >
         <ListSubheader>
-          <Button color="inherit" aria-label={t('closeMenu')} onClick={handleClose} align="right" style={{ float: 'right' }}>&times;</Button>
+          <Button color="inherit" aria-label={t('closeWindowMenu')} onClick={handleClose} align="right" style={{ float: 'right' }}>&times;</Button>
           {t('openWindows')}
         </ListSubheader>
         {

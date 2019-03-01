@@ -35,7 +35,7 @@ describe('WorkspaceFullScreenButton', () => {
     });
 
     it('has the proper aria-label i18n key', () => {
-      expect(wrapper.find('WithStyles(IconButton)[aria-label="fullScreen"]').length).toBe(1);
+      expect(wrapper.find('WithStyles(IconButton)[aria-label="workspaceFullScreen"]').length).toBe(1);
     });
 
     it('triggers the setWorkspaceFullscreen prop with the appropriate boolean', () => {
