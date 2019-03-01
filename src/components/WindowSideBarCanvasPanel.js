@@ -21,7 +21,6 @@ export class WindowSideBarCanvasPanel extends Component {
     } = this.props;
 
     const canvasesIdAndLabel = getIdAndLabelOfCanvases(canvases);
-
     return (
       <>
         <Typography variant="h2" className={classes.windowSideBarH2}>{t('canvasIndex')}</Typography>

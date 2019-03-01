@@ -38,6 +38,7 @@ export default {
   thumbnailNavigation: {
     defaultPosition: 'bottom',
     height: 150,
+    width: 100,
   },
   workspace: {
     type: 'mosaic',

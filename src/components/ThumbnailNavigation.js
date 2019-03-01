@@ -82,6 +82,7 @@ export class ThumbnailNavigation extends Component {
               >
                 <CanvasThumbnail
                   imageUrl={manifestoCanvas.thumbnail(null, height)}
+                  isValid={manifestoCanvas.hasValidDimensions}
                   maxHeight={config.thumbnailNavigation.height}
                   maxWidth={style.width}
                   aspectRatio={manifestoCanvas.aspectRatio}
@@ -103,8 +104,8 @@ export class ThumbnailNavigation extends Component {
     const { config, canvasGroupings } = this.props;
     return canvasGroupings
       .getCanvases(options.index)
-      .map(canvas => new ManifestoCanvas(canvas).aspectRatio)
-      .reduce((acc, current) => acc + Math.floor(config.thumbnailNavigation.height * current), 8);
+      .map(canvas => new ManifestoCanvas(canvas))
+      .reduce((acc, currentCanvas) => { return acc + (currentCanvas.hasValidDimensions ? Math.floor(config.thumbnailNavigation.height * currentCanvas.aspectRatio) : config.thumbnailNavigation.width); }, 8); // eslint-disable-line arrow-body-style, max-len
   }
 
   /**
