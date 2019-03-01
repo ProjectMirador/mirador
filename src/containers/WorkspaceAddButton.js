@@ -31,8 +31,9 @@ const mapDispatchToProps = { setWorkspaceAddVisibility: actions.setWorkspaceAddV
  * @returns {{ctrlBtn: {margin: (number|string)}}}
  */
 const styles = theme => ({
-  ctrlBtn: {
+  fab: {
     margin: theme.spacing.unit,
+    marginLeft: theme.spacing.unit / 2,
   },
 });
 

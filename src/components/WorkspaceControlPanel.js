@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Drawer from '@material-ui/core/Drawer';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 import WorkspaceControlPanelButtons
   from '../containers/WorkspaceControlPanelButtons';
 import ns from '../config/css-ns';
@@ -17,16 +18,15 @@ export class WorkspaceControlPanel extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Drawer
-        className={classNames(classes.drawer, ns('workspace-control-panel'))}
-        variant="permanent"
-        anchor="left"
-        classes={{ paper: classNames(classes.drawer) }}
-        PaperProps={{ style: { position: 'absolute' } }}
-        open
+      <AppBar
+        className={classNames(classes.root, ns('workspace-control-panel'))}
+        color="default"
+        position="absolute"
       >
-        <WorkspaceControlPanelButtons />
-      </Drawer>
+        <Toolbar className={classes.toolbar}>
+          <WorkspaceControlPanelButtons />
+        </Toolbar>
+      </AppBar>
     );
   }
 }

@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/mirador.min.js",
   "files": [
-     "dist"
+    "dist"
   ],
   "scripts": {
     "lint": "node_modules/.bin/eslint ./ && node_modules/.bin/sass-lint -v ./src/styles/**/*",
