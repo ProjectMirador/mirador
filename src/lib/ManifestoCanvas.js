@@ -51,29 +51,33 @@ export default class ManifestoCanvas {
       return undefined;
     }
 
-    if (maxWidth && maxHeight) {
-      const { aspectRatio } = this;
-      const desiredAspectRatio = maxWidth / maxHeight;
-
-      // size to width
-      if (desiredAspectRatio < aspectRatio) {
-        height = null;
-        width = maxWidth;
-      } else {
+    switch (this.thumbnailConstraints(maxWidth, maxHeight)) {
+      case 'sizeByH':
         height = maxHeight;
-        width = null;
-      }
-    } else if (!maxWidth && !maxHeight) {
-      width = null;
-      height = '150';
-    } else {
-      width = maxWidth;
-      height = maxHeight;
+        break;
+      case 'sizeByW':
+        width = maxWidth;
+        break;
+      default:
+        height = '150';
     }
+
     // note that, although the IIIF server may support sizeByConfinedWh (e.g. !w,h)
     // this is a IIIF level 2 feature, so we're instead providing w, or h,-style requests
     // which are only level 1.
     return this.canonicalImageUri.replace(/\/full\/.*\/0\//, `/full/${width || ''},${height || ''}/0/`);
+  }
+
+  /** @private */
+  thumbnailConstraints(maxWidth, maxHeight) {
+    if (!maxHeight && !maxWidth) return undefined;
+    if (maxHeight && !maxWidth) return 'sizeByH';
+    if (!maxHeight && maxWidth) return 'sizeByW';
+
+    const { aspectRatio } = this;
+    const desiredAspectRatio = maxWidth / maxHeight;
+
+    return desiredAspectRatio < aspectRatio ? 'sizeByW' : 'sizeByH';
   }
 
   /**
