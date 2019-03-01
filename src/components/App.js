@@ -57,26 +57,26 @@ export class App extends Component {
     });
 
     return (
-      <div className={classNames(classes.background, ns('viewer'))}>
-        <I18nextProvider i18n={this.i18n}>
-          <MuiThemeProvider theme={createMuiTheme(theme)}>
-            <Fullscreen
-              enabled={isFullscreenEnabled}
-              onChange={setWorkspaceFullscreen}
-            >
+      <Fullscreen
+        enabled={isFullscreenEnabled}
+        onChange={setWorkspaceFullscreen}
+      >
+        <div className={classNames(classes.background, ns('viewer'))}>
+          <I18nextProvider i18n={this.i18n}>
+            <MuiThemeProvider theme={createMuiTheme(theme)}>
               {
                 isWorkspaceAddVisible
                   ? <WorkspaceAdd />
                   : <Workspace />
                }
-            </Fullscreen>
-            {
-              isWorkspaceControlPanelVisible
-                && <WorkspaceControlPanel />
-            }
-          </MuiThemeProvider>
-        </I18nextProvider>
-      </div>
+              {
+                isWorkspaceControlPanelVisible
+                  && <WorkspaceControlPanel />
+              }
+            </MuiThemeProvider>
+          </I18nextProvider>
+        </div>
+      </Fullscreen>
     );
   }
 }
