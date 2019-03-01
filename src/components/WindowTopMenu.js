@@ -19,7 +19,13 @@ export class WindowTopMenu extends Component {
 
     return (
       <>
-        <Menu id={`window-menu_${windowId}`} anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+        <Menu
+          id={`window-menu_${windowId}`}
+          container={document.getElementById(windowId)}
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
           <ListItem>
             <WindowViewSettings windowId={windowId} />
           </ListItem>
