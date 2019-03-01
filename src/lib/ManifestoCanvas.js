@@ -1,3 +1,4 @@
+import flatten from 'lodash/flatten';
 /**
  * ManifestoCanvas - adds additional, testable logic around Manifesto's Canvas
  * https://iiif-commons.github.io/manifesto/classes/_canvas_.manifesto.canvas.html
@@ -20,6 +21,15 @@ export default class ManifestoCanvas {
    */
   get aspectRatio() {
     return this.canvas.getWidth() / this.canvas.getHeight();
+  }
+
+  /** */
+  get annotationListUris() {
+    return flatten(
+      new Array(this.canvas.__jsonld.otherContent), // eslint-disable-line no-underscore-dangle
+    )
+      .filter(otherContent => otherContent && otherContent['@type'] === 'sc:AnnotationList')
+      .map(otherContent => otherContent['@id']);
   }
 
   /**

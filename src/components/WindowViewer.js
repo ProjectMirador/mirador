@@ -26,14 +26,18 @@ export class WindowViewer extends Component {
    * Request the initial canvas on mount
    */
   componentDidMount() {
-    const { fetchInfoResponse } = this.props;
+    const { fetchInfoResponse, fetchAnnotation } = this.props;
 
     if (!this.infoResponseIsInStore()) {
       this.currentCanvases().forEach((canvas) => {
-        const { imageInformationUri } = new ManifestoCanvas(canvas);
+        const manifestoCanvas = new ManifestoCanvas(canvas);
+        const { imageInformationUri } = manifestoCanvas;
         if (imageInformationUri) {
           fetchInfoResponse(imageInformationUri);
         }
+        manifestoCanvas.annotationListUris.forEach((uri) => {
+          fetchAnnotation(manifestoCanvas.canvas.id, uri);
+        });
       });
     }
   }
@@ -43,15 +47,19 @@ export class WindowViewer extends Component {
    * Request a new canvas if it is needed
    */
   componentDidUpdate(prevProps) {
-    const { window, fetchInfoResponse } = this.props;
+    const { window, fetchInfoResponse, fetchAnnotation } = this.props;
     if (prevProps.window.view !== window.view
       || (prevProps.window.canvasIndex !== window.canvasIndex && !this.infoResponseIsInStore())
     ) {
       this.currentCanvases().forEach((canvas) => {
-        const { imageInformationUri } = new ManifestoCanvas(canvas);
+        const manifestoCanvas = new ManifestoCanvas(canvas);
+        const { imageInformationUri } = manifestoCanvas;
         if (imageInformationUri) {
           fetchInfoResponse(imageInformationUri);
         }
+        manifestoCanvas.annotationListUris.forEach((uri) => {
+          fetchAnnotation(manifestoCanvas.canvas.id, uri);
+        });
       });
     }
     // If the view changes, create a new instance
@@ -129,6 +137,7 @@ export class WindowViewer extends Component {
 
 WindowViewer.propTypes = {
   infoResponses: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  fetchAnnotation: PropTypes.func.isRequired,
   fetchInfoResponse: PropTypes.func.isRequired,
   manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types

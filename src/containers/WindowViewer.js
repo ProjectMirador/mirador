@@ -20,7 +20,10 @@ const mapStateToProps = state => (
  * @memberof WindowViewer
  * @private
  */
-const mapDispatchToProps = { fetchInfoResponse: actions.fetchInfoResponse };
+const mapDispatchToProps = {
+  fetchAnnotation: actions.fetchAnnotation,
+  fetchInfoResponse: actions.fetchInfoResponse,
+};
 
 
 const enhance = compose(

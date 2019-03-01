@@ -6,6 +6,7 @@ import OSDViewer from '../../../src/containers/OpenSeadragonViewer';
 import ViewerNavigation from '../../../src/containers/ViewerNavigation';
 import fixture from '../../fixtures/version-2/019.json';
 import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
+import otherContentFixture from '../../fixtures/version-2/299843.json';
 
 let mockManifest = {
   id: 123,
@@ -23,6 +24,7 @@ function createWrapper(props) {
     <WindowViewer
       infoResponses={{}}
       fetchInfoResponse={() => {}}
+      fetchAnnotation={() => {}}
       manifest={mockManifest}
       window={mockWindow}
       {...props}
@@ -148,6 +150,17 @@ describe('WindowViewer', () => {
         },
       );
       expect(mockFnCanvas2).toHaveBeenCalledTimes(0);
+    });
+    it('calls fetchAnnotation when otherContent is present', () => {
+      const mockFnAnno = jest.fn();
+      mockManifest = {
+        id: 123,
+        manifestation: manifesto.create(otherContentFixture),
+      };
+      wrapper = createWrapper(
+        { manifest: mockManifest, fetchAnnotation: mockFnAnno },
+      );
+      expect(mockFnAnno).toHaveBeenCalledTimes(1);
     });
   });
 

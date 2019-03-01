@@ -7,6 +7,7 @@ import {
   viewersReducer,
   windowsReducer,
   workspaceReducer,
+  annotationsReducer,
 } from '.';
 
 /**
@@ -23,6 +24,7 @@ export default function createRootReducer(pluginReducers) {
     infoResponses: infoResponsesReducer,
     config: configReducer,
     viewers: viewersReducer,
+    annotations: annotationsReducer,
     ...pluginReducers,
   });
 }
