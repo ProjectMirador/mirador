@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import Fullscreen from 'react-fullscreen-crossbrowser';
+import Fullscreen from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
 import WorkspaceControlPanel from '../containers/WorkspaceControlPanel';
 import Workspace from '../containers/Workspace';

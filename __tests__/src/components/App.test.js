@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { MuiThemeProvider } from '@material-ui/core/styles';
-import Fullscreen from 'react-fullscreen-crossbrowser';
+import Fullscreen from 'react-full-screen';
 import WorkspaceControlPanel from '../../../src/containers/WorkspaceControlPanel';
 import Workspace from '../../../src/containers/Workspace';
 import WorkspaceAdd from '../../../src/containers/WorkspaceAdd';

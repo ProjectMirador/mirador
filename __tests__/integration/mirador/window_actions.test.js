@@ -4,6 +4,7 @@ describe('Window actions', () => {
   });
   it('opens a window and closes it', async () => {
     await expect(page).toClick('#addBtn');
+    await expect(page).toClick('.mirador-add-resource-button');
     await expect(page).toFill('#manifestURL', 'http://localhost:5000/api/sn904cj3439');
     await expect(page).toClick('#fetchBtn');
 

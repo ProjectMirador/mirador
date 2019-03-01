@@ -13,7 +13,6 @@ const styles = theme => ({
   },
   drawer: {
     overflowX: 'hidden',
-    height: '100%',
   },
 });
 

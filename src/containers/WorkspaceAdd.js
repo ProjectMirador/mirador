@@ -39,6 +39,9 @@ const styles = theme => ({
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 2,
   },
+  displayNone: {
+    display: 'none',
+  },
   typographyBody: {
     flexGrow: 1,
     fontSize: '1em',

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import AddIcon from '@material-ui/icons/AddSharp';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMoreSharp';
 import AppBar from '@material-ui/core/AppBar';
@@ -56,12 +57,21 @@ export class WorkspaceAdd extends React.Component {
       <div className={ns('workspace-add')}>
         {manifestList}
 
-        <Fab variant="extended" disabled={addResourcesOpen} className={classes.fab} color="secondary" onClick={() => (this.setAddResourcesVisibility(true))}>
+        <Fab
+          variant="extended"
+          disabled={addResourcesOpen}
+          className={classNames(classes.fab, ns('add-resource-button'))}
+          color="secondary"
+          onClick={() => (this.setAddResourcesVisibility(true))}
+        >
           <AddIcon />
           {t('addResource')}
         </Fab>
 
         <Drawer
+          className={classNames({
+            [classes.displayNone]: !addResourcesOpen,
+          })}
           variant="persistent"
           anchor="bottom"
           open={addResourcesOpen}

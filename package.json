@@ -2,7 +2,10 @@
   "name": "mirador",
   "version": "3.0.0-alpha.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/mirador.min.js",
+  "files": [
+     "dist"
+  ],
   "scripts": {
     "lint": "node_modules/.bin/eslint ./ && node_modules/.bin/sass-lint -v ./src/styles/**/*",
     "server": "node_modules/.bin/http-server",
@@ -46,7 +49,7 @@
     "prop-types": "^15.6.2",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
-    "react-fullscreen-crossbrowser": "^1.0.9",
+    "react-full-screen": "^0.2.4",
     "react-i18next": "^10.2.0",
     "react-mosaic-component": "^2.1.0",
     "react-placeholder": "^3.0.1",
