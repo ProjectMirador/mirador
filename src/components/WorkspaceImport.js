@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 
 /**
  */
-class WorkspaceImport extends Component {
+export class WorkspaceImport extends Component {
   /**
    *
    * constructor
@@ -86,5 +86,3 @@ WorkspaceImport.defaultProps = {
   open: false,
   t: key => key,
 };
-
-export default WorkspaceImport;

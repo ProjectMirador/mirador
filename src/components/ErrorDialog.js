@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 
 /**
  */
-class ErrorDialog extends Component {
+export class ErrorDialog extends Component {
   /**
    * render
    * @return
@@ -52,5 +52,3 @@ ErrorDialog.defaultProps = {
   open: false,
   t: key => key,
 };
-
-export default ErrorDialog;
