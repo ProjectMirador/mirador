@@ -14,6 +14,7 @@ describe('WorkspaceMenu', () => {
     toggleZoomControls = jest.fn();
     wrapper = shallow(
       <WorkspaceMenu
+        containerId="mirador"
         handleClose={handleClose}
         showZoomControls={showZoomControls}
         toggleZoomControls={toggleZoomControls}
