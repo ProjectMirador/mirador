@@ -101,13 +101,11 @@ export class ThumbnailNavigation extends Component {
    * canvases
    */
   calculateScaledWidth(options) {
-<<<<<<< HEAD
     const { config, canvasGroupings } = this.props;
-    const ret = canvasGroupings
+    return canvasGroupings
       .getCanvases(options.index)
       .map(canvas => new ManifestoCanvas(canvas))
       .reduce((acc, currentCanvas) => { return acc + (currentCanvas.hasValidDimensions ? Math.floor(config.thumbnailNavigation.height * currentCanvas.aspectRatio) : config.thumbnailNavigation.width); }, 8); // eslint-disable-line arrow-body-style, max-len
-    return ret;
   }
 
   /**
@@ -121,16 +119,6 @@ export class ThumbnailNavigation extends Component {
         return Math.ceil(window.canvasIndex / 2);
       default:
         return window.canvasIndex;
-=======
-    const { config, canvases } = this.props;
-    const canvas = new ManifestoCanvas(canvases[options.index]);
-    /*
-    if canvas provides valid dimensions return calculated width, based on height and aspectRatio,
-    otherweise return the default width
-    */
-    if (canvas.hasValidDimensions) {
-      return Math.floor(config.thumbnailNavigation.height * canvas.aspectRatio) + 8;
->>>>>>> #1888 fixes import for ManifestoCanvas, re-adds padding for thumbnail grid cell
     }
   }
 
