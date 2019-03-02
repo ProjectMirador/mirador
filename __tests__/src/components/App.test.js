@@ -9,6 +9,8 @@ import { App } from '../../../src/components/App';
 import settings from '../../../src/config/settings';
 import i18n from '../../../src/i18n';
 
+jest.unmock('react-i18next');
+
 /** */
 function createWrapper(props) {
   return shallow(
