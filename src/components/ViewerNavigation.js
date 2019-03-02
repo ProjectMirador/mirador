@@ -29,7 +29,7 @@ export class ViewerNavigation extends Component {
    */
   hasNextCanvas() {
     const { window, canvases } = this.props;
-    return window.canvasIndex <= canvases.length - this.canvasIncrementor();
+    return window.canvasIndex < canvases.length - this.canvasIncrementor();
   }
 
   /**
