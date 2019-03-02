@@ -27,6 +27,18 @@ describe('ViewerNavigation', () => {
       expect(setCanvas).toHaveBeenCalledWith('foo', 1);
     });
   });
+  describe('when next canvases are not present', () => {
+    it('nextCanvas button is disabled', () => {
+      const endWrapper = shallow(
+        <ViewerNavigation
+          canvases={[1, 2]}
+          setCanvas={() => {}}
+          window={{ id: 'foo', canvasIndex: 1 }}
+        />,
+      );
+      expect(endWrapper.find('.mirador-next-canvas-button').prop('disabled')).toBe(true);
+    });
+  });
   describe('when previous canvases are not present', () => {
     it('disabled on previousCanvas button', () => {
       expect(wrapper.find('.mirador-previous-canvas-button').prop('disabled')).toBe(true);
@@ -40,7 +52,7 @@ describe('ViewerNavigation', () => {
     it('setCanvas function is called after click for next', () => {
       wrapper = shallow(
         <ViewerNavigation
-          canvases={[1, 2]}
+          canvases={[1, 2, 3]}
           setCanvas={setCanvas}
           window={{ id: 'foo', canvasIndex: 0, view: 'book' }}
         />,
