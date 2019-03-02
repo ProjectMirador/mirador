@@ -6,6 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import ns from '../config/css-ns';
 import WindowSideBarInfoPanel from '../containers/WindowSideBarInfoPanel';
 import WindowSideBarCanvasPanel from '../containers/WindowSideBarCanvasPanel';
+import WindowSideBarAnnotationsPanel from '../containers/WindowSideBarAnnotationsPanel';
 
 /**
  * CompanionWindow
@@ -23,6 +24,8 @@ export class CompanionWindow extends Component {
         return <WindowSideBarInfoPanel windowId={windowId} />;
       case 'canvas_navigation':
         return <WindowSideBarCanvasPanel windowId={windowId} />;
+      case 'annotations':
+        return <WindowSideBarAnnotationsPanel windowId={windowId} />;
       default:
         return null;
     }

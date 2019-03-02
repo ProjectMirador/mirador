@@ -23,4 +23,18 @@ describe('WindowSideBarButtons', () => {
     expect(toggleWindowSideBarPanel).toHaveBeenCalledTimes(1);
     expect(toggleWindowSideBarPanel).toHaveBeenCalledWith('info');
   });
+
+  it('has a badge indicating if the annotations panel has annotations', () => {
+    wrapper = shallow(
+      <WindowSideBarButtons hasAnnotations />,
+    );
+
+    expect(wrapper.find('WithStyles(Badge)').props().invisible).toBe(false);
+
+    wrapper = shallow(
+      <WindowSideBarButtons hasAnnotations={false} />,
+    );
+
+    expect(wrapper.find('WithStyles(Badge)').props().invisible).toBe(true);
+  });
 });

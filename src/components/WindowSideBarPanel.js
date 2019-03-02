@@ -4,6 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import OpenInNewIcon from '@material-ui/icons/OpenInNewSharp';
 import WindowSideBarInfoPanel from '../containers/WindowSideBarInfoPanel';
 import WindowSideBarCanvasPanel from '../containers/WindowSideBarCanvasPanel';
+import WindowSideBarAnnotationsPanel from '../containers/WindowSideBarAnnotationsPanel';
 
 /**
  * WindowSideBarPanel - the panel that pops out from the sidebar
@@ -21,6 +22,8 @@ export class WindowSideBarPanel extends Component {
         return <WindowSideBarInfoPanel windowId={windowId} />;
       case 'canvas_navigation':
         return <WindowSideBarCanvasPanel windowId={windowId} />;
+      case 'annotations':
+        return <WindowSideBarAnnotationsPanel windowId={windowId} />;
       default:
         return null;
     }

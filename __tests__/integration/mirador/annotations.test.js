@@ -12,4 +12,23 @@ describe('Annotations in Mirador', () => {
     ));
     await expect(Object.keys(annotations).length).toEqual(1);
   });
+
+  // Note that this test is tied to a specific record showing up by default (299843.json)
+  it('renders annotation in a companion window/sidebar panel', async () => {
+    const windowId = await page.evaluate(() => {
+      const { windows } = miradorInstance.store.getState();
+
+      return Object.values(windows)
+        .find(w => w.manifestId === 'https://iiif.harvardartmuseums.org/manifests/object/299843').id;
+    });
+
+    await expect(page).toClick(`#${windowId} button[aria-label="Toggle window sidebar"]`);
+
+    await page.waitFor(1000);
+    await expect(page).toClick(`#${windowId} button[aria-label="Open annotation companion window"]`);
+
+    await expect(page).toMatchElement(`#${windowId} h2`, { text: 'Annotations' });
+    await expect(page).toMatchElement(`#${windowId} p`, { text: 'Showing 2 annotations' });
+    await expect(page).toMatchElement(`#${windowId} .mirador-window-sidebar-panel-drawer ul li`, { count: 2 });
+  });
 });
