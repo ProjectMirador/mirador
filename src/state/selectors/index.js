@@ -203,6 +203,16 @@ export function getCompanionWindowIds(state, windowId) {
 }
 
 /**
+ * Return companion windows of a window
+ * @param {String} windowId
+ * @return {Array}
+ */
+export function getCompanionWindowsOfWindow(state, windowId) {
+  return getCompanionWindowIds(state, windowId)
+    .map(id => state.companionWindows[id]);
+}
+
+/**
 * Return languages from config (in state) and indicate which is currently set
 * @param {object} state
 * @return {Array} [ {locale: 'de', label: 'Deutsch', current: true}, ... ]

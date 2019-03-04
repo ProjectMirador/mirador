@@ -130,7 +130,7 @@ describe('window actions', () => {
 
       const addCompanionWindowAction = mockDispatch.mock.calls[1][0];
       expect(addCompanionWindowAction.type).toBe(ActionTypes.ADD_COMPANION_WINDOW);
-      expect(addCompanionWindowAction.payload).toEqual({ content: 'info', position: 'right' });
+      expect(addCompanionWindowAction.payload).toMatchObject({ content: 'info', position: 'right' });
       expect(addCompanionWindowAction.id.startsWith('cw-')).toBe(true);
 
       expect(mockDispatch).toHaveBeenNthCalledWith(3, {
