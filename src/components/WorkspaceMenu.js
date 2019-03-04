@@ -9,11 +9,13 @@ import Typography from '@material-ui/core/Typography';
 import SaveAltIcon from '@material-ui/icons/SaveAltSharp';
 import SettingsIcon from '@material-ui/icons/SettingsSharp';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
+import ViewQuiltIcon from '@material-ui/icons/ViewQuilt';
 import PropTypes from 'prop-types';
 import LanguageSettings from '../containers/LanguageSettings';
 import { NestedMenu } from './NestedMenu';
 import WindowList from '../containers/WindowList';
 import WorkspaceSettings from '../containers/WorkspaceSettings';
+import WorkspaceSelectionDialog from '../containers/WorkspaceSelectionDialog';
 import WorkspaceExport from '../containers/WorkspaceExport';
 import ns from '../config/css-ns';
 
@@ -28,6 +30,7 @@ export class WorkspaceMenu extends Component {
     this.state = {
       windowList: {},
       toggleZoom: {},
+      workspaceSelection: {},
       settings: {},
       exportWorkspace: {},
     };
@@ -73,7 +76,11 @@ export class WorkspaceMenu extends Component {
    */
   render() {
     const {
-      containerId, handleClose, anchorEl, t, showZoomControls,
+      containerId,
+      handleClose,
+      anchorEl,
+      t,
+      showZoomControls,
     } = this.props;
 
     const {
@@ -81,6 +88,7 @@ export class WorkspaceMenu extends Component {
       toggleZoom,
       settings,
       exportWorkspace,
+      workspaceSelection,
     } = this.state;
 
     const container = document.querySelector(`#${containerId} .${ns('viewer')}`);
@@ -116,6 +124,16 @@ export class WorkspaceMenu extends Component {
             <Typography varient="inherit">
               { showZoomControls ? t('hideZoomControls') : t('showZoomControls') }
             </Typography>
+          </MenuItem>
+          <MenuItem
+            aria-haspopup="true"
+            onClick={(e) => { this.handleMenuItemClick('workspaceSelection', e); handleClose(e); }}
+            aria-owns={workspaceSelection.anchorEl ? 'workspace-selection' : undefined}
+          >
+            <ListItemIcon>
+              <ViewQuiltIcon />
+            </ListItemIcon>
+            <Typography varient="inherit">{t('selectWorkspaceMenu')}</Typography>
           </MenuItem>
 
           <NestedMenu icon={<LanguageIcon />} label={t('language')}>
@@ -157,6 +175,10 @@ export class WorkspaceMenu extends Component {
           open={Boolean(settings.open)}
           container={container}
           handleClose={this.handleMenuItemClose('settings')}
+        />
+        <WorkspaceSelectionDialog
+          open={Boolean(workspaceSelection.open)}
+          handleClose={this.handleMenuItemClose('workspaceSelection')}
         />
         <WorkspaceExport
           open={Boolean(exportWorkspace.open)}
