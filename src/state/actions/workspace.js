@@ -21,6 +21,16 @@ export function toggleZoomControls(showZoomControls) {
 }
 
 /**
+ * saveWorkspaceMosaicLayout - action creator
+ *
+ * @param  {Object} layout
+ * @memberof ActionCreators
+ */
+export function saveWorkspaceMosaicLayout(layout) {
+  return { type: ActionTypes.SAVE_WORKSPACE_MOSAIC_LAYOUT, layout };
+}
+
+/**
  * updateWorkspaceMosaicLayout - action creator
  *
  * @param  {Object} layout

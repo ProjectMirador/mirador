@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import pickBy from 'lodash/pickBy';
 import { Workspace } from '../components/Workspace';
 
 /**
@@ -13,10 +12,7 @@ const mapStateToProps = state => (
     isWorkspaceControlPanelVisible: state.config.workspaceControlPanel.enabled,
     workspaceType: state.config.workspace.type,
     windows: state.windows,
-    // pickBy(state.windows, window => window.maximized === false),
-    // Object.keys(state.windows)
-    //   .map(id => state.windows[id])
-    //   .filter(window => window.displayable === true),
+    savedLayout: state.workspace.savedLayout,
   }
 );
 

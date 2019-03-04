@@ -40,8 +40,12 @@ export function addWindow(options) {
  * @param  {String} windowId
  * @memberof ActionCreators
  */
-export function maximizeWindow(windowId) {
-  return { type: ActionTypes.MAXIMIZE_WINDOW, windowId };
+export function maximizeWindow(windowId, layout) {
+  // return { type: ActionTypes.MAXIMIZE_WINDOW, windowId };
+  return (dispatch) => {
+    dispatch({ type: ActionTypes.MAXIMIZE_WINDOW, windowId });
+    dispatch({ type: ActionTypes.SAVE_WORKSPACE_MOSAIC_LAYOUT, layout });
+  };
 }
 
 /**

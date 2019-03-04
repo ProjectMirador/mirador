@@ -8,7 +8,7 @@ import { getWindowManifest, getManifestTitle } from '../state/selectors';
 import { WindowTopBar } from '../components/WindowTopBar';
 
 /** mapStateToProps */
-const mapStateToProps = (state, { windowId }) => ({
+const mapStateToProps = (state, { windowId, layout }) => ({
   manifestTitle: getManifestTitle(getWindowManifest(state, windowId)),
   maximized: state.windows[windowId].maximized,
 });
@@ -18,9 +18,9 @@ const mapStateToProps = (state, { windowId }) => ({
  * @memberof ManifestListItem
  * @private
  */
-const mapDispatchToProps = (dispatch, { windowId }) => ({
+const mapDispatchToProps = (dispatch, { windowId, layout }) => ({
   closeWindow: () => dispatch(actions.closeWindow(windowId)),
-  maximizeWindow: () => dispatch(actions.maximizeWindow(windowId)),
+  maximizeWindow: () => dispatch(actions.maximizeWindow(windowId, layout)),
   minimizeWindow: () => dispatch(actions.minimizeWindow(windowId)),
   toggleWindowSideBar: () => dispatch(actions.toggleWindowSideBar(windowId)),
 });
