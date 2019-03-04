@@ -17,6 +17,7 @@ describe('window actions', () => {
           collectionIndex: 0,
           companionWindowIds: [],
           manifestId: null,
+          maximized: false,
           rangeId: null,
           thumbnailNavigationPosition: 'bottom',
           x: 2700,
@@ -52,6 +53,28 @@ describe('window actions', () => {
         windowId: id,
       };
       expect(actions.removeWindow(id)).toEqual(expectedAction);
+    });
+  });
+
+  describe('maximizeWindow', () => {
+    it('maximizes the window', () => {
+      const maxWindowId = 'abc123';
+      const maximizeWindowAction = {
+        type: ActionTypes.MAXIMIZE_WINDOW,
+        windowId: maxWindowId,
+      };
+      expect(actions.maximizeWindow(maxWindowId)).toEqual(maximizeWindowAction);
+    });
+  });
+
+  describe('minimizeWindow', () => {
+    it('minimizes the window and renders current layout', () => {
+      const minWindowId = 'abc123';
+      const minimizeWindowAction = {
+        type: ActionTypes.MINIMIZE_WINDOW,
+        windowId: minWindowId,
+      };
+      expect(actions.minimizeWindow(minWindowId)).toEqual(minimizeWindowAction);
     });
   });
 

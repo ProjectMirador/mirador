@@ -33,8 +33,27 @@ export function addWindow(options) {
     companionWindowIds: [],
     rotation: null,
     view: 'single',
+    maximized: false,
   };
   return { type: ActionTypes.ADD_WINDOW, window: { ...defaultOptions, ...options } };
+}
+
+/**
+ * maximizeWindow
+ * @param  {String} windowId
+ * @memberof ActionCreators
+ */
+export function maximizeWindow(windowId, layout) {
+  return { type: ActionTypes.MAXIMIZE_WINDOW, windowId };
+}
+
+/**
+ * minimizeWindow
+ * @param  {String} windowId
+ * @memberof ActionCreators
+ */
+export function minimizeWindow(windowId) {
+  return { type: ActionTypes.MINIMIZE_WINDOW, windowId };
 }
 
 /** */

@@ -28,10 +28,12 @@ export class Window extends Component {
         />
       </div>
     );
-    if (workspaceType !== 'mosaic') return topBar;
-    return mosaicWindowActions.connectDragSource(
-      topBar,
-    );
+    if (workspaceType === 'mosaic' && window.maximized === false) {
+      return mosaicWindowActions.connectDragSource(
+        topBar,
+      );
+    }
+    return topBar;
   }
 
   /**
@@ -47,7 +49,13 @@ export class Window extends Component {
     }
 
     return (
-      <section id={window.id} className={cn(classes.window, ns('window'))} aria-label={t('window', { label })}>
+      <div
+        id={window.id}
+        className={
+          cn(classes.window, ns('window'),
+            window.maximized ? ns('workspace-maximized-window') : null)}
+        aria-label={t('window', { label })}
+      >
         {this.wrappedTopBar()}
         <div className={classes.middle}>
           <div className={classes.middleLeft}>
