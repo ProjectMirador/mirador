@@ -64,12 +64,15 @@ export class ViewerNavigation extends Component {
    * Renders things
    */
   render() {
+    const { t } = this.props;
+
     return (
       <div className={ns('osd-navigation')}>
         <IconButton
           className={ns('previous-canvas-button')}
           disabled={!this.hasPreviousCanvas()}
           onClick={this.previousCanvas}
+          aria-label={t('previousCanvas')}
         >
           <NavigationIcon style={{ transform: 'rotate(180deg)' }} />
         </IconButton>
@@ -77,6 +80,7 @@ export class ViewerNavigation extends Component {
           className={ns('next-canvas-button')}
           disabled={!this.hasNextCanvas()}
           onClick={this.nextCanvas}
+          aria-label={t('nextCanvas')}
         >
           <NavigationIcon />
         </IconButton>
@@ -89,4 +93,5 @@ ViewerNavigation.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   setCanvas: PropTypes.func.isRequired,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  t: PropTypes.func.isRequired,
 };
