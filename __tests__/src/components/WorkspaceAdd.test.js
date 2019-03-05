@@ -12,7 +12,6 @@ function createWrapper(props) {
       setWorkspaceAddVisibility={() => {}}
       manifests={{ foo: fixture, bar: fixture }}
       classes={{}}
-      t={str => str}
       {...props}
     />,
   );

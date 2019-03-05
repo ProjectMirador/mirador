@@ -71,7 +71,7 @@ CompanionWindow.propTypes = {
   updateCompanionWindow: PropTypes.func,
   position: PropTypes.string,
   isDisplayed: PropTypes.bool,
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
   title: PropTypes.string,
   windowId: PropTypes.string.isRequired,
   children: PropTypes.node,
@@ -84,6 +84,5 @@ CompanionWindow.defaultProps = {
   isDisplayed: false,
   position: null,
   title: null,
-  t: key => key,
   children: undefined,
 };

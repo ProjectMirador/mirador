@@ -79,7 +79,7 @@ WindowSideBarInfoPanel.propTypes = {
   manifestLabel: PropTypes.string,
   manifestDescription: PropTypes.string,
   manifestMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
 };
@@ -92,5 +92,4 @@ WindowSideBarInfoPanel.defaultProps = {
   manifestLabel: null,
   manifestDescription: null,
   manifestMetadata: [],
-  t: key => key,
 };

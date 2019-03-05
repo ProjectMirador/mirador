@@ -13,7 +13,6 @@ function createWrapper(props) {
       manifestId="http://example.com"
       onDismissClick={() => {}}
       onTryAgainClick={() => {}}
-      t={key => key}
       {...props}
     />,
   );

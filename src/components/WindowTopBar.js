@@ -59,10 +59,9 @@ WindowTopBar.propTypes = {
   windowId: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   toggleWindowSideBar: PropTypes.func.isRequired,
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 WindowTopBar.defaultProps = {
   manifestTitle: '',
-  t: key => key,
 };

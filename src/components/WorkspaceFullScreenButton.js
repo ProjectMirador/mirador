@@ -35,10 +35,9 @@ WorkspaceFullScreenButton.propTypes = {
   isFullscreenEnabled: PropTypes.bool,
   setWorkspaceFullscreen: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 WorkspaceFullScreenButton.defaultProps = {
   isFullscreenEnabled: false,
-  t: key => key,
 };

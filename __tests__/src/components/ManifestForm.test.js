@@ -7,7 +7,6 @@ function createWrapper(props) {
   return shallow(
     <ManifestForm
       fetchManifest={() => {}}
-      t={str => str}
       {...props}
     />,
   );

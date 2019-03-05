@@ -68,10 +68,9 @@ WindowList.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   manifests: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 WindowList.defaultProps = {
   anchorEl: null,
-  t: key => key,
 };

@@ -12,7 +12,6 @@ function createWrapper(props) {
       ready
       addWindow={() => {}}
       fetchManifest={() => {}}
-      t={t => t}
       {...props}
     />,
   );

@@ -88,10 +88,9 @@ export class ManifestForm extends Component {
 ManifestForm.propTypes = {
   fetchManifest: PropTypes.func.isRequired,
   onCancel: PropTypes.func,
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 ManifestForm.defaultProps = {
-  t: key => key,
   onCancel: null,
 };

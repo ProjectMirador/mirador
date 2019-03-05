@@ -18,7 +18,6 @@ function createWrapper(props) {
       manifestTitle="awesome manifest"
       windowId="xyz"
       classes={{}}
-      t={str => str}
       closeWindow={() => {}}
       toggleWindowSideBar={() => {}}
       {...props}

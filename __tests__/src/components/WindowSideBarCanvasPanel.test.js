@@ -22,7 +22,6 @@ describe('WindowSideBarCanvasPanel', () => {
         id="asdf"
         canvases={canvases}
         classes={{}}
-        t={key => key}
         windowId="xyz"
         setCanvas={setCanvas}
         config={{ canvasNavigation: { height: 100 } }}

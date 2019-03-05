@@ -104,7 +104,7 @@ ZoomControls.propTypes = {
   }),
   updateViewport: PropTypes.func,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 ZoomControls.defaultProps = {
@@ -112,5 +112,4 @@ ZoomControls.defaultProps = {
   showZoomControls: false,
   viewer: {},
   updateViewport: () => {},
-  t: key => key,
 };

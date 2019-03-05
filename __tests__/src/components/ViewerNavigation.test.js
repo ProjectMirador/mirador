@@ -9,7 +9,6 @@ function createWrapper(props) {
       canvases={[1, 2]}
       setCanvas={() => {}}
       window={{}}
-      t={k => (k)}
       {...props}
     />,
   );

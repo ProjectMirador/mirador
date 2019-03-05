@@ -68,8 +68,5 @@ WindowThumbnailSettings.propTypes = {
   windowId: PropTypes.string.isRequired,
   setWindowThumbnailPosition: PropTypes.func.isRequired,
   thumbnailNavigationPosition: PropTypes.string.isRequired,
-  t: PropTypes.func,
-};
-WindowThumbnailSettings.defaultProps = {
-  t: key => key,
+  t: PropTypes.func.isRequired,
 };

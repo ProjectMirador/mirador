@@ -92,12 +92,11 @@ WindowSideBarButtons.propTypes = {
   closeCompanionWindow: PropTypes.func.isRequired,
   sideBarPanel: PropTypes.string,
   sideBarPanelId: PropTypes.string,
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 WindowSideBarButtons.defaultProps = {
   hasAnnotations: false,
   sideBarPanel: 'closed',
   sideBarPanelId: null,
-  t: key => key,
 };

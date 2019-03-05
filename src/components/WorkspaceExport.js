@@ -48,12 +48,11 @@ WorkspaceExport.propTypes = {
   open: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
   children: PropTypes.node,
   state: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 WorkspaceExport.defaultProps = {
   container: null,
   open: false,
   children: null,
-  t: key => key,
 };

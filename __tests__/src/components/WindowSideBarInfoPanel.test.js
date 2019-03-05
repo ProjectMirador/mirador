@@ -21,7 +21,6 @@ describe('WindowSideBarInfoPanel', () => {
           manifestLabel="The Manifest Label"
           manifestDescription="The Manifest Description"
           manifestMetadata={metadata}
-          t={str => str}
         />,
       );
     });

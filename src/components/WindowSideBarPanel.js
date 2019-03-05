@@ -55,11 +55,10 @@ export class WindowSideBarPanel extends Component {
 WindowSideBarPanel.propTypes = {
   popOutCompanionWindow: PropTypes.func,
   sideBarPanel: PropTypes.string,
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };
 WindowSideBarPanel.defaultProps = {
   popOutCompanionWindow: () => {},
   sideBarPanel: 'closed', // Closed will fall out to the default null case for the actiuve panel
-  t: key => key,
 };

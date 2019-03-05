@@ -62,8 +62,5 @@ WindowViewSettings.propTypes = {
   windowId: PropTypes.string.isRequired,
   setWindowViewType: PropTypes.func.isRequired,
   windowViewType: PropTypes.string.isRequired,
-  t: PropTypes.func,
-};
-WindowViewSettings.defaultProps = {
-  t: key => key,
+  t: PropTypes.func.isRequired,
 };

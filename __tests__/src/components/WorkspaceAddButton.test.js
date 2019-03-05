@@ -10,7 +10,6 @@ function createWrapper(props) {
   return shallow(
     <WorkspaceAddButton
       classes={{}}
-      t={str => str}
       {...props}
     />,
   );

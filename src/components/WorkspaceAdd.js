@@ -107,10 +107,9 @@ WorkspaceAdd.propTypes = {
   manifests: PropTypes.instanceOf(Object).isRequired,
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 WorkspaceAdd.defaultProps = {
   classes: {},
-  t: key => key,
 };

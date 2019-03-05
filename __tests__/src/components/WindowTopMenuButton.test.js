@@ -11,7 +11,6 @@ function createWrapper(props) {
     <WindowTopMenuButton
       windowId="xyz"
       classes={{}}
-      t={str => str}
       {...props}
     />,
   );

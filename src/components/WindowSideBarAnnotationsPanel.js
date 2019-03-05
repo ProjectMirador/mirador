@@ -53,12 +53,11 @@ WindowSideBarAnnotationsPanel.propTypes = {
     id: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
   })),
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
 };
 
 WindowSideBarAnnotationsPanel.defaultProps = {
   annotations: [],
-  t: key => key,
 };

@@ -74,12 +74,11 @@ WorkspaceSettings.propTypes = {
   children: PropTypes.node,
   updateConfig: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 WorkspaceSettings.defaultProps = {
   container: null,
   open: false,
   children: null,
-  t: key => key,
 };

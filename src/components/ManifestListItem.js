@@ -138,7 +138,7 @@ ManifestListItem.propTypes = {
   size: PropTypes.number,
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   provider: PropTypes.string,
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
   fetchManifest: PropTypes.func.isRequired,
   error: PropTypes.string,
   isFetching: PropTypes.bool,
@@ -152,7 +152,6 @@ ManifestListItem.defaultProps = {
   classes: {},
   size: 0,
   provider: null,
-  t: key => key,
   error: null,
   isFetching: false,
 };

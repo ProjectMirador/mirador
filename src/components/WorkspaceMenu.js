@@ -174,12 +174,11 @@ WorkspaceMenu.propTypes = {
   toggleZoomControls: PropTypes.func,
   showZoomControls: PropTypes.bool,
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  t: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 WorkspaceMenu.defaultProps = {
   anchorEl: null,
-  t: key => key,
   showZoomControls: false,
   toggleZoomControls: () => {},
 };

@@ -69,9 +69,5 @@ export class WorkspaceMenuButton extends Component {
 
 WorkspaceMenuButton.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  t: PropTypes.func,
-};
-
-WorkspaceMenuButton.defaultProps = {
-  t: key => key,
+  t: PropTypes.func.isRequired,
 };
