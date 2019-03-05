@@ -6,6 +6,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import { CanvasThumbnail } from './CanvasThumbnail';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
+import CompanionWindow from '../containers/CompanionWindow';
 import { getIdAndLabelOfCanvases } from '../state/selectors';
 
 /**
@@ -17,13 +18,12 @@ export class WindowSideBarCanvasPanel extends Component {
    */
   render() {
     const {
-      canvases, classes, config, setCanvas, t, windowId,
+      canvases, classes, config, setCanvas, t, windowId, id,
     } = this.props;
 
     const canvasesIdAndLabel = getIdAndLabelOfCanvases(canvases);
     return (
-      <>
-        <Typography variant="h2" className={classes.windowSideBarH2}>{t('canvasIndex')}</Typography>
+      <CompanionWindow title={t('canvasIndex')} id={id} windowId={windowId}>
         <List>
           {
             canvasesIdAndLabel.map((canvas, canvasIndex) => {
@@ -60,7 +60,7 @@ export class WindowSideBarCanvasPanel extends Component {
             })
           }
         </List>
-      </>
+      </CompanionWindow>
     );
   }
 }
@@ -72,4 +72,5 @@ WindowSideBarCanvasPanel.propTypes = {
   setCanvas: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
 };

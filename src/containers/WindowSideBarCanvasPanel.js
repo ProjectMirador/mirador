@@ -27,10 +27,9 @@ const mapDispatchToProps = { setCanvas: actions.setCanvas };
 /**
  *
  * @param theme
- * @returns {label: {paddingLeft: number}, windowSideBarH2: *}}
+ * @returns {label: {paddingLeft: number}}}
  */
 const styles = theme => ({
-  windowSideBarH2: theme.typography.h5,
   label: {
     paddingLeft: theme.spacing.unit,
   },

@@ -34,10 +34,9 @@ const mapStateToProps = (state, { windowId }) => ({
 /**
  *
  * @param theme
- * @returns {{windowSideBarH2: *, windowSideBarH3: *}}
+ * @returns {{windowSideBarH3: *}}
  */
 const styles = theme => ({
-  windowSideBarH2: theme.typography.h5,
   windowSideBarH3: theme.typography.h6,
 });
 

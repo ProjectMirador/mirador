@@ -10,12 +10,12 @@ describe('Companion Windows', () => {
     await page.waitFor(1000);
     await expect(page).toClick('button[aria-label="Open information companion window"]');
 
-    await expect(page).not.toMatchElement('.mirador-companion-window-right .mirador-window-sidebar-info-panel');
+    await expect(page).not.toMatchElement('.mirador-companion-window-right.mirador-window-sidebar-info-panel');
 
     await page.waitFor(1000);
     await expect(page).toClick('button[aria-label="Open in companion window"]');
 
-    await expect(page).toMatchElement('.mirador-companion-window-right .mirador-window-sidebar-info-panel');
+    await expect(page).toMatchElement('.mirador-companion-window-right.mirador-window-sidebar-info-panel');
 
     await expect(page).toClick('button[aria-label="Close this companion window"]');
 

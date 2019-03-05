@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import * as actions from '../state/actions';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import {
+  getCompanionWindowForPosition,
   getSelectedCanvas,
   getSelectedCanvasAnnotations,
   getAnnotationResourcesByMotivation,
@@ -16,9 +17,12 @@ import { WindowSideBarButtons } from '../components/WindowSideBarButtons';
  * @memberof WindowSideButtons
  * @private
  */
-const mapDispatchToProps = (dispatch, props) => ({
-  toggleWindowSideBarPanel: panelType => dispatch(
-    actions.toggleWindowSideBarPanel(props.windowId, panelType),
+const mapDispatchToProps = (dispatch, { windowId }) => ({
+  addCompanionWindow: panelType => dispatch(
+    actions.popOutCompanionWindow(windowId, panelType, 'left'),
+  ),
+  closeCompanionWindow: id => dispatch(
+    actions.updateCompanionWindow(windowId, id, { content: 'closed' }),
   ),
 });
 
@@ -33,7 +37,8 @@ const mapStateToProps = (state, { windowId }) => ({
     getSelectedCanvasAnnotations(state, getSelectedCanvas(state, windowId).id),
     ['oa:commenting', 'sc:painting'],
   ).length > 0,
-  sideBarPanel: state.windows[windowId].sideBarPanel,
+  sideBarPanel: (getCompanionWindowForPosition(state, windowId, 'left') || {}).content,
+  sideBarPanelId: (getCompanionWindowForPosition(state, windowId, 'left') || {}).id,
 });
 
 

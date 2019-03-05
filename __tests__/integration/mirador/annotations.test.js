@@ -29,6 +29,6 @@ describe('Annotations in Mirador', () => {
 
     await expect(page).toMatchElement(`#${windowId} h2`, { text: 'Annotations' });
     await expect(page).toMatchElement(`#${windowId} p`, { text: 'Showing 2 annotations' });
-    await expect(page).toMatchElement(`#${windowId} .mirador-window-sidebar-panel-drawer ul li`, { count: 2 });
+    await expect(page).toMatchElement(`#${windowId} .mirador-companion-window-left.mirador-window-sidebar-annotation-panel ul li`, { count: 2 });
   });
 });

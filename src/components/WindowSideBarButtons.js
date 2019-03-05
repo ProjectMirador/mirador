@@ -6,7 +6,6 @@ import InfoIcon from '@material-ui/icons/InfoSharp';
 import AnnotationIcon from '@material-ui/icons/CommentSharp';
 import CanvasIndexIcon from './icons/CanvasIndexIcon';
 
-
 /**
  *
  */
@@ -21,13 +20,26 @@ export class WindowSideBarButtons extends Component {
     return sideBarPanel === panelType;
   }
 
+  /** */
+  toggleCompanionWindow(panelType) {
+    const {
+      addCompanionWindow, closeCompanionWindow, sideBarPanelId,
+    } = this.props;
+
+    if (this.sideBarPanelCurrentlySelected(panelType)) {
+      closeCompanionWindow(sideBarPanelId);
+    } else {
+      addCompanionWindow(panelType);
+    }
+  }
+
   /**
    * render
    *
    * @return {type}  description
    */
   render() {
-    const { hasAnnotations, toggleWindowSideBarPanel, t } = this.props;
+    const { hasAnnotations, t } = this.props;
     return (
       <>
         <IconButton
@@ -36,7 +48,7 @@ export class WindowSideBarButtons extends Component {
               ? t('closeInfoCompanionWindow')
               : t('openInfoCompanionWindow')
           }
-          onClick={() => (toggleWindowSideBarPanel('info'))}
+          onClick={() => (this.toggleCompanionWindow('info'))}
         >
           <InfoIcon
             color={this.sideBarPanelCurrentlySelected('info') ? 'secondary' : 'inherit'}
@@ -48,7 +60,7 @@ export class WindowSideBarButtons extends Component {
               ? t('closeCanvasNavigationCompanionWindow')
               : t('openCanvasNavigationCompanionWindow')
           }
-          onClick={() => (toggleWindowSideBarPanel('canvas_navigation'))}
+          onClick={() => (this.toggleCompanionWindow('canvas_navigation'))}
         >
           <CanvasIndexIcon
             color={this.sideBarPanelCurrentlySelected('canvas_navigation') ? 'secondary' : 'inherit'}
@@ -61,7 +73,7 @@ export class WindowSideBarButtons extends Component {
               ? t('closeAnnotationCompanionWindow')
               : t('openAnnotationCompanionWindow')
           }
-          onClick={() => (toggleWindowSideBarPanel('annotations'))}
+          onClick={() => (this.toggleCompanionWindow('annotations'))}
         >
           <Badge color="error" invisible={!hasAnnotations} variant="dot">
             <AnnotationIcon
@@ -76,14 +88,16 @@ export class WindowSideBarButtons extends Component {
 
 WindowSideBarButtons.propTypes = {
   hasAnnotations: PropTypes.bool,
-  toggleWindowSideBarPanel: PropTypes.func,
+  addCompanionWindow: PropTypes.func.isRequired,
+  closeCompanionWindow: PropTypes.func.isRequired,
   sideBarPanel: PropTypes.string,
+  sideBarPanelId: PropTypes.string,
   t: PropTypes.func,
 };
 
 WindowSideBarButtons.defaultProps = {
   hasAnnotations: false,
-  toggleWindowSideBarPanel: () => {},
   sideBarPanel: 'closed',
+  sideBarPanelId: null,
   t: key => key,
 };

@@ -83,10 +83,10 @@ describe('windows reducer', () => {
     expect(windowsReducer(before, action)).toEqual(after);
   });
 
-  describe('TOGGLE_WINDOW_SIDE_BAR_PANEL', () => {
+  describe('SET_WINDOW_SIDE_BAR_PANEL', () => {
     it('sets the sideBarPanel value to the given value when it was changed', () => {
       const action = {
-        type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL,
+        type: ActionTypes.SET_WINDOW_SIDE_BAR_PANEL,
         windowId: 'abc123',
         panelType: 'info',
       };
@@ -96,24 +96,6 @@ describe('windows reducer', () => {
       };
       const after = {
         abc123: { sideBarPanel: 'info' },
-        abc321: { sideBarPanel: 'closed' },
-      };
-
-      expect(windowsReducer(before, action)).toEqual(after);
-    });
-
-    it('sets the sideBarPanel value to "closed" when trying to open a panel that already is open', () => {
-      const action = {
-        type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR_PANEL,
-        windowId: 'abc123',
-        panelType: 'info',
-      };
-      const before = {
-        abc123: { sideBarPanel: 'info' },
-        abc321: { sideBarPanel: 'closed' },
-      };
-      const after = {
-        abc123: { sideBarPanel: 'closed' },
         abc321: { sideBarPanel: 'closed' },
       };
 

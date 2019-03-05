@@ -4,8 +4,6 @@ import classNames from 'classnames';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import WindowSideBarButtons from '../containers/WindowSideBarButtons';
-import WindowSideBarPanel from '../containers/WindowSideBarPanel';
-import ns from '../config/css-ns';
 
 /**
  * WindowSideBar
@@ -17,7 +15,7 @@ export class WindowSideBar extends Component {
    */
   render() {
     const {
-      classes, windowId, sideBarOpen, sideBarPanel,
+      classes, windowId, sideBarOpen,
     } = this.props;
 
     return (
@@ -33,28 +31,12 @@ export class WindowSideBar extends Component {
             container: document.getElementById(windowId),
             disablePortal: true,
             hideBackdrop: true,
-            style: { position: 'absolute' },
+            style: { position: 'relative', order: -100 },
           }}
         >
           <List>
             <WindowSideBarButtons windowId={windowId} />
           </List>
-        </Drawer>
-        <Drawer
-          variant="temporary"
-          className={classNames(classes.drawer, ns('window-sidebar-panel-drawer'))}
-          classes={{ paper: classNames(classes.drawer) }}
-          open={sideBarOpen && sideBarPanel !== 'closed'}
-          anchor="left"
-          PaperProps={{ style: { position: 'relative', width: '200px' } }}
-          ModalProps={{
-            container: document.getElementById(windowId),
-            disablePortal: true,
-            hideBackdrop: true,
-            style: { position: 'absolute', width: '200px' },
-          }}
-        >
-          <WindowSideBarPanel windowId={windowId} />
         </Drawer>
       </>
     );
@@ -65,10 +47,8 @@ WindowSideBar.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
   windowId: PropTypes.string.isRequired,
   sideBarOpen: PropTypes.bool,
-  sideBarPanel: PropTypes.string,
 };
 
 WindowSideBar.defaultProps = {
   sideBarOpen: false,
-  sideBarPanel: 'closed',
 };

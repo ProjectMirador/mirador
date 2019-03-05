@@ -4,6 +4,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import { SanitizedHtml } from './SanitizedHtml';
+import CompanionWindow from '../containers/CompanionWindow';
+import ns from '../config/css-ns';
 
 /**
  * WindowSideBarAnnotationsPanel ~
@@ -34,13 +36,14 @@ export class WindowSideBarAnnotationsPanel extends Component {
    * Returns the rendered component
   */
   render() {
-    const { annotations, classes, t } = this.props;
+    const {
+      annotations, t, windowId, id,
+    } = this.props;
     return (
-      <>
-        <Typography className={classes.windowSideBarH2} variant="h2">{t('annotations')}</Typography>
+      <CompanionWindow title={t('annotations')} paperClassName={ns('window-sidebar-annotation-panel')} windowId={windowId} id={id}>
         <Typography variant="body2">{t('showingNumAnnotations', { number: annotations.length })}</Typography>
         {this.sanitizedAnnotations()}
-      </>
+      </CompanionWindow>
     );
   }
 }
@@ -50,12 +53,12 @@ WindowSideBarAnnotationsPanel.propTypes = {
     id: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
   })),
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types,
   t: PropTypes.func,
+  windowId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 WindowSideBarAnnotationsPanel.defaultProps = {
   annotations: [],
-  classes: {},
   t: key => key,
 };

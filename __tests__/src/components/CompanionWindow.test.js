@@ -1,8 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { CompanionWindow } from '../../../src/components/CompanionWindow';
-import WindowSideBarInfoPanel from '../../../src/containers/WindowSideBarInfoPanel';
-import WindowSideBarAnnotationsPanel from '../../../src/containers/WindowSideBarAnnotationsPanel';
 
 /** create wrapper */
 function createWrapper(props) {
@@ -21,25 +19,19 @@ function createWrapper(props) {
 describe('CompanionWindow', () => {
   let companionWindow;
 
-  describe('when the panelContent is set to "info"', () => {
-    it('renders the WindowSideBarInfoPanel', () => {
-      companionWindow = createWrapper({ content: 'info' });
-      expect(companionWindow.find(WindowSideBarInfoPanel).length).toBe(1);
-    });
-  });
+  describe('when the openInCompanionWindow button is clicked', () => {
+    it('triggers the updateCompanionWindow prop with the appropriate args', () => {
+      const updateCompanionWindow = jest.fn();
+      companionWindow = createWrapper({
+        updateCompanionWindow,
+        position: 'left',
+      });
 
-  describe('when the sideBarPanel is set to "annotations"', () => {
-    it('renders the WindowSideBarAnnotationsPanel', () => {
-      companionWindow = createWrapper({ content: 'annotations' });
+      const closeButton = companionWindow.find('WithStyles(IconButton)[aria-label="openInCompanionWindow"]');
 
-      expect(companionWindow.find(WindowSideBarAnnotationsPanel).length).toBe(1);
-    });
-  });
-
-  describe('when the sideBarPanel is set to any unknown value/undefined', () => {
-    it('does not render any panel component', () => {
-      companionWindow = createWrapper();
-      expect(companionWindow.find(WindowSideBarInfoPanel).length).toBe(0);
+      closeButton.simulate('click');
+      expect(updateCompanionWindow).toHaveBeenCalledTimes(1);
+      expect(updateCompanionWindow).toHaveBeenCalledWith('x', 'abc123', { position: 'right' });
     });
   });
 

@@ -1,6 +1,8 @@
 import ReactDOM from 'react-dom';
 import MiradorViewer from '../../../src/lib/MiradorViewer';
 
+jest.unmock('react-i18next');
+
 describe('MiradorViewer', () => {
   let instance;
   beforeAll(() => {

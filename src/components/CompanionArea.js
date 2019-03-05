@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CompanionWindow from '../containers/CompanionWindow';
+import CompanionWindowFactory from '../containers/CompanionWindowFactory';
 
 /** */
 export class CompanionArea extends Component {
@@ -12,7 +12,7 @@ export class CompanionArea extends Component {
       <>
         {
           companionWindows.map(cw => (
-            <CompanionWindow id={cw.id} key={cw.id} windowId={windowId} />
+            <CompanionWindowFactory id={cw.id} key={cw.id} windowId={windowId} />
           ))
         }
       </>
