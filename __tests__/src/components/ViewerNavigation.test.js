@@ -30,6 +30,7 @@ describe('ViewerNavigation', () => {
   });
   describe('when next canvases are present', () => {
     it('disabled on nextCanvas button', () => {
+      expect(wrapper.find('.mirador-next-canvas-button').prop('aria-label')).toBe('nextCanvas');
       expect(wrapper.find('.mirador-next-canvas-button').prop('disabled')).toBe(false);
     });
     it('setCanvas function is called after click', () => {
@@ -70,6 +71,7 @@ describe('ViewerNavigation', () => {
         window: { id: 'foo', canvasIndex: 5, view: 'book' },
       });
       wrapper.find('.mirador-previous-canvas-button').simulate('click');
+      expect(wrapper.find('.mirador-previous-canvas-button').prop('aria-label')).toBe('previousCanvas');
       expect(setCanvas).toHaveBeenCalledWith('foo', 3);
     });
   });
