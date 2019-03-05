@@ -1,6 +1,7 @@
 import filter from 'lodash/filter';
 import flatten from 'lodash/flatten';
 import { LanguageMap } from 'manifesto.js';
+import Annotation from '../../lib/Annotation';
 
 /**
 * Return the manifest that belongs to a certain window.
@@ -109,11 +110,9 @@ export function getSelectedCanvasAnnotations(state, canvasId) {
   if (!annotations) return [];
 
   return filter(
-    annotations,
+    Object.keys(annotations).map(id => new Annotation(annotations[id].json)),
     annotation => annotation
-                  && annotation.json
-                  && annotation.json.resources
-                  && annotation.json.resources.length,
+                  && annotation.present(),
   );
 }
 
@@ -124,21 +123,21 @@ export function getSelectedCanvasAnnotations(state, canvasId) {
 * @return {Array}
 */
 export function getAnnotationResourcesByMotivation(annotations, motivations) {
-  const resources = flatten(annotations.map(annotation => annotation.json.resources));
+  const resources = flatten(annotations.map(annotation => annotation.resources));
 
-  return filter(resources, resource => flatten(new Array(resource.motivation)).some(
+  return filter(resources, resource => resource.motivations.some(
     motivation => motivations.includes(motivation),
   ));
 }
 
 /**
- * @param {Array} annotations
+ * @param {Array} resources
  * @return {Array} [{ id: 'abc123', content: 'Annotation Content' }, ...]
  */
-export function getIdAndContentOfAnnotations(annotations) {
-  return annotations.map((annotation, i) => ({
-    id: (annotation['@id'] || `annotation-${i}`),
-    content: flatten(new Array(annotation.resource)).map(r => r.chars).join(' '),
+export function getIdAndContentOfResources(resources) {
+  return resources.map((resource, i) => ({
+    id: resource.id,
+    content: resource.chars,
   }));
 }
 
