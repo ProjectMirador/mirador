@@ -56,7 +56,7 @@ export class Window extends Component {
               />
             </div>
             <div className={classes.companionAreaBottom}>
-              Companion Area Bottom
+              <CompanionArea windowId={window.id} position="bottom" />
             </div>
           </div>
           <div className={classes.companionAreaRight}>
