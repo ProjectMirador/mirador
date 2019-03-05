@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import WindowSideBar from '../containers/WindowSideBar';
-import CompanionArea from '../containers/CompanionArea';
 import WindowViewer from '../containers/WindowViewer';
 import ns from '../config/css-ns';
 

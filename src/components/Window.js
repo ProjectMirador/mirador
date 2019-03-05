@@ -5,6 +5,7 @@ import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
 import PrimaryWindow from '../containers/PrimaryWindow';
 import ThumbnailNavigation from '../containers/ThumbnailNavigation';
+import CompanionArea from '../containers/CompanionArea';
 
 
 /**
