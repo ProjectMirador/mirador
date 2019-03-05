@@ -21,28 +21,36 @@ const styles = {
     flexDirection: 'column',
     height: '100%',
     width: '100%',
+    minHeight: 0,
   },
   middle: {
     display: 'flex',
     flexDirection: 'row',
     flex: '1',
+    minHeight: 0,
   },
   middleLeft: {
     display: 'flex',
     flexDirection: 'column',
     flex: '1',
+    minHeight: 0,
   },
   primaryWindow: {
     display: 'flex',
     flex: '1',
     position: 'relative',
     height: '300px',
+    minHeight: 0,
   },
   companionAreaRight: {
+    display: 'flex',
     flex: '0',
+    minHeight: 0,
   },
   companionAreaBottom: {
+    display: 'flex',
     flex: '0',
+    minHeight: 0,
   },
   thumbnailArea: {
     flex: '0',
