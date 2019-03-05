@@ -38,6 +38,7 @@ export class WindowSideBarCanvasPanel extends Component {
                   alignItems="flex-start"
                   onClick={onClick}
                   button
+                  component="li"
                 >
                   <div style={{ minWidth: 50 }}>
                     <CanvasThumbnail
