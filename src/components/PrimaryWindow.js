@@ -37,7 +37,6 @@ export class PrimaryWindow extends Component {
       <div className={ns('primary-window')}>
         <WindowSideBar windowId={window.id} />
         {this.renderViewer()}
-        <CompanionArea windowId={window.id} position="right" />
       </div>
     );
   }
