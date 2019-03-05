@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/InfoSharp';
+import AnnotationIcon from '@material-ui/icons/CommentSharp';
 import CanvasIndexIcon from './icons/CanvasIndexIcon';
 
 
@@ -25,7 +27,7 @@ export class WindowSideBarButtons extends Component {
    * @return {type}  description
    */
   render() {
-    const { toggleWindowSideBarPanel, t } = this.props;
+    const { hasAnnotations, toggleWindowSideBarPanel, t } = this.props;
     return (
       <>
         <IconButton
@@ -52,18 +54,35 @@ export class WindowSideBarButtons extends Component {
             color={this.sideBarPanelCurrentlySelected('canvas_navigation') ? 'secondary' : 'inherit'}
           />
         </IconButton>
+
+        <IconButton
+          aria-label={
+            this.sideBarPanelCurrentlySelected('annotations')
+              ? t('closeAnnotationCompanionWindow')
+              : t('openAnnotationCompanionWindow')
+          }
+          onClick={() => (toggleWindowSideBarPanel('annotations'))}
+        >
+          <Badge color="error" invisible={!hasAnnotations} variant="dot">
+            <AnnotationIcon
+              color={this.sideBarPanelCurrentlySelected('annotations') ? 'secondary' : 'inherit'}
+            />
+          </Badge>
+        </IconButton>
       </>
     );
   }
 }
 
 WindowSideBarButtons.propTypes = {
+  hasAnnotations: PropTypes.bool,
   toggleWindowSideBarPanel: PropTypes.func,
   sideBarPanel: PropTypes.string,
   t: PropTypes.func,
 };
 
 WindowSideBarButtons.defaultProps = {
+  hasAnnotations: false,
   toggleWindowSideBarPanel: () => {},
   sideBarPanel: 'closed',
   t: key => key,

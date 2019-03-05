@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { WindowSideBarPanel } from '../../../src/components/WindowSideBarPanel';
 import WindowSideBarInfoPanel from '../../../src/containers/WindowSideBarInfoPanel';
+import WindowSideBarAnnotationsPanel from '../../../src/containers/WindowSideBarAnnotationsPanel';
 
 describe('WindowSideBarPanel', () => {
   let wrapper;
@@ -13,6 +14,16 @@ describe('WindowSideBarPanel', () => {
 
     it('renders the WindowSideBarInfoPanel', () => {
       expect(wrapper.find(WindowSideBarInfoPanel).length).toBe(1);
+    });
+  });
+
+  describe('when the sideBarPanel is set to "annotations"', () => {
+    beforeEach(() => {
+      wrapper = shallow(<WindowSideBarPanel windowId="abc123" sideBarPanel="annotations" />);
+    });
+
+    it('renders the WindowSideBarAnnotationsPanel', () => {
+      expect(wrapper.find(WindowSideBarAnnotationsPanel).length).toBe(1);
     });
   });
 

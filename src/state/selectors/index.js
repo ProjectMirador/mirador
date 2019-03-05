@@ -1,3 +1,5 @@
+import filter from 'lodash/filter';
+import flatten from 'lodash/flatten';
 import { LanguageMap } from 'manifesto.js';
 
 /**
@@ -96,6 +98,49 @@ export function getSelectedCanvas(state, windowId) {
       .getCanvasByIndex(canvasIndex);
 }
 
+/**
+* Return the current canvas' (selected in a window) annotations
+* @param {object} state
+* @param {String} windowId
+* @return {Array}
+*/
+export function getSelectedCanvasAnnotations(state, canvasId) {
+  const annotations = state.annotations && state.annotations[canvasId];
+  if (!annotations) return [];
+
+  return filter(
+    annotations,
+    annotation => annotation
+                  && annotation.json
+                  && annotation.json.resources
+                  && annotation.json.resources.length,
+  );
+}
+
+/**
+* Return an array of annotation resources filtered by the given motivation
+* @param {Array} annotations
+* @param {Array} motivations
+* @return {Array}
+*/
+export function getAnnotationResourcesByMotivation(annotations, motivations) {
+  const resources = flatten(annotations.map(annotation => annotation.json.resources));
+
+  return filter(resources, resource => flatten(new Array(resource.motivation)).some(
+    motivation => motivations.includes(motivation),
+  ));
+}
+
+/**
+ * @param {Array} annotations
+ * @return {Array} [{ id: 'abc123', content: 'Annotation Content' }, ...]
+ */
+export function getIdAndContentOfAnnotations(annotations) {
+  return annotations.map((annotation, i) => ({
+    id: (annotation['@id'] || `annotation-${i}`),
+    content: flatten(new Array(annotation.resource)).map(r => r.chars).join(' '),
+  }));
+}
 
 /** Return position of thumbnail navigation in a certain window.
 * @param {object} state

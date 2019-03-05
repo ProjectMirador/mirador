@@ -3,6 +3,11 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import * as actions from '../state/actions';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
+import {
+  getSelectedCanvas,
+  getSelectedCanvasAnnotations,
+  getAnnotationResourcesByMotivation,
+} from '../state/selectors';
 import { WindowSideBarButtons } from '../components/WindowSideBarButtons';
 
 
@@ -24,6 +29,10 @@ const mapDispatchToProps = (dispatch, props) => ({
  * @private
  */
 const mapStateToProps = (state, { windowId }) => ({
+  hasAnnotations: getAnnotationResourcesByMotivation(
+    getSelectedCanvasAnnotations(state, getSelectedCanvas(state, windowId).id),
+    ['oa:commenting', 'sc:painting'],
+  ).length > 0,
   sideBarPanel: state.windows[windowId].sideBarPanel,
 });
 

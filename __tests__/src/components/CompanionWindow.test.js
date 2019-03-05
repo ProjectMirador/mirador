@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { CompanionWindow } from '../../../src/components/CompanionWindow';
 import WindowSideBarInfoPanel from '../../../src/containers/WindowSideBarInfoPanel';
+import WindowSideBarAnnotationsPanel from '../../../src/containers/WindowSideBarAnnotationsPanel';
 
 /** create wrapper */
 function createWrapper(props) {
@@ -24,6 +25,14 @@ describe('CompanionWindow', () => {
     it('renders the WindowSideBarInfoPanel', () => {
       companionWindow = createWrapper({ content: 'info' });
       expect(companionWindow.find(WindowSideBarInfoPanel).length).toBe(1);
+    });
+  });
+
+  describe('when the sideBarPanel is set to "annotations"', () => {
+    it('renders the WindowSideBarAnnotationsPanel', () => {
+      companionWindow = createWrapper({ content: 'annotations' });
+
+      expect(companionWindow.find(WindowSideBarAnnotationsPanel).length).toBe(1);
     });
   });
 
