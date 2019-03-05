@@ -1,12 +1,12 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { getCompantionWindowIds } from '../state/selectors';
+import { getCompanionWindowIds } from '../state/selectors';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import { WindowMiddleContent } from '../components/WindowMiddleContent';
 
 /** */
 const mapStateToProps = (state, { window }) => ({
-  companionWindowIds: getCompantionWindowIds(state, window.id),
+  companionWindowIds: getCompanionWindowIds(state, window.id),
 });
 
 const enhance = compose(

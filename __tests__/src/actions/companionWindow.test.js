@@ -11,7 +11,8 @@ describe('companionWindow actions', () => {
       };
       const action = actions.addCompanionWindow(payload);
       expect(action.type).toBe(ActionTypes.ADD_COMPANION_WINDOW);
-      expect(action.payload).toEqual(payload);
+      expect(action.payload).toMatchObject(payload);
+      expect(action.payload.id).toMatch(/cw-.*/);
     });
 
     it('should set the correct default values', () => {
