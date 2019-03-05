@@ -208,8 +208,8 @@ export class OpenSeadragonViewer extends Component {
           id={`${windowId}-osd`}
           ref={this.ref}
         >
-          { children }
           <ZoomControls windowId={windowId} />
+          { children }
         </div>
       </>
     );
