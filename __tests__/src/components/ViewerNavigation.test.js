@@ -2,18 +2,28 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { ViewerNavigation } from '../../../src/components/ViewerNavigation';
 
+/** create wrapper */
+function createWrapper(props) {
+  return shallow(
+    <ViewerNavigation
+      canvases={[1, 2]}
+      setCanvas={() => {}}
+      window={{}}
+      t={k => (k)}
+      {...props}
+    />,
+  );
+}
+
 describe('ViewerNavigation', () => {
   let wrapper;
   let setCanvas;
   beforeEach(() => {
     setCanvas = jest.fn();
-    wrapper = shallow(
-      <ViewerNavigation
-        canvases={[1, 2]}
-        setCanvas={setCanvas}
-        window={{ id: 'foo', canvasIndex: 0 }}
-      />,
-    );
+    wrapper = createWrapper({
+      setCanvas,
+      window: { id: 'foo', canvasIndex: 0 },
+    });
   });
   it('renders the component', () => {
     expect(wrapper.find('.mirador-osd-navigation').length).toBe(1);
@@ -29,13 +39,9 @@ describe('ViewerNavigation', () => {
   });
   describe('when next canvases are not present', () => {
     it('nextCanvas button is disabled', () => {
-      const endWrapper = shallow(
-        <ViewerNavigation
-          canvases={[1, 2]}
-          setCanvas={() => {}}
-          window={{ id: 'foo', canvasIndex: 1 }}
-        />,
-      );
+      const endWrapper = createWrapper({
+        window: { id: 'foo', canvasIndex: 1 },
+      });
       expect(endWrapper.find('.mirador-next-canvas-button').prop('disabled')).toBe(true);
     });
   });
@@ -50,24 +56,19 @@ describe('ViewerNavigation', () => {
   });
   describe('bookView', () => {
     it('setCanvas function is called after click for next', () => {
-      wrapper = shallow(
-        <ViewerNavigation
-          canvases={[1, 2, 3]}
-          setCanvas={setCanvas}
-          window={{ id: 'foo', canvasIndex: 0, view: 'book' }}
-        />,
-      );
+      wrapper = createWrapper({
+        canvases: [1, 2, 3],
+        setCanvas,
+        window: { id: 'foo', canvasIndex: 0, view: 'book' },
+      });
       wrapper.find('.mirador-next-canvas-button').simulate('click');
       expect(setCanvas).toHaveBeenCalledWith('foo', 2);
     });
     it('setCanvas function is called after click for previous', () => {
-      wrapper = shallow(
-        <ViewerNavigation
-          canvases={[1, 2]}
-          setCanvas={setCanvas}
-          window={{ id: 'foo', canvasIndex: 5, view: 'book' }}
-        />,
-      );
+      wrapper = createWrapper({
+        setCanvas,
+        window: { id: 'foo', canvasIndex: 5, view: 'book' },
+      });
       wrapper.find('.mirador-previous-canvas-button').simulate('click');
       expect(setCanvas).toHaveBeenCalledWith('foo', 3);
     });
