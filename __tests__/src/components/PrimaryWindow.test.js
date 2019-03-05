@@ -1,15 +1,13 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { WindowMiddleContent } from '../../../src/components/WindowMiddleContent';
-import CompanionArea from '../../../src/containers/CompanionArea';
+import { PrimaryWindow } from '../../../src/components/PrimaryWindow';
 import WindowSideBar from '../../../src/containers/WindowSideBar';
 import WindowViewer from '../../../src/containers/WindowViewer';
 
 /** create wrapper */
 function createWrapper(props) {
   return shallow(
-    <WindowMiddleContent
-      companionWindowIds={['cw1', 'cw-2']}
+    <PrimaryWindow
       window={{ id: 'window-1' }}
       manifest={{}}
       {...props}
@@ -17,14 +15,10 @@ function createWrapper(props) {
   );
 }
 
-describe('WindowMiddleContent', () => {
+describe('PrimaryWindow', () => {
   it('should render outer element', () => {
     const wrapper = createWrapper();
-    expect(wrapper.find('.mirador-window-middle-content')).toHaveLength(1);
-  });
-  it('should render all <CompanionWindow> components', () => {
-    const wrapper = createWrapper();
-    expect(wrapper.find(CompanionArea)).toHaveLength(1);
+    expect(wrapper.find('.mirador-primary-window')).toHaveLength(1);
   });
   it('should render <WindowSideBar>', () => {
     const wrapper = createWrapper();

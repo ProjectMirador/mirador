@@ -2,13 +2,15 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Window } from '../../../src/components/Window';
 import WindowTopBar from '../../../src/containers/WindowTopBar';
-import WindowMiddleContent from '../../../src/containers/WindowMiddleContent';
+import PrimaryWindow from '../../../src/containers/PrimaryWindow';
+import ThumbnailNavigation from '../../../src/containers/ThumbnailNavigation';
 
 /** create wrapper */
 function createWrapper(props, context) {
   return shallow(
     <Window
       window={window}
+      classes={{}}
       {...props}
     />,
     { context },
@@ -36,9 +38,13 @@ describe('Window', () => {
     wrapper = createWrapper({ window });
     expect(wrapper.find(WindowTopBar)).toHaveLength(1);
   });
-  it('should render <WindowMiddleContent>', () => {
+  it('should render <PrimaryWindow>', () => {
     wrapper = createWrapper({ window });
-    expect(wrapper.find(WindowMiddleContent)).toHaveLength(1);
+    expect(wrapper.find(PrimaryWindow)).toHaveLength(1);
+  });
+  it('should render <ThumbnailNavigation>', () => {
+    wrapper = createWrapper({ window });
+    expect(wrapper.find(ThumbnailNavigation)).toHaveLength(1);
   });
   it('should render bottom companions window areas', () => {
     wrapper = createWrapper({ window });
