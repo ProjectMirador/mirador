@@ -9,7 +9,7 @@ import ns from '../config/css-ns';
  * WindowMiddleContent - component that renders the "middle" area of the
  * Mirador Window
  */
-export class WindowMiddleContent extends Component {
+export class PrimaryWindow extends Component {
   /**
    * renderViewer
    *
@@ -34,7 +34,7 @@ export class WindowMiddleContent extends Component {
   render() {
     const { window } = this.props;
     return (
-      <div className={ns('window-middle-content')}>
+      <div className={ns('primary-window')}>
         <WindowSideBar windowId={window.id} />
         {this.renderViewer()}
         <CompanionArea windowId={window.id} position="right" />
@@ -43,11 +43,11 @@ export class WindowMiddleContent extends Component {
   }
 }
 
-WindowMiddleContent.propTypes = {
+PrimaryWindow.propTypes = {
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
-WindowMiddleContent.defaultProps = {
+PrimaryWindow.defaultProps = {
   manifest: null,
 };

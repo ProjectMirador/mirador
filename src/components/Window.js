@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
-import WindowMiddleContent from '../containers/WindowMiddleContent';
+import PrimaryWindow from '../containers/PrimaryWindow';
 import ThumbnailNavigation from '../containers/ThumbnailNavigation';
+
 
 /**
  * Represents a Window in the mirador workspace
@@ -35,17 +37,33 @@ export class Window extends Component {
    * Renders things
    */
   render() {
-    const { manifest, window } = this.props;
-    if (!window) return <></>;
+    const { manifest, window, classes } = this.props;
+
+    if (!window) {
+      return <></>;
+    }
+
     return (
-      <div id={window.id} className={ns('window')}>
+      <div id={window.id} className={cn(classes.window, ns('window'))}>
         {this.wrappedTopBar()}
-        <WindowMiddleContent
-          window={window}
-          manifest={manifest}
-          sideBarOpen={window.sideBarOpen}
-        />
-        <div className={ns('companion-bottom')}>
+        <div className={classes.middle}>
+          <div className={classes.middleLeft}>
+            <div className={classes.primaryWindow}>
+              <PrimaryWindow
+                window={window}
+                manifest={manifest}
+                sideBarOpen={window.sideBarOpen}
+              />
+            </div>
+            <div className={classes.companionAreaBottom}>
+              Companion Area Bottom
+            </div>
+          </div>
+          <div className={classes.companionAreaRight}>
+            Companion Area Right
+          </div>
+        </div>
+        <div className={cn(classes.thumbnailArea, ns('companion-bottom'))}>
           <ThumbnailNavigation
             window={window}
             manifest={manifest}
@@ -64,6 +82,7 @@ Window.contextTypes = {
 };
 
 Window.propTypes = {
+  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   window: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   workspaceType: PropTypes.string,
@@ -73,4 +92,5 @@ Window.defaultProps = {
   window: null,
   manifest: null,
   workspaceType: null,
+  classes: {},
 };

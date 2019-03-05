@@ -59,17 +59,10 @@
     }
   }
 
-  &-window-middle-content {
+  &-primary-window {
     display: flex;
     flex: 1;
     position: relative;
-  }
-
-  &-window {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
   }
 
   &-osd-container {
@@ -84,7 +77,6 @@
 
   &-companion-bottom {
     background: lighten($black, 60%);
-    overflow-y: auto;
     resize: vertical;
   }
 
