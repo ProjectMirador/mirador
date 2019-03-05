@@ -63,7 +63,7 @@ export function toggleWindowSideBar(windowId) {
 }
 
 /**
- * toggleWindowSideBarPanel - action creator
+ * setWindowSideBarPanel - action creator
  *
  * @param  {String} windowId
  * @param  {String} panelType
