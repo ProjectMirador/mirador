@@ -34,6 +34,7 @@ describe('WindowSideBarCanvasPanel', () => {
     expect(wrapper.props().title).toBe('canvasIndex');
     expect(wrapper.find(List).length).toBe(1);
     expect(wrapper.find(ListItem).length).toBe(3);
+    expect(wrapper.find(ListItem).first().props().component).toEqual('li');
     expect(wrapper.find(List).find(Typography).length).toBe(3);
   });
 
