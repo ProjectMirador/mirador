@@ -83,11 +83,13 @@ export class WorkspaceMenu extends Component {
       exportWorkspace,
     } = this.state;
 
+    const container = document.querySelector(`#${containerId} .${ns('viewer')}`);
+
     return (
       <>
         <Menu
           id="workspace-menu"
-          container={document.querySelector(`#${containerId} .${ns('viewer')}`)}
+          container={container}
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleClose}
@@ -153,10 +155,12 @@ export class WorkspaceMenu extends Component {
         />
         <WorkspaceSettings
           open={Boolean(settings.open)}
+          container={container}
           handleClose={this.handleMenuItemClose('settings')}
         />
         <WorkspaceExport
           open={Boolean(exportWorkspace.open)}
+          container={container}
           handleClose={this.handleMenuItemClose('exportWorkspace')}
         />
       </>

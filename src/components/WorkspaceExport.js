@@ -26,10 +26,10 @@ export class WorkspaceExport extends Component {
    */
   render() {
     const {
-      handleClose, open, children, t,
+      container, handleClose, open, children, t,
     } = this.props;
     return (
-      <Dialog id="workspace-settings" open={open} onClose={handleClose}>
+      <Dialog id="workspace-settings" container={container} open={open} onClose={handleClose}>
         <DialogTitle id="form-dialog-title">{t('downloadExport')}</DialogTitle>
         <DialogContent>
           {children}
@@ -43,6 +43,7 @@ export class WorkspaceExport extends Component {
 }
 
 WorkspaceExport.propTypes = {
+  container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
   children: PropTypes.node,
@@ -51,6 +52,7 @@ WorkspaceExport.propTypes = {
 };
 
 WorkspaceExport.defaultProps = {
+  container: null,
   open: false,
   children: null,
   t: key => key,
