@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import {
-  getIdAndContentOfAnnotations,
+  getIdAndContentOfResources,
   getSelectedCanvas,
   getSelectedCanvasAnnotations,
   getAnnotationResourcesByMotivation,
@@ -15,7 +15,7 @@ import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnota
  * @private
  */
 const mapStateToProps = (state, { windowId }) => ({
-  annotations: getIdAndContentOfAnnotations(
+  annotations: getIdAndContentOfResources(
     getAnnotationResourcesByMotivation(
       getSelectedCanvasAnnotations(state, getSelectedCanvas(state, windowId).id),
       ['oa:commenting', 'sc:painting'],

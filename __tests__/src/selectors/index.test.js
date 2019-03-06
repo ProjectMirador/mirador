@@ -8,7 +8,7 @@ import {
   getCompanionWindowForPosition,
   getDestructuredMetadata,
   getAnnotationResourcesByMotivation,
-  getIdAndContentOfAnnotations,
+  getIdAndContentOfResources,
   getLanguagesFromConfigWithCurrent,
   getSelectedCanvas,
   getWindowManifest,
@@ -24,6 +24,8 @@ import {
   getIdAndLabelOfCanvases,
   getCompanionWindowsOfWindow,
 } from '../../../src/state/selectors';
+import Annotation from '../../../src/lib/Annotation';
+import AnnotationResource from '../../../src/lib/AnnotationResource';
 
 
 describe('getWindowManifest()', () => {
@@ -307,11 +309,8 @@ describe('getSelectedCanvasAnnotations', () => {
         },
       },
     };
-    const expected = [
-      { '@id': 'annoId1', json: { resources: ['aResource'] } },
-    ];
 
-    expect(getSelectedCanvasAnnotations(state, 'abc123')).toEqual(expected);
+    expect(getSelectedCanvasAnnotations(state, 'abc123').length).toEqual(1);
   });
 
   it('returns an empty array if there are no annotations', () => {
@@ -325,55 +324,54 @@ describe('getSelectedCanvasAnnotations', () => {
 
 describe('getAnnotationResourcesByMotivation', () => {
   const annotations = [
-    { json: { resources: [{ motivation: 'oa:commenting' }] } },
-    { json: { resources: [{ motivation: 'oa:not-commenting' }] } },
-    { json: { resources: [{ motivation: ['sc:something-else', 'oa:commenting'] }] } },
+    new Annotation({ resources: [{ motivation: 'oa:commenting' }] }),
+    new Annotation({ resources: [{ motivation: 'oa:not-commenting' }] }),
+    new Annotation({ resources: [{ motivation: ['sc:something-else', 'oa:commenting'] }] }),
   ];
 
   it('returns an array of annotation resources (filtered by the passed in array of motiviations)', () => {
     const expected = [
-      { motivation: 'oa:commenting' },
-      { motivation: ['sc:something-else', 'oa:commenting'] },
+      ['oa:commenting'],
+      ['sc:something-else', 'oa:commenting'],
     ];
 
     expect(
-      getAnnotationResourcesByMotivation(annotations, ['something', 'oa:commenting']),
+      getAnnotationResourcesByMotivation(annotations, ['something', 'oa:commenting']).map(r => r.motivations),
     ).toEqual(expected);
   });
 });
 
-describe('getIdAndContentOfAnnotations', () => {
+describe('getIdAndContentOfResources', () => {
   it('returns an array if id/content objects from the annotation resources', () => {
     const annotations = [
-      { '@id': 'theId', resource: { chars: 'The Content' } },
+      new AnnotationResource({ '@id': 'theId', resource: { chars: 'The Content' } }),
     ];
     const expected = [
       { id: 'theId', content: 'The Content' },
     ];
 
-    expect(getIdAndContentOfAnnotations(annotations)).toEqual(expected);
+    expect(getIdAndContentOfResources(annotations)).toEqual(expected);
   });
 
-  it('provides an ID if the annotation does not have one', () => {
+  it('provides an ID as a UUID if the annotation does not have one', () => {
     const annotations = [
-      { resource: { chars: 'The Content' } },
-    ];
-    const expected = [
-      { id: 'annotation-0', content: 'The Content' },
+      new AnnotationResource({ resource: { chars: 'The Content' } }),
     ];
 
-    expect(getIdAndContentOfAnnotations(annotations)).toEqual(expected);
+    expect(getIdAndContentOfResources(annotations)[0].id).toEqual(
+      expect.stringMatching(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/),
+    );
   });
 
   it('handles resource arrays', () => {
     const annotations = [
-      { '@id': 'theId', resource: [{ chars: 'The' }, { chars: 'Content' }] },
+      new AnnotationResource({ '@id': 'theId', resource: [{ chars: 'The' }, { chars: 'Content' }] }),
     ];
     const expected = [
       { id: 'theId', content: 'The Content' },
     ];
 
-    expect(getIdAndContentOfAnnotations(annotations)).toEqual(expected);
+    expect(getIdAndContentOfResources(annotations)).toEqual(expected);
   });
 });
 
