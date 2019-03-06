@@ -1,5 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import * as actions from '../state/actions';
 import { App } from '../components/App';
@@ -41,7 +42,7 @@ const styles = theme => ({
 });
 
 const enhance = compose(
-  withTranslations(),
+  withTranslation(),
   withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
 );

@@ -1,7 +1,9 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
+import { withTranslation } from 'react-i18next';
 import { Window } from '../components/Window';
+import { getWindowManifest, getManifestTitle } from '../state/selectors';
 
 
 /**
@@ -13,6 +15,7 @@ const mapStateToProps = ({ manifests, windows, config }, props) => ({
   manifest: manifests[props.window.manifestId],
   window: windows[props.window.id],
   workspaceType: config.workspace.type,
+  label: getManifestTitle(getWindowManifest({ manifests, windows }, props.window.id)),
 });
 
 /**
@@ -63,6 +66,7 @@ const styles = theme => ({
 });
 
 const enhance = compose(
+  withTranslation(),
   withStyles(styles),
   connect(mapStateToProps),
 );

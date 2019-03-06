@@ -53,6 +53,7 @@
     "tryAgain": "Wiederholen",
     "untitled": "[Unbenannt]",
     "view": "Ansicht",
+    "window": "Fenster: {{label}}",
     "windowMenu": "Fenstermenü",
     "workspace": "Arbeitsfläche",
     "workspaceFullScreen": "Vollbild",
