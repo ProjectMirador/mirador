@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Fullscreen from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
-import WorkspaceControlPanel from '../containers/WorkspaceControlPanel';
-import Workspace from '../containers/Workspace';
-import WorkspaceAdd from '../containers/WorkspaceAdd';
-import ns from '../config/css-ns';
 import i18n from '../i18n';
+import WorkspaceArea from '../containers/WorkspaceArea';
 
 /**
  * This is the top level Mirador component.
@@ -48,9 +44,7 @@ export class App extends Component {
    */
   render() {
     const {
-      isFullscreenEnabled, setWorkspaceFullscreen, classes,
-      isWorkspaceAddVisible, isWorkspaceControlPanelVisible, theme, translations,
-      t,
+      isFullscreenEnabled, setWorkspaceFullscreen, theme, translations,
     } = this.props;
 
     Object.keys(translations).forEach((lng) => {
@@ -62,21 +56,11 @@ export class App extends Component {
         enabled={isFullscreenEnabled}
         onChange={setWorkspaceFullscreen}
       >
-        <main className={classNames(classes.background, ns('viewer'))} aria-label={t('workspace')}>
-          <I18nextProvider i18n={this.i18n}>
-            <MuiThemeProvider theme={createMuiTheme(theme)}>
-              {
-                isWorkspaceAddVisible
-                  ? <WorkspaceAdd />
-                  : <Workspace />
-               }
-              {
-                isWorkspaceControlPanelVisible
-                  && <WorkspaceControlPanel />
-              }
-            </MuiThemeProvider>
-          </I18nextProvider>
-        </main>
+        <I18nextProvider i18n={this.i18n}>
+          <MuiThemeProvider theme={createMuiTheme(theme)}>
+            <WorkspaceArea />
+          </MuiThemeProvider>
+        </I18nextProvider>
       </Fullscreen>
     );
   }
@@ -87,14 +71,9 @@ App.propTypes = {
   theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   translations: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   isFullscreenEnabled: PropTypes.bool,
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
   setWorkspaceFullscreen: PropTypes.func.isRequired,
-  isWorkspaceAddVisible: PropTypes.bool,
-  isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
 App.defaultProps = {
   isFullscreenEnabled: false,
-  isWorkspaceAddVisible: false,
 };
