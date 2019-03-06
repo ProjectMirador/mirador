@@ -16,7 +16,7 @@ describe('Window Sidebars', () => {
 
   it('renders and updates canvas level metadata', async () => {
     await expect(page).toMatchElement(
-      'h3',
+      'h2',
       { text: 'Bodleian Library Human Freaks 2 (33)' },
     );
 

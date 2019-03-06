@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import Typography from '@material-ui/core/Typography';
 import WorkspaceMosaic from '../../../src/containers/WorkspaceMosaic';
 import WorkspaceElastic from '../../../src/containers/WorkspaceElastic';
 import Window from '../../../src/containers/Window';
@@ -17,6 +18,7 @@ function createWrapper(props) {
       isWorkspaceControlPanelVisible
       windows={windows}
       workspaceType="mosaic"
+      t={k => k}
       {...props}
     />,
   );
@@ -29,6 +31,7 @@ describe('Workspace', () => {
 
       expect(wrapper.matchesElement(
         <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
+          <Typography>miradorViewer</Typography>
           <WorkspaceElastic />
         </div>,
       )).toBe(true);
@@ -40,6 +43,7 @@ describe('Workspace', () => {
 
       expect(wrapper.matchesElement(
         <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
+          <Typography>miradorViewer</Typography>
           <WorkspaceMosaic windows={windows} />
         </div>,
       )).toBe(true);
@@ -51,6 +55,7 @@ describe('Workspace', () => {
 
       expect(wrapper.matchesElement(
         <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
+          <Typography>miradorViewer</Typography>
           <Window window={{ id: 1 }} />
           <Window window={{ id: 2 }} />
         </div>,

@@ -34,10 +34,10 @@ const mapStateToProps = (state, { windowId }) => ({
 /**
  *
  * @param theme
- * @returns {{windowSideBarH3: *}}
+ * @returns {{windowSideBarHeading: *}}
  */
 const styles = theme => ({
-  windowSideBarH3: theme.typography.h6,
+  windowSideBarHeading: theme.typography.h6,
 });
 
 const enhance = compose(

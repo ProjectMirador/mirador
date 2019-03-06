@@ -33,7 +33,7 @@ export class CompanionWindow extends Component {
         disableGutters
       >
         <Toolbar variant="dense" className={ns('companion-window-header')}>
-          <Typography variant="h2" className={classes.windowSideBarH2}>
+          <Typography variant="h3" className={classes.windowSideBarTitle}>
             {title}
           </Typography>
           {

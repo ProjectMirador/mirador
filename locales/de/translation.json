@@ -30,6 +30,8 @@
     "listAllOpenWindows": "Liste der geöffneten Fenster",
     "manifestError": "Die Ressource konnte nicht hinzugefügt werden:",
     "menu": "Menü",
+    "miradorResources": "Mirador-Ressourcen",
+    "miradorViewer": "Mirador",
     "nextCanvas": "Nächstes Objekt",
     "numItems": "{{number}} Elemente",
     "off": "Keine",
