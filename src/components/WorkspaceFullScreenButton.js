@@ -18,7 +18,7 @@ export class WorkspaceFullScreenButton extends Component {
     return (
       <IconButton
         className={classes.ctrlBtn}
-        aria-label={isFullscreenEnabled ? t('exitFullScreen') : t('fullScreen')}
+        aria-label={isFullscreenEnabled ? t('exitFullScreen') : t('workspaceFullScreen')}
         onClick={() => setWorkspaceFullscreen(!isFullscreenEnabled)}
       >
         {
