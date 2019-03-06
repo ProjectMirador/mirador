@@ -25,6 +25,7 @@
     "exitFullScreen": "Exit full screen",
     "fetchManifest": "Add",
     "hideZoomControls": "Hide zoom controls",
+    "item": "Item: {{label}}",
     "language": "Language",
     "light": "Light",
     "listAllOpenWindows": "List all open windows",

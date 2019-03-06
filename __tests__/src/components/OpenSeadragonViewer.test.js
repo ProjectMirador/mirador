@@ -20,6 +20,7 @@ describe('OpenSeadragonViewer', () => {
         windowId="base"
         config={{}}
         updateViewport={updateViewport}
+        t={k => k}
       >
         <div className="foo" />
       </OpenSeadragonViewer>,
@@ -98,6 +99,7 @@ describe('OpenSeadragonViewer', () => {
           viewer={{ x: 1, y: 0, zoom: 0.5 }}
           config={{}}
           updateViewport={updateViewport}
+          t={k => k}
         >
           <div className="foo" />
         </OpenSeadragonViewer>,

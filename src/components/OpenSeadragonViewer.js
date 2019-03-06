@@ -200,17 +200,21 @@ export class OpenSeadragonViewer extends Component {
    * Renders things
    */
   render() {
-    const { windowId, children } = this.props;
+    const {
+      windowId, children, label, t,
+    } = this.props;
+
     return (
       <>
-        <div
+        <section
           className={ns('osd-container')}
           id={`${windowId}-osd`}
           ref={this.ref}
+          aria-label={t('item', { label })}
         >
           <ZoomControls windowId={windowId} />
           { children }
-        </div>
+        </section>
       </>
     );
   }
@@ -220,6 +224,7 @@ OpenSeadragonViewer.defaultProps = {
   children: null,
   tileSources: [],
   viewer: null,
+  label: null,
 };
 
 OpenSeadragonViewer.propTypes = {
@@ -228,4 +233,6 @@ OpenSeadragonViewer.propTypes = {
   viewer: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   updateViewport: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  t: PropTypes.func.isRequired,
 };

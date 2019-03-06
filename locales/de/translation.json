@@ -25,6 +25,7 @@
     "exitFullScreen": "Vollbildmodus verlassen",
     "fetchManifest": "Hinzufügen",
     "hideZoomControls": "Zoomsteuerung verbergen",
+    "item": "Objekt: {{label}}",
     "language": "Sprache",
     "light": "Hell",
     "listAllOpenWindows": "Liste der geöffneten Fenster",
