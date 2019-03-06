@@ -44,11 +44,14 @@ const styles = theme => ({
     flexGrow: 1,
   },
   root: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 0,
     width: '200px',
-    overflowY: 'scroll',
   },
   content: {
     ...theme.mixins.gutters(),
+    overflowY: 'scroll',
   },
 });
 
