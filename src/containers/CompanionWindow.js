@@ -44,9 +44,11 @@ const styles = theme => ({
     flexGrow: 1,
   },
   root: {
-    ...theme.mixins.gutters(),
     width: '200px',
     overflowY: 'scroll',
+  },
+  content: {
+    ...theme.mixins.gutters(),
   },
 });
 

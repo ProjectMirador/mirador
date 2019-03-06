@@ -30,8 +30,9 @@ export class CompanionWindow extends Component {
           order: position === 'left' ? -1 : null,
         }}
         square
+        disableGutters
       >
-        <Toolbar variant="dense" disableGutters>
+        <Toolbar variant="dense" className={ns('companion-window-header')}>
           <Typography variant="h2" className={classes.windowSideBarH2}>
             {title}
           </Typography>
@@ -57,7 +58,9 @@ export class CompanionWindow extends Component {
               )
           }
         </Toolbar>
-        {children}
+        <Paper className={[classes.content]} elevation="0">
+          {children}
+        </Paper>
       </Paper>
     );
   }
