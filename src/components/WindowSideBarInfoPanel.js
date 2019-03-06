@@ -33,7 +33,7 @@ export class WindowSideBarInfoPanel extends Component {
     return (
       <CompanionWindow title={t('aboutThisItem')} paperClassName={ns('window-sidebar-info-panel')} windowId={windowId} id={id}>
         {canvasLabel && (
-          <Typography variant="h3" className={classes.windowSideBarH3}>
+          <Typography variant="h4" className={classes.windowSideBarHeading}>
             {canvasLabel}
           </Typography>
         )}
@@ -51,7 +51,7 @@ export class WindowSideBarInfoPanel extends Component {
         <Divider />
 
         {manifestLabel && (
-          <Typography variant="h3" className={classes.windowSideBarH3}>
+          <Typography variant="h4" className={classes.windowSideBarHeading}>
             {manifestLabel}
           </Typography>
         )}

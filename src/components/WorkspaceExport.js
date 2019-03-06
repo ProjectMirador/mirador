@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 
 /**
@@ -30,7 +31,9 @@ export class WorkspaceExport extends Component {
     } = this.props;
     return (
       <Dialog id="workspace-settings" container={container} open={open} onClose={handleClose}>
-        <DialogTitle id="form-dialog-title">{t('downloadExport')}</DialogTitle>
+        <DialogTitle id="form-dialog-title" disableTypography>
+          <Typography variant="h2">{t('downloadExport')}</Typography>
+        </DialogTitle>
         <DialogContent>
           {children}
           <pre>

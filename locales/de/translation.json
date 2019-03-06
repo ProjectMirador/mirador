@@ -29,6 +29,8 @@
     "light": "Hell",
     "listAllOpenWindows": "Liste der geöffneten Fenster",
     "manifestError": "Die Ressource konnte nicht hinzugefügt werden:",
+    "miradorResources": "Mirador-Ressourcen",
+    "miradorViewer": "Mirador",
     "nextCanvas": "Nächstes Objekt",
     "numItems": "{{number}} Elemente",
     "off": "Keine",

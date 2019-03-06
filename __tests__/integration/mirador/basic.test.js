@@ -15,7 +15,7 @@ describe('Basic end to end Mirador', () => {
     await expect(page).toMatchElement('[data-manifestid="http://localhost:5000/api/sn904cj3439"] button');
     await expect(page).toClick('[data-manifestid="http://localhost:5000/api/sn904cj3439"] button');
     await expect(page).toMatchElement(
-      'h3',
+      'h2',
       { text: /Peter's San Francisco Locator/ },
     );
   });

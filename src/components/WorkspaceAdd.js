@@ -55,6 +55,7 @@ export class WorkspaceAdd extends React.Component {
 
     return (
       <div className={ns('workspace-add')}>
+        <Typography variant="srOnly" component="h1">{t('miradorResources')}</Typography>
         {manifestList}
 
         <Fab

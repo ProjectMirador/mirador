@@ -61,7 +61,7 @@ describe('WorkspaceMosaic', () => {
       expect(shallow(shallow(renderedTile).props().renderPreview()).matchesElement(
         <div className="mosaic-preview">
           <div className="mosaic-window-body">
-            <h4>previewWindowTitle</h4>
+            previewWindowTitle
           </div>
         </div>,
       )).toBe(true);

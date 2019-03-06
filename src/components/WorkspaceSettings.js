@@ -5,6 +5,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
+import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import PropTypes from 'prop-types';
 
@@ -44,7 +45,9 @@ export class WorkspaceSettings extends Component {
     } = this.props;
     return (
       <Dialog id="workspace-settings" container={container} open={open} onClose={handleClose}>
-        <DialogTitle id="form-dialog-title">{t('settings')}</DialogTitle>
+        <DialogTitle id="form-dialog-title" disableTypography>
+          <Typography variant="h2">{t('settings')}</Typography>
+        </DialogTitle>
         <DialogContent>
           {children}
           <FormControl>

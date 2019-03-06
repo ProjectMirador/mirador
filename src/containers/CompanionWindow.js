@@ -39,7 +39,7 @@ const mapDispatchToProps = {
  * root: {overflowY: string, width: string}}}
  */
 const styles = theme => ({
-  windowSideBarH2: {
+  windowSideBarTitle: {
     ...theme.typography.h5,
     flexGrow: 1,
   },

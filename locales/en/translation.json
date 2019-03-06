@@ -29,6 +29,8 @@
     "light": "Light",
     "listAllOpenWindows": "List all open windows",
     "manifestError": "The resource cannot be added:",
+    "miradorResources": "Mirador resources",
+    "miradorViewer": "Mirador viewer",
     "nextCanvas": "Next item",
     "numItems": "{{number}} items",
     "off": "Off",
