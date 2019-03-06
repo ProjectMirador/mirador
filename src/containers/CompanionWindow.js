@@ -48,6 +48,7 @@ const styles = theme => ({
     flexDirection: 'column',
     minHeight: 0,
     width: '200px',
+    boxShadow: 'none',
   },
   content: {
     ...theme.mixins.gutters(),
