@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Paper from '@material-ui/core/Paper';
+import ListItem from '@material-ui/core/ListItem';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -69,14 +69,14 @@ export class ManifestListItem extends React.Component {
 
     if (error) {
       return (
-        <Paper elevation={1} className={classes.root} data-manifestid={manifestId}>
+        <ListItem divider elevation={1} className={classes.root} data-manifestid={manifestId}>
           <ManifestListItemError manifestId={manifestId} />
-        </Paper>
+        </ListItem>
       );
     }
 
     return (
-      <Paper elevation={1} className={classes.root} data-manifestid={manifestId}>
+      <ListItem divider elevation={1} className={classes.root} data-manifestid={manifestId}>
         <ReactPlaceholder
           showLoadingAnimation
           delay={500}
@@ -123,7 +123,7 @@ export class ManifestListItem extends React.Component {
             </Grid>
           </Grid>
         </ReactPlaceholder>
-      </Paper>
+      </ListItem>
     );
   }
 }

@@ -34,7 +34,7 @@ describe('ManifestListItem', () => {
   it('renders an error message if fetching the manifest failed', () => {
     const wrapper = createWrapper({ error: 'This is an error message' });
 
-    expect(wrapper.find('WithStyles(Paper)').length).toBe(1);
+    expect(wrapper.find('WithStyles(ListItem)').length).toBe(1);
     expect(wrapper.find(ManifestListItemError).length).toBe(1);
   });
   it('updates and adds window when button clicked', () => {
