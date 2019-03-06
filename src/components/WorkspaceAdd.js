@@ -88,7 +88,7 @@ export class WorkspaceAdd extends React.Component {
           >
             <AppBar position="absolute" color="secondary" onClick={() => (this.setAddResourcesVisibility(false))}>
               <Toolbar>
-                <IconButton className={classes.menuButton} color="inherit" aria-label={t('closeMenu')}>
+                <IconButton className={classes.menuButton} color="inherit" aria-label={t('closeAddResourceMenu')}>
                   <ExpandMoreIcon />
                 </IconButton>
                 <Typography variant="h2" noWrap color="inherit" className={classes.typographyBody}>

@@ -50,7 +50,7 @@ export class WorkspaceMenuButton extends Component {
         <IconButton
           color="default"
           id="menuBtn"
-          aria-label={t('menu')}
+          aria-label={t('workspaceMenu')}
           className={classes.ctrlBtn}
           aria-haspopup="true"
           onClick={this.handleMenuClick}

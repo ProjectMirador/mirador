@@ -49,7 +49,7 @@ export class WindowTopMenuButton extends Component {
       <>
         <IconButton
           color="inherit"
-          aria-label={t('menu')}
+          aria-label={t('windowMenu')}
           className={classes.ctrlBtn}
           aria-haspopup="true"
           onClick={this.handleMenuClick}
