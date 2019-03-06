@@ -15,8 +15,12 @@ const mapStateToProps = ({ manifests, windows, config }, props) => ({
   workspaceType: config.workspace.type,
 });
 
-const styles = {
+/**
+ * @param theme
+ */
+const styles = theme => ({
   window: {
+    backgroundColor: theme.palette.primary.dark,
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
@@ -53,9 +57,10 @@ const styles = {
     minHeight: 0,
   },
   thumbnailArea: {
+    backgroundColor: theme.palette.primary.dark,
     flex: '0',
   },
-};
+});
 
 const enhance = compose(
   withStyles(styles),
