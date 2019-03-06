@@ -24,18 +24,6 @@ const babelLoaderConfig = {
   include: paths.appSrc, // CRL
   loader: require.resolve('babel-loader'),
   options: {
-    plugins: [
-      [
-        require.resolve('babel-plugin-named-asset-import'),
-        {
-          loaderMap: {
-            svg: {
-              ReactComponent: '@svgr/webpack?-prettier,-svgo![path]',
-            },
-          },
-        },
-      ],
-    ],
     cacheDirectory: true,
     // Save disk space when time isn't as important
     cacheCompression: true,
