@@ -95,10 +95,8 @@
   }
 
   &-thumb-navigation {
-
     .mirador-thumbnail-nav-canvas {
-      border: 1px solid $black;
-      color: $white;
+      border: 3px solid transparent;
       cursor: pointer;
       height: 100%;
 

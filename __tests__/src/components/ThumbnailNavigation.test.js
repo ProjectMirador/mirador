@@ -13,6 +13,7 @@ function createWrapper(props) {
       canvasGroupings={
         new CanvasGroupings(manifesto.create(manifestJson).getSequences()[0].getCanvases())
       }
+      classes={{}}
       window={{
         id: 'foobar',
         canvasIndex: 1,
@@ -53,7 +54,7 @@ describe('ThumbnailNavigation', () => {
     expect(wrapper.find('.mirador-thumbnail-nav-canvas-1.mirador-current-canvas'));
   });
   it('when clicked, updates the current canvas', () => {
-    renderedGrid.find('.mirador-thumbnail-nav-canvas-0 WithStyles(GridListTile)').simulate('click');
+    renderedGrid.find('.mirador-thumbnail-nav-canvas-0 WithStyles(GridListTile) WithStyles(Button)').simulate('click');
     expect(setCanvas).toHaveBeenCalledWith('foobar', 0);
   });
   it('sets up calculated width based off of height of area and dimensions of canvas', () => {
