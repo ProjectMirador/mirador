@@ -16,12 +16,14 @@ export class WorkspaceControlPanel extends Component {
    * @return {String} - HTML markup for the component
    */
   render() {
-    const { classes } = this.props;
+    const { classes, t } = this.props;
     return (
       <AppBar
         className={classNames(classes.root, ns('workspace-control-panel'))}
         color="default"
         position="absolute"
+        component="nav"
+        aria-label={t('workspace')}
       >
         <Toolbar className={classes.toolbar}>
           <WorkspaceControlPanelButtons />
@@ -33,4 +35,5 @@ export class WorkspaceControlPanel extends Component {
 
 WorkspaceControlPanel.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  t: PropTypes.func.isRequired,
 };
