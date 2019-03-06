@@ -44,8 +44,13 @@ const styles = theme => ({
     flexGrow: 1,
   },
   root: {
-    ...theme.mixins.gutters(),
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 0,
     width: '200px',
+  },
+  content: {
+    ...theme.mixins.gutters(),
     overflowY: 'scroll',
   },
 });
