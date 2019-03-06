@@ -14,7 +14,7 @@
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
     "build:watch": "webpack --watch --mode=development",
-    "prepublishOnly": "rm -rf ./dist && npm run test",
+    "prepublishOnly": "rm -rf ./dist && npm run build",
     "size": "size-limit",
     "start": "npm run build:dev && concurrently \"npm run build:watch\" \"npm run server -- -p 4444\"",
     "server:json": "node ./scripts/json-server/server.js >> ./scripts/json-server/json-server.log"
