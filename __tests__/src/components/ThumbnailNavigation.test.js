@@ -19,6 +19,7 @@ function createWrapper(props) {
         thumbnailNavigationPosition: 'bottom',
       }}
       config={{ thumbnailNavigation: { height: 150 } }}
+      t={k => k}
       {...props}
     />,
   );

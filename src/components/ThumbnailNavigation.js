@@ -52,14 +52,15 @@ export class ThumbnailNavigation extends Component {
       columnIndex, key, style,
     } = options;
     const {
-      window, setCanvas, config, canvasGroupings,
+      window, setCanvas, config, canvasGroupings, t,
     } = this.props;
     const currentGroupings = canvasGroupings.groupings()[columnIndex];
     return (
-      <div
+      <nav
         key={key}
         style={style}
         className={ns('thumbnail-nav-container')}
+        aria-label={t('thumbnailNavigation')}
       >
         <div
           style={{
@@ -91,7 +92,7 @@ export class ThumbnailNavigation extends Component {
             );
           })}
         </div>
-      </div>
+      </nav>
     );
   }
 
@@ -164,4 +165,5 @@ ThumbnailNavigation.propTypes = {
   canvasGroupings: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   setCanvas: PropTypes.func.isRequired,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  t: PropTypes.func.isRequired,
 };
