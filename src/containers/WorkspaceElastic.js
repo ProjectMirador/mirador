@@ -22,9 +22,9 @@ const mapStateToProps = state => (
  * @private
  */
 const mapDispatchToProps = (dispatch, props) => ({
-  setWorkspaceViewportPosition: (position) => {
+  setWorkspaceViewportPosition: (x, y) => {
     dispatch(
-      actions.setWorkspaceViewportPosition(position),
+      actions.setWorkspaceViewportPosition(x, y),
     );
   },
   toggleWorkspaceExposeMode: size => dispatch(

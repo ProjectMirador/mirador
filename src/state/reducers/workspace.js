@@ -5,9 +5,11 @@ import ActionTypes from '../actions/action-types';
  */
 export const workspaceReducer = (
   state = { // we'll need to abstract this more, methinks.
-    viewportPosition: {
+    viewport: {
       x: -2500,
       y: -2500,
+      width: 800,
+      height: 600,
     },
     exposeModeOn: false,
   },
@@ -25,7 +27,23 @@ export const workspaceReducer = (
     case ActionTypes.SET_WORKSPACE_ADD_VISIBILITY:
       return { ...state, isWorkspaceAddVisible: action.isWorkspaceAddVisible };
     case ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION:
-      return { ...state, viewportPosition: action.payload.position };
+      return {
+        ...state,
+        viewport: {
+          ...state.viewport,
+          x: action.payload.x,
+          y: action.payload.y,
+        },
+      };
+    case ActionTypes.SET_WORKSPACE_VIEWPORT_DIMENSIONS:
+      return {
+        ...state,
+        viewport: {
+          ...state.viewport,
+          width: action.payload.width,
+          height: action.payload.height,
+        },
+      };
     case ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE:
       return { ...state, exposeModeOn: !state.exposeModeOn };
     default:

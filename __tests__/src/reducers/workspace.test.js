@@ -46,13 +46,11 @@ describe('workspace reducer', () => {
     expect(workspaceReducer([], {
       type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
       payload: {
-        position: {
-          x: 50,
-          y: 50,
-        },
+        x: 50,
+        y: 50,
       },
     })).toEqual({
-      viewportPosition: {
+      viewport: {
         x: 50,
         y: 50,
       },

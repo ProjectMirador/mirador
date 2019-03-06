@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
+import ResizeObserver from 'react-resize-observer';
 import Window from '../containers/Window';
 import WorkspaceMosaic from '../containers/WorkspaceMosaic';
 import WorkspaceElastic from '../containers/WorkspaceElastic';
@@ -61,7 +62,7 @@ export class Workspace extends React.Component {
    * render
    */
   render() {
-    const { isWorkspaceControlPanelVisible, t } = this.props;
+    const { isWorkspaceControlPanelVisible, setWorkspaceViewportDimensions, t } = this.props;
 
     return (
       <div
@@ -74,6 +75,12 @@ export class Workspace extends React.Component {
       >
         <Typography variant="srOnly" component="h1">{t('miradorViewer')}</Typography>
         {this.workspaceByType()}
+
+        <ResizeObserver
+          onResize={(rect) => {
+            setWorkspaceViewportDimensions(rect.width, rect.height);
+          }}
+        />
       </div>
     );
   }
@@ -81,6 +88,7 @@ export class Workspace extends React.Component {
 
 Workspace.propTypes = {
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
+  setWorkspaceViewportDimensions: PropTypes.func.isRequired,
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   workspaceType: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func.isRequired,

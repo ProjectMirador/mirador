@@ -43,7 +43,7 @@
   }
 
   &-workspace-with-control-panel {
-    padding-top: 74px; // The height of the control panel
+    margin-top: 74px; // The height of the control panel
   }
 
   &-workspace-maximized-window {
@@ -56,20 +56,57 @@
   &-workspace-add {
     height: 100%;
     overflow: auto;
-    padding-left: 6px;
-    padding-right: 6px;
-    padding-top: 92px;
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-top: 92px;
+  }
+
+  &-elastic-minimap {
+    opacity: 0.8;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
+    width: 200px;
+    height: 200px;
+    border: 2px solid lightgray;
+    background: white;
+    box-sizing: border-box;
+
+    .minimap-window {
+      position: absolute;
+      background: rgba(deepskyblue, .3);
+      border: 1px solid lightgray;
+      box-sizing: border-box;
+    }
+
+    .minimap-viewport {
+      position: absolute;
+      border: 1px solid orangered;
+      box-sizing: border-box;
+      transition: 0.2s box-shadow ease-out;
+      &:hover {
+        transition: 0.2s box-shadow ease-out;
+        box-shadow: 0 0 3px gray;
+      }
+    }
+
+    .window-bounding-box {
+      box-sizing: border-box;
+      position: absolute;
+      border: 1px dotted deeppink;
+    }
   }
 
   @media (min-width: 600px) {
     &-workspace-with-control-panel {
-      padding-left: 100px;
-      padding-top: 0;
+      margin-left: 100px;
+      margin-top: 0;
     }
 
     &-workspace-add {
-      padding-left: 100px;
-      padding-top: 18px;
+      margin-left: 100px;
+      margin-top: 18px;
     }
   }
 

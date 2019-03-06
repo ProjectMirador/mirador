@@ -1,9 +1,9 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import miradorWithPlugins from '../lib/miradorWithPlugins';
 import * as actions from '../state/actions';
-import { Workspace } from '../components/Workspace';
-
+import { ElasticMinimap } from '../components/ElasticMinimap';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -11,30 +11,29 @@ import { Workspace } from '../components/Workspace';
  * @private
  */
 const mapDispatchToProps = (dispatch, props) => ({
-  setWorkspaceViewportDimensions: (width, height) => {
+  setWorkspaceViewportPosition: (x, y) => {
     dispatch(
-      actions.setWorkspaceViewportDimensions(width, height),
+      actions.setWorkspaceViewportPosition(x, y),
     );
   },
 });
 
 /**
  * mapStateToProps - to hook up connect
- * @memberof Workspace
+ * @memberof WindowViewer
  * @private
  */
-const mapStateToProps = state => (
-  {
-    isWorkspaceControlPanelVisible: state.config.workspaceControlPanel.enabled,
-    workspaceType: state.config.workspace.type,
-    windows: state.windows,
-  }
-);
+const mapStateToProps = state => ({
+  // viewport: state.workspace.viewport,
+  // workspaceBoundingBox: state.workspace.viewport,
+  workspaceViewport: state.workspace.viewport,
+  windows: state.windows,
+});
 
 const enhance = compose(
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
-  // further HOC go here
+  miradorWithPlugins,
 );
 
-export default enhance(Workspace);
+export default enhance(ElasticMinimap);

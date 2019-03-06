@@ -272,3 +272,45 @@ export function getLanguagesFromConfigWithCurrent(state) {
     current: key === language,
   }));
 }
+
+/**
+ * Return the bounding box for all open windows in the elastic workspace
+ * in workspace coordinates
+ * @param {object} state
+ * @return {object}
+ */
+export function getWorkspaceBoundingBox(windows) {
+  const windowObjects = Object.values(windows);
+  const minX = Math.min(...windowObjects.map(win => win.x));
+  const minY = Math.min(...windowObjects.map(win => win.y));
+  const maxX = Math.max(...windowObjects.map((win) => {
+    console.log('win width: ', win.width);
+    console.log(win.x + win.width);
+    return (win.x + win.width);
+  }));
+  const maxY = Math.max(...windowObjects.map(win => (win.y + win.height)));
+  console.log('min X: ', minX);
+  console.log('min Y: ', minY);
+  console.log('max X: ', maxX);
+  console.log('max Y: ', maxY);
+  return {
+    x: minX,
+    y: minY,
+    width: (maxX - minX),
+    height: maxY - minY,
+  };
+
+  // Potential solution to overflow problems.
+  // const minX = Math.min(...windowObjects.map(
+  //   win => Number.parseFloat(win.x).toPrecision(4),
+  // ));
+  // const minY = Math.min(...windowObjects.map(
+  //   win => Number.parseFloat(win.y).toPrecision(4),
+  // ));
+  // const maxX = Math.max(...windowObjects.map(
+  //   win => Number.parseFloat((win.x + win.width)).toPrecision(4),
+  // ));
+  // const maxY = Math.max(...windowObjects.map(
+  //   win => Number.parseFloat((win.y + win.height)).toPrecision(4),
+  // ));
+}

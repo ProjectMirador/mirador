@@ -55,6 +55,7 @@
     "react-mosaic-component": "^2.1.0",
     "react-placeholder": "^3.0.1",
     "react-redux": "^6.0.0",
+    "react-resize-observer": "1.1.1",
     "react-rnd": "^9.1.1",
     "react-virtualized": "^9.21.0",
     "redux": "4.0.1",
