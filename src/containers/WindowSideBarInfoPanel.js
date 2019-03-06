@@ -38,6 +38,10 @@ const mapStateToProps = (state, { windowId }) => ({
  */
 const styles = theme => ({
   windowSideBarHeading: theme.typography.h6,
+  sectionHeading: {
+    ...theme.typography.body2,
+    textTransform: 'uppercase',
+  },
 });
 
 const enhance = compose(

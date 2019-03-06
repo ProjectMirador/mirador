@@ -26,7 +26,7 @@ describe('WindowSideBarInfoPanel', () => {
       );
     });
 
-    it('renders header', () => {
+    it('renders headers', () => {
       expect(
         wrapper.props().title,
       ).toBe('aboutThisItem');
@@ -34,7 +34,7 @@ describe('WindowSideBarInfoPanel', () => {
 
     it('renders canvas label', () => {
       expect(
-        wrapper.find(Typography).at(0).matchesElement(
+        wrapper.find(Typography).at(1).matchesElement(
           <Typography>The Canvas Label</Typography>,
         ),
       ).toBe(true);
@@ -42,7 +42,7 @@ describe('WindowSideBarInfoPanel', () => {
 
     it('renders canvas description in SanitizedHtml component', () => {
       expect(
-        wrapper.find(Typography).at(1).matchesElement(
+        wrapper.find(Typography).at(2).matchesElement(
           <Typography>
             <SanitizedHtml htmlString="The Canvas Description" ruleSet="iiif" />
           </Typography>,
@@ -60,7 +60,7 @@ describe('WindowSideBarInfoPanel', () => {
 
     it('renders manifest label', () => {
       expect(
-        wrapper.find(Typography).at(2).matchesElement(
+        wrapper.find(Typography).at(4).matchesElement(
           <Typography>The Manifest Label</Typography>,
         ),
       ).toBe(true);
@@ -68,7 +68,7 @@ describe('WindowSideBarInfoPanel', () => {
 
     it('renders manifest description in SanitizedHtml component', () => {
       expect(
-        wrapper.find(Typography).at(3).matchesElement(
+        wrapper.find(Typography).at(5).matchesElement(
           <Typography>
             <SanitizedHtml htmlString="The Manifest Description" ruleSet="iiif" />
           </Typography>,
