@@ -30,6 +30,8 @@ export class CompanionWindow extends Component {
           order: position === 'left' ? -1 : null,
         }}
         square
+        component="aside"
+        aria-label={title}
       >
         <Toolbar variant="dense" className={ns('companion-window-header')}>
           <Typography variant="h3" className={classes.windowSideBarTitle}>
