@@ -52,7 +52,7 @@ const styles = theme => ({
   },
   content: {
     ...theme.mixins.gutters(),
-    overflowY: 'scroll',
+    overflowY: 'auto',
   },
 });
 
