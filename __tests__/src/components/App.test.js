@@ -22,6 +22,7 @@ function createWrapper(props) {
       theme={settings.theme}
       translations={{}}
       classes={{}}
+      t={k => k}
       {...props}
     />,
   );
@@ -30,7 +31,7 @@ function createWrapper(props) {
 describe('App', () => {
   it('should render outer element correctly', () => {
     const wrapper = createWrapper();
-    expect(wrapper.find('div.mirador-viewer').length).toBe(1);
+    expect(wrapper.find('main.mirador-viewer').length).toBe(1);
   });
 
   it('should render all needed elements ', () => {

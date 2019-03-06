@@ -41,6 +41,7 @@ const styles = theme => ({
 });
 
 const enhance = compose(
+  withTranslations(),
   withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
 );

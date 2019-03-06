@@ -50,6 +50,7 @@ export class App extends Component {
     const {
       isFullscreenEnabled, setWorkspaceFullscreen, classes,
       isWorkspaceAddVisible, isWorkspaceControlPanelVisible, theme, translations,
+      t,
     } = this.props;
 
     Object.keys(translations).forEach((lng) => {
@@ -61,7 +62,7 @@ export class App extends Component {
         enabled={isFullscreenEnabled}
         onChange={setWorkspaceFullscreen}
       >
-        <div className={classNames(classes.background, ns('viewer'))}>
+        <main className={classNames(classes.background, ns('viewer'))} aria-label={t('workspace')}>
           <I18nextProvider i18n={this.i18n}>
             <MuiThemeProvider theme={createMuiTheme(theme)}>
               {
@@ -75,7 +76,7 @@ export class App extends Component {
               }
             </MuiThemeProvider>
           </I18nextProvider>
-        </div>
+        </main>
       </Fullscreen>
     );
   }
@@ -90,6 +91,7 @@ App.propTypes = {
   setWorkspaceFullscreen: PropTypes.func.isRequired,
   isWorkspaceAddVisible: PropTypes.bool,
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired,
 };
 
 App.defaultProps = {
