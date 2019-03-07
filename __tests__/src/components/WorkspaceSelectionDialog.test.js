@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import Select from '@material-ui/core/Select';
 import { WorkspaceSelectionDialog } from '../../../src/components/WorkspaceSelectionDialog';
 import settings from '../../../src/config/settings';
 
@@ -17,7 +18,7 @@ describe('WorkspaceSettings', () => {
         open
         handleClose={handleClose}
         updateConfig={updateConfig}
-        workspaceType={settings.theme}
+        workspaceType={settings.workspace.type}
       />,
     );
   });
@@ -26,12 +27,11 @@ describe('WorkspaceSettings', () => {
     expect(wrapper.find('WithStyles(Dialog)').length).toBe(1);
     expect(wrapper.find('WithStyles(FormControl)').length).toBe(1);
   });
-  it('calls updateConfig when selected', () => {
-    wrapper.instance().handleWorkspaceChange({ target: { value: 'foo' } });
-    expect(updateConfig).toHaveBeenCalled();
+  it('calls updateConfig updating the workspace type when selected', () => {
+    wrapper.find(Select).props().onChange({ target: { value: 'foo' } });
+    expect(updateConfig).toHaveBeenCalledWith({ workspace: { type: 'foo' } });
   });
-  it('renders the current workspace type', () => {
-    wrapper.find.handleWorkspaceChange({ target: { value: 'foo' } });
-    expect(updateConfig).toHaveBeenCalled();
+  it('passes the current workspace type as the value prop to the Select', () => {
+    expect(wrapper.find(Select).props().value).toEqual('mosaic');
   });
 });
