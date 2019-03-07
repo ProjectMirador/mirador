@@ -22,9 +22,6 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   addCompanionWindow: panelType => dispatch(
     actions.popOutCompanionWindow(windowId, panelType, 'left'),
   ),
-  closeCompanionWindow: id => dispatch(
-    actions.updateCompanionWindow(windowId, id, { content: 'closed' }),
-  ),
 });
 
 
@@ -39,7 +36,6 @@ const mapStateToProps = (state, { windowId }) => ({
     ['oa:commenting', 'sc:painting'],
   ).length > 0,
   sideBarPanel: (getCompanionWindowForPosition(state, windowId, 'left') || {}).content,
-  sideBarPanelId: (getCompanionWindowForPosition(state, windowId, 'left') || {}).id,
 });
 
 /** */

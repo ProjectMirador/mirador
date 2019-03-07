@@ -17,27 +17,11 @@ export class WindowSideBarButtons extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  /**
-   * sideBarPanelCurrentlySelected - return if the given sideBarPanel is currently selected
-   * @return Boolean
-   */
-  sideBarPanelCurrentlySelected(panelType) {
-    const { sideBarPanel } = this.props;
-
-    return sideBarPanel === panelType;
-  }
-
   /** */
   handleChange(event, value) {
-    const {
-      addCompanionWindow, closeCompanionWindow, sideBarPanelId,
-    } = this.props;
+    const { addCompanionWindow } = this.props;
 
-    if (this.sideBarPanelCurrentlySelected(value)) {
-      closeCompanionWindow(sideBarPanelId);
-    } else {
-      addCompanionWindow(value);
-    }
+    addCompanionWindow(value);
   }
 
   /**
@@ -63,9 +47,7 @@ export class WindowSideBarButtons extends Component {
         <Tab
           classes={{ root: classes.tab, selected: classes.tabSelected }}
           aria-label={
-            this.sideBarPanelCurrentlySelected('info')
-              ? t('closeCompanionWindow')
-              : t('openInfoCompanionWindow')
+            t('openInfoCompanionWindow')
           }
           icon={(
             <InfoIcon />
@@ -75,9 +57,7 @@ export class WindowSideBarButtons extends Component {
         <Tab
           classes={{ root: classes.tab, selected: classes.tabSelected }}
           aria-label={
-            this.sideBarPanelCurrentlySelected('canvas_navigation')
-              ? t('closeCanvasNavigationCompanionWindow')
-              : t('openCanvasNavigationCompanionWindow')
+            t('openCanvasNavigationCompanionWindow')
           }
           icon={(
             <CanvasIndexIcon />
@@ -87,9 +67,7 @@ export class WindowSideBarButtons extends Component {
         <Tab
           classes={{ root: classes.tab, selected: classes.tabSelected }}
           aria-label={
-            this.sideBarPanelCurrentlySelected('annotations')
-              ? t('closeAnnotationCompanionWindow')
-              : t('openAnnotationCompanionWindow')
+            t('openAnnotationCompanionWindow')
           }
           icon={(
             <Badge color="error" invisible={!hasAnnotations} variant="dot">
@@ -106,9 +84,7 @@ export class WindowSideBarButtons extends Component {
 WindowSideBarButtons.propTypes = {
   hasAnnotations: PropTypes.bool,
   addCompanionWindow: PropTypes.func.isRequired,
-  closeCompanionWindow: PropTypes.func.isRequired,
   sideBarPanel: PropTypes.string,
-  sideBarPanelId: PropTypes.string,
   t: PropTypes.func,
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
@@ -116,7 +92,6 @@ WindowSideBarButtons.propTypes = {
 WindowSideBarButtons.defaultProps = {
   hasAnnotations: false,
   sideBarPanel: 'closed',
-  sideBarPanelId: null,
   t: key => key,
   classes: {},
 };

@@ -7,7 +7,6 @@ function createWrapper(props) {
   return shallow(
     <WindowSideBarButtons
       addCompanionWindow={() => {}}
-      closeCompanionWindow={() => {}}
       {...props}
     />,
   );
