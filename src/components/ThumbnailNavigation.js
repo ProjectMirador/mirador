@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import Grid from 'react-virtualized/dist/commonjs/Grid';
 import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import Typography from '@material-ui/core/Typography';
+import { getCanvasLabel } from '../state/selectors';
 import { CanvasThumbnail } from './CanvasThumbnail';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
 import ns from '../config/css-ns';
@@ -52,7 +55,7 @@ export class ThumbnailNavigation extends Component {
       columnIndex, key, style,
     } = options;
     const {
-      window, setCanvas, config, canvasGroupings, t,
+      classes, window, setCanvas, config, canvasGroupings, t,
     } = this.props;
     const currentGroupings = canvasGroupings.groupings()[columnIndex];
     return (
@@ -87,6 +90,14 @@ export class ThumbnailNavigation extends Component {
                   maxHeight={config.thumbnailNavigation.height}
                   maxWidth={style.width}
                   aspectRatio={manifestoCanvas.aspectRatio}
+                />
+                <GridListTileBar
+                  classes={{ root: classes.root }}
+                  title={(
+                    <Typography classes={{ root: classes.title }} variant="caption">
+                      {getCanvasLabel(canvas, canvas.index)}
+                    </Typography>
+                  )}
                 />
               </GridListTile>
             );
@@ -161,6 +172,7 @@ export class ThumbnailNavigation extends Component {
 }
 
 ThumbnailNavigation.propTypes = {
+  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   canvasGroupings: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   setCanvas: PropTypes.func.isRequired,
