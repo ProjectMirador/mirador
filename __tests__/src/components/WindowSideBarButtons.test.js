@@ -20,36 +20,27 @@ describe('WindowSideBarButtons', () => {
   });
 
   it('renders without an error', () => {
-    expect(wrapper.find('Fragment').length).toBe(1);
+    expect(wrapper.find('WithStyles(Tabs)').length).toBe(1);
   });
 
   it('triggers the addCompanionWindow prop on click', () => {
     const addCompanionWindow = jest.fn();
     wrapper = createWrapper({ addCompanionWindow });
 
-    const iconButton = wrapper.find('WithStyles(IconButton)[aria-label="openInfoCompanionWindow"]');
-    expect(iconButton.simulate('click'));
+    wrapper.find('WithStyles(Tabs)').simulate('change', {}, 'info');
     expect(addCompanionWindow).toHaveBeenCalledTimes(1);
     expect(addCompanionWindow).toHaveBeenCalledWith('info');
   });
 
-  it('triggers the closeCompanionWindow prop when clicking on the current window', () => {
-    const closeCompanionWindow = jest.fn();
-    wrapper = createWrapper({ closeCompanionWindow, sideBarPanelId: 'asdf', sideBarPanel: 'info' });
-
-    const iconButton = wrapper.find('WithStyles(IconButton)[aria-label="closeInfoCompanionWindow"]');
-    expect(iconButton.simulate('click'));
-    expect(closeCompanionWindow).toHaveBeenCalledTimes(1);
-    expect(closeCompanionWindow).toHaveBeenCalledWith('asdf');
-  });
-
   it('has a badge indicating if the annotations panel has annotations', () => {
+    let tab;
     wrapper = createWrapper({ hasAnnotations: true });
-
-    expect(wrapper.find('WithStyles(Badge)').props().invisible).toBe(false);
+    tab = wrapper.find('WithStyles(Tab)[aria-label="openAnnotationCompanionWindow"]').dive().dive();
+    expect(tab.find('WithStyles(Badge)').props().invisible).toBe(false);
 
     wrapper = createWrapper({ hasAnnotations: false });
+    tab = wrapper.find('WithStyles(Tab)[aria-label="openAnnotationCompanionWindow"]').dive().dive();
 
-    expect(wrapper.find('WithStyles(Badge)').props().invisible).toBe(true);
+    expect(tab.find('WithStyles(Badge)').props().invisible).toBe(true);
   });
 });

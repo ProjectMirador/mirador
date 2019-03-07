@@ -1,5 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import * as actions from '../state/actions';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
@@ -41,9 +42,27 @@ const mapStateToProps = (state, { windowId }) => ({
   sideBarPanelId: (getCompanionWindowForPosition(state, windowId, 'left') || {}).id,
 });
 
+/** */
+const style = theme => ({
+  tabsFlexContainer: {
+    flexDirection: 'column',
+  },
+  tabsIndicator: {
+    display: 'none',
+  },
+  tab: {
+    minWidth: 'auto',
+    borderRight: '4px solid transparent',
+  },
+  tabSelected: {
+    backgroundColor: theme.palette.secondary.light,
+    borderRight: `4px solid ${theme.palette.secondary.main}`,
+  },
+});
 
 const enhance = compose(
   withTranslation(),
+  withStyles(style),
   connect(mapStateToProps, mapDispatchToProps),
   miradorWithPlugins,
 );
