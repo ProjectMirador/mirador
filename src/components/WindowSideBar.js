@@ -21,19 +21,13 @@ export class WindowSideBar extends Component {
     return (
       <>
         <Drawer
-          variant="temporary"
+          variant="persistent"
           className={classNames(classes.drawer)}
           classes={{ paper: classNames(classes.drawer) }}
-          open={sideBarOpen}
           anchor="left"
           PaperProps={{ style: { position: 'relative' } }}
-          ModalProps={{
-            container: document.getElementById(windowId),
-            disablePortal: true,
-            hideBackdrop: true,
-            style: { position: 'relative', order: -100 },
-          }}
           component="aside"
+          open={sideBarOpen}
         >
           <List>
             <WindowSideBarButtons windowId={windowId} />
