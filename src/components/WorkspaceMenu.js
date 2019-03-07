@@ -178,6 +178,7 @@ export class WorkspaceMenu extends Component {
         />
         <WorkspaceSelectionDialog
           open={Boolean(workspaceSelection.open)}
+          container={container}
           handleClose={this.handleMenuItemClose('workspaceSelection')}
         />
         <WorkspaceExport

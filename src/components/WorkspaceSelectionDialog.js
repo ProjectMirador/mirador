@@ -17,10 +17,10 @@ export class WorkspaceSelectionDialog extends Component {
    */
   render() {
     const {
-      handleClose, open, children, workspaceType, updateConfig, t,
+      container, handleClose, open, children, workspaceType, updateConfig, t,
     } = this.props;
     return (
-      <Dialog id="workspace-settings" open={open} onClose={handleClose}>
+      <Dialog id="workspace-settings" container={container} open={open} onClose={handleClose}>
         <DialogTitle id="form-dialog-title">{t('workspaceSelectionTitle')}</DialogTitle>
         <DialogContent>
           {children}
@@ -51,6 +51,7 @@ export class WorkspaceSelectionDialog extends Component {
 }
 
 WorkspaceSelectionDialog.propTypes = {
+  container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
   children: PropTypes.node,
@@ -60,6 +61,7 @@ WorkspaceSelectionDialog.propTypes = {
 };
 
 WorkspaceSelectionDialog.defaultProps = {
+  container: null,
   open: false,
   children: null,
   t: key => key,
