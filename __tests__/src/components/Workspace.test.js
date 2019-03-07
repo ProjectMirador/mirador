@@ -67,6 +67,7 @@ describe('Workspace', () => {
       const wrapper = createWrapper({ windows: maximizedWindows });
       expect(wrapper.matchesElement(
         <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
+          <Typography>miradorViewer</Typography>
           <Window window={{ id: 1, maximized: true }} className="mirador-workspace-maximized-window" />
         </div>,
       )).toBe(true);

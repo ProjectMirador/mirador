@@ -49,7 +49,7 @@ export class Window extends Component {
     }
 
     return (
-      <div
+      <section
         id={window.id}
         className={
           cn(classes.window, ns('window'),
