@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import Grid from 'react-virtualized/dist/commonjs/Grid';
 import Button from '@material-ui/core/Button';
-import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import Typography from '@material-ui/core/Typography';
@@ -79,6 +78,7 @@ export class ThumbnailNavigation extends Component {
 
             return (
               <GridListTile
+                component="div"
                 key={canvas.index}
               >
                 <Button
@@ -150,27 +150,25 @@ export class ThumbnailNavigation extends Component {
         className={ns('thumb-navigation')}
         style={{ height: `${config.thumbnailNavigation.height}px` }}
       >
-        <GridList>
-          <AutoSizer
-            defaultHeight={100}
-            defaultWidth={400}
-          >
-            {({ height, width }) => (
-              <Grid
-                cellRenderer={this.cellRenderer}
-                columnCount={canvasGroupings.groupings().length}
-                columnWidth={this.calculateScaledWidth}
-                height={config.thumbnailNavigation.height}
-                rowCount={1}
-                rowHeight={config.thumbnailNavigation.height}
-                scrollToAlignment="center"
-                scrollToColumn={this.scrollToColumn()}
-                width={width}
-                ref={this.gridRef}
-              />
-            )}
-          </AutoSizer>
-        </GridList>
+        <AutoSizer
+          defaultHeight={100}
+          defaultWidth={400}
+        >
+          {({ height, width }) => (
+            <Grid
+              cellRenderer={this.cellRenderer}
+              columnCount={canvasGroupings.groupings().length}
+              columnWidth={this.calculateScaledWidth}
+              height={config.thumbnailNavigation.height}
+              rowCount={1}
+              rowHeight={config.thumbnailNavigation.height}
+              scrollToAlignment="center"
+              scrollToColumn={this.scrollToColumn()}
+              width={width}
+              ref={this.gridRef}
+            />
+          )}
+        </AutoSizer>
       </div>
     );
   }
