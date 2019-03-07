@@ -4,16 +4,12 @@ import WorkspaceControlPanel from '../../../src/containers/WorkspaceControlPanel
 import Workspace from '../../../src/containers/Workspace';
 import WorkspaceAdd from '../../../src/containers/WorkspaceAdd';
 import { WorkspaceArea } from '../../../src/components/WorkspaceArea';
-import i18n from '../../../src/i18n';
-
-jest.unmock('react-i18next');
 
 /** */
 function createWrapper(props) {
   return shallow(
     <WorkspaceArea
       isWorkspaceControlPanelVisible
-      setWorkspaceFullscreen={() => {}}
       classes={{}}
       t={k => k}
       {...props}
@@ -21,7 +17,7 @@ function createWrapper(props) {
   );
 }
 
-describe('App', () => {
+describe('WorkspaceArea', () => {
   it('should render outer element correctly', () => {
     const wrapper = createWrapper();
     expect(wrapper.find('main.mirador-viewer').length).toBe(1);
