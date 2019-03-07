@@ -30,6 +30,7 @@ const styles = theme => ({
     width: 55,
     flexShrink: 0,
     height: '100%',
+    zIndex: theme.zIndex.appBar - 1,
   },
   grow: {
     flexGrow: 1,
