@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Badge from '@material-ui/core/Badge';
-import IconButton from '@material-ui/core/IconButton';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import InfoIcon from '@material-ui/icons/InfoSharp';
 import AnnotationIcon from '@material-ui/icons/CommentSharp';
 import CanvasIndexIcon from './icons/CanvasIndexIcon';
@@ -10,6 +11,12 @@ import CanvasIndexIcon from './icons/CanvasIndexIcon';
  *
  */
 export class WindowSideBarButtons extends Component {
+  /** */
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
   /**
    * sideBarPanelCurrentlySelected - return if the given sideBarPanel is currently selected
    * @return Boolean
@@ -21,15 +28,15 @@ export class WindowSideBarButtons extends Component {
   }
 
   /** */
-  toggleCompanionWindow(panelType) {
+  handleChange(event, value) {
     const {
       addCompanionWindow, closeCompanionWindow, sideBarPanelId,
     } = this.props;
 
-    if (this.sideBarPanelCurrentlySelected(panelType)) {
+    if (this.sideBarPanelCurrentlySelected(value)) {
       closeCompanionWindow(sideBarPanelId);
     } else {
-      addCompanionWindow(panelType);
+      addCompanionWindow(value);
     }
   }
 
@@ -39,49 +46,59 @@ export class WindowSideBarButtons extends Component {
    * @return {type}  description
    */
   render() {
-    const { hasAnnotations, t } = this.props;
+    const {
+      classes, hasAnnotations, sideBarPanel, t,
+    } = this.props;
+
     return (
-      <>
-        <IconButton
+      <Tabs
+        classes={{ flexContainer: classes.tabsFlexContainer, indicator: classes.tabsIndicator }}
+        value={sideBarPanel === 'closed' ? false : sideBarPanel}
+        onChange={this.handleChange}
+        variant="fullWidth"
+        indicatorColor="secondary"
+        textColor="secondary"
+        aria-orientation="vertical"
+      >
+        <Tab
+          classes={{ root: classes.tab, selected: classes.tabSelected }}
           aria-label={
             this.sideBarPanelCurrentlySelected('info')
-              ? t('closeInfoCompanionWindow')
+              ? t('closeCompanionWindow')
               : t('openInfoCompanionWindow')
           }
-          onClick={() => (this.toggleCompanionWindow('info'))}
-        >
-          <InfoIcon
-            color={this.sideBarPanelCurrentlySelected('info') ? 'secondary' : 'inherit'}
-          />
-        </IconButton>
-        <IconButton
+          icon={(
+            <InfoIcon />
+          )}
+          value="info"
+        />
+        <Tab
+          classes={{ root: classes.tab, selected: classes.tabSelected }}
           aria-label={
             this.sideBarPanelCurrentlySelected('canvas_navigation')
               ? t('closeCanvasNavigationCompanionWindow')
               : t('openCanvasNavigationCompanionWindow')
           }
-          onClick={() => (this.toggleCompanionWindow('canvas_navigation'))}
-        >
-          <CanvasIndexIcon
-            color={this.sideBarPanelCurrentlySelected('canvas_navigation') ? 'secondary' : 'inherit'}
-          />
-        </IconButton>
-
-        <IconButton
+          icon={(
+            <CanvasIndexIcon />
+          )}
+          value="canvas_navigation"
+        />
+        <Tab
+          classes={{ root: classes.tab, selected: classes.tabSelected }}
           aria-label={
             this.sideBarPanelCurrentlySelected('annotations')
               ? t('closeAnnotationCompanionWindow')
               : t('openAnnotationCompanionWindow')
           }
-          onClick={() => (this.toggleCompanionWindow('annotations'))}
-        >
-          <Badge color="error" invisible={!hasAnnotations} variant="dot">
-            <AnnotationIcon
-              color={this.sideBarPanelCurrentlySelected('annotations') ? 'secondary' : 'inherit'}
-            />
-          </Badge>
-        </IconButton>
-      </>
+          icon={(
+            <Badge color="error" invisible={!hasAnnotations} variant="dot">
+              <AnnotationIcon />
+            </Badge>
+          )}
+          value="annotations"
+        />
+      </Tabs>
     );
   }
 }
@@ -93,6 +110,7 @@ WindowSideBarButtons.propTypes = {
   sideBarPanel: PropTypes.string,
   sideBarPanelId: PropTypes.string,
   t: PropTypes.func,
+  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 WindowSideBarButtons.defaultProps = {
@@ -100,4 +118,5 @@ WindowSideBarButtons.defaultProps = {
   sideBarPanel: 'closed',
   sideBarPanelId: null,
   t: key => key,
+  classes: {},
 };

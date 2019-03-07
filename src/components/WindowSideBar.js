@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
 import WindowSideBarButtons from '../containers/WindowSideBarButtons';
 
 /**
@@ -29,9 +28,7 @@ export class WindowSideBar extends Component {
           component="aside"
           open={sideBarOpen}
         >
-          <List>
-            <WindowSideBarButtons windowId={windowId} />
-          </List>
+          <WindowSideBarButtons windowId={windowId} />
         </Drawer>
       </>
     );
