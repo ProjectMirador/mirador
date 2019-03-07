@@ -84,4 +84,30 @@ describe('WindowList', () => {
       ).toBe(true);
     });
   });
+
+  describe('with multiple windows', () => {
+    beforeEach(() => {
+      windows = {
+        zyx: { id: 'zyx', manifestId: '123' },
+        xyz: { id: 'xyz', manifestId: 'abc' },
+      };
+      manifests = { abc: { manifestation: { getLabel: jest.fn(() => [{ value: 'Some title' }]) } } };
+
+      wrapper = shallow(
+        <WindowList
+          containerId="mirador"
+          anchorEl={{}}
+          manifests={manifests}
+          windows={windows}
+          handleClose={handleClose}
+          focusWindow={focusWindow}
+        />,
+      );
+    });
+
+    it('has the first window in the list selected', () => {
+      expect(wrapper.find('WithStyles(MenuItem)').first().props().selected).toBe(true);
+      expect(wrapper.find('WithStyles(MenuItem)').last().props().selected).toBe(false);
+    });
+  });
 });
