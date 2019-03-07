@@ -33,6 +33,7 @@ export class WindowSideBar extends Component {
             hideBackdrop: true,
             style: { position: 'relative', order: -100 },
           }}
+          component="aside"
         >
           <List>
             <WindowSideBarButtons windowId={windowId} />

@@ -15,6 +15,7 @@ describe('WorkspaceControlPanel', () => {
       <WorkspaceControlPanel
         classes={{}}
         store={store}
+        t={k => k}
       />,
     );
   });

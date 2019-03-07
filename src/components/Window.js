@@ -38,14 +38,16 @@ export class Window extends Component {
    * Renders things
    */
   render() {
-    const { manifest, window, classes } = this.props;
+    const {
+      label, manifest, window, classes, t,
+    } = this.props;
 
     if (!window) {
       return <></>;
     }
 
     return (
-      <div id={window.id} className={cn(classes.window, ns('window'))}>
+      <section id={window.id} className={cn(classes.window, ns('window'))} aria-label={t('window', { label })}>
         {this.wrappedTopBar()}
         <div className={classes.middle}>
           <div className={classes.middleLeft}>
@@ -70,7 +72,7 @@ export class Window extends Component {
             manifest={manifest}
           />
         </div>
-      </div>
+      </section>
     );
   }
 }
@@ -87,6 +89,8 @@ Window.propTypes = {
   window: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   workspaceType: PropTypes.string,
+  t: PropTypes.func.isRequired,
+  label: PropTypes.string,
 };
 
 Window.defaultProps = {
@@ -94,4 +98,5 @@ Window.defaultProps = {
   manifest: null,
   workspaceType: null,
   classes: {},
+  label: null,
 };

@@ -1,16 +1,25 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import { OpenSeadragonViewer } from '../components/OpenSeadragonViewer';
 import * as actions from '../state/actions';
+import {
+  getCanvasLabel,
+  getSelectedCanvas,
+} from '../state/selectors';
 
 /**
  * mapStateToProps - used to hook up connect to action creators
  * @memberof Window
  * @private
  */
-const mapStateToProps = ({ viewers }, { windowId }) => ({
+const mapStateToProps = ({ viewers, windows, manifests }, { windowId }) => ({
   viewer: viewers[windowId],
+  label: getCanvasLabel(
+    getSelectedCanvas({ windows, manifests }, windowId),
+    windows[windowId].canvasIndex,
+  ),
 });
 
 /**
@@ -23,6 +32,7 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
+  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   miradorWithPlugins,
   // further HOC go here

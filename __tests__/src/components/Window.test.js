@@ -11,6 +11,7 @@ function createWrapper(props, context) {
     <Window
       window={window}
       classes={{}}
+      t={k => k}
       {...props}
     />,
     { context },
@@ -27,7 +28,7 @@ describe('Window', () => {
     height: 400,
   };
   it('should render nothing, if provided with no window data', () => {
-    wrapper = shallow(<Window />);
+    wrapper = shallow(<Window t={k => k} />);
     expect(wrapper.find('.mirador-window')).toHaveLength(0);
   });
   it('should render outer element', () => {
