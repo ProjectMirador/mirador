@@ -39,13 +39,14 @@ export class WindowList extends Component {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <ListSubheader>
+        <ListSubheader role="presentation" selected={false} disabled tabIndex="-1">
           {t('openWindows')}
         </ListSubheader>
         {
-          Object.values(windows).map(window => (
+          Object.values(windows).map((window, i) => (
             <MenuItem
               key={window.id}
+              selected={i === 0}
               onClick={(e) => { focusWindow(window.id); handleClose(e); }}
             >
               {
