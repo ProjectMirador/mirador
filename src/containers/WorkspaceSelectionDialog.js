@@ -1,9 +1,8 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
+import { WorkspaceSelectionDialog } from '../components/WorkspaceSelectionDialog';
 import * as actions from '../state/actions';
-import { WorkspaceMenu } from '../components/WorkspaceMenu';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -11,23 +10,19 @@ import { WorkspaceMenu } from '../components/WorkspaceMenu';
  * @private
  */
 const mapDispatchToProps = {
-  toggleZoomControls: actions.toggleZoomControls,
+  updateConfig: actions.updateConfig,
 };
 
 /**
  * mapStateToProps - to hook up connect
- * @memberof WindowViewer
+ * @memberof Workspace
  * @private
  */
-const mapStateToProps = state => ({
-  containerId: state.config.id,
-  showZoomControls: state.workspace.showZoomControls,
-});
+const mapStateToProps = state => ({ workspaceType: state.config.workspace.type });
 
 const enhance = compose(
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
-  miradorWithPlugins,
 );
 
-export default enhance(WorkspaceMenu);
+export default enhance(WorkspaceSelectionDialog);
