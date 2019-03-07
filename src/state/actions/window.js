@@ -42,6 +42,11 @@ export function updateWindow(id, payload) {
   return { type: ActionTypes.UPDATE_WINDOW, id, payload };
 }
 
+/** */
+export function setCompanionAreaOpen(id, companionAreaOpen) {
+  return { type: ActionTypes.UPDATE_WINDOW, id, payload: { companionAreaOpen } };
+}
+
 /**
  * removeWindow - action creator
  *

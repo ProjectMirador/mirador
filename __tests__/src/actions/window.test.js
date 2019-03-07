@@ -66,6 +66,19 @@ describe('window actions', () => {
     });
   });
 
+  describe('setCompanionAreaOpen', () => {
+    it('returns the appropriate action type', () => {
+      const id = 'abc123';
+      const expectedAction = {
+        type: ActionTypes.UPDATE_WINDOW,
+        id,
+        payload: { companionAreaOpen: true },
+      };
+      expect(actions.setCompanionAreaOpen(id, true)).toEqual(expectedAction);
+    });
+  });
+
+
   describe('setWindowThumbnailPosition', () => {
     it('returns the appropriate action type', () => {
       const id = 'abc123';
