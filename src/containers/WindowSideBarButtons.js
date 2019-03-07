@@ -34,7 +34,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
  */
 const mapStateToProps = (state, { windowId }) => ({
   hasAnnotations: getAnnotationResourcesByMotivation(
-    getSelectedCanvasAnnotations(state, getSelectedCanvas(state, windowId).id),
+    getSelectedCanvasAnnotations(state, (getSelectedCanvas(state, windowId) || {}).id),
     ['oa:commenting', 'sc:painting'],
   ).length > 0,
   sideBarPanel: (getCompanionWindowForPosition(state, windowId, 'left') || {}).content,
