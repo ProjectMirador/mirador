@@ -19,7 +19,8 @@ function createWrapper(props) {
         canvasIndex: 1,
         thumbnailNavigationPosition: 'bottom',
       }}
-      config={{ thumbnailNavigation: { height: 150 } }}
+      config={{ thumbnailNavigation: { height: 150, width: 100 } }}
+      position="bottom"
       t={k => k}
       {...props}
     />,
@@ -28,6 +29,7 @@ function createWrapper(props) {
 
 describe('ThumbnailNavigation', () => {
   let wrapper;
+  let rightWrapper;
   let setCanvas;
   let renderedGrid;
   let grid;
@@ -101,5 +103,49 @@ describe('ThumbnailNavigation', () => {
       },
     });
     expect(mockRecompute).toHaveBeenCalled();
+  });
+  describe('calculating instance methods', () => {
+    beforeEach(() => {
+      rightWrapper = createWrapper({ setCanvas, position: 'right' });
+    });
+    it('style', () => {
+      expect(wrapper.instance().style()).toEqual({ height: '150px', width: '100%' });
+      expect(rightWrapper.instance().style()).toEqual({ height: '100%', width: '100px' });
+    });
+    it('rightWidth', () => {
+      expect(wrapper.instance().rightWidth()).toEqual(100);
+      const mockRecompute = jest.fn();
+      wrapper.instance().gridRef = { current: { recomputeGridSize: mockRecompute } };
+      wrapper.setProps({
+        window: {
+          id: 'foobar',
+          canvasIndex: 1,
+          thumbnailNavigationPosition: 'bottom',
+          view: 'book',
+        },
+      });
+      expect(wrapper.instance().rightWidth()).toEqual(200);
+    });
+    it('calculateScaledWidth', () => {
+      expect(wrapper.instance().calculateScaledWidth({ index: 0 })).toEqual(108);
+      expect(rightWrapper.instance().calculateScaledWidth({ index: 0 })).toEqual(100);
+    });
+    it('calculateScaledHeight', () => {
+      expect(wrapper.instance().calculateScaledHeight({ index: 0 })).toEqual(150);
+      expect(rightWrapper.instance().calculateScaledHeight({ index: 0 })).toEqual(150);
+    });
+
+    it('columnCount', () => {
+      expect(wrapper.instance().columnCount()).toEqual(3);
+      expect(rightWrapper.instance().columnCount()).toEqual(1);
+    });
+    it('rowCount', () => {
+      expect(wrapper.instance().rowCount()).toEqual(1);
+      expect(rightWrapper.instance().rowCount()).toEqual(3);
+    });
+    it('areaHeight', () => {
+      expect(wrapper.instance().areaHeight()).toEqual(150);
+      expect(rightWrapper.instance().areaHeight(99)).toEqual(99);
+    });
   });
 });
