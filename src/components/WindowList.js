@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
@@ -41,7 +40,6 @@ export class WindowList extends Component {
         onClose={handleClose}
       >
         <ListSubheader>
-          <Button color="inherit" aria-label={t('closeWindowMenu')} onClick={handleClose} align="right" style={{ float: 'right' }}>&times;</Button>
           {t('openWindows')}
         </ListSubheader>
         {
