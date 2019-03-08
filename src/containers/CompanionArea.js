@@ -22,6 +22,9 @@ const styles = theme => ({
   root: {
     position: 'relative',
   },
+  horizontal: {
+    width: '100%',
+  },
   toggle: {
     position: 'absolute',
     left: '100%',

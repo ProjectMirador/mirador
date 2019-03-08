@@ -59,6 +59,7 @@ const styles = theme => ({
     display: 'flex',
     flex: '0',
     minHeight: 0,
+    flexBasis: 'auto',
   },
   thumbnailArea: {
     backgroundColor: theme.palette.primary.dark,

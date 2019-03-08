@@ -28,7 +28,7 @@ export class CompanionArea extends Component {
             </IconButton>
           )
         }
-        <div className={ns('companion-windows')} style={{ display: companionAreaOpen && (position !== 'left' || sideBarOpen) ? 'flex' : 'none' }}>
+        <div className={[ns('companion-windows'), position === 'bottom' ? classes.horizontal : null].join(' ')} style={{ display: companionAreaOpen && (position !== 'left' || sideBarOpen) ? 'flex' : 'none' }}>
           {
             companionWindows.map(cw => (
               <CompanionWindowFactory id={cw.id} key={cw.id} windowId={windowId} />
