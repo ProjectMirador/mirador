@@ -21,7 +21,7 @@ export function addCompanionWindow(payload, defaults = defaultProps) {
 /** */
 export function updateCompanionWindow(windowId, id, payload) {
   return (dispatch, getState) => {
-    if (payload.position) {
+    if (payload.position === 'left') {
       const { windows, companionWindows } = getState();
       const { companionWindowIds } = windows[windowId];
 
@@ -66,11 +66,11 @@ export function popOutCompanionWindow(windowId, panelType, position) {
     const { windows, companionWindows } = getState();
     const { companionWindowIds } = windows[windowId];
 
-    companionWindowIds
-      .filter(id => companionWindows[id].position === position)
-      .map(id => dispatch(removeCompanionWindow(id)));
-
     if (position === 'left') {
+      companionWindowIds
+        .filter(id => companionWindows[id].position === position)
+        .map(id => dispatch(removeCompanionWindow(id)));
+
       dispatch(setWindowSideBarPanel(windowId, panelType));
 
       dispatch(setCompanionAreaOpen(windowId, true));
@@ -79,8 +79,14 @@ export function popOutCompanionWindow(windowId, panelType, position) {
     const action = dispatch(addCompanionWindow({ content: panelType, position }));
 
     const companionWindowId = action.id;
-    const existingCompanionWindowIds = companionWindowIds
-      .filter(id => (companionWindows[id].position !== position));
+    let existingCompanionWindowIds;
+
+    if (position === 'left') {
+      existingCompanionWindowIds = companionWindowIds
+        .filter(id => (companionWindows[id].position !== position));
+    } else {
+      existingCompanionWindowIds = companionWindowIds;
+    }
 
     dispatch(updateWindow(windowId, {
       companionWindowIds: existingCompanionWindowIds.concat([companionWindowId]),
