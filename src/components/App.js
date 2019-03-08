@@ -61,7 +61,6 @@ export class App extends Component {
         <I18nextProvider i18n={this.i18n}>
           <MuiThemeProvider theme={createMuiTheme(theme)}>
             <WorkspaceArea />
-            <ErrorDialog />
           </MuiThemeProvider>
         </I18nextProvider>
       </Fullscreen>
