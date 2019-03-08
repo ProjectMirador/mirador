@@ -54,6 +54,12 @@ describe('NestedMenu', () => {
     expect(wrapper.state().nestedMenuIsOpen).toBe(false);
   });
 
+  it('spreads options to the MenuItem', () => {
+    wrapper = createWrapper({ divider: true });
+
+    expect(wrapper.find('WithStyles(MenuItem)').props().divider).toBe(true);
+  });
+
   it('renders the appropriate expand/collapse icon based on the menu open state', () => {
     wrapper = createWrapper();
 
