@@ -23,7 +23,7 @@ export default {
     typography: {
       fontSize: 16,
       body1: {
-        fontSize: "0.878rem",
+        fontSize: "1rem",
         letterSpacing: "0em",
         lineHeight: "1.6em",
       },
@@ -44,7 +44,7 @@ export default {
         lineHeight: "1.6rem",
       },
       body1Next: {
-        fontSize: "0.878rem",
+        fontSize: "1rem",
         letterSpacing: "0em",
         lineHeight: "1.6em",
       },
