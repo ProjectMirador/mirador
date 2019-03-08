@@ -24,10 +24,12 @@ const mapStateToProps = (state, props) => (
  */
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
-  drawer: {
+  paper: {
     overflowX: 'hidden',
-    left: 0,
     width: 55,
+  },
+  drawer: {
+    left: 0,
     flexShrink: 0,
     height: '100%',
     zIndex: theme.zIndex.appBar - 1,

@@ -22,10 +22,10 @@ export class WindowSideBar extends Component {
         <Drawer
           variant="persistent"
           className={classNames(classes.drawer)}
-          classes={{ paper: classNames(classes.drawer) }}
+          classes={{ paper: classNames(classes.paper) }}
           anchor="left"
-          PaperProps={{ style: { position: 'relative' } }}
-          component="aside"
+          PaperProps={{ style: { position: 'relative' }, component: 'aside' }}
+          SlideProps={{ mountOnEnter: true, unmountOnExit: true }}
           open={sideBarOpen}
         >
           <WindowSideBarButtons windowId={windowId} />
