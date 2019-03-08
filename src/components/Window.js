@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
+import Paper from '@material-ui/core/Paper';
 import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
 import PrimaryWindow from '../containers/PrimaryWindow';
@@ -49,7 +50,9 @@ export class Window extends Component {
     }
 
     return (
-      <section
+      <Paper
+        component="section"
+        elevation={1}
         id={window.id}
         className={
           cn(classes.window, ns('window'),
@@ -92,7 +95,7 @@ export class Window extends Component {
             />
           </div>
         )}
-      </section>
+      </Paper>
     );
   }
 }
