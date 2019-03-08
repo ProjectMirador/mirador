@@ -245,4 +245,52 @@ describe('windows reducer', () => {
       },
     });
   });
+
+  it('should handle ADD_COMPANION_WINDOW', () => {
+    // on the right, just tacks the new id on
+    expect(windowsReducer({
+      abc123: {
+        id: 'abc123',
+        companionWindowIds: ['123'],
+      },
+    }, {
+      type: ActionTypes.ADD_COMPANION_WINDOW,
+      id: 'xyz',
+      windowId: 'abc123',
+      payload: {
+        position: 'right',
+      },
+    })).toEqual({
+      abc123: {
+        id: 'abc123',
+        companionWindowIds: ['123', 'xyz'],
+      },
+    });
+
+    // on the left, replaces all ids of windows in that position and sets some additional properties
+    expect(windowsReducer({
+      abc123: {
+        id: 'abc123',
+        companionWindowIds: ['left123'],
+      },
+    }, {
+      type: ActionTypes.ADD_COMPANION_WINDOW,
+      id: 'xyz',
+      windowId: 'abc123',
+      companionWindows: {
+        left123: { position: 'left' },
+      },
+      payload: {
+        content: 'content',
+        position: 'left',
+      },
+    })).toEqual({
+      abc123: {
+        id: 'abc123',
+        companionAreaOpen: true,
+        sideBarPanel: 'content',
+        companionWindowIds: ['xyz'],
+      },
+    });
+  });
 });
