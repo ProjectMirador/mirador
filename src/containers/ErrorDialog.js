@@ -20,7 +20,6 @@ const mapStateToProps = state => ({
  * @private
  */
 const mapDispatchToProps = {
-  addError: actions.addError,
   removeError: actions.removeError,
 };
 

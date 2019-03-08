@@ -1,5 +1,6 @@
 import { configReducer } from '../../../src/state/reducers/config';
 import ActionTypes from '../../../src/state/actions/action-types';
+import configFixture from '../../fixtures/config/export.example.json';
 
 describe('config reducer', () => {
   describe('SET_CONFIG', () => {
@@ -40,6 +41,14 @@ describe('config reducer', () => {
         hello: 'world',
         stuff: { foo: 'bat' },
       });
+    });
+  });
+  describe('IMPORT_CONFIG', () => {
+    it('should handle IMPORT_CONFIG', () => {
+      expect(configReducer([], {
+        type: ActionTypes.IMPORT_CONFIG,
+        config: configFixture,
+      })).toEqual(configFixture);
     });
   });
 });

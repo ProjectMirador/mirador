@@ -27,7 +27,6 @@ export class ErrorDialog extends Component {
     /* extract 'items' value and get first key-value-pair (an error) */
     const error = first(values(omit(errors, 'items')));
     const hasError = !isUndefined(error);
-    
     return (
       <div>
         { hasError && (
