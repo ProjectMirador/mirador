@@ -1,0 +1,148 @@
+{
+  "config": {
+    "canvasNavigation": {
+      "height": 50,
+      "width": 50
+    },
+    "theme": {
+      "palette": {
+        "type": "light",
+        "primary": {
+          "main": "#f5f5f5",
+          "light": "#ffffff",
+          "dark": "#eeeeee",
+          "contrastText": "rgba(0, 0, 0, 0.87)"
+        },
+        "secondary": {
+          "main": "#1967d2",
+          "light": "#64b5f6",
+          "dark": "#0d47a1",
+          "contrastText": "#fff"
+        },
+        "error": {
+          "main": "#b00020",
+          "light": "rgb(191, 51, 76)",
+          "dark": "rgb(123, 0, 22)",
+          "contrastText": "#fff"
+        }
+      },
+      "typography": {
+        "useNextVariants": true
+      },
+      "overrides": {
+        "MuiInput": {
+          "input": {
+            "backgroundColor": "LightGray"
+          }
+        }
+      }
+    },
+    "language": "en",
+    "availableLanguages": {
+      "de": "Deutsch",
+      "en": "English"
+    },
+    "translations": {},
+    "window": {
+      "defaultView": "single"
+    },
+    "windows": [
+      {
+        "loadedManifest": "https://iiif.harvardartmuseums.org/manifests/object/299843",
+        "canvasIndex": 2
+      },
+      {
+        "loadedManifest": "https://iiif.bodleian.ox.ac.uk/iiif/manifest/e32a277e-91e2-4a6d-8ba6-cc4bad230410.json",
+        "thumbnailNavigationPosition": "off"
+      }
+    ],
+    "thumbnailNavigation": {
+      "defaultPosition": "bottom",
+      "height": 150,
+      "width": 100
+    },
+    "workspace": {
+      "type": "mosaic"
+    },
+    "workspaceControlPanel": {
+      "enabled": true
+    },
+    "id": "mirador",
+    "manifests": {
+      "https://media.nga.gov/public/manifests/nga_highlights.json": {
+        "provider": "National Gallery of Art"
+      },
+      "https://data.ucd.ie/api/img/manifests/ucdlib:33064": {
+        "provider": "Irish Architectural Archive"
+      },
+      "https://wellcomelibrary.org/iiif/b18035723/manifest": {
+        "provider": "Wellcome Library"
+      },
+      "https://demos.biblissima.fr/iiif/metadata/florus-dispersus/manifest.json": {
+        "provider": "Biblissima"
+      },
+      "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/manifest.json": {
+        "provider": "e-codices - Virtual Manuscript Library of Switzerland"
+      },
+      "https://wellcomelibrary.org/iiif/collection/b18031511": {
+        "provider": "Wellcome Library"
+      },
+      "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10022508f/manifest.json": {
+        "provider": "Bibliothèque nationale de France"
+      },
+      "https://manifests.britishart.yale.edu/Osbornfa1": {
+        "provider": "Beinecke Rare Book and Manuscript Library, Yale University"
+      },
+      "https://iiif.biblissima.fr/chateauroux/B360446201_MS0005/manifest.json": {
+        "provider": "Biblissima"
+      },
+      "https://iiif.durham.ac.uk/manifests/trifle/32150/t1/m4/q7/t1m4q77fr328/manifest": {
+        "provider": "Durham University Library"
+      }
+    }
+  },
+  "viewers": {
+    "window-32450374-dd2c-455e-83f6-ce0e70d21c5c": {
+      "x": 2696,
+      "y": 4079,
+      "zoom": 0.0001107429053115508
+    },
+    "window-65138dce-d192-484d-8445-b579f5ee14d6": {
+      "x": 1129.5,
+      "y": 1275,
+      "zoom": 0.0002890035037322365
+    }
+  },
+  "windows": {
+    "window-65138dce-d192-484d-8445-b579f5ee14d6": {
+      "id": "window-65138dce-d192-484d-8445-b579f5ee14d6",
+      "canvasIndex": 2,
+      "collectionIndex": 0,
+      "manifestId": "https://iiif.harvardartmuseums.org/manifests/object/299843",
+      "rangeId": null,
+      "thumbnailNavigationPosition": "bottom",
+      "width": 400,
+      "height": 400,
+      "x": 2700,
+      "y": 2700,
+      "companionWindowIds": [],
+      "rotation": null,
+      "view": "single"
+    },
+    "window-32450374-dd2c-455e-83f6-ce0e70d21c5c": {
+      "id": "window-32450374-dd2c-455e-83f6-ce0e70d21c5c",
+      "canvasIndex": 0,
+      "collectionIndex": 0,
+      "manifestId": "https://iiif.bodleian.ox.ac.uk/iiif/manifest/e32a277e-91e2-4a6d-8ba6-cc4bad230410.json",
+      "rangeId": null,
+      "thumbnailNavigationPosition": "off",
+      "width": 400,
+      "height": 400,
+      "x": 2700,
+      "y": 2700,
+      "companionWindowIds": [],
+      "rotation": null,
+      "view": "single"
+    }
+  }
+}
