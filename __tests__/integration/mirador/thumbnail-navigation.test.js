@@ -1,7 +1,7 @@
 /* global miradorInstance */
 
 describe('Thumbnail navigation', () => {
-  beforeAll(async () => {
+  beforeEach(async () => {
     await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/');
   });
 
@@ -18,5 +18,18 @@ describe('Thumbnail navigation', () => {
       miradorInstance.store.getState().windows
     ));
     expect(Object.values(windows)[0].canvasIndex).toBe(1);
+  });
+  it('displays on right side', async () => {
+    await expect(page).toMatchElement('.mirador-thumb-navigation');
+    await expect(page).toMatchElement('.mirador-thumbnail-nav-bottom');
+    await page.evaluate(() => {
+      const { windows } = miradorInstance.store.getState();
+      miradorInstance.store.dispatch(
+        miradorInstance.actions.updateWindow(
+          Object.keys(windows)[0], { thumbnailNavigationPosition: 'right' },
+        ),
+      );
+    });
+    await expect(page).toMatchElement('.mirador-thumbnail-nav-right');
   });
 });

@@ -39,7 +39,7 @@ export class Window extends Component {
    */
   render() {
     const {
-      label, manifest, window, classes, t,
+      label, manifest, window, classes, t, thumbnailNavigationPosition,
     } = this.props;
 
     if (!window) {
@@ -64,14 +64,26 @@ export class Window extends Component {
           </div>
           <div className={classes.companionAreaRight}>
             <CompanionArea windowId={window.id} position="right" />
+            {thumbnailNavigationPosition === 'right' && (
+              <div className={cn(classes.thumbnailArea, classes.thumbnailAreaRight, ns('thumbnail-nav-right'))}>
+                <ThumbnailNavigation
+                  window={window}
+                  manifest={manifest}
+                  position="right"
+                />
+              </div>
+            )}
           </div>
         </div>
-        <div className={cn(classes.thumbnailArea, ns('companion-bottom'))}>
-          <ThumbnailNavigation
-            window={window}
-            manifest={manifest}
-          />
-        </div>
+        {thumbnailNavigationPosition === 'bottom' && (
+          <div className={cn(classes.thumbnailArea, classes.thumbnailAreaBottom, ns('thumbnail-nav-bottom'))}>
+            <ThumbnailNavigation
+              window={window}
+              manifest={manifest}
+              position="bottom"
+            />
+          </div>
+        )}
       </section>
     );
   }
@@ -88,6 +100,7 @@ Window.propTypes = {
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   window: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  thumbnailNavigationPosition: PropTypes.string,
   workspaceType: PropTypes.string,
   t: PropTypes.func.isRequired,
   label: PropTypes.string,
@@ -99,4 +112,5 @@ Window.defaultProps = {
   workspaceType: null,
   classes: {},
   label: null,
+  thumbnailNavigationPosition: 'off',
 };

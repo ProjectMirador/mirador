@@ -12,6 +12,7 @@ function createWrapper(props, context) {
       window={window}
       classes={{}}
       t={k => k}
+      thumbnailNavigationPosition="bottom"
       {...props}
     />,
     { context },
@@ -43,13 +44,15 @@ describe('Window', () => {
     wrapper = createWrapper({ window });
     expect(wrapper.find(PrimaryWindow)).toHaveLength(1);
   });
-  it('should render <ThumbnailNavigation>', () => {
+  it('should render bottom <ThumbnailNavigation>', () => {
     wrapper = createWrapper({ window });
+    expect(wrapper.find('.mirador-thumbnail-nav-bottom').length).toEqual(1);
     expect(wrapper.find(ThumbnailNavigation)).toHaveLength(1);
   });
-  it('should render bottom companions window areas', () => {
-    wrapper = createWrapper({ window });
-    expect(wrapper.find('.mirador-companion-bottom')).toHaveLength(1);
+  it('should render right <ThumbnailNavigation>', () => {
+    wrapper = createWrapper({ window, thumbnailNavigationPosition: 'right' });
+    expect(wrapper.find('.mirador-thumbnail-nav-right').length).toEqual(1);
+    expect(wrapper.find(ThumbnailNavigation)).toHaveLength(1);
   });
   describe('when workspaceType is mosaic', () => {
     it('calls the context mosaicWindowActions connectDragSource method to make WindowTopBar draggable', () => {

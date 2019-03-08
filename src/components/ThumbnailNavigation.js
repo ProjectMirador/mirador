@@ -20,6 +20,7 @@ export class ThumbnailNavigation extends Component {
     super(props);
 
     this.cellRenderer = this.cellRenderer.bind(this);
+    this.calculateScaledHeight = this.calculateScaledHeight.bind(this);
     this.calculateScaledWidth = this.calculateScaledWidth.bind(this);
     this.gridRef = React.createRef();
   }
@@ -52,12 +53,14 @@ export class ThumbnailNavigation extends Component {
    */
   cellRenderer(options) {
     const {
-      columnIndex, key, style,
+      columnIndex, key, style, rowIndex,
     } = options;
     const {
-      classes, window, setCanvas, config, canvasGroupings, t,
+      classes, window, setCanvas, config, canvasGroupings, t, position,
     } = this.props;
-    const currentGroupings = canvasGroupings.groupings()[columnIndex];
+    const currentIndex = (position === 'right') ? rowIndex : columnIndex;
+
+    const currentGroupings = canvasGroupings.groupings()[currentIndex];
     return (
       <nav
         key={key}
@@ -69,7 +72,7 @@ export class ThumbnailNavigation extends Component {
           style={{
             width: style.width - 8,
           }}
-          className={ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${columnIndex}`, this.currentCanvasClass(currentGroupings.map(canvas => canvas.index))])}
+          className={ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${currentIndex}`, this.currentCanvasClass(currentGroupings.map(canvas => canvas.index))])}
         >
           {currentGroupings.map((canvas, i) => {
             const { height } = config.thumbnailNavigation;
@@ -110,14 +113,39 @@ export class ThumbnailNavigation extends Component {
   /**
    * calculateScaledWidth - calculates the scaled width of a column for a Grid
    * in a simple case, a column == canvas. In a book view, a group (or two)
-   * canvases
+   * canvases. When in the "right" position, this value is static.
    */
   calculateScaledWidth(options) {
-    const { config, canvasGroupings } = this.props;
-    return canvasGroupings
-      .getCanvases(options.index)
-      .map(canvas => new ManifestoCanvas(canvas))
-      .reduce((acc, currentCanvas) => { return acc + (currentCanvas.hasValidDimensions ? Math.floor(config.thumbnailNavigation.height * currentCanvas.aspectRatio) : config.thumbnailNavigation.width); }, 8); // eslint-disable-line arrow-body-style, max-len
+    const { config, canvasGroupings, position } = this.props;
+    switch (position) {
+      case 'right':
+        return this.rightWidth();
+      // Default case bottom
+      default:
+        return canvasGroupings.getCanvases(options.index)
+          .map(canvas => new ManifestoCanvas(canvas))
+          .reduce((acc, currentCanvas) => { return acc + (currentCanvas.hasValidDimensions ? Math.floor(config.thumbnailNavigation.height * currentCanvas.aspectRatio) : config.thumbnailNavigation.width); }, 8); // eslint-disable-line arrow-body-style, max-len
+    }
+  }
+
+  /**
+   * calculateScaledHeight - calculates the scaled height of a row for a Grid
+   * in a simple case, a row == canvas. In a book view, a group (or two)
+   * canvases. When in the "bottom" position, this value is static.
+   */
+  calculateScaledHeight(options) {
+    const { config, canvasGroupings, position } = this.props;
+    switch (position) {
+      case 'right':
+        return Math.max(
+          ...canvasGroupings.getCanvases(options.index)
+            .map(canvas => new ManifestoCanvas(canvas))
+            .map(canvas => (canvas.hasValidDimensions ? Math.floor(config.thumbnailNavigation.width / canvas.aspectRatio) : config.thumbnailNavigation.height)), // eslint-disable-line arrow-body-style, max-len
+        );
+      // Default case bottom
+      default:
+        return config.thumbnailNavigation.height;
+    }
   }
 
   /**
@@ -134,18 +162,83 @@ export class ThumbnailNavigation extends Component {
     }
   }
 
+  /** */
+  style() {
+    const { position, config } = this.props;
+    switch (position) {
+      case 'right':
+        return {
+          height: '100%',
+          width: `${this.rightWidth()}px`,
+        };
+      // Default case bottom
+      default:
+        return {
+          height: `${config.thumbnailNavigation.height}px`,
+          width: '100%',
+        };
+    }
+  }
+
+  /** */
+  rightWidth() {
+    const { window, config } = this.props;
+    switch (window.view) {
+      case 'book':
+        return config.thumbnailNavigation.width * 2;
+      default:
+        return config.thumbnailNavigation.width;
+    }
+  }
+
+  /** */
+  columnCount() {
+    const { position, canvasGroupings } = this.props;
+    switch (position) {
+      case 'right':
+        return 1;
+      // Default case bottom
+      default:
+        return canvasGroupings.groupings().length;
+    }
+  }
+
+  /** */
+  rowCount() {
+    const { position, canvasGroupings } = this.props;
+    switch (position) {
+      case 'right':
+        return canvasGroupings.groupings().length;
+      // Default case bottom
+      default:
+        return 1;
+    }
+  }
+
+  /** */
+  areaHeight(height) {
+    const { config, position } = this.props;
+    switch (position) {
+      case 'right':
+        return height;
+      // Default case bottom
+      default:
+        return config.thumbnailNavigation.height;
+    }
+  }
+
   /**
    * Renders things
    */
   render() {
-    const { config, window, canvasGroupings } = this.props;
+    const { window } = this.props;
     if (window.thumbnailNavigationPosition === 'off') {
       return <></>;
     }
     return (
       <div
         className={ns('thumb-navigation')}
-        style={{ height: `${config.thumbnailNavigation.height}px` }}
+        style={this.style()}
       >
         <AutoSizer
           defaultHeight={100}
@@ -154,11 +247,11 @@ export class ThumbnailNavigation extends Component {
           {({ height, width }) => (
             <Grid
               cellRenderer={this.cellRenderer}
-              columnCount={canvasGroupings.groupings().length}
+              columnCount={this.columnCount()}
               columnWidth={this.calculateScaledWidth}
-              height={config.thumbnailNavigation.height}
-              rowCount={1}
-              rowHeight={config.thumbnailNavigation.height}
+              height={this.areaHeight(height)}
+              rowCount={this.rowCount()}
+              rowHeight={this.calculateScaledHeight}
               scrollToAlignment="center"
               scrollToColumn={this.scrollToColumn()}
               width={width}
@@ -175,6 +268,7 @@ ThumbnailNavigation.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   canvasGroupings: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  position: PropTypes.string.isRequired,
   setCanvas: PropTypes.func.isRequired,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func.isRequired,
