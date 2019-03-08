@@ -5,6 +5,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
 import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import {
+  first,
+  isUndefined,
+  omit,
+  values,
+} from 'lodash';
 
 /**
  */
@@ -15,13 +21,17 @@ export class ErrorDialog extends Component {
    */
   render() {
     const {
-      error, removeError, open, t,
+      errors, removeError, t,
     } = this.props;
 
+    /* extract 'items' value and get first key-value-pair (an error) */
+    const error = first(values(omit(errors, 'items')));
+    const hasError = !isUndefined(error);
+    
     return (
       <div>
-        { error && (
-          <Dialog id="workspace-settings" open={open} onClose={() => removeError(error.id)}>
+        { hasError && (
+          <Dialog id="workspace-settings" onClose={() => removeError(error.id)} open={hasError}>
             <DialogTitle id="form-dialog-title">{t('errorDialogTitle')}</DialogTitle>
             <DialogContent>
               <Typography variant="body2" noWrap color="inherit">
@@ -41,14 +51,13 @@ export class ErrorDialog extends Component {
 }
 
 ErrorDialog.propTypes = {
-  error: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  open: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
-  removeError: PropTypes.func.isRequired,
+  errors: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  removeError: PropTypes.func,
   t: PropTypes.func,
 };
 
 ErrorDialog.defaultProps = {
-  error: null,
-  open: false,
+  errors: null,
+  removeError: () => {},
   t: key => key,
 };
