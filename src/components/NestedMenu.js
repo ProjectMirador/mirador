@@ -38,14 +38,16 @@ export class NestedMenu extends Component {
   }
 
   /**
-   * Returns the rendered component
+   * Returns the rendered component.  Spreads unused props to MenuItem
   */
   render() {
     const { nestedMenuIsOpen } = this.state;
-    const { children, icon, label } = this.props;
+    const {
+      children, icon, label, ...otherProps
+    } = this.props;
     return (
       <>
-        <MenuItem onClick={this.handleMenuClick}>
+        <MenuItem onClick={this.handleMenuClick} {...otherProps}>
           {icon
             && (<ListItemIcon>{icon}</ListItemIcon>)
           }
