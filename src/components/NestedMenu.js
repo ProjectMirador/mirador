@@ -46,7 +46,9 @@ export class NestedMenu extends Component {
     return (
       <>
         <MenuItem onClick={this.handleMenuClick}>
-          <ListItemIcon>{icon}</ListItemIcon>
+          {icon
+            && (<ListItemIcon>{icon}</ListItemIcon>)
+          }
           {/* ListItemText adds left padding and we want this to line-up with menu items */}
           <ListItemText style={{ paddingLeft: 0 }}>
             <Typography varient="inherit">{label}</Typography>
@@ -67,6 +69,10 @@ export class NestedMenu extends Component {
 
 NestedMenu.propTypes = {
   children: PropTypes.element.isRequired,
-  icon: PropTypes.element.isRequired,
+  icon: PropTypes.element,
   label: PropTypes.string.isRequired,
+};
+
+NestedMenu.defaultProps = {
+  icon: null,
 };
