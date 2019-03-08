@@ -144,6 +144,12 @@ describe('companionWindow actions', () => {
         windowId: 'abc123',
         panelType: 'info',
       });
+
+      expect(mockDispatch).toHaveBeenNthCalledWith(2, {
+        type: ActionTypes.UPDATE_WINDOW,
+        id: 'abc123',
+        payload: { companionAreaOpen: true },
+      });
     });
   });
 });

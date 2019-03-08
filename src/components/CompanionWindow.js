@@ -41,12 +41,14 @@ export class CompanionWindow extends Component {
             position === 'left'
               ? updateCompanionWindow
                 && (
-                  <IconButton
-                    aria-label={t('openInCompanionWindow')}
-                    onClick={() => { updateCompanionWindow(windowId, id, { position: 'right' }); }}
-                  >
-                    <OpenInNewIcon />
-                  </IconButton>
+                  <>
+                    <IconButton
+                      aria-label={t('openInCompanionWindow')}
+                      onClick={() => { updateCompanionWindow(windowId, id, { position: 'right' }); }}
+                    >
+                      <OpenInNewIcon />
+                    </IconButton>
+                  </>
                 )
               : (
                 <IconButton

@@ -18,7 +18,7 @@ const mapStateToProps = (state, { id, windowId }) => {
     ...companionWindow,
     isDisplayed: (companionWindow
                   && companionWindow.content
-                  && companionWindow.content.length > 0) && (companionWindow.position !== 'left' || state.windows[windowId].sideBarOpen),
+                  && companionWindow.content.length > 0),
   };
 };
 
