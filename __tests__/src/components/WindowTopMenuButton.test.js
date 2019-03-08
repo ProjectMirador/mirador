@@ -10,7 +10,7 @@ function createWrapper(props) {
   return shallow(
     <WindowTopMenuButton
       windowId="xyz"
-      classes={{}}
+      classes={{ ctrlBtnSelected: 'ctrlBtnSelected' }}
       t={str => str}
       {...props}
     />,
@@ -50,5 +50,14 @@ describe('WindowTopMenuButton', () => {
 
     wrapper.instance().handleMenuClose();
     expect(wrapper.find(WindowTopMenu).first().props().anchorEl).toBe(null);
+  });
+
+  it('the button has a class indicating that it is "selected" once it is clicked', () => {
+    const wrapper = createWrapper();
+    expect(wrapper.find('.ctrlBtnSelected').length).toBe(0);
+    wrapper.find('WithStyles(IconButton)').simulate('click', { currentTarget: 'anElement' });
+    expect(wrapper.find('.ctrlBtnSelected').length).toBe(1);
+    wrapper.find('WithStyles(IconButton)').simulate('click', {});
+    expect(wrapper.find('.ctrlBtnSelected').length).toBe(0);
   });
 });

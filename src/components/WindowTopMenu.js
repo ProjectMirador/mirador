@@ -26,6 +26,15 @@ export class WindowTopMenu extends Component {
           id={`window-menu_${windowId}`}
           container={document.querySelector(`#${containerId} .${ns('viewer')}`)}
           anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          getContentAnchorEl={null}
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
