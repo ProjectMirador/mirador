@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Menu from '@material-ui/core/Menu';
-import Divider from '@material-ui/core/Divider';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
@@ -130,11 +129,10 @@ export class WorkspaceMenu extends Component {
             <Typography varient="inherit">{t('selectWorkspaceMenu')}</Typography>
           </MenuItem>
 
-          <NestedMenu label={t('language')}>
+          <NestedMenu label={t('language')} divider>
             <LanguageSettings afterSelect={handleClose} />
           </NestedMenu>
 
-          <Divider />
           <MenuItem
             aria-haspopup="true"
             onClick={(e) => { this.handleMenuItemClick('settings', e); handleClose(e); }}
