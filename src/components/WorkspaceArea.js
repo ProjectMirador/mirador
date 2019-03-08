@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import WorkspaceControlPanel from '../containers/WorkspaceControlPanel';
 import Workspace from '../containers/Workspace';
 import WorkspaceAdd from '../containers/WorkspaceAdd';
+import ErrorDialog from '../containers/ErrorDialog';
 import ns from '../config/css-ns';
 
 /**
@@ -31,6 +32,7 @@ export class WorkspaceArea extends Component {
           isWorkspaceControlPanelVisible
             && <WorkspaceControlPanel />
         }
+        <ErrorDialog />
       </main>
     );
   }
