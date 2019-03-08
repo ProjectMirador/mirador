@@ -56,17 +56,16 @@ export class ThumbnailNavigation extends Component {
       columnIndex, key, style, rowIndex,
     } = options;
     const {
-      classes, window, setCanvas, config, canvasGroupings, t, position,
+      classes, window, setCanvas, config, canvasGroupings, position,
     } = this.props;
     const currentIndex = (position === 'right') ? rowIndex : columnIndex;
 
     const currentGroupings = canvasGroupings.groupings()[currentIndex];
     return (
-      <nav
+      <div
         key={key}
         style={style}
         className={ns('thumbnail-nav-container')}
-        aria-label={t('thumbnailNavigation')}
       >
         <div
           style={{
@@ -106,7 +105,7 @@ export class ThumbnailNavigation extends Component {
             );
           })}
         </div>
-      </nav>
+      </div>
     );
   }
 
@@ -231,13 +230,14 @@ export class ThumbnailNavigation extends Component {
    * Renders things
    */
   render() {
-    const { window } = this.props;
+    const { t, window } = this.props;
     if (window.thumbnailNavigationPosition === 'off') {
       return <></>;
     }
     return (
-      <div
+      <nav
         className={ns('thumb-navigation')}
+        aria-label={t('thumbnailNavigation')}
         style={this.style()}
       >
         <AutoSizer
@@ -259,7 +259,7 @@ export class ThumbnailNavigation extends Component {
             />
           )}
         </AutoSizer>
-      </div>
+      </nav>
     );
   }
 }
