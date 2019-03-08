@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import Menu from '@material-ui/core/Menu';
 import Divider from '@material-ui/core/Divider';
-import LanguageIcon from '@material-ui/icons/Language';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import LoupeIcon from '@material-ui/icons/Loupe';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import SaveAltIcon from '@material-ui/icons/SaveAltSharp';
 import SettingsIcon from '@material-ui/icons/SettingsSharp';
-import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
-import ViewQuiltIcon from '@material-ui/icons/ViewQuilt';
 import PropTypes from 'prop-types';
 import LanguageSettings from '../containers/LanguageSettings';
 import { NestedMenu } from './NestedMenu';
@@ -115,20 +111,13 @@ export class WorkspaceMenu extends Component {
             onClick={(e) => { this.handleMenuItemClick('windowList', e); handleClose(e); }}
             aria-owns={windowList.anchorEl ? 'window-list-menu' : undefined}
           >
-            <ListItemIcon>
-              <ViewHeadlineIcon />
-            </ListItemIcon>
             <Typography varient="inherit">{t('listAllOpenWindows')}</Typography>
           </MenuItem>
-          <Divider />
           <MenuItem
             aria-haspopup="true"
             onClick={(e) => { this.handleZoomToggleClick(e); handleClose(e); }}
             aria-owns={toggleZoom.anchorEl ? 'toggle-zoom-menu' : undefined}
           >
-            <ListItemIcon>
-              <LoupeIcon />
-            </ListItemIcon>
             <Typography varient="inherit">
               { showZoomControls ? t('hideZoomControls') : t('showZoomControls') }
             </Typography>
@@ -138,13 +127,10 @@ export class WorkspaceMenu extends Component {
             onClick={(e) => { this.handleMenuItemClick('workspaceSelection', e); handleClose(e); }}
             aria-owns={workspaceSelection.anchorEl ? 'workspace-selection' : undefined}
           >
-            <ListItemIcon>
-              <ViewQuiltIcon />
-            </ListItemIcon>
             <Typography varient="inherit">{t('selectWorkspaceMenu')}</Typography>
           </MenuItem>
 
-          <NestedMenu icon={<LanguageIcon />} label={t('language')}>
+          <NestedMenu label={t('language')}>
             <LanguageSettings afterSelect={handleClose} />
           </NestedMenu>
 
