@@ -4,7 +4,6 @@ import { withTranslation } from 'react-i18next';
 import miradorWithPlugins from '../lib/miradorWithPlugins';
 import { ErrorDialog } from '../components/ErrorDialog';
 import * as actions from '../state/actions';
-import { getLatestError } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -12,7 +11,7 @@ import { getLatestError } from '../state/selectors';
  * @private
  */
 const mapStateToProps = state => ({
-  error: getLatestError(state),
+  errors: state.errors,
 });
 
 /**
@@ -29,7 +28,6 @@ const enhance = compose(
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   miradorWithPlugins,
-  withTranslation(),
   // further HOC go here
 );
 
