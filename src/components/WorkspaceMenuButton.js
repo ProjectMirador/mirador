@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/MenuSharp';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import WorkspaceMenu from '../containers/WorkspaceMenu';
 
 /**
@@ -51,7 +52,7 @@ export class WorkspaceMenuButton extends Component {
           color="default"
           id="menuBtn"
           aria-label={t('workspaceMenu')}
-          className={classes.ctrlBtn}
+          className={classNames(classes.ctrlBtn, (anchorEl ? classes.ctrlBtnSelected : null))}
           aria-haspopup="true"
           onClick={this.handleMenuClick}
           aria-owns={anchorEl ? 'workspace-menu' : undefined}
