@@ -19,6 +19,9 @@ function createWrapper(props) {
       windowId="xyz"
       classes={{}}
       t={str => str}
+      maximizeWindow={() => {}}
+      maximized={false}
+      minimizeWindow={() => {}}
       closeWindow={() => {}}
       toggleWindowSideBar={() => {}}
       {...props}
@@ -31,7 +34,7 @@ describe('WindowTopBar', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(AppBar).length).toBe(1);
     expect(wrapper.find(Toolbar).length).toBe(1);
-    expect(wrapper.find(IconButton).length).toBe(2);
+    expect(wrapper.find(IconButton).length).toBe(3);
     expect(wrapper.find(MenuIcon).length).toBe(1);
     expect(wrapper.find(Typography).length).toBe(1);
     expect(wrapper.find(WindowTopBarButtons).length).toBe(1);
@@ -63,5 +66,11 @@ describe('WindowTopBar', () => {
     const closeWindow = jest.fn();
     const wrapper = createWrapper({ closeWindow });
     expect(wrapper.find(IconButton).last().props().onClick).toBe(closeWindow);
+  });
+
+  it('passes correct props to <Button/>', () => {
+    const maximizeWindow = jest.fn();
+    const wrapper = createWrapper({ maximizeWindow });
+    expect(wrapper.find(IconButton).at(1).props().onClick).toBe(maximizeWindow);
   });
 });

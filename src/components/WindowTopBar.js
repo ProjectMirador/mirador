@@ -4,6 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/MenuSharp';
 import CloseIcon from '@material-ui/icons/CloseSharp';
+import FullscreenIcon from '@material-ui/icons/FullscreenSharp';
+import FullscreenExitIcon from '@material-ui/icons/FullscreenExitSharp';
 import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 import classNames from 'classnames';
@@ -23,6 +25,7 @@ export class WindowTopBar extends Component {
   render() {
     const {
       closeWindow, windowId, classes, toggleWindowSideBar, t, manifestTitle,
+      maximizeWindow, maximized, minimizeWindow,
     } = this.props;
     return (
       <AppBar position="relative">
@@ -41,6 +44,16 @@ export class WindowTopBar extends Component {
           <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
           <IconButton
             color="inherit"
+            className={ns('window-maximize')}
+            aria-label={t('maximizeWindow')}
+            onClick={(maximized ? minimizeWindow : maximizeWindow)}
+          >
+            {maximized
+              ? <FullscreenExitIcon />
+              : <FullscreenIcon />}
+          </IconButton>
+          <IconButton
+            color="inherit"
             className={ns('window-close')}
             aria-label={t('closeWindow')}
             onClick={closeWindow}
@@ -55,6 +68,9 @@ export class WindowTopBar extends Component {
 
 WindowTopBar.propTypes = {
   manifestTitle: PropTypes.string,
+  maximizeWindow: PropTypes.func,
+  maximized: PropTypes.bool,
+  minimizeWindow: PropTypes.func,
   closeWindow: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -64,5 +80,8 @@ WindowTopBar.propTypes = {
 
 WindowTopBar.defaultProps = {
   manifestTitle: '',
+  maximizeWindow: () => {},
+  maximized: false,
+  minimizeWindow: () => {},
   t: key => key,
 };

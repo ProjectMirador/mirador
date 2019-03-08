@@ -10,6 +10,7 @@ import { WindowTopBar } from '../components/WindowTopBar';
 /** mapStateToProps */
 const mapStateToProps = (state, { windowId }) => ({
   manifestTitle: getManifestTitle(getWindowManifest(state, windowId)),
+  maximized: state.windows[windowId].maximized,
 });
 
 /**
@@ -19,6 +20,8 @@ const mapStateToProps = (state, { windowId }) => ({
  */
 const mapDispatchToProps = (dispatch, { windowId }) => ({
   closeWindow: () => dispatch(actions.closeWindow(windowId)),
+  maximizeWindow: () => dispatch(actions.maximizeWindow(windowId)),
+  minimizeWindow: () => dispatch(actions.minimizeWindow(windowId)),
   toggleWindowSideBar: () => dispatch(actions.toggleWindowSideBar(windowId)),
 });
 

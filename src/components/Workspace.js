@@ -18,6 +18,9 @@ export class Workspace extends React.Component {
    */
   workspaceByType() {
     const { workspaceType, windows } = this.props;
+    if (this.maximizedWindows()) {
+      return this.maximizedWindows();
+    }
     switch (workspaceType) {
       case 'elastic':
         return <WorkspaceElastic />;
@@ -31,6 +34,27 @@ export class Workspace extends React.Component {
           />
         ));
     }
+  }
+
+  /**
+   * Determine whether or not there are maximized windows
+   */
+  maximizedWindows() {
+    const { windows } = this.props;
+    const windowKeys = Object.keys(windows).sort();
+    const maximizedWindows = windowKeys
+      .map(id => windows[id])
+      .filter(window => window.maximized === true);
+    if (maximizedWindows.length) {
+      return Object.values(maximizedWindows).map(window => (
+        <Window
+          key={window.id}
+          window={window}
+          className={classNames(ns('workspace-maximized-window'))}
+        />
+      ));
+    }
+    return false;
   }
 
   /**

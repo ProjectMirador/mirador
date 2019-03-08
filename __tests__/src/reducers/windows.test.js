@@ -29,7 +29,38 @@ describe('windows reducer', () => {
       },
     });
   });
+  it('should handle MAXIMIZE_WINDOW', () => {
+    const action = {
+      type: ActionTypes.MAXIMIZE_WINDOW,
+      windowId: 'abc123',
+    };
+    const before = {
+      abc123: { maximized: false },
+      abc321: { maximized: false },
+    };
+    const after = {
+      abc123: { maximized: true },
+      abc321: { maximized: false },
+    };
 
+    expect(windowsReducer(before, action)).toEqual(after);
+  });
+  it('should handle MINIMIZE_WINDOW', () => {
+    const action = {
+      type: ActionTypes.MINIMIZE_WINDOW,
+      windowId: 'abc123',
+    };
+    const before = {
+      abc123: { maximized: true },
+      abc321: { maximized: false },
+    };
+    const after = {
+      abc123: { maximized: false },
+      abc321: { maximized: false },
+    };
+
+    expect(windowsReducer(before, action)).toEqual(after);
+  });
   it('should handle TOGGLE_WINDOW_SIDE_BAR by toggling the sideBarOpen attribute', () => {
     const action = {
       type: ActionTypes.TOGGLE_WINDOW_SIDE_BAR,

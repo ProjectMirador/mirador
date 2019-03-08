@@ -7,6 +7,7 @@ import Window from '../../../src/containers/Window';
 import { Workspace } from '../../../src/components/Workspace';
 
 const windows = { 1: { id: 1 }, 2: { id: 2 } };
+const maximizedWindows = { 1: { id: 1, maximized: true }, 2: { id: 2, maximized: false } };
 
 /**
  * Utility function to create a Worksapce
@@ -52,12 +53,22 @@ describe('Workspace', () => {
   describe('if workspace type is unknown', () => {
     it('should render <Window/> components as list', () => {
       const wrapper = createWrapper({ workspaceType: 'bubu' });
-
       expect(wrapper.matchesElement(
         <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
           <Typography>miradorViewer</Typography>
           <Window window={{ id: 1 }} />
           <Window window={{ id: 2 }} />
+        </div>,
+      )).toBe(true);
+    });
+  });
+  describe('if any windows are maximized', () => {
+    it('should render only maximized <Window/> components', () => {
+      const wrapper = createWrapper({ windows: maximizedWindows });
+      expect(wrapper.matchesElement(
+        <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
+          <Typography>miradorViewer</Typography>
+          <Window window={{ id: 1, maximized: true }} className="mirador-workspace-maximized-window" />
         </div>,
       )).toBe(true);
     });

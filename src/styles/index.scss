@@ -46,6 +46,13 @@
     padding-top: 74px; // The height of the control panel
   }
 
+  &-workspace-maximized-window {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: 10000;
+  }
+
   &-workspace-add {
     height: 100%;
     overflow: auto;

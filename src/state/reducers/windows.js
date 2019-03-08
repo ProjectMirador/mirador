@@ -9,6 +9,23 @@ export const windowsReducer = (state = {}, action) => {
     case ActionTypes.ADD_WINDOW:
       return { ...state, [action.window.id]: action.window };
 
+    case ActionTypes.MAXIMIZE_WINDOW:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          maximized: true,
+        },
+      };
+    case ActionTypes.MINIMIZE_WINDOW:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          maximized: false,
+        },
+      };
+
     case ActionTypes.UPDATE_WINDOW:
       return updateIn(state, [action.id], orig => merge(orig, action.payload));
 
