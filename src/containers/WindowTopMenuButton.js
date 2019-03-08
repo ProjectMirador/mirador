@@ -13,6 +13,9 @@ const styles = theme => ({
   ctrlBtn: {
     margin: theme.spacing.unit,
   },
+  ctrlBtnSelected: {
+    backgroundColor: theme.palette.action.selected,
+  },
 });
 
 const enhance = compose(
