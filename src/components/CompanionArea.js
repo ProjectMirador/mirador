@@ -9,6 +9,15 @@ import ns from '../config/css-ns';
 /** */
 export class CompanionArea extends Component {
   /** */
+  areaLayoutClass() {
+    const {
+      classes, position,
+    } = this.props;
+
+    return position === 'bottom' ? classes.horizontal : null;
+  }
+
+  /** */
   render() {
     const {
       classes, companionWindows, companionAreaOpen, setCompanionAreaOpen,
@@ -16,7 +25,7 @@ export class CompanionArea extends Component {
     } = this.props;
 
     return (
-      <div className={classes.root} style={{ minHeight: 0, display: 'flex' }}>
+      <div className={[classes.root, this.areaLayoutClass()].join(' ')}>
         {
           setCompanionAreaOpen && position === 'left' && sideBarOpen && companionWindows.length > 0
           && (
@@ -28,7 +37,7 @@ export class CompanionArea extends Component {
             </IconButton>
           )
         }
-        <div className={ns('companion-windows')} style={{ display: companionAreaOpen && (position !== 'left' || sideBarOpen) ? 'flex' : 'none' }}>
+        <div className={[ns('companion-windows'), this.areaLayoutClass()].join(' ')} style={{ display: companionAreaOpen && (position !== 'left' || sideBarOpen) ? 'flex' : 'none' }}>
           {
             companionWindows.map(cw => (
               <CompanionWindowFactory id={cw.id} key={cw.id} windowId={windowId} />

@@ -45,10 +45,19 @@ const styles = theme => ({
   },
   root: {
     display: 'flex',
-    flexDirection: 'column',
     minHeight: 0,
-    width: '200px',
     boxShadow: 'none',
+    flexDirection: 'column',
+  },
+  horizontal: {
+    height: '200px',
+    width: '100%',
+  },
+  vertical: {
+    width: '200px',
+  },
+  positionButton: {
+    order: -100,
   },
   content: {
     ...theme.mixins.gutters(),

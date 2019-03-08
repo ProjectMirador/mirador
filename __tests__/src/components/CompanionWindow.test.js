@@ -8,7 +8,7 @@ function createWrapper(props) {
     <CompanionWindow
       id="abc123"
       windowId="x"
-      classes={{}}
+      classes={{ horizontal: 'horizontal', vertical: 'vertical' }}
       companionWindow={{}}
       position="right"
       {...props}
@@ -27,9 +27,9 @@ describe('CompanionWindow', () => {
         position: 'left',
       });
 
-      const closeButton = companionWindow.find('WithStyles(IconButton)[aria-label="openInCompanionWindow"]');
+      const button = companionWindow.find('WithStyles(IconButton)[aria-label="openInCompanionWindow"]');
 
-      closeButton.simulate('click');
+      button.simulate('click');
       expect(updateCompanionWindow).toHaveBeenCalledTimes(1);
       expect(updateCompanionWindow).toHaveBeenCalledWith('x', 'abc123', { position: 'right' });
     });
@@ -47,5 +47,29 @@ describe('CompanionWindow', () => {
       expect(removeCompanionWindowEvent).toHaveBeenCalledTimes(1);
       expect(removeCompanionWindowEvent).toHaveBeenCalledWith('x', 'abc123');
     });
+  });
+
+  describe('when the companion window is on the right', () => {
+    const updateCompanionWindow = jest.fn();
+    companionWindow = createWrapper({ updateCompanionWindow, position: 'right' });
+
+    expect(companionWindow.find('WithStyles(Paper).vertical').length).toBe(1);
+
+    const button = companionWindow.find('WithStyles(IconButton)[aria-label="openInCompanionWindow"]');
+    button.simulate('click');
+    expect(updateCompanionWindow).toHaveBeenCalledTimes(1);
+    expect(updateCompanionWindow).toHaveBeenCalledWith('x', 'abc123', { position: 'bottom' });
+  });
+
+  describe('when the companion window is on the bottom', () => {
+    const updateCompanionWindow = jest.fn();
+    companionWindow = createWrapper({ updateCompanionWindow, position: 'bottom' });
+
+    expect(companionWindow.find('WithStyles(Paper).horizontal').length).toBe(1);
+
+    const button = companionWindow.find('WithStyles(IconButton)[aria-label="openInCompanionWindow"]');
+    button.simulate('click');
+    expect(updateCompanionWindow).toHaveBeenCalledTimes(1);
+    expect(updateCompanionWindow).toHaveBeenCalledWith('x', 'abc123', { position: 'right' });
   });
 });
