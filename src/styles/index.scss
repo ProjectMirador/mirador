@@ -47,9 +47,9 @@
   }
 
   &-workspace-maximized-window {
+    left: 0;
     position: absolute;
-    left: 0px;
-    top: 0px;
+    top: 0;
     z-index: 10000;
   }
 
