@@ -10,6 +10,7 @@ import CompanionWindowFactory from '../../../src/containers/CompanionWindowFacto
 function createWrapper(props) {
   return shallow(
     <CompanionArea
+      classes={{ horizontal: 'horizontal' }}
       windowId="abc123"
       position="right"
       companionWindows={[
@@ -25,6 +26,11 @@ describe('CompanionArea', () => {
   it('should render all <CompanionWindow>', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(CompanionWindowFactory).length).toBe(2);
+  });
+
+  it('should add the appropriate classes when the companion area fills the full width', () => {
+    const wrapper = createWrapper({ position: 'bottom' });
+    expect(wrapper.find('div.horizontal').length).toBe(2);
   });
 
   it('should pass correct props to the <CompanionWindow> components', () => {

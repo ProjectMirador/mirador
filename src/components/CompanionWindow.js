@@ -6,6 +6,8 @@ import OpenInNewIcon from '@material-ui/icons/OpenInNewSharp';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
+import ThumbnailNavigationBottomIcon from './icons/ThumbnailNavigationBottomIcon';
+import ThumbnailNavigationRightIcon from './icons/ThumbnailNavigationRightIcon';
 import ns from '../config/css-ns';
 
 /**
@@ -24,7 +26,7 @@ export class CompanionWindow extends Component {
 
     return (
       <Paper
-        className={[classes.root, ns(`companion-window-${position}`), paperClassName].join(' ')}
+        className={[classes.root, position === 'bottom' ? classes.horizontal : classes.vertical, ns(`companion-window-${position}`), paperClassName].join(' ')}
         style={{
           display: isDisplayed ? null : 'none',
           order: position === 'left' ? -1 : null,
@@ -51,13 +53,26 @@ export class CompanionWindow extends Component {
                   </>
                 )
               : (
-                <IconButton
-                  aria-label={t('closeCompanionWindow')}
-                  className={classes.closeButton}
-                  onClick={() => { onCloseClick(windowId, id); }}
-                >
-                  <CloseIcon />
-                </IconButton>
+                <>
+                  {
+                    updateCompanionWindow && (
+                      <IconButton
+                        className={classes.positionButton}
+                        aria-label={t('openInCompanionWindow')}
+                        onClick={() => { updateCompanionWindow(windowId, id, { position: position === 'bottom' ? 'right' : 'bottom' }); }}
+                      >
+                        { position === 'bottom' ? <ThumbnailNavigationRightIcon /> : <ThumbnailNavigationBottomIcon /> }
+                      </IconButton>
+                    )
+                  }
+                  <IconButton
+                    aria-label={t('closeCompanionWindow')}
+                    className={classes.closeButton}
+                    onClick={() => { onCloseClick(windowId, id); }}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </>
               )
           }
         </Toolbar>
