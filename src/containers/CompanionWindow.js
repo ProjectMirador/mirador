@@ -40,7 +40,7 @@ const mapDispatchToProps = {
  */
 const styles = theme => ({
   windowSideBarTitle: {
-    ...theme.typography.h5,
+    ...theme.typography.subtitle1,
     flexGrow: 1,
   },
   root: {

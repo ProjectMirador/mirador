@@ -37,7 +37,7 @@ export class WindowTopBar extends Component {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h2" noWrap color="inherit" className={classes.typographyBody}>
+          <Typography variant="h2" noWrap color="inherit" className={classes.title}>
             {manifestTitle}
           </Typography>
           <WindowTopBarButtons windowId={windowId} />

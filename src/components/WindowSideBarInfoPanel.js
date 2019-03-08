@@ -34,7 +34,7 @@ export class WindowSideBarInfoPanel extends Component {
       <CompanionWindow title={t('aboutThisItem')} paperClassName={ns('window-sidebar-info-panel')} windowId={windowId} id={id}>
         {canvasLabel && (
           <>
-            <Typography id={`${id}-currentItem`} component="p" className={classes.sectionHeading}>{t('currentItem')}</Typography>
+            <Typography variant="overline" id={`${id}-currentItem`}>{t('currentItem')}</Typography>
             <Typography aria-labelledby={`${id}-currentItem`} variant="h4" className={classes.windowSideBarHeading}>
               {canvasLabel}
             </Typography>
@@ -55,7 +55,7 @@ export class WindowSideBarInfoPanel extends Component {
 
         {manifestLabel && (
           <>
-            <Typography id={`${id}-resource`} component="p" className={classes.sectionHeading}>{t('resource')}</Typography>
+            <Typography variant="overline" id={`${id}-resource`} component="p" className={classes.sectionHeading}>{t('resource')}</Typography>
             <Typography aria-labelledby={`${id}-resource`} variant="h4" className={classes.windowSideBarHeading}>
               {manifestLabel}
             </Typography>
