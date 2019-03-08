@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { difference, values } from 'lodash';
 import ActionTypes from './action-types';
 import { importConfig } from './config';
 import { removeWindow, addWindow, updateWindow } from './window';
@@ -97,33 +97,33 @@ export function toggleWorkspaceExposeMode() {
 export function importWorkspace(stateExport) {
   return (dispatch, getState) => {
     dispatch(importConfig(stateExport.config));
-    const { viewers } = stateExport;
-    const newWindows = stateExport.windows;
-    const newWindowsKeys = _.keys(newWindows);
-    const newWindowsCnt = newWindowsKeys.length;
+    const { viewers } = stateExport || {};
+    const imWins = values(stateExport.windows);
 
-    const existingWindows = getState().windows;
-    const existingWindowsKeys = _.keys(existingWindows);
-    const existingWindowsCnt = existingWindowsKeys.length;
+    /* re-use existing windows */
+    const exIds = values(getState().windows).map((exWin) => {
+      const imWin = imWins.shift();
+      const viewer = viewers[imWin.id];
+      delete imWin.id;
 
-    let currentKey = '';
-    // re-use existing windows
-    for (let i = 0; i < newWindowsCnt; i++) { // eslint-disable-line no-plusplus
-      dispatch(fetchManifest(newWindows[newWindowsKeys[i]].manifestId));
-      if (i < existingWindowsCnt) {
-        currentKey = existingWindowsKeys[i];
-        delete newWindows[newWindowsKeys[i]].id;
-        dispatch(updateWindow(existingWindowsKeys[i], newWindows[newWindowsKeys[i]]));
-      } else {
-        dispatch(addWindow(newWindows[newWindowsKeys[i]]));
-        currentKey = newWindowsKeys[i];
-      }
-      dispatch(updateViewport(currentKey, viewers[newWindowsKeys[i]]));
-    }
+      dispatch(fetchManifest(imWin.manifestId));
+      dispatch(updateWindow(exWin.id, imWin));
+      dispatch(updateViewport(exWin.id, viewer));
 
-    // clean up surplus windows if there are any
-    if (existingWindowsCnt > newWindowsCnt) {
-      Object.keys(existingWindows).slice(newWindowsCnt).map(windowId => dispatch(removeWindow(windowId))); // eslint-disable-line max-len
-    }
+      return exWin.id;
+    });
+
+    /* create new windows for additionally imported ones */
+    const imIds = imWins.map((imWin) => {
+      dispatch(fetchManifest(imWin.manifestId));
+      dispatch(addWindow(imWin));
+      dispatch(updateViewport(imWin.id, viewers[imWin.id]));
+
+      return imWin.id;
+    });
+
+    /* close surplus windows */
+    difference(getState().windows, exIds.concat(imIds))
+      .map(winId => dispatch(removeWindow(winId)));
   };
 }

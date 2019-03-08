@@ -12,7 +12,6 @@ import { App } from '../components/App';
  */
 const mapStateToProps = state => (
   {
-    errors: state.errors,
     isFullscreenEnabled: state.workspace.isFullscreenEnabled,
     language: state.config.language,
     theme: state.config.theme,
@@ -26,7 +25,6 @@ const mapStateToProps = state => (
  * @private
  */
 const mapDispatchToProps = {
-  removeError: actions.removeError,
   setWorkspaceFullscreen: actions.setWorkspaceFullscreen,
 };
 
