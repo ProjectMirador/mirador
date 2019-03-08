@@ -34,7 +34,7 @@ export default {
       },
       button: {
         fontSize: "0.878rem",
-        letterSpacing: "0.9em",
+        letterSpacing: "0.09em",
         lineHeight: "2.25rem",
         textTransform: "uppercase",
       },
@@ -55,7 +55,7 @@ export default {
       },
       buttonNext: {
         fontSize: "0.878rem",
-        letterSpacing: "0.9em",
+        letterSpacing: "0.09em",
         lineHeight: "2.25rem",
       },
       captionNext: {
