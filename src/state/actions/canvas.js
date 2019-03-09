@@ -11,12 +11,21 @@ export function setCanvas(windowId, canvasIndex) {
 }
 
 /**
- * updateViewport - action creator
  *
- * @param  {String} windowId
- * @param  {Number} canvasIndex
- * @memberof ActionCreators
+ * @param windowId
+ * @param payload
+ * @returns {{payload: *, meta: {debounce: {time: number}}, type: string, windowId: *}}
  */
 export function updateViewport(windowId, payload) {
-  return { type: ActionTypes.UPDATE_VIEWPORT, windowId, payload };
+  return {
+    type: ActionTypes.UPDATE_VIEWPORT,
+    meta: {
+      debounce: {
+        // TODO : set this value in a registry
+        time: 300,
+      },
+    },
+    windowId,
+    payload,
+  };
 }
