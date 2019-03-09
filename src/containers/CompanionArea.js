@@ -26,6 +26,7 @@ const styles = theme => ({
   },
   horizontal: {
     width: '100%',
+    flexDirection: 'column',
   },
   toggle: {
     position: 'absolute',
