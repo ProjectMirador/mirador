@@ -16,9 +16,9 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
+  withTranslation(),
   connect(null, mapDispatchToProps),
   miradorWithPlugins,
-  withTranslation(),
   // further HOC go here
 );
 
