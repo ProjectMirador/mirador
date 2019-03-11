@@ -9,6 +9,9 @@ export function companionWindowsReducer(state = {}, action) {
     case ActionTypes.ADD_COMPANION_WINDOW:
       return setIn(state, [action.id], action.payload);
 
+    case ActionTypes.ADD_WINDOW:
+      return setIn(state, [action.companionWindow.id], action.companionWindow);
+
     case ActionTypes.UPDATE_COMPANION_WINDOW:
       return updateIn(state, [action.id], orig => merge(orig, action.payload));
 
