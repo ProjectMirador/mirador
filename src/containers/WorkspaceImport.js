@@ -16,8 +16,8 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
-  connect(null, mapDispatchToProps),
   withTranslation(),
+  connect(null, mapDispatchToProps),
   withPlugins('WorkspaceImport'),
 );
 
