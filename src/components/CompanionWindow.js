@@ -35,7 +35,7 @@ export class CompanionWindow extends Component {
         component="aside"
         aria-label={title}
       >
-        <Toolbar variant="dense" className={ns('companion-window-header')}>
+        <Toolbar variant="dense" className={[position === 'left' ? classes.leftPadding : undefined, ns('companion-window-header')].join(' ')} disableGutters>
           <Typography variant="h3" className={classes.windowSideBarTitle}>
             {title}
           </Typography>
