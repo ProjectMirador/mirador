@@ -8,7 +8,8 @@ describe('Companion Windows', () => {
     await expect(page).toClick('button[aria-label="Toggle window sidebar"]');
 
     await page.waitFor(1000);
-    await expect(page).toClick('button[aria-label="Open information companion window"]');
+    await expect(page).toMatchElement('.mirador-companion-window-left.mirador-window-sidebar-info-panel');
+    await expect(page).toMatchElement('button[aria-label="Open information companion window"][aria-selected="true"]');
 
     await expect(page).not.toMatchElement('.mirador-companion-window-right.mirador-window-sidebar-info-panel');
 
