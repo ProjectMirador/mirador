@@ -126,6 +126,7 @@ export class WindowViewer extends Component {
       <>
         <OSDViewer
           tileSources={this.tileInfoFetchedFromStore()}
+          currentCanvases={this.currentCanvases()}
           windowId={window.id}
         >
           <ViewerNavigation window={window} canvases={this.canvases} />
