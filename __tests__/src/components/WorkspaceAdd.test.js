@@ -52,6 +52,15 @@ describe('WorkspaceAdd', () => {
     expect(wrapper.find('WithStyles(Drawer)').props().open).toBe(false);
   });
 
+  it('passes a submit action through to the form', () => {
+    const wrapper = createWrapper();
+    wrapper.setState({ addResourcesOpen: true });
+
+    expect(wrapper.find('WithStyles(Drawer)').find(ManifestForm).length).toBe(1);
+    wrapper.find('WithStyles(Drawer)').find(ManifestForm).props().onSubmit();
+    expect(wrapper.find('WithStyles(Drawer)').props().open).toBe(false);
+  });
+
   it('passes a cancel action through to the form', () => {
     const wrapper = createWrapper();
     wrapper.setState({ addResourcesOpen: true });

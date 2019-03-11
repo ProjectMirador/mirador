@@ -99,7 +99,10 @@ export class WorkspaceAdd extends React.Component {
                 </Typography>
               </Toolbar>
             </AppBar>
-            <ManifestForm onCancel={() => (this.setAddResourcesVisibility(false))} />
+            <ManifestForm
+              onSubmit={() => (this.setAddResourcesVisibility(false))}
+              onCancel={() => (this.setAddResourcesVisibility(false))}
+            />
           </Paper>
         </Drawer>
       </div>
