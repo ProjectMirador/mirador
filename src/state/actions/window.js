@@ -37,7 +37,7 @@ export function addWindow(options) {
     view: 'single',
     maximized: false,
   };
-  return { type: ActionTypes.ADD_WINDOW, window: { ...defaultOptions, ...options }, companionWindow: { id: cwDefault, position: 'left', content: 'info' } };
+  return { type: ActionTypes.ADD_WINDOW, window: { ...defaultOptions, ...options }, companionWindows: [{ id: cwDefault, position: 'left', content: 'info' }] };
 }
 
 /**
