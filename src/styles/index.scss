@@ -21,6 +21,21 @@
   }
 
   &-companion-window-header {
+    flex-wrap: wrap;
+  }
+
+  &-companion-window-title-controls {
+    order: 1000;
+    flex-grow: 1;
+  }
+
+  &-companion-window-bottom {
+    .mirador-companion-window-title-controls {
+      order: unset;
+    }
+  }
+
+  &-companion-window-header {
     background: $surface-dark;
   }
 

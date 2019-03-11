@@ -21,7 +21,7 @@ export class CompanionWindow extends Component {
   render() {
     const {
       classes, paperClassName, id, onCloseClick, updateCompanionWindow, isDisplayed,
-      position, t, windowId, title, children,
+      position, t, windowId, title, children, titleControls,
     } = this.props;
 
     return (
@@ -35,10 +35,13 @@ export class CompanionWindow extends Component {
         component="aside"
         aria-label={title}
       >
-        <Toolbar variant="dense" className={[position === 'left' ? classes.leftPadding : undefined, ns('companion-window-header')].join(' ')} disableGutters>
+        <Toolbar className={[classes.toolbar, position === 'left' ? classes.leftPadding : undefined, ns('companion-window-header')].join(' ')} disableGutters>
           <Typography variant="h3" className={classes.windowSideBarTitle}>
             {title}
           </Typography>
+          <div className={ns('companion-window-title-controls')}>
+            {titleControls}
+          </div>
           {
             position === 'left'
               ? updateCompanionWindow
@@ -94,6 +97,7 @@ CompanionWindow.propTypes = {
   isDisplayed: PropTypes.bool,
   t: PropTypes.func,
   title: PropTypes.string,
+  titleControls: PropTypes.node,
   windowId: PropTypes.string.isRequired,
   children: PropTypes.node,
 };
@@ -107,4 +111,5 @@ CompanionWindow.defaultProps = {
   title: null,
   t: key => key,
   children: undefined,
+  titleControls: null,
 };

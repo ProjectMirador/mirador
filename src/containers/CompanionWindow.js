@@ -59,6 +59,9 @@ const styles = theme => ({
   positionButton: {
     order: -100,
   },
+  toolbar: {
+    minHeight: 'max-content',
+  },
   leftPadding: {
     ...theme.mixins.gutters(),
     paddingRight: 0,
