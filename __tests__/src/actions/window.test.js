@@ -15,20 +15,24 @@ describe('window actions', () => {
           id: 'helloworld',
           canvasIndex: 1,
           collectionIndex: 0,
-          companionWindowIds: [],
           manifestId: null,
           maximized: false,
           rangeId: null,
           thumbnailNavigationPosition: 'bottom',
           x: 2700,
           y: 2700,
+          sideBarPanel: 'info',
           width: 400,
           height: 400,
           rotation: null,
           view: 'single',
         },
+        companionWindows: [{ position: 'left', content: 'info' }],
       };
-      expect(actions.addWindow(options)).toEqual(expectedAction);
+      const action = actions.addWindow(options);
+      expect(action).toMatchObject(expectedAction);
+      expect(action.window.companionWindowIds.length).toEqual(1);
+      expect(action.window.companionWindowIds[0]).toEqual(action.companionWindows[0].id);
     });
   });
 
