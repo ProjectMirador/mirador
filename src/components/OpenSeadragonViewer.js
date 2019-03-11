@@ -4,6 +4,7 @@ import OpenSeadragon from 'openseadragon';
 import debounce from 'lodash/debounce';
 import ns from '../config/css-ns';
 import ZoomControls from '../containers/ZoomControls';
+import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 
 /**
  * Represents a OpenSeadragonViewer in the mirador workspace. Responsible for mounting
@@ -17,7 +18,11 @@ export class OpenSeadragonViewer extends Component {
     super(props);
 
     this.viewer = null;
+    this.osdCanvasOverlay = null;
+    // An initial value for the updateCanvas method
+    this.updateCanvas = () => {};
     this.ref = React.createRef();
+    this.onUpdateViewport = this.onUpdateViewport.bind(this);
     this.onViewportChange = this.onViewportChange.bind(this);
   }
 
@@ -37,6 +42,9 @@ export class OpenSeadragonViewer extends Component {
       showNavigationControl: false,
       preserveImageSizeOnResize: true,
     });
+
+    this.osdCanvasOverlay = new OpenSeadragonCanvasOverlay(this.viewer);
+    this.viewer.addHandler('update-viewport', this.onUpdateViewport);
     this.viewer.addHandler('viewport-change', debounce(this.onViewportChange, 300));
 
     if (viewer) {
@@ -49,10 +57,21 @@ export class OpenSeadragonViewer extends Component {
 
   /**
    * When the tileSources change, make sure to close the OSD viewer.
+   * When the annotations change, reset the updateCanvas method to make sure
+   * they are added.
    * When the viewport state changes, pan or zoom the OSD viewer as appropriate
    */
   componentDidUpdate(prevProps) {
-    const { tileSources, viewer } = this.props;
+    const { tileSources, viewer, annotations } = this.props;
+    if (!this.annotationsMatch(prevProps.annotations)) {
+      this.updateCanvas = () => {
+        this.osdCanvasOverlay.clear();
+        this.osdCanvasOverlay.resize();
+        this.osdCanvasOverlay.canvasUpdate(() => {
+          this.annotationsToContext(annotations);
+        });
+      };
+    }
     if (!this.tileSourcesMatch(prevProps.tileSources)) {
       this.viewer.close();
       Promise.all(
@@ -83,6 +102,13 @@ export class OpenSeadragonViewer extends Component {
   }
 
   /**
+   * onUpdateViewport - fires during OpenSeadragon render method.
+   */
+  onUpdateViewport(event) {
+    this.updateCanvas();
+  }
+
+  /**
    * Forward OSD state to redux
    */
   onViewportChange(event) {
@@ -94,6 +120,20 @@ export class OpenSeadragonViewer extends Component {
       x: viewport.centerSpringX.target.value,
       y: viewport.centerSpringY.target.value,
       zoom: viewport.zoomSpring.target.value,
+    });
+  }
+
+  /**
+   * annotationsToContext - converts anontations to a canvas context
+   */
+  annotationsToContext(annotations) {
+    const context = this.osdCanvasOverlay.context2d;
+    annotations.forEach((annotation) => {
+      annotation.resources.forEach((resource) => {
+        context.strokeStyle = 'yellow';
+        context.lineWidth = 10;
+        context.strokeRect(...resource.fragmentSelector);
+      });
     });
   }
 
@@ -197,6 +237,25 @@ export class OpenSeadragonViewer extends Component {
   }
 
   /**
+   * annotationsMatch - compares previous annotations to current to determine
+   * whether to add a new updateCanvas method to draw annotations
+   * @param  {Array} prevAnnotations
+   * @return {Boolean}
+   */
+  annotationsMatch(prevAnnotations) {
+    const { annotations } = this.props;
+    return annotations.some((annotation, index) => {
+      if (!prevAnnotations[index]) {
+        return false;
+      }
+      if (annotation.id === prevAnnotations[index].id) {
+        return true;
+      }
+      return false;
+    });
+  }
+
+  /**
    * Renders things
    */
   render() {
@@ -221,6 +280,7 @@ export class OpenSeadragonViewer extends Component {
 }
 
 OpenSeadragonViewer.defaultProps = {
+  annotations: [],
   children: null,
   tileSources: [],
   viewer: null,
@@ -228,6 +288,7 @@ OpenSeadragonViewer.defaultProps = {
 };
 
 OpenSeadragonViewer.propTypes = {
+  annotations: PropTypes.arrayOf(PropTypes.object),
   children: PropTypes.element,
   tileSources: PropTypes.arrayOf(PropTypes.object),
   viewer: PropTypes.object, // eslint-disable-line react/forbid-prop-types

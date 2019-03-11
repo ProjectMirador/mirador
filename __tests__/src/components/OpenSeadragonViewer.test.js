@@ -2,15 +2,20 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import OpenSeadragon from 'openseadragon';
 import { OpenSeadragonViewer } from '../../../src/components/OpenSeadragonViewer';
+import OpenSeadragonCanvasOverlay from '../../../src/lib/OpenSeadragonCanvasOverlay';
+import Annotation from '../../../src/lib/Annotation';
 import ZoomControls from '../../../src/containers/ZoomControls';
 
 jest.mock('openseadragon');
+jest.mock('../../../src/lib/OpenSeadragonCanvasOverlay');
+
 
 describe('OpenSeadragonViewer', () => {
   let wrapper;
   let updateViewport;
   beforeEach(() => {
     OpenSeadragon.mockClear();
+    OpenSeadragonCanvasOverlay.mockClear();
 
     updateViewport = jest.fn();
 
@@ -126,6 +131,16 @@ describe('OpenSeadragonViewer', () => {
         0.5, { x: 1, y: 0, zoom: 0.5 }, false,
       );
     });
+
+    it('sets up a OpenSeadragonCanvasOverlay', () => {
+      wrapper.instance().componentDidMount();
+      expect(OpenSeadragonCanvasOverlay).toHaveBeenCalledTimes(1);
+    });
+
+    it('sets up a listener on update-viewport', () => {
+      wrapper.instance().componentDidMount();
+      expect(addHandler).toHaveBeenCalledWith('update-viewport', expect.anything());
+    });
   });
 
   describe('componentDidUpdate', () => {
@@ -153,6 +168,49 @@ describe('OpenSeadragonViewer', () => {
         0.5, { x: 1, y: 0, zoom: 0.5 }, false,
       );
     });
+
+    it('sets up canvasUpdate to add annotations to the canvas', () => {
+      const clear = jest.fn();
+      const resize = jest.fn();
+      const canvasUpdate = jest.fn();
+      wrapper.instance().osdCanvasOverlay = {
+        clear,
+        resize,
+        canvasUpdate,
+      };
+
+      wrapper.setProps(
+        {
+          annotations: [
+            new Annotation(
+              { '@id': 'foo', resources: [{ foo: 'bar' }] },
+            ),
+          ],
+        },
+      );
+      wrapper.setProps(
+        {
+          annotations: [
+            new Annotation(
+              { '@id': 'foo', resources: [{ foo: 'bar' }] },
+            ),
+          ],
+        },
+      );
+      wrapper.setProps(
+        {
+          annotations: [
+            new Annotation(
+              { '@id': 'bar', resources: [{ foo: 'bar' }] },
+            ),
+          ],
+        },
+      );
+      wrapper.instance().updateCanvas();
+      expect(clear).toHaveBeenCalledTimes(1);
+      expect(resize).toHaveBeenCalledTimes(1);
+      expect(canvasUpdate).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('onViewportChange', () => {
@@ -171,6 +229,37 @@ describe('OpenSeadragonViewer', () => {
         'base',
         { x: 1, y: 0, zoom: 0.5 },
       );
+    });
+  });
+
+  describe('onUpdateViewport', () => {
+    it('fires updateCanvas', () => {
+      const updateCanvas = jest.fn();
+      wrapper.instance().updateCanvas = updateCanvas;
+      wrapper.instance().onUpdateViewport();
+      expect(updateCanvas).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('annotationsToContext', () => {
+    it('converts the annotations to canvas', () => {
+      const strokeRect = jest.fn();
+      wrapper.instance().osdCanvasOverlay = {
+        context2d: {
+          strokeRect,
+        },
+      };
+
+      const annotations = [
+        new Annotation(
+          { '@id': 'foo', resources: [{ on: 'www.example.com/#xywh=10,10,100,200' }] },
+        ),
+      ];
+      wrapper.instance().annotationsToContext(annotations);
+      const context = wrapper.instance().osdCanvasOverlay.context2d;
+      expect(context.strokeStyle).toEqual('yellow');
+      expect(context.lineWidth).toEqual(10);
+      expect(strokeRect).toHaveBeenCalledWith(10, 10, 100, 200);
     });
   });
 });
