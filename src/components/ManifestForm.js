@@ -19,6 +19,7 @@ export class ManifestForm extends Component {
     };
 
     this.formSubmit = this.formSubmit.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
@@ -28,10 +29,22 @@ export class ManifestForm extends Component {
    * @private
    */
   formSubmit(event) {
-    const { fetchManifest } = this.props;
+    const { fetchManifest, onSubmit } = this.props;
     const { formValue } = this.state;
     event.preventDefault();
+    onSubmit();
     fetchManifest(formValue);
+    this.setState({ formValue: '' });
+  }
+
+  /**
+   * Reset the form state
+   */
+  handleCancel() {
+    const { onCancel } = this.props;
+
+    onCancel();
+    this.setState({ formValue: '' });
   }
 
   /**
@@ -71,7 +84,7 @@ export class ManifestForm extends Component {
           </Grid>
           <Grid item sm={3}>
             { onCancel && (
-              <Button onClick={onCancel}>
+              <Button onClick={this.handleCancel}>
                 {t('cancel')}
               </Button>
             )}
@@ -88,10 +101,12 @@ export class ManifestForm extends Component {
 ManifestForm.propTypes = {
   fetchManifest: PropTypes.func.isRequired,
   onCancel: PropTypes.func,
+  onSubmit: PropTypes.func,
   t: PropTypes.func,
 };
 
 ManifestForm.defaultProps = {
   t: key => key,
   onCancel: null,
+  onSubmit: () => {},
 };

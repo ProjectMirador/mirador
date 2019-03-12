@@ -8,7 +8,6 @@ describe('Window actions', () => {
     await expect(page).toFill('#manifestURL', 'http://localhost:5000/api/sn904cj3439');
     await expect(page).toClick('#fetchBtn');
 
-    await expect(page).toClick('button[aria-label="Close add resource panel"]'); // Close menu so new item is visible
     await expect(page).toMatchElement('[data-manifestid="http://localhost:5000/api/sn904cj3439"] button');
     await expect(page).toClick('[data-manifestid="http://localhost:5000/api/sn904cj3439"] button');
 

@@ -1,4 +1,5 @@
 import manifesto from 'manifesto.js';
+import omit from 'lodash/omit';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -8,12 +9,12 @@ export const manifestsReducer = (state = {}, action) => {
   switch (action.type) {
     case ActionTypes.REQUEST_MANIFEST:
       return {
-        ...state,
         [action.manifestId]: {
           ...state[action.manifestId],
           ...action.properties,
           id: action.manifestId,
         },
+        ...omit(state, action.manifestId),
       };
     case ActionTypes.RECEIVE_MANIFEST:
       return {
