@@ -72,4 +72,9 @@ describe('CompanionWindow', () => {
     expect(updateCompanionWindow).toHaveBeenCalledTimes(1);
     expect(updateCompanionWindow).toHaveBeenCalledWith('x', 'abc123', { position: 'right' });
   });
+
+  it('renders title controls', () => {
+    companionWindow = createWrapper({ position: 'bottom', titleControls: <div className="xyz" /> });
+    expect(companionWindow.find('div.xyz').length).toBe(1);
+  });
 });
