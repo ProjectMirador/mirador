@@ -30,6 +30,7 @@ const styles = theme => ({
     height: '100%',
     width: '100%',
     minHeight: 0,
+    overflow: 'hidden',
   },
   middle: {
     display: 'flex',
