@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Fab from '@material-ui/core/Fab';
+import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/AddSharp';
 import CloseIcon from '@material-ui/icons/CloseSharp';
 
@@ -16,19 +17,21 @@ export class WorkspaceAddButton extends Component {
       classes, t, setWorkspaceAddVisibility, isWorkspaceAddVisible,
     } = this.props;
     return (
-      <Fab
-        color="secondary"
-        id="addBtn"
-        aria-label={isWorkspaceAddVisible ? t('closeWindow') : t('add')}
-        className={classes.fab}
-        onClick={() => { setWorkspaceAddVisibility(!isWorkspaceAddVisible); }}
-      >
-        {
-          isWorkspaceAddVisible
-            ? <CloseIcon />
-            : <AddIcon />
-        }
-      </Fab>
+      <Tooltip title={isWorkspaceAddVisible ? t('closeWindow') : t('add')}>
+        <Fab
+          color="secondary"
+          id="addBtn"
+          aria-label={isWorkspaceAddVisible ? t('closeWindow') : t('add')}
+          className={classes.fab}
+          onClick={() => { setWorkspaceAddVisibility(!isWorkspaceAddVisible); }}
+        >
+          {
+            isWorkspaceAddVisible
+              ? <CloseIcon />
+              : <AddIcon />
+          }
+        </Fab>
+      </Tooltip>
     );
   }
 }
