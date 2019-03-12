@@ -4,9 +4,11 @@ import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import FilledInput from '@material-ui/core/FilledInput';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -89,56 +91,50 @@ export class WindowSideBarCanvasPanel extends Component {
 
     return (
       structures.map(canvasOrRange => (
-        <ExpansionPanel
-          defaultExpanded={defaultExpanded}
-          key={canvasOrRange.id}
-          elevation={0}
-          square
-        >
-          <ExpansionPanelSummary style={{ backgroundColor: '#eee' }}>
-            {canvasOrRange.getLabel().map(label => label.value)[0]}
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails style={{ flexDirection: 'column', paddingRight: 0, paddingLeft: 8 }}>
-            {
-              canvasOrRange.getRanges().length > 0
-                && (
-                  <List>
-                    {
-                      this.renderToc(canvasOrRange.getRanges())
-                    }
-                  </List>
-                )
-            }
-            <List>
-              {
-                canvasOrRange.getCanvasIds().map((canvasId) => {
-                  const canvas = canvases.find(e => e.id === canvasId);
-                  if (!canvas) return <></>;
-
-                  const onClick = () => { setCanvas(windowId, canvas.index); }; // eslint-disable-line require-jsdoc, max-len
-
-                  return (
-                    <ListItem
-                      key={canvas.id}
-                      alignItems="flex-start"
-                      onClick={onClick}
-                      button
-                      component="li"
-                      disableGutters
-                    >
-                      <Typography
-                        className={classNames(classes.label)}
-                        variant="body2"
-                      >
-                        {canvas.getLabel().map(label => label.value)[0]}
-                      </Typography>
-                    </ListItem>
+        canvasOrRange.getRanges().length === 0
+          ? (
+            <ListItem
+              component="li"
+              key={canvasOrRange.id}
+              button
+              className={classes.button}
+              onClick={
+                () => {
+                  setCanvas(
+                    windowId,
+                    canvases.find(e => e.id === canvasOrRange.getCanvasIds()[0]).index,
                   );
-                })
+                }
               }
-            </List>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+            >
+              <ListItemText primary={canvasOrRange.getLabel().map(label => label.value)[0]} />
+            </ListItem>
+          )
+          : (
+            <ExpansionPanel
+              defaultExpanded={defaultExpanded}
+              key={canvasOrRange.id}
+              elevation={0}
+              component="li"
+              square
+            >
+              <ExpansionPanelSummary style={{ backgroundColor: '#eee' }}>
+                {canvasOrRange.getLabel().map(label => label.value)[0]}
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails style={{ flexDirection: 'column', paddingRight: 0, paddingLeft: 8 }}>
+                {
+                  canvasOrRange.getRanges().length > 0
+                    && (
+                      <List>
+                        {
+                          this.renderToc(canvasOrRange.getRanges())
+                        }
+                      </List>
+                    )
+                }
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          )
       ))
     );
   }
@@ -158,26 +154,22 @@ export class WindowSideBarCanvasPanel extends Component {
         return this.renderToc(structures, true);
       default:
         return (
-          <List>
-            {
-              canvasesIdAndLabel.map((canvas, canvasIndex) => {
-                const onClick = () => { setCanvas(windowId, canvasIndex); }; // eslint-disable-line require-jsdoc, max-len
+          canvasesIdAndLabel.map((canvas, canvasIndex) => {
+            const onClick = () => { setCanvas(windowId, canvasIndex); }; // eslint-disable-line require-jsdoc, max-len
 
-                return (
-                  <ListItem
-                    key={canvas.id}
-                    alignItems="flex-start"
-                    onClick={onClick}
-                    button
-                    component="li"
-                  >
-                    {variant === 'compact' && this.renderCompact(canvas, canvases[canvasIndex])}
-                    {variant === 'thumbnail' && this.renderThumbnail(canvas, canvases[canvasIndex])}
-                  </ListItem>
-                );
-              })
-            }
-          </List>
+            return (
+              <ListItem
+                key={canvas.id}
+                alignItems="flex-start"
+                onClick={onClick}
+                button
+                component="li"
+              >
+                {variant === 'compact' && this.renderCompact(canvas, canvases[canvasIndex])}
+                {variant === 'thumbnail' && this.renderThumbnail(canvas, canvases[canvasIndex])}
+              </ListItem>
+            );
+          })
         );
     }
   }
@@ -215,7 +207,9 @@ export class WindowSideBarCanvasPanel extends Component {
           </FormControl>
           )}
       >
-        { this.renderList() }
+        <List>
+          { this.renderList() }
+        </List>
       </CompanionWindow>
     );
   }

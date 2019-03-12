@@ -36,6 +36,11 @@ const styles = theme => ({
   label: {
     paddingLeft: theme.spacing.unit,
   },
+  button: {
+    ...theme.typography.body2,
+    textTransform: 'none',
+    textAlign: 'left',
+  },
 });
 
 const enhance = compose(
