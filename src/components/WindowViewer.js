@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Typography from '@material-ui/core/Typography';
 import OSDViewer from '../containers/OpenSeadragonViewer';
 import ZoomControls from '../containers/ZoomControls';
 import ViewerNavigation from '../containers/ViewerNavigation';
@@ -123,7 +124,7 @@ export class WindowViewer extends Component {
    * Renders things
    */
   render() {
-    const { window } = this.props;
+    const { canvasLabel, window } = this.props;
     return (
       <>
         <OSDViewer
@@ -134,6 +135,11 @@ export class WindowViewer extends Component {
           <div className={ns('canvas-nav')}>
             <ZoomControls windowId={window.id} />
             <ViewerNavigation window={window} canvases={this.canvases} />
+            {
+              canvasLabel && (
+                <Typography variant="caption" className={ns('canvas-label')}>{canvasLabel}</Typography>
+              )
+            }
           </div>
         </OSDViewer>
       </>
@@ -147,4 +153,9 @@ WindowViewer.propTypes = {
   fetchInfoResponse: PropTypes.func.isRequired,
   manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  canvasLabel: PropTypes.string,
+};
+
+WindowViewer.defaultProps = {
+  canvasLabel: undefined,
 };

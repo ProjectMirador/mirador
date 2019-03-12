@@ -110,6 +110,14 @@
   &-canvas-nav {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+  }
+
+  &-canvas-label {
+    width: 100%;
+    text-overflow: ellipsis;
+    padding-bottom: 3px;
   }
 
   &-thumb-navigation {

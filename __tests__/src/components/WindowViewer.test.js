@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import manifesto from 'manifesto.js';
+import Typography from '@material-ui/core/Typography';
 import { WindowViewer } from '../../../src/components/WindowViewer';
 import OSDViewer from '../../../src/containers/OpenSeadragonViewer';
 import ViewerNavigation from '../../../src/containers/ViewerNavigation';
@@ -23,6 +24,7 @@ let mockWindow = {
 function createWrapper(props) {
   return shallow(
     <WindowViewer
+      canvasLabel="label"
       infoResponses={{}}
       fetchInfoResponse={() => {}}
       fetchAnnotation={() => {}}
@@ -45,6 +47,7 @@ describe('WindowViewer', () => {
           <div>
             <ZoomControls />
             <ViewerNavigation />
+            <Typography>label</Typography>
           </div>
         </OSDViewer>
       </>,
