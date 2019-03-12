@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import OpenSeadragon from 'openseadragon';
-import debounce from 'lodash/debounce';
 import ns from '../config/css-ns';
 import ZoomControls from '../containers/ZoomControls';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
@@ -45,7 +44,7 @@ export class OpenSeadragonViewer extends Component {
 
     this.osdCanvasOverlay = new OpenSeadragonCanvasOverlay(this.viewer);
     this.viewer.addHandler('update-viewport', this.onUpdateViewport);
-    this.viewer.addHandler('viewport-change', debounce(this.onViewportChange, 300));
+    this.viewer.addHandler('viewport-change', this.onViewportChange);
 
     if (viewer) {
       this.viewer.viewport.panTo(viewer, false);
