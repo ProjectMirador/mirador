@@ -117,6 +117,15 @@ export const windowsReducer = (state = {}, action) => {
           companionWindowIds: state[action.windowId].companionWindowIds.concat([action.id]),
         },
       };
+    case ActionTypes.REMOVE_COMPANION_WINDOW:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          companionWindowIds: state[action.windowId]
+            .companionWindowIds.filter(id => id !== action.id),
+        },
+      };
     default:
       return state;
   }

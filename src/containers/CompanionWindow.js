@@ -27,10 +27,12 @@ const mapStateToProps = (state, { id, windowId }) => {
  * @memberof CompanionWindow
  * @private
  */
-const mapDispatchToProps = {
-  onCloseClick: actions.closeCompanionWindow,
-  updateCompanionWindow: actions.updateCompanionWindow,
-};
+const mapDispatchToProps = (dispatch, { windowId, id }) => ({
+  onCloseClick: () => dispatch(
+    actions.removeCompanionWindow(windowId, id),
+  ),
+  updateCompanionWindow: (...args) => dispatch(actions.updateCompanionWindow(...args)),
+});
 
 /**
  *

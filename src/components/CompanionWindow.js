@@ -71,7 +71,7 @@ export class CompanionWindow extends Component {
                   <IconButton
                     aria-label={t('closeCompanionWindow')}
                     className={classes.closeButton}
-                    onClick={() => { onCloseClick(windowId, id); }}
+                    onClick={onCloseClick}
                   >
                     <CloseIcon />
                   </IconButton>
