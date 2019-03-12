@@ -1,7 +1,7 @@
 {
   "translation": {
     "aboutThisItem": "About this item",
-    "add": "Add",
+    "add": "Add resource",
     "addedFromUrl": "(Added from URL)",
     "addManifestUrl": "Resource location",
     "addManifestUrlHelp": "The URL of a IIIF resource",
