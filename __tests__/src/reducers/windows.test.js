@@ -293,4 +293,23 @@ describe('windows reducer', () => {
       },
     });
   });
+
+  it('should handle REMOVE_COMPANION_WINDOW', () => {
+    // on the right, just tacks the new id on
+    expect(windowsReducer({
+      abc123: {
+        id: 'abc123',
+        companionWindowIds: ['123', 'xyz'],
+      },
+    }, {
+      type: ActionTypes.REMOVE_COMPANION_WINDOW,
+      id: 'xyz',
+      windowId: 'abc123',
+    })).toEqual({
+      abc123: {
+        id: 'abc123',
+        companionWindowIds: ['123'],
+      },
+    });
+  });
 });

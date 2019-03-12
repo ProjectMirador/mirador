@@ -45,7 +45,6 @@ describe('CompanionWindow', () => {
       const closeButton = companionWindow.find('WithStyles(IconButton)[aria-label="closeCompanionWindow"]');
       closeButton.simulate('click');
       expect(removeCompanionWindowEvent).toHaveBeenCalledTimes(1);
-      expect(removeCompanionWindowEvent).toHaveBeenCalledWith('x', 'abc123');
     });
   });
 

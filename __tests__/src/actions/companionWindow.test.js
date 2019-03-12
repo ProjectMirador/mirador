@@ -90,9 +90,10 @@ describe('companionWindow actions', () => {
 
   describe('removeCompanionWindow', () => {
     it('should return correct action object', () => {
-      const action = actions.removeCompanionWindow('cw-123');
+      const action = actions.removeCompanionWindow('window', 'cw-123');
       expect(action.type).toBe(ActionTypes.REMOVE_COMPANION_WINDOW);
       expect(action.id).toBe('cw-123');
+      expect(action.windowId).toBe('window');
     });
   });
 });

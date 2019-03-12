@@ -1,6 +1,5 @@
 import uuid from 'uuid/v4';
 import ActionTypes from './action-types';
-import { removeCompanionWindow } from './companionWindow';
 
 /**
  * focusWindow - action creator
