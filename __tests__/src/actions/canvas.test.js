@@ -1,7 +1,7 @@
 import * as actions from '../../../src/state/actions';
 import ActionTypes from '../../../src/state/actions/action-types';
 
-const debounceTime = 300;
+const debounceTime = 100;
 
 describe('canvas actions', () => {
   describe('setCanvas', () => {

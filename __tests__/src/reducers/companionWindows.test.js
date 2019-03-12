@@ -20,6 +20,22 @@ describe('companionWindowsReducer', () => {
     });
   });
 
+  describe('ADD_WINDOW', () => {
+    it('adds default companion window(s)', () => {
+      const action = {
+        type: ActionTypes.ADD_WINDOW,
+        companionWindows: [{ id: 'banana', position: 'left', content: 'info' }, { id: 'Banane', position: 'right', content: 'canvas_navigation' }],
+      };
+      const beforeState = {};
+      const expectedState = {
+        banana: { id: 'banana', position: 'left', content: 'info' },
+        Banane: { id: 'Banane', position: 'right', content: 'canvas_navigation' },
+      };
+      expect(companionWindowsReducer(beforeState, action)).toEqual(expectedState);
+    });
+  });
+
+
   describe('UPDATE_COMPANION_WINDOW', () => {
     it('updates an existing companion window', () => {
       const action = {

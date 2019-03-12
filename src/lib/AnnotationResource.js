@@ -37,9 +37,9 @@ export default class AnnotationResource {
     const { on } = this.resource;
     switch (typeof on) {
       case 'string':
-        return on.match(/xywh=(.*)$/)[1].split(',');
+        return on.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
       case 'object':
-        return on.selector.value.match(/xywh=(.*)$/)[1].split(',');
+        return on.selector.value.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
       default:
         return null;
     }

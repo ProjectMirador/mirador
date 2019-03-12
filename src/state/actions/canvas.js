@@ -22,7 +22,7 @@ export function updateViewport(windowId, payload) {
     meta: {
       debounce: {
         // TODO : set this value in a registry
-        time: 300,
+        time: 100,
       },
     },
     windowId,

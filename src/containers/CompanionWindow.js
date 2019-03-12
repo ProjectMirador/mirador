@@ -59,6 +59,10 @@ const styles = theme => ({
   positionButton: {
     order: -100,
   },
+  leftPadding: {
+    ...theme.mixins.gutters(),
+    paddingRight: 0,
+  },
   content: {
     ...theme.mixins.gutters(),
     overflowY: 'auto',
