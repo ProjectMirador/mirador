@@ -1,4 +1,9 @@
-import { difference, values } from 'lodash';
+import {
+  difference,
+  keys,
+  slice,
+  values,
+} from 'lodash';
 import ActionTypes from './action-types';
 import { importConfig } from './config';
 import { removeWindow, addWindow, updateWindow } from './window';
@@ -99,9 +104,16 @@ export function importWorkspace(stateExport) {
     dispatch(importConfig(stateExport.config));
     const { viewers } = stateExport || {};
     const imWins = values(stateExport.windows);
+    const exWins = values(getState().windows);
+    const exWinCnt = exWins.length > imWins.length ? imWins.length : exWins.length;
 
-    /* re-use existing windows */
-    const exIds = values(getState().windows).map((exWin) => {
+    /*
+      If the existing workspace already contains windows (exWins),
+      we can re-use them in order to optimize the performance.
+      As we only can only re-use the amount of windows to be imported maximally,
+      slice all additional windows before
+    */
+    const exIds = slice(exWins, 0, exWinCnt).map((exWin) => {
       const imWin = imWins.shift();
       const viewer = viewers[imWin.id];
       delete imWin.id;
@@ -123,7 +135,7 @@ export function importWorkspace(stateExport) {
     });
 
     /* close surplus windows */
-    difference(getState().windows, exIds.concat(imIds))
+    difference(keys(getState().windows), exIds.concat(imIds))
       .map(winId => dispatch(removeWindow(winId)));
   };
 }

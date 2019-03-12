@@ -82,6 +82,10 @@ export const windowsReducer = (state = {}, action) => {
           y: action.payload.size.y,
         },
       };
+    case ActionTypes.NEXT_CANVAS:
+      return setCanvasIndex(state, action.windowId, currentIndex => currentIndex + 1);
+    case ActionTypes.PREVIOUS_CANVAS:
+      return setCanvasIndex(state, action.windowId, currentIndex => currentIndex - 1);
     case ActionTypes.SET_CANVAS:
       return setCanvasIndex(state, action.windowId, currentIndex => action.canvasIndex);
     case ActionTypes.ADD_COMPANION_WINDOW:
