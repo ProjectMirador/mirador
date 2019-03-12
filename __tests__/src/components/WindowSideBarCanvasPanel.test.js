@@ -3,6 +3,8 @@ import { shallow } from 'enzyme';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import manifesto from 'manifesto.js';
 import { WindowSideBarCanvasPanel } from '../../../src/components/WindowSideBarCanvasPanel';
 import { CanvasThumbnail } from '../../../src/components/CanvasThumbnail';
@@ -65,6 +67,57 @@ describe('WindowSideBarCanvasPanel', () => {
     expect(wrapper.find(CanvasThumbnail).length).toBe(0);
   });
 
+  it('renders elements for the TOC view', () => {
+    const wrapper = createWrapper({
+      structures: [{
+        id: 'top',
+        getLabel: () => [{ value: 'top' }],
+        getCanvasIds: () => [],
+        getRanges: () => [
+          {
+            id: '1', getLabel: () => [{ value: 'empty' }], getRanges: () => [], getCanvasIds: () => [],
+          },
+          {
+            id: '2',
+            getLabel: () => [{ value: 'one-with-ranges' }],
+            getRanges: () => [
+              {
+                id: '2.1', getLabel: () => [{ value: 'subrange' }], getRanges: () => [], getCanvasIds: () => [],
+              },
+            ],
+            getCanvasIds: () => [],
+          },
+          {
+            id: '3',
+            getLabel: () => [{ value: 'one-with-canvases' }],
+            getRanges: () => [],
+            getCanvasIds: () => [
+              'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
+            ],
+          },
+        ],
+      }],
+    });
+    wrapper.setState({ variant: 'toc' });
+
+    expect(wrapper.find(ExpansionPanel).length).toBe(5);
+
+    expect(wrapper
+      .find(ExpansionPanel)
+      .at(1)
+      .find(ExpansionPanelSummary)
+      .at(0)
+      .render()
+      .text()).toEqual('empty');
+
+    expect(wrapper.find(ExpansionPanel).at(2).find(List).find(ExpansionPanel).length).toEqual(1);
+
+    expect(wrapper
+      .find(ExpansionPanel).at(4).find(List)
+      .find(Typography)
+      .render()
+      .text()).toEqual('Test 19 Canvas: 1');
+  });
 
   it('should set the correct labels', () => {
     const wrapper = createWrapper();

@@ -6,6 +6,7 @@ import * as actions from '../state/actions';
 import { WindowSideBarCanvasPanel } from '../components/WindowSideBarCanvasPanel';
 import {
   getManifestCanvases,
+  getManifestStructures,
   getWindowManifest,
 } from '../state/selectors';
 
@@ -15,10 +16,12 @@ import {
 const mapStateToProps = (state, { windowId }) => {
   const manifest = getWindowManifest(state, windowId);
   const canvases = getManifestCanvases(manifest);
+  const structures = getManifestStructures(manifest);
   const { config } = state;
   return {
     canvases,
     config,
+    structures,
   };
 };
 

@@ -71,6 +71,21 @@ export function getManifestCanvases(manifest) {
 }
 
 /**
+ * Return the structures of a manifest or an empty Array
+ */
+export function getManifestStructures(manifest) {
+  if (!manifest.manifestation) {
+    return [];
+  }
+
+  if (!manifest.manifestation.getTopRanges) {
+    return [];
+  }
+
+  return manifest.manifestation.getTopRanges();
+}
+
+/**
 * Return ids and labels of canvases
 * @ param {Array} canvases
 * @return {Array} - [ {id: 'id', label: 'label' }, ... ]
