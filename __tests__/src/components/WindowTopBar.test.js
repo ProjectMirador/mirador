@@ -2,13 +2,12 @@ import React from 'react';
 import { shallow } from 'enzyme';
 
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/MenuSharp';
 import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 
 import WindowTopMenuButton from '../../../src/containers/WindowTopMenuButton';
 import WindowTopBarButtons from '../../../src/containers/WindowTopBarButtons';
+import { MiradorMenuButton } from '../../../src/components/MiradorMenuButton';
 import { WindowTopBar } from '../../../src/components/WindowTopBar';
 
 /** create wrapper */
@@ -34,8 +33,7 @@ describe('WindowTopBar', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(AppBar).length).toBe(1);
     expect(wrapper.find(Toolbar).length).toBe(1);
-    expect(wrapper.find(IconButton).length).toBe(3);
-    expect(wrapper.find(MenuIcon).length).toBe(1);
+    expect(wrapper.find(MiradorMenuButton).length).toBe(3);
     expect(wrapper.find(Typography).length).toBe(1);
     expect(wrapper.find(WindowTopBarButtons).length).toBe(1);
     expect(wrapper.find(WindowTopMenuButton).length).toBe(1);
@@ -44,7 +42,7 @@ describe('WindowTopBar', () => {
   it('passes correct props to <IconButton/>', () => {
     const toggleWindowSideBar = jest.fn();
     const wrapper = createWrapper({ toggleWindowSideBar });
-    expect(wrapper.find(IconButton).first().props().onClick).toBe(toggleWindowSideBar);
+    expect(wrapper.find(MiradorMenuButton).first().props().onClick).toBe(toggleWindowSideBar);
   });
 
   it('passes correct props to <Typography/>', () => {
@@ -65,12 +63,12 @@ describe('WindowTopBar', () => {
   it('passes correct props to <Button/>', () => {
     const removeWindow = jest.fn();
     const wrapper = createWrapper({ removeWindow });
-    expect(wrapper.find(IconButton).last().props().onClick).toBe(removeWindow);
+    expect(wrapper.find(MiradorMenuButton).last().props().onClick).toBe(removeWindow);
   });
 
   it('passes correct props to <Button/>', () => {
     const maximizeWindow = jest.fn();
     const wrapper = createWrapper({ maximizeWindow });
-    expect(wrapper.find(IconButton).at(1).props().onClick).toBe(maximizeWindow);
+    expect(wrapper.find(MiradorMenuButton).at(1).props().onClick).toBe(maximizeWindow);
   });
 });

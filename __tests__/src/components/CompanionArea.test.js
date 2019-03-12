@@ -1,8 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import IconButton from '@material-ui/core/IconButton';
-import ArrowLeftSharpIcon from '@material-ui/icons/ArrowLeftSharp';
-import ArrowRightSharpIcon from '@material-ui/icons/ArrowRightSharp';
 import { CompanionArea } from '../../../src/components/CompanionArea';
 import CompanionWindowFactory from '../../../src/containers/CompanionWindowFactory';
 
@@ -17,6 +14,7 @@ function createWrapper(props) {
         { position: 'right', id: 'foo' },
         { position: 'right', id: 'baz' },
       ]}
+      t={key => key}
       {...props}
     />,
   );
@@ -47,17 +45,13 @@ describe('CompanionArea', () => {
       position: 'left', sideBarOpen: true, setCompanionAreaOpen, companionAreaOpen: false,
     });
 
-    expect(wrapper.find('WithStyles(IconButton)').length).toBe(1);
-    expect(wrapper.find('WithStyles(IconButton)').matchesElement(
-      <IconButton>
-        <ArrowRightSharpIcon />
-      </IconButton>,
-    )).toBe(true);
+    expect(wrapper.find('MiradorMenuButton').length).toBe(1);
+    expect(wrapper.find('MiradorMenuButton').first().children('pure(ArrowRightSharpIcon)').length).toBe(1);
 
     expect(wrapper.find('div.mirador-companion-windows').length).toBe(1);
     expect(wrapper.find('div.mirador-companion-windows').props().style.display).toBe('none');
 
-    wrapper.find('WithStyles(IconButton)').simulate('click');
+    wrapper.find('MiradorMenuButton').first().props().onClick(); // Trigger the onClick prop
 
     expect(setCompanionAreaOpen).toHaveBeenCalledWith('abc123', true);
   });
@@ -69,17 +63,13 @@ describe('CompanionArea', () => {
       position: 'left', sideBarOpen: true, setCompanionAreaOpen, companionAreaOpen: true,
     });
 
-    expect(wrapper.find('WithStyles(IconButton)').length).toBe(1);
-    expect(wrapper.find('WithStyles(IconButton)').matchesElement(
-      <IconButton>
-        <ArrowLeftSharpIcon />
-      </IconButton>,
-    )).toBe(true);
+    expect(wrapper.find('MiradorMenuButton').length).toBe(1);
+    expect(wrapper.find('MiradorMenuButton').first().children('pure(ArrowLeftSharpIcon)').length).toBe(1);
 
     expect(wrapper.find('div.mirador-companion-windows').length).toBe(1);
     expect(wrapper.find('div.mirador-companion-windows').props().style.display).toBe('flex');
 
-    wrapper.find('WithStyles(IconButton)').simulate('click');
+    wrapper.find('MiradorMenuButton').first().props().onClick(); // Trigger the onClick prop
 
     expect(setCompanionAreaOpen).toHaveBeenCalledWith('abc123', false);
   });
@@ -89,7 +79,7 @@ describe('CompanionArea', () => {
       position: 'left', sideBarOpen: false, setCompanionAreaOpen: () => {}, companionAreaOpen: true,
     });
 
-    expect(wrapper.find('WithStyles(IconButton)').length).toBe(0);
+    expect(wrapper.find('MiradorMenuButton').length).toBe(0);
   });
 
   it('does not show a toggle in other positions', () => {
@@ -97,6 +87,6 @@ describe('CompanionArea', () => {
       position: 'whatever', sideBarOpen: true, setCompanionAreaOpen: () => {}, companionAreaOpen: true,
     });
 
-    expect(wrapper.find('WithStyles(IconButton)').length).toBe(0);
+    expect(wrapper.find('MiradorMenuButton').length).toBe(0);
   });
 });

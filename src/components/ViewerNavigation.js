@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import IconButton from '@material-ui/core/IconButton';
 import NavigationIcon from '@material-ui/icons/PlayCircleOutlineSharp';
 import PropTypes from 'prop-types';
+import { MiradorMenuButton } from './MiradorMenuButton';
 import ns from '../config/css-ns';
 
 /**
@@ -68,22 +68,22 @@ export class ViewerNavigation extends Component {
 
     return (
       <div className={ns('osd-navigation')}>
-        <IconButton
+        <MiradorMenuButton
+          aria-label={t('previousCanvas')}
           className={ns('previous-canvas-button')}
           disabled={!this.hasPreviousCanvas()}
           onClick={this.previousCanvas}
-          aria-label={t('previousCanvas')}
         >
           <NavigationIcon style={{ transform: 'rotate(180deg)' }} />
-        </IconButton>
-        <IconButton
+        </MiradorMenuButton>
+        <MiradorMenuButton
+          aria-label={t('nextCanvas')}
           className={ns('next-canvas-button')}
           disabled={!this.hasNextCanvas()}
           onClick={this.nextCanvas}
-          aria-label={t('nextCanvas')}
         >
           <NavigationIcon />
-        </IconButton>
+        </MiradorMenuButton>
       </div>
     );
   }

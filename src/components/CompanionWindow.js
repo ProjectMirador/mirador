@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CloseIcon from '@material-ui/icons/CloseSharp';
-import IconButton from '@material-ui/core/IconButton';
 import OpenInNewIcon from '@material-ui/icons/OpenInNewSharp';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import ThumbnailNavigationBottomIcon from './icons/ThumbnailNavigationBottomIcon';
 import ThumbnailNavigationRightIcon from './icons/ThumbnailNavigationRightIcon';
+import { MiradorMenuButton } from './MiradorMenuButton';
 import ns from '../config/css-ns';
 
 /**
@@ -46,35 +46,33 @@ export class CompanionWindow extends Component {
             position === 'left'
               ? updateCompanionWindow
                 && (
-                  <>
-                    <IconButton
-                      aria-label={t('openInCompanionWindow')}
-                      onClick={() => { updateCompanionWindow(windowId, id, { position: 'right' }); }}
-                    >
-                      <OpenInNewIcon />
-                    </IconButton>
-                  </>
+                  <MiradorMenuButton
+                    aria-label={t('openInCompanionWindow')}
+                    onClick={() => { updateCompanionWindow(windowId, id, { position: 'right' }); }}
+                  >
+                    <OpenInNewIcon />
+                  </MiradorMenuButton>
                 )
               : (
                 <>
                   {
                     updateCompanionWindow && (
-                      <IconButton
+                      <MiradorMenuButton
+                        aria-label={position === 'bottom' ? t('moveCompanionWindowToRight') : t('moveCompanionWindowToBottom')}
                         className={classes.positionButton}
-                        aria-label={t('openInCompanionWindow')}
                         onClick={() => { updateCompanionWindow(windowId, id, { position: position === 'bottom' ? 'right' : 'bottom' }); }}
                       >
-                        { position === 'bottom' ? <ThumbnailNavigationRightIcon /> : <ThumbnailNavigationBottomIcon /> }
-                      </IconButton>
+                        {position === 'bottom' ? <ThumbnailNavigationRightIcon /> : <ThumbnailNavigationBottomIcon />}
+                      </MiradorMenuButton>
                     )
                   }
-                  <IconButton
+                  <MiradorMenuButton
                     aria-label={t('closeCompanionWindow')}
                     className={classes.closeButton}
                     onClick={onCloseClick}
                   >
                     <CloseIcon />
-                  </IconButton>
+                  </MiradorMenuButton>
                 </>
               )
           }

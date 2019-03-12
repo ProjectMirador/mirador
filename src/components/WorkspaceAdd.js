@@ -6,7 +6,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMoreSharp';
 import AppBar from '@material-ui/core/AppBar';
 import Drawer from '@material-ui/core/Drawer';
 import Fab from '@material-ui/core/Fab';
-import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -14,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import ns from '../config/css-ns';
 import ManifestForm from '../containers/ManifestForm';
 import ManifestListItem from '../containers/ManifestListItem';
+import { MiradorMenuButton } from './MiradorMenuButton';
 
 /**
  * An area for managing manifests and adding them to workspace
@@ -91,9 +91,13 @@ export class WorkspaceAdd extends React.Component {
           >
             <AppBar position="absolute" color="secondary" onClick={() => (this.setAddResourcesVisibility(false))}>
               <Toolbar>
-                <IconButton className={classes.menuButton} color="inherit" aria-label={t('closeAddResourceMenu')}>
+                <MiradorMenuButton
+                  aria-label={t('closeAddResourceMenu')}
+                  className={classes.menuButton}
+                  color="inherit"
+                >
                   <ExpandMoreIcon />
-                </IconButton>
+                </MiradorMenuButton>
                 <Typography variant="h2" noWrap color="inherit" className={classes.typographyBody}>
                   {t('addResource')}
                 </Typography>
