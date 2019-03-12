@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import { PrimaryWindow } from '../../../src/components/PrimaryWindow';
 import WindowSideBar from '../../../src/containers/WindowSideBar';
 import WindowViewer from '../../../src/containers/WindowViewer';
+import GalleryView from '../../../src/containers/GalleryView';
 
 /** create wrapper */
 function createWrapper(props) {
@@ -28,5 +29,11 @@ describe('PrimaryWindow', () => {
     const manifest = { id: 456, isFetching: false };
     const wrapper = createWrapper({ manifest });
     expect(wrapper.find(WindowViewer)).toHaveLength(1);
+  });
+  it('should render <GalleryView> if manifest is present and view is gallery', () => {
+    const manifest = { id: 456, isFetching: false };
+    const window = { id: 'window-2', view: 'gallery' };
+    const wrapper = createWrapper({ manifest, window });
+    expect(wrapper.find(GalleryView)).toHaveLength(1);
   });
 });

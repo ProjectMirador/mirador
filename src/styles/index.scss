@@ -101,6 +101,47 @@
     position: relative;
   }
 
+  &-gallery-container {
+    flex: 1;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 50px 0 50px 20px;
+  }
+
+  &-gallery-view-item {
+    display: inline-block;
+    max-width: 100px;
+    height: 160px;
+    overflow: hidden;
+    text-overflow: elipsis;
+    margin: 10px 5px;
+    padding: 5px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: 0.1s transform ease-out;
+
+    &.current-canvas {
+      border: 2px solid deepskyblue;
+      padding: 3px;
+    }
+
+    &:hover {
+      transition: 0.1s transform ease-out;
+      transform: scale(1.05);
+      border: 2px solid deepskyblue;
+      padding: 3px;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    img {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+
   &-osd-container {
     flex: 1;
     position: relative;

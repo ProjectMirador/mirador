@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import WindowSideBar from '../containers/WindowSideBar';
 import WindowViewer from '../containers/WindowViewer';
+import GalleryView from '../containers/GalleryView';
 import CompanionArea from '../containers/CompanionArea';
 import ns from '../config/css-ns';
 
@@ -18,6 +19,14 @@ export class PrimaryWindow extends Component {
   renderViewer() {
     const { manifest, window } = this.props;
     if (manifest && manifest.isFetching === false) {
+      if (window.view === 'gallery') {
+        return (
+          <GalleryView
+            window={window}
+            manifest={manifest}
+          />
+        );
+      }
       return (
         <WindowViewer
           window={window}
