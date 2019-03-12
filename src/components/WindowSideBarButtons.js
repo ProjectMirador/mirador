@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Badge from '@material-ui/core/Badge';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/InfoSharp';
 import AnnotationIcon from '@material-ui/icons/CommentSharp';
 import CanvasIndexIcon from './icons/CanvasIndexIcon';
@@ -50,7 +51,9 @@ export class WindowSideBarButtons extends Component {
             t('openInfoCompanionWindow')
           }
           icon={(
-            <InfoIcon />
+            <Tooltip title={t('openInfoCompanionWindow')}>
+              <InfoIcon />
+            </Tooltip>
           )}
           value="info"
         />
@@ -60,7 +63,9 @@ export class WindowSideBarButtons extends Component {
             t('openCanvasNavigationCompanionWindow')
           }
           icon={(
-            <CanvasIndexIcon />
+            <Tooltip title={t('openCanvasNavigationCompanionWindow')}>
+              <CanvasIndexIcon />
+            </Tooltip>
           )}
           value="canvas_navigation"
         />
@@ -70,9 +75,11 @@ export class WindowSideBarButtons extends Component {
             t('openAnnotationCompanionWindow')
           }
           icon={(
-            <Badge color="error" invisible={!hasAnnotations} variant="dot">
-              <AnnotationIcon />
-            </Badge>
+            <Tooltip title={t('openAnnotationCompanionWindow')}>
+              <Badge color="error" invisible={!hasAnnotations} variant="dot">
+                <AnnotationIcon />
+              </Badge>
+            </Tooltip>
           )}
           value="annotations"
         />
