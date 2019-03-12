@@ -55,8 +55,24 @@ describe('window actions', () => {
       const expectedAction = {
         type: ActionTypes.REMOVE_WINDOW,
         windowId: id,
+        companionWindowIds: ['a', 'b', 'c'],
       };
-      expect(actions.removeWindow(id)).toEqual(expectedAction);
+
+      const mockState = {
+        windows: {
+          abc123: { companionWindowIds: ['a', 'b', 'c'] },
+        },
+        companionWindows: {},
+      };
+
+      const mockDispatch = jest.fn(() => ({}));
+      const mockGetState = jest.fn(() => mockState);
+      const thunk = actions.removeWindow(id);
+
+      thunk(mockDispatch, mockGetState);
+
+      const action = mockDispatch.mock.calls[0][0];
+      expect(action).toEqual(expectedAction);
     });
   });
 

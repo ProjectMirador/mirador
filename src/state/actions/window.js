@@ -75,7 +75,12 @@ export function setCompanionAreaOpen(id, companionAreaOpen) {
  * @memberof ActionCreators
  */
 export function removeWindow(windowId) {
-  return { type: ActionTypes.REMOVE_WINDOW, windowId };
+  return (dispatch, getState) => {
+    const { windows } = getState();
+    const { companionWindowIds } = windows[windowId];
+
+    dispatch({ type: ActionTypes.REMOVE_WINDOW, windowId, companionWindowIds });
+  };
 }
 
 /**
@@ -97,17 +102,6 @@ export function toggleWindowSideBar(windowId) {
  */
 export function setWindowSideBarPanel(windowId, panelType) {
   return { type: ActionTypes.SET_WINDOW_SIDE_BAR_PANEL, windowId, panelType };
-}
-
-/**
-* Clean up state and remove window
-*/
-export function closeWindow(windowId) {
-  return (dispatch, getState) => {
-    const { companionWindowIds } = getState().windows[windowId];
-    companionWindowIds.map(id => dispatch(removeCompanionWindow(id)));
-    dispatch(removeWindow(windowId));
-  };
 }
 
 /**
