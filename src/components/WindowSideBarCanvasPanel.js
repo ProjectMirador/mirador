@@ -105,8 +105,8 @@ export class WindowSideBarCanvasPanel extends Component {
               variant="filled"
               input={<FilledInput name="variant" />}
             >
-              <MenuItem value="compact">Compact List</MenuItem>
-              <MenuItem value="thumbnail">Thumbnail List</MenuItem>
+              <MenuItem value="compact">{ t('compactList') }</MenuItem>
+              <MenuItem value="thumbnail">{ t('thumbnailList') }</MenuItem>
             </Select>
           </FormControl>
           )}
