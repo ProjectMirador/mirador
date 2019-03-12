@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/MenuSharp';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import WorkspaceMenu from '../containers/WorkspaceMenu';
+import { MiradorMenuButton } from './MiradorMenuButton';
 
 /**
  */
@@ -48,17 +48,16 @@ export class WorkspaceMenuButton extends Component {
 
     return (
       <>
-        <IconButton
-          color="default"
-          id="menuBtn"
-          aria-label={t('workspaceMenu')}
-          className={classNames(classes.ctrlBtn, (anchorEl ? classes.ctrlBtnSelected : null))}
+        <MiradorMenuButton
           aria-haspopup="true"
-          onClick={this.handleMenuClick}
+          aria-label={t('workspaceMenu')}
           aria-owns={anchorEl ? 'workspace-menu' : undefined}
+          className={classNames(classes.ctrlBtn, (anchorEl ? classes.ctrlBtnSelected : null))}
+          id="menuBtn"
+          onClick={this.handleMenuClick}
         >
           <MenuIcon />
-        </IconButton>
+        </MiradorMenuButton>
         <WorkspaceMenu
           anchorEl={anchorEl}
           handleClose={this.handleMenuClose}

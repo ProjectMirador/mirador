@@ -16,11 +16,12 @@ function createWrapper(props) {
 
 describe('WorkspaceFullScreenButton', () => {
   let wrapper;
+  let menuButton;
 
   it('renders without an error', () => {
     wrapper = createWrapper();
 
-    expect(wrapper.find('WithStyles(IconButton)').length).toBe(1);
+    expect(wrapper.find('MiradorMenuButton').length).toBe(1);
   });
 
   describe('when not in fullscreen', () => {
@@ -28,18 +29,19 @@ describe('WorkspaceFullScreenButton', () => {
     beforeAll(() => {
       setWorkspaceFullscreen = jest.fn();
       wrapper = createWrapper({ setWorkspaceFullscreen });
+      menuButton = wrapper.find('MiradorMenuButton');
     });
 
     it('has the FullscreenIcon', () => {
-      expect(wrapper.find('pure(FullscreenSharpIcon)').length).toBe(1);
+      expect(menuButton.children('pure(FullscreenSharpIcon)').length).toBe(1);
     });
 
     it('has the proper aria-label i18n key', () => {
-      expect(wrapper.find('WithStyles(IconButton)[aria-label="workspaceFullScreen"]').length).toBe(1);
+      expect(menuButton.props()['aria-label']).toEqual('workspaceFullScreen');
     });
 
     it('triggers the setWorkspaceFullscreen prop with the appropriate boolean', () => {
-      wrapper.find('WithStyles(IconButton)').simulate('click');
+      menuButton.props().onClick(); // Trigger the onClick prop
       expect(setWorkspaceFullscreen).toHaveBeenCalledWith(true);
     });
   });
@@ -49,18 +51,19 @@ describe('WorkspaceFullScreenButton', () => {
     beforeAll(() => {
       setWorkspaceFullscreen = jest.fn();
       wrapper = createWrapper({ setWorkspaceFullscreen, isFullscreenEnabled: true });
+      menuButton = wrapper.find('MiradorMenuButton');
     });
 
     it('has the FullscreenExitIcon', () => {
-      expect(wrapper.find('pure(FullscreenExitSharpIcon)').length).toBe(1);
+      expect(menuButton.children('pure(FullscreenExitSharpIcon)').length).toBe(1);
     });
 
     it('has the proper aria-label', () => {
-      expect(wrapper.find('WithStyles(IconButton)[aria-label="exitFullScreen"]').length).toBe(1);
+      expect(menuButton.props()['aria-label']).toEqual('exitFullScreen');
     });
 
     it('triggers the setWorkspaceFullscreen prop with the appropriate boolean', () => {
-      wrapper.find('WithStyles(IconButton)').simulate('click');
+      menuButton.props().onClick(); // Trigger the onClick prop
       expect(setWorkspaceFullscreen).toHaveBeenCalledWith(false);
     });
   });

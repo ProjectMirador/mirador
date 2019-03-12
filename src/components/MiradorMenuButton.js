@@ -11,7 +11,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 */
 export function MiradorMenuButton(props) {
   const { 'aria-label': ariaLabel } = props;
-  const { icon, ...iconButtonProps } = props;
+  const { children, ...iconButtonProps } = props;
 
   return (
     <Tooltip title={ariaLabel}>
@@ -20,7 +20,7 @@ export function MiradorMenuButton(props) {
         (e.g. show the tooltip) even if the IconButton is disabled
       */}
       <span>
-        <IconButton {...iconButtonProps}>{icon}</IconButton>
+        <IconButton {...iconButtonProps}>{children}</IconButton>
       </span>
     </Tooltip>
   );
@@ -28,5 +28,5 @@ export function MiradorMenuButton(props) {
 
 MiradorMenuButton.propTypes = {
   'aria-label': PropTypes.string.isRequired,
-  icon: PropTypes.element.isRequired,
+  children: PropTypes.element.isRequired,
 };

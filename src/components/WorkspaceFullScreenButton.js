@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import IconButton from '@material-ui/core/IconButton';
 import FullscreenIcon from '@material-ui/icons/FullscreenSharp';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExitSharp';
 import PropTypes from 'prop-types';
-
+import { MiradorMenuButton } from './MiradorMenuButton';
 /**
  */
 export class WorkspaceFullScreenButton extends Component {
@@ -16,17 +15,13 @@ export class WorkspaceFullScreenButton extends Component {
       classes, isFullscreenEnabled, setWorkspaceFullscreen, t,
     } = this.props;
     return (
-      <IconButton
-        className={classes.ctrlBtn}
+      <MiradorMenuButton
         aria-label={isFullscreenEnabled ? t('exitFullScreen') : t('workspaceFullScreen')}
+        className={classes.ctrlBtn}
         onClick={() => setWorkspaceFullscreen(!isFullscreenEnabled)}
       >
-        {
-          isFullscreenEnabled
-            ? <FullscreenExitIcon />
-            : <FullscreenIcon />
-        }
-      </IconButton>
+        {isFullscreenEnabled ? <FullscreenExitIcon /> : <FullscreenIcon />}
+      </MiradorMenuButton>
     );
   }
 }

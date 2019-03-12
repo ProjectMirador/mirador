@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVertSharp';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import WindowTopMenu from '../containers/WindowTopMenu';
+import { MiradorMenuButton } from './MiradorMenuButton';
 
 /**
  */
@@ -48,16 +48,16 @@ export class WindowTopMenuButton extends Component {
 
     return (
       <>
-        <IconButton
-          color="inherit"
-          aria-label={t('windowMenu')}
-          className={classNames(classes.ctrlBtn, (anchorEl ? classes.ctrlBtnSelected : null))}
+        <MiradorMenuButton
           aria-haspopup="true"
-          onClick={this.handleMenuClick}
+          aria-label={t('windowMenu')}
           aria-owns={anchorEl ? `window-menu_${windowId}` : undefined}
+          className={classNames(classes.ctrlBtn, (anchorEl ? classes.ctrlBtnSelected : null))}
+          color="inherit"
+          onClick={this.handleMenuClick}
         >
           <MoreVertIcon />
-        </IconButton>
+        </MiradorMenuButton>
         <WindowTopMenu
           windowId={windowId}
           anchorEl={anchorEl}

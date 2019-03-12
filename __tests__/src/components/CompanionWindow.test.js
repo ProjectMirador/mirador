@@ -20,16 +20,15 @@ describe('CompanionWindow', () => {
   let companionWindow;
 
   describe('when the openInCompanionWindow button is clicked', () => {
-    it('triggers the updateCompanionWindow prop with the appropriate args', () => {
+    it('passes the the updateCompanionWindow prop to MiradorMenuButton with the appropriate args', () => {
       const updateCompanionWindow = jest.fn();
       companionWindow = createWrapper({
         updateCompanionWindow,
         position: 'left',
       });
 
-      const button = companionWindow.find('WithStyles(IconButton)[aria-label="openInCompanionWindow"]');
-
-      button.simulate('click');
+      const button = companionWindow.find('MiradorMenuButton');
+      button.props().onClick(); // Trigger the onClick prop
       expect(updateCompanionWindow).toHaveBeenCalledTimes(1);
       expect(updateCompanionWindow).toHaveBeenCalledWith('x', 'abc123', { position: 'right' });
     });
@@ -42,8 +41,8 @@ describe('CompanionWindow', () => {
         onCloseClick: removeCompanionWindowEvent,
       });
 
-      const closeButton = companionWindow.find('WithStyles(IconButton)[aria-label="closeCompanionWindow"]');
-      closeButton.simulate('click');
+      const button = companionWindow.find('MiradorMenuButton');
+      button.props().onClick(); // Trigger the onClick prop
       expect(removeCompanionWindowEvent).toHaveBeenCalledTimes(1);
     });
   });
@@ -54,8 +53,8 @@ describe('CompanionWindow', () => {
 
     expect(companionWindow.find('WithStyles(Paper).vertical').length).toBe(1);
 
-    const button = companionWindow.find('WithStyles(IconButton)[aria-label="openInCompanionWindow"]');
-    button.simulate('click');
+    const button = companionWindow.find('MiradorMenuButton').first();
+    button.props().onClick(); // Trigger the onClick prop
     expect(updateCompanionWindow).toHaveBeenCalledTimes(1);
     expect(updateCompanionWindow).toHaveBeenCalledWith('x', 'abc123', { position: 'bottom' });
   });
@@ -66,8 +65,8 @@ describe('CompanionWindow', () => {
 
     expect(companionWindow.find('WithStyles(Paper).horizontal').length).toBe(1);
 
-    const button = companionWindow.find('WithStyles(IconButton)[aria-label="openInCompanionWindow"]');
-    button.simulate('click');
+    const button = companionWindow.find('MiradorMenuButton').first();
+    button.props().onClick(); // Trigger the onClick prop
     expect(updateCompanionWindow).toHaveBeenCalledTimes(1);
     expect(updateCompanionWindow).toHaveBeenCalledWith('x', 'abc123', { position: 'right' });
   });
