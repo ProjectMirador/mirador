@@ -23,9 +23,10 @@ describe('WindowViewSettings', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(ListSubheader).length).toBe(1);
     const labels = wrapper.find(FormControlLabel);
-    expect(labels.length).toBe(2);
+    expect(labels.length).toBe(3);
     expect(labels.at(0).props().value).toBe('single');
     expect(labels.at(1).props().value).toBe('book');
+    expect(labels.at(2).props().value).toBe('gallery');
   });
 
   it('should set the correct label active (by setting the secondary color)', () => {
@@ -35,6 +36,9 @@ describe('WindowViewSettings', () => {
 
     wrapper = createWrapper({ windowViewType: 'book' });
     expect(wrapper.find(FormControlLabel).at(1).props().control.props.color).toEqual('secondary');
+
+    wrapper = createWrapper({ windowViewType: 'gallery' });
+    expect(wrapper.find(FormControlLabel).at(2).props().control.props.color).toEqual('secondary');
   });
 
   it('updates state when the view config selection changes', () => {
@@ -44,6 +48,8 @@ describe('WindowViewSettings', () => {
     expect(setWindowViewType).toHaveBeenCalledWith('xyz', 'single');
     wrapper.find(MenuItem).at(1).simulate('click');
     expect(setWindowViewType).toHaveBeenCalledWith('xyz', 'book');
+    wrapper.find(MenuItem).at(2).simulate('click');
+    expect(setWindowViewType).toHaveBeenCalledWith('xyz', 'gallery');
   });
 
   it('sets the selected ref to a MenuItem in the component (when mounting)', () => {

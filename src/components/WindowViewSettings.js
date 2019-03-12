@@ -6,6 +6,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import SingleIcon from '@material-ui/icons/CropOriginalSharp';
 import PropTypes from 'prop-types';
 import BookViewIcon from './icons/BookViewIcon';
+import GalleryViewIcon from './icons/GalleryViewIcon';
 
 /**
  *
@@ -80,6 +81,15 @@ export class WindowViewSettings extends Component {
             classes={{ label: windowViewType === 'book' ? classes.selectedLabel : undefined }}
             control={<BookViewIcon color={windowViewType === 'book' ? 'secondary' : undefined} />}
             label={t('book')}
+            labelPlacement="bottom"
+          />
+        </MenuItem>
+        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('gallery'); handleClose(); }}>
+          <FormControlLabel
+            value="gallery"
+            classes={{ label: windowViewType === 'gallery' ? classes.selectedLabel : undefined }}
+            control={<GalleryViewIcon color={windowViewType === 'gallery' ? 'secondary' : undefined} />}
+            label={t('gallery')}
             labelPlacement="bottom"
           />
         </MenuItem>
