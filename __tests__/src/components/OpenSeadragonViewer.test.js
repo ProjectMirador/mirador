@@ -4,7 +4,6 @@ import OpenSeadragon from 'openseadragon';
 import { OpenSeadragonViewer } from '../../../src/components/OpenSeadragonViewer';
 import OpenSeadragonCanvasOverlay from '../../../src/lib/OpenSeadragonCanvasOverlay';
 import Annotation from '../../../src/lib/Annotation';
-import ZoomControls from '../../../src/containers/ZoomControls';
 
 jest.mock('openseadragon');
 jest.mock('../../../src/lib/OpenSeadragonCanvasOverlay');
@@ -26,6 +25,7 @@ describe('OpenSeadragonViewer', () => {
         config={{}}
         updateViewport={updateViewport}
         t={k => k}
+        classes={{ controls: 'controls' }}
       >
         <div className="foo" />
       </OpenSeadragonViewer>,
@@ -37,8 +37,8 @@ describe('OpenSeadragonViewer', () => {
   it('renders child components', () => {
     expect(wrapper.find('.foo').length).toBe(1);
   });
-  it('renders ZoomControls', () => {
-    expect(wrapper.find(ZoomControls).length).toBe(1);
+  it('renders viewer controls', () => {
+    expect(wrapper.find('.controls').length).toBe(1);
   });
   describe('tileSourcesMatch', () => {
     it('when they do not match', () => {

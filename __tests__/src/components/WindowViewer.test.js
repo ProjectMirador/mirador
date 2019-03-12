@@ -1,9 +1,11 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import manifesto from 'manifesto.js';
+import Typography from '@material-ui/core/Typography';
 import { WindowViewer } from '../../../src/components/WindowViewer';
 import OSDViewer from '../../../src/containers/OpenSeadragonViewer';
 import ViewerNavigation from '../../../src/containers/ViewerNavigation';
+import ZoomControls from '../../../src/containers/ZoomControls';
 import fixture from '../../fixtures/version-2/019.json';
 import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
 import otherContentFixture from '../../fixtures/version-2/299843.json';
@@ -22,6 +24,7 @@ let mockWindow = {
 function createWrapper(props) {
   return shallow(
     <WindowViewer
+      canvasLabel="label"
       infoResponses={{}}
       fetchInfoResponse={() => {}}
       fetchAnnotation={() => {}}
@@ -41,7 +44,11 @@ describe('WindowViewer', () => {
     expect(wrapper.matchesElement(
       <>
         <OSDViewer>
-          <ViewerNavigation />
+          <div>
+            <ZoomControls />
+            <ViewerNavigation />
+            <Typography>label</Typography>
+          </div>
         </OSDViewer>
       </>,
     )).toBe(true);

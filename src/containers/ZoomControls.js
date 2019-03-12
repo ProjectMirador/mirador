@@ -32,10 +32,8 @@ const mapDispatchToProps = { updateViewport: actions.updateViewport };
  */
 const styles = theme => ({
   zoom_controls: {
-    position: 'absolute',
-    right: 0,
-    zIndex: 33,
-    top: 0,
+    display: 'flex',
+    flexDirection: 'row',
   },
   ListItem: {
     paddingTop: 0,

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 import AddCircleIcon from '@material-ui/icons/AddCircleOutlineSharp';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircleOutlineSharp';
 import PropTypes from 'prop-types';
@@ -73,23 +71,17 @@ export class ZoomControls extends Component {
       );
     }
     return (
-      <List className={classes.zoom_controls}>
-        <ListItem>
-          <IconButton aria-label={t('zoomIn')} onClick={this.handleZoomInClick}>
-            <AddCircleIcon />
-          </IconButton>
-        </ListItem>
-        <ListItem>
-          <IconButton aria-label={t('zoomOut')} onClick={this.handleZoomOutClick}>
-            <RemoveCircleIcon />
-          </IconButton>
-        </ListItem>
-        <ListItem>
-          <IconButton aria-label={t('zoomReset')} onClick={this.handleZoomResetClick}>
-            <RestoreZoomIcon />
-          </IconButton>
-        </ListItem>
-      </List>
+      <div className={classes.zoom_controls}>
+        <IconButton aria-label={t('zoomIn')} onClick={this.handleZoomInClick}>
+          <AddCircleIcon />
+        </IconButton>
+        <IconButton aria-label={t('zoomOut')} onClick={this.handleZoomOutClick}>
+          <RemoveCircleIcon />
+        </IconButton>
+        <IconButton aria-label={t('zoomReset')} onClick={this.handleZoomResetClick}>
+          <RestoreZoomIcon />
+        </IconButton>
+      </div>
     );
   }
 }

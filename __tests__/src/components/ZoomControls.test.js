@@ -12,7 +12,7 @@ describe('ZoomControls', () => {
     updateViewport = jest.fn();
     wrapper = shallow(
       <ZoomControls
-        classes={{}}
+        classes={{ zoom_controls: 'zoom_controls' }}
         windowId="xyz"
         viewer={viewer}
         showZoomControls={showZoomControls}
@@ -23,7 +23,7 @@ describe('ZoomControls', () => {
 
   describe('with showZoomControls=false', () => {
     it('renders nothing unless asked', () => {
-      expect(wrapper.find('WithStyles(List)').length).toBe(0);
+      expect(wrapper.find('div.zoom_controls').length).toBe(0);
     });
   });
 
@@ -33,7 +33,7 @@ describe('ZoomControls', () => {
       updateViewport = jest.fn();
       wrapper = shallow(
         <ZoomControls
-          classes={{}}
+          classes={{ zoom_controls: 'zoom_controls' }}
           windowId="xyz"
           viewer={viewer}
           showZoomControls
@@ -43,7 +43,7 @@ describe('ZoomControls', () => {
     });
 
     it('renders a couple buttons', () => {
-      expect(wrapper.find('WithStyles(List)').length).toBe(1);
+      expect(wrapper.find('div.zoom_controls').length).toBe(1);
     });
 
     it('has a zoom-in button', () => {
