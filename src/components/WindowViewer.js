@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import OSDViewer from '../containers/OpenSeadragonViewer';
+import ZoomControls from '../containers/ZoomControls';
 import ViewerNavigation from '../containers/ViewerNavigation';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
 import CanvasGroupings from '../lib/CanvasGroupings';
+import ns from '../config/css-ns';
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -129,7 +131,10 @@ export class WindowViewer extends Component {
           currentCanvases={this.currentCanvases()}
           windowId={window.id}
         >
-          <ViewerNavigation window={window} canvases={this.canvases} />
+          <div className={ns('canvas-nav')}>
+            <ZoomControls windowId={window.id} />
+            <ViewerNavigation window={window} canvases={this.canvases} />
+          </div>
         </OSDViewer>
       </>
     );

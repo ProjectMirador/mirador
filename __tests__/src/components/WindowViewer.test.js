@@ -4,6 +4,7 @@ import manifesto from 'manifesto.js';
 import { WindowViewer } from '../../../src/components/WindowViewer';
 import OSDViewer from '../../../src/containers/OpenSeadragonViewer';
 import ViewerNavigation from '../../../src/containers/ViewerNavigation';
+import ZoomControls from '../../../src/containers/ZoomControls';
 import fixture from '../../fixtures/version-2/019.json';
 import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
 import otherContentFixture from '../../fixtures/version-2/299843.json';
@@ -41,7 +42,10 @@ describe('WindowViewer', () => {
     expect(wrapper.matchesElement(
       <>
         <OSDViewer>
-          <ViewerNavigation />
+          <div>
+            <ZoomControls />
+            <ViewerNavigation />
+          </div>
         </OSDViewer>
       </>,
     )).toBe(true);

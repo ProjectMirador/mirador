@@ -99,13 +99,17 @@
     position: relative;
   }
 
-  &-osd-navigation {
-    bottom: 10px;
-    left: 0;
+  div + &-osd-navigation:before {
+    content: '|';
+    color: $gray;
     position: absolute;
-    right: 0;
-    text-align: center;
-    z-index: 33;
+    font-size: 24px;
+    top: 12px;
+  }
+
+  &-canvas-nav {
+    display: flex;
+    justify-content: center;
   }
 
   &-thumb-navigation {
