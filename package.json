@@ -50,8 +50,6 @@
     "node-sass": "^4.9.2",
     "openseadragon": "^2.4.0",
     "prop-types": "^15.6.2",
-    "react": "^16.8.3",
-    "react-dom": "^16.8.3",
     "react-full-screen": "^0.2.4",
     "react-i18next": "^10.2.0",
     "react-mosaic-component": "^2.1.0",
@@ -98,7 +96,9 @@
     "jsdom": "14.0.0",
     "json-server": "^0.14.2",
     "puppeteer": "^1.12.0",
+    "react": "^16.8.3",
     "react-dev-utils": "^8.0.0",
+    "react-dom": "^16.8.3",
     "redux-mock-store": "^1.5.1",
     "sass-lint": "^1.12.1",
     "size-limit": "^0.21.1",
@@ -107,5 +107,9 @@
     "terser-webpack-plugin": "^1.2.1",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.1.2"
+  },
+  "peerDependencies": {
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3"
   }
 }
