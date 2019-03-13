@@ -38,12 +38,6 @@ describe('NestedMenu', () => {
     expect(wrapper.find('WithStyles(Typography)').children().text()).toEqual('GivenLabel');
   });
 
-  it('renders the given children wrapped in a MUI Collapse', () => {
-    wrapper = createWrapper();
-
-    expect(wrapper.find('WithStyles(Collapse)').children().text()).toEqual('GivenChildren');
-  });
-
   it('toggles the local nestedMenuIsOpen state when clicking the MenuItem', () => {
     wrapper = createWrapper();
 
@@ -71,15 +65,15 @@ describe('NestedMenu', () => {
     expect(wrapper.find('pure(ExpandLessSharpIcon)').length).toBe(1);
   });
 
-  it("the MUI Collapse component's in prop is based on the nestedMenuIsOpen state", () => {
+  it("renders the component's children based on the nestedMenuIsOpen state", () => {
     wrapper = createWrapper();
 
     expect(wrapper.state().nestedMenuIsOpen).toBe(false);
-    expect(wrapper.find('WithStyles(Collapse)').find({ in: false }).length).toBe(1);
-    expect(wrapper.find('WithStyles(Collapse)').find({ in: true }).length).toBe(0);
+    expect(wrapper.children().length).toBe(1);
+    expect(wrapper.children().text()).not.toMatch(/GivenChildren/);
 
     wrapper.setState({ nestedMenuIsOpen: true });
-    expect(wrapper.find('WithStyles(Collapse)').find({ in: true }).length).toBe(1);
-    expect(wrapper.find('WithStyles(Collapse)').find({ in: false }).length).toBe(0);
+    expect(wrapper.children().length).toBe(2);
+    expect(wrapper.children().last().text()).toEqual('GivenChildren');
   });
 });
