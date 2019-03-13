@@ -42,7 +42,7 @@ export class Window extends Component {
    */
   render() {
     const {
-      label, manifest, window, classes, t, thumbnailNavigationPosition,
+      focusWindow, label, manifest, window, classes, t, thumbnailNavigationPosition,
     } = this.props;
 
     if (!window) {
@@ -51,6 +51,7 @@ export class Window extends Component {
 
     return (
       <Paper
+        onFocus={focusWindow}
         component="section"
         elevation={1}
         id={window.id}
@@ -115,6 +116,7 @@ Window.propTypes = {
   workspaceType: PropTypes.string,
   t: PropTypes.func.isRequired,
   label: PropTypes.string,
+  focusWindow: PropTypes.func,
 };
 
 Window.defaultProps = {
@@ -124,4 +126,5 @@ Window.defaultProps = {
   classes: {},
   label: null,
   thumbnailNavigationPosition: 'off',
+  focusWindow: () => {},
 };

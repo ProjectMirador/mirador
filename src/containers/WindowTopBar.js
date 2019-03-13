@@ -10,6 +10,7 @@ import { WindowTopBar } from '../components/WindowTopBar';
 const mapStateToProps = (state, { windowId }) => ({
   manifestTitle: getManifestTitle(getWindowManifest(state, windowId)),
   maximized: state.windows[windowId].maximized,
+  focused: state.workspace.focusedWindowId === windowId,
 });
 
 /**
@@ -38,6 +39,10 @@ const styles = theme => ({
     minHeight: 32,
     paddingLeft: 4,
     backgroundColor: theme.palette.primary.light,
+    borderTop: '2px solid transparent',
+  },
+  focused: {
+    borderTop: `2px solid ${theme.palette.secondary.main}`,
   },
 });
 
