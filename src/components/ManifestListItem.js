@@ -95,14 +95,14 @@ export class ManifestListItem extends React.Component {
                 <Grid container spacing={24} className={classes.label}>
                   <Grid item xs={4} sm={3}>
                     {
-                      thumbnail && (
+                      <ReactPlaceholder ready={!!thumbnail} type="rect" style={{ width: 120, height: 80 }}>
                         <img
                           className={ns('manifest-list-item-thumb')}
                           src={thumbnail}
                           alt=""
                           height="80"
                         />
-                      )
+                      </ReactPlaceholder>
                     }
                   </Grid>
                   <Grid item xs={8} sm={9}>

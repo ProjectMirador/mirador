@@ -29,7 +29,7 @@ describe('ManifestListItem', () => {
     const wrapper = createWrapper({ ready: false });
 
     expect(wrapper.find('.mirador-manifest-list-item').length).toBe(1);
-    expect(wrapper.find('ReactPlaceholder').length).toBe(1);
+    expect(wrapper.find('ReactPlaceholder').length > 0).toBe(true);
   });
   it('renders an error message if fetching the manifest failed', () => {
     const wrapper = createWrapper({ error: 'This is an error message' });
