@@ -83,6 +83,30 @@ describe('getManifestThumbnail()', () => {
     expect(received).toEqual(manifestFixture001.thumbnail['@id']);
   });
 
+  it('returns the first canvas thumbnail id', () => {
+    const manifest = {
+      manifestation: {
+        getThumbnail: () => (null),
+        getSequences: () => [
+          {
+            getCanvases: () => [
+              { getThumbnail: () => ({ id: 'xyz' }) },
+            ],
+          },
+        ],
+      },
+    };
+
+    const received = getManifestThumbnail(manifest);
+    expect(received).toEqual('xyz');
+  });
+
+  it('returns a thumbnail sized image url from the first canvas', () => {
+    const manifest = { manifestation: manifesto.create(manifestFixture019) };
+    const received = getManifestThumbnail(manifest);
+    expect(received).toEqual('https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/,80/0/default.jpg');
+  });
+
   it('should return null if manifest has no thumbnail', () => {
     const manifest = { manifestation: manifesto.create({}) };
     const received = getManifestThumbnail(manifest);

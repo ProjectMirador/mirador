@@ -2,6 +2,7 @@ import filter from 'lodash/filter';
 import flatten from 'lodash/flatten';
 import { LanguageMap } from 'manifesto.js';
 import Annotation from '../../lib/Annotation';
+import ManifestoCanvas from '../../lib/ManifestoCanvas';
 
 /**
 * Return the manifest that belongs to a certain window.
@@ -43,14 +44,39 @@ export function getManifestProvider(manifest) {
 }
 
 /**
-* Return the logo of a manifest or null
+* Return the supplied thumbnail for a manifest or null
 * @param {object} manifest
 * @return {String|null}
 */
 export function getManifestThumbnail(manifest) {
-  return manifest.manifestation
-    && manifest.manifestation.getThumbnail()
-    && manifest.manifestation.getThumbnail().id;
+  /** */
+  function getTopLevelManifestThumbnail() {
+    return manifest.manifestation
+      && manifest.manifestation.getThumbnail()
+      && manifest.manifestation.getThumbnail().id;
+  }
+
+  /** */
+  function getFirstCanvasThumbnail() {
+    const canvases = getManifestCanvases(manifest);
+
+    return canvases.length > 0 && canvases[0].getThumbnail() && canvases[0].getThumbnail().id;
+  }
+
+  /** */
+  function generateThumbnailFromFirstCanvas() {
+    const canvases = getManifestCanvases(manifest);
+
+    if (canvases.length === 0) return null;
+
+    const manifestoCanvas = new ManifestoCanvas(canvases[0]);
+
+    return manifestoCanvas.thumbnail(null, 80);
+  }
+
+  return getTopLevelManifestThumbnail()
+    || getFirstCanvasThumbnail()
+    || generateThumbnailFromFirstCanvas();
 }
 
 /**
