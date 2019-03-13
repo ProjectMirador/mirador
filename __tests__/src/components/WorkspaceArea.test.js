@@ -23,10 +23,14 @@ describe('WorkspaceArea', () => {
     expect(wrapper.find('main.mirador-viewer').length).toBe(1);
   });
 
-  it('should render all needed elements ', () => {
+  it('should render all needed elements in order', () => {
     const wrapper = createWrapper();
-    expect(wrapper.find(Workspace).length).toBe(1);
-    expect(wrapper.find(WorkspaceControlPanel).length).toBe(1);
+    expect(wrapper.containsMatchingElement(
+      <main>
+        <WorkspaceControlPanel />
+        <Workspace />
+      </main>,
+    )).toBeTruthy();
   });
 
   it('should not render WorkspaceControlPanel when isWorkspaceControlPanelVisible is false', () => {
