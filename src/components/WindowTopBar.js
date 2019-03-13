@@ -25,11 +25,11 @@ export class WindowTopBar extends Component {
   render() {
     const {
       removeWindow, windowId, classes, toggleWindowSideBar, t, manifestTitle,
-      maximizeWindow, maximized, minimizeWindow,
+      maximizeWindow, maximized, minimizeWindow, focused,
     } = this.props;
     return (
       <AppBar position="relative">
-        <Toolbar disableGutters className={classNames(classes.windowTopBarStyle, ns('window-top-bar'))} variant="dense">
+        <Toolbar disableGutters className={classNames(classes.windowTopBarStyle, focused ? classes.focused : null, ns('window-top-bar'))} variant="dense">
           <MiradorMenuButton
             aria-label={t('toggleWindowSideBar')}
             color="inherit"
@@ -74,6 +74,7 @@ WindowTopBar.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   toggleWindowSideBar: PropTypes.func.isRequired,
   t: PropTypes.func,
+  focused: PropTypes.bool,
 };
 
 WindowTopBar.defaultProps = {
@@ -82,4 +83,5 @@ WindowTopBar.defaultProps = {
   maximized: false,
   minimizeWindow: () => {},
   t: key => key,
+  focused: false,
 };
