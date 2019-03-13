@@ -23,7 +23,7 @@ describe('CompanionWindowFactory', () => {
         content: 'info',
       });
 
-      expect(wrapper.find('WithStyles(Connect(Connect(miradorWithPlugins(WindowSideBarInfoPanel))))').length).toBe(1);
+      expect(wrapper.find('Connect(Connect(miradorWithPlugins(WindowSideBarInfoPanel)))').length).toBe(1);
     });
   });
 

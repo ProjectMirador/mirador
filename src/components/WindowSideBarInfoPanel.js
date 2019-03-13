@@ -21,7 +21,6 @@ export class WindowSideBarInfoPanel extends Component {
       canvasDescription,
       canvasLabel,
       canvasMetadata,
-      classes,
       manifestDescription,
       manifestLabel,
       manifestMetadata,
@@ -35,14 +34,14 @@ export class WindowSideBarInfoPanel extends Component {
         {canvasLabel && (
           <>
             <Typography variant="overline" id={`${id}-currentItem`}>{t('currentItem')}</Typography>
-            <Typography aria-labelledby={`${id}-currentItem`} variant="h4" className={classes.windowSideBarHeading}>
+            <Typography aria-labelledby={`${id}-currentItem`} variant="h4">
               {canvasLabel}
             </Typography>
           </>
         )}
 
         {canvasDescription && (
-          <Typography variant="body2">
+          <Typography variant="body1">
             <SanitizedHtml htmlString={canvasDescription} ruleSet="iiif" />
           </Typography>
         )}
@@ -55,8 +54,8 @@ export class WindowSideBarInfoPanel extends Component {
 
         {manifestLabel && (
           <>
-            <Typography variant="overline" id={`${id}-resource`} component="p" className={classes.sectionHeading}>{t('resource')}</Typography>
-            <Typography aria-labelledby={`${id}-resource`} variant="h4" className={classes.windowSideBarHeading}>
+            <Typography variant="overline" id={`${id}-resource`} component="p">{t('resource')}</Typography>
+            <Typography aria-labelledby={`${id}-resource`} variant="h4">
               {manifestLabel}
             </Typography>
           </>
@@ -81,7 +80,6 @@ WindowSideBarInfoPanel.propTypes = {
   canvasDescription: PropTypes.string,
   canvasLabel: PropTypes.string,
   canvasMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   manifestLabel: PropTypes.string,
   manifestDescription: PropTypes.string,
   manifestMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
@@ -94,7 +92,6 @@ WindowSideBarInfoPanel.defaultProps = {
   canvasDescription: null,
   canvasLabel: null,
   canvasMetadata: [],
-  classes: {},
   manifestLabel: null,
   manifestDescription: null,
   manifestMetadata: [],
