@@ -18,7 +18,11 @@ export class WindowSideBarButtons extends Component {
    */
   static selectPreviousTab(event) {
     const { previousSibling } = event.target;
-    previousSibling && previousSibling.focus();
+    if (previousSibling) {
+      previousSibling.focus();
+    } else {
+      event.target.parentNode.lastChild.focus();
+    }
   }
 
   /**
@@ -27,7 +31,11 @@ export class WindowSideBarButtons extends Component {
    */
   static selectNextTab(event) {
     const { nextSibling } = event.target;
-    nextSibling && nextSibling.focus();
+    if (nextSibling) {
+      nextSibling.focus();
+    } else {
+      event.target.parentNode.firstChild.focus();
+    }
   }
 
   /**
