@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 import ZoomControls from '../containers/ZoomControls';
+import ViewerInfo from '../containers/ViewerInfo';
 import ViewerNavigation from '../containers/ViewerNavigation';
 import ns from '../config/css-ns';
 
@@ -12,7 +12,7 @@ export class WindowCanvasNavigationControls extends Component {
   /** */
   render() {
     const {
-      canvases, canvasLabel, visible, window,
+      canvases, visible, window,
     } = this.props;
 
     if (!visible) return (<></>);
@@ -21,11 +21,7 @@ export class WindowCanvasNavigationControls extends Component {
       <div className={ns('canvas-nav')}>
         <ZoomControls windowId={window.id} />
         <ViewerNavigation window={window} canvases={canvases} />
-        {
-          canvasLabel && (
-            <Typography variant="caption" className={ns('canvas-label')}>{canvasLabel}</Typography>
-          )
-        }
+        <ViewerInfo windowId={window.id} />
       </div>
     );
   }
@@ -35,11 +31,9 @@ export class WindowCanvasNavigationControls extends Component {
 WindowCanvasNavigationControls.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  canvasLabel: PropTypes.string,
   visible: PropTypes.bool,
 };
 
 WindowCanvasNavigationControls.defaultProps = {
-  canvasLabel: undefined,
   visible: true,
 };
