@@ -43,7 +43,7 @@ export class WindowTopBar extends Component {
           <WindowTopBarButtons windowId={windowId} />
           <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
           <MiradorMenuButton
-            aria-label={t('maximizeWindow')}
+            aria-label={(maximized ? t('minimizeWindow') : t('maximizeWindow'))}
             className={ns('window-maximize')}
             color="inherit"
             onClick={(maximized ? minimizeWindow : maximizeWindow)}
