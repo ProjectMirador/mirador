@@ -22,6 +22,6 @@ describe('WorkspaceControlPanel', () => {
 
   it('renders without an error', () => {
     expect(wrapper.find('WithStyles(AppBar)').length).toBe(1);
-    expect(wrapper.find('Connect(miradorWithPlugins(WorkspaceControlPanelButtons))').length).toBe(1);
+    expect(wrapper.find('WorkspaceControlPanelButtons').length).toBe(1);
   });
 });

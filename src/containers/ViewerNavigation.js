@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
 import * as actions from '../state/actions';
 import { ViewerNavigation } from '../components/ViewerNavigation';
 
@@ -17,7 +16,6 @@ const mapDispatchToProps = {
 const enhance = compose(
   withTranslation(),
   connect(null, mapDispatchToProps),
-  miradorWithPlugins,
   // further HOC go here
 );
 

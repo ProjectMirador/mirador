@@ -2,7 +2,6 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
 import {
   getDestructuredMetadata,
   getCanvasLabel,
@@ -44,7 +43,6 @@ const enhance = compose(
   withTranslation(),
   withStyles(styles),
   connect(mapStateToProps, null),
-  miradorWithPlugins,
 );
 
 export default enhance(WindowSideBarInfoPanel);

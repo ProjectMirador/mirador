@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import * as actions from '../state/actions';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
 import {
   getCompanionWindowForPosition,
   getSelectedCanvas,
@@ -60,7 +59,6 @@ const enhance = compose(
   withTranslation(),
   withStyles(style),
   connect(mapStateToProps, mapDispatchToProps),
-  miradorWithPlugins,
 );
 
 export default enhance(WindowSideBarButtons);
