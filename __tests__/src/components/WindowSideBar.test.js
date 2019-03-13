@@ -10,6 +10,6 @@ describe('WindowSideBar', () => {
 
   it('renders without an error', () => {
     expect(wrapper.find('WithStyles(Drawer)').length).toBe(1);
-    expect(wrapper.find('WithStyles(Connect(Connect(miradorWithPlugins(WindowSideBarButtons))))').length).toBe(1);
+    expect(wrapper.find('WithStyles(Connect(WindowSideBarButtons))').length).toBe(1);
   });
 });

@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
 import { WindowSideBar } from '../components/WindowSideBar';
 
 /**
@@ -43,7 +42,6 @@ const styles = theme => ({
 const enhance = compose(
   withStyles(styles),
   connect(mapStateToProps, null),
-  miradorWithPlugins,
 );
 
 export default enhance(WindowSideBar);

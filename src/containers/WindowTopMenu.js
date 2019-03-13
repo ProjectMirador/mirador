@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
 import { WindowTopMenu } from '../components/WindowTopMenu';
 
 /**
@@ -14,7 +13,6 @@ const mapStateToProps = state => ({
 
 const enhance = compose(
   connect(mapStateToProps, null),
-  miradorWithPlugins,
 );
 
 export default enhance(WindowTopMenu);

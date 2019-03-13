@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import * as actions from '../state/actions';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
 import { getWindowManifest, getManifestTitle } from '../state/selectors';
 import { WindowTopBar } from '../components/WindowTopBar';
 
@@ -46,7 +45,6 @@ const enhance = compose(
   withTranslation(),
   withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
-  miradorWithPlugins,
 );
 
 export default enhance(WindowTopBar);

@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../state/actions';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
 import {
   getCanvasLabel,
   getSelectedCanvas,
@@ -36,7 +35,6 @@ const mapDispatchToProps = {
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  miradorWithPlugins,
   // further HOC go here
 );
 
