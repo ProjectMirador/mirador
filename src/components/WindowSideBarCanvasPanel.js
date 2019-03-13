@@ -40,7 +40,7 @@ export class WindowSideBarCanvasPanel extends Component {
       <>
         <Typography
           className={classNames(classes.label)}
-          variant="body2"
+          variant="body1"
         >
           {canvas.label}
         </Typography>
@@ -70,7 +70,7 @@ export class WindowSideBarCanvasPanel extends Component {
         </div>
         <Typography
           className={classNames(classes.label)}
-          variant="body2"
+          variant="body1"
         >
           {canvas.label}
         </Typography>
