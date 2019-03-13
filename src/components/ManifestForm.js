@@ -66,7 +66,7 @@ export class ManifestForm extends Component {
    */
   render() {
     const { formValue } = this.state;
-    const { t, onCancel } = this.props;
+    const { classes, t, onCancel } = this.props;
     return (
       <form onSubmit={this.formSubmit}>
         <Grid container spacing={24}>
@@ -80,6 +80,12 @@ export class ManifestForm extends Component {
               variant="filled"
               label={t('addManifestUrl')}
               helperText={t('addManifestUrlHelp')}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                className: classes.input,
+              }}
             />
           </Grid>
           <Grid item sm={3}>
@@ -99,6 +105,7 @@ export class ManifestForm extends Component {
 }
 
 ManifestForm.propTypes = {
+  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   fetchManifest: PropTypes.func.isRequired,
   onCancel: PropTypes.func,
   onSubmit: PropTypes.func,
@@ -106,6 +113,7 @@ ManifestForm.propTypes = {
 };
 
 ManifestForm.defaultProps = {
+  classes: {},
   t: key => key,
   onCancel: null,
   onSubmit: () => {},

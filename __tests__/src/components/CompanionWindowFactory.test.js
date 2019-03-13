@@ -23,7 +23,7 @@ describe('CompanionWindowFactory', () => {
         content: 'info',
       });
 
-      expect(wrapper.find('WithStyles(Connect(WindowSideBarInfoPanel))').length).toBe(1);
+      expect(wrapper.find('Connect(WindowSideBarInfoPanel)').length).toBe(1);
     });
   });
 

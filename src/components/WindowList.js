@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import PropTypes from 'prop-types';
 import ns from '../config/css-ns';
@@ -49,9 +50,11 @@ export class WindowList extends Component {
               selected={i === 0}
               onClick={(e) => { focusWindow(window.id); handleClose(e); }}
             >
-              {
-                this.titleContent(window)
-              }
+              <Typography variant="body1">
+                {
+                  this.titleContent(window)
+                }
+              </Typography>
             </MenuItem>
           ))
         }

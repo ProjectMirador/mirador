@@ -40,7 +40,7 @@ export class WindowSideBarCanvasPanel extends Component {
       <>
         <Typography
           className={classNames(classes.label)}
-          variant="body2"
+          variant="body1"
         >
           {canvas.label}
         </Typography>
@@ -70,7 +70,7 @@ export class WindowSideBarCanvasPanel extends Component {
         </div>
         <Typography
           className={classNames(classes.label)}
-          variant="body2"
+          variant="body1"
         >
           {canvas.label}
         </Typography>
@@ -101,12 +101,11 @@ export class WindowSideBarCanvasPanel extends Component {
               value={variant}
               onChange={this.handleVariantChange}
               name="variant"
-              autoWidth
               variant="filled"
               input={<FilledInput name="variant" />}
             >
-              <MenuItem value="compact">{ t('compactList') }</MenuItem>
-              <MenuItem value="thumbnail">{ t('thumbnailList') }</MenuItem>
+              <MenuItem value="compact"><Typography variant="body2">{ t('compactList') }</Typography></MenuItem>
+              <MenuItem value="thumbnail"><Typography variant="body2">{ t('thumbnailList') }</Typography></MenuItem>
             </Select>
           </FormControl>
           )}

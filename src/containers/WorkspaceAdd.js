@@ -44,7 +44,6 @@ const styles = theme => ({
   },
   typographyBody: {
     flexGrow: 1,
-    fontSize: '1em',
   },
   menuButton: {
     marginLeft: -12,

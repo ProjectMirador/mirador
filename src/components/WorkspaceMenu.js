@@ -111,14 +111,14 @@ export class WorkspaceMenu extends Component {
             onClick={(e) => { this.handleMenuItemClick('windowList', e); handleClose(e); }}
             aria-owns={windowList.anchorEl ? 'window-list-menu' : undefined}
           >
-            <Typography varient="inherit">{t('listAllOpenWindows')}</Typography>
+            <Typography variant="body1">{t('listAllOpenWindows')}</Typography>
           </MenuItem>
           <MenuItem
             aria-haspopup="true"
             onClick={(e) => { this.handleZoomToggleClick(e); handleClose(e); }}
             aria-owns={toggleZoom.anchorEl ? 'toggle-zoom-menu' : undefined}
           >
-            <Typography varient="inherit">
+            <Typography variant="body1">
               { showZoomControls ? t('hideZoomControls') : t('showZoomControls') }
             </Typography>
           </MenuItem>
@@ -127,7 +127,7 @@ export class WorkspaceMenu extends Component {
             onClick={(e) => { this.handleMenuItemClick('workspaceSelection', e); handleClose(e); }}
             aria-owns={workspaceSelection.anchorEl ? 'workspace-selection' : undefined}
           >
-            <Typography varient="inherit">{t('selectWorkspaceMenu')}</Typography>
+            <Typography variant="body1">{t('selectWorkspaceMenu')}</Typography>
           </MenuItem>
 
           <NestedMenu label={t('language')} divider>
@@ -142,7 +142,7 @@ export class WorkspaceMenu extends Component {
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
-            <Typography varient="inherit">{t('settings')}</Typography>
+            <Typography variant="body1">{t('settings')}</Typography>
           </MenuItem>
           <MenuItem
             aria-haspopup="true"
@@ -152,7 +152,7 @@ export class WorkspaceMenu extends Component {
             <ListItemIcon>
               <SaveAltIcon />
             </ListItemIcon>
-            <Typography varient="inherit">{t('downloadExportWorkspace')}</Typography>
+            <Typography variant="body1">{t('downloadExportWorkspace')}</Typography>
           </MenuItem>
         </Menu>
         <WindowList

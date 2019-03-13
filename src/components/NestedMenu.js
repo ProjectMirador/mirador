@@ -52,7 +52,7 @@ export class NestedMenu extends Component {
             && (<ListItemIcon>{icon}</ListItemIcon>)
           }
           <ListItemText>
-            <Typography varient="inherit">{label}</Typography>
+            <Typography varient="body1">{label}</Typography>
           </ListItemText>
           {
             nestedMenuIsOpen
