@@ -34,7 +34,7 @@ export class LanguageSettings extends Component {
                   && <ListItemIcon><CheckIcon /></ListItemIcon>
               }
               <ListItemText inset>
-                <Typography variant="inherit">
+                <Typography variant="body1">
                   {language.label}
                 </Typography>
               </ListItemText>

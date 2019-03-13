@@ -53,7 +53,7 @@ export class NestedMenu extends Component {
           }
           {/* ListItemText adds left padding and we want this to line-up with menu items */}
           <ListItemText style={{ paddingLeft: 0 }}>
-            <Typography varient="inherit">{label}</Typography>
+            <Typography variant="body1">{label}</Typography>
           </ListItemText>
           {
             nestedMenuIsOpen
