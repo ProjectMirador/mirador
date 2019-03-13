@@ -7,14 +7,16 @@
     "dist"
   ],
   "scripts": {
+    "clean": "rm -rf ./dist",
     "lint": "node_modules/.bin/eslint ./ && node_modules/.bin/sass-lint -v ./src/styles/**/* && node ./scripts/i18n-lint.js",
     "server": "node_modules/.bin/http-server",
     "test": "npm run build && npm run lint && npm run size && jest -c jest.json",
     "test:watch": "jest -c jest.json --watch",
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
+    "build:es": "mkdir -p dist/es && cp -r src dist/es && babel dist/es -d dist/es",
     "build:watch": "webpack --watch --mode=development",
-    "prepublishOnly": "rm -rf ./dist && npm run build",
+    "prepublishOnly": "npm run clean && npm run build:es && npm run build",
     "size": "size-limit",
     "start": "npm run build:dev && concurrently \"npm run build:watch\" \"npm run server -- -p 4444\"",
     "server:json": "node ./scripts/json-server/server.js >> ./scripts/json-server/json-server.log"
@@ -65,6 +67,7 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.0",
     "@babel/plugin-transform-runtime": "^7.3.4",
     "@babel/preset-env": "^7.3.1",
