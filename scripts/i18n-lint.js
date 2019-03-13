@@ -3,7 +3,7 @@ const fs = require('fs');
 const chalk = require('chalk'); // eslint-disable-line import/no-extraneous-dependencies
 
 const { log } = console;
-const globOpts = { cwd: 'locales' };
+const globOpts = { cwd: 'src/locales' };
 const defaultLocaleFile = 'en/translation.json';
 const files = glob.sync('**/translation.json', globOpts);
 const normalizedFiles = {};
@@ -37,7 +37,7 @@ function missingKeys(arr1, arr2) {
 }
 
 files.forEach((fileName) => {
-  const fileContent = fs.readFileSync(`locales/${fileName}`);
+  const fileContent = fs.readFileSync(`src/locales/${fileName}`);
   normalizedFiles[fileName] = Object.keys(JSON.parse(fileContent.toString()).translation);
 });
 
