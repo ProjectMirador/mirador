@@ -12,13 +12,51 @@ import CanvasIndexIcon from './icons/CanvasIndexIcon';
  *
  */
 export class WindowSideBarButtons extends Component {
+  /**
+   *
+   * @param {object} event
+   */
+  static selectPreviousTab(event) {
+    const { previousSibling } = event.target;
+    previousSibling && previousSibling.focus();
+  }
+
+  /**
+   *
+   * @param {object} event
+   */
+  static selectNextTab(event) {
+    const { nextSibling } = event.target;
+    nextSibling && nextSibling.focus();
+  }
+
+  /**
+   *
+   * @param {object} event the onKeyDown event
+   */
+  static handleKeyPress(event) {
+    switch (event.keyCode) {
+      case 38: // arrow up
+        event.preventDefault();
+        return WindowSideBarButtons.selectPreviousTab(event);
+      case 40: // arrow down
+        event.preventDefault();
+        return WindowSideBarButtons.selectNextTab(event);
+      default:
+        return null;
+    }
+  }
+
   /** */
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  /** */
+  /**
+   * @param {object} event the change event
+   * @param {string} value the tab's value
+  */
   handleChange(event, value) {
     const { addCompanionWindow } = this.props;
 
@@ -55,6 +93,7 @@ export class WindowSideBarButtons extends Component {
               <InfoIcon />
             </Tooltip>
           )}
+          onKeyDown={WindowSideBarButtons.handleKeyPress}
           value="info"
         />
         <Tab
@@ -67,6 +106,7 @@ export class WindowSideBarButtons extends Component {
               <CanvasIndexIcon />
             </Tooltip>
           )}
+          onKeyDown={WindowSideBarButtons.handleKeyPress}
           value="canvas_navigation"
         />
         <Tab
@@ -81,6 +121,7 @@ export class WindowSideBarButtons extends Component {
               </Badge>
             </Tooltip>
           )}
+          onKeyDown={WindowSideBarButtons.handleKeyPress}
           value="annotations"
         />
       </Tabs>
