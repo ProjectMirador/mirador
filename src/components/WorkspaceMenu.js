@@ -107,6 +107,7 @@ export class WorkspaceMenu extends Component {
         >
           <MenuItem
             aria-haspopup="true"
+            divider
             onClick={(e) => { this.handleMenuItemClick('windowList', e); handleClose(e); }}
             aria-owns={windowList.anchorEl ? 'window-list-menu' : undefined}
           >

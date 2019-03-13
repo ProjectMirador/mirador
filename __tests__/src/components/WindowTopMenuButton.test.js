@@ -1,9 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import IconButton from '@material-ui/core/IconButton';
-import MoreVertIcon from '@material-ui/icons/MoreVertSharp';
 import WindowTopMenu from '../../../src/containers/WindowTopMenu';
 import { WindowTopMenuButton } from '../../../src/components/WindowTopMenuButton';
+import { MiradorMenuButton } from '../../../src/components/MiradorMenuButton';
 
 /** create wrapper */
 function createWrapper(props) {
@@ -20,8 +19,7 @@ function createWrapper(props) {
 describe('WindowTopMenuButton', () => {
   it('renders all needed elements', () => {
     const wrapper = createWrapper();
-    expect(wrapper.find(IconButton).length).toBe(1);
-    expect(wrapper.find(MoreVertIcon).length).toBe(1);
+    expect(wrapper.find(MiradorMenuButton).length).toBe(1);
     expect(wrapper.find(WindowTopMenu).length).toBe(1);
   });
 
@@ -34,9 +32,9 @@ describe('WindowTopMenuButton', () => {
     expect(props.handleClose).toBe(handleMenuClose);
   });
 
-  it('passes correct props to <IconButton/>', () => {
+  it('passes correct props to <MiradorMenuButton />', () => {
     const wrapper = createWrapper();
-    const props = wrapper.find(IconButton).first().props();
+    const props = wrapper.find(MiradorMenuButton).first().props();
     const { handleMenuClick } = wrapper.instance();
     expect(props.onClick).toBe(handleMenuClick);
   });
@@ -54,10 +52,12 @@ describe('WindowTopMenuButton', () => {
 
   it('the button has a class indicating that it is "selected" once it is clicked', () => {
     const wrapper = createWrapper();
-    expect(wrapper.find('.ctrlBtnSelected').length).toBe(0);
-    wrapper.find('WithStyles(IconButton)').simulate('click', { currentTarget: 'anElement' });
-    expect(wrapper.find('.ctrlBtnSelected').length).toBe(1);
-    wrapper.find('WithStyles(IconButton)').simulate('click', {});
-    expect(wrapper.find('.ctrlBtnSelected').length).toBe(0);
+    const menuButton = wrapper.find(MiradorMenuButton).first();
+
+    expect(wrapper.find(MiradorMenuButton).first().props().className).toEqual('');
+    menuButton.props().onClick({ currentTarget: 'anElement' });
+    expect(wrapper.find(MiradorMenuButton).first().props().className).toEqual('ctrlBtnSelected');
+    menuButton.props().onClick({});
+    expect(wrapper.find(MiradorMenuButton).first().props().className).toEqual('');
   });
 });

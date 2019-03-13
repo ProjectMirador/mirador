@@ -44,25 +44,26 @@ describe('ZoomControls', () => {
 
     it('renders a couple buttons', () => {
       expect(wrapper.find('div.zoom_controls').length).toBe(1);
+      expect(wrapper.find('MiradorMenuButton').length).toBe(3);
     });
 
     it('has a zoom-in button', () => {
-      const button = wrapper.find('WithStyles(IconButton)[aria-label="zoomIn"]');
-      expect(button.simulate('click'));
+      const button = wrapper.find({ 'aria-label': 'zoomIn' }).first();
+      button.props().onClick(); // Trigger the onClick prop
       expect(updateViewport).toHaveBeenCalledTimes(1);
       expect(updateViewport).toHaveBeenCalledWith('xyz', { x: 100, y: 100, zoom: 2 });
     });
 
     it('has a zoom-out button', () => {
-      const button = wrapper.find('WithStyles(IconButton)[aria-label="zoomOut"]');
-      expect(button.simulate('click'));
+      const button = wrapper.find({ 'aria-label': 'zoomOut' }).first();
+      button.props().onClick(); // Trigger the onClick prop
       expect(updateViewport).toHaveBeenCalledTimes(1);
       expect(updateViewport).toHaveBeenCalledWith('xyz', { x: 100, y: 100, zoom: 0.5 });
     });
 
     it('has a zoom reseet button', () => {
-      const button = wrapper.find('WithStyles(IconButton)[aria-label="zoomReset"]');
-      expect(button.simulate('click'));
+      const button = wrapper.find({ 'aria-label': 'zoomReset' }).first();
+      button.props().onClick(); // Trigger the onClick prop
       expect(updateViewport).toHaveBeenCalledTimes(1);
       expect(updateViewport).toHaveBeenCalledWith('xyz', { x: 100, y: 100, zoom: 1 });
     });

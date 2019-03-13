@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
 import {
   getDestructuredMetadata,
   getCanvasLabel,
@@ -33,7 +32,6 @@ const mapStateToProps = (state, { windowId }) => ({
 const enhance = compose(
   withTranslation(),
   connect(mapStateToProps, null),
-  miradorWithPlugins,
 );
 
 export default enhance(WindowSideBarInfoPanel);

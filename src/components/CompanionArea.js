@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import IconButton from '@material-ui/core/IconButton';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeftSharp';
 import ArrowRightIcon from '@material-ui/icons/ArrowRightSharp';
 import CompanionWindowFactory from '../containers/CompanionWindowFactory';
+import { MiradorMenuButton } from './MiradorMenuButton';
 import ns from '../config/css-ns';
 
 /** */
@@ -21,7 +21,7 @@ export class CompanionArea extends Component {
   render() {
     const {
       classes, companionWindows, companionAreaOpen, setCompanionAreaOpen,
-      position, sideBarOpen, windowId,
+      position, sideBarOpen, t, windowId,
     } = this.props;
 
     return (
@@ -29,12 +29,13 @@ export class CompanionArea extends Component {
         {
           setCompanionAreaOpen && position === 'left' && sideBarOpen && companionWindows.length > 0
           && (
-            <IconButton
+            <MiradorMenuButton
+              aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
               className={classes.toggle}
               onClick={() => { setCompanionAreaOpen(windowId, !companionAreaOpen); }}
             >
-              { companionAreaOpen ? <ArrowLeftIcon /> : <ArrowRightIcon /> }
-            </IconButton>
+              {companionAreaOpen ? <ArrowLeftIcon /> : <ArrowRightIcon />}
+            </MiradorMenuButton>
           )
         }
         <div className={[ns('companion-windows'), this.areaLayoutClass()].join(' ')} style={{ display: companionAreaOpen && (position !== 'left' || sideBarOpen) ? 'flex' : 'none' }}>
@@ -57,6 +58,7 @@ CompanionArea.propTypes = {
   sideBarOpen: PropTypes.bool,
   companionAreaOpen: PropTypes.bool,
   setCompanionAreaOpen: PropTypes.func,
+  t: PropTypes.func.isRequired,
 };
 
 CompanionArea.defaultProps = {

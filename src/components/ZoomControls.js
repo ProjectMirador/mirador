@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircleOutlineSharp';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircleOutlineSharp';
 import PropTypes from 'prop-types';
 import RestoreZoomIcon from './icons/RestoreZoomIcon';
+import { MiradorMenuButton } from './MiradorMenuButton';
+
 /**
  */
 export class ZoomControls extends Component {
@@ -72,15 +73,15 @@ export class ZoomControls extends Component {
     }
     return (
       <div className={classes.zoom_controls}>
-        <IconButton aria-label={t('zoomIn')} onClick={this.handleZoomInClick}>
+        <MiradorMenuButton aria-label={t('zoomIn')} onClick={this.handleZoomInClick}>
           <AddCircleIcon />
-        </IconButton>
-        <IconButton aria-label={t('zoomOut')} onClick={this.handleZoomOutClick}>
+        </MiradorMenuButton>
+        <MiradorMenuButton aria-label={t('zoomOut')} onClick={this.handleZoomOutClick}>
           <RemoveCircleIcon />
-        </IconButton>
-        <IconButton aria-label={t('zoomReset')} onClick={this.handleZoomResetClick}>
+        </MiradorMenuButton>
+        <MiradorMenuButton aria-label={t('zoomReset')} onClick={this.handleZoomResetClick}>
           <RestoreZoomIcon />
-        </IconButton>
+        </MiradorMenuButton>
       </div>
     );
   }

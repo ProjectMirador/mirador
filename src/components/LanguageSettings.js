@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import List from '@material-ui/core/List';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import CheckIcon from '@material-ui/icons/CheckSharp';
@@ -21,7 +20,7 @@ export class LanguageSettings extends Component {
     } = this.props;
 
     return (
-      <List>
+      <>
         {
           languages.map(language => (
             <MenuItem
@@ -41,7 +40,7 @@ export class LanguageSettings extends Component {
             </MenuItem>
           ))
         }
-      </List>
+      </>
     );
   }
 }

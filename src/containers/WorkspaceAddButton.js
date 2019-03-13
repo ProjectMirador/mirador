@@ -3,7 +3,6 @@ import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import * as actions from '../state/actions';
-import miradorWithPlugins from '../lib/miradorWithPlugins';
 import { WorkspaceAddButton } from '../components/WorkspaceAddButton';
 
 /**
@@ -40,7 +39,6 @@ const enhance = compose(
   withTranslation(),
   withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
-  miradorWithPlugins,
 );
 
 export default enhance(WorkspaceAddButton);
