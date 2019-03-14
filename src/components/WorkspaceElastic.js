@@ -22,15 +22,15 @@ class WorkspaceElastic extends React.Component {
     } = this.props;
 
     const { viewportPosition } = workspace;
-    const offsetX = viewportPosition.width / 2;
-    const offsetY = viewportPosition.height / 2;
+    const offsetX = workspace.width / 2;
+    const offsetY = workspace.height / 2;
 
     return (
       <div style={{ position: 'relative', width: '100%', height: '100%' }}>
         <Rnd
           default={{
-            width: viewportPosition.width,
-            height: viewportPosition.height,
+            width: workspace.width,
+            height: workspace.height,
           }}
           position={{
             x: viewportPosition.x - offsetX, y: viewportPosition.y - offsetY,

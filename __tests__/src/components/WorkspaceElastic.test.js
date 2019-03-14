@@ -10,11 +10,11 @@ function createWrapper(props) {
       windows={{}}
       workspace={{
         focusedWindowId: 2,
+        width: 5000,
+        height: 5000,
         viewportPosition: {
           x: 20,
           y: 20,
-          width: 5000,
-          height: 5000,
         },
       }}
       setWorkspaceViewportPosition={() => {}}

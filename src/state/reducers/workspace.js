@@ -8,9 +8,9 @@ export const workspaceReducer = (
     viewportPosition: {
       x: 0,
       y: 0,
-      width: 5000,
-      height: 5000,
     },
+    width: 5000,
+    height: 5000,
     exposeModeOn: false,
   },
   action,
