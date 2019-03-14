@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -44,5 +44,32 @@ describe('WindowViewSettings', () => {
     expect(setWindowViewType).toHaveBeenCalledWith('xyz', 'single');
     wrapper.find(MenuItem).at(1).simulate('click');
     expect(setWindowViewType).toHaveBeenCalledWith('xyz', 'book');
+  });
+
+  it('sets the selected ref to a MenuItem in the component (when mounting)', () => {
+    const wrapper = mount(
+      <WindowViewSettings
+        classes={{}}
+        windowId="xyz"
+        setWindowViewType={() => {}}
+        windowViewType="single"
+      />,
+    );
+
+    expect(
+      wrapper // eslint-disable-line no-underscore-dangle
+        .instance()
+        .selectedRef
+        ._reactInternalFiber
+        .type
+        .displayName,
+    ).toEqual('WithStyles(MenuItem)');
+
+    // The document's ActiveElement is an li
+    expect(
+      document
+        .activeElement[Object.keys(document.activeElement)[0]]
+        .elementType,
+    ).toEqual('li');
   });
 });

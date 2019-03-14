@@ -35,6 +35,7 @@ export class WindowTopMenu extends Component {
           getContentAnchorEl={null}
           open={Boolean(anchorEl)}
           onClose={handleClose}
+          disableAutoFocusItem
         >
           <WindowViewSettings windowId={windowId} handleClose={handleClose} />
           <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />

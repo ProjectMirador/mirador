@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
@@ -16,6 +17,25 @@ export class WindowViewSettings extends Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  /**
+   * Take action when the component mounts for the first time
+   */
+  componentDidMount() {
+    if (this.selectedRef) {
+      // MUI uses ReactDOM.findDOMNode and refs for handling focus
+      ReactDOM.findDOMNode(this.selectedRef).focus(); // eslint-disable-line react/no-find-dom-node
+    }
+  }
+
+  /**
+   * @private
+   */
+  handleSelectedRef(ref) {
+    if (this.selectedRef) return;
+
+    this.selectedRef = ref;
   }
 
   /**
@@ -41,7 +61,11 @@ export class WindowViewSettings extends Component {
       <>
         <ListSubheader role="presentation" tabIndex="-1">{t('view')}</ListSubheader>
 
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('single'); handleClose(); }}>
+        <MenuItem
+          className={classes.MenuItem}
+          ref={ref => this.handleSelectedRef(ref)}
+          onClick={() => { this.handleChange('single'); handleClose(); }}
+        >
           <FormControlLabel
             value="single"
             classes={{ label: windowViewType === 'single' ? classes.selectedLabel : undefined }}
