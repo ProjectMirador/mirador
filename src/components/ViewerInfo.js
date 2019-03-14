@@ -20,10 +20,7 @@ export class ViewerInfo extends Component {
       <div className={ns('osd-info')}>
         <Typography variant="caption" className={ns('canvas-label')}>
           {`${canvasIndex + 1} ${t('of')} ${canvasCount}`}
-          {
-            // eslint-disable-next-line prefer-template
-            canvasLabel && ' • ' + canvasLabel
-          }
+          {canvasLabel && ` ${String.fromCharCode(8226)} ${canvasLabel}`}
         </Typography>
       </div>
     );
