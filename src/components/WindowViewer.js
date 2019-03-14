@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 import OSDViewer from '../containers/OpenSeadragonViewer';
-import ZoomControls from '../containers/ZoomControls';
-import ViewerNavigation from '../containers/ViewerNavigation';
+import WindowCanvasNavigationControls from '../containers/WindowCanvasNavigationControls';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
 import CanvasGroupings from '../lib/CanvasGroupings';
-import ns from '../config/css-ns';
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -124,7 +121,7 @@ export class WindowViewer extends Component {
    * Renders things
    */
   render() {
-    const { canvasLabel, window } = this.props;
+    const { window } = this.props;
     return (
       <>
         <OSDViewer
@@ -132,15 +129,7 @@ export class WindowViewer extends Component {
           currentCanvases={this.currentCanvases()}
           windowId={window.id}
         >
-          <div className={ns('canvas-nav')}>
-            <ZoomControls windowId={window.id} />
-            <ViewerNavigation window={window} canvases={this.canvases} />
-            {
-              canvasLabel && (
-                <Typography variant="caption" className={ns('canvas-label')}>{canvasLabel}</Typography>
-              )
-            }
-          </div>
+          <WindowCanvasNavigationControls windowId={window.id} canvases={this.canvases} />
         </OSDViewer>
       </>
     );
@@ -153,9 +142,4 @@ WindowViewer.propTypes = {
   fetchInfoResponse: PropTypes.func.isRequired,
   manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  canvasLabel: PropTypes.string,
-};
-
-WindowViewer.defaultProps = {
-  canvasLabel: undefined,
 };

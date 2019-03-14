@@ -1,10 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../state/actions';
-import {
-  getCanvasLabel,
-  getSelectedCanvas,
-} from '../state/selectors';
 import { WindowViewer } from '../components/WindowViewer';
 
 /**
@@ -14,10 +10,6 @@ import { WindowViewer } from '../components/WindowViewer';
  */
 const mapStateToProps = (state, { window }) => (
   {
-    canvasLabel: getCanvasLabel(
-      getSelectedCanvas(state, window.id),
-      state.windows[window.id].canvasIndex,
-    ),
     infoResponses: state.infoResponses,
   }
 );
