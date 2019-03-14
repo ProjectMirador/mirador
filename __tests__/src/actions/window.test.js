@@ -2,6 +2,55 @@ import * as actions from '../../../src/state/actions';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('window actions', () => {
+  describe('focusWindow', () => {
+    it('should return correct action object with pan=true', () => {
+      const expectedAction = {
+        type: ActionTypes.FOCUS_WINDOW,
+        windowId: 'window',
+        position: { x: -150, y: -188 },
+      };
+
+      const mockState = {
+        windows: {
+          window: { x: 50, y: 12 },
+        },
+        companionWindows: {},
+      };
+
+      const mockDispatch = jest.fn(() => ({}));
+      const mockGetState = jest.fn(() => mockState);
+      const thunk = actions.focusWindow('window', true);
+
+      thunk(mockDispatch, mockGetState);
+
+      const action = mockDispatch.mock.calls[0][0];
+      expect(action).toEqual(expectedAction);
+    });
+    it('should return correct action object with pan=false', () => {
+      const expectedAction = {
+        type: ActionTypes.FOCUS_WINDOW,
+        windowId: 'window',
+        position: {},
+      };
+
+      const mockState = {
+        windows: {
+          window: { x: 50, y: 12 },
+        },
+        companionWindows: {},
+      };
+
+      const mockDispatch = jest.fn(() => ({}));
+      const mockGetState = jest.fn(() => mockState);
+      const thunk = actions.focusWindow('window');
+
+      thunk(mockDispatch, mockGetState);
+
+      const action = mockDispatch.mock.calls[0][0];
+      expect(action).toEqual(expectedAction);
+    });
+  });
+
   describe('addWindow', () => {
     it('should create a new window with merged defaults', () => {
       const options = {

@@ -2,12 +2,23 @@ import { workspaceReducer } from '../../../src/state/reducers/workspace';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('workspace reducer', () => {
-  it('should handle FOCUS_WINDOW', () => {
+  it('should handle FOCUS_WINDOW without position coordinates', () => {
     expect(workspaceReducer([], {
       type: ActionTypes.FOCUS_WINDOW,
       windowId: 'abc123',
     })).toEqual({
       focusedWindowId: 'abc123',
+      viewportPosition: {},
+    });
+  });
+  it('should handle FOCUS_WINDOW', () => {
+    expect(workspaceReducer([], {
+      type: ActionTypes.FOCUS_WINDOW,
+      windowId: 'abc123',
+      position: { x: 10, y: 50 },
+    })).toEqual({
+      focusedWindowId: 'abc123',
+      viewportPosition: { x: 10, y: 50 },
     });
   });
   it('should handle SET_WORKSPACE_FULLSCREEN', () => {
