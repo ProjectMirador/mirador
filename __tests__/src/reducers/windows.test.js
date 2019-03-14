@@ -294,4 +294,56 @@ describe('windows reducer', () => {
       },
     });
   });
+
+  describe('SELECT_ANNOTATION', () => {
+    it('handles when no selectedAnnotations exist', () => {
+      const beforeState = { abc123: {} };
+      const action = {
+        type: ActionTypes.SELECT_ANNOTATION, windowId: 'abc123', canvasId: 'cId', annotationId: 'aId',
+      };
+      const expectedState = {
+        abc123: { selectedAnnotations: { cId: ['aId'] } },
+      };
+
+      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
+    });
+
+    it('adds new annotation IDs to existing canvas IDs', () => {
+      const beforeState = { abc123: { selectedAnnotations: { cId: ['prevId'] } } };
+      const action = {
+        type: ActionTypes.SELECT_ANNOTATION, windowId: 'abc123', canvasId: 'cId', annotationId: 'aId',
+      };
+      const expectedState = {
+        abc123: { selectedAnnotations: { cId: ['prevId', 'aId'] } },
+      };
+
+      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
+    });
+
+    describe('DESELECT_ANNOTATION', () => {
+      it('remvoves the given annotation Id', () => {
+        const beforeState = { abc123: { selectedAnnotations: { cId: ['aId1', 'aId2'] } } };
+        const action = {
+          type: ActionTypes.DESELECT_ANNOTATION, windowId: 'abc123', canvasId: 'cId', annotationId: 'aId1',
+        };
+        const expectedState = {
+          abc123: { selectedAnnotations: { cId: ['aId2'] } },
+        };
+
+        expect(windowsReducer(beforeState, action)).toEqual(expectedState);
+      });
+
+      it('remvoves the given canvas Id from the selected annotations if there are no more IDs', () => {
+        const beforeState = { abc123: { selectedAnnotations: { cId1: ['aId1'], cId2: ['aId2'] } } };
+        const action = {
+          type: ActionTypes.DESELECT_ANNOTATION, windowId: 'abc123', canvasId: 'cId2', annotationId: 'aId2',
+        };
+        const expectedState = {
+          abc123: { selectedAnnotations: { cId1: ['aId1'] } },
+        };
+
+        expect(windowsReducer(beforeState, action)).toEqual(expectedState);
+      });
+    });
+  });
 });
