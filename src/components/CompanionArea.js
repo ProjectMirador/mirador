@@ -14,7 +14,7 @@ export class CompanionArea extends Component {
       classes, position,
     } = this.props;
 
-    return position === 'bottom' ? classes.horizontal : null;
+    return (position === 'bottom' || position === 'far-bottom') ? classes.horizontal : null;
   }
 
   /** */
@@ -25,7 +25,7 @@ export class CompanionArea extends Component {
     } = this.props;
 
     return (
-      <div className={[classes.root, this.areaLayoutClass()].join(' ')}>
+      <div className={[classes.root, this.areaLayoutClass(), ns(`companion-area-${position}`)].join(' ')}>
         {
           setCompanionAreaOpen && position === 'left' && sideBarOpen && companionWindows.length > 0
           && (

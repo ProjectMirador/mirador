@@ -129,7 +129,7 @@ export default {
   },
   windows: [],
   thumbnailNavigation: {
-    defaultPosition: 'bottom',
+    defaultPosition: 'far-bottom',
     height: 150,
     width: 100,
   },

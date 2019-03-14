@@ -5,7 +5,6 @@ import Paper from '@material-ui/core/Paper';
 import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
 import PrimaryWindow from '../containers/PrimaryWindow';
-import ThumbnailNavigation from '../containers/ThumbnailNavigation';
 import CompanionArea from '../containers/CompanionArea';
 
 
@@ -42,7 +41,7 @@ export class Window extends Component {
    */
   render() {
     const {
-      focusWindow, label, manifest, window, classes, t, thumbnailNavigationPosition,
+      focusWindow, label, manifest, window, classes, t,
     } = this.props;
 
     if (!window) {
@@ -76,26 +75,10 @@ export class Window extends Component {
           </div>
           <div className={classes.companionAreaRight}>
             <CompanionArea windowId={window.id} position="right" />
-            {thumbnailNavigationPosition === 'right' && (
-              <div className={cn(classes.thumbnailArea, classes.thumbnailAreaRight, ns('thumbnail-nav-right'))}>
-                <ThumbnailNavigation
-                  window={window}
-                  manifest={manifest}
-                  position="right"
-                />
-              </div>
-            )}
+            <CompanionArea windowId={window.id} position="far-right" />
           </div>
         </div>
-        {thumbnailNavigationPosition === 'bottom' && (
-          <div className={cn(classes.thumbnailArea, classes.thumbnailAreaBottom, ns('thumbnail-nav-bottom'))}>
-            <ThumbnailNavigation
-              window={window}
-              manifest={manifest}
-              position="bottom"
-            />
-          </div>
-        )}
+        <CompanionArea windowId={window.id} position="far-bottom" />
       </Paper>
     );
   }
@@ -112,7 +95,6 @@ Window.propTypes = {
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   window: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  thumbnailNavigationPosition: PropTypes.string,
   workspaceType: PropTypes.string,
   t: PropTypes.func.isRequired,
   label: PropTypes.string,
@@ -125,6 +107,5 @@ Window.defaultProps = {
   workspaceType: null,
   classes: {},
   label: null,
-  thumbnailNavigationPosition: 'off',
   focusWindow: () => {},
 };

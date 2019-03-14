@@ -21,15 +21,15 @@ describe('Thumbnail navigation', () => {
   });
   it('displays on right side', async () => {
     await expect(page).toMatchElement('.mirador-thumb-navigation');
-    await expect(page).toMatchElement('.mirador-thumbnail-nav-bottom');
+    await expect(page).toMatchElement('.mirador-companion-area-far-bottom .mirador-thumb-navigation');
     await page.evaluate(() => {
       const { windows } = miradorInstance.store.getState();
       miradorInstance.store.dispatch(
-        miradorInstance.actions.updateWindow(
-          Object.keys(windows)[0], { thumbnailNavigationPosition: 'right' },
+        miradorInstance.actions.setWindowThumbnailPosition(
+          Object.keys(windows)[0], 'far-right',
         ),
       );
     });
-    await expect(page).toMatchElement('.mirador-thumbnail-nav-right');
+    await expect(page).toMatchElement('.mirador-companion-area-far-right .mirador-thumb-navigation');
   });
 });

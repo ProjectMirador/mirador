@@ -30,8 +30,8 @@ export class ThumbnailNavigation extends Component {
    * of the grids
    */
   componentDidUpdate(prevProps) {
-    const { window } = this.props;
-    if (prevProps.window.view !== window.view && window.thumbnailNavigationPosition !== 'off') {
+    const { position, window } = this.props;
+    if (prevProps.window.view !== window.view && position !== 'off') {
       this.gridRef.current.recomputeGridSize();
     }
   }
@@ -58,7 +58,7 @@ export class ThumbnailNavigation extends Component {
     const {
       classes, window, setCanvas, config, canvasGroupings, position,
     } = this.props;
-    const currentIndex = (position === 'right') ? rowIndex : columnIndex;
+    const currentIndex = (position === 'far-right') ? rowIndex : columnIndex;
 
     const currentGroupings = canvasGroupings.groupings()[currentIndex];
     return (
@@ -117,7 +117,7 @@ export class ThumbnailNavigation extends Component {
   calculateScaledWidth(options) {
     const { config, canvasGroupings, position } = this.props;
     switch (position) {
-      case 'right':
+      case 'far-right':
         return this.rightWidth();
       // Default case bottom
       default:
@@ -135,7 +135,7 @@ export class ThumbnailNavigation extends Component {
   calculateScaledHeight(options) {
     const { config, canvasGroupings, position } = this.props;
     switch (position) {
-      case 'right':
+      case 'far-right':
         return Math.max(
           ...canvasGroupings.getCanvases(options.index)
             .map(canvas => new ManifestoCanvas(canvas))
@@ -165,10 +165,12 @@ export class ThumbnailNavigation extends Component {
   style() {
     const { position, config } = this.props;
     switch (position) {
-      case 'right':
+      case 'far-right':
         return {
           height: '100%',
           width: `${this.rightWidth()}px`,
+          display: 'flex',
+          minHeight: 0,
         };
       // Default case bottom
       default:
@@ -194,7 +196,7 @@ export class ThumbnailNavigation extends Component {
   columnCount() {
     const { position, canvasGroupings } = this.props;
     switch (position) {
-      case 'right':
+      case 'far-right':
         return 1;
       // Default case bottom
       default:
@@ -206,7 +208,7 @@ export class ThumbnailNavigation extends Component {
   rowCount() {
     const { position, canvasGroupings } = this.props;
     switch (position) {
-      case 'right':
+      case 'far-right':
         return canvasGroupings.groupings().length;
       // Default case bottom
       default:
@@ -218,7 +220,7 @@ export class ThumbnailNavigation extends Component {
   areaHeight(height) {
     const { config, position } = this.props;
     switch (position) {
-      case 'right':
+      case 'far-right':
         return height;
       // Default case bottom
       default:
@@ -230,8 +232,8 @@ export class ThumbnailNavigation extends Component {
    * Renders things
    */
   render() {
-    const { t, window } = this.props;
-    if (window.thumbnailNavigationPosition === 'off') {
+    const { t, position } = this.props;
+    if (position === 'off') {
       return <></>;
     }
     return (
