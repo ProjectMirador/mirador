@@ -5,6 +5,7 @@ import Fullscreen from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../i18n';
 import WorkspaceArea from '../containers/WorkspaceArea';
+import '../styles/index.scss';
 
 /**
  * This is the top level Mirador component.
