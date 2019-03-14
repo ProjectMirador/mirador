@@ -56,7 +56,7 @@ describe('WindowList', () => {
       ).toBe(true);
       wrapper.find('WithStyles(MenuItem)').simulate('click', {});
       expect(handleClose).toBeCalled();
-      expect(focusWindow).toBeCalledWith('xyz');
+      expect(focusWindow).toBeCalledWith('xyz', true);
     });
   });
 

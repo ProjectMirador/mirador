@@ -48,7 +48,7 @@ export class WindowList extends Component {
             <MenuItem
               key={window.id}
               selected={i === 0}
-              onClick={(e) => { focusWindow(window.id); handleClose(e); }}
+              onClick={(e) => { focusWindow(window.id, true); handleClose(e); }}
             >
               <Typography variant="body1">
                 {

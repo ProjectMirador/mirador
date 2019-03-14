@@ -7,8 +7,17 @@ import ActionTypes from './action-types';
  * @param  {String} windowId
  * @memberof ActionCreators
  */
-export function focusWindow(windowId) {
-  return { type: ActionTypes.FOCUS_WINDOW, windowId };
+export function focusWindow(windowId, pan = false) {
+  return (dispatch, getState) => {
+    const { windows } = getState();
+    const { x, y } = windows[windowId];
+
+    dispatch({
+      type: ActionTypes.FOCUS_WINDOW,
+      windowId,
+      position: pan ? { x: x - 200, y: y - 200 } : {},
+    });
+  };
 }
 
 /**
