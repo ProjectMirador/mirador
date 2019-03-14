@@ -33,7 +33,7 @@ class WorkspaceElastic extends React.Component {
             height: workspace.height,
           }}
           position={{
-            x: viewportPosition.x - offsetX, y: viewportPosition.y - offsetY,
+            x: -1 * viewportPosition.x - offsetX, y: -1 * viewportPosition.y - offsetY,
           }}
           enableResizing={{
             top: false,
@@ -46,7 +46,7 @@ class WorkspaceElastic extends React.Component {
             topLeft: false,
           }}
           onDragStop={(e, d) => {
-            setWorkspaceViewportPosition({ x: d.x + offsetX, y: d.y + offsetY });
+            setWorkspaceViewportPosition({ x: -1 * d.x - offsetX, y: -1 * d.y - offsetY });
           }}
           cancel={`.${ns('window')}`}
           className={ns('workspace')}

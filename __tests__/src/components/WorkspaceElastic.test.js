@@ -139,8 +139,8 @@ describe('WorkspaceElastic', () => {
           y: 200,
         });
       expect(mockDragStop).toHaveBeenCalledWith({
-        x: 2700,
-        y: 2700,
+        x: -2700,
+        y: -2700,
       });
     });
   });
