@@ -20,6 +20,14 @@
     }
   }
 
+  &-workspace {
+    transition-duration: 0.7s;
+
+    &.react-draggable-dragging {
+      transition-duration: unset;
+    }
+  }
+
   &-companion-window-header {
     flex-wrap: wrap;
   }
