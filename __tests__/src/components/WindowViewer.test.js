@@ -7,7 +7,6 @@ import WindowCanvasNavigationControls from '../../../src/containers/WindowCanvas
 import fixture from '../../fixtures/version-2/019.json';
 import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
 import otherContentFixture from '../../fixtures/version-2/299843.json';
-import ViewerInfo from '../../../src/containers/ViewerInfo';
 
 let mockManifest = {
   id: 123,

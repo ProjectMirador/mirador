@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Typography from '@material-ui/core/Typography';
 import { WindowCanvasNavigationControls } from '../../../src/components/WindowCanvasNavigationControls';
+import ViewerInfo from '../../../src/containers/ViewerInfo';
 import ViewerNavigation from '../../../src/containers/ViewerNavigation';
 import ZoomControls from '../../../src/containers/ZoomControls';
 
@@ -26,7 +26,7 @@ describe('WindowCanvasNavigationControls', () => {
       <div>
         <ZoomControls />
         <ViewerNavigation />
-        <Typography>label</Typography>
+        <ViewerInfo />
       </div>,
     )).toBe(true);
   });
