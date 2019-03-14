@@ -9,6 +9,7 @@ function createWrapper(props) {
     <WorkspaceElastic
       windows={{}}
       workspace={{
+        focusedWindowId: 2,
         viewportPosition: {
           x: 20,
           y: 20,
@@ -69,6 +70,11 @@ describe('WorkspaceElastic', () => {
         width: 300,
         height: 400,
       });
+  });
+  describe('focused window', () => {
+    it('adds a class to the focused window', () => {
+      expect(wrapper.find(Rnd).at(2).hasClass('mirador-workspace-focused-window'));
+    });
   });
   describe('window behaviour', () => {
     it('when windows are dragged', () => {

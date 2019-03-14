@@ -61,6 +61,9 @@ class WorkspaceElastic extends React.Component {
                 });
               }}
               dragHandleClassName={ns('window-top-bar')}
+              className={
+                workspace.focusedWindowId === window.id ? ns('workspace-focused-window') : null
+              }
             >
               <Window
                 window={window}
