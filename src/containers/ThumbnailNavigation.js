@@ -5,14 +5,23 @@ import { withStyles } from '@material-ui/core/styles';
 import CanvasGroupings from '../lib/CanvasGroupings';
 import * as actions from '../state/actions';
 import { ThumbnailNavigation } from '../components/ThumbnailNavigation';
-import { getManifestCanvases } from '../state/selectors';
+import { getManifestCanvases, getWindowManifest } from '../state/selectors';
 /**
  * mapStateToProps - used to hook up state to props
  * @memberof ThumbnailNavigation
  * @private
  */
-const mapStateToProps = ({ config }, { manifest, window }) => ({
-  canvasGroupings: new CanvasGroupings(getManifestCanvases(manifest), window.view),
+const mapStateToProps = ({
+  companionWindows, config, manifests, windows,
+}, { windowId }) => ({
+  canvasGroupings: new CanvasGroupings(
+    getManifestCanvases(
+      getWindowManifest({ windows, manifests }, windowId),
+    ),
+    windows[windowId].view,
+  ),
+  position: companionWindows[windows[windowId].thumbnailNavigationId].position,
+  window: windows[windowId],
   config,
 });
 

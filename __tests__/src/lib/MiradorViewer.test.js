@@ -67,7 +67,7 @@ describe('MiradorViewer', () => {
       expect(Object.keys(windowIds).length).toBe(2);
       expect(windows[windowIds[0]].canvasIndex).toBe(2);
       expect(windows[windowIds[1]].canvasIndex).toBe(0);
-      expect(windows[windowIds[0]].thumbnailNavigationPosition).toBe('bottom');
+      expect(windows[windowIds[0]].thumbnailNavigationPosition).toBe('far-bottom');
       expect(windows[windowIds[1]].thumbnailNavigationPosition).toBe('off');
       expect(windows[windowIds[0]].view).toBe('single');
       expect(windows[windowIds[1]].view).toBe('book');

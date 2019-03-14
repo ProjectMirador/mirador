@@ -46,4 +46,14 @@ describe('CompanionWindowFactory', () => {
       expect(wrapper.find('Connect(WindowSideBarAnnotationsPanel)').length).toBe(1);
     });
   });
+
+  describe('for the thumbnail nav window', () => {
+    it('renders the appropriate arg component', () => {
+      wrapper = createWrapper({
+        content: 'thumbnail_navigation',
+      });
+
+      expect(wrapper.find('WithStyles(Connect(ThumbnailNavigation))').length).toBe(1);
+    });
+  });
 });

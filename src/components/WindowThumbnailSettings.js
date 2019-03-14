@@ -47,13 +47,13 @@ export class WindowThumbnailSettings extends Component {
             labelPlacement="bottom"
           />
           <FormControlLabel
-            value="bottom"
+            value="far-bottom"
             control={<Radio color="secondary" icon={<ThumbnailNavigationBottomIcon />} checkedIcon={<ThumbnailNavigationBottomIcon />} />}
             label={t('bottom')}
             labelPlacement="bottom"
           />
           <FormControlLabel
-            value="right"
+            value="far-right"
             control={<Radio color="secondary" icon={<ThumbnailNavigationRightIcon />} checkedIcon={<ThumbnailNavigationRightIcon />} />}
             label={t('right')}
             labelPlacement="bottom"

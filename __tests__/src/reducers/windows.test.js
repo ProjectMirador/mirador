@@ -78,24 +78,6 @@ describe('windows reducer', () => {
     expect(windowsReducer(before, action)).toEqual(after);
   });
 
-  it('should handle SET_WINDOW_THUMBNAIL_POSITION by changing the thumbnailNavigationPosition attribute', () => {
-    const action = {
-      type: ActionTypes.SET_WINDOW_THUMBNAIL_POSITION,
-      windowId: 'abc123',
-      position: 'right',
-    };
-    const before = {
-      abc123: { thumbnailNavigationPosition: 'bottom' },
-      abc321: { thumbnailNavigationPosition: 'off' },
-    };
-    const after = {
-      abc123: { thumbnailNavigationPosition: 'right' },
-      abc321: { thumbnailNavigationPosition: 'off' },
-    };
-
-    expect(windowsReducer(before, action)).toEqual(after);
-  });
-
   it('should handle SET_WINDOW_VIEW_TYPE by changing the view attribute', () => {
     const action = {
       type: ActionTypes.SET_WINDOW_VIEW_TYPE,

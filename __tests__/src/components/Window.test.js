@@ -3,7 +3,6 @@ import { shallow } from 'enzyme';
 import { Window } from '../../../src/components/Window';
 import WindowTopBar from '../../../src/containers/WindowTopBar';
 import PrimaryWindow from '../../../src/containers/PrimaryWindow';
-import ThumbnailNavigation from '../../../src/containers/ThumbnailNavigation';
 
 /** create wrapper */
 function createWrapper(props, context) {
@@ -12,7 +11,6 @@ function createWrapper(props, context) {
       window={window}
       classes={{}}
       t={k => k}
-      thumbnailNavigationPosition="bottom"
       {...props}
     />,
     { context },
@@ -44,16 +42,6 @@ describe('Window', () => {
   it('should render <PrimaryWindow>', () => {
     wrapper = createWrapper({ window });
     expect(wrapper.find(PrimaryWindow)).toHaveLength(1);
-  });
-  it('should render bottom <ThumbnailNavigation>', () => {
-    wrapper = createWrapper({ window });
-    expect(wrapper.find('.mirador-thumbnail-nav-bottom').length).toEqual(1);
-    expect(wrapper.find(ThumbnailNavigation)).toHaveLength(1);
-  });
-  it('should render right <ThumbnailNavigation>', () => {
-    wrapper = createWrapper({ window, thumbnailNavigationPosition: 'right' });
-    expect(wrapper.find('.mirador-thumbnail-nav-right').length).toEqual(1);
-    expect(wrapper.find(ThumbnailNavigation)).toHaveLength(1);
   });
   describe('when workspaceType is mosaic', () => {
     it('calls the context mosaicWindowActions connectDragSource method to make WindowTopBar draggable', () => {

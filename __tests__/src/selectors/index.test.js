@@ -132,8 +132,11 @@ describe('getManifestCanvases', () => {
 describe('getThumbnailNavigationPosition', () => {
   const state = {
     windows: {
-      a: { id: 'a', thumbnailNavigationPosition: 'bottom' },
-      b: { id: 'b' },
+      a: { id: 'a', thumbnailNavigationId: 'cw_a' },
+      b: { id: 'b', thumbnailNavigationId: 'cw_b' },
+    },
+    companionWindows: {
+      cw_a: { position: 'bottom' },
     },
   };
 

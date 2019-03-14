@@ -174,7 +174,9 @@ export function getIdAndContentOfResources(resources) {
 */
 export function getThumbnailNavigationPosition(state, windowId) {
   return state.windows[windowId]
-    && state.windows[windowId].thumbnailNavigationPosition;
+    && state.windows[windowId].thumbnailNavigationId
+    && state.companionWindows[state.windows[windowId].thumbnailNavigationId]
+    && state.companionWindows[state.windows[windowId].thumbnailNavigationId].position;
 }
 
 /**

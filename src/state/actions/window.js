@@ -19,24 +19,32 @@ export function focusWindow(windowId) {
  */
 export function addWindow(options) {
   const cwDefault = `cw-${uuid()}`;
+  const cwThumbs = `cw-${uuid()}`;
   const defaultOptions = {
     id: `window-${uuid()}`,
     canvasIndex: 0,
     collectionIndex: 0,
     manifestId: null,
     rangeId: null,
-    thumbnailNavigationPosition: 'bottom', // bottom by default in settings.js
+    thumbnailNavigationId: cwThumbs,
     width: 400,
     height: 400,
     x: 2700,
     y: 2700,
-    companionWindowIds: [cwDefault],
+    companionWindowIds: [cwDefault, cwThumbs],
     sideBarPanel: 'info',
     rotation: null,
     view: 'single',
     maximized: false,
   };
-  return { type: ActionTypes.ADD_WINDOW, window: { ...defaultOptions, ...options }, companionWindows: [{ id: cwDefault, position: 'left', content: 'info' }] };
+  return {
+    type: ActionTypes.ADD_WINDOW,
+    window: { ...defaultOptions, ...options },
+    companionWindows: [
+      { id: cwDefault, position: 'left', content: 'info' },
+      { id: cwThumbs, position: options.thumbnailNavigationPosition || 'far-bottom', content: 'thumbnail_navigation' },
+    ],
+  };
 }
 
 /**
@@ -111,7 +119,14 @@ export function setWindowSideBarPanel(windowId, panelType) {
  * @memberof ActionCreators
  */
 export function setWindowThumbnailPosition(windowId, position) {
-  return { type: ActionTypes.SET_WINDOW_THUMBNAIL_POSITION, windowId, position };
+  return (dispatch, getState) => {
+    const { windows } = getState();
+    const { thumbnailNavigationId } = windows[windowId];
+
+    dispatch({
+      type: ActionTypes.UPDATE_COMPANION_WINDOW, id: thumbnailNavigationId, payload: { position },
+    });
+  };
 }
 
 /**

@@ -25,15 +25,15 @@ describe('WindowThumbnailSettings', () => {
     const labels = wrapper.find(FormControlLabel);
     expect(labels.length).toBe(3);
     expect(labels.at(0).props().value).toBe('off');
-    expect(labels.at(1).props().value).toBe('bottom');
-    expect(labels.at(2).props().value).toBe('right');
+    expect(labels.at(1).props().value).toBe('far-bottom');
+    expect(labels.at(2).props().value).toBe('far-right');
   });
 
   it('should set the correct label active', () => {
-    let wrapper = createWrapper({ thumbnailNavigationPosition: 'bottom' });
-    expect(wrapper.find(RadioGroup).props().value).toBe('bottom');
-    wrapper = createWrapper({ thumbnailNavigationPosition: 'right' });
-    expect(wrapper.find(RadioGroup).props().value).toBe('right');
+    let wrapper = createWrapper({ thumbnailNavigationPosition: 'far-bottom' });
+    expect(wrapper.find(RadioGroup).props().value).toBe('far-bottom');
+    wrapper = createWrapper({ thumbnailNavigationPosition: 'far-right' });
+    expect(wrapper.find(RadioGroup).props().value).toBe('far-right');
   });
 
   it('updates state when the thumbnail config selection changes', () => {
@@ -41,7 +41,7 @@ describe('WindowThumbnailSettings', () => {
     const wrapper = createWrapper({ setWindowThumbnailPosition });
     wrapper.find(RadioGroup).first().simulate('change', { target: { value: 'off' } });
     expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'off');
-    wrapper.find(RadioGroup).first().simulate('change', { target: { value: 'right' } });
-    expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'right');
+    wrapper.find(RadioGroup).first().simulate('change', { target: { value: 'far-right' } });
+    expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'far-right');
   });
 });

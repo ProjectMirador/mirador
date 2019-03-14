@@ -17,10 +17,9 @@ function createWrapper(props) {
       window={{
         id: 'foobar',
         canvasIndex: 1,
-        thumbnailNavigationPosition: 'bottom',
       }}
       config={{ thumbnailNavigation: { height: 150, width: 100 } }}
-      position="bottom"
+      position="far-bottom"
       t={k => k}
       {...props}
     />,
@@ -106,11 +105,11 @@ describe('ThumbnailNavigation', () => {
   });
   describe('calculating instance methods', () => {
     beforeEach(() => {
-      rightWrapper = createWrapper({ setCanvas, position: 'right' });
+      rightWrapper = createWrapper({ setCanvas, position: 'far-right' });
     });
     it('style', () => {
-      expect(wrapper.instance().style()).toEqual({ height: '150px', width: '100%' });
-      expect(rightWrapper.instance().style()).toEqual({ height: '100%', width: '100px' });
+      expect(wrapper.instance().style()).toMatchObject({ height: '150px', width: '100%' });
+      expect(rightWrapper.instance().style()).toMatchObject({ height: '100%', width: '100px' });
     });
     it('rightWidth', () => {
       expect(wrapper.instance().rightWidth()).toEqual(100);
