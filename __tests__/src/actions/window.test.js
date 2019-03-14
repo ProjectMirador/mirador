@@ -18,8 +18,8 @@ describe('window actions', () => {
           manifestId: null,
           maximized: false,
           rangeId: null,
-          x: 2700,
-          y: 2700,
+          x: 2760,
+          y: 2760,
           sideBarPanel: 'info',
           width: 400,
           height: 400,
@@ -31,7 +31,19 @@ describe('window actions', () => {
           { position: 'far-bottom', content: 'thumbnail_navigation' },
         ],
       };
-      const action = actions.addWindow(options);
+
+      const mockState = {
+        windows: { a: {}, b: {} },
+      };
+
+      const mockDispatch = jest.fn(() => ({}));
+      const mockGetState = jest.fn(() => mockState);
+      const thunk = actions.addWindow(options);
+
+      thunk(mockDispatch, mockGetState);
+
+      const action = mockDispatch.mock.calls[0][0];
+
       expect(action).toMatchObject(expectedAction);
       expect(action.window.companionWindowIds.length).toEqual(2);
       expect(action.window.companionWindowIds[0]).toEqual(action.companionWindows[0].id);

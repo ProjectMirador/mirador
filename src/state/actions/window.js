@@ -18,32 +18,38 @@ export function focusWindow(windowId) {
  * @memberof ActionCreators
  */
 export function addWindow(options) {
-  const cwDefault = `cw-${uuid()}`;
-  const cwThumbs = `cw-${uuid()}`;
-  const defaultOptions = {
-    id: `window-${uuid()}`,
-    canvasIndex: 0,
-    collectionIndex: 0,
-    manifestId: null,
-    rangeId: null,
-    thumbnailNavigationId: cwThumbs,
-    width: 400,
-    height: 400,
-    x: 2700,
-    y: 2700,
-    companionWindowIds: [cwDefault, cwThumbs],
-    sideBarPanel: 'info',
-    rotation: null,
-    view: 'single',
-    maximized: false,
-  };
-  return {
-    type: ActionTypes.ADD_WINDOW,
-    window: { ...defaultOptions, ...options },
-    companionWindows: [
-      { id: cwDefault, position: 'left', content: 'info' },
-      { id: cwThumbs, position: options.thumbnailNavigationPosition || 'far-bottom', content: 'thumbnail_navigation' },
-    ],
+  return (dispatch, getState) => {
+    const { windows } = getState();
+    const numWindows = Object.keys(windows).length;
+
+    const cwDefault = `cw-${uuid()}`;
+    const cwThumbs = `cw-${uuid()}`;
+    const defaultOptions = {
+      id: `window-${uuid()}`,
+      canvasIndex: 0,
+      collectionIndex: 0,
+      manifestId: null,
+      rangeId: null,
+      thumbnailNavigationId: cwThumbs,
+      width: 400,
+      height: 400,
+      x: 2700 + (Math.floor(numWindows / 10) * 50 + (numWindows * 30) % 300),
+      y: 2700 + ((numWindows * 30) % 300),
+      companionWindowIds: [cwDefault, cwThumbs],
+      sideBarPanel: 'info',
+      rotation: null,
+      view: 'single',
+      maximized: false,
+    };
+
+    dispatch({
+      type: ActionTypes.ADD_WINDOW,
+      window: { ...defaultOptions, ...options },
+      companionWindows: [
+        { id: cwDefault, position: 'left', content: 'info' },
+        { id: cwThumbs, position: options.thumbnailNavigationPosition || 'far-bottom', content: 'thumbnail_navigation' },
+      ],
+    });
   };
 }
 
