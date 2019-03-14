@@ -13,6 +13,8 @@ function createWrapper(props) {
         viewportPosition: {
           x: 20,
           y: 20,
+          width: 5000,
+          height: 5000,
         },
       }}
       setWorkspaceViewportPosition={() => {}}
@@ -59,8 +61,8 @@ describe('WorkspaceElastic', () => {
       .at(2)
       .props().position)
       .toEqual({
-        x: 25,
-        y: 25,
+        x: 2525,
+        y: 2525,
       });
     expect(wrapper
       .find(Rnd)
@@ -92,8 +94,8 @@ describe('WorkspaceElastic', () => {
           y: 200,
         });
       expect(mockDragStop).toHaveBeenCalledWith(1, {
-        x: 200,
-        y: 200,
+        x: -2300,
+        y: -2300,
       });
     });
     it('when windows are resized', () => {
@@ -111,10 +113,12 @@ describe('WorkspaceElastic', () => {
             width: 400,
             height: 200,
           },
-        });
+        }, {}, { x: 0, y: 0 });
       expect(mockOnResize).toHaveBeenCalledWith(1, {
         width: 400,
         height: 200,
+        x: -2500,
+        y: -2500,
       });
     });
   });
@@ -135,8 +139,8 @@ describe('WorkspaceElastic', () => {
           y: 200,
         });
       expect(mockDragStop).toHaveBeenCalledWith({
-        x: 200,
-        y: 200,
+        x: 2700,
+        y: 2700,
       });
     });
   });
