@@ -20,58 +20,68 @@ class WorkspaceElastic extends React.Component {
       updateWindowPosition,
       setWindowSize,
     } = this.props;
+
+    const { viewportPosition } = workspace;
+    const offsetX = workspace.width / 2;
+    const offsetY = workspace.height / 2;
+
     return (
-      <Rnd
-        default={{
-          width: 5000,
-          height: 5000,
-        }}
-        position={{ x: workspace.viewportPosition.x, y: workspace.viewportPosition.y }}
-        enableResizing={{
-          top: false,
-          right: false,
-          bottom: false,
-          left: false,
-          topRight: false,
-          bottomRight: false,
-          bottomLeft: false,
-          topLeft: false,
-        }}
-        onDragStop={(e, d) => {
-          setWorkspaceViewportPosition({ x: d.x, y: d.y });
-        }}
-        cancel={`.${ns('window')}`}
-        className={ns('workspace')}
-      >
-        {
-          Object.values(windows).map(window => (
-            <Rnd
-              key={window.id}
-              size={{ width: window.width, height: window.height }}
-              position={{ x: window.x, y: window.y }}
-              bounds="parent"
-              onDragStop={(e, d) => {
-                updateWindowPosition(window.id, { x: d.x, y: d.y });
-              }}
-              onResize={(e, direction, ref, delta, position) => {
-                setWindowSize(window.id, {
-                  width: ref.style.width,
-                  height: ref.style.height,
-                  ...position,
-                });
-              }}
-              dragHandleClassName={ns('window-top-bar')}
-              className={
-                workspace.focusedWindowId === window.id ? ns('workspace-focused-window') : null
-              }
-            >
-              <Window
-                window={window}
-              />
-            </Rnd>
-          ))
-        }
-      </Rnd>
+      <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+        <Rnd
+          default={{
+            width: workspace.width,
+            height: workspace.height,
+          }}
+          position={{
+            x: -1 * viewportPosition.x - offsetX, y: -1 * viewportPosition.y - offsetY,
+          }}
+          enableResizing={{
+            top: false,
+            right: false,
+            bottom: false,
+            left: false,
+            topRight: false,
+            bottomRight: false,
+            bottomLeft: false,
+            topLeft: false,
+          }}
+          onDragStop={(e, d) => {
+            setWorkspaceViewportPosition({ x: -1 * d.x - offsetX, y: -1 * d.y - offsetY });
+          }}
+          cancel={`.${ns('window')}`}
+          className={ns('workspace')}
+        >
+          {
+            Object.values(windows).map(window => (
+              <Rnd
+                key={window.id}
+                size={{ width: window.width, height: window.height }}
+                position={{ x: window.x + offsetX, y: window.y + offsetY }}
+                bounds="parent"
+                onDragStop={(e, d) => {
+                  updateWindowPosition(window.id, { x: d.x - offsetX, y: d.y - offsetY });
+                }}
+                onResize={(e, direction, ref, delta, position) => {
+                  setWindowSize(window.id, {
+                    width: ref.style.width,
+                    height: ref.style.height,
+                    x: position.x - offsetX,
+                    y: position.y - offsetY,
+                  });
+                }}
+                dragHandleClassName={ns('window-top-bar')}
+                className={
+                  workspace.focusedWindowId === window.id ? ns('workspace-focused-window') : null
+                }
+              >
+                <Window
+                  window={window}
+                />
+              </Rnd>
+            ))
+          }
+        </Rnd>
+      </div>
     );
   }
 }
