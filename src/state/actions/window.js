@@ -34,7 +34,7 @@ export function addWindow(options) {
       width: 400,
       height: 400,
       x: 2700 + (Math.floor(numWindows / 10) * 50 + (numWindows * 30) % 300),
-      y: 2700 + ((numWindows * 30) % 300),
+      y: 2700 + ((numWindows * 50) % 300),
       companionWindowIds: [cwDefault, cwThumbs],
       sideBarPanel: 'info',
       rotation: null,

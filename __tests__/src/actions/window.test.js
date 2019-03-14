@@ -19,7 +19,7 @@ describe('window actions', () => {
           maximized: false,
           rangeId: null,
           x: 2760,
-          y: 2760,
+          y: 2800,
           sideBarPanel: 'info',
           width: 400,
           height: 400,
