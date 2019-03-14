@@ -15,6 +15,20 @@ export default class AnnotationResource {
     return this._id; // eslint-disable-line no-underscore-dangle
   }
 
+  /** */
+  get targetId() {
+    const { on } = this.resource;
+
+    switch (typeof on) {
+      case 'string':
+        return on.replace(/#?xywh=(.*)$/, '');
+      case 'object':
+        return on.full.replace(/#?xywh=(.*)$/, '');
+      default:
+        return null;
+    }
+  }
+
   /**
    * @return {[Array]}
    */

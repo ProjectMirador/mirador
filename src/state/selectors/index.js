@@ -178,6 +178,7 @@ export function getAnnotationResourcesByMotivation(annotations, motivations) {
 export function getIdAndContentOfResources(resources) {
   return resources.map((resource, i) => ({
     id: resource.id,
+    targetId: resource.targetId,
     content: resource.chars,
   }));
 }

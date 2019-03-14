@@ -399,10 +399,10 @@ describe('getAnnotationResourcesByMotivation', () => {
 describe('getIdAndContentOfResources', () => {
   it('returns an array if id/content objects from the annotation resources', () => {
     const annotations = [
-      new AnnotationResource({ '@id': 'theId', resource: { chars: 'The Content' } }),
+      new AnnotationResource({ '@id': 'theId', on: 'example.com', resource: { chars: 'The Content' } }),
     ];
     const expected = [
-      { id: 'theId', content: 'The Content' },
+      { id: 'theId', targetId: 'example.com', content: 'The Content' },
     ];
 
     expect(getIdAndContentOfResources(annotations)).toEqual(expected);
@@ -420,10 +420,10 @@ describe('getIdAndContentOfResources', () => {
 
   it('handles resource arrays', () => {
     const annotations = [
-      new AnnotationResource({ '@id': 'theId', resource: [{ chars: 'The' }, { chars: 'Content' }] }),
+      new AnnotationResource({ '@id': 'theId', on: 'example.com', resource: [{ chars: 'The' }, { chars: 'Content' }] }),
     ];
     const expected = [
-      { id: 'theId', content: 'The Content' },
+      { id: 'theId', targetId: 'example.com', content: 'The Content' },
     ];
 
     expect(getIdAndContentOfResources(annotations)).toEqual(expected);
