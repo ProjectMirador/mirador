@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Rnd } from 'react-rnd';
+import ResizeObserver from 'react-resize-observer';
 import Window from '../containers/Window';
 import ns from '../config/css-ns';
 
@@ -16,6 +17,7 @@ class WorkspaceElastic extends React.Component {
     const {
       workspace,
       windows,
+      setWorkspaceViewportDimensions,
       setWorkspaceViewportPosition,
       updateWindowPosition,
       setWindowSize,
@@ -27,6 +29,10 @@ class WorkspaceElastic extends React.Component {
 
     return (
       <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+        <ResizeObserver
+          onResize={(rect) => { setWorkspaceViewportDimensions(rect); }}
+        />
+
         <Rnd
           default={{
             width: workspace.width,
@@ -88,6 +94,7 @@ class WorkspaceElastic extends React.Component {
 
 WorkspaceElastic.propTypes = {
   setWorkspaceViewportPosition: PropTypes.func.isRequired,
+  setWorkspaceViewportDimensions: PropTypes.func.isRequired,
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   workspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   updateWindowPosition: PropTypes.func.isRequired,

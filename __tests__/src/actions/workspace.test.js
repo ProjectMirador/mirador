@@ -49,6 +49,23 @@ describe('workspace actions', () => {
       expect(actions.setWorkspaceAddVisibility(true)).toEqual(expectedAction);
     });
   });
+  describe('setWorkspaceViewportDimensions', () => {
+    it('should set the workspace add visibility', () => {
+      const expectedAction = {
+        type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
+        payload: {
+          position: {
+            width: 20,
+            height: 25,
+          },
+        },
+      };
+      expect(actions.setWorkspaceViewportDimensions({
+        width: 20,
+        height: 25,
+      })).toEqual(expectedAction);
+    });
+  });
   describe('setWorkspaceViewportPosition', () => {
     it('should set the workspace add visibility', () => {
       const expectedAction = {

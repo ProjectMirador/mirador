@@ -7,14 +7,22 @@ describe('window actions', () => {
       const expectedAction = {
         type: ActionTypes.FOCUS_WINDOW,
         windowId: 'window',
-        position: { x: -150, y: -188 },
+        position: { x: 25, y: -13 },
       };
 
       const mockState = {
         windows: {
-          window: { x: 50, y: 12 },
+          window: {
+            x: 50, y: 12, width: 50, height: 50,
+          },
         },
         companionWindows: {},
+        workspace: {
+          viewportPosition: {
+            width: 100,
+            height: 100,
+          },
+        },
       };
 
       const mockDispatch = jest.fn(() => ({}));
