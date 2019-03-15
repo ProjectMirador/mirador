@@ -13,22 +13,20 @@ import CanvasIndexIcon from './icons/CanvasIndexIcon';
  *
  */
 export class WindowSideBarButtons extends Component {
-  /**
-   * sets the focus on the given tab
-   */
-  static focusTab(tab) {
-    tab.focus();
-    tab.setAttribute('aria-selected', 'true');
-    tab.setAttribute('tabindex', '0');
-  }
-
   /** */
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleTabRef = this.handleTabRef.bind(this);
-    this.tabValues = ['info', 'canvas_navigation', 'annotations'];
+
+    this.keys = {
+      end: 35,
+      home: 36,
+      up: 38,
+      down: 40,
+    };
   }
 
   /**
@@ -38,10 +36,11 @@ export class WindowSideBarButtons extends Component {
     // eslint-disable-next-line react/no-find-dom-node, prefer-destructuring
     this.tabBar = ReactDOM.findDOMNode(this.tabRef).childNodes[0].childNodes[0].childNodes[0];
     this.tabs = Array.from(this.tabBar.childNodes);
+    this.selectTab(this.tabs[0]);
   }
 
   /**
-  *
+  * ref handler for the tab
   * @param {*} node
   */
   handleTabRef(node) {
@@ -56,15 +55,24 @@ export class WindowSideBarButtons extends Component {
   */
   handleChange(event, value) {
     const { addCompanionWindow } = this.props;
-    this.deactivateTabs(event, this.tabValues.indexOf(value));
+    this.selectTab(event.target);
     addCompanionWindow(value);
   }
 
   /**
-   * @param {object} event
+   * select the given tab
+   * @param {*} tab
+   */
+  selectTab(tab) {
+    tab.removeAttribute('tabindex');
+    tab.setAttribute('aria-selected', 'true');
+    this.deactivateTabs(this.tabs.indexOf(tab));
+  }
+
+  /**
    * @param {number} omit index to omit
    */
-  deactivateTabs(tab, omit = -1) {
+  deactivateTabs(omit = -1) {
     this.tabs.map((v, k) => {
       if (k !== omit) {
         v.setAttribute('tabindex', '-1');
@@ -76,14 +84,14 @@ export class WindowSideBarButtons extends Component {
 
   /**
    *
-   * @param {object} event the onKeyDown event
+   * @param {object} event the keyUp event
    */
-  handleKeyPress(event) {
+  handleKeyUp(event) {
     switch (event.keyCode) {
-      case 38: // arrow up
+      case this.keys.up:
         event.preventDefault();
         return this.focusPreviousTab(event.target);
-      case 40: // arrow down
+      case this.keys.down:
         event.preventDefault();
         return this.focusNextTab(event.target);
       default:
@@ -93,20 +101,51 @@ export class WindowSideBarButtons extends Component {
 
   /**
    *
-   * @param {object} event
+   * @param {object} event the keyDown event
    */
-  focusPreviousTab(tab) {
-    const previousTab = tab.previousSibling || this.tabBar.lastChild;
-    WindowSideBarButtons.focusTab(previousTab);
+  handleKeyDown(event) {
+    switch (event.keyCode) {
+      case this.keys.home:
+        event.preventDefault();
+        return this.focusFirstTab();
+      case this.keys.end:
+        event.preventDefault();
+        return this.focusLastTab();
+      default:
+        return null;
+    }
+  }
+
+  /**
+   * focus the first tab
+   */
+  focusFirstTab() {
+    this.tabBar.firstChild.focus();
   }
 
   /**
    *
-   * @param {object} event
+   * @param {object} tab the currently selected tab
+   */
+  focusPreviousTab(tab) {
+    const previousTab = tab.previousSibling || this.tabBar.lastChild;
+    previousTab.focus();
+  }
+
+  /**
+   * focus the last tab
+   */
+  focusLastTab() {
+    this.tabBar.lastChild.focus();
+  }
+
+  /**
+   *
+   * @param {object} tab the currently selected tab
    */
   focusNextTab(tab) {
     const nextTab = tab.nextSibling || this.tabBar.firstChild;
-    WindowSideBarButtons.focusTab(nextTab);
+    nextTab.focus();
   }
 
   /**
@@ -143,7 +182,8 @@ export class WindowSideBarButtons extends Component {
               <InfoIcon />
             </Tooltip>
           )}
-          onKeyDown={this.handleKeyPress}
+          onKeyUp={this.handleKeyUp}
+          onKeyDown={this.handleKeyDown}
           value="info"
         />
         <Tab
@@ -156,7 +196,8 @@ export class WindowSideBarButtons extends Component {
               <CanvasIndexIcon />
             </Tooltip>
           )}
-          onKeyDown={this.handleKeyPress}
+          onKeyUp={this.handleKeyUp}
+          onKeyDown={this.handleKeyDown}
           value="canvas_navigation"
         />
         <Tab
@@ -171,7 +212,8 @@ export class WindowSideBarButtons extends Component {
               </Badge>
             </Tooltip>
           )}
-          onKeyDown={this.handleKeyPress}
+          onKeyUp={this.handleKeyUp}
+          onKeyDown={this.handleKeyDown}
           value="annotations"
         />
       </Tabs>
