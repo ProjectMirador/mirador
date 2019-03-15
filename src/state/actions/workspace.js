@@ -45,18 +45,35 @@ export function setWorkspaceAddVisibility(isWorkspaceAddVisible) {
  * @param  {Object} position
  * @memberof ActionCreators
  */
-export function setWorkspaceViewportPosition(position) {
+export function setWorkspaceViewportPosition({ x, y }) {
   return {
     type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
     payload: {
       position: {
-        x: position.x,
-        y: position.y,
+        x,
+        y,
       },
     },
   };
 }
 
+/**
+ * setWorkspaceViewportDimensions - action creator
+ *
+ * @param  {Object} position
+ * @memberof ActionCreators
+ */
+export function setWorkspaceViewportDimensions({ width, height }) {
+  return {
+    type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
+    payload: {
+      position: {
+        width,
+        height,
+      },
+    },
+  };
+}
 /**
  * toggleWorkspaceExposeMode - action creator
  *

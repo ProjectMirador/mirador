@@ -15,13 +15,17 @@ const mapStateToProps = state => (
   }
 );
 
-
 /**
  * mapDispatchToProps - used to hook up connect to action creators
  * @memberof Workspace
  * @private
  */
 const mapDispatchToProps = (dispatch, props) => ({
+  setWorkspaceViewportDimensions: (position) => {
+    dispatch(
+      actions.setWorkspaceViewportDimensions(position),
+    );
+  },
   setWorkspaceViewportPosition: (position) => {
     dispatch(
       actions.setWorkspaceViewportPosition(position),

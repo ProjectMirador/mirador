@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Rnd } from 'react-rnd';
+import ResizeObserver from 'react-resize-observer';
 import WorkspaceElastic from '../../../src/components/WorkspaceElastic';
 
 /** create wrapper */
@@ -17,6 +18,7 @@ function createWrapper(props) {
           y: 20,
         },
       }}
+      setWorkspaceViewportDimensions={() => {}}
       setWorkspaceViewportPosition={() => {}}
       setWindowSize={() => {}}
       updateWindowPosition={() => {}}
@@ -141,6 +143,27 @@ describe('WorkspaceElastic', () => {
       expect(mockDragStop).toHaveBeenCalledWith({
         x: -2700,
         y: -2700,
+      });
+    });
+
+    it('when workspace itself is resized', () => {
+      const mockResize = jest.fn();
+      wrapper = createWrapper({
+        windows,
+        setWorkspaceViewportDimensions: mockResize,
+      });
+
+      wrapper
+        .find(ResizeObserver)
+        .at(0)
+        .props()
+        .onResize({
+          width: 500,
+          height: 500,
+        });
+      expect(mockResize).toHaveBeenCalledWith({
+        width: 500,
+        height: 500,
       });
     });
   });

@@ -34,7 +34,13 @@ export const workspaceReducer = (
     case ActionTypes.SET_WORKSPACE_ADD_VISIBILITY:
       return { ...state, isWorkspaceAddVisible: action.isWorkspaceAddVisible };
     case ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION:
-      return { ...state, viewportPosition: action.payload.position };
+      return {
+        ...state,
+        viewportPosition: {
+          ...state.viewportPosition,
+          ...action.payload.position,
+        },
+      };
     case ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE:
       return { ...state, exposeModeOn: !state.exposeModeOn };
     default:
