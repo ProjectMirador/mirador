@@ -2,8 +2,9 @@ import AnnotationResource from './AnnotationResource';
 /** */
 export default class Annotation {
   /** */
-  constructor(json) {
+  constructor(json, target) {
     this.json = json;
+    this.target = target;
   }
 
   /** */
