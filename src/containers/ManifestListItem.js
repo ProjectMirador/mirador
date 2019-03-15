@@ -48,6 +48,9 @@ const styles = theme => ({
     height: '2.5rem',
     paddingRight: 8,
   },
+  placeholder: {
+    backgroundColor: theme.palette.grey[300],
+  },
 });
 
 const enhance = compose(

@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import ReactPlaceholder from 'react-placeholder';
 import { TextBlock, TextRow, RectShape } from 'react-placeholder/lib/placeholders';
+import Img from 'react-image';
 import ManifestListItemError from '../containers/ManifestListItemError';
 import ns from '../config/css-ns';
 import 'react-placeholder/lib/reactPlaceholder.css';
@@ -94,16 +95,18 @@ export class ManifestListItem extends React.Component {
               >
                 <Grid container spacing={24} className={classes.label}>
                   <Grid item xs={4} sm={3}>
-                    {
-                      <ReactPlaceholder ready={!!thumbnail} type="rect" style={{ width: 120, height: 80 }}>
-                        <img
-                          className={ns('manifest-list-item-thumb')}
-                          src={thumbnail}
-                          alt=""
-                          height="80"
+                    <Img
+                      className={ns('manifest-list-item-thumb')}
+                      src={[thumbnail]}
+                      alt=""
+                      height="80"
+                      unloader={(
+                        <RectShape
+                          className={classes.placeholder}
+                          style={{ width: 120, height: 80 }}
                         />
-                      </ReactPlaceholder>
-                    }
+                      )}
+                    />
                   </Grid>
                   <Grid item xs={8} sm={9}>
                     <Typography component="span" variant="h6">
@@ -119,16 +122,15 @@ export class ManifestListItem extends React.Component {
             </Grid>
 
             <Grid item xs={4} sm={2}>
-              {
-                <ReactPlaceholder ready={!!manifestLogo} type="rect" style={{ width: 60, height: 60 }}>
-                  <img
-                    src={manifestLogo}
-                    alt=""
-                    role="presentation"
-                    className={classes.logo}
-                  />
-                </ReactPlaceholder>
-              }
+              <Img
+                src={[manifestLogo]}
+                alt=""
+                role="presentation"
+                className={classes.logo}
+                unloader={
+                  <RectShape className={classes.placeholder} style={{ width: 60, height: 60 }} />
+                }
+              />
             </Grid>
           </Grid>
         </ReactPlaceholder>
