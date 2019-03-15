@@ -33,9 +33,9 @@ export class WindowSideBarButtons extends Component {
    *
    */
   componentDidMount() {
-    // eslint-disable-next-line react/no-find-dom-node, prefer-destructuring
-    this.tabBar = ReactDOM.findDOMNode(this.tabRef).childNodes[0].childNodes[0].childNodes[0];
-    this.tabs = Array.from(this.tabBar.childNodes);
+    // eslint-disable-next-line react/no-find-dom-node
+    this.tabs = Array.from(ReactDOM.findDOMNode(this.tabRef).getElementsByTagName('button'));
+    this.tabBar = this.tabs[0].parent;
     this.selectTab(this.tabs[0]);
   }
 
