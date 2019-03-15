@@ -126,17 +126,32 @@ export function getSelectedCanvas(state, windowId) {
 }
 
 /**
-* Return the current canvas' (selected in a window) annotations
+* Return annotations for an array of targets
 * @param {object} state
-* @param {String} windowId
+* @param {Array} targets
 * @return {Array}
 */
-export function getSelectedCanvasAnnotations(state, canvasId) {
-  const annotations = state.annotations && state.annotations[canvasId];
+export function getSelectedTargetsAnnotations(state, targets) {
+  const annotations = state.annotations
+    && targets.map(target => getSelectedTargetAnnotations(state, target));
+  if (!annotations) return [];
+
+  return flatten(annotations);
+}
+
+/**
+* Return a single target's annotations
+* @param {object} state
+* @param {String} target
+* @return {Array}
+*/
+export function getSelectedTargetAnnotations(state, target) {
+  const annotations = state.annotations && state.annotations[target];
+
   if (!annotations) return [];
 
   return filter(
-    Object.keys(annotations).map(id => new Annotation(annotations[id].json)),
+    Object.keys(annotations).map(id => new Annotation(annotations[id].json, target)),
     annotation => annotation
                   && annotation.present(),
   );

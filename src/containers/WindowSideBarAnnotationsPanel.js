@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import {
   getIdAndContentOfResources,
   getSelectedCanvas,
-  getSelectedCanvasAnnotations,
+  getSelectedTargetAnnotations,
   getAnnotationResourcesByMotivation,
 } from '../state/selectors';
 import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnotationsPanel';
@@ -17,7 +17,7 @@ import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnota
 const mapStateToProps = (state, { windowId }) => ({
   annotations: getIdAndContentOfResources(
     getAnnotationResourcesByMotivation(
-      getSelectedCanvasAnnotations(state, getSelectedCanvas(state, windowId).id),
+      getSelectedTargetAnnotations(state, getSelectedCanvas(state, windowId).id),
       ['oa:commenting', 'sc:painting'],
     ),
   ),

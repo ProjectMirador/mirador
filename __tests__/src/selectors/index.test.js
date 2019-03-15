@@ -19,7 +19,8 @@ import {
   getManifestProvider,
   getManifestTitle,
   getManifestThumbnail,
-  getSelectedCanvasAnnotations,
+  getSelectedTargetAnnotations,
+  getSelectedTargetsAnnotations,
   getWindowViewType,
   getIdAndLabelOfCanvases,
   getCompanionWindowsOfWindow,
@@ -325,7 +326,7 @@ describe('getDestructuredMetadata', () => {
   });
 });
 
-describe('getSelectedCanvasAnnotations', () => {
+describe('getSelectedTargetAnnotations', () => {
   it('returns annotations for the given canvasId that have resources', () => {
     const state = {
       annotations: {
@@ -337,15 +338,42 @@ describe('getSelectedCanvasAnnotations', () => {
       },
     };
 
-    expect(getSelectedCanvasAnnotations(state, 'abc123').length).toEqual(1);
+    expect(getSelectedTargetAnnotations(state, 'abc123').length).toEqual(1);
   });
 
   it('returns an empty array if there are no annotations', () => {
     const state = { annotations: { xyz321: {} } };
     const expected = [];
 
-    expect(getSelectedCanvasAnnotations({}, 'abc123')).toEqual(expected);
-    expect(getSelectedCanvasAnnotations(state, 'abc123')).toEqual(expected);
+    expect(getSelectedTargetAnnotations({}, 'abc123')).toEqual(expected);
+    expect(getSelectedTargetAnnotations(state, 'abc123')).toEqual(expected);
+  });
+});
+
+describe('getSelectedTargetsAnnotations', () => {
+  it('returns annotations for multiple canvasIds', () => {
+    const state = {
+      annotations: {
+        abc123: {
+          annoId1: { '@id': 'annoId1', json: { resources: ['aResource'] } },
+          annoId2: { '@id': 'annoId2' },
+          annoId3: { '@id': 'annoId3', json: { resources: [] } },
+        },
+        def456: {
+          annoId4: { '@id': 'annoId4', json: { resources: ['helloWorld'] } },
+        },
+      },
+    };
+
+    expect(getSelectedTargetsAnnotations(state, ['abc123', 'def456']).length).toEqual(2);
+  });
+
+  it('returns an empty array if there are no annotations', () => {
+    const state = { annotations: { xyz321: {} } };
+    const expected = [];
+
+    expect(getSelectedTargetsAnnotations({}, ['abc123'])).toEqual(expected);
+    expect(getSelectedTargetsAnnotations(state, ['abc123'])).toEqual(expected);
   });
 });
 
