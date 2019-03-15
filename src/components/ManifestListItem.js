@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import ReactPlaceholder from 'react-placeholder';
 import { TextBlock, TextRow, RectShape } from 'react-placeholder/lib/placeholders';
 import ManifestListItemError from '../containers/ManifestListItemError';
-import WindowIcon from '../containers/WindowIcon';
 import ns from '../config/css-ns';
 import 'react-placeholder/lib/reactPlaceholder.css';
 
