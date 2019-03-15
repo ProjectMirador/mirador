@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Typography from '@material-ui/core/Typography';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import MenuItem from '@material-ui/core/MenuItem';
 import ThumbnailsOffIcon from '@material-ui/icons/CropDinSharp';
 import PropTypes from 'prop-types';
 import ThumbnailNavigationBottomIcon from './icons/ThumbnailNavigationBottomIcon';
@@ -22,10 +21,10 @@ export class WindowThumbnailSettings extends Component {
   /**
    * @private
    */
-  handleChange(event) {
+  handleChange(value) {
     const { windowId, setWindowThumbnailPosition } = this.props;
 
-    setWindowThumbnailPosition(windowId, event.target.value);
+    setWindowThumbnailPosition(windowId, value);
   }
 
   /**
@@ -34,42 +33,61 @@ export class WindowThumbnailSettings extends Component {
    * @return {type}  description
    */
   render() {
-    const { thumbnailNavigationPosition, t } = this.props;
+    const {
+      classes, handleClose, t, thumbnailNavigationPosition,
+    } = this.props;
 
     return (
       <>
-        <Typography>{t('thumbnails')}</Typography>
-        <RadioGroup aria-label={t('position')} name="position" value={thumbnailNavigationPosition} onChange={this.handleChange} row>
+        <ListSubheader role="presentation" tabIndex="-1">{t('thumbnails')}</ListSubheader>
+
+        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('off'); handleClose(); }}>
           <FormControlLabel
             value="off"
-            control={<Radio color="secondary" icon={<ThumbnailsOffIcon />} checkedIcon={<ThumbnailsOffIcon />} />}
+            classes={{ label: thumbnailNavigationPosition === 'off' ? classes.selectedLabel : undefined }}
+            control={
+              <ThumbnailsOffIcon color={thumbnailNavigationPosition === 'off' ? 'secondary' : undefined} />
+            }
             label={t('off')}
             labelPlacement="bottom"
           />
+        </MenuItem>
+        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('far-bottom'); handleClose(); }}>
           <FormControlLabel
             value="far-bottom"
-            control={<Radio color="secondary" icon={<ThumbnailNavigationBottomIcon />} checkedIcon={<ThumbnailNavigationBottomIcon />} />}
+            classes={{ label: thumbnailNavigationPosition === 'far-bottom' ? classes.selectedLabel : undefined }}
+            control={
+              <ThumbnailNavigationBottomIcon color={thumbnailNavigationPosition === 'far-bottom' ? 'secondary' : undefined} />
+            }
             label={t('bottom')}
             labelPlacement="bottom"
           />
+        </MenuItem>
+        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('far-right'); handleClose(); }}>
           <FormControlLabel
             value="far-right"
-            control={<Radio color="secondary" icon={<ThumbnailNavigationRightIcon />} checkedIcon={<ThumbnailNavigationRightIcon />} />}
+            classes={{ label: thumbnailNavigationPosition === 'far-right' ? classes.selectedLabel : undefined }}
+            control={
+              <ThumbnailNavigationRightIcon color={thumbnailNavigationPosition === 'far-right' ? 'secondary' : undefined} />
+            }
             label={t('right')}
             labelPlacement="bottom"
           />
-        </RadioGroup>
+        </MenuItem>
       </>
     );
   }
 }
 
 WindowThumbnailSettings.propTypes = {
+  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  handleClose: PropTypes.func,
   windowId: PropTypes.string.isRequired,
   setWindowThumbnailPosition: PropTypes.func.isRequired,
   thumbnailNavigationPosition: PropTypes.string.isRequired,
   t: PropTypes.func,
 };
 WindowThumbnailSettings.defaultProps = {
+  handleClose: () => {},
   t: key => key,
 };

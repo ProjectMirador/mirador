@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Typography from '@material-ui/core/Typography';
+import MenuItem from '@material-ui/core/MenuItem';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import SingleIcon from '@material-ui/icons/CropOriginalSharp';
 import PropTypes from 'prop-types';
 import BookViewIcon from './icons/BookViewIcon';
@@ -20,12 +20,31 @@ export class WindowViewSettings extends Component {
   }
 
   /**
+   * Take action when the component mounts for the first time
+   */
+  componentDidMount() {
+    if (this.selectedRef) {
+      // MUI uses ReactDOM.findDOMNode and refs for handling focus
+      ReactDOM.findDOMNode(this.selectedRef).focus(); // eslint-disable-line react/no-find-dom-node
+    }
+  }
+
+  /**
    * @private
    */
-  handleChange(event) {
+  handleSelectedRef(ref) {
+    if (this.selectedRef) return;
+
+    this.selectedRef = ref;
+  }
+
+  /**
+   * @private
+   */
+  handleChange(value) {
     const { windowId, setWindowViewType } = this.props;
 
-    setWindowViewType(windowId, event.target.value);
+    setWindowViewType(windowId, value);
   }
 
   /**
@@ -34,36 +53,50 @@ export class WindowViewSettings extends Component {
    * @return {type}  description
    */
   render() {
-    const { windowViewType, t } = this.props;
+    const {
+      classes, handleClose, t, windowViewType,
+    } = this.props;
 
     return (
       <>
-        <Typography>{t('view')}</Typography>
-        <RadioGroup aria-label={t('position')} name="position" value={windowViewType} onChange={this.handleChange} row>
+        <ListSubheader role="presentation" tabIndex="-1">{t('view')}</ListSubheader>
+
+        <MenuItem
+          className={classes.MenuItem}
+          ref={ref => this.handleSelectedRef(ref)}
+          onClick={() => { this.handleChange('single'); handleClose(); }}
+        >
           <FormControlLabel
             value="single"
-            control={<Radio color="secondary" icon={<SingleIcon />} checkedIcon={<SingleIcon />} />}
+            classes={{ label: windowViewType === 'single' ? classes.selectedLabel : undefined }}
+            control={<SingleIcon color={windowViewType === 'single' ? 'secondary' : undefined} />}
             label={t('single')}
             labelPlacement="bottom"
           />
+        </MenuItem>
+        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('book'); handleClose(); }}>
           <FormControlLabel
             value="book"
-            control={<Radio color="secondary" icon={<BookViewIcon />} checkedIcon={<BookViewIcon />} />}
+            classes={{ label: windowViewType === 'book' ? classes.selectedLabel : undefined }}
+            control={<BookViewIcon color={windowViewType === 'book' ? 'secondary' : undefined} />}
             label={t('book')}
             labelPlacement="bottom"
           />
-        </RadioGroup>
+        </MenuItem>
       </>
     );
   }
 }
 
 WindowViewSettings.propTypes = {
+  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  handleClose: PropTypes.func,
   windowId: PropTypes.string.isRequired,
   setWindowViewType: PropTypes.func.isRequired,
   windowViewType: PropTypes.string.isRequired,
   t: PropTypes.func,
 };
 WindowViewSettings.defaultProps = {
+  handleClose: () => {},
   t: key => key,
 };

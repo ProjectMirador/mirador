@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { withStyles } from '@material-ui/core/styles';
 import * as actions from '../state/actions';
 import { getWindowViewType } from '../state/selectors';
 import { WindowViewSettings } from '../components/WindowViewSettings';
@@ -23,7 +24,18 @@ const mapStateToProps = (state, props) => (
   }
 );
 
+/** */
+const styles = theme => ({
+  selectedLabel: {
+    color: theme.palette.secondary.main,
+  },
+  MenuItem: {
+    display: 'inline',
+  },
+});
+
 const enhance = compose(
+  withStyles(styles),
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
 );

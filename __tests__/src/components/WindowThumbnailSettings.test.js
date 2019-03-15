@@ -1,14 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Typography from '@material-ui/core/Typography';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import MenuItem from '@material-ui/core/MenuItem';
 import { WindowThumbnailSettings } from '../../../src/components/WindowThumbnailSettings';
 
 /** create wrapper */
 function createWrapper(props) {
   return shallow(
     <WindowThumbnailSettings
+      classes={{}}
       windowId="xyz"
       setWindowThumbnailPosition={() => {}}
       thumbnailNavigationPosition="off"
@@ -20,8 +21,7 @@ function createWrapper(props) {
 describe('WindowThumbnailSettings', () => {
   it('renders all elements correctly', () => {
     const wrapper = createWrapper();
-    expect(wrapper.find(Typography).length).toBe(1);
-    expect(wrapper.find(RadioGroup).length).toBe(1);
+    expect(wrapper.find(ListSubheader).length).toBe(1);
     const labels = wrapper.find(FormControlLabel);
     expect(labels.length).toBe(3);
     expect(labels.at(0).props().value).toBe('off');
@@ -29,19 +29,22 @@ describe('WindowThumbnailSettings', () => {
     expect(labels.at(2).props().value).toBe('far-right');
   });
 
-  it('should set the correct label active', () => {
+  it('should set the correct label active (by setting the secondary color)', () => {
     let wrapper = createWrapper({ thumbnailNavigationPosition: 'far-bottom' });
-    expect(wrapper.find(RadioGroup).props().value).toBe('far-bottom');
+    expect(wrapper.find(FormControlLabel).at(1).props().control.props.color).toEqual('secondary');
+    expect(wrapper.find(FormControlLabel).at(2).props().control.props.color).not.toEqual('secondary');
+
     wrapper = createWrapper({ thumbnailNavigationPosition: 'far-right' });
-    expect(wrapper.find(RadioGroup).props().value).toBe('far-right');
+    expect(wrapper.find(FormControlLabel).at(2).props().control.props.color).toEqual('secondary');
   });
 
   it('updates state when the thumbnail config selection changes', () => {
     const setWindowThumbnailPosition = jest.fn();
     const wrapper = createWrapper({ setWindowThumbnailPosition });
-    wrapper.find(RadioGroup).first().simulate('change', { target: { value: 'off' } });
+
+    wrapper.find(MenuItem).at(0).simulate('click');
     expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'off');
-    wrapper.find(RadioGroup).first().simulate('change', { target: { value: 'far-right' } });
+    wrapper.find(MenuItem).at(2).simulate('click');
     expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'far-right');
   });
 });

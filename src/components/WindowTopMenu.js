@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ListItem from '@material-ui/core/ListItem';
 import Menu from '@material-ui/core/Menu';
 import PropTypes from 'prop-types';
 import WindowThumbnailSettings from '../containers/WindowThumbnailSettings';
@@ -36,13 +35,10 @@ export class WindowTopMenu extends Component {
           getContentAnchorEl={null}
           open={Boolean(anchorEl)}
           onClose={handleClose}
+          disableAutoFocusItem
         >
-          <ListItem divider>
-            <WindowViewSettings windowId={windowId} />
-          </ListItem>
-          <ListItem divider>
-            <WindowThumbnailSettings windowId={windowId} />
-          </ListItem>
+          <WindowViewSettings windowId={windowId} handleClose={handleClose} />
+          <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />
         </Menu>
       </>
     );

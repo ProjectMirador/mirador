@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import ListItem from '@material-ui/core/ListItem';
 import Menu from '@material-ui/core/Menu';
 import WindowThumbnailSettings from '../../../src/containers/WindowThumbnailSettings';
 import WindowViewSettings from '../../../src/containers/WindowViewSettings';
@@ -23,7 +22,6 @@ describe('WindowTopMenu', () => {
   it('renders all needed elements', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(Menu).length).toBe(1);
-    expect(wrapper.find(ListItem).length).toBe(2);
     expect(wrapper.find(WindowThumbnailSettings).length).toBe(1);
     expect(wrapper.find(WindowViewSettings).length).toBe(1);
   });
