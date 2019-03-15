@@ -6,8 +6,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import ReactPlaceholder from 'react-placeholder';
 import { TextBlock, TextRow, RectShape } from 'react-placeholder/lib/placeholders';
+import Img from 'react-image';
 import ManifestListItemError from '../containers/ManifestListItemError';
-import WindowIcon from '../containers/WindowIcon';
 import ns from '../config/css-ns';
 import 'react-placeholder/lib/reactPlaceholder.css';
 
@@ -41,6 +41,7 @@ export class ManifestListItem extends React.Component {
       ready,
       title,
       thumbnail,
+      manifestLogo,
       addWindow,
       handleClose,
       size,
@@ -94,16 +95,18 @@ export class ManifestListItem extends React.Component {
               >
                 <Grid container spacing={24} className={classes.label}>
                   <Grid item xs={4} sm={3}>
-                    {
-                      <ReactPlaceholder ready={!!thumbnail} type="rect" style={{ width: 120, height: 80 }}>
-                        <img
-                          className={ns('manifest-list-item-thumb')}
-                          src={thumbnail}
-                          alt=""
-                          height="80"
+                    <Img
+                      className={ns('manifest-list-item-thumb')}
+                      src={[thumbnail]}
+                      alt=""
+                      height="80"
+                      unloader={(
+                        <RectShape
+                          className={classes.placeholder}
+                          style={{ width: 120, height: 80 }}
                         />
-                      </ReactPlaceholder>
-                    }
+                      )}
+                    />
                   </Grid>
                   <Grid item xs={8} sm={9}>
                     <Typography component="span" variant="h6">
@@ -119,7 +122,15 @@ export class ManifestListItem extends React.Component {
             </Grid>
 
             <Grid item xs={4} sm={2}>
-              <WindowIcon className={ns('manifest-list-item-logo')} manifestId={manifestId} />
+              <Img
+                src={[manifestLogo]}
+                alt=""
+                role="presentation"
+                className={classes.logo}
+                unloader={
+                  <RectShape className={classes.placeholder} style={{ width: 60, height: 60 }} />
+                }
+              />
             </Grid>
           </Grid>
         </ReactPlaceholder>
@@ -136,6 +147,7 @@ ManifestListItem.propTypes = {
   title: PropTypes.string,
   thumbnail: PropTypes.string,
   size: PropTypes.number,
+  manifestLogo: PropTypes.string,
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   provider: PropTypes.string,
   t: PropTypes.func,
@@ -155,4 +167,5 @@ ManifestListItem.defaultProps = {
   t: key => key,
   error: null,
   isFetching: false,
+  manifestLogo: null,
 };

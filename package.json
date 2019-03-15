@@ -52,6 +52,7 @@
     "prop-types": "^15.6.2",
     "react-full-screen": "^0.2.4",
     "react-i18next": "^10.2.0",
+    "react-image": "^2.0.0",
     "react-mosaic-component": "^2.1.0",
     "react-placeholder": "^3.0.1",
     "react-redux": "^6.0.0",
