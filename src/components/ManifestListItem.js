@@ -41,6 +41,7 @@ export class ManifestListItem extends React.Component {
       ready,
       title,
       thumbnail,
+      manifestLogo,
       addWindow,
       handleClose,
       size,
@@ -119,7 +120,16 @@ export class ManifestListItem extends React.Component {
             </Grid>
 
             <Grid item xs={4} sm={2}>
-              <WindowIcon className={ns('manifest-list-item-logo')} manifestId={manifestId} />
+              {
+                <ReactPlaceholder ready={!!manifestLogo} type="rect" style={{ width: 60, height: 60 }}>
+                  <img
+                    src={manifestLogo}
+                    alt=""
+                    role="presentation"
+                    className={classes.logo}
+                  />
+                </ReactPlaceholder>
+              }
             </Grid>
           </Grid>
         </ReactPlaceholder>
@@ -136,6 +146,7 @@ ManifestListItem.propTypes = {
   title: PropTypes.string,
   thumbnail: PropTypes.string,
   size: PropTypes.number,
+  manifestLogo: PropTypes.string,
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   provider: PropTypes.string,
   t: PropTypes.func,
@@ -155,4 +166,5 @@ ManifestListItem.defaultProps = {
   t: key => key,
   error: null,
   isFetching: false,
+  manifestLogo: null,
 };
