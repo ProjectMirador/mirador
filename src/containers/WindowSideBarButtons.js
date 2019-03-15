@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withTranslation } from 'react-i18next';
 import * as actions from '../state/actions';
 import {
@@ -48,10 +49,24 @@ const style = theme => ({
   tab: {
     minWidth: 'auto',
     borderRight: '4px solid transparent',
+    '&:hover': {
+      textDecoration: 'none',
+      backgroundColor: fade(theme.palette.text.primary, theme.palette.action.hoverOpacity),
+      // Reset on touch devices, it doesn't add specificity
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+      '&$disabled': {
+        backgroundColor: 'transparent',
+      },
+    },
   },
   tabSelected: {
     backgroundColor: theme.palette.secondary.light,
     borderRight: `4px solid ${theme.palette.secondary.main}`,
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.light,
+    },
   },
 });
 
