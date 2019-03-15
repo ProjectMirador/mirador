@@ -19,6 +19,7 @@ import {
   getManifestProvider,
   getManifestTitle,
   getManifestThumbnail,
+  getSelectedAnnotationIds,
   getSelectedTargetAnnotations,
   getSelectedTargetsAnnotations,
   getWindowViewType,
@@ -530,4 +531,24 @@ describe('getCompanionWindowsOfWindow', () => {
       { id: 'bar', content: 'canvas' },
     ]);
   });
+});
+
+it('getSelectedAnnotationIds returns an array of selected annotation IDs from state', () => {
+  const state = {
+    windows: {
+      wid: {
+        selectedAnnotations: {
+          tid1: ['aid1', 'aid2'],
+          tid2: ['aid3'],
+        },
+      },
+    },
+  };
+
+  expect(getSelectedAnnotationIds(state, 'wid', ['tid2'])).toEqual(
+    ['aid3'],
+  );
+  expect(getSelectedAnnotationIds(state, 'wid', ['tid1', 'tid2'])).toEqual(
+    ['aid1', 'aid2', 'aid3'],
+  );
 });

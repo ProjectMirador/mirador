@@ -15,13 +15,34 @@ export class WindowSideBarAnnotationsPanel extends Component {
    * Rreturn an array of sanitized annotation data
    */
   sanitizedAnnotations() {
-    const { annotations } = this.props;
+    const {
+      annotations,
+      classes,
+      deselectAnnotation,
+      windowId,
+      selectAnnotation,
+      selectedAnnotationIds,
+    } = this.props;
 
     return (
       <List>
         {
           annotations.map(annotation => (
-            <ListItem key={annotation.id}>
+            <ListItem
+              key={annotation.id}
+              className={
+                selectedAnnotationIds.includes(annotation.id)
+                  ? classes.selectedAnnotation
+                  : null
+              }
+              onClick={() => {
+                if (selectedAnnotationIds.includes(annotation.id)) {
+                  deselectAnnotation(windowId, annotation.targetId, annotation.id);
+                } else {
+                  selectAnnotation(windowId, annotation.targetId, annotation.id);
+                }
+              }}
+            >
               <Typography variant="body2">
                 <SanitizedHtml ruleSet="iiif" htmlString={annotation.content} />
               </Typography>
@@ -53,6 +74,10 @@ WindowSideBarAnnotationsPanel.propTypes = {
     id: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
   })),
+  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  deselectAnnotation: PropTypes.func.isRequired,
+  selectAnnotation: PropTypes.func.isRequired,
+  selectedAnnotationIds: PropTypes.arrayOf(PropTypes.string),
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
@@ -60,5 +85,6 @@ WindowSideBarAnnotationsPanel.propTypes = {
 
 WindowSideBarAnnotationsPanel.defaultProps = {
   annotations: [],
+  selectedAnnotationIds: [],
   t: key => key,
 };

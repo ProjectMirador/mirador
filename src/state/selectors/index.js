@@ -316,3 +316,15 @@ export function getLanguagesFromConfigWithCurrent(state) {
     current: key === language,
   }));
 }
+
+/**
+ * Return the selected annotations IDs of a given CanvasId
+ * @param {Object} state
+ * @param {String} windowId
+ * @param {Array} targetIds
+ * @return {Array}
+ */
+export function getSelectedAnnotationIds(state, windowId, targetIds) {
+  return flatten(targetIds.map(targetId => state.windows[windowId].selectedAnnotations
+     && state.windows[windowId].selectedAnnotations[targetId]));
+}
