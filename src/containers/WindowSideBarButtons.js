@@ -7,7 +7,7 @@ import * as actions from '../state/actions';
 import {
   getCompanionWindowForPosition,
   getSelectedCanvas,
-  getSelectedCanvasAnnotations,
+  getSelectedTargetAnnotations,
   getAnnotationResourcesByMotivation,
 } from '../state/selectors';
 import { WindowSideBarButtons } from '../components/WindowSideBarButtons';
@@ -32,7 +32,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
  */
 const mapStateToProps = (state, { windowId }) => ({
   hasAnnotations: getAnnotationResourcesByMotivation(
-    getSelectedCanvasAnnotations(state, (getSelectedCanvas(state, windowId) || {}).id),
+    getSelectedTargetAnnotations(state, (getSelectedCanvas(state, windowId) || {}).id),
     ['oa:commenting', 'sc:painting'],
   ).length > 0,
   sideBarPanel: (getCompanionWindowForPosition(state, windowId, 'left') || {}).content,
