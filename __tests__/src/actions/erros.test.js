@@ -17,8 +17,8 @@ describe('errors actions', () => {
     it('removes an existing error', () => {
       const errorId = 'testId123';
       const expectedAction = {
-        type: ActionTypes.REMOVE_ERROR,
         id: errorId,
+        type: ActionTypes.REMOVE_ERROR,
       };
 
       expect(actions.removeError(errorId)).toEqual(expectedAction);

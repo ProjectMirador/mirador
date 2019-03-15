@@ -26,7 +26,6 @@ const mapDispatchToProps = {
 const enhance = compose(
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
-  withTranslation(),
   withPlugins('ErrorDialog'),
 );
 

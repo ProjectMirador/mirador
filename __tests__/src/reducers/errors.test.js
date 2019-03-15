@@ -23,11 +23,11 @@ describe('ADD_ERROR', () => {
 
   it('should handle REMOVE_ERROR', () => {
     const stateBefore = {
-      items: [errorId],
       errorId: {
         id: errorId,
         message: errorMessage,
       },
+      items: [errorId],
     };
 
     /*
@@ -35,8 +35,8 @@ describe('ADD_ERROR', () => {
       so we are able to provide an error history or some kind of logs later on
     */
     expect(errorsReducer(stateBefore, {
-      type: ActionTypes.REMOVE_ERROR,
       id: errorId,
+      type: ActionTypes.REMOVE_ERROR,
     })).toHaveProperty('items', []);
   });
 });

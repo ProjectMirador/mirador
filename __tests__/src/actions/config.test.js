@@ -28,8 +28,8 @@ describe('config actions', () => {
     it('imports the config', () => {
       const config = configFixture;
       const expectedAction = {
-        type: ActionTypes.IMPORT_CONFIG,
         config,
+        type: ActionTypes.IMPORT_CONFIG,
       };
       expect(actions.importConfig(config)).toEqual(expectedAction);
     });

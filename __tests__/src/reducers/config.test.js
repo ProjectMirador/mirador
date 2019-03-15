@@ -46,8 +46,8 @@ describe('config reducer', () => {
   describe('IMPORT_CONFIG', () => {
     it('should handle IMPORT_CONFIG', () => {
       expect(configReducer([], {
-        type: ActionTypes.IMPORT_CONFIG,
         config: configFixture,
+        type: ActionTypes.IMPORT_CONFIG,
       })).toEqual(configFixture);
     });
   });

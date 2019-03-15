@@ -62,7 +62,7 @@ export class WorkspaceImport extends Component {
       <Dialog id="workspace-settings" open={open} onClose={handleClose}>
         <DialogTitle id="form-dialog-title">{t('import')}</DialogTitle>
         <DialogContent>
-          <TextField rows="15" multiline onChange={this.handleChange} />
+          <TextField rows="15" multiline variant="filled" onChange={this.handleChange} />
           <div>
             <Button onClick={this.handleClick}>
               {t('importWorkspace')}
