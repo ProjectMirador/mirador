@@ -1,7 +1,10 @@
 import ReactDOM from 'react-dom';
+import { pluginStore } from '../../../src/extend';
 import MiradorViewer from '../../../src/lib/MiradorViewer';
 
 jest.unmock('react-i18next');
+jest.mock('../../../src/extend');
+jest.mock('react-dom');
 
 describe('MiradorViewer', () => {
   let instance;
@@ -20,26 +23,29 @@ describe('MiradorViewer', () => {
       expect(ReactDOM.render).toHaveBeenCalled();
     });
   });
-  describe('processPlugins', () => {
-    it('combines actionCreators and reducers', () => {
-      const fooPlugin = {
-        actions: {
-          fooAction: () => {},
+  describe('process plugins', () => {
+    it('should store plugins and set reducers to state', () => {
+      /** */ const fooReducer = (state = 0) => state;
+      /** */ const barReducer = (state = 0) => state;
+      /** */ const bazReducer = (state = 0) => state;
+      /** */ const plugins = [
+        {
+          reducers: {
+            foo: fooReducer,
+            bar: barReducer,
+          },
         },
-        reducers: {
-          fooReducer: null,
+        {
+          reducers: {
+            baz: bazReducer,
+          },
         },
-      };
-      window.Mirador = {
-        plugins: {
-          fooPlugin,
-        },
-      };
-      instance = new MiradorViewer({
-        plugins: ['fooPlugin'],
-      });
-      expect(instance.actions.fooAction).toBeDefined();
-      expect(instance.store.pluginReducers).toBeDefined();
+      ];
+      instance = new MiradorViewer({}, plugins);
+      expect(pluginStore.storePlugins).toBeCalledWith(plugins);
+      expect(instance.store.getState().foo).toBeDefined();
+      expect(instance.store.getState().bar).toBeDefined();
+      expect(instance.store.getState().baz).toBeDefined();
     });
   });
   describe('processConfig', () => {
