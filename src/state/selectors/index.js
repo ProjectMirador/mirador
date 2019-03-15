@@ -328,3 +328,18 @@ export function getSelectedAnnotationIds(state, windowId, targetIds) {
   return flatten(targetIds.map(targetId => state.windows[windowId].selectedAnnotations
      && state.windows[windowId].selectedAnnotations[targetId]));
 }
+
+/**
+* Return the current canvas' (selected in a window) selected annotations
+* @param {object} state
+* @param {Array} targetIds
+* @param {Array} annotationIds
+* @return {Array}
+*/
+export function getSelectedTargetAnnotationResources(state, targetIds, annotationIds) {
+  return getSelectedTargetsAnnotations(state, targetIds)
+    .map(annotation => ({
+      id: (annotation['@id'] || annotation.id),
+      resources: annotation.resources.filter(r => annotationIds && annotationIds.includes(r.id)),
+    }));
+}

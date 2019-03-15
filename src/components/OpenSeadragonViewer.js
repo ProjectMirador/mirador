@@ -70,6 +70,7 @@ export class OpenSeadragonViewer extends Component {
           this.annotationsToContext(annotations);
         });
       };
+      this.viewer.forceRedraw();
     }
     if (!this.tileSourcesMatch(prevProps.tileSources)) {
       this.viewer.close();
@@ -243,11 +244,15 @@ export class OpenSeadragonViewer extends Component {
    */
   annotationsMatch(prevAnnotations) {
     const { annotations } = this.props;
+
     return annotations.some((annotation, index) => {
       if (!prevAnnotations[index]) {
         return false;
       }
-      if (annotation.id === prevAnnotations[index].id) {
+      const newIds = annotation.resources.map(r => r.id);
+      const prevIds = prevAnnotations[index].resources.map(r => r.id);
+
+      if ((annotation.id === prevAnnotations[index].id) && (newIds === prevIds)) {
         return true;
       }
       return false;

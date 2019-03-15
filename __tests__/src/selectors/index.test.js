@@ -22,6 +22,7 @@ import {
   getSelectedAnnotationIds,
   getSelectedTargetAnnotations,
   getSelectedTargetsAnnotations,
+  getSelectedTargetAnnotationResources,
   getWindowViewType,
   getIdAndLabelOfCanvases,
   getCompanionWindowsOfWindow,
@@ -551,4 +552,22 @@ it('getSelectedAnnotationIds returns an array of selected annotation IDs from st
   expect(getSelectedAnnotationIds(state, 'wid', ['tid1', 'tid2'])).toEqual(
     ['aid1', 'aid2', 'aid3'],
   );
+});
+
+it('getSelectedTargetAnnotationResources filters the annotation resources by the annotationIds passed in', () => {
+  const state = {
+    annotations: {
+      cid1: {
+        annoId1: { id: 'annoId1', json: { resources: [{ '@id': 'annoId1' }, { '@id': 'annoId2' }] } },
+      },
+    },
+  };
+
+  expect(
+    getSelectedTargetAnnotationResources(state, ['cid1'], ['annoId1'])[0].resources.length,
+  ).toBe(1);
+
+  expect(
+    getSelectedTargetAnnotationResources(state, ['cid1'], ['annoId1', 'annoId2'])[0].resources.length,
+  ).toBe(2);
 });
