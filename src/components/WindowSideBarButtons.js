@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Badge from '@material-ui/core/Badge';
 import Tabs from '@material-ui/core/Tabs';
@@ -13,52 +14,40 @@ import CanvasIndexIcon from './icons/CanvasIndexIcon';
  */
 export class WindowSideBarButtons extends Component {
   /**
-   *
-   * @param {object} event
+   * sets the focus on the given tab
    */
-  static selectPreviousTab(event) {
-    const { previousSibling } = event.target;
-    if (previousSibling) {
-      previousSibling.focus();
-    } else {
-      event.target.parentNode.lastChild.focus();
-    }
-  }
-
-  /**
-   *
-   * @param {object} event
-   */
-  static selectNextTab(event) {
-    const { nextSibling } = event.target;
-    if (nextSibling) {
-      nextSibling.focus();
-    } else {
-      event.target.parentNode.firstChild.focus();
-    }
-  }
-
-  /**
-   *
-   * @param {object} event the onKeyDown event
-   */
-  static handleKeyPress(event) {
-    switch (event.keyCode) {
-      case 38: // arrow up
-        event.preventDefault();
-        return WindowSideBarButtons.selectPreviousTab(event);
-      case 40: // arrow down
-        event.preventDefault();
-        return WindowSideBarButtons.selectNextTab(event);
-      default:
-        return null;
-    }
+  static focusTab(tab) {
+    tab.focus();
+    tab.setAttribute('aria-selected', 'true');
+    tab.setAttribute('tabindex', '0');
   }
 
   /** */
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleTabRef = this.handleTabRef.bind(this);
+    this.tabValues = ['info', 'canvas_navigation', 'annotations'];
+  }
+
+  /**
+   *
+   */
+  componentDidMount() {
+    // eslint-disable-next-line react/no-find-dom-node, prefer-destructuring
+    this.tabBar = ReactDOM.findDOMNode(this.tabRef).childNodes[0].childNodes[0].childNodes[0];
+    this.tabs = Array.from(this.tabBar.childNodes);
+  }
+
+  /**
+  *
+  * @param {*} node
+  */
+  handleTabRef(node) {
+    if (node != null) {
+      this.tabRef = node;
+    }
   }
 
   /**
@@ -67,8 +56,57 @@ export class WindowSideBarButtons extends Component {
   */
   handleChange(event, value) {
     const { addCompanionWindow } = this.props;
-
+    this.deactivateTabs(event, this.tabValues.indexOf(value));
     addCompanionWindow(value);
+  }
+
+  /**
+   * @param {object} event
+   * @param {number} omit index to omit
+   */
+  deactivateTabs(tab, omit = -1) {
+    this.tabs.map((v, k) => {
+      if (k !== omit) {
+        v.setAttribute('tabindex', '-1');
+        v.setAttribute('aria-selected', 'false');
+      }
+      return null;
+    });
+  }
+
+  /**
+   *
+   * @param {object} event the onKeyDown event
+   */
+  handleKeyPress(event) {
+    switch (event.keyCode) {
+      case 38: // arrow up
+        event.preventDefault();
+        return this.focusPreviousTab(event.target);
+      case 40: // arrow down
+        event.preventDefault();
+        return this.focusNextTab(event.target);
+      default:
+        return null;
+    }
+  }
+
+  /**
+   *
+   * @param {object} event
+   */
+  focusPreviousTab(tab) {
+    const previousTab = tab.previousSibling || this.tabBar.lastChild;
+    WindowSideBarButtons.focusTab(previousTab);
+  }
+
+  /**
+   *
+   * @param {object} event
+   */
+  focusNextTab(tab) {
+    const nextTab = tab.nextSibling || this.tabBar.firstChild;
+    WindowSideBarButtons.focusTab(nextTab);
   }
 
   /**
@@ -78,7 +116,10 @@ export class WindowSideBarButtons extends Component {
    */
   render() {
     const {
-      classes, hasAnnotations, sideBarPanel, t,
+      classes,
+      hasAnnotations,
+      sideBarPanel,
+      t,
     } = this.props;
 
     return (
@@ -90,6 +131,7 @@ export class WindowSideBarButtons extends Component {
         indicatorColor="secondary"
         textColor="secondary"
         aria-orientation="vertical"
+        ref={this.handleTabRef}
       >
         <Tab
           classes={{ root: classes.tab, selected: classes.tabSelected }}
@@ -102,7 +144,7 @@ export class WindowSideBarButtons extends Component {
             </Tooltip>
           )}
           TouchRippleProps={{ classes: { child: classes.tabRipple } }}
-          onKeyDown={WindowSideBarButtons.handleKeyPress}
+          onKeyDown={this.handleKeyPress}
           value="info"
         />
         <Tab
@@ -116,7 +158,7 @@ export class WindowSideBarButtons extends Component {
             </Tooltip>
           )}
           TouchRippleProps={{ classes: { child: classes.tabRipple } }}
-          onKeyDown={WindowSideBarButtons.handleKeyPress}
+          onKeyDown={this.handleKeyPress}
           value="canvas_navigation"
         />
         <Tab
@@ -132,7 +174,7 @@ export class WindowSideBarButtons extends Component {
             </Tooltip>
           )}
           TouchRippleProps={{ classes: { child: classes.tabRipple } }}
-          onKeyDown={WindowSideBarButtons.handleKeyPress}
+          onKeyDown={this.handleKeyPress}
           value="annotations"
         />
       </Tabs>
