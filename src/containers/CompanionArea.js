@@ -29,6 +29,7 @@ const styles = theme => ({
     display: 'flex',
     minHeight: 0,
     position: 'relative',
+    zIndex: theme.zIndex.appBar - 2,
   },
   toggle: {
     '&:hover': {
