@@ -9,13 +9,24 @@ import ActionTypes from './action-types';
  */
 export function focusWindow(windowId, pan = false) {
   return (dispatch, getState) => {
-    const { windows } = getState();
-    const { x, y } = windows[windowId];
+    const { windows, workspace } = getState();
 
+    let position;
+
+    if (pan) {
+      const {
+        x, y, width, height,
+      } = windows[windowId];
+
+      const { viewportPosition: { width: viewWidth, height: viewHeight } } = workspace;
+      position = { x: (x + width / 2) - viewWidth / 2, y: (y + height / 2) - viewHeight / 2 };
+    } else {
+      position = {};
+    }
     dispatch({
       type: ActionTypes.FOCUS_WINDOW,
       windowId,
-      position: pan ? { x: x - 200, y: y - 200 } : {},
+      position,
     });
   };
 }
