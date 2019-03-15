@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import deepmerge from 'deepmerge';
 import App from '../containers/App';
-import createRootReducer from '../state/reducers/rootReducer';
+import { pluginStore } from '../extend';
 import createStore from '../state/createStore';
 import * as actions from '../state/actions';
 import settings from '../config/settings';
@@ -14,10 +14,11 @@ import settings from '../config/settings';
 class MiradorViewer {
   /**
    */
-  constructor(config) {
-    this.store = createStore();
+  constructor(config, plugins) {
+    pluginStore.storePlugins(plugins);
+    const pluginReducers = getReducersFromPlugins(plugins);
+    this.store = createStore(pluginReducers);
     this.config = config;
-    this.processPlugins();
     this.processConfig();
     const viewer = {
       actions,
@@ -70,40 +71,11 @@ class MiradorViewer {
       );
     });
   }
+}
 
-  /**
-   * Process Plugins
-   */
-  processPlugins() {
-    const plugins = this.config.plugins || [];
-    const actionCreators = [];
-    const reducers = [];
-
-    plugins.forEach((pluginName) => {
-      const plugin = window.Mirador.plugins[pluginName];
-
-      // Add Actions
-      if (plugin.actions) {
-        Object.keys(plugin.actions)
-          .forEach(actionName => actionCreators.push({
-            name: actionName,
-            action: plugin.actions[actionName],
-          }));
-      }
-      // Add Reducers
-      if (plugin.reducers) {
-        Object.keys(plugin.reducers)
-          .forEach(reducerName => reducers.push({
-            name: reducerName,
-            reducer: plugin.reducers[reducerName],
-          }));
-      }
-    });
-
-    actionCreators.forEach((action) => { actions[action.name] = action.action; });
-    reducers.forEach((reducer) => { this.store.pluginReducers[reducer.name] = reducer.reducer; });
-    this.store.replaceReducer(createRootReducer(this.store.pluginReducers));
-  }
+/** Return reducers from plugins */
+function getReducersFromPlugins(plugins) {
+  return plugins && plugins.reduce((acc, plugin) => ({ ...acc, ...plugin.reducers }), {});
 }
 
 export default MiradorViewer;

@@ -13,9 +13,9 @@ import createRootReducer from './reducers/rootReducer';
 /**
  * Configure Store
  */
-export default function () {
-  const store = createStore(
-    createRootReducer(),
+export default function (pluginReducers) {
+  return createStore(
+    createRootReducer(pluginReducers),
     composeWithDevTools(
       applyMiddleware(
         createDebounce(),
@@ -23,6 +23,4 @@ export default function () {
       ),
     ),
   );
-  store.pluginReducers = {};
-  return store;
 }
