@@ -35,7 +35,8 @@ export class WindowSideBarButtons extends Component {
   componentDidMount() {
     // eslint-disable-next-line react/no-find-dom-node
     this.tabs = Array.from(ReactDOM.findDOMNode(this.tabRef).getElementsByTagName('button'));
-    this.tabBar = this.tabs[0].parent;
+    console.log(this.tabs[0]);
+    this.tabBar = this.tabs[0].parentElement;
     this.selectTab(this.tabs[0]);
   }
 
