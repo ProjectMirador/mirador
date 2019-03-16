@@ -124,7 +124,12 @@
   }
 
   &-osd-info {
-    order: 2
+    order: 2;
+    overflow: hidden;
+    padding-bottom: 3px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
   }
 
   &-canvas-nav {
@@ -133,12 +138,6 @@
     flex-direction: column;
     justify-content: center;
     text-align: center;
-  }
-
-  &-canvas-label {
-    width: 100%;
-    text-overflow: ellipsis;
-    padding-bottom: 3px;
   }
 
   &-thumb-navigation {

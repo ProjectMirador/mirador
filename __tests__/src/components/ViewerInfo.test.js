@@ -21,8 +21,11 @@ describe('ViewerNavigation', () => {
 
   it('renders the component', () => {
     wrapper = createWrapper();
-    expect(wrapper.find(Typography).length).toBe(1);
+
+    expect(wrapper.find(Typography).length).toBe(2);
     expect(wrapper.find(Typography).at(0)
-      .matchesElement(<Typography>3 of 8 • testLabel</Typography>)).toBe(true);
+      .matchesElement(<Typography>3 of 8</Typography>)).toBe(true);
+    expect(wrapper.find(Typography).at(1)
+      .matchesElement(<Typography> • testLabel</Typography>)).toBe(true);
   });
 });
