@@ -6,7 +6,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 
 import WindowTopMenuButton from '../../../src/containers/WindowTopMenuButton';
-import WindowTopBarButtons from '../../../src/containers/WindowTopBarButtons';
 import { MiradorMenuButton } from '../../../src/components/MiradorMenuButton';
 import { WindowTopBar } from '../../../src/components/WindowTopBar';
 
@@ -35,7 +34,6 @@ describe('WindowTopBar', () => {
     expect(wrapper.find(Toolbar).length).toBe(1);
     expect(wrapper.find(MiradorMenuButton).length).toBe(3);
     expect(wrapper.find(Typography).length).toBe(1);
-    expect(wrapper.find(WindowTopBarButtons).length).toBe(1);
     expect(wrapper.find(WindowTopMenuButton).length).toBe(1);
   });
 
@@ -48,11 +46,6 @@ describe('WindowTopBar', () => {
   it('passes correct props to <Typography/>', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(Typography).first().render().text()).toBe('awesome manifest');
-  });
-
-  it('passes correct props to <WindowTopBarButtons/>', () => {
-    const wrapper = createWrapper();
-    expect(wrapper.find(WindowTopBarButtons).first().props().windowId).toBe('xyz');
   });
 
   it('passe correct props to <WindowTopMenuButton', () => {

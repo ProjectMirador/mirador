@@ -52,7 +52,7 @@ export class WorkspaceMenuButton extends Component {
           aria-haspopup="true"
           aria-label={t('workspaceMenu')}
           aria-owns={anchorEl ? 'workspace-menu' : undefined}
-          className={classNames(classes.ctrlBtn, (anchorEl ? classes.ctrlBtnSelected : null))}
+          className={anchorEl ? classes.ctrlBtnSelected : null}
           id="menuBtn"
           onClick={this.handleMenuClick}
         >

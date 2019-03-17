@@ -13,7 +13,7 @@ describe('Window actions', () => {
 
     await expect(page).toMatchElement('.mirador-window');
     await page.waitFor(1000);
-    await expect(page).toClick('.mirador-window-close');
+    await expect(page).toClick('button[aria-label="Close window"]');
     const numWindows = await page.evaluate(page => (
       document.querySelectorAll('.mirador-window').length
     )); // only default configed windows found

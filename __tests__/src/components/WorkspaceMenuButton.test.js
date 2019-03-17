@@ -17,10 +17,9 @@ describe('WorkspaceMenuButton', () => {
   it('the button has a class indicating that it is "selected" once it is clicked', () => {
     const menuButton = wrapper.find('MiradorMenuButton').first();
 
-    expect(wrapper.find('MiradorMenuButton').first().props().className).toEqual('');
     menuButton.props().onClick({ currentTarget: 'anElement' });
     expect(wrapper.find('MiradorMenuButton').first().props().className).toEqual('ctrlBtnSelected');
     menuButton.props().onClick({});
-    expect(wrapper.find('MiradorMenuButton').first().props().className).toEqual('');
+    expect(wrapper.find('MiradorMenuButton').first().props().className).toEqual(null);
   });
 });

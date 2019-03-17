@@ -9,7 +9,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 import classNames from 'classnames';
 import WindowTopMenuButton from '../containers/WindowTopMenuButton';
-import WindowTopBarButtons from '../containers/WindowTopBarButtons';
 import { MiradorMenuButton } from './MiradorMenuButton';
 import ns from '../config/css-ns';
 
@@ -28,32 +27,32 @@ export class WindowTopBar extends Component {
       maximizeWindow, maximized, minimizeWindow, focused,
     } = this.props;
     return (
-      <AppBar position="relative">
-        <Toolbar disableGutters className={classNames(classes.windowTopBarStyle, focused ? classes.focused : null, ns('window-top-bar'))} variant="dense">
+      <AppBar
+        className={classNames(classes.windowTopBarStyle, focused ? classes.focused : null, ns('window-top-bar'))}
+        color="secondary"
+        position="static"
+      >
+        <Toolbar disableGutters variant="dense">
           <MiradorMenuButton
             aria-label={t('toggleWindowSideBar')}
-            color="inherit"
             onClick={toggleWindowSideBar}
           >
             <MenuIcon />
           </MiradorMenuButton>
-          <Typography variant="h2" noWrap color="inherit" className={classes.title}>
+          <Typography variant="h2" noWrap className={classes.title}>
             {manifestTitle}
           </Typography>
-          <WindowTopBarButtons windowId={windowId} />
-          <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
+          <WindowTopMenuButton
+            windowId={windowId}
+          />
           <MiradorMenuButton
             aria-label={(maximized ? t('minimizeWindow') : t('maximizeWindow'))}
-            className={ns('window-maximize')}
-            color="inherit"
             onClick={(maximized ? minimizeWindow : maximizeWindow)}
           >
             {(maximized ? <FullscreenExitIcon /> : <FullscreenIcon />)}
           </MiradorMenuButton>
           <MiradorMenuButton
             aria-label={t('closeWindow')}
-            className={ns('window-close')}
-            color="inherit"
             onClick={removeWindow}
           >
             <CloseIcon />
