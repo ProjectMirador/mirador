@@ -57,9 +57,6 @@ const style = theme => ({
       '@media (hover: none)': {
         backgroundColor: 'transparent',
       },
-      '&$disabled': {
-        backgroundColor: 'transparent',
-      },
     },
   },
   tabSelected: {
