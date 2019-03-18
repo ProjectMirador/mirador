@@ -71,22 +71,6 @@ describe('OpenSeadragonViewer', () => {
       ).toHaveBeenCalledWith(expect.any(OpenSeadragon.Rect), true);
     });
   });
-  describe('boundsFromTileSources', () => {
-    it('generates bounds from a set of tileSources', () => {
-      expect(wrapper.instance().boundsFromTileSources()).toEqual(expect.arrayContaining(
-        [0, 0, 249, 200],
-      ));
-    });
-  });
-  describe('boundingRectFromTileSource', () => {
-    it('creates a bounding area for the current tileSource offset if needed', () => {
-      expect(wrapper.instance().boundingRectFromTileSource(
-        { '@id': 'http://bar', width: 150, height: 201 }, 1,
-      )).toEqual(expect.arrayContaining(
-        [100, 0, 149, 200],
-      ));
-    });
-  });
 
   describe('componentDidMount', () => {
     let panTo;
