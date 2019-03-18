@@ -35,10 +35,12 @@ const styles = theme => ({
   title: {
     ...theme.typography.h6,
     flexGrow: 1,
+    paddingLeft: theme.spacing.unit / 2,
   },
   windowTopBarStyle: {
     minHeight: 32,
-    paddingLeft: 4,
+    paddingLeft: theme.spacing.unit / 2,
+    paddingRight: theme.spacing.unit / 2,
     backgroundColor: theme.palette.primary.light,
     borderTop: '2px solid transparent',
   },

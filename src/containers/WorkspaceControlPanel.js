@@ -15,15 +15,13 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       left: 0,
       right: 'auto',
-      width: 96,
+      width: 64,
       height: '100%',
     },
   },
   toolbar: {
     [theme.breakpoints.up('sm')]: {
       display: 'block',
-      paddingLeft: theme.spacing.unit * 2,
-      paddingRight: theme.spacing.unit * 2,
     },
   },
   ctrlBtn: {

@@ -25,7 +25,7 @@ export class WorkspaceControlPanel extends Component {
         component="nav"
         aria-label={t('workspace')}
       >
-        <Toolbar className={classes.toolbar}>
+        <Toolbar disableGutters className={classes.toolbar}>
           <WorkspaceControlPanelButtons />
         </Toolbar>
       </AppBar>
