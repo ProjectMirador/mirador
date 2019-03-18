@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { SanitizedHtml } from './SanitizedHtml';
+import ns from '../config/css-ns';
+
 
 /**
  * Renders label/value pair metadata in a dl
@@ -24,7 +26,7 @@ export class LabelValueMetadata extends Component {
     // they are intended to display metadata that will not
     // need to be re-rendered internally in any meaningful way
     return (
-      <dl>
+      <dl className={ns('label-value-metadata')}>
         {labelValuePairs.reduce((acc, labelValuePair, i) => acc.concat([
           <dt key={`label-${i}`}>
             <Typography variant="subtitle2" component="span">{labelValuePair.label}</Typography>

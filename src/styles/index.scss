@@ -150,6 +150,13 @@
       }
     }
   }
+
+  &-label-value-metadata {
+    dd {
+      margin-bottom: 0.5em;
+      margin-left: 0;
+    }
+  }
 }
 
 // override react-mosaic styles to mimic MUI's elevation
