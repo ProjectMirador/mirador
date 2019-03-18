@@ -13,11 +13,11 @@ describe('Language Switching', () => {
       await expect(page).toMatchElement('li', { text: 'Deutsch' });
       await expect(page).toMatchElement('li', { text: 'English' });
 
-      await expect(page).toMatchElement('[aria-label="Toggle window sidebar"]');
+      await expect(page).toMatchElement('[aria-label="Toggle sidebar"]');
       await expect(page).not.toMatchElement('[aria-label="Seitenleiste umschalten"]');
       await expect(page).toClick('li', { text: 'Deutsch' });
       await page.waitFor(1000);
-      await expect(page).not.toMatchElement('[aria-label="Toggle window sidebar"]');
+      await expect(page).not.toMatchElement('[aria-label="Toggle sidebar"]');
       await expect(page).toMatchElement('[aria-label="Seitenleiste umschalten"]');
     });
   });
