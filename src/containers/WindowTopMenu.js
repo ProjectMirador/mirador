@@ -1,5 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withPlugins } from '../extend';
 import { WindowTopMenu } from '../components/WindowTopMenu';
 
 /**
@@ -13,6 +14,7 @@ const mapStateToProps = state => ({
 
 const enhance = compose(
   connect(mapStateToProps, null),
+  withPlugins('WindowTopMenu'),
 );
 
 export default enhance(WindowTopMenu);

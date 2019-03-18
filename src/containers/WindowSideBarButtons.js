@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withTranslation } from 'react-i18next';
+import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import {
   getCompanionWindowForPosition,
@@ -74,6 +75,7 @@ const enhance = compose(
   withTranslation(),
   withStyles(style),
   connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('WindowSideBarButtons'),
 );
 
 export default enhance(WindowSideBarButtons);

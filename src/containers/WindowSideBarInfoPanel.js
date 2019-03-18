@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { withPlugins } from '../extend';
 import {
   getDestructuredMetadata,
   getCanvasLabel,
@@ -32,6 +33,7 @@ const mapStateToProps = (state, { windowId }) => ({
 const enhance = compose(
   withTranslation(),
   connect(mapStateToProps, null),
+  withPlugins('WindowSideBarInfoPanel'),
 );
 
 export default enhance(WindowSideBarInfoPanel);

@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
+import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import { ManifestForm } from '../components/ManifestForm';
 
@@ -25,6 +26,7 @@ const enhance = compose(
   withStyles(styles),
   withTranslation(),
   connect(null, mapDispatchToProps),
+  withPlugins('ManifestForm'),
 );
 
 export default enhance(ManifestForm);

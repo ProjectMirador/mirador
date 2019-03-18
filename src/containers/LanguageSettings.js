@@ -1,4 +1,6 @@
+import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import { getLanguagesFromConfigWithCurrent } from '../state/selectors';
 import { LanguageSettings } from '../components/LanguageSettings';
@@ -21,4 +23,8 @@ const mapDispatchToProps = (dispatch, { afterSelect }) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LanguageSettings);
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('LanguageSettings'),
+)(LanguageSettings);

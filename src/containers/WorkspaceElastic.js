@@ -1,5 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import WorkspaceElastic from '../components/WorkspaceElastic';
 
@@ -48,6 +49,7 @@ const mapDispatchToProps = (dispatch, props) => ({
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('WorkspaceElastic'),
   // further HOC go here
 );
 

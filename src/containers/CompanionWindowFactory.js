@@ -1,5 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withPlugins } from '../extend';
 import { CompanionWindowFactory } from '../components/CompanionWindowFactory';
 
 /**
@@ -20,6 +21,7 @@ const mapStateToProps = (state, { id }) => {
 
 const enhance = compose(
   connect(mapStateToProps),
+  withPlugins('CompanionWindowFactory'),
 );
 
 export default enhance(CompanionWindowFactory);

@@ -1,5 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import WindowSideBarInfoPanel from '../../../src/containers/WindowSideBarInfoPanel';
+import WindowSideBarCanvasPanel from '../../../src/containers/WindowSideBarCanvasPanel';
+import WindowSideBarAnnotationsPanel from '../../../src/containers/WindowSideBarAnnotationsPanel';
+import ThumbnailNavigation from '../../../src/containers/ThumbnailNavigation';
 import { CompanionWindowFactory } from '../../../src/components/CompanionWindowFactory';
 
 /** create wrapper */
@@ -23,7 +27,7 @@ describe('CompanionWindowFactory', () => {
         content: 'info',
       });
 
-      expect(wrapper.find('Connect(WindowSideBarInfoPanel)').length).toBe(1);
+      expect(wrapper.find(WindowSideBarInfoPanel).length).toBe(1);
     });
   });
 
@@ -33,7 +37,7 @@ describe('CompanionWindowFactory', () => {
         content: 'canvas_navigation',
       });
 
-      expect(wrapper.find('WithStyles(Connect(WindowSideBarCanvasPanel))').length).toBe(1);
+      expect(wrapper.find(WindowSideBarCanvasPanel).length).toBe(1);
     });
   });
 
@@ -43,7 +47,7 @@ describe('CompanionWindowFactory', () => {
         content: 'annotations',
       });
 
-      expect(wrapper.find('Connect(WindowSideBarAnnotationsPanel)').length).toBe(1);
+      expect(wrapper.find(WindowSideBarAnnotationsPanel).length).toBe(1);
     });
   });
 
@@ -53,7 +57,7 @@ describe('CompanionWindowFactory', () => {
         content: 'thumbnail_navigation',
       });
 
-      expect(wrapper.find('WithStyles(Connect(ThumbnailNavigation))').length).toBe(1);
+      expect(wrapper.find(ThumbnailNavigation).length).toBe(1);
     });
   });
 });

@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
+import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import { WorkspaceAddButton } from '../components/WorkspaceAddButton';
 
@@ -39,6 +40,7 @@ const enhance = compose(
   withTranslation(),
   withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('WorkspaceAddButton'),
 );
 
 export default enhance(WorkspaceAddButton);

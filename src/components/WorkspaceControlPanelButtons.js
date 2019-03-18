@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import WorkspaceFullScreenButton from '../containers/WorkspaceFullScreenButton';
 import WorkspaceAddButton from '../containers/WorkspaceAddButton';
 import WorkspaceMenuButton from '../containers/WorkspaceMenuButton';
+
+/** Renders plugins */
+const PluginHook = (props) => {
+  const { PluginComponent } = props; // eslint-disable-line react/prop-types
+  return PluginComponent ? <PluginComponent {...props} /> : null;
+};
 
 /**
  *
@@ -14,22 +19,13 @@ export class WorkspaceControlPanelButtons extends Component {
    * @return {type}  description
    */
   render() {
-    const { children } = this.props;
     return (
       <>
         <WorkspaceAddButton />
         <WorkspaceMenuButton />
         <WorkspaceFullScreenButton />
-        {children}
+        <PluginHook {...this.props} />
       </>
     );
   }
 }
-
-WorkspaceControlPanelButtons.propTypes = {
-  children: PropTypes.node,
-};
-
-WorkspaceControlPanelButtons.defaultProps = {
-  children: null,
-};

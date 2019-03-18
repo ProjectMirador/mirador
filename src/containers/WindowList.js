@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
+import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import { WindowList } from '../components/WindowList';
 
@@ -29,6 +30,7 @@ const mapStateToProps = state => (
 const enhance = compose(
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('WindowList'),
 );
 
 export default enhance(WindowList);

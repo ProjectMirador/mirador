@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import { WorkspaceMenu } from '../components/WorkspaceMenu';
 
@@ -26,6 +27,7 @@ const mapStateToProps = state => ({
 const enhance = compose(
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('WorkspaceMenu'),
 );
 
 export default enhance(WorkspaceMenu);

@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
+import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import { ZoomControls } from '../components/ZoomControls';
 
@@ -45,6 +46,7 @@ const enhance = compose(
   withTranslation(),
   withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('ZoomControls'),
 );
 
 export default enhance(ZoomControls);
