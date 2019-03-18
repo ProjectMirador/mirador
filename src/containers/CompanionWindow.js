@@ -50,13 +50,23 @@ const styles = theme => ({
     minHeight: 0,
     boxShadow: 'none',
     flexDirection: 'column',
+    boxSizing: 'border-box',
   },
   horizontal: {
-    height: '200px',
+    height: '201px',
     width: '100%',
   },
   vertical: {
-    width: '200px',
+    width: '201px',
+  },
+  'companionWindow-left': {
+
+  },
+  'companionWindow-right': {
+    borderLeft: '0.5px solid rgba(0, 0, 0, 0.12)',
+  },
+  'companionWindow-bottom': {
+    borderTop: '0.5px solid rgba(0, 0, 0, 0.12)',
   },
   positionButton: {
     order: -100,
