@@ -52,7 +52,7 @@ export class WindowTopMenuButton extends Component {
           aria-haspopup="true"
           aria-label={t('windowMenu')}
           aria-owns={anchorEl ? `window-menu_${windowId}` : undefined}
-          className={classNames(classes.ctrlBtn, (anchorEl ? classes.ctrlBtnSelected : null))}
+          className={anchorEl ? classes.ctrlBtnSelected : null}
           color="inherit"
           onClick={this.handleMenuClick}
         >

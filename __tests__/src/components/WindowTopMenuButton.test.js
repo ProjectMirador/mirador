@@ -54,10 +54,10 @@ describe('WindowTopMenuButton', () => {
     const wrapper = createWrapper();
     const menuButton = wrapper.find(MiradorMenuButton).first();
 
-    expect(wrapper.find(MiradorMenuButton).first().props().className).toEqual('');
+    expect(wrapper.find(MiradorMenuButton).first().props().className).toEqual(null);
     menuButton.props().onClick({ currentTarget: 'anElement' });
     expect(wrapper.find(MiradorMenuButton).first().props().className).toEqual('ctrlBtnSelected');
     menuButton.props().onClick({});
-    expect(wrapper.find(MiradorMenuButton).first().props().className).toEqual('');
+    expect(wrapper.find(MiradorMenuButton).first().props().className).toEqual(null);
   });
 });
