@@ -70,6 +70,7 @@
     "tryAgain": "Try again",
     "untitled": "[Untitled]",
     "view": "View",
+    "window": "Window: {{label}}",
     "windowMenu": "Window menu",
     "workspace": "Workspace",
     "workspaceFullScreen": "Full Screen",
