@@ -13,7 +13,8 @@
       display: none;
     }
 
-    .react-draggable, .mosaic-window-body {
+    .react-draggable,
+    .mosaic-window-body {
       .mirador-window-top-bar {
         cursor: move;
       }
@@ -21,7 +22,11 @@
   }
 
   &-workspace {
-    transition-duration: 0.7s;
+    box-sizing: border-box;
+    margin: 0;
+    overflow: scroll;
+    position: absolute;
+    transition-duration: .7s;
 
     &.react-draggable-dragging {
       transition-duration: unset;
@@ -29,22 +34,19 @@
   }
 
   &-companion-window-header {
+    background: $surface-dark;
     flex-wrap: wrap;
   }
 
   &-companion-window-title-controls {
-    order: 1000;
     flex-grow: 1;
+    order: 1000;
   }
 
   &-companion-window-bottom {
     .mirador-companion-window-title-controls {
       order: unset;
     }
-  }
-
-  &-companion-window-header {
-    background: $surface-dark;
   }
 
   &-workspace-viewport {
@@ -56,13 +58,6 @@
     position: absolute;
     right: 0;
     top: 0;
-  }
-
-  &-workspace {
-    box-sizing: border-box;
-    margin: 0;
-    overflow: scroll;
-    position: absolute;
   }
 
   &-workspace-with-control-panel {
@@ -111,12 +106,14 @@
     position: relative;
   }
 
-  div + &-osd-navigation:before {
-    content: '|';
-    color: $gray;
-    position: absolute;
-    font-size: 24px;
-    top: 12px;
+  div + &-osd-navigation {
+    &::before {
+      color: $gray;
+      content: '|';
+      font-size: 24px;
+      position: absolute;
+      top: 12px;
+    }
   }
 
   &-osd-navigation {
@@ -134,8 +131,8 @@
 
   &-canvas-nav {
     display: flex;
-    flex-wrap: wrap;
     flex-direction: column;
+    flex-wrap: wrap;
     justify-content: center;
     text-align: center;
   }
