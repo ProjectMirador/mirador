@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import { ViewerNavigation } from '../components/ViewerNavigation';
 
@@ -16,6 +17,7 @@ const mapDispatchToProps = {
 const enhance = compose(
   withTranslation(),
   connect(null, mapDispatchToProps),
+  withPlugins('ViewerNavigation'),
   // further HOC go here
 );
 

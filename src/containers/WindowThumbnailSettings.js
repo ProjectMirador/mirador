@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
+import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import { getThumbnailNavigationPosition } from '../state/selectors';
 import { WindowThumbnailSettings } from '../components/WindowThumbnailSettings';
@@ -38,6 +39,7 @@ const enhance = compose(
   withStyles(styles),
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('WindowThumbnailSettings'),
   // further HOC go here
 );
 

@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
+import { withPlugins } from '../extend';
 import { WorkspaceControlPanel } from '../components/WorkspaceControlPanel';
 
 /**
@@ -36,6 +37,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withPlugins('WorkspaceControlPanel'),
   // further HOC go here
 );
 

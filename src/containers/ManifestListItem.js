@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
+import { withPlugins } from '../extend';
 import {
   getManifestTitle, getManifestThumbnail, getManifestCanvases, getManifestLogo, getManifestProvider,
 } from '../state/selectors';
@@ -57,6 +58,7 @@ const enhance = compose(
   withTranslation(),
   withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('ManifestListItem'),
 );
 
 export default enhance(ManifestListItem);

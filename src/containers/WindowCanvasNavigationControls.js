@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { withPlugins } from '../extend';
 import {
   getCanvasLabel,
   getSelectedCanvas,
@@ -18,6 +19,7 @@ const mapStateToProps = (state, { windowId }) => ({
 
 const enhance = compose(
   connect(mapStateToProps),
+  withPlugins('WindowCanvasNavigationControls'),
 );
 
 export default enhance(WindowCanvasNavigationControls);

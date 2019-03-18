@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
+import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import { CompanionWindow } from '../components/CompanionWindow';
 
@@ -77,6 +78,7 @@ const enhance = compose(
   withTranslation(),
   withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('CompanionWindow'),
 );
 
 export default enhance(CompanionWindow);

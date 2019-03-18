@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
+import { withPlugins } from '../extend';
 import { fetchManifest, removeManifest } from '../state/actions/manifest';
 import { ManifestListItemError } from '../components/ManifestListItemError';
 
@@ -32,6 +33,7 @@ const enhance = compose(
   withTranslation(),
   withStyles(styles),
   connect(null, mapDispatchToProps),
+  withPlugins('ManifestListItemError'),
 );
 
 export default enhance(ManifestListItemError);

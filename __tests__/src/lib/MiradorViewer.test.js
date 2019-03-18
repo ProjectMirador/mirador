@@ -1,9 +1,9 @@
 import ReactDOM from 'react-dom';
-import { pluginStore } from '../../../src/extend';
+import { pluginStore } from '../../../src/extend/pluginStore';
 import MiradorViewer from '../../../src/lib/MiradorViewer';
 
 jest.unmock('react-i18next');
-jest.mock('../../../src/extend');
+jest.mock('../../../src/extend/pluginStore');
 jest.mock('react-dom');
 
 describe('MiradorViewer', () => {

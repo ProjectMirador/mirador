@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { withPlugins } from '../extend';
 import { Workspace } from '../components/Workspace';
 
 /**
@@ -19,6 +20,7 @@ const mapStateToProps = state => (
 const enhance = compose(
   withTranslation(),
   connect(mapStateToProps),
+  withPlugins('Workspace'),
   // further HOC go here
 );
 

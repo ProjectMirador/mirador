@@ -1,5 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import { WindowViewer } from '../components/WindowViewer';
 
@@ -27,6 +28,7 @@ const mapDispatchToProps = {
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('WindowViewer'),
   // further HOC go here
 );
 
