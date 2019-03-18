@@ -39,9 +39,13 @@ export class CompanionWindow extends Component {
           <Typography variant="h3" className={classes.windowSideBarTitle}>
             {title}
           </Typography>
-          <div className={ns('companion-window-title-controls')}>
-            {titleControls}
-          </div>
+          {
+            titleControls && (
+              <div className={ns('companion-window-title-controls')}>
+                {titleControls}
+              </div>
+            )
+          }
           {
             position === 'left'
               ? updateCompanionWindow
