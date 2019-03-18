@@ -27,10 +27,10 @@ describe('Window Sidebars', () => {
       .find(window => window.manifestId === 'http://localhost:5000/api/001')
       .id;
 
-    await expect(page).toMatchElement(`#${windowId} button[aria-label="Toggle window sidebar"]`);
-    await expect(page).toClick(`#${windowId} button[aria-label="Toggle window sidebar"]`);
+    await expect(page).toMatchElement(`#${windowId} button[aria-label="Toggle sidebar"]`);
+    await expect(page).toClick(`#${windowId} button[aria-label="Toggle sidebar"]`);
 
-    await expect(page).toMatchElement(`#${windowId} button[aria-label="Open information companion window"]`);
+    await expect(page).toMatchElement(`#${windowId} button[aria-label="Information"]`);
   });
 
   it('renders canvas navigation and updates canvas after clicking a navigation item', async () => {
@@ -42,9 +42,9 @@ describe('Window Sidebars', () => {
       .find(window => window.manifestId === 'http://localhost:5000/api/001')
       .id;
 
-    await expect(page).toMatchElement(`#${windowId} button[aria-label="Toggle window sidebar"]`);
-    await expect(page).toClick(`#${windowId} button[aria-label="Toggle window sidebar"]`);
+    await expect(page).toMatchElement(`#${windowId} button[aria-label="Toggle sidebar"]`);
+    await expect(page).toClick(`#${windowId} button[aria-label="Toggle sidebar"]`);
 
-    await expect(page).toMatchElement(`#${windowId} button[aria-label="Open canvas navigation companion window"]`);
+    await expect(page).toMatchElement(`#${windowId} button[aria-label="Index"]`);
   });
 });

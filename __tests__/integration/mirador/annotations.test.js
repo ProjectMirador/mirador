@@ -22,10 +22,10 @@ describe('Annotations in Mirador', () => {
         .find(w => w.manifestId === 'https://iiif.harvardartmuseums.org/manifests/object/299843').id;
     });
 
-    await expect(page).toClick(`#${windowId} button[aria-label="Toggle window sidebar"]`);
+    await expect(page).toClick(`#${windowId} button[aria-label="Toggle sidebar"]`);
 
     await page.waitFor(1000);
-    await expect(page).toClick(`#${windowId} button[aria-label="Open annotation companion window"]`);
+    await expect(page).toClick(`#${windowId} button[aria-label="Annotations"]`);
 
     await expect(page).toMatchElement(`#${windowId} h3`, { text: 'Annotations' });
     await expect(page).toMatchElement(`#${windowId} h6`, { text: 'Showing 2 annotations' });
