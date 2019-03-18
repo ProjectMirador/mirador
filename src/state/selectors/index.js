@@ -3,6 +3,7 @@ import flatten from 'lodash/flatten';
 import { LanguageMap } from 'manifesto.js';
 import Annotation from '../../lib/Annotation';
 import ManifestoCanvas from '../../lib/ManifestoCanvas';
+import CanvasGroupings from '../../lib/CanvasGroupings';
 
 /**
 * Return the manifest that belongs to a certain window.
@@ -124,6 +125,26 @@ export function getSelectedCanvas(state, windowId) {
       .getSequences()[0]
       .getCanvasByIndex(canvasIndex);
 }
+
+/**
+* Return the current canvases selected in a window
+* For book view returns 2, for single returns 1
+* @param {object} state
+* @param {String} windowId
+* @return {Array}
+*/
+export function getSelectedCanvases(state, windowId) {
+  const manifest = getWindowManifest(state, windowId);
+  const { canvasIndex, view } = state.windows[windowId];
+
+  return manifest
+    && manifest.manifestation
+    && new CanvasGroupings(
+      manifest.manifestation.getSequences()[0].getCanvases(),
+      view,
+    ).getCanvases(canvasIndex);
+}
+
 
 /**
 * Return annotations for an array of targets

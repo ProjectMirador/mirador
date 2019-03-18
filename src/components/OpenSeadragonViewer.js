@@ -133,8 +133,8 @@ export class OpenSeadragonViewer extends Component {
     const { currentCanvases } = this.props;
     const context = this.osdCanvasOverlay.context2d;
     annotations.forEach((annotation) => {
-      const offset = new CanvasWorld(currentCanvases).offsetByCanvas(annotation.target);
       annotation.resources.forEach((resource) => {
+        const offset = new CanvasWorld(currentCanvases).offsetByCanvas(resource.targetId);
         const fragment = resource.fragmentSelector;
         fragment[0] += offset.x;
         context.strokeStyle = 'yellow';
