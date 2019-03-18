@@ -13,7 +13,8 @@
       display: none;
     }
 
-    .react-draggable, .mosaic-window-body {
+    .react-draggable,
+    .mosaic-window-body {
       .mirador-window-top-bar {
         cursor: move;
       }
@@ -25,7 +26,7 @@
     margin: 0;
     overflow: scroll;
     position: absolute;
-    transition-duration: 0.7s;
+    transition-duration: .7s;
 
     &.react-draggable-dragging {
       transition-duration: unset;
@@ -105,12 +106,14 @@
     position: relative;
   }
 
-  div + &-osd-navigation:before {
-    color: $gray;
-    content: '|';
-    font-size: 24px;
-    position: absolute;
-    top: 12px;
+  div + &-osd-navigation {
+    &::before {
+      color: $gray;
+      content: '|';
+      font-size: 24px;
+      position: absolute;
+      top: 12px;
+    }
   }
 
   &-osd-navigation {
