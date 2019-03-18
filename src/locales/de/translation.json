@@ -42,7 +42,7 @@
     "openInfoCompanionWindow": "Informationshilfsfenster",
     "openWindows": "Fenster öffnen",
     "position": "Position",
-    "previewWindowTitle": "Mirador",
+    "previewWindowTitle": "{{title}}",
     "previousCanvas": "Vorherigen Objekt",
     "resource": "Ressource",
     "right": "Rechts",

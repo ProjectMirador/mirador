@@ -48,7 +48,7 @@
     "openInfoCompanionWindow": "Information",
     "openWindows": "Current open windows",
     "position": "Position",
-    "previewWindowTitle": "Mirador",
+    "previewWindowTitle": "{{title}}",
     "previousCanvas": "Previous item",
     "resource": "Resource",
     "right": "Right",

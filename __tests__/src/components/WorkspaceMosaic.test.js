@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Mosaic } from 'react-mosaic-component';
+import MosaicRenderPreview from '../../../src/containers/MosaicRenderPreview';
 import { WorkspaceMosaic } from '../../../src/components/WorkspaceMosaic';
 
 /** create wrapper */
@@ -58,11 +59,10 @@ describe('WorkspaceMosaic', () => {
         additionalControls: [],
         path: 'foo',
       }));
+
       expect(shallow(shallow(renderedTile).props().renderPreview()).matchesElement(
         <div className="mosaic-preview">
-          <div className="mosaic-window-body">
-            previewWindowTitle
-          </div>
+          <MosaicRenderPreview windowId={1} />
         </div>,
       )).toBe(true);
     });
