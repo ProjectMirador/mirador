@@ -17,11 +17,11 @@ export class WorkspaceAddButton extends Component {
       classes, t, setWorkspaceAddVisibility, isWorkspaceAddVisible,
     } = this.props;
     return (
-      <Tooltip title={isWorkspaceAddVisible ? t('closeWindow') : t('add')}>
+      <Tooltip title={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}>
         <Fab
           color="secondary"
           id="addBtn"
-          aria-label={isWorkspaceAddVisible ? t('closeWindow') : t('add')}
+          aria-label={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}
           className={classes.fab}
           onClick={() => { setWorkspaceAddVisibility(!isWorkspaceAddVisible); }}
         >
