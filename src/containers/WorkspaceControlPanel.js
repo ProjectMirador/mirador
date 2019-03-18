@@ -22,8 +22,6 @@ const styles = theme => ({
   toolbar: {
     [theme.breakpoints.up('sm')]: {
       display: 'block',
-      paddingLeft: theme.spacing.unit * 2,
-      paddingRight: theme.spacing.unit * 2,
     },
   },
   ctrlBtn: {
