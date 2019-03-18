@@ -96,13 +96,14 @@ export class WindowSideBarCanvasPanel extends Component {
         id={id}
         windowId={windowId}
         titleControls={(
-          <FormControl variant="filled">
+          <FormControl>
             <Select
+              displayEmpty
               value={variant}
               onChange={this.handleVariantChange}
               name="variant"
-              variant="filled"
-              input={<FilledInput name="variant" />}
+              classes={{ select: classes.select }}
+              className={classes.selectEmpty}
             >
               <MenuItem value="compact"><Typography variant="body2">{ t('compactList') }</Typography></MenuItem>
               <MenuItem value="thumbnail"><Typography variant="body2">{ t('thumbnailList') }</Typography></MenuItem>
