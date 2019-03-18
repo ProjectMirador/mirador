@@ -144,11 +144,13 @@ describe('OpenSeadragonViewer', () => {
   });
 
   describe('componentDidUpdate', () => {
-    it('calls the OSD viewport panTo and zoomTo with the component state', () => {
+    it('calls the OSD viewport panTo and zoomTo with the component state and forces a redraw', () => {
       const panTo = jest.fn();
       const zoomTo = jest.fn();
+      const forceRedraw = jest.fn();
 
       wrapper.instance().viewer = {
+        forceRedraw,
         viewport: {
           centerSpringX: { target: { value: 10 } },
           centerSpringY: { target: { value: 10 } },
@@ -167,17 +169,22 @@ describe('OpenSeadragonViewer', () => {
       expect(zoomTo).toHaveBeenCalledWith(
         0.5, { x: 1, y: 0, zoom: 0.5 }, false,
       );
+      expect(forceRedraw).toHaveBeenCalled();
     });
 
-    it('sets up canvasUpdate to add annotations to the canvas', () => {
+    it('sets up canvasUpdate to add annotations to the canvas and forces a redraw', () => {
       const clear = jest.fn();
       const resize = jest.fn();
       const canvasUpdate = jest.fn();
+      const forceRedraw = jest.fn();
+
       wrapper.instance().osdCanvasOverlay = {
         clear,
         resize,
         canvasUpdate,
       };
+
+      wrapper.instance().viewer = { forceRedraw };
 
       wrapper.setProps(
         {
@@ -210,6 +217,7 @@ describe('OpenSeadragonViewer', () => {
       expect(clear).toHaveBeenCalledTimes(1);
       expect(resize).toHaveBeenCalledTimes(1);
       expect(canvasUpdate).toHaveBeenCalledTimes(1);
+      expect(forceRedraw).toHaveBeenCalled();
     });
   });
 

@@ -11,6 +11,25 @@ describe('AnnotationResource', () => {
       expect(annoResource.id).toEqual(expected);
     });
   });
+
+  describe('targetId', () => {
+    it('removes fragmentSelector coords from string targets', () => {
+      expect(
+        new AnnotationResource({ on: 'www.example.com/#xywh=10,10,100,200' }).targetId,
+      ).toEqual('www.example.com/');
+    });
+
+    it('removes fragmentSelector coords from object targets', () => {
+      expect(
+        new AnnotationResource({ on: { full: 'www.example.com/#xywh=10,10,100,200' } }).targetId,
+      ).toEqual('www.example.com/');
+    });
+
+    it('returns null when there is no target', () => {
+      expect(new AnnotationResource().targetId).toBeNull();
+    });
+  });
+
   describe('motivations', () => {
     it('with no motivation', () => {
       expect(new AnnotationResource().motivations).toEqual([]);

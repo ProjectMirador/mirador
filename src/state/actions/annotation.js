@@ -65,3 +65,31 @@ export function fetchAnnotation(canvasId, annotationId) {
       .catch(error => dispatch(receiveAnnotationFailure(canvasId, annotationId, error)));
   });
 }
+
+/**
+ * selectAnnotation - action creator
+ *
+ * @param  {String} windowId
+ * @param  {String} canvasId
+ * @param  {String} annotationId
+ * @memberof ActionCreators
+ */
+export function selectAnnotation(windowId, canvasId, annotationId) {
+  return {
+    type: ActionTypes.SELECT_ANNOTATION, windowId, canvasId, annotationId,
+  };
+}
+
+/**
+ * deselectAnnotation - action creator
+ *
+ * @param  {String} windowId
+ * @param  {String} canvasId
+ * @param  {String} annotationId
+ * @memberof ActionCreators
+ */
+export function deselectAnnotation(windowId, canvasId, annotationId) {
+  return {
+    type: ActionTypes.DESELECT_ANNOTATION, windowId, canvasId, annotationId,
+  };
+}

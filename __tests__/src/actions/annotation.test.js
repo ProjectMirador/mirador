@@ -107,4 +107,30 @@ describe('annotation actions', () => {
       });
     });
   });
+
+  it('handles the selectAnnotation action', () => {
+    const windowId = 'wId1';
+    const canvasId = 'cId1';
+    const annotationId = 'aId1';
+    const expectedAction = {
+      type: ActionTypes.SELECT_ANNOTATION,
+      windowId,
+      canvasId,
+      annotationId,
+    };
+    expect(actions.selectAnnotation(windowId, canvasId, annotationId)).toEqual(expectedAction);
+  });
+
+  it('handles the deselectAnnotation action', () => {
+    const windowId = 'wId1';
+    const canvasId = 'cId1';
+    const annotationId = 'aId1';
+    const expectedAction = {
+      type: ActionTypes.DESELECT_ANNOTATION,
+      windowId,
+      canvasId,
+      annotationId,
+    };
+    expect(actions.deselectAnnotation(windowId, canvasId, annotationId)).toEqual(expectedAction);
+  });
 });

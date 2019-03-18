@@ -19,8 +19,10 @@ import {
   getManifestProvider,
   getManifestTitle,
   getManifestThumbnail,
+  getSelectedAnnotationIds,
   getSelectedTargetAnnotations,
   getSelectedTargetsAnnotations,
+  getSelectedTargetAnnotationResources,
   getWindowViewType,
   getIdAndLabelOfCanvases,
   getCompanionWindowsOfWindow,
@@ -399,10 +401,10 @@ describe('getAnnotationResourcesByMotivation', () => {
 describe('getIdAndContentOfResources', () => {
   it('returns an array if id/content objects from the annotation resources', () => {
     const annotations = [
-      new AnnotationResource({ '@id': 'theId', resource: { chars: 'The Content' } }),
+      new AnnotationResource({ '@id': 'theId', on: 'example.com', resource: { chars: 'The Content' } }),
     ];
     const expected = [
-      { id: 'theId', content: 'The Content' },
+      { id: 'theId', targetId: 'example.com', content: 'The Content' },
     ];
 
     expect(getIdAndContentOfResources(annotations)).toEqual(expected);
@@ -420,10 +422,10 @@ describe('getIdAndContentOfResources', () => {
 
   it('handles resource arrays', () => {
     const annotations = [
-      new AnnotationResource({ '@id': 'theId', resource: [{ chars: 'The' }, { chars: 'Content' }] }),
+      new AnnotationResource({ '@id': 'theId', on: 'example.com', resource: [{ chars: 'The' }, { chars: 'Content' }] }),
     ];
     const expected = [
-      { id: 'theId', content: 'The Content' },
+      { id: 'theId', targetId: 'example.com', content: 'The Content' },
     ];
 
     expect(getIdAndContentOfResources(annotations)).toEqual(expected);
@@ -530,4 +532,42 @@ describe('getCompanionWindowsOfWindow', () => {
       { id: 'bar', content: 'canvas' },
     ]);
   });
+});
+
+it('getSelectedAnnotationIds returns an array of selected annotation IDs from state', () => {
+  const state = {
+    windows: {
+      wid: {
+        selectedAnnotations: {
+          tid1: ['aid1', 'aid2'],
+          tid2: ['aid3'],
+        },
+      },
+    },
+  };
+
+  expect(getSelectedAnnotationIds(state, 'wid', ['tid2'])).toEqual(
+    ['aid3'],
+  );
+  expect(getSelectedAnnotationIds(state, 'wid', ['tid1', 'tid2'])).toEqual(
+    ['aid1', 'aid2', 'aid3'],
+  );
+});
+
+it('getSelectedTargetAnnotationResources filters the annotation resources by the annotationIds passed in', () => {
+  const state = {
+    annotations: {
+      cid1: {
+        annoId1: { id: 'annoId1', json: { resources: [{ '@id': 'annoId1' }, { '@id': 'annoId2' }] } },
+      },
+    },
+  };
+
+  expect(
+    getSelectedTargetAnnotationResources(state, ['cid1'], ['annoId1'])[0].resources.length,
+  ).toBe(1);
+
+  expect(
+    getSelectedTargetAnnotationResources(state, ['cid1'], ['annoId1', 'annoId2'])[0].resources.length,
+  ).toBe(2);
 });
