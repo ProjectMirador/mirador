@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import {
   Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
 } from 'react-mosaic-component';
 import 'react-mosaic-component/react-mosaic-component.css';
+import MosaicRenderPreview from '../containers/MosaicRenderPreview';
 import Window from '../containers/Window';
 
 /**
@@ -66,9 +66,10 @@ export class WorkspaceMosaic extends React.Component {
    * Render a tile (Window) in the Mosaic.
    */
   tileRenderer(id, path) {
-    const { classes, windows, t } = this.props;
+    const { windows } = this.props;
     const window = windows[id];
     if (!window) return null;
+
     return (
       <MosaicWindow
         toolbarControls={[]}
@@ -77,9 +78,7 @@ export class WorkspaceMosaic extends React.Component {
         windowId={window.id}
         renderPreview={() => (
           <div className="mosaic-preview">
-            <div className={classNames('mosaic-window-body', classes.preview)}>
-              {t('previewWindowTitle')}
-            </div>
+            <MosaicRenderPreview windowId={window.id} />
           </div>
         )}
       >
@@ -116,14 +115,7 @@ export class WorkspaceMosaic extends React.Component {
 }
 
 WorkspaceMosaic.propTypes = {
-  t: PropTypes.func,
   updateWorkspaceMosaicLayout: PropTypes.func.isRequired,
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   workspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-};
-
-WorkspaceMosaic.defaultProps = {
-  t: key => key,
-  classes: {},
 };
