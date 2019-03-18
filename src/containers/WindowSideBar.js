@@ -26,7 +26,7 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   paper: {
     overflowX: 'hidden',
-    width: 55,
+    width: 48,
   },
   drawer: {
     left: 0,
