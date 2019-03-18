@@ -75,8 +75,7 @@ const styles = theme => ({
     minHeight: 'max-content',
   },
   leftPadding: {
-    ...theme.mixins.gutters(),
-    paddingRight: 0,
+    paddingLeft: theme.spacing.unit * 2,
   },
   content: {
     ...theme.mixins.gutters(),
