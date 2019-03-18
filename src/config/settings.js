@@ -125,6 +125,8 @@ export default {
   translations: {
   },
   window: {
+    allowClose: true,
+    allowMaximize: true,
     defaultView: 'single',
   },
   windows: [],
