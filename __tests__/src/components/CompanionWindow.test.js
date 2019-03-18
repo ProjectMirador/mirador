@@ -71,8 +71,11 @@ describe('CompanionWindow', () => {
     expect(updateCompanionWindow).toHaveBeenCalledWith('x', 'abc123', { position: 'right' });
   });
 
-  it('renders title controls', () => {
+  it('renders title controls when available', () => {
     companionWindow = createWrapper({ position: 'bottom', titleControls: <div className="xyz" /> });
-    expect(companionWindow.find('div.xyz').length).toBe(1);
+    expect(companionWindow.find('.mirador-companion-window-title-controls div.xyz').length).toBe(1);
+
+    companionWindow = createWrapper({ position: 'bottom' });
+    expect(companionWindow.find('.mirador-companion-window-title-controls').length).toBe(0);
   });
 });
