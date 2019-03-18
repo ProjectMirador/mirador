@@ -36,6 +36,12 @@ describe('MiradorMenuButton', () => {
     expect(wrapper.find('WithStyles(Tooltip) span WithStyles(IconButton)').props()['aria-label']).toEqual('The Label');
   });
 
+  it('sets the wrapperClassName prop on the wrapping span', () => {
+    wrapper = createWrapper({ wrapperClassName: 'someClass' });
+
+    expect(wrapper.find('WithStyles(Tooltip) span').props().className).toEqual('someClass');
+  });
+
   it('spreads any other props to IconButton', () => {
     wrapper = createWrapper({ color: 'inherit' });
 
