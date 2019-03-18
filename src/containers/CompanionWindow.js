@@ -78,7 +78,6 @@ const styles = theme => ({
     paddingLeft: theme.spacing.unit * 2,
   },
   content: {
-    ...theme.mixins.gutters(),
     overflowY: 'auto',
   },
 });

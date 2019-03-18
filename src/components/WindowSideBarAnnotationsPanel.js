@@ -58,11 +58,13 @@ export class WindowSideBarAnnotationsPanel extends Component {
   */
   render() {
     const {
-      annotations, t, windowId, id,
+      annotations, classes, t, windowId, id,
     } = this.props;
     return (
       <CompanionWindow title={t('annotations')} paperClassName={ns('window-sidebar-annotation-panel')} windowId={windowId} id={id}>
-        <Typography variant="subtitle2">{t('showingNumAnnotations', { number: annotations.length })}</Typography>
+        <div className={classes.section}>
+          <Typography variant="subtitle2">{t('showingNumAnnotations', { number: annotations.length })}</Typography>
+        </div>
         {this.sanitizedAnnotations()}
       </CompanionWindow>
     );
