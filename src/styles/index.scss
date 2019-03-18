@@ -33,8 +33,8 @@
   }
 
   &-companion-window-title-controls {
-    order: 1000;
     flex-grow: 1;
+    order: 1000;
   }
 
   &-companion-window-bottom {
@@ -112,10 +112,10 @@
   }
 
   div + &-osd-navigation:before {
-    content: '|';
     color: $gray;
-    position: absolute;
+    content: '|';
     font-size: 24px;
+    position: absolute;
     top: 12px;
   }
 
@@ -134,8 +134,8 @@
 
   &-canvas-nav {
     display: flex;
-    flex-wrap: wrap;
     flex-direction: column;
+    flex-wrap: wrap;
     justify-content: center;
     text-align: center;
   }
