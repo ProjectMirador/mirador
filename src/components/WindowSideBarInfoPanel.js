@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { SanitizedHtml } from './SanitizedHtml';
 import { LabelValueMetadata } from './LabelValueMetadata';
