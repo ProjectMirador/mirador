@@ -21,6 +21,10 @@
   }
 
   &-workspace {
+    box-sizing: border-box;
+    margin: 0;
+    overflow: scroll;
+    position: absolute;
     transition-duration: 0.7s;
 
     &.react-draggable-dragging {
@@ -29,6 +33,7 @@
   }
 
   &-companion-window-header {
+    background: $surface-dark;
     flex-wrap: wrap;
   }
 
@@ -43,10 +48,6 @@
     }
   }
 
-  &-companion-window-header {
-    background: $surface-dark;
-  }
-
   &-workspace-viewport {
     background: $surface-dark;
     bottom: 0;
@@ -56,13 +57,6 @@
     position: absolute;
     right: 0;
     top: 0;
-  }
-
-  &-workspace {
-    box-sizing: border-box;
-    margin: 0;
-    overflow: scroll;
-    position: absolute;
   }
 
   &-workspace-with-control-panel {
