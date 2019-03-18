@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import OpenSeadragon from 'openseadragon';
 import ns from '../config/css-ns';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
+import CanvasWorld from '../lib/CanvasWorld';
 
 /**
  * Represents a OpenSeadragonViewer in the mirador workspace. Responsible for mounting
@@ -61,7 +62,9 @@ export class OpenSeadragonViewer extends Component {
    * When the viewport state changes, pan or zoom the OSD viewer as appropriate
    */
   componentDidUpdate(prevProps) {
-    const { tileSources, viewer, annotations } = this.props;
+    const {
+      tileSources, viewer, annotations, currentCanvases,
+    } = this.props;
     if (!this.annotationsMatch(prevProps.annotations)) {
       this.updateCanvas = () => {
         this.osdCanvasOverlay.clear();
@@ -78,7 +81,7 @@ export class OpenSeadragonViewer extends Component {
         tileSources.map((tileSource, i) => this.addTileSource(tileSource, i)),
       ).then(() => {
         if (tileSources[0]) {
-          this.fitBounds(...this.boundsFromTileSources(), true);
+          this.fitBounds(...new CanvasWorld(currentCanvases).worldBounds(), true);
         }
       });
     } else if (viewer) {
@@ -127,72 +130,24 @@ export class OpenSeadragonViewer extends Component {
    * annotationsToContext - converts anontations to a canvas context
    */
   annotationsToContext(annotations) {
+    const { currentCanvases } = this.props;
     const context = this.osdCanvasOverlay.context2d;
     annotations.forEach((annotation) => {
       annotation.resources.forEach((resource) => {
+        const offset = new CanvasWorld(currentCanvases).offsetByCanvas(resource.targetId);
+        const fragment = resource.fragmentSelector;
+        fragment[0] += offset.x;
         context.strokeStyle = 'yellow';
         context.lineWidth = 10;
-        context.strokeRect(...resource.fragmentSelector);
+        context.strokeRect(...fragment);
       });
     });
-  }
-
-  /**
-   * boundsFromTileSources - calculates the overall width/height
-   * based on 0 -> n tileSources
-   */
-  boundsFromTileSources() {
-    const { tileSources } = this.props;
-    const heights = [];
-    const dimensions = [];
-    tileSources.forEach((tileSource) => {
-      heights.push(tileSource.height);
-      dimensions.push({
-        width: tileSource.width,
-        height: tileSource.height,
-      });
-    });
-    const minHeight = Math.min(...heights);
-    let scaledWidth = 0;
-    dimensions.forEach((dim) => {
-      const aspectRatio = dim.width / dim.height;
-      scaledWidth += Math.floor(minHeight * aspectRatio);
-    });
-    return [
-      0,
-      0,
-      scaledWidth,
-      minHeight,
-    ];
-  }
-
-  /**
-   * boundingRectFromTileSource - Creates a bounding rectangle
-   * in the Viewports space, using the current tileSource and the tileSource
-   * total area. Limitation, can only handle tileSources with a length of 1 or 2
-   */
-  boundingRectFromTileSource(tileSource, i) {
-    const { tileSources } = this.props;
-    const wholeBounds = this.boundsFromTileSources();
-    const { width } = tileSources[i];
-    const { height } = tileSources[i];
-    const aspectRatio = width / height;
-    const scaledWidth = Math.floor(wholeBounds[3] * aspectRatio);
-    let x = 0;
-    if (i === 1) {
-      x = wholeBounds[2] - scaledWidth;
-    }
-    return [
-      x,
-      0,
-      scaledWidth,
-      wholeBounds[3],
-    ];
   }
 
   /**
    */
   addTileSource(tileSource, i = 0) {
+    const { currentCanvases } = this.props;
     return new Promise((resolve, reject) => {
       if (!this.viewer) {
         return;
@@ -200,7 +155,7 @@ export class OpenSeadragonViewer extends Component {
       this.viewer.addTiledImage({
         tileSource,
         fitBounds: new OpenSeadragon.Rect(
-          ...this.boundingRectFromTileSource(tileSource, i),
+          ...new CanvasWorld(currentCanvases).canvasToWorldCoordinates(i),
         ),
         success: event => resolve(event),
         error: event => reject(event),
@@ -287,6 +242,7 @@ export class OpenSeadragonViewer extends Component {
 OpenSeadragonViewer.defaultProps = {
   annotations: [],
   children: null,
+  currentCanvases: [],
   tileSources: [],
   viewer: null,
   label: null,
@@ -296,6 +252,7 @@ OpenSeadragonViewer.defaultProps = {
 OpenSeadragonViewer.propTypes = {
   annotations: PropTypes.arrayOf(PropTypes.object),
   children: PropTypes.element,
+  currentCanvases: PropTypes.arrayOf(PropTypes.object),
   tileSources: PropTypes.arrayOf(PropTypes.object),
   viewer: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   updateViewport: PropTypes.func.isRequired,
