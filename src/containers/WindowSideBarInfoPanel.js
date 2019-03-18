@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend';
 import {
   getDestructuredMetadata,
@@ -30,8 +31,24 @@ const mapStateToProps = (state, { windowId }) => ({
   manifestMetadata: getDestructuredMetadata(getWindowManifest(state, windowId).manifestation),
 });
 
+/**
+ *
+ * @param theme
+ * @returns {label: {paddingLeft: number}}}
+ */
+const styles = theme => ({
+  section: {
+    borderBottom: '.5px solid rgba(0,0,0,0.25)',
+    paddingBottom: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit,
+    paddingTop: theme.spacing.unit * 2,
+  },
+});
+
 const enhance = compose(
   withTranslation(),
+  withStyles(styles),
   connect(mapStateToProps, null),
   withPlugins('WindowSideBarInfoPanel'),
 );

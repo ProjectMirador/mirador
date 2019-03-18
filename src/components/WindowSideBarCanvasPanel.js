@@ -83,7 +83,7 @@ export class WindowSideBarCanvasPanel extends Component {
    */
   render() {
     const {
-      canvases, setCanvas, t, windowId, id,
+      canvases, setCanvas, classes, t, windowId, id,
     } = this.props;
 
     const { variant } = this.state;
@@ -118,6 +118,7 @@ export class WindowSideBarCanvasPanel extends Component {
               return (
                 <ListItem
                   key={canvas.id}
+                  className={classes.listItem}
                   alignItems="flex-start"
                   onClick={onClick}
                   button

@@ -26,51 +26,53 @@ export class WindowSideBarInfoPanel extends Component {
       manifestMetadata,
       windowId,
       id,
+      classes,
       t,
     } = this.props;
 
     return (
       <CompanionWindow title={t('aboutThisItem')} paperClassName={ns('window-sidebar-info-panel')} windowId={windowId} id={id}>
-        {canvasLabel && (
-          <>
-            <Typography variant="overline" id={`${id}-currentItem`}>{t('currentItem')}</Typography>
-            <Typography aria-labelledby={`${id}-currentItem`} variant="h4">
-              {canvasLabel}
+        <div className={classes.section}>
+          {canvasLabel && (
+            <>
+              <Typography variant="overline" id={`${id}-currentItem`}>{t('currentItem')}</Typography>
+              <Typography aria-labelledby={`${id}-currentItem`} variant="h4">
+                {canvasLabel}
+              </Typography>
+            </>
+          )}
+
+          {canvasDescription && (
+            <Typography variant="body1">
+              <SanitizedHtml htmlString={canvasDescription} ruleSet="iiif" />
             </Typography>
-          </>
-        )}
+          )}
 
-        {canvasDescription && (
-          <Typography variant="body1">
-            <SanitizedHtml htmlString={canvasDescription} ruleSet="iiif" />
-          </Typography>
-        )}
+          {canvasMetadata.length > 0 && (
+            <LabelValueMetadata labelValuePairs={canvasMetadata} />
+          )}
+        </div>
 
-        {canvasMetadata.length > 0 && (
-          <LabelValueMetadata labelValuePairs={canvasMetadata} />
-        )}
+        <div className={classes.section}>
+          {manifestLabel && (
+            <>
+              <Typography variant="overline" id={`${id}-resource`} component="p">{t('resource')}</Typography>
+              <Typography aria-labelledby={`${id}-resource`} variant="h4">
+                {manifestLabel}
+              </Typography>
+            </>
+          )}
 
-        <Divider />
-
-        {manifestLabel && (
-          <>
-            <Typography variant="overline" id={`${id}-resource`} component="p">{t('resource')}</Typography>
-            <Typography aria-labelledby={`${id}-resource`} variant="h4">
-              {manifestLabel}
+          {manifestDescription && (
+            <Typography variant="body2">
+              <SanitizedHtml htmlString={manifestDescription} ruleSet="iiif" />
             </Typography>
-          </>
-        )}
+          )}
 
-        {manifestDescription && (
-          <Typography variant="body2">
-            <SanitizedHtml htmlString={manifestDescription} ruleSet="iiif" />
-          </Typography>
-        )}
-
-        {manifestMetadata.length > 0 && (
-          <LabelValueMetadata labelValuePairs={manifestMetadata} />
-        )}
-
+          {manifestMetadata.length > 0 && (
+            <LabelValueMetadata labelValuePairs={manifestMetadata} />
+          )}
+        </div>
       </CompanionWindow>
     );
   }
@@ -86,6 +88,7 @@ WindowSideBarInfoPanel.propTypes = {
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
+  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 WindowSideBarInfoPanel.defaultProps = {
@@ -96,4 +99,5 @@ WindowSideBarInfoPanel.defaultProps = {
   manifestDescription: null,
   manifestMetadata: [],
   t: key => key,
+  classes: {},
 };

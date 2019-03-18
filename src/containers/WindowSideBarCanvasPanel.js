@@ -34,6 +34,10 @@ const styles = theme => ({
   label: {
     paddingLeft: theme.spacing.unit,
   },
+  listItem: {
+    borderBottom: '0.5px solid rgba(0,0,0,0.12)',
+    paddingRight: theme.spacing.unit,
+  },
 });
 
 const enhance = compose(
