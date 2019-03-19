@@ -41,7 +41,6 @@ export default {
       caption: {
         fontSize: "0.772rem",
         letterSpacing: "0.13em",
-        textAlign: 'center',
         lineHeight: "1.1rem",
       },
       body1Next: {

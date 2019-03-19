@@ -136,6 +136,7 @@ export function getSelectedCanvas(state, windowId) {
 export function getSelectedCanvases(state, windowId) {
   const manifest = getWindowManifest(state, windowId);
   const { canvasIndex, view } = state.windows[windowId];
+  console.debug();
 
   return manifest
     && manifest.manifestation

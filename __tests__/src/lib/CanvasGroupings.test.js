@@ -52,5 +52,11 @@ describe('CanvasGroupings', () => {
         expect(subject.getCanvases(2)).toEqual([1, 2]);
       });
     });
+    describe('gallery', () => {
+      it('selects by index', () => {
+        const subject = new CanvasGroupings([0, 1, 2, 3]);
+        expect(subject.getCanvases(2)).toEqual([2]);
+      });
+    });
   });
 });
