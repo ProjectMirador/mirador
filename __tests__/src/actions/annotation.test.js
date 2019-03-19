@@ -133,4 +133,13 @@ describe('annotation actions', () => {
     };
     expect(actions.deselectAnnotation(windowId, canvasId, annotationId)).toEqual(expectedAction);
   });
+
+  it('handles the toggleAnnotationDisplay action', () => {
+    const windowId = 'wId1';
+    const expectedAction = {
+      type: ActionTypes.TOGGLE_ANNOTATION_DISPLAY,
+      windowId,
+    };
+    expect(actions.toggleAnnotationDisplay(windowId)).toEqual(expectedAction);
+  });
 });

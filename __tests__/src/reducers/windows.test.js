@@ -345,5 +345,17 @@ describe('windows reducer', () => {
         expect(windowsReducer(beforeState, action)).toEqual(expectedState);
       });
     });
+
+    it('handles TOGGLE_ANNOTATION_DISPLAY by toggling the given window\'s displayAllAnnotation value', () => {
+      const beforeState = { abc123: { displayAllAnnotations: false } };
+      const action = {
+        type: ActionTypes.TOGGLE_ANNOTATION_DISPLAY, windowId: 'abc123',
+      };
+      const expectedState = {
+        abc123: { displayAllAnnotations: true },
+      };
+
+      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
+    });
   });
 });

@@ -93,3 +93,15 @@ export function deselectAnnotation(windowId, canvasId, annotationId) {
     type: ActionTypes.DESELECT_ANNOTATION, windowId, canvasId, annotationId,
   };
 }
+
+/**
+ * toggleAnnotationDisplay - action creator
+ *
+ * @param  {String} windowId
+ * @memberof ActionCreators
+ */
+export function toggleAnnotationDisplay(windowId) {
+  return {
+    type: ActionTypes.TOGGLE_ANNOTATION_DISPLAY, windowId,
+  };
+}
