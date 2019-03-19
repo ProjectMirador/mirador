@@ -13,14 +13,22 @@ import CanvasIndexIcon from './icons/CanvasIndexIcon';
  *
  */
 export class WindowSideBarButtons extends Component {
+  /**
+   * selects the given tab
+   * @param {*} tab the tab to activate
+   */
+  static activateTab(tab) {
+    tab.removeAttribute('tabindex');
+    tab.setAttribute('aria-selected', 'true');
+  }
+
   /** */
   constructor(props) {
     super(props);
+    const { windowId } = this.props;
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.handleTabRef = this.handleTabRef.bind(this);
-
+    this.windowId = `${windowId}-sidebar-buttons`;
     this.keys = {
       end: 35,
       home: 36,
@@ -33,21 +41,17 @@ export class WindowSideBarButtons extends Component {
    *
    */
   componentDidMount() {
-    // eslint-disable-next-line react/no-find-dom-node
-    this.tabs = Array.from(ReactDOM.findDOMNode(this.tabRef).getElementsByTagName('button'));
-    console.log(this.tabs[0]);
+    this.tabs = Array.from(document.querySelectorAll(`#${this.windowId} button[role=tab]`));
     this.tabBar = this.tabs[0].parentElement;
-    this.selectTab(this.tabs[0]);
-  }
 
-  /**
-  * ref handler for the tab
-  * @param {*} node
-  */
-  handleTabRef(node) {
-    if (node != null) {
-      this.tabRef = node;
-    }
+    /*
+      the change event isn't fired, when the tabs component is initialized,
+      so we have to perform the required actions on our own
+    */
+    const selectedTab = document.querySelectorAll('[aria-selected="true"]')[0];
+    this.selectTab(selectedTab);
+    this.deactivateTabs(this.tabs.indexOf(selectedTab));
+    selectedTab.focus();
   }
 
   /**
@@ -56,17 +60,18 @@ export class WindowSideBarButtons extends Component {
   */
   handleChange(event, value) {
     const { addCompanionWindow } = this.props;
-    this.selectTab(event.target);
+    const tab = event.target;
+
+    this.selectTab(tab);
     addCompanionWindow(value);
   }
 
   /**
-   * select the given tab
+   *
    * @param {*} tab
    */
   selectTab(tab) {
-    tab.removeAttribute('tabindex');
-    tab.setAttribute('aria-selected', 'true');
+    WindowSideBarButtons.activateTab(tab);
     this.deactivateTabs(this.tabs.indexOf(tab));
   }
 
@@ -101,23 +106,6 @@ export class WindowSideBarButtons extends Component {
   }
 
   /**
-   *
-   * @param {object} event the keyDown event
-   */
-  handleKeyDown(event) {
-    switch (event.keyCode) {
-      case this.keys.home:
-        event.preventDefault();
-        return this.focusFirstTab();
-      case this.keys.end:
-        event.preventDefault();
-        return this.focusLastTab();
-      default:
-        return null;
-    }
-  }
-
-  /**
    * focus the first tab
    */
   focusFirstTab() {
@@ -125,7 +113,7 @@ export class WindowSideBarButtons extends Component {
   }
 
   /**
-   *
+   * focus the previous tab
    * @param {object} tab the currently selected tab
    */
   focusPreviousTab(tab) {
@@ -141,7 +129,7 @@ export class WindowSideBarButtons extends Component {
   }
 
   /**
-   *
+   * focus the next tab
    * @param {object} tab the currently selected tab
    */
   focusNextTab(tab) {
@@ -163,61 +151,59 @@ export class WindowSideBarButtons extends Component {
     } = this.props;
 
     return (
-      <Tabs
-        classes={{ flexContainer: classes.tabsFlexContainer, indicator: classes.tabsIndicator }}
-        value={sideBarPanel === 'closed' ? false : sideBarPanel}
-        onChange={this.handleChange}
-        variant="fullWidth"
-        indicatorColor="secondary"
-        textColor="secondary"
-        aria-orientation="vertical"
-        ref={this.handleTabRef}
-      >
-        <Tab
-          classes={{ root: classes.tab, selected: classes.tabSelected }}
-          aria-label={
-            t('openInfoCompanionWindow')
-          }
-          icon={(
-            <Tooltip title={t('openInfoCompanionWindow')}>
-              <InfoIcon />
-            </Tooltip>
-          )}
-          onKeyUp={this.handleKeyUp}
-          onKeyDown={this.handleKeyDown}
-          value="info"
-        />
-        <Tab
-          classes={{ root: classes.tab, selected: classes.tabSelected }}
-          aria-label={
-            t('openCanvasNavigationCompanionWindow')
-          }
-          icon={(
-            <Tooltip title={t('openCanvasNavigationCompanionWindow')}>
-              <CanvasIndexIcon />
-            </Tooltip>
-          )}
-          onKeyUp={this.handleKeyUp}
-          onKeyDown={this.handleKeyDown}
-          value="canvas_navigation"
-        />
-        <Tab
-          classes={{ root: classes.tab, selected: classes.tabSelected }}
-          aria-label={
-            t('openAnnotationCompanionWindow')
-          }
-          icon={(
-            <Tooltip title={t('openAnnotationCompanionWindow')}>
-              <Badge color="error" invisible={!hasAnnotations} variant="dot">
-                <AnnotationIcon />
-              </Badge>
-            </Tooltip>
-          )}
-          onKeyUp={this.handleKeyUp}
-          onKeyDown={this.handleKeyDown}
-          value="annotations"
-        />
-      </Tabs>
+      <div id={this.windowId}>
+        <Tabs
+          classes={{ flexContainer: classes.tabsFlexContainer, indicator: classes.tabsIndicator }}
+          value={sideBarPanel === 'closed' ? false : sideBarPanel}
+          onChange={this.handleChange}
+          variant="fullWidth"
+          indicatorColor="secondary"
+          textColor="secondary"
+          aria-orientation="vertical"
+        >
+          <Tab
+            classes={{ root: classes.tab, selected: classes.tabSelected }}
+            aria-label={
+              t('openInfoCompanionWindow')
+            }
+            icon={(
+              <Tooltip title={t('openInfoCompanionWindow')}>
+                <InfoIcon />
+              </Tooltip>
+            )}
+            onKeyUp={this.handleKeyUp}
+            value="info"
+          />
+          <Tab
+            classes={{ root: classes.tab, selected: classes.tabSelected }}
+            aria-label={
+              t('openCanvasNavigationCompanionWindow')
+            }
+            icon={(
+              <Tooltip title={t('openCanvasNavigationCompanionWindow')}>
+                <CanvasIndexIcon />
+              </Tooltip>
+            )}
+            onKeyUp={this.handleKeyUp}
+            value="canvas_navigation"
+          />
+          <Tab
+            classes={{ root: classes.tab, selected: classes.tabSelected }}
+            aria-label={
+              t('openAnnotationCompanionWindow')
+            }
+            icon={(
+              <Tooltip title={t('openAnnotationCompanionWindow')}>
+                <Badge color="error" invisible={!hasAnnotations} variant="dot">
+                  <AnnotationIcon />
+                </Badge>
+              </Tooltip>
+            )}
+            onKeyUp={this.handleKeyUp}
+            value="annotations"
+          />
+        </Tabs>
+      </div>
     );
   }
 }
@@ -228,6 +214,7 @@ WindowSideBarButtons.propTypes = {
   sideBarPanel: PropTypes.string,
   t: PropTypes.func,
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  windowId: PropTypes.string.isRequired,
 };
 
 WindowSideBarButtons.defaultProps = {

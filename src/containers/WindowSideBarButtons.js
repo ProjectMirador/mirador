@@ -37,6 +37,7 @@ const mapStateToProps = (state, { windowId }) => ({
     ['oa:commenting', 'sc:painting'],
   ).length > 0,
   sideBarPanel: (getCompanionWindowForPosition(state, windowId, 'left') || {}).content,
+  windowId,
 });
 
 /** */
