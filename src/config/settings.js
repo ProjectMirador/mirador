@@ -40,8 +40,8 @@ export default {
       },
       caption: {
         fontSize: "0.772rem",
-        letterSpacing: "0.13em",
-        lineHeight: "1.1rem",
+        letterSpacing: "0.033em",
+        lineHeight: "1.6rem",
       },
       body1Next: {
         fontSize: "1rem",
