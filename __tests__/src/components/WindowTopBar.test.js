@@ -71,4 +71,12 @@ describe('WindowTopBar', () => {
     const wrapper = createWrapper({ maximizeWindow });
     expect(wrapper.find(MiradorMenuButton).at(1).props().onClick).toBe(maximizeWindow);
   });
+
+  it('close button is configurable', () => {
+    expect(createWrapper({ allowClose: false }).find('.mirador-window-close').length).toEqual(0);
+  });
+
+  it('fullscreen button is configurable', () => {
+    expect(createWrapper({ allowMaximize: false }).find('.mirador-window-maximize').length).toEqual(0);
+  });
 });

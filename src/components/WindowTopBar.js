@@ -25,7 +25,7 @@ export class WindowTopBar extends Component {
   render() {
     const {
       removeWindow, windowId, classes, toggleWindowSideBar, t, manifestTitle,
-      maximizeWindow, maximized, minimizeWindow, focused,
+      maximizeWindow, maximized, minimizeWindow, focused, allowClose, allowMaximize,
     } = this.props;
     return (
       <AppBar position="relative">
@@ -42,22 +42,26 @@ export class WindowTopBar extends Component {
           </Typography>
           <WindowTopBarButtons windowId={windowId} />
           <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
-          <MiradorMenuButton
-            aria-label={(maximized ? t('minimizeWindow') : t('maximizeWindow'))}
-            className={ns('window-maximize')}
-            color="inherit"
-            onClick={(maximized ? minimizeWindow : maximizeWindow)}
-          >
-            {(maximized ? <FullscreenExitIcon /> : <FullscreenIcon />)}
-          </MiradorMenuButton>
-          <MiradorMenuButton
-            aria-label={t('closeWindow')}
-            className={ns('window-close')}
-            color="inherit"
-            onClick={removeWindow}
-          >
-            <CloseIcon />
-          </MiradorMenuButton>
+          {allowMaximize && (
+            <MiradorMenuButton
+              aria-label={(maximized ? t('minimizeWindow') : t('maximizeWindow'))}
+              className={ns('window-maximize')}
+              color="inherit"
+              onClick={(maximized ? minimizeWindow : maximizeWindow)}
+            >
+              {(maximized ? <FullscreenExitIcon /> : <FullscreenIcon />)}
+            </MiradorMenuButton>
+          )}
+          {allowClose && (
+            <MiradorMenuButton
+              aria-label={t('closeWindow')}
+              className={ns('window-close')}
+              color="inherit"
+              onClick={removeWindow}
+            >
+              <CloseIcon />
+            </MiradorMenuButton>
+          )}
         </Toolbar>
       </AppBar>
     );
@@ -65,6 +69,8 @@ export class WindowTopBar extends Component {
 }
 
 WindowTopBar.propTypes = {
+  allowClose: PropTypes.bool,
+  allowMaximize: PropTypes.bool,
   manifestTitle: PropTypes.string,
   maximizeWindow: PropTypes.func,
   maximized: PropTypes.bool,
@@ -78,6 +84,8 @@ WindowTopBar.propTypes = {
 };
 
 WindowTopBar.defaultProps = {
+  allowClose: true,
+  allowMaximize: true,
   manifestTitle: '',
   maximizeWindow: () => {},
   maximized: false,
