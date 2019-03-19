@@ -21,7 +21,7 @@ export class ThumbnailNavigation extends Component {
   constructor(props) {
     super(props);
 
-    this.scrollbarSize = 10;
+    this.scrollbarSize = 15;
     this.spacing = 16; // 2 * (2px margin + 2px border + 2px padding + 2px padding)
     this.cellRenderer = this.cellRenderer.bind(this);
     this.calculateScaledHeight = this.calculateScaledHeight.bind(this);
