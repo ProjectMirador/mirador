@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
 import { CanvasThumbnail } from './CanvasThumbnail';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
+import CanvasWorld from '../lib/CanvasWorld';
 import ns from '../config/css-ns';
 import 'react-virtualized/styles.css';
 
@@ -21,7 +22,7 @@ export class ThumbnailNavigation extends Component {
     super(props);
 
     this.scrollbarSize = 10;
-    this.spacing = 12; // 2 * (2px margin + 2px border + 2px padding)
+    this.spacing = 16; // 2 * (2px margin + 2px border + 2px padding + 2px padding)
     this.cellRenderer = this.cellRenderer.bind(this);
     this.calculateScaledHeight = this.calculateScaledHeight.bind(this);
     this.calculateScaledWidth = this.calculateScaledWidth.bind(this);
@@ -65,6 +66,7 @@ export class ThumbnailNavigation extends Component {
     const maxHeight = (position === 'far-right') ? null : config.thumbnailNavigation.height - (this.scrollbarSize + 12);
     const maxWidth = (position === 'far-right') ? config.thumbnailNavigation.width : null;
     const currentGroupings = canvasGroupings.groupings()[currentIndex];
+    const currentWorld = new CanvasWorld(currentGroupings);
     return (
       <div
         key={key}
@@ -85,6 +87,10 @@ export class ThumbnailNavigation extends Component {
         >
           {currentGroupings.map((canvas, i) => {
             const manifestoCanvas = new ManifestoCanvas(canvas);
+            const worldWidth = currentWorld.worldBounds()[2];
+            const tileWidth = Math.floor(
+              canvas.getWidth() / worldWidth * 100,
+            );
             return (
               <GridListTile
                 component="div"
@@ -92,7 +98,7 @@ export class ThumbnailNavigation extends Component {
                 onClick={() => setCanvas(window.id, currentGroupings[0].index)}
                 style={{
                   height: style.height - this.spacing / 2,
-                  width: currentGroupings.length === 2 ? '50%' : '100%',
+                  width: `${tileWidth}%`,
                 }}
               >
                 <CanvasThumbnail
