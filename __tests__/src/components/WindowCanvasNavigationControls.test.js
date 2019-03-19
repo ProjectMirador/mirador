@@ -12,6 +12,7 @@ function createWrapper(props) {
       canvases={[]}
       canvasLabel="label"
       window={{}}
+      zoomToWorld={() => {}}
       {...props}
     />,
   );
@@ -19,12 +20,13 @@ function createWrapper(props) {
 
 describe('WindowCanvasNavigationControls', () => {
   let wrapper;
+  const zoomToWorld = jest.fn();
 
   it('renders properly', () => {
-    wrapper = createWrapper();
+    wrapper = createWrapper({ zoomToWorld });
     expect(wrapper.matchesElement(
       <div>
-        <ZoomControls />
+        <ZoomControls zoomToWorld={zoomToWorld} />
         <ViewerNavigation />
         <ViewerInfo />
       </div>,

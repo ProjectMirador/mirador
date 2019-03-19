@@ -17,6 +17,7 @@ describe('ZoomControls', () => {
         viewer={viewer}
         showZoomControls={showZoomControls}
         updateViewport={updateViewport}
+        zoomToWorld={() => {}}
       />,
     );
   });
@@ -29,6 +30,7 @@ describe('ZoomControls', () => {
 
 
   describe('with showZoomControls=true', () => {
+    const zoomToWorld = jest.fn();
     beforeEach(() => {
       updateViewport = jest.fn();
       wrapper = shallow(
@@ -38,6 +40,7 @@ describe('ZoomControls', () => {
           viewer={viewer}
           showZoomControls
           updateViewport={updateViewport}
+          zoomToWorld={zoomToWorld}
         />,
       );
     });
@@ -61,11 +64,11 @@ describe('ZoomControls', () => {
       expect(updateViewport).toHaveBeenCalledWith('xyz', { x: 100, y: 100, zoom: 0.5 });
     });
 
-    it('has a zoom reseet button', () => {
+    it('has a zoom reset button', () => {
       const button = wrapper.find({ 'aria-label': 'zoomReset' }).first();
       button.props().onClick(); // Trigger the onClick prop
-      expect(updateViewport).toHaveBeenCalledTimes(1);
-      expect(updateViewport).toHaveBeenCalledWith('xyz', { x: 100, y: 100, zoom: 1 });
+      expect(zoomToWorld).toHaveBeenCalledTimes(1);
+      expect(zoomToWorld).toHaveBeenCalledWith(false);
     });
   });
 

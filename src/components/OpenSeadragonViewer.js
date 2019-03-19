@@ -24,6 +24,7 @@ export class OpenSeadragonViewer extends Component {
     this.ref = React.createRef();
     this.onUpdateViewport = this.onUpdateViewport.bind(this);
     this.onViewportChange = this.onViewportChange.bind(this);
+    this.zoomToWorld = this.zoomToWorld.bind(this);
   }
 
   /**
@@ -81,7 +82,7 @@ export class OpenSeadragonViewer extends Component {
         tileSources.map((tileSource, i) => this.addTileSource(tileSource, i)),
       ).then(() => {
         if (tileSources[0]) {
-          this.fitBounds(...new CanvasWorld(currentCanvases).worldBounds(), true);
+          this.zoomToWorld();
         }
       });
     } else if (viewer) {
@@ -165,10 +166,10 @@ export class OpenSeadragonViewer extends Component {
 
   /**
    */
-  fitBounds(x, y, w, h) {
+  fitBounds(x, y, w, h, immediately = true) {
     this.viewer.viewport.fitBounds(
       new OpenSeadragon.Rect(x, y, w, h),
-      true,
+      immediately,
     );
   }
 
@@ -189,6 +190,14 @@ export class OpenSeadragonViewer extends Component {
       }
       return false;
     });
+  }
+
+  /**
+   * zoomToWorld - zooms the viewer to the extent of the canvas world
+   */
+  zoomToWorld(immediately = true) {
+    const { currentCanvases } = this.props;
+    this.fitBounds(...new CanvasWorld(currentCanvases).worldBounds(), immediately);
   }
 
   /**
@@ -222,6 +231,15 @@ export class OpenSeadragonViewer extends Component {
       windowId, children, classes, label, t,
     } = this.props;
 
+    const enhancedChildren = React.Children.map(children, child => (
+      React.cloneElement(
+        child,
+        {
+          zoomToWorld: this.zoomToWorld,
+        },
+      )
+    ));
+
     return (
       <>
         <section
@@ -231,7 +249,7 @@ export class OpenSeadragonViewer extends Component {
           aria-label={t('item', { label })}
         >
           <Paper square className={classes.controls} elevation={0}>
-            { children }
+            { enhancedChildren }
           </Paper>
         </section>
       </>

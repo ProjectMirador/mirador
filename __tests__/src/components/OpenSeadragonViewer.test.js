@@ -34,8 +34,11 @@ describe('OpenSeadragonViewer', () => {
   it('renders the component', () => {
     expect(wrapper.find('.mirador-osd-container').length).toBe(1);
   });
-  it('renders child components', () => {
+  it('renders child components enhanced with additional props', () => {
     expect(wrapper.find('.foo').length).toBe(1);
+    expect(wrapper.find('.foo').props()).toEqual(expect.objectContaining({
+      zoomToWorld: wrapper.instance().zoomToWorld,
+    }));
   });
   it('renders viewer controls', () => {
     expect(wrapper.find('.controls').length).toBe(1);
@@ -69,6 +72,15 @@ describe('OpenSeadragonViewer', () => {
       expect(
         wrapper.instance().viewer.viewport.fitBounds,
       ).toHaveBeenCalledWith(expect.any(OpenSeadragon.Rect), true);
+    });
+  });
+
+  describe('zoomToWorld', () => {
+    it('uses fitBounds with the existing CanvasWorld', () => {
+      const fitBounds = jest.fn();
+      wrapper.instance().fitBounds = fitBounds;
+      wrapper.instance().zoomToWorld();
+      expect(fitBounds).toHaveBeenCalledWith(0, 0, 0, Infinity, true);
     });
   });
 
