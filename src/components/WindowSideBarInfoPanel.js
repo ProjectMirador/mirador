@@ -55,7 +55,7 @@ export class WindowSideBarInfoPanel extends Component {
         <div className={classes.section}>
           {manifestLabel && (
             <>
-              <Typography variant="overline" id={`${id}-resource`} component="p">{t('resource')}</Typography>
+              <Typography variant="overline" id={`${id}-resource`}>{t('resource')}</Typography>
               <Typography aria-labelledby={`${id}-resource`} variant="h4">
                 {manifestLabel}
               </Typography>
