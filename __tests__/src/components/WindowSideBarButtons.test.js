@@ -13,9 +13,14 @@ function createWrapper(props) {
 }
 
 describe('WindowSideBarButtons', () => {
+  const windowId = 'test123';
   let wrapper;
+
   beforeEach(() => {
-    wrapper = createWrapper();
+    document.body.innerHTML = `<div id="${windowId}-sidebar-buttons" >`
+    + '<button role="tab" aria-selected="true" />'
+    + '</div>';
+    wrapper = createWrapper({ windowId });
   });
 
   it('renders without an error', () => {
@@ -24,20 +29,20 @@ describe('WindowSideBarButtons', () => {
 
   it('triggers the addCompanionWindow prop on click', () => {
     const addCompanionWindow = jest.fn();
-    wrapper = createWrapper({ addCompanionWindow });
+    wrapper = createWrapper({ addCompanionWindow, windowId });
 
-    wrapper.find('WithStyles(Tabs)').simulate('change', {}, 'info');
+    wrapper.find('WithStyles(Tabs)').simulate('change', { target: { removeAttribute: () => {}, setAttribute: () => {} } }, 'info');
     expect(addCompanionWindow).toHaveBeenCalledTimes(1);
     expect(addCompanionWindow).toHaveBeenCalledWith('info');
   });
 
   it('has a badge indicating if the annotations panel has annotations', () => {
     let tab;
-    wrapper = createWrapper({ hasAnnotations: true });
+    wrapper = createWrapper({ hasAnnotations: true, windowId });
     tab = wrapper.find('WithStyles(Tab)[aria-label="openAnnotationCompanionWindow"]').dive().dive();
     expect(tab.find('WithStyles(Badge)').props().invisible).toBe(false);
 
-    wrapper = createWrapper({ hasAnnotations: false });
+    wrapper = createWrapper({ hasAnnotations: false, windowId });
     tab = wrapper.find('WithStyles(Tab)[aria-label="openAnnotationCompanionWindow"]').dive().dive();
 
     expect(tab.find('WithStyles(Badge)').props().invisible).toBe(true);
