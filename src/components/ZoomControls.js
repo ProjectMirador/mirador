@@ -16,7 +16,6 @@ export class ZoomControls extends Component {
 
     this.handleZoomInClick = this.handleZoomInClick.bind(this);
     this.handleZoomOutClick = this.handleZoomOutClick.bind(this);
-    this.handleZoomResetClick = this.handleZoomResetClick.bind(this);
   }
 
   /**
@@ -46,24 +45,13 @@ export class ZoomControls extends Component {
   }
 
   /**
-   * @private
-   */
-  handleZoomResetClick() {
-    const { windowId, updateViewport, viewer } = this.props;
-
-    updateViewport(windowId, {
-      x: viewer.x,
-      y: viewer.y,
-      zoom: 1,
-    });
-  }
-
-  /**
    * render
    * @return
    */
   render() {
-    const { showZoomControls, classes, t } = this.props;
+    const {
+      showZoomControls, classes, t, zoomToWorld,
+    } = this.props;
 
     if (!showZoomControls) {
       return (
@@ -79,7 +67,7 @@ export class ZoomControls extends Component {
         <MiradorMenuButton aria-label={t('zoomOut')} onClick={this.handleZoomOutClick}>
           <RemoveCircleIcon />
         </MiradorMenuButton>
-        <MiradorMenuButton aria-label={t('zoomReset')} onClick={this.handleZoomResetClick}>
+        <MiradorMenuButton aria-label={t('zoomReset')} onClick={() => zoomToWorld(false)}>
           <RestoreZoomIcon />
         </MiradorMenuButton>
       </div>
@@ -98,6 +86,7 @@ ZoomControls.propTypes = {
   updateViewport: PropTypes.func,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
+  zoomToWorld: PropTypes.func.isRequired,
 };
 
 ZoomControls.defaultProps = {
