@@ -120,6 +120,10 @@
     cursor: pointer;
     transition: 0.1s transform ease-out;
 
+    span {
+      textAlign: 'center',
+    }
+
     &.current-canvas {
       border: 2px solid deepskyblue;
       padding: 3px;
