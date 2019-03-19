@@ -7,9 +7,9 @@ import { withPlugins } from '../extend';
 import { OpenSeadragonViewer } from '../components/OpenSeadragonViewer';
 import * as actions from '../state/actions';
 import {
+  getAllOrSelectedAnnotations,
   getCanvasLabel,
   getSelectedAnnotationIds,
-  getSelectedTargetAnnotationResources,
 } from '../state/selectors';
 
 /**
@@ -22,8 +22,9 @@ const mapStateToProps = ({
 }, { windowId, currentCanvases }) => ({
   viewer: viewers[windowId],
   label: getCanvasLabel({ windows, manifests }, { windowId, canvasIndex: 'selected' }),
-  annotations: getSelectedTargetAnnotationResources(
-    { annotations },
+  annotations: getAllOrSelectedAnnotations(
+    { annotations, windows },
+    windowId,
     currentCanvases.map(c => c.id),
     getSelectedAnnotationIds({ windows }, windowId, currentCanvases.map(c => c.id)),
   ),
