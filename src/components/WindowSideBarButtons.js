@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Badge from '@material-ui/core/Badge';
 import Tabs from '@material-ui/core/Tabs';
@@ -48,7 +47,7 @@ export class WindowSideBarButtons extends Component {
       the change event isn't fired, when the tabs component is initialized,
       so we have to perform the required actions on our own
     */
-    const selectedTab = document.querySelectorAll('[aria-selected="true"]')[0];
+    const selectedTab = this.tabs.find(t => (t.getAttribute('aria-selected')) === 'true');
     this.selectTab(selectedTab);
     this.deactivateTabs(this.tabs.indexOf(selectedTab));
     selectedTab.focus();
@@ -61,7 +60,6 @@ export class WindowSideBarButtons extends Component {
   handleChange(event, value) {
     const { addCompanionWindow } = this.props;
     const tab = event.target;
-
     this.selectTab(tab);
     addCompanionWindow(value);
   }
