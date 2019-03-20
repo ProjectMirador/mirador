@@ -1,72 +1,82 @@
+import { createSelector } from 'reselect';
 import filter from 'lodash/filter';
 import flatten from 'lodash/flatten';
-import { LanguageMap } from 'manifesto.js';
+import manifesto, { LanguageMap } from 'manifesto.js';
 import Annotation from '../../lib/Annotation';
 import ManifestoCanvas from '../../lib/ManifestoCanvas';
 import CanvasGroupings from '../../lib/CanvasGroupings';
 
-/**
-* Return the manifest that belongs to a certain window.
-* @param {object} state
-* @param {String} windowId
-* @return {object}
-*/
-export function getWindowManifest(state, windowId) {
-  return state.windows[windowId]
-    && state.windows[windowId].manifestId
-    && state.manifests[state.windows[windowId].manifestId];
+/** Get the relevant manifest information */
+export function getManifest(state, { manifestId, windowId }) {
+  return state.manifests[
+    manifestId
+    || (windowId && state.windows[windowId] && state.windows[windowId].manifestId)
+  ];
 }
 
+/** Instantiate a manifesto instance */
+export const getManifestoInstance = createSelector(
+  [getManifest],
+  manifest => manifest && manifest.json && manifesto.create(manifest.json),
+);
+
 /**
-* Return the logo of a manifest or null
-* @param {object} manifest
-* @return {String|null}
-*/
-export function getManifestLogo(manifest) {
-  return manifest.manifestation
-    && manifest.manifestation.getLogo();
-}
+ * Get the logo for a manifest
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @return {String|null}
+ */
+export const getManifestLogo = createSelector(
+  [getManifestoInstance],
+  manifest => manifest && manifest.getLogo(),
+);
 
 /**
 * Return the IIIF v3 provider of a manifest or null
-* @param {object} manifest
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @return {String|null}
 */
-export function getManifestProvider(manifest) {
-  if (manifest && manifest.provider) {
-    return manifest.provider;
-  }
-
-  return manifest
-    && manifest.manifestation
-    && manifest.manifestation.getProperty('provider')
-    && manifest.manifestation.getProperty('provider')[0].label
-    && LanguageMap.parse(manifest.manifestation.getProperty('provider')[0].label, manifest.manifestation.options.locale).map(label => label.value)[0];
-}
+export const getManifestProvider = createSelector(
+  [getManifestoInstance],
+  manifest => manifest
+    && manifest.getProperty('provider')
+    && manifest.getProperty('provider')[0].label
+    && LanguageMap.parse(manifest.getProperty('provider')[0].label, manifest.options.locale).map(label => label.value)[0],
+);
 
 /**
 * Return the supplied thumbnail for a manifest or null
-* @param {object} manifest
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @return {String|null}
 */
-export function getManifestThumbnail(manifest) {
+export function getManifestThumbnail(state, props) {
   /** */
   function getTopLevelManifestThumbnail() {
-    return manifest.manifestation
-      && manifest.manifestation.getThumbnail()
-      && manifest.manifestation.getThumbnail().id;
+    const manifest = getManifestoInstance(state, props);
+
+    return manifest
+      && manifest.getThumbnail()
+      && manifest.getThumbnail().id;
   }
 
   /** */
   function getFirstCanvasThumbnail() {
-    const canvases = getManifestCanvases(manifest);
+    const canvases = getManifestCanvases(state, props);
 
     return canvases.length > 0 && canvases[0].getThumbnail() && canvases[0].getThumbnail().id;
   }
 
   /** */
   function generateThumbnailFromFirstCanvas() {
-    const canvases = getManifestCanvases(manifest);
+    const canvases = getManifestCanvases(state, props);
 
     if (canvases.length === 0) return null;
 
@@ -82,20 +92,26 @@ export function getManifestThumbnail(manifest) {
 
 /**
 * Return the logo of a manifest or null
-* @param {object} manifest
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @return {String|null}
 */
-export function getManifestCanvases(manifest) {
-  if (!manifest.manifestation) {
-    return [];
-  }
+export const getManifestCanvases = createSelector(
+  [getManifestoInstance],
+  (manifest) => {
+    if (!manifest) {
+      return [];
+    }
 
-  if (!manifest.manifestation.getSequences || !manifest.manifestation.getSequences()[0]) {
-    return [];
-  }
+    if (!manifest.getSequences || !manifest.getSequences()[0]) {
+      return [];
+    }
 
-  return manifest.manifestation.getSequences()[0].getCanvases();
-}
+    return manifest.getSequences()[0].getCanvases();
+  },
+);
 
 /**
 * Return ids and labels of canvases
@@ -112,40 +128,42 @@ export function getIdAndLabelOfCanvases(canvases) {
 /**
 * Return the current canvas selected in a window
 * @param {object} state
-* @param {String} windowId
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @return {Object}
 */
-export function getSelectedCanvas(state, windowId) {
-  const manifest = getWindowManifest(state, windowId);
-  const { canvasIndex } = state.windows[windowId];
-
-  return manifest
-    && manifest.manifestation
-    && manifest.manifestation
+export const getSelectedCanvas = createSelector(
+  [
+    getManifestoInstance,
+    (state, { windowId }) => state.windows[windowId].canvasIndex,
+  ],
+  (manifest, canvasIndex) => manifest
+    && manifest
       .getSequences()[0]
-      .getCanvasByIndex(canvasIndex);
-}
+      .getCanvasByIndex(canvasIndex),
+);
 
 /**
 * Return the current canvases selected in a window
 * For book view returns 2, for single returns 1
 * @param {object} state
-* @param {String} windowId
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @return {Array}
 */
-export function getSelectedCanvases(state, windowId) {
-  const manifest = getWindowManifest(state, windowId);
-  const { canvasIndex, view } = state.windows[windowId];
-  console.debug();
-
-  return manifest
-    && manifest.manifestation
+export const getSelectedCanvases = createSelector(
+  [
+    getManifestoInstance,
+    (state, { windowId }) => state.windows[windowId],
+  ],
+  (manifest, { canvasIndex, view }) => manifest
     && new CanvasGroupings(
-      manifest.manifestation.getSequences()[0].getCanvases(),
+      manifest.getSequences()[0].getCanvases(),
       view,
-    ).getCanvases(canvasIndex);
-}
-
+    ).getCanvases(canvasIndex),
+);
 
 /**
 * Return annotations for an array of targets
@@ -219,18 +237,38 @@ export function getThumbnailNavigationPosition(state, windowId) {
 
 /**
 * Return manifest title
-* @param {object} manifest
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @return {String}
 */
-export function getManifestTitle(manifest) {
-  return manifest
-    && manifest.manifestation
-    && manifest.manifestation.getLabel().map(label => label.value)[0];
+export const getManifestTitle = createSelector(
+  [getManifestoInstance],
+  manifest => manifest
+    && manifest.getLabel().map(label => label.value)[0],
+);
+
+/**
+ * Return the manifest titles for all open windows
+ * @param {object} state
+ * @return {object}
+ */
+export function getWindowTitles(state) {
+  const result = {};
+
+  Object.keys(state.windows).forEach((windowId) => {
+    result[windowId] = getManifestTitle(state, { windowId });
+  });
+
+  return result;
 }
 
 /** Return type of view in a certain window.
 * @param {object} state
-* @param {String} windowId
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @param {String}
 */
 export function getWindowViewType(state, windowId) {
@@ -239,14 +277,17 @@ export function getWindowViewType(state, windowId) {
 
 /**
 * Return manifest description
-* @param {object} manifest
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @return {String}
 */
-export function getManifestDescription(manifest) {
-  return manifest
-    && manifest.manifestation
-    && manifest.manifestation.getDescription().map(label => label.value)[0];
-}
+export const getManifestDescription = createSelector(
+  [getManifestoInstance],
+  manifest => manifest
+    && manifest.getDescription().map(label => label.value)[0],
+);
 
 /**
 * Return canvas label, or alternatively return the given index + 1 to be displayed
@@ -279,6 +320,19 @@ export function getDestructuredMetadata(iiifResource) {
     }))
   );
 }
+
+/**
+ * Return manifest metadata in a label / value structure
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @return {Array[Object]}
+ */
+export const getManifestMetadata = createSelector(
+  [getManifestoInstance],
+  manifest => manifest && getDestructuredMetadata(manifest),
+);
 
 /**
 * Return canvas description

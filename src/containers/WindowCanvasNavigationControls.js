@@ -11,7 +11,7 @@ import { WindowCanvasNavigationControls } from '../components/WindowCanvasNaviga
 const mapStateToProps = (state, { windowId }) => ({
   window: state.windows[windowId],
   canvasLabel: getCanvasLabel(
-    getSelectedCanvas(state, windowId),
+    getSelectedCanvas(state, { windowId }),
     state.windows[windowId].canvasIndex,
   ),
   visible: state.workspace.focusedWindowId === windowId,

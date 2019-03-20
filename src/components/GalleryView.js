@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
-import { getCanvasLabel, getManifestCanvases } from '../state/selectors';
+import { getCanvasLabel } from '../state/selectors';
 import { CanvasThumbnail } from './CanvasThumbnail';
 import ns from '../config/css-ns';
 
@@ -12,16 +12,6 @@ import ns from '../config/css-ns';
  * OSD and Navigation
  */
 export class GalleryView extends Component {
-  /**
-   * @param {Object} props
-   */
-  constructor(props) {
-    super(props);
-
-    const { manifest } = this.props;
-    this.canvases = manifest.manifestation.getSequences()[0].getCanvases();
-  }
-
   /**
    * container classes
    */
@@ -35,7 +25,7 @@ export class GalleryView extends Component {
    * Renders things
    */
   render() {
-    const { window, manifest, setCanvas } = this.props;
+    const { window, canvases, setCanvas } = this.props;
     return (
       <>
         <section
@@ -43,7 +33,7 @@ export class GalleryView extends Component {
           id={`${window.id}-gallery`}
         >
           {
-            getManifestCanvases(manifest).map((canvas) => {
+            canvases.map((canvas) => {
               const manifestoCanvas = new ManifestoCanvas(canvas);
               return (
                 <div
@@ -75,7 +65,7 @@ export class GalleryView extends Component {
 }
 
 GalleryView.propTypes = {
-  manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   setCanvas: PropTypes.func.isRequired,
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import manifesto from 'manifesto.js';
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryView } from '../../../src/components/GalleryView';
@@ -9,7 +9,7 @@ function createWrapper(props) {
   return shallow(
     <GalleryView
       window={{ id: '1234', canvasIndex: 0 }}
-      manifest={{ manifestation: manifesto.create(manifestJson) }}
+      canvases={manifesto.create(manifestJson).getSequences()[0].getCanvases()}
       setCanvas={() => {}}
       {...props}
     />,

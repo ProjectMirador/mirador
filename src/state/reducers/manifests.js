@@ -1,4 +1,3 @@
-import manifesto from 'manifesto.js';
 import omit from 'lodash/omit';
 import ActionTypes from '../actions/action-types';
 
@@ -22,7 +21,7 @@ export const manifestsReducer = (state = {}, action) => {
         [action.manifestId]: {
           ...state[action.manifestId],
           id: action.manifestId,
-          manifestation: manifesto.create(action.manifestJson),
+          json: action.manifestJson,
           isFetching: false,
           error: null, // Explicitly set the error to null in case this is a re-fetch
         },

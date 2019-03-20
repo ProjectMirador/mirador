@@ -14,14 +14,9 @@ export class WindowList extends Component {
    * @private
    */
   titleContent(window) {
-    const { manifests, t } = this.props;
+    const { titles, t } = this.props;
 
-    if (window.manifestId
-        && manifests[window.manifestId]
-        && manifests[window.manifestId].manifestation) {
-      return manifests[window.manifestId].manifestation.getLabel().map(label => label.value)[0];
-    }
-    return t('untitled');
+    return titles[window.id] || t('untitled');
   }
 
   /**
@@ -69,11 +64,12 @@ WindowList.propTypes = {
   handleClose: PropTypes.func.isRequired,
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  manifests: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  titles: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
 };
 
 WindowList.defaultProps = {
   anchorEl: null,
   t: key => key,
+  titles: {},
 };

@@ -4,7 +4,8 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend';
 import {
-  getManifestTitle, getManifestThumbnail, getManifestCanvases, getManifestLogo, getManifestProvider,
+  getManifestTitle, getManifestThumbnail, getManifestCanvases,
+  getManifestLogo, getManifestProvider,
 } from '../state/selectors';
 import * as actions from '../state/actions';
 import { ManifestListItem } from '../components/ManifestListItem';
@@ -14,14 +15,14 @@ const mapStateToProps = (state, { manifestId }) => {
   const manifest = state.manifests[manifestId];
 
   return {
-    ready: !!manifest.manifestation,
+    ready: !!manifest.json,
     error: manifest.error,
     isFetching: manifest.isFetching,
-    title: getManifestTitle(manifest),
-    thumbnail: getManifestThumbnail(manifest),
-    provider: getManifestProvider(manifest),
-    size: getManifestCanvases(manifest).length,
-    manifestLogo: getManifestLogo(state.manifests[manifestId]),
+    title: getManifestTitle(state, { manifestId }),
+    thumbnail: getManifestThumbnail(state, { manifestId }),
+    provider: manifest.provider || getManifestProvider(state, { manifestId }),
+    size: getManifestCanvases(state, { manifestId }).length,
+    manifestLogo: getManifestLogo(state, { manifestId }),
   };
 };
 

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as actions from '../state/actions';
 import { withPlugins } from '../extend';
 import { GalleryView } from '../components/GalleryView';
+import { getManifestCanvases } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -10,7 +11,9 @@ import { GalleryView } from '../components/GalleryView';
  * @private
  */
 const mapStateToProps = state => (
-  {}
+  {
+    canvases: getManifestCanvases(state, { windowId: window.id }),
+  }
 );
 
 /**
