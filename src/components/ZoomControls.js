@@ -3,7 +3,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircleOutlineSharp';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircleOutlineSharp';
 import PropTypes from 'prop-types';
 import RestoreZoomIcon from './icons/RestoreZoomIcon';
-import { MiradorMenuButton } from './MiradorMenuButton';
+import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 /**
  */

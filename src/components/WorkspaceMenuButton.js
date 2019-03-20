@@ -3,7 +3,7 @@ import MenuIcon from '@material-ui/icons/MenuSharp';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import WorkspaceMenu from '../containers/WorkspaceMenu';
-import { MiradorMenuButton } from './MiradorMenuButton';
+import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 /**
  */

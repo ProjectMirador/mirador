@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { ZoomControls } from '../../../src/components/ZoomControls';
 
 describe('ZoomControls', () => {
@@ -47,7 +48,7 @@ describe('ZoomControls', () => {
 
     it('renders a couple buttons', () => {
       expect(wrapper.find('div.zoom_controls').length).toBe(1);
-      expect(wrapper.find('MiradorMenuButton').length).toBe(3);
+      expect(wrapper.find(MiradorMenuButton).length).toBe(3);
     });
 
     it('has a zoom-in button', () => {

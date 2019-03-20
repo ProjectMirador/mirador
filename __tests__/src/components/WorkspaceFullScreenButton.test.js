@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { WorkspaceFullScreenButton } from '../../../src/components/WorkspaceFullScreenButton';
 
 /** */
@@ -21,7 +22,7 @@ describe('WorkspaceFullScreenButton', () => {
   it('renders without an error', () => {
     wrapper = createWrapper();
 
-    expect(wrapper.find('MiradorMenuButton').length).toBe(1);
+    expect(wrapper.find(MiradorMenuButton).length).toBe(1);
   });
 
   describe('when not in fullscreen', () => {
@@ -29,7 +30,7 @@ describe('WorkspaceFullScreenButton', () => {
     beforeAll(() => {
       setWorkspaceFullscreen = jest.fn();
       wrapper = createWrapper({ setWorkspaceFullscreen });
-      menuButton = wrapper.find('MiradorMenuButton');
+      menuButton = wrapper.find(MiradorMenuButton);
     });
 
     it('has the FullscreenIcon', () => {
@@ -51,7 +52,7 @@ describe('WorkspaceFullScreenButton', () => {
     beforeAll(() => {
       setWorkspaceFullscreen = jest.fn();
       wrapper = createWrapper({ setWorkspaceFullscreen, isFullscreenEnabled: true });
-      menuButton = wrapper.find('MiradorMenuButton');
+      menuButton = wrapper.find(MiradorMenuButton);
     });
 
     it('has the FullscreenExitIcon', () => {

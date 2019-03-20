@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import FullscreenIcon from '@material-ui/icons/FullscreenSharp';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExitSharp';
 import PropTypes from 'prop-types';
-import { MiradorMenuButton } from './MiradorMenuButton';
+import MiradorMenuButton from '../containers/MiradorMenuButton';
 /**
  */
 export class WorkspaceFullScreenButton extends Component {

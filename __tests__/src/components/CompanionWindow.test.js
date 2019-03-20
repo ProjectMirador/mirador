@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { CompanionWindow } from '../../../src/components/CompanionWindow';
 
 /** create wrapper */
@@ -27,7 +28,7 @@ describe('CompanionWindow', () => {
         position: 'left',
       });
 
-      const button = companionWindow.find('MiradorMenuButton');
+      const button = companionWindow.find(MiradorMenuButton);
       button.props().onClick(); // Trigger the onClick prop
       expect(updateCompanionWindow).toHaveBeenCalledTimes(1);
       expect(updateCompanionWindow).toHaveBeenCalledWith('x', 'abc123', { position: 'right' });
@@ -41,7 +42,7 @@ describe('CompanionWindow', () => {
         onCloseClick: removeCompanionWindowEvent,
       });
 
-      const button = companionWindow.find('MiradorMenuButton');
+      const button = companionWindow.find(MiradorMenuButton);
       button.props().onClick(); // Trigger the onClick prop
       expect(removeCompanionWindowEvent).toHaveBeenCalledTimes(1);
     });
@@ -53,7 +54,7 @@ describe('CompanionWindow', () => {
 
     expect(companionWindow.find('WithStyles(Paper).vertical').length).toBe(1);
 
-    const button = companionWindow.find('MiradorMenuButton').first();
+    const button = companionWindow.find(MiradorMenuButton).first();
     button.props().onClick(); // Trigger the onClick prop
     expect(updateCompanionWindow).toHaveBeenCalledTimes(1);
     expect(updateCompanionWindow).toHaveBeenCalledWith('x', 'abc123', { position: 'bottom' });
@@ -65,7 +66,7 @@ describe('CompanionWindow', () => {
 
     expect(companionWindow.find('WithStyles(Paper).horizontal').length).toBe(1);
 
-    const button = companionWindow.find('MiradorMenuButton').first();
+    const button = companionWindow.find(MiradorMenuButton).first();
     button.props().onClick(); // Trigger the onClick prop
     expect(updateCompanionWindow).toHaveBeenCalledTimes(1);
     expect(updateCompanionWindow).toHaveBeenCalledWith('x', 'abc123', { position: 'right' });

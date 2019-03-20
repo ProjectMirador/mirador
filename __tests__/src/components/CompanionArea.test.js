@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { CompanionArea } from '../../../src/components/CompanionArea';
 import CompanionWindowFactory from '../../../src/containers/CompanionWindowFactory';
 
@@ -45,13 +46,13 @@ describe('CompanionArea', () => {
       position: 'left', sideBarOpen: true, setCompanionAreaOpen, companionAreaOpen: false,
     });
 
-    expect(wrapper.find('MiradorMenuButton').length).toBe(1);
-    expect(wrapper.find('MiradorMenuButton').first().children('pure(ArrowRightSharpIcon)').length).toBe(1);
+    expect(wrapper.find(MiradorMenuButton).length).toBe(1);
+    expect(wrapper.find(MiradorMenuButton).first().children('pure(ArrowRightSharpIcon)').length).toBe(1);
 
     expect(wrapper.find('div.mirador-companion-windows').length).toBe(1);
     expect(wrapper.find('div.mirador-companion-windows').props().style.display).toBe('none');
 
-    wrapper.find('MiradorMenuButton').first().props().onClick(); // Trigger the onClick prop
+    wrapper.find(MiradorMenuButton).first().props().onClick(); // Trigger the onClick prop
 
     expect(setCompanionAreaOpen).toHaveBeenCalledWith('abc123', true);
   });
@@ -63,13 +64,13 @@ describe('CompanionArea', () => {
       position: 'left', sideBarOpen: true, setCompanionAreaOpen, companionAreaOpen: true,
     });
 
-    expect(wrapper.find('MiradorMenuButton').length).toBe(1);
-    expect(wrapper.find('MiradorMenuButton').first().children('pure(ArrowLeftSharpIcon)').length).toBe(1);
+    expect(wrapper.find(MiradorMenuButton).length).toBe(1);
+    expect(wrapper.find(MiradorMenuButton).first().children('pure(ArrowLeftSharpIcon)').length).toBe(1);
 
     expect(wrapper.find('div.mirador-companion-windows').length).toBe(1);
     expect(wrapper.find('div.mirador-companion-windows').props().style.display).toBe('flex');
 
-    wrapper.find('MiradorMenuButton').first().props().onClick(); // Trigger the onClick prop
+    wrapper.find(MiradorMenuButton).first().props().onClick(); // Trigger the onClick prop
 
     expect(setCompanionAreaOpen).toHaveBeenCalledWith('abc123', false);
   });
@@ -79,7 +80,7 @@ describe('CompanionArea', () => {
       position: 'left', sideBarOpen: false, setCompanionAreaOpen: () => {}, companionAreaOpen: true,
     });
 
-    expect(wrapper.find('MiradorMenuButton').length).toBe(0);
+    expect(wrapper.find(MiradorMenuButton).length).toBe(0);
   });
 
   it('does not show a toggle in other positions', () => {
@@ -87,6 +88,6 @@ describe('CompanionArea', () => {
       position: 'whatever', sideBarOpen: true, setCompanionAreaOpen: () => {}, companionAreaOpen: true,
     });
 
-    expect(wrapper.find('MiradorMenuButton').length).toBe(0);
+    expect(wrapper.find(MiradorMenuButton).length).toBe(0);
   });
 });

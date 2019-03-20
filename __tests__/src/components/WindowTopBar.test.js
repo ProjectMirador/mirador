@@ -7,7 +7,7 @@ import AppBar from '@material-ui/core/AppBar';
 
 import WindowTopMenuButton from '../../../src/containers/WindowTopMenuButton';
 import WindowTopBarButtons from '../../../src/containers/WindowTopBarButtons';
-import { MiradorMenuButton } from '../../../src/components/MiradorMenuButton';
+import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { WindowTopBar } from '../../../src/components/WindowTopBar';
 
 /** create wrapper */

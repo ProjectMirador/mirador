@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeftSharp';
 import ArrowRightIcon from '@material-ui/icons/ArrowRightSharp';
 import CompanionWindowFactory from '../containers/CompanionWindowFactory';
-import { MiradorMenuButton } from './MiradorMenuButton';
+import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
 
 /** */

@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import ns from '../config/css-ns';
 import ManifestForm from '../containers/ManifestForm';
 import ManifestListItem from '../containers/ManifestListItem';
-import { MiradorMenuButton } from './MiradorMenuButton';
+import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 /**
  * An area for managing manifests and adding them to workspace
