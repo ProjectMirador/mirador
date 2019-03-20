@@ -6,7 +6,7 @@ import {
 } from 'lodash';
 import ActionTypes from './action-types';
 import { importConfig } from './config';
-import { removeWindow, addWindow, updateWindow } from './window';
+import { addWindow, removeWindow, updateWindow } from './window';
 import { updateViewport } from './canvas';
 import { fetchManifest } from './manifest';
 
