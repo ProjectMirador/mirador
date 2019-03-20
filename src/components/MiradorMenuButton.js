@@ -28,15 +28,9 @@ export function MiradorMenuButton(props) {
       title={ariaLabel}
       {...TooltipProps}
     >
-      {/*
-        Wrap IconButton in span so it can receive mouse events
-        (e.g. show the tooltip) even if the IconButton is disabled
-      */}
-      <span className={wrapperClassName}>
-        <IconButton {...iconButtonProps}>
-          {children}
-        </IconButton>
-      </span>
+      <IconButton {...iconButtonProps}>
+        {children}
+      </IconButton>
     </Tooltip>
   );
 }
