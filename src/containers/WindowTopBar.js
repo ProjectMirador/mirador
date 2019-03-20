@@ -4,12 +4,12 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
-import { getWindowManifest, getManifestTitle } from '../state/selectors';
+import { getManifestoInstance, getManifestTitle } from '../state/selectors';
 import { WindowTopBar } from '../components/WindowTopBar';
 
 /** mapStateToProps */
 const mapStateToProps = (state, { windowId }) => ({
-  manifestTitle: getManifestTitle(getWindowManifest(state, windowId)),
+  manifestTitle: getManifestTitle(getManifestoInstance(state, { windowId })),
   maximized: state.windows[windowId].maximized,
   focused: state.workspace.focusedWindowId === windowId,
   allowClose: state.config.window.allowClose,

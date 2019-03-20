@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
 import { ViewerInfo } from '../components/ViewerInfo';
-import { getCanvasLabel, getWindowManifest, getManifestCanvases } from '../state/selectors';
+import { getCanvasLabel, getManifestoInstance, getManifestCanvases } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -12,7 +12,7 @@ import { getCanvasLabel, getWindowManifest, getManifestCanvases } from '../state
  */
 const mapStateToProps = (state, props) => {
   const { windowId } = props;
-  const manifest = getWindowManifest(state, windowId);
+  const manifest = getManifestoInstance(state, { windowId });
   const canvases = getManifestCanvases(manifest);
   const { canvasIndex } = state.windows[windowId];
 

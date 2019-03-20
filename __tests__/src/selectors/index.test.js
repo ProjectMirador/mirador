@@ -12,7 +12,7 @@ import {
   getLanguagesFromConfigWithCurrent,
   getSelectedCanvas,
   getSelectedCanvases,
-  getWindowManifest,
+  getManifest,
   getManifestLogo,
   getManifestCanvases,
   getManifestDescription,
@@ -32,7 +32,7 @@ import Annotation from '../../../src/lib/Annotation';
 import AnnotationResource from '../../../src/lib/AnnotationResource';
 
 
-describe('getWindowManifest()', () => {
+describe('getManifest()', () => {
   const state = {
     windows: {
       a: { id: 'a', manifestId: 'x' },
@@ -44,59 +44,64 @@ describe('getWindowManifest()', () => {
     },
   };
 
+  it('should return the manifest of a certain id', () => {
+    const received = getManifest(state, { manifestId: 'x' });
+    const expected = { id: 'x' };
+    expect(received).toEqual(expected);
+  });
+
+
   it('should return the manifest of a certain window', () => {
-    const received = getWindowManifest(state, 'a');
+    const received = getManifest(state, { windowId: 'a' });
     const expected = { id: 'x' };
     expect(received).toEqual(expected);
   });
 
   it('should return undefined if window doesnt exist', () => {
-    const received = getWindowManifest(state, 'unknown');
+    const received = getManifest(state, { windowId: 'unknown' });
     expect(received).toBeUndefined();
   });
 
   it('should return undefined if window has no manifest id', () => {
-    const received = getWindowManifest(state, 'c');
+    const received = getManifest(state, { windowId: 'c' });
     expect(received).toBeUndefined();
   });
 
   it('should return undefined if manifest does not exist', () => {
-    const received = getWindowManifest(state, 'b');
+    const received = getManifest(state, { windowId: 'b' });
     expect(received).toBeUndefined();
   });
 });
 
 describe('getManifestLogo()', () => {
   it('should return manifest logo id', () => {
-    const received = getManifestLogo({ manifests: { x: { manifesto: manifesto.create(manifestFixture001) } } }, { manifestId: 'x' });
+    const received = getManifestLogo({ manifests: { x: { manifestation: manifesto.create(manifestFixture001) } } }, { manifestId: 'x' });
     expect(received).toEqual(manifestFixture001.logo['@id']);
   });
 
   it('should return null if manifest has no logo', () => {
-    const received = getManifestLogo({ manifests: { x: { manifesto: manifesto.create({}) } } }, { manifestId: 'x' });
+    const received = getManifestLogo({ manifests: { x: { manifestation: manifesto.create({}) } } }, { manifestId: 'x' });
     expect(received).toBeNull();
   });
 });
 
 describe('getManifestThumbnail()', () => {
   it('should return manifest thumbnail id', () => {
-    const manifest = { manifestation: manifesto.create(manifestFixture001) };
+    const manifest = manifesto.create(manifestFixture001);
     const received = getManifestThumbnail(manifest);
     expect(received).toEqual(manifestFixture001.thumbnail['@id']);
   });
 
   it('returns the first canvas thumbnail id', () => {
     const manifest = {
-      manifestation: {
-        getThumbnail: () => (null),
-        getSequences: () => [
-          {
-            getCanvases: () => [
-              { getThumbnail: () => ({ id: 'xyz' }) },
-            ],
-          },
-        ],
-      },
+      getThumbnail: () => (null),
+      getSequences: () => [
+        {
+          getCanvases: () => [
+            { getThumbnail: () => ({ id: 'xyz' }) },
+          ],
+        },
+      ],
     };
 
     const received = getManifestThumbnail(manifest);
@@ -104,13 +109,13 @@ describe('getManifestThumbnail()', () => {
   });
 
   it('returns a thumbnail sized image url from the first canvas', () => {
-    const manifest = { manifestation: manifesto.create(manifestFixture019) };
+    const manifest = manifesto.create(manifestFixture019);
     const received = getManifestThumbnail(manifest);
     expect(received).toEqual('https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/,80/0/default.jpg');
   });
 
   it('should return null if manifest has no thumbnail', () => {
-    const manifest = { manifestation: manifesto.create({}) };
+    const manifest = manifesto.create({});
     const received = getManifestThumbnail(manifest);
     expect(received).toBeNull();
   });
@@ -124,7 +129,7 @@ describe('getManifestCanvases', () => {
   });
 
   it('returns canvases from the manifest', () => {
-    const manifest = { manifestation: manifesto.create(manifestFixture001) };
+    const manifest = manifesto.create(manifestFixture001);
     const received = getManifestCanvases(manifest);
     expect(received.length).toBe(1);
     expect(received[0].id).toBe('https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json');
@@ -160,19 +165,13 @@ describe('getThumbnailNavigationPosition', () => {
 
 describe('getManifestTitle', () => {
   it('should return manifest title', () => {
-    const manifest = { manifestation: manifesto.create(manifestFixture001) };
+    const manifest = manifesto.create(manifestFixture001);
     const received = getManifestTitle(manifest);
     expect(received).toBe('Bodleian Library Human Freaks 2 (33)');
   });
 
   it('should return undefined if manifest undefined', () => {
     const received = getManifestTitle(undefined);
-    expect(received).toBeUndefined();
-  });
-
-  it('should return undefined if no manifestation', () => {
-    const manifest = {};
-    const received = getManifestTitle(manifest);
     expect(received).toBeUndefined();
   });
 });
@@ -203,7 +202,7 @@ describe('getWindowViewType', () => {
 
 describe('getManifestDescription', () => {
   it('should return manifest description', () => {
-    const manifest = { manifestation: manifesto.create(manifestFixture001) };
+    const manifest = manifesto.create(manifestFixture001);
     const received = getManifestDescription(manifest);
     expect(received).toBe('[Handbill of Mr. Becket, [1787] ]');
   });
@@ -212,29 +211,17 @@ describe('getManifestDescription', () => {
     const received = getManifestDescription(undefined);
     expect(received).toBeUndefined();
   });
-
-  it('should return undefined if no manifestation', () => {
-    const manifest = {};
-    const received = getManifestDescription(manifest);
-    expect(received).toBeUndefined();
-  });
 });
 
 describe('getManifestProvider', () => {
   it('should return manifest provider label', () => {
-    const manifest = { manifestation: manifesto.create(manifestFixtureWithAProvider) };
+    const manifest = manifesto.create(manifestFixtureWithAProvider);
     const received = getManifestProvider(manifest);
     expect(received).toBe('Example Organization');
   });
 
   it('should return undefined if manifest undefined', () => {
     const received = getManifestProvider(undefined);
-    expect(received).toBeUndefined();
-  });
-
-  it('should return undefined if no manifestation', () => {
-    const manifest = {};
-    const received = getManifestProvider(manifest);
     expect(received).toBeUndefined();
   });
 });
