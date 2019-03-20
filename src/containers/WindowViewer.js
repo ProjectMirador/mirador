@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import { WindowViewer } from '../components/WindowViewer';
+import { getManifestCanvases } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -12,6 +13,7 @@ import { WindowViewer } from '../components/WindowViewer';
 const mapStateToProps = (state, { window }) => (
   {
     infoResponses: state.infoResponses,
+    canvases: getManifestCanvases(state, { windowId: window.id }),
   }
 );
 

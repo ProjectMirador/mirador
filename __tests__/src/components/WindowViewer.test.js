@@ -8,10 +8,7 @@ import fixture from '../../fixtures/version-2/019.json';
 import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
 import otherContentFixture from '../../fixtures/version-2/299843.json';
 
-let mockManifest = {
-  id: 123,
-  manifestation: manifesto.create(fixture),
-};
+let canvases = manifesto.create(fixture).getSequences()[0].getCanvases();
 
 let mockWindow = {
   canvasIndex: 0,
@@ -26,7 +23,7 @@ function createWrapper(props) {
       infoResponses={{}}
       fetchInfoResponse={() => {}}
       fetchAnnotation={() => {}}
-      manifest={mockManifest}
+      canvases={canvases}
       window={mockWindow}
       {...props}
     />,
@@ -130,22 +127,19 @@ describe('WindowViewer', () => {
     it('does not call fetchInfoResponse for a canvas that has no images', () => {
       const mockFnCanvas0 = jest.fn();
       const mockFnCanvas2 = jest.fn();
-      mockManifest = {
-        id: 123,
-        manifestation: manifesto.create(emptyCanvasFixture),
-      };
+      canvases = manifesto.create(emptyCanvasFixture).getSequences()[0].getCanvases();
       mockWindow = {
         canvasIndex: 0,
         view: 'single',
       };
       wrapper = createWrapper(
-        { manifest: mockManifest, fetchInfoResponse: mockFnCanvas0, window: mockWindow },
+        { canvases, fetchInfoResponse: mockFnCanvas0, window: mockWindow },
       );
       expect(mockFnCanvas0).toHaveBeenCalledTimes(1);
 
       wrapper = createWrapper(
         {
-          manifest: mockManifest,
+          canvases,
           fetchInfoResponse: mockFnCanvas2,
           window: { canvasIndex: 2, view: 'single' },
         },
@@ -154,12 +148,9 @@ describe('WindowViewer', () => {
     });
     it('calls fetchAnnotation when otherContent is present', () => {
       const mockFnAnno = jest.fn();
-      mockManifest = {
-        id: 123,
-        manifestation: manifesto.create(otherContentFixture),
-      };
+      canvases = manifesto.create(otherContentFixture).getSequences()[0].getCanvases();
       wrapper = createWrapper(
-        { manifest: mockManifest, fetchAnnotation: mockFnAnno },
+        { canvases, fetchAnnotation: mockFnAnno },
       );
       expect(mockFnAnno).toHaveBeenCalledTimes(1);
     });
@@ -168,16 +159,13 @@ describe('WindowViewer', () => {
   describe('componentDidUpdate', () => {
     it('does not call fetchInfoResponse for a canvas that has no images', () => {
       const mockFn = jest.fn();
-      mockManifest = {
-        id: 123,
-        manifestation: manifesto.create(emptyCanvasFixture),
-      };
+      canvases = manifesto.create(emptyCanvasFixture).getSequences()[0].getCanvases();
       mockWindow = {
         canvasIndex: 2,
         view: 'single',
       };
       wrapper = createWrapper(
-        { manifest: mockManifest, fetchInfoResponse: mockFn, window: mockWindow },
+        { canvases, fetchInfoResponse: mockFn, window: mockWindow },
       );
 
       wrapper.setProps({ window: { canvasIndex: 3, view: 'single' } });

@@ -223,6 +223,17 @@ export const getManifestTitle = createSelector(
     && manifest.getLabel().map(label => label.value)[0],
 );
 
+/** */
+export function getWindowTitles(state) {
+  const result = {};
+
+  Object.keys(state.windows).forEach((windowId) => {
+    result[windowId] = getManifestTitle(state, { windowId });
+  });
+
+  return result;
+}
+
 /** Return type of view in a certain window.
 * @param {object} state
 * @param {String} windowId

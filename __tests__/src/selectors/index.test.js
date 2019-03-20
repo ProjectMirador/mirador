@@ -28,6 +28,7 @@ import {
   getIdAndLabelOfCanvases,
   getCompanionWindowsOfWindow,
   getManifestMetadata,
+  getWindowTitles,
 } from '../../../src/state/selectors';
 import Annotation from '../../../src/lib/Annotation';
 import AnnotationResource from '../../../src/lib/AnnotationResource';
@@ -181,6 +182,29 @@ describe('getManifestTitle', () => {
   it('should return undefined if manifest undefined', () => {
     const received = getManifestTitle({ manifests: {} }, { manifestId: 'x' });
     expect(received).toBeUndefined();
+  });
+});
+
+describe('getWindowTitles', () => {
+  it('should return manifest titles for the open windows', () => {
+    const state = {
+      windows: {
+        a: { manifestId: 'amanifest' },
+        b: { manifestId: 'bmanifest' },
+      },
+      manifests: {
+        amanifest: { manifestation: manifesto.create(manifestFixture001) },
+        bmanifest: { manifestation: manifesto.create(manifestFixture002) },
+        cmanifest: { manifestation: manifesto.create(manifestFixture019) },
+      },
+    };
+
+    const received = getWindowTitles(state);
+
+    expect(received).toEqual({
+      a: 'Bodleian Library Human Freaks 2 (33)',
+      b: 'Test 2 Manifest: Metadata Pairs',
+    });
   });
 });
 

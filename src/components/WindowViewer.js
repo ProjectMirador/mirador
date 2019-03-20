@@ -16,8 +16,8 @@ export class WindowViewer extends Component {
   constructor(props) {
     super(props);
 
-    const { manifest, window } = this.props;
-    this.canvases = manifest.manifestation.getSequences()[0].getCanvases();
+    const { canvases, window } = this.props;
+    this.canvases = canvases;
     this.canvasGroupings = new CanvasGroupings(this.canvases, window.view);
   }
 
@@ -137,9 +137,9 @@ export class WindowViewer extends Component {
 }
 
 WindowViewer.propTypes = {
+  canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   infoResponses: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   fetchAnnotation: PropTypes.func.isRequired,
   fetchInfoResponse: PropTypes.func.isRequired,
-  manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };

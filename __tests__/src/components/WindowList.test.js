@@ -8,19 +8,19 @@ describe('WindowList', () => {
   let wrapper;
   let handleClose;
   let focusWindow;
-  let manifests;
+  let titles;
   let windows;
   beforeEach(() => {
     handleClose = jest.fn();
     focusWindow = jest.fn();
-    manifests = {};
+    titles = {};
     windows = {};
 
     wrapper = shallow(
       <WindowList
         containerId="mirador"
         anchorEl={{}}
-        manifests={manifests}
+        titles={titles}
         windows={windows}
         handleClose={handleClose}
         focusWindow={focusWindow}
@@ -40,7 +40,7 @@ describe('WindowList', () => {
         <WindowList
           containerId="mirador"
           anchorEl={{}}
-          manifests={manifests}
+          titles={titles}
           windows={windows}
           handleClose={handleClose}
           focusWindow={focusWindow}
@@ -63,13 +63,13 @@ describe('WindowList', () => {
   describe('with a window with a matching manifest', () => {
     beforeEach(() => {
       windows = { xyz: { id: 'xyz', manifestId: 'abc' } };
-      manifests = { abc: { manifestation: { getLabel: jest.fn(() => [{ value: 'Some title' }]) } } };
+      titles = { xyz: 'Some title' };
 
       wrapper = shallow(
         <WindowList
           containerId="mirador"
           anchorEl={{}}
-          manifests={manifests}
+          titles={titles}
           windows={windows}
           handleClose={handleClose}
           focusWindow={focusWindow}
@@ -92,13 +92,13 @@ describe('WindowList', () => {
         zyx: { id: 'zyx', manifestId: '123' },
         xyz: { id: 'xyz', manifestId: 'abc' },
       };
-      manifests = { abc: { manifestation: { getLabel: jest.fn(() => [{ value: 'Some title' }]) } } };
+      titles = { xyz: 'Some title' };
 
       wrapper = shallow(
         <WindowList
           containerId="mirador"
           anchorEl={{}}
-          manifests={manifests}
+          titles={titles}
           windows={windows}
           handleClose={handleClose}
           focusWindow={focusWindow}

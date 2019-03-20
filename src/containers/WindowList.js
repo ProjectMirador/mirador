@@ -3,6 +3,7 @@ import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
+import { getWindowTitles } from '../state/selectors';
 import { WindowList } from '../components/WindowList';
 
 /**
@@ -22,8 +23,8 @@ const mapDispatchToProps = {
 const mapStateToProps = state => (
   {
     containerId: state.config.id,
+    titles: getWindowTitles(state),
     windows: state.windows,
-    manifests: state.manifests,
   }
 );
 
