@@ -1,22 +1,12 @@
+import { createSelector } from 'reselect';
 import filter from 'lodash/filter';
 import flatten from 'lodash/flatten';
 import Annotation from '../../lib/Annotation';
+import { getCanvas } from './canvases';
 
 export * from './canvases';
 export * from './manifests';
 export * from './windows';
-
-/**
-* Return ids and labels of canvases
-* @ param {Array} canvases
-* @return {Array} - [ {id: 'id', label: 'label' }, ... ]
-*/
-export function getIdAndLabelOfCanvases(canvases) {
-  return canvases.map((canvas, index) => ({
-    id: canvas.id,
-    label: getCanvasLabel(canvas, index),
-  }));
-}
 
 /**
 * Return annotations for an array of targets
@@ -76,18 +66,25 @@ export function getIdAndContentOfResources(resources) {
   }));
 }
 
+/** */
+function getWindow(state, { windowId }) {
+  return state.windows && state.windows[windowId];
+}
+
 /** Return position of thumbnail navigation in a certain window.
 * @param {object} state
 * @param {String} windowId
 * @param {String}
 */
-export function getThumbnailNavigationPosition(state, windowId) {
-  return state.windows[windowId]
-    && state.windows[windowId].thumbnailNavigationId
-    && state.companionWindows[state.windows[windowId].thumbnailNavigationId]
-    && state.companionWindows[state.windows[windowId].thumbnailNavigationId].position;
-}
-
+export const getThumbnailNavigationPosition = createSelector(
+  [
+    getWindow,
+    state => state.companionWindows,
+  ],
+  (window, companionWindows) => window
+    && companionWindows[window.thumbnailNavigationId]
+    && companionWindows[window.thumbnailNavigationId].position,
+);
 
 /** Return type of view in a certain window.
 * @param {object} state
@@ -96,34 +93,54 @@ export function getThumbnailNavigationPosition(state, windowId) {
 * @param {string} props.windowId
 * @param {String}
 */
-export function getWindowViewType(state, windowId) {
-  return state.windows[windowId] && state.windows[windowId].view;
-}
+export const getWindowViewType = createSelector(
+  [getWindow],
+  window => window && window.view,
+);
 
 /**
 * Return canvas label, or alternatively return the given index + 1 to be displayed
 * @param {object} canvas
 * @return {String|Integer}
 */
-export function getCanvasLabel(canvas, canvasIndex) {
-  if (!canvas) {
-    return undefined;
-  }
-  if (canvas.getLabel().length > 0) {
-    return canvas.getLabel().map(label => label.value)[0];
-  }
-  return String(canvasIndex + 1);
-}
+export const getCanvasLabel = createSelector(
+  [getCanvas],
+  canvas => (canvas && (
+    canvas.getLabel().length > 0
+      ? canvas.getLabel().map(label => label.value)[0]
+      : String(canvas.index + 1)
+  )),
+);
 
 /**
 * Return canvas description
 * @param {object} canvas
 * @param {String}
 */
-export function getCanvasDescription(canvas) {
-  return canvas
-    && canvas.getProperty('description');
-}
+export const getCanvasDescription = createSelector(
+  [getCanvas],
+  canvas => canvas && canvas.getProperty('description'),
+);
+
+/**
+* Return compantion window ids from a window
+* @param {String} windowId
+* @return {Array}
+*/
+export const getCompanionWindowIds = createSelector(
+  [getWindow],
+  window => (window && window.companionWindowIds) || [],
+);
+
+/**
+ * Return companion windows of a window
+ * @param {String} windowId
+ * @return {Array}
+ */
+export const getCompanionWindowsOfWindow = createSelector(
+  [getCompanionWindowIds, state => state.companionWindows],
+  (companionWindowIds, companionWindows) => companionWindowIds.map(id => companionWindows[id]),
+);
 
 /**
 * Return the companion window string from state in a given windowId and position
@@ -132,32 +149,10 @@ export function getCanvasDescription(canvas) {
 * @param {String} position
 * @return {String}
 */
-export function getCompanionWindowForPosition(state, windowId, position) {
-  return ((state.windows[windowId] || {}).companionWindowIds || []).map(key => (
-    state.companionWindows[key]
-  )).find(cw => (
-    cw.position === position
-  ));
-}
-
-/**
-* Return compantion window ids from a window
-* @param {String} windowId
-* @return {Array}
-*/
-export function getCompanionWindowIds(state, windowId) {
-  return state.windows[windowId].companionWindowIds;
-}
-
-/**
- * Return companion windows of a window
- * @param {String} windowId
- * @return {Array}
- */
-export function getCompanionWindowsOfWindow(state, windowId) {
-  return getCompanionWindowIds(state, windowId)
-    .map(id => state.companionWindows[id]);
-}
+export const getCompanionWindowForPosition = createSelector(
+  [getCompanionWindowsOfWindow, (state, { position }) => position],
+  (companionWindows, position) => companionWindows.find(cw => cw.position === position),
+);
 
 /**
 * Return languages from config (in state) and indicate which is currently set

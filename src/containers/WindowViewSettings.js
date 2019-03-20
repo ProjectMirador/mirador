@@ -19,9 +19,9 @@ const mapDispatchToProps = { setWindowViewType: actions.setWindowViewType };
  * @memberof WindowViewer
  * @private
  */
-const mapStateToProps = (state, props) => (
+const mapStateToProps = (state, { windowId }) => (
   {
-    windowViewType: getWindowViewType(state, props.windowId),
+    windowViewType: getWindowViewType(state, { windowId }),
   }
 );
 

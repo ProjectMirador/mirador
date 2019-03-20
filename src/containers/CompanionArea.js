@@ -10,7 +10,7 @@ import { CompanionArea } from '../components/CompanionArea';
 /** */
 const mapStateToProps = (state, { windowId, position }) => ({
   sideBarOpen: state.windows[windowId].sideBarOpen,
-  companionWindows: getCompanionWindowsOfWindow(state, windowId)
+  companionWindows: getCompanionWindowsOfWindow(state, { windowId })
     .filter(cw => cw.position === position),
   companionAreaOpen: position !== 'left' || state.windows[windowId].companionAreaOpen,
 });

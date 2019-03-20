@@ -10,7 +10,6 @@ import Select from '@material-ui/core/Select';
 import { CanvasThumbnail } from './CanvasThumbnail';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
 import CompanionWindow from '../containers/CompanionWindow';
-import { getIdAndLabelOfCanvases } from '../state/selectors';
 
 /**
  * a panel showing the canvases for a given manifest
@@ -22,6 +21,16 @@ export class WindowSideBarCanvasPanel extends Component {
 
     this.state = { variant: 'thumbnail' };
     this.handleVariantChange = this.handleVariantChange.bind(this);
+  }
+
+  /** @private */
+  getIdAndLabelOfCanvases() {
+    const { canvases } = this.props;
+
+    return canvases.map((canvas, index) => ({
+      id: canvas.id,
+      label: new ManifestoCanvas(canvas).getLabel(),
+    }));
   }
 
   /** */
@@ -88,7 +97,7 @@ export class WindowSideBarCanvasPanel extends Component {
     const { variant } = this.state;
 
 
-    const canvasesIdAndLabel = getIdAndLabelOfCanvases(canvases);
+    const canvasesIdAndLabel = this.getIdAndLabelOfCanvases(canvases);
     return (
       <CompanionWindow
         title={t('canvasIndex')}

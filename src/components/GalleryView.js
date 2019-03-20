@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
-import { getCanvasLabel } from '../state/selectors';
 import { CanvasThumbnail } from './CanvasThumbnail';
 import ns from '../config/css-ns';
 
@@ -52,7 +51,7 @@ export class GalleryView extends Component {
                     aspectRatio={manifestoCanvas.aspectRatio}
                   />
                   <Typography variant="caption">
-                    {getCanvasLabel(canvas, canvas.index)}
+                    {manifestoCanvas.getLabel()}
                   </Typography>
                 </div>
               );

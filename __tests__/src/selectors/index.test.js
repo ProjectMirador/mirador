@@ -1,25 +1,17 @@
-import manifesto from 'manifesto.js';
 import manifestFixture001 from '../../fixtures/version-2/001.json';
-import manifestFixture002 from '../../fixtures/version-2/002.json';
-import manifestFixture019 from '../../fixtures/version-2/019.json';
-import manifestFixtureWithAProvider from '../../fixtures/version-3/with_a_provider.json';
 import {
   getCanvasLabel,
   getCompanionWindowForPosition,
   getAnnotationResourcesByMotivation,
   getIdAndContentOfResources,
   getLanguagesFromConfigWithCurrent,
-  getSelectedCanvas,
-  getSelectedCanvases,
   getThumbnailNavigationPosition,
   getSelectedAnnotationIds,
   getSelectedTargetAnnotations,
   getSelectedTargetsAnnotations,
   getSelectedTargetAnnotationResources,
   getWindowViewType,
-  getIdAndLabelOfCanvases,
   getCompanionWindowsOfWindow,
-  getWindowTitles,
 } from '../../../src/state/selectors';
 import Annotation from '../../../src/lib/Annotation';
 import AnnotationResource from '../../../src/lib/AnnotationResource';
@@ -36,17 +28,17 @@ describe('getThumbnailNavigationPosition', () => {
   };
 
   it('should return thumbnail navigation position if window exists', () => {
-    const received = getThumbnailNavigationPosition(state, 'a');
+    const received = getThumbnailNavigationPosition(state, { windowId: 'a' });
     expect(received).toBe('bottom');
   });
 
   it('should return undefined if position does not exist in window', () => {
-    const received = getThumbnailNavigationPosition(state, 'b');
+    const received = getThumbnailNavigationPosition(state, { windowId: 'b' });
     expect(received).toBeUndefined();
   });
 
   it('should return undefined if window does not exists', () => {
-    const received = getThumbnailNavigationPosition(state, 'c');
+    const received = getThumbnailNavigationPosition(state, { windowId: 'c' });
     expect(received).toBeUndefined();
   });
 });
@@ -60,40 +52,53 @@ describe('getWindowViewType', () => {
   };
 
   it('should return view type if window exists', () => {
-    const received = getWindowViewType(state, 'a');
+    const received = getWindowViewType(state, { windowId: 'a' });
     expect(received).toBe('single');
   });
 
   it('should return undefined if view type does not exist in window', () => {
-    const received = getWindowViewType(state, 'b');
+    const received = getWindowViewType(state, { windowId: 'b' });
     expect(received).toBeUndefined();
   });
 
   it('should return undefined if window does not exists', () => {
-    const received = getWindowViewType(state, 'c');
+    const received = getWindowViewType(state, { windowId: 'c' });
     expect(received).toBeUndefined();
   });
 });
 
 describe('getCanvasLabel', () => {
   it('should return label of the canvas', () => {
-    const canvas = manifesto
-      .create(manifestFixture001)
-      .getSequences()[0]
-      .getCanvases()[0];
-
-    const received = getCanvasLabel(canvas);
+    const state = { manifests: { a: { json: manifestFixture001 } } };
+    const received = getCanvasLabel(state, { manifestId: 'a', canvasIndex: 0 });
     expect(received).toBe('Whole Page');
   });
 
   it('should return undefined if the canvas is undefined', () => {
-    expect(getCanvasLabel(undefined)).toBeUndefined();
+    const state = { manifests: { } };
+    expect(getCanvasLabel(state, { manifestId: 'b', canvasIndex: 0 })).toBeUndefined();
   });
 
   it('should return the canvas index as (+1) as string if no label given', () => {
-    const canvas = { getLabel: () => [] };
-    const received = getCanvasLabel(canvas, 42);
-    expect(received).toBe('43');
+    const manifest = {
+      '@context': 'http://iiif.io/api/presentation/2/context.json',
+      '@id':
+       'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+      '@type': 'sc:Manifest',
+      sequences: [
+        {
+          canvases: [
+            {
+              '@id': 'some-canvas-without-a-label',
+            },
+          ],
+        },
+      ],
+    };
+
+    const state = { manifests: { a: { json: manifest } } };
+    const received = getCanvasLabel(state, { manifestId: 'a', canvasIndex: 0 });
+    expect(received).toBe('1');
   });
 });
 
@@ -202,36 +207,6 @@ describe('getIdAndContentOfResources', () => {
   });
 });
 
-describe('getIdAndLabelOfCanvases', () => {
-  it('should return id and label of each canvas in manifest', () => {
-    const canvases = manifesto
-      .create(manifestFixture019)
-      .getSequences()[0]
-      .getCanvases();
-    const received = getIdAndLabelOfCanvases(canvases);
-    const expected = [
-      {
-        id: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
-        label: 'Test 19 Canvas: 1',
-      },
-      {
-        id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
-        label: 'Image 1',
-      },
-      {
-        id: 'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
-        label: 'Image 2',
-      },
-    ];
-    expect(received).toEqual(expected);
-  });
-
-  it('should return empty array if canvas if empty', () => {
-    const received = getIdAndLabelOfCanvases([]);
-    expect(received).toEqual([]);
-  });
-});
-
 describe('getCompanionWindowForPosition', () => {
   const state = {
     windows: { a: { companionWindowIds: ['abc'] } },
@@ -242,19 +217,19 @@ describe('getCompanionWindowForPosition', () => {
   };
 
   it('the companion window type based on the given position', () => {
-    const received = getCompanionWindowForPosition(state, 'a', 'right');
+    const received = getCompanionWindowForPosition(state, { windowId: 'a', position: 'right' });
 
     expect(received.id).toEqual('abc');
   });
 
   it('returns undefined if the given window does not exist', () => {
-    const received = getCompanionWindowForPosition(state, 'c', 'right');
+    const received = getCompanionWindowForPosition(state, { windowId: 'c', position: 'right' });
 
     expect(received).toBeUndefined();
   });
 
   it('returns undefined if a companion window at the given position does not exist', () => {
-    const received = getCompanionWindowForPosition(state, 'a', 'bottom');
+    const received = getCompanionWindowForPosition(state, { windowId: 'a', position: 'bottom' });
 
     expect(received).toBeUndefined();
   });
@@ -295,7 +270,7 @@ describe('getCompanionWindowsOfWindow', () => {
   };
 
   it('should return companion windows for a given window id', () => {
-    const received = getCompanionWindowsOfWindow(state, 'abc123');
+    const received = getCompanionWindowsOfWindow(state, { windowId: 'abc123' });
 
     expect(received).toEqual([
       { id: 'foo', content: 'info' },
