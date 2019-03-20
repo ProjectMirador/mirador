@@ -6,7 +6,7 @@ import ManifestoCanvas from '../../lib/ManifestoCanvas';
 export function getManifest(state, { manifestId, windowId }) {
   return state.manifests[
     manifestId
-    || (windowId && state.windows[windowId] && state.windows[windowId].manifestId)
+    || (windowId && state.windows && state.windows[windowId] && state.windows[windowId].manifestId)
   ];
 }
 

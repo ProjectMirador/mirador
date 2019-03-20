@@ -3,17 +3,13 @@ import { compose } from 'redux';
 import { withPlugins } from '../extend';
 import {
   getCanvasLabel,
-  getSelectedCanvas,
 } from '../state/selectors';
 import { WindowCanvasNavigationControls } from '../components/WindowCanvasNavigationControls';
 
 /** */
 const mapStateToProps = (state, { windowId }) => ({
   window: state.windows[windowId],
-  canvasLabel: getCanvasLabel(
-    getSelectedCanvas(state, { windowId }),
-    state.windows[windowId].canvasIndex,
-  ),
+  canvasLabel: getCanvasLabel(state, { windowId, canvasIndex: 'selected' }),
   visible: state.workspace.focusedWindowId === windowId,
 });
 

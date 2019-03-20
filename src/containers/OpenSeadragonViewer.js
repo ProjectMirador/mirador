@@ -9,7 +9,6 @@ import * as actions from '../state/actions';
 import {
   getCanvasLabel,
   getSelectedAnnotationIds,
-  getSelectedCanvas,
   getSelectedTargetAnnotationResources,
 } from '../state/selectors';
 
@@ -22,10 +21,7 @@ const mapStateToProps = ({
   viewers, windows, manifests, annotations,
 }, { windowId, currentCanvases }) => ({
   viewer: viewers[windowId],
-  label: getCanvasLabel(
-    getSelectedCanvas({ windows, manifests }, { windowId }),
-    windows[windowId].canvasIndex,
-  ),
+  label: getCanvasLabel({ windows, manifests }, { windowId, canvasIndex: 'selected' }),
   annotations: getSelectedTargetAnnotationResources(
     { annotations },
     currentCanvases.map(c => c.id),

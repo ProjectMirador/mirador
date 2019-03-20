@@ -80,6 +80,15 @@ export default class ManifestoCanvas {
   }
 
   /**
+   * Get the canvas label
+   */
+  getLabel() {
+    return this.canvas.getLabel().length > 0
+      ? this.canvas.getLabel().map(label => label.value)[0]
+      : String(this.canvas.index + 1);
+  }
+
+  /**
    * Creates a canonical image request for a thumb
    * @param {Number} height
    */

@@ -2,22 +2,11 @@ import { createSelector } from 'reselect';
 import filter from 'lodash/filter';
 import flatten from 'lodash/flatten';
 import Annotation from '../../lib/Annotation';
+import { getCanvas } from './canvases';
 
 export * from './canvases';
 export * from './manifests';
 export * from './windows';
-
-/**
-* Return ids and labels of canvases
-* @ param {Array} canvases
-* @return {Array} - [ {id: 'id', label: 'label' }, ... ]
-*/
-export function getIdAndLabelOfCanvases(canvases) {
-  return canvases.map((canvas, index) => ({
-    id: canvas.id,
-    label: getCanvasLabel(canvas, index),
-  }));
-}
 
 /**
 * Return annotations for an array of targets
@@ -114,25 +103,24 @@ export const getWindowViewType = createSelector(
 * @param {object} canvas
 * @return {String|Integer}
 */
-export function getCanvasLabel(canvas, canvasIndex) {
-  if (!canvas) {
-    return undefined;
-  }
-  if (canvas.getLabel().length > 0) {
-    return canvas.getLabel().map(label => label.value)[0];
-  }
-  return String(canvasIndex + 1);
-}
+export const getCanvasLabel = createSelector(
+  [getCanvas],
+  canvas => (canvas && (
+    canvas.getLabel().length > 0
+      ? canvas.getLabel().map(label => label.value)[0]
+      : String(canvas.index + 1)
+  )),
+);
 
 /**
 * Return canvas description
 * @param {object} canvas
 * @param {String}
 */
-export function getCanvasDescription(canvas) {
-  return canvas
-    && canvas.getProperty('description');
-}
+export const getCanvasDescription = createSelector(
+  [getCanvas],
+  canvas => canvas && canvas.getProperty('description'),
+);
 
 /**
 * Return compantion window ids from a window
