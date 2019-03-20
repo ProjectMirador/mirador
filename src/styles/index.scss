@@ -77,10 +77,8 @@
 
   &-workspace-add {
     height: 100%;
-    overflow: auto;
-    padding-left: 6px;
-    padding-right: 6px;
-    padding-top: 92px;
+    overflow: hidden auto;
+    padding-top: 68px;
   }
 
   @media (min-width: 600px) {
@@ -91,7 +89,7 @@
 
     &-workspace-add {
       padding-left: 68px;
-      padding-top: 18px;
+      padding-top: 0;
     }
   }
 
