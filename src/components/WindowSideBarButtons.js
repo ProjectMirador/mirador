@@ -27,6 +27,13 @@ export class WindowSideBarButtons extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
     this.keys = {
+      down: 'ArrowDown',
+      end: 'End',
+      home: 'Home',
+      up: 'ArrowUp',
+    };
+
+    this.chars = {
       down: 40,
       end: 35,
       home: 36,
@@ -89,16 +96,15 @@ export class WindowSideBarButtons extends Component {
    * @param {object} event the keyUp event
    */
   handleKeyUp(event) {
-    switch (event.keyCode) {
-      case this.keys.up:
-        event.preventDefault();
-        return this.focusPreviousTab(event.target);
-      case this.keys.down:
-        event.preventDefault();
-        return this.focusNextTab(event.target);
-      default:
-        return null;
+    if (event.key === this.keys.up || event.which === this.chars.up) {
+      event.preventDefault();
+      return this.focusPreviousTab(event.target);
     }
+    if (event.key === this.keys.down || event.which === this.chars.down) {
+      event.preventDefault();
+      return this.focusNextTab(event.target);
+    }
+    return null;
   }
 
   /**
