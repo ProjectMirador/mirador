@@ -204,12 +204,13 @@ describe('getWindowViewType', () => {
 describe('getManifestDescription', () => {
   it('should return manifest description', () => {
     const manifest = manifesto.create(manifestFixture001);
-    const received = getManifestDescription(manifest);
+    const state = { manifests: { x: { manifestation: manifest } } };
+    const received = getManifestDescription(state, { manifestId: 'x' });
     expect(received).toBe('[Handbill of Mr. Becket, [1787] ]');
   });
 
   it('should return undefined if manifest undefined', () => {
-    const received = getManifestDescription(undefined);
+    const received = getManifestDescription({ manifests: {} }, { manifestId: 'x' });
     expect(received).toBeUndefined();
   });
 });

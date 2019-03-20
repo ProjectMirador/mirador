@@ -232,7 +232,9 @@ export function getWindowViewType(state, windowId) {
 * @param {object} manifest
 * @return {String}
 */
-export function getManifestDescription(manifest) {
+export function getManifestDescription(state, props) {
+  const manifest = getManifestoInstance(state, props);
+
   return manifest
     && manifest.getDescription().map(label => label.value)[0];
 }
