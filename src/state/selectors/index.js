@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import filter from 'lodash/filter';
 import flatten from 'lodash/flatten';
-import { LanguageMap } from 'manifesto.js';
+import manifesto, { LanguageMap } from 'manifesto.js';
 import Annotation from '../../lib/Annotation';
 import ManifestoCanvas from '../../lib/ManifestoCanvas';
 import CanvasGroupings from '../../lib/CanvasGroupings';
@@ -16,7 +16,10 @@ export function getManifest(state, { manifestId, windowId }) {
 
 export const getManifestoInstance = createSelector(
   [getManifest],
-  manifest => manifest && manifest.manifestation,
+  manifest => manifest && (
+    manifest.manifestation
+    || (manifest.json && manifesto.create(manifest.json))
+  ),
 );
 
 export const getManifestLogo = createSelector(

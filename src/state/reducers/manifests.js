@@ -23,6 +23,7 @@ export const manifestsReducer = (state = {}, action) => {
           ...state[action.manifestId],
           id: action.manifestId,
           manifestation: manifesto.create(action.manifestJson),
+          json: manifestJson,
           isFetching: false,
           error: null, // Explicitly set the error to null in case this is a re-fetch
         },
