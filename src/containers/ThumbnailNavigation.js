@@ -44,6 +44,7 @@ const styles = theme => ({
     color: theme.palette.common.white,
     cursor: 'pointer',
     padding: '2px',
+    margin: '2px',
     '&$currentCanvas': {
       border: `2px solid ${theme.palette.secondary.main}`,
     },

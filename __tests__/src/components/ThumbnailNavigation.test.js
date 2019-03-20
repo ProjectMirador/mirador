@@ -64,7 +64,7 @@ describe('ThumbnailNavigation', () => {
     expect(setCanvas).toHaveBeenCalledWith('foobar', 0);
   });
   it('sets up calculated width based off of height of area and dimensions of canvas', () => {
-    expect(renderedGrid.find('.mirador-thumbnail-nav-container').first().prop('style').width).toEqual(90);
+    expect(renderedGrid.find('.mirador-thumbnail-nav-container').first().prop('style').width).toEqual(95);
   });
   it('renders canvas thumbnails', () => {
     expect(renderedGrid.find('CanvasThumbnail').length).toBe(3);
@@ -125,12 +125,12 @@ describe('ThumbnailNavigation', () => {
       expect(wrapper.instance().rightWidth()).toEqual(200);
     });
     it('calculateScaledWidth', () => {
-      expect(wrapper.instance().calculateScaledWidth({ index: 0 })).toEqual(90);
-      expect(rightWrapper.instance().calculateScaledWidth({ index: 0 })).toEqual(100);
+      expect(wrapper.instance().calculateScaledWidth({ index: 0 })).toEqual(95);
+      expect(rightWrapper.instance().calculateScaledWidth({ index: 0 })).toEqual(116);
     });
     it('calculateScaledHeight', () => {
       expect(wrapper.instance().calculateScaledHeight({ index: 0 })).toEqual(135);
-      expect(rightWrapper.instance().calculateScaledHeight({ index: 0 })).toEqual(126);
+      expect(rightWrapper.instance().calculateScaledHeight({ index: 0 })).toEqual(166);
     });
 
     it('columnCount', () => {

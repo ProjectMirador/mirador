@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 import Grid from 'react-virtualized/dist/commonjs/Grid';
-import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import Typography from '@material-ui/core/Typography';
@@ -63,19 +62,18 @@ export class ThumbnailNavigation extends Component {
       classes, window, setCanvas, config, canvasGroupings, position,
     } = this.props;
     const currentIndex = (position === 'far-right') ? rowIndex : columnIndex;
-    const maxHeight = (position === 'far-right') ? null : config.thumbnailNavigation.height - (this.scrollbarSize + 12);
-    const maxWidth = (position === 'far-right') ? config.thumbnailNavigation.width : null;
     const currentGroupings = canvasGroupings.groupings()[currentIndex];
-    const currentWorld = new CanvasWorld(currentGroupings);
     return (
       <div
         key={key}
         style={style}
         className={ns('thumbnail-nav-container')}
       >
-        <GridList
-          component="div"
-          spacing={0}
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'nowrap',
+          }}
           className={classNames(
             ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${currentIndex}`, this.currentCanvasClass(currentGroupings.map(canvas => canvas.index))]),
             classes.canvas,
@@ -87,26 +85,26 @@ export class ThumbnailNavigation extends Component {
         >
           {currentGroupings.map((canvas, i) => {
             const manifestoCanvas = new ManifestoCanvas(canvas);
-            const worldWidth = currentWorld.worldBounds()[2];
-            const tileWidth = Math.floor(
-              canvas.getWidth() / worldWidth * 100,
+            const thumbWidth = Math.floor(
+              (style.height - this.spacing) * manifestoCanvas.aspectRatio,
             );
+            const maxHeight = (position === 'far-right') ? null : style.height - this.spacing;
+            const maxWidth = (position === 'far-right') ? thumbWidth : null;
             return (
               <GridListTile
                 component="div"
                 key={canvas.index}
                 onClick={() => setCanvas(window.id, currentGroupings[0].index)}
                 style={{
-                  height: style.height - this.spacing / 2,
-                  width: `${tileWidth}%`,
+                  height: '100%',
+                  width: 'auto',
                 }}
               >
                 <CanvasThumbnail
-                  imageUrl={manifestoCanvas.thumbnail(null, maxHeight)}
+                  imageUrl={manifestoCanvas.thumbnail(null, config.thumbnailNavigation.height)}
                   isValid={manifestoCanvas.hasValidDimensions}
                   maxHeight={maxHeight}
                   maxWidth={maxWidth}
-                  aspectRatio={manifestoCanvas.aspectRatio}
                 />
                 <GridListTileBar
                   classes={{ root: classes.root }}
@@ -119,7 +117,7 @@ export class ThumbnailNavigation extends Component {
               </GridListTile>
             );
           })}
-        </GridList>
+        </div>
       </div>
     );
   }
@@ -133,12 +131,18 @@ export class ThumbnailNavigation extends Component {
     const { config, canvasGroupings, position } = this.props;
     switch (position) {
       case 'far-right':
-        return this.rightWidth();
+        return this.rightWidth() + this.spacing;
       // Default case bottom
-      default:
-        return canvasGroupings.getCanvases(options.index)
-          .map(canvas => new ManifestoCanvas(canvas))
-          .reduce((acc, currentCanvas) => { return acc + (currentCanvas.hasValidDimensions ? Math.floor((config.thumbnailNavigation.height - this.scrollbarSize) * currentCanvas.aspectRatio) : config.thumbnailNavigation.width); }, 0); // eslint-disable-line arrow-body-style, max-len
+      default: {
+        const canvases = canvasGroupings.getCanvases(options.index);
+        const world = new CanvasWorld(canvases);
+        const bounds = world.worldBounds();
+        const calc = Math.floor(
+          (config.thumbnailNavigation.height - this.scrollbarSize - this.spacing)
+           * bounds[2] / bounds[3],
+        );
+        return calc + this.spacing;
+      }
     }
   }
 
@@ -150,12 +154,15 @@ export class ThumbnailNavigation extends Component {
   calculateScaledHeight(options) {
     const { config, canvasGroupings, position } = this.props;
     switch (position) {
-      case 'far-right':
-        return Math.max(
-          ...canvasGroupings.getCanvases(options.index)
-            .map(canvas => new ManifestoCanvas(canvas))
-            .map(canvas => (canvas.hasValidDimensions ? Math.floor((config.thumbnailNavigation.width - this.spacing) / canvas.aspectRatio) : config.thumbnailNavigation.height - 12)), // eslint-disable-line arrow-body-style, max-len
+      case 'far-right': {
+        const canvases = canvasGroupings.getCanvases(options.index);
+        const world = new CanvasWorld(canvases);
+        const bounds = world.worldBounds();
+        const calc = Math.floor(
+          config.thumbnailNavigation.width * canvases.length * bounds[3] / bounds[2],
         );
+        return calc + this.spacing;
+      }
       // Default case bottom
       default:
         return config.thumbnailNavigation.height - this.scrollbarSize;
