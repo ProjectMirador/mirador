@@ -166,12 +166,13 @@ describe('getThumbnailNavigationPosition', () => {
 describe('getManifestTitle', () => {
   it('should return manifest title', () => {
     const manifest = manifesto.create(manifestFixture001);
-    const received = getManifestTitle(manifest);
+    const state = { manifests: { x: { manifestation: manifest } } };
+    const received = getManifestTitle(state, { manifestId: 'x' });
     expect(received).toBe('Bodleian Library Human Freaks 2 (33)');
   });
 
   it('should return undefined if manifest undefined', () => {
-    const received = getManifestTitle(undefined);
+    const received = getManifestTitle({ manifests: {} }, { manifestId: 'x' });
     expect(received).toBeUndefined();
   });
 });

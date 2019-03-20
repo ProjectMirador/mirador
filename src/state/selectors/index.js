@@ -10,7 +10,7 @@ import CanvasGroupings from '../../lib/CanvasGroupings';
 export function getManifest(state, { manifestId, windowId }) {
   return state.manifests[
     manifestId
-    || (state.windows[windowId] && state.windows[windowId].manifestId)
+    || (windowId && state.windows[windowId] && state.windows[windowId].manifestId)
   ];
 }
 
@@ -209,10 +209,11 @@ export function getThumbnailNavigationPosition(state, windowId) {
 
 /**
 * Return manifest title
-* @param {object} manifest
 * @return {String}
 */
-export function getManifestTitle(manifest) {
+export function getManifestTitle(state, props) {
+  const manifest = getManifestoInstance(state, props);
+
   return manifest
     && manifest.getLabel().map(label => label.value)[0];
 }

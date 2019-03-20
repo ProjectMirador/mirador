@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
-import { getManifestoInstance, getManifestTitle } from '../state/selectors';
+import { getManifestTitle } from '../state/selectors';
 import { MosaicRenderPreview } from '../components/MosaicRenderPreview';
 
 /** */
 const mapStateToProps = (state, { windowId }) => (
   {
-    title: getManifestTitle(getManifestoInstance(state, { windowId })),
+    title: getManifestTitle(state, { windowId }),
   }
 );
 

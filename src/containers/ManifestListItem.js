@@ -18,7 +18,7 @@ const mapStateToProps = (state, { manifestId }) => {
     ready: !!manifest.manifestation,
     error: manifest.error,
     isFetching: manifest.isFetching,
-    title: getManifestTitle(getManifestoInstance(state, { manifestId })),
+    title: getManifestTitle(state, { manifestId }),
     thumbnail: getManifestThumbnail(getManifestoInstance(state, { manifestId })),
     provider: manifest.provider || getManifestProvider(getManifestoInstance(state, { manifestId })),
     size: getManifestCanvases(getManifestoInstance(state, { manifestId })).length,
