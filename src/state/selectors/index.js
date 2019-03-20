@@ -77,22 +77,25 @@ export function getIdAndContentOfResources(resources) {
   }));
 }
 
+/** */
+function getWindow(state, { windowId }) {
+  return state.windows && state.windows[windowId];
+}
+
 /** Return position of thumbnail navigation in a certain window.
 * @param {object} state
 * @param {String} windowId
 * @param {String}
 */
-export function getThumbnailNavigationPosition(state, windowId) {
-  return state.windows[windowId]
-    && state.windows[windowId].thumbnailNavigationId
-    && state.companionWindows[state.windows[windowId].thumbnailNavigationId]
-    && state.companionWindows[state.windows[windowId].thumbnailNavigationId].position;
-}
-
-/** */
-function getWindow(state, { windowId }) {
-  return state.windows && state.windows[windowId];
-}
+export const getThumbnailNavigationPosition = createSelector(
+  [
+    getWindow,
+    state => state.companionWindows,
+  ],
+  (window, companionWindows) => window
+    && companionWindows[window.thumbnailNavigationId]
+    && companionWindows[window.thumbnailNavigationId].position,
+);
 
 /** Return type of view in a certain window.
 * @param {object} state

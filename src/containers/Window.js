@@ -18,7 +18,7 @@ const mapStateToProps = (state, props) => ({
   window: state.windows[props.window.id],
   workspaceType: state.config.workspace.type,
   label: getManifestTitle(state, { windowId: props.window.id }),
-  thumbnailNavigationPosition: getThumbnailNavigationPosition(state, props.window.id),
+  thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId: props.window.id }),
 });
 
 /**

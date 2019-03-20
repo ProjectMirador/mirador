@@ -19,9 +19,9 @@ const mapDispatchToProps = { setWindowThumbnailPosition: actions.setWindowThumbn
  * @memberof WindowViewer
  * @private
  */
-const mapStateToProps = (state, props) => (
+const mapStateToProps = (state, { windowId }) => (
   {
-    thumbnailNavigationPosition: getThumbnailNavigationPosition(state, props.windowId),
+    thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId }),
   }
 );
 

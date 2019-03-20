@@ -36,17 +36,17 @@ describe('getThumbnailNavigationPosition', () => {
   };
 
   it('should return thumbnail navigation position if window exists', () => {
-    const received = getThumbnailNavigationPosition(state, 'a');
+    const received = getThumbnailNavigationPosition(state, { windowId: 'a' });
     expect(received).toBe('bottom');
   });
 
   it('should return undefined if position does not exist in window', () => {
-    const received = getThumbnailNavigationPosition(state, 'b');
+    const received = getThumbnailNavigationPosition(state, { windowId: 'b' });
     expect(received).toBeUndefined();
   });
 
   it('should return undefined if window does not exists', () => {
-    const received = getThumbnailNavigationPosition(state, 'c');
+    const received = getThumbnailNavigationPosition(state, { windowId: 'c' });
     expect(received).toBeUndefined();
   });
 });
