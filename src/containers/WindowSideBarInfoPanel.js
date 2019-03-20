@@ -9,7 +9,7 @@ import {
   getManifestDescription,
   getManifestTitle,
   getSelectedCanvas,
-  getManifestoInstance,
+  getManifestMetadata,
   getCanvasDescription,
 } from '../state/selectors';
 import { WindowSideBarInfoPanel } from '../components/WindowSideBarInfoPanel';
@@ -28,7 +28,7 @@ const mapStateToProps = (state, { windowId }) => ({
   canvasMetadata: getDestructuredMetadata(getSelectedCanvas(state, windowId)),
   manifestLabel: getManifestTitle(state, { windowId }),
   manifestDescription: getManifestDescription(state, { windowId }),
-  manifestMetadata: getDestructuredMetadata(getManifestoInstance(state, { windowId })),
+  manifestMetadata: getManifestMetadata(state, { windowId }),
 });
 
 /**

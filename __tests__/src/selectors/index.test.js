@@ -27,6 +27,7 @@ import {
   getWindowViewType,
   getIdAndLabelOfCanvases,
   getCompanionWindowsOfWindow,
+  getManifestMetadata,
 } from '../../../src/state/selectors';
 import Annotation from '../../../src/lib/Annotation';
 import AnnotationResource from '../../../src/lib/AnnotationResource';
@@ -357,6 +358,27 @@ describe('getDestructuredMetadata', () => {
   it('should return the first value of label/value attributes for each object in the array ', () => {
     const iiifResource = manifesto.create(manifestFixture002);
     const received = getDestructuredMetadata(iiifResource);
+    const expected = [{
+      label: 'date',
+      value: 'some date',
+    }];
+
+    expect(received).toEqual(expected);
+  });
+
+  it('returns an empty array if there is no metadata', () => {
+    const iiifResource = manifesto.create(manifestFixture019);
+    const received = getDestructuredMetadata(iiifResource);
+
+    expect(received).toEqual([]);
+  });
+});
+
+describe('getManifestMetadata', () => {
+  it('should return the first value of label/value attributes for each object in the array ', () => {
+    const iiifResource = manifesto.create(manifestFixture002);
+    const state = { manifests: { x: { manifestation: iiifResource } } };
+    const received = getManifestMetadata(state, { manifestId: 'x' });
     const expected = [{
       label: 'date',
       value: 'some date',

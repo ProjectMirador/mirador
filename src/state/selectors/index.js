@@ -278,6 +278,15 @@ export function getDestructuredMetadata(iiifResource) {
 }
 
 /**
+ * Return manifest metadata in a label / value structure
+ */
+export function getManifestMetadata(state, props) {
+  const manifest = getManifestoInstance(state, props);
+
+  return getDestructuredMetadata(manifest);
+}
+
+/**
 * Return canvas description
 * @param {object} canvas
 * @param {String}
