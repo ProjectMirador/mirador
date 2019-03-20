@@ -14,11 +14,20 @@ export function getManifest(state, { manifestId, windowId }) {
   ];
 }
 
+/** Instantiate a manifesto instance */
 export const getManifestoInstance = createSelector(
   [getManifest],
   manifest => manifest && manifest.json && manifesto.create(manifest.json),
 );
 
+/**
+ * Get the logo for a manifest
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @return {String|null}
+ */
 export const getManifestLogo = createSelector(
   [getManifestoInstance],
   manifest => manifest && manifest.getLogo(),
@@ -26,7 +35,10 @@ export const getManifestLogo = createSelector(
 
 /**
 * Return the IIIF v3 provider of a manifest or null
-* @param {object} manifest
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @return {String|null}
 */
 export const getManifestProvider = createSelector(
@@ -39,7 +51,10 @@ export const getManifestProvider = createSelector(
 
 /**
 * Return the supplied thumbnail for a manifest or null
-* @param {object} manifest
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @return {String|null}
 */
 export function getManifestThumbnail(state, props) {
@@ -77,7 +92,10 @@ export function getManifestThumbnail(state, props) {
 
 /**
 * Return the logo of a manifest or null
-* @param {object} manifest
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @return {String|null}
 */
 export const getManifestCanvases = createSelector(
@@ -110,7 +128,9 @@ export function getIdAndLabelOfCanvases(canvases) {
 /**
 * Return the current canvas selected in a window
 * @param {object} state
-* @param {String} windowId
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @return {Object}
 */
 export const getSelectedCanvas = createSelector(
@@ -128,7 +148,9 @@ export const getSelectedCanvas = createSelector(
 * Return the current canvases selected in a window
 * For book view returns 2, for single returns 1
 * @param {object} state
-* @param {String} windowId
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @return {Array}
 */
 export const getSelectedCanvases = createSelector(
@@ -215,6 +237,10 @@ export function getThumbnailNavigationPosition(state, windowId) {
 
 /**
 * Return manifest title
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @return {String}
 */
 export const getManifestTitle = createSelector(
@@ -223,7 +249,11 @@ export const getManifestTitle = createSelector(
     && manifest.getLabel().map(label => label.value)[0],
 );
 
-/** */
+/**
+ * Return the manifest titles for all open windows
+ * @param {object} state
+ * @return {object}
+ */
 export function getWindowTitles(state) {
   const result = {};
 
@@ -236,7 +266,9 @@ export function getWindowTitles(state) {
 
 /** Return type of view in a certain window.
 * @param {object} state
-* @param {String} windowId
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @param {String}
 */
 export function getWindowViewType(state, windowId) {
@@ -245,7 +277,10 @@ export function getWindowViewType(state, windowId) {
 
 /**
 * Return manifest description
-* @param {object} manifest
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
 * @return {String}
 */
 export const getManifestDescription = createSelector(
@@ -288,6 +323,11 @@ export function getDestructuredMetadata(iiifResource) {
 
 /**
  * Return manifest metadata in a label / value structure
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @return {Array[Object]}
  */
 export const getManifestMetadata = createSelector(
   [getManifestoInstance],
