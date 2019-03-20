@@ -31,8 +31,8 @@ export class ErrorDialog extends Component {
     return (
       <div>
         { hasError && (
-          <Dialog id="workspace-settings" onClose={() => removeError(error.id)} open={hasError}>
-            <DialogTitle id="form-dialog-title">{t('errorDialogTitle')}</DialogTitle>
+          <Dialog onClose={() => removeError(error.id)} open={hasError}>
+            <DialogTitle>{t('errorDialogTitle')}</DialogTitle>
             <DialogContent>
               <Typography variant="body2" noWrap color="inherit">
                 {error.message}
