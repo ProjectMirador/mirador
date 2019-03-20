@@ -63,7 +63,7 @@ export class WindowSideBarInfoPanel extends Component {
           )}
 
           {manifestDescription && (
-            <Typography variant="body2">
+            <Typography variant="body1">
               <SanitizedHtml htmlString={manifestDescription} ruleSet="iiif" />
             </Typography>
           )}
