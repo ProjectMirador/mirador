@@ -183,17 +183,8 @@
   }
 
   &-thumb-navigation {
-
-    .mirador-thumbnail-nav-canvas {
-      border: 1px solid $black;
-      color: $white;
-      cursor: pointer;
-      height: 100%;
-
-      &.mirador-current-canvas {
-        border: 3px solid $blue;
-      }
-    }
+    margin: 2px;
+    padding: 2px;
   }
 
   &-label-value-metadata {

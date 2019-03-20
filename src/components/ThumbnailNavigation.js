@@ -5,8 +5,10 @@ import Grid from 'react-virtualized/dist/commonjs/Grid';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import Typography from '@material-ui/core/Typography';
+import classNames from 'classnames';
 import { CanvasThumbnail } from './CanvasThumbnail';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
+import CanvasWorld from '../lib/CanvasWorld';
 import ns from '../config/css-ns';
 import 'react-virtualized/styles.css';
 
@@ -18,6 +20,8 @@ export class ThumbnailNavigation extends Component {
   constructor(props) {
     super(props);
 
+    this.scrollbarSize = 15;
+    this.spacing = 16; // 2 * (2px margin + 2px border + 2px padding + 2px padding)
     this.cellRenderer = this.cellRenderer.bind(this);
     this.calculateScaledHeight = this.calculateScaledHeight.bind(this);
     this.calculateScaledWidth = this.calculateScaledWidth.bind(this);
@@ -58,7 +62,6 @@ export class ThumbnailNavigation extends Component {
       classes, window, setCanvas, config, canvasGroupings, position,
     } = this.props;
     const currentIndex = (position === 'far-right') ? rowIndex : columnIndex;
-
     const currentGroupings = canvasGroupings.groupings()[currentIndex];
     return (
       <div
@@ -68,29 +71,40 @@ export class ThumbnailNavigation extends Component {
       >
         <div
           style={{
-            width: style.width - 8,
+            display: 'flex',
+            flexWrap: 'nowrap',
           }}
-          className={ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${currentIndex}`, this.currentCanvasClass(currentGroupings.map(canvas => canvas.index))])}
+          className={classNames(
+            ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${currentIndex}`, this.currentCanvasClass(currentGroupings.map(canvas => canvas.index))]),
+            classes.canvas,
+            {
+              [classes.currentCanvas]: currentGroupings
+                .map(canvas => canvas.index).includes(window.canvasIndex),
+            },
+          )}
         >
           {currentGroupings.map((canvas, i) => {
-            const { height } = config.thumbnailNavigation;
             const manifestoCanvas = new ManifestoCanvas(canvas);
-
+            const thumbWidth = Math.floor(
+              (style.height - this.spacing) * manifestoCanvas.aspectRatio,
+            );
+            const maxHeight = (position === 'far-right') ? null : style.height - this.spacing;
+            const maxWidth = (position === 'far-right') ? thumbWidth : null;
             return (
               <GridListTile
                 component="div"
                 key={canvas.index}
                 onClick={() => setCanvas(window.id, currentGroupings[0].index)}
                 style={{
-                  position: 'absolute', left: (style.width - 8) * i / 2, top: 2,
+                  height: '100%',
+                  width: 'auto',
                 }}
               >
                 <CanvasThumbnail
-                  imageUrl={manifestoCanvas.thumbnail(null, height)}
+                  imageUrl={manifestoCanvas.thumbnail(null, config.thumbnailNavigation.height)}
                   isValid={manifestoCanvas.hasValidDimensions}
-                  maxHeight={config.thumbnailNavigation.height}
-                  maxWidth={style.width}
-                  aspectRatio={manifestoCanvas.aspectRatio}
+                  maxHeight={maxHeight}
+                  maxWidth={maxWidth}
                 />
                 <GridListTileBar
                   classes={{ root: classes.root }}
@@ -117,12 +131,18 @@ export class ThumbnailNavigation extends Component {
     const { config, canvasGroupings, position } = this.props;
     switch (position) {
       case 'far-right':
-        return this.rightWidth();
+        return this.rightWidth() + this.spacing;
       // Default case bottom
-      default:
-        return canvasGroupings.getCanvases(options.index)
-          .map(canvas => new ManifestoCanvas(canvas))
-          .reduce((acc, currentCanvas) => { return acc + (currentCanvas.hasValidDimensions ? Math.floor(config.thumbnailNavigation.height * currentCanvas.aspectRatio) : config.thumbnailNavigation.width); }, 8); // eslint-disable-line arrow-body-style, max-len
+      default: {
+        const canvases = canvasGroupings.getCanvases(options.index);
+        const world = new CanvasWorld(canvases);
+        const bounds = world.worldBounds();
+        const calc = Math.floor(
+          (config.thumbnailNavigation.height - this.scrollbarSize - this.spacing)
+           * bounds[2] / bounds[3],
+        );
+        return calc + this.spacing;
+      }
     }
   }
 
@@ -134,15 +154,18 @@ export class ThumbnailNavigation extends Component {
   calculateScaledHeight(options) {
     const { config, canvasGroupings, position } = this.props;
     switch (position) {
-      case 'far-right':
-        return Math.max(
-          ...canvasGroupings.getCanvases(options.index)
-            .map(canvas => new ManifestoCanvas(canvas))
-            .map(canvas => (canvas.hasValidDimensions ? Math.floor(config.thumbnailNavigation.width / canvas.aspectRatio) : config.thumbnailNavigation.height)), // eslint-disable-line arrow-body-style, max-len
+      case 'far-right': {
+        const canvases = canvasGroupings.getCanvases(options.index);
+        const world = new CanvasWorld(canvases);
+        const bounds = world.worldBounds();
+        const calc = Math.floor(
+          config.thumbnailNavigation.width * canvases.length * bounds[3] / bounds[2],
         );
+        return calc + this.spacing;
+      }
       // Default case bottom
       default:
-        return config.thumbnailNavigation.height;
+        return config.thumbnailNavigation.height - this.scrollbarSize;
     }
   }
 
@@ -167,7 +190,7 @@ export class ThumbnailNavigation extends Component {
       case 'far-right':
         return {
           height: '100%',
-          width: `${this.rightWidth()}px`,
+          width: `${this.rightWidth() + this.scrollbarSize + this.spacing}px`,
           display: 'flex',
           minHeight: 0,
         };
@@ -185,7 +208,7 @@ export class ThumbnailNavigation extends Component {
     const { window, config } = this.props;
     switch (window.view) {
       case 'book':
-        return config.thumbnailNavigation.width * 2;
+        return (config.thumbnailNavigation.width * 2);
       default:
         return config.thumbnailNavigation.width;
     }

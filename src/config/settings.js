@@ -132,8 +132,8 @@ export default {
   windows: [],
   thumbnailNavigation: {
     defaultPosition: 'far-bottom',
-    height: 150,
-    width: 100,
+    height: 150, // height of entire ThumbnailNavigation area when position is "far-bottom"
+    width: 100, // width of a single thumb in ThumbnailNavigation area when position is "far-right"
   },
   workspace: {
     type: 'mosaic',

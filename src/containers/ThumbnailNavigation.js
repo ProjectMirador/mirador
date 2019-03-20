@@ -36,14 +36,26 @@ const mapDispatchToProps = {
 /**
  * Styles for withStyles HOC
  */
-const styles = {
+const styles = theme => ({
+  currentCanvas: {
+  },
+  canvas: {
+    border: '2px solid transparent',
+    color: theme.palette.common.white,
+    cursor: 'pointer',
+    padding: '2px',
+    margin: '2px',
+    '&$currentCanvas': {
+      border: `2px solid ${theme.palette.secondary.main}`,
+    },
+  },
   root: {
     background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
   },
   title: {
     color: '#ffffff',
   },
-};
+});
 
 const enhance = compose(
   withStyles(styles),
