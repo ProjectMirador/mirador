@@ -10,7 +10,7 @@ import { getManifestCanvases } from '../state/selectors';
  * @memberof WindowViewer
  * @private
  */
-const mapStateToProps = state => (
+const mapStateToProps = (state, { window }) => (
   {
     canvases: getManifestCanvases(state, { windowId: window.id }),
   }
