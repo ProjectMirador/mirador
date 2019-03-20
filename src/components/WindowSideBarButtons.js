@@ -24,10 +24,8 @@ export class WindowSideBarButtons extends Component {
   /** */
   constructor(props) {
     super(props);
-    const { windowId } = this.props;
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
-    this.windowId = `${windowId}-sidebar-buttons`;
     this.keys = {
       down: 40,
       end: 35,
@@ -40,7 +38,7 @@ export class WindowSideBarButtons extends Component {
    *
    */
   componentDidMount() {
-    this.tabs = Array.from(document.querySelectorAll(`#${this.windowId} button[role=tab]`));
+    this.tabs = Array.from(document.querySelectorAll(`#${this.containerId} button[role=tab]`));
     this.tabBar = this.tabs[0].parentElement;
 
     /*
@@ -171,7 +169,6 @@ export class WindowSideBarButtons extends Component {
           )}
           TouchRippleProps={{ classes: { child: classes.tabRipple } }}
           onKeyUp={this.handleKeyUp}
-          onKeyDown={this.handleKeyDown}
           value="info"
         />
         <Tab
@@ -186,7 +183,6 @@ export class WindowSideBarButtons extends Component {
           )}
           TouchRippleProps={{ classes: { child: classes.tabRipple } }}
           onKeyUp={this.handleKeyUp}
-          onKeyDown={this.handleKeyDown}
           value="canvas_navigation"
         />
         <Tab
@@ -203,7 +199,6 @@ export class WindowSideBarButtons extends Component {
           )}
           TouchRippleProps={{ classes: { child: classes.tabRipple } }}
           onKeyUp={this.handleKeyUp}
-          onKeyDown={this.handleKeyDown}
           value="annotations"
         />
       </Tabs>
@@ -217,7 +212,6 @@ WindowSideBarButtons.propTypes = {
   hasAnnotations: PropTypes.bool,
   sideBarPanel: PropTypes.string,
   t: PropTypes.func,
-  windowId: PropTypes.string.isRequired,
 };
 
 WindowSideBarButtons.defaultProps = {
