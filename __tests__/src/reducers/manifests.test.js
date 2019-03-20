@@ -34,7 +34,11 @@ describe('manifests reducer', () => {
       abc123: {
         id: 'abc123',
         isFetching: false,
-        manifestation: {},
+        json: {
+          id: 'abc123',
+          '@type': 'sc:Manifest',
+          content: 'lots of canvases and metadata and such',
+        },
         error: null,
       },
     });

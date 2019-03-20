@@ -15,7 +15,7 @@ const mapStateToProps = (state, { manifestId }) => {
   const manifest = state.manifests[manifestId];
 
   return {
-    ready: !!manifest.manifestation,
+    ready: !!manifest.json,
     error: manifest.error,
     isFetching: manifest.isFetching,
     title: getManifestTitle(state, { manifestId }),

@@ -77,51 +77,53 @@ describe('getManifest()', () => {
 
 describe('getManifestLogo()', () => {
   it('should return manifest logo id', () => {
-    const received = getManifestLogo({ manifests: { x: { manifestation: manifesto.create(manifestFixture001) } } }, { manifestId: 'x' });
+    const received = getManifestLogo({ manifests: { x: { json: manifestFixture001 } } }, { manifestId: 'x' });
     expect(received).toEqual(manifestFixture001.logo['@id']);
   });
 
   it('should return null if manifest has no logo', () => {
-    const received = getManifestLogo({ manifests: { x: { manifestation: manifesto.create({}) } } }, { manifestId: 'x' });
-    expect(received).toBeNull();
+    const received = getManifestLogo({ manifests: { x: {} } }, { manifestId: 'x' });
+    expect(received).toBeUndefined();
   });
 });
 
 describe('getManifestThumbnail()', () => {
   it('should return manifest thumbnail id', () => {
-    const manifest = manifesto.create(manifestFixture001);
-    const state = { manifests: { x: { manifestation: manifest } } };
+    const state = { manifests: { x: { json: manifestFixture001 } } };
     const received = getManifestThumbnail(state, { manifestId: 'x' });
     expect(received).toEqual(manifestFixture001.thumbnail['@id']);
   });
 
   it('returns the first canvas thumbnail id', () => {
     const manifest = {
-      getThumbnail: () => (null),
-      getSequences: () => [
+      '@context': 'http://iiif.io/api/presentation/2/context.json',
+      '@id':
+       'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+      '@type': 'sc:Manifest',
+      sequences: [
         {
-          getCanvases: () => [
-            { getThumbnail: () => ({ id: 'xyz' }) },
+          canvases: [
+            {
+              thumbnail: { id: 'xyz' },
+            },
           ],
         },
       ],
     };
 
-    const state = { manifests: { x: { manifestation: manifest } } };
+    const state = { manifests: { x: { json: manifest } } };
     const received = getManifestThumbnail(state, { manifestId: 'x' });
     expect(received).toEqual('xyz');
   });
 
   it('returns a thumbnail sized image url from the first canvas', () => {
-    const manifest = manifesto.create(manifestFixture019);
-    const state = { manifests: { x: { manifestation: manifest } } };
+    const state = { manifests: { x: { json: manifestFixture019 } } };
     const received = getManifestThumbnail(state, { manifestId: 'x' });
     expect(received).toEqual('https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/,80/0/default.jpg');
   });
 
   it('should return null if manifest has no thumbnail', () => {
-    const manifest = manifesto.create({});
-    const state = { manifests: { x: { manifestation: manifest } } };
+    const state = { manifests: { x: {} } };
     const received = getManifestThumbnail(state, { manifestId: 'x' });
     expect(received).toBeNull();
   });
@@ -129,15 +131,13 @@ describe('getManifestThumbnail()', () => {
 
 describe('getManifestCanvases', () => {
   it('returns an empty array if the manifestation is not loaded', () => {
-    const manifest = {};
-    const state = { manifests: { x: { manifestation: manifest } } };
+    const state = { manifests: { x: {} } };
     const received = getManifestCanvases(state, { manifestId: 'x' });
     expect(received).toEqual([]);
   });
 
   it('returns canvases from the manifest', () => {
-    const manifest = manifesto.create(manifestFixture001);
-    const state = { manifests: { x: { manifestation: manifest } } };
+    const state = { manifests: { x: { json: manifestFixture001 } } };
     const received = getManifestCanvases(state, { manifestId: 'x' });
     expect(received.length).toBe(1);
     expect(received[0].id).toBe('https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json');
@@ -173,8 +173,7 @@ describe('getThumbnailNavigationPosition', () => {
 
 describe('getManifestTitle', () => {
   it('should return manifest title', () => {
-    const manifest = manifesto.create(manifestFixture001);
-    const state = { manifests: { x: { manifestation: manifest } } };
+    const state = { manifests: { x: { json: manifestFixture001 } } };
     const received = getManifestTitle(state, { manifestId: 'x' });
     expect(received).toBe('Bodleian Library Human Freaks 2 (33)');
   });
@@ -193,9 +192,9 @@ describe('getWindowTitles', () => {
         b: { manifestId: 'bmanifest' },
       },
       manifests: {
-        amanifest: { manifestation: manifesto.create(manifestFixture001) },
-        bmanifest: { manifestation: manifesto.create(manifestFixture002) },
-        cmanifest: { manifestation: manifesto.create(manifestFixture019) },
+        amanifest: { json: manifestFixture001 },
+        bmanifest: { json: manifestFixture002 },
+        cmanifest: { json: manifestFixture019 },
       },
     };
 
@@ -234,8 +233,7 @@ describe('getWindowViewType', () => {
 
 describe('getManifestDescription', () => {
   it('should return manifest description', () => {
-    const manifest = manifesto.create(manifestFixture001);
-    const state = { manifests: { x: { manifestation: manifest } } };
+    const state = { manifests: { x: { json: manifestFixture001 } } };
     const received = getManifestDescription(state, { manifestId: 'x' });
     expect(received).toBe('[Handbill of Mr. Becket, [1787] ]');
   });
@@ -248,8 +246,7 @@ describe('getManifestDescription', () => {
 
 describe('getManifestProvider', () => {
   it('should return manifest provider label', () => {
-    const manifest = manifesto.create(manifestFixtureWithAProvider);
-    const state = { manifests: { x: { manifestation: manifest } } };
+    const state = { manifests: { x: { json: manifestFixtureWithAProvider } } };
     const received = getManifestProvider(state, { manifestId: 'x' });
     expect(received).toBe('Example Organization');
   });
@@ -271,7 +268,7 @@ describe('getSelectedCanvas', () => {
     manifests: {
       x: {
         id: 'x',
-        manifestation: manifesto.create(manifestFixture019),
+        json: manifestFixture019,
       },
     },
   };
@@ -319,7 +316,7 @@ describe('getSelectedCanvases', () => {
     manifests: {
       x: {
         id: 'x',
-        manifestation: manifesto.create(manifestFixture019),
+        json: manifestFixture019,
       },
     },
   };
@@ -400,8 +397,7 @@ describe('getDestructuredMetadata', () => {
 
 describe('getManifestMetadata', () => {
   it('should return the first value of label/value attributes for each object in the array ', () => {
-    const iiifResource = manifesto.create(manifestFixture002);
-    const state = { manifests: { x: { manifestation: iiifResource } } };
+    const state = { manifests: { x: { json: manifestFixture002 } } };
     const received = getManifestMetadata(state, { manifestId: 'x' });
     const expected = [{
       label: 'date',

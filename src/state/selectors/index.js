@@ -16,10 +16,7 @@ export function getManifest(state, { manifestId, windowId }) {
 
 export const getManifestoInstance = createSelector(
   [getManifest],
-  manifest => manifest && (
-    manifest.manifestation
-    || (manifest.json && manifesto.create(manifest.json))
-  ),
+  manifest => manifest && manifest.json && manifesto.create(manifest.json),
 );
 
 export const getManifestLogo = createSelector(
