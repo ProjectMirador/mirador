@@ -35,8 +35,8 @@ describe('WindowTopBar', () => {
     expect(wrapper.find(Toolbar).length).toBe(1);
     expect(wrapper.find(MiradorMenuButton).length).toBe(3);
     expect(wrapper.find(Typography).length).toBe(1);
-    expect(wrapper.find(WindowTopBarButtons).length).toBe(1);
     expect(wrapper.find(WindowTopMenuButton).length).toBe(1);
+    expect(wrapper.find('PluginHook').length).toBe(1);
   });
 
   it('passes correct props to <IconButton/>', () => {
@@ -50,9 +50,9 @@ describe('WindowTopBar', () => {
     expect(wrapper.find(Typography).first().render().text()).toBe('awesome manifest');
   });
 
-  it('passes correct props to <WindowTopBarButtons/>', () => {
+  it('passes correct props to <PluginHook/>', () => {
     const wrapper = createWrapper();
-    expect(wrapper.find(WindowTopBarButtons).first().props().windowId).toBe('xyz');
+    expect(wrapper.find('PluginHook').props()).toEqual(wrapper.instance().props);
   });
 
   it('passe correct props to <WindowTopMenuButton', () => {

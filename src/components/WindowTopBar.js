@@ -14,6 +14,12 @@ import { MiradorMenuButton } from './MiradorMenuButton';
 import ns from '../config/css-ns';
 
 
+/** Renders plugins */
+const PluginHook = (props) => {
+  const { PluginComponent } = props; // eslint-disable-line react/prop-types
+  return PluginComponent ? <PluginComponent {...props} /> : null;
+};
+
 /**
  * WindowTopBar
  */
@@ -40,7 +46,7 @@ export class WindowTopBar extends Component {
           <Typography variant="h2" noWrap color="inherit" className={classes.title}>
             {manifestTitle}
           </Typography>
-          <WindowTopBarButtons windowId={windowId} />
+          <PluginHook {...this.props} />
           <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
           {allowMaximize && (
             <MiradorMenuButton
