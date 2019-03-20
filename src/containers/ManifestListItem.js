@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend';
 import {
   getManifestTitle, getManifestThumbnail, getManifestCanvases,
-  getManifestLogo, getManifestProvider, getManifestoInstance,
+  getManifestLogo, getManifestProvider,
 } from '../state/selectors';
 import * as actions from '../state/actions';
 import { ManifestListItem } from '../components/ManifestListItem';
