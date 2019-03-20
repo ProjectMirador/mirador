@@ -27,6 +27,13 @@ export class WorkspaceSelectionDialog extends Component {
           <FormControl>
             <InputLabel htmlFor="workspace-type">{t('workspace')}</InputLabel>
             <Select
+              MenuProps={{
+                anchorOrigin: {
+                  horizontal: 'left',
+                  vertical: 'bottom',
+                },
+                getContentAnchorEl: null,
+              }}
               value={workspaceType}
               onChange={(event) => {
                 updateConfig({

@@ -97,6 +97,13 @@ export class WindowSideBarCanvasPanel extends Component {
         titleControls={(
           <FormControl>
             <Select
+              MenuProps={{
+                anchorOrigin: {
+                  horizontal: 'left',
+                  vertical: 'bottom',
+                },
+                getContentAnchorEl: null,
+              }}
               displayEmpty
               value={variant}
               onChange={this.handleVariantChange}

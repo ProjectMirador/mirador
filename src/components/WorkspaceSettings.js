@@ -53,6 +53,13 @@ export class WorkspaceSettings extends Component {
           <FormControl>
             <InputLabel htmlFor="theme-simple">{t('theme')}</InputLabel>
             <Select
+              MenuProps={{
+                anchorOrigin: {
+                  horizontal: 'left',
+                  vertical: 'bottom',
+                },
+                getContentAnchorEl: null,
+              }}
               value={theme.palette.type}
               onChange={this.handleThemeChange}
               inputProps={{
