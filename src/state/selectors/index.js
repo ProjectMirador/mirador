@@ -105,3 +105,20 @@ export function getSelectedTargetAnnotationResources(state, targetIds, annotatio
       resources: annotation.resources.filter(r => annotationIds && annotationIds.includes(r.id)),
     }));
 }
+
+/**
+* Return all of the given canvases annotations if the window
+* is set to display all, otherwise only return selected
+* @param {object} state
+* @param {String} windowId
+* @param {Array} targetIds
+* @param {Array} annotationIds
+* @return {Array}
+*/
+export function getAllOrSelectedAnnotations(state, windowId, targetIds, annotationIds) {
+  if (state.windows[windowId].displayAllAnnotations) {
+    return getSelectedTargetsAnnotations(state, targetIds);
+  }
+
+  return getSelectedTargetAnnotationResources(state, targetIds, annotationIds);
+}

@@ -1,4 +1,5 @@
 import {
+  getAllOrSelectedAnnotations,
   getAnnotationResourcesByMotivation,
   getIdAndContentOfResources,
   getLanguagesFromConfigWithCurrent,
@@ -165,4 +166,40 @@ it('getSelectedTargetAnnotationResources filters the annotation resources by the
   expect(
     getSelectedTargetAnnotationResources(state, ['cid1'], ['annoId1', 'annoId2'])[0].resources.length,
   ).toBe(2);
+});
+
+describe('getAllOrSelectedAnnotations', () => {
+  it('returns all annotations if the given window is set to display all', () => {
+    const state = {
+      windows: {
+        abc123: { displayAllAnnotations: true },
+      },
+      annotations: {
+        cid1: {
+          annoId1: { id: 'annoId1', json: { resources: [{ '@id': 'annoId1' }, { '@id': 'annoId2' }] } },
+        },
+      },
+    };
+
+    expect(
+      getAllOrSelectedAnnotations(state, 'abc123', ['cid1'], ['annoId1'])[0].resources.length,
+    ).toBe(2);
+  });
+
+  it('returns only selected annotations if the window is not set to display all', () => {
+    const state = {
+      windows: {
+        abc123: { displayAllAnnotations: false },
+      },
+      annotations: {
+        cid1: {
+          annoId1: { id: 'annoId1', json: { resources: [{ '@id': 'annoId1' }, { '@id': 'annoId2' }] } },
+        },
+      },
+    };
+
+    expect(
+      getAllOrSelectedAnnotations(state, 'abc123', ['cid1'], ['annoId1'])[0].resources.length,
+    ).toBe(1);
+  });
 });

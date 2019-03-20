@@ -143,6 +143,14 @@ export const windowsReducer = (state = {}, action) => {
         },
       };
     }
+    case ActionTypes.TOGGLE_ANNOTATION_DISPLAY:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          displayAllAnnotations: !state[action.windowId].displayAllAnnotations,
+        },
+      };
     default:
       return state;
   }

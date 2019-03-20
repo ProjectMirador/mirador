@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import AnnotationSettings from '../../../src/containers/AnnotationSettings';
 import { WindowSideBarAnnotationsPanel } from '../../../src/components/WindowSideBarAnnotationsPanel';
 
 /** */
@@ -25,6 +26,10 @@ describe('WindowSideBarAnnotationsPanel', () => {
     expect(
       wrapper.props().title,
     ).toBe('annotations');
+  });
+
+  it('has the AnnotationSettings component', () => {
+    expect(createWrapper().find(AnnotationSettings).length).toBe(1);
   });
 
   it('renders a list with a list item for each annotation', () => {

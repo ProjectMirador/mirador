@@ -58,6 +58,7 @@ export function addWindow(options) {
       companionWindowIds: [cwDefault, cwThumbs],
       sideBarPanel: 'info',
       rotation: null,
+      displayAllAnnotations: false,
       selectedAnnotations: {},
       view: 'single',
       maximized: false,
