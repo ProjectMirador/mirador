@@ -21,7 +21,7 @@ const mapStateToProps = (state, { manifestId }) => {
     thumbnail: getManifestThumbnail(manifest),
     provider: getManifestProvider(manifest),
     size: getManifestCanvases(manifest).length,
-    manifestLogo: getManifestLogo(state.manifests[manifestId]),
+    manifestLogo: getManifestLogo(state, { manifestId }),
   };
 };
 

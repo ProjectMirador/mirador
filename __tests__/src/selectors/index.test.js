@@ -68,14 +68,12 @@ describe('getWindowManifest()', () => {
 
 describe('getManifestLogo()', () => {
   it('should return manifest logo id', () => {
-    const manifest = { manifestation: manifesto.create(manifestFixture001) };
-    const received = getManifestLogo(manifest);
+    const received = getManifestLogo({ manifests: { x: { manifesto: manifesto.create(manifestFixture001) } } }, { manifestId: 'x' });
     expect(received).toEqual(manifestFixture001.logo['@id']);
   });
 
   it('should return null if manifest has no logo', () => {
-    const manifest = { manifestation: manifesto.create({}) };
-    const received = getManifestLogo(manifest);
+    const received = getManifestLogo({ manifests: { x: { manifesto: manifesto.create({}) } } }, { manifestId: 'x' });
     expect(received).toBeNull();
   });
 });

@@ -1,9 +1,36 @@
+import { createSelector } from 'reselect';
 import filter from 'lodash/filter';
 import flatten from 'lodash/flatten';
 import { LanguageMap } from 'manifesto.js';
 import Annotation from '../../lib/Annotation';
 import ManifestoCanvas from '../../lib/ManifestoCanvas';
 import CanvasGroupings from '../../lib/CanvasGroupings';
+
+/** */
+const uncurry = curriedFn => (...args) => (
+  args.reduce((left, right) => left(right), curriedFn)
+);
+
+/** */
+const createSelectorN = (...selectors) => {
+  const curriedFn = selectors[selectors.length - 1];
+  return createSelector(...selectors.slice(0, -1), uncurry(curriedFn));
+};
+
+/** */
+function getManifest(state, { manifestId }) {
+  return state.manifests[manifestId];
+}
+
+export const getManifestoInstance = createSelector(
+  [getManifest],
+  manifest => manifest.manifesto,
+);
+
+export const getManifestLogo = createSelectorN(
+  [getManifestoInstance],
+  manifest => manifest && manifest.getLogo(),
+);
 
 /**
 * Return the manifest that belongs to a certain window.
@@ -15,16 +42,6 @@ export function getWindowManifest(state, windowId) {
   return state.windows[windowId]
     && state.windows[windowId].manifestId
     && state.manifests[state.windows[windowId].manifestId];
-}
-
-/**
-* Return the logo of a manifest or null
-* @param {object} manifest
-* @return {String|null}
-*/
-export function getManifestLogo(manifest) {
-  return manifest.manifestation
-    && manifest.manifestation.getLogo();
 }
 
 /**
