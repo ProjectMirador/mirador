@@ -43,6 +43,9 @@ const styles = theme => ({
   displayNone: {
     display: 'none',
   },
+  list: {
+    margin: '16px',
+  },
   typographyBody: {
     flexGrow: 1,
   },
