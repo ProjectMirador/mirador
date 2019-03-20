@@ -32,7 +32,6 @@ const styles = theme => ({
   },
   toggle: {
     position: 'absolute',
-    left: '100%',
     width: '1rem',
     zIndex: theme.zIndex.drawer,
     backgroundColor: theme.palette.background.paper,
