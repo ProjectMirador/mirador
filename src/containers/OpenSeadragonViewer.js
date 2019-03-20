@@ -23,7 +23,7 @@ const mapStateToProps = ({
 }, { windowId, currentCanvases }) => ({
   viewer: viewers[windowId],
   label: getCanvasLabel(
-    getSelectedCanvas({ windows, manifests }, windowId),
+    getSelectedCanvas({ windows, manifests }, { windowId }),
     windows[windowId].canvasIndex,
   ),
   annotations: getSelectedTargetAnnotationResources(

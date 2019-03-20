@@ -20,13 +20,13 @@ import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnota
  */
 const mapStateToProps = (state, { windowId }) => ({
   selectedAnnotationIds: getSelectedAnnotationIds(
-    state, windowId, getSelectedCanvases(state, windowId).map(canvas => canvas.id),
+    state, windowId, getSelectedCanvases(state, { windowId }).map(canvas => canvas.id),
   ),
   annotations: getIdAndContentOfResources(
     getAnnotationResourcesByMotivation(
       getSelectedTargetsAnnotations(
         state,
-        getSelectedCanvases(state, windowId).map(canvas => canvas.id),
+        getSelectedCanvases(state, { windowId }).map(canvas => canvas.id),
       ),
       ['oa:commenting', 'sc:painting'],
     ),

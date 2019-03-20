@@ -268,7 +268,7 @@ describe('getSelectedCanvas', () => {
   };
 
   it('should return canvas based on the canvas index stored window state', () => {
-    const selectedCanvas = getSelectedCanvas(state, 'a');
+    const selectedCanvas = getSelectedCanvas(state, { windowId: 'a' });
 
     expect(selectedCanvas.id).toEqual(
       'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
@@ -276,7 +276,7 @@ describe('getSelectedCanvas', () => {
   });
 
   it('should return undefined when there is no manifestation to get a canvas from', () => {
-    const selectedCanvas = getSelectedCanvas(noManifestationState, 'a');
+    const selectedCanvas = getSelectedCanvas(noManifestationState, { windowId: 'a' });
 
     expect(selectedCanvas).toBeUndefined();
   });
@@ -316,7 +316,7 @@ describe('getSelectedCanvases', () => {
   };
 
   it('should return canvas groupings based on the canvas index stored window state', () => {
-    const selectedCanvases = getSelectedCanvases(state, 'a');
+    const selectedCanvases = getSelectedCanvases(state, { windowId: 'a' });
 
     expect(selectedCanvases.length).toEqual(2);
     expect(selectedCanvases.map(canvas => canvas.id)).toEqual([
@@ -326,7 +326,7 @@ describe('getSelectedCanvases', () => {
   });
 
   it('should return undefined when there is no manifestation to get a canvas from', () => {
-    const selectedCanvas = getSelectedCanvases(noManifestationState, 'a');
+    const selectedCanvas = getSelectedCanvases(noManifestationState, { windowId: 'a' });
 
     expect(selectedCanvas).toBeUndefined();
   });
