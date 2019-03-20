@@ -70,7 +70,7 @@ export class ManifestForm extends Component {
     return (
       <form onSubmit={this.formSubmit}>
         <Grid container spacing={24}>
-          <Grid item sm={9}>
+          <Grid item xs={12} sm={8} md={9}>
             <TextField
               fullWidth
               value={formValue}
@@ -88,7 +88,7 @@ export class ManifestForm extends Component {
               }}
             />
           </Grid>
-          <Grid item sm={3}>
+          <Grid item xs={12} sm={4} md={3} className={classes.buttons}>
             { onCancel && (
               <Button onClick={this.handleCancel}>
                 {t('cancel')}

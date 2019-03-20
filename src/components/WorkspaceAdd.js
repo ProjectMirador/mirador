@@ -78,10 +78,10 @@ export class WorkspaceAdd extends React.Component {
           className={classNames({
             [classes.displayNone]: !addResourcesOpen,
           })}
+          classes={{ paper: classes.paper }}
           variant="persistent"
           anchor="bottom"
           open={addResourcesOpen}
-          PaperProps={{ style: { position: 'absolute', left: 100 } }}
           ModalProps={{
             disablePortal: true,
             hideBackdrop: true,
@@ -92,7 +92,7 @@ export class WorkspaceAdd extends React.Component {
             className={classes.form}
           >
             <AppBar position="absolute" color="secondary" onClick={() => (this.setAddResourcesVisibility(false))}>
-              <Toolbar>
+              <Toolbar variant="dense">
                 <MiradorMenuButton
                   aria-label={t('closeAddResourceMenu')}
                   className={classes.menuButton}

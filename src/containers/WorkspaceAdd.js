@@ -31,9 +31,11 @@ const mapDispatchToProps = { setWorkspaceAddVisibility: actions.setWorkspaceAddV
 const styles = theme => ({
   form: {
     ...theme.mixins.gutters(),
+    left: '0',
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
-    marginTop: 64,
+    right: '0',
+    marginTop: 48,
   },
   fab: {
     position: 'absolute',
@@ -45,6 +47,13 @@ const styles = theme => ({
   },
   list: {
     margin: '16px',
+  },
+  paper: {
+    borderTop: '0',
+    left: '0',
+    [theme.breakpoints.up('sm')]: {
+      left: '65px',
+    },
   },
   typographyBody: {
     flexGrow: 1,

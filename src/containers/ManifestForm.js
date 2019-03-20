@@ -17,6 +17,12 @@ const mapDispatchToProps = { fetchManifest: actions.fetchManifest };
  * @param theme
  */
 const styles = theme => ({
+  buttons: {
+    textAlign: 'right',
+    [theme.breakpoints.up('sm')]: {
+      textAlign: 'inherit',
+    },
+  },
   input: {
     ...theme.typography.body1,
   },
