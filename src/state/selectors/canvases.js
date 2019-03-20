@@ -62,3 +62,27 @@ export const getSelectedCanvases = createSelector(
       view,
     ).getCanvases(canvasIndex),
 );
+
+/**
+* Return canvas label, or alternatively return the given index + 1 to be displayed
+* @param {object} canvas
+* @return {String|Integer}
+*/
+export const getCanvasLabel = createSelector(
+  [getCanvas],
+  canvas => (canvas && (
+    canvas.getLabel().length > 0
+      ? canvas.getLabel().map(label => label.value)[0]
+      : String(canvas.index + 1)
+  )),
+);
+
+/**
+* Return canvas description
+* @param {object} canvas
+* @param {String}
+*/
+export const getCanvasDescription = createSelector(
+  [getCanvas],
+  canvas => canvas && canvas.getProperty('description'),
+);
