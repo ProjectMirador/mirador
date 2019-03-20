@@ -12,7 +12,12 @@ import ns from '../config/css-ns';
 export function MiradorMenuButton(props) {
   const { 'aria-label': ariaLabel } = props;
   const {
-    children, containerId, dispatch, wrapperClassName, ...iconButtonProps
+    children,
+    containerId,
+    dispatch,
+    TooltipProps,
+    wrapperClassName,
+    ...iconButtonProps
   } = props;
 
   return (
@@ -21,6 +26,7 @@ export function MiradorMenuButton(props) {
         container: document.querySelector(`#${containerId} .${ns('viewer')}`),
       }}
       title={ariaLabel}
+      {...TooltipProps}
     >
       {/*
         Wrap IconButton in span so it can receive mouse events
@@ -40,10 +46,12 @@ MiradorMenuButton.propTypes = {
   children: PropTypes.element.isRequired,
   containerId: PropTypes.string.isRequired,
   dispatch: PropTypes.func,
+  TooltipProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   wrapperClassName: PropTypes.string,
 };
 
 MiradorMenuButton.defaultProps = {
   dispatch: () => {},
+  TooltipProps: {},
   wrapperClassName: null,
 };

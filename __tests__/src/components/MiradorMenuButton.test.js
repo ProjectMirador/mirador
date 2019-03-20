@@ -7,7 +7,7 @@ import { MiradorMenuButton } from '../../../src/components/MiradorMenuButton';
 */
 function createWrapper(props) {
   return shallow(
-    <MiradorMenuButton aria-label="The Label" {...props}>
+    <MiradorMenuButton aria-label="The Label" containerId="mirador" {...props}>
       <>icon</>
     </MiradorMenuButton>,
   );
@@ -40,6 +40,12 @@ describe('MiradorMenuButton', () => {
     wrapper = createWrapper({ wrapperClassName: 'someClass' });
 
     expect(wrapper.find('WithStyles(Tooltip) span').props().className).toEqual('someClass');
+  });
+
+  it('spreads TooltipProps to the Tooltip component', () => {
+    wrapper = createWrapper({ TooltipProps: { style: { color: 'red' } } });
+
+    expect(wrapper.find('WithStyles(Tooltip)').props().style).toEqual({ color: 'red' });
   });
 
   it('spreads any other props to IconButton', () => {
