@@ -224,12 +224,13 @@ describe('getManifestDescription', () => {
 describe('getManifestProvider', () => {
   it('should return manifest provider label', () => {
     const manifest = manifesto.create(manifestFixtureWithAProvider);
-    const received = getManifestProvider(manifest);
+    const state = { manifests: { x: { manifestation: manifest } } };
+    const received = getManifestProvider(state, { manifestId: 'x' });
     expect(received).toBe('Example Organization');
   });
 
   it('should return undefined if manifest undefined', () => {
-    const received = getManifestProvider(undefined);
+    const received = getManifestProvider({ manifests: {} }, { manifestId: 'x' });
     expect(received).toBeUndefined();
   });
 });

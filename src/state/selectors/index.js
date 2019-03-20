@@ -29,7 +29,9 @@ export const getManifestLogo = createSelector(
 * @param {object} manifest
 * @return {String|null}
 */
-export function getManifestProvider(manifest) {
+export function getManifestProvider(state, props) {
+  const manifest = getManifestoInstance(state, props);
+
   return manifest
     && manifest.getProperty('provider')
     && manifest.getProperty('provider')[0].label
