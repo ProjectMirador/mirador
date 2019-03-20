@@ -60,17 +60,17 @@ describe('getWindowViewType', () => {
   };
 
   it('should return view type if window exists', () => {
-    const received = getWindowViewType(state, 'a');
+    const received = getWindowViewType(state, { windowId: 'a' });
     expect(received).toBe('single');
   });
 
   it('should return undefined if view type does not exist in window', () => {
-    const received = getWindowViewType(state, 'b');
+    const received = getWindowViewType(state, { windowId: 'b' });
     expect(received).toBeUndefined();
   });
 
   it('should return undefined if window does not exists', () => {
-    const received = getWindowViewType(state, 'c');
+    const received = getWindowViewType(state, { windowId: 'c' });
     expect(received).toBeUndefined();
   });
 });
@@ -242,19 +242,19 @@ describe('getCompanionWindowForPosition', () => {
   };
 
   it('the companion window type based on the given position', () => {
-    const received = getCompanionWindowForPosition(state, 'a', 'right');
+    const received = getCompanionWindowForPosition(state, { windowId: 'a', position: 'right' });
 
     expect(received.id).toEqual('abc');
   });
 
   it('returns undefined if the given window does not exist', () => {
-    const received = getCompanionWindowForPosition(state, 'c', 'right');
+    const received = getCompanionWindowForPosition(state, { windowId: 'c', position: 'right' });
 
     expect(received).toBeUndefined();
   });
 
   it('returns undefined if a companion window at the given position does not exist', () => {
-    const received = getCompanionWindowForPosition(state, 'a', 'bottom');
+    const received = getCompanionWindowForPosition(state, { windowId: 'a', position: 'bottom' });
 
     expect(received).toBeUndefined();
   });
@@ -295,7 +295,7 @@ describe('getCompanionWindowsOfWindow', () => {
   };
 
   it('should return companion windows for a given window id', () => {
-    const received = getCompanionWindowsOfWindow(state, 'abc123');
+    const received = getCompanionWindowsOfWindow(state, { windowId: 'abc123' });
 
     expect(received).toEqual([
       { id: 'foo', content: 'info' },
