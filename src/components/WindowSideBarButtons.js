@@ -54,7 +54,6 @@ export class WindowSideBarButtons extends Component {
     */
     const selectedTab = this.tabs.find(t => (t.getAttribute('aria-selected')) === 'true');
     this.selectTab(selectedTab);
-    this.deactivateTabs(this.tabs.indexOf(selectedTab));
     selectedTab.focus();
   }
 
@@ -71,7 +70,7 @@ export class WindowSideBarButtons extends Component {
 
   /**
    *
-   * @param {*} tab
+   * @param {*} tab the tab to select
    */
   selectTab(tab) {
     WindowSideBarButtons.activateTab(tab);
@@ -79,7 +78,7 @@ export class WindowSideBarButtons extends Component {
   }
 
   /**
-   * @param {number} omit index to omit
+   * @param {number} omit tab index to omit
    */
   deactivateTabs(omit = -1) {
     this.tabs.map((v, k) => {
