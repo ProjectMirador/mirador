@@ -27,7 +27,7 @@ export class WindowSideBarButtons extends Component {
     const { windowId } = this.props;
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
-    this.windowId = `${windowId}-sidebar-buttons`;
+    this.containerId = `${windowId}-sidebar-buttons`;
     this.keys = {
       end: 35,
       home: 36,
@@ -40,7 +40,7 @@ export class WindowSideBarButtons extends Component {
    *
    */
   componentDidMount() {
-    this.tabs = Array.from(document.querySelectorAll(`#${this.windowId} button[role=tab]`));
+    this.tabs = Array.from(document.querySelectorAll(`#${this.containerId} button[role=tab]`));
     this.tabBar = this.tabs[0].parentElement;
 
     /*
@@ -149,7 +149,7 @@ export class WindowSideBarButtons extends Component {
     } = this.props;
 
     return (
-      <div id={this.windowId}>
+      <div id={this.containerId}>
         <Tabs
           classes={{ flexContainer: classes.tabsFlexContainer, indicator: classes.tabsIndicator }}
           value={sideBarPanel === 'closed' ? false : sideBarPanel}
