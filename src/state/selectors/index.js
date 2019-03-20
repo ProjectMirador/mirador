@@ -7,17 +7,6 @@ import ManifestoCanvas from '../../lib/ManifestoCanvas';
 import CanvasGroupings from '../../lib/CanvasGroupings';
 
 /** */
-const uncurry = curriedFn => (...args) => (
-  args.reduce((left, right) => left(right), curriedFn)
-);
-
-/** */
-const createSelectorN = (...selectors) => {
-  const curriedFn = selectors[selectors.length - 1];
-  return createSelector(...selectors.slice(0, -1), uncurry(curriedFn));
-};
-
-/** */
 function getManifest(state, { manifestId }) {
   return state.manifests[manifestId];
 }
@@ -27,7 +16,7 @@ export const getManifestoInstance = createSelector(
   manifest => manifest.manifesto,
 );
 
-export const getManifestLogo = createSelectorN(
+export const getManifestLogo = createSelector(
   [getManifestoInstance],
   manifest => manifest && manifest.getLogo(),
 );
