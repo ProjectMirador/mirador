@@ -29,6 +29,13 @@ export class WindowSideBarButtons extends Component {
     this.handleKeyUp = this.handleKeyUp.bind(this);
     this.containerId = `${windowId}-sidebar-buttons`;
     this.keys = {
+      end: 'End',
+      home: 'Home',
+      up: 'ArrowUp',
+      down: 'ArrowDown',
+    };
+
+    this.chars = {
       end: 35,
       home: 36,
       up: 38,
@@ -91,16 +98,15 @@ export class WindowSideBarButtons extends Component {
    * @param {object} event the keyUp event
    */
   handleKeyUp(event) {
-    switch (event.keyCode) {
-      case this.keys.up:
-        event.preventDefault();
-        return this.focusPreviousTab(event.target);
-      case this.keys.down:
-        event.preventDefault();
-        return this.focusNextTab(event.target);
-      default:
-        return null;
+    if (event.key === this.keys.up || event.which === this.chars.up) {
+      event.preventDefault();
+      return this.focusPreviousTab(event.target);
     }
+    if (event.key === this.keys.down || event.which === this.chars.down) {
+      event.preventDefault();
+      return this.focusNextTab(event.target);
+    }
+    return null;
   }
 
   /**
