@@ -41,9 +41,11 @@ export function getManifestProvider(manifest) {
 * @param {object} manifest
 * @return {String|null}
 */
-export function getManifestThumbnail(manifest) {
+export function getManifestThumbnail(state, props) {
   /** */
   function getTopLevelManifestThumbnail() {
+    const manifest = getManifestoInstance(state, props);
+
     return manifest
       && manifest.getThumbnail()
       && manifest.getThumbnail().id;
@@ -51,14 +53,14 @@ export function getManifestThumbnail(manifest) {
 
   /** */
   function getFirstCanvasThumbnail() {
-    const canvases = getManifestCanvases(manifest);
+    const canvases = getManifestCanvases(state, props);
 
     return canvases.length > 0 && canvases[0].getThumbnail() && canvases[0].getThumbnail().id;
   }
 
   /** */
   function generateThumbnailFromFirstCanvas() {
-    const canvases = getManifestCanvases(manifest);
+    const canvases = getManifestCanvases(state, props);
 
     if (canvases.length === 0) return null;
 
@@ -77,7 +79,9 @@ export function getManifestThumbnail(manifest) {
 * @param {object} manifest
 * @return {String|null}
 */
-export function getManifestCanvases(manifest) {
+export function getManifestCanvases(state, props) {
+  const manifest = getManifestoInstance(state, props);
+
   if (!manifest) {
     return [];
   }

@@ -6,7 +6,7 @@ import { withPlugins } from '../extend';
 import CanvasGroupings from '../lib/CanvasGroupings';
 import * as actions from '../state/actions';
 import { ThumbnailNavigation } from '../components/ThumbnailNavigation';
-import { getManifestCanvases, getManifestoInstance } from '../state/selectors';
+import { getManifestCanvases } from '../state/selectors';
 /**
  * mapStateToProps - used to hook up state to props
  * @memberof ThumbnailNavigation
@@ -16,9 +16,7 @@ const mapStateToProps = ({
   companionWindows, config, manifests, windows,
 }, { windowId }) => ({
   canvasGroupings: new CanvasGroupings(
-    getManifestCanvases(
-      getManifestoInstance({ windows, manifests }, { windowId }),
-    ),
+    getManifestCanvases({ windows, manifests }, { windowId }),
     windows[windowId].view,
   ),
   position: companionWindows[windows[windowId].thumbnailNavigationId].position,

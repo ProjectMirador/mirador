@@ -7,15 +7,13 @@ import * as actions from '../state/actions';
 import { WindowSideBarCanvasPanel } from '../components/WindowSideBarCanvasPanel';
 import {
   getManifestCanvases,
-  getManifestoInstance,
 } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
  */
 const mapStateToProps = (state, { windowId }) => {
-  const manifest = getManifestoInstance(state, { windowId });
-  const canvases = getManifestCanvases(manifest);
+  const canvases = getManifestCanvases(state, { windowId });
   const { config } = state;
   return {
     canvases,

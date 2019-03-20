@@ -88,7 +88,8 @@ describe('getManifestLogo()', () => {
 describe('getManifestThumbnail()', () => {
   it('should return manifest thumbnail id', () => {
     const manifest = manifesto.create(manifestFixture001);
-    const received = getManifestThumbnail(manifest);
+    const state = { manifests: { x: { manifestation: manifest } } };
+    const received = getManifestThumbnail(state, { manifestId: 'x' });
     expect(received).toEqual(manifestFixture001.thumbnail['@id']);
   });
 
@@ -104,19 +105,22 @@ describe('getManifestThumbnail()', () => {
       ],
     };
 
-    const received = getManifestThumbnail(manifest);
+    const state = { manifests: { x: { manifestation: manifest } } };
+    const received = getManifestThumbnail(state, { manifestId: 'x' });
     expect(received).toEqual('xyz');
   });
 
   it('returns a thumbnail sized image url from the first canvas', () => {
     const manifest = manifesto.create(manifestFixture019);
-    const received = getManifestThumbnail(manifest);
+    const state = { manifests: { x: { manifestation: manifest } } };
+    const received = getManifestThumbnail(state, { manifestId: 'x' });
     expect(received).toEqual('https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/,80/0/default.jpg');
   });
 
   it('should return null if manifest has no thumbnail', () => {
     const manifest = manifesto.create({});
-    const received = getManifestThumbnail(manifest);
+    const state = { manifests: { x: { manifestation: manifest } } };
+    const received = getManifestThumbnail(state, { manifestId: 'x' });
     expect(received).toBeNull();
   });
 });
@@ -124,13 +128,15 @@ describe('getManifestThumbnail()', () => {
 describe('getManifestCanvases', () => {
   it('returns an empty array if the manifestation is not loaded', () => {
     const manifest = {};
-    const received = getManifestCanvases(manifest);
+    const state = { manifests: { x: { manifestation: manifest } } };
+    const received = getManifestCanvases(state, { manifestId: 'x' });
     expect(received).toEqual([]);
   });
 
   it('returns canvases from the manifest', () => {
     const manifest = manifesto.create(manifestFixture001);
-    const received = getManifestCanvases(manifest);
+    const state = { manifests: { x: { manifestation: manifest } } };
+    const received = getManifestCanvases(state, { manifestId: 'x' });
     expect(received.length).toBe(1);
     expect(received[0].id).toBe('https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json');
   });
