@@ -50,7 +50,6 @@ export class CanvasThumbnail extends Component {
     const {
       maxHeight, maxWidth, aspectRatio,
     } = this.props;
-
     if (maxHeight && maxWidth && aspectRatio) return 'sizeByConfinedWh';
     if (maxHeight && maxWidth) return 'sizeByDistortedWh';
     if (maxHeight && !maxWidth) return 'sizeByH';
