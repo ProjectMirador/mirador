@@ -6,8 +6,8 @@ describe('config actions', () => {
     it('sets the config', () => {
       const config = { foo: 'bar' };
       const expectedAction = {
-        type: ActionTypes.SET_CONFIG,
         config,
+        type: ActionTypes.SET_CONFIG,
       };
       expect(actions.setConfig(config)).toEqual(expectedAction);
     });
@@ -16,8 +16,8 @@ describe('config actions', () => {
     it('updates the config', () => {
       const config = { foo: 'bar' };
       const expectedAction = {
-        type: ActionTypes.UPDATE_CONFIG,
         config,
+        type: ActionTypes.UPDATE_CONFIG,
       };
       expect(actions.updateConfig(config)).toEqual(expectedAction);
     });

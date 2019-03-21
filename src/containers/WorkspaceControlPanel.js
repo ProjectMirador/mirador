@@ -11,24 +11,24 @@ import { WorkspaceControlPanel } from '../components/WorkspaceControlPanel';
  * drawer: {overflowX: string, height: string}}}
  */
 const styles = theme => ({
+  ctrlBtn: {
+    margin: theme.spacing.unit,
+  },
+  drawer: {
+    overflowX: 'hidden',
+  },
   root: {
     [theme.breakpoints.up('sm')]: {
+      height: '100%',
       left: 0,
       right: 'auto',
       width: 64,
-      height: '100%',
     },
   },
   toolbar: {
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },
-  },
-  ctrlBtn: {
-    margin: theme.spacing.unit,
-  },
-  drawer: {
-    overflowX: 'hidden',
   },
 });
 

@@ -92,6 +92,6 @@ export class ViewerNavigation extends Component {
 ViewerNavigation.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   setCanvas: PropTypes.func.isRequired,
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func.isRequired,
+  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };

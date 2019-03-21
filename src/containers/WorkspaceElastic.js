@@ -11,8 +11,8 @@ import WorkspaceElastic from '../components/WorkspaceElastic';
  */
 const mapStateToProps = state => (
   {
-    workspace: state.workspace,
     windows: state.windows,
+    workspace: state.workspace,
   }
 );
 
@@ -22,6 +22,11 @@ const mapStateToProps = state => (
  * @private
  */
 const mapDispatchToProps = (dispatch, props) => ({
+  setWindowSize: (windowId, size) => {
+    dispatch(
+      actions.setWindowSize(windowId, size),
+    );
+  },
   setWorkspaceViewportDimensions: (position) => {
     dispatch(
       actions.setWorkspaceViewportDimensions(position),
@@ -38,11 +43,6 @@ const mapDispatchToProps = (dispatch, props) => ({
   updateWindowPosition: (windowId, position) => {
     dispatch(
       actions.updateWindowPosition(windowId, position),
-    );
-  },
-  setWindowSize: (windowId, size) => {
-    dispatch(
-      actions.setWindowSize(windowId, size),
     );
   },
 });

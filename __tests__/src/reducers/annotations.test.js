@@ -4,9 +4,9 @@ import ActionTypes from '../../../src/state/actions/action-types';
 describe('annotation reducer', () => {
   it('should handle REQUEST_ANNOTATION', () => {
     expect(annotationsReducer({}, {
-      type: ActionTypes.REQUEST_ANNOTATION,
-      canvasId: 'foo',
       annotationId: 'abc123',
+      canvasId: 'foo',
+      type: ActionTypes.REQUEST_ANNOTATION,
     })).toEqual({
       foo: {
         abc123: {
@@ -27,14 +27,14 @@ describe('annotation reducer', () => {
         },
       },
       {
-        type: ActionTypes.RECEIVE_ANNOTATION,
-        canvasId: 'foo',
         annotationId: 'abc123',
         annotationJson: {
-          id: 'abc123',
           '@type': 'sc:AnnotationList',
           content: 'anno stuff',
+          id: 'abc123',
         },
+        canvasId: 'foo',
+        type: ActionTypes.RECEIVE_ANNOTATION,
       },
     )).toMatchObject({
       foo: {
@@ -57,17 +57,17 @@ describe('annotation reducer', () => {
         },
       },
       {
-        type: ActionTypes.RECEIVE_ANNOTATION_FAILURE,
-        canvasId: 'foo',
         annotationId: 'abc123',
+        canvasId: 'foo',
         error: "This institution didn't enable CORS.",
+        type: ActionTypes.RECEIVE_ANNOTATION_FAILURE,
       },
     )).toEqual({
       foo: {
         abc123: {
+          error: "This institution didn't enable CORS.",
           id: 'abc123',
           isFetching: false,
-          error: "This institution didn't enable CORS.",
         },
       },
     });

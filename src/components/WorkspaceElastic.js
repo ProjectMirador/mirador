@@ -28,28 +28,28 @@ class WorkspaceElastic extends React.Component {
     const offsetY = workspace.height / 2;
 
     return (
-      <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <div style={{ height: '100%', position: 'relative', width: '100%' }}>
         <ResizeObserver
           onResize={(rect) => { setWorkspaceViewportDimensions(rect); }}
         />
 
         <Rnd
           default={{
-            width: workspace.width,
             height: workspace.height,
+            width: workspace.width,
           }}
           position={{
             x: -1 * viewportPosition.x - offsetX, y: -1 * viewportPosition.y - offsetY,
           }}
           enableResizing={{
-            top: false,
-            right: false,
             bottom: false,
-            left: false,
-            topRight: false,
-            bottomRight: false,
             bottomLeft: false,
+            bottomRight: false,
+            left: false,
+            right: false,
+            top: false,
             topLeft: false,
+            topRight: false,
           }}
           onDragStop={(e, d) => {
             setWorkspaceViewportPosition({ x: -1 * d.x - offsetX, y: -1 * d.y - offsetY });
@@ -61,7 +61,7 @@ class WorkspaceElastic extends React.Component {
             Object.values(windows).map(window => (
               <Rnd
                 key={window.id}
-                size={{ width: window.width, height: window.height }}
+                size={{ height: window.height, width: window.width }}
                 position={{ x: window.x + offsetX, y: window.y + offsetY }}
                 bounds="parent"
                 onDragStop={(e, d) => {
@@ -69,8 +69,8 @@ class WorkspaceElastic extends React.Component {
                 }}
                 onResize={(e, direction, ref, delta, position) => {
                   setWindowSize(window.id, {
-                    width: ref.style.width,
                     height: ref.style.height,
+                    width: ref.style.width,
                     x: position.x - offsetX,
                     y: position.y - offsetY,
                   });
@@ -93,12 +93,12 @@ class WorkspaceElastic extends React.Component {
 }
 
 WorkspaceElastic.propTypes = {
-  setWorkspaceViewportPosition: PropTypes.func.isRequired,
+  setWindowSize: PropTypes.func.isRequired,
   setWorkspaceViewportDimensions: PropTypes.func.isRequired,
+  setWorkspaceViewportPosition: PropTypes.func.isRequired,
+  updateWindowPosition: PropTypes.func.isRequired,
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   workspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  updateWindowPosition: PropTypes.func.isRequired,
-  setWindowSize: PropTypes.func.isRequired,
 };
 
 export default WorkspaceElastic;

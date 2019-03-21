@@ -11,12 +11,12 @@ function createWrapper(props) {
       windows={{}}
       workspace={{
         focusedWindowId: 2,
-        width: 5000,
         height: 5000,
         viewportPosition: {
           x: 20,
           y: 20,
         },
+        width: 5000,
       }}
       setWorkspaceViewportDimensions={() => {}}
       setWorkspaceViewportPosition={() => {}}
@@ -30,18 +30,18 @@ function createWrapper(props) {
 describe('WorkspaceElastic', () => {
   const windows = {
     1: {
+      height: 200,
       id: 1,
+      width: 200,
       x: 20,
       y: 20,
-      width: 200,
-      height: 200,
     },
     2: {
+      height: 400,
       id: 2,
+      width: 300,
       x: 25,
       y: 25,
-      width: 300,
-      height: 400,
     },
   };
   let wrapper;
@@ -55,8 +55,8 @@ describe('WorkspaceElastic', () => {
       .at(1)
       .props().size)
       .toEqual({
-        width: 200,
         height: 200,
+        width: 200,
       });
     expect(wrapper
       .find(Rnd)
@@ -71,8 +71,8 @@ describe('WorkspaceElastic', () => {
       .at(2)
       .props().size)
       .toEqual({
-        width: 300,
         height: 400,
+        width: 300,
       });
   });
   describe('focused window', () => {
@@ -84,8 +84,8 @@ describe('WorkspaceElastic', () => {
     it('when windows are dragged', () => {
       const mockDragStop = jest.fn();
       wrapper = createWrapper({
-        windows,
         updateWindowPosition: mockDragStop,
+        windows,
       });
       wrapper
         .find(Rnd)
@@ -103,8 +103,8 @@ describe('WorkspaceElastic', () => {
     it('when windows are resized', () => {
       const mockOnResize = jest.fn();
       wrapper = createWrapper({
-        windows,
         setWindowSize: mockOnResize,
+        windows,
       });
       wrapper
         .find(Rnd)
@@ -112,13 +112,13 @@ describe('WorkspaceElastic', () => {
         .props()
         .onResize('myevent', 'direction', {
           style: {
-            width: 400,
             height: 200,
+            width: 400,
           },
         }, {}, { x: 0, y: 0 });
       expect(mockOnResize).toHaveBeenCalledWith(1, {
-        width: 400,
         height: 200,
+        width: 400,
         x: -2500,
         y: -2500,
       });
@@ -129,8 +129,8 @@ describe('WorkspaceElastic', () => {
     it('when workspace itself is dragged', () => {
       const mockDragStop = jest.fn();
       wrapper = createWrapper({
-        windows,
         setWorkspaceViewportPosition: mockDragStop,
+        windows,
       });
       wrapper
         .find(Rnd)
@@ -149,8 +149,8 @@ describe('WorkspaceElastic', () => {
     it('when workspace itself is resized', () => {
       const mockResize = jest.fn();
       wrapper = createWrapper({
-        windows,
         setWorkspaceViewportDimensions: mockResize,
+        windows,
       });
 
       wrapper
@@ -158,12 +158,12 @@ describe('WorkspaceElastic', () => {
         .at(0)
         .props()
         .onResize({
-          width: 500,
           height: 500,
+          width: 500,
         });
       expect(mockResize).toHaveBeenCalledWith({
-        width: 500,
         height: 500,
+        width: 500,
       });
     });
   });

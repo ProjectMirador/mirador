@@ -54,7 +54,7 @@ export class ManifestListItem extends React.Component {
     const placeholder = (
       <Grid container className={ns('manifest-list-item')} spacing={24}>
         <Grid item xs={3} sm={2}>
-          <RectShape color="gray" style={{ width: 120, height: 80 }} />
+          <RectShape color="gray" style={{ height: 80, width: 120 }} />
         </Grid>
         <Grid item xs={9} sm={6}>
           <TextRow color="gray" />
@@ -63,7 +63,7 @@ export class ManifestListItem extends React.Component {
           <TextBlock rows={2} color="gray" />
         </Grid>
         <Grid item xs={4} sm={2}>
-          <RectShape color="gray" style={{ width: 60, height: 60 }} />
+          <RectShape color="gray" style={{ height: 60, width: 60 }} />
         </Grid>
       </Grid>
     );
@@ -103,7 +103,7 @@ export class ManifestListItem extends React.Component {
                       unloader={(
                         <RectShape
                           className={classes.placeholder}
-                          style={{ width: 120, height: 80 }}
+                          style={{ height: 80, width: 120 }}
                         />
                       )}
                     />
@@ -128,7 +128,7 @@ export class ManifestListItem extends React.Component {
                 role="presentation"
                 className={classes.logo}
                 unloader={
-                  <RectShape className={classes.placeholder} style={{ width: 60, height: 60 }} />
+                  <RectShape className={classes.placeholder} style={{ height: 60, width: 60 }} />
                 }
               />
             </Grid>
@@ -140,32 +140,32 @@ export class ManifestListItem extends React.Component {
 }
 
 ManifestListItem.propTypes = {
-  manifestId: PropTypes.string.isRequired,
   addWindow: PropTypes.func.isRequired,
-  handleClose: PropTypes.func,
-  ready: PropTypes.bool,
-  title: PropTypes.string,
-  thumbnail: PropTypes.string,
-  size: PropTypes.number,
-  manifestLogo: PropTypes.string,
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  provider: PropTypes.string,
-  t: PropTypes.func,
-  fetchManifest: PropTypes.func.isRequired,
   error: PropTypes.string,
+  fetchManifest: PropTypes.func.isRequired,
+  handleClose: PropTypes.func,
   isFetching: PropTypes.bool,
+  manifestId: PropTypes.string.isRequired,
+  manifestLogo: PropTypes.string,
+  provider: PropTypes.string,
+  ready: PropTypes.bool,
+  size: PropTypes.number,
+  t: PropTypes.func,
+  thumbnail: PropTypes.string,
+  title: PropTypes.string,
 };
 
 ManifestListItem.defaultProps = {
-  handleClose: () => {},
-  ready: false,
-  thumbnail: null,
-  title: null,
   classes: {},
-  size: 0,
-  provider: null,
-  t: key => key,
   error: null,
+  handleClose: () => {},
   isFetching: false,
   manifestLogo: null,
+  provider: null,
+  ready: false,
+  size: 0,
+  t: key => key,
+  thumbnail: null,
+  title: null,
 };

@@ -13,9 +13,9 @@ describe('workspace reducer', () => {
   });
   it('should handle FOCUS_WINDOW', () => {
     expect(workspaceReducer([], {
+      position: { x: 10, y: 50 },
       type: ActionTypes.FOCUS_WINDOW,
       windowId: 'abc123',
-      position: { x: 10, y: 50 },
     })).toEqual({
       focusedWindowId: 'abc123',
       viewportPosition: { x: 10, y: 50 },
@@ -23,53 +23,53 @@ describe('workspace reducer', () => {
   });
   it('should handle SET_WORKSPACE_FULLSCREEN', () => {
     expect(workspaceReducer([], {
-      type: ActionTypes.SET_WORKSPACE_FULLSCREEN,
       isFullscreenEnabled: true,
+      type: ActionTypes.SET_WORKSPACE_FULLSCREEN,
     })).toEqual({
       isFullscreenEnabled: true,
     });
   });
   it('should handle TOGGLE_ZOOM_CONTROLS', () => {
     expect(workspaceReducer([], {
-      type: ActionTypes.TOGGLE_ZOOM_CONTROLS,
       showZoomControls: true,
+      type: ActionTypes.TOGGLE_ZOOM_CONTROLS,
     })).toEqual({
       showZoomControls: true,
     });
   });
   it('should handle UPDATE_WORKSPACE_MOSAIC_LAYOUT', () => {
     expect(workspaceReducer([], {
-      type: ActionTypes.UPDATE_WORKSPACE_MOSAIC_LAYOUT,
       layout: { foo: 'bar' },
+      type: ActionTypes.UPDATE_WORKSPACE_MOSAIC_LAYOUT,
     })).toEqual({
       layout: { foo: 'bar' },
     });
   });
   it('should handle SET_WORKSPACE_ADD_VISIBILITY', () => {
     expect(workspaceReducer([], {
-      type: ActionTypes.SET_WORKSPACE_ADD_VISIBILITY,
       isWorkspaceAddVisible: true,
+      type: ActionTypes.SET_WORKSPACE_ADD_VISIBILITY,
     })).toEqual({
       isWorkspaceAddVisible: true,
     });
   });
   it('should handle SET_WORKSPACE_VIEWPORT_POSITION', () => {
     expect(workspaceReducer([], {
-      type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
       payload: {
         position: {
+          height: 50,
+          width: 50,
           x: 50,
           y: 50,
-          width: 50,
-          height: 50,
         },
       },
+      type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
     })).toEqual({
       viewportPosition: {
+        height: 50,
+        width: 50,
         x: 50,
         y: 50,
-        width: 50,
-        height: 50,
       },
     });
   });

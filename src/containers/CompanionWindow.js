@@ -41,23 +41,8 @@ const mapDispatchToProps = (dispatch, { windowId, id }) => ({
  * root: {overflowY: string, width: string}}}
  */
 const styles = theme => ({
-  windowSideBarTitle: {
-    ...theme.typography.subtitle1,
-    flexGrow: 1,
-  },
-  root: {
-    display: 'flex',
-    minHeight: 0,
-    boxShadow: 'none',
-    flexDirection: 'column',
-    boxSizing: 'border-box',
-  },
-  horizontal: {
-    height: '201px',
-    width: '100%',
-  },
-  vertical: {
-    width: '201px',
+  'companionWindow-bottom': {
+    borderTop: '0.5px solid rgba(0, 0, 0, 0.12)',
   },
   'companionWindow-left': {
 
@@ -65,20 +50,36 @@ const styles = theme => ({
   'companionWindow-right': {
     borderLeft: '0.5px solid rgba(0, 0, 0, 0.12)',
   },
-  'companionWindow-bottom': {
-    borderTop: '0.5px solid rgba(0, 0, 0, 0.12)',
+
+  content: {
+    overflowY: 'auto',
   },
-  positionButton: {
-    order: -100,
-  },
-  toolbar: {
-    minHeight: 'max-content',
+  horizontal: {
+    height: '201px',
+    width: '100%',
   },
   leftPadding: {
     paddingLeft: theme.spacing.unit * 2,
   },
-  content: {
-    overflowY: 'auto',
+  positionButton: {
+    order: -100,
+  },
+  root: {
+    boxShadow: 'none',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 0,
+  },
+  toolbar: {
+    minHeight: 'max-content',
+  },
+  vertical: {
+    width: '201px',
+  },
+  windowSideBarTitle: {
+    ...theme.typography.subtitle1,
+    flexGrow: 1,
   },
 });
 

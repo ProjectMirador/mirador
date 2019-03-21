@@ -30,8 +30,8 @@ export class CompanionWindowFactory extends Component {
 
 CompanionWindowFactory.propTypes = {
   content: PropTypes.string,
-  windowId: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
+  windowId: PropTypes.string.isRequired,
 };
 
 CompanionWindowFactory.defaultProps = {

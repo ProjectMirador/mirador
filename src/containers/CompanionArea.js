@@ -9,10 +9,9 @@ import { CompanionArea } from '../components/CompanionArea';
 
 /** */
 const mapStateToProps = (state, { windowId, position }) => ({
-  sideBarOpen: state.windows[windowId].sideBarOpen,
   companionWindows: getCompanionWindowsOfWindow(state, { windowId })
     .filter(cw => cw.position === position),
-  companionAreaOpen: position !== 'left' || state.windows[windowId].companionAreaOpen,
+  sideBarOpen: state.windows[windowId].sideBarOpen,
 });
 
 const mapDispatchToProps = ({
@@ -21,24 +20,25 @@ const mapDispatchToProps = ({
 
 /** */
 const styles = theme => ({
-  root: {
-    position: 'relative',
-    minHeight: 0,
-    display: 'flex',
-  },
   horizontal: {
-    width: '100%',
     flexDirection: 'column',
+    width: '100%',
+  },
+  root: {
+    display: 'flex',
+    minHeight: 0,
+    position: 'relative',
   },
   toggle: {
-    position: 'absolute',
-    width: '1rem',
-    zIndex: theme.zIndex.drawer,
     backgroundColor: theme.palette.background.paper,
     border: `1px solid ${theme.palette.primary.dark}`,
     borderRadius: 0,
-    padding: 2,
+    left: '100%',
     marginTop: '1rem',
+    padding: 2,
+    position: 'absolute',
+    width: '1rem',
+    zIndex: theme.zIndex.drawer,
   },
 });
 

@@ -27,11 +27,11 @@ const mapStateToProps = (state, { windowId }) => (
 
 /** */
 const styles = theme => ({
-  selectedLabel: {
-    color: theme.palette.secondary.main,
-  },
   MenuItem: {
     display: 'inline',
+  },
+  selectedLabel: {
+    color: theme.palette.secondary.main,
   },
 });
 

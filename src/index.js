@@ -6,9 +6,9 @@ export * from './components';
 export * from './state/reducers';
 
 const exports = {
-  viewer: init,
   actions,
   selectors,
+  viewer: init,
 };
 
 export default exports;

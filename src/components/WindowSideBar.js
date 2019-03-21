@@ -24,7 +24,7 @@ export class WindowSideBar extends Component {
           className={classNames(classes.drawer)}
           classes={{ paper: classNames(classes.paper) }}
           anchor="left"
-          PaperProps={{ style: { position: 'relative' }, component: 'nav' }}
+          PaperProps={{ component: 'nav', style: { position: 'relative' } }}
           SlideProps={{ mountOnEnter: true, unmountOnExit: true }}
           open={sideBarOpen}
         >
@@ -37,8 +37,8 @@ export class WindowSideBar extends Component {
 
 WindowSideBar.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
-  windowId: PropTypes.string.isRequired,
   sideBarOpen: PropTypes.bool,
+  windowId: PropTypes.string.isRequired,
 };
 
 WindowSideBar.defaultProps = {

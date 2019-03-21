@@ -20,7 +20,15 @@ describe('OpenSeadragonViewer', () => {
 
     wrapper = shallow(
       <OpenSeadragonViewer
-        tileSources={[{ '@id': 'http://foo', width: 100, height: 200 }, { '@id': 'http://bar', width: 150, height: 201 }]}
+        tileSources={[{
+          '@id': 'http://foo',
+          height: 200,
+          width: 100,
+        }, {
+          '@id': 'http://bar',
+          height: 201,
+          width: 150,
+        }]}
         windowId="base"
         config={{}}
         updateViewport={updateViewport}
@@ -109,9 +117,9 @@ describe('OpenSeadragonViewer', () => {
       wrapper.instance().ref = { current: true };
 
       OpenSeadragon.mockImplementation(() => ({
-        viewport: { panTo, zoomTo },
         addHandler,
         addTiledImage: jest.fn().mockResolvedValue('event'),
+        viewport: { panTo, zoomTo },
       }));
     });
 
@@ -150,8 +158,8 @@ describe('OpenSeadragonViewer', () => {
         viewport: {
           centerSpringX: { target: { value: 10 } },
           centerSpringY: { target: { value: 10 } },
-          zoomSpring: { target: { value: 1 } },
           panTo,
+          zoomSpring: { target: { value: 1 } },
           zoomTo,
         },
       };
@@ -175,9 +183,9 @@ describe('OpenSeadragonViewer', () => {
       const forceRedraw = jest.fn();
 
       wrapper.instance().osdCanvasOverlay = {
+        canvasUpdate,
         clear,
         resize,
-        canvasUpdate,
       };
 
       wrapper.instance().viewer = { forceRedraw };

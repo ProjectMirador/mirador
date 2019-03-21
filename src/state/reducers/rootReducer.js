@@ -17,14 +17,14 @@ import {
  */
 export default function createRootReducer(pluginReducers) {
   return combineReducers({
-    companionWindows: companionWindowsReducer,
-    workspace: workspaceReducer,
-    windows: windowsReducer,
-    manifests: manifestsReducer,
-    infoResponses: infoResponsesReducer,
-    config: configReducer,
-    viewers: viewersReducer,
     annotations: annotationsReducer,
+    companionWindows: companionWindowsReducer,
+    config: configReducer,
+    infoResponses: infoResponsesReducer,
+    manifests: manifestsReducer,
+    viewers: viewersReducer,
+    windows: windowsReducer,
+    workspace: workspaceReducer,
     ...pluginReducers,
   });
 }

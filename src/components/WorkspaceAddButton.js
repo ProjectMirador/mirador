@@ -38,12 +38,12 @@ export class WorkspaceAddButton extends Component {
 
 WorkspaceAddButton.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  t: PropTypes.func,
-  setWorkspaceAddVisibility: PropTypes.func.isRequired,
   isWorkspaceAddVisible: PropTypes.bool,
+  setWorkspaceAddVisibility: PropTypes.func.isRequired,
+  t: PropTypes.func,
 };
 
 WorkspaceAddButton.defaultProps = {
-  t: key => key,
   isWorkspaceAddVisible: false,
+  t: key => key,
 };

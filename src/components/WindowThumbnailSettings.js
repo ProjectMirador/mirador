@@ -82,10 +82,10 @@ export class WindowThumbnailSettings extends Component {
 WindowThumbnailSettings.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func,
-  windowId: PropTypes.string.isRequired,
   setWindowThumbnailPosition: PropTypes.func.isRequired,
-  thumbnailNavigationPosition: PropTypes.string.isRequired,
   t: PropTypes.func,
+  thumbnailNavigationPosition: PropTypes.string.isRequired,
+  windowId: PropTypes.string.isRequired,
 };
 WindowThumbnailSettings.defaultProps = {
   handleClose: () => {},

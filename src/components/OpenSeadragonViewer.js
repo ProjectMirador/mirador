@@ -36,12 +36,13 @@ export class OpenSeadragonViewer extends Component {
       return;
     }
     this.viewer = new OpenSeadragon({
-      id: this.ref.current.id,
-      preserveViewport: true,
-      blendTime: 0.1,
       alwaysBlend: false,
-      showNavigationControl: false,
+      blendTime: 0.1,
+      id: this.ref.current.id,
       preserveImageSizeOnResize: true,
+      preserveViewport: true,
+      showNavigationControl: false,
+
     });
 
     this.osdCanvasOverlay = new OpenSeadragonCanvasOverlay(this.viewer);
@@ -64,7 +65,7 @@ export class OpenSeadragonViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      tileSources, viewer, annotations, currentCanvases,
+      tileSources, viewer, annotations,
     } = this.props;
     if (!this.annotationsMatch(prevProps.annotations)) {
       this.updateCanvas = () => {
@@ -154,12 +155,12 @@ export class OpenSeadragonViewer extends Component {
         return;
       }
       this.viewer.addTiledImage({
-        tileSource,
+        error: event => reject(event),
         fitBounds: new OpenSeadragon.Rect(
           ...new CanvasWorld(currentCanvases).canvasToWorldCoordinates(i),
         ),
         success: event => resolve(event),
-        error: event => reject(event),
+        tileSource,
       });
     });
   }
@@ -260,22 +261,23 @@ export class OpenSeadragonViewer extends Component {
 OpenSeadragonViewer.defaultProps = {
   annotations: [],
   children: null,
+  classes: {},
   currentCanvases: [],
+  label: null,
   tileSources: [],
   viewer: null,
-  label: null,
-  classes: {},
+
 };
 
 OpenSeadragonViewer.propTypes = {
   annotations: PropTypes.arrayOf(PropTypes.object),
   children: PropTypes.element,
+  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   currentCanvases: PropTypes.arrayOf(PropTypes.object),
-  tileSources: PropTypes.arrayOf(PropTypes.object),
-  viewer: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  updateViewport: PropTypes.func.isRequired,
-  windowId: PropTypes.string.isRequired,
   label: PropTypes.string,
   t: PropTypes.func.isRequired,
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  tileSources: PropTypes.arrayOf(PropTypes.object),
+  updateViewport: PropTypes.func.isRequired,
+  viewer: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  windowId: PropTypes.string.isRequired,
 };

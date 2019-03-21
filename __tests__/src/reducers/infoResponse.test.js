@@ -4,8 +4,8 @@ import ActionTypes from '../../../src/state/actions/action-types';
 describe('info response reducer', () => {
   it('should handle REQUEST_INFO_RESPONSE', () => {
     expect(infoResponsesReducer({}, {
-      type: ActionTypes.REQUEST_INFO_RESPONSE,
       infoId: 'abc123',
+      type: ActionTypes.REQUEST_INFO_RESPONSE,
     })).toEqual({
       abc123: {
         id: 'abc123',
@@ -22,13 +22,13 @@ describe('info response reducer', () => {
         },
       },
       {
-        type: ActionTypes.RECEIVE_INFO_RESPONSE,
         infoId: 'abc123',
         infoJson: {
-          id: 'abc123',
           '@type': 'sc:Manifest',
           content: 'lots of canvases and metadata and such',
+          id: 'abc123',
         },
+        type: ActionTypes.RECEIVE_INFO_RESPONSE,
       },
     )).toMatchObject({
       abc123: {
@@ -47,15 +47,15 @@ describe('info response reducer', () => {
         },
       },
       {
-        type: ActionTypes.RECEIVE_INFO_RESPONSE_FAILURE,
-        infoId: 'abc123',
         error: "This institution didn't enable CORS.",
+        infoId: 'abc123',
+        type: ActionTypes.RECEIVE_INFO_RESPONSE_FAILURE,
       },
     )).toEqual({
       abc123: {
+        error: "This institution didn't enable CORS.",
         id: 'abc123',
         isFetching: false,
-        error: "This institution didn't enable CORS.",
       },
     });
   });
@@ -72,8 +72,8 @@ describe('info response reducer', () => {
         },
       },
       {
-        type: ActionTypes.REMOVE_INFO_RESPONSE,
         infoId: 'abc123',
+        type: ActionTypes.REMOVE_INFO_RESPONSE,
       },
     )).toEqual({
       def456: {

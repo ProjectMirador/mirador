@@ -58,9 +58,9 @@ export function getAnnotationResourcesByMotivation(annotations, motivations) {
  */
 export function getIdAndContentOfResources(resources) {
   return resources.map((resource, i) => ({
+    content: resource.chars,
     id: resource.id,
     targetId: resource.targetId,
-    content: resource.chars,
   }));
 }
 
@@ -73,9 +73,9 @@ export function getLanguagesFromConfigWithCurrent(state) {
   const { availableLanguages, language } = state.config;
 
   return Object.keys(availableLanguages).map(key => ({
-    locale: key,
-    label: availableLanguages[key],
     current: key === language,
+    label: availableLanguages[key],
+    locale: key,
   }));
 }
 

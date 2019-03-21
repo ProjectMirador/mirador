@@ -76,8 +76,8 @@ export const windowsReducer = (state = {}, action) => {
         ...state,
         [action.payload.windowId]: {
           ...state[action.payload.windowId],
-          width: action.payload.size.width,
           height: action.payload.size.height,
+          width: action.payload.size.width,
           x: action.payload.size.x,
           y: action.payload.size.y,
         },
@@ -96,8 +96,8 @@ export const windowsReducer = (state = {}, action) => {
           [action.windowId]: {
             ...state[action.windowId],
             companionAreaOpen: true,
-            sideBarPanel: action.payload.content,
             companionWindowIds: newCompanionWindowIds.concat([action.id]),
+            sideBarPanel: action.payload.content,
           },
         };
       }

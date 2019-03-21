@@ -89,8 +89,8 @@ describe('WindowList', () => {
   describe('with multiple windows', () => {
     beforeEach(() => {
       windows = {
-        zyx: { id: 'zyx', manifestId: '123' },
         xyz: { id: 'xyz', manifestId: 'abc' },
+        zyx: { id: 'zyx', manifestId: '123' },
       };
       titles = { xyz: 'Some title' };
 

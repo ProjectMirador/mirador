@@ -93,19 +93,19 @@ Window.contextTypes = {
 
 Window.propTypes = {
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  window: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  workspaceType: PropTypes.string,
-  t: PropTypes.func.isRequired,
-  label: PropTypes.string,
   focusWindow: PropTypes.func,
+  label: PropTypes.string,
+  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  t: PropTypes.func.isRequired,
+  window: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  workspaceType: PropTypes.string,
 };
 
 Window.defaultProps = {
-  window: null,
-  manifest: null,
-  workspaceType: null,
   classes: {},
-  label: null,
   focusWindow: () => {},
+  label: null,
+  manifest: null,
+  window: null,
+  workspaceType: null,
 };

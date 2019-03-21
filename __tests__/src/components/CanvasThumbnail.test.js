@@ -59,10 +59,18 @@ describe('CanvasThumbnail', () => {
   });
 
   it('can be constrained by maxWidth and maxHeight and a desired aspect ratio', () => {
-    wrapper = createWrapper({ maxHeight: 400, maxWidth: 500, aspectRatio: 2 });
+    wrapper = createWrapper({
+      aspectRatio: 2,
+      maxHeight: 400,
+      maxWidth: 500,
+    });
     expect(wrapper.find('img').props().style).toMatchObject({ height: 250, width: 500 });
 
-    wrapper = createWrapper({ maxHeight: 400, maxWidth: 500, aspectRatio: 1 });
+    wrapper = createWrapper({
+      aspectRatio: 1,
+      maxHeight: 400,
+      maxWidth: 500,
+    });
     expect(wrapper.find('img').props().style).toMatchObject({ height: 400, width: 400 });
   });
 });

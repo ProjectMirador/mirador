@@ -59,13 +59,13 @@ export class WindowList extends Component {
 }
 
 WindowList.propTypes = {
+  anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   containerId: PropTypes.string.isRequired,
   focusWindow: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
-  anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  titles: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
+  titles: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 WindowList.defaultProps = {

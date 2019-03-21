@@ -8,9 +8,12 @@ import { WindowCanvasNavigationControls } from '../components/WindowCanvasNaviga
 
 /** */
 const mapStateToProps = (state, { windowId }) => ({
-  window: state.windows[windowId],
-  canvasLabel: getCanvasLabel(state, { windowId, canvasIndex: 'selected' }),
+  canvasLabel: getCanvasLabel(state, {
+    canvasIndex: 'selected',
+    windowId,
+  }),
   visible: state.workspace.focusedWindowId === windowId,
+  window: state.windows[windowId],
 });
 
 const enhance = compose(

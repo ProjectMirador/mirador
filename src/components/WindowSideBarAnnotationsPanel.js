@@ -75,16 +75,16 @@ export class WindowSideBarAnnotationsPanel extends Component {
 
 WindowSideBarAnnotationsPanel.propTypes = {
   annotations: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
   })),
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   deselectAnnotation: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
   selectAnnotation: PropTypes.func.isRequired,
   selectedAnnotationIds: PropTypes.arrayOf(PropTypes.string),
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
 };
 
 WindowSideBarAnnotationsPanel.defaultProps = {

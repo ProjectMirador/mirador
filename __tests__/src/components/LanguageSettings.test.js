@@ -18,8 +18,16 @@ function createWrapper(props) {
 describe('LanguageSettings', () => {
   let wrapper;
   const languages = [
-    { locale: 'de', label: 'Deutsch', current: true },
-    { locale: 'en', label: 'English', current: false },
+    {
+      current: true,
+      label: 'Deutsch',
+      locale: 'de',
+    },
+    {
+      current: false,
+      label: 'English',
+      locale: 'en',
+    },
   ];
 
 
@@ -74,7 +82,10 @@ describe('LanguageSettings', () => {
 
   it('triggers the handleClick prop when clicking a list item', () => {
     const mockHandleClick = jest.fn();
-    wrapper = createWrapper({ languages, handleClick: mockHandleClick });
+    wrapper = createWrapper({
+      handleClick: mockHandleClick,
+      languages,
+    });
 
     wrapper.find('WithStyles(MenuItem)').last().simulate('click');
 

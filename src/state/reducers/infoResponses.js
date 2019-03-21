@@ -18,16 +18,16 @@ export const infoResponsesReducer = (state = {}, action) => {
         ...state,
         [action.infoId]: {
           id: action.infoId,
-          json: action.infoJson,
           isFetching: false,
+          json: action.infoJson,
         },
       };
     case ActionTypes.RECEIVE_INFO_RESPONSE_FAILURE:
       return {
         ...state,
         [action.infoId]: {
-          id: action.infoId,
           error: action.error,
+          id: action.infoId,
           isFetching: false,
         },
       };

@@ -9,19 +9,19 @@ const noHtml = {
 
 // Presentation API 2 suggestion.
 const iiif = {
-  ALLOWED_TAGS: ['a', 'b', 'br', 'i', 'img', 'p', 'span'],
   ALLOWED_ATTR: ['href', 'src', 'alt'],
+  ALLOWED_TAGS: ['a', 'b', 'br', 'i', 'img', 'p', 'span'],
 };
 
 // Rule set that is used in Mirador 2.
 const mirador2 = {
-  ALLOWED_TAGS: ['a', 'b', 'br', 'i', 'img', 'p', 'span', 'strong', 'em', 'ul', 'ol', 'li'],
   ALLOWED_ATTR: ['href', 'target', 'src', 'alt', 'dir'],
+  ALLOWED_TAGS: ['a', 'b', 'br', 'i', 'img', 'p', 'span', 'strong', 'em', 'ul', 'ol', 'li'],
 };
 
 export default {
-  liberal,
-  noHtml,
   iiif,
+  liberal,
   mirador2,
+  noHtml,
 };

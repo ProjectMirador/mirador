@@ -7,7 +7,11 @@ import ActionTypes from './action-types';
  * @memberof ActionCreators
  */
 export function setCanvas(windowId, canvasIndex) {
-  return { type: ActionTypes.SET_CANVAS, windowId, canvasIndex };
+  return {
+    canvasIndex,
+    type: ActionTypes.SET_CANVAS,
+    windowId,
+  };
 }
 
 /**
@@ -18,14 +22,14 @@ export function setCanvas(windowId, canvasIndex) {
  */
 export function updateViewport(windowId, payload) {
   return {
-    type: ActionTypes.UPDATE_VIEWPORT,
     meta: {
       debounce: {
         // TODO : set this value in a registry
         time: 100,
       },
     },
-    windowId,
     payload,
+    type: ActionTypes.UPDATE_VIEWPORT,
+    windowId,
   };
 }

@@ -22,7 +22,10 @@ describe('ViewerNavigation', () => {
     setCanvas = jest.fn();
     wrapper = createWrapper({
       setCanvas,
-      window: { id: 'foo', canvasIndex: 0 },
+      window: {
+        canvasIndex: 0,
+        id: 'foo',
+      },
     });
   });
   it('renders the component', () => {
@@ -41,7 +44,10 @@ describe('ViewerNavigation', () => {
   describe('when next canvases are not present', () => {
     it('nextCanvas button is disabled', () => {
       const endWrapper = createWrapper({
-        window: { id: 'foo', canvasIndex: 1 },
+        window: {
+          canvasIndex: 1,
+          id: 'foo',
+        },
       });
       expect(endWrapper.find('.mirador-next-canvas-button').prop('disabled')).toBe(true);
     });
@@ -60,7 +66,11 @@ describe('ViewerNavigation', () => {
       wrapper = createWrapper({
         canvases: [1, 2, 3],
         setCanvas,
-        window: { id: 'foo', canvasIndex: 0, view: 'book' },
+        window: {
+          canvasIndex: 0,
+          id: 'foo',
+          view: 'book',
+        },
       });
       wrapper.find('.mirador-next-canvas-button').simulate('click');
       expect(setCanvas).toHaveBeenCalledWith('foo', 2);
@@ -68,7 +78,11 @@ describe('ViewerNavigation', () => {
     it('setCanvas function is called after click for previous', () => {
       wrapper = createWrapper({
         setCanvas,
-        window: { id: 'foo', canvasIndex: 5, view: 'book' },
+        window: {
+          canvasIndex: 5,
+          id: 'foo',
+          view: 'book',
+        },
       });
       wrapper.find('.mirador-previous-canvas-button').simulate('click');
       expect(wrapper.find('.mirador-previous-canvas-button').prop('aria-label')).toBe('previousCanvas');

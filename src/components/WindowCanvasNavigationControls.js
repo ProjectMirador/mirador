@@ -30,8 +30,8 @@ export class WindowCanvasNavigationControls extends Component {
 
 WindowCanvasNavigationControls.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   visible: PropTypes.bool,
+  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   zoomToWorld: PropTypes.func.isRequired,
 };
 

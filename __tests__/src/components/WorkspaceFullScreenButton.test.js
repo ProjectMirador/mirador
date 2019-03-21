@@ -51,7 +51,7 @@ describe('WorkspaceFullScreenButton', () => {
     let setWorkspaceFullscreen;
     beforeAll(() => {
       setWorkspaceFullscreen = jest.fn();
-      wrapper = createWrapper({ setWorkspaceFullscreen, isFullscreenEnabled: true });
+      wrapper = createWrapper({ isFullscreenEnabled: true, setWorkspaceFullscreen });
       menuButton = wrapper.find(MiradorMenuButton);
     });
 

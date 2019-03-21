@@ -12,8 +12,14 @@ function createWrapper(props) {
       windowId="abc123"
       position="right"
       companionWindows={[
-        { position: 'right', id: 'foo' },
-        { position: 'right', id: 'baz' },
+        {
+          id: 'foo',
+          position: 'right',
+        },
+        {
+          id: 'baz',
+          position: 'right',
+        },
       ]}
       t={key => key}
       {...props}
@@ -43,7 +49,10 @@ describe('CompanionArea', () => {
     const setCompanionAreaOpen = jest.fn();
 
     const wrapper = createWrapper({
-      position: 'left', sideBarOpen: true, setCompanionAreaOpen, companionAreaOpen: false,
+      companionAreaOpen: false,
+      position: 'left',
+      setCompanionAreaOpen,
+      sideBarOpen: true,
     });
 
     expect(wrapper.find(MiradorMenuButton).length).toBe(1);
@@ -61,7 +70,10 @@ describe('CompanionArea', () => {
     const setCompanionAreaOpen = jest.fn();
 
     const wrapper = createWrapper({
-      position: 'left', sideBarOpen: true, setCompanionAreaOpen, companionAreaOpen: true,
+      companionAreaOpen: true,
+      position: 'left',
+      setCompanionAreaOpen,
+      sideBarOpen: true,
     });
 
     expect(wrapper.find(MiradorMenuButton).length).toBe(1);
@@ -77,7 +89,10 @@ describe('CompanionArea', () => {
 
   it('does not show a toggle if the sidebar is collapsed', () => {
     const wrapper = createWrapper({
-      position: 'left', sideBarOpen: false, setCompanionAreaOpen: () => {}, companionAreaOpen: true,
+      companionAreaOpen: true,
+      position: 'left',
+      setCompanionAreaOpen: () => {},
+      sideBarOpen: false,
     });
 
     expect(wrapper.find(MiradorMenuButton).length).toBe(0);
@@ -85,7 +100,10 @@ describe('CompanionArea', () => {
 
   it('does not show a toggle in other positions', () => {
     const wrapper = createWrapper({
-      position: 'whatever', sideBarOpen: true, setCompanionAreaOpen: () => {}, companionAreaOpen: true,
+      companionAreaOpen: true,
+      position: 'whatever',
+      setCompanionAreaOpen: () => {},
+      sideBarOpen: true,
     });
 
     expect(wrapper.find(MiradorMenuButton).length).toBe(0);

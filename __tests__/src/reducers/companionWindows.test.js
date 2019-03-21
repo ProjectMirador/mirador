@@ -5,15 +5,15 @@ describe('companionWindowsReducer', () => {
   describe('ADD_COMPANION_WINDOW', () => {
     it('adds a new companion window', () => {
       const action = {
-        type: ActionTypes.ADD_COMPANION_WINDOW,
         id: 'abc123',
         payload: { content: 'info', position: 'right' },
+        type: ActionTypes.ADD_COMPANION_WINDOW,
       };
       const beforeState = {};
       const expectedState = {
         abc123: {
-          position: 'right',
           content: 'info',
+          position: 'right',
         },
       };
       expect(companionWindowsReducer(beforeState, action)).toEqual(expectedState);
@@ -23,13 +23,29 @@ describe('companionWindowsReducer', () => {
   describe('ADD_WINDOW', () => {
     it('adds default companion window(s)', () => {
       const action = {
+        companionWindows: [{
+          content: 'info',
+          id: 'banana',
+          position: 'left',
+        }, {
+          content: 'canvas_navigation',
+          id: 'Banane',
+          position: 'right',
+        }],
         type: ActionTypes.ADD_WINDOW,
-        companionWindows: [{ id: 'banana', position: 'left', content: 'info' }, { id: 'Banane', position: 'right', content: 'canvas_navigation' }],
       };
       const beforeState = {};
       const expectedState = {
-        banana: { id: 'banana', position: 'left', content: 'info' },
-        Banane: { id: 'Banane', position: 'right', content: 'canvas_navigation' },
+        Banane: {
+          content: 'canvas_navigation',
+          id: 'Banane',
+          position: 'right',
+        },
+        banana: {
+          content: 'info',
+          id: 'banana',
+          position: 'left',
+        },
       };
       expect(companionWindowsReducer(beforeState, action)).toEqual(expectedState);
     });
@@ -39,21 +55,21 @@ describe('companionWindowsReducer', () => {
   describe('UPDATE_COMPANION_WINDOW', () => {
     it('updates an existing companion window', () => {
       const action = {
-        type: ActionTypes.UPDATE_COMPANION_WINDOW,
         id: 'abc123',
         payload: { content: 'canvases', foo: 'bar' },
+        type: ActionTypes.UPDATE_COMPANION_WINDOW,
       };
       const beforeState = {
         abc123: {
-          position: 'right',
           content: 'info',
+          position: 'right',
         },
       };
       const expectedState = {
         abc123: {
-          position: 'right',
           content: 'canvases',
           foo: 'bar',
+          position: 'right',
         },
       };
       expect(companionWindowsReducer(beforeState, action)).toEqual(expectedState);
@@ -63,13 +79,13 @@ describe('companionWindowsReducer', () => {
   describe('REMOVE_COMPANION_WINDOW', () => {
     it('should remove a companion window', () => {
       const action = {
-        type: ActionTypes.REMOVE_COMPANION_WINDOW,
         id: 'abc123',
+        type: ActionTypes.REMOVE_COMPANION_WINDOW,
       };
       const beforeState = {
         abc123: {
-          position: 'right',
           content: 'info',
+          position: 'right',
         },
       };
       const expectedState = {};
@@ -80,9 +96,9 @@ describe('companionWindowsReducer', () => {
   describe('REMOVE_WINDOW', () => {
     it('should remove a companion window', () => {
       const action = {
-        type: ActionTypes.REMOVE_WINDOW,
-        id: 'abc123',
         companionWindowIds: ['a', 'b'],
+        id: 'abc123',
+        type: ActionTypes.REMOVE_WINDOW,
       };
       const beforeState = {
         a: {},

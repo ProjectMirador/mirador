@@ -12,10 +12,10 @@ import { App } from '../components/App';
  */
 const mapStateToProps = state => (
   {
+    isFullscreenEnabled: state.workspace.isFullscreenEnabled,
     language: state.config.language,
     theme: state.config.theme,
     translations: state.config.translations,
-    isFullscreenEnabled: state.workspace.isFullscreenEnabled,
   }
 );
 

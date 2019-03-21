@@ -81,8 +81,8 @@ describe('windows reducer', () => {
   it('should handle SET_WINDOW_VIEW_TYPE by changing the view attribute', () => {
     const action = {
       type: ActionTypes.SET_WINDOW_VIEW_TYPE,
-      windowId: 'abc123',
       viewType: 'book',
+      windowId: 'abc123',
     };
     const before = {
       abc123: { view: 'single' },
@@ -99,9 +99,9 @@ describe('windows reducer', () => {
   describe('SET_WINDOW_SIDE_BAR_PANEL', () => {
     it('sets the sideBarPanel value to the given value when it was changed', () => {
       const action = {
+        panelType: 'info',
         type: ActionTypes.SET_WINDOW_SIDE_BAR_PANEL,
         windowId: 'abc123',
-        panelType: 'info',
       };
       const before = {
         abc123: { sideBarPanel: 'closed' },
@@ -119,25 +119,25 @@ describe('windows reducer', () => {
   it('should handle SET_CANVAS', () => {
     expect(windowsReducer({
       abc123: {
-        id: 'abc123',
         canvasIndex: 1,
+        id: 'abc123',
       },
       def456: {
-        id: 'def456',
         canvasIndex: 1,
+        id: 'def456',
       },
     }, {
+      canvasIndex: 5,
       type: ActionTypes.SET_CANVAS,
       windowId: 'abc123',
-      canvasIndex: 5,
     })).toEqual({
       abc123: {
-        id: 'abc123',
         canvasIndex: 5,
+        id: 'abc123',
       },
       def456: {
-        id: 'def456',
         canvasIndex: 1,
+        id: 'def456',
       },
     });
   });
@@ -145,21 +145,24 @@ describe('windows reducer', () => {
   describe('UPDATE_WINDOW', () => {
     it('updates an existing window', () => {
       const action = {
-        type: ActionTypes.UPDATE_WINDOW,
         id: 'abc123',
-        payload: { foo: 11, baz: 33 },
+        payload: {
+          baz: 33,
+          foo: 11,
+        },
+        type: ActionTypes.UPDATE_WINDOW,
       };
       const beforeState = {
         abc123: {
-          foo: 1,
           bar: 2,
+          foo: 1,
         },
       };
       const expectedState = {
         abc123: {
-          foo: 11,
           bar: 2,
           baz: 33,
+          foo: 11,
         },
       };
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
@@ -175,23 +178,23 @@ describe('windows reducer', () => {
         id: 'def456',
       },
     }, {
-      type: ActionTypes.SET_WINDOW_SIZE,
       payload: {
-        windowId: 'abc123',
         size: {
+          height: 200,
+          width: 200,
           x: 20,
           y: 20,
-          width: 200,
-          height: 200,
         },
+        windowId: 'abc123',
       },
+      type: ActionTypes.SET_WINDOW_SIZE,
     })).toEqual({
       abc123: {
+        height: 200,
         id: 'abc123',
+        width: 200,
         x: 20,
         y: 20,
-        width: 200,
-        height: 200,
       },
       def456: {
         id: 'def456',
@@ -208,14 +211,14 @@ describe('windows reducer', () => {
         id: 'def456',
       },
     }, {
-      type: ActionTypes.UPDATE_WINDOW_POSITION,
       payload: {
-        windowId: 'abc123',
         position: {
           x: 20,
           y: 20,
         },
+        windowId: 'abc123',
       },
+      type: ActionTypes.UPDATE_WINDOW_POSITION,
     })).toEqual({
       abc123: {
         id: 'abc123',
@@ -232,46 +235,46 @@ describe('windows reducer', () => {
     // on the right, just tacks the new id on
     expect(windowsReducer({
       abc123: {
-        id: 'abc123',
         companionWindowIds: ['123'],
+        id: 'abc123',
       },
     }, {
-      type: ActionTypes.ADD_COMPANION_WINDOW,
       id: 'xyz',
-      windowId: 'abc123',
       payload: {
         position: 'right',
       },
+      type: ActionTypes.ADD_COMPANION_WINDOW,
+      windowId: 'abc123',
     })).toEqual({
       abc123: {
-        id: 'abc123',
         companionWindowIds: ['123', 'xyz'],
+        id: 'abc123',
       },
     });
 
     // on the left, replaces all ids of windows in that position and sets some additional properties
     expect(windowsReducer({
       abc123: {
-        id: 'abc123',
         companionWindowIds: ['left123'],
+        id: 'abc123',
       },
     }, {
-      type: ActionTypes.ADD_COMPANION_WINDOW,
-      id: 'xyz',
-      windowId: 'abc123',
       companionWindows: {
         left123: { position: 'left' },
       },
+      id: 'xyz',
       payload: {
         content: 'content',
         position: 'left',
       },
+      type: ActionTypes.ADD_COMPANION_WINDOW,
+      windowId: 'abc123',
     })).toEqual({
       abc123: {
-        id: 'abc123',
         companionAreaOpen: true,
-        sideBarPanel: 'content',
         companionWindowIds: ['xyz'],
+        id: 'abc123',
+        sideBarPanel: 'content',
       },
     });
   });
@@ -280,17 +283,17 @@ describe('windows reducer', () => {
     // on the right, just tacks the new id on
     expect(windowsReducer({
       abc123: {
-        id: 'abc123',
         companionWindowIds: ['123', 'xyz'],
+        id: 'abc123',
       },
     }, {
-      type: ActionTypes.REMOVE_COMPANION_WINDOW,
       id: 'xyz',
+      type: ActionTypes.REMOVE_COMPANION_WINDOW,
       windowId: 'abc123',
     })).toEqual({
       abc123: {
-        id: 'abc123',
         companionWindowIds: ['123'],
+        id: 'abc123',
       },
     });
   });
@@ -299,7 +302,10 @@ describe('windows reducer', () => {
     it('handles when no selectedAnnotations exist', () => {
       const beforeState = { abc123: {} };
       const action = {
-        type: ActionTypes.SELECT_ANNOTATION, windowId: 'abc123', canvasId: 'cId', annotationId: 'aId',
+        annotationId: 'aId',
+        canvasId: 'cId',
+        type: ActionTypes.SELECT_ANNOTATION,
+        windowId: 'abc123',
       };
       const expectedState = {
         abc123: { selectedAnnotations: { cId: ['aId'] } },
@@ -311,7 +317,10 @@ describe('windows reducer', () => {
     it('adds new annotation IDs to existing canvas IDs', () => {
       const beforeState = { abc123: { selectedAnnotations: { cId: ['prevId'] } } };
       const action = {
-        type: ActionTypes.SELECT_ANNOTATION, windowId: 'abc123', canvasId: 'cId', annotationId: 'aId',
+        annotationId: 'aId',
+        canvasId: 'cId',
+        type: ActionTypes.SELECT_ANNOTATION,
+        windowId: 'abc123',
       };
       const expectedState = {
         abc123: { selectedAnnotations: { cId: ['prevId', 'aId'] } },
@@ -324,7 +333,10 @@ describe('windows reducer', () => {
       it('remvoves the given annotation Id', () => {
         const beforeState = { abc123: { selectedAnnotations: { cId: ['aId1', 'aId2'] } } };
         const action = {
-          type: ActionTypes.DESELECT_ANNOTATION, windowId: 'abc123', canvasId: 'cId', annotationId: 'aId1',
+          annotationId: 'aId1',
+          canvasId: 'cId',
+          type: ActionTypes.DESELECT_ANNOTATION,
+          windowId: 'abc123',
         };
         const expectedState = {
           abc123: { selectedAnnotations: { cId: ['aId2'] } },
@@ -336,7 +348,10 @@ describe('windows reducer', () => {
       it('remvoves the given canvas Id from the selected annotations if there are no more IDs', () => {
         const beforeState = { abc123: { selectedAnnotations: { cId1: ['aId1'], cId2: ['aId2'] } } };
         const action = {
-          type: ActionTypes.DESELECT_ANNOTATION, windowId: 'abc123', canvasId: 'cId2', annotationId: 'aId2',
+          annotationId: 'aId2',
+          canvasId: 'cId2',
+          type: ActionTypes.DESELECT_ANNOTATION,
+          windowId: 'abc123',
         };
         const expectedState = {
           abc123: { selectedAnnotations: { cId1: ['aId1'] } },

@@ -6,16 +6,16 @@ describe('workspace actions', () => {
     it('should return correct action type if set to true', () => {
       const receivedAction = actions.setWorkspaceFullscreen(true);
       const expectedAction = {
-        type: ActionTypes.SET_WORKSPACE_FULLSCREEN,
         isFullscreenEnabled: true,
+        type: ActionTypes.SET_WORKSPACE_FULLSCREEN,
       };
       expect(receivedAction).toEqual(expectedAction);
     });
     it('should return correct action type if set to false', () => {
       const receivedAction = actions.setWorkspaceFullscreen(false);
       const expectedAction = {
-        type: ActionTypes.SET_WORKSPACE_FULLSCREEN,
         isFullscreenEnabled: false,
+        type: ActionTypes.SET_WORKSPACE_FULLSCREEN,
       };
       expect(receivedAction).toEqual(expectedAction);
     });
@@ -25,8 +25,8 @@ describe('workspace actions', () => {
       const options = { foo: 'bar' };
 
       const expectedAction = {
-        type: ActionTypes.UPDATE_WORKSPACE_MOSAIC_LAYOUT,
         layout: { foo: 'bar' },
+        type: ActionTypes.UPDATE_WORKSPACE_MOSAIC_LAYOUT,
       };
       expect(actions.updateWorkspaceMosaicLayout(options)).toEqual(expectedAction);
     });
@@ -34,8 +34,8 @@ describe('workspace actions', () => {
   describe('toggleZoomControls', () => {
     it('should set the zoom control visibility', () => {
       const expectedAction = {
-        type: ActionTypes.TOGGLE_ZOOM_CONTROLS,
         showZoomControls: true,
+        type: ActionTypes.TOGGLE_ZOOM_CONTROLS,
       };
       expect(actions.toggleZoomControls(true)).toEqual(expectedAction);
     });
@@ -43,8 +43,8 @@ describe('workspace actions', () => {
   describe('setWorkspaceAddVisibility', () => {
     it('should set the workspace add visibility', () => {
       const expectedAction = {
-        type: ActionTypes.SET_WORKSPACE_ADD_VISIBILITY,
         isWorkspaceAddVisible: true,
+        type: ActionTypes.SET_WORKSPACE_ADD_VISIBILITY,
       };
       expect(actions.setWorkspaceAddVisibility(true)).toEqual(expectedAction);
     });
@@ -52,30 +52,30 @@ describe('workspace actions', () => {
   describe('setWorkspaceViewportDimensions', () => {
     it('should set the workspace add visibility', () => {
       const expectedAction = {
-        type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
         payload: {
           position: {
-            width: 20,
             height: 25,
+            width: 20,
           },
         },
+        type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
       };
       expect(actions.setWorkspaceViewportDimensions({
-        width: 20,
         height: 25,
+        width: 20,
       })).toEqual(expectedAction);
     });
   });
   describe('setWorkspaceViewportPosition', () => {
     it('should set the workspace add visibility', () => {
       const expectedAction = {
-        type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
         payload: {
           position: {
             x: 20,
             y: 20,
           },
         },
+        type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
       };
       expect(actions.setWorkspaceViewportPosition({
         x: 20,

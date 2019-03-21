@@ -52,8 +52,8 @@ export class PrimaryWindow extends Component {
 }
 
 PrimaryWindow.propTypes = {
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 PrimaryWindow.defaultProps = {

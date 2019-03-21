@@ -9,8 +9,8 @@ import ActionTypes from './action-types';
  */
 export function requestInfoResponse(infoId) {
   return {
-    type: ActionTypes.REQUEST_INFO_RESPONSE,
     infoId,
+    type: ActionTypes.REQUEST_INFO_RESPONSE,
   };
 }
 
@@ -23,9 +23,9 @@ export function requestInfoResponse(infoId) {
  */
 export function receiveInfoResponse(infoId, infoJson) {
   return {
-    type: ActionTypes.RECEIVE_INFO_RESPONSE,
     infoId,
     infoJson,
+    type: ActionTypes.RECEIVE_INFO_RESPONSE,
   };
 }
 
@@ -38,9 +38,9 @@ export function receiveInfoResponse(infoId, infoJson) {
  */
 export function receiveInfoResponseFailure(infoId, error) {
   return {
-    type: ActionTypes.RECEIVE_INFO_RESPONSE_FAILURE,
-    infoId,
     error,
+    infoId,
+    type: ActionTypes.RECEIVE_INFO_RESPONSE_FAILURE,
   };
 }
 
@@ -67,5 +67,5 @@ export function fetchInfoResponse(infoId) {
  * @memberof ActionCreators
  */
 export function removeInfoResponse(infoId) {
-  return { type: ActionTypes.REMOVE_INFO_RESPONSE, infoId };
+  return { infoId, type: ActionTypes.REMOVE_INFO_RESPONSE };
 }

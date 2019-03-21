@@ -11,9 +11,9 @@ describe('viewers reducer', () => {
         y: 1,
       },
     }, {
+      payload: { x: 0, y: 1, zoom: 0.5 },
       type: ActionTypes.UPDATE_VIEWPORT,
       windowId: 'abc123',
-      payload: { x: 0, y: 1, zoom: 0.5 },
     })).toEqual({
       abc123: {
         x: 0,

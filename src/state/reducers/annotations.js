@@ -21,8 +21,8 @@ export const annotationsReducer = (state = {}, action) => {
         [action.canvasId]: {
           [action.annotationId]: {
             id: action.annotationId,
-            json: action.annotationJson,
             isFetching: false,
+            json: action.annotationJson,
           },
         },
       };
@@ -31,8 +31,8 @@ export const annotationsReducer = (state = {}, action) => {
         ...state,
         [action.canvasId]: {
           [action.annotationId]: {
-            id: action.annotationId,
             error: action.error,
+            id: action.annotationId,
             isFetching: false,
           },
         },

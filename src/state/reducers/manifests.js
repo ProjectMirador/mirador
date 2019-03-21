@@ -20,10 +20,10 @@ export const manifestsReducer = (state = {}, action) => {
         ...state,
         [action.manifestId]: {
           ...state[action.manifestId],
-          id: action.manifestId,
-          json: action.manifestJson,
-          isFetching: false,
           error: null, // Explicitly set the error to null in case this is a re-fetch
+          id: action.manifestId,
+          isFetching: false,
+          json: action.manifestJson,
         },
       };
     case ActionTypes.RECEIVE_MANIFEST_FAILURE:
@@ -31,8 +31,8 @@ export const manifestsReducer = (state = {}, action) => {
         ...state,
         [action.manifestId]: {
           ...state[action.manifestId],
-          id: action.manifestId,
           error: action.error,
+          id: action.manifestId,
           isFetching: false,
         },
       };

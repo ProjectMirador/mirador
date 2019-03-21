@@ -46,17 +46,17 @@ export class WorkspaceExport extends Component {
 }
 
 WorkspaceExport.propTypes = {
+  children: PropTypes.node,
   container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
-  children: PropTypes.node,
   state: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
 };
 
 WorkspaceExport.defaultProps = {
+  children: null,
   container: null,
   open: false,
-  children: null,
   t: key => key,
 };

@@ -9,7 +9,11 @@ describe('WorkspaceExport', () => {
 
   beforeEach(() => {
     handleClose = jest.fn();
-    mockState = { windows: { }, config: { }, manifests: { } };
+    mockState = {
+      config: { },
+      manifests: { },
+      windows: { },
+    };
 
     wrapper = shallow(
       <WorkspaceExport
