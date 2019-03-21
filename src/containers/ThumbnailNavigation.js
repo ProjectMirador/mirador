@@ -47,6 +47,7 @@ const styles = theme => ({
     border: '2px solid transparent',
     color: theme.palette.common.white,
     cursor: 'pointer',
+    display: 'flex',
     margin: '2px',
     padding: '2px',
   },
