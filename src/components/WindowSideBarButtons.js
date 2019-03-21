@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Badge from '@material-ui/core/Badge';
 import Tabs from '@material-ui/core/Tabs';
@@ -47,16 +48,25 @@ export class WindowSideBarButtons extends Component {
    *
    */
   componentDidMount() {
-    this.tabs = Array.from(document.querySelectorAll(`#${this.containerId} button[role=tab]`));
-    this.tabBar = this.tabs[0].parentElement;
+    this.tabBar = ReactDOM.findDOMNode(this.tabsRef); // eslint-disable-line react/no-find-dom-node
+    this.tabs = Array.from(this.tabBar.querySelectorAll('button[role=tab]'));
 
     /*
       the change event isn't fired, when the tabs component is initialized,
       so we have to perform the required actions on our own
     */
-    const selectedTab = this.tabs.find(t => (t.getAttribute('aria-selected')) === 'true');
+    const selectedTab = this.tabs.find(t => (t.getAttribute('aria-selected')) === 'true') || this.tabs[0];
     this.selectTab(selectedTab);
     selectedTab.focus();
+  }
+
+  /**
+   * Set the ref to the parent tabs element
+   */
+  setTabsRef(ref) {
+    if (this.tabsRef) return;
+
+    this.tabsRef = ref;
   }
 
   /**
@@ -109,26 +119,12 @@ export class WindowSideBarButtons extends Component {
   }
 
   /**
-   * focus the first tab
-   */
-  focusFirstTab() {
-    this.tabBar.firstChild.focus();
-  }
-
-  /**
    * focus the previous tab
    * @param {object} tab the currently selected tab
    */
   focusPreviousTab(tab) {
-    const previousTab = tab.previousSibling || this.tabBar.lastChild;
+    const previousTab = tab.previousSibling || this.tabs[this.tabs.length - 1];
     previousTab.focus();
-  }
-
-  /**
-   * focus the last tab
-   */
-  focusLastTab() {
-    this.tabBar.lastChild.focus();
   }
 
   /**
@@ -136,7 +132,7 @@ export class WindowSideBarButtons extends Component {
    * @param {object} tab the currently selected tab
    */
   focusNextTab(tab) {
-    const nextTab = tab.nextSibling || this.tabBar.firstChild;
+    const nextTab = tab.nextSibling || this.tabs[0];
     nextTab.focus();
   }
 
@@ -163,6 +159,7 @@ export class WindowSideBarButtons extends Component {
           indicatorColor="secondary"
           textColor="secondary"
           aria-orientation="vertical"
+          ref={ref => this.setTabsRef(ref)}
         >
           <Tab
             classes={{ root: classes.tab, selected: classes.tabSelected }}
