@@ -1,5 +1,5 @@
 export default {
-  canvasNavigation: {
+  canvasNavigation: { // Set the hight and width of canvas thumbnails in the  CanvasNavigation companion window
     height: 50,
     width: 50,
   },
@@ -117,28 +117,28 @@ export default {
       useNextVariants: true // set so that console deprecation warning is removed
     }
   },
-  language: 'en',
+  language: 'en', // The default language set in the application
   availableLanguages: { // All the languages available in the language switcher
     de: 'Deutsch',
     en: 'English',
   },
-  translations: {
+  translations: { // Translations can be added to inject new languages or override existing labels
   },
   window: {
-    allowClose: true,
-    allowMaximize: true,
-    defaultView: 'single',
+    allowClose: true, // Configure if windows can be closed or not
+    allowMaximize: true, // Configure if windows can be maximized or not
+    defaultView: 'single',  // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in
   },
-  windows: [],
+  windows: [], // Array of windows to be open when mirador initializes (each object should at least provide a loadedManifest key with the value of the IIIF presentation manifest to load)
   thumbnailNavigation: {
-    defaultPosition: 'far-bottom',
+    defaultPosition: 'far-bottom', // Which position for the thumbnail navigation to be be displayed. Other possible values are "off" or "far-right"
     height: 150, // height of entire ThumbnailNavigation area when position is "far-bottom"
     width: 100, // width of a single thumb in ThumbnailNavigation area when position is "far-right"
   },
   workspace: {
-    type: 'mosaic',
+    type: 'mosaic', // Which workspace type to load by default. Other possible values are "elastic"
   },
   workspaceControlPanel: {
-    enabled: true,
+    enabled: true, // Configure if the control panel should be rendered.  Useful if you want to lock the viewer down to only the configured manifests
   },
 };
