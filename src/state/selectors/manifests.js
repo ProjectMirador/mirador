@@ -10,10 +10,22 @@ export function getManifest(state, { manifestId, windowId }) {
   ];
 }
 
+/** */
+function getLocale(state, { companionWindowId }) {
+  return companionWindowId
+    && state.companionWindows[companionWindowId]
+    && state.companionWindows[companionWindowId].locale;
+}
+
 /** Instantiate a manifesto instance */
 export const getManifestoInstance = createSelector(
-  [getManifest],
-  manifest => manifest && manifest.json && manifesto.create(manifest.json),
+  [
+    getManifest,
+    getLocale,
+  ],
+  (manifest, locale) => manifest
+    && manifest.json
+    && manifesto.create(manifest.json, locale ? { locale } : undefined),
 );
 
 /**
@@ -178,4 +190,40 @@ export function getDestructuredMetadata(iiifResource) {
 export const getManifestMetadata = createSelector(
   [getManifestoInstance],
   manifest => manifest && getDestructuredMetadata(manifest),
+);
+
+/** */
+function getLocalesForStructure(item) {
+  const languages = [];
+  if (Array.isArray(item)) {
+    languages.push(...item.filter(i => (typeof i === 'object' && i['@language'])).map(i => i['@language']));
+  } else if (typeof item === 'object') {
+    if (item['@language']) languages.push(item['@language']);
+  }
+  return languages;
+}
+
+/** */
+function getLocales(resource) {
+  if (!resource) return [];
+
+  const metadata = resource.getProperty('metadata') || [];
+  const languages = {};
+
+  for (let i = 0; i < metadata.length; i += 1) {
+    const item = metadata[i];
+    getLocalesForStructure(item.label).forEach((l) => { languages[l] = true; });
+    getLocalesForStructure(item.value).forEach((l) => { languages[l] = true; });
+  }
+  return Object.keys(languages);
+}
+
+export const getDefaultManifestLocale = createSelector(
+  [getManifestoInstance],
+  manifest => manifest && manifest.options && manifest.options.locale && manifest.options.locale.replace(/-.*$/, ''),
+);
+
+export const getMetadataLocales = createSelector(
+  [getManifestoInstance],
+  manifest => getLocales(manifest),
 );
