@@ -33,7 +33,12 @@ export class CompanionArea extends Component {
               aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
               className={classes.toggle}
               onClick={() => { setCompanionAreaOpen(windowId, !companionAreaOpen); }}
-              TooltipProps={{ style: { right: '0', position: 'absolute' } }}
+              TooltipProps={{
+                style: {
+                  position: 'absolute',
+                  right: '0',
+                },
+              }}
             >
               {companionAreaOpen ? <ArrowLeftIcon /> : <ArrowRightIcon />}
             </MiradorMenuButton>

@@ -189,15 +189,10 @@ export class ThumbnailNavigation extends Component {
     switch (position) {
       case 'far-right':
         return {
-<<<<<<< HEAD
-          height: '100%',
-          width: `${this.rightWidth() + this.scrollbarSize + this.spacing}px`,
-=======
->>>>>>> #2128: adds sort-keys to eslint rules, reorders keys
           display: 'flex',
           height: '100%',
           minHeight: 0,
-          width: `${this.rightWidth()}px`,
+          width: `${this.rightWidth() + this.scrollbarSize + this.spacing}px`,
         };
       // Default case bottom
       default:

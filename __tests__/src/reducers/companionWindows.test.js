@@ -36,15 +36,15 @@ describe('companionWindowsReducer', () => {
       };
       const beforeState = {};
       const expectedState = {
-        Banane: {
-          content: 'canvas_navigation',
-          id: 'Banane',
-          position: 'right',
-        },
         banana: {
           content: 'info',
           id: 'banana',
           position: 'left',
+        },
+        Banane: {
+          content: 'canvas_navigation',
+          id: 'Banane',
+          position: 'right',
         },
       };
       expect(companionWindowsReducer(beforeState, action)).toEqual(expectedState);

@@ -36,7 +36,10 @@ const mapStateToProps = (state, { windowId }) => ({
     getSelectedTargetAnnotations(state, (getSelectedCanvas(state, { windowId }) || {}).id),
     ['oa:commenting', 'sc:painting'],
   ).length > 0,
-  sideBarPanel: (getCompanionWindowForPosition(state, { windowId, position: 'left' }) || {}).content,
+  sideBarPanel: (getCompanionWindowForPosition(state, {
+    position: 'left',
+    windowId,
+  }) || {}).content,
 });
 
 /** */

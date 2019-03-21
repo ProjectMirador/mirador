@@ -24,7 +24,7 @@
     }],
     "react/prefer-stateless-function": "off",
     "sort-keys": ["error", "asc", {
-      "caseSensitive": true,
+      "caseSensitive": false,
       "natural": false
     }]
   }

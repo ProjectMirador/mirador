@@ -74,8 +74,8 @@ WindowTopBar.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   focused: PropTypes.bool,
   manifestTitle: PropTypes.string,
-  maximizeWindow: PropTypes.func,
   maximized: PropTypes.bool,
+  maximizeWindow: PropTypes.func,
   minimizeWindow: PropTypes.func,
   removeWindow: PropTypes.func.isRequired,
   t: PropTypes.func,
@@ -88,8 +88,8 @@ WindowTopBar.defaultProps = {
   allowMaximize: true,
   focused: false,
   manifestTitle: '',
-  maximizeWindow: () => {},
   maximized: false,
+  maximizeWindow: () => {},
   minimizeWindow: () => {},
   t: key => key,
 };
