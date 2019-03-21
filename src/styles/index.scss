@@ -93,6 +93,90 @@
     position: relative;
   }
 
+  &-toc-item {
+    cursor: pointer;
+    .mirador-toc-section {
+      width: 100%;
+      overflow: hidden;
+      max-height: 0px;
+      transition: 1s all ease-out;
+      padding-left: 15px;
+      h6.leaf {
+        border-left: 2px solid lightGray;
+      }
+    }
+
+    .mirador-toc-section.open {
+      max-height: 10000px;
+      transition: 7s all ease-out;
+    }
+
+    h6 {
+      margin: 0;
+      position: relative;
+      padding-left: 15px;
+      &:hover {
+        background-color: #efefef;
+        text-shadow: 0.6px 0 0 black;
+      }
+      &.leaf {
+        border-left: 2px solid lightgray;
+        padding-left: 15px;
+      }
+    }
+    &.selected>.mirador-toc-heading {
+        &.leaf {
+            border-left: 4px solid black;
+        }
+        border-left: 4px solid black;
+    }
+  }
+
+  &-gallery-container {
+    flex: 1;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 50px 0 50px 20px;
+  }
+
+  &-gallery-view-item {
+    display: inline-block;
+    max-width: 100px;
+    height: 160px;
+    overflow: hidden;
+    text-overflow: elipsis;
+    margin: 10px 5px;
+    padding: 5px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: 0.1s transform ease-out;
+
+    span {
+      text-align: 'center',
+    }
+
+    &.current-canvas {
+      border: 2px solid deepskyblue;
+      padding: 3px;
+    }
+
+    &:hover {
+      transition: 0.1s transform ease-out;
+      transform: scale(1.05);
+      border: 2px solid deepskyblue;
+      padding: 3px;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    img {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+
   &-osd-container {
     flex: 1;
     position: relative;

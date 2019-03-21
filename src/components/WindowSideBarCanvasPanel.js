@@ -10,6 +10,7 @@ import Select from '@material-ui/core/Select';
 import { CanvasThumbnail } from './CanvasThumbnail';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
 import CompanionWindow from '../containers/CompanionWindow';
+import TableOfContentsTree from '../containers/TableOfContentsTree';
 
 /**
  * a panel showing the canvases for a given manifest
@@ -95,7 +96,6 @@ export class WindowSideBarCanvasPanel extends Component {
       canvases, selectedCanvases, setCanvas, classes, t, variant, windowId, id,
     } = this.props;
 
-
     const canvasesIdAndLabel = this.getIdAndLabelOfCanvases(canvases);
     return (
       <CompanionWindow
@@ -119,12 +119,22 @@ export class WindowSideBarCanvasPanel extends Component {
               classes={{ select: classes.select }}
               className={classes.selectEmpty}
             >
+              <MenuItem value="toc"><Typography variant="body2">Table of Contents</Typography></MenuItem>
               <MenuItem value="compact"><Typography variant="body2">{ t('compactList') }</Typography></MenuItem>
               <MenuItem value="thumbnail"><Typography variant="body2">{ t('thumbnailList') }</Typography></MenuItem>
             </Select>
           </FormControl>
           )}
       >
+        {
+          variant === 'toc' && (
+            <TableOfContentsTree
+              windowId={windowId}
+            />
+          )
+        }
+
+        { variant !== 'toc' && (
         <List>
           {
             canvasesIdAndLabel.map((canvas, canvasIndex) => {
@@ -147,6 +157,7 @@ export class WindowSideBarCanvasPanel extends Component {
             })
           }
         </List>
+        )}
       </CompanionWindow>
     );
   }
@@ -161,11 +172,11 @@ WindowSideBarCanvasPanel.propTypes = {
   setCanvas: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   updateVariant: PropTypes.func.isRequired,
-  variant: PropTypes.oneOf(['compact', 'thumbnail']),
+  variant: PropTypes.oneOf(['toc', 'compact', 'thumbnail']),
   windowId: PropTypes.string.isRequired,
 };
 
 WindowSideBarCanvasPanel.defaultProps = {
   selectedCanvases: [],
-  variant: 'thumbnail',
+  variant: 'toc',
 };

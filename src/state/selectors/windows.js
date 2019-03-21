@@ -1,5 +1,8 @@
 import { createSelector } from 'reselect';
-import { getManifestTitle } from './manifests';
+import {
+  getManifestTitle,
+  getManifestoInstance,
+} from './manifests';
 import { getWorkspaceType } from './config';
 
 /**
@@ -150,4 +153,13 @@ export const getWindowDraggability = createSelector(
     if (workspaceType === 'elastic') return true;
     return manyWindows && window && window.maximized === false;
   },
+);
+
+export const getCurrentCanvasId = createSelector(
+  getManifestoInstance,
+  getWindow,
+  (manifest, window) => manifest
+    .getSequences()[0]
+    .getCanvasByIndex(window.canvasIndex)
+    .id,
 );

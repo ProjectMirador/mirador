@@ -12,15 +12,14 @@
     <script type="text/javascript">
      var miradorInstance = Mirador.viewer({
        id: 'mirador',
-       windows: [{
-         loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
-         canvasIndex: 2,
-         thumbnailNavigationPosition: 'far-bottom',
-       },
-       {
-         loadedManifest: 'https://iiif.bodleian.ox.ac.uk/iiif/manifest/e32a277e-91e2-4a6d-8ba6-cc4bad230410.json',
-       }],
+       windows: [
+         {
+           loadedManifest: 'https://iiif.bodleian.ox.ac.uk/iiif/manifest/390fd0e8-9eae-475d-9564-ed916ab9035c.json',
+           canvasIndex: 2,
+         },
+       ],
        manifests: {
+         "https://iiif.bodleian.ox.ac.uk/iiif/manifest/390fd0e8-9eae-475d-9564-ed916ab9035c.json": { provider: "Bodleian Library, Oxfordshire"},
          "https://media.nga.gov/public/manifests/nga_highlights.json": { provider: "National Gallery of Art"},
          "https://data.ucd.ie/api/img/manifests/ucdlib:33064": { provider: "Irish Architectural Archive"},
          "https://wellcomelibrary.org/iiif/b18035723/manifest": { provider: "Wellcome Library"},

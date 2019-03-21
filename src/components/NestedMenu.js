@@ -27,6 +27,14 @@ export class NestedMenu extends Component {
   /**
    * handleMenuClick toggles the nestedMenuIsOpen state
    */
+  componentDidMount() {
+    MenuItem.defaultProps.disableTouchRipple = true;
+    MenuItem.defaultProps.disableFocusRipple = true;
+  }
+
+  /**
+   * handleMenuClick toggles the nestedMenuIsOpen state
+   */
   handleMenuClick() {
     const { nestedMenuIsOpen } = this.state;
 

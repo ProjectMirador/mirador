@@ -337,7 +337,6 @@ function getLocales(resource) {
 
   const metadata = resource.getProperty('metadata') || [];
   const languages = {};
-
   for (let i = 0; i < metadata.length; i += 1) {
     const item = metadata[i];
     getLocalesForStructure(item.label).forEach((l) => { languages[l] = true; });
@@ -349,4 +348,17 @@ function getLocales(resource) {
 export const getMetadataLocales = createSelector(
   [getManifestoInstance],
   manifest => getLocales(manifest),
+);
+
+/**
+ * Return manifest structures/ranges
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @return {Array[Object]}
+ */
+export const getManifestStructures = createSelector(
+  [getManifestoInstance],
+  manifest => (manifest ? manifest.getTopRanges() : []),
 );

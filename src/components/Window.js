@@ -7,7 +7,6 @@ import WindowTopBar from '../containers/WindowTopBar';
 import PrimaryWindow from '../containers/PrimaryWindow';
 import CompanionArea from '../containers/CompanionArea';
 
-
 /**
  * Represents a Window in the mirador workspace
  * @param {object} window
