@@ -4,6 +4,7 @@ import OpenSeadragon from 'openseadragon';
 import { OpenSeadragonViewer } from '../../../src/components/OpenSeadragonViewer';
 import OpenSeadragonCanvasOverlay from '../../../src/lib/OpenSeadragonCanvasOverlay';
 import Annotation from '../../../src/lib/Annotation';
+import CanvasWorld from '../../../src/lib/CanvasWorld';
 
 jest.mock('openseadragon');
 jest.mock('../../../src/lib/OpenSeadragonCanvasOverlay');
@@ -34,6 +35,7 @@ describe('OpenSeadragonViewer', () => {
         updateViewport={updateViewport}
         t={k => k}
         classes={{ controls: 'controls' }}
+        canvasWorld={new CanvasWorld([])}
       >
         <div className="foo" />
       </OpenSeadragonViewer>,
@@ -108,6 +110,7 @@ describe('OpenSeadragonViewer', () => {
           viewer={{ x: 1, y: 0, zoom: 0.5 }}
           config={{}}
           updateViewport={updateViewport}
+          canvasWorld={new CanvasWorld([])}
           t={k => k}
         >
           <div className="foo" />

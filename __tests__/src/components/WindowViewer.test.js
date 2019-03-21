@@ -8,7 +8,7 @@ import fixture from '../../fixtures/version-2/019.json';
 import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
 import otherContentFixture from '../../fixtures/version-2/299843.json';
 
-let canvases = manifesto.create(fixture).getSequences()[0].getCanvases();
+let currentCanvases = manifesto.create(fixture).getSequences()[0].getCanvases();
 
 let mockWindow = {
   canvasIndex: 0,
@@ -23,7 +23,7 @@ function createWrapper(props) {
       infoResponses={{}}
       fetchInfoResponse={() => {}}
       fetchAnnotation={() => {}}
-      canvases={canvases}
+      currentCanvases={[currentCanvases[1]]}
       window={mockWindow}
       {...props}
     />,
@@ -32,10 +32,8 @@ function createWrapper(props) {
 
 describe('WindowViewer', () => {
   let wrapper;
-  beforeEach(() => {
-    wrapper = createWrapper();
-  });
   it('renders properly', () => {
+    wrapper = createWrapper();
     expect(wrapper.matchesElement(
       <>
         <OSDViewer>
@@ -43,31 +41,6 @@ describe('WindowViewer', () => {
         </OSDViewer>
       </>,
     )).toBe(true);
-  });
-  describe('currentCanvases', () => {
-    it('by default returns a single canvas', () => {
-      expect(wrapper.instance().currentCanvases().length).toEqual(1);
-    });
-    describe('book view', () => {
-      it('when the first canvas is selected', () => {
-        wrapper = createWrapper({
-          window: {
-            canvasIndex: 0,
-            view: 'book',
-          },
-        });
-        expect(wrapper.instance().currentCanvases().length).toEqual(1);
-      });
-      it('when the second canvas is selected', () => {
-        wrapper = createWrapper({
-          window: {
-            canvasIndex: 1,
-            view: 'book',
-          },
-        });
-        expect(wrapper.instance().currentCanvases().length).toEqual(2);
-      });
-    });
   });
   describe('currentInfoResponses', () => {
     describe('returns only available infoResponses', () => {
@@ -131,38 +104,32 @@ describe('WindowViewer', () => {
       });
     });
   });
-  it('when view type changes', () => {
-    expect(wrapper.instance().canvasGroupings.groupings().length).toEqual(3);
-    wrapper.setProps({
-      window: {
-        canvasIndex: 0,
-        view: 'book',
-      },
-    });
-    expect(wrapper.instance().canvasGroupings.groupings().length).toEqual(2);
-  });
 
   describe('componentDidMount', () => {
     it('does not call fetchInfoResponse for a canvas that has no images', () => {
       const mockFnCanvas0 = jest.fn();
       const mockFnCanvas2 = jest.fn();
-      canvases = manifesto.create(emptyCanvasFixture).getSequences()[0].getCanvases();
+      const canvases = manifesto.create(emptyCanvasFixture).getSequences()[0].getCanvases();
+
+      currentCanvases = [canvases[0]];
+
       mockWindow = {
         canvasIndex: 0,
         view: 'single',
       };
       wrapper = createWrapper(
         {
-          canvases,
+          currentCanvases,
           fetchInfoResponse: mockFnCanvas0,
           window: mockWindow,
         },
       );
       expect(mockFnCanvas0).toHaveBeenCalledTimes(1);
 
+      currentCanvases = [canvases[2]];
       wrapper = createWrapper(
         {
-          canvases,
+          currentCanvases,
           fetchInfoResponse: mockFnCanvas2,
           window: { canvasIndex: 2, view: 'single' },
         },
@@ -171,9 +138,11 @@ describe('WindowViewer', () => {
     });
     it('calls fetchAnnotation when otherContent is present', () => {
       const mockFnAnno = jest.fn();
-      canvases = manifesto.create(otherContentFixture).getSequences()[0].getCanvases();
+      const canvases = manifesto.create(otherContentFixture).getSequences()[0].getCanvases();
+      currentCanvases = [canvases[0]];
+
       wrapper = createWrapper(
-        { canvases, fetchAnnotation: mockFnAnno },
+        { currentCanvases, fetchAnnotation: mockFnAnno },
       );
       expect(mockFnAnno).toHaveBeenCalledTimes(1);
     });
@@ -182,16 +151,17 @@ describe('WindowViewer', () => {
   describe('componentDidUpdate', () => {
     it('does not call fetchInfoResponse for a canvas that has no images', () => {
       const mockFn = jest.fn();
-      canvases = manifesto.create(emptyCanvasFixture).getSequences()[0].getCanvases();
+      const canvases = manifesto.create(emptyCanvasFixture).getSequences()[0].getCanvases();
+      currentCanvases = [canvases[2]];
       mockWindow = {
         canvasIndex: 2,
         view: 'single',
       };
       wrapper = createWrapper(
-        { canvases, fetchInfoResponse: mockFn, window: mockWindow },
+        { currentCanvases, fetchInfoResponse: mockFn, window: mockWindow },
       );
 
-      wrapper.setProps({ window: { canvasIndex: 3, view: 'single' } });
+      wrapper.setProps({ currentCanvases: [canvases[3]], window: { canvasIndex: 3, view: 'single' } });
 
       expect(mockFn).toHaveBeenCalledTimes(0);
     });
