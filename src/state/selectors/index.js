@@ -1,42 +1,37 @@
+import { createSelector } from 'reselect';
 import filter from 'lodash/filter';
 import flatten from 'lodash/flatten';
 import Annotation from '../../lib/Annotation';
+import { getSelectedCanvases } from './canvases';
 
 export * from './canvases';
 export * from './manifests';
 export * from './windows';
 
-/**
-* Return annotations for an array of targets
-* @param {object} state
-* @param {Array} targets
-* @return {Array}
-*/
-export function getSelectedTargetsAnnotations(state, targets) {
-  const annotations = state.annotations
-    && targets.map(target => getSelectedTargetAnnotations(state, target));
-  if (!annotations) return [];
+const getAnnotationsOnSelectedCanvases = createSelector(
+  [
+    getSelectedCanvases,
+    state => state.annotations,
+  ],
+  (canvases, annotations) => {
+    if (!annotations || !canvases) return [];
+    return flatten(
+      canvases.map(c => c.id).map(
+        targetId => annotations[targetId] && Object.values(annotations[targetId]),
+      ),
+    );
+  },
+);
 
-  return flatten(annotations);
-}
-
-/**
-* Return a single target's annotations
-* @param {object} state
-* @param {String} target
-* @return {Array}
-*/
-export function getSelectedTargetAnnotations(state, target) {
-  const annotations = state.annotations && state.annotations[target];
-
-  if (!annotations) return [];
-
-  return filter(
-    Object.keys(annotations).map(id => new Annotation(annotations[id].json, target)),
-    annotation => annotation
-                  && annotation.present(),
-  );
-}
+const getPresentAnnotationsOnSelectedCanvases = createSelector(
+  [
+    getAnnotationsOnSelectedCanvases,
+  ],
+  annotations => filter(
+    Object.values(annotations).map(annotation => annotation && new Annotation(annotation.json)),
+    annotation => annotation && annotation.present(),
+  ),
+);
 
 /**
 * Return an array of annotation resources filtered by the given motivation
@@ -44,25 +39,18 @@ export function getSelectedTargetAnnotations(state, target) {
 * @param {Array} motivations
 * @return {Array}
 */
-export function getAnnotationResourcesByMotivation(annotations, motivations) {
-  const resources = flatten(annotations.map(annotation => annotation.resources));
-
-  return filter(resources, resource => resource.motivations.some(
-    motivation => motivations.includes(motivation),
-  ));
-}
-
-/**
- * @param {Array} resources
- * @return {Array} [{ id: 'abc123', content: 'Annotation Content' }, ...]
- */
-export function getIdAndContentOfResources(resources) {
-  return resources.map((resource, i) => ({
-    content: resource.chars,
-    id: resource.id,
-    targetId: resource.targetId,
-  }));
-}
+export const getAnnotationResourcesByMotivation = createSelector(
+  [
+    getPresentAnnotationsOnSelectedCanvases,
+    (state, { motivations }) => motivations,
+  ],
+  (annotations, motivations) => filter(
+    flatten(annotations.map(annotation => annotation.resources)),
+    resource => resource.motivations.some(
+      motivation => motivations.includes(motivation),
+    ),
+  ),
+);
 
 /**
 * Return languages from config (in state) and indicate which is currently set
@@ -86,39 +74,32 @@ export function getLanguagesFromConfigWithCurrent(state) {
  * @param {Array} targetIds
  * @return {Array}
  */
-export function getSelectedAnnotationIds(state, windowId, targetIds) {
-  return flatten(targetIds.map(targetId => state.windows[windowId].selectedAnnotations
-     && state.windows[windowId].selectedAnnotations[targetId]));
-}
+export const getSelectedAnnotationIds = createSelector(
+  [
+    (state, { windowId }) => state.windows[windowId].selectedAnnotations,
+    getSelectedCanvases,
+  ],
+  (selectedAnnotations, canvases) => (
+    flatten(
+      canvases.map(c => c.id).map(targetId => selectedAnnotations && selectedAnnotations[targetId]),
+    )
+  ),
+);
 
-/**
-* Return the current canvas' (selected in a window) selected annotations
-* @param {object} state
-* @param {Array} targetIds
-* @param {Array} annotationIds
-* @return {Array}
-*/
-export function getSelectedTargetAnnotationResources(state, targetIds, annotationIds) {
-  return getSelectedTargetsAnnotations(state, targetIds)
-    .map(annotation => ({
+export const getAllOrSelectedAnnotationsOnCanvases = createSelector(
+  [
+    getPresentAnnotationsOnSelectedCanvases,
+    getSelectedAnnotationIds,
+    (state, { windowId }) => state.windows[windowId].displayAllAnnotations,
+  ],
+  (canvasAnnotations, selectedAnnotationIds, displayAllAnnotations) => {
+    if (displayAllAnnotations) return canvasAnnotations;
+
+    return canvasAnnotations.map(annotation => ({
       id: (annotation['@id'] || annotation.id),
-      resources: annotation.resources.filter(r => annotationIds && annotationIds.includes(r.id)),
+      resources: annotation.resources.filter(
+        r => selectedAnnotationIds && selectedAnnotationIds.includes(r.id),
+      ),
     }));
-}
-
-/**
-* Return all of the given canvases annotations if the window
-* is set to display all, otherwise only return selected
-* @param {object} state
-* @param {String} windowId
-* @param {Array} targetIds
-* @param {Array} annotationIds
-* @return {Array}
-*/
-export function getAllOrSelectedAnnotations(state, windowId, targetIds, annotationIds) {
-  if (state.windows[windowId].displayAllAnnotations) {
-    return getSelectedTargetsAnnotations(state, targetIds);
-  }
-
-  return getSelectedTargetAnnotationResources(state, targetIds, annotationIds);
-}
+  },
+);

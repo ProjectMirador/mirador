@@ -5,13 +5,22 @@ import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import {
-  getIdAndContentOfResources,
   getSelectedAnnotationIds,
-  getSelectedCanvases,
-  getSelectedTargetsAnnotations,
   getAnnotationResourcesByMotivation,
 } from '../state/selectors';
 import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnotationsPanel';
+
+/**
+ * @param {Array} resources
+ * @return {Array} [{ id: 'abc123', content: 'Annotation Content' }, ...]
+ */
+function getIdAndContentOfResources(resources) {
+  return resources.map((resource, i) => ({
+    content: resource.chars,
+    id: resource.id,
+    targetId: resource.targetId,
+  }));
+}
 
 /**
  * mapStateToProps - to hook up connect
@@ -20,17 +29,9 @@ import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnota
  */
 const mapStateToProps = (state, { windowId }) => ({
   annotations: getIdAndContentOfResources(
-    getAnnotationResourcesByMotivation(
-      getSelectedTargetsAnnotations(
-        state,
-        getSelectedCanvases(state, { windowId }).map(canvas => canvas.id),
-      ),
-      ['oa:commenting', 'sc:painting'],
-    ),
+    getAnnotationResourcesByMotivation(state, { motivations: ['oa:commenting', 'sc:painting'], windowId }),
   ),
-  selectedAnnotationIds: getSelectedAnnotationIds(
-    state, windowId, getSelectedCanvases(state, { windowId }).map(canvas => canvas.id),
-  ),
+  selectedAnnotationIds: getSelectedAnnotationIds(state, { windowId }),
 });
 
 /**

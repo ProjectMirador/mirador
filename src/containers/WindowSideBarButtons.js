@@ -7,8 +7,6 @@ import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import {
   getCompanionWindowForPosition,
-  getSelectedCanvas,
-  getSelectedTargetAnnotations,
   getAnnotationResourcesByMotivation,
 } from '../state/selectors';
 import { WindowSideBarButtons } from '../components/WindowSideBarButtons';
@@ -32,14 +30,8 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
  * @private
  */
 const mapStateToProps = (state, { windowId }) => ({
-  hasAnnotations: getAnnotationResourcesByMotivation(
-    getSelectedTargetAnnotations(state, (getSelectedCanvas(state, { windowId }) || {}).id),
-    ['oa:commenting', 'sc:painting'],
-  ).length > 0,
-  sideBarPanel: (getCompanionWindowForPosition(state, {
-    position: 'left',
-    windowId,
-  }) || {}).content,
+  hasAnnotations: getAnnotationResourcesByMotivation(state, { motivations: ['oa:commenting', 'sc:painting'], windowId }).length > 0,
+  sideBarPanel: (getCompanionWindowForPosition(state, { position: 'left', windowId }) || {}).content,
 });
 
 /** */
