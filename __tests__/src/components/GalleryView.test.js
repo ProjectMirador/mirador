@@ -8,8 +8,11 @@ import { GalleryView } from '../../../src/components/GalleryView';
 function createWrapper(props) {
   return shallow(
     <GalleryView
-      window={{ id: '1234', canvasIndex: 0 }}
       canvases={manifesto.create(manifestJson).getSequences()[0].getCanvases()}
+      window={{
+        canvasIndex: 0,
+        id: '1234',
+      }}
       setCanvas={() => {}}
       {...props}
     />,

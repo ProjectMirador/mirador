@@ -36,35 +36,38 @@ const mapStateToProps = (state, { windowId }) => ({
     getSelectedTargetAnnotations(state, (getSelectedCanvas(state, { windowId }) || {}).id),
     ['oa:commenting', 'sc:painting'],
   ).length > 0,
-  sideBarPanel: (getCompanionWindowForPosition(state, { windowId, position: 'left' }) || {}).content,
+  sideBarPanel: (getCompanionWindowForPosition(state, {
+    position: 'left',
+    windowId,
+  }) || {}).content,
 });
 
 /** */
 const style = theme => ({
+  tab: {
+    '&:hover': {
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+      backgroundColor: fade(theme.palette.text.primary, theme.palette.action.hoverOpacity),
+      textDecoration: 'none',
+      // Reset on touch devices, it doesn't add specificity
+    },
+    borderRight: '4px solid transparent',
+    minWidth: 'auto',
+  },
+  tabSelected: {
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.light,
+    },
+    backgroundColor: theme.palette.secondary.light,
+    borderRight: `4px solid ${theme.palette.secondary.main}`,
+  },
   tabsFlexContainer: {
     flexDirection: 'column',
   },
   tabsIndicator: {
     display: 'none',
-  },
-  tab: {
-    minWidth: 'auto',
-    borderRight: '4px solid transparent',
-    '&:hover': {
-      textDecoration: 'none',
-      backgroundColor: fade(theme.palette.text.primary, theme.palette.action.hoverOpacity),
-      // Reset on touch devices, it doesn't add specificity
-      '@media (hover: none)': {
-        backgroundColor: 'transparent',
-      },
-    },
-  },
-  tabSelected: {
-    backgroundColor: theme.palette.secondary.light,
-    borderRight: `4px solid ${theme.palette.secondary.main}`,
-    '&:hover': {
-      backgroundColor: theme.palette.secondary.light,
-    },
   },
 });
 

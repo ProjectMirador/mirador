@@ -23,6 +23,6 @@ export class SanitizedHtml extends Component {
 }
 
 SanitizedHtml.propTypes = {
-  ruleSet: PropTypes.string.isRequired,
   htmlString: PropTypes.string.isRequired,
+  ruleSet: PropTypes.string.isRequired,
 };

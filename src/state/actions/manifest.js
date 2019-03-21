@@ -9,9 +9,9 @@ import ActionTypes from './action-types';
  */
 export function requestManifest(manifestId, properties) {
   return {
-    type: ActionTypes.REQUEST_MANIFEST,
     manifestId,
     properties,
+    type: ActionTypes.REQUEST_MANIFEST,
   };
 }
 
@@ -24,9 +24,9 @@ export function requestManifest(manifestId, properties) {
  */
 export function receiveManifest(manifestId, manifestJson) {
   return {
-    type: ActionTypes.RECEIVE_MANIFEST,
     manifestId,
     manifestJson,
+    type: ActionTypes.RECEIVE_MANIFEST,
   };
 }
 
@@ -39,9 +39,9 @@ export function receiveManifest(manifestId, manifestJson) {
  */
 export function receiveManifestFailure(manifestId, error) {
   return {
-    type: ActionTypes.RECEIVE_MANIFEST_FAILURE,
-    manifestId,
     error,
+    manifestId,
+    type: ActionTypes.RECEIVE_MANIFEST_FAILURE,
   };
 }
 
@@ -75,5 +75,5 @@ export function fetchManifest(manifestId, properties) {
  * @memberof ActionCreators
  */
 export function removeManifest(manifestId) {
-  return { type: ActionTypes.REMOVE_MANIFEST, manifestId };
+  return { manifestId, type: ActionTypes.REMOVE_MANIFEST };
 }

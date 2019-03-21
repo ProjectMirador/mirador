@@ -12,7 +12,10 @@ const Target = props => <div>Hello</div>;
 /** create wrapper  */
 function createWrapper(plugins) {
   pluginStore.getPlugins = () => plugins;
-  const props = { foo: 1, bar: 2 };
+  const props = {
+    bar: 2,
+    foo: 1,
+  };
   const PluginWrapper = withPlugins('Target', Target);
   return shallow(<PluginWrapper {...props} />);
 }
@@ -44,8 +47,8 @@ describe('PluginHoc: if no plugin exists for the target', () => {
 describe('PluginHoc: if a delete plugin exists for the target', () => {
   it('renders nothing', () => {
     const plugin = {
-      target: 'Target',
       mode: 'delete',
+      target: 'Target',
     };
     const wrapper = createWrapper([plugin]);
     expect(wrapper.find('*').length).toBe(0);
@@ -57,9 +60,9 @@ describe('PluginHoc: if a replace plugin exists for the target', () => {
     /** */
     const PluginComponent = props => <div>look i am a plugin</div>;
     const plugin = {
-      target: 'Target',
-      mode: 'replace',
       component: PluginComponent,
+      mode: 'replace',
+      target: 'Target',
     };
     const wrapper = createWrapper([plugin]);
     const selector = 'Connect(PluginComponent)';
@@ -74,9 +77,9 @@ describe('PluginHoc: if a add plugin exists for the target', () => {
     /** */
     const PluginComponent = props => <div>look i am a plugin</div>;
     const plugin = {
-      target: 'Target',
-      mode: 'add',
       component: PluginComponent,
+      mode: 'add',
+      target: 'Target',
     };
     const wrapper = createWrapper([plugin]);
     expect(wrapper.find(Target).length).toBe(1);
@@ -92,9 +95,9 @@ describe('PluginHoc: if a wrap plugin extists for the target', () => {
     /** */
     const PluginComponent = props => <div>look i am a plugin</div>;
     const plugin = {
-      target: 'Target',
-      mode: 'wrap',
       component: PluginComponent,
+      mode: 'wrap',
+      target: 'Target',
     };
     const wrapper = createWrapper([plugin]);
     const selector = 'Connect(PluginComponent)';

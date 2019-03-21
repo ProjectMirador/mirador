@@ -43,8 +43,8 @@ export class WorkspaceSelectionDialog extends Component {
                 });
               }}
               inputProps={{
-                name: 'workspace',
                 id: 'workspace-type',
+                name: 'workspace',
               }}
             >
               <MenuItem value="elastic">{t('elastic')}</MenuItem>
@@ -58,18 +58,18 @@ export class WorkspaceSelectionDialog extends Component {
 }
 
 WorkspaceSelectionDialog.propTypes = {
+  children: PropTypes.node,
   container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
-  children: PropTypes.node,
+  t: PropTypes.func,
   updateConfig: PropTypes.func.isRequired,
   workspaceType: PropTypes.string.isRequired,
-  t: PropTypes.func,
 };
 
 WorkspaceSelectionDialog.defaultProps = {
+  children: null,
   container: null,
   open: false,
-  children: null,
   t: key => key,
 };

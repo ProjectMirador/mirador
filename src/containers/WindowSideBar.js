@@ -23,21 +23,21 @@ const mapStateToProps = (state, props) => (
  * drawer: {overflowX: string, left: number, flexShrink: number, width: number, height: string}}}
  */
 const styles = theme => ({
-  toolbar: theme.mixins.toolbar,
-  paper: {
-    overflowX: 'hidden',
-    width: 48,
-  },
   drawer: {
-    left: 0,
     flexShrink: 0,
     height: '100%',
-    zIndex: theme.zIndex.appBar - 1,
+    left: 0,
     order: -1000,
+    zIndex: theme.zIndex.appBar - 1,
   },
   grow: {
     flexGrow: 1,
   },
+  paper: {
+    overflowX: 'hidden',
+    width: 48,
+  },
+  toolbar: theme.mixins.toolbar,
 });
 
 const enhance = compose(

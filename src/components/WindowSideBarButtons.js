@@ -89,16 +89,16 @@ export class WindowSideBarButtons extends Component {
 }
 
 WindowSideBarButtons.propTypes = {
-  hasAnnotations: PropTypes.bool,
   addCompanionWindow: PropTypes.func.isRequired,
+  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  hasAnnotations: PropTypes.bool,
   sideBarPanel: PropTypes.string,
   t: PropTypes.func,
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 WindowSideBarButtons.defaultProps = {
+  classes: {},
   hasAnnotations: false,
   sideBarPanel: 'closed',
   t: key => key,
-  classes: {},
 };

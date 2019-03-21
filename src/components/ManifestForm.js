@@ -114,7 +114,7 @@ ManifestForm.propTypes = {
 
 ManifestForm.defaultProps = {
   classes: {},
-  t: key => key,
   onCancel: null,
   onSubmit: () => {},
+  t: key => key,
 };

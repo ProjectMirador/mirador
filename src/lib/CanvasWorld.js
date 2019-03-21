@@ -59,8 +59,8 @@ export default class CanvasWorld {
     this.canvases.forEach((canvas) => {
       heights.push(canvas.getHeight());
       dimensions.push({
-        width: canvas.getWidth(),
         height: canvas.getHeight(),
+        width: canvas.getWidth(),
       });
     });
     const minHeight = Math.min(...heights);

@@ -23,11 +23,11 @@ export class WorkspaceMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      windowList: {},
-      toggleZoom: {},
-      workspaceSelection: {},
-      settings: {},
       exportWorkspace: {},
+      settings: {},
+      toggleZoom: {},
+      windowList: {},
+      workspaceSelection: {},
     };
     this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
     this.handleMenuItemClose = this.handleMenuItemClose.bind(this);
@@ -95,12 +95,12 @@ export class WorkspaceMenu extends Component {
           container={container}
           anchorEl={anchorEl}
           anchorOrigin={{
-            vertical: 'top',
             horizontal: 'right',
+            vertical: 'top',
           }}
           transformOrigin={{
-            vertical: 'top',
             horizontal: 'left',
+            vertical: 'top',
           }}
           open={Boolean(anchorEl)}
           onClose={handleClose}
@@ -185,17 +185,17 @@ export class WorkspaceMenu extends Component {
 }
 
 WorkspaceMenu.propTypes = {
+  anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   containerId: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
-  toggleZoomControls: PropTypes.func,
   showZoomControls: PropTypes.bool,
-  anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
+  toggleZoomControls: PropTypes.func,
 };
 
 WorkspaceMenu.defaultProps = {
   anchorEl: null,
-  t: key => key,
   showZoomControls: false,
+  t: key => key,
   toggleZoomControls: () => {},
 };

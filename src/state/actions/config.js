@@ -7,7 +7,7 @@ import ActionTypes from './action-types';
 * @memberof ActionCreators
  */
 export function setConfig(config) {
-  return { type: ActionTypes.SET_CONFIG, config };
+  return { config, type: ActionTypes.SET_CONFIG };
 }
 
 /**
@@ -17,5 +17,5 @@ export function setConfig(config) {
 * @memberof ActionCreators
  */
 export function updateConfig(config) {
-  return { type: ActionTypes.UPDATE_CONFIG, config };
+  return { config, type: ActionTypes.UPDATE_CONFIG };
 }

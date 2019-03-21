@@ -8,32 +8,32 @@ import {
 
 describe('getSelectedCanvas', () => {
   const state = {
-    windows: {
-      a: {
-        id: 'a',
-        manifestId: 'x',
-        canvasIndex: 1,
-      },
-    },
     manifests: {
       x: {
         id: 'x',
         json: manifestFixture019,
       },
     },
+    windows: {
+      a: {
+        canvasIndex: 1,
+        id: 'a',
+        manifestId: 'x',
+      },
+    },
   };
 
   const noManifestationState = {
-    windows: {
-      a: {
-        id: 'a',
-        manifestId: 'x',
-        canvasIndex: 1,
-      },
-    },
     manifests: {
       x: {
         id: 'x',
+      },
+    },
+    windows: {
+      a: {
+        canvasIndex: 1,
+        id: 'a',
+        manifestId: 'x',
       },
     },
   };
@@ -55,33 +55,33 @@ describe('getSelectedCanvas', () => {
 
 describe('getSelectedCanvases', () => {
   const state = {
-    windows: {
-      a: {
-        id: 'a',
-        manifestId: 'x',
-        canvasIndex: 1,
-        view: 'book',
-      },
-    },
     manifests: {
       x: {
         id: 'x',
         json: manifestFixture019,
       },
     },
+    windows: {
+      a: {
+        canvasIndex: 1,
+        id: 'a',
+        manifestId: 'x',
+        view: 'book',
+      },
+    },
   };
 
   const noManifestationState = {
-    windows: {
-      a: {
-        id: 'a',
-        manifestId: 'x',
-        canvasIndex: 1,
-      },
-    },
     manifests: {
       x: {
         id: 'x',
+      },
+    },
+    windows: {
+      a: {
+        canvasIndex: 1,
+        id: 'a',
+        manifestId: 'x',
       },
     },
   };
@@ -106,13 +106,19 @@ describe('getSelectedCanvases', () => {
 describe('getCanvasLabel', () => {
   it('should return label of the canvas', () => {
     const state = { manifests: { a: { json: manifestFixture001 } } };
-    const received = getCanvasLabel(state, { manifestId: 'a', canvasIndex: 0 });
+    const received = getCanvasLabel(state, {
+      canvasIndex: 0,
+      manifestId: 'a',
+    });
     expect(received).toBe('Whole Page');
   });
 
   it('should return undefined if the canvas is undefined', () => {
     const state = { manifests: { } };
-    expect(getCanvasLabel(state, { manifestId: 'b', canvasIndex: 0 })).toBeUndefined();
+    expect(getCanvasLabel(state, {
+      canvasIndex: 0,
+      manifestId: 'b',
+    })).toBeUndefined();
   });
 
   it('should return the canvas index as (+1) as string if no label given', () => {
@@ -133,7 +139,10 @@ describe('getCanvasLabel', () => {
     };
 
     const state = { manifests: { a: { json: manifest } } };
-    const received = getCanvasLabel(state, { manifestId: 'a', canvasIndex: 0 });
+    const received = getCanvasLabel(state, {
+      canvasIndex: 0,
+      manifestId: 'a',
+    });
     expect(received).toBe('1');
   });
 });

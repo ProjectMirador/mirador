@@ -60,8 +60,8 @@ class MiradorViewer {
       this.store.dispatch(actions.addWindow({
         canvasIndex: (miradorWindow.canvasIndex || 0),
         manifestId: miradorWindow.loadedManifest,
-        view,
         thumbnailNavigationPosition,
+        view,
       }));
     });
 

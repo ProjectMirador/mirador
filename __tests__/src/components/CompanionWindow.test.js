@@ -24,8 +24,8 @@ describe('CompanionWindow', () => {
     it('passes the the updateCompanionWindow prop to MiradorMenuButton with the appropriate args', () => {
       const updateCompanionWindow = jest.fn();
       companionWindow = createWrapper({
-        updateCompanionWindow,
         position: 'left',
+        updateCompanionWindow,
       });
 
       const button = companionWindow.find(MiradorMenuButton);
@@ -50,7 +50,10 @@ describe('CompanionWindow', () => {
 
   describe('when the companion window is on the right', () => {
     const updateCompanionWindow = jest.fn();
-    companionWindow = createWrapper({ updateCompanionWindow, position: 'right' });
+    companionWindow = createWrapper({
+      position: 'right',
+      updateCompanionWindow,
+    });
 
     expect(companionWindow.find('WithStyles(Paper).vertical').length).toBe(1);
 
@@ -62,7 +65,10 @@ describe('CompanionWindow', () => {
 
   describe('when the companion window is on the bottom', () => {
     const updateCompanionWindow = jest.fn();
-    companionWindow = createWrapper({ updateCompanionWindow, position: 'bottom' });
+    companionWindow = createWrapper({
+      position: 'bottom',
+      updateCompanionWindow,
+    });
 
     expect(companionWindow.find('WithStyles(Paper).horizontal').length).toBe(1);
 

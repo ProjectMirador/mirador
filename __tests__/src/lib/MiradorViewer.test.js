@@ -31,8 +31,8 @@ describe('MiradorViewer', () => {
       /** */ const plugins = [
         {
           reducers: {
-            foo: fooReducer,
             bar: barReducer,
+            foo: fooReducer,
           },
         },
         {
@@ -52,10 +52,13 @@ describe('MiradorViewer', () => {
     it('transforms config values to actions to dispatch to store', () => {
       instance = new MiradorViewer({
         id: 'mirador',
+        manifests: {
+          'http://media.nga.gov/public/manifests/nga_highlights.json': { provider: 'National Gallery of Art' },
+        },
         windows: [
           {
-            loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
             canvasIndex: 2,
+            loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
           },
           {
             loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
@@ -63,9 +66,6 @@ describe('MiradorViewer', () => {
             view: 'book',
           },
         ],
-        manifests: {
-          'http://media.nga.gov/public/manifests/nga_highlights.json': { provider: 'National Gallery of Art' },
-        },
       });
 
       const { windows, manifests } = instance.store.getState();

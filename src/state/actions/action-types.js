@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */
 const ActionTypes = {
   ADD_COMPANION_WINDOW: 'ADD_COMPANION_WINDOW',
   UPDATE_COMPANION_WINDOW: 'UPDATE_COMPANION_WINDOW',

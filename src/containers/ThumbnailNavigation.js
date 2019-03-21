@@ -16,12 +16,15 @@ const mapStateToProps = ({
   companionWindows, config, manifests, windows,
 }, { windowId }) => ({
   canvasGroupings: new CanvasGroupings(
-    getManifestCanvases({ windows, manifests }, { windowId }),
+    getManifestCanvases({
+      manifests,
+      windows,
+    }, { windowId }),
     windows[windowId].view,
   ),
+  config,
   position: companionWindows[windows[windowId].thumbnailNavigationId].position,
   window: windows[windowId],
-  config,
 });
 
 /**
@@ -37,17 +40,17 @@ const mapDispatchToProps = {
  * Styles for withStyles HOC
  */
 const styles = theme => ({
-  currentCanvas: {
-  },
   canvas: {
-    border: '2px solid transparent',
-    color: theme.palette.common.white,
-    cursor: 'pointer',
-    padding: '2px',
-    margin: '2px',
     '&$currentCanvas': {
       border: `2px solid ${theme.palette.secondary.main}`,
     },
+    border: '2px solid transparent',
+    color: theme.palette.common.white,
+    cursor: 'pointer',
+    margin: '2px',
+    padding: '2px',
+  },
+  currentCanvas: {
   },
   root: {
     background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',

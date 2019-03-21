@@ -10,7 +10,10 @@ function createWrapper(props) {
   return shallow(
     <WorkspaceAdd
       setWorkspaceAddVisibility={() => {}}
-      manifests={{ foo: fixture, bar: fixture }}
+      manifests={{
+        bar: fixture,
+        foo: fixture,
+      }}
       classes={{}}
       t={str => str}
       {...props}

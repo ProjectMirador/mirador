@@ -189,10 +189,10 @@ export class ThumbnailNavigation extends Component {
     switch (position) {
       case 'far-right':
         return {
-          height: '100%',
-          width: `${this.rightWidth() + this.scrollbarSize + this.spacing}px`,
           display: 'flex',
+          height: '100%',
           minHeight: 0,
+          width: `${this.rightWidth() + this.scrollbarSize + this.spacing}px`,
         };
       // Default case bottom
       default:
@@ -289,11 +289,11 @@ export class ThumbnailNavigation extends Component {
 }
 
 ThumbnailNavigation.propTypes = {
+  canvasGroupings: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  canvasGroupings: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   position: PropTypes.string.isRequired,
   setCanvas: PropTypes.func.isRequired,
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func.isRequired,
+  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };

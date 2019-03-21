@@ -33,7 +33,12 @@ export class CompanionArea extends Component {
               aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
               className={classes.toggle}
               onClick={() => { setCompanionAreaOpen(windowId, !companionAreaOpen); }}
-              TooltipProps={{ style: { right: '0', position: 'absolute' } }}
+              TooltipProps={{
+                style: {
+                  position: 'absolute',
+                  right: '0',
+                },
+              }}
             >
               {companionAreaOpen ? <ArrowLeftIcon /> : <ArrowRightIcon />}
             </MiradorMenuButton>
@@ -53,18 +58,18 @@ export class CompanionArea extends Component {
 
 CompanionArea.propTypes = {
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  position: PropTypes.string.isRequired,
-  windowId: PropTypes.string.isRequired,
-  companionWindows: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-  sideBarOpen: PropTypes.bool,
   companionAreaOpen: PropTypes.bool,
+  companionWindows: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  position: PropTypes.string.isRequired,
   setCompanionAreaOpen: PropTypes.func,
+  sideBarOpen: PropTypes.bool,
   t: PropTypes.func.isRequired,
+  windowId: PropTypes.string.isRequired,
 };
 
 CompanionArea.defaultProps = {
-  sideBarOpen: false,
+  classes: {},
   companionAreaOpen: true,
   setCompanionAreaOpen: () => {},
-  classes: {},
+  sideBarOpen: false,
 };

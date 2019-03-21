@@ -16,7 +16,10 @@ describe('OpenSeadragonCanvasOverlay', () => {
       },
       viewport: {
         getBounds: jest.fn(() => ({
-          x: 40, y: 80, width: 200, height: 300,
+          height: 300,
+          width: 200,
+          x: 40,
+          y: 80,
         })),
         getZoom: jest.fn(() => (0.75)),
       },

@@ -15,14 +15,14 @@ const mapStateToProps = (state, { manifestId }) => {
   const manifest = state.manifests[manifestId];
 
   return {
-    ready: !!manifest.json,
     error: manifest.error,
     isFetching: manifest.isFetching,
-    title: getManifestTitle(state, { manifestId }),
-    thumbnail: getManifestThumbnail(state, { manifestId }),
-    provider: manifest.provider || getManifestProvider(state, { manifestId }),
-    size: getManifestCanvases(state, { manifestId }).length,
     manifestLogo: getManifestLogo(state, { manifestId }),
+    provider: manifest.provider || getManifestProvider(state, { manifestId }),
+    ready: !!manifest.json,
+    size: getManifestCanvases(state, { manifestId }).length,
+    thumbnail: getManifestThumbnail(state, { manifestId }),
+    title: getManifestTitle(state, { manifestId }),
   };
 };
 
@@ -39,12 +39,9 @@ const mapDispatchToProps = { addWindow: actions.addWindow, fetchManifest: action
  * @returns {{root: {}, label: {textAlign: string, textTransform: string}}}
  */
 const styles = theme => ({
-  root: {
-    ...theme.mixins.gutters(),
-  },
   label: {
-    textTransform: 'initial',
     textAlign: 'left',
+    textTransform: 'initial',
   },
   logo: {
     height: '2.5rem',
@@ -52,6 +49,9 @@ const styles = theme => ({
   },
   placeholder: {
     backgroundColor: theme.palette.grey[300],
+  },
+  root: {
+    ...theme.mixins.gutters(),
   },
 });
 

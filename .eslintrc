@@ -22,6 +22,10 @@
         "FunctionExpression": true
       }
     }],
-    "react/prefer-stateless-function": "off"
+    "react/prefer-stateless-function": "off",
+    "sort-keys": ["error", "asc", {
+      "caseSensitive": false,
+      "natural": false
+    }]
   }
 }

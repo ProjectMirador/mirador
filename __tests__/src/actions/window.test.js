@@ -5,22 +5,25 @@ describe('window actions', () => {
   describe('focusWindow', () => {
     it('should return correct action object with pan=true', () => {
       const expectedAction = {
+        position: { x: 25, y: -13 },
         type: ActionTypes.FOCUS_WINDOW,
         windowId: 'window',
-        position: { x: 25, y: -13 },
       };
 
       const mockState = {
+        companionWindows: {},
         windows: {
           window: {
-            x: 50, y: 12, width: 50, height: 50,
+            height: 50,
+            width: 50,
+            x: 50,
+            y: 12,
           },
         },
-        companionWindows: {},
         workspace: {
           viewportPosition: {
-            width: 100,
             height: 100,
+            width: 100,
           },
         },
       };
@@ -36,16 +39,16 @@ describe('window actions', () => {
     });
     it('should return correct action object with pan=false', () => {
       const expectedAction = {
+        position: {},
         type: ActionTypes.FOCUS_WINDOW,
         windowId: 'window',
-        position: {},
       };
 
       const mockState = {
+        companionWindows: {},
         windows: {
           window: { x: 50, y: 12 },
         },
-        companionWindows: {},
       };
 
       const mockDispatch = jest.fn(() => ({}));
@@ -62,31 +65,37 @@ describe('window actions', () => {
   describe('addWindow', () => {
     it('should create a new window with merged defaults', () => {
       const options = {
-        id: 'helloworld',
         canvasIndex: 1,
+        id: 'helloworld',
       };
 
       const expectedAction = {
+        companionWindows: [
+          {
+            content: 'info',
+            position: 'left',
+          },
+          {
+            content: 'thumbnail_navigation',
+            position: 'far-bottom',
+          },
+        ],
         type: ActionTypes.ADD_WINDOW,
         window: {
-          id: 'helloworld',
           canvasIndex: 1,
           collectionIndex: 0,
+          height: 400,
+          id: 'helloworld',
           manifestId: null,
           maximized: false,
           rangeId: null,
+          rotation: null,
+          sideBarPanel: 'info',
+          view: 'single',
+          width: 400,
           x: 260,
           y: 300,
-          sideBarPanel: 'info',
-          width: 400,
-          height: 400,
-          rotation: null,
-          view: 'single',
         },
-        companionWindows: [
-          { position: 'left', content: 'info' },
-          { position: 'far-bottom', content: 'thumbnail_navigation' },
-        ],
       };
 
       const mockState = {
@@ -112,8 +121,8 @@ describe('window actions', () => {
   describe('updateWindow', () => {
     it('should return correct action object', () => {
       const payload = {
-        foo: 1,
         bar: 2,
+        foo: 1,
       };
       const action = actions.updateWindow('window-123', payload);
       expect(action.type).toBe(ActionTypes.UPDATE_WINDOW);
@@ -126,16 +135,16 @@ describe('window actions', () => {
     it('removes the window and returns windowId', () => {
       const id = 'abc123';
       const expectedAction = {
+        companionWindowIds: ['a', 'b', 'c'],
         type: ActionTypes.REMOVE_WINDOW,
         windowId: id,
-        companionWindowIds: ['a', 'b', 'c'],
       };
 
       const mockState = {
+        companionWindows: {},
         windows: {
           abc123: { companionWindowIds: ['a', 'b', 'c'] },
         },
-        companionWindows: {},
       };
 
       const mockDispatch = jest.fn(() => ({}));
@@ -186,9 +195,9 @@ describe('window actions', () => {
     it('returns the appropriate action type', () => {
       const id = 'abc123';
       const expectedAction = {
-        type: ActionTypes.UPDATE_WINDOW,
         id,
         payload: { companionAreaOpen: true },
+        type: ActionTypes.UPDATE_WINDOW,
       };
       expect(actions.setCompanionAreaOpen(id, true)).toEqual(expectedAction);
     });
@@ -200,9 +209,9 @@ describe('window actions', () => {
       const id = 'abc123';
 
       const expectedAction = {
-        type: ActionTypes.UPDATE_COMPANION_WINDOW,
         id,
         payload: { position: 'right' },
+        type: ActionTypes.UPDATE_COMPANION_WINDOW,
       };
 
       const mockState = {
@@ -227,8 +236,8 @@ describe('window actions', () => {
       const id = 'abc123';
       const expectedAction = {
         type: ActionTypes.SET_WINDOW_VIEW_TYPE,
-        windowId: id,
         viewType: 'book',
+        windowId: id,
       };
       expect(actions.setWindowViewType(id, 'book')).toEqual(expectedAction);
     });
@@ -239,9 +248,9 @@ describe('window actions', () => {
       const windowId = 'abc123';
       const panelType = 'panelType';
       const expectedAction = {
+        panelType,
         type: ActionTypes.SET_WINDOW_SIDE_BAR_PANEL,
         windowId,
-        panelType,
       };
       expect(actions.setWindowSideBarPanel(windowId, 'panelType')).toEqual(expectedAction);
     });
@@ -251,22 +260,22 @@ describe('window actions', () => {
     it('returns the appropriate action type', () => {
       const id = 'abc123';
       const expectedAction = {
-        type: ActionTypes.SET_WINDOW_SIZE,
         payload: {
-          windowId: id,
           size: {
+            height: 200,
+            width: 200,
             x: 20,
             y: 20,
-            width: 200,
-            height: 200,
           },
+          windowId: id,
         },
+        type: ActionTypes.SET_WINDOW_SIZE,
       };
       expect(actions.setWindowSize(id, {
+        height: 200,
+        width: 200,
         x: 20,
         y: 20,
-        width: 200,
-        height: 200,
       })).toEqual(expectedAction);
     });
   });
@@ -275,14 +284,14 @@ describe('window actions', () => {
     it('returns the appropriate action type', () => {
       const id = 'abc123';
       const expectedAction = {
-        type: ActionTypes.UPDATE_WINDOW_POSITION,
         payload: {
-          windowId: id,
           position: {
             x: 20,
             y: 20,
           },
+          windowId: id,
         },
+        type: ActionTypes.UPDATE_WINDOW_POSITION,
       };
       expect(actions.updateWindowPosition(id, {
         x: 20,

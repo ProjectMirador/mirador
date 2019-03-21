@@ -25,12 +25,12 @@ export class WindowTopMenu extends Component {
           container={document.querySelector(`#${containerId} .${ns('viewer')}`)}
           anchorEl={anchorEl}
           anchorOrigin={{
-            vertical: 'bottom',
             horizontal: 'right',
+            vertical: 'bottom',
           }}
           transformOrigin={{
-            vertical: 'top',
             horizontal: 'right',
+            vertical: 'top',
           }}
           getContentAnchorEl={null}
           open={Boolean(anchorEl)}
@@ -46,10 +46,10 @@ export class WindowTopMenu extends Component {
 }
 
 WindowTopMenu.propTypes = {
-  containerId: PropTypes.string.isRequired,
-  windowId: PropTypes.string.isRequired,
-  handleClose: PropTypes.func.isRequired,
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  containerId: PropTypes.string.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  windowId: PropTypes.string.isRequired,
 };
 
 WindowTopMenu.defaultProps = {

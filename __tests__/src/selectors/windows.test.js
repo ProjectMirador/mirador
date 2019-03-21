@@ -13,14 +13,14 @@ import {
 describe('getWindowTitles', () => {
   it('should return manifest titles for the open windows', () => {
     const state = {
-      windows: {
-        a: { manifestId: 'amanifest' },
-        b: { manifestId: 'bmanifest' },
-      },
       manifests: {
         amanifest: { json: manifestFixture001 },
         bmanifest: { json: manifestFixture002 },
         cmanifest: { json: manifestFixture019 },
+      },
+      windows: {
+        a: { manifestId: 'amanifest' },
+        b: { manifestId: 'bmanifest' },
       },
     };
 
@@ -36,12 +36,12 @@ describe('getWindowTitles', () => {
 
 describe('getThumbnailNavigationPosition', () => {
   const state = {
+    companionWindows: {
+      cw_a: { position: 'bottom' },
+    },
     windows: {
       a: { id: 'a', thumbnailNavigationId: 'cw_a' },
       b: { id: 'b', thumbnailNavigationId: 'cw_b' },
-    },
-    companionWindows: {
-      cw_a: { position: 'bottom' },
     },
   };
 
@@ -87,27 +87,36 @@ describe('getWindowViewType', () => {
 
 describe('getCompanionWindowForPosition', () => {
   const state = {
-    windows: { a: { companionWindowIds: ['abc'] } },
     companionWindows: {
       abc: { id: 'abc', position: 'right' },
       xyz: { id: 'xyz', position: 'bottom' },
     },
+    windows: { a: { companionWindowIds: ['abc'] } },
   };
 
   it('the companion window type based on the given position', () => {
-    const received = getCompanionWindowForPosition(state, { windowId: 'a', position: 'right' });
+    const received = getCompanionWindowForPosition(state, {
+      position: 'right',
+      windowId: 'a',
+    });
 
     expect(received.id).toEqual('abc');
   });
 
   it('returns undefined if the given window does not exist', () => {
-    const received = getCompanionWindowForPosition(state, { windowId: 'c', position: 'right' });
+    const received = getCompanionWindowForPosition(state, {
+      position: 'right',
+      windowId: 'c',
+    });
 
     expect(received).toBeUndefined();
   });
 
   it('returns undefined if a companion window at the given position does not exist', () => {
-    const received = getCompanionWindowForPosition(state, { windowId: 'a', position: 'bottom' });
+    const received = getCompanionWindowForPosition(state, {
+      position: 'bottom',
+      windowId: 'a',
+    });
 
     expect(received).toBeUndefined();
   });
@@ -115,19 +124,19 @@ describe('getCompanionWindowForPosition', () => {
 
 describe('getCompanionWindowsOfWindow', () => {
   const state = {
+    companionWindows: {
+      bar: {
+        content: 'canvas',
+        id: 'bar',
+      },
+      foo: {
+        content: 'info',
+        id: 'foo',
+      },
+    },
     windows: {
       abc123: {
         companionWindowIds: ['foo', 'bar'],
-      },
-    },
-    companionWindows: {
-      foo: {
-        id: 'foo',
-        content: 'info',
-      },
-      bar: {
-        id: 'bar',
-        content: 'canvas',
       },
     },
   };
@@ -136,8 +145,14 @@ describe('getCompanionWindowsOfWindow', () => {
     const received = getCompanionWindowsOfWindow(state, { windowId: 'abc123' });
 
     expect(received).toEqual([
-      { id: 'foo', content: 'info' },
-      { id: 'bar', content: 'canvas' },
+      {
+        content: 'info',
+        id: 'foo',
+      },
+      {
+        content: 'canvas',
+        id: 'bar',
+      },
     ]);
   });
 });

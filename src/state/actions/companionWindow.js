@@ -13,11 +13,11 @@ export function addCompanionWindow(windowId, payload, defaults = defaultProps) {
     const id = `cw-${uuid()}`;
 
     dispatch({
-      type: ActionTypes.ADD_COMPANION_WINDOW,
-      id,
-      windowId,
       companionWindows,
+      id,
       payload: { ...defaults, ...payload, id },
+      type: ActionTypes.ADD_COMPANION_WINDOW,
+      windowId,
     });
   };
 }
@@ -25,14 +25,18 @@ export function addCompanionWindow(windowId, payload, defaults = defaultProps) {
 /** */
 export function updateCompanionWindow(windowId, id, payload) {
   return {
-    type: ActionTypes.UPDATE_COMPANION_WINDOW,
-    windowId,
     id,
     payload,
+    type: ActionTypes.UPDATE_COMPANION_WINDOW,
+    windowId,
   };
 }
 
 /** */
 export function removeCompanionWindow(windowId, id) {
-  return { type: ActionTypes.REMOVE_COMPANION_WINDOW, id, windowId };
+  return {
+    id,
+    type: ActionTypes.REMOVE_COMPANION_WINDOW,
+    windowId,
+  };
 }

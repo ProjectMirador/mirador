@@ -20,14 +20,20 @@ import {
 const mapStateToProps = ({
   viewers, windows, manifests, annotations,
 }, { windowId, currentCanvases }) => ({
-  viewer: viewers[windowId],
-  label: getCanvasLabel({ windows, manifests }, { windowId, canvasIndex: 'selected' }),
   annotations: getAllOrSelectedAnnotations(
     { annotations, windows },
     windowId,
     currentCanvases.map(c => c.id),
     getSelectedAnnotationIds({ windows }, windowId, currentCanvases.map(c => c.id)),
   ),
+  label: getCanvasLabel({
+    manifests,
+    windows,
+  }, {
+    canvasIndex: 'selected',
+    windowId,
+  }),
+  viewer: viewers[windowId],
 });
 
 /**
@@ -46,11 +52,11 @@ const mapDispatchToProps = {
  */
 const styles = theme => ({
   controls: {
-    width: '100%',
-    position: 'absolute',
-    bottom: 0,
-    zIndex: 50,
     backgroundColor: fade(theme.palette.background.paper, 0.5),
+    bottom: 0,
+    position: 'absolute',
+    width: '100%',
+    zIndex: 50,
   },
 });
 

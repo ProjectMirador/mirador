@@ -81,22 +81,22 @@ WindowSideBarInfoPanel.propTypes = {
   canvasDescription: PropTypes.string,
   canvasLabel: PropTypes.string,
   canvasMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
-  manifestLabel: PropTypes.string,
+  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  id: PropTypes.string.isRequired,
   manifestDescription: PropTypes.string,
+  manifestLabel: PropTypes.string,
   manifestMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 WindowSideBarInfoPanel.defaultProps = {
   canvasDescription: null,
   canvasLabel: null,
   canvasMetadata: [],
-  manifestLabel: null,
+  classes: {},
   manifestDescription: null,
+  manifestLabel: null,
   manifestMetadata: [],
   t: key => key,
-  classes: {},
 };

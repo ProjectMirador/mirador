@@ -68,11 +68,12 @@ export class App extends Component {
 }
 
 App.propTypes = {
+  isFullscreenEnabled: PropTypes.bool,
   language: PropTypes.string.isRequired,
+  setWorkspaceFullscreen: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   translations: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  isFullscreenEnabled: PropTypes.bool,
-  setWorkspaceFullscreen: PropTypes.func.isRequired,
+
 };
 
 App.defaultProps = {

@@ -18,13 +18,13 @@ import {
 
 describe('getManifest()', () => {
   const state = {
+    manifests: {
+      x: { id: 'x' },
+    },
     windows: {
       a: { id: 'a', manifestId: 'x' },
       b: { id: 'b', manifestId: 'y' },
       c: { id: 'c' },
-    },
-    manifests: {
-      x: { id: 'x' },
     },
   };
 

@@ -117,9 +117,9 @@ export class WorkspaceAdd extends React.Component {
 }
 
 WorkspaceAdd.propTypes = {
+  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   manifests: PropTypes.instanceOf(Object).isRequired,
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
 };
 

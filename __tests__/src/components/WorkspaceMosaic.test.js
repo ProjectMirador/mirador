@@ -30,7 +30,10 @@ describe('WorkspaceMosaic', () => {
   describe('componentDidUpdate', () => {
     it('updates the workspace layout when windows change', () => {
       const updateWorkspaceMosaicLayout = jest.fn();
-      wrapper = createWrapper({ windows, updateWorkspaceMosaicLayout });
+      wrapper = createWrapper({
+        updateWorkspaceMosaicLayout,
+        windows,
+      });
 
       wrapper.setProps({ windows: { ...windows, 3: { id: 3 } } });
 
@@ -55,9 +58,9 @@ describe('WorkspaceMosaic', () => {
       expect(renderedTile).not.toBeNull();
       expect(shallow(renderedTile).find('DropTarget(DragSource(InternalMosaicWindow))').length).toEqual(1);
       expect(shallow(renderedTile).props()).toEqual(expect.objectContaining({
-        toolbarControls: [],
         additionalControls: [],
         path: 'foo',
+        toolbarControls: [],
       }));
 
       expect(shallow(shallow(renderedTile).props().renderPreview()).matchesElement(
@@ -73,7 +76,10 @@ describe('WorkspaceMosaic', () => {
   describe('mosaicChange', () => {
     it('calls the provided prop to update layout', () => {
       const updateWorkspaceMosaicLayout = jest.fn();
-      wrapper = createWrapper({ windows, updateWorkspaceMosaicLayout });
+      wrapper = createWrapper({
+        updateWorkspaceMosaicLayout,
+        windows,
+      });
 
       wrapper.instance().mosaicChange();
       expect(updateWorkspaceMosaicLayout).toBeCalled();

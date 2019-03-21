@@ -5,13 +5,13 @@ import ActionTypes from '../actions/action-types';
  */
 export const workspaceReducer = (
   state = { // we'll need to abstract this more, methinks.
+    exposeModeOn: false,
+    height: 5000,
     viewportPosition: {
       x: 0,
       y: 0,
     },
     width: 5000,
-    height: 5000,
-    exposeModeOn: false,
   },
   action,
 ) => {

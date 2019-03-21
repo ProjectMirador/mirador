@@ -4,59 +4,51 @@ const TerserPlugin = require('terser-webpack-plugin');
 const paths = require('./config/paths');
 
 const eslintLoaderConfig = {
-  test: /\.(js|mjs|jsx)$/,
   enforce: 'pre',
+  include: paths.appSrc,
+  test: /\.(js|mjs|jsx)$/,
   use: [
     {
+      loader: require.resolve('eslint-loader'),
       options: {
-        formatter: require.resolve('react-dev-utils/eslintFormatter'),
         eslintPath: require.resolve('eslint'),
+        formatter: require.resolve('react-dev-utils/eslintFormatter'),
 
       },
-      loader: require.resolve('eslint-loader'),
     },
   ],
-  include: paths.appSrc,
 };
 
 const babelLoaderConfig = {
-  test: /\.(js|mjs|jsx)$/,
   include: paths.appSrc, // CRL
   loader: require.resolve('babel-loader'),
   options: {
-    cacheDirectory: true,
     // Save disk space when time isn't as important
     cacheCompression: true,
+    cacheDirectory: true,
     compact: true,
   },
+  test: /\.(js|mjs|jsx)$/,
 };
 
 const baseConfig = [
   {
     entry: './src/index-core.js',
-    output: {
-      path: path.join(__dirname, 'dist'),
-      filename: 'm3core.umd.js',
-      libraryTarget: 'umd',
-      library: 'm3core',
-    },
     module: {
       rules: [
         eslintLoaderConfig,
         babelLoaderConfig,
       ],
     },
+    output: {
+      filename: 'm3core.umd.js',
+      library: 'm3core',
+      libraryTarget: 'umd',
+      path: path.join(__dirname, 'dist'),
+    },
   },
   {
     entry: './src/index.js',
-    output: {
-      path: path.join(__dirname, 'dist'),
-      filename: 'mirador.min.js',
-      libraryTarget: 'umd',
-      library: 'Mirador',
-      libraryExport: 'default',
-    },
-    resolve: { extensions: ['.js'] },
     module: {
       rules: [
         eslintLoaderConfig,
@@ -79,11 +71,19 @@ const baseConfig = [
         }),
       ],
     },
+    output: {
+      filename: 'mirador.min.js',
+      library: 'Mirador',
+      libraryExport: 'default',
+      libraryTarget: 'umd',
+      path: path.join(__dirname, 'dist'),
+    },
     plugins: [
       new webpack.IgnorePlugin({
         resourceRegExp: /@blueprintjs\/(core|icons)/, // ignore optional UI framework dependencies
       }),
     ],
+    resolve: { extensions: ['.js'] },
   },
 ];
 

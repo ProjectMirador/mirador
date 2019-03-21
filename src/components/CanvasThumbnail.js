@@ -11,7 +11,7 @@ export class CanvasThumbnail extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = { loaded: false, image: null };
+    this.state = { image: null, loaded: false };
     this.handleIntersection = this.handleIntersection.bind(this);
   }
 
@@ -26,8 +26,8 @@ export class CanvasThumbnail extends Component {
     const image = new Image();
     image.src = imageUrl;
     this.setState({
-      loaded: true,
       image,
+      loaded: true,
     });
   }
 
@@ -128,19 +128,19 @@ export class CanvasThumbnail extends Component {
 CanvasThumbnail.defaultImgPlaceholder = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==';
 
 CanvasThumbnail.propTypes = {
+  aspectRatio: PropTypes.number,
   imageUrl: PropTypes.string,
   isValid: PropTypes.bool,
   maxHeight: PropTypes.number,
   maxWidth: PropTypes.number,
-  aspectRatio: PropTypes.number,
   style: PropTypes.object, // eslint-disable-line react/forbid-prop-types,
 };
 
 CanvasThumbnail.defaultProps = {
+  aspectRatio: null,
   imageUrl: null,
   isValid: true,
   maxHeight: null,
   maxWidth: null,
-  aspectRatio: null,
   style: {},
 };

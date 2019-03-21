@@ -63,8 +63,8 @@ export class WorkspaceSettings extends Component {
               value={theme.palette.type}
               onChange={this.handleThemeChange}
               inputProps={{
-                name: 'theme',
                 id: 'theme-simple',
+                name: 'theme',
               }}
             >
               <MenuItem value="light">{t('light')}</MenuItem>
@@ -78,18 +78,18 @@ export class WorkspaceSettings extends Component {
 }
 
 WorkspaceSettings.propTypes = {
+  children: PropTypes.node,
   container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
-  children: PropTypes.node,
-  updateConfig: PropTypes.func.isRequired,
-  theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
+  theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  updateConfig: PropTypes.func.isRequired,
 };
 
 WorkspaceSettings.defaultProps = {
+  children: null,
   container: null,
   open: false,
-  children: null,
   t: key => key,
 };

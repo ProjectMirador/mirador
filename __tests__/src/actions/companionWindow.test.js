@@ -6,14 +6,14 @@ describe('companionWindow actions', () => {
     it('should return correct action object', () => {
       const payload = {
         content: 'info',
-        position: 'right',
         foo: 'bar',
+        position: 'right',
       };
       const mockState = {
+        companionWindows: {},
         windows: {
           abc123: { companionWindowIds: [] },
         },
-        companionWindows: {},
       };
 
       const mockDispatch = jest.fn(() => ({}));
@@ -33,10 +33,10 @@ describe('companionWindow actions', () => {
       const defaults = { foo: 'bar' };
 
       const mockState = {
+        companionWindows: {},
         windows: {
           abc123: { companionWindowIds: [] },
         },
-        companionWindows: {},
       };
 
       const mockDispatch = jest.fn(() => ({}));
@@ -53,10 +53,10 @@ describe('companionWindow actions', () => {
       const payload = {};
 
       const mockState = {
+        companionWindows: {},
         windows: {
           abc123: { companionWindowIds: [] },
         },
-        companionWindows: {},
       };
 
       const mockDispatch = jest.fn(() => ({}));
@@ -76,8 +76,8 @@ describe('companionWindow actions', () => {
     it('should return correct action object', () => {
       const payload = {
         content: 'info',
-        position: 'right',
         foo: 'bar',
+        position: 'right',
       };
 
       const action = actions.updateCompanionWindow('abc123', 'cw-123', payload);

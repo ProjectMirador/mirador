@@ -24,9 +24,9 @@ export function focusWindow(windowId, pan = false) {
       position = {};
     }
     dispatch({
+      position,
       type: ActionTypes.FOCUS_WINDOW,
       windowId,
-      position,
     });
   };
 }
@@ -45,32 +45,39 @@ export function addWindow(options) {
     const cwDefault = `cw-${uuid()}`;
     const cwThumbs = `cw-${uuid()}`;
     const defaultOptions = {
-      id: `window-${uuid()}`,
       canvasIndex: 0,
       collectionIndex: 0,
-      manifestId: null,
-      rangeId: null,
-      thumbnailNavigationId: cwThumbs,
-      width: 400,
+      companionWindowIds: [cwDefault, cwThumbs],
       height: 400,
+      id: `window-${uuid()}`,
+      manifestId: null,
+      maximized: false,
+      rangeId: null,
+      rotation: null,
+      selectedAnnotations: {},
+      sideBarPanel: 'info',
+      thumbnailNavigationId: cwThumbs,
+      view: 'single',
+      width: 400,
       x: 200 + (Math.floor(numWindows / 10) * 50 + (numWindows * 30) % 300),
       y: 200 + ((numWindows * 50) % 300),
-      companionWindowIds: [cwDefault, cwThumbs],
-      sideBarPanel: 'info',
-      rotation: null,
-      displayAllAnnotations: false,
-      selectedAnnotations: {},
-      view: 'single',
-      maximized: false,
     };
 
     dispatch({
+      companionWindows: [
+        {
+          content: 'info',
+          id: cwDefault,
+          position: 'left',
+        },
+        {
+          content: 'thumbnail_navigation',
+          id: cwThumbs,
+          position: options.thumbnailNavigationPosition || 'far-bottom',
+        },
+      ],
       type: ActionTypes.ADD_WINDOW,
       window: { ...defaultOptions, ...options },
-      companionWindows: [
-        { id: cwDefault, position: 'left', content: 'info' },
-        { id: cwThumbs, position: options.thumbnailNavigationPosition || 'far-bottom', content: 'thumbnail_navigation' },
-      ],
     });
   };
 }
@@ -95,12 +102,20 @@ export function minimizeWindow(windowId) {
 
 /** */
 export function updateWindow(id, payload) {
-  return { type: ActionTypes.UPDATE_WINDOW, id, payload };
+  return {
+    id,
+    payload,
+    type: ActionTypes.UPDATE_WINDOW,
+  };
 }
 
 /** */
 export function setCompanionAreaOpen(id, companionAreaOpen) {
-  return { type: ActionTypes.UPDATE_WINDOW, id, payload: { companionAreaOpen } };
+  return {
+    id,
+    payload: { companionAreaOpen },
+    type: ActionTypes.UPDATE_WINDOW,
+  };
 }
 
 /**
@@ -114,7 +129,11 @@ export function removeWindow(windowId) {
     const { windows } = getState();
     const { companionWindowIds } = windows[windowId];
 
-    dispatch({ type: ActionTypes.REMOVE_WINDOW, windowId, companionWindowIds });
+    dispatch({
+      companionWindowIds,
+      type: ActionTypes.REMOVE_WINDOW,
+      windowId,
+    });
   };
 }
 
@@ -136,7 +155,11 @@ export function toggleWindowSideBar(windowId) {
  * @memberof ActionCreators
  */
 export function setWindowSideBarPanel(windowId, panelType) {
-  return { type: ActionTypes.SET_WINDOW_SIDE_BAR_PANEL, windowId, panelType };
+  return {
+    panelType,
+    type: ActionTypes.SET_WINDOW_SIDE_BAR_PANEL,
+    windowId,
+  };
 }
 
 /**
@@ -152,7 +175,9 @@ export function setWindowThumbnailPosition(windowId, position) {
     const { thumbnailNavigationId } = windows[windowId];
 
     dispatch({
-      type: ActionTypes.UPDATE_COMPANION_WINDOW, id: thumbnailNavigationId, payload: { position },
+      id: thumbnailNavigationId,
+      payload: { position },
+      type: ActionTypes.UPDATE_COMPANION_WINDOW,
     });
   };
 }
@@ -165,7 +190,11 @@ export function setWindowThumbnailPosition(windowId, position) {
  * @memberof ActionCreators
  */
 export function setWindowViewType(windowId, viewType) {
-  return { type: ActionTypes.SET_WINDOW_VIEW_TYPE, windowId, viewType };
+  return {
+    type: ActionTypes.SET_WINDOW_VIEW_TYPE,
+    viewType,
+    windowId,
+  };
 }
 
 /**
@@ -177,11 +206,11 @@ export function setWindowViewType(windowId, viewType) {
  */
 export function updateWindowPosition(windowId, position) {
   return {
-    type: ActionTypes.UPDATE_WINDOW_POSITION,
     payload: {
-      windowId,
       position,
+      windowId,
     },
+    type: ActionTypes.UPDATE_WINDOW_POSITION,
   };
 }
 
@@ -194,10 +223,10 @@ export function updateWindowPosition(windowId, position) {
  */
 export function setWindowSize(windowId, size) {
   return {
-    type: ActionTypes.SET_WINDOW_SIZE,
     payload: {
-      windowId,
       size,
+      windowId,
     },
+    type: ActionTypes.SET_WINDOW_SIZE,
   };
 }

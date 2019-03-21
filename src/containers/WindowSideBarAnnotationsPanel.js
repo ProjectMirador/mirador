@@ -19,9 +19,6 @@ import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnota
  * @private
  */
 const mapStateToProps = (state, { windowId }) => ({
-  selectedAnnotationIds: getSelectedAnnotationIds(
-    state, windowId, getSelectedCanvases(state, { windowId }).map(canvas => canvas.id),
-  ),
   annotations: getIdAndContentOfResources(
     getAnnotationResourcesByMotivation(
       getSelectedTargetsAnnotations(
@@ -31,6 +28,9 @@ const mapStateToProps = (state, { windowId }) => ({
       ['oa:commenting', 'sc:painting'],
     ),
   ),
+  selectedAnnotationIds: getSelectedAnnotationIds(
+    state, windowId, getSelectedCanvases(state, { windowId }).map(canvas => canvas.id),
+  ),
 });
 
 /**
@@ -39,21 +39,21 @@ const mapStateToProps = (state, { windowId }) => ({
  * @private
  */
 const mapDispatchToProps = {
-  selectAnnotation: actions.selectAnnotation,
   deselectAnnotation: actions.deselectAnnotation,
+  selectAnnotation: actions.selectAnnotation,
 };
 
 /** */
 const styles = theme => ({
-  selectedAnnotation: {
-    backgroundColor: theme.palette.background.default,
-  },
   section: {
     borderBottom: '.5px solid rgba(0,0,0,0.25)',
     paddingBottom: theme.spacing.unit,
     paddingLeft: theme.spacing.unit * 2,
     paddingRight: theme.spacing.unit,
     paddingTop: theme.spacing.unit * 2,
+  },
+  selectedAnnotation: {
+    backgroundColor: theme.palette.background.default,
   },
 });
 

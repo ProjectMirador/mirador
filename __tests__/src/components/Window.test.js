@@ -20,12 +20,12 @@ function createWrapper(props, context) {
 describe('Window', () => {
   let wrapper;
   const window = {
+    height: 400,
     id: 123,
+    maximized: false,
+    width: 400,
     x: 2700,
     y: 2700,
-    width: 400,
-    height: 400,
-    maximized: false,
   };
   it('should render nothing, if provided with no window data', () => {
     wrapper = shallow(<Window t={k => k} />);

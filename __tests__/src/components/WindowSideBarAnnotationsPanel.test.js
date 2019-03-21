@@ -35,8 +35,14 @@ describe('WindowSideBarAnnotationsPanel', () => {
   it('renders a list with a list item for each annotation', () => {
     wrapper = createWrapper({
       annotations: [
-        { id: 'abc123', content: 'First Annotation' },
-        { id: 'xyz321', content: 'Last Annotation' },
+        {
+          content: 'First Annotation',
+          id: 'abc123',
+        },
+        {
+          content: 'Last Annotation',
+          id: 'xyz321',
+        },
       ],
     });
 
@@ -50,8 +56,16 @@ describe('WindowSideBarAnnotationsPanel', () => {
 
     wrapper = createWrapper({
       annotations: [
-        { id: 'abc123', targetId: 'example.com/iiif/12345', content: 'First Annotation' },
-        { id: 'xyz321', targetId: 'example.com/iiif/54321', content: 'Last Annotation' },
+        {
+          content: 'First Annotation',
+          id: 'abc123',
+          targetId: 'example.com/iiif/12345',
+        },
+        {
+          content: 'Last Annotation',
+          id: 'xyz321',
+          targetId: 'example.com/iiif/54321',
+        },
       ],
       selectAnnotation,
     });
@@ -64,12 +78,20 @@ describe('WindowSideBarAnnotationsPanel', () => {
     const deselectAnnotation = jest.fn();
 
     wrapper = createWrapper({
-      selectedAnnotationIds: ['abc123'],
       annotations: [
-        { id: 'abc123', targetId: 'example.com/iiif/12345', content: 'First Annotation' },
-        { id: 'xyz321', targetId: 'example.com/iiif/54321', content: 'Last Annotation' },
+        {
+          content: 'First Annotation',
+          id: 'abc123',
+          targetId: 'example.com/iiif/12345',
+        },
+        {
+          content: 'Last Annotation',
+          id: 'xyz321',
+          targetId: 'example.com/iiif/54321',
+        },
       ],
       deselectAnnotation,
+      selectedAnnotationIds: ['abc123'],
     });
 
     wrapper.find('WithStyles(ListItem)').first().simulate('click');

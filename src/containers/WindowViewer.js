@@ -12,8 +12,8 @@ import { getManifestCanvases } from '../state/selectors';
  */
 const mapStateToProps = (state, { window }) => (
   {
-    infoResponses: state.infoResponses,
     canvases: getManifestCanvases(state, { windowId: window.id }),
+    infoResponses: state.infoResponses,
   }
 );
 

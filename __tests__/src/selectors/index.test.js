@@ -87,7 +87,11 @@ describe('getIdAndContentOfResources', () => {
       new AnnotationResource({ '@id': 'theId', on: 'example.com', resource: { chars: 'The Content' } }),
     ];
     const expected = [
-      { id: 'theId', targetId: 'example.com', content: 'The Content' },
+      {
+        content: 'The Content',
+        id: 'theId',
+        targetId: 'example.com',
+      },
     ];
 
     expect(getIdAndContentOfResources(annotations)).toEqual(expected);
@@ -108,7 +112,11 @@ describe('getIdAndContentOfResources', () => {
       new AnnotationResource({ '@id': 'theId', on: 'example.com', resource: [{ chars: 'The' }, { chars: 'Content' }] }),
     ];
     const expected = [
-      { id: 'theId', targetId: 'example.com', content: 'The Content' },
+      {
+        content: 'The Content',
+        id: 'theId',
+        targetId: 'example.com',
+      },
     ];
 
     expect(getIdAndContentOfResources(annotations)).toEqual(expected);
@@ -118,12 +126,26 @@ describe('getIdAndContentOfResources', () => {
 describe('getLanguagesFromConfigWithCurrent', () => {
   it('returns an array of objects with locale, label, and current properties', () => {
     const state = {
-      config: { language: 'epo', availableLanguages: { epo: 'Esparanto', tlh: 'Klingon' } },
+      config: {
+        availableLanguages: {
+          epo: 'Esparanto',
+          tlh: 'Klingon',
+        },
+        language: 'epo',
+      },
     };
 
     const expected = [
-      { locale: 'epo', label: 'Esparanto', current: true },
-      { locale: 'tlh', label: 'Klingon', current: false },
+      {
+        current: true,
+        label: 'Esparanto',
+        locale: 'epo',
+      },
+      {
+        current: false,
+        label: 'Klingon',
+        locale: 'tlh',
+      },
     ];
 
     expect(getLanguagesFromConfigWithCurrent(state)).toEqual(expected);
@@ -171,13 +193,13 @@ it('getSelectedTargetAnnotationResources filters the annotation resources by the
 describe('getAllOrSelectedAnnotations', () => {
   it('returns all annotations if the given window is set to display all', () => {
     const state = {
-      windows: {
-        abc123: { displayAllAnnotations: true },
-      },
       annotations: {
         cid1: {
           annoId1: { id: 'annoId1', json: { resources: [{ '@id': 'annoId1' }, { '@id': 'annoId2' }] } },
         },
+      },
+      windows: {
+        abc123: { displayAllAnnotations: true },
       },
     };
 
@@ -188,13 +210,13 @@ describe('getAllOrSelectedAnnotations', () => {
 
   it('returns only selected annotations if the window is not set to display all', () => {
     const state = {
-      windows: {
-        abc123: { displayAllAnnotations: false },
-      },
       annotations: {
         cid1: {
           annoId1: { id: 'annoId1', json: { resources: [{ '@id': 'annoId1' }, { '@id': 'annoId2' }] } },
         },
+      },
+      windows: {
+        abc123: { displayAllAnnotations: false },
       },
     };
 

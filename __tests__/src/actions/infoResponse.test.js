@@ -12,8 +12,8 @@ describe('infoResponse actions', () => {
     it('requests an infoResponse from given a url', () => {
       const id = 'abc123';
       const expectedAction = {
-        type: ActionTypes.REQUEST_INFO_RESPONSE,
         infoId: id,
+        type: ActionTypes.REQUEST_INFO_RESPONSE,
       };
       expect(actions.requestInfoResponse(id)).toEqual(expectedAction);
     });
@@ -22,13 +22,13 @@ describe('infoResponse actions', () => {
     it('recieves an infoResponse', () => {
       const id = 'abc123';
       const json = {
-        id,
         content: 'image information request',
+        id,
       };
       const expectedAction = {
-        type: ActionTypes.RECEIVE_INFO_RESPONSE,
         infoId: id,
         infoJson: json,
+        type: ActionTypes.RECEIVE_INFO_RESPONSE,
       };
       expect(actions.receiveInfoResponse(id, json)).toEqual(expectedAction);
     });
@@ -66,7 +66,7 @@ describe('infoResponse actions', () => {
             const expectedActions = store.getActions();
             expect(expectedActions).toEqual([
               { infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000/info.json', type: 'REQUEST_INFO_RESPONSE' },
-              { infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000/info.json', error: new Error('invalid json response body at undefined reason: Unexpected end of JSON input'), type: 'RECEIVE_INFO_RESPONSE_FAILURE' },
+              { error: new Error('invalid json response body at undefined reason: Unexpected end of JSON input'), infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000/info.json', type: 'RECEIVE_INFO_RESPONSE_FAILURE' },
             ]);
           });
       });
@@ -75,8 +75,8 @@ describe('infoResponse actions', () => {
   describe('removeInfoResponse', () => {
     it('removes an existing infoResponse', () => {
       const expectedAction = {
-        type: ActionTypes.REMOVE_INFO_RESPONSE,
         infoId: 'foo',
+        type: ActionTypes.REMOVE_INFO_RESPONSE,
       };
       expect(actions.removeInfoResponse('foo')).toEqual(expectedAction);
     });
