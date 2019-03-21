@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import MoreVertIcon from '@material-ui/icons/MoreVertSharp';
 import PropTypes from 'prop-types';
 import WindowTopMenu from '../containers/WindowTopMenu';
-import { MiradorMenuButton } from './MiradorMenuButton';
+import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 /**
  */

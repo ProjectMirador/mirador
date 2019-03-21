@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import WindowTopMenu from '../../../src/containers/WindowTopMenu';
 import { WindowTopMenuButton } from '../../../src/components/WindowTopMenuButton';
-import { MiradorMenuButton } from '../../../src/components/MiradorMenuButton';
+import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 
 /** create wrapper */
 function createWrapper(props) {
