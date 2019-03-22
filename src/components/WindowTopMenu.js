@@ -3,6 +3,7 @@ import Menu from '@material-ui/core/Menu';
 import PropTypes from 'prop-types';
 import WindowThumbnailSettings from '../containers/WindowThumbnailSettings';
 import WindowViewSettings from '../containers/WindowViewSettings';
+import WindowPluginButtons from '../containers/WindowPluginButtons';
 import ns from '../config/css-ns';
 
 /**
@@ -39,6 +40,7 @@ export class WindowTopMenu extends Component {
         >
           <WindowViewSettings windowId={windowId} handleClose={handleClose} />
           <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />
+          <WindowPluginButtons windowId={windowId} />
         </Menu>
       </>
     );
