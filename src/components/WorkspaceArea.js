@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import ErrorDialog from '../containers/ErrorDialog';
 import WorkspaceControlPanel from '../containers/WorkspaceControlPanel';
 import Workspace from '../containers/Workspace';
 import WorkspaceAdd from '../containers/WorkspaceAdd';
@@ -30,7 +31,8 @@ export class WorkspaceArea extends Component {
           isWorkspaceAddVisible
             ? <WorkspaceAdd />
             : <Workspace />
-         }
+        }
+        {<ErrorDialog />}
       </main>
     );
   }

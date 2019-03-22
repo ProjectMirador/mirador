@@ -69,11 +69,13 @@ export function addWindow(options) {
       companionWindows: [
         {
           content: 'info',
+          default: true,
           id: cwDefault,
           position: 'left',
         },
         {
           content: 'thumbnail_navigation',
+          default: true,
           id: cwThumbs,
           position: options.thumbnailNavigationPosition
             || config.thumbnailNavigation.defaultPosition,

@@ -11,7 +11,7 @@ import { CompanionArea } from '../components/CompanionArea';
 const mapStateToProps = (state, { windowId, position }) => ({
   companionAreaOpen: getCompanionAreaVisibility(state, { position, windowId }),
   companionWindows: getCompanionWindowsOfWindow(state, { windowId })
-    .filter(cw => cw.position === position),
+    .filter(cw => cw && cw.position === position),
   sideBarOpen: getWindow(state, { windowId }).sideBarOpen,
 });
 

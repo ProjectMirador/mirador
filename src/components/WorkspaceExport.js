@@ -13,12 +13,20 @@ export class WorkspaceExport extends Component {
    */
   exportableState() {
     const { state } = this.props;
-    const { config, viewers, windows } = state;
-
-    return JSON.stringify({
+    const {
+      companionWindows,
       config,
       viewers,
       windows,
+      workspace,
+    } = state;
+
+    return JSON.stringify({
+      companionWindows,
+      config,
+      viewers,
+      windows,
+      workspace,
     }, null, 2);
   }
 

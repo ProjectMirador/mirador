@@ -1,12 +1,15 @@
 import {
   difference,
   keys,
+  omit,
+  pick,
   slice,
   values,
 } from 'lodash';
 import ActionTypes from './action-types';
 import { importConfig } from './config';
 import { addWindow, removeWindow, updateWindow } from './window';
+import { addCompanionWindow, removeCompanionWindow, updateCompanionWindow } from './companionWindow';
 import { updateViewport } from './canvas';
 import { fetchManifest } from './manifest';
 
@@ -100,12 +103,28 @@ export function toggleWorkspaceExposeMode() {
  * importWorkspace - action creator
  */
 export function importWorkspace(stateExport) {
+  // debugger;
   return (dispatch, getState) => {
-    dispatch(importConfig(stateExport.config));
     const { viewers } = stateExport || {};
+    const { companionWindows } = stateExport || {};
+    const {
+      exposeModeOn,
+      height,
+      viewportPosition,
+      width,
+    } = stateExport.workspace;
+
     const imWins = values(stateExport.windows);
     const exWins = values(getState().windows);
     const exWinCnt = exWins.length > imWins.length ? imWins.length : exWins.length;
+
+    /* first do window independent stuff */
+    dispatch(importConfig(stateExport.config));
+    getState().workspace.exposeModeOn !== exposeModeOn && dispatch(toggleWorkspaceExposeMode());
+    dispatch(setWorkspaceViewportDimensions({ width, height }));
+    dispatch(setWorkspaceViewportPosition(viewportPosition));
+
+    /* now import the windows */
 
     /*
       If the existing workspace already contains windows (exWins),
@@ -116,20 +135,42 @@ export function importWorkspace(stateExport) {
     const exIds = slice(exWins, 0, exWinCnt).map((exWin) => {
       const imWin = imWins.shift();
       const viewer = viewers[imWin.id];
-      delete imWin.id;
 
       dispatch(fetchManifest(imWin.manifestId));
-      dispatch(updateWindow(exWin.id, imWin));
-      dispatch(updateViewport(exWin.id, viewer));
+      /*
+        remove exisiting companionWindows, except the ones marked as default
+      */
+      exWin.companionWindowIds
+        .filter(cwId => !getState().companionWindows[cwId].default)
+        .map(cwId => dispatch(removeCompanionWindow(exWin.id, cwId)));
 
+      /* update the window */
+      dispatch(updateWindow(exWin.id, omit(imWin, 'id', 'companionWindowIds', 'thumbnailNavigationId')));
+
+      /* update default companionWindows */
+      exWin.companionWindowIds
+        .filter(cwId => companionWindows[cwId].default)
+        .map(cwId => dispatch(updateCompanionWindow(exWin.id, cwId, companionWindows[cwId])));
+
+      /* create non-default companionWindows */
+      imWin.companionWindowIds
+        .filter(cwId => !companionWindows[cwId].default)
+        .map(cwId => dispatch(addCompanionWindow(exWin.id, { ...omit(companionWindows[cwId], 'id') })));
+      dispatch(updateViewport(exWin.id, viewer));
       return exWin.id;
     });
 
     /* create new windows for additionally imported ones */
     const imIds = imWins.map((imWin) => {
+      const viewer = viewers[imWin.id];
+
       dispatch(fetchManifest(imWin.manifestId));
-      dispatch(addWindow(imWin));
-      dispatch(updateViewport(imWin.id, viewers[imWin.id]));
+      dispatch(addWindow(omit(imWin, ['companionWindowIds', 'thumbnailNavigationId'])));
+      dispatch(updateViewport(imWin.id, viewer));
+      /* create companion windows */
+      values(companionWindows)
+        .filter(cw => !cw.default)
+        .map(cw => dispatch(addCompanionWindow(imWin.id, { ...omit(cw, 'id') }, {})));
 
       return imWin.id;
     });
