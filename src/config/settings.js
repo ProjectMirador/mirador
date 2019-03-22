@@ -115,7 +115,12 @@ export default {
         lineHeight: "1.75em",
       },
       useNextVariants: true // set so that console deprecation warning is removed
-    }
+    },
+    props: {
+      MuiButtonBase: {
+        disableRipple: true, // No more ripple, on the whole application 💣!
+      },
+    },
   },
   language: 'en', // The default language set in the application
   availableLanguages: { // All the languages available in the language switcher
