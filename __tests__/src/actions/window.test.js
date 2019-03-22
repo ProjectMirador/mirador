@@ -99,6 +99,7 @@ describe('window actions', () => {
       };
 
       const mockState = {
+        config: {},
         windows: { a: {}, b: {} },
       };
 
