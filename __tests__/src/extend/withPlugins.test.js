@@ -12,7 +12,7 @@ const Target = props => <div>Hello</div>;
 /** create wrapper  */
 function createPluginHoc(plugins) {
   pluginStore.getPlugins = () => plugins;
-  const props = { foo: 1, bar: 2 };
+  const props = { bar: 2, foo: 1 };
   const PluginHoc = withPlugins('Target', Target);
   return shallow(<PluginHoc {...props} />);
 }
@@ -44,17 +44,17 @@ describe('PluginHoc: if no plugin exists for the target', () => {
 describe('PluginHoc: if a delete-plugin exists for the target', () => {
   it('renders nothing', () => {
     const plugins = {
+      add: [
+        { mode: 'add', target: 'Target' },
+      ],
       delete: [
-        { target: 'Target', mode: 'delete' },
+        { mode: 'delete', target: 'Target' },
       ],
       replace: [
-        { target: 'Target', mode: 'replace' },
+        { mode: 'replace', target: 'Target' },
       ],
       wrap: [
-        { target: 'Target', mode: 'wrap' },
-      ],
-      add: [
-        { target: 'Target', mode: 'add' },
+        { mode: 'wrap', target: 'Target' },
       ],
     };
 
@@ -70,15 +70,15 @@ describe('PluginHoc: if replace-plugins exists but no delete-plugin', () => {
     /** */ const WrapPluginComponent = props => <div>look i am a plugin</div>;
     /** */ const AddPluginComponent = props => <div>look i am a plugin</div>;
     const plugins = {
+      add: [
+        { component: AddPluginComponent, mode: 'add', target: 'Target' },
+      ],
       replace: [
-        { target: 'Target', mode: 'replace', component: ReplacePluginComponentA },
-        { target: 'Target', mode: 'replace', component: ReplacePluginComponentB },
+        { component: ReplacePluginComponentA, mode: 'replace', target: 'Target' },
+        { component: ReplacePluginComponentB, mode: 'replace', target: 'Target' },
       ],
       wrap: [
-        { target: 'Target', mode: 'wrap', component: WrapPluginComponent },
-      ],
-      add: [
-        { target: 'Target', mode: 'add', component: AddPluginComponent },
+        { component: WrapPluginComponent, mode: 'wrap', target: 'Target' },
       ],
     };
     const hoc = createPluginHoc(plugins);
@@ -95,8 +95,8 @@ describe('PluginHoc: if wrap-plugins exists but no delete-plugin, no replace-plu
     /** */ const WrapPluginComponentB = props => <div>look i am a plugin</div>;
     const plugins = {
       wrap: [
-        { target: 'Target', mode: 'wrap', component: WrapPluginComponentA },
-        { target: 'Target', mode: 'wrap', component: WrapPluginComponentB },
+        { component: WrapPluginComponentA, mode: 'wrap', target: 'Target' },
+        { component: WrapPluginComponentB, mode: 'wrap', target: 'Target' },
       ],
     };
     const hoc = createPluginHoc(plugins);
@@ -114,8 +114,8 @@ describe('PluginHoc: if add-plugins exist but no delete-plugin, no replace-plugi
     /** */ const AddPluginComponentB = props => <div>look i am a plugin</div>;
     const plugins = {
       add: [
-        { target: 'Target', mode: 'add', component: AddPluginComponentA },
-        { target: 'Target', mode: 'add', component: AddPluginComponentB },
+        { component: AddPluginComponentA, mode: 'add', target: 'Target' },
+        { component: AddPluginComponentB, mode: 'add', target: 'Target' },
       ],
     };
     const hoc = createPluginHoc(plugins);
@@ -138,12 +138,12 @@ describe('PluginHoc: if add-plugins AND wrap-plugins exist but no delete-plugin 
     /** */ const AddPluginComponentB = props => <div>look i am a plugin</div>;
     const plugins = {
       add: [
-        { target: 'Target', mode: 'add', component: AddPluginComponentA },
-        { target: 'Target', mode: 'add', component: AddPluginComponentB },
+        { component: AddPluginComponentA, mode: 'add', target: 'Target' },
+        { component: AddPluginComponentB, mode: 'add', target: 'Target' },
       ],
       wrap: [
-        { target: 'Target', mode: 'wrap', component: WrapPluginComponentA },
-        { target: 'Target', mode: 'wrap', component: WrapPluginComponentB },
+        { component: WrapPluginComponentA, mode: 'wrap', target: 'Target' },
+        { component: WrapPluginComponentB, mode: 'wrap', target: 'Target' },
       ],
     };
     const hoc = createPluginHoc(plugins);

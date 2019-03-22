@@ -16,62 +16,62 @@ describe('getPlugins', () => {
   });
   it('returns { mode -> plugin } mapping for target', () => {
     const plugins = [
-      { target: 'Window', mode: 'delete' },
-      { target: 'Window', mode: 'delete' },
-      { target: 'Window', mode: 'replace' },
-      { target: 'Window', mode: 'replace' },
-      { target: 'Window', mode: 'wrap' },
-      { target: 'Window', mode: 'wrap' },
-      { target: 'Window', mode: 'add' },
-      { target: 'Window', mode: 'add' },
+      { mode: 'delete', target: 'Window' },
+      { mode: 'delete', target: 'Window' },
+      { mode: 'replace', target: 'Window' },
+      { mode: 'replace', target: 'Window' },
+      { mode: 'wrap', target: 'Window' },
+      { mode: 'wrap', target: 'Window' },
+      { mode: 'add', target: 'Window' },
+      { mode: 'add', target: 'Window' },
 
-      { target: 'TopBar', mode: 'delete' },
-      { target: 'TopBar', mode: 'delete' },
-      { target: 'TopBar', mode: 'replace' },
-      { target: 'TopBar', mode: 'replace' },
-      { target: 'TopBar', mode: 'wrap' },
-      { target: 'TopBar', mode: 'wrap' },
-      { target: 'TopBar', mode: 'add' },
-      { target: 'TopBar', mode: 'add' },
+      { mode: 'delete', target: 'TopBar' },
+      { mode: 'delete', target: 'TopBar' },
+      { mode: 'replace', target: 'TopBar' },
+      { mode: 'replace', target: 'TopBar' },
+      { mode: 'wrap', target: 'TopBar' },
+      { mode: 'wrap', target: 'TopBar' },
+      { mode: 'add', target: 'TopBar' },
+      { mode: 'add', target: 'TopBar' },
     ];
 
     pluginStore.storePlugins(plugins);
 
     expect(pluginStore.getPlugins('Window')).toEqual({
+      add: [
+        { mode: 'add', target: 'Window' },
+        { mode: 'add', target: 'Window' },
+      ],
       delete: [
-        { target: 'Window', mode: 'delete' },
-        { target: 'Window', mode: 'delete' },
+        { mode: 'delete', target: 'Window' },
+        { mode: 'delete', target: 'Window' },
       ],
       replace: [
-        { target: 'Window', mode: 'replace' },
-        { target: 'Window', mode: 'replace' },
+        { mode: 'replace', target: 'Window' },
+        { mode: 'replace', target: 'Window' },
       ],
       wrap: [
-        { target: 'Window', mode: 'wrap' },
-        { target: 'Window', mode: 'wrap' },
-      ],
-      add: [
-        { target: 'Window', mode: 'add' },
-        { target: 'Window', mode: 'add' },
+        { mode: 'wrap', target: 'Window' },
+        { mode: 'wrap', target: 'Window' },
       ],
     });
 
     expect(pluginStore.getPlugins('TopBar')).toEqual({
+      add: [
+        { mode: 'add', target: 'TopBar' },
+        { mode: 'add', target: 'TopBar' },
+      ],
       delete: [
-        { target: 'TopBar', mode: 'delete' },
-        { target: 'TopBar', mode: 'delete' },
+        { mode: 'delete', target: 'TopBar' },
+        { mode: 'delete', target: 'TopBar' },
       ],
       replace: [
-        { target: 'TopBar', mode: 'replace' },
-        { target: 'TopBar', mode: 'replace' },
+        { mode: 'replace', target: 'TopBar' },
+        { mode: 'replace', target: 'TopBar' },
       ],
       wrap: [
-        { target: 'TopBar', mode: 'wrap' },
-        { target: 'TopBar', mode: 'wrap' },
-      ],
-      add: [
-        { target: 'TopBar', mode: 'add' },
-        { target: 'TopBar', mode: 'add' },
+        { mode: 'wrap', target: 'TopBar' },
+        { mode: 'wrap', target: 'TopBar' },
       ],
     });
   });
