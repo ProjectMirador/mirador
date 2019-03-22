@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
-import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
