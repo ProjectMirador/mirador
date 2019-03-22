@@ -107,7 +107,6 @@ export class WorkspaceMenu extends Component {
         >
           <MenuItem
             aria-haspopup="true"
-            divider
             onClick={(e) => { this.handleMenuItemClick('windowList', e); handleClose(e); }}
             aria-owns={windowList.anchorEl ? 'window-list-menu' : undefined}
           >
@@ -117,6 +116,7 @@ export class WorkspaceMenu extends Component {
             aria-haspopup="true"
             onClick={(e) => { this.handleZoomToggleClick(e); handleClose(e); }}
             aria-owns={toggleZoom.anchorEl ? 'toggle-zoom-menu' : undefined}
+            divider
           >
             <Typography variant="body1">
               { showZoomControls ? t('hideZoomControls') : t('showZoomControls') }
@@ -130,7 +130,7 @@ export class WorkspaceMenu extends Component {
             <Typography variant="body1">{t('selectWorkspaceMenu')}</Typography>
           </MenuItem>
 
-          <NestedMenu label={t('language')} divider>
+          <NestedMenu label={t('language')}>
             <LanguageSettings afterSelect={handleClose} />
           </NestedMenu>
 
@@ -138,6 +138,7 @@ export class WorkspaceMenu extends Component {
             aria-haspopup="true"
             onClick={(e) => { this.handleMenuItemClick('settings', e); handleClose(e); }}
             aria-owns={settings.AnchorEl ? 'workspace-settings' : undefined}
+            divider
           >
             <ListItemIcon>
               <SettingsIcon />
