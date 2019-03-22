@@ -12,9 +12,10 @@ export function getManifest(state, { manifestId, windowId }) {
 
 /** */
 function getLocale(state, { companionWindowId }) {
-  return companionWindowId
+  return (companionWindowId
     && state.companionWindows[companionWindowId]
-    && state.companionWindows[companionWindowId].locale;
+    && state.companionWindows[companionWindowId].locale)
+    || (state.config && state.config.language);
 }
 
 /** Instantiate a manifesto instance */
