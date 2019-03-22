@@ -37,7 +37,7 @@ export class WorkspaceMosaic extends React.Component {
     const { windows, workspace, updateWorkspaceMosaicLayout } = this.props;
     if (prevProps.windows !== windows || prevProps.workspace !== workspace) {
       const newLayout = this.determineWorkspaceLayout();
-      if (newLayout) updateWorkspaceMosaicLayout(newLayout);
+      if (newLayout !== workspace.layout) updateWorkspaceMosaicLayout(newLayout);
     }
   }
 
@@ -59,7 +59,7 @@ export class WorkspaceMosaic extends React.Component {
       return newLayout;
     }
 
-    return null;
+    return workspace.layout;
   }
 
   /**
