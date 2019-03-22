@@ -39,7 +39,7 @@ export function focusWindow(windowId, pan = false) {
  */
 export function addWindow(options) {
   return (dispatch, getState) => {
-    const { windows } = getState();
+    const { config, windows } = getState();
     const numWindows = Object.keys(windows).length;
 
     const cwDefault = `cw-${uuid()}`;
@@ -48,6 +48,7 @@ export function addWindow(options) {
       canvasIndex: 0,
       collectionIndex: 0,
       companionWindowIds: [cwDefault, cwThumbs],
+      displayAllAnnotations: config.displayAllAnnotations || false,
       height: 400,
       id: `window-${uuid()}`,
       manifestId: null,
