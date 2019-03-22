@@ -95,3 +95,20 @@ export const getViewer = createSelector(
   ],
   (viewers, windowId) => viewers[windowId],
 );
+
+/**
+ * Returns the visibility of the companion area
+ * @param {object} state
+ * @param {object} props
+ * @return {Boolean}
+ */
+export const getCompanionAreaVisibility = createSelector(
+  [
+    (state, { position }) => position,
+    getWindow,
+  ],
+  (position, { companionAreaOpen, sideBarOpen }) => {
+    if (position !== 'left') return true;
+    return !!(companionAreaOpen && sideBarOpen);
+  },
+);

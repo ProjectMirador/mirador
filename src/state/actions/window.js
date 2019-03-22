@@ -47,6 +47,7 @@ export function addWindow(options) {
     const defaultOptions = {
       canvasIndex: 0,
       collectionIndex: 0,
+      companionAreaOpen: true,
       companionWindowIds: [cwDefault, cwThumbs],
       displayAllAnnotations: config.displayAllAnnotations || false,
       height: 400,
