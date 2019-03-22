@@ -31,17 +31,7 @@ const mapDispatchToProps = { setWorkspaceAddVisibility: actions.setWorkspaceAddV
  */
 const styles = theme => ({
   fab: {
-    [theme.breakpoints.up('sm')]: {
-      marginBottom: theme.spacing.unit,
-      marginLeft: theme.spacing.unit / 2,
-      marginRight: theme.spacing.unit / 2,
-      marginTop: theme.spacing.unit,
-    },
-
-    marginBottom: theme.spacing.unit / 2,
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    marginTop: theme.spacing.unit / 2,
+    margin: theme.spacing.unit,
   },
 });
 
