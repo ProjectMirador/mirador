@@ -37,23 +37,26 @@ const mapStateToProps = (state, { windowId }) => ({
 /** */
 const style = theme => ({
   tab: {
+    '&:active': {
+      backgroundColor: theme.palette.action.active,
+    },
     '&:hover': {
       '@media (hover: none)': {
         backgroundColor: 'transparent',
       },
-      backgroundColor: fade(theme.palette.text.primary, theme.palette.action.hoverOpacity),
+      backgroundColor: theme.palette.action.hover,
       textDecoration: 'none',
       // Reset on touch devices, it doesn't add specificity
     },
-    borderRight: '4px solid transparent',
+
+    borderRight: '2px solid transparent',
     minWidth: 'auto',
   },
+  tabRipple: {
+    backgroundColor: theme.palette.action.active,
+  },
   tabSelected: {
-    '&:hover': {
-      backgroundColor: theme.palette.secondary.light,
-    },
-    backgroundColor: theme.palette.secondary.light,
-    borderRight: `4px solid ${theme.palette.secondary.main}`,
+    borderRight: `2px solid ${theme.palette.secondary.main}`,
   },
   tabsFlexContainer: {
     flexDirection: 'column',
