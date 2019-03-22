@@ -34,15 +34,16 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
  * windowTopBarStyle: {minHeight: number, paddingLeft: number, backgroundColor: string}}}
  */
 const styles = theme => ({
-  focused: {
-    borderTop: `2px solid ${theme.palette.secondary.main}`,
-  },
+  focused: {},
   title: {
     ...theme.typography.h6,
     flexGrow: 1,
     paddingLeft: theme.spacing.unit / 2,
   },
   windowTopBarStyle: {
+    '&$focused': {
+      borderTop: `2px solid ${theme.palette.secondary.main}`,
+    },
     backgroundColor: theme.palette.primary.light,
     borderTop: '2px solid transparent',
     minHeight: 32,
