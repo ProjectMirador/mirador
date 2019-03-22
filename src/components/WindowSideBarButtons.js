@@ -55,6 +55,7 @@ export class WindowSideBarButtons extends Component {
               <InfoIcon />
             </Tooltip>
           )}
+          TouchRippleProps={{ classes: { child: classes.tabRipple } }}
           value="info"
         />
         <Tab
@@ -67,6 +68,7 @@ export class WindowSideBarButtons extends Component {
               <CanvasIndexIcon />
             </Tooltip>
           )}
+          TouchRippleProps={{ classes: { child: classes.tabRipple } }}
           value="canvas_navigation"
         />
         <Tab
@@ -81,6 +83,7 @@ export class WindowSideBarButtons extends Component {
               </Badge>
             </Tooltip>
           )}
+          TouchRippleProps={{ classes: { child: classes.tabRipple } }}
           value="annotations"
         />
       </Tabs>
