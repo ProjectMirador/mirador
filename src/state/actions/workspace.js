@@ -121,7 +121,7 @@ export function importWorkspace(stateExport) {
     /* first do window independent stuff */
     dispatch(importConfig(stateExport.config));
     getState().workspace.exposeModeOn !== exposeModeOn && dispatch(toggleWorkspaceExposeMode());
-    dispatch(setWorkspaceViewportDimensions({ width, height }));
+    dispatch(setWorkspaceViewportDimensions({ height, width }));
     dispatch(setWorkspaceViewportPosition(viewportPosition));
 
     /* now import the windows */
