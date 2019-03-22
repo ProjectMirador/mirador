@@ -5,8 +5,10 @@ import {
   getWindowTitles,
   getThumbnailNavigationPosition,
   getWindowViewType,
+  getCompanionWindow,
   getCompanionWindowForPosition,
   getCompanionWindowsOfWindow,
+  getViewer,
 } from '../../../src/state/selectors/windows';
 
 
@@ -122,6 +124,26 @@ describe('getCompanionWindowForPosition', () => {
   });
 });
 
+describe('getCompanionWindow', () => {
+  const state = {
+    companionWindows: {
+      bar: {
+        content: 'canvas',
+        id: 'bar',
+      },
+    },
+  };
+
+  it('should return companion windows for a given window id', () => {
+    const received = getCompanionWindow(state, { companionWindowId: 'bar' });
+
+    expect(received).toEqual({
+      content: 'canvas',
+      id: 'bar',
+    });
+  });
+});
+
 describe('getCompanionWindowsOfWindow', () => {
   const state = {
     companionWindows: {
@@ -154,5 +176,23 @@ describe('getCompanionWindowsOfWindow', () => {
         id: 'bar',
       },
     ]);
+  });
+});
+
+describe('getViewer', () => {
+  const state = {
+    viewers: {
+      bar: {
+        id: 'bar',
+      },
+    },
+  };
+
+  it('should return companion windows for a given window id', () => {
+    const received = getViewer(state, { windowId: 'bar' });
+
+    expect(received).toEqual({
+      id: 'bar',
+    });
   });
 });

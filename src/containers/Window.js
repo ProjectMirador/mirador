@@ -5,7 +5,10 @@ import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import { Window } from '../components/Window';
-import { getManifestTitle, getThumbnailNavigationPosition } from '../state/selectors';
+import {
+  getManifest, getManifestTitle, getThumbnailNavigationPosition, getWindow,
+  getWorkspaceType,
+} from '../state/selectors';
 
 
 /**
@@ -13,12 +16,12 @@ import { getManifestTitle, getThumbnailNavigationPosition } from '../state/selec
  * @memberof Window
  * @private
  */
-const mapStateToProps = (state, props) => ({
-  label: getManifestTitle(state, { windowId: props.window.id }),
-  manifest: state.manifests[props.window.manifestId],
-  thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId: props.window.id }),
-  window: state.windows[props.window.id],
-  workspaceType: state.config.workspace.type,
+const mapStateToProps = (state, { window }) => ({
+  label: getManifestTitle(state, { windowId: window.id }),
+  manifest: getManifest(state, { windowId: window.id }),
+  thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId: window.id }),
+  window: getWindow(state, { windowId: window.id }),
+  workspaceType: getWorkspaceType(state),
 });
 
 /**

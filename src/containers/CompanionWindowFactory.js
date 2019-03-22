@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend';
+import { getCompanionWindow } from '../state/selectors';
 import { CompanionWindowFactory } from '../components/CompanionWindowFactory';
 
 /**
@@ -9,7 +10,7 @@ import { CompanionWindowFactory } from '../components/CompanionWindowFactory';
  * @private
  */
 const mapStateToProps = (state, { id }) => {
-  const companionWindow = state.companionWindows[id];
+  const companionWindow = getCompanionWindow(state, { companionWindowId: id });
 
   return {
     ...companionWindow,

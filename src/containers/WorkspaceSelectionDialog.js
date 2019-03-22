@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
 import { WorkspaceSelectionDialog } from '../components/WorkspaceSelectionDialog';
 import * as actions from '../state/actions';
+import { getWorkspaceType } from '../state/selectors';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -19,7 +20,7 @@ const mapDispatchToProps = {
  * @memberof Workspace
  * @private
  */
-const mapStateToProps = state => ({ workspaceType: state.config.workspace.type });
+const mapStateToProps = state => ({ workspaceType: getWorkspaceType(state) });
 
 const enhance = compose(
   withTranslation(),

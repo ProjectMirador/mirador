@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
 import { WorkspaceSettings } from '../components/WorkspaceSettings';
 import * as actions from '../state/actions';
+import { getTheme } from '../state/selectors';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -21,7 +22,7 @@ const mapDispatchToProps = {
  */
 const mapStateToProps = state => (
   {
-    theme: state.config.theme,
+    theme: getTheme(state),
   }
 );
 

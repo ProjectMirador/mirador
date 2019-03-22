@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
-import { getCompanionWindowsOfWindow } from '../state/selectors';
+import { getCompanionWindowsOfWindow, getWindow } from '../state/selectors';
 import * as actions from '../state/actions';
 import { CompanionArea } from '../components/CompanionArea';
 
@@ -11,7 +11,7 @@ import { CompanionArea } from '../components/CompanionArea';
 const mapStateToProps = (state, { windowId, position }) => ({
   companionWindows: getCompanionWindowsOfWindow(state, { windowId })
     .filter(cw => cw.position === position),
-  sideBarOpen: state.windows[windowId].sideBarOpen,
+  sideBarOpen: getWindow(state, { windowId }).sideBarOpen,
 });
 
 const mapDispatchToProps = ({

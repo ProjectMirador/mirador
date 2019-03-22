@@ -3,16 +3,17 @@ import { compose } from 'redux';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend';
 import { WindowSideBar } from '../components/WindowSideBar';
+import { getWindow } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
  * @memberof WindowSideBar
  * @private
  */
-const mapStateToProps = (state, props) => (
+const mapStateToProps = (state, { windowId }) => (
   {
-    sideBarOpen: state.windows[props.windowId].sideBarOpen,
-    sideBarPanel: state.windows[props.windowId].sideBarPanel,
+    sideBarOpen: getWindow(state, { windowId }).sideBarOpen,
+    sideBarPanel: getWindow(state, { windowId }).sideBarPanel,
   }
 );
 

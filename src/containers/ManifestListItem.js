@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend';
 import {
+  getManifest,
   getManifestTitle, getManifestThumbnail, getManifestCanvases,
   getManifestLogo, getManifestProvider,
 } from '../state/selectors';
@@ -11,20 +12,17 @@ import * as actions from '../state/actions';
 import { ManifestListItem } from '../components/ManifestListItem';
 
 /** */
-const mapStateToProps = (state, { manifestId }) => {
-  const manifest = state.manifests[manifestId];
-
-  return {
-    error: manifest.error,
-    isFetching: manifest.isFetching,
-    manifestLogo: getManifestLogo(state, { manifestId }),
-    provider: manifest.provider || getManifestProvider(state, { manifestId }),
-    ready: !!manifest.json,
-    size: getManifestCanvases(state, { manifestId }).length,
-    thumbnail: getManifestThumbnail(state, { manifestId }),
-    title: getManifestTitle(state, { manifestId }),
-  };
-};
+const mapStateToProps = (state, { manifestId }) => ({
+  error: getManifest(state, { manifestId }).error,
+  isFetching: getManifest(state, { manifestId }).isFetching,
+  manifestLogo: getManifestLogo(state, { manifestId }),
+  provider: getManifest(state, { manifestId }).provider
+    || getManifestProvider(state, { manifestId }),
+  ready: !!getManifest(state, { manifestId }).json,
+  size: getManifestCanvases(state, { manifestId }).length,
+  thumbnail: getManifestThumbnail(state, { manifestId }),
+  title: getManifestTitle(state, { manifestId }),
+});
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators

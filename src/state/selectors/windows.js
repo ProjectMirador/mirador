@@ -17,7 +17,7 @@ export function getWindowTitles(state) {
 }
 
 /** */
-function getWindow(state, { windowId }) {
+export function getWindow(state, { windowId }) {
   return state.windows && state.windows[windowId];
 }
 
@@ -58,6 +58,14 @@ export const getCompanionWindowIds = createSelector(
   window => (window && window.companionWindowIds) || [],
 );
 
+export const getCompanionWindow = createSelector(
+  [
+    state => state.companionWindows,
+    (state, { companionWindowId }) => companionWindowId,
+  ],
+  (companionWindows, companionWindowId) => companionWindows[companionWindowId],
+);
+
 /**
  * Return companion windows of a window
  * @param {String} windowId
@@ -78,4 +86,12 @@ export const getCompanionWindowsOfWindow = createSelector(
 export const getCompanionWindowForPosition = createSelector(
   [getCompanionWindowsOfWindow, (state, { position }) => position],
   (companionWindows, position) => companionWindows.find(cw => cw.position === position),
+);
+
+export const getViewer = createSelector(
+  [
+    state => state.viewers,
+    (state, { windowId }) => windowId,
+  ],
+  (viewers, windowId) => viewers[windowId],
 );
