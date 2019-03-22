@@ -47,9 +47,13 @@ describe('WorkspaceMosaic', () => {
         direction: 'row', first: '1', second: '2',
       });
     });
+    it('when there are no windows', () => {
+      wrapper = createWrapper({ windows: {}, workspace: { layout: 'foo' } });
+      expect(wrapper.instance().determineWorkspaceLayout()).toBeNull();
+    });
     it('when window ids match workspace layout', () => {
       wrapper = createWrapper({ windows: { foo: { id: 'foo' } }, workspace: { layout: 'foo' } });
-      expect(wrapper.instance().determineWorkspaceLayout()).toBeNull();
+      expect(wrapper.instance().determineWorkspaceLayout()).toBe('foo');
     });
   });
   describe('tileRenderer', () => {
