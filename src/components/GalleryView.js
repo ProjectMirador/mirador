@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import classNames from 'classnames';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
 import { CanvasThumbnail } from './CanvasThumbnail';
-import ns from '../config/css-ns';
-
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -12,23 +11,16 @@ import ns from '../config/css-ns';
  */
 export class GalleryView extends Component {
   /**
-   * container classes
-   */
-  containerClasses(currentCanvas) {
-    const { window } = this.props;
-    const currentClass = (currentCanvas === window.canvasIndex) ? 'current-canvas' : '';
-    return `${ns('gallery-view-item')} ${currentClass}`;
-  }
-
-  /**
    * Renders things
    */
   render() {
-    const { window, canvases, setCanvas } = this.props;
+    const {
+      canvases, classes, setCanvas, window,
+    } = this.props;
     return (
       <>
         <section
-          className={ns('gallery-container')}
+          className={classes.galleryContainer}
           id={`${window.id}-gallery`}
         >
           {
@@ -37,7 +29,12 @@ export class GalleryView extends Component {
               return (
                 <div
                   key={canvas.index}
-                  className={this.containerClasses(canvas.index)}
+                  className={
+                    classNames(
+                      classes.galleryViewItem,
+                      canvas.index === window.canvasIndex ? classes.currentCanvas : '',
+                    )
+                  }
                   onClick={() => setCanvas(window.id, canvas.index)}
                   onKeyUp={() => setCanvas(window.id, canvas.index)}
                   role="button"
@@ -49,6 +46,7 @@ export class GalleryView extends Component {
                     maxHeight={120}
                     maxWidth={100}
                     aspectRatio={manifestoCanvas.aspectRatio}
+                    style={{ margin: '0 auto' }}
                   />
                   <Typography variant="caption">
                     {manifestoCanvas.getLabel()}
@@ -65,6 +63,7 @@ export class GalleryView extends Component {
 
 GalleryView.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   setCanvas: PropTypes.func.isRequired,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
