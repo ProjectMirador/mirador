@@ -11,6 +11,7 @@ import {
   getAllOrSelectedAnnotationsOnCanvases,
   getCanvasLabel,
   getSelectedCanvases,
+  getViewer,
 } from '../state/selectors';
 
 /**
@@ -22,7 +23,7 @@ const mapStateToProps = (state, { windowId }) => ({
   annotations: getAllOrSelectedAnnotationsOnCanvases(state, { windowId }),
   canvasWorld: new CanvasWorld(getSelectedCanvases(state, { windowId })),
   label: getCanvasLabel(state, { canvasIndex: 'selected', windowId }),
-  viewer: state.viewers[windowId],
+  viewer: getViewer(state, { windowId }),
 });
 
 /**

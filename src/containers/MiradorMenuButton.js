@@ -2,10 +2,11 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend';
 import { MiradorMenuButton } from '../components/MiradorMenuButton';
+import { getContainerId } from '../state/selectors';
 
 /** */
 const mapStateToProps = state => ({
-  containerId: state.config.id,
+  containerId: getContainerId(state),
 });
 
 const enhance = compose(

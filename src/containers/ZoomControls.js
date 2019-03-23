@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
+import { getShowZoomControlsConfig, getViewer } from '../state/selectors';
 import { ZoomControls } from '../components/ZoomControls';
 
 /**
@@ -11,10 +12,10 @@ import { ZoomControls } from '../components/ZoomControls';
  * @memberof Workspace
  * @private
  */
-const mapStateToProps = (state, props) => (
+const mapStateToProps = (state, { windowId }) => (
   {
-    showZoomControls: state.workspace.showZoomControls,
-    viewer: state.viewers[props.windowId],
+    showZoomControls: getShowZoomControlsConfig(state),
+    viewer: getViewer(state, { windowId }),
   }
 );
 

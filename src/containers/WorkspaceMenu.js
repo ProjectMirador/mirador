@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
+import { getContainerId, getShowZoomControlsConfig } from '../state/selectors';
 import { WorkspaceMenu } from '../components/WorkspaceMenu';
 
 /**
@@ -20,8 +21,8 @@ const mapDispatchToProps = {
  * @private
  */
 const mapStateToProps = state => ({
-  containerId: state.config.id,
-  showZoomControls: state.workspace.showZoomControls,
+  containerId: getContainerId(state),
+  showZoomControls: getShowZoomControlsConfig(state),
 });
 
 const enhance = compose(

@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend';
 import { WindowTopMenu } from '../components/WindowTopMenu';
+import { getContainerId } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -9,7 +10,7 @@ import { WindowTopMenu } from '../components/WindowTopMenu';
  * @private
  */
 const mapStateToProps = state => ({
-  containerId: state.config.id,
+  containerId: getContainerId(state),
 });
 
 const enhance = compose(

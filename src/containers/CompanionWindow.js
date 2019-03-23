@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
+import { getCompanionWindow } from '../state/selectors';
 import { CompanionWindow } from '../components/CompanionWindow';
 
 /**
@@ -12,7 +13,7 @@ import { CompanionWindow } from '../components/CompanionWindow';
  * @private
  */
 const mapStateToProps = (state, { id, windowId }) => {
-  const companionWindow = state.companionWindows[id];
+  const companionWindow = getCompanionWindow(state, { companionWindowId: id });
 
   return {
     ...companionWindow,

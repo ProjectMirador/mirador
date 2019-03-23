@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
+import { getFullScreenEnabled } from '../state/selectors';
 import { WorkspaceFullScreenButton }
   from '../components/WorkspaceFullScreenButton';
 
@@ -13,7 +14,7 @@ import { WorkspaceFullScreenButton }
  * @private
  */
 const mapStateToProps = state => ({
-  isFullscreenEnabled: state.workspace.isFullscreenEnabled,
+  isFullscreenEnabled: getFullScreenEnabled(state),
 });
 
 /**
