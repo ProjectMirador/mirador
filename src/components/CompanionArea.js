@@ -34,9 +34,10 @@ export class CompanionArea extends Component {
               className={classes.toggle}
               onClick={() => { setCompanionAreaOpen(windowId, !companionAreaOpen); }}
               TooltipProps={{
+                placement: 'right',
                 style: {
+                  left: '100%',
                   position: 'absolute',
-                  right: '0',
                 },
               }}
             >
