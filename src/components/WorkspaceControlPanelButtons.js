@@ -5,8 +5,12 @@ import WorkspaceMenuButton from '../containers/WorkspaceMenuButton';
 
 /** Renders plugins */
 const PluginHook = (props) => {
-  const { PluginComponent } = props; // eslint-disable-line react/prop-types
-  return PluginComponent ? <PluginComponent {...props} /> : null;
+  const { PluginComponents } = props; // eslint-disable-line react/prop-types
+  return PluginComponents ? (
+    PluginComponents.map((PluginComponent, index) => (
+      <PluginComponent {...props} key={index} /> // eslint-disable-line react/no-array-index-key
+    ))
+  ) : null;
 };
 
 /**
