@@ -9,7 +9,7 @@ import ns from '../config/css-ns';
 /** Renders plugins */
 function PluginHook(props) {
   const { PluginComponents, t } = props; // eslint-disable-line react/prop-types
-  return PluginComponents && (
+  return PluginComponents ? (
     <>
       <ListSubheader role="presentation" tabIndex="-1">{t('windowPluginButtons')}</ListSubheader>
       {
@@ -18,7 +18,7 @@ function PluginHook(props) {
         ))
       }
     </>
-  );
+  ) : null;
 }
 
 /**
