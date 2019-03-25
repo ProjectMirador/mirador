@@ -44,24 +44,13 @@ describe('PluginHoc: if no plugin exists for the target', () => {
   });
 });
 
-describe('PluginHoc: if a delete plugin exists for the target', () => {
-  it('renders nothing', () => {
-    const plugin = {
-      mode: 'delete',
-      target: 'Target',
-    };
-    const wrapper = createWrapper([plugin]);
-    expect(wrapper.find('*').length).toBe(0);
-  });
-});
-
-describe('PluginHoc: if a replace plugin exists for the target', () => {
-  it('renders the plugin component', () => {
+describe('PluginHoc: if a wrap plugin extists for the target', () => {
+  it('renders the plugin component and passes the target component as a prop', () => {
     /** */
     const PluginComponent = props => <div>look i am a plugin</div>;
     const plugin = {
       component: PluginComponent,
-      mode: 'replace',
+      mode: 'wrap',
       target: 'Target',
     };
     const wrapper = createWrapper([plugin]);
@@ -69,6 +58,8 @@ describe('PluginHoc: if a replace plugin exists for the target', () => {
     expect(wrapper.find(selector).length).toBe(1);
     expect(wrapper.find(selector).props().foo).toBe(1);
     expect(wrapper.find(selector).props().bar).toBe(2);
+    expect(wrapper.find(selector).props().TargetComponent)
+      .toBe(Target);
   });
 });
 
@@ -87,24 +78,5 @@ describe('PluginHoc: if a add plugin exists for the target', () => {
     expect(wrapper.find(Target).props().bar).toBe(2);
     expect(wrapper.find(Target).props().PluginComponent.WrappedComponent)
       .toBe(PluginComponent);
-  });
-});
-
-describe('PluginHoc: if a wrap plugin extists for the target', () => {
-  it('renders the plugin component and passes the target component as a prop', () => {
-    /** */
-    const PluginComponent = props => <div>look i am a plugin</div>;
-    const plugin = {
-      component: PluginComponent,
-      mode: 'wrap',
-      target: 'Target',
-    };
-    const wrapper = createWrapper([plugin]);
-    const selector = 'Connect(PluginComponent)';
-    expect(wrapper.find(selector).length).toBe(1);
-    expect(wrapper.find(selector).props().foo).toBe(1);
-    expect(wrapper.find(selector).props().bar).toBe(2);
-    expect(wrapper.find(selector).props().TargetComponent)
-      .toBe(Target);
   });
 });
