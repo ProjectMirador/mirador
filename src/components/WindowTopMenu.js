@@ -1,9 +1,25 @@
 import React, { Component } from 'react';
 import Menu from '@material-ui/core/Menu';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import PropTypes from 'prop-types';
 import WindowThumbnailSettings from '../containers/WindowThumbnailSettings';
 import WindowViewSettings from '../containers/WindowViewSettings';
 import ns from '../config/css-ns';
+
+/** Renders plugins */
+function PluginHook(props) {
+  const { PluginComponents, t } = props; // eslint-disable-line react/prop-types
+  return PluginComponents ? (
+    <>
+      <ListSubheader role="presentation" tabIndex="-1">{t('windowPluginButtons')}</ListSubheader>
+      {
+        PluginComponents.map((PluginComponent, index) => (
+          <PluginComponent {...props} key={index} /> // eslint-disable-line react/no-array-index-key
+        ))
+      }
+    </>
+  ) : null;
+}
 
 /**
  */
@@ -39,6 +55,7 @@ export class WindowTopMenu extends Component {
         >
           <WindowViewSettings windowId={windowId} handleClose={handleClose} />
           <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />
+          <PluginHook {...this.props} />
         </Menu>
       </>
     );

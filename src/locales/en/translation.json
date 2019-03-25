@@ -69,6 +69,7 @@
     "view": "View items as",
     "window": "Window: {{label}}",
     "windowMenu": "Window options",
+    "windowPluginButtons": "Plugins",
     "workspace": "Workspace",
     "workspaceFullScreen": "Full screen",
     "workspaceMenu": "Workspace options",

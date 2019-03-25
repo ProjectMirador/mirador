@@ -24,6 +24,7 @@ describe('WindowTopMenu', () => {
     expect(wrapper.find(Menu).length).toBe(1);
     expect(wrapper.find(WindowThumbnailSettings).length).toBe(1);
     expect(wrapper.find(WindowViewSettings).length).toBe(1);
+    expect(wrapper.find('PluginHook').length).toBe(1);
   });
 
   it('passes windowId to <WindowThumbnailSettings/>', () => {
