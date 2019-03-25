@@ -2,7 +2,6 @@ import {
   difference,
   keys,
   omit,
-  pick,
   slice,
   values,
 } from 'lodash';
