@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>Mirador</title>
+  </head>
+  <body>
+    <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
+    <script src="../../../../node_modules/react/umd/react.development.js"></script>
+    <script src="../../../../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script>document.write("<script type='text/javascript' src='../../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel">
+
+      const config = { id: 'mirador' };
+
+      const AddPluginComponentA = (props) => (
+        <div id="add-plugin-component-a">
+          Plugin A
+        </div>
+      );
+
+      const AddPluginComponentB = (props) => (
+        <div id="add-plugin-component-b">
+          Plugin B
+        </div>
+      );
+
+      const addPluginA = {
+        target: 'WorkspaceControlPanelButtons',
+        mode: 'add',
+        component: AddPluginComponentA,
+      };
+
+      const addPluginB = {
+        target: 'WorkspaceControlPanelButtons',
+        mode: 'add',
+        component: AddPluginComponentB,
+      };
+
+      const miradorInstance = Mirador.viewer(config, [addPluginA, addPluginB]);
+
+     </script>
+  </body>
+</html>
