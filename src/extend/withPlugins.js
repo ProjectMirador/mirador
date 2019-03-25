@@ -11,20 +11,13 @@ function _withPlugins(targetName, TargetComponent) { // eslint-disable-line no-u
     render() {
       const plugin = pluginStore.getPlugins().find(p => p.target === targetName);
 
-      if (plugin && plugin.mode === 'delete') {
-        return null;
-      }
-      if (plugin && plugin.mode === 'replace') {
+      if (plugin && plugin.mode === 'wrap') {
         const PluginComponent = connectPluginComponent(plugin);
-        return <PluginComponent {...this.props} />;
+        return <PluginComponent {...this.props} TargetComponent={TargetComponent} />;
       }
       if (plugin && plugin.mode === 'add') {
         const PluginComponent = connectPluginComponent(plugin);
         return <TargetComponent {...this.props} PluginComponent={PluginComponent} />;
-      }
-      if (plugin && plugin.mode === 'wrap') {
-        const PluginComponent = connectPluginComponent(plugin);
-        return <PluginComponent {...this.props} TargetComponent={TargetComponent} />;
       }
       return <TargetComponent {...this.props} />;
     }
