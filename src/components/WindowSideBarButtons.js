@@ -156,7 +156,7 @@ export class WindowSideBarButtons extends Component {
         indicatorColor="secondary"
         textColor="secondary"
         aria-orientation="vertical"
-        ref={this.handleTabRef}
+        ref={ref => this.setTabsRef(ref)}
       >
         <Tab
           classes={{ root: classes.tab, selected: classes.tabSelected }}
