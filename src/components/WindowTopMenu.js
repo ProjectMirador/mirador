@@ -6,25 +6,20 @@ import WindowThumbnailSettings from '../containers/WindowThumbnailSettings';
 import WindowViewSettings from '../containers/WindowViewSettings';
 import ns from '../config/css-ns';
 
-/** */
+/** Renders plugins */
 function PluginHook(props) {
-  const { PluginComponent, t } = props;
-  return PluginComponent && (
+  const { PluginComponents, t } = props; // eslint-disable-line react/prop-types
+  return PluginComponents && (
     <>
       <ListSubheader role="presentation" tabIndex="-1">{t('windowPluginButtons')}</ListSubheader>
-      <PluginComponent {...props} />
+      {
+        PluginComponents.map((PluginComponent, index) => (
+          <PluginComponent {...props} key={index} /> // eslint-disable-line react/no-array-index-key
+        ))
+      }
     </>
   );
 }
-
-PluginHook.propTypes = {
-  PluginComponent: PropTypes.func,
-  t: PropTypes.func.isRequired,
-};
-
-PluginHook.defaultProps = {
-  PluginComponent: null,
-};
 
 /**
  */
