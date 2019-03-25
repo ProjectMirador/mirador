@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import curry from 'lodash/curry';
+import isEmpty from 'lodash/isEmpty';
 import { connect } from 'react-redux';
 import { pluginStore } from '.';
 
@@ -8,18 +9,22 @@ function _withPlugins(targetName, TargetComponent) { // eslint-disable-line no-u
   /** plugin wrapper hoc */
   class PluginHoc extends Component {
     /** render */
-    render() {
-      const plugin = pluginStore.getPlugins().find(p => p.target === targetName);
+    render() { // eslint-disable-line consistent-return
+      const plugins = pluginStore.getPlugins(targetName);
 
-      if (plugin && plugin.mode === 'wrap') {
-        const PluginComponent = connectPluginComponent(plugin);
-        return <PluginComponent {...this.props} TargetComponent={TargetComponent} />;
+      if (isEmpty(plugins)) {
+        return <TargetComponent {...this.props} />;
       }
-      if (plugin && plugin.mode === 'add') {
-        const PluginComponent = connectPluginComponent(plugin);
-        return <TargetComponent {...this.props} PluginComponent={PluginComponent} />;
+
+      if (!isEmpty(plugins.wrap)) {
+        const WrapPluginComponent = connectPluginComponent(plugins.wrap[0]);
+        return <WrapPluginComponent {...this.props} TargetComponent={TargetComponent} />;
       }
-      return <TargetComponent {...this.props} />;
+
+      if (!isEmpty(plugins.add)) {
+        const AddPluginComponents = plugins.add.map(plugin => connectPluginComponent(plugin));
+        return <TargetComponent {...this.props} PluginComponents={AddPluginComponents} />;
+      }
     }
   }
 
