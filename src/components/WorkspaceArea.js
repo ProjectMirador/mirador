@@ -32,7 +32,7 @@ export class WorkspaceArea extends Component {
             ? <WorkspaceAdd />
             : <Workspace />
         }
-        {<ErrorDialog />}
+        <ErrorDialog />
       </main>
     );
   }
