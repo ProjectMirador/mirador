@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>Mirador</title>
+  </head>
+  <body>
+    <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
+    <script src="../../../../node_modules/react/umd/react.development.js"></script>
+    <script src="../../../../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script>document.write("<script type='text/javascript' src='../../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel">
+
+      const config = { id: 'mirador' };
+
+      const WrapPluginComponent = (props) => (
+        <div id="wrap-plugin-component">
+          Wrap Plugin
+          <props.TargetComponent {...props} />
+        </div>
+      );
+
+      const wrapPlugin = {
+        target: 'WorkspaceControlPanelButtons',
+        mode: 'wrap',
+        component: WrapPluginComponent,
+      };
+
+      const miradorInstance = Mirador.viewer(config, [wrapPlugin]);
+     </script>
+  </body>
+</html>

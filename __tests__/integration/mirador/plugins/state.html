@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>Mirador</title>
+  </head>
+  <body>
+    <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
+    <script src="../../../../node_modules/react/umd/react.development.js"></script>
+    <script src="../../../../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script>document.write("<script type='text/javascript' src='../../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel">
+
+      const config = {
+        id: 'mirador',
+        windows: [{
+          loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+          canvasIndex: 2,
+        }],
+      };
+
+      const initialState = {
+        someNumber: 0,
+        canvasChangeCount: 0,
+      };
+
+      const pluginStateReducer = (state = initialState, action) => {
+        if (action.type === 'INC_SOME_NUMBER')
+          return { ...state, someNumber: state.someNumber + 1 };
+        if (action.type === 'SET_CANVAS')
+          return { ...state, canvasChangeCount: state.canvasChangeCount + 1 };
+        return state;
+      };
+
+      const PluginComponent = (props) => (
+        <button id="plugin-button" onClick={props.incSomeNumber}>
+          { "Plugin:" + props.manifestId }
+        </button>
+      );
+
+      const mapDispatchToProps = (dispatch) => ({
+        incSomeNumber: () => dispatch({ type: 'INC_SOME_NUMBER' }),
+      });
+
+      const mapStateToProps = (state) => ({
+        manifestId: state.manifests[Object.keys(state.manifests)[0]].id,
+      });
+
+      const plugin = {
+        target: 'WorkspaceControlPanelButtons',
+        mode: 'wrap',
+        component: PluginComponent,
+        mapStateToProps: mapStateToProps,
+        mapDispatchToProps: mapDispatchToProps,
+        reducers: {
+          pluginState: pluginStateReducer,
+        },
+      };
+
+      const miradorInstance = Mirador.viewer(config, [plugin]);
+
+    </script>
+  </body>
+</html>
