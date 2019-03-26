@@ -30,14 +30,18 @@ const styles = theme => ({
     position: 'relative',
   },
   toggle: {
+    '&:hover': {
+      backgroundColor: theme.palette.background.paper,
+    },
     backgroundColor: theme.palette.background.paper,
     border: `1px solid ${theme.palette.primary.dark}`,
     borderRadius: 0,
+    height: '48px',
     left: '100%',
     marginTop: '1rem',
     padding: 2,
     position: 'absolute',
-    width: '1rem',
+    width: '23px',
     zIndex: theme.zIndex.drawer,
   },
 });
