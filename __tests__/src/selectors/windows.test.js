@@ -2,6 +2,7 @@ import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture002 from '../../fixtures/version-2/002.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import {
+  getCompanionAreaVisibility,
   getWindowTitles,
   getThumbnailNavigationPosition,
   getWindowViewType,
@@ -193,6 +194,51 @@ describe('getViewer', () => {
 
     expect(received).toEqual({
       id: 'bar',
+    });
+  });
+});
+
+describe('getCompanionAreaVisibility', () => {
+  describe('in the left position', () => {
+    it('is true if the companionArea and sideBar are set to be open', () => {
+      const state = {
+        windows: {
+          abc123: { companionAreaOpen: true, sideBarOpen: true },
+        },
+      };
+      const props = { position: 'left', windowId: 'abc123' };
+
+      expect(getCompanionAreaVisibility(state, props)).toBe(true);
+    });
+
+    it('is false if either companionArea or the sideBar are set to be closed', () => {
+      const companionAreaClosedState = {
+        windows: {
+          abc123: { companionAreaOpen: false, sideBarOpen: true },
+        },
+      };
+      const sideBarClosedState = {
+        windows: {
+          abc123: { companionAreaOpen: true, sideBarOpen: false },
+        },
+      };
+      const props = { position: 'left', windowId: 'abc123' };
+
+      expect(getCompanionAreaVisibility(companionAreaClosedState, props)).toBe(false);
+      expect(getCompanionAreaVisibility(sideBarClosedState, props)).toBe(false);
+    });
+  });
+
+  describe('in any non-left position', () => {
+    it('is true', () => {
+      const state = {
+        windows: {
+          abc123: { companionAreaOpen: false, sideBarOpen: false },
+        },
+      };
+      const props = { position: 'right', windowId: 'abc123' };
+
+      expect(getCompanionAreaVisibility(state, props)).toBe(true);
     });
   });
 });

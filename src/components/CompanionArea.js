@@ -45,7 +45,7 @@ export class CompanionArea extends Component {
             </MiradorMenuButton>
           )
         }
-        <div className={[ns('companion-windows'), this.areaLayoutClass()].join(' ')} style={{ display: companionAreaOpen && (position !== 'left' || sideBarOpen) ? 'flex' : 'none' }}>
+        <div className={[ns('companion-windows'), this.areaLayoutClass()].join(' ')} style={{ display: companionAreaOpen ? 'flex' : 'none' }}>
           {
             companionWindows.map(cw => (
               <CompanionWindowFactory id={cw.id} key={cw.id} windowId={windowId} />
@@ -59,7 +59,7 @@ export class CompanionArea extends Component {
 
 CompanionArea.propTypes = {
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  companionAreaOpen: PropTypes.bool,
+  companionAreaOpen: PropTypes.bool.isRequired,
   companionWindows: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   position: PropTypes.string.isRequired,
   setCompanionAreaOpen: PropTypes.func,
@@ -70,7 +70,6 @@ CompanionArea.propTypes = {
 
 CompanionArea.defaultProps = {
   classes: {},
-  companionAreaOpen: true,
   setCompanionAreaOpen: () => {},
   sideBarOpen: false,
 };

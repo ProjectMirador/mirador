@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
-import { getCompanionWindowsOfWindow, getWindow } from '../state/selectors';
+import { getCompanionWindowsOfWindow, getCompanionAreaVisibility, getWindow } from '../state/selectors';
 import * as actions from '../state/actions';
 import { CompanionArea } from '../components/CompanionArea';
 
 /** */
 const mapStateToProps = (state, { windowId, position }) => ({
+  companionAreaOpen: getCompanionAreaVisibility(state, { position, windowId }),
   companionWindows: getCompanionWindowsOfWindow(state, { windowId })
     .filter(cw => cw.position === position),
   sideBarOpen: getWindow(state, { windowId }).sideBarOpen,

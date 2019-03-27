@@ -11,6 +11,7 @@ function createWrapper(props) {
       classes={{ horizontal: 'horizontal' }}
       windowId="abc123"
       position="right"
+      companionAreaOpen
       companionWindows={[
         {
           id: 'foo',
