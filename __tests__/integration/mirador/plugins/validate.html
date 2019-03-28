@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>Mirador</title>
+  </head>
+  <body>
+    <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
+    <script src="../../../../node_modules/react/umd/react.development.js"></script>
+    <script src="../../../../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script>document.write("<script type='text/javascript' src='../../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel">
+
+      const config = { id: 'mirador' };
+
+      const validPluginA = {
+        target: 'WorkspaceControlPanelButtons',
+        mode: 'add',
+        component: props => (<div id="valid-plugin-a" />),
+      };
+
+      const validPluginB = {
+        name: 'validPluginB',
+        target: 'WorkspaceControlPanelButtons',
+        mode: 'add',
+        component: props => (<div id="valid-plugin-b" />),
+        mapStateToProps: () => ({}),
+        mapDispatchToProps: {},
+        reducers: {
+          bar: (state = null, action) => state,
+        },
+      };
+
+      const invalidPluginA = {
+        name: 'invalidPluginA',
+        target: 'WorkspaceControlPanelButtons',
+        mode: 'LURK', // invalid
+        component: props => (<div id="invalid-plugin-a" />),
+      };
+
+      const invalidPluginB = {
+        name: 'invalidPluginB',
+        target: x => x, // invalid
+        mode: 'add',
+        component: props => (<div id="invalid-plugin-b" />),
+      };
+
+      const invalidPluginC = {
+        name: 'invalidPluginC',
+        target: 'WorkspaceControlPanelButtons',
+        mode: 'add',
+        component: props => (<div id="invalid-plugin-c" />),
+        mapStateToProps: {}, // invalid
+      };
+
+      const invalidPluginD = {
+        name: 'invalidPluginD',
+        target: 'WorkspaceControlPanelButtons',
+        mode: 'add',
+        component: props => (<div id="invalid-plugin-d" />),
+        mapDispatchToProps: "foo" // invalid
+      };
+
+      const invalidPluginE = {
+        name: 'invalidPluginE',
+        target: 'WorkspaceControlPanelButtons',
+        mode: 'add',
+        component: props => (<div id="invalid-plugin-e" />),
+        reducers: 3, // invalid
+      };
+
+      const invalidPluginF = {
+        name: 'invalidPluginF',
+        target: 'WorkspaceControlPanelButtons',
+        mode: 'add',
+        component: props => (<div id="invalid-plugin-f" />),
+        reducers: {
+          foo: "foo", // invalid
+        },
+      };
+
+
+
+      const miradorInstance = Mirador.viewer(config, [
+        validPluginA,
+        validPluginB,
+        invalidPluginA,
+        invalidPluginB,
+        invalidPluginC,
+        invalidPluginD,
+        invalidPluginE,
+        invalidPluginF,
+      ]);
+
+     </script>
+  </body>
+</html>
