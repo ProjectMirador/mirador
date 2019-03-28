@@ -1,4 +1,5 @@
 import update from 'lodash/update';
+import { validatePlugin } from '.';
 
 export const pluginStore = {
   /**
@@ -20,8 +21,10 @@ export const pluginStore = {
    *
    * @param {Array} plugins
    */
-  storePlugins(plugins) {
-    this.pluginMap = mapPlugins(plugins || []);
+  storePlugins(plugins = []) {
+    const { validPlugins, invalidPlugins } = filterPlugins(plugins);
+    logInvalidPlugins(invalidPlugins);
+    this.pluginMap = mapPlugins(validPlugins);
   },
 };
 
@@ -47,4 +50,22 @@ function mapPlugins(plugins) {
   return plugins.reduce((map, plugin) => (
     update(map, [plugin.target, plugin.mode], x => [...x || [], plugin])
   ), {});
+}
+
+/** */
+function filterPlugins(plugins) {
+  const filteredPlugins = { invalidPlugins: [], validPlugins: [] };
+  plugins.forEach(plugin => (
+    validatePlugin(plugin)
+      ? filteredPlugins.validPlugins.push(plugin)
+      : filteredPlugins.invalidPlugins.push(plugin)
+  ));
+  return filteredPlugins;
+}
+
+/** */
+function logInvalidPlugins(plugins) {
+  plugins.forEach(plugin => (
+    console.log('Mirador: Plugin ${plugin.name} is not valid and was rejected.')
+  ));
 }

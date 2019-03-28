@@ -15,39 +15,42 @@ describe('getPlugins', () => {
     expect(pluginStore.getPlugins('target')).not.toBeDefined();
   });
   it('returns mode->plugins mapping for target', () => {
-    const plugins = [
-      { mode: 'wrap', target: 'Window' },
-      { mode: 'wrap', target: 'Window' },
-      { mode: 'add', target: 'Window' },
-      { mode: 'add', target: 'Window' },
+    /** */
+    const component = x => x;
 
-      { mode: 'wrap', target: 'TopBar' },
-      { mode: 'wrap', target: 'TopBar' },
-      { mode: 'add', target: 'TopBar' },
-      { mode: 'add', target: 'TopBar' },
+    const plugins = [
+      { component, mode: 'wrap', target: 'Window' },
+      { component, mode: 'wrap', target: 'Window' },
+      { component, mode: 'add', target: 'Window' },
+      { component, mode: 'add', target: 'Window' },
+
+      { component, mode: 'wrap', target: 'TopBar' },
+      { component, mode: 'wrap', target: 'TopBar' },
+      { component, mode: 'add', target: 'TopBar' },
+      { component, mode: 'add', target: 'TopBar' },
     ];
 
     pluginStore.storePlugins(plugins);
 
     expect(pluginStore.getPlugins('Window')).toEqual({
       add: [
-        { mode: 'add', target: 'Window' },
-        { mode: 'add', target: 'Window' },
+        { component, mode: 'add', target: 'Window' },
+        { component, mode: 'add', target: 'Window' },
       ],
       wrap: [
-        { mode: 'wrap', target: 'Window' },
-        { mode: 'wrap', target: 'Window' },
+        { component, mode: 'wrap', target: 'Window' },
+        { component, mode: 'wrap', target: 'Window' },
       ],
     });
 
     expect(pluginStore.getPlugins('TopBar')).toEqual({
       add: [
-        { mode: 'add', target: 'TopBar' },
-        { mode: 'add', target: 'TopBar' },
+        { component, mode: 'add', target: 'TopBar' },
+        { component, mode: 'add', target: 'TopBar' },
       ],
       wrap: [
-        { mode: 'wrap', target: 'TopBar' },
-        { mode: 'wrap', target: 'TopBar' },
+        { component, mode: 'wrap', target: 'TopBar' },
+        { component, mode: 'wrap', target: 'TopBar' },
       ],
     });
   });
