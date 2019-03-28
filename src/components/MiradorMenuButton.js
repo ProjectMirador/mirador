@@ -16,7 +16,6 @@ export function MiradorMenuButton(props) {
     containerId,
     dispatch,
     TooltipProps,
-    wrapperClassName,
     ...iconButtonProps
   } = props;
 
@@ -41,11 +40,9 @@ MiradorMenuButton.propTypes = {
   containerId: PropTypes.string.isRequired,
   dispatch: PropTypes.func,
   TooltipProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  wrapperClassName: PropTypes.string,
 };
 
 MiradorMenuButton.defaultProps = {
   dispatch: () => {},
   TooltipProps: {},
-  wrapperClassName: null,
 };
