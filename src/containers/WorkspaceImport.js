@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
-import WorkspaceImport from '../components/WorkspaceImport';
+import { WorkspaceImport } from '../components/WorkspaceImport';
 import * as actions from '../state/actions';
 
 /**

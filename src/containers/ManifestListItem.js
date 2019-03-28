@@ -7,7 +7,7 @@ import {
   getManifest,
   getManifestTitle, getManifestThumbnail, getManifestCanvases,
   getManifestLogo, getManifestProvider,
-} from '../state/selectors/manifests';
+} from '../state/selectors';
 import * as actions from '../state/actions';
 import { ManifestListItem } from '../components/ManifestListItem';
 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
-import { getCompanionWindowsOfWindow, getCompanionAreaVisibility, getWindow } from '../state/selectors/windows';
+import { getCompanionWindowsOfWindow, getCompanionAreaVisibility, getWindow } from '../state/selectors';
 import * as actions from '../state/actions';
 import { CompanionArea } from '../components/CompanionArea';
 
