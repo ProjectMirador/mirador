@@ -2,6 +2,7 @@ import isString from 'lodash/isString';
 import isUndefined from 'lodash/isUndefined';
 import isFunction from 'lodash/isFunction';
 import isObject from 'lodash/isObject';
+import isNull from 'lodash/isNull';
 import some from 'lodash/some';
 import every from 'lodash/every';
 import values from 'lodash/values';
@@ -49,14 +50,15 @@ const checkComponent = (plugin) => {
 const checkMapStateToProps = (plugin) => {
   const { mapStateToProps } = plugin;
   return isUndefined(mapStateToProps)
-    || isFunction(mapStateToProps)
-    || isObject(mapStateToProps);
+    || isNull(mapStateToProps)
+    || isFunction(mapStateToProps);
 };
 
 /** */
 const checkMapDispatchToProps = (plugin) => {
   const { mapDispatchToProps } = plugin;
   return isUndefined(mapDispatchToProps)
+    || isNull(mapDispatchToProps)
     || isFunction(mapDispatchToProps)
     || isObject(mapDispatchToProps);
 };

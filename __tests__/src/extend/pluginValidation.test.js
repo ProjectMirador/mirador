@@ -64,23 +64,25 @@ describe('validatePlugin', () => {
     expect(validatePlugin(plugin)).toBe(true);
   });
 
-  it('mapStateToProps must be undefined, function or object', () => {
+  it('mapStateToProps must be undefined, null or function', () => {
     let plugin = createPlugin({ mapStateToProps: undefined });
     expect(validatePlugin(plugin)).toBe(true);
     plugin = createPlugin({ mapStateToProps: x => x });
     expect(validatePlugin(plugin)).toBe(true);
-    plugin = createPlugin({ mapStateToProps: {} });
+    plugin = createPlugin({ mapStateToProps: null });
     expect(validatePlugin(plugin)).toBe(true);
     plugin = createPlugin({ mapStateToProps: 'something' });
     expect(validatePlugin(plugin)).toBe(false);
   });
 
-  it('mapDispatchToProps must be undefined, function or object', () => {
+  it('mapDispatchToProps must be undefined, null, function or object', () => {
     let plugin = createPlugin({ mapDispatchToProps: undefined });
     expect(validatePlugin(plugin)).toBe(true);
     plugin = createPlugin({ mapDispatchToProps: x => x });
     expect(validatePlugin(plugin)).toBe(true);
     plugin = createPlugin({ mapDispatchToProps: {} });
+    expect(validatePlugin(plugin)).toBe(true);
+    plugin = createPlugin({ mapDispatchToProps: null });
     expect(validatePlugin(plugin)).toBe(true);
     plugin = createPlugin({ mapDispatchToProps: 'something' });
     expect(validatePlugin(plugin)).toBe(false);

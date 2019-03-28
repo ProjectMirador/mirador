@@ -14,6 +14,7 @@ describe('getPlugins', () => {
     pluginStore.storePlugins();
     expect(pluginStore.getPlugins('target')).not.toBeDefined();
   });
+
   it('returns mode->plugins mapping for target', () => {
     /** */
     const component = x => x;
@@ -51,6 +52,25 @@ describe('getPlugins', () => {
       wrap: [
         { component, mode: 'wrap', target: 'TopBar' },
         { component, mode: 'wrap', target: 'TopBar' },
+      ],
+    });
+  });
+
+  // see also pluginValidation.test.js
+  it('filter out invalid plugins', () => {
+    /** */
+    const component = x => x;
+
+    const plugins = [
+      { component, mode: 'add', target: 'Window' },
+      { component, mode: 'LURK', target: 'Window' },
+    ];
+
+    pluginStore.storePlugins(plugins);
+
+    expect(pluginStore.getPlugins('Window')).toEqual({
+      add: [
+        { component, mode: 'add', target: 'Window' },
       ],
     });
   });
