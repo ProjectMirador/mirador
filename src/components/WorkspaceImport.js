@@ -3,7 +3,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
-import { TextField } from '@material-ui/core';
+import { Input } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 
 /**
@@ -42,11 +42,13 @@ export class WorkspaceImport extends Component {
     const { configImportValue } = this.state;
     event.preventDefault();
     try {
+      console.log(configImportValue);
       const configJSON = JSON.parse(configImportValue);
       importConfig(configJSON);
     } catch (ex) {
+      console.log(ex);
       const { addError } = this.props;
-      addError(ex.message);
+      addError(ex.toString());
     }
   }
 
@@ -59,10 +61,10 @@ export class WorkspaceImport extends Component {
       handleClose, open, t,
     } = this.props;
     return (
-      <Dialog id="workspace-settings" open={open} onClose={handleClose}>
-        <DialogTitle id="form-dialog-title">{t('import')}</DialogTitle>
+      <Dialog id="workspace-import" open={open} onClose={handleClose}>
+        <DialogTitle id="workspace-import-title">{t('import')}</DialogTitle>
         <DialogContent>
-          <TextField rows="15" multiline variant="filled" onChange={this.handleChange} />
+          <Input id="workspace-import-input" rows="15" multiline variant="filled" onChange={this.handleChange} />
           <div>
             <Button onClick={this.handleClick}>
               {t('importWorkspace')}

@@ -161,6 +161,7 @@ export class WorkspaceMenu extends Component {
           </MenuItem>
           <MenuItem
             aria-haspopup="true"
+            id="workspace-menu-import"
             onClick={(e) => { this.handleMenuItemClick('importWorkspace', e); handleClose(e); }}
             aria-owns={exportWorkspace.AnchorEl ? 'workspace-import' : undefined}
           >
@@ -196,6 +197,7 @@ export class WorkspaceMenu extends Component {
         />
         <WorkspaceImport
           open={Boolean(importWorkspace.open)}
+          container={container}
           handleClose={this.handleMenuItemClose('importWorkspace')}
         />
       </>

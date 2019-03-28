@@ -1,4 +1,30 @@
 {
+  "companionWindows": {
+    "cw-b86f0558-6f04-4b56-ac9b-34b7e0769db3": {
+      "content": "info",
+      "default": true,
+      "id": "cw-b86f0558-6f04-4b56-ac9b-34b7e0769db3",
+      "position": "left"
+    },
+    "cw-b15df6ac-9069-4f16-bd19-e11c6aaa3911": {
+      "content": "thumbnail_navigation",
+      "default": true,
+      "id": "cw-b15df6ac-9069-4f16-bd19-e11c6aaa3911",
+      "position": "far-bottom"
+    },
+    "cw-c4934b3c-2411-40b1-9088-5e066276620f": {
+      "content": "info",
+      "default": true,
+      "id": "cw-c4934b3c-2411-40b1-9088-5e066276620f",
+      "position": "left"
+    },
+    "cw-76580e14-4d7a-4ea5-84a6-5de052941a3d": {
+      "content": "thumbnail_navigation",
+      "default": true,
+      "id": "cw-76580e14-4d7a-4ea5-84a6-5de052941a3d",
+      "position": "far-bottom"
+    }
+  },
   "config": {
     "canvasNavigation": {
       "height": 50,
@@ -27,13 +53,104 @@
         }
       },
       "typography": {
+        "fontSize": 16,
+        "body1": {
+          "fontSize": "1rem",
+          "letterSpacing": "0em",
+          "lineHeight": "1.6em"
+        },
+        "body2": {
+          "fontSize": "0.878rem",
+          "letterSpacing": "0.015em",
+          "lineHeight": "1.6em"
+        },
+        "button": {
+          "fontSize": "0.878rem",
+          "letterSpacing": "0.09em",
+          "lineHeight": "2.25rem",
+          "textTransform": "uppercase"
+        },
+        "caption": {
+          "fontSize": "0.772rem",
+          "letterSpacing": "0.033em",
+          "lineHeight": "1.6rem"
+        },
+        "body1Next": {
+          "fontSize": "1rem",
+          "letterSpacing": "0em",
+          "lineHeight": "1.6em"
+        },
+        "body2Next": {
+          "fontSize": "0.878rem",
+          "letterSpacing": "0.015em",
+          "lineHeight": "1.6em"
+        },
+        "buttonNext": {
+          "fontSize": "0.878rem",
+          "letterSpacing": "0.09em",
+          "lineHeight": "2.25rem"
+        },
+        "captionNext": {
+          "fontSize": "0.772rem",
+          "letterSpacing": "0.33em",
+          "lineHeight": "1.6rem"
+        },
+        "overline": {
+          "fontSize": "0.678rem",
+          "fontWeight": 500,
+          "letterSpacing": "0.166em",
+          "lineHeight": "2em",
+          "textTransform": "uppercase"
+        },
+        "h1": {
+          "fontSize": "2.822rem",
+          "letterSpacing": "-0.015em",
+          "lineHeight": "1.2em"
+        },
+        "h2": {
+          "fontSize": "1.575rem",
+          "letterSpacing": "0em",
+          "lineHeight": "1.33em"
+        },
+        "h3": {
+          "fontSize": "1.383rem",
+          "fontWeight": 300,
+          "letterSpacing": "0em",
+          "lineHeight": "1.33em"
+        },
+        "h4": {
+          "fontSize": "1.215rem",
+          "letterSpacing": "0.007em",
+          "lineHeight": "1.45em"
+        },
+        "h5": {
+          "fontSize": "1.138rem",
+          "letterSpacing": "0.005em",
+          "lineHeight": "1.55em"
+        },
+        "h6": {
+          "fontSize": "1.067rem",
+          "fontWeight": 400,
+          "letterSpacing": "0.01em",
+          "lineHeight": "1.6em"
+        },
+        "subtitle1": {
+          "fontSize": "0.937rem",
+          "letterSpacing": "0.015em",
+          "lineHeight": "1.6em",
+          "fontWeight": 300
+        },
+        "subtitle2": {
+          "fontSize": "0.878rem",
+          "fontWeight": 500,
+          "letterSpacing": "0.02em",
+          "lineHeight": "1.75em"
+        },
         "useNextVariants": true
       },
-      "overrides": {
-        "MuiInput": {
-          "input": {
-            "backgroundColor": "LightGray"
-          }
+      "props": {
+        "MuiButtonBase": {
+          "disableTouchRipple": true
         }
       }
     },
@@ -42,8 +159,11 @@
       "de": "Deutsch",
       "en": "English"
     },
+    "displayAllAnnotations": false,
     "translations": {},
     "window": {
+      "allowClose": true,
+      "allowMaximize": true,
       "defaultView": "single"
     },
     "windows": [
@@ -57,7 +177,7 @@
       }
     ],
     "thumbnailNavigation": {
-      "defaultPosition": "bottom",
+      "defaultPosition": "far-bottom",
       "height": 150,
       "width": 100
     },
@@ -102,47 +222,77 @@
     }
   },
   "viewers": {
-    "window-32450374-dd2c-455e-83f6-ce0e70d21c5c": {
-      "x": 2696,
-      "y": 4079,
-      "zoom": 0.0001107429053115508
+    "window-404c667d-e1e0-4ae7-aaf2-98e08bb627bd": {
+      "x": 1205.5,
+      "y": 1686,
+      "zoom": 0.00021117049395471312
     },
-    "window-65138dce-d192-484d-8445-b579f5ee14d6": {
-      "x": 1129.5,
-      "y": 1275,
-      "zoom": 0.0002890035037322365
+    "window-f48761a4-4388-4ddd-aff6-9a331410aad3": {
+      "x": 2217.999999999988,
+      "y": 3193.5865262629163,
+      "zoom": 0.00010301562691749936
     }
   },
   "windows": {
-    "window-65138dce-d192-484d-8445-b579f5ee14d6": {
-      "id": "window-65138dce-d192-484d-8445-b579f5ee14d6",
-      "canvasIndex": 2,
+    "window-404c667d-e1e0-4ae7-aaf2-98e08bb627bd": {
+      "canvasIndex": 4,
       "collectionIndex": 0,
-      "manifestId": "https://iiif.harvardartmuseums.org/manifests/object/299843",
-      "rangeId": null,
-      "thumbnailNavigationPosition": "bottom",
-      "width": 400,
+      "companionWindowIds": [
+        "cw-b86f0558-6f04-4b56-ac9b-34b7e0769db3",
+        "cw-b15df6ac-9069-4f16-bd19-e11c6aaa3911"
+      ],
+      "displayAllAnnotations": false,
       "height": 400,
-      "x": 2700,
-      "y": 2700,
-      "companionWindowIds": [],
+      "id": "window-404c667d-e1e0-4ae7-aaf2-98e08bb627bd",
+      "manifestId": "https://wellcomelibrary.org/iiif/b18035723/manifest",
+      "maximized": false,
+      "rangeId": null,
       "rotation": null,
-      "view": "single"
+      "selectedAnnotations": {},
+      "sideBarPanel": "info",
+      "thumbnailNavigationId": "cw-b15df6ac-9069-4f16-bd19-e11c6aaa3911",
+      "view": "single",
+      "width": 400,
+      "x": 200,
+      "y": 200
     },
-    "window-32450374-dd2c-455e-83f6-ce0e70d21c5c": {
-      "id": "window-32450374-dd2c-455e-83f6-ce0e70d21c5c",
-      "canvasIndex": 0,
+    "window-f48761a4-4388-4ddd-aff6-9a331410aad3": {
+      "canvasIndex": 1,
       "collectionIndex": 0,
-      "manifestId": "https://iiif.bodleian.ox.ac.uk/iiif/manifest/e32a277e-91e2-4a6d-8ba6-cc4bad230410.json",
-      "rangeId": null,
-      "thumbnailNavigationPosition": "off",
-      "width": 400,
+      "companionWindowIds": [
+        "cw-c4934b3c-2411-40b1-9088-5e066276620f",
+        "cw-76580e14-4d7a-4ea5-84a6-5de052941a3d"
+      ],
+      "displayAllAnnotations": false,
       "height": 400,
-      "x": 2700,
-      "y": 2700,
-      "companionWindowIds": [],
+      "id": "window-f48761a4-4388-4ddd-aff6-9a331410aad3",
+      "manifestId": "https://demos.biblissima.fr/iiif/metadata/florus-dispersus/manifest.json",
+      "maximized": false,
+      "rangeId": null,
       "rotation": null,
-      "view": "single"
+      "selectedAnnotations": {},
+      "sideBarPanel": "info",
+      "thumbnailNavigationId": "cw-76580e14-4d7a-4ea5-84a6-5de052941a3d",
+      "view": "single",
+      "width": 400,
+      "x": 230,
+      "y": 250
     }
+  },
+  "workspace": {
+    "exposeModeOn": false,
+    "height": 5000,
+    "viewportPosition": {
+      "x": 0,
+      "y": 0
+    },
+    "width": 5000,
+    "layout": {
+      "direction": "row",
+      "first": "window-404c667d-e1e0-4ae7-aaf2-98e08bb627bd",
+      "second": "window-f48761a4-4388-4ddd-aff6-9a331410aad3"
+    },
+    "focusedWindowId": "window-f48761a4-4388-4ddd-aff6-9a331410aad3",
+    "isWorkspaceAddVisible": false
   }
 }
