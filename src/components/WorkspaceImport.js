@@ -42,11 +42,9 @@ export class WorkspaceImport extends Component {
     const { configImportValue } = this.state;
     event.preventDefault();
     try {
-      console.log(configImportValue);
       const configJSON = JSON.parse(configImportValue);
       importConfig(configJSON);
     } catch (ex) {
-      console.log(ex);
       const { addError } = this.props;
       addError(ex.toString());
     }
