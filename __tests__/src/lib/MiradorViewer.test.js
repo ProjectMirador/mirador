@@ -59,10 +59,10 @@ describe('MiradorViewer', () => {
           {
             canvasIndex: 2,
             loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+            thumbnailNavigationPosition: 'far-bottom',
           },
           {
             loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
-            thumbnailNavigationPosition: 'off',
             view: 'book',
           },
         ],
