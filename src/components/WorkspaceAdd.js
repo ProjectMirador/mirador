@@ -106,6 +106,7 @@ export class WorkspaceAdd extends React.Component {
               </Toolbar>
             </AppBar>
             <ManifestForm
+              addResourcesOpen={addResourcesOpen}
               onSubmit={() => (this.setAddResourcesVisibility(false))}
               onCancel={() => (this.setAddResourcesVisibility(false))}
             />
