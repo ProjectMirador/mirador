@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withStyles } from '@material-ui/core';
+import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
 import { WindowSideBar } from '../components/WindowSideBar';
 import { getWindow } from '../state/selectors';
@@ -43,6 +44,7 @@ const styles = theme => ({
 
 const enhance = compose(
   withStyles(styles),
+  withTranslation(),
   connect(mapStateToProps, null),
   withPlugins('WindowSideBar'),
 );

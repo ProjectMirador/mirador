@@ -14,7 +14,7 @@ export class WindowSideBar extends Component {
    */
   render() {
     const {
-      classes, windowId, sideBarOpen,
+      classes, t, windowId, sideBarOpen,
     } = this.props;
 
     return (
@@ -24,7 +24,11 @@ export class WindowSideBar extends Component {
           className={classNames(classes.drawer)}
           classes={{ paper: classNames(classes.paper) }}
           anchor="left"
-          PaperProps={{ component: 'nav', style: { position: 'relative' } }}
+          PaperProps={{
+            'aria-label': t('sidebarPanelsNavigation'),
+            component: 'nav',
+            style: { position: 'relative' },
+          }}
           SlideProps={{ mountOnEnter: true, unmountOnExit: true }}
           open={sideBarOpen}
         >
@@ -38,6 +42,7 @@ export class WindowSideBar extends Component {
 WindowSideBar.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
   sideBarOpen: PropTypes.bool,
+  t: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };
 
