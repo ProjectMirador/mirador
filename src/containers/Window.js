@@ -68,7 +68,7 @@ const styles = theme => ({
     position: 'relative',
   },
   thumbnailArea: {
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: theme.palette.darkened[theme.palette.type],
   },
   thumbnailAreaBottom: {
   },
@@ -76,7 +76,7 @@ const styles = theme => ({
     minWidth: 100,
   },
   window: {
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: theme.palette.darkened[theme.palette.type],
     display: 'flex',
     flexDirection: 'column',
     height: '100%',

@@ -8,13 +8,17 @@ export default {
       type: 'light', // dark also available
       primary: {
         main: '#f5f5f5',
-        light: '#ffffff',
-        dark: '#eeeeee',
       },
       secondary: {
         main: '#1967d2',
-        light: '#64b5f6',
-        dark: '#0d47a1',
+      },
+      darkened: { // custom colors used for a specific offset in some places
+        dark: '#000000',
+        light: '#eeeeee'
+      },
+      lightened: { // custom colors used for a specific offset in some places
+        dark: '#424242',
+        light: '#ffffff',
       },
       error: {
         main: '#b00020',
