@@ -5,16 +5,15 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import SaveAltIcon from '@material-ui/icons/SaveAltSharp';
-import SettingsIcon from '@material-ui/icons/SettingsSharp';
 import PropTypes from 'prop-types';
 import LanguageSettings from '../containers/LanguageSettings';
 import { NestedMenu } from './NestedMenu';
 import WindowList from '../containers/WindowList';
-import WorkspaceSettings from '../containers/WorkspaceSettings';
 import WorkspaceSelectionDialog from '../containers/WorkspaceSelectionDialog';
 import WorkspaceExport from '../containers/WorkspaceExport';
 import WorkspaceImport from '../containers/WorkspaceImport';
 import ns from '../config/css-ns';
+import ChangeThemeDialog from '../containers/ChangeThemeDialog';
 
 /**
  */
@@ -25,9 +24,9 @@ export class WorkspaceMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      changeTheme: {},
       exportWorkspace: {},
       importWorkspace: {},
-      settings: {},
       toggleZoom: {},
       windowList: {},
       workspaceSelection: {},
@@ -83,9 +82,9 @@ export class WorkspaceMenu extends Component {
 
     const {
       importWorkspace,
+      changeTheme,
       windowList,
       toggleZoom,
-      settings,
       exportWorkspace,
       workspaceSelection,
     } = this.state;
@@ -137,17 +136,13 @@ export class WorkspaceMenu extends Component {
           <NestedMenu label={t('language')}>
             <LanguageSettings afterSelect={handleClose} />
           </NestedMenu>
-
           <MenuItem
             aria-haspopup="true"
-            onClick={(e) => { this.handleMenuItemClick('settings', e); handleClose(e); }}
-            aria-owns={settings.AnchorEl ? 'workspace-settings' : undefined}
+            onClick={(e) => { this.handleMenuItemClick('changeTheme', e); handleClose(e); }}
+            aria-owns={changeTheme.anchorEl ? 'change-theme' : undefined}
             divider
           >
-            <ListItemIcon>
-              <SettingsIcon />
-            </ListItemIcon>
-            <Typography variant="body1">{t('settings')}</Typography>
+            <Typography variant="body1">{t('changeTheme')}</Typography>
           </MenuItem>
           <MenuItem
             aria-haspopup="true"
@@ -178,17 +173,11 @@ export class WorkspaceMenu extends Component {
             handleClose={this.handleMenuItemClose('windowList')}
           />
         )}
-        {Boolean(toggleZoom.open) && (
-          <WorkspaceSettings
-            open={Boolean(toggleZoom.open)}
-            handleClose={this.handleMenuItemClose('toggleZoom')}
-          />
-        )}
-        {Boolean(settings.open) && (
-          <WorkspaceSettings
-            open={Boolean(settings.open)}
+        {Boolean(changeTheme.open) && (
+          <ChangeThemeDialog
             container={container}
-            handleClose={this.handleMenuItemClose('settings')}
+            handleClose={this.handleMenuItemClose('changeTheme')}
+            open={Boolean(changeTheme.open)}
           />
         )}
         {Boolean(workspaceSelection.open) && (
