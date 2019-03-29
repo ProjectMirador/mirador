@@ -49,7 +49,7 @@ const copyProps = (src, target) => {
 copyProps(window, global);
 
 /**
- * copy object property descriptors from `src` to `target` 
+ * copy object property descriptors from `src` to `target`
  * @param {*} src
  * @param {*} target
  */
