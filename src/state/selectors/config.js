@@ -34,11 +34,6 @@ export const getWorkspaceType = createSelector(
   ({ workspace }) => workspace.type,
 );
 
-export const getFullScreenEnabled = createSelector(
-  [getConfig],
-  ({ workspace }) => workspace.isFullscreenEnabled,
-);
-
 export const getContainerId = createSelector(
   [getConfig],
   ({ id }) => id,
