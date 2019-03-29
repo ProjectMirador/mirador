@@ -28,7 +28,7 @@ describe('Annotations in Mirador', () => {
     await expect(page).toClick(`#${windowId} button[aria-label="Annotations"]`);
 
     await expect(page).toMatchElement(`#${windowId} h3`, { text: 'Annotations' });
-    await expect(page).toMatchElement(`#${windowId} h6`, { text: 'Showing 2 annotations' });
+    await expect(page).toMatchElement(`#${windowId} p`, { text: 'Showing 2 annotations' });
     await expect(page).toMatchElement(`#${windowId} .mirador-companion-window-left.mirador-window-sidebar-annotation-panel ul li`, { count: 2 });
   });
 });
