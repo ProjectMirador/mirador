@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/MenuSharp';
 import CloseIcon from '@material-ui/icons/CloseSharp';
-import FullscreenIcon from '@material-ui/icons/FullscreenSharp';
-import FullscreenExitIcon from '@material-ui/icons/FullscreenExitSharp';
 import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 import classNames from 'classnames';
 import WindowTopMenuButton from '../containers/WindowTopMenuButton';
 import WindowTopBarButtons from '../containers/WindowTopBarButtons';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+import WindowMaxIcon from './icons/WindowMaxIcon';
+import WindowMinIcon from './icons/WindowMinIcon';
 import ns from '../config/css-ns';
 
 
@@ -49,7 +49,7 @@ export class WindowTopBar extends Component {
               color="inherit"
               onClick={(maximized ? minimizeWindow : maximizeWindow)}
             >
-              {(maximized ? <FullscreenExitIcon /> : <FullscreenIcon />)}
+              {(maximized ? <WindowMinIcon /> : <WindowMaxIcon />)}
             </MiradorMenuButton>
           )}
           {allowClose && (

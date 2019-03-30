@@ -3,7 +3,6 @@ import {
   getShowZoomControlsConfig,
   getTheme,
   getWorkspaceType,
-  getFullScreenEnabled,
   getContainerId,
 } from '../../../src/state/selectors';
 
@@ -56,15 +55,6 @@ describe('getWorkspaceType', () => {
     expect(getWorkspaceType(state)).toEqual('elastic');
   });
 });
-
-
-describe('getFullScreenEnabled', () => {
-  it('returns the workspace configuration for full screen', () => {
-    const state = { config: { workspace: { isFullscreenEnabled: true } } };
-    expect(getFullScreenEnabled(state)).toEqual(true);
-  });
-});
-
 
 describe('getContainerId', () => {
   it('returns the container id', () => {
