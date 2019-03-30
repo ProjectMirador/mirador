@@ -29,37 +29,39 @@ export class WindowTopBar extends Component {
     } = this.props;
     return (
       <AppBar position="relative">
-        <Toolbar disableGutters className={classNames(classes.windowTopBarStyle, focused ? classes.focused : null, ns('window-top-bar'))} variant="dense">
-          <MiradorMenuButton
-            aria-label={t('toggleWindowSideBar')}
-            onClick={toggleWindowSideBar}
-          >
-            <MenuIcon />
-          </MiradorMenuButton>
-          <Typography variant="h2" noWrap color="inherit" className={classes.title}>
-            {manifestTitle}
-          </Typography>
-          <WindowTopBarButtons windowId={windowId} />
-          <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
-          {allowMaximize && (
+        <nav aria-label={t('windowNavigation')}>
+          <Toolbar disableGutters className={classNames(classes.windowTopBarStyle, focused ? classes.focused : null, ns('window-top-bar'))} variant="dense">
             <MiradorMenuButton
-              aria-label={(maximized ? t('minimizeWindow') : t('maximizeWindow'))}
-              className={ns('window-maximize')}
-              onClick={(maximized ? minimizeWindow : maximizeWindow)}
+              aria-label={t('toggleWindowSideBar')}
+              onClick={toggleWindowSideBar}
             >
-              {(maximized ? <WindowMinIcon /> : <WindowMaxIcon />)}
+              <MenuIcon />
             </MiradorMenuButton>
-          )}
-          {allowClose && (
-            <MiradorMenuButton
-              aria-label={t('closeWindow')}
-              className={ns('window-close')}
-              onClick={removeWindow}
-            >
-              <CloseIcon />
-            </MiradorMenuButton>
-          )}
-        </Toolbar>
+            <Typography variant="h2" noWrap color="inherit" className={classes.title}>
+              {manifestTitle}
+            </Typography>
+            <WindowTopBarButtons windowId={windowId} />
+            <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
+            {allowMaximize && (
+              <MiradorMenuButton
+                aria-label={(maximized ? t('minimizeWindow') : t('maximizeWindow'))}
+                className={ns('window-maximize')}
+                onClick={(maximized ? minimizeWindow : maximizeWindow)}
+              >
+                {(maximized ? <WindowMinIcon /> : <WindowMaxIcon />)}
+              </MiradorMenuButton>
+            )}
+            {allowClose && (
+              <MiradorMenuButton
+                aria-label={t('closeWindow')}
+                className={ns('window-close')}
+                onClick={removeWindow}
+              >
+                <CloseIcon />
+              </MiradorMenuButton>
+            )}
+          </Toolbar>
+        </nav>
       </AppBar>
     );
   }
