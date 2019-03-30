@@ -35,7 +35,7 @@ const styles = theme => ({
       backgroundColor: theme.palette.background.paper,
     },
     backgroundColor: theme.palette.background.paper,
-    border: `1px solid ${theme.palette.primary.dark}`,
+    border: `1px solid ${theme.palette.darkened[theme.palette.type]}`,
     borderRadius: 0,
     height: '48px',
     left: '100%',

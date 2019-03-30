@@ -32,7 +32,6 @@ export class WindowTopBar extends Component {
         <Toolbar disableGutters className={classNames(classes.windowTopBarStyle, focused ? classes.focused : null, ns('window-top-bar'))} variant="dense">
           <MiradorMenuButton
             aria-label={t('toggleWindowSideBar')}
-            color="inherit"
             onClick={toggleWindowSideBar}
           >
             <MenuIcon />
@@ -46,7 +45,6 @@ export class WindowTopBar extends Component {
             <MiradorMenuButton
               aria-label={(maximized ? t('minimizeWindow') : t('maximizeWindow'))}
               className={ns('window-maximize')}
-              color="inherit"
               onClick={(maximized ? minimizeWindow : maximizeWindow)}
             >
               {(maximized ? <WindowMinIcon /> : <WindowMaxIcon />)}
@@ -56,7 +54,6 @@ export class WindowTopBar extends Component {
             <MiradorMenuButton
               aria-label={t('closeWindow')}
               className={ns('window-close')}
-              color="inherit"
               onClick={removeWindow}
             >
               <CloseIcon />
