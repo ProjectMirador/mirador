@@ -30,6 +30,16 @@ const styles = theme => ({
     padding: '50px 0 50px 20px',
     width: '100%',
   },
+  galleryViewCaption: {
+    boxOrient: 'vertical',
+    display: '-webkit-box',
+    height: '3em',
+    lineClamp: '2',
+    lineHeight: '1.5em',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    wordBreak: 'break-word',
+  },
   galleryViewItem: {
     '&:focus': {
       outline: 'none',

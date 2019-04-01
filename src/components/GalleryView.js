@@ -47,7 +47,7 @@ export class GalleryView extends Component {
                     aspectRatio={manifestoCanvas.aspectRatio}
                     style={{ margin: '0 auto' }}
                   />
-                  <Typography variant="caption">
+                  <Typography variant="caption" className={classes.galleryViewCaption}>
                     {manifestoCanvas.getLabel()}
                   </Typography>
                 </div>
