@@ -75,7 +75,8 @@ export function addWindow(options) {
         {
           content: 'thumbnail_navigation',
           id: cwThumbs,
-          position: options.thumbnailNavigationPosition || 'far-bottom',
+          position: options.thumbnailNavigationPosition
+            || config.thumbnailNavigation.defaultPosition,
         },
       ],
       type: ActionTypes.ADD_WINDOW,

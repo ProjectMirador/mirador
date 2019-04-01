@@ -77,7 +77,7 @@ describe('window actions', () => {
           },
           {
             content: 'thumbnail_navigation',
-            position: 'far-bottom',
+            position: 'off',
           },
         ],
         type: ActionTypes.ADD_WINDOW,
@@ -99,7 +99,11 @@ describe('window actions', () => {
       };
 
       const mockState = {
-        config: {},
+        config: {
+          thumbnailNavigation: {
+            defaultPosition: 'off',
+          },
+        },
         windows: { a: {}, b: {} },
       };
 
