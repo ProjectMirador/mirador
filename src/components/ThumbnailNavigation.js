@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
-import Grid from 'react-virtualized/dist/commonjs/Grid';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import { VariableSizeGrid as Grid } from 'react-window';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import Typography from '@material-ui/core/Typography';
@@ -10,7 +10,6 @@ import { CanvasThumbnail } from './CanvasThumbnail';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
 import CanvasWorld from '../lib/CanvasWorld';
 import ns from '../config/css-ns';
-import 'react-virtualized/styles.css';
 
 /**
  */
@@ -35,7 +34,8 @@ export class ThumbnailNavigation extends Component {
   componentDidUpdate(prevProps) {
     const { position, window } = this.props;
     if (prevProps.window.view !== window.view && position !== 'off') {
-      this.gridRef.current.recomputeGridSize();
+      this.gridRef.current.resetAfterColumnIndex(0);
+      this.gridRef.current.resetAfterRowIndex(0);
     }
   }
 
@@ -56,7 +56,7 @@ export class ThumbnailNavigation extends Component {
    */
   cellRenderer(options) {
     const {
-      columnIndex, key, style, rowIndex,
+      columnIndex, rowIndex, style,
     } = options;
     const {
       classes, window, setCanvas, config, canvasGroupings, position,
@@ -65,7 +65,6 @@ export class ThumbnailNavigation extends Component {
     const currentGroupings = canvasGroupings.groupings()[currentIndex];
     return (
       <div
-        key={key}
         style={style}
         className={ns('thumbnail-nav-container')}
       >
@@ -127,14 +126,14 @@ export class ThumbnailNavigation extends Component {
    * in a simple case, a column == canvas. In a book view, a group (or two)
    * canvases. When in the "right" position, this value is static.
    */
-  calculateScaledWidth(options) {
+  calculateScaledWidth(index) {
     const { config, canvasGroupings, position } = this.props;
     switch (position) {
       case 'far-right':
         return this.rightWidth() + this.spacing;
       // Default case bottom
       default: {
-        const canvases = canvasGroupings.getCanvases(options.index);
+        const canvases = canvasGroupings.getCanvases(index);
         const world = new CanvasWorld(canvases);
         const bounds = world.worldBounds();
         const calc = Math.floor(
@@ -151,11 +150,11 @@ export class ThumbnailNavigation extends Component {
    * in a simple case, a row == canvas. In a book view, a group (or two)
    * canvases. When in the "bottom" position, this value is static.
    */
-  calculateScaledHeight(options) {
+  calculateScaledHeight(index) {
     const { config, canvasGroupings, position } = this.props;
     switch (position) {
       case 'far-right': {
-        const canvases = canvasGroupings.getCanvases(options.index);
+        const canvases = canvasGroupings.getCanvases(index);
         const world = new CanvasWorld(canvases);
         const bounds = world.worldBounds();
         const calc = Math.floor(
@@ -270,7 +269,6 @@ export class ThumbnailNavigation extends Component {
         >
           {({ height, width }) => (
             <Grid
-              cellRenderer={this.cellRenderer}
               columnCount={this.columnCount()}
               columnWidth={this.calculateScaledWidth}
               height={this.areaHeight(height)}
@@ -280,7 +278,9 @@ export class ThumbnailNavigation extends Component {
               scrollToColumn={this.scrollToColumn()}
               width={width}
               ref={this.gridRef}
-            />
+            >
+              {this.cellRenderer}
+            </Grid>
           )}
         </AutoSizer>
       </nav>
