@@ -156,6 +156,7 @@ export class WindowSideBarButtons extends Component {
         indicatorColor="secondary"
         textColor="secondary"
         aria-orientation="vertical"
+        aria-label={t('sidebarPanelsNavigation')}
         ref={ref => this.setTabsRef(ref)}
       >
         <Tab
