@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend';
 import { WorkspaceSelectionDialog } from '../components/WorkspaceSelectionDialog';
 import * as actions from '../state/actions';
@@ -22,8 +23,22 @@ const mapDispatchToProps = {
  */
 const mapStateToProps = state => ({ workspaceType: getWorkspaceType(state) });
 
+/** */
+const styles = theme => ({
+  dialog: {
+    width: '400px',
+  },
+  listItem: {
+    '&:hover': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    cursor: 'pointer',
+  },
+});
+
 const enhance = compose(
   withTranslation(),
+  withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WorkspaceSelectionDialog'),
 );
