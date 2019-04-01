@@ -3,12 +3,10 @@ import isUndefined from 'lodash/isUndefined';
 import isFunction from 'lodash/isFunction';
 import isObject from 'lodash/isObject';
 import isNull from 'lodash/isNull';
-import some from 'lodash/some';
-import every from 'lodash/every';
 import values from 'lodash/values';
 
 /** */
-export const validatePlugin = plugin => every([
+export const validatePlugin = plugin => [
   checkPlugin,
   checkName,
   checkTarget,
@@ -17,7 +15,7 @@ export const validatePlugin = plugin => every([
   checkMapStateToProps,
   checkMapDispatchToProps,
   checkReducers,
-], check => check(plugin));
+].every(check => check(plugin));
 
 /** */
 const checkPlugin = plugin => isObject(plugin);
@@ -37,7 +35,7 @@ const checkTarget = (plugin) => {
 /** */
 const checkMode = (plugin) => {
   const { mode } = plugin;
-  return some(['add', 'wrap'], s => s === mode);
+  return ['add', 'wrap'].some(s => s === mode);
 };
 
 /** */
@@ -67,5 +65,5 @@ const checkMapDispatchToProps = (plugin) => {
 const checkReducers = (plugin) => {
   const { reducers } = plugin;
   return isUndefined(reducers)
-    || (isObject(reducers) && every(values(reducers), isFunction));
+    || (isObject(reducers) && values(reducers).every(isFunction));
 };
