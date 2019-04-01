@@ -21,15 +21,14 @@ const mapStateToProps = (state, { window }) => (
  * Styles to be passed to the withStyles HOC
  */
 const styles = theme => ({
-  currentCanvas: {
-    border: `2px solid ${theme.palette.secondary.main}`,
-    padding: theme.spacing.unit / 2,
-  },
   galleryContainer: {
-    flex: '1',
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     overflowX: 'hidden',
     overflowY: 'scroll',
     padding: '50px 0 50px 20px',
+    width: '100%',
   },
   galleryViewItem: {
     '&:focus': {
@@ -37,20 +36,19 @@ const styles = theme => ({
     },
     '&:hover': {
       border: `2px solid ${theme.palette.secondary.main}`,
-      padding: theme.spacing.unit / 2,
-      transform: 'scale(1.05)',
-      transition: '.1s transform ease-out',
     },
-    boxSizing: 'border-box',
+    border: '2px solid transparent',
     cursor: 'pointer',
     display: 'inline-block',
-    height: '160px',
+    height: '165px',
     margin: `${theme.spacing.unit}px ${theme.spacing.unit / 2}px`,
-    maxWidth: '100px',
+    minWidth: '60px',
     overflow: 'hidden',
     padding: theme.spacing.unit / 2,
-    textOverflow: 'elipsis',
-    transition: '.1s transform ease-out',
+    width: 'min-content',
+  },
+  galleryViewItemCurrent: {
+    border: `2px solid ${theme.palette.secondary.main}`,
   },
 });
 
