@@ -141,7 +141,7 @@ export default {
   },
   windows: [], // Array of windows to be open when mirador initializes (each object should at least provide a loadedManifest key with the value of the IIIF presentation manifest to load)
   thumbnailNavigation: {
-    defaultPosition: 'far-bottom', // Which position for the thumbnail navigation to be be displayed. Other possible values are "off" or "far-right"
+    defaultPosition: 'off', // Which position for the thumbnail navigation to be be displayed. Other possible values are "far-bottom" or "far-right"
     height: 150, // height of entire ThumbnailNavigation area when position is "far-bottom"
     width: 100, // width of a single thumb in ThumbnailNavigation area when position is "far-right"
   },
