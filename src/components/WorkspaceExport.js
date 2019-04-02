@@ -1,13 +1,25 @@
-import React, { Component } from 'react';
+import React, { Component, Children } from 'react';
+import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 /**
  */
 export class WorkspaceExport extends Component {
+  /** */
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      value: '',
+    };
+  }
+
   /**
    * @private
    */
@@ -27,10 +39,16 @@ export class WorkspaceExport extends Component {
    */
   render() {
     const {
-      container, handleClose, open, children, t,
+      children, container, handleClose, open, t,
     } = this.props;
     return (
-      <Dialog id="workspace-settings" container={container} open={open} onClose={handleClose}>
+      <Dialog
+        id="workspace-settings"
+        container={container}
+        open={open}
+        onClose={handleClose}
+        scroll="paper"
+      >
         <DialogTitle id="form-dialog-title" disableTypography>
           <Typography variant="h2">{t('downloadExport')}</Typography>
         </DialogTitle>
@@ -40,6 +58,16 @@ export class WorkspaceExport extends Component {
             {this.exportableState()}
           </pre>
         </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleClose()}>{t('cancel')}</Button>
+          <CopyToClipboard
+            // eslint-disable-next-line react/destructuring-assignment
+            text={this.state.value}
+            // eslint-disable-next-line react/no-unused-state
+          >
+            <Button variant="contained" color="secondary" onClick={() => this.setState({ value: this.exportableState() })}>Copy to clipboard</Button>
+          </CopyToClipboard>
+        </DialogActions>
       </Dialog>
     );
   }
