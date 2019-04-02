@@ -143,7 +143,7 @@ export default {
   thumbnailNavigation: {
     defaultPosition: 'off', // Which position for the thumbnail navigation to be be displayed. Other possible values are "far-bottom" or "far-right"
     height: 150, // height of entire ThumbnailNavigation area when position is "far-bottom"
-    width: 100, // width of a single thumb in ThumbnailNavigation area when position is "far-right"
+    width: 200, // width of entire ThumbnailNavigation area when position is "far-right"
   },
   workspace: {
     type: 'mosaic', // Which workspace type to load by default. Other possible values are "elastic"

@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import { VariableSizeGrid as Grid } from 'react-window';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import Typography from '@material-ui/core/Typography';
-import classNames from 'classnames';
-import { CanvasThumbnail } from './CanvasThumbnail';
-import ManifestoCanvas from '../lib/ManifestoCanvas';
+import { VariableSizeList as List } from 'react-window';
 import CanvasWorld from '../lib/CanvasWorld';
+import ThumbnailCanvasGrouping from '../containers/ThumbnailCanvasGrouping';
 import ns from '../config/css-ns';
 
 /**
@@ -20,10 +15,9 @@ export class ThumbnailNavigation extends Component {
     super(props);
 
     this.scrollbarSize = 15;
-    this.spacing = 16; // 2 * (2px margin + 2px border + 2px padding + 2px padding)
-    this.cellRenderer = this.cellRenderer.bind(this);
-    this.calculateScaledHeight = this.calculateScaledHeight.bind(this);
-    this.calculateScaledWidth = this.calculateScaledWidth.bind(this);
+    this.spacing = 8; // 2 * (2px margin + 2px border + 2px padding + 2px padding)
+    this.calculateScaledSize = this.calculateScaledSize.bind(this);
+    this.itemCount = this.itemCount.bind(this);
     this.gridRef = React.createRef();
   }
 
@@ -34,152 +28,46 @@ export class ThumbnailNavigation extends Component {
   componentDidUpdate(prevProps) {
     const { position, window } = this.props;
     if (prevProps.window.view !== window.view && position !== 'off') {
-      this.gridRef.current.resetAfterColumnIndex(0);
-      this.gridRef.current.resetAfterRowIndex(0);
+      this.gridRef.current.resetAfterIndex(0);
     }
   }
 
   /**
-   * Determines whether the current index is the rendered canvas, providing
-   * a useful class.
+   * When on right, row height
+   * When on bottom, column width
    */
-  currentCanvasClass(canvasIndices) {
-    const { window } = this.props;
-    if (canvasIndices.includes(window.canvasIndex)) return 'current-canvas';
-    return '';
-  }
-
-  /**
-   * Renders a given "cell" for a react-virtualized Grid. This is a grouping of
-   * canvases.
-   * https://github.com/bvaughn/react-virtualized/blob/master/docs/Grid.md
-   */
-  cellRenderer(options) {
-    const {
-      columnIndex, rowIndex, style,
-    } = options;
-    const {
-      classes, window, setCanvas, config, canvasGroupings, position,
-    } = this.props;
-    const currentIndex = (position === 'far-right') ? rowIndex : columnIndex;
-    const currentGroupings = canvasGroupings.groupings()[currentIndex];
-    return (
-      <div
-        style={style}
-        className={ns('thumbnail-nav-container')}
-      >
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'nowrap',
-          }}
-          className={classNames(
-            ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${currentIndex}`, this.currentCanvasClass(currentGroupings.map(canvas => canvas.index))]),
-            classes.canvas,
-            {
-              [classes.currentCanvas]: currentGroupings
-                .map(canvas => canvas.index).includes(window.canvasIndex),
-            },
-          )}
-        >
-          {currentGroupings.map((canvas, i) => {
-            const manifestoCanvas = new ManifestoCanvas(canvas);
-            const thumbWidth = Math.floor(
-              (style.height - this.spacing) * manifestoCanvas.aspectRatio,
-            );
-            const maxHeight = (position === 'far-right') ? null : style.height - this.spacing;
-            const maxWidth = (position === 'far-right') ? thumbWidth : null;
-            return (
-              <GridListTile
-                component="div"
-                key={canvas.index}
-                onClick={() => setCanvas(window.id, currentGroupings[0].index)}
-                style={{
-                  height: '100%',
-                  width: 'auto',
-                }}
-              >
-                <CanvasThumbnail
-                  imageUrl={manifestoCanvas.thumbnail(null, config.thumbnailNavigation.height)}
-                  isValid={manifestoCanvas.hasValidDimensions}
-                  maxHeight={maxHeight}
-                  maxWidth={maxWidth}
-                />
-                <GridListTileBar
-                  classes={{ root: classes.root }}
-                  title={(
-                    <Typography classes={{ root: classes.title }} variant="caption">
-                      {manifestoCanvas.getLabel()}
-                    </Typography>
-                  )}
-                />
-              </GridListTile>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
-
-  /**
-   * calculateScaledWidth - calculates the scaled width of a column for a Grid
-   * in a simple case, a column == canvas. In a book view, a group (or two)
-   * canvases. When in the "right" position, this value is static.
-   */
-  calculateScaledWidth(index) {
+  calculateScaledSize(index) {
     const { config, canvasGroupings, position } = this.props;
-    switch (position) {
-      case 'far-right':
-        return this.rightWidth() + this.spacing;
-      // Default case bottom
-      default: {
-        const canvases = canvasGroupings.getCanvases(index);
-        const world = new CanvasWorld(canvases);
-        const bounds = world.worldBounds();
-        const calc = Math.floor(
-          (config.thumbnailNavigation.height - this.scrollbarSize - this.spacing)
-           * bounds[2] / bounds[3],
-        );
-        return calc + this.spacing;
-      }
-    }
-  }
-
-  /**
-   * calculateScaledHeight - calculates the scaled height of a row for a Grid
-   * in a simple case, a row == canvas. In a book view, a group (or two)
-   * canvases. When in the "bottom" position, this value is static.
-   */
-  calculateScaledHeight(index) {
-    const { config, canvasGroupings, position } = this.props;
+    const canvases = canvasGroupings.getCanvases(index);
+    const world = new CanvasWorld(canvases);
+    const bounds = world.worldBounds();
     switch (position) {
       case 'far-right': {
-        const canvases = canvasGroupings.getCanvases(index);
-        const world = new CanvasWorld(canvases);
-        const bounds = world.worldBounds();
         const calc = Math.floor(
-          config.thumbnailNavigation.width * canvases.length * bounds[3] / bounds[2],
+          this.calculatingWidth(canvases.length) * bounds[3] / bounds[2],
         );
+        // console.log(calc);
         return calc + this.spacing;
       }
       // Default case bottom
-      default:
-        return config.thumbnailNavigation.height - this.scrollbarSize;
+      default: {
+        const calc = Math.ceil(
+          (config.thumbnailNavigation.height - this.scrollbarSize - this.spacing - 4)
+           * bounds[2] / bounds[3],
+        );
+        console.log(calc, bounds[2], bounds[3]);
+        return calc;
+      }
     }
   }
 
-  /**
-   * In book view, this is halved to represent the proxy between the "canvasIndex"
-   * and the columnIndex (in this case the index of grouped canvases)
-   */
-  scrollToColumn() {
-    const { window } = this.props;
-    switch (window.view) {
-      case 'book':
-        return Math.ceil(window.canvasIndex / 2);
-      default:
-        return window.canvasIndex;
+  /** */
+  calculatingWidth(canvasesLength) {
+    const { config } = this.props;
+    if (canvasesLength === 1) {
+      return config.thumbnailNavigation.width / 2;
     }
+    return config.thumbnailNavigation.width;
   }
 
   /** */
@@ -188,10 +76,9 @@ export class ThumbnailNavigation extends Component {
     switch (position) {
       case 'far-right':
         return {
-          display: 'flex',
           height: '100%',
           minHeight: 0,
-          width: `${this.rightWidth() + this.scrollbarSize + this.spacing}px`,
+          width: `${config.thumbnailNavigation.width + this.scrollbarSize + this.spacing}px`,
         };
       // Default case bottom
       default:
@@ -199,41 +86,6 @@ export class ThumbnailNavigation extends Component {
           height: `${config.thumbnailNavigation.height}px`,
           width: '100%',
         };
-    }
-  }
-
-  /** */
-  rightWidth() {
-    const { window, config } = this.props;
-    switch (window.view) {
-      case 'book':
-        return (config.thumbnailNavigation.width * 2);
-      default:
-        return config.thumbnailNavigation.width;
-    }
-  }
-
-  /** */
-  columnCount() {
-    const { position, canvasGroupings } = this.props;
-    switch (position) {
-      case 'far-right':
-        return 1;
-      // Default case bottom
-      default:
-        return canvasGroupings.groupings().length;
-    }
-  }
-
-  /** */
-  rowCount() {
-    const { position, canvasGroupings } = this.props;
-    switch (position) {
-      case 'far-right':
-        return canvasGroupings.groupings().length;
-      // Default case bottom
-      default:
-        return 1;
     }
   }
 
@@ -249,11 +101,23 @@ export class ThumbnailNavigation extends Component {
     }
   }
 
+  /** */
+  itemCount() {
+    const { canvasGroupings } = this.props;
+    return canvasGroupings.groupings().length;
+  }
+
   /**
    * Renders things
    */
   render() {
-    const { t, position } = this.props;
+    const {
+      t,
+      canvasGroupings,
+      config,
+      position,
+      window,
+    } = this.props;
     if (position === 'off') {
       return <></>;
     }
@@ -263,24 +127,25 @@ export class ThumbnailNavigation extends Component {
         aria-label={t('thumbnailNavigation')}
         style={this.style()}
       >
-        <AutoSizer
-          defaultHeight={100}
-          defaultWidth={400}
-        >
+        <AutoSizer>
           {({ height, width }) => (
-            <Grid
-              columnCount={this.columnCount()}
-              columnWidth={this.calculateScaledWidth}
+            <List
               height={this.areaHeight(height)}
-              rowCount={this.rowCount()}
-              rowHeight={this.calculateScaledHeight}
-              scrollToAlignment="center"
-              scrollToColumn={this.scrollToColumn()}
+              itemCount={this.itemCount()}
+              itemSize={this.calculateScaledSize}
               width={width}
+              layout={(position === 'far-bottom') ? 'horizontal' : 'vertical'}
+              itemData={{
+                canvasGroupings,
+                config,
+                height: 150 - this.spacing - this.scrollbarSize,
+                position,
+                window,
+              }}
               ref={this.gridRef}
             >
-              {this.cellRenderer}
-            </Grid>
+              {ThumbnailCanvasGrouping}
+            </List>
           )}
         </AutoSizer>
       </nav>
@@ -290,10 +155,8 @@ export class ThumbnailNavigation extends Component {
 
 ThumbnailNavigation.propTypes = {
   canvasGroupings: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   position: PropTypes.string.isRequired,
-  setCanvas: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
