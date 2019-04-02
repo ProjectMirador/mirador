@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { List, ListItem, ListItemText } from '@material-ui/core';
+import { List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { keys, chars } from '../lib/KeyHelper';
 
@@ -88,7 +88,9 @@ export class WorkspaceSelectionDialog extends Component {
         onKeyDown={event => this.keyDownHandler(event)}
         open={open}
       >
-        <DialogTitle id="workspace-selection-dialog-title">{t('workspaceSelectionTitle')}</DialogTitle>
+        <DialogTitle id="workspace-selection-dialog-title" disableTypography>
+          <Typography variant="h2">{t('workspaceSelectionTitle')}</Typography>
+        </DialogTitle>
         <DialogContent>
           {children}
           <List>
