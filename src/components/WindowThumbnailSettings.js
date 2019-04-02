@@ -21,10 +21,11 @@ export class WindowThumbnailSettings extends Component {
   /**
    * @private
    */
-  handleChange(value) {
-    const { windowId, setWindowThumbnailPosition } = this.props;
+  handleChange(e) {
+    const { windowId, setWindowThumbnailPosition, handleClose } = this.props;
 
-    setWindowThumbnailPosition(windowId, value);
+    setWindowThumbnailPosition(windowId, e.currentTarget.dataset.value);
+    handleClose();
   }
 
   /**
@@ -34,14 +35,18 @@ export class WindowThumbnailSettings extends Component {
    */
   render() {
     const {
-      classes, handleClose, t, thumbnailNavigationPosition,
+      classes, t, thumbnailNavigationPosition,
     } = this.props;
 
     return (
       <>
         <ListSubheader role="presentation" tabIndex="-1">{t('thumbnails')}</ListSubheader>
 
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('off'); handleClose(); }}>
+        <MenuItem
+          className={classes.MenuItem}
+          data-value="off"
+          onClick={this.handleChange}
+        >
           <FormControlLabel
             value="off"
             classes={{ label: thumbnailNavigationPosition === 'off' ? classes.selectedLabel : undefined }}
@@ -52,7 +57,11 @@ export class WindowThumbnailSettings extends Component {
             labelPlacement="bottom"
           />
         </MenuItem>
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('far-bottom'); handleClose(); }}>
+        <MenuItem
+          className={classes.MenuItem}
+          data-value="far-bottom"
+          onClick={this.handleChange}
+        >
           <FormControlLabel
             value="far-bottom"
             classes={{ label: thumbnailNavigationPosition === 'far-bottom' ? classes.selectedLabel : undefined }}
@@ -63,7 +72,11 @@ export class WindowThumbnailSettings extends Component {
             labelPlacement="bottom"
           />
         </MenuItem>
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('far-right'); handleClose(); }}>
+        <MenuItem
+          className={classes.MenuItem}
+          data-value="far-right"
+          onClick={this.handleChange}
+        >
           <FormControlLabel
             value="far-right"
             classes={{ label: thumbnailNavigationPosition === 'far-right' ? classes.selectedLabel : undefined }}

@@ -10,12 +10,24 @@ import { CanvasThumbnail } from './CanvasThumbnail';
  * OSD and Navigation
  */
 export class GalleryView extends Component {
+  /** */
+  constructor(props) {
+    super(props);
+    this.setCanvas = this.setCanvas.bind(this);
+  }
+
+  /** */
+  setCanvas(e) {
+    const { setCanvas, window } = this.props;
+    setCanvas(window.id, e.currentTarget.dataset.canvasIndex);
+  }
+
   /**
    * Renders things
    */
   render() {
     const {
-      canvases, classes, setCanvas, window,
+      canvases, classes, window,
     } = this.props;
     return (
       <>
@@ -35,8 +47,9 @@ export class GalleryView extends Component {
                       canvas.index === window.canvasIndex ? classes.currentCanvas : '',
                     )
                   }
-                  onClick={() => setCanvas(window.id, canvas.index)}
-                  onKeyUp={() => setCanvas(window.id, canvas.index)}
+                  data-canvas-index={canvas.index}
+                  onClick={this.setCanvas}
+                  onKeyUp={this.setCanvas}
                   role="button"
                   tabIndex={0}
                 >

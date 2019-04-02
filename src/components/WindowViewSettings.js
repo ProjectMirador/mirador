@@ -42,10 +42,11 @@ export class WindowViewSettings extends Component {
   /**
    * @private
    */
-  handleChange(value) {
-    const { windowId, setWindowViewType } = this.props;
+  handleChange(e) {
+    const { windowId, setWindowViewType, handleClose } = this.props;
 
-    setWindowViewType(windowId, value);
+    setWindowViewType(windowId, e.currentTarget.dataset.view);
+    handleClose();
   }
 
   /**
@@ -55,7 +56,7 @@ export class WindowViewSettings extends Component {
    */
   render() {
     const {
-      classes, handleClose, t, windowViewType,
+      classes, t, windowViewType,
     } = this.props;
 
     return (
@@ -65,7 +66,8 @@ export class WindowViewSettings extends Component {
         <MenuItem
           className={classes.MenuItem}
           ref={ref => this.handleSelectedRef(ref)}
-          onClick={() => { this.handleChange('single'); handleClose(); }}
+          data-view="single"
+          onClick={this.handleChange}
         >
           <FormControlLabel
             value="single"
@@ -75,7 +77,11 @@ export class WindowViewSettings extends Component {
             labelPlacement="bottom"
           />
         </MenuItem>
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('book'); handleClose(); }}>
+        <MenuItem
+          className={classes.MenuItem}
+          data-view="book"
+          onClick={this.handleChange}
+        >
           <FormControlLabel
             value="book"
             classes={{ label: windowViewType === 'book' ? classes.selectedLabel : undefined }}
@@ -84,7 +90,11 @@ export class WindowViewSettings extends Component {
             labelPlacement="bottom"
           />
         </MenuItem>
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('gallery'); handleClose(); }}>
+        <MenuItem
+          className={classes.MenuItem}
+          data-view="gallery"
+          onClick={this.handleChange}
+        >
           <FormControlLabel
             value="gallery"
             classes={{ label: windowViewType === 'gallery' ? classes.selectedLabel : undefined }}
