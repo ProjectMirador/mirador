@@ -94,7 +94,7 @@ export class WorkspaceAdd extends React.Component {
             <AppBar position="absolute" color="secondary" onClick={() => (this.setAddResourcesVisibility(false))}>
               <Toolbar variant="dense">
                 <MiradorMenuButton
-                  aria-label={t('closeAddResourceMenu')}
+                  aria-label={t('closeAddResourceForm')}
                   className={classes.menuButton}
                 >
                   <ExpandMoreIcon />
