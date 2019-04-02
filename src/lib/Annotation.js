@@ -1,3 +1,4 @@
+import flatten from 'lodash/flatten';
 import AnnotationResource from './AnnotationResource';
 /** */
 export default class Annotation {
@@ -21,6 +22,7 @@ export default class Annotation {
   /** */
   get resources() {
     if (!this.json || !this.json.resources) return [];
-    return this.json.resources.map(resource => new AnnotationResource(resource));
+
+    return flatten([this.json.resources]).map(resource => new AnnotationResource(resource));
   }
 }
