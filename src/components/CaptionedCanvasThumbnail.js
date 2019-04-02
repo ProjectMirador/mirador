@@ -28,7 +28,8 @@ export class CaptionedCanvasThumbnail extends Component {
           isValid={manifestoCanvas.hasValidDimensions}
           maxHeight={height}
           style={{
-            maxWidth: `${(height * manifestoCanvas.aspectRatio)}px`,
+            maxWidth: `${Math.ceil(height * manifestoCanvas.aspectRatio)}px`,
+            verticalAlign: 'bottom',
           }}
         />
         <div
@@ -45,12 +46,6 @@ export class CaptionedCanvasThumbnail extends Component {
             <Typography
               classes={{ root: classes.title }}
               variant="caption"
-              style={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                width: '100%',
-              }}
             >
               {manifestoCanvas.getLabel()}
             </Typography>

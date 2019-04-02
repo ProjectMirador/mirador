@@ -38,7 +38,7 @@ export class ThumbnailNavigation extends Component {
    */
   calculateScaledSize(index) {
     const { config, canvasGroupings, position } = this.props;
-    const canvases = canvasGroupings.getCanvases(index);
+    const canvases = canvasGroupings.groupings()[index];
     const world = new CanvasWorld(canvases);
     const bounds = world.worldBounds();
     switch (position) {

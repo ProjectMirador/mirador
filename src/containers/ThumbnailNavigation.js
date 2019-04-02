@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
 import CanvasGroupings from '../lib/CanvasGroupings';
-import * as actions from '../state/actions';
 import { ThumbnailNavigation } from '../components/ThumbnailNavigation';
 import { getWindow } from '../state/selectors/windows';
 import { getManifestCanvases } from '../state/selectors/manifests';

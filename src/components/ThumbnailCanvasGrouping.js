@@ -24,8 +24,8 @@ export class ThumbnailCanvasGrouping extends PureComponent {
    * a useful class.
    */
   currentCanvasClass(canvasIndices) {
-    const { window } = this.props;
-    if (canvasIndices.includes(window.canvasIndex)) return 'current-canvas';
+    const { index } = this.props;
+    if (canvasIndices.includes(index)) return 'current-canvas';
     return '';
   }
 
@@ -37,8 +37,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
     const {
       canvasGroupings, position, height,
     } = data;
-    const currentIndex = index;
-    const currentGroupings = canvasGroupings.groupings()[currentIndex];
+    const currentGroupings = canvasGroupings.groupings()[index];
     const SPACING = 8;
     return (
       <div
@@ -60,12 +59,12 @@ export class ThumbnailCanvasGrouping extends PureComponent {
           tabIndex={-1}
           style={{
             display: 'inline-block',
-            height: (position === 'far-right') ? '100%' : `${height - SPACING}px`,
+            height: (position === 'far-right') ? 'auto' : `${height - SPACING}px`,
             whiteSpace: 'nowrap',
             width: (position === 'far-bottom') ? 'auto' : `${style.width}px`,
           }}
           className={classNames(
-            ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${currentIndex}`, this.currentCanvasClass(currentGroupings.map(canvas => canvas.index))]),
+            ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${index}`, this.currentCanvasClass(currentGroupings.map(canvas => canvas.index))]),
             classes.canvas,
             {
               [classes.currentCanvas]: currentGroupings
@@ -77,7 +76,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
             <CaptionedCanvasThumbnail
               key={canvas.id}
               canvas={canvas}
-              height={(position === 'far-right') ? style.height - SPACING : height - (1.5 * SPACING)}
+              height={(position === 'far-right') ? style.height - (1.5 * SPACING) : height - (1.5 * SPACING)}
             />
           ))}
         </div>
