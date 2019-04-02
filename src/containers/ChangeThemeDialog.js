@@ -23,6 +23,9 @@ const styles = theme => ({
   lightColor: {
     color: theme.palette.grey['500'],
   },
+  listitem: {
+    cursor: 'pointer',
+  },
 });
 
 

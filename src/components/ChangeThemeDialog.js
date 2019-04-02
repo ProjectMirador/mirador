@@ -25,7 +25,7 @@ export class ChangeThemeDialog extends Component {
    * Propagate theme palette type selection into the global state
    */
   handleThemeChange(theme) {
-    const { updateConfig } = this.props;
+    const { updateConfig, handleClose } = this.props;
 
     updateConfig({
       theme: {
@@ -34,6 +34,7 @@ export class ChangeThemeDialog extends Component {
         },
       },
     });
+    handleClose();
   }
 
   /** */
@@ -52,13 +53,13 @@ export class ChangeThemeDialog extends Component {
       >
         <DialogTitle id="change-the-dialog-title">{t('changeTheme')}</DialogTitle>
         <List>
-          <ListItem onClick={() => this.handleThemeChange('light')}>
+          <ListItem className={classes.listitem} onClick={() => this.handleThemeChange('light')}>
             <ListItemIcon>
               <PaletteIcon className={classes.lightColor} />
             </ListItemIcon>
             <ListItemText>{t('light')}</ListItemText>
           </ListItem>
-          <ListItem onClick={() => this.handleThemeChange('dark')}>
+          <ListItem className={classes.listitem} onClick={() => this.handleThemeChange('dark')}>
             <ListItemIcon>
               <PaletteIcon className={classes.darkColor} />
             </ListItemIcon>
