@@ -29,6 +29,9 @@ const styles = theme => ({
     width: '400px',
   },
   listItem: {
+    '&:focus': {
+      backgroundColor: theme.palette.action.focus,
+    },
     '&:hover': {
       backgroundColor: theme.palette.action.hover,
     },

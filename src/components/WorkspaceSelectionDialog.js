@@ -4,10 +4,25 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { List, ListItem, ListItemText } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { keys, chars } from '../lib/KeyHelper';
 
 /**
  */
 export class WorkspaceSelectionDialog extends Component {
+  /** */
+  constructor(props) {
+    super(props);
+    const { workspaceType } = this.props;
+    this.state = {
+      selected: workspaceType,
+    };
+
+    this.selectPreviousItem = this.selectPreviousItem.bind(this);
+    this.selectNextItem = this.selectNextItem.bind(this);
+    this.keyDownHandler = this.keyDownHandler.bind(this);
+    this.workspaceTypes = ['elastic', 'mosaic'];
+  }
+
   /**
    * Propagate workspace type selection into the global state
    */
@@ -20,6 +35,40 @@ export class WorkspaceSelectionDialog extends Component {
       },
     });
     handleClose();
+  }
+
+  /** */
+  selectPreviousItem() {
+    const { selected } = this.state;
+    const selectedIndex = this.workspaceTypes.indexOf(selected);
+    const newIndex = selectedIndex > 0 ? selectedIndex - 1 : this.workspaceTypes.length - 1;
+    this.setState({ selected: this.workspaceTypes[newIndex] });
+  }
+
+  /** */
+  selectNextItem() {
+    const { selected } = this.state;
+    const selectedIndex = this.workspaceTypes.indexOf(selected);
+    const newIndex = selectedIndex + 1 < this.workspaceTypes.length ? selectedIndex + 1 : 0;
+    this.setState({ selected: this.workspaceTypes[newIndex] });
+  }
+
+  /** */
+  keyDownHandler(event) {
+    if (event.key === keys.up || event.which === chars.up) {
+      event.preventDefault();
+      return this.selectPreviousItem(event.target);
+    }
+    if (event.key === keys.down || event.which === chars.down) {
+      event.preventDefault();
+      return this.selectNextItem(event.target);
+    }
+    if (event.key === keys.enter || event.which === chars.enter) {
+      event.preventDefault();
+      const { selected } = this.state;
+      this.handleworkspaceTypeChange(selected);
+    }
+    return null;
   }
 
   /**
@@ -36,6 +85,7 @@ export class WorkspaceSelectionDialog extends Component {
         container={container}
         id="workspace-settings"
         onClose={handleClose}
+        onKeyDown={event => this.keyDownHandler(event)}
         open={open}
       >
         <DialogTitle id="workspace-selection-dialog-title">{t('workspaceSelectionTitle')}</DialogTitle>
@@ -44,20 +94,30 @@ export class WorkspaceSelectionDialog extends Component {
           <List>
             <ListItem
               className={classes.listItem}
+              key="elastic"
               onClick={() => this.handleworkspaceTypeChange('elastic')}
+              // eslint-disable-next-line react/destructuring-assignment
+              selected={this.state.selected === 'elastic'}
             >
               <img src="/src/images/elastic.jpg" alt={t('elastic')} />
               <ListItemText
+                primaryTypographyProps={{ variant: 'h3' }}
+                secondaryTypographyProps={{ variant: 'body1' }}
                 primary={t('elastic')}
                 secondary={t('elasticDescription')}
               />
             </ListItem>
             <ListItem
               className={classes.listItem}
+              key="mosaic"
               onClick={() => this.handleworkspaceTypeChange('mosaic')}
+              // eslint-disable-next-line react/destructuring-assignment
+              selected={this.state.selected === 'mosaic'}
             >
               <img src="/src/images/mosaic.jpg" alt={t('mosaic')} />
               <ListItemText
+                primaryTypographyProps={{ variant: 'h3' }}
+                secondaryTypographyProps={{ variant: 'body1' }}
                 primary={t('mosaic')}
                 secondary={t('mosaicDescription')}
               />
@@ -77,6 +137,7 @@ WorkspaceSelectionDialog.propTypes = {
   open: PropTypes.bool,
   t: PropTypes.func,
   updateConfig: PropTypes.func.isRequired,
+  workspaceType: PropTypes.string.isRequired,
 };
 
 WorkspaceSelectionDialog.defaultProps = {
