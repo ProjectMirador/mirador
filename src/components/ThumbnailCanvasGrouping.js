@@ -15,8 +15,8 @@ export class ThumbnailCanvasGrouping extends PureComponent {
 
   /** */
   setCanvas(e) {
-    const { setCanvas } = this.props;
-    setCanvas(e.currentTarget.dataset.windowid, parseInt(e.currentTarget.dataset.canvasIndex, 10));
+    const { setCanvas, window } = this.props;
+    setCanvas(window.id, parseInt(e.currentTarget.dataset.canvasIndex, 10));
   }
 
   /**
@@ -24,8 +24,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
    * a useful class.
    */
   currentCanvasClass(canvasIndices) {
-    const { data } = this.props;
-    const { window } = data;
+    const { window } = this.props;
     if (canvasIndices.includes(window.canvasIndex)) return 'current-canvas';
     return '';
   }
@@ -33,10 +32,10 @@ export class ThumbnailCanvasGrouping extends PureComponent {
   /** */
   render() {
     const {
-      index, style, data, classes,
+      index, style, data, classes, window,
     } = this.props;
     const {
-      canvasGroupings, window, position, height,
+      canvasGroupings, position, height,
     } = data;
     const currentIndex = index;
     const currentGroupings = canvasGroupings.groupings()[currentIndex];
@@ -55,7 +54,6 @@ export class ThumbnailCanvasGrouping extends PureComponent {
       >
         <div
           role="button"
-          data-windowid={window.id}
           data-canvas-index={currentGroupings[0].index}
           onKeyUp={this.setCanvas}
           onClick={this.setCanvas}
@@ -94,4 +92,5 @@ ThumbnailCanvasGrouping.propTypes = {
   index: PropTypes.number.isRequired,
   setCanvas: PropTypes.func.isRequired,
   style: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };

@@ -138,7 +138,7 @@ export class ThumbnailNavigation extends Component {
                 config,
                 height: 150 - this.spacing - this.scrollbarSize,
                 position,
-                window,
+                windowId: window.id,
               }}
               ref={this.gridRef}
             >

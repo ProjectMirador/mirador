@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
+import { getWindow } from '../state/selectors';
 import { ThumbnailCanvasGrouping } from '../components/ThumbnailCanvasGrouping';
 
 /**
@@ -14,6 +15,15 @@ import { ThumbnailCanvasGrouping } from '../components/ThumbnailCanvasGrouping';
 const mapDispatchToProps = {
   setCanvas: actions.setCanvas,
 };
+
+/**
+ * mapStateToProps - used to hook up state to props
+ * @memberof ThumbnailCanvasGrouping
+ * @private
+ */
+const mapStateToProps = (state, { data }) => ({
+  window: getWindow(state, { windowId: data.windowId }),
+});
 
 /**
  * Styles for withStyles HOC
@@ -35,7 +45,7 @@ const styles = theme => ({
 const enhance = compose(
   withStyles(styles),
   withTranslation(),
-  connect(null, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   withPlugins('ThumnailNavigation'),
 );
 
