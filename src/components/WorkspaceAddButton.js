@@ -8,13 +8,28 @@ import CloseIcon from '@material-ui/icons/CloseSharp';
 /**
  */
 export class WorkspaceAddButton extends Component {
+  /** */
+  constructor(props) {
+    super(props);
+
+    this.setWorkspaceAddVisibility = this.setWorkspaceAddVisibility.bind(this);
+  }
+
+  /**
+   * @private
+   */
+  setWorkspaceAddVisibility() {
+    const { isWorkspaceAddVisible, setWorkspaceAddVisibility } = this.props;
+    setWorkspaceAddVisibility(!isWorkspaceAddVisible);
+  }
+
   /**
    * render
    * @return
    */
   render() {
     const {
-      classes, t, setWorkspaceAddVisibility, isWorkspaceAddVisible,
+      classes, t, isWorkspaceAddVisible,
     } = this.props;
     return (
       <Tooltip title={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}>
@@ -24,7 +39,7 @@ export class WorkspaceAddButton extends Component {
           id="addBtn"
           aria-label={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}
           className={classes.fab}
-          onClick={() => { setWorkspaceAddVisibility(!isWorkspaceAddVisible); }}
+          onClick={this.setWorkspaceAddVisibility}
         >
           {
             isWorkspaceAddVisible

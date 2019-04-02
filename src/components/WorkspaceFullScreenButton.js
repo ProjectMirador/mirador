@@ -6,19 +6,31 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
 /**
  */
 export class WorkspaceFullScreenButton extends Component {
+  /**  */
+  constructor(props) {
+    super(props);
+    this.setWorkspaceFullscreen = this.setWorkspaceFullscreen.bind(this);
+  }
+
+  /** */
+  setWorkspaceFullscreen() {
+    const { setWorkspaceFullscreen, isFullscreenEnabled } = this.props;
+    setWorkspaceFullscreen(!isFullscreenEnabled);
+  }
+
   /**
    * render
    * @return
    */
   render() {
     const {
-      classes, isFullscreenEnabled, setWorkspaceFullscreen, t,
+      classes, isFullscreenEnabled, t,
     } = this.props;
     return (
       <MiradorMenuButton
         aria-label={isFullscreenEnabled ? t('exitFullScreen') : t('workspaceFullScreen')}
         className={classes.ctrlBtn}
-        onClick={() => setWorkspaceFullscreen(!isFullscreenEnabled)}
+        onClick={this.setWorkspaceFullscreen}
       >
         {isFullscreenEnabled ? <FullscreenExitIcon /> : <FullscreenIcon />}
       </MiradorMenuButton>

@@ -9,6 +9,18 @@ import ns from '../config/css-ns';
 /** */
 export class CompanionArea extends Component {
   /** */
+  constructor(props) {
+    super(props);
+    this.setCompanionAreaOpen = this.setCompanionAreaOpen.bind(this);
+  }
+
+  /** */
+  setCompanionAreaOpen() {
+    const { setCompanionAreaOpen, windowId, companionAreaOpen } = this.props;
+    setCompanionAreaOpen(windowId, !companionAreaOpen);
+  }
+
+  /** */
   areaLayoutClass() {
     const {
       classes, position,
@@ -32,7 +44,7 @@ export class CompanionArea extends Component {
             <MiradorMenuButton
               aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
               className={classes.toggle}
-              onClick={() => { setCompanionAreaOpen(windowId, !companionAreaOpen); }}
+              onClick={this.setCompanionAreaOpen}
               TooltipProps={{
                 placement: 'right',
                 style: {

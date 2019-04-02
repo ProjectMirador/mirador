@@ -11,12 +11,24 @@ import PropTypes from 'prop-types';
  * of the application
 */
 export class LanguageSettings extends Component {
+  /** */
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  /** */
+  handleClick(e) {
+    const { handleClick } = this.props;
+    handleClick(e.currentTarget.dataset.locale);
+  }
+
   /**
    * Returns the rendered component
   */
   render() {
     const {
-      handleClick, languages,
+      languages,
     } = this.props;
 
     return (
@@ -26,7 +38,8 @@ export class LanguageSettings extends Component {
             <MenuItem
               button={!language.current}
               key={language.locale}
-              onClick={() => { handleClick(language.locale); }}
+              data-locale={language.locale}
+              onClick={this.handleClick}
             >
               {
                 language.current

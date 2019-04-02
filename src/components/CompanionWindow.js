@@ -14,14 +14,26 @@ import ns from '../config/css-ns';
  * CompanionWindow
  */
 export class CompanionWindow extends Component {
+  /** */
+  constructor(props) {
+    super(props);
+    this.updateCompanionWindow = this.updateCompanionWindow.bind(this);
+  }
+
+  /** */
+  updateCompanionWindow(e) {
+    const { id, updateCompanionWindow, windowId } = this.props;
+    updateCompanionWindow(windowId, id, e.currentTarget.dataset.position);
+  }
+
   /**
    * render
    * @return
    */
   render() {
     const {
-      classes, paperClassName, id, onCloseClick, updateCompanionWindow, isDisplayed,
-      position, t, windowId, title, children, titleControls,
+      classes, paperClassName, onCloseClick, updateCompanionWindow, isDisplayed,
+      position, t, title, children, titleControls,
     } = this.props;
 
     return (
@@ -52,7 +64,8 @@ export class CompanionWindow extends Component {
                 && (
                   <MiradorMenuButton
                     aria-label={t('openInCompanionWindow')}
-                    onClick={() => { updateCompanionWindow(windowId, id, { position: 'right' }); }}
+                    data-position="right"
+                    onClick={this.updateCompanionWindow}
                   >
                     <OpenInNewIcon />
                   </MiradorMenuButton>
@@ -63,8 +76,9 @@ export class CompanionWindow extends Component {
                     updateCompanionWindow && (
                       <MiradorMenuButton
                         aria-label={position === 'bottom' ? t('moveCompanionWindowToRight') : t('moveCompanionWindowToBottom')}
+                        data-position={position === 'bottom' ? 'right' : 'bottom'}
                         wrapperClassName={classes.positionButton}
-                        onClick={() => { updateCompanionWindow(windowId, id, { position: position === 'bottom' ? 'right' : 'bottom' }); }}
+                        onClick={this.updateCompanionWindow}
                       >
                         {position === 'bottom' ? <ThumbnailNavigationRightIcon /> : <ThumbnailNavigationBottomIcon />}
                       </MiradorMenuButton>

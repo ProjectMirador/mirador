@@ -28,13 +28,22 @@ export class WorkspaceAdd extends React.Component {
     this.state = { addResourcesOpen: false };
 
     this.setAddResourcesVisibility = this.setAddResourcesVisibility.bind(this);
+    this.setWorkspaceAddVisibility = this.setWorkspaceAddVisibility.bind(this);
   }
 
   /**
    * @private
    */
-  setAddResourcesVisibility(bool) {
-    this.setState({ addResourcesOpen: bool });
+  setAddResourcesVisibility(e) {
+    this.setState({ addResourcesOpen: e.currentTarget.dataset.resourceVisiblity });
+  }
+
+  /**
+   * @private
+   */
+  setWorkspaceAddVisibility(e) {
+    const { setWorkspaceAddVisibility } = this.props;
+    setWorkspaceAddVisibility(e.currentTarget.dataset.workspaceVisibility);
   }
 
   /**
@@ -42,7 +51,7 @@ export class WorkspaceAdd extends React.Component {
    */
   render() {
     const {
-      manifests, setWorkspaceAddVisibility, t, classes,
+      manifests, t, classes,
     } = this.props;
     const { addResourcesOpen } = this.state;
 
@@ -50,7 +59,8 @@ export class WorkspaceAdd extends React.Component {
       <ManifestListItem
         key={manifest}
         manifestId={manifest}
-        handleClose={() => setWorkspaceAddVisibility(false)}
+        data-workspace-visibility={false}
+        handleClose={this.setWorkspaceAddVisibility}
       />
     ));
 
@@ -68,7 +78,8 @@ export class WorkspaceAdd extends React.Component {
           disabled={addResourcesOpen}
           className={classNames(classes.fab, ns('add-resource-button'))}
           color="secondary"
-          onClick={() => (this.setAddResourcesVisibility(true))}
+          data-resource-visibility
+          onClick={this.setAddResourcesVisibility}
         >
           <AddIcon />
           {t('addResource')}
@@ -91,7 +102,7 @@ export class WorkspaceAdd extends React.Component {
           <Paper
             className={classes.form}
           >
-            <AppBar position="absolute" color="secondary" onClick={() => (this.setAddResourcesVisibility(false))}>
+            <AppBar position="absolute" color="secondary" onClick={this.setAddResourcesVisibility} data-resource-visibility={false}>
               <Toolbar variant="dense">
                 <MiradorMenuButton
                   aria-label={t('closeAddResourceMenu')}
@@ -106,8 +117,9 @@ export class WorkspaceAdd extends React.Component {
             </AppBar>
             <ManifestForm
               addResourcesOpen={addResourcesOpen}
-              onSubmit={() => (this.setAddResourcesVisibility(false))}
-              onCancel={() => (this.setAddResourcesVisibility(false))}
+              data-resource-visibility={false}
+              onSubmit={this.setAddResourcesVisibility}
+              onCancel={this.setAddResourcesVisibility}
             />
           </Paper>
         </Drawer>

@@ -10,12 +10,31 @@ import Typography from '@material-ui/core/Typography';
  * message to the user about a problem loading a manifest
 */
 export class ManifestListItemError extends Component {
+  /** */
+  constructor(props) {
+    super(props);
+    this.onDismissClick = this.onDismissClick.bind(this);
+    this.onTryAgainClick = this.onTryAgainClick.bind(this);
+  }
+
+  /** */
+  onDismissClick() {
+    const { onDismissClick, manifestId } = this.props;
+    onDismissClick(manifestId);
+  }
+
+  /** */
+  onTryAgainClick() {
+    const { onTryAgainClick, manifestId } = this.props;
+    onTryAgainClick(manifestId);
+  }
+
   /**
    * Returns the rendered component
   */
   render() {
     const {
-      classes, manifestId, onDismissClick, onTryAgainClick, t,
+      classes, manifestId, t,
     } = this.props;
 
     return (
@@ -37,10 +56,10 @@ export class ManifestListItemError extends Component {
         <Grid container>
           <Grid container item xs={12} sm={6} justify="flex-end">
             <Grid item>
-              <Button onClick={() => { onDismissClick(manifestId); }}>
+              <Button onClick={this.onDismissClick}>
                 {t('dismiss')}
               </Button>
-              <Button onClick={() => { onTryAgainClick(manifestId); }}>
+              <Button onClick={this.onTryAgainClick}>
                 {t('tryAgain')}
               </Button>
             </Grid>

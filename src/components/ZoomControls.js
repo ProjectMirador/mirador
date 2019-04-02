@@ -16,6 +16,7 @@ export class ZoomControls extends Component {
 
     this.handleZoomInClick = this.handleZoomInClick.bind(this);
     this.handleZoomOutClick = this.handleZoomOutClick.bind(this);
+    this.zoomToWorld = this.zoomToWorld.bind(this);
   }
 
   /**
@@ -44,13 +45,19 @@ export class ZoomControls extends Component {
     });
   }
 
+  /** */
+  zoomToWorld() {
+    const { zoomToWorld } = this.props;
+    zoomToWorld(false);
+  }
+
   /**
    * render
    * @return
    */
   render() {
     const {
-      showZoomControls, classes, t, zoomToWorld,
+      showZoomControls, classes, t,
     } = this.props;
 
     if (!showZoomControls) {
@@ -67,7 +74,7 @@ export class ZoomControls extends Component {
         <MiradorMenuButton aria-label={t('zoomOut')} onClick={this.handleZoomOutClick}>
           <RemoveCircleIcon />
         </MiradorMenuButton>
-        <MiradorMenuButton aria-label={t('zoomReset')} onClick={() => zoomToWorld(false)}>
+        <MiradorMenuButton aria-label={t('zoomReset')} onClick={this.zoomToWorld}>
           <RestoreZoomIcon />
         </MiradorMenuButton>
       </div>

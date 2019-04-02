@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
@@ -12,7 +12,7 @@ import Window from '../containers/Window';
  * @memberof Workspace
  * @private
  */
-export class WorkspaceMosaic extends React.Component {
+export class WorkspaceMosaic extends Component {
   /**
    */
   constructor(props) {
@@ -21,6 +21,7 @@ export class WorkspaceMosaic extends React.Component {
     this.tileRenderer = this.tileRenderer.bind(this);
     this.mosaicChange = this.mosaicChange.bind(this);
     this.determineWorkspaceLayout = this.determineWorkspaceLayout.bind(this);
+    this.renderPreview = this.renderPreview.bind(this);
     this.zeroStateView = <div />;
   }
 
@@ -76,11 +77,7 @@ export class WorkspaceMosaic extends React.Component {
         additionalControls={[]}
         path={path}
         windowId={window.id}
-        renderPreview={() => (
-          <div className="mosaic-preview">
-            <MosaicRenderPreview windowId={window.id} />
-          </div>
-        )}
+        renderPreview={this.renderPreview}
       >
         <Window
           key={window.id}
@@ -97,6 +94,17 @@ export class WorkspaceMosaic extends React.Component {
     const { updateWorkspaceMosaicLayout } = this.props;
     updateWorkspaceMosaicLayout(newLayout);
   }
+
+  /* eslint-disable class-methods-use-this */
+  /** */
+  renderPreview(props) {
+    return (
+      <div className="mosaic-preview">
+        <MosaicRenderPreview windowId={props.windowId} />
+      </div>
+    );
+  }
+  /* eslint-enable class-methods-use-this */
 
   /**
    */
