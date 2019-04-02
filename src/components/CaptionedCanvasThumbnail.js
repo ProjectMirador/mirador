@@ -12,7 +12,6 @@ export class CaptionedCanvasThumbnail extends Component {
   render() {
     const { canvas, classes, height } = this.props;
     const manifestoCanvas = new ManifestoCanvas(canvas);
-    console.log(height);
     return (
       <div
         key={canvas.id}
@@ -36,13 +35,11 @@ export class CaptionedCanvasThumbnail extends Component {
           className={classNames(ns('canvas-thumb-label'), classes.canvasThumbLabel)}
           style={{
             width: '100%',
-            // width: `${Math.floor(height * manifestoCanvas.aspectRatio) - 8}px`,
           }}
         >
           <div
             style={{
               margin: '4px',
-              padding: '4px',
             }}
           >
             <Typography

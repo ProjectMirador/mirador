@@ -1,12 +1,24 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { CaptionedCanvasThumbnail } from './CaptionedCanvasThumbnail';
+import CaptionedCanvasThumbnail from '../containers/CaptionedCanvasThumbnail';
 import ns from '../config/css-ns';
 
 
 /** */
 export class ThumbnailCanvasGrouping extends PureComponent {
+  /** */
+  constructor(props) {
+    super(props);
+    this.setCanvas = this.setCanvas.bind(this);
+  }
+
+  /** */
+  setCanvas(e) {
+    const { setCanvas } = this.props;
+    setCanvas(e.currentTarget.dataset.windowid, parseInt(e.currentTarget.dataset.canvasIndex, 10));
+  }
+
   /**
    * Determines whether the current index is the rendered canvas, providing
    * a useful class.
@@ -21,7 +33,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
   /** */
   render() {
     const {
-      index, style, data, classes, setCanvas,
+      index, style, data, classes,
     } = this.props;
     const {
       canvasGroupings, window, position, height,
@@ -43,12 +55,14 @@ export class ThumbnailCanvasGrouping extends PureComponent {
       >
         <div
           role="button"
-          onKeyUp={() => setCanvas(window.id, currentGroupings[0].index)}
-          onClick={() => setCanvas(window.id, currentGroupings[0].index)}
+          data-windowid={window.id}
+          data-canvas-index={currentGroupings[0].index}
+          onKeyUp={this.setCanvas}
+          onClick={this.setCanvas}
           tabIndex={-1}
           style={{
             display: 'inline-block',
-            height: (position === 'far-right') ? 'auto' : `${height - SPACING}px`,
+            height: (position === 'far-right') ? '100%' : `${height - SPACING}px`,
             whiteSpace: 'nowrap',
             width: (position === 'far-bottom') ? 'auto' : `${style.width}px`,
           }}
@@ -65,7 +79,6 @@ export class ThumbnailCanvasGrouping extends PureComponent {
             <CaptionedCanvasThumbnail
               key={canvas.id}
               canvas={canvas}
-              classes={classes}
               height={(position === 'far-right') ? style.height - SPACING : height - (1.5 * SPACING)}
             />
           ))}

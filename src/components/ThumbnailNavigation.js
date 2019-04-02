@@ -46,7 +46,6 @@ export class ThumbnailNavigation extends Component {
         const calc = Math.floor(
           this.calculatingWidth(canvases.length) * bounds[3] / bounds[2],
         );
-        // console.log(calc);
         return calc + this.spacing;
       }
       // Default case bottom
@@ -55,7 +54,6 @@ export class ThumbnailNavigation extends Component {
           (config.thumbnailNavigation.height - this.scrollbarSize - this.spacing - 4)
            * bounds[2] / bounds[3],
         );
-        console.log(calc, bounds[2], bounds[3]);
         return calc;
       }
     }

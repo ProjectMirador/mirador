@@ -28,19 +28,7 @@ const styles = theme => ({
     color: theme.palette.common.white,
     cursor: 'pointer',
   },
-  canvasThumbLabel: {
-    background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-    bottom: '5px',
-    left: '0px',
-    position: 'absolute',
-  },
   currentCanvas: {
-  },
-  root: {
-    background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-  },
-  title: {
-    color: '#ffffff',
   },
 });
 
