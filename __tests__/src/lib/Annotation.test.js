@@ -22,5 +22,11 @@ describe('Annotation', () => {
         { resources: [{ foo: 'bar' }] },
       ).resources.forEach(resource => expect(resource).toBeInstanceOf(AnnotationResource));
     });
+
+    it('handles resources that are just a single object instead of an array of objects', () => {
+      new Annotation(
+        { resources: { foo: 'bar' } },
+      ).resources.forEach(resource => expect(resource).toBeInstanceOf(AnnotationResource));
+    });
   });
 });
