@@ -33,7 +33,7 @@ export class WorkspaceSelectionDialog extends Component {
    */
   handleworkspaceTypeChange(workspaceType) {
     const { handleClose, updateConfig } = this.props;
-
+    this.setState({ selected: workspaceType });
     updateConfig({
       workspace: {
         type: workspaceType,
@@ -60,6 +60,7 @@ export class WorkspaceSelectionDialog extends Component {
 
   /** */
   keyDownHandler(event) {
+    const { handleClose } = this.props;
     if (event.key === keys.up || event.which === chars.up) {
       event.preventDefault();
       return this.selectPreviousItem(event.target);
@@ -73,7 +74,11 @@ export class WorkspaceSelectionDialog extends Component {
       const { selected } = this.state;
       this.handleworkspaceTypeChange(selected);
     }
-    return null;
+    if (event.key === keys.esc || event.which === chars.esc) {
+      event.preventDefault();
+      handleClose();
+    }
+    return event;
   }
 
   /**
@@ -82,14 +87,13 @@ export class WorkspaceSelectionDialog extends Component {
    */
   render() {
     const {
-      classes, container, handleClose, open, children, t,
+      classes, container, open, children, t,
     } = this.props;
     return (
       <Dialog
         aria-labelledby="workspace-selection-dialog-title"
         container={container}
         id="workspace-settings"
-        onClose={handleClose}
         onKeyDown={event => this.keyDownHandler(event)}
         open={open}
       >
@@ -109,7 +113,7 @@ export class WorkspaceSelectionDialog extends Component {
               <img src="/src/images/elastic.jpg" alt={t('elastic')} />
               <ListItemText
                 primaryTypographyProps={{ variant: 'h3' }}
-                secondaryTypographyProps={{ variant: 'body1' }}
+                secondaryTypographyProps={{ color: 'default', variant: 'body1' }}
                 primary={t('elastic')}
                 secondary={t('elasticDescription')}
               />
@@ -124,7 +128,7 @@ export class WorkspaceSelectionDialog extends Component {
               <img src="/src/images/mosaic.jpg" alt={t('mosaic')} />
               <ListItemText
                 primaryTypographyProps={{ variant: 'h3' }}
-                secondaryTypographyProps={{ variant: 'body1' }}
+                secondaryTypographyProps={{ color: 'default', variant: 'body1' }}
                 primary={t('mosaic')}
                 secondary={t('mosaicDescription')}
               />
