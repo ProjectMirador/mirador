@@ -63,9 +63,20 @@ export class ThumbnailNavigation extends Component {
   calculatingWidth(canvasesLength) {
     const { config } = this.props;
     if (canvasesLength === 1) {
-      return config.thumbnailNavigation.width / 2;
+      return config.thumbnailNavigation.width;
     }
-    return config.thumbnailNavigation.width;
+    return config.thumbnailNavigation.width * 2;
+  }
+
+  /** */
+  rightWidth() {
+    const { window, config } = this.props;
+    switch (window.view) {
+      case 'book':
+        return (config.thumbnailNavigation.width * 2);
+      default:
+        return config.thumbnailNavigation.width;
+    }
   }
 
   /** */
@@ -76,7 +87,7 @@ export class ThumbnailNavigation extends Component {
         return {
           height: '100%',
           minHeight: 0,
-          width: `${config.thumbnailNavigation.width + this.scrollbarSize + this.spacing}px`,
+          width: `${this.rightWidth() + this.scrollbarSize + this.spacing}px`,
         };
       // Default case bottom
       default:
@@ -136,7 +147,7 @@ export class ThumbnailNavigation extends Component {
               itemData={{
                 canvasGroupings,
                 config,
-                height: 150 - this.spacing - this.scrollbarSize,
+                height: config.thumbnailNavigation.height - this.spacing - this.scrollbarSize,
                 position,
                 windowId: window.id,
               }}

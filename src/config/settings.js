@@ -142,8 +142,8 @@ export default {
   windows: [], // Array of windows to be open when mirador initializes (each object should at least provide a loadedManifest key with the value of the IIIF presentation manifest to load)
   thumbnailNavigation: {
     defaultPosition: 'off', // Which position for the thumbnail navigation to be be displayed. Other possible values are "far-bottom" or "far-right"
-    height: 150, // height of entire ThumbnailNavigation area when position is "far-bottom"
-    width: 200, // width of entire ThumbnailNavigation area when position is "far-right"
+    height: 130, // height of entire ThumbnailNavigation area when position is "far-bottom"
+    width: 100, // width of one canvas (doubled for book view) in ThumbnailNavigation area when position is "far-right"
   },
   workspace: {
     type: 'mosaic', // Which workspace type to load by default. Other possible values are "elastic"
