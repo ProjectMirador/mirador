@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { Utils } from 'manifesto.js';
 import CanvasGroupings from '../../lib/CanvasGroupings';
 import { getManifestoInstance } from './manifests';
 
@@ -86,3 +87,48 @@ export const getCanvasDescription = createSelector(
   [getCanvas],
   canvas => canvas && canvas.getProperty('description'),
 );
+
+const authServiceProfiles = {
+  clickthrough: true, external: true, kiosk: true, login: true,
+};
+/**
+ *
+ */
+export function selectNextAuthService({ auth }, resource, filter = authServiceProfiles) {
+  const externalService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/external');
+
+  if (externalService) {
+    if (!auth[externalService.id]) {
+      return filter.external && externalService;
+    }
+
+    if (auth[externalService.id].isFetching || auth[externalService.id].ok) return null;
+  }
+
+  const kioskService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/kiosk');
+  if (kioskService) {
+    if (!auth[kioskService.id]) {
+      return filter.kiosk && kioskService;
+    }
+
+    if (auth[kioskService.id].isFetching || auth[kioskService.id].ok) return null;
+  }
+
+  const clickthroughService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/clickthrough');
+  if (clickthroughService) {
+    if (!auth[clickthroughService.id]) {
+      return filter.clickthrough && clickthroughService;
+    }
+
+    if (auth[clickthroughService.id].isFetching || auth[clickthroughService.id].ok) return null;
+  }
+
+  const loginService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/login');
+  if (loginService) {
+    if (!auth[loginService.id]) {
+      return filter.login && loginService;
+    }
+  }
+
+  return null;
+}
