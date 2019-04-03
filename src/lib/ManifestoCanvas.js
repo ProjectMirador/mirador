@@ -32,9 +32,8 @@ export default class ManifestoCanvas {
       .map(otherContent => otherContent['@id']);
   }
 
-  /**
-   */
-  get imageInformationUri() {
+  /** */
+  get imageResource() {
     if (!(
       this.canvas.getImages()[0]
       && this.canvas.getImages()[0].getResource()
@@ -44,8 +43,28 @@ export default class ManifestoCanvas {
       return undefined;
     }
 
+    return this.canvas.getImages()[0].getResource();
+  }
+
+  /**
+   */
+  get imageId() {
+    if (!(this.imageResource)) {
+      return undefined;
+    }
+
+    return this.imageResource.getServices()[0].id;
+  }
+
+  /**
+   */
+  get imageInformationUri() {
+    if (!(this.imageId)) {
+      return undefined;
+    }
+
     return `${
-      this.canvas.getImages()[0].getResource().getServices()[0].id.replace(/\/$/, '')
+      this.imageId.replace(/\/$/, '')
     }/info.json`;
   }
 
