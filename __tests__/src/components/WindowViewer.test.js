@@ -48,10 +48,10 @@ describe('WindowViewer', () => {
         wrapper = createWrapper(
           {
             infoResponses: {
-              'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005/info.json': {
+              'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005': {
                 isFetching: false,
               },
-              'https://stacks.stanford.edu/image/iiif/rz176rt6531%2FPC0170_s3_Tree_Calendar_20081101_152516_0410/info.json': {
+              'https://stacks.stanford.edu/image/iiif/rz176rt6531%2FPC0170_s3_Tree_Calendar_20081101_152516_0410': {
                 isFetching: true,
               },
             },
@@ -70,7 +70,7 @@ describe('WindowViewer', () => {
               foo: {
                 isFetching: false,
               },
-              'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005/info.json': {
+              'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005': {
                 isFetching: false,
               },
             },
@@ -86,10 +86,10 @@ describe('WindowViewer', () => {
         wrapper = createWrapper(
           {
             infoResponses: {
-              'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005/info.json': {
+              'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005': {
                 isFetching: false,
               },
-              'https://stacks.stanford.edu/image/iiif/rz176rt6531%2FPC0170_s3_Tree_Calendar_20081101_152516_0410/info.json': {
+              'https://stacks.stanford.edu/image/iiif/rz176rt6531%2FPC0170_s3_Tree_Calendar_20081101_152516_0410': {
                 error: 'yikes!',
                 isFetching: false,
               },

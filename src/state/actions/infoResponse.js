@@ -51,11 +51,14 @@ export function receiveInfoResponseFailure(infoId, error) {
  * @param  {String} infoId
  * @memberof ActionCreators
  */
-export function fetchInfoResponse(infoId) {
+export function fetchInfoResponse({ imageId, imageResource }) {
   return ((dispatch) => {
+    const infoId = imageId || `${
+      imageResource.getServices()[0].id.replace(/\/$/, '')
+    }`;
     dispatch(requestInfoResponse(infoId));
 
-    return fetch(infoId)
+    return fetch(`${infoId}/info.json`)
       .then(response => response.json().then(json => ({ json, ok: response.ok })))
       .then(({ json, ok }) => dispatch(receiveInfoResponse(infoId, json, ok)))
       .catch(error => dispatch(receiveInfoResponseFailure(infoId, error)));
