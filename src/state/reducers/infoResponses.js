@@ -1,3 +1,4 @@
+import normalizeUrl from 'normalize-url';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -17,6 +18,7 @@ export const infoResponsesReducer = (state = {}, action) => {
       return {
         ...state,
         [action.infoId]: {
+          degraded: !action.ok || !(normalizeUrl(action.infoId) === normalizeUrl(action.infoJson['@id'])),
           id: action.infoId,
           isFetching: false,
           json: action.infoJson,

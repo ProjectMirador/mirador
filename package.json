@@ -42,6 +42,7 @@
     "manifesto.js": "^3.0.9",
     "node-fetch": "^2.3.0",
     "node-sass": "^4.9.2",
+    "normalize-url": "^4.2.0",
     "openseadragon": "^2.4.0",
     "prop-types": "^15.6.2",
     "react-full-screen": "^0.2.4",
