@@ -18,17 +18,20 @@ export class Window extends Component {
    * additional functionality based on workspace type
    */
   wrappedTopBar() {
-    const { manifest, window, workspaceType } = this.props;
+    const {
+      manifest, window, workspaceType, windowDraggable,
+    } = this.props;
     const { mosaicWindowActions } = this.context;
     const topBar = (
       <div>
         <WindowTopBar
           windowId={window.id}
           manifest={manifest}
+          windowDraggable={windowDraggable}
         />
       </div>
     );
-    if (workspaceType === 'mosaic' && window.maximized === false) {
+    if (workspaceType === 'mosaic' && windowDraggable) {
       return mosaicWindowActions.connectDragSource(
         topBar,
       );
@@ -98,6 +101,7 @@ Window.propTypes = {
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func.isRequired,
   window: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  windowDraggable: PropTypes.bool,
   workspaceType: PropTypes.string,
 };
 
@@ -107,5 +111,6 @@ Window.defaultProps = {
   label: null,
   manifest: null,
   window: null,
+  windowDraggable: null,
   workspaceType: null,
 };
