@@ -6,8 +6,10 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Typography,
+  DialogContent,
 } from '@material-ui/core';
-import PaletteIcon from '@material-ui/icons/Palette';
+import PaletteIcon from '@material-ui/icons/PaletteSharp';
 import PropTypes from 'prop-types';
 
 /**
@@ -44,6 +46,7 @@ export class ChangeThemeDialog extends Component {
       handleClose,
       open,
       t,
+      theme,
     } = this.props;
 
     return (
@@ -51,21 +54,27 @@ export class ChangeThemeDialog extends Component {
         onClose={handleClose}
         open={open}
       >
-        <DialogTitle id="change-the-dialog-title">{t('changeTheme')}</DialogTitle>
-        <List>
-          <ListItem className={classes.listitem} onClick={() => this.handleThemeChange('light')}>
-            <ListItemIcon>
-              <PaletteIcon className={classes.lightColor} />
-            </ListItemIcon>
-            <ListItemText>{t('light')}</ListItemText>
-          </ListItem>
-          <ListItem className={classes.listitem} onClick={() => this.handleThemeChange('dark')}>
-            <ListItemIcon>
-              <PaletteIcon className={classes.darkColor} />
-            </ListItemIcon>
-            <ListItemText>{t('dark')}</ListItemText>
-          </ListItem>
-        </List>
+        <DialogTitle id="change-the-dialog-title" disableTypography>
+          <Typography variant="h2">
+            {t('changeTheme')}
+          </Typography>
+        </DialogTitle>
+        <DialogContent className={classes.dialogContent}>
+          <List>
+            <ListItem className={classes.listitem} onClick={() => this.handleThemeChange('light')} selected={theme === 'light'}>
+              <ListItemIcon>
+                <PaletteIcon className={classes.lightColor} />
+              </ListItemIcon>
+              <ListItemText>{t('light')}</ListItemText>
+            </ListItem>
+            <ListItem className={classes.listitem} onClick={() => this.handleThemeChange('dark')} selected={theme === 'dark'}>
+              <ListItemIcon>
+                <PaletteIcon className={classes.darkColor} />
+              </ListItemIcon>
+              <ListItemText>{t('dark')}</ListItemText>
+            </ListItem>
+          </List>
+        </DialogContent>
       </Dialog>
     );
   }

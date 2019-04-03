@@ -15,15 +15,33 @@ const mapDispatchToProps = {
   updateConfig: actions.updateConfig,
 };
 
+/**
+ * mapStateToProps - to hook up connect
+ * @memberof ChangeThemeDialog
+ * @private
+ */
+const mapStateToProps = state => ({
+  theme: state.config.theme.palette.type,
+});
+
 /** */
 const styles = theme => ({
   darkColor: {
-    color: theme.palette.grey['900'],
+    color: '#000000',
+  },
+  dialogContent: {
+    padding: 0,
   },
   lightColor: {
-    color: theme.palette.grey['500'],
+    color: '#BDBDBD',
   },
   listitem: {
+    '&:focus': {
+      backgroundColor: theme.palette.action.focus,
+    },
+    '&:hover': {
+      backgroundColor: theme.palette.action.hover,
+    },
     cursor: 'pointer',
   },
 });
@@ -32,7 +50,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
-  connect(undefined, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   withPlugins('ChangeThemeDialog'),
 );
 
