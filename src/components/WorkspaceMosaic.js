@@ -66,7 +66,7 @@ export class WorkspaceMosaic extends React.Component {
    * Render a tile (Window) in the Mosaic.
    */
   tileRenderer(id, path) {
-    const { windows } = this.props;
+    const { windows, workspace } = this.props;
     const window = windows[id];
     if (!window) return null;
 
@@ -83,7 +83,7 @@ export class WorkspaceMosaic extends React.Component {
         )}
       >
         <Window
-          key={window.id}
+          key={`${window.id}-${workspace.id}`}
           window={window}
         />
       </MosaicWindow>

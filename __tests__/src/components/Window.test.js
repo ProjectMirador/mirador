@@ -11,6 +11,7 @@ function createWrapper(props, context) {
       window={window}
       classes={{}}
       t={k => k}
+      fetchManifest={() => {}}
       {...props}
     />,
     { context },
@@ -22,13 +23,14 @@ describe('Window', () => {
   const window = {
     height: 400,
     id: 123,
+    manifestId: 'foo',
     maximized: false,
     width: 400,
     x: 2700,
     y: 2700,
   };
   it('should render nothing, if provided with no window data', () => {
-    wrapper = shallow(<Window t={k => k} />);
+    wrapper = createWrapper({ window: null });
     expect(wrapper.find('.mirador-window')).toHaveLength(0);
   });
   it('should render outer element', () => {
@@ -42,6 +44,11 @@ describe('Window', () => {
   it('should render <PrimaryWindow>', () => {
     wrapper = createWrapper({ window });
     expect(wrapper.find(PrimaryWindow)).toHaveLength(1);
+  });
+  it('should dispatch fetchManifest when component mounts but manifest is not preset', () => {
+    const mockFetchManifest = jest.fn();
+    wrapper = createWrapper({ fetchManifest: mockFetchManifest, window });
+    expect(mockFetchManifest).toHaveBeenCalled();
   });
   describe('when workspaceType is mosaic', () => {
     it('calls the context mosaicWindowActions connectDragSource method to make WindowTopBar draggable', () => {

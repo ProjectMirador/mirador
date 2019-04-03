@@ -30,6 +30,7 @@ const mapStateToProps = (state, { window }) => ({
  * @private
  */
 const mapDispatchToProps = (dispatch, { window }) => ({
+  fetchManifest: (...args) => dispatch(actions.fetchManifest(...args)),
   focusWindow: () => dispatch(actions.focusWindow(window.id)),
 });
 
