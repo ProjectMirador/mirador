@@ -10,6 +10,7 @@ import {
   getCompanionWindowForPosition,
   getCompanionWindowsOfWindow,
   getViewer,
+  getWindowDraggability,
 } from '../../../src/state/selectors/windows';
 
 
@@ -239,6 +240,52 @@ describe('getCompanionAreaVisibility', () => {
       const props = { position: 'right', windowId: 'abc123' };
 
       expect(getCompanionAreaVisibility(state, props)).toBe(true);
+    });
+  });
+});
+
+describe('getWindowDraggability', () => {
+  describe('in elastic mode', () => {
+    it('is always true', () => {
+      const state = {
+        config: { workspace: { type: 'elastic' } },
+        windows: {},
+      };
+      const props = {};
+
+      expect(getWindowDraggability(state, props)).toBe(true);
+    });
+  });
+
+  describe('in non-elastic mode', () => {
+    it('is false if there is only one window', () => {
+      const state = {
+        config: { workspace: { type: 'mosaic' } },
+        windows: { abc123: {} },
+      };
+      const props = { windowId: 'abc123' };
+
+      expect(getWindowDraggability(state, props)).toBe(false);
+    });
+
+    it('is false when the window is maximized', () => {
+      const state = {
+        config: { workspace: { type: 'mosaic' } },
+        windows: { abc123: { maximized: true }, abc321: { maximized: false } },
+      };
+      const props = { windowId: 'abc123' };
+
+      expect(getWindowDraggability(state, props)).toBe(false);
+    });
+
+    it('is true if there are many windows (as long as the window is not maximized)', () => {
+      const state = {
+        config: { workspace: { type: 'mosaic' } },
+        windows: { abc123: { maximized: false }, abc321: { maximized: false } },
+      };
+      const props = { windowId: 'abc123' };
+
+      expect(getWindowDraggability(state, props)).toBe(true);
     });
   });
 });

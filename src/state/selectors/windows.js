@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { getManifestTitle } from './manifests';
+import { getWorkspaceType } from './config';
 
 /**
  * Return the manifest titles for all open windows
@@ -110,5 +111,23 @@ export const getCompanionAreaVisibility = createSelector(
   (position, { companionAreaOpen, sideBarOpen }) => {
     if (position !== 'left') return true;
     return !!(companionAreaOpen && sideBarOpen);
+  },
+);
+
+/**
+ * Returns the draggability of a window
+ * @param {object} state
+ * @param {object} props
+ * @return {Boolean}
+ */
+export const getWindowDraggability = createSelector(
+  [
+    getWorkspaceType,
+    getWindow,
+    state => Object.keys(state.windows).length > 1,
+  ],
+  (workspaceType, window, manyWindows) => {
+    if (workspaceType === 'elastic') return true;
+    return manyWindows && window && window.maximized === false;
   },
 );
