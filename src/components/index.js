@@ -1,6 +1,7 @@
 export * from './App';
 export * from './CanvasThumbnail';
 export * from './CompanionWindow';
+export * from './ErrorDialog';
 export * from './LabelValueMetadata';
 export * from './LanguageSettings';
 export * from './ManifestForm';
@@ -33,6 +34,7 @@ export * from './WorkspaceControlPanel';
 export * from './WorkspaceControlPanelButtons';
 export * from './WorkspaceExport';
 export * from './WorkspaceFullScreenButton';
+export * from './WorkspaceImport';
 export * from './WorkspaceMenu';
 export * from './WorkspaceMenuButton';
 export * from './WorkspaceMosaic';
