@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import {
+  accessTokensReducer,
   authReducer,
   companionWindowsReducer,
   configReducer,
@@ -19,6 +20,7 @@ import {
  */
 export default function createRootReducer(pluginReducers) {
   return combineReducers({
+    accessTokens: accessTokensReducer,
     annotations: annotationsReducer,
     auth: authReducer,
     companionWindows: companionWindowsReducer,

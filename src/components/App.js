@@ -6,6 +6,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from '../i18n';
 import WorkspaceArea from '../containers/WorkspaceArea';
 import AuthenticationSender from '../containers/AuthenticationSender';
+import AccessTokenSender from '../containers/AccessTokenSender';
 import '../styles/index.scss';
 
 /**
@@ -61,6 +62,7 @@ export class App extends Component {
         <I18nextProvider i18n={this.i18n}>
           <MuiThemeProvider theme={createMuiTheme(theme)}>
             <AuthenticationSender />
+            <AccessTokenSender />
             <WorkspaceArea />
           </MuiThemeProvider>
         </I18nextProvider>

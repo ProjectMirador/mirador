@@ -47,6 +47,7 @@
     "prop-types": "^15.6.2",
     "react-full-screen": "^0.2.4",
     "react-i18next": "^10.5.2",
+    "react-iframe-comm": "^1.2.2",
     "react-image": "^2.0.0",
     "react-mosaic-component": "^2.1.0",
     "react-new-window": "0.0.12",

@@ -1,3 +1,4 @@
+export * from './accessTokens';
 export * from './companionWindows';
 export * from './errors';
 export * from './workspace';
