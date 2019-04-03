@@ -4,6 +4,8 @@ import {
   getSelectedCanvas,
   getSelectedCanvases,
   getCanvasLabel,
+  selectInteractiveAuthServices,
+  selectNextAuthService,
 } from '../../../src/state/selectors/canvases';
 
 describe('getSelectedCanvas', () => {
@@ -144,5 +146,105 @@ describe('getCanvasLabel', () => {
       manifestId: 'a',
     });
     expect(received).toBe('1');
+  });
+});
+
+describe('selectNextAuthService', () => {
+  const auth = {};
+  const resource = {
+    service: [
+      {
+        '@id': 'external',
+        profile: 'http://iiif.io/api/auth/1/external',
+      },
+      {
+        '@id': 'kiosk',
+        profile: 'http://iiif.io/api/auth/1/kiosk',
+      },
+      {
+        '@id': 'clickthrough',
+        profile: 'http://iiif.io/api/auth/1/clickthrough',
+      },
+      {
+        '@id': 'login',
+        profile: 'http://iiif.io/api/auth/1/login',
+      },
+    ],
+  };
+
+  const noAuthResource = {};
+
+  it('returns external first', () => {
+    expect(selectNextAuthService({ auth }, resource).id).toEqual('external');
+  });
+
+  it('returns kiosk next', () => {
+    auth.external = { isFetching: false, ok: false };
+    expect(selectNextAuthService({ auth }, resource).id).toEqual('kiosk');
+  });
+
+  it('returns clickthrough next', () => {
+    auth.external = { isFetching: false, ok: false };
+    auth.kiosk = { isFetching: false, ok: false };
+    expect(selectNextAuthService({ auth }, resource).id).toEqual('clickthrough');
+  });
+
+  it('returns login last', () => {
+    auth.external = { isFetching: false, ok: false };
+    auth.kiosk = { isFetching: false, ok: false };
+    auth.clickthrough = { isFetching: false, ok: false };
+    expect(selectNextAuthService({ auth }, resource).id).toEqual('login');
+  });
+
+  it('returns null if there are no services', () => {
+    expect(selectNextAuthService({ auth }, noAuthResource)).toBeNull();
+  });
+
+  it('returns null if a service is currently in-flight', () => {
+    auth.external = { isFetching: true };
+    expect(selectNextAuthService({ auth }, resource)).toBeNull();
+  });
+});
+
+
+describe('selectInteractiveAuthServices', () => {
+  const resource = {
+    service: [
+      {
+        '@id': 'external',
+        profile: 'http://iiif.io/api/auth/1/external',
+      },
+      {
+        '@id': 'login',
+        profile: 'http://iiif.io/api/auth/1/login',
+      },
+    ],
+  };
+
+  const state = {
+    auth: {},
+    infoResponses: {
+      'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d': {
+        json: resource,
+      },
+    },
+    manifests: {
+      a: {
+        json: manifestFixture001,
+      },
+    },
+  };
+
+  it('returns undefined if there is no current canvas', () => {
+    expect(selectInteractiveAuthServices({ manifests: {} }, { canvasIndex: 5, manifestId: 'a' })).toBeUndefined();
+  });
+
+  it('returns undefined if the next auth service is non-interactive', () => {
+    expect(selectInteractiveAuthServices(state, { canvasIndex: 0, manifestId: 'a' })).toBeUndefined();
+  });
+
+  it('returns the service if the next auth service is interactive', () => {
+    const auth = { external: { isFetching: false, ok: false } };
+    expect(selectInteractiveAuthServices({ ...state, auth }, { canvasIndex: 0, manifestId: 'a' }).id).toEqual('login');
   });
 });

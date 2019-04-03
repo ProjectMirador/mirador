@@ -88,6 +88,20 @@ export const getCanvasDescription = createSelector(
   canvas => canvas && canvas.getProperty('description'),
 );
 
+/** */
+export const selectInfoResponses = state => state.infoResponses;
+
+export const selectInfoResponse = createSelector(
+  [
+    getCanvas,
+    selectInfoResponses,
+  ],
+  (canvas, infoResponses) => canvas
+    && infoResponses[canvas.getImages()[0].getResource().getServices()[0].id]
+    && !infoResponses[canvas.getImages()[0].getResource().getServices()[0].id].isFetching
+    && infoResponses[canvas.getImages()[0].getResource().getServices()[0].id],
+);
+
 const authServiceProfiles = {
   clickthrough: true, external: true, kiosk: true, login: true,
 };
@@ -132,3 +146,17 @@ export function selectNextAuthService({ auth }, resource, filter = authServicePr
 
   return null;
 }
+
+export const selectInteractiveAuthServices = createSelector(
+  [
+    selectInfoResponse,
+    state => state,
+  ],
+  (infoResponse, state) => {
+    const resource = infoResponse && infoResponse.json;
+
+    if (!resource) return undefined;
+
+    return selectNextAuthService(state, resource, { clickthrough: true, login: true });
+  },
+);

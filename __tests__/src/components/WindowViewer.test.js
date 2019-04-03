@@ -4,6 +4,7 @@ import manifesto from 'manifesto.js';
 import { WindowViewer } from '../../../src/components/WindowViewer';
 import OSDViewer from '../../../src/containers/OpenSeadragonViewer';
 import WindowCanvasNavigationControls from '../../../src/containers/WindowCanvasNavigationControls';
+import WindowAuthenticationControl from '../../../src/containers/WindowAuthenticationControl';
 import fixture from '../../fixtures/version-2/019.json';
 import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
 import otherContentFixture from '../../fixtures/version-2/299843.json';
@@ -39,6 +40,7 @@ describe('WindowViewer', () => {
         <OSDViewer>
           <WindowCanvasNavigationControls />
         </OSDViewer>
+        <WindowAuthenticationControl />
       </>,
     )).toBe(true);
   });
