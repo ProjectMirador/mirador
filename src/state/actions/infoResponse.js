@@ -21,10 +21,11 @@ export function requestInfoResponse(infoId) {
  * @param  {Object} manifestJson
  * @memberof ActionCreators
  */
-export function receiveInfoResponse(infoId, infoJson) {
+export function receiveInfoResponse(infoId, infoJson, ok) {
   return {
     infoId,
     infoJson,
+    ok,
     type: ActionTypes.RECEIVE_INFO_RESPONSE,
   };
 }
@@ -53,9 +54,10 @@ export function receiveInfoResponseFailure(infoId, error) {
 export function fetchInfoResponse(infoId) {
   return ((dispatch) => {
     dispatch(requestInfoResponse(infoId));
+
     return fetch(infoId)
-      .then(response => response.json())
-      .then(json => dispatch(receiveInfoResponse(infoId, json)))
+      .then(response => response.json().then(json => ({ json, ok: response.ok })))
+      .then(({ json, ok }) => dispatch(receiveInfoResponse(infoId, json, ok)))
       .catch(error => dispatch(receiveInfoResponseFailure(infoId, error)));
   });
 }
