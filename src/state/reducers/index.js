@@ -7,3 +7,4 @@ export * from './infoResponses';
 export * from './config';
 export * from './viewers';
 export * from './annotations';
+export * from './auth';

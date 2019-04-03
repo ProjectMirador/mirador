@@ -49,6 +49,7 @@
     "react-i18next": "^10.5.2",
     "react-image": "^2.0.0",
     "react-mosaic-component": "^2.1.0",
+    "react-new-window": "0.0.12",
     "react-placeholder": "^3.0.1",
     "react-redux": "^6.0.0",
     "react-resize-observer": "^1.1.1",

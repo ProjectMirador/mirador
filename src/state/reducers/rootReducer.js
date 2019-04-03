@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import {
+  authReducer,
   companionWindowsReducer,
   configReducer,
   errorsReducer,
@@ -19,6 +20,7 @@ import {
 export default function createRootReducer(pluginReducers) {
   return combineReducers({
     annotations: annotationsReducer,
+    auth: authReducer,
     companionWindows: companionWindowsReducer,
     config: configReducer,
     errors: errorsReducer,
