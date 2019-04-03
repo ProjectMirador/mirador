@@ -109,4 +109,10 @@ describe('companionWindowsReducer', () => {
       expect(companionWindowsReducer(beforeState, action)).toEqual(expectedState);
     });
   });
+  it('should handle IMPORT_MIRADOR_STATE', () => {
+    expect(companionWindowsReducer({}, {
+      state: { companionWindows: { new: 'stuff' } },
+      type: ActionTypes.IMPORT_MIRADOR_STATE,
+    })).toEqual({ new: 'stuff' });
+  });
 });

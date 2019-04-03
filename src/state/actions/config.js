@@ -1,3 +1,4 @@
+import uuid from 'uuid/v4';
 import ActionTypes from './action-types';
 
 /**
@@ -28,4 +29,21 @@ export function setConfig(config) {
  */
 export function updateConfig(config) {
   return { config, type: ActionTypes.UPDATE_CONFIG };
+}
+
+/**
+ * importMiradorState - action creator
+ *
+ * @param  {Object} config
+ * @memberof ActionCreators
+ */
+export function importMiradorState(state) {
+  const newState = {
+    ...state,
+    workspace: {
+      ...state.workspace,
+      id: uuid(),
+    },
+  };
+  return { state: newState, type: ActionTypes.IMPORT_MIRADOR_STATE };
 }

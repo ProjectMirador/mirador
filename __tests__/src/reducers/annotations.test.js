@@ -72,4 +72,10 @@ describe('annotation reducer', () => {
       },
     });
   });
+  it('should handle IMPORT_MIRADOR_STATE setting to clean state', () => {
+    expect(annotationsReducer({}, {
+      state: { annotations: { new: 'stuff' } },
+      type: ActionTypes.IMPORT_MIRADOR_STATE,
+    })).toEqual({});
+  });
 });

@@ -38,6 +38,8 @@ export const infoResponsesReducer = (state = {}, action) => {
         }
         return object;
       }, {});
+    case ActionTypes.IMPORT_MIRADOR_STATE:
+      return {};
     default: return state;
   }
 };

@@ -39,4 +39,10 @@ describe('ADD_ERROR', () => {
       type: ActionTypes.REMOVE_ERROR,
     })).toHaveProperty('items', []);
   });
+  it('should handle IMPORT_MIRADOR_STATE setting default state', () => {
+    expect(errorsReducer({}, {
+      state: { errors: { new: 'stuff' } },
+      type: ActionTypes.IMPORT_MIRADOR_STATE,
+    })).toEqual({ items: [] });
+  });
 });

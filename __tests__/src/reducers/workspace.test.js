@@ -80,4 +80,10 @@ describe('workspace reducer', () => {
       exposeModeOn: true,
     });
   });
+  it('should handle IMPORT_MIRADOR_STATE', () => {
+    expect(workspaceReducer({}, {
+      state: { workspace: { new: 'stuff' } },
+      type: ActionTypes.IMPORT_MIRADOR_STATE,
+    })).toEqual({ new: 'stuff' });
+  });
 });

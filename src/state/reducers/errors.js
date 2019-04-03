@@ -20,6 +20,8 @@ export const errorsReducer = (state = defaultState, action) => {
       }, {});
       ret.items = without(ret.items, action.id);
       return ret;
+    case ActionTypes.IMPORT_MIRADOR_STATE:
+      return defaultState;
     default:
       return state;
   }
