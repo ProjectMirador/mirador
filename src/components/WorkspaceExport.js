@@ -59,13 +59,12 @@ export class WorkspaceExport extends Component {
           </pre>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleClose()}>{t('cancel')}</Button>
+          <Button color="secondary" onClick={() => handleClose()}>{t('cancel')}</Button>
           <CopyToClipboard
             // eslint-disable-next-line react/destructuring-assignment
             text={this.state.value}
-            // eslint-disable-next-line react/no-unused-state
           >
-            <Button variant="contained" color="secondary" onClick={() => this.setState({ value: this.exportableState() })}>Copy to clipboard</Button>
+            <Button variant="contained" color="secondary" onClick={() => this.setState({ value: this.exportableState() })}>{t('copy')}</Button>
           </CopyToClipboard>
         </DialogActions>
       </Dialog>
