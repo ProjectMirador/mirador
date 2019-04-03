@@ -46,7 +46,7 @@ const enhance = compose(
   withStyles(styles),
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('ThumnailNavigation'),
+  withPlugins('ThumbnailCanvasGrouping'),
 );
 
 export default enhance(ThumbnailCanvasGrouping);

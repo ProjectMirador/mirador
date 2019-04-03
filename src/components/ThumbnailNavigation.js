@@ -217,7 +217,10 @@ export class ThumbnailNavigation extends Component {
         onKeyUp={this.handleKeyUp}
         role="grid"
       >
-        <AutoSizer>
+        <AutoSizer
+          defaultHeight={100}
+          defaultWidth={400}
+        >
           {({ height, width }) => (
             <List
               height={this.areaHeight(height)}

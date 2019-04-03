@@ -10,13 +10,18 @@ import { CaptionedCanvasThumbnail } from '../components/CaptionedCanvasThumbnail
 const styles = theme => ({
   canvasThumbLabel: {
     background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-    bottom: '0px',
+    bottom: '5px',
     left: '0px',
     overflow: 'hidden',
     position: 'absolute',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     width: '100%',
+  },
+  container: {
+    display: 'inline-block',
+    height: 'inherit',
+    position: 'relative',
   },
   root: {
     background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
@@ -29,7 +34,7 @@ const styles = theme => ({
 const enhance = compose(
   withStyles(styles),
   withTranslation(),
-  withPlugins('ThumnailNavigation'),
+  withPlugins('CaptionedCanvasThumbnail'),
 );
 
 export default enhance(CaptionedCanvasThumbnail);

@@ -15,28 +15,21 @@ export class CaptionedCanvasThumbnail extends Component {
     return (
       <div
         key={canvas.id}
-        style={{
-          display: 'inline-block',
-          height: 'inherit',
-          position: 'relative',
-        }}
+        className={classes.container}
       >
         <CanvasThumbnail
           imageUrl={
             manifestoCanvas.thumbnail(null, 200)
+            // TODO: When we make these areas resizable, we should probably not hard code this
           }
           isValid={manifestoCanvas.hasValidDimensions}
           maxHeight={height}
           style={{
             maxWidth: `${Math.ceil(height * manifestoCanvas.aspectRatio)}px`,
-            verticalAlign: 'bottom',
           }}
         />
         <div
           className={classNames(ns('canvas-thumb-label'), classes.canvasThumbLabel)}
-          style={{
-            width: '100%',
-          }}
         >
           <div
             style={{
