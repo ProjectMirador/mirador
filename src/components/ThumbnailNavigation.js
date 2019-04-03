@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { VariableSizeList as List } from 'react-window';
+import classNames from 'classnames';
 import CanvasWorld from '../lib/CanvasWorld';
 import ThumbnailCanvasGrouping from '../containers/ThumbnailCanvasGrouping';
 import ns from '../config/css-ns';
@@ -18,6 +19,9 @@ export class ThumbnailNavigation extends Component {
     this.spacing = 8; // 2 * (2px margin + 2px border + 2px padding + 2px padding)
     this.calculateScaledSize = this.calculateScaledSize.bind(this);
     this.itemCount = this.itemCount.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.nextCanvas = this.nextCanvas.bind(this);
+    this.previousCanvas = this.previousCanvas.bind(this);
     this.gridRef = React.createRef();
   }
 
@@ -29,6 +33,11 @@ export class ThumbnailNavigation extends Component {
     const { position, window } = this.props;
     if (prevProps.window.view !== window.view && position !== 'off') {
       this.gridRef.current.resetAfterIndex(0);
+    }
+    if (prevProps.window.canvasIndex !== window.canvasIndex) {
+      let index = window.canvasIndex;
+      if (window.view === 'book') index = Math.ceil(index / 2);
+      this.gridRef.current.scrollToItem(index, 'center');
     }
   }
 
@@ -116,6 +125,71 @@ export class ThumbnailNavigation extends Component {
     return canvasGroupings.groupings().length;
   }
 
+  /** */
+  handleKeyUp(e) {
+    const { position } = this.props;
+    let nextKey = 'ArrowRight';
+    let previousKey = 'ArrowLeft';
+    if (position === 'far-right') {
+      nextKey = 'ArrowDown';
+      previousKey = 'ArrowUp';
+    }
+    switch (e.key) {
+      case nextKey:
+        this.nextCanvas();
+        break;
+      case previousKey:
+        this.previousCanvas();
+        break;
+      default:
+        break;
+    }
+  }
+
+  /**
+   */
+  nextCanvas() {
+    const { window, setCanvas } = this.props;
+    if (this.hasNextCanvas()) {
+      setCanvas(window.id, window.canvasIndex + this.canvasIncrementor());
+    }
+  }
+
+  /**
+   */
+  hasNextCanvas() {
+    const { window, canvasGroupings } = this.props;
+    return window.canvasIndex < canvasGroupings.canvases.length - this.canvasIncrementor();
+  }
+
+  /**
+   */
+  previousCanvas() {
+    const { window, setCanvas } = this.props;
+    if (this.hasPreviousCanvas()) {
+      setCanvas(window.id, Math.max(0, window.canvasIndex - this.canvasIncrementor()));
+    }
+  }
+
+  /**
+   */
+  hasPreviousCanvas() {
+    const { window } = this.props;
+    return window.canvasIndex > 0;
+  }
+
+  /**
+   */
+  canvasIncrementor() {
+    const { window } = this.props;
+    switch (window.view) {
+      case 'book':
+        return 2;
+      default:
+        return 1;
+    }
+  }
+
   /**
    * Renders things
    */
@@ -123,6 +197,7 @@ export class ThumbnailNavigation extends Component {
     const {
       t,
       canvasGroupings,
+      classes,
       config,
       position,
       window,
@@ -131,10 +206,16 @@ export class ThumbnailNavigation extends Component {
       return <></>;
     }
     return (
-      <nav
-        className={ns('thumb-navigation')}
+      <div
+        className={classNames(
+          ns('thumb-navigation'),
+          classes.thumbNavigation,
+        )}
         aria-label={t('thumbnailNavigation')}
         style={this.style()}
+        tabIndex={0}
+        onKeyUp={this.handleKeyUp}
+        role="grid"
       >
         <AutoSizer>
           {({ height, width }) => (
@@ -157,15 +238,17 @@ export class ThumbnailNavigation extends Component {
             </List>
           )}
         </AutoSizer>
-      </nav>
+      </div>
     );
   }
 }
 
 ThumbnailNavigation.propTypes = {
   canvasGroupings: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   position: PropTypes.string.isRequired,
+  setCanvas: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
