@@ -9,7 +9,7 @@ function createWrapper(props) {
   return shallow(
     <GalleryView
       canvases={manifesto.create(manifestJson).getSequences()[0].getCanvases()}
-      classes={{ currentCanvas: 'currentCanvas' }}
+      classes={{ galleryViewItemCurrent: 'galleryViewItemCurrent' }}
       window={{
         canvasIndex: 0,
         id: '1234',
@@ -34,7 +34,7 @@ describe('GalleryView', () => {
     expect(wrapper.find('div[role="button"]').length).toBe(3);
   });
   it('sets a mirador-current-canvas class on current canvas', () => {
-    expect(wrapper.find('div[role="button"]').at(0).props().className).toEqual('currentCanvas');
+    expect(wrapper.find('div[role="button"]').at(0).props().className).toEqual('galleryViewItemCurrent');
   });
   it('renders the canvas labels for each canvas in canvas items', () => {
     expect(wrapper.find('WithStyles(Typography)').length).toBe(3);

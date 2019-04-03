@@ -32,7 +32,7 @@ export class GalleryView extends Component {
                   className={
                     classNames(
                       classes.galleryViewItem,
-                      canvas.index === window.canvasIndex ? classes.currentCanvas : '',
+                      canvas.index === window.canvasIndex ? classes.galleryViewItemCurrent : '',
                     )
                   }
                   onClick={() => setCanvas(window.id, canvas.index)}
@@ -44,11 +44,10 @@ export class GalleryView extends Component {
                     imageUrl={manifestoCanvas.thumbnail(null, 100)}
                     isValid={manifestoCanvas.hasValidDimensions}
                     maxHeight={120}
-                    maxWidth={100}
                     aspectRatio={manifestoCanvas.aspectRatio}
                     style={{ margin: '0 auto' }}
                   />
-                  <Typography variant="caption">
+                  <Typography variant="caption" className={classes.galleryViewCaption}>
                     {manifestoCanvas.getLabel()}
                   </Typography>
                 </div>
