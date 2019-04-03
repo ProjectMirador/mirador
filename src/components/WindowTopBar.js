@@ -24,13 +24,23 @@ export class WindowTopBar extends Component {
    */
   render() {
     const {
-      removeWindow, windowId, classes, toggleWindowSideBar, t, manifestTitle,
+      removeWindow, windowId, classes, toggleWindowSideBar, t, manifestTitle, windowDraggable,
       maximizeWindow, maximized, minimizeWindow, focused, allowClose, allowMaximize,
     } = this.props;
+
     return (
       <AppBar position="relative">
         <nav aria-label={t('windowNavigation')}>
-          <Toolbar disableGutters className={classNames(classes.windowTopBarStyle, focused ? classes.focused : null, ns('window-top-bar'))} variant="dense">
+          <Toolbar
+            disableGutters
+            className={classNames(
+              classes.windowTopBarStyle,
+              windowDraggable ? classes.windowTopBarStyleDraggable : null,
+              focused ? classes.focused : null,
+              ns('window-top-bar'),
+            )}
+            variant="dense"
+          >
             <MiradorMenuButton
               aria-label={t('toggleWindowSideBar')}
               onClick={toggleWindowSideBar}
@@ -79,6 +89,7 @@ WindowTopBar.propTypes = {
   removeWindow: PropTypes.func.isRequired,
   t: PropTypes.func,
   toggleWindowSideBar: PropTypes.func.isRequired,
+  windowDraggable: PropTypes.bool,
   windowId: PropTypes.string.isRequired,
 };
 
@@ -91,4 +102,5 @@ WindowTopBar.defaultProps = {
   maximizeWindow: () => {},
   minimizeWindow: () => {},
   t: key => key,
+  windowDraggable: true,
 };

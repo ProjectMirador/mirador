@@ -7,7 +7,7 @@ import * as actions from '../state/actions';
 import { Window } from '../components/Window';
 import {
   getManifest, getManifestTitle, getThumbnailNavigationPosition, getWindow,
-  getWorkspaceType,
+  getWorkspaceType, getWindowDraggability,
 } from '../state/selectors';
 
 
@@ -21,6 +21,7 @@ const mapStateToProps = (state, { window }) => ({
   manifest: getManifest(state, { windowId: window.id }),
   thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId: window.id }),
   window: getWindow(state, { windowId: window.id }),
+  windowDraggable: getWindowDraggability(state, { windowId: window.id }),
   workspaceType: getWorkspaceType(state),
 });
 

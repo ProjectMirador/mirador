@@ -46,9 +46,20 @@ describe('Window', () => {
   describe('when workspaceType is mosaic', () => {
     it('calls the context mosaicWindowActions connectDragSource method to make WindowTopBar draggable', () => {
       const connectDragSource = jest.fn(component => component);
-      wrapper = createWrapper({ window, workspaceType: 'mosaic' }, { mosaicWindowActions: { connectDragSource } });
+      wrapper = createWrapper(
+        { window, windowDraggable: true, workspaceType: 'mosaic' }, { mosaicWindowActions: { connectDragSource } },
+      );
       expect(wrapper.find(WindowTopBar)).toHaveLength(1);
       expect(connectDragSource).toHaveBeenCalled();
+    });
+
+    it('does not call the context mosaicWindowActions connectDragSource when the windowDraggable is set to false', () => {
+      const connectDragSource = jest.fn(component => component);
+      wrapper = createWrapper(
+        { window, windowDraggable: false, workspaceType: 'mosaic' }, { mosaicWindowActions: { connectDragSource } },
+      );
+      expect(wrapper.find(WindowTopBar)).toHaveLength(1);
+      expect(connectDragSource).not.toHaveBeenCalled();
     });
   });
 });

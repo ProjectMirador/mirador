@@ -50,6 +50,9 @@ const styles = theme => ({
     paddingLeft: theme.spacing.unit / 2,
     paddingRight: theme.spacing.unit / 2,
   },
+  windowTopBarStyleDraggable: {
+    cursor: 'move',
+  },
 });
 
 const enhance = compose(
