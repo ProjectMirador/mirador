@@ -60,6 +60,36 @@ describe('infoResponse actions', () => {
             ]);
           });
       });
+      it('dispatches the REQUEST_INFO_RESPONSE with an existing access token', () => {
+        store = mockStore({
+          accessTokens: { a_token_service: { json: { accessToken: 'TOKEN' } } },
+          infoResponses: {
+            a: {
+              isFetching: false,
+              json: {
+                service: {
+                  profile: 'http://iiif.io/api/auth/1/some_auth_service',
+                  service: [{
+                    '@id': 'a_token_service',
+                    profile: 'http://iiif.io/api/auth/1/token',
+                  }],
+                },
+              },
+            },
+          },
+        });
+        // TODO: I've got no idea how to test if we used an acceess token
+        store.dispatch(actions.fetchInfoResponse({ imageId: 'a' }))
+          .then(() => {
+            const expectedActions = store.getActions();
+            expect(expectedActions).toEqual([
+              { infoId: 'a', type: 'REQUEST_INFO_RESPONSE' },
+              {
+                infoId: 'a', infoJson: { data: '12345' }, ok: true, type: 'RECEIVE_INFO_RESPONSE',
+              },
+            ]);
+          });
+      });
     });
     describe('error response', () => {
       it('dispatches the REQUEST_INFO_RESPONSE and then RECEIVE_INFO_RESPONSE', () => {

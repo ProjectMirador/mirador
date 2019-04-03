@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { Utils } from 'manifesto.js';
 import ActionTypes from './action-types';
 
 /**
@@ -44,6 +45,21 @@ export function receiveInfoResponseFailure(infoId, error) {
     type: ActionTypes.RECEIVE_INFO_RESPONSE_FAILURE,
   };
 }
+/** @private */
+function getAccessToken({ accessTokens }, iiifService) {
+  if (!iiifService) return undefined;
+
+  const services = Utils.getServices(iiifService).filter(s => s.getProfile().value.match(/http:\/\/iiif.io\/api\/auth\/1\//));
+
+  for (let i = 0; i < services.length; i += 1) {
+    const authService = services[i];
+    const accessTokenService = Utils.getService(authService, 'http://iiif.io/api/auth/1/token');
+    const token = accessTokens[accessTokenService.id];
+    if (token && token.json) return token.json.accessToken;
+  }
+
+  return undefined;
+}
 
 /**
  * fetchInfoResponse - action creator
@@ -52,13 +68,31 @@ export function receiveInfoResponseFailure(infoId, error) {
  * @memberof ActionCreators
  */
 export function fetchInfoResponse({ imageId, imageResource }) {
-  return ((dispatch) => {
+  return ((dispatch, getState) => {
+    const state = getState();
     const infoId = imageId || `${
       imageResource.getServices()[0].id.replace(/\/$/, '')
     }`;
+    const headers = {};
+
+    const infoResponse = infoId
+      && state.infoResponses
+      && state.infoResponses[infoId]
+      && !state.infoResponses[infoId].isFetching
+      && state.infoResponses[infoId].json;
+
+    const token = getAccessToken(
+      getState(),
+      infoResponse || (imageResource && imageResource.getServices()[0]),
+    );
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     dispatch(requestInfoResponse(infoId));
 
-    return fetch(`${infoId}/info.json`)
+    return fetch(`${infoId}/info.json`, { headers })
       .then(response => response.json().then(json => ({ json, ok: response.ok })))
       .then(({ json, ok }) => dispatch(receiveInfoResponse(infoId, json, ok)))
       .catch(error => dispatch(receiveInfoResponseFailure(infoId, error)));
