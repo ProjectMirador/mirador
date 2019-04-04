@@ -39,6 +39,34 @@ describe('WorkspaceMosaic', () => {
 
       expect(updateWorkspaceMosaicLayout).toHaveBeenCalled();
     });
+    it('updates the workspace layout when windows are removed', () => {
+      const updateWorkspaceMosaicLayout = jest.fn();
+      wrapper = createWrapper({
+        updateWorkspaceMosaicLayout,
+        windows,
+        workspace: {
+          layout: { first: 1, second: 2 },
+        },
+      });
+      wrapper.instance().windowPaths = { 2: ['second'] };
+      wrapper.setProps({ windows: { 1: { id: 1 } } });
+      expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith(1);
+    });
+    it('when no windows remain', () => {
+      const updateWorkspaceMosaicLayout = jest.fn();
+      wrapper = createWrapper({
+        updateWorkspaceMosaicLayout,
+        windows,
+      });
+      wrapper.setProps({ windows: {} });
+      expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith({});
+    });
+  });
+  describe('bookkeepPath', () => {
+    it('as windows are rendered keeps a reference to their path in binary tree', () => {
+      wrapper.instance().tileRenderer('1', 'foo');
+      expect(wrapper.instance().windowPaths).toEqual({ 1: 'foo' });
+    });
   });
   describe('determineWorkspaceLayout', () => {
     it('when window ids do not match workspace layout', () => {
@@ -47,9 +75,9 @@ describe('WorkspaceMosaic', () => {
         direction: 'row', first: '1', second: '2',
       });
     });
-    it('when there are no windows', () => {
+    it('by default use workspace.layout', () => {
       wrapper = createWrapper({ windows: {}, workspace: { layout: 'foo' } });
-      expect(wrapper.instance().determineWorkspaceLayout()).toBeNull();
+      expect(wrapper.instance().determineWorkspaceLayout()).toEqual('foo');
     });
     it('when window ids match workspace layout', () => {
       wrapper = createWrapper({ windows: { foo: { id: 'foo' } }, workspace: { layout: 'foo' } });
