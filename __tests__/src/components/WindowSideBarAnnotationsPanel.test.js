@@ -7,8 +7,10 @@ import { WindowSideBarAnnotationsPanel } from '../../../src/components/WindowSid
 function createWrapper(props) {
   return shallow(
     <WindowSideBarAnnotationsPanel
+      allAnnotationsAreHighlighted={false}
       classes={{}}
       deselectAnnotation={() => {}}
+      highlightAnnotation={() => {}}
       selectAnnotation={() => {}}
       id="xyz"
       windowId="abc"
@@ -96,5 +98,67 @@ describe('WindowSideBarAnnotationsPanel', () => {
 
     wrapper.find('WithStyles(ListItem)').first().simulate('click');
     expect(deselectAnnotation).toHaveBeenCalledWith('abc', 'example.com/iiif/12345', 'abc123');
+  });
+
+  describe('when allAnnotationsAreHighlighted is true', () => {
+    it('does not highlight annotations on mouse enter', () => {
+      const highlightAnnotation = jest.fn();
+
+      wrapper = createWrapper({
+        allAnnotationsAreHighlighted: true,
+        annotations: [
+          {
+            content: 'Annotation',
+            id: 'annoId',
+            targetId: 'example.com/iiif/12345',
+          },
+        ],
+        highlightAnnotation,
+      });
+
+      wrapper.find('WithStyles(ListItem)').first().simulate('mouseEnter');
+      expect(highlightAnnotation).not.toHaveBeenCalled();
+
+      wrapper.find('WithStyles(ListItem)').first().simulate('mouseLeave');
+      expect(highlightAnnotation).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('when allAnnotationsAreHighlighted is false', () => {
+    it('highlights annotations on mouse enter', () => {
+      const highlightAnnotation = jest.fn();
+
+      wrapper = createWrapper({
+        annotations: [
+          {
+            content: 'Annotation',
+            id: 'annoId',
+            targetId: 'example.com/iiif/12345',
+          },
+        ],
+        highlightAnnotation,
+      });
+
+      wrapper.find('WithStyles(ListItem)').first().simulate('mouseEnter');
+      expect(highlightAnnotation).toHaveBeenCalledWith('abc', 'annoId');
+    });
+
+    it('sets the highlighted annotation to null on mouse leave', () => {
+      const highlightAnnotation = jest.fn();
+
+      wrapper = createWrapper({
+        annotations: [
+          {
+            content: 'Annotation',
+            id: 'annoId',
+            targetId: 'example.com/iiif/12345',
+          },
+        ],
+        highlightAnnotation,
+      });
+
+      wrapper.find('WithStyles(ListItem)').first().simulate('mouseLeave');
+      expect(highlightAnnotation).toHaveBeenCalledWith('abc', null);
+    });
   });
 });

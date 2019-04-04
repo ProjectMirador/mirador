@@ -67,24 +67,6 @@ export const getSelectedAnnotationIds = createSelector(
   ),
 );
 
-export const getAllOrSelectedAnnotationsOnCanvases = createSelector(
-  [
-    getPresentAnnotationsOnSelectedCanvases,
-    getSelectedAnnotationIds,
-    (state, { windowId }) => state.windows[windowId].displayAllAnnotations,
-  ],
-  (canvasAnnotations, selectedAnnotationIds, displayAllAnnotations) => {
-    if (displayAllAnnotations) return canvasAnnotations;
-
-    return canvasAnnotations.map(annotation => ({
-      id: (annotation['@id'] || annotation.id),
-      resources: annotation.resources.filter(
-        r => selectedAnnotationIds && selectedAnnotationIds.includes(r.id),
-      ),
-    }));
-  },
-);
-
 export const getSelectedAnnotationsOnCanvases = createSelector(
   [
     getPresentAnnotationsOnSelectedCanvases,
@@ -101,10 +83,19 @@ export const getSelectedAnnotationsOnCanvases = createSelector(
 export const getHighlightedAnnotationsOnCanvases = createSelector(
   [
     getPresentAnnotationsOnSelectedCanvases,
+    (state, { windowId }) => state.windows[windowId].highlightedAnnotation,
     (state, { windowId }) => state.windows[windowId].displayAllAnnotations,
   ],
-  (canvasAnnotations, displayAllAnnotations) => {
+  (canvasAnnotations, highlightedAnnotation, displayAllAnnotations) => {
     if (displayAllAnnotations) return canvasAnnotations;
+    if (highlightedAnnotation) {
+      return canvasAnnotations.map(annotation => ({
+        id: (annotation['@id'] || annotation.id),
+        resources: annotation.resources.filter(
+          r => highlightedAnnotation && highlightedAnnotation === r.id,
+        ),
+      }));
+    }
     return [];
   },
 );

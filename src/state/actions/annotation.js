@@ -111,3 +111,15 @@ export function toggleAnnotationDisplay(windowId) {
     type: ActionTypes.TOGGLE_ANNOTATION_DISPLAY, windowId,
   };
 }
+
+/**
+ * toggleAnnotationDisplay - action creator
+ *
+ * @param  {String} windowId
+ * @memberof ActionCreators
+ */
+export function highlightAnnotation(windowId, annotationId) {
+  return {
+    annotationId, type: ActionTypes.HIGHLIGHT_ANNOTATION, windowId,
+  };
+}
