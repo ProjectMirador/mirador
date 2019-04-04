@@ -84,3 +84,16 @@ export const getAllOrSelectedAnnotationsOnCanvases = createSelector(
     }));
   },
 );
+
+export const getSelectedAnnotationsOnCanvases = createSelector(
+  [
+    getPresentAnnotationsOnSelectedCanvases,
+    getSelectedAnnotationIds,
+  ],
+  (canvasAnnotations, selectedAnnotationIds) => canvasAnnotations.map(annotation => ({
+    id: (annotation['@id'] || annotation.id),
+    resources: annotation.resources.filter(
+      r => selectedAnnotationIds && selectedAnnotationIds.includes(r.id),
+    ),
+  })),
+);

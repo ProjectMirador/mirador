@@ -65,14 +65,14 @@ export class OpenSeadragonViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      tileSources, viewer, annotations,
+      tileSources, viewer, selectedAnnotations,
     } = this.props;
-    if (!this.annotationsMatch(prevProps.annotations)) {
+    if (!this.annotationsMatch(prevProps.selectedAnnotations)) {
       this.updateCanvas = () => {
         this.osdCanvasOverlay.clear();
         this.osdCanvasOverlay.resize();
         this.osdCanvasOverlay.canvasUpdate(() => {
-          this.annotationsToContext(annotations);
+          this.annotationsToContext(selectedAnnotations);
         });
       };
       this.viewer.forceRedraw();
@@ -208,9 +208,9 @@ export class OpenSeadragonViewer extends Component {
    * @return {Boolean}
    */
   annotationsMatch(prevAnnotations) {
-    const { annotations } = this.props;
+    const { selectedAnnotations } = this.props;
 
-    return annotations.some((annotation, index) => {
+    return selectedAnnotations.some((annotation, index) => {
       if (!prevAnnotations[index]) {
         return false;
       }
@@ -259,21 +259,21 @@ export class OpenSeadragonViewer extends Component {
 }
 
 OpenSeadragonViewer.defaultProps = {
-  annotations: [],
   children: null,
   classes: {},
   label: null,
+  selectedAnnotations: [],
   tileSources: [],
   viewer: null,
 
 };
 
 OpenSeadragonViewer.propTypes = {
-  annotations: PropTypes.arrayOf(PropTypes.object),
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
   children: PropTypes.element,
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   label: PropTypes.string,
+  selectedAnnotations: PropTypes.arrayOf(PropTypes.object),
   t: PropTypes.func.isRequired,
   tileSources: PropTypes.arrayOf(PropTypes.object),
   updateViewport: PropTypes.func.isRequired,
