@@ -42,7 +42,7 @@ describe('PluginHoc: if no plugin exists for the target', () => {
 });
 
 describe('PluginHoc: if wrap plugins exist for target', () => {
-  it('renders the first wrap plugin and passes the target component as prop', () => {
+  it('renders the first wrap plugin and passes the target component and the target props to it', () => {
     /** */ const WrapPluginComponentA = props => <div>look i am a plugin</div>;
     /** */ const WrapPluginComponentB = props => <div>look i am a plugin</div>;
     const plugins = {
@@ -54,9 +54,8 @@ describe('PluginHoc: if wrap plugins exist for target', () => {
     const hoc = createPluginHoc(plugins);
     const selector = 'Connect(WrapPluginComponentA)';
     expect(hoc.find(selector).length).toBe(1);
-    expect(hoc.find(selector).props().foo).toBe(1);
-    expect(hoc.find(selector).props().bar).toBe(2);
     expect(hoc.find(selector).props().TargetComponent).toBe(Target);
+    expect(hoc.find(selector).props().targetProps).toEqual({ bar: 2, foo: 1 });
   });
 });
 

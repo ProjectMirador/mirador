@@ -18,7 +18,7 @@ function _withPlugins(targetName, TargetComponent) { // eslint-disable-line no-u
 
       if (!isEmpty(plugins.wrap)) {
         const WrapPluginComponent = connectPluginComponent(plugins.wrap[0]);
-        return <WrapPluginComponent {...this.props} TargetComponent={TargetComponent} />;
+        return <WrapPluginComponent targetProps={this.props} TargetComponent={TargetComponent} />;
       }
 
       if (!isEmpty(plugins.add)) {
