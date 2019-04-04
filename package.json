@@ -17,7 +17,7 @@
     "build:es": "mkdir -p dist/es && cp -r src dist/es && babel dist/es -d dist/es",
     "build:watch": "webpack --watch --mode=development",
     "prepublishOnly": "npm run clean && npm run build:es && npm run build",
-    "size": "size-limit",
+    "size": "bundlewatch --config bundlewatch.config.json",
     "start": "npm run build:dev && concurrently \"npm run build:watch\" \"npm run server -- -p 4444\"",
     "server:json": "node ./scripts/json-server/server.js >> ./scripts/json-server/json-server.log"
   },
@@ -27,12 +27,6 @@
     "Jack Reed <phillipjreed@gmail.com> (https://www.jack-reed.com)"
   ],
   "repository": "https://github.com/ProjectMirador/mirador",
-  "size-limit": [
-    {
-      "limit": "390 KB",
-      "path": "dist/mirador.min.js"
-    }
-  ],
   "dependencies": {
     "@material-ui/core": "^3.9.1",
     "@material-ui/icons": "^3.0.2",
@@ -76,6 +70,7 @@
     "babel-eslint": "10.0.1",
     "babel-jest": "^24.5.0",
     "babel-loader": "^8.0.4",
+    "bundlewatch": "^0.2.1",
     "chalk": "^2.4.2",
     "codecov": "^3.1.0",
     "concurrently": "^4.0.1",
@@ -104,7 +99,6 @@
     "react-dom": "^16.8.3",
     "redux-mock-store": "^1.5.1",
     "sass-lint": "^1.12.1",
-    "size-limit": "^0.21.1",
     "style-loader": "^0.23.1",
     "supertest": "^4.0.2",
     "terser-webpack-plugin": "^1.2.1",
