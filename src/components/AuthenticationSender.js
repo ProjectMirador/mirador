@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import NewWindow from 'react-new-window';
+import NewWindow from 'react-new-window/umd/react-new-window';
 
 /**
  * Opens a new window for click
