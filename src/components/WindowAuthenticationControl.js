@@ -52,6 +52,7 @@ export class WindowAuthenticationControl extends Component {
       description,
       degraded,
       header,
+      label,
       profile,
     } = this.props;
 
@@ -69,7 +70,7 @@ export class WindowAuthenticationControl extends Component {
         <Snackbar
           anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
           open
-          message="I'm an auth control"
+          message={label}
           action={
             (
               <Button onClick={this.handleClickOpen} color="primary">
@@ -109,6 +110,7 @@ WindowAuthenticationControl.propTypes = {
   handleAuthInteraction: PropTypes.func.isRequired,
   header: PropTypes.string,
   infoId: PropTypes.string,
+  label: PropTypes.string,
   profile: PropTypes.shape({ value: PropTypes.string }),
   serviceId: PropTypes.string,
   windowId: PropTypes.string.isRequired,
@@ -120,6 +122,7 @@ WindowAuthenticationControl.defaultProps = {
   description: undefined,
   header: undefined,
   infoId: undefined,
+  label: undefined,
   profile: undefined,
   serviceId: undefined,
 };

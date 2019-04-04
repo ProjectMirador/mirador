@@ -21,6 +21,7 @@ const mapStateToProps = (state, { windowId }) => {
     description: interactiveAuthService && interactiveAuthService.getDescription(),
     header: interactiveAuthService && interactiveAuthService.getHeader(),
     infoId: infoResponse.id,
+    label: interactiveAuthService && interactiveAuthService.getLabel()[0].value,
     profile: interactiveAuthService && interactiveAuthService.getProfile(),
     serviceId: interactiveAuthService && interactiveAuthService.id,
   };
