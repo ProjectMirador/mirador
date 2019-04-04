@@ -171,35 +171,47 @@ export class WorkspaceMenu extends Component {
             <Typography variant="body1">{t('importWorkspace')}</Typography>
           </MenuItem>
         </Menu>
-        <WindowList
-          anchorEl={windowList.anchorEl}
-          open={Boolean(windowList.anchorEl)}
-          handleClose={this.handleMenuItemClose('windowList')}
-        />
-        <WorkspaceSettings
-          open={Boolean(toggleZoom.open)}
-          handleClose={this.handleMenuItemClose('toggleZoom')}
-        />
-        <WorkspaceSettings
-          open={Boolean(settings.open)}
-          container={container}
-          handleClose={this.handleMenuItemClose('settings')}
-        />
-        <WorkspaceSelectionDialog
-          open={Boolean(workspaceSelection.open)}
-          container={container}
-          handleClose={this.handleMenuItemClose('workspaceSelection')}
-        />
-        <WorkspaceExport
-          open={Boolean(exportWorkspace.open)}
-          container={container}
-          handleClose={this.handleMenuItemClose('exportWorkspace')}
-        />
-        <WorkspaceImport
-          open={Boolean(importWorkspace.open)}
-          container={container}
-          handleClose={this.handleMenuItemClose('importWorkspace')}
-        />
+        {Boolean(windowList.anchorEl) && (
+          <WindowList
+            anchorEl={windowList.anchorEl}
+            open={Boolean(windowList.anchorEl)}
+            handleClose={this.handleMenuItemClose('windowList')}
+          />
+        )}
+        {Boolean(toggleZoom.open) && (
+          <WorkspaceSettings
+            open={Boolean(toggleZoom.open)}
+            handleClose={this.handleMenuItemClose('toggleZoom')}
+          />
+        )}
+        {Boolean(settings.open) && (
+          <WorkspaceSettings
+            open={Boolean(settings.open)}
+            container={container}
+            handleClose={this.handleMenuItemClose('settings')}
+          />
+        )}
+        {Boolean(workspaceSelection.open) && (
+          <WorkspaceSelectionDialog
+            open={Boolean(workspaceSelection.open)}
+            container={container}
+            handleClose={this.handleMenuItemClose('workspaceSelection')}
+          />
+        )}
+        {Boolean(exportWorkspace.open) && (
+          <WorkspaceExport
+            open={Boolean(exportWorkspace.open)}
+            container={container}
+            handleClose={this.handleMenuItemClose('exportWorkspace')}
+          />
+        )}
+        {Boolean(importWorkspace.open) && (
+          <WorkspaceImport
+            open={Boolean(importWorkspace.open)}
+            container={container}
+            handleClose={this.handleMenuItemClose('importWorkspace')}
+          />
+        )}
       </>
     );
   }
