@@ -1,5 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import { selectInfoResponse, selectInteractiveAuthServices } from '../state/selectors';
@@ -35,9 +36,19 @@ const mapStateToProps = (state, { windowId }) => {
 const mapDispatchToProps = {
   handleAuthInteraction: actions.addAuthenticationRequest,
 };
-
+/**
+ * @param theme
+ * @returns {{typographyBody: {flexGrow: number, fontSize: number|string},
+ * windowTopBarStyle: {minHeight: number, paddingLeft: number, backgroundColor: string}}}
+ */
+const styles = theme => ({
+  snackbar: {
+    position: 'absolute',
+  },
+});
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
+  withStyles(styles),
   withPlugins('WindowAuthenticationControl'),
 );
 

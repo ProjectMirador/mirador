@@ -48,6 +48,7 @@ export class WindowAuthenticationControl extends Component {
   /** */
   render() {
     const {
+      classes,
       confirmLabel,
       description,
       degraded,
@@ -68,6 +69,7 @@ export class WindowAuthenticationControl extends Component {
     return (
       <>
         <Snackbar
+          classes={{ root: classes.snackbar }}
           anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
           open
           message={label}
@@ -104,6 +106,7 @@ export class WindowAuthenticationControl extends Component {
 }
 
 WindowAuthenticationControl.propTypes = {
+  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   confirmLabel: PropTypes.string,
   degraded: PropTypes.bool,
   description: PropTypes.string,
