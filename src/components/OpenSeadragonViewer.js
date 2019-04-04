@@ -12,6 +12,31 @@ import CanvasWorld from '../lib/CanvasWorld';
  */
 export class OpenSeadragonViewer extends Component {
   /**
+   * annotationsMatch - compares previous annotations to current to determine
+   * whether to add a new updateCanvas method to draw annotations
+   * @param  {Array} currentAnnotations
+   * @param  {Array} prevAnnotations
+   * @return {Boolean}
+   */
+  static annotationsMatch(currentAnnotations, prevAnnotations) {
+    return currentAnnotations.some((annotation, index) => {
+      if (!prevAnnotations[index]) {
+        return false;
+      }
+      const newIds = annotation.resources.map(r => r.id);
+      const prevIds = prevAnnotations[index].resources.map(r => r.id);
+
+      // The newIds === prevIds is always returning false right now (because javascript)
+      // Using something like lodash's isEqual causes behavior
+      // that was unexpeected when switching annotations and should to be investigated further
+      if ((annotation.id === prevAnnotations[index].id) && (newIds === prevIds)) {
+        return true;
+      }
+      return false;
+    });
+  }
+
+  /**
    * @param {Object} props
    */
   constructor(props) {
@@ -65,18 +90,31 @@ export class OpenSeadragonViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      tileSources, viewer, selectedAnnotations,
+      tileSources, viewer, highlightedAnnotations, selectedAnnotations,
     } = this.props;
-    if (!this.annotationsMatch(prevProps.selectedAnnotations)) {
+    const highlightsUpdated = !OpenSeadragonViewer.annotationsMatch(
+      highlightedAnnotations, prevProps.highlightedAnnotations,
+    );
+    const selectionsUpdated = !OpenSeadragonViewer.annotationsMatch(
+      selectedAnnotations, prevProps.selectedAnnotations,
+    );
+
+    if (highlightsUpdated || selectionsUpdated) {
       this.updateCanvas = () => {
         this.osdCanvasOverlay.clear();
         this.osdCanvasOverlay.resize();
         this.osdCanvasOverlay.canvasUpdate(() => {
-          this.annotationsToContext(selectedAnnotations);
+          if (highlightsUpdated) {
+            this.annotationsToContext(highlightedAnnotations, '#00BFFF');
+          }
+          if (selectionsUpdated) {
+            this.annotationsToContext(selectedAnnotations, 'yellow');
+          }
         });
       };
       this.viewer.forceRedraw();
     }
+
     if (!this.tileSourcesMatch(prevProps.tileSources)) {
       this.viewer.close();
       Promise.all(
@@ -131,7 +169,7 @@ export class OpenSeadragonViewer extends Component {
   /**
    * annotationsToContext - converts anontations to a canvas context
    */
-  annotationsToContext(annotations) {
+  annotationsToContext(annotations, color = 'yellow') {
     const { canvasWorld } = this.props;
     const context = this.osdCanvasOverlay.context2d;
     annotations.forEach((annotation) => {
@@ -139,7 +177,7 @@ export class OpenSeadragonViewer extends Component {
         const offset = canvasWorld.offsetByCanvas(resource.targetId);
         const fragment = resource.fragmentSelector;
         fragment[0] += offset.x;
-        context.strokeStyle = 'yellow';
+        context.strokeStyle = color;
         context.lineWidth = 10;
         context.strokeRect(...fragment);
       });
@@ -202,29 +240,6 @@ export class OpenSeadragonViewer extends Component {
   }
 
   /**
-   * annotationsMatch - compares previous annotations to current to determine
-   * whether to add a new updateCanvas method to draw annotations
-   * @param  {Array} prevAnnotations
-   * @return {Boolean}
-   */
-  annotationsMatch(prevAnnotations) {
-    const { selectedAnnotations } = this.props;
-
-    return selectedAnnotations.some((annotation, index) => {
-      if (!prevAnnotations[index]) {
-        return false;
-      }
-      const newIds = annotation.resources.map(r => r.id);
-      const prevIds = prevAnnotations[index].resources.map(r => r.id);
-
-      if ((annotation.id === prevAnnotations[index].id) && (newIds === prevIds)) {
-        return true;
-      }
-      return false;
-    });
-  }
-
-  /**
    * Renders things
    */
   render() {
@@ -261,6 +276,7 @@ export class OpenSeadragonViewer extends Component {
 OpenSeadragonViewer.defaultProps = {
   children: null,
   classes: {},
+  highlightedAnnotations: [],
   label: null,
   selectedAnnotations: [],
   tileSources: [],
@@ -272,6 +288,7 @@ OpenSeadragonViewer.propTypes = {
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
   children: PropTypes.element,
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  highlightedAnnotations: PropTypes.arrayOf(PropTypes.object),
   label: PropTypes.string,
   selectedAnnotations: PropTypes.arrayOf(PropTypes.object),
   t: PropTypes.func.isRequired,

@@ -9,6 +9,7 @@ import * as actions from '../state/actions';
 import CanvasWorld from '../lib/CanvasWorld';
 import {
   getSelectedAnnotationsOnCanvases,
+  getHighlightedAnnotationsOnCanvases,
   getCanvasLabel,
   getSelectedCanvases,
   getViewer,
@@ -21,6 +22,7 @@ import {
  */
 const mapStateToProps = (state, { windowId }) => ({
   canvasWorld: new CanvasWorld(getSelectedCanvases(state, { windowId })),
+  highlightedAnnotations: getHighlightedAnnotationsOnCanvases(state, { windowId }),
   label: getCanvasLabel(state, { canvasIndex: 'selected', windowId }),
   selectedAnnotations: getSelectedAnnotationsOnCanvases(state, { windowId }),
   viewer: getViewer(state, { windowId }),

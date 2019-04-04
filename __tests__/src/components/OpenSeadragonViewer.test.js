@@ -53,6 +53,37 @@ describe('OpenSeadragonViewer', () => {
   it('renders viewer controls', () => {
     expect(wrapper.find('.controls').length).toBe(1);
   });
+
+  describe('annotationsMatch', () => {
+    it('is false if the annotations are a different size', () => {
+      const currentAnnotations = [{ id: 1, resources: [] }];
+      const previousAnnotations = [{ id: 1, resources: [] }, { id: 2, resources: [] }];
+
+      expect(
+        OpenSeadragonViewer.annotationsMatch(currentAnnotations, previousAnnotations),
+      ).toBe(false);
+    });
+
+    // TODO: This scenario currently does not work
+    // it('is true if the previous annotation\'s resource IDs all match', () => {
+    //   const currentAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
+    //   const previousAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
+    //
+    //   expect(
+    //     OpenSeadragonViewer.annotationsMatch(currentAnnotations, previousAnnotations),
+    //   ).toBe(true);
+    // });
+
+    it('is false if the previous annotation\'s resource IDs do not match', () => {
+      const currentAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
+      const previousAnnotations = [{ id: 1, resources: [{ id: 'rid2' }] }];
+
+      expect(
+        OpenSeadragonViewer.annotationsMatch(currentAnnotations, previousAnnotations),
+      ).toBe(false);
+    });
+  });
+
   describe('tileSourcesMatch', () => {
     it('when they do not match', () => {
       expect(wrapper.instance().tileSourcesMatch([])).toBe(false);

@@ -97,3 +97,14 @@ export const getSelectedAnnotationsOnCanvases = createSelector(
     ),
   })),
 );
+
+export const getHighlightedAnnotationsOnCanvases = createSelector(
+  [
+    getPresentAnnotationsOnSelectedCanvases,
+    (state, { windowId }) => state.windows[windowId].displayAllAnnotations,
+  ],
+  (canvasAnnotations, displayAllAnnotations) => {
+    if (displayAllAnnotations) return canvasAnnotations;
+    return [];
+  },
+);
