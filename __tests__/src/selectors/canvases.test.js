@@ -4,7 +4,7 @@ import {
   getSelectedCanvas,
   getSelectedCanvases,
   getCanvasLabel,
-  selectInteractiveAuthServices,
+  selectCanvasAuthService,
   selectNextAuthService,
 } from '../../../src/state/selectors/canvases';
 
@@ -207,7 +207,7 @@ describe('selectNextAuthService', () => {
 });
 
 
-describe('selectInteractiveAuthServices', () => {
+describe('selectCanvasAuthService', () => {
   const resource = {
     service: [
       {
@@ -220,6 +220,14 @@ describe('selectInteractiveAuthServices', () => {
       },
     ],
   };
+  const externalOnly = {
+    service: [
+      {
+        '@id': 'external',
+        profile: 'http://iiif.io/api/auth/1/external',
+      },
+    ],
+  };
 
   const state = {
     auth: {},
@@ -227,24 +235,40 @@ describe('selectInteractiveAuthServices', () => {
       'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d': {
         json: resource,
       },
+      'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44': {
+        json: externalOnly,
+      },
     },
     manifests: {
       a: {
         json: manifestFixture001,
       },
+      b: {
+        json: manifestFixture019,
+      },
     },
   };
 
   it('returns undefined if there is no current canvas', () => {
-    expect(selectInteractiveAuthServices({ manifests: {} }, { canvasIndex: 5, manifestId: 'a' })).toBeUndefined();
+    expect(selectCanvasAuthService({ manifests: {} }, { canvasIndex: 5, manifestId: 'a' })).toBeUndefined();
   });
 
-  it('returns undefined if the next auth service is non-interactive', () => {
-    expect(selectInteractiveAuthServices(state, { canvasIndex: 0, manifestId: 'a' })).toBeUndefined();
+  it('returns the next auth service to try', () => {
+    expect(selectCanvasAuthService(state, { canvasIndex: 0, manifestId: 'a' }).id).toEqual('external');
   });
 
   it('returns the service if the next auth service is interactive', () => {
     const auth = { external: { isFetching: false, ok: false } };
-    expect(selectInteractiveAuthServices({ ...state, auth }, { canvasIndex: 0, manifestId: 'a' }).id).toEqual('login');
+    expect(selectCanvasAuthService({ ...state, auth }, { canvasIndex: 0, manifestId: 'a' }).id).toEqual('login');
+  });
+
+  it('returns the last attempted auth service if all of them have been tried', () => {
+    const auth = {
+      external: { isFetching: false, ok: false },
+      login: { isFetching: false, ok: false },
+    };
+    expect(selectCanvasAuthService({ ...state, auth }, { canvasIndex: 0, manifestId: 'a' }).id).toEqual('login');
+    expect(selectCanvasAuthService({ ...state, auth }, { canvasIndex: 0, manifestId: 'b' }).id).toEqual('external');
+    expect(selectCanvasAuthService({ ...state, auth }, { canvasIndex: 1, manifestId: 'b' })).toBeUndefined();
   });
 });

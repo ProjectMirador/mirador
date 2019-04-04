@@ -1,9 +1,10 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
-import { selectInfoResponse, selectInteractiveAuthServices } from '../state/selectors';
+import { selectAuthStatus, selectInfoResponse, selectCanvasAuthService } from '../state/selectors';
 import { WindowAuthenticationControl } from '../components/WindowAuthenticationControl';
 
 
@@ -13,18 +14,21 @@ import { WindowAuthenticationControl } from '../components/WindowAuthenticationC
  * @private
  */
 const mapStateToProps = (state, { windowId }) => {
-  const interactiveAuthService = selectInteractiveAuthServices(state, { canvasIndex: 'selected', windowId });
+  const service = selectCanvasAuthService(state, { canvasIndex: 'selected', windowId });
   const infoResponse = selectInfoResponse(state, { canvasIndex: 'selected', windowId }) || {};
 
   return {
-    confirmLabel: interactiveAuthService && interactiveAuthService.getConfirmLabel(),
+    confirmLabel: service && service.getConfirmLabel(),
     degraded: infoResponse.degraded,
-    description: interactiveAuthService && interactiveAuthService.getDescription(),
-    header: interactiveAuthService && interactiveAuthService.getHeader(),
+    description: service && service.getDescription(),
+    failureDescription: service && service.getFailureDescription(),
+    failureHeader: service && service.getFailureHeader(),
+    header: service && service.getHeader(),
     infoId: infoResponse.id,
-    label: interactiveAuthService && interactiveAuthService.getLabel()[0].value,
-    profile: interactiveAuthService && interactiveAuthService.getProfile(),
-    serviceId: interactiveAuthService && interactiveAuthService.id,
+    label: service && service.getLabel()[0].value,
+    profile: service && service.getProfile(),
+    serviceId: service && service.id,
+    status: service && selectAuthStatus(state, service),
   };
 };
 
@@ -42,6 +46,9 @@ const mapDispatchToProps = {
  * windowTopBarStyle: {minHeight: number, paddingLeft: number, backgroundColor: string}}}
  */
 const styles = theme => ({
+  failure: {
+    backgroundColor: theme.palette.error.dark,
+  },
   snackbar: {
     position: 'absolute',
   },

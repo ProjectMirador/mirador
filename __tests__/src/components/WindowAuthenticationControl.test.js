@@ -13,10 +13,12 @@ function createWrapper(props) {
   return shallow(
     <WindowAuthenticationControl
       t={key => key}
+      classes={{}}
       degraded
       handleAuthInteraction={() => {}}
+      label="authenticate"
       windowId="w"
-      profile={{ value: 'xyz' }}
+      profile={{ value: 'http://iiif.io/api/auth/1/login' }}
       {...props}
     />,
   );
@@ -62,5 +64,21 @@ describe('WindowAuthenticationControl', () => {
     wrapper.find(Button).at(1).simulate('click');
     expect(handleAuthInteraction).toHaveBeenCalledWith('w', 'i', 's');
     expect(wrapper.find(Dialog).props().open).toEqual(false);
+  });
+
+  it('displays a failure message if the login has failed', () => {
+    wrapper = createWrapper({
+      failureDescription: 'failure description',
+      failureHeader: 'failure header',
+      status: 'failed',
+    });
+
+    expect(wrapper.find(Snackbar)).toHaveLength(1);
+    expect(wrapper.find(Snackbar).props().message.props.htmlString).toEqual('failure header failure description');
+    wrapper.find(Snackbar).props().action[0].props.onClick();
+
+    expect(wrapper.find(Snackbar)).toHaveLength(2);
+    expect(wrapper.find(Snackbar).at(0).props().message.props.htmlString).toEqual('authenticate');
+    expect(wrapper.find(Snackbar).at(1).props().open).toEqual(false);
   });
 });

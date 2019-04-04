@@ -147,7 +147,24 @@ export function selectNextAuthService({ auth }, resource, filter = authServicePr
   return null;
 }
 
-export const selectInteractiveAuthServices = createSelector(
+/** */
+export function selectFailedAuthService(state, resource) {
+  const loginService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/login');
+  if (selectAuthStatus(state, loginService) === 'failed') return loginService;
+
+  const clickthroughService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/clickthrough');
+  if (selectAuthStatus(state, clickthroughService) === 'failed') return clickthroughService;
+
+  const kioskService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/kiosk');
+  if (selectAuthStatus(state, kioskService) === 'failed') return kioskService;
+
+  const externalService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/external');
+  if (selectAuthStatus(state, externalService) === 'failed') return externalService;
+
+  return null;
+}
+
+export const selectCanvasAuthService = createSelector(
   [
     selectInfoResponse,
     state => state,
@@ -157,6 +174,16 @@ export const selectInteractiveAuthServices = createSelector(
 
     if (!resource) return undefined;
 
-    return selectNextAuthService(state, resource, { clickthrough: true, login: true });
+    return selectNextAuthService(state, resource)
+      || selectFailedAuthService(state, resource);
   },
 );
+
+/** */
+export function selectAuthStatus({ auth }, service) {
+  if (!service) return null;
+  if (!auth[service.id]) return null;
+  if (auth[service.id].isFetching) return 'fetching';
+  if (auth[service.id].ok) return 'ok';
+  return 'failed';
+}
