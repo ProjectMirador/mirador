@@ -42,7 +42,8 @@ describe('WorkspaceMenu', () => {
   describe('handleMenuItemClose', () => {
     it('resets the anchor state', () => {
       wrapper.instance().handleMenuItemClose('windowList')();
-      expect(wrapper.find(WindowList).props().open).toBe(false);
+      expect(Boolean(wrapper.state('windowList').anchorEl)).toEqual(false);
+      expect(wrapper.find(WindowList).length).toBe(0);
     });
   });
 
