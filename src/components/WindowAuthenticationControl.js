@@ -55,6 +55,7 @@ export class WindowAuthenticationControl extends Component {
       header,
       label,
       profile,
+      t,
     } = this.props;
 
     if (!degraded || !profile) return <></>;
@@ -76,7 +77,7 @@ export class WindowAuthenticationControl extends Component {
           action={
             (
               <Button onClick={this.handleClickOpen} color="primary">
-              Login
+                { t('login') }
               </Button>
             )
           }
@@ -93,10 +94,10 @@ export class WindowAuthenticationControl extends Component {
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose}>
-              Cancel
+              {t('cancel')}
             </Button>
             <Button onClick={this.handleConfirm} autoFocus>
-              {confirmLabel || 'Login' }
+              {confirmLabel || t('login') }
             </Button>
           </DialogActions>
         </Dialog>
@@ -116,6 +117,7 @@ WindowAuthenticationControl.propTypes = {
   label: PropTypes.string,
   profile: PropTypes.shape({ value: PropTypes.string }),
   serviceId: PropTypes.string,
+  t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };
 
@@ -128,4 +130,5 @@ WindowAuthenticationControl.defaultProps = {
   label: undefined,
   profile: undefined,
   serviceId: undefined,
+  t: () => {},
 };

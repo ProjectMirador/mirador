@@ -49,6 +49,7 @@ const styles = theme => ({
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
+  withTranslation(),
   withPlugins('WindowAuthenticationControl'),
 );
 
