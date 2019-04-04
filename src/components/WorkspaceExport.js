@@ -1,4 +1,4 @@
-import React, { Component, Children } from 'react';
+import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -11,15 +11,6 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 /**
  */
 export class WorkspaceExport extends Component {
-  /** */
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      value: '',
-    };
-  }
-
   /**
    * @private
    */
@@ -50,6 +41,7 @@ export class WorkspaceExport extends Component {
     const {
       children, container, handleClose, open, t,
     } = this.props;
+    const exportableState = this.exportableState();
     return (
       <Dialog
         id="workspace-settings"
@@ -64,16 +56,15 @@ export class WorkspaceExport extends Component {
         <DialogContent>
           {children}
           <pre>
-            {this.exportableState()}
+            {exportableState}
           </pre>
         </DialogContent>
         <DialogActions>
           <Button color="secondary" onClick={() => handleClose()}>{t('cancel')}</Button>
           <CopyToClipboard
-            // eslint-disable-next-line react/destructuring-assignment
-            text={this.state.value}
+            text={exportableState}
           >
-            <Button variant="contained" color="secondary" onClick={() => this.setState({ value: this.exportableState() })}>{t('copy')}</Button>
+            <Button variant="contained" color="secondary">{t('copy')}</Button>
           </CopyToClipboard>
         </DialogActions>
       </Dialog>
