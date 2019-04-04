@@ -13,15 +13,35 @@ import ns from '../config/css-ns';
 */
 export class WindowSideBarAnnotationsPanel extends Component {
   /**
+   * constructor -
+   */
+  constructor(props) {
+    super(props);
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  /**
+   * Handle click event of an annotation.
+  */
+  handleClick(event, annotation) {
+    const {
+      deselectAnnotation, selectAnnotation, selectedAnnotationIds, windowId,
+    } = this.props;
+
+    if (selectedAnnotationIds.includes(annotation.id)) {
+      deselectAnnotation(windowId, annotation.targetId, annotation.id);
+    } else {
+      selectAnnotation(windowId, annotation.targetId, annotation.id);
+    }
+  }
+
+  /**
    * Rreturn an array of sanitized annotation data
    */
   sanitizedAnnotations() {
     const {
       annotations,
-      classes,
-      deselectAnnotation,
-      windowId,
-      selectAnnotation,
       selectedAnnotationIds,
     } = this.props;
 
@@ -31,18 +51,8 @@ export class WindowSideBarAnnotationsPanel extends Component {
           annotations.map(annotation => (
             <ListItem
               key={annotation.id}
-              className={
-                selectedAnnotationIds.includes(annotation.id)
-                  ? classes.selectedAnnotation
-                  : null
-              }
-              onClick={() => {
-                if (selectedAnnotationIds.includes(annotation.id)) {
-                  deselectAnnotation(windowId, annotation.targetId, annotation.id);
-                } else {
-                  selectAnnotation(windowId, annotation.targetId, annotation.id);
-                }
-              }}
+              selected={selectedAnnotationIds.includes(annotation.id)}
+              onClick={e => this.handleClick(e, annotation)}
             >
               <Typography variant="body2">
                 <SanitizedHtml ruleSet="iiif" htmlString={annotation.content} />
