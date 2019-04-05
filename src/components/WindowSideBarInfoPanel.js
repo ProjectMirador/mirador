@@ -23,6 +23,7 @@ export class WindowSideBarInfoPanel extends Component {
       manifestDescription,
       manifestLabel,
       manifestMetadata,
+      manifestUrl,
       windowId,
       id,
       classes,
@@ -72,6 +73,23 @@ export class WindowSideBarInfoPanel extends Component {
             <LabelValueMetadata labelValuePairs={manifestMetadata} />
           )}
         </div>
+
+        <div className={classes.section}>
+          <Typography variant="overline" id={`${id}-related`}>{t('related')}</Typography>
+          <Typography aria-labelledby={`${id}-related`} variant="h4">
+            {t('links')}
+          </Typography>
+          <dl className={ns('label-value-metadata')}>
+            { manifestUrl && (
+              <>
+                <Typography variant="subtitle2" component="dt">{t('iiif_manifest')}</Typography>
+                <Typography variant="body1" component="dd">
+                  <a href={manifestUrl}>{manifestUrl}</a>
+                </Typography>
+              </>
+            )}
+          </dl>
+        </div>
       </CompanionWindow>
     );
   }
@@ -86,6 +104,7 @@ WindowSideBarInfoPanel.propTypes = {
   manifestDescription: PropTypes.string,
   manifestLabel: PropTypes.string,
   manifestMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+  manifestUrl: PropTypes.string,
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };
@@ -98,5 +117,6 @@ WindowSideBarInfoPanel.defaultProps = {
   manifestDescription: null,
   manifestLabel: null,
   manifestMetadata: [],
+  manifestUrl: null,
   t: key => key,
 };

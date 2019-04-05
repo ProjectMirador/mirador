@@ -21,6 +21,7 @@ describe('WindowSideBarInfoPanel', () => {
           manifestLabel="The Manifest Label"
           manifestDescription="The Manifest Description"
           manifestMetadata={metadata}
+          manifestUrl="http://example.com/"
           t={str => str}
         />,
       );
@@ -83,6 +84,24 @@ describe('WindowSideBarInfoPanel', () => {
         ),
       ).toBe(true);
     });
+
+    it('renders manifest links', () => {
+      expect(
+        wrapper.find('div').at(2)
+          .find(Typography).at(2)
+          .matchesElement(
+            <Typography component="dt">iiif_manifest</Typography>,
+          ),
+      ).toBe(true);
+
+      expect(
+        wrapper.find('div').at(2)
+          .find(Typography).at(3)
+          .matchesElement(
+            <Typography component="dd"><a href="http://example.com/">http://example.com/</a></Typography>,
+          ),
+      ).toBe(true);
+    });
   });
 
   describe('when metadata is not present', () => {
@@ -93,7 +112,6 @@ describe('WindowSideBarInfoPanel', () => {
     });
 
     it('does not render empty elements elements', () => {
-      expect(wrapper.find(Typography).length).toBe(0);
       expect(wrapper.find(LabelValueMetadata).length).toBe(0);
     });
   });

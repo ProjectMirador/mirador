@@ -138,6 +138,19 @@ export const getManifestDescription = createSelector(
 );
 
 /**
+* Return manifest title
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
+* @return {String}
+*/
+export const getManifestUrl = createSelector(
+  [getManifestoInstance],
+  manifest => manifest && manifest.id,
+);
+
+/**
 * Return metadata in a label / value structure
 * This is a potential seam for pulling the i18n locale from
 * state and plucking out the appropriate language.

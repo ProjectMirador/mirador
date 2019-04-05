@@ -13,6 +13,7 @@ import {
   getManifestTitle,
   getManifestThumbnail,
   getManifestMetadata,
+  getManifestUrl,
 } from '../../../src/state/selectors/manifests';
 
 
@@ -164,6 +165,20 @@ describe('getManifestProvider', () => {
     expect(received).toBeUndefined();
   });
 });
+
+describe('getManifestUrl', () => {
+  it('should return manifest url', () => {
+    const state = { manifests: { x: { json: manifestFixtureWithAProvider } } };
+    const received = getManifestUrl(state, { manifestId: 'x' });
+    expect(received).toBe('https://example.com/with_a_provider.json');
+  });
+
+  it('should return undefined if manifest undefined', () => {
+    const received = getManifestUrl({ manifests: {} }, { manifestId: 'x' });
+    expect(received).toBeUndefined();
+  });
+});
+
 describe('getDestructuredMetadata', () => {
   it('should return the first value of label/value attributes for each object in the array ', () => {
     const iiifResource = manifesto.create(manifestFixture002);
