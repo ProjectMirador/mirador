@@ -84,7 +84,7 @@ export class WindowSideBarInfoPanel extends Component {
               <>
                 <Typography variant="subtitle2" component="dt">{t('iiif_manifest')}</Typography>
                 <Typography variant="body1" component="dd">
-                  <a href={manifestUrl}>{manifestUrl}</a>
+                  <a target="_blank" rel="noopener noreferrer" href={manifestUrl}>{manifestUrl}</a>
                 </Typography>
               </>
             )}
