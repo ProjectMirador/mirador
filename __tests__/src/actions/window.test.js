@@ -76,7 +76,7 @@ describe('window actions', () => {
             position: 'left',
           },
           {
-            content: 'thumbnail_navigation',
+            content: 'thumbnailNavigation',
             position: 'off',
           },
         ],

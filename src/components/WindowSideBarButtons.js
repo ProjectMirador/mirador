@@ -162,38 +162,38 @@ export class WindowSideBarButtons extends Component {
         <Tab
           classes={{ root: classes.tab, selected: classes.tabSelected }}
           aria-label={
-            t('openCompanionWindow', { context: 'Info' })
+            t('openCompanionWindow', { context: 'info' })
           }
           icon={(
-            <Tooltip title={t('openCompanionWindow', { context: 'Info' })}>
+            <Tooltip title={t('openCompanionWindow', { context: 'info' })}>
               <InfoIcon />
             </Tooltip>
           )}
           TouchRippleProps={{ classes: { child: classes.tabRipple } }}
           onKeyUp={this.handleKeyUp}
-          value="info"
+          value="Info"
         />
         <Tab
           classes={{ root: classes.tab, selected: classes.tabSelected }}
           aria-label={
-            t('openCompanionWindow', { context: 'Canvas' })
+            t('openCompanionWindow', { context: 'canvas' })
           }
           icon={(
-            <Tooltip title={t('openCompanionWindow', { context: 'Canvas' })}>
+            <Tooltip title={t('openCompanionWindow', { context: 'canvas' })}>
               <CanvasIndexIcon />
             </Tooltip>
           )}
           TouchRippleProps={{ classes: { child: classes.tabRipple } }}
           onKeyUp={this.handleKeyUp}
-          value="canvas_navigation"
+          value="canvas"
         />
         <Tab
           classes={{ root: classes.tab, selected: classes.tabSelected }}
           aria-label={
-            t('openCompanionWindow', { context: 'Annotations' })
+            t('openCompanionWindow', { context: 'annotations' })
           }
           icon={(
-            <Tooltip title={t('openCompanionWindow', { context: 'Annotations' })}>
+            <Tooltip title={t('openCompanionWindow', { context: 'annotations' })}>
               <Badge color="error" invisible={!hasAnnotations} variant="dot">
                 <AnnotationIcon />
               </Badge>

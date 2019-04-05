@@ -49,11 +49,11 @@ describe('WindowSideBarButtons (shallow)', () => {
   it('has a badge indicating if the annotations panel has annotations', () => {
     let tab;
     wrapper = createWrapper({ hasAnnotations: true, windowId });
-    tab = wrapper.find('WithStyles(Tab)[value="Annotations"]');
+    tab = wrapper.find('WithStyles(Tab)[value="annotations"]');
     expect(tab.find('WithStyles(Badge)').props().invisible).toBe(false);
 
     wrapper = createWrapper({ hasAnnotations: false, windowId });
-    tab = wrapper.find('WithStyles(Tab)[value="Annotations"]');
+    tab = wrapper.find('WithStyles(Tab)[value="annotations"]');
 
     expect(tab.find('WithStyles(Badge)').props().invisible).toBe(true);
   });

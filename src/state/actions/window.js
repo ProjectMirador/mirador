@@ -74,7 +74,7 @@ export function addWindow(options) {
           position: 'left',
         },
         {
-          content: 'thumbnail_navigation',
+          content: 'thumbnailNavigation',
           default: true,
           id: cwThumbs,
           position: options.thumbnailNavigationPosition

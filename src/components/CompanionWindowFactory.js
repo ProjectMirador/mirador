@@ -16,11 +16,11 @@ export class CompanionWindowFactory extends Component {
     switch (content) {
       case 'info':
         return (<WindowSideBarInfoPanel id={id} windowId={windowId} />);
-      case 'canvas_navigation':
+      case 'canvas':
         return (<WindowSideBarCanvasPanel id={id} windowId={windowId} />);
       case 'annotations':
         return <WindowSideBarAnnotationsPanel id={id} windowId={windowId} />;
-      case 'thumbnail_navigation':
+      case 'thumbnailNavigation':
         return <ThumbnailNavigation id={id} windowId={windowId} />;
       default:
         return (<></>);

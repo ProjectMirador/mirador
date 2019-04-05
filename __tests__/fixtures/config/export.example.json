@@ -7,7 +7,7 @@
       "position": "left"
     },
     "cw-b15df6ac-9069-4f16-bd19-e11c6aaa3911": {
-      "content": "thumbnail_navigation",
+      "content": "thumbnailNavigation",
       "default": true,
       "id": "cw-b15df6ac-9069-4f16-bd19-e11c6aaa3911",
       "position": "far-bottom"
@@ -19,7 +19,7 @@
       "position": "left"
     },
     "cw-76580e14-4d7a-4ea5-84a6-5de052941a3d": {
-      "content": "thumbnail_navigation",
+      "content": "thumbnailNavigation",
       "default": true,
       "id": "cw-76580e14-4d7a-4ea5-84a6-5de052941a3d",
       "position": "far-bottom"
