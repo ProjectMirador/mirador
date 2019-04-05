@@ -33,7 +33,7 @@ describe('GalleryView', () => {
   it('renders gallery items for all canvases', () => {
     expect(wrapper.find('div[role="button"]').length).toBe(3);
   });
-  it('sets a mirador-current-canvas class on current canvas', () => {
+  it('sets a mirador-current-canvas-grouping class on current canvas', () => {
     expect(wrapper.find('div[role="button"]').at(0).props().className).toEqual('galleryViewItemCurrent');
   });
   it('renders the canvas labels for each canvas in canvas items', () => {

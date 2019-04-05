@@ -13,7 +13,7 @@ describe('Thumbnail navigation', () => {
     expect(Object.values(windows)[0].canvasIndex).toBe(2); // test harness in index.html starts at 2
     await page.waitFor(1000);
     await expect(page).toClick('.mirador-thumbnail-nav-canvas-1 img');
-    await expect(page).toMatchElement('.mirador-thumbnail-nav-canvas-1.mirador-current-canvas', { timeout: 1500 });
+    await expect(page).toMatchElement('.mirador-thumbnail-nav-canvas-1.mirador-current-canvas-grouping', { timeout: 1500 });
     windows = await page.evaluate(() => (
       miradorInstance.store.getState().windows
     ));

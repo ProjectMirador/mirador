@@ -42,31 +42,20 @@ const mapDispatchToProps = {
  * Styles for withStyles HOC
  */
 const styles = theme => ({
-  canvas: {
-    '&$currentCanvas': {
-      border: `2px solid ${theme.palette.secondary.main}`,
+  thumbNavigation: {
+    '&:focus': {
+      boxShadow: 0,
+      outline: 0,
     },
-    border: '2px solid transparent',
-    color: theme.palette.common.white,
-    cursor: 'pointer',
-    margin: '2px',
-    padding: '2px',
-  },
-  currentCanvas: {
-  },
-  root: {
-    background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-  },
-  title: {
-    color: '#ffffff',
   },
 });
+
 
 const enhance = compose(
   withStyles(styles),
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('ThumnailNavigation'),
+  withPlugins('ThumbnailNavigation'),
 );
 
 export default enhance(ThumbnailNavigation);
