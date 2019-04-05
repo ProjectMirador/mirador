@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Dialog,
   DialogTitle,
-  List,
   ListItem,
   ListItemIcon,
   ListItemText,
@@ -11,6 +10,7 @@ import {
 } from '@material-ui/core';
 import PaletteIcon from '@material-ui/icons/PaletteSharp';
 import PropTypes from 'prop-types';
+import { ListKeyboardNavigation } from '../lib/ListKeyboardNavigation';
 
 /**
  * a simple dialog providing the possibility to switch the theme
@@ -48,11 +48,13 @@ export class ChangeThemeDialog extends Component {
       t,
       theme,
     } = this.props;
-
     return (
       <Dialog
         onClose={handleClose}
         open={open}
+        disableAutoFocus
+        disableRestoreFocus
+        disableEnforceFocus
       >
         <DialogTitle id="change-the-dialog-title" disableTypography>
           <Typography variant="h2">
@@ -60,20 +62,20 @@ export class ChangeThemeDialog extends Component {
           </Typography>
         </DialogTitle>
         <DialogContent className={classes.dialogContent}>
-          <List>
-            <ListItem className={classes.listitem} onClick={() => this.handleThemeChange('light')} selected={theme === 'light'}>
+          <ListKeyboardNavigation selected={theme} onChange={this.handleThemeChange}>
+            <ListItem className={classes.listitem} value="light">
               <ListItemIcon>
                 <PaletteIcon className={classes.lightColor} />
               </ListItemIcon>
               <ListItemText>{t('light')}</ListItemText>
             </ListItem>
-            <ListItem className={classes.listitem} onClick={() => this.handleThemeChange('dark')} selected={theme === 'dark'}>
+            <ListItem className={classes.listitem} value="dark">
               <ListItemIcon>
                 <PaletteIcon className={classes.darkColor} />
               </ListItemIcon>
               <ListItemText>{t('dark')}</ListItemText>
             </ListItem>
-          </List>
+          </ListKeyboardNavigation>
         </DialogContent>
       </Dialog>
     );
@@ -85,6 +87,7 @@ ChangeThemeDialog.propTypes = {
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
   t: PropTypes.func.isRequired,
+  theme: PropTypes.string.isRequired,
   updateConfig: PropTypes.func.isRequired,
 };
 
