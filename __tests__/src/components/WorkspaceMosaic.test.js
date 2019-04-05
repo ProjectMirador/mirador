@@ -76,7 +76,11 @@ describe('WorkspaceMosaic', () => {
       });
     });
     it('by default use workspace.layout', () => {
-      wrapper = createWrapper({ windows: {}, workspace: { layout: 'foo' } });
+      wrapper = createWrapper({ windows: { foo: 'bar' }, workspace: { layout: 'foo' } });
+      expect(wrapper.instance().determineWorkspaceLayout()).toEqual('foo');
+    });
+    it('generates a new layout if windows do not match current layout', () => {
+      wrapper = createWrapper({ windows: { foo: 'bar' }, workspace: { layout: { first: 'foo', second: 'bark' } } });
       expect(wrapper.instance().determineWorkspaceLayout()).toEqual('foo');
     });
     it('when window ids match workspace layout', () => {
