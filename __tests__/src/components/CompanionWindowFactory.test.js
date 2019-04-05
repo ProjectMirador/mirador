@@ -31,10 +31,10 @@ describe('CompanionWindowFactory', () => {
     });
   });
 
-  describe('for a canvas_navigation window', () => {
+  describe('for a canvas navigation window', () => {
     it('renders the appropriate arg component', () => {
       wrapper = createWrapper({
-        content: 'canvas_navigation',
+        content: 'canvas',
       });
 
       expect(wrapper.find(WindowSideBarCanvasPanel).length).toBe(1);
@@ -54,7 +54,7 @@ describe('CompanionWindowFactory', () => {
   describe('for the thumbnail nav window', () => {
     it('renders the appropriate arg component', () => {
       wrapper = createWrapper({
-        content: 'thumbnail_navigation',
+        content: 'thumbnailNavigation',
       });
 
       expect(wrapper.find(ThumbnailNavigation).length).toBe(1);
