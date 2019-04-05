@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
+import ListItemText from '@material-ui/core/ListItemText';
 import { WindowList } from '../../../src/components/WindowList';
 
 describe('WindowList', () => {
@@ -52,7 +52,7 @@ describe('WindowList', () => {
       expect(wrapper.find('WithStyles(MenuItem)').length).toBe(1);
       expect(wrapper.find('WithStyles(MenuItem)').key()).toBe('xyz');
       expect(
-        wrapper.find('WithStyles(MenuItem)').matchesElement(<MenuItem><Typography>untitled</Typography></MenuItem>),
+        wrapper.find('WithStyles(MenuItem)').matchesElement(<MenuItem><ListItemText>untitled</ListItemText></MenuItem>),
       ).toBe(true);
       wrapper.find('WithStyles(MenuItem)').simulate('click', {});
       expect(handleClose).toBeCalled();
@@ -81,7 +81,7 @@ describe('WindowList', () => {
       expect(wrapper.find('WithStyles(MenuItem)').length).toBe(1);
       expect(wrapper.find('WithStyles(MenuItem)').key()).toBe('xyz');
       expect(
-        wrapper.find('WithStyles(MenuItem)').matchesElement(<MenuItem><Typography>Some title</Typography></MenuItem>),
+        wrapper.find('WithStyles(MenuItem)').matchesElement(<MenuItem><ListItemText>Some title</ListItemText></MenuItem>),
       ).toBe(true);
     });
   });

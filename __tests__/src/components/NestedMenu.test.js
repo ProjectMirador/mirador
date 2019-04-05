@@ -35,7 +35,7 @@ describe('NestedMenu', () => {
   it('renders the given label wrapped in a MUI Typography', () => {
     wrapper = createWrapper();
 
-    expect(wrapper.find('WithStyles(Typography)').children().text()).toEqual('GivenLabel');
+    expect(wrapper.find('WithStyles(ListItemText)').children().text()).toEqual('GivenLabel');
   });
 
   it('toggles the local nestedMenuIsOpen state when clicking the MenuItem', () => {
