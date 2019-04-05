@@ -25,7 +25,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
    */
   currentCanvasClass(canvasIndices) {
     const { index } = this.props;
-    if (canvasIndices.includes(index)) return 'current-canvas';
+    if (canvasIndices.includes(index)) return 'current-canvas-grouping';
     return '';
   }
 
