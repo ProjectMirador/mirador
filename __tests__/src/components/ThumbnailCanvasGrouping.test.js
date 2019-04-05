@@ -42,7 +42,7 @@ describe('ThumbnailCanvasGrouping', () => {
     expect(wrapper.find('.mirador-thumbnail-nav-container').length).toEqual(1);
   });
   it('sets a mirador-current-canvas-grouping class on current canvas', () => {
-    expect(wrapper.find('.mirador-thumbnail-nav-canvas-1.mirador-current-canvas-grouping'));
+    expect(wrapper.find('.mirador-thumbnail-nav-canvas-1.mirador-current-canvas-grouping').length).toEqual(1);
   });
   it('renders a CaptionedCanvasThumbnail', () => {
     expect(wrapper.find('WithStyles(WithPlugins(CaptionedCanvasThumbnail))').length).toEqual(1);
