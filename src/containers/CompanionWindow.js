@@ -76,7 +76,7 @@ const styles = theme => ({
     minHeight: 'max-content',
   },
   vertical: {
-    width: '201px',
+    width: '235px',
   },
   windowSideBarTitle: {
     ...theme.typography.subtitle1,
