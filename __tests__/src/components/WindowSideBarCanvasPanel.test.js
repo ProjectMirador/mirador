@@ -23,6 +23,7 @@ function createWrapper(props) {
       windowId="xyz"
       setCanvas={() => {}}
       config={{ canvasNavigation: { height: 100 } }}
+      updateVariant={() => {}}
       {...props}
     />,
   );
@@ -46,16 +47,16 @@ describe('WindowSideBarCanvasPanel', () => {
   });
 
   describe('handleVariantChange', () => {
-    it('toggles state', () => {
-      const wrapper = createWrapper();
+    it('updates the variant', () => {
+      const updateVariant = jest.fn();
+      const wrapper = createWrapper({ updateVariant });
       wrapper.instance().handleVariantChange({ target: { value: 'compact' } });
-      expect(wrapper.state().variant).toBe('compact');
+      expect(updateVariant).toHaveBeenCalledWith('compact');
     });
   });
 
   it('renders all needed elements for the compact view', () => {
-    const wrapper = createWrapper();
-    wrapper.setState({ variant: 'compact' });
+    const wrapper = createWrapper({ variant: 'compact' });
     expect(wrapper.props().title).toBe('canvasIndex');
     expect(wrapper.find(List).length).toBe(1);
     expect(wrapper.find(ListItem).length).toBe(3);

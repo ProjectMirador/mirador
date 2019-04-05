@@ -19,7 +19,6 @@ export class WindowSideBarCanvasPanel extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { variant: 'thumbnail' };
     this.handleVariantChange = this.handleVariantChange.bind(this);
   }
 
@@ -33,9 +32,11 @@ export class WindowSideBarCanvasPanel extends Component {
     }));
   }
 
-  /** */
+  /** @private */
   handleVariantChange(event) {
-    this.setState({ variant: event.target.value });
+    const { updateVariant } = this.props;
+
+    updateVariant(event.target.value);
   }
 
   /** */
@@ -91,10 +92,8 @@ export class WindowSideBarCanvasPanel extends Component {
    */
   render() {
     const {
-      canvases, setCanvas, classes, t, windowId, id,
+      canvases, setCanvas, classes, t, variant, windowId, id,
     } = this.props;
-
-    const { variant } = this.state;
 
 
     const canvasesIdAndLabel = this.getIdAndLabelOfCanvases(canvases);
@@ -159,5 +158,11 @@ WindowSideBarCanvasPanel.propTypes = {
   id: PropTypes.string.isRequired,
   setCanvas: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
+  updateVariant: PropTypes.func.isRequired,
+  variant: PropTypes.oneOf(['compact', 'thumbnail']),
   windowId: PropTypes.string.isRequired,
+};
+
+WindowSideBarCanvasPanel.defaultProps = {
+  variant: 'thumbnail',
 };

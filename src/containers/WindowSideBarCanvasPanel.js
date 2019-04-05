@@ -6,22 +6,30 @@ import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import { WindowSideBarCanvasPanel } from '../components/WindowSideBarCanvasPanel';
 import {
+  getCompanionWindow,
   getManifestCanvases,
 } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
  */
-const mapStateToProps = (state, { windowId }) => {
+const mapStateToProps = (state, { id, windowId }) => {
   const canvases = getManifestCanvases(state, { windowId });
   const { config } = state;
   return {
     canvases,
     config,
+    variant: getCompanionWindow(state, { companionWindowId: id, windowId }).variant,
   };
 };
 
-const mapDispatchToProps = { setCanvas: actions.setCanvas };
+/** */
+const mapDispatchToProps = (dispatch, { id, windowId }) => ({
+  setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
+  updateVariant: variant => dispatch(
+    actions.updateCompanionWindow(windowId, id, { variant }),
+  ),
+});
 
 /**
  *
