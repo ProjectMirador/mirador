@@ -7,7 +7,7 @@ import { createRemoveUpdate, updateTree } from 'react-mosaic-component/lib/util/
 import 'react-mosaic-component/react-mosaic-component.css';
 import difference from 'lodash/difference';
 import MosaicRenderPreview from '../containers/MosaicRenderPreview';
-import Window from '../containers/Window';
+import Window from '../containers/window/Window';
 
 /**
  * Represents a work area that contains any number of windows

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Rnd } from 'react-rnd';
 import ResizeObserver from 'react-resize-observer';
-import Window from '../containers/Window';
+import Window from '../containers/window/Window';
 import ns from '../config/css-ns';
 
 /**

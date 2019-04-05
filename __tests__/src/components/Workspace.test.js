@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
 import WorkspaceMosaic from '../../../src/containers/WorkspaceMosaic';
 import WorkspaceElastic from '../../../src/containers/WorkspaceElastic';
-import Window from '../../../src/containers/Window';
+import Window from '../../../src/containers/window/Window';
 import { Workspace } from '../../../src/components/Workspace';
 
 const windows = { 1: { id: 1 }, 2: { id: 2 } };
