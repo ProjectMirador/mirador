@@ -52,6 +52,7 @@ export function addWindow(options) {
       displayAllAnnotations: config.displayAllAnnotations || false,
       height: 400,
       id: `window-${uuid()}`,
+      layoutOrder: numWindows + 1,
       manifestId: null,
       maximized: false,
       rangeId: null,

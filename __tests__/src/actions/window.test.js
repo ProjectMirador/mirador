@@ -86,6 +86,7 @@ describe('window actions', () => {
           collectionIndex: 0,
           height: 400,
           id: 'helloworld',
+          layoutOrder: 3,
           manifestId: null,
           maximized: false,
           rangeId: null,
