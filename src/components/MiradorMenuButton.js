@@ -16,7 +16,6 @@ export function MiradorMenuButton(props) {
     containerId,
     dispatch,
     TooltipProps,
-    wrapperClassName,
     ...iconButtonProps
   } = props;
 
@@ -28,15 +27,9 @@ export function MiradorMenuButton(props) {
       title={ariaLabel}
       {...TooltipProps}
     >
-      {/*
-        Wrap IconButton in span so it can receive mouse events
-        (e.g. show the tooltip) even if the IconButton is disabled
-      */}
-      <span className={wrapperClassName}>
-        <IconButton {...iconButtonProps}>
-          {children}
-        </IconButton>
-      </span>
+      <IconButton {...iconButtonProps}>
+        {children}
+      </IconButton>
     </Tooltip>
   );
 }
@@ -47,11 +40,9 @@ MiradorMenuButton.propTypes = {
   containerId: PropTypes.string.isRequired,
   dispatch: PropTypes.func,
   TooltipProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  wrapperClassName: PropTypes.string,
 };
 
 MiradorMenuButton.defaultProps = {
   dispatch: () => {},
   TooltipProps: {},
-  wrapperClassName: null,
 };
