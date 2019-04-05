@@ -147,6 +147,24 @@ export class WindowSideBarButtons extends Component {
       t,
     } = this.props;
 
+    /** */
+    const TabButton = props => (
+      <Tab
+        classes={{ root: classes.tab, selected: classes.tabSelected }}
+        aria-label={
+          t('openCompanionWindow', { context: props.value })
+        }
+        icon={(
+          <Tooltip title={t('openCompanionWindow', { context: props.value })}>
+            {props.icon}
+          </Tooltip>
+        )}
+        TouchRippleProps={{ classes: { child: classes.tabRipple } }}
+        onKeyUp={this.handleKeyUp}
+        {...props}
+      />
+    );
+
     return (
       <Tabs
         classes={{ flexContainer: classes.tabsFlexContainer, indicator: classes.tabsIndicator }}
@@ -159,49 +177,21 @@ export class WindowSideBarButtons extends Component {
         aria-label={t('sidebarPanelsNavigation')}
         ref={ref => this.setTabsRef(ref)}
       >
-        <Tab
-          classes={{ root: classes.tab, selected: classes.tabSelected }}
-          aria-label={
-            t('openCompanionWindow', { context: 'info' })
-          }
-          icon={(
-            <Tooltip title={t('openCompanionWindow', { context: 'info' })}>
-              <InfoIcon />
-            </Tooltip>
-          )}
-          TouchRippleProps={{ classes: { child: classes.tabRipple } }}
-          onKeyUp={this.handleKeyUp}
-          value="Info"
+        <TabButton
+          value="info"
+          icon={(<InfoIcon />)}
         />
-        <Tab
-          classes={{ root: classes.tab, selected: classes.tabSelected }}
-          aria-label={
-            t('openCompanionWindow', { context: 'canvas' })
-          }
-          icon={(
-            <Tooltip title={t('openCompanionWindow', { context: 'canvas' })}>
-              <CanvasIndexIcon />
-            </Tooltip>
-          )}
-          TouchRippleProps={{ classes: { child: classes.tabRipple } }}
-          onKeyUp={this.handleKeyUp}
+        <TabButton
           value="canvas"
+          icon={(<CanvasIndexIcon />)}
         />
-        <Tab
-          classes={{ root: classes.tab, selected: classes.tabSelected }}
-          aria-label={
-            t('openCompanionWindow', { context: 'annotations' })
-          }
-          icon={(
-            <Tooltip title={t('openCompanionWindow', { context: 'annotations' })}>
-              <Badge color="error" invisible={!hasAnnotations} variant="dot">
-                <AnnotationIcon />
-              </Badge>
-            </Tooltip>
-          )}
-          TouchRippleProps={{ classes: { child: classes.tabRipple } }}
-          onKeyUp={this.handleKeyUp}
+        <TabButton
           value="annotations"
+          icon={(
+            <Badge color="error" invisible={!hasAnnotations} variant="dot">
+              <AnnotationIcon />
+            </Badge>
+          )}
         />
       </Tabs>
     );
