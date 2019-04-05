@@ -12,6 +12,7 @@ function createWrapper(props) {
       handleClose={() => {}}
       updateConfig={() => {}}
       t={t => (t)}
+      theme="light"
       {...props}
     />,
   );
@@ -32,14 +33,5 @@ describe('ChangeThemeDialog', () => {
     expect(wrapper.find('WithStyles(ListItemText)').length).toBe(2);
     expect(wrapper.find('WithStyles(ListItemText)').first().render().text()).toBe('light');
     expect(wrapper.find('WithStyles(ListItemText)').last().render().text()).toBe('dark');
-  });
-
-  it('triggers the updateConfig handler when selecting a theme', () => {
-    const mockHandleClick = jest.fn();
-
-    wrapper = createWrapper({ updateConfig: mockHandleClick });
-    wrapper.find('WithStyles(ListItem)').first().simulate('click');
-
-    expect(mockHandleClick).toHaveBeenCalledTimes(1);
   });
 });
