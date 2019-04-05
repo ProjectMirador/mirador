@@ -53,6 +53,7 @@ export function addWindow(options) {
       draggingEnabled: true,
       height: 400,
       id: `window-${uuid()}`,
+      layoutOrder: numWindows + 1,
       manifestId: null,
       maximized: false,
       rangeId: null,

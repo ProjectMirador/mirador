@@ -6,6 +6,7 @@ import {
 import { createRemoveUpdate, updateTree } from 'react-mosaic-component/lib/util/mosaicUpdates';
 import 'react-mosaic-component/react-mosaic-component.css';
 import difference from 'lodash/difference';
+import toPairs from 'lodash/toPairs';
 import MosaicRenderPreview from '../containers/MosaicRenderPreview';
 import Window from '../containers/Window';
 import MosaicLayout from '../lib/MosaicLayout';
@@ -80,16 +81,17 @@ export class WorkspaceMosaic extends React.Component {
    */
   determineWorkspaceLayout() {
     const { windows, workspace } = this.props;
-    const windowKeys = Object.keys(windows).sort();
+    const sortedWindows = toPairs(windows)
+      .sort((a, b) => a.layoutOrder - b.layoutOrder).map(val => val[0]);
     const leaveKeys = getLeaves(workspace.layout);
     // Windows were added
-    if (!windowKeys.every(e => leaveKeys.includes(e))) {
+    if (!sortedWindows.every(e => leaveKeys.includes(e))) {
       // No current layout, so just generate a new one
       if (leaveKeys.length < 2) {
-        return createBalancedTreeFromLeaves(windowKeys);
+        return createBalancedTreeFromLeaves(sortedWindows);
       }
       // Add new windows to layout
-      const addedWindows = difference(windowKeys, leaveKeys);
+      const addedWindows = difference(sortedWindows, leaveKeys);
       const layout = new MosaicLayout(workspace.layout);
       layout.addWindows(addedWindows);
       return layout.layout;
