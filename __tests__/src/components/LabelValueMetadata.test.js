@@ -26,18 +26,18 @@ describe('LabelValueMetadata', () => {
 
     it('renders a dt/dd for each label/value pair', () => {
       expect(wrapper.find('dl').length).toEqual(1);
-      expect(wrapper.find('dt').length).toEqual(2);
-      expect(wrapper.find('dd').length).toEqual(2);
+      expect(wrapper.find('WithStyles(Typography)[component="dt"]').length).toEqual(2);
+      expect(wrapper.find('WithStyles(Typography)[component="dd"]').length).toEqual(2);
     });
 
     it('renders correct labels in dt', () => {
-      expect(wrapper.find('dt WithStyles(Typography)').first().children().text()).toEqual('Label 1');
-      expect(wrapper.find('dt WithStyles(Typography)').last().children().text()).toEqual('Label 2');
+      expect(wrapper.find('WithStyles(Typography)[component="dt"]').first().children().text()).toEqual('Label 1');
+      expect(wrapper.find('WithStyles(Typography)[component="dt"]').last().children().text()).toEqual('Label 2');
     });
 
     it('renders SanitizedHtml component in dt for each value', () => {
-      expect(wrapper.find('dd').first().find(SanitizedHtml).length).toBe(1);
-      expect(wrapper.find('dd').last().find(SanitizedHtml).length).toBe(1);
+      expect(wrapper.find('WithStyles(Typography)[component="dd"]').first().find(SanitizedHtml).length).toBe(1);
+      expect(wrapper.find('WithStyles(Typography)[component="dd"]').last().find(SanitizedHtml).length).toBe(1);
     });
 
     it('passes value string to SanitizedHtml', () => {
