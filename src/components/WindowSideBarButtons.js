@@ -162,10 +162,10 @@ export class WindowSideBarButtons extends Component {
         <Tab
           classes={{ root: classes.tab, selected: classes.tabSelected }}
           aria-label={
-            t('openInfoCompanionWindow')
+            t('openCompanionWindow', { context: 'Info' })
           }
           icon={(
-            <Tooltip title={t('openInfoCompanionWindow')}>
+            <Tooltip title={t('openCompanionWindow', { context: 'Info' })}>
               <InfoIcon />
             </Tooltip>
           )}
@@ -176,10 +176,10 @@ export class WindowSideBarButtons extends Component {
         <Tab
           classes={{ root: classes.tab, selected: classes.tabSelected }}
           aria-label={
-            t('openCanvasNavigationCompanionWindow')
+            t('openCompanionWindow', { context: 'Canvas' })
           }
           icon={(
-            <Tooltip title={t('openCanvasNavigationCompanionWindow')}>
+            <Tooltip title={t('openCompanionWindow', { context: 'Canvas' })}>
               <CanvasIndexIcon />
             </Tooltip>
           )}
@@ -190,10 +190,10 @@ export class WindowSideBarButtons extends Component {
         <Tab
           classes={{ root: classes.tab, selected: classes.tabSelected }}
           aria-label={
-            t('openAnnotationCompanionWindow')
+            t('openCompanionWindow', { context: 'Annotations' })
           }
           icon={(
-            <Tooltip title={t('openAnnotationCompanionWindow')}>
+            <Tooltip title={t('openCompanionWindow', { context: 'Annotations' })}>
               <Badge color="error" invisible={!hasAnnotations} variant="dot">
                 <AnnotationIcon />
               </Badge>
