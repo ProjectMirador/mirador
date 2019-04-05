@@ -91,7 +91,11 @@ export class WorkspaceMosaic extends React.Component {
       layout.addWindows(addedWindows);
       return layout.layout;
     }
-
+    // Windows were removed (perhaps in a different Workspace). We don't have a
+    // way to reconfigure.. so we have to random generate
+    if (!leaveKeys.every(e => sortedWindows.includes(e))) {
+      return createBalancedTreeFromLeaves(sortedWindows);
+    }
     return workspace.layout;
   }
 
