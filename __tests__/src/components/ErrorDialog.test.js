@@ -29,7 +29,7 @@ describe('ErrorDialog', () => {
     const errors = { testid123: { id: 'testid123', message: errorMessage } };
 
     wrapper = createWrapper({ errors });
-    expect(wrapper.find('WithStyles(Typography)[variant="body2"]').render().text()).toBe(errorMessage);
+    expect(wrapper.find('WithStyles(DialogContentText)[variant="body2"]').render().text()).toBe(errorMessage);
   });
 
   it('triggers the handleClick prop when clicking the ok button', () => {

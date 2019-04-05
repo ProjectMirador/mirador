@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { SanitizedHtml } from './SanitizedHtml';
 import AnnotationSettings from '../containers/AnnotationSettings';
@@ -76,9 +77,9 @@ export class WindowSideBarAnnotationsPanel extends Component {
               onMouseEnter={() => this.handleMouseEnter(annotation)}
               onMouseLeave={() => this.handleMouseLeave(annotation)}
             >
-              <Typography variant="body2">
+              <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
                 <SanitizedHtml ruleSet="iiif" htmlString={annotation.content} />
-              </Typography>
+              </ListItemText>
             </ListItem>
           ))
         }
