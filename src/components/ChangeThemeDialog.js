@@ -52,9 +52,6 @@ export class ChangeThemeDialog extends Component {
       <Dialog
         onClose={handleClose}
         open={open}
-        disableAutoFocus
-        disableRestoreFocus
-        disableEnforceFocus
       >
         <DialogTitle id="change-the-dialog-title" disableTypography>
           <Typography variant="h2">
