@@ -38,4 +38,14 @@ describe('MosaicLayout', () => {
       });
     });
   });
+  describe('removeWindows', () => {
+    let instance;
+    beforeEach(() => {
+      instance = new MosaicLayout({ first: 'foo', second: 'bar' });
+    });
+    it('case 1 window: returns a single window', () => {
+      instance.removeWindows(['bar'], { bar: ['second'] });
+      expect(instance.layout).toEqual('foo');
+    });
+  });
 });
