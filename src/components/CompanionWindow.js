@@ -63,7 +63,7 @@ export class CompanionWindow extends Component {
                     updateCompanionWindow && (
                       <MiradorMenuButton
                         aria-label={position === 'bottom' ? t('moveCompanionWindowToRight') : t('moveCompanionWindowToBottom')}
-                        wrapperClassName={classes.positionButton}
+                        className={classes.positionButton}
                         onClick={() => { updateCompanionWindow(windowId, id, { position: position === 'bottom' ? 'right' : 'bottom' }); }}
                       >
                         {position === 'bottom' ? <ThumbnailNavigationRightIcon /> : <ThumbnailNavigationBottomIcon />}

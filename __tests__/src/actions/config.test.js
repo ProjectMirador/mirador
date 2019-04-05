@@ -34,4 +34,13 @@ describe('config actions', () => {
       expect(actions.importConfig(config)).toEqual(expectedAction);
     });
   });
+
+  describe('importMiradorState', () => {
+    it('imports the Mirador state updating the workspace id', () => {
+      const state = { workspace: { id: 'foo' }, zalgo: 'bar' };
+      expect(actions.importMiradorState(state).state.workspace.id).not.toEqual('foo');
+      expect(actions.importMiradorState(state).state.zalgo).toEqual('bar');
+      expect(actions.importMiradorState(state).type).toEqual(ActionTypes.IMPORT_MIRADOR_STATE);
+    });
+  });
 });

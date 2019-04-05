@@ -51,4 +51,10 @@ describe('config reducer', () => {
       })).toEqual(configFixture);
     });
   });
+  it('should handle IMPORT_MIRADOR_STATE', () => {
+    expect(configReducer({}, {
+      state: { config: { new: 'stuff' } },
+      type: ActionTypes.IMPORT_MIRADOR_STATE,
+    })).toEqual({ new: 'stuff' });
+  });
 });

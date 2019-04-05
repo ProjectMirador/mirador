@@ -18,6 +18,7 @@ function createWrapper(props) {
     <Workspace
       isWorkspaceControlPanelVisible
       windows={windows}
+      workspaceId="foo"
       workspaceType="mosaic"
       t={k => k}
       {...props}

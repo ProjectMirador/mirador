@@ -387,4 +387,11 @@ describe('windows reducer', () => {
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
     });
   });
+
+  it('should handle IMPORT_MIRADOR_STATE', () => {
+    expect(windowsReducer({}, {
+      state: { windows: { new: 'stuff' } },
+      type: ActionTypes.IMPORT_MIRADOR_STATE,
+    })).toEqual({ new: 'stuff' });
+  });
 });

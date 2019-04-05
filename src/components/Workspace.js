@@ -17,7 +17,7 @@ export class Workspace extends React.Component {
    * Determine which workspace to render by configured type
    */
   workspaceByType() {
-    const { workspaceType, windows } = this.props;
+    const { workspaceId, workspaceType, windows } = this.props;
     if (this.maximizedWindows()) {
       return this.maximizedWindows();
     }
@@ -29,7 +29,7 @@ export class Workspace extends React.Component {
       default:
         return Object.values(windows).map(window => (
           <Window
-            key={window.id}
+            key={`${window.id}-${workspaceId}`}
             window={window}
           />
         ));
@@ -40,7 +40,7 @@ export class Workspace extends React.Component {
    * Determine whether or not there are maximized windows
    */
   maximizedWindows() {
-    const { windows } = this.props;
+    const { windows, workspaceId } = this.props;
     const windowKeys = Object.keys(windows).sort();
     const maximizedWindows = windowKeys
       .map(id => windows[id])
@@ -48,7 +48,7 @@ export class Workspace extends React.Component {
     if (maximizedWindows.length) {
       return Object.values(maximizedWindows).map(window => (
         <Window
-          key={window.id}
+          key={`${window.id}-${workspaceId}`}
           window={window}
           className={classNames(ns('workspace-maximized-window'))}
         />
@@ -83,5 +83,6 @@ Workspace.propTypes = {
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
   t: PropTypes.func.isRequired,
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  workspaceId: PropTypes.string.isRequired,
   workspaceType: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
 };

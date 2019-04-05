@@ -2,6 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import Fullscreen from 'react-full-screen';
+import AccessTokenSender from '../../../src/containers/AccessTokenSender';
+import AuthenticationSender from '../../../src/containers/AuthenticationSender';
 import WorkspaceArea from '../../../src/containers/WorkspaceArea';
 import { App } from '../../../src/components/App';
 import settings from '../../../src/config/settings';
@@ -30,6 +32,8 @@ describe('App', () => {
     expect(wrapper.find(MuiThemeProvider).length).toBe(1);
     expect(wrapper.find(Fullscreen).length).toBe(1);
     expect(wrapper.find(WorkspaceArea).length).toBe(1);
+    expect(wrapper.find(AuthenticationSender).length).toBe(1);
+    expect(wrapper.find(AccessTokenSender).length).toBe(1);
   });
 
   it('sets up a theme based on the config passed in merged w/ MaterialUI', () => {

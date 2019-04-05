@@ -19,6 +19,8 @@ export const viewersReducer = (state = {}, action) => {
         }
         return object;
       }, {});
+    case ActionTypes.IMPORT_MIRADOR_STATE:
+      return action.state.viewers;
     default:
       return state;
   }

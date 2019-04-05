@@ -1,0 +1,364 @@
+{
+  "@id": "info:iiifauth",
+  "@type": "sc:Manifest",
+  "description": "A collection of IIIF auth fixtures",
+  "sequences": [
+    {
+      "@id": "https://manifests.britishart.yale.edu/sequence/Osbornfa1",
+      "@type": "sc:Sequence",
+      "canvases": [
+        {
+          "@id": "info:canvas_01_Icarus_Breughel.jpg",
+          "@type": "sc:Canvas",
+          "height": 1800,
+          "width": 1200,
+          "label": "Standard login",
+          "images": [
+            {
+              "@id": "info:image_01_Icarus_Breughel.jpg",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "info:canvas_01_Icarus_Breughel.jpg",
+              "resource": {
+                "@id": "https://iiifauth.digtest.co.uk/img/01_Icarus_Breughel.jpg/full/full/0/native.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 1800,
+                "width": 1200,
+                "service": {
+                  "@id": "https://iiifauth.digtest.co.uk/img/01_Icarus_Breughel.jpg",
+                  "profile": "http://iiif.io/api/image/1/level1.json",
+                  "@context": "http://iiif.io/api/image/2/context.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "info:canvas_02_gauguin.jpg",
+          "@type": "sc:Canvas",
+          "height": 1800,
+          "width": 1200,
+          "label": "Login with degraded access for unauthed users",
+          "images": [
+            {
+              "@id": "info:image_02_gauguin.jpg",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "info:canvas_02_gauguin.jpg",
+              "resource": {
+                "@id": "https://iiifauth.digtest.co.uk/img/02_gauguin.jpg/full/full/0/native.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 1800,
+                "width": 1200,
+                "service": {
+                  "@id": "https://iiifauth.digtest.co.uk/img/02_gauguin.jpg",
+                  "profile": "http://iiif.io/api/image/1/level1.json",
+                  "@context": "http://iiif.io/api/image/2/context.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "info:canvas_02_gauguin_degraded.jpg",
+          "@type": "sc:Canvas",
+          "height": 1800,
+          "width": 1200,
+          "label": "The degraded (open) form of the above",
+          "images": [
+            {
+              "@id": "info:image_02_gauguin_degraded.jpg",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "info:canvas_02_gauguin_degraded.jpg",
+              "resource": {
+                "@id": "https://iiifauth.digtest.co.uk/img/02_gauguin_degraded.jpg/full/full/0/native.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 1800,
+                "width": 1200,
+                "service": {
+                  "@id": "https://iiifauth.digtest.co.uk/img/02_gauguin_degraded.jpg",
+                  "profile": "http://iiif.io/api/image/1/level1.json",
+                  "@context": "http://iiif.io/api/image/2/context.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "info:canvas_03_clickthrough.jpg",
+          "@type": "sc:Canvas",
+          "height": 1800,
+          "width": 1200,
+          "label": "Clickthrough",
+          "images": [
+            {
+              "@id": "info:image_03_clickthrough.jpg",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "info:canvas_03_clickthrough.jpg",
+              "resource": {
+                "@id": "https://iiifauth.digtest.co.uk/img/03_clickthrough.jpg/full/full/0/native.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 1800,
+                "width": 1200,
+                "service": {
+                  "@id": "https://iiifauth.digtest.co.uk/img/03_clickthrough.jpg",
+                  "profile": "http://iiif.io/api/image/1/level1.json",
+                  "@context": "http://iiif.io/api/image/2/context.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "info:canvas_04_gene_cernan.jpg",
+          "@type": "sc:Canvas",
+          "height": 1800,
+          "width": 1200,
+          "label": "Kiosk",
+          "images": [
+            {
+              "@id": "info:image_04_gene_cernan.jpg",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "info:canvas_04_gene_cernan.jpg",
+              "resource": {
+                "@id": "https://iiifauth.digtest.co.uk/img/04_gene_cernan.jpg/full/full/0/native.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 1800,
+                "width": 1200,
+                "service": {
+                  "@id": "https://iiifauth.digtest.co.uk/img/04_gene_cernan.jpg",
+                  "profile": "http://iiif.io/api/image/1/level1.json",
+                  "@context": "http://iiif.io/api/image/2/context.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "info:canvas_05_cader_idris.jpg",
+          "@type": "sc:Canvas",
+          "height": 1800,
+          "width": 1200,
+          "label": "External auth, log in at https://iiifauth.digtest.co.uk/external-cookie/05_cader_idris.jpg",
+          "images": [
+            {
+              "@id": "info:image_05_cader_idris.jpg",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "info:canvas_05_cader_idris.jpg",
+              "resource": {
+                "@id": "https://iiifauth.digtest.co.uk/img/05_cader_idris.jpg/full/full/0/native.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 1800,
+                "width": 1200,
+                "service": {
+                  "@id": "https://iiifauth.digtest.co.uk/img/05_cader_idris.jpg",
+                  "profile": "http://iiif.io/api/image/1/level1.json",
+                  "@context": "http://iiif.io/api/image/2/context.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "info:canvas_06_1959.jpg",
+          "@type": "sc:Canvas",
+          "height": 1800,
+          "width": 1200,
+          "label": "Login pattern, shared service",
+          "images": [
+            {
+              "@id": "info:image_06_1959.jpg",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "info:canvas_06_1959.jpg",
+              "resource": {
+                "@id": "https://iiifauth.digtest.co.uk/img/06_1959.jpg/full/full/0/native.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 1800,
+                "width": 1200,
+                "service": {
+                  "@id": "https://iiifauth.digtest.co.uk/img/06_1959.jpg",
+                  "profile": "http://iiif.io/api/image/1/level1.json",
+                  "@context": "http://iiif.io/api/image/2/context.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "info:canvas_07_mars_water.jpg",
+          "@type": "sc:Canvas",
+          "height": 1800,
+          "width": 1200,
+          "label": "Clickthrough pattern, shared service",
+          "images": [
+            {
+              "@id": "info:image_07_mars_water.jpg",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "info:canvas_07_mars_water.jpg",
+              "resource": {
+                "@id": "https://iiifauth.digtest.co.uk/img/07_mars_water.jpg/full/full/0/native.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 1800,
+                "width": 1200,
+                "service": {
+                  "@id": "https://iiifauth.digtest.co.uk/img/07_mars_water.jpg",
+                  "profile": "http://iiif.io/api/image/1/level1.json",
+                  "@context": "http://iiif.io/api/image/2/context.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "info:canvas_08_portmeirion.jpg",
+          "@type": "sc:Canvas",
+          "height": 1800,
+          "width": 1200,
+          "label": "Clickthrough AND external, to allow machine access; https://iiifauth.digtest.co.uk/external-cookie/08_portmeirion.jpg",
+          "images": [
+            {
+              "@id": "info:image_08_portmeirion.jpg",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "info:canvas_08_portmeirion.jpg",
+              "resource": {
+                "@id": "https://iiifauth.digtest.co.uk/img/08_portmeirion.jpg/full/full/0/native.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 1800,
+                "width": 1200,
+                "service": {
+                  "@id": "https://iiifauth.digtest.co.uk/img/08_portmeirion.jpg",
+                  "profile": "http://iiif.io/api/image/1/level1.json",
+                  "@context": "http://iiif.io/api/image/2/context.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "info:canvas_09_lordship_lane.jpg",
+          "@type": "sc:Canvas",
+          "height": 1800,
+          "width": 1200,
+          "label": "Open content for reference",
+          "images": [
+            {
+              "@id": "info:image_09_lordship_lane.jpg",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "info:canvas_09_lordship_lane.jpg",
+              "resource": {
+                "@id": "https://iiifauth.digtest.co.uk/img/09_lordship_lane.jpg/full/full/0/native.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 1800,
+                "width": 1200,
+                "service": {
+                  "@id": "https://iiifauth.digtest.co.uk/img/09_lordship_lane.jpg",
+                  "profile": "http://iiif.io/api/image/1/level1.json",
+                  "@context": "http://iiif.io/api/image/2/context.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "info:canvas_10_babel.jpg",
+          "@type": "sc:Canvas",
+          "height": 1800,
+          "width": 1200,
+          "label": "maxWidth enforced by server",
+          "images": [
+            {
+              "@id": "info:image_10_babel.jpg",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "info:canvas_10_babel.jpg",
+              "resource": {
+                "@id": "https://iiifauth.digtest.co.uk/img/10_babel.jpg/full/full/0/native.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 1800,
+                "width": 1200,
+                "service": {
+                  "@id": "https://iiifauth.digtest.co.uk/img/10_babel.jpg",
+                  "profile": "http://iiif.io/api/image/1/level1.json",
+                  "@context": "http://iiif.io/api/image/2/context.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "info:canvas_11_kitty_joyner.jpg",
+          "@type": "sc:Canvas",
+          "height": 1800,
+          "width": 1200,
+          "label": "Anyone can zoom, login reqd for download",
+          "images": [
+            {
+              "@id": "info:image_11_kitty_joyner.jpg",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "info:canvas_11_kitty_joyner.jpg",
+              "resource": {
+                "@id": "https://iiifauth.digtest.co.uk/img/11_kitty_joyner.jpg/full/full/0/native.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 1800,
+                "width": 1200,
+                "service": {
+                  "@id": "https://iiifauth.digtest.co.uk/img/11_kitty_joyner.jpg",
+                  "profile": "http://iiif.io/api/image/1/level1.json",
+                  "@context": "http://iiif.io/api/image/2/context.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "info:canvas_11_kitty_joyner_degraded.jpg",
+          "@type": "sc:Canvas",
+          "height": 1800,
+          "width": 1200,
+          "label": "degraded version - same image, but maxWidth=512",
+          "images": [
+            {
+              "@id": "info:image_11_kitty_joyner_degraded.jpg",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "info:canvas_11_kitty_joyner_degraded.jpg",
+              "resource": {
+                "@id": "https://iiifauth.digtest.co.uk/img/11_kitty_joyner_degraded.jpg/full/full/0/native.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 1800,
+                "width": 1200,
+                "service": {
+                  "@id": "https://iiifauth.digtest.co.uk/img/11_kitty_joyner_degraded.jpg",
+                  "profile": "http://iiif.io/api/image/1/level1.json",
+                  "@context": "http://iiif.io/api/image/2/context.json"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

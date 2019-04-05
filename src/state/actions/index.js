@@ -11,3 +11,4 @@ export * from './infoResponse';
 export * from './canvas';
 export * from './workspace';
 export * from './annotation';
+export * from './auth';

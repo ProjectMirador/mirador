@@ -38,6 +38,7 @@ describe('OpenSeadragonViewer', () => {
         canvasWorld={new CanvasWorld([])}
       >
         <div className="foo" />
+        <div className="bar" />
       </OpenSeadragonViewer>,
     );
   });
@@ -47,6 +48,10 @@ describe('OpenSeadragonViewer', () => {
   it('renders child components enhanced with additional props', () => {
     expect(wrapper.find('.foo').length).toBe(1);
     expect(wrapper.find('.foo').props()).toEqual(expect.objectContaining({
+      zoomToWorld: wrapper.instance().zoomToWorld,
+    }));
+    expect(wrapper.find('.bar').length).toBe(1);
+    expect(wrapper.find('.bar').props()).toEqual(expect.objectContaining({
       zoomToWorld: wrapper.instance().zoomToWorld,
     }));
   });

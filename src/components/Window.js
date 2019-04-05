@@ -13,6 +13,14 @@ import CompanionArea from '../containers/CompanionArea';
  * @param {object} window
  */
 export class Window extends Component {
+  /** */
+  componentDidMount(prevProps) {
+    const { fetchManifest, manifest, window } = this.props;
+    if (window && window.manifestId && (!manifest || !manifest.isFetching)) {
+      fetchManifest(window.manifestId);
+    }
+  }
+
   /**
    * wrappedTopBar - will conditionally wrap a WindowTopBar for needed
    * additional functionality based on workspace type
@@ -96,6 +104,7 @@ Window.contextTypes = {
 
 Window.propTypes = {
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  fetchManifest: PropTypes.func.isRequired,
   focusWindow: PropTypes.func,
   label: PropTypes.string,
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types

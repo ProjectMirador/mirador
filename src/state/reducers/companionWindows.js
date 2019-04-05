@@ -23,7 +23,8 @@ export function companionWindowsReducer(state = {}, action) {
 
     case ActionTypes.REMOVE_COMPANION_WINDOW:
       return removeIn(state, [action.id]);
-
+    case ActionTypes.IMPORT_MIRADOR_STATE:
+      return action.state.companionWindows;
     default:
       return state;
   }
