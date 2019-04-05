@@ -19,6 +19,7 @@ export class OpenSeadragonViewer extends Component {
    * @return {Boolean}
    */
   static annotationsMatch(currentAnnotations, prevAnnotations) {
+    if (currentAnnotations.length === 0 && prevAnnotations.length === 0) return true;
     return currentAnnotations.some((annotation, index) => {
       if (!prevAnnotations[index]) {
         return false;
