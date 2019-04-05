@@ -142,4 +142,15 @@ describe('annotation actions', () => {
     };
     expect(actions.toggleAnnotationDisplay(windowId)).toEqual(expectedAction);
   });
+
+  it('handles the highlightAnnotation action', () => {
+    const windowId = 'wId1';
+    const annotationId = 'aId1';
+    const expectedAction = {
+      annotationId,
+      type: ActionTypes.HIGHLIGHT_ANNOTATION,
+      windowId,
+    };
+    expect(actions.highlightAnnotation(windowId, annotationId)).toEqual(expectedAction);
+  });
 });

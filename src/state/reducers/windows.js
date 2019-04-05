@@ -143,6 +143,14 @@ export const windowsReducer = (state = {}, action) => {
         },
       };
     }
+    case ActionTypes.HIGHLIGHT_ANNOTATION:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          highlightedAnnotation: action.annotationId,
+        },
+      };
     case ActionTypes.TOGGLE_ANNOTATION_DISPLAY:
       return {
         ...state,

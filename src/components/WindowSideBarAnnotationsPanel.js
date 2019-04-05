@@ -19,6 +19,8 @@ export class WindowSideBarAnnotationsPanel extends Component {
     super(props);
 
     this.handleClick = this.handleClick.bind(this);
+    this.handleMouseEnter = this.handleMouseEnter.bind(this);
+    this.handleMouseLeave = this.handleMouseLeave.bind(this);
   }
 
   /**
@@ -36,12 +38,29 @@ export class WindowSideBarAnnotationsPanel extends Component {
     }
   }
 
+  /** */
+  handleMouseEnter(annotation) {
+    const { allAnnotationsAreHighlighted, highlightAnnotation, windowId } = this.props;
+    if (allAnnotationsAreHighlighted) return;
+
+    highlightAnnotation(windowId, annotation.id);
+  }
+
+  /** */
+  handleMouseLeave() {
+    const { allAnnotationsAreHighlighted, highlightAnnotation, windowId } = this.props;
+    if (allAnnotationsAreHighlighted) return;
+
+    highlightAnnotation(windowId, null);
+  }
+
   /**
    * Rreturn an array of sanitized annotation data
    */
   sanitizedAnnotations() {
     const {
       annotations,
+      classes,
       selectedAnnotationIds,
     } = this.props;
 
@@ -50,9 +69,12 @@ export class WindowSideBarAnnotationsPanel extends Component {
         {
           annotations.map(annotation => (
             <ListItem
+              className={classes.annotationListItem}
               key={annotation.id}
               selected={selectedAnnotationIds.includes(annotation.id)}
               onClick={e => this.handleClick(e, annotation)}
+              onMouseEnter={() => this.handleMouseEnter(annotation)}
+              onMouseLeave={() => this.handleMouseLeave(annotation)}
             >
               <Typography variant="body2">
                 <SanitizedHtml ruleSet="iiif" htmlString={annotation.content} />
@@ -84,12 +106,14 @@ export class WindowSideBarAnnotationsPanel extends Component {
 }
 
 WindowSideBarAnnotationsPanel.propTypes = {
+  allAnnotationsAreHighlighted: PropTypes.bool.isRequired,
   annotations: PropTypes.arrayOf(PropTypes.shape({
     content: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
   })),
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   deselectAnnotation: PropTypes.func.isRequired,
+  highlightAnnotation: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   selectAnnotation: PropTypes.func.isRequired,
   selectedAnnotationIds: PropTypes.arrayOf(PropTypes.string),

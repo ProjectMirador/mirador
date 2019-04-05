@@ -33,7 +33,7 @@ const styles = theme => ({
     paddingLeft: theme.spacing.unit,
   },
   listItem: {
-    borderBottom: '0.5px solid rgba(0,0,0,0.12)',
+    borderBottom: `0.5px solid ${theme.palette.divider}`,
     paddingRight: theme.spacing.unit,
   },
   select: {
