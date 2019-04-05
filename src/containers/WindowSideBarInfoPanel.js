@@ -8,6 +8,7 @@ import {
   getCanvasLabel,
   getManifestDescription,
   getManifestTitle,
+  getManifestUrl,
   getSelectedCanvas,
   getManifestMetadata,
   getCanvasDescription,
@@ -26,6 +27,7 @@ const mapStateToProps = (state, { windowId }) => ({
   manifestDescription: getManifestDescription(state, { windowId }),
   manifestLabel: getManifestTitle(state, { windowId }),
   manifestMetadata: getManifestMetadata(state, { windowId }),
+  manifestUrl: getManifestUrl(state, { windowId }),
 });
 
 /**
