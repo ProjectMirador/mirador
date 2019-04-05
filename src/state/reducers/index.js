@@ -1,3 +1,4 @@
+export * from './accessTokens';
 export * from './companionWindows';
 export * from './errors';
 export * from './workspace';
@@ -7,3 +8,4 @@ export * from './infoResponses';
 export * from './config';
 export * from './viewers';
 export * from './annotations';
+export * from './auth';

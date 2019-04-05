@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import OSDViewer from '../containers/OpenSeadragonViewer';
 import WindowCanvasNavigationControls from '../containers/WindowCanvasNavigationControls';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
+import WindowAuthenticationControl from '../containers/WindowAuthenticationControl';
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -19,9 +20,9 @@ export class WindowViewer extends Component {
     if (!this.infoResponseIsInStore()) {
       currentCanvases.forEach((canvas) => {
         const manifestoCanvas = new ManifestoCanvas(canvas);
-        const { imageInformationUri } = manifestoCanvas;
-        if (imageInformationUri) {
-          fetchInfoResponse(imageInformationUri);
+        const { imageResource } = manifestoCanvas;
+        if (imageResource) {
+          fetchInfoResponse({ imageResource });
         }
         manifestoCanvas.annotationListUris.forEach((uri) => {
           fetchAnnotation(manifestoCanvas.canvas.id, uri);
@@ -44,9 +45,9 @@ export class WindowViewer extends Component {
     ) {
       currentCanvases.forEach((canvas) => {
         const manifestoCanvas = new ManifestoCanvas(canvas);
-        const { imageInformationUri } = manifestoCanvas;
-        if (imageInformationUri) {
-          fetchInfoResponse(imageInformationUri);
+        const { imageResource } = manifestoCanvas;
+        if (imageResource) {
+          fetchInfoResponse({ imageResource });
         }
         manifestoCanvas.annotationListUris.forEach((uri) => {
           fetchAnnotation(manifestoCanvas.canvas.id, uri);
@@ -78,7 +79,7 @@ export class WindowViewer extends Component {
     const { currentCanvases, infoResponses } = this.props;
 
     return currentCanvases.map(canvas => (
-      infoResponses[new ManifestoCanvas(canvas).imageInformationUri]
+      infoResponses[new ManifestoCanvas(canvas).imageId]
     )).filter(infoResponse => (infoResponse !== undefined
       && infoResponse.isFetching === false
       && infoResponse.error === undefined));
@@ -110,8 +111,9 @@ export class WindowViewer extends Component {
           tileSources={this.tileInfoFetchedFromStore()}
           windowId={window.id}
         >
-          <WindowCanvasNavigationControls windowId={window.id} />
+          <WindowCanvasNavigationControls key="canvas_nav" windowId={window.id} />
         </OSDViewer>
+        <WindowAuthenticationControl key="auth" windowId={window.id} />
       </>
     );
   }
