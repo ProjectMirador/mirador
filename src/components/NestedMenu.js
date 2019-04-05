@@ -50,8 +50,8 @@ export class NestedMenu extends Component {
           {icon
             && (<ListItemIcon>{icon}</ListItemIcon>)
           }
-          <ListItemText>
-            <Typography variant="body1">{label}</Typography>
+          <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
+            {label}
           </ListItemText>
           {
             nestedMenuIsOpen

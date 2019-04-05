@@ -73,7 +73,7 @@ describe('LanguageSettings', () => {
     const firstListText = wrapper
       .find('WithStyles(MenuItem)')
       .first()
-      .find('WithStyles(ListItemText) WithStyles(Typography)')
+      .find('WithStyles(ListItemText)')
       .children()
       .text();
 

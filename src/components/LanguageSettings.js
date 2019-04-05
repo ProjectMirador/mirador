@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
 import CheckIcon from '@material-ui/icons/CheckSharp';
 import PropTypes from 'prop-types';
 
@@ -32,10 +31,8 @@ export class LanguageSettings extends Component {
                 language.current
                   && <ListItemIcon><CheckIcon /></ListItemIcon>
               }
-              <ListItemText inset>
-                <Typography variant="body1">
-                  {language.label}
-                </Typography>
+              <ListItemText inset primaryTypographyProps={{ variant: 'body1' }}>
+                {language.label}
               </ListItemText>
             </MenuItem>
           ))

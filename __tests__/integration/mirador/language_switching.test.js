@@ -5,7 +5,7 @@ describe('Language Switching', () => {
 
       await expect(page).toClick('#menuBtn');
       await expect(page).toMatchElement('ul[role="menu"]');
-      await expect(page).toMatchElement('li p', { text: 'Language' });
+      await expect(page).toMatchElement('li', { text: 'Language' });
 
       await expect(page).not.toMatchElement('li', { text: 'Deutsch' });
       await expect(page).not.toMatchElement('li', { text: 'English' });
