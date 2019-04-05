@@ -12,7 +12,7 @@ import * as actions from '../state/actions';
  */
 const mapDispatchToProps = {
   addError: actions.addError,
-  importConfig: actions.importWorkspace,
+  importConfig: actions.importMiradorState,
 };
 
 const enhance = compose(

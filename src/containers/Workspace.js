@@ -14,6 +14,7 @@ const mapStateToProps = state => (
   {
     isWorkspaceControlPanelVisible: state.config.workspaceControlPanel.enabled,
     windows: state.windows,
+    workspaceId: state.workspace.id,
     workspaceType: getWorkspaceType(state),
   }
 );

@@ -11,6 +11,8 @@ export const configReducer = (state = {}, action) => {
       return deepmerge(state, action.config);
     case ActionTypes.SET_CONFIG:
       return action.config;
+    case ActionTypes.IMPORT_MIRADOR_STATE:
+      return action.state.config;
     default:
       return state;
   }

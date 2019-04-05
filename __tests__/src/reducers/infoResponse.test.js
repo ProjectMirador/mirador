@@ -82,4 +82,10 @@ describe('info response reducer', () => {
       },
     });
   });
+  it('should handle IMPORT_MIRADOR_STATE setting to clean state', () => {
+    expect(infoResponsesReducer({}, {
+      state: { infoResponses: { new: 'stuff' } },
+      type: ActionTypes.IMPORT_MIRADOR_STATE,
+    })).toEqual({});
+  });
 });

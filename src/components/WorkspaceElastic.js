@@ -60,7 +60,7 @@ class WorkspaceElastic extends React.Component {
           {
             Object.values(windows).map(window => (
               <Rnd
-                key={window.id}
+                key={`${window.id}-${workspace.id}`}
                 size={{ height: window.height, width: window.width }}
                 position={{ x: window.x + offsetX, y: window.y + offsetY }}
                 bounds="parent"

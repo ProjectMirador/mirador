@@ -1,3 +1,4 @@
+import uuid from 'uuid/v4';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -7,6 +8,7 @@ export const workspaceReducer = (
   state = { // we'll need to abstract this more, methinks.
     exposeModeOn: false,
     height: 5000,
+    id: uuid(),
     viewportPosition: {
       x: 0,
       y: 0,
@@ -43,6 +45,8 @@ export const workspaceReducer = (
       };
     case ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE:
       return { ...state, exposeModeOn: !state.exposeModeOn };
+    case ActionTypes.IMPORT_MIRADOR_STATE:
+      return action.state.workspace;
     default:
       return state;
   }

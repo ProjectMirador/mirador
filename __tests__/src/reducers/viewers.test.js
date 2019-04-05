@@ -42,4 +42,10 @@ describe('viewers reducer', () => {
       },
     });
   });
+  it('should handle IMPORT_MIRADOR_STATE', () => {
+    expect(viewersReducer({}, {
+      state: { viewers: { new: 'stuff' } },
+      type: ActionTypes.IMPORT_MIRADOR_STATE,
+    })).toEqual({ new: 'stuff' });
+  });
 });
