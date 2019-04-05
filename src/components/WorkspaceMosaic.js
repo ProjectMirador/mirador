@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
   Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
 } from 'react-mosaic-component';
-import { createRemoveUpdate, updateTree } from 'react-mosaic-component/lib/util/mosaicUpdates';
 import 'react-mosaic-component/react-mosaic-component.css';
 import difference from 'lodash/difference';
 import toPairs from 'lodash/toPairs';
@@ -50,14 +49,10 @@ export class WorkspaceMosaic extends React.Component {
         return;
       }
 
-      // Generate a set of "removeUpdates" to update layout binary tree
       const removedWindows = difference(prevWindows, currentWindows);
-      const removeUpdates = removedWindows
-        .map(windowId => (
-          createRemoveUpdate(workspace.layout, this.windowPaths[windowId])
-        ));
-      const newTree = updateTree(workspace.layout, removeUpdates);
-      updateWorkspaceMosaicLayout(newTree);
+      const layout = new MosaicLayout(workspace.layout);
+      layout.removeWindows(removedWindows, this.windowPaths);
+      updateWorkspaceMosaicLayout(layout.layout);
     }
     // Handles when Windows are added (not via Add Resource UI)
     // TODO: If a window is added, add it in a better way #2380

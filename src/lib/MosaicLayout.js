@@ -1,4 +1,4 @@
-import { updateTree } from 'react-mosaic-component/lib/util/mosaicUpdates';
+import { createRemoveUpdate, updateTree } from 'react-mosaic-component/lib/util/mosaicUpdates';
 import {
   getNodeAtPath, getOtherDirection, getPathToCorner, Corner,
 } from 'react-mosaic-component/lib/util/mosaicUtilities';
@@ -30,7 +30,7 @@ export default class MosaicLayout {
    * addWindows - updates the layout with new windows using an algorithm ported
    * from the react-mosaic-components examples. Will always add to the Top Right
    * https://github.com/nomcopter/react-mosaic/blob/5081df8d1528d4c3b83a72763a46a30b3048fe95/demo/ExampleApp.tsx#L119-L154
-   * @param {Array} addedWindows [description]
+   * @param {Array} addedWindowIds [description]
    */
   addWindows(addedWindowIds) {
     addedWindowIds.forEach((windowId, i) => {
@@ -61,5 +61,19 @@ export default class MosaicLayout {
       // the new location for each new window
       this.layout = updateTree(this.layout, [update]);
     });
+  }
+
+  /**
+   * removeWindows - Generate a set of "removeUpdates" to update layout binary
+   * tree. Then update the layout.
+   * @param  {Array} removedWindowIds
+   * @param  {Object} windowPaths - a lookup table for window paths
+   */
+  removeWindows(removedWindowIds, windowPaths) {
+    const removeUpdates = removedWindowIds
+      .map(windowId => (
+        createRemoveUpdate(this.layout, windowPaths[windowId])
+      ));
+    this.layout = updateTree(this.layout, removeUpdates);
   }
 }
