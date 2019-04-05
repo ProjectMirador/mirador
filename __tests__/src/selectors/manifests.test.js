@@ -4,6 +4,7 @@ import manifestFixture002 from '../../fixtures/version-2/002.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import manifestFixtureWithAProvider from '../../fixtures/version-3/with_a_provider.json';
 import {
+  getDefaultManifestLocale,
   getDestructuredMetadata,
   getManifest,
   getManifestLogo,
@@ -14,6 +15,7 @@ import {
   getManifestThumbnail,
   getManifestMetadata,
   getManifestUrl,
+  getMetadataLocales,
 } from '../../../src/state/selectors/manifests';
 
 
@@ -216,5 +218,47 @@ describe('getManifestMetadata', () => {
     const received = getDestructuredMetadata(iiifResource);
 
     expect(received).toEqual([]);
+  });
+});
+
+describe('getDefaultManifestLocale', () => {
+  it('gets the default locale for the manifest', () => {
+    const state = { manifests: { x: { json: manifestFixture002 } } };
+    const received = getDefaultManifestLocale(state, { manifestId: 'x' });
+    expect(received).toEqual('en');
+  });
+});
+
+describe('getMetadataLocales', () => {
+  it('gets the locales preseent in the manifest metadata', () => {
+    const manifest = {
+      '@context': 'http://iiif.io/api/presentation/2/context.json',
+      '@id':
+       'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+      '@type': 'sc:Manifest',
+      metadata: [
+        {
+          label: [
+            { '@language': 'de-label', '@value': 'Besitzende Einrichtung' },
+            { '@language': 'en-label', '@value': 'Holding Institution' },
+          ],
+          value: 'Herzog August Bibliothek Wolfenb\u00fcttel',
+        },
+        {
+          label: 'Digitization Project',
+          value: [
+            { '@language': 'en-value', '@value': 'Manuscripts from German-Speaking Lands - A Polonsky Foundation Digitization Project - A collaboration between the Bodleian Libraries and the Herzog August Bibliothek.' },
+            { '@language': 'de-value', '@value': 'Handschriften aus dem deutschen Sprachraum. Ein Digitalisierungsprojekt der Polonsky Stiftung. Eine Zusammenarbeit zwischen der Universit\u00e4t Oxford und der Herzog August Bibliothek Wolfenb\u00fcttel' },
+          ],
+        },
+        {
+          label: 'Some label',
+          value: { '@language': 'one-value', '@value': '1' },
+        },
+      ],
+    };
+    const state = { manifests: { x: { json: manifest } } };
+    const received = getMetadataLocales(state, { manifestId: 'x' });
+    expect(received).toEqual(['de-label', 'en-label', 'en-value', 'de-value', 'one-value']);
   });
 });
