@@ -77,7 +77,7 @@ export const getSelectedAnnotationsOnCanvases = createSelector(
     resources: annotation.resources.filter(
       r => selectedAnnotationIds && selectedAnnotationIds.includes(r.id),
     ),
-  })),
+  })).filter(val => val.resources.length > 0),
 );
 
 export const getHighlightedAnnotationsOnCanvases = createSelector(
@@ -94,7 +94,7 @@ export const getHighlightedAnnotationsOnCanvases = createSelector(
         resources: annotation.resources.filter(
           r => highlightedAnnotation && highlightedAnnotation === r.id,
         ),
-      }));
+      })).filter(val => val.resources.length > 0);
     }
     return [];
   },

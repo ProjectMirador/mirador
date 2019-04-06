@@ -79,6 +79,10 @@ describe('OpenSeadragonViewer', () => {
     //   ).toBe(true);
     // });
 
+    it('is true if both are empty', () => {
+      expect(OpenSeadragonViewer.annotationsMatch([], [])).toBe(true);
+    });
+
     it('is false if the previous annotation\'s resource IDs do not match', () => {
       const currentAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
       const previousAnnotations = [{ id: 1, resources: [{ id: 'rid2' }] }];
@@ -212,7 +216,7 @@ describe('OpenSeadragonViewer', () => {
       expect(zoomTo).toHaveBeenCalledWith(
         0.5, { x: 1, y: 0, zoom: 0.5 }, false,
       );
-      expect(forceRedraw).toHaveBeenCalled();
+      expect(forceRedraw).not.toHaveBeenCalled();
     });
 
     it('sets up canvasUpdate to add annotations to the canvas and forces a redraw', () => {
@@ -231,7 +235,7 @@ describe('OpenSeadragonViewer', () => {
 
       wrapper.setProps(
         {
-          annotations: [
+          selectedAnnotations: [
             new Annotation(
               { '@id': 'foo', resources: [{ foo: 'bar' }] },
             ),
@@ -240,7 +244,7 @@ describe('OpenSeadragonViewer', () => {
       );
       wrapper.setProps(
         {
-          annotations: [
+          selectedAnnotations: [
             new Annotation(
               { '@id': 'foo', resources: [{ foo: 'bar' }] },
             ),
@@ -249,7 +253,7 @@ describe('OpenSeadragonViewer', () => {
       );
       wrapper.setProps(
         {
-          annotations: [
+          selectedAnnotations: [
             new Annotation(
               { '@id': 'bar', resources: [{ foo: 'bar' }] },
             ),

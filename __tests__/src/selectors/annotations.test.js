@@ -246,4 +246,40 @@ describe('getHighlightedAnnotationsOnCanvases', () => {
       getHighlightedAnnotationsOnCanvases(state, { windowId: 'abc123' }),
     ).toEqual([]);
   });
+
+  it('returns an empty array if there are no resources', () => {
+    const state = {
+      annotations: {
+        cid1: {
+          annoId1: { id: 'annoId1', json: { resources: [{ '@id': 'annoId2' }, { '@id': 'annoId3' }] } },
+        },
+      },
+      manifests: {
+        mid: {
+          json: {
+            '@context': 'http://iiif.io/api/presentation/2/context.json',
+            '@id':
+             'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+            '@type': 'sc:Manifest',
+            sequences: [
+              {
+                canvases: [
+                  {
+                    '@id': 'cid1',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
+      windows: {
+        abc123: { canvasIndex: 0, highlightedAnnotation: 'annoId1', manifestId: 'mid' },
+      },
+    };
+
+    expect(
+      getHighlightedAnnotationsOnCanvases(state, { windowId: 'abc123' }).length,
+    ).toBe(0);
+  });
 });
