@@ -160,8 +160,8 @@ export class OpenSeadragonViewer extends Component {
     const { viewport } = event.eventSource;
 
     updateViewport(windowId, {
-      x: viewport.centerSpringX.target.value,
-      y: viewport.centerSpringY.target.value,
+      x: Math.round(viewport.centerSpringX.target.value),
+      y: Math.round(viewport.centerSpringY.target.value),
       zoom: viewport.zoomSpring.target.value,
     });
   }

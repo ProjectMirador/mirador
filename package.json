@@ -59,7 +59,6 @@
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.7.1",
     "redux": "4.0.1",
-    "redux-debounced": "^0.5.0",
     "redux-devtools-extension": "^2.13.2",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
