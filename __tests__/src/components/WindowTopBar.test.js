@@ -39,6 +39,13 @@ describe('WindowTopBar', () => {
     expect(wrapper.find(WindowTopMenuButton).length).toBe(1);
   });
 
+  it('triggers window focus when clicked', () => {
+    const focusWindow = jest.fn();
+    const wrapper = createWrapper({ focusWindow });
+    wrapper.find(Toolbar).simulate('mouseDown');
+    expect(focusWindow).toHaveBeenCalled();
+  });
+
   it('passes correct props to <IconButton/>', () => {
     const toggleWindowSideBar = jest.fn();
     const wrapper = createWrapper({ toggleWindowSideBar });

@@ -22,6 +22,7 @@ const mapStateToProps = (state, { windowId }) => ({
  * @private
  */
 const mapDispatchToProps = (dispatch, { windowId }) => ({
+  focusWindow: () => dispatch(actions.focusWindow(windowId)),
   maximizeWindow: () => dispatch(actions.maximizeWindow(windowId)),
   minimizeWindow: () => dispatch(actions.minimizeWindow(windowId)),
   removeWindow: () => dispatch(actions.removeWindow(windowId)),
