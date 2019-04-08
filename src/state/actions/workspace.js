@@ -1,16 +1,4 @@
-import {
-  difference,
-  keys,
-  omit,
-  slice,
-  values,
-} from 'lodash';
 import ActionTypes from './action-types';
-import { importConfig } from './config';
-import { addWindow, removeWindow, updateWindow } from './window';
-import { addCompanionWindow, removeCompanionWindow, updateCompanionWindow } from './companionWindow';
-import { updateViewport } from './canvas';
-import { fetchManifest } from './manifest';
 
 /**
  * setWorkspaceFullscreen - action creator
