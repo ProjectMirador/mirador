@@ -1,15 +1,14 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
+import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
-import { WorkspaceSelectionDialog } from '../components/WorkspaceSelectionDialog';
 import * as actions from '../state/actions';
-import { getWorkspaceType } from '../state/selectors';
+import { ChangeThemeDialog } from '../components/ChangeThemeDialog';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
- * @memberof ManifestListItem
+ * @memberof ChangeThemeDialog
  * @private
  */
 const mapDispatchToProps = {
@@ -18,17 +17,28 @@ const mapDispatchToProps = {
 
 /**
  * mapStateToProps - to hook up connect
- * @memberof Workspace
+ * @memberof ChangeThemeDialog
  * @private
  */
-const mapStateToProps = state => ({ workspaceType: getWorkspaceType(state) });
+const mapStateToProps = state => ({
+  theme: state.config.theme.palette.type,
+});
 
 /** */
 const styles = theme => ({
-  dialog: {
-    width: '400px',
+  darkColor: {
+    color: '#000000',
   },
-  listItem: {
+  dialogContent: {
+    padding: 0,
+  },
+  lightColor: {
+    color: '#BDBDBD',
+  },
+  listitem: {
+    '&:focus': {
+      backgroundColor: theme.palette.action.focus,
+    },
     '&:hover': {
       backgroundColor: theme.palette.action.hover,
     },
@@ -36,11 +46,12 @@ const styles = theme => ({
   },
 });
 
+
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('WorkspaceSelectionDialog'),
+  withPlugins('ChangeThemeDialog'),
 );
 
-export default enhance(WorkspaceSelectionDialog);
+export default enhance(ChangeThemeDialog);
