@@ -144,6 +144,11 @@ describe('window actions', () => {
         companionWindowIds: ['a', 'b', 'c'],
         type: ActionTypes.REMOVE_WINDOW,
         windowId: id,
+        windows: {
+          abc123: {
+            companionWindowIds: ['a', 'b', 'c'],
+          },
+        },
       };
 
       const mockState = {

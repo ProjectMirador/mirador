@@ -21,6 +21,32 @@ describe('workspace reducer', () => {
       viewportPosition: { x: 10, y: 50 },
     });
   });
+  it('should handle ADD_WINDOW', () => {
+    expect(workspaceReducer([], {
+      type: ActionTypes.ADD_WINDOW,
+      window: { id: 'abc123' },
+    })).toEqual({
+      focusedWindowId: 'abc123',
+    });
+  });
+  it('should handle REMOVE_WINDOW (by doing nothing if multiple windows remain)', () => {
+    expect(workspaceReducer({ focusedWindowId: 'asdf' }, {
+      type: ActionTypes.REMOVE_WINDOW,
+      windowId: 'abc123',
+      windows: { abc123: {}, def123: {}, ghi123: {} },
+    })).toEqual({
+      focusedWindowId: 'asdf',
+    });
+  });
+  it('should handle REMOVE_WINDOW (by focusing the window if it is the last one remaining)', () => {
+    expect(workspaceReducer([], {
+      type: ActionTypes.REMOVE_WINDOW,
+      windowId: 'abc123',
+      windows: { abc123: {}, def123: {} },
+    })).toEqual({
+      focusedWindowId: 'def123',
+    });
+  });
   it('should handle SET_WORKSPACE_FULLSCREEN', () => {
     expect(workspaceReducer([], {
       isFullscreenEnabled: true,

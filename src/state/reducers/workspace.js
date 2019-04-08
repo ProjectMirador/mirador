@@ -27,6 +27,17 @@ export const workspaceReducer = (
           ...action.position,
         },
       };
+    case ActionTypes.ADD_WINDOW:
+      return {
+        ...state,
+        focusedWindowId: action.window.id,
+      };
+    case ActionTypes.REMOVE_WINDOW:
+      if (Object.keys(action.windows).length > 2) return state;
+      return {
+        ...state,
+        focusedWindowId: Object.keys(action.windows).find(e => e !== action.windowId),
+      };
     case ActionTypes.SET_WORKSPACE_FULLSCREEN:
       return { ...state, isFullscreenEnabled: action.isFullscreenEnabled };
     case ActionTypes.TOGGLE_ZOOM_CONTROLS:
