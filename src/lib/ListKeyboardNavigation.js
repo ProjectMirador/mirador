@@ -61,7 +61,7 @@ export class ListKeyboardNavigation extends Component {
 
   /** */
   render() {
-    const { children, className, onChange } = this.props;
+    const { children, onChange } = this.props;
     const { selected } = this.state;
     this.listItems = children;
     this.values = children.map(child => child.props.value);
@@ -79,7 +79,7 @@ export class ListKeyboardNavigation extends Component {
       return ret;
     });
     return (
-      <List {...this.props} tabIndex="0" className={className} ref={(ref) => { this.selectedChild = ref; }} onKeyDown={this.keyDownHandler}>
+      <List tabIndex="0" {...this.props} ref={(ref) => { this.selectedChild = ref; }} onKeyDown={this.keyDownHandler}>
         {childrenSelected}
       </List>
     );
@@ -88,8 +88,6 @@ export class ListKeyboardNavigation extends Component {
 
 ListKeyboardNavigation.propTypes = {
   children: PropTypes.node,
-  // eslint-disable-next-line react/forbid-prop-types
-  className: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   selected: PropTypes.string.isRequired,
 };
