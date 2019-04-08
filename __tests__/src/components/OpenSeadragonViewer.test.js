@@ -169,7 +169,7 @@ describe('OpenSeadragonViewer', () => {
     it('calls the OSD viewport panTo and zoomTo with the component state', () => {
       wrapper.instance().componentDidMount();
 
-      expect(addHandler).toHaveBeenCalledWith('viewport-change', expect.anything());
+      expect(addHandler).toHaveBeenCalledWith('update-viewport', expect.anything());
 
       expect(panTo).toHaveBeenCalledWith(
         { x: 1, y: 0, zoom: 0.5 }, false,
@@ -268,18 +268,19 @@ describe('OpenSeadragonViewer', () => {
     });
   });
 
-  describe('onViewportChange', () => {
-    it('translates the OSD viewport data into an update to the component state', () => {
-      wrapper.instance().onViewportChange({
-        eventSource: {
-          viewport: {
-            centerSpringX: { target: { value: 1 } },
-            centerSpringY: { target: { value: 0 } },
-            zoomSpring: { target: { value: 0.5 } },
-          },
+  describe('componentWillUnmount', () => {
+    it('updates the viewer and removes all handlers', () => {
+      const removeMock = jest.fn();
+      wrapper.instance().viewer = {
+        removeAllHandlers: removeMock,
+        viewport: {
+          getCenter: jest.fn(() => ({ x: 1, y: 0 })),
+          getZoom: jest.fn(() => 0.5),
         },
-      });
+      };
+      wrapper.unmount();
 
+      expect(removeMock).toHaveBeenCalled();
       expect(updateViewport).toHaveBeenCalledWith(
         'base',
         { x: 1, y: 0, zoom: 0.5 },

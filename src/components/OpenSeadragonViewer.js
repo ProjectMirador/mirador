@@ -49,7 +49,6 @@ export class OpenSeadragonViewer extends Component {
     this.updateCanvas = () => {};
     this.ref = React.createRef();
     this.onUpdateViewport = this.onUpdateViewport.bind(this);
-    this.onViewportChange = this.onViewportChange.bind(this);
     this.zoomToWorld = this.zoomToWorld.bind(this);
   }
 
@@ -73,7 +72,6 @@ export class OpenSeadragonViewer extends Component {
 
     this.osdCanvasOverlay = new OpenSeadragonCanvasOverlay(this.viewer);
     this.viewer.addHandler('update-viewport', this.onUpdateViewport);
-    this.viewer.addHandler('viewport-change', this.onViewportChange);
 
     if (viewer) {
       this.viewer.viewport.panTo(viewer, false);
@@ -142,6 +140,7 @@ export class OpenSeadragonViewer extends Component {
   /**
    */
   componentWillUnmount() {
+    this.updateViewerLocation();
     this.viewer.removeAllHandlers();
   }
 
@@ -153,17 +152,16 @@ export class OpenSeadragonViewer extends Component {
   }
 
   /**
-   * Forward OSD state to redux
+   * Only update the viewer redux state when explicitly asked to
    */
-  onViewportChange(event) {
+  updateViewerLocation() {
     const { updateViewport, windowId } = this.props;
 
-    const { viewport } = event.eventSource;
-
+    const center = this.viewer.viewport.getCenter();
     updateViewport(windowId, {
-      x: Math.round(viewport.centerSpringX.target.value),
-      y: Math.round(viewport.centerSpringY.target.value),
-      zoom: viewport.zoomSpring.target.value,
+      x: Math.round(center.x),
+      y: Math.round(center.y),
+      zoom: this.viewer.viewport.getZoom(),
     });
   }
 
