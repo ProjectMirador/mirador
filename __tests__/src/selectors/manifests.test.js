@@ -2,6 +2,8 @@ import manifesto from 'manifesto.js';
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture002 from '../../fixtures/version-2/002.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
+import manifestFixtureSn904cj3429 from '../../fixtures/version-2/sn904cj3429.json';
+import manifestFixturev3001 from '../../fixtures/version-3/001.json';
 import manifestFixtureWithAProvider from '../../fixtures/version-3/with_a_provider.json';
 import {
   getDefaultManifestLocale,
@@ -10,10 +12,13 @@ import {
   getManifestLogo,
   getManifestCanvases,
   getManifestDescription,
+  getManifestHomepage,
   getManifestProvider,
   getManifestTitle,
   getManifestThumbnail,
   getManifestMetadata,
+  getManifestRelatedContent,
+  getManifestRenderings,
   getManifestUrl,
   getMetadataLocales,
 } from '../../../src/state/selectors/manifests';
@@ -164,6 +169,79 @@ describe('getManifestProvider', () => {
 
   it('should return undefined if manifest undefined', () => {
     const received = getManifestProvider({ manifests: {} }, { manifestId: 'x' });
+    expect(received).toBeUndefined();
+  });
+});
+
+describe('getManifestHomepage', () => {
+  it('should return manifest homepage', () => {
+    const state = { manifests: { x: { json: manifestFixturev3001 } } };
+    const received = getManifestHomepage(state, { manifestId: 'x' });
+    expect(received).toEqual([
+      {
+        label: 'View on Digital Bodleian',
+        value: 'https://digital.bodleian.ox.ac.uk/inquire/p/9cca8fdd-4a61-4429-8ac1-f648764b4d6d',
+      },
+    ]);
+  });
+
+  it('should return undefined if manifest undefined', () => {
+    const received = getManifestHomepage({ manifests: {} }, { manifestId: 'x' });
+    expect(received).toBeUndefined();
+  });
+});
+
+describe('getManifestRenderings', () => {
+  it('should return manifest renderings', () => {
+    const state = {
+      manifests: {
+        x: {
+          json: {
+            '@context': 'http://iiif.io/api/presentation/2/context.json',
+            '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+            '@type': 'sc:Manifest',
+            rendering: [
+              {
+                format: 'application/pdf',
+                id: 'https://example.org/1.pdf',
+                label: { en: ['PDF Rendering of Book'] },
+                type: 'Text',
+              },
+            ],
+          },
+        },
+      },
+    };
+
+    const received = getManifestRenderings(state, { manifestId: 'x' });
+    expect(received).toEqual([
+      {
+        label: 'PDF Rendering of Book',
+        value: 'https://example.org/1.pdf',
+      },
+    ]);
+  });
+
+  it('should return undefined if manifest undefined', () => {
+    const received = getManifestRenderings({ manifests: {} }, { manifestId: 'x' });
+    expect(received).toBeUndefined();
+  });
+});
+
+describe('getManifestRelatedContent', () => {
+  it('should return manifest seeAlso content', () => {
+    const state = { manifests: { x: { json: manifestFixtureSn904cj3429 } } };
+    const received = getManifestRelatedContent(state, { manifestId: 'x' });
+    expect(received).toEqual([
+      {
+        format: 'application/mods+xml',
+        value: 'https://purl.stanford.edu/sn904cj3429.mods',
+      },
+    ]);
+  });
+
+  it('should return undefined if manifest undefined', () => {
+    const received = getManifestRelatedContent({ manifests: {} }, { manifestId: 'x' });
     expect(received).toBeUndefined();
   });
 });

@@ -59,6 +59,78 @@ export const getManifestProvider = createSelector(
 );
 
 /**
+ */
+function asArray(value) {
+  if (!Array.isArray(value)) {
+    return [value];
+  }
+
+  return value;
+}
+
+/**
+* Return the IIIF v3 homepage of a manifest or null
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
+* @return {String|null}
+*/
+export const getManifestHomepage = createSelector(
+  [getManifestoInstance],
+  manifest => manifest
+    && manifest.getProperty('homepage')
+    && asArray(manifest.getProperty('homepage')).map(homepage => (
+      {
+        label: LanguageMap.parse(homepage.label, manifest.options.locale)
+          .map(label => label.value)[0],
+        value: homepage.id || homepage['@id'],
+      }
+    )),
+);
+
+/**
+* Return the IIIF v3 renderings of a manifest or null
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
+* @return {String|null}
+*/
+export const getManifestRenderings = createSelector(
+  [getManifestoInstance],
+  manifest => manifest
+    && manifest.getRenderings().map(rendering => (
+      {
+        label: rendering.getLabel().map(label => label.value)[0],
+        value: rendering.id,
+      }
+    )),
+);
+
+/**
+* Return the IIIF v2/v3 seeAlso data from a manifest or null
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
+* @return {String|null}
+*/
+export const getManifestRelatedContent = createSelector(
+  [getManifestoInstance],
+  manifest => manifest
+    && manifest.getProperty('seeAlso')
+    && asArray(manifest.getProperty('seeAlso')).map(related => (
+      {
+        format: related.format,
+        label: LanguageMap.parse(related.label, manifest.options.locale)
+          .map(label => label.value)[0],
+        value: related.id || related['@id'],
+      }
+    )),
+);
+
+/**
 * Return the supplied thumbnail for a manifest or null
 * @param {object} state
 * @param {object} props

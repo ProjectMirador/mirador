@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
 import {
+  getManifestHomepage,
+  getManifestRelatedContent,
+  getManifestRenderings,
   getManifestUrl,
 } from '../state/selectors';
 import { ManifestRelatedLinks } from '../components/ManifestRelatedLinks';
@@ -13,7 +16,10 @@ import { ManifestRelatedLinks } from '../components/ManifestRelatedLinks';
  * @private
  */
 const mapStateToProps = (state, { id, windowId }) => ({
+  homepage: getManifestHomepage(state, { windowId }),
   manifestUrl: getManifestUrl(state, { windowId }),
+  renderings: getManifestRenderings(state, { windowId }),
+  seeAlso: getManifestRelatedContent(state, { windowId }),
 });
 
 const enhance = compose(
