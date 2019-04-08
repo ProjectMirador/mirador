@@ -139,6 +139,7 @@ export function removeWindow(windowId) {
       companionWindowIds,
       type: ActionTypes.REMOVE_WINDOW,
       windowId,
+      windows,
     });
   };
 }
