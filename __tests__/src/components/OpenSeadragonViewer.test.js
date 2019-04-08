@@ -191,34 +191,6 @@ describe('OpenSeadragonViewer', () => {
   });
 
   describe('componentDidUpdate', () => {
-    it('calls the OSD viewport panTo and zoomTo with the component state and forces a redraw', () => {
-      const panTo = jest.fn();
-      const zoomTo = jest.fn();
-      const forceRedraw = jest.fn();
-
-      wrapper.instance().viewer = {
-        forceRedraw,
-        viewport: {
-          centerSpringX: { target: { value: 10 } },
-          centerSpringY: { target: { value: 10 } },
-          panTo,
-          zoomSpring: { target: { value: 1 } },
-          zoomTo,
-        },
-      };
-
-      wrapper.setProps({ viewer: { x: 0.5, y: 0.5, zoom: 0.1 } });
-      wrapper.setProps({ viewer: { x: 1, y: 0, zoom: 0.5 } });
-
-      expect(panTo).toHaveBeenCalledWith(
-        { x: 1, y: 0, zoom: 0.5 }, false,
-      );
-      expect(zoomTo).toHaveBeenCalledWith(
-        0.5, { x: 1, y: 0, zoom: 0.5 }, false,
-      );
-      expect(forceRedraw).not.toHaveBeenCalled();
-    });
-
     it('sets up canvasUpdate to add annotations to the canvas and forces a redraw', () => {
       const clear = jest.fn();
       const resize = jest.fn();

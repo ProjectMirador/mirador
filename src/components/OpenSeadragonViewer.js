@@ -89,7 +89,7 @@ export class OpenSeadragonViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      tileSources, viewer, highlightedAnnotations, selectedAnnotations,
+      tileSources, highlightedAnnotations, selectedAnnotations,
     } = this.props;
     const highlightsUpdated = !OpenSeadragonViewer.annotationsMatch(
       highlightedAnnotations, prevProps.highlightedAnnotations,
@@ -123,17 +123,6 @@ export class OpenSeadragonViewer extends Component {
           this.zoomToWorld();
         }
       });
-    } else if (viewer) {
-      const { viewport } = this.viewer;
-
-      if (viewer.x !== viewport.centerSpringX.target.value
-        || viewer.y !== viewport.centerSpringY.target.value) {
-        this.viewer.viewport.panTo(viewer, false);
-      }
-
-      if (viewer.zoom !== viewport.zoomSpring.target.value) {
-        this.viewer.viewport.zoomTo(viewer.zoom, viewer, false);
-      }
     }
   }
 
