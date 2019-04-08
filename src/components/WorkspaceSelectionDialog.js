@@ -48,6 +48,7 @@ export class WorkspaceSelectionDialog extends Component {
         aria-labelledby="workspace-selection-dialog-title"
         container={container}
         id="workspace-settings"
+        onClose={handleClose}
         onEscapeKeyDown={handleClose}
         open={open}
       >
