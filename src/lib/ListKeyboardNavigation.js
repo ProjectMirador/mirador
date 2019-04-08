@@ -61,11 +61,10 @@ export class ListKeyboardNavigation extends Component {
 
   /** */
   render() {
-    const { children, onChange } = this.props;
+    const { children, className, onChange } = this.props;
     const { selected } = this.state;
     this.listItems = children;
     this.values = children.map(child => child.props.value);
-
     const childrenSelected = children.map((child, index) => {
       const ret = React.cloneElement(child, {
         ...child.props,
@@ -80,7 +79,7 @@ export class ListKeyboardNavigation extends Component {
       return ret;
     });
     return (
-      <List tabIndex="0" ref={(ref) => { this.selectedChild = ref; }} onKeyDown={this.keyDownHandler}>
+      <List {...this.props} tabIndex="0" className={className} ref={(ref) => { this.selectedChild = ref; }} onKeyDown={this.keyDownHandler}>
         {childrenSelected}
       </List>
     );
@@ -89,6 +88,8 @@ export class ListKeyboardNavigation extends Component {
 
 ListKeyboardNavigation.propTypes = {
   children: PropTypes.node,
+  // eslint-disable-next-line react/forbid-prop-types
+  className: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   selected: PropTypes.string.isRequired,
 };

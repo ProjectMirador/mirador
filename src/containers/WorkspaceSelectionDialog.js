@@ -25,8 +25,27 @@ const mapStateToProps = state => ({ workspaceType: getWorkspaceType(state) });
 
 /** */
 const styles = theme => ({
-  dialog: {
-    width: '400px',
+  card: {
+    backgroundColor: 'transparent',
+    borderRadius: '0',
+    boxShadow: '0 0 transparent',
+    display: 'flex',
+  },
+  content: {
+    flex: '1 0 auto',
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  list: {
+    '&active': {
+      outline: 'none',
+    },
+    '&focus': {
+      outline: 'none',
+    },
+    outline: 'none',
   },
   listItem: {
     '&:focus': {
@@ -36,6 +55,10 @@ const styles = theme => ({
       backgroundColor: theme.palette.action.hover,
     },
     cursor: 'pointer',
+  },
+  media: {
+    height: '120px',
+    width: '160px',
   },
 });
 

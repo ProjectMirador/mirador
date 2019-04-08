@@ -3,13 +3,14 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {
-  List,
+  Card,
+  CardContent,
+  CardMedia,
   ListItem,
-  ListItemText,
   Typography,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { keys, chars } from '../lib/KeyHelper';
+import { ListKeyboardNavigation } from '../lib/ListKeyboardNavigation';
 
 /**
  */
@@ -17,15 +18,8 @@ export class WorkspaceSelectionDialog extends Component {
   /** */
   constructor(props) {
     super(props);
-    const { workspaceType } = this.props;
-    this.state = {
-      selected: workspaceType,
-    };
 
-    this.selectPreviousItem = this.selectPreviousItem.bind(this);
-    this.selectNextItem = this.selectNextItem.bind(this);
-    this.keyDownHandler = this.keyDownHandler.bind(this);
-    this.workspaceTypes = ['elastic', 'mosaic'];
+    this.handleworkspaceTypeChange = this.handleworkspaceTypeChange.bind(this);
   }
 
   /**
@@ -33,7 +27,6 @@ export class WorkspaceSelectionDialog extends Component {
    */
   handleworkspaceTypeChange(workspaceType) {
     const { handleClose, updateConfig } = this.props;
-    this.setState({ selected: workspaceType });
     updateConfig({
       workspace: {
         type: workspaceType,
@@ -42,59 +35,20 @@ export class WorkspaceSelectionDialog extends Component {
     handleClose();
   }
 
-  /** */
-  selectPreviousItem() {
-    const { selected } = this.state;
-    const selectedIndex = this.workspaceTypes.indexOf(selected);
-    const newIndex = selectedIndex > 0 ? selectedIndex - 1 : this.workspaceTypes.length - 1;
-    this.setState({ selected: this.workspaceTypes[newIndex] });
-  }
-
-  /** */
-  selectNextItem() {
-    const { selected } = this.state;
-    const selectedIndex = this.workspaceTypes.indexOf(selected);
-    const newIndex = selectedIndex + 1 < this.workspaceTypes.length ? selectedIndex + 1 : 0;
-    this.setState({ selected: this.workspaceTypes[newIndex] });
-  }
-
-  /** */
-  keyDownHandler(event) {
-    const { handleClose } = this.props;
-    if (event.key === keys.up || event.which === chars.up) {
-      event.preventDefault();
-      return this.selectPreviousItem(event.target);
-    }
-    if (event.key === keys.down || event.which === chars.down) {
-      event.preventDefault();
-      return this.selectNextItem(event.target);
-    }
-    if (event.key === keys.enter || event.which === chars.enter) {
-      event.preventDefault();
-      const { selected } = this.state;
-      this.handleworkspaceTypeChange(selected);
-    }
-    if (event.key === keys.esc || event.which === chars.esc) {
-      event.preventDefault();
-      handleClose();
-    }
-    return event;
-  }
-
   /**
    * render
    * @return
    */
   render() {
     const {
-      classes, container, open, children, t,
+      classes, container, handleClose, open, children, t, workspaceType,
     } = this.props;
     return (
       <Dialog
         aria-labelledby="workspace-selection-dialog-title"
         container={container}
         id="workspace-settings"
-        onKeyDown={event => this.keyDownHandler(event)}
+        onEscapeKeyDown={handleClose}
         open={open}
       >
         <DialogTitle id="workspace-selection-dialog-title" disableTypography>
@@ -102,38 +56,45 @@ export class WorkspaceSelectionDialog extends Component {
         </DialogTitle>
         <DialogContent>
           {children}
-          <List>
+          {/* eslint-disable-next-line max-len */}
+          <ListKeyboardNavigation onChange={this.handleworkspaceTypeChange} selected={workspaceType} className={classes.list}>
             <ListItem
               className={classes.listItem}
-              key="elastic"
-              onClick={() => this.handleworkspaceTypeChange('elastic')}
-              // eslint-disable-next-line react/destructuring-assignment
-              selected={this.state.selected === 'elastic'}
+              value="elastic"
             >
-              <img src="/src/images/elastic.jpg" alt={t('elastic')} />
-              <ListItemText
-                primaryTypographyProps={{ variant: 'h3' }}
-                secondaryTypographyProps={{ color: 'default', variant: 'body1' }}
-                primary={t('elastic')}
-                secondary={t('elasticDescription')}
-              />
+              <Card className={classes.card}>
+                <CardMedia
+                  className={classes.media}
+                  image="/src/images/icon_workspace_elastic.svg"
+                  title={t('elastic')}
+                />
+                <div className={classes.details}>
+                  <CardContent className={classes.content}>
+                    <Typography variant="h2">{t('elastic')}</Typography>
+                    <Typography variant="body2">{t('elasticDescription')}</Typography>
+                  </CardContent>
+                </div>
+              </Card>
             </ListItem>
             <ListItem
               className={classes.listItem}
-              key="mosaic"
-              onClick={() => this.handleworkspaceTypeChange('mosaic')}
-              // eslint-disable-next-line react/destructuring-assignment
-              selected={this.state.selected === 'mosaic'}
+              value="mosaic"
             >
-              <img src="/src/images/mosaic.jpg" alt={t('mosaic')} />
-              <ListItemText
-                primaryTypographyProps={{ variant: 'h3' }}
-                secondaryTypographyProps={{ color: 'default', variant: 'body1' }}
-                primary={t('mosaic')}
-                secondary={t('mosaicDescription')}
-              />
+              <Card className={classes.card}>
+                <CardMedia
+                  className={classes.media}
+                  image="/src/images/icon_workspace_mosaic.svg"
+                  title={t('mosaic')}
+                />
+                <div className={classes.details}>
+                  <CardContent className={classes.content}>
+                    <Typography variant="h2">{t('mosaic')}</Typography>
+                    <Typography variant="body2">{t('mosaicDescription')}</Typography>
+                  </CardContent>
+                </div>
+              </Card>
             </ListItem>
-          </List>
+          </ListKeyboardNavigation>
         </DialogContent>
       </Dialog>
     );
