@@ -6,6 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import WorkspaceControlPanelButtons
   from '../containers/WorkspaceControlPanelButtons';
 import ns from '../config/css-ns';
+import { Branding } from './Branding';
 
 /**
  * Provides the panel responsible for controlling the entire workspace
@@ -16,10 +17,10 @@ export class WorkspaceControlPanel extends Component {
    * @return {String} - HTML markup for the component
    */
   render() {
-    const { classes, t } = this.props;
+    const { classes, t, variant } = this.props;
     return (
       <AppBar
-        className={classNames(classes.root, ns('workspace-control-panel'))}
+        className={classNames(classes.root, ns('workspace-control-panel'), variant === 'wide' ? classes.wide : null)}
         color="default"
         position="absolute"
         component="nav"
@@ -28,6 +29,7 @@ export class WorkspaceControlPanel extends Component {
         <Toolbar disableGutters className={classes.toolbar}>
           <WorkspaceControlPanelButtons />
         </Toolbar>
+        <Branding className={classes.branding} t={t} variant={variant} />
       </AppBar>
     );
   }
@@ -36,4 +38,9 @@ export class WorkspaceControlPanel extends Component {
 WorkspaceControlPanel.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func.isRequired,
+  variant: PropTypes.oneOf(['default', 'wide']),
+};
+
+WorkspaceControlPanel.defaultProps = {
+  variant: 'default',
 };

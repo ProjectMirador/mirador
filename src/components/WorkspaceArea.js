@@ -18,14 +18,14 @@ export class WorkspaceArea extends Component {
    */
   render() {
     const {
-      classes, isWorkspaceAddVisible, isWorkspaceControlPanelVisible, t,
+      classes, controlPanelVariant, isWorkspaceAddVisible, isWorkspaceControlPanelVisible, t,
     } = this.props;
 
     return (
       <main className={classNames(classes.background, ns('viewer'))} aria-label={t('workspace')}>
         {
           isWorkspaceControlPanelVisible
-            && <WorkspaceControlPanel />
+            && <WorkspaceControlPanel variant={controlPanelVariant} />
         }
         {
           isWorkspaceAddVisible
@@ -41,11 +41,13 @@ export class WorkspaceArea extends Component {
 
 WorkspaceArea.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
+  controlPanelVariant: PropTypes.string,
   isWorkspaceAddVisible: PropTypes.bool,
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
   t: PropTypes.func.isRequired,
 };
 
 WorkspaceArea.defaultProps = {
+  controlPanelVariant: undefined,
   isWorkspaceAddVisible: false,
 };
