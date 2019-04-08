@@ -59,7 +59,7 @@ describe('WorkspaceMosaic', () => {
         windows,
       });
       wrapper.setProps({ windows: {} });
-      expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith({});
+      expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith(null);
     });
   });
   describe('bookkeepPath', () => {
