@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Window from '../containers/Window';
 import WorkspaceMosaic from '../containers/WorkspaceMosaic';
@@ -21,6 +22,9 @@ export class Workspace extends React.Component {
     if (this.maximizedWindows()) {
       return this.maximizedWindows();
     }
+
+    if (Object.keys(windows).length === 0) return this.zeroWindows();
+
     switch (workspaceType) {
       case 'elastic':
         return <WorkspaceElastic />;
@@ -34,6 +38,34 @@ export class Workspace extends React.Component {
           />
         ));
     }
+  }
+
+  /** */
+  zeroWindows() {
+    const { t } = this.props;
+
+    return (
+      <Grid
+        alignItems="center"
+        container
+        style={{
+          height: '100%',
+        }}
+      >
+        <Grid
+          xs={12}
+          item
+        >
+          <Typography
+            variant="h1"
+            component="div"
+            align="center"
+          >
+            {t('welcome')}
+          </Typography>
+        </Grid>
+      </Grid>
+    );
   }
 
   /**
