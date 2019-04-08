@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
 import ExpandLess from '@material-ui/icons/ExpandLessSharp';
 import ExpandMore from '@material-ui/icons/ExpandMoreSharp';
 
