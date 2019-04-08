@@ -26,6 +26,7 @@ export class WindowTopBar extends Component {
     const {
       removeWindow, windowId, classes, toggleWindowSideBar, t, manifestTitle, windowDraggable,
       maximizeWindow, maximized, minimizeWindow, focused, allowClose, allowMaximize,
+      focusWindow,
     } = this.props;
 
     return (
@@ -33,6 +34,7 @@ export class WindowTopBar extends Component {
         <nav aria-label={t('windowNavigation')}>
           <Toolbar
             disableGutters
+            onMouseDown={focusWindow}
             className={classNames(
               classes.windowTopBarStyle,
               windowDraggable ? classes.windowTopBarStyleDraggable : null,
@@ -82,6 +84,7 @@ WindowTopBar.propTypes = {
   allowMaximize: PropTypes.bool,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   focused: PropTypes.bool,
+  focusWindow: PropTypes.func,
   manifestTitle: PropTypes.string,
   maximized: PropTypes.bool,
   maximizeWindow: PropTypes.func,
@@ -97,6 +100,7 @@ WindowTopBar.defaultProps = {
   allowClose: true,
   allowMaximize: true,
   focused: false,
+  focusWindow: () => {},
   manifestTitle: '',
   maximized: false,
   maximizeWindow: () => {},
