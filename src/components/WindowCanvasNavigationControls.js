@@ -12,14 +12,19 @@ export class WindowCanvasNavigationControls extends Component {
   /** */
   render() {
     const {
-      visible, window, zoomToWorld,
+      visible, window, zoomIn, zoomOut, zoomToWorld,
     } = this.props;
 
     if (!visible) return (<></>);
 
     return (
       <div className={ns('canvas-nav')}>
-        <ZoomControls windowId={window.id} zoomToWorld={zoomToWorld} />
+        <ZoomControls
+          windowId={window.id}
+          zoomIn={zoomIn}
+          zoomOut={zoomOut}
+          zoomToWorld={zoomToWorld}
+        />
         <ViewerNavigation window={window} />
         <ViewerInfo windowId={window.id} />
       </div>
@@ -31,6 +36,8 @@ export class WindowCanvasNavigationControls extends Component {
 WindowCanvasNavigationControls.propTypes = {
   visible: PropTypes.bool,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  zoomIn: PropTypes.func.isRequired,
+  zoomOut: PropTypes.func.isRequired,
   zoomToWorld: PropTypes.func.isRequired,
 };
 

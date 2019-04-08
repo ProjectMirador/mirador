@@ -18,6 +18,8 @@ describe('ZoomControls', () => {
         viewer={viewer}
         showZoomControls={showZoomControls}
         updateViewport={updateViewport}
+        zoomIn={() => {}}
+        zoomOut={() => {}}
         zoomToWorld={() => {}}
       />,
     );
@@ -31,6 +33,8 @@ describe('ZoomControls', () => {
 
 
   describe('with showZoomControls=true', () => {
+    const zoomIn = jest.fn();
+    const zoomOut = jest.fn();
     const zoomToWorld = jest.fn();
     beforeEach(() => {
       updateViewport = jest.fn();
@@ -41,6 +45,8 @@ describe('ZoomControls', () => {
           viewer={viewer}
           showZoomControls
           updateViewport={updateViewport}
+          zoomIn={zoomIn}
+          zoomOut={zoomOut}
           zoomToWorld={zoomToWorld}
         />,
       );
@@ -54,15 +60,13 @@ describe('ZoomControls', () => {
     it('has a zoom-in button', () => {
       const button = wrapper.find({ 'aria-label': 'zoomIn' }).first();
       button.props().onClick(); // Trigger the onClick prop
-      expect(updateViewport).toHaveBeenCalledTimes(1);
-      expect(updateViewport).toHaveBeenCalledWith('xyz', { x: 100, y: 100, zoom: 2 });
+      expect(zoomIn).toHaveBeenCalledTimes(1);
     });
 
     it('has a zoom-out button', () => {
       const button = wrapper.find({ 'aria-label': 'zoomOut' }).first();
       button.props().onClick(); // Trigger the onClick prop
-      expect(updateViewport).toHaveBeenCalledTimes(1);
-      expect(updateViewport).toHaveBeenCalledWith('xyz', { x: 100, y: 100, zoom: 0.5 });
+      expect(zoomOut).toHaveBeenCalledTimes(1);
     });
 
     it('has a zoom reset button', () => {
@@ -70,13 +74,6 @@ describe('ZoomControls', () => {
       button.props().onClick(); // Trigger the onClick prop
       expect(zoomToWorld).toHaveBeenCalledTimes(1);
       expect(zoomToWorld).toHaveBeenCalledWith(false);
-    });
-  });
-
-  describe('handleZoomInClick', () => {
-    it('increases the zoom value on Zoom-In', () => {
-      wrapper.instance().handleZoomInClick();
-      expect(updateViewport).toHaveBeenCalled();
     });
   });
 });

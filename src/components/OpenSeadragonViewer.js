@@ -49,6 +49,8 @@ export class OpenSeadragonViewer extends Component {
     this.updateCanvas = () => {};
     this.ref = React.createRef();
     this.onUpdateViewport = this.onUpdateViewport.bind(this);
+    this.zoomIn = this.zoomIn.bind(this);
+    this.zoomOut = this.zoomOut.bind(this);
     this.zoomToWorld = this.zoomToWorld.bind(this);
   }
 
@@ -227,6 +229,26 @@ export class OpenSeadragonViewer extends Component {
     this.fitBounds(...canvasWorld.worldBounds(), immediately);
   }
 
+  /** */
+  zoomIn() {
+    const center = this.viewer.viewport.getCenter();
+    this.viewer.viewport.zoomTo(
+      this.viewer.viewport.getZoom() * 2,
+      center,
+      false,
+    );
+  }
+
+  /** */
+  zoomOut() {
+    const center = this.viewer.viewport.getCenter();
+    this.viewer.viewport.zoomTo(
+      this.viewer.viewport.getZoom() / 2,
+      center,
+      false,
+    );
+  }
+
   /**
    * Renders things
    */
@@ -239,6 +261,8 @@ export class OpenSeadragonViewer extends Component {
       React.cloneElement(
         child,
         {
+          zoomIn: this.zoomIn,
+          zoomOut: this.zoomOut,
           zoomToWorld: this.zoomToWorld,
         },
       )

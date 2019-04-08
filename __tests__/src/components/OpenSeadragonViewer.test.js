@@ -48,10 +48,14 @@ describe('OpenSeadragonViewer', () => {
   it('renders child components enhanced with additional props', () => {
     expect(wrapper.find('.foo').length).toBe(1);
     expect(wrapper.find('.foo').props()).toEqual(expect.objectContaining({
+      zoomIn: wrapper.instance().zoomIn,
+      zoomOut: wrapper.instance().zoomOut,
       zoomToWorld: wrapper.instance().zoomToWorld,
     }));
     expect(wrapper.find('.bar').length).toBe(1);
     expect(wrapper.find('.bar').props()).toEqual(expect.objectContaining({
+      zoomIn: wrapper.instance().zoomIn,
+      zoomOut: wrapper.instance().zoomOut,
       zoomToWorld: wrapper.instance().zoomToWorld,
     }));
   });
@@ -131,6 +135,36 @@ describe('OpenSeadragonViewer', () => {
       wrapper.instance().fitBounds = fitBounds;
       wrapper.instance().zoomToWorld();
       expect(fitBounds).toHaveBeenCalledWith(0, 0, 0, Infinity, true);
+    });
+  });
+
+  describe('zoomIn', () => {
+    it('zooms in osd instance', () => {
+      const zoomToMock = jest.fn();
+      wrapper.instance().viewer = {
+        viewport: {
+          getCenter: jest.fn(() => ({ x: 2, y: 3 })),
+          getZoom: jest.fn(() => 42),
+          zoomTo: zoomToMock,
+        },
+      };
+      wrapper.instance().zoomIn();
+      expect(zoomToMock).toHaveBeenCalledWith(84, { x: 2, y: 3 }, false);
+    });
+  });
+
+  describe('zoomOut', () => {
+    it('zooms out osd instance', () => {
+      const zoomToMock = jest.fn();
+      wrapper.instance().viewer = {
+        viewport: {
+          getCenter: jest.fn(() => ({ x: 2, y: 3 })),
+          getZoom: jest.fn(() => 42),
+          zoomTo: zoomToMock,
+        },
+      };
+      wrapper.instance().zoomOut();
+      expect(zoomToMock).toHaveBeenCalledWith(21, { x: 2, y: 3 }, false);
     });
   });
 

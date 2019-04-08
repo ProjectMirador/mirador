@@ -9,48 +9,12 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
  */
 export class ZoomControls extends Component {
   /**
-   * constructor -
-   */
-  constructor(props) {
-    super(props);
-
-    this.handleZoomInClick = this.handleZoomInClick.bind(this);
-    this.handleZoomOutClick = this.handleZoomOutClick.bind(this);
-  }
-
-  /**
-   * @private
-   */
-  handleZoomInClick() {
-    const { windowId, updateViewport, viewer } = this.props;
-
-    updateViewport(windowId, {
-      x: viewer.x,
-      y: viewer.y,
-      zoom: viewer.zoom * 2,
-    });
-  }
-
-  /**
-   * @private
-   */
-  handleZoomOutClick() {
-    const { windowId, updateViewport, viewer } = this.props;
-
-    updateViewport(windowId, {
-      x: viewer.x,
-      y: viewer.y,
-      zoom: viewer.zoom / 2,
-    });
-  }
-
-  /**
    * render
    * @return
    */
   render() {
     const {
-      showZoomControls, classes, t, zoomToWorld,
+      showZoomControls, classes, t, zoomIn, zoomOut, zoomToWorld,
     } = this.props;
 
     if (!showZoomControls) {
@@ -61,10 +25,10 @@ export class ZoomControls extends Component {
     }
     return (
       <div className={classes.zoom_controls}>
-        <MiradorMenuButton aria-label={t('zoomIn')} onClick={this.handleZoomInClick}>
+        <MiradorMenuButton aria-label={t('zoomIn')} onClick={zoomIn}>
           <AddCircleIcon />
         </MiradorMenuButton>
-        <MiradorMenuButton aria-label={t('zoomOut')} onClick={this.handleZoomOutClick}>
+        <MiradorMenuButton aria-label={t('zoomOut')} onClick={zoomOut}>
           <RemoveCircleIcon />
         </MiradorMenuButton>
         <MiradorMenuButton aria-label={t('zoomReset')} onClick={() => zoomToWorld(false)}>
@@ -79,20 +43,12 @@ ZoomControls.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   showZoomControls: PropTypes.bool,
   t: PropTypes.func,
-  updateViewport: PropTypes.func,
-  viewer: PropTypes.shape({
-    x: PropTypes.number,
-    y: PropTypes.number,
-    zoom: PropTypes.number,
-  }),
-  windowId: PropTypes.string,
+  zoomIn: PropTypes.func.isRequired,
+  zoomOut: PropTypes.func.isRequired,
   zoomToWorld: PropTypes.func.isRequired,
 };
 
 ZoomControls.defaultProps = {
   showZoomControls: false,
   t: key => key,
-  updateViewport: () => {},
-  viewer: {},
-  windowId: '',
 };
