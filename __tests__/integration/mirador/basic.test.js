@@ -9,10 +9,10 @@ describe('Basic end to end Mirador', () => {
   it('loads a manifest and displays it', async () => {
     await expect(page).toClick('#addBtn');
     await expect(page).toClick('.mirador-add-resource-button');
-    await expect(page).toFill('#manifestURL', 'http://localhost:5000/api/sn904cj3439');
+    await expect(page).toFill('#manifestURL', 'http://localhost:5000/api/sn904cj3429');
     await expect(page).toClick('#fetchBtn');
-    await expect(page).toMatchElement('[data-manifestid="http://localhost:5000/api/sn904cj3439"] button');
-    await expect(page).toClick('[data-manifestid="http://localhost:5000/api/sn904cj3439"] button');
+    await expect(page).toMatchElement('[data-manifestid="http://localhost:5000/api/sn904cj3429"] button');
+    await expect(page).toClick('[data-manifestid="http://localhost:5000/api/sn904cj3429"] button');
     await expect(page).toMatchElement(
       'h2',
       { text: /Peter's San Francisco Locator/ },
