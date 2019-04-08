@@ -26,6 +26,7 @@
     "downloadExportWorkspace": "Export workspace",
     "elastic": "Elastic",
     "elasticDescription": "Move and size windows freely in an unlimited workspace. Windows can overlap.",
+    "emptyResourceList": "Your resource list is empty",
     "errorDialogConfirm": "OK",
     "errorDialogTitle": "An error occurred",
     "exitFullScreen": "Exit full screen",

@@ -5,6 +5,7 @@ import AddIcon from '@material-ui/icons/AddSharp';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMoreSharp';
 import AppBar from '@material-ui/core/AppBar';
 import Drawer from '@material-ui/core/Drawer';
+import Grid from '@material-ui/core/Grid';
 import Fab from '@material-ui/core/Fab';
 import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
@@ -56,13 +57,35 @@ export class WorkspaceAdd extends React.Component {
 
     return (
       <div className={ns('workspace-add')}>
-        <Paper className={classes.list}>
-          <Typography variant="srOnly" component="h1">{t('miradorResources')}</Typography>
-          <List>
-            {manifestList}
-          </List>
-        </Paper>
-
+        {(Object.keys(manifests).length < 1) ? (
+          <Grid
+            alignItems="center"
+            container
+            style={{
+              height: '100%',
+            }}
+          >
+            <Grid
+              xs={12}
+              item
+            >
+              <Typography
+                variant="h1"
+                component="div"
+                align="center"
+              >
+                {t('emptyResourceList')}
+              </Typography>
+            </Grid>
+          </Grid>
+        ) : (
+          <Paper className={classes.list}>
+            <Typography variant="srOnly" component="h1">{t('miradorResources')}</Typography>
+            <List>
+              {manifestList}
+            </List>
+          </Paper>
+        )}
         <Fab
           variant="extended"
           disabled={addResourcesOpen}

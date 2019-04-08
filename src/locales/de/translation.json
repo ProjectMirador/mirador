@@ -24,6 +24,7 @@
     "downloadExportWorkspace": "Arbeitsfläche exortieren",
     "elastic": "Elastisch",
     "elasticDescription": "Fenster können frei und unbegrenzt innerhalb der Arbeitsfläche bewegt werden und sich überlappen",
+    "emptyResourceList": "Ihre Ressourcenliste ist leer",
     "errorDialogTitle": "Es ist ein Fehler aufgetreten",
     "errorDialogConfirm": "OK",
     "exitFullScreen": "Vollbildmodus verlassen",
