@@ -7,16 +7,16 @@ describe('pass valid and invalid plugins to <WorkspaceControlPanelButtons>', () 
   });
 
   it('valid plugins will be applied <WorkspaceControlPanelButtons>', async () => {
-    await expect(page).toMatchElement('.mirador-workspace-control-panel-buttons #valid-plugin-a');
-    await expect(page).toMatchElement('.mirador-workspace-control-panel-buttons #valid-plugin-b');
+    await expect(page).toMatchElement('#valid-plugin-a');
+    await expect(page).toMatchElement('#valid-plugin-b');
   });
 
   it('invalid plugins will not be applied <WorkspaceControlPanelButtons>', async () => {
-    await expect(page).not.toMatchElement('.mirador-workspace-control-panel-buttons #invalid-plugin-a');
-    await expect(page).not.toMatchElement('.mirador-workspace-control-panel-buttons #invalid-plugin-b');
-    await expect(page).not.toMatchElement('.mirador-workspace-control-panel-buttons #invalid-plugin-c');
-    await expect(page).not.toMatchElement('.mirador-workspace-control-panel-buttons #invalid-plugin-d');
-    await expect(page).not.toMatchElement('.mirador-workspace-control-panel-buttons #invalid-plugin-e');
-    await expect(page).not.toMatchElement('.mirador-workspace-control-panel-buttons #invalid-plugin-f');
+    await expect(page).not.toMatchElement('#invalid-plugin-a');
+    await expect(page).not.toMatchElement('#invalid-plugin-b');
+    await expect(page).not.toMatchElement('#invalid-plugin-c');
+    await expect(page).not.toMatchElement('#invalid-plugin-d');
+    await expect(page).not.toMatchElement('#invalid-plugin-e');
+    await expect(page).not.toMatchElement('#invalid-plugin-f');
   });
 });

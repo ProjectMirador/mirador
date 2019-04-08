@@ -12,11 +12,6 @@ describe('WorkspaceControlPanelButtons', () => {
     wrapper = shallow(<WorkspaceControlPanelButtons />);
   });
 
-  it('sets correct class name', () => {
-    expect(wrapper.find('div').first().props().className)
-      .toBe('mirador-workspace-control-panel-buttons');
-  });
-
   it('render all needed elements', () => {
     expect(wrapper.find(WorkspaceAddButton).length).toBe(1);
     expect(wrapper.find(WorkspaceMenuButton).length).toBe(1);

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ns from '../config/css-ns';
 import WorkspaceFullScreenButton from '../containers/WorkspaceFullScreenButton';
 import WorkspaceAddButton from '../containers/WorkspaceAddButton';
 import WorkspaceMenuButton from '../containers/WorkspaceMenuButton';
@@ -25,12 +24,12 @@ export class WorkspaceControlPanelButtons extends Component {
    */
   render() {
     return (
-      <div className={ns('workspace-control-panel-buttons')}>
+      <>
         <WorkspaceAddButton />
         <WorkspaceMenuButton />
         <WorkspaceFullScreenButton />
         <PluginHook {...this.props} />
-      </div>
+      </>
     );
   }
 }
