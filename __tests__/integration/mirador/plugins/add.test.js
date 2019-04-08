@@ -7,7 +7,7 @@ describe('add two plugins to <WorkspaceControlPanelButtons>', () => {
   });
 
   it('all add plugins will be added to <WorkspaceControlPanelButtons>', async () => {
-    await expect(page).toMatchElement('.mirador-workspace-control-panel-buttons #add-plugin-component-a');
-    await expect(page).toMatchElement('.mirador-workspace-control-panel-buttons #add-plugin-component-b');
+    await expect(page).toMatchElement('#add-plugin-component-a');
+    await expect(page).toMatchElement('#add-plugin-component-b');
   });
 });

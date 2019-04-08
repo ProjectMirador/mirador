@@ -7,6 +7,6 @@ describe('wrap <WorkspaceControlPanelButtons> by a plugin', () => {
   });
 
   it('wraps <WorkspaceControlPanelButtons>', async () => {
-    await expect(page).toMatchElement('#wrap-plugin-component .mirador-workspace-control-panel-buttons');
+    await expect(page).toMatchElement('#wrap-plugin-component');
   });
 });

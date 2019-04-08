@@ -7,7 +7,7 @@ describe('try to apply 2 add plugins and 2 wrap plugins to <WorkspaceControlPane
   });
 
   it('only apply the first wrap plugin', async () => {
-    await expect(page).toMatchElement('#wrap-plugin-component-a .mirador-workspace-control-panel-buttons');
+    await expect(page).toMatchElement('#wrap-plugin-component-a');
     await expect(page).not.toMatchElement('#wrap-plugin-component-b');
     await expect(page).not.toMatchElement('#add-plugin-component-a');
     await expect(page).not.toMatchElement('#add-plugin-component-b');

@@ -22,12 +22,14 @@ const styles = theme => ({
       height: '100%',
       left: 0,
       right: 'auto',
-      width: 64,
+      width: 'auto',
     },
   },
   toolbar: {
     [theme.breakpoints.up('sm')]: {
-      display: 'block',
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: 0,
     },
   },
 });
