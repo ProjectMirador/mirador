@@ -33,7 +33,14 @@
       } else {
         this.element = jQuery(this.template({ ranges: this.getTplData() })).appendTo(this.appendTo);
         this.tocData = _this.initTocData();
-        this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, _this.canvasID));
+        switch (this.manifestVersion) {
+          case '1':
+            this. ($.getRangeIDByCanvasID(_this.structures, _this.canvasID));
+      	    break;
+      	  case '2':
+       	    this.setSelectedElements($.getRangeIDByCanvasIDv2(_this.structures[0], _this.canvasID));
+      	    break;
+        }
         this.element.find('.has-child ul').hide();
         this.render();
       }
@@ -306,15 +313,34 @@
 
       _this.eventEmitter.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event, canvasID) {
         if (!_this.structures) { return; }
-        _this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, canvasID));
+        switch (_this.manifestVersion) {
+          case '1':
+      	     _this.setSelectedElements($.getRangeIDByCanvasID(_this.structures, canvasID));
+             break;
+          case '2':
+            _this.setSelectedElements($.getRangeIDByCanvasIDv2(_this.structures[0], canvasID));
+            break;
+        }
         _this.render();
       });
 
       _this.element.find('.toc-link').on('click', function(event) {
         event.stopPropagation();
 
-        var rangeID = jQuery(this).data().rangeid,
-            canvasID = jQuery.grep(_this.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0];
+        var rangeID = jQuery(this).data().rangeid, canvasID;
+            //canvasID = jQuery.grep(_this.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0];
+        var getRangeV2 = function(range) {
+            if (range.hasOwnProperty('canvases')) { return range.canvases[0]; } else { return getRangeV2(range.children[0]); }
+        };
+        switch (_this.manifestVersion) {
+           case '1':
+             canvasID = jQuery.grep(_this.structures, function(item) { return item['@id'] == rangeID; })[0].canvases[0];
+              break;
+            case '2':
+          	  var r = jQuery.grep(_this.structures, function(item) { return item['@id'] == rangeID; })[0];
+          	  canvasID = getRangeV2(r);
+            break;
+        }
 
         _this.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + _this.windowId, canvasID);
       });
