@@ -50,6 +50,18 @@ export function addWindow(options) {
       companionAreaOpen: true,
       companionWindowIds: [cwDefault, cwThumbs],
       displayAllAnnotations: config.displayAllAnnotations || false,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+      draggingEnabled: true,
+      height: 400,
+=======
+>>>>>>> 66137e87... Extract elastic layout properties to a separate redux slice
+=======
+      draggingEnabled: true,
+>>>>>>> 618af013... #2355: adds toggling of the disableDragging property
+>>>>>>> 310a9dd0... 2355: adds toggling of the disableDragging property
       id: `window-${uuid()}`,
       layoutOrder: numWindows + 1,
       manifestId: null,
@@ -204,6 +216,17 @@ export function setWindowViewType(windowId, viewType) {
   return {
     type: ActionTypes.SET_WINDOW_VIEW_TYPE,
     viewType,
+    windowId,
+  };
+}
+
+/**
+ * toggleDraggingEnabled - action creator
+ * @param {String} windowId
+ */
+export function toggleDraggingEnabled(windowId) {
+  return {
+    type: ActionTypes.TOGGLE_DRAGGING,
     windowId,
   };
 }
