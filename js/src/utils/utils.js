@@ -185,6 +185,29 @@
     return rangeIDs;
   };
 
+  $.getRangeIDByCanvasIDv2 = function(structures, canvasID /*, [given parent range] for iiif v 2.0 manifests (for multiple ranges, later) */) {
+    var rangeIDs = [];
+    var findRanges = function(canvasID,range, rangeIDs, parentRangeID) {
+      if (range.canvases) {
+        if (range.canvases[0] === canvasID) {
+          rangeIDs.push(range['@id']);
+          if (parentRangeID !== null) {
+            rangeIDs.push(parentRangeID);
+          }
+        }
+      }
+      if (range.children) {
+        var i;
+        for (i = 0; i < range.children.length; i++) {
+          findRanges(canvasID, range.children[i], rangeIDs, range['@id']);
+        }
+      }
+    };
+
+    findRanges(canvasID,structures,rangeIDs, null);
+    return rangeIDs;
+  };
+
   $.layoutDescriptionFromGridString = function (gridString) {
     var columns = parseInt(gridString.substring(gridString.indexOf("x") + 1, gridString.length),10),
     rowsPerColumn = parseInt(gridString.substring(0, gridString.indexOf("x")),10),
