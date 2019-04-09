@@ -96,7 +96,15 @@ export class WindowSideBarCanvasPanel extends Component {
    */
   render() {
     const {
-      canvases, setCanvas, classes, t, toggleDraggingEnabled, variant, windowId, id,
+      canvases,
+      classes,
+      id,
+      selectedCanvases,
+      setCanvas,
+      t,
+      toggleDraggingEnabled,
+      variant,
+      windowId,
     } = this.props;
 
     const { variantSelectionOpened } = this.state;
