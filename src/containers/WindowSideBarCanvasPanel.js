@@ -26,6 +26,7 @@ const mapStateToProps = (state, { id, windowId }) => {
 /** */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
   setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
+  toggleDraggingEnabled: () => dispatch(actions.toggleDraggingEnabled(windowId)),
   updateVariant: variant => dispatch(
     actions.updateCompanionWindow(windowId, id, { variant }),
   ),

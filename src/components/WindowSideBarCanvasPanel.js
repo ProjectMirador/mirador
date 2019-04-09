@@ -18,8 +18,11 @@ export class WindowSideBarCanvasPanel extends Component {
   /** */
   constructor(props) {
     super(props);
-
     this.handleVariantChange = this.handleVariantChange.bind(this);
+
+    this.state = {
+      variantSelectionOpened: false,
+    };
   }
 
   /** @private */
@@ -37,6 +40,7 @@ export class WindowSideBarCanvasPanel extends Component {
     const { updateVariant } = this.props;
 
     updateVariant(event.target.value);
+    this.setState({ variantSelectionOpened: false });
   }
 
   /** */
@@ -92,10 +96,10 @@ export class WindowSideBarCanvasPanel extends Component {
    */
   render() {
     const {
-      canvases, setCanvas, classes, t, variant, windowId, id,
+      canvases, setCanvas, classes, t, toggleDraggingEnabled, variant, windowId, id,
     } = this.props;
 
-
+    const { variantSelectionOpened } = this.state;
     const canvasesIdAndLabel = this.getIdAndLabelOfCanvases(canvases);
     return (
       <CompanionWindow
@@ -116,6 +120,15 @@ export class WindowSideBarCanvasPanel extends Component {
               value={variant}
               onChange={this.handleVariantChange}
               name="variant"
+              open={variantSelectionOpened}
+              onOpen={(e) => {
+                toggleDraggingEnabled();
+                this.setState({ variantSelectionOpened: true });
+              }}
+              onClose={(e) => {
+                toggleDraggingEnabled();
+                this.setState({ variantSelectionOpened: false });
+              }}
               classes={{ select: classes.select }}
               className={classes.selectEmpty}
             >
@@ -158,6 +171,7 @@ WindowSideBarCanvasPanel.propTypes = {
   id: PropTypes.string.isRequired,
   setCanvas: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
+  toggleDraggingEnabled: PropTypes.func.isRequired,
   updateVariant: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['compact', 'thumbnail']),
   windowId: PropTypes.string.isRequired,

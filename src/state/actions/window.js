@@ -50,6 +50,7 @@ export function addWindow(options) {
       companionAreaOpen: true,
       companionWindowIds: [cwDefault, cwThumbs],
       displayAllAnnotations: config.displayAllAnnotations || false,
+      draggingEnabled: true,
       height: 400,
       id: `window-${uuid()}`,
       manifestId: null,
@@ -233,5 +234,16 @@ export function setWindowSize(windowId, size) {
       windowId,
     },
     type: ActionTypes.SET_WINDOW_SIZE,
+  };
+}
+
+/**
+ * toggleDraggingEnabled - action creator
+ * @param {String} windowId
+ */
+export function toggleDraggingEnabled(windowId) {
+  return {
+    type: ActionTypes.TOGGLE_DRAGGING,
+    windowId,
   };
 }
