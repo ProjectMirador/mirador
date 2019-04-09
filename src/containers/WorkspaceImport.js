@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend';
 import { WorkspaceImport } from '../components/WorkspaceImport';
 import * as actions from '../state/actions';
@@ -15,8 +16,19 @@ const mapDispatchToProps = {
   importConfig: actions.importMiradorState,
 };
 
+/** */
+const styles = theme => ({
+  hint: {
+    maxWidth: '400px',
+  },
+  textField: {
+    width: '400px',
+  },
+});
+
 const enhance = compose(
   withTranslation(),
+  withStyles(styles),
   connect(null, mapDispatchToProps),
   withPlugins('WorkspaceImport'),
 );
