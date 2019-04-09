@@ -172,10 +172,10 @@ describe('OpenSeadragonViewer', () => {
       expect(addHandler).toHaveBeenCalledWith('viewport-change', expect.anything());
 
       expect(panTo).toHaveBeenCalledWith(
-        { x: 1, y: 0, zoom: 0.5 }, false,
+        { x: 1, y: 0, zoom: 0.5 }, true,
       );
       expect(zoomTo).toHaveBeenCalledWith(
-        0.5, { x: 1, y: 0, zoom: 0.5 }, false,
+        0.5, { x: 1, y: 0, zoom: 0.5 }, true,
       );
     });
 

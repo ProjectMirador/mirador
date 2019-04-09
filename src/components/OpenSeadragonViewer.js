@@ -76,8 +76,8 @@ export class OpenSeadragonViewer extends Component {
     this.viewer.addHandler('viewport-change', this.onViewportChange);
 
     if (viewer) {
-      this.viewer.viewport.panTo(viewer, false);
-      this.viewer.viewport.zoomTo(viewer.zoom, viewer, false);
+      this.viewer.viewport.panTo(viewer, true);
+      this.viewer.viewport.zoomTo(viewer.zoom, viewer, true);
     }
 
     tileSources.forEach((tileSource, i) => this.addTileSource(tileSource, i));
