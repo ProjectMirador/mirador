@@ -24,6 +24,7 @@ function createWrapper(props) {
       setCanvas={() => {}}
       config={{ canvasNavigation: { height: 100 } }}
       updateVariant={() => {}}
+      selectedCanvases={[canvases[1]]}
       {...props}
     />,
   );
@@ -42,6 +43,7 @@ describe('WindowSideBarCanvasPanel', () => {
     expect(wrapper.find(List).length).toBe(1);
     expect(wrapper.find(ListItem).length).toBe(3);
     expect(wrapper.find(ListItem).first().props().component).toEqual('li');
+    expect(wrapper.find(ListItem).at(1).props().selected).toBe(true);
     expect(wrapper.find(List).find(Typography).length).toBe(3);
     expect(wrapper.find(CanvasThumbnail).length).toBe(3);
   });
