@@ -92,7 +92,7 @@ export class WindowSideBarCanvasPanel extends Component {
    */
   render() {
     const {
-      canvases, setCanvas, classes, t, variant, windowId, id,
+      canvases, selectedCanvases, setCanvas, classes, t, variant, windowId, id,
     } = this.props;
 
 
@@ -138,6 +138,7 @@ export class WindowSideBarCanvasPanel extends Component {
                   onClick={onClick}
                   button
                   component="li"
+                  selected={!!selectedCanvases.find(c => c.id === canvas.id)}
                 >
                   {variant === 'compact' && this.renderCompact(canvas, canvases[canvasIndex])}
                   {variant === 'thumbnail' && this.renderThumbnail(canvas, canvases[canvasIndex])}
@@ -156,6 +157,7 @@ WindowSideBarCanvasPanel.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   id: PropTypes.string.isRequired,
+  selectedCanvases: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string })),
   setCanvas: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   updateVariant: PropTypes.func.isRequired,
@@ -164,5 +166,6 @@ WindowSideBarCanvasPanel.propTypes = {
 };
 
 WindowSideBarCanvasPanel.defaultProps = {
+  selectedCanvases: [],
   variant: 'thumbnail',
 };
