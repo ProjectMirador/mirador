@@ -38,6 +38,7 @@
     "iiif_manifest": "IIIF manifest",
     "import" : "Import",
     "importWorkspace": "Import workspace",
+    "importWorkspaceHint": "Paste a Mirador 3 configuration to be imported",
     "item": "Item: {{label}}",
     "language": "Language",
     "light": "Light theme",

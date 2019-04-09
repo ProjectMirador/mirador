@@ -3,7 +3,12 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
-import { Input } from '@material-ui/core';
+import {
+  DialogActions,
+  DialogContentText,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 
 /**
@@ -20,7 +25,7 @@ export class WorkspaceImport extends Component {
       configImportValue: '',
     };
 
-    this.handleClick = this.handleClick.bind(this);
+    this.handleImportConfig = this.handleImportConfig.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -37,13 +42,14 @@ export class WorkspaceImport extends Component {
   /**
    * @private
    */
-  handleClick(event) {
-    const { importConfig } = this.props;
+  handleImportConfig(event) {
+    const { handleClose, importConfig } = this.props;
     const { configImportValue } = this.state;
-    event.preventDefault();
+
     try {
       const configJSON = JSON.parse(configImportValue);
       importConfig(configJSON);
+      handleClose();
     } catch (ex) {
       const { addError } = this.props;
       addError(ex.toString());
@@ -56,19 +62,39 @@ export class WorkspaceImport extends Component {
    */
   render() {
     const {
-      handleClose, open, t,
+      classes, handleClose, open, t,
     } = this.props;
+
     return (
-      <Dialog id="workspace-import" open={open} onClose={handleClose}>
-        <DialogTitle id="workspace-import-title">{t('import')}</DialogTitle>
+      <Dialog
+        aria-labelledby="workspace-import-title"
+        id="workspace-import"
+        onEscapeKeyDown={handleClose}
+        onClose={handleClose}
+        open={open}
+      >
+        <DialogTitle id="workspace-import-title" disableTypography>
+          <Typography variant="h2">{t('importWorkspace')}</Typography>
+        </DialogTitle>
         <DialogContent>
-          <Input id="workspace-import-input" rows="15" multiline variant="filled" onChange={this.handleChange} />
-          <div>
-            <Button onClick={this.handleClick}>
-              {t('importWorkspace')}
-            </Button>
-          </div>
+          <TextField
+            className={classes.textField}
+            id="workspace-import-input"
+            multiline
+            onChange={this.handleChange}
+            rows="15"
+            variant="filled"
+          />
+          <DialogContentText className={classes.hint}>{t('importWorkspaceHint')}</DialogContentText>
         </DialogContent>
+        <DialogActions>
+          <Button color="secondary" onClick={handleClose}>
+            {t('cancel')}
+          </Button>
+          <Button color="secondary" onClick={this.handleImportConfig} variant="contained">
+            {t('import')}
+          </Button>
+        </DialogActions>
       </Dialog>
     );
   }
@@ -76,6 +102,7 @@ export class WorkspaceImport extends Component {
 
 WorkspaceImport.propTypes = {
   addError: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   importConfig: PropTypes.func.isRequired, // eslint-disable-line react/forbid-prop-types
   open: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
