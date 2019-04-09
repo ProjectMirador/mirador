@@ -75,4 +75,16 @@ describe('ZoomControls', () => {
       expect(updateViewport).toHaveBeenCalled();
     });
   });
+
+  describe('responsive divider', () => {
+    it('is present when the displayDivider prop is true (default)', () => {
+      wrapper = createWrapper({ showZoomControls: true, viewer });
+      expect(wrapper.find('span.divider').length).toEqual(1);
+    });
+
+    it('is not present when the displayDivider prop is false', () => {
+      wrapper = createWrapper({ displayDivider: false, showZoomControls: true, viewer });
+      expect(wrapper.find('.divider').length).toEqual(0);
+    });
+  });
 });

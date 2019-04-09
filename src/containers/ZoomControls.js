@@ -33,6 +33,12 @@ const mapDispatchToProps = { updateViewport: actions.updateViewport };
  * ListItem: {paddingBottom: number, paddingTop: number}}}
  */
 const styles = theme => ({
+  divider: {
+    borderRight: '1px solid #808080',
+    display: 'inline-block',
+    height: '24px',
+    margin: '12px 6px',
+  },
   ListItem: {
     paddingBottom: 0,
     paddingTop: 0,
@@ -40,6 +46,7 @@ const styles = theme => ({
   zoom_controls: {
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'center',
   },
 });
 

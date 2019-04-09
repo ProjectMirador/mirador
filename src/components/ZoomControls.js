@@ -50,7 +50,7 @@ export class ZoomControls extends Component {
    */
   render() {
     const {
-      showZoomControls, classes, t, zoomToWorld,
+      displayDivider, showZoomControls, classes, t, zoomToWorld,
     } = this.props;
 
     if (!showZoomControls) {
@@ -70,6 +70,7 @@ export class ZoomControls extends Component {
         <MiradorMenuButton aria-label={t('zoomReset')} onClick={() => zoomToWorld(false)}>
           <RestoreZoomIcon />
         </MiradorMenuButton>
+        {displayDivider && <span className={classes.divider} />}
       </div>
     );
   }
@@ -77,6 +78,7 @@ export class ZoomControls extends Component {
 
 ZoomControls.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  displayDivider: PropTypes.bool,
   showZoomControls: PropTypes.bool,
   t: PropTypes.func,
   updateViewport: PropTypes.func,
@@ -90,6 +92,7 @@ ZoomControls.propTypes = {
 };
 
 ZoomControls.defaultProps = {
+  displayDivider: true,
   showZoomControls: false,
   t: key => key,
   updateViewport: () => {},
