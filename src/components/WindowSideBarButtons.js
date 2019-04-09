@@ -149,20 +149,17 @@ export class WindowSideBarButtons extends Component {
 
     /** */
     const TabButton = props => (
-      <Tab
-        classes={{ root: classes.tab, selected: classes.tabSelected }}
-        aria-label={
-          t('openCompanionWindow', { context: props.value })
-        }
-        icon={(
-          <Tooltip title={t('openCompanionWindow', { context: props.value })}>
-            {props.icon}
-          </Tooltip>
-        )}
-        TouchRippleProps={{ classes: { child: classes.tabRipple } }}
-        onKeyUp={this.handleKeyUp}
-        {...props}
-      />
+      <Tooltip title={t('openCompanionWindow', { context: props.value })}>
+        <Tab
+          {...props}
+          classes={{ root: classes.tab, selected: classes.tabSelected }}
+          aria-label={
+            t('openCompanionWindow', { context: props.value })
+          }
+          TouchRippleProps={{ classes: { child: classes.tabRipple } }}
+          onKeyUp={this.handleKeyUp}
+        />
+      </Tooltip>
     );
 
     return (
