@@ -79,8 +79,9 @@ describe('WindowSideBarButtons (shallow)', () => {
     });
 
     it('the focuses on the last tab when pressing the up arrow from the first tab', () => {
+      const tabs = wrapper.find('button[role="tab"]');
       wrapper.find('button[role="tab"]').first().simulate('keyUp', { key: 'ArrowUp' });
-      assertTabFocused(wrapper, 2); // Assuming 3 tabs
+      assertTabFocused(wrapper, tabs.length - 1); // Assuming 3 tabs
     });
   });
 });

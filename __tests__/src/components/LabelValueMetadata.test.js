@@ -59,4 +59,26 @@ describe('LabelValueMetadata', () => {
       expect(wrapper.matchesElement(<></>)).toBe(true);
     });
   });
+
+  describe('when the labelValuePair has a default label', () => {
+    beforeEach(() => {
+      labelValuePair = [
+        {
+          value: 'Value 1',
+        },
+        {
+          label: 'Label 2',
+          value: 'Value 2',
+        },
+      ];
+      wrapper = shallow(
+        <LabelValueMetadata labelValuePairs={labelValuePair} defaultLabel="Default label" />,
+      );
+    });
+
+    it('renders correct labels in dt', () => {
+      expect(wrapper.find('WithStyles(Typography)[component="dt"]').first().children().text()).toEqual('Default label');
+      expect(wrapper.find('WithStyles(Typography)[component="dt"]').last().children().text()).toEqual('Label 2');
+    });
+  });
 });
