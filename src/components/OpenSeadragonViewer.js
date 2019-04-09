@@ -49,6 +49,7 @@ export class OpenSeadragonViewer extends Component {
     this.onUpdateViewport = this.onUpdateViewport.bind(this);
     this.onViewportChange = this.onViewportChange.bind(this);
     this.zoomToWorld = this.zoomToWorld.bind(this);
+    this.osdUpdating = false;
   }
 
   /**
@@ -59,6 +60,7 @@ export class OpenSeadragonViewer extends Component {
     if (!this.ref.current) {
       return;
     }
+
     this.viewer = new OpenSeadragon({
       alwaysBlend: false,
       blendTime: 0.1,
@@ -71,7 +73,14 @@ export class OpenSeadragonViewer extends Component {
 
     this.osdCanvasOverlay = new OpenSeadragonCanvasOverlay(this.viewer);
     this.viewer.addHandler('update-viewport', this.onUpdateViewport);
-    this.viewer.addHandler('viewport-change', this.onViewportChange);
+    // Set a flag when OSD starts animating (so that viewer updates are not used)
+    this.viewer.addHandler('animation-start', () => {
+      this.osdUpdating = true;
+    });
+    this.viewer.addHandler('animation-finish', this.onViewportChange);
+    this.viewer.addHandler('animation-finish', () => {
+      this.osdUpdating = false;
+    });
 
     if (viewer) {
       this.viewer.viewport.panTo(viewer, true);
@@ -119,7 +128,7 @@ export class OpenSeadragonViewer extends Component {
           this.zoomToWorld();
         }
       });
-    } else if (viewer) {
+    } else if (viewer && !this.osdUpdating) {
       const { viewport } = this.viewer;
 
       if (viewer.x !== viewport.centerSpringX.target.value

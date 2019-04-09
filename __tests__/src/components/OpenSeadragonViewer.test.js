@@ -177,14 +177,20 @@ describe('OpenSeadragonViewer', () => {
     it('calls the OSD viewport panTo and zoomTo with the component state', () => {
       wrapper.instance().componentDidMount();
 
-      expect(addHandler).toHaveBeenCalledWith('viewport-change', expect.anything());
-
       expect(panTo).toHaveBeenCalledWith(
         { x: 1, y: 0, zoom: 0.5 }, true,
       );
       expect(zoomTo).toHaveBeenCalledWith(
         0.5, { x: 1, y: 0, zoom: 0.5 }, true,
       );
+    });
+
+    it('adds animation-start/finish flag for rerendering performance', () => {
+      wrapper.instance().componentDidMount();
+
+      expect(addHandler).toHaveBeenCalledWith('animation-start', expect.anything());
+      expect(addHandler).toHaveBeenCalledWith('animation-finish', expect.anything());
+      expect(addHandler).toHaveBeenCalledWith('animation-finish', wrapper.instance().onViewportChange);
     });
 
     it('sets up a OpenSeadragonCanvasOverlay', () => {
