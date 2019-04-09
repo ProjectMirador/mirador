@@ -7,6 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/InfoSharp';
 import AnnotationIcon from '@material-ui/icons/CommentSharp';
+import AttributionIcon from '@material-ui/icons/CopyrightSharp';
 import CanvasIndexIcon from './icons/CanvasIndexIcon';
 
 /**
@@ -180,6 +181,10 @@ export class WindowSideBarButtons extends Component {
         <TabButton
           value="info"
           icon={(<InfoIcon />)}
+        />
+        <TabButton
+          value="attribution"
+          icon={(<AttributionIcon />)}
         />
         <TabButton
           value="canvas"

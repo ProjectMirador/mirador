@@ -4,6 +4,7 @@ import WindowSideBarInfoPanel from '../../../src/containers/WindowSideBarInfoPan
 import WindowSideBarCanvasPanel from '../../../src/containers/WindowSideBarCanvasPanel';
 import WindowSideBarAnnotationsPanel from '../../../src/containers/WindowSideBarAnnotationsPanel';
 import ThumbnailNavigation from '../../../src/containers/ThumbnailNavigation';
+import AttributionPanel from '../../../src/containers/AttributionPanel';
 import { CompanionWindowFactory } from '../../../src/components/CompanionWindowFactory';
 
 /** create wrapper */
@@ -48,6 +49,16 @@ describe('CompanionWindowFactory', () => {
       });
 
       expect(wrapper.find(WindowSideBarAnnotationsPanel).length).toBe(1);
+    });
+  });
+
+  describe('for an attribution window', () => {
+    it('renders the appropriate arg component', () => {
+      wrapper = createWrapper({
+        content: 'attribution',
+      });
+
+      expect(wrapper.find(AttributionPanel).length).toBe(1);
     });
   });
 

@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import manifesto, { LanguageMap } from 'manifesto.js';
+import manifesto, { LanguageMap, Utils } from 'manifesto.js';
 import ManifestoCanvas from '../../lib/ManifestoCanvas';
 
 /** Get the relevant manifest information */
@@ -130,6 +130,35 @@ export const getManifestRelatedContent = createSelector(
     )),
 );
 
+/**
+* Return the IIIF requiredStatement (v3) or attribution (v2) data from a manifest or null
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
+* @return {String|null}
+*/
+export const getRequiredStatement = createSelector(
+  [getManifestoInstance],
+  manifest => manifest
+    && asArray(manifest.getRequiredStatement()).map(labelValuePair => ({
+      label: labelValuePair.getLabel(),
+      value: labelValuePair.getValue(),
+    })),
+);
+/**
+* Return the IIIF v2 rights (v3) or license (v2) data from a manifest or null
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
+* @return {String|null}
+*/
+export const getRights = createSelector(
+  [getManifestoInstance, getLocale],
+  (manifest, locale) => manifest
+    && (Utils.getLocalisedValue(manifest.getProperty('rights'), locale) || manifest.getLicense()),
+);
 /**
 * Return the supplied thumbnail for a manifest or null
 * @param {object} state
