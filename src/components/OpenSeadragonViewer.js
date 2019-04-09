@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
+import isEqual from 'lodash/isEqual';
 import OpenSeadragon from 'openseadragon';
 import ns from '../config/css-ns';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
@@ -20,17 +21,14 @@ export class OpenSeadragonViewer extends Component {
    */
   static annotationsMatch(currentAnnotations, prevAnnotations) {
     if (currentAnnotations.length === 0 && prevAnnotations.length === 0) return true;
-    return currentAnnotations.some((annotation, index) => {
-      if (!prevAnnotations[index]) {
-        return false;
-      }
+    if (currentAnnotations.length !== prevAnnotations.length) return false;
+    return currentAnnotations.every((annotation, index) => {
       const newIds = annotation.resources.map(r => r.id);
       const prevIds = prevAnnotations[index].resources.map(r => r.id);
+      if (newIds.length === 0 && prevIds.length === 0) return true;
+      if (newIds.length !== prevIds.length) return false;
 
-      // The newIds === prevIds is always returning false right now (because javascript)
-      // Using something like lodash's isEqual causes behavior
-      // that was unexpeected when switching annotations and should to be investigated further
-      if ((annotation.id === prevAnnotations[index].id) && (newIds === prevIds)) {
+      if ((annotation.id === prevAnnotations[index].id) && (isEqual(newIds, prevIds))) {
         return true;
       }
       return false;
@@ -105,12 +103,8 @@ export class OpenSeadragonViewer extends Component {
         this.osdCanvasOverlay.clear();
         this.osdCanvasOverlay.resize();
         this.osdCanvasOverlay.canvasUpdate(() => {
-          if (highlightsUpdated) {
-            this.annotationsToContext(highlightedAnnotations, '#00BFFF');
-          }
-          if (selectionsUpdated) {
-            this.annotationsToContext(selectedAnnotations, 'yellow');
-          }
+          this.annotationsToContext(highlightedAnnotations, '#00BFFF');
+          this.annotationsToContext(selectedAnnotations, 'yellow');
         });
       };
       this.viewer.forceRedraw();
