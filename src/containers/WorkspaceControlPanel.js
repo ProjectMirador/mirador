@@ -11,6 +11,18 @@ import { WorkspaceControlPanel } from '../components/WorkspaceControlPanel';
  * drawer: {overflowX: string, height: string}}}
  */
 const styles = theme => ({
+  branding: {
+    display: 'flex',
+    position: 'absolute',
+    [theme.breakpoints.up('sm')]: {
+      bottom: 0,
+      display: 'block',
+      float: 'none',
+      right: 'auto',
+      width: '100%',
+    },
+    right: 0,
+  },
   ctrlBtn: {
     margin: theme.spacing.unit,
   },
@@ -22,13 +34,17 @@ const styles = theme => ({
       height: '100%',
       left: 0,
       right: 'auto',
-      width: 64,
+      width: 'auto',
     },
   },
   toolbar: {
     [theme.breakpoints.up('sm')]: {
-      display: 'block',
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: 0,
     },
+  },
+  wide: {
   },
 });
 

@@ -75,6 +75,16 @@ describe('Workspace', () => {
     });
   });
 
+  describe('if there are no windows', () => {
+    it('should render placeholder content', () => {
+      const wrapper = createWrapper({ windows: {} });
+
+      expect(wrapper.find(Typography).at(1).matchesElement(
+        <Typography>welcome</Typography>,
+      )).toBe(true);
+    });
+  });
+
   describe('when the workspace control panel is displayed', () => {
     it('has the *-with-control-panel class applied', () => {
       const wrapper = createWrapper();

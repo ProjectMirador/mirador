@@ -13,6 +13,7 @@ import { WorkspaceAddButton } from '../components/WorkspaceAddButton';
  */
 const mapStateToProps = state => (
   {
+    emptyWorkspace: Object.keys(state.windows).length === 0,
     isWorkspaceAddVisible: state.workspace.isWorkspaceAddVisible,
   }
 );
