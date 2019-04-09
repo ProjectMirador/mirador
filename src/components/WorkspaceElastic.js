@@ -56,6 +56,7 @@ class WorkspaceElastic extends React.Component {
           }}
           cancel={`.${ns('window')}`}
           className={ns('workspace')}
+          disableDragging={!workspace.draggingEnabled}
         >
           {
             Object.values(windows).map(window => (
@@ -79,7 +80,6 @@ class WorkspaceElastic extends React.Component {
                 className={
                   workspace.focusedWindowId === window.id ? ns('workspace-focused-window') : null
                 }
-                disableDragging={!window.draggingEnabled}
               >
                 <Window
                   window={window}
