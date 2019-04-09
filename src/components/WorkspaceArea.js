@@ -5,6 +5,7 @@ import ErrorDialog from '../containers/ErrorDialog';
 import WorkspaceControlPanel from '../containers/WorkspaceControlPanel';
 import Workspace from '../containers/Workspace';
 import WorkspaceAdd from '../containers/WorkspaceAdd';
+import BackgroundPluginArea from '../containers/BackgroundPluginArea';
 import ns from '../config/css-ns';
 
 /**
@@ -33,6 +34,7 @@ export class WorkspaceArea extends Component {
             : <Workspace />
         }
         <ErrorDialog />
+        <BackgroundPluginArea />
       </main>
     );
   }

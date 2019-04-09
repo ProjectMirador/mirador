@@ -61,23 +61,22 @@ describe('OpenSeadragonViewer', () => {
 
   describe('annotationsMatch', () => {
     it('is false if the annotations are a different size', () => {
-      const currentAnnotations = [{ id: 1, resources: [] }];
-      const previousAnnotations = [{ id: 1, resources: [] }, { id: 2, resources: [] }];
+      const currentAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
+      const previousAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }, { id: 2, resources: [{ id: 'rid2' }] }];
 
       expect(
         OpenSeadragonViewer.annotationsMatch(currentAnnotations, previousAnnotations),
       ).toBe(false);
     });
 
-    // TODO: This scenario currently does not work
-    // it('is true if the previous annotation\'s resource IDs all match', () => {
-    //   const currentAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
-    //   const previousAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
-    //
-    //   expect(
-    //     OpenSeadragonViewer.annotationsMatch(currentAnnotations, previousAnnotations),
-    //   ).toBe(true);
-    // });
+    it('is true if the previous annotation\'s resource IDs all match', () => {
+      const currentAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
+      const previousAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
+
+      expect(
+        OpenSeadragonViewer.annotationsMatch(currentAnnotations, previousAnnotations),
+      ).toBe(true);
+    });
 
     it('is true if both are empty', () => {
       expect(OpenSeadragonViewer.annotationsMatch([], [])).toBe(true);
@@ -90,6 +89,15 @@ describe('OpenSeadragonViewer', () => {
       expect(
         OpenSeadragonViewer.annotationsMatch(currentAnnotations, previousAnnotations),
       ).toBe(false);
+    });
+
+    it('returns true if the annotation resources IDs are empty (to prevent unecessary rerender)', () => {
+      const currentAnnotations = [{ id: 1, resources: [] }];
+      const previousAnnotations = [{ id: 1, resources: [] }];
+
+      expect(
+        OpenSeadragonViewer.annotationsMatch(currentAnnotations, previousAnnotations),
+      ).toBe(true);
     });
   });
 
@@ -172,10 +180,10 @@ describe('OpenSeadragonViewer', () => {
       expect(addHandler).toHaveBeenCalledWith('viewport-change', expect.anything());
 
       expect(panTo).toHaveBeenCalledWith(
-        { x: 1, y: 0, zoom: 0.5 }, false,
+        { x: 1, y: 0, zoom: 0.5 }, true,
       );
       expect(zoomTo).toHaveBeenCalledWith(
-        0.5, { x: 1, y: 0, zoom: 0.5 }, false,
+        0.5, { x: 1, y: 0, zoom: 0.5 }, true,
       );
     });
 

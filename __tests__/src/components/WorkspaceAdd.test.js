@@ -27,6 +27,12 @@ describe('WorkspaceAdd', () => {
     expect(wrapper.find(ManifestListItem).length).toBe(2);
   });
 
+  it('without manifests, renders an empty message', () => {
+    const wrapper = createWrapper({ manifests: {} });
+    expect(wrapper.find(ManifestListItem).length).toEqual(0);
+    expect(wrapper.find('WithStyles(Typography)').first().children().text()).toEqual('emptyResourceList');
+  });
+
   it('toggles the workspace visibility', () => {
     const setWorkspaceAddVisibility = jest.fn();
     const wrapper = createWrapper({ setWorkspaceAddVisibility });

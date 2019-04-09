@@ -45,7 +45,7 @@ export class WorkspaceMosaic extends React.Component {
     if (!prevWindows.every(e => currentWindows.includes(e))) {
       // There are no more remaining Windows, just return an empty layout
       if (currentWindows.length === 0) {
-        updateWorkspaceMosaicLayout({});
+        updateWorkspaceMosaicLayout(null);
         return;
       }
 
