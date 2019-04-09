@@ -118,6 +118,10 @@
     text-align: center;
   }
 
+  &-canvas-nav-stacked {
+    flex-direction: column;
+  }
+
   &-label-value-metadata {
     dd {
       margin-bottom: .5em;
