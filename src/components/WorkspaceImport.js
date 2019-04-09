@@ -45,6 +45,7 @@ export class WorkspaceImport extends Component {
   handleImportConfig(event) {
     const { handleClose, importConfig } = this.props;
     const { configImportValue } = this.state;
+
     try {
       const configJSON = JSON.parse(configImportValue);
       importConfig(configJSON);
