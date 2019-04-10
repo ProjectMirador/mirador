@@ -74,6 +74,7 @@ export class WorkspaceMenu extends Component {
       containerId,
       handleClose,
       anchorEl,
+      isWorkspaceAddVisible,
       t,
       showZoomControls,
     } = this.props;
@@ -107,6 +108,7 @@ export class WorkspaceMenu extends Component {
         >
           <MenuItem
             aria-haspopup="true"
+            disabled={isWorkspaceAddVisible}
             onClick={(e) => { this.handleZoomToggleClick(e); handleClose(e); }}
             aria-owns={toggleZoom.anchorEl ? 'toggle-zoom-menu' : undefined}
           >
@@ -191,6 +193,7 @@ WorkspaceMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   containerId: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
+  isWorkspaceAddVisible: PropTypes.bool,
   showZoomControls: PropTypes.bool,
   t: PropTypes.func,
   toggleZoomControls: PropTypes.func,
@@ -198,6 +201,7 @@ WorkspaceMenu.propTypes = {
 
 WorkspaceMenu.defaultProps = {
   anchorEl: null,
+  isWorkspaceAddVisible: false,
   showZoomControls: false,
   t: key => key,
   toggleZoomControls: () => {},

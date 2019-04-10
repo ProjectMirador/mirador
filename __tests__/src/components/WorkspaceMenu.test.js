@@ -1,7 +1,17 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { WorkspaceMenu } from '../../../src/components/WorkspaceMenu';
-import WindowList from '../../../src/containers/WindowList';
+
+/** */
+function createShallow(props) {
+  return shallow(
+    <WorkspaceMenu
+      containerId="mirador"
+
+      {...props}
+    />,
+  );
+}
 
 describe('WorkspaceMenu', () => {
   let wrapper;
@@ -12,14 +22,7 @@ describe('WorkspaceMenu', () => {
   beforeEach(() => {
     handleClose = jest.fn();
     toggleZoomControls = jest.fn();
-    wrapper = shallow(
-      <WorkspaceMenu
-        containerId="mirador"
-        handleClose={handleClose}
-        showZoomControls={showZoomControls}
-        toggleZoomControls={toggleZoomControls}
-      />,
-    );
+    wrapper = createShallow({ handleClose, showZoomControls, toggleZoomControls });
   });
 
   it('renders without an error', () => {
@@ -29,6 +32,16 @@ describe('WorkspaceMenu', () => {
   it('closes the current menu when opening a submenu', () => {
     wrapper.find('WithStyles(MenuItem)').first().simulate('click', {});
     expect(handleClose).toBeCalled();
+  });
+
+  it('disables zoom controls if the workspaceAdd UI is visible', () => {
+    expect(wrapper.find('WithStyles(MenuItem)').at(0).props().disabled).toBe(false);
+
+    wrapper = createShallow({
+      handleClose, isWorkspaceAddVisible: true, showZoomControls, toggleZoomControls,
+    });
+
+    expect(wrapper.find('WithStyles(MenuItem)').at(0).props().disabled).toBe(true);
   });
 
   describe('handleZoomToggleClick', () => {
