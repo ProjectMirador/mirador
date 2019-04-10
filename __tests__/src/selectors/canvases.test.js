@@ -3,6 +3,7 @@ import manifestFixture019 from '../../fixtures/version-2/019.json';
 import {
   getSelectedCanvas,
   getSelectedCanvases,
+  getCanvas,
   getCanvasLabel,
   selectCanvasAuthService,
   selectNextAuthService,
@@ -102,6 +103,34 @@ describe('getSelectedCanvases', () => {
     const selectedCanvas = getSelectedCanvases(noManifestationState, { windowId: 'a' });
 
     expect(selectedCanvas).toBeUndefined();
+  });
+});
+
+describe('getCanvas', () => {
+  it('returns the canvas by id', () => {
+    const state = { manifests: { a: { json: manifestFixture001 } } };
+    const received = getCanvas(state, {
+      canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
+      manifestId: 'a',
+    });
+    expect(received.id).toBe('https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json');
+  });
+
+  it('returns the canvas by index', () => {
+    const state = { manifests: { a: { json: manifestFixture001 } } };
+    const received = getCanvas(state, {
+      canvasIndex: 0,
+      manifestId: 'a',
+    });
+    expect(received.id).toBe('https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json');
+  });
+
+  it('does nothing if an id or index is not provided', () => {
+    const state = { manifests: { a: { json: manifestFixture001 } } };
+    const received = getCanvas(state, {
+      manifestId: 'a',
+    });
+    expect(received).toBeUndefined();
   });
 });
 

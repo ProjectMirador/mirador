@@ -19,15 +19,17 @@ export class CanvasInfo extends Component {
       canvasLabel,
       canvasMetadata,
       id,
+      index,
       t,
+      totalSize,
     } = this.props;
 
     return (
       <>
         {canvasLabel && (
           <>
-            <Typography variant="overline" id={`${id}-currentItem`}>{t('currentItem')}</Typography>
-            <Typography aria-labelledby={`${id}-currentItem`} variant="h4">
+            <Typography variant="overline" id={`${id}-currentItem-${index}`}>{t('currentItem', { context: `${index + 1}/${totalSize}` })}</Typography>
+            <Typography aria-labelledby={`${id}-currentItem-${index}`} variant="h4">
               {canvasLabel}
             </Typography>
           </>
@@ -52,12 +54,16 @@ CanvasInfo.propTypes = {
   canvasLabel: PropTypes.string,
   canvasMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   id: PropTypes.string.isRequired,
+  index: PropTypes.number,
   t: PropTypes.func,
+  totalSize: PropTypes.number,
 };
 
 CanvasInfo.defaultProps = {
   canvasDescription: null,
   canvasLabel: null,
   canvasMetadata: [],
+  index: 1,
   t: key => key,
+  totalSize: 1,
 };

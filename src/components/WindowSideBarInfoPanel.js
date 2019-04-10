@@ -23,6 +23,7 @@ export class WindowSideBarInfoPanel extends Component {
       classes,
       t,
       locale,
+      selectedCanvases,
       setLocale,
       availableLocales,
       showLocalePicker,
@@ -45,9 +46,19 @@ export class WindowSideBarInfoPanel extends Component {
             )
         )}
       >
-        <div className={classes.section}>
-          <CanvasInfo id={id} windowId={windowId} />
-        </div>
+        {
+          selectedCanvases.map((canvas, index) => (
+            <div key={canvas.id} className={classes.section}>
+              <CanvasInfo
+                id={id}
+                canvasId={canvas.id}
+                index={index}
+                totalSize={selectedCanvases.length}
+                windowId={windowId}
+              />
+            </div>
+          ))
+        }
 
         <div className={classes.section}>
           <ManifestInfo id={id} windowId={windowId} />
@@ -66,6 +77,7 @@ WindowSideBarInfoPanel.propTypes = {
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   id: PropTypes.string.isRequired,
   locale: PropTypes.string,
+  selectedCanvases: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string })),
   setLocale: PropTypes.func,
   showLocalePicker: PropTypes.bool,
   t: PropTypes.func,
@@ -76,6 +88,7 @@ WindowSideBarInfoPanel.defaultProps = {
   availableLocales: [],
   classes: {},
   locale: '',
+  selectedCanvases: [],
   setLocale: undefined,
   showLocalePicker: false,
   t: key => key,
