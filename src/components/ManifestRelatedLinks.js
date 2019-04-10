@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import CollapsibleSection from '../containers/CollapsibleSection';
 import ns from '../config/css-ns';
 
 
@@ -23,8 +24,10 @@ export class ManifestRelatedLinks extends Component {
     } = this.props;
 
     return (
-      <>
-        <Typography variant="overline" id={`${id}-related`}>{t('related')}</Typography>
+      <CollapsibleSection
+        id={`${id}-related`}
+        label={t('related')}
+      >
         <Typography aria-labelledby={`${id}-related`} variant="h4">
           {t('links')}
         </Typography>
@@ -77,7 +80,7 @@ export class ManifestRelatedLinks extends Component {
             </>
           )}
         </dl>
-      </>
+      </CollapsibleSection>
     );
   }
 }

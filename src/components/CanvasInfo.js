@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import CollapsibleSection from '../containers/CollapsibleSection';
 import { SanitizedHtml } from './SanitizedHtml';
 import { LabelValueMetadata } from './LabelValueMetadata';
 
@@ -25,26 +26,28 @@ export class CanvasInfo extends Component {
     } = this.props;
 
     return (
-      <>
-        {canvasLabel && (
-          <>
-            <Typography variant="overline" id={`${id}-currentItem-${index}`}>{t('currentItem', { context: `${index + 1}/${totalSize}` })}</Typography>
+      <CollapsibleSection
+        id={`${id}-currentItem-${index}`}
+        label={t('currentItem', { context: `${index + 1}/${totalSize}` })}
+      >
+        <>
+          {canvasLabel && (
             <Typography aria-labelledby={`${id}-currentItem-${index}`} variant="h4">
               {canvasLabel}
             </Typography>
-          </>
-        )}
+          )}
 
-        {canvasDescription && (
-          <Typography variant="body1">
-            <SanitizedHtml htmlString={canvasDescription} ruleSet="iiif" />
-          </Typography>
-        )}
+          {canvasDescription && (
+            <Typography variant="body1">
+              <SanitizedHtml htmlString={canvasDescription} ruleSet="iiif" />
+            </Typography>
+          )}
 
-        {canvasMetadata.length > 0 && (
-          <LabelValueMetadata labelValuePairs={canvasMetadata} />
-        )}
-      </>
+          {canvasMetadata.length > 0 && (
+            <LabelValueMetadata labelValuePairs={canvasMetadata} />
+          )}
+        </>
+      </CollapsibleSection>
     );
   }
 }

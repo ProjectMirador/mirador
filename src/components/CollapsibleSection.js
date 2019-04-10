@@ -8,7 +8,7 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
 /**
  * CollapsableSection ~
 */
-export class CollapsableSection extends Component {
+export class CollapsibleSection extends Component {
   /** */
   constructor(props) {
     super(props);
@@ -61,7 +61,7 @@ export class CollapsableSection extends Component {
   }
 }
 
-CollapsableSection.propTypes = {
+CollapsibleSection.propTypes = {
   children: PropTypes.element.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   id: PropTypes.string.isRequired,

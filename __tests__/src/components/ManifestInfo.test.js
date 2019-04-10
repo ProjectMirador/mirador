@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
 import { ManifestInfo } from '../../../src/components/ManifestInfo';
 import { LabelValueMetadata } from '../../../src/components/LabelValueMetadata';
+import CollapsibleSection from '../../../src/containers/CollapsibleSection';
 import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
 
 describe('ManifestInfo', () => {
@@ -22,9 +23,13 @@ describe('ManifestInfo', () => {
       );
     });
 
+    it('renders the content in a CollapsibleSection', () => {
+      expect(wrapper.find(CollapsibleSection).length).toBe(1);
+    });
+
     it('renders manifest label', () => {
       expect(
-        wrapper.find(Typography).at(1).matchesElement(
+        wrapper.find(Typography).at(0).matchesElement(
           <Typography>The Manifest Label</Typography>,
         ),
       ).toBe(true);
@@ -32,7 +37,7 @@ describe('ManifestInfo', () => {
 
     it('renders manifest description in SanitizedHtml component', () => {
       expect(
-        wrapper.find(Typography).at(2).matchesElement(
+        wrapper.find(Typography).at(1).matchesElement(
           <Typography>
             <SanitizedHtml htmlString="The Manifest Description" ruleSet="iiif" />
           </Typography>,
