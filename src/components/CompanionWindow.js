@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CloseIcon from '@material-ui/icons/CloseSharp';
 import OpenInNewIcon from '@material-ui/icons/OpenInNewSharp';
+import MoveIcon from '@material-ui/icons/DragIndicatorSharp';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
-import ThumbnailNavigationBottomIcon from './icons/ThumbnailNavigationBottomIcon';
-import ThumbnailNavigationRightIcon from './icons/ThumbnailNavigationRightIcon';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
 
@@ -21,7 +20,7 @@ export class CompanionWindow extends Component {
   render() {
     const {
       classes, paperClassName, id, onCloseClick, updateCompanionWindow, isDisplayed,
-      position, t, windowId, title, children, titleControls,
+      position, t, windowId, title, children, titleControls, size,
     } = this.props;
 
     return (
@@ -35,17 +34,10 @@ export class CompanionWindow extends Component {
         component="aside"
         aria-label={title}
       >
-        <Toolbar className={[classes.toolbar, position === 'left' ? classes.leftPadding : undefined, ns('companion-window-header')].join(' ')} disableGutters>
+        <Toolbar className={[classes.toolbar, size.width < 370 ? classes.small : null, ns('companion-window-header')].join(' ')} disableGutters>
           <Typography variant="h3" className={classes.windowSideBarTitle}>
             {title}
           </Typography>
-          {
-            titleControls && (
-              <div className={ns('companion-window-title-controls')}>
-                {titleControls}
-              </div>
-            )
-          }
           {
             position === 'left'
               ? updateCompanionWindow
@@ -66,7 +58,7 @@ export class CompanionWindow extends Component {
                         className={classes.positionButton}
                         onClick={() => { updateCompanionWindow(windowId, id, { position: position === 'bottom' ? 'right' : 'bottom' }); }}
                       >
-                        {position === 'bottom' ? <ThumbnailNavigationRightIcon /> : <ThumbnailNavigationBottomIcon />}
+                        <MoveIcon />
                       </MiradorMenuButton>
                     )
                   }
@@ -79,6 +71,13 @@ export class CompanionWindow extends Component {
                   </MiradorMenuButton>
                 </>
               )
+          }
+          {
+            titleControls && (
+              <div className={[classes.titleControls, ns('companion-window-title-controls')].join(' ')}>
+                {titleControls}
+              </div>
+            )
           }
         </Toolbar>
         <Paper className={classes.content} elevation={0}>
@@ -97,6 +96,7 @@ CompanionWindow.propTypes = {
   onCloseClick: PropTypes.func,
   paperClassName: PropTypes.string,
   position: PropTypes.string,
+  size: PropTypes.shape({ width: PropTypes.number }),
   t: PropTypes.func,
   title: PropTypes.string,
   titleControls: PropTypes.node,
@@ -110,6 +110,7 @@ CompanionWindow.defaultProps = {
   onCloseClick: () => {},
   paperClassName: '',
   position: null,
+  size: {},
   t: key => key,
   title: null,
   titleControls: null,
