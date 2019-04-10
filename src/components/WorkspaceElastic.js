@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Rnd } from 'react-rnd';
 import ResizeObserver from 'react-resize-observer';
-import WorkspaceElasticWindow from './WorkspaceElasticWindow';
-import Window from '../containers/Window';
+import WorkspaceElasticWindow from '../containers/WorkspaceElasticWindow';
 import ns from '../config/css-ns';
 
 /**
@@ -20,7 +19,6 @@ class WorkspaceElastic extends React.Component {
       elasticLayout,
       setWorkspaceViewportDimensions,
       setWorkspaceViewportPosition,
-      updateElasticWindowLayout,
     } = this.props;
 
     const { viewportPosition } = workspace;
@@ -59,11 +57,10 @@ class WorkspaceElastic extends React.Component {
           disableDragging={!workspace.draggingEnabled}
         >
           {
-            Object.values(elasticLayout).map(layout => (
+            Object.keys(elasticLayout).map(windowId => (
               <WorkspaceElasticWindow
-                layout={layout}
-                workspace={workspace}
-                updateElasticWindowLayout={updateElasticWindowLayout}
+                key={windowId}
+                windowId={windowId}
               />
             ))
           }
@@ -74,16 +71,9 @@ class WorkspaceElastic extends React.Component {
 }
 
 WorkspaceElastic.propTypes = {
-  elasticLayout: PropTypes.objectOf(PropTypes.shape({
-    height: PropTypes.number,
-    id: PropTypes.string,
-    width: PropTypes.number,
-    x: PropTypes.number,
-    y: PropTypes.number,
-  })).isRequired,
+  elasticLayout: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   setWorkspaceViewportDimensions: PropTypes.func.isRequired,
   setWorkspaceViewportPosition: PropTypes.func.isRequired,
-  updateElasticWindowLayout: PropTypes.func.isRequired,
   workspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
