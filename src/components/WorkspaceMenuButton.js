@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MenuIcon from '@material-ui/icons/MenuSharp';
+import SettingsIcon from '@material-ui/icons/SettingsSharp';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import WorkspaceMenu from '../containers/WorkspaceMenu';
@@ -56,7 +56,7 @@ export class WorkspaceMenuButton extends Component {
           id="menuBtn"
           onClick={this.handleMenuClick}
         >
-          <MenuIcon />
+          <SettingsIcon />
         </MiradorMenuButton>
         <WorkspaceMenu
           anchorEl={anchorEl}
