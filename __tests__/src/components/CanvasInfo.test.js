@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
 import { CanvasInfo } from '../../../src/components/CanvasInfo';
 import { LabelValueMetadata } from '../../../src/components/LabelValueMetadata';
+import CollapsibleSection from '../../../src/containers/CollapsibleSection';
 import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
 
 describe('CanvasInfo', () => {
@@ -22,9 +23,13 @@ describe('CanvasInfo', () => {
       );
     });
 
+    it('renders the content in a CollapsibleSection', () => {
+      expect(wrapper.find(CollapsibleSection).length).toBe(1);
+    });
+
     it('renders canvas label', () => {
       expect(
-        wrapper.find(Typography).at(1).matchesElement(
+        wrapper.find(Typography).at(0).matchesElement(
           <Typography>The Canvas Label</Typography>,
         ),
       ).toBe(true);
@@ -32,7 +37,7 @@ describe('CanvasInfo', () => {
 
     it('renders canvas description in SanitizedHtml component', () => {
       expect(
-        wrapper.find(Typography).at(2).matchesElement(
+        wrapper.find(Typography).at(1).matchesElement(
           <Typography>
             <SanitizedHtml htmlString="The Canvas Description" ruleSet="iiif" />
           </Typography>,

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import CollapsibleSection from '../containers/CollapsibleSection';
 import { SanitizedHtml } from './SanitizedHtml';
 import { LabelValueMetadata } from './LabelValueMetadata';
 
@@ -23,14 +24,14 @@ export class ManifestInfo extends Component {
     } = this.props;
 
     return (
-      <>
+      <CollapsibleSection
+        id={`${id}-resource`}
+        label={t('resource')}
+      >
         {manifestLabel && (
-          <>
-            <Typography variant="overline" id={`${id}-resource`}>{t('resource')}</Typography>
-            <Typography aria-labelledby={`${id}-resource`} variant="h4">
-              {manifestLabel}
-            </Typography>
-          </>
+          <Typography aria-labelledby={`${id}-resource`} variant="h4">
+            {manifestLabel}
+          </Typography>
         )}
 
         {manifestDescription && (
@@ -42,7 +43,7 @@ export class ManifestInfo extends Component {
         {manifestMetadata.length > 0 && (
           <LabelValueMetadata labelValuePairs={manifestMetadata} />
         )}
-      </>
+      </CollapsibleSection>
     );
   }
 }

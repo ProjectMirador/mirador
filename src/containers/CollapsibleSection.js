@@ -1,7 +1,7 @@
 import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
-import { CollapsableSection } from '../components/CollapsableSection';
+import { CollapsibleSection } from '../components/CollapsibleSection';
 
 const styles = {
   button: {
@@ -18,4 +18,4 @@ const enhance = compose(
   withStyles(styles),
 );
 
-export default enhance(CollapsableSection);
+export default enhance(CollapsibleSection);
