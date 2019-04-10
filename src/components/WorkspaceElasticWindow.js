@@ -14,6 +14,7 @@ class WorkspaceElasticWindow extends React.Component {
    */
   render() {
     const {
+      companionWindowDimensions,
       focused,
       layout,
       workspace,
@@ -26,7 +27,10 @@ class WorkspaceElasticWindow extends React.Component {
     return (
       <Rnd
         key={`${layout.windowId}-${workspace.id}`}
-        size={{ height: layout.height, width: layout.width }}
+        size={{
+          height: layout.height + companionWindowDimensions.height,
+          width: layout.width + companionWindowDimensions.width,
+        }}
         position={{ x: layout.x + offsetX, y: layout.y + offsetY }}
         bounds="parent"
         onDragStop={(e, d) => {
@@ -37,8 +41,8 @@ class WorkspaceElasticWindow extends React.Component {
         }}
         onResize={(e, direction, ref, delta, position) => {
           updateElasticWindowLayout(layout.windowId, {
-            height: ref.style.height,
-            width: ref.style.width,
+            height: ref.style.height - companionWindowDimensions.height,
+            width: ref.style.width - companionWindowDimensions.width,
             x: position.x - offsetX,
             y: position.y - offsetY,
           });
@@ -57,6 +61,10 @@ class WorkspaceElasticWindow extends React.Component {
 }
 
 WorkspaceElasticWindow.propTypes = {
+  companionWindowDimensions: PropTypes.shape({
+    height: PropTypes.number,
+    width: PropTypes.number,
+  }),
   focused: PropTypes.bool,
   layout: PropTypes.shape({
     height: PropTypes.number,
@@ -70,6 +78,7 @@ WorkspaceElasticWindow.propTypes = {
 };
 
 WorkspaceElasticWindow.defaultProps = {
+  companionWindowDimensions: { height: 0, width: 0 },
   focused: false,
 };
 

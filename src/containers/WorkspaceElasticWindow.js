@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../state/actions';
 import WorkspaceElasticWindow from '../components/WorkspaceElasticWindow';
+import { selectCompanionWindowDimensions } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -10,6 +11,7 @@ import WorkspaceElasticWindow from '../components/WorkspaceElasticWindow';
  */
 const mapStateToProps = (state, { windowId }) => (
   {
+    companionWindowDimensions: selectCompanionWindowDimensions(state, { windowId }),
     focused: state.workspace.focusedWindowId === windowId,
     layout: state.elasticLayout[windowId],
     workspace: state.workspace,
