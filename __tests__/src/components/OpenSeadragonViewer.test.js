@@ -38,7 +38,6 @@ describe('OpenSeadragonViewer', () => {
         config={{}}
         updateViewport={updateViewport}
         t={k => k}
-        classes={{ controls: 'controls' }}
         canvasWorld={new CanvasWorld(canvases)}
       >
         <div className="foo" />
@@ -58,9 +57,6 @@ describe('OpenSeadragonViewer', () => {
     expect(wrapper.find('.bar').props()).toEqual(expect.objectContaining({
       zoomToWorld: wrapper.instance().zoomToWorld,
     }));
-  });
-  it('renders viewer controls', () => {
-    expect(wrapper.find('.controls').length).toBe(1);
   });
 
   describe('annotationsMatch', () => {
