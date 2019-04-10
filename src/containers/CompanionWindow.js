@@ -83,7 +83,7 @@ const styles = theme => ({
     order: 3,
   },
   toolbar: {
-    '&small': {
+    '&$small': {
       '& $closeButton': {
         order: 'unset',
       },
