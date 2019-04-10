@@ -49,6 +49,17 @@ export function getSelectedCanvas(state, props) {
 }
 
 /**
+* Return the selected canvas index for a window
+* @param {object} state
+* @param {object} props
+* @param {string} props.windowId
+* @return {Object}
+*/
+export function getSelectedCanvasIndex({ windows }, { windowId }) {
+  return windows[windowId].canvasIndex;
+}
+
+/**
 * Return the current canvases selected in a window
 * For book view returns 2, for single returns 1
 * @param {object} state
@@ -60,9 +71,10 @@ export function getSelectedCanvas(state, props) {
 export const getSelectedCanvases = createSelector(
   [
     getCanvases,
+    getSelectedCanvasIndex,
     (state, { windowId }) => state.windows[windowId],
   ],
-  (canvases, { canvasIndex, view }) => canvases
+  (canvases, canvasIndex, view) => canvases
     && new CanvasGroupings(
       canvases,
       view,

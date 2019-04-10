@@ -22,8 +22,7 @@ export class PrimaryWindow extends Component {
       if (window.view === 'gallery') {
         return (
           <GalleryView
-            window={window}
-            manifest={manifest}
+            windowId={window.id}
           />
         );
       }
