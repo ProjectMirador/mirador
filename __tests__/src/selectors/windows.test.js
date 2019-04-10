@@ -11,6 +11,7 @@ import {
   getCompanionWindowsOfWindow,
   getViewer,
   getWindowDraggability,
+  selectCompanionWindowDimensions,
 } from '../../../src/state/selectors/windows';
 
 
@@ -286,6 +287,26 @@ describe('getWindowDraggability', () => {
       const props = { windowId: 'abc123' };
 
       expect(getWindowDraggability(state, props)).toBe(true);
+    });
+  });
+});
+
+describe('selectCompanionWindowDimensions', () => {
+  it('tallies up the width/height of the companion windows', () => {
+    const state = {
+      companionWindows: {
+        abc: { id: 'abc', position: 'right' },
+        def: { id: 'def', position: 'right' },
+        xyz: { id: 'xyz', position: 'bottom' },
+      },
+      windows: { a: { companionWindowIds: ['abc', 'def', 'xyz'] } },
+    };
+
+    const props = { windowId: 'a' };
+
+    expect(selectCompanionWindowDimensions(state, props)).toEqual({
+      height: 201,
+      width: 235 * 2,
     });
   });
 });
