@@ -46,6 +46,7 @@ const styles = theme => ({
  * @private
  */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
+  focusOnCanvas: () => dispatch(actions.setWindowViewType(windowId, 'single')),
   setCanvas: (...args) => dispatch(actions.setCanvas(windowId, ...args)),
 });
 

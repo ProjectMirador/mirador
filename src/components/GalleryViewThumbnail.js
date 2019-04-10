@@ -19,9 +19,15 @@ export class GalleryViewThumbnail extends Component {
 
   /** @private */
   handleSelect() {
-    const { canvas, setCanvas } = this.props;
+    const {
+      canvas, selected, setCanvas, focusOnCanvas,
+    } = this.props;
 
-    setCanvas(canvas.index);
+    if (selected) {
+      focusOnCanvas();
+    } else {
+      setCanvas(canvas.index);
+    }
   }
 
   /**
@@ -66,6 +72,7 @@ export class GalleryViewThumbnail extends Component {
 GalleryViewThumbnail.propTypes = {
   canvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  focusOnCanvas: PropTypes.func.isRequired,
   selected: PropTypes.bool,
   setCanvas: PropTypes.func.isRequired,
 };
