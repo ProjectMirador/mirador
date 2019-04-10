@@ -37,4 +37,15 @@ describe('WindowCanvasNavigationControls', () => {
     wrapper = createWrapper({ visible: false });
     expect(wrapper.matchesElement(<></>)).toBe(true);
   });
+
+  it('updates the canvasNavWidth state when the visibility changes', () => {
+    wrapper = createWrapper({ visible: false });
+    wrapper.instance().canvasNav = { current: { offsetWidth: 300 } }; // fake the ref
+
+    expect(wrapper.state('canvasNavWidth')).toEqual(null);
+
+    wrapper.setProps({ visible: true });
+
+    expect(wrapper.state('canvasNavWidth')).toEqual(300);
+  });
 });

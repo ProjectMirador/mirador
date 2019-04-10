@@ -97,16 +97,6 @@
     position: relative;
   }
 
-  div + &-osd-navigation {
-    &::before {
-      color: $gray;
-      content: '|';
-      font-size: 24px;
-      position: absolute;
-      top: 12px;
-    }
-  }
-
   &-osd-navigation {
     order: 1;
   }
@@ -122,10 +112,14 @@
 
   &-canvas-nav {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
     text-align: center;
+  }
+
+  &-canvas-nav-stacked {
+    flex-direction: column;
   }
 
   &-label-value-metadata {
