@@ -119,6 +119,7 @@ export class WorkspaceAdd extends React.Component {
                 <MiradorMenuButton
                   aria-label={t('closeAddResourceForm')}
                   className={classes.menuButton}
+                  color="inherit"
                 >
                   <ExpandMoreIcon />
                 </MiradorMenuButton>
