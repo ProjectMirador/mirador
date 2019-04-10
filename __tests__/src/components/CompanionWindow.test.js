@@ -9,7 +9,7 @@ function createWrapper(props) {
     <CompanionWindow
       id="abc123"
       windowId="x"
-      classes={{ horizontal: 'horizontal', vertical: 'vertical' }}
+      classes={{ horizontal: 'horizontal', small: 'small', vertical: 'vertical' }}
       companionWindow={{}}
       position="right"
       {...props}
@@ -84,5 +84,10 @@ describe('CompanionWindow', () => {
 
     companionWindow = createWrapper({ position: 'bottom' });
     expect(companionWindow.find('.mirador-companion-window-title-controls').length).toBe(0);
+  });
+
+  it('adds a small class when the component width is small', () => {
+    companionWindow = createWrapper({ size: { width: 369 } });
+    expect(companionWindow.find('.small').length).toBe(1);
   });
 });

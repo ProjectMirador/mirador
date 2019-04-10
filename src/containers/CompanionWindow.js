@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
+import { withSize } from 'react-sizeme';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import { getCompanionWindow } from '../state/selectors';
@@ -42,6 +43,9 @@ const mapDispatchToProps = (dispatch, { windowId, id }) => ({
  * root: {overflowY: string, width: string}}}
  */
 const styles = theme => ({
+  closeButton: {
+    order: 4,
+  },
   'companionWindow-bottom': {
     borderTop: '0.5px solid rgba(0, 0, 0, 0.12)',
   },
@@ -51,7 +55,6 @@ const styles = theme => ({
   'companionWindow-right': {
     borderLeft: '0.5px solid rgba(0, 0, 0, 0.12)',
   },
-
   content: {
     overflowY: 'auto',
     wordBreak: 'break-word',
@@ -60,11 +63,10 @@ const styles = theme => ({
     height: '201px',
     width: '100%',
   },
-  leftPadding: {
-    paddingLeft: theme.spacing.unit * 2,
-  },
   positionButton: {
+    marginLeft: -16,
     order: -100,
+    width: 24,
   },
   root: {
     boxShadow: 'none',
@@ -73,21 +75,42 @@ const styles = theme => ({
     flexDirection: 'column',
     minHeight: 0,
   },
+  small: {},
+  titleControls: {
+    alignItems: 'center',
+    display: 'flex',
+    minHeight: 48,
+    order: 3,
+  },
   toolbar: {
+    '&small': {
+      '& $closeButton': {
+        order: 'unset',
+      },
+      '& $titleControls': {
+        order: 'unset',
+      },
+    },
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
     minHeight: 'max-content',
+    paddingLeft: theme.spacing.unit * 2,
   },
   vertical: {
     width: '235px',
   },
   windowSideBarTitle: {
     ...theme.typography.subtitle1,
+    alignSelf: 'center',
     flexGrow: 1,
+    width: 160,
   },
 });
 
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withSize(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('CompanionWindow'),
 );
