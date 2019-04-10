@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { withSize } from 'react-sizeme';
 import { withPlugins } from '../extend';
 import {
   getCanvasLabel,
@@ -19,6 +20,7 @@ const mapStateToProps = (state, { windowId }) => ({
 
 const enhance = compose(
   connect(mapStateToProps),
+  withSize(),
   withPlugins('WindowCanvasNavigationControls'),
 );
 

@@ -10,60 +10,13 @@ import ns from '../config/css-ns';
  * Represents the viewer controls in the mirador workspace.
  */
 export class WindowCanvasNavigationControls extends Component {
-  /** */
-  constructor(props) {
-    super(props);
-
-    this.state = { canvasNavWidth: null };
-
-    this.canvasNav = React.createRef();
-  }
-
-  /**
-   * Set the necessary widths in state when the component
-   * mounts and bind the state update to window resize
-  */
-  componentDidMount() {
-    this.updateComponentWidth();
-    window.addEventListener('resize', this.updateComponentWidth.bind(this));
-  }
-
-  /**
-   * Update the component width when the visibility changes
-  */
-  componentDidUpdate(prevProps) {
-    const { visible } = this.props;
-
-    if (prevProps.visible !== visible) {
-      this.updateComponentWidth();
-    }
-  }
-
-  /**
-   * Unbind the window resize listener when unmounting the component
-  */
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateComponentWidth.bind(this));
-  }
-
-  /**
-   * Simple utility function to set state (that we can bind on window resize)
-  */
-  updateComponentWidth() {
-    this.setState({
-      canvasNavWidth: (
-        this.canvasNav && this.canvasNav.current && this.canvasNav.current.offsetWidth
-      ),
-    });
-  }
-
   /**
    * Determine if canvasNavControls are stacked (based on a hard-coded width)
   */
   canvasNavControlsAreStacked() {
-    const { canvasNavWidth } = this.state;
+    const { size } = this.props;
 
-    return (canvasNavWidth && canvasNavWidth <= 253);
+    return (size && size.width && size.width <= 253);
   }
 
   /** */
@@ -77,7 +30,6 @@ export class WindowCanvasNavigationControls extends Component {
     return (
       <div
         className={classNames(ns('canvas-nav'), this.canvasNavControlsAreStacked() ? ns('canvas-nav-stacked') : null)}
-        ref={this.canvasNav}
       >
         <ZoomControls
           displayDivider={!this.canvasNavControlsAreStacked()}
@@ -93,6 +45,7 @@ export class WindowCanvasNavigationControls extends Component {
 
 
 WindowCanvasNavigationControls.propTypes = {
+  size: PropTypes.shape({ width: PropTypes.number }).isRequired,
   visible: PropTypes.bool,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   zoomToWorld: PropTypes.func.isRequired,

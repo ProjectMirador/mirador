@@ -11,6 +11,7 @@ function createWrapper(props) {
     <WindowCanvasNavigationControls
       canvases={[]}
       canvasLabel="label"
+      size={{ width: 300 }}
       window={{}}
       zoomToWorld={() => {}}
       {...props}
@@ -38,14 +39,15 @@ describe('WindowCanvasNavigationControls', () => {
     expect(wrapper.matchesElement(<></>)).toBe(true);
   });
 
-  it('updates the canvasNavWidth state when the visibility changes', () => {
-    wrapper = createWrapper({ visible: false });
-    wrapper.instance().canvasNav = { current: { offsetWidth: 300 } }; // fake the ref
+  it('sets the proper class/ZoomControls prop dependent on the size/width prop', () => {
+    wrapper = createWrapper();
 
-    expect(wrapper.state('canvasNavWidth')).toEqual(null);
+    expect(wrapper.find('.mirador-canvas-nav-stacked').length).toEqual(0);
+    expect(wrapper.find(ZoomControls).props().displayDivider).toBe(true);
 
-    wrapper.setProps({ visible: true });
+    wrapper.setProps({ size: { width: 200 } });
 
-    expect(wrapper.state('canvasNavWidth')).toEqual(300);
+    expect(wrapper.find('.mirador-canvas-nav-stacked').length).toEqual(1);
+    expect(wrapper.find(ZoomControls).props().displayDivider).toBe(false);
   });
 });
