@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import Paper from '@material-ui/core/Paper';
 import { WindowCanvasNavigationControls } from '../../../src/components/WindowCanvasNavigationControls';
 import ViewerInfo from '../../../src/containers/ViewerInfo';
 import ViewerNavigation from '../../../src/containers/ViewerNavigation';
@@ -26,11 +27,11 @@ describe('WindowCanvasNavigationControls', () => {
   it('renders properly', () => {
     wrapper = createWrapper({ zoomToWorld });
     expect(wrapper.matchesElement(
-      <div>
+      <Paper square>
         <ZoomControls zoomToWorld={zoomToWorld} />
         <ViewerNavigation />
         <ViewerInfo />
-      </div>,
+      </Paper>,
     )).toBe(true);
   });
 
