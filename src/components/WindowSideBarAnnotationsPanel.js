@@ -95,8 +95,13 @@ export class WindowSideBarAnnotationsPanel extends Component {
       annotations, classes, t, windowId, id,
     } = this.props;
     return (
-      <CompanionWindow title={t('annotations')} paperClassName={ns('window-sidebar-annotation-panel')} windowId={windowId} id={id}>
-        <AnnotationSettings windowId={windowId} />
+      <CompanionWindow
+        title={t('annotations')}
+        paperClassName={ns('window-sidebar-annotation-panel')}
+        windowId={windowId}
+        id={id}
+        titleControls={<AnnotationSettings windowId={windowId} />}
+      >
         <div className={classes.section}>
           <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { number: annotations.length })}</Typography>
         </div>
