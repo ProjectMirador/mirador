@@ -29,6 +29,13 @@ describe('MiradorMenuButton', () => {
     ).toEqual('icon');
   });
 
+  it('does not render the Tooltip if the button is disabled', () => {
+    wrapper = createWrapper({ disabled: true });
+
+    expect(wrapper.find('WithStyles(Tooltip) WithStyles(IconButton)').length).toEqual(0);
+    expect(wrapper.find('WithStyles(IconButton)').length).toEqual(1);
+  });
+
   it('uses the aria-label prop the the Tooltip title prop', () => {
     wrapper = createWrapper();
 
