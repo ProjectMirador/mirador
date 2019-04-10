@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -19,6 +19,14 @@ export function MiradorMenuButton(props) {
     ...iconButtonProps
   } = props;
 
+  const button = (
+    <IconButton {...iconButtonProps}>
+      {children}
+    </IconButton>
+  );
+
+  if (iconButtonProps.disabled) return button;
+
   return (
     <Tooltip
       PopperProps={{
@@ -27,9 +35,7 @@ export function MiradorMenuButton(props) {
       title={ariaLabel}
       {...TooltipProps}
     >
-      <IconButton {...iconButtonProps}>
-        {children}
-      </IconButton>
+      {button}
     </Tooltip>
   );
 }
