@@ -45,9 +45,9 @@ const styles = theme => ({
  * @memberof WindowViewer
  * @private
  */
-const mapDispatchToProps = {
-  setCanvas: actions.setCanvas,
-};
+const mapDispatchToProps = (dispatch, { id, windowId }) => ({
+  setCanvas: (...args) => dispatch(actions.setCanvas(windowId, ...args)),
+});
 
 const enhance = compose(
   withStyles(styles),

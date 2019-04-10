@@ -15,7 +15,7 @@ export class GalleryViewThumbnail extends Component {
    */
   render() {
     const {
-      canvas, classes, selected, setCanvas, windowId,
+      canvas, classes, selected, setCanvas,
     } = this.props;
 
     const manifestoCanvas = new ManifestoCanvas(canvas);
@@ -29,8 +29,8 @@ export class GalleryViewThumbnail extends Component {
             selected ? classes.galleryViewItemCurrent : '',
           )
         }
-        onClick={() => setCanvas(windowId, canvas.index)}
-        onKeyUp={() => setCanvas(windowId, canvas.index)}
+        onClick={() => setCanvas(canvas.index)}
+        onKeyUp={() => setCanvas(canvas.index)}
         role="button"
         tabIndex={0}
       >
@@ -54,7 +54,6 @@ GalleryViewThumbnail.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   selected: PropTypes.bool,
   setCanvas: PropTypes.func.isRequired,
-  windowId: PropTypes.string.isRequired,
 };
 
 GalleryViewThumbnail.defaultProps = {

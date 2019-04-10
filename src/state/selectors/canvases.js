@@ -72,7 +72,7 @@ export const getSelectedCanvases = createSelector(
   [
     getCanvases,
     getSelectedCanvasIndex,
-    (state, { windowId }) => state.windows[windowId],
+    (state, { windowId }) => state.windows[windowId].view,
   ],
   (canvases, canvasIndex, view) => canvases
     && new CanvasGroupings(
