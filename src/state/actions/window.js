@@ -9,14 +9,14 @@ import ActionTypes from './action-types';
  */
 export function focusWindow(windowId, pan = false) {
   return (dispatch, getState) => {
-    const { windows, workspace } = getState();
+    const { elasticLayout, workspace } = getState();
 
     let position;
 
     if (pan) {
       const {
         x, y, width, height,
-      } = windows[windowId];
+      } = elasticLayout[windowId];
 
       const { viewportPosition: { width: viewWidth, height: viewHeight } } = workspace;
       position = { x: (x + width / 2) - viewWidth / 2, y: (y + height / 2) - viewHeight / 2 };
@@ -50,7 +50,6 @@ export function addWindow(options) {
       companionAreaOpen: true,
       companionWindowIds: [cwDefault, cwThumbs],
       displayAllAnnotations: config.displayAllAnnotations || false,
-      height: 400,
       id: `window-${uuid()}`,
       layoutOrder: numWindows + 1,
       manifestId: null,
@@ -61,6 +60,10 @@ export function addWindow(options) {
       sideBarPanel: 'info',
       thumbnailNavigationId: cwThumbs,
       view: 'single',
+    };
+
+    const elasticLayout = {
+      height: 400,
       width: 400,
       x: 200 + (Math.floor(numWindows / 10) * 50 + (numWindows * 30) % 300),
       y: 200 + ((numWindows * 50) % 300),
@@ -82,6 +85,7 @@ export function addWindow(options) {
             || config.thumbnailNavigation.defaultPosition,
         },
       ],
+      elasticLayout,
       type: ActionTypes.ADD_WINDOW,
       window: { ...defaultOptions, ...options },
     });
@@ -201,39 +205,5 @@ export function setWindowViewType(windowId, viewType) {
     type: ActionTypes.SET_WINDOW_VIEW_TYPE,
     viewType,
     windowId,
-  };
-}
-
-/**
- * updateWindowPosition - action creator
- *
- * @param  {String} windowId
- * @param  {Array} position
- * @memberof ActionCreators
- */
-export function updateWindowPosition(windowId, position) {
-  return {
-    payload: {
-      position,
-      windowId,
-    },
-    type: ActionTypes.UPDATE_WINDOW_POSITION,
-  };
-}
-
-/**
- * setWindowSize - action creator
- *
- * @param  {String} windowId
- * @param  {Object} size
- * @memberof ActionCreators
- */
-export function setWindowSize(windowId, size) {
-  return {
-    payload: {
-      size,
-      windowId,
-    },
-    type: ActionTypes.SET_WINDOW_SIZE,
   };
 }

@@ -9,3 +9,4 @@ export * from './config';
 export * from './viewers';
 export * from './annotations';
 export * from './auth';
+export * from './elasticLayout';
