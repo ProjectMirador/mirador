@@ -62,7 +62,7 @@ export class CollapsibleSection extends Component {
 }
 
 CollapsibleSection.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.node.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
