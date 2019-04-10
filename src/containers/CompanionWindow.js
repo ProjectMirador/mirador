@@ -54,6 +54,7 @@ const styles = theme => ({
 
   content: {
     overflowY: 'auto',
+    wordBreak: 'break-word',
   },
   horizontal: {
     height: '201px',
