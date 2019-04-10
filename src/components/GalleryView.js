@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { GalleryViewThumbnail } from './GalleryViewThumbnail';
+import GalleryViewThumbnail from '../containers/GalleryViewThumbnail';
 
 /**
  * Renders a GalleryView overview of the manifest.
@@ -11,7 +11,7 @@ export class GalleryView extends Component {
    */
   render() {
     const {
-      canvases, classes, selectedCanvasIndex, setCanvas, windowId,
+      canvases, classes, selectedCanvasIndex, windowId,
     } = this.props;
     return (
       <>
@@ -26,8 +26,6 @@ export class GalleryView extends Component {
                 selected={selectedCanvasIndex === canvas.index}
                 windowId={windowId}
                 canvas={canvas}
-                classes={classes}
-                setCanvas={setCanvas}
               />
             ))
           }
@@ -41,7 +39,6 @@ GalleryView.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   selectedCanvasIndex: PropTypes.number.isRequired,
-  setCanvas: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };
 
