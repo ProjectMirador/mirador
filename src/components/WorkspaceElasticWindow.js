@@ -14,6 +14,7 @@ class WorkspaceElasticWindow extends React.Component {
    */
   render() {
     const {
+      focused,
       layout,
       workspace,
       updateElasticWindowLayout,
@@ -44,7 +45,7 @@ class WorkspaceElasticWindow extends React.Component {
         }}
         dragHandleClassName={ns('window-top-bar')}
         className={
-          workspace.focusedWindowId === layout.windowId ? ns('workspace-focused-window') : null
+          focused ? ns('workspace-focused-window') : null
         }
       >
         <Window
@@ -56,6 +57,7 @@ class WorkspaceElasticWindow extends React.Component {
 }
 
 WorkspaceElasticWindow.propTypes = {
+  focused: PropTypes.bool,
   layout: PropTypes.shape({
     height: PropTypes.number,
     id: PropTypes.string,
@@ -65,6 +67,10 @@ WorkspaceElasticWindow.propTypes = {
   }).isRequired,
   updateElasticWindowLayout: PropTypes.func.isRequired,
   workspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
+
+WorkspaceElasticWindow.defaultProps = {
+  focused: false,
 };
 
 export default WorkspaceElasticWindow;
