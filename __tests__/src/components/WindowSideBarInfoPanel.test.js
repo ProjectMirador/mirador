@@ -5,30 +5,47 @@ import CanvasInfo from '../../../src/containers/CanvasInfo';
 import ManifestInfo from '../../../src/containers/ManifestInfo';
 import ManifestRelatedLinks from '../../../src/containers/ManifestRelatedLinks';
 
+/** create wrapper */
+function createWrapper(props) {
+  return shallow(
+    <WindowSideBarInfoPanel
+      id="asdf"
+      windowId="zxcv"
+      t={str => str}
+      {...props}
+    />,
+  );
+}
 describe('WindowSideBarInfoPanel', () => {
   let wrapper;
 
   describe('when metadata is present', () => {
-    beforeEach(() => {
-      wrapper = shallow(
-        <WindowSideBarInfoPanel
-          id="asdf"
-          windowId="zxcv"
-          t={str => str}
-        />,
-      );
-    });
-
     it('renders headers', () => {
+      wrapper = createWrapper();
       expect(
         wrapper.props().title,
       ).toBe('aboutThisItem');
     });
 
-    it('renders the elemeents', () => {
-      expect(wrapper.find(CanvasInfo).length).toBe(1);
+    it('renders the manifest elements', () => {
+      wrapper = createWrapper();
       expect(wrapper.find(ManifestInfo).length).toBe(1);
       expect(wrapper.find(ManifestRelatedLinks).length).toBe(1);
+    });
+
+    it('renders the canvas elements', () => {
+      wrapper = createWrapper({ selectedCanvases: [{ id: '1' }, { id: '2' }] });
+      expect(wrapper.find(CanvasInfo).length).toBe(2);
+      let canvasInfo = wrapper.find(CanvasInfo).at(0);
+
+      expect(canvasInfo.props().canvasId).toEqual('1');
+      expect(canvasInfo.props().index).toEqual(0);
+      expect(canvasInfo.props().totalSize).toEqual(2);
+
+      canvasInfo = wrapper.find(CanvasInfo).at(1);
+      expect(canvasInfo.props().canvasId).toEqual('2');
+      expect(canvasInfo.props().index).toEqual(1);
+      expect(canvasInfo.props().totalSize).toEqual(2);
     });
   });
 });
