@@ -109,7 +109,6 @@ export class WorkspaceMenu extends Component {
             aria-haspopup="true"
             onClick={(e) => { this.handleZoomToggleClick(e); handleClose(e); }}
             aria-owns={toggleZoom.anchorEl ? 'toggle-zoom-menu' : undefined}
-            divider
           >
             <Typography variant="body1">
               { showZoomControls ? t('hideZoomControls') : t('showZoomControls') }
@@ -130,7 +129,6 @@ export class WorkspaceMenu extends Component {
             aria-haspopup="true"
             onClick={(e) => { this.handleMenuItemClick('changeTheme', e); handleClose(e); }}
             aria-owns={changeTheme.anchorEl ? 'change-theme' : undefined}
-            divider
           >
             <Typography variant="body1">{t('changeTheme')}</Typography>
           </MenuItem>
