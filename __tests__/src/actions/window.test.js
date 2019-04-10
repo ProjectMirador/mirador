@@ -12,12 +12,16 @@ describe('window actions', () => {
 
       const mockState = {
         companionWindows: {},
-        windows: {
+        elasticLayout: {
           window: {
             height: 50,
             width: 50,
             x: 50,
             y: 12,
+          },
+        },
+        windows: {
+          window: {
           },
         },
         workspace: {
@@ -46,8 +50,13 @@ describe('window actions', () => {
 
       const mockState = {
         companionWindows: {},
+        elasticLayout: {
+          windows: {
+            window: { x: 50, y: 12 },
+          },
+        },
         windows: {
-          window: { x: 50, y: 12 },
+          window: {},
         },
       };
 
@@ -80,11 +89,16 @@ describe('window actions', () => {
             position: 'off',
           },
         ],
+        elasticLayout: {
+          height: 400,
+          width: 400,
+          x: 260,
+          y: 300,
+        },
         type: ActionTypes.ADD_WINDOW,
         window: {
           canvasIndex: 1,
           collectionIndex: 0,
-          height: 400,
           id: 'helloworld',
           layoutOrder: 3,
           manifestId: null,
@@ -93,9 +107,6 @@ describe('window actions', () => {
           rotation: null,
           sideBarPanel: 'info',
           view: 'single',
-          width: 400,
-          x: 260,
-          y: 300,
         },
       };
 
@@ -264,50 +275,6 @@ describe('window actions', () => {
         windowId,
       };
       expect(actions.setWindowSideBarPanel(windowId, 'panelType')).toEqual(expectedAction);
-    });
-  });
-
-  describe('setWindowSize', () => {
-    it('returns the appropriate action type', () => {
-      const id = 'abc123';
-      const expectedAction = {
-        payload: {
-          size: {
-            height: 200,
-            width: 200,
-            x: 20,
-            y: 20,
-          },
-          windowId: id,
-        },
-        type: ActionTypes.SET_WINDOW_SIZE,
-      };
-      expect(actions.setWindowSize(id, {
-        height: 200,
-        width: 200,
-        x: 20,
-        y: 20,
-      })).toEqual(expectedAction);
-    });
-  });
-
-  describe('updateWindowPosition', () => {
-    it('returns the appropriate action type', () => {
-      const id = 'abc123';
-      const expectedAction = {
-        payload: {
-          position: {
-            x: 20,
-            y: 20,
-          },
-          windowId: id,
-        },
-        type: ActionTypes.UPDATE_WINDOW_POSITION,
-      };
-      expect(actions.updateWindowPosition(id, {
-        x: 20,
-        y: 20,
-      })).toEqual(expectedAction);
     });
   });
 });
