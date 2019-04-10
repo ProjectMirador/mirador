@@ -15,13 +15,13 @@ export class GalleryView extends Component {
    */
   render() {
     const {
-      canvases, classes, setCanvas, window,
+      canvases, classes, selectedCanvasIndex, setCanvas, windowId,
     } = this.props;
     return (
       <>
         <section
           className={classes.galleryContainer}
-          id={`${window.id}-gallery`}
+          id={`${windowId}-gallery`}
         >
           {
             canvases.map((canvas) => {
@@ -32,11 +32,11 @@ export class GalleryView extends Component {
                   className={
                     classNames(
                       classes.galleryViewItem,
-                      canvas.index === window.canvasIndex ? classes.galleryViewItemCurrent : '',
+                      canvas.index === selectedCanvasIndex ? classes.galleryViewItemCurrent : '',
                     )
                   }
-                  onClick={() => setCanvas(window.id, canvas.index)}
-                  onKeyUp={() => setCanvas(window.id, canvas.index)}
+                  onClick={() => setCanvas(windowId, canvas.index)}
+                  onKeyUp={() => setCanvas(windowId, canvas.index)}
                   role="button"
                   tabIndex={0}
                 >
@@ -63,6 +63,7 @@ export class GalleryView extends Component {
 GalleryView.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  selectedCanvasIndex: PropTypes.number.isRequired,
   setCanvas: PropTypes.func.isRequired,
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  windowId: PropTypes.string.isRequired,
 };

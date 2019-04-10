@@ -10,10 +10,8 @@ function createWrapper(props) {
     <GalleryView
       canvases={manifesto.create(manifestJson).getSequences()[0].getCanvases()}
       classes={{ galleryViewItemCurrent: 'galleryViewItemCurrent' }}
-      window={{
-        canvasIndex: 0,
-        id: '1234',
-      }}
+      windowId="1234"
+      selectedCanvasIndex={0}
       setCanvas={() => {}}
       {...props}
     />,

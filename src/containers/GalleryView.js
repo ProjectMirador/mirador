@@ -4,16 +4,17 @@ import { withStyles } from '@material-ui/core/styles';
 import * as actions from '../state/actions';
 import { withPlugins } from '../extend';
 import { GalleryView } from '../components/GalleryView';
-import { getManifestCanvases } from '../state/selectors';
+import { getManifestCanvases, getSelectedCanvasIndex } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
  * @memberof WindowViewer
  * @private
  */
-const mapStateToProps = (state, { window }) => (
+const mapStateToProps = (state, { windowId }) => (
   {
-    canvases: getManifestCanvases(state, { windowId: window.id }),
+    canvases: getManifestCanvases(state, { windowId }),
+    selectedCanvasIndex: getSelectedCanvasIndex(state, { windowId }),
   }
 );
 
