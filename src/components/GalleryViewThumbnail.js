@@ -10,12 +10,26 @@ import { CanvasThumbnail } from './CanvasThumbnail';
  * OSD and Navigation
  */
 export class GalleryViewThumbnail extends Component {
+  /** */
+  constructor(props) {
+    super(props);
+
+    this.handleSelect = this.handleSelect.bind(this);
+  }
+
+  /** @private */
+  handleSelect() {
+    const { canvas, setCanvas } = this.props;
+
+    setCanvas(canvas.index);
+  }
+
   /**
    * Renders things
    */
   render() {
     const {
-      canvas, classes, selected, setCanvas,
+      canvas, classes, selected,
     } = this.props;
 
     const manifestoCanvas = new ManifestoCanvas(canvas);
@@ -29,8 +43,8 @@ export class GalleryViewThumbnail extends Component {
             selected ? classes.galleryViewItemCurrent : '',
           )
         }
-        onClick={() => setCanvas(canvas.index)}
-        onKeyUp={() => setCanvas(canvas.index)}
+        onClick={this.handleSelect}
+        onKeyUp={this.handleSelect}
         role="button"
         tabIndex={0}
       >
