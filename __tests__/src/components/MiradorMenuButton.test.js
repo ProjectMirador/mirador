@@ -54,4 +54,11 @@ describe('MiradorMenuButton', () => {
 
     expect(wrapper.find('WithStyles(Tooltip) WithStyles(IconButton)').props().color).toEqual('inherit');
   });
+
+  it('wraps the child component in a badge if the badge prop is set to true (and passes BadgeProps)', () => {
+    wrapper = createWrapper({ badge: true, BadgeProps: { badgeContent: 3 } });
+
+    expect(wrapper.find('WithStyles(Badge)').props().badgeContent).toEqual(3);
+    expect(wrapper.find('WithStyles(Badge)').first().children().text()).toEqual('icon');
+  });
 });
