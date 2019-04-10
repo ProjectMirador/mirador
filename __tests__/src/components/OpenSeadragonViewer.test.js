@@ -1,10 +1,14 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import OpenSeadragon from 'openseadragon';
+import manifesto from 'manifesto.js';
 import { OpenSeadragonViewer } from '../../../src/components/OpenSeadragonViewer';
 import OpenSeadragonCanvasOverlay from '../../../src/lib/OpenSeadragonCanvasOverlay';
 import Annotation from '../../../src/lib/Annotation';
 import CanvasWorld from '../../../src/lib/CanvasWorld';
+import fixture from '../../fixtures/version-2/019.json';
+
+const canvases = manifesto.create(fixture).getSequences()[0].getCanvases();
 
 jest.mock('openseadragon');
 jest.mock('../../../src/lib/OpenSeadragonCanvasOverlay');
@@ -35,7 +39,7 @@ describe('OpenSeadragonViewer', () => {
         updateViewport={updateViewport}
         t={k => k}
         classes={{ controls: 'controls' }}
-        canvasWorld={new CanvasWorld([])}
+        canvasWorld={new CanvasWorld(canvases)}
       >
         <div className="foo" />
         <div className="bar" />
@@ -138,7 +142,7 @@ describe('OpenSeadragonViewer', () => {
       const fitBounds = jest.fn();
       wrapper.instance().fitBounds = fitBounds;
       wrapper.instance().zoomToWorld();
-      expect(fitBounds).toHaveBeenCalledWith(0, 0, 0, Infinity, true);
+      expect(fitBounds).toHaveBeenCalledWith(0, 0, 5041, 1800, true);
     });
   });
 
@@ -312,6 +316,11 @@ describe('OpenSeadragonViewer', () => {
           strokeRect,
         },
       };
+      wrapper.instance().viewer = {
+        viewport: {
+          getZoom: () => (0.0005),
+        },
+      };
 
       const annotations = [
         new Annotation(
@@ -321,7 +330,7 @@ describe('OpenSeadragonViewer', () => {
       wrapper.instance().annotationsToContext(annotations);
       const context = wrapper.instance().osdCanvasOverlay.context2d;
       expect(context.strokeStyle).toEqual('yellow');
-      expect(context.lineWidth).toEqual(10);
+      expect(context.lineWidth).toEqual(4);
       expect(strokeRect).toHaveBeenCalledWith(10, 10, 100, 200);
     });
   });

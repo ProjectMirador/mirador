@@ -167,13 +167,15 @@ export class OpenSeadragonViewer extends Component {
   annotationsToContext(annotations, color = 'yellow') {
     const { canvasWorld } = this.props;
     const context = this.osdCanvasOverlay.context2d;
+    const zoom = this.viewer.viewport.getZoom(true);
+    const width = canvasWorld.worldBounds()[2];
     annotations.forEach((annotation) => {
       annotation.resources.forEach((resource) => {
         const offset = canvasWorld.offsetByCanvas(resource.targetId);
         const fragment = resource.fragmentSelector;
         fragment[0] += offset.x;
         context.strokeStyle = color;
-        context.lineWidth = 10;
+        context.lineWidth = Math.ceil(10 / (zoom * width));
         context.strokeRect(...fragment);
       });
     });
