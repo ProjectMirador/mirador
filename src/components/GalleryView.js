@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import classNames from 'classnames';
-import ManifestoCanvas from '../lib/ManifestoCanvas';
-import { CanvasThumbnail } from './CanvasThumbnail';
+import GalleryViewThumbnail from '../containers/GalleryViewThumbnail';
 
 /**
- * Represents a WindowViewer in the mirador workspace. Responsible for mounting
- * OSD and Navigation
+ * Renders a GalleryView overview of the manifest.
  */
 export class GalleryView extends Component {
   /**
@@ -15,44 +11,23 @@ export class GalleryView extends Component {
    */
   render() {
     const {
-      canvases, classes, setCanvas, window,
+      canvases, classes, selectedCanvasIndex, windowId,
     } = this.props;
     return (
       <>
         <section
           className={classes.galleryContainer}
-          id={`${window.id}-gallery`}
+          id={`${windowId}-gallery`}
         >
           {
-            canvases.map((canvas) => {
-              const manifestoCanvas = new ManifestoCanvas(canvas);
-              return (
-                <div
-                  key={canvas.index}
-                  className={
-                    classNames(
-                      classes.galleryViewItem,
-                      canvas.index === window.canvasIndex ? classes.galleryViewItemCurrent : '',
-                    )
-                  }
-                  onClick={() => setCanvas(window.id, canvas.index)}
-                  onKeyUp={() => setCanvas(window.id, canvas.index)}
-                  role="button"
-                  tabIndex={0}
-                >
-                  <CanvasThumbnail
-                    imageUrl={manifestoCanvas.thumbnail(null, 100)}
-                    isValid={manifestoCanvas.hasValidDimensions}
-                    maxHeight={120}
-                    aspectRatio={manifestoCanvas.aspectRatio}
-                    style={{ margin: '0 auto' }}
-                  />
-                  <Typography variant="caption" className={classes.galleryViewCaption}>
-                    {manifestoCanvas.getLabel()}
-                  </Typography>
-                </div>
-              );
-            })
+            canvases.map(canvas => (
+              <GalleryViewThumbnail
+                key={canvas.id}
+                selected={selectedCanvasIndex === canvas.index}
+                windowId={windowId}
+                canvas={canvas}
+              />
+            ))
           }
         </section>
       </>
@@ -62,7 +37,11 @@ export class GalleryView extends Component {
 
 GalleryView.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  setCanvas: PropTypes.func.isRequired,
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  selectedCanvasIndex: PropTypes.number.isRequired,
+  windowId: PropTypes.string.isRequired,
+};
+
+GalleryView.defaultProps = {
+  classes: {},
 };
