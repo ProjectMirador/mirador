@@ -27,8 +27,17 @@ export class WindowList extends Component {
     const {
       containerId, handleClose, anchorEl, windows, focusWindow, t,
     } = this.props;
+
     return (
       <Menu
+        anchorOrigin={{
+          horizontal: 'right',
+          vertical: 'top',
+        }}
+        transformOrigin={{
+          horizontal: 'left',
+          vertical: 'top',
+        }}
         id="window-list-menu"
         container={document.querySelector(`#${containerId} .${ns('viewer')}`)}
         anchorEl={anchorEl}
