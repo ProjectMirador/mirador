@@ -44,4 +44,18 @@ describe('GalleryView', () => {
     wrapper.find('div[role="button"]').first().simulate('click');
     expect(focusOnCanvas).toHaveBeenCalled();
   });
+
+  it('sets the window mode if the user hits enter while on a canvas', () => {
+    const focusOnCanvas = jest.fn();
+    wrapper = createWrapper({ focusOnCanvas, selected: true });
+    wrapper.find('div[role="button"]').first().simulate('keyUp', { key: 'Enter' });
+    expect(focusOnCanvas).toHaveBeenCalled();
+  });
+
+  it('sets the window mode if the user hits space while on a canvas', () => {
+    const focusOnCanvas = jest.fn();
+    wrapper = createWrapper({ focusOnCanvas, selected: true });
+    wrapper.find('div[role="button"]').first().simulate('keyUp', { key: ' ' });
+    expect(focusOnCanvas).toHaveBeenCalled();
+  });
 });

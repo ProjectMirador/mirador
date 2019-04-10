@@ -30,6 +30,36 @@ export class GalleryViewThumbnail extends Component {
     }
   }
 
+  /** @private */
+  handleKey(event) {
+    const {
+      canvas, setCanvas, focusOnCanvas,
+    } = this.props;
+
+    this.keys = {
+      enter: 'Enter',
+      space: ' ',
+    };
+
+    this.chars = {
+      enter: 13,
+      space: 32,
+    };
+
+    const enterOrSpace = (
+      event.key === this.keys.enter
+      || event.which === this.chars.enter
+      || event.key === this.keys.space
+      || event.which === this.chars.space
+    );
+
+    if (enterOrSpace) {
+      focusOnCanvas();
+    } else {
+      setCanvas(canvas.index);
+    }
+  }
+
   /**
    * Renders things
    */
