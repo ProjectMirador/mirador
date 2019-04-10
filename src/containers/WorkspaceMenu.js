@@ -22,6 +22,7 @@ const mapDispatchToProps = {
  */
 const mapStateToProps = state => ({
   containerId: getContainerId(state),
+  isWorkspaceAddVisible: state.workspace.isWorkspaceAddVisible,
   showZoomControls: getShowZoomControlsConfig(state),
 });
 
