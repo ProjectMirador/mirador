@@ -16,12 +16,12 @@ import {
  * @memberof Window
  * @private
  */
-const mapStateToProps = (state, { window }) => ({
-  label: getManifestTitle(state, { windowId: window.id }),
-  manifest: getManifest(state, { windowId: window.id }),
-  thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId: window.id }),
-  window: getWindow(state, { windowId: window.id }),
-  windowDraggable: getWindowDraggability(state, { windowId: window.id }),
+const mapStateToProps = (state, { windowId }) => ({
+  label: getManifestTitle(state, { windowId }),
+  manifest: getManifest(state, { windowId }),
+  thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId }),
+  window: getWindow(state, { windowId }),
+  windowDraggable: getWindowDraggability(state, { windowId }),
   workspaceType: getWorkspaceType(state),
 });
 
@@ -30,9 +30,9 @@ const mapStateToProps = (state, { window }) => ({
  * @memberof ManifestListItem
  * @private
  */
-const mapDispatchToProps = (dispatch, { window }) => ({
+const mapDispatchToProps = (dispatch, { windowId }) => ({
   fetchManifest: (...args) => dispatch(actions.fetchManifest(...args)),
-  focusWindow: () => dispatch(actions.focusWindow(window.id)),
+  focusWindow: () => dispatch(actions.focusWindow(windowId)),
 });
 
 /**
