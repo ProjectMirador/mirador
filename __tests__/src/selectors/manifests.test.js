@@ -21,6 +21,8 @@ import {
   getManifestRenderings,
   getManifestUrl,
   getMetadataLocales,
+  getRequiredStatement,
+  getRights,
 } from '../../../src/state/selectors/manifests';
 
 
@@ -338,5 +340,46 @@ describe('getMetadataLocales', () => {
     const state = { manifests: { x: { json: manifest } } };
     const received = getMetadataLocales(state, { manifestId: 'x' });
     expect(received).toEqual(['de-label', 'en-label', 'en-value', 'de-value', 'one-value']);
+  });
+});
+
+describe('getRequiredStatement', () => {
+  it('gets the attribution data for a IIIF v2 manifest', () => {
+    const state = { manifests: { x: { json: manifestFixture001 } } };
+    const received = getRequiredStatement(state, { manifestId: 'x' });
+    expect(received).toEqual([{ label: null, value: 'http://creativecommons.org/licenses/by-nc-sa/3.0/.' }]);
+  });
+
+  it('gets the required statement data for a IIIF v3 manifest', () => {
+    const state = { manifests: { x: { json: manifestFixturev3001 } } };
+    const received = getRequiredStatement(state, { manifestId: 'x' });
+    expect(received).toEqual([{ label: 'Terms of Use', value: null }]);
+  });
+});
+
+describe('getRights', () => {
+  it('gets the license data for a IIIF v2 manifest', () => {
+    const manifest = {
+      '@context': 'http://iiif.io/api/presentation/2/context.json',
+      '@id':
+       'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+      '@type': 'sc:Manifest',
+      license: 'http://example.com',
+    };
+    const state = { manifests: { x: { json: manifest } } };
+    const received = getRights(state, { manifestId: 'x' });
+    expect(received).toEqual('http://example.com');
+  });
+  it('gets the rights data for a IIIF v3 manifest', () => {
+    const manifest = {
+      '@context': 'http://iiif.io/api/presentation/2/context.json',
+      '@id':
+       'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+      '@type': 'sc:Manifest',
+      license: 'http://example.com',
+    };
+    const state = { manifests: { x: { json: manifest } } };
+    const received = getRights(state, { manifestId: 'x' });
+    expect(received).toEqual('http://example.com');
   });
 });

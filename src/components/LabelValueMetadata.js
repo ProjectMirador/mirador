@@ -15,7 +15,7 @@ export class LabelValueMetadata extends Component {
    * @return {String} - HTML markup for the component
    */
   render() {
-    const { labelValuePairs } = this.props;
+    const { defaultLabel, labelValuePairs } = this.props;
 
     if (labelValuePairs.length === 0) {
       return (<></>);
@@ -28,7 +28,7 @@ export class LabelValueMetadata extends Component {
     return (
       <dl className={ns('label-value-metadata')}>
         {labelValuePairs.reduce((acc, labelValuePair, i) => acc.concat([
-          <Typography component="dt" key={`label-${i}`} variant="subtitle2">{labelValuePair.label}</Typography>,
+          <Typography component="dt" key={`label-${i}`} variant="subtitle2">{labelValuePair.label || defaultLabel}</Typography>,
           <Typography component="dd" key={`value-${i}`} variant="body1">
             <SanitizedHtml htmlString={labelValuePair.value} ruleSet="iiif" />
           </Typography>,
@@ -40,5 +40,13 @@ export class LabelValueMetadata extends Component {
 }
 
 LabelValueMetadata.propTypes = {
-  labelValuePairs: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types,
+  defaultLabel: PropTypes.string,
+  labelValuePairs: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    value: PropTypes.string,
+  })).isRequired, // eslint-disable-line react/forbid-prop-types,
+};
+
+LabelValueMetadata.defaultProps = {
+  defaultLabel: undefined,
 };
