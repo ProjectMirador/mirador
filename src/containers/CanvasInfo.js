@@ -4,8 +4,8 @@ import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
 import {
   getDestructuredMetadata,
+  getCanvas,
   getCanvasLabel,
-  getSelectedCanvas,
   getCanvasDescription,
 } from '../state/selectors';
 import { CanvasInfo } from '../components/CanvasInfo';
@@ -15,11 +15,11 @@ import { CanvasInfo } from '../components/CanvasInfo';
  * @memberof WindowSideBarInfoPanel
  * @private
  */
-const mapStateToProps = (state, { id, windowId }) => ({
-  canvasDescription: getCanvasDescription(state, { canvasIndex: 'selected', companionWindowId: id, windowId }),
-  canvasLabel: getCanvasLabel(state, { canvasIndex: 'selected', companionWindowId: id, windowId }),
+const mapStateToProps = (state, { canvasId, id, windowId }) => ({
+  canvasDescription: getCanvasDescription(state, { canvasId, companionWindowId: id, windowId }),
+  canvasLabel: getCanvasLabel(state, { canvasId, companionWindowId: id, windowId }),
   canvasMetadata: getDestructuredMetadata(
-    getSelectedCanvas(state, { companionWindowId: id, windowId }),
+    getCanvas(state, { canvasId, companionWindowId: id, windowId }),
   ),
 });
 

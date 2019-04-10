@@ -24,11 +24,16 @@ export const getCanvas = createSelector(
         ? state.windows[windowId].canvasIndex
         : canvasIndex
     ),
+    (state, { canvasId }) => canvasId,
   ],
-  (manifest, canvasIndex) => manifest
-    && manifest
-      .getSequences()[0]
-      .getCanvasByIndex(canvasIndex),
+  (manifest, canvasIndex, canvasId) => {
+    if (!manifest) return undefined;
+
+    if (canvasId !== undefined) return manifest.getSequences()[0].getCanvasById(canvasId);
+    if (canvasIndex !== undefined) return manifest.getSequences()[0].getCanvasByIndex(canvasIndex);
+
+    return undefined;
+  },
 );
 
 /**
