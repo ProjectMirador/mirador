@@ -8,7 +8,6 @@ import SaveAltIcon from '@material-ui/icons/SaveAltSharp';
 import PropTypes from 'prop-types';
 import LanguageSettings from '../containers/LanguageSettings';
 import { NestedMenu } from './NestedMenu';
-import WindowList from '../containers/WindowList';
 import WorkspaceSelectionDialog from '../containers/WorkspaceSelectionDialog';
 import WorkspaceExport from '../containers/WorkspaceExport';
 import WorkspaceImport from '../containers/WorkspaceImport';
@@ -28,7 +27,6 @@ export class WorkspaceMenu extends Component {
       exportWorkspace: {},
       importWorkspace: {},
       toggleZoom: {},
-      windowList: {},
       workspaceSelection: {},
     };
     this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
@@ -83,7 +81,6 @@ export class WorkspaceMenu extends Component {
     const {
       importWorkspace,
       changeTheme,
-      windowList,
       toggleZoom,
       exportWorkspace,
       workspaceSelection,
@@ -108,13 +105,6 @@ export class WorkspaceMenu extends Component {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem
-            aria-haspopup="true"
-            onClick={(e) => { this.handleMenuItemClick('windowList', e); handleClose(e); }}
-            aria-owns={windowList.anchorEl ? 'window-list-menu' : undefined}
-          >
-            <Typography variant="body1">{t('listAllOpenWindows')}</Typography>
-          </MenuItem>
           <MenuItem
             aria-haspopup="true"
             onClick={(e) => { this.handleZoomToggleClick(e); handleClose(e); }}
@@ -166,13 +156,6 @@ export class WorkspaceMenu extends Component {
             <Typography variant="body1">{t('importWorkspace')}</Typography>
           </MenuItem>
         </Menu>
-        {Boolean(windowList.anchorEl) && (
-          <WindowList
-            anchorEl={windowList.anchorEl}
-            open={Boolean(windowList.anchorEl)}
-            handleClose={this.handleMenuItemClose('windowList')}
-          />
-        )}
         {Boolean(changeTheme.open) && (
           <ChangeThemeDialog
             container={container}

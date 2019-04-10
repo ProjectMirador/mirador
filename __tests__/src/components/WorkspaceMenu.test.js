@@ -31,22 +31,6 @@ describe('WorkspaceMenu', () => {
     expect(handleClose).toBeCalled();
   });
 
-  describe('handleMenuItemClick', () => {
-    it('sets the anchor state', () => {
-      wrapper.instance().handleMenuItemClick('windowList', { currentTarget: true });
-
-      expect(wrapper.find(WindowList).props().open).toBe(true);
-    });
-  });
-
-  describe('handleMenuItemClose', () => {
-    it('resets the anchor state', () => {
-      wrapper.instance().handleMenuItemClose('windowList')();
-      expect(Boolean(wrapper.state('windowList').anchorEl)).toEqual(false);
-      expect(wrapper.find(WindowList).length).toBe(0);
-    });
-  });
-
   describe('handleZoomToggleClick', () => {
     it('resets the anchor state', () => {
       wrapper.instance().handleZoomToggleClick();
