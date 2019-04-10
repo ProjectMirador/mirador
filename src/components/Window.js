@@ -109,7 +109,7 @@ Window.propTypes = {
   label: PropTypes.string,
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func.isRequired,
-  window: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   windowDraggable: PropTypes.bool,
   workspaceType: PropTypes.string,
 };
@@ -119,7 +119,6 @@ Window.defaultProps = {
   focusWindow: () => {},
   label: null,
   manifest: null,
-  window: null,
   windowDraggable: null,
   workspaceType: null,
 };

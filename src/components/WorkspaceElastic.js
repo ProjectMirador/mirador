@@ -83,7 +83,7 @@ class WorkspaceElastic extends React.Component {
                 }
               >
                 <Window
-                  window={window}
+                  windowId={layout.windowId}
                 />
               </Rnd>
             ))
