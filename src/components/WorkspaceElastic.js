@@ -16,11 +16,10 @@ class WorkspaceElastic extends React.Component {
   render() {
     const {
       workspace,
-      windows,
+      elasticLayout,
       setWorkspaceViewportDimensions,
       setWorkspaceViewportPosition,
-      updateWindowPosition,
-      setWindowSize,
+      updateElasticWindowLayout,
     } = this.props;
 
     const { viewportPosition } = workspace;
@@ -59,17 +58,20 @@ class WorkspaceElastic extends React.Component {
           disableDragging={!workspace.draggingEnabled}
         >
           {
-            Object.values(windows).map(window => (
+            Object.values(elasticLayout).map(layout => (
               <Rnd
-                key={`${window.id}-${workspace.id}`}
-                size={{ height: window.height, width: window.width }}
-                position={{ x: window.x + offsetX, y: window.y + offsetY }}
+                key={`${layout.windowId}-${workspace.id}`}
+                size={{ height: layout.height, width: layout.width }}
+                position={{ x: layout.x + offsetX, y: layout.y + offsetY }}
                 bounds="parent"
                 onDragStop={(e, d) => {
-                  updateWindowPosition(window.id, { x: d.x - offsetX, y: d.y - offsetY });
+                  updateElasticWindowLayout(
+                    layout.windowId,
+                    { x: d.x - offsetX, y: d.y - offsetY },
+                  );
                 }}
                 onResize={(e, direction, ref, delta, position) => {
-                  setWindowSize(window.id, {
+                  updateElasticWindowLayout(layout.windowId, {
                     height: ref.style.height,
                     width: ref.style.width,
                     x: position.x - offsetX,
@@ -78,7 +80,7 @@ class WorkspaceElastic extends React.Component {
                 }}
                 dragHandleClassName={ns('window-top-bar')}
                 className={
-                  workspace.focusedWindowId === window.id ? ns('workspace-focused-window') : null
+                  workspace.focusedWindowId === layout.windowId ? ns('workspace-focused-window') : null
                 }
               >
                 <Window
@@ -94,11 +96,16 @@ class WorkspaceElastic extends React.Component {
 }
 
 WorkspaceElastic.propTypes = {
-  setWindowSize: PropTypes.func.isRequired,
+  elasticLayout: PropTypes.objectOf(PropTypes.shape({
+    height: PropTypes.number,
+    id: PropTypes.string,
+    width: PropTypes.number,
+    x: PropTypes.number,
+    y: PropTypes.number,
+  })).isRequired,
   setWorkspaceViewportDimensions: PropTypes.func.isRequired,
   setWorkspaceViewportPosition: PropTypes.func.isRequired,
-  updateWindowPosition: PropTypes.func.isRequired,
-  windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  updateElasticWindowLayout: PropTypes.func.isRequired,
   workspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
