@@ -7,6 +7,7 @@ import * as actions from '../state/actions';
 import {
   getCompanionWindowForPosition,
   getAnnotationResourcesByMotivation,
+  isCollection,
 } from '../state/selectors';
 import { WindowSideBarButtons } from '../components/WindowSideBarButtons';
 
@@ -30,6 +31,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
  */
 const mapStateToProps = (state, { windowId }) => ({
   hasAnnotations: getAnnotationResourcesByMotivation(state, { motivations: ['oa:commenting', 'sc:painting'], windowId }).length > 0,
+  isCollection: isCollection(state, { windowId }),
   sideBarPanel: (getCompanionWindowForPosition(state, { position: 'left', windowId }) || {}).content,
 });
 

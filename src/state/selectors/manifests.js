@@ -149,6 +149,30 @@ export const getManifestDescription = createSelector(
   manifest => manifest
     && manifest.getDescription().map(label => label.value)[0],
 );
+//
+// /**
+// * Return if manifest is a Collection
+// * @param {object} state
+// * @param {object} props
+// * @param {string} props.manifestId
+// * @param {string} props.windowId
+// * @return {String}
+// */
+// export const isCollection = createSelector(
+//   [getManifestoInstance],
+//   manifest => manifest
+//     && manifest.isCollection(),
+// );
+
+/** Instantiate a manifesto instance */
+export const isCollection = createSelector(
+  [
+    getManifest,
+    getLocale,
+  ],
+  (manifest, locale) => manifest
+    && manifest.collectionId,
+);
 
 /**
 * Return manifest title

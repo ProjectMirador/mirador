@@ -143,6 +143,7 @@ export class WindowSideBarButtons extends Component {
     const {
       classes,
       hasAnnotations,
+      isCollection,
       sideBarPanel,
       t,
     } = this.props;
@@ -182,7 +183,7 @@ export class WindowSideBarButtons extends Component {
           icon={(<InfoIcon />)}
         />
         <TabButton
-          value="canvas"
+          value={isCollection ? 'collection' : 'canvas'}
           icon={(<CanvasIndexIcon />)}
         />
         <TabButton
@@ -202,6 +203,7 @@ WindowSideBarButtons.propTypes = {
   addCompanionWindow: PropTypes.func.isRequired,
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   hasAnnotations: PropTypes.bool,
+  isCollection: PropTypes.bool,
   sideBarPanel: PropTypes.string,
   t: PropTypes.func,
 };
@@ -209,6 +211,7 @@ WindowSideBarButtons.propTypes = {
 WindowSideBarButtons.defaultProps = {
   classes: {},
   hasAnnotations: false,
+  isCollection: false,
   sideBarPanel: 'closed',
   t: key => key,
 };

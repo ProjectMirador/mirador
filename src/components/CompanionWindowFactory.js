@@ -4,6 +4,7 @@ import ThumbnailNavigation from '../containers/ThumbnailNavigation';
 import WindowSideBarAnnotationsPanel from '../containers/WindowSideBarAnnotationsPanel';
 import WindowSideBarInfoPanel from '../containers/WindowSideBarInfoPanel';
 import WindowSideBarCanvasPanel from '../containers/WindowSideBarCanvasPanel';
+import WindowSideBarCollectionPanel from '../containers/WindowSideBarCollectionPanel';
 
 /**
  * Render a companion window using the appropriate component for the content
@@ -18,6 +19,8 @@ export class CompanionWindowFactory extends Component {
         return (<WindowSideBarInfoPanel id={id} windowId={windowId} />);
       case 'canvas':
         return (<WindowSideBarCanvasPanel id={id} windowId={windowId} />);
+      case 'collection':
+        return (<WindowSideBarCollectionPanel id={id} windowId={windowId} />);
       case 'annotations':
         return <WindowSideBarAnnotationsPanel id={id} windowId={windowId} />;
       case 'thumbnailNavigation':

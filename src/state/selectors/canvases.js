@@ -5,7 +5,12 @@ import { getManifestoInstance } from './manifests';
 
 export const getCanvases = createSelector(
   [getManifestoInstance],
-  manifest => manifest && manifest.getSequences()[0].getCanvases(),
+  // playing with this because there it's throwing an error on manifest.getSequences()
+  // when trying to load Multi-volume Work Collections
+  manifest => manifest // eslint-disable-line no-confusing-arrow
+    && (manifest.isCollection())
+    ? []
+    : manifest.getSequences()[0].getCanvases(), // eslint-disable-line no-confusing-arrow
 );
 
 /**
