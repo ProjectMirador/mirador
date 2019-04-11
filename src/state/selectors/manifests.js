@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import manifesto, { LanguageMap, Utils } from 'manifesto.js';
+import manifesto, { LanguageMap } from 'manifesto.js';
 import ManifestoCanvas from '../../lib/ManifestoCanvas';
 
 /** Get the relevant manifest information */
