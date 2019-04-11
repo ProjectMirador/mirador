@@ -95,14 +95,12 @@ export const getManifestHomepage = createSelector(
     getProperty('homepage'),
     getManifestLocale,
   ],
-  (homepages, locale) => homepages
-    && asArray(homepages).map(homepage => (
-      {
-        label: LanguageMap.parse(homepage.label, locale)
-          .map(label => label.value)[0],
-        value: homepage.id || homepage['@id'],
-      }
-    )),
+  (homepage, locale) => homepage
+    && {
+      label: LanguageMap.parse(homepage.label, locale)
+        .map(label => label.value)[0],
+      value: homepage.id || homepage['@id'],
+    },
 );
 
 /**

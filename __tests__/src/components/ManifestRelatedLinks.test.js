@@ -12,12 +12,12 @@ describe('ManifestRelatedLinks', () => {
       wrapper = shallow(
         <ManifestRelatedLinks
           id="xyz"
-          homepage={[
+          homepage={
             {
               label: 'Home page',
               value: 'http://example.com/',
             },
-          ]}
+          }
           manifestUrl="http://example.com/"
           renderings={[
             {

@@ -179,12 +179,12 @@ describe('getManifestHomepage', () => {
   it('should return manifest homepage', () => {
     const state = { manifests: { x: { json: manifestFixturev3001 } } };
     const received = getManifestHomepage(state, { manifestId: 'x' });
-    expect(received).toEqual([
+    expect(received).toEqual(
       {
         label: 'View on Digital Bodleian',
         value: 'https://digital.bodleian.ox.ac.uk/inquire/p/9cca8fdd-4a61-4429-8ac1-f648764b4d6d',
       },
-    ]);
+    );
   });
 
   it('should return undefined if manifest undefined', () => {

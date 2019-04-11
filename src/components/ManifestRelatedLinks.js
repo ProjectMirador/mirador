@@ -36,11 +36,9 @@ export class ManifestRelatedLinks extends Component {
             <>
               <Typography variant="subtitle2" component="dt">{t('iiif_homepage')}</Typography>
               {
-                homepage.map(page => (
-                  <Typography key={page.value} variant="body1" component="dd">
-                    <a target="_blank" rel="noopener noreferrer" href={page.value}>{page.label || page.value}</a>
-                  </Typography>
-                ))
+                <Typography key={homepage.value} variant="body1" component="dd">
+                  <a target="_blank" rel="noopener noreferrer" href={homepage.value}>{homepage.label || homepage.value}</a>
+                </Typography>
               }
             </>
           )}
@@ -86,10 +84,10 @@ export class ManifestRelatedLinks extends Component {
 }
 
 ManifestRelatedLinks.propTypes = {
-  homepage: PropTypes.arrayOf(PropTypes.shape({
+  homepage: PropTypes.shape({
     label: PropTypes.string,
     value: PropTypes.string,
-  })),
+  }),
   id: PropTypes.string.isRequired,
   manifestUrl: PropTypes.string,
   renderings: PropTypes.arrayOf(PropTypes.shape({
