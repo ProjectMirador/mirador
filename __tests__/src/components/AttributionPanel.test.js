@@ -29,7 +29,7 @@ describe('AttributionPanel', () => {
   });
 
   it('renders the rights statement', () => {
-    const wrapper = createWrapper({ rights: 'http://example.com' });
+    const wrapper = createWrapper({ rights: ['http://example.com', 'http://stanford.edu'] });
     expect(
       wrapper.find(Typography).at(0).matchesElement(
         <Typography>rights</Typography>,
@@ -39,6 +39,13 @@ describe('AttributionPanel', () => {
       wrapper.find(Typography).at(1).matchesElement(
         <Typography>
           <a href="http://example.com">http://example.com</a>
+        </Typography>,
+      ),
+    ).toBe(true);
+    expect(
+      wrapper.find(Typography).at(2).matchesElement(
+        <Typography>
+          <a href="http://stanford.edu">http://stanford.edu</a>
         </Typography>,
       ),
     ).toBe(true);

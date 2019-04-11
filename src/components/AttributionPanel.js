@@ -42,9 +42,11 @@ export class AttributionPanel extends Component {
             rights && (
               <>
                 <Typography variant="subtitle2" component="dt">{t('rights')}</Typography>
-                <Typography key={rights} variant="body1" component="dd">
-                  <a target="_blank" rel="noopener noreferrer" href={rights}>{rights}</a>
-                </Typography>
+                { rights.map(v => (
+                  <Typography variant="body1" component="dd">
+                    <a target="_blank" rel="noopener noreferrer" href={v}>{v}</a>
+                  </Typography>
+                )) }
               </>
             )
           }
@@ -76,7 +78,7 @@ AttributionPanel.propTypes = {
     label: PropTypes.string,
     value: PropTypes.string,
   })),
-  rights: PropTypes.string,
+  rights: PropTypes.arrayOf(PropTypes.string),
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };

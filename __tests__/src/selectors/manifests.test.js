@@ -6,7 +6,7 @@ import manifestFixtureSn904cj3429 from '../../fixtures/version-2/sn904cj3429.jso
 import manifestFixturev3001 from '../../fixtures/version-3/001.json';
 import manifestFixtureWithAProvider from '../../fixtures/version-3/with_a_provider.json';
 import {
-  getDefaultManifestLocale,
+  getManifestLocale,
   getDestructuredMetadata,
   getManifest,
   getManifestLogo,
@@ -301,10 +301,10 @@ describe('getManifestMetadata', () => {
   });
 });
 
-describe('getDefaultManifestLocale', () => {
+describe('getManifestLocale', () => {
   it('gets the default locale for the manifest', () => {
     const state = { manifests: { x: { json: manifestFixture002 } } };
-    const received = getDefaultManifestLocale(state, { manifestId: 'x' });
+    const received = getManifestLocale(state, { manifestId: 'x' });
     expect(received).toEqual('en');
   });
 });
@@ -368,7 +368,7 @@ describe('getRights', () => {
     };
     const state = { manifests: { x: { json: manifest } } };
     const received = getRights(state, { manifestId: 'x' });
-    expect(received).toEqual('http://example.com');
+    expect(received).toEqual(['http://example.com']);
   });
   it('gets the rights data for a IIIF v3 manifest', () => {
     const manifest = {
@@ -380,6 +380,6 @@ describe('getRights', () => {
     };
     const state = { manifests: { x: { json: manifest } } };
     const received = getRights(state, { manifestId: 'x' });
-    expect(received).toEqual('http://example.com');
+    expect(received).toEqual(['http://example.com']);
   });
 });

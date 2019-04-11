@@ -10,14 +10,6 @@ export function getManifest(state, { manifestId, windowId }) {
   ];
 }
 
-/** */
-function getLocale(state, { companionWindowId }) {
-  return (companionWindowId
-    && state.companionWindows[companionWindowId]
-    && state.companionWindows[companionWindowId].locale)
-    || (state.config && state.config.language);
-}
-
 /** Instantiate a manifesto instance */
 export const getManifestoInstance = createSelector(
   [
@@ -29,6 +21,26 @@ export const getManifestoInstance = createSelector(
     && manifesto.create(manifest.json, locale ? { locale } : undefined),
 );
 
+export const getManifestLocale = createSelector(
+  [getManifestoInstance],
+  manifest => manifest && manifest.options && manifest.options.locale && manifest.options.locale.replace(/-.*$/, ''),
+);
+
+/** */
+function getProperty(property) {
+  return createSelector(
+    [getManifestoInstance],
+    manifest => manifest && manifest.getProperty(property),
+  );
+}
+
+/** */
+function getLocale(state, { companionWindowId }) {
+  return (companionWindowId
+    && state.companionWindows[companionWindowId]
+    && state.companionWindows[companionWindowId].locale)
+    || (state.config && state.config.language);
+}
 /**
  * Get the logo for a manifest
  * @param {object} state
@@ -51,11 +63,13 @@ export const getManifestLogo = createSelector(
 * @return {String|null}
 */
 export const getManifestProvider = createSelector(
-  [getManifestoInstance],
-  manifest => manifest
-    && manifest.getProperty('provider')
-    && manifest.getProperty('provider')[0].label
-    && LanguageMap.parse(manifest.getProperty('provider')[0].label, manifest.options.locale).map(label => label.value)[0],
+  [
+    getProperty('provider'),
+    getManifestLocale,
+  ],
+  (provider, locale) => provider
+    && provider[0].label
+    && LanguageMap.parse(provider[0].label, locale).map(label => label.value)[0],
 );
 
 /**
@@ -77,12 +91,14 @@ function asArray(value) {
 * @return {String|null}
 */
 export const getManifestHomepage = createSelector(
-  [getManifestoInstance],
-  manifest => manifest
-    && manifest.getProperty('homepage')
-    && asArray(manifest.getProperty('homepage')).map(homepage => (
+  [
+    getProperty('homepage'),
+    getManifestLocale,
+  ],
+  (homepages, locale) => homepages
+    && asArray(homepages).map(homepage => (
       {
-        label: LanguageMap.parse(homepage.label, manifest.options.locale)
+        label: LanguageMap.parse(homepage.label, locale)
           .map(label => label.value)[0],
         value: homepage.id || homepage['@id'],
       }
@@ -117,13 +133,15 @@ export const getManifestRenderings = createSelector(
 * @return {String|null}
 */
 export const getManifestRelatedContent = createSelector(
-  [getManifestoInstance],
-  manifest => manifest
-    && manifest.getProperty('seeAlso')
-    && asArray(manifest.getProperty('seeAlso')).map(related => (
+  [
+    getProperty('seeAlso'),
+    getManifestLocale,
+  ],
+  (seeAlso, locale) => seeAlso
+    && asArray(seeAlso).map(related => (
       {
         format: related.format,
-        label: LanguageMap.parse(related.label, manifest.options.locale)
+        label: LanguageMap.parse(related.label, locale)
           .map(label => label.value)[0],
         value: related.id || related['@id'],
       }
@@ -146,6 +164,7 @@ export const getRequiredStatement = createSelector(
       value: labelValuePair.getValue(),
     })),
 );
+
 /**
 * Return the IIIF v2 rights (v3) or license (v2) data from a manifest or null
 * @param {object} state
@@ -155,10 +174,17 @@ export const getRequiredStatement = createSelector(
 * @return {String|null}
 */
 export const getRights = createSelector(
-  [getManifestoInstance, getLocale],
-  (manifest, locale) => manifest
-    && (Utils.getLocalisedValue(manifest.getProperty('rights'), locale) || manifest.getLicense()),
+  [
+    getProperty('rights'),
+    getProperty('license'),
+    getManifestLocale,
+  ],
+  (rights, license, locale) => {
+    const data = rights || license;
+    return asArray(LanguageMap.parse(data, locale).map(label => label.value));
+  },
 );
+
 /**
 * Return the supplied thumbnail for a manifest or null
 * @param {object} state
@@ -319,11 +345,6 @@ function getLocales(resource) {
   }
   return Object.keys(languages);
 }
-
-export const getDefaultManifestLocale = createSelector(
-  [getManifestoInstance],
-  manifest => manifest && manifest.options && manifest.options.locale && manifest.options.locale.replace(/-.*$/, ''),
-);
 
 export const getMetadataLocales = createSelector(
   [getManifestoInstance],
