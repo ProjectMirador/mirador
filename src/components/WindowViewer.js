@@ -37,11 +37,11 @@ export class WindowViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      currentCanvases, window, fetchInfoResponse, fetchAnnotation,
+      canvasIndex, currentCanvases, window, fetchInfoResponse, fetchAnnotation,
     } = this.props;
 
     if (prevProps.window.view !== window.view
-      || (prevProps.window.canvasIndex !== window.canvasIndex && !this.infoResponseIsInStore())
+      || (prevProps.canvasIndex !== canvasIndex && !this.infoResponseIsInStore())
     ) {
       currentCanvases.forEach((canvas) => {
         const manifestoCanvas = new ManifestoCanvas(canvas);
@@ -120,6 +120,7 @@ export class WindowViewer extends Component {
 }
 
 WindowViewer.propTypes = {
+  canvasIndex: PropTypes.number.isRequired,
   currentCanvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   fetchAnnotation: PropTypes.func.isRequired,
   fetchInfoResponse: PropTypes.func.isRequired,

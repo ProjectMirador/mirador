@@ -12,9 +12,9 @@ function createWrapper(props) {
       canvasGroupings={
         new CanvasGroupings(manifesto.create(manifestJson).getSequences()[0].getCanvases())
       }
+      canvasIndex={1}
       classes={{}}
       window={{
-        canvasIndex: 1,
         id: 'foobar',
       }}
       config={{ thumbnailNavigation: { height: 150, width: 100 } }}
@@ -48,8 +48,8 @@ describe('ThumbnailNavigation', () => {
     const mockReset = jest.fn();
     wrapper.instance().gridRef = { current: { resetAfterIndex: mockReset } };
     wrapper.setProps({
+      canvasIndex: 1,
       window: {
-        canvasIndex: 1,
         id: 'foobar',
         thumbnailNavigationPosition: 'far-bottom',
         view: 'book',
@@ -61,8 +61,8 @@ describe('ThumbnailNavigation', () => {
     const mockScroll = jest.fn();
     wrapper.instance().gridRef = { current: { scrollToItem: mockScroll } };
     wrapper.setProps({
+      canvasIndex: 3,
       window: {
-        canvasIndex: 3,
         id: 'foobar',
         thumbnailNavigationPosition: 'far-bottom',
       },
@@ -85,8 +85,8 @@ describe('ThumbnailNavigation', () => {
       const mockReset = jest.fn();
       wrapper.instance().gridRef = { current: { resetAfterIndex: mockReset } };
       wrapper.setProps({
+        canvasIndex: 1,
         window: {
-          canvasIndex: 1,
           id: 'foobar',
           thumbnailNavigationPosition: 'far-bottom',
           view: 'book',
@@ -114,10 +114,10 @@ describe('ThumbnailNavigation', () => {
     const rightSetCanvas = jest.fn();
     beforeEach(() => {
       rightWrapper = createWrapper({
+        canvasIndex: 1,
         position: 'far-right',
         setCanvas: rightSetCanvas,
         window: {
-          canvasIndex: 1,
           id: 'foobat',
         },
       });

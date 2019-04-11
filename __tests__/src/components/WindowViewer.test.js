@@ -12,7 +12,6 @@ import otherContentFixture from '../../fixtures/version-2/299843.json';
 let currentCanvases = manifesto.create(fixture).getSequences()[0].getCanvases();
 
 let mockWindow = {
-  canvasIndex: 0,
   view: 'single',
 };
 
@@ -20,6 +19,7 @@ let mockWindow = {
 function createWrapper(props) {
   return shallow(
     <WindowViewer
+      canvasIndex={0}
       canvasLabel="label"
       infoResponses={{}}
       fetchInfoResponse={() => {}}
@@ -49,6 +49,7 @@ describe('WindowViewer', () => {
       it('isFetching is false', () => {
         wrapper = createWrapper(
           {
+            canvasIndex: 1,
             infoResponses: {
               'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005': {
                 isFetching: false,
@@ -58,7 +59,6 @@ describe('WindowViewer', () => {
               },
             },
             window: {
-              canvasIndex: 1,
               view: 'book',
             },
           },
@@ -68,6 +68,7 @@ describe('WindowViewer', () => {
       it('infoResponse is undefined', () => {
         wrapper = createWrapper(
           {
+            canvasIndex: 1,
             infoResponses: {
               foo: {
                 isFetching: false,
@@ -77,7 +78,6 @@ describe('WindowViewer', () => {
               },
             },
             window: {
-              canvasIndex: 1,
               view: 'book',
             },
           },
@@ -87,6 +87,7 @@ describe('WindowViewer', () => {
       it('error is not present', () => {
         wrapper = createWrapper(
           {
+            canvasIndex: 1,
             infoResponses: {
               'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005': {
                 isFetching: false,
@@ -97,7 +98,6 @@ describe('WindowViewer', () => {
               },
             },
             window: {
-              canvasIndex: 1,
               view: 'book',
             },
           },
@@ -116,11 +116,11 @@ describe('WindowViewer', () => {
       currentCanvases = [canvases[0]];
 
       mockWindow = {
-        canvasIndex: 0,
         view: 'single',
       };
       wrapper = createWrapper(
         {
+          canvasIndex: 0,
           currentCanvases,
           fetchInfoResponse: mockFnCanvas0,
           window: mockWindow,
@@ -131,9 +131,10 @@ describe('WindowViewer', () => {
       currentCanvases = [canvases[2]];
       wrapper = createWrapper(
         {
+          canvasIndex: 2,
           currentCanvases,
           fetchInfoResponse: mockFnCanvas2,
-          window: { canvasIndex: 2, view: 'single' },
+          window: { view: 'single' },
         },
       );
       expect(mockFnCanvas2).toHaveBeenCalledTimes(0);
@@ -156,14 +157,18 @@ describe('WindowViewer', () => {
       const canvases = manifesto.create(emptyCanvasFixture).getSequences()[0].getCanvases();
       currentCanvases = [canvases[2]];
       mockWindow = {
-        canvasIndex: 2,
         view: 'single',
       };
       wrapper = createWrapper(
-        { currentCanvases, fetchInfoResponse: mockFn, window: mockWindow },
+        {
+          canvasIndex: 2,
+          currentCanvases,
+          fetchInfoResponse: mockFn,
+          window: mockWindow,
+        },
       );
 
-      wrapper.setProps({ currentCanvases: [canvases[3]], window: { canvasIndex: 3, view: 'single' } });
+      wrapper.setProps({ canvasIndex: 3, currentCanvases: [canvases[3]], window: { view: 'single' } });
 
       expect(mockFn).toHaveBeenCalledTimes(0);
     });

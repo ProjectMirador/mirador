@@ -22,6 +22,18 @@ export function getWindow(state, { windowId }) {
   return state.windows && state.windows[windowId];
 }
 
+export const getCanvasIndex = createSelector(
+  [
+    getWindow,
+    (state, { canvasIndex }) => canvasIndex,
+  ],
+  (window, canvasIndex) => (
+    canvasIndex === 'selected' || canvasIndex === undefined
+      ? window.canvasIndex
+      : canvasIndex
+  ),
+);
+
 /** Return position of thumbnail navigation in a certain window.
 * @param {object} state
 * @param {String} windowId

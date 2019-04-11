@@ -10,13 +10,13 @@ function createWrapper(props) {
   return shallow(
     <ThumbnailCanvasGrouping
       index={1}
+      canvasIndex={1}
       classes={{}}
       style={{
         height: 90,
         width: 100,
       }}
       window={{
-        canvasIndex: 1,
         id: 'foobar',
       }}
       {...props}
