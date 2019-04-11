@@ -16,19 +16,13 @@ export const manifestsReducer = (state = {}, action) => {
         ...omit(state, action.manifestId),
       };
     case ActionTypes.RECEIVE_MANIFEST:
-      let collectionId = null; // eslint-disable-line no-case-declarations
-      let { manifestId } = action; // eslint-disable-line no-case-declarations
-      if (action.manifestJson['@type'] === 'sc:Collection') {
-        collectionId = action.manifestId;
-        manifestId = action.manifestJson.manifests[0]['@id'];
-      }
       return {
         ...state,
         [action.manifestId]: {
           ...state[action.manifestId],
-          collectionId: collectionId, // eslint-disable-line object-shorthand
+          collectionId: action.collectionId,
           error: null, // Explicitly set the error to null in case this is a re-fetch
-          id: manifestId,
+          id: action.manifestId,
           isFetching: false,
           json: action.manifestJson,
         },

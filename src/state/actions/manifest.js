@@ -57,7 +57,15 @@ export function fetchManifest(manifestId, properties) {
 
     return fetch(manifestId)
       .then(response => response.json())
-      .then(json => dispatch(receiveManifest(manifestId, json)))
+      .then((json) => {
+        let collectionId = null;
+        if (json['@type'] === 'sc:Collection') {
+          collectionId = manifestId;
+          manifestId = json.manifests[0]['@id']; // eslint-disable-line no-param-reassign
+          dispatch(requestManifest(manifestId, { ...properties, collectionId, isFetching: true }));
+        }
+        dispatch(receiveManifest(manifestId, json, collectionId));
+      })
       .catch((error) => {
         if (typeof error === 'object') { // Returned by JSON parse failure
           dispatch(receiveManifestFailure(manifestId, String(error)));
