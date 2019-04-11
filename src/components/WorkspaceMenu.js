@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
 import Menu from '@material-ui/core/Menu';
-import ImportIcon from '@material-ui/icons/Input';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
-import SaveAltIcon from '@material-ui/icons/SaveAltSharp';
 import PropTypes from 'prop-types';
 import LanguageSettings from '../containers/LanguageSettings';
 import { NestedMenu } from './NestedMenu';
 import WorkspaceSelectionDialog from '../containers/WorkspaceSelectionDialog';
-import WorkspaceExport from '../containers/WorkspaceExport';
-import WorkspaceImport from '../containers/WorkspaceImport';
 import ns from '../config/css-ns';
 import ChangeThemeDialog from '../containers/ChangeThemeDialog';
 
@@ -24,8 +19,6 @@ export class WorkspaceMenu extends Component {
     super(props);
     this.state = {
       changeTheme: {},
-      exportWorkspace: {},
-      importWorkspace: {},
       toggleZoom: {},
       workspaceSelection: {},
     };
@@ -74,15 +67,14 @@ export class WorkspaceMenu extends Component {
       containerId,
       handleClose,
       anchorEl,
+      isWorkspaceAddVisible,
       t,
       showZoomControls,
     } = this.props;
 
     const {
-      importWorkspace,
       changeTheme,
       toggleZoom,
-      exportWorkspace,
       workspaceSelection,
     } = this.state;
 
@@ -107,9 +99,9 @@ export class WorkspaceMenu extends Component {
         >
           <MenuItem
             aria-haspopup="true"
+            disabled={isWorkspaceAddVisible}
             onClick={(e) => { this.handleZoomToggleClick(e); handleClose(e); }}
             aria-owns={toggleZoom.anchorEl ? 'toggle-zoom-menu' : undefined}
-            divider
           >
             <Typography variant="body1">
               { showZoomControls ? t('hideZoomControls') : t('showZoomControls') }
@@ -130,30 +122,8 @@ export class WorkspaceMenu extends Component {
             aria-haspopup="true"
             onClick={(e) => { this.handleMenuItemClick('changeTheme', e); handleClose(e); }}
             aria-owns={changeTheme.anchorEl ? 'change-theme' : undefined}
-            divider
           >
             <Typography variant="body1">{t('changeTheme')}</Typography>
-          </MenuItem>
-          <MenuItem
-            aria-haspopup="true"
-            onClick={(e) => { this.handleMenuItemClick('exportWorkspace', e); handleClose(e); }}
-            aria-owns={exportWorkspace.AnchorEl ? 'workspace-export' : undefined}
-          >
-            <ListItemIcon>
-              <SaveAltIcon />
-            </ListItemIcon>
-            <Typography variant="body1">{t('downloadExportWorkspace')}</Typography>
-          </MenuItem>
-          <MenuItem
-            aria-haspopup="true"
-            id="workspace-menu-import"
-            onClick={(e) => { this.handleMenuItemClick('importWorkspace', e); handleClose(e); }}
-            aria-owns={exportWorkspace.AnchorEl ? 'workspace-import' : undefined}
-          >
-            <ListItemIcon>
-              <ImportIcon />
-            </ListItemIcon>
-            <Typography variant="body1">{t('importWorkspace')}</Typography>
           </MenuItem>
         </Menu>
         {Boolean(changeTheme.open) && (
@@ -170,20 +140,6 @@ export class WorkspaceMenu extends Component {
             handleClose={this.handleMenuItemClose('workspaceSelection')}
           />
         )}
-        {Boolean(exportWorkspace.open) && (
-          <WorkspaceExport
-            open={Boolean(exportWorkspace.open)}
-            container={container}
-            handleClose={this.handleMenuItemClose('exportWorkspace')}
-          />
-        )}
-        {Boolean(importWorkspace.open) && (
-          <WorkspaceImport
-            open={Boolean(importWorkspace.open)}
-            container={container}
-            handleClose={this.handleMenuItemClose('importWorkspace')}
-          />
-        )}
       </>
     );
   }
@@ -193,6 +149,7 @@ WorkspaceMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   containerId: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
+  isWorkspaceAddVisible: PropTypes.bool,
   showZoomControls: PropTypes.bool,
   t: PropTypes.func,
   toggleZoomControls: PropTypes.func,
@@ -200,6 +157,7 @@ WorkspaceMenu.propTypes = {
 
 WorkspaceMenu.defaultProps = {
   anchorEl: null,
+  isWorkspaceAddVisible: false,
   showZoomControls: false,
   t: key => key,
   toggleZoomControls: () => {},

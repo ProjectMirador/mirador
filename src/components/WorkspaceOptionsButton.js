@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
-import SettingsIcon from '@material-ui/icons/SettingsSharp';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import WorkspaceMenu from '../containers/WorkspaceMenu';
+import MoreHorizontalIcon from '@material-ui/icons/MoreHorizSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+import WorkspaceOptionsMenu from '../containers/WorkspaceOptionsMenu';
 
 /**
- */
-export class WorkspaceMenuButton extends Component {
+ * WorkspaceOptionsButton ~
+*/
+export class WorkspaceOptionsButton extends Component {
   /**
    * constructor -
    */
   constructor(props) {
     super(props);
-    this.state = {
-      anchorEl: null,
-    };
+    this.state = { anchorEl: null };
     this.handleMenuClick = this.handleMenuClick.bind(this);
     this.handleMenuClose = this.handleMenuClose.bind(this);
   }
@@ -39,26 +37,22 @@ export class WorkspaceMenuButton extends Component {
   }
 
   /**
-   * render
-   * @return
-   */
+   * Returns the rendered component
+  */
   render() {
-    const { classes, t } = this.props;
+    const { t } = this.props;
     const { anchorEl } = this.state;
 
     return (
       <>
         <MiradorMenuButton
-          aria-haspopup="true"
-          aria-label={t('workspaceMenu')}
-          aria-owns={anchorEl ? 'workspace-menu' : undefined}
-          className={classNames(classes.ctrlBtn, (anchorEl ? classes.ctrlBtnSelected : null))}
-          id="menuBtn"
+          aria-label={t('workspaceOptions')}
           onClick={this.handleMenuClick}
         >
-          <SettingsIcon />
+          <MoreHorizontalIcon />
         </MiradorMenuButton>
-        <WorkspaceMenu
+
+        <WorkspaceOptionsMenu
           anchorEl={anchorEl}
           handleClose={this.handleMenuClose}
         />
@@ -67,11 +61,6 @@ export class WorkspaceMenuButton extends Component {
   }
 }
 
-WorkspaceMenuButton.propTypes = {
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  t: PropTypes.func,
-};
-
-WorkspaceMenuButton.defaultProps = {
-  t: key => key,
+WorkspaceOptionsButton.propTypes = {
+  t: PropTypes.func.isRequired,
 };
