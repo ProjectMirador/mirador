@@ -70,6 +70,8 @@ export class CompanionWindow extends Component {
           }}
           disableDragging
           enableResizing={this.resizeHandles()}
+          minHeight={50}
+          minWidth={100}
         >
 
           <Toolbar className={[classes.toolbar, size.width < 370 ? classes.small : null, ns('companion-window-header')].join(' ')} disableGutters>
