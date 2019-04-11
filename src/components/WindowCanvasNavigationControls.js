@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Paper from '@material-ui/core/Paper';
 import ZoomControls from '../containers/ZoomControls';
 import ViewerInfo from '../containers/ViewerInfo';
 import ViewerNavigation from '../containers/ViewerNavigation';
@@ -22,15 +23,13 @@ export class WindowCanvasNavigationControls extends Component {
   /** */
   render() {
     const {
-      visible, window, zoomToWorld,
+      classes, visible, window, zoomToWorld,
     } = this.props;
 
     if (!visible) return (<></>);
 
     return (
-      <div
-        className={classNames(ns('canvas-nav'), this.canvasNavControlsAreStacked() ? ns('canvas-nav-stacked') : null)}
-      >
+      <Paper square className={classNames(classes.controls, ns('canvas-nav'), this.canvasNavControlsAreStacked() ? ns('canvas-nav-stacked') : null)} elevation={0}>
         <ZoomControls
           displayDivider={!this.canvasNavControlsAreStacked()}
           windowId={window.id}
@@ -38,13 +37,14 @@ export class WindowCanvasNavigationControls extends Component {
         />
         <ViewerNavigation window={window} />
         <ViewerInfo windowId={window.id} />
-      </div>
+      </Paper>
     );
   }
 }
 
 
 WindowCanvasNavigationControls.propTypes = {
+  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   size: PropTypes.shape({ width: PropTypes.number }).isRequired,
   visible: PropTypes.bool,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -52,5 +52,6 @@ WindowCanvasNavigationControls.propTypes = {
 };
 
 WindowCanvasNavigationControls.defaultProps = {
+  classes: {},
   visible: true,
 };
