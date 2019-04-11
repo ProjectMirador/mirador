@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
 import Menu from '@material-ui/core/Menu';
-import ImportIcon from '@material-ui/icons/Input';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
-import SaveAltIcon from '@material-ui/icons/SaveAltSharp';
 import PropTypes from 'prop-types';
 import LanguageSettings from '../containers/LanguageSettings';
 import { NestedMenu } from './NestedMenu';
 import WorkspaceSelectionDialog from '../containers/WorkspaceSelectionDialog';
-import WorkspaceExport from '../containers/WorkspaceExport';
-import WorkspaceImport from '../containers/WorkspaceImport';
 import ns from '../config/css-ns';
 import ChangeThemeDialog from '../containers/ChangeThemeDialog';
 
@@ -24,8 +19,6 @@ export class WorkspaceMenu extends Component {
     super(props);
     this.state = {
       changeTheme: {},
-      exportWorkspace: {},
-      importWorkspace: {},
       toggleZoom: {},
       workspaceSelection: {},
     };
@@ -80,10 +73,8 @@ export class WorkspaceMenu extends Component {
     } = this.props;
 
     const {
-      importWorkspace,
       changeTheme,
       toggleZoom,
-      exportWorkspace,
       workspaceSelection,
     } = this.state;
 
@@ -134,27 +125,6 @@ export class WorkspaceMenu extends Component {
           >
             <Typography variant="body1">{t('changeTheme')}</Typography>
           </MenuItem>
-          <MenuItem
-            aria-haspopup="true"
-            onClick={(e) => { this.handleMenuItemClick('exportWorkspace', e); handleClose(e); }}
-            aria-owns={exportWorkspace.AnchorEl ? 'workspace-export' : undefined}
-          >
-            <ListItemIcon>
-              <SaveAltIcon />
-            </ListItemIcon>
-            <Typography variant="body1">{t('downloadExportWorkspace')}</Typography>
-          </MenuItem>
-          <MenuItem
-            aria-haspopup="true"
-            id="workspace-menu-import"
-            onClick={(e) => { this.handleMenuItemClick('importWorkspace', e); handleClose(e); }}
-            aria-owns={exportWorkspace.AnchorEl ? 'workspace-import' : undefined}
-          >
-            <ListItemIcon>
-              <ImportIcon />
-            </ListItemIcon>
-            <Typography variant="body1">{t('importWorkspace')}</Typography>
-          </MenuItem>
         </Menu>
         {Boolean(changeTheme.open) && (
           <ChangeThemeDialog
@@ -168,20 +138,6 @@ export class WorkspaceMenu extends Component {
             open={Boolean(workspaceSelection.open)}
             container={container}
             handleClose={this.handleMenuItemClose('workspaceSelection')}
-          />
-        )}
-        {Boolean(exportWorkspace.open) && (
-          <WorkspaceExport
-            open={Boolean(exportWorkspace.open)}
-            container={container}
-            handleClose={this.handleMenuItemClose('exportWorkspace')}
-          />
-        )}
-        {Boolean(importWorkspace.open) && (
-          <WorkspaceImport
-            open={Boolean(importWorkspace.open)}
-            container={container}
-            handleClose={this.handleMenuItemClose('importWorkspace')}
           />
         )}
       </>
