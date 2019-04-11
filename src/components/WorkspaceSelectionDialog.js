@@ -15,7 +15,9 @@ import { ListKeyboardNavigation } from '../lib/ListKeyboardNavigation';
 /**
  */
 export class WorkspaceSelectionDialog extends Component {
-  /** */
+  /**
+   * constructor
+   */
   constructor(props) {
     super(props);
 
