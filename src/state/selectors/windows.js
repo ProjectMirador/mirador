@@ -114,6 +114,26 @@ export const getCompanionAreaVisibility = createSelector(
   },
 );
 
+export const selectCompanionWindowDimensions = createSelector(
+  [getCompanionWindowsOfWindow],
+  (companionWindows) => {
+    let width = 0;
+    let height = 0;
+
+    companionWindows.forEach((cw) => {
+      if (cw.position.match(/right/)) {
+        width += 235;
+      }
+
+      if (cw.position.match(/bottom/)) {
+        height += 201;
+      }
+    });
+
+    return { height, width };
+  },
+);
+
 /**
  * Returns the draggability of a window
  * @param {object} state

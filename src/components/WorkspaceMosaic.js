@@ -121,7 +121,7 @@ export class WorkspaceMosaic extends React.Component {
       >
         <Window
           key={`${window.id}-${workspace.id}`}
-          window={window}
+          windowId={window.id}
         />
       </MosaicWindow>
     );
