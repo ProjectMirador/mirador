@@ -12,6 +12,7 @@ import {
   getViewer,
   getWindowDraggability,
   selectCompanionWindowDimensions,
+  getCanvasIndex,
 } from '../../../src/state/selectors/windows';
 
 
@@ -38,6 +39,35 @@ describe('getWindowTitles', () => {
   });
 });
 
+describe('getCanvasIndex', () => {
+  it('returns the index if provided', () => {
+    expect(getCanvasIndex({}, { canvasIndex: 25 })).toEqual(25);
+  });
+  it('returns the current canvasIndex for the window if provided', () => {
+    const state = {
+      windows: {
+        a: { canvasIndex: 13 },
+      },
+    };
+
+    expect(getCanvasIndex(state, { windowId: 'a' })).toEqual(13);
+  });
+  it('returns the default canvasIndex for the manifest', () => {
+    const state = {
+      manifests: {
+        x: { json: { ...manifestFixture019, start: { id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1' } } },
+      },
+      windows: {
+        a: { manifestId: 'x' },
+      },
+    };
+
+    expect(getCanvasIndex(state, { windowId: 'a' })).toEqual(1);
+  });
+  it('defaults to the first canvas', () => {
+    expect(getCanvasIndex({}, {})).toEqual(0);
+  });
+});
 
 describe('getThumbnailNavigationPosition', () => {
   const state = {
