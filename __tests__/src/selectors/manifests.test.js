@@ -368,7 +368,7 @@ describe('getRights', () => {
     };
     const state = { manifests: { x: { json: manifest } } };
     const received = getRights(state, { manifestId: 'x' });
-    expect(received).toEqual('http://example.com');
+    expect(received).toEqual(['http://example.com']);
   });
   it('gets the rights data for a IIIF v3 manifest', () => {
     const manifest = {
@@ -380,6 +380,6 @@ describe('getRights', () => {
     };
     const state = { manifests: { x: { json: manifest } } };
     const received = getRights(state, { manifestId: 'x' });
-    expect(received).toEqual('http://example.com');
+    expect(received).toEqual(['http://example.com']);
   });
 });

@@ -164,6 +164,7 @@ export const getRequiredStatement = createSelector(
       value: labelValuePair.getValue(),
     })),
 );
+
 /**
 * Return the IIIF v2 rights (v3) or license (v2) data from a manifest or null
 * @param {object} state
@@ -178,9 +179,12 @@ export const getRights = createSelector(
     getProperty('license'),
     getManifestLocale,
   ],
-  (rights, license, locale) => (rights || license)
-    && (Utils.getLocalisedValue(rights || license, locale)),
+  (rights, license, locale) => {
+    const data = rights || license;
+    return asArray(LanguageMap.parse(data, locale).map(label => label.value));
+  },
 );
+
 /**
 * Return the supplied thumbnail for a manifest or null
 * @param {object} state
