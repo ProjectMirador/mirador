@@ -60,13 +60,16 @@ const styles = theme => ({
     wordBreak: 'break-word',
   },
   horizontal: {
-    height: '201px',
-    width: '100%',
   },
   positionButton: {
     marginLeft: -16,
     order: -100,
     width: 24,
+  },
+  rnd: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 0,
   },
   root: {
     boxShadow: 'none',
@@ -97,7 +100,6 @@ const styles = theme => ({
     paddingLeft: theme.spacing.unit * 2,
   },
   vertical: {
-    width: '235px',
   },
   windowSideBarTitle: {
     ...theme.typography.subtitle1,
