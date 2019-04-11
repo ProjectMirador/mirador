@@ -57,8 +57,8 @@ const styles = theme => ({
     cursor: 'pointer',
   },
   media: {
-    height: '120px',
-    width: '160px',
+    flex: '0 0 120px',
+    height: '90px',
   },
 });
 

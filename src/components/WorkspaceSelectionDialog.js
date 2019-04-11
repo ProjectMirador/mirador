@@ -57,8 +57,11 @@ export class WorkspaceSelectionDialog extends Component {
         </DialogTitle>
         <DialogContent>
           {children}
-          {/* eslint-disable-next-line max-len */}
-          <ListKeyboardNavigation onChange={this.handleworkspaceTypeChange} selected={workspaceType} className={classes.list}>
+          <ListKeyboardNavigation
+            className={classes.list}
+            onChange={this.handleworkspaceTypeChange}
+            selected={workspaceType}
+          >
             <ListItem
               className={classes.listItem}
               value="elastic"
@@ -71,8 +74,8 @@ export class WorkspaceSelectionDialog extends Component {
                 />
                 <div className={classes.details}>
                   <CardContent className={classes.content}>
-                    <Typography variant="h2">{t('elastic')}</Typography>
-                    <Typography variant="body2">{t('elasticDescription')}</Typography>
+                    <Typography component="p" variant="h3">{t('elastic')}</Typography>
+                    <Typography variant="body1">{t('elasticDescription')}</Typography>
                   </CardContent>
                 </div>
               </Card>
@@ -89,8 +92,8 @@ export class WorkspaceSelectionDialog extends Component {
                 />
                 <div className={classes.details}>
                   <CardContent className={classes.content}>
-                    <Typography variant="h2">{t('mosaic')}</Typography>
-                    <Typography variant="body2">{t('mosaicDescription')}</Typography>
+                    <Typography component="p" variant="h3">{t('mosaic')}</Typography>
+                    <Typography variant="body1">{t('mosaicDescription')}</Typography>
                   </CardContent>
                 </div>
               </Card>
