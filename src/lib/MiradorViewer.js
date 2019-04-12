@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import deepmerge from 'deepmerge';
+import { PluginProvider } from '../extend';
 import App from '../containers/App';
-import { pluginStore } from '../extend';
 import createStore from '../state/createStore';
+import createRootReducer from '../state/reducers/rootReducer';
 import * as actions from '../state/actions';
 import settings from '../config/settings';
 
@@ -15,9 +16,7 @@ class MiradorViewer {
   /**
    */
   constructor(config, plugins) {
-    pluginStore.storePlugins(plugins);
-    const pluginReducers = getReducersFromPlugins(plugins);
-    this.store = createStore(pluginReducers);
+    this.store = createStore();
     this.config = config;
     this.processConfig();
     const viewer = {
@@ -27,7 +26,9 @@ class MiradorViewer {
 
     ReactDOM.render(
       <Provider store={this.store}>
-        <App />
+        <PluginProvider plugins={plugins} createRootReducer={createRootReducer}>
+          <App />
+        </PluginProvider>
       </Provider>,
       document.getElementById(config.id),
     );
@@ -71,11 +72,6 @@ class MiradorViewer {
       );
     });
   }
-}
-
-/** Return reducers from plugins */
-function getReducersFromPlugins(plugins) {
-  return plugins && plugins.reduce((acc, plugin) => ({ ...acc, ...plugin.reducers }), {});
 }
 
 export default MiradorViewer;
