@@ -138,6 +138,7 @@ export default {
     allowClose: true, // Configure if windows can be closed or not
     allowMaximize: true, // Configure if windows can be maximized or not
     defaultView: 'single',  // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in
+    hideAnnotationsPanel: false, // Configure to hide the annotations panel in the WindowSideBarButtons
   },
   windows: [], // Array of windows to be open when mirador initializes (each object should at least provide a loadedManifest key with the value of the IIIF presentation manifest to load)
   thumbnailNavigation: {

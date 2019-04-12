@@ -58,6 +58,11 @@ describe('WindowSideBarButtons (shallow)', () => {
     expect(tab.find('WithStyles(Badge)').props().invisible).toBe(true);
   });
 
+  it('can hide annotation panel when configured to do so', () => {
+    wrapper = createWrapper({ hasAnnotations: true, hideAnnotationsPanel: true, windowId });
+    expect(wrapper.find('WithStyles(Tab)[value="annotations"]').length).toEqual(0);
+  });
+
   describe('handleKeyUp', () => {
     it('the first tab is focussed by default', () => {
       assertTabFocused(wrapper, 0);
