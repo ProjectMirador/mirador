@@ -26,6 +26,8 @@ export class WorkspaceMosaic extends React.Component {
     this.determineWorkspaceLayout = this.determineWorkspaceLayout.bind(this);
     this.zeroStateView = <div />;
     this.windowPaths = {};
+    this.toolbarControls = [];
+    this.additionalControls = [];
   }
 
   /** */
@@ -99,6 +101,15 @@ export class WorkspaceMosaic extends React.Component {
     return workspace.layout;
   }
 
+  /** */
+  static renderPreview(mosaicProps) {
+    return (
+      <div className="mosaic-preview">
+        <MosaicRenderPreview windowId={mosaicProps.windowId} />
+      </div>
+    );
+  }
+
   /**
    * Render a tile (Window) in the Mosaic.
    */
@@ -109,15 +120,11 @@ export class WorkspaceMosaic extends React.Component {
     this.bookkeepPath(window.id, path);
     return (
       <MosaicWindow
-        toolbarControls={[]}
-        additionalControls={[]}
+        toolbarControls={this.toolbarControls}
+        additionalControls={this.additionalControls}
         path={path}
         windowId={window.id}
-        renderPreview={() => (
-          <div className="mosaic-preview">
-            <MosaicRenderPreview windowId={window.id} />
-          </div>
-        )}
+        renderPreview={WorkspaceMosaic.renderPreview}
       >
         <Window
           key={`${window.id}-${workspace.id}`}
