@@ -1,8 +1,70 @@
 import {
   getAnnotationResourcesByMotivation,
+  getAnnotationResourcesByMotivationForCanvas,
   getHighlightedAnnotationsOnCanvases,
   getSelectedAnnotationIds,
 } from '../../../src/state/selectors';
+
+describe('getAnnotationResourcesByMotivationForCanvas', () => {
+  it('returns an array of annotation resources on a given canvas (filtered by the passed in array of motiviations)', () => {
+    const expected = [
+      ['oa:commenting'],
+      ['sc:something-else', 'oa:commenting'],
+    ];
+
+    const state = {
+      annotations: {
+        cid1: {
+          annoId1: {
+            id: 'annoId1',
+            json: {
+              resources: [{ '@id': 'annoId1', motivation: 'oa:commenting' }],
+            },
+          },
+        },
+        cid2: {
+          annoId1: {
+            id: 'annoId2',
+            json: {
+              resources: [
+                { '@id': 'annoId1', motivation: 'oa:commenting' },
+                { '@id': 'annoId2', motivation: 'oa:not-commenting' },
+                { '@id': 'annoId3', motivation: ['sc:something-else', 'oa:commenting'] },
+              ],
+            },
+          },
+        },
+      },
+      manifests: {
+        mid: {
+          json: {
+            '@context': 'http://iiif.io/api/presentation/2/context.json',
+            '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+            '@type': 'sc:Manifest',
+            sequences: [
+              {
+                canvases: [
+                  { '@id': 'cid1' },
+                  { '@id': 'cid2' },
+                ],
+              },
+            ],
+          },
+        },
+      },
+      windows: {
+        abc123: {
+          canvasIndex: 1,
+          manifestId: 'mid',
+        },
+      },
+    };
+
+    expect(
+      getAnnotationResourcesByMotivationForCanvas(state, { motivations: ['something', 'oa:commenting'], windowId: 'abc123' }).map(r => r.motivations),
+    ).toEqual(expected);
+  });
+});
 
 describe('getAnnotationResourcesByMotivation', () => {
   it('returns an array of annotation resources (filtered by the passed in array of motiviations)', () => {
