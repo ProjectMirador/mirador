@@ -30,6 +30,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
  */
 const mapStateToProps = (state, { windowId }) => ({
   hasAnnotations: getAnnotationResourcesByMotivation(state, { motivations: ['oa:commenting', 'sc:painting'], windowId }).length > 0,
+  hideAnnotationsPanel: state.config.window.hideAnnotationsPanel,
   sideBarPanel: (getCompanionWindowForPosition(state, { position: 'left', windowId }) || {}).content,
 });
 

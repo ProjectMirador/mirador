@@ -144,6 +144,7 @@ export class WindowSideBarButtons extends Component {
     const {
       classes,
       hasAnnotations,
+      hideAnnotationsPanel,
       sideBarPanel,
       t,
     } = this.props;
@@ -187,14 +188,16 @@ export class WindowSideBarButtons extends Component {
           value="canvas"
           icon={(<CanvasIndexIcon />)}
         />
-        <TabButton
-          value="annotations"
-          icon={(
-            <Badge color="error" invisible={!hasAnnotations} variant="dot">
-              <AnnotationIcon />
-            </Badge>
-          )}
-        />
+        {!hideAnnotationsPanel && (
+          <TabButton
+            value="annotations"
+            icon={(
+              <Badge color="error" invisible={!hasAnnotations} variant="dot">
+                <AnnotationIcon />
+              </Badge>
+            )}
+          />
+        )}
       </Tabs>
     );
   }
@@ -204,6 +207,7 @@ WindowSideBarButtons.propTypes = {
   addCompanionWindow: PropTypes.func.isRequired,
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   hasAnnotations: PropTypes.bool,
+  hideAnnotationsPanel: PropTypes.bool,
   sideBarPanel: PropTypes.string,
   t: PropTypes.func,
 };
@@ -211,6 +215,7 @@ WindowSideBarButtons.propTypes = {
 WindowSideBarButtons.defaultProps = {
   classes: {},
   hasAnnotations: false,
+  hideAnnotationsPanel: false,
   sideBarPanel: 'closed',
   t: key => key,
 };
