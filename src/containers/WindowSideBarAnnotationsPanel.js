@@ -3,25 +3,11 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend';
-import * as actions from '../state/actions';
 import {
-  getSelectedAnnotationIds,
+  getSelectedCanvases,
   getAnnotationResourcesByMotivation,
-  getWindow,
 } from '../state/selectors';
 import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnotationsPanel';
-
-/**
- * @param {Array} resources
- * @return {Array} [{ id: 'abc123', content: 'Annotation Content' }, ...]
- */
-function getIdAndContentOfResources(resources) {
-  return resources.map((resource, i) => ({
-    content: resource.chars,
-    id: resource.id,
-    targetId: resource.targetId,
-  }));
-}
 
 /**
  * mapStateToProps - to hook up connect
@@ -29,33 +15,13 @@ function getIdAndContentOfResources(resources) {
  * @private
  */
 const mapStateToProps = (state, { windowId }) => ({
-  allAnnotationsAreHighlighted: getWindow(state, { windowId }).displayAllAnnotations,
-  annotations: getIdAndContentOfResources(
-    getAnnotationResourcesByMotivation(state, { motivations: ['oa:commenting', 'sc:painting'], windowId }),
-  ),
-  selectedAnnotationIds: getSelectedAnnotationIds(state, { windowId }),
+  annotationCount: getAnnotationResourcesByMotivation(state, { motivations: ['oa:commenting', 'sc:painting'], windowId }).length,
+  selectedCanvases: getSelectedCanvases(state, { windowId }),
 });
 
-/**
- * mapDispatchToProps - to hook up connect
- * @memberof WindowSideBarAnnotationsPanel
- * @private
- */
-const mapDispatchToProps = {
-  deselectAnnotation: actions.deselectAnnotation,
-  highlightAnnotation: actions.highlightAnnotation,
-  selectAnnotation: actions.selectAnnotation,
-};
 
 /** */
 const styles = theme => ({
-  annotationListItem: {
-    '&:hover': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    borderBottom: `0.5px solid ${theme.palette.divider}`,
-    cursor: 'pointer',
-  },
   section: {
     borderBottom: '.5px solid rgba(0,0,0,0.25)',
     paddingBottom: theme.spacing.unit,
@@ -68,7 +34,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps, null),
   withPlugins('WindowSideBarAnnotationPanel'),
   // further HOC
 );
