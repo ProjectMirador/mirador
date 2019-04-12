@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend';
 import { GalleryView } from '../components/GalleryView';
-import { getManifestCanvases, getSelectedCanvasIndex } from '../state/selectors';
+import { getManifestCanvases, getCanvasIndex } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -13,7 +13,7 @@ import { getManifestCanvases, getSelectedCanvasIndex } from '../state/selectors'
 const mapStateToProps = (state, { windowId }) => (
   {
     canvases: getManifestCanvases(state, { windowId }),
-    selectedCanvasIndex: getSelectedCanvasIndex(state, { windowId }),
+    selectedCanvasIndex: getCanvasIndex(state, { windowId }),
   }
 );
 

@@ -21,7 +21,7 @@ import {
 const mapStateToProps = (state, { windowId }) => ({
   canvasWorld: new CanvasWorld(getSelectedCanvases(state, { windowId })),
   highlightedAnnotations: getHighlightedAnnotationsOnCanvases(state, { windowId }),
-  label: getCanvasLabel(state, { canvasIndex: 'selected', windowId }),
+  label: getCanvasLabel(state, { windowId }),
   selectedAnnotations: getSelectedAnnotationsOnCanvases(state, { windowId }),
   viewer: getViewer(state, { windowId }),
 });

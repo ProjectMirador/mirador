@@ -1,60 +1,12 @@
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import {
-  getSelectedCanvas,
   getSelectedCanvases,
   getCanvas,
   getCanvasLabel,
   selectCanvasAuthService,
   selectNextAuthService,
 } from '../../../src/state/selectors/canvases';
-
-describe('getSelectedCanvas', () => {
-  const state = {
-    manifests: {
-      x: {
-        id: 'x',
-        json: manifestFixture019,
-      },
-    },
-    windows: {
-      a: {
-        canvasIndex: 1,
-        id: 'a',
-        manifestId: 'x',
-      },
-    },
-  };
-
-  const noManifestationState = {
-    manifests: {
-      x: {
-        id: 'x',
-      },
-    },
-    windows: {
-      a: {
-        canvasIndex: 1,
-        id: 'a',
-        manifestId: 'x',
-      },
-    },
-  };
-
-  it('should return canvas based on the canvas index stored window state', () => {
-    const selectedCanvas = getSelectedCanvas(state, { windowId: 'a' });
-
-    expect(selectedCanvas.id).toEqual(
-      'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
-    );
-  });
-
-  it('should return undefined when there is no manifestation to get a canvas from', () => {
-    const selectedCanvas = getSelectedCanvas(noManifestationState, { windowId: 'a' });
-
-    expect(selectedCanvas).toBeUndefined();
-  });
-});
 
 describe('getSelectedCanvases', () => {
   const state = {
@@ -125,12 +77,12 @@ describe('getCanvas', () => {
     expect(received.id).toBe('https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json');
   });
 
-  it('does nothing if an id or index is not provided', () => {
+  it('returns the default canvas if an id or index is not provided', () => {
     const state = { manifests: { a: { json: manifestFixture001 } } };
     const received = getCanvas(state, {
       manifestId: 'a',
     });
-    expect(received).toBeUndefined();
+    expect(received.index).toBe(0);
   });
 });
 

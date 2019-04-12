@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
-import { getWindow } from '../state/selectors';
+import { getWindow, getCanvasIndex } from '../state/selectors';
 import { ThumbnailCanvasGrouping } from '../components/ThumbnailCanvasGrouping';
 
 /**
@@ -22,6 +22,7 @@ const mapDispatchToProps = {
  * @private
  */
 const mapStateToProps = (state, { data }) => ({
+  canvasIndex: getCanvasIndex(state, { windowId: data.windowId }),
   window: getWindow(state, { windowId: data.windowId }),
 });
 

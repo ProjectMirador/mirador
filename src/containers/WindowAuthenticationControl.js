@@ -14,8 +14,8 @@ import { WindowAuthenticationControl } from '../components/WindowAuthenticationC
  * @private
  */
 const mapStateToProps = (state, { windowId }) => {
-  const service = selectCanvasAuthService(state, { canvasIndex: 'selected', windowId });
-  const infoResponse = selectInfoResponse(state, { canvasIndex: 'selected', windowId }) || {};
+  const service = selectCanvasAuthService(state, { windowId });
+  const infoResponse = selectInfoResponse(state, { windowId }) || {};
 
   return {
     confirmLabel: service && service.getConfirmLabel(),

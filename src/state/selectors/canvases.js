@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import { Utils } from 'manifesto.js';
 import CanvasGroupings from '../../lib/CanvasGroupings';
 import { getManifestoInstance } from './manifests';
+import { getCanvasIndex, getWindowViewType } from './windows';
 
 export const getCanvases = createSelector(
   [getManifestoInstance],
@@ -19,45 +20,17 @@ export const getCanvases = createSelector(
 export const getCanvas = createSelector(
   [
     getManifestoInstance,
-    (state, { windowId, canvasIndex }) => (
-      canvasIndex === 'selected'
-        ? state.windows[windowId].canvasIndex
-        : canvasIndex
-    ),
+    getCanvasIndex,
     (state, { canvasId }) => canvasId,
   ],
   (manifest, canvasIndex, canvasId) => {
     if (!manifest) return undefined;
 
     if (canvasId !== undefined) return manifest.getSequences()[0].getCanvasById(canvasId);
-    if (canvasIndex !== undefined) return manifest.getSequences()[0].getCanvasByIndex(canvasIndex);
 
-    return undefined;
+    return manifest.getSequences()[0].getCanvasByIndex(canvasIndex);
   },
 );
-
-/**
-* Return the current canvas selected in a window
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {Object}
-*/
-export function getSelectedCanvas(state, props) {
-  return getCanvas(state, { ...props, canvasIndex: 'selected' });
-}
-
-/**
-* Return the selected canvas index for a window
-* @param {object} state
-* @param {object} props
-* @param {string} props.windowId
-* @return {Object}
-*/
-export function getSelectedCanvasIndex({ windows }, { windowId }) {
-  return windows[windowId].canvasIndex;
-}
 
 /**
 * Return the current canvases selected in a window
@@ -71,14 +44,14 @@ export function getSelectedCanvasIndex({ windows }, { windowId }) {
 export const getSelectedCanvases = createSelector(
   [
     getCanvases,
-    getSelectedCanvasIndex,
-    (state, { windowId }) => state.windows[windowId].view,
+    getCanvasIndex,
+    getWindowViewType,
   ],
   (canvases, canvasIndex, view) => canvases
-    && new CanvasGroupings(
-      canvases,
-      view,
-    ).getCanvases(canvasIndex),
+      && new CanvasGroupings(
+        canvases,
+        view,
+      ).getCanvases(canvasIndex),
 );
 
 /**

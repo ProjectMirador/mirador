@@ -30,12 +30,12 @@ export class ThumbnailNavigation extends Component {
    * of the grids
    */
   componentDidUpdate(prevProps) {
-    const { position, window } = this.props;
+    const { canvasIndex, position, window } = this.props;
     if (prevProps.window.view !== window.view && position !== 'off') {
       this.gridRef.current.resetAfterIndex(0);
     }
-    if (prevProps.window.canvasIndex !== window.canvasIndex) {
-      let index = window.canvasIndex;
+    if (prevProps.canvasIndex !== canvasIndex) {
+      let index = canvasIndex;
       if (window.view === 'book') index = Math.ceil(index / 2);
       this.gridRef.current.scrollToItem(index, 'center');
     }
@@ -149,33 +149,33 @@ export class ThumbnailNavigation extends Component {
   /**
    */
   nextCanvas() {
-    const { window, setCanvas } = this.props;
+    const { window, canvasIndex, setCanvas } = this.props;
     if (this.hasNextCanvas()) {
-      setCanvas(window.id, window.canvasIndex + this.canvasIncrementor());
+      setCanvas(window.id, canvasIndex + this.canvasIncrementor());
     }
   }
 
   /**
    */
   hasNextCanvas() {
-    const { window, canvasGroupings } = this.props;
-    return window.canvasIndex < canvasGroupings.canvases.length - this.canvasIncrementor();
+    const { canvasIndex, canvasGroupings } = this.props;
+    return canvasIndex < canvasGroupings.canvases.length - this.canvasIncrementor();
   }
 
   /**
    */
   previousCanvas() {
-    const { window, setCanvas } = this.props;
+    const { window, canvasIndex, setCanvas } = this.props;
     if (this.hasPreviousCanvas()) {
-      setCanvas(window.id, Math.max(0, window.canvasIndex - this.canvasIncrementor()));
+      setCanvas(window.id, Math.max(0, canvasIndex - this.canvasIncrementor()));
     }
   }
 
   /**
    */
   hasPreviousCanvas() {
-    const { window } = this.props;
-    return window.canvasIndex > 0;
+    const { canvasIndex } = this.props;
+    return canvasIndex > 0;
   }
 
   /**
@@ -248,6 +248,7 @@ export class ThumbnailNavigation extends Component {
 
 ThumbnailNavigation.propTypes = {
   canvasGroupings: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  canvasIndex: PropTypes.number.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   position: PropTypes.string.isRequired,

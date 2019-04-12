@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
-import { getManifestCanvases } from '../state/selectors';
+import { getManifestCanvases, getCanvasIndex } from '../state/selectors';
 import { ViewerNavigation } from '../components/ViewerNavigation';
 
 /** */
 const mapStateToProps = (state, { window }) => ({
   canvases: getManifestCanvases(state, { windowId: window.id }),
+  canvasIndex: getCanvasIndex(state, { windowId: window.id }),
 });
 
 /**

@@ -21,9 +21,9 @@ describe('ViewerNavigation', () => {
   beforeEach(() => {
     setCanvas = jest.fn();
     wrapper = createWrapper({
+      canvasIndex: 0,
       setCanvas,
       window: {
-        canvasIndex: 0,
         id: 'foo',
       },
     });
@@ -44,8 +44,8 @@ describe('ViewerNavigation', () => {
   describe('when next canvases are not present', () => {
     it('nextCanvas button is disabled', () => {
       const endWrapper = createWrapper({
+        canvasIndex: 1,
         window: {
-          canvasIndex: 1,
           id: 'foo',
         },
       });
@@ -65,9 +65,9 @@ describe('ViewerNavigation', () => {
     it('setCanvas function is called after click for next', () => {
       wrapper = createWrapper({
         canvases: [1, 2, 3],
+        canvasIndex: 0,
         setCanvas,
         window: {
-          canvasIndex: 0,
           id: 'foo',
           view: 'book',
         },
@@ -77,9 +77,9 @@ describe('ViewerNavigation', () => {
     });
     it('setCanvas function is called after click for previous', () => {
       wrapper = createWrapper({
+        canvasIndex: 5,
         setCanvas,
         window: {
-          canvasIndex: 5,
           id: 'foo',
           view: 'book',
         },

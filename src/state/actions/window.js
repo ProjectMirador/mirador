@@ -45,7 +45,7 @@ export function addWindow(options) {
     const cwDefault = `cw-${uuid()}`;
     const cwThumbs = `cw-${uuid()}`;
     const defaultOptions = {
-      canvasIndex: 0,
+      canvasIndex: undefined,
       collectionIndex: 0,
       companionAreaOpen: true,
       companionWindowIds: [cwDefault, cwThumbs],

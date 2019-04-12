@@ -4,7 +4,7 @@ import ManifestoCanvas from '../../lib/ManifestoCanvas';
 
 /** Get the relevant manifest information */
 export function getManifest(state, { manifestId, windowId }) {
-  return state.manifests[
+  return state.manifests && state.manifests[
     manifestId
     || (windowId && state.windows && state.windows[windowId] && state.windows[windowId].manifestId)
   ];
@@ -349,4 +349,34 @@ function getLocales(resource) {
 export const getMetadataLocales = createSelector(
   [getManifestoInstance],
   manifest => getLocales(manifest),
+);
+
+/**
+ * Returns the starting canvas index specified in the manifest
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @return {Number}
+ */
+export const getManifestStartCanvasIndex = createSelector(
+  [getManifestoInstance],
+  (manifest) => {
+    if (!manifest) return 0;
+
+    let canvasId;
+
+    // IIIF v2
+    canvasId = manifest.getSequences()[0].getProperty('startCanvas');
+
+    if (!canvasId) {
+      // IIIF v3
+      const start = manifest.getProperty('start')
+      || manifest.getSequences()[0].getProperty('start');
+
+      canvasId = start && (start.id || start.source);
+    }
+
+    return ((canvasId && manifest.getSequences()[0].getCanvasById(canvasId)) || {}).index;
+  },
 );

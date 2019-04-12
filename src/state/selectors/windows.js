@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { getManifestTitle } from './manifests';
+import { getManifestTitle, getManifestStartCanvasIndex } from './manifests';
 import { getWorkspaceType } from './config';
 
 /**
@@ -21,6 +21,22 @@ export function getWindowTitles(state) {
 export function getWindow(state, { windowId }) {
   return state.windows && state.windows[windowId];
 }
+
+/** Return the canvas index for a certain window.
+* @param {object} state
+* @param {String} windowId
+* @param {Number}
+*/
+export const getCanvasIndex = createSelector(
+  [
+    getWindow,
+    (state, { canvasIndex }) => canvasIndex,
+    getManifestStartCanvasIndex,
+  ],
+  (window, providedCanvasIndex, defaultIndex) => (
+    providedCanvasIndex || (window && window.canvasIndex) || defaultIndex || 0
+  ),
+);
 
 /** Return position of thumbnail navigation in a certain window.
 * @param {object} state

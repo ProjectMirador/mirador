@@ -14,6 +14,7 @@ import {
   getManifestDescription,
   getManifestHomepage,
   getManifestProvider,
+  getManifestStartCanvasIndex,
   getManifestTitle,
   getManifestThumbnail,
   getManifestMetadata,
@@ -387,5 +388,56 @@ describe('getRights', () => {
     const state = { manifests: { x: { json: manifest } } };
     const received = getRights(state, { manifestId: 'x' });
     expect(received).toEqual(['http://example.com']);
+  });
+});
+
+describe('getManifestStartCanvasIndex', () => {
+  it('gets the startCanvas index for a IIIF v2 manifest', () => {
+    const manifest = {
+      '@context': 'http://iiif.io/api/presentation/2/context.json',
+      '@id':
+       'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+      '@type': 'sc:Manifest',
+      sequences: [{
+        canvases: [
+          {
+            '@id': 'http://example.com/1',
+          },
+          {
+            '@id': 'http://example.com/2',
+          },
+        ],
+        startCanvas: 'http://example.com/2',
+      }],
+    };
+    const state = { manifests: { x: { json: manifest } } };
+    expect(getManifestStartCanvasIndex(state, { manifestId: 'x' })).toEqual(1);
+  });
+
+  it('gets the start data for a IIIF v3 manifest', () => {
+    const manifest = {
+      '@context': 'http://iiif.io/api/presentation/2/context.json',
+      '@id':
+       'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+      '@type': 'sc:Manifest',
+      sequences: [{
+        canvases: [
+          {
+            '@id': 'http://example.com/1',
+          },
+          {
+            '@id': 'http://example.com/2',
+          },
+        ],
+      }],
+      start: { source: 'http://example.com/2' },
+    };
+    const state = { manifests: { x: { json: manifest } } };
+    expect(getManifestStartCanvasIndex(state, { manifestId: 'x' })).toEqual(1);
+  });
+
+  it('is undefined if no start canvas is specified', () => {
+    const state = { manifests: { x: { json: manifestFixture001 } } };
+    expect(getManifestStartCanvasIndex(state, { manifestId: 'x' })).toEqual(undefined);
   });
 });

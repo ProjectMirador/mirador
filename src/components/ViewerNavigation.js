@@ -19,33 +19,33 @@ export class ViewerNavigation extends Component {
   /**
    */
   nextCanvas() {
-    const { window, setCanvas } = this.props;
+    const { window, canvasIndex, setCanvas } = this.props;
     if (this.hasNextCanvas()) {
-      setCanvas(window.id, window.canvasIndex + this.canvasIncrementor());
+      setCanvas(window.id, canvasIndex + this.canvasIncrementor());
     }
   }
 
   /**
    */
   hasNextCanvas() {
-    const { window, canvases } = this.props;
-    return window.canvasIndex < canvases.length - this.canvasIncrementor();
+    const { canvasIndex, canvases } = this.props;
+    return canvasIndex < canvases.length - this.canvasIncrementor();
   }
 
   /**
    */
   previousCanvas() {
-    const { window, setCanvas } = this.props;
+    const { window, canvasIndex, setCanvas } = this.props;
     if (this.hasPreviousCanvas()) {
-      setCanvas(window.id, Math.max(0, window.canvasIndex - this.canvasIncrementor()));
+      setCanvas(window.id, Math.max(0, canvasIndex - this.canvasIncrementor()));
     }
   }
 
   /**
    */
   hasPreviousCanvas() {
-    const { window } = this.props;
-    return window.canvasIndex > 0;
+    const { canvasIndex } = this.props;
+    return canvasIndex > 0;
   }
 
   /**
@@ -91,6 +91,7 @@ export class ViewerNavigation extends Component {
 
 ViewerNavigation.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  canvasIndex: PropTypes.number.isRequired,
   setCanvas: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
