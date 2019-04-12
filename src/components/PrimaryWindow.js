@@ -17,18 +17,18 @@ export class PrimaryWindow extends Component {
    * @return {(String|null)}
    */
   renderViewer() {
-    const { manifest, window } = this.props;
+    const { manifest, view, windowId } = this.props;
     if (manifest && manifest.isFetching === false) {
-      if (window.view === 'gallery') {
+      if (view === 'gallery') {
         return (
           <GalleryView
-            windowId={window.id}
+            windowId={windowId}
           />
         );
       }
       return (
         <WindowViewer
-          windowId={window.id}
+          windowId={windowId}
         />
       );
     }
@@ -39,11 +39,11 @@ export class PrimaryWindow extends Component {
    * Render the component
    */
   render() {
-    const { window } = this.props;
+    const { windowId } = this.props;
     return (
       <div className={ns('primary-window')}>
-        <WindowSideBar windowId={window.id} />
-        <CompanionArea windowId={window.id} position="left" />
+        <WindowSideBar windowId={windowId} />
+        <CompanionArea windowId={windowId} position="left" />
         {this.renderViewer()}
       </div>
     );
@@ -52,9 +52,11 @@ export class PrimaryWindow extends Component {
 
 PrimaryWindow.propTypes = {
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  view: PropTypes.string,
+  windowId: PropTypes.string.isRequired,
 };
 
 PrimaryWindow.defaultProps = {
   manifest: null,
+  view: undefined,
 };

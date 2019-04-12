@@ -75,7 +75,8 @@ export class Window extends Component {
           <div className={classes.middleLeft}>
             <div className={classes.primaryWindow}>
               <PrimaryWindow
-                window={window}
+                view={window.view}
+                windowId={window.id}
                 manifest={manifest}
                 sideBarOpen={window.sideBarOpen}
               />
