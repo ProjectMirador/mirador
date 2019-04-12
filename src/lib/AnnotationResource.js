@@ -50,11 +50,13 @@ export default class AnnotationResource {
   /** */
   get fragmentSelector() {
     const { on } = this.resource;
-    switch (typeof on) {
+    const onArray = flatten(compact(new Array(on)))[0];
+
+    switch (typeof onArray) {
       case 'string':
-        return on.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
+        return onArray.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
       case 'object':
-        return on.selector.value.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
+        return onArray.selector.value.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
       default:
         return null;
     }

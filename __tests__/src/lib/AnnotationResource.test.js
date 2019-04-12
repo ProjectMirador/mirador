@@ -80,6 +80,7 @@ describe('AnnotationResource', () => {
       expect(new AnnotationResource({ on: 'www.example.com/#xywh=10,10,100,200' })
         .fragmentSelector).toEqual([10, 10, 100, 200]);
     });
+
     it('more complex selector', () => {
       expect(new AnnotationResource({ on: { selector: { value: 'www.example.com/#xywh=10,10,100,200' } } })
         .fragmentSelector).toEqual([10, 10, 100, 200]);
