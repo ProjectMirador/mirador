@@ -13,10 +13,8 @@ const mapStateToProps = (state, { id }) => {
   const companionWindow = getCompanionWindow(state, { companionWindowId: id });
 
   return {
-    ...companionWindow,
-    isDisplayed: companionWindow
-                  && companionWindow.content
-                  && companionWindow.content.length > 0,
+    content: companionWindow.content,
+    id,
   };
 };
 
