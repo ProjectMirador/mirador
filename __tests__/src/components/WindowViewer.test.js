@@ -11,10 +11,6 @@ import otherContentFixture from '../../fixtures/version-2/299843.json';
 
 let currentCanvases = manifesto.create(fixture).getSequences()[0].getCanvases();
 
-let mockWindow = {
-  view: 'single',
-};
-
 /** create wrapper */
 function createWrapper(props) {
   return shallow(
@@ -25,7 +21,8 @@ function createWrapper(props) {
       fetchInfoResponse={() => {}}
       fetchAnnotation={() => {}}
       currentCanvases={[currentCanvases[1]]}
-      window={mockWindow}
+      view="single"
+      windowId="xyz"
       {...props}
     />,
   );
@@ -58,9 +55,7 @@ describe('WindowViewer', () => {
                 isFetching: true,
               },
             },
-            window: {
-              view: 'book',
-            },
+            view: 'book',
           },
         );
         expect(wrapper.instance().currentInfoResponses().length).toEqual(1);
@@ -77,9 +72,7 @@ describe('WindowViewer', () => {
                 isFetching: false,
               },
             },
-            window: {
-              view: 'book',
-            },
+            view: 'book',
           },
         );
         expect(wrapper.instance().currentInfoResponses().length).toEqual(1);
@@ -97,9 +90,7 @@ describe('WindowViewer', () => {
                 isFetching: false,
               },
             },
-            window: {
-              view: 'book',
-            },
+            view: 'book',
           },
         );
         expect(wrapper.instance().currentInfoResponses().length).toEqual(1);
@@ -115,15 +106,12 @@ describe('WindowViewer', () => {
 
       currentCanvases = [canvases[0]];
 
-      mockWindow = {
-        view: 'single',
-      };
       wrapper = createWrapper(
         {
           canvasIndex: 0,
           currentCanvases,
           fetchInfoResponse: mockFnCanvas0,
-          window: mockWindow,
+          view: 'single',
         },
       );
       expect(mockFnCanvas0).toHaveBeenCalledTimes(1);
@@ -134,7 +122,7 @@ describe('WindowViewer', () => {
           canvasIndex: 2,
           currentCanvases,
           fetchInfoResponse: mockFnCanvas2,
-          window: { view: 'single' },
+          view: 'single',
         },
       );
       expect(mockFnCanvas2).toHaveBeenCalledTimes(0);
@@ -156,19 +144,16 @@ describe('WindowViewer', () => {
       const mockFn = jest.fn();
       const canvases = manifesto.create(emptyCanvasFixture).getSequences()[0].getCanvases();
       currentCanvases = [canvases[2]];
-      mockWindow = {
-        view: 'single',
-      };
       wrapper = createWrapper(
         {
           canvasIndex: 2,
           currentCanvases,
           fetchInfoResponse: mockFn,
-          window: mockWindow,
+          view: 'single',
         },
       );
 
-      wrapper.setProps({ canvasIndex: 3, currentCanvases: [canvases[3]], window: { view: 'single' } });
+      wrapper.setProps({ canvasIndex: 3, currentCanvases: [canvases[3]], view: 'single' });
 
       expect(mockFn).toHaveBeenCalledTimes(0);
     });

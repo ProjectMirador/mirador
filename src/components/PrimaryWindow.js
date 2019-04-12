@@ -28,7 +28,7 @@ export class PrimaryWindow extends Component {
       }
       return (
         <WindowViewer
-          window={window}
+          windowId={window.id}
         />
       );
     }
