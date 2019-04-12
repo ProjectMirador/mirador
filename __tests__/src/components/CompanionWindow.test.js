@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { Rnd } from 'react-rnd';
 import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { CompanionWindow } from '../../../src/components/CompanionWindow';
 
@@ -89,5 +90,16 @@ describe('CompanionWindow', () => {
   it('adds a small class when the component width is small', () => {
     companionWindow = createWrapper({ size: { width: 369 } });
     expect(companionWindow.find('.small').length).toBe(1);
+  });
+  it('has a resize handler ', () => {
+    companionWindow = createWrapper();
+    expect(companionWindow.find(Rnd).length).toBe(1);
+    expect(companionWindow.find(Rnd).prop('enableResizing').left).toBe(true);
+    expect(companionWindow.find(Rnd).prop('default')).toEqual({ height: 'auto', width: 235 });
+
+    companionWindow = createWrapper({ position: 'bottom' });
+    expect(companionWindow.find(Rnd).length).toBe(1);
+    expect(companionWindow.find(Rnd).prop('enableResizing').top).toBe(true);
+    expect(companionWindow.find(Rnd).prop('default')).toEqual({ height: 201, width: 'auto' });
   });
 });
