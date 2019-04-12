@@ -104,8 +104,8 @@ WorkspaceImport.propTypes = {
   addError: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
-  importConfig: PropTypes.func.isRequired, // eslint-disable-line react/forbid-prop-types
-  open: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
+  importConfig: PropTypes.func.isRequired,
+  open: PropTypes.bool,
   t: PropTypes.func,
 };
 

@@ -116,5 +116,5 @@ Workspace.propTypes = {
   t: PropTypes.func.isRequired,
   windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   workspaceId: PropTypes.string.isRequired,
-  workspaceType: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
+  workspaceType: PropTypes.string.isRequired,
 };

@@ -74,7 +74,7 @@ WorkspaceSelectionDialog.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
-  open: PropTypes.bool, // eslint-disable-line react/forbid-prop-types
+  open: PropTypes.bool,
   t: PropTypes.func,
   updateConfig: PropTypes.func.isRequired,
 };
