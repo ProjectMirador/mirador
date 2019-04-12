@@ -15,6 +15,7 @@ export class GalleryViewThumbnail extends Component {
     super(props);
 
     this.handleSelect = this.handleSelect.bind(this);
+    this.handleKey = this.handleKey.bind(this);
   }
 
   /** @private */
@@ -80,7 +81,7 @@ export class GalleryViewThumbnail extends Component {
           )
         }
         onClick={this.handleSelect}
-        onKeyUp={this.handleSelect}
+        onKeyUp={this.handleKey}
         role="button"
         tabIndex={0}
       >
