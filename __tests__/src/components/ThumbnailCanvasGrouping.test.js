@@ -16,9 +16,6 @@ function createWrapper(props) {
         height: 90,
         width: 100,
       }}
-      window={{
-        id: 'foobar',
-      }}
       {...props}
     />,
   );
@@ -50,7 +47,7 @@ describe('ThumbnailCanvasGrouping', () => {
   it('when clicked, updates the current canvas', () => {
     wrapper = createWrapper({ data, index: 0, setCanvas });
     wrapper.find('.mirador-thumbnail-nav-canvas-0').simulate('click', { currentTarget: { dataset: { canvasIndex: '0' } } });
-    expect(setCanvas).toHaveBeenCalledWith('foobar', 0);
+    expect(setCanvas).toHaveBeenCalledWith(0);
   });
   describe('attributes based off far-bottom position', () => {
     it('in button div', () => {
