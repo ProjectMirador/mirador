@@ -13,6 +13,7 @@ import {
   getWindowDraggability,
   selectCompanionWindowDimensions,
   getCanvasIndex,
+  getWindowManifests,
 } from '../../../src/state/selectors/windows';
 
 
@@ -36,6 +37,21 @@ describe('getWindowTitles', () => {
       a: 'Bodleian Library Human Freaks 2 (33)',
       b: 'Test 2 Manifest: Metadata Pairs',
     });
+  });
+});
+
+describe('getWindowManifests', () => {
+  it('should return manifest titles for the open windows', () => {
+    const state = {
+      windows: {
+        a: { manifestId: 'amanifest' },
+        b: { manifestId: 'bmanifest' },
+      },
+    };
+
+    const received = getWindowManifests(state);
+
+    expect(received).toEqual(['amanifest', 'bmanifest']);
   });
 });
 

@@ -6,13 +6,14 @@ import { withPlugins } from '../extend';
 import {
   getManifest,
   getManifestTitle, getManifestThumbnail, getManifestCanvases,
-  getManifestLogo, getManifestProvider,
+  getManifestLogo, getManifestProvider, getWindowManifests,
 } from '../state/selectors';
 import * as actions from '../state/actions';
 import { ManifestListItem } from '../components/ManifestListItem';
 
 /** */
 const mapStateToProps = (state, { manifestId }) => ({
+  active: getWindowManifests(state).includes(manifestId),
   error: getManifest(state, { manifestId }).error,
   isFetching: getManifest(state, { manifestId }).isFetching,
   manifestLogo: getManifestLogo(state, { manifestId }),
@@ -37,6 +38,7 @@ const mapDispatchToProps = { addWindow: actions.addWindow, fetchManifest: action
  * @returns {{root: {}, label: {textAlign: string, textTransform: string}}}
  */
 const styles = theme => ({
+  active: {},
   label: {
     textAlign: 'left',
     textTransform: 'initial',
@@ -50,6 +52,10 @@ const styles = theme => ({
   },
   root: {
     ...theme.mixins.gutters(),
+    '&$active': {
+      borderLeft: `4px solid ${theme.palette.secondary.main}`,
+    },
+    borderLeft: '4px solid transparent',
   },
 });
 

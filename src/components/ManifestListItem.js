@@ -37,6 +37,7 @@ export class ManifestListItem extends React.Component {
   /** */
   render() {
     const {
+      active,
       manifestId,
       ready,
       title,
@@ -77,7 +78,7 @@ export class ManifestListItem extends React.Component {
     }
 
     return (
-      <ListItem divider elevation={1} className={classes.root} data-manifestid={manifestId}>
+      <ListItem divider elevation={1} className={[classes.root, active ? classes.active : ''].join(' ')} data-manifestid={manifestId}>
         <ReactPlaceholder
           showLoadingAnimation
           delay={500}
@@ -140,6 +141,7 @@ export class ManifestListItem extends React.Component {
 }
 
 ManifestListItem.propTypes = {
+  active: PropTypes.bool,
   addWindow: PropTypes.func.isRequired,
   classes: PropTypes.objectOf(PropTypes.string),
   error: PropTypes.string,
@@ -157,6 +159,7 @@ ManifestListItem.propTypes = {
 };
 
 ManifestListItem.defaultProps = {
+  active: false,
   classes: {},
   error: null,
   handleClose: () => {},

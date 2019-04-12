@@ -25,6 +25,10 @@ describe('ManifestListItem', () => {
     expect(wrapper.find('WithStyles(ButtonBase)').length).toBe(1);
     expect(wrapper.find('WithStyles(ButtonBase) WithStyles(Typography)').children().text()).toEqual('xyz');
   });
+  it('adds a class when the item is active', () => {
+    const wrapper = createWrapper({ active: true, classes: { active: 'active' } });
+    expect(wrapper.find('.active').length).toEqual(1);
+  });
   it('renders a placeholder element until real data is available', () => {
     const wrapper = createWrapper({ ready: false });
 

@@ -17,6 +17,15 @@ export function getWindowTitles(state) {
   return result;
 }
 
+/**
+ * Return the manifest titles for all open windows
+ * @param {object} state
+ * @return {object}
+ */
+export function getWindowManifests(state) {
+  return Object.values(state.windows).map(window => window.manifestId);
+}
+
 /** */
 export function getWindow(state, { windowId }) {
   return state.windows && state.windows[windowId];
