@@ -208,6 +208,7 @@ export function setWindowViewType(windowId, viewType) {
     windowId,
   };
 }
+<<<<<<< HEAD
 
 /**
  * toggleDraggingEnabled - action creator
@@ -219,3 +220,5 @@ export function toggleDraggingEnabled(windowId) {
     windowId,
   };
 }
+=======
+>>>>>>> origin/master

@@ -51,7 +51,6 @@ class WorkspaceElasticWindow extends React.Component {
         className={
           focused ? ns('workspace-focused-window') : null
         }
-        disableDragging={!workspace.draggingEnabled}
       >
         <Window
           windowId={layout.windowId}
