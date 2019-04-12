@@ -24,7 +24,7 @@ const mapStateToProps = state => (
   {
     containerId: getContainerId(state),
     titles: getWindowTitles(state),
-    windows: state.windows,
+    windowIds: Object.keys(state.windows),
   }
 );
 

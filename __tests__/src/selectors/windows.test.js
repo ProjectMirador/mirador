@@ -14,8 +14,40 @@ import {
   selectCompanionWindowDimensions,
   getCanvasIndex,
   getWindowManifests,
+  getWindows,
+  getMaximizedWindows,
 } from '../../../src/state/selectors/windows';
 
+describe('getWindows', () => {
+  it('should return windows from state', () => {
+    const state = {
+      windows: {
+        a: { manifestId: 'amanifest' },
+        b: { manifestId: 'bmanifest' },
+      },
+    };
+
+    const received = getWindows(state);
+
+    expect(received).toEqual(state.windows);
+  });
+});
+
+describe('getMaximizedWindows', () => {
+  it('filters windows to only those maximized', () => {
+    const state = {
+      windows: {
+        a: { manifestId: 'amanifest', maximized: true },
+        b: { manifestId: 'bmanifest' },
+      },
+    };
+
+    const received = getMaximizedWindows(state);
+
+    expect(received.length).toEqual(1);
+    expect(received[0].manifestId).toEqual('amanifest');
+  });
+});
 
 describe('getWindowTitles', () => {
   it('should return manifest titles for the open windows', () => {

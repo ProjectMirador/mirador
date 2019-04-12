@@ -18,20 +18,20 @@ export class Workspace extends React.Component {
    * Determine which workspace to render by configured type
    */
   workspaceByType() {
-    const { workspaceId, workspaceType, windows } = this.props;
+    const { workspaceId, workspaceType, windowIds } = this.props;
     if (this.maximizedWindows()) {
       return this.maximizedWindows();
     }
 
-    if (Object.keys(windows).length === 0) return this.zeroWindows();
+    if (windowIds.length === 0) return this.zeroWindows();
 
     switch (workspaceType) {
       case 'elastic':
         return <WorkspaceElastic />;
       case 'mosaic':
-        return <WorkspaceMosaic windows={windows} />;
+        return <WorkspaceMosaic />;
       default:
-        return Object.keys(windows).map(windowId => (
+        return windowIds.map(windowId => (
           <Window
             key={`${windowId}-${workspaceId}`}
             windowId={windowId}
@@ -72,12 +72,10 @@ export class Workspace extends React.Component {
    * Determine whether or not there are maximized windows
    */
   maximizedWindows() {
-    const { windows, workspaceId } = this.props;
-    const windowKeys = Object.keys(windows).sort();
-    const maximizedWindows = windowKeys
-      .filter(windowId => windows[windowId].maximized === true);
-    if (maximizedWindows.length) {
-      return maximizedWindows.map(windowId => (
+    const { maximizedWindowIds, workspaceId } = this.props;
+
+    if (maximizedWindowIds.length > 0) {
+      return maximizedWindowIds.map(windowId => (
         <Window
           key={`${windowId}-${workspaceId}`}
           windowId={windowId}
@@ -112,8 +110,14 @@ export class Workspace extends React.Component {
 
 Workspace.propTypes = {
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
+  maximizedWindowIds: PropTypes.arrayOf(PropTypes.string),
   t: PropTypes.func.isRequired,
-  windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  windowIds: PropTypes.arrayOf(PropTypes.string),
   workspaceId: PropTypes.string.isRequired,
   workspaceType: PropTypes.string.isRequired,
+};
+
+Workspace.defaultProps = {
+  maximizedWindowIds: [],
+  windowIds: [],
 };

@@ -9,19 +9,17 @@ describe('WindowList', () => {
   let handleClose;
   let focusWindow;
   let titles;
-  let windows;
   beforeEach(() => {
     handleClose = jest.fn();
     focusWindow = jest.fn();
     titles = {};
-    windows = {};
 
     wrapper = shallow(
       <WindowList
         containerId="mirador"
         anchorEl={{}}
         titles={titles}
-        windows={windows}
+        windowIds={[]}
         handleClose={handleClose}
         focusWindow={focusWindow}
       />,
@@ -34,14 +32,12 @@ describe('WindowList', () => {
 
   describe('with a window without a matching manifest', () => {
     beforeEach(() => {
-      windows = { xyz: { id: 'xyz', manifestId: 'abc' } };
-
       wrapper = shallow(
         <WindowList
           containerId="mirador"
           anchorEl={{}}
           titles={titles}
-          windows={windows}
+          windowIds={['xyz']}
           handleClose={handleClose}
           focusWindow={focusWindow}
         />,
@@ -62,7 +58,6 @@ describe('WindowList', () => {
 
   describe('with a window with a matching manifest', () => {
     beforeEach(() => {
-      windows = { xyz: { id: 'xyz', manifestId: 'abc' } };
       titles = { xyz: 'Some title' };
 
       wrapper = shallow(
@@ -70,7 +65,7 @@ describe('WindowList', () => {
           containerId="mirador"
           anchorEl={{}}
           titles={titles}
-          windows={windows}
+          windowIds={['xyz']}
           handleClose={handleClose}
           focusWindow={focusWindow}
         />,
@@ -88,10 +83,6 @@ describe('WindowList', () => {
 
   describe('with multiple windows', () => {
     beforeEach(() => {
-      windows = {
-        xyz: { id: 'xyz', manifestId: 'abc' },
-        zyx: { id: 'zyx', manifestId: '123' },
-      };
       titles = { xyz: 'Some title' };
 
       wrapper = shallow(
@@ -99,7 +90,7 @@ describe('WindowList', () => {
           containerId="mirador"
           anchorEl={{}}
           titles={titles}
-          windows={windows}
+          windowIds={['xyz', 'zyx']}
           handleClose={handleClose}
           focusWindow={focusWindow}
         />,

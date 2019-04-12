@@ -6,9 +6,6 @@ import WorkspaceElastic from '../../../src/containers/WorkspaceElastic';
 import Window from '../../../src/containers/Window';
 import { Workspace } from '../../../src/components/Workspace';
 
-const windows = { 1: { id: 1 }, 2: { id: 2 } };
-const maximizedWindows = { 1: { id: 1, maximized: true }, 2: { id: 2, maximized: false } };
-
 /**
  * Utility function to create a Worksapce
  * component with all required props set
@@ -17,7 +14,7 @@ function createWrapper(props) {
   return shallow(
     <Workspace
       isWorkspaceControlPanelVisible
-      windows={windows}
+      windowIds={['1', '2']}
       workspaceId="foo"
       workspaceType="mosaic"
       t={k => k}
@@ -46,7 +43,7 @@ describe('Workspace', () => {
       expect(wrapper.matchesElement(
         <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
           <Typography>miradorViewer</Typography>
-          <WorkspaceMosaic windows={windows} />
+          <WorkspaceMosaic />
         </div>,
       )).toBe(true);
     });
@@ -65,7 +62,7 @@ describe('Workspace', () => {
   });
   describe('if any windows are maximized', () => {
     it('should render only maximized <Window/> components', () => {
-      const wrapper = createWrapper({ windows: maximizedWindows });
+      const wrapper = createWrapper({ maximizedWindowIds: ['1'] });
       expect(wrapper.matchesElement(
         <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
           <Typography>miradorViewer</Typography>
@@ -77,7 +74,7 @@ describe('Workspace', () => {
 
   describe('if there are no windows', () => {
     it('should render placeholder content', () => {
-      const wrapper = createWrapper({ windows: {} });
+      const wrapper = createWrapper({ windowIds: [] });
 
       expect(wrapper.find(Typography).at(1).matchesElement(
         <Typography>welcome</Typography>,

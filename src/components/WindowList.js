@@ -13,10 +13,10 @@ export class WindowList extends Component {
    * Get the title for a window from its manifest title
    * @private
    */
-  titleContent(window) {
+  titleContent(windowId) {
     const { titles, t } = this.props;
 
-    return titles[window.id] || t('untitled');
+    return titles[windowId] || t('untitled');
   }
 
   /**
@@ -25,7 +25,7 @@ export class WindowList extends Component {
    */
   render() {
     const {
-      containerId, handleClose, anchorEl, windows, focusWindow, t,
+      containerId, handleClose, anchorEl, windowIds, focusWindow, t,
     } = this.props;
 
     return (
@@ -48,15 +48,15 @@ export class WindowList extends Component {
           {t('openWindows')}
         </ListSubheader>
         {
-          Object.values(windows).map((window, i) => (
+          windowIds.map((windowId, i) => (
             <MenuItem
-              key={window.id}
+              key={windowId}
               selected={i === 0}
-              onClick={(e) => { focusWindow(window.id, true); handleClose(e); }}
+              onClick={(e) => { focusWindow(windowId, true); handleClose(e); }}
             >
               <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
                 {
-                  this.titleContent(window)
+                  this.titleContent(windowId)
                 }
               </ListItemText>
             </MenuItem>
@@ -73,8 +73,8 @@ WindowList.propTypes = {
   focusWindow: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   t: PropTypes.func,
-  titles: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  windows: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  titles: PropTypes.objectOf(PropTypes.string),
+  windowIds: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 WindowList.defaultProps = {
