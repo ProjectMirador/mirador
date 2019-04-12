@@ -119,9 +119,9 @@ export const getCompanionWindowsOfWindow = createSelector(
 * @param {String} position
 * @return {String}
 */
-export const getCompanionWindowForPosition = createSelector(
+export const getCompanionWindowsForPosition = createSelector(
   [getCompanionWindowsOfWindow, (state, { position }) => position],
-  (companionWindows, position) => companionWindows.find(cw => cw.position === position),
+  (companionWindows, position) => companionWindows.filter(cw => cw.position === position),
 );
 
 export const getViewer = createSelector(

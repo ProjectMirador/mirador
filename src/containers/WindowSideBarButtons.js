@@ -5,7 +5,7 @@ import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
 import {
-  getCompanionWindowForPosition,
+  getCompanionWindowsForPosition,
   getAnnotationResourcesByMotivation,
 } from '../state/selectors';
 import { WindowSideBarButtons } from '../components/WindowSideBarButtons';
@@ -31,7 +31,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
 const mapStateToProps = (state, { windowId }) => ({
   hasAnnotations: getAnnotationResourcesByMotivation(state, { motivations: ['oa:commenting', 'sc:painting'], windowId }).length > 0,
   hideAnnotationsPanel: state.config.window.hideAnnotationsPanel,
-  sideBarPanel: (getCompanionWindowForPosition(state, { position: 'left', windowId }) || {}).content,
+  sideBarPanel: ((getCompanionWindowsForPosition(state, { position: 'left', windowId }))[0] || {}).content,
 });
 
 /** */
