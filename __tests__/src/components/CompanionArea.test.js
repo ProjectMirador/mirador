@@ -12,16 +12,7 @@ function createWrapper(props) {
       windowId="abc123"
       position="right"
       companionAreaOpen
-      companionWindows={[
-        {
-          id: 'foo',
-          position: 'right',
-        },
-        {
-          id: 'baz',
-          position: 'right',
-        },
-      ]}
+      companionWindowIds={['foo', 'baz']}
       t={key => key}
       {...props}
     />,

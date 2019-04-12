@@ -21,14 +21,14 @@ export class CompanionArea extends Component {
   /** */
   render() {
     const {
-      classes, companionWindows, companionAreaOpen, setCompanionAreaOpen,
+      classes, companionWindowIds, companionAreaOpen, setCompanionAreaOpen,
       position, sideBarOpen, t, windowId,
     } = this.props;
 
     return (
       <div className={[classes.root, this.areaLayoutClass(), ns(`companion-area-${position}`)].join(' ')}>
         {
-          setCompanionAreaOpen && position === 'left' && sideBarOpen && companionWindows.length > 0
+          setCompanionAreaOpen && position === 'left' && sideBarOpen && companionWindowIds.length > 0
           && (
             <MiradorMenuButton
               aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
@@ -49,8 +49,8 @@ export class CompanionArea extends Component {
         <Slide in={companionAreaOpen} direction="right">
           <div className={[ns('companion-windows'), this.areaLayoutClass()].join(' ')} style={{ display: companionAreaOpen ? 'flex' : 'none' }}>
             {
-              companionWindows.map(cw => (
-                <CompanionWindowFactory id={cw.id} key={cw.id} windowId={windowId} />
+              companionWindowIds.map(id => (
+                <CompanionWindowFactory id={id} key={id} windowId={windowId} />
               ))
             }
           </div>
@@ -63,7 +63,7 @@ export class CompanionArea extends Component {
 CompanionArea.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   companionAreaOpen: PropTypes.bool.isRequired,
-  companionWindows: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  companionWindowIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   position: PropTypes.string.isRequired,
   setCompanionAreaOpen: PropTypes.func,
   sideBarOpen: PropTypes.bool,

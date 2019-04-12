@@ -7,15 +7,47 @@ import {
   getThumbnailNavigationPosition,
   getWindowViewType,
   getCompanionWindow,
-  getCompanionWindowForPosition,
+  getCompanionWindowsForPosition,
   getCompanionWindowsOfWindow,
   getViewer,
   getWindowDraggability,
   selectCompanionWindowDimensions,
   getCanvasIndex,
   getWindowManifests,
+  getWindows,
+  getMaximizedWindows,
 } from '../../../src/state/selectors/windows';
 
+describe('getWindows', () => {
+  it('should return windows from state', () => {
+    const state = {
+      windows: {
+        a: { manifestId: 'amanifest' },
+        b: { manifestId: 'bmanifest' },
+      },
+    };
+
+    const received = getWindows(state);
+
+    expect(received).toEqual(state.windows);
+  });
+});
+
+describe('getMaximizedWindows', () => {
+  it('filters windows to only those maximized', () => {
+    const state = {
+      windows: {
+        a: { manifestId: 'amanifest', maximized: true },
+        b: { manifestId: 'bmanifest' },
+      },
+    };
+
+    const received = getMaximizedWindows(state);
+
+    expect(received.length).toEqual(1);
+    expect(received[0].manifestId).toEqual('amanifest');
+  });
+});
 
 describe('getWindowTitles', () => {
   it('should return manifest titles for the open windows', () => {
@@ -136,7 +168,7 @@ describe('getWindowViewType', () => {
   });
 });
 
-describe('getCompanionWindowForPosition', () => {
+describe('getCompanionWindowsForPosition', () => {
   const state = {
     companionWindows: {
       abc: { id: 'abc', position: 'right' },
@@ -146,30 +178,30 @@ describe('getCompanionWindowForPosition', () => {
   };
 
   it('the companion window type based on the given position', () => {
-    const received = getCompanionWindowForPosition(state, {
+    const received = getCompanionWindowsForPosition(state, {
       position: 'right',
       windowId: 'a',
     });
-
-    expect(received.id).toEqual('abc');
+    expect(received.length).toBe(1);
+    expect(received[0].id).toEqual('abc');
   });
 
   it('returns undefined if the given window does not exist', () => {
-    const received = getCompanionWindowForPosition(state, {
+    const received = getCompanionWindowsForPosition(state, {
       position: 'right',
       windowId: 'c',
     });
 
-    expect(received).toBeUndefined();
+    expect(received).toEqual([]);
   });
 
   it('returns undefined if a companion window at the given position does not exist', () => {
-    const received = getCompanionWindowForPosition(state, {
+    const received = getCompanionWindowsForPosition(state, {
       position: 'bottom',
       windowId: 'a',
     });
 
-    expect(received).toBeUndefined();
+    expect(received).toEqual([]);
   });
 });
 

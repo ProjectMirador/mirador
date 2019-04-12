@@ -5,12 +5,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
 import { DialogActions, DialogContentText, Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import {
-  first,
-  isUndefined,
-  omit,
-  values,
-} from 'lodash';
+import { isUndefined } from 'lodash';
 
 /**
  */
@@ -21,11 +16,9 @@ export class ErrorDialog extends Component {
    */
   render() {
     const {
-      errors, removeError, t,
+      error, removeError, t,
     } = this.props;
 
-    /* extract 'items' value and get first key-value-pair (an error) */
-    const error = first(values(omit(errors, 'items')));
     const hasError = !isUndefined(error);
 
     return error ? (
@@ -54,13 +47,16 @@ export class ErrorDialog extends Component {
 }
 
 ErrorDialog.propTypes = {
-  errors: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  error: PropTypes.shape({
+    id: PropTypes.string,
+    message: PropTypes.string,
+  }),
   removeError: PropTypes.func,
   t: PropTypes.func,
 };
 
 ErrorDialog.defaultProps = {
-  errors: null,
+  error: null,
   removeError: () => {},
   t: key => key,
 };

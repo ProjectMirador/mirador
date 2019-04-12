@@ -11,7 +11,9 @@ import { WorkspaceMosaic } from '../components/WorkspaceMosaic';
  */
 const mapStateToProps = state => (
   {
-    workspace: state.workspace,
+    layout: state.workspace.layout,
+    windows: state.windows,
+    workspaceId: state.workspace.id,
   }
 );
 

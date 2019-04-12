@@ -10,7 +10,7 @@ import { getWorkspaceType } from './config';
 export function getWindowTitles(state) {
   const result = {};
 
-  Object.keys(state.windows).forEach((windowId) => {
+  Object.keys(getWindows(state)).forEach((windowId) => {
     result[windowId] = getManifestTitle(state, { windowId });
   });
 
@@ -27,8 +27,18 @@ export function getWindowManifests(state) {
 }
 
 /** */
+export function getWindows(state) {
+  return state.windows || {};
+}
+
+/** */
+export function getMaximizedWindows(state) {
+  return Object.values(getWindows(state)).filter(window => window.maximized === true);
+}
+
+/** */
 export function getWindow(state, { windowId }) {
-  return state.windows && state.windows[windowId];
+  return getWindows(state)[windowId];
 }
 
 /** Return the canvas index for a certain window.
@@ -109,9 +119,9 @@ export const getCompanionWindowsOfWindow = createSelector(
 * @param {String} position
 * @return {String}
 */
-export const getCompanionWindowForPosition = createSelector(
+export const getCompanionWindowsForPosition = createSelector(
   [getCompanionWindowsOfWindow, (state, { position }) => position],
-  (companionWindows, position) => companionWindows.find(cw => cw.position === position),
+  (companionWindows, position) => companionWindows.filter(cw => cw.position === position),
 );
 
 export const getViewer = createSelector(
