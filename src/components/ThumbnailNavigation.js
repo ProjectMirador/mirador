@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Paper from '@material-ui/core/Paper';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { VariableSizeList as List } from 'react-window';
 import classNames from 'classnames';
@@ -206,12 +207,14 @@ export class ThumbnailNavigation extends Component {
       return <></>;
     }
     return (
-      <div
+      <Paper
         className={classNames(
           ns('thumb-navigation'),
           classes.thumbNavigation,
         )}
         aria-label={t('thumbnailNavigation')}
+        square
+        elevation={0}
         style={this.style()}
         tabIndex={0}
         onKeyUp={this.handleKeyUp}
@@ -241,7 +244,7 @@ export class ThumbnailNavigation extends Component {
             </List>
           )}
         </AutoSizer>
-      </div>
+      </Paper>
     );
   }
 }
