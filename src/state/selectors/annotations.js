@@ -2,7 +2,31 @@ import { createSelector } from 'reselect';
 import filter from 'lodash/filter';
 import flatten from 'lodash/flatten';
 import Annotation from '../../lib/Annotation';
-import { getSelectedCanvases } from './canvases';
+import { getCanvas, getSelectedCanvases } from './canvases';
+
+const getAnnotationsOnCanvas = createSelector(
+  [
+    getCanvas,
+    state => state.annotations,
+  ],
+  (canvas, annotations) => {
+    if (!annotations || !canvas) return [];
+    if (!annotations[canvas.id]) return [];
+
+    return flatten(Object.values(annotations[canvas.id]));
+  },
+);
+
+const getPresentAnnotationsCanvas = createSelector(
+  [
+    getAnnotationsOnCanvas,
+  ],
+  annotations => filter(
+    Object.values(annotations).map(annotation => annotation && new Annotation(annotation.json)),
+    annotation => annotation && annotation.present(),
+  ),
+);
+
 
 const getAnnotationsOnSelectedCanvases = createSelector(
   [
@@ -26,6 +50,25 @@ const getPresentAnnotationsOnSelectedCanvases = createSelector(
   annotations => filter(
     Object.values(annotations).map(annotation => annotation && new Annotation(annotation.json)),
     annotation => annotation && annotation.present(),
+  ),
+);
+
+/**
+* Return an array of annotation resources filtered by the given motivation for a particular canvas
+* @param {Array} annotations
+* @param {Array} motivations
+* @return {Array}
+*/
+export const getAnnotationResourcesByMotivationForCanvas = createSelector(
+  [
+    getPresentAnnotationsCanvas,
+    (state, { motivations }) => motivations,
+  ],
+  (annotations, motivations) => filter(
+    flatten(annotations.map(annotation => annotation.resources)),
+    resource => resource.motivations.some(
+      motivation => motivations.includes(motivation),
+    ),
   ),
 );
 
