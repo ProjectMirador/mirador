@@ -19,6 +19,12 @@ describe('AnnotationResource', () => {
       ).toEqual('www.example.com/');
     });
 
+    it('can target an array of selectors', () => {
+      expect(
+        new AnnotationResource({ on: [{ full: 'www.example.com/#xywh=10,10,100,200' }] }).targetId,
+      ).toEqual('www.example.com/');
+    });
+
     it('removes fragmentSelector coords from object targets', () => {
       expect(
         new AnnotationResource({ on: { full: 'www.example.com/#xywh=10,10,100,200' } }).targetId,

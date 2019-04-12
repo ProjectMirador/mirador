@@ -18,12 +18,13 @@ export default class AnnotationResource {
   /** */
   get targetId() {
     const { on } = this.resource;
+    const onArray = flatten(compact(new Array(on)))[0];
 
-    switch (typeof on) {
+    switch (typeof onArray) {
       case 'string':
-        return on.replace(/#?xywh=(.*)$/, '');
+        return onArray.replace(/#?xywh=(.*)$/, '');
       case 'object':
-        return on.full.replace(/#?xywh=(.*)$/, '');
+        return onArray.full.replace(/#?xywh=(.*)$/, '');
       default:
         return null;
     }
