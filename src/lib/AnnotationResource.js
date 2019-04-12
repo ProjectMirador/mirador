@@ -17,14 +17,12 @@ export default class AnnotationResource {
 
   /** */
   get targetId() {
-    const { on } = this.resource;
-    const onArray = flatten(compact(new Array(on)))[0];
-
-    switch (typeof onArray) {
+    const on = this.on[0];
+    switch (typeof on) {
       case 'string':
-        return onArray.replace(/#?xywh=(.*)$/, '');
+        return on.replace(/#?xywh=(.*)$/, '');
       case 'object':
-        return onArray.full.replace(/#?xywh=(.*)$/, '');
+        return on.full.replace(/#?xywh=(.*)$/, '');
       default:
         return null;
     }
@@ -43,20 +41,42 @@ export default class AnnotationResource {
   }
 
   /** */
+  get on() {
+    return flatten(compact(new Array(this.resource.on)));
+  }
+
+  /** */
   get chars() {
     return this.resources.map(r => r.chars).join(' ');
   }
 
   /** */
-  get fragmentSelector() {
-    const { on } = this.resource;
-    const onArray = flatten(compact(new Array(on)))[0];
-
-    switch (typeof onArray) {
+  get selector() {
+    const on = this.on[0];
+    switch (typeof on) {
       case 'string':
-        return onArray.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
+        return on;
       case 'object':
-        return onArray.selector.value.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
+        // For choices, just return the default for now. FIXME: enhance for SVG
+        // selectors
+        if (on.selector['@type'] === 'oa:Choice') {
+          return on.selector.default;
+        }
+        return on.selector;
+      default:
+        return null;
+    }
+  }
+
+  /** */
+  get fragmentSelector() {
+    const { selector } = this;
+
+    switch (typeof selector) {
+      case 'string':
+        return selector.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
+      case 'object':
+        return selector.value.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
       default:
         return null;
     }

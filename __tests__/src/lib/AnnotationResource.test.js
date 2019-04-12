@@ -62,6 +62,32 @@ describe('AnnotationResource', () => {
         .resources).toEqual(['foo', 'bar']);
     });
   });
+  describe('on', () => {
+    it('with no on', () => {
+      expect(new AnnotationResource().on).toEqual([]);
+    });
+    it('with a single on', () => {
+      expect(new AnnotationResource({ on: 'foo' })
+        .on).toEqual(['foo']);
+    });
+    it('with multiple on', () => {
+      expect(new AnnotationResource({ on: ['foo', 'bar'] })
+        .on).toEqual(['foo', 'bar']);
+    });
+  });
+  describe('selector', () => {
+    it('returns the on string (for simple fragment selector)', () => {
+      expect(new AnnotationResource({ on: 'yolo' }).selector).toEqual('yolo');
+    });
+    it('picks the default selector when given a choice', () => {
+      expect(new AnnotationResource({ on: { selector: { '@type': 'oa:Choice', default: { value: 'www.example.com/#xywh=10,10,100,200' } } } })
+        .selector).toEqual({ value: 'www.example.com/#xywh=10,10,100,200' });
+    });
+    it('returns the selector when not given a choice', () => {
+      expect(new AnnotationResource({ on: { selector: { value: 'www.example.com/#xywh=10,10,100,200' } } })
+        .selector).toEqual({ value: 'www.example.com/#xywh=10,10,100,200' });
+    });
+  });
   describe('chars', () => {
     it('with no resource', () => {
       expect(new AnnotationResource().chars).toEqual('');
@@ -81,8 +107,18 @@ describe('AnnotationResource', () => {
         .fragmentSelector).toEqual([10, 10, 100, 200]);
     });
 
+    it('array of selectors', () => {
+      expect(new AnnotationResource({ on: [{ selector: { value: 'www.example.com/#xywh=10,10,100,200' } }] })
+        .fragmentSelector).toEqual([10, 10, 100, 200]);
+    });
+
     it('more complex selector', () => {
       expect(new AnnotationResource({ on: { selector: { value: 'www.example.com/#xywh=10,10,100,200' } } })
+        .fragmentSelector).toEqual([10, 10, 100, 200]);
+    });
+
+    it('choice selector', () => {
+      expect(new AnnotationResource({ on: { selector: { '@type': 'oa:Choice', default: { value: 'www.example.com/#xywh=10,10,100,200' } } } })
         .fragmentSelector).toEqual([10, 10, 100, 200]);
     });
   });
