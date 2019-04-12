@@ -1,40 +1,33 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import curry from 'lodash/curry';
 import isEmpty from 'lodash/isEmpty';
-import { connect } from 'react-redux';
-import { pluginStore } from '.';
+import { PluginContext } from '.';
+
 
 /** withPlugins should be the innermost HOC */
 function _withPlugins(targetName, TargetComponent) { // eslint-disable-line no-underscore-dangle
-  /** plugin wrapper hoc */
-  class PluginHoc extends Component {
-    /** render */
-    render() { // eslint-disable-line consistent-return
-      const plugins = pluginStore.getPlugins(targetName);
+  /** */
+  function PluginHoc(props) {
+    const pluginMap = useContext(PluginContext);
+    const plugins = pluginMap[targetName];
 
-      if (isEmpty(plugins)) {
-        return <TargetComponent {...this.props} />;
-      }
+    if (isEmpty(plugins)) {
+      return <TargetComponent {...props} />;
+    }
 
-      if (!isEmpty(plugins.wrap)) {
-        const WrapPluginComponent = connectPluginComponent(plugins.wrap[0]);
-        return <WrapPluginComponent targetProps={this.props} TargetComponent={TargetComponent} />;
-      }
+    if (!isEmpty(plugins.wrap)) {
+      const PluginComponent = plugins.wrap[0].component;
+      return <PluginComponent targetProps={props} TargetComponent={TargetComponent} />;
+    }
 
-      if (!isEmpty(plugins.add)) {
-        const AddPluginComponents = plugins.add.map(plugin => connectPluginComponent(plugin));
-        return <TargetComponent {...this.props} PluginComponents={AddPluginComponents} />;
-      }
+    if (!isEmpty(plugins.add)) {
+      const PluginComponents = plugins.add.map(plugin => plugin.component);
+      return <TargetComponent {...props} PluginComponents={PluginComponents} />;
     }
   }
 
   PluginHoc.displayName = `WithPlugins(${targetName})`;
   return PluginHoc;
-}
-
-/** Connect plugin component to state */
-function connectPluginComponent(plugin) {
-  return connect(plugin.mapStateToProps, plugin.mapDispatchToProps)(plugin.component);
 }
 
 /** withPlugins('MyComponent')(MyComponent) */
