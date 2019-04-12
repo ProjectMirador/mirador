@@ -112,4 +112,9 @@ describe('workspace reducer', () => {
       type: ActionTypes.IMPORT_MIRADOR_STATE,
     })).toEqual({ new: 'stuff' });
   });
+  it('should handle ActionTypes.TOGGLE_DRAGGING', () => {
+    expect(workspaceReducer({ draggingEnabled: true }, {
+      type: ActionTypes.TOGGLE_DRAGGING,
+    })).toEqual({ draggingEnabled: false });
+  });
 });

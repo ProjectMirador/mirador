@@ -85,3 +85,12 @@ export function toggleWorkspaceExposeMode() {
     type: ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE,
   };
 }
+
+/**
+ * toggleDraggingEnabled - action creator
+ */
+export function toggleDraggingEnabled() {
+  return {
+    type: ActionTypes.TOGGLE_DRAGGING,
+  };
+}

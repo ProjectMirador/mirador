@@ -25,10 +25,14 @@ const mapStateToProps = (state, { id, windowId }) => {
   };
 };
 
-/** */
+/**
+ * mapStateToProps - used to hook up connect to state
+ * @memberof WindowSideBarCanvasPanel
+ * @private
+ */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
   setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
-  toggleDraggingEnabled: () => dispatch(actions.toggleDraggingEnabled(windowId)),
+  toggleDraggingEnabled: () => dispatch(actions.toggleDraggingEnabled()),
   updateVariant: variant => dispatch(
     actions.updateCompanionWindow(windowId, id, { variant }),
   ),

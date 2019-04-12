@@ -144,7 +144,7 @@ export class WindowSideBarCanvasPanel extends Component {
               <MenuItem value="thumbnail"><Typography variant="body2">{ t('thumbnailList') }</Typography></MenuItem>
             </Select>
           </FormControl>
-          )}
+        )}
       >
         <List>
           {

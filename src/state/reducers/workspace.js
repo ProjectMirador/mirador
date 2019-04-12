@@ -6,6 +6,7 @@ import ActionTypes from '../actions/action-types';
  */
 export const workspaceReducer = (
   state = { // we'll need to abstract this more, methinks.
+    draggingEnabled: true,
     exposeModeOn: false,
     height: 5000,
     id: uuid(),
@@ -58,6 +59,8 @@ export const workspaceReducer = (
       return { ...state, exposeModeOn: !state.exposeModeOn };
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return action.state.workspace;
+    case ActionTypes.TOGGLE_DRAGGING:
+      return { ...state, draggingEnabled: !state.draggingEnabled };
     default:
       return state;
   }
