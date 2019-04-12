@@ -23,7 +23,7 @@ export class WindowCanvasNavigationControls extends Component {
   /** */
   render() {
     const {
-      classes, visible, window, zoomToWorld,
+      classes, visible, windowId, zoomToWorld,
     } = this.props;
 
     if (!visible) return (<></>);
@@ -32,11 +32,11 @@ export class WindowCanvasNavigationControls extends Component {
       <Paper square className={classNames(classes.controls, ns('canvas-nav'), this.canvasNavControlsAreStacked() ? ns('canvas-nav-stacked') : null)} elevation={0}>
         <ZoomControls
           displayDivider={!this.canvasNavControlsAreStacked()}
-          windowId={window.id}
+          windowId={windowId}
           zoomToWorld={zoomToWorld}
         />
-        <ViewerNavigation windowId={window.id} />
-        <ViewerInfo windowId={window.id} />
+        <ViewerNavigation windowId={windowId} />
+        <ViewerInfo windowId={windowId} />
       </Paper>
     );
   }
@@ -47,7 +47,7 @@ WindowCanvasNavigationControls.propTypes = {
   classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   size: PropTypes.shape({ width: PropTypes.number }).isRequired,
   visible: PropTypes.bool,
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  windowId: PropTypes.string.isRequired,
   zoomToWorld: PropTypes.func.isRequired,
 };
 

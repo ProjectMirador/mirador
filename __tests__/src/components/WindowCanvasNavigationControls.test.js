@@ -13,7 +13,7 @@ function createWrapper(props) {
       canvases={[]}
       canvasLabel="label"
       size={{ width: 300 }}
-      window={{}}
+      windowId="abc"
       zoomToWorld={() => {}}
       {...props}
     />,
