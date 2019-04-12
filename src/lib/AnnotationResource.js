@@ -17,8 +17,7 @@ export default class AnnotationResource {
 
   /** */
   get targetId() {
-    const { on } = this.resource;
-
+    const on = this.on[0];
     switch (typeof on) {
       case 'string':
         return on.replace(/#?xywh=(.*)$/, '');
@@ -42,18 +41,42 @@ export default class AnnotationResource {
   }
 
   /** */
+  get on() {
+    return flatten(compact(new Array(this.resource.on)));
+  }
+
+  /** */
   get chars() {
     return this.resources.map(r => r.chars).join(' ');
   }
 
   /** */
-  get fragmentSelector() {
-    const { on } = this.resource;
+  get selector() {
+    const on = this.on[0];
     switch (typeof on) {
       case 'string':
-        return on.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
+        return on;
       case 'object':
-        return on.selector.value.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
+        // For choices, just return the default for now. FIXME: enhance for SVG
+        // selectors
+        if (on.selector['@type'] === 'oa:Choice') {
+          return on.selector.default;
+        }
+        return on.selector;
+      default:
+        return null;
+    }
+  }
+
+  /** */
+  get fragmentSelector() {
+    const { selector } = this;
+
+    switch (typeof selector) {
+      case 'string':
+        return selector.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
+      case 'object':
+        return selector.value.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
       default:
         return null;
     }
