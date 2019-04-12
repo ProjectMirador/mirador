@@ -30,13 +30,13 @@ export class ThumbnailNavigation extends Component {
    * of the grids
    */
   componentDidUpdate(prevProps) {
-    const { canvasIndex, position, window } = this.props;
-    if (prevProps.window.view !== window.view && position !== 'off') {
+    const { canvasIndex, position, view } = this.props;
+    if (prevProps.view !== view && position !== 'off') {
       this.gridRef.current.resetAfterIndex(0);
     }
     if (prevProps.canvasIndex !== canvasIndex) {
       let index = canvasIndex;
-      if (window.view === 'book') index = Math.ceil(index / 2);
+      if (view === 'book') index = Math.ceil(index / 2);
       this.gridRef.current.scrollToItem(index, 'center');
     }
   }
@@ -79,8 +79,8 @@ export class ThumbnailNavigation extends Component {
 
   /** */
   rightWidth() {
-    const { window, config } = this.props;
-    switch (window.view) {
+    const { view, config } = this.props;
+    switch (view) {
       case 'book':
         return (config.thumbnailNavigation.width * 2);
       default:
@@ -149,9 +149,9 @@ export class ThumbnailNavigation extends Component {
   /**
    */
   nextCanvas() {
-    const { window, canvasIndex, setCanvas } = this.props;
+    const { canvasIndex, setCanvas } = this.props;
     if (this.hasNextCanvas()) {
-      setCanvas(window.id, canvasIndex + this.canvasIncrementor());
+      setCanvas(canvasIndex + this.canvasIncrementor());
     }
   }
 
@@ -165,9 +165,9 @@ export class ThumbnailNavigation extends Component {
   /**
    */
   previousCanvas() {
-    const { window, canvasIndex, setCanvas } = this.props;
+    const { canvasIndex, setCanvas } = this.props;
     if (this.hasPreviousCanvas()) {
-      setCanvas(window.id, Math.max(0, canvasIndex - this.canvasIncrementor()));
+      setCanvas(Math.max(0, canvasIndex - this.canvasIncrementor()));
     }
   }
 
@@ -181,8 +181,8 @@ export class ThumbnailNavigation extends Component {
   /**
    */
   canvasIncrementor() {
-    const { window } = this.props;
-    switch (window.view) {
+    const { view } = this.props;
+    switch (view) {
       case 'book':
         return 2;
       default:
@@ -200,7 +200,7 @@ export class ThumbnailNavigation extends Component {
       classes,
       config,
       position,
-      window,
+      windowId,
     } = this.props;
     if (position === 'off') {
       return <></>;
@@ -233,7 +233,7 @@ export class ThumbnailNavigation extends Component {
                 config,
                 height: config.thumbnailNavigation.height - this.spacing - this.scrollbarSize,
                 position,
-                windowId: window.id,
+                windowId,
               }}
               ref={this.gridRef}
             >
@@ -254,5 +254,10 @@ ThumbnailNavigation.propTypes = {
   position: PropTypes.string.isRequired,
   setCanvas: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  view: PropTypes.string,
+  windowId: PropTypes.string.isRequired,
+};
+
+ThumbnailNavigation.defaultProps = {
+  view: undefined,
 };

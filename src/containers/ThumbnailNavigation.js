@@ -6,7 +6,7 @@ import { withPlugins } from '../extend';
 import CanvasGroupings from '../lib/CanvasGroupings';
 import * as actions from '../state/actions';
 import { ThumbnailNavigation } from '../components/ThumbnailNavigation';
-import { getManifestCanvases, getCanvasIndex, getWindow } from '../state/selectors';
+import { getManifestCanvases, getCanvasIndex, getWindowViewType } from '../state/selectors';
 
 /**
  * mapStateToProps - used to hook up state to props
@@ -21,7 +21,7 @@ const mapStateToProps = (state, { windowId }) => ({
   canvasIndex: getCanvasIndex(state, { windowId }),
   config: state.config,
   position: state.companionWindows[state.windows[windowId].thumbnailNavigationId].position,
-  window: getWindow(state, { windowId }),
+  view: getWindowViewType(state, { windowId }),
 });
 
 /**
@@ -29,9 +29,9 @@ const mapStateToProps = (state, { windowId }) => ({
  * @memberof ThumbnailNavigation
  * @private
  */
-const mapDispatchToProps = {
-  setCanvas: actions.setCanvas,
-};
+const mapDispatchToProps = (dispatch, { windowId }) => ({
+  setCanvas: (...args) => dispatch(actions.setCanvas(windowId, ...args)),
+});
 
 /**
  * Styles for withStyles HOC
