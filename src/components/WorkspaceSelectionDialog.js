@@ -71,7 +71,7 @@ export class WorkspaceSelectionDialog extends Component {
 
 WorkspaceSelectionDialog.propTypes = {
   children: PropTypes.node,
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,

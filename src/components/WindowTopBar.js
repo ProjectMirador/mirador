@@ -82,7 +82,7 @@ export class WindowTopBar extends Component {
 WindowTopBar.propTypes = {
   allowClose: PropTypes.bool,
   allowMaximize: PropTypes.bool,
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   focused: PropTypes.bool,
   focusWindow: PropTypes.func,
   manifestTitle: PropTypes.string,

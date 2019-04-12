@@ -61,7 +61,7 @@ export class CompanionArea extends Component {
 }
 
 CompanionArea.propTypes = {
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string),
   companionAreaOpen: PropTypes.bool.isRequired,
   companionWindows: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   position: PropTypes.string.isRequired,

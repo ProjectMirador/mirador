@@ -117,7 +117,7 @@ WindowSideBarAnnotationsPanel.propTypes = {
     content: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
   })),
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   deselectAnnotation: PropTypes.func.isRequired,
   highlightAnnotation: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,

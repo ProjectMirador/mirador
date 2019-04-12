@@ -44,7 +44,7 @@ export class WindowCanvasNavigationControls extends Component {
 
 
 WindowCanvasNavigationControls.propTypes = {
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string),
   size: PropTypes.shape({ width: PropTypes.number }).isRequired,
   visible: PropTypes.bool,
   window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types

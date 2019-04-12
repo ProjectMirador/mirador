@@ -87,7 +87,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
 
 ThumbnailCanvasGrouping.propTypes = {
   canvasIndex: PropTypes.number.isRequired,
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   data: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   index: PropTypes.number.isRequired,
   setCanvas: PropTypes.func.isRequired,

@@ -103,7 +103,7 @@ Window.contextTypes = {
 };
 
 Window.propTypes = {
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string),
   fetchManifest: PropTypes.func.isRequired,
   focusWindow: PropTypes.func,
   label: PropTypes.string,

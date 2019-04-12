@@ -141,7 +141,7 @@ export class ManifestListItem extends React.Component {
 
 ManifestListItem.propTypes = {
   addWindow: PropTypes.func.isRequired,
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string),
   error: PropTypes.string,
   fetchManifest: PropTypes.func.isRequired,
   handleClose: PropTypes.func,

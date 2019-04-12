@@ -54,7 +54,7 @@ export class LocalePicker extends Component {
 
 LocalePicker.propTypes = {
   availableLocales: PropTypes.arrayOf(PropTypes.string),
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string),
   locale: PropTypes.string,
   setLocale: PropTypes.func,
 };

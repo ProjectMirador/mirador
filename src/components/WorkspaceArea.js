@@ -42,7 +42,7 @@ export class WorkspaceArea extends Component {
 
 
 WorkspaceArea.propTypes = {
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   controlPanelVariant: PropTypes.string,
   isWorkspaceAddVisible: PropTypes.bool,
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
