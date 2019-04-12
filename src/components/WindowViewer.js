@@ -37,10 +37,10 @@ export class WindowViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      canvasIndex, currentCanvases, window, fetchInfoResponse, fetchAnnotation,
+      canvasIndex, currentCanvases, view, fetchInfoResponse, fetchAnnotation,
     } = this.props;
 
-    if (prevProps.window.view !== window.view
+    if (prevProps.view !== view
       || (prevProps.canvasIndex !== canvasIndex && !this.infoResponseIsInStore())
     ) {
       currentCanvases.forEach((canvas) => {
@@ -104,16 +104,16 @@ export class WindowViewer extends Component {
    * Renders things
    */
   render() {
-    const { window } = this.props;
+    const { windowId } = this.props;
     return (
       <>
         <OSDViewer
           tileSources={this.tileInfoFetchedFromStore()}
-          windowId={window.id}
+          windowId={windowId}
         >
-          <WindowCanvasNavigationControls key="canvas_nav" windowId={window.id} />
+          <WindowCanvasNavigationControls key="canvas_nav" windowId={windowId} />
         </OSDViewer>
-        <WindowAuthenticationControl key="auth" windowId={window.id} />
+        <WindowAuthenticationControl key="auth" windowId={windowId} />
       </>
     );
   }
@@ -125,5 +125,6 @@ WindowViewer.propTypes = {
   fetchAnnotation: PropTypes.func.isRequired,
   fetchInfoResponse: PropTypes.func.isRequired,
   infoResponses: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  view: PropTypes.string.isRequired,
+  windowId: PropTypes.string.isRequired,
 };

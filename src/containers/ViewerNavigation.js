@@ -3,13 +3,15 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend';
 import * as actions from '../state/actions';
-import { getManifestCanvases, getCanvasIndex } from '../state/selectors';
+import { getManifestCanvases, getCanvasIndex, getWindowViewType } from '../state/selectors';
 import { ViewerNavigation } from '../components/ViewerNavigation';
 
 /** */
-const mapStateToProps = (state, { window }) => ({
-  canvases: getManifestCanvases(state, { windowId: window.id }),
-  canvasIndex: getCanvasIndex(state, { windowId: window.id }),
+const mapStateToProps = (state, { windowId }) => ({
+  canvases: getManifestCanvases(state, { windowId }),
+  canvasIndex: getCanvasIndex(state, { windowId }),
+  view: getWindowViewType(state, { windowId }),
+  windowId: window.id,
 });
 
 /**
@@ -17,9 +19,9 @@ const mapStateToProps = (state, { window }) => ({
  * @memberof ManifestForm
  * @private
  */
-const mapDispatchToProps = {
-  setCanvas: actions.setCanvas,
-};
+const mapDispatchToProps = (dispatch, { windowId }) => ({
+  setCanvas: (...args) => dispatch(actions.setCanvas(windowId, ...args)),
+});
 
 const enhance = compose(
   withTranslation(),

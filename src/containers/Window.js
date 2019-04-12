@@ -7,7 +7,7 @@ import * as actions from '../state/actions';
 import { Window } from '../components/Window';
 import {
   getManifest, getManifestTitle, getThumbnailNavigationPosition, getWindow,
-  getWorkspaceType, getWindowDraggability,
+  getWorkspaceType, getWindowDraggability, getWindowViewType,
 } from '../state/selectors';
 
 
@@ -19,7 +19,11 @@ import {
 const mapStateToProps = (state, { windowId }) => ({
   label: getManifestTitle(state, { windowId }),
   manifest: getManifest(state, { windowId }),
+  manifestId: (getWindow(state, { windowId }) || {}).manifestId,
+  maximized: (getWindow(state, { windowId }) || {}).maximized,
+  sideBarOpen: (getWindow(state, { windowId }) || {}).sideBarOpen,
   thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId }),
+  view: getWindowViewType(state, { windowId }),
   window: getWindow(state, { windowId }),
   windowDraggable: getWindowDraggability(state, { windowId }),
   workspaceType: getWorkspaceType(state),

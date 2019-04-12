@@ -31,10 +31,10 @@ export class Workspace extends React.Component {
       case 'mosaic':
         return <WorkspaceMosaic windows={windows} />;
       default:
-        return Object.values(windows).map(window => (
+        return Object.keys(windows).map(windowId => (
           <Window
-            key={`${window.id}-${workspaceId}`}
-            window={window}
+            key={`${windowId}-${workspaceId}`}
+            windowId={windowId}
           />
         ));
     }
@@ -75,13 +75,12 @@ export class Workspace extends React.Component {
     const { windows, workspaceId } = this.props;
     const windowKeys = Object.keys(windows).sort();
     const maximizedWindows = windowKeys
-      .map(id => windows[id])
-      .filter(window => window.maximized === true);
+      .filter(windowId => windows[windowId].maximized === true);
     if (maximizedWindows.length) {
-      return Object.values(maximizedWindows).map(window => (
+      return maximizedWindows.map(windowId => (
         <Window
-          key={`${window.id}-${workspaceId}`}
-          window={window}
+          key={`${windowId}-${workspaceId}`}
+          windowId={windowId}
           className={classNames(ns('workspace-maximized-window'))}
         />
       ));

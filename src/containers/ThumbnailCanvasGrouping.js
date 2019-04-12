@@ -12,9 +12,9 @@ import { ThumbnailCanvasGrouping } from '../components/ThumbnailCanvasGrouping';
  * @memberof ThumbnailCanvasGrouping
  * @private
  */
-const mapDispatchToProps = {
-  setCanvas: actions.setCanvas,
-};
+const mapDispatchToProps = (dispatch, { data }) => ({
+  setCanvas: (...args) => dispatch(actions.setCanvas(data.windowId, ...args)),
+});
 
 /**
  * mapStateToProps - used to hook up state to props

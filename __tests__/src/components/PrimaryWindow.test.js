@@ -9,7 +9,7 @@ import GalleryView from '../../../src/containers/GalleryView';
 function createWrapper(props) {
   return shallow(
     <PrimaryWindow
-      window={{ id: 'window-1' }}
+      windowId="window-1"
       manifest={{}}
       {...props}
     />,
@@ -32,8 +32,7 @@ describe('PrimaryWindow', () => {
   });
   it('should render <GalleryView> if manifest is present and view is gallery', () => {
     const manifest = { id: 456, isFetching: false };
-    const window = { id: 'window-2', view: 'gallery' };
-    const wrapper = createWrapper({ manifest, window });
+    const wrapper = createWrapper({ manifest, view: 'gallery', windowId: 'window-2' });
     expect(wrapper.find(GalleryView)).toHaveLength(1);
   });
 });

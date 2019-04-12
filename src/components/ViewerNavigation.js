@@ -19,9 +19,9 @@ export class ViewerNavigation extends Component {
   /**
    */
   nextCanvas() {
-    const { window, canvasIndex, setCanvas } = this.props;
+    const { canvasIndex, setCanvas } = this.props;
     if (this.hasNextCanvas()) {
-      setCanvas(window.id, canvasIndex + this.canvasIncrementor());
+      setCanvas(canvasIndex + this.canvasIncrementor());
     }
   }
 
@@ -35,9 +35,9 @@ export class ViewerNavigation extends Component {
   /**
    */
   previousCanvas() {
-    const { window, canvasIndex, setCanvas } = this.props;
+    const { canvasIndex, setCanvas } = this.props;
     if (this.hasPreviousCanvas()) {
-      setCanvas(window.id, Math.max(0, canvasIndex - this.canvasIncrementor()));
+      setCanvas(Math.max(0, canvasIndex - this.canvasIncrementor()));
     }
   }
 
@@ -51,8 +51,8 @@ export class ViewerNavigation extends Component {
   /**
    */
   canvasIncrementor() {
-    const { window } = this.props;
-    switch (window.view) {
+    const { view } = this.props;
+    switch (view) {
       case 'book':
         return 2;
       default:
@@ -94,5 +94,9 @@ ViewerNavigation.propTypes = {
   canvasIndex: PropTypes.number.isRequired,
   setCanvas: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  view: PropTypes.string,
+};
+
+ViewerNavigation.defaultProps = {
+  view: undefined,
 };

@@ -14,9 +14,7 @@ function createWrapper(props) {
       }
       canvasIndex={1}
       classes={{}}
-      window={{
-        id: 'foobar',
-      }}
+      windowId="foobar"
       config={{ thumbnailNavigation: { height: 150, width: 100 } }}
       position="far-bottom"
       t={k => k}
@@ -49,11 +47,7 @@ describe('ThumbnailNavigation', () => {
     wrapper.instance().gridRef = { current: { resetAfterIndex: mockReset } };
     wrapper.setProps({
       canvasIndex: 1,
-      window: {
-        id: 'foobar',
-        thumbnailNavigationPosition: 'far-bottom',
-        view: 'book',
-      },
+      view: 'book',
     });
     expect(mockReset).toHaveBeenCalled();
   });
@@ -62,10 +56,6 @@ describe('ThumbnailNavigation', () => {
     wrapper.instance().gridRef = { current: { scrollToItem: mockScroll } };
     wrapper.setProps({
       canvasIndex: 3,
-      window: {
-        id: 'foobar',
-        thumbnailNavigationPosition: 'far-bottom',
-      },
     });
     expect(mockScroll).toHaveBeenCalled();
   });
@@ -86,11 +76,7 @@ describe('ThumbnailNavigation', () => {
       wrapper.instance().gridRef = { current: { resetAfterIndex: mockReset } };
       wrapper.setProps({
         canvasIndex: 1,
-        window: {
-          id: 'foobar',
-          thumbnailNavigationPosition: 'far-bottom',
-          view: 'book',
-        },
+        view: 'book',
       });
       expect(wrapper.instance().rightWidth()).toEqual(200);
     });
@@ -117,23 +103,20 @@ describe('ThumbnailNavigation', () => {
         canvasIndex: 1,
         position: 'far-right',
         setCanvas: rightSetCanvas,
-        window: {
-          id: 'foobat',
-        },
       });
     });
     describe('handleKeyUp', () => {
       it('next', () => {
         wrapper.instance().handleKeyUp({ key: 'ArrowRight' });
-        expect(setCanvas).toHaveBeenCalledWith('foobar', 2);
+        expect(setCanvas).toHaveBeenCalledWith(2);
         rightWrapper.instance().handleKeyUp({ key: 'ArrowDown' });
-        expect(rightSetCanvas).toHaveBeenCalledWith('foobat', 2);
+        expect(rightSetCanvas).toHaveBeenCalledWith(2);
       });
       it('previous', () => {
         wrapper.instance().handleKeyUp({ key: 'ArrowLeft' });
-        expect(setCanvas).toHaveBeenCalledWith('foobar', 0);
+        expect(setCanvas).toHaveBeenCalledWith(0);
         rightWrapper.instance().handleKeyUp({ key: 'ArrowUp' });
-        expect(rightSetCanvas).toHaveBeenCalledWith('foobat', 0);
+        expect(rightSetCanvas).toHaveBeenCalledWith(0);
       });
     });
   });

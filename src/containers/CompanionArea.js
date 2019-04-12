@@ -12,7 +12,7 @@ const mapStateToProps = (state, { windowId, position }) => ({
   companionAreaOpen: getCompanionAreaVisibility(state, { position, windowId }),
   companionWindows: getCompanionWindowsOfWindow(state, { windowId })
     .filter(cw => cw && cw.position === position),
-  sideBarOpen: getWindow(state, { windowId }).sideBarOpen,
+  sideBarOpen: (getWindow(state, { windowId }) || {}).sideBarOpen,
 });
 
 const mapDispatchToProps = ({

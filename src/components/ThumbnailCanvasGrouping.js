@@ -15,8 +15,8 @@ export class ThumbnailCanvasGrouping extends PureComponent {
 
   /** */
   setCanvas(e) {
-    const { setCanvas, window } = this.props;
-    setCanvas(window.id, parseInt(e.currentTarget.dataset.canvasIndex, 10));
+    const { setCanvas } = this.props;
+    setCanvas(parseInt(e.currentTarget.dataset.canvasIndex, 10));
   }
 
   /**
@@ -92,5 +92,4 @@ ThumbnailCanvasGrouping.propTypes = {
   index: PropTypes.number.isRequired,
   setCanvas: PropTypes.func.isRequired,
   style: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
