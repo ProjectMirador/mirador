@@ -39,7 +39,7 @@ const styles = theme => ({
     flexDirection: 'column',
   },
   headline: {
-    paddingBottom: '0',
+    paddingBottom: '6px',
   },
   list: {
     '&active': {
