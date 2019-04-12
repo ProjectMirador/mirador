@@ -10,9 +10,12 @@ describe('WorkspaceExport', () => {
   beforeEach(() => {
     handleClose = jest.fn();
     mockState = {
-      config: { },
-      manifests: { },
-      windows: { },
+      companionWindows: {},
+      config: {},
+      elasticLayout: {},
+      viewers: {},
+      windows: {},
+      workspace: {},
     };
 
     wrapper = shallow(
@@ -30,8 +33,12 @@ describe('WorkspaceExport', () => {
 
   it('renders an exportable version of state', () => {
     expect(wrapper.find('pre').length).toBe(1);
+    expect(wrapper.find('pre').text()).toMatch('"companionWindows":');
     expect(wrapper.find('pre').text()).toMatch('"config":');
+    expect(wrapper.find('pre').text()).toMatch('"elasticLayout":');
+    expect(wrapper.find('pre').text()).toMatch('"viewers":');
     expect(wrapper.find('pre').text()).toMatch('"windows":');
+    expect(wrapper.find('pre').text()).toMatch('"workspace":');
     expect(wrapper.find('pre').text()).not.toMatch('"manifests":');
   });
 });

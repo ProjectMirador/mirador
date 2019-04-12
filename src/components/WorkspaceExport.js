@@ -19,6 +19,7 @@ export class WorkspaceExport extends Component {
     const {
       companionWindows,
       config,
+      elasticLayout,
       viewers,
       windows,
       workspace,
@@ -27,6 +28,7 @@ export class WorkspaceExport extends Component {
     return JSON.stringify({
       companionWindows,
       config,
+      elasticLayout,
       viewers,
       windows,
       workspace,
