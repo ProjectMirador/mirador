@@ -38,6 +38,9 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
   },
+  headline: {
+    paddingBottom: '0',
+  },
   list: {
     '&active': {
       outline: 'none',
@@ -59,6 +62,14 @@ const styles = theme => ({
   media: {
     flex: '0 0 120px',
     height: '90px',
+  },
+  root: {
+    '&:last-child': {
+      paddingBottom: '12px',
+    },
+    paddingBottom: 0,
+    paddingTop: 0,
+    textAlign: 'left',
   },
 });
 

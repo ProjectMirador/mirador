@@ -75,8 +75,11 @@ export class WorkspaceSelectionDialog extends Component {
                   title={t('elastic')}
                 />
                 <div className={classes.details}>
-                  <CardContent className={classes.content}>
-                    <Typography component="p" variant="h3">{t('elastic')}</Typography>
+                  <CardContent
+                    classes={{ root: classes.root }}
+                    className={classes.content}
+                  >
+                    <Typography className={classes.headline} component="p" variant="h3">{t('elastic')}</Typography>
                     <Typography variant="body1">{t('elasticDescription')}</Typography>
                   </CardContent>
                 </div>
@@ -93,8 +96,11 @@ export class WorkspaceSelectionDialog extends Component {
                   title={t('mosaic')}
                 />
                 <div className={classes.details}>
-                  <CardContent className={classes.content}>
-                    <Typography component="p" variant="h3">{t('mosaic')}</Typography>
+                  <CardContent
+                    className={classes.content}
+                    classes={{ root: classes.root }}
+                  >
+                    <Typography className={classes.headline} component="p" variant="h3">{t('mosaic')}</Typography>
                     <Typography variant="body1">{t('mosaicDescription')}</Typography>
                   </CardContent>
                 </div>
