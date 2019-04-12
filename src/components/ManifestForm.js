@@ -135,7 +135,7 @@ export class ManifestForm extends Component {
 
 ManifestForm.propTypes = {
   addResourcesOpen: PropTypes.bool.isRequired,
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string),
   fetchManifest: PropTypes.func.isRequired,
   onCancel: PropTypes.func,
   onSubmit: PropTypes.func,

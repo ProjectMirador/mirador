@@ -37,7 +37,7 @@ export class GalleryView extends Component {
 
 GalleryView.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string),
   selectedCanvasIndex: PropTypes.number.isRequired,
   windowId: PropTypes.string.isRequired,
 };

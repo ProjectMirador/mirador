@@ -18,7 +18,7 @@ export function MosaicRenderPreview(props) {
 }
 
 MosaicRenderPreview.propTypes = {
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string),
   t: PropTypes.func,
   title: PropTypes.string,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types

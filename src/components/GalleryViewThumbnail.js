@@ -101,7 +101,7 @@ export class GalleryViewThumbnail extends Component {
 
 GalleryViewThumbnail.propTypes = {
   canvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   focusOnCanvas: PropTypes.func.isRequired,
   selected: PropTypes.bool,
   setCanvas: PropTypes.func.isRequired,

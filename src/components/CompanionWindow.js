@@ -131,7 +131,7 @@ export class CompanionWindow extends Component {
 
 CompanionWindow.propTypes = {
   children: PropTypes.node,
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   id: PropTypes.string.isRequired,
   isDisplayed: PropTypes.bool,
   onCloseClick: PropTypes.func,

@@ -27,7 +27,7 @@ export class WorkspaceFullScreenButton extends Component {
 }
 
 WorkspaceFullScreenButton.propTypes = {
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isFullscreenEnabled: PropTypes.bool,
   setWorkspaceFullscreen: PropTypes.func.isRequired,
   t: PropTypes.func,

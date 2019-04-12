@@ -80,7 +80,7 @@ export class ChangeThemeDialog extends Component {
 }
 
 ChangeThemeDialog.propTypes = {
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
   t: PropTypes.func.isRequired,

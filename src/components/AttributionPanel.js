@@ -71,7 +71,7 @@ export class AttributionPanel extends Component {
 }
 
 AttributionPanel.propTypes = {
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string),
   id: PropTypes.string.isRequired,
   manifestLogo: PropTypes.string,
   requiredStatement: PropTypes.arrayOf(PropTypes.shape({

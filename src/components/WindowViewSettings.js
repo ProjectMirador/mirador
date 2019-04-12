@@ -99,7 +99,7 @@ export class WindowViewSettings extends Component {
 }
 
 WindowViewSettings.propTypes = {
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   handleClose: PropTypes.func,
   setWindowViewType: PropTypes.func.isRequired,
   t: PropTypes.func,

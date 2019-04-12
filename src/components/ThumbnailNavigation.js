@@ -249,7 +249,7 @@ export class ThumbnailNavigation extends Component {
 ThumbnailNavigation.propTypes = {
   canvasGroupings: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   canvasIndex: PropTypes.number.isRequired,
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   position: PropTypes.string.isRequired,
   setCanvas: PropTypes.func.isRequired,

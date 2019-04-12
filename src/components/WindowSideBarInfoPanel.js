@@ -74,7 +74,7 @@ export class WindowSideBarInfoPanel extends Component {
 
 WindowSideBarInfoPanel.propTypes = {
   availableLocales: PropTypes.arrayOf(PropTypes.string),
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  classes: PropTypes.objectOf(PropTypes.string),
   id: PropTypes.string.isRequired,
   locale: PropTypes.string,
   selectedCanvases: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string })),
