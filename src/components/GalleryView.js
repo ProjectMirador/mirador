@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Paper from '@material-ui/core/Paper';
 import GalleryViewThumbnail from '../containers/GalleryViewThumbnail';
 
 /**
@@ -14,23 +15,24 @@ export class GalleryView extends Component {
       canvases, classes, selectedCanvasIndex, windowId,
     } = this.props;
     return (
-      <>
-        <section
-          className={classes.galleryContainer}
-          id={`${windowId}-gallery`}
-        >
-          {
-            canvases.map(canvas => (
-              <GalleryViewThumbnail
-                key={canvas.id}
-                selected={selectedCanvasIndex === canvas.index}
-                windowId={windowId}
-                canvas={canvas}
-              />
-            ))
-          }
-        </section>
-      </>
+      <Paper
+        component="section"
+        square
+        elevation={0}
+        className={classes.galleryContainer}
+        id={`${windowId}-gallery`}
+      >
+        {
+          canvases.map(canvas => (
+            <GalleryViewThumbnail
+              key={canvas.id}
+              selected={selectedCanvasIndex === canvas.index}
+              windowId={windowId}
+              canvas={canvas}
+            />
+          ))
+        }
+      </Paper>
     );
   }
 }

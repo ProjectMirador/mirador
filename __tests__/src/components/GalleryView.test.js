@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import manifesto from 'manifesto.js';
+import Paper from '@material-ui/core/Paper';
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryView } from '../../../src/components/GalleryView';
 import GalleryViewThumbnail from '../../../src/containers/GalleryViewThumbnail';
@@ -25,7 +26,8 @@ describe('GalleryView', () => {
     wrapper = createWrapper({ setCanvas });
   });
   it('renders the component', () => {
-    expect(wrapper.find('section').length).toBe(1);
+    expect(wrapper.find(Paper).length).toBe(1);
+    expect(wrapper.find(Paper).prop('component')).toEqual('section');
   });
   it('renders gallery items for all canvases', () => {
     expect(wrapper.find(GalleryViewThumbnail).length).toBe(3);
