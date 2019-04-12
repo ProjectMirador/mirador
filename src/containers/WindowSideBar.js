@@ -13,8 +13,8 @@ import { getWindow } from '../state/selectors';
  */
 const mapStateToProps = (state, { windowId }) => (
   {
-    sideBarOpen: getWindow(state, { windowId }).sideBarOpen,
-    sideBarPanel: getWindow(state, { windowId }).sideBarPanel,
+    sideBarOpen: (getWindow(state, { windowId }) || {}).sideBarOpen,
+    sideBarPanel: (getWindow(state, { windowId }) || {}).sideBarPanel,
   }
 );
 

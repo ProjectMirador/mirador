@@ -124,7 +124,9 @@ export const getCompanionAreaVisibility = createSelector(
     (state, { position }) => position,
     getWindow,
   ],
-  (position, { companionAreaOpen, sideBarOpen }) => {
+  (position, window) => {
+    if (!window) return false;
+    const { companionAreaOpen, sideBarOpen } = window;
     if (position !== 'left') return true;
     return !!(companionAreaOpen && sideBarOpen);
   },

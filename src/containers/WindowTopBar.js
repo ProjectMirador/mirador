@@ -13,7 +13,7 @@ const mapStateToProps = (state, { windowId }) => ({
   allowMaximize: state.config.window.allowMaximize,
   focused: state.workspace.focusedWindowId === windowId,
   manifestTitle: getManifestTitle(state, { windowId }),
-  maximized: getWindow(state, { windowId }).maximized,
+  maximized: (getWindow(state, { windowId }) || {}).maximized,
 });
 
 /**
