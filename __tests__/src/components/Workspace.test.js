@@ -57,8 +57,8 @@ describe('Workspace', () => {
       expect(wrapper.matchesElement(
         <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
           <Typography>miradorViewer</Typography>
-          <Window window={{ id: 1 }} />
-          <Window window={{ id: 2 }} />
+          <Window windowId="1" />
+          <Window windowId="2" />
         </div>,
       )).toBe(true);
     });
@@ -69,7 +69,7 @@ describe('Workspace', () => {
       expect(wrapper.matchesElement(
         <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
           <Typography>miradorViewer</Typography>
-          <Window window={{ id: 1, maximized: true }} className="mirador-workspace-maximized-window" />
+          <Window windowId="1" className="mirador-workspace-maximized-window" />
         </div>,
       )).toBe(true);
     });

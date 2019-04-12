@@ -15,9 +15,9 @@ import CompanionArea from '../containers/CompanionArea';
 export class Window extends Component {
   /** */
   componentDidMount(prevProps) {
-    const { fetchManifest, manifest, window } = this.props;
-    if (window && window.manifestId && (!manifest || !manifest.isFetching)) {
-      fetchManifest(window.manifestId);
+    const { fetchManifest, manifest, manifestId } = this.props;
+    if (manifestId && (!manifest || !manifest.isFetching)) {
+      fetchManifest(manifestId);
     }
   }
 
@@ -27,13 +27,13 @@ export class Window extends Component {
    */
   wrappedTopBar() {
     const {
-      manifest, window, workspaceType, windowDraggable,
+      manifest, windowId, workspaceType, windowDraggable,
     } = this.props;
     const { mosaicWindowActions } = this.context;
     const topBar = (
       <div>
         <WindowTopBar
-          windowId={window.id}
+          windowId={windowId}
           manifest={manifest}
           windowDraggable={windowDraggable}
         />
@@ -52,22 +52,18 @@ export class Window extends Component {
    */
   render() {
     const {
-      focusWindow, label, manifest, window, classes, t,
+      focusWindow, label, manifest, maximized, sideBarOpen, view, windowId, classes, t,
     } = this.props;
-
-    if (!window) {
-      return <></>;
-    }
 
     return (
       <Paper
         onFocus={focusWindow}
         component="section"
         elevation={1}
-        id={window.id}
+        id={windowId}
         className={
           cn(classes.window, ns('window'),
-            window.maximized ? ns('workspace-maximized-window') : null)}
+            maximized ? ns('workspace-maximized-window') : null)}
         aria-label={t('window', { label })}
       >
         {this.wrappedTopBar()}
@@ -75,22 +71,22 @@ export class Window extends Component {
           <div className={classes.middleLeft}>
             <div className={classes.primaryWindow}>
               <PrimaryWindow
-                view={window.view}
-                windowId={window.id}
+                view={view}
+                windowId={windowId}
                 manifest={manifest}
-                sideBarOpen={window.sideBarOpen}
+                sideBarOpen={sideBarOpen}
               />
             </div>
             <div className={classes.companionAreaBottom}>
-              <CompanionArea windowId={window.id} position="bottom" />
+              <CompanionArea windowId={windowId} position="bottom" />
             </div>
           </div>
           <div className={classes.companionAreaRight}>
-            <CompanionArea windowId={window.id} position="right" />
-            <CompanionArea windowId={window.id} position="far-right" />
+            <CompanionArea windowId={windowId} position="right" />
+            <CompanionArea windowId={windowId} position="far-right" />
           </div>
         </div>
-        <CompanionArea windowId={window.id} position="far-bottom" />
+        <CompanionArea windowId={windowId} position="far-bottom" />
       </Paper>
     );
   }
@@ -109,9 +105,13 @@ Window.propTypes = {
   focusWindow: PropTypes.func,
   label: PropTypes.string,
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  manifestId: PropTypes.string,
+  maximized: PropTypes.bool,
+  sideBarOpen: PropTypes.bool,
   t: PropTypes.func.isRequired,
-  window: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  view: PropTypes.string,
   windowDraggable: PropTypes.bool,
+  windowId: PropTypes.string.isRequired,
   workspaceType: PropTypes.string,
 };
 
@@ -120,6 +120,10 @@ Window.defaultProps = {
   focusWindow: () => {},
   label: null,
   manifest: null,
+  manifestId: undefined,
+  maximized: false,
+  sideBarOpen: false,
+  view: undefined,
   windowDraggable: null,
   workspaceType: null,
 };
