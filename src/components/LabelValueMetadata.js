@@ -44,7 +44,7 @@ LabelValueMetadata.propTypes = {
   labelValuePairs: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
     value: PropTypes.string,
-  })).isRequired, // eslint-disable-line react/forbid-prop-types,
+  })).isRequired,
 };
 
 LabelValueMetadata.defaultProps = {
