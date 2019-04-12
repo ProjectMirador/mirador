@@ -1,5 +1,3 @@
-export * from './pluginContext';
-export * from './pluginProvider';
-export * from './pluginPreprocessing';
-export * from './pluginValidation';
+export * from './pluginStore';
 export * from './withPlugins';
+export * from './pluginValidation';

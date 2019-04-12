@@ -1,20 +1,20 @@
 import React from 'react';
-import { mount } from 'enzyme';
-import { withPlugins, PluginContext } from '../../../src/extend';
+import { shallow } from 'enzyme';
+import { withPlugins } from '../../../src/extend';
+import { pluginStore } from '../../../src/extend/pluginStore';
 
+
+jest.mock('../../../src/extend/pluginStore');
 
 /** Mock target component */
 const Target = props => <div>Hello</div>;
 
 /** create wrapper  */
-function createPluginHoc(pluginMap) {
+function createPluginHoc(plugins) {
+  pluginStore.getPlugins = () => plugins;
   const props = { bar: 2, foo: 1 };
   const PluginHoc = withPlugins('Target', Target);
-  return mount(
-    <PluginContext.Provider value={pluginMap}>
-      <PluginHoc {...props} />
-    </PluginContext.Provider>,
-  );
+  return shallow(<PluginHoc {...props} />);
 }
 
 describe('withPlugins', () => {
@@ -34,7 +34,7 @@ describe('withPlugins', () => {
 
 describe('PluginHoc: if no plugin exists for the target', () => {
   it('renders the target component', () => {
-    const hoc = createPluginHoc({});
+    const hoc = createPluginHoc([]);
     expect(hoc.find(Target).length).toBe(1);
     expect(hoc.find(Target).props().foo).toBe(1);
     expect(hoc.find(Target).props().bar).toBe(2);
@@ -45,16 +45,14 @@ describe('PluginHoc: if wrap plugins exist for target', () => {
   it('renders the first wrap plugin and passes the target component and the target props to it', () => {
     /** */ const WrapPluginComponentA = props => <div>look i am a plugin</div>;
     /** */ const WrapPluginComponentB = props => <div>look i am a plugin</div>;
-    const pluginMap = {
-      Target: {
-        wrap: [
-          { component: WrapPluginComponentA, mode: 'wrap', target: 'Target' },
-          { component: WrapPluginComponentB, mode: 'wrap', target: 'Target' },
-        ],
-      },
+    const plugins = {
+      wrap: [
+        { component: WrapPluginComponentA, mode: 'wrap', target: 'Target' },
+        { component: WrapPluginComponentB, mode: 'wrap', target: 'Target' },
+      ],
     };
-    const hoc = createPluginHoc(pluginMap);
-    const selector = 'WrapPluginComponentA';
+    const hoc = createPluginHoc(plugins);
+    const selector = 'Connect(WrapPluginComponentA)';
     expect(hoc.find(selector).length).toBe(1);
     expect(hoc.find(selector).props().TargetComponent).toBe(Target);
     expect(hoc.find(selector).props().targetProps).toEqual({ bar: 2, foo: 1 });
@@ -66,20 +64,20 @@ describe('PluginHoc: if add plugins exist but no wrap plugin', () => {
     /** */ const AddPluginComponentA = props => <div>look i am a plugin</div>;
     /** */ const AddPluginComponentB = props => <div>look i am a plugin</div>;
     const plugins = {
-      Target: {
-        add: [
-          { component: AddPluginComponentA, mode: 'add', target: 'Target' },
-          { component: AddPluginComponentB, mode: 'add', target: 'Target' },
-        ],
-      },
+      add: [
+        { component: AddPluginComponentA, mode: 'add', target: 'Target' },
+        { component: AddPluginComponentB, mode: 'add', target: 'Target' },
+      ],
     };
     const hoc = createPluginHoc(plugins);
     const selector = Target;
     expect(hoc.find(selector).length).toBe(1);
     expect(hoc.find(selector).props().foo).toBe(1);
     expect(hoc.find(selector).props().bar).toBe(2);
-    expect(hoc.find(selector).props().PluginComponents[0]).toBe(AddPluginComponentA);
-    expect(hoc.find(selector).props().PluginComponents[1]).toBe(AddPluginComponentB);
+    expect(hoc.find(selector).props().PluginComponents[0].displayName)
+      .toBe('Connect(AddPluginComponentA)');
+    expect(hoc.find(selector).props().PluginComponents[1].displayName)
+      .toBe('Connect(AddPluginComponentB)');
   });
 });
 
@@ -90,19 +88,17 @@ describe('PluginHoc: if wrap plugins AND add plugins exist for target', () => {
     /** */ const AddPluginComponentA = props => <div>look i am a plugin</div>;
     /** */ const AddPluginComponentB = props => <div>look i am a plugin</div>;
     const plugins = {
-      Target: {
-        add: [
-          { component: AddPluginComponentA, mode: 'add', target: 'Target' },
-          { component: AddPluginComponentB, mode: 'add', target: 'Target' },
-        ],
-        wrap: [
-          { component: WrapPluginComponentA, mode: 'wrap', target: 'Target' },
-          { component: WrapPluginComponentB, mode: 'wrap', target: 'Target' },
-        ],
-      },
+      add: [
+        { component: AddPluginComponentA, mode: 'add', target: 'Target' },
+        { component: AddPluginComponentB, mode: 'add', target: 'Target' },
+      ],
+      wrap: [
+        { component: WrapPluginComponentA, mode: 'wrap', target: 'Target' },
+        { component: WrapPluginComponentB, mode: 'wrap', target: 'Target' },
+      ],
     };
     const hoc = createPluginHoc(plugins);
-    expect(hoc.find(WrapPluginComponentA).length).toBe(1);
+    expect(hoc.find('Connect(WrapPluginComponentA)').length).toBe(1);
     expect(hoc.find(Target).length).toBe(0);
   });
 });
