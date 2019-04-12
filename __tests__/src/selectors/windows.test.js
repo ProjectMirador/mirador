@@ -15,7 +15,7 @@ import {
   getCanvasIndex,
   getWindowManifests,
   getWindows,
-  getMaximizedWindows,
+  getMaximizedWindowsIds,
 } from '../../../src/state/selectors/windows';
 
 describe('getWindows', () => {
@@ -33,19 +33,18 @@ describe('getWindows', () => {
   });
 });
 
-describe('getMaximizedWindows', () => {
+describe('getMaximizedWindowsIds', () => {
   it('filters windows to only those maximized', () => {
     const state = {
       windows: {
-        a: { manifestId: 'amanifest', maximized: true },
-        b: { manifestId: 'bmanifest' },
+        a: { id: 'a', maximized: true },
+        b: { id: 'b' },
       },
     };
 
-    const received = getMaximizedWindows(state);
+    const received = getMaximizedWindowsIds(state);
 
-    expect(received.length).toEqual(1);
-    expect(received[0].manifestId).toEqual('amanifest');
+    expect(received).toEqual(['a']);
   });
 });
 
