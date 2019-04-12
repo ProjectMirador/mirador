@@ -35,7 +35,7 @@ export class WindowCanvasNavigationControls extends Component {
           windowId={window.id}
           zoomToWorld={zoomToWorld}
         />
-        <ViewerNavigation window={window} />
+        <ViewerNavigation windowId={window.id} />
         <ViewerInfo windowId={window.id} />
       </Paper>
     );
