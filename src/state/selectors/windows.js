@@ -32,9 +32,18 @@ export function getWindows(state) {
 }
 
 /** */
-export function getMaximizedWindows(state) {
-  return Object.values(getWindows(state)).filter(window => window.maximized === true);
-}
+export const getWindowIds = createSelector(
+  [getWindows],
+  windows => Object.keys(windows),
+);
+
+/** */
+export const getMaximizedWindowsIds = createSelector(
+  [getWindows],
+  windows => Object.values(windows)
+    .filter(window => window.maximized === true)
+    .map(window => window.id),
+);
 
 /** */
 export function getWindow(state, { windowId }) {
