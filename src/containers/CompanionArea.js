@@ -24,6 +24,9 @@ const styles = theme => ({
     flexDirection: 'column',
     width: '100%',
   },
+  left: {
+    width: 235,
+  },
   root: {
     display: 'flex',
     minHeight: 0,

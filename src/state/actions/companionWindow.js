@@ -1,5 +1,6 @@
 import uuid from 'uuid/v4';
 import ActionTypes from './action-types';
+import { getCompanionWindowsForPosition } from '../selectors';
 
 const defaultProps = {
   content: null,
@@ -19,6 +20,22 @@ export function addCompanionWindow(windowId, payload, defaults = defaultProps) {
       type: ActionTypes.ADD_COMPANION_WINDOW,
       windowId,
     });
+  };
+}
+
+/** */
+export function addOrUpdateCompanionWindow(windowId, payload, defaults = defaultProps) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { position } = payload;
+
+    const updatableWindow = position === 'left' && getCompanionWindowsForPosition(state, { position, windowId })[0];
+
+    if (updatableWindow) {
+      dispatch(updateCompanionWindow(windowId, updatableWindow.id, payload));
+    } else {
+      dispatch(addCompanionWindow(windowId, payload, defaults));
+    }
   };
 }
 

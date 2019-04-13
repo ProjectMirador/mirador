@@ -47,7 +47,7 @@ export class CompanionArea extends Component {
           )
         }
         <Slide in={companionAreaOpen} direction="right">
-          <div className={[ns('companion-windows'), this.areaLayoutClass()].join(' ')} style={{ display: companionAreaOpen ? 'flex' : 'none' }}>
+          <div className={[ns('companion-windows'), companionWindowIds.length > 0 && classes[position], this.areaLayoutClass()].join(' ')} style={{ display: companionAreaOpen ? 'flex' : 'none' }}>
             {
               companionWindowIds.map(id => (
                 <CompanionWindowFactory id={id} key={id} windowId={windowId} />

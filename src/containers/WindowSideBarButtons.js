@@ -18,7 +18,7 @@ import { WindowSideBarButtons } from '../components/WindowSideBarButtons';
  */
 const mapDispatchToProps = (dispatch, { windowId }) => ({
   addCompanionWindow: content => dispatch(
-    actions.addCompanionWindow(windowId, { content, position: 'left' }),
+    actions.addOrUpdateCompanionWindow(windowId, { content, position: 'left' }),
   ),
 });
 
