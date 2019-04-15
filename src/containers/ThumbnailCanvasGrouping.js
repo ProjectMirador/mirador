@@ -32,7 +32,7 @@ const mapStateToProps = (state, { data }) => ({
 const styles = theme => ({
   canvas: {
     '&$currentCanvas': {
-      outline: `2px solid ${theme.palette.secondary.main}`,
+      outline: `2px solid ${theme.palette.primary.main}`,
       outlineOffset: '3px',
     },
     '&:hover': {

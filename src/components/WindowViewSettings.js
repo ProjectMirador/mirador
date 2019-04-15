@@ -70,7 +70,7 @@ export class WindowViewSettings extends Component {
           <FormControlLabel
             value="single"
             classes={{ label: windowViewType === 'single' ? classes.selectedLabel : undefined }}
-            control={<SingleIcon color={windowViewType === 'single' ? 'secondary' : undefined} />}
+            control={<SingleIcon color={windowViewType === 'single' ? 'primary' : undefined} />}
             label={t('single')}
             labelPlacement="bottom"
           />
@@ -79,7 +79,7 @@ export class WindowViewSettings extends Component {
           <FormControlLabel
             value="book"
             classes={{ label: windowViewType === 'book' ? classes.selectedLabel : undefined }}
-            control={<BookViewIcon color={windowViewType === 'book' ? 'secondary' : undefined} />}
+            control={<BookViewIcon color={windowViewType === 'book' ? 'primary' : undefined} />}
             label={t('book')}
             labelPlacement="bottom"
           />
@@ -88,7 +88,7 @@ export class WindowViewSettings extends Component {
           <FormControlLabel
             value="gallery"
             classes={{ label: windowViewType === 'gallery' ? classes.selectedLabel : undefined }}
-            control={<GalleryViewIcon color={windowViewType === 'gallery' ? 'secondary' : undefined} />}
+            control={<GalleryViewIcon color={windowViewType === 'gallery' ? 'primary' : undefined} />}
             label={t('gallery')}
             labelPlacement="bottom"
           />
