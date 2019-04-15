@@ -62,11 +62,11 @@ export class WorkspaceExport extends Component {
           </pre>
         </DialogContent>
         <DialogActions>
-          <Button color="secondary" onClick={() => handleClose()}>{t('cancel')}</Button>
+          <Button color="primary" onClick={() => handleClose()}>{t('cancel')}</Button>
           <CopyToClipboard
             text={exportableState}
           >
-            <Button variant="contained" color="secondary">{t('copy')}</Button>
+            <Button variant="contained" color="primary">{t('copy')}</Button>
           </CopyToClipboard>
         </DialogActions>
       </Dialog>

@@ -32,7 +32,7 @@ const mapStateToProps = (state, { data }) => ({
 const styles = theme => ({
   canvas: {
     '&$currentCanvas': {
-      border: `2px solid ${theme.palette.secondary.main}`,
+      border: `2px solid ${theme.palette.primary.main}`,
     },
     border: '2px solid transparent',
     boxSizing: 'border-box',

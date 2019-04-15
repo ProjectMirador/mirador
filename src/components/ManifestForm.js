@@ -123,7 +123,7 @@ export class ManifestForm extends Component {
                 {t('cancel')}
               </Button>
             )}
-            <Button id="fetchBtn" type="submit" variant="contained" color="secondary">
+            <Button id="fetchBtn" type="submit" variant="contained" color="primary">
               {t('fetchManifest')}
             </Button>
           </Grid>

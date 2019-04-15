@@ -23,7 +23,7 @@ const styles = theme => ({
       outline: 'none',
     },
     '&:hover': {
-      border: `2px solid ${theme.palette.secondary.main}`,
+      border: `2px solid ${theme.palette.primary.main}`,
     },
     border: '2px solid transparent',
     cursor: 'pointer',
@@ -36,7 +36,7 @@ const styles = theme => ({
     width: 'min-content',
   },
   galleryViewItemCurrent: {
-    border: `2px solid ${theme.palette.secondary.main}`,
+    border: `2px solid ${theme.palette.primary.main}`,
   },
 });
 

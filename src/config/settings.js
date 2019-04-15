@@ -7,10 +7,10 @@ export default {
     palette: {
       type: 'light', // dark also available
       primary: {
-        main: '#f5f5f5',
+        main: '#1967d2',
       },
       secondary: {
-        main: '#1967d2',
+        main: '#ffa224',
       },
       darkened: { // custom colors used for a specific offset in some places
         dark: '#000000',

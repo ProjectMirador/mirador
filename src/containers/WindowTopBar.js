@@ -43,7 +43,7 @@ const styles = theme => ({
   },
   windowTopBarStyle: {
     '&$focused': {
-      borderTop: `2px solid ${theme.palette.secondary.main}`,
+      borderTop: `2px solid ${theme.palette.primary.main}`,
     },
     backgroundColor: theme.palette.lightened[theme.palette.type],
     borderTop: '2px solid transparent',

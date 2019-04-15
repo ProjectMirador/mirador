@@ -21,7 +21,7 @@ export class WorkspaceAddButton extends Component {
       <Tooltip title={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}>
         <Fab
           size="medium"
-          color="secondary"
+          color="primary"
           id="addBtn"
           aria-label={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}
           className={classes.fab}

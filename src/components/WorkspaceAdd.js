@@ -90,7 +90,7 @@ export class WorkspaceAdd extends React.Component {
           variant="extended"
           disabled={addResourcesOpen}
           className={classNames(classes.fab, ns('add-resource-button'))}
-          color="secondary"
+          color="primary"
           onClick={() => (this.setAddResourcesVisibility(true))}
         >
           <AddIcon />
@@ -114,7 +114,7 @@ export class WorkspaceAdd extends React.Component {
           <Paper
             className={classes.form}
           >
-            <AppBar position="absolute" color="secondary" onClick={() => (this.setAddResourcesVisibility(false))}>
+            <AppBar position="absolute" color="primary" onClick={() => (this.setAddResourcesVisibility(false))}>
               <Toolbar variant="dense">
                 <MiradorMenuButton
                   aria-label={t('closeAddResourceForm')}

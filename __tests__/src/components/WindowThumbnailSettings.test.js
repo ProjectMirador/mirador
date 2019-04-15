@@ -29,13 +29,13 @@ describe('WindowThumbnailSettings', () => {
     expect(labels.at(2).props().value).toBe('far-right');
   });
 
-  it('should set the correct label active (by setting the secondary color)', () => {
+  it('should set the correct label active (by setting the primary color)', () => {
     let wrapper = createWrapper({ thumbnailNavigationPosition: 'far-bottom' });
-    expect(wrapper.find(FormControlLabel).at(1).props().control.props.color).toEqual('secondary');
-    expect(wrapper.find(FormControlLabel).at(2).props().control.props.color).not.toEqual('secondary');
+    expect(wrapper.find(FormControlLabel).at(1).props().control.props.color).toEqual('primary');
+    expect(wrapper.find(FormControlLabel).at(2).props().control.props.color).not.toEqual('primary');
 
     wrapper = createWrapper({ thumbnailNavigationPosition: 'far-right' });
-    expect(wrapper.find(FormControlLabel).at(2).props().control.props.color).toEqual('secondary');
+    expect(wrapper.find(FormControlLabel).at(2).props().control.props.color).toEqual('primary');
   });
 
   it('updates state when the thumbnail config selection changes', () => {
