@@ -11,6 +11,8 @@ import {
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { ListKeyboardNavigation } from '../lib/ListKeyboardNavigation';
+import elasticImgUrl from '../images/icon_workspace_elastic.svg';
+import mosaicImgUrl from '../images/icon_workspace_mosaic.svg';
 
 /**
  */
@@ -71,7 +73,7 @@ export class WorkspaceSelectionDialog extends Component {
               <Card className={classes.card}>
                 <CardMedia
                   className={classes.media}
-                  image="/src/images/icon_workspace_elastic.svg"
+                  image={elasticImgUrl}
                   title={t('elastic')}
                 />
                 <div className={classes.details}>
@@ -92,7 +94,7 @@ export class WorkspaceSelectionDialog extends Component {
               <Card className={classes.card}>
                 <CardMedia
                   className={classes.media}
-                  image="/src/images/icon_workspace_mosaic.svg"
+                  image={mosaicImgUrl}
                   title={t('mosaic')}
                 />
                 <div className={classes.details}>

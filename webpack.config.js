@@ -41,7 +41,12 @@ const baseConfig = [
             'css-loader', // translates CSS into CommonJS
             'sass-loader', // compiles Sass to CSS, using Node Sass by default
           ],
-        }],
+        },
+        {
+          test: /.svg$/,
+          use: ['url-loader'],
+        },
+      ],
     },
     output: {
       filename: 'mirador.min.js',
