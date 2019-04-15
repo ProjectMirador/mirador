@@ -95,6 +95,7 @@ const styles = theme => ({
       },
     },
     alignItems: 'flex-start',
+    background: (theme.palette.type === 'light') ? theme.palette.grey[100] : theme.palette.grey[700],
     justifyContent: 'space-between',
     minHeight: 'max-content',
     paddingLeft: theme.spacing.unit * 2,

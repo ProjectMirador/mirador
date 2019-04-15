@@ -13,6 +13,7 @@ import { Workspace } from '../../../src/components/Workspace';
 function createWrapper(props) {
   return shallow(
     <Workspace
+      classes={{}}
       isWorkspaceControlPanelVisible
       windowIds={['1', '2']}
       workspaceId="foo"

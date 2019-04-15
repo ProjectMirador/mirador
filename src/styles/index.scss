@@ -27,7 +27,6 @@
   }
 
   &-companion-window-header {
-    background: $surface-dark;
     flex-wrap: wrap;
   }
 
@@ -40,17 +39,6 @@
     .mirador-companion-window-title-controls {
       order: unset;
     }
-  }
-
-  &-workspace-viewport {
-    background: $surface-dark;
-    bottom: 0;
-    left: 0;
-    margin: 0;
-    overflow: hidden;
-    position: absolute;
-    right: 0;
-    top: 0;
   }
 
   &-workspace-with-control-panel {
