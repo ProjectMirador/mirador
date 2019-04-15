@@ -159,7 +159,7 @@ export class WorkspaceMosaic extends React.Component {
 }
 
 WorkspaceMosaic.propTypes = {
-  layout: PropTypes.oneOf(
+  layout: PropTypes.oneOfType(
     [PropTypes.object, PropTypes.string],
   ), // eslint-disable-line react/forbid-prop-types
   updateWorkspaceMosaicLayout: PropTypes.func.isRequired,
