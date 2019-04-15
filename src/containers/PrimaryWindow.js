@@ -1,5 +1,5 @@
 import { compose } from 'redux';
-import { withPlugins } from '../extend';
+import { withPlugins } from '../extend/withPlugins';
 import { PrimaryWindow } from '../components/PrimaryWindow';
 
 

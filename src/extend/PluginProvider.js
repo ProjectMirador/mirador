@@ -1,17 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ReactReduxContext } from 'react-redux';
+import PluginContext from './PluginContext';
 import {
-  PluginContext,
   filterValidPlugins,
   addPluginReducersToStore,
   connectPluginsToStore,
   createTargetToPluginMapping,
-} from '.';
-
+} from './pluginPreprocessing';
 
 /**  */
-export function PluginProvider(props) {
+export default function PluginProvider(props) {
   const { store } = useContext(ReactReduxContext);
   const { plugins, createRootReducer, children } = props;
   const [pluginMap, setPluginMap] = useState({});

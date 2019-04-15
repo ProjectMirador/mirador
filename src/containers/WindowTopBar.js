@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
-import { withPlugins } from '../extend';
+import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getManifestTitle, getWindow } from '../state/selectors';
 import { WindowTopBar } from '../components/WindowTopBar';

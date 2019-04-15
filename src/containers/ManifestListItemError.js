@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
-import { withPlugins } from '../extend';
+import { withPlugins } from '../extend/withPlugins';
 import { fetchManifest, removeManifest } from '../state/actions/manifest';
 import { ManifestListItemError } from '../components/ManifestListItemError';
 

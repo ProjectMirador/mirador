@@ -1,7 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import { withPlugins } from '../extend';
+import { withPlugins } from '../extend/withPlugins';
 import { GalleryView } from '../components/GalleryView';
 import { getManifestCanvases, getCanvasIndex } from '../state/selectors';
 

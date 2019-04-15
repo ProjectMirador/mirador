@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import curry from 'lodash/curry';
 import isEmpty from 'lodash/isEmpty';
-import { PluginContext } from '.';
+import PluginContext from './PluginContext';
 
 
 /** withPlugins should be the innermost HOC */

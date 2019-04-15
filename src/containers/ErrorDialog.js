@@ -6,7 +6,7 @@ import {
   omit,
   values,
 } from 'lodash';
-import { withPlugins } from '../extend';
+import { withPlugins } from '../extend/withPlugins';
 import { ErrorDialog } from '../components/ErrorDialog';
 import * as actions from '../state/actions';
 

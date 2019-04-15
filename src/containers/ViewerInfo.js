@@ -1,7 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { withPlugins } from '../extend';
+import { withPlugins } from '../extend/withPlugins';
 import { ViewerInfo } from '../components/ViewerInfo';
 import { getCanvasLabel, getManifestCanvases, getCanvasIndex } from '../state/selectors';
 

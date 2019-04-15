@@ -1,6 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { withPlugins, PluginContext } from '../../../src/extend';
+import { withPlugins } from '../../../src/extend/withPlugins';
+import PluginContext from '../../../src/extend/PluginContext';
 
 
 /** Mock target component */

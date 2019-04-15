@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
-import { withPlugins } from '../extend';
+import { withPlugins } from '../extend/withPlugins';
 import { WorkspaceSelectionDialog } from '../components/WorkspaceSelectionDialog';
 import * as actions from '../state/actions';
 import { getWorkspaceType } from '../state/selectors';

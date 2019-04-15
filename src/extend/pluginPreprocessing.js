@@ -1,6 +1,6 @@
 import update from 'lodash/update';
 import { connect } from 'react-redux';
-import { validatePlugin } from '.';
+import { validatePlugin } from './pluginValidation';
 
 /**
  * Returns a mapping from targets to plugins and modes

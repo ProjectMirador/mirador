@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import deepmerge from 'deepmerge';
-import { PluginProvider } from '../extend';
+import PluginProvider from '../extend/PluginProvider';
 import App from '../containers/App';
 import createStore from '../state/createStore';
 import createRootReducer from '../state/reducers/rootReducer';
