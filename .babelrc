@@ -1,4 +1,9 @@
 {
   "presets": ["@babel/preset-env", "@babel/preset-react"],
-  "plugins": ["@babel/plugin-transform-runtime", "lodash"],
+  "plugins": [
+    "@babel/plugin-transform-runtime",
+    ["lodash", { "id": [
+      "lodash", "@material-ui/core", "react-placeholder",
+      ]}
+    ]],
 }

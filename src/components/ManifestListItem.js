@@ -4,7 +4,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import ReactPlaceholder from 'react-placeholder';
+import { ReactPlaceholder } from 'react-placeholder/lib';
 import { TextBlock, TextRow, RectShape } from 'react-placeholder/lib/placeholders';
 import Img from 'react-image';
 import ManifestListItemError from '../containers/ManifestListItemError';
