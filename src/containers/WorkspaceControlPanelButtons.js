@@ -1,4 +1,4 @@
-import { withPlugins } from '../extend';
+import { withPlugins } from '../extend/withPlugins';
 import { WorkspaceControlPanelButtons }
   from '../components/WorkspaceControlPanelButtons';
 

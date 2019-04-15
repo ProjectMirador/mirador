@@ -1,6 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withPlugins } from '../extend';
+import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getLanguagesFromConfigWithCurrent } from '../state/selectors';
 import { LanguageSettings } from '../components/LanguageSettings';

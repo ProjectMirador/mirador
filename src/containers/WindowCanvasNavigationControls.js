@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { withSize } from 'react-sizeme';
 import { withStyles } from '@material-ui/core';
 import { fade } from '@material-ui/core/styles/colorManipulator';
-import { withPlugins } from '../extend';
+import { withPlugins } from '../extend/withPlugins';
 import {
   getCanvasLabel,
 } from '../state/selectors';

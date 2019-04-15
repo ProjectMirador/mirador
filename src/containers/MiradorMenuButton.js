@@ -1,6 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withPlugins } from '../extend';
+import { withPlugins } from '../extend/withPlugins';
 import { MiradorMenuButton } from '../components/MiradorMenuButton';
 import { getContainerId } from '../state/selectors';
 

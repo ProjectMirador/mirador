@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { withTranslation } from 'react-i18next';
-import { withPlugins } from '../extend';
+import { withPlugins } from '../extend/withPlugins';
 import { getManifestTitle } from '../state/selectors';
 import { MosaicRenderPreview } from '../components/MosaicRenderPreview';
 

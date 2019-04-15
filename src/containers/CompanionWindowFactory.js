@@ -1,6 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withPlugins } from '../extend';
+import { withPlugins } from '../extend/withPlugins';
 import { getCompanionWindow } from '../state/selectors';
 import { CompanionWindowFactory } from '../components/CompanionWindowFactory';
 
