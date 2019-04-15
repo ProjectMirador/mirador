@@ -5,17 +5,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {
   Card,
   CardContent,
-  CardMedia,
   ListItem,
   Typography,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import ReactSVG from 'react-svg';
 import WorkspaceTypeElasticIcon from './icons/WorkspaceTypeElasticIcon';
 import WorkspaceTypeMosaicIcon from './icons/WorkspaceTypeMosaicIcon';
 import { ListKeyboardNavigation } from '../lib/ListKeyboardNavigation';
-import elasticImgUrl from '../images/icon_workspace_elastic.svg';
-import mosaicImgUrl from '../images/icon_workspace_mosaic.svg';
 
 /**
  */
