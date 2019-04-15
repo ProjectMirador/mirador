@@ -71,6 +71,13 @@ const styles = theme => ({
     paddingTop: 0,
     textAlign: 'left',
   },
+  svg: {
+    backgroundSize: '90px 120px',
+  },
+  svgRoot: {
+    height: '90px',
+    width: '120px',
+  },
 });
 
 const enhance = compose(

@@ -10,6 +10,9 @@ import {
   Typography,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import ReactSVG from 'react-svg';
+import WorkspaceTypeElasticIcon from './icons/WorkspaceTypeElasticIcon';
+import WorkspaceTypeMosaicIcon from './icons/WorkspaceTypeMosaicIcon';
 import { ListKeyboardNavigation } from '../lib/ListKeyboardNavigation';
 import elasticImgUrl from '../images/icon_workspace_elastic.svg';
 import mosaicImgUrl from '../images/icon_workspace_mosaic.svg';
@@ -71,10 +74,11 @@ export class WorkspaceSelectionDialog extends Component {
               value="elastic"
             >
               <Card className={classes.card}>
-                <CardMedia
-                  className={classes.media}
-                  image={elasticImgUrl}
-                  title={t('elastic')}
+                <WorkspaceTypeElasticIcon
+                  classes={{
+                    root: classes.svgRoot,
+                  }}
+                  viewBox="0 0 90 120"
                 />
                 <div className={classes.details}>
                   <CardContent
@@ -92,10 +96,11 @@ export class WorkspaceSelectionDialog extends Component {
               value="mosaic"
             >
               <Card className={classes.card}>
-                <CardMedia
-                  className={classes.media}
-                  image={mosaicImgUrl}
-                  title={t('mosaic')}
+                <WorkspaceTypeMosaicIcon
+                  classes={{
+                    root: classes.svgRoot,
+                  }}
+                  viewBox="0 0 90 120"
                 />
                 <div className={classes.details}>
                   <CardContent
