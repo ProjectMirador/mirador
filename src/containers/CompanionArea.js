@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
-import { getCompanionWindowsForPosition, getCompanionAreaVisibility, getWindow } from '../state/selectors';
+import { getCompanionWindowIdsForPosition, getCompanionAreaVisibility, getWindow } from '../state/selectors';
 import * as actions from '../state/actions';
 import { CompanionArea } from '../components/CompanionArea';
 
 /** */
 const mapStateToProps = (state, { windowId, position }) => ({
   companionAreaOpen: getCompanionAreaVisibility(state, { position, windowId }),
-  companionWindowIds: getCompanionWindowsForPosition(state, { position, windowId }).map(w => w.id),
+  companionWindowIds: getCompanionWindowIdsForPosition(state, { position, windowId }),
   sideBarOpen: (getWindow(state, { windowId }) || {}).sideBarOpen,
 });
 

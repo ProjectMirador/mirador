@@ -66,21 +66,6 @@ export const getCanvasIndex = createSelector(
   ),
 );
 
-/** Return position of thumbnail navigation in a certain window.
-* @param {object} state
-* @param {String} windowId
-* @param {String}
-*/
-export const getThumbnailNavigationPosition = createSelector(
-  [
-    getWindow,
-    state => state.companionWindows,
-  ],
-  (window, companionWindows) => window
-    && companionWindows[window.thumbnailNavigationId]
-    && companionWindows[window.thumbnailNavigationId].position,
-);
-
 /** Return type of view in a certain window.
 * @param {object} state
 * @param {object} props
@@ -93,91 +78,12 @@ export const getWindowViewType = createSelector(
   window => window && window.view,
 );
 
-/**
-* Return compantion window ids from a window
-* @param {String} windowId
-* @return {Array}
-*/
-export const getCompanionWindowIds = createSelector(
-  [getWindow],
-  window => (window && window.companionWindowIds) || [],
-);
-
-export const getCompanionWindow = createSelector(
-  [
-    state => state.companionWindows,
-    (state, { companionWindowId }) => companionWindowId,
-  ],
-  (companionWindows, companionWindowId) => companionWindows[companionWindowId],
-);
-
-/**
- * Return companion windows of a window
- * @param {String} windowId
- * @return {Array}
- */
-export const getCompanionWindowsOfWindow = createSelector(
-  [getCompanionWindowIds, state => state.companionWindows],
-  (companionWindowIds, companionWindows) => companionWindowIds.map(id => companionWindows[id]),
-);
-
-/**
-* Return the companion window string from state in a given windowId and position
-* @param {object} state
-* @param {String} windowId
-* @param {String} position
-* @return {String}
-*/
-export const getCompanionWindowsForPosition = createSelector(
-  [getCompanionWindowsOfWindow, (state, { position }) => position],
-  (companionWindows, position) => companionWindows.filter(cw => cw.position === position),
-);
-
 export const getViewer = createSelector(
   [
     state => state.viewers,
     (state, { windowId }) => windowId,
   ],
   (viewers, windowId) => viewers[windowId],
-);
-
-/**
- * Returns the visibility of the companion area
- * @param {object} state
- * @param {object} props
- * @return {Boolean}
- */
-export const getCompanionAreaVisibility = createSelector(
-  [
-    (state, { position }) => position,
-    getWindow,
-  ],
-  (position, window) => {
-    if (!window) return false;
-    const { companionAreaOpen, sideBarOpen } = window;
-    if (position !== 'left') return true;
-    return !!(companionAreaOpen && sideBarOpen);
-  },
-);
-
-export const selectCompanionWindowDimensions = createSelector(
-  [getCompanionWindowsOfWindow],
-  (companionWindows) => {
-    let width = 0;
-    let height = 0;
-
-    companionWindows.forEach((cw) => {
-      if (cw.position.match(/right/)) {
-        width += 235;
-      }
-
-      if (cw.position.match(/bottom/)) {
-        height += 201;
-      }
-    });
-
-    return { height, width };
-  },
 );
 
 /**
