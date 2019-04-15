@@ -90,7 +90,7 @@ export class Workspace extends React.Component {
    * render
    */
   render() {
-    const { isWorkspaceControlPanelVisible, t } = this.props;
+    const { classes, isWorkspaceControlPanelVisible, t } = this.props;
 
     return (
       <div
@@ -98,6 +98,7 @@ export class Workspace extends React.Component {
           classNames(
             ns('workspace-viewport'),
             (isWorkspaceControlPanelVisible && ns('workspace-with-control-panel')),
+            classes.workspaceViewport,
           )
         }
       >
@@ -109,6 +110,7 @@ export class Workspace extends React.Component {
 }
 
 Workspace.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
   maximizedWindowIds: PropTypes.arrayOf(PropTypes.string),
   t: PropTypes.func.isRequired,
