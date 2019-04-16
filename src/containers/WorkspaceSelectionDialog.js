@@ -71,10 +71,7 @@ const styles = theme => ({
     paddingTop: 0,
     textAlign: 'left',
   },
-  svg: {
-    backgroundSize: '90px 120px',
-  },
-  svgRoot: {
+  svgIcon: {
     flexShrink: 0,
     height: '90px',
     width: '120px',
