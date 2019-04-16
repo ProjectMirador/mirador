@@ -308,5 +308,5 @@ export default function WorkspaceTypeMosaicIcon(props) {
         </g>
       </svg>
     </SVGUniqueID>
-);
+  );
 }
