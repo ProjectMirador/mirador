@@ -65,7 +65,6 @@ export class ListKeyboardNavigation extends Component {
     const { selected } = this.state;
     this.listItems = children;
     this.values = children.map(child => child.props.value);
-
     const childrenSelected = children.map((child, index) => {
       const ret = React.cloneElement(child, {
         ...child.props,
@@ -80,7 +79,7 @@ export class ListKeyboardNavigation extends Component {
       return ret;
     });
     return (
-      <List tabIndex="0" ref={(ref) => { this.selectedChild = ref; }} onKeyDown={this.keyDownHandler}>
+      <List tabIndex="0" {...this.props} ref={(ref) => { this.selectedChild = ref; }} onKeyDown={this.keyDownHandler}>
         {childrenSelected}
       </List>
     );

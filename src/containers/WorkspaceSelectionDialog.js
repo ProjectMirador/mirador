@@ -25,14 +25,56 @@ const mapStateToProps = state => ({ workspaceType: getWorkspaceType(state) });
 
 /** */
 const styles = theme => ({
-  dialog: {
-    width: '400px',
+  card: {
+    backgroundColor: 'transparent',
+    borderRadius: '0',
+    boxShadow: '0 0 transparent',
+    display: 'flex',
+  },
+  content: {
+    flex: '1 0 auto',
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  headline: {
+    paddingBottom: '6px',
+  },
+  list: {
+    '&active': {
+      outline: 'none',
+    },
+    '&focus': {
+      outline: 'none',
+    },
+    outline: 'none',
   },
   listItem: {
+    '&:focus': {
+      backgroundColor: theme.palette.action.focus,
+    },
     '&:hover': {
       backgroundColor: theme.palette.action.hover,
     },
     cursor: 'pointer',
+  },
+  media: {
+    flex: '0 0 120px',
+    height: '90px',
+  },
+  root: {
+    '&:last-child': {
+      paddingBottom: '12px',
+    },
+    paddingBottom: 0,
+    paddingTop: 0,
+    textAlign: 'left',
+  },
+  svgIcon: {
+    flexShrink: 0,
+    height: '90px',
+    width: '120px',
   },
 });
 

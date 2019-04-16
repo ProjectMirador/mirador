@@ -58,6 +58,7 @@
     "react-resize-observer": "^1.1.1",
     "react-rnd": "^9.1.1",
     "react-sizeme": "^2.5.2",
+    "react-svg-unique-id": "^1.0.1",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.7.1",
     "redux": "4.0.1",

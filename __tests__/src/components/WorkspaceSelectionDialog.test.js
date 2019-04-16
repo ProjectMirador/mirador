@@ -7,27 +7,28 @@ describe('WorkspaceSettings', () => {
   let handleClose;
   let updateConfig;
 
-  beforeEach(() => {
+  /**
+   * create wrapper
+   * @param {*} props additional properties
+   */
+  function createWrapper(props) {
     handleClose = jest.fn();
     updateConfig = jest.fn();
 
-    wrapper = shallow(
+    return shallow(
       <WorkspaceSelectionDialog
-        classes={{ listItem: {} }}
+        classes={{ list: {} }}
         open
         handleClose={handleClose}
         updateConfig={updateConfig}
+        workspaceType="elastic"
+        {...props}
       />,
     );
-  });
+  }
 
   it('renders without an error', () => {
-    expect(wrapper.find('WithStyles(Dialog)').length).toBe(1);
-    expect(wrapper.find('WithStyles(List)').length).toBe(1);
-  });
-
-  it('calls updateConfig updating the workspace type when selected', () => {
-    wrapper.find('WithStyles(ListItem)').first().simulate('click');
-    expect(updateConfig).toHaveBeenCalledWith({ workspace: { type: 'elastic' } });
+    wrapper = createWrapper();
+    expect(wrapper.matchesElement('WithStyles(WorkspaceSelectionDialog)'));
   });
 });
