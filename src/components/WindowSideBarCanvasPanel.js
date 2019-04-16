@@ -96,7 +96,6 @@ export class WindowSideBarCanvasPanel extends Component {
    */
   render() {
     const {
-<<<<<<< HEAD
       canvases,
       classes,
       id,
@@ -106,9 +105,6 @@ export class WindowSideBarCanvasPanel extends Component {
       toggleDraggingEnabled,
       variant,
       windowId,
-=======
-      canvases, setCanvas, classes, t, toggleDraggingEnabled, variant, windowId, id,
->>>>>>> e9cc36c1... #2355: adds toggling of the disableDragging property
     } = this.props;
 
     const { variantSelectionOpened } = this.state;

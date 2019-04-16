@@ -54,6 +54,7 @@ class WorkspaceElastic extends React.Component {
           }}
           cancel={`.${ns('window')}`}
           className={ns('workspace')}
+          disableDragging={!workspace.draggingEnabled}
         >
           {
             Object.keys(elasticLayout).map(windowId => (

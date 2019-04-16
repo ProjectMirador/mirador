@@ -208,13 +208,3 @@ export function setWindowViewType(windowId, viewType) {
     windowId,
   };
 }
-
-/**
- * toggleDraggingEnabled - action creator
- * @param {String} windowId
- */
-export function toggleDraggingEnabled() {
-  return {
-    type: ActionTypes.TOGGLE_DRAGGING,
-  };
-}
