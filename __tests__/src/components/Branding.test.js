@@ -32,7 +32,6 @@ describe('Branding', () => {
         <div>
           <div>
             <Typography>mirador</Typography>
-            <Typography>version</Typography>
           </div>
           <Typography>
             <IconButton>
