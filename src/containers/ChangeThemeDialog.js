@@ -21,7 +21,7 @@ const mapDispatchToProps = {
  * @private
  */
 const mapStateToProps = state => ({
-  theme: state.config.theme.palette.type,
+  theme: state.config.selectedTheme,
 });
 
 /** */

@@ -44,8 +44,8 @@ describe('getShowZoomControlsConfig', () => {
 
 describe('getTheme', () => {
   it('returns the theme', () => {
-    const state = { config: { theme: 'dark' } };
-    expect(getTheme(state)).toEqual('dark');
+    const state = { config: { theme: { whatever: 'dark' } } };
+    expect(getTheme(state)).toEqual({ whatever: 'dark' });
   });
 });
 
