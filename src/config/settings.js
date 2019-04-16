@@ -10,6 +10,11 @@ export default {
         type: 'dark',
         primary: {
           main: '#4db6ac',
+        },
+        shades: {
+          dark: '#000000',
+          main: '#424242',
+          light: '#616161',
         }
       }
     },
@@ -29,8 +34,9 @@ export default {
         main: '#ffa224',
       },
       shades: { // Shades that can be used to offset color areas of the Workspace / Window
-        dark: ['#000000', '#424242', '#616161'], // dark -> light
-        light: ['#eeeeee', '#ffffff', '#f5f5f5'], // dark -> light (almost :))
+        dark: '#eeeeee',
+        main: '#ffffff',
+        light: '#f5f5f5',
       },
       error: {
         main: '#b00020',
