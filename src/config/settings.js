@@ -4,7 +4,7 @@ export default {
     width: 50,
   },
   selectedTheme: 'light', // dark also available
-  theme: { // Sets up a MaterialUI theme. See https://material-ui.com/customization/default-theme/
+  themes: {
     dark: {
       palette: {
         type: 'dark',
@@ -13,6 +13,13 @@ export default {
         }
       }
     },
+    light: {
+      palette: {
+        type: 'light',
+      }
+    }
+  },
+  theme: { // Sets up a MaterialUI theme. See https://material-ui.com/customization/default-theme/
     palette: {
       type: 'light',
       primary: {

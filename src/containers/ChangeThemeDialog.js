@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
+import { getThemeIds } from '../state/selectors';
 import { ChangeThemeDialog } from '../components/ChangeThemeDialog';
 
 /**
@@ -21,18 +22,19 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
  * @private
  */
 const mapStateToProps = state => ({
-  theme: state.config.selectedTheme,
+  selectedTheme: state.config.selectedTheme,
+  themeIds: getThemeIds(state),
 });
 
 /** */
 const styles = theme => ({
-  darkColor: {
+  dark: {
     color: '#000000',
   },
   dialogContent: {
     padding: 0,
   },
-  lightColor: {
+  light: {
     color: '#BDBDBD',
   },
   listitem: {

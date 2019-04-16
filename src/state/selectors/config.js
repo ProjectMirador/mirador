@@ -27,7 +27,12 @@ export const getShowZoomControlsConfig = createSelector(
 
 export const getTheme = createSelector(
   [getConfig],
-  ({ theme, selectedTheme }) => deepmerge(theme, theme[selectedTheme] || {}),
+  ({ theme, themes, selectedTheme }) => deepmerge(theme, themes[selectedTheme] || {}),
+);
+
+export const getThemeIds = createSelector(
+  [getConfig],
+  ({ themes }) => Object.keys(themes),
 );
 
 export const getWorkspaceType = createSelector(

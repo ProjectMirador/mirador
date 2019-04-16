@@ -12,7 +12,8 @@ function createWrapper(props) {
       handleClose={() => {}}
       setSelectedTheme={() => {}}
       t={t => (t)}
-      theme="light"
+      selectedTheme="light"
+      themeIds={['light', 'dark']}
       {...props}
     />,
   );
