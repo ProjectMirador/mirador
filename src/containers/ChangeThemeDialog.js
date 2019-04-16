@@ -11,9 +11,9 @@ import { ChangeThemeDialog } from '../components/ChangeThemeDialog';
  * @memberof ChangeThemeDialog
  * @private
  */
-const mapDispatchToProps = {
-  updateConfig: actions.updateConfig,
-};
+const mapDispatchToProps = (dispatch, { windowId }) => ({
+  setSelectedTheme: theme => dispatch(actions.updateConfig({ selectedTheme: theme })),
+});
 
 /**
  * mapStateToProps - to hook up connect
