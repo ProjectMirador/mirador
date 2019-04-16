@@ -29,13 +29,7 @@ export class ChangeThemeDialog extends Component {
   handleThemeChange(theme) {
     const { updateConfig, handleClose } = this.props;
 
-    updateConfig({
-      theme: {
-        palette: {
-          type: theme,
-        },
-      },
-    });
+    updateConfig({ selectedTheme: theme });
     handleClose();
   }
 

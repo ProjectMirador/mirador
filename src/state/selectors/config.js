@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import deepmerge from 'deepmerge';
 
 /** */
 function getConfig(state) {
@@ -26,7 +27,7 @@ export const getShowZoomControlsConfig = createSelector(
 
 export const getTheme = createSelector(
   [getConfig],
-  ({ theme }) => theme,
+  ({ theme, selectedTheme }) => deepmerge(theme, theme[selectedTheme] || {}),
 );
 
 export const getWorkspaceType = createSelector(
