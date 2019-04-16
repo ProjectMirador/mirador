@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import MiradorIcon from './icons/MiradorIcon';
-import { version } from '../../package.json';
 
 /**
  * Opens a new window for click
@@ -22,7 +21,6 @@ export class Branding extends Component {
         { variant === 'wide' && (
         <div>
           <Typography align="center" component="p" variant="h3">{t('mirador')}</Typography>
-          <Typography align="center" variant="caption">{t('version', { version })}</Typography>
         </div>
         )}
         <Typography align="center">
