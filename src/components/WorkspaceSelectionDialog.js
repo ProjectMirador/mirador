@@ -71,10 +71,8 @@ export class WorkspaceSelectionDialog extends Component {
             >
               <Card className={classes.card}>
                 <WorkspaceTypeElasticIcon
-                  classes={{
-                    root: classes.svgRoot,
-                  }}
-                  viewBox="0 0 90 120"
+                  className={classes.svgRoot}
+                  viewBox="0 0 120 90"
                 />
                 <div className={classes.details}>
                   <CardContent
@@ -93,10 +91,8 @@ export class WorkspaceSelectionDialog extends Component {
             >
               <Card className={classes.card}>
                 <WorkspaceTypeMosaicIcon
-                  classes={{
-                    root: classes.svgRoot,
-                  }}
-                  viewBox="0 0 90 120"
+                  className={classes.svgRoot}
+                  viewBox="0 0 120 90"
                 />
                 <div className={classes.details}>
                   <CardContent

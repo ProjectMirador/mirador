@@ -1,77 +1,312 @@
 import React from 'react';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import { SVGUniqueID } from 'react-svg-unique-id';
 
 /**
- * BookViewIcon ~
+ * WorkspaceTypeMosaicIcon ~
 */
 export default function WorkspaceTypeMosaicIcon(props) {
   return (
-    <SvgIcon {...props}>
-      <svg xmlns="http://www.w3.org/2000/svg" width="300" height="225" viewBox="0 0 300 225">
+    <SVGUniqueID>
+      <svg xmlns="http://www.w3.org/2000/svg" {...props} version="1.1">
         <defs>
-          <linearGradient id="linear-gradient" x1="0.5" y1="1" x2="0.5" gradientUnits="objectBoundingBox">
-            <stop offset="0" />
-            <stop offset="0.14" stopOpacity="0.631" />
-            <stop offset="1" stopOpacity="0" />
-          </linearGradient>
-          <linearGradient id="linear-gradient-2" x1="0.5" y1="1" x2="0.5" gradientUnits="objectBoundingBox">
-            <stop offset="0" stopColor="#fff" stopOpacity="0" />
-            <stop offset="0.23" stopColor="#fff" stopOpacity="0.012" />
-            <stop offset="0.36" stopColor="#fff" stopOpacity="0.039" />
-            <stop offset="0.47" stopColor="#fff" stopOpacity="0.102" />
-            <stop offset="0.57" stopColor="#fff" stopOpacity="0.18" />
-            <stop offset="0.67" stopColor="#fff" stopOpacity="0.278" />
-            <stop offset="0.75" stopColor="#fff" stopOpacity="0.412" />
-            <stop offset="0.83" stopColor="#fff" stopOpacity="0.561" />
-            <stop offset="0.91" stopColor="#fff" stopOpacity="0.741" />
-            <stop offset="0.98" stopColor="#fff" stopOpacity="0.929" />
-            <stop offset="1" stopColor="#fff" />
-          </linearGradient>
-          <clipPath id="clip-mosaic_icon">
-            <rect width="300" height="225" />
-          </clipPath>
-        </defs>
-        <g id="mosaic_icon" data-name="mosaic icon" clipPath="url(#clip-mosaic_icon)">
-          <rect width="300" height="225" fill="#fff" />
-          <path id="checkbox" d="M258.766,37.316v146.5H39.053V37.316Zm40.07-39.254h-300v225h300Z" transform="translate(1.163 1.938)" fill="#010101" fillRule="evenodd" opacity="0.5" />
-          <path id="checkbox-2" data-name="checkbox" d="M258.766,37.316v146.5H39.053V37.316Zm40.07-39.254h-300v225h300Z" transform="translate(1.164 1.938)" fill="#010101" fillRule="evenodd" opacity="0.246" />
-          <g id="Path_821" data-name="Path 821" transform="translate(40 39)" fill="none">
-            <path d="M0,0H220V147H0Z" stroke="none" />
-            <path d="M 2 2 L 2 145 L 218 145 L 218 2 L 172.9869689941406 2 L 2 2 M 0 0 L 172.9869689941406 0 L 220 0 L 220 147 L 0 147 L 0 0 Z" stroke="none" fill="#01579b" />
-          </g>
-          <g id="Rectangle_257" data-name="Rectangle 257" transform="translate(40 39)" fill="#fff" stroke="#01579b" strokeWidth="2">
-            <rect width="20" height="147" stroke="none" />
-            <rect x="1" y="1" width="18" height="145" fill="none" />
-          </g>
-          <g id="Group_688" data-name="Group 688" transform="translate(-27.5 -126)">
-            <circle id="teal_circle" data-name="teal circle" cx="7.5" cy="7.5" r="7.5" transform="translate(70 171)" fill="#009688" />
-            <g id="Group_333" data-name="Group 333" transform="translate(70 171)" opacity="0.12">
-              <path id="gradient_border_2" data-name="gradient border 2" d="M3408,959.089A4.911,4.911,0,1,1,3403.09,964a4.911,4.911,0,0,1,4.911-4.911m0-.089a5,5,0,1,0,5,5,5,5,0,0,0-5-5Z" transform="translate(-3403 -959)" fill="url(#linear-gradient)" />
-              <path id="gradient_border_1" data-name="gradient border 1" d="M3408,959.089A4.911,4.911,0,1,1,3403.09,964a4.911,4.911,0,0,1,4.911-4.911m0-.089a5,5,0,1,0,5,5,5,5,0,0,0-5-5Z" transform="translate(-3403 -959)" fill="url(#linear-gradient-2)" />
+          <filter id="alpha" filterUnits="objectBoundingBox" x="0%" y="0%" width="100%" height="100%">
+            <feColorMatrix type="matrix" in="SourceGraphic" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0" />
+          </filter>
+          <mask id="mask0">
+            <g filter="url(#alpha)">
+              <rect x="0" y="0" width="120" height="90" style={{ fill: 'rgb(0%,0%,0%)', fillOpacity: '0.501961', stroke: 'none' }} />
             </g>
+          </mask>
+          <clipPath id="clip1">
+            <rect width="120" height="90" />
+          </clipPath>
+          <g id="surface6" clipPath="url(#clip1)">
+            <path
+              style={{
+                fill: 'rgb(0.392157%,0.392157%,0.392157%)',
+                fillOpacity: '1',
+                fillRule: 'evenodd',
+                stroke: 'none',
+              }}
+              d="M 103.972656 15.703125 L 103.972656 74.300781 L 16.085938 74.300781 L 16.085938 15.703125 Z M 120 0 L 0 0 L 0 90 L 120 90 Z M 120 0 "
+            />
           </g>
-          <g id="Rectangle_270" data-name="Rectangle 270" transform="translate(60 40.647)" fill="#88c6c3" stroke="#707070" strokeWidth="1" opacity="0.747">
-            <rect width="99" height="72" stroke="none" />
-            <rect x="0.5" y="0.5" width="98" height="71" fill="none" />
+          <mask id="mask1">
+            <g filter="url(#alpha)">
+              <rect x="0" y="0" width="120" height="90" style={{ fill: 'rgb(0%,0%,0%)', fillOpacity: '0.247059', stroke: 'none' }} />
+            </g>
+          </mask>
+          <clipPath id="clip2">
+            <rect width="120" height="90" />
+          </clipPath>
+          <g id="surface9" clipPath="url(#clip2)">
+            <path
+              style={{
+                fill: 'rgb(0.392157%,0.392157%,0.392157%)',
+                fillOpacity: '1',
+                fillRule: 'evenodd',
+                stroke: 'none',
+              }}
+              d="M 103.972656 15.703125 L 103.972656 74.300781 L 16.085938 74.300781 L 16.085938 15.703125 Z M 120 0 L 0 0 L 0 90 L 120 90 Z M 120 0 "
+            />
           </g>
-          <g id="Rectangle_271" data-name="Rectangle 271" transform="translate(159 40.647)" fill="#88c6c3" stroke="#707070" strokeWidth="1" opacity="0.747">
-            <rect width="99" height="72" stroke="none" />
-            <rect x="0.5" y="0.5" width="98" height="71" fill="none" />
+          <mask id="mask2">
+            <g filter="url(#alpha)">
+              <rect x="0" y="0" width="120" height="90" style={{ fill: 'rgb(0%,0%,0%)', fillOpacity: '0.121569', stroke: 'none' }} />
+            </g>
+          </mask>
+          <linearGradient id="linear0" gradientUnits="userSpaceOnUse" x1="0.5" y1="1" x2="0.5" y2="0" gradientTransform="matrix(4,0,0,4,17,18)">
+            <stop offset="0" style={{ stopColor: 'rgb(0%,0%,0%)', stopOpacity: '1' }} />
+            <stop offset="0.14" tyle={{ stopColor: 'rgb(0%,0%,0%)', stopOpacity: '0.631373' }} />
+            <stop offset="1" tyle={{ stopColor: 'rgb(0%,0%,0%)', stopOpacity: '0' }} />
+          </linearGradient>
+          <linearGradient id="linear1" gradientUnits="userSpaceOnUse" x1="0.5" y1="1" x2="0.5" y2="0" gradientTransform="matrix(4,0,0,4,17,18)">
+            <stop offset="0" style={{ stopColor: 'rgb(100%,100%,100%)', stopOpacity: '0' }} />
+            <stop offset="0.23" style={{ stopColor: 'rgb(100%,100%,100%)', stopOpacity: '0.0117647' }} />
+            <stop offset="0.36" style={{ stopColor: 'rgb(100%,100%,100%)', stopOpacity: '0.0392157' }} />
+            <stop offset="0.47" style={{ stopColor: 'rgb(100%,100%,100%)', stopOpacity: '0.101961' }} />
+            <stop offset="0.57" style={{ stopColor: 'rgb(100%,100%,100%)', stopOpacity: '0.180392' }} />
+            <stop offset="0.67" style={{ stopColor: 'rgb(100%,100%,100%)', stopOpacity: '0.278431' }} />
+            <stop offset="0.75" style={{ stopColor: 'rgb(100%,100%,100%)', stopOpacity: '0.411765' }} />
+            <stop offset="0.83" style={{ stopColor: 'rgb(100%,100%,100%)', stopOpacity: '0.560784' }} />
+            <stop offset="0.91" style={{ stopColor: 'rgb(100%,100%,100%)', stopOpacity: '0.741176' }} />
+            <stop offset="0.98" style={{ stopColor: 'rgb(100%,100%,100%)', stopOpacity: '0.929412' }} />
+            <stop offset="1" style={{ stopColor: 'rgb(100%,100%,100%)', stopOpacity: '1' }} />
+          </linearGradient>
+          <clipPath id="clip3">
+            <rect width="120" height="90" />
+          </clipPath>
+          <g id="surface12" clipPath="url(#clip3)">
+            <path
+              style={{
+                fill: 'url(#linear0)',
+                fillRule: 'nonzero',
+                stroke: 'none',
+              }}
+              d="M 19 18.035156 C 20.085938 18.035156 20.964844 18.914062 20.964844 20 C 20.964844 21.085938 20.085938 21.964844 19 21.964844 C 17.914062 21.964844 17.035156 21.085938 17.035156 20 C 17.035156 18.914062 17.914062 18.035156 19 18.035156 M 19 18 C 17.894531 18 17 18.894531 17 20 C 17 21.105469 17.894531 22 19 22 C 20.105469 22 21 21.105469 21 20 C 21 18.894531 20.105469 18 19 18 Z M 19 18 "
+            />
+            <path
+              style={{
+                fill: 'url(#linear1)',
+                fillRule: 'nonzero',
+                stroke: 'none',
+              }}
+              d="M 19 18.035156 C 20.085938 18.035156 20.964844 18.914062 20.964844 20 C 20.964844 21.085938 20.085938 21.964844 19 21.964844 C 17.914062 21.964844 17.035156 21.085938 17.035156 20 C 17.035156 18.914062 17.914062 18.035156 19 18.035156 M 19 18 C 17.894531 18 17 18.894531 17 20 C 17 21.105469 17.894531 22 19 22 C 20.105469 22 21 21.105469 21 20 C 21 18.894531 20.105469 18 19 18 Z M 19 18 "
+            />
           </g>
-          <g id="Rectangle_272" data-name="Rectangle 272" transform="translate(192 112.647)" fill="#88c6c3" stroke="#707070" strokeWidth="1" opacity="0.747">
-            <rect width="66" height="71.45" stroke="none" />
-            <rect x="0.5" y="0.5" width="65" height="70.45" fill="none" />
+          <mask id="mask3">
+            <g filter="url(#alpha)">
+              <rect x="0" y="0" width="120" height="90" style={{ fill: 'rgb(0%,0%,0%)', fillOpacity: ' 0.745098', stroke: 'none' }} />
+            </g>
+          </mask>
+          <clipPath id="clip4">
+            <rect width="120" height="90" />
+          </clipPath>
+          <g id="surface15" clipPath="url(#clip4)">
+            <path
+              style={{
+                fill: 'rgb(53.333333%,77.647059%,76.470588%)',
+                fillOpacity: '1',
+                fillRule: 'nonzero',
+                stroke: 'none',
+              }}
+              d="M 24 16.257812 L 63.601562 16.257812 L 63.601562 45.058594 L 24 45.058594 Z M 24 16.257812 "
+            />
+            <path
+              style={{
+                fill: 'none',
+                stroke: 'rgb(43.921569%,43.921569%,43.921569%)',
+                strokeLinecap: 'butt',
+                strokeLinejoin: 'miter',
+                strokeMiterlimit: '4',
+                strokeOpacity: '1',
+                strokeWidth: '1',
+              }}
+              d="M 0.498047 0.495578 L 98.496094 0.495578 L 98.496094 71.501437 L 0.498047 71.501437 Z M 0.498047 0.495578 "
+              transform="matrix(0.4,0,0,0.4,24,16.2588)"
+            />
           </g>
-          <g id="Rectangle_284" data-name="Rectangle 284" transform="translate(60 112.647)" fill="#88c6c3" stroke="#707070" strokeWidth="1" opacity="0.747">
-            <rect width="66" height="71.45" stroke="none" />
-            <rect x="0.5" y="0.5" width="65" height="70.45" fill="none" />
+          <mask id="mask4">
+            <g filter="url(#alpha)">
+              <rect x="0" y="0" width="120" height="90" style={{ fill: 'rgb(0%,0%,0%)', fillOpacity: '0.745098', stroke: 'none' }} />
+            </g>
+          </mask>
+          <clipPath id="clip5">
+            <rect width="120" height="90" />
+          </clipPath>
+          <g id="surface18" clipPath="url(#clip5)">
+            <path
+              style={{
+                fill: 'rgb(53.333333%,77.647059%,76.470588%)',
+                fillOpacity: '1',
+                fillRule: 'nonzero',
+                stroke: ' none',
+              }}
+              d="M 63.601562 16.257812 L 103.199219 16.257812 L 103.199219 45.058594 L 63.601562 45.058594 Z M 63.601562 16.257812 "
+            />
+            <path
+              style={{
+                fill: 'none',
+                stroke: 'rgb(43.921569%,43.921569%,43.921569%)',
+                strokeLinecap: 'butt',
+                strokeLinejoin: 'miter',
+                strokeMiterlimit: '4',
+                strokeOpacity: '1',
+                strokeWidth: '1',
+              }}
+              d="M 0.501953 0.495578 L 98.5 0.495578 L 98.5 71.501437 L 0.501953 71.501437 Z M 0.501953 0.495578 "
+              transform="matrix(0.4,0,0,0.4,63.6,16.2588)"
+            />
           </g>
-          <g id="Rectangle_285" data-name="Rectangle 285" transform="translate(126 112.647)" fill="#88c6c3" stroke="#707070" strokeWidth="1" opacity="0.747">
-            <rect width="66" height="71.45" stroke="none" />
-            <rect x="0.5" y="0.5" width="65" height="70.45" fill="none" />
+          <mask id="mask5">
+            <g filter="url(#alpha)">
+              <rect x="0" y="0" width="120" height="90" style={{ fill: 'rgb(0%,0%,0%)', fillOpacity: '0.745098', stroke: 'none' }} />
+            </g>
+          </mask>
+          <clipPath id="clip6">
+            <rect width="120" height="90" />
+          </clipPath>
+          <g id="surface21" clipPath="url(#clip6)">
+            <path
+              style={{
+                fill: 'rgb(53.333333%,77.647059%,76.470588%)',
+                fillOpacity: 1,
+                fillRule: 'nonzero',
+                stroke: 'none',
+              }}
+              d="M 76.800781 45.058594 L 103.199219 45.058594 L 103.199219 73.640625 L 76.800781 73.640625 Z M 76.800781 45.058594 "
+            />
+            <path
+              style={{
+                fill: 'none',
+                stroke: ' rgb(43.921569%,43.921569%,43.921569%)',
+                strokeLinecap: 'butt',
+                strokeLinejoin: 'miter',
+                strokeMiterlimit: '4',
+                strokeOpacity: '1',
+                strokeWidth: '1',
+              }}
+              d="M 0.5 0.497531 L 65.5 0.497531 L 65.5 70.94675 L 0.5 70.94675 Z M 0.5 0.497531 "
+              transform="matrix(0.4,0,0,0.4,76.8,45.0588)"
+            />
           </g>
+          <mask id="mask6">
+            <g filter="url(#alpha)">
+              <rect x="0" y="0" width="120" height="90" style={{ fill: 'rgb(0%,0%,0%)', fillOpacity: 0.745098, stroke: 'none' }} />
+            </g>
+          </mask>
+          <clipPath id="clip7">
+            <rect width="120" height="90" />
+          </clipPath>
+          <g id="surface24" clipPath="url(#clip7)">
+            <path
+              style={{
+                fill: 'rgb(53.333333%,77.647059%,76.470588%)',
+                fillOpacity: '1',
+                fillRule: 'nonzero',
+                stroke: 'none',
+              }}
+              d="M 24 45.058594 L 50.398438 45.058594 L 50.398438 73.640625 L 24 73.640625 Z M 24 45.058594 "
+            />
+            <path
+              style={{
+                fill: 'none',
+                stroke: 'rgb(43.921569%,43.921569%,43.921569%)',
+                strokeLinecap: 'butt',
+                strokeLinejoin: 'miter',
+                strokeMiterlimit: '4',
+                strokeOpacity: '1',
+                strokeWidth: '1',
+              }}
+              d="M 0.498047 0.497531 L 65.498047 0.497531 L 65.498047 70.94675 L 0.498047 70.94675 Z M 0.498047 0.497531 "
+              transform="matrix(0.4,0,0,0.4,24,45.0588)"
+            />
+          </g>
+          <mask id="mask7">
+            <g filter="url(#alpha)">
+              <rect x="0" y="0" width="120" height="90" style={{ fill: 'rgb(0%,0%,0%)', fillOpacity: '0.745098', stroke: 'none' }} />
+            </g>
+          </mask>
+          <clipPath id="clip8">
+            <rect width="120" height="90" />
+          </clipPath>
+          <g id="surface27" clipPath="url(#clip8)">
+            <path
+              style={{
+                fill: 'rgb(53.333333%,77.647059%,76.470588%)',
+                fillOpacity: 1,
+                fillRule: 'nonzero',
+                stroke: 'none',
+              }}
+              d="M 50.398438 45.058594 L 76.800781 45.058594 L 76.800781 73.640625 L 50.398438 73.640625 Z M 50.398438 45.058594 "
+            />
+            <path
+              style={{
+                fill: 'none',
+                stroke: 'rgb(43.921569%,43.921569%,43.921569%)',
+                strokeLinecap: 'butt',
+                strokeLinejoin: 'miter',
+                strokeMiterlimit: '4',
+                strokeOpacity: '1',
+                strokeWidth: '1',
+              }}
+              d="M 0.503906 0.497531 L 65.503906 0.497531 L 65.503906 70.94675 L 0.503906 70.94675 Z M 0.503906 0.497531 "
+              transform="matrix(0.4,0,0,0.4,50.4,45.0588)"
+            />
+          </g>
+        </defs>
+        <g id="surface1">
+          <rect x="0" y="0" width="120" height="90" style={{ fill: 'rgb(100%,100%,100%)', fillOpacity: '1', stroke: 'none' }} />
+          <use xlinkHref="#surface6" mask="url(#mask0)" />
+          <use xlinkHref="#surface9" mask="url(#mask1)" />
+          <path
+            style={{
+              fill: 'rgb(0.392157%,34.117647%,60.784314%)',
+              fillOpacity: '1',
+              fillRule: 'nonzero',
+              stroke: 'none',
+            }}
+            d="M 16.800781 16.398438 L 16.800781 73.601562 L 103.199219 73.601562 L 103.199219 16.398438 L 16.800781 16.398438 M 16 15.601562 L 104 15.601562 L 104 74.398438 L 16 74.398438 Z M 16 15.601562 "
+          />
+          <path
+            style={{
+              fill: 'rgb(100%,100%,100%)',
+              fillOpacity: '1',
+              fillRule: 'nonzero',
+              stroke: 'none',
+            }}
+            d="M 16 15.601562 L 24 15.601562 L 24 74.398438 L 16 74.398438 Z M 16 15.601562 "
+          />
+          <path
+            style={{
+              fill: 'none',
+              stroke: 'rgb(0.392157%,34.117647%,60.784314%)',
+              strokeLinecap: 'butt',
+              strokeLinejoin: 'miter',
+              strokeMiterlimit: '4',
+              strokeOpacity: '1',
+              strokeWidth: '2',
+            }}
+            d="M 0.996094 1 L 19.003906 1 L 19.003906 146 L 0.996094 146 Z M 0.996094 1 "
+            transform="matrix(0.4,0,0,0.4,16,15.6)"
+          />
+          <path
+            style={{
+              fill: 'rgb(0%,58.823529%,53.333333%)',
+              fillOpacity: '1',
+              fillRule: 'nonzero',
+              stroke: 'none',
+            }}
+            d="M 23 21 C 23 22.65625 21.65625 24 20 24 C 18.34375 24 17 22.65625 17 21 C 17 19.34375 18.34375 18 20 18 C 21.65625 18 23 19.34375 23 21 Z M 23 21 "
+          />
+          <use xlinkHref="#surface12" mask="url(#mask2)" />
+          <use xlinkHref="#surface15" mask="url(#mask3)" />
+          <use xlinkHref="#surface18" mask="url(#mask4)" />
+          <use xlinkHref="#surface21" mask="url(#mask5)" />
+          <use xlinkHref="#surface24" mask="url(#mask6)" />
+          <use xlinkHref="#surface27" mask="url(#mask7)" />
         </g>
       </svg>
-    </SvgIcon>
-  );
+    </SVGUniqueID>
+);
 }

@@ -75,6 +75,7 @@ const styles = theme => ({
     backgroundSize: '90px 120px',
   },
   svgRoot: {
+    flexShrink: 0,
     height: '90px',
     width: '120px',
   },
