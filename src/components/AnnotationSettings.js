@@ -24,6 +24,7 @@ export class AnnotationSettings extends Component {
             disabled={displayAllDisabled}
             onChange={toggleAnnotationDisplay}
             value={displayAll ? 'all' : 'select'}
+            color="primary"
           />
         )}
         label={t('displayAllAnnotations')}
