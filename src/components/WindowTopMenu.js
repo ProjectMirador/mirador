@@ -30,7 +30,7 @@ export class WindowTopMenu extends Component {
    */
   render() {
     const {
-      containerId, handleClose, anchorEl, windowId,
+      containerId, handleClose, anchorEl, toggleDraggingEnabled, windowId,
     } = this.props;
     // const {} = this.state;
 
@@ -51,6 +51,8 @@ export class WindowTopMenu extends Component {
           getContentAnchorEl={null}
           open={Boolean(anchorEl)}
           onClose={handleClose}
+          onEntering={toggleDraggingEnabled}
+          onExit={toggleDraggingEnabled}
           disableAutoFocusItem
         >
           <WindowViewSettings windowId={windowId} handleClose={handleClose} />
@@ -66,6 +68,7 @@ WindowTopMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   containerId: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
+  toggleDraggingEnabled: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };
 
