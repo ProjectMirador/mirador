@@ -13,6 +13,7 @@ function createWrapper(props) {
       windowId="xyz"
       handleClose={() => {}}
       anchorEl={null}
+      toggleDraggingEnabled={() => {}}
       {...props}
     />,
   );
@@ -35,18 +36,24 @@ describe('WindowTopMenu', () => {
 
   it('passses correct props to <Menu/> when no achor element given', () => {
     const handleClose = jest.fn();
-    const wrapper = createWrapper({ handleClose });
+    const toggleDraggingEnabled = jest.fn();
+    const wrapper = createWrapper({ handleClose, toggleDraggingEnabled });
     expect(wrapper.find(Menu).first().props().anchorEl).toBe(null);
     expect(wrapper.find(Menu).first().props().open).toBe(false);
     expect(wrapper.find(Menu).first().props().onClose).toBe(handleClose);
+    expect(wrapper.find(Menu).first().props().onEntering).toBe(toggleDraggingEnabled);
+    expect(wrapper.find(Menu).first().props().onExit).toBe(toggleDraggingEnabled);
   });
 
-  it('passses correct props to <Menu/> when no achor element given', () => {
+  it('passses correct props to <Menu/> when achor element given', () => {
     const handleClose = jest.fn();
+    const toggleDraggingEnabled = jest.fn();
     const anchorEl = {};
-    const wrapper = createWrapper({ anchorEl, handleClose });
+    const wrapper = createWrapper({ anchorEl, handleClose, toggleDraggingEnabled });
     expect(wrapper.find(Menu).first().props().anchorEl).toBe(anchorEl);
     expect(wrapper.find(Menu).first().props().open).toBe(true);
     expect(wrapper.find(Menu).first().props().onClose).toBe(handleClose);
+    expect(wrapper.find(Menu).first().props().onEntering).toBe(toggleDraggingEnabled);
+    expect(wrapper.find(Menu).first().props().onExit).toBe(toggleDraggingEnabled);
   });
 });

@@ -50,6 +50,7 @@ export function addWindow(options) {
       companionAreaOpen: true,
       companionWindowIds: [cwDefault, cwThumbs],
       displayAllAnnotations: config.displayAllAnnotations || false,
+      draggingEnabled: true,
       id: `window-${uuid()}`,
       layoutOrder: numWindows + 1,
       manifestId: null,

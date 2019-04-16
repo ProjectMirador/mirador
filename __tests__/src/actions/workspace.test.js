@@ -91,4 +91,12 @@ describe('workspace actions', () => {
       expect(actions.toggleWorkspaceExposeMode()).toEqual(expectedAction);
     });
   });
+  describe('toggleDraggingEnabled', () => {
+    it('should set the draggingEnabled to false', () => {
+      const expectedAction = {
+        type: ActionTypes.TOGGLE_DRAGGING,
+      };
+      expect(actions.toggleDraggingEnabled()).toEqual(expectedAction);
+    });
+  });
 });
