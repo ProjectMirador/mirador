@@ -161,6 +161,13 @@ export const windowsReducer = (state = {}, action) => {
       };
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return action.state.windows;
+    case ActionTypes.TOGGLE_DRAGGING:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId], draggingEnabled: !state[action.windowId].draggingEnabled,
+        },
+      };
     default:
       return state;
   }
