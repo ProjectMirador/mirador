@@ -67,6 +67,7 @@ export class WorkspaceMenu extends Component {
       containerId,
       handleClose,
       anchorEl,
+      showThemePicker,
       isWorkspaceAddVisible,
       t,
       showZoomControls,
@@ -118,13 +119,15 @@ export class WorkspaceMenu extends Component {
           <NestedMenu label={t('language')}>
             <LanguageSettings afterSelect={handleClose} />
           </NestedMenu>
-          <MenuItem
-            aria-haspopup="true"
-            onClick={(e) => { this.handleMenuItemClick('changeTheme', e); handleClose(e); }}
-            aria-owns={changeTheme.anchorEl ? 'change-theme' : undefined}
-          >
-            <Typography variant="body1">{t('changeTheme')}</Typography>
-          </MenuItem>
+          { showThemePicker && (
+            <MenuItem
+              aria-haspopup="true"
+              onClick={(e) => { this.handleMenuItemClick('changeTheme', e); handleClose(e); }}
+              aria-owns={changeTheme.anchorEl ? 'change-theme' : undefined}
+            >
+              <Typography variant="body1">{t('changeTheme')}</Typography>
+            </MenuItem>
+          )}
         </Menu>
         {Boolean(changeTheme.open) && (
           <ChangeThemeDialog
@@ -150,6 +153,7 @@ WorkspaceMenu.propTypes = {
   containerId: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
   isWorkspaceAddVisible: PropTypes.bool,
+  showThemePicker: PropTypes.bool,
   showZoomControls: PropTypes.bool,
   t: PropTypes.func,
   toggleZoomControls: PropTypes.func,
@@ -158,6 +162,7 @@ WorkspaceMenu.propTypes = {
 WorkspaceMenu.defaultProps = {
   anchorEl: null,
   isWorkspaceAddVisible: false,
+  showThemePicker: false,
   showZoomControls: false,
   t: key => key,
   toggleZoomControls: () => {},
