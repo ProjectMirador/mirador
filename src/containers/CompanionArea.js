@@ -25,7 +25,7 @@ const styles = theme => ({
     width: '100%',
   },
   left: {
-    width: 235,
+    minWidth: 235,
   },
   root: {
     display: 'flex',
