@@ -45,7 +45,7 @@ const styles = theme => ({
     '&$focused': {
       borderTop: `2px solid ${theme.palette.primary.main}`,
     },
-    backgroundColor: theme.palette.lightened[theme.palette.type],
+    backgroundColor: theme.palette.shades[theme.palette.type][1],
     borderTop: '2px solid transparent',
     minHeight: 32,
     paddingLeft: theme.spacing.unit / 2,

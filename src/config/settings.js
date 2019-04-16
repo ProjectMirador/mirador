@@ -12,13 +12,9 @@ export default {
       secondary: {
         main: '#ffa224',
       },
-      darkened: { // custom colors used for a specific offset in some places
-        dark: '#000000',
-        light: '#eeeeee'
-      },
-      lightened: { // custom colors used for a specific offset in some places
-        dark: '#424242',
-        light: '#ffffff',
+      shades: { // Shades that can be used to offset color areas of the Workspace / Window
+        dark: ['#000000', '#424242', '#616161'], // dark -> light
+        light: ['#eeeeee', '#ffffff', '#f5f5f5'], // dark -> light (almost :))
       },
       error: {
         main: '#b00020',
