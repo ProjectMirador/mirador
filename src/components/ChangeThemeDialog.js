@@ -27,15 +27,9 @@ export class ChangeThemeDialog extends Component {
    * Propagate theme palette type selection into the global state
    */
   handleThemeChange(theme) {
-    const { updateConfig, handleClose } = this.props;
+    const { setSelectedTheme, handleClose } = this.props;
 
-    updateConfig({
-      theme: {
-        palette: {
-          type: theme,
-        },
-      },
-    });
+    setSelectedTheme(theme);
     handleClose();
   }
 
@@ -83,9 +77,9 @@ ChangeThemeDialog.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
+  setSelectedTheme: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   theme: PropTypes.string.isRequired,
-  updateConfig: PropTypes.func.isRequired,
 };
 
 ChangeThemeDialog.defaultProps = {

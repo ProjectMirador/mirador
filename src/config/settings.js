@@ -3,9 +3,18 @@ export default {
     height: 50,
     width: 50,
   },
+  selectedTheme: 'light', // dark also available
   theme: { // Sets up a MaterialUI theme. See https://material-ui.com/customization/default-theme/
+    dark: {
+      palette: {
+        type: 'dark',
+        primary: {
+          main: '#4db6ac',
+        }
+      }
+    },
     palette: {
-      type: 'light', // dark also available
+      type: 'light',
       primary: {
         main: '#1967d2',
       },
