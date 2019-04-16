@@ -1,6 +1,6 @@
 import uuid from 'uuid/v4';
 import ActionTypes from './action-types';
-import { getCompanionWindowsForPosition } from '../selectors';
+import { getCompanionWindowIdsForPosition } from '../selectors';
 
 const defaultProps = {
   content: null,
@@ -29,10 +29,10 @@ export function addOrUpdateCompanionWindow(windowId, payload, defaults = default
     const state = getState();
     const { position } = payload;
 
-    const updatableWindow = position === 'left' && getCompanionWindowsForPosition(state, { position, windowId })[0];
+    const updatableWindowId = position === 'left' && getCompanionWindowIdsForPosition(state, { position, windowId })[0];
 
-    if (updatableWindow) {
-      dispatch(updateCompanionWindow(windowId, updatableWindow.id, payload));
+    if (updatableWindowId) {
+      dispatch(updateCompanionWindow(windowId, updatableWindowId, payload));
     } else {
       dispatch(addCompanionWindow(windowId, payload, defaults));
     }
