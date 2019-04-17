@@ -225,6 +225,8 @@ export class OpenSeadragonViewer extends Component {
    */
   tileSourcesMatch(prevTileSources) {
     const { tileSources } = this.props;
+    if (tileSources.length === 0 && prevTileSources.length === 0) return true;
+
     return tileSources.some((tileSource, index) => {
       if (!prevTileSources[index]) {
         return false;

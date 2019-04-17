@@ -105,6 +105,13 @@ describe('OpenSeadragonViewer', () => {
     it('when they do not match', () => {
       expect(wrapper.instance().tileSourcesMatch([])).toBe(false);
     });
+    it('with an empty array', () => {
+      wrapper.instance().viewer = {
+        close: () => {},
+      };
+      wrapper.setProps({ tileSources: [] });
+      expect(wrapper.instance().tileSourcesMatch([])).toBe(true);
+    });
     it('when the @ids do match', () => {
       expect(wrapper.instance().tileSourcesMatch([{ '@id': 'http://foo' }])).toBe(true);
     });
