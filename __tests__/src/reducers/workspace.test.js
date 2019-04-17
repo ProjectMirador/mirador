@@ -80,7 +80,7 @@ describe('workspace reducer', () => {
     });
   });
   it('should handle SET_WORKSPACE_VIEWPORT_POSITION', () => {
-    expect(workspaceReducer([], {
+    expect(workspaceReducer({ height: 5000, width: 5000 }, {
       payload: {
         position: {
           height: 50,
@@ -91,12 +91,36 @@ describe('workspace reducer', () => {
       },
       type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
     })).toEqual({
+      height: 5000,
       viewportPosition: {
         height: 50,
         width: 50,
         x: 50,
         y: 50,
       },
+      width: 5000,
+    });
+  });
+  it('resizes the workspace if the SET_WORKSPACE_VIEWPORT_POSITION are beyond outside the workspace', () => {
+    expect(workspaceReducer({ height: 500, width: 500 }, {
+      payload: {
+        position: {
+          height: 50,
+          width: 50,
+          x: -255,
+          y: 0,
+        },
+      },
+      type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
+    })).toEqual({
+      height: 1000,
+      viewportPosition: {
+        height: 50,
+        width: 50,
+        x: -255,
+        y: 0,
+      },
+      width: 1000,
     });
   });
   it('should handle TOGGLE_WORKSPACE_EXPOSE_MODE', () => {

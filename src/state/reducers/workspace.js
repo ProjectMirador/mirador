@@ -1,6 +1,22 @@
 import uuid from 'uuid/v4';
 import ActionTypes from '../actions/action-types';
 
+/** Check if the viewport dimensions are fully specified */
+function hasViewportPosition(viewportPosition) {
+  return viewportPosition.x !== undefined
+    && viewportPosition.y !== undefined
+    && viewportPosition.width !== undefined
+    && viewportPosition.height !== undefined;
+}
+
+/** Check if the containee is fully within the bounds on the container */
+function contains(container, containee) {
+  return containee.x - containee.width / 2 > container.x - container.width / 2
+    && containee.y - containee.height / 2 > container.y - container.height / 2
+    && containee.x + containee.width / 2 < container.x + container.width / 2
+    && containee.y + containee.height / 2 < container.y + container.height / 2;
+}
+
 /**
  * workspaceReducer
  */
@@ -18,6 +34,8 @@ export const workspaceReducer = (
   },
   action,
 ) => {
+  let newWorkspaceDimensions;
+  let viewportPosition;
   switch (action.type) {
     case ActionTypes.FOCUS_WINDOW:
       return {
@@ -48,12 +66,29 @@ export const workspaceReducer = (
     case ActionTypes.SET_WORKSPACE_ADD_VISIBILITY:
       return { ...state, isWorkspaceAddVisible: action.isWorkspaceAddVisible };
     case ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION:
+      newWorkspaceDimensions = {};
+
+      viewportPosition = {
+        ...state.viewportPosition,
+        ...action.payload.position,
+      };
+
+      if (
+        hasViewportPosition(viewportPosition)
+        && !contains({
+          height: state.height, width: state.width, x: 0, y: 0,
+        }, viewportPosition)
+      ) {
+        newWorkspaceDimensions = {
+          height: state.height * 2,
+          width: state.width * 2,
+        };
+      }
+
       return {
         ...state,
-        viewportPosition: {
-          ...state.viewportPosition,
-          ...action.payload.position,
-        },
+        ...newWorkspaceDimensions,
+        viewportPosition,
       };
     case ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE:
       return { ...state, exposeModeOn: !state.exposeModeOn };
