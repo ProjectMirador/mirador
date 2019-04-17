@@ -13,6 +13,8 @@ function createWrapper(props) {
       classes={{}}
       setWorkspaceAddVisibility={() => {}}
       t={str => str}
+      useExtendedFab
+
       {...props}
     />,
   );
@@ -47,5 +49,21 @@ describe('WorkspaceAddButton', () => {
 
     wrapper.find(Fab).simulate('click');
     expect(setWorkspaceAddVisibility).toHaveBeenCalledWith(false);
+  });
+
+  describe('when the useExtendedFab prop is false', () => {
+    it('does not have the startHere Typography ', () => {
+      const wrapper = createWrapper({ useExtendedFab: false });
+
+      expect(wrapper.find(Typography).length).toEqual(0);
+    });
+
+    it('the Fab does not have extended variant prop', () => {
+      const extendedWrapper = createWrapper({ useExtendedFab: true });
+      const wrapper = createWrapper({ useExtendedFab: false });
+
+      expect(extendedWrapper.find(Fab).props().variant).toBe('extended');
+      expect(wrapper.find(Fab).props().variant).toEqual(null);
+    });
   });
 });
