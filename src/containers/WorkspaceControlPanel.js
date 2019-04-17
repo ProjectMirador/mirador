@@ -14,6 +14,9 @@ const styles = theme => ({
   branding: {
     display: 'flex',
     position: 'absolute',
+    [theme.breakpoints.up('xs')]: {
+      display: 'none',
+    },
     [theme.breakpoints.up('sm')]: {
       bottom: 0,
       display: 'block',
