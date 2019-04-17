@@ -47,13 +47,13 @@ const styles = theme => ({
     order: 4,
   },
   'companionWindow-bottom': {
-    borderTop: '0.5px solid rgba(0, 0, 0, 0.12)',
+    borderTop: `0.5px solid ${theme.palette.divider}`,
   },
   'companionWindow-left': {
 
   },
   'companionWindow-right': {
-    borderLeft: '0.5px solid rgba(0, 0, 0, 0.12)',
+    borderLeft: `0.5px solid ${theme.palette.divider}`,
   },
   content: {
     overflowY: 'auto',

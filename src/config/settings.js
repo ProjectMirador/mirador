@@ -41,6 +41,7 @@ export default {
       error: {
         main: '#b00020',
       },
+      section_divider: 'rgba(0, 0, 0, 0.25)',
     },
     typography: {
       fontSize: 16,
