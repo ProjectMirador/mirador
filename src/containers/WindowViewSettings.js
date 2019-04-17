@@ -32,7 +32,7 @@ const styles = theme => ({
     display: 'inline',
   },
   selectedLabel: {
-    color: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
   },
 });
 

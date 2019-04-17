@@ -56,7 +56,7 @@ const style = theme => ({
     backgroundColor: theme.palette.action.active,
   },
   tabSelected: {
-    borderRight: `2px solid ${theme.palette.secondary.main}`,
+    borderRight: `2px solid ${theme.palette.primary.main}`,
   },
   tabsFlexContainer: {
     flexDirection: 'column',

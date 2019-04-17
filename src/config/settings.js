@@ -3,22 +3,40 @@ export default {
     height: 50,
     width: 50,
   },
+  selectedTheme: 'light', // dark also available
+  themes: {
+    dark: {
+      palette: {
+        type: 'dark',
+        primary: {
+          main: '#4db6ac',
+        },
+        shades: {
+          dark: '#000000',
+          main: '#424242',
+          light: '#616161',
+        }
+      }
+    },
+    light: {
+      palette: {
+        type: 'light',
+      }
+    }
+  },
   theme: { // Sets up a MaterialUI theme. See https://material-ui.com/customization/default-theme/
     palette: {
-      type: 'light', // dark also available
+      type: 'light',
       primary: {
-        main: '#f5f5f5',
-      },
-      secondary: {
         main: '#1967d2',
       },
-      darkened: { // custom colors used for a specific offset in some places
-        dark: '#000000',
-        light: '#eeeeee'
+      secondary: {
+        main: '#ffa224',
       },
-      lightened: { // custom colors used for a specific offset in some places
-        dark: '#424242',
-        light: '#ffffff',
+      shades: { // Shades that can be used to offset color areas of the Workspace / Window
+        dark: '#eeeeee',
+        main: '#ffffff',
+        light: '#f5f5f5',
       },
       error: {
         main: '#b00020',

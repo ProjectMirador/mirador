@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
+import { getTheme } from '../state/selectors';
 import { App } from '../components/App';
 
 
@@ -14,7 +15,7 @@ const mapStateToProps = state => (
   {
     isFullscreenEnabled: state.workspace.isFullscreenEnabled,
     language: state.config.language,
-    theme: state.config.theme,
+    theme: getTheme(state),
     translations: state.config.translations,
   }
 );

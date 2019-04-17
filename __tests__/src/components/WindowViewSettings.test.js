@@ -29,16 +29,16 @@ describe('WindowViewSettings', () => {
     expect(labels.at(2).props().value).toBe('gallery');
   });
 
-  it('should set the correct label active (by setting the secondary color)', () => {
+  it('should set the correct label active (by setting the primary color)', () => {
     let wrapper = createWrapper({ windowViewType: 'single' });
-    expect(wrapper.find(FormControlLabel).at(0).props().control.props.color).toEqual('secondary');
-    expect(wrapper.find(FormControlLabel).at(1).props().control.props.color).not.toEqual('secondary');
+    expect(wrapper.find(FormControlLabel).at(0).props().control.props.color).toEqual('primary');
+    expect(wrapper.find(FormControlLabel).at(1).props().control.props.color).not.toEqual('primary');
 
     wrapper = createWrapper({ windowViewType: 'book' });
-    expect(wrapper.find(FormControlLabel).at(1).props().control.props.color).toEqual('secondary');
+    expect(wrapper.find(FormControlLabel).at(1).props().control.props.color).toEqual('primary');
 
     wrapper = createWrapper({ windowViewType: 'gallery' });
-    expect(wrapper.find(FormControlLabel).at(2).props().control.props.color).toEqual('secondary');
+    expect(wrapper.find(FormControlLabel).at(2).props().control.props.color).toEqual('primary');
   });
 
   it('updates state when the view config selection changes', () => {

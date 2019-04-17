@@ -43,9 +43,9 @@ const styles = theme => ({
   },
   windowTopBarStyle: {
     '&$focused': {
-      borderTop: `2px solid ${theme.palette.secondary.main}`,
+      borderTop: `2px solid ${theme.palette.primary.main}`,
     },
-    backgroundColor: theme.palette.lightened[theme.palette.type],
+    backgroundColor: theme.palette.shades.main,
     borderTop: '2px solid transparent',
     minHeight: 32,
     paddingLeft: theme.spacing.unit / 2,

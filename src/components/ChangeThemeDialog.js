@@ -27,15 +27,9 @@ export class ChangeThemeDialog extends Component {
    * Propagate theme palette type selection into the global state
    */
   handleThemeChange(theme) {
-    const { updateConfig, handleClose } = this.props;
+    const { setSelectedTheme, handleClose } = this.props;
 
-    updateConfig({
-      theme: {
-        palette: {
-          type: theme,
-        },
-      },
-    });
+    setSelectedTheme(theme);
     handleClose();
   }
 
@@ -45,8 +39,9 @@ export class ChangeThemeDialog extends Component {
       classes,
       handleClose,
       open,
+      selectedTheme,
       t,
-      theme,
+      themeIds,
     } = this.props;
     return (
       <Dialog
@@ -59,19 +54,17 @@ export class ChangeThemeDialog extends Component {
           </Typography>
         </DialogTitle>
         <DialogContent className={classes.dialogContent}>
-          <ListKeyboardNavigation selected={theme} onChange={this.handleThemeChange}>
-            <ListItem className={classes.listitem} value="light">
-              <ListItemIcon>
-                <PaletteIcon className={classes.lightColor} />
-              </ListItemIcon>
-              <ListItemText>{t('light')}</ListItemText>
-            </ListItem>
-            <ListItem className={classes.listitem} value="dark">
-              <ListItemIcon>
-                <PaletteIcon className={classes.darkColor} />
-              </ListItemIcon>
-              <ListItemText>{t('dark')}</ListItemText>
-            </ListItem>
+          <ListKeyboardNavigation selected={selectedTheme} onChange={this.handleThemeChange}>
+            {
+              themeIds.map(value => (
+                <ListItem key={value} className={classes.listitem} value={value}>
+                  <ListItemIcon>
+                    <PaletteIcon className={classes[value]} />
+                  </ListItemIcon>
+                  <ListItemText>{t(value)}</ListItemText>
+                </ListItem>
+              ))
+            }
           </ListKeyboardNavigation>
         </DialogContent>
       </Dialog>
@@ -83,11 +76,13 @@ ChangeThemeDialog.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
+  selectedTheme: PropTypes.string.isRequired,
+  setSelectedTheme: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
-  theme: PropTypes.string.isRequired,
-  updateConfig: PropTypes.func.isRequired,
+  themeIds: PropTypes.arrayOf(PropTypes.string),
 };
 
 ChangeThemeDialog.defaultProps = {
   open: false,
+  themeIds: [],
 };

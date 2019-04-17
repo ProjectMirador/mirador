@@ -157,8 +157,8 @@ export class WindowSideBarButtons extends Component {
         value={sideBarPanel === 'closed' ? false : sideBarPanel}
         onChange={this.handleChange}
         variant="fullWidth"
-        indicatorColor="secondary"
-        textColor="secondary"
+        indicatorColor="primary"
+        textColor="primary"
         aria-orientation="vertical"
         aria-label={t('sidebarPanelsNavigation')}
         ref={ref => this.setTabsRef(ref)}
@@ -179,7 +179,7 @@ export class WindowSideBarButtons extends Component {
           <TabButton
             value="annotations"
             icon={(
-              <Badge color="error" invisible={!hasAnnotations} variant="dot">
+              <Badge color="secondary" invisible={!hasAnnotations} variant="dot">
                 <AnnotationIcon />
               </Badge>
             )}

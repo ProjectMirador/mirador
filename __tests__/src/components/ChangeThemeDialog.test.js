@@ -10,9 +10,10 @@ function createWrapper(props) {
     <ChangeThemeDialog
       classes={{ darkColor: '#000000', lightColor: '#ffffff' }}
       handleClose={() => {}}
-      updateConfig={() => {}}
+      setSelectedTheme={() => {}}
       t={t => (t)}
-      theme="light"
+      selectedTheme="light"
+      themeIds={['light', 'dark']}
       {...props}
     />,
   );
@@ -33,5 +34,14 @@ describe('ChangeThemeDialog', () => {
     expect(wrapper.find('WithStyles(ListItemText)').length).toBe(2);
     expect(wrapper.find('WithStyles(ListItemText)').first().render().text()).toBe('light');
     expect(wrapper.find('WithStyles(ListItemText)').last().render().text()).toBe('dark');
+  });
+
+  it('shows up theme selection properly', () => {
+    const setSelectedTheme = jest.fn();
+
+    wrapper = createWrapper({ setSelectedTheme });
+    wrapper.find('ListKeyboardNavigation').first().simulate('change', 'light');
+
+    expect(setSelectedTheme).toHaveBeenCalledWith('light');
   });
 });

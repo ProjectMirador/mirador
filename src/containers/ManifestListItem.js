@@ -53,7 +53,7 @@ const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
     '&$active': {
-      borderLeft: `4px solid ${theme.palette.secondary.main}`,
+      borderLeft: `4px solid ${theme.palette.primary.main}`,
     },
     borderLeft: '4px solid transparent',
   },
