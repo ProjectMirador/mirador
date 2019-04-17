@@ -58,9 +58,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
           onClick={this.setCanvas}
           tabIndex={-1}
           style={{
-            display: 'inline-block',
             height: (position === 'far-right') ? 'auto' : `${height - SPACING}px`,
-            whiteSpace: 'nowrap',
             width: (position === 'far-bottom') ? 'auto' : `${style.width}px`,
           }}
           className={classNames(
