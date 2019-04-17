@@ -26,7 +26,7 @@ class MiradorViewer {
 
     ReactDOM.render(
       <Provider store={this.store}>
-        <PluginProvider plugins={plugins} createRootReducer={createRootReducer}>
+        <PluginProvider store={this.store} plugins={plugins} createRootReducer={createRootReducer}>
           <App />
         </PluginProvider>
       </Provider>,

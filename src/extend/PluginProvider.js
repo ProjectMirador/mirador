@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { ReactReduxContext } from 'react-redux';
 import PluginContext from './PluginContext';
 import {
   filterValidPlugins,
@@ -11,8 +10,9 @@ import {
 
 /**  */
 export default function PluginProvider(props) {
-  const { store } = useContext(ReactReduxContext);
-  const { plugins, createRootReducer, children } = props;
+  const {
+    store, plugins, createRootReducer, children,
+  } = props;
   const [pluginMap, setPluginMap] = useState({});
 
   useEffect(() => {
@@ -33,10 +33,12 @@ PluginProvider.propTypes = {
   children: PropTypes.node,
   createRootReducer: PropTypes.func,
   plugins: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+  store: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 PluginProvider.defaultProps = {
   children: null,
   createRootReducer: null,
   plugins: [],
+  store: null,
 };
