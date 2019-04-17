@@ -31,7 +31,9 @@ export class WindowListButton extends Component {
    * Returns the rendered component
   */
   render() {
-    const { disabled, t, windowCount } = this.props;
+    const {
+      classes, disabled, t, windowCount,
+    } = this.props;
     const { windowListAnchor } = this.state;
 
     return (
@@ -42,7 +44,7 @@ export class WindowListButton extends Component {
           aria-owns={windowListAnchor ? 'window-list' : null}
           disabled={disabled}
           badge
-          BadgeProps={{ badgeContent: windowCount }}
+          BadgeProps={{ badgeContent: windowCount, classes: { badge: classes.badge } }}
           onClick={e => this.handleOpen(e)}
         >
           <BookmarksIcon />
@@ -62,10 +64,12 @@ export class WindowListButton extends Component {
 }
 
 WindowListButton.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string),
   disabled: PropTypes.bool,
   t: PropTypes.func.isRequired,
   windowCount: PropTypes.number.isRequired,
 };
 WindowListButton.defaultProps = {
+  classes: {},
   disabled: false,
 };
