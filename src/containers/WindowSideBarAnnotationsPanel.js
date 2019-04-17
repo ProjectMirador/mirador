@@ -23,7 +23,7 @@ const mapStateToProps = (state, { windowId }) => ({
 /** */
 const styles = theme => ({
   section: {
-    borderBottom: '.5px solid rgba(0,0,0,0.25)',
+    borderBottom: `.5px solid ${theme.palette.divider}`,
     paddingBottom: theme.spacing.unit,
     paddingLeft: theme.spacing.unit * 2,
     paddingRight: theme.spacing.unit,
