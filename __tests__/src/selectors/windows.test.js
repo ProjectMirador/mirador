@@ -1,5 +1,6 @@
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture002 from '../../fixtures/version-2/002.json';
+import manifestFixture015 from '../../fixtures/version-2/015.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import {
   getWindowTitles,
@@ -112,9 +113,16 @@ describe('getCanvasIndex', () => {
 
 describe('getWindowViewType', () => {
   const state = {
+    manifests: {
+      x: { json: { ...manifestFixture001 } },
+      y: { json: { ...manifestFixture015 } },
+    },
     windows: {
       a: { id: 'a', view: 'single' },
       b: { id: 'b' },
+      d: { id: 'd', manifestId: 'x' },
+      e: { id: 'e', manifestId: 'x', view: 'book' },
+      f: { id: 'f', manifestId: 'y' },
     },
   };
 
@@ -131,6 +139,21 @@ describe('getWindowViewType', () => {
   it('should return undefined if window does not exists', () => {
     const received = getWindowViewType(state, { windowId: 'c' });
     expect(received).toBeUndefined();
+  });
+
+  it('should return modified viewingHint if view type does not exist', () => {
+    const received = getWindowViewType(state, { windowId: 'd' });
+    expect(received).toEqual('single');
+  });
+
+  it('should return window view type even if viewingHint is available', () => {
+    const received = getWindowViewType(state, { windowId: 'e' });
+    expect(received).toEqual('book');
+  });
+
+  it('should return modified viewingHint for a book', () => {
+    const received = getWindowViewType(state, { windowId: 'f' });
+    expect(received).toEqual('book');
   });
 });
 

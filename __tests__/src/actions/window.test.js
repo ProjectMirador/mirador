@@ -106,7 +106,6 @@ describe('window actions', () => {
           rangeId: null,
           rotation: null,
           sideBarPanel: 'info',
-          view: 'single',
         },
       };
 

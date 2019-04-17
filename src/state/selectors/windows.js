@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { getManifestTitle, getManifestStartCanvasIndex } from './manifests';
+import { getManifestTitle, getManifestStartCanvasIndex, getManifestViewingHint } from './manifests';
 import { getWorkspaceType } from './config';
 
 /**
@@ -74,8 +74,14 @@ export const getCanvasIndex = createSelector(
 * @param {String}
 */
 export const getWindowViewType = createSelector(
-  [getWindow],
-  window => window && window.view,
+  [getWindow, getManifestViewingHint],
+  (window, manifestViewingHint) => {
+    const lookup = {
+      individuals: 'single',
+      paged: 'book',
+    };
+    return (window && window.view) || lookup[manifestViewingHint];
+  },
 );
 
 export const getViewer = createSelector(
