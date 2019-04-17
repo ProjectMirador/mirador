@@ -23,7 +23,7 @@ const styles = theme => ({
       outline: 'none',
     },
     '&:hover': {
-      border: `2px solid ${theme.palette.primary.main}`,
+      backgroundColor: theme.palette.hover.light,
     },
     border: '2px solid transparent',
     cursor: 'pointer',

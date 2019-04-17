@@ -41,6 +41,9 @@ export default {
       error: {
         main: '#b00020',
       },
+      hover: {
+        light: 'rgba(0,0,0,0.08)',
+      },
       section_divider: 'rgba(0, 0, 0, 0.25)',
     },
     typography: {
