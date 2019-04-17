@@ -54,6 +54,7 @@ const styles = theme => ({
     flex: '0',
     minHeight: 0,
   },
+  maximized: {},
   middle: {
     display: 'flex',
     flex: '1',
@@ -82,6 +83,12 @@ const styles = theme => ({
     minWidth: 100,
   },
   window: {
+    '&$maximized': {
+      left: 0,
+      position: 'absolute',
+      top: 0,
+      zIndex: theme.zIndex.modal - 1,
+    },
     backgroundColor: theme.palette.shades.dark,
     display: 'flex',
     flexDirection: 'column',
