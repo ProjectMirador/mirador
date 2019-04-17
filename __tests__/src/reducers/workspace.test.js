@@ -80,7 +80,7 @@ describe('workspace reducer', () => {
     });
   });
   it('should handle SET_WORKSPACE_VIEWPORT_POSITION', () => {
-    expect(workspaceReducer([], {
+    expect(workspaceReducer({ height: 5000, width: 5000 }, {
       payload: {
         position: {
           height: 50,
@@ -91,12 +91,14 @@ describe('workspace reducer', () => {
       },
       type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
     })).toEqual({
+      height: 5000,
       viewportPosition: {
         height: 50,
         width: 50,
         x: 50,
         y: 50,
       },
+      width: 5000,
     });
   });
   it('resizes the workspace if the SET_WORKSPACE_VIEWPORT_POSITION are beyond outside the workspace', () => {

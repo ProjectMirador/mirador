@@ -1,6 +1,22 @@
 import uuid from 'uuid/v4';
 import ActionTypes from '../actions/action-types';
 
+/** Check if the viewport dimensions are fully specified */
+function hasViewportPosition(viewportPosition) {
+  return viewportPosition.x !== undefined
+    && viewportPosition.y !== undefined
+    && viewportPosition.width !== undefined
+    && viewportPosition.height !== undefined;
+}
+
+/** Check if the containee is fully within the bounds on the container */
+function contains(container, containee) {
+  return containee.x - containee.width / 2 > container.x - container.width / 2
+    && containee.y - containee.height / 2 > container.y - container.height / 2
+    && containee.x + containee.width / 2 < container.x + container.width / 2
+    && containee.y + containee.height / 2 < container.y + container.height / 2;
+}
+
 /**
  * workspaceReducer
  */
@@ -58,16 +74,10 @@ export const workspaceReducer = (
       };
 
       if (
-        (viewportPosition.x !== undefined
-          && viewportPosition.y !== undefined
-          && viewportPosition.width !== undefined
-          && viewportPosition.height !== undefined)
-        && (
-          viewportPosition.x - viewportPosition.width / 2 < -1 * state.width / 2
-          || viewportPosition.y - viewportPosition.height / 2 < -1 * state.height / 2
-          || viewportPosition.x + viewportPosition.width / 2 > state.width / 2
-          || viewportPosition.y + viewportPosition.height / 2 > state.height / 2
-        )
+        hasViewportPosition(viewportPosition)
+        && !contains({
+          height: state.height, width: state.width, x: 0, y: 0,
+        }, viewportPosition)
       ) {
         newWorkspaceDimensions = {
           height: state.height * 2,
