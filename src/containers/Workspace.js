@@ -26,7 +26,6 @@ const mapStateToProps = state => (
  */
 const styles = theme => ({
   workspaceViewport: {
-    background: theme.palette.shades.main,
     bottom: 0,
     left: 0,
     margin: 0,
