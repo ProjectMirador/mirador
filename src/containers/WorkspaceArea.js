@@ -25,7 +25,7 @@ const mapStateToProps = state => (
  */
 const styles = theme => ({
   background: {
-    background: theme.palette.background.default,
+    background: theme.palette.shades.light,
   },
 });
 
