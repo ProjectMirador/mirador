@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import WorkspaceAddButton from '../containers/WorkspaceAddButton';
 import WorkspaceControlPanelButtons
   from '../containers/WorkspaceControlPanelButtons';
 import ns from '../config/css-ns';
@@ -27,7 +28,10 @@ export class WorkspaceControlPanel extends Component {
         aria-label={t('workspace')}
       >
         <Toolbar disableGutters className={classes.toolbar}>
-          <WorkspaceControlPanelButtons />
+          <WorkspaceAddButton />
+          <div className={classes.workspaceButtons}>
+            <WorkspaceControlPanelButtons />
+          </div>
         </Toolbar>
         <Branding className={classes.branding} t={t} variant={variant} />
       </AppBar>

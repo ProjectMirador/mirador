@@ -41,13 +41,21 @@ const styles = theme => ({
     },
   },
   toolbar: {
+    display: 'flex',
+    justifyContent: 'space-between',
     [theme.breakpoints.up('sm')]: {
-      display: 'flex',
       flexDirection: 'column',
+      justifyContent: 'flex-start',
       minHeight: 0,
     },
   },
   wide: {
+  },
+  workspaceButtons: {
+    [theme.breakpoints.up('sm')]: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
   },
 });
 
