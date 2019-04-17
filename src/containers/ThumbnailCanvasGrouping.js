@@ -32,12 +32,19 @@ const mapStateToProps = (state, { data }) => ({
 const styles = theme => ({
   canvas: {
     '&$currentCanvas': {
-      border: `2px solid ${theme.palette.secondary.main}`,
+      outline: `2px solid ${theme.palette.secondary.main}`,
+      outlineOffset: '3px',
     },
-    border: '2px solid transparent',
+    '&:hover': {
+      outline: '9px solid rgba(0, 0, 0, 0.08)',
+      outlineOffset: '-2px',
+    },
     boxSizing: 'border-box',
     color: theme.palette.common.white,
     cursor: 'pointer',
+    display: 'inline-block',
+    outline: 0,
+    whiteSpace: 'nowrap',
   },
   currentCanvas: {
   },
