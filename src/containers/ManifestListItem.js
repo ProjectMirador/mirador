@@ -41,7 +41,7 @@ const styles = theme => ({
   active: {},
   buttonGrid: {
     '&:hover': {
-      backgroundColor: theme.palette.hover.light,
+      backgroundColor: theme.palette.action.hover,
     },
   },
   label: {

@@ -36,7 +36,7 @@ const styles = theme => ({
       outlineOffset: '3px',
     },
     '&:hover': {
-      outline: `9px solid ${theme.palette.hover.light}`,
+      outline: `9px solid ${theme.palette.action.hover}`,
       outlineOffset: '-2px',
     },
     boxSizing: 'border-box',
