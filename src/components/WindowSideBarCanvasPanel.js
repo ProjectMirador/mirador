@@ -6,8 +6,10 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import RootRef from '@material-ui/core/RootRef';
 import Select from '@material-ui/core/Select';
 import { CanvasThumbnail } from './CanvasThumbnail';
+import { ScrollTo } from './ScrollTo';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
 import CompanionWindow from '../containers/CompanionWindow';
 
@@ -23,6 +25,8 @@ export class WindowSideBarCanvasPanel extends Component {
     this.state = {
       variantSelectionOpened: false,
     };
+
+    this.containerRef = React.createRef();
   }
 
   /** @private */
@@ -110,65 +114,74 @@ export class WindowSideBarCanvasPanel extends Component {
     const { variantSelectionOpened } = this.state;
     const canvasesIdAndLabel = this.getIdAndLabelOfCanvases(canvases);
     return (
-      <CompanionWindow
-        title={t('canvasIndex')}
-        id={id}
-        windowId={windowId}
-        titleControls={(
-          <FormControl>
-            <Select
-              MenuProps={{
-                anchorOrigin: {
-                  horizontal: 'left',
-                  vertical: 'bottom',
-                },
-                getContentAnchorEl: null,
-              }}
-              displayEmpty
-              value={variant}
-              onChange={this.handleVariantChange}
-              name="variant"
-              open={variantSelectionOpened}
-              onOpen={(e) => {
-                toggleDraggingEnabled();
-                this.setState({ variantSelectionOpened: true });
-              }}
-              onClose={(e) => {
-                toggleDraggingEnabled();
-                this.setState({ variantSelectionOpened: false });
-              }}
-              classes={{ select: classes.select }}
-              className={classes.selectEmpty}
-            >
-              <MenuItem value="compact"><Typography variant="body2">{ t('compactList') }</Typography></MenuItem>
-              <MenuItem value="thumbnail"><Typography variant="body2">{ t('thumbnailList') }</Typography></MenuItem>
-            </Select>
-          </FormControl>
-        )}
-      >
-        <List>
-          {
-            canvasesIdAndLabel.map((canvas, canvasIndex) => {
-              const onClick = () => { setCanvas(windowId, canvasIndex); }; // eslint-disable-line require-jsdoc, max-len
+      <RootRef rootRef={this.containerRef}>
+        <CompanionWindow
+          title={t('canvasIndex')}
+          id={id}
+          windowId={windowId}
+          titleControls={(
+            <FormControl>
+              <Select
+                MenuProps={{
+                  anchorOrigin: {
+                    horizontal: 'left',
+                    vertical: 'bottom',
+                  },
+                  getContentAnchorEl: null,
+                }}
+                displayEmpty
+                value={variant}
+                onChange={this.handleVariantChange}
+                name="variant"
+                open={variantSelectionOpened}
+                onOpen={(e) => {
+                  toggleDraggingEnabled();
+                  this.setState({ variantSelectionOpened: true });
+                }}
+                onClose={(e) => {
+                  toggleDraggingEnabled();
+                  this.setState({ variantSelectionOpened: false });
+                }}
+                classes={{ select: classes.select }}
+                className={classes.selectEmpty}
+              >
+                <MenuItem value="compact"><Typography variant="body2">{ t('compactList') }</Typography></MenuItem>
+                <MenuItem value="thumbnail"><Typography variant="body2">{ t('thumbnailList') }</Typography></MenuItem>
+              </Select>
+            </FormControl>
+          )}
+        >
+          <List>
+            {
+              canvasesIdAndLabel.map((canvas, canvasIndex) => {
+                const onClick = () => { setCanvas(windowId, canvasIndex); }; // eslint-disable-line require-jsdoc, max-len
 
-              return (
-                <ListItem
-                  key={canvas.id}
-                  className={classes.listItem}
-                  alignItems="flex-start"
-                  onClick={onClick}
-                  button
-                  component="li"
-                  selected={!!selectedCanvases.find(c => c.id === canvas.id)}
-                >
-                  {variant === 'compact' && this.renderCompact(canvas, canvases[canvasIndex])}
-                  {variant === 'thumbnail' && this.renderThumbnail(canvas, canvases[canvasIndex])}
-                </ListItem>
-              );
-            })
-          }
-        </List>
-      </CompanionWindow>
+                return (
+                  <ScrollTo
+                    containerRef={this.containerRef}
+                    key={`${canvas.id}-${variant}`}
+                    offsetTop={96} // offset for the height of the form above
+                    scrollTo={!!selectedCanvases.find(c => c.id === canvas.id)}
+                  >
+                    <ListItem
+                      key={canvas.id}
+                      className={classes.listItem}
+                      alignItems="flex-start"
+                      onClick={onClick}
+                      button
+                      component="li"
+                      selected={!!selectedCanvases.find(c => c.id === canvas.id)}
+                    >
+                      {variant === 'compact' && this.renderCompact(canvas, canvases[canvasIndex])}
+                      {variant === 'thumbnail' && this.renderThumbnail(canvas, canvases[canvasIndex])}
+                    </ListItem>
+                  </ScrollTo>
+                );
+              })
+            }
+          </List>
+        </CompanionWindow>
+      </RootRef>
     );
   }
 }
