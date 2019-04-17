@@ -116,6 +116,20 @@ describe('OpenSeadragonViewer', () => {
       expect(wrapper.instance().tileSourcesMatch([{ '@id': 'http://foo' }])).toBe(true);
     });
   });
+
+  describe('addAllTileSources', () => {
+    it('calls addTileSource for every tileSources and then zoomsToWorld', () => {
+      wrapper.instance().viewer = {
+        close: () => {},
+      };
+      wrapper.setProps({ tileSources: [1, 2, 3, 4] });
+      const mockAddTileSource = jest.fn();
+      wrapper.instance().addTileSource = mockAddTileSource;
+      wrapper.instance().addAllTileSources();
+      expect(mockAddTileSource).toHaveBeenCalledTimes(4);
+    });
+  });
+
   describe('addTileSource', () => {
     it('calls addTiledImage asynchronously on the OSD viewer', async () => {
       wrapper.instance().addTileSource({}).then((event) => {

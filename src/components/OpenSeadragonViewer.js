@@ -55,7 +55,7 @@ export class OpenSeadragonViewer extends Component {
    * React lifecycle event
    */
   componentDidMount() {
-    const { tileSources, viewer } = this.props;
+    const { viewer } = this.props;
     if (!this.ref.current) {
       return;
     }
@@ -85,8 +85,7 @@ export class OpenSeadragonViewer extends Component {
       this.viewer.viewport.panTo(viewer, true);
       this.viewer.viewport.zoomTo(viewer.zoom, viewer, true);
     }
-
-    tileSources.forEach((tileSource, i) => this.addTileSource(tileSource, i));
+    this.addAllTileSources();
   }
 
   /**
@@ -97,7 +96,7 @@ export class OpenSeadragonViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      tileSources, viewer, highlightedAnnotations, selectedAnnotations,
+      viewer, highlightedAnnotations, selectedAnnotations,
     } = this.props;
     const highlightsUpdated = !OpenSeadragonViewer.annotationsMatch(
       highlightedAnnotations, prevProps.highlightedAnnotations,
@@ -120,13 +119,7 @@ export class OpenSeadragonViewer extends Component {
 
     if (!this.tileSourcesMatch(prevProps.tileSources)) {
       this.viewer.close();
-      Promise.all(
-        tileSources.map((tileSource, i) => this.addTileSource(tileSource, i)),
-      ).then(() => {
-        if (tileSources[0]) {
-          this.zoomToWorld();
-        }
-      });
+      this.addAllTileSources();
     } else if (viewer && !this.osdUpdating) {
       const { viewport } = this.viewer;
 
@@ -186,6 +179,18 @@ export class OpenSeadragonViewer extends Component {
         context.lineWidth = Math.ceil(10 / (zoom * width));
         context.strokeRect(...fragment);
       });
+    });
+  }
+
+  /** */
+  addAllTileSources() {
+    const { tileSources } = this.props;
+    Promise.all(
+      tileSources.map((tileSource, i) => this.addTileSource(tileSource, i)),
+    ).then(() => {
+      if (tileSources[0]) {
+        this.zoomToWorld();
+      }
     });
   }
 
