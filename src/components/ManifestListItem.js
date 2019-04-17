@@ -86,7 +86,7 @@ export class ManifestListItem extends React.Component {
           customPlaceholder={placeholder}
         >
           <Grid container className={ns('manifest-list-item')} spacing={24}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6} className={classes.buttonGrid}>
               <ButtonBase
                 className={ns('manifest-list-item-title')}
                 style={{ width: '100%' }}

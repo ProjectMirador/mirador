@@ -39,6 +39,11 @@ const mapDispatchToProps = { addWindow: actions.addWindow, fetchManifest: action
  */
 const styles = theme => ({
   active: {},
+  buttonGrid: {
+    '&:hover': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
   label: {
     textAlign: 'left',
     textTransform: 'initial',
