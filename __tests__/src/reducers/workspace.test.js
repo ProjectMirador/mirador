@@ -99,6 +99,28 @@ describe('workspace reducer', () => {
       },
     });
   });
+  it('resizes the workspace if the SET_WORKSPACE_VIEWPORT_POSITION are beyond outside the workspace', () => {
+    expect(workspaceReducer({ height: 500, width: 500 }, {
+      payload: {
+        position: {
+          height: 50,
+          width: 50,
+          x: -255,
+          y: 0,
+        },
+      },
+      type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
+    })).toEqual({
+      height: 1000,
+      viewportPosition: {
+        height: 50,
+        width: 50,
+        x: -255,
+        y: 0,
+      },
+      width: 1000,
+    });
+  });
   it('should handle TOGGLE_WORKSPACE_EXPOSE_MODE', () => {
     expect(workspaceReducer([], {
       type: ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE,

@@ -18,6 +18,8 @@ export const workspaceReducer = (
   },
   action,
 ) => {
+  let newWorkspaceDimensions;
+  let viewportPosition;
   switch (action.type) {
     case ActionTypes.FOCUS_WINDOW:
       return {
@@ -48,12 +50,35 @@ export const workspaceReducer = (
     case ActionTypes.SET_WORKSPACE_ADD_VISIBILITY:
       return { ...state, isWorkspaceAddVisible: action.isWorkspaceAddVisible };
     case ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION:
+      newWorkspaceDimensions = {};
+
+      viewportPosition = {
+        ...state.viewportPosition,
+        ...action.payload.position,
+      };
+
+      if (
+        (viewportPosition.x !== undefined
+          && viewportPosition.y !== undefined
+          && viewportPosition.width !== undefined
+          && viewportPosition.height !== undefined)
+        && (
+          viewportPosition.x - viewportPosition.width / 2 < -1 * state.width / 2
+          || viewportPosition.y - viewportPosition.height / 2 < -1 * state.height / 2
+          || viewportPosition.x + viewportPosition.width / 2 > state.width / 2
+          || viewportPosition.y + viewportPosition.height / 2 > state.height / 2
+        )
+      ) {
+        newWorkspaceDimensions = {
+          height: state.height * 2,
+          width: state.width * 2,
+        };
+      }
+
       return {
         ...state,
-        viewportPosition: {
-          ...state.viewportPosition,
-          ...action.payload.position,
-        },
+        ...newWorkspaceDimensions,
+        viewportPosition,
       };
     case ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE:
       return { ...state, exposeModeOn: !state.exposeModeOn };

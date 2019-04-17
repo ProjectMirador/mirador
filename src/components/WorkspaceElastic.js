@@ -32,7 +32,7 @@ class WorkspaceElastic extends React.Component {
         />
 
         <Rnd
-          default={{
+          size={{
             height: workspace.height,
             width: workspace.width,
           }}
