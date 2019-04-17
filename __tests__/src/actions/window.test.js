@@ -114,6 +114,10 @@ describe('window actions', () => {
           thumbnailNavigation: {
             defaultPosition: 'off',
           },
+          window: {
+            defaultSideBarPanel: 'info',
+            sideBarOpenByDefault: false,
+          },
         },
         windows: { a: {}, b: {} },
       };
