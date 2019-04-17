@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { WindowListButton } from '../components/WindowListButton';
 
@@ -10,8 +11,20 @@ const mapStateToProps = ({ windows, workspace }) => ({
   windowCount: Object.keys(windows).length,
 });
 
+/**
+ *
+ * @param theme
+ * @returns {{background: {background: string}}}
+ */
+const styles = theme => ({
+  badge: {
+    paddingLeft: 12,
+  },
+});
+
 const enhance = compose(
   withTranslation(),
+  withStyles(styles),
   connect(mapStateToProps, null),
   withPlugins('WindowListButton'),
 );

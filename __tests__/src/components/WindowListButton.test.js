@@ -23,7 +23,7 @@ describe('WindowListButton', () => {
   it('passes the windowCount as BadgeProps to MiradorMenuButton', () => {
     wrapper = createWrapper();
 
-    expect(wrapper.find(MiradorMenuButton).props().BadgeProps).toEqual({ badgeContent: 3 });
+    expect(wrapper.find(MiradorMenuButton).props().BadgeProps.badgeContent).toEqual(3);
   });
 
   it('disabled the MiradorMenuButton if the disabled prop is true', () => {
