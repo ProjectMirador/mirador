@@ -36,9 +36,20 @@ describe('getLanguagesFromConfigWithCurrent', () => {
 });
 
 describe('getShowZoomControlsConfig', () => {
-  it('returns the workspace configuration for showing zoom controls', () => {
-    const state = { workspace: { showZoomControls: true } };
+  it('returns the settings config if it has not been set on the workspace', () => {
+    const state = {
+      config: { workspace: { showZoomControls: true } },
+      workspace: {},
+    };
     expect(getShowZoomControlsConfig(state)).toEqual(true);
+  });
+
+  it('returns the workspace configuration for showing zoom controls', () => {
+    const state = {
+      config: { workspace: { showZoomControls: true } },
+      workspace: { showZoomControls: false },
+    };
+    expect(getShowZoomControlsConfig(state)).toEqual(false);
   });
 });
 

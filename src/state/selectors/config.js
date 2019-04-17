@@ -20,8 +20,15 @@ export const getLanguagesFromConfigWithCurrent = createSelector(
 );
 
 export const getShowZoomControlsConfig = createSelector(
-  [state => state.workspace],
-  workspace => workspace.showZoomControls,
+  [
+    state => state.workspace,
+    getConfig,
+  ],
+  (workspace, config) => (
+    workspace.showZoomControls === undefined
+      ? (config.workspace.showZoomControls)
+      : workspace.showZoomControls
+  ),
 );
 
 export const getTheme = createSelector(

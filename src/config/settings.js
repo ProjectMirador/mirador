@@ -147,6 +147,7 @@ export default {
     width: 100, // width of one canvas (doubled for book view) in ThumbnailNavigation area when position is "far-right"
   },
   workspace: {
+    showZoomControls: false, // Configure if zoom controls should be displayed by default
     type: 'mosaic', // Which workspace type to load by default. Other possible values are "elastic"
   },
   workspaceControlPanel: {
