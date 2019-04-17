@@ -34,7 +34,7 @@ const mapDispatchToProps = (dispatch, { windowId, id }) => ({
  */
 const styles = theme => ({
   section: {
-    borderBottom: `.5px solid ${theme.palette.divider}`,
+    borderBottom: `.5px solid ${theme.palette.section_divider}`,
     paddingBottom: theme.spacing.unit,
     paddingLeft: theme.spacing.unit * 2,
     paddingRight: theme.spacing.unit,
