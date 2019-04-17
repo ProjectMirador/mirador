@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import Slide from '@material-ui/core/Slide';
 import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { CompanionArea } from '../../../src/components/CompanionArea';
 import CompanionWindowFactory from '../../../src/containers/CompanionWindowFactory';
@@ -23,11 +24,13 @@ describe('CompanionArea', () => {
   it('should render all <CompanionWindow>', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(CompanionWindowFactory).length).toBe(2);
+    expect(wrapper.find(Slide).prop('direction')).toBe('left');
   });
 
   it('should add the appropriate classes when the companion area fills the full width', () => {
     const wrapper = createWrapper({ position: 'bottom' });
     expect(wrapper.find('div.horizontal').length).toBe(2);
+    expect(wrapper.find(Slide).prop('direction')).toBe('up');
   });
 
   it('should pass correct props to the <CompanionWindow> components', () => {
@@ -49,6 +52,7 @@ describe('CompanionArea', () => {
 
     expect(wrapper.find(MiradorMenuButton).length).toBe(1);
     expect(wrapper.find(MiradorMenuButton).first().children('pure(ArrowRightSharpIcon)').length).toBe(1);
+    expect(wrapper.find(Slide).prop('direction')).toBe('right');
 
     expect(wrapper.find('div.mirador-companion-windows').length).toBe(1);
     expect(wrapper.find('div.mirador-companion-windows').props().style.display).toBe('none');
