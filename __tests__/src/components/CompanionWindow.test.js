@@ -10,9 +10,15 @@ function createWrapper(props) {
     <CompanionWindow
       id="abc123"
       windowId="x"
-      classes={{ horizontal: 'horizontal', small: 'small', vertical: 'vertical' }}
+      classes={{
+        horizontal: 'horizontal',
+        positionButton: 'positionButton',
+        small: 'small',
+        vertical: 'vertical',
+      }}
       companionWindow={{}}
       position="right"
+      showMoveToBottom
       {...props}
     />,
   );
@@ -101,5 +107,15 @@ describe('CompanionWindow', () => {
     expect(companionWindow.find(Rnd).length).toBe(1);
     expect(companionWindow.find(Rnd).prop('enableResizing').top).toBe(true);
     expect(companionWindow.find(Rnd).prop('default')).toEqual({ height: 201, width: 'auto' });
+  });
+
+  it('shows the moveToBottom button when true is passed for showMoveToBottom', () => {
+    companionWindow = createWrapper({ showMoveToBottom: false, updateCompanionWindow: true });
+    expect(companionWindow.find('.positionButton').length).toBe(0);
+  });
+
+  it('doesn\'t show the moveToBottom button when false is passed for showMoveToBottom', () => {
+    companionWindow = createWrapper({ showMoveToBottom: false, updateCompanionWindow: true });
+    expect(companionWindow.find('.positionButton').length).toBe(0);
   });
 });

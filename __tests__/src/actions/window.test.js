@@ -280,4 +280,18 @@ describe('window actions', () => {
       expect(actions.setWindowSideBarPanel(windowId, 'panelType')).toEqual(expectedAction);
     });
   });
+
+  describe('setWindowHeight', () => {
+    it('returns the appropriate action type', () => {
+      const height = 500;
+      const type = ActionTypes.SET_WINDOW_HEIGHT;
+      const windowId = 'abc123';
+      const expectedAction = {
+        height,
+        type,
+        windowId,
+      };
+      expect(actions.setWindowHeight(windowId, height)).toEqual(expectedAction);
+    });
+  });
 });

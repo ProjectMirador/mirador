@@ -161,6 +161,14 @@ export const windowsReducer = (state = {}, action) => {
       };
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return action.state.windows;
+    case ActionTypes.SET_WINDOW_HEIGHT:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          height: action.height,
+        },
+      };
     default:
       return state;
   }

@@ -23,6 +23,7 @@ function createWrapper(props) {
       currentCanvases={[currentCanvases[1]]}
       view="single"
       windowId="xyz"
+      size={{ height: 500 }}
       {...props}
     />,
   );

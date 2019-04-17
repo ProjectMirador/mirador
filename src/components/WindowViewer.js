@@ -49,7 +49,14 @@ export class WindowViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      canvasIndex, currentCanvases, view, fetchInfoResponse, fetchAnnotation,
+      canvasIndex,
+      currentCanvases,
+      fetchInfoResponse,
+      fetchAnnotation,
+      height,
+      setWindowHeight,
+      size,
+      view,
     } = this.props;
 
     if (prevProps.view !== view
@@ -65,6 +72,10 @@ export class WindowViewer extends Component {
           fetchAnnotation(manifestoCanvas.canvas.id, uri);
         });
       });
+    }
+    // only accept changes of at least 1 pixel, to limit the re-rendering
+    if (Math.abs(height - size.height) > 1) {
+      setWindowHeight(window.id, size.height);
     }
   }
 
@@ -143,7 +154,18 @@ WindowViewer.propTypes = {
   currentCanvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   fetchAnnotation: PropTypes.func.isRequired,
   fetchInfoResponse: PropTypes.func.isRequired,
+  height: PropTypes.number.isRequired,
   infoResponses: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  setWindowHeight: PropTypes.func,
+  size: PropTypes.shape({
+    height: PropTypes.number,
+    position: PropTypes.number,
+    width: PropTypes.number,
+  }).isRequired,
   view: PropTypes.string.isRequired,
   windowId: PropTypes.string.isRequired,
+};
+
+WindowViewer.defaultProps = {
+  setWindowHeight: () => {},
 };
