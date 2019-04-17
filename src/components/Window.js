@@ -63,7 +63,7 @@ export class Window extends Component {
         id={windowId}
         className={
           cn(classes.window, ns('window'),
-            maximized ? ns('workspace-maximized-window') : null)}
+            maximized ? classes.maximized : null)}
         aria-label={t('window', { label })}
       >
         {this.wrappedTopBar()}

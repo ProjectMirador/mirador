@@ -14,6 +14,7 @@ class WorkspaceElasticWindow extends React.Component {
    */
   render() {
     const {
+      classes,
       companionWindowDimensions,
       focused,
       layout,
@@ -49,7 +50,7 @@ class WorkspaceElasticWindow extends React.Component {
         }}
         dragHandleClassName={ns('window-top-bar')}
         className={
-          focused ? ns('workspace-focused-window') : null
+          focused ? classes.focused : null
         }
       >
         <Window
@@ -61,6 +62,7 @@ class WorkspaceElasticWindow extends React.Component {
 }
 
 WorkspaceElasticWindow.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string),
   companionWindowDimensions: PropTypes.shape({
     height: PropTypes.number,
     width: PropTypes.number,
@@ -78,6 +80,7 @@ WorkspaceElasticWindow.propTypes = {
 };
 
 WorkspaceElasticWindow.defaultProps = {
+  classes: {},
   companionWindowDimensions: { height: 0, width: 0 },
   focused: false,
 };
