@@ -2,6 +2,7 @@ import {
   getLanguagesFromConfigWithCurrent,
   getShowZoomControlsConfig,
   getTheme,
+  getThemeIds,
   getWorkspaceType,
   getContainerId,
 } from '../../../src/state/selectors';
@@ -59,6 +60,22 @@ describe('getTheme', () => {
     };
 
     expect(getTheme(state)).toEqual({ and_another_thing: true, whatever: 'dark' });
+  });
+});
+
+describe('getThemeIds', () => {
+  it('returns the available themes', () => {
+    const state = {
+      config: {
+        themes: {
+          a: {},
+          b: {},
+          c: {},
+        },
+      },
+    };
+
+    expect(getThemeIds(state)).toEqual(['a', 'b', 'c']);
   });
 });
 
