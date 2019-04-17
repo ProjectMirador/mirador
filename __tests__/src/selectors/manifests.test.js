@@ -1,6 +1,7 @@
 import manifesto from 'manifesto.js';
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture002 from '../../fixtures/version-2/002.json';
+import manifestFixture015 from '../../fixtures/version-2/015.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import manifestFixtureSn904cj3429 from '../../fixtures/version-2/sn904cj3429.json';
 import manifestFixturev3001 from '../../fixtures/version-3/001.json';
@@ -21,6 +22,7 @@ import {
   getManifestRelatedContent,
   getManifestRenderings,
   getManifestUrl,
+  getManifestViewingHint,
   getMetadataLocales,
   getRequiredStatement,
   getRights,
@@ -439,5 +441,22 @@ describe('getManifestStartCanvasIndex', () => {
   it('is undefined if no start canvas is specified', () => {
     const state = { manifests: { x: { json: manifestFixture001 } } };
     expect(getManifestStartCanvasIndex(state, { manifestId: 'x' })).toEqual(undefined);
+  });
+});
+
+describe('getManifestViewingHint', () => {
+  it('gets from the manifest', () => {
+    const state = { manifests: { x: { json: manifestFixture001 } } };
+    expect(getManifestViewingHint(state, { manifestId: 'x' })).toEqual('individuals');
+  });
+
+  it('gets from the sequence', () => {
+    const state = { manifests: { x: { json: manifestFixture015 } } };
+    expect(getManifestViewingHint(state, { manifestId: 'x' })).toEqual('paged');
+  });
+
+  it('is null if no viewingHint is specified', () => {
+    const state = { manifests: { x: { json: manifestFixture019 } } };
+    expect(getManifestViewingHint(state, { manifestId: 'x' })).toBeNull();
   });
 });

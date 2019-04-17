@@ -60,7 +60,6 @@ export function addWindow(options) {
       selectedAnnotations: {},
       sideBarPanel: 'info',
       thumbnailNavigationId: cwThumbs,
-      view: 'single',
     };
 
     const elasticLayout = {

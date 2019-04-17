@@ -380,3 +380,21 @@ export const getManifestStartCanvasIndex = createSelector(
     return ((canvasId && manifest.getSequences()[0].getCanvasById(canvasId)) || {}).index;
   },
 );
+
+/**
+ * Returns the viewing hint for the first sequence in the manifest or the manifest
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @return {Number}
+ */
+export const getManifestViewingHint = createSelector(
+  [getManifestoInstance],
+  (manifest) => {
+    if (!manifest) return null;
+    const viewingHint = manifest.getSequences()[0].getViewingHint() || manifest.getViewingHint();
+    if (viewingHint) return viewingHint.value;
+    return null;
+  },
+);

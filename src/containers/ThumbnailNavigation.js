@@ -13,16 +13,19 @@ import { getManifestCanvases, getCanvasIndex, getWindowViewType } from '../state
  * @memberof ThumbnailNavigation
  * @private
  */
-const mapStateToProps = (state, { windowId }) => ({
-  canvasGroupings: new CanvasGroupings(
-    getManifestCanvases(state, { windowId }),
-    state.windows[windowId].view,
-  ),
-  canvasIndex: getCanvasIndex(state, { windowId }),
-  config: state.config,
-  position: state.companionWindows[state.windows[windowId].thumbnailNavigationId].position,
-  view: getWindowViewType(state, { windowId }),
-});
+const mapStateToProps = (state, { windowId }) => {
+  const viewType = getWindowViewType(state, { windowId });
+  return {
+    canvasGroupings: new CanvasGroupings(
+      getManifestCanvases(state, { windowId }),
+      viewType,
+    ),
+    canvasIndex: getCanvasIndex(state, { windowId }),
+    config: state.config,
+    position: state.companionWindows[state.windows[windowId].thumbnailNavigationId].position,
+    view: viewType,
+  };
+};
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
