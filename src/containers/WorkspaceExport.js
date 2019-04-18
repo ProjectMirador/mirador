@@ -17,6 +17,9 @@ const mapStateToProps = state => ({ state });
  * @param theme
  */
 const styles = theme => ({
+  cancelBtn: {
+    color: theme.palette.text.primary,
+  },
   dialogcontent: {
     backgroundColor: theme.palette.shades.light,
     color: theme.palette.text.primary,

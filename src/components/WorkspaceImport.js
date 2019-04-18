@@ -88,7 +88,7 @@ export class WorkspaceImport extends Component {
           <DialogContentText className={classes.hint}>{t('importWorkspaceHint')}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={handleClose}>
+          <Button className={classes.cancelBtn} onClick={handleClose}>
             {t('cancel')}
           </Button>
           <Button color="primary" onClick={this.handleImportConfig} variant="contained">

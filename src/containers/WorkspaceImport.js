@@ -18,6 +18,9 @@ const mapDispatchToProps = {
 
 /** */
 const styles = theme => ({
+  cancelBtn: {
+    color: theme.palette.text.primary,
+  },
   hint: {
     maxWidth: '400px',
   },
