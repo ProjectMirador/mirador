@@ -20,6 +20,12 @@ const styles = theme => ({
   badge: {
     paddingLeft: 12,
   },
+  ctrlBtn: {
+    margin: theme.spacing.unit,
+  },
+  ctrlBtnSelected: {
+    backgroundColor: theme.palette.action.selected,
+  },
 });
 
 const enhance = compose(

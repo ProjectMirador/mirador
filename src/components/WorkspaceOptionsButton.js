@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import MoreHorizontalIcon from '@material-ui/icons/MoreHorizSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import WorkspaceOptionsMenu from '../containers/WorkspaceOptionsMenu';
@@ -40,13 +41,16 @@ export class WorkspaceOptionsButton extends Component {
    * Returns the rendered component
   */
   render() {
-    const { t } = this.props;
+    const { classes, t } = this.props;
     const { anchorEl } = this.state;
 
     return (
       <>
         <MiradorMenuButton
           aria-label={t('workspaceOptions')}
+          className={
+            classNames(classes.ctrlBtn, (anchorEl ? classes.ctrlBtnSelected : null))
+          }
           onClick={this.handleMenuClick}
         >
           <MoreHorizontalIcon />
@@ -62,5 +66,6 @@ export class WorkspaceOptionsButton extends Component {
 }
 
 WorkspaceOptionsButton.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   t: PropTypes.func.isRequired,
 };
