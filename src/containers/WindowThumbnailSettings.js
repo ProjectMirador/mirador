@@ -27,10 +27,14 @@ const mapStateToProps = (state, { windowId }) => (
 
 /** */
 const styles = theme => ({
+  label: {
+    borderBottom: '2px solid transparent',
+  },
   MenuItem: {
     display: 'inline',
   },
   selectedLabel: {
+    borderBottom: `2px solid ${theme.palette.primary.main}`,
     color: theme.palette.primary.main,
   },
 });
