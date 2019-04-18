@@ -58,7 +58,8 @@ export function addWindow(options) {
       rangeId: null,
       rotation: null,
       selectedAnnotations: {},
-      sideBarPanel: 'info',
+      sideBarOpen: config.window.sideBarOpenByDefault,
+      sideBarPanel: config.window.defaultSideBarPanel,
       thumbnailNavigationId: cwThumbs,
     };
 
@@ -72,7 +73,7 @@ export function addWindow(options) {
     dispatch({
       companionWindows: [
         {
-          content: 'info',
+          content: config.window.defaultSideBarPanel,
           default: true,
           id: cwDefault,
           position: 'left',

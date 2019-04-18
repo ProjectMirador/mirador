@@ -18,6 +18,22 @@ export class CompanionArea extends Component {
     return (position === 'bottom' || position === 'far-bottom') ? classes.horizontal : null;
   }
 
+  /** @private */
+  slideDirection() {
+    const { position } = this.props;
+
+    switch (position) {
+      case 'right':
+      case 'far-right':
+        return 'left';
+      case 'bottom':
+      case 'far-bottom':
+        return 'up';
+      default:
+        return 'right';
+    }
+  }
+
   /** */
   render() {
     const {
@@ -46,7 +62,7 @@ export class CompanionArea extends Component {
             </MiradorMenuButton>
           )
         }
-        <Slide in={companionAreaOpen} direction="right">
+        <Slide in={companionAreaOpen} direction={this.slideDirection()}>
           <div className={[ns('companion-windows'), companionWindowIds.length > 0 && classes[position], this.areaLayoutClass()].join(' ')} style={{ display: companionAreaOpen ? 'flex' : 'none' }}>
             {
               companionWindowIds.map(id => (
