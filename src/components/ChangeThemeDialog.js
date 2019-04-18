@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   Dialog,
   DialogTitle,
+  List,
   ListItem,
   ListItemIcon,
   ListItemText,
@@ -10,7 +11,6 @@ import {
 } from '@material-ui/core';
 import PaletteIcon from '@material-ui/icons/PaletteSharp';
 import PropTypes from 'prop-types';
-import { ListKeyboardNavigation } from '../lib/ListKeyboardNavigation';
 
 /**
  * a simple dialog providing the possibility to switch the theme
@@ -54,10 +54,18 @@ export class ChangeThemeDialog extends Component {
           </Typography>
         </DialogTitle>
         <DialogContent className={classes.dialogContent}>
-          <ListKeyboardNavigation selected={selectedTheme} onChange={this.handleThemeChange}>
+          <List>
             {
               themeIds.map(value => (
-                <ListItem key={value} className={classes.listitem} value={value}>
+                <ListItem
+                  button
+                  className={classes.listitem}
+                  component="li"
+                  key={value}
+                  onClick={() => this.handleThemeChange(value)}
+                  selected={value === selectedTheme}
+                  value={value}
+                >
                   <ListItemIcon>
                     <PaletteIcon className={classes[value]} />
                   </ListItemIcon>
@@ -65,7 +73,7 @@ export class ChangeThemeDialog extends Component {
                 </ListItem>
               ))
             }
-          </ListKeyboardNavigation>
+          </List>
         </DialogContent>
       </Dialog>
     );

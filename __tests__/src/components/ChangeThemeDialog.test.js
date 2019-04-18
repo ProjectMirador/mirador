@@ -40,7 +40,7 @@ describe('ChangeThemeDialog', () => {
     const setSelectedTheme = jest.fn();
 
     wrapper = createWrapper({ setSelectedTheme });
-    wrapper.find('ListKeyboardNavigation').first().simulate('change', 'light');
+    wrapper.find('WithStyles(ListItem)').at(0).simulate('click');
 
     expect(setSelectedTheme).toHaveBeenCalledWith('light');
   });
