@@ -17,8 +17,8 @@ export class CanvasAnnotations extends Component {
     super(props);
 
     this.handleClick = this.handleClick.bind(this);
-    this.handleMouseEnter = this.handleMouseEnter.bind(this);
-    this.handleMouseLeave = this.handleMouseLeave.bind(this);
+    this.handleAnnotationHighlight = this.handleAnnotationHighlight.bind(this);
+    this.handleAnnotationUnHighlight = this.handleAnnotationUnHighlight.bind(this);
   }
 
   /**
@@ -37,7 +37,7 @@ export class CanvasAnnotations extends Component {
   }
 
   /** */
-  handleMouseEnter(annotation) {
+  handleAnnotationHighlight(annotation) {
     const { allAnnotationsAreHighlighted, highlightAnnotation, windowId } = this.props;
     if (allAnnotationsAreHighlighted) return;
 
@@ -45,7 +45,7 @@ export class CanvasAnnotations extends Component {
   }
 
   /** */
-  handleMouseLeave() {
+  handleAnnotationUnHighlight() {
     const { allAnnotationsAreHighlighted, highlightAnnotation, windowId } = this.props;
     if (allAnnotationsAreHighlighted) return;
 
@@ -70,12 +70,16 @@ export class CanvasAnnotations extends Component {
           {
             annotations.map(annotation => (
               <ListItem
+                button
+                component="li"
                 className={classes.annotationListItem}
                 key={annotation.id}
                 selected={selectedAnnotationIds.includes(annotation.id)}
                 onClick={e => this.handleClick(e, annotation)}
-                onMouseEnter={() => this.handleMouseEnter(annotation)}
-                onMouseLeave={() => this.handleMouseLeave(annotation)}
+                onFocus={() => this.handleAnnotationHighlight(annotation)}
+                onBlur={this.handleAnnotationUnHighlight}
+                onMouseEnter={() => this.handleAnnotationHighlight(annotation)}
+                onMouseLeave={this.handleAnnotationUnHighlight}
               >
                 <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
                   <SanitizedHtml ruleSet="iiif" htmlString={annotation.content} />

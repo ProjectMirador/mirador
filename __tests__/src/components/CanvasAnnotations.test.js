@@ -132,6 +132,24 @@ describe('CanvasAnnotations', () => {
         expect(highlightAnnotation).toHaveBeenCalledWith('abc', 'annoId');
       });
 
+      it('highlights annotations on focus', () => {
+        const highlightAnnotation = jest.fn();
+
+        wrapper = createWrapper({
+          annotations: [
+            {
+              content: 'Annotation',
+              id: 'annoId',
+              targetId: 'example.com/iiif/12345',
+            },
+          ],
+          highlightAnnotation,
+        });
+
+        wrapper.find('WithStyles(ListItem)').first().simulate('focus');
+        expect(highlightAnnotation).toHaveBeenCalledWith('abc', 'annoId');
+      });
+
       it('sets the highlighted annotation to null on mouse leave', () => {
         const highlightAnnotation = jest.fn();
 
