@@ -35,8 +35,8 @@ const styles = theme => ({
     display: 'inline',
   },
   selectedLabel: {
-    borderBottom: `2px solid ${theme.palette.primary.main}`,
-    color: theme.palette.primary.main,
+    borderBottom: `2px solid ${theme.palette.secondary.main}`,
+    color: theme.palette.secondary.main,
   },
 });
 

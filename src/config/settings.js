@@ -11,6 +11,9 @@ export default {
         primary: {
           main: '#4db6ac',
         },
+        secondary: {
+          main: '#4db6ac',
+        },
         shades: {
           dark: '#000000',
           main: '#424242',
@@ -31,7 +34,7 @@ export default {
         main: '#1967d2',
       },
       secondary: {
-        main: '#ffa224',
+        main: '#1967d2',
       },
       shades: { // Shades that can be used to offset color areas of the Workspace / Window
         dark: '#eeeeee',

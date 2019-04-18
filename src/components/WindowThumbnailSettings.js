@@ -46,7 +46,7 @@ export class WindowThumbnailSettings extends Component {
             value="off"
             classes={{ label: thumbnailNavigationPosition === 'off' ? classes.selectedLabel : classes.label }}
             control={
-              <ThumbnailsOffIcon color={thumbnailNavigationPosition === 'off' ? 'primary' : undefined} />
+              <ThumbnailsOffIcon color={thumbnailNavigationPosition === 'off' ? 'secondary' : undefined} />
             }
             label={t('off')}
             labelPlacement="bottom"
@@ -57,7 +57,7 @@ export class WindowThumbnailSettings extends Component {
             value="far-bottom"
             classes={{ label: thumbnailNavigationPosition === 'far-bottom' ? classes.selectedLabel : classes.label }}
             control={
-              <ThumbnailNavigationBottomIcon color={thumbnailNavigationPosition === 'far-bottom' ? 'primary' : undefined} />
+              <ThumbnailNavigationBottomIcon color={thumbnailNavigationPosition === 'far-bottom' ? 'secondary' : undefined} />
             }
             label={t('bottom')}
             labelPlacement="bottom"
@@ -68,7 +68,7 @@ export class WindowThumbnailSettings extends Component {
             value="far-right"
             classes={{ label: thumbnailNavigationPosition === 'far-right' ? classes.selectedLabel : classes.label }}
             control={
-              <ThumbnailNavigationRightIcon color={thumbnailNavigationPosition === 'far-right' ? 'primary' : undefined} />
+              <ThumbnailNavigationRightIcon color={thumbnailNavigationPosition === 'far-right' ? 'secondary' : undefined} />
             }
             label={t('right')}
             labelPlacement="bottom"
