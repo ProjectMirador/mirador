@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import WorkspaceExport from '../containers/WorkspaceExport';
 import WorkspaceImport from '../containers/WorkspaceImport';
+import { PluginHook } from './PluginHook';
 import ns from '../config/css-ns';
 
 /**
@@ -97,6 +98,7 @@ export class WorkspaceOptionsMenu extends Component {
             </ListItemIcon>
             <Typography variant="body1">{t('importWorkspace')}</Typography>
           </MenuItem>
+          <PluginHook {...this.props} />
         </Menu>
         {Boolean(exportWorkspace.open) && (
           <WorkspaceExport

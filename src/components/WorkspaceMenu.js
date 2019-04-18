@@ -8,6 +8,7 @@ import { NestedMenu } from './NestedMenu';
 import WorkspaceSelectionDialog from '../containers/WorkspaceSelectionDialog';
 import ns from '../config/css-ns';
 import ChangeThemeDialog from '../containers/ChangeThemeDialog';
+import { PluginHook } from './PluginHook';
 
 /**
  */
@@ -128,6 +129,7 @@ export class WorkspaceMenu extends Component {
               <Typography variant="body1">{t('changeTheme')}</Typography>
             </MenuItem>
           )}
+          <PluginHook {...this.props} />
         </Menu>
         {Boolean(changeTheme.open) && (
           <ChangeThemeDialog
