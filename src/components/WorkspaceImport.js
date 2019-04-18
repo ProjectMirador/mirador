@@ -88,7 +88,7 @@ export class WorkspaceImport extends Component {
           <DialogContentText className={classes.hint}>{t('importWorkspaceHint')}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={handleClose}>
+          <Button className={classes.cancelBtn} onClick={handleClose}>
             {t('cancel')}
           </Button>
           <Button color="primary" onClick={this.handleImportConfig} variant="contained">
@@ -102,7 +102,7 @@ export class WorkspaceImport extends Component {
 
 WorkspaceImport.propTypes = {
   addError: PropTypes.func.isRequired,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  classes: PropTypes.objectOf(PropTypes.string),
   handleClose: PropTypes.func.isRequired,
   importConfig: PropTypes.func.isRequired,
   open: PropTypes.bool,
@@ -110,6 +110,7 @@ WorkspaceImport.propTypes = {
 };
 
 WorkspaceImport.defaultProps = {
+  classes: {},
   open: false,
   t: key => key,
 };
