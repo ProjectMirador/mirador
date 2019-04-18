@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import BookmarksIcon from '@material-ui/icons/BookmarksSharp';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import WindowList from '../containers/WindowList';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
@@ -42,6 +43,9 @@ export class WindowListButton extends Component {
           aria-haspopup="true"
           aria-label={t('listAllOpenWindows')}
           aria-owns={windowListAnchor ? 'window-list' : null}
+          className={
+            classNames(classes.ctrlBtn, (windowListAnchor ? classes.ctrlBtnSelected : null))
+          }
           disabled={disabled}
           badge
           BadgeProps={{ badgeContent: windowCount, classes: { badge: classes.badge } }}

@@ -8,6 +8,7 @@ import { WorkspaceOptionsButton } from '../../../src/components/WorkspaceOptions
 function createShallow(props) {
   return shallow(
     <WorkspaceOptionsButton
+      classes={{}}
       t={k => k}
       {...props}
     />,
