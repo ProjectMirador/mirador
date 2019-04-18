@@ -44,6 +44,9 @@ export default {
       error: {
         main: '#b00020',
       },
+      notification: { // Color used in MUI Badge dots
+        main: '#ffa224'
+      },
       section_divider: 'rgba(0, 0, 0, 0.25)',
     },
     typography: {

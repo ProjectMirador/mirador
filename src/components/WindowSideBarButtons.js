@@ -179,7 +179,7 @@ export class WindowSideBarButtons extends Component {
           <TabButton
             value="annotations"
             icon={(
-              <Badge color="secondary" invisible={!hasAnnotations} variant="dot">
+              <Badge classes={{ badge: classes.badge }} invisible={!hasAnnotations} variant="dot">
                 <AnnotationIcon />
               </Badge>
             )}
