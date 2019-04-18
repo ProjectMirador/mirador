@@ -102,7 +102,7 @@ export class WorkspaceImport extends Component {
 
 WorkspaceImport.propTypes = {
   addError: PropTypes.func.isRequired,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  classes: PropTypes.objectOf(PropTypes.string),
   handleClose: PropTypes.func.isRequired,
   importConfig: PropTypes.func.isRequired,
   open: PropTypes.bool,
@@ -110,6 +110,7 @@ WorkspaceImport.propTypes = {
 };
 
 WorkspaceImport.defaultProps = {
+  classes: {},
   open: false,
   t: key => key,
 };
