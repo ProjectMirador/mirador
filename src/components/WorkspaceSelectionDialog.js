@@ -5,13 +5,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {
   Card,
   CardContent,
+  List,
   ListItem,
   Typography,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import WorkspaceTypeElasticIcon from './icons/WorkspaceTypeElasticIcon';
 import WorkspaceTypeMosaicIcon from './icons/WorkspaceTypeMosaicIcon';
-import { ListKeyboardNavigation } from '../lib/ListKeyboardNavigation';
 
 /**
  */
@@ -60,13 +60,13 @@ export class WorkspaceSelectionDialog extends Component {
         </DialogTitle>
         <DialogContent>
           {children}
-          <ListKeyboardNavigation
-            className={classes.list}
-            onChange={this.handleworkspaceTypeChange}
-            selected={workspaceType}
-          >
+          <List className={classes.list}>
             <ListItem
+              button
               className={classes.listItem}
+              component="li"
+              onClick={() => this.handleworkspaceTypeChange('elastic')}
+              selected={workspaceType === 'elastic'}
               value="elastic"
             >
               <Card className={classes.card}>
@@ -86,7 +86,11 @@ export class WorkspaceSelectionDialog extends Component {
               </Card>
             </ListItem>
             <ListItem
+              button
               className={classes.listItem}
+              component="li"
+              onClick={() => this.handleworkspaceTypeChange('mosaic')}
+              selected={workspaceType === 'mosaic'}
               value="mosaic"
             >
               <Card className={classes.card}>
@@ -105,7 +109,7 @@ export class WorkspaceSelectionDialog extends Component {
                 </div>
               </Card>
             </ListItem>
-          </ListKeyboardNavigation>
+          </List>
         </DialogContent>
       </Dialog>
     );
