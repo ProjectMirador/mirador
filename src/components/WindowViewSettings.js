@@ -69,7 +69,7 @@ export class WindowViewSettings extends Component {
         >
           <FormControlLabel
             value="single"
-            classes={{ label: windowViewType === 'single' ? classes.selectedLabel : undefined }}
+            classes={{ label: windowViewType === 'single' ? classes.selectedLabel : classes.label }}
             control={<SingleIcon color={windowViewType === 'single' ? 'primary' : undefined} />}
             label={t('single')}
             labelPlacement="bottom"
@@ -78,7 +78,7 @@ export class WindowViewSettings extends Component {
         <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('book'); handleClose(); }}>
           <FormControlLabel
             value="book"
-            classes={{ label: windowViewType === 'book' ? classes.selectedLabel : undefined }}
+            classes={{ label: windowViewType === 'book' ? classes.selectedLabel : classes.label }}
             control={<BookViewIcon color={windowViewType === 'book' ? 'primary' : undefined} />}
             label={t('book')}
             labelPlacement="bottom"
@@ -87,7 +87,7 @@ export class WindowViewSettings extends Component {
         <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('gallery'); handleClose(); }}>
           <FormControlLabel
             value="gallery"
-            classes={{ label: windowViewType === 'gallery' ? classes.selectedLabel : undefined }}
+            classes={{ label: windowViewType === 'gallery' ? classes.selectedLabel : classes.label }}
             control={<GalleryViewIcon color={windowViewType === 'gallery' ? 'primary' : undefined} />}
             label={t('gallery')}
             labelPlacement="bottom"

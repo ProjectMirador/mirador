@@ -44,7 +44,7 @@ export class WindowThumbnailSettings extends Component {
         <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('off'); handleClose(); }}>
           <FormControlLabel
             value="off"
-            classes={{ label: thumbnailNavigationPosition === 'off' ? classes.selectedLabel : undefined }}
+            classes={{ label: thumbnailNavigationPosition === 'off' ? classes.selectedLabel : classes.label }}
             control={
               <ThumbnailsOffIcon color={thumbnailNavigationPosition === 'off' ? 'primary' : undefined} />
             }
@@ -55,7 +55,7 @@ export class WindowThumbnailSettings extends Component {
         <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('far-bottom'); handleClose(); }}>
           <FormControlLabel
             value="far-bottom"
-            classes={{ label: thumbnailNavigationPosition === 'far-bottom' ? classes.selectedLabel : undefined }}
+            classes={{ label: thumbnailNavigationPosition === 'far-bottom' ? classes.selectedLabel : classes.label }}
             control={
               <ThumbnailNavigationBottomIcon color={thumbnailNavigationPosition === 'far-bottom' ? 'primary' : undefined} />
             }
@@ -66,7 +66,7 @@ export class WindowThumbnailSettings extends Component {
         <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('far-right'); handleClose(); }}>
           <FormControlLabel
             value="far-right"
-            classes={{ label: thumbnailNavigationPosition === 'far-right' ? classes.selectedLabel : undefined }}
+            classes={{ label: thumbnailNavigationPosition === 'far-right' ? classes.selectedLabel : classes.label }}
             control={
               <ThumbnailNavigationRightIcon color={thumbnailNavigationPosition === 'far-right' ? 'primary' : undefined} />
             }
