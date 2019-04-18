@@ -15,7 +15,7 @@ export class WorkspaceAddButton extends Component {
    */
   render() {
     const {
-      classes, emptyWorkspace, t, setWorkspaceAddVisibility, isWorkspaceAddVisible,
+      classes, t, setWorkspaceAddVisibility, isWorkspaceAddVisible, useExtendedFab,
     } = this.props;
     return (
       <Tooltip title={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}>
@@ -25,7 +25,7 @@ export class WorkspaceAddButton extends Component {
           id="addBtn"
           aria-label={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}
           className={classes.fab}
-          variant={!isWorkspaceAddVisible && emptyWorkspace ? 'extended' : null}
+          variant={useExtendedFab ? 'extended' : null}
           onClick={() => { setWorkspaceAddVisibility(!isWorkspaceAddVisible); }}
         >
           {
@@ -33,7 +33,7 @@ export class WorkspaceAddButton extends Component {
               ? <CloseIcon />
               : <AddIcon />
           }
-          { !isWorkspaceAddVisible && emptyWorkspace && <Typography color="inherit">{t('startHere')}</Typography> }
+          { useExtendedFab && <Typography color="inherit">{t('startHere')}</Typography> }
         </Fab>
       </Tooltip>
     );
@@ -42,14 +42,13 @@ export class WorkspaceAddButton extends Component {
 
 WorkspaceAddButton.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  emptyWorkspace: PropTypes.bool,
   isWorkspaceAddVisible: PropTypes.bool,
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
   t: PropTypes.func,
+  useExtendedFab: PropTypes.bool.isRequired,
 };
 
 WorkspaceAddButton.defaultProps = {
-  emptyWorkspace: false,
   isWorkspaceAddVisible: false,
   t: key => key,
 };

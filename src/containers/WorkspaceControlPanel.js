@@ -14,6 +14,9 @@ const styles = theme => ({
   branding: {
     display: 'flex',
     position: 'absolute',
+    [theme.breakpoints.up('xs')]: {
+      display: 'none',
+    },
     [theme.breakpoints.up('sm')]: {
       bottom: 0,
       display: 'block',
@@ -38,13 +41,21 @@ const styles = theme => ({
     },
   },
   toolbar: {
+    display: 'flex',
+    justifyContent: 'space-between',
     [theme.breakpoints.up('sm')]: {
-      display: 'flex',
       flexDirection: 'column',
+      justifyContent: 'flex-start',
       minHeight: 0,
     },
   },
   wide: {
+  },
+  workspaceButtons: {
+    [theme.breakpoints.up('sm')]: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
   },
 });
 

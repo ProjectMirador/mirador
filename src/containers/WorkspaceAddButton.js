@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
+import withWidth from '@material-ui/core/withWidth';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { WorkspaceAddButton } from '../components/WorkspaceAddButton';
@@ -11,12 +12,17 @@ import { WorkspaceAddButton } from '../components/WorkspaceAddButton';
  * @memberof WorkspaceControlPanel
  * @private
  */
-const mapStateToProps = state => (
-  {
-    emptyWorkspace: Object.keys(state.windows).length === 0,
-    isWorkspaceAddVisible: state.workspace.isWorkspaceAddVisible,
-  }
-);
+const mapStateToProps = (state, { width }) => {
+  const { isWorkspaceAddVisible } = state.workspace;
+  return {
+    isWorkspaceAddVisible,
+    useExtendedFab: (
+      (width !== 'xs')
+        && !isWorkspaceAddVisible
+        && Object.keys(state.windows).length === 0
+    ),
+  };
+};
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -39,6 +45,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withWidth(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WorkspaceAddButton'),
 );
