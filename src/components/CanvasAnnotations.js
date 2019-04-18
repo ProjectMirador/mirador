@@ -70,6 +70,8 @@ export class CanvasAnnotations extends Component {
           {
             annotations.map(annotation => (
               <ListItem
+                button
+                component="li"
                 className={classes.annotationListItem}
                 key={annotation.id}
                 selected={selectedAnnotationIds.includes(annotation.id)}
