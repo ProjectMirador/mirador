@@ -167,11 +167,11 @@ describe('OpenSeadragonViewer', () => {
     let panTo;
     let zoomTo;
     let addHandler;
+
     beforeEach(() => {
       panTo = jest.fn();
       zoomTo = jest.fn();
       addHandler = jest.fn();
-
       wrapper = shallow(
         <OpenSeadragonViewer
           tileSources={[{ '@id': 'http://foo' }]}
@@ -222,6 +222,20 @@ describe('OpenSeadragonViewer', () => {
     it('sets up a listener on update-viewport', () => {
       wrapper.instance().componentDidMount();
       expect(addHandler).toHaveBeenCalledWith('update-viewport', expect.anything());
+    });
+
+    it('sets up a listener on canvas-click', () => {
+      wrapper.instance().componentDidMount();
+      expect(addHandler).toHaveBeenNthCalledWith(5, 'canvas-click', OpenSeadragonViewer.onCanvasClick);
+    });
+  });
+
+  describe('onCanvasClick', () => {
+    it('sets preventDefaultAction', () => {
+      const event = { preventDefaultAction: () => {} };
+      jest.spyOn(event, 'preventDefaultAction');
+      OpenSeadragonViewer.onCanvasClick(event);
+      expect(event.preventDefaultAction).toBe(true);
     });
   });
 
