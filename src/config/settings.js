@@ -168,6 +168,14 @@ export default {
           },
         },
       },
+      MuiTouchRipple: {
+        childPulsate: {
+          animation: 'none',
+        },
+        rippleVisible: {
+          animation: 'none',
+        },
+      },
     },
     props: {
       MuiButtonBase: {
