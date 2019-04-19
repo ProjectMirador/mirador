@@ -28,7 +28,11 @@ export class ManifestRelatedLinks extends Component {
         id={`${id}-related`}
         label={t('related')}
       >
-        <Typography aria-labelledby={`${id}-related`} variant="h4">
+        <Typography
+          aria-labelledby={`${id}-related ${id}-related-heading`}
+          id={`${id}-related-heading`}
+          variant="h4"
+        >
           {t('links')}
         </Typography>
         <dl className={ns('label-value-metadata')}>

@@ -29,7 +29,11 @@ export class ManifestInfo extends Component {
         label={t('resource')}
       >
         {manifestLabel && (
-          <Typography aria-labelledby={`${id}-resource`} variant="h4">
+          <Typography
+            aria-labelledby={`${id}-resource ${id}-resource-heading`}
+            id={`${id}-resource-heading`}
+            variant="h4"
+          >
             {manifestLabel}
           </Typography>
         )}

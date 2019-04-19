@@ -32,7 +32,13 @@ export class CanvasInfo extends Component {
       >
         <>
           {canvasLabel && (
-            <Typography aria-labelledby={`${id}-currentItem-${index}`} variant="h4">
+            <Typography
+              aria-labelledby={
+                `${id}-currentItem-${index} ${id}-currentItem-${index}-heading`
+              }
+              id={`${id}-currentItem-${index}-heading`}
+              variant="h4"
+            >
               {canvasLabel}
             </Typography>
           )}
