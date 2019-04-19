@@ -40,6 +40,16 @@ const styles = theme => ({
   fab: {
     margin: theme.spacing.unit,
   },
+  fabPrimary: {
+    '&:focus': {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  },
+  fabSecondary: {
+    '&:focus': {
+      backgroundColor: theme.palette.secondary.dark,
+    },
+  },
 });
 
 const enhance = compose(

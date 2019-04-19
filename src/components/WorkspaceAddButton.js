@@ -23,8 +23,10 @@ export class WorkspaceAddButton extends Component {
           size="medium"
           color="primary"
           id="addBtn"
+          disableRipple
           aria-label={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}
           className={classes.fab}
+          classes={{ primary: classes.fabPrimary, secondary: classes.fabSecondary }}
           variant={useExtendedFab ? 'extended' : null}
           onClick={() => { setWorkspaceAddVisibility(!isWorkspaceAddVisible); }}
         >
