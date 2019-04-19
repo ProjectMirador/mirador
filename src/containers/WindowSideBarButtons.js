@@ -43,6 +43,14 @@ const style = theme => ({
     '&:active': {
       backgroundColor: theme.palette.action.active,
     },
+    '&:focus': {
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+      backgroundColor: theme.palette.action.hover,
+      textDecoration: 'none',
+      // Reset on touch devices, it doesn't add specificity
+    },
     '&:hover': {
       '@media (hover: none)': {
         backgroundColor: 'transparent',
@@ -54,9 +62,6 @@ const style = theme => ({
 
     borderRight: '2px solid transparent',
     minWidth: 'auto',
-  },
-  tabRipple: {
-    backgroundColor: theme.palette.action.active,
   },
   tabSelected: {
     borderRight: `2px solid ${theme.palette.primary.main}`,

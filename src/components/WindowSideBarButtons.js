@@ -145,7 +145,7 @@ export class WindowSideBarButtons extends Component {
           aria-label={
             t('openCompanionWindow', { context: props.value })
           }
-          TouchRippleProps={{ classes: { child: classes.tabRipple } }}
+          disableRipple
           onKeyUp={this.handleKeyUp}
         />
       </Tooltip>
