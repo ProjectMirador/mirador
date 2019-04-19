@@ -10,6 +10,16 @@ import ns from '../config/css-ns';
  */
 export class WindowList extends Component {
   /**
+   * Given the menuElement passed in by the onEntering callback,
+   * find the 2nd ListItem element (avoiding the header) and focus it
+  */
+  static focus2ndListIitem(menuElement) {
+    if (!menuElement.querySelectorAll('li') || menuElement.querySelectorAll('li').length < 2) return;
+
+    menuElement.querySelectorAll('li')[1].focus(); // The 2nd LI
+  }
+
+  /**
    * Get the title for a window from its manifest title
    * @private
    */
@@ -40,9 +50,11 @@ export class WindowList extends Component {
         }}
         id="window-list-menu"
         container={document.querySelector(`#${containerId} .${ns('viewer')}`)}
+        disableAutoFocusItem
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        onEntering={WindowList.focus2ndListIitem}
       >
         <ListSubheader role="presentation" selected={false} disabled tabIndex="-1">
           {t('openWindows')}
@@ -51,7 +63,6 @@ export class WindowList extends Component {
           windowIds.map((windowId, i) => (
             <MenuItem
               key={windowId}
-              selected={i === 0}
               onClick={(e) => { focusWindow(windowId, true); handleClose(e); }}
             >
               <ListItemText primaryTypographyProps={{ variant: 'body1' }}>

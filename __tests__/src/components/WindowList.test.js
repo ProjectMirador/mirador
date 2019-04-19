@@ -81,25 +81,21 @@ describe('WindowList', () => {
     });
   });
 
-  describe('with multiple windows', () => {
-    beforeEach(() => {
-      titles = { xyz: 'Some title' };
+  describe('focus2ndListIitem', () => {
+    const mockListItem = jest.fn();
+    /** */
+    const mockSingleItemMenu = { querySelectorAll: () => [{ focus: mockListItem }] };
+    /** */
+    const mockMultiItemMenu = { querySelectorAll: () => ['Header', { focus: mockListItem }] };
 
-      wrapper = shallow(
-        <WindowList
-          containerId="mirador"
-          anchorEl={{}}
-          titles={titles}
-          windowIds={['xyz', 'zyx']}
-          handleClose={handleClose}
-          focusWindow={focusWindow}
-        />,
-      );
+    it('does not set focus if there is only one list item (the header)', () => {
+      WindowList.focus2ndListIitem(mockSingleItemMenu);
+      expect(mockListItem).not.toHaveBeenCalled();
     });
 
-    it('has the first window in the list selected', () => {
-      expect(wrapper.find('WithStyles(MenuItem)').first().props().selected).toBe(true);
-      expect(wrapper.find('WithStyles(MenuItem)').last().props().selected).toBe(false);
+    it('sets focus on the 2nd list item', () => {
+      WindowList.focus2ndListIitem(mockMultiItemMenu);
+      expect(mockListItem).toHaveBeenCalled();
     });
   });
 });
