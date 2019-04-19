@@ -31,10 +31,10 @@ export default {
     palette: {
       type: 'light',
       primary: {
-        main: '#1967d2',
+        main: '#1967d2', // Controls the color of the Add button and current window indicator
       },
       secondary: {
-        main: '#1967d2',
+        main: '#1967d2', // Controls the color of Selects and FormControls
       },
       shades: { // Shades that can be used to offset color areas of the Workspace / Window
         dark: '#eeeeee',
