@@ -34,9 +34,6 @@ const styles = theme => ({
     zIndex: theme.zIndex.appBar - 2,
   },
   toggle: {
-    '&:hover': {
-      backgroundColor: theme.palette.background.paper,
-    },
     backgroundColor: theme.palette.background.paper,
     border: `1px solid ${theme.palette.shades.dark}`,
     borderRadius: 0,
@@ -47,6 +44,11 @@ const styles = theme => ({
     position: 'absolute',
     width: '23px',
     zIndex: theme.zIndex.drawer,
+  },
+  toggleButton: {
+    marginBottom: 12,
+    marginTop: 12,
+    padding: 0,
   },
 });
 
