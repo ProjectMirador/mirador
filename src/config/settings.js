@@ -146,6 +146,13 @@ export default {
       useNextVariants: true // set so that console deprecation warning is removed
     },
     overrides: {
+      MuiListSubheader: {
+        root: {
+          '&[role="presentation"]:focus': {
+            outline: 0,
+          },
+        },
+      },
       MuiTooltip: { // Overridden from https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/Tooltip/Tooltip.js#L40-L70
         tooltipPlacementLeft: {
           ['@media (min-width:600px)']: {
