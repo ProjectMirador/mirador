@@ -35,14 +35,6 @@ export class OpenSeadragonViewer extends Component {
   }
 
   /**
-   *
-   * @param e
-   */
-  static onCanvasClick(e) {
-    e.preventDefaultAction = true;
-  }
-
-  /**
    * @param {Object} props
    */
   constructor(props) {
@@ -56,7 +48,9 @@ export class OpenSeadragonViewer extends Component {
     this.onUpdateViewport = this.onUpdateViewport.bind(this);
     this.onViewportChange = this.onViewportChange.bind(this);
     this.zoomToWorld = this.zoomToWorld.bind(this);
+    this.onCanvasClick = this.onCanvasClick.bind(this);
     this.osdUpdating = false;
+    this.justReceivedFocus = false;
   }
 
   /**
@@ -88,7 +82,7 @@ export class OpenSeadragonViewer extends Component {
     this.viewer.addHandler('animation-finish', () => {
       this.osdUpdating = false;
     });
-    this.viewer.addHandler('canvas-click', OpenSeadragonViewer.onCanvasClick);
+    this.viewer.addHandler('canvas-click', this.onCanvasClick);
     if (viewer) {
       this.viewer.viewport.panTo(viewer, true);
       this.viewer.viewport.zoomTo(viewer.zoom, viewer, true);
@@ -104,7 +98,7 @@ export class OpenSeadragonViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      viewer, highlightedAnnotations, selectedAnnotations,
+      focused, viewer, highlightedAnnotations, selectedAnnotations,
     } = this.props;
     const highlightsUpdated = !OpenSeadragonViewer.annotationsMatch(
       highlightedAnnotations, prevProps.highlightedAnnotations,
@@ -123,6 +117,11 @@ export class OpenSeadragonViewer extends Component {
         });
       };
       this.viewer.forceRedraw();
+    }
+
+    if (focused && prevProps.focused !== focused) {
+      this.justReceivedFocus = true;
+      setTimeout(() => { this.justReceivedFocus = false; }, 50);
     }
 
     if (!this.tileSourcesMatch(prevProps.tileSources)) {
@@ -153,6 +152,16 @@ export class OpenSeadragonViewer extends Component {
    */
   onUpdateViewport(event) {
     this.updateCanvas();
+  }
+
+  /**
+   * Prevent OSD from performing click-to-zoom when the window just received focus
+   *
+   * @param e
+   */
+  onCanvasClick(e) {
+    e.preventDefaultAction = this.justReceivedFocus;
+    this.justReceivedFocus = false;
   }
 
   /**
@@ -293,17 +302,18 @@ export class OpenSeadragonViewer extends Component {
 
 OpenSeadragonViewer.defaultProps = {
   children: null,
+  focused: false,
   highlightedAnnotations: [],
   label: null,
   selectedAnnotations: [],
   tileSources: [],
   viewer: null,
-
 };
 
 OpenSeadragonViewer.propTypes = {
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
   children: PropTypes.node,
+  focused: PropTypes.bool,
   highlightedAnnotations: PropTypes.arrayOf(PropTypes.object),
   label: PropTypes.string,
   selectedAnnotations: PropTypes.arrayOf(PropTypes.object),
