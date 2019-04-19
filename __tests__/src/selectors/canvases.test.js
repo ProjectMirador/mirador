@@ -6,6 +6,7 @@ import {
   getCanvasLabel,
   selectCanvasAuthService,
   selectNextAuthService,
+  selectInfoResponse,
 } from '../../../src/state/selectors/canvases';
 
 describe('getSelectedCanvases', () => {
@@ -251,5 +252,54 @@ describe('selectCanvasAuthService', () => {
     expect(selectCanvasAuthService({ ...state, auth }, { canvasIndex: 0, manifestId: 'a' }).id).toEqual('login');
     expect(selectCanvasAuthService({ ...state, auth }, { canvasIndex: 0, manifestId: 'b' }).id).toEqual('external');
     expect(selectCanvasAuthService({ ...state, auth }, { canvasIndex: 1, manifestId: 'b' })).toBeUndefined();
+  });
+});
+
+describe('selectInfoResponse', () => {
+  it('returns in the info response for the first canvas resource', () => {
+    const resource = { some: 'resource' };
+
+    const state = {
+      auth: {},
+      infoResponses: {
+        'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d': {
+          json: resource,
+        },
+      },
+      manifests: {
+        a: {
+          json: manifestFixture001,
+        },
+      },
+    };
+
+    expect(selectInfoResponse(state, { canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json', manifestId: 'a' }).json).toBe(resource);
+  });
+
+  it('returns nothing if there are no canvas resources', () => {
+    const state = {
+      auth: {},
+      manifests: {
+        a: {
+          json: {
+            '@context': 'http://iiif.io/api/presentation/2/context.json',
+            '@id':
+             'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+            '@type': 'sc:Manifest',
+            sequences: [
+              {
+                canvases: [
+                  {
+                    '@id': 'some-canvas-without-resources',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    };
+
+    expect(selectInfoResponse(state, { canvasId: 'some-canvas-without-resources', manifestId: 'a' })).toBe(undefined);
   });
 });
