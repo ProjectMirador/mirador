@@ -46,20 +46,16 @@ export class CompanionArea extends Component {
         {
           setCompanionAreaOpen && position === 'left' && sideBarOpen && companionWindowIds.length > 0
           && (
-            <MiradorMenuButton
-              aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
-              className={classes.toggle}
-              onClick={() => { setCompanionAreaOpen(windowId, !companionAreaOpen); }}
-              TooltipProps={{
-                placement: 'right',
-                style: {
-                  left: '100%',
-                  position: 'absolute',
-                },
-              }}
-            >
-              {companionAreaOpen ? <ArrowLeftIcon /> : <ArrowRightIcon />}
-            </MiradorMenuButton>
+            <div className={classes.toggle}>
+              <MiradorMenuButton
+                aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
+                className={classes.toggleButton}
+                onClick={() => { setCompanionAreaOpen(windowId, !companionAreaOpen); }}
+                TooltipProps={{ placement: 'right' }}
+              >
+                {companionAreaOpen ? <ArrowLeftIcon /> : <ArrowRightIcon />}
+              </MiradorMenuButton>
+            </div>
           )
         }
         <Slide in={companionAreaOpen} direction={this.slideDirection()}>
