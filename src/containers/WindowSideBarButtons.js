@@ -36,6 +36,9 @@ const mapStateToProps = (state, { windowId }) => ({
 
 /** */
 const style = theme => ({
+  badge: {
+    backgroundColor: theme.palette.notification.main,
+  },
   tab: {
     '&:active': {
       backgroundColor: theme.palette.action.active,

@@ -11,6 +11,9 @@ export default {
         primary: {
           main: '#4db6ac',
         },
+        secondary: {
+          main: '#4db6ac',
+        },
         shades: {
           dark: '#000000',
           main: '#424242',
@@ -28,10 +31,10 @@ export default {
     palette: {
       type: 'light',
       primary: {
-        main: '#1967d2',
+        main: '#1967d2', // Controls the color of the Add button and current window indicator
       },
       secondary: {
-        main: '#ffa224',
+        main: '#1967d2', // Controls the color of Selects and FormControls
       },
       shades: { // Shades that can be used to offset color areas of the Workspace / Window
         dark: '#eeeeee',
@@ -40,6 +43,9 @@ export default {
       },
       error: {
         main: '#b00020',
+      },
+      notification: { // Color used in MUI Badge dots
+        main: '#ffa224'
       },
       section_divider: 'rgba(0, 0, 0, 0.25)',
     },
