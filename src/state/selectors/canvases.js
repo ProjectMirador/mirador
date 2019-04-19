@@ -86,7 +86,7 @@ export const selectInfoResponse = createSelector(
     getCanvas,
     selectInfoResponses,
   ],
-  (canvas, infoResponses) => canvas
+  (canvas, infoResponses) => canvas && canvas.getImages()[0]
     && infoResponses[canvas.getImages()[0].getResource().getServices()[0].id]
     && !infoResponses[canvas.getImages()[0].getResource().getServices()[0].id].isFetching
     && infoResponses[canvas.getImages()[0].getResource().getServices()[0].id],
