@@ -101,7 +101,7 @@
       max-height: 0px;
       transition: 1s all ease-out;
       padding-left: 15px;
-      h6.leaf {
+      .mirador-toc-heading.leaf {
         border-left: 2px solid lightGray;
       }
     }
@@ -111,7 +111,7 @@
       transition: 7s all ease-out;
     }
 
-    h6 {
+    .mirador-toc-heading {
       margin: 0;
       position: relative;
       padding-left: 15px;

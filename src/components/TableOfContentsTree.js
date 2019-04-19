@@ -34,7 +34,7 @@ export class TableOfContentsTree extends Component {
     return (
       <div className={`mirador-toc-item ${selected}`} key={range.id}>
         <Typography
-          variant="subtitle2"
+          variant="body2"
           onClick={(e) => {
             if (leaf) {
               setCanvas(
