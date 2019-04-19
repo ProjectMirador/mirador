@@ -10,6 +10,18 @@ import WindowAuthenticationControl from '../containers/WindowAuthenticationContr
  * OSD and Navigation
  */
 export class WindowViewer extends Component {
+  /** */
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  /** */
+  static getDerivedStateFromError(error) {
+    // Update state so the next render will show the fallback UI.
+    return { hasError: true };
+  }
+
   /**
    * componentDidMount - React lifecycle method
    * Request the initial canvas on mount
@@ -105,6 +117,13 @@ export class WindowViewer extends Component {
    */
   render() {
     const { windowId } = this.props;
+
+    const { hasError } = this.state;
+
+    if (hasError) {
+      return <></>;
+    }
+
     return (
       <>
         <OSDViewer
