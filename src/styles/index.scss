@@ -95,14 +95,19 @@
 
   &-toc-item {
     cursor: pointer;
+    box-sizing: border-box;
+
+    .mirador-toc-item {
+      margin-left: 12px;
+    }
+
     .mirador-toc-section {
       width: 100%;
       overflow: hidden;
       max-height: 0px;
       transition: 1s all ease-out;
-      padding-left: 15px;
       .mirador-toc-heading.leaf {
-        border-left: 2px solid lightGray;
+        font-weight: normal;
       }
     }
 
@@ -114,21 +119,25 @@
     .mirador-toc-heading {
       margin: 0;
       position: relative;
-      padding-left: 15px;
+      font-weight: bold;
+      border-left: 2px solid transparent;
+      border-bottom: 0.5px solid rgba(0, 0, 0, 0.12);
+      padding: 8px 0 8px 8px;
+      box-sizing: border-box;
       &:hover {
-        background-color: #efefef;
-        text-shadow: 0.6px 0 0 black;
+        background: rgba(0,0,0,0.08);
       }
       &.leaf {
-        border-left: 2px solid lightgray;
-        padding-left: 15px;
+        font-weight: normal;
       }
     }
     &.selected>.mirador-toc-heading {
+        border-left: 2px solid #1967d2;
         &.leaf {
-            border-left: 4px solid black;
+          font-weight: normal;
+          border-left: 2px solid #1967d2;
+          background: rgba(0,0,0,0.14);
         }
-        border-left: 4px solid black;
     }
   }
 

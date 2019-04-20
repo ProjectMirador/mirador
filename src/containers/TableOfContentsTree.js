@@ -41,11 +41,10 @@ const mapStateToProps = (state, { windowId }) => ({
 const styles = theme => ({
   section: {
     borderBottom: '.5px solid rgba(0,0,0,0.25)',
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 2,
+    paddingLeft: theme.spacing.unit,
     paddingRight: theme.spacing.unit,
-    paddingTop: theme.spacing.unit * 2,
-  },
+    paddingTop: theme.spacing.unit,
+  }
 });
 
 const enhance = compose(
