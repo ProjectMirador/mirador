@@ -31,4 +31,31 @@ describe('WorkspaceSettings', () => {
     wrapper = createWrapper();
     expect(wrapper.matchesElement('WithStyles(WorkspaceSelectionDialog)'));
   });
+
+  it('sends the updateConfig and handleClose props on workspace selection', () => {
+    wrapper = createWrapper();
+
+    wrapper.find('WithStyles(MenuItem)').at(0).simulate('click');
+    expect(updateConfig).toHaveBeenLastCalledWith({ workspace: { type: 'elastic' } });
+    wrapper.find('WithStyles(MenuItem)').at(1).simulate('click');
+    expect(updateConfig).toHaveBeenLastCalledWith({ workspace: { type: 'mosaic' } });
+    expect(handleClose).toHaveBeenCalledTimes(2);
+  });
+
+  describe('inital focus', () => {
+    const mockMenuItemFocus = jest.fn();
+    const mockMenu = {
+      querySelectorAll: (selector) => {
+        expect(selector).toEqual('li[value="elastic"]');
+        return [{ focus: mockMenuItemFocus }];
+      },
+    };
+
+    it('sets an onEntered prop on the Dialog that focuses the selected item', () => {
+      wrapper = createWrapper();
+
+      wrapper.find('WithStyles(Dialog)').props().onEntered(mockMenu);
+      expect(mockMenuItemFocus).toHaveBeenCalled();
+    });
+  });
 });

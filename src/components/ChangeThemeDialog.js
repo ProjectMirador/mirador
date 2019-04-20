@@ -2,24 +2,37 @@ import React, { Component } from 'react';
 import {
   Dialog,
   DialogTitle,
-  ListItem,
   ListItemIcon,
   ListItemText,
+  MenuList,
+  MenuItem,
   Typography,
   DialogContent,
 } from '@material-ui/core';
 import PaletteIcon from '@material-ui/icons/PaletteSharp';
 import PropTypes from 'prop-types';
-import { ListKeyboardNavigation } from '../lib/ListKeyboardNavigation';
 
 /**
  * a simple dialog providing the possibility to switch the theme
  */
 export class ChangeThemeDialog extends Component {
   /**
+   * Set the initial focus when the dialog enters
+   * Find the selected item by using the current theme
+   * in a selector on the value attribute (which we need to set)
+  */
+  static setInitialFocus(dialogElement, selectedTheme) {
+    const selectedListItem = dialogElement.querySelectorAll(`li[value="${selectedTheme}"]`);
+    if (!selectedListItem || selectedListItem.length === 0) return;
+
+    selectedListItem[0].focus();
+  }
+
+  /**
   */
   constructor(props) {
     super(props);
+    this.selectedItemRef = React.createRef();
     this.handleThemeChange = this.handleThemeChange.bind(this);
   }
 
@@ -46,6 +59,7 @@ export class ChangeThemeDialog extends Component {
     return (
       <Dialog
         onClose={handleClose}
+        onEntered={dialog => ChangeThemeDialog.setInitialFocus(dialog, selectedTheme)}
         open={open}
       >
         <DialogTitle id="change-the-dialog-title" disableTypography>
@@ -54,18 +68,24 @@ export class ChangeThemeDialog extends Component {
           </Typography>
         </DialogTitle>
         <DialogContent className={classes.dialogContent}>
-          <ListKeyboardNavigation selected={selectedTheme} onChange={this.handleThemeChange}>
+          <MenuList>
             {
               themeIds.map(value => (
-                <ListItem key={value} className={classes.listitem} value={value}>
+                <MenuItem
+                  key={value}
+                  className={classes.listitem}
+                  onClick={() => { this.handleThemeChange(value); }}
+                  selected={value === selectedTheme}
+                  value={value}
+                >
                   <ListItemIcon>
                     <PaletteIcon className={classes[value]} />
                   </ListItemIcon>
                   <ListItemText>{t(value)}</ListItemText>
-                </ListItem>
+                </MenuItem>
               ))
             }
-          </ListKeyboardNavigation>
+          </MenuList>
         </DialogContent>
       </Dialog>
     );

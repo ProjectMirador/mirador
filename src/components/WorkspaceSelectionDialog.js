@@ -5,17 +5,29 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {
   Card,
   CardContent,
-  ListItem,
+  MenuList,
+  MenuItem,
   Typography,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import WorkspaceTypeElasticIcon from './icons/WorkspaceTypeElasticIcon';
 import WorkspaceTypeMosaicIcon from './icons/WorkspaceTypeMosaicIcon';
-import { ListKeyboardNavigation } from '../lib/ListKeyboardNavigation';
 
 /**
  */
 export class WorkspaceSelectionDialog extends Component {
+  /**
+   * Set the initial focus when the dialog enters
+   * Find the selected item by using the current workspace type
+   * in a selector on the value attribute (which we need to set)
+  */
+  static setInitialFocus(dialogElement, workspaceType) {
+    const selectedListItem = dialogElement.querySelectorAll(`li[value="${workspaceType}"]`);
+    if (!selectedListItem || selectedListItem.length === 0) return;
+
+    selectedListItem[0].focus();
+  }
+
   /**
    * constructor
    */
@@ -52,6 +64,7 @@ export class WorkspaceSelectionDialog extends Component {
         container={container}
         id="workspace-selection-dialog"
         onClose={handleClose}
+        onEntered={dialog => WorkspaceSelectionDialog.setInitialFocus(dialog, workspaceType)}
         onEscapeKeyDown={handleClose}
         open={open}
       >
@@ -60,13 +73,14 @@ export class WorkspaceSelectionDialog extends Component {
         </DialogTitle>
         <DialogContent>
           {children}
-          <ListKeyboardNavigation
-            className={classes.list}
-            onChange={this.handleworkspaceTypeChange}
+          <MenuList
+            classes={{ root: classes.list }}
             selected={workspaceType}
           >
-            <ListItem
-              className={classes.listItem}
+            <MenuItem
+              className={classes.menuItem}
+              onClick={() => this.handleworkspaceTypeChange('elastic')}
+              selected={workspaceType === 'elastic'}
               value="elastic"
             >
               <Card className={classes.card}>
@@ -84,9 +98,11 @@ export class WorkspaceSelectionDialog extends Component {
                   </CardContent>
                 </div>
               </Card>
-            </ListItem>
-            <ListItem
-              className={classes.listItem}
+            </MenuItem>
+            <MenuItem
+              className={classes.menuItem}
+              onClick={() => this.handleworkspaceTypeChange('mosaic')}
+              selected={workspaceType === 'mosaic'}
               value="mosaic"
             >
               <Card className={classes.card}>
@@ -104,8 +120,8 @@ export class WorkspaceSelectionDialog extends Component {
                   </CardContent>
                 </div>
               </Card>
-            </ListItem>
-          </ListKeyboardNavigation>
+            </MenuItem>
+          </MenuList>
         </DialogContent>
       </Dialog>
     );
