@@ -29,7 +29,7 @@ describe('CollapsibleSection', () => {
   });
 
   it('renders the passed in label is a Typography', () => {
-    expect(wrapper.find(Typography).props().children[0]).toEqual('The Section Label');
+    expect(wrapper.find(Typography).props().children).toEqual('The Section Label');
   });
 
   it('renders a mirador button with an icon dependent on the open state', () => {
