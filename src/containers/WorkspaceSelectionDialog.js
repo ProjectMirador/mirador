@@ -50,18 +50,14 @@ const styles = theme => ({
     },
     outline: 'none',
   },
-  listItem: {
-    '&:focus': {
-      backgroundColor: theme.palette.action.focus,
-    },
-    '&:hover': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    cursor: 'pointer',
-  },
   media: {
     flex: '0 0 120px',
     height: '90px',
+  },
+  menuItem: {
+    height: 'auto',
+    overflow: 'auto',
+    whiteSpace: 'inherit',
   },
   root: {
     '&:last-child': {
