@@ -14,6 +14,18 @@ import CompanionArea from '../containers/CompanionArea';
  */
 export class Window extends Component {
   /** */
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  /** */
+  static getDerivedStateFromError(error) {
+    // Update state so the next render will show the fallback UI.
+    return { hasError: true };
+  }
+
+  /** */
   componentDidMount(prevProps) {
     const { fetchManifest, manifest, manifestId } = this.props;
     if (manifestId && (!manifest || !manifest.isFetching)) {
@@ -54,6 +66,12 @@ export class Window extends Component {
     const {
       focusWindow, label, manifest, maximized, sideBarOpen, view, windowId, classes, t,
     } = this.props;
+
+    const { hasError } = this.state;
+
+    if (hasError) {
+      return <></>;
+    }
 
     return (
       <Paper
