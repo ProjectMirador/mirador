@@ -40,8 +40,25 @@ describe('ChangeThemeDialog', () => {
     const setSelectedTheme = jest.fn();
 
     wrapper = createWrapper({ setSelectedTheme });
-    wrapper.find('ListKeyboardNavigation').first().simulate('change', 'light');
+    wrapper.find('WithStyles(MenuItem)').first().simulate('click');
 
     expect(setSelectedTheme).toHaveBeenCalledWith('light');
+  });
+
+  describe('inital focus', () => {
+    const mockMenuItemFocus = jest.fn();
+    const mockMenu = {
+      querySelectorAll: (selector) => {
+        expect(selector).toEqual('li[value="light"]');
+        return [{ focus: mockMenuItemFocus }];
+      },
+    };
+
+    it('sets an onEntered prop on the Dialog that focuses the selected item', () => {
+      wrapper = createWrapper();
+
+      wrapper.find('WithStyles(Dialog)').props().onEntered(mockMenu);
+      expect(mockMenuItemFocus).toHaveBeenCalled();
+    });
   });
 });
