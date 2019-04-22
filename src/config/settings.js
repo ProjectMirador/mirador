@@ -196,6 +196,7 @@ export default {
     en: 'English',
   },
   displayAllAnnotations: false, // Configure if annotations to be displayed on the canvas by default when fetched
+  resourceHeaders: {}, // Headers to send with IIIF Presentation API resource requests
   translations: { // Translations can be added to inject new languages or override existing labels
   },
   window: {

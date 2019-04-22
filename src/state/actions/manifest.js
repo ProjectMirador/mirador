@@ -52,10 +52,10 @@ export function receiveManifestFailure(manifestId, error) {
  * @memberof ActionCreators
  */
 export function fetchManifest(manifestId, properties) {
-  return ((dispatch) => {
+  return ((dispatch, getState) => {
     dispatch(requestManifest(manifestId, { ...properties, isFetching: true }));
-
-    return fetch(manifestId)
+    const { config = {} } = getState();
+    return fetch(manifestId, { headers: config.resourceHeaders })
       .then(response => response.json())
       .then(json => dispatch(receiveManifest(manifestId, json)))
       .catch((error) => {
