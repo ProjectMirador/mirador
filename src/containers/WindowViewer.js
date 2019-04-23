@@ -37,7 +37,6 @@ const mapDispatchToProps = {
   setWindowHeight: actions.setWindowHeight,
 };
 
-
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withSize({ monitorHeight: true, refreshMode: 'debounce' }),

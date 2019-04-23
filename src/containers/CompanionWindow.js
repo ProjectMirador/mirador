@@ -7,7 +7,6 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
   getCompanionWindow,
-  getCompanionWindowsForPosition,
   getWindow,
 } from '../state/selectors';
 import { CompanionWindow } from '../components/CompanionWindow';
@@ -20,7 +19,8 @@ import { CompanionWindow } from '../components/CompanionWindow';
 const mapStateToProps = (state, { id, windowId }) => {
   const window = getWindow(state, { windowId });
   const companionWindow = getCompanionWindow(state, { companionWindowId: id });
-  const showMoveToBottom = !window.height || window.height > 300 || companionWindow.position !== 'right' || getCompanionWindowsForPosition(state, { position: 'bottom', windowId }).length === 0;
+  const showMoveToBottom = !window.height || window.height > 300 || companionWindow.position !== 'right';
+
   return {
     ...companionWindow,
     isDisplayed: (companionWindow

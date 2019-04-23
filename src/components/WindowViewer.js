@@ -57,6 +57,7 @@ export class WindowViewer extends Component {
       setWindowHeight,
       size,
       view,
+      windowId,
     } = this.props;
 
     if (prevProps.view !== view
@@ -73,9 +74,10 @@ export class WindowViewer extends Component {
         });
       });
     }
+
     // only accept changes of at least 1 pixel, to limit the re-rendering
-    if (Math.abs(height - size.height) > 1) {
-      setWindowHeight(window.id, size.height);
+    if (!height || Math.abs(height - size.height) > 1) {
+      setWindowHeight(windowId, size.height);
     }
   }
 
