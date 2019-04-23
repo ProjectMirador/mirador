@@ -100,7 +100,7 @@ export class WorkspaceExport extends Component {
             </pre>
           </DialogContent>
           <DialogActions>
-            <Button color="primary">{t('cancel')}</Button>
+            <Button color="primary" onClick={() => handleClose()}>{t('cancel')}</Button>
             <CopyToClipboard
               text={exportableState}
               onCopy={this.handleDialogClose}
