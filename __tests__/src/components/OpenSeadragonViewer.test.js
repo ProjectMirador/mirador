@@ -229,20 +229,6 @@ describe('OpenSeadragonViewer', () => {
       wrapper.instance().componentDidMount();
       expect(addHandler).toHaveBeenCalledWith('update-viewport', expect.anything());
     });
-
-    it('sets up a listener on canvas-click', () => {
-      wrapper.instance().componentDidMount();
-      expect(addHandler).toHaveBeenNthCalledWith(5, 'canvas-click', OpenSeadragonViewer.onCanvasClick);
-    });
-  });
-
-  describe('onCanvasClick', () => {
-    it('sets preventDefaultAction', () => {
-      const event = { preventDefaultAction: () => {} };
-      jest.spyOn(event, 'preventDefaultAction');
-      OpenSeadragonViewer.onCanvasClick(event);
-      expect(event.preventDefaultAction).toBe(true);
-    });
   });
 
   describe('canvas-click handlers', () => {
@@ -359,6 +345,15 @@ describe('OpenSeadragonViewer', () => {
       expect(resize).toHaveBeenCalledTimes(1);
       expect(canvasUpdate).toHaveBeenCalledTimes(1);
       expect(forceRedraw).toHaveBeenCalled();
+    });
+
+    it('sets timeout on justReceivedFocus', () => {
+      jest.useFakeTimers();
+      wrapper.setProps({ focused: true });
+      expect(wrapper.instance().justReceivedFocus).toBe(true);
+      jest.runAllTimers();
+      expect(setTimeout).toHaveBeenCalledTimes(1);
+      expect(wrapper.instance().justReceivedFocus).toBe(false);
     });
   });
 
