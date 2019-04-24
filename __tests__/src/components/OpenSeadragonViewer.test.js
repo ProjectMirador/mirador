@@ -163,29 +163,35 @@ describe('OpenSeadragonViewer', () => {
     });
   });
 
+  /**
+   *
+   * @param props
+   * @returns {*}
+   */
+  const createWrapper = props => shallow(
+    <OpenSeadragonViewer
+      tileSources={[{ '@id': 'http://foo' }]}
+      windowId="base"
+      viewer={{ x: 1, y: 0, zoom: 0.5 }}
+      config={props}
+      updateViewport={updateViewport}
+      canvasWorld={new CanvasWorld([])}
+      t={k => k}
+    >
+      <div className="foo" />
+    </OpenSeadragonViewer>,
+  );
+
   describe('componentDidMount', () => {
     let panTo;
     let zoomTo;
     let addHandler;
+
     beforeEach(() => {
       panTo = jest.fn();
       zoomTo = jest.fn();
       addHandler = jest.fn();
-
-      wrapper = shallow(
-        <OpenSeadragonViewer
-          tileSources={[{ '@id': 'http://foo' }]}
-          windowId="base"
-          viewer={{ x: 1, y: 0, zoom: 0.5 }}
-          config={{}}
-          updateViewport={updateViewport}
-          canvasWorld={new CanvasWorld([])}
-          t={k => k}
-        >
-          <div className="foo" />
-        </OpenSeadragonViewer>,
-      );
-
+      wrapper = createWrapper();
       wrapper.instance().ref = { current: true };
 
       OpenSeadragon.mockImplementation(() => ({
@@ -222,6 +228,45 @@ describe('OpenSeadragonViewer', () => {
     it('sets up a listener on update-viewport', () => {
       wrapper.instance().componentDidMount();
       expect(addHandler).toHaveBeenCalledWith('update-viewport', expect.anything());
+    });
+  });
+
+  describe('canvas-click handlers', () => {
+    const addHandler = jest.fn();
+    const panTo = jest.fn();
+    const zoomTo = jest.fn();
+    it('conditionally sets up "disable zoom action" handler on canvas-click', () => {
+      wrapper = createWrapper({ isCanvasClickZoomActionDisabled: true });
+      wrapper.instance().ref = { current: true };
+      OpenSeadragon.mockImplementation(() => ({
+        addHandler,
+        viewport: { panTo, zoomTo },
+      }));
+      wrapper.instance().componentDidMount();
+      expect(addHandler).toHaveBeenCalledWith('canvas-click', OpenSeadragonViewer.onCanvasClick);
+    });
+    it('sets preventDefaultAction on CanvasClick', () => {
+      const event = { preventDefaultAction: () => {} };
+      jest.spyOn(event, 'preventDefaultAction');
+      OpenSeadragonViewer.onCanvasClick(event);
+      expect(event.preventDefaultAction).toBe(true);
+    });
+    it('conditionally sets up "after focus, enable click zoom action" handler on canvas-click', () => {
+      wrapper = createWrapper({ isCanvasClickZoomActionAfterFocusEnabled: true });
+      wrapper.instance().ref = { current: true };
+      OpenSeadragon.mockImplementation(() => ({
+        addHandler,
+        viewport: { panTo, zoomTo },
+      }));
+      wrapper.instance().componentDidMount();
+      expect(addHandler).toHaveBeenCalledWith('canvas-click', wrapper.instance().onCanvasFocus);
+    });
+    it('sets preventDefaultAction on CanvasFocus', () => {
+      const event = { preventDefaultAction: () => {} };
+      jest.spyOn(event, 'preventDefaultAction');
+      wrapper.instance().justReceivedFocus = true;
+      wrapper.instance().onCanvasFocus(event);
+      expect(event.preventDefaultAction).toBe(true);
     });
   });
 

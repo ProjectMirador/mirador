@@ -20,6 +20,8 @@ import {
  */
 const mapStateToProps = (state, { windowId }) => ({
   canvasWorld: new CanvasWorld(getSelectedCanvases(state, { windowId })),
+  config: state.config.viewer,
+  focused: state.workspace.focusedWindowId === windowId,
   highlightedAnnotations: getHighlightedAnnotationsOnCanvases(state, { windowId }),
   label: getCanvasLabel(state, { windowId }),
   selectedAnnotations: getSelectedAnnotationsOnCanvases(state, { windowId }),

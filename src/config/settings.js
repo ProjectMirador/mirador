@@ -198,6 +198,10 @@ export default {
   displayAllAnnotations: false, // Configure if annotations to be displayed on the canvas by default when fetched
   translations: { // Translations can be added to inject new languages or override existing labels
   },
+  viewer: {
+    isCanvasClickZoomActionDisabled: false,
+    isCanvasClickZoomActionAfterFocusEnabled: true,
+  },
   window: {
     allowClose: true, // Configure if windows can be closed or not
     allowMaximize: true, // Configure if windows can be maximized or not
