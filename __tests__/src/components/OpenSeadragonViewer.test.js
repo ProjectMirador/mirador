@@ -229,6 +229,20 @@ describe('OpenSeadragonViewer', () => {
       wrapper.instance().componentDidMount();
       expect(addHandler).toHaveBeenCalledWith('update-viewport', expect.anything());
     });
+
+    it('sets up a listener on canvas-click', () => {
+      wrapper.instance().componentDidMount();
+      expect(addHandler).toHaveBeenNthCalledWith(5, 'canvas-click', OpenSeadragonViewer.onCanvasClick);
+    });
+  });
+
+  describe('onCanvasClick', () => {
+    it('sets preventDefaultAction', () => {
+      const event = { preventDefaultAction: () => {} };
+      jest.spyOn(event, 'preventDefaultAction');
+      OpenSeadragonViewer.onCanvasClick(event);
+      expect(event.preventDefaultAction).toBe(true);
+    });
   });
 
   describe('canvas-click handlers', () => {
