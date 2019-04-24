@@ -53,17 +53,22 @@ export class OpenSeadragonViewer extends Component {
     // An initial value for the updateCanvas method
     this.updateCanvas = () => {};
     this.ref = React.createRef();
+    this.onCanvasFocus = this.onCanvasFocus.bind(this);
     this.onUpdateViewport = this.onUpdateViewport.bind(this);
     this.onViewportChange = this.onViewportChange.bind(this);
     this.zoomToWorld = this.zoomToWorld.bind(this);
     this.osdUpdating = false;
+    this.justReceivedFocus = false;
   }
 
   /**
    * React lifecycle event
    */
   componentDidMount() {
-    const { viewer } = this.props;
+    const {
+      config,
+      viewer,
+    } = this.props;
     if (!this.ref.current) {
       return;
     }
@@ -75,7 +80,6 @@ export class OpenSeadragonViewer extends Component {
       preserveImageSizeOnResize: true,
       preserveViewport: true,
       showNavigationControl: false,
-
     });
 
     this.osdCanvasOverlay = new OpenSeadragonCanvasOverlay(this.viewer);
@@ -88,7 +92,11 @@ export class OpenSeadragonViewer extends Component {
     this.viewer.addHandler('animation-finish', () => {
       this.osdUpdating = false;
     });
-    this.viewer.addHandler('canvas-click', OpenSeadragonViewer.onCanvasClick);
+    if (config && config.isCanvasClickZoomActionDisabled) {
+      this.viewer.addHandler('canvas-click', OpenSeadragonViewer.onCanvasClick);
+    } else if (config && config.isCanvasClickZoomActionAfterFocusEnabled) {
+      this.viewer.addHandler('canvas-click', this.onCanvasFocus);
+    }
     if (viewer) {
       this.viewer.viewport.panTo(viewer, true);
       this.viewer.viewport.zoomTo(viewer.zoom, viewer, true);
@@ -104,7 +112,7 @@ export class OpenSeadragonViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      viewer, highlightedAnnotations, selectedAnnotations,
+      focused, highlightedAnnotations, selectedAnnotations, viewer,
     } = this.props;
     const highlightsUpdated = !OpenSeadragonViewer.annotationsMatch(
       highlightedAnnotations, prevProps.highlightedAnnotations,
@@ -123,6 +131,11 @@ export class OpenSeadragonViewer extends Component {
         });
       };
       this.viewer.forceRedraw();
+    }
+
+    if (focused && prevProps.focused !== focused) {
+      this.justReceivedFocus = true;
+      setTimeout(() => { this.justReceivedFocus = false; }, 50);
     }
 
     if (!this.tileSourcesMatch(prevProps.tileSources)) {
@@ -146,6 +159,15 @@ export class OpenSeadragonViewer extends Component {
    */
   componentWillUnmount() {
     this.viewer.removeAllHandlers();
+  }
+
+  /**
+   *
+   * @param e
+   */
+  onCanvasFocus(e) {
+    e.preventDefaultAction = this.justReceivedFocus;
+    this.justReceivedFocus = false;
   }
 
   /**
@@ -293,17 +315,20 @@ export class OpenSeadragonViewer extends Component {
 
 OpenSeadragonViewer.defaultProps = {
   children: null,
+  config: null,
+  focused: false,
   highlightedAnnotations: [],
   label: null,
   selectedAnnotations: [],
   tileSources: [],
   viewer: null,
-
 };
 
 OpenSeadragonViewer.propTypes = {
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
   children: PropTypes.node,
+  config: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  focused: PropTypes.bool,
   highlightedAnnotations: PropTypes.arrayOf(PropTypes.object),
   label: PropTypes.string,
   selectedAnnotations: PropTypes.arrayOf(PropTypes.object),
