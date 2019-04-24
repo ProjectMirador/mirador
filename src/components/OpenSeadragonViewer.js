@@ -35,6 +35,14 @@ export class OpenSeadragonViewer extends Component {
   }
 
   /**
+   *
+   * @param e
+   */
+  static onCanvasClick(e) {
+    e.preventDefaultAction = true;
+  }
+
+  /**
    * @param {Object} props
    */
   constructor(props) {
@@ -80,7 +88,7 @@ export class OpenSeadragonViewer extends Component {
     this.viewer.addHandler('animation-finish', () => {
       this.osdUpdating = false;
     });
-
+    this.viewer.addHandler('canvas-click', OpenSeadragonViewer.onCanvasClick);
     if (viewer) {
       this.viewer.viewport.panTo(viewer, true);
       this.viewer.viewport.zoomTo(viewer.zoom, viewer, true);
