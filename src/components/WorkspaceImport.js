@@ -43,7 +43,12 @@ export class WorkspaceImport extends Component {
    * @private
    */
   handleImportConfig(event) {
-    const { handleClose, importConfig } = this.props;
+    const {
+      addError,
+      handleClose,
+      importConfig,
+      t,
+    } = this.props;
     const { configImportValue } = this.state;
 
     try {
@@ -51,8 +56,10 @@ export class WorkspaceImport extends Component {
       importConfig(configJSON);
       handleClose();
     } catch (ex) {
-      const { addError } = this.props;
-      addError(ex.toString());
+      addError({
+        message: ex.toString(),
+        showDialog: true,
+      });
     }
   }
 

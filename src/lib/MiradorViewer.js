@@ -57,7 +57,7 @@ class MiradorViewer {
       } else {
         view = mergedConfig.window.defaultView;
       }
-      this.store.dispatch(actions.fetchManifest(miradorWindow.loadedManifest));
+      this.store.dispatch(actions.fetchManifest(miradorWindow.loadedManifest, {}, true));
       this.store.dispatch(actions.addWindow({
         canvasIndex: (miradorWindow.canvasIndex || 0),
         manifestId: miradorWindow.loadedManifest,

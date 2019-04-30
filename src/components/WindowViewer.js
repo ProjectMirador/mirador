@@ -140,10 +140,14 @@ export class WindowViewer extends Component {
 
 WindowViewer.propTypes = {
   canvasIndex: PropTypes.number.isRequired,
-  currentCanvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  currentCanvases: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   fetchAnnotation: PropTypes.func.isRequired,
   fetchInfoResponse: PropTypes.func.isRequired,
   infoResponses: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   view: PropTypes.string.isRequired,
   windowId: PropTypes.string.isRequired,
+};
+
+WindowViewer.defaultProps = {
+  currentCanvases: [],
 };

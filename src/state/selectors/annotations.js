@@ -105,7 +105,9 @@ export const getSelectedAnnotationIds = createSelector(
   ],
   (selectedAnnotations, canvases) => (
     flatten(
-      canvases.map(c => c.id).map(targetId => selectedAnnotations && selectedAnnotations[targetId]),
+      canvases && canvases
+        .map(c => c.id)
+        .map(targetId => selectedAnnotations && selectedAnnotations[targetId]),
     )
   ),
 );

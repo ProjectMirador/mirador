@@ -36,7 +36,7 @@ describe('ErrorDialog', () => {
     const error = { id: 'testid123', message: '' };
     const mockHandleClick = jest.fn();
 
-    wrapper = createWrapper({ error, removeError: mockHandleClick });
+    wrapper = createWrapper({ confirmError: mockHandleClick, error });
     wrapper.find('WithStyles(Button)').simulate('click');
     expect(mockHandleClick).toHaveBeenCalledTimes(1);
   });

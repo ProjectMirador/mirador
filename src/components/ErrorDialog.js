@@ -3,7 +3,12 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
-import { DialogActions, DialogContentText, Typography } from '@material-ui/core';
+import {
+  DialogActions,
+  DialogContentText,
+  Divider,
+  Typography,
+} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { isUndefined } from 'lodash';
 
@@ -16,27 +21,25 @@ export class ErrorDialog extends Component {
    */
   render() {
     const {
-      error, removeError, t,
+      error, confirmError, t,
     } = this.props;
-
-    const hasError = !isUndefined(error);
 
     return error ? (
       <Dialog
         aria-labelledby="error-dialog-title"
         id="error-dialog"
-        onClose={() => removeError(error.id)}
-        open={hasError}
+        onClose={() => confirmError(error.id)}
+        open={!isUndefined(error)}
       >
         <DialogTitle id="error-dialog-title" disableTypography>
           <Typography variant="h2">{t('errorDialogTitle')}</Typography>
         </DialogTitle>
-        <DialogContent disableTypography>
-          <DialogContentText variant="body2" noWrap color="inherit">
+        <DialogContent>
+          <DialogContentText variant="body2" color="inherit">
             {error.message}
           </DialogContentText>
           <DialogActions>
-            <Button onClick={() => removeError(error.id)} variant="contained">
+            <Button color="primary" onClick={() => confirmError(error.id)} variant="contained">
               {t('errorDialogConfirm')}
             </Button>
           </DialogActions>
@@ -47,16 +50,17 @@ export class ErrorDialog extends Component {
 }
 
 ErrorDialog.propTypes = {
+  confirmError: PropTypes.func,
   error: PropTypes.shape({
     id: PropTypes.string,
     message: PropTypes.string,
+    showDialog: PropTypes.bool,
   }),
-  removeError: PropTypes.func,
   t: PropTypes.func,
 };
 
 ErrorDialog.defaultProps = {
-  error: null,
-  removeError: () => {},
+  confirmError: () => {},
+  error: undefined,
   t: key => key,
 };

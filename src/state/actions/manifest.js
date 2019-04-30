@@ -1,5 +1,7 @@
 import fetch from 'node-fetch';
+import i18next from 'i18next';
 import ActionTypes from './action-types';
+import { addError } from './errors';
 
 /**
  * requestManifest - action creator
@@ -51,7 +53,7 @@ export function receiveManifestFailure(manifestId, error) {
  * @param  {String} manifestId
  * @memberof ActionCreators
  */
-export function fetchManifest(manifestId, properties) {
+export function fetchManifest(manifestId, properties, showErrorDialog = false) {
   return ((dispatch) => {
     dispatch(requestManifest(manifestId, { ...properties, isFetching: true }));
 
@@ -59,11 +61,13 @@ export function fetchManifest(manifestId, properties) {
       .then(response => response.json())
       .then(json => dispatch(receiveManifest(manifestId, json)))
       .catch((error) => {
-        if (typeof error === 'object') { // Returned by JSON parse failure
-          dispatch(receiveManifestFailure(manifestId, String(error)));
-        } else {
-          dispatch(receiveManifestFailure(manifestId, error));
-        }
+        // JSON parse failure returns an error object
+        const errorMessage = typeof error === 'object' ? String(error) : error;
+        dispatch(receiveManifestFailure(manifestId, errorMessage));
+        dispatch(addError({
+          message: errorMessage,
+          showDialog: showErrorDialog,
+        }));
       });
   });
 }

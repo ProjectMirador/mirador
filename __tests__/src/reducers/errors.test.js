@@ -11,33 +11,49 @@ describe('ADD_ERROR', () => {
       id: errorId,
       message: errorMessage,
     };
+
+    const expected = {
+      id: errorId,
+      message: errorMessage,
+    };
+
     const ret = errorsReducer(undefined, {
+      id: errorId,
+      payload: {
+        ...error,
+      },
       type: ActionTypes.ADD_ERROR,
-      ...error,
 
     });
     expect(ret.items).toEqual([error.id]);
     expect(ret).toHaveProperty(error.id);
-    expect(ret[error.id]).toEqual(error);
+    expect(ret[error.id]).toEqual(expected);
   });
 
-  it('should handle REMOVE_ERROR', () => {
+  it('should handle CONFIRM_ERROR', () => {
     const stateBefore = {
-      errorId: {
+      [errorId]: {
         id: errorId,
         message: errorMessage,
       },
       items: [errorId],
     };
 
+    const expected = {
+      ...stateBefore,
+      [errorId]: {
+        ...stateBefore[errorId], showDialog: false,
+      },
+    };
+
     /*
-      Only the id is removed from the 'items' array. The error itself remains part of the state,
+      Only the 'showDialog' property is set to false. The error itself remains part of the state,
       so we are able to provide an error history or some kind of logs later on
     */
     expect(errorsReducer(stateBefore, {
       id: errorId,
-      type: ActionTypes.REMOVE_ERROR,
-    })).toHaveProperty('items', []);
+      type: ActionTypes.CONFIRM_ERROR,
+    })).toEqual(expected);
   });
   it('should handle IMPORT_MIRADOR_STATE setting default state', () => {
     expect(errorsReducer({}, {

@@ -29,7 +29,7 @@ export class Window extends Component {
   componentDidMount(prevProps) {
     const { fetchManifest, manifest, manifestId } = this.props;
     if (manifestId && (!manifest || !manifest.isFetching)) {
-      fetchManifest(manifestId);
+      fetchManifest(manifestId, true);
     }
   }
 
