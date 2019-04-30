@@ -1,5 +1,4 @@
 import fetch from 'node-fetch';
-import i18next from 'i18next';
 import ActionTypes from './action-types';
 import { addError } from './errors';
 

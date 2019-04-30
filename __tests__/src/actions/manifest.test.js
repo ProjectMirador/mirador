@@ -76,18 +76,17 @@ describe('manifest actions', () => {
         store.dispatch(actions.fetchManifest('https://purl.stanford.edu/sn904cj3429/iiif/manifest'))
           .then(() => {
             const expectedActions = store.getActions();
-            expect(expectedActions).toEqual([
-              {
-                manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest',
-                properties: { isFetching: true },
-                type: 'REQUEST_MANIFEST',
-              },
-              {
-                error: 'FetchError: invalid json response body at undefined reason: Unexpected end of JSON input',
-                manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest',
-                type: 'RECEIVE_MANIFEST_FAILURE',
-              },
-            ]);
+            expect(expectedActions).toContain({
+              manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest',
+              properties: { isFetching: true },
+              type: 'REQUEST_MANIFEST',
+            });
+
+            expect(expectedActions).toContain({
+              error: 'FetchError: invalid json response body at undefined reason: Unexpected end of JSON input',
+              manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest',
+              type: 'RECEIVE_MANIFEST_FAILURE',
+            });
           });
       });
     });

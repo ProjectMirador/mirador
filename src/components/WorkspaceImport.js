@@ -47,7 +47,6 @@ export class WorkspaceImport extends Component {
       addError,
       handleClose,
       importConfig,
-      t,
     } = this.props;
     const { configImportValue } = this.state;
 

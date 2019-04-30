@@ -30,7 +30,6 @@ const styles = theme => ({
 });
 
 const enhance = compose(
-  withTranslation(),
   withStyles(styles),
   connect(null, mapDispatchToProps),
   withPlugins('WorkspaceImport'),
