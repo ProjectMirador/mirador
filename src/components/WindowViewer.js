@@ -76,7 +76,7 @@ export class WindowViewer extends Component {
     }
 
     // only accept changes of at least 1 pixel, to limit the re-rendering
-    if (!height || Math.abs(height - size.height) > 1) {
+    if (typeof height === 'undefined' || Math.abs(height - size.height) > 1) {
       setWindowHeight(windowId, size.height);
     }
   }
