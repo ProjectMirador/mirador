@@ -38,6 +38,13 @@ describe('manifest actions', () => {
     beforeEach(() => {
       store = mockStore({});
     });
+    describe('custom resourceHeaders', () => {
+      it('are sent', () => {
+        store = mockStore({ config: { resourceHeaders: { Accept: 'hello' } } });
+        store.dispatch(actions.fetchManifest('https://purl.stanford.edu/sn904cj3429/iiif/manifest'));
+        expect(fetch.mock.calls[0][1].headers).toEqual({ Accept: 'hello' });
+      });
+    });
     describe('success response', () => {
       beforeEach(() => {
         fetch.mockResponseOnce(JSON.stringify({ data: '12345' })); // eslint-disable-line no-undef
