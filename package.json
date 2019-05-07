@@ -110,7 +110,7 @@
     "sass-lint": "^1.12.1",
     "style-loader": "^0.23.1",
     "supertest": "^4.0.2",
-    "terser-webpack-plugin": "^1.2.1",
+    "terser-webpack-plugin": "^1.2.3",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.0"
   },

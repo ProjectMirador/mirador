@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
 const paths = require('./config/paths');
 
 const babelLoaderConfig = {
@@ -42,6 +43,13 @@ const baseConfig = [
             'sass-loader', // compiles Sass to CSS, using Node Sass by default
           ],
         },
+      ],
+    },
+    optimization: {
+      minimizer: [
+        new TerserPlugin({
+          extractComments: true,
+        }),
       ],
     },
     output: {
