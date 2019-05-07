@@ -194,8 +194,8 @@ export default {
   availableLanguages: { // All the languages available in the language switcher
     de: 'Deutsch',
     en: 'English',
-    zh_cn: '中文(简体)',
-    zh_tw: '中文(繁體)',
+    'zh-CN': '中文(简体)',
+    'zh-TW': '中文(繁體)',
   },
   displayAllAnnotations: false, // Configure if annotations to be displayed on the canvas by default when fetched
   translations: { // Translations can be added to inject new languages or override existing labels
