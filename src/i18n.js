@@ -11,9 +11,9 @@ import fr from './locales/fr/translation.json';
 const resources = {
   de,
   en,
+  fr,
   'zh-CN': zhCn,
   'zh-TW': zhTw,
-  fr
 };
 
 i18n
