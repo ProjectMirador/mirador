@@ -194,6 +194,7 @@ export default {
   availableLanguages: { // All the languages available in the language switcher
     de: 'Deutsch',
     en: 'English',
+    fr: 'Français',
     'zh-CN': '中文(简体)',
     'zh-TW': '中文(繁體)',
   },
