@@ -195,6 +195,7 @@ export default {
     de: 'Deutsch',
     en: 'English',
     fr: 'Français',
+    ja: 'Japanese',
     'zh-CN': '中文(简体)',
     'zh-TW': '中文(繁體)',
   },
