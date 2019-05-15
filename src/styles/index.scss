@@ -38,8 +38,9 @@
     }
   }
 
+  // The height of the control panel
   &-workspace-with-control-panel {
-    padding-top: 74px; // The height of the control panel
+    padding-top: 74px; 
   }
 
   &-workspace-add {
@@ -105,7 +106,7 @@
   }
 }
 
-// override react-mosaic styles to mimic MUI's elevation
+// override react-mosaic styles to mimic MUIs elevation
 .mosaic {
   &-tile {
     $start: rgba(0, 0, 0, .2);
