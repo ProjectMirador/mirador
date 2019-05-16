@@ -9,11 +9,6 @@ function _withPlugins(targetName, TargetComponent) { // eslint-disable-line no-u
   /** */
   function PluginHoc(props) {
     const pluginMap = useContext(PluginContext);
-
-    if (isEmpty(pluginMap)) {
-      return <TargetComponent {...props} />;
-    }
-
     const plugins = pluginMap[targetName];
 
     if (isEmpty(plugins)) {
