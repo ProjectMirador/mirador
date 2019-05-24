@@ -19,14 +19,14 @@ import { CompanionWindow } from '../components/CompanionWindow';
 const mapStateToProps = (state, { id, windowId }) => {
   const window = getWindow(state, { windowId });
   const companionWindow = getCompanionWindow(state, { companionWindowId: id });
-  const showMoveToBottom = !window.height || window.height > 300 || companionWindow.position !== 'right';
+  const enableMoveToBottom = !window.height || window.height > 300 || companionWindow.position !== 'right';
 
   return {
     ...companionWindow,
+    enableMoveToBottom,
     isDisplayed: (companionWindow
                   && companionWindow.content
                   && companionWindow.content.length > 0),
-    showMoveToBottom,
   };
 };
 

@@ -109,13 +109,13 @@ describe('CompanionWindow', () => {
     expect(companionWindow.find(Rnd).prop('default')).toEqual({ height: 201, width: 'auto' });
   });
 
-  it('shows the moveToBottom button when true is passed for showMoveToBottom', () => {
-    companionWindow = createWrapper({ showMoveToBottom: false, updateCompanionWindow: true });
-    expect(companionWindow.find('.positionButton').length).toBe(0);
+  it('moveToBottom button is enabled when true is passed for enableMoveToBottom', () => {
+    companionWindow = createWrapper({ enableMoveToBottom: true, updateCompanionWindow: true });
+    expect(companionWindow.find('.positionButton[disabled=false]').length).toBe(1);
   });
 
-  it('doesn\'t show the moveToBottom button when false is passed for showMoveToBottom', () => {
-    companionWindow = createWrapper({ showMoveToBottom: false, updateCompanionWindow: true });
-    expect(companionWindow.find('.positionButton').length).toBe(0);
+  it('moveToBottom button is disabled when false is passed for enableMoveToBottom', () => {
+    companionWindow = createWrapper({ enableMoveToBottom: false, updateCompanionWindow: true });
+    expect(companionWindow.find('.positionButton[disabled=true]').length).toBe(1);
   });
 });
