@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/MenuSharp';
 import CloseIcon from '@material-ui/icons/CloseSharp';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -8,6 +7,7 @@ import AppBar from '@material-ui/core/AppBar';
 import classNames from 'classnames';
 import WindowTopMenuButton from '../containers/WindowTopMenuButton';
 import WindowTopBarButtons from '../containers/WindowTopBarButtons';
+import WindowTopBarTitle from '../containers/WindowTopBarTitle';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import WindowMaxIcon from './icons/WindowMaxIcon';
 import WindowMinIcon from './icons/WindowMinIcon';
@@ -24,7 +24,7 @@ export class WindowTopBar extends Component {
    */
   render() {
     const {
-      removeWindow, windowId, classes, toggleWindowSideBar, t, manifestTitle, windowDraggable,
+      removeWindow, windowId, classes, toggleWindowSideBar, t, windowDraggable,
       maximizeWindow, maximized, minimizeWindow, focused, allowClose, allowMaximize,
       focusWindow,
     } = this.props;
@@ -49,9 +49,9 @@ export class WindowTopBar extends Component {
             >
               <MenuIcon />
             </MiradorMenuButton>
-            <Typography variant="h2" noWrap color="inherit" className={classes.title}>
-              {manifestTitle}
-            </Typography>
+            <WindowTopBarTitle
+              windowId={windowId}
+            />
             <WindowTopBarButtons windowId={windowId} />
             <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
             {allowMaximize && (
@@ -85,7 +85,6 @@ WindowTopBar.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   focused: PropTypes.bool,
   focusWindow: PropTypes.func,
-  manifestTitle: PropTypes.string,
   maximized: PropTypes.bool,
   maximizeWindow: PropTypes.func,
   minimizeWindow: PropTypes.func,
@@ -101,7 +100,6 @@ WindowTopBar.defaultProps = {
   allowMaximize: true,
   focused: false,
   focusWindow: () => {},
-  manifestTitle: '',
   maximized: false,
   maximizeWindow: () => {},
   minimizeWindow: () => {},
