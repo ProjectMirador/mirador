@@ -12,9 +12,9 @@ export class WindowTopBarTitle extends Component {
    */
   render() {
     const {
-      classes, manifestTitle,
+      classes, hideWindowTitle, manifestTitle,
     } = this.props;
-    return (
+    return !hideWindowTitle && (
       <Typography variant="h2" noWrap color="inherit" className={classes.title}>
         {manifestTitle}
       </Typography>
@@ -24,9 +24,11 @@ export class WindowTopBarTitle extends Component {
 
 WindowTopBarTitle.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  hideWindowTitle: PropTypes.bool,
   manifestTitle: PropTypes.string,
 };
 
 WindowTopBarTitle.defaultProps = {
+  hideWindowTitle: false,
   manifestTitle: '',
 };

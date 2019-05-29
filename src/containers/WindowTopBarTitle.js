@@ -8,6 +8,7 @@ import { WindowTopBarTitle } from '../components/WindowTopBarTitle';
 
 /** mapStateToProps */
 const mapStateToProps = (state, { windowId }) => ({
+  hideWindowTitle: state.config.window.hideWindowTitle,
   manifestTitle: getManifestTitle(state, { windowId }),
 });
 

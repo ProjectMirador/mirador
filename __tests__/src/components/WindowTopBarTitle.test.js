@@ -27,4 +27,8 @@ describe('WindowTopBarTitle', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(Typography).first().render().text()).toBe('awesome manifest');
   });
+
+  it('title is configurable', () => {
+    expect(createWrapper({ hideWindowTitle: true }).find(Typography).length).toEqual(0);
+  });
 });
