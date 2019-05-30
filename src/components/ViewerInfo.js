@@ -18,10 +18,10 @@ export class ViewerInfo extends Component {
 
     return (
       <div className={ns('osd-info')}>
-        <Typography inline variant="caption" className={ns('canvas-count')}>
+        <Typography display="inline" variant="caption" className={ns('canvas-count')}>
           {`${canvasIndex + 1} ${t('of')} ${canvasCount}`}
         </Typography>
-        <Typography inline variant="caption" className={ns('canvas-label')}>
+        <Typography display="inline" variant="caption" className={ns('canvas-label')}>
           {canvasLabel && ` • ${canvasLabel}`}
         </Typography>
       </div>
