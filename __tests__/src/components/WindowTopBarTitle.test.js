@@ -30,5 +30,6 @@ describe('WindowTopBarTitle', () => {
 
   it('title is configurable', () => {
     expect(createWrapper({ hideWindowTitle: true }).find(Typography).length).toEqual(0);
+    expect(createWrapper({ hideWindowTitle: true }).find('div').length).toEqual(1);
   });
 });

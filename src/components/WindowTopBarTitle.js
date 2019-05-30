@@ -14,11 +14,17 @@ export class WindowTopBarTitle extends Component {
     const {
       classes, hideWindowTitle, manifestTitle,
     } = this.props;
-    return !hideWindowTitle && (
-      <Typography variant="h2" noWrap color="inherit" className={classes.title}>
-        {manifestTitle}
-      </Typography>
-    );
+    let title = null;
+    if (hideWindowTitle) {
+      title = (<div className={classes.title} />);
+    } else {
+      title = (
+        <Typography variant="h2" noWrap color="inherit" className={classes.title}>
+          {manifestTitle}
+        </Typography>
+      );
+    }
+    return title;
   }
 }
 
