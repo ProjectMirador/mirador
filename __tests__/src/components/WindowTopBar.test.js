@@ -1,12 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 
 import WindowTopMenuButton from '../../../src/containers/WindowTopMenuButton';
 import WindowTopBarButtons from '../../../src/containers/WindowTopBarButtons';
+import WindowTopBarTitle from '../../../src/containers/WindowTopBarTitle';
 import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { WindowTopBar } from '../../../src/components/WindowTopBar';
 
@@ -14,7 +14,6 @@ import { WindowTopBar } from '../../../src/components/WindowTopBar';
 function createWrapper(props) {
   return shallow(
     <WindowTopBar
-      manifestTitle="awesome manifest"
       windowId="xyz"
       classes={{}}
       t={str => str}
@@ -34,7 +33,7 @@ describe('WindowTopBar', () => {
     expect(wrapper.find(AppBar).length).toBe(1);
     expect(wrapper.find(Toolbar).length).toBe(1);
     expect(wrapper.find(MiradorMenuButton).length).toBe(3);
-    expect(wrapper.find(Typography).length).toBe(1);
+    expect(wrapper.find(WindowTopBarTitle).length).toBe(1);
     expect(wrapper.find(WindowTopBarButtons).length).toBe(1);
     expect(wrapper.find(WindowTopMenuButton).length).toBe(1);
   });
@@ -50,11 +49,6 @@ describe('WindowTopBar', () => {
     const toggleWindowSideBar = jest.fn();
     const wrapper = createWrapper({ toggleWindowSideBar });
     expect(wrapper.find(MiradorMenuButton).first().props().onClick).toBe(toggleWindowSideBar);
-  });
-
-  it('passes correct props to <Typography/>', () => {
-    const wrapper = createWrapper();
-    expect(wrapper.find(Typography).first().render().text()).toBe('awesome manifest');
   });
 
   it('passes correct props to <WindowTopBarButtons/>', () => {

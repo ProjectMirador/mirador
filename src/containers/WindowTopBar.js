@@ -36,11 +36,6 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
  */
 const styles = theme => ({
   focused: {},
-  title: {
-    ...theme.typography.h6,
-    flexGrow: 1,
-    paddingLeft: theme.spacing.unit / 2,
-  },
   windowTopBarStyle: {
     '&$focused': {
       borderTop: `2px solid ${theme.palette.primary.main}`,
