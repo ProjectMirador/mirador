@@ -20,7 +20,7 @@ const styles = theme => ({
   title: {
     ...theme.typography.h6,
     flexGrow: 1,
-    paddingLeft: theme.spacing.unit / 2,
+    paddingLeft: theme.spacing(0.5),
   },
 });
 

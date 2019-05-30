@@ -59,9 +59,9 @@ const styles = theme => ({
     cursor: 'pointer',
   },
   sectionHeading: {
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit,
-    paddingTop: theme.spacing.unit * 2,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+    paddingTop: theme.spacing(2),
   },
 });
 

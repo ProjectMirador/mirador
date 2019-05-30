@@ -29,10 +29,10 @@ const styles = theme => ({
     cursor: 'pointer',
     display: 'inline-block',
     height: '165px',
-    margin: `${theme.spacing.unit}px ${theme.spacing.unit / 2}px`,
+    margin: `${theme.spacing(1)}px ${theme.spacing(0.5)}px`,
     minWidth: '60px',
     overflow: 'hidden',
-    padding: theme.spacing.unit / 2,
+    padding: theme.spacing(0.5),
     width: 'min-content',
   },
   galleryViewItemCurrent: {

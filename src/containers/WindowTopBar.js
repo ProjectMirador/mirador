@@ -44,8 +44,8 @@ const styles = theme => ({
     backgroundColor: theme.palette.shades.main,
     borderTop: '2px solid transparent',
     minHeight: 32,
-    paddingLeft: theme.spacing.unit / 2,
-    paddingRight: theme.spacing.unit / 2,
+    paddingLeft: theme.spacing(0.5),
+    paddingRight: theme.spacing(0.5),
   },
   windowTopBarStyleDraggable: {
     cursor: 'move',
