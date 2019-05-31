@@ -9,6 +9,7 @@ import WindowTopMenuButton from '../containers/WindowTopMenuButton';
 import WindowTopBarButtons from '../containers/WindowTopBarButtons';
 import WindowTopBarTitle from '../containers/WindowTopBarTitle';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+import FullScreenButton from '../containers/FullScreenButton';
 import WindowMaxIcon from './icons/WindowMaxIcon';
 import WindowMinIcon from './icons/WindowMinIcon';
 import ns from '../config/css-ns';
@@ -26,7 +27,7 @@ export class WindowTopBar extends Component {
     const {
       removeWindow, windowId, classes, toggleWindowSideBar, t, windowDraggable,
       maximizeWindow, maximized, minimizeWindow, focused, allowClose, allowMaximize,
-      focusWindow,
+      focusWindow, allowFullscreen,
     } = this.props;
 
     return (
@@ -63,6 +64,9 @@ export class WindowTopBar extends Component {
                 {(maximized ? <WindowMinIcon /> : <WindowMaxIcon />)}
               </MiradorMenuButton>
             )}
+            {allowFullscreen && (
+              <FullScreenButton />
+            )}
             {allowClose && (
               <MiradorMenuButton
                 aria-label={t('closeWindow')}
@@ -81,6 +85,7 @@ export class WindowTopBar extends Component {
 
 WindowTopBar.propTypes = {
   allowClose: PropTypes.bool,
+  allowFullscreen: PropTypes.bool,
   allowMaximize: PropTypes.bool,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   focused: PropTypes.bool,
@@ -97,6 +102,7 @@ WindowTopBar.propTypes = {
 
 WindowTopBar.defaultProps = {
   allowClose: true,
+  allowFullscreen: false,
   allowMaximize: true,
   focused: false,
   focusWindow: () => {},

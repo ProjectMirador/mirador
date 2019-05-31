@@ -205,6 +205,7 @@ export default {
   },
   window: {
     allowClose: true, // Configure if windows can be closed or not
+    allowFullscreen: false, // Configure to show a "fullscreen" button in the WindowTopBar
     allowMaximize: true, // Configure if windows can be maximized or not
     defaultSideBarPanel: 'info', // Configure which sidebar is selected by default. Options: info, rights, canvas, annotations
     defaultView: 'single',  // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in

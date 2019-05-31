@@ -8,6 +8,7 @@ import WindowTopMenuButton from '../../../src/containers/WindowTopMenuButton';
 import WindowTopBarButtons from '../../../src/containers/WindowTopBarButtons';
 import WindowTopBarTitle from '../../../src/containers/WindowTopBarTitle';
 import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
+import FullScreenButton from '../../../src/containers/FullScreenButton';
 import { WindowTopBar } from '../../../src/components/WindowTopBar';
 
 /** create wrapper */
@@ -28,7 +29,7 @@ function createWrapper(props) {
 }
 
 describe('WindowTopBar', () => {
-  it('renders all needed elements', () => {
+  it('renders all default components', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(AppBar).length).toBe(1);
     expect(wrapper.find(Toolbar).length).toBe(1);
@@ -36,6 +37,7 @@ describe('WindowTopBar', () => {
     expect(wrapper.find(WindowTopBarTitle).length).toBe(1);
     expect(wrapper.find(WindowTopBarButtons).length).toBe(1);
     expect(wrapper.find(WindowTopMenuButton).length).toBe(1);
+    expect(wrapper.find(FullScreenButton).length).toBe(0);
   });
 
   it('triggers window focus when clicked', () => {
@@ -77,7 +79,11 @@ describe('WindowTopBar', () => {
     expect(createWrapper({ allowClose: false }).find('.mirador-window-close').length).toEqual(0);
   });
 
-  it('fullscreen button is configurable', () => {
+  it('maximize button is configurable', () => {
     expect(createWrapper({ allowMaximize: false }).find('.mirador-window-maximize').length).toEqual(0);
+  });
+
+  it('fullscreen button is configurable', () => {
+    expect(createWrapper({ allowFullscreen: true }).find(FullScreenButton).length).toEqual(1);
   });
 });
