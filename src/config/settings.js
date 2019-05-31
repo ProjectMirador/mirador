@@ -206,7 +206,7 @@ export default {
   window: {
     allowClose: true, // Configure if windows can be closed or not
     allowMaximize: true, // Configure if windows can be maximized or not
-    defaultSideBarPanel: 'info', // Configure which sidebar is selected by default. Options: info, rights, canvas, annotations
+    defaultSideBarPanel: 'info', // Configure which sidebar is selected by default. Options: info, attribution, canvas, annotations
     defaultView: 'single',  // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in
     hideAnnotationsPanel: false, // Configure to hide the annotations panel in the WindowSideBarButtons
     hideWindowTitle: false, // Configure if the window title is shown in the window title bar or not
