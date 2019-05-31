@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import WorkspaceFullScreenButton from '../containers/WorkspaceFullScreenButton';
+import FullScreenButton from '../containers/FullScreenButton';
 import WorkspaceMenuButton from '../containers/WorkspaceMenuButton';
 import WorkspaceOptionsButton from '../containers/WorkspaceOptionsButton';
 import WindowListButton from '../containers/WindowListButton';
@@ -20,7 +20,7 @@ export class WorkspaceControlPanelButtons extends Component {
         <WindowListButton />
         <WorkspaceMenuButton />
         <WorkspaceOptionsButton />
-        <WorkspaceFullScreenButton />
+        <FullScreenButton />
         <PluginHook {...this.props} />
       </>
     );
