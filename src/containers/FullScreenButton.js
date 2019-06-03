@@ -5,12 +5,11 @@ import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getFullScreenEnabled } from '../state/selectors';
-import { WorkspaceFullScreenButton }
-  from '../components/WorkspaceFullScreenButton';
+import { FullScreenButton } from '../components/FullScreenButton';
 
 /**
  * mapStateToProps - to hook up connect
- * @memberof WorkspaceFullScreenButton
+ * @memberof FullScreenButton
  * @private
  */
 const mapStateToProps = state => ({
@@ -39,7 +38,7 @@ const enhance = compose(
   withTranslation(),
   withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('WorkspaceFullScreenButton'),
+  withPlugins('FullScreenButton'),
 );
 
-export default enhance(WorkspaceFullScreenButton);
+export default enhance(FullScreenButton);

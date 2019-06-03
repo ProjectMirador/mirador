@@ -1,12 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
-import { WorkspaceFullScreenButton } from '../../../src/components/WorkspaceFullScreenButton';
+import { FullScreenButton } from '../../../src/components/FullScreenButton';
 
 /** */
 function createWrapper(props) {
   return shallow(
-    <WorkspaceFullScreenButton
+    <FullScreenButton
       classes={{}}
       setWorkspaceFullscreen={() => {}}
       isFullscreenEnabled={false}
@@ -15,7 +15,7 @@ function createWrapper(props) {
   );
 }
 
-describe('WorkspaceFullScreenButton', () => {
+describe('FullScreenButton', () => {
   let wrapper;
   let menuButton;
 

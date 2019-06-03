@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 /**
  */
-export class WorkspaceFullScreenButton extends Component {
+export class FullScreenButton extends Component {
   /**
    * render
    * @return
@@ -26,14 +26,14 @@ export class WorkspaceFullScreenButton extends Component {
   }
 }
 
-WorkspaceFullScreenButton.propTypes = {
+FullScreenButton.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isFullscreenEnabled: PropTypes.bool,
   setWorkspaceFullscreen: PropTypes.func.isRequired,
   t: PropTypes.func,
 };
 
-WorkspaceFullScreenButton.defaultProps = {
+FullScreenButton.defaultProps = {
   isFullscreenEnabled: false,
   t: key => key,
 };
