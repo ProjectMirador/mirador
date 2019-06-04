@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import OSDViewer from '../containers/OpenSeadragonViewer';
 import WindowCanvasNavigationControls from '../containers/WindowCanvasNavigationControls';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
-import WindowAuthenticationControl from '../containers/WindowAuthenticationControl';
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -125,15 +124,12 @@ export class WindowViewer extends Component {
     }
 
     return (
-      <>
-        <OSDViewer
-          tileSources={this.tileInfoFetchedFromStore()}
-          windowId={windowId}
-        >
-          <WindowCanvasNavigationControls key="canvas_nav" windowId={windowId} />
-        </OSDViewer>
-        <WindowAuthenticationControl key="auth" windowId={windowId} />
-      </>
+      <OSDViewer
+        tileSources={this.tileInfoFetchedFromStore()}
+        windowId={windowId}
+      >
+        <WindowCanvasNavigationControls key="canvas_nav" windowId={windowId} />
+      </OSDViewer>
     );
   }
 }

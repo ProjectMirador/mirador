@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import { Window } from '../../../src/components/Window';
 import WindowTopBar from '../../../src/containers/WindowTopBar';
 import PrimaryWindow from '../../../src/containers/PrimaryWindow';
+import WindowAuthenticationControl from '../../../src/containers/WindowAuthenticationControl';
 
 /** create wrapper */
 function createWrapper(props, context) {
@@ -32,6 +33,10 @@ describe('Window', () => {
   it('should render <PrimaryWindow>', () => {
     wrapper = createWrapper();
     expect(wrapper.find(PrimaryWindow)).toHaveLength(1);
+  });
+  it('renders <WindowAuthenticationControl>', () => {
+    wrapper = createWrapper();
+    expect(wrapper.find(WindowAuthenticationControl)).toHaveLength(1);
   });
   it('should dispatch fetchManifest when component mounts but manifest is not preset', () => {
     const mockFetchManifest = jest.fn();
