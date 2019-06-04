@@ -54,32 +54,6 @@ export class WindowAuthenticationControl extends Component {
   }
 
   /** */
-  dialogActions(localProps) {
-    const {
-      classes,
-      confirmLabel,
-      t,
-    } = this.props;
-
-    const {
-      hideCancelButton,
-    } = localProps || {};
-
-    return (
-      <DialogActions>
-        { !hideCancelButton && (
-          <Button onClick={this.handleClose} color="inherit">
-            {t('cancel')}
-          </Button>
-        )}
-        <Button onClick={this.handleConfirm} className={classes.buttonInvert} autoFocus color="secondary">
-          {confirmLabel || (this.isInteractive() ? t('login') : t('retry'))}
-        </Button>
-      </DialogActions>
-    );
-  }
-
-  /** */
   render() {
     const {
       classes,
@@ -101,29 +75,35 @@ export class WindowAuthenticationControl extends Component {
 
     const { showFailureMessage, open } = this.state;
 
-    const hasCollapsedContent = showFailureMessage && failed
+    const isInFailureState = showFailureMessage && failed;
+
+    const hasCollapsedContent = isInFailureState
       ? failureDescription
       : header || description;
+
+    const confirmButton = (
+      <Button onClick={this.handleConfirm} className={classes.buttonInvert} autoFocus color="secondary">
+        {confirmLabel || (this.isInteractive() ? t('login') : t('retry')) }
+      </Button>
+    );
 
     return (
       <Paper square elevation={4} color="secondary" classes={{ root: classes.paper }}>
         <Button fullWidth className={classes.topBar} onClick={hasCollapsedContent ? this.handleClickOpen : this.handleConfirm} component="div" color="inherit">
           <LockIcon className={classes.icon} />
           <Typography className={classes.label} component="h3" variant="body1" color="inherit" inline>
-            <SanitizedHtml htmlString={(showFailureMessage && failed ? failureHeader : label) || t('authenticationRequired')} ruleSet="iiif" />
+            <SanitizedHtml htmlString={(isInFailureState ? failureHeader : label) || t('authenticationRequired')} ruleSet="iiif" />
           </Typography>
-          { hasCollapsedContent
-            ? !open && (
-            <Typography className={classes.fauxButton} variant="button" color="inherit">
-              { t('continue') }
-            </Typography>
-            )
-            : (
-              <Button onClick={this.handleConfirm} className={[classes.buttonInvert, classes.fauxButton].join(' ')} autoFocus color="secondary">
-                {confirmLabel || (this.isInteractive() ? t('login') : t('retry')) }
-              </Button>
-            )
-          }
+          <span className={classes.fauxButton}>
+            { hasCollapsedContent
+              ? !open && (
+              <Typography variant="button" color="inherit">
+                { t('continue') }
+              </Typography>
+              )
+              : confirmButton
+            }
+          </span>
         </Button>
         {
           hasCollapsedContent && (
@@ -133,7 +113,7 @@ export class WindowAuthenticationControl extends Component {
             >
               <Typography variant="body1" color="inherit" className={classes.expanded}>
                 {
-                  showFailureMessage && failed
+                  isInFailureState
                     ? <SanitizedHtml htmlString={failureDescription || ''} ruleSet="iiif" />
                     : (
                       <>
@@ -144,7 +124,12 @@ export class WindowAuthenticationControl extends Component {
                     )
                 }
               </Typography>
-              {this.dialogActions()}
+              <DialogActions>
+                <Button onClick={this.handleClose} color="inherit">
+                  {t('cancel')}
+                </Button>
+                {confirmButton}
+              </DialogActions>
             </Collapse>
           )
       }
