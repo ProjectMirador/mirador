@@ -65,8 +65,6 @@ export class WindowAuthenticationControl extends Component {
       hideCancelButton,
     } = localProps || {};
 
-    if (!this.isInteractive()) return <></>;
-
     return (
       <DialogActions>
         { !hideCancelButton && (
@@ -75,36 +73,9 @@ export class WindowAuthenticationControl extends Component {
           </Button>
         )}
         <Button onClick={this.handleConfirm} className={classes.buttonInvert} autoFocus color="secondary">
-          {confirmLabel || t('login') }
+          {confirmLabel || (this.isInteractive() ? t('login') : t('retry'))}
         </Button>
       </DialogActions>
-    );
-  }
-
-  /** */
-  renderFailure() {
-    const {
-      classes,
-      failureHeader,
-      failureDescription,
-      t,
-    } = this.props;
-
-    return (
-      <Paper square elevation={4} color="secondary" classes={{ root: classes.paper }}>
-        <Button fullWidth className={classes.topBar} component="div" color="inherit">
-          <LockIcon className={classes.icon} />
-          <Typography component="h3" variant="body1" color="inherit" inline>
-            <SanitizedHtml htmlString={failureHeader || t('authenticationFailed')} ruleSet="iiif" />
-          </Typography>
-        </Button>
-        {failureDescription && (
-          <Typography variant="body1" color="inherit" className={classes.expanded}>
-            <SanitizedHtml htmlString={failureDescription} ruleSet="iiif" />
-          </Typography>
-        )}
-        {this.dialogActions()}
-      </Paper>
     );
   }
 
@@ -112,8 +83,11 @@ export class WindowAuthenticationControl extends Component {
   render() {
     const {
       classes,
+      confirmLabel,
       degraded,
       description,
+      failureDescription,
+      failureHeader,
       header,
       label,
       profile,
@@ -121,43 +95,58 @@ export class WindowAuthenticationControl extends Component {
       t,
     } = this.props;
 
+    const failed = status === 'failed';
     if ((!degraded || !profile) && status !== 'fetching') return <></>;
+    if (!this.isInteractive() && !failed) return <></>;
 
     const { showFailureMessage, open } = this.state;
 
-    if (showFailureMessage && status === 'failed') return this.renderFailure();
-
-    const hasCollapsedContent = header || description;
+    const hasCollapsedContent = showFailureMessage && failed
+      ? failureDescription
+      : header || description;
 
     return (
       <Paper square elevation={4} color="secondary" classes={{ root: classes.paper }}>
-        <Button fullWidth className={classes.topBar} onClick={this.handleClickOpen} component="div" color="inherit">
+        <Button fullWidth className={classes.topBar} onClick={hasCollapsedContent ? this.handleClickOpen : this.handleConfirm} component="div" color="inherit">
           <LockIcon className={classes.icon} />
           <Typography className={classes.label} component="h3" variant="body1" color="inherit" inline>
-            <SanitizedHtml htmlString={label || t('authenticationRequired')} ruleSet="iiif" />
+            <SanitizedHtml htmlString={(showFailureMessage && failed ? failureHeader : label) || t('authenticationRequired')} ruleSet="iiif" />
           </Typography>
-          {hasCollapsedContent && !open && (
+          { hasCollapsedContent
+            ? !open && (
             <Typography className={classes.fauxButton} variant="button" color="inherit">
               { t('continue') }
             </Typography>
-          )}
+            )
+            : (
+              <Button onClick={this.handleConfirm} className={[classes.buttonInvert, classes.fauxButton].join(' ')} autoFocus color="secondary">
+                {confirmLabel || (this.isInteractive() ? t('login') : t('retry')) }
+              </Button>
+            )
+          }
         </Button>
         {
-          hasCollapsedContent
-            ? (
-              <Collapse
-                in={open}
-                onClose={this.handleClose}
-              >
-                <Typography variant="body1" color="inherit" className={classes.expanded}>
-                  <SanitizedHtml htmlString={header || ''} ruleSet="iiif" />
-                  { header && description ? ': ' : '' }
-                  <SanitizedHtml htmlString={description || ''} ruleSet="iiif" />
-                </Typography>
-                {this.dialogActions()}
-              </Collapse>
-            )
-            : this.dialogActions({ hideCancelButton: true })
+          hasCollapsedContent && (
+            <Collapse
+              in={open}
+              onClose={this.handleClose}
+            >
+              <Typography variant="body1" color="inherit" className={classes.expanded}>
+                {
+                  showFailureMessage && failed
+                    ? <SanitizedHtml htmlString={failureDescription || ''} ruleSet="iiif" />
+                    : (
+                      <>
+                        <SanitizedHtml htmlString={header || ''} ruleSet="iiif" />
+                        { header && description ? ': ' : '' }
+                        <SanitizedHtml htmlString={description || ''} ruleSet="iiif" />
+                      </>
+                    )
+                }
+              </Typography>
+              {this.dialogActions()}
+            </Collapse>
+          )
       }
       </Paper>
     );

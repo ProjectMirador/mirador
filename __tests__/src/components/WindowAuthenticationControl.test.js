@@ -43,7 +43,10 @@ describe('WindowAuthenticationControl', () => {
       });
       expect(wrapper.find(SanitizedHtml).at(0).props().htmlString).toEqual('failure header');
       expect(wrapper.find(SanitizedHtml).at(1).props().htmlString).toEqual('failure description');
-      expect(wrapper.find(DialogActions)).toHaveLength(0);
+      expect(wrapper.find(DialogActions)).toHaveLength(1);
+      expect(wrapper.find(DialogActions).find(Button)).toHaveLength(2);
+      expect(wrapper.find(DialogActions).find(Button).at(1).children()
+        .text()).toEqual('retry');
     });
   });
 
@@ -56,11 +59,12 @@ describe('WindowAuthenticationControl', () => {
   });
 
   it('hides the cancel button if there is nothing to collapose', () => {
-    wrapper = createWrapper({ confirmLabel: 'some confirm label' });
-
-    expect(wrapper.find(DialogActions).find(Button)).toHaveLength(1);
-    expect(wrapper.find(DialogActions).find(Button).at(0).children()
+    wrapper = createWrapper({ classes: { topBar: 'topBar' }, confirmLabel: 'some confirm label' });
+    expect(wrapper.find('.topBar').children().find(Button).at(0)
+      .children()
       .text()).toEqual('some confirm label');
+
+    expect(wrapper.find(DialogActions).find(Button)).toHaveLength(0);
   });
 
   it('shows the auth dialog when the login button is clicked', () => {
