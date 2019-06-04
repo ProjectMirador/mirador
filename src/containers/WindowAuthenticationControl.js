@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { selectAuthStatus, selectInfoResponse, selectCanvasAuthService } from '../state/selectors';
@@ -46,11 +47,42 @@ const mapDispatchToProps = {
  * windowTopBarStyle: {minHeight: number, paddingLeft: number, backgroundColor: string}}}
  */
 const styles = theme => ({
+  buttonInvert: {
+    '&:hover': {
+      backgroundColor: fade(
+        theme.palette.secondary.contrastText, 1 - theme.palette.action.hoverOpacity,
+      ),
+    },
+    backgroundColor: theme.palette.secondary.contrastText,
+  },
+  expanded: {
+    paddingLeft: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
+  },
   failure: {
     backgroundColor: theme.palette.error.dark,
   },
-  snackbar: {
-    position: 'absolute',
+  fauxButton: {
+    marginLeft: theme.spacing.unit * 2.5,
+  },
+  icon: {
+    marginRight: theme.spacing.unit * 1.5,
+    verticalAlign: 'text-bottom',
+  },
+  label: {
+    lineHeight: 2.25,
+  },
+  paper: {
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.contrastText,
+    cursor: 'pointer',
+  },
+  topBar: {
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.main,
+    },
+    justifyContent: 'inherit',
+    textTransform: 'none',
   },
 });
 const enhance = compose(

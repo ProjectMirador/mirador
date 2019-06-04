@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Snackbar from '@material-ui/core/Snackbar';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Dialog from '@material-ui/core/Dialog';
+import Paper from '@material-ui/core/Paper';
+import Collapse from '@material-ui/core/Collapse';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
+import LockIcon from '@material-ui/icons/LockSharp';
 import { SanitizedHtml } from './SanitizedHtml';
 
 /**
@@ -19,13 +16,12 @@ export class WindowAuthenticationControl extends Component {
     super(props);
 
     this.state = {
-      failureOpen: true,
       open: false,
+      showFailureMessage: true,
     };
 
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.handleFailureClose = this.handleFailureClose.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
   }
 
@@ -36,12 +32,7 @@ export class WindowAuthenticationControl extends Component {
 
   /** */
   handleClose() {
-    this.setState({ open: false });
-  }
-
-  /** */
-  handleFailureClose() {
-    this.setState({ failureOpen: false });
+    this.setState({ open: false, showFailureMessage: false });
   }
 
   /** */
@@ -50,126 +41,118 @@ export class WindowAuthenticationControl extends Component {
       handleAuthInteraction, infoId, serviceId, windowId,
     } = this.props;
     handleAuthInteraction(windowId, infoId, serviceId);
-
-    this.handleClose();
+    this.setState({ showFailureMessage: true });
   }
 
   /** */
-  renderInteractiveAuth() {
+  isInteractive() {
+    const {
+      profile,
+    } = this.props;
+
+    return profile.value === 'http://iiif.io/api/auth/1/clickthrough' || profile.value === 'http://iiif.io/api/auth/1/login';
+  }
+
+  /** */
+  dialogActions() {
     const {
       classes,
       confirmLabel,
-      description,
-      header,
-      label,
       t,
     } = this.props;
 
-    const { open } = this.state;
+    if (!this.isInteractive()) return <></>;
 
     return (
-      <>
-        <Snackbar
-          classes={{ root: classes.snackbar }}
-          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-          open
-          message={
-            <SanitizedHtml htmlString={label || ''} ruleSet="iiif" />
-          }
-          action={
-            (
-              <Button onClick={this.handleClickOpen} color="primary">
-                { t('login') }
-              </Button>
-            )
-          }
-        />
-        <Dialog
-          open={open}
-          onClose={this.handleClose}
-        >
-          <DialogTitle>{header || ''}</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              <SanitizedHtml htmlString={description || ''} ruleSet="iiif" />
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose}>
-              {t('cancel')}
-            </Button>
-            <Button onClick={this.handleConfirm} autoFocus>
-              {confirmLabel || t('login') }
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </>
+      <DialogActions>
+        <Button onClick={this.handleClose} color="inherit">
+          {t('cancel')}
+        </Button>
+        <Button onClick={this.handleConfirm} className={classes.buttonInvert} autoFocus color="secondary">
+          {confirmLabel || t('login') }
+        </Button>
+      </DialogActions>
     );
   }
 
   /** */
-  renderFailureMessages() {
+  renderFailure() {
     const {
       classes,
       failureHeader,
       failureDescription,
+      t,
     } = this.props;
 
-    const { failureOpen } = this.state;
-
     return (
-      <Snackbar
-        ContentProps={{ className: classes.failure }}
-        classes={{ root: classes.snackbar }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-        open={failureOpen}
-        message={
-          <SanitizedHtml htmlString={`${failureHeader} ${failureDescription}` || ''} ruleSet="iiif" />
-        }
-        action={[
-          <IconButton
-            key="close"
-            aria-label="Close"
-            color="inherit"
-            className={classes.close}
-            onClick={this.handleFailureClose}
-          >
-            <CloseIcon className={classes.icon} />
-          </IconButton>,
-        ]}
-      />
+      <Paper square elevation={4} color="secondary" classes={{ root: classes.paper }}>
+        <Button fullWidth className={classes.topBar} component="div" color="inherit">
+          <LockIcon className={classes.icon} />
+          <Typography component="h3" variant="body1" color="inherit" inline>
+            <SanitizedHtml htmlString={failureHeader || t('authenticationFailed')} ruleSet="iiif" />
+          </Typography>
+        </Button>
+        {failureDescription && (
+          <Typography variant="body1" color="inherit" className={classes.expanded}>
+            <SanitizedHtml htmlString={failureDescription} ruleSet="iiif" />
+          </Typography>
+        )}
+        {this.dialogActions()}
+      </Paper>
     );
   }
 
   /** */
   render() {
     const {
+      classes,
       degraded,
-      status,
+      description,
+      header,
+      label,
       profile,
+      status,
+      t,
     } = this.props;
 
-    const { failureOpen } = this.state;
+    if ((!degraded || !profile) && status !== 'fetching') return <></>;
 
-    if (!degraded || !profile) return <></>;
+    const { showFailureMessage, open } = this.state;
 
-    const url = profile.value;
+    if (showFailureMessage && status === 'failed') return this.renderFailure();
 
+    const hasCollapsedContent = header || description;
 
-    /**
-    Login: onclick, show modal dialog w/ header, description, confirmLabel
-    Clickthrough: onclick show modal dialog w/ header, description, confirmLabel
-    Kiosk/external: no-op
-    */
     return (
-      <>
-        {
-          (status !== 'failed' || !failureOpen)
-            && (url === 'http://iiif.io/api/auth/1/clickthrough' || url === 'http://iiif.io/api/auth/1/login')
-            && this.renderInteractiveAuth()
-        }
-        { status === 'failed' && this.renderFailureMessages() }
-      </>
+      <Paper square elevation={4} color="secondary" classes={{ root: classes.paper }}>
+        <Button fullWidth className={classes.topBar} onClick={this.handleClickOpen} component="div" color="inherit">
+          <LockIcon className={classes.icon} />
+          <Typography className={classes.label} component="h3" variant="body1" color="inherit" inline>
+            <SanitizedHtml htmlString={label || t('authenticationRequired')} ruleSet="iiif" />
+          </Typography>
+          {hasCollapsedContent && !open && (
+            <Typography className={classes.fauxButton} variant="button" color="inherit">
+              { t('continue') }
+            </Typography>
+          )}
+        </Button>
+        <Collapse
+          in={open}
+          onClose={this.handleClose}
+        >
+          {
+            hasCollapsedContent && (
+              <Typography variant="body1" color="inherit" className={classes.expanded}>
+                <SanitizedHtml htmlString={header || ''} ruleSet="iiif" />
+                { header && description ? ': ' : '' }
+                <SanitizedHtml htmlString={description || ''} ruleSet="iiif" />
+              </Typography>
+            )
+          }
+          {this.dialogActions()}
+        </Collapse>
+        {!hasCollapsedContent && this.dialogActions()}
+      </Paper>
     );
   }
 }
