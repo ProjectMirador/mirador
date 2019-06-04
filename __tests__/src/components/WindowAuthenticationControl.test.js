@@ -55,8 +55,16 @@ describe('WindowAuthenticationControl', () => {
       .text()).toEqual('some confirm label');
   });
 
+  it('hides the cancel button if there is nothing to collapose', () => {
+    wrapper = createWrapper({ confirmLabel: 'some confirm label' });
+
+    expect(wrapper.find(DialogActions).find(Button)).toHaveLength(1);
+    expect(wrapper.find(DialogActions).find(Button).at(0).children()
+      .text()).toEqual('some confirm label');
+  });
+
   it('shows the auth dialog when the login button is clicked', () => {
-    wrapper = createWrapper({ classes: { topBar: 'topBar' } });
+    wrapper = createWrapper({ classes: { topBar: 'topBar' }, description: 'some description' });
     wrapper.find('.topBar').props().onClick();
     expect(wrapper.find(Collapse).props().in).toEqual(true);
   });

@@ -54,20 +54,26 @@ export class WindowAuthenticationControl extends Component {
   }
 
   /** */
-  dialogActions() {
+  dialogActions(localProps) {
     const {
       classes,
       confirmLabel,
       t,
     } = this.props;
 
+    const {
+      hideCancelButton,
+    } = localProps || {};
+
     if (!this.isInteractive()) return <></>;
 
     return (
       <DialogActions>
-        <Button onClick={this.handleClose} color="inherit">
-          {t('cancel')}
-        </Button>
+        { !hideCancelButton && (
+          <Button onClick={this.handleClose} color="inherit">
+            {t('cancel')}
+          </Button>
+        )}
         <Button onClick={this.handleConfirm} className={classes.buttonInvert} autoFocus color="secondary">
           {confirmLabel || t('login') }
         </Button>
@@ -136,22 +142,23 @@ export class WindowAuthenticationControl extends Component {
             </Typography>
           )}
         </Button>
-        <Collapse
-          in={open}
-          onClose={this.handleClose}
-        >
-          {
-            hasCollapsedContent && (
-              <Typography variant="body1" color="inherit" className={classes.expanded}>
-                <SanitizedHtml htmlString={header || ''} ruleSet="iiif" />
-                { header && description ? ': ' : '' }
-                <SanitizedHtml htmlString={description || ''} ruleSet="iiif" />
-              </Typography>
+        {
+          hasCollapsedContent
+            ? (
+              <Collapse
+                in={open}
+                onClose={this.handleClose}
+              >
+                <Typography variant="body1" color="inherit" className={classes.expanded}>
+                  <SanitizedHtml htmlString={header || ''} ruleSet="iiif" />
+                  { header && description ? ': ' : '' }
+                  <SanitizedHtml htmlString={description || ''} ruleSet="iiif" />
+                </Typography>
+                {this.dialogActions()}
+              </Collapse>
             )
-          }
-          {this.dialogActions()}
-        </Collapse>
-        {!hasCollapsedContent && this.dialogActions()}
+            : this.dialogActions({ hideCancelButton: true })
+      }
       </Paper>
     );
   }
