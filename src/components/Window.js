@@ -6,6 +6,7 @@ import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
 import PrimaryWindow from '../containers/PrimaryWindow';
 import CompanionArea from '../containers/CompanionArea';
+import WindowAuthenticationControl from '../containers/WindowAuthenticationControl';
 import { PluginHook } from './PluginHook';
 
 
@@ -50,6 +51,7 @@ export class Window extends Component {
           manifest={manifest}
           windowDraggable={windowDraggable}
         />
+        <WindowAuthenticationControl key="auth" windowId={windowId} />
       </div>
     );
     if (workspaceType === 'mosaic' && windowDraggable) {

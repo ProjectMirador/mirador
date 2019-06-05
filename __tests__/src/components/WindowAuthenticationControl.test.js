@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Snackbar from '@material-ui/core/Snackbar';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
+import Collapse from '@material-ui/core/Collapse';
+import DialogActions from '@material-ui/core/DialogActions';
 import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
 import { WindowAuthenticationControl } from '../../../src/components/WindowAuthenticationControl';
 
@@ -32,21 +32,45 @@ describe('WindowAuthenticationControl', () => {
     expect(wrapper.matchesElement(<></>)).toBe(true);
   });
 
-  it('renders properly', () => {
-    wrapper = createWrapper({ confirmLabel: 'some confirm label', description: 'some description' });
-    expect(wrapper.find(Snackbar)).toHaveLength(1);
-    expect(wrapper.find(Dialog)).toHaveLength(1);
-    expect(wrapper.find(SanitizedHtml)).toHaveLength(1);
-    expect(wrapper.find(SanitizedHtml).props().htmlString).toEqual('some description');
-    expect(wrapper.find(Button)).toHaveLength(2);
-    expect(wrapper.find(Button).at(1).children().text()).toEqual('some confirm label');
+  describe('with a non-interactive login', () => {
+    it('renders failure messages', () => {
+      wrapper = createWrapper({
+        degraded: true,
+        failureDescription: 'failure description',
+        failureHeader: 'failure header',
+        profile: { value: 'http://iiif.io/api/auth/1/external' },
+        status: 'failed',
+      });
+      expect(wrapper.find(SanitizedHtml).at(0).props().htmlString).toEqual('failure header');
+      expect(wrapper.find(SanitizedHtml).at(1).props().htmlString).toEqual('failure description');
+      expect(wrapper.find(DialogActions)).toHaveLength(1);
+      expect(wrapper.find(DialogActions).find(Button)).toHaveLength(2);
+      expect(wrapper.find(DialogActions).find(Button).at(1).children()
+        .text()).toEqual('retry');
+    });
   });
 
-  it('opens the auth dialog when the login button is clicked', () => {
-    wrapper = createWrapper({});
+  it('renders properly', () => {
+    wrapper = createWrapper({ confirmLabel: 'some confirm label', description: 'some description' });
+    expect(wrapper.find(SanitizedHtml).at(2).props().htmlString).toEqual('some description');
+    expect(wrapper.find(DialogActions).find(Button)).toHaveLength(2);
+    expect(wrapper.find(DialogActions).find(Button).at(1).children()
+      .text()).toEqual('some confirm label');
+  });
 
-    wrapper.find(Snackbar).props().action.props.onClick();
-    expect(wrapper.find(Dialog).props().open).toEqual(true);
+  it('hides the cancel button if there is nothing to collapose', () => {
+    wrapper = createWrapper({ classes: { topBar: 'topBar' }, confirmLabel: 'some confirm label' });
+    expect(wrapper.find('.topBar').children().find(Button).at(0)
+      .children()
+      .text()).toEqual('some confirm label');
+
+    expect(wrapper.find(DialogActions).find(Button)).toHaveLength(0);
+  });
+
+  it('shows the auth dialog when the login button is clicked', () => {
+    wrapper = createWrapper({ classes: { topBar: 'topBar' }, description: 'some description' });
+    wrapper.find('.topBar').props().onClick();
+    expect(wrapper.find(Collapse).props().in).toEqual(true);
   });
 
   it('triggers an action when the confirm button is clicked', () => {
@@ -59,11 +83,10 @@ describe('WindowAuthenticationControl', () => {
       serviceId: 's',
     });
     wrapper.instance().setState({ open: true });
-    expect(wrapper.find(Dialog).props().open).toEqual(true);
+    expect(wrapper.find(Collapse).props().in).toEqual(true);
 
-    wrapper.find(Button).at(1).simulate('click');
+    wrapper.find(DialogActions).find(Button).at(1).simulate('click');
     expect(handleAuthInteraction).toHaveBeenCalledWith('w', 'i', 's');
-    expect(wrapper.find(Dialog).props().open).toEqual(false);
   });
 
   it('displays a failure message if the login has failed', () => {
@@ -73,12 +96,26 @@ describe('WindowAuthenticationControl', () => {
       status: 'failed',
     });
 
-    expect(wrapper.find(Snackbar)).toHaveLength(1);
-    expect(wrapper.find(Snackbar).props().message.props.htmlString).toEqual('failure header failure description');
-    wrapper.find(Snackbar).props().action[0].props.onClick();
+    expect(wrapper.find(SanitizedHtml).at(0).props().htmlString).toEqual('failure header');
+    expect(wrapper.find(SanitizedHtml).at(1).props().htmlString).toEqual('failure description');
 
-    expect(wrapper.find(Snackbar)).toHaveLength(2);
-    expect(wrapper.find(Snackbar).at(0).props().message.props.htmlString).toEqual('authenticate');
-    expect(wrapper.find(Snackbar).at(1).props().open).toEqual(false);
+    expect(wrapper.find(DialogActions).find(Button)).toHaveLength(2);
+    expect(wrapper.find(DialogActions).find(Button).at(1).children()
+      .text()).toEqual('login');
+  });
+
+  it('displays the login messages if the user dismisses the failure messages', () => {
+    wrapper = createWrapper({
+      failureDescription: 'failure description',
+      failureHeader: 'failure header',
+      status: 'failed',
+    });
+
+    expect(wrapper.find(SanitizedHtml).at(0).props().htmlString).toEqual('failure header');
+    expect(wrapper.find(SanitizedHtml).at(1).props().htmlString).toEqual('failure description');
+
+    wrapper.find(DialogActions).find(Button).at(0).simulate('click');
+
+    expect(wrapper.find(SanitizedHtml).at(0).props().htmlString).toEqual('authenticate');
   });
 });

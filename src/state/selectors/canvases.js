@@ -138,18 +138,18 @@ export function selectNextAuthService({ auth }, resource, filter = authServicePr
 }
 
 /** */
-export function selectFailedAuthService(state, resource) {
+export function selectActiveAuthService(state, resource) {
   const loginService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/login');
-  if (selectAuthStatus(state, loginService) === 'failed') return loginService;
+  if (selectAuthStatus(state, loginService)) return loginService;
 
   const clickthroughService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/clickthrough');
-  if (selectAuthStatus(state, clickthroughService) === 'failed') return clickthroughService;
+  if (selectAuthStatus(state, clickthroughService)) return clickthroughService;
 
   const kioskService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/kiosk');
-  if (selectAuthStatus(state, kioskService) === 'failed') return kioskService;
+  if (selectAuthStatus(state, kioskService)) return kioskService;
 
   const externalService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/external');
-  if (selectAuthStatus(state, externalService) === 'failed') return externalService;
+  if (selectAuthStatus(state, externalService)) return externalService;
 
   return null;
 }
@@ -165,7 +165,7 @@ export const selectCanvasAuthService = createSelector(
     if (!resource) return undefined;
 
     return selectNextAuthService(state, resource)
-      || selectFailedAuthService(state, resource);
+      || selectActiveAuthService(state, resource);
   },
 );
 
