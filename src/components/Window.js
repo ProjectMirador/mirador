@@ -6,6 +6,7 @@ import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
 import PrimaryWindow from '../containers/PrimaryWindow';
 import CompanionArea from '../containers/CompanionArea';
+import { PluginHook } from './PluginHook';
 
 
 /**
@@ -105,6 +106,7 @@ export class Window extends Component {
           </div>
         </div>
         <CompanionArea windowId={windowId} position="far-bottom" />
+        <PluginHook {...this.props} />
       </Paper>
     );
   }
