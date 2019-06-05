@@ -3,6 +3,7 @@ import ManifestoCanvas from '../../../src/lib/ManifestoCanvas';
 import fixture from '../../fixtures/version-2/019.json';
 import imagev1Fixture from '../../fixtures/version-2/Osbornfa1.json';
 import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
+import serviceFixture from '../../fixtures/version-2/canvasService.json';
 import otherContentFixture from '../../fixtures/version-2/299843.json';
 
 describe('ManifestoCanvas', () => {
@@ -93,6 +94,19 @@ describe('ManifestoCanvas', () => {
       );
 
       expect(emptyCanvasInstance.thumbnail()).toBeUndefined();
+    });
+  });
+  describe('service', () => {
+    it('correctly returns the service information', () => {
+      const serviceInstance = new ManifestoCanvas(
+        manifesto.create(serviceFixture).getSequences()[0].getCanvases()[0],
+      );
+
+      expect(serviceInstance.service).toBeDefined();
+    });
+
+    it('returns undefined if there is no service', () => {
+      expect(instance.service).toBeUndefined();
     });
   });
 });

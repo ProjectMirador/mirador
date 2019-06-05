@@ -99,6 +99,13 @@ export default class ManifestoCanvas {
   }
 
   /**
+   * Get the canvas service
+   */
+  get service() {
+    return this.canvas.__jsonld.service; // eslint-disable-line no-underscore-dangle
+  }
+
+  /**
    * Get the canvas label
    */
   getLabel() {
