@@ -394,4 +394,20 @@ describe('windows reducer', () => {
       type: ActionTypes.IMPORT_MIRADOR_STATE,
     })).toEqual({ new: 'stuff' });
   });
+
+  describe('SET_WINDOW_HEIGHT', () => {
+    it('sets the height attribute on the given window', () => {
+      const action = {
+        height: 500,
+        type: ActionTypes.SET_WINDOW_HEIGHT,
+        windowId: 'abc123',
+      };
+      const expectedState = {
+        abc123: {
+          height: 500,
+        },
+      };
+      expect(windowsReducer({}, action)).toEqual(expectedState);
+    });
+  });
 });

@@ -5,7 +5,10 @@ import { withStyles } from '@material-ui/core';
 import { withSize } from 'react-sizeme';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getCompanionWindow } from '../state/selectors';
+import {
+  getCompanionWindow,
+  getWindow,
+} from '../state/selectors';
 import { CompanionWindow } from '../components/CompanionWindow';
 
 /**
@@ -14,10 +17,13 @@ import { CompanionWindow } from '../components/CompanionWindow';
  * @private
  */
 const mapStateToProps = (state, { id, windowId }) => {
+  const window = getWindow(state, { windowId });
   const companionWindow = getCompanionWindow(state, { companionWindowId: id });
+  const enableMoveToBottom = !window.height || window.height > 300 || companionWindow.position !== 'right';
 
   return {
     ...companionWindow,
+    enableMoveToBottom,
     isDisplayed: (companionWindow
                   && companionWindow.content
                   && companionWindow.content.length > 0),

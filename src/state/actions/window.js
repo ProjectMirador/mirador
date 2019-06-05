@@ -208,3 +208,16 @@ export function setWindowViewType(windowId, viewType) {
     windowId,
   };
 }
+
+/**
+ * setWindowHeight - action creator
+ * @param {*} windowId
+ * @param {*} height
+ */
+export function setWindowHeight(windowId, height) {
+  return {
+    height,
+    type: ActionTypes.SET_WINDOW_HEIGHT,
+    windowId,
+  };
+}

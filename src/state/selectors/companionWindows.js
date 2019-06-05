@@ -24,7 +24,7 @@ export const getThumbnailNavigationPosition = createSelector(
 );
 
 /**
-* Return compantion window ids from a window
+* Return companion window ids from a window
 * @param {String} windowId
 * @return {Array}
 */
@@ -43,7 +43,7 @@ const getCompanionWindowIndexByWindowAndPosition = createSelector(
 );
 
 /**
-* Return compantion window ids from a window
+* Return companion window ids from a window
 * @param {String} windowId
 * @return {Array}
 */

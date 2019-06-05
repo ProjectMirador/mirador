@@ -50,8 +50,8 @@ export class CompanionWindow extends Component {
    */
   render() {
     const {
-      classes, paperClassName, id, onCloseClick, updateCompanionWindow, isDisplayed,
-      position, t, windowId, title, children, titleControls, size,
+      classes, enableMoveToBottom, paperClassName, id, onCloseClick, updateCompanionWindow,
+      isDisplayed, position, t, windowId, title, children, titleControls, size,
     } = this.props;
 
     return (
@@ -100,6 +100,7 @@ export class CompanionWindow extends Component {
                         <MiradorMenuButton
                           aria-label={position === 'bottom' ? t('moveCompanionWindowToRight') : t('moveCompanionWindowToBottom')}
                           className={classes.positionButton}
+                          disabled={!enableMoveToBottom}
                           onClick={() => { updateCompanionWindow(windowId, id, { position: position === 'bottom' ? 'right' : 'bottom' }); }}
                         >
                           <MoveIcon />
@@ -113,6 +114,7 @@ export class CompanionWindow extends Component {
                     >
                       <CloseIcon />
                     </MiradorMenuButton>
+
                   </>
                 )
             }
@@ -136,6 +138,7 @@ export class CompanionWindow extends Component {
 CompanionWindow.propTypes = {
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  enableMoveToBottom: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
   isDisplayed: PropTypes.bool,
   onCloseClick: PropTypes.func,
