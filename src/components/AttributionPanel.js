@@ -39,7 +39,7 @@ export class AttributionPanel extends Component {
             <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />
           )}
           {
-            rights && (
+            rights && rights.length > 0 && (
               <>
                 <Typography variant="subtitle2" component="dt">{t('rights')}</Typography>
                 { rights.map(v => (

@@ -51,6 +51,13 @@ describe('AttributionPanel', () => {
     ).toBe(true);
   });
 
+  it('renders the rights statement', () => {
+    const wrapper = createWrapper({ rights: [] });
+    expect(
+      wrapper.find(Typography).length,
+    ).toBe(0);
+  });
+
   it('renders the manifest logo', () => {
     const manifestLogo = 'http://example.com';
     const wrapper = createWrapper({ manifestLogo });
