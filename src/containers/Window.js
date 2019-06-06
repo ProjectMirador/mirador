@@ -90,6 +90,7 @@ const styles = theme => ({
       zIndex: theme.zIndex.modal - 1,
     },
     backgroundColor: theme.palette.shades.dark,
+    borderRadius: 0,
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
