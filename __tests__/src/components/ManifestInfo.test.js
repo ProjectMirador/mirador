@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { ManifestInfo } from '../../../src/components/ManifestInfo';
 import { LabelValueMetadata } from '../../../src/components/LabelValueMetadata';
 import CollapsibleSection from '../../../src/containers/CollapsibleSection';
-import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
+import SanitizedHtml from '../../../src/containers/SanitizedHtml';
 
 describe('ManifestInfo', () => {
   const metadata = [{ label: {}, value: {} }];

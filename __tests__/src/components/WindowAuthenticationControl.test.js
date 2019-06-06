@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import DialogActions from '@material-ui/core/DialogActions';
-import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
+import SanitizedHtml from '../../../src/containers/SanitizedHtml';
 import { WindowAuthenticationControl } from '../../../src/components/WindowAuthenticationControl';
 
 /**

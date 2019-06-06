@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { LabelValueMetadata } from '../../../src/components/LabelValueMetadata';
-import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
+import SanitizedHtml from '../../../src/containers/SanitizedHtml';
 
 describe('LabelValueMetadata', () => {
   let wrapper;

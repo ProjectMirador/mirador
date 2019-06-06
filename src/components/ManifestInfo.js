@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import CollapsibleSection from '../containers/CollapsibleSection';
-import { SanitizedHtml } from './SanitizedHtml';
+import SanitizedHtml from '../containers/SanitizedHtml';
 import { LabelValueMetadata } from './LabelValueMetadata';
 
 

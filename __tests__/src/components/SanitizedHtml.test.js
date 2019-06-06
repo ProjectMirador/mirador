@@ -4,6 +4,7 @@ import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
 
 const wrapper = shallow(
   <SanitizedHtml
+    classes={{ root: 'root' }}
     htmlString="<script>doBadThings()</script><b>Don't worry!</b><a>Some link</a>"
     ruleSet="iiif"
   />,
@@ -15,7 +16,7 @@ describe('SanitizedHtml', () => {
   });
 
   it('should pass correct class name to root element', () => {
-    expect(wrapper.find('span').first().props().className).toBe('mirador-third-party-html');
+    expect(wrapper.find('span').first().props().className).toBe('root mirador-third-party-html');
   });
 
   it('should pass sanitized html string to dangerouslySetInnerHTML attribute', () => {
