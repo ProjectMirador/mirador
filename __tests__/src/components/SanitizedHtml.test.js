@@ -4,7 +4,7 @@ import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
 
 const wrapper = shallow(
   <SanitizedHtml
-    htmlString="<script>doBadThings()</script><b>Don't worry!</b>"
+    htmlString="<script>doBadThings()</script><b>Don't worry!</b><a>Some link</a>"
     ruleSet="iiif"
   />,
 );
@@ -20,6 +20,6 @@ describe('SanitizedHtml', () => {
 
   it('should pass sanitized html string to dangerouslySetInnerHTML attribute', () => {
     expect(wrapper.find('span').first().props().dangerouslySetInnerHTML)
-      .toEqual({ __html: "<b>Don't worry!</b>" });
+      .toEqual({ __html: "<b>Don't worry!</b><a target=\"_blank\" rel=\"noopener noreferrer\">Some link</a>" });
   });
 });
