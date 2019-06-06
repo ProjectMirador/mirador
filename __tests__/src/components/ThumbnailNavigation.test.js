@@ -4,13 +4,14 @@ import manifesto from 'manifesto.js';
 import { ThumbnailNavigation } from '../../../src/components/ThumbnailNavigation';
 import CanvasGroupings from '../../../src/lib/CanvasGroupings';
 import manifestJson from '../../fixtures/version-2/019.json';
+import zeroWidthFixture from '../../fixtures/version-2/zeroWidthCanvas.json';
 
 /** create wrapper */
-function createWrapper(props) {
+function createWrapper(props, fixture = manifestJson) {
   return shallow(
     <ThumbnailNavigation
       canvasGroupings={
-        new CanvasGroupings(manifesto.create(manifestJson).getSequences()[0].getCanvases())
+        new CanvasGroupings(manifesto.create(fixture).getSequences()[0].getCanvases())
       }
       canvasIndex={1}
       classes={{}}
@@ -86,6 +87,8 @@ describe('ThumbnailNavigation', () => {
     it('calculateScaledSize', () => {
       expect(wrapper.instance().calculateScaledSize(0)).toEqual(82);
       expect(rightWrapper.instance().calculateScaledSize(0)).toEqual(158);
+      const zeroWidthWrapper = createWrapper({ position: 'far-right' }, zeroWidthFixture);
+      expect(zeroWidthWrapper.instance().calculateScaledSize(0)).toEqual(108);
     });
     it('calculatingWidth', () => {
       expect(wrapper.instance().calculatingWidth(1)).toEqual(100);

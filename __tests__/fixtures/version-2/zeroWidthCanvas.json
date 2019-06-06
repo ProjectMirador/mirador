@@ -1,0 +1,40 @@
+{
+  "@id": "https://iiif.bodleian.ox.ac.uk/iiif/manifest/e32a277e-91e2-4a6d-8ba6-cc4bad230410.json",
+  "@type": "sc:Manifest",
+  "description": "Zero width/height canvas.",
+  "sequences": [
+    {
+      "@id": "https://a",
+      "@type": "sc:Sequence",
+      "canvases": [
+        {
+          "@id": "https://iiif.bodleian.ox.ac.uk/iiif/canvas/03472cb2-32d3-4c65-b9b6-51119609baac.json",
+          "@type": "sc:Canvas",
+          "label": "[f. 83 Annapurna?]",
+          "width": 0,
+          "height": 0,
+          "images": [
+            {
+              "@id": "https://iiif.bodleian.ox.ac.uk/iiif/annotation/03472cb2-32d3-4c65-b9b6-51119609baac.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://iiif.bodleian.ox.ac.uk/iiif/canvas/03472cb2-32d3-4c65-b9b6-51119609baac.json",
+              "resource": {
+                "@id": "https://iiif.bodleian.ox.ac.uk/iiif/image/03472cb2-32d3-4c65-b9b6-51119609baac",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "width": 0,
+                "height": 0,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "profile": "http://iiif.io/api/image/2/level1.json",
+                  "@id": "https://iiif.bodleian.ox.ac.uk/iiif/image/03472cb2-32d3-4c65-b9b6-51119609baac"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
