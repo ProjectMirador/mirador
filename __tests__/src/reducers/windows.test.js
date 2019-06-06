@@ -303,7 +303,7 @@ describe('windows reducer', () => {
       const beforeState = { abc123: {} };
       const action = {
         annotationId: 'aId',
-        canvasId: 'cId',
+        targetId: 'cId',
         type: ActionTypes.SELECT_ANNOTATION,
         windowId: 'abc123',
       };
@@ -318,7 +318,7 @@ describe('windows reducer', () => {
       const beforeState = { abc123: { selectedAnnotations: { cId: ['prevId'] } } };
       const action = {
         annotationId: 'aId',
-        canvasId: 'cId',
+        targetId: 'cId',
         type: ActionTypes.SELECT_ANNOTATION,
         windowId: 'abc123',
       };
@@ -334,7 +334,7 @@ describe('windows reducer', () => {
         const beforeState = { abc123: { selectedAnnotations: { cId: ['aId1', 'aId2'] } } };
         const action = {
           annotationId: 'aId1',
-          canvasId: 'cId',
+          targetId: 'cId',
           type: ActionTypes.DESELECT_ANNOTATION,
           windowId: 'abc123',
         };
@@ -349,7 +349,7 @@ describe('windows reducer', () => {
         const beforeState = { abc123: { selectedAnnotations: { cId1: ['aId1'], cId2: ['aId2'] } } };
         const action = {
           annotationId: 'aId2',
-          canvasId: 'cId2',
+          targetId: 'cId2',
           type: ActionTypes.DESELECT_ANNOTATION,
           windowId: 'abc123',
         };

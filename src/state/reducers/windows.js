@@ -125,8 +125,8 @@ export const windowsReducer = (state = {}, action) => {
           ...state[action.windowId],
           selectedAnnotations: {
             ...state[action.windowId].selectedAnnotations,
-            [action.canvasId]: [
-              ...((state[action.windowId].selectedAnnotations || {})[action.canvasId] || []),
+            [action.targetId]: [
+              ...((state[action.windowId].selectedAnnotations || {})[action.targetId] || []),
               action.annotationId,
             ],
           },
@@ -168,21 +168,21 @@ export const windowsReducer = (state = {}, action) => {
 
 /**
  * Handle removing IDs from selectedAnnotations
- * where empty canvasIDs are removed from state as well
+ * where empty targetIds are removed from state as well
  */
 function updatedSelectedAnnotations(state, action) {
   const filteredIds = state[action.windowId]
-    .selectedAnnotations[action.canvasId]
+    .selectedAnnotations[action.targetId]
     .filter(id => id !== action.annotationId);
 
   if (filteredIds.length > 0) {
     return {
       ...state[action.windowId].selectedAnnotations,
-      [action.canvasId]: filteredIds,
+      [action.targetId]: filteredIds,
     };
   }
 
-  return remove(state[action.windowId].selectedAnnotations, action.canvasId);
+  return remove(state[action.windowId].selectedAnnotations, action.targetId);
 }
 
 /**

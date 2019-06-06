@@ -5,7 +5,7 @@ describe('annotation reducer', () => {
   it('should handle REQUEST_ANNOTATION', () => {
     expect(annotationsReducer({}, {
       annotationId: 'abc123',
-      canvasId: 'foo',
+      targetId: 'foo',
       type: ActionTypes.REQUEST_ANNOTATION,
     })).toEqual({
       foo: {
@@ -33,7 +33,7 @@ describe('annotation reducer', () => {
           content: 'anno stuff',
           id: 'abc123',
         },
-        canvasId: 'foo',
+        targetId: 'foo',
         type: ActionTypes.RECEIVE_ANNOTATION,
       },
     )).toMatchObject({
@@ -58,8 +58,8 @@ describe('annotation reducer', () => {
       },
       {
         annotationId: 'abc123',
-        canvasId: 'foo',
         error: "This institution didn't enable CORS.",
+        targetId: 'foo',
         type: ActionTypes.RECEIVE_ANNOTATION_FAILURE,
       },
     )).toEqual({
