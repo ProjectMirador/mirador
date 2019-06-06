@@ -56,6 +56,7 @@ export class ThumbnailNavigation extends Component {
         const calc = Math.floor(
           this.calculatingWidth(canvases.length) * bounds[3] / bounds[2],
         );
+        if (!Number.isInteger(calc)) return config.thumbnailNavigation.width + this.spacing;
         return calc + this.spacing;
       }
       // Default case bottom
