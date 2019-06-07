@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { CanvasInfo } from '../../../src/components/CanvasInfo';
 import { LabelValueMetadata } from '../../../src/components/LabelValueMetadata';
 import CollapsibleSection from '../../../src/containers/CollapsibleSection';
-import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
+import SanitizedHtml from '../../../src/containers/SanitizedHtml';
 
 describe('CanvasInfo', () => {
   const metadata = [{ label: {}, value: {} }];

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import { SanitizedHtml } from './SanitizedHtml';
+import SanitizedHtml from '../containers/SanitizedHtml';
 import ns from '../config/css-ns';
 
 

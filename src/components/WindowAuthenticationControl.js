@@ -6,7 +6,7 @@ import Collapse from '@material-ui/core/Collapse';
 import DialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
 import LockIcon from '@material-ui/icons/LockSharp';
-import { SanitizedHtml } from './SanitizedHtml';
+import SanitizedHtml from '../containers/SanitizedHtml';
 
 /**
  */
