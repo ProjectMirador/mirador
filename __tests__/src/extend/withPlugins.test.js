@@ -20,11 +20,11 @@ function createPluginHoc(pluginMap) {
 
 describe('withPlugins', () => {
   it('should return a function (normal function call)', () => {
-    expect(withPlugins('Target', Target)).toBeInstanceOf(Function);
+    expect(withPlugins('Target', Target)).toBeInstanceOf(Object);
   });
 
   it('should return a function (curry function call)', () => {
-    expect(withPlugins('Target')(Target)).toBeInstanceOf(Function);
+    expect(withPlugins('Target')(Target)).toBeInstanceOf(Object);
   });
 
   it('displayName prop of returned function is based on target name argument', () => {

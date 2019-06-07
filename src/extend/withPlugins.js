@@ -7,32 +7,39 @@ import PluginContext from './PluginContext';
 /** withPlugins should be the innermost HOC */
 function _withPlugins(targetName, TargetComponent) { // eslint-disable-line no-underscore-dangle
   /** */
-  function PluginHoc(props) {
+  function PluginHoc(props, ref) {
     const pluginMap = useContext(PluginContext);
 
+    const passDownProps = {
+      ...props,
+    };
+
+    if (ref) passDownProps.ref = ref;
+
     if (isEmpty(pluginMap)) {
-      return <TargetComponent {...props} />;
+      return <TargetComponent {...passDownProps} />;
     }
 
     const plugins = pluginMap[targetName];
 
     if (isEmpty(plugins)) {
-      return <TargetComponent {...props} />;
+      return <TargetComponent {...passDownProps} />;
     }
 
     if (!isEmpty(plugins.wrap)) {
       const PluginComponent = plugins.wrap[0].component;
-      return <PluginComponent targetProps={props} TargetComponent={TargetComponent} />;
+      return <PluginComponent targetProps={passDownProps} TargetComponent={TargetComponent} />;
     }
 
     if (!isEmpty(plugins.add)) {
       const PluginComponents = plugins.add.map(plugin => plugin.component);
-      return <TargetComponent {...props} PluginComponents={PluginComponents} />;
+      return <TargetComponent {...passDownProps} PluginComponents={PluginComponents} />;
     }
   }
+  const whatever = React.forwardRef(PluginHoc);
 
-  PluginHoc.displayName = `WithPlugins(${targetName})`;
-  return PluginHoc;
+  whatever.displayName = `WithPlugins(${targetName})`;
+  return whatever;
 }
 
 /** withPlugins('MyComponent')(MyComponent) */
