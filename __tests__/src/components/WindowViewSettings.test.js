@@ -63,13 +63,11 @@ describe('WindowViewSettings', () => {
     );
 
     expect(
-      wrapper // eslint-disable-line no-underscore-dangle
+      wrapper
         .instance()
         .selectedRef
-        ._reactInternalFiber
-        .type
-        .displayName,
-    ).toEqual('WithStyles(MenuItem)');
+        .tagName,
+    ).toEqual('LI');
 
     // The document's ActiveElement is an li
     expect(

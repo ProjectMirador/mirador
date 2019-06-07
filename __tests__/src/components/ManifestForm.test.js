@@ -17,10 +17,10 @@ function createWrapper(props) {
 describe('ManifestForm', () => {
   it('renders', () => {
     const wrapper = createWrapper({ addResourcesOpen: false });
-    expect(wrapper.find('TextField[label="addManifestUrl"]').length).toBe(1);
+    expect(wrapper.find('ForwardRef(TextField)[label="addManifestUrl"]').length).toBe(1);
     wrapper.setProps({ addResourcesOpen: true });
-    expect(wrapper.find('TextField[label="addManifestUrl"] input').instance()).toEqual(document.activeElement);
-    expect(wrapper.find('WithStyles(Button)[type="submit"]').length).toBe(1);
+    expect(wrapper.find('ForwardRef(TextField)[label="addManifestUrl"] input').instance()).toEqual(document.activeElement);
+    expect(wrapper.find('button[type="submit"]').length).toBe(1);
   });
 
   it('has a cancel button when a cancel action is provided', () => {
@@ -28,9 +28,9 @@ describe('ManifestForm', () => {
     const wrapper = createWrapper({ addResourcesOpen: true, onCancel });
     wrapper.setState({ formValue: 'asdf' });
 
-    expect(wrapper.find('WithStyles(Button)[onClick]').length).toBe(1);
+    expect(wrapper.find('button[onClick]').length).toBe(1);
 
-    wrapper.find('WithStyles(Button)[onClick]').simulate('click');
+    wrapper.find('button[onClick]').simulate('click');
 
     expect(onCancel).toHaveBeenCalled();
     expect(wrapper.state().formValue).toBe('');

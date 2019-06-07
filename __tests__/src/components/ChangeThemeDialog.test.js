@@ -1,5 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import Dialog from '@material-ui/core/Dialog';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
 import { ChangeThemeDialog } from '../../../src/components/ChangeThemeDialog';
 
 /**
@@ -25,22 +28,22 @@ describe('ChangeThemeDialog', () => {
   it('renders propertly', () => {
     wrapper = createWrapper();
 
-    expect(wrapper.find('WithStyles(Dialog)').length).toBe(1);
+    expect(wrapper.find(Dialog).length).toBe(1);
   });
 
   it('shows up theme selection properly', () => {
     wrapper = createWrapper();
 
-    expect(wrapper.find('WithStyles(ListItemText)').length).toBe(2);
-    expect(wrapper.find('WithStyles(ListItemText)').first().render().text()).toBe('light');
-    expect(wrapper.find('WithStyles(ListItemText)').last().render().text()).toBe('dark');
+    expect(wrapper.find(ListItemText).length).toBe(2);
+    expect(wrapper.find(ListItemText).first().render().text()).toBe('light');
+    expect(wrapper.find(ListItemText).last().render().text()).toBe('dark');
   });
 
   it('shows up theme selection properly', () => {
     const setSelectedTheme = jest.fn();
 
     wrapper = createWrapper({ setSelectedTheme });
-    wrapper.find('WithStyles(MenuItem)').first().simulate('click');
+    wrapper.find(MenuItem).first().simulate('click');
 
     expect(setSelectedTheme).toHaveBeenCalledWith('light');
   });
@@ -57,7 +60,7 @@ describe('ChangeThemeDialog', () => {
     it('sets an onEntered prop on the Dialog that focuses the selected item', () => {
       wrapper = createWrapper();
 
-      wrapper.find('WithStyles(Dialog)').props().onEntered(mockMenu);
+      wrapper.find(Dialog).props().onEntered(mockMenu);
       expect(mockMenuItemFocus).toHaveBeenCalled();
     });
   });

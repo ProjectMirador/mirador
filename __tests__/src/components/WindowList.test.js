@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { WindowList } from '../../../src/components/WindowList';
@@ -27,7 +28,7 @@ describe('WindowList', () => {
   });
 
   it('renders without an error', () => {
-    expect(wrapper.find('WithStyles(Menu)').length).toBe(1);
+    expect(wrapper.find(Menu).length).toBe(1);
   });
 
   describe('with a window without a matching manifest', () => {
@@ -45,12 +46,13 @@ describe('WindowList', () => {
     });
 
     it('renders without an error', () => {
-      expect(wrapper.find('WithStyles(MenuItem)').length).toBe(1);
-      expect(wrapper.find('WithStyles(MenuItem)').key()).toBe('xyz');
+      expect(wrapper.find(MenuItem).length).toBe(1);
+      expect(wrapper.find(MenuItem).key()).toBe('xyz');
       expect(
-        wrapper.find('WithStyles(MenuItem)').matchesElement(<MenuItem><ListItemText>untitled</ListItemText></MenuItem>),
+        wrapper.find(MenuItem)
+          .matchesElement(<MenuItem><ListItemText>untitled</ListItemText></MenuItem>),
       ).toBe(true);
-      wrapper.find('WithStyles(MenuItem)').simulate('click', {});
+      wrapper.find(MenuItem).simulate('click', {});
       expect(handleClose).toBeCalled();
       expect(focusWindow).toBeCalledWith('xyz', true);
     });
@@ -73,10 +75,11 @@ describe('WindowList', () => {
     });
 
     it('renders without an error', () => {
-      expect(wrapper.find('WithStyles(MenuItem)').length).toBe(1);
-      expect(wrapper.find('WithStyles(MenuItem)').key()).toBe('xyz');
+      expect(wrapper.find(MenuItem).length).toBe(1);
+      expect(wrapper.find(MenuItem).key()).toBe('xyz');
       expect(
-        wrapper.find('WithStyles(MenuItem)').matchesElement(<MenuItem><ListItemText>Some title</ListItemText></MenuItem>),
+        wrapper.find(MenuItem)
+          .matchesElement(<MenuItem><ListItemText>Some title</ListItemText></MenuItem>),
       ).toBe(true);
     });
   });

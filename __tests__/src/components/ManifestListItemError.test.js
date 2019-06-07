@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { ManifestListItemError } from '../../../src/components/ManifestListItemError';
 
@@ -39,7 +40,7 @@ describe('ManifestListItemError', () => {
     mockFn = jest.fn();
     wrapper = createWrapper({ onDismissClick: mockFn });
 
-    wrapper.find('WithStyles(Button)').first().simulate('click');
+    wrapper.find(Button).first().simulate('click');
     expect(mockFn).toHaveBeenCalledTimes(1);
     expect(mockFn).toHaveBeenCalledWith('http://example.com');
   });
@@ -48,7 +49,7 @@ describe('ManifestListItemError', () => {
     mockFn = jest.fn();
     wrapper = createWrapper({ onTryAgainClick: mockFn });
 
-    wrapper.find('WithStyles(Button)').last().simulate('click');
+    wrapper.find(Button).last().simulate('click');
     expect(mockFn).toHaveBeenCalledTimes(1);
     expect(mockFn).toHaveBeenCalledWith('http://example.com');
   });

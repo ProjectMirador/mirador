@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import manifesto from 'manifesto.js';
+import Typography from '@material-ui/core/Typography';
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryViewThumbnail } from '../../../src/components/GalleryViewThumbnail';
 
@@ -28,14 +29,14 @@ describe('GalleryView', () => {
   });
   it('renders the canvas labels for each canvas in canvas items', () => {
     wrapper = createWrapper();
-    expect(wrapper.find('WithStyles(Typography)').length).toBe(1);
+    expect(wrapper.find(Typography).length).toBe(1);
   });
   it('sets the selected canvas on click', () => {
     const setCanvas = jest.fn();
     wrapper = createWrapper({ setCanvas });
     wrapper.find('div[role="button"]').first().simulate('click');
     expect(setCanvas).toHaveBeenCalledWith(0);
-    expect(wrapper.find('WithStyles(Typography)').length).toBe(1);
+    expect(wrapper.find(Typography).length).toBe(1);
   });
 
   it('sets the window mode if the selected canvas is clicked', () => {

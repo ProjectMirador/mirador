@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import Typography from '@material-ui/core/Typography';
 import CanvasAnnotations from '../../../src/containers/CanvasAnnotations';
 import { WindowSideBarAnnotationsPanel } from '../../../src/components/WindowSideBarAnnotationsPanel';
 
@@ -35,7 +36,7 @@ describe('WindowSideBarAnnotationsPanel', () => {
 
   it('renders the annotationsCount', () => {
     wrapper = createWrapper();
-    const translatedCount = wrapper.find('WithStyles(Typography)').props().children;
+    const translatedCount = wrapper.find(Typography).props().children;
 
     expect(translatedCount.key).toEqual('showingNumAnnotations');
     expect(translatedCount.args.number).toEqual(4);
