@@ -87,8 +87,8 @@ export class WorkspaceImport extends Component {
             rows="15"
             variant="filled"
             inputProps={{ autofocus: 'autofocus', className: classes.textInput }}
+            helperText={t('importWorkspaceHint')}
           />
-          <DialogContentText>{t('importWorkspaceHint')}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button className={classes.cancelBtn} onClick={handleClose}>
