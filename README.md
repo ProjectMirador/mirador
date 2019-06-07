@@ -4,6 +4,8 @@
 
 ## Running Mirador locally
 
+Mirador local development requires [nodejs](https://nodejs.org/en/download/) to be installed.
+
 1. Run `npm install` to install the dependencies.
 
 ## Starting the project
