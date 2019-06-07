@@ -51,6 +51,8 @@ export class WorkspaceExport extends Component {
         open={open}
         onClose={handleClose}
         scroll="paper"
+        fullWidth
+        maxWidth="sm"
       >
         <DialogTitle id="form-dialog-title" disableTypography>
           <Typography variant="h2">{t('downloadExport')}</Typography>

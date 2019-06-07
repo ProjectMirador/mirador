@@ -21,11 +21,11 @@ const styles = theme => ({
   cancelBtn: {
     color: theme.palette.text.primary,
   },
-  hint: {
-    maxWidth: '400px',
-  },
   textField: {
-    width: '400px',
+    width: '100%',
+  },
+  textInput: {
+    fontFamily: 'monospace',
   },
 });
 

@@ -72,6 +72,8 @@ export class WorkspaceImport extends Component {
         onEscapeKeyDown={handleClose}
         onClose={handleClose}
         open={open}
+        fullWidth
+        maxWidth="sm"
       >
         <DialogTitle id="workspace-import-title" disableTypography>
           <Typography variant="h2">{t('importWorkspace')}</Typography>
@@ -84,8 +86,9 @@ export class WorkspaceImport extends Component {
             onChange={this.handleChange}
             rows="15"
             variant="filled"
+            inputProps={{ autofocus: 'autofocus', className: classes.textInput }}
           />
-          <DialogContentText className={classes.hint}>{t('importWorkspaceHint')}</DialogContentText>
+          <DialogContentText>{t('importWorkspaceHint')}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button className={classes.cancelBtn} onClick={handleClose}>

@@ -31,6 +31,13 @@ describe('WorkspaceExport', () => {
     expect(wrapper.find('WithStyles(Dialog)').length).toBe(1);
   });
 
+  it('renders sizing props', () => {
+    expect(wrapper.find('WithStyles(Dialog)').props()).toEqual(expect.objectContaining({
+      fullWidth: true,
+      maxWidth: 'sm',
+    }));
+  });
+
   it('renders an exportable version of state', () => {
     expect(wrapper.find('pre').length).toBe(1);
     expect(wrapper.find('pre').text()).toMatch('"companionWindows":');
