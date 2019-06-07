@@ -41,8 +41,8 @@ const styles = theme => ({
 
 const enhance = compose(
   withStyles(styles),
-  withTranslation(),
-  connect(mapStateToProps, mapDispatchToProps),
+  withTranslation(null, { withRef: true }),
+  connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),
   withPlugins('WindowThumbnailSettings'),
   // further HOC go here
 );
