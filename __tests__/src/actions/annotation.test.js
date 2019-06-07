@@ -10,19 +10,19 @@ const mockStore = configureMockStore(middlewares);
 describe('annotation actions', () => {
   describe('requestAnnotation', () => {
     it('requests an annotation from given a url', () => {
-      const canvasId = 'foo';
+      const targetId = 'foo';
       const annotationId = 'abc123';
       const expectedAction = {
         annotationId,
-        canvasId,
+        targetId,
         type: ActionTypes.REQUEST_ANNOTATION,
       };
-      expect(actions.requestAnnotation(canvasId, annotationId)).toEqual(expectedAction);
+      expect(actions.requestAnnotation(targetId, annotationId)).toEqual(expectedAction);
     });
   });
   describe('receiveAnnotation', () => {
     it('recieves an annotation', () => {
-      const canvasId = 'foo';
+      const targetId = 'foo';
       const annotationId = 'abc123';
       const json = {
         annotationId,
@@ -31,10 +31,10 @@ describe('annotation actions', () => {
       const expectedAction = {
         annotationId,
         annotationJson: json,
-        canvasId,
+        targetId,
         type: ActionTypes.RECEIVE_ANNOTATION,
       };
-      expect(actions.receiveAnnotation(canvasId, annotationId, json)).toEqual(expectedAction);
+      expect(actions.receiveAnnotation(targetId, annotationId, json)).toEqual(expectedAction);
     });
   });
   describe('fetchAnnotation', () => {
@@ -54,7 +54,7 @@ describe('annotation actions', () => {
         expect(store.getActions()).toEqual([
           {
             annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
-            canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
+            targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
             type: 'REQUEST_ANNOTATION',
           },
         ]);
@@ -69,13 +69,13 @@ describe('annotation actions', () => {
             expect(expectedActions).toEqual([
               {
                 annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
-                canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
+                targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
                 type: 'REQUEST_ANNOTATION',
               },
               {
                 annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
                 annotationJson: { data: '12345' },
-                canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
+                targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
                 type: 'RECEIVE_ANNOTATION',
               },
             ]);
@@ -93,13 +93,13 @@ describe('annotation actions', () => {
             expect(expectedActions).toEqual([
               {
                 annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
-                canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
+                targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
                 type: 'REQUEST_ANNOTATION',
               },
               {
                 annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
-                canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
                 error: new Error('invalid json response body at undefined reason: Unexpected end of JSON input'),
+                targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
                 type: 'RECEIVE_ANNOTATION_FAILURE',
               },
             ]);
@@ -110,28 +110,28 @@ describe('annotation actions', () => {
 
   it('handles the selectAnnotation action', () => {
     const windowId = 'wId1';
-    const canvasId = 'cId1';
+    const targetId = 'cId1';
     const annotationId = 'aId1';
     const expectedAction = {
       annotationId,
-      canvasId,
+      targetId,
       type: ActionTypes.SELECT_ANNOTATION,
       windowId,
     };
-    expect(actions.selectAnnotation(windowId, canvasId, annotationId)).toEqual(expectedAction);
+    expect(actions.selectAnnotation(windowId, targetId, annotationId)).toEqual(expectedAction);
   });
 
   it('handles the deselectAnnotation action', () => {
     const windowId = 'wId1';
-    const canvasId = 'cId1';
+    const targetId = 'cId1';
     const annotationId = 'aId1';
     const expectedAction = {
       annotationId,
-      canvasId,
+      targetId,
       type: ActionTypes.DESELECT_ANNOTATION,
       windowId,
     };
-    expect(actions.deselectAnnotation(windowId, canvasId, annotationId)).toEqual(expectedAction);
+    expect(actions.deselectAnnotation(windowId, targetId, annotationId)).toEqual(expectedAction);
   });
 
   it('handles the toggleAnnotationDisplay action', () => {

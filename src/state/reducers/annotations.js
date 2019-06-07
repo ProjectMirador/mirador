@@ -8,7 +8,7 @@ export const annotationsReducer = (state = {}, action) => {
     case ActionTypes.REQUEST_ANNOTATION:
       return {
         ...state,
-        [action.canvasId]: {
+        [action.targetId]: {
           [action.annotationId]: {
             id: action.annotationId,
             isFetching: true,
@@ -18,7 +18,7 @@ export const annotationsReducer = (state = {}, action) => {
     case ActionTypes.RECEIVE_ANNOTATION:
       return {
         ...state,
-        [action.canvasId]: {
+        [action.targetId]: {
           [action.annotationId]: {
             id: action.annotationId,
             isFetching: false,
@@ -29,7 +29,7 @@ export const annotationsReducer = (state = {}, action) => {
     case ActionTypes.RECEIVE_ANNOTATION_FAILURE:
       return {
         ...state,
-        [action.canvasId]: {
+        [action.targetId]: {
           [action.annotationId]: {
             error: action.error,
             id: action.annotationId,

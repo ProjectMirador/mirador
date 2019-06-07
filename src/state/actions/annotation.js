@@ -4,14 +4,14 @@ import ActionTypes from './action-types';
 /**
  * requestAnnotation - action creator
  *
- * @param  {String} canvasId
+ * @param  {String} targetId
  * @param  {String} annotationId
  * @memberof ActionCreators
  */
-export function requestAnnotation(canvasId, annotationId) {
+export function requestAnnotation(targetId, annotationId) {
   return {
     annotationId,
-    canvasId,
+    targetId,
     type: ActionTypes.REQUEST_ANNOTATION,
   };
 }
@@ -19,16 +19,16 @@ export function requestAnnotation(canvasId, annotationId) {
 /**
  * receiveAnnotation - action creator
  *
- * @param  {String} canvasId
+ * @param  {String} targetId
  * @param  {String} annotationId
  * @param  {Object} annotationJson
  * @memberof ActionCreators
  */
-export function receiveAnnotation(canvasId, annotationId, annotationJson) {
+export function receiveAnnotation(targetId, annotationId, annotationJson) {
   return {
     annotationId,
     annotationJson,
-    canvasId,
+    targetId,
     type: ActionTypes.RECEIVE_ANNOTATION,
   };
 }
@@ -36,16 +36,16 @@ export function receiveAnnotation(canvasId, annotationId, annotationJson) {
 /**
  * receiveAnnotationFailure - action creator
  *
- * @param  {String} canvasId
+ * @param  {String} targetId
  * @param  {String} annotationId
  * @param  {String} error
  * @memberof ActionCreators
  */
-export function receiveAnnotationFailure(canvasId, annotationId, error) {
+export function receiveAnnotationFailure(targetId, annotationId, error) {
   return {
     annotationId,
-    canvasId,
     error,
+    targetId,
     type: ActionTypes.RECEIVE_ANNOTATION_FAILURE,
   };
 }
@@ -56,13 +56,13 @@ export function receiveAnnotationFailure(canvasId, annotationId, error) {
  * @param  {String} annotationId
  * @memberof ActionCreators
  */
-export function fetchAnnotation(canvasId, annotationId) {
+export function fetchAnnotation(targetId, annotationId) {
   return ((dispatch) => {
-    dispatch(requestAnnotation(canvasId, annotationId));
+    dispatch(requestAnnotation(targetId, annotationId));
     return fetch(annotationId)
       .then(response => response.json())
-      .then(json => dispatch(receiveAnnotation(canvasId, annotationId, json)))
-      .catch(error => dispatch(receiveAnnotationFailure(canvasId, annotationId, error)));
+      .then(json => dispatch(receiveAnnotation(targetId, annotationId, json)))
+      .catch(error => dispatch(receiveAnnotationFailure(targetId, annotationId, error)));
   });
 }
 
@@ -70,14 +70,14 @@ export function fetchAnnotation(canvasId, annotationId) {
  * selectAnnotation - action creator
  *
  * @param  {String} windowId
- * @param  {String} canvasId
+ * @param  {String} targetId
  * @param  {String} annotationId
  * @memberof ActionCreators
  */
-export function selectAnnotation(windowId, canvasId, annotationId) {
+export function selectAnnotation(windowId, targetId, annotationId) {
   return {
     annotationId,
-    canvasId,
+    targetId,
     type: ActionTypes.SELECT_ANNOTATION,
     windowId,
   };
@@ -87,14 +87,14 @@ export function selectAnnotation(windowId, canvasId, annotationId) {
  * deselectAnnotation - action creator
  *
  * @param  {String} windowId
- * @param  {String} canvasId
+ * @param  {String} targetId
  * @param  {String} annotationId
  * @memberof ActionCreators
  */
-export function deselectAnnotation(windowId, canvasId, annotationId) {
+export function deselectAnnotation(windowId, targetId, annotationId) {
   return {
     annotationId,
-    canvasId,
+    targetId,
     type: ActionTypes.DESELECT_ANNOTATION,
     windowId,
   };
