@@ -50,7 +50,6 @@ export default {
       section_divider: 'rgba(0, 0, 0, 0.25)',
     },
     typography: {
-      fontSize: 16,
       body1: {
         fontSize: "1rem",
         letterSpacing: "0em",
