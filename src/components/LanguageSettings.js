@@ -27,11 +27,12 @@ export class LanguageSettings extends Component {
               key={language.locale}
               onClick={() => { handleClick(language.locale); }}
             >
-              {
-                language.current
-                  && <ListItemIcon><CheckIcon /></ListItemIcon>
-              }
-              <ListItemText inset primaryTypographyProps={{ variant: 'body1' }}>
+              <ListItemIcon>
+                {
+                  language.current && <CheckIcon />
+                }
+              </ListItemIcon>
+              <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
                 {language.label}
               </ListItemText>
             </MenuItem>
