@@ -31,8 +31,10 @@
   "dependencies": {
     "@material-ui/core": "^4.1.0",
     "@material-ui/icons": "^4.1.0",
+    "@material-ui/lab": "^4.0.0-alpha.15",
     "@researchgate/react-intersection-observer": "^0.7.4",
     "classnames": "^2.2.6",
+    "clsx": "^1.0.4",
     "css-ns": "^1.2.2",
     "deepmerge": "^3.1.0",
     "dompurify": "^1.0.9",

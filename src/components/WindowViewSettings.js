@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import clsx from 'clsx';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import MenuItem from '@material-ui/core/MenuItem';
+// import MenuItem from '@material-ui/core/MenuItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import SingleIcon from '@material-ui/icons/CropOriginalSharp';
 import PropTypes from 'prop-types';
 import BookViewIcon from './icons/BookViewIcon';
@@ -42,10 +45,11 @@ export class WindowViewSettings extends Component {
   /**
    * @private
    */
-  handleChange(value) {
-    const { windowId, setWindowViewType } = this.props;
+  handleChange(event, value) {
+    const { handleClose, windowId, setWindowViewType } = this.props;
 
     setWindowViewType(windowId, value);
+    handleClose();
   }
 
   /**
@@ -55,48 +59,60 @@ export class WindowViewSettings extends Component {
    */
   render() {
     const {
-      classes, handleClose, t, windowViewType,
+      classes, t, windowViewType,
     } = this.props;
 
     return (
       <>
         <ListSubheader role="presentation" disableSticky tabIndex="-1">{t('view')}</ListSubheader>
 
-        <MenuItem
-          className={classes.MenuItem}
-          ref={ref => this.handleSelectedRef(ref)}
-          onClick={() => { this.handleChange('single'); handleClose(); }}
-        >
-          <FormControlLabel
-            value="single"
-            classes={{ label: windowViewType === 'single' ? classes.selectedLabel : classes.label }}
-            control={<SingleIcon color={windowViewType === 'single' ? 'secondary' : undefined} />}
-            label={t('single')}
-            labelPlacement="bottom"
-          />
-        </MenuItem>
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('book'); handleClose(); }}>
-          <FormControlLabel
-            value="book"
-            classes={{ label: windowViewType === 'book' ? classes.selectedLabel : classes.label }}
-            control={<BookViewIcon color={windowViewType === 'book' ? 'secondary' : undefined} />}
-            label={t('book')}
-            labelPlacement="bottom"
-          />
-        </MenuItem>
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('gallery'); handleClose(); }}>
-          <FormControlLabel
-            value="gallery"
-            classes={{ label: windowViewType === 'gallery' ? classes.selectedLabel : classes.label }}
-            control={<GalleryViewIcon color={windowViewType === 'gallery' ? 'secondary' : undefined} />}
-            label={t('gallery')}
-            labelPlacement="bottom"
-          />
-        </MenuItem>
+        <ToggleButtonGroup component="li" value={windowViewType} exclusive onChange={this.handleChange}>
+          <ToggleButtonWithLabel classes={classes} t={t} value="single" control={<SingleIcon />} />
+          <ToggleButtonWithLabel classes={classes} t={t} value="book" control={<BookViewIcon />} />
+          <ToggleButtonWithLabel classes={classes} t={t} value="gallery" control={<GalleryViewIcon />} />
+        </ToggleButtonGroup>
       </>
     );
   }
 }
+
+
+/** */
+const ToggleButtonWithLabel = (props) => {
+  const {
+    classes, t, selected, value, control, ...other
+  } = props;
+
+  return (
+    <ToggleButton
+      value={value}
+      className={
+        clsx(
+          classes.toggleButton,
+          {
+            [classes.selected]: selected,
+          },
+        )
+      }
+      {...other}
+    >
+      <FormControlLabel
+        classes={{ label: classes.label }}
+        control={React.cloneElement(control, { color: selected ? 'secondary' : undefined })}
+        label={t(value)}
+        labelPlacement="bottom"
+      />
+    </ToggleButton>
+  );
+};
+
+ToggleButtonWithLabel.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  control: PropTypes.element.isRequired,
+  selected: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
+};
 
 WindowViewSettings.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,

@@ -34,9 +34,18 @@ const styles = theme => ({
   MenuItem: {
     display: 'inline',
   },
-  selectedLabel: {
-    borderBottom: `2px solid ${theme.palette.secondary.main}`,
-    color: theme.palette.secondary.main,
+  /* Pseudo-class applied to the root element if `selected={true}`. */
+  selected: {},
+  toggleButton: {
+    '&$selected': {
+      '& $label': {
+        borderBottom: `2px solid ${theme.palette.secondary.main}`,
+      },
+      color: theme.palette.secondary.main,
+    },
+    border: 0,
+    color: 'inherit',
+    textTransform: 'inherit',
   },
 });
 
