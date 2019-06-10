@@ -1,5 +1,8 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import Badge from '@material-ui/core/Badge';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import { WindowSideBarButtons } from '../../../src/components/WindowSideBarButtons';
 
 /** create wrapper */
@@ -34,14 +37,14 @@ describe('WindowSideBarButtons (shallow)', () => {
   });
 
   it('renders without an error', () => {
-    expect(wrapper.find('WithStyles(Tabs)').length).toBe(1);
+    expect(wrapper.find(Tabs).length).toBe(1);
   });
 
   it('triggers the addCompanionWindow prop on click', () => {
     const addCompanionWindow = jest.fn();
     wrapper = createWrapper({ addCompanionWindow, windowId });
 
-    wrapper.find('WithStyles(Tabs)').props().onChange({ target: { removeAttribute: () => {}, setAttribute: () => {} } }, 'info');
+    wrapper.find(Tabs).props().onChange({ target: { removeAttribute: () => {}, setAttribute: () => {} } }, 'info');
     expect(addCompanionWindow).toHaveBeenCalledTimes(1);
     expect(addCompanionWindow).toHaveBeenCalledWith('info');
   });
@@ -49,13 +52,13 @@ describe('WindowSideBarButtons (shallow)', () => {
   it('has a badge indicating if the annotations panel has annotations', () => {
     let tab;
     wrapper = createWrapper({ hasAnnotations: true, windowId });
-    tab = wrapper.find('WithStyles(Tab)[value="annotations"]');
-    expect(tab.find('WithStyles(Badge)').props().invisible).toBe(false);
+    tab = wrapper.find(Tab).find('[value="annotations"]');
+    expect(tab.find(Badge).props().invisible).toBe(false);
 
     wrapper = createWrapper({ hasAnnotations: false, windowId });
-    tab = wrapper.find('WithStyles(Tab)[value="annotations"]');
+    tab = wrapper.find(Tab).find('[value="annotations"]');
 
-    expect(tab.find('WithStyles(Badge)').props().invisible).toBe(true);
+    expect(tab.find(Badge).props().invisible).toBe(true);
   });
 
   describe('handleKeyUp', () => {

@@ -98,7 +98,7 @@ const styles = theme => ({
     background: theme.palette.shades.light,
     justifyContent: 'space-between',
     minHeight: 'max-content',
-    paddingLeft: theme.spacing.unit * 2,
+    paddingLeft: theme.spacing(2),
   },
   vertical: {
   },

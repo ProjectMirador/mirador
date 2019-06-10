@@ -27,7 +27,7 @@ const styles = theme => ({
     right: 0,
   },
   ctrlBtn: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
   drawer: {
     overflowX: 'hidden',

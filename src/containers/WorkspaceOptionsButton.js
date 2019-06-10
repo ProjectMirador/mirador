@@ -10,7 +10,7 @@ import { WorkspaceOptionsButton } from '../components/WorkspaceOptionsButton';
  */
 const styles = theme => ({
   ctrlBtn: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
   ctrlBtnSelected: {
     backgroundColor: theme.palette.action.selected,

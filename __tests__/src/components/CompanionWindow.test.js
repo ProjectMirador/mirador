@@ -56,7 +56,7 @@ describe('CompanionWindow', () => {
       updateCompanionWindow,
     });
 
-    expect(companionWindow.find('WithStyles(Paper).vertical').length).toBe(1);
+    expect(companionWindow.find('.vertical').length).toBe(1);
 
     const button = companionWindow.find(MiradorMenuButton).first();
     button.props().onClick(); // Trigger the onClick prop
@@ -71,7 +71,7 @@ describe('CompanionWindow', () => {
       updateCompanionWindow,
     });
 
-    expect(companionWindow.find('WithStyles(Paper).horizontal').length).toBe(1);
+    expect(companionWindow.find('.horizontal').length).toBe(1);
 
     const button = companionWindow.find(MiradorMenuButton).first();
     button.props().onClick(); // Trigger the onClick prop

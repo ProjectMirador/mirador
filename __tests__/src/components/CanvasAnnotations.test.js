@@ -1,5 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import { CanvasAnnotations } from '../../../src/components/CanvasAnnotations';
 
 /** Utility function to wrap CanvasAnnotations */
@@ -40,27 +43,27 @@ describe('CanvasAnnotations', () => {
   it('renders a heading with the appropriate context based on index and totalSize', () => {
     wrapper = createWrapper({ annotations });
 
-    expect(wrapper.find('WithStyles(Typography)').length).toBe(1);
-    let heading = wrapper.find('WithStyles(Typography)').props().children;
+    expect(wrapper.find(Typography).length).toBe(1);
+    let heading = wrapper.find(Typography).props().children;
     expect(heading.key).toEqual('annotationCanvasLabel');
     expect(heading.args.label).toEqual('A Canvas Label');
     expect(heading.args.context).toEqual('1/1');
 
     wrapper = createWrapper({ annotations, index: 1, totalSize: 2 });
-    heading = wrapper.find('WithStyles(Typography)').props().children;
+    heading = wrapper.find(Typography).props().children;
     expect(heading.args.context).toEqual('2/2');
   });
 
   it('renders a List w/ a ListItem for every annotation', () => {
     wrapper = createWrapper({ annotations });
 
-    expect(wrapper.find('WithStyles(List)').length).toEqual(1);
-    expect(wrapper.find('WithStyles(ListItem)').length).toEqual(2);
+    expect(wrapper.find(List).length).toEqual(1);
+    expect(wrapper.find(ListItem).length).toEqual(2);
   });
 
   it('renders nothing when there are no annotations', () => {
     wrapper = createWrapper();
-    expect(wrapper.find('WithStyles(Typography)').length).toBe(0);
+    expect(wrapper.find(Typography).length).toBe(0);
   });
 
   describe('interacting with annotations', () => {
@@ -72,7 +75,7 @@ describe('CanvasAnnotations', () => {
         selectAnnotation,
       });
 
-      wrapper.find('WithStyles(ListItem)').first().simulate('click');
+      wrapper.find(ListItem).first().simulate('click');
       expect(selectAnnotation).toHaveBeenCalledWith('abc', 'example.com/iiif/12345', 'abc123');
     });
 
@@ -85,7 +88,7 @@ describe('CanvasAnnotations', () => {
         selectedAnnotationIds: ['abc123'],
       });
 
-      wrapper.find('WithStyles(ListItem)').first().simulate('click');
+      wrapper.find(ListItem).first().simulate('click');
       expect(deselectAnnotation).toHaveBeenCalledWith('abc', 'example.com/iiif/12345', 'abc123');
     });
 
@@ -105,10 +108,10 @@ describe('CanvasAnnotations', () => {
           highlightAnnotation,
         });
 
-        wrapper.find('WithStyles(ListItem)').first().simulate('mouseEnter');
+        wrapper.find(ListItem).first().simulate('mouseEnter');
         expect(highlightAnnotation).not.toHaveBeenCalled();
 
-        wrapper.find('WithStyles(ListItem)').first().simulate('mouseLeave');
+        wrapper.find(ListItem).first().simulate('mouseLeave');
         expect(highlightAnnotation).not.toHaveBeenCalled();
       });
     });
@@ -128,7 +131,7 @@ describe('CanvasAnnotations', () => {
           highlightAnnotation,
         });
 
-        wrapper.find('WithStyles(ListItem)').first().simulate('mouseEnter');
+        wrapper.find(ListItem).first().simulate('mouseEnter');
         expect(highlightAnnotation).toHaveBeenCalledWith('abc', 'annoId');
       });
 
@@ -146,7 +149,7 @@ describe('CanvasAnnotations', () => {
           highlightAnnotation,
         });
 
-        wrapper.find('WithStyles(ListItem)').first().simulate('focus');
+        wrapper.find(ListItem).first().simulate('focus');
         expect(highlightAnnotation).toHaveBeenCalledWith('abc', 'annoId');
       });
 
@@ -164,7 +167,7 @@ describe('CanvasAnnotations', () => {
           highlightAnnotation,
         });
 
-        wrapper.find('WithStyles(ListItem)').first().simulate('mouseLeave');
+        wrapper.find(ListItem).first().simulate('mouseLeave');
         expect(highlightAnnotation).toHaveBeenCalledWith('abc', null);
       });
     });

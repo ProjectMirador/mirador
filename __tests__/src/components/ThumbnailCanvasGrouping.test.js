@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import manifesto from 'manifesto.js';
 import { ThumbnailCanvasGrouping } from '../../../src/components/ThumbnailCanvasGrouping';
+import CaptionedCanvasThumbnail from '../../../src/containers/CaptionedCanvasThumbnail';
 import CanvasGroupings from '../../../src/lib/CanvasGroupings';
 import manifestJson from '../../fixtures/version-2/019.json';
 
@@ -42,7 +43,7 @@ describe('ThumbnailCanvasGrouping', () => {
     expect(wrapper.find('.mirador-thumbnail-nav-canvas-1.mirador-current-canvas-grouping').length).toEqual(1);
   });
   it('renders a CaptionedCanvasThumbnail', () => {
-    expect(wrapper.find('WithStyles(WithPlugins(CaptionedCanvasThumbnail))').length).toEqual(1);
+    expect(wrapper.find(CaptionedCanvasThumbnail).length).toEqual(1);
   });
   it('when clicked, updates the current canvas', () => {
     wrapper = createWrapper({ data, index: 0, setCanvas });

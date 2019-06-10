@@ -1,5 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import { ErrorDialog } from '../../../src/components/ErrorDialog';
 
 /**
@@ -21,7 +24,7 @@ describe('ErrorDialog', () => {
     const error = { id: 'testid123', message: '' };
 
     wrapper = createWrapper({ error });
-    expect(wrapper.find('WithStyles(Dialog)').length).toBe(1);
+    expect(wrapper.find(Dialog).length).toBe(1);
   });
 
   it('shows up error message correctly', () => {
@@ -29,7 +32,7 @@ describe('ErrorDialog', () => {
     const error = { id: 'testid123', message: errorMessage };
 
     wrapper = createWrapper({ error });
-    expect(wrapper.find('WithStyles(DialogContentText)[variant="body2"]').render().text()).toBe(errorMessage);
+    expect(wrapper.find(DialogContentText).find('[variant="body2"]').render().text()).toBe(errorMessage);
   });
 
   it('triggers the handleClick prop when clicking the ok button', () => {
@@ -37,7 +40,7 @@ describe('ErrorDialog', () => {
     const mockHandleClick = jest.fn();
 
     wrapper = createWrapper({ error, removeError: mockHandleClick });
-    wrapper.find('WithStyles(Button)').simulate('click');
+    wrapper.find(Button).simulate('click');
     expect(mockHandleClick).toHaveBeenCalledTimes(1);
   });
 });

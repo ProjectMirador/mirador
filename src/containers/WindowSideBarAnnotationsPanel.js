@@ -24,10 +24,10 @@ const mapStateToProps = (state, { windowId }) => ({
 const styles = theme => ({
   section: {
     borderBottom: `.5px solid ${theme.palette.section_divider}`,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit,
-    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+    paddingTop: theme.spacing(2),
   },
 });
 

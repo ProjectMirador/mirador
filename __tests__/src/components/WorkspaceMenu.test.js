@@ -1,5 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import { WorkspaceMenu } from '../../../src/components/WorkspaceMenu';
 
 /** */
@@ -26,22 +28,22 @@ describe('WorkspaceMenu', () => {
   });
 
   it('renders without an error', () => {
-    expect(wrapper.find('WithStyles(Menu)').length).toBe(1);
+    expect(wrapper.find(Menu).length).toBe(1);
   });
 
   it('closes the current menu when opening a submenu', () => {
-    wrapper.find('WithStyles(MenuItem)').first().simulate('click', {});
+    wrapper.find(MenuItem).first().simulate('click', {});
     expect(handleClose).toBeCalled();
   });
 
   it('disables zoom controls if the workspaceAdd UI is visible', () => {
-    expect(wrapper.find('WithStyles(MenuItem)').at(0).props().disabled).toBe(false);
+    expect(wrapper.find(MenuItem).at(0).props().disabled).toBe(false);
 
     wrapper = createShallow({
       handleClose, isWorkspaceAddVisible: true, showZoomControls, toggleZoomControls,
     });
 
-    expect(wrapper.find('WithStyles(MenuItem)').at(0).props().disabled).toBe(true);
+    expect(wrapper.find(MenuItem).at(0).props().disabled).toBe(true);
   });
 
   describe('handleZoomToggleClick', () => {

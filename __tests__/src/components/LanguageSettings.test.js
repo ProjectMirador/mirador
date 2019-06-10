@@ -1,5 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
 import { LanguageSettings } from '../../../src/components/LanguageSettings';
 
 /**
@@ -34,7 +36,7 @@ describe('LanguageSettings', () => {
   it('renders a list with a list item for each language passed in props', () => {
     wrapper = createWrapper({ languages });
 
-    expect(wrapper.find('WithStyles(MenuItem)').length).toBe(2);
+    expect(wrapper.find(MenuItem).length).toBe(2);
   });
 
   it('non-active list items are buttons (and active are not)', () => {
@@ -42,14 +44,14 @@ describe('LanguageSettings', () => {
 
     expect(
       wrapper
-        .find('WithStyles(MenuItem)')
+        .find(MenuItem)
         .first() // The German / active button
         .prop('button'),
     ).toBe(false);
 
     expect(
       wrapper
-        .find('WithStyles(MenuItem)')
+        .find(MenuItem)
         .last() // The English / non-active button
         .prop('button'),
     ).toBe(true);
@@ -60,9 +62,9 @@ describe('LanguageSettings', () => {
 
     expect(
       wrapper
-        .find('WithStyles(MenuItem)')
+        .find(MenuItem)
         .first()
-        .find('WithStyles(ListItemIcon) pure(CheckSharpIcon)')
+        .find('CheckSharpIcon')
         .length,
     ).toBe(1);
   });
@@ -71,9 +73,9 @@ describe('LanguageSettings', () => {
     wrapper = createWrapper({ languages });
 
     const firstListText = wrapper
-      .find('WithStyles(MenuItem)')
+      .find(MenuItem)
       .first()
-      .find('WithStyles(ListItemText)')
+      .find(ListItemText)
       .children()
       .text();
 
@@ -87,7 +89,7 @@ describe('LanguageSettings', () => {
       languages,
     });
 
-    wrapper.find('WithStyles(MenuItem)').last().simulate('click');
+    wrapper.find(MenuItem).last().simulate('click');
 
     expect(mockHandleClick).toHaveBeenCalledTimes(1);
     expect(mockHandleClick).toHaveBeenCalledWith('en');

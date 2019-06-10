@@ -11,7 +11,7 @@ import { WorkspaceControlPanelButtons }
  */
 const styles = theme => ({
   ctrlBtn: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
 });
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import manifesto from 'manifesto.js';
+import Typography from '@material-ui/core/Typography';
 import { CaptionedCanvasThumbnail } from '../../../src/components/CaptionedCanvasThumbnail';
 import manifestJson from '../../fixtures/version-2/019.json';
 
@@ -28,6 +29,6 @@ describe('CaptionedCanvasThumbnail', () => {
     expect(wrapper.find('CanvasThumbnail').first().props().style.maxWidth).toEqual('67px');
   });
   it('adds a caption', () => {
-    expect(wrapper.find('WithStyles(Typography)').props().children).toEqual('Test 19 Canvas: 1');
+    expect(wrapper.find(Typography).props().children).toEqual('Test 19 Canvas: 1');
   });
 });

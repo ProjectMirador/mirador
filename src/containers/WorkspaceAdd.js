@@ -33,16 +33,16 @@ const styles = theme => ({
     display: 'none',
   },
   fab: {
-    bottom: theme.spacing.unit * 2,
+    bottom: theme.spacing(2),
     position: 'absolute',
-    right: theme.spacing.unit * 2,
+    right: theme.spacing(2),
   },
   form: {
     ...theme.mixins.gutters(),
     left: '0',
     marginTop: 48,
-    paddingBottom: theme.spacing.unit * 2,
-    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing(2),
+    paddingTop: theme.spacing(2),
     right: '0',
   },
   list: {

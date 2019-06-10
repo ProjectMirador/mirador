@@ -34,7 +34,7 @@ describe('FullScreenButton', () => {
     });
 
     it('has the FullscreenIcon', () => {
-      expect(menuButton.children('pure(FullscreenSharpIcon)').length).toBe(1);
+      expect(menuButton.children('FullscreenSharpIcon').length).toBe(1);
     });
 
     it('has the proper aria-label i18n key', () => {
@@ -56,7 +56,7 @@ describe('FullScreenButton', () => {
     });
 
     it('has the FullscreenExitIcon', () => {
-      expect(menuButton.children('pure(FullscreenExitSharpIcon)').length).toBe(1);
+      expect(menuButton.children('FullscreenExitSharpIcon').length).toBe(1);
     });
 
     it('has the proper aria-label', () => {

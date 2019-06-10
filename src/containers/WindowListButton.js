@@ -21,7 +21,7 @@ const styles = theme => ({
     paddingLeft: 12,
   },
   ctrlBtn: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
   ctrlBtnSelected: {
     backgroundColor: theme.palette.action.selected,

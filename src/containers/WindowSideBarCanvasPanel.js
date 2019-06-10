@@ -45,11 +45,11 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
  */
 const styles = theme => ({
   label: {
-    paddingLeft: theme.spacing.unit,
+    paddingLeft: theme.spacing(1),
   },
   listItem: {
     borderBottom: `0.5px solid ${theme.palette.divider}`,
-    paddingRight: theme.spacing.unit,
+    paddingRight: theme.spacing(1),
   },
   select: {
     '&:focus': {

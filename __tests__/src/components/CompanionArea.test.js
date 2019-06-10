@@ -51,7 +51,7 @@ describe('CompanionArea', () => {
     });
 
     expect(wrapper.find(MiradorMenuButton).length).toBe(1);
-    expect(wrapper.find(MiradorMenuButton).first().children('pure(ArrowRightSharpIcon)').length).toBe(1);
+    expect(wrapper.find(MiradorMenuButton).first().children('ArrowRightSharpIcon').length).toBe(1);
     expect(wrapper.find(Slide).prop('direction')).toBe('right');
 
     expect(wrapper.find('div.mirador-companion-windows').length).toBe(1);
@@ -73,7 +73,7 @@ describe('CompanionArea', () => {
     });
 
     expect(wrapper.find(MiradorMenuButton).length).toBe(1);
-    expect(wrapper.find(MiradorMenuButton).first().children('pure(ArrowLeftSharpIcon)').length).toBe(1);
+    expect(wrapper.find(MiradorMenuButton).first().children('ArrowLeftSharpIcon').length).toBe(1);
 
     expect(wrapper.find('div.mirador-companion-windows').length).toBe(1);
     expect(wrapper.find('div.mirador-companion-windows').props().style.display).toBe('flex');

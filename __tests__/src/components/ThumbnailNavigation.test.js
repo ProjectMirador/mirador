@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import manifesto from 'manifesto.js';
 import { ThumbnailNavigation } from '../../../src/components/ThumbnailNavigation';
+import ThumbnailCanvasGrouping from '../../../src/containers/ThumbnailCanvasGrouping';
 import CanvasGroupings from '../../../src/lib/CanvasGroupings';
 import manifestJson from '../../fixtures/version-2/019.json';
 import zeroWidthFixture from '../../fixtures/version-2/zeroWidthCanvas.json';
@@ -38,7 +39,7 @@ describe('ThumbnailNavigation', () => {
   it('renders containers based off of number of canvases', () => {
     expect(wrapper
       .find('AutoSizer').dive().find('List').dive()
-      .find('WithStyles(Connect(WithPlugins(ThumbnailCanvasGrouping)))').length).toEqual(3);
+      .find(ThumbnailCanvasGrouping).length).toEqual(3);
   });
   it('has a ref set used to reset on view change', () => {
     expect(wrapper.instance().gridRef).not.toBe(null);
