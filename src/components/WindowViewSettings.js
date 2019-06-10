@@ -60,7 +60,7 @@ export class WindowViewSettings extends Component {
 
     return (
       <>
-        <ListSubheader role="presentation" tabIndex="-1">{t('view')}</ListSubheader>
+        <ListSubheader role="presentation" disableSticky tabIndex="-1">{t('view')}</ListSubheader>
 
         <MenuItem
           className={classes.MenuItem}
