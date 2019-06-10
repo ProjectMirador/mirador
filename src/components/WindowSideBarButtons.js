@@ -8,6 +8,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/InfoSharp';
 import AnnotationIcon from '@material-ui/icons/CommentSharp';
 import AttributionIcon from '@material-ui/icons/CopyrightSharp';
+import SearchIcon from '@material-ui/icons/SearchSharp';
 import CanvasIndexIcon from './icons/CanvasIndexIcon';
 import { keys, chars } from '../lib/KeyHelper';
 /**
@@ -132,6 +133,8 @@ export class WindowSideBarButtons extends Component {
       classes,
       hasAnnotations,
       hideAnnotationsPanel,
+      hideSearchPanel,
+      searchService,
       sideBarPanel,
       t,
     } = this.props;
@@ -185,6 +188,12 @@ export class WindowSideBarButtons extends Component {
             )}
           />
         )}
+        {!hideSearchPanel && searchService && (
+          <TabButton
+            value="search"
+            icon={(<SearchIcon />)}
+          />
+        )}
       </Tabs>
     );
   }
@@ -195,6 +204,8 @@ WindowSideBarButtons.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   hasAnnotations: PropTypes.bool,
   hideAnnotationsPanel: PropTypes.bool,
+  hideSearchPanel: PropTypes.bool,
+  searchService: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   sideBarPanel: PropTypes.string,
   t: PropTypes.func,
 };
@@ -203,6 +214,7 @@ WindowSideBarButtons.defaultProps = {
   classes: {},
   hasAnnotations: false,
   hideAnnotationsPanel: false,
+  hideSearchPanel: true,
   sideBarPanel: 'closed',
   t: key => key,
 };

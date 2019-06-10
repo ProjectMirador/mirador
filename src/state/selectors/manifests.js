@@ -398,3 +398,14 @@ export const getManifestViewingHint = createSelector(
     return null;
   },
 );
+
+/** */
+export const getManifestSearchService = createSelector(
+  [getManifestoInstance],
+  (manifest) => {
+    if (!manifest) return null;
+    const searchService = manifest.getService('http://iiif.io/api/search/0/search');
+    if (searchService) return searchService;
+    return null;
+  },
+);

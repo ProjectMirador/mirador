@@ -5,6 +5,7 @@ import WindowSideBarAnnotationsPanel from '../containers/WindowSideBarAnnotation
 import WindowSideBarInfoPanel from '../containers/WindowSideBarInfoPanel';
 import WindowSideBarCanvasPanel from '../containers/WindowSideBarCanvasPanel';
 import AttributionPanel from '../containers/AttributionPanel';
+import SearchPanel from '../containers/SearchPanel';
 
 /**
  * Render a companion window using the appropriate component for the content
@@ -25,6 +26,8 @@ export class CompanionWindowFactory extends Component {
         return <ThumbnailNavigation id={id} windowId={windowId} />;
       case 'attribution':
         return <AttributionPanel id={id} windowId={windowId} />;
+      case 'search':
+        return <SearchPanel id={id} windowId={windowId} />;
       default:
         return (<></>);
     }

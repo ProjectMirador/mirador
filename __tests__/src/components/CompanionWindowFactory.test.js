@@ -5,6 +5,7 @@ import WindowSideBarCanvasPanel from '../../../src/containers/WindowSideBarCanva
 import WindowSideBarAnnotationsPanel from '../../../src/containers/WindowSideBarAnnotationsPanel';
 import ThumbnailNavigation from '../../../src/containers/ThumbnailNavigation';
 import AttributionPanel from '../../../src/containers/AttributionPanel';
+import SearchPanel from '../../../src/containers/SearchPanel';
 import { CompanionWindowFactory } from '../../../src/components/CompanionWindowFactory';
 
 /** create wrapper */
@@ -69,6 +70,16 @@ describe('CompanionWindowFactory', () => {
       });
 
       expect(wrapper.find(ThumbnailNavigation).length).toBe(1);
+    });
+  });
+
+  describe('for the search window', () => {
+    it('renders the appropriate arg component', () => {
+      wrapper = createWrapper({
+        content: 'search',
+      });
+
+      expect(wrapper.find(SearchPanel).length).toBe(1);
     });
   });
 });

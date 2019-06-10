@@ -209,6 +209,7 @@ export default {
     defaultSideBarPanel: 'info', // Configure which sidebar is selected by default. Options: info, attribution, canvas, annotations
     defaultView: 'single',  // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in
     hideAnnotationsPanel: false, // Configure to hide the annotations panel in the WindowSideBarButtons
+    hideSearchPanel: true, // Configure to hide search panel in the WindowSideBarButtons
     hideWindowTitle: false, // Configure if the window title is shown in the window title bar or not
     sideBarOpenByDefault: false, // Configure if the sidebar (and its content panel) is open by default
   },

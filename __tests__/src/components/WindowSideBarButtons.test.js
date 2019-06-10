@@ -66,6 +66,16 @@ describe('WindowSideBarButtons (shallow)', () => {
     expect(wrapper.find('WithStyles(Tab)[value="annotations"]').length).toEqual(0);
   });
 
+  describe('search', () => {
+    it('by default is off', () => {
+      expect(wrapper.find('WithStyles(Tab)[value="search"]').length).toEqual(0);
+    });
+    it('can be configured to be on', () => {
+      wrapper = createWrapper({ hideSearchPanel: false, searchService: {}, windowId });
+      expect(wrapper.find('WithStyles(ForwardRef(Tab))[value="search"]').length).toEqual(1);
+    });
+  });
+
   describe('handleKeyUp', () => {
     it('the first tab is focussed by default', () => {
       assertTabFocused(wrapper, 0);
