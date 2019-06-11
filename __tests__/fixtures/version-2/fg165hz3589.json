@@ -1,0 +1,228 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "https://purl.stanford.edu/fg165hz3589/iiif/manifest",
+  "@type": "sc:Manifest",
+  "label": "Arrival, Processing and Departure Procedures/General Information",
+  "attribution": "Copyright (c) The Board of Trustees of the Leland Stanford Junior University. All rights reserved.",
+  "logo": {
+    "@id": "https://stacks.stanford.edu/image/iiif/wy534zh7137%2FSULAIR_rosette/full/400,/0/default.jpg",
+    "service": {
+      "@context": "http://iiif.io/api/image/2/context.json",
+      "@id": "https://stacks.stanford.edu/image/iiif/wy534zh7137%2FSULAIR_rosette",
+      "profile": "http://iiif.io/api/image/2/level2.json"
+    }
+  },
+  "seeAlso": {
+    "@id": "https://purl.stanford.edu/fg165hz3589.mods",
+    "format": "application/mods+xml"
+  },
+  "service": [
+    {
+      "@context": "http://iiif.io/api/search/0/context.json",
+      "@id": "https://contentsearch.stanford.edu/fg165hz3589/search",
+      "profile": "http://iiif.io/api/search/0/search",
+      "label": "Search within this manifest",
+      "service": {
+        "@id": "https://contentsearch.stanford.edu/fg165hz3589/autocomplete",
+        "profile": "http://iiif.io/api/search/0/autocomplete"
+      }
+    }
+  ],
+  "viewingHint": "paged",
+  "metadata": [
+    {
+      "label": "Available Online",
+      "value": "<a href='https://purl.stanford.edu/fg165hz3589'>https://purl.stanford.edu/fg165hz3589</a>"
+    },
+    {
+      "label": "Title",
+      "value": "Arrival, Processing and Departure Procedures/General Information"
+    },
+    {
+      "label": "Contributor",
+      "value": "Tilghman, B. Noah (colCollector)"
+    },
+    {
+      "label": "Type",
+      "value": "Text"
+    },
+    {
+      "label": "Format",
+      "value": "application/pdf"
+    },
+    {
+      "label": "Relation",
+      "value": "Stanford University. Libraries. Department of Special Collections and University ArchivesSC1056https://purl.stanford.edu/fg165hz3589"
+    },
+    {
+      "label": "Relation",
+      "value": "B. Noah Tilghman color transparencies and other materials documenting Antarctica, 1972-2003"
+    },
+    {
+      "label": "PublishDate",
+      "value": "2019-06-02T21:57:51Z"
+    }
+  ],
+  "thumbnail": {
+    "@id": "https://stacks.stanford.edu/image/iiif/fg165hz3589%2Ffg165hz3589_1/full/!400,400/0/default.jpg",
+    "@type": "dctypes:Image",
+    "format": "image/jpeg",
+    "service": {
+      "@context": "http://iiif.io/api/image/2/context.json",
+      "@id": "https://stacks.stanford.edu/image/iiif/fg165hz3589%2Ffg165hz3589_1",
+      "profile": "http://iiif.io/api/image/2/level2.json"
+    }
+  },
+  "sequences": [
+    {
+      "@id": "https://purl.stanford.edu/fg165hz3589#sequence-1",
+      "@type": "sc:Sequence",
+      "label": "Current order",
+      "viewingDirection": "left-to-right",
+      "rendering": [
+        {
+          "@id": "https://stacks.stanford.edu/file/fg165hz3589/fg165hz3589.pdf",
+          "label": "Download Object 1",
+          "format": "application/pdf"
+        }
+      ],
+      "canvases": [
+        {
+          "@id": "https://purl.stanford.edu/fg165hz3589/iiif/canvas/fg165hz3589_1",
+          "@type": "sc:Canvas",
+          "label": "Page 1",
+          "height": 3279,
+          "width": 2530,
+          "images": [
+            {
+              "@id": "https://purl.stanford.edu/fg165hz3589/iiif/annotation/fg165hz3589_1",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "resource": {
+                "@id": "https://stacks.stanford.edu/image/iiif/fg165hz3589%2Ffg165hz3589_1/full/full/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 3279,
+                "width": 2530,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://stacks.stanford.edu/image/iiif/fg165hz3589%2Ffg165hz3589_1",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              },
+              "on": "https://purl.stanford.edu/fg165hz3589/iiif/canvas/fg165hz3589_1"
+            }
+          ]
+        },
+        {
+          "@id": "https://purl.stanford.edu/fg165hz3589/iiif/canvas/fg165hz3589_2",
+          "@type": "sc:Canvas",
+          "label": "Page 2",
+          "height": 3279,
+          "width": 2531,
+          "images": [
+            {
+              "@id": "https://purl.stanford.edu/fg165hz3589/iiif/annotation/fg165hz3589_2",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "resource": {
+                "@id": "https://stacks.stanford.edu/image/iiif/fg165hz3589%2Ffg165hz3589_2/full/full/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 3279,
+                "width": 2531,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://stacks.stanford.edu/image/iiif/fg165hz3589%2Ffg165hz3589_2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              },
+              "on": "https://purl.stanford.edu/fg165hz3589/iiif/canvas/fg165hz3589_2"
+            }
+          ]
+        },
+        {
+          "@id": "https://purl.stanford.edu/fg165hz3589/iiif/canvas/fg165hz3589_3",
+          "@type": "sc:Canvas",
+          "label": "Page 3",
+          "height": 3282,
+          "width": 2531,
+          "images": [
+            {
+              "@id": "https://purl.stanford.edu/fg165hz3589/iiif/annotation/fg165hz3589_3",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "resource": {
+                "@id": "https://stacks.stanford.edu/image/iiif/fg165hz3589%2Ffg165hz3589_3/full/full/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 3282,
+                "width": 2531,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://stacks.stanford.edu/image/iiif/fg165hz3589%2Ffg165hz3589_3",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              },
+              "on": "https://purl.stanford.edu/fg165hz3589/iiif/canvas/fg165hz3589_3"
+            }
+          ]
+        },
+        {
+          "@id": "https://purl.stanford.edu/fg165hz3589/iiif/canvas/fg165hz3589_4",
+          "@type": "sc:Canvas",
+          "label": "Page 4",
+          "height": 3279,
+          "width": 2534,
+          "images": [
+            {
+              "@id": "https://purl.stanford.edu/fg165hz3589/iiif/annotation/fg165hz3589_4",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "resource": {
+                "@id": "https://stacks.stanford.edu/image/iiif/fg165hz3589%2Ffg165hz3589_4/full/full/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 3279,
+                "width": 2534,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://stacks.stanford.edu/image/iiif/fg165hz3589%2Ffg165hz3589_4",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              },
+              "on": "https://purl.stanford.edu/fg165hz3589/iiif/canvas/fg165hz3589_4"
+            }
+          ]
+        },
+        {
+          "@id": "https://purl.stanford.edu/fg165hz3589/iiif/canvas/fg165hz3589_5",
+          "@type": "sc:Canvas",
+          "label": "Page 5",
+          "height": 3281,
+          "width": 2536,
+          "images": [
+            {
+              "@id": "https://purl.stanford.edu/fg165hz3589/iiif/annotation/fg165hz3589_5",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "resource": {
+                "@id": "https://stacks.stanford.edu/image/iiif/fg165hz3589%2Ffg165hz3589_5/full/full/0/default.jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 3281,
+                "width": 2536,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://stacks.stanford.edu/image/iiif/fg165hz3589%2Ffg165hz3589_5",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              },
+              "on": "https://purl.stanford.edu/fg165hz3589/iiif/canvas/fg165hz3589_5"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
