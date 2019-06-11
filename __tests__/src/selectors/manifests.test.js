@@ -6,6 +6,7 @@ import manifestFixture019 from '../../fixtures/version-2/019.json';
 import manifestFixtureSn904cj3429 from '../../fixtures/version-2/sn904cj3429.json';
 import manifestFixturev3001 from '../../fixtures/version-3/001.json';
 import manifestFixtureWithAProvider from '../../fixtures/version-3/with_a_provider.json';
+import manifestFixtureFg165hz3589 from '../../fixtures/version-2/fg165hz3589.json';
 import {
   getManifestLocale,
   getDestructuredMetadata,
@@ -26,6 +27,7 @@ import {
   getMetadataLocales,
   getRequiredStatement,
   getRights,
+  getManifestSearchService,
 } from '../../../src/state/selectors/manifests';
 
 
@@ -458,5 +460,17 @@ describe('getManifestViewingHint', () => {
   it('is null if no viewingHint is specified', () => {
     const state = { manifests: { x: { json: manifestFixture019 } } };
     expect(getManifestViewingHint(state, { manifestId: 'x' })).toBeNull();
+  });
+});
+
+describe('getManifestSearchService', () => {
+  it('gets from the manifest', () => {
+    const state = { manifests: { x: { json: manifestFixtureFg165hz3589 } } };
+    expect(getManifestSearchService(state, { manifestId: 'x' }).id).toEqual('https://contentsearch.stanford.edu/fg165hz3589/search');
+  });
+
+  it('is null if no search service is specified', () => {
+    const state = { manifests: { x: { json: manifestFixture019 } } };
+    expect(getManifestSearchService(state, { manifestId: 'x' })).toBeNull();
   });
 });
