@@ -17,7 +17,7 @@ export class SearchPanel extends Component {
         title={t('searchTitle')}
         windowId={windowId}
         id={id}
-        titleControls={<SearchPanelControls windowId={windowId} />}
+        titleControls={<SearchPanelControls cwId={id} windowId={windowId} />}
       />
     );
   }

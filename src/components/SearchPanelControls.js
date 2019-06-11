@@ -11,8 +11,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 export class SearchPanelControls extends Component {
   /** */
   render() {
-    const { t, windowId } = this.props;
-    const id = `search-${windowId}`;
+    const { cwId, t } = this.props;
+    const id = `search-${cwId}`;
     return (
       <div>
         <FormControl>
@@ -34,8 +34,8 @@ export class SearchPanelControls extends Component {
 }
 
 SearchPanelControls.propTypes = {
+  cwId: PropTypes.string.isRequired,
   t: PropTypes.func,
-  windowId: PropTypes.string.isRequired,
 };
 
 SearchPanelControls.defaultProps = {
