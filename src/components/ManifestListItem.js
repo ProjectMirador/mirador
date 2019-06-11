@@ -53,7 +53,7 @@ export class ManifestListItem extends React.Component {
     } = this.props;
 
     const placeholder = (
-      <Grid container className={ns('manifest-list-item')} spacing={24}>
+      <Grid container className={ns('manifest-list-item')} spacing={2}>
         <Grid item xs={3} sm={2}>
           <RectShape color="gray" style={{ height: 80, width: 120 }} />
         </Grid>
@@ -85,7 +85,7 @@ export class ManifestListItem extends React.Component {
           ready={ready}
           customPlaceholder={placeholder}
         >
-          <Grid container className={ns('manifest-list-item')} spacing={24}>
+          <Grid container className={ns('manifest-list-item')} spacing={2}>
             <Grid item xs={12} sm={6} className={classes.buttonGrid}>
               <ButtonBase
                 className={ns('manifest-list-item-title')}
@@ -94,7 +94,7 @@ export class ManifestListItem extends React.Component {
                   (event) => { handleOpenButtonClick(event, manifestId, addWindow); handleClose(); }
                 }
               >
-                <Grid container spacing={24} className={classes.label}>
+                <Grid container spacing={2} className={classes.label}>
                   <Grid item xs={4} sm={3}>
                     <Img
                       className={ns('manifest-list-item-thumb')}
