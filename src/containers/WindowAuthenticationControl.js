@@ -56,17 +56,17 @@ const styles = theme => ({
     backgroundColor: theme.palette.secondary.contrastText,
   },
   expanded: {
-    paddingLeft: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
+    paddingLeft: theme.spacing(),
+    paddingRight: theme.spacing(),
   },
   failure: {
     backgroundColor: theme.palette.error.dark,
   },
   fauxButton: {
-    marginLeft: theme.spacing.unit * 2.5,
+    marginLeft: theme.spacing(2.5),
   },
   icon: {
-    marginRight: theme.spacing.unit * 1.5,
+    marginRight: theme.spacing(1.5),
     verticalAlign: 'text-bottom',
   },
   label: {
