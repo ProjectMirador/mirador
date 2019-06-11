@@ -12,6 +12,7 @@ import {
   windowsReducer,
   workspaceReducer,
   annotationsReducer,
+  searchesReducer,
 } from '.';
 
 /**
@@ -30,6 +31,7 @@ export default function createRootReducer(pluginReducers) {
     errors: errorsReducer,
     infoResponses: infoResponsesReducer,
     manifests: manifestsReducer,
+    searches: searchesReducer,
     viewers: viewersReducer,
     windows: windowsReducer,
     workspace: workspaceReducer,
