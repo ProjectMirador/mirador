@@ -9,6 +9,7 @@ import { SearchPanelControls } from '../../../src/components/SearchPanelControls
 function createWrapper(props) {
   return shallow(
     <SearchPanelControls
+      cwId="cw"
       windowId="window"
       {...props}
     />,
@@ -20,9 +21,9 @@ describe('SearchPanelControls', () => {
     const wrapper = createWrapper();
     const label = wrapper.find('WithStyles(WithFormControlContext(ForwardRef(InputLabel)))');
     const input = wrapper.find('WithStyles(ForwardRef(Input))');
-    expect(label.props()).toMatchObject({ htmlFor: 'search-window' });
+    expect(label.props()).toMatchObject({ htmlFor: 'search-cw' });
     expect(label.text()).toEqual('searchInputLabel');
-    expect(input.props()).toMatchObject({ id: 'search-window' });
+    expect(input.props()).toMatchObject({ id: 'search-cw' });
   });
   it('endAdornment is a SearchIcon', () => {
     const wrapper = createWrapper();
