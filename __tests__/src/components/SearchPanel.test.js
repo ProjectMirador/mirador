@@ -22,4 +22,8 @@ describe('SearchPanel', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(CompanionWindow).length).toEqual(1);
   });
+  it('has the SearchPanelControls component', () => {
+    const titleControls = createWrapper().prop('titleControls');
+    expect(titleControls.type.displayName).toEqual('Connect(WithStyles(WithPlugins(SearchPanelControls)))');
+  });
 });
