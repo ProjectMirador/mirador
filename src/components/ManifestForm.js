@@ -97,7 +97,7 @@ export class ManifestForm extends Component {
     } = this.props;
     return (
       <form onSubmit={this.formSubmit}>
-        <Grid container spacing={24}>
+        <Grid container spacing={2}>
           <Grid item xs={12} sm={8} md={9}>
             <TextField
               ref={ref => this.setInputRef(ref)}
