@@ -91,6 +91,8 @@
     "retry": "Retry",
     "right": "Right",
     "rights": "License",
+    "searchInputLabel": "search terms",
+    "searchSubmitAria": "Search",
     "searchTitle": "Search",
     "selectWorkspaceMenu": "Select workspace type",
     "settings": "Settings",
