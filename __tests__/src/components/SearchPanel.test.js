@@ -5,7 +5,7 @@ import { SearchPanel } from '../../../src/components/SearchPanel';
 
 
 /**
- * Helper function to create a shallow wrapper around AttributionPanel
+ * Helper function to create a shallow wrapper around SearchPanel
  */
 function createWrapper(props) {
   return shallow(
@@ -25,5 +25,9 @@ describe('SearchPanel', () => {
   it('has the SearchPanelControls component', () => {
     const titleControls = createWrapper().prop('titleControls');
     expect(titleControls.type.displayName).toEqual('Connect(WithStyles(WithPlugins(SearchPanelControls)))');
+  });
+  it('has the SearchResults', () => {
+    const wrapper = createWrapper();
+    expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchResults)))').length).toEqual(1);
   });
 });

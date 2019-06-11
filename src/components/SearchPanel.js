@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CompanionWindow from '../containers/CompanionWindow';
 import SearchPanelControls from '../containers/SearchPanelControls';
+import SearchResults from '../containers/SearchResults';
 /** */
 export class SearchPanel extends Component {
   /** */
@@ -18,7 +19,12 @@ export class SearchPanel extends Component {
         windowId={windowId}
         id={id}
         titleControls={<SearchPanelControls cwId={id} windowId={windowId} />}
-      />
+      >
+        <SearchResults
+          cwId={id}
+          windowId={windowId}
+        />
+      </CompanionWindow>
     );
   }
 }
