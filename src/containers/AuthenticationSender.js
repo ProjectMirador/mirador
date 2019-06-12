@@ -10,7 +10,8 @@ import { AuthenticationSender } from '../components/AuthenticationSender';
  * @memberof App
  * @private
  */
-const mapStateToProps = ({ auth }) => ({
+const mapStateToProps = ({ auth, config }) => ({
+  center: config.window.authNewWindowCenter,
   url: auth && (Object.values(auth).find(e => e.isFetching && e.profile !== 'http://iiif.io/api/auth/1/external') || {}).id,
 });
 
