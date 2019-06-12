@@ -6,6 +6,7 @@ import { withPlugins } from '../extend/withPlugins';
 import { SearchPanelControls } from '../components/SearchPanelControls';
 import * as actions from '../state/actions';
 import {
+  getManifestAutocompleteService,
   getManifestSearchService,
   getSearchResultsForCompanionWindow,
 } from '../state/selectors';
@@ -18,6 +19,7 @@ import {
 const mapStateToProps = (state, { companionWindowId, windowId }) => {
   const results = getSearchResultsForCompanionWindow(state, { companionWindowId, windowId });
   return {
+    autocompleteService: getManifestAutocompleteService(state, { windowId }),
     query: results && results.query,
     searchService: getManifestSearchService(state, { windowId }),
   };

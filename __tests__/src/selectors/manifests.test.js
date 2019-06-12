@@ -28,6 +28,7 @@ import {
   getRequiredStatement,
   getRights,
   getManifestSearchService,
+  getManifestAutocompleteService,
 } from '../../../src/state/selectors/manifests';
 
 
@@ -472,5 +473,17 @@ describe('getManifestSearchService', () => {
   it('is null if no search service is specified', () => {
     const state = { manifests: { x: { json: manifestFixture019 } } };
     expect(getManifestSearchService(state, { manifestId: 'x' })).toBeNull();
+  });
+});
+
+describe('getManifestAutocompleteService', () => {
+  it('gets from the manifest', () => {
+    const state = { manifests: { x: { json: manifestFixtureFg165hz3589 } } };
+    expect(getManifestAutocompleteService(state, { manifestId: 'x' }).id).toEqual('https://contentsearch.stanford.edu/fg165hz3589/autocomplete');
+  });
+
+  it('is null if no search service is specified', () => {
+    const state = { manifests: { x: { json: manifestFixture019 } } };
+    expect(getManifestAutocompleteService(state, { manifestId: 'x' })).toBeNull();
   });
 });
