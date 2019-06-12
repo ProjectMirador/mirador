@@ -8,9 +8,9 @@ import ActionTypes from './action-types';
  * @param  {String} searchId
  * @memberof ActionCreators
  */
-export function requestSearch(targetId, searchId) {
+export function requestSearch(targetId, companionWindowId) {
   return {
-    searchId,
+    companionWindowId,
     targetId,
     type: ActionTypes.REQUEST_SEARCH,
   };
@@ -24,9 +24,9 @@ export function requestSearch(targetId, searchId) {
  * @param  {Object} searchJson
  * @memberof ActionCreators
  */
-export function receiveSearch(targetId, searchId, searchJson) {
+export function receiveSearch(targetId, companionWindowId, searchJson) {
   return {
-    searchId,
+    companionWindowId,
     searchJson,
     targetId,
     type: ActionTypes.RECEIVE_SEARCH,
@@ -41,10 +41,10 @@ export function receiveSearch(targetId, searchId, searchJson) {
  * @param  {String} error
  * @memberof ActionCreators
  */
-export function receiveSearchFailure(targetId, searchId, error) {
+export function receiveSearchFailure(targetId, companionWindowId, error) {
   return {
+    companionWindowId,
     error,
-    searchId,
     targetId,
     type: ActionTypes.RECEIVE_SEARCH_FAILURE,
   };
@@ -56,12 +56,12 @@ export function receiveSearchFailure(targetId, searchId, error) {
  * @param  {String} searchId
  * @memberof ActionCreators
  */
-export function fetchSearch(targetId, searchId) {
+export function fetchSearch(targetId, companionWindowId, searchId) {
   return ((dispatch) => {
-    dispatch(requestSearch(targetId, searchId));
+    dispatch(requestSearch(targetId, companionWindowId));
     return fetch(searchId)
       .then(response => response.json())
-      .then(json => dispatch(receiveSearch(targetId, searchId, json)))
-      .catch(error => dispatch(receiveSearchFailure(targetId, searchId, error)));
+      .then(json => dispatch(receiveSearch(targetId, companionWindowId, json)))
+      .catch(error => dispatch(receiveSearchFailure(targetId, companionWindowId, error)));
   });
 }

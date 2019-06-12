@@ -4,13 +4,12 @@ import ActionTypes from '../../../src/state/actions/action-types';
 describe('search reducer', () => {
   it('should handle REQUEST_SEARCH', () => {
     expect(searchesReducer({}, {
-      searchId: 'abc123',
+      companionWindowId: 'abc123',
       targetId: 'foo',
       type: ActionTypes.REQUEST_SEARCH,
     })).toEqual({
       foo: {
         abc123: {
-          id: 'abc123',
           isFetching: true,
         },
       },
@@ -21,13 +20,12 @@ describe('search reducer', () => {
       {
         foo: {
           abc123: {
-            id: 'abc123',
             isFetching: true,
           },
         },
       },
       {
-        searchId: 'abc123',
+        companionWindowId: 'abc123',
         searchJson: {
           '@type': 'sc:AnnotationList',
           content: 'anno stuff',
@@ -39,7 +37,6 @@ describe('search reducer', () => {
     )).toMatchObject({
       foo: {
         abc123: {
-          id: 'abc123',
           isFetching: false,
           json: {},
         },
@@ -51,14 +48,13 @@ describe('search reducer', () => {
       {
         foo: {
           abc123: {
-            id: 'abc123',
             isFetching: true,
           },
         },
       },
       {
+        companionWindowId: 'abc123',
         error: "This institution didn't enable CORS.",
-        searchId: 'abc123',
         targetId: 'foo',
         type: ActionTypes.RECEIVE_SEARCH_FAILURE,
       },
@@ -66,7 +62,6 @@ describe('search reducer', () => {
       foo: {
         abc123: {
           error: "This institution didn't enable CORS.",
-          id: 'abc123',
           isFetching: false,
         },
       },

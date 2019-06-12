@@ -10,8 +10,7 @@ export const searchesReducer = (state = {}, action) => {
         ...state,
         [action.targetId]: {
           ...state[action.targetId],
-          [action.searchId]: {
-            id: action.searchId,
+          [action.companionWindowId]: {
             isFetching: true,
           },
         },
@@ -21,8 +20,7 @@ export const searchesReducer = (state = {}, action) => {
         ...state,
         [action.targetId]: {
           ...state[action.targetId],
-          [action.searchId]: {
-            id: action.searchId,
+          [action.companionWindowId]: {
             isFetching: false,
             json: action.searchJson,
           },
@@ -33,9 +31,8 @@ export const searchesReducer = (state = {}, action) => {
         ...state,
         [action.targetId]: {
           ...state[action.targetId],
-          [action.searchId]: {
+          [action.companionWindowId]: {
             error: action.error,
-            id: action.searchId,
             isFetching: false,
           },
         },
