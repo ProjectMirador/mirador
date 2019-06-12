@@ -10,6 +10,11 @@ export default class CanvasWorld {
     this.canvases = canvases;
   }
 
+  /** */
+  get canvasIds() {
+    return this.canvases.map(canvas => canvas.id);
+  }
+
   /**
    * canvasToWorldCoordinates - calculates the canvas coordinates respective to
    * the world.
