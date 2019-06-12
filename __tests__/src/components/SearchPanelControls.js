@@ -44,7 +44,6 @@ describe('SearchPanelControls', () => {
     const fetchSearch = jest.fn();
     const searchService = {
       id: 'http://www.example.com/search',
-      options: { resource: { id: 'example.com/manifest' } },
     };
     const wrapper = createWrapper({ fetchSearch, searchService });
     wrapper.setState({ search: 'asdf' });
@@ -52,7 +51,7 @@ describe('SearchPanelControls', () => {
     wrapper.setState({ search: 'yolo' });
 
     wrapper.find('form').simulate('submit', { preventDefault: () => {} });
-    expect(fetchSearch).toHaveBeenCalledWith('example.com/manifest', 'cw', 'http://www.example.com/search?q=yolo');
+    expect(fetchSearch).toHaveBeenCalledWith('window', 'cw', 'http://www.example.com/search?q=yolo');
     expect(wrapper.state().search).toBe('yolo');
   });
 });

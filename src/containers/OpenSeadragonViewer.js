@@ -11,8 +11,7 @@ import {
   getCanvasLabel,
   getSelectedCanvases,
   getViewer,
-  getSearchAnnotationsForManifest,
-  getCompanionWindowIdsForPosition,
+  getSearchAnnotationsForWindow,
 } from '../state/selectors';
 
 /**
@@ -24,12 +23,9 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   canvasWorld: new CanvasWorld(getSelectedCanvases(state, { windowId })),
   highlightedAnnotations: getHighlightedAnnotationsOnCanvases(state, { windowId }),
   label: getCanvasLabel(state, { windowId }),
-  searchAnnotations: getSearchAnnotationsForManifest(
+  searchAnnotations: getSearchAnnotationsForWindow(
     state,
-    {
-      companionWindowId: getCompanionWindowIdsForPosition(state, { position: 'left', windowId })[0],
-      windowId,
-    },
+    { windowId },
   ),
   selectedAnnotations: getSelectedAnnotationsOnCanvases(state, { windowId }),
   viewer: getViewer(state, { windowId }),
