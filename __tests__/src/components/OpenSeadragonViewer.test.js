@@ -332,7 +332,7 @@ describe('OpenSeadragonViewer', () => {
   });
 
   describe('annotationsToContext', () => {
-    it('converts the annotations to canvas', () => {
+    it('converts the annotations to canvas and checks that the canvas is displayed', () => {
       const strokeRect = jest.fn();
       wrapper.instance().osdCanvasOverlay = {
         context2d: {
@@ -347,7 +347,7 @@ describe('OpenSeadragonViewer', () => {
 
       const annotations = [
         new Annotation(
-          { '@id': 'foo', resources: [{ on: 'www.example.com/#xywh=10,10,100,200' }] },
+          { '@id': 'foo', resources: [{ on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=10,10,100,200' }] },
         ),
       ];
       wrapper.instance().annotationsToContext(annotations);

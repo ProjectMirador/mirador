@@ -1,6 +1,7 @@
 import {
   getSearchResultsForManifest,
   getSearchHitsForManifest,
+  getSearchAnnotationsForManifest,
 } from '../../../src/state/selectors';
 
 describe('getSearchResultsForManifest', () => {
@@ -73,6 +74,47 @@ describe('getSearchHitsForManifest', () => {
     ).toEqual([]);
     expect(
       getSearchHitsForManifest({}, { companionWindowId, manifestId: 'http://example.com/manifest/1' }),
+    ).toEqual([]);
+  });
+});
+
+describe('getSearchAnnotationsForManifest', () => {
+  const companionWindowId = 'cwid';
+
+  it('returns results for a manifest', () => {
+    const state = {
+      manifests: {
+        'http://example.com/manifest/1': {
+          id: 'http://example.com/manifest/1',
+        },
+      },
+      searches: {
+        'http://example.com/manifest/1': {
+          [companionWindowId]: {
+            json: { '@id': 'yolo', resources: [{ '@id': 'annoId2' }] },
+          },
+        },
+        'http://example.com/manifest/2': {
+          [companionWindowId]: {
+            json: { foo: 'bar' },
+          },
+        },
+      },
+    };
+    expect(
+      getSearchAnnotationsForManifest(state, { companionWindowId, manifestId: 'http://example.com/manifest/1' }),
+    ).toEqual([{
+      id: 'yolo',
+      resources: [{ resource: { '@id': 'annoId2' } }],
+    }]);
+    expect(
+      getSearchAnnotationsForManifest(state, { companionWindowId, manifestId: 'http://example.com/manifest/foo' }),
+    ).toEqual([]);
+    expect(
+      getSearchAnnotationsForManifest({}, { companionWindowId, manifestId: 'http://example.com/manifest/1' }),
+    ).toEqual([]);
+    expect(
+      getSearchAnnotationsForManifest({}, { manifestId: 'http://example.com/manifest/1' }),
     ).toEqual([]);
   });
 });

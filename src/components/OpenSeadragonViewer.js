@@ -96,7 +96,7 @@ export class OpenSeadragonViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      viewer, highlightedAnnotations, selectedAnnotations,
+      viewer, highlightedAnnotations, selectedAnnotations, searchAnnotations,
     } = this.props;
     const highlightsUpdated = !OpenSeadragonViewer.annotationsMatch(
       highlightedAnnotations, prevProps.highlightedAnnotations,
@@ -104,6 +104,20 @@ export class OpenSeadragonViewer extends Component {
     const selectionsUpdated = !OpenSeadragonViewer.annotationsMatch(
       selectedAnnotations, prevProps.selectedAnnotations,
     );
+    const searchAnnotationsUpdated = !OpenSeadragonViewer.annotationsMatch(
+      searchAnnotations, prevProps.searchAnnotations,
+    );
+
+    if (searchAnnotationsUpdated) {
+      this.updateCanvas = () => {
+        this.osdCanvasOverlay.clear();
+        this.osdCanvasOverlay.resize();
+        this.osdCanvasOverlay.canvasUpdate(() => {
+          this.annotationsToContext(searchAnnotations, '#00BFFF');
+        });
+      };
+      this.viewer.forceRedraw();
+    }
 
     if (highlightsUpdated || selectionsUpdated) {
       this.updateCanvas = () => {
@@ -172,6 +186,7 @@ export class OpenSeadragonViewer extends Component {
     const width = canvasWorld.worldBounds()[2];
     annotations.forEach((annotation) => {
       annotation.resources.forEach((resource) => {
+        if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
         const offset = canvasWorld.offsetByCanvas(resource.targetId);
         const fragment = resource.fragmentSelector;
         fragment[0] += offset.x;
@@ -287,10 +302,10 @@ OpenSeadragonViewer.defaultProps = {
   children: null,
   highlightedAnnotations: [],
   label: null,
+  searchAnnotations: [],
   selectedAnnotations: [],
   tileSources: [],
   viewer: null,
-
 };
 
 OpenSeadragonViewer.propTypes = {
@@ -298,6 +313,7 @@ OpenSeadragonViewer.propTypes = {
   children: PropTypes.node,
   highlightedAnnotations: PropTypes.arrayOf(PropTypes.object),
   label: PropTypes.string,
+  searchAnnotations: PropTypes.arrayOf(PropTypes.object),
   selectedAnnotations: PropTypes.arrayOf(PropTypes.object),
   t: PropTypes.func.isRequired,
   tileSources: PropTypes.arrayOf(PropTypes.object),

@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { getManifest } from './manifests';
+import Annotation from '../../lib/Annotation';
 
 export const getSearchResultsForManifest = createSelector(
   [
@@ -21,5 +22,19 @@ export const getSearchHitsForManifest = createSelector(
   (result) => {
     if (!result || !result.json || result.isFetching || !result.json.hits) return [];
     return result.json.hits;
+  },
+);
+
+export const getSearchAnnotationsForManifest = createSelector(
+  [
+    getSearchResultsForManifest,
+  ],
+  (result) => {
+    if (!result || !result.json || result.isFetching || !result.json.resources) return [];
+    const anno = new Annotation(result.json);
+    return [{
+      id: anno.id,
+      resources: anno.resources,
+    }];
   },
 );
