@@ -11,30 +11,30 @@ describe('search actions', () => {
   describe('requestSearch', () => {
     it('requests an search from given a url', () => {
       const targetId = 'foo';
-      const searchId = 'abc123';
+      const companionWindowId = 'abc123';
       const expectedAction = {
-        searchId,
+        companionWindowId,
         targetId,
         type: ActionTypes.REQUEST_SEARCH,
       };
-      expect(actions.requestSearch(targetId, searchId)).toEqual(expectedAction);
+      expect(actions.requestSearch(targetId, companionWindowId)).toEqual(expectedAction);
     });
   });
   describe('receiveSearch', () => {
     it('recieves an search', () => {
       const targetId = 'foo';
-      const searchId = 'abc123';
+      const companionWindowId = 'abc123';
       const json = {
+        companionWindowId,
         content: 'search request',
-        searchId,
       };
       const expectedAction = {
-        searchId,
+        companionWindowId,
         searchJson: json,
         targetId,
         type: ActionTypes.RECEIVE_SEARCH,
       };
-      expect(actions.receiveSearch(targetId, searchId, json)).toEqual(expectedAction);
+      expect(actions.receiveSearch(targetId, companionWindowId, json)).toEqual(expectedAction);
     });
   });
   describe('fetchSearch', () => {
@@ -49,11 +49,12 @@ describe('search actions', () => {
       it('dispatches the REQUEST_SEARCH action', () => {
         store.dispatch(actions.fetchSearch(
           'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
+          'companionWindowId',
           'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
         ));
         expect(store.getActions()).toEqual([
           {
-            searchId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
+            companionWindowId: 'companionWindowId',
             targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
             type: 'REQUEST_SEARCH',
           },
@@ -62,18 +63,19 @@ describe('search actions', () => {
       it('dispatches the REQUEST_SEARCH and then RECEIVE_SEARCH', () => {
         store.dispatch(actions.fetchSearch(
           'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
+          'companionWindowId',
           'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
         ))
           .then(() => {
             const expectedActions = store.getActions();
             expect(expectedActions).toEqual([
               {
-                searchId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
+                companionWindowId: 'companionWindowId',
                 targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
                 type: 'REQUEST_SEARCH',
               },
               {
-                searchId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
+                companionWindowId: 'companionWindowId',
                 searchJson: { data: '12345' },
                 targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
                 type: 'RECEIVE_SEARCH',
@@ -86,19 +88,20 @@ describe('search actions', () => {
       it('dispatches the REQUEST_SEARCH and then RECEIVE_SEARCH', () => {
         store.dispatch(actions.fetchSearch(
           'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
+          'companionWindowId',
           'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
         ))
           .then(() => {
             const expectedActions = store.getActions();
             expect(expectedActions).toEqual([
               {
-                searchId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
+                companionWindowId: 'companionWindowId',
                 targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
                 type: 'REQUEST_SEARCH',
               },
               {
+                companionWindowId: 'companionWindowId',
                 error: new Error('invalid json response body at undefined reason: Unexpected end of JSON input'),
-                searchId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
                 targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
                 type: 'RECEIVE_SEARCH_FAILURE',
               },

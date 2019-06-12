@@ -18,10 +18,10 @@ export class SearchPanel extends Component {
         title={t('searchTitle')}
         windowId={windowId}
         id={id}
-        titleControls={<SearchPanelControls cwId={id} windowId={windowId} />}
+        titleControls={<SearchPanelControls companionWindowId={id} windowId={windowId} />}
       >
         <SearchResults
-          cwId={id}
+          companionWindowId={id}
           windowId={windowId}
         />
       </CompanionWindow>

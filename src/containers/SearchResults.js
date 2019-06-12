@@ -13,8 +13,8 @@ import {
  * @memberof SearchResult
  * @private
  */
-const mapStateToProps = (state, { windowId }) => ({
-  searchHits: getSearchHitsForManifest(state, { windowId }),
+const mapStateToProps = (state, { companionWindowId, windowId }) => ({
+  searchHits: getSearchHitsForManifest(state, { companionWindowId, windowId }),
 });
 
 const enhance = compose(

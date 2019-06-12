@@ -4,6 +4,8 @@ import {
 } from '../../../src/state/selectors';
 
 describe('getSearchResultsForManifest', () => {
+  const companionWindowId = 'cwid';
+
   it('returns flattened results for a manifest', () => {
     const state = {
       manifests: {
@@ -13,35 +15,36 @@ describe('getSearchResultsForManifest', () => {
       },
       searches: {
         'http://example.com/manifest/1': {
-          'http://example.com/search?q=help': {
-            id: 'http://example.com/search?q=help',
+          [companionWindowId]: {
             json: { foo: 'bar' },
           },
         },
         'http://example.com/manifest/2': {
-          'http://example.com/search?q=help': {
-            id: 'http://example.com/search?q=help',
+          [companionWindowId]: {
             json: { foo: 'bar' },
           },
         },
       },
     };
     expect(
-      getSearchResultsForManifest(state, { manifestId: 'http://example.com/manifest/1' }),
-    ).toEqual([{
-      id: 'http://example.com/search?q=help',
+      getSearchResultsForManifest(state, { companionWindowId, manifestId: 'http://example.com/manifest/1' }),
+    ).toEqual({
       json: { foo: 'bar' },
-    }]);
+    });
     expect(
-      getSearchResultsForManifest(state, { manifestId: 'http://example.com/manifest/foo' }),
-    ).toEqual([]);
+      getSearchResultsForManifest(state, { companionWindowId, manifestId: 'http://example.com/manifest/foo' }),
+    ).toEqual(null);
+    expect(
+      getSearchResultsForManifest({}, { companionWindowId, manifestId: 'http://example.com/manifest/1' }),
+    ).toEqual(null);
     expect(
       getSearchResultsForManifest({}, { manifestId: 'http://example.com/manifest/1' }),
-    ).toEqual([]);
+    ).toEqual(null);
   });
 });
 
 describe('getSearchHitsForManifest', () => {
+  const companionWindowId = 'cwid';
   it('returns flattened hits for a manifest', () => {
     const state = {
       manifests: {
@@ -51,27 +54,25 @@ describe('getSearchHitsForManifest', () => {
       },
       searches: {
         'http://example.com/manifest/1': {
-          'http://example.com/search?q=help': {
-            id: 'http://example.com/search?q=help',
+          [companionWindowId]: {
             json: { hits: [1, 2, 3] },
           },
         },
         'http://example.com/manifest/2': {
-          'http://example.com/search?q=help': {
-            id: 'http://example.com/search?q=help',
+          [companionWindowId]: {
             json: { foo: 'bar' },
           },
         },
       },
     };
     expect(
-      getSearchHitsForManifest(state, { manifestId: 'http://example.com/manifest/1' }),
+      getSearchHitsForManifest(state, { companionWindowId, manifestId: 'http://example.com/manifest/1' }),
     ).toEqual([1, 2, 3]);
     expect(
-      getSearchResultsForManifest(state, { manifestId: 'http://example.com/manifest/foo' }),
+      getSearchHitsForManifest(state, { companionWindowId, manifestId: 'http://example.com/manifest/foo' }),
     ).toEqual([]);
     expect(
-      getSearchResultsForManifest({}, { manifestId: 'http://example.com/manifest/1' }),
+      getSearchHitsForManifest({}, { companionWindowId, manifestId: 'http://example.com/manifest/1' }),
     ).toEqual([]);
   });
 });

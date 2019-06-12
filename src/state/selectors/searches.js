@@ -1,18 +1,16 @@
 import { createSelector } from 'reselect';
-import compact from 'lodash/compact';
-import flatten from 'lodash/flatten';
 import { getManifest } from './manifests';
 
 export const getSearchResultsForManifest = createSelector(
   [
     getManifest,
+    (state, { companionWindowId }) => companionWindowId,
     state => state.searches,
   ],
-  (manifest, searches) => {
-    if (!searches || !manifest) return [];
-    if (!searches[manifest.id]) return [];
+  (manifest, companionWindowId, searches) => {
+    if (!manifest || !companionWindowId) return null;
 
-    return flatten(Object.values(searches[manifest.id]));
+    return searches && searches[manifest.id] && searches[manifest.id][companionWindowId];
   },
 );
 
@@ -20,8 +18,8 @@ export const getSearchHitsForManifest = createSelector(
   [
     getSearchResultsForManifest,
   ],
-  searchResults => flatten(compact(searchResults.map((result) => {
-    if (!result.json || result.isFetching || !result.json.hits) return null;
+  (result) => {
+    if (!result || !result.json || result.isFetching || !result.json.hits) return [];
     return result.json.hits;
-  }))),
+  },
 );

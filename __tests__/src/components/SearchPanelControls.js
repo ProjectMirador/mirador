@@ -9,7 +9,7 @@ import { SearchPanelControls } from '../../../src/components/SearchPanelControls
 function createWrapper(props) {
   return shallow(
     <SearchPanelControls
-      cwId="cw"
+      companionWindowId="cw"
       windowId="window"
       {...props}
     />,
@@ -52,7 +52,7 @@ describe('SearchPanelControls', () => {
     wrapper.setState({ search: 'yolo' });
 
     wrapper.find('form').simulate('submit', { preventDefault: () => {} });
-    expect(fetchSearch).toHaveBeenCalledWith('example.com/manifest', 'http://www.example.com/search?q=yolo');
+    expect(fetchSearch).toHaveBeenCalledWith('example.com/manifest', 'cw', 'http://www.example.com/search?q=yolo');
     expect(wrapper.state().search).toBe('yolo');
   });
 });

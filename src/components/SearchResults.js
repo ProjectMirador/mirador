@@ -10,7 +10,7 @@ export class SearchResults extends Component {
   /** */
   render() {
     const {
-      cwId,
+      companionWindowId,
       searchHits,
     } = this.props;
 
@@ -21,7 +21,7 @@ export class SearchResults extends Component {
             searchHits.map(hit => (
               <ListItem
                 button
-                key={`${cwId}-${hit.annotations[0]}`}
+                key={`${companionWindowId}-${hit.annotations[0]}`}
                 component="li"
               >
                 <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
@@ -43,7 +43,7 @@ export class SearchResults extends Component {
 }
 
 SearchResults.propTypes = {
-  cwId: PropTypes.string.isRequired,
+  companionWindowId: PropTypes.string.isRequired,
   searchHits: PropTypes.arrayOf(PropTypes.object).isRequired,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
 };
