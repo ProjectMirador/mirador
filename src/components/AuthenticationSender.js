@@ -22,7 +22,7 @@ export class AuthenticationSender extends Component {
 
   /** */
   render() {
-    const { url } = this.props;
+    const { center, url } = this.props;
     if (!url) return <></>;
 
     /**
@@ -30,16 +30,18 @@ export class AuthenticationSender extends Component {
     external, no-op
     */
     return (
-      <NewWindow url={`${url}?origin=${window.origin}`} onUnload={this.onUnload} />
+      <NewWindow center={center} url={`${url}?origin=${window.origin}`} onUnload={this.onUnload} />
     );
   }
 }
 
 AuthenticationSender.propTypes = {
+  center: PropTypes.oneOf(['screen', 'parent']),
   handleInteraction: PropTypes.func.isRequired,
   url: PropTypes.string,
 };
 
 AuthenticationSender.defaultProps = {
+  center: 'parent',
   url: undefined,
 };
