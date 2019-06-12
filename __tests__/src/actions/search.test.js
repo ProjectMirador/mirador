@@ -37,6 +37,20 @@ describe('search actions', () => {
       expect(actions.receiveSearch(targetId, companionWindowId, json)).toEqual(expectedAction);
     });
   });
+
+  describe('removeSearch', () => {
+    it('sends the remove search action', () => {
+      const targetId = 'foo';
+      const companionWindowId = 'abc123';
+      const expectedAction = {
+        companionWindowId,
+        targetId,
+        type: ActionTypes.REMOVE_SEARCH,
+      };
+      expect(actions.removeSearch(targetId, companionWindowId)).toEqual(expectedAction);
+    });
+  });
+
   describe('fetchSearch', () => {
     let store = null;
     beforeEach(() => {

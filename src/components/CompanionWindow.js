@@ -143,7 +143,10 @@ CompanionWindow.propTypes = {
   position: PropTypes.string,
   size: PropTypes.shape({ width: PropTypes.number }),
   t: PropTypes.func,
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.node,
+  ]),
   titleControls: PropTypes.node,
   updateCompanionWindow: PropTypes.func,
   windowId: PropTypes.string.isRequired,

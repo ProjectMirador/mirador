@@ -67,6 +67,36 @@ describe('search reducer', () => {
       },
     });
   });
+
+  it('should handle REMOVE_SEARCH', () => {
+    expect(searchesReducer(
+      {
+        foo: {
+          abc123: {
+            isFetching: false,
+            json: {},
+          },
+          xyz321: {
+            isFetching: false,
+            json: {},
+          },
+        },
+      },
+      {
+        companionWindowId: 'abc123',
+        targetId: 'foo',
+        type: ActionTypes.REMOVE_SEARCH,
+      },
+    )).toEqual({
+      foo: {
+        xyz321: {
+          isFetching: false,
+          json: {},
+        },
+      },
+    });
+  });
+
   it('should handle IMPORT_MIRADOR_STATE setting to clean state', () => {
     expect(searchesReducer(
       {

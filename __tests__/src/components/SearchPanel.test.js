@@ -22,6 +22,24 @@ describe('SearchPanel', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(CompanionWindow).length).toEqual(1);
   });
+
+  it('passes a Clear chip as the CompanionWindow title prop', () => {
+    const wrapper = createWrapper();
+
+    const title = wrapper.find(CompanionWindow).props().title.props.children;
+    expect(title[0]).toEqual('searchTitle');
+    expect(title[1].type.displayName).toEqual('WithStyles(ForwardRef(Chip))');
+  });
+
+  it('the Clear chip calls the removeSearch prop', () => {
+    const removeSearch = jest.fn();
+    const wrapper = createWrapper({ query: 'Wolpertinger', removeSearch });
+    const chip = wrapper.find(CompanionWindow).props().title.props.children[1];
+
+    chip.props.onClick();
+    expect(removeSearch).toHaveBeenCalled();
+  });
+
   it('has the SearchPanelControls component', () => {
     const titleControls = createWrapper().prop('titleControls');
     expect(titleControls.type.displayName).toEqual('Connect(WithStyles(WithPlugins(SearchPanelControls)))');

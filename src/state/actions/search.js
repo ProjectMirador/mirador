@@ -51,6 +51,21 @@ export function receiveSearchFailure(targetId, companionWindowId, error) {
 }
 
 /**
+ * removeSearch - action creator
+ *
+ * @param  {String} targetId
+ * @param  {String} companionWindowId
+ * @memberof ActionCreators
+ */
+export function removeSearch(targetId, companionWindowId) {
+  return {
+    companionWindowId,
+    targetId,
+    type: ActionTypes.REMOVE_SEARCH,
+  };
+}
+
+/**
  * fetchSearch - action creator
  *
  * @param  {String} searchId
