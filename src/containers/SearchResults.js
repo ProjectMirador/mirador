@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { SearchResults } from '../components/SearchResults';
 import {
-  getSearchHitsForManifest,
+  getSearchHitsForCompanionWindow,
 } from '../state/selectors';
 
 /**
@@ -14,7 +14,7 @@ import {
  * @private
  */
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
-  searchHits: getSearchHitsForManifest(state, { companionWindowId, windowId }),
+  searchHits: getSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
 });
 
 const enhance = compose(

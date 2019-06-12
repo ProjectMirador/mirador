@@ -27,10 +27,12 @@ export class SearchPanelControls extends Component {
 
   /** */
   submitSearch(event) {
-    const { companionWindowId, fetchSearch, searchService } = this.props;
+    const {
+      companionWindowId, fetchSearch, searchService, windowId,
+    } = this.props;
     const { search } = this.state;
     event.preventDefault();
-    fetchSearch(searchService.options.resource.id, companionWindowId, `${searchService.id}?q=${search}`);
+    fetchSearch(windowId, companionWindowId, `${searchService.id}?q=${search}`);
   }
 
   /** */
@@ -68,9 +70,9 @@ SearchPanelControls.propTypes = {
   fetchSearch: PropTypes.func.isRequired,
   searchService: PropTypes.shape({
     id: PropTypes.string,
-    options: PropTypes.object,
   }).isRequired,
   t: PropTypes.func,
+  windowId: PropTypes.string.isRequired,
 };
 
 SearchPanelControls.defaultProps = {

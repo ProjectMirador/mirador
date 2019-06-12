@@ -1,23 +1,33 @@
 import { createSelector } from 'reselect';
-import { getManifest } from './manifests';
+import flatten from 'lodash/flatten';
 import Annotation from '../../lib/Annotation';
 
-export const getSearchResultsForManifest = createSelector(
+export const getSearchResultsForWindow = createSelector(
   [
-    getManifest,
-    (state, { companionWindowId }) => companionWindowId,
+    (state, { windowId }) => windowId,
     state => state.searches,
   ],
-  (manifest, companionWindowId, searches) => {
-    if (!manifest || !companionWindowId) return null;
+  (windowId, searches) => {
+    if (!windowId || !searches) return [];
 
-    return searches && searches[manifest.id] && searches[manifest.id][companionWindowId];
+    return searches && searches[windowId];
   },
 );
 
-export const getSearchHitsForManifest = createSelector(
+const getSearchResultsForCompanionWindow = createSelector(
   [
-    getSearchResultsForManifest,
+    getSearchResultsForWindow,
+    (state, { companionWindowId }) => companionWindowId,
+  ],
+  (results, companionWindowId) => {
+    if (!results || !companionWindowId) return [];
+    return results && results[companionWindowId];
+  },
+);
+
+export const getSearchHitsForCompanionWindow = createSelector(
+  [
+    getSearchResultsForCompanionWindow,
   ],
   (result) => {
     if (!result || !result.json || result.isFetching || !result.json.hits) return [];
@@ -25,16 +35,19 @@ export const getSearchHitsForManifest = createSelector(
   },
 );
 
-export const getSearchAnnotationsForManifest = createSelector(
+export const getSearchAnnotationsForWindow = createSelector(
   [
-    getSearchResultsForManifest,
+    getSearchResultsForWindow,
   ],
-  (result) => {
-    if (!result || !result.json || result.isFetching || !result.json.resources) return [];
-    const anno = new Annotation(result.json);
-    return [{
-      id: anno.id,
-      resources: anno.resources,
-    }];
+  (results) => {
+    if (!results) return [];
+    return flatten(Object.values(results).map((result) => {
+      if (!result || !result.json || result.isFetching || !result.json.resources) return [];
+      const anno = new Annotation(result.json);
+      return {
+        id: anno.id,
+        resources: anno.resources,
+      };
+    }));
   },
 );
