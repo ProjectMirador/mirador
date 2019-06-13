@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import flatten from 'lodash/flatten';
 import Annotation from '../../lib/Annotation';
 import { getWindow } from './windows';
 
@@ -36,20 +35,31 @@ export const getSearchHitsForCompanionWindow = createSelector(
   },
 );
 
+/** convert search results to an annotation */
+const searchResultsToAnnotation = (result) => {
+  if (!result || !result.json || result.isFetching || !result.json.resources) return undefined;
+  const anno = new Annotation(result.json);
+  return {
+    id: anno.id,
+    resources: anno.resources,
+  };
+};
+
+export const getSearchAnnotationsForCompanionWindow = createSelector(
+  [
+    getSearchResultsForCompanionWindow,
+  ],
+  result => searchResultsToAnnotation(result),
+);
+
 export const getSearchAnnotationsForWindow = createSelector(
   [
     getSearchResultsForWindow,
   ],
   (results) => {
     if (!results) return [];
-    return flatten(Object.values(results).map((result) => {
-      if (!result || !result.json || result.isFetching || !result.json.resources) return [];
-      const anno = new Annotation(result.json);
-      return {
-        id: anno.id,
-        resources: anno.resources,
-      };
-    }));
+    const arr = Object.values(results).map(result => searchResultsToAnnotation(result));
+    return arr.filter(e => e);
   },
 );
 

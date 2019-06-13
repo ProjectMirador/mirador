@@ -13,6 +13,7 @@ export class SearchHit extends Component {
   /** */
   render() {
     const {
+      canvasLabel,
       classes,
       hit,
       focused,
@@ -42,8 +43,9 @@ export class SearchHit extends Component {
         selected={selected}
       >
         <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
-          <Typography>
+          <Typography variant="h6">
             <Chip component="span" label={index + 1} className={classes.hitCounter} />
+            {canvasLabel}
           </Typography>
           <SanitizedHtml ruleSet="iiif" htmlString={hit.before} />
           {' '}
@@ -65,6 +67,7 @@ export class SearchHit extends Component {
 }
 
 SearchHit.propTypes = {
+  canvasLabel: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.string),
   focused: PropTypes.bool,
   hit: PropTypes.shape({
@@ -82,6 +85,7 @@ SearchHit.propTypes = {
 };
 
 SearchHit.defaultProps = {
+  canvasLabel: undefined,
   classes: {},
   focused: false,
   index: undefined,
