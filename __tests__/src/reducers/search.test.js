@@ -68,9 +68,49 @@ describe('search reducer', () => {
     });
   });
   it('should handle IMPORT_MIRADOR_STATE setting to clean state', () => {
-    expect(searchesReducer({}, {
-      state: { searchs: { new: 'stuff' } },
-      type: ActionTypes.IMPORT_MIRADOR_STATE,
-    })).toEqual({});
+    expect(searchesReducer(
+      {
+        foo: {
+          abc123: {
+            isFetching: true,
+          },
+        },
+      },
+      {
+        state: { whatever: true },
+        type: ActionTypes.IMPORT_MIRADOR_STATE,
+      },
+    )).toEqual({});
+  });
+  it('should handle REMOVE_WINDOW setting to clean state', () => {
+    expect(searchesReducer(
+      {
+        foo: {
+          abc123: {
+            isFetching: true,
+          },
+        },
+      },
+      {
+        type: ActionTypes.REMOVE_WINDOW,
+        windowId: 'foo',
+      },
+    )).toEqual({});
+  });
+  it('should handle REMOVE_COMPANION_WINDOW setting to clean state', () => {
+    expect(searchesReducer(
+      {
+        foo: {
+          abc123: {
+            isFetching: true,
+          },
+        },
+      },
+      {
+        id: 'abc123',
+        type: ActionTypes.REMOVE_COMPANION_WINDOW,
+        windowId: 'foo',
+      },
+    )).toEqual({ foo: {} });
   });
 });
