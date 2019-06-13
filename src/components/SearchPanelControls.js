@@ -159,73 +159,75 @@ export class SearchPanelControls extends Component {
     const { search } = this.state;
     const id = `search-${companionWindowId}`;
     return (
-      <form onSubmit={this.submitSearch}>
-        <FormControl>
-          <Downshift
-            id={id}
-            inputValue={search}
-            isOpen={selectOpen}
-            onInputValueChange={this.handleChange}
-            onSelect={this.selectItem}
-          >
-            {({
-              getInputProps,
-              getItemProps,
-              getLabelProps,
-              getMenuProps,
-              highlightedIndex,
-              inputValue,
-              isOpen,
-              selectedItem,
-            }) => {
-              const { onBlur, onFocus, ...inputProps } = getInputProps({});
-              return (
-                <div>
-                  {renderInput({
-                    classes: {},
-                    fullWidth: true,
-                    InputLabelProps: getLabelProps(),
-                    InputProps: {
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label={t('searchSubmitAria')}
-                            type="submit"
-                          >
-                            <SearchIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                      id,
-                      onBlur,
-                      onFocus,
-                    },
-                    inputProps,
-                    label: t('searchInputLabel'),
-                  })}
-                  <div {...getMenuProps()}>
-                    {isOpen ? (
-                      <Paper square>
-                        {
-                          this.getSuggestions(inputValue).map((suggestion, index) => (
-                            renderSuggestion({
-                              highlightedIndex,
-                              index,
-                              itemProps: getItemProps({ item: suggestion.match }),
-                              selectedItem,
-                              suggestion,
-                            })
-                          ))
-                        }
-                      </Paper>
-                    ) : null}
+      <>
+        <form onSubmit={this.submitSearch}>
+          <FormControl>
+            <Downshift
+              id={id}
+              inputValue={search}
+              isOpen={selectOpen}
+              onInputValueChange={this.handleChange}
+              onSelect={this.selectItem}
+            >
+              {({
+                getInputProps,
+                getItemProps,
+                getLabelProps,
+                getMenuProps,
+                highlightedIndex,
+                inputValue,
+                isOpen,
+                selectedItem,
+              }) => {
+                const { onBlur, onFocus, ...inputProps } = getInputProps({});
+                return (
+                  <div>
+                    {renderInput({
+                      classes: {},
+                      fullWidth: true,
+                      InputLabelProps: getLabelProps(),
+                      InputProps: {
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label={t('searchSubmitAria')}
+                              type="submit"
+                            >
+                              <SearchIcon />
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                        id,
+                        onBlur,
+                        onFocus,
+                      },
+                      inputProps,
+                      label: t('searchInputLabel'),
+                    })}
+                    <div {...getMenuProps()}>
+                      {isOpen ? (
+                        <Paper square>
+                          {
+                            this.getSuggestions(inputValue).map((suggestion, index) => (
+                              renderSuggestion({
+                                highlightedIndex,
+                                index,
+                                itemProps: getItemProps({ item: suggestion.match }),
+                                selectedItem,
+                                suggestion,
+                              })
+                            ))
+                          }
+                        </Paper>
+                      ) : null}
+                    </div>
                   </div>
-                </div>
-              );
-            }}
-          </Downshift>
-        </FormControl>
-      </form>
+                );
+              }}
+            </Downshift>
+          </FormControl>
+        </form>
+      </>
     );
   }
 }
