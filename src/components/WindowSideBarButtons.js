@@ -132,9 +132,9 @@ export class WindowSideBarButtons extends Component {
     const {
       classes,
       hasAnnotations,
+      hasSearchService,
       hideAnnotationsPanel,
       hideSearchPanel,
-      searchService,
       sideBarPanel,
       t,
     } = this.props;
@@ -188,7 +188,7 @@ export class WindowSideBarButtons extends Component {
             )}
           />
         )}
-        {!hideSearchPanel && searchService && (
+        {!hideSearchPanel && hasSearchService && (
           <TabButton
             value="search"
             icon={(<SearchIcon />)}
@@ -203,9 +203,9 @@ WindowSideBarButtons.propTypes = {
   addCompanionWindow: PropTypes.func.isRequired,
   classes: PropTypes.objectOf(PropTypes.string),
   hasAnnotations: PropTypes.bool,
+  hasSearchService: PropTypes.bool,
   hideAnnotationsPanel: PropTypes.bool,
   hideSearchPanel: PropTypes.bool,
-  searchService: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   sideBarPanel: PropTypes.string,
   t: PropTypes.func,
 };
@@ -213,6 +213,7 @@ WindowSideBarButtons.propTypes = {
 WindowSideBarButtons.defaultProps = {
   classes: {},
   hasAnnotations: false,
+  hasSearchService: false,
   hideAnnotationsPanel: false,
   hideSearchPanel: true,
   sideBarPanel: 'closed',
