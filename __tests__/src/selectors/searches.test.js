@@ -2,6 +2,7 @@ import {
   getSearchResultsForWindow,
   getSearchHitsForCompanionWindow,
   getSearchAnnotationsForWindow,
+  getSelectedContentSearchAnnotations,
 } from '../../../src/state/selectors';
 
 describe('getSearchResultsForWindow', () => {
@@ -94,6 +95,27 @@ describe('getSearchAnnotationsForWindow', () => {
     ).toEqual([]);
     expect(
       getSearchAnnotationsForWindow({}, { windowId: 'a' }),
+    ).toEqual([]);
+  });
+});
+
+
+describe('getSelectedContentSearchAnnotations', () => {
+  it('returns the currently selected content search annotations for the window', () => {
+    const state = {
+      windows: {
+        foo: {
+          selectedContentSearchAnnotation: ['bar'],
+        },
+      },
+    };
+
+    expect(
+      getSelectedContentSearchAnnotations(state, { windowId: 'foo' }),
+    ).toEqual(['bar']);
+
+    expect(
+      getSelectedContentSearchAnnotations(state, { windowId: 'baz' }),
     ).toEqual([]);
   });
 });

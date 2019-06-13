@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import flatten from 'lodash/flatten';
 import Annotation from '../../lib/Annotation';
+import { getWindow } from './windows';
 
 export const getSearchResultsForWindow = createSelector(
   [
@@ -50,4 +51,11 @@ export const getSearchAnnotationsForWindow = createSelector(
       };
     }));
   },
+);
+
+export const getSelectedContentSearchAnnotations = createSelector(
+  [
+    getWindow,
+  ],
+  window => (window && window.selectedContentSearchAnnotation) || [],
 );
