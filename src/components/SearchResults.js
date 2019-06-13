@@ -6,6 +6,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import BackIcon from '@material-ui/icons/ArrowBackSharp';
+import Typography from '@material-ui/core/Typography';
+import Chip from '@material-ui/core/Chip';
 import SanitizedHtml from '../containers/SanitizedHtml';
 
 /** */
@@ -30,7 +32,7 @@ export class SearchResults extends Component {
   }
 
   /** */
-  renderHit(hit) {
+  renderHit(hit, index) {
     const {
       classes,
       companionWindowId,
@@ -65,6 +67,9 @@ export class SearchResults extends Component {
         selected={selected}
       >
         <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
+          <Typography>
+            <Chip label={index + 1} className={classes.hitCounter} />
+          </Typography>
           <SanitizedHtml ruleSet="iiif" htmlString={hit.before} />
           {' '}
           <strong>

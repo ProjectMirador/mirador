@@ -27,6 +27,9 @@ const mapDispatchToProps = {
 /** */
 const styles = theme => ({
   focused: {},
+  hitCounter: {
+    ...theme.typography.h6,
+  },
   inlineButton: {
     margin: 0,
     padding: 0,
@@ -35,6 +38,9 @@ const styles = theme => ({
   },
   listItem: {
     '&$selected': {
+      '& $hitCounter': {
+        backgroundColor: 'yellow',
+      },
       '&$focused': {
         '&:hover': {
           backgroundColor: 'inherit',
