@@ -328,39 +328,41 @@ describe('windows reducer', () => {
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
     });
+  });
 
-    describe('DESELECT_ANNOTATION', () => {
-      it('remvoves the given annotation Id', () => {
-        const beforeState = { abc123: { selectedAnnotations: { cId: ['aId1', 'aId2'] } } };
-        const action = {
-          annotationId: 'aId1',
-          targetId: 'cId',
-          type: ActionTypes.DESELECT_ANNOTATION,
-          windowId: 'abc123',
-        };
-        const expectedState = {
-          abc123: { selectedAnnotations: { cId: ['aId2'] } },
-        };
+  describe('DESELECT_ANNOTATION', () => {
+    it('remvoves the given annotation Id', () => {
+      const beforeState = { abc123: { selectedAnnotations: { cId: ['aId1', 'aId2'] } } };
+      const action = {
+        annotationId: 'aId1',
+        targetId: 'cId',
+        type: ActionTypes.DESELECT_ANNOTATION,
+        windowId: 'abc123',
+      };
+      const expectedState = {
+        abc123: { selectedAnnotations: { cId: ['aId2'] } },
+      };
 
-        expect(windowsReducer(beforeState, action)).toEqual(expectedState);
-      });
-
-      it('remvoves the given canvas Id from the selected annotations if there are no more IDs', () => {
-        const beforeState = { abc123: { selectedAnnotations: { cId1: ['aId1'], cId2: ['aId2'] } } };
-        const action = {
-          annotationId: 'aId2',
-          targetId: 'cId2',
-          type: ActionTypes.DESELECT_ANNOTATION,
-          windowId: 'abc123',
-        };
-        const expectedState = {
-          abc123: { selectedAnnotations: { cId1: ['aId1'] } },
-        };
-
-        expect(windowsReducer(beforeState, action)).toEqual(expectedState);
-      });
+      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
     });
 
+    it('remvoves the given canvas Id from the selected annotations if there are no more IDs', () => {
+      const beforeState = { abc123: { selectedAnnotations: { cId1: ['aId1'], cId2: ['aId2'] } } };
+      const action = {
+        annotationId: 'aId2',
+        targetId: 'cId2',
+        type: ActionTypes.DESELECT_ANNOTATION,
+        windowId: 'abc123',
+      };
+      const expectedState = {
+        abc123: { selectedAnnotations: { cId1: ['aId1'] } },
+      };
+
+      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
+    });
+  });
+
+  describe('TOGGLE_ANNOTATION_DISPLAY', () => {
     it('handles TOGGLE_ANNOTATION_DISPLAY by toggling the given window\'s displayAllAnnotation value', () => {
       const beforeState = { abc123: { displayAllAnnotations: false } };
       const action = {
@@ -382,6 +384,20 @@ describe('windows reducer', () => {
       };
       const expectedState = {
         abc123: { highlightedAnnotation: 'aaa123' },
+      };
+
+      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
+    });
+  });
+
+  describe('SELECT_CONTENT_SEARCH_ANNOTATION', () => {
+    it('sets the highlightedAnnotation attribute on the given window', () => {
+      const beforeState = { abc123: {} };
+      const action = {
+        annotationId: ['aaa123'], type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION, windowId: 'abc123',
+      };
+      const expectedState = {
+        abc123: { selectedContentSearchAnnotation: ['aaa123'] },
       };
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);

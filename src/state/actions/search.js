@@ -65,3 +65,18 @@ export function fetchSearch(targetId, companionWindowId, searchId) {
       .catch(error => dispatch(receiveSearchFailure(targetId, companionWindowId, error)));
   });
 }
+
+/**
+ * selectedContentSearchAnnotation - action creator
+ *
+ * @param  {String} windowId
+ * @param  {String} annotationId
+ * @memberof ActionCreators
+ */
+export function selectContentSearchAnnotation(windowId, annotationId) {
+  return {
+    annotationId,
+    type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION,
+    windowId,
+  };
+}

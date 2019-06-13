@@ -110,4 +110,16 @@ describe('search actions', () => {
       });
     });
   });
+  describe('selectContentSearchAnnotation', () => {
+    it('dispatches the SELECT_CONTENT_SEARCH_ANNOTATION action', () => {
+      const windowId = 'foo';
+      const annotationId = ['abc123'];
+      const expectedAction = {
+        annotationId,
+        type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION,
+        windowId,
+      };
+      expect(actions.selectContentSearchAnnotation(windowId, annotationId)).toEqual(expectedAction);
+    });
+  });
 });

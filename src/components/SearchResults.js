@@ -12,6 +12,9 @@ export class SearchResults extends Component {
     const {
       companionWindowId,
       searchHits,
+      selectContentSearchAnnotation,
+      selectedContentSearchAnnotation,
+      windowId,
     } = this.props;
 
     return (
@@ -23,6 +26,8 @@ export class SearchResults extends Component {
                 button
                 key={`${companionWindowId}-${hit.annotations[0]}`}
                 component="li"
+                onClick={() => selectContentSearchAnnotation(windowId, hit.annotations)}
+                selected={selectedContentSearchAnnotation[0] === hit.annotations[0]}
               >
                 <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
                   <SanitizedHtml ruleSet="iiif" htmlString={hit.before} />
@@ -45,5 +50,12 @@ export class SearchResults extends Component {
 SearchResults.propTypes = {
   companionWindowId: PropTypes.string.isRequired,
   searchHits: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selectContentSearchAnnotation: PropTypes.func,
+  selectedContentSearchAnnotation: PropTypes.arrayOf(PropTypes.string),
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
+};
+
+SearchResults.defaultProps = {
+  selectContentSearchAnnotation: () => {},
+  selectedContentSearchAnnotation: [],
 };

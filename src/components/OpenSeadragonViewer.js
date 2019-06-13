@@ -96,7 +96,9 @@ export class OpenSeadragonViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      viewer, highlightedAnnotations, selectedAnnotations, searchAnnotations,
+      viewer,
+      highlightedAnnotations, selectedAnnotations,
+      searchAnnotations, selectedContentSearchAnnotations,
     } = this.props;
     const highlightsUpdated = !OpenSeadragonViewer.annotationsMatch(
       highlightedAnnotations, prevProps.highlightedAnnotations,
@@ -108,12 +110,17 @@ export class OpenSeadragonViewer extends Component {
       searchAnnotations, prevProps.searchAnnotations,
     );
 
-    if (searchAnnotationsUpdated) {
+    const selectedContentSearchAnnotationsUpdated = !OpenSeadragonViewer.annotationsMatch(
+      selectedContentSearchAnnotations, prevProps.selectedContentSearchAnnotations,
+    );
+
+    if (searchAnnotationsUpdated || selectedContentSearchAnnotationsUpdated) {
       this.updateCanvas = () => {
         this.osdCanvasOverlay.clear();
         this.osdCanvasOverlay.resize();
         this.osdCanvasOverlay.canvasUpdate(() => {
           this.annotationsToContext(searchAnnotations, '#00BFFF');
+          this.annotationsToContext(selectedContentSearchAnnotations, 'yellow');
         });
       };
       this.viewer.forceRedraw();
@@ -304,6 +311,7 @@ OpenSeadragonViewer.defaultProps = {
   label: null,
   searchAnnotations: [],
   selectedAnnotations: [],
+  selectedContentSearchAnnotations: [],
   tileSources: [],
   viewer: null,
 };
@@ -315,6 +323,7 @@ OpenSeadragonViewer.propTypes = {
   label: PropTypes.string,
   searchAnnotations: PropTypes.arrayOf(PropTypes.object),
   selectedAnnotations: PropTypes.arrayOf(PropTypes.object),
+  selectedContentSearchAnnotations: PropTypes.arrayOf(PropTypes.object),
   t: PropTypes.func.isRequired,
   tileSources: PropTypes.arrayOf(PropTypes.object),
   updateViewport: PropTypes.func.isRequired,

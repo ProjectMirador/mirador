@@ -118,6 +118,14 @@ export const windowsReducer = (state = {}, action) => {
             .companionWindowIds.filter(id => id !== action.id),
         },
       };
+    case ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          selectedContentSearchAnnotation: action.annotationId,
+        },
+      };
     case ActionTypes.SELECT_ANNOTATION:
       return {
         ...state,
