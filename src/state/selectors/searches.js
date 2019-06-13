@@ -21,7 +21,7 @@ export const getSearchResultsForCompanionWindow = createSelector(
     (state, { companionWindowId }) => companionWindowId,
   ],
   (results, companionWindowId) => {
-    if (!results || !companionWindowId) return [];
+    if (!results || !companionWindowId) return {};
     return results && results[companionWindowId];
   },
 );

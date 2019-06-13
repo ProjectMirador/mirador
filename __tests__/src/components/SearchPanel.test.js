@@ -24,7 +24,7 @@ describe('SearchPanel', () => {
   });
 
   it('passes a Clear chip as the CompanionWindow title prop', () => {
-    const wrapper = createWrapper();
+    const wrapper = createWrapper({ query: 'Wolpertinger' });
 
     const title = wrapper.find(CompanionWindow).props().title.props.children;
     expect(title[0]).toEqual('searchTitle');
@@ -38,6 +38,14 @@ describe('SearchPanel', () => {
 
     chip.props.onClick();
     expect(removeSearch).toHaveBeenCalled();
+  });
+
+  it('does not render a Clear chip if there is no search query to be cleared', () => {
+    const wrapper = createWrapper();
+
+    const title = wrapper.find(CompanionWindow).props().title.props.children;
+    expect(title[0]).toEqual('searchTitle');
+    expect(title[1]).toEqual('');
   });
 
   it('has the SearchPanelControls component', () => {

@@ -13,6 +13,7 @@ export class SearchPanel extends Component {
       classes,
       windowId,
       id,
+      query,
       removeSearch,
       t,
     } = this.props;
@@ -22,15 +23,19 @@ export class SearchPanel extends Component {
         title={(
           <>
             {t('searchTitle')}
-            <Chip
-              className={classes.clearChip}
-              color="secondary"
-              label={t('clearSearch')}
-              onClick={removeSearch}
-              onDelete={removeSearch}
-              size="small"
-              variant="outlined"
-            />
+            {
+              query && query !== '' && (
+                <Chip
+                  className={classes.clearChip}
+                  color="secondary"
+                  label={t('clearSearch')}
+                  onClick={removeSearch}
+                  onDelete={removeSearch}
+                  size="small"
+                  variant="outlined"
+                />
+              )
+            }
           </>
         )}
         windowId={windowId}
@@ -51,6 +56,7 @@ SearchPanel.propTypes = {
     clearChip: PropTypes.string,
   }),
   id: PropTypes.string.isRequired,
+  query: PropTypes.string,
   removeSearch: PropTypes.func.isRequired,
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
@@ -58,5 +64,6 @@ SearchPanel.propTypes = {
 
 SearchPanel.defaultProps = {
   classes: {},
+  query: '',
   t: key => key,
 };

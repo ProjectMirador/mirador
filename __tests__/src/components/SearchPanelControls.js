@@ -57,15 +57,15 @@ describe('SearchPanelControls', () => {
 
   describe('input', () => {
     it('has the query prop has the input value on intial render', () => {
-      const wrapper = createWrapper({ query: 'Wolper' });
+      const wrapper = createWrapper({ query: 'Wolpertinger' });
 
-      expect(wrapper.find('WithStyles(ForwardRef(Input))').props().value).toEqual('Wolper');
+      expect(wrapper.find('WithStyles(ForwardRef(Input))').props().value).toEqual('Wolpertinger');
     });
 
     it('clears the local search state/input when the incoming query prop has been cleared', () => {
-      const wrapper = createWrapper({ query: 'Wolper' });
+      const wrapper = createWrapper({ query: 'Wolpertinger' });
 
-      expect(wrapper.state().search).toEqual('Wolper');
+      expect(wrapper.state().search).toEqual('Wolpertinger');
       wrapper.setProps({ query: '' });
       expect(wrapper.state().search).toEqual('');
       expect(wrapper.find('WithStyles(ForwardRef(Input))').props().value).toEqual('');
