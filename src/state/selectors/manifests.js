@@ -409,3 +409,13 @@ export const getManifestSearchService = createSelector(
     return null;
   },
 );
+
+/** */
+export const getManifestAutocompleteService = createSelector(
+  [getManifestSearchService],
+  (searchService) => {
+    const autocompleteService = searchService && searchService.getService('http://iiif.io/api/search/0/autocomplete');
+
+    return autocompleteService && autocompleteService;
+  },
+);
