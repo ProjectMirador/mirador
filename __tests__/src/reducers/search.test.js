@@ -5,12 +5,14 @@ describe('search reducer', () => {
   it('should handle REQUEST_SEARCH', () => {
     expect(searchesReducer({}, {
       companionWindowId: 'abc123',
+      query: 'search terms',
       targetId: 'foo',
       type: ActionTypes.REQUEST_SEARCH,
     })).toEqual({
       foo: {
         abc123: {
           isFetching: true,
+          query: 'search terms',
         },
       },
     });
@@ -67,6 +69,36 @@ describe('search reducer', () => {
       },
     });
   });
+
+  it('should handle REMOVE_SEARCH', () => {
+    expect(searchesReducer(
+      {
+        foo: {
+          abc123: {
+            isFetching: false,
+            json: {},
+          },
+          xyz321: {
+            isFetching: false,
+            json: {},
+          },
+        },
+      },
+      {
+        companionWindowId: 'abc123',
+        targetId: 'foo',
+        type: ActionTypes.REMOVE_SEARCH,
+      },
+    )).toEqual({
+      foo: {
+        xyz321: {
+          isFetching: false,
+          json: {},
+        },
+      },
+    });
+  });
+
   it('should handle IMPORT_MIRADOR_STATE setting to clean state', () => {
     expect(searchesReducer(
       {

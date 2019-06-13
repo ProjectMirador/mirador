@@ -15,13 +15,13 @@ export const getSearchResultsForWindow = createSelector(
   },
 );
 
-const getSearchResultsForCompanionWindow = createSelector(
+export const getSearchResultsForCompanionWindow = createSelector(
   [
     getSearchResultsForWindow,
     (state, { companionWindowId }) => companionWindowId,
   ],
   (results, companionWindowId) => {
-    if (!results || !companionWindowId) return [];
+    if (!results || !companionWindowId) return {};
     return results && results[companionWindowId];
   },
 );
