@@ -27,6 +27,7 @@ const styles = theme => ({
   focused: {},
   hitCounter: {
     ...theme.typography.h6,
+    backgroundColor: theme.palette.hitCounter.default,
   },
   inlineButton: {
     margin: 0,
@@ -37,7 +38,7 @@ const styles = theme => ({
   listItem: {
     '&$selected': {
       '& $hitCounter': {
-        backgroundColor: 'yellow',
+        backgroundColor: theme.palette.hitCounter.selected,
       },
       '&$focused': {
         '&:hover': {
