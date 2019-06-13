@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Downshift from 'downshift';
-import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -53,7 +52,7 @@ describe('SearchPanelControls', () => {
       .dive()
       .dive();
     expect(divedInput.find('SearchSharpIcon').length).toEqual(1);
-    expect(divedInput.find(IconButton).find('[type="submit"]').length).toEqual(1);
+    expect(divedInput.find('Connect(WithPlugins(MiradorMenuButton))[type="submit"]').length).toEqual(1);
   });
   it('renders suggestions', () => {
     const fetchSearch = jest.fn();

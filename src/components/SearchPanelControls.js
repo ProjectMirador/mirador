@@ -6,7 +6,6 @@ import Downshift from 'downshift';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import SearchIcon from '@material-ui/icons/SearchSharp';
-import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeftSharp';
 import ChevronRightIcon from '@material-ui/icons/ChevronRightSharp';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -227,12 +226,9 @@ export class SearchPanelControls extends Component {
                       InputProps: {
                         endAdornment: (
                           <InputAdornment position="end">
-                            <IconButton
-                              aria-label={t('searchSubmitAria')}
-                              type="submit"
-                            >
+                            <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
                               <SearchIcon />
-                            </IconButton>
+                            </MiradorMenuButton>
                           </InputAdornment>
                         ),
                         id,
