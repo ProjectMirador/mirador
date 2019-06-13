@@ -47,6 +47,9 @@ const styles = theme => ({
     textTransform: 'none',
   },
   selected: {},
+  toggleFocus: {
+    ...theme.typography.subtitle1,
+  },
 });
 
 const enhance = compose(
