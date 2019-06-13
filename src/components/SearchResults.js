@@ -8,38 +8,53 @@ import SanitizedHtml from '../containers/SanitizedHtml';
 /** */
 export class SearchResults extends Component {
   /** */
-  render() {
+  constructor(props) {
+    super(props);
+
+    this.renderHit = this.renderHit.bind(this);
+  }
+
+  /** */
+  renderHit(hit) {
     const {
       companionWindowId,
-      searchHits,
       selectContentSearchAnnotation,
       selectedContentSearchAnnotation,
       windowId,
     } = this.props;
 
     return (
+      <ListItem
+        button
+        key={`${companionWindowId}-${hit.annotations[0]}`}
+        component="li"
+        onClick={() => selectContentSearchAnnotation(windowId, hit.annotations)}
+        selected={selectedContentSearchAnnotation[0] === hit.annotations[0]}
+      >
+        <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
+          <SanitizedHtml ruleSet="iiif" htmlString={hit.before} />
+          {' '}
+          <strong>
+            <SanitizedHtml ruleSet="iiif" htmlString={hit.match} />
+          </strong>
+          {' '}
+          <SanitizedHtml ruleSet="iiif" htmlString={hit.after} />
+        </ListItemText>
+      </ListItem>
+    );
+  }
+
+  /** */
+  render() {
+    const {
+      searchHits,
+    } = this.props;
+
+    return (
       <>
         <List>
           {
-            searchHits.map(hit => (
-              <ListItem
-                button
-                key={`${companionWindowId}-${hit.annotations[0]}`}
-                component="li"
-                onClick={() => selectContentSearchAnnotation(windowId, hit.annotations)}
-                selected={selectedContentSearchAnnotation[0] === hit.annotations[0]}
-              >
-                <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
-                  <SanitizedHtml ruleSet="iiif" htmlString={hit.before} />
-                  {' '}
-                  <strong>
-                    <SanitizedHtml ruleSet="iiif" htmlString={hit.match} />
-                  </strong>
-                  {' '}
-                  <SanitizedHtml ruleSet="iiif" htmlString={hit.after} />
-                </ListItemText>
-              </ListItem>
-            ))
+            searchHits.map(this.renderHit)
           }
         </List>
       </>
