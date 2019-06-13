@@ -82,6 +82,7 @@ const styles = theme => ({
   titleControls: {
     alignItems: 'center',
     display: 'flex',
+    flexFlow: 'row wrap',
     minHeight: 48,
     order: 3,
   },
