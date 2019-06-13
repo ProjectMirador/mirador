@@ -22,7 +22,7 @@ function createWrapper(props) {
 describe('WindowTopMenu', () => {
   it('renders all needed elements', () => {
     const wrapper = createWrapper();
-    console.log(wrapper.debug());
+
     expect(wrapper.find(Menu).length).toBe(1);
     expect(wrapper.find(WindowThumbnailSettings).length).toBe(1);
     expect(wrapper.find(WindowViewSettings).length).toBe(1);

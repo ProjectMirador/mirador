@@ -5,7 +5,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
 import {
   DialogActions,
-  DialogContentText,
   TextField,
   Typography,
 } from '@material-ui/core';
