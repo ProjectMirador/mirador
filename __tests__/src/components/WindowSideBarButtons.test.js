@@ -71,7 +71,7 @@ describe('WindowSideBarButtons (shallow)', () => {
       expect(wrapper.find('WithStyles(Tab)[value="search"]').length).toEqual(0);
     });
     it('can be configured to be on', () => {
-      wrapper = createWrapper({ hideSearchPanel: false, searchService: {}, windowId });
+      wrapper = createWrapper({ hasSearchService: true, hideSearchPanel: false, windowId });
       expect(wrapper.find('WithStyles(ForwardRef(Tab))[value="search"]').length).toEqual(1);
     });
   });
