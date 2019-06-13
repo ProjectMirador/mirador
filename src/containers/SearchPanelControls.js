@@ -7,6 +7,7 @@ import { SearchPanelControls } from '../components/SearchPanelControls';
 import * as actions from '../state/actions';
 import {
   getManifestSearchService,
+  getSearchResultsForCompanionWindow,
 } from '../state/selectors';
 
 /**
@@ -14,9 +15,13 @@ import {
  * @memberof SearchPanelControls
  * @private
  */
-const mapStateToProps = (state, { windowId }) => ({
-  searchService: getManifestSearchService(state, { windowId }),
-});
+const mapStateToProps = (state, { companionWindowId, windowId }) => {
+  const results = getSearchResultsForCompanionWindow(state, { companionWindowId, windowId });
+  return {
+    query: results && results.query,
+    searchService: getManifestSearchService(state, { windowId }),
+  };
+};
 
 /**
  * mapDispatchToProps - to hook up connect

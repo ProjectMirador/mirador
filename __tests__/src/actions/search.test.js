@@ -10,14 +10,16 @@ const mockStore = configureMockStore(middlewares);
 describe('search actions', () => {
   describe('requestSearch', () => {
     it('requests an search from given a url', () => {
+      const query = 'search terms';
       const targetId = 'foo';
       const companionWindowId = 'abc123';
       const expectedAction = {
         companionWindowId,
+        query,
         targetId,
         type: ActionTypes.REQUEST_SEARCH,
       };
-      expect(actions.requestSearch(targetId, companionWindowId)).toEqual(expectedAction);
+      expect(actions.requestSearch(targetId, companionWindowId, query)).toEqual(expectedAction);
     });
   });
   describe('receiveSearch', () => {
@@ -65,10 +67,12 @@ describe('search actions', () => {
           'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
           'companionWindowId',
           'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
+          'search terms',
         ));
         expect(store.getActions()).toEqual([
           {
             companionWindowId: 'companionWindowId',
+            query: 'search terms',
             targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
             type: 'REQUEST_SEARCH',
           },

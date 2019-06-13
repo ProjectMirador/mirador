@@ -15,6 +15,7 @@ export const searchesReducer = (state = {}, action) => {
           ...state[action.targetId],
           [action.companionWindowId]: {
             isFetching: true,
+            query: action.query,
           },
         },
       };

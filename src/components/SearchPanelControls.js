@@ -13,9 +13,24 @@ export class SearchPanelControls extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { search: '' };
+    this.state = { search: props.query };
     this.handleChange = this.handleChange.bind(this);
     this.submitSearch = this.submitSearch.bind(this);
+  }
+
+  /**
+   * Set the component's local search state
+   * to blank when the query has been cleared
+   */
+  componentDidUpdate(prevProps) {
+    const { query } = this.props;
+
+    if (query === '' && query !== prevProps.query) {
+      // We are setting local state directly here ONLY when the query prop (from redux)
+      // and it has been cleared out. This means a user has cleared the search and we
+      // need to clear the controlled Input value as well.
+      this.setState({ search: '' }); // eslint-disable-line react/no-did-update-set-state
+    }
   }
 
   /** */
@@ -32,7 +47,7 @@ export class SearchPanelControls extends Component {
     } = this.props;
     const { search } = this.state;
     event.preventDefault();
-    fetchSearch(windowId, companionWindowId, `${searchService.id}?q=${search}`);
+    fetchSearch(windowId, companionWindowId, `${searchService.id}?q=${search}`, search);
   }
 
   /** */
@@ -68,6 +83,7 @@ export class SearchPanelControls extends Component {
 SearchPanelControls.propTypes = {
   companionWindowId: PropTypes.string.isRequired,
   fetchSearch: PropTypes.func.isRequired,
+  query: PropTypes.string,
   searchService: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
@@ -76,5 +92,6 @@ SearchPanelControls.propTypes = {
 };
 
 SearchPanelControls.defaultProps = {
+  query: '',
   t: key => key,
 };

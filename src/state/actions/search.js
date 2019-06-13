@@ -6,11 +6,13 @@ import ActionTypes from './action-types';
  *
  * @param  {String} targetId
  * @param  {String} searchId
+ * @param  {String} query
  * @memberof ActionCreators
  */
-export function requestSearch(targetId, companionWindowId) {
+export function requestSearch(targetId, companionWindowId, query) {
   return {
     companionWindowId,
+    query,
     targetId,
     type: ActionTypes.REQUEST_SEARCH,
   };
@@ -69,11 +71,12 @@ export function removeSearch(targetId, companionWindowId) {
  * fetchSearch - action creator
  *
  * @param  {String} searchId
+ * @param  {String} query
  * @memberof ActionCreators
  */
-export function fetchSearch(targetId, companionWindowId, searchId) {
+export function fetchSearch(targetId, companionWindowId, searchId, query) {
   return ((dispatch) => {
-    dispatch(requestSearch(targetId, companionWindowId));
+    dispatch(requestSearch(targetId, companionWindowId, query));
     return fetch(searchId)
       .then(response => response.json())
       .then(json => dispatch(receiveSearch(targetId, companionWindowId, json)))

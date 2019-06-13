@@ -15,7 +15,7 @@ export const getSearchResultsForWindow = createSelector(
   },
 );
 
-const getSearchResultsForCompanionWindow = createSelector(
+export const getSearchResultsForCompanionWindow = createSelector(
   [
     getSearchResultsForWindow,
     (state, { companionWindowId }) => companionWindowId,

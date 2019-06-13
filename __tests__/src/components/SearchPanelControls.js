@@ -51,7 +51,24 @@ describe('SearchPanelControls', () => {
     wrapper.setState({ search: 'yolo' });
 
     wrapper.find('form').simulate('submit', { preventDefault: () => {} });
-    expect(fetchSearch).toHaveBeenCalledWith('window', 'cw', 'http://www.example.com/search?q=yolo');
+    expect(fetchSearch).toHaveBeenCalledWith('window', 'cw', 'http://www.example.com/search?q=yolo', 'yolo');
     expect(wrapper.state().search).toBe('yolo');
+  });
+
+  describe('input', () => {
+    it('has the query prop has the input value on intial render', () => {
+      const wrapper = createWrapper({ query: 'Wolper' });
+
+      expect(wrapper.find('WithStyles(ForwardRef(Input))').props().value).toEqual('Wolper');
+    });
+
+    it('clears the local search state/input when the incoming query prop has been cleared', () => {
+      const wrapper = createWrapper({ query: 'Wolper' });
+
+      expect(wrapper.state().search).toEqual('Wolper');
+      wrapper.setProps({ query: '' });
+      expect(wrapper.state().search).toEqual('');
+      expect(wrapper.find('WithStyles(ForwardRef(Input))').props().value).toEqual('');
+    });
   });
 });
