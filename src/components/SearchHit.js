@@ -30,6 +30,7 @@ export class SearchHit extends Component {
   /** */
   render() {
     const {
+      adjacent,
       canvasLabel,
       classes,
       hit,
@@ -49,6 +50,7 @@ export class SearchHit extends Component {
         className={clsx(
           classes.listItem,
           {
+            [classes.adjacent]: adjacent,
             [classes.selected]: selected,
             [classes.focused]: focused,
           },
@@ -83,6 +85,7 @@ export class SearchHit extends Component {
 }
 
 SearchHit.propTypes = {
+  adjacent: PropTypes.bool,
   canvasLabel: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.string),
   focused: PropTypes.bool,
@@ -101,6 +104,7 @@ SearchHit.propTypes = {
 };
 
 SearchHit.defaultProps = {
+  adjacent: false,
   canvasLabel: undefined,
   classes: {},
   focused: false,
