@@ -42,9 +42,9 @@ export class SearchPanelNavigation extends Component {
   */
   render() {
     const {
-      searchHits, selectedContentSearchAnnotation, classes, t,
+      searchHits, selectedContentSearchAnnotation, classes, t, startIndex,
     } = this.props;
-    const currentHitIndex = searchHits
+    const currentHitIndex = startIndex + searchHits
       .findIndex(val => val.annotations.includes(selectedContentSearchAnnotation[0]));
     return (
       <>
@@ -79,11 +79,13 @@ SearchPanelNavigation.propTypes = {
   }).isRequired,
   selectContentSearchAnnotation: PropTypes.func.isRequired,
   selectedContentSearchAnnotation: PropTypes.arrayOf(PropTypes.string).isRequired,
+  startIndex: PropTypes.number,
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };
 SearchPanelNavigation.defaultProps = {
   classes: {},
   searchHits: [],
+  startIndex: 0,
   t: key => key,
 };
