@@ -8,6 +8,7 @@ import * as actions from '../state/actions';
 import {
   getCanvasLabel,
   getSearchAnnotationForCompanionWindow,
+  getSelectedCanvases,
   getSelectedContentSearchAnnotationIds,
 } from '../state/selectors';
 
@@ -24,7 +25,10 @@ const mapStateToProps = (state, { hit, companionWindowId, windowId }) => {
   const resourceAnnotations = annotation.resources;
   const hitAnnotation = resourceAnnotations.find(r => r.id === hit.annotations[0]);
 
+  const selectedCanvasIds = getSelectedCanvases(state, { windowId }).map(canvas => canvas.id);
+
   return {
+    adjacent: selectedCanvasIds.includes(hitAnnotation.targetId),
     canvasLabel: hitAnnotation && getCanvasLabel(state, {
       canvasId: hitAnnotation.targetId,
       windowId,
@@ -39,6 +43,7 @@ const mapDispatchToProps = {
 
 /** */
 const styles = theme => ({
+  adjacent: {},
   canvasLabel: {
     ...theme.typography.h6,
   },
@@ -56,6 +61,16 @@ const styles = theme => ({
     textTransform: 'none',
   },
   listItem: {
+    '&$adjacent': {
+      '& $hitCounter': {
+        backgroundColor: theme.palette.highlights.secondary,
+      },
+      '&$selected': {
+        '& $hitCounter': {
+          backgroundColor: theme.palette.highlights.primary,
+        },
+      },
+    },
     '&$selected': {
       '& $hitCounter': {
         backgroundColor: theme.palette.highlights.primary,

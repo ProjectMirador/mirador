@@ -119,10 +119,10 @@ export class OpenSeadragonViewer extends Component {
         this.osdCanvasOverlay.clear();
         this.osdCanvasOverlay.resize();
         this.osdCanvasOverlay.canvasUpdate(() => {
-          this.annotationsToContext(searchAnnotations, palette.highlights.primary);
+          this.annotationsToContext(searchAnnotations, palette.highlights.secondary);
           this.annotationsToContext(
             selectedContentSearchAnnotations,
-            palette.highlights.secondary,
+            palette.highlights.primary,
           );
         });
       };
@@ -134,8 +134,8 @@ export class OpenSeadragonViewer extends Component {
         this.osdCanvasOverlay.clear();
         this.osdCanvasOverlay.resize();
         this.osdCanvasOverlay.canvasUpdate(() => {
-          this.annotationsToContext(highlightedAnnotations, palette.highlights.primary);
-          this.annotationsToContext(selectedAnnotations, palette.highlights.secondary);
+          this.annotationsToContext(highlightedAnnotations, palette.highlights.secondary);
+          this.annotationsToContext(selectedAnnotations, palette.highlights.primary);
         });
       };
       this.viewer.forceRedraw();
