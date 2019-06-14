@@ -47,6 +47,11 @@ export default {
       notification: { // Color used in MUI Badge dots
         main: '#ffa224'
       },
+      hitCounter: {
+        default: '#bdbdbd',
+        selected: '#ffff00',
+        adjcaent: '#00BFFF',
+      },
       section_divider: 'rgba(0, 0, 0, 0.25)',
     },
     typography: {

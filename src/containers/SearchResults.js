@@ -26,27 +26,9 @@ const mapDispatchToProps = {
 
 /** */
 const styles = theme => ({
-  focused: {},
-  inlineButton: {
-    margin: 0,
-    padding: 0,
-    textDecoration: 'underline',
-    textTransform: 'none',
-  },
-  listItem: {
-    '&$selected': {
-      '&$focused': {
-        '&:hover': {
-          backgroundColor: 'inherit',
-        },
-        backgroundColor: 'inherit',
-      },
-    },
-  },
   navigation: {
     textTransform: 'none',
   },
-  selected: {},
   toggleFocus: {
     ...theme.typography.subtitle1,
   },
