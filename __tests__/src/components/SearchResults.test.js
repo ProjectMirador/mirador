@@ -46,4 +46,44 @@ describe('SearchResults', () => {
     wrapper.find(Button).simulate('click');
     expect(wrapper.state().focused).toEqual(false);
   });
+
+  describe('no search results', () => {
+    it('shows no results', () => {
+      const wrapper = createWrapper({
+        searchHits: [],
+        searchResults: {
+          isFetching: false,
+          query: 'nope',
+        },
+      });
+      expect(wrapper.find('WithStyles(ForwardRef(Typography))').text()).toEqual('searchNoResults');
+    });
+    it('with hits', () => {
+      const wrapper = createWrapper({
+        searchResults: {
+          isFetching: false,
+          query: 'nope',
+        },
+      });
+      expect(wrapper.find('WithStyles(ForwardRef(Typography))').length).toEqual(0);
+    });
+    it('while fetching', () => {
+      const wrapper = createWrapper({
+        searchResults: {
+          isFetching: true,
+          query: 'nope',
+        },
+      });
+      expect(wrapper.find('WithStyles(ForwardRef(Typography))').length).toEqual(0);
+    });
+    it('without a query', () => {
+      const wrapper = createWrapper({
+        searchResults: {
+          isFetching: false,
+          query: '',
+        },
+      });
+      expect(wrapper.find('WithStyles(ForwardRef(Typography))').length).toEqual(0);
+    });
+  });
 });
