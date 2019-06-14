@@ -34,9 +34,17 @@ const mapDispatchToProps = {
   fetchSearch: actions.fetchSearch,
 };
 
+/** */
+const styles = theme => ({
+  suggestions: {
+    position: 'absolute',
+    zIndex: theme.zIndex.modal - 1,
+  },
+});
+
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withStyles({}),
+  withStyles(styles),
   withTranslation(),
   withPlugins('SearchPanelControls'),
 );

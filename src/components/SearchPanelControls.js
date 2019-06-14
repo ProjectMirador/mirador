@@ -72,7 +72,7 @@ export class SearchPanelControls extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { search: props.query, suggestions: [] };
+    this.state = { search: props.query, selectOpen: props.selectOpen, suggestions: [] };
     this.handleChange = this.handleChange.bind(this);
     this.submitSearch = this.submitSearch.bind(this);
     this.getSuggestions = this.getSuggestions.bind(this);
@@ -112,6 +112,8 @@ export class SearchPanelControls extends Component {
   handleChange(value) {
     this.setState({
       search: value,
+      selectOpen: true,
+      suggestions: [],
     });
 
     this.fetchAutocomplete(value);
@@ -120,10 +122,6 @@ export class SearchPanelControls extends Component {
   /** */
   fetchAutocomplete(value) {
     const { autocompleteService } = this.props;
-
-    this.setState({
-      suggestions: [],
-    });
 
     if (!autocompleteService) return;
     if (!value) return;
@@ -147,22 +145,23 @@ export class SearchPanelControls extends Component {
     const { search } = this.state;
     event && event.preventDefault();
     if (!search) return;
+    this.setState({ selectOpen: false });
     fetchSearch(windowId, companionWindowId, `${searchService.id}?q=${search}`, search);
   }
 
   /** */
   selectItem(selectedItem) {
-    this.setState({ search: selectedItem });
+    this.setState({ search: selectedItem, selectOpen: false });
     this.submitSearch();
   }
 
   /** */
   render() {
     const {
-      companionWindowId, t, selectOpen, windowId,
+      classes, companionWindowId, t, windowId,
     } = this.props;
 
-    const { search } = this.state;
+    const { search, selectOpen } = this.state;
     const id = `search-${companionWindowId}`;
     return (
       <>
@@ -172,7 +171,7 @@ export class SearchPanelControls extends Component {
               id={id}
               inputValue={search}
               isOpen={selectOpen}
-              onInputValueChange={this.handleChange}
+              onOuterClick={() => this.setState({ selectOpen: false })}
               onSelect={this.selectItem}
             >
               {({
@@ -185,7 +184,14 @@ export class SearchPanelControls extends Component {
                 isOpen,
                 selectedItem,
               }) => {
-                const { onBlur, onFocus, ...inputProps } = getInputProps({});
+                const { onBlur, onFocus, ...inputProps } = getInputProps({
+                  onChange: (e) => {
+                    this.handleChange(e.target.value);
+                  },
+                  onKeyDown: (e) => {
+                    e.nativeEvent.preventDownshiftDefault = true;
+                  },
+                });
                 return (
                   <div>
                     {renderInput({
@@ -209,7 +215,7 @@ export class SearchPanelControls extends Component {
                     })}
                     <div {...getMenuProps()}>
                       {isOpen ? (
-                        <Paper square>
+                        <Paper square className={classes.suggestions}>
                           {
                             this.getSuggestions(inputValue).map((suggestion, index) => (
                               renderSuggestion({
@@ -240,6 +246,7 @@ SearchPanelControls.propTypes = {
   autocompleteService: PropTypes.shape({
     id: PropTypes.string,
   }),
+  classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string.isRequired,
   fetchSearch: PropTypes.func.isRequired,
   query: PropTypes.string,
@@ -253,6 +260,7 @@ SearchPanelControls.propTypes = {
 
 SearchPanelControls.defaultProps = {
   autocompleteService: undefined,
+  classes: {},
   query: '',
   selectOpen: undefined,
   t: key => key,
