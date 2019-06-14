@@ -5,6 +5,8 @@ import {
   getSelectedContentSearchAnnotationIds,
   getSelectedContentSearchAnnotations,
   getSearchAnnotationForCompanionWindow,
+  getResourceAnnotationForSearchHit,
+  getResourceAnnotationLabel,
 } from '../../../src/state/selectors';
 
 describe('getSearchResultsForWindow', () => {
@@ -183,6 +185,83 @@ describe('getSelectedContentSearchAnnotations', () => {
 
     expect(
       getSelectedContentSearchAnnotations(state, { windowId: 'baz' }),
+    ).toEqual([]);
+  });
+});
+
+describe('getResourceAnnotationForSearchHit', () => {
+  const companionWindowId = 'cwid';
+  const annoId = 'annoId2';
+  it('returns the resource annotation connected to the hit by ID', () => {
+    const state = {
+      searches: {
+        a: {
+          [companionWindowId]: {
+            json: {
+              '@id': 'yolo',
+              resources: [{ '@id': annoId }],
+            },
+          },
+        },
+      },
+    };
+
+    expect(
+      getResourceAnnotationForSearchHit(
+        state, { annotationUri: annoId, companionWindowId, windowId: 'a' },
+      ).resource['@id'],
+    ).toEqual(annoId);
+  });
+});
+
+describe('getResourceAnnotationLabel', () => {
+  const companionWindowId = 'cwid';
+  const annoId = 'annoId2';
+  it('returns the label from a LanguageMap JSON object', () => {
+    const state = {
+      companionWindows: {
+        [companionWindowId]: { locale: 'en' },
+      },
+      searches: {
+        a: {
+          [companionWindowId]: {
+            json: {
+              '@id': 'yolo',
+              resources: [{
+                '@id': annoId,
+                label: { '@language': 'en', '@value': 'The Annotation Label' },
+              }],
+            },
+          },
+        },
+      },
+    };
+
+    expect(
+      getResourceAnnotationLabel(
+        state, { annotationUri: annoId, companionWindowId, windowId: 'a' },
+      ),
+    ).toEqual(['The Annotation Label']);
+  });
+
+  it('returns an empty array if the annotation resource does not have a label (to be consistent w/ the return of LanguageMap.parse)', () => {
+    const state = {
+      companionWindows: {
+        [companionWindowId]: { locale: 'en' },
+      },
+      searches: {
+        a: {
+          [companionWindowId]: {
+            json: { '@id': 'yolo', resources: [{ '@id': annoId }] },
+          },
+        },
+      },
+    };
+
+    expect(
+      getResourceAnnotationLabel(
+        state, { annotationUri: annoId, companionWindowId, windowId: 'a' },
+      ),
     ).toEqual([]);
   });
 });

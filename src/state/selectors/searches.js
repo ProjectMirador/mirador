@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
+import { LanguageMap } from 'manifesto.js';
 import Annotation from '../../lib/Annotation';
 import { getWindow } from './windows';
+import { getManifestLocale } from './manifests';
 
 export const getSearchResultsForWindow = createSelector(
   [
@@ -82,4 +84,28 @@ export const getSelectedContentSearchAnnotations = createSelector(
       r => selectedAnnotationIds && selectedAnnotationIds.includes(r.id),
     ),
   })).filter(val => val.resources.length > 0),
+);
+
+export const getResourceAnnotationForSearchHit = createSelector(
+  [
+    getSearchAnnotationForCompanionWindow,
+    (state, { annotationUri }) => annotationUri,
+  ],
+  (searchAnnotations, annotationUri) => searchAnnotations.resources.find(
+    r => r.id === annotationUri,
+  ),
+);
+
+export const getResourceAnnotationLabel = createSelector(
+  [
+    getResourceAnnotationForSearchHit,
+    getManifestLocale,
+  ],
+  (resourceAnnotation, locale) => {
+    if (
+      !(resourceAnnotation && resourceAnnotation.resource && resourceAnnotation.resource.label)
+    ) return [];
+
+    return LanguageMap.parse(resourceAnnotation.resource.label, locale).map(label => label.value);
+  },
 );
