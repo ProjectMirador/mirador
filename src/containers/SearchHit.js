@@ -2,10 +2,13 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
+import flatten from 'lodash/flatten';
 import { withPlugins } from '../extend/withPlugins';
 import { SearchHit } from '../components/SearchHit';
 import * as actions from '../state/actions';
 import {
+  getCanvasLabel,
+  getSearchAnnotationsForCompanionWindow,
   getSelectedContentSearchAnnotationIds,
 } from '../state/selectors';
 
@@ -14,9 +17,21 @@ import {
  * @memberof SearchHit
  * @private
  */
-const mapStateToProps = (state, { hit, companionWindowId, windowId }) => ({
-  selected: getSelectedContentSearchAnnotationIds(state, { windowId })[0] === hit.annotations[0],
-});
+const mapStateToProps = (state, { hit, companionWindowId, windowId }) => {
+  const annotations = getSearchAnnotationsForCompanionWindow(
+    state, { companionWindowId, windowId },
+  );
+  const resourceAnnotations = flatten(annotations.map(a => a.resources));
+  const hitAnnotation = resourceAnnotations.find(r => r.id === hit.annotations[0]);
+
+  return {
+    canvasLabel: hitAnnotation && getCanvasLabel(state, {
+      canvasId: hitAnnotation.targetId,
+      windowId,
+    }),
+    selected: getSelectedContentSearchAnnotationIds(state, { windowId })[0] === hit.annotations[0],
+  };
+};
 
 const mapDispatchToProps = {
   selectContentSearchAnnotation: actions.selectContentSearchAnnotation,
@@ -28,6 +43,8 @@ const styles = theme => ({
   hitCounter: {
     ...theme.typography.h6,
     backgroundColor: theme.palette.hitCounter.default,
+    marginRight: theme.spacing(1),
+    verticalAlign: 'inherit',
   },
   inlineButton: {
     margin: 0,
