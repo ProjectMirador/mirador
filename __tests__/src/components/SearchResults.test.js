@@ -20,6 +20,7 @@ function createWrapper(props) {
           match: 'moose',
         },
       ]}
+      startIndex={10}
       {...props}
     />,
   );
@@ -30,7 +31,7 @@ describe('SearchResults', () => {
     const selectContentSearchAnnotation = jest.fn();
     const wrapper = createWrapper({ selectContentSearchAnnotation });
     expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').length).toEqual(1);
-    expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').prop('index')).toEqual(0);
+    expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').prop('index')).toEqual(10);
   });
 
   it('can focus on a single item', () => {

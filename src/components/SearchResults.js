@@ -30,6 +30,7 @@ export class SearchResults extends Component {
     const {
       classes,
       searchHits,
+      startIndex,
       t,
       windowId,
     } = this.props;
@@ -53,7 +54,7 @@ export class SearchResults extends Component {
                 key={hit.annotations[0]}
                 focused={focused}
                 hit={hit}
-                index={index}
+                index={startIndex + index}
                 windowId={windowId}
                 showDetails={this.toggleFocus}
               />
@@ -68,11 +69,13 @@ export class SearchResults extends Component {
 SearchResults.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   searchHits: PropTypes.arrayOf(PropTypes.object).isRequired,
+  startIndex: PropTypes.number,
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
 };
 
 SearchResults.defaultProps = {
   classes: {},
+  startIndex: 0,
   t: k => k,
 };

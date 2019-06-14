@@ -25,20 +25,30 @@ export const getSearchResultsForCompanionWindow = createSelector(
   },
 );
 
-export const getSearchHitsForCompanionWindow = createSelector(
+export const getSearchForCompanionWindow = createSelector(
   [
     getSearchResultsForCompanionWindow,
   ],
   (result) => {
-    if (!result || !result.json || result.isFetching || !result.json.hits) return [];
-    return result.json.hits;
+    if (!result || !result.json || result.isFetching) return {};
+    return result.json;
+  },
+);
+
+export const getSearchHitsForCompanionWindow = createSelector(
+  [
+    getSearchForCompanionWindow,
+  ],
+  (result) => {
+    if (!result.hits) return [];
+    return result.hits;
   },
 );
 
 /** convert search results to an annotation */
-const searchResultsToAnnotation = (result) => {
-  if (!result || !result.json || result.isFetching || !result.json.resources) return undefined;
-  const anno = new Annotation(result.json);
+const searchResultsToAnnotation = (json) => {
+  if (!json.resources) return undefined;
+  const anno = new Annotation(json);
   return {
     id: anno.id,
     resources: anno.resources,
@@ -47,7 +57,7 @@ const searchResultsToAnnotation = (result) => {
 
 export const getSearchAnnotationsForCompanionWindow = createSelector(
   [
-    getSearchResultsForCompanionWindow,
+    getSearchForCompanionWindow,
   ],
   result => searchResultsToAnnotation(result),
 );
@@ -58,7 +68,9 @@ export const getSearchAnnotationsForWindow = createSelector(
   ],
   (results) => {
     if (!results) return [];
-    const arr = Object.values(results).map(result => searchResultsToAnnotation(result));
+    const arr = Object.values(results).map(result => (
+      result && result.json && !result.isFetching && searchResultsToAnnotation(result.json)
+    ));
     return arr.filter(e => e);
   },
 );

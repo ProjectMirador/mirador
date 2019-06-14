@@ -5,6 +5,7 @@ import {
   getSelectedContentSearchAnnotationIds,
   getSelectedContentSearchAnnotations,
   getSearchAnnotationsForCompanionWindow,
+  getSearchForCompanionWindow,
 } from '../../../src/state/selectors';
 
 describe('getSearchResultsForWindow', () => {
@@ -33,6 +34,36 @@ describe('getSearchResultsForWindow', () => {
     expect(
       getSearchResultsForWindow({}, { windowId: 'a' }),
     ).toEqual([]);
+  });
+});
+
+describe('getSearchForCompanionWindow', () => {
+  const companionWindowId = 'cwid';
+  it('returns the search data for a completed search', () => {
+    const state = {
+      searches: {
+        a: {
+          [companionWindowId]: {
+            json: { hits: [1, 2, 3] },
+          },
+        },
+        b: {
+          [companionWindowId]: {
+            isFetching: true,
+            json: { },
+          },
+        },
+      },
+    };
+    expect(
+      getSearchForCompanionWindow(state, { companionWindowId, windowId: 'a' }),
+    ).toEqual({ hits: [1, 2, 3] });
+    expect(
+      getSearchForCompanionWindow(state, { companionWindowId, windowId: 'b' }),
+    ).toEqual({});
+    expect(
+      getSearchForCompanionWindow({}, { companionWindowId, windowId: 'a' }),
+    ).toEqual({});
   });
 });
 

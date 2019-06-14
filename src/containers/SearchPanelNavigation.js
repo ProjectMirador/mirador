@@ -8,6 +8,7 @@ import * as actions from '../state/actions';
 import {
   getSearchHitsForCompanionWindow,
   getSelectedContentSearchAnnotationIds,
+  getSearchForCompanionWindow,
 } from '../state/selectors';
 
 /**
@@ -18,6 +19,7 @@ import {
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   searchHits: getSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
   selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, { windowId }),
+  startIndex: getSearchForCompanionWindow(state, { companionWindowId, windowId }).startIndex,
 });
 
 /**
