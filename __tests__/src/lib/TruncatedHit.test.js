@@ -3,11 +3,17 @@ import TruncatedHit from '../../../src/lib/TruncatedHit';
 describe('TruncatedHit', () => {
   const th = new TruncatedHit({
     after: 'aaaaa', before: 'bbbbb', match: 'four',
-  }, 10);
+  }, 10, 1);
   const matchOnly = new TruncatedHit({ match: 'four' }, 10);
   describe('charsOnSide', () => {
     it('returns a balanced number of chars to put on each side of match', () => {
       expect(th.charsOnSide).toEqual(3);
+    });
+    it('uses a minimum value for each side to account for beginning/end', () => {
+      const min = new TruncatedHit({
+        after: 'aaaaa', before: 'bbbbb', match: 'four',
+      }, 10, 10);
+      expect(min.charsOnSide).toEqual(10);
     });
   });
   describe('before', () => {
