@@ -85,6 +85,19 @@ describe('SearchPanelControls', () => {
     expect(wrapper.state().search).toBe('yolo');
   });
 
+  it('does not submit an empty search', () => {
+    const fetchSearch = jest.fn();
+    const searchService = {
+      id: 'http://www.example.com/search',
+      options: { resource: { id: 'example.com/manifest' } },
+    };
+    const wrapper = createWrapper({ fetchSearch, searchService });
+    wrapper.setState({ search: '' });
+
+    wrapper.find('form').simulate('submit', { preventDefault: () => {} });
+    expect(fetchSearch).not.toHaveBeenCalled();
+  });
+
   describe('input', () => {
     it('has the query prop has the input value on intial render', () => {
       const wrapper = createWrapper({ query: 'Wolpertinger' });
