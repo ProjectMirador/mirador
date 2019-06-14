@@ -21,9 +21,10 @@ function createWrapper(props) {
 }
 
 describe('SearchPanelControls', () => {
-  it('renders a form', () => {
+  it('renders a form and navigation', () => {
     const wrapper = createWrapper();
     expect(wrapper.find('form').length).toEqual(1);
+    expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchPanelNavigation)))').length).toEqual(1);
   });
   it('submits a search when an autocomplete suggestion is picked', () => {
     const fetchSearch = jest.fn();
@@ -99,30 +100,6 @@ describe('SearchPanelControls', () => {
       wrapper.setProps({ query: '' });
       expect(wrapper.state().search).toEqual('');
       expect(wrapper.find(Downshift).props().inputValue).toEqual('');
-    });
-  });
-
-  describe('when searchHits are available', () => {
-    it('renders text with buttons', () => {
-      const selectContentSearchAnnotation = jest.fn();
-      const wrapper = createWrapper({
-        searchHits: [{ annotations: ['1'] }, { annotations: ['2'] }, { annotations: ['3'] }],
-        selectContentSearchAnnotation,
-        selectedContentSearchAnnotation: ['2'],
-      });
-      expect(wrapper.find('WithStyles(ForwardRef(Typography))').text()).toEqual('searchPageSeparator');
-      expect(wrapper.find('Connect(WithPlugins(MiradorMenuButton))[disabled=false]').length).toEqual(2);
-      wrapper.find('Connect(WithPlugins(MiradorMenuButton))[disabled=false]').first().props().onClick();
-      expect(selectContentSearchAnnotation).toHaveBeenCalledWith('window', ['1']);
-      wrapper.find('Connect(WithPlugins(MiradorMenuButton))[disabled=false]').last().props().onClick();
-      expect(selectContentSearchAnnotation).toHaveBeenCalledWith('window', ['3']);
-    });
-    it('buttons disabled when no next/prev', () => {
-      const wrapper = createWrapper({
-        searchHits: [{ annotations: ['1'] }],
-        selectedContentSearchAnnotation: ['1'],
-      });
-      expect(wrapper.find('Connect(WithPlugins(MiradorMenuButton))[disabled=true]').length).toEqual(2);
     });
   });
 });

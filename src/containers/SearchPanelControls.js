@@ -8,9 +8,7 @@ import * as actions from '../state/actions';
 import {
   getManifestAutocompleteService,
   getManifestSearchService,
-  getSearchHitsForCompanionWindow,
   getSearchResultsForCompanionWindow,
-  getSelectedContentSearchAnnotationIds,
 } from '../state/selectors';
 
 /**
@@ -23,9 +21,7 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => {
   return {
     autocompleteService: getManifestAutocompleteService(state, { windowId }),
     query: results && results.query,
-    searchHits: getSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
     searchService: getManifestSearchService(state, { windowId }),
-    selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, { windowId }),
   };
 };
 
@@ -36,20 +32,11 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => {
  */
 const mapDispatchToProps = {
   fetchSearch: actions.fetchSearch,
-  selectContentSearchAnnotation: actions.selectContentSearchAnnotation,
 };
-
-/** */
-const styles = theme => ({
-  body2: {
-    marginLeft: '-16px',
-    width: '100%',
-  },
-});
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withStyles(styles),
+  withStyles({}),
   withTranslation(),
   withPlugins('SearchPanelControls'),
 );
