@@ -98,7 +98,7 @@ export class OpenSeadragonViewer extends Component {
     const {
       viewer,
       highlightedAnnotations, selectedAnnotations,
-      searchAnnotations, selectedContentSearchAnnotations,
+      searchAnnotations, selectedContentSearchAnnotations, palette,
     } = this.props;
     const highlightsUpdated = !OpenSeadragonViewer.annotationsMatch(
       highlightedAnnotations, prevProps.highlightedAnnotations,
@@ -119,8 +119,11 @@ export class OpenSeadragonViewer extends Component {
         this.osdCanvasOverlay.clear();
         this.osdCanvasOverlay.resize();
         this.osdCanvasOverlay.canvasUpdate(() => {
-          this.annotationsToContext(searchAnnotations, '#00BFFF');
-          this.annotationsToContext(selectedContentSearchAnnotations, 'yellow');
+          this.annotationsToContext(searchAnnotations, palette.highlights.primary);
+          this.annotationsToContext(
+            selectedContentSearchAnnotations,
+            palette.highlights.secondary,
+          );
         });
       };
       this.viewer.forceRedraw();
@@ -131,8 +134,8 @@ export class OpenSeadragonViewer extends Component {
         this.osdCanvasOverlay.clear();
         this.osdCanvasOverlay.resize();
         this.osdCanvasOverlay.canvasUpdate(() => {
-          this.annotationsToContext(highlightedAnnotations, '#00BFFF');
-          this.annotationsToContext(selectedAnnotations, 'yellow');
+          this.annotationsToContext(highlightedAnnotations, palette.highlights.primary);
+          this.annotationsToContext(selectedAnnotations, palette.highlights.secondary);
         });
       };
       this.viewer.forceRedraw();
@@ -309,6 +312,7 @@ OpenSeadragonViewer.defaultProps = {
   children: null,
   highlightedAnnotations: [],
   label: null,
+  palette: {},
   searchAnnotations: [],
   selectedAnnotations: [],
   selectedContentSearchAnnotations: [],
@@ -321,6 +325,7 @@ OpenSeadragonViewer.propTypes = {
   children: PropTypes.node,
   highlightedAnnotations: PropTypes.arrayOf(PropTypes.object),
   label: PropTypes.string,
+  palette: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   searchAnnotations: PropTypes.arrayOf(PropTypes.object),
   selectedAnnotations: PropTypes.arrayOf(PropTypes.object),
   selectedContentSearchAnnotations: PropTypes.arrayOf(PropTypes.object),
