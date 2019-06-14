@@ -55,7 +55,7 @@ const styles = theme => ({
   listItem: {
     '&$selected': {
       '& $hitCounter': {
-        backgroundColor: theme.palette.hitCounter.selected,
+        backgroundColor: theme.palette.highlights.primary,
       },
       '&$focused': {
         '&:hover': {

@@ -13,6 +13,7 @@ import {
   getViewer,
   getSearchAnnotationsForWindow,
   getSelectedContentSearchAnnotations,
+  getTheme,
 } from '../state/selectors';
 
 /**
@@ -24,6 +25,7 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   canvasWorld: new CanvasWorld(getSelectedCanvases(state, { windowId })),
   highlightedAnnotations: getHighlightedAnnotationsOnCanvases(state, { windowId }),
   label: getCanvasLabel(state, { windowId }),
+  palette: getTheme(state).palette,
   searchAnnotations: getSearchAnnotationsForWindow(
     state,
     { windowId },
