@@ -6,13 +6,11 @@ import Downshift from 'downshift';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import SearchIcon from '@material-ui/icons/SearchSharp';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeftSharp';
-import ChevronRightIcon from '@material-ui/icons/ChevronRightSharp';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+import SearchPanelNavigation from '../containers/SearchPanelNavigation';
 
 /** */
 function renderInput(inputProps) {
@@ -111,34 +109,6 @@ export class SearchPanelControls extends Component {
   }
 
   /** */
-  nextSearchResult(currentHitIndex) {
-    const { searchHits, selectContentSearchAnnotation, windowId } = this.props;
-    selectContentSearchAnnotation(windowId, searchHits[currentHitIndex + 1].annotations);
-  }
-
-  /** */
-  previousSearchResult(currentHitIndex) {
-    const { searchHits, selectContentSearchAnnotation, windowId } = this.props;
-    selectContentSearchAnnotation(windowId, searchHits[currentHitIndex - 1].annotations);
-  }
-
-  /** */
-  hasNextResult(currentHitIndex) {
-    const { searchHits } = this.props;
-    if (searchHits.length === 0) return false;
-    if (currentHitIndex < searchHits.length - 1) return true;
-    return false;
-  }
-
-  /** */
-  hasPreviousResult(currentHitIndex) {
-    const { searchHits } = this.props;
-    if (searchHits.length === 0) return false;
-    if (currentHitIndex > 0) return true;
-    return false;
-  }
-
-  /** */
   handleChange(value) {
     this.setState({
       search: value,
@@ -189,12 +159,9 @@ export class SearchPanelControls extends Component {
   /** */
   render() {
     const {
-      companionWindowId, t, searchHits, selectedContentSearchAnnotation, classes,
-      selectOpen,
+      companionWindowId, t, selectOpen, windowId,
     } = this.props;
 
-    const currentHitIndex = searchHits
-      .findIndex(val => val.annotations.includes(selectedContentSearchAnnotation[0]));
     const { search } = this.state;
     const id = `search-${companionWindowId}`;
     return (
@@ -263,25 +230,7 @@ export class SearchPanelControls extends Component {
             </Downshift>
           </FormControl>
         </form>
-        {(searchHits.length > 0) && (
-          <Typography variant="body2" align="center" classes={classes}>
-            <MiradorMenuButton
-              aria-label={t('searchPreviousResult')}
-              disabled={!this.hasPreviousResult(currentHitIndex)}
-              onClick={() => this.previousSearchResult(currentHitIndex)}
-            >
-              <ChevronLeftIcon />
-            </MiradorMenuButton>
-              {t('searchPageSeparator', { current: currentHitIndex + 1, total: searchHits.length })}
-            <MiradorMenuButton
-              aria-label={t('searchNextResult')}
-              disabled={!this.hasNextResult(currentHitIndex)}
-              onClick={() => this.nextSearchResult(currentHitIndex)}
-            >
-              <ChevronRightIcon />
-            </MiradorMenuButton>
-          </Typography>
-        )}
+        <SearchPanelNavigation windowId={windowId} companionWindowId={companionWindowId} />
       </>
     );
   }
@@ -291,16 +240,12 @@ SearchPanelControls.propTypes = {
   autocompleteService: PropTypes.shape({
     id: PropTypes.string,
   }),
-  classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string.isRequired,
   fetchSearch: PropTypes.func.isRequired,
   query: PropTypes.string,
-  searchHits: PropTypes.arrayOf(PropTypes.object),
   searchService: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
-  selectContentSearchAnnotation: PropTypes.func.isRequired,
-  selectedContentSearchAnnotation: PropTypes.arrayOf(PropTypes.string).isRequired,
   selectOpen: PropTypes.bool,
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
@@ -308,9 +253,7 @@ SearchPanelControls.propTypes = {
 
 SearchPanelControls.defaultProps = {
   autocompleteService: undefined,
-  classes: {},
   query: '',
-  searchHits: [],
   selectOpen: undefined,
   t: key => key,
 };
