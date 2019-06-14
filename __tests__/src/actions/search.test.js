@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 
 import * as actions from '../../../src/state/actions';
 import ActionTypes from '../../../src/state/actions/action-types';
+import manifestFixture015 from '../../fixtures/version-2/015.json';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -129,15 +130,44 @@ describe('search actions', () => {
     });
   });
   describe('selectContentSearchAnnotation', () => {
-    it('dispatches the SELECT_CONTENT_SEARCH_ANNOTATION action', () => {
+    it('dispatches the SELECT_CONTENT_SEARCH_ANNOTATION action with the right canvas index', () => {
+      const store = mockStore({
+        manifests: {
+          bar: {
+            json: manifestFixture015,
+          },
+        },
+        searches: {
+          foo: {
+            cwid: {
+              json: {
+                resources: [
+                  {
+                    '@id': 'abc123',
+                    on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/15/c2.json#0,2,4,5',
+                  },
+                ],
+              },
+            },
+          },
+        },
+        windows: {
+          foo: {
+            manifestId: 'bar',
+          },
+        },
+      });
       const windowId = 'foo';
       const annotationId = ['abc123'];
       const expectedAction = {
         annotationId,
+        canvasIndex: 1,
         type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION,
         windowId,
       };
-      expect(actions.selectContentSearchAnnotation(windowId, annotationId)).toEqual(expectedAction);
+      store.dispatch(actions.selectContentSearchAnnotation(windowId, annotationId));
+      const actualActions = store.getActions();
+      expect(actualActions).toEqual([expectedAction]);
     });
   });
 });

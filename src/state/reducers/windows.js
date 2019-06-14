@@ -123,6 +123,7 @@ export const windowsReducer = (state = {}, action) => {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
+          canvasIndex: action.canvasIndex,
           selectedContentSearchAnnotation: action.annotationId,
         },
       };
