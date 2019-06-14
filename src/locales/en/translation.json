@@ -96,6 +96,7 @@
     "rights": "License",
     "searchInputLabel": "search terms",
     "searchNextResult": "Next result",
+    "searchNoResults": "No results found",
     "searchPageSeparator": "{{current}} of {{total}}",
     "searchPreviousResult": "Previous result",
     "searchSubmitAria": "Submit search",

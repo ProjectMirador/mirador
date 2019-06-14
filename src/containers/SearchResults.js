@@ -8,6 +8,7 @@ import * as actions from '../state/actions';
 import {
   getSearchHitsForCompanionWindow,
   getSelectedContentSearchAnnotationIds,
+  getSearchResultsForCompanionWindow,
 } from '../state/selectors';
 
 /**
@@ -17,6 +18,7 @@ import {
  */
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   searchHits: getSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
+  searchResults: getSearchResultsForCompanionWindow(state, { companionWindowId, windowId }),
   selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, { windowId }),
 });
 
@@ -28,6 +30,10 @@ const mapDispatchToProps = {
 const styles = theme => ({
   navigation: {
     textTransform: 'none',
+  },
+  noResults: {
+    ...theme.typography.h6,
+    padding: theme.spacing(2),
   },
   toggleFocus: {
     ...theme.typography.subtitle1,

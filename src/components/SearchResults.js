@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
+import Typography from '@material-ui/core/Typography';
 import BackIcon from '@material-ui/icons/ArrowBackSharp';
 import SearchHit from '../containers/SearchHit';
 
@@ -31,6 +32,7 @@ export class SearchResults extends Component {
       classes,
       companionWindowId,
       searchHits,
+      searchResults,
       t,
       windowId,
     } = this.props;
@@ -39,6 +41,10 @@ export class SearchResults extends Component {
       focused,
     } = this.state;
 
+    const noResultsState = (
+      searchResults && searchResults.query && !searchResults.isFetching && searchHits.length === 0
+    );
+
     return (
       <>
         { focused && (
@@ -46,6 +52,11 @@ export class SearchResults extends Component {
             <BackIcon />
             {t('backToResults')}
           </Button>
+        )}
+        {noResultsState && (
+          <Typography className={classes.noResults}>
+            {t('searchNoResults')}
+          </Typography>
         )}
         <List>
           {
@@ -71,6 +82,7 @@ SearchResults.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string.isRequired,
   searchHits: PropTypes.arrayOf(PropTypes.object).isRequired,
+  searchResults: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
 };
