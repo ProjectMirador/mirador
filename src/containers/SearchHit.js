@@ -21,7 +21,7 @@ const mapStateToProps = (state, { hit, companionWindowId, windowId }) => {
     state, { companionWindowId, windowId },
   );
 
-  const resourceAnnotations = [annotation.resources];
+  const resourceAnnotations = annotation.resources;
   const hitAnnotation = resourceAnnotations.find(r => r.id === hit.annotations[0]);
 
   return {

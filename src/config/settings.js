@@ -50,7 +50,7 @@ export default {
       hitCounter: {
         default: '#bdbdbd',
         selected: '#ffff00',
-        adjcaent: '#00BFFF',
+        adjacent: '#00BFFF',
       },
       section_divider: 'rgba(0, 0, 0, 0.25)',
     },
