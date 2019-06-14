@@ -1,4 +1,9 @@
 import fetch from 'node-fetch';
+import flatten from 'lodash/flatten';
+import {
+  getCanvas,
+  getSearchAnnotationsForWindow,
+} from '../selectors';
 import ActionTypes from './action-types';
 
 /**
@@ -91,10 +96,20 @@ export function fetchSearch(targetId, companionWindowId, searchId, query) {
  * @param  {String} annotationId
  * @memberof ActionCreators
  */
-export function selectContentSearchAnnotation(windowId, annotationId) {
-  return {
-    annotationId,
-    type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION,
-    windowId,
+export function selectContentSearchAnnotation(windowId, annotationIds) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const annotations = getSearchAnnotationsForWindow(state, { windowId });
+    const resourceAnnotations = flatten(annotations.map(a => a.resources));
+    const hitAnnotation = resourceAnnotations.find(r => r.id === annotationIds[0]);
+    const canvasId = hitAnnotation && hitAnnotation.targetId;
+    const canvas = canvasId && getCanvas(state, { canvasId, windowId });
+
+    dispatch({
+      annotationId: annotationIds,
+      canvasIndex: canvas && canvas.index,
+      type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION,
+      windowId,
+    });
   };
 }

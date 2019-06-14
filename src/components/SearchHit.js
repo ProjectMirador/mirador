@@ -11,6 +11,22 @@ import SanitizedHtml from '../containers/SanitizedHtml';
 /** */
 export class SearchHit extends Component {
   /** */
+  constructor(props) {
+    super(props);
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  /** */
+  handleClick() {
+    const {
+      hit, selectContentSearchAnnotation, windowId,
+    } = this.props;
+
+    selectContentSearchAnnotation(windowId, hit.annotations);
+  }
+
+  /** */
   render() {
     const {
       canvasLabel,
@@ -20,10 +36,8 @@ export class SearchHit extends Component {
       index,
       showDetails,
       selected,
-      selectContentSearchAnnotation,
       t,
       truncated,
-      windowId,
     } = this.props;
 
     if (focused && !selected) return null;
@@ -39,7 +53,7 @@ export class SearchHit extends Component {
         )}
         button={!selected}
         component="li"
-        onClick={() => selectContentSearchAnnotation(windowId, hit.annotations)}
+        onClick={this.handleClick}
         selected={selected}
       >
         <ListItemText primaryTypographyProps={{ variant: 'body2' }}>

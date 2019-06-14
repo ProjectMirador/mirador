@@ -394,10 +394,10 @@ describe('windows reducer', () => {
     it('sets the highlightedAnnotation attribute on the given window', () => {
       const beforeState = { abc123: {} };
       const action = {
-        annotationId: ['aaa123'], type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION, windowId: 'abc123',
+        annotationId: ['aaa123'], canvasIndex: 5, type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION, windowId: 'abc123',
       };
       const expectedState = {
-        abc123: { selectedContentSearchAnnotation: ['aaa123'] },
+        abc123: { canvasIndex: 5, selectedContentSearchAnnotation: ['aaa123'] },
       };
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
