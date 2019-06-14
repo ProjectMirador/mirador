@@ -7,8 +7,9 @@ import { SearchHit } from '../components/SearchHit';
 import * as actions from '../state/actions';
 import {
   getCanvasLabel,
-  getSearchAnnotationForCompanionWindow,
   getSelectedCanvases,
+  getResourceAnnotationForSearchHit,
+  getResourceAnnotationLabel,
   getSelectedContentSearchAnnotationIds,
 } from '../state/selectors';
 
@@ -18,17 +19,17 @@ import {
  * @private
  */
 const mapStateToProps = (state, { hit, companionWindowId, windowId }) => {
-  const annotation = getSearchAnnotationForCompanionWindow(
-    state, { companionWindowId, windowId },
+  const hitAnnotation = getResourceAnnotationForSearchHit(
+    state, { annotationUri: hit.annotations[0], companionWindowId, windowId },
   );
-
-  const resourceAnnotations = annotation.resources;
-  const hitAnnotation = resourceAnnotations.find(r => r.id === hit.annotations[0]);
-
+  const annotationLabel = getResourceAnnotationLabel(
+    state, { annotationUri: hit.annotations[0], companionWindowId, windowId },
+  );
   const selectedCanvasIds = getSelectedCanvases(state, { windowId }).map(canvas => canvas.id);
 
   return {
     adjacent: selectedCanvasIds.includes(hitAnnotation.targetId),
+    annotationLabel: annotationLabel[0],
     canvasLabel: hitAnnotation && getCanvasLabel(state, {
       canvasId: hitAnnotation.targetId,
       windowId,

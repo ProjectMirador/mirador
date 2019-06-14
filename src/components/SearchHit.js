@@ -31,6 +31,7 @@ export class SearchHit extends Component {
   render() {
     const {
       adjacent,
+      annotationLabel,
       canvasLabel,
       classes,
       hit,
@@ -65,6 +66,9 @@ export class SearchHit extends Component {
             <Chip component="span" label={index + 1} className={classes.hitCounter} />
             {canvasLabel}
           </Typography>
+          {annotationLabel && (
+            <Typography variant="subtitle2">{annotationLabel}</Typography>
+          )}
           <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.before} />
           {' '}
           <strong>
@@ -86,6 +90,7 @@ export class SearchHit extends Component {
 
 SearchHit.propTypes = {
   adjacent: PropTypes.bool,
+  annotationLabel: PropTypes.string,
   canvasLabel: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.string),
   focused: PropTypes.bool,
@@ -105,6 +110,7 @@ SearchHit.propTypes = {
 
 SearchHit.defaultProps = {
   adjacent: false,
+  annotationLabel: undefined,
   canvasLabel: undefined,
   classes: {},
   focused: false,
