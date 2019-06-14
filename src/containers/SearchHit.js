@@ -39,6 +39,9 @@ const mapDispatchToProps = {
 
 /** */
 const styles = theme => ({
+  canvasLabel: {
+    ...theme.typography.h6,
+  },
   focused: {},
   hitCounter: {
     ...theme.typography.h6,

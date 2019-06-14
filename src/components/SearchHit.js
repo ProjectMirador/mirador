@@ -57,7 +57,7 @@ export class SearchHit extends Component {
         selected={selected}
       >
         <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
-          <Typography variant="h6">
+          <Typography className={classes.canvasLabel}>
             <Chip component="span" label={index + 1} className={classes.hitCounter} />
             {canvasLabel}
           </Typography>
