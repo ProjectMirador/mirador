@@ -29,6 +29,7 @@ export class SearchResults extends Component {
   render() {
     const {
       classes,
+      companionWindowId,
       searchHits,
       t,
       windowId,
@@ -50,6 +51,7 @@ export class SearchResults extends Component {
           {
             searchHits.map((hit, index) => (
               <SearchHit
+                companionWindowId={companionWindowId}
                 key={hit.annotations[0]}
                 focused={focused}
                 hit={hit}
@@ -67,6 +69,7 @@ export class SearchResults extends Component {
 
 SearchResults.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
+  companionWindowId: PropTypes.string.isRequired,
   searchHits: PropTypes.arrayOf(PropTypes.object).isRequired,
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types

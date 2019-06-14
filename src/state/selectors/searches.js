@@ -45,7 +45,7 @@ const searchResultsToAnnotation = (result) => {
   };
 };
 
-export const getSearchAnnotationsForCompanionWindow = createSelector(
+export const getSearchAnnotationForCompanionWindow = createSelector(
   [
     getSearchResultsForCompanionWindow,
   ],
