@@ -7,6 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import SanitizedHtml from '../containers/SanitizedHtml';
+import TruncatedHit from '../lib/TruncatedHit';
 
 /** */
 export class SearchHit extends Component {
@@ -27,6 +28,7 @@ export class SearchHit extends Component {
     } = this.props;
 
     if (focused && !selected) return null;
+    const truncatedHit = new TruncatedHit(hit);
 
     return (
       <ListItem
@@ -47,13 +49,13 @@ export class SearchHit extends Component {
             <Chip component="span" label={index + 1} className={classes.hitCounter} />
             {canvasLabel}
           </Typography>
-          <SanitizedHtml ruleSet="iiif" htmlString={hit.before} />
+          <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.before} />
           {' '}
           <strong>
-            <SanitizedHtml ruleSet="iiif" htmlString={hit.match} />
+            <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.match} />
           </strong>
           {' '}
-          <SanitizedHtml ruleSet="iiif" htmlString={hit.after} />
+          <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.after} />
           {' '}
           { truncated && !focused && (
             <Button className={classes.inlineButton} onClick={showDetails} color="secondary" size="small">
