@@ -1,16 +1,17 @@
 /** */
 export default class TruncatedHit {
   /** */
-  constructor(hit, maxChars = 200) {
+  constructor(hit, maxChars = 200, minimum = 20) {
     this.hit = hit;
     this.maxChars = maxChars;
+    this.minimum = minimum;
   }
 
   /** */
   get charsOnSide() {
     const resultingChars = (this.maxChars - this.hit.match.length) / 2;
     const measured = [this.hit.before.length, this.hit.after.length].filter(length => length > 0);
-    return Math.min(resultingChars, ...measured);
+    return Math.max(Math.min(resultingChars, ...measured), this.minimum);
   }
 
   /** */
