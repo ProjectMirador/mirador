@@ -470,6 +470,13 @@ describe('getManifestSearchService', () => {
     expect(getManifestSearchService(state, { manifestId: 'x' }).id).toEqual('https://contentsearch.stanford.edu/fg165hz3589/search');
   });
 
+  it('supports v1 of the search spec', () => {
+    const v1 = JSON.parse(JSON.stringify(manifestFixtureFg165hz3589));
+    v1.service[0].profile = 'http://iiif.io/api/search/1/search';
+    const state = { manifests: { x: { json: v1 } } };
+    expect(getManifestSearchService(state, { manifestId: 'x' }).id).toEqual('https://contentsearch.stanford.edu/fg165hz3589/search');
+  });
+
   it('is null if no search service is specified', () => {
     const state = { manifests: { x: { json: manifestFixture019 } } };
     expect(getManifestSearchService(state, { manifestId: 'x' })).toBeNull();
@@ -481,6 +488,15 @@ describe('getManifestAutocompleteService', () => {
     const state = { manifests: { x: { json: manifestFixtureFg165hz3589 } } };
     expect(getManifestAutocompleteService(state, { manifestId: 'x' }).id).toEqual('https://contentsearch.stanford.edu/fg165hz3589/autocomplete');
   });
+
+  it('supports v1 of the search spec', () => {
+    const v1 = JSON.parse(JSON.stringify(manifestFixtureFg165hz3589));
+    v1.service[0].profile = 'http://iiif.io/api/search/1/search';
+    v1.service[0].service.profile = 'http://iiif.io/api/search/1/autocomplete';
+    const state = { manifests: { x: { json: v1 } } };
+    expect(getManifestAutocompleteService(state, { manifestId: 'x' }).id).toEqual('https://contentsearch.stanford.edu/fg165hz3589/autocomplete');
+  });
+
 
   it('is null if no search service is specified', () => {
     const state = { manifests: { x: { json: manifestFixture019 } } };
