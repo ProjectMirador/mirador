@@ -2,13 +2,12 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
-import flatten from 'lodash/flatten';
 import { withPlugins } from '../extend/withPlugins';
 import { SearchHit } from '../components/SearchHit';
 import * as actions from '../state/actions';
 import {
   getCanvasLabel,
-  getSearchAnnotationsForCompanionWindow,
+  getSearchAnnotationForCompanionWindow,
   getSelectedContentSearchAnnotationIds,
 } from '../state/selectors';
 
@@ -18,10 +17,11 @@ import {
  * @private
  */
 const mapStateToProps = (state, { hit, companionWindowId, windowId }) => {
-  const annotations = getSearchAnnotationsForCompanionWindow(
+  const annotation = getSearchAnnotationForCompanionWindow(
     state, { companionWindowId, windowId },
   );
-  const resourceAnnotations = flatten(annotations.map(a => a.resources));
+
+  const resourceAnnotations = [annotation.resources];
   const hitAnnotation = resourceAnnotations.find(r => r.id === hit.annotations[0]);
 
   return {

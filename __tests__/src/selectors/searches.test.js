@@ -4,7 +4,7 @@ import {
   getSearchAnnotationsForWindow,
   getSelectedContentSearchAnnotationIds,
   getSelectedContentSearchAnnotations,
-  getSearchAnnotationsForCompanionWindow,
+  getSearchAnnotationForCompanionWindow,
 } from '../../../src/state/selectors';
 
 describe('getSearchResultsForWindow', () => {
@@ -65,7 +65,7 @@ describe('getSearchHitsForCompanionWindow', () => {
   });
 });
 
-describe('getSearchAnnotationsForCompanionWindow', () => {
+describe('getSearchAnnotationForCompanionWindow', () => {
   const companionWindowId = 'cwid';
 
   it('returns results for a manifest', () => {
@@ -79,19 +79,19 @@ describe('getSearchAnnotationsForCompanionWindow', () => {
       },
     };
     expect(
-      getSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId: 'a' }),
+      getSearchAnnotationForCompanionWindow(state, { companionWindowId, windowId: 'a' }),
     ).toEqual({
       id: 'yolo',
       resources: [{ resource: { '@id': 'annoId2' } }],
     });
     expect(
-      getSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId: 'b' }),
+      getSearchAnnotationForCompanionWindow(state, { companionWindowId, windowId: 'b' }),
     ).toEqual(undefined);
     expect(
-      getSearchAnnotationsForCompanionWindow({}, { companionWindowId, windowId: 'a' }),
+      getSearchAnnotationForCompanionWindow({}, { companionWindowId, windowId: 'a' }),
     ).toEqual(undefined);
     expect(
-      getSearchAnnotationsForCompanionWindow({}, { windowId: 'a' }),
+      getSearchAnnotationForCompanionWindow({}, { windowId: 'a' }),
     ).toEqual(undefined);
   });
 });
