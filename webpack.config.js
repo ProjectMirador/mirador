@@ -1,5 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const paths = require('./config/paths');
 
@@ -37,11 +39,7 @@ const baseConfig = [
         babelLoaderConfig,
         {
           test: /\.s?css$/,
-          use: [
-            'style-loader', // creates style nodes from JS strings
-            'css-loader', // translates CSS into CommonJS
-            'sass-loader', // compiles Sass to CSS, using Node Sass by default
-          ],
+          use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
         },
       ],
     },
@@ -49,6 +47,11 @@ const baseConfig = [
       minimizer: [
         new TerserPlugin({
           extractComments: true,
+        }),
+        new OptimizeCSSAssetsPlugin({
+          cssProcessorPluginOptions: {
+            preset: ['default', { discardComments: { removeAll: true } }],
+          },
         }),
       ],
     },
@@ -60,6 +63,10 @@ const baseConfig = [
       path: path.join(__dirname, 'dist'),
     },
     plugins: [
+      new MiniCssExtractPlugin({
+        chunkFilename: '[id].css',
+        filename: '[name].css',
+      }),
       new webpack.IgnorePlugin({
         resourceRegExp: /@blueprintjs\/(core|icons)/, // ignore optional UI framework dependencies
       }),

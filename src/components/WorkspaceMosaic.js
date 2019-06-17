@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
   Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
 } from 'react-mosaic-component';
-import 'react-mosaic-component/react-mosaic-component.css';
 import difference from 'lodash/difference';
 import toPairs from 'lodash/toPairs';
 import MosaicRenderPreview from '../containers/MosaicRenderPreview';

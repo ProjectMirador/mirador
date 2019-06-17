@@ -19,5 +19,5 @@ describe('Window actions', () => {
     )); // only default configed windows found
     await page.waitFor(1000);
     await expect(numWindows).toBe(2);
-  });
+  }, 30000);
 });

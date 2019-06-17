@@ -46,5 +46,5 @@ describe('Window Sidebars', () => {
     await expect(page).toClick(`#${windowId} button[aria-label="Toggle sidebar"]`);
 
     await expect(page).toMatchElement(`#${windowId} button[aria-label="Index"]`);
-  });
+  }, 30000);
 });
