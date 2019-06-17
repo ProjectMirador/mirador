@@ -11,7 +11,6 @@ export const validatePlugin = plugin => [
   checkName,
   checkTarget,
   checkMode,
-  checkComponent,
   checkMapStateToProps,
   checkMapDispatchToProps,
   checkReducers,
@@ -36,12 +35,6 @@ const checkTarget = (plugin) => {
 const checkMode = (plugin) => {
   const { mode } = plugin;
   return ['add', 'wrap'].some(s => s === mode);
-};
-
-/** */
-const checkComponent = (plugin) => {
-  const { component } = plugin;
-  return isFunction(component);
 };
 
 /** */
