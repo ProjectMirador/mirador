@@ -97,7 +97,7 @@ describe('ManifestoCanvas', () => {
     });
   });
   describe('service', () => {
-    it('correctly returns the service information', () => {
+    it('correctly returns the service information for the given canvas', () => {
       const serviceInstance = new ManifestoCanvas(
         manifesto.create(serviceFixture).getSequences()[0].getCanvases()[0],
       );
