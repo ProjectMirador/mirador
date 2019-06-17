@@ -1,0 +1,216 @@
+{
+	"@context": "http://iiif.io/api/presentation/2/context.json",
+	"@type": "sc:Manifest",
+	"@id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb00122140/manifest",
+	"label": "Feuerwerksbuch. Sammlung von medizinischen und Hausrezepten - BSB Cgm 399",
+	"metadata": [
+		{
+			"label": [
+				{
+					"@language": "de",
+					"@value": "Titel"
+				},
+				{
+					"@language": "zh",
+					"@value": "書名"
+				},
+				{
+					"@language": "en",
+					"@value": "Title"
+				}
+			],
+			"value": "Feuerwerksbuch. Sammlung von medizinischen und Hausrezepten - BSB Cgm 399"
+		},
+		{
+			"label": [
+				{
+					"@language": "de",
+					"@value": "Entstehung"
+				},
+				{
+					"@language": "zh",
+					"@value": "生成"
+				},
+				{
+					"@language": "en",
+					"@value": "Creation"
+				}
+			],
+			"value": "[S.l.] Bayern (München?), 2. Hälfte 15. Jh. mit Nachträgen"
+		},
+		{
+			"label": [
+				{
+					"@language": "de",
+					"@value": "Umfang"
+				},
+				{
+					"@language": "zh",
+					"@value": "範疇"
+				},
+				{
+					"@language": "en",
+					"@value": "Extent"
+				}
+			],
+			"value": "204 Bl. - Papier"
+		},
+		{
+			"label": [
+				{
+					"@language": "de",
+					"@value": "Sprache"
+				},
+				{
+					"@language": "zh",
+					"@value": "語言"
+				},
+				{
+					"@language": "en",
+					"@value": "Language"
+				}
+			],
+			"value": [
+				{
+					"@language": "de",
+					"@value": "Deutsch"
+				},
+				{
+					"@language": "zh",
+					"@value": "德语"
+				},
+				{
+					"@language": "en",
+					"@value": "German"
+				}
+			]
+		},
+		{
+			"label": [
+				{
+					"@language": "de",
+					"@value": "Standort"
+				},
+				{
+					"@language": "zh",
+					"@value": "位置"
+				},
+				{
+					"@language": "en",
+					"@value": "Location"
+				}
+			],
+			"value": "München, Bayerische Staatsbibliothek -- Cgm 399"
+		},
+		{
+			"label": [
+				{
+					"@language": "de",
+					"@value": "Objektkategorie"
+				},
+				{
+					"@language": "zh",
+					"@value": "物件類別"
+				},
+				{
+					"@language": "en",
+					"@value": "Object Type"
+				}
+			],
+			"value": "Buch"
+		},
+		{
+			"label": [
+				{
+					"@language": "en",
+					"@value": "Identifier"
+				},
+				{
+					"@language": "de",
+					"@value": "Identifikator"
+				}
+			],
+			"value": "BSB-Hss Cgm 399"
+		},
+		{
+			"label": [
+				{
+					"@language": "de",
+					"@value": "Anmerkung"
+				},
+				{
+					"@language": "zh",
+					"@value": "說明"
+				},
+				{
+					"@language": "en",
+					"@value": "Note"
+				}
+			],
+			"value": "Sammelhandschrift. - Alte Foliierung 1 - 145 und 1 - 65, durch neue Blattzählung 1 - 135 teilweise korrigiert, die jedoch die unbeschriebenen Bl. nicht zählt: 10 zwischen 51 und 52, 42 zwischen 52 und 53, 2 zwischen 81 und 82, je 1 Bl. zwischen 82 und 83, 83 und 84, 84 und 85, 4 zwischen 118 und 119, 2 zwischen 123 und 124, je 3 zwischen 126 und 127, 131 und 132. Außerdem unbeschrieben: 49v, 51v, 52r, 53r, 78v, 79v - 80r, 81v, 83v, 84v, 99r, 104r, 109r, 120r, 125v, 126v, 127v, 132v. Eingeheftete Zettel zwischen 37 und 38, 48 und 49, 50 und 51, 52 und 53, 58 und 59, 60 und 61, 69 und 70, 85 und 86, 86 und 87, 99 und 100, 133 und 134, 134 und 135. - 1 Zeichnung."
+		}
+	],
+	"navDate": "1451-01-01T00:00:00Z",
+	"license": "http://creativecommons.org/licenses/by-nc-sa/4.0/deed.de",
+	"attribution": "Bayerische Staatsbibliothek",
+	"seeAlso": [
+		{
+			"@id": "https://opacplus.bsb-muenchen.de/title/BV037270417",
+			"label": "OPAC",
+			"format": "text/html"
+		},
+		{
+			"@id": "https://opacplus.bsb-muenchen.de/title/BV037270417?format=marc",
+			"label": "MARCXML",
+			"format": "application/marcxml+xml",
+			"profile": "http://www.loc.gov/standards/marcxml/"
+		},
+		{
+			"@id": "https://opacplus.bsb-muenchen.de/title/BV037270417?format=rdf",
+			"label": "RDF",
+			"format": "application/rdf+xml",
+			"profile": "https://lod.b3kat.de/doc"
+		}
+	],
+	"sequences": [
+		{
+			"@id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb00122140/sequences/normal",
+			"@type": "sc:Sequence",
+			"canvases": [
+				{
+					"@id": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb00122140/canvas/1",
+					"@type": "sc:Canvas",
+					"label": "(0001)",
+					"service": {
+						"@context": "http://iiif.io/api/annex/services/physdim/1/context.json",
+						"physicalScale": 0.006811360634081902,
+						"physicalUnits": "cm",
+						"profile": "http://iiif.io/api/annex/services/physdim"
+					},
+					"images": [
+						{
+							"@type": "oa:Annotation",
+							"motivation": "sc:painting",
+							"resource": {
+								"@id": "https://api.digitale-sammlungen.de/iiif/image/v2/bsb00122140_00001/full/full/0/default.jpg",
+								"@type": "dctypes:Image",
+								"service": {
+									"@context": "http://iiif.io/api/image/2/context.json",
+									"@id": "https://api.digitale-sammlungen.de/iiif/image/v2/bsb00122140_00001",
+									"profile": "http://iiif.io/api/image/2/level2.json",
+									"protocol": "http://iiif.io/api/image"
+								},
+								"format": "image/jpeg",
+								"width": 2271,
+								"height": 2805
+							},
+							"on": "https://api.digitale-sammlungen.de/iiif/presentation/v2/bsb00122140/canvas/1"
+						}
+					],
+					"width": 2271,
+					"height": 2805
+				}
+			]
+		}
+	]
+}
