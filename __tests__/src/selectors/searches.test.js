@@ -7,6 +7,7 @@ import {
   getResourceAnnotationForSearchHit,
   getResourceAnnotationLabel,
   getSearchIsFetching,
+  getNextSearchId,
 } from '../../../src/state/selectors';
 
 describe('getSearchQuery', () => {
@@ -61,6 +62,39 @@ describe('getSearchIsFetching', () => {
     expect(
       getSearchIsFetching(state, { companionWindowId, windowId: 'b' }),
     ).toEqual(false);
+  });
+});
+
+describe('getNextSearchId', () => {
+  const companionWindowId = 'cwid';
+  it('it finds the next unrequested search page', () => {
+    const state = {
+      searches: {
+        a: {
+          [companionWindowId]: {
+            data: {
+              'search?page=1': {
+                json: {
+                  next: 'search?page=2',
+                },
+              },
+              'search?page=2': {
+                json: {
+                  next: 'search?page=3',
+                },
+              },
+            },
+            query: 'xyz',
+          },
+        },
+      },
+    };
+    expect(
+      getNextSearchId(state, { companionWindowId, windowId: 'a' }),
+    ).toEqual('search?page=3');
+    expect(
+      getSearchQuery(state, { companionWindowId, windowId: 'b' }),
+    ).toEqual(undefined);
   });
 });
 

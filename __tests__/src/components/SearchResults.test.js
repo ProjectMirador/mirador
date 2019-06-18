@@ -10,7 +10,9 @@ import { SearchResults } from '../../../src/components/SearchResults';
 function createWrapper(props) {
   return shallow(
     <SearchResults
+      companionWindowId="cwid"
       windowId="window"
+      query="query"
       selectedContentSearchAnnotation={['foo']}
       searchHits={[
         {
@@ -76,6 +78,21 @@ describe('SearchResults', () => {
         query: '',
       });
       expect(wrapper.find('WithStyles(ForwardRef(Typography))').length).toEqual(0);
+    });
+  });
+
+  describe('multi-page search results', () => {
+    it('shows a button to request the next page', () => {
+      const fetchSearch = jest.fn();
+      const wrapper = createWrapper({
+        fetchSearch,
+        nextSearch: 'search?page=2',
+      });
+
+      expect(wrapper.find(Button).length).toEqual(1);
+      wrapper.find(Button).simulate('click');
+
+      expect(fetchSearch).toHaveBeenCalledWith('window', 'cwid', 'search?page=2', 'query');
     });
   });
 });
