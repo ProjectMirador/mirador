@@ -22,6 +22,37 @@ describe('search reducer', () => {
       },
     });
   });
+  it('should removes previous search requests with REQUEST_SEARCH', () => {
+    expect(searchesReducer({
+      foo: {
+        abc123: {
+          data: {
+            'search?page=xyz': {
+              json: { },
+            },
+          },
+          query: 'initial search terms',
+        },
+      },
+    }, {
+      companionWindowId: 'abc123',
+      query: 'search terms',
+      searchId: 'search?page=1',
+      type: ActionTypes.REQUEST_SEARCH,
+      windowId: 'foo',
+    })).toEqual({
+      foo: {
+        abc123: {
+          data: {
+            'search?page=1': {
+              isFetching: true,
+            },
+          },
+          query: 'search terms',
+        },
+      },
+    });
+  });
   it('should handle RECEIVE_SEARCH', () => {
     expect(searchesReducer(
       {
