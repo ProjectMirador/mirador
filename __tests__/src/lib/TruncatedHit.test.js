@@ -15,6 +15,9 @@ describe('TruncatedHit', () => {
       }, 10, 10);
       expect(min.charsOnSide).toEqual(10);
     });
+    it('with only a match', () => {
+      expect(matchOnly.charsOnSide).toEqual(20);
+    });
   });
   describe('before', () => {
     it('returns substring of before chars', () => {
