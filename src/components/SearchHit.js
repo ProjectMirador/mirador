@@ -62,6 +62,7 @@ export class SearchHit extends Component {
         component="li"
         onClick={this.handleClick}
         selected={selected}
+        aria-live="assertive"
       >
         <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
           <Typography variant="subtitle2" className={classes.subtitle}>
