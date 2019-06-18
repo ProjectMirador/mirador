@@ -5,15 +5,12 @@ import { withStyles } from '@material-ui/core/styles';
 import * as actions from '../state/actions';
 import { withPlugins } from '../extend/withPlugins';
 import { SearchPanel } from '../components/SearchPanel';
-import { getSearchResultsForCompanionWindow } from '../state/selectors';
+import { getSearchQuery } from '../state/selectors';
 
 /** */
-const mapStateToProps = (state, { id, windowId }) => {
-  const results = getSearchResultsForCompanionWindow(state, { companionWindowId: id, windowId });
-  return {
-    query: results && results.query,
-  };
-};
+const mapStateToProps = (state, { id, windowId }) => ({
+  query: getSearchQuery(state, { companionWindowId: id, windowId }),
+});
 
 /** */
 const mapDispatchToProps = (dispatch, props) => ({

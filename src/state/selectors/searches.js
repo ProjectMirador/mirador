@@ -27,6 +27,13 @@ export const getSearchResultsForCompanionWindow = createSelector(
   },
 );
 
+export const getSearchQuery = createSelector(
+  [
+    getSearchResultsForCompanionWindow,
+  ],
+  results => results && results.query,
+);
+
 export const getSearchHitsForCompanionWindow = createSelector(
   [
     getSearchResultsForCompanionWindow,

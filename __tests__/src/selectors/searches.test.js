@@ -1,4 +1,5 @@
 import {
+  getSearchQuery,
   getSearchResultsForWindow,
   getSearchHitsForCompanionWindow,
   getSearchAnnotationsForWindow,
@@ -8,6 +9,27 @@ import {
   getResourceAnnotationForSearchHit,
   getResourceAnnotationLabel,
 } from '../../../src/state/selectors';
+
+describe('getSearchQuery', () => {
+  const companionWindowId = 'cwid';
+  it('returns the search query performed', () => {
+    const state = {
+      searches: {
+        a: {
+          [companionWindowId]: {
+            query: 'xyz',
+          },
+        },
+      },
+    };
+    expect(
+      getSearchQuery(state, { companionWindowId, windowId: 'a' }),
+    ).toEqual('xyz');
+    expect(
+      getSearchQuery(state, { companionWindowId, windowId: 'b' }),
+    ).toEqual(undefined);
+  });
+});
 
 describe('getSearchResultsForWindow', () => {
   const companionWindowId = 'cwid';

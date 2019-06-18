@@ -8,6 +8,7 @@ import {
   getCompanionWindowsForPosition,
   getAnnotationResourcesByMotivation,
   getManifestSearchService,
+  getSearchQuery,
 } from '../state/selectors';
 import { WindowSideBarButtons } from '../components/WindowSideBarButtons';
 
@@ -31,6 +32,10 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
  */
 const mapStateToProps = (state, { windowId }) => ({
   hasAnnotations: getAnnotationResourcesByMotivation(state, { motivations: ['oa:commenting', 'sc:painting'], windowId }).length > 0,
+  hasSearchResults: getSearchQuery(state, {
+    companionWindowId: (getCompanionWindowsForPosition(state, { position: 'left', windowId })[0] || {}).id,
+    windowId,
+  }),
   hasSearchService: getManifestSearchService(state, { windowId }) !== null,
   hideAnnotationsPanel: state.config.window.hideAnnotationsPanel,
   hideSearchPanel: state.config.window.hideSearchPanel,
