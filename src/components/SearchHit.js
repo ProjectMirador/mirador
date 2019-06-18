@@ -70,18 +70,22 @@ export class SearchHit extends Component {
           {annotationLabel && (
             <Typography variant="subtitle2">{annotationLabel}</Typography>
           )}
-          <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.before} />
-          {' '}
-          <strong>
-            <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.match} />
-          </strong>
-          {' '}
-          <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.after} />
-          {' '}
-          { truncated && !focused && (
-            <Button className={classes.inlineButton} onClick={showDetails} color="secondary" size="small">
-              {t('more')}
-            </Button>
+          {hit && (
+            <>
+              <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.before} />
+              {' '}
+              <strong>
+                <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.match} />
+              </strong>
+              {' '}
+              <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.after} />
+              {' '}
+              { truncated && !focused && (
+                <Button className={classes.inlineButton} onClick={showDetails} color="secondary" size="small">
+                  {t('more')}
+                </Button>
+              )}
+            </>
           )}
         </ListItemText>
       </ListItem>
@@ -99,7 +103,7 @@ SearchHit.propTypes = {
     after: PropTypes.string,
     before: PropTypes.string,
     match: PropTypes.string,
-  }).isRequired,
+  }),
   index: PropTypes.number,
   selectContentSearchAnnotation: PropTypes.func,
   selected: PropTypes.bool,
@@ -114,6 +118,7 @@ SearchHit.defaultProps = {
   canvasLabel: undefined,
   classes: {},
   focused: false,
+  hit: undefined,
   index: undefined,
   selectContentSearchAnnotation: () => {},
   selected: false,
