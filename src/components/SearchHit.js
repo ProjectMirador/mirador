@@ -62,8 +62,8 @@ export class SearchHit extends Component {
         onClick={this.handleClick}
         selected={selected}
       >
-        <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
-          <Typography className={classes.canvasLabel}>
+        <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
+          <Typography variant="subtitle2" className={classes.subtitle}>
             <Chip component="span" label={index + 1} className={classes.hitCounter} />
             {canvasLabel}
           </Typography>

@@ -40,13 +40,14 @@ describe('SearchHit', () => {
     it('renders the annotationLabel if present', () => {
       const wrapper = createWrapper({ annotationLabel: 'The Anno Label' });
 
+      expect(wrapper.find('WithStyles(ForwardRef(Typography))[variant="subtitle2"]').length).toEqual(2);
       expect(wrapper.find('WithStyles(ForwardRef(Typography))[variant="subtitle2"][children="The Anno Label"]').length).toEqual(1);
     });
 
     it('does not render the typography if no annotation label is present', () => {
       const wrapper = createWrapper();
 
-      expect(wrapper.find('WithStyles(ForwardRef(Typography))[variant="subtitle2"]').length).toEqual(0);
+      expect(wrapper.find('WithStyles(ForwardRef(Typography))[variant="subtitle2"]').length).toEqual(1);
     });
   });
 });
