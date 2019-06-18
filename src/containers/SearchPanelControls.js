@@ -8,7 +8,7 @@ import * as actions from '../state/actions';
 import {
   getManifestAutocompleteService,
   getManifestSearchService,
-  getSearchResultsForCompanionWindow,
+  getSearchQuery,
 } from '../state/selectors';
 
 /**
@@ -16,14 +16,11 @@ import {
  * @memberof SearchPanelControls
  * @private
  */
-const mapStateToProps = (state, { companionWindowId, windowId }) => {
-  const results = getSearchResultsForCompanionWindow(state, { companionWindowId, windowId });
-  return {
-    autocompleteService: getManifestAutocompleteService(state, { windowId }),
-    query: results && results.query,
-    searchService: getManifestSearchService(state, { windowId }),
-  };
-};
+const mapStateToProps = (state, { companionWindowId, windowId }) => ({
+  autocompleteService: getManifestAutocompleteService(state, { windowId }),
+  query: getSearchQuery(state, { companionWindowId, windowId }),
+  searchService: getManifestSearchService(state, { windowId }),
+});
 
 /**
  * mapDispatchToProps - to hook up connect
