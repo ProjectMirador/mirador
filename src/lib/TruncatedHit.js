@@ -10,7 +10,7 @@ export default class TruncatedHit {
   /** */
   get charsOnSide() {
     const resultingChars = (this.maxChars - this.hit.match.length) / 2;
-    const measured = [this.hit.before.length, this.hit.after.length].filter(length => length > 0);
+    const measured = [(this.hit.before || '').length, (this.hit.after || '').length].filter(length => length > 0);
     return Math.max(Math.min(resultingChars, ...measured), this.minimum);
   }
 
