@@ -9,6 +9,7 @@ import { SearchHit } from '../../../src/components/SearchHit';
 function createWrapper(props) {
   return shallow(
     <SearchHit
+      annotationId="foo"
       hit={{
         after: ', and start the chainsaw',
         annotations: ['foo'],
