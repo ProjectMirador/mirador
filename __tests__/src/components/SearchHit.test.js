@@ -9,6 +9,7 @@ import { SearchHit } from '../../../src/components/SearchHit';
 function createWrapper(props) {
   return shallow(
     <SearchHit
+      annotationId="foo"
       hit={{
         after: ', and start the chainsaw',
         annotations: ['foo'],
@@ -34,6 +35,11 @@ describe('SearchHit', () => {
 
     wrapper.find('WithStyles(ForwardRef(ListItem))').simulate('click');
     expect(selectContentSearchAnnotation).toHaveBeenCalledWith('window', ['foo']);
+  });
+
+  it('renders the annotation char if the hit is not available', () => {
+    const wrapper = createWrapper({ annotation: { chars: 'xyz' }, hit: undefined });
+    expect(wrapper.find('WithStyles(ForwardRef(ListItemText))').render().text()).toEqual('1xyz');
   });
 
   describe('Annotation Labels', () => {

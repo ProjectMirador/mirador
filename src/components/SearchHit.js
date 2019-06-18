@@ -21,16 +21,17 @@ export class SearchHit extends Component {
   /** */
   handleClick() {
     const {
-      hit, selectContentSearchAnnotation, windowId,
+      annotationId, selectContentSearchAnnotation, windowId,
     } = this.props;
 
-    selectContentSearchAnnotation(windowId, hit.annotations);
+    selectContentSearchAnnotation(windowId, [annotationId]);
   }
 
   /** */
   render() {
     const {
       adjacent,
+      annotation,
       annotationLabel,
       canvasLabel,
       classes,
@@ -70,19 +71,24 @@ export class SearchHit extends Component {
           {annotationLabel && (
             <Typography variant="subtitle2">{annotationLabel}</Typography>
           )}
-          <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.before} />
-          {' '}
-          <strong>
-            <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.match} />
-          </strong>
-          {' '}
-          <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.after} />
-          {' '}
-          { truncated && !focused && (
-            <Button className={classes.inlineButton} onClick={showDetails} color="secondary" size="small">
-              {t('more')}
-            </Button>
+          {hit && (
+            <>
+              <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.before} />
+              {' '}
+              <strong>
+                <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.match} />
+              </strong>
+              {' '}
+              <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.after} />
+              {' '}
+              { truncated && !focused && (
+                <Button className={classes.inlineButton} onClick={showDetails} color="secondary" size="small">
+                  {t('more')}
+                </Button>
+              )}
+            </>
           )}
+          {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
         </ListItemText>
       </ListItem>
     );
@@ -91,6 +97,10 @@ export class SearchHit extends Component {
 
 SearchHit.propTypes = {
   adjacent: PropTypes.bool,
+  annotation: PropTypes.shape({
+    content: PropTypes.string,
+  }),
+  annotationId: PropTypes.string,
   annotationLabel: PropTypes.string,
   canvasLabel: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.string),
@@ -99,7 +109,7 @@ SearchHit.propTypes = {
     after: PropTypes.string,
     before: PropTypes.string,
     match: PropTypes.string,
-  }).isRequired,
+  }),
   index: PropTypes.number,
   selectContentSearchAnnotation: PropTypes.func,
   selected: PropTypes.bool,
@@ -110,10 +120,13 @@ SearchHit.propTypes = {
 
 SearchHit.defaultProps = {
   adjacent: false,
+  annotation: undefined,
+  annotationId: undefined,
   annotationLabel: undefined,
   canvasLabel: undefined,
   classes: {},
   focused: false,
+  hit: undefined,
   index: undefined,
   selectContentSearchAnnotation: () => {},
   selected: false,

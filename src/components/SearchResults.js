@@ -31,8 +31,12 @@ export class SearchResults extends Component {
     const {
       classes,
       companionWindowId,
+      isFetching,
+      fetchSearch,
+      nextSearch,
+      query,
+      searchAnnotations,
       searchHits,
-      searchResults,
       t,
       windowId,
     } = this.props;
@@ -42,7 +46,7 @@ export class SearchResults extends Component {
     } = this.state;
 
     const noResultsState = (
-      searchResults && searchResults.query && !searchResults.isFetching && searchHits.length === 0
+      query && !isFetching && searchHits.length === 0 && searchAnnotations.length === 0
     );
 
     return (
@@ -72,7 +76,25 @@ export class SearchResults extends Component {
               />
             ))
           }
+          { searchHits.length === 0
+            && searchAnnotations.length > 0
+            && searchAnnotations.map((anno, index) => (
+              <SearchHit
+                annotationId={anno.id}
+                companionWindowId={companionWindowId}
+                key={anno.id}
+                focused={focused}
+                index={index}
+                windowId={windowId}
+                showDetails={this.toggleFocus}
+              />
+            ))}
         </List>
+        { nextSearch && (
+          <Button color="secondary" onClick={() => fetchSearch(windowId, companionWindowId, nextSearch, query)}>
+            {t('moreResults')}
+          </Button>
+        )}
       </>
     );
   }
@@ -81,13 +103,22 @@ export class SearchResults extends Component {
 SearchResults.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string.isRequired,
-  searchHits: PropTypes.arrayOf(PropTypes.object).isRequired,
-  searchResults: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  fetchSearch: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool,
+  nextSearch: PropTypes.string,
+  query: PropTypes.string,
+  searchAnnotations: PropTypes.arrayOf(PropTypes.object),
+  searchHits: PropTypes.arrayOf(PropTypes.object),
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
 };
 
 SearchResults.defaultProps = {
   classes: {},
+  isFetching: false,
+  nextSearch: undefined,
+  query: undefined,
+  searchAnnotations: [],
+  searchHits: [],
   t: k => k,
 };

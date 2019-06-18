@@ -10,7 +10,9 @@ import { SearchResults } from '../../../src/components/SearchResults';
 function createWrapper(props) {
   return shallow(
     <SearchResults
+      companionWindowId="cwid"
       windowId="window"
+      query="query"
       selectedContentSearchAnnotation={['foo']}
       searchHits={[
         {
@@ -47,43 +49,65 @@ describe('SearchResults', () => {
     expect(wrapper.state().focused).toEqual(false);
   });
 
+  describe('annotation-only search results', () => {
+    it('renders a SearchHit for each annotation', () => {
+      const wrapper = createWrapper({
+        searchAnnotations: [{ id: 'x' }, { id: 'y' }],
+        searchHits: [],
+      });
+      expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').length).toEqual(2);
+      expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').at(0).prop('index')).toEqual(0);
+      expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').at(0).prop('annotationId')).toEqual('x');
+
+      expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').at(1).prop('index')).toEqual(1);
+      expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').at(1).prop('annotationId')).toEqual('y');
+    });
+  });
+
   describe('no search results', () => {
     it('shows no results', () => {
       const wrapper = createWrapper({
+        isFetching: false,
+        query: 'nope',
         searchHits: [],
-        searchResults: {
-          isFetching: false,
-          query: 'nope',
-        },
       });
       expect(wrapper.find('WithStyles(ForwardRef(Typography))').text()).toEqual('searchNoResults');
     });
     it('with hits', () => {
       const wrapper = createWrapper({
-        searchResults: {
-          isFetching: false,
-          query: 'nope',
-        },
+        isFetching: false,
+        query: 'nope',
       });
       expect(wrapper.find('WithStyles(ForwardRef(Typography))').length).toEqual(0);
     });
     it('while fetching', () => {
       const wrapper = createWrapper({
-        searchResults: {
-          isFetching: true,
-          query: 'nope',
-        },
+        isFetching: true,
+        query: 'nope',
       });
       expect(wrapper.find('WithStyles(ForwardRef(Typography))').length).toEqual(0);
     });
     it('without a query', () => {
       const wrapper = createWrapper({
-        searchResults: {
-          isFetching: false,
-          query: '',
-        },
+        isFetching: false,
+        query: '',
       });
       expect(wrapper.find('WithStyles(ForwardRef(Typography))').length).toEqual(0);
+    });
+  });
+
+  describe('multi-page search results', () => {
+    it('shows a button to request the next page', () => {
+      const fetchSearch = jest.fn();
+      const wrapper = createWrapper({
+        fetchSearch,
+        nextSearch: 'search?page=2',
+      });
+
+      expect(wrapper.find(Button).length).toEqual(1);
+      wrapper.find(Button).simulate('click');
+
+      expect(fetchSearch).toHaveBeenCalledWith('window', 'cwid', 'search?page=2', 'query');
     });
   });
 });

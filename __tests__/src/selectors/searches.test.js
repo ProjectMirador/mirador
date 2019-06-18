@@ -1,13 +1,13 @@
 import {
   getSearchQuery,
-  getSearchResultsForWindow,
-  getSearchHitsForCompanionWindow,
   getSearchAnnotationsForWindow,
+  getSearchHitsForCompanionWindow,
   getSelectedContentSearchAnnotationIds,
   getSelectedContentSearchAnnotations,
-  getSearchAnnotationForCompanionWindow,
   getResourceAnnotationForSearchHit,
   getResourceAnnotationLabel,
+  getSearchIsFetching,
+  getNextSearchId,
 } from '../../../src/state/selectors';
 
 describe('getSearchQuery', () => {
@@ -31,32 +31,70 @@ describe('getSearchQuery', () => {
   });
 });
 
-describe('getSearchResultsForWindow', () => {
+describe('getSearchIsFetching', () => {
   const companionWindowId = 'cwid';
-
-  it('returns flattened results for a manifest', () => {
+  it('returns whether any search page is currently fetching', () => {
     const state = {
       searches: {
         a: {
           [companionWindowId]: {
-            json: { foo: 'bar' },
+            data: {
+              'search?page=1': {
+                isFetching: true,
+              },
+            },
           },
         },
         b: {
           [companionWindowId]: {
-            json: { foo: 'bar' },
+            data: {
+              'search?page=1': {
+                isFetching: false,
+              },
+            },
           },
         },
       },
     };
     expect(
-      getSearchResultsForWindow(state, { windowId: 'a' }),
-    ).toEqual({
-      cwid: { json: { foo: 'bar' } },
-    });
+      getSearchIsFetching(state, { companionWindowId, windowId: 'a' }),
+    ).toEqual(true);
     expect(
-      getSearchResultsForWindow({}, { windowId: 'a' }),
-    ).toEqual([]);
+      getSearchIsFetching(state, { companionWindowId, windowId: 'b' }),
+    ).toEqual(false);
+  });
+});
+
+describe('getNextSearchId', () => {
+  const companionWindowId = 'cwid';
+  it('it finds the next unrequested search page', () => {
+    const state = {
+      searches: {
+        a: {
+          [companionWindowId]: {
+            data: {
+              'search?page=1': {
+                json: {
+                  next: 'search?page=2',
+                },
+              },
+              'search?page=2': {
+                json: {
+                  next: 'search?page=3',
+                },
+              },
+            },
+            query: 'xyz',
+          },
+        },
+      },
+    };
+    expect(
+      getNextSearchId(state, { companionWindowId, windowId: 'a' }),
+    ).toEqual('search?page=3');
+    expect(
+      getSearchQuery(state, { companionWindowId, windowId: 'b' }),
+    ).toEqual(undefined);
   });
 });
 
@@ -67,56 +105,36 @@ describe('getSearchHitsForCompanionWindow', () => {
       searches: {
         a: {
           [companionWindowId]: {
-            json: { hits: [1, 2, 3] },
+            data: {
+              'search?page=1': {
+                json: { hits: [1, 2, 3] },
+              },
+              'search?page=2': {
+                json: { hits: [4, 5] },
+              },
+            },
           },
         },
         b: {
           [companionWindowId]: {
-            json: { foo: 'bar' },
+            data: {
+              'search?page=1': {
+                json: { foo: 'bar' },
+              },
+            },
           },
         },
       },
     };
     expect(
       getSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'a' }),
-    ).toEqual([1, 2, 3]);
+    ).toEqual([1, 2, 3, 4, 5]);
     expect(
       getSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'b' }),
     ).toEqual([]);
     expect(
       getSearchHitsForCompanionWindow({}, { companionWindowId, windowId: 'a' }),
     ).toEqual([]);
-  });
-});
-
-describe('getSearchAnnotationForCompanionWindow', () => {
-  const companionWindowId = 'cwid';
-
-  it('returns results for a manifest', () => {
-    const state = {
-      searches: {
-        a: {
-          [companionWindowId]: {
-            json: { '@id': 'yolo', resources: [{ '@id': 'annoId2' }] },
-          },
-        },
-      },
-    };
-    expect(
-      getSearchAnnotationForCompanionWindow(state, { companionWindowId, windowId: 'a' }),
-    ).toEqual({
-      id: 'yolo',
-      resources: [{ resource: { '@id': 'annoId2' } }],
-    });
-    expect(
-      getSearchAnnotationForCompanionWindow(state, { companionWindowId, windowId: 'b' }),
-    ).toEqual(undefined);
-    expect(
-      getSearchAnnotationForCompanionWindow({}, { companionWindowId, windowId: 'a' }),
-    ).toEqual(undefined);
-    expect(
-      getSearchAnnotationForCompanionWindow({}, { windowId: 'a' }),
-    ).toEqual(undefined);
   });
 });
 
@@ -128,12 +146,23 @@ describe('getSearchAnnotationsForWindow', () => {
       searches: {
         a: {
           [companionWindowId]: {
-            json: { '@id': 'yolo', resources: [{ '@id': 'annoId2' }] },
+            data: {
+              'search?page=1': {
+                json: { '@id': 'yolo', resources: [{ '@id': 'annoId2' }] },
+              },
+              'search?page=2': {
+                json: { '@id': 'another', resources: [{ '@id': 'annoId3' }] },
+              },
+            },
           },
         },
         b: {
           [companionWindowId]: {
-            json: { foo: 'bar' },
+            data: {
+              'search?page=1': {
+                json: { foo: 'bar' },
+              },
+            },
           },
         },
       },
@@ -142,7 +171,10 @@ describe('getSearchAnnotationsForWindow', () => {
       getSearchAnnotationsForWindow(state, { companionWindowId, windowId: 'a' }),
     ).toEqual([{
       id: 'yolo',
-      resources: [{ resource: { '@id': 'annoId2' } }],
+      resources: [
+        { resource: { '@id': 'annoId2' } },
+        { resource: { '@id': 'annoId3' } },
+      ],
     }]);
     expect(
       getSearchAnnotationsForWindow(state, { companionWindowId, windowId: 'b' }),
@@ -183,10 +215,18 @@ describe('getSelectedContentSearchAnnotations', () => {
       searches: {
         foo: {
           bar: {
-            json: { '@id': 'yolo', resources: [{ '@id': 'annoId2' }] },
+            data: {
+              'search?page=1': {
+                json: { '@id': 'yolo', resources: [{ '@id': 'annoId2' }] },
+              },
+            },
           },
           baz: {
-            json: { '@id': 'nope', resources: [{ '@id': 'notthisone' }] },
+            data: {
+              'search?page=1': {
+                json: { '@id': 'nope', resources: [{ '@id': 'notthisone' }] },
+              },
+            },
           },
         },
       },
@@ -219,9 +259,13 @@ describe('getResourceAnnotationForSearchHit', () => {
       searches: {
         a: {
           [companionWindowId]: {
-            json: {
-              '@id': 'yolo',
-              resources: [{ '@id': annoId }],
+            data: {
+              'search?page=1': {
+                json: {
+                  '@id': 'yolo',
+                  resources: [{ '@id': annoId }],
+                },
+              },
             },
           },
         },
@@ -247,12 +291,16 @@ describe('getResourceAnnotationLabel', () => {
       searches: {
         a: {
           [companionWindowId]: {
-            json: {
-              '@id': 'yolo',
-              resources: [{
-                '@id': annoId,
-                label: { '@language': 'en', '@value': 'The Annotation Label' },
-              }],
+            data: {
+              'search?page=1': {
+                json: {
+                  '@id': 'yolo',
+                  resources: [{
+                    '@id': annoId,
+                    label: { '@language': 'en', '@value': 'The Annotation Label' },
+                  }],
+                },
+              },
             },
           },
         },
@@ -274,7 +322,11 @@ describe('getResourceAnnotationLabel', () => {
       searches: {
         a: {
           [companionWindowId]: {
-            json: { '@id': 'yolo', resources: [{ '@id': annoId }] },
+            data: {
+              'search?page=1': {
+                json: { '@id': 'yolo', resources: [{ '@id': annoId }] },
+              },
+            },
           },
         },
       },

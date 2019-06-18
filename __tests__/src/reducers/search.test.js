@@ -6,12 +6,48 @@ describe('search reducer', () => {
     expect(searchesReducer({}, {
       companionWindowId: 'abc123',
       query: 'search terms',
-      targetId: 'foo',
+      searchId: 'search?page=1',
       type: ActionTypes.REQUEST_SEARCH,
+      windowId: 'foo',
     })).toEqual({
       foo: {
         abc123: {
-          isFetching: true,
+          data: {
+            'search?page=1': {
+              isFetching: true,
+            },
+          },
+          query: 'search terms',
+        },
+      },
+    });
+  });
+  it('should removes previous search requests with REQUEST_SEARCH', () => {
+    expect(searchesReducer({
+      foo: {
+        abc123: {
+          data: {
+            'search?page=xyz': {
+              json: { },
+            },
+          },
+          query: 'initial search terms',
+        },
+      },
+    }, {
+      companionWindowId: 'abc123',
+      query: 'search terms',
+      searchId: 'search?page=1',
+      type: ActionTypes.REQUEST_SEARCH,
+      windowId: 'foo',
+    })).toEqual({
+      foo: {
+        abc123: {
+          data: {
+            'search?page=1': {
+              isFetching: true,
+            },
+          },
           query: 'search terms',
         },
       },
@@ -22,25 +58,34 @@ describe('search reducer', () => {
       {
         foo: {
           abc123: {
-            isFetching: true,
+            data: {
+              'search?page=1': {
+                isFetching: true,
+              },
+            },
+            query: 'search terms',
           },
         },
       },
       {
         companionWindowId: 'abc123',
+        searchId: 'search?page=1',
         searchJson: {
-          '@type': 'sc:AnnotationList',
           content: 'anno stuff',
-          id: 'abc123',
         },
-        targetId: 'foo',
         type: ActionTypes.RECEIVE_SEARCH,
+        windowId: 'foo',
       },
     )).toMatchObject({
       foo: {
         abc123: {
-          isFetching: false,
-          json: {},
+          data: {
+            'search?page=1': {
+              isFetching: false,
+              json: {},
+            },
+          },
+          query: 'search terms',
         },
       },
     });
@@ -50,21 +95,32 @@ describe('search reducer', () => {
       {
         foo: {
           abc123: {
-            isFetching: true,
+            data: {
+              'search?page=1': {
+                isFetching: true,
+              },
+            },
+            query: 'search terms',
           },
         },
       },
       {
         companionWindowId: 'abc123',
         error: "This institution didn't enable CORS.",
-        targetId: 'foo',
+        searchId: 'search?page=1',
         type: ActionTypes.RECEIVE_SEARCH_FAILURE,
+        windowId: 'foo',
       },
     )).toEqual({
       foo: {
         abc123: {
-          error: "This institution didn't enable CORS.",
-          isFetching: false,
+          data: {
+            'search?page=1': {
+              error: "This institution didn't enable CORS.",
+              isFetching: false,
+            },
+          },
+          query: 'search terms',
         },
       },
     });
@@ -86,8 +142,8 @@ describe('search reducer', () => {
       },
       {
         companionWindowId: 'abc123',
-        targetId: 'foo',
         type: ActionTypes.REMOVE_SEARCH,
+        windowId: 'foo',
       },
     )).toEqual({
       foo: {
