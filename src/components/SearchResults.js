@@ -31,8 +31,9 @@ export class SearchResults extends Component {
     const {
       classes,
       companionWindowId,
+      isFetching,
+      query,
       searchHits,
-      searchResults,
       t,
       windowId,
     } = this.props;
@@ -42,7 +43,7 @@ export class SearchResults extends Component {
     } = this.state;
 
     const noResultsState = (
-      searchResults && searchResults.query && !searchResults.isFetching && searchHits.length === 0
+      query && !isFetching && searchHits.length === 0
     );
 
     return (
@@ -81,13 +82,16 @@ export class SearchResults extends Component {
 SearchResults.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string.isRequired,
+  isFetching: PropTypes.bool,
+  query: PropTypes.string,
   searchHits: PropTypes.arrayOf(PropTypes.object).isRequired,
-  searchResults: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
 };
 
 SearchResults.defaultProps = {
   classes: {},
+  isFetching: false,
+  query: undefined,
   t: k => k,
 };

@@ -8,7 +8,8 @@ import * as actions from '../state/actions';
 import {
   getSearchHitsForCompanionWindow,
   getSelectedContentSearchAnnotationIds,
-  getSearchResultsForCompanionWindow,
+  getSearchQuery,
+  getSearchIsFetching,
 } from '../state/selectors';
 
 /**
@@ -17,8 +18,9 @@ import {
  * @private
  */
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
+  isFetching: getSearchIsFetching(state, { companionWindowId, windowId }),
+  query: getSearchQuery(state, { companionWindowId, windowId }),
   searchHits: getSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
-  searchResults: getSearchResultsForCompanionWindow(state, { companionWindowId, windowId }),
   selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, { windowId }),
 });
 

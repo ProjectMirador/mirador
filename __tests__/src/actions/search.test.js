@@ -12,45 +12,53 @@ describe('search actions', () => {
   describe('requestSearch', () => {
     it('requests an search from given a url', () => {
       const query = 'search terms';
-      const targetId = 'foo';
+      const windowId = 'foo';
       const companionWindowId = 'abc123';
+      const searchId = 'search?page=1';
       const expectedAction = {
         companionWindowId,
         query,
-        targetId,
+        searchId,
         type: ActionTypes.REQUEST_SEARCH,
+        windowId,
       };
-      expect(actions.requestSearch(targetId, companionWindowId, query)).toEqual(expectedAction);
+      expect(
+        actions.requestSearch(windowId, companionWindowId, searchId, query),
+      ).toEqual(expectedAction);
     });
   });
   describe('receiveSearch', () => {
     it('recieves an search', () => {
-      const targetId = 'foo';
+      const windowId = 'foo';
       const companionWindowId = 'abc123';
+      const searchId = 'search?page=1';
       const json = {
         companionWindowId,
         content: 'search request',
       };
       const expectedAction = {
         companionWindowId,
+        searchId,
         searchJson: json,
-        targetId,
         type: ActionTypes.RECEIVE_SEARCH,
+        windowId,
       };
-      expect(actions.receiveSearch(targetId, companionWindowId, json)).toEqual(expectedAction);
+      expect(
+        actions.receiveSearch(windowId, companionWindowId, searchId, json),
+      ).toEqual(expectedAction);
     });
   });
 
   describe('removeSearch', () => {
     it('sends the remove search action', () => {
-      const targetId = 'foo';
+      const windowId = 'foo';
       const companionWindowId = 'abc123';
       const expectedAction = {
         companionWindowId,
-        targetId,
         type: ActionTypes.REMOVE_SEARCH,
+        windowId,
       };
-      expect(actions.removeSearch(targetId, companionWindowId)).toEqual(expectedAction);
+      expect(actions.removeSearch(windowId, companionWindowId)).toEqual(expectedAction);
     });
   });
 
@@ -65,39 +73,42 @@ describe('search actions', () => {
       });
       it('dispatches the REQUEST_SEARCH action', () => {
         store.dispatch(actions.fetchSearch(
-          'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
+          'windowId',
           'companionWindowId',
-          'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
+          'searchId',
           'search terms',
         ));
         expect(store.getActions()).toEqual([
           {
             companionWindowId: 'companionWindowId',
             query: 'search terms',
-            targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
+            searchId: 'searchId',
             type: 'REQUEST_SEARCH',
+            windowId: 'windowId',
           },
         ]);
       });
       it('dispatches the REQUEST_SEARCH and then RECEIVE_SEARCH', () => {
         store.dispatch(actions.fetchSearch(
-          'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
+          'windowId',
           'companionWindowId',
-          'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
+          'searchId',
         ))
           .then(() => {
             const expectedActions = store.getActions();
             expect(expectedActions).toEqual([
               {
                 companionWindowId: 'companionWindowId',
-                targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
+                searchId: 'searchId',
                 type: 'REQUEST_SEARCH',
+                windowId: 'windowId',
               },
               {
                 companionWindowId: 'companionWindowId',
+                searchId: 'searchId',
                 searchJson: { data: '12345' },
-                targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
                 type: 'RECEIVE_SEARCH',
+                windowId: 'windowId',
               },
             ]);
           });
@@ -106,23 +117,25 @@ describe('search actions', () => {
     describe('error response', () => {
       it('dispatches the REQUEST_SEARCH and then RECEIVE_SEARCH', () => {
         store.dispatch(actions.fetchSearch(
-          'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
+          'windowId',
           'companionWindowId',
-          'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
+          'searchId',
         ))
           .then(() => {
             const expectedActions = store.getActions();
             expect(expectedActions).toEqual([
               {
                 companionWindowId: 'companionWindowId',
-                targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
+                searchId: 'searchId',
                 type: 'REQUEST_SEARCH',
+                windowId: 'windowId',
               },
               {
                 companionWindowId: 'companionWindowId',
                 error: new Error('invalid json response body at undefined reason: Unexpected end of JSON input'),
-                targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
+                searchId: 'searchId',
                 type: 'RECEIVE_SEARCH_FAILURE',
+                windowId: 'windowId',
               },
             ]);
           });
@@ -140,13 +153,17 @@ describe('search actions', () => {
         searches: {
           foo: {
             cwid: {
-              json: {
-                resources: [
-                  {
-                    '@id': 'abc123',
-                    on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/15/c2.json#0,2,4,5',
+              data: {
+                'search?page=1': {
+                  json: {
+                    resources: [
+                      {
+                        '@id': 'abc123',
+                        on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/15/c2.json#0,2,4,5',
+                      },
+                    ],
                   },
-                ],
+                },
               },
             },
           },

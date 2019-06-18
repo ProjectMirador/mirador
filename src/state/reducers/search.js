@@ -11,10 +11,16 @@ export const searchesReducer = (state = {}, action) => {
     case ActionTypes.REQUEST_SEARCH:
       return {
         ...state,
-        [action.targetId]: {
-          ...state[action.targetId],
+        [action.windowId]: {
+          ...state[action.windowId],
           [action.companionWindowId]: {
-            isFetching: true,
+            ...(state[action.windowId] || {})[action.companionWindowId],
+            data: {
+              ...((state[action.windowId] || {})[action.companionWindowId] || {}).data,
+              [action.searchId]: {
+                isFetching: true,
+              },
+            },
             query: action.query,
           },
         },
@@ -22,33 +28,43 @@ export const searchesReducer = (state = {}, action) => {
     case ActionTypes.RECEIVE_SEARCH:
       return {
         ...state,
-        [action.targetId]: {
-          ...state[action.targetId],
+        [action.windowId]: {
+          ...state[action.windowId],
           [action.companionWindowId]: {
-            ...state[action.targetId][action.companionWindowId],
-            isFetching: false,
-            json: action.searchJson,
+            ...(state[action.windowId] || {})[action.companionWindowId],
+            data: {
+              ...((state[action.windowId] || {})[action.companionWindowId] || {}).data,
+              [action.searchId]: {
+                isFetching: false,
+                json: action.searchJson,
+              },
+            },
           },
         },
       };
     case ActionTypes.RECEIVE_SEARCH_FAILURE:
       return {
         ...state,
-        [action.targetId]: {
-          ...state[action.targetId],
+        [action.windowId]: {
+          ...state[action.windowId],
           [action.companionWindowId]: {
-            ...state[action.targetId][action.companionWindowId],
-            error: action.error,
-            isFetching: false,
+            ...(state[action.windowId] || {})[action.companionWindowId],
+            data: {
+              ...((state[action.windowId] || {})[action.companionWindowId] || {}).data,
+              [action.searchId]: {
+                error: action.error,
+                isFetching: false,
+              },
+            },
           },
         },
       };
     case ActionTypes.REMOVE_SEARCH:
       return {
         ...state,
-        [action.targetId]: Object.keys(state[action.targetId]).reduce((object, key) => {
+        [action.windowId]: Object.keys(state[action.windowId]).reduce((object, key) => {
           if (key !== action.companionWindowId) {
-            object[key] = state[action.targetId][key]; // eslint-disable-line no-param-reassign
+            object[key] = state[action.windowId][key]; // eslint-disable-line no-param-reassign
           }
           return object;
         }, {}),
