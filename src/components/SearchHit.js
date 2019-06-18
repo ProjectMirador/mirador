@@ -40,11 +40,12 @@ export class SearchHit extends Component {
       showDetails,
       selected,
       t,
-      truncated,
     } = this.props;
 
     if (focused && !selected) return null;
-    const truncatedHit = new TruncatedHit(hit);
+
+    const truncatedHit = focused ? hit : hit && new TruncatedHit(hit);
+    const truncated = hit && truncatedHit.before !== hit.before && truncatedHit.after !== hit.after;
 
     return (
       <ListItem
@@ -104,7 +105,6 @@ SearchHit.propTypes = {
   selected: PropTypes.bool,
   showDetails: PropTypes.func,
   t: PropTypes.func,
-  truncated: PropTypes.bool,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
 };
 
@@ -119,5 +119,4 @@ SearchHit.defaultProps = {
   selected: false,
   showDetails: () => {},
   t: k => k,
-  truncated: true,
 };
