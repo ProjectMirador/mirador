@@ -31,6 +31,7 @@ export class SearchResults extends Component {
     const {
       classes,
       companionWindowId,
+      containerRef,
       isFetching,
       fetchSearch,
       nextSearch,
@@ -66,6 +67,7 @@ export class SearchResults extends Component {
           {
             searchHits.map((hit, index) => (
               <SearchHit
+                containerRef={containerRef}
                 companionWindowId={companionWindowId}
                 key={hit.annotations[0]}
                 focused={focused}
@@ -82,6 +84,7 @@ export class SearchResults extends Component {
               <SearchHit
                 annotationId={anno.id}
                 companionWindowId={companionWindowId}
+                containerRef={containerRef}
                 key={anno.id}
                 focused={focused}
                 index={index}
@@ -103,6 +106,10 @@ export class SearchResults extends Component {
 SearchResults.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string.isRequired,
+  containerRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]),
   fetchSearch: PropTypes.func.isRequired,
   isFetching: PropTypes.bool,
   nextSearch: PropTypes.string,
@@ -115,6 +122,7 @@ SearchResults.propTypes = {
 
 SearchResults.defaultProps = {
   classes: {},
+  containerRef: undefined,
   isFetching: false,
   nextSearch: undefined,
   query: undefined,

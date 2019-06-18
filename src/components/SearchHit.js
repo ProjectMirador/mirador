@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import TruncatedHit from '../lib/TruncatedHit';
+import { ScrollTo } from './ScrollTo';
 
 /** */
 export class SearchHit extends Component {
@@ -35,6 +36,7 @@ export class SearchHit extends Component {
       annotationLabel,
       canvasLabel,
       classes,
+      containerRef,
       hit,
       focused,
       index,
@@ -49,48 +51,54 @@ export class SearchHit extends Component {
     const truncated = hit && truncatedHit.before !== hit.before && truncatedHit.after !== hit.after;
 
     return (
-      <ListItem
-        className={clsx(
-          classes.listItem,
-          {
-            [classes.adjacent]: adjacent,
-            [classes.selected]: selected,
-            [classes.focused]: focused,
-          },
-        )}
-        button={!selected}
-        component="li"
-        onClick={this.handleClick}
-        selected={selected}
+      <ScrollTo
+        containerRef={containerRef}
+        offsetTop={96} // offset for the height of the form above
+        scrollTo={selected}
       >
-        <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
-          <Typography variant="subtitle2" className={classes.subtitle}>
-            <Chip component="span" label={index + 1} className={classes.hitCounter} />
-            {canvasLabel}
-          </Typography>
-          {annotationLabel && (
-            <Typography variant="subtitle2">{annotationLabel}</Typography>
+        <ListItem
+          className={clsx(
+            classes.listItem,
+            {
+              [classes.adjacent]: adjacent,
+              [classes.selected]: selected,
+              [classes.focused]: focused,
+            },
           )}
-          {hit && (
-            <>
-              <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.before} />
-              {' '}
-              <strong>
-                <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.match} />
-              </strong>
-              {' '}
-              <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.after} />
-              {' '}
-              { truncated && !focused && (
-                <Button className={classes.inlineButton} onClick={showDetails} color="secondary" size="small">
-                  {t('more')}
-                </Button>
-              )}
-            </>
-          )}
-          {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
-        </ListItemText>
-      </ListItem>
+          button={!selected}
+          component="li"
+          onClick={this.handleClick}
+          selected={selected}
+        >
+          <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
+            <Typography variant="subtitle2" className={classes.subtitle}>
+              <Chip component="span" label={index + 1} className={classes.hitCounter} />
+              {canvasLabel}
+            </Typography>
+            {annotationLabel && (
+              <Typography variant="subtitle2">{annotationLabel}</Typography>
+            )}
+            {hit && (
+              <>
+                <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.before} />
+                {' '}
+                <strong>
+                  <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.match} />
+                </strong>
+                {' '}
+                <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.after} />
+                {' '}
+                { truncated && !focused && (
+                  <Button className={classes.inlineButton} onClick={showDetails} color="secondary" size="small">
+                    {t('more')}
+                  </Button>
+                )}
+              </>
+            )}
+            {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
+          </ListItemText>
+        </ListItem>
+      </ScrollTo>
     );
   }
 }
@@ -104,6 +112,10 @@ SearchHit.propTypes = {
   annotationLabel: PropTypes.string,
   canvasLabel: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.string),
+  containerRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]),
   focused: PropTypes.bool,
   hit: PropTypes.shape({
     after: PropTypes.string,
@@ -125,6 +137,7 @@ SearchHit.defaultProps = {
   annotationLabel: undefined,
   canvasLabel: undefined,
   classes: {},
+  containerRef: undefined,
   focused: false,
   hit: undefined,
   index: undefined,
