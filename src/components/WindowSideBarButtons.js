@@ -132,6 +132,7 @@ export class WindowSideBarButtons extends Component {
     const {
       classes,
       hasAnnotations,
+      hasSearchResults,
       hasSearchService,
       hideAnnotationsPanel,
       hideSearchPanel,
@@ -191,7 +192,11 @@ export class WindowSideBarButtons extends Component {
         {!hideSearchPanel && hasSearchService && (
           <TabButton
             value="search"
-            icon={(<SearchIcon />)}
+            icon={(
+              <Badge classes={{ badge: classes.badge }} invisible={!hasSearchResults} variant="dot">
+                <SearchIcon />
+              </Badge>
+            )}
           />
         )}
       </Tabs>
@@ -203,6 +208,7 @@ WindowSideBarButtons.propTypes = {
   addCompanionWindow: PropTypes.func.isRequired,
   classes: PropTypes.objectOf(PropTypes.string),
   hasAnnotations: PropTypes.bool,
+  hasSearchResults: PropTypes.bool,
   hasSearchService: PropTypes.bool,
   hideAnnotationsPanel: PropTypes.bool,
   hideSearchPanel: PropTypes.bool,
@@ -213,6 +219,7 @@ WindowSideBarButtons.propTypes = {
 WindowSideBarButtons.defaultProps = {
   classes: {},
   hasAnnotations: false,
+  hasSearchResults: false,
   hasSearchService: false,
   hideAnnotationsPanel: false,
   hideSearchPanel: true,

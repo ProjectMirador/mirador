@@ -74,6 +74,28 @@ describe('WindowSideBarButtons (shallow)', () => {
       wrapper = createWrapper({ hasSearchService: true, hideSearchPanel: false, windowId });
       expect(wrapper.find('WithStyles(ForwardRef(Tab))[value="search"]').length).toEqual(1);
     });
+
+    it('has a badge indicating if the search panel has active annotations', () => {
+      let tab;
+      wrapper = createWrapper({
+        hasSearchResults: true,
+        hasSearchService: true,
+        hideSearchPanel: false,
+        windowId,
+      });
+      tab = wrapper.find(Tab).find('[value="search"]');
+      expect(tab.find(Badge).props().invisible).toBe(false);
+
+      wrapper = createWrapper({
+        hasSearchResults: false,
+        hasSearchService: true,
+        hideSearchPanel: false,
+        windowId,
+      });
+      tab = wrapper.find(Tab).find('[value="search"]');
+
+      expect(tab.find(Badge).props().invisible).toBe(true);
+    });
   });
 
   describe('handleKeyUp', () => {
