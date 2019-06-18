@@ -6,6 +6,7 @@ import { withPlugins } from '../extend/withPlugins';
 import { SearchResults } from '../components/SearchResults';
 import * as actions from '../state/actions';
 import {
+  getSearchAnnotationForCompanionWindow,
   getSearchHitsForCompanionWindow,
   getSelectedContentSearchAnnotationIds,
   getSearchResultsForCompanionWindow,
@@ -17,6 +18,8 @@ import {
  * @private
  */
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
+  searchAnnotations:
+    getSearchAnnotationForCompanionWindow(state, { companionWindowId, windowId }).resources,
   searchHits: getSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
   searchResults: getSearchResultsForCompanionWindow(state, { companionWindowId, windowId }),
   selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, { windowId }),

@@ -31,6 +31,7 @@ export class SearchResults extends Component {
     const {
       classes,
       companionWindowId,
+      searchAnnotations,
       searchHits,
       searchResults,
       t,
@@ -42,7 +43,11 @@ export class SearchResults extends Component {
     } = this.state;
 
     const noResultsState = (
-      searchResults && searchResults.query && !searchResults.isFetching && searchHits.length === 0
+      searchResults
+        && searchResults.query
+        && !searchResults.isFetching
+        && searchHits.length === 0
+        && searchAnnotations.length === 0
     );
 
     return (
@@ -72,6 +77,19 @@ export class SearchResults extends Component {
               />
             ))
           }
+          { searchHits.length === 0
+            && searchAnnotations.length > 0
+            && searchAnnotations.map((anno, index) => (
+              <SearchHit
+                annotationId={anno.id}
+                companionWindowId={companionWindowId}
+                key={anno.id}
+                focused={focused}
+                index={index}
+                windowId={windowId}
+                showDetails={this.toggleFocus}
+              />
+            ))}
         </List>
       </>
     );
@@ -81,7 +99,8 @@ export class SearchResults extends Component {
 SearchResults.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string.isRequired,
-  searchHits: PropTypes.arrayOf(PropTypes.object).isRequired,
+  searchAnnotations: PropTypes.arrayOf(PropTypes.object),
+  searchHits: PropTypes.arrayOf(PropTypes.object),
   searchResults: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
@@ -89,5 +108,7 @@ SearchResults.propTypes = {
 
 SearchResults.defaultProps = {
   classes: {},
+  searchAnnotations: [],
+  searchHits: [],
   t: k => k,
 };

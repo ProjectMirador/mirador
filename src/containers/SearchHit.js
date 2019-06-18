@@ -32,6 +32,7 @@ const mapStateToProps = (state, {
 
   return {
     adjacent: selectedCanvasIds.includes(hitAnnotation.targetId),
+    annotation: hitAnnotation,
     annotationId: realAnnoId,
     annotationLabel: annotationLabel[0],
     canvasLabel: hitAnnotation && getCanvasLabel(state, {

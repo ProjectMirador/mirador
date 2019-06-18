@@ -31,6 +31,7 @@ export class SearchHit extends Component {
   render() {
     const {
       adjacent,
+      annotation,
       annotationLabel,
       canvasLabel,
       classes,
@@ -87,6 +88,7 @@ export class SearchHit extends Component {
               )}
             </>
           )}
+          {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
         </ListItemText>
       </ListItem>
     );
@@ -95,6 +97,9 @@ export class SearchHit extends Component {
 
 SearchHit.propTypes = {
   adjacent: PropTypes.bool,
+  annotation: PropTypes.shape({
+    content: PropTypes.string,
+  }),
   annotationId: PropTypes.string,
   annotationLabel: PropTypes.string,
   canvasLabel: PropTypes.string,
@@ -115,6 +120,7 @@ SearchHit.propTypes = {
 
 SearchHit.defaultProps = {
   adjacent: false,
+  annotation: undefined,
   annotationId: undefined,
   annotationLabel: undefined,
   canvasLabel: undefined,
