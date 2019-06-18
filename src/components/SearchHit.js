@@ -21,10 +21,10 @@ export class SearchHit extends Component {
   /** */
   handleClick() {
     const {
-      hit, selectContentSearchAnnotation, windowId,
+      annotationId, selectContentSearchAnnotation, windowId,
     } = this.props;
 
-    selectContentSearchAnnotation(windowId, hit.annotations);
+    selectContentSearchAnnotation(windowId, [annotationId]);
   }
 
   /** */
@@ -95,6 +95,7 @@ export class SearchHit extends Component {
 
 SearchHit.propTypes = {
   adjacent: PropTypes.bool,
+  annotationId: PropTypes.string,
   annotationLabel: PropTypes.string,
   canvasLabel: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.string),
@@ -114,6 +115,7 @@ SearchHit.propTypes = {
 
 SearchHit.defaultProps = {
   adjacent: false,
+  annotationId: undefined,
   annotationLabel: undefined,
   canvasLabel: undefined,
   classes: {},
