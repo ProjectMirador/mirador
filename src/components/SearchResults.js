@@ -58,7 +58,7 @@ export class SearchResults extends Component {
             {t('searchNoResults')}
           </Typography>
         )}
-        <List>
+        <List disablePadding>
           {
             searchHits.map((hit, index) => (
               <SearchHit

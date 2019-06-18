@@ -45,13 +45,11 @@ const mapDispatchToProps = {
 /** */
 const styles = theme => ({
   adjacent: {},
-  canvasLabel: {
-    ...theme.typography.h6,
-  },
   focused: {},
   hitCounter: {
-    ...theme.typography.h6,
+    ...theme.typography.subtitle2,
     backgroundColor: theme.palette.hitCounter.default,
+    height: 30,
     marginRight: theme.spacing(1),
     verticalAlign: 'inherit',
   },
@@ -83,8 +81,13 @@ const styles = theme => ({
         backgroundColor: 'inherit',
       },
     },
+    borderBottom: `0.5px solid ${theme.palette.divider}`,
+    paddingRight: 8,
   },
   selected: {},
+  subtitle: {
+    marginBottom: theme.spacing(1.5),
+  },
 });
 
 const enhance = compose(
