@@ -9,66 +9,69 @@ import ActionTypes from './action-types';
 /**
  * requestSearch - action creator
  *
- * @param  {String} targetId
+ * @param  {String} windowId
  * @param  {String} searchId
  * @param  {String} query
  * @memberof ActionCreators
  */
-export function requestSearch(targetId, companionWindowId, query) {
+export function requestSearch(windowId, companionWindowId, searchId, query) {
   return {
     companionWindowId,
     query,
-    targetId,
+    searchId,
     type: ActionTypes.REQUEST_SEARCH,
+    windowId,
   };
 }
 
 /**
  * receiveSearch - action creator
  *
- * @param  {String} targetId
+ * @param  {String} windowId
  * @param  {String} searchId
  * @param  {Object} searchJson
  * @memberof ActionCreators
  */
-export function receiveSearch(targetId, companionWindowId, searchJson) {
+export function receiveSearch(windowId, companionWindowId, searchId, searchJson) {
   return {
     companionWindowId,
+    searchId,
     searchJson,
-    targetId,
     type: ActionTypes.RECEIVE_SEARCH,
+    windowId,
   };
 }
 
 /**
  * receiveSearchFailure - action creator
  *
- * @param  {String} targetId
+ * @param  {String} windowId
  * @param  {String} searchId
  * @param  {String} error
  * @memberof ActionCreators
  */
-export function receiveSearchFailure(targetId, companionWindowId, error) {
+export function receiveSearchFailure(windowId, companionWindowId, searchId, error) {
   return {
     companionWindowId,
     error,
-    targetId,
+    searchId,
     type: ActionTypes.RECEIVE_SEARCH_FAILURE,
+    windowId,
   };
 }
 
 /**
  * removeSearch - action creator
  *
- * @param  {String} targetId
+ * @param  {String} windowId
  * @param  {String} companionWindowId
  * @memberof ActionCreators
  */
-export function removeSearch(targetId, companionWindowId) {
+export function removeSearch(windowId, companionWindowId) {
   return {
     companionWindowId,
-    targetId,
     type: ActionTypes.REMOVE_SEARCH,
+    windowId,
   };
 }
 
@@ -79,13 +82,13 @@ export function removeSearch(targetId, companionWindowId) {
  * @param  {String} query
  * @memberof ActionCreators
  */
-export function fetchSearch(targetId, companionWindowId, searchId, query) {
+export function fetchSearch(windowId, companionWindowId, searchId, query) {
   return ((dispatch) => {
-    dispatch(requestSearch(targetId, companionWindowId, query));
+    dispatch(requestSearch(windowId, companionWindowId, searchId, query));
     return fetch(searchId)
       .then(response => response.json())
-      .then(json => dispatch(receiveSearch(targetId, companionWindowId, json)))
-      .catch(error => dispatch(receiveSearchFailure(targetId, companionWindowId, error)));
+      .then(json => dispatch(receiveSearch(windowId, companionWindowId, searchId, json)))
+      .catch(error => dispatch(receiveSearchFailure(windowId, companionWindowId, searchId, error)));
   });
 }
 

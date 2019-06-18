@@ -1,74 +1,94 @@
 import { createSelector } from 'reselect';
 import { LanguageMap } from 'manifesto.js';
+import flatten from 'lodash/flatten';
 import Annotation from '../../lib/Annotation';
 import { getWindow } from './windows';
 import { getManifestLocale } from './manifests';
 
-export const getSearchResultsForWindow = createSelector(
+const getSearchForWindow = createSelector(
   [
     (state, { windowId }) => windowId,
     state => state.searches,
   ],
   (windowId, searches) => {
-    if (!windowId || !searches) return [];
+    if (!windowId || !searches) return {};
 
-    return searches && searches[windowId];
+    return searches[windowId];
   },
 );
 
-export const getSearchResultsForCompanionWindow = createSelector(
+const getSearchForCompanionWindow = createSelector(
   [
-    getSearchResultsForWindow,
+    getSearchForWindow,
     (state, { companionWindowId }) => companionWindowId,
   ],
   (results, companionWindowId) => {
-    if (!results || !companionWindowId) return {};
-    return results && results[companionWindowId];
+    if (!results || !companionWindowId) return undefined;
+    return results[companionWindowId];
+  },
+);
+
+const getSearchResponsesForCompanionWindow = createSelector(
+  [
+    getSearchForCompanionWindow,
+  ],
+  (results) => {
+    if (!results) return [];
+    return Object.values(results.data);
   },
 );
 
 export const getSearchQuery = createSelector(
   [
-    getSearchResultsForCompanionWindow,
+    getSearchForCompanionWindow,
   ],
   results => results && results.query,
 );
 
+export const getSearchIsFetching = createSelector(
+  [
+    getSearchResponsesForCompanionWindow,
+  ],
+  results => results.some(result => result.isFetching),
+);
+
 export const getSearchHitsForCompanionWindow = createSelector(
   [
-    getSearchResultsForCompanionWindow,
+    getSearchResponsesForCompanionWindow,
   ],
-  (result) => {
+  results => flatten(results.map((result) => {
     if (!result || !result.json || result.isFetching || !result.json.hits) return [];
+
     return result.json.hits;
-  },
+  })),
 );
 
 /** convert search results to an annotation */
-const searchResultsToAnnotation = (result) => {
-  if (!result || !result.json || result.isFetching || !result.json.resources) return undefined;
-  const anno = new Annotation(result.json);
+const searchResultsToAnnotation = (results) => {
+  const annotations = results.map((result) => {
+    if (!result || !result.json || result.isFetching || !result.json.resources) return undefined;
+    const anno = new Annotation(result.json);
+    return {
+      id: anno.id,
+      resources: anno.resources,
+    };
+  }).filter(a => a);
+
   return {
-    id: anno.id,
-    resources: anno.resources,
+    id: (annotations.find(a => a.id) || {}).id,
+    resources: flatten(annotations.map(a => a.resources)),
   };
 };
 
-export const getSearchAnnotationForCompanionWindow = createSelector(
-  [
-    getSearchResultsForCompanionWindow,
-  ],
-  result => searchResultsToAnnotation(result),
-);
-
 export const getSearchAnnotationsForWindow = createSelector(
   [
-    getSearchResultsForWindow,
+    getSearchForWindow,
   ],
   (results) => {
     if (!results) return [];
-    const arr = Object.values(results).map(result => searchResultsToAnnotation(result));
-    return arr.filter(e => e);
+    const data = Object.values(results).map(r => Object.values(r.data));
+
+    return data.map(d => searchResultsToAnnotation(d)).filter(a => a.resources.length > 0);
   },
 );
 
@@ -95,10 +115,10 @@ export const getSelectedContentSearchAnnotations = createSelector(
 
 export const getResourceAnnotationForSearchHit = createSelector(
   [
-    getSearchAnnotationForCompanionWindow,
+    getSearchResponsesForCompanionWindow,
     (state, { annotationUri }) => annotationUri,
   ],
-  (searchAnnotations, annotationUri) => searchAnnotations.resources.find(
+  (results, annotationUri) => searchResultsToAnnotation(results).resources.find(
     r => r.id === annotationUri,
   ),
 );
