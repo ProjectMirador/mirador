@@ -49,6 +49,21 @@ describe('SearchResults', () => {
     expect(wrapper.state().focused).toEqual(false);
   });
 
+  describe('annotation-only search results', () => {
+    it('renders a SearchHit for each annotation', () => {
+      const wrapper = createWrapper({
+        searchAnnotations: [{ id: 'x' }, { id: 'y' }],
+        searchHits: [],
+      });
+      expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').length).toEqual(2);
+      expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').at(0).prop('index')).toEqual(0);
+      expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').at(0).prop('annotationId')).toEqual('x');
+
+      expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').at(1).prop('index')).toEqual(1);
+      expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').at(1).prop('annotationId')).toEqual('y');
+    });
+  });
+
   describe('no search results', () => {
     it('shows no results', () => {
       const wrapper = createWrapper({

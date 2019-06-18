@@ -37,6 +37,11 @@ describe('SearchHit', () => {
     expect(selectContentSearchAnnotation).toHaveBeenCalledWith('window', ['foo']);
   });
 
+  it('renders the annotation char if the hit is not available', () => {
+    const wrapper = createWrapper({ annotation: { chars: 'xyz' }, hit: undefined });
+    expect(wrapper.find('WithStyles(ForwardRef(ListItemText))').render().text()).toEqual('1xyz');
+  });
+
   describe('Annotation Labels', () => {
     it('renders the annotationLabel if present', () => {
       const wrapper = createWrapper({ annotationLabel: 'The Anno Label' });

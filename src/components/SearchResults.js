@@ -35,6 +35,7 @@ export class SearchResults extends Component {
       fetchSearch,
       nextSearch,
       query,
+      searchAnnotations,
       searchHits,
       t,
       windowId,
@@ -45,7 +46,7 @@ export class SearchResults extends Component {
     } = this.state;
 
     const noResultsState = (
-      query && !isFetching && searchHits.length === 0
+      query && !isFetching && searchHits.length === 0 && searchAnnotations.length === 0
     );
 
     return (
@@ -75,6 +76,19 @@ export class SearchResults extends Component {
               />
             ))
           }
+          { searchHits.length === 0
+            && searchAnnotations.length > 0
+            && searchAnnotations.map((anno, index) => (
+              <SearchHit
+                annotationId={anno.id}
+                companionWindowId={companionWindowId}
+                key={anno.id}
+                focused={focused}
+                index={index}
+                windowId={windowId}
+                showDetails={this.toggleFocus}
+              />
+            ))}
         </List>
         { nextSearch && (
           <Button color="secondary" onClick={() => fetchSearch(windowId, companionWindowId, nextSearch, query)}>
@@ -93,7 +107,8 @@ SearchResults.propTypes = {
   isFetching: PropTypes.bool,
   nextSearch: PropTypes.string,
   query: PropTypes.string,
-  searchHits: PropTypes.arrayOf(PropTypes.object).isRequired,
+  searchAnnotations: PropTypes.arrayOf(PropTypes.object),
+  searchHits: PropTypes.arrayOf(PropTypes.object),
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
 };
@@ -103,5 +118,7 @@ SearchResults.defaultProps = {
   isFetching: false,
   nextSearch: undefined,
   query: undefined,
+  searchAnnotations: [],
+  searchHits: [],
   t: k => k,
 };

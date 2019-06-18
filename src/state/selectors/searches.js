@@ -100,6 +100,13 @@ const searchResultsToAnnotation = (results) => {
   };
 };
 
+export const getSearchAnnotationsForCompanionWindow = createSelector(
+  [
+    getSearchResponsesForCompanionWindow,
+  ],
+  results => results && searchResultsToAnnotation(results),
+);
+
 export const getSearchAnnotationsForWindow = createSelector(
   [
     getSearchForWindow,
@@ -135,10 +142,10 @@ export const getSelectedContentSearchAnnotations = createSelector(
 
 export const getResourceAnnotationForSearchHit = createSelector(
   [
-    getSearchResponsesForCompanionWindow,
+    getSearchAnnotationsForCompanionWindow,
     (state, { annotationUri }) => annotationUri,
   ],
-  (results, annotationUri) => searchResultsToAnnotation(results).resources.find(
+  (annotation, annotationUri) => annotation.resources.find(
     r => r.id === annotationUri,
   ),
 );
