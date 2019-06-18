@@ -35,7 +35,7 @@ export class WorkspaceAddButton extends Component {
               ? <CloseIcon />
               : <AddIcon />
           }
-          { useExtendedFab && <Typography color="inherit">{t('startHere')}</Typography> }
+          { useExtendedFab && t('startHere') }
         </Fab>
       </Tooltip>
     );

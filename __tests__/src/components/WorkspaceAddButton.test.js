@@ -36,7 +36,7 @@ describe('WorkspaceAddButton', () => {
     expect(wrapper.find(Fab).matchesElement(
       <Fab>
         <AddIcon />
-        <Typography>startHere</Typography>
+        startHere
       </Fab>,
     )).toBe(true);
   });
