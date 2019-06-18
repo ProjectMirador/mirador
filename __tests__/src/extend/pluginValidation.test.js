@@ -55,15 +55,6 @@ describe('validatePlugin', () => {
     expect(validatePlugin(plugin)).toBe(true);
   });
 
-  it('component must be function', () => {
-    let plugin = createPlugin({ component: undefined });
-    expect(validatePlugin(plugin)).toBe(false);
-    plugin = createPlugin({ component: 'somethink' });
-    expect(validatePlugin(plugin)).toBe(false);
-    plugin = createPlugin({ component: x => x });
-    expect(validatePlugin(plugin)).toBe(true);
-  });
-
   it('mapStateToProps must be undefined, null or function', () => {
     let plugin = createPlugin({ mapStateToProps: undefined });
     expect(validatePlugin(plugin)).toBe(true);
