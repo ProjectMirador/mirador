@@ -16,7 +16,13 @@ export const searchesReducer = (state = {}, action) => {
           [action.companionWindowId]: {
             ...(state[action.windowId] || {})[action.companionWindowId],
             data: {
-              ...((state[action.windowId] || {})[action.companionWindowId] || {}).data,
+              ...(() => {
+                const cw = ((state[action.windowId] || {})[action.companionWindowId] || {});
+
+                if (cw.query !== action.query) return undefined;
+
+                return cw.data;
+              })(),
               [action.searchId]: {
                 isFetching: true,
               },
