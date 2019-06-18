@@ -32,6 +32,8 @@ export class SearchResults extends Component {
       classes,
       companionWindowId,
       isFetching,
+      fetchSearch,
+      nextSearch,
       query,
       searchHits,
       t,
@@ -74,6 +76,11 @@ export class SearchResults extends Component {
             ))
           }
         </List>
+        { nextSearch && (
+          <Button color="secondary" onClick={() => fetchSearch(windowId, companionWindowId, nextSearch, query)}>
+            {t('moreResults')}
+          </Button>
+        )}
       </>
     );
   }
@@ -82,7 +89,9 @@ export class SearchResults extends Component {
 SearchResults.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string.isRequired,
+  fetchSearch: PropTypes.func.isRequired,
   isFetching: PropTypes.bool,
+  nextSearch: PropTypes.string,
   query: PropTypes.string,
   searchHits: PropTypes.arrayOf(PropTypes.object).isRequired,
   t: PropTypes.func,
@@ -92,6 +101,7 @@ SearchResults.propTypes = {
 SearchResults.defaultProps = {
   classes: {},
   isFetching: false,
+  nextSearch: undefined,
   query: undefined,
   t: k => k,
 };

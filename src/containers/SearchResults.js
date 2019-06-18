@@ -6,6 +6,7 @@ import { withPlugins } from '../extend/withPlugins';
 import { SearchResults } from '../components/SearchResults';
 import * as actions from '../state/actions';
 import {
+  getNextSearchId,
   getSearchHitsForCompanionWindow,
   getSelectedContentSearchAnnotationIds,
   getSearchQuery,
@@ -19,12 +20,14 @@ import {
  */
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   isFetching: getSearchIsFetching(state, { companionWindowId, windowId }),
+  nextSearch: getNextSearchId(state, { companionWindowId, windowId }),
   query: getSearchQuery(state, { companionWindowId, windowId }),
   searchHits: getSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
   selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, { windowId }),
 });
 
 const mapDispatchToProps = {
+  fetchSearch: actions.fetchSearch,
   selectContentSearchAnnotation: actions.selectContentSearchAnnotation,
 };
 

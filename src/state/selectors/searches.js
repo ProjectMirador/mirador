@@ -52,6 +52,26 @@ export const getSearchIsFetching = createSelector(
   results => results.some(result => result.isFetching),
 );
 
+export const getNextSearchId = createSelector(
+  [
+    getSearchForCompanionWindow,
+  ],
+  (results) => {
+    if (!results || !results.data) return undefined;
+
+    const resultWithAnUnresolvedNext = Object.values(results.data).find(result => (
+      !result.isFetching
+        && result.json
+        && result.json.next
+        && !results.data[result.json.next]
+    ));
+
+    return resultWithAnUnresolvedNext
+      && resultWithAnUnresolvedNext.json
+      && resultWithAnUnresolvedNext.json.next;
+  },
+);
+
 export const getSearchHitsForCompanionWindow = createSelector(
   [
     getSearchResponsesForCompanionWindow,
