@@ -44,7 +44,7 @@ describe('Window', () => {
     expect(mockFetchManifest).toHaveBeenCalled();
   });
   describe('when workspaceType is mosaic', () => {
-    it('calls the context mosaicWindowActions connectDragSource method to make WindowTopBar draggable', () => {
+    xit('calls the context mosaicWindowActions connectDragSource method to make WindowTopBar draggable', () => {
       const connectDragSource = jest.fn(component => component);
       wrapper = createWrapper(
         { windowDraggable: true, workspaceType: 'mosaic' }, { mosaicWindowActions: { connectDragSource } },
