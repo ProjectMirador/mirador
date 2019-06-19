@@ -136,6 +136,37 @@ describe('window actions', () => {
       expect(action.window.companionWindowIds[1]).toEqual(action.window.thumbnailNavigationId);
       expect(action.window.companionWindowIds[1]).toEqual(action.companionWindows[1].id);
     });
+    it('creates a new window with additional companion windows', () => {
+      const options = {
+        canvasIndex: 1,
+        companionWindows: [{
+          content: 'attribution',
+          position: 'right',
+        }],
+        id: 'helloworld',
+      };
+
+      const mockState = {
+        companionWindows: {},
+        config: {
+          thumbnailNavigation: {},
+          window: {},
+        },
+        windows: {},
+      };
+
+      const mockDispatch = jest.fn(() => ({}));
+      const mockGetState = jest.fn(() => mockState);
+      const thunk = actions.addWindow(options);
+
+      thunk(mockDispatch, mockGetState);
+
+      const action = mockDispatch.mock.calls[0][0];
+
+      expect(action.window.companionWindowIds.length).toEqual(3);
+      expect(action.window.companionWindowIds[2]).toEqual(action.companionWindows[2].id);
+      expect(action.companionWindows[2]).toMatchObject({ content: 'attribution', position: 'right' });
+    });
   });
 
   describe('updateWindow', () => {
