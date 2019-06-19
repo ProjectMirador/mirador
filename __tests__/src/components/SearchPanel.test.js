@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import CompanionWindow from '../../../src/containers/CompanionWindow';
+import SearchResults from '../../../src/containers/SearchResults';
 import { SearchPanel } from '../../../src/components/SearchPanel';
 
 
@@ -49,11 +50,11 @@ describe('SearchPanel', () => {
   });
 
   it('has the SearchPanelControls component', () => {
-    const titleControls = createWrapper().prop('titleControls');
+    const titleControls = createWrapper().find(CompanionWindow).prop('titleControls');
     expect(titleControls.type.displayName).toEqual('Connect(WithStyles(WithPlugins(SearchPanelControls)))');
   });
   it('has the SearchResults', () => {
     const wrapper = createWrapper();
-    expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchResults)))').length).toEqual(1);
+    expect(wrapper.find(SearchResults).length).toEqual(1);
   });
 });

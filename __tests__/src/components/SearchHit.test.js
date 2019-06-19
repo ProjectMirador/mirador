@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { SearchHit } from '../../../src/components/SearchHit';
+import { ScrollTo } from '../../../src/components/ScrollTo';
 
 
 /**
@@ -40,6 +41,12 @@ describe('SearchHit', () => {
   it('renders the annotation char if the hit is not available', () => {
     const wrapper = createWrapper({ annotation: { chars: 'xyz' }, hit: undefined });
     expect(wrapper.find('WithStyles(ForwardRef(ListItemText))').render().text()).toEqual('1xyz');
+  });
+
+  it('renders a ScrollTo', () => {
+    const wrapper = createWrapper({ containerRef: 'ref' });
+    expect(wrapper.find(ScrollTo).prop('containerRef')).toEqual('ref');
+    expect(wrapper.find(ScrollTo).prop('scrollTo')).toEqual(true);
   });
 
   describe('Annotation Labels', () => {
