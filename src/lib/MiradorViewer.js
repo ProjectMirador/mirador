@@ -45,24 +45,16 @@ class MiradorViewer {
     this.store.dispatch(action);
 
     mergedConfig.windows.forEach((miradorWindow) => {
-      let thumbnailNavigationPosition;
-      let view;
-      if (miradorWindow.thumbnailNavigationPosition !== undefined) {
-        ({ thumbnailNavigationPosition } = miradorWindow);
-      } else {
-        thumbnailNavigationPosition = mergedConfig.thumbnailNavigation.defaultPosition;
-      }
-      if (miradorWindow.view !== undefined) {
-        ({ view } = miradorWindow);
-      } else {
-        view = mergedConfig.window.defaultView;
-      }
-      this.store.dispatch(actions.fetchManifest(miradorWindow.loadedManifest));
+      const manifestId = miradorWindow.manifestId || miradorWindow.loadedManifest;
+      this.store.dispatch(actions.fetchManifest(manifestId));
       this.store.dispatch(actions.addWindow({
-        canvasIndex: (miradorWindow.canvasIndex || 0),
-        manifestId: miradorWindow.loadedManifest,
-        thumbnailNavigationPosition,
-        view,
+        // these are default values ...
+        canvasIndex: 0,
+        manifestId,
+        thumbnailNavigationPosition: mergedConfig.thumbnailNavigation.defaultPosition,
+        view: mergedConfig.window.defaultView,
+        // ... overridden by values from the window configuration
+        ...miradorWindow,
       }));
     });
 
