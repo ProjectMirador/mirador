@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import Paper from '@material-ui/core/Paper';
+import { MosaicWindowContext } from 'react-mosaic-component/lib/contextTypes';
 import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
 import PrimaryWindow from '../containers/PrimaryWindow';
@@ -114,12 +115,7 @@ export class Window extends Component {
   }
 }
 
-Window.contextTypes = {
-  mosaicWindowActions: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.object,
-  ]),
-};
+Window.contextType = MosaicWindowContext;
 
 Window.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
