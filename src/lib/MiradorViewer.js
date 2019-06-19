@@ -53,7 +53,7 @@ class MiradorViewer {
         manifestId,
         thumbnailNavigationPosition: mergedConfig.thumbnailNavigation.defaultPosition,
         view: mergedConfig.window.defaultView,
-        // ... overridden by values from the window configuration
+        // ... overridden by values from the window configuration ...
         ...miradorWindow,
       }));
     });
