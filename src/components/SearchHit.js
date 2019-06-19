@@ -36,6 +36,7 @@ export class SearchHit extends Component {
       annotationLabel,
       canvasLabel,
       classes,
+      companionWindowId,
       containerRef,
       hit,
       focused,
@@ -49,6 +50,7 @@ export class SearchHit extends Component {
 
     const truncatedHit = focused ? hit : hit && new TruncatedHit(hit);
     const truncated = hit && truncatedHit.before !== hit.before && truncatedHit.after !== hit.after;
+    const canvasLabelHtmlId = `${companionWindowId}-${index}`;
 
     return (
       <ScrollTo
@@ -73,7 +75,9 @@ export class SearchHit extends Component {
           <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
             <Typography variant="subtitle2" className={classes.subtitle}>
               <Chip component="span" label={index + 1} className={classes.hitCounter} />
-              {canvasLabel}
+              <span id={canvasLabelHtmlId}>
+                {canvasLabel}
+              </span>
             </Typography>
             {annotationLabel && (
               <Typography variant="subtitle2">{annotationLabel}</Typography>
@@ -89,7 +93,7 @@ export class SearchHit extends Component {
                 <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.after} />
                 {' '}
                 { truncated && !focused && (
-                  <Button className={classes.inlineButton} onClick={showDetails} color="secondary" size="small">
+                  <Button className={classes.inlineButton} onClick={showDetails} color="secondary" size="small" aria-describedby={canvasLabelHtmlId}>
                     {t('more')}
                   </Button>
                 )}
@@ -112,6 +116,7 @@ SearchHit.propTypes = {
   annotationLabel: PropTypes.string,
   canvasLabel: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.string),
+  companionWindowId: PropTypes.string,
   containerRef: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
@@ -137,6 +142,7 @@ SearchHit.defaultProps = {
   annotationLabel: undefined,
   canvasLabel: undefined,
   classes: {},
+  companionWindowId: undefined,
   containerRef: undefined,
   focused: false,
   hit: undefined,

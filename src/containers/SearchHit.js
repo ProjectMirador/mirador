@@ -59,9 +59,11 @@ const styles = theme => ({
     verticalAlign: 'inherit',
   },
   inlineButton: {
+    '& span': {
+      lineHeight: '1.5em',
+    },
     margin: 0,
     padding: 0,
-    textDecoration: 'underline',
     textTransform: 'none',
   },
   listItem: {
