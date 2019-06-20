@@ -44,7 +44,7 @@ export class Window extends Component {
     const {
       manifest, windowId, workspaceType, windowDraggable,
     } = this.props;
-    const { mosaicWindowActions } = this.context;
+
     const topBar = (
       <div>
         <WindowTopBar
@@ -56,6 +56,7 @@ export class Window extends Component {
       </div>
     );
     if (workspaceType === 'mosaic' && windowDraggable) {
+      const { mosaicWindowActions } = this.context;
       return mosaicWindowActions.connectDragSource(
         topBar,
       );
