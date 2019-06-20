@@ -51,9 +51,11 @@ export class ViewerNavigation extends Component {
   /**
    */
   canvasIncrementor() {
-    const { view } = this.props;
+    const { canvasIndex, canvases, view } = this.props;
     switch (view) {
       case 'book':
+        // the case where the index is n - 1
+        if (canvasIndex === canvases.length - 2) return 1;
         return 2;
       default:
         return 1;
