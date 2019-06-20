@@ -63,8 +63,6 @@ export const workspaceReducer = (
       return { ...state, showZoomControls: action.showZoomControls };
     case ActionTypes.UPDATE_WORKSPACE_MOSAIC_LAYOUT:
       return { ...state, layout: action.layout };
-    case ActionTypes.SET_WORKSPACE_ADD_VISIBILITY:
-      return { ...state, isWorkspaceAddVisible: action.isWorkspaceAddVisible };
     case ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION:
       newWorkspaceDimensions = {};
 

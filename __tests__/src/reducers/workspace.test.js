@@ -71,14 +71,6 @@ describe('workspace reducer', () => {
       layout: { foo: 'bar' },
     });
   });
-  it('should handle SET_WORKSPACE_ADD_VISIBILITY', () => {
-    expect(workspaceReducer([], {
-      isWorkspaceAddVisible: true,
-      type: ActionTypes.SET_WORKSPACE_ADD_VISIBILITY,
-    })).toEqual({
-      isWorkspaceAddVisible: true,
-    });
-  });
   it('should handle SET_WORKSPACE_VIEWPORT_POSITION', () => {
     expect(workspaceReducer({ height: 5000, width: 5000 }, {
       payload: {

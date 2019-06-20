@@ -47,3 +47,15 @@ export function importMiradorState(state) {
   };
   return { state: newState, type: ActionTypes.IMPORT_MIRADOR_STATE };
 }
+
+/**
+ * @param  {Object} isWorkspaceAddVisible
+ * @memberof ActionCreators
+ */
+export function setWorkspaceAddVisibility(isWorkspaceAddVisible) {
+  return updateConfig({
+    workspace: {
+      isWorkspaceAddVisible,
+    },
+  });
+}

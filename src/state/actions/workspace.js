@@ -30,16 +30,6 @@ export function updateWorkspaceMosaicLayout(layout) {
 }
 
 /**
- * updateWorkspaceMosaicLayout - action creator
- *
- * @param  {Object} isWorkspaceAddVisible
- * @memberof ActionCreators
- */
-export function setWorkspaceAddVisibility(isWorkspaceAddVisible) {
-  return { isWorkspaceAddVisible, type: ActionTypes.SET_WORKSPACE_ADD_VISIBILITY };
-}
-
-/**
  * setWorkspaceViewportPosition - action creator
  *
  * @param  {Object} position

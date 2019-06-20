@@ -40,15 +40,6 @@ describe('workspace actions', () => {
       expect(actions.toggleZoomControls(true)).toEqual(expectedAction);
     });
   });
-  describe('setWorkspaceAddVisibility', () => {
-    it('should set the workspace add visibility', () => {
-      const expectedAction = {
-        isWorkspaceAddVisible: true,
-        type: ActionTypes.SET_WORKSPACE_ADD_VISIBILITY,
-      };
-      expect(actions.setWorkspaceAddVisibility(true)).toEqual(expectedAction);
-    });
-  });
   describe('setWorkspaceViewportDimensions', () => {
     it('should set the workspace add visibility', () => {
       const expectedAction = {
