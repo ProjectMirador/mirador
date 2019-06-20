@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import MoreVertIcon from '@material-ui/icons/MoreVertSharp';
 import PropTypes from 'prop-types';
 import WindowTopMenu from '../containers/WindowTopMenu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+import WindowOptionsIcon from './icons/WindowOptionsIcon';
 
 /**
  */
@@ -54,7 +54,7 @@ export class WindowTopMenuButton extends Component {
           className={anchorEl ? classes.ctrlBtnSelected : null}
           onClick={this.handleMenuClick}
         >
-          <MoreVertIcon />
+          <WindowOptionsIcon />
         </MiradorMenuButton>
         <WindowTopMenu
           windowId={windowId}
