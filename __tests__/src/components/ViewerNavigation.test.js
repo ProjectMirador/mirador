@@ -28,11 +28,21 @@ describe('ViewerNavigation', () => {
     expect(wrapper.find('.mirador-osd-navigation').length).toBe(1);
   });
   describe('when next canvases are present', () => {
-    it('disabled on nextCanvas button', () => {
+    it('nextCanvas button is not disabled', () => {
       expect(wrapper.find('.mirador-next-canvas-button').prop('aria-label')).toBe('nextCanvas');
       expect(wrapper.find('.mirador-next-canvas-button').prop('disabled')).toBe(false);
     });
     it('setCanvas function is called after click', () => {
+      wrapper.find('.mirador-next-canvas-button').simulate('click');
+      expect(setCanvas).toHaveBeenCalledWith(1);
+    });
+    it('nextCanvas button is not disabled in bookview', () => {
+      wrapper = createWrapper({
+        canvases: [1, 2],
+        canvasIndex: 0,
+        setCanvas,
+        view: 'book',
+      });
       wrapper.find('.mirador-next-canvas-button').simulate('click');
       expect(setCanvas).toHaveBeenCalledWith(1);
     });
