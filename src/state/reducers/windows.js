@@ -109,6 +109,16 @@ export const windowsReducer = (state = {}, action) => {
           companionWindowIds: state[action.windowId].companionWindowIds.concat([action.id]),
         },
       };
+    case ActionTypes.UPDATE_COMPANION_WINDOW:
+      if (action.payload.position !== 'left') return state;
+
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          companionAreaOpen: true,
+        },
+      };
     case ActionTypes.REMOVE_COMPANION_WINDOW:
       return {
         ...state,
