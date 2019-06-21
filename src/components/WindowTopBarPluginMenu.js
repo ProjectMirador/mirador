@@ -79,7 +79,7 @@ export class WindowTopBarPluginMenu extends Component {
           open={Boolean(anchorEl)}
           onClose={() => this.handleMenuClose()}
         >
-          <PluginHook {...this.props} />
+          <PluginHook handleClose={() => this.handleMenuClose()} {...this.props} />
         </Menu>
       </>
     );
