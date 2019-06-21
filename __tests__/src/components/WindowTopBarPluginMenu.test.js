@@ -61,5 +61,14 @@ describe('WindowTopBarPluginMenu', () => {
       expect(wrapper.find(Menu).props().open).toBe(false);
       expect(wrapper.state().anchorEl).toBeNull();
     });
+
+    it('explicitly passes the local close handler to the PluginHook', () => {
+      wrapper = createWrapper({ PluginComponents });
+
+      wrapper.setState({ anchorEl: 'Button' });
+      expect(wrapper.state().anchorEl).toEqual('Button');
+      expect(wrapper.find(PluginHook).props().handleClose());
+      expect(wrapper.state().anchorEl).toBeNull();
+    });
   });
 });
