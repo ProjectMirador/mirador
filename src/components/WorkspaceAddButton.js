@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/AddSharp';
 import CloseIcon from '@material-ui/icons/CloseSharp';
 
