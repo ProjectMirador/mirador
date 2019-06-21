@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import NewWindow from 'react-new-window/umd/react-new-window';
+import { NewWindow } from '../../../src/components/NewWindow';
 import { AuthenticationSender } from '../../../src/components/AuthenticationSender';
 
 /**
@@ -37,7 +37,7 @@ describe('AuthenticationSender', () => {
   it('triggers an action when the window is unloaded', () => {
     const handleInteraction = jest.fn();
     wrapper = createWrapper({ handleInteraction, url: 'http://example.com' });
-    wrapper.find(NewWindow).simulate('unload');
+    wrapper.find(NewWindow).simulate('close');
 
     expect(handleInteraction).toHaveBeenCalledWith('http://example.com');
   });

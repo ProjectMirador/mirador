@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import NewWindow from 'react-new-window/umd/react-new-window';
+import { NewWindow } from './NewWindow';
+
 
 /**
  * Opens a new window for click
@@ -10,11 +11,11 @@ export class AuthenticationSender extends Component {
   constructor(props) {
     super(props);
 
-    this.onUnload = this.onUnload.bind(this);
+    this.onClose = this.onClose.bind(this);
   }
 
   /** @private */
-  onUnload() {
+  onClose() {
     const { handleInteraction, url } = this.props;
 
     handleInteraction(url);
@@ -22,26 +23,19 @@ export class AuthenticationSender extends Component {
 
   /** */
   render() {
-    const { center, url } = this.props;
+    const { url } = this.props;
+
     if (!url) return <></>;
 
-    /**
-    login, clickthrough/kiosk open @id, wait for close
-    external, no-op
-    */
-    return (
-      <NewWindow center={center} url={`${url}?origin=${window.origin}`} onUnload={this.onUnload} />
-    );
+    return <NewWindow name="IiifAuthenticationSender" url={`${url}?origin=${window.origin}`} features="centerscreen" onClose={this.onClose} />;
   }
 }
 
 AuthenticationSender.propTypes = {
-  center: PropTypes.oneOf(['screen', 'parent']),
   handleInteraction: PropTypes.func.isRequired,
   url: PropTypes.string,
 };
 
 AuthenticationSender.defaultProps = {
-  center: 'parent',
   url: undefined,
 };
