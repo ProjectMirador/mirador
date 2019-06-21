@@ -230,6 +230,7 @@ export default {
   workspace: {
     showZoomControls: false, // Configure if zoom controls should be displayed by default
     type: 'mosaic', // Which workspace type to load by default. Other possible values are "elastic"
+    isWorkspaceAddVisible: false,
   },
   workspaceControlPanel: {
     enabled: true, // Configure if the control panel should be rendered.  Useful if you want to lock the viewer down to only the configured manifests

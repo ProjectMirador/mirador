@@ -43,4 +43,17 @@ describe('config actions', () => {
       expect(actions.importMiradorState(state).type).toEqual(ActionTypes.IMPORT_MIRADOR_STATE);
     });
   });
+  describe('setWorkspaceAddVisibility', () => {
+    it('should set the the isWorkspaceAddVisible property', () => {
+      expect(actions.setWorkspaceAddVisibility(true)).toEqual({
+        config: { workspace: { isWorkspaceAddVisible: true } },
+        type: ActionTypes.UPDATE_CONFIG,
+      });
+
+      expect(actions.setWorkspaceAddVisibility(true)).toEqual({
+        config: { workspace: { isWorkspaceAddVisible: true } },
+        type: ActionTypes.UPDATE_CONFIG,
+      });
+    });
+  });
 });

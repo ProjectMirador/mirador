@@ -13,7 +13,7 @@ import { WorkspaceAddButton } from '../components/WorkspaceAddButton';
  * @private
  */
 const mapStateToProps = (state, { width }) => {
-  const { isWorkspaceAddVisible } = state.workspace;
+  const { isWorkspaceAddVisible } = state.config.workspace;
   return {
     isWorkspaceAddVisible,
     useExtendedFab: (

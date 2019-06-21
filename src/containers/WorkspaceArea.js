@@ -12,8 +12,8 @@ import { WorkspaceArea } from '../components/WorkspaceArea';
  */
 const mapStateToProps = state => (
   {
-    controlPanelVariant: state.workspace.isWorkspaceAddVisible || Object.keys(state.windows).length > 0 ? undefined : 'wide',
-    isWorkspaceAddVisible: state.workspace.isWorkspaceAddVisible,
+    controlPanelVariant: state.config.workspace.isWorkspaceAddVisible || Object.keys(state.windows).length > 0 ? undefined : 'wide',
+    isWorkspaceAddVisible: state.config.workspace.isWorkspaceAddVisible,
     isWorkspaceControlPanelVisible: state.config.workspaceControlPanel.enabled,
   }
 );

@@ -6,8 +6,8 @@ import { withPlugins } from '../extend/withPlugins';
 import { WindowListButton } from '../components/WindowListButton';
 
 /** */
-const mapStateToProps = ({ windows, workspace }) => ({
-  disabled: workspace.isWorkspaceAddVisible,
+const mapStateToProps = ({ windows, config }) => ({
+  disabled: config.workspace.isWorkspaceAddVisible,
   windowCount: Object.keys(windows).length,
 });
 
