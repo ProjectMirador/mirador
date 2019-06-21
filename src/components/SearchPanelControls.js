@@ -87,12 +87,12 @@ export class SearchPanelControls extends Component {
    */
   componentDidUpdate(prevProps) {
     const { query } = this.props;
-
-    if (query === '' && query !== prevProps.query) {
+    if (query !== prevProps.query) {
       // We are setting local state directly here ONLY when the query prop (from redux)
-      // and it has been cleared out. This means a user has cleared the search and we
-      // need to clear the controlled Input value as well.
-      this.setState({ search: '' }); // eslint-disable-line react/no-did-update-set-state
+      // changed
+      this.setState({ // eslint-disable-line react/no-did-update-set-state
+        search: query,
+      });
     }
   }
 

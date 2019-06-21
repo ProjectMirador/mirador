@@ -37,18 +37,19 @@ export function focusWindow(windowId, pan = false) {
  * @param  {Object} options
  * @memberof ActionCreators
  */
-export function addWindow(options) {
+export function addWindow({ companionWindows, ...options }) {
   return (dispatch, getState) => {
     const { config, windows } = getState();
     const numWindows = Object.keys(windows).length;
 
     const cwDefault = `cw-${uuid()}`;
     const cwThumbs = `cw-${uuid()}`;
+    const additionalCompanionWindowIds = (companionWindows || []).map(e => `cw-${uuid()}`);
     const defaultOptions = {
       canvasIndex: undefined,
       collectionIndex: 0,
       companionAreaOpen: true,
-      companionWindowIds: [cwDefault, cwThumbs],
+      companionWindowIds: [cwDefault, cwThumbs, ...additionalCompanionWindowIds],
       displayAllAnnotations: config.displayAllAnnotations || false,
       draggingEnabled: true,
       id: `window-${uuid()}`,
@@ -85,6 +86,9 @@ export function addWindow(options) {
           position: options.thumbnailNavigationPosition
             || config.thumbnailNavigation.defaultPosition,
         },
+        ...(
+          (companionWindows || []).map((cw, i) => ({ ...cw, id: additionalCompanionWindowIds[i] }))
+        ),
       ],
       elasticLayout,
       type: ActionTypes.ADD_WINDOW,

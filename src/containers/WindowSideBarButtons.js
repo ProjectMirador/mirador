@@ -9,6 +9,7 @@ import {
   getAnnotationResourcesByMotivation,
   getManifestSearchService,
   getSearchQuery,
+  getWindow,
 } from '../state/selectors';
 import { WindowSideBarButtons } from '../components/WindowSideBarButtons';
 
@@ -32,7 +33,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
  */
 const mapStateToProps = (state, { windowId }) => ({
   hasAnnotations: getAnnotationResourcesByMotivation(state, { motivations: ['oa:commenting', 'sc:painting'], windowId }).length > 0,
-  hasSearchResults: getSearchQuery(state, {
+  hasSearchResults: getWindow(state, { windowId }).suggestedSearches || getSearchQuery(state, {
     companionWindowId: (getCompanionWindowsForPosition(state, { position: 'left', windowId })[0] || {}).id,
     windowId,
   }),

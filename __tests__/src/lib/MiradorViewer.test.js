@@ -3,6 +3,12 @@ import MiradorViewer from '../../../src/lib/MiradorViewer';
 
 jest.unmock('react-i18next');
 jest.mock('react-dom');
+jest.mock('node-fetch', () => jest.fn(() => Promise.resolve({ json: () => ({}) })));
+
+jest.mock('../../../src/state/selectors', () => ({
+  getCompanionWindowIdsForPosition: () => ['cwid'],
+  getManifestSearchService: () => ({ id: 'http://example.com/search' }),
+}));
 
 describe('MiradorViewer', () => {
   let instance;
@@ -46,6 +52,8 @@ describe('MiradorViewer', () => {
       expect(Object.keys(windowIds).length).toBe(2);
       expect(windows[windowIds[0]].canvasIndex).toBe(2);
       expect(windows[windowIds[1]].canvasIndex).toBe(0);
+      expect(windows[windowIds[0]].layoutOrder).toBe(0);
+      expect(windows[windowIds[1]].layoutOrder).toBe(1);
       expect(windows[windowIds[0]].thumbnailNavigationPosition).toBe('far-bottom');
       expect(windows[windowIds[1]].thumbnailNavigationPosition).toBe('off');
       expect(windows[windowIds[0]].view).toBe('single');
@@ -54,6 +62,31 @@ describe('MiradorViewer', () => {
       const manifestIds = Object.keys(manifests);
       expect(Object.keys(manifestIds).length).toBe(2);
       expect(manifests['http://media.nga.gov/public/manifests/nga_highlights.json'].provider).toBe('National Gallery of Art');
+    });
+
+    /** */
+    function flushPromises() {
+      return new Promise(resolve => setImmediate(resolve));
+    }
+
+    it('dispatches pre-configured searches', async () => {
+      instance = new MiradorViewer({
+        id: 'mirador',
+        windows: [
+          {
+            defaultSearchQuery: 'NSF',
+            manifestId: 'https://purl.stanford.edu/fg165hz3589/iiif/manifest',
+          },
+        ],
+      });
+
+      await flushPromises();
+
+      const { searches, windows } = instance.store.getState();
+      const windowIds = Object.keys(windows);
+      const searchWindowIds = Object.keys(searches);
+      expect(Object.keys(searchWindowIds).length).toBe(1);
+      expect(searches[windowIds[0]].cwid.query).toBe('NSF');
     });
   });
 });

@@ -109,6 +109,7 @@
     "sidebarPanelsNavigation": "Sidebar panels navigation",
     "single": "Single",
     "startHere": "Start Here",
+    "suggestSearch": "Search this document for \"{{ query }}\"",
     "theme": "Theme",
     "thumbnailList": "Thumbnail list",
     "thumbnailNavigation": "Thumbnails",

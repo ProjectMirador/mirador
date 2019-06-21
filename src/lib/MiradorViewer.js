@@ -2,12 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import deepmerge from 'deepmerge';
+import uuid from 'uuid/v4';
 import PluginProvider from '../extend/PluginProvider';
 import App from '../containers/App';
 import createStore from '../state/createStore';
 import createRootReducer from '../state/reducers/rootReducer';
 import * as actions from '../state/actions';
 import settings from '../config/settings';
+import { getCompanionWindowIdsForPosition, getManifestSearchService } from '../state/selectors';
 
 /**
  * Default Mirador instantiation
@@ -44,26 +46,39 @@ class MiradorViewer {
     const action = actions.setConfig(mergedConfig);
     this.store.dispatch(action);
 
-    mergedConfig.windows.forEach((miradorWindow) => {
-      let thumbnailNavigationPosition;
-      let view;
-      if (miradorWindow.thumbnailNavigationPosition !== undefined) {
-        ({ thumbnailNavigationPosition } = miradorWindow);
-      } else {
-        thumbnailNavigationPosition = mergedConfig.thumbnailNavigation.defaultPosition;
-      }
-      if (miradorWindow.view !== undefined) {
-        ({ view } = miradorWindow);
-      } else {
-        view = mergedConfig.window.defaultView;
-      }
-      this.store.dispatch(actions.fetchManifest(miradorWindow.loadedManifest));
-      this.store.dispatch(actions.addWindow({
-        canvasIndex: (miradorWindow.canvasIndex || 0),
-        manifestId: miradorWindow.loadedManifest,
-        thumbnailNavigationPosition,
-        view,
+    mergedConfig.windows.forEach((miradorWindow, layoutOrder) => {
+      const windowId = `window-${uuid()}`;
+      const manifestId = miradorWindow.manifestId || miradorWindow.loadedManifest;
+      const manifestAction = this.store.dispatch(actions.fetchManifest(manifestId));
+      const windowAction = this.store.dispatch(actions.addWindow({
+        // these are default values ...
+        canvasIndex: 0,
+        id: windowId,
+        layoutOrder,
+        manifestId,
+        thumbnailNavigationPosition: mergedConfig.thumbnailNavigation.defaultPosition,
+        view: mergedConfig.window.defaultView,
+        // ... overridden by values from the window configuration ...
+        ...miradorWindow,
       }));
+
+      Promise.all([manifestAction, windowAction]).then(() => {
+        if (miradorWindow.defaultSearchQuery) {
+          const state = this.store.getState();
+          const companionWindowId = getCompanionWindowIdsForPosition(state, { position: 'left', windowId })[0];
+          const searchService = getManifestSearchService(state, { windowId });
+          const searchId = searchService && `${searchService.id}?q=${miradorWindow.defaultSearchQuery}`;
+
+          companionWindowId && searchId && this.store.dispatch(
+            actions.fetchSearch(
+              windowId,
+              companionWindowId,
+              searchId,
+              miradorWindow.defaultSearchQuery,
+            ),
+          );
+        }
+      });
     });
 
     Object.keys(mergedConfig.manifests || {}).forEach((manifestId) => {
