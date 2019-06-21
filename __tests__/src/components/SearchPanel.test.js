@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import Button from '@material-ui/core/Button';
 import CompanionWindow from '../../../src/containers/CompanionWindow';
 import SearchResults from '../../../src/containers/SearchResults';
 import { SearchPanel } from '../../../src/components/SearchPanel';
@@ -12,6 +13,8 @@ function createWrapper(props) {
   return shallow(
     <SearchPanel
       id="xyz"
+      fetchSearch={() => {}}
+      searchService={{ id: 'http://example.com/search' }}
       windowId="window"
       {...props}
     />,
@@ -56,5 +59,16 @@ describe('SearchPanel', () => {
   it('has the SearchResults', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(SearchResults).length).toEqual(1);
+  });
+
+  it('suggests searches', () => {
+    const fetchSearch = jest.fn();
+    const wrapper = createWrapper({ fetchSearch, suggestedSearches: ['abc'] });
+    expect(wrapper.find(Button).length).toEqual(1);
+    wrapper.find(Button).simulate('click');
+    expect(fetchSearch).toHaveBeenCalledWith('http://example.com/search?q=abc', 'abc');
+
+    wrapper.setProps({ query: 'something' });
+    expect(wrapper.find(Button).length).toEqual(0);
   });
 });
