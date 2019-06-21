@@ -6,7 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 import classNames from 'classnames';
 import WindowTopMenuButton from '../containers/WindowTopMenuButton';
-import WindowTopBarButtons from '../containers/WindowTopBarButtons';
+import WindowTopBarPluginMenu from '../containers/WindowTopBarPluginMenu';
 import WindowTopBarTitle from '../containers/WindowTopBarTitle';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import FullScreenButton from '../containers/FullScreenButton';
@@ -53,8 +53,8 @@ export class WindowTopBar extends Component {
             <WindowTopBarTitle
               windowId={windowId}
             />
-            <WindowTopBarButtons windowId={windowId} />
             <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
+            <WindowTopBarPluginMenu windowId={windowId} />
             {allowMaximize && (
               <MiradorMenuButton
                 aria-label={(maximized ? t('minimizeWindow') : t('maximizeWindow'))}

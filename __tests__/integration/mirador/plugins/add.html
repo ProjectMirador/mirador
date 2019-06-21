@@ -28,6 +28,12 @@
         </div>
       );
 
+      const AddPluginComponentC = (props) => (
+        <div id="add-plugin-component-c">
+          Plugin C
+        </div>
+      );
+
       const addPluginA = {
         target: 'WorkspaceControlPanelButtons',
         mode: 'add',
@@ -40,7 +46,13 @@
         component: AddPluginComponentB,
       };
 
-      const miradorInstance = Mirador.viewer(config, [addPluginA, addPluginB]);
+      const addPluginC = {
+        target: 'WindowTopBarPluginMenu',
+        mode: 'add',
+        component: AddPluginComponentC,
+      };
+
+      const miradorInstance = Mirador.viewer(config, [addPluginA, addPluginB, addPluginC]);
 
      </script>
   </body>

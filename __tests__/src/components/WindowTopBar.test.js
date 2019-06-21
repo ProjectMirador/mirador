@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 
 import WindowTopMenuButton from '../../../src/containers/WindowTopMenuButton';
-import WindowTopBarButtons from '../../../src/containers/WindowTopBarButtons';
+import WindowTopBarPluginMenu from '../../../src/containers/WindowTopBarPluginMenu';
 import WindowTopBarTitle from '../../../src/containers/WindowTopBarTitle';
 import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import FullScreenButton from '../../../src/containers/FullScreenButton';
@@ -35,7 +35,7 @@ describe('WindowTopBar', () => {
     expect(wrapper.find(Toolbar).length).toBe(1);
     expect(wrapper.find(MiradorMenuButton).length).toBe(3);
     expect(wrapper.find(WindowTopBarTitle).length).toBe(1);
-    expect(wrapper.find(WindowTopBarButtons).length).toBe(1);
+    expect(wrapper.find(WindowTopBarPluginMenu).length).toBe(1);
     expect(wrapper.find(WindowTopMenuButton).length).toBe(1);
     expect(wrapper.find(FullScreenButton).length).toBe(0);
   });
@@ -55,7 +55,7 @@ describe('WindowTopBar', () => {
 
   it('passes correct props to <WindowTopBarButtons/>', () => {
     const wrapper = createWrapper();
-    expect(wrapper.find(WindowTopBarButtons).first().props().windowId).toBe('xyz');
+    expect(wrapper.find(WindowTopBarPluginMenu).first().props().windowId).toBe('xyz');
   });
 
   it('passe correct props to <WindowTopMenuButton', () => {
