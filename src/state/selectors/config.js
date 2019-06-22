@@ -3,7 +3,7 @@ import deepmerge from 'deepmerge';
 
 /** */
 function getConfig(state) {
-  return state.config;
+  return state.config || {};
 }
 
 /**
@@ -50,4 +50,9 @@ export const getWorkspaceType = createSelector(
 export const getContainerId = createSelector(
   [getConfig],
   ({ id }) => id,
+);
+
+export const getDefaultView = createSelector(
+  [getConfig],
+  ({ window }) => window && window.defaultView,
 );
