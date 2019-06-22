@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Downshift from 'downshift';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Input from '@material-ui/core/Input';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -43,7 +44,7 @@ describe('SearchPanelControls', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(Downshift).prop('id')).toEqual('search-cw');
   });
-  it('endAdornment is a SearchIcon', () => {
+  it('endAdornment is a SearchIcon (with no CircularProgress indicator)', () => {
     const wrapper = createWrapper();
     const divedInput = wrapper.find(Downshift).dive().find(TextField).dive()
       .dive()
@@ -52,9 +53,23 @@ describe('SearchPanelControls', () => {
       .dive()
       .dive()
       .dive();
+    expect(divedInput.find(CircularProgress).length).toEqual(0);
     expect(divedInput.find('SearchSharpIcon').length).toEqual(1);
     expect(divedInput.find('Connect(WithPlugins(MiradorMenuButton))[type="submit"]').length).toEqual(1);
   });
+
+  it('endAdornment has a CircularProgress indicator when there the current search is fetching', () => {
+    const wrapper = createWrapper({ searchIsFetching: true });
+    const divedInput = wrapper.find(Downshift).dive().find(TextField).dive()
+      .dive()
+      .find(Input)
+      .dive()
+      .dive()
+      .dive()
+      .dive();
+    expect(divedInput.find(CircularProgress).length).toEqual(1);
+  });
+
   it('renders suggestions', () => {
     const fetchSearch = jest.fn();
     const wrapper = createWrapper({

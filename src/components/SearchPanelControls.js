@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import deburr from 'lodash/deburr';
 import debounce from 'lodash/debounce';
 import Downshift from 'downshift';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import SearchIcon from '@material-ui/icons/SearchSharp';
@@ -158,7 +159,7 @@ export class SearchPanelControls extends Component {
   /** */
   render() {
     const {
-      classes, companionWindowId, t, windowId,
+      classes, companionWindowId, searchIsFetching, t, windowId,
     } = this.props;
 
     const { search, selectOpen } = this.state;
@@ -200,10 +201,13 @@ export class SearchPanelControls extends Component {
                       InputLabelProps: getLabelProps(),
                       InputProps: {
                         endAdornment: (
-                          <InputAdornment position="end">
+                          <InputAdornment position="end" className={classes.adornmentWrapper}>
                             <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
                               <SearchIcon />
                             </MiradorMenuButton>
+                            {Boolean(searchIsFetching) && (
+                              <CircularProgress className={classes.searchProgress} size={50} />
+                            )}
                           </InputAdornment>
                         ),
                         id,
@@ -250,6 +254,7 @@ SearchPanelControls.propTypes = {
   companionWindowId: PropTypes.string.isRequired,
   fetchSearch: PropTypes.func.isRequired,
   query: PropTypes.string,
+  searchIsFetching: PropTypes.bool.isRequired,
   searchService: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
