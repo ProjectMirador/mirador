@@ -113,6 +113,11 @@ describe('getCanvasIndex', () => {
 
 describe('getWindowViewType', () => {
   const state = {
+    config: {
+      window: {
+        defaultView: 'default',
+      },
+    },
     manifests: {
       x: { json: { ...manifestFixture001 } },
       y: { json: { ...manifestFixture015 } },
@@ -131,14 +136,14 @@ describe('getWindowViewType', () => {
     expect(received).toBe('single');
   });
 
-  it('should return undefined if view type does not exist in window', () => {
+  it('should return the default if view type does not exist in window', () => {
     const received = getWindowViewType(state, { windowId: 'b' });
-    expect(received).toBeUndefined();
+    expect(received).toBe('default');
   });
 
-  it('should return undefined if window does not exists', () => {
+  it('should return the default if window does not exists', () => {
     const received = getWindowViewType(state, { windowId: 'c' });
-    expect(received).toBeUndefined();
+    expect(received).toBe('default');
   });
 
   it('should return modified viewingHint if view type does not exist', () => {

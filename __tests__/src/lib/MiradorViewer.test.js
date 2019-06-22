@@ -56,7 +56,7 @@ describe('MiradorViewer', () => {
       expect(windows[windowIds[1]].layoutOrder).toBe(1);
       expect(windows[windowIds[0]].thumbnailNavigationPosition).toBe('far-bottom');
       expect(windows[windowIds[1]].thumbnailNavigationPosition).toBe('off');
-      expect(windows[windowIds[0]].view).toBe('single');
+      expect(windows[windowIds[0]].view).toBe(undefined);
       expect(windows[windowIds[1]].view).toBe('book');
 
       const manifestIds = Object.keys(manifests);
