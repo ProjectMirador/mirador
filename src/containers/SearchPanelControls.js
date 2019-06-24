@@ -33,6 +33,10 @@ const mapDispatchToProps = {
 
 /** */
 const styles = theme => ({
+  searchInput: {
+    paddingBottom: theme.spacing(1),
+    paddingRight: theme.spacing(1.5),
+  },
   suggestions: {
     position: 'absolute',
     zIndex: theme.zIndex.modal - 1,
