@@ -221,7 +221,18 @@ export default {
     hideWindowTitle: false, // Configure if the window title is shown in the window title bar or not
     sideBarOpenByDefault: false, // Configure if the sidebar (and its content panel) is open by default
   },
-  windows: [], // Array of windows to be open when mirador initializes (each object should at least provide a loadedManifest key with the value of the IIIF presentation manifest to load)
+  windows: [ // Array of windows to be open when mirador initializes (each object should at least provide a manifestId key with the value of the IIIF presentation manifest to load)
+    /**
+    Example Window:
+    {
+      manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+      canvasIndex: 2,
+      thumbnailNavigationPosition: 'far-bottom',
+    }
+    // ../state/actions/window.js `defaultOptions`
+    // ../lib/MiradorViewer.js `windowAction`
+    */
+  ], 
   thumbnailNavigation: {
     defaultPosition: 'off', // Which position for the thumbnail navigation to be be displayed. Other possible values are "far-bottom" or "far-right"
     height: 130, // height of entire ThumbnailNavigation area when position is "far-bottom"
