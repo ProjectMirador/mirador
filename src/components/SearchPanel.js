@@ -79,6 +79,7 @@ export class SearchPanel extends Component {
 SearchPanel.propTypes = {
   classes: PropTypes.shape({
     clearChip: PropTypes.string,
+    inlineButton: PropTypes.string,
   }),
   fetchSearch: PropTypes.func,
   id: PropTypes.string.isRequired,
