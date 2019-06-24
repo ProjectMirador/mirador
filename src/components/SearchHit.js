@@ -110,7 +110,7 @@ export class SearchHit extends Component {
 SearchHit.propTypes = {
   adjacent: PropTypes.bool,
   annotation: PropTypes.shape({
-    content: PropTypes.string,
+    chars: PropTypes.string,
   }),
   annotationId: PropTypes.string,
   annotationLabel: PropTypes.string,

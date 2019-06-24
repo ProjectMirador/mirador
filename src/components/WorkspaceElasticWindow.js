@@ -72,6 +72,7 @@ WorkspaceElasticWindow.propTypes = {
     height: PropTypes.number,
     id: PropTypes.string,
     width: PropTypes.number,
+    windowId: PropTypes.string,
     x: PropTypes.number,
     y: PropTypes.number,
   }).isRequired,
