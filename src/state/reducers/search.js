@@ -9,6 +9,27 @@ import ActionTypes from '../actions/action-types';
 export const searchesReducer = (state = {}, action) => {
   switch (action.type) {
     case ActionTypes.REQUEST_SEARCH:
+      if (((state[action.windowId] || {})[action.companionWindowId] || {}) !== action.query) {
+        // new query
+        return {
+          ...state,
+          [action.windowId]: {
+            ...state[action.windowId],
+            [action.companionWindowId]: {
+              ...(state[action.windowId] || {})[action.companionWindowId],
+              data: {
+                [action.searchId]: {
+                  isFetching: true,
+                },
+              },
+              query: action.query,
+              selectedContentSearchAnnotation: [],
+            },
+          },
+        };
+      }
+
+      // paginating through a query
       return {
         ...state,
         [action.windowId]: {
@@ -16,18 +37,11 @@ export const searchesReducer = (state = {}, action) => {
           [action.companionWindowId]: {
             ...(state[action.windowId] || {})[action.companionWindowId],
             data: {
-              ...(() => {
-                const cw = ((state[action.windowId] || {})[action.companionWindowId] || {});
-
-                if (cw.query !== action.query) return undefined;
-
-                return cw.data;
-              })(),
+              ...((state[action.windowId] || {})[action.companionWindowId] || {}).data,
               [action.searchId]: {
                 isFetching: true,
               },
             },
-            query: action.query,
           },
         },
       };
@@ -74,6 +88,17 @@ export const searchesReducer = (state = {}, action) => {
           }
           return object;
         }, {}),
+      };
+    case ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          [action.companionWindowId]: {
+            ...(state[action.windowId] || {})[action.companionWindowId],
+            selectedContentSearchAnnotation: action.annotationId,
+          },
+        },
       };
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return {};

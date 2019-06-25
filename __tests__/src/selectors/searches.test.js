@@ -207,7 +207,7 @@ describe('getSelectedContentSearchAnnotationIds', () => {
     ).toEqual([]);
   });
 
-  it('returns the seleected content search annotation for the search', () => {
+  it('returns the selected content search annotation for the search', () => {
     const state = {
       searches: {
         foo: {
