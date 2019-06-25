@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 
 /**
  */
@@ -57,14 +57,14 @@ export class WorkspaceExport extends Component {
         <DialogTitle id="form-dialog-title" disableTypography>
           <Typography variant="h2">{t('downloadExport')}</Typography>
         </DialogTitle>
-        <DialogContent
+        <ScrollIndicatedDialogContent
           className={classes.dialogcontent}
         >
           {children}
           <pre>
             {exportableState}
           </pre>
-        </DialogContent>
+        </ScrollIndicatedDialogContent>
         <DialogActions>
           <Button className={classes.cancelBtn} onClick={() => handleClose()}>{t('cancel')}</Button>
           <CopyToClipboard
