@@ -9,7 +9,6 @@ import {
   getNextSearchId,
   getSearchAnnotationsForCompanionWindow,
   getSearchHitsForCompanionWindow,
-  getSelectedContentSearchAnnotationIds,
   getSearchQuery,
   getSearchIsFetching,
 } from '../state/selectors';
@@ -26,12 +25,10 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   searchAnnotations:
     getSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId }).resources,
   searchHits: getSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
-  selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, { windowId }),
 });
 
 const mapDispatchToProps = {
   fetchSearch: actions.fetchSearch,
-  selectContentSearchAnnotation: actions.selectContentSearchAnnotation,
 };
 
 /** */
