@@ -206,6 +206,31 @@ describe('getSelectedContentSearchAnnotationIds', () => {
       getSelectedContentSearchAnnotationIds(state, { windowId: 'baz' }),
     ).toEqual([]);
   });
+
+  it('returns the seleected content search annotation for the search', () => {
+    const state = {
+      searches: {
+        foo: {
+          bar: {
+            selectedContentSearchAnnotation: ['baz'],
+          },
+        },
+      },
+      windows: {
+        foo: {
+          selectedContentSearchAnnotation: ['unused'],
+        },
+      },
+    };
+
+    expect(
+      getSelectedContentSearchAnnotationIds(state, { companionWindowId: 'bar', windowId: 'foo' }),
+    ).toEqual(['baz']);
+
+    expect(
+      getSelectedContentSearchAnnotationIds(state, { windowId: 'baz' }),
+    ).toEqual([]);
+  });
 });
 
 
