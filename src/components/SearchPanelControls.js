@@ -166,7 +166,7 @@ export class SearchPanelControls extends Component {
     return (
       <>
         <form onSubmit={this.submitSearch}>
-          <FormControl>
+          <FormControl className={classes.searchInput}>
             <Downshift
               id={id}
               inputValue={search}
