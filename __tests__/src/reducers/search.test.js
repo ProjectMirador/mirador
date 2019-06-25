@@ -18,6 +18,7 @@ describe('search reducer', () => {
             },
           },
           query: 'search terms',
+          selectedContentSearchAnnotation: [],
         },
       },
     });
@@ -49,6 +50,7 @@ describe('search reducer', () => {
             },
           },
           query: 'search terms',
+          selectedContentSearchAnnotation: [],
         },
       },
     });
@@ -150,6 +152,32 @@ describe('search reducer', () => {
         xyz321: {
           isFetching: false,
           json: {},
+        },
+      },
+    });
+  });
+
+  it('handles SELECT_CONTENT_SEARCH_ANNOTATION', () => {
+    expect(searchesReducer(
+      {
+        foo: {
+          abc123: {
+            selectedContentSearchAnnotation: ['foo'],
+            whatever: true,
+          },
+        },
+      },
+      {
+        annotationId: ['bar'],
+        companionWindowId: 'abc123',
+        type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION,
+        windowId: 'foo',
+      },
+    )).toEqual({
+      foo: {
+        abc123: {
+          selectedContentSearchAnnotation: ['bar'],
+          whatever: true,
         },
       },
     });

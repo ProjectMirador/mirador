@@ -17,17 +17,21 @@ import {
  */
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   searchHits: getSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
-  selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, { windowId }),
+  selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, {
+    companionWindowId, windowId,
+  }),
 });
 
 /**
  * mapDispatchToProps - to hook up connect
- * @memberof SearchPanelControls
+ * @memberof SearchPanelNavigation
  * @private
  */
-const mapDispatchToProps = {
-  selectContentSearchAnnotation: actions.selectContentSearchAnnotation,
-};
+const mapDispatchToProps = (dispatch, { companionWindowId, windowId }) => ({
+  selectContentSearchAnnotation: (...args) => dispatch(
+    actions.selectContentSearchAnnotation(windowId, companionWindowId, ...args),
+  ),
+});
 
 /** */
 const styles = theme => ({

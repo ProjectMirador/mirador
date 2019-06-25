@@ -175,14 +175,18 @@ describe('search actions', () => {
         },
       });
       const windowId = 'foo';
+      const companionWindowId = 'cwid';
       const annotationId = ['abc123'];
       const expectedAction = {
         annotationId,
         canvasIndex: 1,
+        companionWindowId,
         type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION,
         windowId,
       };
-      store.dispatch(actions.selectContentSearchAnnotation(windowId, annotationId));
+      store.dispatch(
+        actions.selectContentSearchAnnotation(windowId, companionWindowId, annotationId),
+      );
       const actualActions = store.getActions();
       expect(actualActions).toEqual([expectedAction]);
     });

@@ -7,27 +7,42 @@ import ActionTypes from '../actions/action-types';
  * searchReducer
  */
 export const searchesReducer = (state = {}, action) => {
+  const searchStruct = (state[action.windowId] || {})[action.companionWindowId] || {};
   switch (action.type) {
     case ActionTypes.REQUEST_SEARCH:
+      if (searchStruct.query !== action.query) {
+        // new query
+        return {
+          ...state,
+          [action.windowId]: {
+            ...state[action.windowId],
+            [action.companionWindowId]: {
+              ...searchStruct,
+              data: {
+                [action.searchId]: {
+                  isFetching: true,
+                },
+              },
+              query: action.query,
+              selectedContentSearchAnnotation: [],
+            },
+          },
+        };
+      }
+
+      // paginating through a query
       return {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
           [action.companionWindowId]: {
-            ...(state[action.windowId] || {})[action.companionWindowId],
+            ...searchStruct,
             data: {
-              ...(() => {
-                const cw = ((state[action.windowId] || {})[action.companionWindowId] || {});
-
-                if (cw.query !== action.query) return undefined;
-
-                return cw.data;
-              })(),
+              ...searchStruct.data,
               [action.searchId]: {
                 isFetching: true,
               },
             },
-            query: action.query,
           },
         },
       };
@@ -37,9 +52,9 @@ export const searchesReducer = (state = {}, action) => {
         [action.windowId]: {
           ...state[action.windowId],
           [action.companionWindowId]: {
-            ...(state[action.windowId] || {})[action.companionWindowId],
+            ...searchStruct,
             data: {
-              ...((state[action.windowId] || {})[action.companionWindowId] || {}).data,
+              ...searchStruct.data,
               [action.searchId]: {
                 isFetching: false,
                 json: action.searchJson,
@@ -54,9 +69,9 @@ export const searchesReducer = (state = {}, action) => {
         [action.windowId]: {
           ...state[action.windowId],
           [action.companionWindowId]: {
-            ...(state[action.windowId] || {})[action.companionWindowId],
+            ...searchStruct,
             data: {
-              ...((state[action.windowId] || {})[action.companionWindowId] || {}).data,
+              ...searchStruct.data,
               [action.searchId]: {
                 error: action.error,
                 isFetching: false,
@@ -74,6 +89,17 @@ export const searchesReducer = (state = {}, action) => {
           }
           return object;
         }, {}),
+      };
+    case ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          [action.companionWindowId]: {
+            ...searchStruct,
+            selectedContentSearchAnnotation: action.annotationId,
+          },
+        },
       };
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return {};

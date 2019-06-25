@@ -99,7 +99,7 @@ export function fetchSearch(windowId, companionWindowId, searchId, query) {
  * @param  {String} annotationId
  * @memberof ActionCreators
  */
-export function selectContentSearchAnnotation(windowId, annotationIds) {
+export function selectContentSearchAnnotation(windowId, companionWindowId, annotationIds) {
   return (dispatch, getState) => {
     const state = getState();
     const annotations = getSearchAnnotationsForWindow(state, { windowId });
@@ -111,6 +111,7 @@ export function selectContentSearchAnnotation(windowId, annotationIds) {
     dispatch({
       annotationId: annotationIds,
       canvasIndex: canvas && canvas.index,
+      companionWindowId,
       type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION,
       windowId,
     });
