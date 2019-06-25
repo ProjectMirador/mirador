@@ -83,7 +83,10 @@ export const windowsReducer = (state = {}, action) => {
         },
       };
     case ActionTypes.SET_CANVAS:
-      return setCanvasIndex(state, action.windowId, currentIndex => action.canvasIndex);
+      return updateIn(state, [action.windowId], orig => merge(orig, {
+        canvasIndex: action.canvasIndex,
+        selectedContentSearchAnnotation: action.selectedContentSearchAnnotation,
+      }));
     case ActionTypes.ADD_COMPANION_WINDOW:
       if (action.payload.position === 'left') {
         const { companionWindowIds } = state[action.windowId];
@@ -210,24 +213,4 @@ function updatedSelectedAnnotations(state, action) {
   }
 
   return remove(state[action.windowId].selectedAnnotations, action.targetId);
-}
-
-/**
- * @param {Object} state
- * @param {String} windowId
- * @param {Function} getIndex - gets curent canvas index passed and should return new index
- */
-function setCanvasIndex(state, windowId, getIndex) {
-  return Object.values(state).reduce((object, window) => {
-    if (window.id === windowId) {
-      return {
-        ...object,
-        [window.id]: {
-          ...window,
-          canvasIndex: getIndex(window.canvasIndex),
-        },
-      };
-    }
-    return { ...object, [window.id]: window };
-  }, {});
 }
