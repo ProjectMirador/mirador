@@ -85,7 +85,7 @@ export class WorkspaceImport extends Component {
             onChange={this.handleChange}
             rows="15"
             variant="filled"
-            inputProps={{ autofocus: 'autofocus', className: classes.textInput }}
+            inputProps={{ autoFocus: 'autofocus', className: classes.textInput }}
             helperText={t('importWorkspaceHint')}
           />
         </DialogContent>

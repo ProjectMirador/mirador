@@ -35,7 +35,7 @@ describe('WorkspaceImport', () => {
   });
   it('renders TextField props', () => {
     expect(wrapper.find(TextField).props()).toEqual(expect.objectContaining({
-      inputProps: { autofocus: 'autofocus' },
+      inputProps: { autoFocus: 'autofocus' },
     }));
   });
 });
