@@ -7,16 +7,17 @@ import ActionTypes from '../actions/action-types';
  * searchReducer
  */
 export const searchesReducer = (state = {}, action) => {
+  const searchStruct = (state[action.windowId] || {})[action.companionWindowId] || {};
   switch (action.type) {
     case ActionTypes.REQUEST_SEARCH:
-      if (((state[action.windowId] || {})[action.companionWindowId] || {}) !== action.query) {
+      if (searchStruct.query !== action.query) {
         // new query
         return {
           ...state,
           [action.windowId]: {
             ...state[action.windowId],
             [action.companionWindowId]: {
-              ...(state[action.windowId] || {})[action.companionWindowId],
+              ...searchStruct,
               data: {
                 [action.searchId]: {
                   isFetching: true,
@@ -35,9 +36,9 @@ export const searchesReducer = (state = {}, action) => {
         [action.windowId]: {
           ...state[action.windowId],
           [action.companionWindowId]: {
-            ...(state[action.windowId] || {})[action.companionWindowId],
+            ...searchStruct,
             data: {
-              ...((state[action.windowId] || {})[action.companionWindowId] || {}).data,
+              ...searchStruct.data,
               [action.searchId]: {
                 isFetching: true,
               },
@@ -51,9 +52,9 @@ export const searchesReducer = (state = {}, action) => {
         [action.windowId]: {
           ...state[action.windowId],
           [action.companionWindowId]: {
-            ...(state[action.windowId] || {})[action.companionWindowId],
+            ...searchStruct,
             data: {
-              ...((state[action.windowId] || {})[action.companionWindowId] || {}).data,
+              ...searchStruct.data,
               [action.searchId]: {
                 isFetching: false,
                 json: action.searchJson,
@@ -68,9 +69,9 @@ export const searchesReducer = (state = {}, action) => {
         [action.windowId]: {
           ...state[action.windowId],
           [action.companionWindowId]: {
-            ...(state[action.windowId] || {})[action.companionWindowId],
+            ...searchStruct,
             data: {
-              ...((state[action.windowId] || {})[action.companionWindowId] || {}).data,
+              ...searchStruct.data,
               [action.searchId]: {
                 error: action.error,
                 isFetching: false,
@@ -95,7 +96,7 @@ export const searchesReducer = (state = {}, action) => {
         [action.windowId]: {
           ...state[action.windowId],
           [action.companionWindowId]: {
-            ...(state[action.windowId] || {})[action.companionWindowId],
+            ...searchStruct,
             selectedContentSearchAnnotation: action.annotationId,
           },
         },
