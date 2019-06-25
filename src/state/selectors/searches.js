@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import { LanguageMap } from 'manifesto.js';
 import flatten from 'lodash/flatten';
 import Annotation from '../../lib/Annotation';
+import { getCanvases } from './canvases';
 import { getWindow } from './windows';
 import { getManifestLocale } from './manifests';
 
@@ -72,7 +73,7 @@ export const getNextSearchId = createSelector(
   },
 );
 
-export const getSearchHitsForCompanionWindow = createSelector(
+const getSearchHitsForCompanionWindow = createSelector(
   [
     getSearchResponsesForCompanionWindow,
   ],
@@ -81,6 +82,27 @@ export const getSearchHitsForCompanionWindow = createSelector(
 
     return result.json.hits;
   })),
+);
+
+export const getSortedSearchHitsForCompanionWindow = createSelector(
+  [
+    getSearchHitsForCompanionWindow,
+    getCanvases,
+    (state, { companionWindowId, windowId }) => annotationUri => getResourceAnnotationForSearchHit(
+      state, { annotationUri, companionWindowId, windowId },
+    ),
+  ],
+  (searchHits, canvases, annotationForSearchHit) => {
+    if (!canvases || canvases.length === 0) return [];
+    if (!searchHits || searchHits.length === 0) return [];
+    const canvasIds = canvases.map(canvas => canvas.id);
+
+    return [].concat(searchHits).sort((a, b) => {
+      const hitA = annotationForSearchHit(a.annotations[0]);
+      const hitB = annotationForSearchHit(b.annotations[0]);
+      return canvasIds.indexOf(hitA.targetId) - canvasIds.indexOf(hitB.targetId);
+    });
+  },
 );
 
 /** convert search results to an annotation */

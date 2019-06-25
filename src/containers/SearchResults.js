@@ -8,9 +8,9 @@ import * as actions from '../state/actions';
 import {
   getNextSearchId,
   getSearchAnnotationsForCompanionWindow,
-  getSearchHitsForCompanionWindow,
   getSearchQuery,
   getSearchIsFetching,
+  getSortedSearchHitsForCompanionWindow,
 } from '../state/selectors';
 
 /**
@@ -24,7 +24,7 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   query: getSearchQuery(state, { companionWindowId, windowId }),
   searchAnnotations:
     getSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId }).resources,
-  searchHits: getSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
+  searchHits: getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
 });
 
 const mapDispatchToProps = {
