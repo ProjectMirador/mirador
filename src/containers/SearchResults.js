@@ -7,10 +7,10 @@ import { SearchResults } from '../components/SearchResults';
 import * as actions from '../state/actions';
 import {
   getNextSearchId,
-  getSearchAnnotationsForCompanionWindow,
   getSearchQuery,
   getSearchIsFetching,
   getSortedSearchHitsForCompanionWindow,
+  getSortedSearchAnnotationsForCompanionWindow,
 } from '../state/selectors';
 
 /**
@@ -23,7 +23,7 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   nextSearch: getNextSearchId(state, { companionWindowId, windowId }),
   query: getSearchQuery(state, { companionWindowId, windowId }),
   searchAnnotations:
-    getSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId }).resources,
+    getSortedSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId }),
   searchHits: getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
 });
 

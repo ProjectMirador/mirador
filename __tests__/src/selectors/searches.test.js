@@ -1,6 +1,7 @@
 import {
   getSearchQuery,
   getSearchAnnotationsForWindow,
+  getSortedSearchAnnotationsForCompanionWindow,
   getSortedSearchHitsForCompanionWindow,
   getSelectedContentSearchAnnotationIds,
   getSelectedContentSearchAnnotations,
@@ -176,6 +177,39 @@ describe('getSortedSearchHitsForCompanionWindow', () => {
     expect(
       getSortedSearchHitsForCompanionWindow({}, { companionWindowId, windowId: 'a' }),
     ).toEqual([]);
+  });
+});
+
+describe('getSortedSearchAnnotationsForCompanionWindow', () => {
+  it('sorts the search annotations for the companion window based on the "on" target', () => {
+    const companionWindowId = 'cwid';
+    const resources = [
+      { '@id': 'http://example.com/iiif/canvas3', on: 'http://example.com/iiif/canvas3' },
+      { '@id': 'http://example.com/iiif/canvas1', on: 'http://example.com/iiif/canvas1' },
+      { '@id': 'http://example.com/iiif/canvas2', on: 'http://example.com/iiif/canvas2' },
+    ];
+    const state = {
+      companionWindows: {
+        [companionWindowId]: { position: 'left' },
+      },
+      searches: {
+        a: {
+          [companionWindowId]: {
+            data: {
+              'search?page=1': { json: { resources } },
+            },
+          },
+        },
+      },
+    };
+
+    expect(
+      getSortedSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId: 'a' }).map(r => r.id),
+    ).toEqual([
+      'http://example.com/iiif/canvas1',
+      'http://example.com/iiif/canvas2',
+      'http://example.com/iiif/canvas3',
+    ]);
   });
 });
 

@@ -122,11 +122,29 @@ const searchResultsToAnnotation = (results) => {
   };
 };
 
-export const getSearchAnnotationsForCompanionWindow = createSelector(
+const getSearchAnnotationsForCompanionWindow = createSelector(
   [
     getSearchResponsesForCompanionWindow,
   ],
   results => results && searchResultsToAnnotation(results),
+);
+
+export const getSortedSearchAnnotationsForCompanionWindow = createSelector(
+  [
+    getSearchAnnotationsForCompanionWindow,
+    getCanvases,
+  ],
+  (searchAnnotations, canvases) => {
+    if (!searchAnnotations
+        || !searchAnnotations.resources
+        || searchAnnotations.length === 0) return [];
+    if (!canvases || canvases.length === 0) return [];
+    const canvasIds = canvases.map(canvas => canvas.id);
+
+    return [].concat(searchAnnotations.resources).sort(
+      (annoA, annoB) => canvasIds.indexOf(annoA.targetId) - canvasIds.indexOf(annoB.targetId),
+    );
+  },
 );
 
 export const getSearchAnnotationsForWindow = createSelector(
