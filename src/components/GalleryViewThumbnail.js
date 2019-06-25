@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
@@ -66,7 +68,7 @@ export class GalleryViewThumbnail extends Component {
    */
   render() {
     const {
-      canvas, classes, selected,
+      annotationsCount, annotationSelected, canvas, classes, selected,
     } = this.props;
 
     const manifestoCanvas = new ManifestoCanvas(canvas);
@@ -77,7 +79,8 @@ export class GalleryViewThumbnail extends Component {
         className={
           classNames(
             classes.galleryViewItem,
-            selected ? classes.galleryViewItemCurrent : '',
+            selected ? classes.selected : '',
+            annotationsCount > 0 ? classes.hasAnnotations : '',
           )
         }
         onClick={this.handleSelect}
@@ -95,12 +98,27 @@ export class GalleryViewThumbnail extends Component {
         <Typography variant="caption" className={classes.galleryViewCaption}>
           {manifestoCanvas.getLabel()}
         </Typography>
+        { annotationsCount > 0 && (
+          <Chip
+            avatar={<Avatar className={classes.avatar} />}
+            label={annotationsCount}
+            className={
+              classNames(
+                classes.chip,
+                annotationSelected ? classes.selected : '',
+              )
+            }
+            size="small"
+          />
+        )}
       </div>
     );
   }
 }
 
 GalleryViewThumbnail.propTypes = {
+  annotationsCount: PropTypes.number,
+  annotationSelected: PropTypes.bool,
   canvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   focusOnCanvas: PropTypes.func.isRequired,
@@ -109,5 +127,7 @@ GalleryViewThumbnail.propTypes = {
 };
 
 GalleryViewThumbnail.defaultProps = {
+  annotationsCount: 0,
+  annotationSelected: false,
   selected: false,
 };

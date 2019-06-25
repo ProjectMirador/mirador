@@ -1,4 +1,10 @@
+import flatten from 'lodash/flatten';
 import ActionTypes from './action-types';
+import {
+  getCanvas,
+  getSearchAnnotationsForWindow,
+} from '../selectors';
+
 /**
  * setCanvas - action creator
  *
@@ -7,11 +13,26 @@ import ActionTypes from './action-types';
  * @memberof ActionCreators
  */
 export function setCanvas(windowId, canvasIndex) {
-  return {
-    canvasIndex,
-    type: ActionTypes.SET_CANVAS,
-    windowId,
-  };
+  return ((dispatch, getState) => {
+    const state = getState();
+
+    const annotations = getSearchAnnotationsForWindow(state, { windowId });
+    const resourceAnnotations = flatten(annotations.map(a => a.resources));
+    const canvas = getCanvas(state, { canvasIndex, windowId });
+    const hitAnnotation = resourceAnnotations.find(r => r.targetId === canvas.id);
+
+    const action = {
+      canvasIndex,
+      type: ActionTypes.SET_CANVAS,
+      windowId,
+    };
+
+    if (hitAnnotation && hitAnnotation.id) {
+      action.selectedContentSearchAnnotation = [hitAnnotation.id];
+    }
+
+    dispatch(action);
+  });
 }
 
 /**

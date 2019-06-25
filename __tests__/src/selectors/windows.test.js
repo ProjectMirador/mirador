@@ -85,6 +85,15 @@ describe('getCanvasIndex', () => {
   it('returns the index if provided', () => {
     expect(getCanvasIndex({}, { canvasIndex: 25 })).toEqual(25);
   });
+  it('returns the index, if provided, even if it is 0', () => {
+    const state = {
+      windows: {
+        a: { canvasIndex: 13 },
+      },
+    };
+
+    expect(getCanvasIndex(state, { canvasIndex: 0 })).toEqual(0);
+  });
   it('returns the current canvasIndex for the window if provided', () => {
     const state = {
       windows: {

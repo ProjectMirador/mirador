@@ -81,6 +81,8 @@ export class OpenSeadragonViewer extends Component {
       this.osdUpdating = false;
     });
 
+    this.updateCanvas = this.canvasUpdateCallback();
+
     if (viewer) {
       this.viewer.viewport.panTo(viewer, true);
       this.viewer.viewport.zoomTo(viewer.zoom, viewer, true);
@@ -98,7 +100,7 @@ export class OpenSeadragonViewer extends Component {
     const {
       viewer,
       highlightedAnnotations, selectedAnnotations,
-      searchAnnotations, selectedContentSearchAnnotations, palette,
+      searchAnnotations, selectedContentSearchAnnotations,
     } = this.props;
     const highlightsUpdated = !OpenSeadragonViewer.annotationsMatch(
       highlightedAnnotations, prevProps.highlightedAnnotations,
@@ -114,30 +116,13 @@ export class OpenSeadragonViewer extends Component {
       selectedContentSearchAnnotations, prevProps.selectedContentSearchAnnotations,
     );
 
-    if (searchAnnotationsUpdated || selectedContentSearchAnnotationsUpdated) {
-      this.updateCanvas = () => {
-        this.osdCanvasOverlay.clear();
-        this.osdCanvasOverlay.resize();
-        this.osdCanvasOverlay.canvasUpdate(() => {
-          this.annotationsToContext(searchAnnotations, palette.highlights.secondary);
-          this.annotationsToContext(
-            selectedContentSearchAnnotations,
-            palette.highlights.primary,
-          );
-        });
-      };
-      this.viewer.forceRedraw();
-    }
-
-    if (highlightsUpdated || selectionsUpdated) {
-      this.updateCanvas = () => {
-        this.osdCanvasOverlay.clear();
-        this.osdCanvasOverlay.resize();
-        this.osdCanvasOverlay.canvasUpdate(() => {
-          this.annotationsToContext(highlightedAnnotations, palette.highlights.secondary);
-          this.annotationsToContext(selectedAnnotations, palette.highlights.primary);
-        });
-      };
+    if (
+      searchAnnotationsUpdated
+      || selectedContentSearchAnnotationsUpdated
+      || highlightsUpdated
+      || selectionsUpdated
+    ) {
+      this.updateCanvas = this.canvasUpdateCallback();
       this.viewer.forceRedraw();
     }
 
@@ -184,6 +169,15 @@ export class OpenSeadragonViewer extends Component {
       y: Math.round(viewport.centerSpringY.target.value),
       zoom: viewport.zoomSpring.target.value,
     });
+  }
+
+  /** */
+  canvasUpdateCallback() {
+    return () => {
+      this.osdCanvasOverlay.clear();
+      this.osdCanvasOverlay.resize();
+      this.osdCanvasOverlay.canvasUpdate(this.renderAnnotations.bind(this));
+    };
   }
 
   /**
@@ -274,6 +268,26 @@ export class OpenSeadragonViewer extends Component {
   zoomToWorld(immediately = true) {
     const { canvasWorld } = this.props;
     this.fitBounds(...canvasWorld.worldBounds(), immediately);
+  }
+
+  /** */
+  renderAnnotations() {
+    const {
+      searchAnnotations,
+      selectedContentSearchAnnotations,
+      highlightedAnnotations,
+      selectedAnnotations,
+      palette,
+    } = this.props;
+
+    this.annotationsToContext(searchAnnotations, palette.highlights.secondary);
+    this.annotationsToContext(
+      selectedContentSearchAnnotations,
+      palette.highlights.primary,
+    );
+
+    this.annotationsToContext(highlightedAnnotations, palette.highlights.secondary);
+    this.annotationsToContext(selectedAnnotations, palette.highlights.primary);
   }
 
   /**

@@ -128,12 +128,14 @@ describe('windows reducer', () => {
       },
     }, {
       canvasIndex: 5,
+      selectedContentSearchAnnotation: 'xyz',
       type: ActionTypes.SET_CANVAS,
       windowId: 'abc123',
     })).toEqual({
       abc123: {
         canvasIndex: 5,
         id: 'abc123',
+        selectedContentSearchAnnotation: 'xyz',
       },
       def456: {
         canvasIndex: 1,
