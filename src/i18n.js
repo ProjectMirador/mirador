@@ -6,6 +6,7 @@ import zhCn from './locales/zhCn/translation.json';
 import zhTw from './locales/zhTw/translation.json';
 import fr from './locales/fr/translation.json';
 import ja from './locales/ja/translation.json';
+import ptBr from './locales/ptBr/translation.json'
 
 
 // Load translations for each language
@@ -16,6 +17,7 @@ const resources = {
   ja,
   'zh-CN': zhCn,
   'zh-TW': zhTw,
+  'pt-BR': ptBr,
 };
 
 i18n
