@@ -6,8 +6,8 @@ import { withPlugins } from '../extend/withPlugins';
 import { SearchPanelNavigation } from '../components/SearchPanelNavigation';
 import * as actions from '../state/actions';
 import {
-  getSearchHitsForCompanionWindow,
   getSelectedContentSearchAnnotationIds,
+  getSortedSearchHitsForCompanionWindow,
 } from '../state/selectors';
 
 /**
@@ -16,7 +16,7 @@ import {
  * @private
  */
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
-  searchHits: getSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
+  searchHits: getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
   selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, {
     companionWindowId, windowId,
   }),

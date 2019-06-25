@@ -1,7 +1,7 @@
 import {
   getSearchQuery,
   getSearchAnnotationsForWindow,
-  getSearchHitsForCompanionWindow,
+  getSortedSearchHitsForCompanionWindow,
   getSelectedContentSearchAnnotationIds,
   getSelectedContentSearchAnnotations,
   getResourceAnnotationForSearchHit,
@@ -9,6 +9,20 @@ import {
   getSearchIsFetching,
   getNextSearchId,
 } from '../../../src/state/selectors';
+
+jest.mock('../../../src/state/selectors/canvases', () => {
+  const originalModule = jest.requireActual('../../../src/state/selectors/canvases');
+
+  return {
+    __esModule: true, // Use it when dealing with esModules
+    ...originalModule,
+    getCanvases: () => [
+      { id: 'http://example.com/iiif/canvas1' },
+      { id: 'http://example.com/iiif/canvas2' },
+      { id: 'http://example.com/iiif/canvas3' },
+    ],
+  };
+});
 
 describe('getSearchQuery', () => {
   const companionWindowId = 'cwid';
@@ -98,19 +112,40 @@ describe('getNextSearchId', () => {
   });
 });
 
-describe('getSearchHitsForCompanionWindow', () => {
+describe('getSortedSearchHitsForCompanionWindow', () => {
   const companionWindowId = 'cwid';
-  it('returns flattened hits for a manifest', () => {
+  it('returns flattened and sorted (by canvas/target order) hits for a manifest', () => {
+    const resources = [
+      { '@id': 'http://example.com/iiif/canvas1', on: 'http://example.com/iiif/canvas1' },
+      { '@id': 'http://example.com/iiif/canvas2', on: 'http://example.com/iiif/canvas2' },
+      { '@id': 'http://example.com/iiif/canvas3', on: 'http://example.com/iiif/canvas3' },
+    ];
     const state = {
+      companionWindows: {
+        [companionWindowId]: { position: 'left' },
+      },
       searches: {
         a: {
           [companionWindowId]: {
             data: {
               'search?page=1': {
-                json: { hits: [1, 2, 3] },
+                json: {
+                  hits: [
+                    { annotations: ['http://example.com/iiif/canvas3'], id: 1 },
+                    { annotations: ['http://example.com/iiif/canvas1'], id: 2 },
+                    { annotations: ['http://example.com/iiif/canvas2'], id: 3 },
+                  ],
+                  resources,
+                },
               },
               'search?page=2': {
-                json: { hits: [4, 5] },
+                json: {
+                  hits: [
+                    { annotations: ['http://example.com/iiif/canvas3'], id: 4 },
+                    { annotations: ['http://example.com/iiif/canvas1'], id: 5 },
+                  ],
+                  resources,
+                },
               },
             },
           },
@@ -127,13 +162,19 @@ describe('getSearchHitsForCompanionWindow', () => {
       },
     };
     expect(
-      getSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'a' }),
-    ).toEqual([1, 2, 3, 4, 5]);
+      getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'a' }),
+    ).toEqual([
+      { annotations: ['http://example.com/iiif/canvas1'], id: 2 },
+      { annotations: ['http://example.com/iiif/canvas1'], id: 5 },
+      { annotations: ['http://example.com/iiif/canvas2'], id: 3 },
+      { annotations: ['http://example.com/iiif/canvas3'], id: 1 },
+      { annotations: ['http://example.com/iiif/canvas3'], id: 4 },
+    ]);
     expect(
-      getSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'b' }),
+      getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'b' }),
     ).toEqual([]);
     expect(
-      getSearchHitsForCompanionWindow({}, { companionWindowId, windowId: 'a' }),
+      getSortedSearchHitsForCompanionWindow({}, { companionWindowId, windowId: 'a' }),
     ).toEqual([]);
   });
 });
