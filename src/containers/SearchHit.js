@@ -30,6 +30,10 @@ const mapStateToProps = (state, {
   );
   const selectedCanvasIds = getSelectedCanvases(state, { windowId }).map(canvas => canvas.id);
 
+  const selectedAnnotation = getSelectedContentSearchAnnotationIds(state, {
+    companionWindowId, windowId,
+  });
+
   return {
     adjacent: selectedCanvasIds.includes(hitAnnotation.targetId),
     annotation: hitAnnotation,
@@ -39,7 +43,8 @@ const mapStateToProps = (state, {
       canvasId: hitAnnotation.targetId,
       windowId,
     }),
-    selected: getSelectedContentSearchAnnotationIds(state, { windowId })[0] === realAnnoId,
+    selected: selectedAnnotation[0] === realAnnoId,
+    windowSelected: getSelectedContentSearchAnnotationIds(state, { windowId })[0] === realAnnoId,
   };
 };
 
@@ -78,13 +83,13 @@ const styles = theme => ({
       '& $hitCounter': {
         backgroundColor: theme.palette.highlights.secondary,
       },
-      '&$selected': {
+      '&$windowSelected': {
         '& $hitCounter': {
           backgroundColor: theme.palette.highlights.primary,
         },
       },
     },
-    '&$selected': {
+    '&$windowSelected': {
       '& $hitCounter': {
         backgroundColor: theme.palette.highlights.primary,
       },
@@ -102,6 +107,7 @@ const styles = theme => ({
   subtitle: {
     marginBottom: theme.spacing(1.5),
   },
+  windowSelected: {},
 });
 
 const enhance = compose(

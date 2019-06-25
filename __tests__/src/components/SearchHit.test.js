@@ -11,6 +11,7 @@ function createWrapper(props) {
   return shallow(
     <SearchHit
       annotationId="foo"
+      classes={{ windowSelected: 'windowSelected' }}
       hit={{
         after: ', and start the chainsaw',
         annotations: ['foo'],
@@ -20,6 +21,7 @@ function createWrapper(props) {
       windowId="window"
       selected
       index={0}
+      windowSelected
       {...props}
     />,
   );
@@ -31,6 +33,7 @@ describe('SearchHit', () => {
     const wrapper = createWrapper({ selectContentSearchAnnotation });
     expect(wrapper.find('WithStyles(ForwardRef(ListItem))').length).toEqual(1);
     expect(wrapper.find('WithStyles(ForwardRef(ListItem))').prop('selected')).toEqual(true);
+    expect(wrapper.find('WithStyles(ForwardRef(ListItem))').prop('className')).toEqual('windowSelected');
     expect(wrapper.find('WithStyles(ForwardRef(ListItemText))').render().text()).toEqual('1Light up the moose , and start the chai ');
     expect(wrapper.find('strong').length).toEqual(1);
 
