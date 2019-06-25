@@ -8,6 +8,7 @@ function createWrapper(props) {
   return shallow(
     <FullScreenButton
       classes={{}}
+      className="xyz"
       setWorkspaceFullscreen={() => {}}
       isFullscreenEnabled={false}
       {...props}
@@ -23,6 +24,7 @@ describe('FullScreenButton', () => {
     wrapper = createWrapper();
 
     expect(wrapper.find(MiradorMenuButton).length).toBe(1);
+    expect(wrapper.find(MiradorMenuButton).prop('className')).toBe('xyz');
   });
 
   describe('when not in fullscreen', () => {
