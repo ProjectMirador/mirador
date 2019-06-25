@@ -43,9 +43,16 @@ const mapStateToProps = (state, {
   };
 };
 
-const mapDispatchToProps = {
-  selectContentSearchAnnotation: actions.selectContentSearchAnnotation,
-};
+/**
+ * mapDispatchToProps - to hook up connect
+ * @memberof SearchPanelNavigation
+ * @private
+ */
+const mapDispatchToProps = (dispatch, { companionWindowId, windowId }) => ({
+  selectContentSearchAnnotation: (...args) => dispatch(
+    actions.selectContentSearchAnnotation(windowId, companionWindowId, ...args),
+  ),
+});
 
 /** */
 const styles = theme => ({

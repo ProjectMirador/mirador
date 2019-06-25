@@ -22,10 +22,10 @@ export class SearchHit extends Component {
   /** */
   handleClick() {
     const {
-      annotationId, selectContentSearchAnnotation, windowId,
+      annotationId, selectContentSearchAnnotation,
     } = this.props;
 
-    selectContentSearchAnnotation(windowId, [annotationId]);
+    selectContentSearchAnnotation([annotationId]);
   }
 
   /** */
