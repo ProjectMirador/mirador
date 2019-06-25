@@ -202,6 +202,7 @@ export default {
     en: 'English',
     fr: 'Français',
     ja: '日本語',
+    nl: 'Nederlands',
     'zh-CN': '中文(简体)',
     'zh-TW': '中文(繁體)',
   },
