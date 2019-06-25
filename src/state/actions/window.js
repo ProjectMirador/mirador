@@ -164,21 +164,6 @@ export function toggleWindowSideBar(windowId) {
 }
 
 /**
- * setWindowSideBarPanel - action creator
- *
- * @param  {String} windowId
- * @param  {String} panelType
- * @memberof ActionCreators
- */
-export function setWindowSideBarPanel(windowId, panelType) {
-  return {
-    panelType,
-    type: ActionTypes.SET_WINDOW_SIDE_BAR_PANEL,
-    windowId,
-  };
-}
-
-/**
  * setWindowThumbnailPosition - action creator
  *
  * @param  {String} windowId

@@ -298,17 +298,4 @@ describe('window actions', () => {
       expect(actions.setWindowViewType(id, 'book')).toEqual(expectedAction);
     });
   });
-
-  describe('setWindowSideBarPanel', () => {
-    it('returns the appropriate action type', () => {
-      const windowId = 'abc123';
-      const panelType = 'panelType';
-      const expectedAction = {
-        panelType,
-        type: ActionTypes.SET_WINDOW_SIDE_BAR_PANEL,
-        windowId,
-      };
-      expect(actions.setWindowSideBarPanel(windowId, 'panelType')).toEqual(expectedAction);
-    });
-  });
 });

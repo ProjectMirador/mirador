@@ -279,6 +279,44 @@ describe('windows reducer', () => {
     });
   });
 
+  it('should handle UPDATE_COMPANION_WINDOW', () => {
+    // opens the companion area to if the companion window was on the left
+    expect(windowsReducer({
+      abc123: {
+        companionAreaOpen: false,
+      },
+    }, {
+      id: 'xyz',
+      payload: {
+        position: 'left',
+      },
+      type: ActionTypes.UPDATE_COMPANION_WINDOW,
+      windowId: 'abc123',
+    })).toEqual({
+      abc123: {
+        companionAreaOpen: true,
+      },
+    });
+
+    // does nothing if the companion window wasn't on the left
+    expect(windowsReducer({
+      abc123: {
+        companionAreaOpen: false,
+      },
+    }, {
+      id: 'xyz',
+      payload: {
+        position: 'right',
+      },
+      type: ActionTypes.UPDATE_COMPANION_WINDOW,
+      windowId: 'abc123',
+    })).toEqual({
+      abc123: {
+        companionAreaOpen: false,
+      },
+    });
+  });
+
   it('should handle REMOVE_COMPANION_WINDOW', () => {
     // on the right, just tacks the new id on
     expect(windowsReducer({

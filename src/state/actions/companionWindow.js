@@ -1,5 +1,6 @@
 import uuid from 'uuid/v4';
 import ActionTypes from './action-types';
+import { updateWindow } from './window';
 import { getCompanionWindowIdsForPosition } from '../selectors';
 
 const defaultProps = {
