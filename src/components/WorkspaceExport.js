@@ -41,7 +41,7 @@ export class WorkspaceExport extends Component {
    */
   render() {
     const {
-      children, classes, container, handleClose, open, t,
+      children, container, handleClose, open, t,
     } = this.props;
     const exportableState = this.exportableState();
     return (
@@ -57,16 +57,14 @@ export class WorkspaceExport extends Component {
         <DialogTitle id="form-dialog-title" disableTypography>
           <Typography variant="h2">{t('downloadExport')}</Typography>
         </DialogTitle>
-        <ScrollIndicatedDialogContent
-          className={classes.dialogcontent}
-        >
+        <ScrollIndicatedDialogContent>
           {children}
           <pre>
             {exportableState}
           </pre>
         </ScrollIndicatedDialogContent>
         <DialogActions>
-          <Button className={classes.cancelBtn} onClick={() => handleClose()}>{t('cancel')}</Button>
+          <Button onClick={() => handleClose()}>{t('cancel')}</Button>
           <CopyToClipboard
             text={exportableState}
           >
@@ -80,7 +78,6 @@ export class WorkspaceExport extends Component {
 
 WorkspaceExport.propTypes = {
   children: PropTypes.node,
-  classes: PropTypes.objectOf(PropTypes.string),
   container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
@@ -90,7 +87,6 @@ WorkspaceExport.propTypes = {
 
 WorkspaceExport.defaultProps = {
   children: null,
-  classes: {},
   container: null,
   open: false,
   t: key => key,
