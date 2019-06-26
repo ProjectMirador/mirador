@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import FullScreenButton from '../containers/FullScreenButton';
 import WorkspaceMenuButton from '../containers/WorkspaceMenuButton';
 import WorkspaceOptionsButton from '../containers/WorkspaceOptionsButton';
@@ -15,14 +16,23 @@ export class WorkspaceControlPanelButtons extends Component {
    * @return {type}  description
    */
   render() {
+    const { classes } = this.props;
     return (
       <>
         <WindowListButton />
         <WorkspaceMenuButton />
         <WorkspaceOptionsButton />
-        <FullScreenButton />
+        <FullScreenButton className={classes.ctrlBtn} />
         <PluginHook {...this.props} />
       </>
     );
   }
 }
+
+WorkspaceControlPanelButtons.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string),
+};
+
+WorkspaceControlPanelButtons.defaultProps = {
+  classes: {},
+};

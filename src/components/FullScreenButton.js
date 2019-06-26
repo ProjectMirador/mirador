@@ -12,11 +12,11 @@ export class FullScreenButton extends Component {
    */
   render() {
     const {
-      classes, isFullscreenEnabled, setWorkspaceFullscreen, t,
+      isFullscreenEnabled, setWorkspaceFullscreen, t, ...rest
     } = this.props;
     return (
       <MiradorMenuButton
-        className={classes.ctrlBtn}
+        {...rest}
         aria-label={isFullscreenEnabled ? t('exitFullScreen') : t('workspaceFullScreen')}
         onClick={() => setWorkspaceFullscreen(!isFullscreenEnabled)}
       >
@@ -27,7 +27,6 @@ export class FullScreenButton extends Component {
 }
 
 FullScreenButton.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isFullscreenEnabled: PropTypes.bool,
   setWorkspaceFullscreen: PropTypes.func.isRequired,
   t: PropTypes.func,
