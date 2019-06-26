@@ -10,7 +10,7 @@ export function accessTokensReducer(state = {}, action) {
 
   switch (action.type) {
     case ActionTypes.RECEIVE_INFO_RESPONSE:
-      if (action.ok && normalizeUrl(action.infoId) === normalizeUrl(action.infoJson['@id'])) return state;
+      if (action.ok && normalizeUrl(action.infoId, { stripAuthentication: false }) === normalizeUrl(action.infoJson['@id'], { stripAuthentication: false })) return state;
 
       authService = Utils.getService({ ...action.infoJson, options: {} }, 'http://iiif.io/api/auth/1/external');
       if (!authService) return state;
