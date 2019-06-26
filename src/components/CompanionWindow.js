@@ -50,7 +50,7 @@ export class CompanionWindow extends Component {
    */
   render() {
     const {
-      classes, paperClassName, id, onCloseClick, updateCompanionWindow, isDisplayed,
+      ariaLabel, classes, paperClassName, id, onCloseClick, updateCompanionWindow, isDisplayed,
       position, t, windowId, title, children, titleControls, size,
     } = this.props;
 
@@ -63,7 +63,7 @@ export class CompanionWindow extends Component {
         }}
         square
         component="aside"
-        aria-label={title}
+        aria-label={ariaLabel || title}
       >
         <Rnd
           className={[classes.rnd]}
@@ -134,6 +134,7 @@ export class CompanionWindow extends Component {
 }
 
 CompanionWindow.propTypes = {
+  ariaLabel: PropTypes.string,
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   id: PropTypes.string.isRequired,
@@ -153,6 +154,7 @@ CompanionWindow.propTypes = {
 };
 
 CompanionWindow.defaultProps = {
+  ariaLabel: undefined,
   children: undefined,
   isDisplayed: false,
   onCloseClick: () => {},

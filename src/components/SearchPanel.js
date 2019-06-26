@@ -34,6 +34,7 @@ export class SearchPanel extends Component {
     return (
       <RootRef rootRef={this.containerRef}>
         <CompanionWindow
+          ariaLabel={t('searchTitle')}
           title={(
             <>
               {t('searchTitle')}
