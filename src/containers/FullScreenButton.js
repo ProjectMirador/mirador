@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
+import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getFullScreenEnabled } from '../state/selectors';
@@ -22,7 +23,18 @@ const mapStateToProps = state => ({
  */
 const mapDispatchToProps = { setWorkspaceFullscreen: actions.setWorkspaceFullscreen };
 
+/**
+ *
+ * @param theme
+ */
+const styles = theme => ({
+  ctrlBtn: {
+    margin: theme.spacing(1),
+  },
+});
+
 const enhance = compose(
+  withStyles(styles),
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('FullScreenButton'),
