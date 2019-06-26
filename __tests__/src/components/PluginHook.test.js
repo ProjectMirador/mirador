@@ -7,17 +7,29 @@ it('renders nothing when no plugins passed', () => {
   expect(wrapper).toEqual({});
 });
 
-it('renders plugin components if some passed', () => {
-  /** */
-  const PluginComponentA = props => <div>A</div>;
-  /** */
-  const PluginComponentB = props => <div>B</div>;
+/** */
+const PluginComponentA = props => <div>A</div>;
+/** */
+const PluginComponentB = props => <div>B</div>;
 
+it('renders plugin components if some passed', () => {
   const wrapper = shallow(
     <PluginHook
       PluginComponents={[PluginComponentA, PluginComponentB]}
     />,
   );
+
   expect(wrapper.find(PluginComponentA).length).toBe(1);
   expect(wrapper.find(PluginComponentB).length).toBe(1);
+});
+
+it('does not pass classes to PluginComponents (which will throw warnings for styles plugins)', () => {
+  const wrapper = shallow(
+    <PluginHook
+      classes={{ someLocal: 'classes' }}
+      PluginComponents={[PluginComponentA]}
+    />,
+  );
+
+  expect(wrapper.find(PluginComponentA).props().classes).toBeUndefined();
 });
