@@ -20,6 +20,16 @@ function createWrapper(props) {
 
 describe('CompanionWindow', () => {
   let companionWindow;
+  describe('aria-label', () => {
+    it('has an aria-label for the landmark derived from the title', () => {
+      companionWindow = createWrapper({ title: 'some title' });
+      expect(companionWindow.prop('aria-label')).toEqual('some title');
+    });
+    it('can be overridden with an explicit ariaLabel prop', () => {
+      companionWindow = createWrapper({ ariaLabel: 'some label', title: 'some title' });
+      expect(companionWindow.prop('aria-label')).toEqual('some label');
+    });
+  });
 
   describe('when the openInCompanionWindow button is clicked', () => {
     it('passes the the updateCompanionWindow prop to MiradorMenuButton with the appropriate args', () => {
