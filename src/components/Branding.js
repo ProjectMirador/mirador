@@ -28,6 +28,8 @@ export class Branding extends Component {
             align="center"
             component="a"
             href="http://projectmirador.org"
+            target="_blank"
+            rel="noopener"
           >
             <MiradorIcon fontSize="large" />
           </IconButton>
