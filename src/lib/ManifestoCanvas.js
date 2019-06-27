@@ -1,4 +1,5 @@
 import flatten from 'lodash/flatten';
+import { Utils } from 'manifesto.js';
 /**
  * ManifestoCanvas - adds additional, testable logic around Manifesto's Canvas
  * https://iiif-commons.github.io/manifesto/classes/_canvas_.manifesto.canvas.html
@@ -12,9 +13,19 @@ export default class ManifestoCanvas {
   }
 
   /**
+   * Implements Manifesto's canonicalImageUri algorithm to support
+   * IIIF Presentation v3
    */
-  get canonicalImageUri() {
-    return this.canvas.getCanonicalImageUri();
+  canonicalImageUri(w, format = 'jpg') {
+    const service = this.imageResource.getServices()[0];
+    if (!(service)) return undefined;
+    const region = 'full';
+    let size = w;
+    const imageWidth = this.imageResource.getWidth();
+    if ((!w) || w === imageWidth) size = 'full';
+    const quality = Utils.getImageQuality(service.getProfile());
+    const id = service.id.replace(/\/+$/, '');
+    return [id, region, size, 0, `${quality}.${format}`].join('/');
   }
 
   /**
@@ -140,7 +151,7 @@ export default class ManifestoCanvas {
     // note that, although the IIIF server may support sizeByConfinedWh (e.g. !w,h)
     // this is a IIIF level 2 feature, so we're instead providing w, or h,-style requests
     // which are only level 1.
-    return this.canonicalImageUri.replace(/\/full\/.*\/0\//, `/full/${width || ''},${height || ''}/0/`);
+    return this.canonicalImageUri().replace(/\/full\/.*\/0\//, `/full/${width || ''},${height || ''}/0/`);
   }
 
   /** @private */

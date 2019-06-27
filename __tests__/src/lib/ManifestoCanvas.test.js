@@ -32,9 +32,9 @@ describe('ManifestoCanvas', () => {
     });
   });
   describe('canonicalImageUri', () => {
-    it('calls manifestos method to return a canonical imageUri', () => {
-      expect(instance.canonicalImageUri).toEqual(
-        'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/5426,/0/default.jpg',
+    it('calculates a canonical imageUri', () => {
+      expect(instance.canonicalImageUri()).toEqual(
+        'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/full/0/default.jpg',
       );
     });
   });
