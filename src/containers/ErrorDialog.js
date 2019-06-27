@@ -17,7 +17,7 @@ import * as actions from '../state/actions';
  */
 const mapStateToProps = state => ({
   /* extract 'items' value and get first key-value-pair (an error) */
-  errors: first(values(omit(state.errors, 'items'))),
+  error: first(values(omit(state.errors, 'items'))),
 });
 
 /**
