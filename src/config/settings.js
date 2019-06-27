@@ -235,4 +235,8 @@ export default {
   workspaceControlPanel: {
     enabled: true, // Configure if the control panel should be rendered.  Useful if you want to lock the viewer down to only the configured manifests
   },
+  galleryView: {
+    height: 120, // height of gallery view thumbnails
+    width: null, // width of gallery view thumbnails (or null, to auto-calculate an aspect-ratio appropriate size)
+  }
 };

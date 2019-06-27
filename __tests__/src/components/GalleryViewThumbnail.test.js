@@ -5,6 +5,7 @@ import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryViewThumbnail } from '../../../src/components/GalleryViewThumbnail';
+import { CanvasThumbnail } from '../../../src/components/CanvasThumbnail';
 
 /** create wrapper */
 function createWrapper(props) {
@@ -27,6 +28,11 @@ describe('GalleryView', () => {
 
     wrapper = createWrapper({ selected: false });
     expect(wrapper.find('div[role="button"]').at(0).prop('className')).not.toEqual('selected');
+  });
+  it('renders the thumbnail', () => {
+    wrapper = createWrapper({ config: { height: 55 } });
+    expect(wrapper.find(CanvasThumbnail).length).toBe(1);
+    expect(wrapper.find(CanvasThumbnail).prop('maxHeight')).toBe(55);
   });
   it('renders the canvas labels for each canvas in canvas items', () => {
     wrapper = createWrapper();

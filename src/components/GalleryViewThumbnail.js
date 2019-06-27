@@ -68,7 +68,7 @@ export class GalleryViewThumbnail extends Component {
    */
   render() {
     const {
-      annotationsCount, annotationSelected, canvas, classes, selected,
+      annotationsCount, annotationSelected, canvas, classes, config, selected,
     } = this.props;
 
     const manifestoCanvas = new ManifestoCanvas(canvas);
@@ -89,9 +89,9 @@ export class GalleryViewThumbnail extends Component {
         tabIndex={0}
       >
         <CanvasThumbnail
-          imageUrl={manifestoCanvas.thumbnail(null, 100)}
+          imageUrl={manifestoCanvas.thumbnail(config.width, config.height)}
           isValid={manifestoCanvas.hasValidDimensions}
-          maxHeight={120}
+          maxHeight={config.height}
           aspectRatio={manifestoCanvas.aspectRatio}
           style={{ margin: '0 auto' }}
         />
@@ -121,6 +121,10 @@ GalleryViewThumbnail.propTypes = {
   annotationSelected: PropTypes.bool,
   canvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  config: PropTypes.shape({
+    height: PropTypes.number,
+    width: PropTypes.number,
+  }),
   focusOnCanvas: PropTypes.func.isRequired,
   selected: PropTypes.bool,
   setCanvas: PropTypes.func.isRequired,
@@ -129,5 +133,9 @@ GalleryViewThumbnail.propTypes = {
 GalleryViewThumbnail.defaultProps = {
   annotationsCount: 0,
   annotationSelected: false,
+  config: {
+    height: 100,
+    width: null,
+  },
   selected: false,
 };
