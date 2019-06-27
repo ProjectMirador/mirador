@@ -1,3 +1,4 @@
+
 // Setup Jest to mock fetch
 
 import { JSDOM } from 'jsdom'; // eslint-disable-line import/no-extraneous-dependencies
@@ -7,6 +8,8 @@ import Adapter from 'enzyme-adapter-react-16'; // eslint-disable-line import/no-
 
 const jsdom = new JSDOM('<!doctype html><html><body><div id="main"></div></body></html>');
 const { window } = jsdom;
+
+jest.setTimeout(10000);
 
 window.HTMLCanvasElement.prototype.getContext = () => {};
 jest.setMock('node-fetch', fetch);
