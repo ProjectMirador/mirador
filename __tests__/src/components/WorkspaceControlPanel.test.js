@@ -5,7 +5,7 @@ import createStore from '../../../src/state/createStore';
 import * as actions from '../../../src/state/actions';
 import WorkspaceAddButton from '../../../src/containers/WorkspaceAddButton';
 import WorkspaceControlPanelButtons from '../../../src/containers/WorkspaceControlPanelButtons';
-import { Branding } from '../../../src/components/Branding';
+import Branding from '../../../src/containers/Branding';
 import { WorkspaceControlPanel } from '../../../src/components/WorkspaceControlPanel';
 import fixture from '../../fixtures/version-2/002.json';
 

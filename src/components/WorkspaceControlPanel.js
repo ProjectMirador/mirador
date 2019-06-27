@@ -6,8 +6,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import WorkspaceAddButton from '../containers/WorkspaceAddButton';
 import WorkspaceControlPanelButtons
   from '../containers/WorkspaceControlPanelButtons';
+import Branding from '../containers/Branding';
 import ns from '../config/css-ns';
-import { Branding } from './Branding';
 
 /**
  * Provides the panel responsible for controlling the entire workspace
