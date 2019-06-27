@@ -43,8 +43,15 @@ export default class ManifestoCanvas {
       .map(otherContent => otherContent['@id']);
   }
 
-  /** */
+  /**
+   * Will negotiate a v2 or v3 type of resource
+   */
   get imageResource() {
+    return (this.presentation2ImageResource || this.presentation3ImageResource);
+  }
+
+  /** */
+  get presentation2ImageResource() {
     if (!(
       this.canvas.getImages()[0]
       && this.canvas.getImages()[0].getResource()
@@ -55,6 +62,21 @@ export default class ManifestoCanvas {
     }
 
     return this.canvas.getImages()[0].getResource();
+  }
+
+  /** */
+  get presentation3ImageResource() {
+    if (!(
+      this.canvas.getContent()[0]
+      && this.canvas.getContent()[0]
+      && this.canvas.getContent()[0].getBody()[0]
+      && this.canvas.getContent()[0].getBody()[0].getServices()[0]
+      && this.canvas.getContent()[0].getBody()[0].getServices()[0].id
+    )) {
+      return undefined;
+    }
+
+    return this.canvas.getContent()[0].getBody()[0];
   }
 
   /**

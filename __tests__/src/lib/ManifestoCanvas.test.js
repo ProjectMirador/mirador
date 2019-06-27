@@ -1,6 +1,7 @@
 import manifesto from 'manifesto.js';
 import ManifestoCanvas from '../../../src/lib/ManifestoCanvas';
 import fixture from '../../fixtures/version-2/019.json';
+import v3fixture from '../../fixtures/version-3/001.json';
 import imagev1Fixture from '../../fixtures/version-2/Osbornfa1.json';
 import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
 import serviceFixture from '../../fixtures/version-2/canvasService.json';
@@ -8,9 +9,13 @@ import otherContentFixture from '../../fixtures/version-2/299843.json';
 
 describe('ManifestoCanvas', () => {
   let instance;
+  let v3Instance;
   beforeAll(() => {
     instance = new ManifestoCanvas(
       manifesto.create(fixture).getSequences()[0].getCanvases()[0],
+    );
+    v3Instance = new ManifestoCanvas(
+      manifesto.create(v3fixture).getSequences()[0].getCanvases()[0],
     );
   });
   describe('annotationListUris', () => {
@@ -35,6 +40,11 @@ describe('ManifestoCanvas', () => {
     it('calculates a canonical imageUri', () => {
       expect(instance.canonicalImageUri()).toEqual(
         'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/full/0/default.jpg',
+      );
+    });
+    it('calculates a canonical imageUri for prezi v3', () => {
+      expect(v3Instance.canonicalImageUri()).toEqual(
+        'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d/full/full/0/default.jpg',
       );
     });
   });
