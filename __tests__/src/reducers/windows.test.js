@@ -450,4 +450,29 @@ describe('windows reducer', () => {
       type: ActionTypes.IMPORT_MIRADOR_STATE,
     })).toEqual({ new: 'stuff' });
   });
+
+  describe('RECEIVE_SEARCH', () => {
+    it('set the canvas index and annotation id if provided', () => {
+      const beforeState = { abc123: {} };
+      const action = {
+        annotationId: 'aaa123', canvasIndex: 5, type: ActionTypes.RECEIVE_SEARCH, windowId: 'abc123',
+      };
+      const expectedState = {
+        abc123: { canvasIndex: 5, selectedContentSearchAnnotation: ['aaa123'] },
+      };
+
+      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
+    });
+    it('passes through existing data otherwise', () => {
+      const beforeState = { abc123: { canvasIndex: 5, selectedContentSearchAnnotation: ['aaa123'] } };
+      const action = {
+        type: ActionTypes.RECEIVE_SEARCH, windowId: 'abc123',
+      };
+      const expectedState = {
+        abc123: { canvasIndex: 5, selectedContentSearchAnnotation: ['aaa123'] },
+      };
+
+      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
+    });
+  });
 });

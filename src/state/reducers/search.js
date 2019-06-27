@@ -60,6 +60,10 @@ export const searchesReducer = (state = {}, action) => {
                 json: action.searchJson,
               },
             },
+            selectedContentSearchAnnotation: searchStruct.selectedContentSearchAnnotation
+              && searchStruct.selectedContentSearchAnnotation.length > 0
+              ? searchStruct.selectedContentSearchAnnotation
+              : (action.annotationId && [action.annotationId]),
           },
         },
       };
@@ -100,6 +104,21 @@ export const searchesReducer = (state = {}, action) => {
             selectedContentSearchAnnotation: action.annotationId,
           },
         },
+      };
+    case ActionTypes.SET_CANVAS:
+      if (Object.keys(action.searches).length === 0) return state;
+
+      return {
+        ...state,
+        [action.windowId]: Object.keys(state[action.windowId]).reduce((object, key) => {
+          if (Object.keys(action.searches).includes(key)) {
+            object[key] = { // eslint-disable-line no-param-reassign
+              ...state[action.windowId][key],
+              selectedContentSearchAnnotation: action.searches[key],
+            };
+          }
+          return object;
+        }, {}),
       };
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return {};

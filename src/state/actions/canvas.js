@@ -1,8 +1,8 @@
-import flatten from 'lodash/flatten';
 import ActionTypes from './action-types';
 import {
-  getCanvas,
-  getSearchAnnotationsForWindow,
+  getSelectedCanvases,
+  getSearchAnnotationsForCompanionWindow,
+  getSearchForWindow,
 } from '../selectors';
 
 /**
@@ -16,19 +16,33 @@ export function setCanvas(windowId, canvasIndex) {
   return ((dispatch, getState) => {
     const state = getState();
 
-    const annotations = getSearchAnnotationsForWindow(state, { windowId });
-    const resourceAnnotations = flatten(annotations.map(a => a.resources));
-    const canvas = getCanvas(state, { canvasIndex, windowId });
-    const hitAnnotation = resourceAnnotations.find(r => r.targetId === canvas.id);
+    const canvasIds = getSelectedCanvases(state, { canvasIndex, windowId }).map(c => c.id);
+    const searches = getSearchForWindow(state, { windowId }) || {};
+    const annotationBySearch = Object.keys(searches).reduce((accumulator, companionWindowId) => {
+      const annotations = getSearchAnnotationsForCompanionWindow(state, {
+        companionWindowId, windowId,
+      });
+      const resourceAnnotations = annotations.resources;
+      const hitAnnotation = resourceAnnotations.find(r => canvasIds.includes(r.targetId));
+
+      if (hitAnnotation) accumulator[companionWindowId] = [hitAnnotation.id];
+
+      return accumulator;
+    }, {});
+
+    const annotationIds = Object.values(annotationBySearch);
 
     const action = {
       canvasIndex,
+      searches: annotationBySearch,
       type: ActionTypes.SET_CANVAS,
       windowId,
     };
 
-    if (hitAnnotation && hitAnnotation.id) {
-      action.selectedContentSearchAnnotation = [hitAnnotation.id];
+    if (annotationIds.length > 0) {
+      action.selectedContentSearchAnnotation = ( // eslint-disable-line prefer-destructuring
+        annotationIds[0]
+      );
     }
 
     dispatch(action);

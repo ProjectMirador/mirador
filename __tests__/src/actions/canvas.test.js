@@ -9,11 +9,13 @@ const mockStore = configureMockStore(middlewares);
 
 jest.mock('../../../src/state/selectors', () => ({
   getCanvas: (state, { canvasIndex }) => ({ id: `canvasId-${canvasIndex}` }),
-  getSearchAnnotationsForWindow: () => ([{
+  getSearchAnnotationsForCompanionWindow: () => ({
     resources: [
       { id: 'annoId', targetId: 'canvasId-5' },
     ],
-  }]),
+  }),
+  getSearchForWindow: () => ({ cwid: { } }),
+  getSelectedCanvases: () => [{ id: 'canvasId-5' }],
 }));
 
 describe('canvas actions', () => {
@@ -27,22 +29,14 @@ describe('canvas actions', () => {
       const id = 'abc123';
       const expectedAction = {
         canvasIndex: 100,
-        type: ActionTypes.SET_CANVAS,
-        windowId: id,
-      };
-      store.dispatch(actions.setCanvas(id, 100));
-      expect(store.getActions()[0]).toEqual(expectedAction);
-    });
-
-    it('updates the currently selected search to something on that canvas', () => {
-      const id = 'abc123';
-      const expectedAction = {
-        canvasIndex: 5,
+        searches: {
+          cwid: ['annoId'],
+        },
         selectedContentSearchAnnotation: ['annoId'],
         type: ActionTypes.SET_CANVAS,
         windowId: id,
       };
-      store.dispatch(actions.setCanvas(id, 5));
+      store.dispatch(actions.setCanvas(id, 100));
       expect(store.getActions()[0]).toEqual(expectedAction);
     });
   });

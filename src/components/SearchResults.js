@@ -5,6 +5,7 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import BackIcon from '@material-ui/icons/ArrowBackSharp';
 import SearchHit from '../containers/SearchHit';
+import { ScrollTo } from './ScrollTo';
 
 /** */
 export class SearchResults extends Component {
@@ -53,10 +54,12 @@ export class SearchResults extends Component {
     return (
       <>
         { focused && (
-          <Button onClick={this.toggleFocus} className={classes.navigation} size="small">
-            <BackIcon />
-            {t('backToResults')}
-          </Button>
+          <ScrollTo containerRef={containerRef} offsetTop={96} scrollTo>
+            <Button onClick={this.toggleFocus} className={classes.navigation} size="small">
+              <BackIcon />
+              {t('backToResults')}
+            </Button>
+          </ScrollTo>
         )}
         {noResultsState && (
           <Typography className={classes.noResults}>

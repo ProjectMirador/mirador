@@ -157,6 +157,33 @@ describe('search reducer', () => {
     });
   });
 
+  it('handles SET_CANVAS', () => {
+    expect(searchesReducer(
+      {
+        foo: {
+          abc123: {
+            selectedContentSearchAnnotation: ['foo'],
+            whatever: true,
+          },
+        },
+      },
+      {
+        searches: {
+          abc123: ['bar'],
+        },
+        type: ActionTypes.SET_CANVAS,
+        windowId: 'foo',
+      },
+    )).toEqual({
+      foo: {
+        abc123: {
+          selectedContentSearchAnnotation: ['bar'],
+          whatever: true,
+        },
+      },
+    });
+  });
+
   it('handles SELECT_CONTENT_SEARCH_ANNOTATION', () => {
     expect(searchesReducer(
       {
