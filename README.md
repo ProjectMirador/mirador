@@ -5,6 +5,9 @@
 ## For Mirador Users
 You can quickly use and configure Mirador by remixing the [mirador-start](https://mirador-start.glitch.me/) Glitch.
 
+## Adding translations to Mirador
+For help with adding a translation, see [src/locales/README.md](src/locales/README.md)
+
 ## Running Mirador locally
 
 Mirador local development requires [nodejs](https://nodejs.org/en/download/) to be installed.
