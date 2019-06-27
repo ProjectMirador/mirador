@@ -11,6 +11,14 @@ function createWrapper(props) {
     <WindowSideBarButtons
       addCompanionWindow={() => {}}
       {...props}
+      panels={{
+        annotations: true,
+        attribution: true,
+        canvas: true,
+        info: true,
+        search: false,
+        ...props.panels,
+      }}
     />,
   );
 }
@@ -62,7 +70,7 @@ describe('WindowSideBarButtons (shallow)', () => {
   });
 
   it('can hide annotation panel when configured to do so', () => {
-    wrapper = createWrapper({ hasAnnotations: true, hideAnnotationsPanel: true, windowId });
+    wrapper = createWrapper({ hasAnnotations: true, panels: { annotations: false }, windowId });
     expect(wrapper.find('WithStyles(Tab)[value="annotations"]').length).toEqual(0);
   });
 
@@ -71,7 +79,7 @@ describe('WindowSideBarButtons (shallow)', () => {
       expect(wrapper.find('WithStyles(Tab)[value="search"]').length).toEqual(0);
     });
     it('can be configured to be on', () => {
-      wrapper = createWrapper({ hasSearchService: true, hideSearchPanel: false, windowId });
+      wrapper = createWrapper({ hasSearchService: true, panels: { search: true }, windowId });
       expect(wrapper.find('WithStyles(ForwardRef(Tab))[value="search"]').length).toEqual(1);
     });
 
@@ -80,7 +88,9 @@ describe('WindowSideBarButtons (shallow)', () => {
       wrapper = createWrapper({
         hasSearchResults: true,
         hasSearchService: true,
-        hideSearchPanel: false,
+        panels: {
+          search: true,
+        },
         windowId,
       });
       tab = wrapper.find(Tab).find('[value="search"]');
@@ -89,7 +99,9 @@ describe('WindowSideBarButtons (shallow)', () => {
       wrapper = createWrapper({
         hasSearchResults: false,
         hasSearchService: true,
-        hideSearchPanel: false,
+        panels: {
+          search: true,
+        },
         windowId,
       });
       tab = wrapper.find(Tab).find('[value="search"]');
