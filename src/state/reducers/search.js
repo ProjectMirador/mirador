@@ -101,6 +101,21 @@ export const searchesReducer = (state = {}, action) => {
           },
         },
       };
+    case ActionTypes.SET_CANVAS:
+      if (Object.keys(action.searches).length === 0) return state;
+
+      return {
+        ...state,
+        [action.windowId]: Object.keys(state[action.windowId]).reduce((object, key) => {
+          if (Object.keys(action.searches).includes(key)) {
+            object[key] = { // eslint-disable-line no-param-reassign
+              ...state[action.windowId][key],
+              selectedContentSearchAnnotation: action.searches[key],
+            };
+          }
+          return object;
+        }, {}),
+      };
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return {};
     case ActionTypes.REMOVE_WINDOW:
