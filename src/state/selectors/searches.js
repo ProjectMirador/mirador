@@ -2,11 +2,11 @@ import { createSelector } from 'reselect';
 import { LanguageMap } from 'manifesto.js';
 import flatten from 'lodash/flatten';
 import Annotation from '../../lib/Annotation';
-import { getCanvases } from './canvases';
+import { getCanvas, getCanvases } from './canvases';
 import { getWindow } from './windows';
 import { getManifestLocale } from './manifests';
 
-const getSearchForWindow = createSelector(
+export const getSearchForWindow = createSelector(
   [
     (state, { windowId }) => windowId,
     state => state.searches,
@@ -122,29 +122,32 @@ const searchResultsToAnnotation = (results) => {
   };
 };
 
-const getSearchAnnotationsForCompanionWindow = createSelector(
+export const getSearchAnnotationsForCompanionWindow = createSelector(
   [
     getSearchResponsesForCompanionWindow,
   ],
   results => results && searchResultsToAnnotation(results),
 );
 
+/** */
+export function sortSearchAnnotationsByCanvasOrder(searchAnnotations, canvases) {
+  if (!searchAnnotations
+      || !searchAnnotations.resources
+      || searchAnnotations.length === 0) return [];
+  if (!canvases || canvases.length === 0) return [];
+  const canvasIds = canvases.map(canvas => canvas.id);
+
+  return [].concat(searchAnnotations.resources).sort(
+    (annoA, annoB) => canvasIds.indexOf(annoA.targetId) - canvasIds.indexOf(annoB.targetId),
+  );
+}
+
 export const getSortedSearchAnnotationsForCompanionWindow = createSelector(
   [
     getSearchAnnotationsForCompanionWindow,
     getCanvases,
   ],
-  (searchAnnotations, canvases) => {
-    if (!searchAnnotations
-        || !searchAnnotations.resources
-        || searchAnnotations.length === 0) return [];
-    if (!canvases || canvases.length === 0) return [];
-    const canvasIds = canvases.map(canvas => canvas.id);
-
-    return [].concat(searchAnnotations.resources).sort(
-      (annoA, annoB) => canvasIds.indexOf(annoA.targetId) - canvasIds.indexOf(annoB.targetId),
-    );
-  },
+  (searchAnnotations, canvases) => sortSearchAnnotationsByCanvasOrder(searchAnnotations, canvases),
 );
 
 export const getSearchAnnotationsForWindow = createSelector(
@@ -203,5 +206,29 @@ export const getResourceAnnotationLabel = createSelector(
     ) return [];
 
     return LanguageMap.parse(resourceAnnotation.resource.label, locale).map(label => label.value);
+  },
+);
+
+const getAnnotationById = createSelector(
+  [
+    getSearchAnnotationsForWindow,
+    (state, { annotationId }) => (annotationId),
+  ],
+  (annotations, annotationId) => {
+    const resourceAnnotations = flatten(annotations.map(a => a.resources));
+    return resourceAnnotations.find(r => r.id === annotationId);
+  },
+);
+
+export const getCanvasForAnnotation = createSelector(
+  [
+    getAnnotationById,
+    (state, { windowId }) => canvasId => getCanvas(
+      state, { canvasId, windowId },
+    ),
+  ],
+  (annotation, getCanvasById) => {
+    const canvasId = annotation && annotation.targetId;
+    return canvasId && getCanvasById(canvasId);
   },
 );

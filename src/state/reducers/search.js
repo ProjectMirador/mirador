@@ -60,6 +60,10 @@ export const searchesReducer = (state = {}, action) => {
                 json: action.searchJson,
               },
             },
+            selectedContentSearchAnnotation: searchStruct.selectedContentSearchAnnotation
+              && searchStruct.selectedContentSearchAnnotation.length > 0
+              ? searchStruct.selectedContentSearchAnnotation
+              : (action.annotationId && [action.annotationId]),
           },
         },
       };

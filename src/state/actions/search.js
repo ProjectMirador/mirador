@@ -1,10 +1,13 @@
 import fetch from 'node-fetch';
-import flatten from 'lodash/flatten';
 import {
+  getCanvasForAnnotation,
   getCanvas,
-  getSearchAnnotationsForWindow,
+  getCanvases,
+  sortSearchAnnotationsByCanvasOrder,
+  getSelectedContentSearchAnnotationIds,
 } from '../selectors';
 import ActionTypes from './action-types';
+import Annotation from '../../lib/Annotation';
 
 /**
  * requestSearch - action creator
@@ -33,12 +36,33 @@ export function requestSearch(windowId, companionWindowId, searchId, query) {
  * @memberof ActionCreators
  */
 export function receiveSearch(windowId, companionWindowId, searchId, searchJson) {
-  return {
-    companionWindowId,
-    searchId,
-    searchJson,
-    type: ActionTypes.RECEIVE_SEARCH,
-    windowId,
+  return (dispatch, getState) => {
+    const state = getState();
+    const selectedIds = getSelectedContentSearchAnnotationIds(state, {
+      companionWindowId, windowId,
+    });
+    let annotation;
+    let canvas;
+
+    if (selectedIds.length === 0) {
+      const canvases = getCanvases(state, { windowId });
+      annotation = sortSearchAnnotationsByCanvasOrder( // eslint-disable-line prefer-destructuring
+        new Annotation(searchJson), canvases,
+      )[0];
+      canvas = annotation && getCanvas(state, {
+        canvasId: annotation.targetId, windowId,
+      });
+    }
+
+    dispatch({
+      annotationId: annotation && annotation.id,
+      canvasIndex: canvas && canvas.index,
+      companionWindowId,
+      searchId,
+      searchJson,
+      type: ActionTypes.RECEIVE_SEARCH,
+      windowId,
+    });
   };
 }
 
@@ -102,11 +126,9 @@ export function fetchSearch(windowId, companionWindowId, searchId, query) {
 export function selectContentSearchAnnotation(windowId, companionWindowId, annotationIds) {
   return (dispatch, getState) => {
     const state = getState();
-    const annotations = getSearchAnnotationsForWindow(state, { windowId });
-    const resourceAnnotations = flatten(annotations.map(a => a.resources));
-    const hitAnnotation = resourceAnnotations.find(r => r.id === annotationIds[0]);
-    const canvasId = hitAnnotation && hitAnnotation.targetId;
-    const canvas = canvasId && getCanvas(state, { canvasId, windowId });
+    const canvas = getCanvasForAnnotation(state, {
+      annotationId: annotationIds[0], companionWindowId, windowId,
+    });
 
     dispatch({
       annotationId: annotationIds,
