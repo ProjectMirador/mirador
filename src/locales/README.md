@@ -44,3 +44,17 @@ Would look like this in French.
 Strings contained in double curly braces `{{}}` should not be changed.
 
 The [`i18n.js`](../i18n.js) file should also be updated for the new language.
+
+Lastly, you'll want to add the new locale and native language to the `availableLanguages` section in the [settings file](/src/config/settings.js).
+
+```javascript
+// src/config/settings.js
+...
+availableLanguages: {
+    de: 'Deutsch',
+    en: 'English',
+    fr: 'Français',
+...
+```
+
+This will add the new language to the Language selection drop down as well as allow Mirador implementers to opt-out of including the language in their installation.
