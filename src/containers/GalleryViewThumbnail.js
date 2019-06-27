@@ -52,7 +52,7 @@ const styles = theme => ({
     border: '2px solid transparent',
     cursor: 'pointer',
     display: 'inline-block',
-    height: '165px',
+    height: props => props.config.height + 45,
     margin: `${theme.spacing(1)}px ${theme.spacing(0.5)}px`,
     minWidth: '60px',
     overflow: 'hidden',
@@ -78,6 +78,7 @@ const mapStateToProps = (state, { canvas, windowId }) => {
     annotationsCount: flatten(searchAnnotations.map(a => a.resources))
       .filter(a => a.targetId === canvas.id).length,
     annotationSelected: selectedAnnotationCanvases.includes(canvas.id),
+    config: state.config.galleryView,
   };
 };
 
@@ -92,8 +93,8 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
 });
 
 const enhance = compose(
-  withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
+  withStyles(styles),
   // further HOC go here
 );
 
