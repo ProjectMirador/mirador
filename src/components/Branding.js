@@ -5,17 +5,13 @@ import Typography from '@material-ui/core/Typography';
 import MiradorIcon from './icons/MiradorIcon';
 
 /**
- * Opens a new window for click
+ * Display a branding icon
  */
 export class Branding extends Component {
   /** */
   render() {
     const { t, variant, ...ContainerProps } = this.props;
 
-    /**
-    login, clickthrough/kiosk open @id, wait for close
-    external, no-op
-    */
     return (
       <div {...ContainerProps}>
         { variant === 'wide' && (
