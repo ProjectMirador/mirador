@@ -8,7 +8,6 @@ import createI18nInstance from '../i18n';
 import WorkspaceArea from '../containers/WorkspaceArea';
 import AuthenticationSender from '../containers/AuthenticationSender';
 import AccessTokenSender from '../containers/AccessTokenSender';
-import '../styles/index.scss';
 
 /**
  * This is the top level Mirador component.

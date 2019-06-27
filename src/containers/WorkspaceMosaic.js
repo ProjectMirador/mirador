@@ -17,7 +17,6 @@ const mapStateToProps = state => (
   }
 );
 
-
 /**
  * mapDispatchToProps - used to hook up connect to action creators
  * @memberof Workspace
