@@ -57,7 +57,7 @@ export class SearchHit extends Component {
       <ScrollTo
         containerRef={containerRef}
         offsetTop={96} // offset for the height of the form above
-        scrollTo={selected}
+        scrollTo={selected && !focused}
       >
         <ListItem
           className={clsx(

@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Button from '@material-ui/core/Button';
 import { SearchResults } from '../../../src/components/SearchResults';
+import { ScrollTo } from '../../../src/components/ScrollTo';
 
 
 /**
@@ -44,6 +45,7 @@ describe('SearchResults', () => {
   it('can return to the full list view', () => {
     const wrapper = createWrapper({});
     wrapper.setState({ focused: true });
+    expect(wrapper.find(ScrollTo).prop('scrollTo')).toEqual(true);
     expect(wrapper.find(Button).text()).toEqual('backToResults');
     wrapper.find(Button).simulate('click');
     expect(wrapper.state().focused).toEqual(false);
