@@ -27,7 +27,7 @@ export class Branding extends Component {
           <IconButton
             align="center"
             component="a"
-            href="http://projectmirador.org"
+            href="https://projectmirador.org"
             target="_blank"
             rel="noopener"
           >
