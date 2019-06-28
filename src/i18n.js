@@ -6,6 +6,7 @@ import zhCn from './locales/zhCn/translation.json';
 import zhTw from './locales/zhTw/translation.json';
 import fr from './locales/fr/translation.json';
 import ja from './locales/ja/translation.json';
+import nl from './locales/nl/translation.json';
 import ptBr from './locales/ptBr/translation.json';
 
 
@@ -16,6 +17,7 @@ export default () => {
     en,
     fr,
     ja,
+    nl,
     'pt-BR': ptBr,
     'zh-CN': zhCn,
     'zh-TW': zhTw,
