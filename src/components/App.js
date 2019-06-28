@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Fullscreen from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../i18n';
+import createI18nInstance from '../i18n';
 import WorkspaceArea from '../containers/WorkspaceArea';
 import AuthenticationSender from '../containers/AuthenticationSender';
 import AccessTokenSender from '../containers/AccessTokenSender';
@@ -18,7 +18,7 @@ export class App extends Component {
   constructor(props) {
     super(props);
 
-    this.i18n = i18n;
+    this.i18n = createI18nInstance();
   }
 
   /**
