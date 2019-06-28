@@ -7,7 +7,6 @@ import AuthenticationSender from '../../../src/containers/AuthenticationSender';
 import WorkspaceArea from '../../../src/containers/WorkspaceArea';
 import { App } from '../../../src/components/App';
 import settings from '../../../src/config/settings';
-import i18n from '../../../src/i18n';
 
 jest.unmock('react-i18next');
 
@@ -45,8 +44,8 @@ describe('App', () => {
   });
 
   it('sets up translations based on the config passed in', () => {
-    createWrapper({ translations: { en: { off: 'on' } } });
-    expect(i18n.t('off')).toEqual('on');
+    const wrapper = createWrapper({ translations: { en: { off: 'on' } } });
+    expect(wrapper.instance().i18n.t('off')).toEqual('on');
   });
 
   it('should pass setWorkspaceFullscreen to Fullscreen.onChange', () => {
@@ -70,9 +69,9 @@ describe('App', () => {
     it('changes the i18n language if the language prop has been updated', () => {
       const wrapper = createWrapper();
 
-      expect(i18n.language).toEqual('en');
+      expect(wrapper.instance().i18n.language).toEqual('en');
       wrapper.setProps({ language: 'de' });
-      expect(i18n.language).toEqual('de');
+      expect(wrapper.instance().i18n.language).toEqual('de');
     });
   });
 });

@@ -9,26 +9,29 @@ import ja from './locales/ja/translation.json';
 import ptBr from './locales/ptBr/translation.json';
 
 
-// Load translations for each language
-const resources = {
-  de,
-  en,
-  fr,
-  ja,
-  'pt-BR': ptBr,
-  'zh-CN': zhCn,
-  'zh-TW': zhTw,
+export default () => {
+  // Load translations for each language
+  const resources = {
+    de,
+    en,
+    fr,
+    ja,
+    'pt-BR': ptBr,
+    'zh-CN': zhCn,
+    'zh-TW': zhTw,
+  };
+
+  const instance = i18n.createInstance();
+  instance
+    .use(initReactI18next)
+    .init({
+      fallbackLng: 'en',
+      interpolation: {
+        escapeValue: false, // react is already safe from xss
+      },
+      lng: 'en',
+      resources,
+    });
+
+  return instance;
 };
-
-i18n
-  .use(initReactI18next)
-  .init({
-    fallbackLng: 'en',
-    interpolation: {
-      escapeValue: false, // react is already safe from xss
-    },
-    lng: 'en',
-    resources,
-  });
-
-export default i18n;
