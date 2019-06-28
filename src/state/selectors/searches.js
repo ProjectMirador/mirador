@@ -2,10 +2,11 @@ import { createSelector } from 'reselect';
 import { LanguageMap } from 'manifesto.js';
 import flatten from 'lodash/flatten';
 import Annotation from '../../lib/Annotation';
+import { getCanvas, getCanvases } from './canvases';
 import { getWindow } from './windows';
 import { getManifestLocale } from './manifests';
 
-const getSearchForWindow = createSelector(
+export const getSearchForWindow = createSelector(
   [
     (state, { windowId }) => windowId,
     state => state.searches,
@@ -72,7 +73,7 @@ export const getNextSearchId = createSelector(
   },
 );
 
-export const getSearchHitsForCompanionWindow = createSelector(
+const getSearchHitsForCompanionWindow = createSelector(
   [
     getSearchResponsesForCompanionWindow,
   ],
@@ -81,6 +82,27 @@ export const getSearchHitsForCompanionWindow = createSelector(
 
     return result.json.hits;
   })),
+);
+
+export const getSortedSearchHitsForCompanionWindow = createSelector(
+  [
+    getSearchHitsForCompanionWindow,
+    getCanvases,
+    (state, { companionWindowId, windowId }) => annotationUri => getResourceAnnotationForSearchHit(
+      state, { annotationUri, companionWindowId, windowId },
+    ),
+  ],
+  (searchHits, canvases, annotationForSearchHit) => {
+    if (!canvases || canvases.length === 0) return [];
+    if (!searchHits || searchHits.length === 0) return [];
+    const canvasIds = canvases.map(canvas => canvas.id);
+
+    return [].concat(searchHits).sort((a, b) => {
+      const hitA = annotationForSearchHit(a.annotations[0]);
+      const hitB = annotationForSearchHit(b.annotations[0]);
+      return canvasIds.indexOf(hitA.targetId) - canvasIds.indexOf(hitB.targetId);
+    });
+  },
 );
 
 /** convert search results to an annotation */
@@ -107,6 +129,27 @@ export const getSearchAnnotationsForCompanionWindow = createSelector(
   results => results && searchResultsToAnnotation(results),
 );
 
+/** */
+export function sortSearchAnnotationsByCanvasOrder(searchAnnotations, canvases) {
+  if (!searchAnnotations
+      || !searchAnnotations.resources
+      || searchAnnotations.length === 0) return [];
+  if (!canvases || canvases.length === 0) return [];
+  const canvasIds = canvases.map(canvas => canvas.id);
+
+  return [].concat(searchAnnotations.resources).sort(
+    (annoA, annoB) => canvasIds.indexOf(annoA.targetId) - canvasIds.indexOf(annoB.targetId),
+  );
+}
+
+export const getSortedSearchAnnotationsForCompanionWindow = createSelector(
+  [
+    getSearchAnnotationsForCompanionWindow,
+    getCanvases,
+  ],
+  (searchAnnotations, canvases) => sortSearchAnnotationsByCanvasOrder(searchAnnotations, canvases),
+);
+
 export const getSearchAnnotationsForWindow = createSelector(
   [
     getSearchForWindow,
@@ -122,10 +165,12 @@ export const getSearchAnnotationsForWindow = createSelector(
 export const getSelectedContentSearchAnnotationIds = createSelector(
   [
     getWindow,
+    getSearchForCompanionWindow,
   ],
-  window => (window && window.selectedContentSearchAnnotation) || [],
+  (window, search) => (search && search.selectedContentSearchAnnotation)
+    || (window && window.selectedContentSearchAnnotation)
+    || [],
 );
-
 
 export const getSelectedContentSearchAnnotations = createSelector(
   [
@@ -161,5 +206,29 @@ export const getResourceAnnotationLabel = createSelector(
     ) return [];
 
     return LanguageMap.parse(resourceAnnotation.resource.label, locale).map(label => label.value);
+  },
+);
+
+const getAnnotationById = createSelector(
+  [
+    getSearchAnnotationsForWindow,
+    (state, { annotationId }) => (annotationId),
+  ],
+  (annotations, annotationId) => {
+    const resourceAnnotations = flatten(annotations.map(a => a.resources));
+    return resourceAnnotations.find(r => r.id === annotationId);
+  },
+);
+
+export const getCanvasForAnnotation = createSelector(
+  [
+    getAnnotationById,
+    (state, { windowId }) => canvasId => getCanvas(
+      state, { canvasId, windowId },
+    ),
+  ],
+  (annotation, getCanvasById) => {
+    const canvasId = annotation && annotation.targetId;
+    return canvasId && getCanvasById(canvasId);
   },
 );

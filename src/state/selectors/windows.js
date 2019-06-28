@@ -61,9 +61,13 @@ export const getCanvasIndex = createSelector(
     (state, { canvasIndex }) => canvasIndex,
     getManifestStartCanvasIndex,
   ],
-  (window, providedCanvasIndex, defaultIndex) => (
-    providedCanvasIndex || (window && window.canvasIndex) || defaultIndex || 0
-  ),
+  (window, providedCanvasIndex, defaultIndex) => {
+    if (providedCanvasIndex !== undefined) return providedCanvasIndex;
+
+    if (window && (window.canvasIndex !== undefined)) return window.canvasIndex;
+
+    return defaultIndex || 0;
+  },
 );
 
 /** Return type of view in a certain window.

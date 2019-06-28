@@ -32,7 +32,7 @@ const styles = theme => ({
     borderBottom: '2px solid transparent',
   },
   MenuItem: {
-    display: 'inline',
+    display: 'inline-block',
   },
   selectedLabel: {
     borderBottom: `2px solid ${theme.palette.secondary.main}`,

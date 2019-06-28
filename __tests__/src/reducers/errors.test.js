@@ -21,6 +21,42 @@ describe('ADD_ERROR', () => {
     expect(ret[error.id]).toEqual(error);
   });
 
+  it('handles RECEIVE_INFO_RESPONSE_FAILURE', () => {
+    const error = {
+      error: errorMessage,
+      infoId: 'abc',
+    };
+    const ret = errorsReducer(undefined, {
+      type: ActionTypes.RECEIVE_INFO_RESPONSE_FAILURE,
+      ...error,
+
+    });
+    expect(ret.items).toEqual([error.infoId]);
+    expect(ret).toHaveProperty(error.infoId);
+    expect(ret[error.infoId]).toEqual({
+      id: 'abc',
+      message: errorMessage,
+    });
+  });
+
+  it('handles RECEIVE_SEARCH_FAILURE', () => {
+    const error = {
+      error: errorMessage,
+      searchId: 'def',
+    };
+    const ret = errorsReducer(undefined, {
+      type: ActionTypes.RECEIVE_SEARCH_FAILURE,
+      ...error,
+
+    });
+    expect(ret.items).toEqual([error.searchId]);
+    expect(ret).toHaveProperty(error.searchId);
+    expect(ret[error.searchId]).toEqual({
+      id: 'def',
+      message: errorMessage,
+    });
+  });
+
   it('should handle REMOVE_ERROR', () => {
     const stateBefore = {
       errorId: {

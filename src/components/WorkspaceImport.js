@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
 import {
@@ -9,6 +8,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 
 /**
  */
@@ -77,7 +77,7 @@ export class WorkspaceImport extends Component {
         <DialogTitle id="workspace-import-title" disableTypography>
           <Typography variant="h2">{t('importWorkspace')}</Typography>
         </DialogTitle>
-        <DialogContent>
+        <ScrollIndicatedDialogContent>
           <TextField
             className={classes.textField}
             id="workspace-import-input"
@@ -88,7 +88,7 @@ export class WorkspaceImport extends Component {
             inputProps={{ autoFocus: 'autofocus', className: classes.textInput }}
             helperText={t('importWorkspaceHint')}
           />
-        </DialogContent>
+        </ScrollIndicatedDialogContent>
         <DialogActions>
           <Button className={classes.cancelBtn} onClick={handleClose}>
             {t('cancel')}

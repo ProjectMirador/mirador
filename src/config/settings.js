@@ -203,6 +203,7 @@ export default {
     fr: 'Français',
     ja: '日本語',
     nl: 'Nederlands',
+    'pt-BR': 'Português do Brasil',
     'zh-CN': '中文(简体)',
     'zh-TW': '中文(繁體)',
   },
@@ -215,12 +216,17 @@ export default {
     allowFullscreen: false, // Configure to show a "fullscreen" button in the WindowTopBar
     allowMaximize: true, // Configure if windows can be maximized or not
     authNewWindowCenter: 'parent', // Configure how to center a new window created by the authentication flow. Options: parent, screen
-    defaultSideBarPanel: 'info', // Configure which sidebar is selected by default. Options: info, attribution, canvas, annotations
+    defaultSideBarPanel: 'info', // Configure which sidebar is selected by default. Options: info, attribution, canvas, annotations, search
     defaultView: 'single',  // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in
-    hideAnnotationsPanel: false, // Configure to hide the annotations panel in the WindowSideBarButtons
-    hideSearchPanel: true, // Configure to hide search panel in the WindowSideBarButtons
     hideWindowTitle: false, // Configure if the window title is shown in the window title bar or not
     sideBarOpenByDefault: false, // Configure if the sidebar (and its content panel) is open by default
+    panels: { // Configure which panels are visible in WindowSideBarButtons
+      info: true,
+      attribution: true,
+      canvas: true,
+      annotations: true,
+      search: false,
+    }
   },
   windows: [], // Array of windows to be open when mirador initializes (each object should at least provide a loadedManifest key with the value of the IIIF presentation manifest to load)
   thumbnailNavigation: {
@@ -235,4 +241,8 @@ export default {
   workspaceControlPanel: {
     enabled: true, // Configure if the control panel should be rendered.  Useful if you want to lock the viewer down to only the configured manifests
   },
+  galleryView: {
+    height: 120, // height of gallery view thumbnails
+    width: null, // width of gallery view thumbnails (or null, to auto-calculate an aspect-ratio appropriate size)
+  }
 };

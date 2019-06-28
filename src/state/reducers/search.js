@@ -7,27 +7,42 @@ import ActionTypes from '../actions/action-types';
  * searchReducer
  */
 export const searchesReducer = (state = {}, action) => {
+  const searchStruct = (state[action.windowId] || {})[action.companionWindowId] || {};
   switch (action.type) {
     case ActionTypes.REQUEST_SEARCH:
+      if (searchStruct.query !== action.query) {
+        // new query
+        return {
+          ...state,
+          [action.windowId]: {
+            ...state[action.windowId],
+            [action.companionWindowId]: {
+              ...searchStruct,
+              data: {
+                [action.searchId]: {
+                  isFetching: true,
+                },
+              },
+              query: action.query,
+              selectedContentSearchAnnotation: [],
+            },
+          },
+        };
+      }
+
+      // paginating through a query
       return {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
           [action.companionWindowId]: {
-            ...(state[action.windowId] || {})[action.companionWindowId],
+            ...searchStruct,
             data: {
-              ...(() => {
-                const cw = ((state[action.windowId] || {})[action.companionWindowId] || {});
-
-                if (cw.query !== action.query) return undefined;
-
-                return cw.data;
-              })(),
+              ...searchStruct.data,
               [action.searchId]: {
                 isFetching: true,
               },
             },
-            query: action.query,
           },
         },
       };
@@ -37,14 +52,18 @@ export const searchesReducer = (state = {}, action) => {
         [action.windowId]: {
           ...state[action.windowId],
           [action.companionWindowId]: {
-            ...(state[action.windowId] || {})[action.companionWindowId],
+            ...searchStruct,
             data: {
-              ...((state[action.windowId] || {})[action.companionWindowId] || {}).data,
+              ...searchStruct.data,
               [action.searchId]: {
                 isFetching: false,
                 json: action.searchJson,
               },
             },
+            selectedContentSearchAnnotation: searchStruct.selectedContentSearchAnnotation
+              && searchStruct.selectedContentSearchAnnotation.length > 0
+              ? searchStruct.selectedContentSearchAnnotation
+              : (action.annotationId && [action.annotationId]),
           },
         },
       };
@@ -54,9 +73,9 @@ export const searchesReducer = (state = {}, action) => {
         [action.windowId]: {
           ...state[action.windowId],
           [action.companionWindowId]: {
-            ...(state[action.windowId] || {})[action.companionWindowId],
+            ...searchStruct,
             data: {
-              ...((state[action.windowId] || {})[action.companionWindowId] || {}).data,
+              ...searchStruct.data,
               [action.searchId]: {
                 error: action.error,
                 isFetching: false,
@@ -71,6 +90,32 @@ export const searchesReducer = (state = {}, action) => {
         [action.windowId]: Object.keys(state[action.windowId]).reduce((object, key) => {
           if (key !== action.companionWindowId) {
             object[key] = state[action.windowId][key]; // eslint-disable-line no-param-reassign
+          }
+          return object;
+        }, {}),
+      };
+    case ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          [action.companionWindowId]: {
+            ...searchStruct,
+            selectedContentSearchAnnotation: action.annotationId,
+          },
+        },
+      };
+    case ActionTypes.SET_CANVAS:
+      if (Object.keys(action.searches).length === 0) return state;
+
+      return {
+        ...state,
+        [action.windowId]: Object.keys(state[action.windowId]).reduce((object, key) => {
+          if (Object.keys(action.searches).includes(key)) {
+            object[key] = { // eslint-disable-line no-param-reassign
+              ...state[action.windowId][key],
+              selectedContentSearchAnnotation: action.searches[key],
+            };
           }
           return object;
         }, {}),

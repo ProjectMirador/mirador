@@ -6,8 +6,8 @@ import { withPlugins } from '../extend/withPlugins';
 import { SearchPanelNavigation } from '../components/SearchPanelNavigation';
 import * as actions from '../state/actions';
 import {
-  getSearchHitsForCompanionWindow,
   getSelectedContentSearchAnnotationIds,
+  getSortedSearchHitsForCompanionWindow,
 } from '../state/selectors';
 
 /**
@@ -16,18 +16,22 @@ import {
  * @private
  */
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
-  searchHits: getSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
-  selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, { windowId }),
+  searchHits: getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
+  selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, {
+    companionWindowId, windowId,
+  }),
 });
 
 /**
  * mapDispatchToProps - to hook up connect
- * @memberof SearchPanelControls
+ * @memberof SearchPanelNavigation
  * @private
  */
-const mapDispatchToProps = {
-  selectContentSearchAnnotation: actions.selectContentSearchAnnotation,
-};
+const mapDispatchToProps = (dispatch, { companionWindowId, windowId }) => ({
+  selectContentSearchAnnotation: (...args) => dispatch(
+    actions.selectContentSearchAnnotation(windowId, companionWindowId, ...args),
+  ),
+});
 
 /** */
 const styles = theme => ({

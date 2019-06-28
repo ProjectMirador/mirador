@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 
 /**
  */
@@ -41,7 +41,7 @@ export class WorkspaceExport extends Component {
    */
   render() {
     const {
-      children, classes, container, handleClose, open, t,
+      children, container, handleClose, open, t,
     } = this.props;
     const exportableState = this.exportableState();
     return (
@@ -57,16 +57,14 @@ export class WorkspaceExport extends Component {
         <DialogTitle id="form-dialog-title" disableTypography>
           <Typography variant="h2">{t('downloadExport')}</Typography>
         </DialogTitle>
-        <DialogContent
-          className={classes.dialogcontent}
-        >
+        <ScrollIndicatedDialogContent>
           {children}
           <pre>
             {exportableState}
           </pre>
-        </DialogContent>
+        </ScrollIndicatedDialogContent>
         <DialogActions>
-          <Button className={classes.cancelBtn} onClick={() => handleClose()}>{t('cancel')}</Button>
+          <Button onClick={() => handleClose()}>{t('cancel')}</Button>
           <CopyToClipboard
             text={exportableState}
           >
@@ -80,7 +78,6 @@ export class WorkspaceExport extends Component {
 
 WorkspaceExport.propTypes = {
   children: PropTypes.node,
-  classes: PropTypes.objectOf(PropTypes.string),
   container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
@@ -90,7 +87,6 @@ WorkspaceExport.propTypes = {
 
 WorkspaceExport.defaultProps = {
   children: null,
-  classes: {},
   container: null,
   open: false,
   t: key => key,

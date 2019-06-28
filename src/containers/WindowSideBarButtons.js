@@ -38,8 +38,7 @@ const mapStateToProps = (state, { windowId }) => ({
     windowId,
   }),
   hasSearchService: getManifestSearchService(state, { windowId }) !== null,
-  hideAnnotationsPanel: state.config.window.hideAnnotationsPanel,
-  hideSearchPanel: state.config.window.hideSearchPanel,
+  panels: state.config.window.panels,
   sideBarPanel: ((getCompanionWindowsForPosition(state, { position: 'left', windowId }))[0] || {}).content,
 });
 

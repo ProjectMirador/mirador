@@ -7,11 +7,10 @@ import { SearchResults } from '../components/SearchResults';
 import * as actions from '../state/actions';
 import {
   getNextSearchId,
-  getSearchAnnotationsForCompanionWindow,
-  getSearchHitsForCompanionWindow,
-  getSelectedContentSearchAnnotationIds,
   getSearchQuery,
   getSearchIsFetching,
+  getSortedSearchHitsForCompanionWindow,
+  getSortedSearchAnnotationsForCompanionWindow,
 } from '../state/selectors';
 
 /**
@@ -24,14 +23,12 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   nextSearch: getNextSearchId(state, { companionWindowId, windowId }),
   query: getSearchQuery(state, { companionWindowId, windowId }),
   searchAnnotations:
-    getSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId }).resources,
-  searchHits: getSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
-  selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, { windowId }),
+    getSortedSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId }),
+  searchHits: getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
 });
 
 const mapDispatchToProps = {
   fetchSearch: actions.fetchSearch,
-  selectContentSearchAnnotation: actions.selectContentSearchAnnotation,
 };
 
 /** */

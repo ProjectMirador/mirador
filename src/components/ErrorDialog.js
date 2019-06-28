@@ -33,7 +33,7 @@ export class ErrorDialog extends Component {
         </DialogTitle>
         <DialogContent disableTypography>
           <DialogContentText variant="body2" noWrap color="inherit">
-            {error.message}
+            {`${error.message}`}
           </DialogContentText>
           <DialogActions>
             <Button onClick={() => removeError(error.id)} variant="contained">

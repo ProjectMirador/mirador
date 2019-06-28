@@ -128,12 +128,14 @@ describe('windows reducer', () => {
       },
     }, {
       canvasIndex: 5,
+      selectedContentSearchAnnotation: 'xyz',
       type: ActionTypes.SET_CANVAS,
       windowId: 'abc123',
     })).toEqual({
       abc123: {
         canvasIndex: 5,
         id: 'abc123',
+        selectedContentSearchAnnotation: 'xyz',
       },
       def456: {
         canvasIndex: 1,
@@ -447,5 +449,30 @@ describe('windows reducer', () => {
       state: { windows: { new: 'stuff' } },
       type: ActionTypes.IMPORT_MIRADOR_STATE,
     })).toEqual({ new: 'stuff' });
+  });
+
+  describe('RECEIVE_SEARCH', () => {
+    it('set the canvas index and annotation id if provided', () => {
+      const beforeState = { abc123: {} };
+      const action = {
+        annotationId: 'aaa123', canvasIndex: 5, type: ActionTypes.RECEIVE_SEARCH, windowId: 'abc123',
+      };
+      const expectedState = {
+        abc123: { canvasIndex: 5, selectedContentSearchAnnotation: ['aaa123'] },
+      };
+
+      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
+    });
+    it('passes through existing data otherwise', () => {
+      const beforeState = { abc123: { canvasIndex: 5, selectedContentSearchAnnotation: ['aaa123'] } };
+      const action = {
+        type: ActionTypes.RECEIVE_SEARCH, windowId: 'abc123',
+      };
+      const expectedState = {
+        abc123: { canvasIndex: 5, selectedContentSearchAnnotation: ['aaa123'] },
+      };
+
+      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
+    });
   });
 });

@@ -134,8 +134,7 @@ export class WindowSideBarButtons extends Component {
       hasAnnotations,
       hasSearchResults,
       hasSearchService,
-      hideAnnotationsPanel,
-      hideSearchPanel,
+      panels,
       sideBarPanel,
       t,
     } = this.props;
@@ -167,19 +166,25 @@ export class WindowSideBarButtons extends Component {
         aria-label={t('sidebarPanelsNavigation')}
         ref={ref => this.setTabsRef(ref)}
       >
-        <TabButton
-          value="info"
-          icon={(<InfoIcon />)}
-        />
-        <TabButton
-          value="attribution"
-          icon={(<AttributionIcon />)}
-        />
-        <TabButton
-          value="canvas"
-          icon={(<CanvasIndexIcon />)}
-        />
-        {!hideAnnotationsPanel && (
+        { panels.info && (
+          <TabButton
+            value="info"
+            icon={(<InfoIcon />)}
+          />
+        )}
+        { panels.attribution && (
+          <TabButton
+            value="attribution"
+            icon={(<AttributionIcon />)}
+          />
+        )}
+        { panels.canvas && (
+          <TabButton
+            value="canvas"
+            icon={(<CanvasIndexIcon />)}
+          />
+        )}
+        {panels.annotations && (
           <TabButton
             value="annotations"
             icon={(
@@ -189,7 +194,7 @@ export class WindowSideBarButtons extends Component {
             )}
           />
         )}
-        {!hideSearchPanel && hasSearchService && (
+        {panels.search && hasSearchService && (
           <TabButton
             value="search"
             icon={(
@@ -210,8 +215,7 @@ WindowSideBarButtons.propTypes = {
   hasAnnotations: PropTypes.bool,
   hasSearchResults: PropTypes.bool,
   hasSearchService: PropTypes.bool,
-  hideAnnotationsPanel: PropTypes.bool,
-  hideSearchPanel: PropTypes.bool,
+  panels: PropTypes.arrayOf(PropTypes.bool),
   sideBarPanel: PropTypes.string,
   t: PropTypes.func,
 };
@@ -221,8 +225,7 @@ WindowSideBarButtons.defaultProps = {
   hasAnnotations: false,
   hasSearchResults: false,
   hasSearchService: false,
-  hideAnnotationsPanel: false,
-  hideSearchPanel: true,
+  panels: [],
   sideBarPanel: 'closed',
   t: key => key,
 };

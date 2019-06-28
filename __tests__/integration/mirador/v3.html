@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
-    <title>Mirador</title>
+    <title>Mirador - Prezi v3</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
   </head>
   <body>
@@ -14,21 +14,13 @@
      var miradorInstance = Mirador.viewer({
        id: 'mirador',
        windows: [{
-         loadedManifest: 'https://purl.stanford.edu/fg165hz3589/iiif/manifest',
-         // defaultSearchQuery: 'NSF',
-         suggestedSearches: ['NSF'],
+         manifestId: 'https://iiif.bodleian.ox.ac.uk/iiif/manifest/e32a277e-91e2-4a6d-8ba6-cc4bad230410.json',
        }],
-       window: {
-         panels: {
-           search: true,
-         },
+       resourceHeaders: {
+         Accept: 'application/ld+json;profile="http://iiif.io/api/presentation/3/context.json"',
        },
-       manifests: {
-         "https://damsssl.llgc.org.uk/iiif/2.0/4566425/manifest.json": { provider: "LLGC"},
-         "https://data.ucd.ie/api/img/manifests/ucdlib:33064": { provider: "Irish Architectural Archive"},
-         "https://wellcomelibrary.org/iiif/b18035723/manifest": { provider: "Wellcome Library"},
-         "https://scta.info/iiif/graciliscommentary/lon/manifest": { provider: "SCTA"},
-         "https://purl.stanford.edu/zx429wp8334/iiif/manifest": { provider: "SUL" },
+       window: {
+         hideSearchPanel: false,
        }
      });
     </script>

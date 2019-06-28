@@ -8,6 +8,7 @@ import * as actions from '../state/actions';
 import {
   getManifestAutocompleteService,
   getManifestSearchService,
+  getSearchIsFetching,
   getSearchQuery,
 } from '../state/selectors';
 
@@ -19,6 +20,7 @@ import {
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   autocompleteService: getManifestAutocompleteService(state, { windowId }),
   query: getSearchQuery(state, { companionWindowId, windowId }),
+  searchIsFetching: getSearchIsFetching(state, { companionWindowId, windowId }),
   searchService: getManifestSearchService(state, { windowId }),
 });
 
@@ -33,9 +35,16 @@ const mapDispatchToProps = {
 
 /** */
 const styles = theme => ({
+  adornmentWrapper: {
+    position: 'relative',
+  },
   searchInput: {
     paddingBottom: theme.spacing(1),
     paddingRight: theme.spacing(1.5),
+  },
+  searchProgress: {
+    position: 'absolute',
+    zIndex: 1,
   },
   suggestions: {
     position: 'absolute',

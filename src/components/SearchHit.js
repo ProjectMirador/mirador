@@ -22,10 +22,10 @@ export class SearchHit extends Component {
   /** */
   handleClick() {
     const {
-      annotationId, selectContentSearchAnnotation, windowId,
+      annotationId, selectContentSearchAnnotation,
     } = this.props;
 
-    selectContentSearchAnnotation(windowId, [annotationId]);
+    selectContentSearchAnnotation([annotationId]);
   }
 
   /** */
@@ -44,6 +44,7 @@ export class SearchHit extends Component {
       showDetails,
       selected,
       t,
+      windowSelected,
     } = this.props;
 
     if (focused && !selected) return null;
@@ -56,7 +57,7 @@ export class SearchHit extends Component {
       <ScrollTo
         containerRef={containerRef}
         offsetTop={96} // offset for the height of the form above
-        scrollTo={selected}
+        scrollTo={selected && !focused}
       >
         <ListItem
           className={clsx(
@@ -65,6 +66,7 @@ export class SearchHit extends Component {
               [classes.adjacent]: adjacent,
               [classes.selected]: selected,
               [classes.focused]: focused,
+              [classes.windowSelected]: windowSelected,
             },
           )}
           button={!selected}
@@ -133,6 +135,7 @@ SearchHit.propTypes = {
   showDetails: PropTypes.func,
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
+  windowSelected: PropTypes.bool,
 };
 
 SearchHit.defaultProps = {
@@ -151,4 +154,5 @@ SearchHit.defaultProps = {
   selected: false,
   showDetails: () => {},
   t: k => k,
+  windowSelected: false,
 };

@@ -11,14 +11,14 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
 export class SearchPanelNavigation extends Component {
   /** */
   nextSearchResult(currentHitIndex) {
-    const { searchHits, selectContentSearchAnnotation, windowId } = this.props;
-    selectContentSearchAnnotation(windowId, searchHits[currentHitIndex + 1].annotations);
+    const { searchHits, selectContentSearchAnnotation } = this.props;
+    selectContentSearchAnnotation(searchHits[currentHitIndex + 1].annotations);
   }
 
   /** */
   previousSearchResult(currentHitIndex) {
-    const { searchHits, selectContentSearchAnnotation, windowId } = this.props;
-    selectContentSearchAnnotation(windowId, searchHits[currentHitIndex - 1].annotations);
+    const { searchHits, selectContentSearchAnnotation } = this.props;
+    selectContentSearchAnnotation(searchHits[currentHitIndex - 1].annotations);
   }
 
   /** */
@@ -80,7 +80,7 @@ SearchPanelNavigation.propTypes = {
   selectContentSearchAnnotation: PropTypes.func.isRequired,
   selectedContentSearchAnnotation: PropTypes.arrayOf(PropTypes.string).isRequired,
   t: PropTypes.func,
-  windowId: PropTypes.string.isRequired,
+  windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
 };
 SearchPanelNavigation.defaultProps = {
   classes: {},
