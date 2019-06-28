@@ -32,13 +32,18 @@ describe('SearchResults', () => {
   it('renders a SearchHit for each hit', () => {
     const selectContentSearchAnnotation = jest.fn();
     const wrapper = createWrapper({ selectContentSearchAnnotation });
-    expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').length).toEqual(1);
-    expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').prop('index')).toEqual(0);
+    const searchHits = wrapper.find('LiveMessenger').props().children({});
+
+    expect(searchHits.length).toEqual(1);
+    expect(searchHits[0].type.displayName).toEqual('Connect(WithStyles(WithPlugins(SearchHit)))');
+    expect(searchHits[0].props.index).toEqual(0);
   });
 
   it('can focus on a single item', () => {
     const wrapper = createWrapper({});
-    wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').prop('showDetails')();
+    const searchHits = wrapper.find('LiveMessenger').props().children({});
+
+    searchHits[0].props.showDetails();
     expect(wrapper.state().focused).toEqual(true);
   });
 
@@ -51,18 +56,28 @@ describe('SearchResults', () => {
     expect(wrapper.state().focused).toEqual(false);
   });
 
+  it('passes announcePolite function to the SearchHits', () => {
+    const announcePolite = jest.fn();
+    const wrapper = createWrapper({});
+    const searchHits = wrapper.find('LiveMessenger').props().children({ announcePolite });
+
+    expect(searchHits[0].props.announcer).toEqual(announcePolite);
+  });
+
   describe('annotation-only search results', () => {
     it('renders a SearchHit for each annotation', () => {
       const wrapper = createWrapper({
         searchAnnotations: [{ id: 'x' }, { id: 'y' }],
         searchHits: [],
       });
-      expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').length).toEqual(2);
-      expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').at(0).prop('index')).toEqual(0);
-      expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').at(0).prop('annotationId')).toEqual('x');
 
-      expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').at(1).prop('index')).toEqual(1);
-      expect(wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))').at(1).prop('annotationId')).toEqual('y');
+      const searchHits = wrapper.find('LiveMessenger').props().children({});
+      expect(searchHits.length).toEqual(2);
+      expect(searchHits[0].props.index).toEqual(0);
+      expect(searchHits[0].props.annotationId).toEqual('x');
+
+      expect(searchHits[1].props.index).toEqual(1);
+      expect(searchHits[1].props.annotationId).toEqual('y');
     });
   });
 

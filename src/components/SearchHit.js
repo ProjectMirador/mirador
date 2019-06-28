@@ -19,6 +19,46 @@ export class SearchHit extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
+  /**
+   * Announce the annotation content if the component is mounted selected
+   */
+  componentDidMount() {
+    const { selected } = this.props;
+
+    if (selected) this.announceHit();
+  }
+
+  /**
+   * Announce hit if the hit has been selected
+   */
+  componentDidUpdate(prevProps) {
+    const { selected } = this.props;
+
+    if (selected && selected !== prevProps.selected) {
+      this.announceHit();
+    }
+  }
+
+  /**
+   * Pass content describing the hit to the announcer prop (intended for screen readers)
+   */
+  announceHit() {
+    const {
+      annotationLabel, announcer, canvasLabel, hit, index, t, total,
+    } = this.props;
+    if (!hit) return;
+    const truncatedHit = new TruncatedHit(hit);
+
+    announcer([
+      `${index + 1} ${t('of')} ${total}`,
+      canvasLabel,
+      annotationLabel,
+      truncatedHit.before,
+      truncatedHit.match,
+      truncatedHit.after,
+    ].join(' '));
+  }
+
   /** */
   handleClick() {
     const {
@@ -116,6 +156,7 @@ SearchHit.propTypes = {
   }),
   annotationId: PropTypes.string,
   annotationLabel: PropTypes.string,
+  announcer: PropTypes.func.isRequired,
   canvasLabel: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string,
@@ -134,6 +175,7 @@ SearchHit.propTypes = {
   selected: PropTypes.bool,
   showDetails: PropTypes.func,
   t: PropTypes.func,
+  total: PropTypes.number,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
   windowSelected: PropTypes.bool,
 };
@@ -154,5 +196,6 @@ SearchHit.defaultProps = {
   selected: false,
   showDetails: () => {},
   t: k => k,
+  total: undefined,
   windowSelected: false,
 };
