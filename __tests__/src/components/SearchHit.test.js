@@ -10,6 +10,7 @@ import { ScrollTo } from '../../../src/components/ScrollTo';
 function createWrapper(props) {
   return shallow(
     <SearchHit
+      announcer={() => {}}
       annotationId="foo"
       classes={{ windowSelected: 'windowSelected' }}
       hit={{
@@ -64,6 +65,48 @@ describe('SearchHit', () => {
       const wrapper = createWrapper();
 
       expect(wrapper.find('WithStyles(ForwardRef(Typography))[variant="subtitle2"]').length).toEqual(1);
+    });
+  });
+
+  describe('announcer', () => {
+    it('sends information about the annotation when selected', () => {
+      const announcer = jest.fn();
+      const wrapper = createWrapper({
+        annotationLabel: 'The Annotation Label',
+        announcer,
+        canvasLabel: 'The Canvas Label',
+        selected: false,
+        total: 9,
+      });
+
+      expect(announcer).not.toHaveBeenCalled();
+      wrapper.setProps({ selected: true });
+      expect(announcer).toHaveBeenCalledWith(
+        '1 of 9 The Canvas Label The Annotation Label Light up the moose , and start the chai',
+      );
+    });
+
+    it('calls the announcer when initially rendered as selected', () => {
+      const announcer = jest.fn();
+      createWrapper({ announcer, selected: true });
+
+      expect(announcer).toHaveBeenCalled();
+    });
+
+    it('does not call the announcer when initially rendered as unselected', () => {
+      const announcer = jest.fn();
+      createWrapper({ announcer, selected: false });
+
+      expect(announcer).not.toHaveBeenCalled();
+    });
+
+    it('does not send information about annotations that are not being deselected', () => {
+      const announcer = jest.fn();
+      const wrapper = createWrapper({ announcer, selected: true });
+
+      announcer.mockClear();
+      wrapper.setProps({ selected: false });
+      expect(announcer).not.toHaveBeenCalled();
     });
   });
 });
