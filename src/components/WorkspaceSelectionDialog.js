@@ -41,11 +41,9 @@ export class WorkspaceSelectionDialog extends Component {
    * Propagate workspace type selection into the global state
    */
   handleWorkspaceTypeChange(workspaceType) {
-    const { handleClose, updateConfig } = this.props;
-    updateConfig({
-      workspace: {
-        type: workspaceType,
-      },
+    const { handleClose, updateWorkspace } = this.props;
+    updateWorkspace({
+      type: workspaceType,
     });
     handleClose();
   }
@@ -135,7 +133,7 @@ WorkspaceSelectionDialog.propTypes = {
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
   t: PropTypes.func,
-  updateConfig: PropTypes.func.isRequired,
+  updateWorkspace: PropTypes.func.isRequired,
   workspaceType: PropTypes.string.isRequired,
 };
 

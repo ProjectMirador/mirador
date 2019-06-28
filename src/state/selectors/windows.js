@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { getManifestTitle, getManifestViewingHint, getManifestoInstance } from './manifests';
-import { getWorkspaceType, getDefaultView } from './config';
+import { getDefaultView } from './config';
+import { getWorkspaceType } from './workspace';
 
 /**
  * Return the manifest titles for all open windows

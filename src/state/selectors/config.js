@@ -42,11 +42,6 @@ export const getThemeIds = createSelector(
   ({ themes }) => Object.keys(themes),
 );
 
-export const getWorkspaceType = createSelector(
-  [getConfig],
-  ({ workspace }) => workspace.type,
-);
-
 export const getContainerId = createSelector(
   [getConfig],
   ({ id }) => id,

@@ -16,3 +16,8 @@ export const getFullScreenEnabled = createSelector(
 export function getLatestError(state) {
   return state.errors.items[0] && state.errors[state.errors.items[0]];
 }
+
+export const getWorkspaceType = createSelector(
+  [getWorkspace],
+  ({ type }) => type,
+);
