@@ -30,6 +30,11 @@ export const workspaceReducer = (
   let newWorkspaceDimensions;
   let viewportPosition;
   switch (action.type) {
+    case ActionTypes.UPDATE_WORKSPACE:
+      return {
+        ...state,
+        ...action.config,
+      };
     case ActionTypes.FOCUS_WINDOW:
       return {
         ...state,

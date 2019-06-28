@@ -1,6 +1,15 @@
 import ActionTypes from './action-types';
 
 /**
+ * updateWorkspace - action creator
+ *
+ * @param {Object} config
+ */
+export function updateWorkspace(config) {
+  return { config, type: ActionTypes.UPDATE_WORKSPACE };
+}
+
+/**
  * setWorkspaceFullscreen - action creator
  *
  * @param  {Boolean} isFullscreenEnabled

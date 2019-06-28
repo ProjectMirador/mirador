@@ -2,6 +2,17 @@ import * as actions from '../../../src/state/actions';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('workspace actions', () => {
+  describe('updateWorkspace', () => {
+    it('updates the workspace settings', () => {
+      const options = { foo: 'bar' };
+
+      const expectedAction = {
+        config: { foo: 'bar' },
+        type: ActionTypes.UPDATE_WORKSPACE,
+      };
+      expect(actions.updateWorkspace(options)).toEqual(expectedAction);
+    });
+  });
   describe('setWorkspaceFullscreen', () => {
     it('should return correct action type if set to true', () => {
       const receivedAction = actions.setWorkspaceFullscreen(true);
