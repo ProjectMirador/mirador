@@ -130,6 +130,12 @@ describe('workspace reducer', () => {
       exposeModeOn: true,
     });
   });
+  it('should handle SET_CONFIG', () => {
+    expect(workspaceReducer({}, {
+      config: { workspace: { new: 'stuff' } },
+      type: ActionTypes.SET_CONFIG,
+    })).toEqual({ new: 'stuff' });
+  });
   it('should handle IMPORT_MIRADOR_STATE', () => {
     expect(workspaceReducer({}, {
       state: { workspace: { new: 'stuff' } },
