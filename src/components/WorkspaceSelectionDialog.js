@@ -34,13 +34,13 @@ export class WorkspaceSelectionDialog extends Component {
   constructor(props) {
     super(props);
 
-    this.handleworkspaceTypeChange = this.handleworkspaceTypeChange.bind(this);
+    this.handleWorkspaceTypeChange = this.handleWorkspaceTypeChange.bind(this);
   }
 
   /**
    * Propagate workspace type selection into the global state
    */
-  handleworkspaceTypeChange(workspaceType) {
+  handleWorkspaceTypeChange(workspaceType) {
     const { handleClose, updateConfig } = this.props;
     updateConfig({
       workspace: {
@@ -79,7 +79,7 @@ export class WorkspaceSelectionDialog extends Component {
           >
             <MenuItem
               className={classes.menuItem}
-              onClick={() => this.handleworkspaceTypeChange('elastic')}
+              onClick={() => this.handleWorkspaceTypeChange('elastic')}
               selected={workspaceType === 'elastic'}
               value="elastic"
             >
@@ -101,7 +101,7 @@ export class WorkspaceSelectionDialog extends Component {
             </MenuItem>
             <MenuItem
               className={classes.menuItem}
-              onClick={() => this.handleworkspaceTypeChange('mosaic')}
+              onClick={() => this.handleWorkspaceTypeChange('mosaic')}
               selected={workspaceType === 'mosaic'}
               value="mosaic"
             >
