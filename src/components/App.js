@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Fullscreen from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
+import { LiveAnnouncer } from 'react-aria-live';
 import createI18nInstance from '../i18n';
 import WorkspaceArea from '../containers/WorkspaceArea';
 import AuthenticationSender from '../containers/AuthenticationSender';
@@ -60,11 +61,13 @@ export class App extends Component {
         onChange={setWorkspaceFullscreen}
       >
         <I18nextProvider i18n={this.i18n}>
-          <MuiThemeProvider theme={createMuiTheme(theme)}>
-            <AuthenticationSender />
-            <AccessTokenSender />
-            <WorkspaceArea />
-          </MuiThemeProvider>
+          <LiveAnnouncer>
+            <MuiThemeProvider theme={createMuiTheme(theme)}>
+              <AuthenticationSender />
+              <AccessTokenSender />
+              <WorkspaceArea />
+            </MuiThemeProvider>
+          </LiveAnnouncer>
         </I18nextProvider>
       </Fullscreen>
     );
