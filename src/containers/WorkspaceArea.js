@@ -4,6 +4,8 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { WorkspaceArea } from '../components/WorkspaceArea';
+import reactMosaicJss from '../styles/vendor/react-mosaic-jss';
+import reactPlaceholderJss from '../styles/vendor/react-placeholder-jss';
 
 /**
  * mapStateToProps - to hook up connect
@@ -118,6 +120,8 @@ const styles = theme => ({
     '.mosaic-window-toolbar': {
       display: [['none'], '!important'],
     },
+    ...reactMosaicJss['@global'],
+    ...reactPlaceholderJss['@global'],
   },
   background: {
     background: theme.palette.shades.light,

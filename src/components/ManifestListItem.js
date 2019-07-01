@@ -9,7 +9,6 @@ import { TextBlock, TextRow, RectShape } from 'react-placeholder/lib/placeholder
 import Img from 'react-image';
 import ManifestListItemError from '../containers/ManifestListItemError';
 import ns from '../config/css-ns';
-import 'react-placeholder/lib/reactPlaceholder.css';
 
 /**
  * Handling open button click
