@@ -50,7 +50,7 @@ const styles = theme => ({
     borderTop: `0.5px solid ${theme.palette.divider}`,
   },
   'companionWindow-left': {
-
+    borderRight: `0.5px solid ${theme.palette.divider}`,
   },
   'companionWindow-right': {
     borderLeft: `0.5px solid ${theme.palette.divider}`,
