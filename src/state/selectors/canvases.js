@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import { Utils } from 'manifesto.js';
 import CanvasGroupings from '../../lib/CanvasGroupings';
 import { getManifestoInstance } from './manifests';
-import { getCanvasIndex, getWindowViewType } from './windows';
+import { getWindow, getWindowViewType } from './windows';
 
 export const getCanvases = createSelector(
   [getManifestoInstance],

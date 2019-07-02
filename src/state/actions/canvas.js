@@ -1,6 +1,7 @@
 import ActionTypes from './action-types';
 import {
-  getSelectedCanvases,
+  getCanvasGrouping,
+  getCanvas,
   getSearchAnnotationsForCompanionWindow,
   getSearchForWindow,
 } from '../selectors';
@@ -12,11 +13,11 @@ import {
  * @param  {String} canvasId
  * @memberof ActionCreators
  */
-export function setCanvas(windowId, canvasIndex) {
+export function setCanvas(windowId, canvasId) {
   return ((dispatch, getState) => {
     const state = getState();
 
-    const canvasIds = getSelectedCanvases(state, { canvasIndex, windowId }).map(c => c.id);
+    const canvasIds = getCanvasGrouping(state, { canvasId, windowId }).map(c => c.id);
     const searches = getSearchForWindow(state, { windowId }) || {};
     const annotationBySearch = Object.keys(searches).reduce((accumulator, companionWindowId) => {
       const annotations = getSearchAnnotationsForCompanionWindow(state, {
@@ -33,7 +34,7 @@ export function setCanvas(windowId, canvasIndex) {
     const annotationIds = Object.values(annotationBySearch);
 
     const action = {
-      canvasIndex,
+      canvasId: canvasIds && canvasIds[0],
       searches: annotationBySearch,
       type: ActionTypes.SET_CANVAS,
       windowId,

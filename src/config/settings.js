@@ -233,13 +233,13 @@ export default {
     Example Window:
     {
       manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
-      canvasIndex: 2,
+      canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/page_2',
       thumbnailNavigationPosition: 'far-bottom',
     }
     // ../state/actions/window.js `defaultOptions`
     // ../lib/MiradorViewer.js `windowAction`
     */
-  ], 
+  ],
   thumbnailNavigation: {
     defaultPosition: 'off', // Which position for the thumbnail navigation to be be displayed. Other possible values are "far-bottom" or "far-right"
     height: 130, // height of entire ThumbnailNavigation area when position is "far-bottom"

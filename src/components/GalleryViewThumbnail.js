@@ -29,7 +29,7 @@ export class GalleryViewThumbnail extends Component {
     if (selected) {
       focusOnCanvas();
     } else {
-      setCanvas(canvas.index);
+      setCanvas(canvas.id);
     }
   }
 
@@ -59,7 +59,7 @@ export class GalleryViewThumbnail extends Component {
     if (enterOrSpace) {
       focusOnCanvas();
     } else {
-      setCanvas(canvas.index);
+      setCanvas(canvas.index, canvas.id);
     }
   }
 

@@ -81,7 +81,7 @@ describe('search actions', () => {
       };
       const expectedAction = {
         annotationId: 'abc123',
-        canvasIndex: 1,
+        canvasId: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/15/c2.json',
         companionWindowId,
         searchId,
         searchJson: json,
@@ -225,7 +225,7 @@ describe('search actions', () => {
       const annotationId = ['abc123'];
       const expectedAction = {
         annotationId,
-        canvasIndex: 1,
+        canvasId: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/15/c2.json',
         companionWindowId,
         type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION,
         windowId,

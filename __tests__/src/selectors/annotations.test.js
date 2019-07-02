@@ -54,14 +54,13 @@ describe('getAnnotationResourcesByMotivationForCanvas', () => {
       },
       windows: {
         abc123: {
-          canvasIndex: 1,
           manifestId: 'mid',
         },
       },
     };
 
     expect(
-      getAnnotationResourcesByMotivationForCanvas(state, { motivations: ['something', 'oa:commenting'], windowId: 'abc123' }).map(r => r.motivations),
+      getAnnotationResourcesByMotivationForCanvas(state, { canvasId: 'cid2', motivations: ['something', 'oa:commenting'], windowId: 'abc123' }).map(r => r.motivations),
     ).toEqual(expected);
   });
 });

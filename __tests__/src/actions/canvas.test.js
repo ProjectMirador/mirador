@@ -12,11 +12,11 @@ jest.mock('../../../src/state/selectors', () => ({
   getCanvasGrouping: (state, { canvasId }) => [{ id: canvasId }],
   getSearchAnnotationsForCompanionWindow: () => ({
     resources: [
-      { id: 'annoId', targetId: 'canvasId-5' },
+      { id: 'annoId', targetId: 'a' },
     ],
   }),
   getSearchForWindow: () => ({ cwid: { } }),
-  getSelectedCanvases: () => [{ id: 'canvasId-5' }],
+  getSelectedCanvases: () => [{ id: 'a' }],
 }));
 
 describe('canvas actions', () => {
@@ -29,7 +29,7 @@ describe('canvas actions', () => {
     it('sets to a defined canvas', () => {
       const id = 'abc123';
       const expectedAction = {
-        canvasIndex: 100,
+        canvasId: 'a',
         searches: {
           cwid: ['annoId'],
         },
@@ -37,7 +37,7 @@ describe('canvas actions', () => {
         type: ActionTypes.SET_CANVAS,
         windowId: id,
       };
-      store.dispatch(actions.setCanvas(id, 100));
+      store.dispatch(actions.setCanvas(id, 'a'));
       expect(store.getActions()[0]).toEqual(expectedAction);
     });
   });

@@ -19,7 +19,7 @@ describe('getSelectedCanvases', () => {
     },
     windows: {
       a: {
-        canvasIndex: 1,
+        canvasId: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
         id: 'a',
         manifestId: 'x',
         view: 'book',

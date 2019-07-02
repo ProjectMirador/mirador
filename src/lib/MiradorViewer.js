@@ -52,7 +52,6 @@ class MiradorViewer {
       const manifestAction = this.store.dispatch(actions.fetchManifest(manifestId));
       const windowAction = this.store.dispatch(actions.addWindow({
         // these are default values ...
-        canvasIndex: 0,
         id: windowId,
         layoutOrder,
         manifestId,

@@ -16,7 +16,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
   /** */
   setCanvas(e) {
     const { setCanvas } = this.props;
-    setCanvas(parseInt(e.currentTarget.dataset.canvasIndex, 10));
+    setCanvas(e.currentTarget.dataset.canvasId);
   }
 
   /**
@@ -53,6 +53,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
       >
         <div
           role="button"
+          data-canvas-id={currentGroupings[0].id}
           data-canvas-index={currentGroupings[0].index}
           onKeyUp={this.setCanvas}
           onClick={this.setCanvas}

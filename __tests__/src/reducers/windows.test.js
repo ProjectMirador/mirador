@@ -119,26 +119,26 @@ describe('windows reducer', () => {
   it('should handle SET_CANVAS', () => {
     expect(windowsReducer({
       abc123: {
-        canvasIndex: 1,
+        canvasId: 'http://example.com/canvas/1',
         id: 'abc123',
       },
       def456: {
-        canvasIndex: 1,
+        canvasId: 'http://example.com/canvas/1',
         id: 'def456',
       },
     }, {
-      canvasIndex: 5,
+      canvasId: 'http://example.com/canvas/5',
       selectedContentSearchAnnotation: 'xyz',
       type: ActionTypes.SET_CANVAS,
       windowId: 'abc123',
     })).toEqual({
       abc123: {
-        canvasIndex: 5,
+        canvasId: 'http://example.com/canvas/5',
         id: 'abc123',
         selectedContentSearchAnnotation: 'xyz',
       },
       def456: {
-        canvasIndex: 1,
+        canvasId: 'http://example.com/canvas/1',
         id: 'def456',
       },
     });
@@ -434,10 +434,10 @@ describe('windows reducer', () => {
     it('sets the highlightedAnnotation attribute on the given window', () => {
       const beforeState = { abc123: {} };
       const action = {
-        annotationId: ['aaa123'], canvasIndex: 5, type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION, windowId: 'abc123',
+        annotationId: ['aaa123'], canvasId: 'info:canvas/5', type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION, windowId: 'abc123',
       };
       const expectedState = {
-        abc123: { canvasIndex: 5, selectedContentSearchAnnotation: ['aaa123'] },
+        abc123: { canvasId: 'info:canvas/5', selectedContentSearchAnnotation: ['aaa123'] },
       };
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
@@ -455,21 +455,21 @@ describe('windows reducer', () => {
     it('set the canvas index and annotation id if provided', () => {
       const beforeState = { abc123: {} };
       const action = {
-        annotationId: 'aaa123', canvasIndex: 5, type: ActionTypes.RECEIVE_SEARCH, windowId: 'abc123',
+        annotationId: 'aaa123', canvasId: 'info:canvas/5', type: ActionTypes.RECEIVE_SEARCH, windowId: 'abc123',
       };
       const expectedState = {
-        abc123: { canvasIndex: 5, selectedContentSearchAnnotation: ['aaa123'] },
+        abc123: { canvasId: 'info:canvas/5', selectedContentSearchAnnotation: ['aaa123'] },
       };
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
     });
     it('passes through existing data otherwise', () => {
-      const beforeState = { abc123: { canvasIndex: 5, selectedContentSearchAnnotation: ['aaa123'] } };
+      const beforeState = { abc123: { canvasId: 'info:canvas/5', selectedContentSearchAnnotation: ['aaa123'] } };
       const action = {
         type: ActionTypes.RECEIVE_SEARCH, windowId: 'abc123',
       };
       const expectedState = {
-        abc123: { canvasIndex: 5, selectedContentSearchAnnotation: ['aaa123'] },
+        abc123: { canvasId: 'info:canvas/5', selectedContentSearchAnnotation: ['aaa123'] },
       };
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);

@@ -31,7 +31,7 @@ export class WindowSideBarAnnotationsPanel extends Component {
 
         {selectedCanvases.map((canvas, index) => (
           <CanvasAnnotations
-            canvasIndex={canvas.index}
+            canvasId={canvas.id}
             key={canvas.id}
             index={index}
             totalSize={selectedCanvases.length}

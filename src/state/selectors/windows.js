@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { getManifestTitle, getManifestStartCanvasIndex, getManifestViewingHint } from './manifests';
+import { getManifestTitle, getManifestViewingHint, getManifestoInstance } from './manifests';
 import { getWorkspaceType, getDefaultView } from './config';
 
 /**

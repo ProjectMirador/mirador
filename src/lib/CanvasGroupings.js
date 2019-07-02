@@ -10,6 +10,11 @@ export default class CanvasGroupings {
     this._groupings = null; // eslint-disable-line no-underscore-dangle
   }
 
+  /** */
+  getCanvasesById(canvasId) {
+    return this.groupings().find(group => group.some(c => c.id === canvasId));
+  }
+
   /**
    */
   getCanvases(index) {
