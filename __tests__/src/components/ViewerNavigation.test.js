@@ -7,7 +7,7 @@ function createWrapper(props) {
   return shallow(
     <ViewerNavigation
       canvases={[1, 2]}
-      setCanvas={() => {}}
+      setCanvasByIndex={() => {}}
       t={k => (k)}
       {...props}
     />,
@@ -16,12 +16,12 @@ function createWrapper(props) {
 
 describe('ViewerNavigation', () => {
   let wrapper;
-  let setCanvas;
+  let setCanvasByIndex;
   beforeEach(() => {
-    setCanvas = jest.fn();
+    setCanvasByIndex = jest.fn();
     wrapper = createWrapper({
       canvasIndex: 0,
-      setCanvas,
+      setCanvasByIndex,
     });
   });
   it('renders the component', () => {
@@ -34,17 +34,17 @@ describe('ViewerNavigation', () => {
     });
     it('setCanvas function is called after click', () => {
       wrapper.find('.mirador-next-canvas-button').simulate('click');
-      expect(setCanvas).toHaveBeenCalledWith(1);
+      expect(setCanvasByIndex).toHaveBeenCalledWith(1);
     });
     it('nextCanvas button is not disabled in bookview', () => {
       wrapper = createWrapper({
         canvases: [1, 2],
         canvasIndex: 0,
-        setCanvas,
+        setCanvasByIndex,
         view: 'book',
       });
       wrapper.find('.mirador-next-canvas-button').simulate('click');
-      expect(setCanvas).toHaveBeenCalledWith(1);
+      expect(setCanvasByIndex).toHaveBeenCalledWith(1);
     });
   });
   describe('when next canvases are not present', () => {
@@ -61,7 +61,7 @@ describe('ViewerNavigation', () => {
     });
     it('setCanvas function is not called after click, as its disabled', () => {
       wrapper.find('.mirador-previous-canvas-button').simulate('click');
-      expect(setCanvas).not.toHaveBeenCalled();
+      expect(setCanvasByIndex).not.toHaveBeenCalled();
     });
   });
   describe('bookView', () => {
@@ -69,21 +69,21 @@ describe('ViewerNavigation', () => {
       wrapper = createWrapper({
         canvases: [1, 2, 3],
         canvasIndex: 0,
-        setCanvas,
+        setCanvasByIndex,
         view: 'book',
       });
       wrapper.find('.mirador-next-canvas-button').simulate('click');
-      expect(setCanvas).toHaveBeenCalledWith(2);
+      expect(setCanvasByIndex).toHaveBeenCalledWith(2);
     });
     it('setCanvas function is called after click for previous', () => {
       wrapper = createWrapper({
         canvasIndex: 5,
-        setCanvas,
+        setCanvasByIndex,
         view: 'book',
       });
       wrapper.find('.mirador-previous-canvas-button').simulate('click');
       expect(wrapper.find('.mirador-previous-canvas-button').prop('aria-label')).toBe('previousCanvas');
-      expect(setCanvas).toHaveBeenCalledWith(3);
+      expect(setCanvasByIndex).toHaveBeenCalledWith(3);
     });
   });
 });

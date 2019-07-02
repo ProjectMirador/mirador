@@ -9,7 +9,7 @@ import {
  * setCanvas - action creator
  *
  * @param  {String} windowId
- * @param  {Number} canvasIndex
+ * @param  {String} canvasId
  * @memberof ActionCreators
  */
 export function setCanvas(windowId, canvasIndex) {
@@ -46,6 +46,23 @@ export function setCanvas(windowId, canvasIndex) {
     }
 
     dispatch(action);
+  });
+}
+
+/**
+ * setCanvasByIndex - action creator
+ *
+ * @param  {String} windowId
+ * @param  {Number} canvasIndex
+ * @memberof ActionCreators
+ */
+export function setCanvasByIndex(windowId, canvasIndex) {
+  return ((dispatch, getState) => {
+    const state = getState();
+
+    const canvas = getCanvas(state, { canvasIndex, windowId });
+
+    dispatch(setCanvas(windowId, canvas && canvas.id));
   });
 }
 

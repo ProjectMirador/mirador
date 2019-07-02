@@ -19,9 +19,9 @@ export class ViewerNavigation extends Component {
   /**
    */
   nextCanvas() {
-    const { canvasIndex, setCanvas } = this.props;
+    const { canvasIndex, setCanvasByIndex } = this.props;
     if (this.hasNextCanvas()) {
-      setCanvas(canvasIndex + this.canvasIncrementor());
+      setCanvasByIndex(canvasIndex + this.canvasIncrementor());
     }
   }
 
@@ -35,9 +35,9 @@ export class ViewerNavigation extends Component {
   /**
    */
   previousCanvas() {
-    const { canvasIndex, setCanvas } = this.props;
+    const { canvasIndex, setCanvasByIndex } = this.props;
     if (this.hasPreviousCanvas()) {
-      setCanvas(Math.max(0, canvasIndex - this.canvasIncrementor()));
+      setCanvasByIndex(Math.max(0, canvasIndex - this.canvasIncrementor()));
     }
   }
 
@@ -94,7 +94,7 @@ export class ViewerNavigation extends Component {
 ViewerNavigation.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   canvasIndex: PropTypes.number.isRequired,
-  setCanvas: PropTypes.func.isRequired,
+  setCanvasByIndex: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   view: PropTypes.string,
 };

@@ -20,7 +20,7 @@ const mapStateToProps = (state, { windowId }) => ({
  * @private
  */
 const mapDispatchToProps = (dispatch, { windowId }) => ({
-  setCanvas: (...args) => dispatch(actions.setCanvas(windowId, ...args)),
+  setCanvasByIndex: (...args) => dispatch(actions.setCanvasByIndex(windowId, ...args)),
 });
 
 const enhance = compose(
