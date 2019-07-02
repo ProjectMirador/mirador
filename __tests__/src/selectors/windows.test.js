@@ -82,34 +82,13 @@ describe('getWindowManifests', () => {
 });
 
 describe('getCanvasIndex', () => {
-  it('returns the index if provided', () => {
-    expect(getCanvasIndex({}, { canvasIndex: 25 })).toEqual(25);
-  });
-  it('returns the index, if provided, even if it is 0', () => {
-    const state = {
-      windows: {
-        a: { canvasIndex: 13 },
-      },
-    };
-
-    expect(getCanvasIndex(state, { canvasIndex: 0 })).toEqual(0);
-  });
-  it('returns the current canvasIndex for the window if provided', () => {
-    const state = {
-      windows: {
-        a: { canvasIndex: 13 },
-      },
-    };
-
-    expect(getCanvasIndex(state, { windowId: 'a' })).toEqual(13);
-  });
-  it('returns the default canvasIndex for the manifest', () => {
+  it('returns the current canvasIndex for the window', () => {
     const state = {
       manifests: {
-        x: { json: { ...manifestFixture019, start: { id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1' } } },
+        y: { json: { ...manifestFixture015 } },
       },
       windows: {
-        a: { manifestId: 'x' },
+        a: { canvasId: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/15/c2.json', manifestId: 'y' },
       },
     };
 

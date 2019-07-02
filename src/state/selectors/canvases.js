@@ -20,7 +20,7 @@ export const getCanvases = createSelector(
 export const getCanvas = createSelector(
   [
     getManifestoInstance,
-    getCanvasIndex,
+    (state, { canvasIndex }) => canvasIndex,
     (state, { canvasId }) => canvasId,
   ],
   (manifest, canvasIndex, canvasId) => {
