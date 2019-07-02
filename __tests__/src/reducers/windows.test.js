@@ -1,5 +1,6 @@
 import { windowsReducer } from '../../../src/state/reducers/windows';
 import ActionTypes from '../../../src/state/actions/action-types';
+import manifestJson from '../../fixtures/version-2/019.json';
 
 describe('windows reducer', () => {
   it('should handle ADD_WINDOW', () => {
@@ -27,6 +28,28 @@ describe('windows reducer', () => {
       def456: {
         id: 'def456',
       },
+    });
+  });
+  it('should handle RECEIVE_MANIFEST', () => {
+    const state = {
+      window: {
+        canvasIndex: 1,
+        manifestId: 'a',
+      },
+      window2: {
+      },
+    };
+    expect(windowsReducer(state, {
+      manifestId: 'a',
+      manifestJson,
+      type: ActionTypes.RECEIVE_MANIFEST,
+    })).toEqual({
+      window: {
+        canvasId: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
+        canvasIndex: undefined,
+        manifestId: 'a',
+      },
+      window2: {},
     });
   });
   it('should handle MAXIMIZE_WINDOW', () => {
