@@ -32,7 +32,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
   /** */
   render() {
     const {
-      index, style, data, classes, canvasIndex,
+      index, style, data, classes, currentCanvasId,
     } = this.props;
     const {
       canvasGroupings, position, height,
@@ -66,7 +66,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
             classes.canvas,
             {
               [classes.currentCanvas]: currentGroupings
-                .map(canvas => canvas.index).includes(canvasIndex),
+                .map(canvas => canvas.id).includes(currentCanvasId),
             },
           )}
         >
@@ -84,8 +84,8 @@ export class ThumbnailCanvasGrouping extends PureComponent {
 }
 
 ThumbnailCanvasGrouping.propTypes = {
-  canvasIndex: PropTypes.number.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  currentCanvasId: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   index: PropTypes.number.isRequired,
   setCanvas: PropTypes.func.isRequired,

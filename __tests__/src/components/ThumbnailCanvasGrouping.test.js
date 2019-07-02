@@ -11,7 +11,7 @@ function createWrapper(props) {
   return shallow(
     <ThumbnailCanvasGrouping
       index={1}
-      canvasIndex={1}
+      currentCanvasId="https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1"
       classes={{}}
       style={{
         height: 90,
