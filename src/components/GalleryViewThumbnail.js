@@ -93,7 +93,10 @@ export class GalleryViewThumbnail extends Component {
           isValid={manifestoCanvas.hasValidDimensions}
           maxHeight={config.height}
           aspectRatio={manifestoCanvas.aspectRatio}
-          style={{ margin: '0 auto' }}
+          style={{
+            margin: '0 auto',
+            maxWidth: `${Math.ceil(config.height * manifestoCanvas.aspectRatio)}px`,
+          }}
         />
         <Typography variant="caption" className={classes.galleryViewCaption}>
           {manifestoCanvas.getLabel()}
