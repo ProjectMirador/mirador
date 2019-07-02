@@ -42,8 +42,8 @@ class WorkspaceElasticWindow extends React.Component {
         }}
         onResize={(e, direction, ref, delta, position) => {
           updateElasticWindowLayout(layout.windowId, {
-            height: ref.style.height - companionWindowDimensions.height,
-            width: ref.style.width - companionWindowDimensions.width,
+            height: Number.parseInt(ref.style.height, 10) - companionWindowDimensions.height,
+            width: Number.parseInt(ref.style.width, 10) - companionWindowDimensions.width,
             x: position.x - offsetX,
             y: position.y - offsetY,
           });

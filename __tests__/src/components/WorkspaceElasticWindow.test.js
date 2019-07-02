@@ -88,8 +88,8 @@ describe('WorkspaceElasticWindow', () => {
         .props()
         .onResize('myevent', 'direction', {
           style: {
-            height: 200,
-            width: 400,
+            height: '200px',
+            width: '400px',
           },
         }, {}, { x: 0, y: 0 });
       expect(mockOnResize).toHaveBeenCalledWith('1', {
