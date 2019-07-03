@@ -27,11 +27,13 @@ describe('Mirador Invalid API Response Handler Test', () => {
     await expect(page).toMatchElement(
       'p', { text: 'http://localhost:5000/api/broken' },
     );
-
     await expect(page).toClick('button', { text: 'Dismiss' });
+
+    await page.waitFor(() => !document.querySelector('li[data-manifestid="http://localhost:5000/api/broken"]'));
+
     await expect(page).not.toMatchElement(
       'p',
-      { text: 'The resource http://localhost:5000/api/broken cannot be added.' },
+      { text: 'The resource cannot be added:', timeout: 2000 },
     );
   }, 10000);
 });
