@@ -23,6 +23,7 @@ const mapStateToProps = (state, { windowId }) => (
 const styles = theme => ({
   galleryContainer: {
     alignItems: 'flex-start',
+    display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
     overflowX: 'hidden',
