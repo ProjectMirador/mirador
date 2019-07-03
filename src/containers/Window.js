@@ -51,7 +51,7 @@ const styles = theme => ({
   },
   companionAreaRight: {
     display: 'flex',
-    flex: '0',
+    flex: '0 1 auto',
     minHeight: 0,
   },
   maximized: {},
