@@ -8,7 +8,7 @@ import { WindowSideBarCanvasPanel } from '../components/WindowSideBarCanvasPanel
 import {
   getCompanionWindow,
   getManifestCanvases,
-  getSelectedCanvases,
+  getVisibleCanvases,
 } from '../state/selectors';
 
 /**
@@ -20,7 +20,7 @@ const mapStateToProps = (state, { id, windowId }) => {
   return {
     canvases,
     config,
-    selectedCanvases: getSelectedCanvases(state, { windowId }),
+    selectedCanvases: getVisibleCanvases(state, { windowId }),
     variant: getCompanionWindow(state, { companionWindowId: id, windowId }).variant,
   };
 };

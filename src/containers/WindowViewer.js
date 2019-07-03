@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { WindowViewer } from '../components/WindowViewer';
-import { getSelectedCanvases, getCurrentCanvas, getWindowViewType } from '../state/selectors';
+import { getVisibleCanvases, getCurrentCanvas, getWindowViewType } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -12,7 +12,7 @@ import { getSelectedCanvases, getCurrentCanvas, getWindowViewType } from '../sta
  */
 const mapStateToProps = (state, { windowId }) => (
   {
-    currentCanvases: getSelectedCanvases(state, { windowId }) || [],
+    currentCanvases: getVisibleCanvases(state, { windowId }) || [],
     currentCanvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
     infoResponses: state.infoResponses,
     view: getWindowViewType(state, { windowId }),

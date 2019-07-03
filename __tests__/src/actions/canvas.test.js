@@ -16,7 +16,7 @@ jest.mock('../../../src/state/selectors', () => ({
     ],
   }),
   getSearchForWindow: () => ({ cwid: { } }),
-  getSelectedCanvases: () => [{ id: 'a' }],
+  getVisibleCanvases: () => [{ id: 'a' }],
 }));
 
 describe('canvas actions', () => {

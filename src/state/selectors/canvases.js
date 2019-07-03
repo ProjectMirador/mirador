@@ -46,7 +46,7 @@ export const getCurrentCanvas = createSelector(
 );
 
 /** */
-export function getSelectedCanvases(state, args) {
+export function getVisibleCanvases(state, args) {
   const canvas = getCurrentCanvas(state, { ...args });
   if (!canvas) return undefined;
 
