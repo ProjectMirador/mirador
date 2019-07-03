@@ -24,15 +24,15 @@ function getIdAndContentOfResources(resources) {
 }
 
 /** For connect */
-const mapStateToProps = (state, { canvasIndex, windowId }) => ({
+const mapStateToProps = (state, { canvasId, windowId }) => ({
   allAnnotationsAreHighlighted: getWindow(state, { windowId }).displayAllAnnotations,
   annotations: getIdAndContentOfResources(
     getAnnotationResourcesByMotivationForCanvas(
-      state, { canvasIndex, motivations: ['oa:commenting', 'sc:painting'], windowId },
+      state, { canvasId, motivations: ['oa:commenting', 'sc:painting'], windowId },
     ),
   ),
   label: getCanvasLabel(state, {
-    canvasIndex,
+    canvasId,
     windowId,
   }),
   selectedAnnotationIds: getSelectedAnnotationIds(state, { windowId }),

@@ -151,9 +151,9 @@ export class ThumbnailNavigation extends Component {
   /**
    */
   nextCanvas() {
-    const { canvasIndex, setCanvas } = this.props;
+    const { canvasIndex, setCanvasByIndex } = this.props;
     if (this.hasNextCanvas()) {
-      setCanvas(canvasIndex + this.canvasIncrementor());
+      setCanvasByIndex(canvasIndex + this.canvasIncrementor());
     }
   }
 
@@ -167,9 +167,9 @@ export class ThumbnailNavigation extends Component {
   /**
    */
   previousCanvas() {
-    const { canvasIndex, setCanvas } = this.props;
+    const { canvasIndex, setCanvasByIndex } = this.props;
     if (this.hasPreviousCanvas()) {
-      setCanvas(Math.max(0, canvasIndex - this.canvasIncrementor()));
+      setCanvasByIndex(Math.max(0, canvasIndex - this.canvasIncrementor()));
     }
   }
 
@@ -256,7 +256,7 @@ ThumbnailNavigation.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   position: PropTypes.string.isRequired,
-  setCanvas: PropTypes.func.isRequired,
+  setCanvasByIndex: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   view: PropTypes.string,
   windowId: PropTypes.string.isRequired,

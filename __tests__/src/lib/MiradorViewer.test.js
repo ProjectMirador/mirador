@@ -36,7 +36,7 @@ describe('MiradorViewer', () => {
         },
         windows: [
           {
-            canvasIndex: 2,
+            canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
             loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
             thumbnailNavigationPosition: 'far-bottom',
           },
@@ -50,8 +50,8 @@ describe('MiradorViewer', () => {
       const { windows, manifests } = instance.store.getState();
       const windowIds = Object.keys(windows);
       expect(Object.keys(windowIds).length).toBe(2);
-      expect(windows[windowIds[0]].canvasIndex).toBe(2);
-      expect(windows[windowIds[1]].canvasIndex).toBe(0);
+      expect(windows[windowIds[0]].canvasId).toBe('https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892');
+      expect(windows[windowIds[1]].canvasId).toBe(undefined);
       expect(windows[windowIds[0]].layoutOrder).toBe(0);
       expect(windows[windowIds[1]].layoutOrder).toBe(1);
       expect(windows[windowIds[0]].thumbnailNavigationPosition).toBe('far-bottom');

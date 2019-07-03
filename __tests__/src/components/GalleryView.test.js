@@ -31,6 +31,5 @@ describe('GalleryView', () => {
   });
   it('renders gallery items for all canvases', () => {
     expect(wrapper.find(GalleryViewThumbnail).length).toBe(3);
-    expect(wrapper.find(GalleryViewThumbnail).at(0).prop('selected')).toBe(true);
   });
 });

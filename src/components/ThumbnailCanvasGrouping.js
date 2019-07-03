@@ -16,7 +16,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
   /** */
   setCanvas(e) {
     const { setCanvas } = this.props;
-    setCanvas(parseInt(e.currentTarget.dataset.canvasIndex, 10));
+    setCanvas(e.currentTarget.dataset.canvasId);
   }
 
   /**
@@ -32,7 +32,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
   /** */
   render() {
     const {
-      index, style, data, classes, canvasIndex,
+      index, style, data, classes, currentCanvasId,
     } = this.props;
     const {
       canvasGroupings, position, height,
@@ -53,6 +53,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
       >
         <div
           role="button"
+          data-canvas-id={currentGroupings[0].id}
           data-canvas-index={currentGroupings[0].index}
           onKeyUp={this.setCanvas}
           onClick={this.setCanvas}
@@ -66,7 +67,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
             classes.canvas,
             {
               [classes.currentCanvas]: currentGroupings
-                .map(canvas => canvas.index).includes(canvasIndex),
+                .map(canvas => canvas.id).includes(currentCanvasId),
             },
           )}
         >
@@ -84,8 +85,8 @@ export class ThumbnailCanvasGrouping extends PureComponent {
 }
 
 ThumbnailCanvasGrouping.propTypes = {
-  canvasIndex: PropTypes.number.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  currentCanvasId: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   index: PropTypes.number.isRequired,
   setCanvas: PropTypes.func.isRequired,

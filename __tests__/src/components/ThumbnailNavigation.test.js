@@ -28,10 +28,10 @@ function createWrapper(props, fixture = manifestJson) {
 describe('ThumbnailNavigation', () => {
   let wrapper;
   let rightWrapper;
-  let setCanvas;
+  let setCanvasByIndex;
   beforeEach(() => {
-    setCanvas = jest.fn();
-    wrapper = createWrapper({ setCanvas });
+    setCanvasByIndex = jest.fn();
+    wrapper = createWrapper({ setCanvasByIndex });
   });
   it('renders the component', () => {
     expect(wrapper.find('.mirador-thumb-navigation').length).toBe(1);
@@ -65,7 +65,7 @@ describe('ThumbnailNavigation', () => {
     beforeEach(() => {
       rightWrapper = createWrapper({
         position: 'far-right',
-        setCanvas,
+        setCanvasByIndex,
       });
     });
     it('style', () => {
@@ -101,26 +101,26 @@ describe('ThumbnailNavigation', () => {
     });
   });
   describe('keyboard navigation', () => {
-    const rightSetCanvas = jest.fn();
+    const rightSetCanvasByIndex = jest.fn();
     beforeEach(() => {
       rightWrapper = createWrapper({
         canvasIndex: 1,
         position: 'far-right',
-        setCanvas: rightSetCanvas,
+        setCanvasByIndex: rightSetCanvasByIndex,
       });
     });
     describe('handleKeyUp', () => {
       it('next', () => {
         wrapper.instance().handleKeyUp({ key: 'ArrowRight' });
-        expect(setCanvas).toHaveBeenCalledWith(2);
+        expect(setCanvasByIndex).toHaveBeenCalledWith(2);
         rightWrapper.instance().handleKeyUp({ key: 'ArrowDown' });
-        expect(rightSetCanvas).toHaveBeenCalledWith(2);
+        expect(rightSetCanvasByIndex).toHaveBeenCalledWith(2);
       });
       it('previous', () => {
         wrapper.instance().handleKeyUp({ key: 'ArrowLeft' });
-        expect(setCanvas).toHaveBeenCalledWith(0);
+        expect(setCanvasByIndex).toHaveBeenCalledWith(0);
         rightWrapper.instance().handleKeyUp({ key: 'ArrowUp' });
-        expect(rightSetCanvas).toHaveBeenCalledWith(0);
+        expect(rightSetCanvasByIndex).toHaveBeenCalledWith(0);
       });
     });
   });

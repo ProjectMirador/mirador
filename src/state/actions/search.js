@@ -56,7 +56,7 @@ export function receiveSearch(windowId, companionWindowId, searchId, searchJson)
 
     dispatch({
       annotationId: annotation && annotation.id,
-      canvasIndex: canvas && canvas.index,
+      canvasId: canvas && canvas.id,
       companionWindowId,
       searchId,
       searchJson,
@@ -132,7 +132,7 @@ export function selectContentSearchAnnotation(windowId, companionWindowId, annot
 
     dispatch({
       annotationId: annotationIds,
-      canvasIndex: canvas && canvas.index,
+      canvasId: canvas && canvas.id,
       companionWindowId,
       type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION,
       windowId,

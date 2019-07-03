@@ -154,7 +154,7 @@ export class WindowSideBarCanvasPanel extends Component {
           <List>
             {
               canvasesIdAndLabel.map((canvas, canvasIndex) => {
-                const onClick = () => { setCanvas(windowId, canvasIndex); }; // eslint-disable-line require-jsdoc, max-len
+                const onClick = () => { setCanvas(windowId, canvas.id); }; // eslint-disable-line require-jsdoc, max-len
 
                 return (
                   <ScrollTo

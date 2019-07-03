@@ -19,7 +19,7 @@ describe('getSelectedCanvases', () => {
     },
     windows: {
       a: {
-        canvasIndex: 1,
+        canvasId: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
         id: 'a',
         manifestId: 'x',
         view: 'book',
@@ -76,14 +76,6 @@ describe('getCanvas', () => {
       manifestId: 'a',
     });
     expect(received.id).toBe('https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json');
-  });
-
-  it('returns the default canvas if an id or index is not provided', () => {
-    const state = { manifests: { a: { json: manifestFixture001 } } };
-    const received = getCanvas(state, {
-      manifestId: 'a',
-    });
-    expect(received.index).toBe(0);
   });
 });
 

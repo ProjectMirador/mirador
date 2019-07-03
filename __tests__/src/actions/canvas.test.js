@@ -8,14 +8,15 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 jest.mock('../../../src/state/selectors', () => ({
-  getCanvas: (state, { canvasIndex }) => ({ id: `canvasId-${canvasIndex}` }),
+  getCanvas: (state, { canvasId, canvasIndex }) => ({ id: canvasId || `canvasIndex-${canvasIndex}` }),
+  getCanvasGrouping: (state, { canvasId }) => [{ id: canvasId }],
   getSearchAnnotationsForCompanionWindow: () => ({
     resources: [
-      { id: 'annoId', targetId: 'canvasId-5' },
+      { id: 'annoId', targetId: 'a' },
     ],
   }),
   getSearchForWindow: () => ({ cwid: { } }),
-  getSelectedCanvases: () => [{ id: 'canvasId-5' }],
+  getSelectedCanvases: () => [{ id: 'a' }],
 }));
 
 describe('canvas actions', () => {
@@ -28,7 +29,7 @@ describe('canvas actions', () => {
     it('sets to a defined canvas', () => {
       const id = 'abc123';
       const expectedAction = {
-        canvasIndex: 100,
+        canvasId: 'a',
         searches: {
           cwid: ['annoId'],
         },
@@ -36,7 +37,25 @@ describe('canvas actions', () => {
         type: ActionTypes.SET_CANVAS,
         windowId: id,
       };
-      store.dispatch(actions.setCanvas(id, 100));
+      store.dispatch(actions.setCanvas(id, 'a'));
+      expect(store.getActions()[0]).toEqual(expectedAction);
+    });
+  });
+  describe('setCanvasByIndex', () => {
+    let store = null;
+    beforeEach(() => {
+      store = mockStore({});
+    });
+
+    it('sets to a defined canvas', () => {
+      const id = 'abc123';
+      const expectedAction = {
+        canvasId: 'canvasIndex-1',
+        searches: {},
+        type: ActionTypes.SET_CANVAS,
+        windowId: id,
+      };
+      store.dispatch(actions.setCanvasByIndex(id, 1));
       expect(store.getActions()[0]).toEqual(expectedAction);
     });
   });

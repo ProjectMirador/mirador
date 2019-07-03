@@ -2,6 +2,13 @@ import { createSelector } from 'reselect';
 import manifesto, { LanguageMap } from 'manifesto.js';
 import ManifestoCanvas from '../../lib/ManifestoCanvas';
 
+/** */
+function createManifestoInstance(json, locale) {
+  if (!json) return undefined;
+  return manifesto.create(json, locale ? { locale } : undefined);
+}
+
+
 /** Get the relevant manifest information */
 export function getManifest(state, { manifestId, windowId }) {
   return state.manifests && state.manifests[
@@ -17,8 +24,7 @@ export const getManifestoInstance = createSelector(
     getLocale,
   ],
   (manifest, locale) => manifest
-    && manifest.json
-    && manifesto.create(manifest.json, locale ? { locale } : undefined),
+    && createManifestoInstance(manifest.json, locale),
 );
 
 export const getManifestLocale = createSelector(
@@ -352,34 +358,37 @@ export const getMetadataLocales = createSelector(
 );
 
 /**
- * Returns the starting canvas index specified in the manifest
- * @param {object} state
- * @param {object} props
- * @param {string} props.manifestId
- * @param {string} props.windowId
- * @return {Number}
+ * Returns the starting canvas specified in the manifest
+ * @param {object} manifest manifesto instance
+ * @param {number} canvasIndexFromState
+ * @return {Canvas}
  */
-export const getManifestStartCanvasIndex = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest) return 0;
+export function getManifestStartCanvas(json, canvasIndexFromState) {
+  if (!json) return {};
 
-    let canvasId;
+  const manifest = createManifestoInstance(json);
 
-    // IIIF v2
-    canvasId = manifest.getSequences()[0].getProperty('startCanvas');
+  if (!manifest) return {};
 
-    if (!canvasId) {
-      // IIIF v3
-      const start = manifest.getProperty('start')
-      || manifest.getSequences()[0].getProperty('start');
+  if (canvasIndexFromState !== undefined) {
+    return manifest.getSequences()[0].getCanvasByIndex(canvasIndexFromState);
+  }
 
-      canvasId = start && (start.id || start.source);
-    }
+  let canvasId;
 
-    return ((canvasId && manifest.getSequences()[0].getCanvasById(canvasId)) || {}).index;
-  },
-);
+  // IIIF v2
+  canvasId = manifest.getSequences()[0].getProperty('startCanvas');
+
+  if (!canvasId) {
+    // IIIF v3
+    const start = manifest.getProperty('start')
+    || manifest.getSequences()[0].getProperty('start');
+
+    canvasId = start && (start.id || start.source);
+  }
+
+  return ((canvasId && manifest.getSequences()[0].getCanvasById(canvasId)) || {});
+}
 
 /**
  * Returns the viewing hint for the first sequence in the manifest or the manifest

@@ -42,7 +42,7 @@ describe('WindowViewer', () => {
       it('isFetching is false', () => {
         wrapper = createWrapper(
           {
-            canvasIndex: 1,
+            currentCanvasId: 1,
             infoResponses: {
               'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005': {
                 isFetching: false,
@@ -59,7 +59,7 @@ describe('WindowViewer', () => {
       it('infoResponse is undefined', () => {
         wrapper = createWrapper(
           {
-            canvasIndex: 1,
+            currentCanvasId: 1,
             infoResponses: {
               foo: {
                 isFetching: false,
@@ -76,7 +76,7 @@ describe('WindowViewer', () => {
       it('error is not present', () => {
         wrapper = createWrapper(
           {
-            canvasIndex: 1,
+            currentCanvasId: 1,
             infoResponses: {
               'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005': {
                 isFetching: false,
@@ -104,8 +104,8 @@ describe('WindowViewer', () => {
 
       wrapper = createWrapper(
         {
-          canvasIndex: 0,
           currentCanvases,
+          currentCanvasId: 0,
           fetchInfoResponse: mockFnCanvas0,
           view: 'single',
         },
@@ -115,8 +115,8 @@ describe('WindowViewer', () => {
       currentCanvases = [canvases[2]];
       wrapper = createWrapper(
         {
-          canvasIndex: 2,
           currentCanvases,
+          currentCanvasId: 2,
           fetchInfoResponse: mockFnCanvas2,
           view: 'single',
         },
@@ -142,14 +142,14 @@ describe('WindowViewer', () => {
       currentCanvases = [canvases[2]];
       wrapper = createWrapper(
         {
-          canvasIndex: 2,
           currentCanvases,
+          currentCanvasId: 2,
           fetchInfoResponse: mockFn,
           view: 'single',
         },
       );
 
-      wrapper.setProps({ canvasIndex: 3, currentCanvases: [canvases[3]], view: 'single' });
+      wrapper.setProps({ currentCanvases: [canvases[3]], currentCanvasId: 3, view: 'single' });
 
       expect(mockFn).toHaveBeenCalledTimes(0);
     });

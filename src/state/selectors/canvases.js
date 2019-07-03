@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import { Utils } from 'manifesto.js';
 import CanvasGroupings from '../../lib/CanvasGroupings';
 import { getManifestoInstance } from './manifests';
-import { getCanvasIndex, getWindowViewType } from './windows';
+import { getWindow, getWindowViewType } from './windows';
 
 export const getCanvases = createSelector(
   [getManifestoInstance],
@@ -20,17 +20,38 @@ export const getCanvases = createSelector(
 export const getCanvas = createSelector(
   [
     getManifestoInstance,
-    getCanvasIndex,
+    (state, { canvasIndex }) => canvasIndex,
     (state, { canvasId }) => canvasId,
   ],
   (manifest, canvasIndex, canvasId) => {
     if (!manifest) return undefined;
 
     if (canvasId !== undefined) return manifest.getSequences()[0].getCanvasById(canvasId);
-
     return manifest.getSequences()[0].getCanvasByIndex(canvasIndex);
   },
 );
+
+export const getCurrentCanvas = createSelector(
+  [
+    getManifestoInstance,
+    getWindow,
+  ],
+  (manifest, window) => {
+    if (!manifest || !window) return undefined;
+
+    if (!window.canvasId) return manifest.getSequences()[0].getCanvasByIndex(0);
+
+    return manifest.getSequences()[0].getCanvasById(window.canvasId);
+  },
+);
+
+/** */
+export function getSelectedCanvases(state, args) {
+  const canvas = getCurrentCanvas(state, { ...args });
+  if (!canvas) return undefined;
+
+  return getCanvasGrouping(state, { ...args, canvasId: canvas.id });
+}
 
 /**
 * Return the current canvases selected in a window
@@ -41,17 +62,17 @@ export const getCanvas = createSelector(
 * @param {string} props.windowId
 * @return {Array}
 */
-export const getSelectedCanvases = createSelector(
+export const getCanvasGrouping = createSelector(
   [
     getCanvases,
-    getCanvasIndex,
+    (state, { canvasId }) => canvasId,
     getWindowViewType,
   ],
-  (canvases, canvasIndex, view) => canvases
+  (canvases, canvasId, view) => (canvases
       && new CanvasGroupings(
         canvases,
         view,
-      ).getCanvases(canvasIndex),
+      ).getCanvasesById(canvasId)) || [],
 );
 
 /**

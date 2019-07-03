@@ -7,6 +7,7 @@ import { GalleryViewThumbnail } from '../components/GalleryViewThumbnail';
 import {
   getSearchAnnotationsForWindow,
   getSelectedContentSearchAnnotations,
+  getCurrentCanvas,
 } from '../state/selectors';
 
 /**
@@ -66,6 +67,7 @@ const styles = theme => ({
 
 /** */
 const mapStateToProps = (state, { canvas, windowId }) => {
+  const currentCanvas = getCurrentCanvas(state, { windowId });
   const selectedAnnotations = getSelectedContentSearchAnnotations(state, { windowId });
   const annotationResources = flatten(selectedAnnotations.map(a => a.resources));
   const selectedAnnotationCanvases = annotationResources.map(a => a.targetId);
@@ -79,6 +81,7 @@ const mapStateToProps = (state, { canvas, windowId }) => {
       .filter(a => a.targetId === canvas.id).length,
     annotationSelected: selectedAnnotationCanvases.includes(canvas.id),
     config: state.config.galleryView,
+    selected: currentCanvas && currentCanvas.id === canvas.id,
   };
 };
 

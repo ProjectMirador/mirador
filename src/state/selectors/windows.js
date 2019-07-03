@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { getManifestTitle, getManifestStartCanvasIndex, getManifestViewingHint } from './manifests';
+import { getManifestTitle, getManifestViewingHint, getManifestoInstance } from './manifests';
 import { getWorkspaceType, getDefaultView } from './config';
 
 /**
@@ -58,16 +58,12 @@ export function getWindow(state, { windowId }) {
 export const getCanvasIndex = createSelector(
   [
     getWindow,
-    (state, { canvasIndex }) => canvasIndex,
-    getManifestStartCanvasIndex,
+    getManifestoInstance,
   ],
-  (window, providedCanvasIndex, defaultIndex) => {
-    if (providedCanvasIndex !== undefined) return providedCanvasIndex;
-
-    if (window && (window.canvasIndex !== undefined)) return window.canvasIndex;
-
-    return defaultIndex || 0;
-  },
+  (window, manifest) => (
+    (manifest && window && window.canvasId
+      && manifest.getSequences()[0].getCanvasById(window.canvasId))
+    || {}).index || 0,
 );
 
 /** Return type of view in a certain window.

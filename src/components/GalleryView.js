@@ -12,7 +12,7 @@ export class GalleryView extends Component {
    */
   render() {
     const {
-      canvases, classes, selectedCanvasIndex, windowId,
+      canvases, classes, windowId,
     } = this.props;
     return (
       <Paper
@@ -26,7 +26,6 @@ export class GalleryView extends Component {
           canvases.map(canvas => (
             <GalleryViewThumbnail
               key={canvas.id}
-              selected={selectedCanvasIndex === canvas.index}
               windowId={windowId}
               canvas={canvas}
             />
@@ -40,7 +39,6 @@ export class GalleryView extends Component {
 GalleryView.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.objectOf(PropTypes.string),
-  selectedCanvasIndex: PropTypes.number.isRequired,
   windowId: PropTypes.string.isRequired,
 };
 

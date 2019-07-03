@@ -42,7 +42,7 @@ describe('GalleryView', () => {
     const setCanvas = jest.fn();
     wrapper = createWrapper({ setCanvas });
     wrapper.find('div[role="button"]').first().simulate('click');
-    expect(setCanvas).toHaveBeenCalledWith(0);
+    expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
     expect(wrapper.find(Typography).length).toBe(1);
   });
 

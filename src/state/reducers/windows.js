@@ -1,5 +1,6 @@
 import { remove, updateIn, merge } from 'immutable';
 import ActionTypes from '../actions/action-types';
+import { getManifestStartCanvas } from '../selectors';
 
 /**
  * windowsReducer
@@ -9,6 +10,21 @@ export const windowsReducer = (state = {}, action) => {
     case ActionTypes.ADD_WINDOW:
       return { ...state, [action.window.id]: action.window };
 
+    case ActionTypes.RECEIVE_MANIFEST:
+      return Object.keys(state).reduce((object, key) => {
+        if (state[key].manifestId === action.manifestId) {
+          object[key] = { // eslint-disable-line no-param-reassign
+            ...state[key],
+            canvasId: state[key].canvasId
+              || getManifestStartCanvas(action.manifestJson, state[key].canvasIndex).id,
+            canvasIndex: undefined,
+          };
+        } else {
+          object[key] = state[key]; // eslint-disable-line no-param-reassign
+        }
+
+        return object;
+      }, {});
     case ActionTypes.MAXIMIZE_WINDOW:
       return {
         ...state,
@@ -84,7 +100,7 @@ export const windowsReducer = (state = {}, action) => {
       };
     case ActionTypes.SET_CANVAS:
       return updateIn(state, [action.windowId], orig => merge(orig, {
-        canvasIndex: action.canvasIndex,
+        canvasId: action.canvasId,
         selectedContentSearchAnnotation: action.selectedContentSearchAnnotation,
       }));
     case ActionTypes.ADD_COMPANION_WINDOW:
@@ -136,7 +152,7 @@ export const windowsReducer = (state = {}, action) => {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
-          canvasIndex: action.canvasIndex,
+          canvasId: action.canvasId,
           selectedContentSearchAnnotation: action.annotationId,
         },
       };
@@ -196,7 +212,7 @@ export const windowsReducer = (state = {}, action) => {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
-          canvasIndex: action.canvasIndex || state[action.windowId].canvasIndex,
+          canvasId: action.canvasId || state[action.windowId].canvasId,
           selectedContentSearchAnnotation: (action.annotationId && [action.annotationId])
             || state[action.windowId].selectedContentSearchAnnotation,
         },

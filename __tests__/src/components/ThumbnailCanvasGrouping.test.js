@@ -11,7 +11,7 @@ function createWrapper(props) {
   return shallow(
     <ThumbnailCanvasGrouping
       index={1}
-      canvasIndex={1}
+      currentCanvasId="https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1"
       classes={{}}
       style={{
         height: 90,
@@ -47,8 +47,8 @@ describe('ThumbnailCanvasGrouping', () => {
   });
   it('when clicked, updates the current canvas', () => {
     wrapper = createWrapper({ data, index: 0, setCanvas });
-    wrapper.find('.mirador-thumbnail-nav-canvas-0').simulate('click', { currentTarget: { dataset: { canvasIndex: '0' } } });
-    expect(setCanvas).toHaveBeenCalledWith(0);
+    wrapper.find('.mirador-thumbnail-nav-canvas-0').simulate('click', { currentTarget: { dataset: { canvasId: 'info:0' } } });
+    expect(setCanvas).toHaveBeenCalledWith('info:0');
   });
   describe('attributes based off far-bottom position', () => {
     it('in button div', () => {
