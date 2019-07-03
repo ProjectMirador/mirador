@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import {
-  getSelectedCanvases,
+  getVisibleCanvases,
   getAnnotationResourcesByMotivation,
 } from '../state/selectors';
 import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnotationsPanel';
@@ -16,7 +16,7 @@ import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnota
  */
 const mapStateToProps = (state, { windowId }) => ({
   annotationCount: getAnnotationResourcesByMotivation(state, { motivations: ['oa:commenting', 'sc:painting'], windowId }).length,
-  selectedCanvases: getSelectedCanvases(state, { windowId }),
+  selectedCanvases: getVisibleCanvases(state, { windowId }),
 });
 
 

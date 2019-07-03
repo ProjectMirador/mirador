@@ -1,7 +1,7 @@
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import {
-  getSelectedCanvases,
+  getVisibleCanvases,
   getCanvas,
   getCanvasLabel,
   selectCanvasAuthService,
@@ -9,7 +9,7 @@ import {
   selectInfoResponse,
 } from '../../../src/state/selectors/canvases';
 
-describe('getSelectedCanvases', () => {
+describe('getVisibleCanvases', () => {
   const state = {
     manifests: {
       x: {
@@ -43,7 +43,7 @@ describe('getSelectedCanvases', () => {
   };
 
   it('should return canvas groupings based on the canvas index stored window state', () => {
-    const selectedCanvases = getSelectedCanvases(state, { windowId: 'a' });
+    const selectedCanvases = getVisibleCanvases(state, { windowId: 'a' });
 
     expect(selectedCanvases.length).toEqual(2);
     expect(selectedCanvases.map(canvas => canvas.id)).toEqual([
@@ -53,7 +53,7 @@ describe('getSelectedCanvases', () => {
   });
 
   it('should return undefined when there is no manifestation to get a canvas from', () => {
-    const selectedCanvas = getSelectedCanvases(noManifestationState, { windowId: 'a' });
+    const selectedCanvas = getVisibleCanvases(noManifestationState, { windowId: 'a' });
 
     expect(selectedCanvas).toBeUndefined();
   });

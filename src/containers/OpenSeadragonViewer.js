@@ -10,7 +10,7 @@ import {
   getSelectedAnnotationsOnCanvases,
   getHighlightedAnnotationsOnCanvases,
   getCanvasLabel,
-  getSelectedCanvases,
+  getVisibleCanvases,
   getViewer,
   getSearchAnnotationsForWindow,
   getSelectedContentSearchAnnotations,
@@ -23,7 +23,7 @@ import {
  * @private
  */
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
-  canvasWorld: new CanvasWorld(getSelectedCanvases(state, { windowId })),
+  canvasWorld: new CanvasWorld(getVisibleCanvases(state, { windowId })),
   highlightedAnnotations: getHighlightedAnnotationsOnCanvases(state, { windowId }),
   label: getCanvasLabel(state, {
     canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,

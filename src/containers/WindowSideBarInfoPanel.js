@@ -7,7 +7,7 @@ import * as actions from '../state/actions';
 import {
   getManifestLocale,
   getMetadataLocales,
-  getSelectedCanvases,
+  getVisibleCanvases,
 } from '../state/selectors';
 import { WindowSideBarInfoPanel } from '../components/WindowSideBarInfoPanel';
 
@@ -19,7 +19,7 @@ import { WindowSideBarInfoPanel } from '../components/WindowSideBarInfoPanel';
 const mapStateToProps = (state, { id, windowId }) => ({
   availableLocales: getMetadataLocales(state, { companionWindowId: id, windowId }),
   locale: state.companionWindows[id].locale || getManifestLocale(state, { windowId }),
-  selectedCanvases: getSelectedCanvases(state, { windowId }),
+  selectedCanvases: getVisibleCanvases(state, { windowId }),
 });
 
 /** */

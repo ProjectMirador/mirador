@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import filter from 'lodash/filter';
 import flatten from 'lodash/flatten';
 import Annotation from '../../lib/Annotation';
-import { getCanvas, getSelectedCanvases } from './canvases';
+import { getCanvas, getVisibleCanvases } from './canvases';
 
 const getAnnotationsOnCanvas = createSelector(
   [
@@ -30,7 +30,7 @@ const getPresentAnnotationsCanvas = createSelector(
 
 const getAnnotationsOnSelectedCanvases = createSelector(
   [
-    getSelectedCanvases,
+    getVisibleCanvases,
     state => state.annotations,
   ],
   (canvases, annotations) => {
@@ -101,7 +101,7 @@ export const getAnnotationResourcesByMotivation = createSelector(
 export const getSelectedAnnotationIds = createSelector(
   [
     (state, { windowId }) => state.windows[windowId].selectedAnnotations,
-    getSelectedCanvases,
+    getVisibleCanvases,
   ],
   (selectedAnnotations, canvases) => (
     (canvases && flatten(
