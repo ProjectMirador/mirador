@@ -50,7 +50,7 @@ export class SearchHit extends Component {
     const truncatedHit = new TruncatedHit(hit);
 
     announcer([
-      `${index + 1} ${t('of')} ${total}`,
+      t('pagination', { current: index + 1, total }),
       canvasLabel,
       annotationLabel,
       truncatedHit.before,
