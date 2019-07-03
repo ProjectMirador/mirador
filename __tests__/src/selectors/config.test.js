@@ -90,13 +90,6 @@ describe('getThemeIds', () => {
   });
 });
 
-describe('getWorkspaceType', () => {
-  it('returns the workspace type', () => {
-    const state = { config: { workspace: { type: 'elastic' } } };
-    expect(getWorkspaceType(state)).toEqual('elastic');
-  });
-});
-
 describe('getContainerId', () => {
   it('returns the container id', () => {
     const state = { config: { id: 'mirador' } };

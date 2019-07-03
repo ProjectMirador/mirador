@@ -246,8 +246,15 @@ export default {
     width: 100, // width of one canvas (doubled for book view) in ThumbnailNavigation area when position is "far-right"
   },
   workspace: {
+    exposeModeOn: false, // unused?
+    height: 5000, // height of the elastic mode's virtual canvas
     showZoomControls: false, // Configure if zoom controls should be displayed by default
     type: 'mosaic', // Which workspace type to load by default. Other possible values are "elastic"
+    viewportPosition: { // center coordinates for the elastic mode workspace
+      x: 0,
+      y: 0,
+    },
+    width: 5000, // width of the elastic mode's virtual canvas
   },
   workspaceControlPanel: {
     enabled: true, // Configure if the control panel should be rendered.  Useful if you want to lock the viewer down to only the configured manifests

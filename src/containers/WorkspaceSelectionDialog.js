@@ -13,7 +13,7 @@ import { getWorkspaceType } from '../state/selectors';
  * @private
  */
 const mapDispatchToProps = {
-  updateConfig: actions.updateConfig,
+  updateWorkspace: actions.updateWorkspace,
 };
 
 /**

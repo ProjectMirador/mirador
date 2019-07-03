@@ -7,7 +7,7 @@ import { WorkspaceSelectionDialog } from '../../../src/components/WorkspaceSelec
 describe('WorkspaceSettings', () => {
   let wrapper;
   let handleClose;
-  let updateConfig;
+  let updateWorkspace;
 
   /**
    * create wrapper
@@ -15,14 +15,14 @@ describe('WorkspaceSettings', () => {
    */
   function createWrapper(props) {
     handleClose = jest.fn();
-    updateConfig = jest.fn();
+    updateWorkspace = jest.fn();
 
     return shallow(
       <WorkspaceSelectionDialog
         classes={{ list: {} }}
         open
         handleClose={handleClose}
-        updateConfig={updateConfig}
+        updateWorkspace={updateWorkspace}
         workspaceType="elastic"
         {...props}
       />,
@@ -38,9 +38,9 @@ describe('WorkspaceSettings', () => {
     wrapper = createWrapper();
 
     wrapper.find(MenuItem).at(0).simulate('click');
-    expect(updateConfig).toHaveBeenLastCalledWith({ workspace: { type: 'elastic' } });
+    expect(updateWorkspace).toHaveBeenLastCalledWith({ type: 'elastic' });
     wrapper.find(MenuItem).at(1).simulate('click');
-    expect(updateConfig).toHaveBeenLastCalledWith({ workspace: { type: 'mosaic' } });
+    expect(updateWorkspace).toHaveBeenLastCalledWith({ type: 'mosaic' });
     expect(handleClose).toHaveBeenCalledTimes(2);
   });
 

@@ -23,20 +23,18 @@ function contains(container, containee) {
 export const workspaceReducer = (
   state = { // we'll need to abstract this more, methinks.
     draggingEnabled: true,
-    exposeModeOn: false,
-    height: 5000,
     id: uuid(),
-    viewportPosition: {
-      x: 0,
-      y: 0,
-    },
-    width: 5000,
   },
   action,
 ) => {
   let newWorkspaceDimensions;
   let viewportPosition;
   switch (action.type) {
+    case ActionTypes.UPDATE_WORKSPACE:
+      return {
+        ...state,
+        ...action.config,
+      };
     case ActionTypes.FOCUS_WINDOW:
       return {
         ...state,
@@ -92,6 +90,8 @@ export const workspaceReducer = (
       };
     case ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE:
       return { ...state, exposeModeOn: !state.exposeModeOn };
+    case ActionTypes.SET_CONFIG:
+      return { ...state, ...action.config.workspace };
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return action.state.workspace;
     case ActionTypes.TOGGLE_DRAGGING:

@@ -2,6 +2,14 @@ import { workspaceReducer } from '../../../src/state/reducers/workspace';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('workspace reducer', () => {
+  it('should handle UPDATE_WORKSPACE', () => {
+    expect(workspaceReducer({}, {
+      config: { type: 'mosaic' },
+      type: ActionTypes.UPDATE_WORKSPACE,
+    })).toEqual({
+      type: 'mosaic',
+    });
+  });
   it('should handle FOCUS_WINDOW without position coordinates', () => {
     expect(workspaceReducer([], {
       type: ActionTypes.FOCUS_WINDOW,
@@ -129,6 +137,12 @@ describe('workspace reducer', () => {
     })).toEqual({
       exposeModeOn: true,
     });
+  });
+  it('should handle SET_CONFIG', () => {
+    expect(workspaceReducer({}, {
+      config: { workspace: { new: 'stuff' } },
+      type: ActionTypes.SET_CONFIG,
+    })).toEqual({ new: 'stuff' });
   });
   it('should handle IMPORT_MIRADOR_STATE', () => {
     expect(workspaceReducer({}, {
