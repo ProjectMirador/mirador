@@ -19,7 +19,7 @@ export class ViewerInfo extends Component {
     return (
       <div className={ns('osd-info')}>
         <Typography display="inline" variant="caption" className={ns('canvas-count')}>
-          {`${canvasIndex + 1} ${t('of')} ${canvasCount}`}
+          { t('pagination', { current: canvasIndex + 1, total: canvasCount }) }
         </Typography>
         <Typography display="inline" variant="caption" className={ns('canvas-label')}>
           {canvasLabel && ` • ${canvasLabel}`}

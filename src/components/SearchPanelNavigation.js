@@ -57,7 +57,7 @@ export class SearchPanelNavigation extends Component {
             >
               <ChevronLeftIcon />
             </MiradorMenuButton>
-              {t('searchPageSeparator', { current: currentHitIndex + 1, total: searchHits.length })}
+              {t('pagination', { current: currentHitIndex + 1, total: searchHits.length })}
             <MiradorMenuButton
               aria-label={t('searchNextResult')}
               disabled={!this.hasNextResult(currentHitIndex)}

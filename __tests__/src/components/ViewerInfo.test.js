@@ -24,7 +24,7 @@ describe('ViewerNavigation', () => {
 
     expect(wrapper.find(Typography).length).toBe(2);
     expect(wrapper.find(Typography).at(0)
-      .matchesElement(<Typography>3 of 8</Typography>)).toBe(true);
+      .matchesElement(<Typography>pagination</Typography>)).toBe(true);
     expect(wrapper.find(Typography).at(1)
       .matchesElement(<Typography> • testLabel</Typography>)).toBe(true);
   });

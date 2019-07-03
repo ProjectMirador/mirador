@@ -25,7 +25,7 @@ describe('SearchPanelNavigation', () => {
         selectContentSearchAnnotation,
         selectedContentSearchAnnotation: ['2'],
       });
-      expect(wrapper.find('WithStyles(ForwardRef(Typography))').text()).toEqual('searchPageSeparator');
+      expect(wrapper.find('WithStyles(ForwardRef(Typography))').text()).toEqual('pagination');
       expect(wrapper.find('Connect(WithPlugins(MiradorMenuButton))[disabled=false]').length).toEqual(2);
       wrapper.find('Connect(WithPlugins(MiradorMenuButton))[disabled=false]').first().props().onClick();
       expect(selectContentSearchAnnotation).toHaveBeenCalledWith(['1']);
