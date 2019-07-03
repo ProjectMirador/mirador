@@ -107,6 +107,7 @@ const styles = theme => ({
         paddingTop: 0,
       },
     },
+    ...reactMosaicJss['@global'],
     '.mosaic-tile': {
       boxShadow: [
         [0, 1, 3, 0, 'rgba(0, 0, 0, .2)'],
@@ -120,7 +121,6 @@ const styles = theme => ({
     '.mosaic-window-toolbar': {
       display: [['none'], '!important'],
     },
-    ...reactMosaicJss['@global'],
     ...reactPlaceholderJss['@global'],
   },
   background: {

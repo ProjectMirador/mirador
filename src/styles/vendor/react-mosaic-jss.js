@@ -1,5 +1,6 @@
 // jss convert node_modules/react-mosaic-component/react-mosaic-component.css -f js > src/styles/vendor/react-mosaic-jss.js
 // Then unused "Blueprint" theme styles removed
+// Then remove failed converted fallbacks (seems to be a problem from less -> css -> jss)
 
 export default {
   '@global': {
@@ -138,15 +139,6 @@ export default {
     '.mosaic-window, .mosaic-preview': {
       position: 'relative',
       display: 'flex',
-      fallbacks: [
-        {
-          W: 'vertical',
-        },
-        {
-          display: '-webkit-box',
-        },
-      ],
-      W: 'normal',
       flexDirection: 'column',
       overflow: 'hidden',
       boxShadow: '0 0 1px rgba(0, 0, 0, 0.2)',
@@ -154,15 +146,6 @@ export default {
     '.mosaic-window .mosaic-window-toolbar, .mosaic-preview .mosaic-window-toolbar': {
       zIndex: '4',
       display: 'flex',
-      fallbacks: [
-        {
-          W: 'justify',
-        },
-        {
-          display: '-webkit-box',
-        },
-      ],
-      W: 'center',
       justifyContent: 'space-between',
       alignItems: 'center',
       flexShrink: '0',
@@ -175,7 +158,6 @@ export default {
     },
     '.mosaic-window .mosaic-window-title, .mosaic-preview .mosaic-window-title': {
       paddingLeft: 15,
-      W: '1',
       flex: '1',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
@@ -257,21 +239,6 @@ export default {
     },
     '.mosaic-window .mosaic-preview .mosaic-window-body, .mosaic-preview .mosaic-preview .mosaic-window-body': {
       display: 'flex',
-      fallbacks: [
-        {
-          W: 'center',
-        },
-        {
-          W: 'normal',
-        },
-        {
-          W: 'vertical',
-        },
-        {
-          display: '-webkit-box',
-        },
-      ],
-      W: 'center',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
