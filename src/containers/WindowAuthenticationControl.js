@@ -5,7 +5,12 @@ import { withStyles } from '@material-ui/core';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { selectAuthStatus, selectInfoResponse, selectCanvasAuthService } from '../state/selectors';
+import {
+  getCurrentCanvas,
+  selectAuthStatus,
+  selectInfoResponse,
+  selectCanvasAuthService,
+} from '../state/selectors';
 import { WindowAuthenticationControl } from '../components/WindowAuthenticationControl';
 
 
@@ -15,8 +20,9 @@ import { WindowAuthenticationControl } from '../components/WindowAuthenticationC
  * @private
  */
 const mapStateToProps = (state, { windowId }) => {
-  const service = selectCanvasAuthService(state, { windowId });
-  const infoResponse = selectInfoResponse(state, { windowId }) || {};
+  const canvasId = (getCurrentCanvas(state, { windowId }) || {}).id;
+  const service = selectCanvasAuthService(state, { canvasId, windowId });
+  const infoResponse = selectInfoResponse(state, { canvasId, windowId }) || {};
 
   return {
     confirmLabel: service && service.getConfirmLabel(),
