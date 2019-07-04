@@ -46,7 +46,7 @@
     "node-fetch": "^2.6.0",
     "node-sass": "^4.12.0",
     "normalize-url": "^4.2.0",
-    "openseadragon": "^2.4.0",
+    "openseadragon": "^2.4.1",
     "prop-types": "^15.6.2",
     "react-aria-live": "^2.0.5",
     "react-copy-to-clipboard": "^5.0.1",
