@@ -6,6 +6,7 @@ import { OpenSeadragonViewer } from '../components/OpenSeadragonViewer';
 import * as actions from '../state/actions';
 import CanvasWorld from '../lib/CanvasWorld';
 import {
+  getCurrentCanvas,
   getSelectedAnnotationsOnCanvases,
   getHighlightedAnnotationsOnCanvases,
   getCanvasLabel,
@@ -24,7 +25,10 @@ import {
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   canvasWorld: new CanvasWorld(getSelectedCanvases(state, { windowId })),
   highlightedAnnotations: getHighlightedAnnotationsOnCanvases(state, { windowId }),
-  label: getCanvasLabel(state, { windowId }),
+  label: getCanvasLabel(state, {
+    canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
+    windowId,
+  }),
   palette: getTheme(state).palette,
   searchAnnotations: getSearchAnnotationsForWindow(
     state,

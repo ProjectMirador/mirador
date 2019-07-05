@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withPlugins } from '../extend/withPlugins';
 import {
+  getCurrentCanvas,
   getCanvasLabel,
 } from '../state/selectors';
 import { WindowCanvasNavigationControls } from '../components/WindowCanvasNavigationControls';
@@ -12,6 +13,7 @@ import { WindowCanvasNavigationControls } from '../components/WindowCanvasNaviga
 /** */
 const mapStateToProps = (state, { windowId }) => ({
   canvasLabel: getCanvasLabel(state, {
+    canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
     windowId,
   }),
   visible: state.workspace.focusedWindowId === windowId,
