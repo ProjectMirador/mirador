@@ -42,7 +42,7 @@
     "immutable": "^4.0.0-rc.12",
     "intersection-observer": "^0.7.0",
     "lodash": "^4.17.11",
-    "manifesto.js": "^3.0.9",
+    "manifesto.js": "^3.0.11",
     "node-fetch": "^2.6.0",
     "node-sass": "^4.12.0",
     "normalize-url": "^4.2.0",
