@@ -29,7 +29,7 @@
   ],
   "repository": "https://github.com/ProjectMirador/mirador",
   "dependencies": {
-    "@material-ui/core": "^4.1.3",
+    "@material-ui/core": "^4.2.0",
     "@material-ui/icons": "^4.2.1",
     "@researchgate/react-intersection-observer": "^1.0.0",
     "classnames": "^2.2.6",
