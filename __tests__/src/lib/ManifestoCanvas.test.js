@@ -85,13 +85,13 @@ describe('ManifestoCanvas', () => {
   });
   describe('imageInformationUri', () => {
     it('correctly returns an image information url for a v2 Image API', () => {
-      expect(instance.imageInformationUri).toEqual('https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/info.json');
+      expect(instance.imageInformationUri()).toEqual('https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/info.json');
     });
     it('correctly returns an image information url for a v1 Image API', () => {
       const imagev1Instance = new ManifestoCanvas(
         Utils.parseManifest(imagev1Fixture).getSequences()[0].getCanvases()[0],
       );
-      expect(imagev1Instance.imageInformationUri).toEqual('https://images.britishart.yale.edu/iiif/b38081da-8991-4464-a71e-d9891226a35f/info.json');
+      expect(imagev1Instance.imageInformationUri()).toEqual('https://images.britishart.yale.edu/iiif/b38081da-8991-4464-a71e-d9891226a35f/info.json');
     });
 
     it('is undefined if a canvas is empty (e.g. has no images)', () => {
@@ -99,7 +99,7 @@ describe('ManifestoCanvas', () => {
         Utils.parseManifest(emptyCanvasFixture).getSequences()[0].getCanvases()[3],
       );
 
-      expect(emptyCanvasInstance.imageInformationUri).toBeUndefined();
+      expect(emptyCanvasInstance.imageInformationUri()).toBeUndefined();
     });
   });
   describe('aspectRatio', () => {

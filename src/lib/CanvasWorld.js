@@ -1,3 +1,6 @@
+import normalizeUrl from 'normalize-url';
+import ManifestoCanvas from './ManifestoCanvas';
+
 /**
  * CanvasWorld
  */
@@ -20,8 +23,9 @@ export default class CanvasWorld {
    * canvasToWorldCoordinates - calculates the canvas coordinates respective to
    * the world.
    */
-  canvasToWorldCoordinates(i) {
+  canvasToWorldCoordinates(tileSource) {
     const wholeBounds = this.worldBounds();
+    const i = this.indexOfImageResource(tileSource['@id']);
     const canvas = this.canvases[i];
     const aspectRatio = canvas.getWidth() / canvas.getHeight();
     const scaledWidth = Math.floor(wholeBounds[3] * aspectRatio);
@@ -48,6 +52,14 @@ export default class CanvasWorld {
   /** */
   indexOfTarget(canvasTarget) {
     return this.canvases.map(canvas => canvas.id).indexOf(canvasTarget);
+  }
+
+  /** @private */
+  indexOfImageResource(imageId) {
+    return this.canvases.findIndex(c => new ManifestoCanvas(c).imageIds.some(id => (
+      normalizeUrl(id, { stripAuthentication: false })
+        === normalizeUrl(imageId, { stripAuthentication: false })
+    )));
   }
 
   /**

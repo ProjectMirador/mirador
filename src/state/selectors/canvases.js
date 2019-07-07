@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import flatten from 'lodash/flatten';
 import CanvasGroupings from '../../lib/CanvasGroupings';
+import ManifestoCanvas from '../../lib/ManifestoCanvas';
 import { getManifestoInstance } from './manifests';
 import { getWindow, getWindowViewType } from './windows';
 
@@ -200,11 +201,16 @@ export const selectInfoResponse = createSelector(
     getCanvas,
     selectInfoResponses,
   ],
-  (canvas, infoResponses) => canvas && canvas.getImages()[0]
-    && canvas.getImages()[0].getResource().getServices()[0]
-    && infoResponses[canvas.getImages()[0].getResource().getServices()[0].id]
-    && !infoResponses[canvas.getImages()[0].getResource().getServices()[0].id].isFetching
-    && infoResponses[canvas.getImages()[0].getResource().getServices()[0].id],
+  (canvas, infoResponses) => {
+    if (!canvas) return undefined;
+    const manifestoCanvas = new ManifestoCanvas(canvas);
+    const image = manifestoCanvas.imageResources[0];
+    const iiifServiceId = image && image.getServices()[0].id;
+
+    return iiifServiceId && infoResponses[iiifServiceId]
+    && !infoResponses[iiifServiceId].isFetching
+    && infoResponses[iiifServiceId];
+  },
 );
 
 const authServiceProfiles = {

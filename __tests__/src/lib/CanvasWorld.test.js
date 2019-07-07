@@ -19,9 +19,9 @@ describe('CanvasWorld', () => {
   });
   describe('canvasToWorldCoordinates', () => {
     it('converts canvas coordinates to world offset by location', () => {
-      expect(new CanvasWorld([canvases[1]]).canvasToWorldCoordinates(0))
+      expect(new CanvasWorld([canvases[1]]).canvasToWorldCoordinates({ '@id': 'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005' }))
         .toEqual([0, 0, 6501, 4421]);
-      expect(new CanvasWorld(canvasSubset).canvasToWorldCoordinates(1))
+      expect(new CanvasWorld(canvasSubset).canvasToWorldCoordinates({ '@id': 'https://stacks.stanford.edu/image/iiif/rz176rt6531%2FPC0170_s3_Tree_Calendar_20081101_152516_0410' }))
         .toEqual([6305, 0, 2848, 4288]);
     });
     it('supports RTL orientations', () => {
