@@ -70,9 +70,7 @@ function getAccessToken({ accessTokens }, iiifService) {
 export function fetchInfoResponse({ imageId, imageResource }) {
   return ((dispatch, getState) => {
     const state = getState();
-    const infoId = imageId || `${
-      imageResource.getServices()[0].id.replace(/\/$/, '')
-    }`;
+    const infoId = (imageId || imageResource.getServices()[0].id);
     const headers = {};
 
     const infoResponse = infoId
@@ -92,7 +90,7 @@ export function fetchInfoResponse({ imageId, imageResource }) {
 
     dispatch(requestInfoResponse(infoId));
 
-    return fetch(`${infoId}/info.json`, { headers })
+    return fetch(`${infoId.replace(/\/$/, '')}/info.json`, { headers })
       .then(response => response.json().then(json => ({ json, ok: response.ok })))
       .then(({ json, ok }) => dispatch(receiveInfoResponse(infoId, json, ok)))
       .catch(error => dispatch(receiveInfoResponseFailure(infoId, error)));
