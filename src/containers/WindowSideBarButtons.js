@@ -4,7 +4,10 @@ import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
+import ManifestoCanvas from '../lib/ManifestoCanvas';
 import {
+  getCanvases,
+  getVisibleCanvases,
   getCompanionWindowsForPosition,
   getAnnotationResourcesByMotivation,
   getManifestSearchService,
@@ -25,6 +28,11 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   ),
 });
 
+/** */
+function hasLayers(canvases) {
+  return canvases && canvases.some(c => new ManifestoCanvas(c).imageIds.length > 1);
+}
+
 
 /**
  * mapStateToProps - used to hook up connect to state
@@ -36,6 +44,8 @@ const mapStateToProps = (state, { windowId }) => ({
     state,
     { motivations: state.config.annotations.filteredMotivations, windowId },
   ).length > 0,
+  hasAnyLayers: hasLayers(getCanvases(state, { windowId })),
+  hasCurrentLayers: hasLayers(getVisibleCanvases(state, { windowId })),
   hasSearchResults: getWindow(state, { windowId }).suggestedSearches || getSearchQuery(state, {
     companionWindowId: (getCompanionWindowsForPosition(state, { position: 'left', windowId })[0] || {}).id,
     windowId,

@@ -6,6 +6,7 @@ import WindowSideBarAnnotationsPanel from '../../../src/containers/WindowSideBar
 import ThumbnailNavigation from '../../../src/containers/ThumbnailNavigation';
 import AttributionPanel from '../../../src/containers/AttributionPanel';
 import SearchPanel from '../../../src/containers/SearchPanel';
+import LayersPanel from '../../../src/containers/LayersPanel';
 import { CompanionWindowFactory } from '../../../src/components/CompanionWindowFactory';
 
 /** create wrapper */
@@ -80,6 +81,16 @@ describe('CompanionWindowFactory', () => {
       });
 
       expect(wrapper.find(SearchPanel).length).toBe(1);
+    });
+  });
+
+  describe('for the layers window', () => {
+    it('renders the appropriate arg component', () => {
+      wrapper = createWrapper({
+        content: 'layers',
+      });
+
+      expect(wrapper.find(LayersPanel).length).toBe(1);
     });
   });
 });
