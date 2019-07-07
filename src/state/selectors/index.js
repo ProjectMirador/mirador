@@ -7,3 +7,4 @@ export * from './windows';
 export * from './workspace';
 export * from './searches';
 export * from './ranges';
+export * from './layers';

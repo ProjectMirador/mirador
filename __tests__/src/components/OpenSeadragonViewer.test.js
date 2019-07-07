@@ -170,6 +170,39 @@ describe('OpenSeadragonViewer', () => {
       expect(wrapper.instance().addTileSource({})).toEqual(expect.any(Promise));
     });
   });
+
+  describe('refreshTileProperties', () => {
+    it('updates the index and opacity of the OSD tiles from the canvas world', () => {
+      const setOpacity = jest.fn();
+      const setItemIndex = jest.fn();
+      const canvasWorld = {
+        layerIndexOfImageResource: i => 1 - i,
+        layerOpacityOfImageResource: i => 0.5,
+      };
+      wrapper.setProps({ canvasWorld });
+      wrapper.instance().loaded = true;
+      wrapper.instance().viewer = {
+        world: {
+          getItemAt: i => ({ setOpacity, source: i }),
+          getItemCount: () => 2,
+          setItemIndex,
+        },
+      };
+
+      wrapper.instance().refreshTileProperties();
+
+      expect(setOpacity).toHaveBeenCalledTimes(2);
+      expect(setOpacity.mock.calls[0]).toEqual([0.5]);
+      expect(setOpacity.mock.calls[1]).toEqual([0.5]);
+
+      expect(setItemIndex).toHaveBeenCalledTimes(2);
+      expect(setItemIndex.mock.calls[0][0].source).toEqual(0);
+      expect(setItemIndex.mock.calls[0][1]).toEqual(1);
+      expect(setItemIndex.mock.calls[1][0].source).toEqual(1);
+      expect(setItemIndex.mock.calls[1][1]).toEqual(0);
+    });
+  });
+
   describe('fitBounds', () => {
     it('calls OSD viewport.fitBounds with provided x, y, w, h', () => {
       wrapper.instance().viewer = {

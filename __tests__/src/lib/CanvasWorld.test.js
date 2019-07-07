@@ -25,7 +25,7 @@ describe('CanvasWorld', () => {
         .toEqual([6305, 0, 2848, 4288]);
     });
     it('supports RTL orientations', () => {
-      expect(new CanvasWorld(canvasSubset, 'right-to-left').canvasToWorldCoordinates(1))
+      expect(new CanvasWorld(canvasSubset, {}, 'right-to-left').canvasToWorldCoordinates(1))
         .toEqual([0, 0, 2848, 4288]);
     });
   });
@@ -44,6 +44,79 @@ describe('CanvasWorld', () => {
       expect(
         new CanvasWorld(canvasSubset).indexOfTarget('https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1'),
       ).toEqual(1);
+    });
+  });
+
+  describe('layerOpacityOfImageResource', () => {
+    const tileSource1 = { '@id': 'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005' };
+    it('returns 0 if the layer is currently hidden', () => {
+      const layers = {
+        'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1': {
+          'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005/full/full/0/default.jpg': {
+            visibility: false,
+          },
+        },
+      };
+
+      expect(
+        new CanvasWorld(canvases, layers).layerOpacityOfImageResource(tileSource1),
+      ).toEqual(0);
+    });
+
+    it('returns 1 if there is no opacity configuration for the layer', () => {
+      expect(
+        new CanvasWorld(canvases).layerOpacityOfImageResource(tileSource1),
+      ).toEqual(1);
+
+      expect(
+        new CanvasWorld(canvases, {}).layerOpacityOfImageResource(tileSource1),
+      ).toEqual(1);
+
+      const layers = {
+        'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1': {
+        },
+      };
+
+      expect(
+        new CanvasWorld(canvases, layers).layerOpacityOfImageResource(tileSource1),
+      ).toEqual(1);
+    });
+
+    it('returns the configured opacity value for the layer', () => {
+      const layers = {
+        'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1': {
+          'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005/full/full/0/default.jpg': {
+            opacity: 0.5,
+          },
+        },
+      };
+
+      expect(
+        new CanvasWorld(canvases, layers).layerOpacityOfImageResource(tileSource1),
+      ).toEqual(0.5);
+    });
+  });
+
+  describe('layerIndexOfImageResource', () => {
+    const tileSource0 = { '@id': 'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44' };
+    it('returns undefined by default', () => {
+      expect(
+        new CanvasWorld(canvases).layerIndexOfImageResource(tileSource0),
+      ).toEqual(undefined);
+    });
+
+    it('returns the inverse of the configured index', () => {
+      const layers = {
+        'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json': {
+          'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/full/0/default.jpg': {
+            index: 0,
+          },
+        },
+      };
+
+      expect(
+        new CanvasWorld(canvases, layers).layerIndexOfImageResource(tileSource0),
+      ).toEqual(0);
     });
   });
 });

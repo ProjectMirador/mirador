@@ -9,8 +9,9 @@ export default class CanvasWorld {
    * @param {Array} canvases - Array of Manifesto:Canvas objects to create a
    * world from.
    */
-  constructor(canvases, viewingDirection = 'left-to-right') {
+  constructor(canvases, layers, viewingDirection = 'left-to-right') {
     this.canvases = canvases;
+    this.layers = layers;
     this.viewingDirection = viewingDirection;
   }
 
@@ -60,6 +61,52 @@ export default class CanvasWorld {
       normalizeUrl(id, { stripAuthentication: false })
         === normalizeUrl(imageId, { stripAuthentication: false })
     )));
+  }
+
+  /** @private */
+  getLayerMetadata(tileSource) {
+    if (!this.layers) return undefined;
+
+    const imageId = tileSource['@id'];
+    const canvases = this.canvases.map(c => new ManifestoCanvas(c));
+    const manifestoCanvas = canvases.find(c => c.imageIds.some(id => (
+      normalizeUrl(id, { stripAuthentication: false })
+        === normalizeUrl(imageId, { stripAuthentication: false }))));
+    if (!manifestoCanvas) return undefined;
+
+    const resourceIndex = manifestoCanvas.imageResources
+      .findIndex(r => (
+        normalizeUrl(r.getServices()[0].id, { stripAuthentication: false })
+        === normalizeUrl(imageId, { stripAuthentication: false })));
+    const resource = manifestoCanvas.imageResources[resourceIndex];
+
+    const layer = this.layers[manifestoCanvas.canvas.id];
+    const imageResourceLayer = layer && layer[resource.id];
+
+    return {
+      index: resourceIndex,
+      opacity: 1,
+      total: manifestoCanvas.imageResources.length,
+      visibility: true,
+      ...imageResourceLayer,
+    };
+  }
+
+  /** */
+  layerOpacityOfImageResource(tileSource) {
+    const layer = this.getLayerMetadata(tileSource);
+    if (!layer) return 1;
+    if (!layer.visibility) return 0;
+
+    return layer.opacity;
+  }
+
+  /** */
+  layerIndexOfImageResource(tileSource) {
+    const layer = this.getLayerMetadata(tileSource);
+    if (!layer) return undefined;
+
+    return layer.total - layer.index - 1;
   }
 
   /**
