@@ -64,6 +64,8 @@ const ActionTypes = {
   REMOVE_SEARCH: 'mirador/REMOVE_SEARCH',
 
   SELECT_CONTENT_SEARCH_ANNOTATION: 'mirador/SELECT_CONTENT_SEARCH_ANNOTATION',
+
+  UPDATE_LAYERS: 'mirador/UPDATE_LAYERS',
 };
 
 export default ActionTypes;
