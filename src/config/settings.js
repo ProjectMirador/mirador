@@ -225,7 +225,7 @@ export default {
       attribution: true,
       canvas: true,
       annotations: true,
-      search: false,
+      search: true,
     }
   },
   windows: [ // Array of windows to be open when mirador initializes (each object should at least provide a manifestId key with the value of the IIIF presentation manifest to load)
