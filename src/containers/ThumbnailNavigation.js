@@ -6,7 +6,10 @@ import { withPlugins } from '../extend/withPlugins';
 import CanvasGroupings from '../lib/CanvasGroupings';
 import * as actions from '../state/actions';
 import { ThumbnailNavigation } from '../components/ThumbnailNavigation';
-import { getManifestCanvases, getCanvasIndex, getWindowViewType } from '../state/selectors';
+import {
+  getNextCanvasGrouping, getPreviousCanvasGrouping,
+  getManifestCanvases, getCanvasIndex, getWindowViewType,
+} from '../state/selectors';
 
 /**
  * mapStateToProps - used to hook up state to props
@@ -22,6 +25,8 @@ const mapStateToProps = (state, { windowId }) => {
     ),
     canvasIndex: getCanvasIndex(state, { windowId }),
     config: state.config,
+    hasNextCanvas: !!getNextCanvasGrouping(state, { windowId }),
+    hasPreviousCanvas: !!getPreviousCanvasGrouping(state, { windowId }),
     position: state.companionWindows[state.windows[windowId].thumbnailNavigationId].position,
     view: viewType,
   };
@@ -33,7 +38,8 @@ const mapStateToProps = (state, { windowId }) => {
  * @private
  */
 const mapDispatchToProps = (dispatch, { windowId }) => ({
-  setCanvasByIndex: (...args) => dispatch(actions.setCanvasByIndex(windowId, ...args)),
+  setNextCanvas: (...args) => dispatch(actions.setNextCanvas(windowId)),
+  setPreviousCanvas: (...args) => dispatch(actions.setPreviousCanvas(windowId)),
 });
 
 /**

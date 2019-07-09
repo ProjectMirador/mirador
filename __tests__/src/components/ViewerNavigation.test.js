@@ -7,7 +7,6 @@ function createWrapper(props) {
   return shallow(
     <ViewerNavigation
       canvases={[1, 2]}
-      setCanvasByIndex={() => {}}
       t={k => (k)}
       {...props}
     />,
@@ -16,12 +15,16 @@ function createWrapper(props) {
 
 describe('ViewerNavigation', () => {
   let wrapper;
-  let setCanvasByIndex;
+  let setNextCanvas;
+  let setPreviousCanvas;
   beforeEach(() => {
-    setCanvasByIndex = jest.fn();
+    setNextCanvas = jest.fn();
+    setPreviousCanvas = jest.fn();
     wrapper = createWrapper({
-      canvasIndex: 0,
-      setCanvasByIndex,
+      hasNextCanvas: true,
+      hasPreviousCanvas: false,
+      setNextCanvas,
+      setPreviousCanvas,
     });
   });
   it('renders the component', () => {
@@ -32,27 +35,35 @@ describe('ViewerNavigation', () => {
       expect(wrapper.find('.mirador-next-canvas-button').prop('aria-label')).toBe('nextCanvas');
       expect(wrapper.find('.mirador-next-canvas-button').prop('disabled')).toBe(false);
     });
-    it('setCanvas function is called after click', () => {
+    it('setNextCanvas function is called after click', () => {
       wrapper.find('.mirador-next-canvas-button').simulate('click');
-      expect(setCanvasByIndex).toHaveBeenCalledWith(1);
-    });
-    it('nextCanvas button is not disabled in bookview', () => {
-      wrapper = createWrapper({
-        canvases: [1, 2],
-        canvasIndex: 0,
-        setCanvasByIndex,
-        view: 'book',
-      });
-      wrapper.find('.mirador-next-canvas-button').simulate('click');
-      expect(setCanvasByIndex).toHaveBeenCalledWith(1);
+      expect(setNextCanvas).toHaveBeenCalled();
     });
   });
   describe('when next canvases are not present', () => {
     it('nextCanvas button is disabled', () => {
-      const endWrapper = createWrapper({
-        canvasIndex: 1,
-      });
+      const endWrapper = createWrapper();
       expect(endWrapper.find('.mirador-next-canvas-button').prop('disabled')).toBe(true);
+      endWrapper.find('.mirador-next-canvas-button').simulate('click');
+      expect(setNextCanvas).not.toHaveBeenCalled();
+    });
+  });
+  describe('when previous canvases are present', () => {
+    beforeEach(() => {
+      wrapper = createWrapper({
+        hasNextCanvas: false,
+        hasPreviousCanvas: true,
+        setNextCanvas,
+        setPreviousCanvas,
+      });
+    });
+    it('previousCanvas button is not disabled', () => {
+      expect(wrapper.find('.mirador-previous-canvas-button').prop('aria-label')).toBe('previousCanvas');
+      expect(wrapper.find('.mirador-previous-canvas-button').prop('disabled')).toBe(false);
+    });
+    it('setPreviousCanvas function is called after click', () => {
+      wrapper.find('.mirador-previous-canvas-button').simulate('click');
+      expect(setPreviousCanvas).toHaveBeenCalled();
     });
   });
   describe('when previous canvases are not present', () => {
@@ -61,29 +72,7 @@ describe('ViewerNavigation', () => {
     });
     it('setCanvas function is not called after click, as its disabled', () => {
       wrapper.find('.mirador-previous-canvas-button').simulate('click');
-      expect(setCanvasByIndex).not.toHaveBeenCalled();
-    });
-  });
-  describe('bookView', () => {
-    it('setCanvas function is called after click for next', () => {
-      wrapper = createWrapper({
-        canvases: [1, 2, 3],
-        canvasIndex: 0,
-        setCanvasByIndex,
-        view: 'book',
-      });
-      wrapper.find('.mirador-next-canvas-button').simulate('click');
-      expect(setCanvasByIndex).toHaveBeenCalledWith(2);
-    });
-    it('setCanvas function is called after click for previous', () => {
-      wrapper = createWrapper({
-        canvasIndex: 5,
-        setCanvasByIndex,
-        view: 'book',
-      });
-      wrapper.find('.mirador-previous-canvas-button').simulate('click');
-      expect(wrapper.find('.mirador-previous-canvas-button').prop('aria-label')).toBe('previousCanvas');
-      expect(setCanvasByIndex).toHaveBeenCalledWith(3);
+      expect(setPreviousCanvas).not.toHaveBeenCalled();
     });
   });
 });

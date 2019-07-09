@@ -1,7 +1,8 @@
 import ActionTypes from './action-types';
 import {
   getCanvasGrouping,
-  getCanvas,
+  getNextCanvasGrouping,
+  getPreviousCanvasGrouping,
   getSearchAnnotationsForCompanionWindow,
   getSearchForWindow,
 } from '../selectors';
@@ -50,20 +51,22 @@ export function setCanvas(windowId, canvasId) {
   });
 }
 
-/**
- * setCanvasByIndex - action creator
- *
- * @param  {String} windowId
- * @param  {Number} canvasIndex
- * @memberof ActionCreators
- */
-export function setCanvasByIndex(windowId, canvasIndex) {
+/** Set the window's canvas to the next canvas grouping */
+export function setNextCanvas(windowId) {
+  return ((dispatch, getState) => {
+    const state = getState();
+    const newGroup = getNextCanvasGrouping(state, { windowId });
+    newGroup && dispatch(setCanvas(windowId, newGroup[0] && newGroup[0].id));
+  });
+}
+
+/** Set the window's canvas to the previous canvas grouping */
+export function setPreviousCanvas(windowId) {
   return ((dispatch, getState) => {
     const state = getState();
 
-    const canvas = getCanvas(state, { canvasIndex, windowId });
-
-    dispatch(setCanvas(windowId, canvas && canvas.id));
+    const newGroup = getPreviousCanvasGrouping(state, { windowId });
+    newGroup && dispatch(setCanvas(windowId, newGroup[0] && newGroup[0].id));
   });
 }
 
