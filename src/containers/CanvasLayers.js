@@ -40,14 +40,20 @@ const styles = theme => ({
     display: 'flex',
     flex: 1,
     flexDirection: 'row',
-    marginBottom: -1 * theme.spacing(1),
+    marginBottom: -1 * theme.spacing(2) + 0.5,
     marginRight: theme.spacing(1),
-    marginTop: -1 * theme.spacing(1),
+    marginTop: -1 * theme.spacing(2),
     maxWidth: theme.spacing(3),
     width: theme.spacing(3),
   },
+  image: {
+    borderBottom: `1px solid ${theme.palette.divider}`,
+  },
   label: {
     paddingLeft: theme.spacing(1),
+  },
+  list: {
+    paddingTop: 0,
   },
   listItem: {
     '& $dragHandle': {
@@ -65,7 +71,9 @@ const styles = theme => ({
     alignItems: 'stretch',
     borderBottom: `0.5px solid ${theme.palette.divider}`,
     cursor: 'pointer',
+    paddingBottom: theme.spacing(2),
     paddingRight: theme.spacing(1),
+    paddingTop: theme.spacing(2),
   },
   opacityIcon: {
     marginRight: theme.spacing(0.5),
@@ -88,6 +96,7 @@ const styles = theme => ({
   slider: {
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
+    maxWidth: 150,
   },
 });
 

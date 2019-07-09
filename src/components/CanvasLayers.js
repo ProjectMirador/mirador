@@ -133,7 +133,7 @@ export class CanvasLayers extends Component {
     };
 
     return (
-      <div>
+      <div style={{ flex: 1 }}>
         <div style={{ alignItems: 'flex-start', display: 'flex' }}>
           <div style={{ minWidth: 50 }}>
             <CanvasThumbnail
@@ -142,6 +142,7 @@ export class CanvasLayers extends Component {
               maxHeight={height}
               maxWidth={width}
               aspectRatio={manifestoCanvas.aspectRatio}
+              ImageProps={{ className: classes.image }}
             />
           </div>
           <Typography
@@ -247,6 +248,7 @@ export class CanvasLayers extends Component {
           <Droppable droppableId={this.droppableId}>
             {(provided, snapshot) => (
               <List
+                className={classes.list}
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
