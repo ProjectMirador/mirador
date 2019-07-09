@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import IframeComm from 'react-iframe-comm';
+import { IframeComm } from '../lib/IFrameComm';
 
 /**
  * Opens a new window for click
