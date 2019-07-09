@@ -13,6 +13,9 @@ export class IframeComm extends Component {
     this.onReceiveMessage = this.onReceiveMessage.bind(this);
     this.onLoad = this.onLoad.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
+    this.setIFrameElement = (el) => {
+      this.frame = el;
+    };
   }
 
   /**
@@ -64,7 +67,7 @@ export class IframeComm extends Component {
     }
     // TODO: Look into doing a syn-ack TCP-like handshake
     //       to make sure iFrame is ready to REALLY accept messages, not just loaded.
-    // send intial props when iframe loads
+    // send initial props when iframe loads
     const { postMessageData } = this.props;
     this.sendMessage(postMessageData);
   }
@@ -126,9 +129,7 @@ export class IframeComm extends Component {
     );
     return (
       <iframe //eslint-disable-line
-        ref={(el) => {
-          this.frame = el;
-        }}
+        ref={this.setIFrameElement}
         {...mergedAttributes}
       />
     );

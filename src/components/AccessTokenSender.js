@@ -32,6 +32,7 @@ export class AccessTokenSender extends Component {
       <IframeComm
         attributes={{ src: `${url}?origin=${window.origin}&messageId=${url}` }}
         handleReceiveMessage={this.onReceiveAccessTokenMessage}
+        postMessageData=""
       />
     );
   }
