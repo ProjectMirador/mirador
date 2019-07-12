@@ -28,10 +28,8 @@ function createWrapper(props, fixture = manifestJson) {
 describe('ThumbnailNavigation', () => {
   let wrapper;
   let rightWrapper;
-  let setCanvasByIndex;
   beforeEach(() => {
-    setCanvasByIndex = jest.fn();
-    wrapper = createWrapper({ setCanvasByIndex });
+    wrapper = createWrapper();
   });
   it('renders the component', () => {
     expect(wrapper.find('.mirador-thumb-navigation').length).toBe(1);
@@ -65,7 +63,6 @@ describe('ThumbnailNavigation', () => {
     beforeEach(() => {
       rightWrapper = createWrapper({
         position: 'far-right',
-        setCanvasByIndex,
       });
     });
     it('style', () => {
@@ -101,26 +98,35 @@ describe('ThumbnailNavigation', () => {
     });
   });
   describe('keyboard navigation', () => {
-    const rightSetCanvasByIndex = jest.fn();
+    const setNextCanvas = jest.fn();
+    const setPreviousCanvas = jest.fn();
     beforeEach(() => {
-      rightWrapper = createWrapper({
+      wrapper = createWrapper({
         canvasIndex: 1,
-        position: 'far-right',
-        setCanvasByIndex: rightSetCanvasByIndex,
+        hasNextCanvas: true,
+        hasPreviousCanvas: true,
+        setNextCanvas,
+        setPreviousCanvas,
       });
     });
     describe('handleKeyUp', () => {
-      it('next', () => {
+      it('handles right arrow by advancing the current canvas', () => {
         wrapper.instance().handleKeyUp({ key: 'ArrowRight' });
-        expect(setCanvasByIndex).toHaveBeenCalledWith(2);
-        rightWrapper.instance().handleKeyUp({ key: 'ArrowDown' });
-        expect(rightSetCanvasByIndex).toHaveBeenCalledWith(2);
+        expect(setNextCanvas).toHaveBeenCalled();
       });
-      it('previous', () => {
+      it('handles down arrow by advancing the current canvas when the canvas is on the right', () => {
+        wrapper.setProps({ position: 'far-right' });
+        wrapper.instance().handleKeyUp({ key: 'ArrowDown' });
+        expect(setNextCanvas).toHaveBeenCalled();
+      });
+      it('handles left arrow by selecting the previous canvas', () => {
         wrapper.instance().handleKeyUp({ key: 'ArrowLeft' });
-        expect(setCanvasByIndex).toHaveBeenCalledWith(0);
-        rightWrapper.instance().handleKeyUp({ key: 'ArrowUp' });
-        expect(rightSetCanvasByIndex).toHaveBeenCalledWith(0);
+        expect(setPreviousCanvas).toHaveBeenCalled();
+      });
+      it('handles up arrow by selecting the previous canvas when the canvas is on the right', () => {
+        wrapper.setProps({ position: 'far-right' });
+        wrapper.instance().handleKeyUp({ key: 'ArrowUp' });
+        expect(setPreviousCanvas).toHaveBeenCalled();
       });
     });
   });

@@ -54,6 +54,27 @@ export function getVisibleCanvases(state, args) {
 }
 
 /**
+* Return the current canvases grouped by how they'll appear in the viewer
+* For book view returns groups of 2, for single returns 1
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
+* @return {Array}
+*/
+const getCanvasGroupings = createSelector(
+  [
+    getCanvases,
+    getWindowViewType,
+  ],
+  (canvases, view) => (canvases
+      && new CanvasGroupings(
+        canvases,
+        view,
+      ).groupings()),
+);
+
+/**
 * Return the current canvases selected in a window
 * For book view returns 2, for single returns 1
 * @param {object} state
@@ -64,15 +85,62 @@ export function getVisibleCanvases(state, args) {
 */
 export const getCanvasGrouping = createSelector(
   [
-    getCanvases,
+    getCanvasGroupings,
     (state, { canvasId }) => canvasId,
-    getWindowViewType,
   ],
-  (canvases, canvasId, view) => (canvases
-      && new CanvasGroupings(
-        canvases,
-        view,
-      ).getCanvasesById(canvasId)) || [],
+  (groupings, canvasId, view) => (groupings
+      && groupings.find(group => group.some(c => c.id === canvasId))) || [],
+);
+
+/**
+* Return the next canvas(es) for a window
+* For book view returns 2, for single returns 1
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
+* @return {Array}
+*/
+export const getNextCanvasGrouping = createSelector(
+  [
+    getCanvasGroupings,
+    getCurrentCanvas,
+  ],
+  (groupings, canvas, view) => {
+    if (!groupings) return undefined;
+    const currentGroupIndex = groupings.findIndex(group => group.some(c => c.id === canvas.id));
+
+    if (currentGroupIndex < 0 || currentGroupIndex + 1 >= groupings.length) return undefined;
+    const newGroup = groupings[currentGroupIndex + 1];
+
+    return newGroup;
+  },
+);
+
+/**
+* Return the previous canvas(es) for a window
+* For book view returns 2, for single returns 1
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
+* @return {Array}
+*/
+export const getPreviousCanvasGrouping = createSelector(
+  [
+    getCanvasGroupings,
+    getCurrentCanvas,
+  ],
+  (groupings, canvas, view) => {
+    if (!groupings) return undefined;
+
+    const currentGroupIndex = groupings.findIndex(group => group.some(c => c.id === canvas.id));
+
+    if (currentGroupIndex < 1) return undefined;
+    const newGroup = groupings[currentGroupIndex - 1];
+
+    return newGroup;
+  },
 );
 
 /**

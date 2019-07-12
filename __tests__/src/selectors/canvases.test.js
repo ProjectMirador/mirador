@@ -2,6 +2,8 @@ import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import {
   getVisibleCanvases,
+  getNextCanvasGrouping,
+  getPreviousCanvasGrouping,
   getCanvas,
   getCanvasLabel,
   selectCanvasAuthService,
@@ -56,6 +58,61 @@ describe('getVisibleCanvases', () => {
     const selectedCanvas = getVisibleCanvases(noManifestationState, { windowId: 'a' });
 
     expect(selectedCanvas).toBeUndefined();
+  });
+});
+
+describe('getNextCanvasGrouping', () => {
+  const state = {
+    manifests: {
+      x: {
+        id: 'x',
+        json: manifestFixture019,
+      },
+    },
+    windows: {
+      a: {
+        canvasId: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
+        id: 'a',
+        manifestId: 'x',
+        view: 'book',
+      },
+    },
+  };
+
+  it('should return the next canvas groupings', () => {
+    const selectedCanvases = getNextCanvasGrouping(state, { windowId: 'a' });
+
+    expect(selectedCanvases.map(canvas => canvas.id)).toEqual([
+      'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
+      'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
+    ]);
+  });
+});
+
+describe('getPreviousCanvasGrouping', () => {
+  const state = {
+    manifests: {
+      x: {
+        id: 'x',
+        json: manifestFixture019,
+      },
+    },
+    windows: {
+      a: {
+        canvasId: 'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
+        id: 'a',
+        manifestId: 'x',
+        view: 'book',
+      },
+    },
+  };
+
+  it('should return the next canvas groupings', () => {
+    const selectedCanvases = getPreviousCanvasGrouping(state, { windowId: 'a' });
+
+    expect(selectedCanvases.map(canvas => canvas.id)).toEqual([
+      'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
+    ]);
   });
 });
 

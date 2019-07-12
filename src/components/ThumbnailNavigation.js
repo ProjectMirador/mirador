@@ -151,44 +151,18 @@ export class ThumbnailNavigation extends Component {
   /**
    */
   nextCanvas() {
-    const { canvasIndex, setCanvasByIndex } = this.props;
-    if (this.hasNextCanvas()) {
-      setCanvasByIndex(canvasIndex + this.canvasIncrementor());
+    const { hasNextCanvas, setNextCanvas } = this.props;
+    if (hasNextCanvas) {
+      setNextCanvas();
     }
-  }
-
-  /**
-   */
-  hasNextCanvas() {
-    const { canvasIndex, canvasGroupings } = this.props;
-    return canvasIndex < canvasGroupings.canvases.length - this.canvasIncrementor();
   }
 
   /**
    */
   previousCanvas() {
-    const { canvasIndex, setCanvasByIndex } = this.props;
-    if (this.hasPreviousCanvas()) {
-      setCanvasByIndex(Math.max(0, canvasIndex - this.canvasIncrementor()));
-    }
-  }
-
-  /**
-   */
-  hasPreviousCanvas() {
-    const { canvasIndex } = this.props;
-    return canvasIndex > 0;
-  }
-
-  /**
-   */
-  canvasIncrementor() {
-    const { view } = this.props;
-    switch (view) {
-      case 'book':
-        return 2;
-      default:
-        return 1;
+    const { hasPreviousCanvas, setPreviousCanvas } = this.props;
+    if (hasPreviousCanvas) {
+      setPreviousCanvas();
     }
   }
 
@@ -255,13 +229,20 @@ ThumbnailNavigation.propTypes = {
   canvasIndex: PropTypes.number.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  hasNextCanvas: PropTypes.bool,
+  hasPreviousCanvas: PropTypes.bool,
   position: PropTypes.string.isRequired,
-  setCanvasByIndex: PropTypes.func.isRequired,
+  setNextCanvas: PropTypes.func,
+  setPreviousCanvas: PropTypes.func,
   t: PropTypes.func.isRequired,
   view: PropTypes.string,
   windowId: PropTypes.string.isRequired,
 };
 
 ThumbnailNavigation.defaultProps = {
+  hasNextCanvas: false,
+  hasPreviousCanvas: false,
+  setNextCanvas: () => {},
+  setPreviousCanvas: () => {},
   view: undefined,
 };
