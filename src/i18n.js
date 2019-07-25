@@ -8,7 +8,7 @@ import fr from './locales/fr/translation.json';
 import ja from './locales/ja/translation.json';
 import nl from './locales/nl/translation.json';
 import ptBr from './locales/ptBr/translation.json';
-
+import it from './locales/it/translation.json';
 
 export default () => {
   // Load translations for each language
@@ -21,6 +21,7 @@ export default () => {
     'pt-BR': ptBr,
     'zh-CN': zhCn,
     'zh-TW': zhTw,
+    it,
   };
 
   const instance = i18n.createInstance();

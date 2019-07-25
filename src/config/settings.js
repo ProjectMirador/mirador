@@ -206,6 +206,7 @@ export default {
     'pt-BR': 'Português do Brasil',
     'zh-CN': '中文(简体)',
     'zh-TW': '中文(繁體)',
+    it: "Italiano",
   },
   displayAllAnnotations: false, // Configure if annotations to be displayed on the canvas by default when fetched
   resourceHeaders: {}, // Headers to send with IIIF Presentation API resource requests
