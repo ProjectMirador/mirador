@@ -16,12 +16,12 @@ export default () => {
     de,
     en,
     fr,
+    it,
     ja,
     nl,
     'pt-BR': ptBr,
     'zh-CN': zhCn,
     'zh-TW': zhTw,
-    it,
   };
 
   const instance = i18n.createInstance();
