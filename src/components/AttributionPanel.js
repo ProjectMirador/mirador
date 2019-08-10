@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import { RectShape } from 'react-placeholder/lib/placeholders';
+import Skeleton from '@material-ui/lab/Skeleton';
 import Img from 'react-image';
 import CompanionWindow from '../containers/CompanionWindow';
 import { LabelValueMetadata } from './LabelValueMetadata';
@@ -60,7 +60,7 @@ export class AttributionPanel extends Component {
               role="presentation"
               className={classes.logo}
               unloader={
-                <RectShape className={classes.placeholder} style={{ height: 60, width: 60 }} />
+                <Skeleton className={classes.placeholder} variant="rect" height={60} width={60} />
               }
             />
           </div>
