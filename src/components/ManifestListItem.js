@@ -4,12 +4,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { ReactPlaceholder } from 'react-placeholder/lib';
-import { TextBlock, TextRow, RectShape } from 'react-placeholder/lib/placeholders';
+import Skeleton from '@material-ui/lab/Skeleton';
 import Img from 'react-image';
 import ManifestListItemError from '../containers/ManifestListItemError';
 import ns from '../config/css-ns';
-import 'react-placeholder/lib/reactPlaceholder.css';
 
 /**
  * Handling open button click
@@ -55,16 +53,17 @@ export class ManifestListItem extends React.Component {
     const placeholder = (
       <Grid container className={ns('manifest-list-item')} spacing={2}>
         <Grid item xs={3} sm={2}>
-          <RectShape color="gray" style={{ height: 80, width: 120 }} />
+          <Skeleton className={classes.placeholder} variant="rect" height={80} width={120} />
         </Grid>
         <Grid item xs={9} sm={6}>
-          <TextRow color="gray" />
+          <Skeleton className={classes.placeholder} variant="text" />
         </Grid>
         <Grid item xs={8} sm={2}>
-          <TextBlock rows={2} color="gray" />
+          <Skeleton className={classes.placeholder} variant="text" />
+          <Skeleton className={classes.placeholder} variant="text" />
         </Grid>
         <Grid item xs={4} sm={2}>
-          <RectShape color="gray" style={{ height: 60, width: 60 }} />
+          <Skeleton className={classes.placeholder} variant="rect" height={60} width={60} />
         </Grid>
       </Grid>
     );
@@ -79,12 +78,7 @@ export class ManifestListItem extends React.Component {
 
     return (
       <ListItem divider elevation={1} className={[classes.root, active ? classes.active : ''].join(' ')} data-manifestid={manifestId}>
-        <ReactPlaceholder
-          showLoadingAnimation
-          delay={500}
-          ready={ready}
-          customPlaceholder={placeholder}
-        >
+        {ready ? (
           <Grid container className={ns('manifest-list-item')} spacing={2}>
             <Grid item xs={12} sm={6} className={classes.buttonGrid}>
               <ButtonBase
@@ -102,9 +96,12 @@ export class ManifestListItem extends React.Component {
                       alt=""
                       height="80"
                       unloader={(
-                        <RectShape
+                        <Skeleton
+                          variant="rect"
+                          disableAnimate
                           className={classes.placeholder}
-                          style={{ height: 80, width: 120 }}
+                          height={80}
+                          width={120}
                         />
                       )}
                     />
@@ -128,13 +125,21 @@ export class ManifestListItem extends React.Component {
                 alt=""
                 role="presentation"
                 className={classes.logo}
-                unloader={
-                  <RectShape className={classes.placeholder} style={{ height: 60, width: 60 }} />
-                }
+                unloader={(
+                  <Skeleton
+                    variant="rect"
+                    disableAnimate
+                    className={classes.placeholder}
+                    height={60}
+                    width={60}
+                  />
+                )}
               />
             </Grid>
           </Grid>
-        </ReactPlaceholder>
+        ) : (
+          placeholder
+        )}
       </ListItem>
     );
   }

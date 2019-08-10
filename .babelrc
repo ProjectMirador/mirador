@@ -4,7 +4,7 @@
     "@babel/plugin-transform-runtime",
     "transform-react-remove-prop-types",
     ["lodash", { "id": [
-      "lodash", "react-placeholder",
+      "lodash",
       ]}
     ]],
 }
