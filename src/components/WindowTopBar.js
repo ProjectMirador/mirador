@@ -27,7 +27,7 @@ export class WindowTopBar extends Component {
     const {
       removeWindow, windowId, classes, toggleWindowSideBar, t, windowDraggable,
       maximizeWindow, maximized, minimizeWindow, focused, allowClose, allowMaximize,
-      focusWindow, allowFullscreen,
+      focusWindow, allowFullscreen, allowTopMenuButton,
     } = this.props;
 
     return (
@@ -53,7 +53,9 @@ export class WindowTopBar extends Component {
             <WindowTopBarTitle
               windowId={windowId}
             />
-            <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
+            {allowTopMenuButton && (
+              <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
+            )}
             <WindowTopBarPluginMenu windowId={windowId} />
             {allowMaximize && (
               <MiradorMenuButton
@@ -86,6 +88,7 @@ export class WindowTopBar extends Component {
 WindowTopBar.propTypes = {
   allowClose: PropTypes.bool,
   allowFullscreen: PropTypes.bool,
+  allowTopMenuButton: PropTypes.bool,
   allowMaximize: PropTypes.bool,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   focused: PropTypes.bool,
@@ -103,6 +106,7 @@ WindowTopBar.propTypes = {
 WindowTopBar.defaultProps = {
   allowClose: true,
   allowFullscreen: false,
+  allowTopMenuButton: true,
   allowMaximize: true,
   focused: false,
   focusWindow: () => {},
