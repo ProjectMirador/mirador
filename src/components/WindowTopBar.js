@@ -88,8 +88,8 @@ export class WindowTopBar extends Component {
 WindowTopBar.propTypes = {
   allowClose: PropTypes.bool,
   allowFullscreen: PropTypes.bool,
-  allowTopMenuButton: PropTypes.bool,
   allowMaximize: PropTypes.bool,
+  allowTopMenuButton: PropTypes.bool,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   focused: PropTypes.bool,
   focusWindow: PropTypes.func,
@@ -106,8 +106,8 @@ WindowTopBar.propTypes = {
 WindowTopBar.defaultProps = {
   allowClose: true,
   allowFullscreen: false,
-  allowTopMenuButton: true,
   allowMaximize: true,
+  allowTopMenuButton: true,
   focused: false,
   focusWindow: () => {},
   maximized: false,

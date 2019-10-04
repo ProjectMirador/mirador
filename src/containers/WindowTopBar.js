@@ -11,8 +11,8 @@ import { WindowTopBar } from '../components/WindowTopBar';
 const mapStateToProps = (state, { windowId }) => ({
   allowClose: state.config.window.allowClose,
   allowFullscreen: state.config.window.allowFullscreen,
-  allowTopMenuButton: state.config.window.allowTopMenuButton,
   allowMaximize: state.config.window.allowMaximize,
+  allowTopMenuButton: state.config.window.allowTopMenuButton,
   focused: state.workspace.focusedWindowId === windowId,
   manifestTitle: getManifestTitle(state, { windowId }),
   maximized: (getWindow(state, { windowId }) || {}).maximized,
