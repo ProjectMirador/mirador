@@ -217,6 +217,7 @@ export default {
     allowFullscreen: false, // Configure to show a "fullscreen" button in the WindowTopBar
     allowMaximize: true, // Configure if windows can be maximized or not
     allowTopMenuButton: true, // Configure if window view and thumbnail display menu are visible or not
+    allowWindowSideBar: true, // Configure if side bar menu is visible or not
     authNewWindowCenter: 'parent', // Configure how to center a new window created by the authentication flow. Options: parent, screen
     defaultSideBarPanel: 'info', // Configure which sidebar is selected by default. Options: info, attribution, canvas, annotations, search
     defaultView: 'single',  // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in

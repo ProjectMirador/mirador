@@ -27,7 +27,7 @@ export class WindowTopBar extends Component {
     const {
       removeWindow, windowId, classes, toggleWindowSideBar, t, windowDraggable,
       maximizeWindow, maximized, minimizeWindow, focused, allowClose, allowMaximize,
-      focusWindow, allowFullscreen, allowTopMenuButton,
+      focusWindow, allowFullscreen, allowTopMenuButton, allowWindowSideBar,
     } = this.props;
 
     return (
@@ -44,12 +44,14 @@ export class WindowTopBar extends Component {
             )}
             variant="dense"
           >
-            <MiradorMenuButton
-              aria-label={t('toggleWindowSideBar')}
-              onClick={toggleWindowSideBar}
-            >
-              <MenuIcon />
-            </MiradorMenuButton>
+            {allowWindowSideBar && (
+              <MiradorMenuButton
+                aria-label={t('toggleWindowSideBar')}
+                onClick={toggleWindowSideBar}
+              >
+                <MenuIcon />
+              </MiradorMenuButton>
+            )}
             <WindowTopBarTitle
               windowId={windowId}
             />
@@ -90,6 +92,7 @@ WindowTopBar.propTypes = {
   allowFullscreen: PropTypes.bool,
   allowMaximize: PropTypes.bool,
   allowTopMenuButton: PropTypes.bool,
+  allowWindowSideBar: PropTypes.bool,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   focused: PropTypes.bool,
   focusWindow: PropTypes.func,
@@ -108,6 +111,7 @@ WindowTopBar.defaultProps = {
   allowFullscreen: false,
   allowMaximize: true,
   allowTopMenuButton: true,
+  allowWindowSideBar: true,
   focused: false,
   focusWindow: () => {},
   maximized: false,
