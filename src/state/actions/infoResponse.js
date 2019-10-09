@@ -49,7 +49,7 @@ export function receiveInfoResponseFailure(infoId, error) {
 function getAccessToken({ accessTokens }, iiifService) {
   if (!iiifService) return undefined;
 
-  const services = Utils.getServices(iiifService).filter(s => s.getProfile().value.match(/http:\/\/iiif.io\/api\/auth\/1\//));
+  const services = Utils.getServices(iiifService).filter(s => s.getProfile().match(/http:\/\/iiif.io\/api\/auth\/1\//));
 
   for (let i = 0; i < services.length; i += 1) {
     const authService = services[i];

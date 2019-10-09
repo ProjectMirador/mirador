@@ -50,7 +50,7 @@ export class WindowAuthenticationControl extends Component {
       profile,
     } = this.props;
 
-    return profile.value === 'http://iiif.io/api/auth/1/clickthrough' || profile.value === 'http://iiif.io/api/auth/1/login';
+    return profile === 'http://iiif.io/api/auth/1/clickthrough' || profile === 'http://iiif.io/api/auth/1/login';
   }
 
   /** */
@@ -149,7 +149,7 @@ WindowAuthenticationControl.propTypes = {
   header: PropTypes.string,
   infoId: PropTypes.string,
   label: PropTypes.string,
-  profile: PropTypes.shape({ value: PropTypes.string }),
+  profile: PropTypes.string,
   serviceId: PropTypes.string,
   status: PropTypes.oneOf(['ok', 'fetching', 'failed', null]),
   t: PropTypes.func,
