@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { LanguageMap } from 'manifesto.js';
+import { LanguageMap } from 'manifesto.js/dist-esmodule/LanguageMap';
 import flatten from 'lodash/flatten';
 import Annotation from '../../lib/Annotation';
 import { getCanvas, getCanvases } from './canvases';

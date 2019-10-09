@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
-import manifesto from 'manifesto.js';
+import manifesto from 'manifesto.js/dist-esmodule';
 import { WindowSideBarCanvasPanel } from '../../../src/components/WindowSideBarCanvasPanel';
 import { CanvasThumbnail } from '../../../src/components/CanvasThumbnail';
 import CompanionWindow from '../../../src/containers/CompanionWindow';

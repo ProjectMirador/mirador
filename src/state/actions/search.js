@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import { fetch } from 'vedavaapi-web';
 import {
   getCanvasForAnnotation,
   getCanvas,

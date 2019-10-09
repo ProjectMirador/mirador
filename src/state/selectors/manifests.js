@@ -1,11 +1,12 @@
 import { createSelector } from 'reselect';
-import manifesto, { LanguageMap } from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { LanguageMap } from 'manifesto.js/dist-esmodule/LanguageMap';
 import ManifestoCanvas from '../../lib/ManifestoCanvas';
 
 /** */
 function createManifestoInstance(json, locale) {
   if (!json) return undefined;
-  return manifesto.create(json, locale ? { locale } : undefined);
+  return Utils.parseManifest(json, locale ? { locale } : undefined);
 }
 
 

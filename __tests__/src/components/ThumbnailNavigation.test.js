@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import manifesto from 'manifesto.js';
+import manifesto from 'manifesto.js/dist-esmodule';
 import { ThumbnailNavigation } from '../../../src/components/ThumbnailNavigation';
 import ThumbnailCanvasGrouping from '../../../src/containers/ThumbnailCanvasGrouping';
 import CanvasGroupings from '../../../src/lib/CanvasGroupings';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import manifesto from 'manifesto.js';
+import manifesto from 'manifesto.js/dist-esmodule';
 import { WindowViewer } from '../../../src/components/WindowViewer';
 import OSDViewer from '../../../src/containers/OpenSeadragonViewer';
 import WindowCanvasNavigationControls from '../../../src/containers/WindowCanvasNavigationControls';

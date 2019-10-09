@@ -1,4 +1,4 @@
-import manifesto from 'manifesto.js';
+import manifesto from 'manifesto.js/dist-esmodule';
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture002 from '../../fixtures/version-2/002.json';
 import manifestFixture015 from '../../fixtures/version-2/015.json';

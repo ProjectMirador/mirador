@@ -1,5 +1,5 @@
 import flatten from 'lodash/flatten';
-import { Utils } from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 /**
  * ManifestoCanvas - adds additional, testable logic around Manifesto's Canvas
  * https://iiif-commons.github.io/manifesto/classes/_canvas_.manifesto.canvas.html

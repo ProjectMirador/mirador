@@ -43,7 +43,7 @@
     "immutable": "^4.0.0-rc.12",
     "intersection-observer": "^0.7.0",
     "lodash": "^4.17.11",
-    "manifesto.js": "^3.0.11",
+    "manifesto.js": "./manifesto",
     "node-fetch": "^2.6.0",
     "node-sass": "^4.12.0",
     "normalize-url": "^4.2.0",
@@ -67,7 +67,8 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "sass-loader": "^7.1.0",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "vedavaapi-web": "0.0.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.0",

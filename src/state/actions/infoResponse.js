@@ -1,5 +1,5 @@
-import fetch from 'node-fetch';
-import { Utils } from 'manifesto.js';
+import { fetch } from 'vedavaapi-web';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import ActionTypes from './action-types';
 
 /**

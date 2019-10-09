@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import manifesto from 'manifesto.js';
+import manifesto from 'manifesto.js/dist-esmodule';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import manifestJson from '../../fixtures/version-2/019.json';

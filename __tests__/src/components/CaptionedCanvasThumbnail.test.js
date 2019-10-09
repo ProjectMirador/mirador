@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import manifesto from 'manifesto.js';
+import manifesto from 'manifesto.js/dist-esmodule';
 import Typography from '@material-ui/core/Typography';
 import { CaptionedCanvasThumbnail } from '../../../src/components/CaptionedCanvasThumbnail';
 import manifestJson from '../../fixtures/version-2/019.json';

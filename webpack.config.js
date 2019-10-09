@@ -18,6 +18,12 @@ const babelLoaderConfig = {
 const baseConfig = [
   {
     entry: './src/index-core.js',
+    externals: {
+      'fetch-cookie/node-fetch': 'fetchCookieWrapper',
+      'form-data': 'formData',
+      'node-fetch': 'nodeFetch',
+      url: 'nodeUrl',
+    },
     module: {
       rules: [
         babelLoaderConfig,
@@ -32,6 +38,12 @@ const baseConfig = [
   },
   {
     entry: './src/index.js',
+    externals: {
+      'fetch-cookie/node-fetch': 'fetchCookieWrapper',
+      'form-data': 'formData',
+      'node-fetch': 'nodeFetch',
+      url: 'nodeUrl',
+    },
     module: {
       rules: [
         babelLoaderConfig,
