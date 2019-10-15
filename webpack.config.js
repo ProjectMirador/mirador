@@ -64,7 +64,14 @@ const baseConfig = [
         resourceRegExp: /@blueprintjs\/(core|icons)/, // ignore optional UI framework dependencies
       }),
     ],
-    resolve: { extensions: ['.js'] },
+    resolve: {
+      alias: {
+        http: false,
+        https: false,
+        url: false,
+      },
+      extensions: ['.js'],
+    },
   },
 ];
 
