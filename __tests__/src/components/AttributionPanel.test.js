@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 import Img from 'react-image';
 import { AttributionPanel } from '../../../src/components/AttributionPanel';
 import { LabelValueMetadata } from '../../../src/components/LabelValueMetadata';
@@ -38,14 +39,14 @@ describe('AttributionPanel', () => {
     expect(
       wrapper.find(Typography).at(1).matchesElement(
         <Typography>
-          <a href="http://example.com">http://example.com</a>
+          <Link href="http://example.com">http://example.com</Link>
         </Typography>,
       ),
     ).toBe(true);
     expect(
       wrapper.find(Typography).at(2).matchesElement(
         <Typography>
-          <a href="http://stanford.edu">http://stanford.edu</a>
+          <Link href="http://stanford.edu">http://stanford.edu</Link>
         </Typography>,
       ),
     ).toBe(true);

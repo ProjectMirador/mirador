@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import ns from '../config/css-ns';
 
@@ -42,7 +43,9 @@ export class ManifestRelatedLinks extends Component {
               {
                 homepage.map(page => (
                   <Typography key={page.value} variant="body1" component="dd">
-                    <a target="_blank" rel="noopener noreferrer" href={page.value}>{page.label || page.value}</a>
+                    <Link target="_blank" rel="noopener noreferrer" href={page.value}>
+                      {page.label || page.value}
+                    </Link>
                   </Typography>
                 ))
               }
@@ -54,7 +57,9 @@ export class ManifestRelatedLinks extends Component {
               {
                 renderings.map(rendering => (
                   <Typography key={rendering.value} variant="body1" component="dd">
-                    <a target="_blank" rel="noopener noreferrer" href={rendering.value}>{rendering.label || rendering.value}</a>
+                    <Link target="_blank" rel="noopener noreferrer" href={rendering.value}>
+                      {rendering.label || rendering.value}
+                    </Link>
                   </Typography>
                 ))
               }
@@ -66,9 +71,11 @@ export class ManifestRelatedLinks extends Component {
               {
                 seeAlso.map(related => (
                   <Typography key={related.value} variant="body1" component="dd">
-                    <a target="_blank" rel="noopener noreferrer" href={related.value}>{related.label || related.value}</a>
+                    <Link target="_blank" rel="noopener noreferrer" href={related.value}>
+                      {related.label || related.value}
+                    </Link>
                     { related.format && (
-                      <Typography variant="body2" component="span">{`(${related.format})`}</Typography>
+                      <Typography variant="a" component="span">{`(${related.format})`}</Typography>
                     )}
                   </Typography>
                 ))
@@ -79,7 +86,9 @@ export class ManifestRelatedLinks extends Component {
             <>
               <Typography variant="subtitle2" component="dt">{t('iiif_manifest')}</Typography>
               <Typography variant="body1" component="dd">
-                <a target="_blank" rel="noopener noreferrer" href={manifestUrl}>{manifestUrl}</a>
+                <Link target="_blank" rel="noopener noreferrer" href={manifestUrl}>
+                  {manifestUrl}
+                </Link>
               </Typography>
             </>
           )}
