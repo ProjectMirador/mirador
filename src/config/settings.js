@@ -194,6 +194,9 @@ export default {
       MuiButtonBase: {
         disableTouchRipple: true,
       },
+      MuiLink: {
+        underline: 'always'
+      },
     },
   },
   language: 'en', // The default language set in the application

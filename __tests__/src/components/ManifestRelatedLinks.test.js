@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 import CollapsibleSection from '../../../src/containers/CollapsibleSection';
 import { ManifestRelatedLinks } from '../../../src/components/ManifestRelatedLinks';
 
@@ -56,7 +57,7 @@ describe('ManifestRelatedLinks', () => {
       expect(
         wrapper.find(Typography).at(2)
           .matchesElement(
-            <Typography component="dd"><a href="http://example.com/">Home page</a></Typography>,
+            <Typography component="dd"><Link href="http://example.com/">Home page</Link></Typography>,
           ),
       ).toBe(true);
     });
@@ -73,7 +74,7 @@ describe('ManifestRelatedLinks', () => {
         wrapper.find(Typography).at(4)
           .matchesElement(
             <Typography component="dd">
-              <a href="http://example.com/pdf">PDF Version</a>
+              <Link href="http://example.com/pdf">PDF Version</Link>
             </Typography>,
           ),
       ).toBe(true);
@@ -91,7 +92,7 @@ describe('ManifestRelatedLinks', () => {
         wrapper.find(Typography).at(6)
           .matchesElement(
             <Typography component="dd">
-              <a href="http://example.com/a">A</a>
+              <Link href="http://example.com/a">A</Link>
               <Typography>(text/html)</Typography>
             </Typography>,
           ),
@@ -100,7 +101,7 @@ describe('ManifestRelatedLinks', () => {
       expect(
         wrapper.find(Typography).at(8)
           .matchesElement(
-            <Typography component="dd"><a href="http://example.com/b">http://example.com/b</a></Typography>,
+            <Typography component="dd"><Link href="http://example.com/b">http://example.com/b</Link></Typography>,
           ),
       ).toBe(true);
     });
@@ -116,7 +117,7 @@ describe('ManifestRelatedLinks', () => {
       expect(
         wrapper.find(Typography).at(10)
           .matchesElement(
-            <Typography component="dd"><a href="http://example.com/">http://example.com/</a></Typography>,
+            <Typography component="dd"><Link href="http://example.com/">http://example.com/</Link></Typography>,
           ),
       ).toBe(true);
     });
