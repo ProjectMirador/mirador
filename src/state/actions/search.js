@@ -7,7 +7,7 @@ import {
   getSelectedContentSearchAnnotationIds,
 } from '../selectors';
 import ActionTypes from './action-types';
-import Annotation from '../../lib/Annotation';
+import AnnotationList from '../../lib/AnnotationList';
 
 /**
  * requestSearch - action creator
@@ -47,7 +47,7 @@ export function receiveSearch(windowId, companionWindowId, searchId, searchJson)
     if (selectedIds.length === 0) {
       const canvases = getCanvases(state, { windowId });
       annotation = sortSearchAnnotationsByCanvasOrder( // eslint-disable-line prefer-destructuring
-        new Annotation(searchJson), canvases,
+        new AnnotationList(searchJson), canvases,
       )[0];
       canvas = annotation && getCanvas(state, {
         canvasId: annotation.targetId, windowId,

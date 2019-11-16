@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import filter from 'lodash/filter';
 import flatten from 'lodash/flatten';
-import Annotation from '../../lib/Annotation';
+import AnnotationList from '../../lib/AnnotationList';
 import { getCanvas, getVisibleCanvases } from './canvases';
 
 const getAnnotationsOnCanvas = createSelector(
@@ -22,7 +22,7 @@ const getPresentAnnotationsCanvas = createSelector(
     getAnnotationsOnCanvas,
   ],
   annotations => filter(
-    Object.values(annotations).map(annotation => annotation && new Annotation(annotation.json)),
+    Object.values(annotations).map(annotation => annotation && new AnnotationList(annotation.json)),
     annotation => annotation && annotation.present(),
   ),
 );
@@ -48,7 +48,7 @@ const getPresentAnnotationsOnSelectedCanvases = createSelector(
     getAnnotationsOnSelectedCanvases,
   ],
   annotations => filter(
-    Object.values(annotations).map(annotation => annotation && new Annotation(annotation.json)),
+    Object.values(annotations).map(annotation => annotation && new AnnotationList(annotation.json)),
     annotation => annotation && annotation.present(),
   ),
 );

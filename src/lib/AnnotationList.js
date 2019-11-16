@@ -1,7 +1,7 @@
 import flatten from 'lodash/flatten';
 import AnnotationResource from './AnnotationResource';
 /** */
-export default class Annotation {
+export default class AnnotationList {
   /** */
   constructor(json, target) {
     this.json = json;

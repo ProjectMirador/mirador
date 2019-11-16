@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { LanguageMap } from 'manifesto.js';
 import flatten from 'lodash/flatten';
-import Annotation from '../../lib/Annotation';
+import AnnotationList from '../../lib/AnnotationList';
 import { getCanvas, getCanvases } from './canvases';
 import { getWindow } from './windows';
 import { getManifestLocale } from './manifests';
@@ -109,7 +109,7 @@ export const getSortedSearchHitsForCompanionWindow = createSelector(
 const searchResultsToAnnotation = (results) => {
   const annotations = results.map((result) => {
     if (!result || !result.json || result.isFetching || !result.json.resources) return undefined;
-    const anno = new Annotation(result.json);
+    const anno = new AnnotationList(result.json);
     return {
       id: anno.id,
       resources: anno.resources,
