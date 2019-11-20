@@ -1,3 +1,5 @@
+import flatten from 'lodash/flatten';
+import AnnotationItem from './AnnotationItem';
 /**
  * Annotation representation for IIIF Presentation v3
  * https://iiif.io/api/presentation/3.0/#55-annotation-page
@@ -24,7 +26,7 @@ export default class AnnotationPage {
   get items() {
     if (!this.json || !this.json.items) return [];
 
-    return this.json.items;
+    return flatten([this.json.items]).map(resource => new AnnotationItem(resource));
   }
 
   /**

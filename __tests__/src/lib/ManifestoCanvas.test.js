@@ -48,6 +48,27 @@ describe('ManifestoCanvas', () => {
       );
     });
   });
+  describe('processAnnotations', () => {
+    describe('v2', () => {
+      it('fetches annotations for each annotationList', () => {
+        const otherContentInstance = new ManifestoCanvas(
+          manifesto.create(otherContentFixture).getSequences()[0].getCanvases()[0],
+        );
+        const fetchMock = jest.fn();
+        otherContentInstance.processAnnotations(fetchMock);
+        expect(fetchMock).toHaveBeenCalledTimes(1);
+      });
+    });
+    describe('v3', () => {
+      it('fetches annotations for external items and receives annotations for items that are embedded', () => {
+        const receiveMock = jest.fn();
+        const fetchMock = jest.fn();
+        v3Instance.processAnnotations(fetchMock, receiveMock);
+        expect(receiveMock).toHaveBeenCalledTimes(1);
+        expect(fetchMock).toHaveBeenCalledTimes(2);
+      });
+    });
+  });
   describe('imageInformationUri', () => {
     it('correctly returns an image information url for a v2 Image API', () => {
       expect(instance.imageInformationUri).toEqual('https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/info.json');

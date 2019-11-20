@@ -1,4 +1,5 @@
 import AnnotationPage from '../../../src/lib/AnnotationPage';
+import AnnotationItem from '../../../src/lib/AnnotationItem';
 
 describe('AnnotationPage', () => {
   describe('id', () => {
@@ -17,16 +18,16 @@ describe('AnnotationPage', () => {
   });
   describe('items', () => {
     it('returns items', () => {
-      expect(new AnnotationPage(
+      new AnnotationPage(
         { items: [{ foo: 'bar' }] },
-      ).items).toEqual([{ foo: 'bar' }]);
+      ).items.forEach(resource => expect(resource).toBeInstanceOf(AnnotationItem));
     });
   });
   describe('resources', () => {
     it('returns items', () => {
-      expect(new AnnotationPage(
+      new AnnotationPage(
         { items: [{ foo: 'bar' }] },
-      ).resources).toEqual([{ foo: 'bar' }]);
+      ).items.forEach(resource => expect(resource).toBeInstanceOf(AnnotationItem));
     });
   });
 });
