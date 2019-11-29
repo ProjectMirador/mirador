@@ -6,10 +6,6 @@
     position: absolute;
     right: 0;
     top: 0;
-
-    .mosaic-window-toolbar {
-      display: none;
-    }
   }
 
   &-workspace {
@@ -17,10 +13,6 @@
     margin: 0;
     position: absolute;
     transition-duration: .7s;
-
-    &.react-draggable-dragging {
-      transition-duration: unset;
-    }
   }
 
   &-companion-window-header {
@@ -119,4 +111,12 @@
   &-preview {
     box-shadow: none;
   }
+
+  .mosaic-window-toolbar {
+    display: none;
+  }
+}
+
+.react-draggable-dragging {
+  transition-duration: unset;
 }
