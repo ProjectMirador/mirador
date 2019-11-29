@@ -23,7 +23,10 @@ export class WorkspaceArea extends Component {
     } = this.props;
 
     return (
-      <main className={classNames(classes.background, ns('viewer'))} aria-label={t('workspace')}>
+      <main
+        className={classNames(classes.miradorViewer, ns('viewer'))}
+        aria-label={t('workspace')}
+      >
         {
           isWorkspaceControlPanelVisible
             && <WorkspaceControlPanel variant={controlPanelVariant} />
