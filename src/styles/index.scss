@@ -1,12 +1,5 @@
 .mirador {
 
-  &-workspace {
-    box-sizing: border-box;
-    margin: 0;
-    position: absolute;
-    transition-duration: .7s;
-  }
-
   &-companion-window-header {
     flex-wrap: wrap;
   }
