@@ -61,6 +61,9 @@ const styles = theme => ({
   },
   horizontal: {
   },
+  miradorCompanionWindowHeader: {
+    flexWrap: 'wrap',
+  },
   positionButton: {
     marginLeft: -16,
     order: -100,

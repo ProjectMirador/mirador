@@ -78,7 +78,15 @@ export class CompanionWindow extends Component {
           minWidth={position === 'left' ? 235 : 100}
         >
 
-          <Toolbar className={[classes.toolbar, size.width < 370 ? classes.small : null, ns('companion-window-header')].join(' ')} disableGutters>
+          <Toolbar
+            className={[
+              classes.toolbar,
+              classes.miradorCompanionWindowHeader,
+              size.width < 370 ? classes.small : null,
+              ns('companion-window-header'),
+            ].join(' ')}
+            disableGutters
+          >
             <Typography variant="h3" className={classes.windowSideBarTitle}>
               {title}
             </Typography>
