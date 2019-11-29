@@ -1,16 +1,5 @@
 .mirador {
 
-  &-companion-window-title-controls {
-    flex-grow: 1;
-    order: 1000;
-  }
-
-  &-companion-window-bottom {
-    .mirador-companion-window-title-controls {
-      order: unset;
-    }
-  }
-
   // The height of the control panel
   &-workspace-with-control-panel {
     padding-top: 74px;

@@ -54,6 +54,8 @@ export class CompanionWindow extends Component {
       position, t, windowId, title, children, titleControls, size,
     } = this.props;
 
+    const isBottom = (position === 'bottom' || position === 'far-bottom');
+
     return (
       <Paper
         className={[classes.root, position === 'bottom' ? classes.horizontal : classes.vertical, classes[`companionWindow-${position}`], ns(`companion-window-${position}`), paperClassName].join(' ')}
@@ -69,8 +71,8 @@ export class CompanionWindow extends Component {
           className={[classes.rnd]}
           style={{ display: 'flex', position: 'relative' }}
           default={{
-            height: position === 'bottom' || position === 'far-bottom' ? 201 : 'auto',
-            width: position === 'bottom' || position === 'far-bottom' ? 'auto' : 235,
+            height: isBottom ? 201 : 'auto',
+            width: isBottom ? 'auto' : 235,
           }}
           disableDragging
           enableResizing={this.resizeHandles()}
@@ -126,7 +128,15 @@ export class CompanionWindow extends Component {
             }
             {
               titleControls && (
-                <div className={[classes.titleControls, ns('companion-window-title-controls')].join(' ')}>
+                <div
+                  className={[
+                    classes.titleControls,
+                    isBottom
+                      ? classes.companionWindowTitleControlsBottom
+                      : classes.companionWindowTitleControls,
+                    ns('companion-window-title-controls'),
+                  ].join(' ')}
+                >
                   {titleControls}
                 </div>
               )
