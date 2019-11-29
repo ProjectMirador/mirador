@@ -24,7 +24,7 @@ export class WorkspaceArea extends Component {
 
     return (
       <main
-        className={classNames(classes.miradorViewer, ns('viewer'))}
+        className={classNames(classes.viewer, ns('viewer'))}
         aria-label={t('workspace')}
       >
         {

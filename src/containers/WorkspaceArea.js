@@ -24,7 +24,7 @@ const mapStateToProps = state => (
  * @returns {{background: {background: string}}}
  */
 const styles = theme => ({
-  miradorViewer: {
+  viewer: {
     background: theme.palette.shades.light,
     bottom: 0,
     left: 0,

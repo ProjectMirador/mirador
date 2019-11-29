@@ -44,7 +44,7 @@ const mapDispatchToProps = (dispatch, props) => ({
 });
 
 const styles = {
-  miradorWorkspace: {
+  workspace: {
     boxSizing: 'border-box',
     margin: 0,
     position: 'absolute',

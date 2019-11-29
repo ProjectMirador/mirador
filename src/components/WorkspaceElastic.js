@@ -55,7 +55,7 @@ class WorkspaceElastic extends React.Component {
             setWorkspaceViewportPosition({ x: -1 * d.x - offsetX, y: -1 * d.y - offsetY });
           }}
           cancel={`.${ns('window')}`}
-          className={classNames(classes.miradorWorkspace, ns('workspace'))}
+          className={classNames(classes.workspace, ns('workspace'))}
           disableDragging={!workspace.draggingEnabled}
         >
           {

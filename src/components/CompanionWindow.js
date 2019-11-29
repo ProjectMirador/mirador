@@ -83,7 +83,7 @@ export class CompanionWindow extends Component {
           <Toolbar
             className={[
               classes.toolbar,
-              classes.miradorCompanionWindowHeader,
+              classes.companionWindowHeader,
               size.width < 370 ? classes.small : null,
               ns('companion-window-header'),
             ].join(' ')}
