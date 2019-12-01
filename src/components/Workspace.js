@@ -98,6 +98,7 @@ export class Workspace extends React.Component {
           classNames(
             ns('workspace-viewport'),
             (isWorkspaceControlPanelVisible && ns('workspace-with-control-panel')),
+            (isWorkspaceControlPanelVisible && classes.workspaceWithControlPanel),
             classes.workspaceViewport,
           )
         }
