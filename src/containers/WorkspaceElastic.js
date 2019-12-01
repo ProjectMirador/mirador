@@ -49,6 +49,11 @@ const styles = {
     margin: 0,
     position: 'absolute',
     transitionDuration: '.7s',
+    // order matters
+    // eslint-disable-next-line sort-keys
+    '& .react-draggable-dragging': {
+      transitionDuration: 'unset',
+    },
   },
 };
 
