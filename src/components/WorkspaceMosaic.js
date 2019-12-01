@@ -152,7 +152,7 @@ export class WorkspaceMosaic extends React.Component {
         renderTile={this.tileRenderer}
         initialValue={layout || this.determineWorkspaceLayout()}
         onChange={this.mosaicChange}
-        className={classNames("mirador-mosaic", classes.root)}
+        className={classNames('mirador-mosaic', classes.root)}
         zeroStateView={this.zeroStateView}
       />
     );

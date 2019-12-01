@@ -296,7 +296,7 @@ export class OpenSeadragonViewer extends Component {
    */
   render() {
     const {
-      windowId, children, label, t, classes
+      children, classes, label, t, windowId,
     } = this.props;
 
     const enhancedChildren = React.Children.map(children, child => (

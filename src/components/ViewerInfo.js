@@ -14,8 +14,8 @@ export class ViewerInfo extends Component {
       canvasCount,
       canvasIndex,
       canvasLabel,
-      t,
       classes,
+      t,
     } = this.props;
 
     return (
@@ -37,9 +37,9 @@ ViewerInfo.defaultProps = {
 };
 
 ViewerInfo.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   canvasCount: PropTypes.number.isRequired,
   canvasIndex: PropTypes.number.isRequired,
   canvasLabel: PropTypes.string,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   t: PropTypes.func,
 };
