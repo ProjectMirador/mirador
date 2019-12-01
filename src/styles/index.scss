@@ -1,20 +1,5 @@
 .mirador {
 
-  &-workspace-add {
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    padding-top: 68px;
-  }
-
-  @media (min-width: 600px) {
-
-    &-workspace-add {
-      padding-left: 68px;
-      padding-top: 0;
-    }
-  }
-
   &-primary-window {
     display: flex;
     flex: 1;

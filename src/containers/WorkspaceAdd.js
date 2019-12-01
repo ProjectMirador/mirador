@@ -62,6 +62,20 @@ const styles = theme => ({
   typographyBody: {
     flexGrow: 1,
   },
+  workspaceAdd: {
+    height: '100%',
+    overflowX: 'hidden',
+    overflowY: 'auto',
+    paddingTop: 68,
+  },
+  // injection order matters
+  // eslint-disable-next-line sort-keys
+  '@media (min-width: 600px)': {
+    workspaceAdd: {
+      paddingLeft: 68,
+      paddingTop: 0,
+    },
+  },
 });
 
 const enhance = compose(
