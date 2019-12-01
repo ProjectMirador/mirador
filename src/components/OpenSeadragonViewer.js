@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import OpenSeadragon from 'openseadragon';
+import classNames from 'classnames';
 import ns from '../config/css-ns';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
@@ -295,7 +296,7 @@ export class OpenSeadragonViewer extends Component {
    */
   render() {
     const {
-      windowId, children, label, t,
+      windowId, children, label, t, classes
     } = this.props;
 
     const enhancedChildren = React.Children.map(children, child => (
@@ -310,7 +311,7 @@ export class OpenSeadragonViewer extends Component {
     return (
       <>
         <section
-          className={ns('osd-container')}
+          className={classNames(ns('osd-container'), classes.osdContainer)}
           id={`${windowId}-osd`}
           ref={this.ref}
           aria-label={t('item', { label })}
@@ -336,6 +337,7 @@ OpenSeadragonViewer.defaultProps = {
 
 OpenSeadragonViewer.propTypes = {
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   children: PropTypes.node,
   highlightedAnnotations: PropTypes.arrayOf(PropTypes.object),
   label: PropTypes.string,
