@@ -3,7 +3,6 @@ import {
   getShowZoomControlsConfig,
   getTheme,
   getThemeIds,
-  getWorkspaceType,
   getContainerId,
 } from '../../../src/state/selectors';
 

@@ -337,8 +337,8 @@ OpenSeadragonViewer.defaultProps = {
 
 OpenSeadragonViewer.propTypes = {
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   children: PropTypes.node,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   highlightedAnnotations: PropTypes.arrayOf(PropTypes.object),
   label: PropTypes.string,
   palette: PropTypes.object, // eslint-disable-line react/forbid-prop-types
