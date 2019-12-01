@@ -1,14 +1,5 @@
 .mirador {
 
-  &-osd-info {
-    order: 2;
-    overflow: hidden;
-    padding-bottom: 3px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 100%;
-  }
-
   &-canvas-nav {
     display: flex;
     flex-direction: row;

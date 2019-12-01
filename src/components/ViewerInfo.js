@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import ns from '../config/css-ns';
 
 /**
@@ -14,10 +15,11 @@ export class ViewerInfo extends Component {
       canvasIndex,
       canvasLabel,
       t,
+      classes,
     } = this.props;
 
     return (
-      <div className={ns('osd-info')}>
+      <div className={classNames(ns('osd-info'), classes.osdInfo)}>
         <Typography display="inline" variant="caption" className={ns('canvas-count')}>
           { t('pagination', { current: canvasIndex + 1, total: canvasCount }) }
         </Typography>
@@ -35,6 +37,7 @@ ViewerInfo.defaultProps = {
 };
 
 ViewerInfo.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   canvasCount: PropTypes.number.isRequired,
   canvasIndex: PropTypes.number.isRequired,
   canvasLabel: PropTypes.string,

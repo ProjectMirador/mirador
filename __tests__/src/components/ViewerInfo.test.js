@@ -7,6 +7,7 @@ import { ViewerInfo } from '../../../src/components/ViewerInfo';
 function createWrapper(props) {
   return shallow(
     <ViewerInfo
+      classes={{}}
       canvasCount={8}
       canvasIndex={2}
       canvasLabel="testLabel"
