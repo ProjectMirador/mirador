@@ -1,17 +1,5 @@
 .mirador {
 
-  &-canvas-nav {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    text-align: center;
-  }
-
-  &-canvas-nav-stacked {
-    flex-direction: column;
-  }
-
   &-label-value-metadata {
     dd {
       margin-bottom: .5em;
