@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import WindowSideBar from '../containers/WindowSideBar';
 import WindowViewer from '../containers/WindowViewer';
 import GalleryView from '../containers/GalleryView';
@@ -39,9 +40,9 @@ export class PrimaryWindow extends Component {
    * Render the component
    */
   render() {
-    const { windowId } = this.props;
+    const { windowId, classes } = this.props;
     return (
-      <div className={ns('primary-window')}>
+      <div className={classNames(ns('primary-window'), classes.primaryWindow)}>
         <WindowSideBar windowId={windowId} />
         <CompanionArea windowId={windowId} position="left" />
         {this.renderViewer()}
@@ -51,6 +52,7 @@ export class PrimaryWindow extends Component {
 }
 
 PrimaryWindow.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   view: PropTypes.string,
   windowId: PropTypes.string.isRequired,

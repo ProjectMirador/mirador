@@ -9,6 +9,7 @@ import GalleryView from '../../../src/containers/GalleryView';
 function createWrapper(props) {
   return shallow(
     <PrimaryWindow
+      classes={{}}
       windowId="window-1"
       manifest={{}}
       {...props}
