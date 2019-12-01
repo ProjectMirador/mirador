@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import NavigationIcon from '@material-ui/icons/PlayCircleOutlineSharp';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
 
@@ -12,11 +13,11 @@ export class ViewerNavigation extends Component {
    */
   render() {
     const {
-      hasNextCanvas, hasPreviousCanvas, setNextCanvas, setPreviousCanvas, t,
+      hasNextCanvas, hasPreviousCanvas, setNextCanvas, setPreviousCanvas, t, classes,
     } = this.props;
 
     return (
-      <div className={ns('osd-navigation')}>
+      <div className={classNames(ns('osd-navigation'), classes.osdNavigation)}>
         <MiradorMenuButton
           aria-label={t('previousCanvas')}
           className={ns('previous-canvas-button')}
@@ -39,6 +40,7 @@ export class ViewerNavigation extends Component {
 }
 
 ViewerNavigation.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   hasNextCanvas: PropTypes.bool,
   hasPreviousCanvas: PropTypes.bool,
   setNextCanvas: PropTypes.func,

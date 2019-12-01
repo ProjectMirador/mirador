@@ -6,6 +6,7 @@ import { ViewerNavigation } from '../../../src/components/ViewerNavigation';
 function createWrapper(props) {
   return shallow(
     <ViewerNavigation
+      classes={{}}
       canvases={[1, 2]}
       t={k => (k)}
       {...props}
