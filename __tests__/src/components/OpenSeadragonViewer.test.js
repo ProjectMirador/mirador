@@ -25,6 +25,7 @@ describe('OpenSeadragonViewer', () => {
 
     wrapper = shallow(
       <OpenSeadragonViewer
+        classes={{}}
         tileSources={[{
           '@id': 'http://foo',
           height: 200,
@@ -174,6 +175,7 @@ describe('OpenSeadragonViewer', () => {
 
       wrapper = shallow(
         <OpenSeadragonViewer
+          classes={{}}
           tileSources={[{ '@id': 'http://foo' }]}
           windowId="base"
           viewer={{ x: 1, y: 0, zoom: 0.5 }}

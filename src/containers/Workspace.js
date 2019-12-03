@@ -34,6 +34,17 @@ const styles = theme => ({
     right: 0,
     top: 0,
   },
+  workspaceWithControlPanel: {
+    paddingTop: 74,
+  },
+  // injection order matters here
+  // eslint-disable-next-line sort-keys
+  '@media (min-width: 600px)': {
+    workspaceWithControlPanel: {
+      paddingLeft: 68,
+      paddingTop: 0,
+    },
+  },
 });
 
 const enhance = compose(

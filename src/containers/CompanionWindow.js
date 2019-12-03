@@ -55,6 +55,16 @@ const styles = theme => ({
   'companionWindow-right': {
     borderLeft: `0.5px solid ${theme.palette.divider}`,
   },
+  companionWindowHeader: {
+    flexWrap: 'wrap',
+  },
+  companionWindowTitleControls: {
+    flexGrow: 1,
+    order: 1000,
+  },
+  companionWindowTitleControlsBottom: {
+    order: 'unset',
+  },
   content: {
     overflowY: 'auto',
     wordBreak: 'break-word',

@@ -29,7 +29,18 @@ export class WindowCanvasNavigationControls extends Component {
     if (!visible) return (<></>);
 
     return (
-      <Paper square className={classNames(classes.controls, ns('canvas-nav'), this.canvasNavControlsAreStacked() ? ns('canvas-nav-stacked') : null)} elevation={0}>
+      <Paper
+        square
+        className={
+          classNames(
+            classes.controls,
+            ns('canvas-nav'),
+            classes.canvasNav,
+            this.canvasNavControlsAreStacked() ? ns('canvas-nav-stacked') : null,
+            this.canvasNavControlsAreStacked() ? classes.canvasNavStacked : null,
+          )}
+        elevation={0}
+      >
         <ZoomControls
           displayDivider={!this.canvasNavControlsAreStacked()}
           windowId={windowId}

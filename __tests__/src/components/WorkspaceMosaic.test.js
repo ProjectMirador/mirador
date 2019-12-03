@@ -8,6 +8,7 @@ import { WorkspaceMosaic } from '../../../src/components/WorkspaceMosaic';
 function createWrapper(props) {
   return shallow(
     <WorkspaceMosaic
+      classes={{}}
       windows={{}}
       workspaceId="foo"
       updateWorkspaceMosaicLayout={() => {}}

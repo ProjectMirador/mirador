@@ -6,6 +6,7 @@ import {
 import 'react-mosaic-component/react-mosaic-component.css';
 import difference from 'lodash/difference';
 import toPairs from 'lodash/toPairs';
+import classNames from 'classnames';
 import MosaicRenderPreview from '../containers/MosaicRenderPreview';
 import Window from '../containers/Window';
 import MosaicLayout from '../lib/MosaicLayout';
@@ -145,13 +146,13 @@ export class WorkspaceMosaic extends React.Component {
   /**
    */
   render() {
-    const { layout } = this.props;
+    const { layout, classes } = this.props;
     return (
       <Mosaic
         renderTile={this.tileRenderer}
         initialValue={layout || this.determineWorkspaceLayout()}
         onChange={this.mosaicChange}
-        className="mirador-mosaic"
+        className={classNames('mirador-mosaic', classes.root)}
         zeroStateView={this.zeroStateView}
       />
     );
@@ -159,6 +160,7 @@ export class WorkspaceMosaic extends React.Component {
 }
 
 WorkspaceMosaic.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   layout: PropTypes.oneOfType(
     [PropTypes.object, PropTypes.string],
   ), // eslint-disable-line react/forbid-prop-types

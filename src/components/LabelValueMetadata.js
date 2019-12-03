@@ -29,7 +29,7 @@ export class LabelValueMetadata extends Component {
       <dl className={ns('label-value-metadata')}>
         {labelValuePairs.reduce((acc, labelValuePair, i) => acc.concat([
           <Typography component="dt" key={`label-${i}`} variant="subtitle2">{labelValuePair.label || defaultLabel}</Typography>,
-          <Typography component="dd" key={`value-${i}`} variant="body1">
+          <Typography style={{ marginBottom: '.5em', marginLeft: '0px' }} component="dd" key={`value-${i}`} variant="body1">
             <SanitizedHtml htmlString={labelValuePair.value} ruleSet="iiif" />
           </Typography>,
         ]), [])}

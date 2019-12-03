@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import classNames from 'classnames';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import ns from '../config/css-ns';
 
@@ -16,6 +17,7 @@ export class ManifestRelatedLinks extends Component {
    */
   render() {
     const {
+      classes,
       homepage,
       manifestUrl,
       renderings,
@@ -36,7 +38,7 @@ export class ManifestRelatedLinks extends Component {
         >
           {t('links')}
         </Typography>
-        <dl className={ns('label-value-metadata')}>
+        <dl className={classNames(ns('label-value-metadata'), classes.labelValueMetadata)}>
           { homepage && (
             <>
               <Typography variant="subtitle2" component="dt">{t('iiif_homepage')}</Typography>
@@ -99,6 +101,7 @@ export class ManifestRelatedLinks extends Component {
 }
 
 ManifestRelatedLinks.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   homepage: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
     value: PropTypes.string,

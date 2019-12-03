@@ -24,8 +24,14 @@ const mapStateToProps = state => (
  * @returns {{background: {background: string}}}
  */
 const styles = theme => ({
-  background: {
+  viewer: {
     background: theme.palette.shades.light,
+    bottom: 0,
+    left: 0,
+    overflow: 'hidden',
+    position: 'absolute',
+    right: 0,
+    top: 0,
   },
 });
 

@@ -12,6 +12,7 @@ describe('ManifestRelatedLinks', () => {
     beforeEach(() => {
       wrapper = shallow(
         <ManifestRelatedLinks
+          classes={{}}
           id="xyz"
           homepage={[
             {

@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { OpenSeadragonViewer } from '../components/OpenSeadragonViewer';
 import * as actions from '../state/actions';
@@ -48,7 +49,15 @@ const mapDispatchToProps = {
   updateViewport: actions.updateViewport,
 };
 
+const styles = {
+  osdContainer: {
+    flex: 1,
+    position: 'relative',
+  },
+};
+
 const enhance = compose(
+  withStyles(styles),
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('OpenSeadragonViewer'),

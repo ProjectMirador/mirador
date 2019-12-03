@@ -9,6 +9,7 @@ import WorkspaceElasticWindow from '../../../src/containers/WorkspaceElasticWind
 function createWrapper(props) {
   return shallow(
     <WorkspaceElastic
+      classes={{}}
       elasticLayout={{}}
       workspace={{
         focusedWindowId: '2',

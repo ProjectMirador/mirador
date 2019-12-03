@@ -1,6 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import {
   getManifestHomepage,
@@ -22,7 +23,17 @@ const mapStateToProps = (state, { id, windowId }) => ({
   seeAlso: getManifestRelatedContent(state, { windowId }),
 });
 
+const styles = {
+  labelValueMetadata: {
+    '& dd': {
+      marginBottom: '.5em',
+      marginLeft: '0',
+    },
+  },
+};
+
 const enhance = compose(
+  withStyles(styles),
   withTranslation(),
   connect(mapStateToProps),
   withPlugins('ManifestRelatedLinks'),

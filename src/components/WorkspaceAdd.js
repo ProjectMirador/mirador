@@ -56,7 +56,7 @@ export class WorkspaceAdd extends React.Component {
     ));
 
     return (
-      <div className={ns('workspace-add')}>
+      <div className={classNames(ns('workspace-add'), classes.workspaceAdd)}>
         {(Object.keys(manifests).length < 1) ? (
           <Grid
             alignItems="center"
