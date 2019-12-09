@@ -4,22 +4,20 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { WindowSideBarCanvasPanel } from '../components/WindowSideBarCanvasPanel';
 import {
   getCompanionWindow,
   getManifestCanvases,
   getVisibleCanvases,
 } from '../state/selectors';
+import { SidebarIndexList } from '../components/SidebarIndexList';
 
 /**
  * mapStateToProps - to hook up connect
  */
 const mapStateToProps = (state, { id, windowId }) => {
   const canvases = getManifestCanvases(state, { windowId });
-  const { config } = state;
   return {
     canvases,
-    config,
     selectedCanvases: getVisibleCanvases(state, { windowId }),
     variant: getCompanionWindow(state, { companionWindowId: id, windowId }).variant,
   };
@@ -27,40 +25,31 @@ const mapStateToProps = (state, { id, windowId }) => {
 
 /**
  * mapStateToProps - used to hook up connect to state
- * @memberof WindowSideBarCanvasPanel
+ * @memberof SidebarIndexList
  * @private
  */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
   setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
-  toggleDraggingEnabled: () => dispatch(actions.toggleDraggingEnabled()),
-  updateVariant: variant => dispatch(
-    actions.updateCompanionWindow(windowId, id, { variant }),
-  ),
 });
 
 /**
- *
- * @param theme
+ * Styles for withStyles HOC
  */
 const styles = theme => ({
   label: {
     paddingLeft: theme.spacing(1),
   },
-  select: {
-    '&:focus': {
-      backgroundColor: theme.palette.background.paper,
-    },
-  },
-  selectEmpty: {
-    backgroundColor: theme.palette.background.paper,
+  listItem: {
+    borderBottom: `0.5px solid ${theme.palette.divider}`,
+    paddingRight: theme.spacing(1),
   },
 });
 
 const enhance = compose(
-  withTranslation(),
   withStyles(styles),
+  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('WindowSideBarCanvasPanel'),
+  withPlugins('SidebarIndexList'),
 );
 
-export default enhance(WindowSideBarCanvasPanel);
+export default enhance(SidebarIndexList);
