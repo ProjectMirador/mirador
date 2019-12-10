@@ -57,7 +57,7 @@
     "react-mosaic-component": "^3.2.0",
     "react-redux": "^7.1.0",
     "react-resize-observer": "^1.1.1",
-    "react-rnd": "^9.2.0",
+    "react-rnd": "^10.1",
     "react-sizeme": "^2.6.7",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
