@@ -14,7 +14,7 @@ import { AnnotationSettings } from '../components/AnnotationSettings';
  */
 const mapStateToProps = (state, { windowId }) => ({
   displayAll: getWindow(state, { windowId }).displayAllAnnotations,
-  displayAllDisabled: getAnnotationResourcesByMotivation(state, { motivations: ['oa:commenting', 'sc:painting'], windowId }).length < 2,
+  displayAllDisabled: getAnnotationResourcesByMotivation(state, { motivations: ['oa:commenting', 'sc:painting', 'commenting'], windowId }).length < 2,
 });
 
 /**

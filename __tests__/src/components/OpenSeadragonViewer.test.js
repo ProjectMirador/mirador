@@ -4,7 +4,7 @@ import OpenSeadragon from 'openseadragon';
 import manifesto from 'manifesto.js';
 import { OpenSeadragonViewer } from '../../../src/components/OpenSeadragonViewer';
 import OpenSeadragonCanvasOverlay from '../../../src/lib/OpenSeadragonCanvasOverlay';
-import Annotation from '../../../src/lib/Annotation';
+import AnnotationList from '../../../src/lib/AnnotationList';
 import CanvasWorld from '../../../src/lib/CanvasWorld';
 import fixture from '../../fixtures/version-2/019.json';
 
@@ -273,7 +273,7 @@ describe('OpenSeadragonViewer', () => {
       wrapper.setProps(
         {
           selectedAnnotations: [
-            new Annotation(
+            new AnnotationList(
               { '@id': 'foo', resources: [{ foo: 'bar' }] },
             ),
           ],
@@ -282,7 +282,7 @@ describe('OpenSeadragonViewer', () => {
       wrapper.setProps(
         {
           selectedAnnotations: [
-            new Annotation(
+            new AnnotationList(
               { '@id': 'foo', resources: [{ foo: 'bar' }] },
             ),
           ],
@@ -291,7 +291,7 @@ describe('OpenSeadragonViewer', () => {
       wrapper.setProps(
         {
           selectedAnnotations: [
-            new Annotation(
+            new AnnotationList(
               { '@id': 'bar', resources: [{ foo: 'bar' }] },
             ),
           ],
@@ -348,7 +348,7 @@ describe('OpenSeadragonViewer', () => {
       };
 
       const annotations = [
-        new Annotation(
+        new AnnotationList(
           { '@id': 'foo', resources: [{ on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=10,10,100,200' }] },
         ),
       ];

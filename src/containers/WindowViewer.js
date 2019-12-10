@@ -27,6 +27,7 @@ const mapStateToProps = (state, { windowId }) => (
 const mapDispatchToProps = {
   fetchAnnotation: actions.fetchAnnotation,
   fetchInfoResponse: actions.fetchInfoResponse,
+  receiveAnnotation: actions.receiveAnnotation,
 };
 
 

@@ -269,6 +269,33 @@
           ]
         }
       ],
+      "annotations": [
+        {
+          "id": "https://example.org/iiif/foo/bar/annopage/",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://example.org/iiif/book1/page/manifest/a1",
+              "type": "Annotation",
+              "motivation": "commenting",
+              "body": {
+                "type": "TextualBody",
+                "language": "en",
+                "value": "I love this!"
+              },
+              "target": "https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json#xywh=2000,500,2000,2000"
+            }
+          ]
+        },
+        {
+          "id": "https://example.org/iiif/foo/bar/annopage/remote/1",
+          "type": "AnnotationPage"
+        },
+        {
+          "id": "https://example.org/iiif/foo/bar/annopage/remote/2",
+          "type": "AnnotationPage"
+        }
+      ],
       "metadata": [
         {
           "label": {

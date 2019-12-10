@@ -28,7 +28,7 @@ const mapStateToProps = (state, { canvasId, windowId }) => ({
   allAnnotationsAreHighlighted: getWindow(state, { windowId }).displayAllAnnotations,
   annotations: getIdAndContentOfResources(
     getAnnotationResourcesByMotivationForCanvas(
-      state, { canvasId, motivations: ['oa:commenting', 'sc:painting'], windowId },
+      state, { canvasId, motivations: ['oa:commenting', 'sc:painting', 'commenting'], windowId },
     ),
   ),
   label: getCanvasLabel(state, {

@@ -26,7 +26,9 @@ export class WindowViewer extends Component {
    * Request the initial canvas on mount
    */
   componentDidMount() {
-    const { currentCanvases, fetchInfoResponse, fetchAnnotation } = this.props;
+    const {
+      currentCanvases, fetchInfoResponse, fetchAnnotation, receiveAnnotation,
+    } = this.props;
 
     if (!this.infoResponseIsInStore()) {
       currentCanvases.forEach((canvas) => {
@@ -35,9 +37,7 @@ export class WindowViewer extends Component {
         if (imageResource) {
           fetchInfoResponse({ imageResource });
         }
-        manifestoCanvas.annotationListUris.forEach((uri) => {
-          fetchAnnotation(manifestoCanvas.canvas.id, uri);
-        });
+        manifestoCanvas.processAnnotations(fetchAnnotation, receiveAnnotation);
       });
     }
   }
@@ -48,7 +48,7 @@ export class WindowViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      currentCanvasId, currentCanvases, view, fetchInfoResponse, fetchAnnotation,
+      currentCanvasId, currentCanvases, view, fetchInfoResponse, fetchAnnotation, receiveAnnotation,
     } = this.props;
 
     if (prevProps.view !== view
@@ -60,9 +60,7 @@ export class WindowViewer extends Component {
         if (imageResource) {
           fetchInfoResponse({ imageResource });
         }
-        manifestoCanvas.annotationListUris.forEach((uri) => {
-          fetchAnnotation(manifestoCanvas.canvas.id, uri);
-        });
+        manifestoCanvas.processAnnotations(fetchAnnotation, receiveAnnotation);
       });
     }
   }
@@ -140,6 +138,7 @@ WindowViewer.propTypes = {
   fetchAnnotation: PropTypes.func.isRequired,
   fetchInfoResponse: PropTypes.func.isRequired,
   infoResponses: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  receiveAnnotation: PropTypes.func.isRequired,
   view: PropTypes.string.isRequired,
   windowId: PropTypes.string.isRequired,
 };

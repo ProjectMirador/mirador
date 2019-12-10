@@ -32,7 +32,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
  * @private
  */
 const mapStateToProps = (state, { windowId }) => ({
-  hasAnnotations: getAnnotationResourcesByMotivation(state, { motivations: ['oa:commenting', 'sc:painting'], windowId }).length > 0,
+  hasAnnotations: getAnnotationResourcesByMotivation(state, { motivations: ['oa:commenting', 'sc:painting', 'commenting'], windowId }).length > 0,
   hasSearchResults: getWindow(state, { windowId }).suggestedSearches || getSearchQuery(state, {
     companionWindowId: (getCompanionWindowsForPosition(state, { position: 'left', windowId })[0] || {}).id,
     windowId,
