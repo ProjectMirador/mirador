@@ -77,7 +77,7 @@ export class ManifestRelatedLinks extends Component {
                       {related.label || related.value}
                     </Link>
                     { related.format && (
-                      <Typography variant="a" component="span">{`(${related.format})`}</Typography>
+                      <Typography component="span">{`(${related.format})`}</Typography>
                     )}
                   </Typography>
                 ))
