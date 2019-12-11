@@ -16,20 +16,6 @@ const babelLoaderConfig = {
 };
 const baseConfig = [
   {
-    entry: './src/index-core.js',
-    module: {
-      rules: [
-        babelLoaderConfig,
-      ],
-    },
-    output: {
-      filename: 'm3core.umd.js',
-      library: 'm3core',
-      libraryTarget: 'umd',
-      path: path.join(__dirname, 'dist'),
-    },
-  },
-  {
     entry: ['./src/polyfills.js', './src/index.js'],
     module: {
       rules: [
