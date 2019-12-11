@@ -4,7 +4,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const paths = require('./config/paths');
 
 const babelLoaderConfig = {
-  include: paths.appSrc, // CRL
+  include: paths.appPath, // CRL
   loader: require.resolve('babel-loader'),
   options: {
     // Save disk space when time isn't as important
@@ -14,7 +14,6 @@ const babelLoaderConfig = {
   },
   test: /\.(js|mjs|jsx)$/,
 };
-
 const baseConfig = [
   {
     entry: './src/index-core.js',
@@ -31,7 +30,7 @@ const baseConfig = [
     },
   },
   {
-    entry: './src/index.js',
+    entry: ['./src/polyfills.js', './src/index.js'],
     module: {
       rules: [
         babelLoaderConfig,
