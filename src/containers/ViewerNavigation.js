@@ -4,13 +4,18 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getNextCanvasGrouping, getPreviousCanvasGrouping } from '../state/selectors';
+import {
+  getManifestViewingDirection,
+  getNextCanvasGrouping,
+  getPreviousCanvasGrouping,
+} from '../state/selectors';
 import { ViewerNavigation } from '../components/ViewerNavigation';
 
 /** */
 const mapStateToProps = (state, { windowId }) => ({
   hasNextCanvas: !!getNextCanvasGrouping(state, { windowId }),
   hasPreviousCanvas: !!getPreviousCanvasGrouping(state, { windowId }),
+  viewingDirection: getManifestViewingDirection(state, { windowId }),
 });
 
 /**

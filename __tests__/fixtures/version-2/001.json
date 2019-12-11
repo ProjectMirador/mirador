@@ -125,6 +125,7 @@
     }
   },
   "viewingHint": "individuals",
+  "viewingDirection": "left-to-right",
   "sequences": [
     {
       "@id": "https://iiif.bodleian.ox.ac.uk/iiif/sequence/9cca8fdd-4a61-4429-8ac1-f648764b4d6d_default.json",

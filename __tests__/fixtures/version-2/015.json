@@ -5,11 +5,13 @@
   "label": "Test 15 Manifest: ViewingHint: paged (Modified to be on sequence also)",
   "within": "http://iiif.io/api/presentation/2.0/example/fixtures/collection.json",
   "viewingHint": "individuals",
+  "viewingDirection": "right-to-left",
   "sequences": [
     {
       "@type": "sc:Sequence", 
       "label": "Test 15 Sequence 1", 
       "viewingHint": "paged",
+      "viewingDirection": "left-to-right",
       "canvases": [
         {
           "@id": "http://iiif.io/api/presentation/2.0/example/fixtures/canvas/15/c1.json", 

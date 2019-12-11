@@ -408,6 +408,17 @@ export const getManifestViewingHint = createSelector(
   },
 );
 
+export const getManifestViewingDirection = createSelector(
+  [getManifestoInstance],
+  (manifest) => {
+    if (!manifest) return null;
+    const viewingDirection = manifest.getSequences()[0].getViewingDirection()
+      || manifest.getViewingDirection();
+    if (viewingDirection) return viewingDirection.value;
+    return null;
+  },
+);
+
 /** */
 export const getManifestSearchService = createSelector(
   [getManifestoInstance],

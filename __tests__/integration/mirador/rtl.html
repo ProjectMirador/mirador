@@ -21,6 +21,11 @@
        height: 600px;
        position: relative;
      }
+     #instanceThree {
+       width: 100%;
+       height: 50%;
+       position: relative;
+     }
     </style>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
   </head>
@@ -29,6 +34,8 @@
     <div id="instanceOne" dir="rtl"></div>
     <h1>This is the second instance dir="ltr", viewingDirection="rtl"</h1>
     <div id="instanceTwo" dir="ltr"></div>
+    <h1>This is the third instance dir="rtl"</h1>
+    <div id="instanceThree" dir="rtl"></div>
     <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
     <script type="text/javascript">
      var miradorInstance = Mirador.viewer({
@@ -44,6 +51,12 @@
        id: 'instanceTwo',
        windows: [{
          manifestId: 'https://candra.dhii.jp/iiif/blackjacky/b001/manifest.json',
+       }]
+     });
+     var miradorInstance = Mirador.viewer({
+       id: 'instanceThree',
+       windows: [{
+         manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
        }]
      });
     </script>

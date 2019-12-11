@@ -24,6 +24,7 @@ import {
   getManifestRelatedContent,
   getManifestRenderings,
   getManifestUrl,
+  getManifestViewingDirection,
   getManifestViewingHint,
   getMetadataLocales,
   getRequiredStatement,
@@ -488,6 +489,23 @@ describe('getManifestViewingHint', () => {
   it('is null if no viewingHint is specified', () => {
     const state = { manifests: { x: { json: manifestFixture019 } } };
     expect(getManifestViewingHint(state, { manifestId: 'x' })).toBeNull();
+  });
+});
+
+describe('getManifestViewingDirection', () => {
+  it('gets from the manifest', () => {
+    const state = { manifests: { x: { json: manifestFixture001 } } };
+    expect(getManifestViewingDirection(state, { manifestId: 'x' })).toEqual('left-to-right');
+  });
+
+  it('gets from the sequence', () => {
+    const state = { manifests: { x: { json: manifestFixture015 } } };
+    expect(getManifestViewingDirection(state, { manifestId: 'x' })).toEqual('left-to-right');
+  });
+
+  it('is null if no viewingDirection is specified', () => {
+    const state = { manifests: { x: { json: manifestFixture019 } } };
+    expect(getManifestViewingDirection(state, { manifestId: 'x' })).toBeNull();
   });
 });
 
