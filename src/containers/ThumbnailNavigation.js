@@ -9,6 +9,7 @@ import { ThumbnailNavigation } from '../components/ThumbnailNavigation';
 import {
   getNextCanvasGrouping, getPreviousCanvasGrouping,
   getManifestCanvases, getCanvasIndex, getWindowViewType,
+  getManifestViewingDirection,
 } from '../state/selectors';
 
 /**
@@ -29,6 +30,7 @@ const mapStateToProps = (state, { windowId }) => {
     hasPreviousCanvas: !!getPreviousCanvasGrouping(state, { windowId }),
     position: state.companionWindows[state.windows[windowId].thumbnailNavigationId].position,
     view: viewType,
+    viewingDirection: getManifestViewingDirection(state, { windowId }),
   };
 };
 
