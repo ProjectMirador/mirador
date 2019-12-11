@@ -5,10 +5,22 @@
 
 // eslint-disable-next-line func-names
 module.exports = function (api) {
-  api.cache(true);
+  const isDevelopmentEnv = api.env('development');
+  const isProductionEnv = api.env('production');
+  const isTestEnv = api.env('test');
 
   const presets = [
-    [
+    isTestEnv && [
+      '@babel/preset-env',
+      {
+        modules: 'commonjs',
+        targets: {
+          node: 'current',
+        },
+      },
+      '@babel/preset-react',
+    ],
+    (isProductionEnv || isDevelopmentEnv) && [
       '@babel/preset-env',
       {
         corejs: 3,
@@ -18,8 +30,14 @@ module.exports = function (api) {
         useBuiltIns: 'entry',
       },
     ],
-    '@babel/preset-react',
-  ];
+    [
+      '@babel/preset-react',
+      {
+        development: isDevelopmentEnv || isTestEnv,
+        useBuiltIns: true,
+      },
+    ],
+  ].filter(Boolean);
 
   const plugins = [
     'babel-plugin-macros',
