@@ -39,8 +39,12 @@ export default class ManifestoCanvas {
     return flatten(
       new Array(this.canvas.__jsonld.otherContent), // eslint-disable-line no-underscore-dangle
     )
-      .filter(otherContent => otherContent && otherContent['@type'] === 'sc:AnnotationList')
-      .map(otherContent => otherContent['@id']);
+      .filter((otherContent) => {
+        return otherContent && (typeof otherContent === 'string' || otherContent['@type'] === 'sc:AnnotationList');
+      })
+      .map((otherContent) => {
+        return typeof otherContent === 'string' ? otherContent : otherContent['@id'];
+      });
   }
 
   /** */

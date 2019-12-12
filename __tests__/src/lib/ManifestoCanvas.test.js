@@ -6,6 +6,7 @@ import imagev1Fixture from '../../fixtures/version-2/Osbornfa1.json';
 import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
 import serviceFixture from '../../fixtures/version-2/canvasService.json';
 import otherContentFixture from '../../fixtures/version-2/299843.json';
+import otherContentStringsFixture from '../../fixtures/version-2/BibliographicResource_3000126341277.json';
 
 describe('ManifestoCanvas', () => {
   let instance;
@@ -25,14 +26,27 @@ describe('ManifestoCanvas', () => {
       });
     });
     describe('when annotationLists are present', () => {
-      it('returns an array of uris', () => {
-        const otherContentInstance = new ManifestoCanvas(
-          manifesto.create(otherContentFixture).getSequences()[0].getCanvases()[0],
-        );
-        expect(otherContentInstance.annotationListUris.length).toEqual(1);
-        expect(otherContentInstance.annotationListUris).toEqual([
-          'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
-        ]);
+      describe('with items as objects', () => {
+        it('returns an array of uris', () => {
+          const otherContentInstance = new ManifestoCanvas(
+            manifesto.create(otherContentFixture).getSequences()[0].getCanvases()[0],
+          );
+          expect(otherContentInstance.annotationListUris.length).toEqual(1);
+          expect(otherContentInstance.annotationListUris).toEqual([
+            'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
+          ]);
+        });
+      });
+      describe('with items as strings', () => {
+        it('returns an array of uris', () => {
+          const otherContentInstance = new ManifestoCanvas(
+            manifesto.create(otherContentStringsFixture).getSequences()[0].getCanvases()[0],
+          );
+          expect(otherContentInstance.annotationListUris.length).toEqual(1);
+          expect(otherContentInstance.annotationListUris).toEqual([
+            'https://iiif.europeana.eu/presentation/9200301/BibliographicResource_3000126341277/annopage/1',
+          ]);
+        });
       });
     });
   });
