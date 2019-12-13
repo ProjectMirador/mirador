@@ -6,8 +6,9 @@ export default class CanvasWorld {
    * @param {Array} canvases - Array of Manifesto:Canvas objects to create a
    * world from.
    */
-  constructor(canvases) {
+  constructor(canvases, viewingDirection = 'left-to-right') {
     this.canvases = canvases;
+    this.viewingDirection = viewingDirection;
   }
 
   /** */
@@ -25,7 +26,7 @@ export default class CanvasWorld {
     const aspectRatio = canvas.getWidth() / canvas.getHeight();
     const scaledWidth = Math.floor(wholeBounds[3] * aspectRatio);
     let x = 0;
-    if (i === 1) {
+    if (i === this.secondCanvasIndex) {
       x = wholeBounds[2] - scaledWidth;
     }
     return [
@@ -34,6 +35,14 @@ export default class CanvasWorld {
       scaledWidth,
       wholeBounds[3],
     ];
+  }
+
+  /**
+   * secondCanvasIndex - index of the second canvas used for determining which
+   * is first
+   */
+  get secondCanvasIndex() {
+    return this.viewingDirection === 'right-to-left' ? 0 : 1;
   }
 
   /** */
