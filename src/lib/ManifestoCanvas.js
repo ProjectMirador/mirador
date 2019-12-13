@@ -34,17 +34,19 @@ export default class ManifestoCanvas {
     return this.canvas.getWidth() / this.canvas.getHeight();
   }
 
-  /** */
+  /**
+   * Fetches AnnotationList URIs from canvas's otherContent property
+   *
+   * Supported otherContent types:
+   * - Objects having @type property of "sc:AnnotationList" and URI in @id
+   * - Strings being the URIs
+   */
   get annotationListUris() {
     return flatten(
       new Array(this.canvas.__jsonld.otherContent), // eslint-disable-line no-underscore-dangle
     )
-      .filter((otherContent) => {
-        return otherContent && (typeof otherContent === 'string' || otherContent['@type'] === 'sc:AnnotationList');
-      })
-      .map((otherContent) => {
-        return typeof otherContent === 'string' ? otherContent : otherContent['@id'];
-      });
+      .filter(otherContent => otherContent && (typeof otherContent === 'string' || otherContent['@type'] === 'sc:AnnotationList'))
+      .map(otherContent => (typeof otherContent === 'string' ? otherContent : otherContent['@id']));
   }
 
   /** */
