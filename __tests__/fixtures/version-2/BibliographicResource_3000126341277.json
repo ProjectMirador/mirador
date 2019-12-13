@@ -1,0 +1,110 @@
+{
+  "@type" : "sc:Manifest",
+  "@id" : "https://iiif.europeana.eu/presentation/9200301/BibliographicResource_3000126341277/manifest",
+  "@context" : "http://iiif.io/api/presentation/2/context.json",
+  "within" : "http://data.theeuropeanlibrary.org/Collection/a0611",
+  "label" : [ {
+    "@value" : "Uusi Aura, nr: 274A - 1909-11-26"
+  } ],
+  "metadata" : [ {
+    "label" : "type",
+    "value" : [ {
+      "@value" : "http://schema.org/PublicationIssue"
+    }, {
+      "@language" : "en",
+      "@value" : "Analytic serial"
+    }, {
+      "@language" : "en",
+      "@value" : "Newspaper"
+    }, {
+      "@language" : "en",
+      "@value" : "Newspaper Issue"
+    } ]
+  }, {
+    "label" : "language",
+    "value" : [ {
+      "@value" : "fin"
+    } ]
+  }, {
+    "label" : "source",
+    "value" : [ {
+      "@value" : "http://digi.kansalliskirjasto.fi/sanomalehti/binding/803341"
+    } ]
+  } ],
+  "thumbnail" : {
+    "@type" : "dctypes:Image",
+    "@id" : "https://api.europeana.eu/api/v2/thumbnail-by-url.json?uri=https%3A%2F%2Fiiif.europeana.eu%2Fimage%2FZL7BQFMZHWA34ENQ6ZEWBTQK2R3ZWL3I5PS46AILJEODMY6UM4TA%2Fpresentation_images%2Fd461d710-02ca-11e6-a651-fa163e2dd531%2Fnode-4%2Fimage%2FNLF%2FUusi_Aura%2F1909%2F11%2F26%2F274B_1%2F19091126_274B_1-0001%2Ffull%2Ffull%2F0%2Fdefault.jpg&type=TEXT"
+  },
+  "navDate" : "1909-11-26T00:00:00Z",
+  "attribution" : "Uusi Aura, nr: 274A - 1909-11-26 - https://www.europeana.eu/portal/record/9200301/BibliographicResource_3000126341277.html. National Library of Finland. Public Domain Mark - http://creativecommons.org/publicdomain/mark/1.0/",
+  "license" : "http://creativecommons.org/publicdomain/mark/1.0/",
+  "logo" : "https://style.europeana.eu/images/europeana-logo-default.png",
+  "seeAlso" : [ {
+    "@id" : "https://www.europeana.eu/api/v2/record/9200301/BibliographicResource_3000126341277.json-ld",
+    "format" : "application/ld+json",
+    "profile" : "http://www.europeana.eu/schemas/edm/"
+  }, {
+    "@id" : "https://www.europeana.eu/api/v2/record/9200301/BibliographicResource_3000126341277.json",
+    "format" : "application/json",
+    "profile" : "http://www.europeana.eu/schemas/edm/"
+  }, {
+    "@id" : "https://www.europeana.eu/api/v2/record/9200301/BibliographicResource_3000126341277.rdf",
+    "format" : "application/rdf+xml",
+    "profile" : "http://www.europeana.eu/schemas/edm/"
+  } ],
+  "sequences" : [ {
+    "@type" : "sc:Sequence",
+    "@id" : "https://iiif.europeana.eu/presentation/9200301/BibliographicResource_3000126341277/sequence/s1",
+    "label" : "Current Page Order",
+    "startCanvas" : "https://iiif.europeana.eu/presentation/9200301/BibliographicResource_3000126341277/canvas/p1",
+    "canvases" : [ {
+      "@type" : "sc:Canvas",
+      "@id" : "https://iiif.europeana.eu/presentation/9200301/BibliographicResource_3000126341277/canvas/p1",
+      "label" : "p. 1",
+      "height" : 2594,
+      "width" : 1890,
+      "attribution" : "Uusi Aura, nr: 274A - 1909-11-26 - https://www.europeana.eu/portal/record/9200301/BibliographicResource_3000126341277.html. National Library of Finland. Public Domain Mark - http://creativecommons.org/publicdomain/mark/1.0/",
+      "images" : [ {
+        "@type" : "oa:Annotation",
+        "@id" : "https://iiif.europeana.eu/presentation/9200301/BibliographicResource_3000126341277/annotation/p1",
+        "motivation" : "sc:painting",
+        "resource" : {
+          "@type" : "dctypes:Image",
+          "@id" : "https://iiif.europeana.eu/image/ZL7BQFMZHWA34ENQ6ZEWBTQK2R3ZWL3I5PS46AILJEODMY6UM4TA/presentation_images/d461d710-02ca-11e6-a651-fa163e2dd531/node-4/image/NLF/Uusi_Aura/1909/11/26/274B_1/19091126_274B_1-0001/full/full/0/default.jpg",
+          "format" : "image/jpeg",
+          "service" : {
+            "@id" : "https://iiif.europeana.eu/image/ZL7BQFMZHWA34ENQ6ZEWBTQK2R3ZWL3I5PS46AILJEODMY6UM4TA/presentation_images/d461d710-02ca-11e6-a651-fa163e2dd531/node-4/image/NLF/Uusi_Aura/1909/11/26/274B_1/19091126_274B_1-0001",
+            "profile" : "http://iiif.io/api/image/2/level1.json",
+            "@context" : "http://iiif.io/api/image/2/context.json"
+          }
+        },
+        "on" : "https://iiif.europeana.eu/presentation/9200301/BibliographicResource_3000126341277/canvas/p1"
+      } ],
+      "otherContent" : [ "https://iiif.europeana.eu/presentation/9200301/BibliographicResource_3000126341277/annopage/1" ]
+    }, {
+      "@type" : "sc:Canvas",
+      "@id" : "https://iiif.europeana.eu/presentation/9200301/BibliographicResource_3000126341277/canvas/p2",
+      "label" : "p. 2",
+      "height" : 2656,
+      "width" : 1882,
+      "attribution" : "Uusi Aura, nr: 274A - 1909-11-26 - https://www.europeana.eu/portal/record/9200301/BibliographicResource_3000126341277.html. National Library of Finland. Public Domain Mark - http://creativecommons.org/publicdomain/mark/1.0/",
+      "images" : [ {
+        "@type" : "oa:Annotation",
+        "@id" : "https://iiif.europeana.eu/presentation/9200301/BibliographicResource_3000126341277/annotation/p2",
+        "motivation" : "sc:painting",
+        "resource" : {
+          "@type" : "dctypes:Image",
+          "@id" : "https://iiif.europeana.eu/image/ZL7BQFMZHWA34ENQ6ZEWBTQK2R3ZWL3I5PS46AILJEODMY6UM4TA/presentation_images/d461d710-02ca-11e6-a651-fa163e2dd531/node-4/image/NLF/Uusi_Aura/1909/11/26/274B_1/19091126_274B_1-0002/full/full/0/default.jpg",
+          "format" : "image/jpeg",
+          "service" : {
+            "@id" : "https://iiif.europeana.eu/image/ZL7BQFMZHWA34ENQ6ZEWBTQK2R3ZWL3I5PS46AILJEODMY6UM4TA/presentation_images/d461d710-02ca-11e6-a651-fa163e2dd531/node-4/image/NLF/Uusi_Aura/1909/11/26/274B_1/19091126_274B_1-0002",
+            "profile" : "http://iiif.io/api/image/2/level1.json",
+            "@context" : "http://iiif.io/api/image/2/context.json"
+          }
+        },
+        "on" : "https://iiif.europeana.eu/presentation/9200301/BibliographicResource_3000126341277/canvas/p2"
+      } ],
+      "otherContent" : [ "https://iiif.europeana.eu/presentation/9200301/BibliographicResource_3000126341277/annopage/2" ]
+    } ]
+  } ]
+}
