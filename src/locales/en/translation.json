@@ -109,6 +109,7 @@
     "single": "Single",
     "startHere": "Start Here",
     "suggestSearch": "Search this document for \"{{ query }}\"",
+    "tableOfContentsList": "Table of contents",
     "theme": "Theme",
     "thumbnailList": "Thumbnail list",
     "thumbnailNavigation": "Thumbnails",

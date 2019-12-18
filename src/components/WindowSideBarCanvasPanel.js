@@ -7,6 +7,7 @@ import RootRef from '@material-ui/core/RootRef';
 import Select from '@material-ui/core/Select';
 import CompanionWindow from '../containers/CompanionWindow';
 import SidebarIndexList from '../containers/SidebarIndexList';
+import SidebarIndexTableOfContents from '../containers/SidebarIndexTableOfContents';
 
 /**
  * a panel showing the canvases for a given manifest
@@ -46,6 +47,24 @@ export class WindowSideBarCanvasPanel extends Component {
     } = this.props;
 
     const { variantSelectionOpened } = this.state;
+    let listComponent;
+    if (variant === 'tableOfContents') {
+      listComponent = (
+        <SidebarIndexTableOfContents
+          id={id}
+          containerRef={this.containerRef}
+          windowId={windowId}
+        />
+      );
+    } else {
+      listComponent = (
+        <SidebarIndexList
+          id={id}
+          containerRef={this.containerRef}
+          windowId={windowId}
+        />
+      );
+    }
     return (
       <RootRef rootRef={this.containerRef}>
         <CompanionWindow
@@ -80,11 +99,12 @@ export class WindowSideBarCanvasPanel extends Component {
               >
                 <MenuItem value="compact"><Typography variant="body2">{ t('compactList') }</Typography></MenuItem>
                 <MenuItem value="thumbnail"><Typography variant="body2">{ t('thumbnailList') }</Typography></MenuItem>
+                <MenuItem value="tableOfContents"><Typography variant="body2">{ t('tableOfContentsList') }</Typography></MenuItem>
               </Select>
             </FormControl>
           )}
         >
-          <SidebarIndexList id={id} containerRef={this.containerRef} windowId={windowId} />
+          {listComponent}
         </CompanionWindow>
       </RootRef>
     );
@@ -97,10 +117,10 @@ WindowSideBarCanvasPanel.propTypes = {
   t: PropTypes.func.isRequired,
   toggleDraggingEnabled: PropTypes.func.isRequired,
   updateVariant: PropTypes.func.isRequired,
-  variant: PropTypes.oneOf(['compact', 'thumbnail']),
+  variant: PropTypes.oneOf(['compact', 'thumbnail', 'tableOfContents']),
   windowId: PropTypes.string.isRequired,
 };
 
 WindowSideBarCanvasPanel.defaultProps = {
-  variant: 'thumbnail',
+  variant: 'tableOfContents',
 };
