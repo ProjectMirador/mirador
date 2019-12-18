@@ -452,3 +452,12 @@ export const getManifestAutocompleteService = createSelector(
     return autocompleteService && autocompleteService;
   },
 );
+
+/** */
+export const getManifestTreeStructure = createSelector(
+  [getManifestoInstance],
+  (manifest) => {
+    if (!manifest) return null;
+    return manifest.getDefaultTree();
+  },
+);
