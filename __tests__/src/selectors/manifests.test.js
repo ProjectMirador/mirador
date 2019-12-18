@@ -25,6 +25,7 @@ import {
   getManifestRenderings,
   getManifestUrl,
   getManifestViewingHint,
+  getManifestTreeStructure,
   getMetadataLocales,
   getRequiredStatement,
   getRights,

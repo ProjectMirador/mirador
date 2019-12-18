@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>Mirador - Table of contents</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+  </head>
+  <body>
+    <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
+    <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
+    <script type="text/javascript">
+     var miradorInstance = Mirador.viewer({
+       id: 'mirador',
+       windows: [{
+         manifestId: 'https://iiif.bodleian.ox.ac.uk/iiif/manifest/390fd0e8-9eae-475d-9564-ed916ab9035c.json',
+         canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/a024a538-aef3-44b3-ad11-51c6a8b04ea2.json'
+       }],
+       window: {
+         sideBarOpenByDefault: true,
+         defaultSideBarPanel: 'canvas'
+       },
+       manifests: {
+       }
+     });
+    </script>
+  </body>
+</html>
