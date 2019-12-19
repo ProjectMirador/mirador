@@ -13,18 +13,31 @@ export class ViewerNavigation extends Component {
    */
   render() {
     const {
-      hasNextCanvas, hasPreviousCanvas, setNextCanvas, setPreviousCanvas, t, classes,
+      hasNextCanvas, hasPreviousCanvas, setNextCanvas, setPreviousCanvas, t,
+      classes, viewingDirection,
     } = this.props;
 
+    let htmlDir = 'ltr';
+    let nextIconStyle = { transform: 'rotate(180deg)' };
+    let previousIconStyle = {};
+    if (viewingDirection === 'right-to-left') {
+      htmlDir = 'rtl';
+      nextIconStyle = {};
+      previousIconStyle = { transform: 'rotate(180deg)' };
+    }
+
     return (
-      <div className={classNames(ns('osd-navigation'), classes.osdNavigation)}>
+      <div
+        className={classNames(ns('osd-navigation'), classes.osdNavigation)}
+        dir={htmlDir}
+      >
         <MiradorMenuButton
           aria-label={t('previousCanvas')}
           className={ns('previous-canvas-button')}
           disabled={!hasPreviousCanvas}
           onClick={() => { hasPreviousCanvas && setPreviousCanvas(); }}
         >
-          <NavigationIcon style={{ transform: 'rotate(180deg)' }} />
+          <NavigationIcon style={nextIconStyle} />
         </MiradorMenuButton>
         <MiradorMenuButton
           aria-label={t('nextCanvas')}
@@ -32,7 +45,7 @@ export class ViewerNavigation extends Component {
           disabled={!hasNextCanvas}
           onClick={() => { hasNextCanvas && setNextCanvas(); }}
         >
-          <NavigationIcon />
+          <NavigationIcon style={previousIconStyle} />
         </MiradorMenuButton>
       </div>
     );
@@ -46,6 +59,7 @@ ViewerNavigation.propTypes = {
   setNextCanvas: PropTypes.func,
   setPreviousCanvas: PropTypes.func,
   t: PropTypes.func.isRequired,
+  viewingDirection: PropTypes.string,
 };
 
 ViewerNavigation.defaultProps = {
@@ -53,4 +67,5 @@ ViewerNavigation.defaultProps = {
   hasPreviousCanvas: false,
   setNextCanvas: () => {},
   setPreviousCanvas: () => {},
+  viewingDirection: '',
 };

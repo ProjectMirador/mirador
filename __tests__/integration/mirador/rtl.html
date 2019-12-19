@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>Mirador - RTL</title>
+    <style type="text/css">
+     html, body {
+       height: 100%;
+       width: 100%;
+     }
+     #instanceOne {
+       width: 100%;
+       height: 50%;
+       position: relative;
+     }
+     #instanceTwo {
+       margin: 0 auto;
+       width: 800px;
+       height: 600px;
+       position: relative;
+     }
+     #instanceThree {
+       width: 100%;
+       height: 50%;
+       position: relative;
+     }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+  </head>
+  <body>
+    <h1>This is the first instance dir="rtl"</h1>
+    <div id="instanceOne" dir="rtl"></div>
+    <h1>This is the second instance dir="ltr", viewingDirection="rtl"</h1>
+    <div id="instanceTwo" dir="ltr"></div>
+    <h1>This is the third instance dir="rtl"</h1>
+    <div id="instanceThree" dir="rtl"></div>
+    <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
+    <script type="text/javascript">
+     var miradorInstance = Mirador.viewer({
+       id: 'instanceOne',
+       windows: [{
+         manifestId: 'https://iiif.bodleian.ox.ac.uk/iiif/manifest/e800b13a-6699-49ae-9bc2-c9b8c35b7a25.json',
+       }],
+       theme: {
+         direction: 'rtl'
+       }
+     });
+     var miradorInstance = Mirador.viewer({
+       id: 'instanceTwo',
+       windows: [{
+         manifestId: 'https://candra.dhii.jp/iiif/blackjacky/b001/manifest.json',
+       }]
+     });
+     var miradorInstance = Mirador.viewer({
+       id: 'instanceThree',
+       windows: [{
+         manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+       }]
+     });
+    </script>
+  </body>
+</html>

@@ -130,4 +130,17 @@ describe('ThumbnailNavigation', () => {
       });
     });
   });
+  describe('when viewingDirection="right-to-left"', () => {
+    beforeEach(() => {
+      wrapper = createWrapper({
+        viewingDirection: 'right-to-left',
+      });
+    });
+
+    it('sets up react-window to be rtl', () => {
+      expect(wrapper
+        .find('AutoSizer').dive().find('List').dive()
+        .props().style.direction).toEqual('rtl');
+    });
+  });
 });

@@ -176,11 +176,13 @@ export class ThumbnailNavigation extends Component {
       classes,
       config,
       position,
+      viewingDirection,
       windowId,
     } = this.props;
     if (position === 'off') {
       return <></>;
     }
+    const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
     return (
       <Paper
         className={classNames(
@@ -201,6 +203,7 @@ export class ThumbnailNavigation extends Component {
         >
           {({ height, width }) => (
             <List
+              direction={htmlDir}
               height={this.areaHeight(height)}
               itemCount={this.itemCount()}
               itemSize={this.calculateScaledSize}
@@ -236,6 +239,7 @@ ThumbnailNavigation.propTypes = {
   setPreviousCanvas: PropTypes.func,
   t: PropTypes.func.isRequired,
   view: PropTypes.string,
+  viewingDirection: PropTypes.string,
   windowId: PropTypes.string.isRequired,
 };
 
@@ -245,4 +249,5 @@ ThumbnailNavigation.defaultProps = {
   setNextCanvas: () => {},
   setPreviousCanvas: () => {},
   view: undefined,
+  viewingDirection: '',
 };

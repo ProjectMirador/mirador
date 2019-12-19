@@ -24,6 +24,10 @@ describe('CanvasWorld', () => {
       expect(new CanvasWorld(canvasSubset).canvasToWorldCoordinates(1))
         .toEqual([6305, 0, 2848, 4288]);
     });
+    it('supports RTL orientations', () => {
+      expect(new CanvasWorld(canvasSubset, 'right-to-left').canvasToWorldCoordinates(1))
+        .toEqual([0, 0, 2848, 4288]);
+    });
   });
   describe('offsetByCanvas', () => {
     it('calculates an offset that can be used to translate annotations', () => {

@@ -1,5 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import NavigationIcon from '@material-ui/icons/PlayCircleOutlineSharp';
+import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { ViewerNavigation } from '../../../src/components/ViewerNavigation';
 
 /** create wrapper */
@@ -74,6 +76,28 @@ describe('ViewerNavigation', () => {
     it('setCanvas function is not called after click, as its disabled', () => {
       wrapper.find('.mirador-previous-canvas-button').simulate('click');
       expect(setPreviousCanvas).not.toHaveBeenCalled();
+    });
+  });
+  describe('when viewingDirection is right-to-left', () => {
+    beforeEach(() => {
+      wrapper = createWrapper({
+        hasNextCanvas: true,
+        hasPreviousCanvas: true,
+        setNextCanvas,
+        setPreviousCanvas,
+        viewingDirection: 'right-to-left',
+      });
+    });
+
+    it('changes the arrow styles', () => {
+      const previous = wrapper.find(MiradorMenuButton).first().children('PlayCircleOutlineSharpIcon').props();
+      const next = wrapper.find(MiradorMenuButton).last().children('PlayCircleOutlineSharpIcon').props();
+      expect(previous.style).toEqual({});
+      expect(next.style).toEqual({ transform: 'rotate(180deg)' });
+    });
+
+    it('sets the dir="rtl"', () => {
+      expect(wrapper.find('div').props().dir).toBe('rtl');
     });
   });
 });
