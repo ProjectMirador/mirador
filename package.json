@@ -49,6 +49,7 @@
     "normalize-url": "^4.2.0",
     "openseadragon": "^2.4.1",
     "prop-types": "^15.6.2",
+    "re-reselect": "^3.4.0",
     "react-aria-live": "^2.0.5",
     "react-copy-to-clipboard": "^5.0.1",
     "react-full-screen": "^0.2.4",
