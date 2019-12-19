@@ -105,7 +105,7 @@ describe('CompanionWindow', () => {
     companionWindow = createWrapper();
     expect(companionWindow.find(Rnd).length).toBe(1);
     expect(companionWindow.find(Rnd).prop('enableResizing').left).toBe(true);
-    expect(companionWindow.find(Rnd).prop('default')).toEqual({ height: 'auto', width: 235 });
+    expect(companionWindow.find(Rnd).prop('default')).toEqual({ height: '100%', width: 235 });
 
     companionWindow = createWrapper({ position: 'bottom' });
     expect(companionWindow.find(Rnd).length).toBe(1);
