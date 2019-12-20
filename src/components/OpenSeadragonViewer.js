@@ -56,19 +56,14 @@ export class OpenSeadragonViewer extends Component {
    * React lifecycle event
    */
   componentDidMount() {
-    const { viewer } = this.props;
+    const { osdConfig, viewer } = this.props;
     if (!this.ref.current) {
       return;
     }
 
     this.viewer = new OpenSeadragon({
-      alwaysBlend: false,
-      blendTime: 0.1,
       id: this.ref.current.id,
-      preserveImageSizeOnResize: true,
-      preserveViewport: true,
-      showNavigationControl: false,
-
+      ...osdConfig,
     });
 
     this.osdCanvasOverlay = new OpenSeadragonCanvasOverlay(this.viewer);
@@ -327,6 +322,7 @@ OpenSeadragonViewer.defaultProps = {
   children: null,
   highlightedAnnotations: [],
   label: null,
+  osdConfig: {},
   palette: {},
   searchAnnotations: [],
   selectedAnnotations: [],
@@ -341,6 +337,7 @@ OpenSeadragonViewer.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   highlightedAnnotations: PropTypes.arrayOf(PropTypes.object),
   label: PropTypes.string,
+  osdConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   palette: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   searchAnnotations: PropTypes.arrayOf(PropTypes.object),
   selectedAnnotations: PropTypes.arrayOf(PropTypes.object),

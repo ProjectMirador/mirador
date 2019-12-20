@@ -34,6 +34,7 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
     canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
     windowId,
   }),
+  osdConfig: state.config.osdConfig,
   palette: getTheme(state).palette,
   searchAnnotations: getSearchAnnotationsForWindow(
     state,
