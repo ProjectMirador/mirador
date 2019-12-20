@@ -71,7 +71,7 @@ export class CompanionWindow extends Component {
           className={[classes.rnd]}
           style={{ display: 'flex', position: 'relative' }}
           default={{
-            height: isBottom ? 201 : 'auto',
+            height: isBottom ? 201 : '100%',
             width: isBottom ? 'auto' : 235,
           }}
           disableDragging
