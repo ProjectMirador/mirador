@@ -268,5 +268,12 @@ export default {
   galleryView: {
     height: 120, // height of gallery view thumbnails
     width: null, // width of gallery view thumbnails (or null, to auto-calculate an aspect-ratio appropriate size)
+  },
+  osdConfig: { // Default config used for OpenSeadragon
+    alwaysBlend: false,
+    blendTime: 0.1,
+    preserveImageSizeOnResize: true,
+    preserveViewport: true,
+    showNavigationControl: false,
   }
 };
