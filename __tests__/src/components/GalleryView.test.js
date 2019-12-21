@@ -32,4 +32,16 @@ describe('GalleryView', () => {
   it('renders gallery items for all canvases', () => {
     expect(wrapper.find(GalleryViewThumbnail).length).toBe(3);
   });
+
+  describe('when viewingDirection="right-to-left"', () => {
+    beforeEach(() => {
+      wrapper = createWrapper({
+        viewingDirection: 'right-to-left',
+      });
+    });
+
+    it('sets up Paper to be rtl', () => {
+      expect(wrapper.find('WithStyles(ForwardRef(Paper))').props().dir).toEqual('rtl');
+    });
+  });
 });
