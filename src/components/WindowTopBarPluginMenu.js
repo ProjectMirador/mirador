@@ -45,7 +45,7 @@ export class WindowTopBarPluginMenu extends Component {
    */
   render() {
     const {
-      classes, containerId, PluginComponents, t, windowId,
+      classes, containerId, PluginComponents, t, windowId, menuIcon,
     } = this.props;
     const { anchorEl } = this.state;
 
@@ -60,7 +60,7 @@ export class WindowTopBarPluginMenu extends Component {
           className={anchorEl ? classes.ctrlBtnSelected : null}
           onClick={this.handleMenuClick}
         >
-          <MoreVertIcon />
+          {menuIcon}
         </MiradorMenuButton>
 
         <Menu
@@ -91,6 +91,7 @@ WindowTopBarPluginMenu.propTypes = {
     ctrlBtnSelected: PropTypes.string,
   }),
   containerId: PropTypes.string.isRequired,
+  menuIcon: PropTypes.element,
   PluginComponents: PropTypes.arrayOf(
     PropTypes.node,
   ),
@@ -101,5 +102,6 @@ WindowTopBarPluginMenu.propTypes = {
 
 WindowTopBarPluginMenu.defaultProps = {
   classes: {},
+  menuIcon: <MoreVertIcon />,
   PluginComponents: [],
 };

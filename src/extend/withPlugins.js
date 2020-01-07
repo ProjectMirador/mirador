@@ -26,6 +26,19 @@ function _withPlugins(targetName, TargetComponent) { // eslint-disable-line no-u
       return <TargetComponent {...passDownProps} />;
     }
 
+    if (!isEmpty(plugins.wrap) && !isEmpty(plugins.add)) {
+      const WrapPluginComponent = plugins.wrap[0].component;
+      const AddPluginComponents = plugins.add.map(plugin => plugin.component);
+      return (
+        <WrapPluginComponent
+          targetProps={passDownProps}
+          {...passDownProps}
+          PluginComponents={AddPluginComponents}
+          TargetComponent={TargetComponent}
+        />
+      );
+    }
+
     if (!isEmpty(plugins.wrap)) {
       const PluginComponent = plugins.wrap[0].component;
       return <PluginComponent targetProps={passDownProps} TargetComponent={TargetComponent} />;
