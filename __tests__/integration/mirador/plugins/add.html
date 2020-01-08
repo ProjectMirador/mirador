@@ -49,6 +49,12 @@
         )
       }
 
+      const AddPluginComponentE = (props) => (
+        <div id="add-plugin-component-e">
+          <input value="hello world"/>
+        </div>
+      );
+
       const addPluginA = {
         target: 'WorkspaceControlPanelButtons',
         mode: 'add',
@@ -73,7 +79,13 @@
         component: WrapPluginComponent,
       };
 
-      const miradorInstance = Mirador.viewer(config, [addPluginA, addPluginB, addPluginC, wrapPluginD]);
+      const addPluginE = {
+        target: 'WindowTopBarPluginArea',
+        mode: 'add',
+        component: AddPluginComponentE,
+      };
+
+      const miradorInstance = Mirador.viewer(config, [addPluginA, addPluginB, addPluginC, wrapPluginD, addPluginE]);
 
      </script>
   </body>
