@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import createCachedSelector from 're-reselect';
 import manifesto, { LanguageMap } from 'manifesto.js';
 import ManifestoCanvas from '../../lib/ManifestoCanvas';
 
@@ -18,13 +19,20 @@ export function getManifest(state, { manifestId, windowId }) {
 }
 
 /** Instantiate a manifesto instance */
-export const getManifestoInstance = createSelector(
-  [
-    getManifest,
-    getLocale,
-  ],
+export const getManifestoInstance = createCachedSelector(
+  getManifest,
+  getLocale,
   (manifest, locale) => manifest
     && createManifestoInstance(manifest.json, locale),
+)(
+  (state, props) => [
+    props.manifestId,
+    props.windowId,
+    (state.companionWindows
+      && state.companionWindows[props.companionWindowId]
+      && state.companionWindows[props.companionWindowId].locale)
+      || (state.config && state.config.language),
+  ].join(' - '), // Cache key consisting of manifestId, windowId, and locale
 );
 
 export const getManifestLocale = createSelector(
