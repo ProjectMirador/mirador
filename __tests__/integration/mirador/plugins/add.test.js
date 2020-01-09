@@ -10,4 +10,10 @@ describe('add two plugins to <WorkspaceControlPanelButtons>', () => {
     await expect(page).toMatchElement('#add-plugin-component-a');
     await expect(page).toMatchElement('#add-plugin-component-b');
   });
+
+  it('wrapped and added plugins will be added to <WindowTopBarPluginMenu>', async () => {
+    await expect(page).toClick('#wrapped-plugin-with-adds button');
+    await expect(page).toMatchElement('#add-plugin-component-c');
+    await expect(page).toMatchElement('#wrapped-plugin-with-adds');
+  });
 });

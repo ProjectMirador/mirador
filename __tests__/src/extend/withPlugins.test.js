@@ -85,7 +85,7 @@ describe('PluginHoc: if add plugins exist but no wrap plugin', () => {
 });
 
 describe('PluginHoc: if wrap plugins AND add plugins exist for target', () => {
-  it('renders the first wrap plugin, ignores add plugins', () => {
+  it('renders the first wrap plugin, ignores add plugins if props are not passed through', () => {
     /** */ const WrapPluginComponentA = props => <div>look i am a plugin</div>;
     /** */ const WrapPluginComponentB = props => <div>look i am a plugin</div>;
     /** */ const AddPluginComponentA = props => <div>look i am a plugin</div>;
@@ -105,5 +105,28 @@ describe('PluginHoc: if wrap plugins AND add plugins exist for target', () => {
     const hoc = createPluginHoc(plugins);
     expect(hoc.find(WrapPluginComponentA).length).toBe(1);
     expect(hoc.find(Target).length).toBe(0);
+  });
+  it('renders the first wrap plugin, renders add plugins if plugin/props are passed through', () => {
+    /** */ const WrapPluginComponentA = plugin => (
+      <plugin.TargetComponent {...plugin.targetProps} {...plugin} />
+    );
+    /** */ const WrapPluginComponentB = props => <div>look i am a plugin</div>;
+    /** */ const AddPluginComponentA = props => <div>look i am a plugin</div>;
+    /** */ const AddPluginComponentB = props => <div>look i am a plugin</div>;
+    const plugins = {
+      Target: {
+        add: [
+          { component: AddPluginComponentA, mode: 'add', target: 'Target' },
+          { component: AddPluginComponentB, mode: 'add', target: 'Target' },
+        ],
+        wrap: [
+          { component: WrapPluginComponentA, mode: 'wrap', target: 'Target' },
+          { component: WrapPluginComponentB, mode: 'wrap', target: 'Target' },
+        ],
+      },
+    };
+    const hoc = createPluginHoc(plugins);
+    expect(hoc.find(WrapPluginComponentA).length).toBe(1);
+    expect(hoc.find(Target).length).toBe(1);
   });
 });
