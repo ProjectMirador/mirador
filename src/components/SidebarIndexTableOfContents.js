@@ -3,10 +3,22 @@ import PropTypes from 'prop-types';
 import TreeView from '@material-ui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import TreeItem from '@material-ui/lab/TreeItem';
 
 /** */
 export class SidebarIndexTableOfContents extends Component {
+  /** */
+  getAllSubTreeCanvasIds(node) {
+    const canvasIds = node.data.getCanvasIds() || [];
+    if (node.nodes) {
+      canvasIds.push(
+        ...node.nodes.reduce((acc, n) => acc.concat(...this.getAllSubTreeCanvasIds(n)), []),
+      );
+    }
+    return canvasIds;
+  }
+
   /** */
   selectTreeItem(node) {
     const { setCanvas, windowId } = this.props;
@@ -19,16 +31,24 @@ export class SidebarIndexTableOfContents extends Component {
   }
 
   /** */
-  buildTreeItems(nodes) {
+  buildTreeItems(nodes, canvasIds) {
     return (
       nodes.map(node => (
         <TreeItem
           key={node.id}
           nodeId={node.id}
-          label={node.label}
+          label={(
+            <>
+              {canvasIds.reduce(
+                (acc, canvasId) => acc || (this.getAllSubTreeCanvasIds(node).indexOf(canvasId) !== -1),
+                false,
+              ) && <VisibilityIcon />}
+              {node.label}
+            </>
+          )}
           onClick={() => this.selectTreeItem(node)}
         >
-          {node.nodes.length > 0 ? this.buildTreeItems(node.nodes) : null}
+          {node.nodes.length > 0 ? this.buildTreeItems(node.nodes, canvasIds) : null}
         </TreeItem>
       ))
     );
@@ -37,12 +57,14 @@ export class SidebarIndexTableOfContents extends Component {
   /** */
   render() {
     const {
-      classes, treeStructure,
+      canvases, classes, treeStructure,
     } = this.props;
 
     if (!treeStructure) {
       return <></>;
     }
+
+    const canvasIds = canvases.map(canvas => canvas.id);
 
     return (
       <>
@@ -50,8 +72,9 @@ export class SidebarIndexTableOfContents extends Component {
           className={classes.root}
           defaultCollapseIcon={<ExpandMoreIcon />}
           defaultExpandIcon={<ChevronRightIcon />}
+          defaultEndIcon={<></>}
         >
-          {this.buildTreeItems(treeStructure.nodes)}
+          {this.buildTreeItems(treeStructure.nodes, canvasIds)}
         </TreeView>
       </>
     );
@@ -59,6 +82,7 @@ export class SidebarIndexTableOfContents extends Component {
 }
 
 SidebarIndexTableOfContents.propTypes = {
+  canvases: PropTypes.arrayOf(PropTypes.object).isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   setCanvas: PropTypes.func.isRequired,
   treeStructure: PropTypes.objectOf().isRequired,
