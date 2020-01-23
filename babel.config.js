@@ -3,6 +3,11 @@
  * compatible with IE11 and Edge.
  */
 
+const moduleFormatMap = {
+  cjs: 'commonjs',
+  es: false,
+};
+
 // eslint-disable-next-line func-names
 module.exports = function (api) {
   const isDevelopmentEnv = api.env('development');
@@ -26,7 +31,7 @@ module.exports = function (api) {
         corejs: 3,
         exclude: ['transform-typeof-symbol'],
         forceAllTransforms: true,
-        modules: false,
+        modules: moduleFormatMap[process.env.MODULE_FORMAT] || false,
         useBuiltIns: 'entry',
       },
     ],
