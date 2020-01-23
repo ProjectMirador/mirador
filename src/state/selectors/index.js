@@ -6,3 +6,4 @@ export * from './manifests';
 export * from './windows';
 export * from './workspace';
 export * from './searches';
+export * from './miradorState';
