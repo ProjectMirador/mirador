@@ -55,7 +55,7 @@ describe('manifest actions', () => {
           {
             manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest',
             properties: { isFetching: true },
-            type: 'REQUEST_MANIFEST',
+            type: 'mirador/REQUEST_MANIFEST',
           },
         ]);
       });
@@ -67,12 +67,12 @@ describe('manifest actions', () => {
               {
                 manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest',
                 properties: { isFetching: true },
-                type: 'REQUEST_MANIFEST',
+                type: 'mirador/REQUEST_MANIFEST',
               },
               {
                 manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest',
                 manifestJson: { data: '12345' },
-                type: 'RECEIVE_MANIFEST',
+                type: 'mirador/RECEIVE_MANIFEST',
               },
             ]);
           });
@@ -87,12 +87,12 @@ describe('manifest actions', () => {
               {
                 manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest',
                 properties: { isFetching: true },
-                type: 'REQUEST_MANIFEST',
+                type: 'mirador/REQUEST_MANIFEST',
               },
               {
                 error: 'FetchError: invalid json response body at undefined reason: Unexpected end of JSON input',
                 manifestId: 'https://purl.stanford.edu/sn904cj3429/iiif/manifest',
-                type: 'RECEIVE_MANIFEST_FAILURE',
+                type: 'mirador/RECEIVE_MANIFEST_FAILURE',
               },
             ]);
           });

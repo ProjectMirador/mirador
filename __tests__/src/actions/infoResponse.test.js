@@ -45,7 +45,7 @@ describe('infoResponse actions', () => {
       it('dispatches the REQUEST_INFO_RESPONSE action', () => {
         store.dispatch(actions.fetchInfoResponse({ imageId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000' }));
         expect(store.getActions()).toEqual([
-          { infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000', type: 'REQUEST_INFO_RESPONSE' },
+          { infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000', type: 'mirador/REQUEST_INFO_RESPONSE' },
         ]);
       });
       it('dispatches the REQUEST_INFO_RESPONSE and then RECEIVE_INFO_RESPONSE', () => {
@@ -53,9 +53,9 @@ describe('infoResponse actions', () => {
           .then(() => {
             const expectedActions = store.getActions();
             expect(expectedActions).toEqual([
-              { infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000', type: 'REQUEST_INFO_RESPONSE' },
+              { infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000', type: 'mirador/REQUEST_INFO_RESPONSE' },
               {
-                infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000', infoJson: { data: '12345' }, ok: true, type: 'RECEIVE_INFO_RESPONSE',
+                infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000', infoJson: { data: '12345' }, ok: true, type: 'mirador/RECEIVE_INFO_RESPONSE',
               },
             ]);
           });
@@ -83,9 +83,9 @@ describe('infoResponse actions', () => {
           .then(() => {
             const expectedActions = store.getActions();
             expect(expectedActions).toEqual([
-              { infoId: 'a', type: 'REQUEST_INFO_RESPONSE' },
+              { infoId: 'a', type: 'mirador/REQUEST_INFO_RESPONSE' },
               {
-                infoId: 'a', infoJson: { data: '12345' }, ok: true, type: 'RECEIVE_INFO_RESPONSE',
+                infoId: 'a', infoJson: { data: '12345' }, ok: true, type: 'mirador/RECEIVE_INFO_RESPONSE',
               },
             ]);
           });
@@ -97,8 +97,8 @@ describe('infoResponse actions', () => {
           .then(() => {
             const expectedActions = store.getActions();
             expect(expectedActions).toEqual([
-              { infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000', type: 'REQUEST_INFO_RESPONSE' },
-              { error: new Error('invalid json response body at undefined reason: Unexpected end of JSON input'), infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000', type: 'RECEIVE_INFO_RESPONSE_FAILURE' },
+              { infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000', type: 'mirador/REQUEST_INFO_RESPONSE' },
+              { error: new Error('invalid json response body at undefined reason: Unexpected end of JSON input'), infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000', type: 'mirador/RECEIVE_INFO_RESPONSE_FAILURE' },
             ]);
           });
       });

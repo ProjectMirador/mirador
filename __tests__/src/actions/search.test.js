@@ -129,7 +129,7 @@ describe('search actions', () => {
             companionWindowId: 'companionWindowId',
             query: 'search terms',
             searchId: 'searchId',
-            type: 'REQUEST_SEARCH',
+            type: 'mirador/REQUEST_SEARCH',
             windowId: 'windowId',
           },
         ]);
@@ -146,14 +146,14 @@ describe('search actions', () => {
               {
                 companionWindowId: 'companionWindowId',
                 searchId: 'searchId',
-                type: 'REQUEST_SEARCH',
+                type: 'mirador/REQUEST_SEARCH',
                 windowId: 'windowId',
               },
               {
                 companionWindowId: 'companionWindowId',
                 searchId: 'searchId',
                 searchJson: { data: '12345' },
-                type: 'RECEIVE_SEARCH',
+                type: 'mirador/RECEIVE_SEARCH',
                 windowId: 'windowId',
               },
             ]);
@@ -173,14 +173,14 @@ describe('search actions', () => {
               {
                 companionWindowId: 'companionWindowId',
                 searchId: 'searchId',
-                type: 'REQUEST_SEARCH',
+                type: 'mirador/REQUEST_SEARCH',
                 windowId: 'windowId',
               },
               {
                 companionWindowId: 'companionWindowId',
                 error: new Error('invalid json response body at undefined reason: Unexpected end of JSON input'),
                 searchId: 'searchId',
-                type: 'RECEIVE_SEARCH_FAILURE',
+                type: 'mirador/RECEIVE_SEARCH_FAILURE',
                 windowId: 'windowId',
               },
             ]);
