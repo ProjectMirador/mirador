@@ -16,9 +16,10 @@
     "test:watch": "jest -c jest.json --watch",
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
-    "build:es": "mkdir -p dist/es && cp -r src dist/es && babel dist/es -d dist/es",
+    "build:es": "mkdir -p dist/es && cp -r src dist/es && MODULE_FORMAT=es babel dist/es -d dist/es",
+    "build:cjs": "mkdir -p dist/cjs && cp -r src dist/cjs && MODULE_FORMAT=cjs babel dist/cjs -d dist/cjs",
     "build:watch": "webpack --watch --mode=development",
-    "prepublishOnly": "npm run clean && npm run build:es && npm run build",
+    "prepublishOnly": "npm run clean && npm run build:es && npm run build:cjs && npm run build",
     "size": "bundlewatch --config bundlewatch.config.json",
     "start": "npm run build:dev && concurrently \"npm run build:watch\" \"npm run server -- -p 4444\"",
     "server:json": "node ./scripts/json-server/server.js >> ./scripts/json-server/json-server.log"
