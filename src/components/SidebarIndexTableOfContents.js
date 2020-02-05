@@ -31,7 +31,7 @@ export class SidebarIndexTableOfContents extends Component {
   }
 
   /** */
-  buildTreeItems(nodes, canvasIds) {
+  buildTreeItems(nodes, canvasIds, visibleRangeIds) {
     return (
       nodes.map(node => (
         <TreeItem
@@ -39,16 +39,17 @@ export class SidebarIndexTableOfContents extends Component {
           nodeId={node.id}
           label={(
             <>
-              {canvasIds.reduce(
+              {/* {canvasIds.reduce(
                 (acc, canvasId) => acc || (this.getAllSubTreeCanvasIds(node).indexOf(canvasId) !== -1),
                 false,
-              ) && <VisibilityIcon />}
+              ) && <VisibilityIcon />} */}
+              { visibleRangeIds.indexOf(node.id) !== -1 && <VisibilityIcon /> }
               {node.label}
             </>
           )}
           onClick={() => this.selectTreeItem(node)}
         >
-          {node.nodes.length > 0 ? this.buildTreeItems(node.nodes, canvasIds) : null}
+          {node.nodes.length > 0 ? this.buildTreeItems(node.nodes, canvasIds, visibleRangeIds) : null}
         </TreeItem>
       ))
     );
@@ -57,9 +58,10 @@ export class SidebarIndexTableOfContents extends Component {
   /** */
   render() {
     const {
-      canvases, classes, treeStructure,
+      canvases, classes, treeStructure, visibleRanges,
     } = this.props;
 
+    console.log(visibleRanges);
     if (!treeStructure) {
       return <></>;
     }
@@ -74,7 +76,7 @@ export class SidebarIndexTableOfContents extends Component {
           defaultExpandIcon={<ChevronRightIcon />}
           defaultEndIcon={<></>}
         >
-          {this.buildTreeItems(treeStructure.nodes, canvasIds)}
+          {this.buildTreeItems(treeStructure.nodes, canvasIds, visibleRanges)}
         </TreeView>
       </>
     );
@@ -86,5 +88,6 @@ SidebarIndexTableOfContents.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   setCanvas: PropTypes.func.isRequired,
   treeStructure: PropTypes.objectOf().isRequired,
+  visibleRanges: PropTypes.arrayOf(PropTypes.string).isRequired,
   windowId: PropTypes.string.isRequired,
 };

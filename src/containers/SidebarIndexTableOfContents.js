@@ -8,6 +8,7 @@ import {
   getManifestoInstance,
   getManifestTreeStructure,
   getVisibleCanvases,
+  getVisibleRangeIds,
 } from '../state/selectors';
 import * as actions from '../state/actions';
 
@@ -19,6 +20,7 @@ const mapStateToProps = (state, { id, windowId }) => ({
   canvases: getVisibleCanvases(state, { windowId }),
   manifesto: getManifestoInstance(state, { windowId }),
   treeStructure: getManifestTreeStructure(state, { windowId }),
+  visibleRangeIds: getVisibleRangeIds(state, { windowId }),
 });
 
 /**
