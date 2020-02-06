@@ -57,3 +57,24 @@ export function removeCompanionWindow(windowId, id) {
     windowId,
   };
 }
+
+/** */
+export function toggleRangeNode(windowId, id, nodeId) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const companionWindow = state.companionWindows[id];
+    const expandedNodeIds = companionWindow.expandedNodeIds || [];
+    const payload = {};
+    if (expandedNodeIds.indexOf(nodeId) === -1) {
+      payload.expandedNodeIds = [...expandedNodeIds, nodeId];
+    } else {
+      payload.expandedNodeIds = expandedNodeIds.filter(item => nodeId !== item);
+    }
+    return dispatch({
+      id,
+      payload,
+      type: ActionTypes.UPDATE_COMPANION_WINDOW,
+      windowId,
+    });
+  };
+}

@@ -9,19 +9,9 @@ import TreeItem from '@material-ui/lab/TreeItem';
 /** */
 export class SidebarIndexTableOfContents extends Component {
   /** */
-  getAllSubTreeCanvasIds(node) {
-    const canvasIds = node.data.getCanvasIds() || [];
-    if (node.nodes) {
-      canvasIds.push(
-        ...node.nodes.reduce((acc, n) => acc.concat(...this.getAllSubTreeCanvasIds(n)), []),
-      );
-    }
-    return canvasIds;
-  }
-
-  /** */
   selectTreeItem(node) {
-    const { setCanvas, windowId } = this.props;
+    const { setCanvas, toggleRangeNode, windowId } = this.props;
+    toggleRangeNode(node.id);
     // Do not select if there are child nodes
     if (node.nodes.length > 0) {
       return;
@@ -39,11 +29,7 @@ export class SidebarIndexTableOfContents extends Component {
           nodeId={node.id}
           label={(
             <>
-              {/* {canvasIds.reduce(
-                (acc, canvasId) => acc || (this.getAllSubTreeCanvasIds(node).indexOf(canvasId) !== -1),
-                false,
-              ) && <VisibilityIcon />} */}
-              { visibleRangeIds.indexOf(node.id) !== -1 && <VisibilityIcon /> }
+              {visibleRangeIds.indexOf(node.id) !== -1 && <VisibilityIcon />}
               {node.label}
             </>
           )}
@@ -58,10 +44,9 @@ export class SidebarIndexTableOfContents extends Component {
   /** */
   render() {
     const {
-      canvases, classes, treeStructure, visibleRanges,
+      canvases, classes, treeStructure, visibleRangeIds, expandedRangeIds,
     } = this.props;
 
-    console.log(visibleRanges);
     if (!treeStructure) {
       return <></>;
     }
@@ -75,8 +60,9 @@ export class SidebarIndexTableOfContents extends Component {
           defaultCollapseIcon={<ExpandMoreIcon />}
           defaultExpandIcon={<ChevronRightIcon />}
           defaultEndIcon={<></>}
+          expanded={expandedRangeIds}
         >
-          {this.buildTreeItems(treeStructure.nodes, canvasIds, visibleRanges)}
+          {this.buildTreeItems(treeStructure.nodes, canvasIds, visibleRangeIds)}
         </TreeView>
       </>
     );
@@ -86,8 +72,10 @@ export class SidebarIndexTableOfContents extends Component {
 SidebarIndexTableOfContents.propTypes = {
   canvases: PropTypes.arrayOf(PropTypes.object).isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  expandedRangeIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   setCanvas: PropTypes.func.isRequired,
+  toggleRangeNode: PropTypes.func.isRequired,
   treeStructure: PropTypes.objectOf().isRequired,
-  visibleRanges: PropTypes.arrayOf(PropTypes.string).isRequired,
+  visibleRangeIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   windowId: PropTypes.string.isRequired,
 };
