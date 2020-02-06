@@ -8,7 +8,8 @@ import {
   getManifestoInstance,
   getManifestTreeStructure,
   getVisibleCanvases,
-  getVisibleRangeIds,
+  getVisibleNodeIds,
+  getExpandedNodeIds,
 } from '../state/selectors';
 import * as actions from '../state/actions';
 
@@ -18,9 +19,10 @@ import * as actions from '../state/actions';
  */
 const mapStateToProps = (state, { id, windowId }) => ({
   canvases: getVisibleCanvases(state, { windowId }),
+  expandedRangeIds: getExpandedNodeIds(state, { companionWindowId: id, windowId }),
   manifesto: getManifestoInstance(state, { windowId }),
   treeStructure: getManifestTreeStructure(state, { windowId }),
-  visibleRangeIds: getVisibleRangeIds(state, { windowId }),
+  visibleRangeIds: getVisibleNodeIds(state, { windowId }),
 });
 
 /**
@@ -30,6 +32,7 @@ const mapStateToProps = (state, { id, windowId }) => ({
  */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
   setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
+  toggleRangeNode: nodeId => dispatch(actions.toggleRangeNode(windowId, id, nodeId)),
 });
 
 /**
