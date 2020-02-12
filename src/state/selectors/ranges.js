@@ -5,7 +5,7 @@ import { getVisibleCanvases } from './canvases';
 import { getCompanionWindow } from './companionWindows';
 
 /** */
-function getVisibleNodeIdsInSubTree(nodes, canvasIds) {
+function getVisibleRangeIdsInSubTree(nodes, canvasIds) {
   return nodes.reduce((rangeIds, node) => {
     const currentRangeIds = [];
     const nodeContainsVisibleCanvas = canvasIds.reduce(
@@ -14,11 +14,11 @@ function getVisibleNodeIdsInSubTree(nodes, canvasIds) {
     );
     if (node.nodes.length > 0) {
       const subTreeVisibleRangeIds = node.nodes.length > 0
-        ? getVisibleNodeIdsInSubTree(node.nodes, canvasIds) : [];
+        ? getVisibleRangeIdsInSubTree(node.nodes, canvasIds) : [];
       currentRangeIds.push(...subTreeVisibleRangeIds);
     }
     if (currentRangeIds.length > 0 || nodeContainsVisibleCanvas) {
-      currentRangeIds.push(node.id);
+      currentRangeIds.push(node.data.id);
     }
     rangeIds.push(...currentRangeIds);
     return rangeIds;
@@ -26,7 +26,7 @@ function getVisibleNodeIdsInSubTree(nodes, canvasIds) {
 }
 
 /** */
-export const getVisibleNodeIds = createSelector(
+export const getVisibleRangeIds = createSelector(
   [
     getManifestTreeStructure,
     getVisibleCanvases,
@@ -36,19 +36,19 @@ export const getVisibleNodeIds = createSelector(
       return [];
     }
     const canvasIds = canvases.map(canvas => canvas.id);
-    return getVisibleNodeIdsInSubTree(tree.nodes, canvasIds);
+    return getVisibleRangeIdsInSubTree(tree.nodes, canvasIds);
   },
 );
 
 /** */
-export function getManuallyExpandedNodeIds(state, { companionWindowId }) {
+export function getManuallyExpandedRangeIds(state, { companionWindowId }) {
   const companionWindow = getCompanionWindow(state, { companionWindowId });
-  return companionWindow.expandedNodeIds || [];
+  return companionWindow.expandedRangeIds || [];
 }
 
 /** */
-export function getExpandedNodeIds(state, { ...args }) {
-  const visibleNodeIds = getVisibleNodeIds(state, { ...args });
-  const manuallyExpandedNodeIds = getManuallyExpandedNodeIds(state, { ...args });
-  return union(manuallyExpandedNodeIds, visibleNodeIds);
+export function getExpandedRangeIds(state, { ...args }) {
+  const visibleRangeIds = getVisibleRangeIds(state, { ...args });
+  const manuallyExpandedRangeIds = getManuallyExpandedRangeIds(state, { ...args });
+  return union(manuallyExpandedRangeIds, visibleRangeIds);
 }
