@@ -11,8 +11,8 @@ import { ScrollTo } from './ScrollTo';
 export class SidebarIndexTableOfContents extends Component {
   /** */
   selectTreeItem(node) {
-    const { setCanvas, toggleRangeNode, windowId } = this.props;
-    toggleRangeNode(node.id);
+    const { setCanvas, toggleRange, windowId } = this.props;
+    toggleRange(node.data.id);
     // Do not select if there are child nodes
     if (node.nodes.length > 0) {
       return;
@@ -27,16 +27,16 @@ export class SidebarIndexTableOfContents extends Component {
       nodes.map(node => (
         <TreeItem
           key={node.id}
-          nodeId={node.id}
+          nodeId={node.data.id}
           label={(
               <ScrollTo
                 containerRef={containerRef}
                 key={`${node.id}-scroll`}
                 offsetTop={96} // offset for the height of the form above
-                scrollTo={visibleRangeIds.indexOf(node.id) !== - 1 && node.nodes.length === 0}
+                scrollTo={visibleRangeIds.indexOf(node.data.id) !== - 1 && node.nodes.length === 0}
               >
                 <>
-                  {visibleRangeIds.indexOf(node.id) !== -1 && <VisibilityIcon />}
+                  {visibleRangeIds.indexOf(node.data.id) !== -1 && <VisibilityIcon fontSize='small' color='secondary'/>}
                   {node.label}
                 </>
               </ScrollTo>

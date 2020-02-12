@@ -59,16 +59,16 @@ export function removeCompanionWindow(windowId, id) {
 }
 
 /** */
-export function toggleRangeNode(windowId, id, nodeId) {
+export function toggleRange(windowId, id, rangeId) {
   return (dispatch, getState) => {
     const state = getState();
     const companionWindow = state.companionWindows[id];
-    const expandedNodeIds = companionWindow.expandedNodeIds || [];
+    const expandedRangeIds = companionWindow.expandedRangeIds || [];
     const payload = {};
-    if (expandedNodeIds.indexOf(nodeId) === -1) {
-      payload.expandedNodeIds = [...expandedNodeIds, nodeId];
+    if (expandedRangeIds.indexOf(rangeId) === -1) {
+      payload.expandedRangeIds = [...expandedRangeIds, rangeId];
     } else {
-      payload.expandedNodeIds = expandedNodeIds.filter(item => nodeId !== item);
+      payload.expandedRangeIds = expandedRangeIds.filter(item => rangeId !== item);
     }
     return dispatch({
       id,
