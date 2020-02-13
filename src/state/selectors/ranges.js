@@ -6,37 +6,74 @@ import { getCompanionWindow } from './companionWindows';
 
 /** */
 function getVisibleRangeIdsInSubTree(nodes, canvasIds) {
-  return nodes.reduce((rangeIds, node) => {
-    const currentRangeIds = [];
+  return nodes.reduce((rangeIdAcc, node) => {
+    const currentBranchRangeIds = [];
+    const currentLeafRangeIds = [];
     const nodeContainsVisibleCanvas = canvasIds.reduce(
       (acc, canvasId) => acc || node.data.getCanvasIds().indexOf(canvasId) !== -1,
       false,
     );
     if (node.nodes.length > 0) {
       const subTreeVisibleRangeIds = node.nodes.length > 0
-        ? getVisibleRangeIdsInSubTree(node.nodes, canvasIds) : [];
-      currentRangeIds.push(...subTreeVisibleRangeIds);
+        ? getVisibleRangeIdsInSubTree(node.nodes, canvasIds) : {
+          branchRangeIds: [],
+          leafRangeIds: [],
+        };
+      currentBranchRangeIds.push(...subTreeVisibleRangeIds.branchRangeIds);
+      currentLeafRangeIds.push(...subTreeVisibleRangeIds.leafRangeIds);
     }
-    if (currentRangeIds.length > 0 || nodeContainsVisibleCanvas) {
-      currentRangeIds.push(node.data.id);
+    if (currentBranchRangeIds.length > 0
+      || currentLeafRangeIds.length > 0
+      || nodeContainsVisibleCanvas) {
+      if (node.nodes.length > 0) {
+        currentBranchRangeIds.push(node.data.id);
+      } else {
+        currentLeafRangeIds.push(node.data.id);
+      }
     }
-    rangeIds.push(...currentRangeIds);
-    return rangeIds;
-  }, []);
+    rangeIdAcc.branchRangeIds.push(...currentBranchRangeIds);
+    rangeIdAcc.leafRangeIds.push(...currentLeafRangeIds);
+    return rangeIdAcc;
+  }, {
+    branchRangeIds: [],
+    leafRangeIds: [],
+  });
 }
 
 /** */
-export const getVisibleRangeIds = createSelector(
+const getVisibleLeafAndBranchRangeIds = createSelector(
   [
     getManifestTreeStructure,
     getVisibleCanvases,
   ],
   (tree, canvases) => {
     if (!canvases) {
-      return [];
+      return {
+        branchRangeIds: [],
+        leafRangeIds: [],
+      };
     }
     const canvasIds = canvases.map(canvas => canvas.id);
     return getVisibleRangeIdsInSubTree(tree.nodes, canvasIds);
+  },
+);
+
+/** */
+export const getVisibleRangeIds = createSelector(
+  [
+    getVisibleLeafAndBranchRangeIds,
+  ],
+  (visibleLeafAndBranchRangeIds) => {
+    return union(visibleLeafAndBranchRangeIds.leafRangeIds, visibleLeafAndBranchRangeIds.branchRangeIds);
+  },
+);
+
+const getVisibleBranchRangeIds = createSelector(
+  [
+    getVisibleLeafAndBranchRangeIds,
+  ],
+  (visibleLeafAndBranchRangeIds) => {
+    return visibleLeafAndBranchRangeIds.branchRangeIds;
   },
 );
 
@@ -48,7 +85,7 @@ export function getManuallyExpandedRangeIds(state, { companionWindowId }) {
 
 /** */
 export function getExpandedRangeIds(state, { ...args }) {
-  const visibleRangeIds = getVisibleRangeIds(state, { ...args });
+  const visibleBranchRangeIds = getVisibleBranchRangeIds(state, { ...args });
   const manuallyExpandedRangeIds = getManuallyExpandedRangeIds(state, { ...args });
-  return union(manuallyExpandedRangeIds, visibleRangeIds);
+  return union(manuallyExpandedRangeIds, visibleBranchRangeIds);
 }

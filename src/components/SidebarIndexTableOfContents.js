@@ -12,13 +12,23 @@ export class SidebarIndexTableOfContents extends Component {
   /** */
   selectTreeItem(node) {
     const { setCanvas, toggleRange, windowId } = this.props;
-    toggleRange(node.data.id);
     // Do not select if there are child nodes
     if (node.nodes.length > 0) {
+      toggleRange(node.data.id);
       return;
     }
     const canvas = node.data.getCanvasIds()[0];
     setCanvas(windowId, canvas);
+  }
+
+  /** */
+  handleKeyPressed(event, node) {
+    if (event.key === 'Enter'
+      || event.key === ' '
+      || event.key === 'ArrowLeft' && this.props.expandedRangeIds.indexOf(node.data.id) !== -1
+      || event.key === 'ArrowRight' && this.props.expandedRangeIds.indexOf(node.data.id) === -1) {
+      this.selectTreeItem(node);
+    }
   }
 
   /** */
@@ -42,6 +52,7 @@ export class SidebarIndexTableOfContents extends Component {
               </ScrollTo>
           )}
           onClick={() => this.selectTreeItem(node)}
+          onKeyDown={e => this.handleKeyPressed(e, node)}
         >
           {node.nodes.length > 0 ? this.buildTreeItems(node.nodes, canvasIds, visibleRangeIds, containerRef) : null}
         </TreeItem>
