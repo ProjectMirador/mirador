@@ -18,6 +18,8 @@ export class ViewerInfo extends Component {
       t,
     } = this.props;
 
+    if (canvasCount === 0) return '';
+
     return (
       <div className={classNames(ns('osd-info'), classes.osdInfo)}>
         <Typography display="inline" variant="caption" className={ns('canvas-count')}>
