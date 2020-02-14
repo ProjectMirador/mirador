@@ -1,0 +1,82 @@
+{
+   "@context" : "http://iiif.io/api/presentation/2/context.json",
+   "@id" : "https://www.loc.gov/item/2017498721/manifest.json",
+   "viewingHint" : "paged",
+   "metadata" : [
+      {
+         "label" : "APA Citation Style",
+         "value" : "Ṣalāḥ Al-Dīn Bak, M. &amp; Eltaher Collection. (1949) <cite>1. al-Jāmiʻah al-ʻArabīyah wa-aḥdāth Filasṭīn ; 2. al-Qaḍīyah al-Filasṭīnīyah amāma Lajnat al-tawfīq</cite>. [Cairo?: Maṭbaʻat Fāḍil] [Pdf] Retrieved from the Library of Congress, https://www.loc.gov/item/2017498721/."
+      },
+      {
+         "label" : "MLA Citation Style",
+         "value" : "Ṣalāḥ Al-Dīn Bak, Muḥammad, Author, and  Eltaher Collection. <cite>1. al-Jāmiʻah al-ʻArabīyah wa-aḥdāth Filasṭīn ; 2. al-Qaḍīyah al-Filasṭīnīyah amāma Lajnat al-tawfīq</cite>. [Cairo?: Maṭbaʻat Fāḍil, 1949] Pdf. Retrieved from the Library of Congress, &lt;www.loc.gov/item/2017498721/&gt;."
+      },
+      {
+         "label" : "Chicago Citation Style",
+         "value" : "Ṣalāḥ Al-Dīn Bak, Muḥammad, Author, and  Eltaher Collection. <cite>1. al-Jāmiʻah al-ʻArabīyah wa-aḥdāth Filasṭīn ; 2. al-Qaḍīyah al-Filasṭīnīyah amāma Lajnat al-tawfīq</cite>. [Cairo?: Maṭbaʻat Fāḍil, 1949] Pdf. https://www.loc.gov/item/2017498721/."
+      },
+      {
+         "label" : "Contributors",
+         "value" : [
+            "Ṣalāḥ al-Dīn Bak, Muḥammad, author.",
+            "Eltaher Collection (Library of Congress)"
+         ]
+      },
+      {
+         "label" : "Created Published",
+         "value" : [
+            "[Cairo?] : Maṭbaʻat Fāḍil, [1949]"
+         ]
+      },
+      {
+         "value" : [
+            "book"
+         ],
+         "label" : "Original Format"
+      },
+      {
+         "value" : [
+            "palestine",
+            "politics and government",
+            "arab-israeli conflict",
+            "sources"
+         ],
+         "label" : "Subjects"
+      },
+      {
+         "value" : [
+            "image",
+            "pdf"
+         ],
+         "label" : "Online Format"
+      },
+      {
+         "label" : "Item Url",
+         "value" : "https://www.loc.gov/item/2017498721/"
+      }
+   ],
+   "logo" : "https://loc.gov/static/images/logo-loc-new-branding.svg",
+   "seeAlso" : [
+      {
+         "@id" : "https://lccn.loc.gov/2017498721/marcxml",
+         "format" : "text/xml"
+      },
+      {
+         "@id" : "https://lccn.loc.gov/2017498721/mods",
+         "format" : "text/xml"
+      },
+      {
+         "format" : "text/html",
+         "@id" : "https://lccn.loc.gov/2017498721/dc"
+      }
+   ],
+   "navDate" : "1949-01-01:T00:00:00Z",
+   "attribution" : "Provided by the Library of Congress",
+   "viewingDirection" : "left-to-right",
+   "description" : "In Arabic.",
+   "thumbnail" : {
+      "@id" : "https://cdn.loc.gov/service/amed/amedeltaher/2017498721/2017498721.gif"
+   },
+   "label" : "1. al-Jāmiʻah al-ʻArabīyah wa-aḥdāth Filasṭīn ; 2. al-Qaḍīyah al-Filasṭīnīyah amāma Lajnat al-tawfīq",
+   "@type" : "sc:Manifest"
+}

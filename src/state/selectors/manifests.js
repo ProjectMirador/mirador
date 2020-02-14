@@ -410,7 +410,8 @@ export const getManifestViewingHint = createSelector(
   [getManifestoInstance],
   (manifest) => {
     if (!manifest) return null;
-    const viewingHint = manifest.getSequences()[0].getViewingHint() || manifest.getViewingHint();
+    const viewingHint = (manifest.getSequences()[0] && manifest.getSequences()[0].getViewingHint())
+      || manifest.getViewingHint();
     if (viewingHint) return viewingHint.value;
     return null;
   },
