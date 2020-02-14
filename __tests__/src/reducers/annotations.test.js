@@ -46,6 +46,78 @@ describe('annotation reducer', () => {
       },
     });
   });
+  it('should be able to RECEIVE_ANNOTATION from multiple sources and merge state', () => {
+    const firstReduction = annotationsReducer(
+      {
+        foo: {
+          abc123: {
+            id: 'abc123',
+            isFetching: true,
+          },
+        },
+      },
+      {
+        annotationId: 'efg456',
+        annotationJson: {
+          '@type': 'sc:AnnotationList',
+          content: 'anno stuff',
+          id: 'efg456',
+        },
+        targetId: 'foo',
+        type: ActionTypes.RECEIVE_ANNOTATION,
+      },
+    );
+    expect(firstReduction).toMatchObject({
+      foo: {
+        abc123: {
+          id: 'abc123',
+          isFetching: true,
+        },
+        efg456: {
+          isFetching: false,
+          json: {
+            '@type': 'sc:AnnotationList',
+            content: 'anno stuff',
+            id: 'efg456',
+          },
+        },
+      },
+    });
+    const secondReduction = annotationsReducer(
+      firstReduction,
+      {
+        annotationId: 'abc123',
+        annotationJson: {
+          '@type': 'sc:AnnotationList',
+          content: 'anno stuff',
+          id: 'abc123',
+        },
+        targetId: 'foo',
+        type: ActionTypes.RECEIVE_ANNOTATION,
+      },
+    );
+    expect(secondReduction).toMatchObject({
+      foo: {
+        abc123: {
+          id: 'abc123',
+          isFetching: false,
+          json: {
+            '@type': 'sc:AnnotationList',
+            content: 'anno stuff',
+            id: 'abc123',
+          },
+        },
+        efg456: {
+          isFetching: false,
+          json: {
+            '@type': 'sc:AnnotationList',
+            content: 'anno stuff',
+            id: 'efg456',
+          },
+        },
+      },
+    });
+  });
   it('should handle RECEIVE_ANNOTATION_FAILURE', () => {
     expect(annotationsReducer(
       {
