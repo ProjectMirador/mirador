@@ -35,7 +35,7 @@ export class SidebarIndexTableOfContents extends Component {
   }
 
   /** */
-  buildTreeItems(nodes, canvasIds, visibleRangeIds, containerRef) {
+  buildTreeItems(nodes, canvasIds, visibleRangeIds, containerRef, rangeIdToScrollTo) {
     return (
       nodes.map(node => (
         <TreeItem
@@ -46,7 +46,7 @@ export class SidebarIndexTableOfContents extends Component {
                 containerRef={containerRef}
                 key={`${node.id}-scroll`}
                 offsetTop={96} // offset for the height of the form above
-                scrollTo={visibleRangeIds.indexOf(node.data.id) !== - 1 && node.nodes.length === 0}
+                scrollTo={rangeIdToScrollTo === node.data.id}
               >
                 <>
                   {visibleRangeIds.indexOf(node.data.id) !== -1 && <VisibilityIcon fontSize='small' color='secondary'/>}
@@ -66,7 +66,7 @@ export class SidebarIndexTableOfContents extends Component {
   /** */
   render() {
     const {
-      canvases, classes, treeStructure, visibleRangeIds, expandedRangeIds, containerRef,
+      canvases, classes, treeStructure, visibleRangeIds, expandedRangeIds, containerRef, rangeIdToScrollTo,
     } = this.props;
 
     if (!treeStructure) {
@@ -84,7 +84,7 @@ export class SidebarIndexTableOfContents extends Component {
           defaultEndIcon={<></>}
           expanded={expandedRangeIds}
         >
-          {this.buildTreeItems(treeStructure.nodes, canvasIds, visibleRangeIds, containerRef)}
+          {this.buildTreeItems(treeStructure.nodes, canvasIds, visibleRangeIds, containerRef, rangeIdToScrollTo)}
         </TreeView>
       </>
     );
@@ -100,6 +100,7 @@ SidebarIndexTableOfContents.propTypes = {
   ]),
   expandedRangeIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   setCanvas: PropTypes.func.isRequired,
+  rangeIdToScrollTo: PropTypes.func.isRequired,
   toggleRangeNode: PropTypes.func.isRequired,
   treeStructure: PropTypes.objectOf().isRequired,
   visibleRangeIds: PropTypes.arrayOf(PropTypes.string).isRequired,

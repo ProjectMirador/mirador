@@ -10,6 +10,7 @@ import {
   getVisibleCanvases,
   getVisibleRangeIds,
   getExpandedRangeIds,
+  getRangeIdToScrollTo,
 } from '../state/selectors';
 import * as actions from '../state/actions';
 
@@ -21,8 +22,9 @@ const mapStateToProps = (state, { id, windowId }) => ({
   canvases: getVisibleCanvases(state, { windowId }),
   expandedRangeIds: getExpandedRangeIds(state, { companionWindowId: id, windowId }),
   manifesto: getManifestoInstance(state, { windowId }),
+  rangeIdToScrollTo: getRangeIdToScrollTo(state, { companionWindowId: id, windowId }),
   treeStructure: getManifestTreeStructure(state, { windowId }),
-  visibleRangeIds: getVisibleRangeIds(state, { windowId }),
+  visibleRangeIds: getVisibleRangeIds(state, { companionWindowId: id, windowId }),
 });
 
 /**
