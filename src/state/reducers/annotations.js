@@ -9,6 +9,7 @@ export const annotationsReducer = (state = {}, action) => {
       return {
         ...state,
         [action.targetId]: {
+          ...state[action.targetId],
           [action.annotationId]: {
             id: action.annotationId,
             isFetching: true,
@@ -19,6 +20,7 @@ export const annotationsReducer = (state = {}, action) => {
       return {
         ...state,
         [action.targetId]: {
+          ...state[action.targetId],
           [action.annotationId]: {
             id: action.annotationId,
             isFetching: false,
@@ -30,6 +32,7 @@ export const annotationsReducer = (state = {}, action) => {
       return {
         ...state,
         [action.targetId]: {
+          ...state[action.targetId],
           [action.annotationId]: {
             error: action.error,
             id: action.annotationId,
