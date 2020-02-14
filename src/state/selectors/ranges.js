@@ -1,8 +1,20 @@
 import { createSelector } from 'reselect';
 import union from 'lodash/union';
+import { Utils } from 'manifesto.js';
 import { getManifestTreeStructure } from './manifests';
 import { getVisibleCanvases } from './canvases';
 import { getCompanionWindow } from './companionWindows';
+
+/** */
+function rangeContainsCanvasId(range, canvasId) {
+  const canvasIds = range.getCanvasIds();
+  for (let i = 0; i < canvasIds.length; i += 1) {
+    if (Utils.normalisedUrlsMatch(canvasIds[i], canvasId)) {
+      return true;
+    }
+  }
+  return false;
+}
 
 /** */
 function getVisibleRangeIdsInSubTree(nodes, canvasIds) {
@@ -10,7 +22,7 @@ function getVisibleRangeIdsInSubTree(nodes, canvasIds) {
     const currentBranchRangeIds = [];
     const currentLeafRangeIds = [];
     const nodeContainsVisibleCanvas = canvasIds.reduce(
-      (acc, canvasId) => acc || node.data.getCanvasIds().indexOf(canvasId) !== -1,
+      (acc, canvasId) => acc || rangeContainsCanvasId(node.data, canvasId),
       false,
     );
     if (node.nodes.length > 0) {
