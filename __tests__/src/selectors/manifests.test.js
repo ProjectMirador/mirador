@@ -7,6 +7,7 @@ import manifestFixtureSn904cj3429 from '../../fixtures/version-2/sn904cj3429.jso
 import manifestFixturev3001 from '../../fixtures/version-3/001.json';
 import manifestFixtureWithAProvider from '../../fixtures/version-3/with_a_provider.json';
 import manifestFixtureFg165hz3589 from '../../fixtures/version-2/fg165hz3589.json';
+import manifestFixture2017498721 from '../../fixtures/version-2/2017498721.json';
 import {
   getManifestoInstance,
   getManifestLocale,
@@ -485,6 +486,11 @@ describe('getManifestViewingHint', () => {
   it('gets from the manifest', () => {
     const state = { manifests: { x: { json: manifestFixture001 } } };
     expect(getManifestViewingHint(state, { manifestId: 'x' })).toEqual('individuals');
+  });
+
+  it('gets from the manifest if this is no sequence', () => {
+    const state = { manifests: { x: { json: manifestFixture2017498721 } } };
+    expect(getManifestViewingHint(state, { manifestId: 'x' })).toEqual('paged');
   });
 
   it('gets from the sequence', () => {
