@@ -21,6 +21,7 @@ function getVisibleRangeIdsInSubTree(nodes, canvasIds) {
   return nodes.reduce((rangeIdAcc, node) => {
     const currentBranchRangeIds = [];
     const currentLeafRangeIds = [];
+    const currentCanvasRangeIds = [];
     const nodeContainsVisibleCanvas = canvasIds.reduce(
       (acc, canvasId) => acc || rangeContainsCanvasId(node.data, canvasId),
       false,
@@ -29,10 +30,12 @@ function getVisibleRangeIdsInSubTree(nodes, canvasIds) {
       const subTreeVisibleRangeIds = node.nodes.length > 0
         ? getVisibleRangeIdsInSubTree(node.nodes, canvasIds) : {
           branchRangeIds: [],
+          canvasRangeIds: [],
           leafRangeIds: [],
         };
       currentBranchRangeIds.push(...subTreeVisibleRangeIds.branchRangeIds);
       currentLeafRangeIds.push(...subTreeVisibleRangeIds.leafRangeIds);
+      currentCanvasRangeIds.push(...subTreeVisibleRangeIds.canvasRangeIds);
     }
     if (currentBranchRangeIds.length > 0
       || currentLeafRangeIds.length > 0
@@ -42,12 +45,17 @@ function getVisibleRangeIdsInSubTree(nodes, canvasIds) {
       } else {
         currentLeafRangeIds.push(node.data.id);
       }
+      if (nodeContainsVisibleCanvas) {
+        currentCanvasRangeIds.push(node.data.id);
+      }
     }
     rangeIdAcc.branchRangeIds.push(...currentBranchRangeIds);
+    rangeIdAcc.canvasRangeIds.push(...currentCanvasRangeIds);
     rangeIdAcc.leafRangeIds.push(...currentLeafRangeIds);
     return rangeIdAcc;
   }, {
     branchRangeIds: [],
+    canvasRangeIds: [],
     leafRangeIds: [],
   });
 }
@@ -62,6 +70,7 @@ const getVisibleLeafAndBranchRangeIds = createSelector(
     if (!canvases) {
       return {
         branchRangeIds: [],
+        canvasRangeIds: [],
         leafRangeIds: [],
       };
     }
@@ -75,18 +84,21 @@ export const getVisibleRangeIds = createSelector(
   [
     getVisibleLeafAndBranchRangeIds,
   ],
-  (visibleLeafAndBranchRangeIds) => {
-    return union(visibleLeafAndBranchRangeIds.leafRangeIds, visibleLeafAndBranchRangeIds.branchRangeIds);
-  },
+  visibleLeafAndBranchRangeIds => union(visibleLeafAndBranchRangeIds.leafRangeIds, visibleLeafAndBranchRangeIds.branchRangeIds),
 );
 
 const getVisibleBranchRangeIds = createSelector(
   [
     getVisibleLeafAndBranchRangeIds,
   ],
-  (visibleLeafAndBranchRangeIds) => {
-    return visibleLeafAndBranchRangeIds.branchRangeIds;
-  },
+  visibleLeafAndBranchRangeIds => visibleLeafAndBranchRangeIds.branchRangeIds,
+);
+
+const getCanvasContainingRangeIds = createSelector(
+  [
+    getVisibleLeafAndBranchRangeIds,
+  ],
+  visibleLeafAndBranchRangeIds => visibleLeafAndBranchRangeIds.canvasRangeIds,
 );
 
 /** */
@@ -100,4 +112,13 @@ export function getExpandedRangeIds(state, { ...args }) {
   const visibleBranchRangeIds = getVisibleBranchRangeIds(state, { ...args });
   const manuallyExpandedRangeIds = getManuallyExpandedRangeIds(state, { ...args });
   return union(manuallyExpandedRangeIds, visibleBranchRangeIds);
+}
+
+/** */
+export function getRangeIdToScrollTo(state, { ...args }) {
+  const canvasContainingRangeIds = getCanvasContainingRangeIds(state, { ...args });
+  if (canvasContainingRangeIds) {
+    return canvasContainingRangeIds[0];
+  }
+  return null;
 }
