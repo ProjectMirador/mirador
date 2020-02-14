@@ -12,13 +12,16 @@ export class SidebarIndexTableOfContents extends Component {
   /** */
   selectTreeItem(node) {
     const { setCanvas, toggleRange, windowId } = this.props;
-    // Do not select if there are child nodes
     if (node.nodes.length > 0) {
       toggleRange(node.data.id);
+    }
+    // Do not select if there are no canvases listed
+    if (!node.data.getCanvasIds() || node.data.getCanvasIds().length === 0) {
       return;
     }
-    const canvas = node.data.getCanvasIds()[0];
-    setCanvas(windowId, canvas);
+    const target = node.data.getCanvasIds()[0];
+    const canvasId = target.indexOf('#') === -1 ? target : target.substr(0, target.indexOf('#'));
+    setCanvas(windowId, canvasId);
   }
 
   /** */
