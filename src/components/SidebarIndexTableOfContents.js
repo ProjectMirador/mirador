@@ -11,9 +11,9 @@ import { ScrollTo } from './ScrollTo';
 export class SidebarIndexTableOfContents extends Component {
   /** */
   selectTreeItem(node) {
-    const { setCanvas, toggleRange, windowId } = this.props;
+    const { setCanvas, toggleNode, windowId } = this.props;
     if (node.nodes.length > 0) {
-      toggleRange(node.data.id);
+      toggleNode(node.id);
     }
     // Do not select if there are no canvases listed
     if (!node.data.getCanvasIds() || node.data.getCanvasIds().length === 0) {
@@ -28,28 +28,28 @@ export class SidebarIndexTableOfContents extends Component {
   handleKeyPressed(event, node) {
     if (event.key === 'Enter'
       || event.key === ' '
-      || event.key === 'ArrowLeft' && this.props.expandedRangeIds.indexOf(node.data.id) !== -1
-      || event.key === 'ArrowRight' && this.props.expandedRangeIds.indexOf(node.data.id) === -1) {
+      || event.key === 'ArrowLeft' && this.props.expandedNodeIds.indexOf(node.id) !== -1
+      || event.key === 'ArrowRight' && this.props.expandedNodeIds.indexOf(node.id) === -1) {
       this.selectTreeItem(node);
     }
   }
 
   /** */
-  buildTreeItems(nodes, canvasIds, visibleRangeIds, containerRef, rangeIdToScrollTo) {
+  buildTreeItems(nodes, canvasIds, visibleNodeIds, containerRef, nodeIdToScrollTo) {
     return (
       nodes.map(node => (
         <TreeItem
           key={node.id}
-          nodeId={node.data.id}
+          nodeId={node.id}
           label={(
               <ScrollTo
                 containerRef={containerRef}
                 key={`${node.id}-scroll`}
                 offsetTop={96} // offset for the height of the form above
-                scrollTo={rangeIdToScrollTo === node.data.id}
+                scrollTo={nodeIdToScrollTo === node.id}
               >
                 <>
-                  {visibleRangeIds.indexOf(node.data.id) !== -1 && <VisibilityIcon fontSize='small' color='secondary'/>}
+                  {visibleNodeIds.indexOf(node.id) !== -1 && <VisibilityIcon fontSize='small' color='secondary'/>}
                   {node.label}
                 </>
               </ScrollTo>
@@ -57,7 +57,7 @@ export class SidebarIndexTableOfContents extends Component {
           onClick={() => this.selectTreeItem(node)}
           onKeyDown={e => this.handleKeyPressed(e, node)}
         >
-          {node.nodes.length > 0 ? this.buildTreeItems(node.nodes, canvasIds, visibleRangeIds, containerRef) : null}
+          {node.nodes.length > 0 ? this.buildTreeItems(node.nodes, canvasIds, visibleNodeIds, containerRef) : null}
         </TreeItem>
       ))
     );
@@ -66,7 +66,7 @@ export class SidebarIndexTableOfContents extends Component {
   /** */
   render() {
     const {
-      canvases, classes, treeStructure, visibleRangeIds, expandedRangeIds, containerRef, rangeIdToScrollTo,
+      canvases, classes, treeStructure, visibleNodeIds, expandedNodeIds, containerRef, nodeIdToScrollTo,
     } = this.props;
 
     if (!treeStructure) {
@@ -82,9 +82,9 @@ export class SidebarIndexTableOfContents extends Component {
           defaultCollapseIcon={<ExpandMoreIcon />}
           defaultExpandIcon={<ChevronRightIcon />}
           defaultEndIcon={<></>}
-          expanded={expandedRangeIds}
+          expanded={expandedNodeIds}
         >
-          {this.buildTreeItems(treeStructure.nodes, canvasIds, visibleRangeIds, containerRef, rangeIdToScrollTo)}
+          {this.buildTreeItems(treeStructure.nodes, canvasIds, visibleNodeIds, containerRef, nodeIdToScrollTo)}
         </TreeView>
       </>
     );
@@ -98,11 +98,11 @@ SidebarIndexTableOfContents.propTypes = {
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   ]),
-  expandedRangeIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  expandedNodeIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   setCanvas: PropTypes.func.isRequired,
-  rangeIdToScrollTo: PropTypes.func.isRequired,
-  toggleRangeNode: PropTypes.func.isRequired,
+  nodeIdToScrollTo: PropTypes.func.isRequired,
+  toggleNode: PropTypes.func.isRequired,
   treeStructure: PropTypes.objectOf().isRequired,
-  visibleRangeIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  visibleNodeIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   windowId: PropTypes.string.isRequired,
 };
