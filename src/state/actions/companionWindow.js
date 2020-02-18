@@ -59,7 +59,7 @@ export function removeCompanionWindow(windowId, id) {
 }
 
 /** */
-export function toggleRange(windowId, id, rangeId) {
+export function toggleNode(windowId, id, rangeId) {
   return (dispatch, getState) => {
     const state = getState();
     const companionWindow = state.companionWindows[id];
