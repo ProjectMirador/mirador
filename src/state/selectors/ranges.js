@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import union from 'lodash/union';
+import without from 'lodash/without';
 import { Utils } from 'manifesto.js';
 import { getManifestTreeStructure } from './manifests';
 import { getVisibleCanvases } from './canvases';
@@ -84,16 +85,22 @@ const getCanvasContainingNodeIds = createSelector(
 );
 
 /** */
-export function getManuallyExpandedNodeIds(state, { companionWindowId }) {
+export function getManuallyExpandedNodeIds(state, { companionWindowId }, expanded) {
   const companionWindow = getCompanionWindow(state, { companionWindowId });
-  return companionWindow.expandedRangeIds || [];
+  return companionWindow.tocNodes ? Object.keys(companionWindow.tocNodes).reduce(
+    (acc, nodeId) => (companionWindow.tocNodes[nodeId].expanded === expanded
+      ? [...acc, nodeId]
+      : acc),
+    [],
+  ) : [];
 }
 
 /** */
-export function getExpandedNodeIds(state, { ...args }) {
-  const visibleBranchNodeIds = getVisibleBranchNodeIds(state, { ...args });
-  const manuallyExpandedNodeIds = getManuallyExpandedNodeIds(state, { ...args });
-  return union(manuallyExpandedNodeIds, visibleBranchNodeIds);
+export function getExpandedNodeIds(state, { companionWindowId, windowId }) {
+  const visibleBranchNodeIds = getVisibleBranchNodeIds(state, { companionWindowId, windowId });
+  const manuallyExpandedNodeIds = getManuallyExpandedNodeIds(state, { companionWindowId }, true);
+  const manuallyClosedNodeIds = getManuallyExpandedNodeIds(state, { companionWindowId }, false);
+  return without(union(manuallyExpandedNodeIds, visibleBranchNodeIds), ...manuallyClosedNodeIds);
 }
 
 /** */
