@@ -8,9 +8,9 @@ import {
   getManifestoInstance,
   getManifestTreeStructure,
   getVisibleCanvases,
-  getVisibleRangeIds,
-  getExpandedRangeIds,
-  getRangeIdToScrollTo,
+  getVisibleNodeIds,
+  getExpandedNodeIds,
+  getNodeIdToScrollTo,
 } from '../state/selectors';
 import * as actions from '../state/actions';
 
@@ -20,11 +20,11 @@ import * as actions from '../state/actions';
  */
 const mapStateToProps = (state, { id, windowId }) => ({
   canvases: getVisibleCanvases(state, { windowId }),
-  expandedRangeIds: getExpandedRangeIds(state, { companionWindowId: id, windowId }),
+  expandedNodeIds: getExpandedNodeIds(state, { companionWindowId: id, windowId }),
   manifesto: getManifestoInstance(state, { windowId }),
-  rangeIdToScrollTo: getRangeIdToScrollTo(state, { companionWindowId: id, windowId }),
+  nodeIdToScrollTo: getNodeIdToScrollTo(state, { companionWindowId: id, windowId }),
   treeStructure: getManifestTreeStructure(state, { windowId }),
-  visibleRangeIds: getVisibleRangeIds(state, { companionWindowId: id, windowId }),
+  visibleNodeIds: getVisibleNodeIds(state, { companionWindowId: id, windowId }),
 });
 
 /**
@@ -34,7 +34,7 @@ const mapStateToProps = (state, { id, windowId }) => ({
  */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
   setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
-  toggleRange: nodeId => dispatch(actions.toggleRange(windowId, id, nodeId)),
+  toggleNode: nodeId => dispatch(actions.toggleNode(windowId, id, nodeId)),
 });
 
 /**
