@@ -1,6 +1,6 @@
 import uuid from 'uuid/v4';
 import ActionTypes from './action-types';
-import { getCompanionWindowIdsForPosition } from '../selectors';
+import { getCompanionWindowIdsForPosition, getVisibleNodeIds } from '../selectors';
 
 const defaultProps = {
   content: null,
@@ -59,21 +59,15 @@ export function removeCompanionWindow(windowId, id) {
 }
 
 /** */
-export function toggleNode(windowId, id, rangeId) {
+export function toggleNode(windowId, id, nodeId) {
   return (dispatch, getState) => {
     const state = getState();
-    const companionWindow = state.companionWindows[id];
-    const expandedRangeIds = companionWindow.expandedRangeIds || [];
-    const payload = {};
-    if (expandedRangeIds.indexOf(rangeId) === -1) {
-      payload.expandedRangeIds = [...expandedRangeIds, rangeId];
-    } else {
-      payload.expandedRangeIds = expandedRangeIds.filter(item => rangeId !== item);
-    }
+    const visibleNodeIds = getVisibleNodeIds(state, { id, windowId });
     return dispatch({
       id,
-      payload,
-      type: ActionTypes.UPDATE_COMPANION_WINDOW,
+      nodeId,
+      type: ActionTypes.TOGGLE_TOC_NODE,
+      visibleNodeIds,
       windowId,
     });
   };
