@@ -21,6 +21,7 @@ function rangeContainsCanvasId(range, canvasId) {
 function getVisibleNodeIdsInSubTree(nodes, canvasIds) {
   return nodes.reduce((nodeIdAcc, node) => {
     const result = [];
+    result.push(...nodeIdAcc);
     const nodeContainsVisibleCanvas = canvasIds.reduce(
       (acc, canvasId) => acc || rangeContainsCanvasId(node.data, canvasId),
       false,
@@ -35,7 +36,6 @@ function getVisibleNodeIdsInSubTree(nodes, canvasIds) {
         leaf: node.nodes.length === 0,
       });
     }
-    result.push(...nodeIdAcc);
     result.push(...subTreeVisibleNodeIds);
     return result;
   }, []);

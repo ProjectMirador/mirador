@@ -57,7 +57,7 @@ export class SidebarIndexTableOfContents extends Component {
           onClick={() => this.selectTreeItem(node)}
           onKeyDown={e => this.handleKeyPressed(e, node)}
         >
-          {node.nodes.length > 0 ? this.buildTreeItems(node.nodes, canvasIds, visibleNodeIds, containerRef) : null}
+          {node.nodes.length > 0 ? this.buildTreeItems(node.nodes, canvasIds, visibleNodeIds, containerRef, nodeIdToScrollTo) : null}
         </TreeItem>
       ))
     );
