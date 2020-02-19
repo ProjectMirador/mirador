@@ -29,9 +29,9 @@
       };
 
       const pluginStateReducer = (state = initialState, action) => {
-        if (action.type === 'INC_SOME_NUMBER')
+        if (action.type === 'mirador/INC_SOME_NUMBER')
           return { ...state, someNumber: state.someNumber + 1 };
-        if (action.type === 'SET_CANVAS')
+        if (action.type === 'mirador/SET_CANVAS')
           return { ...state, canvasChangeCount: state.canvasChangeCount + 1 };
         return state;
       };
@@ -43,7 +43,7 @@
       );
 
       const mapDispatchToProps = (dispatch) => ({
-        incSomeNumber: () => dispatch({ type: 'INC_SOME_NUMBER' }),
+        incSomeNumber: () => dispatch({ type: 'mirador/INC_SOME_NUMBER' }),
       });
 
       const mapStateToProps = (state) => ({

@@ -55,7 +55,7 @@ describe('annotation actions', () => {
           {
             annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
             targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
-            type: 'REQUEST_ANNOTATION',
+            type: 'mirador/REQUEST_ANNOTATION',
           },
         ]);
       });
@@ -70,13 +70,13 @@ describe('annotation actions', () => {
               {
                 annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
                 targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
-                type: 'REQUEST_ANNOTATION',
+                type: 'mirador/REQUEST_ANNOTATION',
               },
               {
                 annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
                 annotationJson: { data: '12345' },
                 targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
-                type: 'RECEIVE_ANNOTATION',
+                type: 'mirador/RECEIVE_ANNOTATION',
               },
             ]);
           });
@@ -94,13 +94,13 @@ describe('annotation actions', () => {
               {
                 annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
                 targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
-                type: 'REQUEST_ANNOTATION',
+                type: 'mirador/REQUEST_ANNOTATION',
               },
               {
                 annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
                 error: new Error('invalid json response body at undefined reason: Unexpected end of JSON input'),
                 targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
-                type: 'RECEIVE_ANNOTATION_FAILURE',
+                type: 'mirador/RECEIVE_ANNOTATION_FAILURE',
               },
             ]);
           });
