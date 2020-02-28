@@ -28,6 +28,7 @@ export class SidebarIndexTableOfContents extends Component {
   handleKeyPressed(event, node) {
     if (event.key === 'Enter'
       || event.key === ' '
+      || event.key === 'Spacebar'
       || event.key === 'ArrowLeft' && this.props.expandedNodeIds.indexOf(node.id) !== -1
       || event.key === 'ArrowRight' && this.props.expandedNodeIds.indexOf(node.id) === -1) {
       this.selectTreeItem(node);
@@ -60,7 +61,7 @@ export class SidebarIndexTableOfContents extends Component {
           onClick={() => this.selectTreeItem(node)}
           onKeyDown={e => this.handleKeyPressed(e, node)}
         >
-          {node.nodes.length > 0 ? this.buildTreeItems(node.nodes, visibleNodeIds, containerRef, nodeIdToScrollTo) : null}
+          {node.nodes && node.nodes.length > 0 ? this.buildTreeItems(node.nodes, visibleNodeIds, containerRef, nodeIdToScrollTo) : null}
         </TreeItem>
       ))
     );
