@@ -1,0 +1,159 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@type": "sc:Manifest",
+  "@id": "http://foo.test/1/manifest",
+  "label": "Manifest to be used for SidebarIndexTableOfContents.test.js",
+  "sequences" : [
+    {
+      "@type": "sc:Sequence",
+      "canvases": [
+        {
+          "@id": "http://foo.test/1/canvas/c1", 
+          "@type": "sc:Canvas", 
+          "label": "Canvas: 1" 
+        },
+        {
+          "@id": "http://foo.test/1/canvas/c2", 
+          "@type": "sc:Canvas", 
+          "label": "Canvas: 2" 
+        },
+        {
+          "@id": "http://foo.test/1/canvas/c3", 
+          "@type": "sc:Canvas", 
+          "label": "Canvas: 3" 
+        },
+        {
+          "@id": "http://foo.test/1/canvas/c4", 
+          "@type": "sc:Canvas", 
+          "label": "Canvas: 4" 
+        },
+        {
+          "@id": "http://foo.test/1/canvas/c5", 
+          "@type": "sc:Canvas", 
+          "label": "Canvas: 5" 
+        },
+        {
+          "@id": "http://foo.test/1/canvas/c6", 
+          "@type": "sc:Canvas", 
+          "label": "Canvas: 6" 
+        },
+        {
+          "@id": "http://foo.test/1/canvas/c7", 
+          "@type": "sc:Canvas", 
+          "label": "Canvas: 7" 
+        },
+        {
+          "@id": "http://foo.test/1/canvas/c8", 
+          "@type": "sc:Canvas", 
+          "label": "Canvas: 8" 
+        },
+        {
+          "@id": "http://foo.test/1/canvas/c9", 
+          "@type": "sc:Canvas", 
+          "label": "Canvas: 9" 
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "@id": "http://foo.test/1/range/root",
+      "@type": "sc:Range",
+      "viewingHint": "top",
+      "ranges": [
+        "http://foo.test/1/range/1",
+        "http://foo.test/1/range/2"
+      ],
+      "canvases": []
+    },
+    {
+      "@id": "http://foo.test/1/range/1",
+      "@type": "sc:Range",
+      "ranges": [
+        "http://foo.test/1/range/1-1",
+        "http://foo.test/1/range/1-2",
+        "http://foo.test/1/range/1-3"
+      ],
+      "canvases": [
+        "http://foo.test/1/canvas/c1",
+        "http://foo.test/1/canvas/c2",
+        "http://foo.test/1/canvas/c3",
+        "http://foo.test/1/canvas/c4"
+      ]
+    },
+    {
+      "@id": "http://foo.test/1/range/1-1",
+      "@type": "sc:Range",
+      "ranges": [],
+      "canvases": [
+        "http://foo.test/1/canvas/c1",
+        "http://foo.test/1/canvas/c2"
+      ]
+    },
+    {
+      "@id": "http://foo.test/1/range/1-2",
+      "@type": "sc:Range",
+      "ranges": [],
+      "canvases": [
+        "http://foo.test/1/canvas/c2",
+        "http://foo.test/1/canvas/c3"
+      ]
+    },
+    {
+      "@id": "http://foo.test/1/range/1-3",
+      "@type": "sc:Range",
+      "ranges": [],
+      "canvases": [
+        "http://foo.test/1/canvas/c4"
+      ]
+    },
+    {
+      "@id": "http://foo.test/1/range/2",
+      "@type": "sc:Range",
+      "ranges": [
+        "http://foo.test/1/range/2-1",
+        "http://foo.test/1/range/2-2",
+        "http://foo.test/1/range/2-3"
+      ],
+      "canvases": []
+    },
+    {
+      "@id": "http://foo.test/1/range/2-1",
+      "@type": "sc:Range",
+      "ranges": [],
+      "canvases": []
+    },
+    {
+      "@id": "http://foo.test/1/range/2-2",
+      "@type": "sc:Range",
+      "ranges": [
+        "http://foo.test/1/range/2-2-1",
+        "http://foo.test/1/range/2-2-2"
+      ]
+    },
+    {
+      "@id": "http://foo.test/1/range/2-2-1",
+      "@type": "sc:Range",
+      "ranges": [],
+      "canvases": [
+        "http://foo.test/1/canvas/c5",
+        "http://foo.test/1/canvas/c6"
+      ]
+    },
+    {
+      "@id": "http://foo.test/1/range/2-2-2",
+      "@type": "sc:Range",
+      "ranges": [],
+      "canvases": [
+        "http://foo.test/1/canvas/c7",
+        "http://foo.test/1/canvas/c8"
+      ]
+    },
+    {
+      "@id": "http://foo.test/1/range/2-3",
+      "@type": "sc:Range",
+      "ranges": [],
+      "canvases": []
+    }
+  ]
+}
