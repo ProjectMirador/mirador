@@ -35,7 +35,10 @@ export class SidebarIndexTableOfContents extends Component {
   }
 
   /** */
-  buildTreeItems(nodes, canvasIds, visibleNodeIds, containerRef, nodeIdToScrollTo) {
+  buildTreeItems(nodes, visibleNodeIds, containerRef, nodeIdToScrollTo) {
+    if (!nodes) {
+      return null;
+    }
     return (
       nodes.map(node => (
         <TreeItem
@@ -57,7 +60,7 @@ export class SidebarIndexTableOfContents extends Component {
           onClick={() => this.selectTreeItem(node)}
           onKeyDown={e => this.handleKeyPressed(e, node)}
         >
-          {node.nodes.length > 0 ? this.buildTreeItems(node.nodes, canvasIds, visibleNodeIds, containerRef, nodeIdToScrollTo) : null}
+          {node.nodes.length > 0 ? this.buildTreeItems(node.nodes, visibleNodeIds, containerRef, nodeIdToScrollTo) : null}
         </TreeItem>
       ))
     );
@@ -66,14 +69,12 @@ export class SidebarIndexTableOfContents extends Component {
   /** */
   render() {
     const {
-      canvases, classes, treeStructure, visibleNodeIds, expandedNodeIds, containerRef, nodeIdToScrollTo,
+      classes, treeStructure, visibleNodeIds, expandedNodeIds, containerRef, nodeIdToScrollTo,
     } = this.props;
 
     if (!treeStructure) {
       return <></>;
     }
-
-    const canvasIds = canvases.map(canvas => canvas.id);
 
     return (
       <>
@@ -84,7 +85,7 @@ export class SidebarIndexTableOfContents extends Component {
           defaultEndIcon={<></>}
           expanded={expandedNodeIds}
         >
-          {this.buildTreeItems(treeStructure.nodes, canvasIds, visibleNodeIds, containerRef, nodeIdToScrollTo)}
+          {this.buildTreeItems(treeStructure.nodes, visibleNodeIds, containerRef, nodeIdToScrollTo)}
         </TreeView>
       </>
     );
@@ -92,7 +93,6 @@ export class SidebarIndexTableOfContents extends Component {
 }
 
 SidebarIndexTableOfContents.propTypes = {
-  canvases: PropTypes.arrayOf(PropTypes.object).isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   containerRef:  PropTypes.oneOfType([
     PropTypes.func,

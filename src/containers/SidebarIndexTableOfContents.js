@@ -5,9 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { SidebarIndexTableOfContents } from '../components/SidebarIndexTableOfContents';
 import {
-  getManifestoInstance,
   getManifestTreeStructure,
-  getVisibleCanvases,
   getVisibleNodeIds,
   getExpandedNodeIds,
   getNodeIdToScrollTo,
@@ -19,9 +17,7 @@ import * as actions from '../state/actions';
  * mapStateToProps - to hook up connect
  */
 const mapStateToProps = (state, { id, windowId }) => ({
-  canvases: getVisibleCanvases(state, { windowId }),
   expandedNodeIds: getExpandedNodeIds(state, { companionWindowId: id, windowId }),
-  manifesto: getManifestoInstance(state, { windowId }),
   nodeIdToScrollTo: getNodeIdToScrollTo(state, { companionWindowId: id, windowId }),
   treeStructure: getManifestTreeStructure(state, { windowId }),
   visibleNodeIds: getVisibleNodeIds(state, { companionWindowId: id, windowId }),
