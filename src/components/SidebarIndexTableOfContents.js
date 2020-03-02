@@ -26,11 +26,12 @@ export class SidebarIndexTableOfContents extends Component {
 
   /** */
   handleKeyPressed(event, node) {
+    const { expandedNodeIds } = this.props;
     if (event.key === 'Enter'
       || event.key === ' '
       || event.key === 'Spacebar'
-      || event.key === 'ArrowLeft' && this.props.expandedNodeIds.indexOf(node.id) !== -1
-      || event.key === 'ArrowRight' && this.props.expandedNodeIds.indexOf(node.id) === -1) {
+      || (event.key === 'ArrowLeft' && expandedNodeIds.indexOf(node.id) !== -1)
+      || (event.key === 'ArrowRight' && expandedNodeIds.indexOf(node.id) === -1)) {
       this.selectTreeItem(node);
     }
   }
@@ -46,22 +47,27 @@ export class SidebarIndexTableOfContents extends Component {
           key={node.id}
           nodeId={node.id}
           label={(
-              <ScrollTo
-                containerRef={containerRef}
-                key={`${node.id}-scroll`}
-                offsetTop={96} // offset for the height of the form above
-                scrollTo={nodeIdToScrollTo === node.id}
-              >
-                <>
-                  {visibleNodeIds.indexOf(node.id) !== -1 && <VisibilityIcon fontSize='small' color='secondary'/>}
-                  {node.label}
-                </>
-              </ScrollTo>
+            <ScrollTo
+              containerRef={containerRef}
+              key={`${node.id}-scroll`}
+              offsetTop={96} // offset for the height of the form above
+              scrollTo={nodeIdToScrollTo === node.id}
+            >
+              <>
+                {visibleNodeIds.indexOf(node.id) !== -1 && <VisibilityIcon fontSize="small" color="secondary" />}
+                {node.label}
+              </>
+            </ScrollTo>
           )}
           onClick={() => this.selectTreeItem(node)}
           onKeyDown={e => this.handleKeyPressed(e, node)}
         >
-          {node.nodes && node.nodes.length > 0 ? this.buildTreeItems(node.nodes, visibleNodeIds, containerRef, nodeIdToScrollTo) : null}
+          {node.nodes && node.nodes.length > 0 ? this.buildTreeItems(
+            node.nodes,
+            visibleNodeIds,
+            containerRef,
+            nodeIdToScrollTo,
+          ) : null}
         </TreeItem>
       ))
     );
@@ -95,13 +101,13 @@ export class SidebarIndexTableOfContents extends Component {
 
 SidebarIndexTableOfContents.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  containerRef:  PropTypes.oneOfType([
+  containerRef: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]),
+  ]).isRequired,
   expandedNodeIds: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setCanvas: PropTypes.func.isRequired,
   nodeIdToScrollTo: PropTypes.func.isRequired,
+  setCanvas: PropTypes.func.isRequired,
   toggleNode: PropTypes.func.isRequired,
   treeStructure: PropTypes.objectOf().isRequired,
   visibleNodeIds: PropTypes.arrayOf(PropTypes.string).isRequired,
