@@ -25,6 +25,7 @@ function createWrapper(props) {
       config={{ canvasNavigation: { height: 100 } }}
       updateVariant={() => {}}
       selectedCanvases={[canvases[1]]}
+      variant="compact"
       {...props}
     />,
   );
