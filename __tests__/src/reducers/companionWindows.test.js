@@ -109,6 +109,79 @@ describe('companionWindowsReducer', () => {
       expect(companionWindowsReducer(beforeState, action)).toEqual(expectedState);
     });
   });
+
+  describe('TOGGLE_TOC_NODE', () => {
+    const action = {
+      id: 'cw123',
+      nodeId: '0-1',
+      type: ActionTypes.TOGGLE_TOC_NODE,
+    };
+
+    it('should add the id of a toggled node that do not exist in the state', () => {
+      const emptyBeforeState = {
+        cw123: {},
+        cw456: {},
+      };
+      const expectedStateFromEmpty = {
+        cw123: {
+          tocNodes: {
+            '0-1': { expanded: true },
+          },
+        },
+        cw456: {},
+      };
+      expect(companionWindowsReducer(emptyBeforeState, action)).toEqual(expectedStateFromEmpty);
+
+      const filledBeforeState = {
+        cw123: {
+          tocNodes: {
+            '0-0': { expanded: true },
+            '0-2-0': { expanded: true },
+          },
+        },
+        cw456: {},
+      };
+      const expectedStateAfterFilled = {
+        cw123: {
+          tocNodes: {
+            '0-0': { expanded: true },
+            '0-1': { expanded: true },
+            '0-2-0': { expanded: true },
+          },
+        },
+        cw456: {},
+      };
+      expect(companionWindowsReducer(filledBeforeState, action)).toEqual(expectedStateAfterFilled);
+    });
+
+    it('should switch the expanded value for existing nodeIds in the state', () => {
+      const stateWithTrue = {
+        cw123: {
+          tocNodes: {
+            '0-0': { expanded: true },
+            '0-1': { expanded: true },
+            '0-2-0': { expanded: true },
+          },
+        },
+        cw456: {},
+      };
+
+      const stateWithFalse = {
+        cw123: {
+          tocNodes: {
+            '0-0': { expanded: true },
+            '0-1': { expanded: false },
+            '0-2-0': { expanded: true },
+          },
+        },
+        cw456: {},
+      };
+
+      expect(companionWindowsReducer(stateWithTrue, action)).toEqual(stateWithFalse);
+      expect(companionWindowsReducer(stateWithFalse, action)).toEqual(stateWithTrue);
+    });
+  });
+
   it('should handle IMPORT_MIRADOR_STATE', () => {
     expect(companionWindowsReducer({}, {
       state: { companionWindows: { new: 'stuff' } },
