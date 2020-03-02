@@ -47,6 +47,12 @@ describe('SidebarIndexTableOfContents', () => {
     setCanvas = jest.fn();
   });
 
+  it('does not render a TreeView if the tree structure is missing', () => {
+    const wrapper = createWrapper({
+      treeStructure: undefined,
+    });
+    expect(wrapper.children().length).toBe(0);
+  });
 
   it('renders a tree item for every node', () => {
     const structuresWrapper = createWrapper({});
@@ -190,5 +196,25 @@ describe('SidebarIndexTableOfContents', () => {
     expect(node1.prop('nodeId')).toBe('0-1');
     node1.simulate(...createKeydownProps('ArrowRight'));
     expect(setCanvas).toHaveBeenCalledTimes(4);
+  });
+
+  it('does not select a canvas when opening a node with the right arrow key', () => {
+    const wrapper = createWrapper({ setCanvas, toggleNode });
+    const treeView = wrapper.children(TreeView).at(0);
+    const node0 = treeView.childAt(0);
+    expect(node0.prop('nodeId')).toBe('0-0');
+    node0.simulate(...createKeydownProps('ArrowRight'));
+    expect(setCanvas).toHaveBeenCalledTimes(0);
+    expect(toggleNode).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not select a canvas when closing a node with the left arrow key', () => {
+    const wrapper = createWrapper({ expandedNodeIds: ['0-0'], setCanvas, toggleNode });
+    const treeView = wrapper.children(TreeView).at(0);
+    const node0 = treeView.childAt(0);
+    expect(node0.prop('nodeId')).toBe('0-0');
+    node0.simulate(...createKeydownProps('ArrowLeft'));
+    expect(setCanvas).toHaveBeenCalledTimes(0);
+    expect(toggleNode).toHaveBeenCalledTimes(1);
   });
 });
