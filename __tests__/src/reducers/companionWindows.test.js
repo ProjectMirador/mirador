@@ -111,9 +111,22 @@ describe('companionWindowsReducer', () => {
   });
 
   describe('TOGGLE_TOC_NODE', () => {
-    const action = {
+    const actionOpen = {
       id: 'cw123',
-      nodeId: '0-1',
+      payload: {
+        '0-1': {
+          expanded: true,
+        },
+      },
+      type: ActionTypes.TOGGLE_TOC_NODE,
+    };
+    const actionClose = {
+      id: 'cw123',
+      payload: {
+        '0-1': {
+          expanded: false,
+        },
+      },
       type: ActionTypes.TOGGLE_TOC_NODE,
     };
 
@@ -130,9 +143,9 @@ describe('companionWindowsReducer', () => {
         },
         cw456: {},
       };
-      expect(companionWindowsReducer(emptyBeforeState, action)).toEqual(expectedStateFromEmpty);
+      expect(companionWindowsReducer(emptyBeforeState, actionOpen)).toEqual(expectedStateFromEmpty);
 
-      const filledBeforeState = {
+      const beforeState = {
         cw123: {
           tocNodes: {
             '0-0': { expanded: true },
@@ -151,10 +164,10 @@ describe('companionWindowsReducer', () => {
         },
         cw456: {},
       };
-      expect(companionWindowsReducer(filledBeforeState, action)).toEqual(expectedStateAfterFilled);
+      expect(companionWindowsReducer(beforeState, actionOpen)).toEqual(expectedStateAfterFilled);
     });
 
-    it('should switch the expanded value for existing nodeIds in the state', () => {
+    it('should update expanded value for existing nodeIds in the state', () => {
       const stateWithTrue = {
         cw123: {
           tocNodes: {
@@ -177,8 +190,10 @@ describe('companionWindowsReducer', () => {
         cw456: {},
       };
 
-      expect(companionWindowsReducer(stateWithTrue, action)).toEqual(stateWithFalse);
-      expect(companionWindowsReducer(stateWithFalse, action)).toEqual(stateWithTrue);
+      expect(companionWindowsReducer(stateWithTrue, actionOpen)).toEqual(stateWithTrue);
+      expect(companionWindowsReducer(stateWithFalse, actionOpen)).toEqual(stateWithTrue);
+      expect(companionWindowsReducer(stateWithTrue, actionClose)).toEqual(stateWithFalse);
+      expect(companionWindowsReducer(stateWithFalse, actionClose)).toEqual(stateWithFalse);
     });
   });
 
