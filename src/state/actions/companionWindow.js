@@ -1,6 +1,6 @@
 import uuid from 'uuid/v4';
 import ActionTypes from './action-types';
-import { getCompanionWindowIdsForPosition, getVisibleNodeIds } from '../selectors';
+import { getCompanionWindowIdsForPosition, getManuallyExpandedNodeIds, getVisibleNodeIds } from '../selectors';
 
 const defaultProps = {
   content: null,
@@ -62,12 +62,19 @@ export function removeCompanionWindow(windowId, id) {
 export function toggleNode(windowId, id, nodeId) {
   return (dispatch, getState) => {
     const state = getState();
+    const collapsedNodeIds = getManuallyExpandedNodeIds(state, { companionWindowId: id }, false);
+    const expandedNodeIds = getManuallyExpandedNodeIds(state, { companionWindowId: id }, true);
     const visibleNodeIds = getVisibleNodeIds(state, { id, windowId });
+    const expand = collapsedNodeIds.indexOf(nodeId) !== -1
+      || (expandedNodeIds.indexOf(nodeId) === -1 && visibleNodeIds.indexOf(nodeId) === -1);
     return dispatch({
       id,
-      nodeId,
+      payload: {
+        [nodeId]: {
+          expanded: expand,
+        },
+      },
       type: ActionTypes.TOGGLE_TOC_NODE,
-      visibleNodeIds,
       windowId,
     });
   };
