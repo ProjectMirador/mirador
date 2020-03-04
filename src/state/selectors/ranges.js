@@ -18,6 +18,17 @@ function rangeContainsCanvasId(range, canvasId) {
 }
 
 /** */
+function getAllParentIds(node) {
+  if (node.parentNode === undefined) {
+    return [];
+  }
+  if (node.parentNode.parentNode === undefined) {
+    return [node.parentNode.id];
+  }
+  return [...getAllParentIds(node.parentNode), node.parentNode.id];
+}
+
+/** */
 function getVisibleNodeIdsInSubTree(nodes, canvasIds) {
   return nodes.reduce((nodeIdAcc, node) => {
     const result = [];
@@ -29,14 +40,15 @@ function getVisibleNodeIdsInSubTree(nodes, canvasIds) {
     const subTreeVisibleNodeIds = node.nodes.length > 0
       ? getVisibleNodeIdsInSubTree(node.nodes, canvasIds)
       : [];
+    result.push(...subTreeVisibleNodeIds);
     if (nodeContainsVisibleCanvas || subTreeVisibleNodeIds.length > 0) {
       result.push({
         containsVisibleCanvas: nodeContainsVisibleCanvas,
         id: node.id,
         leaf: node.nodes.length === 0,
+        parentIds: getAllParentIds(node),
       });
     }
-    result.push(...subTreeVisibleNodeIds);
     return result;
   }, []);
 }
@@ -79,7 +91,7 @@ const getCanvasContainingNodeIds = createSelector(
     getVisibleLeafAndBranchNodeIds,
   ],
   visibleLeafAndBranchNodeIds => visibleLeafAndBranchNodeIds.reduce(
-    (acc, item) => (item.containsVisibleCanvas ? [...acc, item.id] : acc),
+    (acc, item) => (item.containsVisibleCanvas ? [...acc, item] : acc),
     [],
   ),
 );
@@ -106,8 +118,14 @@ export function getExpandedNodeIds(state, { companionWindowId, windowId }) {
 /** */
 export function getNodeIdToScrollTo(state, { ...args }) {
   const canvasContainingNodeIds = getCanvasContainingNodeIds(state, { ...args });
-  if (canvasContainingNodeIds) {
-    return canvasContainingNodeIds[0];
+  const collapsedNodeIds = getManuallyExpandedNodeIds(state, args, false);
+  if (canvasContainingNodeIds && canvasContainingNodeIds.length > 0) {
+    for (let i = 0; i < canvasContainingNodeIds[0].parentIds.length; i += 1) {
+      if (collapsedNodeIds.indexOf(canvasContainingNodeIds[0].parentIds[i]) !== -1) {
+        return canvasContainingNodeIds[0].parentIds[i];
+      }
+    }
+    return canvasContainingNodeIds[0].id;
   }
   return null;
 }
