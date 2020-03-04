@@ -56,7 +56,7 @@ describe('SidebarIndexTableOfContents', () => {
 
   it('renders a tree item for every node', () => {
     const structuresWrapper = createWrapper({});
-    expect(structuresWrapper.find(TreeItem)).toHaveLength(10);
+    expect(structuresWrapper.find(TreeItem)).toHaveLength(18);
     const simpleTreeWrapper = createWrapper({
       treeStructure: {
         nodes: [
