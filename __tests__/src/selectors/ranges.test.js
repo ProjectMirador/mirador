@@ -1,10 +1,12 @@
 import { setIn } from 'immutable';
+import noRangesJson from '../../fixtures/version-2/001.json';
 import manifestJson from '../../fixtures/version-2/structures.json';
 import {
   getVisibleNodeIds,
   getManuallyExpandedNodeIds,
   getExpandedNodeIds,
   getNodeIdToScrollTo,
+  getDefaultSidebarVariant,
 } from '../../../src/state/selectors';
 
 const state = {
@@ -128,5 +130,15 @@ describe('getNodeIdToScrollTo', () => {
   it('returns no node id if current canvas is not contained in any range', () => {
     const rangeFreeCanvasState = setIn(expandedNodesState, ['windows', 'w1', 'canvasId'], 'http://foo.test/1/canvas/c12');
     expect(getNodeIdToScrollTo(rangeFreeCanvasState, { companionWindowId: 'cw123', windowId: 'w1' })).toBe(null);
+  });
+});
+
+describe('getDefaultSidebarVariant', () => {
+  it('returns thumbnail when no ranges exist', () => {
+    const noRangeState = setIn(state, ['manifests', 'mID', 'json'], noRangesJson);
+    expect(getDefaultSidebarVariant(noRangeState, { windowId: 'w1' })).toBe('thumbnail');
+  });
+  it('returns tableOfContents when ranges exist', () => {
+    expect(getDefaultSidebarVariant(state, { windowId: 'w1' })).toBe('tableOfContents');
   });
 });
