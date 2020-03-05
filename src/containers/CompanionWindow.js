@@ -15,9 +15,11 @@ import { CompanionWindow } from '../components/CompanionWindow';
  */
 const mapStateToProps = (state, { id, windowId }) => {
   const companionWindow = getCompanionWindow(state, { companionWindowId: id });
+  const { defaultSidebarPanelWidth } = state.config.window;
 
   return {
     ...companionWindow,
+    defaultSidebarPanelWidth,
     isDisplayed: (companionWindow
                   && companionWindow.content
                   && companionWindow.content.length > 0),
