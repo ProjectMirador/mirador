@@ -129,3 +129,15 @@ export function getNodeIdToScrollTo(state, { ...args }) {
   }
   return null;
 }
+
+/**
+ * Returns the default sidebar variant depending on whether or not ranges exist
+ */
+export const getDefaultSidebarVariant = createSelector(
+  [
+    getManifestTreeStructure,
+  ],
+  tree => (
+    tree && tree.nodes && tree.nodes.length > 0 ? 'tableOfContents' : 'thumbnail'
+  ),
+);

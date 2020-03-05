@@ -117,10 +117,6 @@ WindowSideBarCanvasPanel.propTypes = {
   t: PropTypes.func.isRequired,
   toggleDraggingEnabled: PropTypes.func.isRequired,
   updateVariant: PropTypes.func.isRequired,
-  variant: PropTypes.oneOf(['compact', 'thumbnail', 'tableOfContents']),
+  variant: PropTypes.oneOf(['compact', 'thumbnail', 'tableOfContents']).isRequired,
   windowId: PropTypes.string.isRequired,
-};
-
-WindowSideBarCanvasPanel.defaultProps = {
-  variant: 'tableOfContents',
 };
