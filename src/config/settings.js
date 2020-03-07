@@ -223,6 +223,7 @@ export default {
     allowWindowSideBar: true, // Configure if side bar menu is visible or not
     authNewWindowCenter: 'parent', // Configure how to center a new window created by the authentication flow. Options: parent, screen
     defaultSideBarPanel: 'info', // Configure which sidebar is selected by default. Options: info, attribution, canvas, annotations, search
+    defaultSidebarPanelWidth: 235, // Configure default sidebar width in pixels
     defaultView: 'single',  // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in
     hideWindowTitle: false, // Configure if the window title is shown in the window title bar or not
     showLocalePicker: false, // Configure locale picker for multi-lingual metadata

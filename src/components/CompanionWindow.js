@@ -51,7 +51,7 @@ export class CompanionWindow extends Component {
   render() {
     const {
       ariaLabel, classes, paperClassName, id, onCloseClick, updateCompanionWindow, isDisplayed,
-      position, t, windowId, title, children, titleControls, size,
+      position, t, windowId, title, children, titleControls, size, defaultSidebarPanelWidth,
     } = this.props;
 
     const isBottom = (position === 'bottom' || position === 'far-bottom');
@@ -72,7 +72,7 @@ export class CompanionWindow extends Component {
           style={{ display: 'flex', position: 'relative' }}
           default={{
             height: isBottom ? 201 : '100%',
-            width: isBottom ? 'auto' : 235,
+            width: isBottom ? 'auto' : defaultSidebarPanelWidth,
           }}
           disableDragging
           enableResizing={this.resizeHandles()}
@@ -155,6 +155,7 @@ CompanionWindow.propTypes = {
   ariaLabel: PropTypes.string,
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  defaultSidebarPanelWidth: PropTypes.number,
   id: PropTypes.string.isRequired,
   isDisplayed: PropTypes.bool,
   onCloseClick: PropTypes.func,
@@ -174,6 +175,7 @@ CompanionWindow.propTypes = {
 CompanionWindow.defaultProps = {
   ariaLabel: undefined,
   children: undefined,
+  defaultSidebarPanelWidth: 235,
   isDisplayed: false,
   onCloseClick: () => {},
   paperClassName: '',
