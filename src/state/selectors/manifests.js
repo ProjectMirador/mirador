@@ -376,7 +376,7 @@ export function getManifestStartCanvas(json, canvasIndexFromState) {
 
   const manifest = createManifestoInstance(json);
 
-  if (!manifest) return {};
+  if (!manifest || !manifest.getSequences()[0]) return {};
 
   if (canvasIndexFromState !== undefined) {
     return manifest.getSequences()[0].getCanvasByIndex(canvasIndexFromState);
@@ -421,8 +421,9 @@ export const getManifestViewingDirection = createSelector(
   [getManifestoInstance],
   (manifest) => {
     if (!manifest) return null;
-    const viewingDirection = manifest.getSequences()[0].getViewingDirection()
-      || manifest.getViewingDirection();
+    const viewingDirection = (
+      manifest.getSequences()[0] && manifest.getSequences()[0].getViewingDirection()
+    ) || manifest.getViewingDirection();
     if (viewingDirection) return viewingDirection.value;
     return null;
   },

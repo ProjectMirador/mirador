@@ -6,7 +6,7 @@ import { getWindow, getWindowViewType } from './windows';
 
 export const getCanvases = createSelector(
   [getManifestoInstance],
-  manifest => manifest && manifest.getSequences()[0].getCanvases(),
+  manifest => manifest && manifest.getSequences()[0] && manifest.getSequences()[0].getCanvases(),
 );
 
 /**
@@ -24,7 +24,7 @@ export const getCanvas = createSelector(
     (state, { canvasId }) => canvasId,
   ],
   (manifest, canvasIndex, canvasId) => {
-    if (!manifest) return undefined;
+    if (!manifest || !manifest.getSequences()[0]) return undefined;
 
     if (canvasId !== undefined) return manifest.getSequences()[0].getCanvasById(canvasId);
     return manifest.getSequences()[0].getCanvasByIndex(canvasIndex);
@@ -37,7 +37,7 @@ export const getCurrentCanvas = createSelector(
     getWindow,
   ],
   (manifest, window) => {
-    if (!manifest || !window) return undefined;
+    if (!manifest || !window || !manifest.getSequences()[0]) return undefined;
 
     if (!window.canvasId) return manifest.getSequences()[0].getCanvasByIndex(0);
 
