@@ -1,0 +1,74 @@
+{
+  "@context": [
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "http://foo.test/1/manifest",
+  "type": "Manifest",
+  "label": {
+    "none": ["Version 3 manifest for TOC and structures related tests"]
+  },
+  "items": [
+    {
+      "id": "http://foo.test/1/canvas/c1",
+      "type": "Canvas"
+    },
+    {
+      "id": "http://foo.test/1/canvas/c2",
+      "type": "Canvas"
+    },
+    {
+      "id": "http://foo.test/1/canvas/c3",
+      "type": "Canvas"
+    },
+    {
+      "id": "http://foo.test/1/canvas/c4",
+      "type": "Canvas"
+    },
+    {
+      "id": "http://foo.test/1/canvas/c4",
+      "type": "Canvas"
+    }
+  ],
+  "structures": [
+    {
+      "id": "http://foo.test/1/range/root",
+      "type": "Range",
+      "items": [
+        {
+          "id": "http://foo.test/1/canvas/c1",
+          "type": "Canvas"
+        },
+        {
+          "id": "http://foo.test/1/range/0-0-0",
+          "type": "Range",
+          "items": [
+            {
+              "id": "http://foo.test/1/canvas/c2",
+              "type": "Canvas"
+            },
+            {
+              "id": "http://foo.test/1/canvas/c3#xywh=0,0,5,5",
+              "type": "Canvas"
+            },
+            {
+              "id": "http://foo.test/1/canvas/c4#t=10,20",
+              "type": "Canvas"
+            },
+            {
+              "type": "SpecificResource",
+              "source": "http://foo.test/1/canvas/c5",
+              "selector": {
+                "type": "FragmentSelector",
+                "value": "xywh=0,0,5,5"
+              }
+            }
+          ]
+        },
+        {
+          "id": "http://foo.test/1/range/0-0-1",
+          "type": "Range"
+        }
+      ]
+    }
+  ]
+}

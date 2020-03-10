@@ -112,7 +112,7 @@
       "ranges": [],
       "canvases": [
         "http://foo.test/1/canvas/c2",
-        "http://foo.test/1/canvas/c3"
+        "http://foo.test/1/canvas/c3#xywh=0,0,5,5"
       ]
     },
     {
