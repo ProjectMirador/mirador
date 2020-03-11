@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import manifesto from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import manifestJson from '../../fixtures/version-2/019.json';
@@ -11,7 +11,7 @@ import { CanvasThumbnail } from '../../../src/components/CanvasThumbnail';
 function createWrapper(props) {
   return shallow(
     <GalleryViewThumbnail
-      canvas={manifesto.create(manifestJson).getSequences()[0].getCanvases()[0]}
+      canvas={Utils.parseManifest(manifestJson).getSequences()[0].getCanvases()[0]}
       classes={{ selected: 'selected' }}
       focusOnCanvas={() => {}}
       setCanvas={() => {}}

@@ -1,4 +1,4 @@
-import { Utils } from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import ActionTypes from './action-types';
 import { fetchInfoResponse } from './infoResponse';
 

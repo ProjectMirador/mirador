@@ -1,6 +1,6 @@
 import normalizeUrl from 'normalize-url';
 
-import { Utils } from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import ActionTypes from '../actions/action-types';
 
 /** */

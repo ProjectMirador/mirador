@@ -1,4 +1,4 @@
-import manifesto from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture002 from '../../fixtures/version-2/002.json';
 import manifestFixture015 from '../../fixtures/version-2/015.json';
@@ -286,7 +286,7 @@ describe('getManifestUrl', () => {
 
 describe('getDestructuredMetadata', () => {
   it('should return the first value of label/value attributes for each object in the array ', () => {
-    const iiifResource = manifesto.create(manifestFixture002);
+    const iiifResource = Utils.parseManifest(manifestFixture002);
     const received = getDestructuredMetadata(iiifResource);
     const expected = [{
       label: 'date',
@@ -297,7 +297,7 @@ describe('getDestructuredMetadata', () => {
   });
 
   it('returns an empty array if there is no metadata', () => {
-    const iiifResource = manifesto.create(manifestFixture019);
+    const iiifResource = Utils.parseManifest(manifestFixture019);
     const received = getDestructuredMetadata(iiifResource);
 
     expect(received).toEqual([]);
@@ -317,7 +317,7 @@ describe('getManifestMetadata', () => {
   });
 
   it('returns an empty array if there is no metadata', () => {
-    const iiifResource = manifesto.create(manifestFixture019);
+    const iiifResource = Utils.parseManifest(manifestFixture019);
     const received = getDestructuredMetadata(iiifResource);
 
     expect(received).toEqual([]);

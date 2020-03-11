@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import manifesto from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import { WindowSideBarCanvasPanel } from '../../../src/components/WindowSideBarCanvasPanel';
 import SidebarIndexList from '../../../src/containers/SidebarIndexList';
 import CompanionWindow from '../../../src/containers/CompanionWindow';
@@ -12,7 +12,7 @@ import manifestJson from '../../fixtures/version-2/019.json';
  * Helper function to create a shallow wrapper around WindowSideBarCanvasPanel
  */
 function createWrapper(props) {
-  const canvases = manifesto.create(manifestJson).getSequences()[0].getCanvases();
+  const canvases = Utils.parseManifest(manifestJson).getSequences()[0].getCanvases();
 
   return shallow(
     <WindowSideBarCanvasPanel

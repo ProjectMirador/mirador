@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import manifesto from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import Paper from '@material-ui/core/Paper';
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryView } from '../../../src/components/GalleryView';
@@ -10,7 +10,7 @@ import GalleryViewThumbnail from '../../../src/containers/GalleryViewThumbnail';
 function createWrapper(props) {
   return shallow(
     <GalleryView
-      canvases={manifesto.create(manifestJson).getSequences()[0].getCanvases()}
+      canvases={Utils.parseManifest(manifestJson).getSequences()[0].getCanvases()}
       windowId="1234"
       selectedCanvasIndex={0}
       {...props}

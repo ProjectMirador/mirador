@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import manifesto from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import { ThumbnailCanvasGrouping } from '../../../src/components/ThumbnailCanvasGrouping';
 import CaptionedCanvasThumbnail from '../../../src/containers/CaptionedCanvasThumbnail';
 import CanvasGroupings from '../../../src/lib/CanvasGroupings';
@@ -27,7 +27,7 @@ describe('ThumbnailCanvasGrouping', () => {
   let rightWrapper;
   let setCanvas;
   const data = {
-    canvasGroupings: new CanvasGroupings(manifesto.create(manifestJson)
+    canvasGroupings: new CanvasGroupings(Utils.parseManifest(manifestJson)
       .getSequences()[0].getCanvases()),
     height: 131,
     position: 'far-bottom',

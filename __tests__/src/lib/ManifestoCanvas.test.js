@@ -1,4 +1,4 @@
-import manifesto from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import ManifestoCanvas from '../../../src/lib/ManifestoCanvas';
 import fixture from '../../fixtures/version-2/019.json';
 import v3fixture from '../../fixtures/version-3/001.json';
@@ -13,10 +13,10 @@ describe('ManifestoCanvas', () => {
   let v3Instance;
   beforeAll(() => {
     instance = new ManifestoCanvas(
-      manifesto.create(fixture).getSequences()[0].getCanvases()[0],
+      Utils.parseManifest(fixture).getSequences()[0].getCanvases()[0],
     );
     v3Instance = new ManifestoCanvas(
-      manifesto.create(v3fixture).getSequences()[0].getCanvases()[0],
+      Utils.parseManifest(v3fixture).getSequences()[0].getCanvases()[0],
     );
   });
   describe('annotationListUris', () => {
@@ -29,7 +29,7 @@ describe('ManifestoCanvas', () => {
       describe('with items as objects', () => {
         it('returns an array of uris', () => {
           const otherContentInstance = new ManifestoCanvas(
-            manifesto.create(otherContentFixture).getSequences()[0].getCanvases()[0],
+            Utils.parseManifest(otherContentFixture).getSequences()[0].getCanvases()[0],
           );
           expect(otherContentInstance.annotationListUris.length).toEqual(1);
           expect(otherContentInstance.annotationListUris).toEqual([
@@ -40,7 +40,7 @@ describe('ManifestoCanvas', () => {
       describe('with items as strings', () => {
         it('returns an array of uris', () => {
           const otherContentInstance = new ManifestoCanvas(
-            manifesto.create(otherContentStringsFixture).getSequences()[0].getCanvases()[0],
+            Utils.parseManifest(otherContentStringsFixture).getSequences()[0].getCanvases()[0],
           );
           expect(otherContentInstance.annotationListUris.length).toEqual(1);
           expect(otherContentInstance.annotationListUris).toEqual([
@@ -66,7 +66,7 @@ describe('ManifestoCanvas', () => {
     describe('v2', () => {
       it('fetches annotations for each annotationList', () => {
         const otherContentInstance = new ManifestoCanvas(
-          manifesto.create(otherContentFixture).getSequences()[0].getCanvases()[0],
+          Utils.parseManifest(otherContentFixture).getSequences()[0].getCanvases()[0],
         );
         const fetchMock = jest.fn();
         otherContentInstance.processAnnotations(fetchMock);
@@ -89,14 +89,14 @@ describe('ManifestoCanvas', () => {
     });
     it('correctly returns an image information url for a v1 Image API', () => {
       const imagev1Instance = new ManifestoCanvas(
-        manifesto.create(imagev1Fixture).getSequences()[0].getCanvases()[0],
+        Utils.parseManifest(imagev1Fixture).getSequences()[0].getCanvases()[0],
       );
       expect(imagev1Instance.imageInformationUri).toEqual('https://images.britishart.yale.edu/iiif/b38081da-8991-4464-a71e-d9891226a35f/info.json');
     });
 
     it('is undefined if a canvas is empty (e.g. has no images)', () => {
       const emptyCanvasInstance = new ManifestoCanvas(
-        manifesto.create(emptyCanvasFixture).getSequences()[0].getCanvases()[3],
+        Utils.parseManifest(emptyCanvasFixture).getSequences()[0].getCanvases()[3],
       );
 
       expect(emptyCanvasInstance.imageInformationUri).toBeUndefined();
@@ -135,7 +135,7 @@ describe('ManifestoCanvas', () => {
 
     it('returns undefined if there are no images to generate a thumbnail from', () => {
       const emptyCanvasInstance = new ManifestoCanvas(
-        manifesto.create(emptyCanvasFixture).getSequences()[0].getCanvases()[3],
+        Utils.parseManifest(emptyCanvasFixture).getSequences()[0].getCanvases()[3],
       );
 
       expect(emptyCanvasInstance.thumbnail()).toBeUndefined();
@@ -144,7 +144,7 @@ describe('ManifestoCanvas', () => {
   describe('service', () => {
     it('correctly returns the service information for the given canvas', () => {
       const serviceInstance = new ManifestoCanvas(
-        manifesto.create(serviceFixture).getSequences()[0].getCanvases()[0],
+        Utils.parseManifest(serviceFixture).getSequences()[0].getCanvases()[0],
       );
 
       expect(serviceInstance.service).toBeDefined();

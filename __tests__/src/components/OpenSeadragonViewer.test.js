@@ -1,14 +1,14 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import OpenSeadragon from 'openseadragon';
-import manifesto from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import { OpenSeadragonViewer } from '../../../src/components/OpenSeadragonViewer';
 import OpenSeadragonCanvasOverlay from '../../../src/lib/OpenSeadragonCanvasOverlay';
 import AnnotationList from '../../../src/lib/AnnotationList';
 import CanvasWorld from '../../../src/lib/CanvasWorld';
 import fixture from '../../fixtures/version-2/019.json';
 
-const canvases = manifesto.create(fixture).getSequences()[0].getCanvases();
+const canvases = Utils.parseManifest(fixture).getSequences()[0].getCanvases();
 
 jest.mock('openseadragon');
 jest.mock('../../../src/lib/OpenSeadragonCanvasOverlay');

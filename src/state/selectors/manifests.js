@@ -1,12 +1,13 @@
 import { createSelector } from 'reselect';
 import createCachedSelector from 're-reselect';
-import manifesto, { LanguageMap } from 'manifesto.js';
+import { LanguageMap } from 'manifesto.js/dist-esmodule/LanguageMap';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import ManifestoCanvas from '../../lib/ManifestoCanvas';
 
 /** */
 function createManifestoInstance(json, locale) {
   if (!json) return undefined;
-  return manifesto.create(json, locale ? { locale } : undefined);
+  return Utils.parseManifest(json, locale ? { locale } : undefined);
 }
 
 
@@ -412,7 +413,7 @@ export const getManifestViewingHint = createSelector(
     if (!manifest) return null;
     const viewingHint = (manifest.getSequences()[0] && manifest.getSequences()[0].getViewingHint())
       || manifest.getViewingHint();
-    if (viewingHint) return viewingHint.value;
+    if (viewingHint) return viewingHint;
     return null;
   },
 );
@@ -423,7 +424,7 @@ export const getManifestViewingDirection = createSelector(
     if (!manifest) return null;
     const viewingDirection = manifest.getSequences()[0].getViewingDirection()
       || manifest.getViewingDirection();
-    if (viewingDirection) return viewingDirection.value;
+    if (viewingDirection) return viewingDirection;
     return null;
   },
 );

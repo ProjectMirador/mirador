@@ -1,8 +1,8 @@
-import manifesto from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import fixture from '../../fixtures/version-2/019.json';
 import CanvasWorld from '../../../src/lib/CanvasWorld';
 
-const canvases = manifesto.create(fixture).getSequences()[0].getCanvases();
+const canvases = Utils.parseManifest(fixture).getSequences()[0].getCanvases();
 const canvasSubset = [canvases[1], canvases[2]];
 
 describe('CanvasWorld', () => {
