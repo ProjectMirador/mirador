@@ -1,6 +1,7 @@
 import { setIn } from 'immutable';
 import noRangesJson from '../../fixtures/version-2/001.json';
 import manifestJson from '../../fixtures/version-2/structures.json';
+import presentation3Json from '../../fixtures/version-3/structures.json';
 import {
   getVisibleNodeIds,
   getManuallyExpandedNodeIds,
@@ -47,6 +48,9 @@ const expandedNodesState = setIn(state, ['companionWindows', 'cw123', 'tocNodes'
 });
 
 describe('getVisibleNodeIds', () => {
+  const prezi3BookState = setIn(state, ['manifests', 'mID', 'json'], presentation3Json);
+  const prezi3State = setIn(prezi3BookState, ['windows', 'w1', 'view'], 'single');
+
   it('contains node ids for all ranges which contain currently visible canvases, and for their parents', () => {
     const visibleNodeIds = getVisibleNodeIds(state, { windowId: 'w1' });
     expect(visibleNodeIds).toEqual(expect.arrayContaining([
@@ -56,6 +60,53 @@ describe('getVisibleNodeIds', () => {
       '0-1-1-1',
     ]));
     expect(visibleNodeIds.length).toBe(4);
+
+    const prezi3StateForCanvas2 = setIn(prezi3State, ['windows', 'w1', 'canvasId'], 'http://foo.test/1/canvas/c2');
+    const prezi3visibleNodeIds = getVisibleNodeIds(prezi3StateForCanvas2, { windowId: 'w1' });
+    expect(prezi3visibleNodeIds).toEqual(expect.arrayContaining([
+      '0-0',
+      '0-0-0',
+    ]));
+    expect(prezi3visibleNodeIds.length).toBe(2);
+  });
+
+  it('contains node ids for ranges with currently visible canvas fragments', () => {
+    const prezi2XYWHFragmentBookState = setIn(state, ['windows', 'w1', 'canvasId'], 'http://foo.test/1/canvas/c3');
+    const prezi2XYWHFragmentState = setIn(prezi2XYWHFragmentBookState, ['windows', 'w1', 'view'], 'single');
+    const visibleNodeIdsForPrezi2 = getVisibleNodeIds(prezi2XYWHFragmentState, { windowId: 'w1' });
+    expect(visibleNodeIdsForPrezi2).toEqual(expect.arrayContaining([
+      '0-0',
+      '0-0-1',
+    ]));
+    expect(visibleNodeIdsForPrezi2.length).toBe(2);
+
+
+    const prezi3XYWHFragmentState = setIn(prezi3State, ['windows', 'w1', 'canvasId'], 'http://foo.test/1/canvas/c3');
+    const visibleNodeIdsForXYWHFragment = getVisibleNodeIds(prezi3XYWHFragmentState, { windowId: 'w1' });
+    expect(visibleNodeIdsForXYWHFragment).toEqual(expect.arrayContaining([
+      '0-0',
+      '0-0-0',
+    ]));
+    expect(visibleNodeIdsForXYWHFragment.length).toBe(2);
+
+    const prezi3TemporalFragmentState = setIn(prezi3State, ['windows', 'w1', 'canvasId'], 'http://foo.test/1/canvas/c4');
+    const visibleNodeIdsForTemporalFragment = getVisibleNodeIds(prezi3TemporalFragmentState, { windowId: 'w1' });
+    expect(visibleNodeIdsForTemporalFragment).toEqual(expect.arrayContaining([
+      '0-0',
+      '0-0-0',
+    ]));
+    expect(visibleNodeIdsForTemporalFragment.length).toBe(2);
+  });
+
+  // This test fails as there is no support for SpecificResource in manifesto yet
+  it.skip('contains node ids for ranges that contain a SpecificResource based on a current canvas', () => {
+    const specificResourceState = setIn(prezi3State, ['windows', 'w1', 'canvasId'], 'http://foo.test/1/canvas/c5');
+    const visibleNodeIds = getVisibleNodeIds(specificResourceState, { windowId: 'w1' });
+    expect(visibleNodeIds).toEqual(expect.arrayContaining([
+      '0-0',
+      '0-0-0',
+    ]));
+    expect(visibleNodeIds.length).toBe(2);
   });
 });
 
