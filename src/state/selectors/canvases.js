@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { Utils } from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import CanvasGroupings from '../../lib/CanvasGroupings';
 import { getManifestoInstance } from './manifests';
 import { getWindow, getWindowViewType } from './windows';

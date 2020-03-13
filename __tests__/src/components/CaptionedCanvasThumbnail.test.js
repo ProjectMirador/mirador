@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import manifesto from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import Typography from '@material-ui/core/Typography';
 import { CaptionedCanvasThumbnail } from '../../../src/components/CaptionedCanvasThumbnail';
 import manifestJson from '../../fixtures/version-2/019.json';
@@ -9,7 +9,7 @@ import manifestJson from '../../fixtures/version-2/019.json';
 function createWrapper(props) {
   return shallow(
     <CaptionedCanvasThumbnail
-      canvas={manifesto.create(manifestJson).getSequences()[0].getCanvases()[0]}
+      canvas={Utils.parseManifest(manifestJson).getSequences()[0].getCanvases()[0]}
       classes={{}}
       height={100}
       {...props}

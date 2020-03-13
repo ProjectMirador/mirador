@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import manifesto from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import { SidebarIndexList } from '../../../src/components/SidebarIndexList';
 import SidebarIndexThumbnail from '../../../src/containers/SidebarIndexThumbnail';
 import SidebarIndexCompact from '../../../src/containers/SidebarIndexCompact';
@@ -12,7 +12,7 @@ import manifestJson from '../../fixtures/version-2/019.json';
  * Helper function to create a shallow wrapper around SidebarIndexList
  */
 function createWrapper(props) {
-  const canvases = manifesto.create(manifestJson).getSequences()[0].getCanvases();
+  const canvases = Utils.parseManifest(manifestJson).getSequences()[0].getCanvases();
 
   return shallow(
     <SidebarIndexList
@@ -62,8 +62,8 @@ describe('SidebarIndexList', () => {
 
   describe('getIdAndLabelOfCanvases', () => {
     it('should return id and label of each canvas in manifest', () => {
-      const canvases = manifesto
-        .create(manifestJson)
+      const canvases = Utils
+        .parseManifest(manifestJson)
         .getSequences()[0]
         .getCanvases();
       const wrapper = createWrapper({ canvases });

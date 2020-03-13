@@ -64,7 +64,7 @@ describe('auth response reducer', () => {
           id: 'auth',
           infoId: ['http://example.com'],
           isFetching: true,
-          profile: { value: 'http://iiif.io/api/auth/1/kiosk' },
+          profile: 'http://iiif.io/api/auth/1/kiosk',
         },
       });
     });

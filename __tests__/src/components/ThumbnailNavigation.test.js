@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import manifesto from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import { ThumbnailNavigation } from '../../../src/components/ThumbnailNavigation';
 import ThumbnailCanvasGrouping from '../../../src/containers/ThumbnailCanvasGrouping';
 import CanvasGroupings from '../../../src/lib/CanvasGroupings';
@@ -12,7 +12,7 @@ function createWrapper(props, fixture = manifestJson) {
   return shallow(
     <ThumbnailNavigation
       canvasGroupings={
-        new CanvasGroupings(manifesto.create(fixture).getSequences()[0].getCanvases())
+        new CanvasGroupings(Utils.parseManifest(fixture).getSequences()[0].getCanvases())
       }
       canvasIndex={1}
       classes={{}}

@@ -3,7 +3,7 @@ import MiradorViewer from '../../../src/lib/MiradorViewer';
 
 jest.unmock('react-i18next');
 jest.mock('react-dom');
-jest.mock('node-fetch', () => jest.fn(() => Promise.resolve({ json: () => ({}) })));
+jest.mock('isomorphic-unfetch', () => jest.fn(() => Promise.resolve({ json: () => ({}) })));
 
 jest.mock('../../../src/state/selectors', () => ({
   getCompanionWindowIdsForPosition: () => ['cwid'],

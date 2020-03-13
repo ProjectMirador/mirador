@@ -18,7 +18,7 @@ function createWrapper(props) {
       handleAuthInteraction={() => {}}
       label="authenticate"
       windowId="w"
-      profile={{ value: 'http://iiif.io/api/auth/1/login' }}
+      profile="http://iiif.io/api/auth/1/login"
       {...props}
     />,
   );
@@ -38,7 +38,7 @@ describe('WindowAuthenticationControl', () => {
         degraded: true,
         failureDescription: 'failure description',
         failureHeader: 'failure header',
-        profile: { value: 'http://iiif.io/api/auth/1/external' },
+        profile: 'http://iiif.io/api/auth/1/external',
         status: 'failed',
       });
       expect(wrapper.find(SanitizedHtml).at(0).props().htmlString).toEqual('failure header');
