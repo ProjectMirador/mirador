@@ -32,6 +32,11 @@ class IntersectionObserverPolyfill {
 
 global.IntersectionObserver = IntersectionObserverPolyfill;
 
+/** */
+function Path2D() {
+}
+
+global.Path2D = Path2D;
 /**
  * copy object property descriptors from `src` to `target`
  * @param {*} src

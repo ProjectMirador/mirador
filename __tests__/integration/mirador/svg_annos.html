@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>Mirador</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+  </head>
+  <body>
+    <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
+    <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
+    <script type="text/javascript">
+     var miradorInstance = Mirador.viewer({
+       id: 'mirador',
+       windows: [
+         {
+           manifestId: 'https://api.myjson.com/bins/ahd5y',
+         },
+         {
+           manifestId: 'https://iiif.bodleian.ox.ac.uk/iiif/manifest/748a9d50-5a3a-440e-ab9d-567dd68b6abb.json',
+           canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/4a4d7347-0c32-4e3d-b517-5042eba06c25.json',
+         }
+       ],
+       window: {
+         sideBarOpenByDefault: true,
+         defaultSideBarPanel: 'annotations'
+       },
+     });
+    </script>
+  </body>
+</html>

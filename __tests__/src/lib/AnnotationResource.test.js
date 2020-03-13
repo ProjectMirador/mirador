@@ -122,4 +122,20 @@ describe('AnnotationResource', () => {
         .fragmentSelector).toEqual([10, 10, 100, 200]);
     });
   });
+  describe('svgSelector', () => {
+    it('simple string', () => {
+      expect(new AnnotationResource({ on: 'www.example.com/#xywh=10,10,100,200' })
+        .svgSelector).toEqual(null);
+    });
+
+    it('array of selectors', () => {
+      expect(new AnnotationResource({ on: [{ selector: { item: { '@type': 'oa:SvgSelector' } } }] })
+        .svgSelector).toEqual({ '@type': 'oa:SvgSelector' });
+    });
+
+    it('without specified type', () => {
+      expect(new AnnotationResource({ on: [{ selector: { item: {} } }] })
+        .svgSelector).toEqual(null);
+    });
+  });
 });

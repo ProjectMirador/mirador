@@ -69,6 +69,23 @@ export default class AnnotationResource {
   }
 
   /** */
+  get svgSelector() {
+    const on = this.on[0];
+
+    switch (typeof on) {
+      case 'string':
+        return null;
+      case 'object':
+        if (on.selector && on.selector.item && on.selector.item['@type'] === 'oa:SvgSelector') {
+          return on.selector.item;
+        }
+        return null;
+      default:
+        return null;
+    }
+  }
+
+  /** */
   get fragmentSelector() {
     const { selector } = this;
 

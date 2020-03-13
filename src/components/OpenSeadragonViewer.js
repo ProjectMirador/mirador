@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import ns from '../config/css-ns';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
+import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
 
 /**
  * Represents a OpenSeadragonViewer in the mirador workspace. Responsible for mounting
@@ -183,16 +184,14 @@ export class OpenSeadragonViewer extends Component {
     const { canvasWorld } = this.props;
     const context = this.osdCanvasOverlay.context2d;
     const zoom = this.viewer.viewport.getZoom(true);
-    const width = canvasWorld.worldBounds()[2];
     annotations.forEach((annotation) => {
       annotation.resources.forEach((resource) => {
         if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
         const offset = canvasWorld.offsetByCanvas(resource.targetId);
-        const fragment = resource.fragmentSelector;
-        fragment[0] += offset.x;
-        context.strokeStyle = color;
-        context.lineWidth = Math.ceil(10 / (zoom * width));
-        context.strokeRect(...fragment);
+        const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
+          color, offset, resource, zoom,
+        });
+        canvasAnnotationDisplay.toContext(context);
       });
     });
   }
