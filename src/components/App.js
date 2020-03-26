@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Fullscreen from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
 import { LiveAnnouncer } from 'react-aria-live';
 import createI18nInstance from '../i18n';
-import WorkspaceArea from '../containers/WorkspaceArea';
 import AuthenticationSender from '../containers/AuthenticationSender';
 import AccessTokenSender from '../containers/AccessTokenSender';
+
+const WorkspaceArea = lazy(() => import('../containers/WorkspaceArea'));
 
 /**
  * This is the top level Mirador component.
@@ -64,7 +65,11 @@ export class App extends Component {
             <MuiThemeProvider theme={createMuiTheme(theme)}>
               <AuthenticationSender />
               <AccessTokenSender />
-              <WorkspaceArea />
+              <Suspense
+                fallback={<div />}
+              >
+                <WorkspaceArea />
+              </Suspense>
             </MuiThemeProvider>
           </LiveAnnouncer>
         </I18nextProvider>

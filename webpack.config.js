@@ -39,6 +39,7 @@ const baseConfig = [
       libraryExport: 'default',
       libraryTarget: 'umd',
       path: path.join(__dirname, 'dist'),
+      publicPath: '/dist/',
     },
     plugins: [
       new webpack.IgnorePlugin({
