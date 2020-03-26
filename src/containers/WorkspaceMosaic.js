@@ -37,7 +37,7 @@ const styles = {
       boxShadow: 'none',
     },
     '& .mosaic-window-toolbar': {
-      display: 'none',
+      display: 'none !important',
     },
   },
 };
